@@ -41,11 +41,11 @@ def main():
                 f'schema={schema}', f'snapshot={snapshot.relative_to(root)}']
     metadata += [f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(root)}' for p in inputs]
     (args.output / 'inputs.sha256').write_text('\n'.join(metadata) + '\n')
+    print('\n'.join(metadata))
     sql = f'''CREATE SCHEMA "{schema}";
 SET search_path TO "{schema}";
 SELECT version(), current_database(), current_user, pg_backend_pid(), current_schema(), clock_timestamp();
-SHOW lc_ctype;
-SHOW lc_collate;
+SELECT datname, datcollate, datctype FROM pg_database WHERE datname=current_database();
 '''
     sql += '\n'.join(p.read_text(encoding='utf-8-sig') for p in sql_files)
     passed = False
