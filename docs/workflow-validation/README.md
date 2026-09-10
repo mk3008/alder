@@ -1,5 +1,11 @@
 # 業務設計からの段階的開発 — 次の適用検証
 
+Current resume (2026-09-10): [Astra prospective amendment](pilot/ASTRA_RESUME.md).
+Stage 1–2 adopted; Stage 3 remains blocked on HB-WV-S3-01. Independent
+instrument repairs are prepared, not executed. The preparation record below
+is preserved as historical context; its execution policy is superseded
+prospectively by the linked amendment.
+
 Status: **PREPARATION — NOT EXECUTED**.
 
 この文書は、完了した研究の参照先と、次に検証する人間要件を整理した準備記録である。候補手順・シナリオ・受入条件の凍結や、Terra/Solによる新しい実行を行った記録ではない。正式Rules、新アーキテクチャ、比較実験の結論ではない。
