@@ -47,7 +47,9 @@ SELECT s3_setup('S3-02'); SELECT clock_timestamp() report_db_clock \gset s302_
 SELECT 'S3-02 report input' observation,'req-stage3-open' request_id,'eq-stage3-known' equipment_id,'reporter-stage3' reported_by,:'s302_report_db_clock' reported_at,'Stage 3 open request' description;
 SELECT report_equipment_fault('req-stage3-open','eq-stage3-known','reporter-stage3',:'s302_report_db_clock'::timestamptz,'Stage 3 open request');
 SELECT 'S3-02 report accepted' outcome;
-SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-open' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s302_report_db_clock'::timestamptz AND description='Stage 3 open request' AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)=1 AND (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')=1 THEN 1 ELSE 0 END s302_report_gate;
+SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-open' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s302_report_db_clock'::timestamptz AND description='Stage 3 open request' AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)=1 AND (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')=1 AND (SELECT count(*) FROM maintenance_request)=1 THEN 1 ELSE 0 END s302_report_gate;
+SELECT * FROM equipment WHERE equipment_id='eq-stage3-known';
+SELECT count(*) request_count FROM maintenance_request;
 CREATE TEMP TABLE s302_pre_closure ON COMMIT DROP AS SELECT * FROM maintenance_request WHERE request_id='req-stage3-open';
 SELECT 'S3-02 pre-closure' observation,* FROM s302_pre_closure;
 SELECT 'S3-02 closure input' observation,'stage3-safety-inspector-fixture' actor,'safety_inspector' authorization,'eq-stage3-known' equipment_id;

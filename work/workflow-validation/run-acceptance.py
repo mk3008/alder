@@ -36,7 +36,8 @@ def main():
         'stage2-acceptance-v2.md', 'stage2-acceptance-v3.md', 'stage2-acceptance-v4.md',
         'stage3-packet.md', 'stage3-acceptance.md', 'stage3-acceptance-v2.md')]
     if len(stages) == 4:
-        inputs += [base / 'frozen/stage4-packet.md', base / 'frozen/stage4-acceptance.md']
+        inputs += [base / 'frozen/stage4-packet.md', base / 'frozen/stage4-acceptance.md',
+                   base / 'frozen/final-instrument-amendment.md']
     metadata = [f'head={subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()}',
                 f'schema={schema}', f'snapshot={snapshot.relative_to(root)}']
     metadata += [f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(root)}' for p in inputs]
