@@ -1,6 +1,8 @@
 # Stage 4 — clear safety closure
 
 Status at creation: verification/final review pending, not adopted.
+Current status: **ADOPTED** after corrected run 34462769183 and independent
+re-review. See INDEPENDENT_REVIEW.md and docs/workflow-validation/pilot/FINAL_REPORT.md.
 The Stage 4 acceptance contract was committed before this implementation.
 
 The only business-source change is `clear_safety_closure` in equipment_safety.sql.
@@ -9,8 +11,10 @@ row to available. It does not change requests. Existing scheduling then admits
 an open request under its original coordinator/future-time conditions.
 No DDL, new lifecycle status, layer, service or shared domain model is added.
 
-Stage 1–3 acceptance and their business operations are retained; Stage 4 adds
-the three frozen cases. Run from the repository root against disposable test
+Stage 1–3 business operations are retained; Stage 4 adds the three frozen
+cases. The final independent review prompted targeted corrections to inherited
+Stage 2/3 instruments under frozen/final-instrument-amendment.md; historical
+snapshots remain unchanged. Run from the repository root against disposable test
 PostgreSQL using standard PG environment variables, or through the CI service:
 
 ```sh

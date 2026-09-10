@@ -1,9 +1,10 @@
 # 業務設計からの段階的開発 — 次の適用検証
 
 Current resume (2026-09-10): [Astra prospective amendment](pilot/ASTRA_RESUME.md).
-Stage 1–3 adopted after HD-WV-003 and cumulative CI verification;
-[Stage 3 adoption](../../work/workflow-validation/runs/stage3/resolution-v2/REVIEW_AND_ADOPTION.md).
-Stage 4 is next. The preparation record below
+Stage 1–4 adopted after HD-WV-003, corrected cumulative CI verification and
+independent final review: [current final report](pilot/FINAL_REPORT.md).
+The planned pilot checkpoint is complete. Earlier cumulative claims are
+qualified in that report. The preparation record below
 is preserved as historical context; its execution policy is superseded
 prospectively by the linked amendment.
 
