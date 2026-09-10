@@ -27,7 +27,22 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Run cumulative acceptance in disposable PostgreSQL
+      - name: Preserve Stage 3 resolution evidence
         env:
           ALDER_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
-        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage4/implementation-v1 --output /tmp/alder-evidence
+        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage3/resolution-v2 --output /tmp/alder-evidence/stage3
+      - name: Run cumulative Stage 4 acceptance
+        env:
+          ALDER_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage4/implementation-v1 --output /tmp/alder-evidence/stage4
+      - name: Preserve acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: alder-acceptance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            /tmp/alder-evidence/**/inputs.sha256
+            /tmp/alder-evidence/**/acceptance-evidence.log
+            /tmp/alder-evidence/**/cleanup.log
+          if-no-files-found: error
+          retention-days: 90
