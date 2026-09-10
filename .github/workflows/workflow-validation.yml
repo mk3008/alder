@@ -1,0 +1,33 @@
+name: Alder cumulative acceptance
+on:
+  push:
+    branches: [research/business-process-workflow-validation]
+    paths:
+      - 'work/workflow-validation/**/*.sql'
+      - 'work/workflow-validation/*.py'
+      - '.github/workflows/workflow-validation.yml'
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: disposable-pilot
+          POSTGRES_INITDB_ARGS: --locale=C.UTF-8
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run cumulative acceptance in disposable PostgreSQL
+        env:
+          ALDER_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage3/resolution-v2 --output /tmp/alder-evidence
