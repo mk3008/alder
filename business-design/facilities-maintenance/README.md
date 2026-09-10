@@ -62,12 +62,12 @@ An authorized technician may complete a `scheduled` maintenance request.
 - An `open` request cannot be completed.
 - Successful completion changes the request to `completed`.
 - The scheduled time remains recorded.
-- Completion records a trusted system/database time from the successful completion operation. A caller-supplied completion time is not authoritative.
+- Completion time is recorded by the application from a trusted system time associated with the successful completion operation; a caller- or technician-supplied completion time is not authoritative.
 - The recorded completion time must not be earlier than the request's report time; otherwise completion is rejected without changing the request.
 - `scheduled_for` is a plan, not a lower bound on physical completion. Completion before the scheduled time is allowed.
 - Reporter identity by itself does not grant technician authority.
 
-The system clock records the business completion fact for this application; this does not mean the database independently detects physical work. Offline or later-reported completion is not specified here.
+The recorded time represents the business completion fact for this application; the application is not assumed to detect physical work independently. Offline or later-reported completion is not specified here.
 
 ## Record a safety closure
 
