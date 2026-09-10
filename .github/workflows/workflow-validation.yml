@@ -30,4 +30,4 @@ jobs:
       - name: Run cumulative acceptance in disposable PostgreSQL
         env:
           ALDER_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
-        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage3/resolution-v2 --output /tmp/alder-evidence
+        run: python3 work/workflow-validation/run-acceptance.py work/workflow-validation/runs/stage4/implementation-v1 --output /tmp/alder-evidence
