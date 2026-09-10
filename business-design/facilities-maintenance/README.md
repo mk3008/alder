@@ -1,102 +1,102 @@
-# Facilities maintenance — Business Design
+# 設備保全 — 業務設計
 
-This document describes the business behavior for a facilities-maintenance application.
+この文書は、設備保全アプリケーションで必要となる業務上の振る舞いを記述する。
 
-## Business roles
+## 業務上の役割
 
-- **Site reporter** — records an observed equipment fault.
-- **Maintenance coordinator** — schedules maintenance work.
-- **Technician** — completes scheduled maintenance work.
-- **Safety inspector** — records and clears equipment safety closure.
+- **現場報告者** — 観測した設備故障を報告する。
+- **保守調整担当者** — 保守作業の日程を設定する。
+- **技術者** — 予定された保守作業を完了する。
+- **安全検査担当者** — 設備の安全閉鎖を記録し、後に解除する。
 
-Role names describe the business authority required by the behavior below. The design does not define a production identity or authorization-management system.
+ここでの役割名は、以下の業務を実行するために必要な業務上の権限を表す。この設計では、本番環境の本人確認や権限管理の仕組みまでは定義しない。
 
-## Business data
+## 業務データ
 
-### Equipment
+### 設備
 
-Each equipment item has an identity and is either:
+各設備は識別子を持ち、状態は次のいずれかである。
 
 - `available`
 - `safety_closed`
 
-### Maintenance request
+### 保守依頼
 
-A maintenance request records:
+保守依頼には次の情報を記録する。
 
-- request identity
-- equipment identity
-- reporter identity
-- observation/report time
-- description
-- lifecycle state: `open`, `scheduled`, or `completed`
-- scheduled time when scheduled
-- completion time when completed
+- 依頼の識別子
+- 設備の識別子
+- 報告者の識別子
+- 観測・報告時刻
+- 説明
+- ライフサイクル状態: `open`、`scheduled`、`completed`
+- 日程設定済みの場合は予定時刻
+- 完了済みの場合は完了時刻
 
-A maintenance request refers to existing equipment.
+保守依頼は、存在する設備を参照する。
 
-## Record an equipment fault
+## 設備故障を報告する
 
-When a site reporter observes a fault, they may record a maintenance request with the equipment, reporter identity, observation time, and description.
+現場報告者が設備の故障を観測したとき、設備、報告者、観測時刻、説明を含む保守依頼を登録できる。
 
-- A new request begins as `open`.
-- The equipment must exist.
-- The description must not be empty or consist only of whitespace.
-- A valid nonblank description is retained as supplied; leading or trailing whitespace is not itself a reason to rewrite the text.
-- More than one request may be reported. No deduplication rule is specified.
+- 新しい依頼は `open` で開始する。
+- 対象設備は存在していなければならない。
+- 説明は空文字列または空白文字だけであってはならない。
+- 有効な空白以外を含む説明は入力された内容のまま保持する。先頭や末尾の空白だけを理由に書き換えない。
+- 複数の依頼を登録できる。重複排除のルールは定義しない。
 
-## Schedule maintenance
+## 保守の日程を設定する
 
-An authorized maintenance coordinator may schedule an `open` maintenance request.
+権限を持つ保守調整担当者は、`open` の保守依頼に日程を設定できる。
 
-- The scheduled time must be a future time when the scheduling operation is performed.
-- Scheduling changes the request to `scheduled` and records the chosen scheduled time.
-- A completed request cannot be rescheduled.
-- Reporter identity by itself does not grant coordinator authority.
-- A request for equipment that is currently `safety_closed` cannot be scheduled.
+- 予定時刻は、日程設定操作を行う時点より未来でなければならない。
+- 日程設定に成功すると、依頼は `scheduled` となり、選択した予定時刻を記録する。
+- `completed` の依頼は再度日程設定できない。
+- 報告者であることだけでは、保守調整担当者としての権限にはならない。
+- 対象設備が現在 `safety_closed` の場合、その設備の依頼には日程を設定できない。
 
-## Complete maintenance
+## 保守作業を完了する
 
-An authorized technician may complete a `scheduled` maintenance request.
+権限を持つ技術者は、`scheduled` の保守依頼を完了できる。
 
-- An `open` request cannot be completed.
-- Successful completion changes the request to `completed`.
-- The scheduled time remains recorded.
-- Completion time is recorded by the application from a trusted system time associated with the successful completion operation; a caller- or technician-supplied completion time is not authoritative.
-- The recorded completion time must not be earlier than the request's report time; otherwise completion is rejected without changing the request.
-- `scheduled_for` is a plan, not a lower bound on physical completion. Completion before the scheduled time is allowed.
-- Reporter identity by itself does not grant technician authority.
+- `open` の依頼は完了できない。
+- 完了に成功すると、依頼は `completed` になる。
+- 予定時刻はそのまま保持する。
+- 完了時刻は、成功した完了操作に対応する信頼できるシステム時刻をアプリケーションが記録する。呼び出し元や技術者が指定した完了時刻は正とはしない。
+- 記録する完了時刻は、依頼の報告時刻より前であってはならない。これを満たせない場合、依頼を変更せず完了を拒否する。
+- `scheduled_for` は計画であり、実際の作業完了時刻の下限ではない。予定時刻より前に完了することを許可する。
+- 報告者であることだけでは、技術者としての権限にはならない。
 
-The recorded time represents the business completion fact for this application; the application is not assumed to detect physical work independently. Offline or later-reported completion is not specified here.
+ここで記録する時刻は、このアプリケーションにおける業務上の完了事実を表す。アプリケーションが物理的な作業完了を自動検出することまでは想定しない。オフラインでの完了や、後から報告される完了はこの設計では定義しない。
 
-## Record a safety closure
+## 安全閉鎖を記録する
 
-After a safety inspection, an authorized safety inspector may record equipment as unsafe.
+安全検査の後、権限を持つ安全検査担当者は設備を危険な状態として記録できる。
 
-- Unsafe equipment becomes `safety_closed`.
-- An existing `open` maintenance request for that equipment remains unchanged as `open`.
-- While the equipment remains `safety_closed`, that open request cannot be scheduled.
-- Safety closure does not retroactively change an already `completed` request.
+- 危険と判断された設備は `safety_closed` になる。
+- その設備に既存の `open` な保守依頼があっても、依頼は `open` のまま変更しない。
+- 設備が `safety_closed` の間、その `open` な依頼には日程を設定できない。
+- 安全閉鎖によって、すでに `completed` となっている依頼を遡って変更しない。
 
-The outstanding maintenance request and the equipment safety state are separate business facts: the fault may remain outstanding while equipment safety determines whether scheduling is currently permitted.
+未解決の保守依頼と設備の安全状態は別の業務上の事実である。故障が未解決のままでも、設備の安全状態によって現在の日程設定可否が決まる場合がある。
 
-## Clear a safety closure
+## 安全閉鎖を解除する
 
-After a later safety inspection, an authorized safety inspector may clear a safety closure.
+後の安全検査で、権限を持つ安全検査担当者は安全閉鎖を解除できる。
 
-- The equipment becomes `available`.
-- Clearing the equipment does not itself schedule or otherwise change an existing open maintenance request.
-- Once equipment is available again, an authorized maintenance coordinator may schedule its open request under the ordinary scheduling rules above.
+- 設備は `available` になる。
+- 安全閉鎖の解除そのものでは、既存の `open` な保守依頼に日程を設定したり、その他の変更を加えたりしない。
+- 設備が再び `available` になれば、権限を持つ保守調整担当者は通常の日程設定ルールに従って、その `open` な依頼へ日程を設定できる。
 
-## Business behavior not decided by this design
+## この設計で未決定の業務上の振る舞い
 
-The current design does not define additional policy for:
+現在の設計では、次の事項について追加の方針を定義していない。
 
-- a request that is already `scheduled` when equipment becomes safety-closed;
-- reporting a new fault while equipment is already safety-closed;
-- repeated safety closure or repeated clearing;
-- clearing an unknown equipment identity;
-- audit history or notifications;
-- offline or externally reported completion.
+- すでに `scheduled` の依頼がある設備を `safety_closed` にした場合の扱い
+- すでに `safety_closed` の設備について新しい故障を報告する場合の扱い
+- 安全閉鎖や解除を繰り返した場合の扱い
+- 存在しない設備に対して安全閉鎖の解除を行う場合の扱い
+- 監査履歴や通知
+- オフラインまたは外部から報告される完了
 
-These are not required behaviors for the current design.
+これらは、現在の業務設計で要求する振る舞いには含めない。
