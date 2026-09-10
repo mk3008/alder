@@ -1,0 +1,165 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/index.js b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/index.js
+new file mode 100644
+index 0000000..e36722c
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/index.js
+@@ -0,0 +1,16 @@
++export {
++  buildingPermitStatus,
++  issueBuildingPermit,
++  recordLicensingClearance,
++  resetPermitIssuance,
++} from "./permit-issuance.js";
++
++export { inspectionStatus, scheduleBuildingInspection } from "./inspections.js";
++
++import { resetPermitIssuance } from "./permit-issuance.js";
++import { resetPermitRecords } from "./permit-records.js";
++
++export function resetLicensing() {
++  resetPermitRecords();
++  resetPermitIssuance();
++}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/inspections.js b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/inspections.js
+new file mode 100644
+index 0000000..81d7679
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/inspections.js
+@@ -0,0 +1,14 @@
++import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
++
++export function scheduleBuildingInspection({ permitId, inspectorId }) {
++  const permit = loadPermitRecord(permitId);
++  if (!inspectorId) throw new Error("inspector is required");
++  savePermitRecord({ ...permit, inspection: { inspectorId, status: "scheduled" } });
++  sendInspectionBooking(permitId, inspectorId);
++}
++
++export function inspectionStatus(permitId) {
++  return loadPermitRecord(permitId).inspection?.status ?? "not-scheduled";
++}
++
++function sendInspectionBooking() {}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-issuance.js b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-issuance.js
+new file mode 100644
+index 0000000..b05c636
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-issuance.js
+@@ -0,0 +1,24 @@
++import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
++
++const clearedContractors = new Set();
++
++export function resetPermitIssuance() {
++  clearedContractors.clear();
++}
++
++export function recordLicensingClearance(contractorId) {
++  if (!contractorId) throw new Error("contractor identity is required");
++  clearedContractors.add(contractorId);
++}
++
++export function issueBuildingPermit({ id, contractorId, riskLevel }) {
++  if (!id || !contractorId) throw new Error("permit identity is required");
++  if (riskLevel === "high" && !clearedContractors.has(contractorId)) {
++    throw new Error("contractor lacks licensing clearance");
++  }
++  savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
++}
++
++export function buildingPermitStatus(id) {
++  return loadPermitRecord(id).status;
++}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-records.js b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-records.js
+new file mode 100644
+index 0000000..ab1a946
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/licensing/building-permits/permit-records.js
+@@ -0,0 +1,15 @@
++const permits = new Map();
++
++export function resetPermitRecords() {
++  permits.clear();
++}
++
++export function loadPermitRecord(id) {
++  const permit = permits.get(id);
++  if (!permit) throw new Error("unknown permit");
++  return permit;
++}
++
++export function savePermitRecord(permit) {
++  permits.set(permit.id, permit);
++}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/implementation/src/licensing/building-permits.js b/work/phase9/runs/package-by-component-plus-placement/stage1/implementation/src/licensing/building-permits.js
+deleted file mode 100644
+index ca1e0a0..0000000
+--- a/work/phase9/runs/package-by-component-plus-placement/stage1/implementation/src/licensing/building-permits.js
++++ /dev/null
+@@ -1,44 +0,0 @@
+-const permits = new Map();
+-const clearedContractors = new Set();
+-
+-export function resetLicensing() {
+-  permits.clear();
+-  clearedContractors.clear();
+-}
+-
+-export function recordLicensingClearance(contractorId) {
+-  if (!contractorId) throw new Error("contractor identity is required");
+-  clearedContractors.add(contractorId);
+-}
+-
+-export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+-  if (!id || !contractorId) throw new Error("permit identity is required");
+-  if (riskLevel === "high" && !clearedContractors.has(contractorId)) {
+-    throw new Error("contractor lacks licensing clearance");
+-  }
+-  savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
+-}
+-
+-export function scheduleBuildingInspection({ permitId, inspectorId }) {
+-  const permit = loadPermitRecord(permitId);
+-  if (!inspectorId) throw new Error("inspector is required");
+-  savePermitRecord({ ...permit, inspection: { inspectorId, status: "scheduled" } });
+-  sendInspectionBooking(permitId, inspectorId);
+-}
+-
+-export function buildingPermitStatus(id) {
+-  return loadPermitRecord(id).status;
+-}
+-
+-export function inspectionStatus(permitId) {
+-  return loadPermitRecord(permitId).inspection?.status ?? "not-scheduled";
+-}
+-
+-function loadPermitRecord(id) {
+-  const permit = permits.get(id);
+-  if (!permit) throw new Error("unknown permit");
+-  return permit;
+-}
+-
+-function savePermitRecord(permit) { permits.set(permit.id, permit); }
+-function sendInspectionBooking() {}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage1/implementation/src/municipal.js b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/municipal.js
+index 55ab641..8f8b70b 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage1/implementation/src/municipal.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage1/refactoring/src/municipal.js
+@@ -5,7 +5,7 @@ export {
+   recordLicensingClearance,
+   resetLicensing,
+   scheduleBuildingInspection,
+-} from "./licensing/building-permits.js";
++} from "./licensing/building-permits/index.js";
+ 
+ export {
+   approveVendorInvoice,
+@@ -14,7 +14,7 @@ export {
+   vendorInvoiceStatus,
+ } from "./finance/vendor-invoices.js";
+ 
+-import { resetLicensing } from "./licensing/building-permits.js";
++import { resetLicensing } from "./licensing/building-permits/index.js";
+ import { resetFinance } from "./finance/vendor-invoices.js";
+ 
+ export function reset() {

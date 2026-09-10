@@ -1,0 +1,34 @@
+[
+  {
+    "source": "src/main/java/study/budget/OperatingBudget.java",
+    "package": "study.budget",
+    "name": "OperatingBudget",
+    "kind": "class",
+    "declaredVisibility": "public",
+    "fqcn": "study.budget.OperatingBudget"
+  },
+  {
+    "source": "src/main/java/study/MunicipalApplication.java",
+    "package": "study",
+    "name": "MunicipalApplication",
+    "kind": "class",
+    "declaredVisibility": "public",
+    "fqcn": "study.MunicipalApplication"
+  },
+  {
+    "source": "src/main/java/study/payments/VendorPaymentComponent.java",
+    "package": "study.payments",
+    "name": "VendorPaymentComponent",
+    "kind": "class",
+    "declaredVisibility": "public",
+    "fqcn": "study.payments.VendorPaymentComponent"
+  },
+  {
+    "source": "src/main/java/study/permits/PermitComponent.java",
+    "package": "study.permits",
+    "name": "PermitComponent",
+    "kind": "class",
+    "declaredVisibility": "public",
+    "fqcn": "study.permits.PermitComponent"
+  }
+]

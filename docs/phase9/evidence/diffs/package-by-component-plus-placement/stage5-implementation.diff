@@ -1,0 +1,41 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/inspections.js b/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/inspections.js
+index ddaef32..81d7679 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/inspections.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/inspections.js
+@@ -1,12 +1,8 @@
+ import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
+-import { hasLicensingClearance } from "../licensing-clearance/index.js";
+ 
+ export function scheduleBuildingInspection({ permitId, inspectorId }) {
+   const permit = loadPermitRecord(permitId);
+   if (!inspectorId) throw new Error("inspector is required");
+-  if (!hasLicensingClearance(permit.contractorId)) {
+-    throw new Error("contractor lacks licensing clearance");
+-  }
+   savePermitRecord({ ...permit, inspection: { inspectorId, status: "scheduled" } });
+   sendInspectionBooking(permitId, inspectorId);
+ }
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/test/acceptance.test.js b/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/test/acceptance.test.js
+index 400a19a..7993737 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/test/acceptance.test.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/test/acceptance.test.js
+@@ -1,11 +1,12 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, setCityEmergencyHold, issueBuildingPermit, submitVendorInvoice, approveVendorInvoice, recordVendorTaxClearance } from "../src/municipal.js";
+-test("stage 4 applies City Operations emergency hold across Licensing and Finance decisions", () => {
++import { reset, issueBuildingPermit, scheduleBuildingInspection, inspectionStatus, recordLicensingClearance } from "../src/municipal.js";
++test("stage 5 removes inspection scheduling from the Licensing clearance policy while issuance remains protected", () => {
+   reset();
+-  setCityEmergencyHold(true);
+-  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" }), /emergency hold/i);
+-  submitVendorInvoice({ id: "v1", vendorId: "vendor-1", amount: 10 });
+-  recordVendorTaxClearance("vendor-1");
+-  assert.throws(() => approveVendorInvoice({ id: "v1" }), /emergency hold/i);
++  issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" });
++  scheduleBuildingInspection({ permitId: "p1", inspectorId: "i1" });
++  assert.equal(inspectionStatus("p1"), "scheduled");
++  assert.throws(() => issueBuildingPermit({ id: "p2", contractorId: "c2", riskLevel: "high" }), /clearance/i);
++  recordLicensingClearance("c2");
++  issueBuildingPermit({ id: "p2", contractorId: "c2", riskLevel: "high" });
+ });

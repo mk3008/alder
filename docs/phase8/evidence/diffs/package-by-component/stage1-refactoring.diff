@@ -1,0 +1,105 @@
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/building-inspections.js" "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/building-inspections.js"
+new file mode 100644
+index 0000000..e3a0281
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/building-inspections.js"
+@@ -0,0 +1,14 @@
++import { getPermit, replacePermit } from "./permit-records.js";
++
++export function scheduleBuildingInspection({ permitId, inspectorId }) {
++  const permit = getPermit(permitId);
++  if (!inspectorId) throw new Error("inspector is required");
++  replacePermit({ ...permit, inspection: { inspectorId, status: "scheduled" } });
++  sendInspectionBooking(permitId, inspectorId);
++}
++
++export function inspectionStatus(permitId) {
++  return getPermit(permitId).inspection?.status ?? "not-scheduled";
++}
++
++function sendInspectionBooking() {}
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage1\\implementation/src/licensing/building-permits.js" "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/building-permits.js"
+index 53198ad..27abae6 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage1\\implementation/src/licensing/building-permits.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/building-permits.js"
+@@ -1,39 +1,18 @@
+ import { hasLicensingClearance } from "./licensing-board.js";
+-
+-const permits = new Map();
++import { createPermit, getPermit, resetPermitRecords } from "./permit-records.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+   if (!id || !contractorId) throw new Error("permit identity is required");
+   if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
+     throw new Error("contractor licensing clearance is required for high-risk permits");
+   }
+-  savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
+-}
+-
+-export function scheduleBuildingInspection({ permitId, inspectorId }) {
+-  const permit = loadPermitRecord(permitId);
+-  if (!inspectorId) throw new Error("inspector is required");
+-  savePermitRecord({ ...permit, inspection: { inspectorId, status: "scheduled" } });
+-  sendInspectionBooking(permitId, inspectorId);
++  createPermit({ id, contractorId, riskLevel, status: "issued", inspection: null });
+ }
+ 
+ export function buildingPermitStatus(id) {
+-  return loadPermitRecord(id).status;
+-}
+-
+-export function inspectionStatus(permitId) {
+-  return loadPermitRecord(permitId).inspection?.status ?? "not-scheduled";
++  return getPermit(id).status;
+ }
+ 
+ export function resetBuildingPermits() {
+-  permits.clear();
+-}
+-
+-function loadPermitRecord(id) {
+-  const permit = permits.get(id);
+-  if (!permit) throw new Error("unknown permit");
+-  return permit;
++  resetPermitRecords();
+ }
+-
+-function savePermitRecord(permit) { permits.set(permit.id, permit); }
+-function sendInspectionBooking() {}
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage1\\implementation/src/licensing/index.js" "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/index.js"
+index 3bd3df8..bc62852 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage1\\implementation/src/licensing/index.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/index.js"
+@@ -1,5 +1,6 @@
+ export { recordLicensingClearance } from "./licensing-board.js";
+-export { issueBuildingPermit, scheduleBuildingInspection, buildingPermitStatus, inspectionStatus } from "./building-permits.js";
++export { issueBuildingPermit, buildingPermitStatus } from "./building-permits.js";
++export { scheduleBuildingInspection, inspectionStatus } from "./building-inspections.js";
+ 
+ import { resetLicensingBoard } from "./licensing-board.js";
+ import { resetBuildingPermits } from "./building-permits.js";
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/permit-records.js" "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/permit-records.js"
+new file mode 100644
+index 0000000..23642af
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component\\stage1\\refactoring/src/licensing/permit-records.js"
+@@ -0,0 +1,19 @@
++const permits = new Map();
++
++export function createPermit(permit) {
++  permits.set(permit.id, permit);
++}
++
++export function getPermit(id) {
++  const permit = permits.get(id);
++  if (!permit) throw new Error("unknown permit");
++  return permit;
++}
++
++export function replacePermit(permit) {
++  permits.set(permit.id, permit);
++}
++
++export function resetPermitRecords() {
++  permits.clear();
++}

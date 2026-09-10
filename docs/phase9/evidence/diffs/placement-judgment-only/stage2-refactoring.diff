@@ -1,0 +1,29 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage2/implementation/src/building-inspection-scheduling.js b/work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/building-inspection-scheduling.js
+similarity index 100%
+rename from work/phase9/runs/placement-judgment-only/stage2/implementation/src/building-inspection-scheduling.js
+rename to work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/building-inspection-scheduling.js
+diff --git a/work/phase9/runs/placement-judgment-only/stage2/implementation/src/building-permit-issuance.js b/work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/building-permit-issuance.js
+similarity index 100%
+rename from work/phase9/runs/placement-judgment-only/stage2/implementation/src/building-permit-issuance.js
+rename to work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/building-permit-issuance.js
+diff --git a/work/phase9/runs/placement-judgment-only/stage2/implementation/src/licensing-board.js b/work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/licensing-board.js
+similarity index 100%
+rename from work/phase9/runs/placement-judgment-only/stage2/implementation/src/licensing-board.js
+rename to work/phase9/runs/placement-judgment-only/stage2/refactoring/src/licensing/licensing-board.js
+diff --git a/work/phase9/runs/placement-judgment-only/stage2/implementation/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage2/refactoring/src/municipal.js
+index bc60c5a..bf6c0e3 100644
+--- a/work/phase9/runs/placement-judgment-only/stage2/implementation/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage2/refactoring/src/municipal.js
+@@ -1,9 +1,9 @@
+ import {
+   recordLicensingClearance,
+   resetLicensingClearances,
+-} from "./licensing-board.js";
+-import { issueBuildingPermit as issuePermit } from "./building-permit-issuance.js";
+-import { scheduleBuildingInspection as scheduleInspection } from "./building-inspection-scheduling.js";
++} from "./licensing/licensing-board.js";
++import { issueBuildingPermit as issuePermit } from "./licensing/building-permit-issuance.js";
++import { scheduleBuildingInspection as scheduleInspection } from "./licensing/building-inspection-scheduling.js";
+ 
+ const permits = new Map();
+ const invoices = new Map();

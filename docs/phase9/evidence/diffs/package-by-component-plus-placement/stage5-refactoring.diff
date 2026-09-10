@@ -1,0 +1,41 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/index.js b/work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/index.js
+index bf64a44..fb2d4d7 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/index.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/index.js
+@@ -1,12 +1,12 @@
+ export {
+   buildingPermitStatus,
+   issueBuildingPermit,
+-} from "./permit-issuance.js";
++} from "./permit-issuance/index.js";
+ 
+ export { inspectionStatus, scheduleBuildingInspection } from "./inspections.js";
+-export { recordLicensingClearance } from "../licensing-clearance/index.js";
++export { recordLicensingClearance } from "./permit-issuance/licensing-clearance.js";
+ 
+-import { resetLicensingClearance } from "../licensing-clearance/index.js";
++import { resetLicensingClearance } from "./permit-issuance/licensing-clearance.js";
+ import { resetPermitRecords } from "./permit-records.js";
+ 
+ export function resetLicensing() {
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/permit-issuance.js b/work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/permit-issuance/index.js
+similarity index 72%
+rename from work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/permit-issuance.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/permit-issuance/index.js
+index 0064204..dc84031 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/building-permits/permit-issuance.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/permit-issuance/index.js
+@@ -1,6 +1,6 @@
+-import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
+-import { hasLicensingClearance } from "../licensing-clearance/index.js";
+-import { isCityEmergencyHoldActive } from "../../city-operations/index.js";
++import { loadPermitRecord, savePermitRecord } from "../permit-records.js";
++import { hasLicensingClearance } from "./licensing-clearance.js";
++import { isCityEmergencyHoldActive } from "../../../city-operations/index.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+   if (isCityEmergencyHoldActive()) {
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/licensing-clearance/index.js b/work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/permit-issuance/licensing-clearance.js
+similarity index 100%
+rename from work/phase9/runs/package-by-component-plus-placement/stage5/implementation/src/licensing/licensing-clearance/index.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage5/refactoring/src/licensing/building-permits/permit-issuance/licensing-clearance.js

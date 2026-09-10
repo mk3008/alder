@@ -1,0 +1,58 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/licensing/building-permit-issuance.js b/work/phase9/runs/placement-judgment-only/stage5/refactoring/src/licensing/building-permit-issuance.js
+index e0934d0..29fefbe 100644
+--- a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/licensing/building-permit-issuance.js
++++ b/work/phase9/runs/placement-judgment-only/stage5/refactoring/src/licensing/building-permit-issuance.js
+@@ -1,10 +1,19 @@
+-import { hasLicensingClearance } from "./licensing-board.js";
+ import { assertCityEmergencyHoldAllows } from "../city-operations/emergency-hold.js";
+ 
++const clearedContractors = new Set();
++
++export function recordLicensingClearance(contractorId) {
++  clearedContractors.add(contractorId);
++}
++
++export function resetLicensingClearances() {
++  clearedContractors.clear();
++}
++
+ export function issueBuildingPermit({ id, contractorId, riskLevel }, savePermitRecord) {
+   assertCityEmergencyHoldAllows("building-permit issuance");
+   if (!id || !contractorId) throw new Error("permit identity is required");
+-  if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
++  if (riskLevel === "high" && !clearedContractors.has(contractorId)) {
+     throw new Error("contractor licensing clearance is required");
+   }
+   savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
+diff --git a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/licensing/licensing-board.js b/work/phase9/runs/placement-judgment-only/stage5/implementation/src/licensing/licensing-board.js
+deleted file mode 100644
+index dba14e1..0000000
+--- a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/licensing/licensing-board.js
++++ /dev/null
+@@ -1,13 +0,0 @@
+-const clearedContractors = new Set();
+-
+-export function recordLicensingClearance(contractorId) {
+-  clearedContractors.add(contractorId);
+-}
+-
+-export function hasLicensingClearance(contractorId) {
+-  return clearedContractors.has(contractorId);
+-}
+-
+-export function resetLicensingClearances() {
+-  clearedContractors.clear();
+-}
+diff --git a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage5/refactoring/src/municipal.js
+index 71d51ab..b857938 100644
+--- a/work/phase9/runs/placement-judgment-only/stage5/implementation/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage5/refactoring/src/municipal.js
+@@ -1,7 +1,7 @@
+ import {
+   recordLicensingClearance,
+   resetLicensingClearances,
+-} from "./licensing/licensing-board.js";
++} from "./licensing/building-permit-issuance.js";
+ import {
+   recordVendorTaxClearance,
+   resetVendorTaxClearances,

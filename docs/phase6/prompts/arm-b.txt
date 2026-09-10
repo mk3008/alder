@@ -1,0 +1,3 @@
+Use Package by Component.
+
+Place each decision behind the narrowest enforceable boundary containing its current semantic owner and actual consumers.

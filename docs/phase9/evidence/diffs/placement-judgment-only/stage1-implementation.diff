@@ -1,0 +1,68 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage1/implementation/src/licensing-board.js b/work/phase9/runs/placement-judgment-only/stage1/implementation/src/licensing-board.js
+new file mode 100644
+index 0000000..dba14e1
+--- /dev/null
++++ b/work/phase9/runs/placement-judgment-only/stage1/implementation/src/licensing-board.js
+@@ -0,0 +1,13 @@
++const clearedContractors = new Set();
++
++export function recordLicensingClearance(contractorId) {
++  clearedContractors.add(contractorId);
++}
++
++export function hasLicensingClearance(contractorId) {
++  return clearedContractors.has(contractorId);
++}
++
++export function resetLicensingClearances() {
++  clearedContractors.clear();
++}
+diff --git a/work/phase9/fixture-base/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage1/implementation/src/municipal.js
+index a7df992..b61ddc3 100644
+--- a/work/phase9/fixture-base/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage1/implementation/src/municipal.js
+@@ -1,16 +1,28 @@
++import {
++  hasLicensingClearance,
++  recordLicensingClearance,
++  resetLicensingClearances,
++} from "./licensing-board.js";
++
+ const permits = new Map();
+ const invoices = new Map();
+ 
+ export function reset() {
+   permits.clear();
+   invoices.clear();
++  resetLicensingClearances();
+ }
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+   if (!id || !contractorId) throw new Error("permit identity is required");
++  if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
++    throw new Error("contractor licensing clearance is required");
++  }
+   savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
+ }
+ 
++export { recordLicensingClearance };
++
+ export function scheduleBuildingInspection({ permitId, inspectorId }) {
+   const permit = loadPermitRecord(permitId);
+   if (!inspectorId) throw new Error("inspector is required");
+diff --git a/work/phase9/runs/placement-judgment-only/stage1/implementation/test/acceptance.test.js b/work/phase9/runs/placement-judgment-only/stage1/implementation/test/acceptance.test.js
+new file mode 100644
+index 0000000..3d92d95
+--- /dev/null
++++ b/work/phase9/runs/placement-judgment-only/stage1/implementation/test/acceptance.test.js
+@@ -0,0 +1,10 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { reset, issueBuildingPermit, buildingPermitStatus, recordLicensingClearance } from "../src/municipal.js";
++test("stage 1 enforces licensing clearance only for high-risk permit issuance", () => {
++  reset();
++  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "high" }), /clearance/i);
++  recordLicensingClearance("c1");
++  issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "high" });
++  assert.equal(buildingPermitStatus("p1"), "issued");
++});

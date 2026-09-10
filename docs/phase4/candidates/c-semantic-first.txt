@@ -1,0 +1,8 @@
+Keep code in the smallest access scope that currently needs it.
+Keep implementation details internal by default.
+
+When current scopes need the same meaning and contract, promote it only to their nearest meaningful common scope. Do not widen visibility for possible future reuse.
+
+Choose semantic scope before technical classification. If technical structure is useful, place it within the semantic scope unless a wider scope is currently required.
+
+Add structure only when it is currently useful. Preserve explicit requirements.

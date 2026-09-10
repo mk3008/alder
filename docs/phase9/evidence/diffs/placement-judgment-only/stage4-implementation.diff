@@ -1,0 +1,104 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage4/implementation/src/city-operations/emergency-hold.js b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/city-operations/emergency-hold.js
+new file mode 100644
+index 0000000..bc1f2ef
+--- /dev/null
++++ b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/city-operations/emergency-hold.js
+@@ -0,0 +1,15 @@
++let cityEmergencyHold = false;
++
++export function setCityEmergencyHold(isHeld) {
++  cityEmergencyHold = Boolean(isHeld);
++}
++
++export function resetCityEmergencyHold() {
++  cityEmergencyHold = false;
++}
++
++export function assertCityEmergencyHoldAllows(action) {
++  if (cityEmergencyHold) {
++    throw new Error(`city emergency hold prevents ${action}`);
++  }
++}
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/finance/vendor-invoice-approval.js b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/finance/vendor-invoice-approval.js
+index 2429f61..4d5b168 100644
+--- a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/finance/vendor-invoice-approval.js
++++ b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/finance/vendor-invoice-approval.js
+@@ -1,3 +1,5 @@
++import { assertCityEmergencyHoldAllows } from "../city-operations/emergency-hold.js";
++
+ const taxClearedVendors = new Set();
+ 
+ export function recordVendorTaxClearance(vendorId) {
+@@ -14,6 +16,7 @@ export function approveVendorInvoice(
+   saveInvoiceRecord,
+   deliverPaymentNotice,
+ ) {
++  assertCityEmergencyHoldAllows("vendor-invoice approval");
+   const invoice = loadInvoiceRecord(id);
+   if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
+   if (!taxClearedVendors.has(invoice.vendorId)) {
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/licensing/building-permit-issuance.js b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/licensing/building-permit-issuance.js
+index a271145..e0934d0 100644
+--- a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/licensing/building-permit-issuance.js
++++ b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/licensing/building-permit-issuance.js
+@@ -1,6 +1,8 @@
+ import { hasLicensingClearance } from "./licensing-board.js";
++import { assertCityEmergencyHoldAllows } from "../city-operations/emergency-hold.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }, savePermitRecord) {
++  assertCityEmergencyHoldAllows("building-permit issuance");
+   if (!id || !contractorId) throw new Error("permit identity is required");
+   if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
+     throw new Error("contractor licensing clearance is required");
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/municipal.js
+index b3c4ef7..71d51ab 100644
+--- a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage4/implementation/src/municipal.js
+@@ -9,6 +9,10 @@ import {
+ } from "./finance/vendor-invoice-approval.js";
+ import { issueBuildingPermit as issuePermit } from "./licensing/building-permit-issuance.js";
+ import { scheduleBuildingInspection as scheduleInspection } from "./licensing/building-inspection-scheduling.js";
++import {
++  setCityEmergencyHold,
++  resetCityEmergencyHold,
++} from "./city-operations/emergency-hold.js";
+ 
+ const permits = new Map();
+ const invoices = new Map();
+@@ -18,6 +22,7 @@ export function reset() {
+   invoices.clear();
+   resetLicensingClearances();
+   resetVendorTaxClearances();
++  resetCityEmergencyHold();
+ }
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+@@ -25,6 +30,7 @@ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+ }
+ 
+ export { recordLicensingClearance, recordVendorTaxClearance };
++export { setCityEmergencyHold };
+ 
+ export function scheduleBuildingInspection({ permitId, inspectorId }) {
+   scheduleInspection(
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/refactoring/test/acceptance.test.js b/work/phase9/runs/placement-judgment-only/stage4/implementation/test/acceptance.test.js
+index 0fa93c2..400a19a 100644
+--- a/work/phase9/runs/placement-judgment-only/stage3/refactoring/test/acceptance.test.js
++++ b/work/phase9/runs/placement-judgment-only/stage4/implementation/test/acceptance.test.js
+@@ -1,11 +1,11 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, submitVendorInvoice, approveVendorInvoice, vendorInvoiceStatus, recordVendorTaxClearance } from "../src/municipal.js";
+-test("stage 3 keeps Finance tax clearance distinct from Licensing clearance", () => {
++import { reset, setCityEmergencyHold, issueBuildingPermit, submitVendorInvoice, approveVendorInvoice, recordVendorTaxClearance } from "../src/municipal.js";
++test("stage 4 applies City Operations emergency hold across Licensing and Finance decisions", () => {
+   reset();
++  setCityEmergencyHold(true);
++  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" }), /emergency hold/i);
+   submitVendorInvoice({ id: "v1", vendorId: "vendor-1", amount: 10 });
+-  assert.throws(() => approveVendorInvoice({ id: "v1" }), /tax clearance/i);
+   recordVendorTaxClearance("vendor-1");
+-  approveVendorInvoice({ id: "v1" });
+-  assert.equal(vendorInvoiceStatus("v1"), "approved");
++  assert.throws(() => approveVendorInvoice({ id: "v1" }), /emergency hold/i);
+ });

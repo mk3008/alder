@@ -1,0 +1,6 @@
+Keep code in the smallest access scope that currently needs it.
+Keep implementation details internal by default.
+
+When current scopes need the same meaning and contract, promote it only to their nearest meaningful common scope. Do not widen visibility for possible future reuse.
+
+Add structure only when it is currently useful. Preserve explicit requirements.

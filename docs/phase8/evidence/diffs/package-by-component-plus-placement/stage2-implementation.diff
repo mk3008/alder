@@ -1,0 +1,107 @@
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/contractorLicensingClearance.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/contractorLicensingClearance.js"
+new file mode 100644
+index 0000000..cca172a
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/contractorLicensingClearance.js"
+@@ -0,0 +1,13 @@
++const clearedContractors = new Set();
++
++export function resetContractorLicensingClearance() {
++  clearedContractors.clear();
++}
++
++export function recordLicensingClearance(contractorId) {
++  clearedContractors.add(contractorId);
++}
++
++export function hasCurrentLicensingClearance(contractorId) {
++  return clearedContractors.has(contractorId);
++}
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/highRiskPermitIssuance.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/highRiskPermitIssuance.js"
+index b0a32cc..e678d69 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/highRiskPermitIssuance.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/highRiskPermitIssuance.js"
+@@ -1,18 +1,16 @@
+ import { savePermitRecord } from "./permitRecords.js";
+-
+-const clearedContractors = new Set();
++import {
++  hasCurrentLicensingClearance,
++  resetContractorLicensingClearance,
++} from "./contractorLicensingClearance.js";
+ 
+ export function resetHighRiskPermitIssuance() {
+-  clearedContractors.clear();
+-}
+-
+-export function recordLicensingClearance(contractorId) {
+-  clearedContractors.add(contractorId);
++  resetContractorLicensingClearance();
+ }
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+   if (!id || !contractorId) throw new Error("permit identity is required");
+-  if (riskLevel === "high" && !clearedContractors.has(contractorId)) {
++  if (riskLevel === "high" && !hasCurrentLicensingClearance(contractorId)) {
+     throw new Error("contractor licensing clearance is required for high-risk permits");
+   }
+   savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/index.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/index.js"
+index 920a2db..49daee6 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/index.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/index.js"
+@@ -1,12 +1,13 @@
+-export { issueBuildingPermit, recordLicensingClearance } from "./highRiskPermitIssuance.js";
++export { issueBuildingPermit } from "./highRiskPermitIssuance.js";
++export { recordLicensingClearance } from "./contractorLicensingClearance.js";
+ export { inspectionStatus, scheduleBuildingInspection } from "./inspections.js";
+ export { loadPermitRecord } from "./permitRecords.js";
+ 
+-import { resetHighRiskPermitIssuance } from "./highRiskPermitIssuance.js";
++import { resetContractorLicensingClearance } from "./contractorLicensingClearance.js";
+ import { loadPermitRecord, resetPermitRecords } from "./permitRecords.js";
+ 
+ export function reset() {
+-  resetHighRiskPermitIssuance();
++  resetContractorLicensingClearance();
+   resetPermitRecords();
+ }
+ 
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/inspections.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/inspections.js"
+index 817714b..c0511fa 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/src/licensing/buildingPermits/inspections.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/src/licensing/buildingPermits/inspections.js"
+@@ -1,8 +1,12 @@
+ import { loadPermitRecord, savePermitRecord } from "./permitRecords.js";
++import { hasCurrentLicensingClearance } from "./contractorLicensingClearance.js";
+ 
+ export function scheduleBuildingInspection({ permitId, inspectorId }) {
+   const permit = loadPermitRecord(permitId);
+   if (!inspectorId) throw new Error("inspector is required");
++  if (!hasCurrentLicensingClearance(permit.contractorId)) {
++    throw new Error("contractor licensing clearance is required for inspections");
++  }
+   savePermitRecord({ ...permit, inspection: { inspectorId, status: "scheduled" } });
+   sendInspectionBooking(permitId, inspectorId);
+ }
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/test/acceptance.test.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/test/acceptance.test.js"
+index 3d92d95..e9511b6 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage1\\refactoring/test/acceptance.test.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\implementation/test/acceptance.test.js"
+@@ -1,10 +1,11 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, issueBuildingPermit, buildingPermitStatus, recordLicensingClearance } from "../src/municipal.js";
+-test("stage 1 enforces licensing clearance only for high-risk permit issuance", () => {
++import { reset, issueBuildingPermit, scheduleBuildingInspection, inspectionStatus, recordLicensingClearance } from "../src/municipal.js";
++test("stage 2 applies the same Licensing Board clearance authority to high-risk inspections", () => {
+   reset();
+-  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "high" }), /clearance/i);
++  issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" });
++  assert.throws(() => scheduleBuildingInspection({ permitId: "p1", inspectorId: "i1" }), /clearance/i);
+   recordLicensingClearance("c1");
+-  issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "high" });
+-  assert.equal(buildingPermitStatus("p1"), "issued");
++  scheduleBuildingInspection({ permitId: "p1", inspectorId: "i1" });
++  assert.equal(inspectionStatus("p1"), "scheduled");
+ });

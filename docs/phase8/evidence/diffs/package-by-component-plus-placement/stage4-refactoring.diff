@@ -1,0 +1,49 @@
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/cityOperations/emergencyHold.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/cityOperations/emergencyHold/index.js"
+similarity index 100%
+rename from "work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/cityOperations/emergencyHold.js"
+rename to "work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/cityOperations/emergencyHold/index.js"
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/finance/vendorInvoices/index.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/finance/vendorInvoices/index.js"
+index c88af3c..e0e4d2f 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/finance/vendorInvoices/index.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/finance/vendorInvoices/index.js"
+@@ -2,7 +2,7 @@ import {
+   hasCurrentVendorTaxClearance,
+   resetVendorTaxClearance,
+ } from "./vendorTaxClearance.js";
+-import { assertCityEmergencyHoldAllows } from "../../cityOperations/emergencyHold.js";
++import { assertCityEmergencyHoldAllows } from "../../cityOperations/emergencyHold/index.js";
+ 
+ const invoices = new Map();
+ 
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/licensing/buildingPermits/highRiskPermitIssuance.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/licensing/buildingPermits/highRiskPermitIssuance.js"
+index 3b00cfe..8c4ff16 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/licensing/buildingPermits/highRiskPermitIssuance.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/licensing/buildingPermits/highRiskPermitIssuance.js"
+@@ -1,5 +1,5 @@
+ import { savePermitRecord } from "./permitRecords.js";
+-import { assertCityEmergencyHoldAllows } from "../../cityOperations/emergencyHold.js";
++import { assertCityEmergencyHoldAllows } from "../../cityOperations/emergencyHold/index.js";
+ import {
+   hasCurrentLicensingClearance,
+   resetContractorLicensingClearance,
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/municipal.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/municipal.js"
+index 02f62c3..34b6923 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\implementation/src/municipal.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage4\\refactoring/src/municipal.js"
+@@ -1,6 +1,6 @@
+ import { reset as resetLicensing } from "./licensing/buildingPermits/index.js";
+ import { reset as resetFinance } from "./finance/vendorInvoices/index.js";
+-import { resetCityEmergencyHold } from "./cityOperations/emergencyHold.js";
++import { resetCityEmergencyHold } from "./cityOperations/emergencyHold/index.js";
+ 
+ export function reset() {
+   resetLicensing();
+@@ -8,7 +8,7 @@ export function reset() {
+   resetCityEmergencyHold();
+ }
+ 
+-export { setCityEmergencyHold } from "./cityOperations/emergencyHold.js";
++export { setCityEmergencyHold } from "./cityOperations/emergencyHold/index.js";
+ 
+ export {
+   issueBuildingPermit,

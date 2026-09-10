@@ -1,0 +1,80 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/index.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/finance/vendor-invoices/index.js
+index 24e3a12..9a6ab93 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/index.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/finance/vendor-invoices/index.js
+@@ -1,4 +1,4 @@
+-import { hasVendorTaxClearance, resetVendorTaxClearance } from "./tax-clearance.js";
++import { hasVendorTaxClearance, resetVendorTaxClearance } from "../vendor-tax-clearance/index.js";
+ import { isCityEmergencyHoldActive } from "../../city-operations/index.js";
+ 
+ const invoices = new Map();
+@@ -30,7 +30,7 @@ export function vendorInvoiceStatus(id) {
+   return loadInvoiceRecord(id).status;
+ }
+ 
+-export { recordVendorTaxClearance } from "./tax-clearance.js";
++export { recordVendorTaxClearance } from "../vendor-tax-clearance/index.js";
+ 
+ function loadInvoiceRecord(id) {
+   const invoice = invoices.get(id);
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/tax-clearance.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/finance/vendor-tax-clearance/index.js
+similarity index 100%
+rename from work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/tax-clearance.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/finance/vendor-tax-clearance/index.js
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/index.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/index.js
+index 93d712d..bf64a44 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/index.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/index.js
+@@ -4,12 +4,12 @@ export {
+ } from "./permit-issuance.js";
+ 
+ export { inspectionStatus, scheduleBuildingInspection } from "./inspections.js";
+-export { recordLicensingClearance } from "./licensing-board.js";
++export { recordLicensingClearance } from "../licensing-clearance/index.js";
+ 
+-import { resetLicensingBoard } from "./licensing-board.js";
++import { resetLicensingClearance } from "../licensing-clearance/index.js";
+ import { resetPermitRecords } from "./permit-records.js";
+ 
+ export function resetLicensing() {
+   resetPermitRecords();
+-  resetLicensingBoard();
++  resetLicensingClearance();
+ }
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/inspections.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/inspections.js
+index 2e1e418..ddaef32 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/inspections.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/inspections.js
+@@ -1,5 +1,5 @@
+ import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
+-import { hasLicensingClearance } from "./licensing-board.js";
++import { hasLicensingClearance } from "../licensing-clearance/index.js";
+ 
+ export function scheduleBuildingInspection({ permitId, inspectorId }) {
+   const permit = loadPermitRecord(permitId);
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/permit-issuance.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/permit-issuance.js
+index 7ca3051..0064204 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/permit-issuance.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/building-permits/permit-issuance.js
+@@ -1,5 +1,5 @@
+ import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
+-import { hasLicensingClearance } from "./licensing-board.js";
++import { hasLicensingClearance } from "../licensing-clearance/index.js";
+ import { isCityEmergencyHoldActive } from "../../city-operations/index.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/licensing-board.js b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/licensing-clearance/index.js
+similarity index 88%
+rename from work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/licensing-board.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/licensing-clearance/index.js
+index d6d6051..c29f689 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/licensing-board.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/refactoring/src/licensing/licensing-clearance/index.js
+@@ -1,6 +1,6 @@
+ const clearedContractors = new Set();
+ 
+-export function resetLicensingBoard() {
++export function resetLicensingClearance() {
+   clearedContractors.clear();
+ }
+ 

@@ -1,0 +1,120 @@
+diff --git "a/work\\phase6\\runs\\package-by-component\\implementation/out/acceptance/MunicipalApplicationAcceptance.class" "b/work\\phase6\\runs\\package-by-component\\implementation/out/acceptance/MunicipalApplicationAcceptance.class"
+new file mode 100644
+index 0000000..ab7efac
+Binary files /dev/null and "b/work\\phase6\\runs\\package-by-component\\implementation/out/acceptance/MunicipalApplicationAcceptance.class" differ
+diff --git "a/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$Permit.class" "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$Permit.class"
+new file mode 100644
+index 0000000..913a147
+Binary files /dev/null and "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$Permit.class" differ
+diff --git "a/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$VendorPayment.class" "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$VendorPayment.class"
+new file mode 100644
+index 0000000..14bffbd
+Binary files /dev/null and "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication$VendorPayment.class" differ
+diff --git "a/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication.class" "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication.class"
+new file mode 100644
+index 0000000..61e5b65
+Binary files /dev/null and "b/work\\phase6\\runs\\package-by-component\\implementation/out/study/MunicipalApplication.class" differ
+diff --git "a/work\\phase6\\fixture-base/src/main/java/study/MunicipalApplication.java" "b/work\\phase6\\runs\\package-by-component\\implementation/src/main/java/study/MunicipalApplication.java"
+index 33e213a..d83d7fb 100644
+--- "a/work\\phase6\\fixture-base/src/main/java/study/MunicipalApplication.java"
++++ "b/work\\phase6\\runs\\package-by-component\\implementation/src/main/java/study/MunicipalApplication.java"
+@@ -7,6 +7,15 @@ import java.util.Map;
+ public final class MunicipalApplication {
+     private final Map<String, Permit> permits = new HashMap<>();
+     private final Map<String, VendorPayment> vendorPayments = new HashMap<>();
++    private int operatingCap = Integer.MAX_VALUE;
++
++    public void setOperatingCap(int amount) {
++        if (amount < 0) throw new IllegalArgumentException("operating cap must not be negative");
++        if (approvedAndReleasedTotal() > amount) {
++            throw new IllegalStateException("operating cap cannot be below committed amount");
++        }
++        operatingCap = amount;
++    }
+ 
+     public void submitPermit(String id, int amount, String applicant) {
+         if (amount <= 0) throw new IllegalArgumentException("permit amount must be positive");
+@@ -15,6 +24,7 @@ public final class MunicipalApplication {
+ 
+     public void approvePermit(String id) {
+         Permit permit = requireSubmittedPermit(id);
++        requireCapacityFor(permit.amount());
+         permits.put(id, permit.withStatus("approved"));
+     }
+ 
+@@ -35,6 +45,7 @@ public final class MunicipalApplication {
+ 
+     public void releaseVendorPayment(String id) {
+         VendorPayment payment = requireEnteredVendorPayment(id);
++        requireCapacityFor(payment.amount());
+         vendorPayments.put(id, payment.withStatus("released"));
+     }
+ 
+@@ -72,6 +83,24 @@ public final class MunicipalApplication {
+         return payment;
+     }
+ 
++    private void requireCapacityFor(int amount) {
++        if (approvedAndReleasedTotal() + amount > operatingCap) {
++            throw new IllegalStateException("operating cap exceeded");
++        }
++    }
++
++    private long approvedAndReleasedTotal() {
++        long permitTotal = permits.values().stream()
++                .filter(permit -> permit.status().equals("approved"))
++                .mapToLong(Permit::amount)
++                .sum();
++        long paymentTotal = vendorPayments.values().stream()
++                .filter(payment -> payment.status().equals("released"))
++                .mapToLong(VendorPayment::amount)
++                .sum();
++        return permitTotal + paymentTotal;
++    }
++
+     private record Permit(String id, int amount, String applicant, String status) {
+         private Permit withStatus(String newStatus) { return new Permit(id, amount, applicant, newStatus); }
+     }
+diff --git "a/work\\phase6\\runs\\package-by-component\\implementation/src/test/java/acceptance/MunicipalApplicationAcceptance.java" "b/work\\phase6\\runs\\package-by-component\\implementation/src/test/java/acceptance/MunicipalApplicationAcceptance.java"
+new file mode 100644
+index 0000000..01760a0
+--- /dev/null
++++ "b/work\\phase6\\runs\\package-by-component\\implementation/src/test/java/acceptance/MunicipalApplicationAcceptance.java"
+@@ -0,0 +1,37 @@
++package acceptance;
++
++import study.MunicipalApplication;
++
++public final class MunicipalApplicationAcceptance {
++    public static void main(String[] args) {
++        MunicipalApplication app = new MunicipalApplication();
++        app.setOperatingCap(100);
++
++        app.submitPermit("permit-1", 60, "Asha");
++        app.approvePermit("permit-1");
++        require("approved".equals(app.permitStatus("permit-1")), "permit approval must remain observable");
++        require("Permit permit-1 for Asha approved".equals(app.permitApprovalMessage("permit-1")), "permit message contract");
++
++        app.enterVendorPayment("payment-1", 30, "Northwind");
++        app.releaseVendorPayment("payment-1");
++        require("released".equals(app.vendorPaymentStatus("payment-1")), "payment release must remain observable");
++        require("Payment payment-1 to Northwind released".equals(app.vendorPaymentReleaseMessage("payment-1")), "payment message contract");
++
++        app.enterVendorPayment("payment-2", 20, "Fabrikam");
++        expectOperatingCap(() -> app.releaseVendorPayment("payment-2"));
++        require("entered".equals(app.vendorPaymentStatus("payment-2")), "rejected release must not change payment state");
++    }
++
++    private static void expectOperatingCap(Runnable action) {
++        try {
++            action.run();
++            throw new AssertionError("expected operating cap rejection");
++        } catch (IllegalStateException expected) {
++            require(expected.getMessage().toLowerCase().contains("cap"), "rejection must mention cap");
++        }
++    }
++
++    private static void require(boolean condition, String message) {
++        if (!condition) throw new AssertionError(message);
++    }
++}

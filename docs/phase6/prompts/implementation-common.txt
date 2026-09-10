@@ -1,0 +1,1 @@
+Implement the frozen business change packet in this Java fixture. Preserve the fixed public application API and existing observable behavior. Do not edit frozen tests or Phase 3–5 material. Run the supplied build and acceptance test command. Work only in the assigned arm directory.

@@ -1,0 +1,81 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/implementation/src/finance/finance-office.js b/work/phase9/runs/placement-judgment-only/stage3/implementation/src/finance/finance-office.js
+deleted file mode 100644
+index 8c5202b..0000000
+--- a/work/phase9/runs/placement-judgment-only/stage3/implementation/src/finance/finance-office.js
++++ /dev/null
+@@ -1,13 +0,0 @@
+-const taxClearedVendors = new Set();
+-
+-export function recordVendorTaxClearance(vendorId) {
+-  taxClearedVendors.add(vendorId);
+-}
+-
+-export function hasVendorTaxClearance(vendorId) {
+-  return taxClearedVendors.has(vendorId);
+-}
+-
+-export function resetVendorTaxClearances() {
+-  taxClearedVendors.clear();
+-}
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/finance/vendor-invoice-approval.js b/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/finance/vendor-invoice-approval.js
+new file mode 100644
+index 0000000..2429f61
+--- /dev/null
++++ b/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/finance/vendor-invoice-approval.js
+@@ -0,0 +1,24 @@
++const taxClearedVendors = new Set();
++
++export function recordVendorTaxClearance(vendorId) {
++  taxClearedVendors.add(vendorId);
++}
++
++export function resetVendorTaxClearances() {
++  taxClearedVendors.clear();
++}
++
++export function approveVendorInvoice(
++  { id },
++  loadInvoiceRecord,
++  saveInvoiceRecord,
++  deliverPaymentNotice,
++) {
++  const invoice = loadInvoiceRecord(id);
++  if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
++  if (!taxClearedVendors.has(invoice.vendorId)) {
++    throw new Error("vendor tax clearance is required");
++  }
++  saveInvoiceRecord({ ...invoice, status: "approved" });
++  deliverPaymentNotice(invoice.id);
++}
+diff --git a/work/phase9/runs/placement-judgment-only/stage3/implementation/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/municipal.js
+index 7386186..b3c4ef7 100644
+--- a/work/phase9/runs/placement-judgment-only/stage3/implementation/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage3/refactoring/src/municipal.js
+@@ -3,10 +3,10 @@ import {
+   resetLicensingClearances,
+ } from "./licensing/licensing-board.js";
+ import {
+-  hasVendorTaxClearance,
+   recordVendorTaxClearance,
+   resetVendorTaxClearances,
+-} from "./finance/finance-office.js";
++  approveVendorInvoice as approveInvoice,
++} from "./finance/vendor-invoice-approval.js";
+ import { issueBuildingPermit as issuePermit } from "./licensing/building-permit-issuance.js";
+ import { scheduleBuildingInspection as scheduleInspection } from "./licensing/building-inspection-scheduling.js";
+ 
+@@ -49,13 +49,7 @@ export function submitVendorInvoice({ id, vendorId, amount }) {
+ }
+ 
+ export function approveVendorInvoice({ id }) {
+-  const invoice = loadInvoiceRecord(id);
+-  if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
+-  if (!hasVendorTaxClearance(invoice.vendorId)) {
+-    throw new Error("vendor tax clearance is required");
+-  }
+-  saveInvoiceRecord({ ...invoice, status: "approved" });
+-  deliverPaymentNotice(invoice.id);
++  approveInvoice({ id }, loadInvoiceRecord, saveInvoiceRecord, deliverPaymentNotice);
+ }
+ 
+ export function vendorInvoiceStatus(id) {

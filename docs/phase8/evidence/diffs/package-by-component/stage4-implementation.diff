@@ -1,0 +1,102 @@
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/emergency-hold.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/emergency-hold.js"
+new file mode 100644
+index 0000000..8426168
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/emergency-hold.js"
+@@ -0,0 +1,13 @@
++let cityEmergencyHold = false;
++
++export function setCityEmergencyHold(isHeld) {
++  cityEmergencyHold = Boolean(isHeld);
++}
++
++export function isCityEmergencyHoldActive() {
++  return cityEmergencyHold;
++}
++
++export function resetCityEmergencyHold() {
++  cityEmergencyHold = false;
++}
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/index.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/index.js"
+new file mode 100644
+index 0000000..6f6ede7
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/city-operations/index.js"
+@@ -0,0 +1 @@
++export { setCityEmergencyHold, isCityEmergencyHoldActive, resetCityEmergencyHold } from "./emergency-hold.js";
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/finance/vendor-invoices.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/finance/vendor-invoices.js"
+index 0a53c6b..82acf97 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/finance/vendor-invoices.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/finance/vendor-invoices.js"
+@@ -1,4 +1,5 @@
+ import { hasCurrentVendorTaxClearance } from "./tax-clearances.js";
++import { isCityEmergencyHoldActive } from "../city-operations/index.js";
+ 
+ const invoices = new Map();
+ 
+@@ -10,6 +11,9 @@ export function submitVendorInvoice({ id, vendorId, amount }) {
+ export function approveVendorInvoice({ id }) {
+   const invoice = loadInvoiceRecord(id);
+   if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
++  if (isCityEmergencyHoldActive()) {
++    throw new Error("invoice approval is unavailable during the city emergency hold");
++  }
+   if (!hasCurrentVendorTaxClearance(invoice.vendorId)) {
+     throw new Error("vendor tax clearance is required for invoice approval");
+   }
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/licensing/building-permits.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/licensing/building-permits.js"
+index 27abae6..5abc8df 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/licensing/building-permits.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/licensing/building-permits.js"
+@@ -1,8 +1,12 @@
+ import { hasLicensingClearance } from "./licensing-board.js";
+ import { createPermit, getPermit, resetPermitRecords } from "./permit-records.js";
++import { isCityEmergencyHoldActive } from "../city-operations/index.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+   if (!id || !contractorId) throw new Error("permit identity is required");
++  if (isCityEmergencyHoldActive()) {
++    throw new Error("permit issuance is unavailable during the city emergency hold");
++  }
+   if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
+     throw new Error("contractor licensing clearance is required for high-risk permits");
+   }
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/municipal.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/municipal.js"
+index c9711b3..8997549 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/src/municipal.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/src/municipal.js"
+@@ -1,10 +1,13 @@
+ import { resetLicensing } from "./licensing/index.js";
+ import { resetFinance } from "./finance/index.js";
++import { resetCityEmergencyHold } from "./city-operations/index.js";
+ 
+ export { recordLicensingClearance, issueBuildingPermit, scheduleBuildingInspection, buildingPermitStatus, inspectionStatus } from "./licensing/index.js";
+ export { recordVendorTaxClearance, submitVendorInvoice, approveVendorInvoice, vendorInvoiceStatus } from "./finance/index.js";
++export { setCityEmergencyHold } from "./city-operations/index.js";
+ 
+ export function reset() {
++  resetCityEmergencyHold();
+   resetLicensing();
+   resetFinance();
+ }
+diff --git "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/test/acceptance.test.js" "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/test/acceptance.test.js"
+index 0fa93c2..400a19a 100644
+--- "a/work\\phase8\\runs\\package-by-component\\stage3\\refactoring/test/acceptance.test.js"
++++ "b/work\\phase8\\runs\\package-by-component\\stage4\\implementation/test/acceptance.test.js"
+@@ -1,11 +1,11 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, submitVendorInvoice, approveVendorInvoice, vendorInvoiceStatus, recordVendorTaxClearance } from "../src/municipal.js";
+-test("stage 3 keeps Finance tax clearance distinct from Licensing clearance", () => {
++import { reset, setCityEmergencyHold, issueBuildingPermit, submitVendorInvoice, approveVendorInvoice, recordVendorTaxClearance } from "../src/municipal.js";
++test("stage 4 applies City Operations emergency hold across Licensing and Finance decisions", () => {
+   reset();
++  setCityEmergencyHold(true);
++  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" }), /emergency hold/i);
+   submitVendorInvoice({ id: "v1", vendorId: "vendor-1", amount: 10 });
+-  assert.throws(() => approveVendorInvoice({ id: "v1" }), /tax clearance/i);
+   recordVendorTaxClearance("vendor-1");
+-  approveVendorInvoice({ id: "v1" });
+-  assert.equal(vendorInvoiceStatus("v1"), "approved");
++  assert.throws(() => approveVendorInvoice({ id: "v1" }), /emergency hold/i);
+ });

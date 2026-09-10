@@ -1,0 +1,299 @@
+diff --git "a/work\\phase6\\runs\\package-by-component-plus-judgment\\implementation/src/main/java/study/MunicipalApplication.java" "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/MunicipalApplication.java"
+index f22be0b..b2b1406 100644
+--- "a/work\\phase6\\runs\\package-by-component-plus-judgment\\implementation/src/main/java/study/MunicipalApplication.java"
++++ "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/MunicipalApplication.java"
+@@ -1,109 +1,49 @@
+ package study;
+ 
+-import java.util.HashMap;
+-import java.util.Map;
++import study.budget.OperatingCap;
++import study.payment.VendorPaymentWorkflow;
++import study.permit.PermitWorkflow;
+ 
+ /** Fixed public application API for a small municipal operations application. */
+ public final class MunicipalApplication {
+-    private final Map<String, Permit> permits = new HashMap<>();
+-    private final Map<String, VendorPayment> vendorPayments = new HashMap<>();
+-    private int operatingCap = Integer.MAX_VALUE;
++    private final PermitWorkflow permits = new PermitWorkflow();
++    private final VendorPaymentWorkflow vendorPayments = new VendorPaymentWorkflow();
++    private final OperatingCap operatingCap = new OperatingCap(
++            () -> permits.committedAmount() + vendorPayments.committedAmount());
+ 
+     public void setOperatingCap(int amount) {
+-        if (amount < 0) throw new IllegalArgumentException("operating cap must not be negative");
+-        if (committedAmount() > amount) throw new IllegalStateException("operating cap is below committed total");
+-        operatingCap = amount;
++        operatingCap.set(amount);
+     }
+ 
+     public void submitPermit(String id, int amount, String applicant) {
+-        if (amount <= 0) throw new IllegalArgumentException("permit amount must be positive");
+-        permits.put(id, new Permit(id, amount, applicant, "submitted"));
++        permits.submit(id, amount, applicant);
+     }
+ 
+     public void approvePermit(String id) {
+-        Permit permit = requireSubmittedPermit(id);
+-        requireCapacityFor(permit.amount());
+-        permits.put(id, permit.withStatus("approved"));
++        permits.approve(id, operatingCap);
+     }
+ 
+     public String permitStatus(String id) {
+-        return requirePermit(id).status();
++        return permits.status(id);
+     }
+ 
+     public String permitApprovalMessage(String id) {
+-        Permit permit = requirePermit(id);
+-        if (!permit.status().equals("approved")) throw new IllegalStateException("permit is not approved");
+-        return "Permit " + permit.id() + " for " + permit.applicant() + " approved";
++        return permits.approvalMessage(id);
+     }
+ 
+     public void enterVendorPayment(String id, int amount, String vendor) {
+-        if (amount <= 0) throw new IllegalArgumentException("payment amount must be positive");
+-        vendorPayments.put(id, new VendorPayment(id, amount, vendor, "entered"));
++        vendorPayments.enter(id, amount, vendor);
+     }
+ 
+     public void releaseVendorPayment(String id) {
+-        VendorPayment payment = requireEnteredVendorPayment(id);
+-        requireCapacityFor(payment.amount());
+-        vendorPayments.put(id, payment.withStatus("released"));
++        vendorPayments.release(id, operatingCap);
+     }
+ 
+     public String vendorPaymentStatus(String id) {
+-        return requireVendorPayment(id).status();
++        return vendorPayments.status(id);
+     }
+ 
+     public String vendorPaymentReleaseMessage(String id) {
+-        VendorPayment payment = requireVendorPayment(id);
+-        if (!payment.status().equals("released")) throw new IllegalStateException("payment is not released");
+-        return "Payment " + payment.id() + " to " + payment.vendor() + " released";
+-    }
+-
+-    private Permit requirePermit(String id) {
+-        Permit permit = permits.get(id);
+-        if (permit == null) throw new IllegalArgumentException("unknown permit");
+-        return permit;
+-    }
+-
+-    private Permit requireSubmittedPermit(String id) {
+-        Permit permit = requirePermit(id);
+-        if (!permit.status().equals("submitted")) throw new IllegalStateException("permit is not submitted");
+-        return permit;
+-    }
+-
+-    private VendorPayment requireVendorPayment(String id) {
+-        VendorPayment payment = vendorPayments.get(id);
+-        if (payment == null) throw new IllegalArgumentException("unknown payment");
+-        return payment;
+-    }
+-
+-    private VendorPayment requireEnteredVendorPayment(String id) {
+-        VendorPayment payment = requireVendorPayment(id);
+-        if (!payment.status().equals("entered")) throw new IllegalStateException("payment is not entered");
+-        return payment;
+-    }
+-
+-    private void requireCapacityFor(int amount) {
+-        if (committedAmount() + amount > operatingCap) {
+-            throw new IllegalStateException("operating cap exceeded");
+-        }
+-    }
+-
+-    private long committedAmount() {
+-        long approvedPermitAmount = permits.values().stream()
+-                .filter(permit -> permit.status().equals("approved"))
+-                .mapToLong(Permit::amount)
+-                .sum();
+-        long releasedPaymentAmount = vendorPayments.values().stream()
+-                .filter(payment -> payment.status().equals("released"))
+-                .mapToLong(VendorPayment::amount)
+-                .sum();
+-        return approvedPermitAmount + releasedPaymentAmount;
+-    }
+-
+-    private record Permit(String id, int amount, String applicant, String status) {
+-        private Permit withStatus(String newStatus) { return new Permit(id, amount, applicant, newStatus); }
+-    }
+-
+-    private record VendorPayment(String id, int amount, String vendor, String status) {
+-        private VendorPayment withStatus(String newStatus) { return new VendorPayment(id, amount, vendor, newStatus); }
++        return vendorPayments.releaseMessage(id);
+     }
+ }
+diff --git "a/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/budget/OperatingCap.java" "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/budget/OperatingCap.java"
+new file mode 100644
+index 0000000..36d242b
+--- /dev/null
++++ "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/budget/OperatingCap.java"
+@@ -0,0 +1,27 @@
++package study.budget;
++
++import java.util.function.LongSupplier;
++
++/** Owns the cross-workflow limit for committed municipal funds. */
++public final class OperatingCap {
++    private final LongSupplier committedAmount;
++    private int amount = Integer.MAX_VALUE;
++
++    public OperatingCap(LongSupplier committedAmount) {
++        this.committedAmount = committedAmount;
++    }
++
++    public void set(int amount) {
++        if (amount < 0) throw new IllegalArgumentException("operating cap must not be negative");
++        if (committedAmount.getAsLong() > amount) {
++            throw new IllegalStateException("operating cap is below committed total");
++        }
++        this.amount = amount;
++    }
++
++    public void requireCapacityFor(int additionalAmount) {
++        if (committedAmount.getAsLong() + additionalAmount > amount) {
++            throw new IllegalStateException("operating cap exceeded");
++        }
++    }
++}
+diff --git "a/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/payment/VendorPaymentWorkflow.java" "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/payment/VendorPaymentWorkflow.java"
+new file mode 100644
+index 0000000..1b3fd67
+--- /dev/null
++++ "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/payment/VendorPaymentWorkflow.java"
+@@ -0,0 +1,62 @@
++package study.payment;
++
++import java.util.HashMap;
++import java.util.Map;
++import study.budget.OperatingCap;
++
++/** Owns vendor-payment lifecycle rules and payment data. */
++public final class VendorPaymentWorkflow {
++    private final Map<String, VendorPayment> payments = new HashMap<>();
++
++    public void enter(String id, int amount, String vendor) {
++        if (amount <= 0) throw new IllegalArgumentException("payment amount must be positive");
++        payments.put(id, new VendorPayment(id, amount, vendor, Status.ENTERED));
++    }
++
++    public void release(String id, OperatingCap operatingCap) {
++        VendorPayment payment = requireEntered(id);
++        operatingCap.requireCapacityFor(payment.amount());
++        payments.put(id, payment.withStatus(Status.RELEASED));
++    }
++
++    public String status(String id) {
++        return requirePayment(id).status().wireValue;
++    }
++
++    public String releaseMessage(String id) {
++        VendorPayment payment = requirePayment(id);
++        if (payment.status() != Status.RELEASED) throw new IllegalStateException("payment is not released");
++        return "Payment " + payment.id() + " to " + payment.vendor() + " released";
++    }
++
++    public long committedAmount() {
++        return payments.values().stream()
++                .filter(payment -> payment.status() == Status.RELEASED)
++                .mapToLong(VendorPayment::amount)
++                .sum();
++    }
++
++    private VendorPayment requirePayment(String id) {
++        VendorPayment payment = payments.get(id);
++        if (payment == null) throw new IllegalArgumentException("unknown payment");
++        return payment;
++    }
++
++    private VendorPayment requireEntered(String id) {
++        VendorPayment payment = requirePayment(id);
++        if (payment.status() != Status.ENTERED) throw new IllegalStateException("payment is not entered");
++        return payment;
++    }
++
++    private record VendorPayment(String id, int amount, String vendor, Status status) {
++        private VendorPayment withStatus(Status newStatus) { return new VendorPayment(id, amount, vendor, newStatus); }
++    }
++
++    private enum Status {
++        ENTERED("entered"), RELEASED("released");
++
++        private final String wireValue;
++
++        Status(String wireValue) { this.wireValue = wireValue; }
++    }
++}
+diff --git "a/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/permit/PermitWorkflow.java" "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/permit/PermitWorkflow.java"
+new file mode 100644
+index 0000000..41f2be3
+--- /dev/null
++++ "b/work\\phase6\\runs\\package-by-component-plus-judgment\\refactoring/src/main/java/study/permit/PermitWorkflow.java"
+@@ -0,0 +1,62 @@
++package study.permit;
++
++import java.util.HashMap;
++import java.util.Map;
++import study.budget.OperatingCap;
++
++/** Owns permit lifecycle rules and permit data. */
++public final class PermitWorkflow {
++    private final Map<String, Permit> permits = new HashMap<>();
++
++    public void submit(String id, int amount, String applicant) {
++        if (amount <= 0) throw new IllegalArgumentException("permit amount must be positive");
++        permits.put(id, new Permit(id, amount, applicant, Status.SUBMITTED));
++    }
++
++    public void approve(String id, OperatingCap operatingCap) {
++        Permit permit = requireSubmitted(id);
++        operatingCap.requireCapacityFor(permit.amount());
++        permits.put(id, permit.withStatus(Status.APPROVED));
++    }
++
++    public String status(String id) {
++        return requirePermit(id).status().wireValue;
++    }
++
++    public String approvalMessage(String id) {
++        Permit permit = requirePermit(id);
++        if (permit.status() != Status.APPROVED) throw new IllegalStateException("permit is not approved");
++        return "Permit " + permit.id() + " for " + permit.applicant() + " approved";
++    }
++
++    public long committedAmount() {
++        return permits.values().stream()
++                .filter(permit -> permit.status() == Status.APPROVED)
++                .mapToLong(Permit::amount)
++                .sum();
++    }
++
++    private Permit requirePermit(String id) {
++        Permit permit = permits.get(id);
++        if (permit == null) throw new IllegalArgumentException("unknown permit");
++        return permit;
++    }
++
++    private Permit requireSubmitted(String id) {
++        Permit permit = requirePermit(id);
++        if (permit.status() != Status.SUBMITTED) throw new IllegalStateException("permit is not submitted");
++        return permit;
++    }
++
++    private record Permit(String id, int amount, String applicant, Status status) {
++        private Permit withStatus(Status newStatus) { return new Permit(id, amount, applicant, newStatus); }
++    }
++
++    private enum Status {
++        SUBMITTED("submitted"), APPROVED("approved");
++
++        private final String wireValue;
++
++        Status(String wireValue) { this.wireValue = wireValue; }
++    }
++}

@@ -1,0 +1,28 @@
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorInvoices.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/finance/vendorInvoices/index.js"
+similarity index 100%
+rename from "work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorInvoices.js"
+rename to "work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/finance/vendorInvoices/index.js"
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorTaxClearance.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/finance/vendorInvoices/vendorTaxClearance.js"
+similarity index 100%
+rename from "work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorTaxClearance.js"
+rename to "work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/finance/vendorInvoices/vendorTaxClearance.js"
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/municipal.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/municipal.js"
+index 8c1257e..e66dfde 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/municipal.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\refactoring/src/municipal.js"
+@@ -1,5 +1,5 @@
+ import { reset as resetLicensing } from "./licensing/buildingPermits/index.js";
+-import { reset as resetFinance } from "./finance/vendorInvoices.js";
++import { reset as resetFinance } from "./finance/vendorInvoices/index.js";
+ 
+ export function reset() {
+   resetLicensing();
+@@ -18,6 +18,6 @@ export {
+   submitVendorInvoice,
+   approveVendorInvoice,
+   vendorInvoiceStatus,
+-} from "./finance/vendorInvoices.js";
++} from "./finance/vendorInvoices/index.js";
+ 
+-export { recordVendorTaxClearance } from "./finance/vendorTaxClearance.js";
++export { recordVendorTaxClearance } from "./finance/vendorInvoices/vendorTaxClearance.js";

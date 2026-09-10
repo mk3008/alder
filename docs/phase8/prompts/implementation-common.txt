@@ -1,0 +1,1 @@
+Implement the frozen current stage business packet in the assigned repository. Preserve all prior-stage observable behavior unless the current packet explicitly changes it. Do not edit frozen tests, task packets, prompts, or prior-phase material. Run the supplied acceptance command. Work only in the assigned arm/stage implementation directory.

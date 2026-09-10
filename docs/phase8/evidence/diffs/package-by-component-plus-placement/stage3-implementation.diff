@@ -1,0 +1,80 @@
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/src/finance/vendorInvoices.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorInvoices.js"
+index e34432c..c671aad 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/src/finance/vendorInvoices.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorInvoices.js"
+@@ -1,7 +1,13 @@
++import {
++  hasCurrentVendorTaxClearance,
++  resetVendorTaxClearance,
++} from "./vendorTaxClearance.js";
++
+ const invoices = new Map();
+ 
+ export function reset() {
+   invoices.clear();
++  resetVendorTaxClearance();
+ }
+ 
+ export function submitVendorInvoice({ id, vendorId, amount }) {
+@@ -12,6 +18,9 @@ export function submitVendorInvoice({ id, vendorId, amount }) {
+ export function approveVendorInvoice({ id }) {
+   const invoice = loadInvoiceRecord(id);
+   if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
++  if (!hasCurrentVendorTaxClearance(invoice.vendorId)) {
++    throw new Error("vendor tax clearance is required for invoice approval");
++  }
+   saveInvoiceRecord({ ...invoice, status: "approved" });
+   deliverPaymentNotice(invoice.id);
+ }
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorTaxClearance.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorTaxClearance.js"
+new file mode 100644
+index 0000000..11cfb45
+--- /dev/null
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/finance/vendorTaxClearance.js"
+@@ -0,0 +1,13 @@
++const clearedVendors = new Set();
++
++export function resetVendorTaxClearance() {
++  clearedVendors.clear();
++}
++
++export function recordVendorTaxClearance(vendorId) {
++  clearedVendors.add(vendorId);
++}
++
++export function hasCurrentVendorTaxClearance(vendorId) {
++  return clearedVendors.has(vendorId);
++}
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/src/municipal.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/municipal.js"
+index 8482c3e..8c1257e 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/src/municipal.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/src/municipal.js"
+@@ -19,3 +19,5 @@ export {
+   approveVendorInvoice,
+   vendorInvoiceStatus,
+ } from "./finance/vendorInvoices.js";
++
++export { recordVendorTaxClearance } from "./finance/vendorTaxClearance.js";
+diff --git "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/test/acceptance.test.js" "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/test/acceptance.test.js"
+index e9511b6..0fa93c2 100644
+--- "a/work\\phase8\\runs\\package-by-component-plus-placement\\stage2\\refactoring/test/acceptance.test.js"
++++ "b/work\\phase8\\runs\\package-by-component-plus-placement\\stage3\\implementation/test/acceptance.test.js"
+@@ -1,11 +1,11 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, issueBuildingPermit, scheduleBuildingInspection, inspectionStatus, recordLicensingClearance } from "../src/municipal.js";
+-test("stage 2 applies the same Licensing Board clearance authority to high-risk inspections", () => {
++import { reset, submitVendorInvoice, approveVendorInvoice, vendorInvoiceStatus, recordVendorTaxClearance } from "../src/municipal.js";
++test("stage 3 keeps Finance tax clearance distinct from Licensing clearance", () => {
+   reset();
+-  issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" });
+-  assert.throws(() => scheduleBuildingInspection({ permitId: "p1", inspectorId: "i1" }), /clearance/i);
+-  recordLicensingClearance("c1");
+-  scheduleBuildingInspection({ permitId: "p1", inspectorId: "i1" });
+-  assert.equal(inspectionStatus("p1"), "scheduled");
++  submitVendorInvoice({ id: "v1", vendorId: "vendor-1", amount: 10 });
++  assert.throws(() => approveVendorInvoice({ id: "v1" }), /tax clearance/i);
++  recordVendorTaxClearance("vendor-1");
++  approveVendorInvoice({ id: "v1" });
++  assert.equal(vendorInvoiceStatus("v1"), "approved");
+ });

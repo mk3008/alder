@@ -1,0 +1,14 @@
+Scope first.
+Scope is the smallest access and visibility boundary that currently needs the code.
+Keep code in that smallest scope by default.
+
+Encapsulate by default.
+Do not make code visible outside its current scope unless that wider visibility is needed.
+
+Structure as needed.
+Add structure only when the current requirements need it.
+
+Share only when earned.
+Share code only when multiple current scopes need the same meaning and contract.
+
+Preserve explicit existing requirements.

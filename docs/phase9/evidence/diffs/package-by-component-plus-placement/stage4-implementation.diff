@@ -1,0 +1,106 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/emergency-hold.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/emergency-hold.js
+new file mode 100644
+index 0000000..891db32
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/emergency-hold.js
+@@ -0,0 +1,13 @@
++let cityEmergencyHold = false;
++
++export function setCityEmergencyHold(isHeld) {
++  cityEmergencyHold = Boolean(isHeld);
++}
++
++export function isCityEmergencyHoldActive() {
++  return cityEmergencyHold;
++}
++
++export function resetCityOperations() {
++  cityEmergencyHold = false;
++}
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/index.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/index.js
+new file mode 100644
+index 0000000..d6aeb05
+--- /dev/null
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/city-operations/index.js
+@@ -0,0 +1,5 @@
++export {
++  isCityEmergencyHoldActive,
++  resetCityOperations,
++  setCityEmergencyHold,
++} from "./emergency-hold.js";
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/index.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/index.js
+index a59e2cb..24e3a12 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/index.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/finance/vendor-invoices/index.js
+@@ -1,4 +1,5 @@
+ import { hasVendorTaxClearance, resetVendorTaxClearance } from "./tax-clearance.js";
++import { isCityEmergencyHoldActive } from "../../city-operations/index.js";
+ 
+ const invoices = new Map();
+ 
+@@ -13,6 +14,9 @@ export function submitVendorInvoice({ id, vendorId, amount }) {
+ }
+ 
+ export function approveVendorInvoice({ id }) {
++  if (isCityEmergencyHoldActive()) {
++    throw new Error("vendor-invoice approval is unavailable during the city emergency hold");
++  }
+   const invoice = loadInvoiceRecord(id);
+   if (invoice.status !== "submitted") throw new Error("invoice is not submitted");
+   if (!hasVendorTaxClearance(invoice.vendorId)) {
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/licensing/building-permits/permit-issuance.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/permit-issuance.js
+index ea55133..7ca3051 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/licensing/building-permits/permit-issuance.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/licensing/building-permits/permit-issuance.js
+@@ -1,7 +1,11 @@
+ import { loadPermitRecord, savePermitRecord } from "./permit-records.js";
+ import { hasLicensingClearance } from "./licensing-board.js";
++import { isCityEmergencyHoldActive } from "../../city-operations/index.js";
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
++  if (isCityEmergencyHoldActive()) {
++    throw new Error("building-permit issuance is unavailable during the city emergency hold");
++  }
+   if (!id || !contractorId) throw new Error("permit identity is required");
+   if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
+     throw new Error("contractor lacks licensing clearance");
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/municipal.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/municipal.js
+index 1f8f4dd..c626134 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/municipal.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/src/municipal.js
+@@ -15,10 +15,14 @@ export {
+   vendorInvoiceStatus,
+ } from "./finance/vendor-invoices/index.js";
+ 
++export { setCityEmergencyHold } from "./city-operations/index.js";
++
+ import { resetLicensing } from "./licensing/building-permits/index.js";
+ import { resetFinance } from "./finance/vendor-invoices/index.js";
++import { resetCityOperations } from "./city-operations/index.js";
+ 
+ export function reset() {
++  resetCityOperations();
+   resetLicensing();
+   resetFinance();
+ }
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/test/acceptance.test.js b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/test/acceptance.test.js
+index 0fa93c2..400a19a 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/test/acceptance.test.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage4/implementation/test/acceptance.test.js
+@@ -1,11 +1,11 @@
+ import test from "node:test";
+ import assert from "node:assert/strict";
+-import { reset, submitVendorInvoice, approveVendorInvoice, vendorInvoiceStatus, recordVendorTaxClearance } from "../src/municipal.js";
+-test("stage 3 keeps Finance tax clearance distinct from Licensing clearance", () => {
++import { reset, setCityEmergencyHold, issueBuildingPermit, submitVendorInvoice, approveVendorInvoice, recordVendorTaxClearance } from "../src/municipal.js";
++test("stage 4 applies City Operations emergency hold across Licensing and Finance decisions", () => {
+   reset();
++  setCityEmergencyHold(true);
++  assert.throws(() => issueBuildingPermit({ id: "p1", contractorId: "c1", riskLevel: "low" }), /emergency hold/i);
+   submitVendorInvoice({ id: "v1", vendorId: "vendor-1", amount: 10 });
+-  assert.throws(() => approveVendorInvoice({ id: "v1" }), /tax clearance/i);
+   recordVendorTaxClearance("vendor-1");
+-  approveVendorInvoice({ id: "v1" });
+-  assert.equal(vendorInvoiceStatus("v1"), "approved");
++  assert.throws(() => approveVendorInvoice({ id: "v1" }), /emergency hold/i);
+ });

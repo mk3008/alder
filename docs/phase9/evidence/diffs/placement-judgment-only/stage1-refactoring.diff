@@ -1,0 +1,42 @@
+diff --git a/work/phase9/runs/placement-judgment-only/stage1/refactoring/src/building-permit-issuance.js b/work/phase9/runs/placement-judgment-only/stage1/refactoring/src/building-permit-issuance.js
+new file mode 100644
+index 0000000..a271145
+--- /dev/null
++++ b/work/phase9/runs/placement-judgment-only/stage1/refactoring/src/building-permit-issuance.js
+@@ -0,0 +1,9 @@
++import { hasLicensingClearance } from "./licensing-board.js";
++
++export function issueBuildingPermit({ id, contractorId, riskLevel }, savePermitRecord) {
++  if (!id || !contractorId) throw new Error("permit identity is required");
++  if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
++    throw new Error("contractor licensing clearance is required");
++  }
++  savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
++}
+diff --git a/work/phase9/runs/placement-judgment-only/stage1/implementation/src/municipal.js b/work/phase9/runs/placement-judgment-only/stage1/refactoring/src/municipal.js
+index b61ddc3..cc3dcc3 100644
+--- a/work/phase9/runs/placement-judgment-only/stage1/implementation/src/municipal.js
++++ b/work/phase9/runs/placement-judgment-only/stage1/refactoring/src/municipal.js
+@@ -1,8 +1,8 @@
+ import {
+-  hasLicensingClearance,
+   recordLicensingClearance,
+   resetLicensingClearances,
+ } from "./licensing-board.js";
++import { issueBuildingPermit as issuePermit } from "./building-permit-issuance.js";
+ 
+ const permits = new Map();
+ const invoices = new Map();
+@@ -14,11 +14,7 @@ export function reset() {
+ }
+ 
+ export function issueBuildingPermit({ id, contractorId, riskLevel }) {
+-  if (!id || !contractorId) throw new Error("permit identity is required");
+-  if (riskLevel === "high" && !hasLicensingClearance(contractorId)) {
+-    throw new Error("contractor licensing clearance is required");
+-  }
+-  savePermitRecord({ id, contractorId, riskLevel, status: "issued", inspection: null });
++  issuePermit({ id, contractorId, riskLevel }, savePermitRecord);
+ }
+ 
+ export { recordLicensingClearance };

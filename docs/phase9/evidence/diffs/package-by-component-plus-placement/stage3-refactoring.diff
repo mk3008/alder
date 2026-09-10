@@ -1,0 +1,61 @@
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/vendor-invoices.js b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/index.js
+similarity index 85%
+rename from work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/vendor-invoices.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/index.js
+index 32c7027..a59e2cb 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/vendor-invoices.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/index.js
+@@ -1,10 +1,10 @@
+-import { hasVendorTaxClearance, resetFinanceOffice } from "./finance-office.js";
++import { hasVendorTaxClearance, resetVendorTaxClearance } from "./tax-clearance.js";
+ 
+ const invoices = new Map();
+ 
+ export function resetFinance() {
+   invoices.clear();
+-  resetFinanceOffice();
++  resetVendorTaxClearance();
+ }
+ 
+ export function submitVendorInvoice({ id, vendorId, amount }) {
+@@ -26,7 +26,7 @@ export function vendorInvoiceStatus(id) {
+   return loadInvoiceRecord(id).status;
+ }
+ 
+-export { recordVendorTaxClearance } from "./finance-office.js";
++export { recordVendorTaxClearance } from "./tax-clearance.js";
+ 
+ function loadInvoiceRecord(id) {
+   const invoice = invoices.get(id);
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/finance-office.js b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/tax-clearance.js
+similarity index 87%
+rename from work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/finance-office.js
+rename to work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/tax-clearance.js
+index ec14ff6..cd3a4ca 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/finance/finance-office.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/finance/vendor-invoices/tax-clearance.js
+@@ -1,6 +1,6 @@
+ const taxClearedVendors = new Set();
+ 
+-export function resetFinanceOffice() {
++export function resetVendorTaxClearance() {
+   taxClearedVendors.clear();
+ }
+ 
+diff --git a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/municipal.js b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/municipal.js
+index 3276801..1f8f4dd 100644
+--- a/work/phase9/runs/package-by-component-plus-placement/stage3/implementation/src/municipal.js
++++ b/work/phase9/runs/package-by-component-plus-placement/stage3/refactoring/src/municipal.js
+@@ -13,10 +13,10 @@ export {
+   recordVendorTaxClearance,
+   submitVendorInvoice,
+   vendorInvoiceStatus,
+-} from "./finance/vendor-invoices.js";
++} from "./finance/vendor-invoices/index.js";
+ 
+ import { resetLicensing } from "./licensing/building-permits/index.js";
+-import { resetFinance } from "./finance/vendor-invoices.js";
++import { resetFinance } from "./finance/vendor-invoices/index.js";
+ 
+ export function reset() {
+   resetLicensing();

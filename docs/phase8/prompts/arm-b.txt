@@ -1,0 +1,3 @@
+Use Package by Component.
+
+For physical placement, choose the narrowest meaningful semantic boundary that owns the decision and contains its current required consumers.

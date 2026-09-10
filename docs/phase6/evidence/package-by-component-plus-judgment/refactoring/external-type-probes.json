@@ -1,0 +1,26 @@
+[
+  {
+    "fqcn": "study.budget.OperatingCap",
+    "declaredVisibility": "public",
+    "externalCompilationExitCode": 0,
+    "compilerOutput": ""
+  },
+  {
+    "fqcn": "study.MunicipalApplication",
+    "declaredVisibility": "public",
+    "externalCompilationExitCode": 0,
+    "compilerOutput": ""
+  },
+  {
+    "fqcn": "study.payment.VendorPaymentWorkflow",
+    "declaredVisibility": "public",
+    "externalCompilationExitCode": 0,
+    "compilerOutput": ""
+  },
+  {
+    "fqcn": "study.permit.PermitWorkflow",
+    "declaredVisibility": "public",
+    "externalCompilationExitCode": 0,
+    "compilerOutput": ""
+  }
+]
