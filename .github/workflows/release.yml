@@ -1,0 +1,91 @@
+name: Release v0.1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/release.yml'
+      - 'docs/release-notes-v0.1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/release.yml'
+      - 'docs/release-notes-v0.1.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Validate release notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          notes=docs/release-notes-v0.1.md
+          test -s "$notes"
+          title="$(sed -n '1s/^# //p' "$notes")"
+          test -n "$title"
+
+  release:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    concurrency:
+      group: alder-release-v0.1
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Create v0.1 only when neither tag nor release exists
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const repo = context.repo;
+            const tag = 'v0.1';
+            const exists = async (request) => {
+              try {
+                await request();
+                return true;
+              } catch (error) {
+                if (error.status === 404) return false;
+                throw error;
+              }
+            };
+            if (await exists(() => github.rest.git.getRef({ ...repo, ref: `tags/${tag}` }))) {
+              core.info(`${tag} tag already exists; nothing to release.`);
+              return;
+            }
+            if (await exists(() => github.rest.repos.getReleaseByTag({ ...repo, tag }))) {
+              core.info(`${tag} release already exists; nothing to release.`);
+              return;
+            }
+            const body = fs.readFileSync('docs/release-notes-v0.1.md', 'utf8');
+            const title = body.split(/\r?\n/, 1)[0];
+            if (!title.startsWith('# ') || !title.slice(2).trim()) {
+              throw new Error('Release notes must start with a nonempty H1 title.');
+            }
+            core.info(`Publishing ${tag} at main commit ${context.sha}`);
+            // GitHub creates the missing tag at this exact commit with the release.
+            // No separate tag write: an interrupted run must not leave a tag-only state.
+            const { data } = await github.rest.repos.createRelease({
+              ...repo,
+              tag_name: tag,
+              target_commitish: context.sha,
+              name: title.slice(2).trim(),
+              body,
+              draft: false,
+              prerelease: false,
+            });
+            core.info(data.html_url);
