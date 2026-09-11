@@ -93,3 +93,15 @@ H1–H5 are rejected or inconclusive if a required fixture family cannot be exec
 Proceed toward a draft normative contract only if H1 and H4 are supported, no correctness/invariant safety signal is worse than its non-inferiority bound, and H5 is directionally supported. Otherwise choose **REVISION_REQUIRED** when ambiguity is diagnosable, **DO_NOT_PROCEED** when harm/no effect is credible, or **EXISTING_CONCEPTS_ARE_SUFFICIENT** when the candidate adds no measurable operational value beyond the control’s existing guidance.
 
 This evaluation does not establish that a style is globally superior. It only tests whether a minimal instruction changes observable agent behavior under the registered fixtures.
+
+## Review knowledge benchmark operation (2026-09-11)
+
+This dated addendum concerns the [review knowledge v0.3 research candidate](phase2/review-knowledge-v0.3.md), separately from the preregistered Scope-First comparison above. It does not amend that comparison's frozen protocol or reinterpret its results.
+
+- Prioritize reuse of the existing three benchmarks as a fixed set: facilities maintenance, purchase request, and meeting-room reservation.
+- For a local review knowledge change, rerun only the affected existing benchmark(s).
+- Do not require reproduction of every past finding to pass. Assess the capability targeted by the change and whether excessive requirements are introduced.
+- Consider a new benchmark only when a clearly identified property cannot be evaluated with the existing three cases.
+- Do not treat increasing the benchmark count itself as an accuracy improvement strategy.
+
+No new benchmarks are added by this addendum.

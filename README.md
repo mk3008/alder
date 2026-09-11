@@ -21,3 +21,7 @@ Phase 2 freeze and attempted-execution artifacts:
 The decision gate at the end of Phase 1 is **PROCEED_TO_PREREGISTERED_EVALUATION**, narrowly for the unresolved AI-agent operational claims. It is not a claim that Scope-First is a novel architecture.
 
 The first Phase 2 runner attempt was unauthenticated. A user-authorized fresh-agent alternative then completed the frozen four-pair pilot. Its recorded result is **NO_PRACTICAL_SEPARATION_OBSERVED**; the candidate was not promoted to normative rules.
+
+Review knowledge research:
+
+- [Review knowledge v0.3 candidate and validation limits](docs/phase2/review-knowledge-v0.3.md)
