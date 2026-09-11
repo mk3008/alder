@@ -1,118 +1,123 @@
 # Alder
 
-**設計書の抜けは、実装から見つける。**
+English | [日本語](README.ja.md)
 
-Alderは、業務設計（Business Design）をもとにAIや開発者が実装し、その実装をAIでレビューして、業務要件の抜け・意味のずれ・未決事項を人間が判断できる形に絞り込む流れを研究しています。
-実装で具体化された意味・処理単位・制約・保証を設計へ逆追跡するため、全要件を完全に決め切るまでコーディングを止めることは前提にしません。
+**Find gaps in your specification through implementation.**
 
-要件記述、実装、ウォークスルー、レビュー、双方向トレーサビリティ、前提や判断根拠を残すDecision Record、人間判断という**既存のソフトウェア工学の仕組みを組み合わせます**。新しい設計理論やアーキテクチャを提案せず、コード配置も規定しません。
+Alder starts from a lightweight description of business operations: who performs the work, what triggers it, what it receives, what it does, and what it produces. We refer to this description of operational work as **Business Design**.
+Alder studies a loop in which AI or developers implement that description, then AI reviews the implementation to narrow down gaps, differences in meaning, and unresolved requirements into questions people can decide.
+By tracing the meanings, units of work, constraints, and guarantees made concrete in code back to the specification, the loop does not require every requirement to be fully settled before coding begins.
 
-**Business Design → Implementation → Review → Human Decision → Update**
+It combines **established software engineering practices**: requirements description, implementation, walkthroughs, reviews, bidirectional traceability, Decision Records for assumptions and rationale, and human judgment. It proposes no new design theory or architecture and prescribes no code layout.
 
-## 決めたと思っている仕様を疑う
+**Describe the work → Implement → Review → Human Decision → Update**
 
-あなたの設計書で、本当に業務は回るだろうか？
+## Question the requirements you think are already decided
 
-Business Designに未決事項が残るのは自然です。実装すると、その曖昧さがデータ、状態、権限、処理単位、保証についての具体的な選択になります。たとえば「承認済み」が何をどこまで認めるのかは、後続の購入処理まで追うと確認すべき点が見えてきます。
+Can your specification actually support the work?
 
-実装者やAIによる合理的な補完も、業務として承認済みとは限りません。実装から設計へ戻り、別の合理的な解釈で現在の仕事や保証が変わる箇所を、人間の判断へ戻します。Decision Recordやテストは意図と挙動の証拠ですが、業務上の承認の代用にはしません。
+It is natural for Business Design to leave questions open. Implementation turns that ambiguity into concrete choices about data, state, authority, units of work, and guarantees. For example, tracing an approval through the subsequent purchasing work can reveal questions about exactly what “approved” authorizes.
 
-新しい手法が必要なのか、という問いに対して、Alderは要件の妥当性確認（requirements validation）やレビューなどの古典的な手法を使います。それらをAIが反復して実行できる開発ループとして扱うことが、現在の研究の中心です。
+A reasonable interpretation chosen by a developer or AI is not necessarily an approved operational decision. The review traces implementation choices back to the specification and returns questions to people where another reasonable interpretation would change the current work or its guarantees. Decision Records and tests are evidence of intent and behavior, not substitutes for approval by the people responsible for the work.
 
-## 開発ループ — 業務を設計せよ。実装で確かめよ。
+Does this require a new method? Alder uses established practices such as requirements validation and review. The current research focuses on using them as a development loop that AI can execute repeatedly.
 
-1. **Business Design** — 現在の業務と、前後の仕事のつながりを記述する。
-2. **Implementation** — AIや開発者が実装し、選んだ前提や判断を記録する。
-3. **Review** — AIが業務設計・実装・DDL・Decision Record・テストを照合する。担当者として仕事を通して歩き、実装が具体化した意味を設計へ戻って確かめる。
-4. **Human Decision** — 現在の仕事に具体的な影響がある未決事項について、条件・根拠・判断責務を示し、業務責任者が判断する。
-5. **Update** — 決定を設計・実装へ反映し、次のループへ進む。
+## Development loop — Design the work. Verify it through implementation.
 
-レビューでは、要件との確定的な不一致、Business確認、技術改善候補、十分性確認を分けます。**Business確認は、実装修正要求と同義ではありません。** 必要な意味が外部運用や既存の契約で満たされるなら、その根拠を確認して閉じられます。
+1. **Business Design** — Describe the current work and how it connects to preceding and subsequent work.
+2. **Implementation** — AI or developers implement it and record the assumptions and decisions they make.
+3. **Review** — AI compares the operational description, implementation, DDL, Decision Records, and tests. It walks through the work from each participant’s perspective and traces meanings made concrete by the implementation back to the description.
+4. **Human Decision** — For unresolved questions with concrete effects on the current work, present the conditions, evidence, and decision responsibility so that the people responsible for the operations can decide.
+5. **Update** — Reflect those decisions in the specification and implementation, then continue the loop.
 
-## Business Designの推奨形式
+The review distinguishes definite requirements mismatches, questions requiring operational clarification, technical improvement candidates, and confirmation that the existing behavior is sufficient. **A request for operational clarification (“Business確認” in the research records) is not automatically an implementation change request.** If an external procedure or an existing contract supplies the required meaning, the question can be closed after confirming that basis.
 
-現在の研究では、業務同士の相関を追える記述として、**5W1HをベースにHowを Input → Procedure → Output で書く形式**を推奨しています。検証したケースが使う現時点の参照形式であり、絶対的な入力仕様ではありません。任意の設計書で同じようにレビューできると確認したわけでもありません。
+## Recommended Business Design format
 
-| 観点 | 記述すること |
+The current research recommends **5W1H, with How written as Input → Procedure → Output**, to make relationships between activities traceable. This is the current reference format used by the evaluated cases, not a mandatory input specification. Equivalent review behavior has not been established for arbitrary specification formats.
+
+| Field | What to describe |
 | --- | --- |
-| What | 業務の名前。Activityを識別するために必須と考える。 |
-| Why | 目的。判断・制約の意味を理解する助けになる範囲で簡潔に書く。深い目的分析は必須にしない。 |
-| When | 開始契機。原則として、前段の業務結果・外部事象・状態変化を受けて始まる形を推奨する。 |
-| Who | 誰の仕事・判断・責任なのか。 |
-| Where | 拠点・場所・チャネルが業務判断や手順に影響する場合に書く。意味がなければ「規定なし」でよい。 |
-| How | Input：前段・利用者・外部から受け取るもの → Procedure：判断・処理すること → Output：後段へ成立した事実として渡すもの。 |
+| What | The name of the work. We consider it necessary to identify the activity. |
+| Why | Its purpose, stated briefly enough to help explain decisions and constraints. Deep purpose analysis is not required. |
+| When | Its trigger. Prefer work that starts in response to a preceding result, external event, or state change. |
+| Who | Who performs the work, makes the judgment, or bears responsibility. |
+| Where | A site, location, or channel when it affects operational decisions or procedures. Otherwise, “not specified” is sufficient. |
+| How | Input: what is received from preceding work, users, or external sources → Procedure: what is decided or processed → Output: what is passed to subsequent work as an established fact. |
 
-各欄を機械的に埋めることより、**Whatで業務を識別し、Who / When / Input / Outputから前後の仕事の相関を追えること**を重視します。
+The point is not to fill every field mechanically. It is to **identify the activity through What and trace relationships between activities through Who / When / Input / Output**.
 
-Whenは「担当者がやろうと思ったとき」のような自主性だけに依存すると、実施タイミングが担当者ごとに揺れます。人間の裁量そのものが業務上の開始条件なら、その裁量を明示します。これは業務を安定して記述するための推奨であり、review knowledgeに追加するRuleではありません。
+A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. If human discretion itself is the operational trigger, state that discretion explicitly. This recommendation helps describe work consistently; it is not an additional rule in the review knowledge.
 
-記述例：[設備保全](business-design/facilities-maintenance/README.md) / [備品購入申請](business-design/purchase-request/README.md) / [会議室予約](business-design/meeting-room/README.md)
+Examples (Japanese): [Facilities maintenance](business-design/facilities-maintenance/README.md) / [Purchase requests](business-design/purchase-request/README.md) / [Meeting-room reservation](business-design/meeting-room/README.md)
 
 ## Review knowledge v0.3
 
-現在の[review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md)は、3問・2手順・1分類条件からなる研究候補です。
+The current [review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) is a research candidate with three questions, two procedures, and one classification condition.
 
-| 区分 | 観点・手順 |
+| Item | Question or procedure |
 | --- | --- |
-| Q1 | 事実を保って仕事を継続できるか |
-| Q2 | 制約の原因と残る効力は説明できるか |
-| Q3 | 前後の仕事で意味・条件・保証がつながるか |
-| P1 | 担当者として通して歩く |
-| P2 | 実装が選んだ意味から戻る |
-| S | 意味を確認してから要求を止める |
+| Q1 | Can the work continue while preserving the facts? |
+| Q2 | Can the causes of constraints and their remaining effects be explained? |
+| Q3 | Do meaning, conditions, and guarantees connect across preceding and subsequent work? |
+| P1 | Walk through the work from each participant’s perspective. |
+| P2 | Trace back from the meanings chosen by the implementation. |
+| S | Confirm the meaning, then stop unnecessary requirements. |
 
-Business Designで範囲を定め、順方向の成立を確認した後、P1 / P2でQ1〜Q3を当てます。見つけた差の具体的な影響と依存を確かめ、最後にSで分類します。適用範囲・止める条件・分類の詳細はリンク先を参照してください。
+Use Business Design to establish the scope and check that the work flows forward. Apply Q1–Q3 through P1 / P2, examine the concrete effects and dependencies of any differences found, and finally classify them with S. See the linked document for the full scope, stopping conditions, and classifications.
 
-## 何を検証したか
+## What has been validated
 
-既存の3つの業務ベンチマークで実装とFresh reviewを実施しました。Fresh回帰検証では、過去のレビュー結果を参照しないAgentが固定された実装をレビューしています。
+Implementation and fresh reviews were carried out on three existing operational benchmarks. In fresh regression reviews, agents reviewed fixed implementations without consulting earlier review results.
 
-| ベンチマーク | 業務の範囲 | Fresh回帰検証 |
+| Benchmark | Operational scope | Fresh regression review |
 | --- | --- | --- |
-| 設備保全 | 故障報告、日程設定、完了、安全閉鎖・解除 | [#32](https://github.com/mk3008/alder/issues/32#issuecomment-5630178622) |
-| 備品購入申請 | 申請、承認・却下、購入完了 | [#33](https://github.com/mk3008/alder/issues/33#issuecomment-5630314919) |
-| 会議室予約 | 空き確認、予約・変更・取消、利用可否の管理 | [#36](https://github.com/mk3008/alder/issues/36#issuecomment-5633135941) |
+| Facilities maintenance | Fault reporting, scheduling, completion, safety closure and reopening | [#32](https://github.com/mk3008/alder/issues/32#issuecomment-5630178622) |
+| Purchase requests | Submission, approval or rejection, purchase completion | [#33](https://github.com/mk3008/alder/issues/33#issuecomment-5630314919) |
+| Meeting-room reservation | Availability checks, booking, changes, cancellation, availability management | [#36](https://github.com/mk3008/alder/issues/36#issuecomment-5633135941) |
 
-この固定セット内では、業務上の未決事項を見つけ、特定の実装案を勝手に要求せず、Human Decision候補として残すレビューが観測されました。たとえば会議室予約では、「予約可能」という一覧の保証範囲をBusiness確認として残しつつ、予約時の正当な再検査を欠陥扱いせず、未来限定検索などの解決策も固定しませんでした。
+Within this fixed set, reviews identified unresolved operational questions and retained them as candidates for Human Decision without prescribing particular implementation solutions. In the meeting-room case, for example, the review retained a question about what a list labeled “available for reservation” guarantees, while accepting legitimate rechecks at booking time and avoiding a prescribed solution such as restricting searches to future times.
 
-**検証限界：**
+**Validation limits:**
 
-- 全欠陥を必ず検出するわけではなく、完全性は保証しません。
-- Fresh実行ごとに同一論点が完全再現されるわけではありません。予約保存後の結果受領中断・予約ID喪失時の照合責務は、#34で観測されましたが#36では主要論点として再現されませんでした。
-- 検出率改善や一般化の因果効果は未証明です。
-- #32 / #33は#31の補正後、#36は#35のQ3 Boundary補正後の検証です。最終補正後に3ケースすべてを再実行したという意味ではありません。
+- Not every defect will necessarily be detected; completeness is not guaranteed.
+- The same findings do not recur in every fresh run. Responsibility for reconciling a saved reservation when result delivery is interrupted and the reservation ID is lost was identified in #34, but did not reappear as a main finding in #36.
+- A causal improvement in detection rates and generalization remain unproven.
+- #32 / #33 evaluated the revision from #31; #36 evaluated the Q3 Boundary revision from #35. All three cases were not rerun after that final revision.
 
-証拠と非再現の詳細は[review knowledgeの検証記録](docs/phase2/review-knowledge-v0.3.md)にまとめています。
+The [review knowledge validation record](docs/phase2/review-knowledge-v0.3.md) links the evidence and documents the finding that did not recur.
 
-## Alderが規定しないこと
+## What Alder does not prescribe
 
-- アーキテクチャスタイル、コード配置、レイヤー構成。
-- 新しいDomain Modeling手法や独自のモデリング言語。
-- 未記述事項をすべて機能追加へ変換すること。
+- Architecture style, code placement, or layers.
+- A new domain modeling method or a proprietary modeling language.
+- Turning every undocumented detail into a feature requirement.
 
-Alderはフレームワーク・パッケージ・CLIとして提供するものではありません。リポジトリ内の実験用実装は検証材料です。レビューで確認する業務上の依存を超えて、アーキテクチャ一般論や外部境界レビュー全般へ責務を広げません。
+Alder is not offered as a framework, package, or CLI. Experimental implementations in this repository are evaluation material. Its responsibility does not extend beyond the operational dependencies under review into general architecture guidance or external-boundary reviews as a whole.
 
-## 現在地と次の問い
+## Current status and next questions
 
-現在は**research candidate（研究候補）**です。review knowledge v0.3を参照できる形で保存していますが、普遍的な正式Ruleとして認定したものではありません。
+The current status is **research candidate**. Review knowledge v0.3 is saved for reference; it has not been established as a universal, normative rule set.
 
-次に検討するのは、実装前レビューと実装後レビューの役割分担、開発フローやAGENTS.mdへの組込み方、review knowledge変更時の低コストな回帰運用です。
+Next questions concern the respective roles of pre-implementation and post-implementation review, integration into development workflows and AGENTS.md, and low-cost regression checks when review knowledge changes.
 
-[評価運用方針](docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11)では、既存3ベンチマークを固定セットとして優先再利用し、局所変更は影響するケースだけを再実行します。過去の全指摘の再現を合格条件にはせず、変更で狙った能力と過剰要求の有無を確かめます。
+The [evaluation operating policy](docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11) prioritizes reuse of the existing three benchmarks as a fixed set. For a local change, rerun only affected cases. Reproducing every past finding is not a pass condition; assess the capability targeted by the change and whether excessive requirements are introduced.
 
 ## Repository map
 
-| 読みたいもの | 参照先 |
+| What to read | Reference |
 | --- | --- |
-| 業務設計の記述例 | [設備保全](business-design/facilities-maintenance/README.md) / [備品購入申請](business-design/purchase-request/README.md) / [会議室予約](business-design/meeting-room/README.md) |
-| レビューの観点・手順・境界と検証証拠 | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| ベンチマークの再利用・局所再実行 | [評価運用方針の追記](docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11) |
+| Examples of operational descriptions | [Facilities maintenance](business-design/facilities-maintenance/README.md) / [Purchase requests](business-design/purchase-request/README.md) / [Meeting-room reservation](business-design/meeting-room/README.md) |
+| Review questions, procedures, boundaries, and validation evidence | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
+| Benchmark reuse and local reruns | [Evaluation operating policy addendum](docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11) |
+
+The Business Design examples, review knowledge, and recent review records are in Japanese.
 
 ### Historical / earlier research — Scope-First
 
-初期のScope-First研究は、AI支援開発の小さなリポジトリ契約を検討した記録です。Phase 1から事前登録評価へ進み、最初の実行環境での認証失敗を経て、Fresh Agentによる4組のパイロット比較を完了しました。結果は **NO_PRACTICAL_SEPARATION_OBSERVED** で、候補を規範的なルールへ昇格させていません。現在のreview knowledge研究とは分けて参照してください。
+The initial Scope-First research explored a small repository contract for AI-assisted development. It proceeded from Phase 1 to preregistered evaluation. After an authentication failure in the initial execution environment, a four-pair pilot comparison was completed using fresh agents. Its result was **NO_PRACTICAL_SEPARATION_OBSERVED**, and the candidate was not promoted to normative rules. Read this separately from the current review knowledge research.
 
 - [Research synthesis](docs/research.md) / [Candidate proposal](docs/proposal.md) / [Sources and evidence boundary](docs/sources.md)
-- [Preregistered evaluation plan](docs/evaluation-plan.md)（末尾に現在の評価運用方針を追記）
+- [Preregistered evaluation plan](docs/evaluation-plan.md) (with the current evaluation operating policy appended)
 - [Freeze record](docs/phase2/freeze-record.md) / [Frozen candidate](docs/phase2/candidate-contract.txt) / [Matched task packets](docs/phase2/task-packets.md)
 - [Run record and invalidity log](docs/phase2/run-record.md) / [Pilot results](docs/phase2/results.md)
