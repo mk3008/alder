@@ -1,16 +1,14 @@
-<!-- Release preparation only: supersedes the draft in Issue #39. Do not publish a release or tag from this PR. After merge, create v0.1 separately and pin artifact links to that tag before publication. -->
-
 # Alder v0.1 — first research checkpoint
 
 **Find gaps in your specification through implementation.**
 
-Alder starts from a lightweight description of business operations: who performs the work, what triggers it, what it receives, what it does, and what it produces. We refer to this operational description as Business Design. This checkpoint combines established requirements validation, implementation, and review practices. It brings together research on using implementation primarily by AI agents and review by a separate agent or fresh context to expose gaps, differences in meaning, and unresolved requirements, then return questions to people for a decision.
+Alder starts from a lightweight description of business operations: who performs the work, what triggers it, what it receives, what it does, and what it produces. We refer to this operational description as Business Design. This checkpoint combines established requirements validation, implementation, and review practices. People define and approve business intent. AI implements it, and a separate AI agent or fresh context reviews the implementation. Only unresolved business questions return to people for a decision.
 
 ## Highlights
 
 - Added practical adoption guidance and copyable implementation, separate review, and human-decision follow-up prompts.
 - Kept English and Japanese READMEs as short entry points, with detailed adoption, philosophy, and validation documentation in English.
-- Explored the loop **Describe the work → Implement → Review → Human Decision → Update**. It does not assume every requirement must be fully settled before implementation begins.
+- Clarified the responsibility split: people define and approve business intent, AI implements it, a separate AI reviews it, and only unresolved business questions return to people for a decision.
 - Carried out implementation and fresh reviews on three operational benchmarks: facilities maintenance, purchase requests, and meeting-room reservation.
 - Saved review knowledge v0.3 as a research candidate: three questions (Q1/Q2/Q3), two procedures (P1/P2), and one classification condition (S).
 - Combined established software engineering practices: requirements validation, walkthroughs, reviews, bidirectional traceability, records of assumptions and rationale, and human judgment. Alder proposes no new design theory or architecture.
@@ -34,11 +32,11 @@ In the meeting-room case, the review retained a question about what a list label
 
 ## Included artifacts
 
-- [Practical adoption guide](https://github.com/mk3008/alder/blob/main/docs/adoption.md) / [Philosophy](https://github.com/mk3008/alder/blob/main/docs/philosophy.md) / [Validation overview](https://github.com/mk3008/alder/blob/main/docs/validation.md)
-- Business Design examples: [Facilities maintenance](https://github.com/mk3008/alder/blob/main/business-design/facilities-maintenance/README.md) / [Purchase requests](https://github.com/mk3008/alder/blob/main/business-design/purchase-request/README.md) / [Meeting-room reservation](https://github.com/mk3008/alder/blob/main/business-design/meeting-room/README.md). The current recommended format is 5W1H with How expressed as Input → Procedure → Output, not a mandatory input specification.
-- [Review knowledge v0.3, validation evidence, and limits](https://github.com/mk3008/alder/blob/main/docs/phase2/review-knowledge-v0.3.md)
+- [Practical adoption guide](https://github.com/mk3008/alder/blob/v0.1/docs/adoption.md) / [Philosophy](https://github.com/mk3008/alder/blob/v0.1/docs/philosophy.md) / [Validation overview](https://github.com/mk3008/alder/blob/v0.1/docs/validation.md)
+- Business Design examples: [Facilities maintenance](https://github.com/mk3008/alder/blob/v0.1/business-design/facilities-maintenance/README.md) / [Purchase requests](https://github.com/mk3008/alder/blob/v0.1/business-design/purchase-request/README.md) / [Meeting-room reservation](https://github.com/mk3008/alder/blob/v0.1/business-design/meeting-room/README.md). The current recommended format is 5W1H with How expressed as Input → Procedure → Output, not a mandatory input specification.
+- [Review knowledge v0.3, validation evidence, and limits](https://github.com/mk3008/alder/blob/v0.1/docs/phase2/review-knowledge-v0.3.md)
 - Fresh regression review records: [Facilities maintenance #32](https://github.com/mk3008/alder/issues/32#issuecomment-5630178622) / [Purchase requests #33](https://github.com/mk3008/alder/issues/33#issuecomment-5630314919) / [Meeting-room reservation #36](https://github.com/mk3008/alder/issues/36#issuecomment-5633135941)
-- [Evaluation operating policy](https://github.com/mk3008/alder/blob/main/docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11)
+- [Evaluation operating policy](https://github.com/mk3008/alder/blob/v0.1/docs/evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11)
 
 The examples, review knowledge, and recent review records are in Japanese. Earlier Scope-First research and pilot results remain available as historical records. Alder prescribes neither an architecture style nor code placement and is not offered as a framework, package, or CLI.
 
