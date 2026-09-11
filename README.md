@@ -12,11 +12,28 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
-1. Put Business Design where the agent can read it. The product repository is recommended, but a separate repository at a known workspace path and revision also works.
-2. Give the implementation agent that path through AGENTS.md or the task prompt.
-3. Have the AI implement the task and preserve material assumptions and choices in Decision Records. It must not invent unresolved business policy; routine reversible technical choices can proceed.
-4. After implementation, use a separate agent or fresh context to review it against Business Design with the selected Alder review knowledge.
-5. Return only necessary business decisions to people, update Business Design with their decisions, and align implementation and tests.
+For a new product, this is the recommended example; existing equivalent locations are fine:
+
+```text
+product/
+  AGENTS.md
+  docs/
+    business-design/
+      ...
+    decisions/
+      ...
+    alder/
+      review-knowledge.md
+  src/
+  tests/
+```
+
+1. Put current Business Design in `docs/business-design/` and the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
+2. Route these paths through AGENTS.md or the task prompt. Have the AI read Business Design first, implement the task, and record material assumptions and choices in `docs/decisions/`. It must not invent unresolved business policy; routine reversible technical choices can proceed.
+3. After implementation, give the review prompt to a separate agent or fresh context. Apply the selected review knowledge and read **Business Design → Decision Records → implementation / DDL / tests**.
+4. Return necessary business decisions to people, update Business Design with their decisions, and align implementation and tests.
+
+This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
 **You do not have to choose an architecture up front.** Without a strong requirement, start AI coding from the Business Design without selecting a named architecture style. First check that the work can be carried out as intended; introduce boundaries, layers, and patterns where concrete needs arise. Known costly boundaries may justify earlier separation.
 

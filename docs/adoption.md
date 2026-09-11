@@ -6,17 +6,29 @@ Alder assumes an AI agent performs implementation, followed by a separate agent 
 
 ## 1. Place Business Design where the agent can read it
 
-Prefer the product repository:
+For a new product, prefer this local arrangement in the product repository:
 
 ```text
 product/
   AGENTS.md
-  business-design/
-    purchase-request.md
-    meeting-room.md
+  docs/
+    business-design/
+      ...
+    decisions/
+      ...
+    alder/
+      review-knowledge.md
   src/
   tests/
 ```
+
+| Example path | Content |
+| --- | --- |
+| `docs/business-design/` | Current Business Design. |
+| `docs/decisions/` | Decision Records for material implementation assumptions and choices. |
+| `docs/alder/review-knowledge.md` | A copy of the selected Alder version's review knowledge / review definition. |
+
+This is a recommended example, not a required layout. Keep existing equivalent locations when they are already established. Copy the selected review knowledge without changing its rules and record its source revision, so the local filename does not obscure which version is used.
 
 This keeps design and implementation comparable in the same commit and PR, aligned on each branch, and available without additional repository discovery. The review can identify exactly which versions it compares.
 
@@ -56,19 +68,22 @@ Use root AGENTS.md as a router. Adapt the paths to your workspace:
 ```markdown
 ## Business Design
 
-- Current business design is under `business-design/`.
+- Current business design is under `docs/business-design/`.
 - Treat it as the current source of operational intent.
 - Do not invent business policy when the design does not decide it.
-- For an Alder review, read Business Design first, then use review knowledge v0.3 at `<alder-path>/docs/phase2/review-knowledge-v0.3.md` from the selected Alder revision.
+- Record material implementation assumptions and choices in Decision Records under `docs/decisions/`.
+- For an Alder review, use `docs/alder/review-knowledge.md` from the selected Alder revision. Read Business Design, then Decision Records, then implementation, DDL, and tests.
 ```
 
-Replace `<alder-path>` with a readable location and record the selected revision. Do not copy the full review knowledge into AGENTS.md or inject Q1–Q3 / P1 / P2 / S into every implementation task. Apply it explicitly during review.
+Record the selected review knowledge source revision in the routing instructions or alongside the copied document. Do not copy the full review knowledge into AGENTS.md or inject Q1–Q3 / P1 / P2 / S into every implementation task. Apply it explicitly during review.
 
 ### Versions and access
 
 The planned first release is **Alder v0.1**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match.
 
-Before v0.1 is published, use [the checked-in review knowledge](phase2/review-knowledge-v0.3.md) at an explicitly recorded commit. After publication, select tag `v0.1` in the GitHub file view for `docs/phase2/review-knowledge-v0.3.md` and give the reviewer that versioned URL. Confirm the reviewer can read it. For offline or reproducible work, make the selected revision's documents readable in the same workspace and state their path and revision. No particular directory layout is mandatory. The current review knowledge is in Japanese.
+For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. Before v0.1 is published, select and record a commit; after publication, select tag `v0.1`. The Alder release remains v0.1 and the copied knowledge remains research version v0.3, regardless of the local filename.
+
+A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
 ## 3. Let the AI implement without inventing business policy
 
@@ -155,7 +170,7 @@ Raw SQL Rules does not prescribe architecture or a framework. Serene is not an O
 After adopting your selected Raw SQL Rules version, a product can route both concerns from AGENTS.md:
 
 ```text
-For business implementation and Alder review, use the Business Design under `business-design/` and the selected Alder review knowledge referenced above.
+For business implementation and Alder review, use the Business Design under `docs/business-design/` and the selected Alder review knowledge referenced above.
 For Raw SQL data-access work, read `rules/raw-sql-rules.md` and follow it as the repository contract.
 ```
 
