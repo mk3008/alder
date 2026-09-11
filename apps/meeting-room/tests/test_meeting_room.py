@@ -149,15 +149,56 @@ class BookingTests(unittest.TestCase):
         self.assertEqual('available', self.manager.set_available('a', True)['state'])
         self.app.change(original['id'], 'a', START, END)
 
-    def test_unresolved_policy_has_no_side_effects(self):
-        reservation = self.reserve()
-        self.rejected('human_decision_required', lambda: self.manager.set_available('a', False))
-        with sqlite3.connect(self.path) as db:
-            self.assertEqual('available', db.execute("SELECT state FROM rooms WHERE id = 'a'").fetchone()[0])
-        self.app.cancel(reservation['id'])
-        self.manager.set_available('a', False)  # cancelled facts do not occupy time
+    def test_unavailable_preserves_all_reservations_and_resume_occupancy(self):
+        original = self.reserve()
+        self.reserve(start=END, end=LATER)
+        # The decision applies to past, ongoing and future reservations alike.
+        self.reserve(start='2030-01-01T01:00:00Z', end='2030-01-01T02:00:00Z')
+        cancelled = self.reserve('b')
+        self.app.cancel(cancelled['id'])
+        before = self.rows()
+        manager = MeetingRooms(self.path, MANAGER, clock=lambda: instant('2030-01-02T10:30:00Z'))
+        for _ in range(2):
+            self.assertEqual('unavailable', manager.set_available('a', False)['state'])
+            self.assertEqual(before, self.rows())
+        self.assertNotIn('a', [r['id'] for r in self.app.availability(START, END)])
+        self.rejected('room_unavailable', self.reserve)
+        self.rejected('room_unavailable', lambda: self.app.change(original['id'], 'a', END, LATER))
+        manager.set_available('a', True)
+        self.assertEqual(before, self.rows())
+        self.assertNotIn('a', [r['id'] for r in self.app.availability(START, END)])
+        self.rejected('overlap', self.reserve)
+        self.assertIn('a', [r['id'] for r in self.app.availability(LATER, '2030-01-02T13:00:00Z')])
+
+    def test_move_from_unavailable_room_preserves_facts_and_checks_destination(self):
+        original = self.reserve()
+        self.reserve('b')
+        self.manager.set_available('a', False)
+        self.manager.set_available('c', False)
+        self.rejected('overlap', lambda: self.app.change(original['id'], 'b', START, END))
+        self.rejected('room_unavailable', lambda: self.app.change(original['id'], 'c', START, END))
+        bob = MeetingRooms(self.path, BOB, clock=lambda: NOW)
+        self.rejected('forbidden', lambda: bob.change(original['id'], 'b', END, LATER))
+        changed = self.app.change(original['id'], 'b', END, LATER)
+        for key in ('id', 'booker', 'purpose', 'registered_us', 'state', 'cancelled_us'):
+            self.assertEqual(original[key], changed[key])
         self.manager.set_available('a', True)
-        self.assertEqual('cancelled', self.rows()[0]['state'])
+        self.assertIn('a', [r['id'] for r in self.app.availability(START, END)])
+        self.assertNotIn('b', [r['id'] for r in self.app.availability(END, LATER)])
+
+    def test_cancel_while_unavailable_remains_cancelled_after_resume(self):
+        original = self.reserve()
+        self.manager.set_available('a', False)
+        bob = MeetingRooms(self.path, BOB, clock=lambda: NOW)
+        self.rejected('forbidden', lambda: bob.cancel(original['id']))
+        cancelled = self.app.cancel(original['id'])
+        self.assertEqual('cancelled', cancelled['state'])
+        self.assertEqual(NOW, cancelled['cancelled_us'])
+        self.assertNotIn('a', [r['id'] for r in self.app.availability(START, END)])
+        self.manager.set_available('a', True)
+        self.assertEqual([cancelled], self.rows())
+        self.assertIn('a', [r['id'] for r in self.app.availability(START, END)])
+        self.reserve()
 
     def test_no_unrequested_cutoff_for_existing_reservations(self):
         reservation = self.reserve()
@@ -221,12 +262,28 @@ class BookingTests(unittest.TestCase):
         if unchanged['room_id'] == 'b':
             self.assertEqual(original, unchanged)
 
-    def test_disable_and_reserve_are_serialized_with_pending_policy(self):
+    def test_disable_and_reserve_are_serialized(self):
         outcomes = self.race([('reserve', None), ('disable', None)])
-        self.assertIn(outcomes, [['human_decision_required', 'ok'], ['ok', 'room_unavailable']])
+        self.assertIn(outcomes, [['ok', 'ok'], ['ok', 'room_unavailable']])
         with sqlite3.connect(self.path) as db:
-            state = db.execute("SELECT state FROM rooms WHERE id = 'a'").fetchone()[0]
-        self.assertEqual(bool(self.rows()), state == 'available')
+            self.assertEqual('unavailable', db.execute("SELECT state FROM rooms WHERE id = 'a'").fetchone()[0])
+        self.assertEqual(outcomes.count('ok') - 1, len(self.rows()))
+        self.manager.set_available('a', True)
+        self.assertEqual(not bool(self.rows()), 'a' in [r['id'] for r in self.app.availability(START, END)])
+
+    def test_disable_and_change_preserve_original_or_successful_change(self):
+        original = self.reserve('b')
+        outcomes = self.race([('change', original['id']), ('disable', None)])
+        self.assertIn(outcomes, [['ok', 'ok'], ['ok', 'room_unavailable']])
+        expected = dict(original)
+        if outcomes == ['ok', 'ok']:
+            expected['room_id'] = 'a'
+        self.assertEqual([expected], self.rows())
+        with sqlite3.connect(self.path) as db:
+            self.assertEqual('unavailable', db.execute("SELECT state FROM rooms WHERE id = 'a'").fetchone()[0])
+        self.manager.set_available('a', True)
+        available = [r['id'] for r in self.app.availability(START, END)]
+        self.assertNotIn(expected['room_id'], available)
 
     def test_clock_is_sampled_after_write_lock(self):
         def clock():

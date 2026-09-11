@@ -1,14 +1,15 @@
 # Meeting-room booking — SQLite implementation
 
 Requirements: [meeting-room Business Design](../../business-design/meeting-room/README.md),
-source blob `59d185f89535ee0414b9e51b4ed1bb435baf838e`, and [Issue #25](https://github.com/mk3008/alder/issues/25).
+initial source blob `59d185f89535ee0414b9e51b4ed1bb435baf838e`, updated with the Human Decision below, and [Issue #25](https://github.com/mk3008/alder/issues/25).
 No other Business Design, implementation, past issue/PR, or research findings were used.
 
-**Draft: one business decision is pending.** Making a room unavailable when it has
-any `reserved` reservations returns `human_decision_required`, without changing
-either the room or its reservations. This is an implementation blocker, not an
-approved rule that reservations prevent taking a room out of service. Consequently
-Activity 5 is incomplete for this case. See [Decision Record](DECISIONS.md#dr-1-existing-reservations-when-a-room-becomes-unavailable).
+All six activities are implemented, including the
+[approved treatment of existing reservations](https://github.com/mk3008/alder/pull/26#issuecomment-5627605137).
+Making a room unavailable preserves reservations. Owners can move to another
+available room or cancel while the original room is unavailable. On resume,
+retained reserved bookings still occupy their intervals. **Reserved does not
+mean the room is guaranteed to be usable.** See [Decision Record](DECISIONS.md#dr-1-existing-reservations-when-a-room-becomes-unavailable).
 
 ## Run
 
@@ -98,7 +99,7 @@ The Python `Actor` is trusted caller context with the same limitation.
 python3 -m unittest discover -s tests -v
 ```
 
-Verified with Python 3.12.14: **17 tests passed**. Tests use temporary on-disk SQLite
+Verified with Python 3.12.14: **20 tests passed**. Tests use temporary on-disk SQLite
 databases, separate processes for concurrent writers and actual CLI subprocesses.
 
 | Requirements | Evidence |
@@ -107,8 +108,8 @@ databases, separate processes for concurrent writers and actual CLI subprocesses
 | Roles and ownership | Another user and manager-only actor cannot change/cancel someone else's reservation; user cannot manage room state |
 | Time and occupancy | All overlap shapes, adjacent intervals, same instant in different offsets, equal/reversed intervals, future boundary, self-exclusion |
 | Activity 5 (no reserved bookings) and 6 | Unavailable room excluded; reserve/change into it rejected; resume restores eligibility; cancelled reservations stay cancelled |
-| Activity 5 (reserved bookings exist) | Explicit pending-decision result, room and all reservations unchanged; **full business behavior not yet verified** |
-| Atomicity and concurrency | Four competing bookings, two changes, booking versus change, booking versus unavailable; one valid serialization, loser retains original facts |
+| Activity 5 (reserved bookings exist) | Past/ongoing/future bookings retained; owners can move/cancel while unavailable; failed moves preserve facts; resume restores retained occupancy |
+| Atomicity and concurrency | Four competing bookings, two changes, booking versus change, booking/change versus unavailable; one valid serialization, loser retains original facts |
 | Technical boundaries | Clock sampled after lock, parameterized SQL, SQL trigger guards, initialization refuses overwrite, unknown/malformed inputs |
 
 Remaining Business Design exclusions (recurrence, participants, capacity/equipment,

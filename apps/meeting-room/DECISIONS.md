@@ -1,30 +1,30 @@
 # Decision Record — Issue #25
 
 This record separates technical choices from approval of business behavior.
-The only requirement source is `business-design/meeting-room/README.md` at blob
-`59d185f89535ee0414b9e51b4ed1bb435baf838e`.
+The requirement sources are the meeting-room Business Design (initial blob
+`59d185f89535ee0414b9e51b4ed1bb435baf838e`) and the Human Decision linked below.
+The Business Design in this PR now incorporates that decision.
 
 ## DR-1: Existing reservations when a room becomes unavailable
 
-- **Chosen:** Do not choose a policy pending the
-  [Human Blocker question](https://github.com/mk3008/alder/issues/25#issuecomment-5627206812).
-  `set_available(room, False)` returns `human_decision_required` if *any* reserved
-  reservation exists for that room. This is a visible partial-implementation gate,
-  not a business rule. The transaction changes neither room nor reservation data.
-  Rooms without reserved reservations can be made unavailable and resumed.
-- **Basis:** Activity 5 requires stopping new reservations/changes into the room,
-  but the explicit undecided list excludes the treatment of existing reservations.
-  Preserving versus cancelling changes the outcome of later availability, change,
-  cancellation and resume. No time-based selection of affected bookings is given.
-- **Business status:** Unconfirmed; Human Decision requested, no answer received.
-- **Recommended, not implemented:** Preserve existing reservation facts and state;
-  permit the owner to move to another available room or cancel; include preserved
-  bookings in occupancy when the room resumes. Automatic cancellation would instead
-  require additional scope, authority and timestamp decisions.
-- **Guarantee:** No unsupported reservation treatment is silently adopted. The
-  implementation cannot yet complete Activity 5 for a room with reserved bookings.
-  The blocked branch and its tests must be replaced/extended after the decision;
-  passing the current tests does not close this business requirement.
+- **Chosen:** Availability changes update only the room state, preserving every
+  reservation's contents, state and timestamps. While unavailable, owners may move
+  to another available room, subject to normal interval/conflict checks, or cancel.
+  Changes targeting the unavailable room (including the same room) remain rejected.
+  On resume, retained reserved bookings occupy their intervals; moved/cancelled
+  bookings reflect their current facts.
+- **Basis:** The initial Design explicitly deferred this treatment. The
+  [Human Blocker](https://github.com/mk3008/alder/issues/25#issuecomment-5627206812)
+  was resolved by the [2026-09-11 Human Decision](https://github.com/mk3008/alder/pull/26#issuecomment-5627605137)
+  approving this policy and requiring its inclusion in the Business Design.
+- **Business status:** Human Decision made; reflected in Activities 3–6, reservation
+  state semantics and Rules 8–9. No outstanding blocker remains.
+- **Guarantee:** `reserved` means time occupancy, **not guaranteed actual usability**.
+  No automatic cancellation, replacement room or notification is introduced.
+  Past/ongoing/future reservations are all retained without a time-based selection
+  policy. Concurrent availability changes and booking mutations use the same writer lock.
+- **History:** The initial draft returned `human_decision_required` for rooms with
+  reserved bookings. That temporary gate has been removed after approval.
 
 ## DR-2: Identity and authority boundary
 
@@ -87,8 +87,7 @@ The only requirement source is `business-design/meeting-room/README.md` at blob
 
 - **Chosen:** Each mutation takes the SQLite writer lock before reading mutable
   facts; overlapping reserved slots are additionally guarded by SQL triggers.
-  Repeated resume/unavailable is a state assignment when the pending-decision gate
-  does not apply. Repeated cancel is rejected because the reservation must be reserved.
+  Repeated resume/unavailable is a state assignment regardless of existing reservations. Repeated cancel is rejected because the reservation must be reserved.
 - **Basis:** Rules 2/6/7 require concurrency safety and preservation on failed
   change. Activities 5/6 assign a target state without an opposite-state precondition;
   Activity 4 explicitly requires `reserved`.

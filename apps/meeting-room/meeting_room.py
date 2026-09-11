@@ -198,11 +198,7 @@ class MeetingRooms:
             raise Rejected('invalid_availability')
         with self.transaction(write=True) as db:
             self.room(db, room_id)
-            if not available and db.execute(
-                "SELECT 1 FROM reservations WHERE room_id = ? AND state = 'reserved' LIMIT 1",
-                (room_id,)).fetchone():
-                # Pending Issue #25 Human Decision; this is NOT a business rejection policy.
-                raise Rejected('human_decision_required')
+            # Availability changes preserve all reservation facts.
             db.execute('UPDATE rooms SET state = ? WHERE id = ?',
                        ('available' if available else 'unavailable', room_id))
             return self.room(db, room_id)
