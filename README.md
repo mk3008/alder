@@ -14,7 +14,7 @@ It combines established software engineering practices—requirements validation
 
 1. Put Business Design where the agent can read it. The product repository is recommended, but a separate repository at a known workspace path and revision also works.
 2. Give the implementation agent that path through AGENTS.md or the task prompt.
-3. Have the AI implement the task. It must not invent unresolved business policy; routine reversible technical choices can proceed.
+3. Have the AI implement the task and preserve material assumptions and choices in Decision Records. It must not invent unresolved business policy; routine reversible technical choices can proceed.
 4. After implementation, use a separate agent or fresh context to review it against Business Design with the selected Alder review knowledge.
 5. Return only necessary business decisions to people, update Business Design with their decisions, and align implementation and tests.
 

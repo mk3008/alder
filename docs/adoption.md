@@ -83,10 +83,16 @@ Business Design: <path and revision>
 Read the relevant Business Design before implementing this task.
 Implement the requested work using the existing project conventions. Do not invent business policy that the Business Design does not decide.
 
-If implementation requires a choice that changes the business outcome, authority, allowed state, data meaning or cardinality, unit of work, or a guarantee relied on by another activity, and the Business Design does not determine that choice, report it as a focused Human Decision. Explain why the existing Business Design does not decide it, give the smallest useful alternatives, and continue independent work where possible.
+When implementation makes a material assumption or choice that is not obvious from the Business Design, record it in a Decision Record. Record what was chosen, why it was needed, and the evidence or constraint that led to it. Do not create Decision Records for every routine, reversible technical choice.
 
-Routine, reversible technical choices do not require Human Decision. Record material assumptions or decisions where the repository normally records them. Perform the relevant non-destructive verification for the requested work.
+If the choice would change the business outcome, authority, allowed state, data meaning or cardinality, unit of work, or a guarantee relied on by another activity, and the Business Design does not decide it, do not record it as an approved business decision. Report it as a focused Human Decision instead and keep it unresolved. Explain why the existing Business Design does not decide it, give the smallest useful alternatives, and continue independent work where possible.
+
+Routine, reversible technical choices do not require Human Decision. Perform the relevant non-destructive verification for the requested work.
 ```
+
+A Decision Record is evidence of material assumptions and choices actually made during implementation, together with their reasons. A Human Decision is needed when Business Design leaves unresolved a choice that changes business meaning. A Decision Record does not replace that human decision; neither passing tests nor completed implementation constitute business approval.
+
+Use the repository’s existing location and format for Decision Records, or a suitable location such as `docs/decisions/` if none exists. Alder requires the record, not a particular directory or template. These are Decision Records, not only architecture decisions.
 
 ## 4. Run a separate Alder review after implementation
 
