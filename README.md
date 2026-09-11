@@ -8,7 +8,7 @@ Alder studies a development loop in which an AI agent implements **Business Desi
 
 It combines established software engineering practices—requirements validation, walkthroughs, bidirectional traceability, decision records, and human judgment—for repeated use with AI. It proposes no new design theory or architecture.
 
-**Business Design → Implementation → Review → Human Decision → Update**
+**People define and approve business intent. AI implements it. A separate AI reviews the implementation. Only unresolved business questions return to people for a decision.**
 
 ## Start with your product
 
@@ -28,10 +28,10 @@ product/
   tests/
 ```
 
-1. Put current Business Design in `docs/business-design/` and the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
+1. Put current Business Design in `docs/business-design/` and a local copy of the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
 2. Route these paths through AGENTS.md or the task prompt. Have the AI read Business Design first, implement the task, and record material assumptions and choices in `docs/decisions/`. It must not invent unresolved business policy; routine reversible technical choices can proceed.
-3. After implementation, give the review prompt to a separate agent or fresh context. Apply the selected review knowledge and read **Business Design → Decision Records → implementation / DDL / tests**.
-4. Return necessary business decisions to people, update Business Design with their decisions, and align implementation and tests.
+3. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**.
+4. Return only unresolved business questions to people for a decision.
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
