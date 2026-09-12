@@ -1,0 +1,7 @@
+{
+  "name": "business-process-consistency-dogfood",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test test/acceptance.test.js" },
+  "dependencies": { "pg": "^8.13.1" }
+}
