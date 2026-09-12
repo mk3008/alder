@@ -25,9 +25,11 @@ Within this fixed set, reviews identified unresolved operational questions and r
 
 The [review knowledge validation record](phase2/review-knowledge-v0.3.md) links the evidence and documents the finding that did not recur.
 
+Separately, [small exploratory architecture comparisons and follow-up evaluation](maintenance-risk-review/results.md) in Issue #45 observed isolation from boundaries suited to the tested risk. Adding a concrete future risk to current requirements also produced a local boundary without specifying an architecture style or solution. These observations do not establish long-term recovery of a comprehensive architecture's initial investment or superiority in total maintenance cost, and neither universally recommend nor reject any architecture style.
+
 ## Next questions
 
-The optimal division between pre-implementation and post-implementation review, workflow integration, and low-cost regression checks remain research questions. Architecture effects and long-term maintainability have not been validated.
+The optimal division between pre-implementation and post-implementation review, workflow integration, and low-cost regression checks remain research questions. Long-term maintainability, comprehension costs, and generalization of the architecture observations remain unvalidated.
 
 The [evaluation operating policy](evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11) prioritizes the existing three benchmarks. Rerun affected cases for local changes; reproducing every past finding is not a pass condition.
 
