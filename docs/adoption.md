@@ -87,16 +87,22 @@ A local copy is optional. A readable versioned GitHub URL for `docs/phase2/revie
 
 ## 3. Let the AI implement without inventing business policy
 
-You do not have to choose an architecture up front. Without a strong requirement, start from the Business Design and existing project conventions. Introduce boundaries, layers, or patterns where a concrete need appears; known costly boundaries may justify earlier separation. See [the architecture position](philosophy.md#ai-coding-and-architecture).
+Alder does not prescribe an architecture style or when to introduce structure. Give the implementation agent the Business Design, current requirements, project constraints, and the information below; let it choose how to realize them. See [the architecture position](philosophy.md#ai-coding-and-architecture).
+
+Describe futures you actually foresee in concrete terms, separately from current requirements. For example: “additional delivery or payment providers are likely,” “there is a concrete prospect of changing the database,” or “business logic must be testable without external I/O.” The last example is a desired property, not a prediction. State the risk or property itself rather than translating it into “create a Port,” “add a Repository,” or “use Clean Architecture.”
+
+Pass on what people actually know about likely changes; do not add hypothetical requirements merely because something might change someday. If no such future is foreseen, say so or omit it. Foresight informs design decisions; it does not authorize the agent to invent undecided future business rules or implement them as current requirements.
 
 Replace the placeholders with the requested task and actual design path:
 
 ```text
 Task: <requested work and acceptance conditions>
 Business Design: <path and revision>
+Current requirements / constraints / review concerns: <concrete requirements and desired properties>
+Known risks / likely future changes: <concrete foresight, separate from current requirements; omit if none>
 
 Read the relevant Business Design before implementing this task.
-Implement the requested work using the existing project conventions. Do not invent business policy that the Business Design does not decide.
+Implement the requested work using the existing project conventions. Use the stated risks and desired properties to choose the implementation; do not treat architecture names as substitutes for requirements. Treat future foresight as design context, not authorization to implement undecided future behavior. Do not invent unforeseen future requirements or business policy that the Business Design does not decide.
 
 When implementation makes a material assumption or choice that is not obvious from the Business Design, record it in a Decision Record. Record what was chosen, why it was needed, and the evidence or constraint that led to it. Do not create Decision Records for every routine, reversible technical choice.
 
