@@ -1,0 +1,99 @@
+--- before/additional.test.mjs
++++ after/additional.test.mjs
+@@ -34,3 +34,43 @@
+   }
+   assert.deepEqual(app.list(), before);
+ });
++
++test('note validation is atomic and counts mixed UTF-16 code units', () => {
++  const app = createApp();
++  const note = '😀'.repeat(139) + ' x';
++  app.submit({ ...input('kept'), note }, requester, 0);
++  const before = app.detail('kept');
++  for (const invalid of [undefined, {}, [], new String('text'), note + 'x']) {
++    assert.throws(() => app.submit({ ...input('retry'), note: invalid }, requester, 0), Error);
++    assert.deepEqual(app.detail('kept'), before);
++    assert.throws(() => app.detail('retry'), Error);
++  }
++  assert.equal(app.submit({ ...input('retry'), note: '' }, requester, 0).note, '');
++});
++
++test('note copies and list omission survive every event', () => {
++  const app = createApp();
++  const request = { ...input('p'), note: ' \nprivate\t ' };
++  const note = request.note;
++  const submitted = app.submit(request, requester, 0);
++  request.note = 'changed';
++  submitted.note = 'changed';
++  app.detail('p').note = 'changed';
++  function verify() {
++    const detail = app.detail('p');
++    assert.equal(detail.note, note);
++    const { note: omitted, ...expected } = detail;
++    assert.deepEqual(app.list(), [expected]);
++    app.list()[0].note = 'injected';
++    assert.equal(app.detail('p').note, note);
++  }
++  verify();
++  app.approve('p', approver, 0).note = 'changed';
++  verify();
++  app.purchase('p', 2, { id: 'b', role: 'buyer' }, 0).note = 'changed';
++  verify();
++  app.submit({ ...input('r'), note }, requester, 0);
++  app.reject('r', 'no', approver, 0).note = 'changed';
++  assert.equal(app.detail('r').note, note);
++  assert.ok(app.list().every(row => !Object.hasOwn(row, 'note')));
++});
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -27,6 +27,16 @@
+   return value.trim();
+ }
+ 
++function submissionNote(input) {
++  if (!Object.hasOwn(input, 'note')) return '';
++  requireCondition(typeof input.note === 'string' && input.note.length <= 280, 'Invalid note');
++  return input.note;
++}
++
++function detailRecord(record) {
++  return { ...record, note: record.note ?? '' };
++}
++
+ // Keep the approval authority decision in one place for future amount-based rules.
+ // The record supplies requestedYen; today's rule deliberately has no amount limit.
+ function requireApprovalAuthority(record, actor) {
+@@ -45,7 +55,7 @@
+ 
+   function save(record) {
+     records.set(record.id, record);
+-    return { ...record };
++    return detailRecord(record);
+   }
+ 
+   return {
+@@ -61,6 +71,7 @@
+         quantity: positiveInteger(input.quantity),
+         requestedYen: positiveInteger(input.requestedYen),
+         reason: trimmedText(input.reason),
++        note: submissionNote(input),
+         submittedAt: now,
+         status: 'submitted',
+       });
+@@ -90,11 +101,14 @@
+     },
+ 
+     detail(id) {
+-      return { ...lookup(id) };
++      return detailRecord(lookup(id));
+     },
+ 
+     list() {
+-      return [...records.keys()].sort().map(id => ({ ...records.get(id) }));
++      return [...records.keys()].sort().map(id => {
++        const { note, ...summary } = records.get(id);
++        return summary;
++      });
+     },
+   };
+ }

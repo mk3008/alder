@@ -1,6 +1,6 @@
 # Execution record — Issue #45
 
-Date: 2026-09-12. Status: **BLOCKED_BEFORE_ARM_EXECUTION**.
+Date: 2026-09-12. Initial status: **BLOCKED_BEFORE_ARM_EXECUTION**, superseded by the execution addendum below. The original pre-execution record is retained.
 
 ## Completed
 
@@ -34,3 +34,15 @@ Requirement Gates, raw/cumulative maintenance costs, prepayment recovery and H1�
 Actual implementation runs: **0**. Actual comparison test runs: **0**. Preparation consists of repository inspection and three documents; token/currency cost is unavailable and is not estimated. Proposed ceiling is four initial agent tasks plus sixteen continuations, with at most two correction rounds per stage. Runtime-only syntax/tests avoid dependency installation and external I/O.
 
 Keep the PR Draft and Issue #45 open. Resume by confirming fresh-context authorization, preparing/fixing and freezing the common acceptance harness before S0, then executing the packet sequence without exposing future packets. Add actual source snapshots, logs, measured diffs and findings to this same branch; only then mark the research complete.
+
+## Execution addendum — 2026-09-12
+
+The user explicitly authorized the four sub-agents, requested third-party-verifiable model/effort records, then selected Astra minimum effort before dispatch. Four fresh contexts were started using `gpt-6-astra` / `low` / `fork_turns: none`. The historical zero-run matrix above is superseded by the actual snapshots and logs under `work/maintenance-cost/runs/`. See [execution evidence](execution.md) for runner IDs, settings/provenance limits, frozen inputs and reproduction commands.
+
+## Final outcome
+
+All four agents completed all five stages using the configured Astra/low setting. All 20 common Gates, evaluator snapshot checks and final snapshot replays passed. No failed current-stage checks or correction rounds were observed; four duplicate F1 logs retained under F2 are excluded by content hash rather than counted as new runs.
+
+Final cumulative production churn A/B/C/D: 115/136/122/127 physical changed lines; excluding blank and standalone comment lines: 108/113/115/120. Initial and F1 rankings change under this sensitivity, while optional test-churn totals produce another ordering. No overall maintenance winner is established. H1–H5, bounded payback observations, classifications and limitations are in [results.md](results.md).
+
+The actual task count is four fresh agents plus sixteen continuations, without another fixture/model/seed. Third-party verification can replay saved sources and recalculate measures; provider internals and a full filesystem-access transcript are unavailable. The original blocker is resolved; the historical zero-run record above is not the final result.

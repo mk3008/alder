@@ -1,0 +1,14 @@
+
+test('list filtering is case-sensitive, sorted, optional and excludes notes', () => {
+  const app = createApp();
+  submit(app, 'z', { item: 'Desk Blue', note: 'private' });
+  submit(app, 'a', { item: 'Desk Red', note: 'private' });
+  submit(app, 'm', { item: 'desk Blue', note: 'private' });
+  assert.deepEqual(app.list({ itemContains: 'Desk' }).map(row => row.id), ['a', 'z']);
+  assert.deepEqual(app.list({ itemContains: 'Blue' }).map(row => row.id), ['m', 'z']);
+  assert.deepEqual(app.list({ itemContains: ' Desk' }), []);
+  assert.deepEqual(app.list({ itemContains: '' }), app.list());
+  assert.deepEqual(app.list({}), app.list());
+  assert.ok(app.list({ itemContains: 'Blue' }).every(row => !Object.hasOwn(row, 'note')));
+  for (const value of [null, 1, false, []]) unchanged(app, () => app.list({ itemContains: value }));
+});

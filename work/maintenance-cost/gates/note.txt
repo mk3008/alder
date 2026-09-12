@@ -1,0 +1,14 @@
+
+test('optional notes have exact UTF-16 boundary and preserve whitespace', () => {
+  const app = createApp();
+  assert.equal(submit(app, 'absent').note, '');
+  for (const [id, note] of [['empty', ''], ['space', '  x  '], ['limit', 'x'.repeat(280)], ['unicode', '😀'.repeat(140)]]) {
+    assert.equal(submit(app, id, { note }).note, note);
+    assert.equal(app.detail(id).note, note);
+  }
+  for (const note of ['x'.repeat(281), '😀'.repeat(141), null, 1, false]) unchanged(app, () => submit(app, 'bad', { note }));
+  assert.ok(app.list().every(row => !Object.hasOwn(row, 'note')));
+  assert.equal(app.approve('space', approver, 1).note, '  x  ');
+  assert.equal(app.purchase('space', 100, buyer, 2).note, '  x  ');
+  assert.equal(app.reject('limit', 'no', approver, 1).note, 'x'.repeat(280));
+});

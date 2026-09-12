@@ -1,0 +1,47 @@
+--- before/additional.test.mjs
++++ after/additional.test.mjs
+@@ -74,3 +74,28 @@
+   assert.equal(app.detail('r').note, note);
+   assert.ok(app.list().every(row => !Object.hasOwn(row, 'note')));
+ });
++
++test('filters validate even on empty state and retain no query state', () => {
++  const app = createApp();
++  for (const value of [undefined, {}, /desk/, new String('desk')]) {
++    assert.throws(() => app.list({ itemContains: value }), Error);
++    assert.deepEqual(app.list(), []);
++  }
++  app.submit({ ...input('p'), item: '  Desk [Blue]  ', note: 'secret' }, requester, 0);
++  const before = app.detail('p');
++  const filter = { itemContains: '[Blue]' };
++  const rows = app.list(filter);
++  assert.equal(rows.length, 1);
++  assert.ok(!Object.hasOwn(rows[0], 'note'));
++  rows[0].item = 'changed';
++  rows[0].note = 'injected';
++  rows.length = 0;
++  filter.itemContains = ' Desk';
++  assert.deepEqual(app.list(filter), []);
++  assert.equal(app.list({ itemContains: 'k [' }).length, 1);
++  assert.deepEqual(app.list({ itemContains: '.*' }), []);
++  assert.deepEqual(app.list({ itemContains: 'secret' }), []);
++  assert.deepEqual(app.detail('p'), before);
++  assert.equal(app.list().length, 1);
++  assert.deepEqual(app.list(undefined), app.list());
++});
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -104,8 +104,11 @@
+       return detailRecord(lookup(id));
+     },
+ 
+-    list() {
+-      return [...records.keys()].sort().map(id => {
++    list(filter = {}) {
++      const hasItemContains = Object.hasOwn(filter, 'itemContains');
++      const itemContains = hasItemContains ? filter.itemContains : '';
++      requireCondition(typeof itemContains === 'string', 'Invalid item filter');
++      return [...records.keys()].sort().filter(id => records.get(id).item.includes(itemContains)).map(id => {
+         const { note, ...summary } = records.get(id);
+         return summary;
+       });

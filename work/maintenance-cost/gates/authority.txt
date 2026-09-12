@@ -1,0 +1,37 @@
+
+test('amount determines exclusive approval authority including exact boundaries', () => {
+  const senior = { id: 's', role: 'seniorApprover' };
+  for (const amount of __AMOUNTS__) {
+    const app = createApp();
+    submit(app, 'p', { requestedYen: amount });
+    const allowed = amount >= __THRESHOLD__ ? senior : approver;
+    const denied = amount >= __THRESHOLD__ ? approver : senior;
+    unchanged(app, () => app.approve('p', denied, 1));
+    assert.equal(app.approve('p', allowed, 2).approvedBy, allowed.id);
+    assert.equal(app.purchase('p', amount, buyer, 3).status, 'purchased');
+  }
+});
+
+test('senior role does not gain submission, rejection or purchase permissions', () => {
+  const app = createApp();
+  const senior = { id: 's', role: 'seniorApprover' };
+  unchanged(app, () => app.submit(input(), senior, 0));
+  for (const amount of [1, 100000]) {
+    const id = String(amount); submit(app, id, { requestedYen: amount });
+    unchanged(app, () => app.reject(id, 'no', senior, 1));
+    assert.equal(app.reject(id, 'no', approver, 2).status, 'rejected');
+  }
+  submit(app, 'p', { requestedYen: 100000 }); app.approve('p', senior, 1);
+  unchanged(app, () => app.purchase('p', 100000, senior, 2));
+});
+
+test('later commands preserve previous approved and purchased records', () => {
+  const app = createApp();
+  submit(app, 'old'); const old = app.approve('old', approver, 1);
+  submit(app, 'bought'); app.approve('bought', approver, 1);
+  const bought = app.purchase('bought', 100, buyer, 2);
+  submit(app, 'pending', { requestedYen: 100000 });
+  app.approve('pending', { id: 's', role: 'seniorApprover' }, 3);
+  assert.deepEqual(app.detail('old'), old);
+  assert.deepEqual(app.detail('bought'), bought);
+});

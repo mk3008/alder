@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "stage": "S0",
+  "frozen_at": "2026-09-12T04:16:12.098576+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "additional.test.mjs": "261259d0ccb13fb6ecb289870c1679ee0ce41abf55bc8d8191212e4232b903b7",
+    "entry.mjs": "6948e3ee807c21781eeaf9339acd42e06bbccff14066516744d0e404fe2ba35c",
+    "slices/approve.mjs": "23e422da12a18d4eab007794a8cf38c1a2d724b4b814c1a8ef0fe4171831b71b",
+    "slices/detail.mjs": "6e8fbe01f1dc768dc790cafe734743163038e32704e5afcac184afa6d8212600",
+    "slices/list.mjs": "3d26eb9f5819296628fb603d50fb73a7104e4252a83aabaa2fb6894f9db31ff5",
+    "slices/purchase.mjs": "677e529ce9b8581c41dada82b0b16e1edf11f8ddcb968a6e66256343aeb42126",
+    "slices/reject.mjs": "02a1b649bedd638082b6ada7f87571dca037fadb36ade2488d3cedfca389dfc9",
+    "slices/submit.mjs": "5160799b4c69c2c2f775485360bc6cb6b2d34cb65448147a6cb4d5aa88be01a4",
+    "validation.mjs": "323d8f168fc2937bc04da4ce686dbce3b420268e09bcd710d82ef4053e7af28b"
+  }
+}

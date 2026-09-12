@@ -1,0 +1,23 @@
+{
+  "arm": "C",
+  "stage": "F2",
+  "frozen_at": "2026-09-12T04:24:34.315380+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-003.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "additional.test.mjs": "261259d0ccb13fb6ecb289870c1679ee0ce41abf55bc8d8191212e4232b903b7",
+    "approval.test.mjs": "b7fb25c41e381a9577628c2f400e32032129cc400fcff602d4ca0bd056aa9eb1",
+    "entry.mjs": "0927dcf89dc927f8283fd2cc00808b9f6dd77d0484c7c09624f591512e423212",
+    "filter.test.mjs": "9606f21af1402fbbb2ed89af778617b914b274bd257f6e3f4fcb04e0ab8d1e16",
+    "note.test.mjs": "e18795a73c361bc27b6865693f3005979114a78996724e95f39037ba18face20",
+    "slices/approve.mjs": "d89b2dec576480c27c30fc0baa5683a8991bb13545fab80c43d20f4843779fcd",
+    "slices/detail.mjs": "6e8fbe01f1dc768dc790cafe734743163038e32704e5afcac184afa6d8212600",
+    "slices/list.mjs": "83048d9411ce749e12bb7661f4c0c8e84ac3892bdfea0008b4a4e149ddaf96dd",
+    "slices/purchase.mjs": "677e529ce9b8581c41dada82b0b16e1edf11f8ddcb968a6e66256343aeb42126",
+    "slices/reject.mjs": "02a1b649bedd638082b6ada7f87571dca037fadb36ade2488d3cedfca389dfc9",
+    "slices/submit.mjs": "462cf89e40c3802ca9c82b59ea9670c1ff68eb6036c040c47b9b19102174d09c",
+    "threshold.test.mjs": "832ac6fbe81d1e67199806ac98bfe893818267a825b7a06df06c996ee027facf",
+    "validation.mjs": "6abd03f106335b8f77c35b7c6250e82a0f87085992fa97d89c10f67a94b29041"
+  }
+}

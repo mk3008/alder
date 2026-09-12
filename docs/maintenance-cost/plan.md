@@ -1,6 +1,6 @@
 # Maintenance cost pilot — Issue #45
 
-Status: **DESIGN_READY / EXECUTION_BLOCKED** (2026-09-12). No implementation arm has run. This is a separate exploratory experiment, not an amendment to `docs/evaluation-plan.md` or a completed comparison.
+Status: **COMPLETED EXPLORATORY PILOT** (2026-09-12). The initial instruction-boundary pause was superseded by explicit user authorization; see `execution.md`. This is a separate exploratory experiment, not an amendment to `docs/evaluation-plan.md` or a completed comparison.
 
 ## Repository inspection and reuse
 
@@ -83,10 +83,10 @@ For a comparison against A, prepayment is an observed S0 difference, not an assu
 | H4 | B's investment retained through U2 | Only a no-hit prefix; if B invests nothing, the prepayment premise is absent. |
 | H5 | Rankings across stages/changes | Constant ranking in one small fixture does not establish universal dominance. |
 
-Report support/contradiction/unknown for the observed case separately from general hypotheses. All are currently **unknown: not run**. A small memory-backed workflow may underexercise Clean Architecture's I/O isolation and VSA's multi-feature locality; retain this limitation even if differences are clear.
+Report support/contradiction/unknown for the observed case separately from general hypotheses. Results are recorded separately after execution. A small memory-backed workflow may underexercise Clean Architecture's I/O isolation and VSA's multi-feature locality; retain this limitation even if differences are clear.
 
 ## Deliverables and next decision
 
 Save actual runs under `work/maintenance-cost/` and results alongside this plan only after a valid runner is available. Store exact delivered prompts, stage hashes/snapshots, commands/output, failures, diffs and the classification ledger. Keep the old evaluation and Phase 2 artifacts unchanged.
 
-The next action is enabling fresh implementation contexts, then freezing tests and executing this matrix. Do not add a second fixture or model now. See `run-record.md` for the actual blocker and work completed; this design-only PR must remain Draft and must not close #45.
+The user authorized fresh implementation contexts; the model/effort and execution evidence are recorded in `execution.md`. Do not add a second fixture or model now. See `run-record.md` for the actual blocker and work completed; execution and evaluation are now complete; see `results.md`. No additional experiment is authorized by this completion.
