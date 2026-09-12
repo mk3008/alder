@@ -1,0 +1,19 @@
+{
+  "arm": "D",
+  "stage": "F2",
+  "frozen_at": "2026-09-12T04:24:34.091741+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-003.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "application.mjs": "a527797cea03cac1e9242f5b4014c38cf53eda152136cdf0faba13952ce4193e",
+    "boundaries.test.mjs": "e49993999fc8d58b70ba1b03eba5f76bbda8db5898f989bab4e54c2da1afb661",
+    "domain.mjs": "2a0beae7137b0ea8dbf4f8bc60d3b231219b8188c933534866e94dc86831e3c5",
+    "entry.mjs": "a9f8cc570607c36999fd69eb9fcc9756b9e75f6abcb460ea3370d284f8fd855b",
+    "filtering.test.mjs": "84d63f992ce9cb28cd1754293034121ae8e4451c66147ff69cd47417880a3d2e",
+    "memory.mjs": "8a64d95d5962485c9dbddaa9b3529e902ffcb9a25558d0164f8309a3ecb47569",
+    "notes.test.mjs": "7380dc1b4150fc8c686d2a26885506533dc2c8ed1521b0ba6a31bdc3cc387347",
+    "senior.test.mjs": "dfdb29d545289da19629e0d5768604c9089ddb586d50bb183087d11597970bb1",
+    "threshold.test.mjs": "0adc89aaeda3bc4f6a359281352697474637ad60280848d643aa61d47ff47f94"
+  }
+}

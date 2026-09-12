@@ -1,0 +1,1763 @@
+{
+  "source_attempt": "records/attempts/run-001.json",
+  "evidence": {
+    "baseline_commit": "9ba73345a57fe0eaf5c34b661a892c72dfd6b55c",
+    "baseline_file_hashes_verified": 445,
+    "method": "Manual exact source-region markers and complete E2 production file hashes/import/export inventory; byte equality is not semantic equivalence or independent causal evidence. Existing measurement algorithms recomputed unchanged.",
+    "region_comparisons": [
+      {
+        "label": "E1 approval use-case body",
+        "arm": "A",
+        "before": {
+          "path": "work/maintenance-cost/runs/A/U2/source/entry.mjs",
+          "start_marker": "    approve(id, actor, now) {",
+          "end_marker_exclusive": "    reject(id, reason, actor, now) {",
+          "first_line": 65,
+          "text": "    approve(id, actor, now) {\n      validateCommand(actor, 'approver', now);\n      return transition(id, actor, 'approver', now, 'submitted', {\n        approvedAt: now, approvedBy: actor.id, status: 'approved',\n      });\n    },\n",
+          "sha256": "af1791b68128416a3e24f1225d091e7eaa69d39678f124efa11ab928b4aa310f"
+        },
+        "after": {
+          "path": "work/maintenance-cost/runs/A/F1/source/entry.mjs",
+          "start_marker": "    approve(id, actor, now) {",
+          "end_marker_exclusive": "    reject(id, reason, actor, now) {",
+          "first_line": 65,
+          "text": "    approve(id, actor, now) {\n      const role = get(id).requestedYen >= 100000 ? 'seniorApprover' : 'approver';\n      validateCommand(actor, role, now);\n      return transition(id, actor, role, now, 'submitted', {\n        approvedAt: now, approvedBy: actor.id, status: 'approved',\n      });\n    },\n",
+          "sha256": "bf3fc753dc02932566c079b17b7f776a1d54d98d14dd9cc909053229f06bfecb"
+        },
+        "byte_identical": false
+      },
+      {
+        "label": "E1 approval use-case body",
+        "arm": "B",
+        "before": {
+          "path": "work/maintenance-cost/runs/B/U2/source/entry.mjs",
+          "start_marker": "    approve(id, actor, now) {",
+          "end_marker_exclusive": "    reject(id, reason, actor, now) {",
+          "first_line": 80,
+          "text": "    approve(id, actor, now) {\n      validateCommand(actor, now);\n      const record = lookup(id, 'submitted');\n      requireApprovalAuthority(record, actor);\n      return save({ ...record, approvedAt: now, approvedBy: actor.id, status: 'approved' });\n    },\n\n",
+          "sha256": "8d799c13aacee69748a07594a4bb34248cd5afb3b9aa3073ca646bb98ac98373"
+        },
+        "after": {
+          "path": "work/maintenance-cost/runs/B/F1/source/entry.mjs",
+          "start_marker": "    approve(id, actor, now) {",
+          "end_marker_exclusive": "    reject(id, reason, actor, now) {",
+          "first_line": 79,
+          "text": "    approve(id, actor, now) {\n      validateCommand(actor, now);\n      const record = lookup(id, 'submitted');\n      requireApprovalAuthority(record, actor);\n      return save({ ...record, approvedAt: now, approvedBy: actor.id, status: 'approved' });\n    },\n\n",
+          "sha256": "8d799c13aacee69748a07594a4bb34248cd5afb3b9aa3073ca646bb98ac98373"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E1 A existing shared transition",
+        "arm": "A",
+        "before": {
+          "path": "work/maintenance-cost/runs/A/U2/source/entry.mjs",
+          "start_marker": "  function transition(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 36,
+          "text": "  function transition(id, actor, role, now, fromStatus, fields) {\n    validateCommand(actor, role, now);\n    const current = get(id);\n    if (current.status !== fromStatus) throw new Error('Invalid transition');\n    const result = { ...current, ...fields };\n    records.set(id, result);\n    return copy(result);\n  }\n",
+          "sha256": "af858f0541fcb785d68eae4b2ef79821b6b3133dda0eb43061687c5fbba2d82e"
+        },
+        "after": {
+          "path": "work/maintenance-cost/runs/A/F1/source/entry.mjs",
+          "start_marker": "  function transition(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 36,
+          "text": "  function transition(id, actor, role, now, fromStatus, fields) {\n    validateCommand(actor, role, now);\n    const current = get(id);\n    if (current.status !== fromStatus) throw new Error('Invalid transition');\n    const result = { ...current, ...fields };\n    records.set(id, result);\n    return copy(result);\n  }\n",
+          "sha256": "af858f0541fcb785d68eae4b2ef79821b6b3133dda0eb43061687c5fbba2d82e"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E1 B local authority helper",
+        "arm": "B",
+        "before": {
+          "path": "work/maintenance-cost/runs/B/U2/source/entry.mjs",
+          "start_marker": "function requireApprovalAuthority(",
+          "end_marker_exclusive": "\nexport function createApp",
+          "first_line": 42,
+          "text": "function requireApprovalAuthority(record, actor) {\n  requireRole(actor, 'approver');\n}\n",
+          "sha256": "9054af14eab17001d6710613808fbf40704ec87c9de3c79dbc31f321cd92a3c0"
+        },
+        "after": {
+          "path": "work/maintenance-cost/runs/B/F1/source/entry.mjs",
+          "start_marker": "function requireApprovalAuthority(",
+          "end_marker_exclusive": "\nexport function createApp",
+          "first_line": 41,
+          "text": "function requireApprovalAuthority(record, actor) {\n  requireRole(actor, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');\n}\n",
+          "sha256": "e6f1b3312efaeac223f539f6afabf0ff0c0efc9facb74b606df1573470e254c1"
+        },
+        "byte_identical": false
+      },
+      {
+        "label": "E2 A lookup",
+        "arm": "A",
+        "before": {
+          "path": "work/maintenance-boundary/runs/A/S0/source/entry.mjs",
+          "start_marker": "  function find(",
+          "end_marker_exclusive": "\n  async function book",
+          "first_line": 5,
+          "text": "  function find(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n",
+          "sha256": "d312302dfc41d7c951d1bb82d19bd8e6b7121a4f469e102dc788304870b21226"
+        },
+        "after": {
+          "path": "work/maintenance-boundary/runs/A/S1/source/entry.mjs",
+          "start_marker": "  function find(",
+          "end_marker_exclusive": "\n  async function book",
+          "first_line": 5,
+          "text": "  function find(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n",
+          "sha256": "d312302dfc41d7c951d1bb82d19bd8e6b7121a4f469e102dc788304870b21226"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E2 A detail query",
+        "arm": "A",
+        "before": {
+          "path": "work/maintenance-boundary/runs/A/S0/source/entry.mjs",
+          "start_marker": "  function detail(",
+          "end_marker_exclusive": "\n  return {book",
+          "first_line": 52,
+          "text": "  function detail(id) {\n    return {...find(id)};\n  }\n",
+          "sha256": "0fae4842e3f3417c1c05bc886c476fa4b42741b415d2803c95043b25d4462e47"
+        },
+        "after": {
+          "path": "work/maintenance-boundary/runs/A/S1/source/entry.mjs",
+          "start_marker": "  function detail(",
+          "end_marker_exclusive": "\n  return {book",
+          "first_line": 69,
+          "text": "  function detail(id) {\n    return {...find(id)};\n  }\n",
+          "sha256": "0fae4842e3f3417c1c05bc886c476fa4b42741b415d2803c95043b25d4462e47"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E2 B lookup",
+        "arm": "B",
+        "before": {
+          "path": "work/maintenance-boundary/runs/B/S0/source/entry.mjs",
+          "start_marker": "  function requireRecord(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 7,
+          "text": "  function requireRecord(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n",
+          "sha256": "97081d08899c9f24eab46edf1bf9dd066408b4021ef7597835c1f6075dd92b3f"
+        },
+        "after": {
+          "path": "work/maintenance-boundary/runs/B/S1/source/entry.mjs",
+          "start_marker": "  function requireRecord(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 11,
+          "text": "  function requireRecord(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n",
+          "sha256": "97081d08899c9f24eab46edf1bf9dd066408b4021ef7597835c1f6075dd92b3f"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E2 B detail query",
+        "arm": "B",
+        "before": {
+          "path": "work/maintenance-boundary/runs/B/S0/source/entry.mjs",
+          "start_marker": "    detail(id) {",
+          "end_marker_exclusive": "\n  };",
+          "first_line": 35,
+          "text": "    detail(id) {\n      return {...requireRecord(id)};\n    },",
+          "sha256": "a998e6dcdfc0bc3303aeb8ae74c1166956efe9df75fc06b63b4cfeceb936d900"
+        },
+        "after": {
+          "path": "work/maintenance-boundary/runs/B/S1/source/entry.mjs",
+          "start_marker": "    detail(id) {",
+          "end_marker_exclusive": "\n  };",
+          "first_line": 41,
+          "text": "    detail(id) {\n      return {...requireRecord(id)};\n    },",
+          "sha256": "a998e6dcdfc0bc3303aeb8ae74c1166956efe9df75fc06b63b4cfeceb936d900"
+        },
+        "byte_identical": true
+      },
+      {
+        "label": "E2 D detail query",
+        "arm": "D",
+        "before": {
+          "path": "work/maintenance-boundary/runs/D/S0/source/booking.mjs",
+          "start_marker": "  function detail(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 3,
+          "text": "  function detail(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown booking');\n    return record;\n  }\n",
+          "sha256": "f60d065b5faf8ae8b0f688ddc1c1cf9b367d0cd8d5fc7719d6fbb9a77668f2f9"
+        },
+        "after": {
+          "path": "work/maintenance-boundary/runs/D/S1/source/booking.mjs",
+          "start_marker": "  function detail(",
+          "end_marker_exclusive": "\n  return {",
+          "first_line": 3,
+          "text": "  function detail(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown booking');\n    return record;\n  }\n",
+          "sha256": "f60d065b5faf8ae8b0f688ddc1c1cf9b367d0cd8d5fc7719d6fbb9a77668f2f9"
+        },
+        "byte_identical": true
+      }
+    ],
+    "experiment2_modules": [
+      {
+        "arm": "A",
+        "files": [
+          {
+            "path": "entry.mjs",
+            "before_sha256": "07cdf0f13b9943c8ff22519891e815cca0ab96acd53035d2af7d6a41e3e36b6e",
+            "after_sha256": "05a8aaa2a9a9e6fc5c6f4a60d77c9d604994bae17797ce42fd2cd23ef230c85a",
+            "byte_identical": false
+          }
+        ],
+        "imports_and_exports": {
+          "entry.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createApp",
+                "{alphaUrl, alphaToken, betaUrl, betaToken}) {"
+              ]
+            ],
+            "uses_fetch": true
+          }
+        }
+      },
+      {
+        "arm": "B",
+        "files": [
+          {
+            "path": "alpha.mjs",
+            "before_sha256": "35f1f715f0ff4bb3362024b10e3e5bc1369e4a792c94d0adc1e4608be865ac24",
+            "after_sha256": "35f1f715f0ff4bb3362024b10e3e5bc1369e4a792c94d0adc1e4608be865ac24",
+            "byte_identical": true
+          },
+          {
+            "path": "beta.mjs",
+            "before_sha256": null,
+            "after_sha256": "1a7b135d4dbfc8db6f39f2d861c627fa44d4c7b186d2dce57d26fca23b0cddb5",
+            "byte_identical": false
+          },
+          {
+            "path": "entry.mjs",
+            "before_sha256": "374f2ff96eb8cfcab2fbd276ce3702ba3c7fbe30f10e5783f46b4aa19f7ef808",
+            "after_sha256": "91391e70cf5a9105ba38fb69382bd3fa4f1e7f6ca6a01424451c00eb54bcd521",
+            "byte_identical": false
+          }
+        ],
+        "imports_and_exports": {
+          "alpha.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createAlphaClient",
+                "{alphaUrl, alphaToken}) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "beta.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createBetaClient",
+                "{betaUrl, betaToken}) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "entry.mjs": {
+            "imports": [
+              "./alpha.mjs",
+              "./beta.mjs"
+            ],
+            "exports": [
+              [
+                "createApp",
+                "{alphaUrl, alphaToken, betaUrl, betaToken}) {"
+              ]
+            ],
+            "uses_fetch": false
+          }
+        }
+      },
+      {
+        "arm": "C",
+        "files": [
+          {
+            "path": "entry.mjs",
+            "before_sha256": "5b08711a26e169dab72bcb3d35a22e4a556465a3ca540e503f1da3dc651b65d7",
+            "after_sha256": "ca48c0d84e68d57ff3faee3f3e775d142d28dbf0c76a026fe718849b6fbde0d5",
+            "byte_identical": false
+          },
+          {
+            "path": "features/book.mjs",
+            "before_sha256": "e554511dd238e2e62708cb90043f9f0d6b25f710843afcd06f16b04dd3a70a75",
+            "after_sha256": "5ae4b03da6c0eb63cb0f89c07f71d75dee846563e6beea8f95bd87be23c5db69",
+            "byte_identical": false
+          },
+          {
+            "path": "features/cancel.mjs",
+            "before_sha256": "0258c863320cf93db4f3603181b3d2db7f967cebff09118beff10954eec1d60f",
+            "after_sha256": "b393f8ceeffb08ae6ba15c0ab79b480769b4cc977ae20e7668fd98b65020654d",
+            "byte_identical": false
+          },
+          {
+            "path": "features/detail.mjs",
+            "before_sha256": "24cd4d6c8d5cc04d21fb596d1cd2a82b35782c2650185b8c9a80eefb0873065e",
+            "after_sha256": "24cd4d6c8d5cc04d21fb596d1cd2a82b35782c2650185b8c9a80eefb0873065e",
+            "byte_identical": true
+          }
+        ],
+        "imports_and_exports": {
+          "entry.mjs": {
+            "imports": [
+              "./features/book.mjs",
+              "./features/cancel.mjs",
+              "./features/detail.mjs"
+            ],
+            "exports": [
+              [
+                "createApp",
+                "{ alphaUrl, alphaToken, betaUrl, betaToken }) {"
+              ]
+            ],
+            "uses_fetch": false
+          },
+          "features/book.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "bookShipment",
+                "{ records, alphaUrl, alphaToken, betaUrl, betaToken }, input) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "features/cancel.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "cancelShipment",
+                "{ records, alphaUrl, alphaToken, betaUrl, betaToken }, id) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "features/detail.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "shipmentDetail",
+                "records, id) {"
+              ]
+            ],
+            "uses_fetch": false
+          }
+        }
+      },
+      {
+        "arm": "D",
+        "files": [
+          {
+            "path": "alpha-shipments.mjs",
+            "before_sha256": "35329698e66c15e6bd65301ad852432cc93f0bda6ab2c85a3c8db34866027344",
+            "after_sha256": "35329698e66c15e6bd65301ad852432cc93f0bda6ab2c85a3c8db34866027344",
+            "byte_identical": true
+          },
+          {
+            "path": "beta-shipments.mjs",
+            "before_sha256": null,
+            "after_sha256": "046428c34761d51e2c022dd21ae5035ad8886fa640e6b03d5054f12e5d147e20",
+            "byte_identical": false
+          },
+          {
+            "path": "booking.mjs",
+            "before_sha256": "25e722d46c68cb6928f716ff0fddea325cab86f30fbf40b591d72f95537b2b49",
+            "after_sha256": "37ecea1bbbe9838650b67fbc61a353808c01c586f87cf8e3c4df4195c8d3df91",
+            "byte_identical": false
+          },
+          {
+            "path": "entry.mjs",
+            "before_sha256": "9042affe2d528f430400c5d5005f4b548c187396043d377e1cd4bae51d0a683c",
+            "after_sha256": "ca60db7c9885db5cebfc5ee66f38fcfdd6cfa7543a92b971d195b9e6b55bea31",
+            "byte_identical": false
+          },
+          {
+            "path": "memory-records.mjs",
+            "before_sha256": "c9dd329d208465ec427441795336141d9a5aad4386575ba6affaf38e96fb8037",
+            "after_sha256": "c9dd329d208465ec427441795336141d9a5aad4386575ba6affaf38e96fb8037",
+            "byte_identical": true
+          }
+        ],
+        "imports_and_exports": {
+          "alpha-shipments.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createAlphaShipments",
+                "{alphaUrl, alphaToken}) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "beta-shipments.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createBetaShipments",
+                "{betaUrl, betaToken}) {"
+              ]
+            ],
+            "uses_fetch": true
+          },
+          "booking.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createBookingService",
+                "{records, shipments}) {"
+              ]
+            ],
+            "uses_fetch": false
+          },
+          "entry.mjs": {
+            "imports": [
+              "./booking.mjs",
+              "./memory-records.mjs",
+              "./alpha-shipments.mjs",
+              "./beta-shipments.mjs"
+            ],
+            "exports": [
+              [
+                "createApp",
+                "{alphaUrl, alphaToken, betaUrl, betaToken}) {"
+              ]
+            ],
+            "uses_fetch": false
+          },
+          "memory-records.mjs": {
+            "imports": [],
+            "exports": [
+              [
+                "createMemoryRecords",
+                ") {"
+              ]
+            ],
+            "uses_fetch": false
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "maintenance-cost": [
+        {
+          "arm": "A",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 90,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 83,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 36,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 32,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 90,
+            "tests": 36,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 83,
+            "tests": 32,
+            "support": 0
+          }
+        },
+        {
+          "arm": "A",
+          "stage": "U1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 8,
+              "deleted": 3,
+              "nonblank_noncomment_churn": 11,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 46,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 43,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 101,
+            "tests": 82,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 94,
+            "tests": 75,
+            "support": 0
+          }
+        },
+        {
+          "arm": "A",
+          "stage": "U2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 5,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 7,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 50,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 46,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 108,
+            "tests": 132,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 101,
+            "tests": 121,
+            "support": 0
+          }
+        },
+        {
+          "arm": "A",
+          "stage": "F1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 3,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 5,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 45,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 42,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 113,
+            "tests": 177,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 106,
+            "tests": 163,
+            "support": 0
+          }
+        },
+        {
+          "arm": "A",
+          "stage": "F2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 1,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 2,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 21,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 21,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 115,
+            "tests": 199,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 108,
+            "tests": 184,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 100,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 82,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 36,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 32,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 100,
+            "tests": 36,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 82,
+            "tests": 32,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "U1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 17,
+              "deleted": 3,
+              "nonblank_noncomment_churn": 18,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 40,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 38,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 120,
+            "tests": 76,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 100,
+            "tests": 70,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "U2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 5,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 7,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 25,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 24,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 127,
+            "tests": 101,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 107,
+            "tests": 94,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "F1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 3,
+              "deleted": 4,
+              "nonblank_noncomment_churn": 4,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 34,
+              "deleted": 4,
+              "nonblank_noncomment_churn": 37,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 134,
+            "tests": 139,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 111,
+            "tests": 131,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "F2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 1,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 2,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 25,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 25,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 136,
+            "tests": 165,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 113,
+            "tests": 156,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 97,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 91,
+              "changed_files": 8,
+              "new_files": 8,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 35,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 32,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 97,
+            "tests": 35,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 91,
+            "tests": 32,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "U1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 5,
+              "deleted": 3,
+              "nonblank_noncomment_churn": 8,
+              "changed_files": 3,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 55,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 52,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 105,
+            "tests": 90,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 99,
+            "tests": 84,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "U2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 7,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 8,
+              "changed_files": 2,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 41,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 38,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 114,
+            "tests": 131,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 107,
+            "tests": 122,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "F1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 4,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 6,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 52,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 49,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 120,
+            "tests": 183,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 113,
+            "tests": 171,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "F2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 1,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 2,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 38,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 37,
+              "changed_files": 2,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 122,
+            "tests": 222,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 115,
+            "tests": 208,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 100,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 93,
+              "changed_files": 4,
+              "new_files": 4,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 38,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 35,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 100,
+            "tests": 38,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 93,
+            "tests": 35,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "U1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 7,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 9,
+              "changed_files": 2,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 39,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 36,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 109,
+            "tests": 77,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 102,
+            "tests": 71,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "U2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 6,
+              "deleted": 2,
+              "nonblank_noncomment_churn": 8,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 30,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 28,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 117,
+            "tests": 107,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 110,
+            "tests": 99,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "F1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 4,
+              "deleted": 4,
+              "nonblank_noncomment_churn": 8,
+              "changed_files": 2,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 40,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 38,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 125,
+            "tests": 147,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 118,
+            "tests": 137,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "F2",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 1,
+              "deleted": 1,
+              "nonblank_noncomment_churn": 2,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 44,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 42,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 127,
+            "tests": 191,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 120,
+            "tests": 179,
+            "support": 0
+          }
+        }
+      ],
+      "maintenance-boundary": [
+        {
+          "arm": "A",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 57,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 51,
+              "changed_files": 1,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 57,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 51,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "A",
+          "stage": "S1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 29,
+              "deleted": 12,
+              "nonblank_noncomment_churn": 41,
+              "changed_files": 1,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 98,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 92,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 69,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 65,
+              "changed_files": 2,
+              "new_files": 2,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 69,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 65,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "B",
+          "stage": "S1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 45,
+              "deleted": 5,
+              "nonblank_noncomment_churn": 48,
+              "changed_files": 2,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 119,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 113,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 67,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 64,
+              "changed_files": 4,
+              "new_files": 4,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 67,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 64,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "C",
+          "stage": "S1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 62,
+              "deleted": 26,
+              "nonblank_noncomment_churn": 88,
+              "changed_files": 3,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 155,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 152,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "S0",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 87,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 83,
+              "changed_files": 4,
+              "new_files": 4,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 87,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 83,
+            "tests": 0,
+            "support": 0
+          }
+        },
+        {
+          "arm": "D",
+          "stage": "S1",
+          "gate_passed": true,
+          "agent_check_attempts": 1,
+          "failed_agent_checks": 0,
+          "stats": {
+            "production": {
+              "added": 49,
+              "deleted": 6,
+              "nonblank_noncomment_churn": 50,
+              "changed_files": 3,
+              "new_files": 1,
+              "deleted_files": 0
+            },
+            "tests": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            },
+            "support": {
+              "added": 0,
+              "deleted": 0,
+              "nonblank_noncomment_churn": 0,
+              "changed_files": 0,
+              "new_files": 0,
+              "deleted_files": 0
+            }
+          },
+          "cumulative_churn": {
+            "production": 142,
+            "tests": 0,
+            "support": 0
+          },
+          "cumulative_nonblank_noncomment_churn": {
+            "production": 133,
+            "tests": 0,
+            "support": 0
+          }
+        }
+      ]
+    }
+  },
+  "test_boundary_observations": [
+    {
+      "arm": "A",
+      "seam": "public createApp",
+      "invalid_fetch_calls": 0,
+      "valid_fetch_calls": 1,
+      "valid_booking_completed": false,
+      "state_written": false
+    },
+    {
+      "arm": "B",
+      "seam": "public createApp",
+      "invalid_fetch_calls": 0,
+      "valid_fetch_calls": 1,
+      "valid_booking_completed": false,
+      "state_written": false
+    },
+    {
+      "arm": "C",
+      "seam": "public createApp",
+      "invalid_fetch_calls": 0,
+      "valid_fetch_calls": 1,
+      "valid_booking_completed": false,
+      "state_written": false
+    },
+    {
+      "arm": "D",
+      "seam": "public createApp",
+      "invalid_fetch_calls": 0,
+      "valid_fetch_calls": 1,
+      "valid_booking_completed": false,
+      "state_written": false
+    },
+    {
+      "arm": "C",
+      "seam": "exported bookShipment",
+      "fetch_calls": 1,
+      "booking_completed": false
+    },
+    {
+      "arm": "D",
+      "seam": "exported createBookingService with fake shipment operations",
+      "fetch_calls": 0,
+      "successful_bookings": 3,
+      "successful_cancellations": 2,
+      "validation_duplicate_and_repeat_guards": true,
+      "failure_atomicity": true,
+      "mixed_provider_routing": true,
+      "events": [
+        {
+          "operation": "book",
+          "provider": "alpha",
+          "shipment": {
+            "id": "old",
+            "address": "Tokyo",
+            "grams": 1
+          }
+        },
+        {
+          "operation": "book",
+          "provider": "beta",
+          "shipment": {
+            "id": "new",
+            "address": "Tokyo",
+            "grams": 1250
+          }
+        },
+        {
+          "operation": "book",
+          "provider": "beta",
+          "shipment": {
+            "id": "failed",
+            "address": "Tokyo",
+            "grams": 1250
+          }
+        },
+        {
+          "operation": "book",
+          "provider": "beta",
+          "shipment": {
+            "id": "failed",
+            "address": "Tokyo",
+            "grams": 1250
+          }
+        },
+        {
+          "operation": "cancel",
+          "provider": "alpha",
+          "trackingId": "alpha/old"
+        },
+        {
+          "operation": "cancel",
+          "provider": "alpha",
+          "trackingId": "alpha/old"
+        },
+        {
+          "operation": "cancel",
+          "provider": "beta",
+          "trackingId": "beta/new"
+        }
+      ]
+    }
+  ],
+  "note": "Deterministic extraction of saved outputs; not another execution or independent sample."
+}

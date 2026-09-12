@@ -1,0 +1,15 @@
+{
+  "arm": "A",
+  "stage": "F1",
+  "frozen_at": "2026-09-12T04:22:03.400726+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "approval.test.mjs": "a62f5deccfe274d65a3992920790b7d5fb1d0e6e1f8372f9bdc8f5c888da116d",
+    "boundaries.test.mjs": "a2f1d1ac83674afa040ddb991933666b00426faccb46dbd789c2766a231a9413",
+    "entry.mjs": "8f4c2e199fc693f8095e17dc621c1eb61268e2c979b03f71a2325db407b0aa7a",
+    "filter.test.mjs": "9cc70a5359f56234a20f976545d47da333550ec0ed59f7d104119d92f1dc745f",
+    "notes.test.mjs": "00a42662d983881a51f004db4d8491d11f25e165831100637bfbfd0180014533"
+  }
+}

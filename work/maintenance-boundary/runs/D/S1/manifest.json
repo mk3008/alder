@@ -1,0 +1,15 @@
+{
+  "arm": "D",
+  "stage": "S1",
+  "frozen_at": "2026-09-12T04:48:16.651018+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "alpha-shipments.mjs": "35329698e66c15e6bd65301ad852432cc93f0bda6ab2c85a3c8db34866027344",
+    "beta-shipments.mjs": "046428c34761d51e2c022dd21ae5035ad8886fa640e6b03d5054f12e5d147e20",
+    "booking.mjs": "37ecea1bbbe9838650b67fbc61a353808c01c586f87cf8e3c4df4195c8d3df91",
+    "entry.mjs": "ca60db7c9885db5cebfc5ee66f38fcfdd6cfa7543a92b971d195b9e6b55bea31",
+    "memory-records.mjs": "c9dd329d208465ec427441795336141d9a5aad4386575ba6affaf38e96fb8037"
+  }
+}

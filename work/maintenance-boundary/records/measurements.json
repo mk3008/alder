@@ -1,0 +1,1209 @@
+{
+  "algorithm": "Python difflib.SequenceMatcher, autojunk=False, physical lines including whitespace, zero-context non-equal opcodes",
+  "rows": [
+    {
+      "arm": "A",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 57,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 51,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 57,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 51,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 57
+    },
+    {
+      "arm": "A",
+      "stage": "S1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 29,
+          "deleted": 12,
+          "nonblank_noncomment_churn": 41,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 98,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 92,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 74
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 69,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 65,
+          "changed_files": 2,
+          "new_files": 2,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 69,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 65,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "alpha.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 69
+    },
+    {
+      "arm": "B",
+      "stage": "S1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 45,
+          "deleted": 5,
+          "nonblank_noncomment_churn": 48,
+          "changed_files": 2,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 119,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 113,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "beta.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 109
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 67,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 64,
+          "changed_files": 4,
+          "new_files": 4,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 67,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 64,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs",
+        "features/book.mjs",
+        "features/cancel.mjs",
+        "features/detail.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 67
+    },
+    {
+      "arm": "C",
+      "stage": "S1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 62,
+          "deleted": 26,
+          "nonblank_noncomment_churn": 88,
+          "changed_files": 3,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 155,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 152,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs",
+        "features/book.mjs",
+        "features/cancel.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 103
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 87,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 83,
+          "changed_files": 4,
+          "new_files": 4,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 87,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 83,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "alpha-shipments.mjs",
+        "booking.mjs",
+        "entry.mjs",
+        "memory-records.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 87
+    },
+    {
+      "arm": "D",
+      "stage": "S1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 49,
+          "deleted": 6,
+          "nonblank_noncomment_churn": 50,
+          "changed_files": 3,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 142,
+        "tests": 0,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 133,
+        "tests": 0,
+        "support": 0
+      },
+      "changed_paths": [
+        "beta-shipments.mjs",
+        "booking.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 130
+    }
+  ],
+  "hunks": [
+    {
+      "id": "A/S0/entry.mjs:0:0:0:57",
+      "arm": "A",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        57
+      ],
+      "added": 57,
+      "deleted": 0,
+      "old": "",
+      "new": "export function createApp({alphaUrl, alphaToken}) {\n  const records = new Map();\n  const authorization = `Bearer ${alphaToken}`;\n\n  function find(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n\n  async function book(input) {\n    if (!input || typeof input.id !== 'string' || !input.id.trim() ||\n        typeof input.address !== 'string' || !input.address.trim() ||\n        !Number.isSafeInteger(input.grams) || input.grams <= 0) {\n      throw new Error('Invalid booking input');\n    }\n    const id = input.id.trim();\n    const address = input.address.trim();\n    const grams = input.grams;\n    if (records.has(id)) throw new Error('Shipment id already exists');\n\n    const response = await fetch(`${alphaUrl}/shipments`, {\n      method: 'POST',\n      redirect: 'manual',\n      headers: {'Content-Type': 'application/json', Authorization: authorization},\n      body: JSON.stringify({reference: id, destination: address, weightGrams: grams}),\n    });\n    if (response.status !== 201) throw new Error('Booking request failed');\n    const result = await response.json();\n    if (!result || typeof result.shipmentId !== 'string' ||\n        result.shipmentId.length === 0 || result.accepted !== true) {\n      throw new Error('Invalid booking response');\n    }\n    const record = {id, address, grams, trackingId: result.shipmentId, status: 'booked'};\n    records.set(id, record);\n    return {...record};\n  }\n\n  async function cancel(id) {\n    const record = find(id);\n    if (record.status === 'cancelled') throw new Error('Shipment already cancelled');\n    const response = await fetch(`${alphaUrl}/shipments/${encodeURIComponent(record.trackingId)}`, {\n      method: 'DELETE',\n      redirect: 'manual',\n      headers: {Authorization: authorization},\n    });\n    if (response.status !== 204) throw new Error('Cancellation request failed');\n    record.status = 'cancelled';\n    return {...record};\n  }\n\n  function detail(id) {\n    return {...find(id)};\n  }\n\n  return {book, cancel, detail};\n}\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:0:1:0:1",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        1
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "export function createApp({alphaUrl, alphaToken}) {\n",
+      "new": "export function createApp({alphaUrl, alphaToken, betaUrl, betaToken}) {\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:19:19:19:21",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        19,
+        19
+      ],
+      "new_range": [
+        19,
+        21
+      ],
+      "added": 2,
+      "deleted": 0,
+      "old": "",
+      "new": "    const provider = Object.hasOwn(input, 'provider') ? input.provider : 'alpha';\n    if (provider !== 'alpha' && provider !== 'beta') throw new Error('Invalid provider');\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:21:22:23:25",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        21,
+        22
+      ],
+      "new_range": [
+        23,
+        25
+      ],
+      "added": 2,
+      "deleted": 1,
+      "old": "    const response = await fetch(`${alphaUrl}/shipments`, {\n",
+      "new": "    const isAlpha = provider === 'alpha';\n    const response = await fetch(isAlpha ? `${alphaUrl}/shipments` : `${betaUrl}/v2/jobs`, {\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:24:26:27:33",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        24,
+        26
+      ],
+      "new_range": [
+        27,
+        33
+      ],
+      "added": 6,
+      "deleted": 2,
+      "old": "      headers: {'Content-Type': 'application/json', Authorization: authorization},\n      body: JSON.stringify({reference: id, destination: address, weightGrams: grams}),\n",
+      "new": "      headers: isAlpha\n        ? {'Content-Type': 'application/json', Authorization: authorization}\n        : {'Content-Type': 'application/json', 'X-Api-Key': betaToken},\n      body: JSON.stringify(isAlpha\n        ? {reference: id, destination: address, weightGrams: grams}\n        : {client_ref: id, parcel: {destination: address, mass_kg: grams / 1000}}),\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:27:28:34:35",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        27,
+        28
+      ],
+      "new_range": [
+        34,
+        35
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    if (response.status !== 201) throw new Error('Booking request failed');\n",
+      "new": "    if (response.status !== (isAlpha ? 201 : 200)) throw new Error('Booking request failed');\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:29:31:36:39",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        29,
+        31
+      ],
+      "new_range": [
+        36,
+        39
+      ],
+      "added": 3,
+      "deleted": 2,
+      "old": "    if (!result || typeof result.shipmentId !== 'string' ||\n        result.shipmentId.length === 0 || result.accepted !== true) {\n",
+      "new": "    const trackingId = isAlpha ? result?.shipmentId : result?.job?.code;\n    const accepted = isAlpha ? result?.accepted : result?.ok;\n    if (typeof trackingId !== 'string' || trackingId.length === 0 || accepted !== true) {\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:33:34:41:42",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        33,
+        34
+      ],
+      "new_range": [
+        41,
+        42
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    const record = {id, address, grams, trackingId: result.shipmentId, status: 'booked'};\n",
+      "new": "    const record = {id, address, grams, trackingId, status: 'booked', provider};\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:41:43:49:54",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        41,
+        43
+      ],
+      "new_range": [
+        49,
+        54
+      ],
+      "added": 5,
+      "deleted": 2,
+      "old": "    const response = await fetch(`${alphaUrl}/shipments/${encodeURIComponent(record.trackingId)}`, {\n      method: 'DELETE',\n",
+      "new": "    const isAlpha = record.provider === 'alpha';\n    const response = await fetch(isAlpha\n      ? `${alphaUrl}/shipments/${encodeURIComponent(record.trackingId)}`\n      : `${betaUrl}/v2/void`, {\n      method: isAlpha ? 'DELETE' : 'POST',\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:44:45:55:59",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        44,
+        45
+      ],
+      "new_range": [
+        55,
+        59
+      ],
+      "added": 4,
+      "deleted": 1,
+      "old": "      headers: {Authorization: authorization},\n",
+      "new": "      headers: isAlpha\n        ? {Authorization: authorization}\n        : {'Content-Type': 'application/json', 'X-Api-Key': betaToken},\n      ...(isAlpha ? {} : {body: JSON.stringify({job_code: record.trackingId})}),\n"
+    },
+    {
+      "id": "A/S1/entry.mjs:46:47:60:64",
+      "arm": "A",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        46,
+        47
+      ],
+      "new_range": [
+        60,
+        64
+      ],
+      "added": 4,
+      "deleted": 1,
+      "old": "    if (response.status !== 204) throw new Error('Cancellation request failed');\n",
+      "new": "    if (response.status !== (isAlpha ? 204 : 200)) throw new Error('Cancellation request failed');\n    if (!isAlpha && (await response.json())?.ok !== true) {\n      throw new Error('Invalid cancellation response');\n    }\n"
+    },
+    {
+      "id": "B/S0/alpha.mjs:0:0:0:30",
+      "arm": "B",
+      "stage": "S0",
+      "path": "alpha.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        30
+      ],
+      "added": 30,
+      "deleted": 0,
+      "old": "",
+      "new": "// Alpha's wire contract is isolated here; the application owns local records.\nexport function createAlphaClient({alphaUrl, alphaToken}) {\n  const authorization = 'Bearer ' + alphaToken;\n  return {\n    async book({id, address, grams}) {\n      const response = await fetch(alphaUrl + '/shipments', {\n        method: 'POST',\n        redirect: 'error',\n        headers: {'Content-Type': 'application/json', Authorization: authorization},\n        body: JSON.stringify({reference: id, destination: address, weightGrams: grams}),\n      });\n      if (response.status !== 201) throw new Error('Alpha booking failed');\n      const body = await response.json();\n      if (body === null || typeof body !== 'object' || Array.isArray(body) ||\n          body.accepted !== true || typeof body.shipmentId !== 'string' ||\n          body.shipmentId.length === 0) {\n        throw new Error('Invalid Alpha booking response');\n      }\n      return body.shipmentId;\n    },\n    async cancel(trackingId) {\n      const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(trackingId), {\n        method: 'DELETE',\n        redirect: 'error',\n        headers: {Authorization: authorization},\n      });\n      if (response.status !== 204) throw new Error('Alpha cancellation failed');\n    },\n  };\n}\n"
+    },
+    {
+      "id": "B/S0/entry.mjs:0:0:0:39",
+      "arm": "B",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        39
+      ],
+      "added": 39,
+      "deleted": 0,
+      "old": "",
+      "new": "import {createAlphaClient} from './alpha.mjs';\n\nexport function createApp({alphaUrl, alphaToken}) {\n  const provider = createAlphaClient({alphaUrl, alphaToken});\n  const records = new Map();\n\n  function requireRecord(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown shipment');\n    return record;\n  }\n\n  return {\n    async book(input) {\n      if (input === null || typeof input !== 'object' ||\n          typeof input.id !== 'string' || input.id.trim() === '' ||\n          typeof input.address !== 'string' || input.address.trim() === '' ||\n          !Number.isSafeInteger(input.grams) || input.grams <= 0) {\n        throw new Error('Invalid booking input');\n      }\n      const shipment = {id: input.id.trim(), address: input.address.trim(), grams: input.grams};\n      if (records.has(shipment.id)) throw new Error('Duplicate shipment id');\n      const trackingId = await provider.book(shipment);\n      const record = {...shipment, trackingId, status: 'booked'};\n      records.set(record.id, record);\n      return {...record};\n    },\n    async cancel(id) {\n      const record = requireRecord(id);\n      if (record.status === 'cancelled') throw new Error('Shipment already cancelled');\n      await provider.cancel(record.trackingId);\n      record.status = 'cancelled';\n      return {...record};\n    },\n    detail(id) {\n      return {...requireRecord(id)};\n    },\n  };\n}\n"
+    },
+    {
+      "id": "B/S1/beta.mjs:0:0:0:34",
+      "arm": "B",
+      "stage": "S1",
+      "path": "beta.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        34
+      ],
+      "added": 34,
+      "deleted": 0,
+      "old": "",
+      "new": "// Beta's wire contract uses the same small application-facing interface as Alpha.\nexport function createBetaClient({betaUrl, betaToken}) {\n  async function post(path, payload) {\n    const response = await fetch(betaUrl + path, {\n      method: 'POST',\n      redirect: 'error',\n      headers: {'Content-Type': 'application/json', 'X-Api-Key': betaToken},\n      body: JSON.stringify(payload),\n    });\n    if (response.status !== 200) throw new Error('Beta request failed');\n    const body = await response.json();\n    if (body === null || typeof body !== 'object' || Array.isArray(body) || body.ok !== true) {\n      throw new Error('Invalid Beta response');\n    }\n    return body;\n  }\n\n  return {\n    async book({id, address, grams}) {\n      const body = await post('/v2/jobs', {\n        client_ref: id,\n        parcel: {destination: address, mass_kg: grams / 1000},\n      });\n      if (body.job === null || typeof body.job !== 'object' || Array.isArray(body.job) ||\n          typeof body.job.code !== 'string' || body.job.code.length === 0) {\n        throw new Error('Invalid Beta booking response');\n      }\n      return body.job.code;\n    },\n    async cancel(trackingId) {\n      await post('/v2/void', {job_code: trackingId});\n    },\n  };\n}\n"
+    },
+    {
+      "id": "B/S1/entry.mjs:1:1:1:2",
+      "arm": "B",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        1,
+        1
+      ],
+      "new_range": [
+        1,
+        2
+      ],
+      "added": 1,
+      "deleted": 0,
+      "old": "",
+      "new": "import {createBetaClient} from './beta.mjs';\n"
+    },
+    {
+      "id": "B/S1/entry.mjs:2:4:3:8",
+      "arm": "B",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        2,
+        4
+      ],
+      "new_range": [
+        3,
+        8
+      ],
+      "added": 5,
+      "deleted": 2,
+      "old": "export function createApp({alphaUrl, alphaToken}) {\n  const provider = createAlphaClient({alphaUrl, alphaToken});\n",
+      "new": "export function createApp({alphaUrl, alphaToken, betaUrl, betaToken}) {\n  const providers = {\n    alpha: createAlphaClient({alphaUrl, alphaToken}),\n    beta: createBetaClient({betaUrl, betaToken}),\n  };\n"
+    },
+    {
+      "id": "B/S1/entry.mjs:20:20:24:26",
+      "arm": "B",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        20,
+        20
+      ],
+      "new_range": [
+        24,
+        26
+      ],
+      "added": 2,
+      "deleted": 0,
+      "old": "",
+      "new": "      const provider = 'provider' in input ? input.provider : 'alpha';\n      if (provider !== 'alpha' && provider !== 'beta') throw new Error('Invalid provider');\n"
+    },
+    {
+      "id": "B/S1/entry.mjs:22:24:28:30",
+      "arm": "B",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        22,
+        24
+      ],
+      "new_range": [
+        28,
+        30
+      ],
+      "added": 2,
+      "deleted": 2,
+      "old": "      const trackingId = await provider.book(shipment);\n      const record = {...shipment, trackingId, status: 'booked'};\n",
+      "new": "      const trackingId = await providers[provider].book(shipment);\n      const record = {...shipment, trackingId, status: 'booked', provider};\n"
+    },
+    {
+      "id": "B/S1/entry.mjs:30:31:36:37",
+      "arm": "B",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        30,
+        31
+      ],
+      "new_range": [
+        36,
+        37
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "      await provider.cancel(record.trackingId);\n",
+      "new": "      await providers[record.provider].cancel(record.trackingId);\n"
+    },
+    {
+      "id": "C/S0/entry.mjs:0:0:0:13",
+      "arm": "C",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        13
+      ],
+      "added": 13,
+      "deleted": 0,
+      "old": "",
+      "new": "import { bookShipment } from './features/book.mjs';\nimport { cancelShipment } from './features/cancel.mjs';\nimport { shipmentDetail } from './features/detail.mjs';\n\nexport function createApp({ alphaUrl, alphaToken }) {\n  const records = new Map();\n  const context = { records, alphaUrl, alphaToken };\n  return {\n    book: input => bookShipment(context, input),\n    cancel: id => cancelShipment(context, id),\n    detail: id => shipmentDetail(records, id),\n  };\n}\n"
+    },
+    {
+      "id": "C/S0/features/book.mjs:0:0:0:35",
+      "arm": "C",
+      "stage": "S0",
+      "path": "features/book.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        35
+      ],
+      "added": 35,
+      "deleted": 0,
+      "old": "",
+      "new": "export async function bookShipment({ records, alphaUrl, alphaToken }, input) {\n  if (typeof input?.id !== 'string' || !input.id.trim()) {\n    throw new Error('id must be a nonempty string');\n  }\n  if (typeof input.address !== 'string' || !input.address.trim()) {\n    throw new Error('address must be a nonempty string');\n  }\n  if (!Number.isSafeInteger(input.grams) || input.grams <= 0) {\n    throw new Error('grams must be a positive safe integer');\n  }\n  const id = input.id.trim();\n  const address = input.address.trim();\n  const grams = input.grams;\n  if (records.has(id)) throw new Error('Shipment id already exists');\n\n  const response = await fetch(alphaUrl + '/shipments', {\n    method: 'POST',\n    redirect: 'manual',\n    headers: {\n      'Content-Type': 'application/json',\n      Authorization: 'Bearer ' + alphaToken,\n    },\n    body: JSON.stringify({ reference: id, destination: address, weightGrams: grams }),\n  });\n  if (response.status !== 201) throw new Error('Booking was not accepted');\n  const payload = await response.json();\n  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)\n      || payload.accepted !== true || typeof payload.shipmentId !== 'string'\n      || payload.shipmentId.length === 0) {\n    throw new Error('Invalid booking response');\n  }\n  const record = { id, address, grams, trackingId: payload.shipmentId, status: 'booked' };\n  records.set(id, record);\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/features/cancel.mjs:0:0:0:14",
+      "arm": "C",
+      "stage": "S0",
+      "path": "features/cancel.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        14
+      ],
+      "added": 14,
+      "deleted": 0,
+      "old": "",
+      "new": "export async function cancelShipment({ records, alphaUrl, alphaToken }, id) {\n  const record = records.get(id);\n  if (!record) throw new Error('Unknown shipment');\n  if (record.status === 'cancelled') throw new Error('Shipment is already cancelled');\n\n  const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(record.trackingId), {\n    method: 'DELETE',\n    redirect: 'manual',\n    headers: { Authorization: 'Bearer ' + alphaToken },\n  });\n  if (response.status !== 204) throw new Error('Cancellation was not accepted');\n  record.status = 'cancelled';\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/features/detail.mjs:0:0:0:5",
+      "arm": "C",
+      "stage": "S0",
+      "path": "features/detail.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        5
+      ],
+      "added": 5,
+      "deleted": 0,
+      "old": "",
+      "new": "export function shipmentDetail(records, id) {\n  const record = records.get(id);\n  if (!record) throw new Error('Unknown shipment');\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S1/entry.mjs:4:5:4:5",
+      "arm": "C",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        4,
+        5
+      ],
+      "new_range": [
+        4,
+        5
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "export function createApp({ alphaUrl, alphaToken }) {\n",
+      "new": "export function createApp({ alphaUrl, alphaToken, betaUrl, betaToken }) {\n"
+    },
+    {
+      "id": "C/S1/entry.mjs:6:7:6:7",
+      "arm": "C",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        6,
+        7
+      ],
+      "new_range": [
+        6,
+        7
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  const context = { records, alphaUrl, alphaToken };\n",
+      "new": "  const context = { records, alphaUrl, alphaToken, betaUrl, betaToken };\n"
+    },
+    {
+      "id": "C/S1/features/book.mjs:0:1:0:1",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/book.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        1
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "export async function bookShipment({ records, alphaUrl, alphaToken }, input) {\n",
+      "new": "export async function bookShipment({ records, alphaUrl, alphaToken, betaUrl, betaToken }, input) {\n"
+    },
+    {
+      "id": "C/S1/features/book.mjs:10:10:10:12",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/book.mjs",
+      "category": "production",
+      "old_range": [
+        10,
+        10
+      ],
+      "new_range": [
+        10,
+        12
+      ],
+      "added": 2,
+      "deleted": 0,
+      "old": "",
+      "new": "  const provider = Object.hasOwn(input, 'provider') ? input.provider : 'alpha';\n  if (provider !== 'alpha' && provider !== 'beta') throw new Error('Invalid provider');\n"
+    },
+    {
+      "id": "C/S1/features/book.mjs:15:30:17:52",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/book.mjs",
+      "category": "production",
+      "old_range": [
+        15,
+        30
+      ],
+      "new_range": [
+        17,
+        52
+      ],
+      "added": 35,
+      "deleted": 15,
+      "old": "  const response = await fetch(alphaUrl + '/shipments', {\n    method: 'POST',\n    redirect: 'manual',\n    headers: {\n      'Content-Type': 'application/json',\n      Authorization: 'Bearer ' + alphaToken,\n    },\n    body: JSON.stringify({ reference: id, destination: address, weightGrams: grams }),\n  });\n  if (response.status !== 201) throw new Error('Booking was not accepted');\n  const payload = await response.json();\n  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)\n      || payload.accepted !== true || typeof payload.shipmentId !== 'string'\n      || payload.shipmentId.length === 0) {\n    throw new Error('Invalid booking response');\n",
+      "new": "  let trackingId;\n  if (provider === 'alpha') {\n    const response = await fetch(alphaUrl + '/shipments', {\n      method: 'POST',\n      redirect: 'manual',\n      headers: {\n        'Content-Type': 'application/json',\n        Authorization: 'Bearer ' + alphaToken,\n      },\n      body: JSON.stringify({ reference: id, destination: address, weightGrams: grams }),\n    });\n    if (response.status !== 201) throw new Error('Booking was not accepted');\n    const payload = await response.json();\n    if (payload === null || typeof payload !== 'object' || Array.isArray(payload)\n        || payload.accepted !== true || typeof payload.shipmentId !== 'string'\n        || payload.shipmentId.length === 0) {\n      throw new Error('Invalid booking response');\n    }\n    trackingId = payload.shipmentId;\n  } else {\n    const response = await fetch(betaUrl + '/v2/jobs', {\n      method: 'POST',\n      redirect: 'manual',\n      headers: { 'Content-Type': 'application/json', 'X-Api-Key': betaToken },\n      body: JSON.stringify({ client_ref: id, parcel: { destination: address, mass_kg: grams / 1000 } }),\n    });\n    if (response.status !== 200) throw new Error('Booking was not accepted');\n    const payload = await response.json();\n    if (payload === null || typeof payload !== 'object' || Array.isArray(payload)\n        || payload.ok !== true || payload.job === null || typeof payload.job !== 'object'\n        || Array.isArray(payload.job) || typeof payload.job.code !== 'string'\n        || payload.job.code.length === 0) {\n      throw new Error('Invalid booking response');\n    }\n    trackingId = payload.job.code;\n"
+    },
+    {
+      "id": "C/S1/features/book.mjs:31:32:53:54",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/book.mjs",
+      "category": "production",
+      "old_range": [
+        31,
+        32
+      ],
+      "new_range": [
+        53,
+        54
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  const record = { id, address, grams, trackingId: payload.shipmentId, status: 'booked' };\n",
+      "new": "  const record = { id, address, grams, trackingId, status: 'booked', provider };\n"
+    },
+    {
+      "id": "C/S1/features/cancel.mjs:0:1:0:1",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/cancel.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        1
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "export async function cancelShipment({ records, alphaUrl, alphaToken }, id) {\n",
+      "new": "export async function cancelShipment({ records, alphaUrl, alphaToken, betaUrl, betaToken }, id) {\n"
+    },
+    {
+      "id": "C/S1/features/cancel.mjs:5:11:5:25",
+      "arm": "C",
+      "stage": "S1",
+      "path": "features/cancel.mjs",
+      "category": "production",
+      "old_range": [
+        5,
+        11
+      ],
+      "new_range": [
+        5,
+        25
+      ],
+      "added": 20,
+      "deleted": 6,
+      "old": "  const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(record.trackingId), {\n    method: 'DELETE',\n    redirect: 'manual',\n    headers: { Authorization: 'Bearer ' + alphaToken },\n  });\n  if (response.status !== 204) throw new Error('Cancellation was not accepted');\n",
+      "new": "  if (record.provider === 'alpha') {\n    const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(record.trackingId), {\n      method: 'DELETE',\n      redirect: 'manual',\n      headers: { Authorization: 'Bearer ' + alphaToken },\n    });\n    if (response.status !== 204) throw new Error('Cancellation was not accepted');\n  } else {\n    const response = await fetch(betaUrl + '/v2/void', {\n      method: 'POST',\n      redirect: 'manual',\n      headers: { 'Content-Type': 'application/json', 'X-Api-Key': betaToken },\n      body: JSON.stringify({ job_code: record.trackingId }),\n    });\n    if (response.status !== 200) throw new Error('Cancellation was not accepted');\n    const payload = await response.json();\n    if (payload === null || typeof payload !== 'object' || Array.isArray(payload) || payload.ok !== true) {\n      throw new Error('Invalid cancellation response');\n    }\n  }\n"
+    },
+    {
+      "id": "D/S0/alpha-shipments.mjs:0:0:0:30",
+      "arm": "D",
+      "stage": "S0",
+      "path": "alpha-shipments.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        30
+      ],
+      "added": 30,
+      "deleted": 0,
+      "old": "",
+      "new": "// Alpha's wire format and response validation stay outside application rules.\nexport function createAlphaShipments({alphaUrl, alphaToken}) {\n  const authorization = 'Bearer ' + alphaToken;\n  return {\n    async book({id, address, grams}) {\n      const response = await fetch(alphaUrl + '/shipments', {\n        method: 'POST',\n        redirect: 'manual',\n        headers: {'Content-Type': 'application/json', Authorization: authorization},\n        body: JSON.stringify({reference: id, destination: address, weightGrams: grams}),\n      });\n      if (response.status !== 201) throw new Error('Alpha booking failed');\n      const result = await response.json();\n      if (!result || typeof result !== 'object' || Array.isArray(result) ||\n          result.accepted !== true || typeof result.shipmentId !== 'string' ||\n          result.shipmentId.length === 0) {\n        throw new Error('Invalid Alpha booking response');\n      }\n      return result.shipmentId;\n    },\n    async cancel(trackingId) {\n      const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(trackingId), {\n        method: 'DELETE',\n        redirect: 'manual',\n        headers: {Authorization: authorization},\n      });\n      if (response.status !== 204) throw new Error('Alpha cancellation failed');\n    },\n  };\n}\n"
+    },
+    {
+      "id": "D/S0/booking.mjs:0:0:0:35",
+      "arm": "D",
+      "stage": "S0",
+      "path": "booking.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        35
+      ],
+      "added": 35,
+      "deleted": 0,
+      "old": "",
+      "new": "// Application rules depend only on a record store and a shipment service.\nexport function createBookingService({records, shipments}) {\n  function detail(id) {\n    const record = records.get(id);\n    if (!record) throw new Error('Unknown booking');\n    return record;\n  }\n\n  return {\n    detail,\n    async book(input) {\n      if (!input || typeof input.id !== 'string' || !input.id.trim() ||\n          typeof input.address !== 'string' || !input.address.trim() ||\n          !Number.isSafeInteger(input.grams) || input.grams <= 0) {\n        throw new Error('Invalid booking input');\n      }\n      const {grams} = input;\n      const id = input.id.trim();\n      const address = input.address.trim();\n      if (records.get(id)) throw new Error('Booking already exists');\n      const trackingId = await shipments.book({id, address, grams});\n      const record = {id, address, grams, trackingId, status: 'booked'};\n      records.put(record);\n      return {...record};\n    },\n    async cancel(id) {\n      const record = detail(id);\n      if (record.status === 'cancelled') throw new Error('Booking already cancelled');\n      await shipments.cancel(record.trackingId);\n      const cancelled = {...record, status: 'cancelled'};\n      records.put(cancelled);\n      return {...cancelled};\n    },\n  };\n}\n"
+    },
+    {
+      "id": "D/S0/entry.mjs:0:0:0:10",
+      "arm": "D",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        10
+      ],
+      "added": 10,
+      "deleted": 0,
+      "old": "",
+      "new": "import {createBookingService} from './booking.mjs';\nimport {createMemoryRecords} from './memory-records.mjs';\nimport {createAlphaShipments} from './alpha-shipments.mjs';\n\nexport function createApp({alphaUrl, alphaToken}) {\n  return createBookingService({\n    records: createMemoryRecords(),\n    shipments: createAlphaShipments({alphaUrl, alphaToken}),\n  });\n}\n"
+    },
+    {
+      "id": "D/S0/memory-records.mjs:0:0:0:12",
+      "arm": "D",
+      "stage": "S0",
+      "path": "memory-records.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        12
+      ],
+      "added": 12,
+      "deleted": 0,
+      "old": "",
+      "new": "export function createMemoryRecords() {\n  const records = new Map();\n  return {\n    get(id) {\n      const record = records.get(id);\n      return record ? {...record} : undefined;\n    },\n    put(record) {\n      records.set(record.id, {...record});\n    },\n  };\n}\n"
+    },
+    {
+      "id": "D/S1/beta-shipments.mjs:0:0:0:34",
+      "arm": "D",
+      "stage": "S1",
+      "path": "beta-shipments.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        34
+      ],
+      "added": 34,
+      "deleted": 0,
+      "old": "",
+      "new": "// Beta implements the same application-facing operations as Alpha.\nexport function createBetaShipments({betaUrl, betaToken}) {\n  async function post(path, body) {\n    const response = await fetch(betaUrl + path, {\n      method: 'POST',\n      redirect: 'manual',\n      headers: {'Content-Type': 'application/json', 'X-Api-Key': betaToken},\n      body: JSON.stringify(body),\n    });\n    if (response.status !== 200) throw new Error('Beta request failed');\n    const result = await response.json();\n    if (!result || typeof result !== 'object' || Array.isArray(result) || result.ok !== true) {\n      throw new Error('Invalid Beta response');\n    }\n    return result;\n  }\n\n  return {\n    async book({id, address, grams}) {\n      const result = await post('/v2/jobs', {\n        client_ref: id,\n        parcel: {destination: address, mass_kg: grams / 1000},\n      });\n      if (!result.job || typeof result.job !== 'object' || Array.isArray(result.job) ||\n          typeof result.job.code !== 'string' || result.job.code.length === 0) {\n        throw new Error('Invalid Beta booking response');\n      }\n      return result.job.code;\n    },\n    async cancel(trackingId) {\n      await post('/v2/void', {job_code: trackingId});\n    },\n  };\n}\n"
+    },
+    {
+      "id": "D/S1/booking.mjs:0:1:0:1",
+      "arm": "D",
+      "stage": "S1",
+      "path": "booking.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        1
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "// Application rules depend only on a record store and a shipment service.\n",
+      "new": "// Application rules depend only on a record store and provider-indexed shipment services.\n"
+    },
+    {
+      "id": "D/S1/booking.mjs:16:16:16:20",
+      "arm": "D",
+      "stage": "S1",
+      "path": "booking.mjs",
+      "category": "production",
+      "old_range": [
+        16,
+        16
+      ],
+      "new_range": [
+        16,
+        20
+      ],
+      "added": 4,
+      "deleted": 0,
+      "old": "",
+      "new": "      const provider = 'provider' in input ? input.provider : 'alpha';\n      if (provider !== 'alpha' && provider !== 'beta') {\n        throw new Error('Invalid provider');\n      }\n"
+    },
+    {
+      "id": "D/S1/booking.mjs:20:22:24:26",
+      "arm": "D",
+      "stage": "S1",
+      "path": "booking.mjs",
+      "category": "production",
+      "old_range": [
+        20,
+        22
+      ],
+      "new_range": [
+        24,
+        26
+      ],
+      "added": 2,
+      "deleted": 2,
+      "old": "      const trackingId = await shipments.book({id, address, grams});\n      const record = {id, address, grams, trackingId, status: 'booked'};\n",
+      "new": "      const trackingId = await shipments[provider].book({id, address, grams});\n      const record = {id, address, grams, trackingId, status: 'booked', provider};\n"
+    },
+    {
+      "id": "D/S1/booking.mjs:28:29:32:33",
+      "arm": "D",
+      "stage": "S1",
+      "path": "booking.mjs",
+      "category": "production",
+      "old_range": [
+        28,
+        29
+      ],
+      "new_range": [
+        32,
+        33
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "      await shipments.cancel(record.trackingId);\n",
+      "new": "      await shipments[record.provider].cancel(record.trackingId);\n"
+    },
+    {
+      "id": "D/S1/entry.mjs:4:5:4:7",
+      "arm": "D",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        4,
+        5
+      ],
+      "new_range": [
+        4,
+        7
+      ],
+      "added": 3,
+      "deleted": 1,
+      "old": "export function createApp({alphaUrl, alphaToken}) {\n",
+      "new": "import {createBetaShipments} from './beta-shipments.mjs';\n\nexport function createApp({alphaUrl, alphaToken, betaUrl, betaToken}) {\n"
+    },
+    {
+      "id": "D/S1/entry.mjs:7:8:9:13",
+      "arm": "D",
+      "stage": "S1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        7,
+        8
+      ],
+      "new_range": [
+        9,
+        13
+      ],
+      "added": 4,
+      "deleted": 1,
+      "old": "    shipments: createAlphaShipments({alphaUrl, alphaToken}),\n",
+      "new": "    shipments: {\n      alpha: createAlphaShipments({alphaUrl, alphaToken}),\n      beta: createBetaShipments({betaUrl, betaToken}),\n    },\n"
+    }
+  ]
+}

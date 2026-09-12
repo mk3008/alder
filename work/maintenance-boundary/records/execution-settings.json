@@ -1,0 +1,14 @@
+{
+  "frozen_at": "2026-09-12T04:44:36.146669+00:00",
+  "model_requested": "gpt-6-astra",
+  "reasoning_effort_requested": "low",
+  "fork_turns": "none",
+  "runner": "collaboration.spawn_agent / followup_task",
+  "runtime": "v24.19.0",
+  "provider_effective_model": null,
+  "provider_effective_effort": null,
+  "evaluator_model": null,
+  "evaluator_effort": null,
+  "note": "Requested settings only; no backend attestation. Shared filesystem isolation is instructional. Explicit prior user authorization persists.",
+  "check_script_sha256": "46288186193bf14bd852a20b6ee8301bc5c9a635710718aa9cecb0038facb6ac"
+}

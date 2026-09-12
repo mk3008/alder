@@ -1,0 +1,130 @@
+{
+  "started_at": "2026-09-12T04:18:28.848844+00:00",
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "acceptance.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "additional.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "entry.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "note.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/approve.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/detail.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/list.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/purchase.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/reject.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "slices/submit.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "validation.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "acceptance.test.mjs",
+        "additional.test.mjs",
+        "note.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "TAP version 13\n# Subtest: submission normalizes text, stores required data and only current event fields\nok 1 - submission normalizes text, stores required data and only current event fields\n  ---\n  duration_ms: 2.043564\n  type: 'test'\n  ...\n# Subtest: approval and purchase retain data; actual total may exceed requested\nok 2 - approval and purchase retain data; actual total may exceed requested\n  ---\n  duration_ms: 0.330979\n  type: 'test'\n  ...\n# Subtest: rejection stores its reason and prevents purchase\nok 3 - rejection stores its reason and prevents purchase\n  ---\n  duration_ms: 0.489829\n  type: 'test'\n  ...\n# Subtest: role checks for each command preserve state\nok 4 - role checks for each command preserve state\n  ---\n  duration_ms: 0.393765\n  type: 'test'\n  ...\n# Subtest: actor IDs and timestamps are validated by every mutation\nok 5 - actor IDs and timestamps are validated by every mutation\n  ---\n  duration_ms: 0.826597\n  type: 'test'\n  ...\n# Subtest: invalid quantity, total, ID and text never create records\nok 6 - invalid quantity, total, ID and text never create records\n  ---\n  duration_ms: 0.568948\n  type: 'test'\n  ...\n# Subtest: invalid actual total and rejection reason preserve records\nok 7 - invalid actual total and rejection reason preserve records\n  ---\n  duration_ms: 1.190466\n  type: 'test'\n  ...\n# Subtest: duplicates and unknown targets fail without mutation\nok 8 - duplicates and unknown targets fail without mutation\n  ---\n  duration_ms: 0.266192\n  type: 'test'\n  ...\n# Subtest: invalid transitions and repeat commands fail atomically\nok 9 - invalid transitions and repeat commands fail atomically\n  ---\n  duration_ms: 0.66304\n  type: 'test'\n  ...\n# Subtest: instances are isolated and IDs sort by JavaScript string comparison\nok 10 - instances are isolated and IDs sort by JavaScript string comparison\n  ---\n  duration_ms: 0.293714\n  type: 'test'\n  ...\n# Subtest: input and output mutations cannot alter stored state\nok 11 - input and output mutations cannot alter stored state\n  ---\n  duration_ms: 0.176146\n  type: 'test'\n  ...\n# Subtest: self approval and non-monotonic valid timestamps are permitted\nok 12 - self approval and non-monotonic valid timestamps are permitted\n  ---\n  duration_ms: 0.136717\n  type: 'test'\n  ...\n# Subtest: optional notes have exact UTF-16 boundary and preserve whitespace\nok 13 - optional notes have exact UTF-16 boundary and preserve whitespace\n  ---\n  duration_ms: 0.477891\n  type: 'test'\n  ...\n# Subtest: IDs retain whitespace; totals are not multiplied by quantity\nok 14 - IDs retain whitespace; totals are not multiplied by quantity\n  ---\n  duration_ms: 0.962523\n  type: 'test'\n  ...\n# Subtest: missing input, unsupported role, and malformed query IDs fail without changing state\nok 15 - missing input, unsupported role, and malformed query IDs fail without changing state\n  ---\n  duration_ms: 1.035413\n  type: 'test'\n  ...\n# Subtest: previous snapshots and another application remain independent through transitions\nok 16 - previous snapshots and another application remain independent through transitions\n  ---\n  duration_ms: 0.282095\n  type: 'test'\n  ...\n# Subtest: supplied non-string notes are rejected atomically, including undefined\nok 17 - supplied non-string notes are rejected atomically, including undefined\n  ---\n  duration_ms: 1.830011\n  type: 'test'\n  ...\n# Subtest: note snapshots and list omission hold after every event\nok 18 - note snapshots and list omission hold after every event\n  ---\n  duration_ms: 0.408025\n  type: 'test'\n  ...\n# Subtest: legacy records normalize on read and transition without mutating queries\nok 19 - legacy records normalize on read and transition without mutating queries\n  ---\n  duration_ms: 0.216127\n  type: 'test'\n  ...\n1..19\n# tests 19\n# suites 0\n# pass 19\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 103.696402\n",
+      "stderr": ""
+    }
+  ],
+  "finished_at": "2026-09-12T04:18:29.673452+00:00",
+  "passed": true
+}

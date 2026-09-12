@@ -1,0 +1,8 @@
+{
+  "source_hunks_classified_once": 49,
+  "measurement_recomputation": "identical",
+  "unique_agent_checks": 20,
+  "captured_gates_passed": 20,
+  "replayed_gates_passed": 20,
+  "duplicate_old_logs_excluded": 4
+}
