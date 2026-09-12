@@ -1,0 +1,297 @@
+schema_name=stage1_063544231741471384cf36fd979fe7c5
+runner_started_utc=2026-09-05T07:43:31.5598054Z
+CREATE SCHEMA
+SET
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+SET
+Output format is unaligned.
+Null display is "NULL".
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-01|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+observation|request_count
+S1-01 setup|0
+(1 row)
+accepted_request_id
+req-stage1-01
+(1 row)
+call_outcome
+S1-01 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-01 row|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+observation|request_count
+S1-01 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-02|reporter|req-stage1-02|eq-stage1-unknown|reporter-stage1|2030-01-15T10:31:00Z|556e6b6e6f776e2061737365742070726f6265
+(1 row)
+observation|request_count
+S1-02 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-02 rejected
+(1 row)
+observation|unknown_equipment_request_count
+S1-02 unknown_equipment|0
+(1 row)
+observation|attempted_id_count
+S1-02 attempted_id|0
+(1 row)
+observation|request_count
+S1-02 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-03|reporter|req-stage1-03|eq-stage1-known|reporter-stage1|2030-01-15T10:32:00Z|
+(1 row)
+observation|request_count
+S1-03 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-03 rejected
+(1 row)
+observation|attempted_id_count
+S1-03 attempted_id|0
+(1 row)
+observation|request_count
+S1-03 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-05|reporter|req-stage1-05|eq-stage1-known|reporter-stage1|2030-01-15T10:35:00Z|202020
+(1 row)
+observation|request_count
+S1-05 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-05 rejected
+(1 row)
+observation|attempted_id_count
+S1-05 attempted_id|0
+(1 row)
+observation|request_count
+S1-05 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-06|reporter|req-stage1-06|eq-stage1-known|reporter-stage1|2030-01-15T10:36:00Z|09
+(1 row)
+observation|request_count
+S1-06 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-06 rejected
+(1 row)
+observation|attempted_id_count
+S1-06 attempted_id|0
+(1 row)
+observation|request_count
+S1-06 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-07|reporter|req-stage1-07|eq-stage1-known|reporter-stage1|2030-01-15T10:37:00Z|0a
+(1 row)
+observation|request_count
+S1-07 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-07 rejected
+(1 row)
+observation|attempted_id_count
+S1-07 attempted_id|0
+(1 row)
+observation|request_count
+S1-07 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-08|reporter|req-stage1-08|eq-stage1-known|reporter-stage1|2030-01-15T10:38:00Z|e38080
+(1 row)
+observation|request_count
+S1-08 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-08 rejected
+(1 row)
+observation|attempted_id_count
+S1-08 attempted_id|0
+(1 row)
+observation|request_count
+S1-08 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-09|reporter|req-stage1-09|eq-stage1-known|reporter-stage1|2030-01-15T10:39:00Z|20090ae38080
+(1 row)
+observation|request_count
+S1-09 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-09 rejected
+(1 row)
+observation|attempted_id_count
+S1-09 attempted_id|0
+(1 row)
+observation|request_count
+S1-09 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+observation|request_count
+S1-04 setup|0
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-04 first|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+first_accepted_request_id
+req-stage1-01
+(1 row)
+call_outcome
+S1-04 first accepted
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-04|reporter|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+accepted_request_id
+req-stage1-04
+(1 row)
+call_outcome
+S1-04 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-04 rows|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+S1-04 rows|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+(2 rows)
+observation|request_count
+S1-04 total|2
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-10|reporter|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|42656172696e672074656d70657261747572652061626f7665206e6f726d616c
+(1 row)
+observation|request_count
+S1-10 setup|0
+(1 row)
+accepted_request_id
+req-stage1-10
+(1 row)
+call_outcome
+S1-10 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-10 row|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|Bearing temperature above normal|open|NULL|NULL
+(1 row)
+observation|request_count
+S1-10 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-11|reporter|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|202042656172696e672074656d70657261747572652061626f7665206e6f726d616c2020
+(1 row)
+observation|request_count
+S1-11 setup|0
+(1 row)
+accepted_request_id
+req-stage1-11
+(1 row)
+call_outcome
+S1-11 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-11 row|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|  Bearing temperature above normal  |open|NULL|NULL
+(1 row)
+observation|request_count
+S1-11 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+result|database_name|schema_name
+STAGE1_ACCEPTANCE_V3_PASS|dogfood|stage1_063544231741471384cf36fd979fe7c5
+(1 row)
+NOTICE:  drop cascades to 7 other objects
+DETAIL:  drop cascades to table stage1_063544231741471384cf36fd979fe7c5.equipment
+drop cascades to table stage1_063544231741471384cf36fd979fe7c5.maintenance_request
+drop cascades to function stage1_063544231741471384cf36fd979fe7c5.report_equipment_fault(text,text,text,timestamp with time zone,text)
+drop cascades to function stage1_063544231741471384cf36fd979fe7c5.stage1_input(text,text,text,text,timestamp with time zone,text)
+drop cascades to function stage1_063544231741471384cf36fd979fe7c5.stage1_rejected(text,text,text,text,timestamp with time zone,text)
+drop cascades to function stage1_063544231741471384cf36fd979fe7c5.stage1_setup(text)
+drop cascades to function stage1_063544231741471384cf36fd979fe7c5.stage1_accepted(text,text,timestamp with time zone,text,bigint)
+DROP SCHEMA
+       observation        | schema_count 
+--------------------------+--------------
+ cleanup_schema_remaining |            0
+(1 row)
+
