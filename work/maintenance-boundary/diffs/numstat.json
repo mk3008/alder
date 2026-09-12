@@ -1,0 +1,162 @@
+[
+  {
+    "arm": "A",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 57,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "S1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 29,
+    "deleted": 12
+  },
+  {
+    "arm": "B",
+    "stage": "S0",
+    "path": "alpha.mjs",
+    "category": "production",
+    "added": 30,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 39,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "S1",
+    "path": "beta.mjs",
+    "category": "production",
+    "added": 34,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "S1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 11,
+    "deleted": 5
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 13,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "features/book.mjs",
+    "category": "production",
+    "added": 35,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "features/cancel.mjs",
+    "category": "production",
+    "added": 14,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "features/detail.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 2,
+    "deleted": 2
+  },
+  {
+    "arm": "C",
+    "stage": "S1",
+    "path": "features/book.mjs",
+    "category": "production",
+    "added": 39,
+    "deleted": 17
+  },
+  {
+    "arm": "C",
+    "stage": "S1",
+    "path": "features/cancel.mjs",
+    "category": "production",
+    "added": 21,
+    "deleted": 7
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "alpha-shipments.mjs",
+    "category": "production",
+    "added": 30,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "booking.mjs",
+    "category": "production",
+    "added": 35,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 10,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "memory-records.mjs",
+    "category": "production",
+    "added": 12,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S1",
+    "path": "beta-shipments.mjs",
+    "category": "production",
+    "added": 34,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S1",
+    "path": "booking.mjs",
+    "category": "production",
+    "added": 8,
+    "deleted": 4
+  },
+  {
+    "arm": "D",
+    "stage": "S1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 7,
+    "deleted": 2
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "status": "post hoc diagnostic after observing C indentation churn; does not replace main metric",
+  "algorithm": "strip each line, omit blank and standalone // comments, then per-file SequenceMatcher autojunk=False",
+  "rows": [
+    {
+      "arm": "A",
+      "stage": "S0",
+      "churn": 51,
+      "cumulative": 51
+    },
+    {
+      "arm": "A",
+      "stage": "S1",
+      "churn": 41,
+      "cumulative": 92
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "churn": 65,
+      "cumulative": 65
+    },
+    {
+      "arm": "B",
+      "stage": "S1",
+      "churn": 48,
+      "cumulative": 113
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "churn": 64,
+      "cumulative": 64
+    },
+    {
+      "arm": "C",
+      "stage": "S1",
+      "churn": 46,
+      "cumulative": 110
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "churn": 83,
+      "cumulative": 83
+    },
+    {
+      "arm": "D",
+      "stage": "S1",
+      "churn": 50,
+      "cumulative": 133
+    }
+  ]
+}

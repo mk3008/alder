@@ -1,0 +1,14 @@
+{
+  "arm": "C",
+  "stage": "S1",
+  "frozen_at": "2026-09-12T04:48:16.029513+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "entry.mjs": "ca48c0d84e68d57ff3faee3f3e775d142d28dbf0c76a026fe718849b6fbde0d5",
+    "features/book.mjs": "5ae4b03da6c0eb63cb0f89c07f71d75dee846563e6beea8f95bd87be23c5db69",
+    "features/cancel.mjs": "b393f8ceeffb08ae6ba15c0ab79b480769b4cc977ae20e7668fd98b65020654d",
+    "features/detail.mjs": "24cd4d6c8d5cc04d21fb596d1cd2a82b35782c2650185b8c9a80eefb0873065e"
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "rubric": {
+    "R": "requirement",
+    "M": "structure maintenance",
+    "D": "deferred design",
+    "X": "inseparable/uncertain"
+  },
+  "note": "Evaluator judgments; no independently identified D-only hunk. X is not zero cost. Initial X separately bounded.",
+  "entries": [
+    {
+      "hunk_id": "A/S0/entry.mjs:0:0:0:57",
+      "classification": "X",
+      "churn": 57,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:0:1:0:1",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:19:19:19:21",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:21:22:23:25",
+      "classification": "R",
+      "churn": 3,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:24:26:27:33",
+      "classification": "R",
+      "churn": 8,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:27:28:34:35",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:29:31:36:39",
+      "classification": "X",
+      "churn": 5,
+      "rationale": "Normalizes two response formats into common trackingId/accepted variables while implementing Beta; requirement work and local deferred restructuring overlap.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ]
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:33:34:41:42",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:41:43:49:54",
+      "classification": "R",
+      "churn": 7,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:44:45:55:59",
+      "classification": "R",
+      "churn": 5,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "A/S1/entry.mjs:46:47:60:64",
+      "classification": "R",
+      "churn": 5,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "B/S0/alpha.mjs:0:0:0:30",
+      "classification": "X",
+      "churn": 30,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "B/S0/entry.mjs:0:0:0:39",
+      "classification": "X",
+      "churn": 39,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "B/S1/beta.mjs:0:0:0:34",
+      "classification": "X",
+      "churn": 34,
+      "rationale": "New required Beta wire handling is packaged behind the pre-existing two-operation boundary; hunk includes behavior, interface packaging and a comment, so no honest exclusive allocation.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "B/S1/entry.mjs:1:1:1:2",
+      "classification": "M",
+      "churn": 1,
+      "rationale": "Imports the added implementation across the chosen module boundary; can also be treated as necessary requirement wiring.",
+      "plausible_alternatives": [
+        "R"
+      ]
+    },
+    {
+      "hunk_id": "B/S1/entry.mjs:2:4:3:8",
+      "classification": "X",
+      "churn": 7,
+      "rationale": "Public configuration extension plus transition from a single client to a provider map combines requirement, composition and deferred generalization.",
+      "plausible_alternatives": [
+        "R",
+        "M",
+        "D"
+      ]
+    },
+    {
+      "hunk_id": "B/S1/entry.mjs:20:20:24:26",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "B/S1/entry.mjs:22:24:28:30",
+      "classification": "R",
+      "churn": 4,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "B/S1/entry.mjs:30:31:36:37",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "C/S0/entry.mjs:0:0:0:13",
+      "classification": "X",
+      "churn": 13,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "C/S0/features/book.mjs:0:0:0:35",
+      "classification": "X",
+      "churn": 35,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "C/S0/features/cancel.mjs:0:0:0:14",
+      "classification": "X",
+      "churn": 14,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "C/S0/features/detail.mjs:0:0:0:5",
+      "classification": "X",
+      "churn": 5,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "C/S1/entry.mjs:4:5:4:5",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "C/S1/entry.mjs:6:7:6:7",
+      "classification": "M",
+      "churn": 2,
+      "rationale": "Propagates new configuration through the existing composition-to-slice boundary; the same lines can reasonably be counted as requirement forwarding.",
+      "plausible_alternatives": [
+        "R"
+      ]
+    },
+    {
+      "hunk_id": "C/S1/features/book.mjs:0:1:0:1",
+      "classification": "M",
+      "churn": 2,
+      "rationale": "Propagates new configuration through the existing composition-to-slice boundary; the same lines can reasonably be counted as requirement forwarding.",
+      "plausible_alternatives": [
+        "R"
+      ]
+    },
+    {
+      "hunk_id": "C/S1/features/book.mjs:10:10:10:12",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "C/S1/features/book.mjs:15:30:17:52",
+      "classification": "X",
+      "churn": 50,
+      "rationale": "Wraps and reindents existing Alpha I/O in a provider branch and adds Beta I/O. Business additions and local deferred restructuring overlap; indentation inflates the raw hunk (see post-hoc sensitivity). No feature boundary was extracted.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ]
+    },
+    {
+      "hunk_id": "C/S1/features/book.mjs:31:32:53:54",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "C/S1/features/cancel.mjs:0:1:0:1",
+      "classification": "M",
+      "churn": 2,
+      "rationale": "Propagates new configuration through the existing composition-to-slice boundary; the same lines can reasonably be counted as requirement forwarding.",
+      "plausible_alternatives": [
+        "R"
+      ]
+    },
+    {
+      "hunk_id": "C/S1/features/cancel.mjs:5:11:5:25",
+      "classification": "X",
+      "churn": 26,
+      "rationale": "Wraps and reindents existing Alpha I/O in a provider branch and adds Beta I/O. Business additions and local deferred restructuring overlap; indentation inflates the raw hunk (see post-hoc sensitivity). No feature boundary was extracted.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ]
+    },
+    {
+      "hunk_id": "D/S0/alpha-shipments.mjs:0:0:0:30",
+      "classification": "X",
+      "churn": 30,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S0/booking.mjs:0:0:0:35",
+      "classification": "X",
+      "churn": 35,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S0/entry.mjs:0:0:0:10",
+      "classification": "X",
+      "churn": 10,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S0/memory-records.mjs:0:0:0:12",
+      "classification": "X",
+      "churn": 12,
+      "rationale": "Initial behavior and chosen structure are inseparable in a new-file hunk; net incremental architecture cost is not identifiable.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S1/beta-shipments.mjs:0:0:0:34",
+      "classification": "X",
+      "churn": 34,
+      "rationale": "New required Beta wire handling is packaged behind the pre-existing two-operation boundary; hunk includes behavior, interface packaging and a comment, so no honest exclusive allocation.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S1/booking.mjs:0:1:0:1",
+      "classification": "X",
+      "churn": 2,
+      "rationale": "Comment-only description of changed dependency cardinality; not executable requirement or demonstrable structure labor.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ]
+    },
+    {
+      "hunk_id": "D/S1/booking.mjs:16:16:16:20",
+      "classification": "R",
+      "churn": 4,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "D/S1/booking.mjs:20:22:24:26",
+      "classification": "R",
+      "churn": 4,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "D/S1/booking.mjs:28:29:32:33",
+      "classification": "R",
+      "churn": 2,
+      "rationale": "Implements the current provider choice, wire contract, response validation, record field or cancellation routing.",
+      "plausible_alternatives": []
+    },
+    {
+      "hunk_id": "D/S1/entry.mjs:4:5:4:7",
+      "classification": "X",
+      "churn": 4,
+      "rationale": "Adds Beta import/configuration/composition and generalizes injected shipments from one service to a keyed map; requirement wiring, boundary maintenance and deferred generalization overlap.",
+      "plausible_alternatives": [
+        "R",
+        "M",
+        "D"
+      ]
+    },
+    {
+      "hunk_id": "D/S1/entry.mjs:7:8:9:13",
+      "classification": "X",
+      "churn": 5,
+      "rationale": "Adds Beta import/configuration/composition and generalizes injected shipments from one service to a keyed map; requirement wiring, boundary maintenance and deferred generalization overlap.",
+      "plausible_alternatives": [
+        "R",
+        "M",
+        "D"
+      ]
+    }
+  ]
+}
