@@ -1,0 +1,387 @@
+{
+  "baseline": "c0786c273e15c288af9ee1c23330a018138807ae",
+  "randomization_seed": 4901,
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "runs": [
+    {
+      "run": "r01",
+      "case": "cost",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r01",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r01/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r01/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "ba2b2790e82f7bf56d287d8a1dc0294018bebdd3e1060110fc36c365da977265",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r02",
+      "case": "cost",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r02",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r02/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r02/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "ba2b2790e82f7bf56d287d8a1dc0294018bebdd3e1060110fc36c365da977265",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r03",
+      "case": "cost",
+      "replicate": 2,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r03",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r03/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r03/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "ba2b2790e82f7bf56d287d8a1dc0294018bebdd3e1060110fc36c365da977265",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r04",
+      "case": "cost",
+      "replicate": 2,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r04",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r04/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r04/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "ba2b2790e82f7bf56d287d8a1dc0294018bebdd3e1060110fc36c365da977265",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r05",
+      "case": "small",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r05",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r05/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r05/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "205863d61952bd7abb339d51d7da8c4c9c7e5da3caef4fb95c788ef98ec752ff",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r06",
+      "case": "small",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r06",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r06/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r06/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "205863d61952bd7abb339d51d7da8c4c9c7e5da3caef4fb95c788ef98ec752ff",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r07",
+      "case": "small",
+      "replicate": 2,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r07",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r07/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r07/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "205863d61952bd7abb339d51d7da8c4c9c7e5da3caef4fb95c788ef98ec752ff",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r08",
+      "case": "small",
+      "replicate": 2,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r08",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r08/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r08/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "205863d61952bd7abb339d51d7da8c4c9c7e5da3caef4fb95c788ef98ec752ff",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r09",
+      "case": "choice",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r09",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r09/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r09/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "c90fcfea2cb70170007541396715c4893aeb65f7fed5cac0a024f299a44f70ed",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r10",
+      "case": "choice",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r10",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r10/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r10/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "c90fcfea2cb70170007541396715c4893aeb65f7fed5cac0a024f299a44f70ed",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r11",
+      "case": "choice",
+      "replicate": 2,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r11",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r11/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r11/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "c90fcfea2cb70170007541396715c4893aeb65f7fed5cac0a024f299a44f70ed",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r12",
+      "case": "choice",
+      "replicate": 2,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r12",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r12/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r12/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "c90fcfea2cb70170007541396715c4893aeb65f7fed5cac0a024f299a44f70ed",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r13",
+      "case": "sufficient",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r13",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r13/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r13/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "105e38dbffe31fc1284a0483eb0a8428722f06ca29968f12e4cca6394b5eac7a",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "9e58f83d28cbde7b522d8dc1e6d8c6d36fa492c1b440079abba3892ec7c6f8cb",
+        "src/receipt.mjs": "3b02805fedfac0a924a9ebfff9b5fb6041493193d43a15e5c2638aefc0dbf076",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r14",
+      "case": "sufficient",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r14",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r14/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r14/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "105e38dbffe31fc1284a0483eb0a8428722f06ca29968f12e4cca6394b5eac7a",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "9e58f83d28cbde7b522d8dc1e6d8c6d36fa492c1b440079abba3892ec7c6f8cb",
+        "src/receipt.mjs": "3b02805fedfac0a924a9ebfff9b5fb6041493193d43a15e5c2638aefc0dbf076",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r15",
+      "case": "defect",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r15",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r15/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r15/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "28141e02efdf6af18a484e85ca9f65943d0d49329ceda3764e9d39004297a30d",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "7dda7d7ec24a43624fc606f93c109765dfb50df30ac263559817e1ef3b7815ea",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r16",
+      "case": "defect",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r16",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r16/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r16/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "28141e02efdf6af18a484e85ca9f65943d0d49329ceda3764e9d39004297a30d",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "7dda7d7ec24a43624fc606f93c109765dfb50df30ac263559817e1ef3b7815ea",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r17",
+      "case": "meaning",
+      "replicate": 1,
+      "arm": "T",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r17",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r17/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r17/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+        "TASK.md": "28141e02efdf6af18a484e85ca9f65943d0d49329ceda3764e9d39004297a30d",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "ef94e017166043bbcb90ae0fab31874e3bb0b215e221d51593fc16042fc63224",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    },
+    {
+      "run": "r18",
+      "case": "meaning",
+      "replicate": 1,
+      "arm": "C",
+      "packet": "/workspace/scratch/41e46e3be08e/means-runs/r18",
+      "prompt": "Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r18/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r18/AGENTS.md. Work only in that packet and save report.md before your final response.",
+      "initial_sha256": {
+        "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+        "TASK.md": "28141e02efdf6af18a484e85ca9f65943d0d49329ceda3764e9d39004297a30d",
+        "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+        "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+        "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+        "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+        "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+        "decisions/accepted.md": "ef94e017166043bbcb90ae0fab31874e3bb0b215e221d51593fc16042fc63224",
+        "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+        "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+        "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+      }
+    }
+  ]
+}

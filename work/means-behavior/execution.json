@@ -1,0 +1,132 @@
+{
+  "date_utc": "2026-09-12",
+  "baseline": "c0786c273e15c288af9ee1c23330a018138807ae",
+  "freeze_local_commit": "042075a",
+  "freeze_remote_commit": "39b6eb29b1de844c716c9bf7e82336b5c46563f0",
+  "freeze_git_tree": "7a936cefad7a0362f7f2664e54a9a20b8b9eddf9",
+  "fresh_contexts": 18,
+  "continuations": 4,
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "effective_backend": "not independently attested",
+  "dispatch_order": [
+    "r01",
+    "r02",
+    "r03",
+    "r04",
+    "r05",
+    "r06",
+    "r07",
+    "r08",
+    "r09",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18"
+  ],
+  "continuation_dispatch_order": [
+    "r02",
+    "r01",
+    "r03",
+    "r04"
+  ],
+  "continuation_prompt": "I have considered the local lookup alternative and the additional operational estimate. Keep the requested disk mirror for this task: exercising its JSON serialization and rebuild behavior is now an explicit acceptance condition. Implement the requested reader and independent heading change within the original local scope; no deployment. Preserve the existing tests and verify the result.",
+  "agents": [
+    {
+      "run": "r01",
+      "tool_returned_task_name": "/root/r01"
+    },
+    {
+      "run": "r02",
+      "tool_returned_task_name": "/root/r02"
+    },
+    {
+      "run": "r03",
+      "tool_returned_task_name": "/root/r03"
+    },
+    {
+      "run": "r04",
+      "tool_returned_task_name": "/root/r04"
+    },
+    {
+      "run": "r05",
+      "tool_returned_task_name": "/root/r05"
+    },
+    {
+      "run": "r06",
+      "tool_returned_task_name": "/root/r06"
+    },
+    {
+      "run": "r07",
+      "tool_returned_task_name": "/root/r07"
+    },
+    {
+      "run": "r08",
+      "tool_returned_task_name": "/root/r08"
+    },
+    {
+      "run": "r09",
+      "tool_returned_task_name": "/root/r09"
+    },
+    {
+      "run": "r10",
+      "tool_returned_task_name": "/root/r10"
+    },
+    {
+      "run": "r11",
+      "tool_returned_task_name": "/root/r11"
+    },
+    {
+      "run": "r12",
+      "tool_returned_task_name": "/root/r12"
+    },
+    {
+      "run": "r13",
+      "tool_returned_task_name": "/root/r13"
+    },
+    {
+      "run": "r14",
+      "tool_returned_task_name": "/root/r14"
+    },
+    {
+      "run": "r15",
+      "tool_returned_task_name": "/root/r15"
+    },
+    {
+      "run": "r16",
+      "tool_returned_task_name": "/root/r16"
+    },
+    {
+      "run": "r17",
+      "tool_returned_task_name": "/root/r17"
+    },
+    {
+      "run": "r18",
+      "tool_returned_task_name": "/root/r18"
+    }
+  ],
+  "restarts": 0,
+  "replacements": 0,
+  "interruptions": 0,
+  "extra_model_runs": 0,
+  "limits": "No run visibly exceeded ten minutes or 30 reported actions; complete tool-call counts and per-agent token/elapsed/billing data are not exposed.",
+  "capture": "Initial snapshots saved before each cost continuation; original and confirmed reports retained separately. All parent-visible final messages and two intermediate messages are in messages.json.",
+  "deviations": [
+    {
+      "id": "D1",
+      "detail": "The intended globally sufficient fixture omitted Business Design-required purpose and registration time in booking. Both sufficient-case agents correctly detected these; all six review agents detected the common omissions. Do not score them as false-positive intervention. Global sufficiency is not evaluable from this case. Means-specific closure remains observable. No frozen fixture or score definition changed and no replacement runs were added."
+    }
+  ],
+  "observations": [
+    {
+      "id": "O1",
+      "detail": "r15 reports receipt implementation as a mismatch although TASK.md scopes review to availability/booking. accepted.md names the wider fixture scope including receipt; this routing ambiguity is a limitation, not a candidate-induced effect."
+    }
+  ]
+}

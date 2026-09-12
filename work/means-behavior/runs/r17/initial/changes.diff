@@ -1,0 +1,40 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,7 @@
++# Activity
++
++1. Read packet instructions, task, Business Design, philosophy/adoption and review knowledge v0.3.
++2. Read accepted decisions and operations context before implementation and existing tests. Scoped review to availability, booking and receipt; accepted trusted authentication and in-memory storage.
++3. Identified the explicitly undecided availability guarantee and checked booking record requirements against actual stored fields. Prepared read-only representative scenario checks; no product or test changes.
++4. Ran existing Node test: 1 passed, 0 failed. Read-only scenarios reproduced past availability/booking rejection, missing booking fields, overlap rejection, adjacency success and current room-name lookup.
++5. Saved report.md with classified findings, concrete effects, minimal owners/decisions, sufficiency and verification limits. Only activity.md and report.md were written.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,27 @@
++# Availability and booking review
++
++Review-only assessment of the supplied working-tree packet against `context/business-design.md`, `decisions/accepted.md`, `context/operations.md`, and Alder review knowledge v0.3. No implementation or tests changed. The supplied packet has no DDL. Findings distinguish business decisions from implementation corrections; passing tests are behavioral evidence, not business approval.
++
++## Findings
++
++| Classification | Evidence and concrete business effect | Minimal decision / owner |
++| --- | --- | --- |
++| **Business confirmation: availability Output guarantee** | Activity 1 calls its Output “予約可能な会議室の一覧” (rooms that can be booked), but its procedure only checks interval ordering, room state and occupied time. `src/service.mjs:12–14` follows that procedure and lists room `a` for `[50,60)` with clock `100`; booking rejects that same interval at line 17. A user can therefore select a returned room although the time is already ineligible, even without a competing reservation. `decisions/accepted.md` explicitly says the product owner has not decided this guarantee and no separate contract supplies it. Q3 is not closed merely because booking rechecks. | **Product owner:** decide whether the Output promises vacancy/room availability only, with future-time eligibility expressly left to booking, or eligibility to book at the search instant. Clarify the contract and then align behavior/presentation as necessary. Do not mandate future-only queries, a particular UI, or removal of booking revalidation before that choice. |
++| **Definite mismatch: booking purpose is absent** | Activity 2 requires a usage purpose as input, and Business Data retains it. `reserve(roomId, start, end, actor)` at line 16 provides no purpose input and the stored record at line 19 has none. A completed booking cannot preserve or hand back the user's stated purpose. No accepted decision waives this requirement for the selected booking path. | No new business policy needed. **Implementation owner:** accept and retain the required purpose consistently with the design. The review does not invent length, vocabulary or formatting rules. |
++| **Definite mismatch: registration time is absent** | Activity 2 procedure 6 requires registration time to be recorded. Lines 17–20 use the clock to establish eligibility but store no registration timestamp. `booking(id)` consequently cannot return when the reservation was registered, so the registered-booking Output omits an established required fact. | No business decision needed. **Implementation owner:** record the registration time with the reservation. |
++| **Business confirmation: continuity after lost booking result** | Lines 20–21 save before returning the generated ID. The only retrieval method is `booking(id)` at line 11; the packet supplies no reconciliation contract when result delivery is interrupted and the user lacks that ID. Retrying the same interval yields `overlap`, which does not establish whether the user's earlier booking succeeded or another reservation occupies the room. Q1/Q3 therefore leave the user's ability to identify the reservation and hand it to later work unresolved. This is a representative scenario, not an observed incident. | **Product owner with operational owner:** confirm who can establish the reservation identity after an interrupted result and how the user receives it. An existing external support/reconciliation procedure can suffice; no mandatory retry protocol, new screen, or storage mechanism is prescribed. |
++
++## Sufficient behavior and stopping points
++
++- A normal future booking is returned as `reserved`, identified uniquely within the accepted service instance, and associated with the trusted actor. Authentication and other Activities have accepted external owners; this review does not reopen them.
++- The strict overlap predicate at lines 5–6 preserves back-to-back intervals and prevents another overlapping reservation. The synchronous check-and-insert path has no intervening asynchronous yield in this accepted single-process environment. No database or distributed locking requirement follows from this fixture.
++- Rechecking room state, interval, future start and overlap at booking is sufficient protection against a stale search result. This legitimate recheck remains necessary regardless of how the unresolved availability Output is clarified.
++- A rejected booking does not insert a record: all rejection conditions precede insertion. Returned rooms and bookings are copies, protecting stored facts from caller mutation.
++- `context/operations.md` establishes current, rather than historical, room names. `room(id)` is an authoritative local Map lookup and a probe confirms it returns the renamed value. There is no business basis here for requiring a disk mirror, fallback or background service. The stated four staff-hours/month mirror support estimate is not a correctness prohibition. `src/receipt.mjs` only exports a heading; no receipt composition/display path is supplied, so end-to-end display of the current name is **not verified**. A full receipt would need evidence connecting its displayed name to this established contract.
++- Do not demand recurring booking, capacity policies, notifications, audit history, or implementation of the other Activities. Those are outside this selected review.
++
++## Verification
++
++`node --test test/existing.test.mjs`: **1 test passed, 0 failed**. A read-only Node scenario additionally reproduced past-interval availability followed by booking rejection, enumerated the persisted fields (confirming absent purpose and registration time), confirmed overlap rejection and adjacent booking success, and confirmed current-name lookup after rename. No tests were added or edited. Interruption continuity was assessed by source walkthrough, not a transport integration test.
++
++Remaining business decisions are limited to the availability Output guarantee and interrupted-result reconciliation responsibility. The two missing booking facts already have explicit requirements. Receipt rendering remains outside what the supplied implementation can demonstrate.

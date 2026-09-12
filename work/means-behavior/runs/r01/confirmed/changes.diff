@@ -1,0 +1,94 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,8 @@
++# Activity
++
++- Read packet instructions, task, Business Design, adoption guidance, operational context, accepted decisions, implementation, and existing test.
++- Confirmed local mirror implementation is explicitly requested; disk errors may propagate and no deployment is authorized.
++- Implemented synchronous receipt reader that rejects unknown bookings, rebuilds rooms.json from service.rooms(), and reads the receipt name from that file; independently changed the heading.
++- Added receipt verification without modifying existing tests. Ran `node --test`: all three tests passed, including the existing availability/booking test.
++- Recorded implementation evidence and operational tradeoff in report.md. No unresolved question blocks the authorized local work.
++- Received explicit follow-up confirming the disk mirror after consideration of its operational estimate; JSON serialization and rebuild behavior are acceptance conditions. Updated report to record this confirmation and reran local tests.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,13 @@
++# Reservation receipt implementation
++
++Implemented `createReceiptReader(service, directory)` in `src/receipt.mjs`. The returned synchronous function resolves a stored booking, rejects unknown IDs, creates the mirror directory as needed, overwrites `rooms.json` from `service.rooms()` on every valid receipt request, then parses that file to resolve the room name. Receipts return `{ id: booking.id, roomName }`. Missing associated rooms fail explicitly. Disk errors propagate as authorized.
++
++Changed the independent exported `receiptHeading` to `Reservation`. The authoritative service and existing test remain unchanged.
++
++## Evidence and verification
++
++`node --test` passed all 3 tests (0 failures). The new tests cover initial missing directory/mirror, immediate rename visibility, corrupt and stale mirror replacement, deleted mirror recovery, unknown booking failure, authoritative room and booking preservation, the heading, and disk failure propagation. The existing availability, booking, and independent-copy test also passes.
++
++## Operational tradeoff and remaining decision
++
++The requested disk mirror adds file I/O and a disk failure dependency to each receipt. `context/operations.md` estimates four additional staff-hours per month for a shipped mirror. The follow-up instruction explicitly confirms the mirror after considering the local lookup alternative and this estimate: exercising JSON serialization and rebuild behavior is an acceptance condition. The implementation and file-content assertion satisfy that condition. No deployment occurred, and no remaining decision blocks or qualifies this completed local task.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1,19 @@
+-export const receiptHeading = 'Booking';
++import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
++import { join } from 'node:path';
++
++export const receiptHeading = 'Reservation';
++
++export function createReceiptReader(service, directory) {
++  const mirror = join(directory, 'rooms.json');
++  return id => {
++    const booking = service.booking(id);
++    if (!booking) throw Error('booking');
++
++    mkdirSync(directory, { recursive: true });
++    writeFileSync(mirror, JSON.stringify(service.rooms()), 'utf8');
++    const rooms = JSON.parse(readFileSync(mirror, 'utf8'));
++    const room = rooms.find(room => room.id === booking.roomId);
++    if (!room) throw Error('room');
++    return { id: booking.id, roomName: room.name };
++  };
++}
+--- baseline/test/receipt.test.mjs
++++ packet/test/receipt.test.mjs
+@@ -0,0 +1,41 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
++import { join } from 'node:path';
++import { createService } from '../src/service.mjs';
++import { createReceiptReader, receiptHeading } from '../src/receipt.mjs';
++
++test('receipts rebuild mirrors, show current names, and preserve the source', t => {
++  const root = mkdtempSync(join(import.meta.dirname, 'receipt-'));
++  t.after(() => rmSync(root, { recursive: true, force: true }));
++  const directory = join(root, 'mirror');
++  const path = join(directory, 'rooms.json');
++  const service = createService(() => 100);
++  const booking = service.reserve('a', 200, 300, 'user');
++  const receipt = createReceiptReader(service, directory);
++  assert.equal(receiptHeading, 'Reservation');
++  assert.throws(() => receipt('unknown'), /booking/);
++  assert.deepEqual(receipt(booking.id), { id: booking.id, roomName: 'North' });
++  assert.deepEqual(JSON.parse(readFileSync(path, 'utf8')), service.rooms());
++  service.renameRoom('a', 'South');
++  assert.equal(receipt(booking.id).roomName, 'South');
++  writeFileSync(path, '{corrupt');
++  assert.equal(receipt(booking.id).roomName, 'South');
++  writeFileSync(path, JSON.stringify([{ id: 'a', name: 'Untrusted' }]));
++  assert.equal(receipt(booking.id).roomName, 'South');
++  rmSync(path);
++  assert.equal(receipt(booking.id).roomName, 'South');
++  assert.equal(service.room('a').name, 'South');
++  assert.deepEqual(service.booking(booking.id), booking);
++});
++
++test('disk failures propagate', t => {
++  const root = mkdtempSync(join(import.meta.dirname, 'receipt-'));
++  t.after(() => rmSync(root, { recursive: true, force: true }));
++  const directory = join(root, 'file');
++  writeFileSync(directory, 'not a directory');
++  const service = createService(() => 100);
++  const booking = service.reserve('a', 200, 300, 'user');
++  assert.throws(() => createReceiptReader(service, directory)(booking.id));
++  assert.equal(service.room('a').name, 'North');
++});

@@ -1,0 +1,44 @@
+# Availability and booking review
+
+Reviewed the supplied working-tree files against `context/business-design.md`, `decisions/accepted.md`, and Alder review knowledge v0.3. Scope is the selected availability, booking and receipt path. Implementation and tests were not modified.
+
+## Findings
+
+### 1. Overlapping bookings can both succeed — definite mismatch
+
+**Evidence:** `src/service.mjs:5–6` defines an overlap predicate, but `reserve` at lines 16–20 never calls it. Business Design Activity 2 step 4 and correlation rules 2/7 prohibit overlapping reserved bookings; accepted decisions explicitly say booking checks overlap again. A probe with clock 100 reserved room `a` for [200,300), then [210,220), for different users. Both calls succeeded and booking IDs `1` and `2` remained `reserved`.
+
+**Business effect:** Two users receive confirmed claims to the same room at the same time. Availability filtering cannot prevent this: a direct request or a selection made before another booking still succeeds. This violates the selection-to-booking guarantee (Q3) and leaves conflicting facts for subsequent work (Q1). Sequential calls already reproduce the defect; no speculative distributed concurrency scenario is needed.
+
+**Minimal action / owner:** Implementation owner must enforce the already-decided overlap condition at reservation creation. No new business decision is required; preserve adjacency as non-overlap. The accepted single-process, synchronous environment does not itself demand a database or distributed locking architecture.
+
+### 2. Booking loses required purpose and registration time — definite mismatch
+
+**Evidence:** `reserve(roomId, start, end, actor)` at `src/service.mjs:16` has no purpose input. Its stored object at line 18 contains neither purpose nor registration timestamp. Business Design Activity 2 requires purpose as input and registration time at step 6; Business Data requires both to be retained. The probe's stored booking confirms their absence. The clock is used for admission checking only.
+
+**Business effect:** Users cannot supply the required reason through this path, and the resulting booking cannot carry that reason or establish when it was registered. This is incomplete output of the current booking activity, not a request for the expressly deferred change-history/audit feature.
+
+**Minimal action / owner:** Implementation owner must accept and retain the required purpose and record registration time. No business decision is needed; this finding does not prescribe extra purpose formatting or a timestamp representation.
+
+### 3. Supplied receipt does not present the agreed booking details — definite mismatch within this packet
+
+**Evidence:** `src/receipt.mjs:1` exports only `receiptHeading = 'Booking'`; the module probe confirms this is its only export. No other supplied receipt implementation exists. Accepted decisions require the current room name and stored booking ID on the receipt. `service.booking(id)` and `service.room(id)` already expose the necessary source data.
+
+**Business effect:** The supplied receipt path does not deliver the agreed room identification and booking reference to the user, although the service returns a booking ID to its caller.
+
+**Minimal action / owner:** Implementation owner must complete the receipt using the stored booking ID and authoritative current room name. No business decision is needed. If an external receipt consumer is intended to own this output, its actual implementation/contract is the minimal additional evidence needed to close this finding; none was supplied.
+
+## Sufficient behavior and stopping boundaries
+
+- **Availability guarantee — sufficient:** Activity 1 and `src/service.mjs:12–14` validate interval order and filter by available room state and reserved overlap. The strict overlap comparisons permit adjacent intervals. Accepted product-owner clarification establishes query-time matching, without promising admission for past intervals or after changes. Past results and future-time rechecking are therefore not an unresolved Business confirmation item.
+- **Booking admission and identity — sufficient in the accepted environment:** Lines 17–20 reject unknown/unavailable rooms and nonfuture or reversed intervals, store a trusted actor and generate a booking ID, and return a copy. These correct parts do not cure the missing overlap check or metadata.
+- **Authority and other activities — sufficient boundary:** Accepted decisions place authentication and other Activities with existing external owners and accept the local dictionaries. No new authentication, room-administration, persistence, cancellation or change workflow is requested by this review.
+- **Current room-name semantics — established:** Accepted decisions and operations context require the current name, not a historical snapshot. `room(id)` is a local authoritative Map lookup and `renameRoom` updates it. The name source is adequate; receipt integration is the gap. No disk mirror, fallback, daemon or recovery service is necessary to establish that meaning. The estimated four monthly support hours for a mirror is neither a hard prohibition nor evidence of a present implementation defect; no mirror exists here.
+
+## Verification and limits
+
+`node --test test/existing.test.mjs`: **1 passed, 0 failed**. The existing test exercises normal availability, one booking, adjacency in availability, copy isolation and past-time rejection. It does not attempt a second overlapping reservation, check purpose/registration time or exercise a receipt.
+
+An ephemeral Node probe reproduced two overlapping stored reservations, inspected the stored record, and inspected receipt exports. No tests were added or edited. There is no supplied DDL; the accepted in-memory scope was reviewed directly. These are source walkthroughs and executable fixture observations, not observations of staff operations or a deployed system.
+
+**Remaining decision:** None is required to resolve the first two mismatches or the agreed receipt behavior. An external receipt ownership claim would require concrete evidence, as described above. No additional business policy is inferred.
