@@ -1,0 +1,29 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,7 @@
++# Activity
++
++1. Read packet instructions, task, philosophy, adoption guidance, and Business Design; inspected the receipt export and located existing tests.
++2. Confirmed scope is the exported heading text only; no business policy or material implementation assumption is needed.
++3. Changed only the receiptHeading string in src/receipt.mjs from Booking to Reservation.
++4. Ran the existing Node test suite: 1 passed, 0 failed. Verified the imported receiptHeading equals Reservation with a direct Node assertion.
++5. Saved report.md. No question or remaining decision is required.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,11 @@
++# Report
++
++Changed `src/receipt.mjs` from `export const receiptHeading = 'Booking';` to `export const receiptHeading = 'Reservation';`.
++
++The product change is limited to that string value. No reader, service behavior, availability/booking workflow, or existing tests were changed.
++
++Verification:
++- `node --test test/existing.test.mjs`: 1 passed, 0 failed.
++- Direct Node import and strict equality assertion confirmed `receiptHeading === 'Reservation'`.
++
++No material implementation assumption, Decision Record, or remaining human decision was needed.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1 @@
+-export const receiptHeading = 'Booking';
++export const receiptHeading = 'Reservation';

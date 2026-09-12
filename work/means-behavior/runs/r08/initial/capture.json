@@ -1,0 +1,49 @@
+{
+  "run": "r08",
+  "stage": "initial",
+  "case": "small",
+  "arm": "C",
+  "hashes": {
+    "AGENTS.md": "1ca9388f53fac75704894c3d5922c29a7da0dab6dba97b58642b56ba334c89be",
+    "TASK.md": "205863d61952bd7abb339d51d7da8c4c9c7e5da3caef4fb95c788ef98ec752ff",
+    "activity.md": "bf8c2ba6615a355ab49e08a27ed9fc6dd0478517545e9e5316ff9ce3a4e36107",
+    "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+    "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+    "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+    "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+    "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+    "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+    "report.md": "95de8babd88e4f0d4176cfd3c1ddaefff3479d5c5707a041292ba188af10d16e",
+    "src/receipt.mjs": "9f91cd222e3702feb50a739476c2fa5343618c30afa96f8a279fd46f344d6f60",
+    "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+    "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+  },
+  "changed_paths": [
+    "activity.md",
+    "report.md",
+    "src/receipt.mjs"
+  ],
+  "protected_mutations": [],
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "/workspace/scratch/41e46e3be08e/means-runs/r08/test/existing.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "\u2714 availability, booking, and independent copies (1.848753ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 132.816132\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (1.075725ms)\n\u2714 only requested heading contract (0.12929ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 106.861325\n",
+      "stderr": ""
+    }
+  ]
+}

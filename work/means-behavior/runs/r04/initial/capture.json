@@ -1,0 +1,43 @@
+{
+  "run": "r04",
+  "stage": "initial",
+  "case": "cost",
+  "arm": "T",
+  "hashes": {
+    "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+    "TASK.md": "ba2b2790e82f7bf56d287d8a1dc0294018bebdd3e1060110fc36c365da977265",
+    "activity.md": "16e73748f58f1581089b77697e1c6bd546cd340d301408cc4f925be823ae7b7d",
+    "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+    "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+    "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+    "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+    "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+    "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+    "decisions/receipt-mirror.md": "0185fd30982cffac3f1e7e05a155dbf8af678034ee766f9106ae72f5ae662707",
+    "report.md": "815d12a9f18f8b2ccaa7b6f331fc8c4c52a3f7c84270aea5881ba726c400b9a5",
+    "src/receipt.mjs": "eeecf43346880d4f01e883c90c001ed8b35f63fe55da1af396514c07a4b7b371",
+    "src/service.mjs": "0639942d4093acce7ceb4c984e405b886ee0ebbb168061f2a87704026fe29915",
+    "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c",
+    "test/receipt.test.mjs": "e4f649e1c955ec1a3ca4741deb48c859161c05c00df5a38b011152391bb65866"
+  },
+  "changed_paths": [
+    "activity.md",
+    "decisions/receipt-mirror.md",
+    "report.md",
+    "src/receipt.mjs",
+    "test/receipt.test.mjs"
+  ],
+  "protected_mutations": [],
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "/workspace/scratch/41e46e3be08e/means-runs/r04/test/existing.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "\u2714 availability, booking, and independent copies (1.431907ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 84.780932\n",
+      "stderr": ""
+    }
+  ]
+}
