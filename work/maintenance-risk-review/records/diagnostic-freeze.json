@@ -1,0 +1,14 @@
+{
+  "frozen_at": "2026-09-12T05:14:27.866718+00:00",
+  "retrospective": true,
+  "new_model_calls": 0,
+  "evaluator_model": null,
+  "evaluator_effort": null,
+  "note": "No new implementation agent or seed; evaluator identity not independently attested. Original implementer settings remain in original records.",
+  "files": {
+    "docs/maintenance-risk-review/plan.md": "63881cce2cb642bd3c4d9c811fd684971cf8cda9d421dc582bd65e3e3c569ab1",
+    "work/maintenance-risk-review/tools/test-boundary.test.mjs": "8e6a45eaff1d0b64835679d811b761986c52b343455cb72e800b667dd495de94",
+    "work/maintenance-risk-review/tools/evidence.py": "08d17122335f5e391a2e9056a4c77f31f034aea2c8b16f3c139d8df3435671c2",
+    "work/maintenance-risk-review/tools/run.py": "3405daf92200c0d890d4b52a58b0e3018a2a91a492f457308c67a1554a8a075a"
+  }
+}
