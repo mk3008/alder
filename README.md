@@ -37,6 +37,8 @@ This layout and a local review-knowledge copy are optional. Prefer keeping desig
 
 **Alder does not prescribe an architecture style or when to introduce structure.** Give the implementation agent the Business Design, explicit requirements and constraints, and concrete future risks you actually foresee; let it choose how to realize them. Architecture knowledge can support that choice, but a style name does not replace requirements.
 
+When technical alternatives compete, **reason before measuring**. Use requirements, risks, scale, runtime behavior, and existing evidence to focus validation on the uncertainties most likely to change the decision. Bound optional evaluation and stop when a sufficiently supported solution is found unless the product explicitly calls for deeper optimization; missing numeric targets alone are not a reason to stop and ask.
+
 [Follow the adoption guide and copy the prompts →](docs/adoption.md)
 
 ## Read more
@@ -44,8 +46,8 @@ This layout and a local review-knowledge copy are optional. Prefer keeping desig
 | Need | Document |
 | --- | --- |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
-| Why implementation helps validate requirements; DDD and architecture | [Philosophy](docs/philosophy.md) |
+| Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-The planned **Alder v0.1** release includes **research review knowledge v0.3**. Alder remains a research candidate; see the [release notes draft](docs/release-notes-v0.1.md). It requires no framework, CLI, or runtime package.
+**Alder v0.2** adds bounded technical-evaluation guidance while retaining **research review knowledge v0.3** unchanged. Alder remains a research candidate; see the [v0.2 release notes](docs/release-notes-v0.2.md). It requires no framework, CLI, or runtime package.
