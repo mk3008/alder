@@ -93,6 +93,26 @@ Describe futures you actually foresee in concrete terms, separately from current
 
 Pass on what people actually know about likely changes; do not add hypothetical requirements merely because something might change someday. If no such future is foreseen, say so or omit it. Foresight informs design decisions; it does not authorize the agent to invent undecided future business rules or implement them as current requirements.
 
+### Prioritize and bound technical evaluation
+
+When a task requires comparing technical candidates, reason from its acceptance conditions, risks, data and call cardinality, complexity, execution environment and resource ownership before choosing what to test. Separate established facts, conditional estimates and remaining unknowns. Prioritize uncertainties whose answers could change feasibility or candidate selection, weighing expected effect, information value, evaluation cost, change risk and reversibility. A small change is not sufficient reason to investigate a candidate deeply when its residual cost is already unlikely to meet the target; an order-of-growth advantage is not sufficient reason to choose a larger change either.
+
+Use existing evidence to narrow the search. Test consequential unknowns such as semantic equivalence, environment-specific costs and shared-resource impact. Where work accumulates over time, reason about timeout, continuing arrivals, backlog, retries and durable catch-up rather than only one successful operation. Do not turn these examples into a checklist for unrelated tasks or require exhaustive design review before implementation.
+
+Set a task-proportionate evaluation time budget and stopping condition before substantial experiments; a bounded scope or experiment count can serve as the budget when no elapsed-time limit is supplied. Stop optional evaluation when acceptance conditions have sufficient support and another experiment is unlikely to change the decision. Stop investigating a rejected candidate once decisive evidence rules it out, and redirect remaining effort to the consequential uncertainty. Preserve required correctness and regression gates. If the budget ends with a material unknown, report the limit and unresolved decision rather than claiming fitness or silently expanding the study.
+
+Use the product concept, Business Design, requirements and user intent to identify where effort matters and which properties must not be compromised. If speed, low memory use or another property is an explicit differentiator, focus evaluation on that property; honor numeric targets when supplied. A qualitative priority also warrants focused effort, without requiring unlimited optimization.
+
+Otherwise, default to a sufficiently good solution: try candidates with the strongest reasoned prospect of meeting the task's needs, and stop searching once relevant verification supports a reasonable result. Numeric targets are not a prerequisite. Relative comparisons, expected workload, resource costs and material risks can support a technical judgment of adequacy; being better than another candidate alone does not establish suitability. The possibility of a still-better candidate is not itself a reason to continue.
+
+Record material adequacy judgments in the relevant Decision Record, including the supporting evidence, assumptions, tradeoffs, remaining limitations and reason for stopping, so they can be reviewed. Distinguish an agent's technical judgment from an agreed requirement or production guarantee. Do not turn every routine choice into a separate record or approval gate.
+
+Ask only when unresolved priorities, unacceptable tradeoffs or consequential unknowns prevent a defensible decision within delegated authority. Missing numeric targets or an unspecified desire for further optimization alone do not require clarification. Make the decision concrete with available evidence and continue independent authorized work. Respect already accepted tradeoffs; do not invent agreed production thresholds, demand a global optimum, or default to smallest change regardless of fitness.
+
+These are implementation and technical-evaluation instructions. Ordinary post-implementation Alder review keeps its Q1–Q3 / P2 / S scope: report concrete requirement or guarantee violations and unresolved business meaning, classify technical improvements separately, and close established sufficiency. A faster alternative alone does not reopen an accepted business decision. A separately requested performance audit uses its own acceptance conditions and evaluation budget.
+
+The [Issue #51 case analysis](inference-validation.md) documents the rationale and limits. This clarification has not been shown to improve agent behavior in a controlled comparison.
+
 Replace the placeholders with the requested task and actual design path:
 
 ```text
@@ -108,7 +128,7 @@ When implementation makes a material assumption or choice that is not obvious fr
 
 If the choice would change the business outcome, authority, allowed state, data meaning or cardinality, unit of work, or a guarantee relied on by another activity, and the Business Design does not decide it, do not record it as an approved business decision. Report it as a focused Human Decision instead and keep it unresolved. Explain why the existing Business Design does not decide it, give the smallest useful alternatives, and continue independent work where possible.
 
-Routine, reversible technical choices do not require Human Decision. Perform the relevant non-destructive verification for the requested work.
+Routine, reversible technical choices do not require Human Decision. Perform the relevant non-destructive verification for the requested work. When comparing technical candidates, apply Alder adoption guidance “Prioritize and bound technical evaluation” from <readable path or URL and revision>: use inference to select consequential uncertainties, set a proportionate evaluation budget and stopping condition, and preserve required verification gates.
 ```
 
 A Decision Record is evidence of material assumptions and choices actually made during implementation, together with their reasons. A Human Decision is needed when Business Design leaves unresolved a choice that changes business meaning. A Decision Record does not replace that human decision; neither passing tests nor completed implementation constitute business approval.
