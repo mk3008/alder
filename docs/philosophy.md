@@ -20,7 +20,7 @@ A light pre-implementation check can catch obvious contradictions or blockers. A
 
 ## Reasoning directs validation
 
-Validation does not replace reasoning. Use requirements, risks, scale and runtime behavior to narrow the alternatives and identify the uncertainties that could change the decision. Measurements test those uncertainties; neither a theoretical advantage nor a passing test alone establishes production fitness. Evaluation also consumes finite time: seek the evidence needed for the task's acceptance conditions, and stop when further investigation is unlikely to change the decision. See [implementation guidance](adoption.md#prioritize-and-bound-technical-evaluation) for prioritization, budgets and unresolved decisions.
+Validation does not replace reasoning. Use requirements, risks, scale and runtime behavior to narrow the alternatives and identify the uncertainties that could change the decision. Measurements test those uncertainties; neither a theoretical advantage nor a passing test alone establishes production fitness. Evaluation also consumes finite time. Product concepts and requirements identify where effort matters and which properties must not be compromised. In the absence of an explicit optimization priority, try the most promising candidates and stop once relevant evidence supports a sufficiently good result. Numeric targets are optional: a reasoned judgment grounded in comparative evidence and intended use can establish adequacy, with its basis and limits recorded for review. See [implementation guidance](adoption.md#prioritize-and-bound-technical-evaluation) for prioritization, budgets and unresolved decisions.
 
 ## Validation rather than model discovery
 
