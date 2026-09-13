@@ -18,6 +18,10 @@ Implementation is observation material for requirements validation; it does not 
 
 A light pre-implementation check can catch obvious contradictions or blockers. Alder's main use here is reviewing choices after implementation has made them concrete. The best division between pre- and post-implementation review remains unverified; design review is not dismissed.
 
+## Reasoning directs validation
+
+Validation does not replace reasoning. Use requirements, risks, scale and runtime behavior to narrow the alternatives and identify the uncertainties that could change the decision. Measurements test those uncertainties; neither a theoretical advantage nor a passing test alone establishes production fitness. Evaluation also consumes finite time: seek the evidence needed for the task's acceptance conditions, and stop when further investigation is unlikely to change the decision. See [implementation guidance](adoption.md#prioritize-and-bound-technical-evaluation) for prioritization, budgets and unresolved decisions.
+
 ## Validation rather than model discovery
 
 Alder does not seek to derive the correct domain model. It procedurally checks whether business meaning fixed in the chosen implementation was actually decided in the current Business Design.
