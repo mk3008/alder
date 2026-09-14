@@ -29,6 +29,7 @@ A topic absent here is **not established as unexamined**: check related records 
 | Mandatory independent Data reviews or exhaustive scenario lists | Not adopted | [Review structure and checklists](#review-structure-and-checklists) |
 | Decision Records, anchoring and fixed status templates | Meaning distinction retained; template efficacy deferred | [Decision records](#decision-records) |
 | Participant walkthrough and reverse tracing as separate procedures | Adopted with limited scope | [Walkthrough and reverse tracing](#walkthrough-and-reverse-tracing) |
+| Explicit establishing facts / direct evidence before closing sufficiency | Existing knowledge sufficient | [Sufficiency evidence](#sufficiency-evidence) |
 | Output guarantees despite legitimate downstream rechecks | Boundary clarification retained; no new question | [Output guarantees](#output-guarantees) |
 | Architecture prepayment, future risk, isolation and total maintenance cost | Partial observations; general ranking deferred | [Architecture and maintenance risk](#architecture-and-maintenance-risk) |
 | Challenging requested means / early warning | Not adopted after qualitative analysis and behavioral pilot | [Requested means and early warning](#requested-means-and-early-warning) |
@@ -75,6 +76,12 @@ A topic absent here is **not established as unexamined**: check related records 
 ## Output guarantees
 
 **Clarify Q3's boundary — adopted with limited scope; a new Q4 was unnecessary.** [#35](https://github.com/mk3008/alder/issues/35#issuecomment-5633002343) judged the “available for reservation” gap an application issue within existing meaning/guarantee questions. [#36](https://github.com/mk3008/alder/issues/36#issuecomment-5633135941) retained the Output question after the clarification without treating valid rechecks as defects or mandating future-only search. Reflection: Q3 Boundary in [current knowledge](phase2/review-knowledge-v0.3.md). Reason: downstream reinspection does not settle what the preceding Output presently promises; neither must the preceding step guarantee every downstream condition. Limit: application-gap diagnosis is an inference from reports; one rerun does not prove causal improvement, and lost-result continuity did not recur as a main finding. Reconsider with a concrete misleading guarantee or excessive guarantee demand; preserve legitimate responsibility boundaries.
+
+## Sufficiency evidence
+
+**Explicit establishing facts and direct evidence — existing knowledge sufficient.** [Issue #58 analysis](sufficiency-evidence.md) compared current Q1–Q3 / P1 / P2 / S with the existing facilities #32, purchase #33 and meeting-room #36 reports, examined #34/#35 as counterevidence, and spot-checked fixed meeting-room source and test assertions. Existing reports link concrete sufficiency facts to implementation/tests, use targeted execution, and distinguish verified behavior from unresolved business approval or unobserved external work. No candidate-specific gap warranting another benchmark was identified; no review-knowledge change was made.
+
+Reason: current dependency/evidence/classification requirements and observed behavior substantially overlap the narrow candidate. The earlier Output-guarantee closure was already addressed in Q3; the lost-result non-recurrence does not establish an erroneous evidence-based closure. Limit: document-based adoption judgment using historical behavioral reports, not a new controlled comparison or proof of equivalence; no runtime rerun or measured cost effect. Reconsider if an important closure under current knowledge rests on a false or ambiguous fact that cheap direct verification could correct, or an actual traceability failure changes review quality. See the linked record for source revisions, stopping rationale and limits.
 
 ## Architecture and maintenance risk
 
