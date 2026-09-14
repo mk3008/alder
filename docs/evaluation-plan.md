@@ -105,3 +105,13 @@ This dated addendum concerns the [review knowledge v0.3 research candidate](phas
 - Do not treat increasing the benchmark count itself as an accuracy improvement strategy.
 
 No new benchmarks are added by this addendum.
+
+## Research Decision Index maintenance
+
+This research-operation addendum concerns future research decisions; it does not amend the frozen Scope-First protocol above or reinterpret historical results.
+
+Before evaluating a new hypothesis or candidate, consult the [Research Decision Index](research-decisions.md) and its related evidence to identify prior consideration, existing adoption and relevant limits. Apply the existing evaluation and sufficiency guidance; the index adds no adoption criterion.
+
+When an investigation or validation reaches an adoption, limited-adoption, rejection, existing-coverage or deferral decision, update the index as part of the same change that records the conclusion. Update the existing entry for additional evidence on the same question; add an entry only for an independent question. Record the disposition, observed learning, current reflection (or none), rationale, primary evidence and material applicability limits or reconsideration conditions. Distinguish document-based judgments from behavioral observations.
+
+Unfinished investigation without a decision and ordinary Issue/implementation work do not require an entry. Keep entries short and link to authoritative records; preserve historical conditions and conclusions, and do not turn a pilot's lack of separation into a universal claim of no effect. This operation is independent of any model, agent, tool or hosting workflow.
