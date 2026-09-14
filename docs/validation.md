@@ -4,6 +4,8 @@
 
 The current status is **research candidate**. Review knowledge v0.3 is not a universal, normative rule set.
 
+For candidate-level adoption, rejection and deferral decisions, consult the [Research Decision Index](research-decisions.md). This page summarizes validation scope; the index helps find prior decisions and their original evidence.
+
 ## What has been validated
 
 Implementation and fresh reviews were carried out on three existing operational benchmarks. In fresh regression reviews, agents reviewed fixed implementations without consulting earlier review results.
