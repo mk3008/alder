@@ -48,7 +48,7 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
-| Previous candidates, adoption decisions, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
+| Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
 **Alder v0.2** adds bounded technical-evaluation guidance while retaining **research review knowledge v0.3** unchanged. Alder remains a research candidate; see the [v0.2 release notes](docs/release-notes-v0.2.md). It requires no framework, CLI, or runtime package.
