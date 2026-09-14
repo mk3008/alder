@@ -1,0 +1,83 @@
+diff --git "a/work\\business-process-dogfood\\runs\\stage2\\consistency-resolution/src/app.js" "b/work\\business-process-dogfood\\runs\\stage2\\refactoring-rerun-1/src/app.js"
+index bbe32af..c142a1a 100644
+--- "a/work\\business-process-dogfood\\runs\\stage2\\consistency-resolution/src/app.js"
++++ "b/work\\business-process-dogfood\\runs\\stage2\\refactoring-rerun-1/src/app.js"
+@@ -1,13 +1,24 @@
+ import { Pool } from 'pg';
+ 
++function requireIdentifier(value, name) {
++  if (typeof value !== 'string' || value.trim() === '') throw new Error(`${name} must be a nonblank identifier`);
++}
++
++function validateLine(line) {
++  const { productId, quantity, unitPrice } = line ?? {};
++  requireIdentifier(productId, 'productId');
++  if (quantity === undefined || unitPrice === undefined) throw new Error('Each quotation line requires quantity and unitPrice');
++  if (Number.isNaN(quantity) || Number.isNaN(unitPrice)) throw new Error('quantity and unitPrice must not be NaN');
++}
++
+ class QuotationStore {
+   constructor(pool) { this.pool = pool; }
+ 
+   async create(input) {
+     const { customerId, expiresAt, lines } = input ?? {};
+-    this.requireIdentifier(customerId, 'customerId');
++    requireIdentifier(customerId, 'customerId');
+     if (!Array.isArray(lines) || lines.length === 0) throw new Error('A quotation requires at least one line');
+-    for (const line of lines) this.validateLine(line);
++    for (const line of lines) validateLine(line);
+ 
+     const client = await this.pool.connect();
+     try {
+@@ -37,8 +48,8 @@ class QuotationStore {
+ 
+   async search(criteria = {}) {
+     const { quotationId, customerId, productId } = criteria ?? {};
+-    if (customerId !== undefined) this.requireIdentifier(customerId, 'customerId');
+-    if (productId !== undefined) this.requireIdentifier(productId, 'productId');
++    if (customerId !== undefined) requireIdentifier(customerId, 'customerId');
++    if (productId !== undefined) requireIdentifier(productId, 'productId');
+     const { rows } = await this.pool.query(
+       `SELECT q.quotation_id FROM quotation q
+         WHERE ($1::bigint IS NULL OR q.quotation_id = $1)
+@@ -55,8 +66,8 @@ class QuotationStore {
+   async revise(quotationId, input) {
+     const { customerId, expiresAt, lines } = input ?? {};
+     if (!Array.isArray(lines) || lines.length === 0) throw new Error('A quotation requires at least one line');
+-    for (const line of lines) this.validateLine(line);
+-    if (customerId !== undefined) this.requireIdentifier(customerId, 'customerId');
++    for (const line of lines) validateLine(line);
++    if (customerId !== undefined) requireIdentifier(customerId, 'customerId');
+ 
+     const client = await this.pool.connect();
+     try {
+@@ -106,17 +117,6 @@ class QuotationStore {
+     }
+   }
+ 
+-  requireIdentifier(value, name) {
+-    if (typeof value !== 'string' || value.trim() === '') throw new Error(`${name} must be a nonblank identifier`);
+-  }
+-
+-  validateLine(line) {
+-    const { productId, quantity, unitPrice } = line ?? {};
+-    this.requireIdentifier(productId, 'productId');
+-    if (quantity === undefined || unitPrice === undefined) throw new Error('Each quotation line requires quantity and unitPrice');
+-    if (Number.isNaN(quantity) || Number.isNaN(unitPrice)) throw new Error('quantity and unitPrice must not be NaN');
+-  }
+-
+   async readQuotation(queryable, quotationId) {
+     const quotation = await queryable.query(
+       `SELECT quotation_id AS "quotationId", customer_id AS "customerId", expires_at AS "expiresAt",
+@@ -177,9 +177,9 @@ class OrderStore {
+ 
+   async createDirect(input) {
+     const { customerId, lines } = input ?? {};
+-    this.quotations.requireIdentifier(customerId, 'customerId');
++    requireIdentifier(customerId, 'customerId');
+     if (!Array.isArray(lines) || lines.length === 0) throw new Error('An order requires at least one line');
+-    for (const line of lines) this.quotations.validateLine(line);
++    for (const line of lines) validateLine(line);
+ 
+     const client = await this.pool.connect();
+     try {
