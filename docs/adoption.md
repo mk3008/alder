@@ -85,21 +85,43 @@ For the recommended local setup, copy [the review knowledge](phase2/review-knowl
 
 A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
-### Optional: draft a human-reviewed behavior/check list
+### Optional: draft and review Atomic Checks
 
-After humans have completed Business Design and its business-correlation review, an AI can use the [behavior/check draft prompt](behavior-derivation/candidate-c3.md) to prepare a list for designers and requesters. Read the **whole Business Design**; organize only the output by Activity. Derive concrete checks from activity conditions, preceding outputs and subsequent inputs, Data/Role/Rule constraints, and relevant zero/one/many, missing-target, boundary, failure and continuation cases.
+After humans have completed Business Design and its business-correlation review, an AI can use the [behavior/check draft prompt](behavior-derivation/candidate-c3.md) to prepare Atomic Checks for designers and requesters. Read the **whole Business Design**; organize only the output by Activity or an already-reviewed Functional Interface. Derive concrete checks from activity conditions, preceding outputs and subsequent inputs, Data/Role/Rule constraints, and relevant zero/one/many, missing-target, boundary, failure and continuation cases.
 
-The human-facing list should make **one Check Item represent one independently reviewable observable expectation whenever practical**. Keep the main view short (condition → expected result); split distinct cardinality cases, exclusions, side-effect prohibitions and downstream-continuation checks instead of hiding several judgments in one long card. Keep provenance (explicit / strong derivation / consideration candidate), confidence, priority, connections and evidence as supporting metadata rather than forcing all of it into the primary reading surface. Do not mechanically split inseparable conditions merely to increase the item count.
+The human-facing view should make **one Atomic Check represent one independently reviewable observable expectation whenever practical**. People primarily review ID, title, expected result, and review state. Keep exact conditions, evidence, derivation classification/confidence, connections and later Test/Code mappings as supporting detail under the same ID. Do not mechanically split inseparable conditions merely to increase the item count.
 
-The AI writes the first draft. Humans review, correct and add items to complete the check list before handing it to the AI for test implementation. Provenance, confidence and priority guide that review; none constitutes approval. Keep plausible expected-result proposals visibly unapproved, and return only genuinely undecided business meaning to Business Design. Update Business Design first if a decision changes its meaning. The [atomic-check regression](behavior-derivation/stage5-atomic-checks.md) records the real-use readability correction that led to this format.
+Use these review states independently from AI confidence and test evidence: **未レビュー / 要確認 / 確認済み / 要修正**. A high-confidence AI derivation is still unreviewed until a person checks it. A human-confirmed Check may still have missing automated-test evidence.
 
-Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to tests; do not turn unapproved candidates into pass/fail expectations. This is an optional drafting aid, not an additional business-design audit, a requirement to resolve every benchmark, or a claim that AI output is complete. The [research conclusion](behavior-derivation/conclusion.md) records the evidence and limits; review-time savings and general reliability have not been measured. Review knowledge v0.3 is unchanged.
+The AI writes the first draft. Humans review, correct and add items to complete the Check list before handing it to the AI for test implementation. If review changes business meaning, **Business Design must be updated and human-confirmed first**; do not let a Check, Decision Record, test or existing implementation become a hidden replacement for Business Design. Then update affected Interfaces/Checks, Decisions, tests and code from that confirmed revision.
 
-### Optional: use operation contracts as a traceability index
+Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to representative test assertions and primary code/SQL entry points. Do not turn unapproved candidates into pass/fail expectations. The [Atomic Check traceability guide](atomic-check-traceability.md) defines the two-layer view, review states, authority boundary, and meaning-preservation audit. The [research conclusion](behavior-derivation/conclusion.md) records evidence and limits. Review knowledge v0.3 is unchanged.
 
-Where one Activity contains independently observable capabilities, or responsibility spans several checks and implementation locations, the [Functional Interface prompt](functional-interface/prompt.md) can draft a small intermediate index. Derive contracts from the whole completed Business Design, then relate them to the c3 checks, test assertions and code. Humans review and complete both drafts. An Interface is an observable operation contract, not a required function, API, class or file; several contracts may share code and one contract may span Python, SQL and tests.
+### Optional: use Functional Interfaces as a responsibility index
 
-Keep source revisions and distinguish missing implementation, conflicting behavior, partial/missing test evidence, unapproved candidates and technical support. A passing test or a matching name does not establish a semantic mapping. Use this index only when it clarifies responsibility or change navigation; it may live in the existing check list or mapping table instead of a separate specification. Direct Business Design → Check → Test/Code mapping remains sufficient where clear. The [one-case study](functional-interface/study.md) records both useful indexing and duplicate-maintenance cost; no detection-rate or review-time advantage was established. This adds no mandatory phase and does not replace c3 or review knowledge v0.3.
+Where one Activity contains independently observable capabilities, or responsibility spans several Atomic Checks and implementation locations, the [Functional Interface prompt](functional-interface/prompt.md) can draft a small intermediate index. Derive contracts from the whole completed Business Design, then relate them to Atomic Checks, test assertions and code. Humans review and complete both drafts. An Interface is an observable operation contract, not a required function, API, class or file; several contracts may share code and one contract may span Python, SQL and tests.
+
+Use the combined trace only where it improves navigation:
+
+```text
+Business Design
+  ↓
+Functional Interface
+  ↓
+Atomic Check
+  ↓
+Automated Test
+  ↓
+Code
+```
+
+The downward direction is **meaning authority**: Business Design is the SSOT. For review and maintenance, trace both directions so an AI can answer “which code realizes this Check?” and “which approved business expectation justifies this test?” Reverse tracing is diagnostic; it never promotes current code or tests into Business Design without human approval.
+
+Keep source revisions and distinguish missing implementation, conflicting behavior, partial/missing test evidence, unapproved candidates and technical support. A passing test or a matching name does not establish a semantic mapping. If a human review exposes a meaning conflict or missing policy, return to Business Design first, then update downstream artifacts.
+
+When Checks are split, renamed, regrouped or regenerated, perform a **meaning-preservation audit**: account for each independent guarantee in the old representation, record intentional removals, and re-check against Business Design. The previous Check set can be a transformation regression oracle, but it is not the SSOT.
+
+Use this index only when it clarifies responsibility or change navigation; it may live in the existing Check list or mapping table instead of a separate specification. Direct Business Design → Check → Test/Code mapping remains sufficient where clear. Do not maintain a complete code-line matrix. The [Atomic Check traceability guide](atomic-check-traceability.md) records the current operating form, while the [Functional Interface study](functional-interface/study.md) records the earlier bounded evaluation and duplicate-maintenance cost.
 
 ## 3. Let the AI implement without inventing business policy
 
