@@ -27,6 +27,10 @@ Within this fixed set, reviews identified unresolved operational questions and r
 
 The [review knowledge validation record](phase2/review-knowledge-v0.3.md) links the evidence and documents the finding that did not recur.
 
+Separately, [Atomic Check traceability](atomic-check-traceability.md) was applied to Velvet's `execute-transfer` slice in Issue #43 / PR #44. The human reviewer reported that the Functional Interface + Atomic Check presentation was substantially easier to review than the earlier compound Check rows. Bounded AI probes then traced representative Checks forward to Business/Decision evidence, tests and code, and traced a multi-destination test backward to its Check and Decision. The same exercise distinguished missing direct test evidence from missing implementation, exposed a meaning conflict for human review, and used a meaning-preservation audit to recover guarantees that had disappeared during a formatting change.
+
+This is one real-product slice with one human reviewer and bounded AI probes. It does not establish lower review time, higher detection rate, completeness, general applicability, or optimal title wording. Business Design remained the SSOT; reverse tracing was used diagnostically rather than to promote existing implementation behavior into business meaning.
+
 Separately, [small exploratory architecture comparisons and follow-up evaluation](maintenance-risk-review/results.md) in Issue #45 observed isolation from boundaries suited to the tested risk. Adding a concrete future risk to current requirements also produced a local boundary without specifying an architecture style or solution. These observations do not establish long-term recovery of a comprehensive architecture's initial investment or superiority in total maintenance cost, and neither universally recommend nor reject any architecture style.
 
 ## Next questions
