@@ -1,0 +1,13 @@
+{
+  "integrity": "PASS",
+  "prior_evidence_unchanged": 40,
+  "counts": {
+    "meeting-room-c3": {
+      "items": 24,
+      "明示": 3,
+      "強い導出": 20,
+      "考慮候補": 1,
+      "優先": 7
+    }
+  }
+}

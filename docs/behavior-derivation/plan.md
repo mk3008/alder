@@ -2,7 +2,7 @@
 
 [依頼](https://github.com/mk3008/alder/issues/62)。開始時main: `d1c7c67f4208a8958a7063bb09ede8f9c254ed4d`。現行v0.3、元Business Design、過去の実装は変更しない。
 
-本書は初回計画を保存する。後続の[継続指示](https://github.com/mk3008/alder/pull/63#issuecomment-5738020150)では、未決検出を研究成果として認め、全ケースresolved化を完了条件から外した。現行の追加評価は[第3段階](stage3.md)を参照。
+本書は初回計画を保存する。後続の[継続指示](https://github.com/mk3008/alder/pull/63#issuecomment-5738020150)では、未決検出を研究成果として認め、全ケースresolved化を完了条件から外した。第3段階の記録は[こちら](stage3.md)。その後、[第4段階](stage4.md)で評価対象を完成済みBusiness Design全文からの検査項目初稿へ訂正した。
 
 ## 少数の導出観点
 
