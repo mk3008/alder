@@ -53,6 +53,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Inference, candidate order, evaluation budget and sufficient results | Adopted with limited scope | [Technical evaluation](#technical-evaluation) |
 | Preventing predictable operator errors through ordinary structure | Adopted with limited scope | [Operational error resistance](#operational-error-resistance) |
 | Reusing benchmarks and stopping bounded evaluation | Adopted | [Research operation](#research-operation) |
+| Human-readable behavior/check lists derived before implementation | Inconclusive / deferred; unresolved-input checkpoint | [Behavior derivation](#behavior-derivation) |
 
 ## Scope and placement
 
@@ -121,6 +122,10 @@ The adopted guidance tries promising candidates first, tests decision-changing u
 ## Operational error resistance
 
 **Remove a cheap predictable trap before relying on a runbook — adopted with limited scope.** [#54 analysis](operational-error-resistance.md) compared existing guidance with six authored cases: ordering, destructive defaults, interrupted retries, ambiguous handoff, partial configuration and legitimate manual judgment. Reflection: [adoption §3](adoption.md#prefer-error-resistant-operation) and the implementation prompt; no philosophy or review-knowledge addition. Reason: existing questions can expose consequences, but did not explicitly prefer a simple structural remedy among acceptable implementation shapes. Limit: analytical cases, not observed operator incidents or measured agent/error reduction; compatibility, availability, external responsibility and legitimate manual judgment remain constraints. Reconsider if concrete use exposes harm to continuity or unjustified automation, or if a consequential adoption decision needs behavioral evidence. This is not a blanket fail-closed, full-automation or UI-redesign rule.
+
+## Behavior derivation
+
+**Human-readable behavior/check lists — inconclusive / deferred.** [Issue #62 stage-one results](behavior-derivation/results.md) preserve one frozen candidate and three fresh derivations from the fixed benchmark Business Designs. The 43 items included useful boundaries and seven explicit review priorities, but missed several known business-meaning questions; one normal/high-confidence facilities item also overextended into an unresolved condition. Reflection: research artifacts only; no change to v0.3 or the standard workflow. Reason: source links and confidence labels alone did not justify reviewing only prioritized items. The fixed meeting-room snapshot correctly reused the already approved reservation-preservation decision. Limits: incomplete inputs, one run per case, uncalibrated confidence, no measured human review-time saving, and no resolved-input evaluation. Reconsider after [human decisions](behavior-derivation/decision-packet.md), a separately reviewed resolved snapshot, and a targeted correction of operational-meaning omissions and overlapping item conditions. Existing requirements-validation foundations are reused; selected test-design background and its boundary are recorded in the [study plan](behavior-derivation/plan.md).
 
 ## Research operation
 
