@@ -1,0 +1,19 @@
+{
+  "integrity": "pass",
+  "checks": 45,
+  "classifications": {
+    "強い導出": 14,
+    "明示": 30,
+    "考慮候補": 1
+  },
+  "source_ranges": 82,
+  "audited_items_including_Q01": 46,
+  "retained_wording_findings": [
+    "C06"
+  ],
+  "protected_baseline_files": 57,
+  "pinned_velvet_blobs_checked": 13,
+  "semantic_validation": "not performed by this script; see audit and study",
+  "isolated_generation_validated": false,
+  "human_approval": false
+}

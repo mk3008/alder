@@ -33,6 +33,8 @@ This is one real-product slice with one human reviewer and bounded AI probes. It
 
 Separately, [small exploratory architecture comparisons and follow-up evaluation](maintenance-risk-review/results.md) in Issue #45 observed isolation from boundaries suited to the tested risk. Adding a concrete future risk to current requirements also produced a local boundary without specifying an architecture style or solution. These observations do not establish long-term recovery of a comprehensive architecture's initial investment or superiority in total maintenance cost, and neither universally recommend nor reject any architecture style.
 
+Separately, [Issue #71](behavior-derivation/issue-71.md) records one known-context application of current c3 to the resolved meeting-room design and a pinned-document assessment of Velvet's reference cases. It demonstrates how grounded checks, unapproved proposals and unresolved alternatives can be represented without reopening settled scope, while retaining a wording defect and unexpanded conditions for review. It does **not** validate spontaneous discovery in an isolated initial-draft run or establish sufficiency. No c3 change was adopted.
+
 ## Next questions
 
 The optimal division between pre-implementation and post-implementation review, workflow integration, and low-cost regression checks remain research questions. Long-term maintainability, comprehension costs, and generalization of the architecture observations remain unvalidated.
