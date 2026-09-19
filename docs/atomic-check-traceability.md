@@ -226,11 +226,11 @@ If direct Business Design → Check → Test/Code traceability is already clear,
 
 ## 9. Evidence and limits
 
-The human-readable form was refined through the Velvet execute-transfer application in Issue #43 / PR #44 after the earlier Functional Interface study.
+The human-readable form was refined through the Velvet execute-transfer application in [Issue #43](https://github.com/mk3008/velvet/issues/43) / [PR #44](https://github.com/mk3008/velvet/pull/44) after the earlier Functional Interface study.
 
 Observed in that bounded case:
 
-- people found Functional Interface responsibility groups easier to review than the earlier large Check cards
+- the human reviewer found the Functional Interface responsibility groups and Atomic Check presentation substantially easier to review than the earlier compound Check rows
 - Atomic Checks made individual expectations easier to discuss
 - an AI could trace representative Checks forward to tests/code and trace a multi-destination test backward to its Check and Decision
 - the mapping distinguished transaction atomicity from per-Link no-op behavior
