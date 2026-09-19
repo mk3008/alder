@@ -52,4 +52,4 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.2** adds bounded technical-evaluation guidance while retaining **research review knowledge v0.3** unchanged. Alder remains a research candidate; see the [v0.2 release notes](docs/release-notes-v0.2.md). It requires no framework, CLI, or runtime package.
+**Alder v0.3** adds optional human/AI Atomic Check traceability while retaining **research review knowledge v0.3** unchanged. Alder remains a research candidate; see the [v0.3 release notes](docs/release-notes-v0.3.md). It requires no framework, CLI, or runtime package.
