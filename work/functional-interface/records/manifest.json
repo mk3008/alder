@@ -1,0 +1,33 @@
+{
+  "base_revision": "ac48516aabc2358cb7a01f0ec123fa91b38702c7",
+  "implementation_revision": "94f6f639b850a92ce5ad55812a4899e7a2c7bc33",
+  "mode": "single evaluator; not blind; no fresh-agent or model comparison",
+  "implementation_files": {
+    "apps/meeting-room/.gitignore": "84366a3766e790961a168b806544fb4103c6d8820644c61404dc9b7deeda3190",
+    "apps/meeting-room/DECISIONS.md": "9fe1d8bd4baa1345306a4708b14c9caf750800c94d4a3b446f97e0829986b200",
+    "apps/meeting-room/README.md": "d8e4230e7e23c3b0c057d0f04d9b225aa7950fb37b8a00c010dfd9ef2da369f3",
+    "apps/meeting-room/cli.py": "6f99ae07ef8690f0a442225efcf9859dcc7ebf3af5de6c40a827a951c0d18952",
+    "apps/meeting-room/meeting_room.py": "5bfd7e6b70b70373839effeabf2ab17ad37b93d1821c5cbe31e9ef3484acb312",
+    "apps/meeting-room/rooms.example.json": "23f5d533800e37ab4a38910c4f7671695dd33a221c131d2f4083c302ed09cfb9",
+    "apps/meeting-room/schema.sql": "a924efb43ffb23ddcf4b3529cde01084ef00175684a00f0cf3fa3d479191cc05",
+    "apps/meeting-room/tests/test_meeting_room.py": "14bc9f4d00091019218a02ba4f0be0beaba0d52074dd6d3220b095ee95090372"
+  },
+  "sha256": {
+    "work/behavior-derivation/stage2/inputs/meeting-room.md": "f114d732ed9dff18fad55204b6823945fd4e9c462f785e34d544cfa34cebc2af",
+    "work/behavior-derivation/stage4/outputs/meeting-room-c3.md": "49dd7186b8f8878290e75f52143d3facf8b1853c5b0436a36d9111d92d03e946",
+    "docs/behavior-derivation/candidate-c3.md": "fd626999c3e1d6e6d7fb8c572580b6b72880d6b5c9dd6f67be34ef99cdcc1673",
+    "docs/functional-interface/prompt.md": "8651460c7fccf96cea80bed1718698e36d6dc992b2a5d3b5f2647ac339b12429",
+    "docs/functional-interface/interfaces.md": "2bbb4b91660f7473a8a8778c3d6f3227b889c48a49b5ebc2dccfa6f8f82d80d7",
+    "work/functional-interface/mapping.json": "5cd8abe2ccfaa3bf7ea4b9e7f9a0bfe7fdd2bd5d2ea96375e9acc31aae8fed89",
+    "work/functional-interface/records/evaluation.json": "55e62821e6b1e6ced403355c99161163e63bc4130009c23c82a725864a6d63ae",
+    "work/functional-interface/records/request.json": "85a0b0bcafcfef7014fb6c4297b2bde30c0ca7b106f1acf6c31f8572cce836d3"
+  },
+  "derivation": {
+    "method": "single evaluator applies f1 and assigns existing c3 checks; code/old reviews known, not fresh or blind",
+    "output": "docs/functional-interface/interfaces.md",
+    "mapping": "work/functional-interface/mapping.json",
+    "model_effort": "inherited runtime; no independent attestation",
+    "new_business_decisions": false,
+    "human_completed_drafts": false
+  }
+}
