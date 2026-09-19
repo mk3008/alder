@@ -1,0 +1,20 @@
+{
+  "integrity": "PASS",
+  "stage1_evidence_unchanged": 23,
+  "counts": {
+    "meeting-room": {
+      "items": 16,
+      "明示": 4,
+      "強い導出": 12,
+      "要確認": 0,
+      "優先": 3
+    },
+    "purchase-request-c2": {
+      "items": 13,
+      "明示": 4,
+      "強い導出": 5,
+      "要確認": 4,
+      "優先": 4
+    }
+  }
+}
