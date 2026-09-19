@@ -1,0 +1,76 @@
+{
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "implementation_revision": "94f6f639b850a92ce5ad55812a4899e7a2c7bc33",
+  "baseline": {
+    "exit_code": 0,
+    "output": "test_all_overlap_shapes_and_touching_boundaries (test_meeting_room.BookingTests.test_all_overlap_shapes_and_touching_boundaries) ... ok\ntest_authority_and_cancelled_terminal_state (test_meeting_room.BookingTests.test_authority_and_cancelled_terminal_state) ... ok\ntest_cancel_while_unavailable_remains_cancelled_after_resume (test_meeting_room.BookingTests.test_cancel_while_unavailable_remains_cancelled_after_resume) ... ok\ntest_change_excludes_self_and_failed_change_preserves_original (test_meeting_room.BookingTests.test_change_excludes_self_and_failed_change_preserves_original) ... ok\ntest_cli_real_process_flow_and_identity (test_meeting_room.BookingTests.test_cli_real_process_flow_and_identity) ... ok\ntest_clock_is_sampled_after_write_lock (test_meeting_room.BookingTests.test_clock_is_sampled_after_write_lock) ... ok\ntest_concurrent_changes_keep_loser_original (test_meeting_room.BookingTests.test_concurrent_changes_keep_loser_original) ... ok\ntest_concurrent_reservations_have_one_winner (test_meeting_room.BookingTests.test_concurrent_reservations_have_one_winner) ... ok\ntest_concurrent_reserve_and_change (test_meeting_room.BookingTests.test_concurrent_reserve_and_change) ... ok\ntest_disable_and_change_preserve_original_or_successful_change (test_meeting_room.BookingTests.test_disable_and_change_preserve_original_or_successful_change) ... ok\ntest_disable_and_reserve_are_serialized (test_meeting_room.BookingTests.test_disable_and_reserve_are_serialized) ... ok\ntest_empty_room_unavailability_and_resume (test_meeting_room.BookingTests.test_empty_room_unavailability_and_resume) ... ok\ntest_full_lifecycle_persistence_and_released_slots (test_meeting_room.BookingTests.test_full_lifecycle_persistence_and_released_slots) ... ok\ntest_initialization_never_overwrites (test_meeting_room.BookingTests.test_initialization_never_overwrites) ... ok\ntest_interval_validation_and_past_availability (test_meeting_room.BookingTests.test_interval_validation_and_past_availability) ... ok\ntest_missing_inputs_and_records (test_meeting_room.BookingTests.test_missing_inputs_and_records) ... ok\ntest_move_from_unavailable_room_preserves_facts_and_checks_destination (test_meeting_room.BookingTests.test_move_from_unavailable_room_preserves_facts_and_checks_destination) ... ok\ntest_no_unrequested_cutoff_for_existing_reservations (test_meeting_room.BookingTests.test_no_unrequested_cutoff_for_existing_reservations) ... ok\ntest_sql_parameters_and_database_guards (test_meeting_room.BookingTests.test_sql_parameters_and_database_guards) ... ok\ntest_unavailable_preserves_all_reservations_and_resume_occupancy (test_meeting_room.BookingTests.test_unavailable_preserves_all_reservations_and_resume_occupancy) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.828s\n\nOK\n"
+  },
+  "observations": {
+    "P1_future_boundary": [
+      {
+        "start": "2020-01-01T00:00:00Z",
+        "candidate_count": 1,
+        "resolved_M1_requires_no_candidates": true,
+        "resolved_M1_satisfied": false
+      },
+      {
+        "start": "2030-01-01T00:00:00Z",
+        "candidate_count": 1,
+        "resolved_M1_requires_no_candidates": true,
+        "resolved_M1_satisfied": false
+      },
+      {
+        "start": "2030-01-02T10:00:00Z",
+        "candidate_count": 1,
+        "resolved_M1_requires_no_candidates": false,
+        "resolved_M1_satisfied": true
+      }
+    ],
+    "P2_cardinality": [
+      {
+        "configured_rooms": 0,
+        "returned_candidates": 0
+      },
+      {
+        "configured_rooms": 1,
+        "returned_candidates": 1
+      },
+      {
+        "configured_rooms": 3,
+        "returned_candidates": 3
+      }
+    ],
+    "P3_missing_targets": {
+      "reserve": "room_not_found",
+      "change": "reservation_not_found",
+      "cancel": "reservation_not_found",
+      "disable": "room_not_found",
+      "resume": "room_not_found"
+    },
+    "P4_lost_result": {
+      "reservation_count_observed_by_evaluator_SQL_only": 1,
+      "retry_result": "overlap",
+      "cli_commands": [
+        "availability",
+        "cancel",
+        "change",
+        "init",
+        "reserve",
+        "resume",
+        "unavailable"
+      ],
+      "semantic_note": "SQL is evaluator evidence, not a supported user reconciliation route. Code inspection is needed to conclude the route is missing."
+    },
+    "P5_failure_to_cancel": {
+      "change_result": "room_unavailable",
+      "original_preserved": true,
+      "same_id_after_cancel": true,
+      "cancelled_state": "cancelled",
+      "released_candidate_ids": [
+        "0"
+      ]
+    }
+  },
+  "interpretation": "Historical tests can pass while resolved-design mappings fail. Probes report observations, not product acceptance."
+}

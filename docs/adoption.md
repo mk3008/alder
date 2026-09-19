@@ -93,6 +93,12 @@ The AI writes the first draft. Humans review, correct and add items to complete 
 
 Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to tests; do not turn unapproved candidates into pass/fail expectations. This is an optional drafting aid, not an additional business-design audit, a requirement to resolve every benchmark, or a claim that AI output is complete. The [research conclusion](behavior-derivation/conclusion.md) records the evidence and limits; review-time savings and general reliability have not been measured. Review knowledge v0.3 is unchanged.
 
+### Optional: use operation contracts as a traceability index
+
+Where one Activity contains independently observable capabilities, or responsibility spans several checks and implementation locations, the [Functional Interface prompt](functional-interface/prompt.md) can draft a small intermediate index. Derive contracts from the whole completed Business Design, then relate them to the c3 checks, test assertions and code. Humans review and complete both drafts. An Interface is an observable operation contract, not a required function, API, class or file; several contracts may share code and one contract may span Python, SQL and tests.
+
+Keep source revisions and distinguish missing implementation, conflicting behavior, partial/missing test evidence, unapproved candidates and technical support. A passing test or a matching name does not establish a semantic mapping. Use this index only when it clarifies responsibility or change navigation; it may live in the existing check list or mapping table instead of a separate specification. Direct Business Design → Check → Test/Code mapping remains sufficient where clear. The [one-case study](functional-interface/study.md) records both useful indexing and duplicate-maintenance cost; no detection-rate or review-time advantage was established. This adds no mandatory phase and does not replace c3 or review knowledge v0.3.
+
 ## 3. Let the AI implement without inventing business policy
 
 Alder does not prescribe an architecture style or when to introduce structure. Give the implementation agent the Business Design, current requirements, project constraints, and the information below; let it choose how to realize them. See [the architecture position](philosophy.md#ai-coding-and-architecture).

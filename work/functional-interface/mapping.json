@@ -1,0 +1,1260 @@
+{
+  "design_revision": "ac48516aabc2358cb7a01f0ec123fa91b38702c7",
+  "design_path": "work/behavior-derivation/stage2/inputs/meeting-room.md",
+  "checks_path": "work/behavior-derivation/stage4/outputs/meeting-room-c3.md",
+  "implementation_revision": "94f6f639b850a92ce5ad55812a4899e7a2c7bc33",
+  "scope": "24 checks assigned; 12 representative semantic claims inspected, not exhaustive check coverage",
+  "interfaces": [
+    {
+      "id": "IF-01",
+      "activity": 1
+    },
+    {
+      "id": "IF-02",
+      "activity": 2
+    },
+    {
+      "id": "IF-03",
+      "activity": 2
+    },
+    {
+      "id": "IF-04",
+      "activity": 3
+    },
+    {
+      "id": "IF-05",
+      "activity": 4
+    },
+    {
+      "id": "IF-06",
+      "activity": 5
+    },
+    {
+      "id": "IF-07",
+      "activity": 6
+    }
+  ],
+  "assignments": [
+    {
+      "check": "MR-01",
+      "primary": "IF-01",
+      "related": [
+        "IF-02"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-02",
+      "primary": "IF-01",
+      "related": [],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-03",
+      "primary": "IF-01",
+      "related": [
+        "IF-02",
+        "IF-04"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-04",
+      "primary": "IF-01",
+      "related": [
+        "IF-02"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-05",
+      "primary": "IF-02",
+      "related": [
+        "IF-03",
+        "IF-04",
+        "IF-05"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-06",
+      "primary": "IF-02",
+      "related": [],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-07",
+      "primary": "IF-02",
+      "related": [
+        "IF-04"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-08",
+      "primary": "IF-03",
+      "related": [
+        "IF-02",
+        "IF-04",
+        "IF-05"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-09",
+      "primary": "IF-03",
+      "related": [
+        "IF-02"
+      ],
+      "approval": "candidate_unapproved"
+    },
+    {
+      "check": "MR-10",
+      "primary": "IF-02",
+      "related": [],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-11",
+      "primary": "IF-04",
+      "related": [
+        "IF-01"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-12",
+      "primary": "IF-04",
+      "related": [],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-13",
+      "primary": "IF-04",
+      "related": [
+        "IF-05"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-14",
+      "primary": "IF-04",
+      "related": [
+        "IF-03"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-15",
+      "primary": "IF-04",
+      "related": [
+        "IF-05",
+        "IF-06"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-16",
+      "primary": "IF-05",
+      "related": [
+        "IF-01",
+        "IF-02",
+        "IF-06"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-17",
+      "primary": "IF-05",
+      "related": [
+        "IF-03"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-18",
+      "primary": "IF-04",
+      "related": [
+        "IF-05"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-19",
+      "primary": "IF-06",
+      "related": [
+        "IF-01",
+        "IF-02",
+        "IF-04"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-20",
+      "primary": "IF-06",
+      "related": [
+        "IF-04",
+        "IF-05",
+        "IF-07"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-21",
+      "primary": "IF-06",
+      "related": [
+        "IF-07"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-22",
+      "primary": "IF-07",
+      "related": [
+        "IF-01",
+        "IF-02",
+        "IF-04"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-23",
+      "primary": "IF-07",
+      "related": [
+        "IF-04",
+        "IF-05"
+      ],
+      "approval": "draft_not_human_completed"
+    },
+    {
+      "check": "MR-24",
+      "primary": "IF-07",
+      "related": [
+        "IF-06"
+      ],
+      "approval": "draft_not_human_completed"
+    }
+  ],
+  "claims": [
+    {
+      "id": "M01",
+      "interfaces": [
+        "IF-01"
+      ],
+      "checks": [
+        "MR-01"
+      ],
+      "business_lines": [
+        [
+          29,
+          29
+        ],
+        [
+          97,
+          107
+        ]
+      ],
+      "status": "missing_check_test",
+      "claim": "有効な未来区間で0/1/複数の選択対象を返す",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.availability",
+          "lines": [
+            146,
+            155
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_full_lifecycle_persistence_and_released_slots",
+          "lines": [
+            64,
+            81
+          ]
+        }
+      ],
+      "test_assertions": "既存テストは初期3室、予約後2室、取消後3室をassert。P2で0/1/3室を観測。",
+      "limit": "既存20件に空一覧/1候補の直接assertは確認できない。P2は研究probeであり製品回帰追加ではない。",
+      "probe": [
+        "P2_cardinality"
+      ]
+    },
+    {
+      "id": "M02",
+      "interfaces": [
+        "IF-01"
+      ],
+      "checks": [
+        "MR-02"
+      ],
+      "business_lines": [
+        [
+          97,
+          107
+        ],
+        [
+          387,
+          387
+        ]
+      ],
+      "status": "implementation_gap",
+      "claim": "開始=検索時点・過去は予約候補にしない",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.availability",
+          "lines": [
+            146,
+            155
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_interval_validation_and_past_availability",
+          "lines": [
+            121,
+            133
+          ]
+        }
+      ],
+      "test_assertions": "旧テストは過去区間で3室を返すことをassert。P1は過去/同時点で1候補を返した。",
+      "limit": "コードもテストも存在するが新M1と逆の期待値。存在だけでmappedにしない。旧設計との版差。",
+      "gap_kind": "conflicting_behavior",
+      "probe": [
+        "P1_future_boundary"
+      ]
+    },
+    {
+      "id": "M03",
+      "interfaces": [
+        "IF-01",
+        "IF-02"
+      ],
+      "checks": [
+        "MR-03",
+        "MR-07"
+      ],
+      "business_lines": [
+        [
+          99,
+          105
+        ],
+        [
+          349,
+          355
+        ]
+      ],
+      "status": "mapped",
+      "claim": "同室の重複を除外し隣接・他室を区別する",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.availability",
+          "lines": [
+            146,
+            155
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.reserve",
+          "lines": [
+            157,
+            171
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.no_overlap",
+          "lines": [
+            139,
+            144
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_all_overlap_shapes_and_touching_boundaries",
+          "lines": [
+            83,
+            96
+          ]
+        }
+      ],
+      "test_assertions": "重複の各形状でreserve拒否とavailabilityからの除外、隣接/別室の予約成功を確認。",
+      "limit": "この行は時間帯/占有条項のみ。MR-07の同時性はM05。未来検索はM02。"
+    },
+    {
+      "id": "M04",
+      "interfaces": [
+        "IF-02",
+        "IF-04",
+        "IF-05"
+      ],
+      "checks": [
+        "MR-05",
+        "MR-11",
+        "MR-16"
+      ],
+      "business_lines": [
+        [
+          43,
+          60
+        ],
+        [
+          146,
+          155
+        ],
+        [
+          193,
+          212
+        ],
+        [
+          248,
+          257
+        ]
+      ],
+      "status": "mapped",
+      "claim": "予約の同一性・本人・登録日時を後続操作へ渡す",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.reserve",
+          "lines": [
+            157,
+            171
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.change",
+          "lines": [
+            173,
+            185
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.cancel",
+          "lines": [
+            187,
+            193
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_full_lifecycle_persistence_and_released_slots",
+          "lines": [
+            64,
+            81
+          ]
+        }
+      ],
+      "test_assertions": "返されたidで再接続後にchange/cancel。booker/registered_us、変更時のid/purpose/state保持、取消日時と枠解放をassert。",
+      "limit": "返答を受け取ってID既知の経路。結果喪失後のIF-03の証拠ではない。"
+    },
+    {
+      "id": "M05",
+      "interfaces": [
+        "IF-02",
+        "IF-04"
+      ],
+      "checks": [
+        "MR-07",
+        "MR-13"
+      ],
+      "business_lines": [
+        [
+          200,
+          206
+        ],
+        [
+          350,
+          355
+        ]
+      ],
+      "status": "mapped",
+      "claim": "同時要求でも占有が重複せず変更の敗者の元予約を保つ",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.transaction",
+          "lines": [
+            94,
+            116
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.reserve",
+          "lines": [
+            157,
+            171
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.change",
+          "lines": [
+            173,
+            185
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.no_overlap",
+          "lines": [
+            139,
+            144
+          ]
+        },
+        {
+          "path": "apps/meeting-room/schema.sql",
+          "lines": [
+            28,
+            52
+          ],
+          "symbol": "reservation_insert_guard / reservation_update_guard / cancelled_is_terminal"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_concurrent_reservations_have_one_winner",
+          "lines": [
+            243,
+            245
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_concurrent_changes_keep_loser_original",
+          "lines": [
+            247,
+            254
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_concurrent_reserve_and_change",
+          "lines": [
+            256,
+            263
+          ]
+        }
+      ],
+      "test_assertions": "4予約要求で1成功、2変更で1成功かつ敗者の全元情報保持、予約対変更で重複なしをassert。",
+      "limit": "Python検査/transaction/SQLの複数箇所へ対応。公平性・無限再試行等の保証は含まない。"
+    },
+    {
+      "id": "M06",
+      "interfaces": [
+        "IF-03"
+      ],
+      "checks": [
+        "MR-08"
+      ],
+      "business_lines": [
+        [
+          43,
+          56
+        ],
+        [
+          159,
+          161
+        ],
+        [
+          387,
+          387
+        ]
+      ],
+      "status": "implementation_gap",
+      "claim": "保存結果を失いIDを知らなくても本人が保存確認・対象特定して継続する",
+      "implementation": [],
+      "tests": [],
+      "test_assertions": "旧CLIは予約照合操作なし。P4は保存済み1件に対する再予約がoverlapとなるだけと確認。",
+      "limit": "owned(db,id)はID既知を前提とする内部検査。評価者SQLは利用者の経路ではない。旧実装の明示されたPython/CLI契約の範囲でmissing。",
+      "gap_kind": "missing_user_route",
+      "probe": [
+        "P4_lost_result"
+      ],
+      "rejected_candidates": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.owned",
+          "lines": [
+            127,
+            136
+          ]
+        },
+        {
+          "path": "apps/meeting-room/cli.py",
+          "symbol": "parser",
+          "lines": [
+            13,
+            33
+          ]
+        },
+        {
+          "path": "apps/meeting-room/cli.py",
+          "symbol": "main",
+          "lines": [
+            52,
+            77
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "interfaces": [
+        "IF-03"
+      ],
+      "checks": [
+        "MR-09"
+      ],
+      "business_lines": [
+        [
+          159,
+          161
+        ]
+      ],
+      "status": "ambiguous_mapping",
+      "claim": "未保存での中断確認・再試行を照合契約に含める候補",
+      "implementation": [],
+      "tests": [],
+      "test_assertions": "c3が候補・未承認と明記。M2の起点は保存後の結果喪失。",
+      "limit": "未保存までの適用を人間が採用/修正/除外するまで実装gapに数えない。人間の承認待ちで研究を止めない。",
+      "approval": "candidate_unapproved"
+    },
+    {
+      "id": "M08",
+      "interfaces": [
+        "IF-04",
+        "IF-05"
+      ],
+      "checks": [
+        "MR-13",
+        "MR-15",
+        "MR-16"
+      ],
+      "business_lines": [
+        [
+          200,
+          208
+        ],
+        [
+          248,
+          253
+        ]
+      ],
+      "status": "missing_check_test",
+      "claim": "変更拒否後に元予約を確認し同じ対象の取消へ続行する",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.change",
+          "lines": [
+            173,
+            185
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.cancel",
+          "lines": [
+            187,
+            193
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.owned",
+          "lines": [
+            127,
+            136
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.transaction",
+          "lines": [
+            94,
+            116
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_change_excludes_self_and_failed_change_preserves_original",
+          "lines": [
+            98,
+            106
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_cancel_while_unavailable_remains_cancelled_after_resume",
+          "lines": [
+            189,
+            201
+          ]
+        }
+      ],
+      "test_assertions": "各既存テストは拒否時保持と取消を別々にassert。P5は変更先不可→保持→同じID取消→枠解放を連続観測。",
+      "limit": "元のテストにこの連続シナリオの直接証拠はない。部分証拠は存在する。1Check=1Testを要求せず、人間が合成証拠の十分性を判断する。",
+      "probe": [
+        "P5_failure_to_cancel"
+      ]
+    },
+    {
+      "id": "M09",
+      "interfaces": [
+        "IF-02",
+        "IF-04",
+        "IF-05",
+        "IF-06",
+        "IF-07"
+      ],
+      "checks": [
+        "MR-10",
+        "MR-14",
+        "MR-17",
+        "MR-21"
+      ],
+      "business_lines": [
+        [
+          29,
+          29
+        ],
+        [
+          43,
+          43
+        ],
+        [
+          146,
+          146
+        ],
+        [
+          193,
+          206
+        ],
+        [
+          244,
+          251
+        ],
+        [
+          289,
+          301
+        ],
+        [
+          333,
+          343
+        ]
+      ],
+      "status": "mapped",
+      "claim": "対象なしで他対象を代用せず操作不成立とする",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.room",
+          "lines": [
+            119,
+            125
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.owned",
+          "lines": [
+            127,
+            136
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.reserve",
+          "lines": [
+            157,
+            171
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.change",
+          "lines": [
+            173,
+            185
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.cancel",
+          "lines": [
+            187,
+            193
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.set_available",
+          "lines": [
+            195,
+            204
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_missing_inputs_and_records",
+          "lines": [
+            135,
+            140
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_change_excludes_self_and_failed_change_preserves_original",
+          "lines": [
+            98,
+            106
+          ]
+        }
+      ],
+      "test_assertions": "room_not_found / reservation_not_foundと予約全行の保持をassert。P3はresume側も観測。",
+      "limit": "この行は対象不在の拒否だけ。正しい対象の再選択や中断時の発見経路全体をmappedにはしない。",
+      "probe": [
+        "P3_missing_targets"
+      ]
+    },
+    {
+      "id": "M10",
+      "interfaces": [
+        "IF-05",
+        "IF-07"
+      ],
+      "checks": [
+        "MR-16",
+        "MR-17"
+      ],
+      "business_lines": [
+        [
+          248,
+          257
+        ],
+        [
+          339,
+          339
+        ],
+        [
+          349,
+          356
+        ]
+      ],
+      "status": "mapped",
+      "claim": "利用不可中でも取消でき、再開しても取消事実と非占有を保つ",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.cancel",
+          "lines": [
+            187,
+            193
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.owned",
+          "lines": [
+            127,
+            136
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.set_available",
+          "lines": [
+            195,
+            204
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.availability",
+          "lines": [
+            146,
+            155
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_cancel_while_unavailable_remains_cancelled_after_resume",
+          "lines": [
+            189,
+            201
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_authority_and_cancelled_terminal_state",
+          "lines": [
+            108,
+            119
+          ]
+        }
+      ],
+      "test_assertions": "取消状態/時刻、再開後の保存行と候補復帰、再取消/変更拒否をassert。",
+      "limit": "取消の通信再試行方式や表示は保証しない。"
+    },
+    {
+      "id": "M11",
+      "interfaces": [
+        "IF-06",
+        "IF-07",
+        "IF-04"
+      ],
+      "checks": [
+        "MR-20",
+        "MR-22",
+        "MR-23"
+      ],
+      "business_lines": [
+        [
+          293,
+          301
+        ],
+        [
+          337,
+          339
+        ],
+        [
+          356,
+          357
+        ]
+      ],
+      "status": "mapped",
+      "claim": "不可化/再開で維持予約の事実・占有を保持し、変更済み予約は新しい枠を占有する",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.set_available",
+          "lines": [
+            195,
+            204
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.change",
+          "lines": [
+            173,
+            185
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.availability",
+          "lines": [
+            146,
+            155
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_unavailable_preserves_all_reservations_and_resume_occupancy",
+          "lines": [
+            152,
+            171
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_move_from_unavailable_room_preserves_facts_and_checks_destination",
+          "lines": [
+            173,
+            187
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_cancel_while_unavailable_remains_cancelled_after_resume",
+          "lines": [
+            189,
+            201
+          ]
+        }
+      ],
+      "test_assertions": "複数予約保持・再開後の占有、別室への移動後の旧枠解放/新枠占有、取消後の非占有を別テストでassert。",
+      "limit": "MR-23のA移動/B取消/C維持が同一室で混在する具体例そのものは未実行。mappedは列挙した条項と別々の証拠の範囲。"
+    },
+    {
+      "id": "M12",
+      "interfaces": [
+        "IF-04",
+        "IF-05",
+        "IF-06",
+        "IF-07"
+      ],
+      "checks": [
+        "MR-18",
+        "MR-19"
+      ],
+      "business_lines": [
+        [
+          17,
+          21
+        ],
+        [
+          181,
+          181
+        ],
+        [
+          232,
+          232
+        ],
+        [
+          277,
+          277
+        ],
+        [
+          321,
+          321
+        ]
+      ],
+      "status": "mapped",
+      "claim": "予約者の操作と管理担当者の判断を区別する",
+      "implementation": [
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.owned",
+          "lines": [
+            127,
+            136
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "MeetingRooms.set_available",
+          "lines": [
+            195,
+            204
+          ]
+        },
+        {
+          "path": "apps/meeting-room/meeting_room.py",
+          "symbol": "Actor.require",
+          "lines": [
+            22,
+            24
+          ]
+        },
+        {
+          "path": "apps/meeting-room/cli.py",
+          "symbol": "identity",
+          "lines": [
+            36,
+            49
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_authority_and_cancelled_terminal_state",
+          "lines": [
+            108,
+            119
+          ]
+        },
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_cli_real_process_flow_and_identity",
+          "lines": [
+            305,
+            324
+          ]
+        }
+      ],
+      "test_assertions": "他者/manager-onlyの取消/変更、user-onlyの管理、空のCLI identity mappingを拒否。",
+      "limit": "信頼されたローカルActor/CLIの境界。未信頼環境の認証安全性まで検証していない。"
+    }
+  ],
+  "reverse_samples": [
+    {
+      "code": {
+        "path": "apps/meeting-room/meeting_room.py",
+        "symbol": "initialize",
+        "lines": [
+          68,
+          86
+        ]
+      },
+      "classification": "technical_support",
+      "interfaces": [],
+      "basis": "設計の識別可能な既存会議室という前提、READMEのoffline provisioning、DR-5。カタログ登録という新しいBusiness Interfaceではない。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_initialization_never_overwrites",
+          "lines": [
+            298,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "path": "apps/meeting-room/meeting_room.py",
+        "symbol": "instant",
+        "lines": [
+          30,
+          40
+        ]
+      },
+      "classification": "technical_support",
+      "interfaces": [
+        "IF-01",
+        "IF-02",
+        "IF-04"
+      ],
+      "basis": "日時の表現選択DR-3。入力区間/未来/占有の比較を支える。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_interval_validation_and_past_availability",
+          "lines": [
+            121,
+            133
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "path": "apps/meeting-room/cli.py",
+        "symbol": "identity",
+        "lines": [
+          36,
+          49
+        ]
+      },
+      "classification": "technical_support",
+      "interfaces": [
+        "IF-01",
+        "IF-02",
+        "IF-04",
+        "IF-05",
+        "IF-06",
+        "IF-07"
+      ],
+      "basis": "RoleへのローカルOS UID適合。DR-2。新しい利用者登録業務ではない。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_cli_real_process_flow_and_identity",
+          "lines": [
+            305,
+            324
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "path": "apps/meeting-room/meeting_room.py",
+        "symbol": "MeetingRooms.transaction",
+        "lines": [
+          94,
+          116
+        ]
+      },
+      "classification": "technical_support",
+      "interfaces": [
+        "IF-02",
+        "IF-04",
+        "IF-05",
+        "IF-06",
+        "IF-07"
+      ],
+      "basis": "重複禁止/変更失敗時保持の実現手段。DR-6。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_concurrent_changes_keep_loser_original",
+          "lines": [
+            247,
+            254
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "path": "apps/meeting-room/meeting_room.py",
+        "symbol": "MeetingRooms.set_available",
+        "lines": [
+          195,
+          204
+        ]
+      },
+      "classification": "mapped",
+      "interfaces": [
+        "IF-06",
+        "IF-07"
+      ],
+      "basis": "一つの物理関数のFalse/Trueが二つの操作契約に対応。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_empty_room_unavailability_and_resume",
+          "lines": [
+            142,
+            150
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "path": "apps/meeting-room/meeting_room.py",
+        "symbol": "MeetingRooms.owned",
+        "lines": [
+          127,
+          136
+        ]
+      },
+      "classification": "technical_support",
+      "interfaces": [
+        "IF-04",
+        "IF-05"
+      ],
+      "basis": "既知IDの所有者/状態検査。IF-03の対象発見とは異なる。",
+      "test": [
+        {
+          "path": "apps/meeting-room/tests/test_meeting_room.py",
+          "symbol": "BookingTests.test_authority_and_cancelled_terminal_state",
+          "lines": [
+            108,
+            119
+          ]
+        }
+      ]
+    }
+  ],
+  "orphan_implementation": "None confirmed in inspected entry points and support samples; not an all-lines claim."
+}

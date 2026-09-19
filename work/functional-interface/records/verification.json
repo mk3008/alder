@@ -1,0 +1,15 @@
+{
+  "integrity": "PASS",
+  "interfaces": 7,
+  "check_assignments": 24,
+  "representative_claims": 12,
+  "claim_status_counts": {
+    "missing_check_test": 2,
+    "implementation_gap": 2,
+    "mapped": 7,
+    "ambiguous_mapping": 1
+  },
+  "related_interface_links": 35,
+  "prior_evidence_unchanged": 46,
+  "semantic_verdict": "manual; see docs/functional-interface/study.md; no completeness guarantee"
+}
