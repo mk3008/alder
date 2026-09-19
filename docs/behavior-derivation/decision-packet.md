@@ -1,4 +1,6 @@
-# Resolved fixtureに進むための人間判断
+# 業務判断の記録と未決事項（研究完了のゲートではない）
+
+[継続指示](https://github.com/mk3008/alder/pull/63#issuecomment-5738020150)に従い、F1–F4/P1–P4の回答依頼は取り下げる。以下の未決事項は検出能力を評価する資料として残す。実際に当該場面を仕様化・テスト化する際には判断が必要だが、ベンチマーク完成のために解決する必要はない。
 
 これは[Issue #62](https://github.com/mk3008/alder/issues/62)の研究用snapshotに必要な判断であり、実サービスの運用変更依頼ではない。M1/M2は2026-09-19の[人間判断](https://github.com/mk3008/alder/pull/63#issuecomment-5737722908)で確定した。F1–F4/P1–P4は未承認。元Business Designは変更せず、承認済み部分をevaluation用snapshotへ出所付きで反映する。
 

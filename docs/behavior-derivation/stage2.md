@@ -1,5 +1,7 @@
 # 第2段階 — 会議室の承認反映後の導出
 
+この文書は第2段階時点の計画と観測を保存する。末尾の全ケースresolved化・追加業務判断という完了条件は[継続指示](https://github.com/mk3008/alder/pull/63#issuecomment-5738020150)により撤回。現在の研究判断は[第3段階](stage3.md)を参照。
+
 ## 実行前の範囲と判断
 
 [PR #63の人間判断](https://github.com/mk3008/alder/pull/63#issuecomment-5737722908)でM1はB（検索時点でも未来条件を満たす候補）、M2は利用者自身による保存確認・対象特定・継続と確定した。追加の承認は求めない。[判断全文](../../work/behavior-derivation/stage2/records/human-decision.json)と[独立snapshot](../../work/behavior-derivation/stage2/inputs/meeting-room.md)を保存し、元入力・第1段階出力を変更しない。
