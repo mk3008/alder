@@ -1,0 +1,27 @@
+{
+  "integrity": "PASS",
+  "semantic_scoring": "manual; see results.md",
+  "counts": {
+    "facilities-maintenance": {
+      "items": 15,
+      "明示": 2,
+      "強い導出": 9,
+      "要確認": 4,
+      "優先": 4
+    },
+    "purchase-request": {
+      "items": 13,
+      "明示": 4,
+      "強い導出": 7,
+      "要確認": 2,
+      "優先": 2
+    },
+    "meeting-room": {
+      "items": 15,
+      "明示": 3,
+      "強い導出": 11,
+      "要確認": 1,
+      "優先": 1
+    }
+  }
+}

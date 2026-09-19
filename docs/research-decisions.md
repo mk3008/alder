@@ -53,6 +53,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Inference, candidate order, evaluation budget and sufficient results | Adopted with limited scope | [Technical evaluation](#technical-evaluation) |
 | Preventing predictable operator errors through ordinary structure | Adopted with limited scope | [Operational error resistance](#operational-error-resistance) |
 | Reusing benchmarks and stopping bounded evaluation | Adopted | [Research operation](#research-operation) |
+| Human-readable behavior/check lists derived before implementation | Inconclusive / deferred; unresolved-input checkpoint | [Behavior derivation](#behavior-derivation) |
 
 ## Scope and placement
 
@@ -121,6 +122,14 @@ The adopted guidance tries promising candidates first, tests decision-changing u
 ## Operational error resistance
 
 **Remove a cheap predictable trap before relying on a runbook — adopted with limited scope.** [#54 analysis](operational-error-resistance.md) compared existing guidance with six authored cases: ordering, destructive defaults, interrupted retries, ambiguous handoff, partial configuration and legitimate manual judgment. Reflection: [adoption §3](adoption.md#prefer-error-resistant-operation) and the implementation prompt; no philosophy or review-knowledge addition. Reason: existing questions can expose consequences, but did not explicitly prefer a simple structural remedy among acceptable implementation shapes. Limit: analytical cases, not observed operator incidents or measured agent/error reduction; compatibility, availability, external responsibility and legitimate manual judgment remain constraints. Reconsider if concrete use exposes harm to continuity or unjustified automation, or if a consequential adoption decision needs behavioral evidence. This is not a blanket fail-closed, full-automation or UI-redesign rule.
+
+## Behavior derivation
+
+**Human-readable behavior/check drafts — adopted with limited scope as an optional human-completed drafting step.** The [Issue #62 conclusion](behavior-derivation/conclusion.md) and [c3 prompt](behavior-derivation/candidate-c3.md) use the whole completed Business Design as input and Activities only as output groups. Five practical perspectives cover activity outcomes, preceding/subsequent connections, Data/Role/Rule constraints, representative cases such as zero/missing targets, and evidence/confidence. AI writes the draft; humans review, correct and add checks to complete the list before AI test implementation. Plausible consideration candidates carry concrete unapproved expectations; only genuinely undecided business meaning returns to Business Design. Reflection: [optional adoption guidance](adoption.md#optional-draft-a-human-reviewed-behaviorcheck-list); no change to review knowledge v0.3.
+
+Reason: the [scope correction](https://github.com/mk3008/alder/pull/63#issuecomment-5738263778) clarified that a useful human-editable draft, not AI-only completeness or priority-only approval, is the target. One [c3 resolved meeting-room run](behavior-derivation/stage4.md) produced 24 checks (3 explicit, 20 strong derivations, 1 consideration candidate), including zero results, missing targets, success/failure continuation and cross-activity identity. The evaluator inspected all items and recorded concrete review and downstream-design examples; this is not human approval. Earlier c1/c2 runs across the three benchmarks remain evidence for prompt development and limitations, not a requirement to resolve every benchmark policy. The [earlier deferral](behavior-derivation/stage3.md) assessed a stronger priority-only approval expectation and is superseded for the narrower drafting use.
+
+Limits: c3 has one completed-input observation; no measured human readability, review-time saving, zero-from-scratch comparison, causal improvement, generalization or executed product tests. The consideration-candidate distinction has only one observed example. Reconsider on real-use evidence that correction burden outweighs drafting help, candidates invent policy, or source-grounded zero/continuation cases repeatedly disappear. Mandatory use, automatic approval and skipping human completion are not adopted; those would need separate evidence.
 
 ## Research operation
 

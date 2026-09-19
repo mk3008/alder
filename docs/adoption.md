@@ -85,6 +85,14 @@ For the recommended local setup, copy [the review knowledge](phase2/review-knowl
 
 A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
+### Optional: draft a human-reviewed behavior/check list
+
+After humans have completed Business Design and its business-correlation review, an AI can use the [behavior/check draft prompt](behavior-derivation/candidate-c3.md) to prepare a list for designers and requesters. Read the **whole Business Design**; organize only the output by Activity. Derive concrete checks from activity conditions, preceding outputs and subsequent inputs, Data/Role/Rule constraints, and relevant zero/one/many, missing-target, boundary, failure and continuation cases.
+
+The AI writes the first draft. Humans review, correct and add items to complete the check list before handing it to the AI for test implementation. Provenance (explicit / strong derivation / consideration candidate), confidence and priority guide that review; none constitutes approval. Keep plausible expected-result proposals visibly unapproved, and return only genuinely undecided business meaning to Business Design. Update Business Design first if a decision changes its meaning.
+
+Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to tests; do not turn unapproved candidates into pass/fail expectations. This is an optional drafting aid, not an additional business-design audit, a requirement to resolve every benchmark, or a claim that AI output is complete. The [research conclusion](behavior-derivation/conclusion.md) records the evidence and limits; review-time savings and general reliability have not been measured. Review knowledge v0.3 is unchanged.
+
 ## 3. Let the AI implement without inventing business policy
 
 Alder does not prescribe an architecture style or when to introduce structure. Give the implementation agent the Business Design, current requirements, project constraints, and the information below; let it choose how to realize them. See [the architecture position](philosophy.md#ai-coding-and-architecture).

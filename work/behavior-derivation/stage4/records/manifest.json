@@ -1,0 +1,23 @@
+{
+  "base_revision": "391c3fdbba14dae1dfbdf8d6ebb9c6a0cea07803",
+  "candidate": "docs/behavior-derivation/candidate-c3.md",
+  "model_effort": "inherited; no independent runtime attestation",
+  "runs": [
+    {
+      "case": "meeting-room-c3",
+      "input": "work/behavior-derivation/stage2/inputs/meeting-room.md",
+      "prompt": "work/behavior-derivation/stage4/records/meeting-room-c3-launch.txt",
+      "output": "work/behavior-derivation/stage4/outputs/meeting-room-c3.md",
+      "agent": "/root/meeting_c3_draft",
+      "attempts": 1,
+      "feedback": false
+    }
+  ],
+  "sha256": {
+    "docs/behavior-derivation/candidate-c3.md": "fd626999c3e1d6e6d7fb8c572580b6b72880d6b5c9dd6f67be34ef99cdcc1673",
+    "work/behavior-derivation/stage4/records/continuation.json": "7700c5077bcc96745c3a6af8b9965056bffdac4a41dc3fb30a051607fcbaec59",
+    "work/behavior-derivation/stage2/inputs/meeting-room.md": "f114d732ed9dff18fad55204b6823945fd4e9c462f785e34d544cfa34cebc2af",
+    "work/behavior-derivation/stage4/records/meeting-room-c3-launch.txt": "32b6d8749f7632d72f72e3352511e561ef4977004a164693f33f587ad6f70a57",
+    "work/behavior-derivation/stage4/outputs/meeting-room-c3.md": "49dd7186b8f8878290e75f52143d3facf8b1853c5b0436a36d9111d92d03e946"
+  }
+}

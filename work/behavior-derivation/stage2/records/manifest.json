@@ -1,0 +1,40 @@
+{
+  "base_revision": "e0b479313ebac906d1b747606aad32ad02e5fb63",
+  "source_snapshot": "work/behavior-derivation/inputs/meeting-room.md",
+  "source_sha256": "0eac1f1b10c9fbb311938a0e985912cfa8f75989ded24c2f2a66b83befb6fb51",
+  "resolved_snapshot": "work/behavior-derivation/stage2/inputs/meeting-room.md",
+  "resolved_sha256": "f114d732ed9dff18fad55204b6823945fd4e9c462f785e34d544cfa34cebc2af",
+  "decision_url": "https://github.com/mk3008/alder/pull/63#issuecomment-5737722908",
+  "candidate": "docs/behavior-derivation/candidate.md",
+  "candidate_sha256": "272ffcfda91b2837e28a7d4277b0554679410f35a0fee6c95d72a250740947ce",
+  "runs": [
+    {
+      "name": "meeting-room",
+      "agent": "/root/derive_resolved_meeting",
+      "fork_turns": "none",
+      "model": "inherited; not independently attested",
+      "effort": "inherited; not independently attested",
+      "prompt": "work/behavior-derivation/stage2/records/meeting-room-launch.txt",
+      "prompt_sha256": "f829b442963def198a3485a100e23fc041ff4c382a29aded9ce291543015a7cb",
+      "status": "completed; no feedback or output edits"
+    },
+    {
+      "name": "purchase-request-c2",
+      "agent": "/root/derive_purchase_c2",
+      "fork_turns": "none",
+      "model": "inherited; not independently attested",
+      "effort": "inherited; not independently attested",
+      "prompt": "work/behavior-derivation/stage2/records/purchase-request-c2-launch.txt",
+      "prompt_sha256": "53b00dc2348260539bce3c68319d55675395b849b1d57b2d0b336e673f5c64ff",
+      "status": "completed; no feedback or output edits"
+    }
+  ],
+  "c2": {
+    "path": "docs/behavior-derivation/candidate-c2.md",
+    "sha256": "497673b11c20a45226e2f6a14eff85fabe3666b9ec72e2ddc06a7e938c3b7371"
+  },
+  "output_sha256": {
+    "work/behavior-derivation/stage2/outputs/meeting-room.md": "6a7bdc9b749881de3063bc6112a39c78214948e2954d96e7e566a2f8e5bae8fa",
+    "work/behavior-derivation/stage2/outputs/purchase-request-c2.md": "77d1d7fba08bb48fd5d2373e62b3d8aa5d3204d095a64cf191b9b23e1ba69e9e"
+  }
+}
