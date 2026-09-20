@@ -2,9 +2,9 @@
 
 ## Status
 
-Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming change avoids confusion with DB/transaction atomicity and does not change granularity, IDs, review states or Test/Code mapping contracts.
+Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming change avoids confusion with DB/transaction atomicity and does not change granularity, IDs or review states. v0.5 narrows permanent traceability to Business Design ↔ Check Item ↔ Automated Test; Code is verified by tests rather than maintained as a permanent mapping target.
 
-Check Item traceability is an **optional Alder workflow** for products where people and AI both need to trace business meaning through checks, tests, and implementation.
+Check Item traceability is an **optional Alder workflow** for products where people and AI both need to trace business meaning through checks and automated tests.
 
 It does not add a new source of business truth, require a standalone Functional Design phase, prescribe an architecture, or require complete line-by-line traceability.
 
@@ -18,8 +18,8 @@ Functional Interface (optional)
 Check Item
   ↓
 Automated Test
-  ↓
-Code
+  │
+  └─ verifies → Code
 ```
 
 The arrows above show **meaning authority**. Business Design is the source of truth for business meaning.
@@ -27,7 +27,9 @@ The arrows above show **meaning authority**. Business Design is the source of tr
 For review and maintenance, the links are also traversed in both directions:
 
 ```text
-Business Design ↔ Functional Interface (optional) ↔ Check Item ↔ Automated Test ↔ Code
+Business Design ↔ Functional Interface (optional) ↔ Check Item ↔ Automated Test
+
+Automated Test ─ verifies → Code
 ```
 
 Bidirectional traceability does **not** make these artifacts equally authoritative.
@@ -46,7 +48,7 @@ When a human review reveals that the current meaning is wrong, incomplete, or no
 4. Re-derive or update affected Functional Interfaces and Check Items from that confirmed Business Design revision.
 5. Update Decision Records when implementation choices or assumptions change.
 6. Update tests and code.
-7. Re-check Business Design → Interface → Check → Test → Code traceability.
+7. Re-check Business Design → Interface → Check → Test traceability, then run the relevant tests against the implementation.
 
 Do not infer a business rule from existing code, tests, or a Decision Record and then silently treat that inferred rule as approved Business Design.
 
@@ -74,7 +76,7 @@ As a default:
 
 Do not mechanically split an indivisible rule into assertion-sized fragments. Keep a condition and its expected result in one Item when separating them would break the meaning. Split when a human could reasonably accept, reject, or revise one expected result without changing the others.
 
-A product can use direct Business Design → Check → Test/Code mapping where a Functional Interface adds no navigation value.
+A product can use direct Business Design → Check → Test traceability where a Functional Interface adds no navigation value.
 
 ## 3. Human-facing view
 
@@ -127,7 +129,6 @@ The supporting detail may contain:
 - AI confidence: 高 / 要精査
 - relevant Functional Interface
 - representative automated test and the assertion that supports the Check
-- primary code / SQL entry points
 - evidence state or mapping gap
 
 The human-facing summary must not remove information the AI needs to preserve semantics.
@@ -140,13 +141,11 @@ Separate the meaning of the Check from the strength of implementation evidence.
 
 Useful mapping states include:
 
-- **mapped** — Business meaning, Check, test assertion, and implementation can be traced for the stated condition
+- **mapped** — Business meaning, Check, and representative test assertion can be traced for the stated condition
 - **partial / missing test evidence** — implementation exists, but direct regression evidence is incomplete
-- **missing implementation** — approved meaning requires a path that cannot be found
-- **conflicting behavior** — implementation or test behavior contradicts approved Business Design
+- **conflicting behavior** — test-observed behavior contradicts approved Business Design
 - **ambiguous mapping** — a candidate mapping exists but the semantic match is not established
 - **candidate / unapproved** — the Check itself is not yet approved, so it cannot establish a product defect
-- **technical support** — implementation supports the capability but is not itself a separate business capability
 
 A passing test does not prove a Check unless its assertions cover the relevant condition and expected result.
 
@@ -154,7 +153,7 @@ A matching symbol or name does not establish a semantic mapping.
 
 ## 6. Forward and reverse traceability
 
-Use the mapping in both directions.
+Maintain permanent traceability only through the test boundary.
 
 ### Forward
 
@@ -163,19 +162,17 @@ Business Design
 → Functional Interface (optional)
 → Check Item
 → Automated Test
-→ Code
 ```
 
 Use this to ask:
 
-- Which system behavior realizes this business meaning?
+- Which Check expresses this business meaning?
 - Which test proves this particular expectation?
-- Which implementation locations must change if the meaning changes?
 
 ### Reverse
 
 ```text
-Code / Test
+Automated Test
 → Check Item
 → Functional Interface (optional)
 → Business Design
@@ -184,11 +181,11 @@ Code / Test
 Use this to ask:
 
 - Why does this test exist?
-- Which approved business expectation justifies this guard?
-- Is this code business behavior or only technical support?
-- Is a current implementation choice accidentally acting as an undocumented requirement?
+- Which approved business expectation justifies this assertion?
 
-Reverse tracing is diagnostic. It must not promote implementation behavior into Business Design without human approval.
+Tests then verify the implementation by execution. Do not maintain a permanent Check Item ↔ Code, file, symbol, SQL-entry-point, or line mapping. Code structure is allowed to change under refactoring or human maintenance without creating a second traceability artifact that must be kept in sync.
+
+When review needs to inspect an implementation choice, locate the relevant code from the current test/runtime path or by fresh repository exploration. That investigation is temporary diagnostic work, not a maintained mapping and not authority to redefine Business Design.
 
 ## 7. Meaning-preservation audit
 
@@ -213,7 +210,6 @@ Prefer:
 - a small set of Functional Interfaces
 - Check Items that correspond to meaningful human review decisions
 - representative test assertions
-- code entry points rather than every function or line
 - updates only to affected mappings
 
 Avoid:
@@ -222,9 +218,9 @@ Avoid:
 - one Check per assertion
 - duplicated specifications that must be edited in parallel
 - treating every helper, SQL fragment, or adapter as a Functional Interface (optional)
-- preserving a stale mapping merely because the IDs still resolve
+- preserving stale physical-code mappings; permanent Code mapping is intentionally out of scope
 
-If direct Business Design → Check → Test/Code traceability is already clear, do not add a Functional Interface layer solely for formality.
+If direct Business Design → Check → Test traceability is already clear, do not add a Functional Interface layer solely for formality.
 
 ## 9. Evidence and limits
 
@@ -234,7 +230,7 @@ Observed in that bounded case:
 
 - the human reviewer found the Functional Interface responsibility groups and Check Item presentation substantially easier to review than the earlier compound Check rows
 - Check Items made individual expectations easier to discuss
-- an AI could trace representative Checks forward to tests/code and trace a multi-destination test backward to its Check and Decision
+- an AI could trace representative Checks to tests and trace a multi-destination test backward to its Check and Decision; the historical evaluation also recorded code locations, which v0.5 no longer adopts as permanent traceability
 - the mapping distinguished transaction atomicity from per-Link no-op behavior
 - the AI could identify direct-test evidence gaps separately from implementation gaps
 - a meaning-preservation audit recovered guarantees that had disappeared during an earlier formatting change
