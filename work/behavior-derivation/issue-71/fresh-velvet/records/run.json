@@ -1,0 +1,26 @@
+{
+  "agent": "/root/velvet_fresh_discovery",
+  "fork_turns": "none",
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning_effort": "omitted; inherited",
+  "runtime_model_effort_attestation": null,
+  "attempts": 1,
+  "feedback": false,
+  "generator_local_allowlist": [
+    "SYSTEM_SCOPE.md",
+    "change-detection-dirty-key-registration.md",
+    "common-contract.md",
+    "concepts.md",
+    "functional-considerations.md",
+    "transfer-execution-process.md"
+  ],
+  "filesystem_isolation": "instruction allowlist; shared filesystem, no OS-level deny boundary",
+  "launch_sha256": "79d864b8d91d987a13ce2073958f0ac8f063d7cdfcc74e7269741542346a07f5",
+  "protocol_sha256": "be5fcf758a8c6ce8d342f540c9e7375ab336abb852791d94661f07077934b646",
+  "inputs_archive_sha256": "d980fe39eb8ca7d92389e449c9aa93b6ec9ef2d8de969d6b3d1d74a383d2adaa",
+  "evaluation_actor": "/root",
+  "status": "completed",
+  "output_sha256": "b81d3a30b74462ba18fd16cbce4a6a97b3842e146ed6510066f8503fdb8c1ca3",
+  "read_log_sha256": "af2332f47b373e48ac662b47c11aa69d47fca2e9739e0cba9882c8acc3685c1e",
+  "generator_report": "Six allowlisted files only; no external URLs or other references; one saved output; no feedback."
+}

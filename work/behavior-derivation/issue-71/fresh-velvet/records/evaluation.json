@@ -1,0 +1,77 @@
+{
+  "evaluator": "/root",
+  "generator": "/root/velvet_fresh_discovery",
+  "categories": {
+    "A": "already decided",
+    "B": "known important unresolved issue rediscovered",
+    "C": "useful unresolved issue not previously explicit",
+    "D": "implementation only",
+    "E": "distant speculation, generalities or unnecessary questions"
+  },
+  "candidates": [
+    {
+      "id": "FC-01",
+      "category": "A",
+      "reason": "All transfer work commits together; partial success is already excluded by Decision 0002, retained by 0013.",
+      "useful_unresolved": false
+    },
+    {
+      "id": "FC-02",
+      "category": "A",
+      "reason": "Configuration locks and recheck already settle the single-Run version boundary; online editing is not a missing requirement.",
+      "useful_unresolved": false
+    }
+  ],
+  "counts": {
+    "A": 2,
+    "B": 0,
+    "C": 0,
+    "D": 0,
+    "E": 0
+  },
+  "qualifying_unresolved_count": 0,
+  "disposition": "experimental",
+  "human_approval": false,
+  "evidence": [
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "docs/decisions/0002-phase1-trusted-execution.md",
+      "sha256": "489d3835f012849c3b9307342ec34dda3645ceb738127698cae217da95b777d9"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "docs/decisions/0008-multi-destination-verification.md",
+      "sha256": "9059ea2121ca9235617159825e23ac18743a5a4f12b522ab6320e6e08b2e6078"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "docs/decisions/0013-product-set-phases.md",
+      "sha256": "4c845118fed5078b97b4af84f01a8914dac2cd48680c6d5bbd39f149663ce8b9"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "src/features/execute-transfer/boundary.ts",
+      "sha256": "2bfb42e479438d00717560b98753c6bb6b50b4abe919fdb05167cce396431317"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "src/features/execute-transfer/queries.ts",
+      "sha256": "a1e853954516361c6de1e1833205727fd645318e32ee37f51c00376bcfb844ba"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "tests/features/execute-transfer/execution.integration.test.ts",
+      "sha256": "3c7a37cc633909d0201aa8c72fa3e6011dd60f544005afa1fdca4c07d7027e2c"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "docs/review/issue-39/execute-transfer-mapping.md",
+      "sha256": "dccd312b086bf43efaebd713c8dad9144a39fadf1d9368f83c80405eef1c1e52"
+    },
+    {
+      "revision": "5d9872221b1e3f67cef671f644aacff69810efb1",
+      "path": "docs/review/issue-43/execute-transfer-atomic-checks.md",
+      "sha256": "05c5ddcfb7fd7cdc13df7f219a100937d83b02912e94c8a9859efd617cb6ec16"
+    }
+  ]
+}
