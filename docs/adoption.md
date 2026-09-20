@@ -79,13 +79,13 @@ Record the selected review knowledge source revision in the routing instructions
 
 ### Versions and access
 
-The current release is **Alder v0.4**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.4 adds optional functional consideration discovery and uses Check Item (introduced as Atomic Check in v0.3); the review knowledge itself remains v0.3.
+The current release is **Alder v0.5**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.4 adds optional functional consideration discovery and uses Check Item (introduced as Atomic Check in v0.3); the review knowledge itself remains v0.3.
 
-For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.4`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.4 and the copied knowledge remains research version v0.3, regardless of the local filename.
+For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.5`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.5 and the copied knowledge remains research version v0.3, regardless of the local filename.
 
 A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
-Alder v0.4 uses **Check Item** (Atomic Check in v0.3). The [v0.4 release notes](release-notes-v0.4.md) describe this terminology-only change and optional consideration discovery. Existing IDs, review states and Test/Code mappings remain valid.
+Alder v0.5 keeps **Check Item** (Atomic Check in v0.3) and narrows permanent traceability to Business Design ↔ Check Item ↔ Test. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. See the [v0.5 release notes](release-notes-v0.5.md). Existing Check IDs and review states remain valid.
 
 <a id="optional-draft-and-review-atomic-checks"></a>
 
@@ -93,13 +93,13 @@ Alder v0.4 uses **Check Item** (Atomic Check in v0.3). The [v0.4 release notes](
 
 After humans have completed Business Design and its business-correlation review, an AI can use the [behavior/check draft prompt](behavior-derivation/candidate-c3.md) to prepare Check Items for designers and requesters. Read the **whole Business Design**; organize only the output by Activity or an already-reviewed Functional Interface. Derive concrete checks from activity conditions, preceding outputs and subsequent inputs, Data/Role/Rule constraints, and relevant zero/one/many, missing-target, boundary, failure and continuation cases.
 
-The human-facing view should make **one Check Item represent one independently reviewable observable expectation whenever practical**. People primarily review ID, title, expected result, and review state. Keep exact conditions, evidence, derivation classification/confidence, connections and later Test/Code mappings as supporting detail under the same ID. Do not mechanically split inseparable conditions merely to increase the item count.
+The human-facing view should make **one Check Item represent one independently reviewable observable expectation whenever practical**. People primarily review ID, title, expected result, and review state. Keep exact conditions, evidence, derivation classification/confidence, connections and later Test mappings as supporting detail under the same ID. Do not mechanically split inseparable conditions merely to increase the item count.
 
 Use these review states independently from AI confidence and test evidence: **未レビュー / 要確認 / 確認済み / 要修正**. A high-confidence AI derivation is still unreviewed until a person checks it. A human-confirmed Check may still have missing automated-test evidence.
 
 The AI writes the first draft. Humans review, correct and add items to complete the Check list before handing it to the AI for test implementation. If review changes business meaning, **Business Design must be updated and human-confirmed first**; do not let a Check, Decision Record, test or existing implementation become a hidden replacement for Business Design. Then update affected Interfaces/Checks, Decisions, tests and code from that confirmed revision.
 
-Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to representative test assertions and primary code/SQL entry points. Do not turn unapproved candidates into pass/fail expectations. The [Check Item traceability guide](check-item-traceability.md) defines the two-layer view, review states, authority boundary, and meaning-preservation audit. The [research conclusion](behavior-derivation/conclusion.md) records evidence and limits. Review knowledge v0.3 is unchanged.
+Pass the human-completed list and the same Business Design revision to the implementation agent. Map design revision + list revision + item ID to representative test assertions. Do not maintain Code, file, symbol, SQL-entry-point, or line mappings as permanent Alder artifacts; tests verify the current implementation by execution. Do not turn unapproved candidates into pass/fail expectations. The [Check Item traceability guide](check-item-traceability.md) defines the two-layer view, review states, authority boundary, and meaning-preservation audit. The [research conclusion](behavior-derivation/conclusion.md) records evidence and limits. Review knowledge v0.3 is unchanged.
 
 ### Optional: explore undocumented functional conditions
 
@@ -111,7 +111,7 @@ The [historical backtest](behavior-derivation/issue-71-historical.md) found one 
 
 ### Optional: use Functional Interfaces as a responsibility index
 
-Where one Activity contains independently observable capabilities, or responsibility spans several Check Items and implementation locations, the [Functional Interface prompt](functional-interface/prompt.md) can draft a small intermediate index. Derive contracts from the whole completed Business Design, then relate them to Check Items, test assertions and code. Humans review and complete both drafts. An Interface is an observable operation contract, not a required function, API, class or file; several contracts may share code and one contract may span Python, SQL and tests.
+Where one Activity contains independently observable capabilities, or responsibility spans several Check Items and implementation locations, the [Functional Interface prompt](functional-interface/prompt.md) can draft a small intermediate index. Derive contracts from the whole completed Business Design, then relate them to Check Items and test assertions. Humans review and complete both drafts. An Interface is an observable operation contract, not a required function, API, class or file; several contracts may share code and one contract may span Python, SQL and tests.
 
 Use the combined trace only where it improves navigation:
 
@@ -123,17 +123,17 @@ Functional Interface
 Check Item
   ↓
 Automated Test
-  ↓
-Code
+  │
+  └─ verifies → Code
 ```
 
-The downward direction is **meaning authority**: Business Design is the SSOT. For review and maintenance, trace both directions so an AI can answer “which code realizes this Check?” and “which approved business expectation justifies this test?” Reverse tracing is diagnostic; it never promotes current code or tests into Business Design without human approval.
+The downward direction is **meaning authority**: Business Design is the SSOT. For review and maintenance, trace Business Design / Interface / Check / Test in both directions so an AI can answer “which approved business expectation justifies this test?” Tests verify Code by execution; do not keep a permanent Check-to-Code location map. Reverse tracing is diagnostic; it never promotes current code or tests into Business Design without human approval.
 
 Keep source revisions and distinguish missing implementation, conflicting behavior, partial/missing test evidence, unapproved candidates and technical support. A passing test or a matching name does not establish a semantic mapping. If a human review exposes a meaning conflict or missing policy, return to Business Design first, then update downstream artifacts.
 
 When Checks are split, renamed, regrouped or regenerated, perform a **meaning-preservation audit**: account for each independent guarantee in the old representation, record intentional removals, and re-check against Business Design. The previous Check set can be a transformation regression oracle, but it is not the SSOT.
 
-Use this index only when it clarifies responsibility or change navigation; it may live in the existing Check list or mapping table instead of a separate specification. Direct Business Design → Check → Test/Code mapping remains sufficient where clear. Do not maintain a complete code-line matrix. The [Check Item traceability guide](check-item-traceability.md) records the current operating form, while the [Functional Interface study](functional-interface/study.md) records the earlier bounded evaluation and duplicate-maintenance cost.
+Use this index only when it clarifies responsibility or change navigation; it may live in the existing Check list or mapping table instead of a separate specification. Direct Business Design → Check → Test traceability remains sufficient where clear. Do not maintain a complete code-line matrix. The [Check Item traceability guide](check-item-traceability.md) records the current operating form, while the [Functional Interface study](functional-interface/study.md) records the earlier bounded evaluation and duplicate-maintenance cost.
 
 ## 3. Let the AI implement without inventing business policy
 
@@ -198,7 +198,7 @@ Use the repository’s existing location and format for Decision Records, or a s
 Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. Provide the design and implementation revisions, documented decisions, and readable review knowledge. This is a workflow recommendation, not an additional rule in review knowledge v0.3.
 
 ```text
-Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from Alder v0.4. Review only; do not modify files.
+Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from Alder v0.5. Review only; do not modify files.
 
 Business Design: <path and revision>
 Implementation: <path and revision or precise working-tree scope>
@@ -222,7 +222,7 @@ For each important finding, report:
 Do not turn every undocumented detail into a requirement. Do not prescribe a particular architecture, UI, data model, or implementation solution when multiple implementations could satisfy the business meaning. A technical fix is not a substitute for confirming unresolved business meaning.
 ```
 
-If you use an unreleased Alder commit rather than v0.4, replace the release name with that selected revision. The prompt routes to the full knowledge; its summary does not replace that document.
+If you use an unreleased Alder commit rather than v0.5, replace the release name with that selected revision. The prompt routes to the full knowledge; its summary does not replace that document.
 
 A Business confirmation is not automatically a request to change implementation. An existing contract or external procedure may supply the required meaning. Confirm that basis and stop when sufficient.
 
