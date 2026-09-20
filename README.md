@@ -49,8 +49,8 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
 | Optional discovery of undocumented functional conditions before Check/Test commitments | [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
-| Optional human/AI traceability from Business Design through Check Items to tests and code | [Check Item traceability](docs/check-item-traceability.md) |
+| Optional human/AI traceability from Business Design through Check Items to tests; tests verify code by execution | [Check Item traceability](docs/check-item-traceability.md) |
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.4** adds optional functional consideration discovery and uses **Check Item** (introduced as Atomic Check in v0.3) for human-reviewable expectations and traceability. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.4 release notes](docs/release-notes-v0.4.md). It requires no framework, CLI, or runtime package.
+**Alder v0.5** keeps Business Design ↔ Check Item ↔ Test as the permanent traceability boundary and deliberately does not maintain Check Item ↔ Code location mappings. Tests verify the implementation by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.5 release notes](docs/release-notes-v0.5.md). It requires no framework, CLI, or runtime package.
