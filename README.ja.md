@@ -48,6 +48,7 @@ product/
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
+| Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
 | 業務設計からAtomic Check、テスト、コードまでを人間/AIで追跡する任意手順 | [Atomic Check traceability（英語）](docs/atomic-check-traceability.md) |
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |

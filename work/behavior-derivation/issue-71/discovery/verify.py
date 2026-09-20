@@ -32,10 +32,13 @@ def main():
     parser.add_argument('--velvet', type=Path)
     args = parser.parse_args()
     manifest = json.loads((AREA / 'manifest.json').read_text())
+    # Manifest keeps its original path/hash; the historical prompt now has a frozen copy.
     for group in ('sha256', 'protected_previous_study_sha256'):
         for name, expected in manifest[group].items():
             require(
-                hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected,
+                hashlib.sha256(
+                    (AREA / 'prompt.md' if name == manifest['prompt'] else ROOT / name).read_bytes()
+                ).hexdigest() == expected,
                 f'hash mismatch: {name}',
             )
     previous_command = [sys.executable, str(AREA.parent / 'verify.py')]

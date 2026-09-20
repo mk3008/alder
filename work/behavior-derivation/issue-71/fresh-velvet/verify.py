@@ -53,7 +53,7 @@ def main():
     require(not log['external_urls'] and not log['other_references'], 'unrecorded references')
     require(run['fork_turns'] == 'none' and run['attempts'] == 1 and not run['feedback'], 'trial changed')
     require(run['status'] == 'completed', 'incomplete run')
-    require(packet['functional-considerations.md'] == (ROOT / 'docs/behavior-derivation/functional-considerations.md').read_bytes(), 'prompt changed')
+    require(packet['functional-considerations.md'] == (AREA.parent / 'discovery/prompt.md').read_bytes(), 'prompt changed')
     ids = re.findall(r'^### (FC-\d+)[：:]', (AREA / 'outputs/raw.md').read_text(), re.M)
     require(ids == [c['id'] for c in evaluation['candidates']], 'candidate coverage mismatch')
     counts = Counter(c['category'] for c in evaluation['candidates'])

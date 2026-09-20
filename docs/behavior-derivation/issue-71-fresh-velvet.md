@@ -1,5 +1,7 @@
 # Issue #71 — Velvet Fresh Agent試行
 
+最新の採否は[historical backtest](issue-71-historical.md)。以下の試行結果・当時の判断は変更せず、後の証拠による採否変更を別記録とする。
+
 [追加コメント](https://github.com/mk3008/alder/pull/72#issuecomment-5746501730)に従い、生成と評価を分離して1回実行した。**候補2件はいずれも既存Decisionで既決（A）。有用な未決論点は0件で、採用条件を満たさないためexperimentalを維持する。** 独立生成を実施したこと自体を、探索promptの独立した効果の証明にはしない。
 
 ## 入力と実行条件
@@ -29,7 +31,7 @@ Concept投影は全statementのID/text、summary、全externalRelationshipsのto
 
 A=2、B（既知の重要な未決論点の再発見）=0、C（有用な新規未記載論点）=0、D（実装方式のみ）=0、E（遠い仮説等）=0。生成側が既決として閉じた9項目・見送った5項目は発見数へ加えない。詳細は[全候補の評価と固定版根拠](../../work/behavior-derivation/issue-71/fresh-velvet/assessment.md)。既存テストは証拠として読んだもので、この試行では実行していない。
 
-人間が検討する価値のある未決論点を1件以上という事前条件は未達。工程を標準採用せず、[実験用入口](../adoption.md#experimental-explore-undocumented-functional-conditions)を維持する。既決事項を例なしで挙げられたことは観察事実だが、未決論点の発見とは区別する。候補を要件やTest期待値へ転記しない。
+人間が検討する価値のある未決論点を1件以上という事前条件は未達。工程を標準採用せず、[実験用入口](../adoption.md#optional-explore-undocumented-functional-conditions)を維持する。既決事項を例なしで挙げられたことは観察事実だが、未決論点の発見とは区別する。候補を要件やTest期待値へ転記しない。
 
 ## 再確認できる記録
 

@@ -1,5 +1,7 @@
 # Issue #71 続編 — 未記載の機能条件を発見する
 
+最新の採否は[historical backtest](issue-71-historical.md)。以下の試行結果・当時の判断は変更せず、後の証拠による採否変更を別記録とする。
+
 最新の追加検証は[Velvet Fresh Agent試行](issue-71-fresh-velvet.md)。候補2件とも既存Decisionで既決であり、採用根拠不足としてexperimentalを維持した。以下はそれ以前の既知文脈での試行記録。
 
 ## コメントを受けた訂正
@@ -18,7 +20,7 @@
 
 文書の行番号は**候補が対象機能に関係する根拠**であり、**未記載の期待結果を承認する根拠**ではない。外部資料も同様に問いの材料である。文書内から決まる結果はc3、答えの決まらない論点は未承認の候補/Business Designへ戻す事項とする。
 
-c3・Business Design・review knowledge v0.3は変更しない。候補探索を別に試せる入口を[adoption](../adoption.md#experimental-explore-undocumented-functional-conditions)に置く。c3全体を書き直すより、既存の根拠付き導出を維持しながら、今回不足していた探索を検討可能にする変更を選んだ。必須工程や一律チェックリストにはしない。
+c3・Business Design・review knowledge v0.3は変更しない。候補探索を別に試せる入口を[adoption](../adoption.md#optional-explore-undocumented-functional-conditions)に置く。c3全体を書き直すより、既存の根拠付き導出を維持しながら、今回不足していた探索を検討可能にする変更を選んだ。必須工程や一律チェックリストにはしない。
 
 ## 実施条件
 
