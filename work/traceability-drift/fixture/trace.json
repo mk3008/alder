@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "check_sources": {
+    "CHECK-01": {
+      "BD-01": "c4c926d9e9ed62a6ee6fd94fde9e267b51920c2ac80d4e062f0836868427f977"
+    },
+    "CHECK-02": {
+      "BD-02": "14001ca927e6874b9c96734fdb56d61bf859356333363b6b636307984ed5703d"
+    },
+    "CHECK-03": {
+      "BD-03": "80c25a15f0af7448d226ba491d354c645eae0d85896c3e38d6e0dcae39d24031"
+    }
+  },
+  "test_checks": {
+    "test_product.BookingTests.test_limit": {
+      "CHECK-01": "51e4da50d7ea372e9387cde365d6d909d24b263587999f568993d9df01e044dc"
+    },
+    "test_product.BookingTests.test_cancel": {
+      "CHECK-02": "6a7a6d89ff3aed25c0ca4a462e93accc46e8af103b193c088aacd46e65c481bb"
+    },
+    "test_product.BookingTests.test_owner": {
+      "CHECK-03": "6519220db6e805871005d0e3f5b7071aa34e75442bbdb4dc6e714834ab256812"
+    }
+  }
+}

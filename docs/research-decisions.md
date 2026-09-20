@@ -39,6 +39,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 | Candidate / question | Current disposition | Detail |
 | --- | --- | --- |
+| Item-level Business Design / Check / Test freshness | Optional bounded pilot; universal tooling deferred | [Traceability drift](#item-level-traceability-drift) |
 | Scope-First as a new architecture or repository contract | Existing concepts sufficient; candidate contract not adopted | [Scope and placement](#scope-and-placement) |
 | Architecture labels and semantic ownership across structural ranges | Inconclusive / deferred; historical checkpoint | [Scope and placement](#scope-and-placement) |
 | Incremental Activity / Data / Rule implementation from incomplete design | Limited experimental adoption; general claims deferred | [Early workflow pilots](#early-workflow-pilots) |
@@ -154,6 +155,14 @@ Business Design remains the SSOT. Check Item review can feed back into Business 
 Review state (未レビュー / 要確認 / 確認済み / 要修正) remains separate from AI derivation confidence and from test-evidence state. No universal title grammar is adopted.
 
 Limits: this change is a maintenance-boundary decision, not measured proof that Test-bounded traceability lowers total maintenance cost. Reconsider only if real use shows that a stable non-physical Code linkage provides decision-relevant value that cannot be obtained from tests and fresh code exploration without reintroducing drift-prone location maintenance.
+
+## Item-level traceability drift
+
+**Content fingerprints on saved Business Design → Check → Test edges — adopted only for an optional bounded pilot.** [Issue #76 study](traceability-drift/study.md) and [26 reproducible scenarios](traceability-drift/observations.json) detect a Business Design-only change and a subsequent Check-update/Test-omission while the old product tests pass. A local source edit selects 1 of 3 Checks rather than all 3 under a document hash. The completed local update changes 2 metadata leaves; ordinary product-code refactoring changes none. Reflection: [optional traceability guidance](check-item-traceability.md#10-optional-item-level-drift-pilot), with the implementation retained as a research PoC.
+
+The established basis is [OFT's versioned coverage links](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/introduction/concepts_and_terms.md); this study selects automatically computed item fingerprints and a narrower graph rather than installing OFT. Explicit revision alone, whole-document pins and AI-only detection were not selected. No Code mapping, mandatory checker, automatic approval or bulk acknowledgement is adopted.
+
+Limits: synthetic same-evaluator cases, no real-product integration or measured human time/net savings. Wording changes require review; wrong edges and blind pin refresh produce demonstrated false negatives. The study records artifact churn, format and stopping rules. Reconsider broader adoption only with real missed-update benefit and reconfirmation-cost evidence; discontinue if maintenance dominates benefit.
 
 ## Functional Interface mapping
 

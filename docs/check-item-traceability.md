@@ -238,3 +238,9 @@ Observed in that bounded case:
 This is evidence that the format can be useful for one real product slice. It is not proof of lower review time, higher defect-detection rate, general applicability, or optimal title wording.
 
 Use it as an optional traceability aid and continue human review.
+
+## 10. Optional item-level drift pilot
+
+A passing test can remain aligned with an old Check after Business Design changes. For products with this concrete risk, an [optional drift pilot](traceability-drift/study.md) records the source-item fingerprint reconciled with each Check and the Check snapshot reconciled with each Test. A source change selects related Checks and Tests; a Check update leaves old Test evidence stale until separately reconciled. Permanent traceability still stops at Test.
+
+Treat freshness mismatches as **requires reconfirmation**, not defects or automatic changes to human review state. Preserve Business Design authority, inspect affected expectations/assertions, and update pins only after reconciliation. The [study](traceability-drift/study.md#reconfirmation-workflow-for-an-opt-in-pilot) defines the minimal artifact and workflow, including false positives, missing-edge and blind-acknowledgement limits. This is a bounded synthetic PoC, not a mandatory checker or a supported parser for existing product documents. Use it only where observed benefit justifies setup and reconfirmation cost; no Code mapping or bulk regeneration is introduced.
