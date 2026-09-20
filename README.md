@@ -53,6 +53,4 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.3** introduced Atomic Check traceability, now called Check Item traceability. This optional human/AI workflow retains **research review knowledge v0.3** unchanged. Alder remains a research candidate; see the [v0.3 release notes](docs/release-notes-v0.3.md). It requires no framework, CLI, or runtime package.
-
-For the upcoming v0.4, the current documentation uses **Check Item** (called Atomic Check in v0.3) and adds optional functional consideration discovery. See the [v0.4 release notes draft](docs/release-notes-v0.4.md). The published release remains v0.3.
+**Alder v0.4** adds optional functional consideration discovery and uses **Check Item** (introduced as Atomic Check in v0.3) for human-reviewable expectations and traceability. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.4 release notes](docs/release-notes-v0.4.md). It requires no framework, CLI, or runtime package.
