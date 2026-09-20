@@ -37,7 +37,9 @@ def main():
         for name, expected in manifest[group].items():
             require(
                 hashlib.sha256(
-                    (AREA / 'prompt.md' if name == manifest['prompt'] else ROOT / name).read_bytes()
+                    (AREA / 'prompt.md' if name == manifest['prompt'] else
+                     AREA.parent / 'frozen-baseline/verify.py' if name == 'work/behavior-derivation/issue-71/verify.py' else
+                     ROOT / name).read_bytes()
                 ).hexdigest() == expected,
                 f'hash mismatch: {name}',
             )

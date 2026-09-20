@@ -34,9 +34,7 @@ def main():
     manifest = json.loads((AREA / 'records/manifest.json').read_text())
     for group in ('sha256', 'protected_baseline_sha256'):
         for name, expected in manifest[group].items():
-            # Current c3 terminology can evolve; verify the original study input unchanged.
-            path = AREA / 'frozen-baseline/candidate-c3.md' if name == manifest['candidate'] else ROOT / name
-            require(digest(path.read_bytes()) == expected, f'hash mismatch: {name}')
+            require(digest((ROOT / name).read_bytes()) == expected, f'hash mismatch: {name}')
 
     source = (ROOT / manifest['input']).read_text().splitlines()
     require(len(source) == manifest['input_lines'], 'input line count changed')
