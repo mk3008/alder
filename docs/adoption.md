@@ -79,13 +79,13 @@ Record the selected review knowledge source revision in the routing instructions
 
 ### Versions and access
 
-The current release is **Alder v0.3**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.3 introduced Atomic Check traceability, now called Check Item traceability. This workflow is optional and keeps the review knowledge itself at v0.3.
+The current release is **Alder v0.4**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.4 adds optional functional consideration discovery and uses Check Item (introduced as Atomic Check in v0.3); the review knowledge itself remains v0.3.
 
-For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.3`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.3 and the copied knowledge remains research version v0.3, regardless of the local filename.
+For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.4`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.4 and the copied knowledge remains research version v0.3, regardless of the local filename.
 
 A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
-Current unreleased documentation uses **Check Item** (Atomic Check in v0.3). The [v0.4 release notes draft](release-notes-v0.4.md) describes this terminology-only change and optional consideration discovery. Existing IDs, review states and Test/Code mappings remain valid.
+Alder v0.4 uses **Check Item** (Atomic Check in v0.3). The [v0.4 release notes](release-notes-v0.4.md) describe this terminology-only change and optional consideration discovery. Existing IDs, review states and Test/Code mappings remain valid.
 
 <a id="optional-draft-and-review-atomic-checks"></a>
 
@@ -198,7 +198,7 @@ Use the repository’s existing location and format for Decision Records, or a s
 Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. Provide the design and implementation revisions, documented decisions, and readable review knowledge. This is a workflow recommendation, not an additional rule in review knowledge v0.3.
 
 ```text
-Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from Alder v0.3. Review only; do not modify files.
+Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from Alder v0.4. Review only; do not modify files.
 
 Business Design: <path and revision>
 Implementation: <path and revision or precise working-tree scope>
@@ -222,7 +222,7 @@ For each important finding, report:
 Do not turn every undocumented detail into a requirement. Do not prescribe a particular architecture, UI, data model, or implementation solution when multiple implementations could satisfy the business meaning. A technical fix is not a substitute for confirming unresolved business meaning.
 ```
 
-If you use an unreleased Alder commit rather than v0.3, replace the release name with that selected revision. The prompt routes to the full knowledge; its summary does not replace that document.
+If you use an unreleased Alder commit rather than v0.4, replace the release name with that selected revision. The prompt routes to the full knowledge; its summary does not replace that document.
 
 A Business confirmation is not automatically a request to change implementation. An existing contract or external procedure may supply the required meaning. Confirm that basis and stop when sufficient.
 
