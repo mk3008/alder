@@ -49,8 +49,8 @@ product/
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
 | Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
-| 業務設計からCheck Item、テスト、コードまでを人間/AIで追跡する任意手順 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
+| 業務設計からCheck Item、テストまでを人間/AIで追跡し、テストでコードを検証する任意手順 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
-**Alder v0.4** では、未記載の機能条件を探す考慮漏れ検証を任意工程として追加し、v0.3でAtomic Checkとして導入した人間向け検査項目を **Check Item** と呼びます。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。[v0.4リリースノート（英語）](docs/release-notes-v0.4.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
+**Alder v0.5** では、恒久的なtraceabilityを **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。コードの正しさは、Business Design由来のTestを実行して検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
