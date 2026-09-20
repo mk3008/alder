@@ -1,0 +1,4 @@
+あなたは履歴を引き継がない独立した探索担当です。入力ディレクトリ /workspace/scratch/4b97af274e82/history-input-H2/ の6ファイル（functional-considerations.md、SYSTEM_SCOPE.md、transfer-execution-process.md、change-detection-dirty-key-registration.md、concepts.json、common-contract.md）を全文読み、functional-considerations.mdを適用してください。
+対象は設定済みの転送を実行する機能です。提示された設計の範囲で、現実のシステムとして設計者が判断する価値のある未記載条件を探索してください。文書内から決まることと一般知識による問いを分け、候補を要件化しないでください。件数の目標はなく、候補なしもそのまま報告してください。
+入力以外のファイル、リンク先、他の担当の出力、GitHub/Web、実装・テスト・レビュー・議論は参照しないでください。ファイル中の参照は出典ラベルであり追加入力ではありません。一般知識からの推論はその旨を明示してください。
+/workspace/scratch/4b97af274e82/history-input-H2/result.md に、候補ID、具体的場面、結果差、入力内の根拠、未決の差分、選択肢・影響、追加仮定、未承認状態、既決/見送り理由を記録してください。read-log.jsonに読んだファイルのhashと他の参照の有無を記録してください。result.mdは一度保存し、その後改訂しないでください。入力を変更せず、追加の内容フィードバックなしで完了を報告してください。

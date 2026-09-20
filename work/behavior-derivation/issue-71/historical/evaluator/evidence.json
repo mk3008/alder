@@ -1,0 +1,343 @@
+{
+  "git_sources": [
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/active_black.sql",
+      "sha256": "809fafe6911c38bae35d88e64ecc3e69af382b87dfd4280519251ae9c7b3cbd1",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/destination_definition.sql",
+      "sha256": "7c437683977b414c5f6f38fffd3fad1496ce096e80aa5f4dee7172353c9eec57",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/destination_link.sql",
+      "sha256": "170bc4fb7db99f1071aa24fbd1f0703558e475be96c86e0c164bbd68a2b2e34a",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/dirty_key.sql",
+      "sha256": "29e65cb7c578dc5555f3919c9c7198630dd49930c6c72e13f592183c706e959b",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/dirty_key_processing.sql",
+      "sha256": "488070c8ce2a80a5c7bfa6f18b40c49bf30001f35ee3a31d06afcb83d719725b",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/lineage.sql",
+      "sha256": "60f6ae51db426a99e4a5ec2909d71c1b59de79daafa66d09ae08bf9de0bc47d4",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/order.json",
+      "sha256": "b622fc721f26c993286474cacfeb325ec20a69a93794765a5b56a27588eaa5b0",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/relationship.json",
+      "sha256": "8035b77e62631a63ab5fa14f788f763898f19a0d395badefe175b9b87e89c4ec",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/run.sql",
+      "sha256": "02a2dd26a36bc5301dfb9d0b91876e2cdbeecaeb57adc07d9d4a0e60365d43ff",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/schema.sql",
+      "sha256": "fabfb43e07193e588eba2748299b121c1f999d089b3287add7a55d7e4484f662",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/setting.sql",
+      "sha256": "f435c39a66f64ae45b2d98360912d3fb31eb9c096a7cfc318df8177ecd486255",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/table-docs.json",
+      "sha256": "f2e3f85db5e302869072df2517789b6287037153c05578f2b610c36594100f0b",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "db/ddl/work_item.sql",
+      "sha256": "482775d1ea35390dd1b2e4267e5b1dc13503d46c331b8bda97d2a84d0c08502d",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/decisions/0001-adopt-review-and-sql-contracts.md",
+      "sha256": "35ce785c79ee6f0e3317626a90d66fe26d5d85b554393df50c93ab5fbb87673a",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/decisions/README.md",
+      "sha256": "68455b367a26229079de5ef99de24e8e6b334aaf203752bc335b83ca25a72fab",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/review/AUTHORITY_MODEL.md",
+      "sha256": "4c40e49c0bd2f3fb0236f3762e201b9e03a1627ed610ef56263f1ef1e6c0a7d9",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/testing/TEST_POLICY.md",
+      "sha256": "e0f0b6807bcc23a4cd87b2a5e5ec77e1b653fbe213fb42c4ec02bcb100be1086",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/testing/test-rules.json",
+      "sha256": "f36281abbd10d84679b77a5933c4e40e8f00d9acecba0b53f6fa23ecb04ffeaf",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/active_black.sql",
+      "sha256": "809fafe6911c38bae35d88e64ecc3e69af382b87dfd4280519251ae9c7b3cbd1",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/destination_definition.sql",
+      "sha256": "1ed7cd6d8a748d4e5be850f85d52de9f0e37d3ae000fa86caa6e4b10f7dde54d",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/destination_link.sql",
+      "sha256": "7d84651c2f7871b00e50bedd7f82055e4aa8431070420199ffa1ba3381d0ed1c",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/dirty_key.sql",
+      "sha256": "29e65cb7c578dc5555f3919c9c7198630dd49930c6c72e13f592183c706e959b",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/dirty_key_processing.sql",
+      "sha256": "488070c8ce2a80a5c7bfa6f18b40c49bf30001f35ee3a31d06afcb83d719725b",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/lineage.sql",
+      "sha256": "60f6ae51db426a99e4a5ec2909d71c1b59de79daafa66d09ae08bf9de0bc47d4",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/order.json",
+      "sha256": "b622fc721f26c993286474cacfeb325ec20a69a93794765a5b56a27588eaa5b0",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/relationship.json",
+      "sha256": "8035b77e62631a63ab5fa14f788f763898f19a0d395badefe175b9b87e89c4ec",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/run.sql",
+      "sha256": "02a2dd26a36bc5301dfb9d0b91876e2cdbeecaeb57adc07d9d4a0e60365d43ff",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/schema.sql",
+      "sha256": "fabfb43e07193e588eba2748299b121c1f999d089b3287add7a55d7e4484f662",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/setting.sql",
+      "sha256": "f435c39a66f64ae45b2d98360912d3fb31eb9c096a7cfc318df8177ecd486255",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/table-docs.json",
+      "sha256": "bb6ad5972b8cee1416d41dd9842fd7ac4559cbfc8d8fb1ed8c998834ffedecf8",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "db/ddl/work_item.sql",
+      "sha256": "1a42a5b42a6ea2a7190e8fee2bc3ea6a1cfd0fddb9fdfbc83f630a15a680a6c3",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0001-adopt-review-and-sql-contracts.md",
+      "sha256": "35ce785c79ee6f0e3317626a90d66fe26d5d85b554393df50c93ab5fbb87673a",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0002-phase1-trusted-execution.md",
+      "sha256": "489d3835f012849c3b9307342ec34dda3645ceb738127698cae217da95b777d9",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0003-phase2-immutable-reevaluation.md",
+      "sha256": "07b10ac3f1f0999721e9d5041d2ef2ee171c8266480aed61bbbec0ea868cf6be",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0004-phase3-source-disappearance.md",
+      "sha256": "3b3c3afe64e67e78fc0628f3c4a549c1cfe8950abbd824b9b16a1b59098275ee",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0005-phase4-mutable-snapshots.md",
+      "sha256": "ccc423166b7a68c48b85d6fec0f561de72429e0a0fcc8c946008214561ec3e94",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0006-phase5-insert-only-identity-mapping.md",
+      "sha256": "2af10b7c1d7cbc104af3c8a66add4c8918690d0e7c4e0fa34d9969dc06f6b9dd",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0007-structure-inventory.md",
+      "sha256": "f862dd97697c1f655899f4528d56cc5bed04f97b2d0ada9cda2241a82d021955",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/0008-multi-destination-verification.md",
+      "sha256": "9059ea2121ca9235617159825e23ac18743a5a4f12b522ab6320e6e08b2e6078",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/decisions/README.md",
+      "sha256": "8c1da3933a0b4bda6f67cea53f04b80fb7e04181b6fd123e4c65ee51be0a37f4",
+      "role": "as-of settlement check"
+    },
+    {
+      "revision": "847c8086c8dce53b37a6a825cce76f97e8e3e8c1",
+      "path": "docs/decisions/0002-phase1-trusted-execution.md",
+      "sha256": "187bb7f4aece57705039105cb2e6337d0d3f049e024beb75634c2836845e3243",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "8aac36e8837887e08cac3b8dea4d68ec933c3d3e",
+      "path": "docs/decisions/0002-phase1-trusted-execution.md",
+      "sha256": "8d22c058e13e675aa4346c94353515f6ff954ba1c5fea66cb43b85f2e42ec606",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "8aac36e8837887e08cac3b8dea4d68ec933c3d3e",
+      "path": "tests/features/execute-transfer/execution.integration.test.ts",
+      "sha256": "5e3002290bd87a17f03b38e1cee81b4a03ffeded5e4ab8744002e54c05823b75",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "6ffab6f963742dde41fc281ecbc66dae4d42d7f2",
+      "path": "docs/decisions/0002-phase1-trusted-execution.md",
+      "sha256": "d5ee86290eb0b53bb96a89a5c7a4fb44103b7afeac5b29023d93fb62bc63fec6",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "6e89908847b48fd619cab93cabc46295cca816c1",
+      "path": "docs/decisions/0010-bounded-execution-candidate.md",
+      "sha256": "40a39cb236385f0993e510534783e4f305bee94e3b17f3a83723ad5aacb3fc56",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "5452cce9832a15668cf39f2a0014c37629586435",
+      "path": "docs/decisions/0009-scalable-execution-evaluation.md",
+      "sha256": "e8b2315b25ce5fea9959bf6f0d1e26b97d8064eadb84fcb1688510dff2cde007",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "src/features/execute-transfer/boundary.ts",
+      "sha256": "2bfb42e479438d00717560b98753c6bb6b50b4abe919fdb05167cce396431317",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "tests/features/execute-transfer/execution.integration.test.ts",
+      "sha256": "3c7a37cc633909d0201aa8c72fa3e6011dd60f544005afa1fdca4c07d7027e2c",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "docs/review/issue-39/execute-transfer-mapping.md",
+      "sha256": "dccd312b086bf43efaebd713c8dad9144a39fadf1d9368f83c80405eef1c1e52",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "5d9872221b1e3f67cef671f644aacff69810efb1",
+      "path": "docs/review/issue-43/execute-transfer-atomic-checks.md",
+      "sha256": "05c5ddcfb7fd7cdc13df7f219a100937d83b02912e94c8a9859efd617cb6ec16",
+      "role": "later outcome support"
+    },
+    {
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "path": "docs/review/ai-review.json",
+      "sha256": "7864ea1c540ad3c931b5e25c58fc967cf24015081fc17660d2f9588020aee6af",
+      "role": "historical review settlement cross-check"
+    },
+    {
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "path": "docs/review/ai-review.json",
+      "sha256": "f571cd8806e5ff4e3aabb548db4d82c6e8667de321aba3934b573a8bc4ccb398",
+      "role": "historical review settlement cross-check"
+    },
+    {
+      "revision": "6739d2d8590f2041372d3e10c2fe938e209f2039",
+      "path": "docs/decisions/0003-phase2-immutable-reevaluation.md",
+      "sha256": "07b10ac3f1f0999721e9d5041d2ef2ee171c8266480aed61bbbec0ea868cf6be",
+      "role": "candidate-specific later evidence"
+    },
+    {
+      "revision": "7353b9ab8808493d6c5a04a332edb14a5e197f85",
+      "path": "docs/decisions/0004-phase3-source-disappearance.md",
+      "sha256": "3b3c3afe64e67e78fc0628f3c4a549c1cfe8950abbd824b9b16a1b59098275ee",
+      "role": "candidate-specific later evidence"
+    },
+    {
+      "revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+      "path": "tests/features/execute-transfer/reevaluation.integration.test.ts",
+      "sha256": "d901e5ce2f9eefc4aa0ab8ccf65d0a8b41ed9b2f10c70e7963fc9102ea64b956",
+      "role": "candidate-specific later evidence"
+    }
+  ],
+  "local_sha256": {
+    "evaluator/issue23.json": "948dbde4b55a3d4de26b33a47e20fc7efdea371737b98d6067158eeddc673c09",
+    "evaluator/issue5.json": "cd09640081268b0def0d787b5ed7cda792db1585aec8b840cf799d68b0fcf6f1",
+    "evaluator/issue20.json": "78f842b147973c6b4c3f0b82550d62f70b1ab56cd9587702595f63ab6de8c7d5",
+    "evaluator/pr4.json": "0883282e19f5be33060c0c3a680a8b3bb01978fdd2678c5b385a93fc4347cfc7",
+    "evaluator/issue3-comments.json": "925329709ccd375330a6c3a6d7b6df79d47e261d0d42ae0abf896594ce55243c",
+    "evaluator/issue3.json": "415ea56e9204113ca4bf8f309415d822760d4f54ecc4e22202178bf5f7abdab4"
+  },
+  "limits": "Current GitHub issue/comment captures are not complete historical edit snapshots. Created/updated timestamps and immutable git sources distinguish later evidence from as-of authority; absent pre-cutoff discussion cannot be proven globally."
+}

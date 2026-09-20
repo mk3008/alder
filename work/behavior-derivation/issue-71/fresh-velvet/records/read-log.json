@@ -1,0 +1,54 @@
+{
+  "target_version": "6b64e3b99845a315a394fee8e500564c3631e2af",
+  "local_inputs": [
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/functional-considerations.md",
+      "read_scope": "全文",
+      "sha256": "182f21693a3033fe3ddea25a6f658cf188c4362d43ee9ee60b345276b7f21dcc"
+    },
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/SYSTEM_SCOPE.md",
+      "read_scope": "全文",
+      "sha256": "9f89a2875dd41d857ad8c6d2229f6523f0476bd8ad7e78693c7575a1a3984813"
+    },
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/transfer-execution-process.md",
+      "read_scope": "全文",
+      "sha256": "c21740f36019debfee80ce1829637ad5d48944475c8dee4dd38cca744f773a6b"
+    },
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/change-detection-dirty-key-registration.md",
+      "read_scope": "全文",
+      "sha256": "66ed0be90b01e66d24f981d4bfbcf7069613b86f1c847a12dac0768d1a88a4c0"
+    },
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/concepts.md",
+      "read_scope": "全文",
+      "sha256": "3d5e05e1cec6289ffdbc1c813d94eb931e77c3901b9cf6b68817eae8d60fdfbd"
+    },
+    {
+      "path": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/common-contract.md",
+      "read_scope": "全文",
+      "sha256": "1493221c378eadb2c82f57d82427ecb8f9459d4f05e771f21e3d5bd7f4e2dfe7"
+    }
+  ],
+  "external_urls": [],
+  "external_url_use": "なし。一般知識からの推論は result.md に区別して記載。",
+  "other_references": [],
+  "other_references_present": false,
+  "not_accessed": [
+    "入力文書のリンク先",
+    "別ディレクトリ資料",
+    "実装",
+    "テスト",
+    "別の探索結果",
+    "過去の議論",
+    "Velvet 固有の Web/GitHub 情報"
+  ],
+  "read_note": "最初の連結表示は長さ制限で省略されたため、concepts.md は1–450、451–900、901–1350、1351–1800、1801–2395行に分けて全文を再読し、DFDも単独で全文再読した。他4ファイルは最初の表示で全文確認した。ファイル内容の読み取り対象は指定6ファイルのみ。",
+  "outputs": {
+    "result": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/result.md",
+    "read_log": "/workspace/scratch/4b97af274e82/velvet-discovery-packet/read-log.json"
+  },
+  "result_policy": "result.md は一度保存後に修正しない。"
+}

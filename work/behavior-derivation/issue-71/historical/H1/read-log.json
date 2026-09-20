@@ -1,0 +1,60 @@
+{
+  "task": "history_h1",
+  "input_directory": "/workspace/scratch/4b97af274e82/history-input-H1",
+  "hash_algorithm": "SHA-256",
+  "files": [
+    {
+      "name": "functional-considerations.md",
+      "sha256": "182f21693a3033fe3ddea25a6f658cf188c4362d43ee9ee60b345276b7f21dcc",
+      "bytes": 4653,
+      "read": "full"
+    },
+    {
+      "name": "SYSTEM_SCOPE.md",
+      "sha256": "17317b0221ae01a919010db9c332553035068a3714ee0703f458344d82f532ab",
+      "bytes": 3244,
+      "read": "full"
+    },
+    {
+      "name": "transfer-execution-process.md",
+      "sha256": "bf61e5b30ac501d6e67a9d7e64800b6b19b2614fc0487d3514b0637e96137d4b",
+      "bytes": 6048,
+      "read": "full"
+    },
+    {
+      "name": "change-detection-dirty-key-registration.md",
+      "sha256": "66ed0be90b01e66d24f981d4bfbcf7069613b86f1c847a12dac0768d1a88a4c0",
+      "bytes": 5595,
+      "read": "full"
+    },
+    {
+      "name": "concepts.json",
+      "sha256": "013ad474b2ef2039517e7d3d3a1a13ccb0ba16ccba9df601fc7599445af10b98",
+      "bytes": 300272,
+      "read": "full"
+    },
+    {
+      "name": "common-contract.md",
+      "sha256": "98142fc0ce1f67e3f24ce832717e16492f41e70da391909e2f8d5d0b383d668d",
+      "bytes": 453,
+      "read": "full"
+    }
+  ],
+  "reading_note": "Initial combined output was truncated; concepts.json was reread by complete concept objects and DFD/common-contract were reread separately. All 16 concepts, summaries, statements, and relationships were read.",
+  "other_references": {
+    "input_external_files": false,
+    "linked_documents": false,
+    "other_agents_outputs": false,
+    "github": false,
+    "web": false,
+    "implementation": false,
+    "tests": false,
+    "reviews": false,
+    "discussions": false,
+    "external_sources": []
+  },
+  "general_knowledge_used": true,
+  "general_knowledge_note": "General reasoning about failure during multiple DB writes and query result absence versus filtering; not treated as an approved product requirement.",
+  "result_save_policy": "result.md created once; no subsequent revision",
+  "input_modified": false
+}

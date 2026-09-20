@@ -1,0 +1,47 @@
+{
+  "input_directory": "/workspace/scratch/4b97af274e82/history-input-H2",
+  "files": [
+    {
+      "name": "functional-considerations.md",
+      "sha256": "182f21693a3033fe3ddea25a6f658cf188c4362d43ee9ee60b345276b7f21dcc",
+      "read": "full"
+    },
+    {
+      "name": "SYSTEM_SCOPE.md",
+      "sha256": "9f89a2875dd41d857ad8c6d2229f6523f0476bd8ad7e78693c7575a1a3984813",
+      "read": "full"
+    },
+    {
+      "name": "transfer-execution-process.md",
+      "sha256": "c21740f36019debfee80ce1829637ad5d48944475c8dee4dd38cca744f773a6b",
+      "read": "full"
+    },
+    {
+      "name": "change-detection-dirty-key-registration.md",
+      "sha256": "66ed0be90b01e66d24f981d4bfbcf7069613b86f1c847a12dac0768d1a88a4c0",
+      "read": "full"
+    },
+    {
+      "name": "concepts.json",
+      "sha256": "65724c003d81c904394960233675642a9df4a86f17682312bb8bea41513464da",
+      "read": "full"
+    },
+    {
+      "name": "common-contract.md",
+      "sha256": "dbb63550e5c31268aed59c0b7eaba764cc128b53a48ca15e8e251c2bc7d76ec3",
+      "read": "full"
+    }
+  ],
+  "other_references_used": false,
+  "external_files_read": [],
+  "links_followed": [],
+  "web_github_implementation_tests_reviews_discussions_consulted": false,
+  "other_agents_outputs_consulted": false,
+  "general_knowledge_used": true,
+  "general_knowledge_notes": [
+    "複数DB書込みの途中失敗と確定単位",
+    "並行更新中の複数読取りの参照時点"
+  ],
+  "reading_notes": "初回の一括出力に切詰めがあったため concepts.json は全16概念を小分けに再表示し、DFDも再表示して全文を読了。参照ラベルのリンク先は未読。",
+  "result_write_policy": "result.md は排他的新規作成で一度だけ保存し、改訂していない。"
+}

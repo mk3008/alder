@@ -32,7 +32,7 @@
 
 たとえば「空き会議室を確認する」を1枚の大きなカードにせず、「0件なら0件」「1件ならその1件」「複数件なら全件」「利用不可室を含めない」「予約済み室を含めない」「確認だけでは予約を作らない」「選択対象を予約へ引き継げる」のように、人間が個別に判断できる項目へ分ける。
 
-一方、「開始日時 < 終了日時でなければ予約不可」のように条件と期待結果を切り離すと意味が壊れるものは1 Checkのままでよい。Functional Interfaceを使う場合、Interfaceは責務のまとまりであり、Check Itemはその下の個別確認単位である。Interface自体をCheckの粒度まで細分化しない。
+一方、「開始日時 < 終了日時でなければ予約不可」のように条件と期待結果を切り離すと意味が壊れるものは1 Checkのままでよい。Functional Interfaceを使う場合、Interfaceは責務のまとまりであり、Atomic Checkはその下の個別確認単位である。Interface自体をCheckの粒度まで細分化しない。
 
 ## 根拠の強さとレビュー
 
@@ -112,4 +112,4 @@ Checkの分割・改名・表示変更・再生成を行う場合は意味保持
 
 後続AIは人間レビュー後の項目書と同じ版のBusiness Designを使い、入力版＋項目書版＋IDをテストへ対応付ける。未承認の考慮候補やBusiness Designへ戻す事項を確定した合否テストにしない。新しい意味判断が必要なら当該項目を保留する。
 
-詳細は [Check Item traceability](../check-item-traceability.md) を参照する。
+詳細は [Atomic Check traceability](../atomic-check-traceability.md) を参照する。
