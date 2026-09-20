@@ -56,10 +56,9 @@ def validate(meta):
                 raise ValueError(f'{owner}: invalid target or SHA-256 pin')
 
 
-def check_fingerprint(body, sources):
-    # Include reviewed source versions: source-only reconfirmation also invalidates
-    # the test edge even if the Check wording happens not to change.
-    return fingerprint({'body': body, 'sources': sources})
+def check_fingerprint(body):
+    # Tests verify the Check's expectation, not its source-review history.
+    return fingerprint(body)
 
 
 def detect(business, checks, meta, test_ids):
@@ -89,7 +88,7 @@ def detect(business, checks, meta, test_ids):
                 reasons.append(f'missing_check:{check}')
             elif check in stale_checks:
                 reasons.append(f'upstream_stale:{check}')
-            elif check_fingerprint(checks[check], meta['check_sources'][check]) != pin:
+            elif check_fingerprint(checks[check]) != pin:
                 reasons.append(f'check_changed:{check}')
         if reasons:
             stale_tests[test] = reasons

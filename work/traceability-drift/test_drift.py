@@ -19,12 +19,8 @@ class DetectorTests(unittest.TestCase):
     def test_many_to_many_source_propagation(self):
         self.meta['check_sources']['CHECK-02']['BD-01'] = fingerprint(self.business['BD-01'])
         self.meta['test_checks']['shared'] = {
-            check: check_fingerprint(self.checks[check], edges)
-            for check, edges in self.meta['check_sources'].items()}
-        # Reconfirm the existing CHECK-02 test against its expanded source set.
-        for edges in self.meta['test_checks'].values():
-            if 'CHECK-02' in edges:
-                edges['CHECK-02'] = check_fingerprint(self.checks['CHECK-02'], self.meta['check_sources']['CHECK-02'])
+            check: check_fingerprint(self.checks[check])
+            for check in self.meta['check_sources']}
         self.business['BD-01'] += 'Changed meaning.\n'
         result = detect(self.business, self.checks, self.meta, self.ids | {'shared'})
         self.assertEqual(set(result['stale_checks']), {'CHECK-01', 'CHECK-02'})
@@ -41,6 +37,31 @@ class DetectorTests(unittest.TestCase):
         first = detect(self.business, self.checks, self.meta, self.ids)
         self.assertEqual(first, detect(self.business, self.checks, self.meta, self.ids))
         self.assertEqual(self.meta, before)
+
+    def test_source_reconfirmation_keeps_unchanged_test_current(self):
+        original_tests = deepcopy(self.meta['test_checks'])
+        self.business['BD-01'] = self.business['BD-01'].replace('A booking', 'A reservation')
+        before = detect(self.business, self.checks, self.meta, self.ids)
+        self.assertEqual(before['stale_checks'], {'CHECK-01': ['source_changed:BD-01']})
+        self.assertEqual(before['stale_tests'], {
+            'test_product.BookingTests.test_limit': ['upstream_stale:CHECK-01']})
+
+        # Review found no change to the Check's meaning or text. Reconcile only
+        # its source edge; no Test pin or assertion is touched.
+        self.meta['check_sources']['CHECK-01']['BD-01'] = fingerprint(self.business['BD-01'])
+        after = detect(self.business, self.checks, self.meta, self.ids)
+        self.assertFalse(any(after.values()), after)
+        self.assertEqual(self.meta['test_checks'], original_tests)
+
+    def test_source_reconfirmation_does_not_hide_changed_check(self):
+        self.business['BD-01'] = self.business['BD-01'].replace('10 participants; 11', '20 participants; 21')
+        self.checks['CHECK-01'] = self.checks['CHECK-01'].replace(
+            '10 participants and reject 11', '20 participants and reject 21')
+        self.meta['check_sources']['CHECK-01']['BD-01'] = fingerprint(self.business['BD-01'])
+        result = detect(self.business, self.checks, self.meta, self.ids)
+        self.assertFalse(result['stale_checks'])
+        self.assertEqual(result['stale_tests'], {
+            'test_product.BookingTests.test_limit': ['check_changed:CHECK-01']})
 
     def test_reject_unknown_fields_including_code_mapping(self):
         self.meta['code'] = {}
@@ -76,9 +97,12 @@ class DetectorTests(unittest.TestCase):
                     items(path)
 
     def test_relation_order_is_not_a_revision(self):
-        sources = {'BD-01': 'a', 'BD-02': 'b'}
-        self.assertEqual(check_fingerprint('body', sources),
-                         check_fingerprint('body', dict(reversed(list(sources.items())))))
+        self.meta['check_sources']['CHECK-01']['BD-02'] = fingerprint(self.business['BD-02'])
+        before = detect(self.business, self.checks, self.meta, self.ids)
+        self.meta['check_sources']['CHECK-01'] = dict(
+            reversed(list(self.meta['check_sources']['CHECK-01'].items())))
+        self.assertFalse(any(before.values()), before)
+        self.assertEqual(before, detect(self.business, self.checks, self.meta, self.ids))
 
     def test_non_string_pin_is_invalid(self):
         self.meta['check_sources']['CHECK-01']['BD-01'] = None

@@ -13,13 +13,13 @@
   },
   "test_checks": {
     "test_product.BookingTests.test_limit": {
-      "CHECK-01": "51e4da50d7ea372e9387cde365d6d909d24b263587999f568993d9df01e044dc"
+      "CHECK-01": "031b55a6a53221a9ec7df160898b311474d1f8df6cdaa1c395ff4e202104efac"
     },
     "test_product.BookingTests.test_cancel": {
-      "CHECK-02": "6a7a6d89ff3aed25c0ca4a462e93accc46e8af103b193c088aacd46e65c481bb"
+      "CHECK-02": "81d3d310f6a83b60ac278bef9b30e28828c0328248de899ca24b5973955c0a82"
     },
     "test_product.BookingTests.test_owner": {
-      "CHECK-03": "6519220db6e805871005d0e3f5b7071aa34e75442bbdb4dc6e714834ab256812"
+      "CHECK-03": "3aed2472a29e278ce7ce56318a8d0648d0a76083f8e0f4ced17b86e93ea88273"
     }
   }
 }

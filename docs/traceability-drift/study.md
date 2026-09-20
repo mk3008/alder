@@ -6,7 +6,7 @@
 
 A saved edge can record the upstream version last checked against its downstream artifact. When that version changes, report **stale / requires reconfirmation**, not a business defect. The study demonstrates deterministic detection of omitted updates in the stored graph. It does not establish that a mapping is semantically correct or that a test proves its Check.
 
-Reason: in the synthetic local-change case, one of three Checks and its one test were selected, instead of all three with a document hash. A completed change required two fingerprint-field updates. Code refactoring required zero trace metadata edits. This supports a small opt-in trial, not a claim that lifetime savings exceed maintenance cost. Human review time and real missed-update frequency were not measured. If a product's reconfirmation cost exceeds the avoided omissions, do not adopt or discontinue the pilot.
+Reason: in the synthetic local-change case, one of three Checks and its one test were selected, instead of all three with a document hash. A completed expectation change required two fingerprint-field updates. A wording-only source change with an unchanged Check required one source-pin update and zero Test-pin updates. Code refactoring required zero trace metadata edits. This supports a small opt-in trial, not a claim that lifetime savings exceed maintenance cost. Human review time and real missed-update frequency were not measured. If a product's reconfirmation cost exceeds the avoided omissions, do not adopt or discontinue the pilot.
 
 Evidence: [reproducible observations](observations.json), [PoC and execution instructions](../../work/traceability-drift/README.md), [Issue #76](https://github.com/mk3008/alder/issues/76). Evaluated against Alder main `90dd8985cc8f4e0391b772bbba570ac8110bf04e`, using Python 3.12.14. No fresh-agent or blind evaluation is claimed.
 
@@ -20,7 +20,7 @@ Evidence: [reproducible observations](observations.json), [PoC and execution ins
 | Stable item ID + automatic content fingerprint | Local to saved edges | Section reorder / CRLF ignored; wording edits flagged | No manual revision bump; content extraction and explicit edge reconfirmation remain | Selected for bounded pilot; 26 runnable scenarios |
 | AI-only semantic comparison | Potentially local | Can judge semantic equivalence | No durable revision signal, repeat reading/inference cost and nondeterminism | Rejected as sole detector; use after deterministic candidate detection |
 
-[OpenFastTrace's Specification Item Revision](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/introduction/concepts_and_terms.md) describes semantic revisions that invalidate existing coverage references, while edits without meaning changes need not advance revision. Read source blob: `d62d7654194ee6ce21966dcb599446ade5367248`. This supplies the established versioned-link concept. Alder's narrower graph, content-derived signal, conservative test invalidation and pilot decision are this study's choices. OFT was not installed, run or evaluated; no OFT graph or Code markers are adopted.
+[OpenFastTrace's Specification Item Revision](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/introduction/concepts_and_terms.md) describes semantic revisions that invalidate existing coverage references, while edits without meaning changes need not advance revision. Read source blob: `d62d7654194ee6ce21966dcb599446ade5367248`. This supplies the established versioned-link concept. Alder's narrower graph, content-derived signal, Check-bounded test invalidation and pilot decision are this study's choices. OFT was not installed, run or evaluated; no OFT graph or Code markers are adopted.
 
 ## Experiment boundary
 
@@ -40,11 +40,13 @@ The sidecar's complete schema is illustrated by [trace.json](../../work/traceabi
 
 - `version: 1` identifies this PoC format.
 - `check_sources[Check ID][Business ID]` stores the source body fingerprint last reconciled with the Check.
-- `test_checks[runner Test ID][Check ID]` stores the fingerprint of the Check's body **and its saved source pins** last reconciled with the test assertion.
+- `test_checks[runner Test ID][Check ID]` stores the fingerprint of the **Check body only** last reconciled with the test assertion. Source pins are not part of the Test fingerprint.
 
-Fingerprints use SHA-256 over UTF-8 canonical JSON (`sort_keys=True`, compact separators, `ensure_ascii=False`). A source body is encoded as a JSON string; a Check snapshot as `{body, sources}`. Pins in the example are real computed values, not placeholders. JSON object ordering is irrelevant. Renaming a stable ID requires repairing edges; renaming a display title without changing the ID is a content edit.
+Fingerprints use SHA-256 over UTF-8 canonical JSON (`sort_keys=True`, compact separators, `ensure_ascii=False`). Both source and Check bodies are encoded as JSON strings; the Test pin contains no source-review metadata. Pins in the example are real computed values, not placeholders. JSON object ordering is irrelevant. Renaming a stable ID requires repairing edges; renaming a display title without changing the ID is a content edit.
 
-Including source pins in the Check snapshot matters: reconfirming a changed source while leaving Check wording unchanged must not silently make old Test evidence current. It conservatively selects that Test for review too. A single test can cover multiple Checks and a Check can have multiple sources/tests; regression tests exercise this propagation. This is a versioned directed graph with only the two existing relation types, not permanent Code traceability.
+Tests verify Check expectations, not their source-review history. While a Check has unreconciled sources, its Tests can appear as `upstream_stale` impact candidates. After those sources are reconciled, an unchanged Check body leaves previously matching Test pins current without Test review or pin updates. A changed Check body still produces `check_changed`; source reconfirmation cannot clear that mismatch or a missing Test. A single test can cover multiple Checks and a Check can have multiple sources/tests; regression tests exercise this propagation. This is a versioned directed graph with only the two existing relation types, not permanent Code traceability.
+
+The [PR #77 review](https://github.com/mk3008/alder/pull/77#pullrequestreview-5262152918) corrected the initial proposal, which mixed source pins into Test identity and required unnecessary Test reconfirmation. The current implementation and observations supersede that behavior; the [pre-review record](https://github.com/mk3008/alder/blob/bdaad49a8f38b08c5061ebb7b5e69b969d14c488/docs/traceability-drift/observations.json) remains in Git history. This narrows propagation at the existing Check boundary rather than adding a new review obligation.
 
 The detector returns `stale_checks`, `stale_tests` with reasons, and `mapping_candidates`. Removed sources/Checks and missing discovered tests are reported. New unmapped sources and Checks without test edges are mapping candidates, not proof that a new test is required. Extra unrelated discovered tests are permitted. Malformed inputs fail separately from stale candidates. A current fingerprint is **not** a human review state or test-evidence state.
 
@@ -58,25 +60,25 @@ The detector returns `stale_checks`, `stale_tests` with reasons, and `mapping_ca
 | B: section reorder or CRLF | 0 | 0 | 3 pass | These edits do not alter section fingerprints |
 | B: rewording or clause-order change | CHECK-01 | limit test | 3 pass | Conservative false positive for business meaning; review rather than automatic correction |
 | D: Business Design + Check + source pin updated, Test untouched | 0 | limit test | 3 pass | Old Test pin detects the second boundary's omitted update |
-| Source reconfirmed, Check text unchanged | 0 | limit test | 3 pass | Source provenance in the Check snapshot prevents premature clearing |
+| Source reconfirmed, Check text unchanged | 0 | 0 | 3 pass | Existing Test pins stay current; only the source pin changes |
 | Design, Check, Test, Code and reviewed pins updated | 0 | 0 | 3 pass | Completed local reconciliation |
 | Test updated to new expectation, Code left old | 0 | 0 | 1 fails | Test runner owns implementation verification; no Code map is needed |
 | Pins blindly refreshed, Test and Code left old | 0 | 0 | 3 pass | Deliberately reproduced false negative: hashes cannot attest review |
 | Wrong source mapping consistently pinned | Wrong CHECK-03 selected; CHECK-01 missed | Wrong owner test selected | 3 pass | Reproduced semantic mapping false negative; saved links need review |
 
-The machine-readable record contains all 26 scenarios, including missing relationships, deletion, rename, add, split, merge and refactor. Ten additional detector regression tests cover many-to-many propagation, malformed pins/IDs/sections, duplicate JSON keys, absent runner inventory and no implicit acknowledgement. Counts describe authored scenarios, not a measured detection rate.
+The machine-readable record contains all 26 scenarios, including missing relationships, deletion, rename, add, split, merge and refactor. Twelve additional detector regression tests cover many-to-many propagation, malformed pins/IDs/sections, duplicate JSON keys, absent runner inventory, no implicit acknowledgement, unchanged-Check reconfirmation and continued detection when the Check body changes. The unchanged-Check reconfirmation regression failed on the pre-review implementation and passed after the correction; the changed-Check regression still requires the old Test to be stale. Counts describe authored scenarios, not a measured detection rate.
 
 ## Maintenance measurements
 
-Counts are changed JSON scalar leaves: a renamed key counts as one removal plus one addition per attached leaf. They measure artifact churn, **not keystrokes, time or human decision effort**. The scenarios include normal business/test edits but the counts below concern additional trace metadata only.
+Counts are changed JSON scalar leaves: a renamed key counts as one removal plus one addition per attached leaf. Each observed scenario also reports `test_pin_leaf_edits` to distinguish Test metadata work from source-pin updates. They measure artifact churn, **not keystrokes, time or human decision effort**. The scenarios include normal business/test edits but the counts below concern additional trace metadata only.
 
 | Operation on this fixture | Metadata leaf edits | Extra work / scope |
 | --- | ---: | --- |
 | Initial setup | 6 relation pins + format version | Identify 3 source IDs and 3 Check IDs; review 3 source edges and 3 Test edges |
 | Business Design edit, before reconciliation | 0 | Detector computes current content; no manual revision bump |
-| Update one Check against changed source | 1 | Review the source → Check relation; affected Test stays stale |
+| Change one Check body against changed source | 1 | Review the source → Check relation; affected Test stays stale because the Check body changed |
 | Complete local Design/Check/Test reconciliation | 2 | One source pin and one Test pin; unrelated edges untouched |
-| Reconfirm wording-only source edit, Check unchanged | 1 so far; 2 after Test reconfirmation | Conservative cost even when expectations stay unchanged |
+| Reconfirm wording-only source edit, Check unchanged | 1 total | Source pin only; 0 Test-pin edits and no Test reconfirmation |
 | Add one Check using existing test | 2 | Add source and Test edges |
 | Split CHECK-01 into two Checks | 3 | Add two edges and refresh the changed original Check's Test pin |
 | Merge two Checks | 5 | Remove one source edge, add another source to retained Check, redirect/refresh Test edges |
@@ -93,7 +95,7 @@ Initial `trace.json`: **803 bytes**, including six 64-character fingerprints (**
 
 1. Change and, when needed, obtain the responsible human's confirmation of Business Design first. Run the read-only detector using current test discovery. Missing meaning returns to Business Design, as in existing Alder guidance.
 2. AI compares each affected source with its Check, proposes a correction or records why its meaning is preserved. Review this narrow diff. Update the source pin only with completed reconciliation; leave undecided items stale. Do not convert freshness to `確認済み` automatically.
-3. Follow saved Test edges. Check assertions against the current Check and source, including boundary cases. Update tests if needed and run relevant tests against Code. Update only reconciled Test pins; test execution alone is not evidence of meaning alignment.
+3. Follow saved Test edges when the Check body changed or an independent Test-evidence gap remains. Check assertions against the current Check, including boundary cases. Update tests if needed and run relevant tests against Code. Update only reconciled Test pins; test execution alone is not evidence of meaning alignment. If the Check body is unchanged after source reconciliation, leave matching Test pins untouched: source reconfirmation alone does not require Test review.
 4. Preserve the reason for unchanged downstream text or changed mappings in the normal reviewed PR/Decision evidence. No separate approval database is introduced. Business decisions belong to the responsible human; AI can extract, compute, draft and execute, but cannot infer approval from a matching hash.
 5. Run detection again. Keep unrelated items intact; no full regeneration. A project may make stale candidates a review gate, but this study does not impose a mandatory gate on Alder or block legitimate unmapped design scope automatically.
 
@@ -101,7 +103,7 @@ There is intentionally no bulk `accept`, baseline-regeneration or automatic ackn
 
 ## False positives, false negatives and stopping boundary
 
-- **False positives:** punctuation, wording, internal layout and within-item reorder; large source units select more Checks; cosmetic source edits conservatively propagate to Tests. Use existing stable semantic units, not one ID per sentence solely to improve counts. Meaning-aware normalization is deferred because its complexity and false-negative risk are not justified here.
+- **False positives:** punctuation, wording, internal layout and within-item reorder; large source units select more Checks; cosmetic source edits select related Tests only while their Check remains unreconciled. Reconfirmation without a Check body change ends that upstream impact; it does not require a Test-pin refresh. Use existing stable semantic units, not one ID per sentence solely to improve counts. Meaning-aware normalization is deferred because its complexity and false-negative risk are not justified here.
 - **False negatives:** missing/wrong semantic edges, normative context outside the declared units, blindly accepted pins, a weakened/misinterpreted test with unchanged Check, changes in external rules or undeclared dependencies. An unmapped-source warning helps discovery but cannot identify every missing edge when a source is already mapped elsewhere. Test inventory proves existence, not assertion adequacy.
 - A content change reverted before detection produces the original fingerprint; there is no history audit. Content identity, not chronological revision tracking, is the goal. The H1 label is intentionally excluded; putting policy there violates the fixture contract and can be missed.
 - Passing detection means no known freshness/mapping candidate in the supplied inventory; it does not prove business correctness, complete traceability, test quality or approval. Human review and existing test evidence remain necessary.

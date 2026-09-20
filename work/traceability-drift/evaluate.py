@@ -67,6 +67,7 @@ def run_case(name, mutate, expected_checks=(), expected_tests=(), expected_candi
         assert json.loads(cli.stdout) == result
         return {'case': name, 'product_tests': product, 'detection': result,
                 'metadata_leaf_edits': edited_fields(original, meta),
+                'test_pin_leaf_edits': edited_fields(original['test_checks'], meta['test_checks']),
                 'metadata_bytes': (p / 'trace.json').stat().st_size}
 
 
@@ -82,7 +83,7 @@ def check_update(p, meta):
 
 def acknowledge_test(p, meta):
     meta['test_checks'][TESTS['limit']]['CHECK-01'] = check_fingerprint(
-        items(p / 'checks.md')['CHECK-01'], meta['check_sources']['CHECK-01'])
+        items(p / 'checks.md')['CHECK-01'])
 
 
 def complete_update(p, meta):
@@ -120,7 +121,7 @@ def add_check(p, meta):
     replace(p / 'checks.md', 'owner.\n\n## CHECK-04', 'owner.\n## CHECK-04')
     meta['check_sources']['CHECK-04'] = deepcopy(meta['check_sources']['CHECK-01'])
     meta['test_checks'][TESTS['limit']]['CHECK-04'] = check_fingerprint(
-        items(p / 'checks.md')['CHECK-04'], meta['check_sources']['CHECK-04'])
+        items(p / 'checks.md')['CHECK-04'])
 
 
 def split_check(p, meta):
@@ -129,14 +130,14 @@ def split_check(p, meta):
     replace(p / 'checks.md', 'Given a request, reject zero participants.', 'Given a request, reject 11 participants.')
     acknowledge_test(p, meta)
     meta['test_checks'][TESTS['limit']]['CHECK-04'] = check_fingerprint(
-        items(p / 'checks.md')['CHECK-04'], meta['check_sources']['CHECK-04'])
+        items(p / 'checks.md')['CHECK-04'])
 
 
 def merge_checks(p, meta):
     replace(p / 'checks.md', '## CHECK-02\n', '')
     del meta['check_sources']['CHECK-02']
     meta['check_sources']['CHECK-01']['BD-02'] = fingerprint(items(p / 'business-design.md')['BD-02'])
-    pin = check_fingerprint(items(p / 'checks.md')['CHECK-01'], meta['check_sources']['CHECK-01'])
+    pin = check_fingerprint(items(p / 'checks.md')['CHECK-01'])
     meta['test_checks'][TESTS['limit']]['CHECK-01'] = pin
     meta['test_checks'][TESTS['cancel']] = {'CHECK-01': pin}
 
@@ -167,7 +168,9 @@ def main():
         '1 through 10 participants; 11 participants are rejected.',
         '11 participants are rejected; 1 through 10 participants are accepted.'), ['CHECK-01'], [TESTS['limit']])
     run('D_check_updated_test_old', check_update, tests=[TESTS['limit']])
-    run('D_source_reconfirmed_check_text_unchanged', cosmetic_reconfirm, tests=[TESTS['limit']])
+    run('D_source_reconfirmed_check_text_unchanged', cosmetic_reconfirm)
+    assert rows[-1]['metadata_leaf_edits'] == 1
+    assert rows[-1]['test_pin_leaf_edits'] == 0
     run('complete_update', complete_update)
     def premature(p, m):
         check_update(p, m)
@@ -213,7 +216,7 @@ def main():
         m['check_sources']['CHECK-03']['BD-01'] = fingerprint(items(p / 'business-design.md')['BD-01'])
         acknowledge_test(p, m)
         m['test_checks'][TESTS['owner']]['CHECK-03'] = check_fingerprint(
-            items(p / 'checks.md')['CHECK-03'], m['check_sources']['CHECK-03'])
+            items(p / 'checks.md')['CHECK-03'])
         business_change(p, m)
     run('wrong_mapping_false_negative_for_CHECK_01', omitted, ['CHECK-03'], [TESTS['owner']])
     # Compare baseline whole-file pin against the same localized edit.
