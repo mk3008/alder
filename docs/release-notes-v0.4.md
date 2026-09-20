@@ -1,7 +1,5 @@
 # Alder v0.4 — functional consideration discovery and Check Items
 
-**Release notes draft.** v0.4 is not yet published. The latest published release remains v0.3; research review knowledge remains v0.3.
-
 ## Optional functional consideration discovery
 
 After Business Design and its business-correlation review, an AI can explore undocumented functional conditions before or alongside Check Item drafting. It uses relevant general knowledge to propose concrete situations with different observable outcomes, then checks existing Decisions, shared contracts and scope before returning genuinely unresolved questions to a person.
@@ -42,4 +40,3 @@ The hash-protected c3 input and verifier used by Issue #71 are retained byte-for
 
 v0.4 adds an optional workflow alongside the existing derivation and traceability guidance, which warrants a minor release rather than a v0.3 documentation patch. The terminology cleanup ships with that workflow addition. It introduces no runtime/API migration, new framework or architecture requirement, nor a new version of the permanent review knowledge.
 
-Publishing the release and creating its tag are separate from this preparation PR.
