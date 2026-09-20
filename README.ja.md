@@ -53,6 +53,6 @@ product/
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
-**Alder v0.3** では、研究候補の**レビュー知識 v0.3**を変更せず、人間/AIで使うCheck Item traceabilityを任意手順として追加します。Alderは引き続き研究候補です。[v0.3 リリースノート（英語）](docs/release-notes-v0.3.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
+**Alder v0.3** ではAtomic Checkとして導入し、現行ではCheck Itemと呼びます。人間/AIで使うtraceabilityは任意手順であり、研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。[v0.3 リリースノート（英語）](docs/release-notes-v0.3.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
 
 v0.4に向けた現行文書では、v0.3のAtomic Checkを **Check Item** と呼び、考慮漏れ検証を任意工程として追加します。[v0.4リリースノート案](docs/release-notes-v0.4.md)を参照してください。公開済みリリースは引き続きv0.3です。

@@ -79,7 +79,7 @@ Record the selected review knowledge source revision in the routing instructions
 
 ### Versions and access
 
-The current release is **Alder v0.3**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.3 adds optional Check Item traceability and keeps the review knowledge itself at v0.3.
+The current release is **Alder v0.3**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.3 introduced Atomic Check traceability, now called Check Item traceability. This workflow is optional and keeps the review knowledge itself at v0.3.
 
 For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.3`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.3 and the copied knowledge remains research version v0.3, regardless of the local filename.
 
