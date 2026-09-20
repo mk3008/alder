@@ -54,7 +54,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Preventing predictable operator errors through ordinary structure | Adopted with limited scope | [Operational error resistance](#operational-error-resistance) |
 | Reusing benchmarks and stopping bounded evaluation | Adopted | [Research operation](#research-operation) |
 | Human-readable behavior/check lists derived before implementation | Adopted with limited scope; optional human-completed draft | [Behavior derivation](#behavior-derivation) |
-| Check Item as human/AI traceability index | Adopted with limited scope; optional two-layer traceability | [Check Item traceability](#check-item-traceability) |
+| Check Item as human/AI traceability index | Adopted with limited scope; permanent traceability ends at Test | [Check Item traceability](#check-item-traceability) |
 
 ## Scope and placement
 
@@ -134,17 +134,26 @@ Limits: c3 initially had one completed-input observation. Velvet Issue #39 / PR 
 
 ## Check Item traceability
 
-Terminology: **Atomic Check (v0.3 terminology; now Check Item)**. Historical artifacts keep their original wording and filenames. The v0.4 naming change preserves item granularity, IDs, review states and Test/Code mappings.
+Terminology: **Atomic Check (v0.3 terminology; now Check Item)**. Historical artifacts keep their original wording and filenames.
 
-**Two-layer Check Item traceability — adopted with limited, optional scope.** [Issue #68](https://github.com/mk3008/alder/issues/68) combines the c3 Check Item correction with the real-product Velvet Issue #43 / PR #44 application. The human-facing layer uses Check ID, title, expected result and human review state; the AI/developer layer retains precise conditions, Business/Decision evidence, derivation classification/confidence, representative test assertions, primary code/SQL entry points and mapping/evidence state under the same ID. [Current guidance](check-item-traceability.md) treats Functional Interfaces as optional responsibility groups above those Checks.
+**Two-layer Check Item traceability — adopted with limited, optional scope; v0.5 narrows the permanent boundary to Test.** [Issue #68](https://github.com/mk3008/alder/issues/68) established the human-facing Check list and supporting traceability details. [Issue #74](https://github.com/mk3008/alder/issues/74) removes permanent Check Item ↔ Code/file/symbol/SQL-location mappings from current guidance.
 
-Reason: the Velvet execute-transfer review found the responsibility groups understandable and the Check Item representation materially easier for the human reviewer to discuss than the earlier compound Check rows. The same case was then traced by AI in both directions: representative Checks reached Business/Decision evidence, tests and code; a multi-destination test traced back to its Check and Decision; missing direct test evidence remained distinct from missing implementation. A meaning-preservation audit also recovered guarantees that had disappeared during an intermediate formatting change.
+The human-facing layer uses Check ID, title, expected result and human review state. The AI/developer layer retains precise conditions, Business/Decision evidence, derivation classification/confidence, representative test assertions and test-evidence state under the same ID. Permanent traceability is:
 
-The multi-destination probe exposed an important authority boundary. Existing Decision/test behavior allowed per-Link no-op decisions while preserving transaction-wide rollback on write failure. A human raised a possible stronger business intent that correlated accounting links should always move together. The implementation evidence could identify the conflict, but could not approve the stronger business meaning. Therefore the adopted workflow makes **Business Design the SSOT**: reverse tracing is diagnostic only. When a human review changes or supplies business meaning, update and confirm Business Design first, then refresh affected Interface/Check/Decision/Test/Code mappings.
+```text
+Business Design ↔ Functional Interface (optional) ↔ Check Item ↔ Automated Test
+Automated Test ─ verifies → Code
+```
 
-Review state (未レビュー / 要確認 / 確認済み / 要修正) is separate from AI derivation confidence and from test-evidence state. Title wording remains deliberately under-specified: broad terms that hide the actual object were hard to review, capability phrasing sometimes helped, and invariants read better as invariant statements. No universal grammar is adopted.
+Reason: Check Item ↔ Test is a semantic relationship between an approved expectation and its executable evidence. It is comparatively stable across refactoring. A permanent Check Item ↔ Code location map instead tracks physical structure that may move under human or AI maintenance, adding a second artifact that can silently drift while tests still pass. Code locations may still be explored temporarily during review or debugging, but that exploration is not an Alder artifact to maintain.
 
-Limits: this is one product slice and one human reviewer, with no controlled timing or defect-detection comparison. The AI traceability probes were bounded examples rather than a measurement of maintenance cost or completeness. The workflow does not require a complete matrix, one Check per assertion, or a Functional Interface layer where direct Business Design → Check → Test/Code navigation is already clear. Reconsider if two-layer documents drift, meaning-preservation audits become burdensome, human readability degrades, or reverse tracing begins to treat implementation as business authority.
+The earlier Velvet and Functional Interface studies remain historical evidence. They recorded code/SQL entry points and direct Check/Test/Code mappings because those were the evaluated candidates at the time. v0.5 does not rewrite those records or claim they were invalid experiments; it changes the current operating boundary after considering their maintenance cost.
+
+Business Design remains the SSOT. Check Item review can feed back into Business Design when a human finds missing or incorrect business meaning. Tests can be traced back to Check Items and Business Design. Tests then verify the current implementation by execution. Code does not acquire business authority, and Alder does not require source annotations, Check IDs in code, line-level matrices or maintained physical-location maps.
+
+Review state (未レビュー / 要確認 / 確認済み / 要修正) remains separate from AI derivation confidence and from test-evidence state. No universal title grammar is adopted.
+
+Limits: this change is a maintenance-boundary decision, not measured proof that Test-bounded traceability lowers total maintenance cost. Reconsider only if real use shows that a stable non-physical Code linkage provides decision-relevant value that cannot be obtained from tests and fresh code exploration without reintroducing drift-prone location maintenance.
 
 ## Functional Interface mapping
 
@@ -152,7 +161,7 @@ Limits: this is one product slice and one human reviewer, with no controlled tim
 
 Reason: responsibility and change-navigation entry points can be made explicit without constraining physical structure. Existing 20 tests passed, yet bounded probes/code inspection retained the known M1 semantic mismatch and missing M2 user reconciliation route against the newer resolved design. Two claims have partial/missing existing test evidence; the unapproved MR-09 remains ambiguous rather than an implementation defect. No orphan business capability was confirmed in the inspected scope. Reflection: [optional adoption guidance](adoption.md#optional-use-functional-interfaces-as-a-responsibility-index); no review-knowledge v0.3 change.
 
-Limits: same-evaluator, known-version-difference case, not a fresh or controlled detection study. Direct Check→Test/Code mapping can express the same findings; seven contract cards, 24 ownership links and 35 related links add maintenance. No measured human readability/cost or AI maintenance advantage, no human completion of the drafts, and no all-check/all-code coverage claim. Reconsider when direct mappings become concretely difficult to navigate, or duplicate contract updates cause drift. A mandatory separate specification or claims of superior detection require comparative usage evidence, not more benchmark completion. One case was sufficient for this bounded judgment; no second benchmark was run.
+Limits: same-evaluator, known-version-difference case, not a fresh or controlled detection study. The historical study showed that direct Check→Test/Code mapping could express the same findings; v0.5 preserves that observation as history but no longer adopts permanent Code-location mapping. Seven contract cards, 24 ownership links and 35 related links illustrate the maintenance cost that motivated the narrower current boundary. No measured human readability/cost or AI maintenance advantage, no human completion of the drafts, and no all-check/all-code coverage claim. Reconsider when direct mappings become concretely difficult to navigate, or duplicate contract updates cause drift. A mandatory separate specification or claims of superior detection require comparative usage evidence, not more benchmark completion. One case was sufficient for this bounded judgment; no second benchmark was run.
 
 ## Functional consideration coverage
 
