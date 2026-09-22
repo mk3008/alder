@@ -152,8 +152,18 @@ def parse_design(text):
         if category == 'Object':
             icon = 'box'
             if body != '(generic icon)':
-                values = sections(body, ('## Icon',), node_id)
-                icon = values['## Icon']
+                object_headings = ['## Icon']
+                if any(h == '## Information' for _, h in headings(body)):
+                    object_headings.append('## Information')
+                values = sections(body, tuple(object_headings), node_id)
+                require([h for _, h in headings(body)] == object_headings,
+                        f'{node_id}: Object fields must follow Icon/[Information] order')
+                icon = 'box' if values['## Icon'] == '(generic icon)' else values['## Icon']
+                if '## Information' in values:
+                    for line in values['## Information'].splitlines():
+                        if line.strip():
+                            require(re.fullmatch(r'- \S.*', line),
+                                    f'{node_id} Information: expected - information concept')
             graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(), 'icon': icon})
             continue
         field_headings = ['## Scope'] + ['## ' + key for key in FIELDS]
