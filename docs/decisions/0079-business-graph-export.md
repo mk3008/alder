@@ -134,3 +134,22 @@ Re-read every Activity in both directions after the rule update:
 | 業務グラフ出力 | The source design's definitions and relations are read from 業務設計書 and the projected nodes/relations/version are written to 業務グラフJSON. |
 
 One input and one output label in 業務設計 and two in 検査項目の設計 were simplified; these retain the review and decision steps as prose. All same-direction I/O references to the same Object remain unified within each Activity. This was a human-readable self-review of the proposed business description; the requester still determines whether its meaning is right. The graph stays at 29 nodes and 66 relations.
+
+### Trial iteration — Alder responsibility versus adjacent development
+
+The [scope-boundary comment](https://github.com/mk3008/alder/pull/80#issuecomment-5785653745) distinguishes using Alder's output from work that Alder itself governs. The quality-review knowledge now asks this for every Activity, and the adoption guide clarifies that coding, Test creation and execution remain adjacent even when they use Business Design and Check Items. Reapplied this check to all ten Activities:
+
+| Activity | Scope and review outcome |
+| --- | --- |
+| 業務設計 | `true`: Alder defines and confirms the business meaning. |
+| システム設計 | `false`: technology selection consumes requirements; its internal choices are not prescribed. |
+| 検査項目の設計 | `true`: Check derivation, requester review and the required traceability are Alder responsibilities. |
+| 実装 | `false`: an adjacent process uses requirements and confirmed Check expectations to make code and tests. Reduced Procedure to creation/update and the Check ID–Test handoff needed for Alder's existing traceability; removed guide modification and internal test-case/branch detail. Keep the actual exceptional return to business design. |
+| 同期漏れ検査 | `true`: this specifically describes Alder's optional drift pilot, not generic Test execution. It remains explicitly opt-in and does not certify business meaning. |
+| テスト・検証 | `false`: an adjacent process executes tests and supplies results for Alder's review. Reduced Procedure to the necessary transfer, execution and recorded result; keep an actual defect return to implementation. |
+| 実装レビュー | `true`: Alder reads design, Check, code, tests and verification evidence to detect business-meaning mismatch. Existing Check ID–Test relationship remains available from 検査項目. |
+| 研究評価 | `true`: evaluation and acceptance of Alder's own method/knowledge changes, rather than generic product development. |
+| 変更の提供 | `false`: PR/merge/release are general delivery work. Reduced Procedure to the handoff and human permission, retaining the existing explicit authorization boundary. |
+| 業務グラフ出力 | `true`: this optional exporter is the Alder-specific tool introduced by Issue #79; successful projection does not approve meaning. |
+
+For this trial, four Activities are adjacent (`scope:false`) and six are within the described Alder work. Scope does not erase correlation: implementation still receives Business Design, system requirements and confirmed Check expectations, and provides code, Test, Check ID mapping and technical decision records. Verification still provides results, and Alder review reads the Check Items, code, tests and results. Adding the previously missing Check Item Input to the review makes that handoff explicit. The graph now has 29 nodes and 65 relations: removed two implementation guide transfers, added one review Check Item Input. The narrower Procedures do not repeal the existing adoption/traceability guidance for products choosing Alder. The proposed boundary is returned for human review; exporter tests establish only source/graph consistency.
