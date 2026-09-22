@@ -75,6 +75,27 @@ class ExportTests(unittest.TestCase):
             ('output', 'read', 'person', 'Notification'),
         })
 
+    def test_activity_scope_preserves_adjacent_business_and_transfers(self):
+        source = SOURCE.replace('## Why', '## Scope\n\n対象外（相関理解のため）\n\n## Why')
+        graph = parse_design(source)
+        node = next(n for n in graph['nodes'] if n['id'] == 'read')
+        self.assertEqual(node['scope'], '対象外（相関理解のため）')
+        self.assertEqual(graph['relations'], parse_design(SOURCE)['relations'])
+        self.assertNotIn('scope', graph)
+        graph['scope'] = 'Document boundary'
+        validate_graph(graph)
+        for value in ('', ' ', False, {}):
+            invalid = copy.deepcopy(graph)
+            next(n for n in invalid['nodes'] if n['id'] == 'read')['scope'] = value
+            with self.subTest(value=value), self.assertRaises(DesignError):
+                validate_graph(invalid)
+        for bad in (SOURCE.replace('## Why', '## Scope\n\n## Why'),
+                    source.replace('## Scope', '## Scope\n\nA\n\n## Scope'),
+                    SOURCE.replace('## Who', '## Scope\n\nOutside\n\n## Who'),
+                    SOURCE.replace('## Icon', '## Scope\n\nOutside\n\n## Icon')):
+            with self.subTest(source=bad), self.assertRaises(DesignError):
+                parse_design(bad)
+
     def test_visible_name_rename_updates_identity_and_connections(self):
         with self.assertRaisesRegex(DesignError, 'dangling relation'):
             parse_design(SOURCE.replace('# Object person', '# Object 依頼者'))
@@ -330,6 +351,14 @@ class ExportTests(unittest.TestCase):
             '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
             '変更の提供', '業務グラフ出力',
         })
+        self.assertEqual(nodes['システム設計']['scope'], '対象外（全体フローを理解するために記載）')
+        self.assertEqual(nodes['システム設計']['when'], '技術検討の依頼')
+        self.assertTrue(all('scope' in n for n in nodes.values() if n['type'] == 'business'))
+        self.assertEqual({r['from'] for r in graph['relations']
+                          if r['kind'] == 'input' and r['to'] == 'システム設計'},
+                         {'業務設計書', '判断記録', 'コード'})
+        self.assertFalse(any(r['kind'] == 'business-exception' and r['to'] == 'システム設計'
+                             for r in graph['relations']))
         self.assertEqual(nodes['依頼者']['type'], 'object')
         self.assertEqual('業務設計者', nodes['業務設計']['who'])
         self.assertEqual('目的・変更要求を受領したとき', nodes['業務設計']['when'])

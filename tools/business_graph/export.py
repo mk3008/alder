@@ -53,6 +53,8 @@ def validate_graph(graph):
         kind = node.get('type')
         require(kind in ('business', 'object'), 'invalid node type')
         expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
+        if kind == 'business' and 'scope' in node:
+            expected.add('scope')
         require(set(node) == expected, f'invalid {kind} node fields')
         require(all(nonempty(v) for v in node.values()), 'node fields must be nonempty text')
         require(visible_name(node['name']) and node['id'] == node['name'], 'node ID must equal its visible name')
@@ -153,15 +155,19 @@ def parse_design(text):
             graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(), 'icon': icon})
             continue
         field_headings = ['## ' + key for key in FIELDS]
+        if any(h == '## Scope' for _, h in headings(body)):
+            field_headings.insert(0, '## Scope')
         if any(h == '## Exception When' for _, h in headings(body)):
             field_headings.insert(field_headings.index('## When') + 1, '## Exception When')
         expected = tuple(field_headings) + ('## How', '### Input', '### Procedure', '### Output')
         values = sections(body, expected, node_id, empty=('## How',))
         require(not values['## How'], f'{node_id}: How must contain Input, Procedure, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow Why/When/[Exception When]/Who/Where/How/Input/Procedure/Output order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow [Scope]/Why/When/[Exception When]/Who/Where/How/Input/Procedure/Output order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
+        if '## Scope' in values:
+            node['scope'] = values['## Scope']
         graph['nodes'].append(node)
         if '## Exception When' in values:
             for line in values['## Exception When'].splitlines():
