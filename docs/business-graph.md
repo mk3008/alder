@@ -31,7 +31,7 @@ The supported subset is deliberately small:
 - One H1 document title and an optional explanatory preamble. Put scope in the visible Scope section and graph-relevant meaning in the Activity fields/relations. No HTML comments are accepted in this profile.
 - An optional `# Scope` prose section, copied as document-wide graph `scope`.
 - `# Object <name>` sections containing `## Icon` with a kebab-case Lucide icon name, or `(generic icon)` to use `box`. This visible value may be selected and changed by a person or AI.
-- `# Activity <name>` sections with nonempty `## Why`, `## When`, `## Who`, `## Where`, structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. An optional nonempty `## Scope` may appear before Why and is preserved as the business node’s `scope` text. It states whether the Activity is within responsibility or included only for adjacent context; omission means unspecified, not implicitly in scope. This is separate from document-wide `# Scope`. An optional nonempty `## Exception When` may appear immediately after When. Use “Not specified” / 規定なし for Where when the environment imposes no business condition.
+- `# Activity <name>` sections with nonempty `## Why`, `## When`, `## Who`, `## Where`, structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. A required `## Scope` must appear before Why and contain exactly `true` or `false`: within responsibility or outside responsibility but included for adjacent context. JSON business `scope` is a boolean, never a string. Omission, prose, numbers and other values are errors. Objects have no Scope. This is separate from document-wide `# Scope` prose. An optional nonempty `## Exception When` may appear immediately after When. Use “Not specified” / 規定なし for Where when the environment imposes no business condition.
 - Input and Output contain one `- Object name — label` per line, or exactly `(none)`. Use the Object's visible name exactly. The Object name identifies who/what is connected; the label describes the content actually read, written or delivered, such as requirements or a review request. Apply this to documents, databases and external people; do not substitute an Object name for the transferred content. Declare actual Object ↔ Business transfers, not a general reference-material inventory. Multiple differently labeled transfers to the same Object are allowed. The old `- [id]: label` notation is rejected because it can disappear as a Markdown link-reference definition.
 - `## Exception When` contains `- Source activity name — trigger and necessary recovery condition` lines. Each creates a `business-exception` from that named Activity to the containing Activity; it is not copied into normal `when` or a second node attribute. Unknown sources, Object sources, empty/malformed lines and duplicate relations are errors. Put each such relation here or in Graph exceptions, not both.
 - Optional `# Graph exceptions` lists `- business-exception Business name → Business name — label` or `- object-exception Object name → Object name — label`. Both endpoints are visible names. These exception/return flows are separate from ordinary Input/Output; no exceptions are inferred.
@@ -60,6 +60,10 @@ users
 (generic icon)
 
 # Activity Result explanation
+
+## Scope
+
+true
 
 ## Why
 
@@ -95,16 +99,16 @@ Not specified.
 
 ## JSON v1 contract
 
-[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision. This PR is the first, unreleased v1; the optional business `scope` preserves visible Activity scope without inferring a classification or dropping adjacent nodes. This is an additive refinement within that unreleased contract: the reviewed contract uses `name` for What and has no duplicate `what` field. The earlier PR drafts are not supported released formats; unknown `what` fields and hidden source annotations are rejected. JSON IDs now equal visible names, so the earlier kebab-case ID constraint no longer applies.
+[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision. This PR is the first, unreleased v1; the required boolean business `scope` preserves visible Activity scope without inferring a classification or dropping adjacent nodes. Earlier optional/text Scope drafts are superseded within that unreleased contract: the reviewed contract uses `name` for What and has no duplicate `what` field. The earlier PR drafts are not supported released formats; unknown `what` fields and hidden source annotations are rejected. JSON IDs now equal visible names, so the earlier kebab-case ID constraint no longer applies.
 
 | Entity | Fields |
 | --- | --- |
 | Graph | `version: 1` (integer), `nodes` (nonempty array with at least one business), `relations` (array), optional nonempty `scope` string |
-| Business | `id`, `type: "business"`, `name` (What: the heading's short business name), `why`, `when`, `who`, `where`, optional nonempty `scope` string |
+| Business | `id`, `type: "business"`, `name` (What: the heading's short business name), `why`, `when`, `who`, `where`, required `scope` boolean |
 | Object | `id`, `type: "object"`, `name`, `icon` |
 | Relation | `kind`, `from`, `to`, `label` |
 
-All node fields and relation fields are nonempty strings. Each node’s `id` equals its visible `name`; relation endpoints use those same names. Both endpoints reference existing IDs. Exact duplicate relations (same kind/from/to/label) are rejected; differently labeled relations sharing endpoints are retained. There is no artificial Input/Output group node and no edge ID to maintain. Relation kind and direction carry the semantics:
+All node fields except business `scope`, and all relation fields, are nonempty strings. Business `scope` must be a JSON boolean; consumers can use `scope === false` to style adjacent businesses, for example in gray. Each node’s `id` equals its visible `name`; relation endpoints use those same names. Both endpoints reference existing IDs. Exact duplicate relations (same kind/from/to/label) are rejected; differently labeled relations sharing endpoints are retained. There is no artificial Input/Output group node and no edge ID to maintain. Relation kind and direction carry the semantics:
 
 | Kind | Allowed endpoints | Meaning |
 | --- | --- | --- |

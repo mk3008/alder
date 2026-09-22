@@ -18,6 +18,10 @@ EXAMPLE = ROOT / 'business-design/alder/graph.generated.json'
 def activity(node_id='read', who='Analyst'):
     return f'''# Activity {node_id}
 
+## Scope
+
+true
+
 ## Why
 
 Determine the next action.
@@ -62,7 +66,7 @@ class ExportTests(unittest.TestCase):
         graph = parse_design(SOURCE)
         nodes = {node['id']: node for node in graph['nodes']}
         self.assertEqual(nodes['read'], {
-            'id': 'read', 'type': 'business', 'name': 'read',
+            'id': 'read', 'type': 'business', 'name': 'read', 'scope': True,
             'why': 'Determine the next action.',
             'when': 'A request arrives.', 'who': 'Analyst', 'where': 'Not specified.',
         })
@@ -76,25 +80,49 @@ class ExportTests(unittest.TestCase):
         })
 
     def test_activity_scope_preserves_adjacent_business_and_transfers(self):
-        source = SOURCE.replace('## Why', '## Scope\n\n対象外（相関理解のため）\n\n## Why')
+        source = SOURCE.replace('## Scope\n\ntrue', '## Scope\n\nfalse')
         graph = parse_design(source)
         node = next(n for n in graph['nodes'] if n['id'] == 'read')
-        self.assertEqual(node['scope'], '対象外（相関理解のため）')
+        self.assertIs(node['scope'], False)
         self.assertEqual(graph['relations'], parse_design(SOURCE)['relations'])
         self.assertNotIn('scope', graph)
         graph['scope'] = 'Document boundary'
         validate_graph(graph)
-        for value in ('', ' ', False, {}):
+        for value in ('', ' ', 'false', 'true', 0, 1, None, {}):
             invalid = copy.deepcopy(graph)
             next(n for n in invalid['nodes'] if n['id'] == 'read')['scope'] = value
             with self.subTest(value=value), self.assertRaises(DesignError):
                 validate_graph(invalid)
-        for bad in (SOURCE.replace('## Why', '## Scope\n\n## Why'),
+        for bad in (SOURCE.replace('## Scope\n\ntrue\n\n', ''),
+                    SOURCE.replace('## Scope\n\ntrue', '## Scope\n\n'),
                     source.replace('## Scope', '## Scope\n\nA\n\n## Scope'),
                     SOURCE.replace('## Who', '## Scope\n\nOutside\n\n## Who'),
                     SOURCE.replace('## Icon', '## Scope\n\nOutside\n\n## Icon')):
             with self.subTest(source=bad), self.assertRaises(DesignError):
                 parse_design(bad)
+
+    def test_required_boolean_scope_rejects_missing_or_coerced_values(self):
+        for value in ('True', 'FALSE', '0', '1', '対象内', '"false"'):
+            with self.subTest(value=value), self.assertRaises(DesignError):
+                parse_design(SOURCE.replace('## Scope\n\ntrue', '## Scope\n\n' + value))
+        graph = parse_design(SOURCE)
+        next(n for n in graph['nodes'] if n['type'] == 'business').pop('scope')
+        with self.assertRaises(DesignError):
+            validate_graph(graph)
+        graph = parse_design(SOURCE)
+        next(n for n in graph['nodes'] if n['type'] == 'object')['scope'] = True
+        with self.assertRaises(DesignError):
+            validate_graph(graph)
+
+    def test_system_requirements_handoff(self):
+        graph = parse_design(DESIGN.read_text())
+        edges = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}
+        self.assertEqual({r for r in edges if 'システム設計' in r[1:3]}, {
+            ('input', '業務設計書', 'システム設計', '業務要件'),
+            ('output', 'システム設計', 'システム要件書', 'インフラ・開発言語・アーキテクチャ・フレームワーク等'),
+        })
+        self.assertIn(('input', '業務設計書', '実装', '業務要件'), edges)
+        self.assertIn(('input', 'システム要件書', '実装', '技術要件'), edges)
 
     def test_visible_name_rename_updates_identity_and_connections(self):
         with self.assertRaisesRegex(DesignError, 'dangling relation'):
@@ -201,7 +229,8 @@ class ExportTests(unittest.TestCase):
     def test_scope_is_preserved_once(self):
         graph = parse_design(SOURCE + '\n# Scope\n\nCurrent work only.\n\nNo future work.\n')
         self.assertEqual(graph['scope'], 'Current work only.\n\nNo future work.')
-        self.assertTrue(all('scope' not in node for node in graph['nodes']))
+        self.assertTrue(all(node['scope'] is True for node in graph['nodes'] if node['type'] == 'business'))
+        self.assertTrue(all('scope' not in node for node in graph['nodes'] if node['type'] == 'object'))
 
     def test_procedure_excluded_and_fenced_headings_not_nodes(self):
         revised = SOURCE.replace('1. Read and explain the question.',
@@ -351,12 +380,12 @@ class ExportTests(unittest.TestCase):
             '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
             '変更の提供', '業務グラフ出力',
         })
-        self.assertEqual(nodes['システム設計']['scope'], '対象外（全体フローを理解するために記載）')
+        self.assertIs(nodes['システム設計']['scope'], False)
         self.assertEqual(nodes['システム設計']['when'], '技術検討の依頼')
         self.assertTrue(all('scope' in n for n in nodes.values() if n['type'] == 'business'))
         self.assertEqual({r['from'] for r in graph['relations']
                           if r['kind'] == 'input' and r['to'] == 'システム設計'},
-                         {'業務設計書', '判断記録', 'コード'})
+                         {'業務設計書'})
         self.assertFalse(any(r['kind'] == 'business-exception' and r['to'] == 'システム設計'
                              for r in graph['relations']))
         self.assertEqual(nodes['依頼者']['type'], 'object')
