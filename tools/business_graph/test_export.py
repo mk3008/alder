@@ -124,9 +124,7 @@ class ExportTests(unittest.TestCase):
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
             ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 判断結果'),
-            ('input', 'テスト', work, '既存のアサーションと関連する回帰テスト'),
-            ('input', '判断記録', work, '検証に影響する技術的な制約と前提'),
-            ('output', work, '検査項目', '期待結果、レビュー状態、Business Design / Testとの対応、検証不足'),
+            ('output', work, '検査項目', '期待結果、レビュー状態、Business Designとの対応、検証不足'),
             ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 未決事項相談 / 判断依頼'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
@@ -144,6 +142,9 @@ class ExportTests(unittest.TestCase):
             self.assertEqual(len(edges), 1)
             self.assertIn('期待結果', edges[0]['label'])
             self.assertIn('検証不足', edges[0]['label'])
+        implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
+        self.assertIn('代表的なケースを選んでテストを作成・更新する', implementation)
+        self.assertIn('Check IDを代表的なTest / assertionに対応づけ', implementation)
 
     def test_system_requirements_handoff(self):
         graph = parse_design(DESIGN.read_text())
