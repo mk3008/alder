@@ -148,8 +148,11 @@ class ExportTests(unittest.TestCase):
             self.assertIn('期待結果', edges[0]['label'])
             self.assertIn('検証不足', edges[0]['label'])
         implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
-        self.assertIn('代表的なケースを選んでテストを作成・更新する', implementation)
+        self.assertIn('Testを、既存のテストを踏まえて作成・更新する', implementation)
         self.assertIn('Check IDを代表的なTest / assertionに対応づけ', implementation)
+        graph_edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
+        self.assertIn(('output', '実装', '検査項目'), graph_edges)
+        self.assertNotIn(('input', 'レビュー結果', '実装'), graph_edges)
 
     def test_system_requirements_handoff(self):
         graph = parse_design(DESIGN.read_text())
@@ -405,6 +408,7 @@ class ExportTests(unittest.TestCase):
             ('input', '依頼者', work, 'レビュー結果 / 判断'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移フィードバック'),
             ('input', 'Alder: 業務ナレッジ', work, '考慮漏れフィードバック'),
+            ('input', 'Alder: 業務設計品質レビュー知識', work, '5W1H・I/O・Procedure・Exceptionの記述品質観点（PR #80試行）'),
             ('output', work, '業務設計書', 'スコープ、業務手順、業務相関'),
             ('output', work, '判断記録', '判断 / 結果'),
             ('output', work, '依頼者', '業務レビュー依頼 / 仮案説明 / 未決事項相談 / 判断依頼'),
