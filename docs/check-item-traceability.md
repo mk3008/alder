@@ -46,9 +46,9 @@ When a human review reveals that the current meaning is wrong, incomplete, or no
 2. Update Business Design first.
 3. Have the responsible human confirm the revised business meaning.
 4. Re-derive or update affected Functional Interfaces and Check Items from that confirmed Business Design revision.
-5. Update Decision Records when implementation choices or assumptions change.
+5. Collect the rationale for changed implementation choices or assumptions; record confirmed material choices in the Alder review/follow-up without treating them as business approval.
 6. Update tests and code.
-7. Re-check Business Design → Interface → Check → Test traceability, then run the relevant tests against the implementation.
+7. After implementation and test execution, use the Alder review/follow-up to check Test expectations against the confirmed Check Items, update Check → Test traceability and remaining evidence gaps, and re-check Business Design → Interface → Check → Test before accepting the change.
 
 Do not infer a business rule from existing code, tests, or a Decision Record and then silently treat that inferred rule as approved Business Design.
 
