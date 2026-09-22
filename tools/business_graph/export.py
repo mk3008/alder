@@ -159,11 +159,15 @@ def parse_design(text):
         field_headings = ['## Scope'] + ['## ' + key for key in FIELDS]
         if any(h == '## Exception When' for _, h in headings(body)):
             field_headings.insert(field_headings.index('## When') + 1, '## Exception When')
-        expected = tuple(field_headings) + ('## How', '### Input', '### Procedure', '### Output')
+        how_headings = ['### Input', '### Procedure']
+        if any(h == '### Exception' for _, h in headings(body)):
+            how_headings.append('### Exception')
+        how_headings.append('### Output')
+        expected = tuple(field_headings) + ('## How', *how_headings)
         values = sections(body, expected, node_id, empty=('## How',))
-        require(not values['## How'], f'{node_id}: How must contain Input, Procedure, Output only')
+        require(not values['## How'], f'{node_id}: How must contain Input, Procedure, optional Exception, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/Output order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/[Exception]/Output order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
         require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
