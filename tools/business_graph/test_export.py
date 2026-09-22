@@ -16,11 +16,9 @@ EXAMPLE = ROOT / 'business-design/alder/graph.generated.json'
 
 
 def activity(node_id='read', who='Analyst'):
-    return f'''# Activity {node_id} — Read a request
+    return f'''# Activity Read a request
 
-## What
-
-Understand a request.
+<!-- alder-id: {node_id} -->
 
 ## Why
 
@@ -57,7 +55,7 @@ Not specified.
 
 
 PREAMBLE = '# Design\n\n<!-- alder-business-graph: 1 -->\n\n'
-OBJECTS = '# Object person — External person\n\n## Icon\n\nusers\n\n# Object record — Record\n\n(generic icon)\n\n'
+OBJECTS = '# Object External person\n\n<!-- alder-id: person -->\n\n## Icon\n\nusers\n\n# Object Record\n\n<!-- alder-id: record -->\n\n(generic icon)\n\n'
 SOURCE = PREAMBLE + OBJECTS + activity()
 
 
@@ -67,7 +65,7 @@ class ExportTests(unittest.TestCase):
         nodes = {node['id']: node for node in graph['nodes']}
         self.assertEqual(nodes['read'], {
             'id': 'read', 'type': 'business', 'name': 'Read a request',
-            'what': 'Understand a request.', 'why': 'Determine the next action.',
+            'why': 'Determine the next action.',
             'when': 'A request arrives.', 'who': 'Analyst', 'where': 'Not specified.',
         })
         self.assertEqual(nodes['record']['icon'], 'box')
@@ -78,6 +76,42 @@ class ExportTests(unittest.TestCase):
             ('output', 'read', 'record', 'Explanation'),
             ('output', 'read', 'person', 'Notification'),
         })
+
+    def test_display_rename_preserves_identity_and_connections(self):
+        original = parse_design(SOURCE)
+        renamed = parse_design(SOURCE.replace('# Activity Read a request', '# Activity 依頼確認')
+                               .replace('# Object External person', '# Object 依頼者'))
+        self.assertEqual(original['relations'], renamed['relations'])
+        self.assertEqual([n['id'] for n in original['nodes']], [n['id'] for n in renamed['nodes']])
+        nodes = {n['id']: n for n in renamed['nodes']}
+        self.assertEqual(nodes['read']['name'], '依頼確認')
+        self.assertEqual(nodes['person']['name'], '依頼者')
+        self.assertNotIn('what', nodes['read'])
+
+    def test_identity_annotation_is_required_and_unambiguous(self):
+        for node_id in ('read', 'person', 'record'):
+            marker = f'<!-- alder-id: {node_id} -->'
+            for replacement in ('', '<!-- alder-id: Bad ID -->',
+                                marker + '\n' + marker, marker + ' trailing text'):
+                with self.subTest(node_id=node_id, replacement=replacement), self.assertRaises(DesignError):
+                    parse_design(SOURCE.replace(marker, replacement))
+        old_heading = SOURCE.replace('# Activity Read a request\n\n<!-- alder-id: read -->',
+                                     '# Activity read — Read a request')
+        with self.assertRaises(DesignError):
+            parse_design(old_heading)
+
+    def test_duplicate_what_is_rejected_in_source_and_json(self):
+        with self.assertRaises(DesignError):
+            parse_design(SOURCE.replace('## Why', '## What\n\nRead a request\n\n## Why'))
+        graph = parse_design(SOURCE)
+        next(n for n in graph['nodes'] if n['type'] == 'business')['what'] = 'Read a request'
+        with self.assertRaises(DesignError):
+            validate_graph(graph)
+
+    def test_shared_role_can_filter_multiple_activities(self):
+        graph = parse_design(SOURCE + '\n' + activity('approve'))
+        self.assertEqual({n['id'] for n in graph['nodes'] if n.get('who') == 'Analyst'},
+                         {'read', 'approve'})
 
     def test_many_inputs_outputs_and_shared_object_labels(self):
         other = activity('approve').replace('Existing context', 'Evidence for approval')
@@ -130,8 +164,8 @@ class ExportTests(unittest.TestCase):
                          render(parse_design(prefix + b + '\n' + a)))
 
     def test_duplicate_ids_across_and_within_node_types(self):
-        for extra in (activity(), '# Object read — Collision\n\n(generic icon)\n',
-                      '# Object record — Collision\n\n(generic icon)\n'):
+        for extra in (activity(), '# Object Collision\n\n<!-- alder-id: read -->\n\n(generic icon)\n',
+                      '# Object Collision\n\n<!-- alder-id: record -->\n\n(generic icon)\n'):
             with self.subTest(extra=extra), self.assertRaisesRegex(DesignError, 'duplicate node ID'):
                 parse_design(SOURCE + '\n' + extra)
 
@@ -214,7 +248,7 @@ class ExportTests(unittest.TestCase):
                SOURCE + '\n# Unknown\n\nA hidden activity.\n',
                SOURCE + '\n# Graph exceptions\n\n- business-exception read -> read: \n',
                SOURCE + '\n```\nUnclosed fence',
-               SOURCE.replace('## What\n\nUnderstand a request.', '## What\n\nUnderstand a request.\n\n### Extra\nHidden'),
+               SOURCE.replace('## Why\n\nDetermine the next action.', '## Why\n\nDetermine the next action.\n\n### Extra\nHidden'),
                SOURCE + '\n# Scope\n\nA\n\n# Scope\n\nB\n']
         for source in bad:
             with self.subTest(source=source), self.assertRaises(DesignError):
@@ -230,8 +264,9 @@ class ExportTests(unittest.TestCase):
             'delivery-work', 'graph-export',
         })
         self.assertEqual(nodes['requester']['type'], 'object')
-        self.assertIn('業務上の意味は責任者である人間が確認する', nodes['business-design-work']['who'])
-        self.assertIn('範囲を限定した任意試行を利用しており', nodes['drift-inspection']['when'])
+        self.assertEqual('業務設計者', nodes['business-design-work']['who'])
+        self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
+        self.assertIn('任意試行の利用時', nodes['drift-inspection']['when'])
         self.assertIn({'kind': 'object-exception', 'from': 'tests', 'to': 'code',
                        'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))

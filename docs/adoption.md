@@ -54,12 +54,14 @@ The current research recommends **5W1H, with How written as Input → Procedure 
 
 | Field | What to describe |
 | --- | --- |
-| What | The name of the work. We consider it necessary to identify the activity. |
-| Why | Its purpose, stated briefly enough to help explain decisions and constraints. Deep purpose analysis is not required. |
-| When | Its trigger. Prefer work that starts in response to a preceding result, external event, or state change. |
-| Who | Who performs the work, makes the judgment, or bears responsibility. |
-| Where | A site, location, or channel when it affects operational decisions or procedures. Otherwise, “not specified” is sufficient. |
+| What | A short business name, represented by the Activity heading; do not repeat it as a separate explanatory field. |
+| Why | Its purpose, in a short phrase. |
+| When | Its start trigger: a preceding result, external event, or state change. Keep relevant activation conditions explicit. |
+| Who | A short, stable role name for the work; reuse the same name for the same role. |
+| Where | A short place or channel name. Use “not specified” when no location constraint applies. |
 | How | Input: what is received from preceding work, users, or external sources → Procedure: what is decided or processed → Output: what is passed to subsequent work as an established fact. |
+
+Design these field values for their later use in correlation views and role filters, not as general explanatory paragraphs. Keep machine IDs separate from human-facing Activity/Object names. Put AI/human assignments, assistance, approval responsibility and detailed operating conditions in Procedure or operating rules; shortening fields must not delete these guarantees. The [optional export profile](business-graph.md#opt-in-markdown-profile-v1) uses hidden ID annotations and projects the Activity heading as the business name. Older research source documents remain frozen as evidence.
 
 The point is not to fill every field mechanically. It is to **identify the activity through What and trace relationships between activities through Who / When / Input / Output**.
 

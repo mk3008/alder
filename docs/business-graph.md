@@ -22,16 +22,17 @@ Existing Business Design remains valid for Alder review without using this expor
 
 Follow the [requester-language principle](adoption.md#language-for-agreement) for source prose and human-facing names/labels. The exporter preserves that text without translating it; keep the profile's structural headings and stable IDs as specified below.
 
-The profile keeps the recommended **5W1H / How = Input → Procedure → Output** sections. Prose fields are authored once in the design and copied to JSON, without a separate handwritten graph/metadata copy of those fields.
+The profile keeps the recommended **5W1H / How = Input → Procedure → Output** sections. The Activity heading is What (the short business name); do not repeat it in a What section. Who is a short, stable role name for grouping/filtering; Why is the purpose, When the start trigger, and Where the place/channel. Keep these values concise and use consistent names for the same role or channel. Put assignment to AI/humans, support, approval responsibility and detailed conditions in Procedure or operating rules. These details remain authoritative even though Procedure is not projected. There is no separate handwritten graph/metadata copy of the fields.
 
 The supported subset is deliberately small:
 
 - One H1 document title and preamble, containing exactly one standalone `<!-- alder-business-graph: 1 -->` line. The preamble explains context but is not projected. Put scope in the explicit Scope section and graph-relevant meaning in the Activity fields/relations.
 - An optional `# Scope` prose section, copied as the document-wide graph `scope`. It applies to all activities; no new per-node scope hierarchy is invented.
-- `# Object <stable-id> — <name>` sections, each containing `## Icon` with a kebab-case Lucide icon name. Alternatively the entire Object body can be `(generic icon)`, yielding `box`.
-- `# Activity <stable-id> — <name>` sections with nonempty `## What`, `## Why`, `## When`, `## Who`, `## Where`, then structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. Use an explicit “Not specified” for Where when appropriate.
+- `# Object <name>` sections, each beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by `## Icon` with a kebab-case Lucide icon name. Alternatively the body after the ID annotation can be `(generic icon)`, yielding `box`.
+- `# Activity <name>` sections beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by nonempty `## Why`, `## When`, `## Who`, `## Where`, then structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. Use an explicit “Not specified” for Where when appropriate.
 - Input and Output contain one `- [object-id]: label` per line (blank lines allowed), or exactly `(none)`. These are explicit references, not Markdown link definitions. Labels contain all the declared information received/written on that relation, including conditions. Multiple differently labeled relations to the same Object are allowed.
 - Optional `# Graph exceptions` with one `- business-exception from-id -> to-id: label` or `- object-exception from-id -> to-id: label` per line. No inferred exceptions.
+- ID annotations are separate from display names and hidden in rendered Markdown. Missing, malformed or duplicate ID annotations are rejected, not inferred from names. The earlier ID-in-heading draft is unsupported.
 - IDs are globally unique across both node types and match `[a-z0-9]+(?:-[a-z0-9]+)*`. Keep IDs stable when renaming display text. Section order does not establish identity or execution order.
 - Prose fields preserve their internal Markdown and newlines after trimming outer whitespace and normalizing CRLF to LF. The parser recognizes unindented ATX headings outside fenced code. Extra headings inside fields are unsupported; use paragraphs/lists instead. Fenced examples inside Procedure are allowed and do not create phantom nodes.
 - Unsupported/duplicate headings or fields after the preamble, empty required fields, unlabeled/unrecognized I/O lines and unclosed fences are errors, not silently dropped input. This is not an arbitrary Markdown parser. The title/preamble and Procedure are not graph fields.
@@ -47,33 +48,35 @@ Minimal example:
 
 Explain the result of one request.
 
-# Object requester — Requester
+# Object Requester
+
+<!-- alder-id: requester -->
 
 ## Icon
 
 users
 
-# Object result — Result document
+# Object Result document
+
+<!-- alder-id: result -->
 
 (generic icon)
 
-# Activity explain — Explain a result
+# Activity Result explanation
 
-## What
-
-Explain the requested result.
+<!-- alder-id: explain -->
 
 ## Why
 
-Let the requester decide the next action.
+Support the next-action decision
 
 ## When
 
-A request is received.
+Request receipt
 
 ## Who
 
-The analyst.
+Analyst
 
 ## Where
 
@@ -97,12 +100,12 @@ Not specified.
 
 ## JSON v1 contract
 
-[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision.
+[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision. This PR is the first, unreleased v1: the reviewed contract uses `name` for What and has no duplicate `what` field. The earlier PR draft is not a supported released format; unknown `what` fields are rejected.
 
 | Entity | Fields |
 | --- | --- |
 | Graph | `version: 1` (integer), `nodes` (nonempty array with at least one business), `relations` (array), optional nonempty `scope` string |
-| Business | `id`, `type: "business"`, `name` (heading's short name), `what`, `why`, `when`, `who`, `where` |
+| Business | `id`, `type: "business"`, `name` (What: the heading's short business name), `why`, `when`, `who`, `where` |
 | Object | `id`, `type: "object"`, `name`, `icon` |
 | Relation | `kind`, `from`, `to`, `label` |
 
@@ -115,7 +118,7 @@ All node fields and relation fields are nonempty strings. Both endpoints referen
 | `business-exception` | Business → Business | Explicit exceptional control/return, not data transfer; render dashed if visualized |
 | `object-exception` | Object → Object | Explicit exceptional Object relationship, such as Test verifying Code by execution |
 
-Who stays a business attribute. An external person can be an Object when the work receives information from or delivers information to that person. Names or matching text never create a Who-to-Object edge.
+Who stays a short role-name business attribute, not a narrative about who assists or approves. Reuse the same role name across activities so consumers can filter by exact value. An external person can be an Object when the work receives information from or delivers information to that person. Names or matching text never create a Who-to-Object edge.
 
 `icon` names refer to Lucide, using the canonical kebab-case spelling such as `file-text`. Missing source icons use `box`; an explicitly empty/malformed Icon is an error. JSON always contains an icon. This exporter checks syntax, not membership of a pinned Lucide release; it neither downloads nor maintains SVGs/catalogs. A future consumer should resolve against its own Lucide version and fall back to `box` for an unavailable name. Icons do not change node or relation semantics.
 

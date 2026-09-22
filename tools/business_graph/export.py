@@ -11,8 +11,9 @@ import tempfile
 
 MARKER = '<!-- alder-business-graph: 1 -->'
 ID = r'[a-z0-9]+(?:-[a-z0-9]+)*'
-ENTITY = re.compile(rf'# (Activity|Object) ({ID}) — (\S.*)')
-FIELDS = ('What', 'Why', 'When', 'Who', 'Where')
+ENTITY = re.compile(r'# (Activity|Object) (\S.*)')
+IDENTITY = re.compile(rf'<!-- alder-id: ({ID}) -->')
+FIELDS = ('Why', 'When', 'Who', 'Where')
 KINDS = ('input', 'output', 'business-exception', 'object-exception')
 
 
@@ -47,7 +48,7 @@ def validate_graph(graph):
         require(isinstance(node, dict), 'node must be an object')
         kind = node.get('type')
         require(kind in ('business', 'object'), 'invalid node type')
-        expected = {'id', 'type', 'name', 'what', 'why', 'when', 'who', 'where'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
+        expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
         require(set(node) == expected, f'invalid {kind} node fields')
         require(all(nonempty(v) for v in node.values()), 'node fields must be nonempty text')
         require(re.fullmatch(ID, node['id']) is not None, f'invalid node ID: {node["id"]}')
@@ -139,7 +140,12 @@ def parse_design(text):
             continue
         match = ENTITY.fullmatch(heading)
         require(match, f'unsupported top-level heading: {heading}')
-        category, node_id, name = match.groups()
+        category, name = match.groups()
+        identity, _, body = body.partition('\n')
+        id_match = IDENTITY.fullmatch(identity)
+        require(id_match, f'{heading}: expected standalone <!-- alder-id: stable-id --> before fields')
+        node_id = id_match.group(1)
+        body = body.strip()
         if category == 'Object':
             icon = 'box'
             if body != '(generic icon)':
@@ -151,7 +157,7 @@ def parse_design(text):
         values = sections(body, expected, node_id, empty=('## How',))
         require(not values['## How'], f'{node_id}: How must contain Input, Procedure, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow What/Why/When/Who/Where/How/Input/Procedure/Output order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow Why/When/Who/Where/How/Input/Procedure/Output order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
         graph['nodes'].append(node)
