@@ -48,6 +48,8 @@ I/OからProcedureへ自然に展開でき、ProcedureからI/Oへ自然に要�
 | --- | --- | --- |
 | Activityの境界と成果物 | 一つの目的として追えるか。統合後に旧Activityや同じ恒久成果物のObjectが残っていないか | 過度な分割、テスト計画と検査項目の二重管理 |
 | Scopeと隣接業務 | `scope:true` は対象手法が責任を持つ業務か。成果物を利用するだけの業務は `scope:false` か。対象外のI/OとProcedureは前後相関を追える必要十分な粒度か | Alderの検査項目を使う実装・Test実行までAlderの責任に含め、コード作成や実行の内部手順を過剰に規定 |
+| 責務境界をまたぐ更新 | `scope:false` のBusinessが対象手法固有の恒久成果物へ直接書き込んでいないか。必要な追跡・記録はどの `scope:true` のActivityが担うか | 隣接する実装がCheck ↔ Test対応やAlderのDecision Recordを直接更新し、レビュー側での意味確認が抜ける |
+| Testの根拠と作成順 | Testの期待結果は確認済みCheck / Business Designへ遡れるか。CodeとTestを同一Activityで作るとき、根拠のない作成順を規定していないか | 現行挙動を追認するTest、Test-first/Code-firstを業務設計が一律に強制 |
 | Procedureの主体と利用Object | 手順の主体はWhoのロールか。「Xを使う」のXはInputのObjectか。AIの支援と業務主体が区別できるか | 「Alderを使うAI」が主体となり、利用する知識や人間の確認が曖昧になる |
 | Who / When / Where | Whoは担当ロールか。Whenは通常の開始イベントか。Whereは業務成立や要件を変える環境・チャネルか | 依頼者ObjectをWhoと混同、前提をWhenへ、ブランチやCIをWhereへ |
 | Input / Output | 実際に受け取り・渡すObjectと内容か。Object名とrelation labelが役割分担しているか | 参照資料一覧、対象文書名をlabelへ転記、更新したObjectのOutput漏れ |
