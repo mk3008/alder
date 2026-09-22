@@ -124,6 +124,9 @@ class ExportTests(unittest.TestCase):
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
             ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 判断結果'),
+            ('input', 'テスト', work, '既存のアサーションと関連する回帰テスト'),
+            ('input', '判断記録', work, '検証に影響する技術的な制約と前提'),
+            ('output', work, 'テスト計画', '計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足'),
             ('output', work, '検査項目', '確定・更新した検査項目'),
             ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 未決事項相談 / 判断依頼'),
         })
@@ -395,7 +398,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(render(graph), EXAMPLE.read_text())
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
-            '業務設計', 'システム設計', '検査項目の設計', 'テスト設計', '実装',
+            '業務設計', 'システム設計', '検査項目の設計', '実装',
             '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
             '変更の提供', '業務グラフ出力',
         })
