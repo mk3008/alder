@@ -162,10 +162,14 @@ class ExportTests(unittest.TestCase):
             self.assertIn('期待結果', edges[0]['label'])
             self.assertIn('検証不足', edges[0]['label'])
         implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
-        self.assertIn('検証ケースとTestのアサーションを、既存のテストを踏まえて作成・更新する', implementation)
-        self.assertIn('Check IDを代表的なTest / assertionに対応づけ', implementation)
+        self.assertIn('コードと実行可能なテストを作成・更新する', implementation)
+        self.assertIn('TestとCheck IDの対応と残る検証不足を検査項目に記録', implementation)
+        self.assertFalse(next(n for n in graph['nodes'] if n['id'] == '実装')['scope'])
+        self.assertFalse(next(n for n in graph['nodes'] if n['id'] == 'テスト・検証')['scope'])
+        self.assertTrue(next(n for n in graph['nodes'] if n['id'] == '実装レビュー')['scope'])
         graph_edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
         self.assertIn(('output', '実装', '検査項目'), graph_edges)
+        self.assertIn(('input', '検査項目', '実装レビュー'), graph_edges)
         self.assertNotIn(('input', 'レビュー結果', '実装'), graph_edges)
 
     def test_system_requirements_handoff(self):
@@ -446,6 +450,9 @@ class ExportTests(unittest.TestCase):
             '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
             '変更の提供', '業務グラフ出力',
         })
+        self.assertEqual({n['id'] for n in nodes.values()
+                          if n['type'] == 'business' and not n['scope']},
+                         {'システム設計', '実装', 'テスト・検証', '変更の提供'})
         self.assertIs(nodes['システム設計']['scope'], False)
         self.assertEqual(nodes['システム設計']['when'], '技術検討の依頼')
         self.assertTrue(all('scope' in n for n in nodes.values() if n['type'] == 'business'))
