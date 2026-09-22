@@ -16,9 +16,7 @@ EXAMPLE = ROOT / 'business-design/alder/graph.generated.json'
 
 
 def activity(node_id='read', who='Analyst'):
-    return f'''# Activity Read a request
-
-<!-- alder-id: {node_id} -->
+    return f'''# Activity {node_id}
 
 ## Why
 
@@ -40,8 +38,8 @@ Not specified.
 
 ### Input
 
-- [person] — Question
-- [record] — Existing context
+- person — Question
+- record — Existing context
 
 ### Procedure
 
@@ -49,13 +47,13 @@ Not specified.
 
 ### Output
 
-- [record] — Explanation
-- [person] — Notification
+- record — Explanation
+- person — Notification
 '''
 
 
-PREAMBLE = '# Design\n\n<!-- alder-business-graph: 1 -->\n\n'
-OBJECTS = '# Object External person\n\n<!-- alder-id: person -->\n\n## Icon\n\nusers\n\n# Object Record\n\n<!-- alder-id: record -->\n\n(generic icon)\n\n'
+PREAMBLE = '# Design\n\n'
+OBJECTS = '# Object person\n\n## Icon\n\nusers\n\n# Object record\n\n(generic icon)\n\n'
 SOURCE = PREAMBLE + OBJECTS + activity()
 
 
@@ -64,7 +62,7 @@ class ExportTests(unittest.TestCase):
         graph = parse_design(SOURCE)
         nodes = {node['id']: node for node in graph['nodes']}
         self.assertEqual(nodes['read'], {
-            'id': 'read', 'type': 'business', 'name': 'Read a request',
+            'id': 'read', 'type': 'business', 'name': 'read',
             'why': 'Determine the next action.',
             'when': 'A request arrives.', 'who': 'Analyst', 'where': 'Not specified.',
         })
@@ -77,28 +75,51 @@ class ExportTests(unittest.TestCase):
             ('output', 'read', 'person', 'Notification'),
         })
 
-    def test_display_rename_preserves_identity_and_connections(self):
-        original = parse_design(SOURCE)
-        renamed = parse_design(SOURCE.replace('# Activity Read a request', '# Activity 依頼確認')
-                               .replace('# Object External person', '# Object 依頼者'))
-        self.assertEqual(original['relations'], renamed['relations'])
-        self.assertEqual([n['id'] for n in original['nodes']], [n['id'] for n in renamed['nodes']])
+    def test_visible_name_rename_updates_identity_and_connections(self):
+        with self.assertRaisesRegex(DesignError, 'dangling relation'):
+            parse_design(SOURCE.replace('# Object person', '# Object 依頼者'))
+        renamed = parse_design(SOURCE.replace('# Activity read', '# Activity 依頼確認')
+                               .replace('# Object person', '# Object 依頼者')
+                               .replace('person —', '依頼者 —'))
         nodes = {n['id']: n for n in renamed['nodes']}
-        self.assertEqual(nodes['read']['name'], '依頼確認')
-        self.assertEqual(nodes['person']['name'], '依頼者')
-        self.assertNotIn('what', nodes['read'])
+        self.assertEqual(nodes['依頼確認']['name'], '依頼確認')
+        self.assertEqual(nodes['依頼者']['name'], '依頼者')
+        self.assertIn({'kind': 'input', 'from': '依頼者', 'to': '依頼確認',
+                       'label': 'Question'}, renamed['relations'])
+        self.assertNotIn('what', nodes['依頼確認'])
 
-    def test_identity_annotation_is_required_and_unambiguous(self):
-        for node_id in ('read', 'person', 'record'):
-            marker = f'<!-- alder-id: {node_id} -->'
-            for replacement in ('', '<!-- alder-id: Bad ID -->',
-                                marker + '\n' + marker, marker + ' trailing text'):
-                with self.subTest(node_id=node_id, replacement=replacement), self.assertRaises(DesignError):
-                    parse_design(SOURCE.replace(marker, replacement))
-        old_heading = SOURCE.replace('# Activity Read a request\n\n<!-- alder-id: read -->',
-                                     '# Activity read — Read a request')
+    def test_human_source_needs_no_machine_annotations(self):
+        self.assertNotIn('<!--', SOURCE)
+        graph = parse_design(SOURCE)
+        self.assertTrue(all(n['id'] == n['name'] for n in graph['nodes']))
         with self.assertRaises(DesignError):
-            parse_design(old_heading)
+            parse_design(SOURCE.replace('## Who', '<!-- alder-id: hidden -->\n\n## Who'))
+
+    def test_visible_japanese_names_spaces_and_colons(self):
+        source = SOURCE.replace('# Object person', '# Object Alder: 業務ナレッジ')
+        source = source.replace('person —', 'Alder: 業務ナレッジ —')
+        source = source.replace('# Activity read', '# Activity 業務 設計')
+        source += '\n# Graph exceptions\n\n- object-exception record → Alder: 業務ナレッジ — 参照\n'
+        graph = parse_design(source)
+        self.assertIn({'kind': 'input', 'from': 'Alder: 業務ナレッジ',
+                       'to': '業務 設計', 'label': 'Question'}, graph['relations'])
+        self.assertIn({'kind': 'object-exception', 'from': 'record',
+                       'to': 'Alder: 業務ナレッジ', 'label': '参照'}, graph['relations'])
+
+    def test_visible_icon_edit_preserves_correlations(self):
+        original = parse_design(SOURCE)
+        revised = parse_design(SOURCE.replace('users', 'user-round'))
+        self.assertEqual(original['relations'], revised['relations'])
+        self.assertEqual([n['id'] for n in original['nodes']], [n['id'] for n in revised['nodes']])
+        self.assertEqual(next(n for n in revised['nodes'] if n['id'] == 'person')['icon'], 'user-round')
+
+    def test_reserved_name_delimiters_and_hidden_metadata_fail(self):
+        for name in ('bad — name', 'bad → name'):
+            with self.subTest(name=name), self.assertRaises(DesignError):
+                parse_design(SOURCE.replace('# Activity read', '# Activity ' + name))
+        for hidden in ('<!-- alder-business-graph: 1 -->', '<!-- fingerprint: abc -->'):
+            with self.subTest(hidden=hidden), self.assertRaises(DesignError):
+                parse_design(PREAMBLE + hidden + '\n' + OBJECTS + activity())
 
     def test_duplicate_what_is_rejected_in_source_and_json(self):
         with self.assertRaises(DesignError):
@@ -120,15 +141,15 @@ class ExportTests(unittest.TestCase):
         self.assertEqual([(r['to'], r['label']) for r in graph['relations'] if r['from'] == 'record'],
                          [('approve', 'Evidence for approval'), ('read', 'Existing context')])
         # Same business may read distinct content from the same object, too.
-        graph = parse_design(SOURCE.replace('- [record] — Existing context', '- [record] — Existing context\n- [record] — History'))
+        graph = parse_design(SOURCE.replace('- record — Existing context', '- record — Existing context\n- record — History'))
         self.assertEqual(len(graph['relations']), 5)
 
     def test_explicit_exception_kinds(self):
         source = SOURCE + '\n' + activity('approve') + '''
 # Graph exceptions
 
-- business-exception approve -> read: Return if unclear
-- object-exception record -> person: Exceptional association
+- business-exception approve → read — Return if unclear
+- object-exception record → person — Exceptional association
 '''
         graph = parse_design(source)
         self.assertIn({'kind': 'business-exception', 'from': 'approve', 'to': 'read', 'label': 'Return if unclear'}, graph['relations'])
@@ -148,8 +169,8 @@ class ExportTests(unittest.TestCase):
     def test_determinism_reordering_line_endings_and_unicode(self):
         source = SOURCE + '\n' + activity('approve', '担当者')
         reordered = PREAMBLE + activity('approve', '担当者') + '\n' + activity() + '\n' + OBJECTS
-        reordered = reordered.replace('- [person] — Question\n- [record] — Existing context',
-                                      '- [record] — Existing context\n- [person] — Question')
+        reordered = reordered.replace('- person — Question\n- record — Existing context',
+                                      '- record — Existing context\n- person — Question')
         expected = render(parse_design(source))
         self.assertEqual(expected, render(parse_design(source)))
         self.assertEqual(expected, render(parse_design(reordered.replace('\n', '\r\n'))))
@@ -157,25 +178,25 @@ class ExportTests(unittest.TestCase):
         self.assertTrue(expected.endswith('\n'))
 
     def test_exception_order_does_not_change_bytes(self):
-        a = '- object-exception record -> person: A'
-        b = '- object-exception person -> record: B'
+        a = '- object-exception record → person — A'
+        b = '- object-exception person → record — B'
         prefix = SOURCE + '\n# Graph exceptions\n\n'
         self.assertEqual(render(parse_design(prefix + a + '\n' + b)),
                          render(parse_design(prefix + b + '\n' + a)))
 
     def test_duplicate_ids_across_and_within_node_types(self):
-        for extra in (activity(), '# Object Collision\n\n<!-- alder-id: read -->\n\n(generic icon)\n',
-                      '# Object Collision\n\n<!-- alder-id: record -->\n\n(generic icon)\n'):
+        for extra in (activity(), '# Object read\n\n(generic icon)\n',
+                      '# Object record\n\n(generic icon)\n'):
             with self.subTest(extra=extra), self.assertRaisesRegex(DesignError, 'duplicate node ID'):
                 parse_design(SOURCE + '\n' + extra)
 
     def test_missing_reference_fails(self):
         with self.assertRaisesRegex(DesignError, 'dangling relation'):
-            parse_design(SOURCE.replace('[record]', '[missing]'))
+            parse_design(SOURCE.replace('record —', 'missing —'))
 
     def test_all_relation_endpoint_combinations(self):
         base = parse_design(SOURCE)
-        base['nodes'].append(dict(next(n for n in base['nodes'] if n['id'] == 'read'), id='other-business'))
+        base['nodes'].append(dict(next(n for n in base['nodes'] if n['id'] == 'read'), id='other-business', name='other-business'))
         allowed = {'input': ('person', 'read'), 'output': ('read', 'person'),
                    'business-exception': ('read', 'other-business'), 'object-exception': ('person', 'record')}
         pairs = [('person', 'read'), ('read', 'person'), ('read', 'other-business'), ('person', 'record')]
@@ -231,22 +252,21 @@ class ExportTests(unittest.TestCase):
             validate_graph(graph)
 
     def test_empty_io_must_be_explicit(self):
-        source = SOURCE.replace('- [person] — Question\n- [record] — Existing context', '(none)')
+        source = SOURCE.replace('- person — Question\n- record — Existing context', '(none)')
         self.assertEqual(len(parse_design(source)['relations']), 2)
         with self.assertRaises(DesignError):
             parse_design(source.replace('(none)', ''))
 
     def test_malformed_source_is_not_partially_exported(self):
-        bad = [SOURCE.replace('<!-- alder-business-graph: 1 -->', ''),
-               SOURCE.replace('<!-- alder-business-graph: 1 -->', '<!-- alder-business-graph: 2 -->'),
+        bad = [SOURCE.replace('# Design', '# Activity Wrong title'),
                SOURCE.replace('## Why', '## Purpose'),
                SOURCE.replace('## Why', '## What'),
                SOURCE.replace('## When\n\nA request arrives.', ''),
                SOURCE.replace('## How\n', '## How\nUnprojected prose\n'),
-               SOURCE.replace('- [person] — Question', 'The person asks a question.'),
-               SOURCE.replace('- [person] — Question', '- [person] — '),
+               SOURCE.replace('- person — Question', 'The person asks a question.'),
+               SOURCE.replace('- person — Question', '- person — '),
                SOURCE + '\n# Unknown\n\nA hidden activity.\n',
-               SOURCE + '\n# Graph exceptions\n\n- business-exception read -> read: \n',
+               SOURCE + '\n# Graph exceptions\n\n- business-exception read → read — \n',
                SOURCE + '\n```\nUnclosed fence',
                SOURCE.replace('## Why\n\nDetermine the next action.', '## Why\n\nDetermine the next action.\n\n### Extra\nHidden'),
                SOURCE + '\n# Scope\n\nA\n\n# Scope\n\nB\n']
@@ -256,41 +276,41 @@ class ExportTests(unittest.TestCase):
 
     def test_business_design_io_matches_human_review(self):
         graph = parse_design(DESIGN.read_text())
-        work = 'business-design-work'
+        work = '業務設計'
         actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
-            ('input', 'requester', work, 'システム要件 / フィードバック'),
-            ('input', 'business-correlation-knowledge', work, '状態遷移フィードバック'),
-            ('input', 'business-knowledge', work, '考慮漏れフィードバック'),
-            ('output', work, 'business-design', 'スコープ、業務手順、業務相関'),
-            ('output', work, 'decisions', '判断 / 結果'),
+            ('input', '依頼者', work, 'システム要件 / フィードバック'),
+            ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移フィードバック'),
+            ('input', 'Alder: 業務ナレッジ', work, '考慮漏れフィードバック'),
+            ('output', work, '業務設計書', 'スコープ、業務手順、業務相関'),
+            ('output', work, '判断記録', '判断 / 結果'),
         })
         names = {n['id']: n['name'] for n in graph['nodes']}
-        self.assertEqual(names['business-correlation-knowledge'], 'Alder: 業務相関ナレッジ')
-        self.assertEqual(names['business-knowledge'], 'Alder: 業務ナレッジ')
+        self.assertEqual(names['Alder: 業務相関ナレッジ'], 'Alder: 業務相関ナレッジ')
+        self.assertEqual(names['Alder: 業務ナレッジ'], 'Alder: 業務ナレッジ')
         self.assertEqual({r['from'] for r in graph['relations']
                           if r['kind'] == 'business-exception' and r['to'] == work},
-                         {'implementation', 'fresh-review'})
+                         {'実装', '実装レビュー'})
 
     def test_hidden_markdown_link_definition_is_rejected(self):
         with self.assertRaises(DesignError):
-            parse_design(SOURCE.replace('- [person] — Question', '- [person]: Question'))
+            parse_design(SOURCE.replace('- person — Question', '- [person]: Question'))
 
     def test_self_design_projection_and_regeneration(self):
         graph = parse_design(DESIGN.read_text())
         self.assertEqual(render(graph), EXAMPLE.read_text())
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
-            'business-design-work', 'system-design', 'check-design', 'test-design', 'implementation',
-            'drift-inspection', 'verification-work', 'fresh-review', 'research-evaluation',
-            'delivery-work', 'graph-export',
+            '業務設計', 'システム設計', '検査項目の設計', 'テスト設計', '実装',
+            '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
+            '変更の提供', '業務グラフ出力',
         })
-        self.assertEqual(nodes['requester']['type'], 'object')
-        self.assertEqual('業務設計者', nodes['business-design-work']['who'])
+        self.assertEqual(nodes['依頼者']['type'], 'object')
+        self.assertEqual('業務設計者', nodes['業務設計']['who'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
-        self.assertIn('任意試行の利用時', nodes['drift-inspection']['when'])
-        self.assertIn({'kind': 'object-exception', 'from': 'tests', 'to': 'code',
+        self.assertIn('任意試行の利用時', nodes['同期漏れ検査']['when'])
+        self.assertIn({'kind': 'object-exception', 'from': 'テスト', 'to': 'コード',
                        'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))
         self.assertTrue(all('procedure' not in node for node in nodes.values()))
@@ -314,7 +334,7 @@ class ExportTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / 'design.md'
             output = Path(directory) / 'graph.json'
-            source.write_text(SOURCE.replace('[record]', '[missing]'))
+            source.write_text(SOURCE.replace('record —', 'missing —'))
             output.write_text('previous valid result')
             result = self.run_cli(source, '-o', output)
             self.assertEqual(result.returncode, 2)

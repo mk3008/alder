@@ -18,22 +18,22 @@ The [Alder self-design](../business-design/alder/README.md) and its [generated e
 
 ## Opt-in Markdown profile v1
 
-Existing Business Design remains valid for Alder review without using this exporter. The repository's older benchmark designs are not silently reinterpreted or rewritten. To export, annotate a design with explicit stable IDs and Object references; the exporter never infers identity or connections from matching names.
+Existing Business Design remains valid for Alder review without using this exporter. The repository's older benchmark designs are not silently reinterpreted or rewritten. To export, use the visible headings and named references below. Invoking the CLI opts into this format; no profile marker, hidden ID, sidecar or fingerprint is required. Names are exact references, not fuzzy entity matching.
 
-Follow the [requester-language principle](adoption.md#language-for-agreement) for source prose and human-facing names/labels. The exporter preserves that text without translating it; keep the profile's structural headings and stable IDs as specified below.
+Follow the [requester-language principle](adoption.md#language-for-agreement) for source prose and human-facing names/labels. The exporter preserves that text without translating it; use the visible structural headings and names specified below. Humans can author and maintain all of it without AI. Humans and AI may both edit Icon values and other visible information; see [co-maintenance](adoption.md#human-and-ai-co-maintenance).
 
 The profile keeps the recommended **5W1H / How = Input → Procedure → Output** sections. The Activity heading is What (the short business name); do not repeat it in a What section. Who is a short, stable role name for grouping/filtering; Why is the purpose, When the start trigger, and Where the place/channel. Keep these values concise and use consistent names for the same role or channel. Put assignment to AI/humans, support, approval responsibility and detailed conditions in Procedure or operating rules. These details remain authoritative even though Procedure is not projected. There is no separate handwritten graph/metadata copy of the fields.
 
 The supported subset is deliberately small:
 
-- One H1 document title and preamble, containing exactly one standalone `<!-- alder-business-graph: 1 -->` line. The preamble explains context but is not projected. Put scope in the explicit Scope section and graph-relevant meaning in the Activity fields/relations.
-- An optional `# Scope` prose section, copied as the document-wide graph `scope`. It applies to all activities; no new per-node scope hierarchy is invented.
-- `# Object <name>` sections, each beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by `## Icon` with a kebab-case Lucide icon name. Alternatively the body after the ID annotation can be `(generic icon)`, yielding `box`.
-- `# Activity <name>` sections beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by nonempty `## Why`, `## When`, `## Who`, `## Where`, then structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. Use an explicit “Not specified” for Where when appropriate.
-- Input and Output contain one `- [object-id] — label` per line (blank lines allowed), or exactly `(none)`. The spaced em dash is required: `- [object-id]: label` is a Markdown link-reference definition and can disappear in rendered documents, so that old draft syntax is rejected. These references remain visible as list text. Declare actual Object ↔ Business transfers from the agreed business correlations, not everything an activity might generally consult. Business-to-business exception/return flows belong in Graph exceptions, not Input. Labels contain all the declared information received/written on that relation, including conditions. Multiple differently labeled relations to the same Object are allowed.
-- Optional `# Graph exceptions` with one `- business-exception from-id -> to-id: label` or `- object-exception from-id -> to-id: label` per line. No inferred exceptions.
-- ID annotations are separate from display names and hidden in rendered Markdown. Missing, malformed or duplicate ID annotations are rejected, not inferred from names. The earlier ID-in-heading draft is unsupported.
-- IDs are globally unique across both node types and match `[a-z0-9]+(?:-[a-z0-9]+)*`. Keep IDs stable when renaming display text. Section order does not establish identity or execution order.
+- One H1 document title and an optional explanatory preamble. Put scope in the visible Scope section and graph-relevant meaning in the Activity fields/relations. No HTML comments are accepted in this profile.
+- An optional `# Scope` prose section, copied as document-wide graph `scope`.
+- `# Object <name>` sections containing `## Icon` with a kebab-case Lucide icon name, or `(generic icon)` to use `box`. This visible value may be selected and changed by a person or AI.
+- `# Activity <name>` sections with nonempty `## Why`, `## When`, `## Who`, `## Where`, structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. Use “Not specified” for Where when appropriate.
+- Input and Output contain one `- Object name — label` per line, or exactly `(none)`. Use the Object's visible name exactly. Declare actual Object ↔ Business transfers, not a general reference-material inventory. Multiple differently labeled transfers to the same Object are allowed. The old `- [id]: label` notation is rejected because it can disappear as a Markdown link-reference definition.
+- Optional `# Graph exceptions` lists `- business-exception Business name → Business name — label` or `- object-exception Object name → Object name — label`. Both endpoints are visible names. These exception/return flows are separate from ordinary Input/Output; no exceptions are inferred.
+- Names must be unique across Activity and Object headings in one document and are used directly as JSON `id` values. Duplicate names and unresolved references are errors, not guessed matches. Japanese, spaces and colons in names are supported. A name cannot contain a newline or the reserved delimiters ` — ` and ` → `.
+- Name changes require updating the visible references and produce changed JSON IDs. IDs remain deterministic while names stay the same; this first unreleased v1 does not promise identity across renames. No hidden map or separately maintained IDs are introduced. For example, Alder distinguishes the Object “テスト計画” from the Activity “テスト設計”.
 - Prose fields preserve their internal Markdown and newlines after trimming outer whitespace and normalizing CRLF to LF. The parser recognizes unindented ATX headings outside fenced code. Extra headings inside fields are unsupported; use paragraphs/lists instead. Fenced examples inside Procedure are allowed and do not create phantom nodes.
 - Unsupported/duplicate headings or fields after the preamble, empty required fields, unlabeled/unrecognized I/O lines and unclosed fences are errors, not silently dropped input. This is not an arbitrary Markdown parser. The title/preamble and Procedure are not graph fields.
 
@@ -42,15 +42,11 @@ Minimal example:
 ```markdown
 # Example Business Design
 
-<!-- alder-business-graph: 1 -->
-
 # Scope
 
 Explain the result of one request.
 
 # Object Requester
-
-<!-- alder-id: requester -->
 
 ## Icon
 
@@ -58,13 +54,9 @@ users
 
 # Object Result document
 
-<!-- alder-id: result -->
-
 (generic icon)
 
 # Activity Result explanation
-
-<!-- alder-id: explain -->
 
 ## Why
 
@@ -86,7 +78,7 @@ Not specified.
 
 ### Input
 
-- [requester] — Question and relevant context
+- Requester — Question and relevant context
 
 ### Procedure
 
@@ -94,13 +86,13 @@ Not specified.
 
 ### Output
 
-- [result] — Explanation and remaining uncertainty
-- [requester] — Result notification
+- Result document — Explanation and remaining uncertainty
+- Requester — Result notification
 ```
 
 ## JSON v1 contract
 
-[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision. This PR is the first, unreleased v1: the reviewed contract uses `name` for What and has no duplicate `what` field. The earlier PR draft is not a supported released format; unknown `what` fields are rejected.
+[`validate_graph(graph)`](../tools/business_graph/export.py) is the executable specification, callable directly from Python. It raises `DesignError` on invalid shape, types or relationships and does not mutate its argument. It includes the cross-node checks that a JSON Schema alone would not express. Tests exercise the validator independently of Markdown parsing. Unknown fields are rejected, including Procedure and layout data. Contract changes require an explicit version decision. This PR is the first, unreleased v1: the reviewed contract uses `name` for What and has no duplicate `what` field. The earlier PR drafts are not supported released formats; unknown `what` fields and hidden source annotations are rejected. JSON IDs now equal visible names, so the earlier kebab-case ID constraint no longer applies.
 
 | Entity | Fields |
 | --- | --- |
@@ -109,7 +101,7 @@ Not specified.
 | Object | `id`, `type: "object"`, `name`, `icon` |
 | Relation | `kind`, `from`, `to`, `label` |
 
-All node fields and relation fields are nonempty strings. Both endpoints reference existing IDs. Exact duplicate relations (same kind/from/to/label) are rejected; differently labeled relations sharing endpoints are retained. There is no artificial Input/Output group node and no edge ID to maintain. Relation kind and direction carry the semantics:
+All node fields and relation fields are nonempty strings. Each node’s `id` equals its visible `name`; relation endpoints use those same names. Both endpoints reference existing IDs. Exact duplicate relations (same kind/from/to/label) are rejected; differently labeled relations sharing endpoints are retained. There is no artificial Input/Output group node and no edge ID to maintain. Relation kind and direction carry the semantics:
 
 | Kind | Allowed endpoints | Meaning |
 | --- | --- | --- |
@@ -122,4 +114,4 @@ Who stays a short role-name business attribute, not a narrative about who assist
 
 `icon` names refer to Lucide, using the canonical kebab-case spelling such as `file-text`. Missing source icons use `box`; an explicitly empty/malformed Icon is an error. JSON always contains an icon. This exporter checks syntax, not membership of a pinned Lucide release; it neither downloads nor maintains SVGs/catalogs. A future consumer should resolve against its own Lucide version and fall back to `box` for an unavailable name. Icons do not change node or relation semantics.
 
-Output nodes sort by ID; relations sort by `(kind, from, to, label)` using Python string order. UTF-8 JSON has two-space indentation and a final newline. No timestamp, working-directory path or inferred fact is emitted. Reordering complete Activity/Object sections, exception lines, or I/O lines leaves output bytes unchanged; changing the content of a prose field or label changes that content. Procedure edits alone do not change the graph. The JSON contains no Procedure, coordinates, zoom or layout. It is a static correlation projection, not an execution scheduler or a permanent Check/Test/Code location index.
+Output nodes sort by ID (visible name); relations sort by `(kind, from, to, label)` using Python string order. UTF-8 JSON has two-space indentation and a final newline. No timestamp, working-directory path or inferred fact is emitted. Reordering complete Activity/Object sections, exception lines, or I/O lines leaves output bytes unchanged; changing the content of a prose field or label changes that content. Procedure edits alone do not change the graph. The JSON contains no Procedure, coordinates, zoom or layout. It is a static correlation projection, not an execution scheduler or a permanent Check/Test/Code location index.

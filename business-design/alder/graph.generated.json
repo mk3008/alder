@@ -2,163 +2,31 @@
   "version": 1,
   "nodes": [
     {
-      "id": "business-correlation-knowledge",
-      "type": "object",
-      "name": "Alder: 業務相関ナレッジ",
-      "icon": "book-open"
-    },
-    {
-      "id": "business-design",
-      "type": "object",
-      "name": "業務設計書",
-      "icon": "file-text"
-    },
-    {
-      "id": "business-design-work",
-      "type": "business",
-      "name": "業務設計",
-      "why": "業務上の意味と保証の合意",
-      "when": "目的・変更要求の受領、未決定事項の発見",
-      "who": "業務設計者",
-      "where": "リポジトリ・レビューの議論"
-    },
-    {
-      "id": "business-knowledge",
+      "id": "Alder: 業務ナレッジ",
       "type": "object",
       "name": "Alder: 業務ナレッジ",
       "icon": "book-open"
     },
     {
-      "id": "check-design",
-      "type": "business",
-      "name": "検査項目の設計",
-      "why": "期待結果と検証範囲の確認",
-      "when": "業務設計・業務相関レビューの完了（検査項目を採用する場合）",
-      "who": "業務設計者",
-      "where": "リポジトリ・レビューの議論"
-    },
-    {
-      "id": "checks",
+      "id": "Alder: 業務相関ナレッジ",
       "type": "object",
-      "name": "検査項目・責務索引",
-      "icon": "list-checks"
+      "name": "Alder: 業務相関ナレッジ",
+      "icon": "book-open"
     },
     {
-      "id": "code",
-      "type": "object",
-      "name": "コード",
-      "icon": "file-code"
-    },
-    {
-      "id": "decisions",
-      "type": "object",
-      "name": "判断記録",
-      "icon": "notebook-pen"
-    },
-    {
-      "id": "delivery",
-      "type": "object",
-      "name": "プルリクエスト・リリース",
-      "icon": "git-pull-request"
-    },
-    {
-      "id": "delivery-work",
-      "type": "business",
-      "name": "変更の提供",
-      "why": "レビュー可能な変更と承認済み成果の提供",
-      "when": "PR作成の準備完了、マージ・リリースの許可",
-      "who": "システム開発者",
-      "where": "GitHub・リリースワークフロー"
-    },
-    {
-      "id": "drift-inspection",
-      "type": "business",
-      "name": "同期漏れ検査",
-      "why": "原文・検査項目・テストの同期漏れの検出",
-      "when": "原文項目・検査項目・テスト一覧の変更（任意試行の利用時）",
-      "who": "システム開発者",
-      "where": "Drift試行環境"
-    },
-    {
-      "id": "drift-metadata",
-      "type": "object",
-      "name": "同期照合情報",
-      "icon": "fingerprint"
-    },
-    {
-      "id": "drift-report",
-      "type": "object",
-      "name": "同期漏れの候補",
-      "icon": "scan-search"
-    },
-    {
-      "id": "fresh-review",
-      "type": "business",
-      "name": "実装レビュー",
-      "why": "業務設計と実装の不一致の検出",
-      "when": "実装・重要な修正のレビュー準備完了",
-      "who": "レビュー担当者",
-      "where": "リポジトリ・レビューの議論"
-    },
-    {
-      "id": "graph",
-      "type": "object",
-      "name": "業務グラフJSON",
-      "icon": "workflow"
-    },
-    {
-      "id": "graph-export",
-      "type": "business",
-      "name": "業務グラフ出力",
-      "why": "業務相関の機械可読化",
-      "when": "出力要求の受領、原文変更に伴う生成例の更新",
-      "who": "システム開発者",
-      "where": "ローカルリポジトリ・CI"
-    },
-    {
-      "id": "implementation",
-      "type": "business",
-      "name": "実装",
-      "why": "意図した業務の実現",
-      "when": "実装に必要な業務方針・技術制約の確定",
-      "who": "システム開発者",
-      "where": "作業ブランチ・ローカル実行環境"
-    },
-    {
-      "id": "knowledge",
+      "id": "ガイド・レビュー知識",
       "type": "object",
       "name": "ガイド・レビュー知識",
       "icon": "book-open"
     },
     {
-      "id": "requester",
+      "id": "コード",
       "type": "object",
-      "name": "依頼者",
-      "icon": "users"
+      "name": "コード",
+      "icon": "file-code"
     },
     {
-      "id": "research",
-      "type": "object",
-      "name": "研究の証拠と採否判断",
-      "icon": "microscope"
-    },
-    {
-      "id": "research-evaluation",
-      "type": "business",
-      "name": "研究評価",
-      "why": "手法変更の採否判断に必要な証拠の整理",
-      "when": "手法変更の提案、再検討条件の成立",
-      "who": "研究担当者",
-      "where": "リポジトリ"
-    },
-    {
-      "id": "review",
-      "type": "object",
-      "name": "レビュー結果",
-      "icon": "messages-square"
-    },
-    {
-      "id": "system-design",
+      "id": "システム設計",
       "type": "business",
       "name": "システム設計",
       "why": "業務上の意図を実現する技術手段の決定",
@@ -167,7 +35,28 @@
       "where": "リポジトリ・タスクの議論"
     },
     {
-      "id": "test-design",
+      "id": "テスト",
+      "type": "object",
+      "name": "テスト",
+      "icon": "flask-conical"
+    },
+    {
+      "id": "テスト・検証",
+      "type": "business",
+      "name": "テスト・検証",
+      "why": "実装の検証結果と限界の確認",
+      "when": "実装変更の完了、期待結果の変更",
+      "who": "システム開発者",
+      "where": "ローカルテスト環境・CI"
+    },
+    {
+      "id": "テスト計画",
+      "type": "object",
+      "name": "テスト計画",
+      "icon": "clipboard-list"
+    },
+    {
+      "id": "テスト設計",
       "type": "business",
       "name": "テスト設計",
       "why": "業務上の期待結果を検証するケースの決定",
@@ -176,471 +65,582 @@
       "where": "リポジトリ"
     },
     {
-      "id": "test-plan",
+      "id": "プルリクエスト・リリース",
       "type": "object",
-      "name": "テスト設計",
-      "icon": "clipboard-list"
+      "name": "プルリクエスト・リリース",
+      "icon": "git-pull-request"
     },
     {
-      "id": "tests",
+      "id": "レビュー結果",
       "type": "object",
-      "name": "テスト",
-      "icon": "flask-conical"
+      "name": "レビュー結果",
+      "icon": "messages-square"
     },
     {
-      "id": "verification",
+      "id": "依頼者",
+      "type": "object",
+      "name": "依頼者",
+      "icon": "users"
+    },
+    {
+      "id": "判断記録",
+      "type": "object",
+      "name": "判断記録",
+      "icon": "notebook-pen"
+    },
+    {
+      "id": "同期漏れの候補",
+      "type": "object",
+      "name": "同期漏れの候補",
+      "icon": "scan-search"
+    },
+    {
+      "id": "同期漏れ検査",
+      "type": "business",
+      "name": "同期漏れ検査",
+      "why": "原文・検査項目・テストの同期漏れの検出",
+      "when": "原文項目・検査項目・テスト一覧の変更（任意試行の利用時）",
+      "who": "システム開発者",
+      "where": "Drift試行環境"
+    },
+    {
+      "id": "同期照合情報",
+      "type": "object",
+      "name": "同期照合情報",
+      "icon": "fingerprint"
+    },
+    {
+      "id": "変更の提供",
+      "type": "business",
+      "name": "変更の提供",
+      "why": "レビュー可能な変更と承認済み成果の提供",
+      "when": "PR作成の準備完了、マージ・リリースの許可",
+      "who": "システム開発者",
+      "where": "GitHub・リリースワークフロー"
+    },
+    {
+      "id": "実装",
+      "type": "business",
+      "name": "実装",
+      "why": "意図した業務の実現",
+      "when": "実装に必要な業務方針・技術制約の確定",
+      "who": "システム開発者",
+      "where": "作業ブランチ・ローカル実行環境"
+    },
+    {
+      "id": "実装レビュー",
+      "type": "business",
+      "name": "実装レビュー",
+      "why": "業務設計と実装の不一致の検出",
+      "when": "実装・重要な修正のレビュー準備完了",
+      "who": "レビュー担当者",
+      "where": "リポジトリ・レビューの議論"
+    },
+    {
+      "id": "検査項目の設計",
+      "type": "business",
+      "name": "検査項目の設計",
+      "why": "期待結果と検証範囲の確認",
+      "when": "業務設計・業務相関レビューの完了（検査項目を採用する場合）",
+      "who": "業務設計者",
+      "where": "リポジトリ・レビューの議論"
+    },
+    {
+      "id": "検査項目・責務索引",
+      "type": "object",
+      "name": "検査項目・責務索引",
+      "icon": "list-checks"
+    },
+    {
+      "id": "検証結果",
       "type": "object",
       "name": "検証結果",
       "icon": "clipboard-check"
     },
     {
-      "id": "verification-work",
+      "id": "業務グラフJSON",
+      "type": "object",
+      "name": "業務グラフJSON",
+      "icon": "workflow"
+    },
+    {
+      "id": "業務グラフ出力",
       "type": "business",
-      "name": "テスト・検証",
-      "why": "実装の検証結果と限界の確認",
-      "when": "実装変更の完了、期待結果の変更",
+      "name": "業務グラフ出力",
+      "why": "業務相関の機械可読化",
+      "when": "出力要求の受領、原文変更に伴う生成例の更新",
       "who": "システム開発者",
-      "where": "ローカルテスト環境・CI"
+      "where": "ローカルリポジトリ・CI"
+    },
+    {
+      "id": "業務設計",
+      "type": "business",
+      "name": "業務設計",
+      "why": "業務上の意味と保証の合意",
+      "when": "目的・変更要求の受領、未決定事項の発見",
+      "who": "業務設計者",
+      "where": "リポジトリ・レビューの議論"
+    },
+    {
+      "id": "業務設計書",
+      "type": "object",
+      "name": "業務設計書",
+      "icon": "file-text"
+    },
+    {
+      "id": "研究の証拠と採否判断",
+      "type": "object",
+      "name": "研究の証拠と採否判断",
+      "icon": "microscope"
+    },
+    {
+      "id": "研究評価",
+      "type": "business",
+      "name": "研究評価",
+      "why": "手法変更の採否判断に必要な証拠の整理",
+      "when": "手法変更の提案、再検討条件の成立",
+      "who": "研究担当者",
+      "where": "リポジトリ"
     }
   ],
   "relations": [
     {
       "kind": "business-exception",
-      "from": "fresh-review",
-      "to": "business-design-work",
-      "label": "レビューによって業務上の意味が変わる場合は、まずBusiness Designを修正して確認を得る"
+      "from": "テスト・検証",
+      "to": "実装",
+      "label": "テストで実装不具合が明らかになった場合は、提供前に修正する"
     },
     {
       "kind": "business-exception",
-      "from": "fresh-review",
-      "to": "implementation",
-      "label": "明確な実装の不一致が見つかった場合は、範囲内の修正へ戻す"
-    },
-    {
-      "kind": "business-exception",
-      "from": "implementation",
-      "to": "business-design-work",
+      "from": "実装",
+      "to": "業務設計",
       "label": "実装で未決定の業務上の意味が明らかになった場合は、人間による設計判断へ戻す"
     },
     {
       "kind": "business-exception",
-      "from": "verification-work",
-      "to": "implementation",
-      "label": "テストで実装不具合が明らかになった場合は、提供前に修正する"
+      "from": "実装レビュー",
+      "to": "実装",
+      "label": "明確な実装の不一致が見つかった場合は、範囲内の修正へ戻す"
+    },
+    {
+      "kind": "business-exception",
+      "from": "実装レビュー",
+      "to": "業務設計",
+      "label": "レビューによって業務上の意味が変わる場合は、まずBusiness Designを修正して確認を得る"
     },
     {
       "kind": "input",
-      "from": "business-correlation-knowledge",
-      "to": "business-design-work",
-      "label": "状態遷移フィードバック"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "check-design",
-      "label": "対象設計の全体、業務の条件、保証"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "drift-inspection",
-      "label": "選択した試行用アダプターが扱える、識別済みの現行原文項目"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "fresh-review",
-      "label": "現在の業務上の意図、対象範囲、業務間の関係"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "graph-export",
-      "label": "独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、注釈付きの5W1H原文"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "implementation",
-      "label": "正本に記された現在の意図と未決定の境界"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "system-design",
-      "label": "対象となる意図、範囲、制約、明示された予見リスク"
-    },
-    {
-      "kind": "input",
-      "from": "business-design",
-      "to": "test-design",
-      "label": "現在意図している結果と境界"
-    },
-    {
-      "kind": "input",
-      "from": "business-knowledge",
-      "to": "business-design-work",
+      "from": "Alder: 業務ナレッジ",
+      "to": "業務設計",
       "label": "考慮漏れフィードバック"
     },
     {
       "kind": "input",
-      "from": "checks",
-      "to": "drift-inspection",
-      "label": "現在のCheck本文"
+      "from": "Alder: 業務相関ナレッジ",
+      "to": "業務設計",
+      "label": "状態遷移フィードバック"
     },
     {
       "kind": "input",
-      "from": "checks",
-      "to": "test-design",
-      "label": "任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細"
-    },
-    {
-      "kind": "input",
-      "from": "code",
-      "to": "delivery-work",
-      "label": "提案する実行可能な変更"
-    },
-    {
-      "kind": "input",
-      "from": "code",
-      "to": "fresh-review",
-      "label": "実装によって具体化された業務上の意味"
-    },
-    {
-      "kind": "input",
-      "from": "code",
-      "to": "implementation",
-      "label": "既存の実装"
-    },
-    {
-      "kind": "input",
-      "from": "code",
-      "to": "system-design",
-      "label": "現行実装の制約"
-    },
-    {
-      "kind": "input",
-      "from": "code",
-      "to": "verification-work",
-      "label": "テスト対象の現行実装"
-    },
-    {
-      "kind": "input",
-      "from": "decisions",
-      "to": "check-design",
-      "label": "決定済みの事項と共有する契約"
-    },
-    {
-      "kind": "input",
-      "from": "decisions",
-      "to": "fresh-review",
-      "label": "記録された実装上の選択と前提"
-    },
-    {
-      "kind": "input",
-      "from": "decisions",
-      "to": "implementation",
-      "label": "技術的な選択と前提"
-    },
-    {
-      "kind": "input",
-      "from": "decisions",
-      "to": "system-design",
-      "label": "既存の技術判断とその限界"
-    },
-    {
-      "kind": "input",
-      "from": "decisions",
-      "to": "test-design",
-      "label": "検証に影響する技術的な制約と前提"
-    },
-    {
-      "kind": "input",
-      "from": "drift-metadata",
-      "to": "drift-inspection",
-      "label": "照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID"
-    },
-    {
-      "kind": "input",
-      "from": "drift-report",
-      "to": "verification-work",
-      "label": "任意試行を使う場合に確認する影響候補"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "check-design",
-      "label": "c3による導出、任意の機能考慮事項の探索、追跡関係のガイド"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "delivery-work",
-      "label": "ガイドや文書の変更案"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "fresh-review",
-      "label": "選択した版のレビュー知識と、レビューを打ち切る条件"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "implementation",
-      "label": "タスクで更新する可能性がある、公開済みのガイド"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "research-evaluation",
-      "label": "現行の手法と変更候補"
-    },
-    {
-      "kind": "input",
-      "from": "knowledge",
-      "to": "system-design",
+      "from": "ガイド・レビュー知識",
+      "to": "システム設計",
       "label": "技術検討の範囲を絞るためのガイドと、操作ミスが起きにくい運用の指針"
     },
     {
       "kind": "input",
-      "from": "requester",
-      "to": "business-design-work",
-      "label": "システム要件 / フィードバック"
+      "from": "ガイド・レビュー知識",
+      "to": "変更の提供",
+      "label": "ガイドや文書の変更案"
     },
     {
       "kind": "input",
-      "from": "requester",
-      "to": "check-design",
-      "label": "期待結果に対する人間の修正とレビュー判断"
+      "from": "ガイド・レビュー知識",
+      "to": "実装",
+      "label": "タスクで更新する可能性がある、公開済みのガイド"
     },
     {
       "kind": "input",
-      "from": "requester",
-      "to": "delivery-work",
-      "label": "人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可"
+      "from": "ガイド・レビュー知識",
+      "to": "実装レビュー",
+      "label": "選択した版のレビュー知識と、レビューを打ち切る条件"
     },
     {
       "kind": "input",
-      "from": "requester",
-      "to": "research-evaluation",
-      "label": "研究の目的と許可された評価範囲"
+      "from": "ガイド・レビュー知識",
+      "to": "検査項目の設計",
+      "label": "c3による導出、任意の機能考慮事項の探索、追跡関係のガイド"
     },
     {
       "kind": "input",
-      "from": "research",
-      "to": "delivery-work",
-      "label": "手法を変更する場合の採用根拠"
+      "from": "ガイド・レビュー知識",
+      "to": "研究評価",
+      "label": "現行の手法と変更候補"
     },
     {
       "kind": "input",
-      "from": "research",
-      "to": "research-evaluation",
-      "label": "既存の結果、限界、再検討条件"
+      "from": "コード",
+      "to": "システム設計",
+      "label": "現行実装の制約"
     },
     {
       "kind": "input",
-      "from": "review",
-      "to": "delivery-work",
-      "label": "Fresh reviewの結果と残る限界"
+      "from": "コード",
+      "to": "テスト・検証",
+      "label": "テスト対象の現行実装"
     },
     {
       "kind": "input",
-      "from": "review",
-      "to": "implementation",
-      "label": "対応すべき、確認済みの不一致や採用された技術改善"
+      "from": "コード",
+      "to": "変更の提供",
+      "label": "提案する実行可能な変更"
     },
     {
       "kind": "input",
-      "from": "review",
-      "to": "research-evaluation",
-      "label": "候補に関係するレビュー結果"
+      "from": "コード",
+      "to": "実装",
+      "label": "既存の実装"
     },
     {
       "kind": "input",
-      "from": "test-plan",
-      "to": "implementation",
-      "label": "関連するアサーションと検証ケース"
+      "from": "コード",
+      "to": "実装レビュー",
+      "label": "実装によって具体化された業務上の意味"
     },
     {
       "kind": "input",
-      "from": "test-plan",
-      "to": "verification-work",
-      "label": "必要なケースと期待する観測結果"
-    },
-    {
-      "kind": "input",
-      "from": "tests",
-      "to": "delivery-work",
-      "label": "更新済みの回帰テスト"
-    },
-    {
-      "kind": "input",
-      "from": "tests",
-      "to": "fresh-review",
-      "label": "選択された振る舞いの証拠となるアサーション"
-    },
-    {
-      "kind": "input",
-      "from": "tests",
-      "to": "implementation",
-      "label": "既存の実行可能なテスト"
-    },
-    {
-      "kind": "input",
-      "from": "tests",
-      "to": "test-design",
-      "label": "既存のアサーションと関連する回帰テスト"
-    },
-    {
-      "kind": "input",
-      "from": "tests",
-      "to": "verification-work",
+      "from": "テスト",
+      "to": "テスト・検証",
       "label": "実行可能なテスト一式"
     },
     {
       "kind": "input",
-      "from": "verification",
-      "to": "delivery-work",
+      "from": "テスト",
+      "to": "テスト設計",
+      "label": "既存のアサーションと関連する回帰テスト"
+    },
+    {
+      "kind": "input",
+      "from": "テスト",
+      "to": "変更の提供",
+      "label": "更新済みの回帰テスト"
+    },
+    {
+      "kind": "input",
+      "from": "テスト",
+      "to": "実装",
+      "label": "既存の実行可能なテスト"
+    },
+    {
+      "kind": "input",
+      "from": "テスト",
+      "to": "実装レビュー",
+      "label": "選択された振る舞いの証拠となるアサーション"
+    },
+    {
+      "kind": "input",
+      "from": "テスト計画",
+      "to": "テスト・検証",
+      "label": "必要なケースと期待する観測結果"
+    },
+    {
+      "kind": "input",
+      "from": "テスト計画",
+      "to": "実装",
+      "label": "関連するアサーションと検証ケース"
+    },
+    {
+      "kind": "input",
+      "from": "レビュー結果",
+      "to": "変更の提供",
+      "label": "Fresh reviewの結果と残る限界"
+    },
+    {
+      "kind": "input",
+      "from": "レビュー結果",
+      "to": "実装",
+      "label": "対応すべき、確認済みの不一致や採用された技術改善"
+    },
+    {
+      "kind": "input",
+      "from": "レビュー結果",
+      "to": "研究評価",
+      "label": "候補に関係するレビュー結果"
+    },
+    {
+      "kind": "input",
+      "from": "依頼者",
+      "to": "変更の提供",
+      "label": "人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可"
+    },
+    {
+      "kind": "input",
+      "from": "依頼者",
+      "to": "検査項目の設計",
+      "label": "期待結果に対する人間の修正とレビュー判断"
+    },
+    {
+      "kind": "input",
+      "from": "依頼者",
+      "to": "業務設計",
+      "label": "システム要件 / フィードバック"
+    },
+    {
+      "kind": "input",
+      "from": "依頼者",
+      "to": "研究評価",
+      "label": "研究の目的と許可された評価範囲"
+    },
+    {
+      "kind": "input",
+      "from": "判断記録",
+      "to": "システム設計",
+      "label": "既存の技術判断とその限界"
+    },
+    {
+      "kind": "input",
+      "from": "判断記録",
+      "to": "テスト設計",
+      "label": "検証に影響する技術的な制約と前提"
+    },
+    {
+      "kind": "input",
+      "from": "判断記録",
+      "to": "実装",
+      "label": "技術的な選択と前提"
+    },
+    {
+      "kind": "input",
+      "from": "判断記録",
+      "to": "実装レビュー",
+      "label": "記録された実装上の選択と前提"
+    },
+    {
+      "kind": "input",
+      "from": "判断記録",
+      "to": "検査項目の設計",
+      "label": "決定済みの事項と共有する契約"
+    },
+    {
+      "kind": "input",
+      "from": "同期漏れの候補",
+      "to": "テスト・検証",
+      "label": "任意試行を使う場合に確認する影響候補"
+    },
+    {
+      "kind": "input",
+      "from": "同期照合情報",
+      "to": "同期漏れ検査",
+      "label": "照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID"
+    },
+    {
+      "kind": "input",
+      "from": "検査項目・責務索引",
+      "to": "テスト設計",
+      "label": "任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細"
+    },
+    {
+      "kind": "input",
+      "from": "検査項目・責務索引",
+      "to": "同期漏れ検査",
+      "label": "現在のCheck本文"
+    },
+    {
+      "kind": "input",
+      "from": "検証結果",
+      "to": "変更の提供",
       "label": "関連するローカル検証とCIの結果"
     },
     {
       "kind": "input",
-      "from": "verification",
-      "to": "fresh-review",
+      "from": "検証結果",
+      "to": "実装レビュー",
       "label": "実際のテスト・ゲートの結果と限界"
     },
     {
       "kind": "input",
-      "from": "verification",
-      "to": "research-evaluation",
+      "from": "検証結果",
+      "to": "研究評価",
       "label": "関連する再現可能な観測結果"
     },
     {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "システム設計",
+      "label": "対象となる意図、範囲、制約、明示された予見リスク"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "テスト設計",
+      "label": "現在意図している結果と境界"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "同期漏れ検査",
+      "label": "選択した試行用アダプターが扱える、識別済みの現行原文項目"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "実装",
+      "label": "正本に記された現在の意図と未決定の境界"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "実装レビュー",
+      "label": "現在の業務上の意図、対象範囲、業務間の関係"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "検査項目の設計",
+      "label": "対象設計の全体、業務の条件、保証"
+    },
+    {
+      "kind": "input",
+      "from": "業務設計書",
+      "to": "業務グラフ出力",
+      "label": "独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、人間可読な5W1H原文"
+    },
+    {
+      "kind": "input",
+      "from": "研究の証拠と採否判断",
+      "to": "変更の提供",
+      "label": "手法を変更する場合の採用根拠"
+    },
+    {
+      "kind": "input",
+      "from": "研究の証拠と採否判断",
+      "to": "研究評価",
+      "label": "既存の結果、限界、再検討条件"
+    },
+    {
       "kind": "object-exception",
-      "from": "tests",
-      "to": "code",
+      "from": "テスト",
+      "to": "コード",
       "label": "テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない"
     },
     {
       "kind": "output",
-      "from": "business-design-work",
-      "to": "business-design",
-      "label": "スコープ、業務手順、業務相関"
-    },
-    {
-      "kind": "output",
-      "from": "business-design-work",
-      "to": "decisions",
-      "label": "判断 / 結果"
-    },
-    {
-      "kind": "output",
-      "from": "check-design",
-      "to": "checks",
-      "label": "レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む"
-    },
-    {
-      "kind": "output",
-      "from": "check-design",
-      "to": "requester",
-      "label": "確認が必要な、残っている具体的な業務上の選択肢のみ"
-    },
-    {
-      "kind": "output",
-      "from": "delivery-work",
-      "to": "delivery",
-      "label": "レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン"
-    },
-    {
-      "kind": "output",
-      "from": "delivery-work",
-      "to": "requester",
-      "label": "対応結果、検証状況、未解決の限界"
-    },
-    {
-      "kind": "output",
-      "from": "drift-inspection",
-      "to": "drift-metadata",
-      "label": "別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない"
-    },
-    {
-      "kind": "output",
-      "from": "drift-inspection",
-      "to": "drift-report",
-      "label": "古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する"
-    },
-    {
-      "kind": "output",
-      "from": "fresh-review",
-      "to": "requester",
-      "label": "責任者である人間の判断が必要な、未決定の業務上の選択肢"
-    },
-    {
-      "kind": "output",
-      "from": "fresh-review",
-      "to": "review",
-      "label": "具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む"
-    },
-    {
-      "kind": "output",
-      "from": "graph-export",
-      "to": "graph",
-      "label": "形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する"
-    },
-    {
-      "kind": "output",
-      "from": "implementation",
-      "to": "code",
-      "label": "レビュー対象となる変更済み実装"
-    },
-    {
-      "kind": "output",
-      "from": "implementation",
-      "to": "decisions",
-      "label": "重要な実装上の選択と残る限界"
-    },
-    {
-      "kind": "output",
-      "from": "implementation",
-      "to": "knowledge",
-      "label": "タスクで許可された場合のガイド更新案"
-    },
-    {
-      "kind": "output",
-      "from": "implementation",
-      "to": "tests",
-      "label": "変更した振る舞いを確認する実行可能なアサーション"
-    },
-    {
-      "kind": "output",
-      "from": "research-evaluation",
-      "to": "decisions",
-      "label": "タスク固有の評価上の選択と、検討を打ち切った理由"
-    },
-    {
-      "kind": "output",
-      "from": "research-evaluation",
-      "to": "research",
-      "label": "証拠、採否などの判断、理由、限界、再検討条件"
-    },
-    {
-      "kind": "output",
-      "from": "system-design",
-      "to": "decisions",
+      "from": "システム設計",
+      "to": "判断記録",
       "label": "技術的な選択、理由、前提、証拠、検討を打ち切る条件"
     },
     {
       "kind": "output",
-      "from": "test-design",
-      "to": "test-plan",
+      "from": "テスト・検証",
+      "to": "検証結果",
+      "label": "成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足"
+    },
+    {
+      "kind": "output",
+      "from": "テスト設計",
+      "to": "テスト計画",
       "label": "計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足"
     },
     {
       "kind": "output",
-      "from": "verification-work",
-      "to": "verification",
-      "label": "成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足"
+      "from": "同期漏れ検査",
+      "to": "同期漏れの候補",
+      "label": "古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する"
+    },
+    {
+      "kind": "output",
+      "from": "同期漏れ検査",
+      "to": "同期照合情報",
+      "label": "別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない"
+    },
+    {
+      "kind": "output",
+      "from": "変更の提供",
+      "to": "プルリクエスト・リリース",
+      "label": "レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン"
+    },
+    {
+      "kind": "output",
+      "from": "変更の提供",
+      "to": "依頼者",
+      "label": "対応結果、検証状況、未解決の限界"
+    },
+    {
+      "kind": "output",
+      "from": "実装",
+      "to": "ガイド・レビュー知識",
+      "label": "タスクで許可された場合のガイド更新案"
+    },
+    {
+      "kind": "output",
+      "from": "実装",
+      "to": "コード",
+      "label": "レビュー対象となる変更済み実装"
+    },
+    {
+      "kind": "output",
+      "from": "実装",
+      "to": "テスト",
+      "label": "変更した振る舞いを確認する実行可能なアサーション"
+    },
+    {
+      "kind": "output",
+      "from": "実装",
+      "to": "判断記録",
+      "label": "重要な実装上の選択と残る限界"
+    },
+    {
+      "kind": "output",
+      "from": "実装レビュー",
+      "to": "レビュー結果",
+      "label": "具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む"
+    },
+    {
+      "kind": "output",
+      "from": "実装レビュー",
+      "to": "依頼者",
+      "label": "責任者である人間の判断が必要な、未決定の業務上の選択肢"
+    },
+    {
+      "kind": "output",
+      "from": "検査項目の設計",
+      "to": "依頼者",
+      "label": "確認が必要な、残っている具体的な業務上の選択肢のみ"
+    },
+    {
+      "kind": "output",
+      "from": "検査項目の設計",
+      "to": "検査項目・責務索引",
+      "label": "レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む"
+    },
+    {
+      "kind": "output",
+      "from": "業務グラフ出力",
+      "to": "業務グラフJSON",
+      "label": "形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する"
+    },
+    {
+      "kind": "output",
+      "from": "業務設計",
+      "to": "判断記録",
+      "label": "判断 / 結果"
+    },
+    {
+      "kind": "output",
+      "from": "業務設計",
+      "to": "業務設計書",
+      "label": "スコープ、業務手順、業務相関"
+    },
+    {
+      "kind": "output",
+      "from": "研究評価",
+      "to": "判断記録",
+      "label": "タスク固有の評価上の選択と、検討を打ち切った理由"
+    },
+    {
+      "kind": "output",
+      "from": "研究評価",
+      "to": "研究の証拠と採否判断",
+      "label": "証拠、採否などの判断、理由、限界、再検討条件"
     }
   ],
   "scope": "Alderのガイド、研究の証拠、任意ツールを開発・保守する。対象は、業務上の意図の定義、技術手段の選択、必要に応じたCheck Itemとテスト計画の作成、実装、任意のDrift検査、検証、独立したレビュー、研究上の変更の評価、承認された変更の提供である。Graph exportは、この設計から必要な情報を取り出す任意の処理である。UIやViewerの設計、レイアウト、課金、業務上の自動承認、任意の研究手法の必須化、Checkとコードの物理位置の恒久的な対応管理は対象外とする。この開発業務では、プロダクトのデータベースや本番サービスを運用しない。"

@@ -48,6 +48,10 @@ State the design path and target revision in the task prompt or AGENTS.md. Pin a
 
 Apply this to explanations, business descriptions, and Input / Procedure / Output text when creating or updating the design. Headers and section names such as What / Why / When / Who / Where / How may remain English. Stable machine identifiers need not be translated. For Alder's own design, the requester uses Japanese, so its prose is Japanese. The format recommendation below does not override this principle.
 
+### Human and AI co-maintenance
+
+Business Design must be writable, readable and maintainable by a person alone, starting from interview findings. AI may draft and edit the same visible information alongside people; it is not an AI-only source format. For example, either a person or AI may choose and later revise an Object's visible Icon field. Keep information in understandable headings, sections and ordinary text. Do not require authors to maintain hidden HTML-comment IDs, annotations or machine-only fingerprints. Derive export data from the human-readable structure; tooling must fit the document. Business Design remains the SSOT and human business agreement is still required.
+
 ### Recommended Business Design format
 
 The current research recommends **5W1H, with How written as Input → Procedure → Output**, to make relationships between activities traceable. This is the current reference format used by the evaluated cases, not a mandatory input specification. Equivalent review behavior has not been established for arbitrary specification formats.
@@ -61,7 +65,7 @@ The current research recommends **5W1H, with How written as Input → Procedure 
 | Where | A short place or channel name. Use “not specified” when no location constraint applies. |
 | How | Input: what is received from preceding work, users, or external sources → Procedure: what is decided or processed → Output: what is passed to subsequent work as an established fact. |
 
-Design these field values for their later use in correlation views and role filters, not as general explanatory paragraphs. Keep machine IDs separate from human-facing Activity/Object names. Put AI/human assignments, assistance, approval responsibility and detailed operating conditions in Procedure or operating rules; shortening fields must not delete these guarantees. The [optional export profile](business-graph.md#opt-in-markdown-profile-v1) uses hidden ID annotations and projects the Activity heading as the business name. Older research source documents remain frozen as evidence.
+Design these field values for their later use in correlation views and role filters, not as general explanatory paragraphs. Do not require human authors to maintain machine IDs or hidden annotations in Business Design. Put AI/human assignments, assistance, approval responsibility and detailed operating conditions in Procedure or operating rules; shortening fields must not delete these guarantees. The [optional export profile](business-graph.md#opt-in-markdown-profile-v1) derives identity and connections from visible names and projects the Activity heading as the business name. Older research source documents remain frozen as evidence.
 
 Input / Output describe the actual information transfers represented by Object ↔ Business connections in the agreed business correlations, not a general reference-material inventory. Keep business-to-business exception/return flows separate from ordinary I/O.
 

@@ -6,6 +6,8 @@
 
 Business Design is the basis for agreement with users/requesters. **Its prose must be written in the language the requester actually uses**, so they can understand the content, identify errors, and agree to its meaning themselves. It is not sufficient for only the implementer or AI to understand it. Headers and section names may remain English; see the [authoring guidance](adoption.md#language-for-agreement).
 
+Business Design must also be maintainable by a person alone and jointly editable with AI through the same visible information. Machine-readable export must adapt to that human-readable structure, without making people maintain hidden IDs or machine-only annotations. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
+
 ## Why not settle every decision before implementing?
 
 Business Design needs enough detail to identify the current work and trace its connections. Alder does not treat careless specifications as sufficient, but it does not postpone implementation until every business decision is perfectly specified.

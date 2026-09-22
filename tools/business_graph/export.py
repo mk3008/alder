@@ -9,10 +9,8 @@ import re
 import sys
 import tempfile
 
-MARKER = '<!-- alder-business-graph: 1 -->'
 ID = r'[a-z0-9]+(?:-[a-z0-9]+)*'
 ENTITY = re.compile(r'# (Activity|Object) (\S.*)')
-IDENTITY = re.compile(rf'<!-- alder-id: ({ID}) -->')
 FIELDS = ('Why', 'When', 'Who', 'Where')
 KINDS = ('input', 'output', 'business-exception', 'object-exception')
 
@@ -28,6 +26,12 @@ def require(condition, message):
 
 def nonempty(value):
     return isinstance(value, str) and bool(value.strip())
+
+
+def visible_name(value):
+    # Delimiters must be unambiguous in the visible relation notation.
+    return (nonempty(value) and value == value.strip()
+            and not any(token in value for token in ('\n', '\r', ' — ', ' → ', '<!--')))
 
 
 def validate_graph(graph):
@@ -51,7 +55,7 @@ def validate_graph(graph):
         expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
         require(set(node) == expected, f'invalid {kind} node fields')
         require(all(nonempty(v) for v in node.values()), 'node fields must be nonempty text')
-        require(re.fullmatch(ID, node['id']) is not None, f'invalid node ID: {node["id"]}')
+        require(visible_name(node['name']) and node['id'] == node['name'], 'node ID must equal its visible name')
         require(node['id'] not in nodes, f'duplicate node ID: {node["id"]}')
         if kind == 'object':
             require(re.fullmatch(ID, node['icon']) is not None, 'icon must be a kebab-case Lucide name')
@@ -111,12 +115,11 @@ def sections(body, expected, context, empty=()):
 
 def parse_design(text):
     text = text.replace('\r\n', '\n')
-    require(text.splitlines().count(MARKER) == 1, f'exactly one {MARKER} is required')
+    require('<!--' not in text, 'HTML comments are unsupported; keep source information visible')
     lines = text.splitlines()
     roots = [(n, h) for n, h in headings(text) if h.startswith('# ')]
     require(roots, 'document title is required')
     require(not ENTITY.fullmatch(roots[0][1]) and roots[0][1] not in ('# Scope', '# Graph exceptions'), 'first H1 must be a document title')
-    require(MARKER in '\n'.join(lines[:roots[1][0] if len(roots) > 1 else len(lines)]), 'profile marker must be in the document preamble')
     graph = {'version': 1, 'nodes': [], 'relations': []}
     special = set()
     for i, (start, heading) in enumerate(roots[1:], 1):
@@ -133,7 +136,7 @@ def parse_design(text):
                 for line in body.splitlines():
                     if not line.strip():
                         continue
-                    match = re.fullmatch(rf'- (business-exception|object-exception) ({ID}) -> ({ID}): (\S.*)', line)
+                    match = re.fullmatch(r'- (business-exception|object-exception) (.+?) → (.+?) — (\S.*)', line)
                     require(match, f'invalid exception: {line}')
                     kind, source, target, label = match.groups()
                     graph['relations'].append({'kind': kind, 'from': source, 'to': target, 'label': label.strip()})
@@ -141,11 +144,7 @@ def parse_design(text):
         match = ENTITY.fullmatch(heading)
         require(match, f'unsupported top-level heading: {heading}')
         category, name = match.groups()
-        identity, _, body = body.partition('\n')
-        id_match = IDENTITY.fullmatch(identity)
-        require(id_match, f'{heading}: expected standalone <!-- alder-id: stable-id --> before fields')
-        node_id = id_match.group(1)
-        body = body.strip()
+        node_id = name.strip()
         if category == 'Object':
             icon = 'box'
             if body != '(generic icon)':
@@ -168,8 +167,8 @@ def parse_design(text):
             for line in contents.splitlines():
                 if not line.strip():
                     continue
-                relation = re.fullmatch(rf'- \[({ID})\] — (\S.*)', line)
-                require(relation, f'{node_id} {field}: expected - [object-id] — label, got {line}')
+                relation = re.fullmatch(r'- (.+?) — (\S.*)', line)
+                require(relation, f'{node_id} {field}: expected - Object name — label, got {line}')
                 object_id, label = relation.groups()
                 source, target = (object_id, node_id) if kind == 'input' else (node_id, object_id)
                 graph['relations'].append({'kind': kind, 'from': source, 'to': target, 'label': label.strip()})
