@@ -8,7 +8,7 @@ Business Designは依頼者との合意に使う文書である。本文は依�
 
 各Activityは責務を示しており、必ず順番に実行する工程ではない。1人が複数の役割を担ってもよい。**Whoはその業務を行うロール**を表し、同じ役割には同じ短い名称を使う。AIや人間への割り当て、支援者、確認者の分担はProcedureに記す。一方、`requester` Objectは、担当者が意図を受け取ったり、質問や結果を返したりする外部の相手を表す。同じ人が両方に関わる場合も、この2つの役割は区別する。
 
-既存の運用規則の参照元は、[導入ガイド](../../docs/adoption.md)、[レビュー知識 v0.3](../../docs/phase2/review-knowledge-v0.3.md)、[Checkの追跡関係](../../docs/check-item-traceability.md)、[任意のDrift試行](../../docs/traceability-drift/study.md)、[研究判断の索引](../../docs/research-decisions.md)である。以下の識別子と明示的なObject参照は、推奨形式である5W1H / Input → Procedure → Outputに付けた注釈であり、同じ入力から同じJSONを生成するために使う。生成JSONは手で編集しない。
+既存の運用規則の参照元は、[導入ガイド](../../docs/adoption.md)、[レビュー知識 v0.3](../../docs/phase2/review-knowledge-v0.3.md)、[Checkの追跡関係](../../docs/check-item-traceability.md)、[任意のDrift試行](../../docs/traceability-drift/study.md)、[研究判断の索引](../../docs/research-decisions.md)である。以下の識別子と明示的なObject参照は、推奨形式である5W1H / Input → Procedure → Outputに付けた注釈であり、同じ入力から同じJSONを生成するために使う。生成JSONは手で編集しない。Input / OutputはObjectと業務の間で実際に受け渡す情報を表し、一般的な参照資料の一覧にはしない。業務要件の問題による業務間の差し戻しは、通常のI/Oではなく末尾の例外フローで表す。
 
 # Scope
 
@@ -33,6 +33,22 @@ file-text
 # Object ガイド・レビュー知識
 
 <!-- alder-id: knowledge -->
+
+## Icon
+
+book-open
+
+# Object Alder: 業務相関ナレッジ
+
+<!-- alder-id: business-correlation-knowledge -->
+
+## Icon
+
+book-open
+
+# Object Alder: 業務ナレッジ
+
+<!-- alder-id: business-knowledge -->
 
 ## Icon
 
@@ -158,24 +174,23 @@ workflow
 
 ### Input
 
-- [requester]: 目的、運用上の制約、人間による業務上の判断
-- [business-design]: 現在の意図、対象範囲、業務間の関係
-- [review]: 具体的な未決定の業務上の問いと、後続業務の保証への影響
-- [research]: 運用方法の変更案に関係する証拠と限界
+- [requester] — システム要件 / フィードバック
+- [business-correlation-knowledge] — 状態遷移フィードバック
+- [business-knowledge] — 考慮漏れフィードバック
 
 ### Procedure
 
 AIが草案作成を支援し、責任を持つ人間の業務設計者が意味を確認する。Alderの開発業務と実現したい結果を記述・保守する。
 
 1. 対象となる設計全体を読み、What、Why、When、Who、WhereとInput → Procedure → Outputから業務を把握する。本文は依頼者が実際に使用する言語で書き、依頼者自身が理解・訂正・合意できるようにする。
-2. 接続する業務をたどり、前の業務の結果と次の業務の条件が整合するか確認する。将来のあらゆる方針が決まるまで実装を待つことは求めない。
-3. 影響の大きい未決定事項は、責任者である人間に判断を求める。草案は未承認と分かる状態にし、テストやDecision Recordを承認の代わりにしない。
+2. 業務相関ナレッジからの状態遷移フィードバックと、業務ナレッジからの考慮漏れフィードバックを確認する。接続する業務をたどり、前の業務の結果と次の業務の条件が整合するか確認する。将来のあらゆる方針が決まるまで実装を待つことは求めない。
+3. 判断とその結果をDecision Recordに記録する。影響の大きい未決定事項は、責任者である人間に判断を求める。草案は未承認と分かる状態にし、テストやDecision Recordを承認の代わりにしない。
 4. 意味が変わる場合は、まずBusiness Designを更新して人間の確認を得てから、影響するCheck Item、Decision Record、テスト、コードを修正する。通常の可逆的な技術判断は、業務上の判断を求めずに進めてよい。
 
 ### Output
 
-- [business-design]: 確認済みの意味と、未決定の範囲や草案を区別した現行設計
-- [requester]: 人間の判断が必要な具体的な選択肢、または確認を受けるための更新済み設計
+- [business-design] — スコープ、業務手順、業務相関
+- [decisions] — 判断 / 結果
 
 # Activity システム設計
 
@@ -201,10 +216,10 @@ AIが草案作成を支援し、責任を持つ人間の業務設計者が意味
 
 ### Input
 
-- [business-design]: 対象となる意図、範囲、制約、明示された予見リスク
-- [knowledge]: 技術検討の範囲を絞るためのガイドと、操作ミスが起きにくい運用の指針
-- [decisions]: 既存の技術判断とその限界
-- [code]: 現行実装の制約
+- [business-design] — 対象となる意図、範囲、制約、明示された予見リスク
+- [knowledge] — 技術検討の範囲を絞るためのガイドと、操作ミスが起きにくい運用の指針
+- [decisions] — 既存の技術判断とその限界
+- [code] — 現行実装の制約
 
 ### Procedure
 
@@ -216,7 +231,7 @@ AIが草案作成を支援し、責任を持つ人間の業務設計者が意味
 
 ### Output
 
-- [decisions]: 技術的な選択、理由、前提、証拠、検討を打ち切る条件
+- [decisions] — 技術的な選択、理由、前提、証拠、検討を打ち切る条件
 
 # Activity 検査項目の設計
 
@@ -242,10 +257,10 @@ AIが草案作成を支援し、責任を持つ人間の業務設計者が意味
 
 ### Input
 
-- [business-design]: 対象設計の全体、業務の条件、保証
-- [knowledge]: c3による導出、任意の機能考慮事項の探索、追跡関係のガイド
-- [decisions]: 決定済みの事項と共有する契約
-- [requester]: 期待結果に対する人間の修正とレビュー判断
+- [business-design] — 対象設計の全体、業務の条件、保証
+- [knowledge] — c3による導出、任意の機能考慮事項の探索、追跡関係のガイド
+- [decisions] — 決定済みの事項と共有する契約
+- [requester] — 期待結果に対する人間の修正とレビュー判断
 
 ### Procedure
 
@@ -258,8 +273,8 @@ AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待
 
 ### Output
 
-- [checks]: レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む
-- [requester]: 確認が必要な、残っている具体的な業務上の選択肢のみ
+- [checks] — レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む
+- [requester] — 確認が必要な、残っている具体的な業務上の選択肢のみ
 
 # Activity テスト設計
 
@@ -285,10 +300,10 @@ AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待
 
 ### Input
 
-- [business-design]: 現在意図している結果と境界
-- [checks]: 任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細
-- [tests]: 既存のアサーションと関連する回帰テスト
-- [decisions]: 検証に影響する技術的な制約と前提
+- [business-design] — 現在意図している結果と境界
+- [checks] — 任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細
+- [tests] — 既存のアサーションと関連する回帰テスト
+- [decisions] — 検証に影響する技術的な制約と前提
 
 ### Procedure
 
@@ -300,7 +315,7 @@ AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待
 
 ### Output
 
-- [test-plan]: 計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足
+- [test-plan] — 計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足
 
 # Activity 実装
 
@@ -326,13 +341,13 @@ AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待
 
 ### Input
 
-- [business-design]: 正本に記された現在の意図と未決定の境界
-- [decisions]: 技術的な選択と前提
-- [test-plan]: 関連するアサーションと検証ケース
-- [code]: 既存の実装
-- [tests]: 既存の実行可能なテスト
-- [knowledge]: タスクで更新する可能性がある、公開済みのガイド
-- [review]: 対応すべき、確認済みの不一致や採用された技術改善
+- [business-design] — 正本に記された現在の意図と未決定の境界
+- [decisions] — 技術的な選択と前提
+- [test-plan] — 関連するアサーションと検証ケース
+- [code] — 既存の実装
+- [tests] — 既存の実行可能なテスト
+- [knowledge] — タスクで更新する可能性がある、公開済みのガイド
+- [review] — 対応すべき、確認済みの不一致や採用された技術改善
 
 ### Procedure
 
@@ -345,10 +360,10 @@ AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待
 
 ### Output
 
-- [code]: レビュー対象となる変更済み実装
-- [tests]: 変更した振る舞いを確認する実行可能なアサーション
-- [knowledge]: タスクで許可された場合のガイド更新案
-- [decisions]: 重要な実装上の選択と残る限界
+- [code] — レビュー対象となる変更済み実装
+- [tests] — 変更した振る舞いを確認する実行可能なアサーション
+- [knowledge] — タスクで許可された場合のガイド更新案
+- [decisions] — 重要な実装上の選択と残る限界
 
 # Activity 同期漏れ検査
 
@@ -374,9 +389,9 @@ Drift試行環境
 
 ### Input
 
-- [business-design]: 選択した試行用アダプターが扱える、識別済みの現行原文項目
-- [checks]: 現在のCheck本文
-- [drift-metadata]: 照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID
+- [business-design] — 選択した試行用アダプターが扱える、識別済みの現行原文項目
+- [checks] — 現在のCheck本文
+- [drift-metadata] — 照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID
 
 ### Procedure
 
@@ -390,8 +405,8 @@ Drift試行環境
 
 ### Output
 
-- [drift-report]: 古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する
-- [drift-metadata]: 別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない
+- [drift-report] — 古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する
+- [drift-metadata] — 別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない
 
 # Activity テスト・検証
 
@@ -417,10 +432,10 @@ Drift試行環境
 
 ### Input
 
-- [code]: テスト対象の現行実装
-- [tests]: 実行可能なテスト一式
-- [test-plan]: 必要なケースと期待する観測結果
-- [drift-report]: 任意試行を使う場合に確認する影響候補
+- [code] — テスト対象の現行実装
+- [tests] — 実行可能なテスト一式
+- [test-plan] — 必要なケースと期待する観測結果
+- [drift-report] — 任意試行を使う場合に確認する影響候補
 
 ### Procedure
 
@@ -432,7 +447,7 @@ Drift試行環境
 
 ### Output
 
-- [verification]: 成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足
+- [verification] — 成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足
 
 # Activity 実装レビュー
 
@@ -458,12 +473,12 @@ Drift試行環境
 
 ### Input
 
-- [business-design]: 現在の業務上の意図、対象範囲、業務間の関係
-- [decisions]: 記録された実装上の選択と前提
-- [knowledge]: 選択した版のレビュー知識と、レビューを打ち切る条件
-- [code]: 実装によって具体化された業務上の意味
-- [tests]: 選択された振る舞いの証拠となるアサーション
-- [verification]: 実際のテスト・ゲートの結果と限界
+- [business-design] — 現在の業務上の意図、対象範囲、業務間の関係
+- [decisions] — 記録された実装上の選択と前提
+- [knowledge] — 選択した版のレビュー知識と、レビューを打ち切る条件
+- [code] — 実装によって具体化された業務上の意味
+- [tests] — 選択された振る舞いの証拠となるアサーション
+- [verification] — 実際のテスト・ゲートの結果と限界
 
 ### Procedure
 
@@ -476,8 +491,8 @@ Drift試行環境
 
 ### Output
 
-- [review]: 具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む
-- [requester]: 責任者である人間の判断が必要な、未決定の業務上の選択肢
+- [review] — 具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む
+- [requester] — 責任者である人間の判断が必要な、未決定の業務上の選択肢
 
 # Activity 研究評価
 
@@ -503,11 +518,11 @@ Drift試行環境
 
 ### Input
 
-- [requester]: 研究の目的と許可された評価範囲
-- [knowledge]: 現行の手法と変更候補
-- [research]: 既存の結果、限界、再検討条件
-- [verification]: 関連する再現可能な観測結果
-- [review]: 候補に関係するレビュー結果
+- [requester] — 研究の目的と許可された評価範囲
+- [knowledge] — 現行の手法と変更候補
+- [research] — 既存の結果、限界、再検討条件
+- [verification] — 関連する再現可能な観測結果
+- [review] — 候補に関係するレビュー結果
 
 ### Procedure
 
@@ -519,8 +534,8 @@ Drift試行環境
 
 ### Output
 
-- [research]: 証拠、採否などの判断、理由、限界、再検討条件
-- [decisions]: タスク固有の評価上の選択と、検討を打ち切った理由
+- [research] — 証拠、採否などの判断、理由、限界、再検討条件
+- [decisions] — タスク固有の評価上の選択と、検討を打ち切った理由
 
 # Activity 変更の提供
 
@@ -546,13 +561,13 @@ GitHub・リリースワークフロー
 
 ### Input
 
-- [code]: 提案する実行可能な変更
-- [tests]: 更新済みの回帰テスト
-- [knowledge]: ガイドや文書の変更案
-- [verification]: 関連するローカル検証とCIの結果
-- [review]: Fresh reviewの結果と残る限界
-- [research]: 手法を変更する場合の採用根拠
-- [requester]: 人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可
+- [code] — 提案する実行可能な変更
+- [tests] — 更新済みの回帰テスト
+- [knowledge] — ガイドや文書の変更案
+- [verification] — 関連するローカル検証とCIの結果
+- [review] — Fresh reviewの結果と残る限界
+- [research] — 手法を変更する場合の採用根拠
+- [requester] — 人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可
 
 ### Procedure
 
@@ -564,8 +579,8 @@ GitHub・リリースワークフロー
 
 ### Output
 
-- [delivery]: レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン
-- [requester]: 対応結果、検証状況、未解決の限界
+- [delivery] — レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン
+- [requester] — 対応結果、検証状況、未解決の限界
 
 # Activity 業務グラフ出力
 
@@ -591,7 +606,7 @@ GitHub・リリースワークフロー
 
 ### Input
 
-- [business-design]: 独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、注釈付きの5W1H原文
+- [business-design] — 独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、注釈付きの5W1H原文
 
 ### Procedure
 
@@ -605,7 +620,7 @@ GitHub・リリースワークフロー
 
 ### Output
 
-- [graph]: 形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する
+- [graph] — 形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する
 
 # Graph exceptions
 

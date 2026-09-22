@@ -2,6 +2,12 @@
   "version": 1,
   "nodes": [
     {
+      "id": "business-correlation-knowledge",
+      "type": "object",
+      "name": "Alder: 業務相関ナレッジ",
+      "icon": "book-open"
+    },
+    {
       "id": "business-design",
       "type": "object",
       "name": "業務設計書",
@@ -15,6 +21,12 @@
       "when": "目的・変更要求の受領、未決定事項の発見",
       "who": "業務設計者",
       "where": "リポジトリ・レビューの議論"
+    },
+    {
+      "id": "business-knowledge",
+      "type": "object",
+      "name": "Alder: 業務ナレッジ",
+      "icon": "book-open"
     },
     {
       "id": "check-design",
@@ -218,9 +230,9 @@
     },
     {
       "kind": "input",
-      "from": "business-design",
+      "from": "business-correlation-knowledge",
       "to": "business-design-work",
-      "label": "現在の意図、対象範囲、業務間の関係"
+      "label": "状態遷移フィードバック"
     },
     {
       "kind": "input",
@@ -263,6 +275,12 @@
       "from": "business-design",
       "to": "test-design",
       "label": "現在意図している結果と境界"
+    },
+    {
+      "kind": "input",
+      "from": "business-knowledge",
+      "to": "business-design-work",
+      "label": "考慮漏れフィードバック"
     },
     {
       "kind": "input",
@@ -388,7 +406,7 @@
       "kind": "input",
       "from": "requester",
       "to": "business-design-work",
-      "label": "目的、運用上の制約、人間による業務上の判断"
+      "label": "システム要件 / フィードバック"
     },
     {
       "kind": "input",
@@ -411,12 +429,6 @@
     {
       "kind": "input",
       "from": "research",
-      "to": "business-design-work",
-      "label": "運用方法の変更案に関係する証拠と限界"
-    },
-    {
-      "kind": "input",
-      "from": "research",
       "to": "delivery-work",
       "label": "手法を変更する場合の採用根拠"
     },
@@ -425,12 +437,6 @@
       "from": "research",
       "to": "research-evaluation",
       "label": "既存の結果、限界、再検討条件"
-    },
-    {
-      "kind": "input",
-      "from": "review",
-      "to": "business-design-work",
-      "label": "具体的な未決定の業務上の問いと、後続業務の保証への影響"
     },
     {
       "kind": "input",
@@ -520,13 +526,13 @@
       "kind": "output",
       "from": "business-design-work",
       "to": "business-design",
-      "label": "確認済みの意味と、未決定の範囲や草案を区別した現行設計"
+      "label": "スコープ、業務手順、業務相関"
     },
     {
       "kind": "output",
       "from": "business-design-work",
-      "to": "requester",
-      "label": "人間の判断が必要な具体的な選択肢、または確認を受けるための更新済み設計"
+      "to": "decisions",
+      "label": "判断 / 結果"
     },
     {
       "kind": "output",

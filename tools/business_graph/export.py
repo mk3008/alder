@@ -168,8 +168,8 @@ def parse_design(text):
             for line in contents.splitlines():
                 if not line.strip():
                     continue
-                relation = re.fullmatch(rf'- \[({ID})\]: (\S.*)', line)
-                require(relation, f'{node_id} {field}: expected - [object-id]: label, got {line}')
+                relation = re.fullmatch(rf'- \[({ID})\] — (\S.*)', line)
+                require(relation, f'{node_id} {field}: expected - [object-id] — label, got {line}')
                 object_id, label = relation.groups()
                 source, target = (object_id, node_id) if kind == 'input' else (node_id, object_id)
                 graph['relations'].append({'kind': kind, 'from': source, 'to': target, 'label': label.strip()})

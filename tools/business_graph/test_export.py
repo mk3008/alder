@@ -40,8 +40,8 @@ Not specified.
 
 ### Input
 
-- [person]: Question
-- [record]: Existing context
+- [person] — Question
+- [record] — Existing context
 
 ### Procedure
 
@@ -49,8 +49,8 @@ Not specified.
 
 ### Output
 
-- [record]: Explanation
-- [person]: Notification
+- [record] — Explanation
+- [person] — Notification
 '''
 
 
@@ -120,7 +120,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual([(r['to'], r['label']) for r in graph['relations'] if r['from'] == 'record'],
                          [('approve', 'Evidence for approval'), ('read', 'Existing context')])
         # Same business may read distinct content from the same object, too.
-        graph = parse_design(SOURCE.replace('- [record]: Existing context', '- [record]: Existing context\n- [record]: History'))
+        graph = parse_design(SOURCE.replace('- [record] — Existing context', '- [record] — Existing context\n- [record] — History'))
         self.assertEqual(len(graph['relations']), 5)
 
     def test_explicit_exception_kinds(self):
@@ -148,8 +148,8 @@ class ExportTests(unittest.TestCase):
     def test_determinism_reordering_line_endings_and_unicode(self):
         source = SOURCE + '\n' + activity('approve', '担当者')
         reordered = PREAMBLE + activity('approve', '担当者') + '\n' + activity() + '\n' + OBJECTS
-        reordered = reordered.replace('- [person]: Question\n- [record]: Existing context',
-                                      '- [record]: Existing context\n- [person]: Question')
+        reordered = reordered.replace('- [person] — Question\n- [record] — Existing context',
+                                      '- [record] — Existing context\n- [person] — Question')
         expected = render(parse_design(source))
         self.assertEqual(expected, render(parse_design(source)))
         self.assertEqual(expected, render(parse_design(reordered.replace('\n', '\r\n'))))
@@ -231,7 +231,7 @@ class ExportTests(unittest.TestCase):
             validate_graph(graph)
 
     def test_empty_io_must_be_explicit(self):
-        source = SOURCE.replace('- [person]: Question\n- [record]: Existing context', '(none)')
+        source = SOURCE.replace('- [person] — Question\n- [record] — Existing context', '(none)')
         self.assertEqual(len(parse_design(source)['relations']), 2)
         with self.assertRaises(DesignError):
             parse_design(source.replace('(none)', ''))
@@ -243,8 +243,8 @@ class ExportTests(unittest.TestCase):
                SOURCE.replace('## Why', '## What'),
                SOURCE.replace('## When\n\nA request arrives.', ''),
                SOURCE.replace('## How\n', '## How\nUnprojected prose\n'),
-               SOURCE.replace('- [person]: Question', 'The person asks a question.'),
-               SOURCE.replace('- [person]: Question', '- [person]: '),
+               SOURCE.replace('- [person] — Question', 'The person asks a question.'),
+               SOURCE.replace('- [person] — Question', '- [person] — '),
                SOURCE + '\n# Unknown\n\nA hidden activity.\n',
                SOURCE + '\n# Graph exceptions\n\n- business-exception read -> read: \n',
                SOURCE + '\n```\nUnclosed fence',
@@ -253,6 +253,29 @@ class ExportTests(unittest.TestCase):
         for source in bad:
             with self.subTest(source=source), self.assertRaises(DesignError):
                 parse_design(source)
+
+    def test_business_design_io_matches_human_review(self):
+        graph = parse_design(DESIGN.read_text())
+        work = 'business-design-work'
+        actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
+                  if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
+        self.assertEqual(actual, {
+            ('input', 'requester', work, 'システム要件 / フィードバック'),
+            ('input', 'business-correlation-knowledge', work, '状態遷移フィードバック'),
+            ('input', 'business-knowledge', work, '考慮漏れフィードバック'),
+            ('output', work, 'business-design', 'スコープ、業務手順、業務相関'),
+            ('output', work, 'decisions', '判断 / 結果'),
+        })
+        names = {n['id']: n['name'] for n in graph['nodes']}
+        self.assertEqual(names['business-correlation-knowledge'], 'Alder: 業務相関ナレッジ')
+        self.assertEqual(names['business-knowledge'], 'Alder: 業務ナレッジ')
+        self.assertEqual({r['from'] for r in graph['relations']
+                          if r['kind'] == 'business-exception' and r['to'] == work},
+                         {'implementation', 'fresh-review'})
+
+    def test_hidden_markdown_link_definition_is_rejected(self):
+        with self.assertRaises(DesignError):
+            parse_design(SOURCE.replace('- [person] — Question', '- [person]: Question'))
 
     def test_self_design_projection_and_regeneration(self):
         graph = parse_design(DESIGN.read_text())

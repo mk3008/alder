@@ -30,7 +30,7 @@ The supported subset is deliberately small:
 - An optional `# Scope` prose section, copied as the document-wide graph `scope`. It applies to all activities; no new per-node scope hierarchy is invented.
 - `# Object <name>` sections, each beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by `## Icon` with a kebab-case Lucide icon name. Alternatively the body after the ID annotation can be `(generic icon)`, yielding `box`.
 - `# Activity <name>` sections beginning with a standalone `<!-- alder-id: <stable-id> -->` annotation, followed by nonempty `## Why`, `## When`, `## Who`, `## Where`, then structural `## How`, and nonempty `### Input`, `### Procedure`, `### Output`, in that order. How has no separate body. Use an explicit “Not specified” for Where when appropriate.
-- Input and Output contain one `- [object-id]: label` per line (blank lines allowed), or exactly `(none)`. These are explicit references, not Markdown link definitions. Labels contain all the declared information received/written on that relation, including conditions. Multiple differently labeled relations to the same Object are allowed.
+- Input and Output contain one `- [object-id] — label` per line (blank lines allowed), or exactly `(none)`. The spaced em dash is required: `- [object-id]: label` is a Markdown link-reference definition and can disappear in rendered documents, so that old draft syntax is rejected. These references remain visible as list text. Declare actual Object ↔ Business transfers from the agreed business correlations, not everything an activity might generally consult. Business-to-business exception/return flows belong in Graph exceptions, not Input. Labels contain all the declared information received/written on that relation, including conditions. Multiple differently labeled relations to the same Object are allowed.
 - Optional `# Graph exceptions` with one `- business-exception from-id -> to-id: label` or `- object-exception from-id -> to-id: label` per line. No inferred exceptions.
 - ID annotations are separate from display names and hidden in rendered Markdown. Missing, malformed or duplicate ID annotations are rejected, not inferred from names. The earlier ID-in-heading draft is unsupported.
 - IDs are globally unique across both node types and match `[a-z0-9]+(?:-[a-z0-9]+)*`. Keep IDs stable when renaming display text. Section order does not establish identity or execution order.
@@ -86,7 +86,7 @@ Not specified.
 
 ### Input
 
-- [requester]: Question and relevant context
+- [requester] — Question and relevant context
 
 ### Procedure
 
@@ -94,8 +94,8 @@ Not specified.
 
 ### Output
 
-- [result]: Explanation and remaining uncertainty
-- [requester]: Result notification
+- [result] — Explanation and remaining uncertainty
+- [requester] — Result notification
 ```
 
 ## JSON v1 contract

@@ -63,6 +63,8 @@ The current research recommends **5W1H, with How written as Input → Procedure 
 
 Design these field values for their later use in correlation views and role filters, not as general explanatory paragraphs. Keep machine IDs separate from human-facing Activity/Object names. Put AI/human assignments, assistance, approval responsibility and detailed operating conditions in Procedure or operating rules; shortening fields must not delete these guarantees. The [optional export profile](business-graph.md#opt-in-markdown-profile-v1) uses hidden ID annotations and projects the Activity heading as the business name. Older research source documents remain frozen as evidence.
 
+Input / Output describe the actual information transfers represented by Object ↔ Business connections in the agreed business correlations, not a general reference-material inventory. Keep business-to-business exception/return flows separate from ordinary I/O.
+
 The point is not to fill every field mechanically. It is to **identify the activity through What and trace relationships between activities through Who / When / Input / Output**.
 
 A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. If human discretion itself is the operational trigger, state that discretion explicitly. This recommendation helps describe work consistently; it is not an additional rule in the review knowledge.
