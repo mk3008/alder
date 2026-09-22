@@ -62,9 +62,9 @@ The current research recommends **5W1H, with How written as Input → Procedure 
 | --- | --- |
 | What | A short business name, represented by the Activity heading; do not repeat it as a separate explanatory field. |
 | Why | Its purpose, in a short phrase. |
-| When | Its start trigger: a preceding result, external event, or state change. Keep relevant activation conditions explicit. |
+| When | Only the normal start trigger: a preceding result, external event, or state change. Keep exception/return triggers separate. |
 | Who | A short, stable role name for the work; reuse the same name for the same role. |
-| Where | A short place or channel name. Use “not specified” when no location constraint applies. |
+| Where | The place, usage environment or channel that affects business procedures or resulting system requirements; otherwise “not specified” (規定なし). |
 | How | Input: what is received from preceding work, users, or external sources → Procedure: what is decided or processed → Output: what is passed to subsequent work as an established fact. |
 
 Design these field values for their later use in correlation views and role filters, not as general explanatory paragraphs. Do not require human authors to maintain machine IDs or hidden annotations in Business Design. Put AI/human assignments, assistance, approval responsibility and detailed operating conditions in Procedure or operating rules; shortening fields must not delete these guarantees. The [optional export profile](business-graph.md#opt-in-markdown-profile-v1) derives identity and connections from visible names and projects the Activity heading as the business name. Older research source documents remain frozen as evidence.
@@ -76,6 +76,12 @@ The point is not to fill every field mechanically. It is to **identify the activ
 A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. If human discretion itself is the operational trigger, state that discretion explicitly. This recommendation helps describe work consistently; it is not an additional rule in the review knowledge.
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
+
+### Normal triggers, exceptions and environment
+
+Keep When and the normal Procedure focused on normal work. If an exception or return requires restarting an Activity, record it separately in a visible **Exception When** section: identify the originating Activity, the trigger and any necessary recovery/confirmation condition. Do not enumerate speculative exceptions. In a graph, normal When remains an Activity attribute; these exception triggers become explicit Business → Business dashed flows. Describe each exception once rather than maintaining a second copy in a global relation list. The optional export profile defines the exact notation.
+
+**Where records the business basis for deriving technical requirements, not the selected technical solution.** Include a place, usage environment or channel only when it affects whether the work can happen, its procedures or downstream requirements. “Customer site” may prompt questions about on-site access, mobile use and connectivity; “company intranet” about network/authentication constraints; “store/warehouse” about available equipment or terminals; “Web/phone” about an actual required channel. These are requirement candidates to establish from the work, not automatic mandates for a device or technology. Derive the required capability first, then compare smartphone Web, native apps, tablets or other technical means in system design. Do not infer “native app required” merely from “customer site”. Where the environment imposes no business condition, write “not specified” (規定なし) instead of listing the repository or review discussion used to record the work.
 
 ### Authoring and checking business correlations
 
@@ -89,7 +95,7 @@ Represent human review as an exchange when the work includes one: deliver the dr
 
 When a requester or responsible person resolves a material open issue, record **which question was decided, by whom, the decision and its result at that resolution step** in the Decision Record. Reflect the resulting business meaning in Business Design as well. Records provide decision evidence; they do not replace the SSOT or confer approval themselves. Ordinary reversible technical choices still follow the [delegation guidance](#3-let-the-ai-implement-without-inventing-business-policy), without an added business-approval gate.
 
-Before presenting a draft, walk one representative passage through its named Objects and steps. Check the [requester’s language](#language-for-agreement), [human/AI maintainability](#human-and-ai-co-maintenance), field meanings, actual transfers, review return paths and decision timing. Correct inconsistencies in the draft; ask people only about concrete unresolved business meaning. This is an authoring check for new and revised designs, not a new mandatory independent-review pipeline or a change to review knowledge v0.3. The existing format recommendation and research limits above still apply.
+Before presenting a draft, walk one representative passage through its named Objects and steps. Check the [requester’s language](#language-for-agreement), [human/AI maintainability](#human-and-ai-co-maintenance), field meanings, normal versus exception triggers, environment-derived requirements, actual transfers, review return paths and decision timing. Correct inconsistencies in the draft; ask people only about concrete unresolved business meaning. This is an authoring check for new and revised designs, not a new mandatory independent-review pipeline or a change to review knowledge v0.3. The existing format recommendation and research limits above still apply.
 
 ## 2. Point the agent to the design and review knowledge
 

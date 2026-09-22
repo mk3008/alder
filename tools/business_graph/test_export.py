@@ -155,6 +155,28 @@ class ExportTests(unittest.TestCase):
         self.assertIn({'kind': 'business-exception', 'from': 'approve', 'to': 'read', 'label': 'Return if unclear'}, graph['relations'])
         self.assertIn({'kind': 'object-exception', 'from': 'record', 'to': 'person', 'label': 'Exceptional association'}, graph['relations'])
 
+    def test_exception_when_projects_only_as_incoming_exception(self):
+        source = SOURCE.replace('## Who', '## Exception When\n\n- approve — Return on ambiguity\n\n## Who')
+        graph = parse_design(source + '\n' + activity('approve'))
+        node = next(n for n in graph['nodes'] if n['id'] == 'read')
+        self.assertEqual(node['when'], 'A request arrives.')
+        self.assertNotIn('exception_when', node)
+        self.assertIn({'kind': 'business-exception', 'from': 'approve', 'to': 'read',
+                       'label': 'Return on ambiguity'}, graph['relations'])
+        global_source = SOURCE + '\n' + activity('approve') + '\n# Graph exceptions\n\n- business-exception approve → read — Return on ambiguity\n'
+        self.assertEqual(graph, parse_design(global_source))
+
+    def test_exception_when_rejects_invalid_or_duplicate_declarations(self):
+        for body in ('', '- absent — Missing source', '- person — Wrong endpoint',
+                     '- read — ', 'Unstructured trigger', '- read — Repeat\n- read — Repeat'):
+            with self.subTest(body=body), self.assertRaises(DesignError):
+                parse_design(SOURCE.replace('## Who', '## Exception When\n\n' + body + '\n\n## Who'))
+        source = SOURCE.replace('## Who', '## Exception When\n\n- read — Repeat\n\n## Who')
+        with self.assertRaisesRegex(DesignError, 'duplicate relation'):
+            parse_design(source + '\n# Graph exceptions\n\n- business-exception read → read — Repeat\n')
+        with self.assertRaises(DesignError):
+            parse_design(SOURCE.replace('## Where', '## Exception When\n\n- read — Return\n\n## Where'))
+
     def test_scope_is_preserved_once(self):
         graph = parse_design(SOURCE + '\n# Scope\n\nCurrent work only.\n\nNo future work.\n')
         self.assertEqual(graph['scope'], 'Current work only.\n\nNo future work.')
@@ -310,6 +332,8 @@ class ExportTests(unittest.TestCase):
         })
         self.assertEqual(nodes['依頼者']['type'], 'object')
         self.assertEqual('業務設計者', nodes['業務設計']['who'])
+        self.assertEqual('目的・変更要求を受領したとき', nodes['業務設計']['when'])
+        self.assertEqual('規定なし', nodes['業務設計']['where'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
         self.assertIn('任意試行の利用時', nodes['同期漏れ検査']['when'])
         self.assertIn({'kind': 'object-exception', 'from': 'テスト', 'to': 'コード',

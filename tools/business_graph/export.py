@@ -152,14 +152,26 @@ def parse_design(text):
                 icon = values['## Icon']
             graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(), 'icon': icon})
             continue
-        expected = tuple('## ' + key for key in FIELDS) + ('## How', '### Input', '### Procedure', '### Output')
+        field_headings = ['## ' + key for key in FIELDS]
+        if any(h == '## Exception When' for _, h in headings(body)):
+            field_headings.insert(field_headings.index('## When') + 1, '## Exception When')
+        expected = tuple(field_headings) + ('## How', '### Input', '### Procedure', '### Output')
         values = sections(body, expected, node_id, empty=('## How',))
         require(not values['## How'], f'{node_id}: How must contain Input, Procedure, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow Why/When/Who/Where/How/Input/Procedure/Output order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow Why/When/[Exception When]/Who/Where/How/Input/Procedure/Output order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
         graph['nodes'].append(node)
+        if '## Exception When' in values:
+            for line in values['## Exception When'].splitlines():
+                if not line.strip():
+                    continue
+                exception = re.fullmatch(r'- (.+?) — (\S.*)', line)
+                require(exception, f'{node_id} Exception When: expected - Source activity — trigger')
+                source, label = exception.groups()
+                graph['relations'].append({'kind': 'business-exception', 'from': source,
+                                           'to': node_id, 'label': label.strip()})
         for field, kind in (('Input', 'input'), ('Output', 'output')):
             contents = values['### ' + field]
             if contents == '(none)':
