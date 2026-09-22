@@ -4,7 +4,7 @@
 
 Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming change avoids confusion with DB/transaction atomicity and does not change granularity, IDs or review states. v0.5 narrows permanent traceability to Business Design ↔ Check Item ↔ Automated Test; Code is verified by tests rather than maintained as a permanent mapping target.
 
-Check Item traceability is an **optional Alder workflow** for products where people and AI both need to trace business meaning through checks and automated tests.
+Check Item design and human review are **required in the current Alder method**. AI creates and updates the list while preserving IDs and Business Design / Check / Test mappings; humans review expected results and return corrections and confirmation. Direct human edits are allowed, followed by a mapping consistency check. Business Design remains human-maintainable. Functional Interfaces and the drift pilot remain optional. See the [current workflow](adoption.md#draft-and-review-check-items-required).
 
 It does not add a new source of business truth, require a standalone Functional Design phase, prescribe an architecture, or require complete line-by-line traceability.
 

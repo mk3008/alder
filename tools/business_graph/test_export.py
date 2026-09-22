@@ -114,6 +114,25 @@ class ExportTests(unittest.TestCase):
         with self.assertRaises(DesignError):
             validate_graph(graph)
 
+    def test_check_design_review_exchange_and_return(self):
+        graph = parse_design(DESIGN.read_text())
+        work = '検査項目の設計'
+        node = next(n for n in graph['nodes'] if n['id'] == work)
+        self.assertEqual(node['when'], '業務設計書の合意完了')
+        self.assertEqual({(r['kind'], r['from'], r['to'], r['label'])
+                          for r in graph['relations']
+                          if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
+            ('input', '業務設計書', work, '業務要件 / 期待結果'),
+            ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 判断結果'),
+            ('output', work, '検査項目', '確定・更新した検査項目'),
+            ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 未決事項相談 / 判断依頼'),
+        })
+        returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
+                   and r['from'] == work]
+        self.assertEqual(len(returns), 1)
+        self.assertEqual(returns[0]['to'], '業務設計')
+        self.assertIn('業務設計書を修正・合意してから', returns[0]['label'])
+
     def test_system_requirements_handoff(self):
         graph = parse_design(DESIGN.read_text())
         edges = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}
@@ -365,7 +384,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(names['Alder: 業務ナレッジ'], 'Alder: 業務ナレッジ')
         self.assertEqual({r['from'] for r in graph['relations']
                           if r['kind'] == 'business-exception' and r['to'] == work},
-                         {'実装', '実装レビュー'})
+                         {'実装', '実装レビュー', '検査項目の設計'})
 
     def test_hidden_markdown_link_definition_is_rejected(self):
         with self.assertRaises(DesignError):

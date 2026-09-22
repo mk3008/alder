@@ -59,7 +59,7 @@ Business Design remains the SSOT; JSON is regenerated, not edited. Procedure is 
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
 | Optional discovery of undocumented functional conditions before Check/Test commitments | [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
-| Optional human/AI traceability from Business Design through Check Items to tests; tests verify code by execution | [Check Item traceability](docs/check-item-traceability.md) |
+| Required Check Item design and human review, with AI-maintained traceability from Business Design to tests; tests verify code by execution | [Check Item traceability](docs/check-item-traceability.md) |
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
