@@ -413,13 +413,13 @@
       "kind": "input",
       "from": "検査項目",
       "to": "実装",
-      "label": "確認済み期待結果 / Check ID / 検証不足"
+      "label": "確認済み期待結果"
     },
     {
       "kind": "input",
       "from": "検査項目",
       "to": "実装レビュー",
-      "label": "確認済み期待結果 / Check IDとTestの対応 / 検証不足"
+      "label": "確認済み期待結果 / 既存のTest対応 / 検証不足"
     },
     {
       "kind": "input",
@@ -543,21 +543,21 @@
     },
     {
       "kind": "output",
-      "from": "実装",
-      "to": "判断記録",
-      "label": "技術的選択 / 理由"
-    },
-    {
-      "kind": "output",
-      "from": "実装",
-      "to": "検査項目",
-      "label": "Check IDとTestの対応 / 検証不足"
+      "from": "実装レビュー",
+      "to": "レビュー結果",
+      "label": "指摘 / 根拠 / 分類 / 十分な振る舞い"
     },
     {
       "kind": "output",
       "from": "実装レビュー",
-      "to": "レビュー結果",
-      "label": "指摘 / 根拠 / 分類 / 十分な振る舞い"
+      "to": "判断記録",
+      "label": "確認済みの技術的選択 / 理由 / 前提"
+    },
+    {
+      "kind": "output",
+      "from": "実装レビュー",
+      "to": "検査項目",
+      "label": "Check IDとTest / assertionの対応 / 検証不足"
     },
     {
       "kind": "output",
