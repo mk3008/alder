@@ -76,3 +76,28 @@ Applied [the When/Where clarification](https://github.com/mk3008/alder/pull/80#i
 Adoption guidance now separates normal triggers/procedures from actual exception starts and defines Where as business-relevant environment/channel evidence for requirement derivation. Its examples distinguish requirement candidates from technical selection (customer-site work does not itself mandate a native app). The export guide links the semantics to the source notation; authoring self-check includes both views. These are reusable authoring clarifications, not a new review knowledge version or a requirement to enumerate hypothetical exceptions.
 
 Validation: 32 exporter/CLI tests passed. Added optional Exception When projection/equivalence and malformed/empty/unknown-source/wrong-type/duplicate/misplaced-section regressions; the self-design checks assert normal When and 規定なし. All 28 nodes and 75 relations remain; only the target When/Where and two exception labels change. Regenerated JSON matches the source, and diff whitespace checks passed.
+
+## PR #80 follow-up — Business Design quality review trial
+
+The [implementation review](https://github.com/mk3008/alder/pull/80#issuecomment-5784586663) exposed a recurring issue beyond one Activity: structurally valid, AI-authored Business Design can still mix field responsibilities, read like a reference list, or obscure the normal work. The [trial decision](https://github.com/mk3008/alder/pull/80#issuecomment-5784726379) is to treat PR #80 as a model case for [writing-quality review knowledge](../business-design-quality-review.md). This checks readability, field responsibility, actual transfers, normal Procedure and exception boundaries. It does not approve business meaning or replace the existing correlation/functional reviews.
+
+For this PR, classify each human finding as a document-specific meaning/content correction, an application of existing authoring guidance, or a potentially reusable writing-quality rule. Directly add generalizable rules to the trial knowledge, apply that latest version to **every Activity** in Alder's self-design, and bring the revised design back to human review. This automatic promotion is authorized for this trial only. Evidence is the review comments and the resulting before/after design; it does not establish that automatic promotion should be a permanent Alder practice. Reconsider after observing false positives, maintenance cost, and whether people can follow the revised design. Never promote a disputed business decision from the AI's self-review.
+
+The first pass classifies the implementation comment's actual handoff, start event, I/O/Procedure agreement and excessive procedure detail as applications of existing guidance; its contrast between a source document and a reason record, and the need to recheck **every** Activity after knowledge updates, are made explicit in the trial knowledge. The chosen implementation details (which Objects are used and what those edges carry) remain specific to this self-design. The prior human review findings supply the initial reusable checks for role/time/place confusion, exception placement, Object versus label, review exchange, duplicate artifacts and misplaced principles.
+
+Self-review of all ten Activities against the trial knowledge, after revising the implementation Activity:
+
+| Activity | Result and action |
+| --- | --- |
+| 業務設計 | Added trial quality-review knowledge as an actual input and a full-design check before requester review. Human approval of meaning remains required. |
+| システム設計 | Kept as out-of-scope adjacent work. Its business requirements input and technical requirements output are distinct and matched by Procedure. |
+| 検査項目の設計 | Kept the review exchange and source-side Exception separate. Test implementation and mapping remain in 実装. |
+| 実装 | Rebuilt When, Where, actual normal inputs, ordered steps, updated Check Item output and receiving-side Exception When. Removed Decision Record and review-result reference-list inputs; preserved guide I/O only for an actual guide-change request. |
+| 同期漏れ検査 | Removed the tool environment from Where and condensed its normal reconciliation steps. The pilot remains optional. |
+| テスト・検証 | Removed the runner from Where; steps now show Check/Test inputs, execution and recorded results. The implementation-defect return remains Exception. |
+| 実装レビュー | Removed repository/discussion from Where and moved the business-decision return from normal I/O/Procedure into Exception and the receiving Exception When. |
+| 研究評価 | Removed repository from Where. Evidence, judgment and outputs remain specific to evaluation rather than ordinary implementation. |
+| 変更の提供 | Kept GitHub as the actual delivery channel; permission to merge/release remains explicit and distinct from merely preparing a PR. |
+| 業務グラフ出力 | Removed local repository/CI from Where. Source, generated JSON and validation remain distinct; successful export does not approve business meaning. |
+
+This is a first self-review, not independent validation of the ten activities. The graph exporter verifies structure and projected relations, not whether the input/output claims or proposed writing-quality rules are correct. The requester remains the reviewer of this self-design; subsequent findings may revise both the design and trial knowledge. Historical intermediate records above describe superseded drafts and are not the current contract.
