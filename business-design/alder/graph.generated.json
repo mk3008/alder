@@ -4,202 +4,202 @@
     {
       "id": "business-design",
       "type": "object",
-      "name": "Business Design",
+      "name": "業務設計書",
       "icon": "file-text"
     },
     {
       "id": "business-design-work",
       "type": "business",
-      "name": "Business design",
-      "what": "Describe and maintain Alder's development work and its intended outcomes.",
-      "why": "Keep business meaning, authority and guarantees explicit at the source before downstream artifacts rely on a changed decision.",
-      "when": "A requester supplies a new objective, or review or research exposes a concrete unresolved business choice or a requested change.",
-      "who": "The responsible human designer, assisted by an AI drafting agent; the responsible human confirms business meaning.",
-      "where": "The repository's Business Design and associated human review discussion."
+      "name": "業務設計",
+      "what": "Alderの開発業務と、その業務で実現したい結果を記述・保守する。",
+      "why": "変更した判断を後続の成果物へ反映する前に、業務上の意味、権限、保証を正本で明確にする。",
+      "when": "依頼者から新しい目的が提示されたとき。または、レビューや研究によって、具体的な未決定の業務上の選択肢や変更要求が明らかになったとき。",
+      "who": "責任を持つ人間の設計者。AIは草案作成を支援し、業務上の意味は責任者である人間が確認する。",
+      "where": "リポジトリ内のBusiness Designと、それに関する人間のレビューでの議論。"
     },
     {
       "id": "check-design",
       "type": "business",
-      "name": "Check Item design and confirmation",
-      "what": "Optionally derive and review observable expectations from the whole Business Design.",
-      "why": "Make requirements review and representative test coverage easier to navigate where the added maintenance is justified.",
-      "when": "Business Design and its activity-correlation review are ready, and the task benefits from Check Items or optional Functional Interfaces.",
-      "who": "An AI drafts; responsible human designers/requesters review, correct and complete the expectations.",
-      "where": "Repository Check list and human review discussion."
+      "name": "Check Itemの設計と確認",
+      "what": "必要に応じて、Business Design全体から観測可能な期待結果を導き、レビューする。",
+      "why": "維持の手間に見合う場合に、要件のレビューと代表的なテストによる検証範囲を確認しやすくする。",
+      "when": "Business Designと業務間の関係のレビューが整い、Check Itemや任意のFunctional Interfaceがタスクに役立つとき。",
+      "who": "AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待結果をレビュー・修正・補完する。",
+      "where": "リポジトリ内の検査項目一覧と、人間のレビューでの議論。"
     },
     {
       "id": "checks",
       "type": "object",
-      "name": "Check Items and optional Functional Interfaces",
+      "name": "検査項目（Check Items）と任意のFunctional Interface",
       "icon": "list-checks"
     },
     {
       "id": "code",
       "type": "object",
-      "name": "Code",
+      "name": "コード",
       "icon": "file-code"
     },
     {
       "id": "decisions",
       "type": "object",
-      "name": "Decision Records",
+      "name": "判断記録（Decision Records）",
       "icon": "notebook-pen"
     },
     {
       "id": "delivery",
       "type": "object",
-      "name": "Pull request / release",
+      "name": "プルリクエスト・リリース",
       "icon": "git-pull-request"
     },
     {
       "id": "delivery-work",
       "type": "business",
-      "name": "Delivery",
-      "what": "Present reviewed changes for human acceptance and publish approved repository changes or releases.",
-      "why": "Make the actual scope, evidence and remaining limits reviewable before adoption.",
-      "when": "A task is ready for a pull request, or the maintainer explicitly authorizes merge or release after review.",
-      "who": "The implementing agent prepares the change; the maintainer authorizes acceptance/release, and the authorized agent or release workflow executes it.",
-      "where": "GitHub pull requests and the repository release workflow."
+      "name": "変更の提供",
+      "what": "レビュー済みの変更を人間に提示して受け入れを求め、承認されたリポジトリの変更やリリースを公開する。",
+      "why": "採用する前に、実際の範囲、証拠、残る限界をレビューできるようにする。",
+      "when": "プルリクエストを作成できる状態になったとき、またはレビュー後にメンテナーがマージやリリースを明示的に許可したとき。",
+      "who": "実装担当のエージェントが変更を準備し、メンテナーが受け入れやリリースを許可する。許可されたエージェントまたはリリースワークフローが実行する。",
+      "where": "GitHubのプルリクエストとリポジトリのリリースワークフロー。"
     },
     {
       "id": "drift-inspection",
       "type": "business",
-      "name": "Drift inspection",
-      "what": "Optionally detect outdated source/Check/Test relationships and select reconfirmation candidates.",
-      "why": "Expose omitted synchronization after source edits without confusing text freshness with business correctness.",
-      "when": "A bounded opt-in pilot is in use and its identified source items, Checks or current Test inventory change.",
-      "who": "The developer or AI operating the read-only detector and interpreting its candidates.",
-      "where": "The optional drift pilot and its supplied fixture/product adapter."
+      "name": "Drift検査",
+      "what": "必要に応じて、原文・Check・Test間の古くなった関係を検出し、再確認の候補を選ぶ。",
+      "why": "文章の更新状態と業務上の正しさを混同せず、原文の編集後に生じた同期漏れを明らかにする。",
+      "when": "範囲を限定した任意試行を利用しており、識別対象の原文項目、Check、または現行テスト一覧が変わったとき。",
+      "who": "読み取り専用の検出器を実行し、候補を解釈する開発者またはAI。",
+      "where": "任意のDrift試行と、そこで提供するフィクスチャ用またはプロダクト用アダプター。"
     },
     {
       "id": "drift-metadata",
       "type": "object",
-      "name": "Opt-in source/Check/Test pins and current Test inventory",
+      "name": "任意試行で使う原文・Check・Testの照合基準と現行テスト一覧",
       "icon": "fingerprint"
     },
     {
       "id": "drift-report",
       "type": "object",
-      "name": "Drift candidates",
+      "name": "同期漏れの候補",
       "icon": "scan-search"
     },
     {
       "id": "fresh-review",
       "type": "business",
-      "name": "Fresh review",
-      "what": "Independently review the concrete implementation choices against Business Design.",
-      "why": "Detect definite mismatches and narrow unresolved business meaning into questions that people can decide.",
-      "when": "An implementation or material revision is available for review with its source design and Decisions.",
-      "who": "A separate AI reviewer or fresh context; responsible humans decide unresolved business meaning.",
-      "where": "Repository diff and review discussion."
+      "name": "独立したレビュー（Fresh review）",
+      "what": "具体的な実装上の選択を、Business Designに照らして独立にレビューする。",
+      "why": "明確な不一致を検出し、未決定の業務上の意味を、人間が判断できる問いに絞る。",
+      "when": "実装または重要な修正を、元の設計とDecision Recordとともにレビューできるとき。",
+      "who": "別のAIレビュー担当、または新しいコンテキストでレビューするAI。未決定の業務上の意味は、責任者である人間が判断する。",
+      "where": "リポジトリの差分とレビューでの議論。"
     },
     {
       "id": "graph",
       "type": "object",
-      "name": "Generated Business Graph JSON",
+      "name": "生成されたBusiness Graph JSON",
       "icon": "workflow"
     },
     {
       "id": "graph-export",
       "type": "business",
-      "name": "Business Graph export",
-      "what": "Project an explicitly annotated Business Design into versioned Business Graph JSON.",
-      "why": "Make the documented activity/Object correlations machine-readable without creating another authority or maintaining the same meaning twice.",
-      "when": "A developer requests a projection or the source design changes and its checked-in example must be regenerated.",
-      "who": "The developer or AI invoking the optional export CLI.",
-      "where": "Local repository or CI; no network or external service is required."
+      "name": "Business Graphの出力",
+      "what": "明示的な注釈を付けたBusiness Designから、形式のバージョンを持つBusiness Graph JSONを生成する。",
+      "why": "別の正本を作ったり、同じ意味を二重に管理したりせず、文書に記したActivityとObjectの関係を機械で読み取れるようにする。",
+      "when": "開発者が出力を求めたとき、または元の設計が変わり、リポジトリに保存した生成例の再生成が必要になったとき。",
+      "who": "任意のexport CLIを実行する開発者またはAI。",
+      "where": "ローカルのリポジトリまたはCI。ネットワークや外部サービスは不要。"
     },
     {
       "id": "implementation",
       "type": "business",
-      "name": "Implementation",
-      "what": "Implement and maintain Alder's guidance, executable tools and tests for the delegated task.",
-      "why": "Make the intended work executable or usable and expose concrete choices for subsequent review.",
-      "when": "The task has sufficient business direction and technical constraints to proceed; complete prior resolution of every future choice is not required.",
-      "who": "The implementation AI or developer.",
-      "where": "An isolated repository branch and local execution environment."
+      "name": "実装",
+      "what": "委譲されたタスクについて、Alderのガイド、実行可能なツール、テストを実装・保守する。",
+      "why": "意図した業務を実行・利用できるようにし、具体的な選択を後のレビューで確認できるようにする。",
+      "when": "作業を進めるのに十分な業務上の方向性と技術的な制約がそろったとき。将来のすべての選択を事前に解決する必要はない。",
+      "who": "実装を担当するAIまたは開発者。",
+      "where": "分離したリポジトリのブランチとローカル実行環境。"
     },
     {
       "id": "knowledge",
       "type": "object",
-      "name": "Alder guidance and review knowledge",
+      "name": "Alderのガイドとレビュー知識",
       "icon": "book-open"
     },
     {
       "id": "requester",
       "type": "object",
-      "name": "System requester / domain expert",
+      "name": "システムの依頼者・業務の専門家",
       "icon": "users"
     },
     {
       "id": "research",
       "type": "object",
-      "name": "Research evidence and adoption decisions",
+      "name": "研究の証拠と採否判断",
       "icon": "microscope"
     },
     {
       "id": "research-evaluation",
       "type": "business",
-      "name": "Research evaluation",
-      "what": "Evaluate proposed changes to Alder's practices and record whether evidence justifies adoption.",
-      "why": "Keep operating guidance grounded in bounded evidence and preserve the distinction between observations and general claims.",
-      "when": "A task proposes a practice change or a documented reconsideration condition is met.",
-      "who": "The research developer or AI; the maintainer decides adoption of proposed permanent guidance.",
-      "where": "Repository research docs and work artifacts."
+      "name": "研究の評価",
+      "what": "Alderの手法の変更案を評価し、証拠が採用を正当化するか記録する。",
+      "why": "運用ガイドを範囲の明確な証拠に基づかせ、観測結果と一般的な主張を区別する。",
+      "when": "タスクで手法の変更が提案されたとき、または記録済みの再検討条件を満たしたとき。",
+      "who": "研究を担当する開発者またはAI。恒久的なガイドの変更案の採用は、メンテナーが判断する。",
+      "where": "リポジトリ内の研究文書と作業成果物。"
     },
     {
       "id": "review",
       "type": "object",
-      "name": "Fresh review findings",
+      "name": "Fresh reviewの結果",
       "icon": "messages-square"
     },
     {
       "id": "system-design",
       "type": "business",
-      "name": "System design",
-      "what": "Choose technical means within Alder's current business intent and task constraints.",
-      "why": "Make implementation feasible and reviewable without inventing business policy or prescribing an architecture name.",
-      "when": "A development task needs technical choices or new evidence changes an existing technical assumption.",
-      "who": "The implementation AI or developer accountable for the delegated technical work.",
-      "where": "Repository and task discussion; material choices in Decision Records."
+      "name": "システム設計",
+      "what": "Alderの現在の業務上の意図とタスクの制約に沿って、技術手段を選ぶ。",
+      "why": "業務方針を勝手に決めたり、アーキテクチャ名を指定したりせず、実装とレビューを可能にする。",
+      "when": "開発タスクで技術判断が必要になったとき、または新しい証拠により既存の技術的な前提が変わったとき。",
+      "who": "委譲された技術作業に責任を持つ実装AIまたは開発者。",
+      "where": "リポジトリとタスクの議論。重要な選択はDecision Recordに残す。"
     },
     {
       "id": "test-design",
       "type": "business",
-      "name": "Test design",
-      "what": "Plan observable assertions and relevant verification cases for the delegated change.",
-      "why": "Verify behavior against the current business intent rather than merely reproducing the implementation's choices.",
-      "when": "An implementable change has testable expectations; if Check Items are used, their human review is complete.",
-      "who": "The AI or developer responsible for test design.",
-      "where": "Repository tests, task plan or existing Check/Test mapping."
+      "name": "テスト設計",
+      "what": "委譲された変更について、観測可能なアサーションと関連する検証ケースを計画する。",
+      "why": "実装上の選択をそのまま再現するだけでなく、現在の業務上の意図に照らして振る舞いを検証する。",
+      "when": "実装可能な変更に、テストで確認できる期待結果があるとき。Check Itemを使う場合は、人間のレビューが完了していること。",
+      "who": "テスト設計を担当するAIまたは開発者。",
+      "where": "リポジトリ内のテスト、タスク計画、または既存のCheckとTestの対応表。"
     },
     {
       "id": "test-plan",
       "type": "object",
-      "name": "Test design",
+      "name": "テスト設計",
       "icon": "clipboard-list"
     },
     {
       "id": "tests",
       "type": "object",
-      "name": "Test",
+      "name": "テスト",
       "icon": "flask-conical"
     },
     {
       "id": "verification",
       "type": "object",
-      "name": "Verification results",
+      "name": "検証結果",
       "icon": "clipboard-check"
     },
     {
       "id": "verification-work",
       "type": "business",
-      "name": "Test / verification",
-      "what": "Execute relevant tests and gates, and reproduce bounded research observations when the task requires them.",
-      "why": "Establish actual implementation evidence and report its limits before a change is delivered.",
-      "when": "Implementation changes are ready for verification, or changed expectations require regression testing.",
-      "who": "The implementing developer or AI and the configured CI runner.",
-      "where": "Local temporary test environments and repository CI."
+      "name": "テスト・検証",
+      "what": "関連するテストとゲートを実行し、タスクで必要な場合は範囲を限定した研究の観測結果を再現する。",
+      "why": "変更を提供する前に、実装について実際の証拠を得て、その限界を報告する。",
+      "when": "実装の変更を検証できる状態になったとき、または期待結果の変更により回帰テストが必要になったとき。",
+      "who": "実装を担当する開発者またはAIと、設定済みのCIランナー。",
+      "where": "ローカルの一時的なテスト環境とリポジトリのCI。"
     }
   ],
   "relations": [
@@ -207,446 +207,446 @@
       "kind": "business-exception",
       "from": "fresh-review",
       "to": "business-design-work",
-      "label": "If review changes business meaning, correct and confirm Business Design first"
+      "label": "レビューによって業務上の意味が変わる場合は、まずBusiness Designを修正して確認を得る"
     },
     {
       "kind": "business-exception",
       "from": "fresh-review",
       "to": "implementation",
-      "label": "If a definite implementation mismatch is found, return for an in-scope correction"
+      "label": "明確な実装の不一致が見つかった場合は、範囲内の修正へ戻す"
     },
     {
       "kind": "business-exception",
       "from": "implementation",
       "to": "business-design-work",
-      "label": "If implementation reveals unresolved business meaning, return for a human design decision"
+      "label": "実装で未決定の業務上の意味が明らかになった場合は、人間による設計判断へ戻す"
     },
     {
       "kind": "business-exception",
       "from": "verification-work",
       "to": "implementation",
-      "label": "If a test exposes an implementation defect, correct it before delivery"
+      "label": "テストで実装不具合が明らかになった場合は、提供前に修正する"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "business-design-work",
-      "label": "Current intent, Scope and activity correlations"
+      "label": "現在の意図、対象範囲、業務間の関係"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "check-design",
-      "label": "Whole applicable design, activity conditions and guarantees"
+      "label": "対象設計の全体、業務の条件、保証"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "drift-inspection",
-      "label": "Current identified source items supported by the selected pilot adapter"
+      "label": "選択した試行用アダプターが扱える、識別済みの現行原文項目"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "fresh-review",
-      "label": "Current business intent, Scope and correlations"
+      "label": "現在の業務上の意図、対象範囲、業務間の関係"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "graph-export",
-      "label": "Annotated 5W1H source including independent Objects, labeled Input/Output and explicit exceptions"
+      "label": "独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、注釈付きの5W1H原文"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "implementation",
-      "label": "Authoritative current intent and unresolved boundaries"
+      "label": "正本に記された現在の意図と未決定の境界"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "system-design",
-      "label": "Applicable intent, Scope, constraints and explicitly foreseen risks"
+      "label": "対象となる意図、範囲、制約、明示された予見リスク"
     },
     {
       "kind": "input",
       "from": "business-design",
       "to": "test-design",
-      "label": "Current intended outcomes and boundaries"
+      "label": "現在意図している結果と境界"
     },
     {
       "kind": "input",
       "from": "checks",
       "to": "drift-inspection",
-      "label": "Current Check bodies"
+      "label": "現在のCheck本文"
     },
     {
       "kind": "input",
       "from": "checks",
       "to": "test-design",
-      "label": "Human-completed expectations and supporting detail, when the optional Check workflow is used"
+      "label": "任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細"
     },
     {
       "kind": "input",
       "from": "code",
       "to": "delivery-work",
-      "label": "Proposed executable changes"
+      "label": "提案する実行可能な変更"
     },
     {
       "kind": "input",
       "from": "code",
       "to": "fresh-review",
-      "label": "Business meaning made concrete in implementation"
+      "label": "実装によって具体化された業務上の意味"
     },
     {
       "kind": "input",
       "from": "code",
       "to": "implementation",
-      "label": "Existing implementation"
+      "label": "既存の実装"
     },
     {
       "kind": "input",
       "from": "code",
       "to": "system-design",
-      "label": "Current implementation constraints"
+      "label": "現行実装の制約"
     },
     {
       "kind": "input",
       "from": "code",
       "to": "verification-work",
-      "label": "Current implementation under test"
+      "label": "テスト対象の現行実装"
     },
     {
       "kind": "input",
       "from": "decisions",
       "to": "check-design",
-      "label": "Already settled choices and shared contracts"
+      "label": "決定済みの事項と共有する契約"
     },
     {
       "kind": "input",
       "from": "decisions",
       "to": "fresh-review",
-      "label": "Recorded implementation choices and assumptions"
+      "label": "記録された実装上の選択と前提"
     },
     {
       "kind": "input",
       "from": "decisions",
       "to": "implementation",
-      "label": "Technical choices and assumptions"
+      "label": "技術的な選択と前提"
     },
     {
       "kind": "input",
       "from": "decisions",
       "to": "system-design",
-      "label": "Existing technical choices and their limits"
+      "label": "既存の技術判断とその限界"
     },
     {
       "kind": "input",
       "from": "decisions",
       "to": "test-design",
-      "label": "Technical constraints and assumptions affecting verification"
+      "label": "検証に影響する技術的な制約と前提"
     },
     {
       "kind": "input",
       "from": "drift-metadata",
       "to": "drift-inspection",
-      "label": "Reconciled source/Check/Test fingerprints and Test IDs from current runner discovery"
+      "label": "照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID"
     },
     {
       "kind": "input",
       "from": "drift-report",
       "to": "verification-work",
-      "label": "Impact candidates to inspect when the opt-in pilot is used"
+      "label": "任意試行を使う場合に確認する影響候補"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "check-design",
-      "label": "c3 derivation, optional functional consideration discovery and traceability guidance"
+      "label": "c3による導出、任意の機能考慮事項の探索、追跡関係のガイド"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "delivery-work",
-      "label": "Proposed guidance/documentation changes"
+      "label": "ガイドや文書の変更案"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "fresh-review",
-      "label": "Selected review knowledge version and its stopping boundaries"
+      "label": "選択した版のレビュー知識と、レビューを打ち切る条件"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "implementation",
-      "label": "Existing published guidance that the task may update"
+      "label": "タスクで更新する可能性がある、公開済みのガイド"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "research-evaluation",
-      "label": "Current practice and candidate change"
+      "label": "現行の手法と変更候補"
     },
     {
       "kind": "input",
       "from": "knowledge",
       "to": "system-design",
-      "label": "Guidance for bounded technical reasoning and error-resistant operation"
+      "label": "技術検討の範囲を絞るためのガイドと、操作ミスが起きにくい運用の指針"
     },
     {
       "kind": "input",
       "from": "requester",
       "to": "business-design-work",
-      "label": "Objectives, operational constraints and human business decisions"
+      "label": "目的、運用上の制約、人間による業務上の判断"
     },
     {
       "kind": "input",
       "from": "requester",
       "to": "check-design",
-      "label": "Human corrections and review decisions on expectations"
+      "label": "期待結果に対する人間の修正とレビュー判断"
     },
     {
       "kind": "input",
       "from": "requester",
       "to": "delivery-work",
-      "label": "Human acceptance and explicit merge/release authorization when those actions are requested"
+      "label": "人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可"
     },
     {
       "kind": "input",
       "from": "requester",
       "to": "research-evaluation",
-      "label": "Research objective and permitted evaluation scope"
+      "label": "研究の目的と許可された評価範囲"
     },
     {
       "kind": "input",
       "from": "research",
       "to": "business-design-work",
-      "label": "Evidence and limits relevant to a proposed change in operating practice"
+      "label": "運用方法の変更案に関係する証拠と限界"
     },
     {
       "kind": "input",
       "from": "research",
       "to": "delivery-work",
-      "label": "Adoption evidence for a practice change, when applicable"
+      "label": "手法を変更する場合の採用根拠"
     },
     {
       "kind": "input",
       "from": "research",
       "to": "research-evaluation",
-      "label": "Existing results, limits and reconsideration conditions"
+      "label": "既存の結果、限界、再検討条件"
     },
     {
       "kind": "input",
       "from": "review",
       "to": "business-design-work",
-      "label": "Concrete unresolved business questions and effects on downstream guarantees"
+      "label": "具体的な未決定の業務上の問いと、後続業務の保証への影響"
     },
     {
       "kind": "input",
       "from": "review",
       "to": "delivery-work",
-      "label": "Fresh review outcome and remaining limitations"
+      "label": "Fresh reviewの結果と残る限界"
     },
     {
       "kind": "input",
       "from": "review",
       "to": "implementation",
-      "label": "Confirmed mismatches or accepted technical improvements to address"
+      "label": "対応すべき、確認済みの不一致や採用された技術改善"
     },
     {
       "kind": "input",
       "from": "review",
       "to": "research-evaluation",
-      "label": "Review findings relevant to the candidate"
+      "label": "候補に関係するレビュー結果"
     },
     {
       "kind": "input",
       "from": "test-plan",
       "to": "implementation",
-      "label": "Relevant assertions and verification cases"
+      "label": "関連するアサーションと検証ケース"
     },
     {
       "kind": "input",
       "from": "test-plan",
       "to": "verification-work",
-      "label": "Required cases and expected observations"
+      "label": "必要なケースと期待する観測結果"
     },
     {
       "kind": "input",
       "from": "tests",
       "to": "delivery-work",
-      "label": "Updated regression tests"
+      "label": "更新済みの回帰テスト"
     },
     {
       "kind": "input",
       "from": "tests",
       "to": "fresh-review",
-      "label": "Assertions as evidence of chosen behavior"
+      "label": "選択された振る舞いの証拠となるアサーション"
     },
     {
       "kind": "input",
       "from": "tests",
       "to": "implementation",
-      "label": "Existing executable tests"
+      "label": "既存の実行可能なテスト"
     },
     {
       "kind": "input",
       "from": "tests",
       "to": "test-design",
-      "label": "Existing assertions and relevant regression coverage"
+      "label": "既存のアサーションと関連する回帰テスト"
     },
     {
       "kind": "input",
       "from": "tests",
       "to": "verification-work",
-      "label": "Executable test suite"
+      "label": "実行可能なテスト一式"
     },
     {
       "kind": "input",
       "from": "verification",
       "to": "delivery-work",
-      "label": "Relevant local and CI verification results"
+      "label": "関連するローカル検証とCIの結果"
     },
     {
       "kind": "input",
       "from": "verification",
       "to": "fresh-review",
-      "label": "Observed test/gate results and limitations"
+      "label": "実際のテスト・ゲートの結果と限界"
     },
     {
       "kind": "input",
       "from": "verification",
       "to": "research-evaluation",
-      "label": "Relevant reproducible observations"
+      "label": "関連する再現可能な観測結果"
     },
     {
       "kind": "object-exception",
       "from": "tests",
       "to": "code",
-      "label": "Tests verify Code by execution; this is not a maintained Check-to-Code location mapping"
+      "label": "テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない"
     },
     {
       "kind": "output",
       "from": "business-design-work",
       "to": "business-design",
-      "label": "Current design with confirmed meaning distinguished from unresolved scope or draft proposals"
+      "label": "確認済みの意味と、未決定の範囲や草案を区別した現行設計"
     },
     {
       "kind": "output",
       "from": "business-design-work",
       "to": "requester",
-      "label": "Concrete choices needing a human decision, or the updated design for confirmation"
+      "label": "人間の判断が必要な具体的な選択肢、または確認を受けるための更新済み設計"
     },
     {
       "kind": "output",
       "from": "check-design",
       "to": "checks",
-      "label": "Human-facing expectations with review state and supporting evidence, plus optional responsibility index"
+      "label": "レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む"
     },
     {
       "kind": "output",
       "from": "check-design",
       "to": "requester",
-      "label": "Only remaining concrete business choices needing confirmation"
+      "label": "確認が必要な、残っている具体的な業務上の選択肢のみ"
     },
     {
       "kind": "output",
       "from": "delivery-work",
       "to": "delivery",
-      "label": "Reviewable pull request, and merged/released revision only when authorized"
+      "label": "レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン"
     },
     {
       "kind": "output",
       "from": "delivery-work",
       "to": "requester",
-      "label": "Outcome, verification status and unresolved limitations"
+      "label": "対応結果、検証状況、未解決の限界"
     },
     {
       "kind": "output",
       "from": "drift-inspection",
       "to": "drift-metadata",
-      "label": "Only separately reconciled pins; detector execution itself never acknowledges them"
+      "label": "別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない"
     },
     {
       "kind": "output",
       "from": "drift-inspection",
       "to": "drift-report",
-      "label": "Stale/missing/mapping candidates and reasons, distinct from product defects"
+      "label": "古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する"
     },
     {
       "kind": "output",
       "from": "fresh-review",
       "to": "requester",
-      "label": "Unresolved business choices requiring the responsible human's judgment"
+      "label": "責任者である人間の判断が必要な、未決定の業務上の選択肢"
     },
     {
       "kind": "output",
       "from": "fresh-review",
       "to": "review",
-      "label": "Findings with concrete conditions, effects, source evidence and classification, including sufficient behavior"
+      "label": "具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む"
     },
     {
       "kind": "output",
       "from": "graph-export",
       "to": "graph",
-      "label": "Generated versioned JSON; regenerate from Business Design instead of editing by hand"
+      "label": "形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する"
     },
     {
       "kind": "output",
       "from": "implementation",
       "to": "code",
-      "label": "Changed implementation for review"
+      "label": "レビュー対象となる変更済み実装"
     },
     {
       "kind": "output",
       "from": "implementation",
       "to": "decisions",
-      "label": "Material implementation choices and remaining limits"
+      "label": "重要な実装上の選択と残る限界"
     },
     {
       "kind": "output",
       "from": "implementation",
       "to": "knowledge",
-      "label": "Proposed guidance updates, when authorized by the task"
+      "label": "タスクで許可された場合のガイド更新案"
     },
     {
       "kind": "output",
       "from": "implementation",
       "to": "tests",
-      "label": "Executable assertions for the changed behavior"
+      "label": "変更した振る舞いを確認する実行可能なアサーション"
     },
     {
       "kind": "output",
       "from": "research-evaluation",
       "to": "decisions",
-      "label": "Task-specific evaluation choices and reason for stopping"
+      "label": "タスク固有の評価上の選択と、検討を打ち切った理由"
     },
     {
       "kind": "output",
       "from": "research-evaluation",
       "to": "research",
-      "label": "Evidence, disposition, reasons, limits and reconsideration conditions"
+      "label": "証拠、採否などの判断、理由、限界、再検討条件"
     },
     {
       "kind": "output",
       "from": "system-design",
       "to": "decisions",
-      "label": "Technical choices, rationale, assumptions, evidence and stopping conditions"
+      "label": "技術的な選択、理由、前提、証拠、検討を打ち切る条件"
     },
     {
       "kind": "output",
       "from": "test-design",
       "to": "test-plan",
-      "label": "Planned cases, observable expectations, representative assertions and known evidence gaps"
+      "label": "計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足"
     },
     {
       "kind": "output",
       "from": "verification-work",
       "to": "verification",
-      "label": "Passed/failed checks, observed behavior, reproduction instructions and remaining verification gaps"
+      "label": "成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足"
     }
   ],
-  "scope": "Develop and maintain Alder's guidance, research evidence and optional tools: define business intent, choose technical means, optionally derive Checks and Test plans, implement, optionally inspect drift, verify, independently review, evaluate research changes and deliver approved changes. Graph export is an optional projection of this design. UI/Viewer design, layout, billing, automatic business approval, mandatory use of optional research practices and permanent Check-to-Code location mappings are outside scope. No product database or production service is operated by this development workflow."
+  "scope": "Alderのガイド、研究の証拠、任意ツールを開発・保守する。対象は、業務上の意図の定義、技術手段の選択、必要に応じたCheck Itemとテスト計画の作成、実装、任意のDrift検査、検証、独立したレビュー、研究上の変更の評価、承認された変更の提供である。Graph exportは、この設計から必要な情報を取り出す任意の処理である。UIやViewerの設計、レイアウト、課金、業務上の自動承認、任意の研究手法の必須化、Checkとコードの物理位置の恒久的な対応管理は対象外とする。この開発業務では、プロダクトのデータベースや本番サービスを運用しない。"
 }

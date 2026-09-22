@@ -230,10 +230,10 @@ class ExportTests(unittest.TestCase):
             'delivery-work', 'graph-export',
         })
         self.assertEqual(nodes['requester']['type'], 'object')
-        self.assertIn('responsible human', nodes['business-design-work']['who'])
-        self.assertIn('opt-in', nodes['drift-inspection']['when'])
+        self.assertIn('業務上の意味は責任者である人間が確認する', nodes['business-design-work']['who'])
+        self.assertIn('範囲を限定した任意試行を利用しており', nodes['drift-inspection']['when'])
         self.assertIn({'kind': 'object-exception', 'from': 'tests', 'to': 'code',
-                       'label': 'Tests verify Code by execution; this is not a maintained Check-to-Code location mapping'}, graph['relations'])
+                       'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))
         self.assertTrue(all('procedure' not in node for node in nodes.values()))
 

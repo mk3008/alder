@@ -42,6 +42,12 @@ workspace/
 
 State the design path and target revision in the task prompt or AGENTS.md. Pin a commit or tag where possible; if using a branch, record its resolved commit alongside the product revision at review time. A GitHub URL alone, or an expectation that the agent will discover the design, is not the standard arrangement. Make the access path known before reviewing.
 
+### Language for agreement
+
+**Write Business Design prose in the language the requester actually uses.** Business Design is a document for agreement with users/requesters: they must be able to read it, understand it, point out errors, and agree to its meaning themselves. Readability for implementers alone is insufficient; this is a prerequisite for meaningful human review, not a cosmetic preference.
+
+Apply this to explanations, business descriptions, and Input / Procedure / Output text when creating or updating the design. Headers and section names such as What / Why / When / Who / Where / How may remain English. Stable machine identifiers need not be translated. For Alder's own design, the requester uses Japanese, so its prose is Japanese. The format recommendation below does not override this principle.
+
 ### Recommended Business Design format
 
 The current research recommends **5W1H, with How written as Input → Procedure → Output**, to make relationships between activities traceable. This is the current reference format used by the evaluated cases, not a mandatory input specification. Equivalent review behavior has not been established for arbitrary specification formats.
@@ -70,6 +76,7 @@ Use root AGENTS.md as a router. Adapt the paths to your workspace:
 
 - Current business design is under `docs/business-design/`.
 - Treat it as the current source of operational intent.
+- When creating or updating Business Design, follow the requester-language principle: write its prose in the language the requester actually uses so they can understand, correct, and agree to it. Headers may remain English.
 - Do not invent business policy when the design does not decide it.
 - Record material implementation assumptions and choices in Decision Records under `docs/decisions/`.
 - For an Alder review, use `docs/alder/review-knowledge.md` from the selected Alder revision. Read Business Design, then Decision Records, then implementation, DDL, and tests.

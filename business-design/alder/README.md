@@ -1,584 +1,586 @@
-# Alder development — Business Design
+# Alderの開発業務 — Business Design
 
 <!-- alder-business-graph: 1 -->
 
-This describes Alder's own development work, including its optional practices. Business Design is the SSOT for operational intent; Code, Test, Checks, Decisions and generated Graph JSON do not replace it. This initial description is submitted for human review in Issue #79; export or passing tests do not mark it human-approved.
+この文書は、任意で採用する工程も含め、Alder自身の開発業務を記述する。業務上の意図の唯一の正本（SSOT）はBusiness Designであり、コード、テスト、Check Item、Decision Record、生成されたGraph JSONはその代わりにならない。この初版はIssue #79で人間のレビューを受けるための案であり、exportやテストが成功しても、人間が承認したことにはならない。
 
-The activities describe responsibilities, not a mandatory sequential pipeline. A single person can hold multiple roles. **Who is the worker for the activity**; the `requester` Object is the external party from whom that worker receives intent or to whom they return questions/results. The same person can participate in both capacities without making the roles equivalent.
+Business Designは依頼者との合意に使う文書である。本文は依頼者が実際に使用する言語で書き、依頼者自身が内容を理解し、誤りを指摘し、合意できることを前提とする。今回の本文は日本語とする。ヘッダーやセクション名は英語でもよい。
 
-Sources for the existing operating rules: [adoption](../../docs/adoption.md), [review knowledge v0.3](../../docs/phase2/review-knowledge-v0.3.md), [Check traceability](../../docs/check-item-traceability.md), [optional drift pilot](../../docs/traceability-drift/study.md), [research decisions](../../docs/research-decisions.md). Identifiers and explicit Object references below annotate the recommended 5W1H / Input → Procedure → Output format for deterministic export; the generated JSON is not edited by hand.
+各Activityは責務を示しており、必ず順番に実行する工程ではない。1人が複数の役割を担ってもよい。**Whoはその業務を行う担当者**を表す。一方、`requester` Objectは、担当者が意図を受け取ったり、質問や結果を返したりする外部の相手を表す。同じ人が両方に関わる場合も、この2つの役割は区別する。
+
+既存の運用規則の参照元は、[導入ガイド](../../docs/adoption.md)、[レビュー知識 v0.3](../../docs/phase2/review-knowledge-v0.3.md)、[Checkの追跡関係](../../docs/check-item-traceability.md)、[任意のDrift試行](../../docs/traceability-drift/study.md)、[研究判断の索引](../../docs/research-decisions.md)である。以下の識別子と明示的なObject参照は、推奨形式である5W1H / Input → Procedure → Outputに付けた注釈であり、同じ入力から同じJSONを生成するために使う。生成JSONは手で編集しない。
 
 # Scope
 
-Develop and maintain Alder's guidance, research evidence and optional tools: define business intent, choose technical means, optionally derive Checks and Test plans, implement, optionally inspect drift, verify, independently review, evaluate research changes and deliver approved changes. Graph export is an optional projection of this design. UI/Viewer design, layout, billing, automatic business approval, mandatory use of optional research practices and permanent Check-to-Code location mappings are outside scope. No product database or production service is operated by this development workflow.
+Alderのガイド、研究の証拠、任意ツールを開発・保守する。対象は、業務上の意図の定義、技術手段の選択、必要に応じたCheck Itemとテスト計画の作成、実装、任意のDrift検査、検証、独立したレビュー、研究上の変更の評価、承認された変更の提供である。Graph exportは、この設計から必要な情報を取り出す任意の処理である。UIやViewerの設計、レイアウト、課金、業務上の自動承認、任意の研究手法の必須化、Checkとコードの物理位置の恒久的な対応管理は対象外とする。この開発業務では、プロダクトのデータベースや本番サービスを運用しない。
 
-# Object requester — System requester / domain expert
+# Object requester — システムの依頼者・業務の専門家
 
 ## Icon
 
 users
 
-# Object business-design — Business Design
+# Object business-design — 業務設計書
 
 ## Icon
 
 file-text
 
-# Object knowledge — Alder guidance and review knowledge
+# Object knowledge — Alderのガイドとレビュー知識
 
 ## Icon
 
 book-open
 
-# Object decisions — Decision Records
+# Object decisions — 判断記録（Decision Records）
 
 ## Icon
 
 notebook-pen
 
-# Object checks — Check Items and optional Functional Interfaces
+# Object checks — 検査項目（Check Items）と任意のFunctional Interface
 
 ## Icon
 
 list-checks
 
-# Object test-plan — Test design
+# Object test-plan — テスト設計
 
 ## Icon
 
 clipboard-list
 
-# Object code — Code
+# Object code — コード
 
 ## Icon
 
 file-code
 
-# Object tests — Test
+# Object tests — テスト
 
 ## Icon
 
 flask-conical
 
-# Object drift-metadata — Opt-in source/Check/Test pins and current Test inventory
+# Object drift-metadata — 任意試行で使う原文・Check・Testの照合基準と現行テスト一覧
 
 ## Icon
 
 fingerprint
 
-# Object drift-report — Drift candidates
+# Object drift-report — 同期漏れの候補
 
 ## Icon
 
 scan-search
 
-# Object verification — Verification results
+# Object verification — 検証結果
 
 ## Icon
 
 clipboard-check
 
-# Object review — Fresh review findings
+# Object review — Fresh reviewの結果
 
 ## Icon
 
 messages-square
 
-# Object research — Research evidence and adoption decisions
+# Object research — 研究の証拠と採否判断
 
 ## Icon
 
 microscope
 
-# Object delivery — Pull request / release
+# Object delivery — プルリクエスト・リリース
 
 ## Icon
 
 git-pull-request
 
-# Object graph — Generated Business Graph JSON
+# Object graph — 生成されたBusiness Graph JSON
 
 ## Icon
 
 workflow
 
-# Activity business-design-work — Business design
+# Activity business-design-work — 業務設計
 
 ## What
 
-Describe and maintain Alder's development work and its intended outcomes.
+Alderの開発業務と、その業務で実現したい結果を記述・保守する。
 
 ## Why
 
-Keep business meaning, authority and guarantees explicit at the source before downstream artifacts rely on a changed decision.
+変更した判断を後続の成果物へ反映する前に、業務上の意味、権限、保証を正本で明確にする。
 
 ## When
 
-A requester supplies a new objective, or review or research exposes a concrete unresolved business choice or a requested change.
+依頼者から新しい目的が提示されたとき。または、レビューや研究によって、具体的な未決定の業務上の選択肢や変更要求が明らかになったとき。
 
 ## Who
 
-The responsible human designer, assisted by an AI drafting agent; the responsible human confirms business meaning.
+責任を持つ人間の設計者。AIは草案作成を支援し、業務上の意味は責任者である人間が確認する。
 
 ## Where
 
-The repository's Business Design and associated human review discussion.
+リポジトリ内のBusiness Designと、それに関する人間のレビューでの議論。
 
 ## How
 
 ### Input
 
-- [requester]: Objectives, operational constraints and human business decisions
-- [business-design]: Current intent, Scope and activity correlations
-- [review]: Concrete unresolved business questions and effects on downstream guarantees
-- [research]: Evidence and limits relevant to a proposed change in operating practice
+- [requester]: 目的、運用上の制約、人間による業務上の判断
+- [business-design]: 現在の意図、対象範囲、業務間の関係
+- [review]: 具体的な未決定の業務上の問いと、後続業務の保証への影響
+- [research]: 運用方法の変更案に関係する証拠と限界
 
 ### Procedure
 
-1. Read the whole applicable design and identify work through What, Why, When, Who, Where and Input → Procedure → Output.
-2. Walk connected work to check that preceding results and subsequent conditions agree. Do not require every future policy to be settled before coding.
-3. Return consequential unresolved choices to the responsible human. Keep a draft visibly unapproved; a test or Decision is not approval.
-4. When meaning changes, update and obtain human confirmation of Business Design first, then revise affected downstream Checks, Decisions, Tests and Code. Ordinary reversible technical choices may proceed without business escalation.
+1. 対象となる設計全体を読み、What、Why、When、Who、WhereとInput → Procedure → Outputから業務を把握する。本文は依頼者が実際に使用する言語で書き、依頼者自身が理解・訂正・合意できるようにする。
+2. 接続する業務をたどり、前の業務の結果と次の業務の条件が整合するか確認する。将来のあらゆる方針が決まるまで実装を待つことは求めない。
+3. 影響の大きい未決定事項は、責任者である人間に判断を求める。草案は未承認と分かる状態にし、テストやDecision Recordを承認の代わりにしない。
+4. 意味が変わる場合は、まずBusiness Designを更新して人間の確認を得てから、影響するCheck Item、Decision Record、テスト、コードを修正する。通常の可逆的な技術判断は、業務上の判断を求めずに進めてよい。
 
 ### Output
 
-- [business-design]: Current design with confirmed meaning distinguished from unresolved scope or draft proposals
-- [requester]: Concrete choices needing a human decision, or the updated design for confirmation
+- [business-design]: 確認済みの意味と、未決定の範囲や草案を区別した現行設計
+- [requester]: 人間の判断が必要な具体的な選択肢、または確認を受けるための更新済み設計
 
-# Activity system-design — System design
+# Activity system-design — システム設計
 
 ## What
 
-Choose technical means within Alder's current business intent and task constraints.
+Alderの現在の業務上の意図とタスクの制約に沿って、技術手段を選ぶ。
 
 ## Why
 
-Make implementation feasible and reviewable without inventing business policy or prescribing an architecture name.
+業務方針を勝手に決めたり、アーキテクチャ名を指定したりせず、実装とレビューを可能にする。
 
 ## When
 
-A development task needs technical choices or new evidence changes an existing technical assumption.
+開発タスクで技術判断が必要になったとき、または新しい証拠により既存の技術的な前提が変わったとき。
 
 ## Who
 
-The implementation AI or developer accountable for the delegated technical work.
+委譲された技術作業に責任を持つ実装AIまたは開発者。
 
 ## Where
 
-Repository and task discussion; material choices in Decision Records.
+リポジトリとタスクの議論。重要な選択はDecision Recordに残す。
 
 ## How
 
 ### Input
 
-- [business-design]: Applicable intent, Scope, constraints and explicitly foreseen risks
-- [knowledge]: Guidance for bounded technical reasoning and error-resistant operation
-- [decisions]: Existing technical choices and their limits
-- [code]: Current implementation constraints
+- [business-design]: 対象となる意図、範囲、制約、明示された予見リスク
+- [knowledge]: 技術検討の範囲を絞るためのガイドと、操作ミスが起きにくい運用の指針
+- [decisions]: 既存の技術判断とその限界
+- [code]: 現行実装の制約
 
 ### Procedure
 
-1. Reason from requirements, data, risks and existing evidence; select an adequate minimal approach.
-2. Bound optional evaluation to uncertainty that could change the decision. Do not impose layers, an architecture label or a new runtime without a concrete need.
-3. Record material assumptions and technical decisions. If alternatives change unresolved business meaning, return that question to Business design.
+1. 要件、データ、リスク、既存の証拠から考え、必要を満たす最小限の方法を選ぶ。
+2. 任意の評価は、判断を変え得る不確実性に範囲を絞る。具体的な必要性がない層、アーキテクチャ名、新しいランタイムを要求しない。
+3. 重要な前提と技術判断を記録する。選択肢によって未決定の業務上の意味が変わる場合は、その問いを業務設計へ戻す。
 
 ### Output
 
-- [decisions]: Technical choices, rationale, assumptions, evidence and stopping conditions
+- [decisions]: 技術的な選択、理由、前提、証拠、検討を打ち切る条件
 
-# Activity check-design — Check Item design and confirmation
+# Activity check-design — Check Itemの設計と確認
 
 ## What
 
-Optionally derive and review observable expectations from the whole Business Design.
+必要に応じて、Business Design全体から観測可能な期待結果を導き、レビューする。
 
 ## Why
 
-Make requirements review and representative test coverage easier to navigate where the added maintenance is justified.
+維持の手間に見合う場合に、要件のレビューと代表的なテストによる検証範囲を確認しやすくする。
 
 ## When
 
-Business Design and its activity-correlation review are ready, and the task benefits from Check Items or optional Functional Interfaces.
+Business Designと業務間の関係のレビューが整い、Check Itemや任意のFunctional Interfaceがタスクに役立つとき。
 
 ## Who
 
-An AI drafts; responsible human designers/requesters review, correct and complete the expectations.
+AIが草案を作成し、責任を持つ人間の設計者や依頼者が期待結果をレビュー・修正・補完する。
 
 ## Where
 
-Repository Check list and human review discussion.
+リポジトリ内の検査項目一覧と、人間のレビューでの議論。
 
 ## How
 
 ### Input
 
-- [business-design]: Whole applicable design, activity conditions and guarantees
-- [knowledge]: c3 derivation, optional functional consideration discovery and traceability guidance
-- [decisions]: Already settled choices and shared contracts
-- [requester]: Human corrections and review decisions on expectations
+- [business-design]: 対象設計の全体、業務の条件、保証
+- [knowledge]: c3による導出、任意の機能考慮事項の探索、追跡関係のガイド
+- [decisions]: 決定済みの事項と共有する契約
+- [requester]: 期待結果に対する人間の修正とレビュー判断
 
 ### Procedure
 
-1. Draft independently reviewable expectations with evidence and stable IDs; do not turn externally prompted unapproved candidates into test assertions.
-2. Keep human review state separate from AI confidence and test evidence. Use unreviewed / needs confirmation / confirmed / needs correction states.
-3. If a correction changes meaning, return to Business design first. Preserve guarantees when splitting or regrouping Checks.
-4. Use a Functional Interface only where it clarifies responsibility. Maintain Business Design ↔ Check ↔ Test traceability; do not maintain Check-to-Code locations.
+1. 独立してレビューできる期待結果を、根拠と安定したIDとともに草案にする。外部知識から挙げた未承認の候補を、テストのアサーションにしない。
+2. 人間のレビュー状態を、AIの確信度やテストの証拠と分けて管理する。状態は「未レビュー / 要確認 / 確認済み / 要修正」を使う。
+3. 修正によって意味が変わる場合は、まず業務設計へ戻す。Check Itemを分割・再編するときも保証を維持する。
+4. Functional Interfaceは、責務が明確になる場合だけ使う。Business Design ↔ Check ↔ Testの追跡関係を維持し、Checkとコードの位置対応は管理しない。
 
 ### Output
 
-- [checks]: Human-facing expectations with review state and supporting evidence, plus optional responsibility index
-- [requester]: Only remaining concrete business choices needing confirmation
+- [checks]: レビュー状態と根拠を伴う、人間向けの期待結果。必要に応じて責務の索引も含む
+- [requester]: 確認が必要な、残っている具体的な業務上の選択肢のみ
 
-# Activity test-design — Test design
+# Activity test-design — テスト設計
 
 ## What
 
-Plan observable assertions and relevant verification cases for the delegated change.
+委譲された変更について、観測可能なアサーションと関連する検証ケースを計画する。
 
 ## Why
 
-Verify behavior against the current business intent rather than merely reproducing the implementation's choices.
+実装上の選択をそのまま再現するだけでなく、現在の業務上の意図に照らして振る舞いを検証する。
 
 ## When
 
-An implementable change has testable expectations; if Check Items are used, their human review is complete.
+実装可能な変更に、テストで確認できる期待結果があるとき。Check Itemを使う場合は、人間のレビューが完了していること。
 
 ## Who
 
-The AI or developer responsible for test design.
+テスト設計を担当するAIまたは開発者。
 
 ## Where
 
-Repository tests, task plan or existing Check/Test mapping.
+リポジトリ内のテスト、タスク計画、または既存のCheckとTestの対応表。
 
 ## How
 
 ### Input
 
-- [business-design]: Current intended outcomes and boundaries
-- [checks]: Human-completed expectations and supporting detail, when the optional Check workflow is used
-- [tests]: Existing assertions and relevant regression coverage
-- [decisions]: Technical constraints and assumptions affecting verification
+- [business-design]: 現在意図している結果と境界
+- [checks]: 任意のCheck工程を使う場合に、人間が完成させた期待結果とその詳細
+- [tests]: 既存のアサーションと関連する回帰テスト
+- [decisions]: 検証に影響する技術的な制約と前提
 
 ### Procedure
 
-1. Select representative normal, boundary, failure and continuation cases relevant to the changed guarantees.
-2. Separate automated evidence from human approval and identify gaps rather than assuming passing tests establish completeness.
-3. When Checks are used, map the design/list revision and Check ID to representative test assertions. Do not require a separate maintained test-plan file where the existing test or Check artifacts suffice.
+1. 変更する保証に関係する、代表的な通常・境界・失敗・継続のケースを選ぶ。
+2. 自動検証の証拠と人間の承認を区別する。テスト成功を網羅性の証明とせず、検証できていない点を示す。
+3. Check Itemを使う場合は、設計・一覧のリビジョンとCheck IDを代表的なテストのアサーションに対応づける。既存のテストやCheckの成果物で足りる場合は、別のテスト計画ファイルの維持を求めない。
 
 ### Output
 
-- [test-plan]: Planned cases, observable expectations, representative assertions and known evidence gaps
+- [test-plan]: 計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足
 
-# Activity implementation — Implementation
+# Activity implementation — 実装
 
 ## What
 
-Implement and maintain Alder's guidance, executable tools and tests for the delegated task.
+委譲されたタスクについて、Alderのガイド、実行可能なツール、テストを実装・保守する。
 
 ## Why
 
-Make the intended work executable or usable and expose concrete choices for subsequent review.
+意図した業務を実行・利用できるようにし、具体的な選択を後のレビューで確認できるようにする。
 
 ## When
 
-The task has sufficient business direction and technical constraints to proceed; complete prior resolution of every future choice is not required.
+作業を進めるのに十分な業務上の方向性と技術的な制約がそろったとき。将来のすべての選択を事前に解決する必要はない。
 
 ## Who
 
-The implementation AI or developer.
+実装を担当するAIまたは開発者。
 
 ## Where
 
-An isolated repository branch and local execution environment.
+分離したリポジトリのブランチとローカル実行環境。
 
 ## How
 
 ### Input
 
-- [business-design]: Authoritative current intent and unresolved boundaries
-- [decisions]: Technical choices and assumptions
-- [test-plan]: Relevant assertions and verification cases
-- [code]: Existing implementation
-- [tests]: Existing executable tests
-- [knowledge]: Existing published guidance that the task may update
-- [review]: Confirmed mismatches or accepted technical improvements to address
+- [business-design]: 正本に記された現在の意図と未決定の境界
+- [decisions]: 技術的な選択と前提
+- [test-plan]: 関連するアサーションと検証ケース
+- [code]: 既存の実装
+- [tests]: 既存の実行可能なテスト
+- [knowledge]: タスクで更新する可能性がある、公開済みのガイド
+- [review]: 対応すべき、確認済みの不一致や採用された技術改善
 
 ### Procedure
 
-1. Implement within the delegated scope and existing design; record material assumptions.
-2. Write or update relevant tests without weakening expectations merely to pass.
-3. Preserve historical research evidence. A proposed permanent guidance change needs its supporting evidence and disposition.
-4. If implementation reveals unresolved business meaning, return the concrete question to Business design rather than authoring hidden policy in Code or Test.
+1. 委譲された範囲と既存設計に沿って実装し、重要な前提を記録する。
+2. 関連するテストを作成・更新する。成功させるためだけに期待結果を弱めない。
+3. 過去の研究の証拠を保全する。恒久的なガイドの変更案には、裏づけとなる証拠と採否の判断が必要である。
+4. 実装で未決定の業務上の意味が明らかになったら、コードやテストに暗黙の方針を埋め込まず、具体的な問いを業務設計へ戻す。
 
 ### Output
 
-- [code]: Changed implementation for review
-- [tests]: Executable assertions for the changed behavior
-- [knowledge]: Proposed guidance updates, when authorized by the task
-- [decisions]: Material implementation choices and remaining limits
+- [code]: レビュー対象となる変更済み実装
+- [tests]: 変更した振る舞いを確認する実行可能なアサーション
+- [knowledge]: タスクで許可された場合のガイド更新案
+- [decisions]: 重要な実装上の選択と残る限界
 
-# Activity drift-inspection — Drift inspection
+# Activity drift-inspection — Drift検査
 
 ## What
 
-Optionally detect outdated source/Check/Test relationships and select reconfirmation candidates.
+必要に応じて、原文・Check・Test間の古くなった関係を検出し、再確認の候補を選ぶ。
 
 ## Why
 
-Expose omitted synchronization after source edits without confusing text freshness with business correctness.
+文章の更新状態と業務上の正しさを混同せず、原文の編集後に生じた同期漏れを明らかにする。
 
 ## When
 
-A bounded opt-in pilot is in use and its identified source items, Checks or current Test inventory change.
+範囲を限定した任意試行を利用しており、識別対象の原文項目、Check、または現行テスト一覧が変わったとき。
 
 ## Who
 
-The developer or AI operating the read-only detector and interpreting its candidates.
+読み取り専用の検出器を実行し、候補を解釈する開発者またはAI。
 
 ## Where
 
-The optional drift pilot and its supplied fixture/product adapter.
+任意のDrift試行と、そこで提供するフィクスチャ用またはプロダクト用アダプター。
 
 ## How
 
 ### Input
 
-- [business-design]: Current identified source items supported by the selected pilot adapter
-- [checks]: Current Check bodies
-- [drift-metadata]: Reconciled source/Check/Test fingerprints and Test IDs from current runner discovery
+- [business-design]: 選択した試行用アダプターが扱える、識別済みの現行原文項目
+- [checks]: 現在のCheck本文
+- [drift-metadata]: 照合を済ませた原文・Check・Testのfingerprintと、現在のテストランナーが検出したTest ID
 
 ### Procedure
 
-1. Compute freshness and reference mismatches without changing pins or human review state.
-2. Select stale or missing relationships for reconfirmation, not automatic defect classification.
-3. Reconcile affected Checks with their source. An unchanged Check body does not require refreshing matching Test pins solely because a source was reconfirmed.
-4. Reconcile changed Check expectations with Tests; update pins only after the separate reconciliation is complete. A matching hash does not prove semantic coverage.
-5. This remains an optional bounded pilot, not a mandatory checker or universal Markdown adapter.
+1. 照合基準として保存した値（pin）や人間のレビュー状態を変更せず、更新状態と参照の不一致を算出する。
+2. 古くなった関係や欠落した関係を再確認の候補とする。不具合として自動分類しない。
+3. 影響するCheckを原文と照合する。Check本文が変わっていなければ、原文を再確認したという理由だけで、一致しているTest側のpinを更新する必要はない。
+4. 変更したCheckの期待結果をTestと照合する。pinは、この照合作業を別途完了してから更新する。ハッシュの一致は、意味上の検証範囲を証明しない。
+5. この工程は範囲を限定した任意試行であり、必須の検査器や汎用Markdownアダプターにはしない。
 
 ### Output
 
-- [drift-report]: Stale/missing/mapping candidates and reasons, distinct from product defects
-- [drift-metadata]: Only separately reconciled pins; detector execution itself never acknowledges them
+- [drift-report]: 古い関係・欠落・対応関係の再確認候補と理由。プロダクトの不具合とは区別する
+- [drift-metadata]: 別途照合を完了したpinのみ。検出器の実行自体では確認済みにしない
 
-# Activity verification-work — Test / verification
+# Activity verification-work — テスト・検証
 
 ## What
 
-Execute relevant tests and gates, and reproduce bounded research observations when the task requires them.
+関連するテストとゲートを実行し、タスクで必要な場合は範囲を限定した研究の観測結果を再現する。
 
 ## Why
 
-Establish actual implementation evidence and report its limits before a change is delivered.
+変更を提供する前に、実装について実際の証拠を得て、その限界を報告する。
 
 ## When
 
-Implementation changes are ready for verification, or changed expectations require regression testing.
+実装の変更を検証できる状態になったとき、または期待結果の変更により回帰テストが必要になったとき。
 
 ## Who
 
-The implementing developer or AI and the configured CI runner.
+実装を担当する開発者またはAIと、設定済みのCIランナー。
 
 ## Where
 
-Local temporary test environments and repository CI.
+ローカルの一時的なテスト環境とリポジトリのCI。
 
 ## How
 
 ### Input
 
-- [code]: Current implementation under test
-- [tests]: Executable test suite
-- [test-plan]: Required cases and expected observations
-- [drift-report]: Impact candidates to inspect when the opt-in pilot is used
+- [code]: テスト対象の現行実装
+- [tests]: 実行可能なテスト一式
+- [test-plan]: 必要なケースと期待する観測結果
+- [drift-report]: 任意試行を使う場合に確認する影響候補
 
 ### Procedure
 
-1. Run relevant tests against current Code; capture actual results including failures.
-2. Resolve implementation defects within scope and rerun relevant checks. Keep research scenarios expecting deliberate failures distinct from product success.
-3. Do not equate a passing suite with business approval, complete coverage or correct source-to-test meaning. Stop optional evaluation when sufficiently supported.
+1. 現行コードに対して関連するテストを実行し、失敗も含めて実際の結果を記録する。
+2. 範囲内の実装不具合を修正し、関連する検証を再実行する。意図的な失敗を期待する研究シナリオと、プロダクトとしての成功を区別する。
+3. テスト一式の成功を、業務上の承認、完全な網羅性、原文とテストの意味の正しい対応と同一視しない。十分な裏づけが得られたら、任意の評価を打ち切る。
 
 ### Output
 
-- [verification]: Passed/failed checks, observed behavior, reproduction instructions and remaining verification gaps
+- [verification]: 成功・失敗した検証、観測した振る舞い、再現手順、残る検証不足
 
-# Activity fresh-review — Fresh review
+# Activity fresh-review — 独立したレビュー（Fresh review）
 
 ## What
 
-Independently review the concrete implementation choices against Business Design.
+具体的な実装上の選択を、Business Designに照らして独立にレビューする。
 
 ## Why
 
-Detect definite mismatches and narrow unresolved business meaning into questions that people can decide.
+明確な不一致を検出し、未決定の業務上の意味を、人間が判断できる問いに絞る。
 
 ## When
 
-An implementation or material revision is available for review with its source design and Decisions.
+実装または重要な修正を、元の設計とDecision Recordとともにレビューできるとき。
 
 ## Who
 
-A separate AI reviewer or fresh context; responsible humans decide unresolved business meaning.
+別のAIレビュー担当、または新しいコンテキストでレビューするAI。未決定の業務上の意味は、責任者である人間が判断する。
 
 ## Where
 
-Repository diff and review discussion.
+リポジトリの差分とレビューでの議論。
 
 ## How
 
 ### Input
 
-- [business-design]: Current business intent, Scope and correlations
-- [decisions]: Recorded implementation choices and assumptions
-- [knowledge]: Selected review knowledge version and its stopping boundaries
-- [code]: Business meaning made concrete in implementation
-- [tests]: Assertions as evidence of chosen behavior
-- [verification]: Observed test/gate results and limitations
+- [business-design]: 現在の業務上の意図、対象範囲、業務間の関係
+- [decisions]: 記録された実装上の選択と前提
+- [knowledge]: 選択した版のレビュー知識と、レビューを打ち切る条件
+- [code]: 実装によって具体化された業務上の意味
+- [tests]: 選択された振る舞いの証拠となるアサーション
+- [verification]: 実際のテスト・ゲートの結果と限界
 
 ### Procedure
 
-1. Read Business Design → Decisions → implementation and Tests.
-2. Walk representative work and trace concrete implementation choices back to their source using Q1–Q3 / P1 / P2 / S.
-3. Classify definite mismatches, business confirmation, technical improvement or sufficient behavior without imposing unrelated architecture or future scope.
-4. Return only unresolved consequential business choices to people. If meaning changes, Business Design is corrected and confirmed before downstream artifacts.
+1. Business Design → Decision Record → 実装とテストの順に読む。
+2. 代表的な業務をたどり、Q1–Q3 / P1 / P2 / Sを使って、具体的な実装上の選択を原文まで追跡する。
+3. 明確な不一致、業務確認、技術改善、十分な振る舞いを分類する。無関係なアーキテクチャや将来の範囲を要求しない。
+4. 影響の大きい未決定の業務上の選択肢だけを人間に返す。意味が変わる場合は、後続の成果物を修正する前にBusiness Designを修正し、確認を得る。
 
 ### Output
 
-- [review]: Findings with concrete conditions, effects, source evidence and classification, including sufficient behavior
-- [requester]: Unresolved business choices requiring the responsible human's judgment
+- [review]: 具体的な条件、影響、原文の根拠、分類を伴うレビュー結果。十分な振る舞いも含む
+- [requester]: 責任者である人間の判断が必要な、未決定の業務上の選択肢
 
-# Activity research-evaluation — Research evaluation
+# Activity research-evaluation — 研究の評価
 
 ## What
 
-Evaluate proposed changes to Alder's practices and record whether evidence justifies adoption.
+Alderの手法の変更案を評価し、証拠が採用を正当化するか記録する。
 
 ## Why
 
-Keep operating guidance grounded in bounded evidence and preserve the distinction between observations and general claims.
+運用ガイドを範囲の明確な証拠に基づかせ、観測結果と一般的な主張を区別する。
 
 ## When
 
-A task proposes a practice change or a documented reconsideration condition is met.
+タスクで手法の変更が提案されたとき、または記録済みの再検討条件を満たしたとき。
 
 ## Who
 
-The research developer or AI; the maintainer decides adoption of proposed permanent guidance.
+研究を担当する開発者またはAI。恒久的なガイドの変更案の採用は、メンテナーが判断する。
 
 ## Where
 
-Repository research docs and work artifacts.
+リポジトリ内の研究文書と作業成果物。
 
 ## How
 
 ### Input
 
-- [requester]: Research objective and permitted evaluation scope
-- [knowledge]: Current practice and candidate change
-- [research]: Existing results, limits and reconsideration conditions
-- [verification]: Relevant reproducible observations
-- [review]: Review findings relevant to the candidate
+- [requester]: 研究の目的と許可された評価範囲
+- [knowledge]: 現行の手法と変更候補
+- [research]: 既存の結果、限界、再検討条件
+- [verification]: 関連する再現可能な観測結果
+- [review]: 候補に関係するレビュー結果
 
 ### Procedure
 
-1. Reason from existing evidence and bound the experiment to a decision-relevant uncertainty.
-2. Preserve prompts, source revisions and outcomes required to reproduce the stated observation; distinguish Fresh evaluation from reused context.
-3. Record adoption, rejection or insufficient evidence with reasons and limits in the research decision index. Do not silently turn an experimental result into a universal rule.
+1. 既存の証拠から考え、判断に関係する不確実性に実験の範囲を絞る。
+2. 述べた観測結果を再現するために必要なプロンプト、原文のリビジョン、結果を保全する。新しいコンテキストでの評価と、既存コンテキストを再利用した評価を区別する。
+3. 採用・不採用・証拠不足の判断を、理由と限界とともに研究判断の索引へ記録する。実験結果を暗黙に普遍的な規則へ変えない。
 
 ### Output
 
-- [research]: Evidence, disposition, reasons, limits and reconsideration conditions
-- [decisions]: Task-specific evaluation choices and reason for stopping
+- [research]: 証拠、採否などの判断、理由、限界、再検討条件
+- [decisions]: タスク固有の評価上の選択と、検討を打ち切った理由
 
-# Activity delivery-work — Delivery
+# Activity delivery-work — 変更の提供
 
 ## What
 
-Present reviewed changes for human acceptance and publish approved repository changes or releases.
+レビュー済みの変更を人間に提示して受け入れを求め、承認されたリポジトリの変更やリリースを公開する。
 
 ## Why
 
-Make the actual scope, evidence and remaining limits reviewable before adoption.
+採用する前に、実際の範囲、証拠、残る限界をレビューできるようにする。
 
 ## When
 
-A task is ready for a pull request, or the maintainer explicitly authorizes merge or release after review.
+プルリクエストを作成できる状態になったとき、またはレビュー後にメンテナーがマージやリリースを明示的に許可したとき。
 
 ## Who
 
-The implementing agent prepares the change; the maintainer authorizes acceptance/release, and the authorized agent or release workflow executes it.
+実装担当のエージェントが変更を準備し、メンテナーが受け入れやリリースを許可する。許可されたエージェントまたはリリースワークフローが実行する。
 
 ## Where
 
-GitHub pull requests and the repository release workflow.
+GitHubのプルリクエストとリポジトリのリリースワークフロー。
 
 ## How
 
 ### Input
 
-- [code]: Proposed executable changes
-- [tests]: Updated regression tests
-- [knowledge]: Proposed guidance/documentation changes
-- [verification]: Relevant local and CI verification results
-- [review]: Fresh review outcome and remaining limitations
-- [research]: Adoption evidence for a practice change, when applicable
-- [requester]: Human acceptance and explicit merge/release authorization when those actions are requested
+- [code]: 提案する実行可能な変更
+- [tests]: 更新済みの回帰テスト
+- [knowledge]: ガイドや文書の変更案
+- [verification]: 関連するローカル検証とCIの結果
+- [review]: Fresh reviewの結果と残る限界
+- [research]: 手法を変更する場合の採用根拠
+- [requester]: 人間の受け入れ判断と、マージやリリースを行う場合の明示的な許可
 
 ### Procedure
 
-1. Describe the problem, changed behavior, evidence and remaining limitations in the pull request.
-2. Address review findings and rerun affected verification. A prepared PR is not a merged or released change.
-3. Merge or release only within the human authorization; preserve release identity and prevent overwriting an existing release/tag.
+1. プルリクエストに、問題、変わる振る舞い、証拠、残る限界を記述する。
+2. レビューの指摘に対応し、影響する検証を再実行する。PRを準備しただけでは、マージやリリースは完了していない。
+3. 人間が許可した範囲でのみマージやリリースを行う。リリースの識別情報を保ち、既存のリリースやタグを上書きしない。
 
 ### Output
 
-- [delivery]: Reviewable pull request, and merged/released revision only when authorized
-- [requester]: Outcome, verification status and unresolved limitations
+- [delivery]: レビュー可能なプルリクエスト。許可された場合のみ、マージ・リリース済みのリビジョン
+- [requester]: 対応結果、検証状況、未解決の限界
 
-# Activity graph-export — Business Graph export
+# Activity graph-export — Business Graphの出力
 
 ## What
 
-Project an explicitly annotated Business Design into versioned Business Graph JSON.
+明示的な注釈を付けたBusiness Designから、形式のバージョンを持つBusiness Graph JSONを生成する。
 
 ## Why
 
-Make the documented activity/Object correlations machine-readable without creating another authority or maintaining the same meaning twice.
+別の正本を作ったり、同じ意味を二重に管理したりせず、文書に記したActivityとObjectの関係を機械で読み取れるようにする。
 
 ## When
 
-A developer requests a projection or the source design changes and its checked-in example must be regenerated.
+開発者が出力を求めたとき、または元の設計が変わり、リポジトリに保存した生成例の再生成が必要になったとき。
 
 ## Who
 
-The developer or AI invoking the optional export CLI.
+任意のexport CLIを実行する開発者またはAI。
 
 ## Where
 
-Local repository or CI; no network or external service is required.
+ローカルのリポジトリまたはCI。ネットワークや外部サービスは不要。
 
 ## How
 
 ### Input
 
-- [business-design]: Annotated 5W1H source including independent Objects, labeled Input/Output and explicit exceptions
+- [business-design]: 独立したObject、ラベル付きInput/Output、明示的な例外関係を含む、注釈付きの5W1H原文
 
 ### Procedure
 
-1. Deterministically extract stable IDs, display names, What/Why/When/Who/Where, Scope, Object icon names and labeled relations from the supported source format.
-2. Validate unique IDs, references and endpoint kinds. Ordinary data connections are only Object → Business (Input) or Business → Object (Output). Reject malformed supported input with a nonzero exit.
-3. Keep business-exception (Business → Business, non-data control with dashed rendering semantics) and object-exception (Object → Object, explicitly exceptional) distinct and labeled.
-4. Supply a generic icon when omitted; icon strings name Lucide icons and no SVG set is maintained here.
-5. Emit stable JSON only after validation. Do not overwrite the input design. Procedure is deliberately excluded, so Graph JSON is never a complete specification or business-approval signal.
+1. 対応する原文形式から、安定したID、表示名、What/Why/When/Who/Where、Scope、Objectのアイコン名、ラベル付き関係を、同じ入力なら同じ結果になるように抽出する。
+2. IDの一意性、参照、接続先の種別を検証する。通常のデータ接続はObject → Business（Input）またはBusiness → Object（Output）のみとする。対応形式に従わない不正な入力は、非ゼロの終了コードで拒否する。
+3. business-exception（Business → Business。データ接続ではない制御上の関係で、破線表示の意味を持つ）とobject-exception（Object → Object。明示的な例外関係）を区別し、それぞれにラベルを付ける。
+4. アイコンが省略されていれば汎用アイコンを補う。アイコンの文字列にはLucideのアイコン名を使い、ここではSVG一式を管理しない。
+5. 検証に成功した後にだけ、順序が安定したJSONを出力する。入力設計を上書きしない。Procedureは意図的に出力対象から除くため、Graph JSONを完全な仕様や業務上の承認の証拠として扱わない。
 
 ### Output
 
-- [graph]: Generated versioned JSON; regenerate from Business Design instead of editing by hand
+- [graph]: 形式のバージョンを持つ生成JSON。手で編集せず、Business Designから再生成する
 
 # Graph exceptions
 
-- business-exception implementation -> business-design-work: If implementation reveals unresolved business meaning, return for a human design decision
-- business-exception fresh-review -> business-design-work: If review changes business meaning, correct and confirm Business Design first
-- business-exception fresh-review -> implementation: If a definite implementation mismatch is found, return for an in-scope correction
-- business-exception verification-work -> implementation: If a test exposes an implementation defect, correct it before delivery
-- object-exception tests -> code: Tests verify Code by execution; this is not a maintained Check-to-Code location mapping
+- business-exception implementation -> business-design-work: 実装で未決定の業務上の意味が明らかになった場合は、人間による設計判断へ戻す
+- business-exception fresh-review -> business-design-work: レビューによって業務上の意味が変わる場合は、まずBusiness Designを修正して確認を得る
+- business-exception fresh-review -> implementation: 明確な実装の不一致が見つかった場合は、範囲内の修正へ戻す
+- business-exception verification-work -> implementation: テストで実装不具合が明らかになった場合は、提供前に修正する
+- object-exception tests -> code: テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない

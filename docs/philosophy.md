@@ -2,6 +2,10 @@
 
 [Back to Alder](../README.md) · [Apply it to a product](adoption.md)
 
+## Business Design must support agreement with the requester
+
+Business Design is the basis for agreement with users/requesters. **Its prose must be written in the language the requester actually uses**, so they can understand the content, identify errors, and agree to its meaning themselves. It is not sufficient for only the implementer or AI to understand it. Headers and section names may remain English; see the [authoring guidance](adoption.md#language-for-agreement).
+
 ## Why not settle every decision before implementing?
 
 Business Design needs enough detail to identify the current work and trace its connections. Alder does not treat careless specifications as sufficient, but it does not postpone implementation until every business decision is perfectly specified.

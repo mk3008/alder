@@ -20,6 +20,8 @@ The [Alder self-design](../business-design/alder/README.md) and its [generated e
 
 Existing Business Design remains valid for Alder review without using this exporter. The repository's older benchmark designs are not silently reinterpreted or rewritten. To export, annotate a design with explicit stable IDs and Object references; the exporter never infers identity or connections from matching names.
 
+Follow the [requester-language principle](adoption.md#language-for-agreement) for source prose and human-facing names/labels. The exporter preserves that text without translating it; keep the profile's structural headings and stable IDs as specified below.
+
 The profile keeps the recommended **5W1H / How = Input → Procedure → Output** sections. Prose fields are authored once in the design and copied to JSON, without a separate handwritten graph/metadata copy of those fields.
 
 The supported subset is deliberately small:
