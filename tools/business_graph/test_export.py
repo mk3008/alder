@@ -308,7 +308,7 @@ class ExportTests(unittest.TestCase):
             ('input', 'Alder: 業務ナレッジ', work, '考慮漏れフィードバック'),
             ('output', work, '業務設計書', 'スコープ、業務手順、業務相関'),
             ('output', work, '判断記録', '判断 / 結果'),
-            ('output', work, '依頼者', '業務設計書 / 未決事項'),
+            ('output', work, '依頼者', '業務レビュー依頼 / 仮案説明 / 未決事項相談 / 判断依頼'),
         })
         names = {n['id']: n['name'] for n in graph['nodes']}
         self.assertEqual(names['Alder: 業務相関ナレッジ'], 'Alder: 業務相関ナレッジ')
