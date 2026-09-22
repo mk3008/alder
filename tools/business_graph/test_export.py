@@ -160,16 +160,24 @@ class ExportTests(unittest.TestCase):
                      and r['from'] == '検査項目' and r['to'] == target]
             self.assertEqual(len(edges), 1)
             self.assertIn('期待結果', edges[0]['label'])
-            self.assertIn('検証不足', edges[0]['label'])
         implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
         self.assertIn('コードと実行可能なテストを作成・更新する', implementation)
-        self.assertIn('TestとCheck IDの対応と残る検証不足を検査項目に記録', implementation)
+        self.assertNotIn('検査項目に記録', implementation)
+        self.assertNotIn('判断記録へ残す', implementation)
         self.assertFalse(next(n for n in graph['nodes'] if n['id'] == '実装')['scope'])
         self.assertFalse(next(n for n in graph['nodes'] if n['id'] == 'テスト・検証')['scope'])
         self.assertTrue(next(n for n in graph['nodes'] if n['id'] == '実装レビュー')['scope'])
         graph_edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
-        self.assertIn(('output', '実装', '検査項目'), graph_edges)
+        self.assertEqual({r['to'] for r in graph['relations']
+                          if r['kind'] == 'output' and r['from'] == '実装'}, {'コード', 'テスト'})
+        self.assertNotIn(('output', '実装', '検査項目'), graph_edges)
+        self.assertNotIn(('output', '実装', '判断記録'), graph_edges)
         self.assertIn(('input', '検査項目', '実装レビュー'), graph_edges)
+        self.assertIn(('output', '実装レビュー', '検査項目'), graph_edges)
+        self.assertIn(('output', '実装レビュー', '判断記録'), graph_edges)
+        review = DESIGN.read_text().split('# Activity 実装レビュー\n', 1)[1].split('# Activity 研究評価\n', 1)[0]
+        self.assertIn('現在のコードの振る舞いの追認ではなく', review)
+        self.assertIn('確認できたCheck IDとTest / assertionの対応', review)
         self.assertNotIn(('input', 'レビュー結果', '実装'), graph_edges)
 
     def test_system_requirements_handoff(self):
