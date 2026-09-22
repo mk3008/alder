@@ -123,9 +123,9 @@ class ExportTests(unittest.TestCase):
                           for r in graph['relations']
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
-            ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 判断結果'),
+            ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 確認結果'),
             ('output', work, '検査項目', '期待結果、レビュー状態、Business Designとの対応、検証不足'),
-            ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 未決事項相談 / 判断依頼'),
+            ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 確認事項'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
                    and r['from'] == work]
