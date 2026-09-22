@@ -15,6 +15,23 @@
 
 ## 確認観点
 
+各欄には固有の意味だけを置き、隣の欄で説明する処理や目的を重ねない。次の「書かないこと」も、全Activityを読み直すときのチェック項目とする。
+
+| 欄 | 書くこと | 書かないこと・移す先 |
+| --- | --- | --- |
+| What | 短い業務名 | 説明・目的はWhyやProcedureへ |
+| Why | 業務の目的 | 手順・技術手段はProcedureやシステム設計へ |
+| When | 正常系の開始トリガー | 前提や許可の説明はProcedure、例外・復帰条件はException / Exception Whenへ |
+| Who | 短く安定した業務主体のロール名 | AI支援や責任分担の説明はProcedureへ |
+| Where | 業務手順や後続要件に影響する場所・環境・チャネル。該当しなければ規定なし | 単なる作業場所、リポジトリやブランチ名は書かない |
+| Object / Information | 情報のまとまり・媒体・相手と、内包する業務上の情報概念 | Entityの厳密定義、正規化、PK/FK、型、完全なcardinalityやテーブル対応は後続設計へ |
+| Input / Output | Objectから受け取る、またはObjectへ書き出す情報の意味 | 利用工程・目的・判断・更新先・分岐・順序はProcedureやExceptionへ |
+| Procedure | WhoがObjectをいつどう使い、判断・更新・出力するかの正常系の順序 | 例外分岐はExceptionへ、一般原則は作成ガイドへ |
+| Exception | Procedure中に発生する例外と遷移 | 正常手順や受け側の再開条件はProcedure / Exception Whenへ |
+| Exception When | 他Activityからの例外を受ける再開条件 | 修正や合意の手順はProcedureへ |
+
+I/Oは後続の業務が受け取る情報を理解できる短さに保ち、Object.Informationにある概念を全部列挙しない。各ObjectのInformationに後続のEntity候補を考える手掛かりがあるか、逆に過度なデータ定義になっていないかを両方確認する。InformationはEntityそのものでも、I/Oラベルと各項目の完全対応表でもない。必要になればInformationとProcedureから詳細を導出する。同一Activityで同一Objectが同方向に複数あるときは、まず一つの情報契約へ統合できるか確認し、分ける必要があればActivity境界も再検討する。
+
 | 観点 | 読み直す問い | 典型的な問題 |
 | --- | --- | --- |
 | Activityの境界と成果物 | 一つの目的として追えるか。統合後に旧Activityや同じ恒久成果物のObjectが残っていないか | 過度な分割、テスト計画と検査項目の二重管理 |
