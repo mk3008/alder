@@ -153,3 +153,28 @@ The [scope-boundary comment](https://github.com/mk3008/alder/pull/80#issuecommen
 | 業務グラフ出力 | `true`: this optional exporter is the Alder-specific tool introduced by Issue #79; successful projection does not approve meaning. |
 
 For this trial, four Activities are adjacent (`scope:false`) and six are within the described Alder work. Scope does not erase correlation: implementation still receives Business Design, system requirements and confirmed Check expectations, and provides code, Test, Check ID mapping and technical decision records. Verification still provides results, and Alder review reads the Check Items, code, tests and results. Adding the previously missing Check Item Input to the review makes that handoff explicit. The graph now has 29 nodes and 65 relations: removed two implementation guide transfers, added one review Check Item Input. The narrower Procedures do not repeal the existing adoption/traceability guidance for products choosing Alder. The proposed boundary is returned for human review; exporter tests establish only source/graph consistency.
+
+### Trial iteration — Code/Test handoff and Alder-owned traceability
+
+The [next human decision](https://github.com/mk3008/alder/pull/80#issuecomment-5786128493) makes the adjacent implementation Activity produce only Code and Test. Its Procedure no longer writes Check Items or Alder Decision Records. Code and Test remain outputs of one Activity: their creation order, including Test-first, Code-first, alternation and code changes for testability, is not prescribed. The check is whether Test expectations derive from human-confirmed Check Items and Business Design rather than merely confirming current code behavior.
+
+The Alder-owned implementation review now reads those artifacts alongside confirmed Check expectations, existing Test mappings, verification results, and existing decisions. Once the Test expectation and source are checked, its follow-up maintains Check ID ↔ Test/assertion mappings and evidence gaps in the Check Item. It records material technical choices and reasons in the Decision Record only when evidence supports them; missing reasons remain review questions, and business meaning still returns to Business Design for human confirmation. The graph therefore shows review Outputs to both 検査項目 and 判断記録. The separate Fresh reviewer remains read-only; the subsequent Alder follow-up performs the authorized maintenance.
+
+This also revises the placement of an existing Alder recommendation: an implementer supplies the rationale for material choices to the review, but the `scope:false` implementation Business is not the owner of Alder's Decision Record. The adoption guide's implementation prompt, Check Item mapping guidance and traceability guide now assign confirmed records and mappings to review/follow-up. This changes the handoff described in this proposed Business Design and associated guidance; the historical research evidence and released v0.5 artifact are not rewritten. Human review is needed to confirm that the narrower handoff still describes the intended practice.
+
+The latest quality knowledge was also reapplied to every Activity after moving these outputs:
+
+| Activity | Scope / I/O / Procedure check |
+| --- | --- |
+| 業務設計 | Owns business meaning and records human business decisions; no Code or Test authoring. |
+| システム設計 | Adjacent technical requirements handoff only; no Alder artifact update. |
+| 検査項目の設計 | Owns initial, human-reviewed Check expectations and preserves existing mappings on Check edits; creation of new Test mappings waits for the later review. |
+| 実装 | Adjacent Code and Test authoring from confirmed expectations; exactly two Outputs, no prescribed authoring order or Alder record write. |
+| 同期漏れ検査 | Alder's optional drift pilot still identifies candidates, without automatic approval or implicit Check/Test mapping update. |
+| テスト・検証 | Adjacent execution supplies results and gaps, without editing Check or Decision Record. |
+| 実装レビュー | Reads Business Design, Check, Code, Test and verification; confirms Test oracle from the Check, updates mappings and remaining gaps, records supported technical reasons and reports missing ones as questions. |
+| 研究評価 | Alder-specific method evidence and decisions, independent of ordinary implementation. |
+| 変更の提供 | Adjacent delivery of reviewed changes with existing authorization boundary, no Alder mapping/Decision write. |
+| 業務グラフ出力 | Optional Alder projection of the source design, without approving its meaning. |
+
+The graph remains 29 nodes and 65 relations: removing the implementation → Check and implementation → Decision Record Outputs (-2), and adding review → Check and review → Decision Record (+2) preserves the relation count while changing ownership. The linked tests assert this exact boundary and source/JSON regeneration; they do not prove that any particular Test is a good oracle. The requester must still approve the business meaning of this self-design.
