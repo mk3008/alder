@@ -62,6 +62,19 @@ SOURCE = PREAMBLE + OBJECTS + activity()
 
 
 class ExportTests(unittest.TestCase):
+    def test_object_information_is_source_only_and_validated(self):
+        source = SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n## Information\n\n- Question\n- Context')
+        self.assertEqual(parse_design(source), parse_design(SOURCE))
+        generic = SOURCE.replace('# Object record\n\n(generic icon)',
+                                 '# Object record\n\n## Icon\n\n(generic icon)\n\n## Information\n\n- Existing context')
+        self.assertEqual(parse_design(generic), parse_design(SOURCE))
+        for invalid in ('## Information\n\n', '## Information\n\nContext',
+                        '## Information\n\n- Question\nContext'):
+            with self.subTest(invalid=invalid), self.assertRaises(DesignError):
+                parse_design(SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n' + invalid))
+        with self.assertRaises(DesignError):
+            parse_design(SOURCE.replace('## Icon\n\nusers', '## Information\n\n- Question\n\n## Icon\n\nusers'))
+
     def test_distinct_who_object_and_all_fields(self):
         graph = parse_design(SOURCE)
         nodes = {node['id']: node for node in graph['nodes']}
@@ -123,16 +136,16 @@ class ExportTests(unittest.TestCase):
                           for r in graph['relations']
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
-            ('input', 'Alder: 検査項目設計ナレッジ', work, '検査項目の導出・レビュー・追跡関係の保守方法'),
+            ('input', 'Alder: 検査項目設計ナレッジ', work, '検査項目の導出・レビュー・追跡関係の確認観点'),
             ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 確認結果'),
-            ('output', work, '検査項目', '期待結果、レビュー状態、Business Designとの対応、検証不足'),
+            ('output', work, '検査項目', '期待結果 / レビュー状態 / 業務設計書との対応 / 検証不足'),
             ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 確認事項'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
                    and r['from'] == work]
         self.assertEqual(len(returns), 1)
         self.assertEqual(returns[0]['to'], '業務設計')
-        self.assertIn('業務設計書を修正・合意してから', returns[0]['label'])
+        self.assertIn('業務上の意味・条件・保証', returns[0]['label'])
         check_source = DESIGN.read_text().split('# Activity 検査項目の設計\n', 1)[1].split('# Activity 実装\n', 1)[0]
         procedure, exception = check_source.split('### Exception\n', 1)
         self.assertNotIn('業務上の意味・条件・保証の修正や未決事項', procedure)
@@ -160,7 +173,7 @@ class ExportTests(unittest.TestCase):
         edges = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}
         self.assertEqual({r for r in edges if 'システム設計' in r[1:3]}, {
             ('input', '業務設計書', 'システム設計', '業務要件'),
-            ('output', 'システム設計', 'システム要件書', 'インフラ・開発言語・アーキテクチャ・フレームワーク等'),
+            ('output', 'システム設計', 'システム要件書', '技術要件'),
         })
         self.assertIn(('input', '業務設計書', '実装', '業務要件'), edges)
         self.assertIn(('input', 'システム要件書', '実装', '技術要件'), edges)
@@ -405,14 +418,13 @@ class ExportTests(unittest.TestCase):
         actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
-            ('input', '依頼者', work, 'システム要件 / フィードバック'),
-            ('input', '依頼者', work, 'レビュー結果 / 判断'),
-            ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移フィードバック'),
-            ('input', 'Alder: 業務ナレッジ', work, '考慮漏れフィードバック'),
-            ('input', 'Alder: 業務設計品質レビュー知識', work, '5W1H・I/O・Procedure・Exceptionの記述品質観点（PR #80試行）'),
-            ('output', work, '業務設計書', 'スコープ、業務手順、業務相関'),
-            ('output', work, '判断記録', '判断 / 結果'),
-            ('output', work, '依頼者', '業務レビュー依頼 / 仮案説明 / 未決事項相談 / 判断依頼'),
+            ('input', '依頼者', work, 'システム要件 / フィードバック / レビュー結果 / 判断'),
+            ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
+            ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
+            ('input', 'Alder: 業務設計品質レビュー知識', work, '記述品質の確認観点'),
+            ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項'),
+            ('output', work, '判断記録', '判断内容 / 結果'),
+            ('output', work, '依頼者', '業務設計案 / レビュー依頼 / 確認事項 / 判断依頼'),
         })
         names = {n['id']: n['name'] for n in graph['nodes']}
         self.assertEqual(names['Alder: 業務相関ナレッジ'], 'Alder: 業務相関ナレッジ')
@@ -447,7 +459,8 @@ class ExportTests(unittest.TestCase):
         self.assertEqual('目的・変更要求を受領したとき', nodes['業務設計']['when'])
         self.assertEqual('規定なし', nodes['業務設計']['where'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
-        self.assertIn('任意試行の利用時', nodes['同期漏れ検査']['when'])
+        self.assertEqual('同期漏れ検査の依頼を受領したとき', nodes['同期漏れ検査']['when'])
+        self.assertIn('範囲を限定した任意試行', DESIGN.read_text())
         self.assertIn({'kind': 'object-exception', 'from': 'テスト', 'to': 'コード',
                        'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))
