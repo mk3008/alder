@@ -327,12 +327,6 @@
     },
     {
       "kind": "input",
-      "from": "テスト",
-      "to": "検査項目の設計",
-      "label": "既存のアサーションと関連する回帰テスト"
-    },
-    {
-      "kind": "input",
       "from": "レビュー結果",
       "to": "変更の提供",
       "label": "Fresh reviewの結果と残る限界"
@@ -393,12 +387,6 @@
     },
     {
       "kind": "input",
-      "from": "判断記録",
-      "to": "検査項目の設計",
-      "label": "検証に影響する技術的な制約と前提"
-    },
-    {
-      "kind": "input",
       "from": "同期漏れの候補",
       "to": "テスト・検証",
       "label": "任意試行を使う場合に確認する影響候補"
@@ -425,7 +413,7 @@
       "kind": "input",
       "from": "検査項目",
       "to": "実装",
-      "label": "確認済みの期待結果、代表的なTest / assertionとの対応、検証不足"
+      "label": "確認済みの期待結果、Business Designとの対応、検証不足"
     },
     {
       "kind": "input",
@@ -581,7 +569,7 @@
       "kind": "output",
       "from": "検査項目の設計",
       "to": "検査項目",
-      "label": "期待結果、レビュー状態、Business Design / Testとの対応、検証不足"
+      "label": "期待結果、レビュー状態、Business Designとの対応、検証不足"
     },
     {
       "kind": "output",
