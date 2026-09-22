@@ -126,8 +126,7 @@ class ExportTests(unittest.TestCase):
             ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 判断結果'),
             ('input', 'テスト', work, '既存のアサーションと関連する回帰テスト'),
             ('input', '判断記録', work, '検証に影響する技術的な制約と前提'),
-            ('output', work, 'テスト計画', '計画したケース、観測可能な期待結果、代表的なアサーション、判明している証拠の不足'),
-            ('output', work, '検査項目', '確定・更新した検査項目'),
+            ('output', work, '検査項目', '期待結果、レビュー状態、Business Design / Testとの対応、検証不足'),
             ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 未決事項相談 / 判断依頼'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
@@ -135,6 +134,16 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(len(returns), 1)
         self.assertEqual(returns[0]['to'], '業務設計')
         self.assertIn('業務設計書を修正・合意してから', returns[0]['label'])
+
+    def test_check_artifact_replaces_duplicate_test_plan(self):
+        graph = parse_design(DESIGN.read_text())
+        self.assertNotIn('テスト計画', {n['id'] for n in graph['nodes']})
+        for target in ('実装', 'テスト・検証'):
+            edges = [r for r in graph['relations'] if r['kind'] == 'input'
+                     and r['from'] == '検査項目' and r['to'] == target]
+            self.assertEqual(len(edges), 1)
+            self.assertIn('期待結果', edges[0]['label'])
+            self.assertIn('検証不足', edges[0]['label'])
 
     def test_system_requirements_handoff(self):
         graph = parse_design(DESIGN.read_text())
