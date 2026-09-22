@@ -54,3 +54,7 @@ product/
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
 **Alder v0.5** では、恒久的なtraceabilityを **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。コードの正しさは、Business Design由来のTestを実行して検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
+
+## Business Graph export（任意）
+
+[Alder自身のBusiness Design](business-design/alder/README.md)からJSONを生成できます。Business DesignがSSOTであり、JSONは再生成する投影結果です。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。

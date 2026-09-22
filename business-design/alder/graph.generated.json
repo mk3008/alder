@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "business-design",
+      "type": "object",
+      "name": "Business Design",
+      "icon": "file-text"
+    },
+    {
+      "id": "business-design-work",
+      "type": "business",
+      "name": "Business design",
+      "what": "Describe and maintain Alder's development work and its intended outcomes.",
+      "why": "Keep business meaning, authority and guarantees explicit at the source before downstream artifacts rely on a changed decision.",
+      "when": "A requester supplies a new objective, or review or research exposes a concrete unresolved business choice or a requested change.",
+      "who": "The responsible human designer, assisted by an AI drafting agent; the responsible human confirms business meaning.",
+      "where": "The repository's Business Design and associated human review discussion."
+    },
+    {
+      "id": "check-design",
+      "type": "business",
+      "name": "Check Item design and confirmation",
+      "what": "Optionally derive and review observable expectations from the whole Business Design.",
+      "why": "Make requirements review and representative test coverage easier to navigate where the added maintenance is justified.",
+      "when": "Business Design and its activity-correlation review are ready, and the task benefits from Check Items or optional Functional Interfaces.",
+      "who": "An AI drafts; responsible human designers/requesters review, correct and complete the expectations.",
+      "where": "Repository Check list and human review discussion."
+    },
+    {
+      "id": "checks",
+      "type": "object",
+      "name": "Check Items and optional Functional Interfaces",
+      "icon": "list-checks"
+    },
+    {
+      "id": "code",
+      "type": "object",
+      "name": "Code",
+      "icon": "file-code"
+    },
+    {
+      "id": "decisions",
+      "type": "object",
+      "name": "Decision Records",
+      "icon": "notebook-pen"
+    },
+    {
+      "id": "delivery",
+      "type": "object",
+      "name": "Pull request / release",
+      "icon": "git-pull-request"
+    },
+    {
+      "id": "delivery-work",
+      "type": "business",
+      "name": "Delivery",
+      "what": "Present reviewed changes for human acceptance and publish approved repository changes or releases.",
+      "why": "Make the actual scope, evidence and remaining limits reviewable before adoption.",
+      "when": "A task is ready for a pull request, or the maintainer explicitly authorizes merge or release after review.",
+      "who": "The implementing agent prepares the change; the maintainer authorizes acceptance/release, and the authorized agent or release workflow executes it.",
+      "where": "GitHub pull requests and the repository release workflow."
+    },
+    {
+      "id": "drift-inspection",
+      "type": "business",
+      "name": "Drift inspection",
+      "what": "Optionally detect outdated source/Check/Test relationships and select reconfirmation candidates.",
+      "why": "Expose omitted synchronization after source edits without confusing text freshness with business correctness.",
+      "when": "A bounded opt-in pilot is in use and its identified source items, Checks or current Test inventory change.",
+      "who": "The developer or AI operating the read-only detector and interpreting its candidates.",
+      "where": "The optional drift pilot and its supplied fixture/product adapter."
+    },
+    {
+      "id": "drift-metadata",
+      "type": "object",
+      "name": "Opt-in source/Check/Test pins and current Test inventory",
+      "icon": "fingerprint"
+    },
+    {
+      "id": "drift-report",
+      "type": "object",
+      "name": "Drift candidates",
+      "icon": "scan-search"
+    },
+    {
+      "id": "fresh-review",
+      "type": "business",
+      "name": "Fresh review",
+      "what": "Independently review the concrete implementation choices against Business Design.",
+      "why": "Detect definite mismatches and narrow unresolved business meaning into questions that people can decide.",
+      "when": "An implementation or material revision is available for review with its source design and Decisions.",
+      "who": "A separate AI reviewer or fresh context; responsible humans decide unresolved business meaning.",
+      "where": "Repository diff and review discussion."
+    },
+    {
+      "id": "graph",
+      "type": "object",
+      "name": "Generated Business Graph JSON",
+      "icon": "workflow"
+    },
+    {
+      "id": "graph-export",
+      "type": "business",
+      "name": "Business Graph export",
+      "what": "Project an explicitly annotated Business Design into versioned Business Graph JSON.",
+      "why": "Make the documented activity/Object correlations machine-readable without creating another authority or maintaining the same meaning twice.",
+      "when": "A developer requests a projection or the source design changes and its checked-in example must be regenerated.",
+      "who": "The developer or AI invoking the optional export CLI.",
+      "where": "Local repository or CI; no network or external service is required."
+    },
+    {
+      "id": "implementation",
+      "type": "business",
+      "name": "Implementation",
+      "what": "Implement and maintain Alder's guidance, executable tools and tests for the delegated task.",
+      "why": "Make the intended work executable or usable and expose concrete choices for subsequent review.",
+      "when": "The task has sufficient business direction and technical constraints to proceed; complete prior resolution of every future choice is not required.",
+      "who": "The implementation AI or developer.",
+      "where": "An isolated repository branch and local execution environment."
+    },
+    {
+      "id": "knowledge",
+      "type": "object",
+      "name": "Alder guidance and review knowledge",
+      "icon": "book-open"
+    },
+    {
+      "id": "requester",
+      "type": "object",
+      "name": "System requester / domain expert",
+      "icon": "users"
+    },
+    {
+      "id": "research",
+      "type": "object",
+      "name": "Research evidence and adoption decisions",
+      "icon": "microscope"
+    },
+    {
+      "id": "research-evaluation",
+      "type": "business",
+      "name": "Research evaluation",
+      "what": "Evaluate proposed changes to Alder's practices and record whether evidence justifies adoption.",
+      "why": "Keep operating guidance grounded in bounded evidence and preserve the distinction between observations and general claims.",
+      "when": "A task proposes a practice change or a documented reconsideration condition is met.",
+      "who": "The research developer or AI; the maintainer decides adoption of proposed permanent guidance.",
+      "where": "Repository research docs and work artifacts."
+    },
+    {
+      "id": "review",
+      "type": "object",
+      "name": "Fresh review findings",
+      "icon": "messages-square"
+    },
+    {
+      "id": "system-design",
+      "type": "business",
+      "name": "System design",
+      "what": "Choose technical means within Alder's current business intent and task constraints.",
+      "why": "Make implementation feasible and reviewable without inventing business policy or prescribing an architecture name.",
+      "when": "A development task needs technical choices or new evidence changes an existing technical assumption.",
+      "who": "The implementation AI or developer accountable for the delegated technical work.",
+      "where": "Repository and task discussion; material choices in Decision Records."
+    },
+    {
+      "id": "test-design",
+      "type": "business",
+      "name": "Test design",
+      "what": "Plan observable assertions and relevant verification cases for the delegated change.",
+      "why": "Verify behavior against the current business intent rather than merely reproducing the implementation's choices.",
+      "when": "An implementable change has testable expectations; if Check Items are used, their human review is complete.",
+      "who": "The AI or developer responsible for test design.",
+      "where": "Repository tests, task plan or existing Check/Test mapping."
+    },
+    {
+      "id": "test-plan",
+      "type": "object",
+      "name": "Test design",
+      "icon": "clipboard-list"
+    },
+    {
+      "id": "tests",
+      "type": "object",
+      "name": "Test",
+      "icon": "flask-conical"
+    },
+    {
+      "id": "verification",
+      "type": "object",
+      "name": "Verification results",
+      "icon": "clipboard-check"
+    },
+    {
+      "id": "verification-work",
+      "type": "business",
+      "name": "Test / verification",
+      "what": "Execute relevant tests and gates, and reproduce bounded research observations when the task requires them.",
+      "why": "Establish actual implementation evidence and report its limits before a change is delivered.",
+      "when": "Implementation changes are ready for verification, or changed expectations require regression testing.",
+      "who": "The implementing developer or AI and the configured CI runner.",
+      "where": "Local temporary test environments and repository CI."
+    }
+  ],
+  "relations": [
+    {
+      "kind": "business-exception",
+      "from": "fresh-review",
+      "to": "business-design-work",
+      "label": "If review changes business meaning, correct and confirm Business Design first"
+    },
+    {
+      "kind": "business-exception",
+      "from": "fresh-review",
+      "to": "implementation",
+      "label": "If a definite implementation mismatch is found, return for an in-scope correction"
+    },
+    {
+      "kind": "business-exception",
+      "from": "implementation",
+      "to": "business-design-work",
+      "label": "If implementation reveals unresolved business meaning, return for a human design decision"
+    },
+    {
+      "kind": "business-exception",
+      "from": "verification-work",
+      "to": "implementation",
+      "label": "If a test exposes an implementation defect, correct it before delivery"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "business-design-work",
+      "label": "Current intent, Scope and activity correlations"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "check-design",
+      "label": "Whole applicable design, activity conditions and guarantees"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "drift-inspection",
+      "label": "Current identified source items supported by the selected pilot adapter"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "fresh-review",
+      "label": "Current business intent, Scope and correlations"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "graph-export",
+      "label": "Annotated 5W1H source including independent Objects, labeled Input/Output and explicit exceptions"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "implementation",
+      "label": "Authoritative current intent and unresolved boundaries"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "system-design",
+      "label": "Applicable intent, Scope, constraints and explicitly foreseen risks"
+    },
+    {
+      "kind": "input",
+      "from": "business-design",
+      "to": "test-design",
+      "label": "Current intended outcomes and boundaries"
+    },
+    {
+      "kind": "input",
+      "from": "checks",
+      "to": "drift-inspection",
+      "label": "Current Check bodies"
+    },
+    {
+      "kind": "input",
+      "from": "checks",
+      "to": "test-design",
+      "label": "Human-completed expectations and supporting detail, when the optional Check workflow is used"
+    },
+    {
+      "kind": "input",
+      "from": "code",
+      "to": "delivery-work",
+      "label": "Proposed executable changes"
+    },
+    {
+      "kind": "input",
+      "from": "code",
+      "to": "fresh-review",
+      "label": "Business meaning made concrete in implementation"
+    },
+    {
+      "kind": "input",
+      "from": "code",
+      "to": "implementation",
+      "label": "Existing implementation"
+    },
+    {
+      "kind": "input",
+      "from": "code",
+      "to": "system-design",
+      "label": "Current implementation constraints"
+    },
+    {
+      "kind": "input",
+      "from": "code",
+      "to": "verification-work",
+      "label": "Current implementation under test"
+    },
+    {
+      "kind": "input",
+      "from": "decisions",
+      "to": "check-design",
+      "label": "Already settled choices and shared contracts"
+    },
+    {
+      "kind": "input",
+      "from": "decisions",
+      "to": "fresh-review",
+      "label": "Recorded implementation choices and assumptions"
+    },
+    {
+      "kind": "input",
+      "from": "decisions",
+      "to": "implementation",
+      "label": "Technical choices and assumptions"
+    },
+    {
+      "kind": "input",
+      "from": "decisions",
+      "to": "system-design",
+      "label": "Existing technical choices and their limits"
+    },
+    {
+      "kind": "input",
+      "from": "decisions",
+      "to": "test-design",
+      "label": "Technical constraints and assumptions affecting verification"
+    },
+    {
+      "kind": "input",
+      "from": "drift-metadata",
+      "to": "drift-inspection",
+      "label": "Reconciled source/Check/Test fingerprints and Test IDs from current runner discovery"
+    },
+    {
+      "kind": "input",
+      "from": "drift-report",
+      "to": "verification-work",
+      "label": "Impact candidates to inspect when the opt-in pilot is used"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "check-design",
+      "label": "c3 derivation, optional functional consideration discovery and traceability guidance"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "delivery-work",
+      "label": "Proposed guidance/documentation changes"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "fresh-review",
+      "label": "Selected review knowledge version and its stopping boundaries"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "implementation",
+      "label": "Existing published guidance that the task may update"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "research-evaluation",
+      "label": "Current practice and candidate change"
+    },
+    {
+      "kind": "input",
+      "from": "knowledge",
+      "to": "system-design",
+      "label": "Guidance for bounded technical reasoning and error-resistant operation"
+    },
+    {
+      "kind": "input",
+      "from": "requester",
+      "to": "business-design-work",
+      "label": "Objectives, operational constraints and human business decisions"
+    },
+    {
+      "kind": "input",
+      "from": "requester",
+      "to": "check-design",
+      "label": "Human corrections and review decisions on expectations"
+    },
+    {
+      "kind": "input",
+      "from": "requester",
+      "to": "delivery-work",
+      "label": "Human acceptance and explicit merge/release authorization when those actions are requested"
+    },
+    {
+      "kind": "input",
+      "from": "requester",
+      "to": "research-evaluation",
+      "label": "Research objective and permitted evaluation scope"
+    },
+    {
+      "kind": "input",
+      "from": "research",
+      "to": "business-design-work",
+      "label": "Evidence and limits relevant to a proposed change in operating practice"
+    },
+    {
+      "kind": "input",
+      "from": "research",
+      "to": "delivery-work",
+      "label": "Adoption evidence for a practice change, when applicable"
+    },
+    {
+      "kind": "input",
+      "from": "research",
+      "to": "research-evaluation",
+      "label": "Existing results, limits and reconsideration conditions"
+    },
+    {
+      "kind": "input",
+      "from": "review",
+      "to": "business-design-work",
+      "label": "Concrete unresolved business questions and effects on downstream guarantees"
+    },
+    {
+      "kind": "input",
+      "from": "review",
+      "to": "delivery-work",
+      "label": "Fresh review outcome and remaining limitations"
+    },
+    {
+      "kind": "input",
+      "from": "review",
+      "to": "implementation",
+      "label": "Confirmed mismatches or accepted technical improvements to address"
+    },
+    {
+      "kind": "input",
+      "from": "review",
+      "to": "research-evaluation",
+      "label": "Review findings relevant to the candidate"
+    },
+    {
+      "kind": "input",
+      "from": "test-plan",
+      "to": "implementation",
+      "label": "Relevant assertions and verification cases"
+    },
+    {
+      "kind": "input",
+      "from": "test-plan",
+      "to": "verification-work",
+      "label": "Required cases and expected observations"
+    },
+    {
+      "kind": "input",
+      "from": "tests",
+      "to": "delivery-work",
+      "label": "Updated regression tests"
+    },
+    {
+      "kind": "input",
+      "from": "tests",
+      "to": "fresh-review",
+      "label": "Assertions as evidence of chosen behavior"
+    },
+    {
+      "kind": "input",
+      "from": "tests",
+      "to": "implementation",
+      "label": "Existing executable tests"
+    },
+    {
+      "kind": "input",
+      "from": "tests",
+      "to": "test-design",
+      "label": "Existing assertions and relevant regression coverage"
+    },
+    {
+      "kind": "input",
+      "from": "tests",
+      "to": "verification-work",
+      "label": "Executable test suite"
+    },
+    {
+      "kind": "input",
+      "from": "verification",
+      "to": "delivery-work",
+      "label": "Relevant local and CI verification results"
+    },
+    {
+      "kind": "input",
+      "from": "verification",
+      "to": "fresh-review",
+      "label": "Observed test/gate results and limitations"
+    },
+    {
+      "kind": "input",
+      "from": "verification",
+      "to": "research-evaluation",
+      "label": "Relevant reproducible observations"
+    },
+    {
+      "kind": "object-exception",
+      "from": "tests",
+      "to": "code",
+      "label": "Tests verify Code by execution; this is not a maintained Check-to-Code location mapping"
+    },
+    {
+      "kind": "output",
+      "from": "business-design-work",
+      "to": "business-design",
+      "label": "Current design with confirmed meaning distinguished from unresolved scope or draft proposals"
+    },
+    {
+      "kind": "output",
+      "from": "business-design-work",
+      "to": "requester",
+      "label": "Concrete choices needing a human decision, or the updated design for confirmation"
+    },
+    {
+      "kind": "output",
+      "from": "check-design",
+      "to": "checks",
+      "label": "Human-facing expectations with review state and supporting evidence, plus optional responsibility index"
+    },
+    {
+      "kind": "output",
+      "from": "check-design",
+      "to": "requester",
+      "label": "Only remaining concrete business choices needing confirmation"
+    },
+    {
+      "kind": "output",
+      "from": "delivery-work",
+      "to": "delivery",
+      "label": "Reviewable pull request, and merged/released revision only when authorized"
+    },
+    {
+      "kind": "output",
+      "from": "delivery-work",
+      "to": "requester",
+      "label": "Outcome, verification status and unresolved limitations"
+    },
+    {
+      "kind": "output",
+      "from": "drift-inspection",
+      "to": "drift-metadata",
+      "label": "Only separately reconciled pins; detector execution itself never acknowledges them"
+    },
+    {
+      "kind": "output",
+      "from": "drift-inspection",
+      "to": "drift-report",
+      "label": "Stale/missing/mapping candidates and reasons, distinct from product defects"
+    },
+    {
+      "kind": "output",
+      "from": "fresh-review",
+      "to": "requester",
+      "label": "Unresolved business choices requiring the responsible human's judgment"
+    },
+    {
+      "kind": "output",
+      "from": "fresh-review",
+      "to": "review",
+      "label": "Findings with concrete conditions, effects, source evidence and classification, including sufficient behavior"
+    },
+    {
+      "kind": "output",
+      "from": "graph-export",
+      "to": "graph",
+      "label": "Generated versioned JSON; regenerate from Business Design instead of editing by hand"
+    },
+    {
+      "kind": "output",
+      "from": "implementation",
+      "to": "code",
+      "label": "Changed implementation for review"
+    },
+    {
+      "kind": "output",
+      "from": "implementation",
+      "to": "decisions",
+      "label": "Material implementation choices and remaining limits"
+    },
+    {
+      "kind": "output",
+      "from": "implementation",
+      "to": "knowledge",
+      "label": "Proposed guidance updates, when authorized by the task"
+    },
+    {
+      "kind": "output",
+      "from": "implementation",
+      "to": "tests",
+      "label": "Executable assertions for the changed behavior"
+    },
+    {
+      "kind": "output",
+      "from": "research-evaluation",
+      "to": "decisions",
+      "label": "Task-specific evaluation choices and reason for stopping"
+    },
+    {
+      "kind": "output",
+      "from": "research-evaluation",
+      "to": "research",
+      "label": "Evidence, disposition, reasons, limits and reconsideration conditions"
+    },
+    {
+      "kind": "output",
+      "from": "system-design",
+      "to": "decisions",
+      "label": "Technical choices, rationale, assumptions, evidence and stopping conditions"
+    },
+    {
+      "kind": "output",
+      "from": "test-design",
+      "to": "test-plan",
+      "label": "Planned cases, observable expectations, representative assertions and known evidence gaps"
+    },
+    {
+      "kind": "output",
+      "from": "verification-work",
+      "to": "verification",
+      "label": "Passed/failed checks, observed behavior, reproduction instructions and remaining verification gaps"
+    }
+  ],
+  "scope": "Develop and maintain Alder's guidance, research evidence and optional tools: define business intent, choose technical means, optionally derive Checks and Test plans, implement, optionally inspect drift, verify, independently review, evaluate research changes and deliver approved changes. Graph export is an optional projection of this design. UI/Viewer design, layout, billing, automatic business approval, mandatory use of optional research practices and permanent Check-to-Code location mappings are outside scope. No product database or production service is operated by this development workflow."
+}

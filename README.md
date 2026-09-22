@@ -41,6 +41,16 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 
 [Follow the adoption guide and copy the prompts →](docs/adoption.md)
 
+## Optional Business Graph export
+
+[Alder's own Business Design](business-design/alder/README.md) can be projected into versioned JSON with a dependency-free Python 3.12+ CLI:
+
+```sh
+python3 tools/business_graph/export.py business-design/alder/README.md -o business-design/alder/graph.generated.json
+```
+
+Business Design remains the SSOT; JSON is regenerated, not edited. Procedure is outside this projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
+
 ## Read more
 
 | Need | Document |
@@ -53,4 +63,4 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.5** keeps Business Design ↔ Check Item ↔ Test as the permanent traceability boundary and deliberately does not maintain Check Item ↔ Code location mappings. Tests verify the implementation by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.5 release notes](docs/release-notes-v0.5.md). It requires no framework, CLI, or runtime package.
+**Alder v0.5** keeps Business Design ↔ Check Item ↔ Test as the permanent traceability boundary and deliberately does not maintain Check Item ↔ Code location mappings. Tests verify the implementation by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.5 release notes](docs/release-notes-v0.5.md). The development method requires no framework, CLI, or runtime package; the graph exporter above is optional.
