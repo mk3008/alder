@@ -137,9 +137,9 @@ class ExportTests(unittest.TestCase):
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
             ('input', 'Alder: 検査項目設計ナレッジ', work, '検査項目の導出・レビュー・追跡関係の確認観点'),
-            ('input', '依頼者', work, '検査項目レビュー結果 / 修正要求 / 確認結果'),
+            ('input', '依頼者', work, '検査項目レビュー結果'),
             ('output', work, '検査項目', '期待結果 / レビュー状態 / 業務設計書との対応 / 検証不足'),
-            ('output', work, '依頼者', '検査項目の説明 / レビュー依頼 / 確認事項'),
+            ('output', work, '依頼者', '検査項目案 / レビュー依頼 / 確認事項'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
                    and r['from'] == work]
@@ -162,7 +162,7 @@ class ExportTests(unittest.TestCase):
             self.assertIn('期待結果', edges[0]['label'])
             self.assertIn('検証不足', edges[0]['label'])
         implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
-        self.assertIn('Testを、既存のテストを踏まえて作成・更新する', implementation)
+        self.assertIn('検証ケースとTestのアサーションを、既存のテストを踏まえて作成・更新する', implementation)
         self.assertIn('Check IDを代表的なTest / assertionに対応づけ', implementation)
         graph_edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
         self.assertIn(('output', '実装', '検査項目'), graph_edges)
@@ -418,13 +418,13 @@ class ExportTests(unittest.TestCase):
         actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
-            ('input', '依頼者', work, 'システム要件 / フィードバック / レビュー結果 / 判断'),
+            ('input', '依頼者', work, 'システム要件 / レビュー結果'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
             ('input', 'Alder: 業務設計品質レビュー知識', work, '記述品質の確認観点'),
             ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項'),
             ('output', work, '判断記録', '判断内容 / 結果'),
-            ('output', work, '依頼者', '業務設計案 / レビュー依頼 / 確認事項 / 判断依頼'),
+            ('output', work, '依頼者', '業務設計案 / レビュー依頼 / 確認事項'),
         })
         names = {n['id']: n['name'] for n in graph['nodes']}
         self.assertEqual(names['Alder: 業務相関ナレッジ'], 'Alder: 業務相関ナレッジ')
