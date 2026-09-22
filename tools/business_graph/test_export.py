@@ -132,6 +132,11 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(len(returns), 1)
         self.assertEqual(returns[0]['to'], '業務設計')
         self.assertIn('業務設計書を修正・合意してから', returns[0]['label'])
+        check_source = DESIGN.read_text().split('# Activity 検査項目の設計\n', 1)[1].split('# Activity 実装\n', 1)[0]
+        procedure, exception = check_source.split('### Exception\n', 1)
+        self.assertNotIn('業務上の意味・条件・保証の修正や未決事項', procedure)
+        self.assertIn('業務上の意味・条件・保証の修正や未決事項', exception)
+        self.assertIn('業務設計へ戻す', exception)
 
     def test_check_artifact_replaces_duplicate_test_plan(self):
         graph = parse_design(DESIGN.read_text())
@@ -246,6 +251,18 @@ class ExportTests(unittest.TestCase):
                        'label': 'Return on ambiguity'}, graph['relations'])
         global_source = SOURCE + '\n' + activity('approve') + '\n# Graph exceptions\n\n- business-exception approve → read — Return on ambiguity\n'
         self.assertEqual(graph, parse_design(global_source))
+
+    def test_how_exception_is_optional_prose_not_an_extra_relation(self):
+        exception = '### Exception\n\n- If the answer is unclear, return to read.\n\n'
+        source = SOURCE.replace('### Output', exception + '### Output')
+        self.assertEqual(parse_design(SOURCE), parse_design(source))
+        self.assertNotIn('exception', next(n for n in parse_design(source)['nodes'] if n['type'] == 'business'))
+        for bad in (SOURCE.replace('### Output', '### Exception\n\n### Output'),
+                    SOURCE.replace('### Input', exception + '### Input'),
+                    SOURCE.replace('### Output', exception + exception + '### Output'),
+                    SOURCE.replace('### Output', '### Output\n\n- record — Explanation\n\n' + exception)):
+            with self.subTest(bad=bad), self.assertRaises(DesignError):
+                parse_design(bad)
 
     def test_exception_when_rejects_invalid_or_duplicate_declarations(self):
         for body in ('', '- absent — Missing source', '- person — Wrong endpoint',
