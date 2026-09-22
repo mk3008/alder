@@ -18,6 +18,8 @@ The [Alder self-design](../business-design/alder/README.md) and its [generated e
 
 ## Opt-in Markdown profile v1
 
+For how to write the work itself, use the [Business Design authoring guidance](adoption.md#authoring-and-checking-business-correlations), including concrete Object use in Procedure, requester-review exchanges and decision timing. The format below validates structure; it cannot replace that authoring check.
+
 Existing Business Design remains valid for Alder review without using this exporter. The repository's older benchmark designs are not silently reinterpreted or rewritten. To export, use the visible headings and named references below. Invoking the CLI opts into this format; no profile marker, hidden ID, sidecar or fingerprint is required. Names are exact references, not fuzzy entity matching.
 
 Follow the [requester-language principle](adoption.md#language-for-agreement) for source prose and human-facing names/labels. The exporter preserves that text without translating it; use the visible structural headings and names specified below. Humans can author and maintain all of it without AI. Humans and AI may both edit Icon values and other visible information; see [co-maintenance](adoption.md#human-and-ai-co-maintenance).

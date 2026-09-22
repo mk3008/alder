@@ -281,10 +281,12 @@ class ExportTests(unittest.TestCase):
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
             ('input', '依頼者', work, 'システム要件 / フィードバック'),
+            ('input', '依頼者', work, 'レビュー結果 / 判断'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移フィードバック'),
             ('input', 'Alder: 業務ナレッジ', work, '考慮漏れフィードバック'),
             ('output', work, '業務設計書', 'スコープ、業務手順、業務相関'),
             ('output', work, '判断記録', '判断 / 結果'),
+            ('output', work, '依頼者', '業務設計書 / 未決事項'),
         })
         names = {n['id']: n['name'] for n in graph['nodes']}
         self.assertEqual(names['Alder: 業務相関ナレッジ'], 'Alder: 業務相関ナレッジ')

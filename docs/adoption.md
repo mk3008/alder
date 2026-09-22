@@ -6,6 +6,8 @@ Alder assumes an AI agent performs implementation, followed by a separate agent 
 
 ## 1. Place Business Design where the agent can read it
 
+When asked to create or revise Business Design, apply the authoring guidance in this section from the first draft, then check the resulting work and correlations before requesting agreement. These are reusable authoring principles, not notes limited to Alder’s self-design.
+
 For a new product, prefer this local arrangement in the product repository:
 
 ```text
@@ -46,7 +48,7 @@ State the design path and target revision in the task prompt or AGENTS.md. Pin a
 
 **Write Business Design prose in the language the requester actually uses.** Business Design is a document for agreement with users/requesters: they must be able to read it, understand it, point out errors, and agree to its meaning themselves. Readability for implementers alone is insufficient; this is a prerequisite for meaningful human review, not a cosmetic preference.
 
-Apply this to explanations, business descriptions, and Input / Procedure / Output text when creating or updating the design. Headers and section names such as What / Why / When / Who / Where / How may remain English. Stable machine identifiers need not be translated. For Alder's own design, the requester uses Japanese, so its prose is Japanese. The format recommendation below does not override this principle.
+Apply this to explanations, business descriptions, and Input / Procedure / Output text when creating or updating the design. Headers and section names such as What / Why / When / Who / Where / How may remain English. For Alder's own design, the requester uses Japanese, so its prose is Japanese. The format recommendation below does not override this principle.
 
 ### Human and AI co-maintenance
 
@@ -75,6 +77,20 @@ A When such as “whenever the person feels like doing it” makes timing depend
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
 
+### Authoring and checking business correlations
+
+Describe Objects independently from Activities. **Who is the role performing the work; an external-human Object is a party that sends or receives information.** The same person may occupy both roles, but one does not imply the other or create a connection automatically. Several Activities may use the same Object and receive different information from it; label each actual transfer instead of duplicating the Object for each Activity.
+
+Ordinary transfers connect Object → Business (Input) or Business → Object (Output). Do not use Business → Business or Object → Object as ordinary data connections. Where a real exception requires one, declare its kind, endpoints and meaning separately. Keep returns for unresolved business requirements distinct from ordinary information transfer. The [export contract](business-graph.md#json-v1-contract) encodes these distinctions when that optional tool is used.
+
+**Procedure is the sequence of work that uses the declared Objects.** Name the input Object and what is read or received, the action or judgment performed, and which Object is updated or delivered. Make the result usable by subsequent work. Do not replace these steps with principles such as “review appropriately” or “record decisions”; place general authoring rules in guidance rather than repeating them as the business procedure. Reconcile Procedure and I/O in both directions: a declared transfer must have a concrete use or production step, and an actual transfer in Procedure must appear in I/O (or the explicitly separate exception relations).
+
+Represent human review as an exchange when the work includes one: deliver the draft and unresolved questions to the requester, receive review results and judgments, update the design and remaining questions, and repeat relevant review until the design and unresolved scope can be agreed. Do not collapse this into one input or assume sending a document means approval. Agreement need not settle every possible future policy; keep confirmed meaning and open questions distinguishable.
+
+When a requester or responsible person resolves a material open issue, record **which question was decided, by whom, the decision and its result at that resolution step** in the Decision Record. Reflect the resulting business meaning in Business Design as well. Records provide decision evidence; they do not replace the SSOT or confer approval themselves. Ordinary reversible technical choices still follow the [delegation guidance](#3-let-the-ai-implement-without-inventing-business-policy), without an added business-approval gate.
+
+Before presenting a draft, walk one representative passage through its named Objects and steps. Check the [requester’s language](#language-for-agreement), [human/AI maintainability](#human-and-ai-co-maintenance), field meanings, actual transfers, review return paths and decision timing. Correct inconsistencies in the draft; ask people only about concrete unresolved business meaning. This is an authoring check for new and revised designs, not a new mandatory independent-review pipeline or a change to review knowledge v0.3. The existing format recommendation and research limits above still apply.
+
 ## 2. Point the agent to the design and review knowledge
 
 Use root AGENTS.md as a router. Adapt the paths to your workspace:
@@ -84,7 +100,7 @@ Use root AGENTS.md as a router. Adapt the paths to your workspace:
 
 - Current business design is under `docs/business-design/`.
 - Treat it as the current source of operational intent.
-- When creating or updating Business Design, follow the requester-language principle: write its prose in the language the requester actually uses so they can understand, correct, and agree to it. Headers may remain English.
+- Before creating or updating Business Design, read section 1 of `docs/adoption.md` from the selected Alder revision (provide its readable path or URL with the task). Apply its authoring principles and correlation check from the first draft.
 - Do not invent business policy when the design does not decide it.
 - Record material implementation assumptions and choices in Decision Records under `docs/decisions/`.
 - For an Alder review, use `docs/alder/review-knowledge.md` from the selected Alder revision. Read Business Design, then Decision Records, then implementation, DDL, and tests.
