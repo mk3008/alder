@@ -184,6 +184,7 @@ class ExportTests(unittest.TestCase):
                           for r in graph['relations']
                           if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}, {
             ('input', '業務設計書', work, '業務要件 / 期待結果'),
+            ('input', '検査項目', work, '現行項目 / ID / レビュー状態 / 既存対応関係'),
             ('input', 'Alder: 検査項目設計ナレッジ', work, '検査項目の導出・レビュー・追跡関係の確認観点'),
             ('input', '依頼者', work, '検査項目レビュー結果'),
             ('output', work, '検査項目', '期待結果 / レビュー状態 / 業務設計書との対応 / 検証不足'),
@@ -474,6 +475,7 @@ class ExportTests(unittest.TestCase):
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
             ('input', '依頼者', work, 'システム要件 / レビュー結果'),
+            ('input', '業務設計書', work, '現行業務要件 / 期待結果 / 未決事項'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
             ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項'),
@@ -503,7 +505,11 @@ class ExportTests(unittest.TestCase):
                           if n['type'] == 'business' and not n['scope']},
                          {'システム設計', '実装'})
         self.assertEqual(len(nodes), 19)
-        self.assertEqual(len(graph['relations']), 29)
+        self.assertEqual(len(graph['relations']), 32)
+        self.assertIn({'kind': 'input', 'from': '検査項目', 'to': '検査項目の設計',
+                       'label': '現行項目 / ID / レビュー状態 / 既存対応関係'}, graph['relations'])
+        self.assertIn({'kind': 'input', 'from': 'テスト', 'to': '同期漏れ検査',
+                       'label': '期待結果 / アサーション'}, graph['relations'])
         self.assertTrue(all(n['information'] for n in nodes.values() if n['type'] == 'object'))
         self.assertEqual(nodes['業務設計書']['information'], [
             '業務範囲・目的', '業務手順・入出力', '業務間の相関・例外', '期待結果・未決事項'])
