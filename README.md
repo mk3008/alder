@@ -43,7 +43,7 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 
 ## Optional Business Graph export
 
-[Alder's own Business Design](business-design/alder/README.md) can be projected into versioned JSON with a dependency-free Python 3.12+ CLI:
+[Business Design for using Alder](business-design/alder/README.md) can be projected into versioned JSON with a dependency-free Python 3.12+ CLI:
 
 ```sh
 python3 tools/business_graph/export.py business-design/alder/README.md -o business-design/alder/graph.generated.json
