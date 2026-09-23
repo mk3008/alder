@@ -66,18 +66,36 @@ SOURCE = PREAMBLE + OBJECTS + activity()
 
 
 class ExportTests(unittest.TestCase):
-    def test_object_information_is_source_only_and_validated(self):
+    def test_object_information_projects_ordered_concepts_and_is_validated(self):
         source = SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n## Information\n\n- Question\n- Context')
-        self.assertEqual(parse_design(source), parse_design(SOURCE))
+        graph = parse_design(source)
+        self.assertEqual(next(n for n in graph['nodes'] if n['id'] == 'person')['information'],
+                         ['Question', 'Context'])
+        self.assertEqual(next(n for n in parse_design(SOURCE)['nodes'] if n['id'] == 'person')['information'], [])
         generic = SOURCE.replace('# Object record\n\n(generic icon)',
                                  '# Object record\n\n## Icon\n\n(generic icon)\n\n## Information\n\n- Existing context')
-        self.assertEqual(parse_design(generic), parse_design(SOURCE))
+        self.assertEqual(next(n for n in parse_design(generic)['nodes'] if n['id'] == 'record')['information'],
+                         ['Existing context'])
+        self.assertNotEqual(render(graph), render(parse_design(SOURCE)))
         for invalid in ('## Information\n\n', '## Information\n\nContext',
                         '## Information\n\n- Question\nContext'):
             with self.subTest(invalid=invalid), self.assertRaises(DesignError):
                 parse_design(SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n' + invalid))
         with self.assertRaises(DesignError):
             parse_design(SOURCE.replace('## Icon\n\nusers', '## Information\n\n- Question\n\n## Icon\n\nusers'))
+        for invalid in (None, 'Question', [''], [1], ['Question', None]):
+            candidate = copy.deepcopy(graph)
+            node = next(n for n in candidate['nodes'] if n['id'] == 'person')
+            if invalid is None:
+                del node['information']
+            else:
+                node['information'] = invalid
+            with self.subTest(value=invalid), self.assertRaises(DesignError):
+                validate_graph(candidate)
+        # Concepts are a readable ordered list, with no inferred schema or label mapping.
+        swapped = parse_design(source.replace('- Question\n- Context', '- Context\n- Question'))
+        self.assertNotEqual(render(graph), render(swapped))
+        self.assertEqual(graph['relations'], swapped['relations'])
 
     def test_distinct_who_object_and_all_fields(self):
         graph = parse_design(SOURCE)
@@ -89,6 +107,7 @@ class ExportTests(unittest.TestCase):
             'result': 'The request is explained, so the person can decide the next action.',
         })
         self.assertEqual(nodes['record']['icon'], 'box')
+        self.assertEqual(nodes['record']['information'], [])
         self.assertEqual(nodes['person']['type'], 'object')
         self.assertEqual({(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}, {
             ('input', 'person', 'read', 'Question'),
@@ -485,6 +504,9 @@ class ExportTests(unittest.TestCase):
                          {'システム設計', '実装'})
         self.assertEqual(len(nodes), 19)
         self.assertEqual(len(graph['relations']), 29)
+        self.assertTrue(all(n['information'] for n in nodes.values() if n['type'] == 'object'))
+        self.assertEqual(nodes['業務設計書']['information'], [
+            '業務範囲・目的', '業務手順・入出力', '業務間の相関・例外', '期待結果・未決事項'])
         self.assertFalse({'研究の証拠と採否判断', 'プルリクエスト・リリース',
                           '検証結果', 'レビュー結果',
                           'Alder: 業務設計品質レビュー知識'} & nodes.keys())
