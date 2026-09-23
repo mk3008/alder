@@ -50,7 +50,7 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 python3 tools/business_graph/export.py business-design/alder/README.md -o graph.json
 ```
 
-Generate JSON when an external visualization, analysis or processing tool helps the designer's own review, a requester's review, or the inspection of business correlations. It is an intermediate format, not a standard Business Activity or a requester deliverable. Consumers need not commit generated JSON or use it to finish standard design work. This repository commits its own projection only as an exporter regression fixture. Business Design remains the SSOT; feed any corrections discovered through external tools back into it. Procedure is outside the projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
+Generate JSON when an external visualization, analysis or processing tool helps the designer's own review, a requester's review, or the inspection of business correlations. It is an intermediate format, not a standard Business Activity or a requester deliverable. Business and Object nodes each preserve an explicit boolean Scope declared in Business Design; Object Scope is not inferred from links. Consumers need not commit generated JSON or use it to finish standard design work. This repository commits its own projection only as an exporter regression fixture. Business Design remains the SSOT; feed any corrections discovered through external tools back into it. Procedure is outside the projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
 
 ## Read more
 
