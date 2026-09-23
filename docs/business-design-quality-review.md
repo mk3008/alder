@@ -10,7 +10,7 @@
 
 1. 指摘を「今回固有の業務意味・内容」「既存原則の適用漏れ」「新たに一般化できる記述品質の問題」に分ける。業務意味の変更はBusiness Designへ戻し、人間の確認を得る。
 2. 一般化できる問題は、読者が何を誤読するか、どの欄・受け渡しを確認するか、修正後に何で確かめるかをこの知識へ記す。単一の文言や業務固有の判断を普遍化しない。
-3. 更新した知識を、指摘された箇所だけでなく対象Business Designの全Activityに適用する。各Activityの正常手順をたどり、Input → Procedure → Output、発生側のException → 受け側のException Whenを照合する。
+3. 更新した知識を、指摘された箇所だけでなく対象Business Designの全Activityに適用する。各Activityの正常手順をたどり、Input → Procedure → Output、正常終了時のResult → 後続のWhen、発生側のException → 受け側のException Whenを照合する。
 4. 修正と残った疑問、誤検知になり得る箇所を記録し、依頼者へ再レビューを依頼する。機械検証は構文・接続・再生成の確認に限り、人間による意味の承認と区別する。
 
 ## 確認観点
@@ -27,6 +27,7 @@
 | Object / Information | 情報のまとまり・媒体・相手と、内包する業務上の情報概念 | Entityの厳密定義、正規化、PK/FK、型、完全なcardinalityやテーブル対応は後続設計へ |
 | Input / Output | Objectから受け取る、またはObjectへ書き出す情報の意味 | 利用工程・目的・判断・更新先・分岐・順序はProcedureやExceptionへ |
 | Procedure | WhoがObjectをいつどう使い、判断・更新・出力するかの正常系の順序 | 例外分岐はExceptionへ、一般原則は作成ガイドへ |
+| Result | 正常終了によって成立した業務上の状態と、その状態から進められる後続業務 | 成果物一覧・受け渡し情報はOutputへ、実施手順はProcedureへ、目的はWhyへ、例外分岐はExceptionへ。詳細な受け入れ条件も並べない |
 | Exception | Procedure中に発生する例外と遷移 | 正常手順や受け側の再開条件はProcedure / Exception Whenへ |
 | Exception When | 他Activityからの例外を受ける再開条件 | 修正や合意の手順はProcedureへ |
 
@@ -55,6 +56,7 @@ I/OからProcedureへ自然に展開でき、ProcedureからI/Oへ自然に要�
 | Whenの開始理由と頻度 | 誰かが依頼したという表現に実在する理由・主体があるか。変更のたびに起動すると過剰な任意診断なら、疑いが生じた時点を開始理由にできるか | 依頼忘れへの対策が必要な架空の依頼業務、全変更への不要な診断、理由があるのに「随時」で曖昧にする |
 | Input / Output | 実際に受け取り・渡すObjectと内容か。Object名とrelation labelが役割分担しているか | 参照資料一覧、対象文書名をlabelへ転記、更新したObjectのOutput漏れ |
 | Procedure | Inputをどう使い、どの順で成果物を作り、いつ完了するか追えるか | 抽象的な「実装する」、一手順に多数の責務、一般原則や研究上の制約を正常手順に混入 |
+| Resultと後続のWhen | 全Activityで正常終了時に成立する状態が読めるか。Resultが可能にする後続業務のWhenと整合するか。任意の診断や独立した依頼を必須の直列工程にしていないか | Outputの成果物一覧やProcedureの手順を繰り返す、目的だけを書く、後続の開始条件と矛盾する、例外復帰を正常終了と混同する |
 | Exception / Exception When | 正常手順に例外分岐が混ざっていないか。発生側のExceptionと受け側の再開条件が対応しているか | Procedure内の「問題なら戻す」、例外関係の二重生成 |
 | レビューと判断 | レビュー依頼・返答・更新と合意が分かるか。業務意味の未決事項を正本の業務設計へ戻しているか | 下流の検査項目やTestで業務意味を確定、判断記録だけを正本化 |
 | 既存運用との整合 | 必須と任意、実装と検証、技術条件と判断理由の責務が一致するか | 任意試行の必須化、Decision Recordから現在の技術条件を復元 |
