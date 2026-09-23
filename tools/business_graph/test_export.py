@@ -53,6 +53,10 @@ Not specified.
 
 - record — Explanation
 - person — Notification
+
+## Result
+
+The request is explained, so the person can decide the next action.
 '''
 
 
@@ -82,6 +86,7 @@ class ExportTests(unittest.TestCase):
             'id': 'read', 'type': 'business', 'name': 'read', 'scope': True,
             'why': 'Determine the next action.',
             'when': 'A request arrives.', 'who': 'Analyst', 'where': 'Not specified.',
+            'result': 'The request is explained, so the person can decide the next action.',
         })
         self.assertEqual(nodes['record']['icon'], 'box')
         self.assertEqual(nodes['person']['type'], 'object')
@@ -92,6 +97,30 @@ class ExportTests(unittest.TestCase):
             ('output', 'read', 'person', 'Notification'),
         })
 
+    def test_result_is_required_prose_in_source_and_graph(self):
+        graph = parse_design(SOURCE)
+        business = next(n for n in graph['nodes'] if n['type'] == 'business')
+        original = business['result']
+        self.assertIn('decide the next action', render(graph))
+        for invalid in (SOURCE.replace('## Result\n\n' + original, ''),
+                        SOURCE.replace(original, '   '),
+                        SOURCE.replace('## Result\n\n' + original, '').replace('## How', '## Result\n\n' + original + '\n\n## How')):
+            with self.subTest(source=invalid), self.assertRaises(DesignError):
+                parse_design(invalid)
+        for invalid in (None, '', 1, ['next action']):
+            candidate = copy.deepcopy(graph)
+            target = next(n for n in candidate['nodes'] if n['type'] == 'business')
+            if invalid is None:
+                del target['result']
+            else:
+                target['result'] = invalid
+            with self.subTest(graph=invalid), self.assertRaises(DesignError):
+                validate_graph(candidate)
+        revised = SOURCE.replace(original, 'The issue is resolved, so follow-up work can begin.')
+        changed = parse_design(revised)
+        self.assertEqual(changed['relations'], graph['relations'])
+        self.assertEqual(next(n for n in changed['nodes'] if n['type'] == 'business')['result'],
+                         'The issue is resolved, so follow-up work can begin.')
     def test_activity_scope_preserves_adjacent_business_and_transfers(self):
         source = SOURCE.replace('## Scope\n\ntrue', '## Scope\n\nfalse')
         graph = parse_design(source)
