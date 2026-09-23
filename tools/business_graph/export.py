@@ -52,17 +52,20 @@ def validate_graph(graph):
         require(isinstance(node, dict), 'node must be an object')
         kind = node.get('type')
         require(kind in ('business', 'object'), 'invalid node type')
-        expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where', 'result'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
-        if kind == 'business':
-            expected.add('scope')
+        expected = ({'id', 'type', 'name', 'why', 'when', 'who', 'where', 'result', 'scope'}
+                    if kind == 'business' else {'id', 'type', 'name', 'icon', 'information'})
         require(set(node) == expected, f'invalid {kind} node fields')
-        require(all(nonempty(v) for k, v in node.items() if k != 'scope'), 'node fields must be nonempty text')
+        require(all(nonempty(v) for k, v in node.items() if k not in ('scope', 'information')),
+                'node text fields must be nonempty')
         if kind == 'business':
             require(type(node['scope']) is bool, 'business scope must be boolean')
         require(visible_name(node['name']) and node['id'] == node['name'], 'node ID must equal its visible name')
         require(node['id'] not in nodes, f'duplicate node ID: {node["id"]}')
         if kind == 'object':
             require(re.fullmatch(ID, node['icon']) is not None, 'icon must be a kebab-case Lucide name')
+            require(isinstance(node['information'], list)
+                    and all(nonempty(item) for item in node['information']),
+                    'object information must be an array of nonempty text')
         nodes[node['id']] = kind
     require('business' in nodes.values(), 'at least one business is required')
     seen = set()
@@ -151,6 +154,7 @@ def parse_design(text):
         node_id = name.strip()
         if category == 'Object':
             icon = 'box'
+            information = []
             if body != '(generic icon)':
                 object_headings = ['## Icon']
                 if any(h == '## Information' for _, h in headings(body)):
@@ -164,7 +168,9 @@ def parse_design(text):
                         if line.strip():
                             require(re.fullmatch(r'- \S.*', line),
                                     f'{node_id} Information: expected - information concept')
-            graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(), 'icon': icon})
+                            information.append(line[2:])
+            graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(),
+                                   'icon': icon, 'information': information})
             continue
         field_headings = ['## Scope'] + ['## ' + key for key in FIELDS]
         if any(h == '## Exception When' for _, h in headings(body)):
