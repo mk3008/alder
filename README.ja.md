@@ -29,9 +29,10 @@ product/
 ```
 
 1. 現在の業務設計を `docs/business-design/` に、選んだAlderバージョンのレビュー知識のローカルコピーを `docs/alder/review-knowledge.md` に置く。
-2. AGENTS.mdやタスクのプロンプトで参照先を案内する。AIに業務設計を先に読ませて実装させ、重要な前提・判断を `docs/decisions/` の判断記録（Decision Record）へ残す。未決の業務ルールは勝手に決めず、通常の可逆的な技術判断は進めます。
-3. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。
-4. 未決の業務判断だけを人間に戻す。
+2. 今回の未リリース版では、業務設計を合意し、検査項目を人間がレビューしてから両方を実装へ引き渡す。ここで標準設計業務が完了する。v0.5/v0.5.1当時、検査項目の工程は任意だった。
+3. AGENTS.mdやタスクのプロンプトで参照先を案内する。AIに確認済みの業務設計と検査項目を読ませて実装させ、重要な前提・判断と理由を後続のAlderフォローアップへ渡す。未決の業務ルールは勝手に決めず、通常の可逆的な技術判断は進める。
+4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
+5. 未決の業務判断だけを人間に戻す。
 
 この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
 
@@ -53,8 +54,8 @@ product/
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
-**Alder v0.5** では、恒久的なtraceabilityを **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。コードの正しさは、Business Design由来のTestを実行して検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
+**Alder v0.5** では、検査項目の作成と追跡関係の保守は任意でした。採用した場合の恒久的な対応関係は **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。過去仕様は[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)を参照してください。フレームワーク、CLI、実行時パッケージの導入は不要です。
 
 ## Business Graph export（任意）
 
-[Alder自身のBusiness Design](business-design/alder/README.md)からJSONを生成できます。Business DesignがSSOTであり、JSONは再生成する投影結果です。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
+[Alderを使った設計業務のBusiness Design](business-design/alder/README.md)からJSONを生成できます。Business DesignがSSOTであり、JSONは再生成する投影結果です。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
