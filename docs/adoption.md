@@ -4,6 +4,12 @@
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. No installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration is required. The reviewer needs readable Business Design and the selected Alder review knowledge.
 
+## One Business Design across three loops
+
+Alder has a **design loop** to describe, review and agree on current work; an **optional improvement loop** to examine a concrete Problem / Pain in already viable work and return an adopted change to Business Design; and a **realization and verification loop** that hands the agreed design and human-reviewed Check Items to implementation and checks the result in a separate Alder review/follow-up. Business Design is the one SSOT throughout. An incomplete or undecided business rule belongs in design; dissatisfaction with otherwise functioning work can start Optimization Review. Neither an unapproved candidate nor a passing Test approves business meaning.
+
+The [Business Design for using Alder](../business-design/alder/README.md) includes the optional improvement review as an in-scope Activity. It exchanges current design information and proposals with the requester through ordinary Input/Output, then returns an accepted decision to business design for revision and agreement. It is not an exception transition, nor a required step before every implementation. The standard design business still ends when the agreed Business Design and Check Items are handed to implementation; post-implementation review/follow-up is separate.
+
 ## 1. Place Business Design where the agent can read it
 
 When asked to create or revise Business Design, apply the authoring guidance in this section from the first draft, then check the resulting work and correlations before requesting agreement. These are reusable authoring principles, not notes limited to Alder’s self-design.

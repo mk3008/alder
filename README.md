@@ -10,6 +10,16 @@ For system delivery, people agree on Business Design and human-review derived Ch
 
 Alder combines established requirements validation, walkthroughs, traceability, decision records and human judgment for repeated use with AI. It proposes no new BPM theory or architecture and does not prescribe a UI or a code structure.
 
+## One design, three loops
+
+| Loop | Use it when | Outcome |
+| --- | --- | --- |
+| Design | Current business meaning is missing or undecided. | Describe and agree on the current Business Design with people. |
+| Improvement (optional) | Current work is viable, but people experience a concrete Problem / Pain. | Review a few alternatives. People choose whether to change the work; an accepted change returns to Business Design for revision and agreement. |
+| Realization and verification | The relevant Business Design is agreed and should be implemented or its implementation checked. | Human-reviewed Check Items guide implementation; independent Alder review and follow-up check the result and Test evidence against the same design. |
+
+An unresolved specification is a design question; Pain in work that already functions is an improvement question. If implementation reveals unresolved business meaning, return the concrete question to Business Design and agree on the correction before updating Checks and code. [Alder's own Business Design](business-design/alder/README.md) includes the optional improvement Activity as ordinary work, without treating it as an exception.
+
 ## Start with your product
 
 For a new product, this is the recommended example; existing equivalent locations are fine:
