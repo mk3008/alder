@@ -554,7 +554,8 @@ class ExportTests(unittest.TestCase):
         actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
-            ('input', '依頼者', work, 'システム要件 / レビュー結果 / 改善候補の採用判断'),
+            ('input', '依頼者', work,
+             'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
             ('input', '業務設計書', work, '現行業務要件 / 期待結果 / 未決事項 / Problem / Pain'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
@@ -583,13 +584,18 @@ class ExportTests(unittest.TestCase):
                     if '業務改善レビュー' in (r['from'], r['to'])}
         self.assertEqual(ordinary, {
             ('input', '業務設計書', '業務改善レビュー', '現在の業務上の意味 / Problem / Pain'),
-            ('input', '依頼者', '業務改善レビュー', '改善検討の依頼 / 現場で確認された困りごと'),
+            ('input', '依頼者', '業務改善レビュー', '改善検討の依頼 / 記録済みProblemの補足'),
             ('input', 'Alder: 業務ナレッジ', '業務改善レビュー', 'Problem起点の改善レビューの観点'),
             ('output', '業務改善レビュー', '依頼者', '改善候補 / 比較根拠 / 確認事項'),
         })
         self.assertIn(('input', '依頼者', '業務設計',
-                       'システム要件 / レビュー結果 / 改善候補の採用判断'),
+                       'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
                       {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']})
+        design_source = DESIGN.read_text().split('# Activity 業務設計\n', 1)[1].split(
+            '# Activity 業務改善レビュー\n', 1)[0]
+        self.assertIn('Problemと相対的なPain levelを依頼者と確認して業務設計書へ記録する',
+                      design_source)
+        self.assertIn('未決の業務仕様とは区別', design_source)
         self.assertFalse(any(r['kind'] == 'business-exception'
                              and '業務改善レビュー' in (r['from'], r['to'])
                              for r in graph['relations']))
@@ -645,7 +651,7 @@ class ExportTests(unittest.TestCase):
                              for r in graph['relations']))
         self.assertEqual(nodes['依頼者']['type'], 'object')
         self.assertEqual('業務設計者', nodes['業務設計']['who'])
-        self.assertEqual('目的・変更要求を受領したとき、または改善候補の採用判断を受けたとき',
+        self.assertEqual('目的・変更要求・現在業務のProblem / Painの記録依頼を受領したとき、または改善候補の採用判断を受けたとき',
                          nodes['業務設計']['when'])
         self.assertEqual('規定なし', nodes['業務設計']['where'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())

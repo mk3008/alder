@@ -6,7 +6,7 @@ Alder assumes an AI agent performs implementation, followed by a separate agent 
 
 ## One Business Design across three loops
 
-Alder has a **design loop** to describe, review and agree on current work; an **optional improvement loop** to examine a concrete Problem / Pain in already viable work and return an adopted change to Business Design; and a **realization and verification loop** that hands the agreed design and human-reviewed Check Items to implementation and checks the result in a separate Alder review/follow-up. Business Design is the one SSOT throughout. An incomplete or undecided business rule belongs in design; dissatisfaction with otherwise functioning work can start Optimization Review. Neither an unapproved candidate nor a passing Test approves business meaning.
+Alder has a **design loop** to describe, review and agree on current work; an **optional improvement loop** that first records and confirms a concrete Problem / Pain in Business Design for already viable work, reviews alternatives and returns an adopted change to Business Design; and a **realization and verification loop** that hands the agreed design and human-reviewed Check Items to implementation and checks the result in a separate Alder review/follow-up. Business Design is the one SSOT throughout. An incomplete or undecided business rule belongs in design; dissatisfaction with otherwise functioning work can start Optimization Review. Neither an unapproved candidate nor a passing Test approves business meaning.
 
 The [Business Design for using Alder](../business-design/alder/README.md) includes the optional improvement review as an in-scope Activity. It exchanges current design information and proposals with the requester through ordinary Input/Output, then returns an accepted decision to business design for revision and agreement. It is not an exception transition, nor a required step before every implementation. The standard design business still ends when the agreed Business Design and Check Items are handed to implementation; post-implementation review/follow-up is separate.
 
@@ -168,7 +168,7 @@ Alder v0.6 retains the **Check Item** (Atomic Check in v0.3) traceability bounda
 
 ### Run Optimization Review for a recorded Problem
 
-When Business Design contains a concrete Problem and Pain level, optionally use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
+When people recognize a new Problem / Pain, first record and confirm it in the current Business Design through the design loop. When Business Design contains that concrete Problem and Pain level, optionally use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
 
 The review:
 

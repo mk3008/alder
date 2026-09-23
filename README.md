@@ -15,7 +15,7 @@ Alder combines established requirements validation, walkthroughs, traceability, 
 | Loop | Use it when | Outcome |
 | --- | --- | --- |
 | Design | Current business meaning is missing or undecided. | Describe and agree on the current Business Design with people. |
-| Improvement (optional) | Current work is viable, but people experience a concrete Problem / Pain. | Review a few alternatives. People choose whether to change the work; an accepted change returns to Business Design for revision and agreement. |
+| Improvement (optional) | Current work is viable, but people experience a concrete Problem / Pain. | First record and confirm Problem / Pain in Business Design, then review a few alternatives. People choose whether to change the work; an accepted change returns to Business Design for revision and agreement. |
 | Realization and verification | The relevant Business Design is agreed and should be implemented or its implementation checked. | Human-reviewed Check Items guide implementation; independent Alder review and follow-up check the result and Test evidence against the same design. |
 
 An unresolved specification is a design question; Pain in work that already functions is an improvement question. If implementation reveals unresolved business meaning, return the concrete question to Business Design and agree on the correction before updating Checks and code. [Alder's own Business Design](business-design/alder/README.md) includes the optional improvement Activity as ordinary work, without treating it as an exception.
@@ -44,7 +44,7 @@ product/
 4. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**. In the follow-up, verify and maintain Check ↔ Test/assertion mappings.
 5. Return only unresolved business questions to people for a decision.
 
-The optional improvement loop starts from a concrete recorded **Problem** and **Pain level**, explores alternative work through [Optimization Review](docs/optimization-review.md), and returns the adoption decision to people. If adopted, revise and re-agree Business Design before deriving Check Items or implementing the change. Candidate Scope, Difficulty and Confidence are proposal assessments, not current facts.
+The optional improvement loop first records and confirms a concrete **Problem** and **Pain level** in Business Design, explores alternative work through [Optimization Review](docs/optimization-review.md), and returns the adoption decision to people. If adopted, revise and re-agree Business Design before deriving Check Items or implementing the change. Candidate Scope, Difficulty and Confidence are proposal assessments, not current facts.
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
