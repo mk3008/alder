@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 10904)
+Total output lines: 192
+
 # Research Decision Index
 
 [Back to Alder](../README.md) · [Validation and current research status](validation.md)
@@ -80,7 +83,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 ## 業務最適化
 
-**Problem起点の業務最適化レビュー — PoCで検討可能な候補を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)は既存の備品購入申請に実験専用のProblem/Pain levelを加え、Fresh Agentが出した3候補を別途点検した。条件が合う承認済み申請のまとめ買いは、申請ごとの購入負荷に直接効く可能性と申請別実績を守る条件が示された。自動化・委託は購入先や契約の未確認事項が大きい。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は一つの架空Problem、一回の生成、効果・実現性の実測なしでは手法の採用を判断できないため。実業務で観測した痛みと業務変更の関係先を入力し、有用性や過剰探索を再確認する際に見直す。候補の採否は人間のBusiness判断に残る。
+**Problem起点の業務最適化レビュー — Problem/Pain/Scopeの出力上の追従を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)では備品購入申請の購入負荷に対して、条件が合う申請のまとめ買いを検討可能な候補とした。[PR #82追加検証](optimization-review/issue-82-followup.md)では承認待ち・購入結果の照合へ焦点が移り、Lowの痛みでは高難度候補を控え、Keep/Expand/Narrowの各Scopeも観測された。一方、既存設計の言い換えが1候補に含まれ、Pain Lowの入力にはProblem文中の「負荷が高い」との意味上の衝突がある。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は単一ベンチマークの少数の出力であり、実際の効果・再現性・比較優位が未確認のため。実業務で観測した痛みと業務変更の関係先に照らして有用性・過剰探索を見直す場合に再考する。候補の採否は人間のBusiness判断に残る。
 
 ## Review structure and checklists
 
@@ -92,21 +95,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 **Separate implementation choice from business approval — adopted with limited scope.** [#17 comparison](https://github.com/mk3008/alder/issues/17#issuecomment-5626005743) found that records made reasons reviewable, but some authority questions became less explicit; anchoring was a possible explanation, not proven causation. [#18](https://github.com/mk3008/alder/issues/18#issuecomment-5626142227) retained the distinction with explicit business status, subject to first-read and prompting limitations. [A / #19](https://github.com/mk3008/alder/issues/19#issuecomment-5626216369) and [B / #20](https://github.com/mk3008/alder/issues/20#issuecomment-5626243690) both retained unresolved approval scope. Reflection: [adoption §3](adoption.md#3-let-the-ai-implement-without-inventing-business-policy) and P2 state that records/tests are evidence, not business approval. Reason: documenting an intentional choice helps review its basis but cannot settle missing policy.
 
-**Fixed four-status or six-field template / anchoring reduction — inconclusive / deferred.** No mandatory record schema was adopted. #17 notes that “implemented under an assumption” and “awaiting business judgment” can coexist; #18 does not establish that six fields must always be required. A/B outputs do not prove B superior. Limit: small, differently instructed readings, no measured causal reduction in anchoring, detection cost or general reliability. Reconsider if a real record-format decision needs evidence that a specific distinction is being lost; compare that question without equating implementation intent with approval.
-
-## Walkthrough and reverse tracing
-
-**Keep two short procedures — adopted with limited scope.** [#23](https://github.com/mk3008/alder/issues/23#issuecomment-5626679109) synthesizes [participant walkthrough #21](https://github.com/mk3008/alder/issues/21#issuecomment-5626466372) and [reverse tracing #22](https://github.com/mk3008/alder/issues/22#issuecomment-5626547424): work grouping, partial completion, external handoff and implementation-selected units/authority became concrete. [#28](https://github.com/mk3008/alder/issues/28#issuecomment-5627889911) retained P2 despite overlap and shortened it; #31 refined its entry points and P1's scene selection. Reflection: P1/P2 in [current knowledge](phase2/review-knowledge-v0.3.md). Reason: selecting evidence and asking a question have different roles; new unique findings on every run are not required. Limit: source/instruction differences prevent isolating the procedures' causal effects or separate-report cost effectiveness. Reconsider if shortening or merging a procedure loses important tracing behavior, or if comparative evidence supports a simpler form; no independent report or extra agent is mandated by P1/P2.
-
-## Output guarantees
-
-**Clarify Q3's boundary — adopted with limited scope; a new Q4 was unnecessary.** [#35](https://github.com/mk3008/alder/issues/35#issuecomment-5633002343) judged the “available for reservation” gap an application issue within existing meaning/guarantee questions. [#36](https://github.com/mk3008/alder/issues/36#issuecomment-5633135941) retained the Output question after the clarification without treating valid rechecks as defects or mandating future-only search. Reflection: Q3 Boundary in [current knowledge](phase2/review-knowledge-v0.3.md). Reason: downstream reinspection does not settle what the preceding Output presently promises; neither must the preceding step guarantee every downstream condition. Limit: application-gap diagnosis is an inference from reports; one rerun does not prove causal improvement, and lost-result continuity did not recur as a main finding. Reconsider with a concrete misleading guarantee or excessive guarantee demand; preserve legitimate responsibility boundaries.
-
-## Sufficiency evidence
-
-**Explicit establishing facts and direct evidence — existing knowledge sufficient.** [Issue #58 analysis](sufficiency-evidence.md) compared current Q1–Q3 / P1 / P2 / S with the existing facilities #32, purchase #33 and meeting-room #36 reports, examined #34/#35 as counterevidence, and spot-checked fixed meeting-room source and test assertions. Existing reports link concrete sufficiency facts to implementation/tests, use targeted execution, and distinguish verified behavior from unresolved business approval or unobserved external work. No candidate-specific gap warranting another benchmark was identified; no review-knowledge change was made.
-
-Reason: current dependency/evidence/classification requirements and observed behavior substantially overlap the narrow candidate. The earlier Output-guarantee closure was already addressed in Q3; the lost-result non-recurrence does not establish an erroneous evidence-based closure. Limit: document-based adoption judgment using historical behavioral reports, not a new controlled comparison or proof of equivalence; no runtime rerun or measured cost effect. Reconsider if an important closure under current knowledge rests on a false or ambiguous fact that cheap direct verification could correct, or an actual traceability failure changes review quality. See the linked record for source revisions, stopping rationale and limits.
+**Fixed four-status or six-field template / anchoring reduction — inconclusive / deferred.** No mandatory record schema was adopted. #17 notes that “implemented under an assumption” and “awaiting business judgm…904 tokens truncated…ent-based adoption judgment using historical behavioral reports, not a new controlled comparison or proof of equivalence; no runtime rerun or measured cost effect. Reconsider if an important closure under current knowledge rests on a false or ambiguous fact that cheap direct verification could correct, or an actual traceability failure changes review quality. See the linked record for source revisions, stopping rationale and limits.
 
 ## Architecture and maintenance risk
 
