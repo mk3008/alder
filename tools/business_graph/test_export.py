@@ -474,8 +474,9 @@ class ExportTests(unittest.TestCase):
         self.assertEqual('目的・変更要求を受領したとき', nodes['業務設計']['when'])
         self.assertEqual('規定なし', nodes['業務設計']['where'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
-        self.assertEqual('同期漏れ検査の依頼を受領したとき', nodes['同期漏れ検査']['when'])
-        self.assertIn('範囲を限定した任意試行', DESIGN.read_text())
+        self.assertEqual('業務設計書・検査項目・テストの対応関係に同期漏れの疑いが生じたとき',
+                         nodes['同期漏れ検査']['when'])
+        self.assertIn('漏れが疑われたときだけ利用する任意の診断', DESIGN.read_text())
         self.assertIn({'kind': 'object-exception', 'from': 'テスト', 'to': 'コード',
                        'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))
