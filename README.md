@@ -42,15 +42,15 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 
 [Follow the adoption guide and copy the prompts →](docs/adoption.md)
 
-## Optional Business Graph export
+## Optional Business Graph export for external tools
 
 [Business Design for using Alder](business-design/alder/README.md) can be projected into versioned JSON with a dependency-free Python 3.12+ CLI:
 
 ```sh
-python3 tools/business_graph/export.py business-design/alder/README.md -o business-design/alder/graph.generated.json
+python3 tools/business_graph/export.py business-design/alder/README.md -o graph.json
 ```
 
-Business Design remains the SSOT; JSON is regenerated, not edited. Procedure is outside this projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
+Generate JSON when an external visualization, analysis or processing tool helps the designer's own review, a requester's review, or the inspection of business correlations. It is an intermediate format, not a standard Business Activity or a requester deliverable. Consumers need not commit generated JSON or use it to finish standard design work. This repository commits its own projection only as an exporter regression fixture. Business Design remains the SSOT; feed any corrections discovered through external tools back into it. Procedure is outside the projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
 
 ## Read more
 
