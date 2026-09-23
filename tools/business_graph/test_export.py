@@ -184,7 +184,7 @@ class ExportTests(unittest.TestCase):
     def test_check_artifact_replaces_duplicate_test_plan(self):
         graph = parse_design(DESIGN.read_text())
         self.assertNotIn('テスト計画', {n['id'] for n in graph['nodes']})
-        for target in ('実装', 'テスト・検証'):
+        for target in ('実装',):
             edges = [r for r in graph['relations'] if r['kind'] == 'input'
                      and r['from'] == '検査項目' and r['to'] == target]
             self.assertEqual(len(edges), 1)
@@ -194,20 +194,15 @@ class ExportTests(unittest.TestCase):
         self.assertNotIn('検査項目に記録', implementation)
         self.assertNotIn('判断記録へ残す', implementation)
         self.assertFalse(next(n for n in graph['nodes'] if n['id'] == '実装')['scope'])
-        self.assertFalse(next(n for n in graph['nodes'] if n['id'] == 'テスト・検証')['scope'])
-        self.assertTrue(next(n for n in graph['nodes'] if n['id'] == '実装レビュー')['scope'])
         graph_edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
         self.assertEqual({r['to'] for r in graph['relations']
                           if r['kind'] == 'output' and r['from'] == '実装'}, {'コード', 'テスト'})
         self.assertNotIn(('output', '実装', '検査項目'), graph_edges)
         self.assertNotIn(('output', '実装', '判断記録'), graph_edges)
-        self.assertIn(('input', '検査項目', '実装レビュー'), graph_edges)
-        self.assertIn(('output', '実装レビュー', '検査項目'), graph_edges)
-        self.assertIn(('output', '実装レビュー', '判断記録'), graph_edges)
-        review = DESIGN.read_text().split('# Activity 実装レビュー\n', 1)[1].split('# Activity 研究評価\n', 1)[0]
-        self.assertIn('現在のコードの振る舞いの追認ではなく', review)
-        self.assertIn('確認できたCheck IDとTest / assertionの対応', review)
-        self.assertNotIn(('input', 'レビュー結果', '実装'), graph_edges)
+        self.assertNotIn(('input', '検査項目', 'テスト・検証'), graph_edges)
+        self.assertEqual({r['to'] for r in graph['relations']
+                          if r['kind'] == 'business-exception' and r['from'] == '実装'},
+                         {'業務設計'})
 
     def test_system_requirements_handoff(self):
         graph = parse_design(DESIGN.read_text())
@@ -462,7 +457,6 @@ class ExportTests(unittest.TestCase):
             ('input', '依頼者', work, 'システム要件 / レビュー結果'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
-            ('input', 'Alder: 業務設計品質レビュー知識', work, '記述品質の確認観点'),
             ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項'),
             ('output', work, '判断記録', '判断内容 / 結果'),
             ('output', work, '依頼者', '業務設計案 / レビュー依頼 / 確認事項'),
@@ -472,7 +466,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(names['Alder: 業務ナレッジ'], 'Alder: 業務ナレッジ')
         self.assertEqual({r['from'] for r in graph['relations']
                           if r['kind'] == 'business-exception' and r['to'] == work},
-                         {'実装', '実装レビュー', '検査項目の設計'})
+                         {'実装', '検査項目の設計'})
 
     def test_hidden_markdown_link_definition_is_rejected(self):
         with self.assertRaises(DesignError):
@@ -483,13 +477,19 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(render(graph), EXAMPLE.read_text())
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
-            '業務設計', 'システム設計', '検査項目の設計', '実装',
-            '同期漏れ検査', 'テスト・検証', '実装レビュー', '研究評価',
-            '変更の提供', '業務グラフ出力',
+            '業務設計', '検査項目の設計', 'システム設計', '実装',
+            '同期漏れ検査', '業務グラフ出力',
         })
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'business' and not n['scope']},
-                         {'システム設計', '実装', 'テスト・検証', '変更の提供'})
+                         {'システム設計', '実装'})
+        self.assertEqual(len(nodes), 19)
+        self.assertEqual(len(graph['relations']), 29)
+        self.assertFalse({'研究の証拠と採否判断', 'プルリクエスト・リリース',
+                          '検証結果', 'レビュー結果',
+                          'Alder: 業務設計品質レビュー知識'} & nodes.keys())
+        linked = {r[endpoint] for r in graph['relations'] for endpoint in ('from', 'to')}
+        self.assertTrue({n['id'] for n in nodes.values() if n['type'] == 'object'} <= linked)
         self.assertIs(nodes['システム設計']['scope'], False)
         self.assertEqual(nodes['システム設計']['when'], '技術検討の依頼')
         self.assertTrue(all('scope' in n for n in nodes.values() if n['type'] == 'business'))
@@ -505,9 +505,8 @@ class ExportTests(unittest.TestCase):
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
         self.assertEqual('業務設計書・検査項目・テストの対応関係に同期漏れの疑いが生じたとき',
                          nodes['同期漏れ検査']['when'])
-        self.assertIn('漏れが疑われたときだけ利用する任意の診断', DESIGN.read_text())
-        self.assertIn({'kind': 'object-exception', 'from': 'テスト', 'to': 'コード',
-                       'label': 'テストは実行によってコードを検証する。Checkとコードの位置対応を維持するものではない'}, graph['relations'])
+        self.assertIn('疑いが生じたときだけ使う任意の診断', DESIGN.read_text())
+        self.assertFalse(any(r['kind'] == 'object-exception' for r in graph['relations']))
         self.assertTrue(any(r['kind'] == 'business-exception' for r in graph['relations']))
         self.assertTrue(all('procedure' not in node for node in nodes.values()))
 
