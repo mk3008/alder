@@ -44,7 +44,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Architecture labels and semantic ownership across structural ranges | Inconclusive / deferred; historical checkpoint | [Scope and placement](#scope-and-placement) |
 | Incremental Activity / Data / Rule implementation from incomplete design | Limited experimental adoption; general claims deferred | [Early workflow pilots](#early-workflow-pilots) |
 | Review knowledge v0.1–v0.3 and three business benchmarks | Adopted with limited scope | [Review knowledge](#review-knowledge) |
-| Problem起点の業務最適化レビュー | PoCで候補1件は検討可能; 恒久化は保留 | [業務最適化](#業務最適化) |
+| Problem起点の業務最適化レビュー | Adopted | [業務最適化](#業務最適化) |
 | Mandatory independent Data reviews or exhaustive scenario lists | Not adopted | [Review structure and checklists](#review-structure-and-checklists) |
 | Decision Records, anchoring and fixed status templates | Meaning distinction retained; template efficacy deferred | [Decision records](#decision-records) |
 | Participant walkthrough and reverse tracing as separate procedures | Adopted with limited scope | [Walkthrough and reverse tracing](#walkthrough-and-reverse-tracing) |
@@ -80,7 +80,13 @@ Alder organizes established software engineering practices into a small AI-assis
 
 ## 業務最適化
 
-**Problem起点の業務最適化レビュー — Problem/Pain/Scopeの出力上の追従を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)では備品購入申請の購入負荷に対して、条件が合う申請のまとめ買いを検討可能な候補とした。[最初の追加検証](optimization-review/issue-82-followup.md)では承認待ち・購入結果の照合へ焦点が移り、Keep/Expand/Narrowの各Scopeも観測された。Pain Lowの入力にはProblem文中の「負荷が高い」との意味上の衝突があったため、[中立ProblemでのHigh/Low各2回比較](optimization-review/issue-82-pain-isolation.md)を行った。Highは高難度案を残し、Lowは関係先の広い案を調査コストに見合わないとして控えた。ただしHighの費用対効果・候補の実現性は未確認であり、設計の言い換えや重複候補も見られる。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は単一ベンチマークの少数の出力で、実際の効果・再現性・比較優位が未確認のため。実業務で観測した痛みと業務変更の関係先に照らして有用性・過剰探索を見直す場合に再考する。候補の採否は人間のBusiness判断に残る。
+**Problem起点の業務最適化レビュー — Adopted.** Alderは、Business Designに記録された具体的なProblemとPain levelを起点に、現在の業務上の意味を保ちながら少数の代替業務案をレビューする [Optimization Review](optimization-review.md) を正式なワークフロー能力として採用する。候補の採否は人間のBusiness判断に残し、採用する場合はBusiness Designを先に更新する。
+
+採用根拠は、既存の備品購入申請ベンチマークを再利用した一連のFresh検証である。[Issue #81の初期PoC](optimization-review/issue-81.md)では購入負荷に対してProblemへ直接関係する候補を出し、既存の承認・却下・購入成立の意味を維持した。[Problem / Pain / Scope追従性の追加検証](optimization-review/issue-82-followup.md)ではProblemを承認待ち・購入結果照合へ変えると探索焦点も切り替わり、Narrow / Keep / Expandの各ScopeがProblemとの関係を伴って観測された。[中立ProblemでのPain High/Low各2回比較](optimization-review/issue-82-pain-isolation.md)では、Highは両回とも関係先の広い高難度候補を未確認条件付きで残し、Lowは両回ともNarrowで低〜中難度の案へ絞り、広い調整をPainに見合わないとして止めた。
+
+Reflection: [adoption guide](adoption.md#run-optimization-review-for-a-recorded-problem) と [Optimization Review](optimization-review.md) に、Problem起点、Painを探索の比例性シグナルとして扱うこと、Scope、関係先ベースのDifficulty、既存Business意味の保持、0件正常終了、現行設計の言い換え・重複候補を成果に数えない停止条件を反映した。これはReview knowledge v0.3へのQ追加ではなく、Business Design変更を人間が決める前の別レビュー能力である。
+
+Limits: 証拠は単一Business Designの少数Fresh実行で、実際の工数削減、費用対効果、候補実現性、最適候補数、完全性、他領域への一般化は未証明である。Highで高難度案を残したことは、その調査費用が実際に見合うことの証明ではない。これらは正式機能をcandidate扱いする理由ではなく、Alderが主張できる証拠範囲の限界として保持する。実利用で過剰探索、Painへの不追従、無価値な候補、Business意味の破壊が継続的に観測された場合は通常の機能改善・変更・廃止判断として再検討する。
 
 ## Review structure and checklists
 
