@@ -29,9 +29,10 @@ product/
 ```
 
 1. Put current Business Design in `docs/business-design/` and a local copy of the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
-2. Route these paths through AGENTS.md or the task prompt. Have the AI read Business Design first, implement the task, and record material assumptions and choices in `docs/decisions/`. It must not invent unresolved business policy; routine reversible technical choices can proceed.
-3. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**.
-4. Return only unresolved business questions to people for a decision.
+2. For this unreleased revision, agree on Business Design and human-review the derived Check Items before handing both to implementation. This completes the standard design business; the tagged v0.5/v0.5.1 workflow kept Check Items optional.
+3. Route these paths through AGENTS.md or the task prompt. Have the AI read the confirmed Business Design and Check Items, implement the task, and report material assumptions and choices for the later Alder follow-up. It must not invent unresolved business policy; routine reversible technical choices can proceed.
+4. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**. In the follow-up, verify and maintain Check ↔ Test/assertion mappings.
+5. Return only unresolved business questions to people for a decision.
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
@@ -63,4 +64,4 @@ Business Design remains the SSOT; JSON is regenerated, not edited. Procedure is 
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.5** keeps Business Design ↔ Check Item ↔ Test as the permanent traceability boundary and deliberately does not maintain Check Item ↔ Code location mappings. Tests verify the implementation by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.5 release notes](docs/release-notes-v0.5.md). The development method requires no framework, CLI, or runtime package; the graph exporter above is optional.
+**Alder v0.5** kept Check Item drafting and traceability optional; when used, permanent mappings stopped at Test, without Check Item ↔ Code location mappings. **This unreleased revision** makes Check Item design and human review required before handoff to implementation. The standard design business ends at that handoff. The separate post-implementation Alder review and follow-up still check Test expectations and maintain Check ↔ Test/assertion mappings before accepting the implementation change. Tests verify Code by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the historical [v0.5 release notes](docs/release-notes-v0.5.md). The method requires no framework, CLI, or runtime package; the graph exporter above is optional.
