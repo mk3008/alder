@@ -17,19 +17,19 @@ Use the current Business Design plus:
 
 Do not invent a Problem merely to force optimization. Not every Activity needs one.
 
-When the Problem belongs naturally to one Activity, it can be recorded alongside that Activity, for example:
+When the Problem belongs naturally to one Activity, record one nonempty Problem / Pain level pair after Result if it is part of the current Business Design. These H2 headings are also accepted by the optional [Business Graph exporter](business-graph.md#opt-in-markdown-profile-v1). For example:
 
 ```markdown
-### Problem
+## Problem
 
 Approved purchase requests require the purchasing operator to repeat purchase and result-registration work for each request.
 
-### Pain level
+## Pain level
 
 High
 ```
 
-Pain level is a review input, not a numerical score or a fixed decision matrix. In the current evidence, higher Pain caused the reviewer to retain broader or higher-difficulty investigation candidates, while lower Pain favored narrower changes and stopped expensive exploration earlier. Use that as a proportionality signal, not as a rule such as “High always permits High Difficulty.”
+For the exportable v1 profile the entire Pain level value is Low, Medium or High. For a review, Problem and Pain may also be supplied explicitly in the prompt when the source design has not yet recorded them; that prompt does not silently change the Business Design or its JSON projection. Pain level is a review input, not a numerical score or a fixed decision matrix. In the current evidence, higher Pain caused the reviewer to retain broader or higher-difficulty investigation candidates, while lower Pain favored narrower changes and stopped expensive exploration earlier. Use that as a proportionality signal, not as a rule such as “High always permits High Difficulty.”
 
 If measured frequency, time, error rate, cost, or other evidence is available, include it. Missing measurements do not require inventing a number.
 
@@ -151,7 +151,7 @@ Do not choose or approve a candidate. People own the Business decision.
 
 People may reject every candidate. No Business Design change is required merely because the review found alternatives.
 
-If a candidate is accepted:
+If a candidate is accepted, the proposal fields (including Expected benefit, Difficulty, Confidence and Narrow / Keep / Expand) remain review output rather than current Business Design facts or Business Graph fields. Then:
 
 1. confirm the changed business meaning, responsibility and scope with the responsible people
 2. update Business Design first

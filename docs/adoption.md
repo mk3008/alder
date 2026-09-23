@@ -119,18 +119,18 @@ Before presenting a draft, walk one representative passage through its named Obj
 Business Design may also record a concrete **Problem** and **Pain level** for an Activity when people actually experience a burden worth reviewing. These are not mandatory fields and should not be invented merely to make every Activity look optimizable.
 
 ```markdown
-### Problem
+## Problem
 
 Approved purchase requests require the purchasing operator to repeat purchase and result-registration work for each request.
 
-### Pain level
+## Pain level
 
 High
 ```
 
-Use a simple relative Pain level such as **Low / Medium / High**. Pain is a proportionality signal for review, not a numerical score or an automatic decision rule. If frequency, time, error rate, cost or other observed evidence is available, record it; do not fabricate measurements when none exist.
+For the [exportable v1 profile](business-graph.md#opt-in-markdown-profile-v1), place the two nonempty H2 fields after Result, in Problem then Pain level order, with **Low / Medium / High** as the entire Pain value. Both fields are optional as a pair; record at most one pair per Activity. Other Business Designs need not use the export profile, but keep Problem and Pain together as the inputs to this review. Pain is a proportionality signal for review, not a numerical score or an automatic decision rule. If frequency, time, error rate, cost or other observed evidence is available, record it; do not fabricate measurements when none exist.
 
-A recorded Problem is the entry point for [Optimization Review](optimization-review.md). The review stays centered on that Problem rather than trying to optimize the whole Business Design.
+The pair is current human-recorded business information. An AI-generated candidate, Expected benefit, Difficulty, Confidence or Narrow / Keep / Expand assessment is not a current fact. If people adopt a change, update and re-agree Business Design before deriving Checks, Tests or implementation; record any remaining Problem and Pain that still describes the revised current work. A recorded Problem is the entry point for [Optimization Review](optimization-review.md). The review stays centered on that Problem rather than trying to optimize the whole Business Design.
 
 
 ## 2. Point the agent to the design and review knowledge
@@ -162,7 +162,7 @@ Alder v0.6 retains the **Check Item** (Atomic Check in v0.3) traceability bounda
 
 ### Run Optimization Review for a recorded Problem
 
-When Business Design contains a concrete Problem and Pain level, use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
+When Business Design contains a concrete Problem and Pain level, optionally use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
 
 The review:
 
@@ -176,7 +176,7 @@ The review:
 
 Return at most a few useful alternatives; the current guide uses a maximum of three for one Problem. Do not choose a winner. People decide whether a candidate is worth adopting.
 
-If people accept a candidate, **update and confirm Business Design first**, then update downstream Checks, Tests, Decisions and implementation. A candidate is not a requirement merely because the AI proposed it.
+If people accept a candidate, **update and confirm Business Design first**: apply the same writing-quality and business-correlation review used for any design revision, and use optional functional-consideration discovery where useful. Ask people to confirm the changed meaning and remaining Problem / Pain before Check Item design. Then update downstream Checks, Tests, Decisions and implementation. A candidate is not a requirement merely because the AI proposed it.
 
 Use the copyable prompt and output contract in [Optimization Review](optimization-review.md). The evidence and limits for this adopted workflow are recorded there and in [Validation](validation.md).
 

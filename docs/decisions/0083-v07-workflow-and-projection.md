@@ -1,0 +1,19 @@
+# Issue #83 — v0.7 workflow and Business Graph alignment
+
+## Review of main before changes
+
+At `d0a5f28` (the merged PR #80), adoption and Optimization Review documented an Activity-level `### Problem` / `### Pain level` pair. The opt-in exporter accepted only its ordered H2/H3 Activity fields, rejecting these documented H3 fields. README described the implementation loop first and treated improvement as an aside. README also mixed current requirements with the v0.6 historical optional Check Item rule and unreleased-version language. The self-design already bounded its standard design business to agreement and Check Item handoff, excluding implementation and subsequent review, but did not explicitly locate Optimization Review. Graph v1 projected Result, Scope and Information but had no decision about recorded Problem / Pain. Review candidates were not current business facts.
+
+The review also checked philosophy, Check Item traceability and v0.6 release notes. Their SSOT and handoff boundaries agree with the current workflow; the historical v0.6 release notes remain unchanged. This record does not assert that structural export proves semantic quality or human approval.
+
+## Decision for the first release of JSON v1
+
+Business Design remains the sole authority for current business meaning. The optional improvement loop begins with a real Problem / Pain, returns proposals for human adoption, then changes and re-agrees Business Design before affected Check Items, Tests or code change. The standard design business remains bounded to agreement and handoff; the improvement review and the post-implementation review/follow-up are distinct Alder capabilities, not extra Activities in that bounded self-design. Therefore no self-design Activity is added. Its document Scope now states this boundary.
+
+For the opt-in export profile, permit **zero or one** nonempty `## Problem` / `## Pain level` pair after Activity Result. Both appear together in that order; Pain is exactly Low, Medium or High. Do not generalize to multiple Problems or infer values from review output. Business nodes omit both keys when absent; otherwise they project the source Problem verbatim and Pain as `pain_level`. These are optional fields in the first, still unreleased JSON v1 contract, so no version bump is necessary. The stricter export profile remains optional for other Alder Business Designs.
+
+Optimization Candidate, Expected benefit, Difficulty, Confidence and Narrow / Keep / Expand belong to an unapproved proposal. None enter the current Business Design or graph merely because the review produced them. When people accept a proposal, revise and re-agree the source first; only the revised current state projects. Procedure remains authoritative in the source and absent from JSON. This record is a format/workflow decision, not new review knowledge or a BPM theory.
+
+## Release preparation boundary
+
+The README files now describe the current workflow directly. Adoption and traceability documents may continue to distinguish the tagged v0.6 behavior from the as-yet unreleased revision until v0.7 is actually tagged. Release notes for v0.7 can summarize the required Check Item design/human review at handoff, Business Graph JSON v1 (including Object.Information, separate boolean Business/Object Scope, Result and optional Problem/Pain), opt-in exporter and external consumer validation. The released v0.6 notes stay as historical evidence. Do not claim the v0.7 release or change the release workflow as part of this issue.

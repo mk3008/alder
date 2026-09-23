@@ -67,6 +67,49 @@ SOURCE = PREAMBLE + OBJECTS + activity()
 
 
 class ExportTests(unittest.TestCase):
+    def test_problem_and_pain_project_only_from_current_activity(self):
+        addition = ('\n## Problem\n\nRepeated manual reconciliation.\n\n'
+                    '## Pain level\n\nHigh\n')
+        source = SOURCE + addition + '\n' + activity('approve')
+        graph = parse_design(source)
+        nodes = {n['id']: n for n in graph['nodes']}
+        self.assertEqual((nodes['read']['problem'], nodes['read']['pain_level']),
+                         ('Repeated manual reconciliation.', 'High'))
+        self.assertNotIn('problem', nodes['approve'])
+        self.assertNotIn('pain_level', nodes['approve'])
+        self.assertEqual(graph['relations'], parse_design(SOURCE + '\n' + activity('approve'))['relations'])
+        self.assertNotEqual(render(graph), render(parse_design(SOURCE + '\n' + activity('approve'))))
+        for level in ('Low', 'Medium', 'High'):
+            self.assertEqual(next(n for n in parse_design(SOURCE + addition.replace('High', level))['nodes']
+                                  if n['type'] == 'business')['pain_level'], level)
+
+    def test_problem_and_pain_reject_partial_misplaced_or_invalid_values(self):
+        pair = '\n## Problem\n\nRepeated work.\n\n## Pain level\n\nHigh\n'
+        invalid_sources = (
+            SOURCE + '\n## Problem\n\nRepeated work.',
+            SOURCE + '\n## Pain level\n\nHigh',
+            SOURCE + pair.replace('Repeated work.', '  '),
+            SOURCE + pair.replace('High', 'Severe'),
+            SOURCE + pair.replace('High', 'high'),
+            SOURCE + pair.replace('## Problem', '## Pain level').replace('## Pain level\n\nHigh', '## Problem\n\nHigh'),
+            SOURCE.replace('## Result', pair + '\n## Result'),
+            SOURCE + pair + '\n## Problem\n\nAnother problem',
+        )
+        for source in invalid_sources:
+            with self.subTest(source=source[-100:]), self.assertRaises(DesignError):
+                parse_design(source)
+        for field, value in (('problem', ''), ('problem', 4), ('pain_level', 'Severe'),
+                             ('pain_level', None)):
+            graph = parse_design(SOURCE + pair)
+            node = next(n for n in graph['nodes'] if n['type'] == 'business')
+            node[field] = value
+            with self.subTest(field=field, value=value), self.assertRaises(DesignError):
+                validate_graph(graph)
+        graph = parse_design(SOURCE + pair)
+        del next(n for n in graph['nodes'] if n['type'] == 'business')['pain_level']
+        with self.assertRaises(DesignError):
+            validate_graph(graph)
+
     def test_object_information_projects_ordered_concepts_and_is_validated(self):
         source = SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n## Information\n\n- Question\n- Context')
         graph = parse_design(source)

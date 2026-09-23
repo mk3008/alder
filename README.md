@@ -2,13 +2,13 @@
 
 English | [日本語](README.ja.md)
 
-**Find gaps in your specification through implementation.**
+**Improve work and verify its implementation from one Business Design.**
 
-Alder studies a development loop in which an AI agent implements **Business Design**—a description of who does the work, when, and with what inputs and outputs—then another agent or fresh context reviews it. Review traces the business meaning made concrete in implementation back to the design and narrows gaps and unresolved choices into questions people can decide. You can begin coding before every business decision is settled.
+Alder uses **Business Design** as the source of truth for current operational intent: who does the work, when, with which inputs and outputs. People can record an operational Problem and Pain level and optionally request an [Optimization Review](docs/optimization-review.md). AI suggests a few alternatives; people decide whether to adopt a change and update and agree on Business Design first. A proposal does not become current business policy by appearing in a review.
 
-It combines established software engineering practices—requirements validation, walkthroughs, bidirectional traceability, decision records, and human judgment—for repeated use with AI. It proposes no new design theory or architecture.
+For system delivery, people agree on Business Design and human-review derived Check Items before implementation. An AI agent implements them; a separate agent or fresh context reviews the resulting implementation and tests. Follow-up checks expectations against the agreed design and maintains Check ↔ Test evidence. Questions about unresolved business meaning return to people. Coding can begin before every possible future policy is settled, but unresolved policy cannot be silently invented.
 
-**People define and approve business intent. AI implements it. A separate AI reviews the implementation. Only unresolved business questions return to people for a decision.**
+Alder combines established requirements validation, walkthroughs, traceability, decision records and human judgment for repeated use with AI. It proposes no new BPM theory or architecture and does not prescribe a UI or a code structure.
 
 ## Start with your product
 
@@ -29,12 +29,12 @@ product/
 ```
 
 1. Put current Business Design in `docs/business-design/` and a local copy of the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
-2. For this unreleased revision, agree on Business Design and human-review the derived Check Items before handing both to implementation. This completes the standard design business; the tagged v0.5/v0.5.1 workflow kept Check Items optional.
+2. Agree on Business Design and human-review the derived Check Items before handing both to implementation. This completes the standard design business.
 3. Route these paths through AGENTS.md or the task prompt. Have the AI read the confirmed Business Design and Check Items, implement the task, and report material assumptions and choices for the later Alder follow-up. It must not invent unresolved business policy; routine reversible technical choices can proceed.
 4. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**. In the follow-up, verify and maintain Check ↔ Test/assertion mappings.
 5. Return only unresolved business questions to people for a decision.
 
-When people have recorded a concrete operational **Problem** and **Pain level**, Alder can also run an [Optimization Review](docs/optimization-review.md) against the Business Design. It explores a small set of alternative business designs, evaluates Scope and business-change Difficulty, and preserves existing meaning until people explicitly decide to change it. Accepted candidates update Business Design first.
+The optional improvement loop starts from a concrete recorded **Problem** and **Pain level**, explores alternative work through [Optimization Review](docs/optimization-review.md), and returns the adoption decision to people. If adopted, revise and re-agree Business Design before deriving Check Items or implementing the change. Candidate Scope, Difficulty and Confidence are proposal assessments, not current facts.
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
@@ -52,7 +52,7 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 python3 tools/business_graph/export.py business-design/alder/README.md -o graph.json
 ```
 
-Generate JSON when an external visualization, analysis or processing tool helps the designer's own review, a requester's review, or the inspection of business correlations. It is an intermediate format, not a standard Business Activity or a requester deliverable. Business and Object nodes each preserve an explicit boolean Scope declared in Business Design; Object Scope is not inferred from links. Consumers need not commit generated JSON or use it to finish standard design work. This repository commits its own projection only as an exporter regression fixture. Business Design remains the SSOT; feed any corrections discovered through external tools back into it. Procedure is outside the projection. See the [source format, relation contract and CLI usage](docs/business-graph.md).
+Generate JSON when an external visualization, analysis or processing tool helps the designer's own review, a requester's review, or the inspection of business correlations. It is an intermediate format, not a standard Business Activity or a requester deliverable. Business and Object nodes each preserve an explicit boolean Scope declared in Business Design; Object Scope is not inferred from links. Consumers need not commit generated JSON or use it to finish standard design work. This repository commits its own projection only as an exporter regression fixture. Business Design remains the SSOT; feed any corrections discovered through external tools back into it. Procedure and unapproved Optimization Review candidates are outside the projection; a recorded Problem / Pain pair is included when present. See the [source format, relation contract and CLI usage](docs/business-graph.md).
 
 ## Read more
 
@@ -67,4 +67,4 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.6** adds the adopted Problem-driven Optimization Review workflow while retaining **Business Design ↔ Check Item ↔ Test** as the permanent traceability boundary. In released v0.6, Check Item drafting and traceability remain optional; **this unreleased revision** makes Check Item design and human review required before handoff to implementation. The standard design business ends at that handoff, while the separate post-implementation Alder review and follow-up check Test expectations and maintain Check ↔ Test/assertion mappings before accepting the implementation change. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code location mappings. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate overall; see the [v0.6 release notes](docs/release-notes-v0.6.md). The method requires no framework, CLI, or runtime package; the Business Graph exporter is optional.
+The current development loop keeps **Business Design ↔ Check Item ↔ Test** as its permanent traceability boundary. The standard design business ends at the agreed design and Check Item handoff. A separate post-implementation Alder review and follow-up checks Test expectations and maintains Check ↔ Test/assertion evidence before accepting a change. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code location mappings. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate overall, while Optimization Review is adopted. See the [v0.6 release notes](docs/release-notes-v0.6.md) for its introduction. No framework, CLI or runtime package is required; Business Graph export is optional.
