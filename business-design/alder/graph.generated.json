@@ -5,31 +5,49 @@
       "id": "Alder: 検査項目設計ナレッジ",
       "type": "object",
       "name": "Alder: 検査項目設計ナレッジ",
-      "icon": "book-open"
+      "icon": "book-open",
+      "information": [
+        "検査項目の導出・レビュー観点",
+        "IDと追跡関係の保守観点"
+      ]
     },
     {
       "id": "Alder: 業務ナレッジ",
       "type": "object",
       "name": "Alder: 業務ナレッジ",
-      "icon": "book-open"
+      "icon": "book-open",
+      "information": [
+        "業務手順・条件・考慮事項の確認観点"
+      ]
     },
     {
       "id": "Alder: 業務相関ナレッジ",
       "type": "object",
       "name": "Alder: 業務相関ナレッジ",
-      "icon": "book-open"
+      "icon": "book-open",
+      "information": [
+        "状態遷移・前後業務の確認観点"
+      ]
     },
     {
       "id": "コード",
       "type": "object",
       "name": "コード",
-      "icon": "file-code"
+      "icon": "file-code",
+      "information": [
+        "実装された振る舞い",
+        "変更内容"
+      ]
     },
     {
       "id": "システム要件書",
       "type": "object",
       "name": "システム要件書",
-      "icon": "file-text"
+      "icon": "file-text",
+      "information": [
+        "技術要件",
+        "インフラ・開発言語・アーキテクチャ・フレームワーク"
+      ]
     },
     {
       "id": "システム設計",
@@ -46,25 +64,42 @@
       "id": "テスト",
       "type": "object",
       "name": "テスト",
-      "icon": "flask-conical"
+      "icon": "flask-conical",
+      "information": [
+        "実行可能な検証ケース・アサーション",
+        "検証対象と期待結果"
+      ]
     },
     {
       "id": "依頼者",
       "type": "object",
       "name": "依頼者",
-      "icon": "users"
+      "icon": "users",
+      "information": [
+        "システム要件",
+        "フィードバック・レビュー結果",
+        "業務上の判断・承認"
+      ]
     },
     {
       "id": "判断記録",
       "type": "object",
       "name": "判断記録",
-      "icon": "notebook-pen"
+      "icon": "notebook-pen",
+      "information": [
+        "判断内容・理由",
+        "残る制約・未決事項"
+      ]
     },
     {
       "id": "同期漏れの候補",
       "type": "object",
       "name": "同期漏れの候補",
-      "icon": "scan-search"
+      "icon": "scan-search",
+      "information": [
+        "古い関係・欠落の候補",
+        "再確認の理由"
+      ]
     },
     {
       "id": "同期漏れ検査",
@@ -81,7 +116,11 @@
       "id": "同期照合情報",
       "type": "object",
       "name": "同期照合情報",
-      "icon": "fingerprint"
+      "icon": "fingerprint",
+      "information": [
+        "原文・Check・Testの照合基準",
+        "検出されたTestの識別情報"
+      ]
     },
     {
       "id": "実装",
@@ -98,7 +137,12 @@
       "id": "検査項目",
       "type": "object",
       "name": "検査項目",
-      "icon": "list-checks"
+      "icon": "list-checks",
+      "information": [
+        "期待結果・レビュー状態",
+        "Business DesignとTestの対応",
+        "検証不足"
+      ]
     },
     {
       "id": "検査項目の設計",
@@ -115,7 +159,12 @@
       "id": "業務グラフJSON",
       "type": "object",
       "name": "業務グラフJSON",
-      "icon": "workflow"
+      "icon": "workflow",
+      "information": [
+        "Activity・Objectと属性",
+        "ラベル付き入出力・例外関係",
+        "形式バージョン"
+      ]
     },
     {
       "id": "業務グラフ出力",
@@ -143,7 +192,13 @@
       "id": "業務設計書",
       "type": "object",
       "name": "業務設計書",
-      "icon": "file-text"
+      "icon": "file-text",
+      "information": [
+        "業務範囲・目的",
+        "業務手順・入出力",
+        "業務間の相関・例外",
+        "期待結果・未決事項"
+      ]
     }
   ],
   "relations": [
