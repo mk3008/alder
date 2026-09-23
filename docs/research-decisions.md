@@ -44,6 +44,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Architecture labels and semantic ownership across structural ranges | Inconclusive / deferred; historical checkpoint | [Scope and placement](#scope-and-placement) |
 | Incremental Activity / Data / Rule implementation from incomplete design | Limited experimental adoption; general claims deferred | [Early workflow pilots](#early-workflow-pilots) |
 | Review knowledge v0.1–v0.3 and three business benchmarks | Adopted with limited scope | [Review knowledge](#review-knowledge) |
+| Problem起点の業務最適化レビュー | PoCで候補1件は検討可能; 恒久化は保留 | [業務最適化](#業務最適化) |
 | Mandatory independent Data reviews or exhaustive scenario lists | Not adopted | [Review structure and checklists](#review-structure-and-checklists) |
 | Decision Records, anchoring and fixed status templates | Meaning distinction retained; template efficacy deferred | [Decision records](#decision-records) |
 | Participant walkthrough and reverse tracing as separate procedures | Adopted with limited scope | [Walkthrough and reverse tracing](#walkthrough-and-reverse-tracing) |
@@ -76,6 +77,10 @@ Alder organizes established software engineering practices into a small AI-assis
 **Q1–Q3 / P1 / P2 / S — adopted with limited scope as research knowledge v0.3.** [v0.1 extraction #11](https://github.com/mk3008/alder/issues/11#issuecomment-5620623137), [v0.2 synthesis #23](https://github.com/mk3008/alder/issues/23#issuecomment-5626679109), [v0.3 extraction #28](https://github.com/mk3008/alder/issues/28#issuecomment-5627889911) and [minimal correction #31](https://github.com/mk3008/alder/issues/31#issuecomment-5630006203) trace continuity, constraint causes, meaning/guarantees, representative scenes and classification into the [current text](phase2/review-knowledge-v0.3.md). Reason: observed business questions and sufficient behavior could be expressed with bounded questions and procedures, without prescribing solutions. Reflection: review knowledge and [adoption review guidance](adoption.md#4-run-a-separate-alder-review-after-implementation).
 
 [Validation](validation.md#what-has-been-validated) links facilities #32, purchase #33 and meeting-room #36 fresh regressions. Within this fixed set, reviews retained unresolved business questions while limiting excessive implementation demands. Limit: #32/#33 used the #31 revision; only meeting-room was rerun after #35. The lost-result reconciliation finding from #34 did not recur as a main finding in #36. Detection-rate improvement, completeness and generalization are unproven. Reconsider wording when an observed omission or overreach identifies a specific question/application gap; do not require all historical findings to recur.
+
+## 業務最適化
+
+**Problem起点の業務最適化レビュー — PoCで検討可能な候補を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)は既存の備品購入申請に実験専用のProblem/Pain levelを加え、Fresh Agentが出した3候補を別途点検した。条件が合う承認済み申請のまとめ買いは、申請ごとの購入負荷に直接効く可能性と申請別実績を守る条件が示された。自動化・委託は購入先や契約の未確認事項が大きい。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は一つの架空Problem、一回の生成、効果・実現性の実測なしでは手法の採用を判断できないため。実業務で観測した痛みと業務変更の関係先を入力し、有用性や過剰探索を再確認する際に見直す。候補の採否は人間のBusiness判断に残る。
 
 ## Review structure and checklists
 

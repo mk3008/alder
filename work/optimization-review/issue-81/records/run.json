@@ -1,0 +1,18 @@
+{
+  "issue": "https://github.com/mk3008/alder/issues/81",
+  "source_revision": "5405a5069fc13e1a1e27de8b06e4a375a3653e5e",
+  "source_path": "business-design/purchase-request/README.md",
+  "source_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "source_packet_path": "/workspace/scratch/501257125b1f/optimization-packet/business-design.md",
+  "prompt_path": "work/optimization-review/issue-81/records/launch.txt",
+  "prompt_sha256": "c9721da21f3d499c9618fe720cf5e57716b7baed329be1e47f1a876dc4881c9e",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/optimization_review",
+  "effective_model_and_effort_independently_attested": false,
+  "raw_output_sha256": "3005d8ac7470169bc3de2cc40ab4a8c19868f668afe3a9fab5eede1ee78b0217",
+  "read_log_sha256": "8661d8e8e16626b46b515b1872812db79916b7fabddf96567626ddff394cb9e4",
+  "runs": 1,
+  "input_isolation": "fresh conversation and explicit file allowlist; shared filesystem was not sandbox-isolated"
+}
