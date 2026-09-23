@@ -8,6 +8,8 @@ Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming 
 
 The standard design business is complete at handoff of the agreed Business Design and Check Items, with their revisions and IDs. Newly written Tests and their assertion mappings do not yet exist at that point. The **separate, required post-implementation Alder review and follow-up** checks the Test oracle against confirmed Check expectations after Test execution and maintains the Check ↔ Test/assertion mapping and evidence gaps in the same Check Item. The independent Fresh review is read-only; its follow-up updates these records before accepting the implementation change. This later maintenance does not extend the bounded design business to Test execution or implementation review.
 
+An evidence gap means missing or unreconciled Test verification for an expectation; it is not a Check review state and does not by itself mean the business expectation is undecided. The Check Item can retain such gaps, including for existing Tests, but complete evidence for newly created Tests is not part of the standard design handoff contract. Treat a concrete uncertainty about handing off a known gap as a human question, without adding a general handoff gate.
+
 It does not add a new source of business truth, require a standalone Functional Design phase, prescribe an architecture, or require complete line-by-line traceability.
 
 The workflow combines:
