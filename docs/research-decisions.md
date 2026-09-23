@@ -80,7 +80,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 ## 業務最適化
 
-**Problem起点の業務最適化レビュー — Problem/Pain/Scopeの出力上の追従を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)では備品購入申請の購入負荷に対して、条件が合う申請のまとめ買いを検討可能な候補とした。[PR #82追加検証](optimization-review/issue-82-followup.md)では承認待ち・購入結果の照合へ焦点が移り、Lowの痛みでは高難度候補を控え、Keep/Expand/Narrowの各Scopeも観測された。一方、既存設計の言い換えが1候補に含まれ、Pain Lowの入力にはProblem文中の「負荷が高い」との意味上の衝突がある。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は単一ベンチマークの少数の出力であり、実際の効果・再現性・比較優位が未確認のため。実業務で観測した痛みと業務変更の関係先に照らして有用性・過剰探索を見直す場合に再考する。候補の採否は人間のBusiness判断に残る。
+**Problem起点の業務最適化レビュー — Problem/Pain/Scopeの出力上の追従を観測、恒久化は保留。** [Issue #81の記録](optimization-review/issue-81.md)では備品購入申請の購入負荷に対して、条件が合う申請のまとめ買いを検討可能な候補とした。[最初の追加検証](optimization-review/issue-82-followup.md)では承認待ち・購入結果の照合へ焦点が移り、Keep/Expand/Narrowの各Scopeも観測された。Pain Lowの入力にはProblem文中の「負荷が高い」との意味上の衝突があったため、[中立ProblemでのHigh/Low各2回比較](optimization-review/issue-82-pain-isolation.md)を行った。Highは高難度案を残し、Lowは関係先の広い案を調査コストに見合わないとして控えた。ただしHighの費用対効果・候補の実現性は未確認であり、設計の言い換えや重複候補も見られる。現行Business Design・Review knowledge・恒久Skill/Ruleには反映しない。理由は単一ベンチマークの少数の出力で、実際の効果・再現性・比較優位が未確認のため。実業務で観測した痛みと業務変更の関係先に照らして有用性・過剰探索を見直す場合に再考する。候補の採否は人間のBusiness判断に残る。
 
 ## Review structure and checklists
 
