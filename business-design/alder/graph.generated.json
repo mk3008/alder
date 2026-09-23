@@ -5,6 +5,7 @@
       "id": "Alder: 検査項目設計ナレッジ",
       "type": "object",
       "name": "Alder: 検査項目設計ナレッジ",
+      "scope": true,
       "icon": "book-open",
       "information": [
         "検査項目の導出・レビュー観点",
@@ -15,6 +16,7 @@
       "id": "Alder: 業務ナレッジ",
       "type": "object",
       "name": "Alder: 業務ナレッジ",
+      "scope": true,
       "icon": "book-open",
       "information": [
         "業務手順・条件・考慮事項の確認観点"
@@ -24,6 +26,7 @@
       "id": "Alder: 業務相関ナレッジ",
       "type": "object",
       "name": "Alder: 業務相関ナレッジ",
+      "scope": true,
       "icon": "book-open",
       "information": [
         "状態遷移・前後業務の確認観点"
@@ -33,6 +36,7 @@
       "id": "コード",
       "type": "object",
       "name": "コード",
+      "scope": false,
       "icon": "file-code",
       "information": [
         "実装された振る舞い",
@@ -43,6 +47,7 @@
       "id": "システム要件書",
       "type": "object",
       "name": "システム要件書",
+      "scope": false,
       "icon": "file-text",
       "information": [
         "技術要件",
@@ -64,6 +69,7 @@
       "id": "テスト",
       "type": "object",
       "name": "テスト",
+      "scope": false,
       "icon": "flask-conical",
       "information": [
         "実行可能な検証ケース・アサーション",
@@ -74,6 +80,7 @@
       "id": "依頼者",
       "type": "object",
       "name": "依頼者",
+      "scope": false,
       "icon": "users",
       "information": [
         "システム要件",
@@ -85,6 +92,7 @@
       "id": "判断記録",
       "type": "object",
       "name": "判断記録",
+      "scope": true,
       "icon": "notebook-pen",
       "information": [
         "判断内容・理由",
@@ -95,6 +103,7 @@
       "id": "同期漏れの候補",
       "type": "object",
       "name": "同期漏れの候補",
+      "scope": true,
       "icon": "scan-search",
       "information": [
         "古い関係・欠落の候補",
@@ -116,6 +125,7 @@
       "id": "同期照合情報",
       "type": "object",
       "name": "同期照合情報",
+      "scope": true,
       "icon": "fingerprint",
       "information": [
         "原文・Check・Testの照合基準",
@@ -137,6 +147,7 @@
       "id": "検査項目",
       "type": "object",
       "name": "検査項目",
+      "scope": true,
       "icon": "list-checks",
       "information": [
         "期待結果・レビュー状態",
@@ -170,6 +181,7 @@
       "id": "業務設計書",
       "type": "object",
       "name": "業務設計書",
+      "scope": true,
       "icon": "file-text",
       "information": [
         "業務範囲・目的",
@@ -361,5 +373,5 @@
       "label": "業務要件 / 期待結果 / 未決事項"
     }
   ],
-  "scope": "Alderが提供するのは、業務上の意図を依頼者と合意する業務設計と、期待結果を確認して検査項目を後続開発へ渡す業務である。技術条件を整理するシステム設計と、合意済みの設計・検査項目を直接受け取る実装は、前後の受け渡しを示すためだけに含める隣接業務であり、Alderの責任範囲ではない。同期漏れ検査は疑いが生じたときだけ使う任意の診断として独立させる。Business Graph JSONは、外部ツールで可視化・解析・加工する場合に業務設計やレビューを助ける任意の中間投影形式であり、標準のBusiness Activityや依頼者への成果物ではない。Alderという手法自体の研究、ガイド改訂の採否、PR・Release、実装後のTest実行・実装レビュー・デプロイはこの標準設計業務の対象外である。各ActivityのScopeは、trueをAlderが提供する業務、falseを直接隣接する業務として扱う。"
+  "scope": "Alderが提供するのは、業務上の意図を依頼者と合意する業務設計と、期待結果を確認して検査項目を後続開発へ渡す業務である。技術条件を整理するシステム設計と、合意済みの設計・検査項目を直接受け取る実装は、前後の受け渡しを示すためだけに含める隣接業務であり、Alderの責任範囲ではない。同期漏れ検査は疑いが生じたときだけ使う任意の診断として独立させる。Business Graph JSONは、外部ツールで可視化・解析・加工する場合に業務設計やレビューを助ける任意の中間投影形式であり、標準のBusiness Activityや依頼者への成果物ではない。Alderという手法自体の研究、ガイド改訂の採否、PR・Release、実装後のTest実行・実装レビュー・デプロイはこの標準設計業務の対象外である。Activity ScopeのtrueはAlderが提供する業務、falseは直接隣接する業務を表す。Object Scopeのtrueはこの業務境界内で成立・管理する成果物またはAlderが提供する知識・照合情報、falseは依頼者や隣接業務が成立・管理するObjectを表す。Input / Outputの向きだけで内外を決めない。"
 }
