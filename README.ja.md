@@ -56,6 +56,6 @@ product/
 
 **Alder v0.5** では、検査項目の作成と追跡関係の保守は任意でした。採用した場合の恒久的な対応関係は **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。過去仕様は[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)を参照してください。フレームワーク、CLI、実行時パッケージの導入は不要です。
 
-## Business Graph export（任意）
+## 外部ツール向けBusiness Graph export（任意）
 
-[Alderを使った設計業務のBusiness Design](business-design/alder/README.md)からJSONを生成できます。Business DesignがSSOTであり、JSONは再生成する投影結果です。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
+[Alderを使った設計業務のBusiness Design](business-design/alder/README.md)を、外部ツールで可視化・解析・加工したい場合は、業務設計や依頼者レビュー、設計者のセルフレビュー時に任意でJSONへ投影できます。JSONは中間形式であり、標準Business Activityや依頼者への成果物ではありません。利用や生成ファイルのcommitは標準設計業務の完了条件ではなく、このリポジトリの生成例はexporterの回帰用fixtureです。外部ツールで見つけた修正はSSOTであるBusiness Designへ反映します。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
