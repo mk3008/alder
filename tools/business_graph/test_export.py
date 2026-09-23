@@ -61,7 +61,8 @@ The request is explained, so the person can decide the next action.
 
 
 PREAMBLE = '# Design\n\n'
-OBJECTS = '# Object person\n\n## Icon\n\nusers\n\n# Object record\n\n(generic icon)\n\n'
+OBJECTS = ('# Object person\n\n## Scope\n\nfalse\n\n## Icon\n\nusers\n\n'
+           '# Object record\n\n## Scope\n\ntrue\n\n## Icon\n\n(generic icon)\n\n')
 SOURCE = PREAMBLE + OBJECTS + activity()
 
 
@@ -72,8 +73,8 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(next(n for n in graph['nodes'] if n['id'] == 'person')['information'],
                          ['Question', 'Context'])
         self.assertEqual(next(n for n in parse_design(SOURCE)['nodes'] if n['id'] == 'person')['information'], [])
-        generic = SOURCE.replace('# Object record\n\n(generic icon)',
-                                 '# Object record\n\n## Icon\n\n(generic icon)\n\n## Information\n\n- Existing context')
+        generic = SOURCE.replace('## Icon\n\n(generic icon)',
+                                 '## Icon\n\n(generic icon)\n\n## Information\n\n- Existing context')
         self.assertEqual(next(n for n in parse_design(generic)['nodes'] if n['id'] == 'record')['information'],
                          ['Existing context'])
         self.assertNotEqual(render(graph), render(parse_design(SOURCE)))
@@ -107,8 +108,10 @@ class ExportTests(unittest.TestCase):
             'result': 'The request is explained, so the person can decide the next action.',
         })
         self.assertEqual(nodes['record']['icon'], 'box')
+        self.assertIs(nodes['record']['scope'], True)
         self.assertEqual(nodes['record']['information'], [])
         self.assertEqual(nodes['person']['type'], 'object')
+        self.assertIs(nodes['person']['scope'], False)
         self.assertEqual({(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}, {
             ('input', 'person', 'read', 'Question'),
             ('input', 'record', 'read', 'Existing context'),
@@ -141,7 +144,8 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(next(n for n in changed['nodes'] if n['type'] == 'business')['result'],
                          'The issue is resolved, so follow-up work can begin.')
     def test_activity_scope_preserves_adjacent_business_and_transfers(self):
-        source = SOURCE.replace('## Scope\n\ntrue', '## Scope\n\nfalse')
+        source = SOURCE.replace('# Activity read\n\n## Scope\n\ntrue',
+                                '# Activity read\n\n## Scope\n\nfalse')
         graph = parse_design(source)
         node = next(n for n in graph['nodes'] if n['id'] == 'read')
         self.assertIs(node['scope'], False)
@@ -154,26 +158,58 @@ class ExportTests(unittest.TestCase):
             next(n for n in invalid['nodes'] if n['id'] == 'read')['scope'] = value
             with self.subTest(value=value), self.assertRaises(DesignError):
                 validate_graph(invalid)
-        for bad in (SOURCE.replace('## Scope\n\ntrue\n\n', ''),
-                    SOURCE.replace('## Scope\n\ntrue', '## Scope\n\n'),
-                    source.replace('## Scope', '## Scope\n\nA\n\n## Scope'),
-                    SOURCE.replace('## Who', '## Scope\n\nOutside\n\n## Who'),
-                    SOURCE.replace('## Icon', '## Scope\n\nOutside\n\n## Icon')):
+        for bad in (SOURCE.replace('# Activity read\n\n## Scope\n\ntrue\n\n', '# Activity read\n\n'),
+                    SOURCE.replace('# Activity read\n\n## Scope\n\ntrue', '# Activity read\n\n## Scope\n\n'),
+                    source.replace('# Activity read\n\n## Scope',
+                                   '# Activity read\n\n## Scope\n\nA\n\n## Scope'),
+                    SOURCE.replace('## Who', '## Scope\n\nOutside\n\n## Who')):
             with self.subTest(source=bad), self.assertRaises(DesignError):
                 parse_design(bad)
+
+    def test_object_scope_is_explicit_boolean_and_not_inferred_from_relations(self):
+        baseline = parse_design(SOURCE)
+        source = SOURCE.replace('# Object person\n\n## Scope\n\nfalse',
+                                '# Object person\n\n## Scope\n\ntrue')
+        changed = parse_design(source)
+        self.assertIs(next(n for n in changed['nodes'] if n['id'] == 'person')['scope'], True)
+        self.assertEqual(changed['relations'], baseline['relations'])
+        self.assertNotEqual(render(changed), render(baseline))
+        # The person receives an Output from the in-scope Activity but stays outside.
+        self.assertIs(next(n for n in baseline['nodes'] if n['id'] == 'person')['scope'], False)
+        for value in ('', ' ', 'True', 'FALSE', '0', '1', '対象内', '"false"'):
+            invalid = SOURCE.replace('# Object person\n\n## Scope\n\nfalse',
+                                     '# Object person\n\n## Scope\n\n' + value)
+            with self.subTest(value=value), self.assertRaises(DesignError):
+                parse_design(invalid)
+        for invalid in (SOURCE.replace('# Object person\n\n## Scope\n\nfalse\n\n',
+                                       '# Object person\n\n'),
+                        SOURCE.replace('# Object person\n\n## Scope\n\nfalse',
+                                       '# Object person\n\n## Scope\n\nfalse\n\n## Scope\n\ntrue'),
+                        SOURCE.replace('## Scope\n\nfalse\n\n## Icon\n\nusers',
+                                       '## Icon\n\nusers\n\n## Scope\n\nfalse'),
+                        SOURCE.replace('# Object record\n\n## Scope\n\ntrue\n\n## Icon\n\n(generic icon)',
+                                       '# Object record\n\n(generic icon)')):
+            with self.subTest(source=invalid), self.assertRaises(DesignError):
+                parse_design(invalid)
 
     def test_required_boolean_scope_rejects_missing_or_coerced_values(self):
         for value in ('True', 'FALSE', '0', '1', '対象内', '"false"'):
             with self.subTest(value=value), self.assertRaises(DesignError):
-                parse_design(SOURCE.replace('## Scope\n\ntrue', '## Scope\n\n' + value))
+                parse_design(SOURCE.replace('# Activity read\n\n## Scope\n\ntrue',
+                                            '# Activity read\n\n## Scope\n\n' + value))
         graph = parse_design(SOURCE)
         next(n for n in graph['nodes'] if n['type'] == 'business').pop('scope')
         with self.assertRaises(DesignError):
             validate_graph(graph)
-        graph = parse_design(SOURCE)
-        next(n for n in graph['nodes'] if n['type'] == 'object')['scope'] = True
-        with self.assertRaises(DesignError):
-            validate_graph(graph)
+        for invalid in (None, '', 0, 1, 'true', [], {}):
+            graph = parse_design(SOURCE)
+            obj = next(n for n in graph['nodes'] if n['type'] == 'object')
+            if invalid is None:
+                del obj['scope']
+            else:
+                obj['scope'] = invalid
+            with self.subTest(value=invalid), self.assertRaises(DesignError):
+                validate_graph(graph)
 
     def test_check_design_review_exchange_and_return(self):
         graph = parse_design(DESIGN.read_text())
@@ -352,7 +388,8 @@ class ExportTests(unittest.TestCase):
         graph = parse_design(SOURCE + '\n# Scope\n\nCurrent work only.\n\nNo future work.\n')
         self.assertEqual(graph['scope'], 'Current work only.\n\nNo future work.')
         self.assertTrue(all(node['scope'] is True for node in graph['nodes'] if node['type'] == 'business'))
-        self.assertTrue(all('scope' not in node for node in graph['nodes'] if node['type'] == 'object'))
+        self.assertIs(next(node for node in graph['nodes'] if node['id'] == 'person')['scope'], False)
+        self.assertIs(next(node for node in graph['nodes'] if node['id'] == 'record')['scope'], True)
 
     def test_procedure_excluded_and_fenced_headings_not_nodes(self):
         revised = SOURCE.replace('1. Read and explain the question.',
@@ -379,8 +416,8 @@ class ExportTests(unittest.TestCase):
                          render(parse_design(prefix + b + '\n' + a)))
 
     def test_duplicate_ids_across_and_within_node_types(self):
-        for extra in (activity(), '# Object read\n\n(generic icon)\n',
-                      '# Object record\n\n(generic icon)\n'):
+        for extra in (activity(), '# Object read\n\n## Scope\n\ntrue\n\n## Icon\n\n(generic icon)\n',
+                      '# Object record\n\n## Scope\n\ntrue\n\n## Icon\n\n(generic icon)\n'):
             with self.subTest(extra=extra), self.assertRaisesRegex(DesignError, 'duplicate node ID'):
                 parse_design(SOURCE + '\n' + extra)
 
@@ -506,6 +543,15 @@ class ExportTests(unittest.TestCase):
                          {'システム設計', '実装'})
         self.assertEqual(len(nodes), 17)
         self.assertEqual(len(graph['relations']), 30)
+        self.assertEqual({n['id'] for n in nodes.values()
+                          if n['type'] == 'object' and n['scope']}, {
+            '業務設計書', '検査項目', '判断記録', '同期照合情報', '同期漏れの候補',
+            'Alder: 業務相関ナレッジ', 'Alder: 業務ナレッジ', 'Alder: 検査項目設計ナレッジ',
+        })
+        self.assertEqual({n['id'] for n in nodes.values()
+                          if n['type'] == 'object' and not n['scope']}, {
+            '依頼者', 'システム要件書', 'コード', 'テスト',
+        })
         self.assertNotIn('業務グラフ出力', nodes)
         self.assertNotIn('業務グラフJSON', nodes)
         self.assertIn('Testによる検証根拠の不足', nodes['検査項目']['information'])
