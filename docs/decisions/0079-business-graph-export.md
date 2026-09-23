@@ -186,3 +186,26 @@ The [human review of the drift When](https://github.com/mk3008/alder/pull/80#iss
 The current normal When is therefore “業務設計書・検査項目・テストの対応関係に同期漏れの疑いが生じたとき.” Its Procedure identifies an optional diagnosis of suspected portions. It is not an Exception When: no originating Activity's Exception triggers a restart here, and the graph gains no business-exception edge. The trial writing-quality knowledge now checks for a real initiation reason, invented passive requesters, over-broad change triggers and vague “随時”; the adoption guidance uses this case to illustrate discretion grounded in an observed concern.
 
 Rechecked the other nine normal When fields against this rule: receipt of an objective/change request, technical inquiry, agreed design, implementation request, completed implementation/changed expectation, prepared review, proposed method change, delivery request and graph export request all remain understandable start reasons in their respective Activities. This reading check does not assert that every possible external request is scheduled by Alder. The graph remains 29 nodes and 65 relations; only the drift Activity's `when` attribute changes. The source's optionality and the pilot's test/evaluation boundaries remain unchanged.
+
+### Trial iteration — normal completion Result and succeeding When
+
+The [reviewer's Result request](https://github.com/mk3008/alder/pull/80#issuecomment-5787129692) adds an explicit, human-readable normal completion state to each Activity. Result describes what becomes true after the successful Procedure and which later business can proceed. It is distinct from Why (purpose), Output (transferred information), Procedure (steps), Exception (abnormal transition), and When (start trigger). The authoring guidance and trial quality knowledge now check these boundaries and compare each enabling Result with a succeeding Activity's When. This is a semantic reading check, not an inferred edge or an assertion that every possible successor is mandatory.
+
+The opt-in Markdown profile requires a nonempty `## Result` after `### Output` for every Activity, including adjacent `scope:false` businesses. The exporter preserves it as the required nonempty `result` string on each business node; `validate_graph` rejects missing, empty, or wrongly typed results. It does not infer Result from I/O or validate agreement with a later When. The source remains authoritative and readable without the graph. **Version decision:** this PR's v1 contract has never been released, so the new required field replaces its earlier draft without a version bump; consumers of the proposed JSON v1 must read the revised contract. No Procedure, Exception, or layout fields are added to JSON.
+
+Full self-review of the ten normal paths, field boundaries, and relevant downstream triggers:
+
+| Activity | Result and downstream When reading check |
+| --- | --- |
+| 業務設計 | Agreement on meaning, procedure, and correlation enables 検査項目の設計; its When requires agreement on 業務設計書. No technical design request is implied. |
+| システム設計 | Technical conditions become usable in 実装 alongside confirmed business expectations; 実装 still begins on its own request for confirmed Check Items. |
+| 検査項目の設計 | Agreed expected results can be passed to 実装; its When requires an implementation request for confirmed Check Items. A review return to 業務設計 is exceptional and is outside Result. |
+| 実装 | Code and executable verification become ready for テスト・検証; its When accepts completion of implementation changes or changed expectations. An implementation defect return is outside Result. |
+| 同期漏れ検査 | Suspected correlations have an examined state and candidates can inform affected Checks or later testing; テスト・検証 consumes candidates only when present. Diagnosis is optional, not a prerequisite to testing. |
+| テスト・検証 | Observed results and remaining gaps can be considered in 実装レビュー; its When also requires the review to be prepared. Defect handling belongs to Exception. |
+| 実装レビュー | Alignment, confirmed Check–Test mapping, and remaining questions become clear enough to decide about 変更の提供; delivery still needs a separate request and acceptance/permission. Business and implementation corrections stay in Exception. |
+| 研究評価 | A decision with its evidence and limits makes adopted method changes candidates for subsequent revision; it does not itself authorize guide modification or delivery. |
+| 変更の提供 | Reviewable changes and authorized results can be handed to later development or use; permission remains an explicit Input/Procedure condition, not a claim that every proposal was merged. |
+| 業務グラフ出力 | Validated generated JSON can be consumed by subsequent visualization or machine processing; graph validity does not prove agreement on business meaning. |
+
+Each Result was checked for repetition of an Output list, detailed acceptance tests, implementation steps, purpose text, and abnormal transitions. The relevant receiving When is consistent but can contain an additional independent request or readiness condition. The generated projection remains 29 nodes and 65 relations; only business-node `result` fields are added. Structural tests and regeneration establish conformance of the proposal, while business meaning still awaits human review.
