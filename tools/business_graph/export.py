@@ -52,7 +52,7 @@ def validate_graph(graph):
         require(isinstance(node, dict), 'node must be an object')
         kind = node.get('type')
         require(kind in ('business', 'object'), 'invalid node type')
-        expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
+        expected = {'id', 'type', 'name', 'why', 'when', 'who', 'where', 'result'} if kind == 'business' else {'id', 'type', 'name', 'icon'}
         if kind == 'business':
             expected.add('scope')
         require(set(node) == expected, f'invalid {kind} node fields')
@@ -173,13 +173,14 @@ def parse_design(text):
         if any(h == '### Exception' for _, h in headings(body)):
             how_headings.append('### Exception')
         how_headings.append('### Output')
-        expected = tuple(field_headings) + ('## How', *how_headings)
+        expected = tuple(field_headings) + ('## How', *how_headings, '## Result')
         values = sections(body, expected, node_id, empty=('## How',))
         require(not values['## How'], f'{node_id}: How must contain Input, Procedure, optional Exception, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/[Exception]/Output order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/[Exception]/Output/Result order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
+        node['result'] = values['## Result']
         require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
         node['scope'] = values['## Scope'] == 'true'
         graph['nodes'].append(node)
