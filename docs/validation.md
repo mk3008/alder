@@ -35,6 +35,30 @@ Separately, [small exploratory architecture comparisons and follow-up evaluation
 
 Separately, [Issue #71](behavior-derivation/issue-71.md) distinguishes check derivation from discovering undocumented conditions. Its [known-context trial](behavior-derivation/issue-71-discovery.md) and [current-version Fresh trial](behavior-derivation/issue-71-fresh-velvet.md) did not establish the adoption criterion. The subsequent [historical backtest](behavior-derivation/issue-71-historical.md) ran two agents without conversation history on frozen earlier Velvet inputs: four candidates comprised one later-decided failure boundary, one conditional unresolved question, and two already settled questions. The concrete Red-success/Black-failure boundary was not fixed by the inspected earlier design and later received explicit human/Decision treatment. This meets the bounded practical criterion for an optional discovery step. It is not evidence of general detection rates or causal prompt improvement: selection used hindsight, one historical review had unrelated open items, runtime attestation and OS input isolation were absent, and no no-prompt control ran. Raw inputs/outputs, trial prompt, read logs, evidence and missed targets are preserved. c3 and review knowledge remain unchanged.
 
+
+## Optimization Review
+
+Alder v0.6 adopts [Optimization Review](optimization-review.md) as a Problem-driven workflow capability. The review starts from an explicitly recorded operational Problem and Pain level, proposes a small set of alternative business designs, evaluates Scope and business-change Difficulty, preserves current Business meaning unless people decide to change it, and returns the adoption decision to people.
+
+The current evidence reuses the purchase-request Business Design rather than adding a new benchmark:
+
+- [Issue #81 initial PoC](optimization-review/issue-81.md): the reviewer stayed centered on the stated purchasing burden and produced bounded alternatives without silently changing approval or purchase-completion meaning.
+- [Problem / Pain / Scope follow-up](optimization-review/issue-82-followup.md): changing the Problem moved the review focus to approval waiting and purchase-result reconciliation; Narrow, Keep and Expand were each used with stated Problem-related reasons.
+- [Pain isolation](optimization-review/issue-82-pain-isolation.md): with a neutral fixed Problem, two High and two Low Fresh runs differed consistently in exploration breadth. Both High runs retained higher-difficulty investigation candidates; both Low runs stayed with narrower, lower-impact changes and explicitly stopped broader external coordination as disproportionate to the stated Pain.
+
+The same evaluations also exposed useful stopping behavior: a restatement of the current Business Design was not counted as a new candidate, overlapping automation/delegation benefits were not treated as additive evidence, and a proposal that could delay state visibility retained that downside instead of being counted as automatically useful.
+
+**Validation limits:**
+
+- one Business Design and a small number of qualitative Fresh runs
+- no measured operational time, error reduction, cost saving, or candidate implementation
+- no proof of optimal candidate count, completeness, or universal Pain behavior
+- requested model/effort and instruction-based file isolation were recorded, but independently attested runtime/model isolation was not available
+- the evidence supports the adopted review behavior and its stopping boundaries; it does not establish that any generated candidate is feasible or worth adopting in a particular organization
+
+These are evidence boundaries for the adopted workflow, not a beta/candidate status. Candidate feasibility and Business changes still require human evidence and approval.
+
+
 ## Next questions
 
 The optimal division between pre-implementation and post-implementation review, workflow integration, and low-cost regression checks remain research questions. Long-term maintainability, comprehension costs, and generalization of the architecture observations remain unvalidated.

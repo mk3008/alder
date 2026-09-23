@@ -1,0 +1,1 @@
+独立したFreshレビューです。/workspace/scratch/501257125b1f/pain-isolation/h1/launch.txt を全文読み、その指示を実行してください。このlaunch.txtと、その中で指定されたbusiness-design.md以外の資料や他run・過去の生成結果を読まないでください。生成物は指示されたディレクトリに保存し、保存後は修正しないでください。

@@ -1,0 +1,11 @@
+{
+  "referenced_input_paths": [
+    "/workspace/scratch/501257125b1f/optimization-packet/business-design.md"
+  ],
+  "referenced_other_materials": false,
+  "other_materials": [],
+  "experimental_conditions_from_task": {
+    "problem": "承認済みの購入申請が増えると、購買担当者が申請ごとに購入を行い、その結果を登録する作業の負荷が高い。",
+    "pain_level": "High"
+  }
+}

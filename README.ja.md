@@ -34,6 +34,8 @@ product/
 4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
 5. 未決の業務判断だけを人間に戻す。
 
+人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を記録した場合は、業務設計に対して[Optimization Review](docs/optimization-review.md)も実行できます。少数の代替業務案を探索し、Scopeと業務変更Difficultyを評価します。人間が変更を決めるまでは既存の業務上の意味を維持し、採用する場合はBusiness Designを先に更新します。
+
 この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
 
 **Alderは、アーキテクチャの形式や構造を導入する時期を規定しません。** 実装を担当するAIには、業務設計、明示的な要求・制約、実際に予見している将来のリスクを具体的に伝え、実現方法を任せます。アーキテクチャの知識はその判断に使えますが、形式の名前だけでは要求の代わりになりません。
@@ -49,12 +51,13 @@ product/
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
+| Problem / Pain / Scope / Difficultyを使って業務の代替案を検討するレビュー | [Optimization Review（英語）](docs/optimization-review.md) |
 | Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
 | 必須の検査項目設計と人間レビュー、AIによる業務設計・Check Item・Testの対応関係の保守 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
-**Alder v0.5** では、検査項目の作成と追跡関係の保守は任意でした。採用した場合の恒久的な対応関係は **Business Design ↔ Check Item ↔ Test** までとし、Check Item ↔ Code の物理位置mappingは持ちません。**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証します。研究候補の**レビュー知識 v0.3**は変更していません。Alderは引き続き研究候補です。過去仕様は[v0.5リリースノート（英語）](docs/release-notes-v0.5.md)を参照してください。フレームワーク、CLI、実行時パッケージの導入は不要です。
+**Alder v0.6** では、Problem起点のOptimization Reviewを正式なワークフロー能力として追加しつつ、恒久的なtraceabilityは **Business Design ↔ Check Item ↔ Test** のままです。リリース済みv0.6では検査項目の作成と追跡関係の保守は任意ですが、**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証し、Check Item ↔ Code の物理位置mappingは持ちません。研究候補の**レビュー知識 v0.3**も変更していません。Alder全体は引き続き研究候補ですが、Optimization Review自体はadoptedです。[v0.6リリースノート（英語）](docs/release-notes-v0.6.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
 
 ## 外部ツール向けBusiness Graph export（任意）
 

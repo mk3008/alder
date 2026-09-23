@@ -1,0 +1,19 @@
+{
+  "source_revision": "5405a5069fc13e1a1e27de8b06e4a375a3653e5e",
+  "source_path": "business-design/purchase-request/README.md",
+  "input_packet_path": "/workspace/scratch/501257125b1f/optimization-followup/a1-approval/business-design.md",
+  "input_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/a1_approval",
+  "effective_model_and_effort_independently_attested": false,
+  "isolation": "fresh conversation and explicit file allowlist; shared filesystem was not sandbox-isolated",
+  "runs": 1,
+  "sha256": {
+    "launch.txt": "7ef371e563f1e7bd6eaee237a8c2b49fa912901449e54d98f6e5cda2d7326edd",
+    "invocation.txt": "320afd0833d0bacaaa362cf34b724cea3a832df52816fe1b32220d6f02cedd0c",
+    "raw.md": "640f69d4310df5e28a02b788e4a75ddb43f5ad235dde716e1a353e3d09219fc3",
+    "read-log.json": "f4f025200a0e803d0a0ab4a2ff15434c83cdc6f811a968e22c04d48528ecb9d0"
+  }
+}
