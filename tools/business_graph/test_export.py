@@ -187,7 +187,7 @@ class ExportTests(unittest.TestCase):
             ('input', '検査項目', work, '現行項目 / ID / レビュー状態 / 既存対応関係'),
             ('input', 'Alder: 検査項目設計ナレッジ', work, '検査項目の導出・レビュー・追跡関係の確認観点'),
             ('input', '依頼者', work, '検査項目レビュー結果'),
-            ('output', work, '検査項目', '期待結果 / レビュー状態 / 業務設計書との対応 / 検証不足'),
+            ('output', work, '検査項目', '期待結果 / レビュー状態 / 業務設計書との対応'),
             ('output', work, '依頼者', '検査項目案 / レビュー依頼 / 確認事項'),
         })
         returns = [r for r in graph['relations'] if r['kind'] == 'business-exception'
@@ -499,13 +499,16 @@ class ExportTests(unittest.TestCase):
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
             '業務設計', '検査項目の設計', 'システム設計', '実装',
-            '同期漏れ検査', '業務グラフ出力',
+            '同期漏れ検査',
         })
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'business' and not n['scope']},
                          {'システム設計', '実装'})
-        self.assertEqual(len(nodes), 19)
-        self.assertEqual(len(graph['relations']), 32)
+        self.assertEqual(len(nodes), 17)
+        self.assertEqual(len(graph['relations']), 30)
+        self.assertNotIn('業務グラフ出力', nodes)
+        self.assertNotIn('業務グラフJSON', nodes)
+        self.assertIn('Testによる検証根拠の不足', nodes['検査項目']['information'])
         self.assertIn({'kind': 'input', 'from': '検査項目', 'to': '検査項目の設計',
                        'label': '現行項目 / ID / レビュー状態 / 既存対応関係'}, graph['relations'])
         self.assertIn({'kind': 'input', 'from': 'テスト', 'to': '同期漏れ検査',
