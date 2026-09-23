@@ -73,7 +73,7 @@ Input / Output describe the actual information transfers represented by Object �
 
 The point is not to fill every field mechanically. It is to **identify the activity through What and trace relationships between activities through Who / When / Input / Output**.
 
-A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. If human discretion itself is the operational trigger, state that discretion explicitly. This recommendation helps describe work consistently; it is not an additional rule in the review knowledge.
+A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. Check the real reason work begins, not merely whether the wording is passive. If human discretion itself is the operational trigger, state the concrete observation prompting that discretion. For example, the optional drift diagnosis starts when a synchronization gap is suspected in Business Design / Check / Test relationships, not on every edit or when an invented requester sends an undefined request. This is a normal start outside the standard flow, not an Exception When caused by another Activity. Use “any time” / 随時 only when no more specific start reason can be stated.
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
 
