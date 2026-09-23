@@ -14,9 +14,13 @@ Business Designは依頼者との合意に使う文書である。本文は依�
 
 # Scope
 
-Alderが提供するのは、業務上の意図を依頼者と合意する業務設計と、期待結果を確認して検査項目を後続開発へ渡す業務である。技術条件を整理するシステム設計と、合意済みの設計・検査項目を直接受け取る実装は、前後の受け渡しを示すためだけに含める隣接業務であり、Alderの責任範囲ではない。同期漏れ検査は疑いが生じたときだけ使う任意の診断として独立させる。Business Graph JSONは、外部ツールで可視化・解析・加工する場合に業務設計やレビューを助ける任意の中間投影形式であり、標準のBusiness Activityや依頼者への成果物ではない。Alderという手法自体の研究、ガイド改訂の採否、PR・Release、実装後のTest実行・実装レビュー・デプロイはこの標準設計業務の対象外である。各ActivityのScopeは、trueをAlderが提供する業務、falseを直接隣接する業務として扱う。
+Alderが提供するのは、業務上の意図を依頼者と合意する業務設計と、期待結果を確認して検査項目を後続開発へ渡す業務である。技術条件を整理するシステム設計と、合意済みの設計・検査項目を直接受け取る実装は、前後の受け渡しを示すためだけに含める隣接業務であり、Alderの責任範囲ではない。同期漏れ検査は疑いが生じたときだけ使う任意の診断として独立させる。Business Graph JSONは、外部ツールで可視化・解析・加工する場合に業務設計やレビューを助ける任意の中間投影形式であり、標準のBusiness Activityや依頼者への成果物ではない。Alderという手法自体の研究、ガイド改訂の採否、PR・Release、実装後のTest実行・実装レビュー・デプロイはこの標準設計業務の対象外である。Activity ScopeのtrueはAlderが提供する業務、falseは直接隣接する業務を表す。Object Scopeのtrueはこの業務境界内で成立・管理する成果物またはAlderが提供する知識・照合情報、falseは依頼者や隣接業務が成立・管理するObjectを表す。Input / Outputの向きだけで内外を決めない。
 
 # Object 依頼者
+
+## Scope
+
+false
 
 ## Icon
 
@@ -29,6 +33,10 @@ users
 - 業務上の判断・承認
 
 # Object 業務設計書
+
+## Scope
+
+true
 
 ## Icon
 
@@ -43,6 +51,10 @@ file-text
 
 # Object システム要件書
 
+## Scope
+
+false
+
 ## Icon
 
 file-text
@@ -54,6 +66,10 @@ file-text
 
 # Object Alder: 業務相関ナレッジ
 
+## Scope
+
+true
+
 ## Icon
 
 book-open
@@ -64,6 +80,10 @@ book-open
 
 # Object Alder: 業務ナレッジ
 
+## Scope
+
+true
+
 ## Icon
 
 book-open
@@ -73,6 +93,10 @@ book-open
 - 業務手順・条件・考慮事項の確認観点
 
 # Object Alder: 検査項目設計ナレッジ
+
+## Scope
+
+true
 
 ## Icon
 
@@ -85,6 +109,10 @@ book-open
 
 # Object 判断記録
 
+## Scope
+
+true
+
 ## Icon
 
 notebook-pen
@@ -95,6 +123,10 @@ notebook-pen
 - 残る制約・未決事項
 
 # Object 検査項目
+
+## Scope
+
+true
 
 ## Icon
 
@@ -108,6 +140,10 @@ list-checks
 
 # Object コード
 
+## Scope
+
+false
+
 ## Icon
 
 file-code
@@ -118,6 +154,10 @@ file-code
 - 変更内容
 
 # Object テスト
+
+## Scope
+
+false
 
 ## Icon
 
@@ -130,6 +170,10 @@ flask-conical
 
 # Object 同期照合情報
 
+## Scope
+
+true
+
 ## Icon
 
 fingerprint
@@ -140,6 +184,10 @@ fingerprint
 - 検出されたTestの識別情報
 
 # Object 同期漏れの候補
+
+## Scope
+
+true
 
 ## Icon
 
