@@ -33,6 +33,8 @@ product/
 3. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**.
 4. Return only unresolved business questions to people for a decision.
 
+When people have recorded a concrete operational **Problem** and **Pain level**, Alder can also run an [Optimization Review](docs/optimization-review.md) against the Business Design. It explores a small set of alternative business designs, evaluates Scope and business-change Difficulty, and preserves existing meaning until people explicitly decide to change it. Accepted candidates update Business Design first.
+
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
 **Alder does not prescribe an architecture style or when to introduce structure.** Give the implementation agent the Business Design, explicit requirements and constraints, and concrete future risks you actually foresee; let it choose how to realize them. Architecture knowledge can support that choice, but a style name does not replace requirements.
@@ -48,9 +50,10 @@ When technical alternatives compete, **reason before measuring**. Use requiremen
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
+| Problem-driven review of alternative business designs using Problem / Pain / Scope / Difficulty | [Optimization Review](docs/optimization-review.md) |
 | Optional discovery of undocumented functional conditions before Check/Test commitments | [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Optional human/AI traceability from Business Design through Check Items to tests; tests verify code by execution | [Check Item traceability](docs/check-item-traceability.md) |
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
-**Alder v0.5** keeps Business Design ↔ Check Item ↔ Test as the permanent traceability boundary and deliberately does not maintain Check Item ↔ Code location mappings. Tests verify the implementation by execution. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate; see the [v0.5 release notes](docs/release-notes-v0.5.md). It requires no framework, CLI, or runtime package.
+**Alder v0.6** adds the adopted Problem-driven Optimization Review workflow while retaining Business Design ↔ Check Item ↔ Test as the permanent traceability boundary. Tests verify the implementation by execution; Alder does not maintain Check Item ↔ Code location mappings. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate overall; see the [v0.6 release notes](docs/release-notes-v0.6.md). It requires no framework, CLI, or runtime package.

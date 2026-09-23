@@ -61,6 +61,25 @@ A When such as “whenever the person feels like doing it” makes timing depend
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
 
+### Record operational Problems when there is something to improve
+
+Business Design may also record a concrete **Problem** and **Pain level** for an Activity when people actually experience a burden worth reviewing. These are not mandatory fields and should not be invented merely to make every Activity look optimizable.
+
+```markdown
+### Problem
+
+Approved purchase requests require the purchasing operator to repeat purchase and result-registration work for each request.
+
+### Pain level
+
+High
+```
+
+Use a simple relative Pain level such as **Low / Medium / High**. Pain is a proportionality signal for review, not a numerical score or an automatic decision rule. If frequency, time, error rate, cost or other observed evidence is available, record it; do not fabricate measurements when none exist.
+
+A recorded Problem is the entry point for [Optimization Review](optimization-review.md). The review stays centered on that Problem rather than trying to optimize the whole Business Design.
+
+
 ## 2. Point the agent to the design and review knowledge
 
 Use root AGENTS.md as a router. Adapt the paths to your workspace:
@@ -79,13 +98,33 @@ Record the selected review knowledge source revision in the routing instructions
 
 ### Versions and access
 
-The current release is **Alder v0.5**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.4 adds optional functional consideration discovery and uses Check Item (introduced as Atomic Check in v0.3); the review knowledge itself remains v0.3.
+The current release is **Alder v0.6**, containing **research review knowledge v0.3**. These versions describe different things and are not renamed to match. v0.6 adds the adopted Problem-driven Optimization Review workflow; the review knowledge itself remains v0.3.
 
-For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.5`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.5 and the copied knowledge remains research version v0.3, regardless of the local filename.
+For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.6`. If you intentionally use an unreleased commit, record that exact revision instead. The Alder release is v0.6 and the copied knowledge remains research version v0.3, regardless of the local filename.
 
 A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
-Alder v0.5 keeps **Check Item** (Atomic Check in v0.3) and narrows permanent traceability to Business Design ↔ Check Item ↔ Test. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. See the [v0.5 release notes](release-notes-v0.5.md). Existing Check IDs and review states remain valid.
+Alder v0.6 retains the v0.5 **Check Item** traceability boundary: Business Design ↔ Check Item ↔ Test. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. v0.6 additionally adopts [Optimization Review](optimization-review.md). See the [v0.6 release notes](release-notes-v0.6.md). Existing Check IDs and review states remain valid.
+
+### Run Optimization Review for a recorded Problem
+
+When Business Design contains a concrete Problem and Pain level, use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
+
+The review:
+
+- starts from the stated Problem instead of searching the entire design for generic improvements
+- treats Pain as a proportionality signal for how far investigation and business-change difficulty are worth exploring
+- considers relevant directions such as Eliminate, Simplify/Merge, Automate, Delegate and Preserve without forcing one candidate from every category
+- classifies Scope as Narrow / Keep / Expand and explains why the Problem requires that boundary
+- judges Difficulty from affected roles, authority, Activities, systems, departments, external parties and contracts rather than code size
+- preserves existing Business meaning unless people explicitly decide to change it
+- allows zero useful candidates and does not count a restatement of the current Business Design as an optimization
+
+Return at most a few useful alternatives; the current guide uses a maximum of three for one Problem. Do not choose a winner. People decide whether a candidate is worth adopting.
+
+If people accept a candidate, **update and confirm Business Design first**, then update downstream Checks, Tests, Decisions and implementation. A candidate is not a requirement merely because the AI proposed it.
+
+Use the copyable prompt and output contract in [Optimization Review](optimization-review.md). The evidence and limits for this adopted workflow are recorded there and in [Validation](validation.md).
 
 <a id="optional-draft-and-review-atomic-checks"></a>
 
