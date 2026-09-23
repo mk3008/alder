@@ -33,6 +33,8 @@
 
 I/Oは後続の業務が受け取る情報を理解できる短さに保ち、Object.Informationにある概念を全部列挙しない。各ObjectのInformationに後続のEntity候補を考える手掛かりがあるか、逆に過度なデータ定義になっていないかを両方確認する。InformationはEntityそのものでも、I/Oラベルと各項目の完全対応表でもない。必要になればInformationとProcedureから詳細を導出する。同一Activityで同一Objectが同方向に複数あるときは、まず一つの情報契約へ統合できるか確認し、分ける必要があればActivity境界も再検討する。
 
+任意のBusiness Graphを生成するときは、原文にある各Object.Informationの情報概念と並び順がJSONの `information` に保たれるかも確認する。形式・再生成の照合であり、Entityの厳密さや各I/Oラベルとの完全対応を要求するものではない。
+
 ### I/OとProcedureの双方向照合
 
 全Activityについて、ObjectごとのInput / OutputをProcedureと照らし、次を確認する。単なる単語の一致ではなく、読者が自然に受け渡しを追えるかで判断する。
