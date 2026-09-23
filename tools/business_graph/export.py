@@ -53,12 +53,11 @@ def validate_graph(graph):
         kind = node.get('type')
         require(kind in ('business', 'object'), 'invalid node type')
         expected = ({'id', 'type', 'name', 'why', 'when', 'who', 'where', 'result', 'scope'}
-                    if kind == 'business' else {'id', 'type', 'name', 'icon', 'information'})
+                    if kind == 'business' else {'id', 'type', 'name', 'scope', 'icon', 'information'})
         require(set(node) == expected, f'invalid {kind} node fields')
         require(all(nonempty(v) for k, v in node.items() if k not in ('scope', 'information')),
                 'node text fields must be nonempty')
-        if kind == 'business':
-            require(type(node['scope']) is bool, 'business scope must be boolean')
+        require(type(node['scope']) is bool, f'{kind} scope must be boolean')
         require(visible_name(node['name']) and node['id'] == node['name'], 'node ID must equal its visible name')
         require(node['id'] not in nodes, f'duplicate node ID: {node["id"]}')
         if kind == 'object':
@@ -153,23 +152,23 @@ def parse_design(text):
         category, name = match.groups()
         node_id = name.strip()
         if category == 'Object':
-            icon = 'box'
             information = []
-            if body != '(generic icon)':
-                object_headings = ['## Icon']
-                if any(h == '## Information' for _, h in headings(body)):
-                    object_headings.append('## Information')
-                values = sections(body, tuple(object_headings), node_id)
-                require([h for _, h in headings(body)] == object_headings,
-                        f'{node_id}: Object fields must follow Icon/[Information] order')
-                icon = 'box' if values['## Icon'] == '(generic icon)' else values['## Icon']
-                if '## Information' in values:
-                    for line in values['## Information'].splitlines():
-                        if line.strip():
-                            require(re.fullmatch(r'- \S.*', line),
-                                    f'{node_id} Information: expected - information concept')
-                            information.append(line[2:])
+            object_headings = ['## Scope', '## Icon']
+            if any(h == '## Information' for _, h in headings(body)):
+                object_headings.append('## Information')
+            values = sections(body, tuple(object_headings), node_id)
+            require([h for _, h in headings(body)] == object_headings,
+                    f'{node_id}: Object fields must follow Scope/Icon/[Information] order')
+            require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
+            icon = 'box' if values['## Icon'] == '(generic icon)' else values['## Icon']
+            if '## Information' in values:
+                for line in values['## Information'].splitlines():
+                    if line.strip():
+                        require(re.fullmatch(r'- \S.*', line),
+                                f'{node_id} Information: expected - information concept')
+                        information.append(line[2:])
             graph['nodes'].append({'id': node_id, 'type': 'object', 'name': name.strip(),
+                                   'scope': values['## Scope'] == 'true',
                                    'icon': icon, 'information': information})
             continue
         field_headings = ['## Scope'] + ['## ' + key for key in FIELDS]
