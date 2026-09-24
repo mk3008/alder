@@ -199,9 +199,9 @@ docs/checks/meeting-room.md を読み、今回合意した範囲を実装して�
 | 知りたいこと | 文書 |
 | --- | --- |
 | 業務設計書に何を、どの順序で書くか | [業務設計書の文書構造](docs/business-design-structure.ja.md) |
+| 記述の品質、未記載の条件、前後の業務のつながりを確かめる | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | 文書配置、各工程の手順とプロンプト | [導入ガイド](docs/adoption.md) |
-| 業務改善の観点、候補の評価、採用後の手順 | [Optimization Review](docs/optimization-review.md) |
-| 未記載の機能条件を検討する | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
+| 業務改善の観点、プロンプト、採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) |
 | 実装レビューの観点と止める条件 | [レビュー知識](docs/phase2/review-knowledge-v0.3.md) |
 | 業務設計書をJSON化し、外部ツールで可視化・解析する | [Business Graph export](docs/business-graph.md) |
 | Alderを使った業務の全体像 | [Alder自身の業務設計書](business-design/alder/README.md) |
