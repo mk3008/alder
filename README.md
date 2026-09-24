@@ -14,6 +14,7 @@ No framework or runtime package is required. Put the Business Design where the a
 | Current situation | What Alder does |
 | --- | --- |
 | Business meaning is missing or undecided | Write Business Design with users and agree on it |
+| You have a hypothesis for new or changed work | Make the intended work concrete as Business Design and check whether the work can operate coherently |
 | The current work is viable, but people have a concrete pain | Record Problem / Pain in Business Design and run Optimization Review |
 | Business Design is agreed and should be implemented | Derive Check Items, human-review them, then let AI implement |
 | You want to verify the implementation against the agreed work | A separate AI reviews it and returns only unresolved business decisions to people |
@@ -41,7 +42,7 @@ product/
   tests/
 ```
 
-1. Write the current work under `docs/business-design/`.
+1. Write the current or intended work under `docs/business-design/`.
 2. Review it with users and agree on the business meaning.
 3. Have AI draft Check Items and have people review them.
 4. Let AI implement, then review in a separate agent or fresh context.
