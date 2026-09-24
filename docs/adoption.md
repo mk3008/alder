@@ -2,6 +2,8 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
+For the standard **post-implementation review**, start with the [installed-plugin PoC](plugin-adoption.md): one-time install, a project Business Design path, and a short natural-language request. The rest of this page is the detailed method and manual/reference route, including workflows the PoC skill does not yet cover. The prompt below remains available for external clients and reproducibility experiments; ordinary plugin use does not require copying it.
+
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. No installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration is required. The reviewer needs readable Business Design and the selected Alder review knowledge.
 
 ## 1. Place Business Design where the agent can read it

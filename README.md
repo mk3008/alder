@@ -12,6 +12,10 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
+**Plugin PoC (post-implementation review):** Install Alder once from the [development marketplace](docs/plugin-adoption.md), keep Business Design in the product repository, and ask “Review this implementation with Alder.” With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The skill carries its review knowledge, selects the relevant context, and reports its package version and reviewed revisions. Other workflows still use the [adoption guide](docs/adoption.md). This package has not been published in the public Plugins Directory.
+
+### Manual/reference workflow
+
 For a new product, this is the recommended example; existing equivalent locations are fine:
 
 ```text
@@ -42,7 +46,7 @@ This layout and a local review-knowledge copy are optional. Prefer keeping desig
 
 When technical alternatives compete, **reason before measuring**. Use requirements, risks, scale, runtime behavior, and existing evidence to focus validation on the uncertainties most likely to change the decision. Bound optional evaluation and stop when a sufficiently supported solution is found unless the product explicitly calls for deeper optimization; missing numeric targets alone are not a reason to stop and ask.
 
-[Follow the adoption guide and copy the prompts →](docs/adoption.md)
+[Start with the plugin PoC →](docs/plugin-adoption.md) · [Manual adoption and reference prompts →](docs/adoption.md)
 
 ## Optional Business Graph export for external tools
 
@@ -58,6 +62,8 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 
 | Need | Document |
 | --- | --- |
+| One-time plugin install and short implementation-review request | [Plugin PoC](docs/plugin-adoption.md) |
+| Bounded evaluation and unverified installation/quality limits | [Plugin PoC evaluation](docs/plugin-poc-evaluation.md) |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
