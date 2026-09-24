@@ -2,73 +2,72 @@
 
 [English](README.md) | 日本語
 
-**一つの業務設計書を正本に、業務を改善し、実装を検証する。**
+**ユーザーと、業務設計書で話そう。**
 
-Alderは、誰が、いつ、何を受け取り、何を渡すかを記述した**業務設計（Business Design）**を、現在の業務上の意図の正本とします。人間が具体的なProblemとPain levelを記録した場合は、任意の[Optimization Review](docs/optimization-review.md)でAIが少数の代替業務案を提案します。採用を決めるのは人間です。採用時には業務設計を先に更新し、再合意します。提案だけで現在の業務ルールは変わりません。
+Alderは、ユーザーとの業務合意を開発工程の外部資料にしません。  
+合意した**業務設計（Business Design）**を正本に、業務改善、Check Item、AI実装、レビューまでをつなぎます。
 
-システムとして実現するときは、業務設計を合意し、導出した検査項目を人間がレビューしてから実装に渡します。AIが実装し、別のエージェントや新しいセッションが実装とテストをレビューします。その後、合意済みの期待結果との照合とCheck ↔ Testの根拠を保守し、未決の業務上の意味だけを人間に戻します。将来のあらゆる業務判断を決めきる前でも実装は始められますが、未決のルールを勝手に決めてはいけません。
+専用フレームワークやruntime packageは不要です。業務設計書を置き、AIに読ませます。
 
-既存の要求妥当性確認、ウォークスルー、追跡関係、判断記録と人間の判断を、AIと繰り返し使うために組み合わせます。新たなBPM理論やアーキテクチャの提案ではなく、UIやコード構造も規定しません。
+## 30秒でわかるAlder
 
-## 一つの業務設計、三つのループ
+| 今どういう状態？ | Alderでやること |
+| --- | --- |
+| 業務の意味が不足・未決 | ユーザーと業務設計書を作り、レビュー・合意する |
+| 今の業務は成立しているが、困っている | Problem / Painを業務設計書に記録し、Optimization Reviewで改善案を出す |
+| 業務設計は合意済みで、システムとして実現したい | Check Itemを作って人間が確認し、AIに実装させる |
+| 実装が業務設計どおりか確かめたい | 別のAIがレビューし、未決の業務判断だけを人間に戻す |
 
-| ループ | いつ使うか | 結果 |
-| --- | --- | --- |
-| 設計 | 現在の業務上の意味が不足・未決のとき | 業務設計書に記述し、人間がレビュー・合意する。 |
-| 改善（任意） | 現在の業務は成立しているが、具体的なProblem / Painがあるとき | まず業務設計書にProblem / Painを記録・確認し、少数の代替案を検討する。人間が採用した場合だけ業務設計書を改訂・再合意する。 |
-| 実現・検証 | 業務設計が合意済みで実装したいとき、または実装が設計どおりか確認したいとき | 人間がレビューしたCheck Itemから実装し、独立したAlderレビューとフォローアップで同じ業務設計に照らして検証する。 |
+改善案は、出ただけでは仕様になりません。人間が採用したときだけ業務設計書を更新し、そこからもう一度実装へ進みます。
 
-**仕様の未決**は業務設計で解く問い、**成立している現在業務のPain**は任意の改善レビューを始める理由です。実装中に業務上の意味の不整合が見つかった場合は、具体的な問いを業務設計へ戻して合意した上でCheckやコードを更新します。[Alder自身の業務設計](business-design/alder/README.md)でも改善を例外扱いせず、任意の通常業務として表します。三つのループで業務上の正本は一つです。
+```text
+ユーザー ↔ Business Design
+              ├─ Problem / Pain → Optimization Review ──採用→ Business Design
+              └─ Check Item → AI実装 → 独立レビュー
+```
 
-## プロダクトで始める
+## 始める
 
-新規導入時は次の配置を推奨します。既存プロジェクトに相当する配置があれば、そのまま使えます。
+新規プロジェクトでは、まずこの程度で十分です。
 
 ```text
 product/
-  AGENTS.md
   docs/
     business-design/
-      ...
     decisions/
-      ...
     alder/
       review-knowledge.md
   src/
   tests/
 ```
 
-1. 現在の業務設計を `docs/business-design/` に、選んだAlderバージョンのレビュー知識のローカルコピーを `docs/alder/review-knowledge.md` に置く。
-2. 業務設計を合意し、導出した検査項目を人間がレビューしてから両方を実装へ引き渡す。ここで標準設計業務が完了する。
-3. AGENTS.mdやタスクのプロンプトで参照先を案内する。AIに確認済みの業務設計と検査項目を読ませて実装させ、重要な前提・判断と理由を後続のAlderフォローアップへ渡す。未決の業務ルールは勝手に決めず、通常の可逆的な技術判断は進める。
-4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
-5. 未決の業務判断だけを人間に戻す。
+1. 現在の業務を `docs/business-design/` に書く。
+2. ユーザーと内容をレビューし、業務上の意味を合意する。
+3. AIにCheck Itemを作らせ、人間が確認する。
+4. AIに実装させ、別のAIまたはfresh contextでレビューする。
 
-任意の業務改善ループでは、具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**をまず業務設計書へ記録・確認し、その内容から[Optimization Review](docs/optimization-review.md)で代替案を探索します。採否は人間が判断し、採用時は業務設計を改訂・再合意してから検査項目や実装に進みます。候補のScope・Difficulty・Confidenceは提案の評価であり、現在の事実ではありません。
+詳しい導入方法とコピーして使えるプロンプトは[導入ガイド](docs/adoption.md)にあります。
 
-この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
+## 業務を改善したいとき
 
-**Alderは、アーキテクチャの形式や構造を導入する時期を規定しません。** 実装を担当するAIには、業務設計、明示的な要求・制約、実際に予見している将来のリスクを具体的に伝え、実現方法を任せます。アーキテクチャの知識はその判断に使えますが、形式の名前だけでは要求の代わりになりません。
+現在の業務は成立しているが、具体的な困りごとがあるなら、まず業務設計書に **Problem / Pain** を記録します。
 
-技術候補を比較するときは、**測る前に推論します。** 要求、リスク、規模、実行時の振る舞い、既存の根拠から、結論を変え得る不確実性へ検証を集中します。任意の評価には上限と停止条件を持たせ、プロダクトがより深い最適化を明示的に求めていないなら、十分な根拠のある妥当解で止めます。数値目標がないことだけを理由に、人間へ確認を戻す必要はありません。
+そこから[Optimization Review](docs/optimization-review.md)を実行すると、AIが少数の代替業務案を出します。採否は人間が決めます。
 
-[導入手順とコピーして使えるプロンプトへ（英語）→](docs/adoption.md)
+## Business Graph（任意）
+
+Business DesignはJSONへ投影し、外部ツールで可視化・解析できます。  
+JSONは中間形式であり、正本は常にBusiness Designです。
+
+[Business Graph JSON v1とexporter](docs/business-graph.md)
 
 ## 詳しく読む
 
 | 知りたいこと | 文書 |
 | --- | --- |
-| 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
-| 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
-| レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| Problem / Pain / Scope / Difficultyを使って業務の代替案を検討するレビュー | [Optimization Review（英語）](docs/optimization-review.md) |
-| Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
-| 必須の検査項目設計と人間レビュー、AIによる業務設計・Check Item・Testの対応関係の保守 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
-| 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
-| 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
-
-現在の開発ループでは、恒久的な追跡関係を **Business Design ↔ Check Item ↔ Test** とします。標準設計業務は合意済みの業務設計と検査項目の引き渡しで完了します。別運用である実装後のAlderレビューとフォローアップでTestの期待結果を確認し、Check ↔ Test/assertionの根拠を保守してから実装変更を受け入れます。Testは実行によってCodeを検証し、Check Item ↔ Code の物理位置mappingは持ちません。研究候補の**レビュー知識 v0.3**は変更していません。Alder全体は研究候補ですが、Optimization Review自体は採用済みです。導入の経緯は[v0.6リリースノート（英語）](docs/release-notes-v0.6.md)を参照してください。フレームワーク、CLI、実行時パッケージは不要で、Business Graph exportも任意です。
-
-## 外部ツール向けBusiness Graph export（任意）
-
-[Alderを使った設計業務のBusiness Design](business-design/alder/README.md)を、外部ツールで可視化・解析・加工したい場合は、業務設計や依頼者レビュー、設計者のセルフレビュー時に任意でJSONへ投影できます。BusinessとObjectのScopeは、それぞれ原文で明示した真偽値を投影し、Objectの内外を接続の向きから推測しません。JSONは中間形式であり、標準Business Activityや依頼者への成果物ではありません。利用や生成ファイルのcommitは標準設計業務の完了条件ではなく、このリポジトリの生成例はexporterの回帰用fixtureです。外部ツールで見つけた修正はSSOTであるBusiness Designへ反映します。Procedureと未承認のOptimization Review候補は投影対象外です。記録済みのProblem / Painは存在する場合に投影します。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
+| 導入方法、Business Designの書き方、標準フロー | [Adoption guide](docs/adoption.md) |
+| 業務改善提案 | [Optimization Review](docs/optimization-review.md) |
+| 実装レビューの観点 | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
+| Business Design → Check Item → Test の追跡 | [Check Item traceability](docs/check-item-traceability.md) |
+| Business Graph JSON / exporter | [Business Graph](docs/business-graph.md) |
+| Alderの考え方と境界 | [Philosophy](docs/philosophy.md) |
