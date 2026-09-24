@@ -22,61 +22,32 @@ Alderでは、ユーザーとの業務分析の結果を業務設計書に残し
 
 どの工程でも、**業務上の意味を決めるのは人間、その合意を残す正本は業務設計書**です。改善候補やコードを根拠に、合意した業務ルールを勝手に変えることはありません。
 
-## インストール・導入
+## 業務設計書とは — ユーザーが読めて、AIがレビューできる形にする
 
-Alderを使うための専用パッケージは不要です。必要なのは、業務設計書とAlderの文書を読めるAIエージェントです。以下ではGitを使い、作業中のプロダクトの隣にAlderを配置します。
+ヒアリング内容を議事録や自由形式の文章に残すだけでは、業務間のつながりや責任、情報の受け渡しを追いにくくなります。Alderでは、仕事を**Activity**、扱う情報・文書・台帳・外部の相手を**Object**として整理します。
 
-プロダクトのルートディレクトリで実行します。
+Activityは5W1Hを基本に、HowをInput・Procedure・Outputへ分け、正常終了後の状態をResultに書きます。困りごとがあればProblemとPain levelも残します。各欄は、後の確認や設計につながる意味を持っています。
 
-```sh
-git clone --depth 1 --branch main https://github.com/mk3008/alder.git ../alder
-git -C ../alder rev-parse HEAD
-```
+| 記述 | 意味・後で使えること |
+| --- | --- |
+| Who | 業務を担うロールと、責任を整理する手掛かり |
+| When | 業務を始める条件 |
+| Input / Output | 業務間で受け渡す情報と、接点を整理する手掛かり |
+| Object / Information | 業務で扱う情報。後続の設計でEntity候補を考える手掛かり |
+| Procedure | 業務ルールと、確認・判断・更新の流れ |
+| Result | 正常終了後に成立する状態と、次の業務へのつながり |
+| Scope | 今回の責任範囲 |
+| Problem / Pain level | 現行業務の困りごとと、その大きさ。改善を始める入口 |
 
-2行目に表示されたコミットIDを記録し、次の`<コミットID>`をその値に置き換えて実行します。ブランチから離れ、そのコミットの文書を参照する状態に固定します。
+これらは後続設計の手掛かりです。WhoやObjectから権限やEntityの定義がそのまま決まるわけではなく、DBを含む技術設計は別途行います。
 
-```sh
-git -C ../alder checkout --detach <コミットID>
-git -C ../alder rev-parse HEAD
-```
+**業務設計書は機械向けのDSLではありません。ユーザーが普通の業務文書として読める自然言語に、AIがレビューできるだけの構造を与えています。**
 
-表示されたコミットIDが記録と一致することを確認します。このチェックアウトは参照専用とし、利用版を更新するときはcheckout先と記録を一緒に変更します。文書は、たとえば次のように配置します。
-
-```text
-workspace/
-  alder/                         # Alderのガイド・レビュー知識
-  product/
-    AGENTS.md
-    docs/
-      business-design/            # 業務設計書
-      checks/                    # 実装へ渡す検査項目
-      decisions/                 # 重要な判断とその理由
-    src/
-    tests/
-```
-
-`AGENTS.md`またはタスクの指示に、次の参照先を追記します。`<コミットID>`は先ほどの値に置き換えてください。
-
-```text
-業務設計書: docs/business-design/
-検査項目: docs/checks/
-判断記録: docs/decisions/
-Alderの参照版: ../alder/ の <コミットID>
-業務設計書の書き方: ../alder/docs/business-design-structure.ja.md
-各工程の手順: ../alder/docs/adoption.md
-業務改善: ../alder/docs/optimization-review.md
-実装後のレビュー知識: ../alder/docs/phase2/review-knowledge-v0.3.md
-
-業務上の意味は業務設計書を正本とし、未決事項は人間に確認する。
-業務改善の候補は、人間が採用を決めてから業務設計書へ反映する。
-実装には、確認済みの業務設計書と人間がレビューした検査項目を渡す。
-```
-
-AIがこれらのパスを読めれば準備完了です。既存の文書配置を使う方法や版の選び方は[導入ガイド](docs/adoption.md)を参照してください。
+各欄の詳しい意味、見出しの順序、参照の書式は[業務設計書の文書構造](docs/business-design-structure.ja.md)へ。JSON化の条件も、このページから確認できます。
 
 ## 業務分析 — 仕事の流れを、ユーザーと確かめる
 
-業務設計書には、**仕事を表すActivity**と、**受け渡す情報や相手を表すObject**を書きます。Activityは5W1Hを基本に、HowをInput・Procedure・Outputに分け、正常終了時に成立する状態をResultに記します。
+ユーザーへのヒアリング内容を、まず業務設計書の形へ整理します。仕事ごとに担当者、手順、受け渡す情報を書き、前後の業務と共有するObjectをつなぎます。
 
 会議室予約なら、たとえば次のように書けます。以下は一つのActivityの抜粋です。
 
@@ -118,7 +89,7 @@ true
 利用者が指定した会議室と時間帯の予約が成立し、その予定で会議の準備を進められる。
 ```
 
-「同時に申し込まれても重複予約が成立しないか」「予約できなかった場合は何が残るか」。こうした問いを、AIのレビューで具体化してユーザーと確認します。ヒアリング内容だけでなく、前後の業務のつながりも読み合わせ、合意した内容と未決事項を区別します。
+Objectや例外を含む[予約受付の全文](docs/examples/meeting-room-reservation.ja.md)と、複数の業務が同じObjectを使う[予約・取消の記述例](docs/examples/meeting-room-lifecycle.ja.md)も用意しています。
 
 AIへの最初の依頼は、たとえば次の形です。
 
@@ -133,7 +104,20 @@ AIへの最初の依頼は、たとえば次の形です。
 確認したルール: 重複予約は成立させない。変更できない場合は元の予約を維持する。
 ```
 
-Objectや例外を含む[コピーして使える予約受付の記述例](docs/examples/meeting-room-reservation.ja.md)と、各欄の意味・見出しの順序を説明する[業務設計書の文書構造](docs/business-design-structure.ja.md)を用意しています。
+### 書いた内容をレビューし、ユーザーと合意する
+
+書式に沿って書くだけでは、業務設計書は完成しません。Alderでは、記述そのもの、業務間のつながり、必要に応じて未記載の条件を順に確かめます。
+
+```text
+ヒアリング → 業務設計書へ構造化 → 記述品質レビュー → 業務相関レビュー
+           → 必要なら考慮漏れレビュー → ユーザー確認・修正・合意
+```
+
+1. **記述品質を確かめる。** Inputにない情報をProcedureで使う、WhyとResultに同じ説明を書くなど、単純な書式でも役割を混同することがあります。誰が何を扱い、何が成立するかを読めるように整えます。[確認観点](docs/business-design-quality-review.md)と[依頼用プロンプト](docs/business-design-quality-check.ja.md)を用意しています。
+2. **業務のつながりを確かめる。** 個々の仕事が読めても、前工程の結果が次の開始条件につながらない、必要な情報が渡らない、といった問題は残ります。共有Objectの意味や例外時の差し戻しも含めて[業務相関をレビュー](docs/business-design-correlation-check.ja.md)します。
+3. **必要なら、考慮漏れを探す。** 正常な手順のヒアリングだけでは決まらない条件を、具体的な結果の違いが生じる場面から探します。一般的な必須機能を押し付けず、「この場合はどう扱うか」という問いにします。[考慮漏れレビュー](docs/behavior-derivation/functional-considerations.md)は任意です。
+
+AIは業務上の答えを代わりに決めません。ユーザーと問いを確認し、修正を重ね、合意した業務設計書を正本にします。実際にレビューで見つかった問いと、その扱いは[会議室予約のレビュー事例](docs/business-design-review.ja.md)で紹介しています。
 
 ## 業務改善 — 困りごとから、別のやり方を探す
 
@@ -193,6 +177,58 @@ docs/checks/meeting-room.md を読み、今回合意した範囲を実装して�
 実装・テスト実行の後は、別のAIエージェントや新しいセッションで、合意した業務と期待結果が実現されているかをレビューします。見つかった業務上の疑問はユーザーと確認し、業務設計書へ反映します。
 
 検査項目の作成からレビューまでのプロンプトは[導入ガイド](docs/adoption.md)、粒度やレビュー状態は[検査項目の作成・保守](docs/check-item-traceability.md)を参照してください。
+
+## インストール・導入
+
+Alderを使うための専用パッケージは不要です。必要なのは、業務設計書とAlderの文書を読めるAIエージェントです。以下ではGitを使い、作業中のプロダクトの隣にAlderを配置します。
+
+プロダクトのルートディレクトリで実行します。
+
+```sh
+git clone --depth 1 --branch main https://github.com/mk3008/alder.git ../alder
+git -C ../alder rev-parse HEAD
+```
+
+2行目に表示されたコミットIDを記録し、次の`<コミットID>`をその値に置き換えて実行します。ブランチから離れ、そのコミットの文書を参照する状態に固定します。
+
+```sh
+git -C ../alder checkout --detach <コミットID>
+git -C ../alder rev-parse HEAD
+```
+
+表示されたコミットIDが記録と一致することを確認します。このチェックアウトは参照専用とし、利用版を更新するときはcheckout先と記録を一緒に変更します。文書は、たとえば次のように配置します。
+
+```text
+workspace/
+  alder/                         # Alderのガイド・レビュー知識
+  product/
+    AGENTS.md
+    docs/
+      business-design/            # 業務設計書
+      checks/                    # 実装へ渡す検査項目
+      decisions/                 # 重要な判断とその理由
+    src/
+    tests/
+```
+
+`AGENTS.md`またはタスクの指示に、次の参照先を追記します。`<コミットID>`は先ほどの値に置き換えてください。
+
+```text
+業務設計書: docs/business-design/
+検査項目: docs/checks/
+判断記録: docs/decisions/
+Alderの参照版: ../alder/ の <コミットID>
+業務設計書の書き方: ../alder/docs/business-design-structure.ja.md
+各工程の手順: ../alder/docs/adoption.md
+業務改善: ../alder/docs/optimization-review.md
+実装後のレビュー知識: ../alder/docs/phase2/review-knowledge-v0.3.md
+
+業務上の意味は業務設計書を正本とし、未決事項は人間に確認する。
+業務改善の候補は、人間が採用を決めてから業務設計書へ反映する。
+実装には、確認済みの業務設計書と人間がレビューした検査項目を渡す。
+```
+
+AIがこれらのパスを読めれば準備完了です。既存の文書配置を使う方法や版の選び方は[導入ガイド](docs/adoption.md)を参照してください。
 
 ## 詳しく読む
 
