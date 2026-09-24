@@ -1,0 +1,19 @@
+{
+  "source_revision": "d0a5f28fc1bd12472bb001cfc750b91377610f06",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/facilities_treatment",
+  "runs": 1,
+  "effective_model_and_effort_independently_attested": false,
+  "input_sha256": {
+    "business-design/facilities-maintenance/README.md": "1c64a1f71d5f2184077fba74ddfebfa6a4ef78333a0e66163909bd785f1c90bc",
+    "docs/optimization-review.md": "1b5951fb2505d98b440ffb022da860dcec61cc2dffab685d9ce6cbab57037096"
+  },
+  "record_sha256": {
+    "launch.txt": "0ec6326f8c7bb342df4bb4fee24038c3280715adfe6fadf824a7d545dfcf5101",
+    "invocation.txt": "12299999426a66d752abac0e41a34b63425ce28004ea3a679bd4ea57a2d0ac43",
+    "raw.md": "9fd04d68910655cdb8d2a2e7c70ae86e8efb8cd51c6aa6f0067586bb9f730c25",
+    "read-log.json": "d65fabe5b2031696d424c28a9438839765a9c4364aecb71b60c70c2e85f17d72"
+  }
+}

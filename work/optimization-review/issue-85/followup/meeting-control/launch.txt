@@ -1,0 +1,12 @@
+Independent Fresh Control review for Alder PR #87. Read only these two files from Alder revision d0a5f28fc1bd12472bb001cfc750b91377610f06:
+- /workspace/scratch/ef15bb86674b/alder/business-design/meeting-room/README.md
+- /workspace/scratch/ef15bb86674b/alder/docs/optimization-review.md
+
+Do not read prior runs, other task prompts, PR discussions, experiment protocol or conversation history. Do not modify either source file. This is a research review, not business approval.
+
+Problem (experiment-only, not a measured fact in the Business Design): 利用者が会議室の空きを確認して予約しても、会議予定の変更や取消が増えると、利用者が予約を変更・取り消して空きを確保し直す作業の負荷が高い。
+Pain level: High. No workload, frequency, occupancy or meeting-pattern facts are supplied.
+
+Run the current Alder Optimization Review using the referenced guidance and its ordinary method. Focus on the stated Problem, use Pain proportionally, consider relevant directions without filling a quota, preserve current business meaning unless identifying a human decision to change it, distinguish facts from assumptions, and report at most three useful candidates with all output fields requested by the guidance. Zero is valid. Do not select or approve a candidate.
+
+Write the complete raw response in Japanese to /workspace/scratch/ef15bb86674b/alder/work/optimization-review/issue-85/followup/meeting-control/raw.md exactly once. Do not edit it afterward. Final message: report only the two source paths read and that the raw output was saved.
