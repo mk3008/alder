@@ -1,0 +1,9 @@
+{
+  "agent_reported_source_paths": [
+    "business-design/meeting-room/README.md",
+    "docs/optimization-review.md"
+  ],
+  "prior_outputs_provided_to_agent": false,
+  "other_materials_reported": false,
+  "isolation": "fresh conversation with explicit file allowlist; shared filesystem access not isolated"
+}

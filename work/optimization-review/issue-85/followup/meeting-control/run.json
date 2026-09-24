@@ -1,0 +1,19 @@
+{
+  "source_revision": "d0a5f28fc1bd12472bb001cfc750b91377610f06",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/meeting_control",
+  "runs": 1,
+  "effective_model_and_effort_independently_attested": false,
+  "input_sha256": {
+    "business-design/meeting-room/README.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+    "docs/optimization-review.md": "1b5951fb2505d98b440ffb022da860dcec61cc2dffab685d9ce6cbab57037096"
+  },
+  "record_sha256": {
+    "launch.txt": "81b8605688326e058aaf623b018d74bd4f84ed44cbd971748e46c5184b8a7042",
+    "invocation.txt": "19ff1385d003bffbf4b95305ba3f4578644445d885a4496ce743262f58c6524b",
+    "raw.md": "7a1af67902511f71dc6065a15d177fcde9af3fbe852694a936fdad04341c3c56",
+    "read-log.json": "c2eac8562f68477be8074aaca923e7bd6412aed67db73c770cc7102e6516d5ba"
+  }
+}

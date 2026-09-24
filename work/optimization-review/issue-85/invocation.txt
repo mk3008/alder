@@ -1,0 +1,3 @@
+spawn_agent task_name=fresh_exploration, fork_turns=none, model=gpt-6-sol, reasoning_effort=medium
+
+You are an independent Fresh reviewer for Alder Issue #85. The complete exact task prompt is in /workspace/scratch/ef15bb86674b/alder/work/optimization-review/issue-85/launch.txt. Read that prompt and only the two source files it names; do not read other repository files or prior outputs. The repository revision and restrictions are specified there. Follow it, write raw.md exactly once, and report the two source paths read. Do not alter the Business Design or guidance.
