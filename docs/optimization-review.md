@@ -45,6 +45,8 @@ Consider the following directions when they are relevant; they are lenses, not a
 - **Delegate** — can responsibility move to an external service, package, existing platform capability, or another established owner?
 - **Preserve** — which business meaning, control, judgment, responsibility, or experience should deliberately remain even if it costs effort?
 
+When the Problem and Pain warrant it, briefly question whether the current Activity, its trigger, timing, unit of work or responsibility boundary must exist in its current form. An extreme alternative may reveal a different business model even if present constraints keep it from becoming a candidate. Restore those constraints before proposing a candidate. This is a light exploration heuristic, not a required sequence or a reason to enumerate every extreme. Stop when further variations add little information relative to their review cost.
+
 For each useful candidate, evaluate:
 
 ### Scope
@@ -89,6 +91,8 @@ Do not count these as new Optimization Candidates:
 
 Prefer a few useful alternatives over filling a quota. The current default is **at most three** candidates for one Problem.
 
+Do not inflate candidate counts with extreme alternatives that are not ready for candidate evaluation. A materially different perspective may instead be returned separately for human exploration, with its unknowns and business-meaning changes made explicit. Omit mere automation, batching, delegation, technical variants or paraphrases that leave the business model intact.
+
 Pain should influence how far the search is worth taking. For example, a Low-pain issue normally gives weaker justification for exploring a high-difficulty cross-organization change when a narrow alternative exists. This is a proportionality judgment, not a hard threshold.
 
 ## Output
@@ -108,6 +112,16 @@ For each candidate, report:
 11. **Confidence**
 
 Do not select a winner or state that a candidate should be adopted. The output is a review for human Business judgment.
+
+### Extreme perspectives (when useful)
+
+Separate from Optimization Candidates, optionally return a few **Extreme perspectives** that question the current business model but cannot yet be treated as candidates. For each, state:
+
+- the different business model and how it could remove the stated Problem
+- why it was not retained as a candidate under current constraints
+- which facts or human business decisions would make it worth revisiting
+
+These are exploration prompts, not feasible proposals or recommendations. State which current Business meaning would change. Do not repeat a perspective already covered by a candidate, fill a quota, or prolong the review to invent one. Zero is valid for both sections.
 
 ## Copyable review prompt
 
@@ -130,6 +144,8 @@ Consider Eliminate, Simplify/Merge, Automate, Delegate and Preserve only when th
 Preserve the current Business meaning unless the candidate explicitly identifies a human Business decision that would change it. Do not invent workloads, services, contracts or external facts. Distinguish assumptions and unknowns.
 
 Return at most three useful candidates. Zero candidates is a valid result. Do not count a restatement of the current Business Design or materially duplicate proposals as separate candidates.
+
+When the Problem and Pain justify it, briefly consider whether the current Activity, timing, unit of work or responsibility boundary is needed at all. Return to actual constraints before proposing candidates. Do not follow a fixed multi-step algorithm or generate weak variants to fill a quota. If a meaningfully different business model cannot become a candidate yet but would give people a useful question to investigate, report it separately under Extreme perspectives: the alternative model and its causal path to removing the Problem, why it is not a candidate, and the facts or human decisions needed to revisit it. Clearly label it as exploratory, not feasible or recommended. Omit this section when there is no useful perspective.
 
 For each candidate report:
 - Candidate
@@ -169,5 +185,6 @@ The adopted behavior was evaluated on the existing purchase-request benchmark:
 - [Issue #81 initial PoC](optimization-review/issue-81.md) produced a bounded set of Problem-related alternatives while retaining existing approval and purchase meaning.
 - [Problem / Pain / Scope follow-up](optimization-review/issue-82-followup.md) changed the Problem and observed the review focus move from purchasing work to approval waiting and purchase-result reconciliation; Narrow, Keep and Expand were all used with stated reasons.
 - [Pain-isolation comparison](optimization-review/issue-82-pain-isolation.md) fixed a neutral Problem and ran High and Low twice each. Both High runs retained higher-difficulty investigation candidates; both Low runs stayed with narrower, lower-impact changes and explicitly stopped broader exploration.
+- [Issue #85 exploration](optimization-review/issue-85-followup.md) compared the existing purchase-request results with one extreme exploration and ran paired Fresh Control/Treatment reviews on facilities maintenance and meeting-room booking. The treatment exposed distinct alternative business models in all three, including ones that did not survive as candidates. The evidence supports returning a bounded perspective to people, not a claim of higher candidate quality or feasibility.
 
-These are small qualitative evaluations on one Business Design, not measured proof of cost savings, optimal candidate count, general completeness, or universal Pain behavior. Candidate feasibility and expected benefit still require business evidence. Those evidence limits do not make Optimization Review experimental; they bound the claims Alder makes about the adopted workflow.
+These are small qualitative evaluations, not measured proof of cost savings, optimal candidate count, general completeness, universal Pain behavior, or a causal improvement in candidate quality. The #85 purchase comparison used historical controls rather than a paired run. Candidate feasibility and expected benefit, and whether an extreme perspective is applicable, still require business evidence. Those evidence limits do not make Optimization Review experimental; they bound the claims Alder makes about the adopted workflow.

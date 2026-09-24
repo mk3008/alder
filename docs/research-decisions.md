@@ -92,6 +92,8 @@ Reflection: [adoption guide](adoption.md#run-optimization-review-for-a-recorded-
 
 Limits: 証拠は単一Business Designの少数Fresh実行で、実際の工数削減、費用対効果、候補実現性、最適候補数、完全性、他領域への一般化は未証明である。Highで高難度案を残したことは、その調査費用が実際に見合うことの証明ではない。これらは正式機能をcandidate扱いする理由ではなく、Alderが主張できる証拠範囲の限界として保持する。実利用で過剰探索、Painへの不追従、無価値な候補、Business意味の破壊が継続的に観測された場合は通常の機能改善・変更・廃止判断として再検討する。
 
+**Extreme perspectives — Optimization Review の任意の出力として採用。** [#85の3ベンチマーク比較](optimization-review/issue-85-followup.md)では、現行のActivityや処理単位を外した別モデルがTreatmentのraw出力に現れた。制約を戻した結果、最終Candidateに残らない案にも、人間が新しい事実から再探索できる問いとしての価値がある。そこで[Optimization Review](optimization-review.md)に軽い探索ヒューリスティックと候補から分けた任意の出力欄を加えた。必須の複数案生成や固定手順にはしない。比較は少数の単回出力で、Controlが同じ視点を将来生成できないこと、候補の品質改善、採用可能性や費用対効果は示していない。意味の薄い視点や過剰な出力量が続く場合は、欄の条件を見直す。
+
 ## Review structure and checklists
 
 **Mandatory Activity / Data / Rule independent reviews — not adopted.** [#11's exclusions](https://github.com/mk3008/alder/issues/11#issuecomment-5620623137) found no basis for symmetric three-part organization or mandatory independent reviews. Data meaning contributed guarantees and sufficiency even when no definite Data defect was found; zero defects did not establish irrelevance. [#23](https://github.com/mk3008/alder/issues/23#issuecomment-5626679109) removed K3's auxiliary-only restriction while still declining mandatory Data-wide review. Reflection: current Q3/P2 examine business-significant meaning without a separate Data audit requirement. Limit: independent-review incremental benefit/cost remains unmeasured. Reconsider if a consequential class is reliably missed by integrated review and a relevant comparison supports separating it.
