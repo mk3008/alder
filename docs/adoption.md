@@ -60,9 +60,9 @@ Apply this to explanations, business descriptions, and Input / Procedure / Outpu
 
 Business Design must be writable, readable and maintainable by a person alone, starting from interview findings. AI may draft and edit the same visible information alongside people; it is not an AI-only source format. For example, either a person or AI may choose and later revise an Object's visible Icon field. Keep information in understandable headings, sections and ordinary text. Do not require authors to maintain hidden HTML-comment IDs, annotations or machine-only fingerprints. Derive export data from the human-readable structure; tooling must fit the document. Business Design remains the SSOT and human business agreement is still required.
 
-### Recommended Business Design format
+### Business Design format
 
-The current research recommends **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, to make relationships between activities traceable. This is the current reference format used by the evaluated cases, not a mandatory input specification. Equivalent review behavior has not been established for arbitrary specification formats.
+Alder defines Business Design around **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, so users can read it as natural-language business documentation while AI can trace relationships between activities. New Business Design written for Alder should use this structure. The detailed visible structure is defined in [Business Design document structure](business-design-structure.ja.md), and the optional Business Graph profile uses the same headings and references. Existing documents in other formats can still be used as source material or reviewed where practical, but equivalent review behavior is not guaranteed until they are expressed in this structure.
 
 | Field | What to describe |
 | --- | --- |
