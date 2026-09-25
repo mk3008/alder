@@ -12,41 +12,21 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
-**Alder Plugin (post-implementation review):** Install version `0.1.0` from the public Alder GitHub repository, enable it once, start a new chat, keep Business Design in the product repository, and ask “Review this implementation with Alder.” The current stable GitHub distribution is pinned by tag `plugin-v0.1.0`; public Plugins Directory publication is a separate future distribution step. With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The installed plugin bundles review knowledge v0.3, routes the short natural-language request to the review skill, discovers the relevant Business Design, remains read-only, and reports the versions and revisions it used. The initial client validation also found semantically equivalent review conclusions to the manual route on one bounded Velvet comparison.
+For **post-implementation review**, install and enable Alder Plugin `0.1.0` once, then start a new chat:
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
 ```
 
-See [Plugin setup](docs/plugin-adoption.md). Other Alder workflows still use the [adoption guide](docs/adoption.md).
-
-### Manual/reference workflow
-
-For a new product, this is the recommended example; existing equivalent locations are fine:
+Keep current Business Design in the product repository under `docs/business-design/` (or specify its existing path). After implementation, ask in that new chat:
 
 ```text
-product/
-  AGENTS.md
-  docs/
-    business-design/
-      ...
-    decisions/
-      ...
-    alder/
-      review-knowledge.md
-  src/
-  tests/
+Review this implementation with Alder.
 ```
 
-1. Put current Business Design in `docs/business-design/` and a local copy of the selected Alder version's review knowledge in `docs/alder/review-knowledge.md`.
-2. For this unreleased revision, agree on Business Design and human-review the derived Check Items before handing both to implementation. This completes the standard design business; the tagged v0.5/v0.5.1 workflow kept Check Items optional.
-3. Route these paths through AGENTS.md or the task prompt. Have the AI read the confirmed Business Design and Check Items, implement the task, and report material assumptions and choices for the later Alder follow-up. It must not invent unresolved business policy; routine reversible technical choices can proceed.
-4. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**. In the follow-up, verify and maintain Check ↔ Test/assertion mappings.
-5. Return only unresolved business questions to people for a decision.
+The plugin finds the design, uses its bundled review knowledge v0.3 and reports read-only findings. No review-knowledge copy, long review prompt, or Alder-specific AGENTS.md entry is needed for the conventional path. A separate follow-up handles human decisions and Check ↔ Test/assertion mappings. See [plugin setup](docs/plugin-adoption.md) for activation and [the adoption guide](docs/adoption.md) for Business Design, implementation handoff, other Alder workflows, and manual review with clients without the plugin.
 
 When people have recorded a concrete operational **Problem** and **Pain level**, Alder can also run an [Optimization Review](docs/optimization-review.md) against the Business Design. It explores a small set of alternative business designs, evaluates Scope and business-change Difficulty, and preserves existing meaning until people explicitly decide to change it. Accepted candidates update Business Design first.
-
-This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
 **Alder does not prescribe an architecture style or when to introduce structure.** Give the implementation agent the Business Design, explicit requirements and constraints, and concrete future risks you actually foresee; let it choose how to realize them. Architecture knowledge can support that choice, but a style name does not replace requirements.
 
