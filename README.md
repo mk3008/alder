@@ -43,22 +43,17 @@ product/
 1. Write the current or intended work under `docs/business-design/`.
 2. Review it with users and agree on the business meaning.
 3. Have AI draft Check Items and have people review them.
-4. Let AI implement, then review in a separate agent or fresh context. With Alder Plugin 0.1.0, ask “Review this implementation with Alder.”
+4. Let AI implement, then review in a separate agent or fresh context.
 
-See the [adoption guide](docs/adoption.md) for Business Design authoring, Check Items, manual review, and copyable prompts. The plugin currently covers only read-only post-implementation review; authoring, Optimization Review, graph export, and follow-up remain manual workflows.
+See the [adoption guide](docs/adoption.md) for Business Design authoring, Check Items, manual review, and copyable prompts.
 
-## Install the implementation-review skill
+## Review an implementation with the plugin
 
-On a supported Codex client, add the stable GitHub marketplace tag:
+1. [Install Alder Plugin](docs/plugin-adoption.md).
+2. Keep the agreed Business Design in the product repository at `docs/business-design/`.
+3. In a new chat, ask “Review this implementation with Alder.” Name the change if several are in progress.
 
-```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
-codex plugin marketplace list
-```
-
-Restart the ChatGPT desktop app, install **Alder** from the **Alder development** marketplace in Plugins Directory, then start a new chat. Keep agreed Business Design in the product repository at `docs/business-design/`; no Alder-specific AGENTS.md entry or copied review knowledge is needed at that conventional path. For another path, add `Business Design: docs/operations/` under an `## Alder` heading in the product's AGENTS.md.
-
-Ask “Review this implementation with Alder,” naming the change when several are in progress. The skill reads Business Design, then relevant decisions and Check Items, then implementation, DDL, and tests. It reports evidence and revisions without editing the product. Human decisions and any resulting Business Design updates happen in a separate follow-up. Plugin version `0.1.0`, Alder method releases, and review knowledge v0.3 are distinct versions. See [Plugin setup](docs/plugin-adoption.md) for supported clients, installation updates, and reproducibility.
+The skill performs a read-only post-implementation review. At the standard path, it needs no Alder-specific AGENTS.md entry or copied review knowledge. For installation details, other paths, and updates, see [Plugin setup](docs/plugin-adoption.md). For authoring, improvement, Check Items, graph export, and follow-up, use the [adoption guide](docs/adoption.md); these are not plugin skills in version 0.1.0.
 
 ## When you want to improve the work
 
