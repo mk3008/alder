@@ -1,8 +1,8 @@
-# Alder plugin PoC
+# Alder Plugin
 
-The development package contains one skill: **read-only post-implementation review**. It includes the exact review knowledge v0.3 text and requires no MCP server, network request at review time, Python package, or product-side Alder checkout. Other Alder workflows still use the existing [adoption guide](adoption.md). The plugin package version `0.1.0` is separate from the Alder method release and from review knowledge v0.3.
+Alder Plugin version `0.1.0` currently provides one supported skill: **read-only post-implementation review**. It includes the exact review knowledge v0.3 text and requires no MCP server, network request at review time, Python package, or product-side Alder checkout. The initial package began as the Issue #86 PoC and was promoted after client installation/routing and a bounded Fresh A/B review comparison succeeded. Other Alder workflows still use the existing [adoption guide](adoption.md). The plugin package version is separate from the Alder method release and from review knowledge v0.3.
 
-## Install once (Codex local marketplace)
+## Install once
 
 Add the Alder repository as a marketplace source from a supported Codex environment:
 
@@ -15,7 +15,7 @@ For development, a reviewed branch may be used instead of a release tag or commi
 
 Then restart the ChatGPT desktop app, open the Plugins Directory, choose the **Alder development** marketplace, install **Alder**, and start a **new chat** before testing the skill. The repository marketplace at `.agents/plugins/marketplace.json` points to `plugins/alder`; installing once does not copy Alder files into each product repository. Refresh/reinstall after updating the development package.
 
-The 2026-09-25 client validation of this PoC confirmed `alder@alder-development` version `0.1.0` as installed and enabled, and a new Fresh run selected the skill from the short request without naming the skill. The Plugins Directory screen itself was not directly observed in that automated validation environment; this is a UI-observation limit, not a failure of installation or activation. This is an authoring/testing distribution route, not a claim that Alder is listed in the public Plugins Directory. Plugin support and marketplace availability vary by client.
+The 2026-09-25 client validation of this PoC confirmed `alder@alder-development` version `0.1.0` as installed and enabled, and a new Fresh run selected the skill from the short request without naming the skill. The Plugins Directory screen itself was not directly observed in that automated validation environment; this is a UI-observation limit, not a failure of installation or activation. The repository marketplace is the current distribution route for Alder Plugin 0.1.0. It is suitable for direct use as well as development. Public Plugins Directory publication is a separate future distribution step, not a prerequisite for using the installed plugin. Plugin support and marketplace availability vary by client.
 
 ## Product setup
 
@@ -47,6 +47,6 @@ Business Design → Business Graph JSON is a deterministic projection, not an LL
 
 Keep `tools/business_graph/export.py` as the single maintained implementation and the direct CLI for external consumers such as `alder_viewer`. Package an identical artifact from that source at build/release time, and check its digest and behavior against the source so plugin and CLI cannot silently diverge. A copied artifact is distribution output, not a second implementation to edit. The installed plugin must have its own copy available without checking out the Alder repository in every product. The package version and exporter source digest should identify what produced a JSON result. Test execution in supported clients and Python availability before making natural-language export a standard advertised capability; do not add an MCP server or independently reimplement the exporter to bridge a client without local script execution.
 
-Future format/structure validation and traceability checks should follow the same boundary: the skill chooses when and why to run a deterministic tool; the tool checks only properties it can establish. This section is a packaging decision for later work, not a claim that plugin `0.1.0` already contains those tools or export skill.
+Future format/structure validation and traceability checks should follow the same boundary: the skill chooses when and why to run a deterministic tool; the tool checks only properties it can establish. This section defines the packaging direction for a later plugin version; plugin `0.1.0` does not yet contain those tools or the export skill.
 
 The [bounded real-product walkthrough](plugin-poc-evaluation.md) records the manual versus plugin route and the validation limits. Existing projects that explicitly route agents to an older local Alder copy must update that routing once when adopting the plugin; a project's own instructions still take precedence.

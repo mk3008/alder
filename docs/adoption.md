@@ -2,7 +2,7 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-For the standard **post-implementation review**, start with the [validated development plugin PoC](plugin-adoption.md): one-time plugin install/enablement, a project Business Design path when the conventional path does not apply, and a short natural-language request. The rest of this page is the detailed method and manual/reference route, including workflows the PoC skill does not yet cover. The prompt below remains available for external clients and reproducibility experiments; ordinary plugin use does not require copying it.
+For the standard **post-implementation review**, start with the [Alder Plugin](plugin-adoption.md): install/enable it once, provide a project Business Design path only when the conventional path does not apply, and use a short natural-language request. Plugin version `0.1.0` currently supports the read-only implementation-review workflow; workflows not yet packaged as skills still use this detailed manual/reference route. The prompt below remains available for external clients and reproducibility experiments; ordinary plugin use does not require copying it.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual/reference route below requires no Alder installer or runtime dependency; the plugin is a distribution and routing layer for the same review knowledge. In either route, the reviewer needs readable Business Design and the selected Alder review knowledge.
 

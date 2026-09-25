@@ -1,4 +1,4 @@
-# Issue #86 — bounded plugin PoC evaluation
+# Issue #86 — initial Alder Plugin validation
 
 ## Baseline and change
 
@@ -69,6 +69,6 @@ The tested Velvet checkout did not have `node_modules`, so typecheck, tests and 
 
 The plugin is a development package, version `0.1.0`, with one read-only implementation-review skill. The package and source provenance remain checked by `tools/test_plugin_package.py`.
 
-For Issue #86's core PoC, client installation/enabling, natural-language skill routing, project/Business Design discovery, bundled-knowledge use, authority order, read-only behavior and one Fresh semantic A/B comparison are now verified. The remaining Plugins Directory item is only direct visual observation of the desktop list.
+Issue #86 began as a bounded PoC, but the validated result is retained as Alder Plugin version `0.1.0` rather than discarded as a demonstration. Client installation/enabling, natural-language skill routing, project/Business Design discovery, bundled-knowledge use, authority order, read-only behavior and one Fresh semantic A/B comparison are verified. The remaining Plugins Directory item is only direct visual observation of the desktop list.
 
 Business Graph export is [planned as a deterministic tool in the same plugin](plugin-adoption.md#business-graph-export-in-the-same-plugin), sourced from the existing CLI, and is not bundled in plugin `0.1.0`. Other Alder reviews and authoring workflows remain manual. Public directory submission, release tagging, broader client coverage and repeated/controlled quality measurement are separate future decisions, not completion requirements for this bounded PoC.
