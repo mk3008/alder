@@ -12,7 +12,7 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
-**Plugin PoC (post-implementation review):** Install Alder once from the [development marketplace](docs/plugin-adoption.md), keep Business Design in the product repository, and ask “Review this implementation with Alder.” With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The skill carries its review knowledge, selects the relevant context, and reports its package version and reviewed revisions. Other workflows still use the [adoption guide](docs/adoption.md). This package has not been published in the public Plugins Directory.
+**Validated development Plugin PoC (post-implementation review):** Add the Alder development marketplace, install and enable Alder once, start a new chat, keep Business Design in the product repository, and ask “Review this implementation with Alder.” With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. Client validation confirmed installation/enabling, short natural-language skill routing, automatic Business Design discovery, bundled review knowledge v0.3, read-only behavior, and semantically equivalent review conclusions to the manual route on one bounded Velvet comparison. See the [setup and validation record](docs/plugin-adoption.md). Other workflows still use the [adoption guide](docs/adoption.md). This package has not been published in the public Plugins Directory.
 
 ### Manual/reference workflow
 
@@ -63,7 +63,7 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 | Need | Document |
 | --- | --- |
 | One-time plugin install and short implementation-review request | [Plugin PoC](docs/plugin-adoption.md) |
-| Bounded evaluation and unverified installation/quality limits | [Plugin PoC evaluation](docs/plugin-poc-evaluation.md) |
+| Client validation, Fresh A/B comparison, and remaining limits | [Plugin PoC evaluation](docs/plugin-poc-evaluation.md) |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |

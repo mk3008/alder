@@ -12,7 +12,7 @@ Alderは、誰が、いつ、何を受け取り、何を成果として渡すか
 
 ## プロダクトで始める
 
-**Plugin PoC（実装後レビュー）:** [開発用marketplace](docs/plugin-adoption.md)からAlderを一度インストールし、業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼します。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Skillがレビュー知識を同梱し、対象を読み、使用版と対象のリビジョンを結果に記録します。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を参照してください。公開Plugin Directoryへの掲載はまだ行っていません。
+**実クライアント検証済みの開発用Plugin PoC（実装後レビュー）:** Alderの開発用marketplaceを登録し、Alderを一度インストール・有効化して新しいチャットを開始します。業務設計書をプロダクト側に置き、「実装が終わったのでAlderレビューして」と依頼するだけでSkillを起動できます。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。実クライアント検証では、短文からの自動選択、Business Designの自動検出、同梱review knowledge v0.3、read-only動作、従来手順との限定Fresh A/Bで意味上同等の結論を確認しました。[セットアップと検証記録](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。公開Plugin Directoryへの掲載はまだ行っていません。
 
 ### 手動・参照用の手順
 
@@ -53,7 +53,7 @@ product/
 | 知りたいこと | 文書 |
 | --- | --- |
 | 一度のPlugin導入と短い実装後レビュー依頼 | [Plugin PoC（英語）](docs/plugin-adoption.md) |
-| 実プロダクトでの限定評価と未検証の範囲 | [Plugin PoC評価（英語）](docs/plugin-poc-evaluation.md) |
+| 実クライアント検証、Fresh A/B比較、残る限界 | [Plugin PoC評価（英語）](docs/plugin-poc-evaluation.md) |
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |

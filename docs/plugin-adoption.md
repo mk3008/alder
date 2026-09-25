@@ -4,15 +4,18 @@ The development package contains one skill: **read-only post-implementation revi
 
 ## Install once (Codex local marketplace)
 
-In a supported Codex CLI / ChatGPT desktop environment, add the Alder Git repository as a marketplace source and install **Alder** from that source in the Plugins Directory:
+Add the Alder repository as a marketplace source from a supported Codex environment:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref <reviewed-release-tag>
+codex plugin marketplace add mk3008/alder --ref <reviewed-release-tag-or-commit>
+codex plugin marketplace list
 ```
 
-During development, use a reviewed commit or branch instead of the release tag. A branch can move: record the resolved plugin source commit with the review. Installation and skill activation should be confirmed in a new session. This is an authoring/testing distribution route, not a claim that Alder is listed in the public Plugins Directory. A release tag and directory publication are separate future steps. Plugin support and marketplace availability vary by client.
+For development, a reviewed branch may be used instead of a release tag or commit. A branch can move, so record the resolved plugin source commit with the review.
 
-The marketplace at `.agents/plugins/marketplace.json` points to `plugins/alder` in this repository. Installing once does not add Alder files to each product repository. A fresh session is needed after installing or updating a plugin in supported clients.
+Then restart the ChatGPT desktop app, open the Plugins Directory, choose the **Alder development** marketplace, install **Alder**, and start a **new chat** before testing the skill. The repository marketplace at `.agents/plugins/marketplace.json` points to `plugins/alder`; installing once does not copy Alder files into each product repository. Refresh/reinstall after updating the development package.
+
+The 2026-09-25 client validation of this PoC confirmed `alder@alder-development` version `0.1.0` as installed and enabled, and a new Fresh run selected the skill from the short request without naming the skill. The Plugins Directory screen itself was not directly observed in that automated validation environment; this is a UI-observation limit, not a failure of installation or activation. This is an authoring/testing distribution route, not a claim that Alder is listed in the public Plugins Directory. Plugin support and marketplace availability vary by client.
 
 ## Product setup
 
@@ -30,7 +33,7 @@ The project may also specify Check Items and Decision Records paths if they diff
 実装が終わったのでAlderレビューして
 ```
 
-If there are multiple unrelated changes or Business Designs, identify the target in that natural-language request. The skill reads the project context and bundled knowledge, reports evidence and classifications, and does not edit files. Run its follow-up separately after a responsible person has answered unresolved business questions.
+If there are multiple unrelated changes or Business Designs, identify the target in that natural-language request. In the validated Velvet run, the short request alone selected the Alder implementation-review skill, found the repository and Business Design without asking for their paths, read the bundled review knowledge v0.3 in full, followed the Business Design → Decision Records → implementation / DDL / tests authority order, reported `Alder plugin 0.1.0 / review knowledge v0.3`, and left the product tree unchanged. The skill reports evidence and classifications and does not edit files. Run its follow-up separately after a responsible person has answered unresolved business questions.
 
 ## Reproducibility and scope
 
