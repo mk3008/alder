@@ -12,41 +12,21 @@ Alderは、誰が、いつ、何を受け取り、何を成果として渡すか
 
 ## プロダクトで始める
 
-**Alder Plugin（実装後レビュー）:** publicなAlder GitHub repositoryからversion `0.1.0`を一度インストール・有効化し、新しいチャットを開始します。業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼するだけで利用できます。現在の安定GitHub配布はtag `plugin-v0.1.0` で固定し、公開Plugins Directoryへの掲載は将来の別配布工程として扱います。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Pluginはreview knowledge v0.3を同梱し、短い自然言語からSkillを選択してBusiness Designを探索し、read-onlyでレビューして使用版と対象revisionを結果に記録します。初期の実クライアント検証では、従来手順との限定Fresh A/Bでも意味上同等の結論を確認しました。
+**実装後レビュー**にはAlder Plugin `0.1.0`を一度インストール・有効化し、新しいチャットを開始します。
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
 ```
 
-[Pluginの導入手順](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。
-
-### 手動・参照用の手順
-
-新規導入時は次の配置を推奨します。既存プロジェクトに相当する配置があれば、そのまま使えます。
+現在の業務設計をプロダクトの `docs/business-design/` に置きます（既存の別の場所なら、そのパスだけ指定します）。実装後、新しいチャットで次のように依頼します。
 
 ```text
-product/
-  AGENTS.md
-  docs/
-    business-design/
-      ...
-    decisions/
-      ...
-    alder/
-      review-knowledge.md
-  src/
-  tests/
+実装が終わったのでAlderレビューして
 ```
 
-1. 現在の業務設計を `docs/business-design/` に、選んだAlderバージョンのレビュー知識のローカルコピーを `docs/alder/review-knowledge.md` に置く。
-2. 今回の未リリース版では、業務設計を合意し、検査項目を人間がレビューしてから両方を実装へ引き渡す。ここで標準設計業務が完了する。v0.5/v0.5.1当時、検査項目の工程は任意だった。
-3. AGENTS.mdやタスクのプロンプトで参照先を案内する。AIに確認済みの業務設計と検査項目を読ませて実装させ、重要な前提・判断と理由を後続のAlderフォローアップへ渡す。未決の業務ルールは勝手に決めず、通常の可逆的な技術判断は進める。
-4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
-5. 未決の業務判断だけを人間に戻す。
+Pluginが業務設計を探し、同梱のreview knowledge v0.3で読み取り専用のレビューを行います。標準パスではレビュー知識のコピー、長いプロンプト、Alder専用のAGENTS.md設定は不要です。人間の判断の反映とCheck ↔ Test/assertionの対応は別のフォローアップで行います。[Pluginの導入手順](docs/plugin-adoption.md)で有効化を確認してください。業務設計、実装への引き渡し、ほかのAlderワークフロー、Pluginを使えないクライアントでの手動レビューは[導入ガイド](docs/adoption.md)を参照してください。
 
 人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を記録した場合は、業務設計に対して[Optimization Review](docs/optimization-review.md)も実行できます。少数の代替業務案を探索し、Scopeと業務変更Difficultyを評価します。人間が変更を決めるまでは既存の業務上の意味を維持し、採用する場合はBusiness Designを先に更新します。
-
-この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
 
 **Alderは、アーキテクチャの形式や構造を導入する時期を規定しません。** 実装を担当するAIには、業務設計、明示的な要求・制約、実際に予見している将来のリスクを具体的に伝え、実現方法を任せます。アーキテクチャの知識はその判断に使えますが、形式の名前だけでは要求の代わりになりません。
 
