@@ -207,61 +207,51 @@ docs/checks/meeting-room.md を読み、今回合意した範囲を実装して�
 未決の業務ルールは具体的な問いとして人間に戻し、重要な前提・判断と理由をレビューへ引き継いでください。
 ```
 
-実装・テスト実行の後は、別のAIエージェントや新しいセッションで、合意した業務と期待結果が実現されているかをレビューします。見つかった業務上の疑問はユーザーと確認し、業務設計書へ反映します。
+実装とテストの後は、別のAIエージェントや新しいセッションでレビューします。Alder Plugin 0.1.0を導入していれば、「実装が終わったのでAlderレビューして」と依頼できます。Skillは業務設計書、判断記録・検査項目、実装・DDL・テストの順に読み、根拠と未確認事項を報告します。このレビューではファイルを変更しません。見つかった業務上の疑問は人間が判断し、必要なら業務設計書を先に修正・再合意します。
 
 検査項目の作成からレビューまでのプロンプトは[導入ガイド](docs/adoption.md)、粒度やレビュー状態は[検査項目の作成・保守](docs/check-item-traceability.md)を参照してください。
 
-## インストール・導入
+## 導入と使い方
 
-Alderを使うための専用パッケージは不要です。必要なのは、業務設計書とAlderの文書を読めるAIエージェントです。以下ではGitを使い、作業中のプロダクトの隣にAlderを配置します。
+業務設計書の作成、品質・相関の確認、改善提案、検査項目の作成には、AlderのガイドをAIが読めるようにします。実装後レビューにはAlder Pluginも利用できます。**Plugin 0.1.0が提供するSkillは、実装後の読み取り専用レビューだけ**です。業務設計書の作成や改善提案、Business Graphの出力は、まだPluginのSkillには含まれません。
 
-プロダクトのルートディレクトリで実行します。
+### 実装後レビューをPluginで行う
+
+対応するCodexクライアントで、公開GitHubリポジトリの安定タグからmarketplaceを登録します。
 
 ```sh
-git clone --depth 1 --branch main https://github.com/mk3008/alder.git ../alder
+codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
+codex plugin marketplace list
+```
+
+ChatGPTデスクトップアプリを再起動し、Plugins Directoryの「Alder development」marketplaceから「Alder」をインストールします。新しいチャットで、対象のプロダクトについて次のように依頼します。
+
+```text
+実装が終わったのでAlderレビューして
+```
+
+業務設計書がプロダクトの`docs/business-design/`にあれば、Alder専用の`AGENTS.md`設定やレビュー知識のコピーは不要です。別の場所に置く場合は、プロダクトの`AGENTS.md`で場所を指定します。
+
+```markdown
+## Alder
+
+Business Design: docs/operations/
+```
+
+複数の変更や設計書があるときは、レビュー対象も依頼に書いてください。Pluginはreview knowledge v0.3を同梱し、結果にPluginとレビュー知識の版、対象のリビジョンを示します。Pluginの版`0.1.0`とAlderの手法の版は別です。クライアントごとの対応状況、更新・再インストール、再現性については[Plugin導入ガイド（英語）](docs/plugin-adoption.md)を参照してください。
+
+### 設計から始める、または手動でレビューする
+
+Pluginに含まれない工程では、選んだAlderの版の文書を作業中のAIが読めるようにします。たとえばプロダクトの隣にAlderを配置し、参照するコミットIDを記録します。
+
+```sh
+git clone --depth 1 https://github.com/mk3008/alder.git ../alder
 git -C ../alder rev-parse HEAD
 ```
 
-2行目に表示されたコミットIDを記録し、次の`<コミットID>`をその値に置き換えて実行します。ブランチから離れ、そのコミットの文書を参照する状態に固定します。
+`../alder/docs/business-design-structure.ja.md`と`../alder/docs/adoption.md`を参照し、プロダクトの`docs/business-design/`に業務設計書を置きます。人間が確認した業務設計書から検査項目を作成・レビューして実装へ渡します。手動で実装後レビューをする場合は、参照版の`docs/phase2/review-knowledge-v0.3.md`も読ませてください。PluginのレビューSkillを使う場合、そのコピーは必要ありません。
 
-```sh
-git -C ../alder checkout --detach <コミットID>
-git -C ../alder rev-parse HEAD
-```
-
-表示されたコミットIDが記録と一致することを確認します。このチェックアウトは参照専用とし、利用版を更新するときはcheckout先と記録を一緒に変更します。文書は、たとえば次のように配置します。
-
-```text
-workspace/
-  alder/                         # Alderのガイド・レビュー知識
-  product/
-    AGENTS.md
-    docs/
-      business-design/            # 業務設計書
-      checks/                    # 実装へ渡す検査項目
-      decisions/                 # 重要な判断とその理由
-    src/
-    tests/
-```
-
-`AGENTS.md`またはタスクの指示に、次の参照先を追記します。`<コミットID>`は先ほどの値に置き換えてください。
-
-```text
-業務設計書: docs/business-design/
-検査項目: docs/checks/
-判断記録: docs/decisions/
-Alderの参照版: ../alder/ の <コミットID>
-業務設計書の書き方: ../alder/docs/business-design-structure.ja.md
-各工程の手順: ../alder/docs/adoption.md
-業務改善: ../alder/docs/optimization-review.md
-実装後のレビュー知識: ../alder/docs/phase2/review-knowledge-v0.3.md
-
-業務上の意味は業務設計書を正本とし、未決事項は人間に確認する。
-業務改善の候補は、人間が採用を決めてから業務設計書へ反映する。
-実装には、確認済みの業務設計書と人間がレビューした検査項目を渡す。
-```
-
-AIがこれらのパスを読めれば準備完了です。既存の文書配置を使う方法や版の選び方は[導入ガイド](docs/adoption.md)を参照してください。
+既存の`AGENTS.md`が古いAlderのローカルコピーを指定している場合は、Plugin導入時にその参照先を更新します。セットアップの選択肢と各工程のプロンプトは[導入ガイド（英語）](docs/adoption.md)にあります。
 
 ## 詳しく読む
 
@@ -269,7 +259,8 @@ AIがこれらのパスを読めれば準備完了です。既存の文書配置
 | --- | --- |
 | 業務設計書に何を、どの順序で書くか | [業務設計書の文書構造](docs/business-design-structure.ja.md) |
 | 記述の品質、未記載の条件、前後の業務のつながりを確かめる | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
-| 文書配置、各工程の手順とプロンプト | [導入ガイド](docs/adoption.md) |
+| Pluginのインストールと実装後レビュー | [Plugin導入ガイド（英語）](docs/plugin-adoption.md) |
+| 文書配置、各工程の手順とプロンプト | [導入ガイド（英語）](docs/adoption.md) |
 | 業務改善の観点、プロンプト、採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) |
 | 実装レビューの観点と止める条件 | [レビュー知識](docs/phase2/review-knowledge-v0.3.md) |
 | 業務設計書をJSON化し、外部ツールで可視化・解析する | [Business Graph export](docs/business-graph.md) |

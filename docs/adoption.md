@@ -2,7 +2,9 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. No installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration is required. The reviewer needs readable Business Design and the selected Alder review knowledge.
+For the standard **post-implementation review**, [Alder Plugin 0.1.0](plugin-adoption.md) packages the read-only review skill and review knowledge v0.3. Install and enable it once; with Business Design at `docs/business-design/`, ask for an Alder review in a new chat. The plugin does not yet package design authoring, Optimization Review, Check Item drafting, graph export, or follow-up. Use this guide for those workflows and for manual review with another client.
+
+Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
 ## One Business Design across three loops
 
