@@ -12,6 +12,10 @@ Alderは、誰が、いつ、何を受け取り、何を成果として渡すか
 
 ## プロダクトで始める
 
+**Alder Plugin（実装後レビュー）:** Alderを一度インストール・有効化して新しいチャットを開始し、業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼します。version `0.1.0` は現在Alder repository marketplaceから配布し、公開Plugins Directoryへの掲載は別の配布工程として扱います。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Pluginはreview knowledge v0.3を同梱し、短い自然言語からSkillを選択してBusiness Designを探索し、read-onlyでレビューして使用版と対象revisionを結果に記録します。初期の実クライアント検証では、従来手順との限定Fresh A/Bでも意味上同等の結論を確認しました。[Pluginの導入手順](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。
+
+### 手動・参照用の手順
+
 新規導入時は次の配置を推奨します。既存プロジェクトに相当する配置があれば、そのまま使えます。
 
 ```text
@@ -42,12 +46,14 @@ product/
 
 技術候補を比較するときは、**測る前に推論します。** 要求、リスク、規模、実行時の振る舞い、既存の根拠から、結論を変え得る不確実性へ検証を集中します。任意の評価には上限と停止条件を持たせ、プロダクトがより深い最適化を明示的に求めていないなら、十分な根拠のある妥当解で止めます。数値目標がないことだけを理由に、人間へ確認を戻す必要はありません。
 
-[導入手順とコピーして使えるプロンプトへ（英語）→](docs/adoption.md)
+[Alder Pluginの導入へ（英語）→](docs/plugin-adoption.md) · [手動の導入手順と参照用プロンプトへ（英語）→](docs/adoption.md)
 
 ## 詳しく読む
 
 | 知りたいこと | 文書 |
 | --- | --- |
+| 一度のPlugin導入と短い実装後レビュー依頼 | [Alder Plugin（英語）](docs/plugin-adoption.md) |
+| 初期Plugin検証、Fresh A/B比較、残る限界 | [Issue #86検証記録（英語）](docs/plugin-poc-evaluation.md) |
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |

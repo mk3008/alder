@@ -12,6 +12,10 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
+**Alder Plugin (post-implementation review):** Install and enable Alder once, start a new chat, keep Business Design in the product repository, and ask “Review this implementation with Alder.” Version `0.1.0` is currently distributed through the Alder repository marketplace; public Plugins Directory publication is a separate distribution step. With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The installed plugin bundles review knowledge v0.3, routes the short natural-language request to the review skill, discovers the relevant Business Design, remains read-only, and reports the versions and revisions it used. The initial client validation also found semantically equivalent review conclusions to the manual route on one bounded Velvet comparison. See [Plugin setup](docs/plugin-adoption.md). Other Alder workflows still use the [adoption guide](docs/adoption.md).
+
+### Manual/reference workflow
+
 For a new product, this is the recommended example; existing equivalent locations are fine:
 
 ```text
@@ -42,7 +46,7 @@ This layout and a local review-knowledge copy are optional. Prefer keeping desig
 
 When technical alternatives compete, **reason before measuring**. Use requirements, risks, scale, runtime behavior, and existing evidence to focus validation on the uncertainties most likely to change the decision. Bound optional evaluation and stop when a sufficiently supported solution is found unless the product explicitly calls for deeper optimization; missing numeric targets alone are not a reason to stop and ask.
 
-[Follow the adoption guide and copy the prompts →](docs/adoption.md)
+[Install and use the Alder Plugin →](docs/plugin-adoption.md) · [Manual adoption and reference prompts →](docs/adoption.md)
 
 ## Optional Business Graph export for external tools
 
@@ -58,6 +62,8 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 
 | Need | Document |
 | --- | --- |
+| One-time plugin install and short implementation-review request | [Alder Plugin](docs/plugin-adoption.md) |
+| Initial plugin validation, Fresh A/B comparison, and remaining limits | [Issue #86 validation](docs/plugin-poc-evaluation.md) |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
