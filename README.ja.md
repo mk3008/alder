@@ -213,45 +213,13 @@ docs/checks/meeting-room.md を読み、今回合意した範囲を実装して�
 
 ## 導入と使い方
 
-業務設計書の作成、品質・相関の確認、改善提案、検査項目の作成には、AlderのガイドをAIが読めるようにします。実装後レビューにはAlder Pluginも利用できます。**Plugin 0.1.0が提供するSkillは、実装後の読み取り専用レビューだけ**です。業務設計書の作成や改善提案、Business Graphの出力は、まだPluginのSkillには含まれません。
+実装後のレビューは、PluginのSkillを使えます。
 
-### 実装後レビューをPluginで行う
+1. [Alder Pluginをインストール](docs/plugin-adoption.md)する。
+2. 合意した業務設計書を、プロダクトの`docs/business-design/`に置く。
+3. 新しいチャットで「実装が終わったのでAlderレビューして」と依頼する。変更が複数ある場合は対象も伝える。
 
-対応するCodexクライアントで、公開GitHubリポジトリの安定タグからmarketplaceを登録します。
-
-```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
-codex plugin marketplace list
-```
-
-ChatGPTデスクトップアプリを再起動し、Plugins Directoryの「Alder development」marketplaceから「Alder」をインストールします。新しいチャットで、対象のプロダクトについて次のように依頼します。
-
-```text
-実装が終わったのでAlderレビューして
-```
-
-業務設計書がプロダクトの`docs/business-design/`にあれば、Alder専用の`AGENTS.md`設定やレビュー知識のコピーは不要です。別の場所に置く場合は、プロダクトの`AGENTS.md`で場所を指定します。
-
-```markdown
-## Alder
-
-Business Design: docs/operations/
-```
-
-複数の変更や設計書があるときは、レビュー対象も依頼に書いてください。Pluginはreview knowledge v0.3を同梱し、結果にPluginとレビュー知識の版、対象のリビジョンを示します。Pluginの版`0.1.0`とAlderの手法の版は別です。クライアントごとの対応状況、更新・再インストール、再現性については[Plugin導入ガイド（英語）](docs/plugin-adoption.md)を参照してください。
-
-### 設計から始める、または手動でレビューする
-
-Pluginに含まれない工程では、選んだAlderの版の文書を作業中のAIが読めるようにします。たとえばプロダクトの隣にAlderを配置し、参照するコミットIDを記録します。
-
-```sh
-git clone --depth 1 https://github.com/mk3008/alder.git ../alder
-git -C ../alder rev-parse HEAD
-```
-
-`../alder/docs/business-design-structure.ja.md`と`../alder/docs/adoption.md`を参照し、プロダクトの`docs/business-design/`に業務設計書を置きます。人間が確認した業務設計書から検査項目を作成・レビューして実装へ渡します。手動で実装後レビューをする場合は、参照版の`docs/phase2/review-knowledge-v0.3.md`も読ませてください。PluginのレビューSkillを使う場合、そのコピーは必要ありません。
-
-既存の`AGENTS.md`が古いAlderのローカルコピーを指定している場合は、Plugin導入時にその参照先を更新します。セットアップの選択肢と各工程のプロンプトは[導入ガイド（英語）](docs/adoption.md)にあります。
+Plugin 0.1.0のSkillは、実装後の**読み取り専用レビュー**に対応しています。標準の配置なら、Alder専用の`AGENTS.md`設定やレビュー知識のコピーは不要です。インストールの詳細、標準以外の配置、更新方法は[Plugin導入ガイド（英語）](docs/plugin-adoption.md)を参照してください。業務設計書の作成、改善提案、検査項目の作成、Business Graphの出力、レビュー後の対応は、まだPluginのSkillには含まれません。これらの手順と手動レビューは[導入ガイド（英語）](docs/adoption.md)にまとめています。
 
 ## 詳しく読む
 
