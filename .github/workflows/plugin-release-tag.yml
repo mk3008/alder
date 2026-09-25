@@ -1,0 +1,36 @@
+name: Plugin release tag
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/plugin-release-tag.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Resolve plugin tag
+        id: plugin
+        run: |
+          version="$(python3 -c 'import json; print(json.load(open("plugins/alder/plugin.json"))["version"])')"
+          echo "tag=plugin-v${version}" >> "$GITHUB_OUTPUT"
+      - name: Create tag when absent
+        env:
+          TAG: ${{ steps.plugin.outputs.tag }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "${TAG} already exists"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "Alder Plugin ${TAG#plugin-v}"
+          git push origin "${TAG}"
