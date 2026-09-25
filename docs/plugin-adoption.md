@@ -1,6 +1,6 @@
 # Alder Plugin
 
-Alder Plugin version `0.2.0` provides two skills: **Business Design drafting from interview notes** and **read-only post-implementation review**. The authoring skill bundles the adoption guide and optional export-profile documentation as versioned references; the review skill still bundles the exact review knowledge v0.3. No MCP server or product-side Alder checkout is needed. The plugin package version is separate from the Alder method release and review knowledge v0.3. The previous stable tag `plugin-v0.1.0` still provides only read-only review; version 0.2.0 is available from this change's commit/branch until separately released.
+Alder Plugin version `0.2.1` provides two skills: **Business Design drafting from interview notes** and **read-only post-implementation review**. The authoring skill bundles the adoption guide and optional export-profile documentation as versioned references; the review skill still bundles the exact review knowledge v0.3. No MCP server or product-side Alder checkout is needed. The plugin package version is separate from the Alder method release and review knowledge v0.3. The previous stable tag `plugin-v0.1.0` still provides only read-only review; version 0.2.1 is available from this change's commit/branch until separately released.
 
 ## Install once
 
@@ -35,7 +35,7 @@ For interview notes, request a draft with ordinary language, for example:
 このヒアリング結果をAlder業務設計書にして
 ```
 
-Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from concrete questions about unresolved business outcomes, responsibilities and handoffs. Review and resolve those questions with the responsible people before treating the draft as agreed. It does not generate Check Items or implement the product. For an unreleased test, install the branch or commit containing version 0.2.0 and start a new chat; the stable tag above does not include this skill.
+Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from concrete questions about unresolved business outcomes, responsibilities and handoffs. Review and resolve those questions with the responsible people before treating the draft as agreed. It does not generate Check Items or implement the product. For an unreleased test, install the branch or commit containing version 0.2.1 and start a new chat; the stable tag above does not include this skill.
 
 Review a completed scoped implementation separately with:
 
@@ -49,7 +49,7 @@ If there are multiple unrelated changes or Business Designs, identify the target
 
 The plugin's `plugin.json` identifies the package version. Each skill's `references/provenance.json` records its source revision and the digests of bundled guidance. A review result records the plugin and knowledge versions, design and implementation revisions, and the plugin source commit when installed from a moving branch. Keep a released package's content immutable; bump its version when changing its workflow or bundled knowledge. A local marketplace installation is a snapshot; refresh/reinstall to use a later package version.
 
-Each skill owns its own routing and write boundary. Deterministic tools handle format, graph export and traceability checks when applicable; they cannot approve business meaning. Plugin 0.2.0 packages design authoring and implementation review; design-quality/correlation/omission review, Optimization Review, Check Item drafting, graph export and follow-up are not packaged skills.
+Each skill owns its own routing and write boundary. Deterministic tools handle format, graph export and traceability checks when applicable; they cannot approve business meaning. Plugin 0.2.1 packages design authoring and implementation review; design-quality/correlation/omission review, Optimization Review, Check Item drafting, graph export and follow-up are not packaged skills.
 
 ## Business Graph export in the same plugin (next step)
 
@@ -57,6 +57,6 @@ Business Design → Business Graph JSON is a deterministic projection, not an LL
 
 Keep `tools/business_graph/export.py` as the single maintained implementation and the direct CLI for external consumers such as `alder_viewer`. Package an identical artifact from that source at build/release time, and check its digest and behavior against the source so plugin and CLI cannot silently diverge. A copied artifact is distribution output, not a second implementation to edit. The installed plugin must have its own copy available without checking out the Alder repository in every product. The package version and exporter source digest should identify what produced a JSON result. Test execution in supported clients and Python availability before making natural-language export a standard advertised capability; do not add an MCP server or independently reimplement the exporter to bridge a client without local script execution.
 
-Future format/structure validation and traceability checks should follow the same boundary: the skill chooses when and why to run a deterministic tool; the tool checks only properties it can establish. This section defines the packaging direction for a later plugin version; plugin `0.2.0` does not yet contain those tools or the export skill.
+Future format/structure validation and traceability checks should follow the same boundary: the skill chooses when and why to run a deterministic tool; the tool checks only properties it can establish. This section defines the packaging direction for a later plugin version; plugin `0.2.1` does not yet contain those tools or the export skill.
 
 The [bounded real-product walkthrough](plugin-poc-evaluation.md) records the manual versus plugin route and the validation limits. Existing projects that explicitly route agents to an older local Alder copy must update that routing once when adopting the plugin; a project's own instructions still take precedence.

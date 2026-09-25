@@ -37,7 +37,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.2.0")
+        self.assertEqual(plugin["version"], "0.2.1")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         author_skill = (AUTHOR / "SKILL.md").read_text()
@@ -64,6 +64,8 @@ class PluginPackageTest(unittest.TestCase):
         self.assertIn("既存の予約がある場合", draft)
         self.assertIn("どの会議室について判断できるか", draft)
         self.assertIn("既存予約と新規予約への影響は未確認", draft)
+        self.assertIn("キャンセル後にその時間帯を空きとして扱うか", draft)
+        self.assertNotIn("キャンセル後は空きとして扱う", draft)
         self.assertNotIn("元の予約は維持される", draft)
         self.assertNotIn("既存予約を取り消す", draft)
 
