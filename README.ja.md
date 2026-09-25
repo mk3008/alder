@@ -12,7 +12,13 @@ Alderは、誰が、いつ、何を受け取り、何を成果として渡すか
 
 ## プロダクトで始める
 
-**Alder Plugin（実装後レビュー）:** Alderを一度インストール・有効化して新しいチャットを開始し、業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼します。version `0.1.0` は現在Alder repository marketplaceから配布し、公開Plugins Directoryへの掲載は別の配布工程として扱います。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Pluginはreview knowledge v0.3を同梱し、短い自然言語からSkillを選択してBusiness Designを探索し、read-onlyでレビューして使用版と対象revisionを結果に記録します。初期の実クライアント検証では、従来手順との限定Fresh A/Bでも意味上同等の結論を確認しました。[Pluginの導入手順](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。
+**Alder Plugin（実装後レビュー）:** publicなAlder GitHub repositoryからversion `0.1.0`を一度インストール・有効化し、新しいチャットを開始します。業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼するだけで利用できます。現在の安定GitHub配布はtag `plugin-v0.1.0` で固定し、公開Plugins Directoryへの掲載は将来の別配布工程として扱います。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Pluginはreview knowledge v0.3を同梱し、短い自然言語からSkillを選択してBusiness Designを探索し、read-onlyでレビューして使用版と対象revisionを結果に記録します。初期の実クライアント検証では、従来手順との限定Fresh A/Bでも意味上同等の結論を確認しました。
+
+```sh
+codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
+```
+
+[Pluginの導入手順](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。
 
 ### 手動・参照用の手順
 

@@ -12,7 +12,13 @@ It combines established software engineering practices—requirements validation
 
 ## Start with your product
 
-**Alder Plugin (post-implementation review):** Install and enable Alder once, start a new chat, keep Business Design in the product repository, and ask “Review this implementation with Alder.” Version `0.1.0` is currently distributed through the Alder repository marketplace; public Plugins Directory publication is a separate distribution step. With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The installed plugin bundles review knowledge v0.3, routes the short natural-language request to the review skill, discovers the relevant Business Design, remains read-only, and reports the versions and revisions it used. The initial client validation also found semantically equivalent review conclusions to the manual route on one bounded Velvet comparison. See [Plugin setup](docs/plugin-adoption.md). Other Alder workflows still use the [adoption guide](docs/adoption.md).
+**Alder Plugin (post-implementation review):** Install version `0.1.0` from the public Alder GitHub repository, enable it once, start a new chat, keep Business Design in the product repository, and ask “Review this implementation with Alder.” The current stable GitHub distribution is pinned by tag `plugin-v0.1.0`; public Plugins Directory publication is a separate future distribution step. With the conventional `docs/business-design/` path, no Alder-specific project configuration is needed. The installed plugin bundles review knowledge v0.3, routes the short natural-language request to the review skill, discovers the relevant Business Design, remains read-only, and reports the versions and revisions it used. The initial client validation also found semantically equivalent review conclusions to the manual route on one bounded Velvet comparison.
+
+```sh
+codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
+```
+
+See [Plugin setup](docs/plugin-adoption.md). Other Alder workflows still use the [adoption guide](docs/adoption.md).
 
 ### Manual/reference workflow
 
