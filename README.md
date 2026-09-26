@@ -51,7 +51,7 @@ Business quality requirements are not omitted or collected in a separate Quality
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
-Detailed design is permitted and is not a separate required gate before implementation. Make technical choices alongside implementation where they can be revised safely; design costly or hard-to-reverse changes in advance as needed, and review the resulting choices after implementation. See [where detailed design fits](docs/philosophy.md#where-detailed-design-fits).
+A separate detailed-design gate is not required before implementation; technical details need not all be settled in advance. Make technical choices alongside implementation where they can be revised safely; design costly or hard-to-reverse changes in advance as needed, and review the resulting choices after implementation. See [where detailed design fits](docs/philosophy.md#where-detailed-design-fits).
 
 **Alder does not prescribe an architecture style or when to introduce structure.** Give the implementation agent the Business Design, explicit requirements and constraints, and concrete future risks you actually foresee; let it choose how to realize them. Architecture knowledge can support that choice, but a style name does not replace requirements.
 
