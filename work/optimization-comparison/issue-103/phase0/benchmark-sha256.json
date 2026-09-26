@@ -1,0 +1,11 @@
+{
+  "benchmark.md": "1b13ebe8bbd15aa112ed68bda6df58ba6647ad79db60d101ea0a71c1753c7bc4",
+  "designer/AGENTS.md": "de1cd2c588b16e5ba263eeb86118847ef15b95818ebdfa02530b6085dbc9990c",
+  "designer/diff-fidelity.patch": "e739f5a78576e2712990aaa5419f33b45b2bedd03ae6bb1891c965b302a6e7b9",
+  "designer/diff-followup.patch": "fcc6a79dcaa69676580f715e6f4394421c60ef5a7fd9d8ef2de25389475cff45",
+  "designer/diff-v4-current.patch": "f538bea06e74ef00ee57f944b2292a5d2b483a12f3854f44c585af65da5a9456",
+  "designer/read-log.md": "0f430cbe25364873b3077885ba40bdfd716155f9e1d60ffa4eb8a2823da3aa6c",
+  "designer/response-v1.md": "773b6d6919b531dd53ebcf79f9b1ef2fbb037715ff26b8decc3616aa9ffa5403",
+  "designer/response-v2.md": "2ffb643458814cfcbbc2e7a6c26563cbd43d1bfc6bd139272db5095c3b3f9ca3",
+  "designer/response-v3.md": "95721d8ac89ea51990b82b9bb9fe5a6e83ffc5d1b39d3ffdd0845b8d809f12be"
+}
