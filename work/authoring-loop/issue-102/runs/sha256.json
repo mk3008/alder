@@ -1,0 +1,36 @@
+{
+  "case1": {
+    "AGENTS.md": "9c8ea849b37dd0223d74e1a6f2f75b1eb3a7e49995fe66f233c28642cac255cd",
+    "docs/business-design/case1.md": "1b4cf33299c86bfd3715307cb29821eea2fa0f055d538b85996baac1f9dde102",
+    "notes.md": "aefd95fdc27bba042bcdd83ce564486ba6363c6b860fc72a62a77735da7b4ab2",
+    "read-log.md": "4832f30faec04422f494a74598087a898b619d4f94f6a0e03daf0e269bf236e4",
+    "response.md": "fc392f8a56f137d0fb414221261fff9e0aee6cf813706205121690fe18f18dac"
+  },
+  "case2": {
+    "AGENTS.md": "cf80797cde5df9bf6a2fff81d34a152a866e9b2b89b3c435b92f8d43e5445ecd",
+    "docs/business-design/case2.md": "555b75246b4768529369d49d33ebb22d2f50e0b266e78eebd2f96c07acc9d278",
+    "draft-diff-v1-v2.patch": "412cc1f2fbd57d8ba27ad369d3cb6423ebe2a0f88a8290978bf48c7646c1bfea",
+    "draft-v1-reconstructed.md": "03271e329ac1249566f8add169675b057ea379ecbe7cca8ae4a34a003bb7cc22",
+    "notes.md": "e01e92a4870633d369ca6478c2fcd2d3804bf708cdfb8abe202cdfcb007ddfdc",
+    "read-log.md": "1a66e58452779e2cf69f6df9f453973558d10ce9da78e55af7de006a7e5e9068",
+    "response-v1.md": "866d649cf53e3e1338680c8e33abb0902f896ae92fad49effe117688f493c54c",
+    "response-v2.md": "60ad550009296e518d1692e9572ae595406d2574ea4035dc4c65456a64c655ca"
+  },
+  "case3": {
+    "AGENTS.md": "b4ef7f02200c26280816e10abf57265c0d9d0cd020018e13cc75b2a1b9af4125",
+    "docs/business-design/case3.md": "b453fc07a4a0297cd66d9074a4b1a980182594404ca617b25e939a6ed2f04580",
+    "notes.md": "fa0e2d3fc09adbad3308055aafbedd9cf058f54abc36c8f2721a1a2e957ba814",
+    "read-log.md": "406683029cdfd1508403516590609de8ae8ef062b40bbb7c7ff3d43bef121dbc",
+    "response.md": "374fc776e722535ab69197d3380b23cc9792579c8cb94546d55991ff88962ac8"
+  },
+  "case4": {
+    "AGENTS.md": "8c18dba54e1dacdc38a6ae4409b8d62a557fd9cd85b32730670ea41bc0580a98",
+    "diff-v1-v2.md": "fe8975403f942e846dc7f13545e2ab99df78b5b5f9f9862649c2d741e3829e2f",
+    "docs/business-design/case4.md": "2d24479819b887d248e9ee98d13d92769e83b9f0e876b7b3afc58d60fb7e86be",
+    "draft-v1-reconstructed.md": "c6eed565cfb079fe3480efa07eeadf6b75eda3947b96ad2c755d6bd6bd85f12b",
+    "notes.md": "6a9451211d9c7d90a2c87aa34900002599758233c4840608febb02af1ad400b0",
+    "read-log.md": "183d6dfa5a86a02afaf2d85528403c1f1a4e9258319fa27c351aae52e93b1164",
+    "response-v1.md": "6dcb8f7715fe21a25d2c49642954407e8890cb400dc0ddf9adbd14c8c927ebba",
+    "response-v2.md": "e02d2a02a2f5afc2646646dc5d47026b6379523bc8a0d19e2e29445c54688f5f"
+  }
+}

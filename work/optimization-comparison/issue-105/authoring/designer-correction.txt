@@ -1,0 +1,1 @@
+同じ Authoring Skill を使って `authoring/customer-confirmation-v1-raw.md` の二件の source fidelity 指摘を反映し、同じ `authoring/design.md` だけを最小改訂してください。機材の調整結果を記録するという未確認の断定、再研修時に旧判定を事前参照するという未確認の手順を削り、確定した事実は維持してください。Oracle、Known Problem、role card、研究 protocol は読まないでください。変更差分、残る material question、読取パス、Plugin version/provenance を返してください。

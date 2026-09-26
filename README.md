@@ -44,7 +44,7 @@ product/
 4. After implementation, give the review prompt to a separate AI agent or fresh context. Use `docs/alder/review-knowledge.md` to review the work, reading **Business Design → Decision Records → implementation / DDL / tests**. In the follow-up, verify and maintain Check ↔ Test/assertion mappings.
 5. Return only unresolved business questions to people for a decision.
 
-When people have recorded a concrete operational **Problem** and **Pain level**, Alder can also run an [Optimization Review](docs/optimization-review.md) against the Business Design. It explores a small set of alternative business designs, evaluates Scope and business-change Difficulty, and preserves existing meaning until people explicitly decide to change it. Accepted candidates update Business Design first.
+When a Business Design's relevant current-state relationships are confirmed, an optional [Structural Discovery inquiry](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) can surface a few grounded questions without declaring a Problem. If people confirm a concrete operational **Problem** and **Pain level**, Alder can run the existing [Optimization Review](docs/optimization-review.md) to explore alternatives, evaluate Scope and business-change Difficulty, and preserve existing meaning until people decide to change it; accepted candidates update Business Design first.
 
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 

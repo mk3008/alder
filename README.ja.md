@@ -44,7 +44,7 @@ product/
 4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
 5. 未決の業務判断だけを人間に戻す。
 
-人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を記録した場合は、業務設計に対して[Optimization Review](docs/optimization-review.md)も実行できます。少数の代替業務案を探索し、Scopeと業務変更Difficultyを評価します。人間が変更を決めるまでは既存の業務上の意味を維持し、採用する場合はBusiness Designを先に更新します。
+現行業務の関係が確認済みの業務設計書では、任意の[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)によって、Problemと決めずに再検討の問いを少数提示できます。人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を確認した場合に、既存の[Optimization Review](docs/optimization-review.md)で代替業務案を検討します。変更を決めるまでは現行の業務上の意味を維持し、採用時はBusiness Designを先に更新します。
 
 この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
 

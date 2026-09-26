@@ -37,7 +37,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.2.1")
+        self.assertEqual(plugin["version"], "0.2.6")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         author_skill = (AUTHOR / "SKILL.md").read_text()
