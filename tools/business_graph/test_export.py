@@ -67,6 +67,49 @@ SOURCE = PREAMBLE + OBJECTS + activity()
 
 
 class ExportTests(unittest.TestCase):
+    def test_problem_and_pain_project_only_from_current_activity(self):
+        addition = ('\n## Problem\n\nRepeated manual reconciliation.\n\n'
+                    '## Pain level\n\nHigh\n')
+        source = SOURCE + addition + '\n' + activity('approve')
+        graph = parse_design(source)
+        nodes = {n['id']: n for n in graph['nodes']}
+        self.assertEqual((nodes['read']['problem'], nodes['read']['pain_level']),
+                         ('Repeated manual reconciliation.', 'High'))
+        self.assertNotIn('problem', nodes['approve'])
+        self.assertNotIn('pain_level', nodes['approve'])
+        self.assertEqual(graph['relations'], parse_design(SOURCE + '\n' + activity('approve'))['relations'])
+        self.assertNotEqual(render(graph), render(parse_design(SOURCE + '\n' + activity('approve'))))
+        for level in ('Low', 'Medium', 'High'):
+            self.assertEqual(next(n for n in parse_design(SOURCE + addition.replace('High', level))['nodes']
+                                  if n['type'] == 'business')['pain_level'], level)
+
+    def test_problem_and_pain_reject_partial_misplaced_or_invalid_values(self):
+        pair = '\n## Problem\n\nRepeated work.\n\n## Pain level\n\nHigh\n'
+        invalid_sources = (
+            SOURCE + '\n## Problem\n\nRepeated work.',
+            SOURCE + '\n## Pain level\n\nHigh',
+            SOURCE + pair.replace('Repeated work.', '  '),
+            SOURCE + pair.replace('High', 'Severe'),
+            SOURCE + pair.replace('High', 'high'),
+            SOURCE + pair.replace('## Problem', '## Pain level').replace('## Pain level\n\nHigh', '## Problem\n\nHigh'),
+            SOURCE.replace('## Result', pair + '\n## Result'),
+            SOURCE + pair + '\n## Problem\n\nAnother problem',
+        )
+        for source in invalid_sources:
+            with self.subTest(source=source[-100:]), self.assertRaises(DesignError):
+                parse_design(source)
+        for field, value in (('problem', ''), ('problem', 4), ('pain_level', 'Severe'),
+                             ('pain_level', None)):
+            graph = parse_design(SOURCE + pair)
+            node = next(n for n in graph['nodes'] if n['type'] == 'business')
+            node[field] = value
+            with self.subTest(field=field, value=value), self.assertRaises(DesignError):
+                validate_graph(graph)
+        graph = parse_design(SOURCE + pair)
+        del next(n for n in graph['nodes'] if n['type'] == 'business')['pain_level']
+        with self.assertRaises(DesignError):
+            validate_graph(graph)
+
     def test_object_information_projects_ordered_concepts_and_is_validated(self):
         source = SOURCE.replace('## Icon\n\nusers', '## Icon\n\nusers\n\n## Information\n\n- Question\n- Context')
         graph = parse_design(source)
@@ -511,11 +554,12 @@ class ExportTests(unittest.TestCase):
         actual = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                   if r['kind'] in ('input', 'output') and work in (r['from'], r['to'])}
         self.assertEqual(actual, {
-            ('input', '依頼者', work, 'システム要件 / レビュー結果'),
-            ('input', '業務設計書', work, '現行業務要件 / 期待結果 / 未決事項'),
+            ('input', '依頼者', work,
+             'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
+            ('input', '業務設計書', work, '現行業務要件 / 期待結果 / 未決事項 / Problem / Pain'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
-            ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項'),
+            ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項 / Problem / Pain'),
             ('output', work, '判断記録', '判断内容 / 結果'),
             ('output', work, '依頼者', '業務設計案 / レビュー依頼 / 確認事項'),
         })
@@ -530,19 +574,48 @@ class ExportTests(unittest.TestCase):
         with self.assertRaises(DesignError):
             parse_design(SOURCE.replace('- person — Question', '- [person]: Question'))
 
+    def test_optional_improvement_is_normal_work_with_human_adoption(self):
+        graph = parse_design(DESIGN.read_text())
+        nodes = {n['id']: n for n in graph['nodes']}
+        self.assertTrue(nodes['業務改善レビュー']['scope'])
+        self.assertIn('合意済み', nodes['業務改善レビュー']['when'])
+        self.assertIn('Problem / Pain', nodes['業務改善レビュー']['when'])
+        ordinary = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
+                    if '業務改善レビュー' in (r['from'], r['to'])}
+        self.assertEqual(ordinary, {
+            ('input', '業務設計書', '業務改善レビュー', '現在の業務上の意味 / Problem / Pain'),
+            ('input', '依頼者', '業務改善レビュー', '改善検討の依頼 / 記録済みProblemの補足'),
+            ('input', 'Alder: 業務ナレッジ', '業務改善レビュー', 'Problem起点の改善レビューの観点'),
+            ('output', '業務改善レビュー', '依頼者', '改善候補 / 比較根拠 / 確認事項'),
+        })
+        self.assertIn(('input', '依頼者', '業務設計',
+                       'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
+                      {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']})
+        design_source = DESIGN.read_text().split('# Activity 業務設計\n', 1)[1].split(
+            '# Activity 業務改善レビュー\n', 1)[0]
+        self.assertIn('Problemと相対的なPain levelを依頼者と確認して業務設計書へ記録する',
+                      design_source)
+        self.assertIn('未決の業務仕様とは区別', design_source)
+        self.assertFalse(any(r['kind'] == 'business-exception'
+                             and '業務改善レビュー' in (r['from'], r['to'])
+                             for r in graph['relations']))
+        self.assertNotIn('改善候補', nodes)
+        self.assertNotIn('candidate', nodes['業務改善レビュー'])
+        self.assertNotIn('problem', nodes['業務改善レビュー'])
+
     def test_self_design_projection_and_regeneration(self):
         graph = parse_design(DESIGN.read_text())
         self.assertEqual(render(graph), EXAMPLE.read_text())
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
             '業務設計', '検査項目の設計', 'システム設計', '実装',
-            '同期漏れ検査',
+            '同期漏れ検査', '業務改善レビュー',
         })
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'business' and not n['scope']},
                          {'システム設計', '実装'})
-        self.assertEqual(len(nodes), 17)
-        self.assertEqual(len(graph['relations']), 30)
+        self.assertEqual(len(nodes), 18)
+        self.assertEqual(len(graph['relations']), 34)
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'object' and n['scope']}, {
             '業務設計書', '検査項目', '判断記録', '同期照合情報', '同期漏れの候補',
@@ -561,7 +634,8 @@ class ExportTests(unittest.TestCase):
                        'label': '期待結果 / アサーション'}, graph['relations'])
         self.assertTrue(all(n['information'] for n in nodes.values() if n['type'] == 'object'))
         self.assertEqual(nodes['業務設計書']['information'], [
-            '業務範囲・目的', '業務手順・入出力', '業務間の相関・例外', '期待結果・未決事項'])
+            '業務範囲・目的', '業務手順・入出力', '業務間の相関・例外',
+            '現在の業務で経験されるProblem / Pain（ある場合）', '期待結果・未決事項'])
         self.assertFalse({'研究の証拠と採否判断', 'プルリクエスト・リリース',
                           '検証結果', 'レビュー結果',
                           'Alder: 業務設計品質レビュー知識'} & nodes.keys())
@@ -577,7 +651,8 @@ class ExportTests(unittest.TestCase):
                              for r in graph['relations']))
         self.assertEqual(nodes['依頼者']['type'], 'object')
         self.assertEqual('業務設計者', nodes['業務設計']['who'])
-        self.assertEqual('目的・変更要求を受領したとき', nodes['業務設計']['when'])
+        self.assertEqual('目的・変更要求・現在業務のProblem / Painの記録依頼を受領したとき、または改善候補の採用判断を受けたとき',
+                         nodes['業務設計']['when'])
         self.assertEqual('規定なし', nodes['業務設計']['where'])
         self.assertIn('責任を持つ人間の業務設計者が意味を確認する', DESIGN.read_text())
         self.assertEqual('業務設計書・検査項目・テストの対応関係に同期漏れの疑いが生じたとき',

@@ -54,7 +54,14 @@ def validate_graph(graph):
         require(kind in ('business', 'object'), 'invalid node type')
         expected = ({'id', 'type', 'name', 'why', 'when', 'who', 'where', 'result', 'scope'}
                     if kind == 'business' else {'id', 'type', 'name', 'scope', 'icon', 'information'})
-        require(set(node) == expected, f'invalid {kind} node fields')
+        optional = {'problem', 'pain_level'} if kind == 'business' else set()
+        require(expected <= set(node) <= expected | optional, f'invalid {kind} node fields')
+        if kind == 'business':
+            require(('problem' in node) == ('pain_level' in node),
+                    'business Problem and Pain level must appear together')
+            if 'pain_level' in node:
+                require(node['pain_level'] in ('Low', 'Medium', 'High'),
+                        'business Pain level must be Low, Medium or High')
         require(all(nonempty(v) for k, v in node.items() if k not in ('scope', 'information')),
                 'node text fields must be nonempty')
         require(type(node['scope']) is bool, f'{kind} scope must be boolean')
@@ -178,16 +185,21 @@ def parse_design(text):
         if any(h == '### Exception' for _, h in headings(body)):
             how_headings.append('### Exception')
         how_headings.append('### Output')
-        expected = tuple(field_headings) + ('## How', *how_headings, '## Result')
+        problem_headings = ['## Problem', '## Pain level'] if any(
+            h in ('## Problem', '## Pain level') for _, h in headings(body)) else []
+        expected = tuple(field_headings) + ('## How', *how_headings, '## Result', *problem_headings)
         values = sections(body, expected, node_id, empty=('## How',))
         require(not values['## How'], f'{node_id}: How must contain Input, Procedure, optional Exception, Output only')
         actual_headings = [h for _, h in headings(body)]
-        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/[Exception]/Output/Result order')
+        require(actual_headings == list(expected), f'{node_id}: fields must follow Scope/Why/When/[Exception When]/Who/Where/How/Input/Procedure/[Exception]/Output/Result/[Problem/Pain level] order')
         node = {'id': node_id, 'type': 'business', 'name': name.strip()}
         node.update({key.lower(): values['## ' + key] for key in FIELDS})
         node['result'] = values['## Result']
         require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
         node['scope'] = values['## Scope'] == 'true'
+        if problem_headings:
+            node['problem'] = values['## Problem']
+            node['pain_level'] = values['## Pain level']
         graph['nodes'].append(node)
         if '## Exception When' in values:
             for line in values['## Exception When'].splitlines():
