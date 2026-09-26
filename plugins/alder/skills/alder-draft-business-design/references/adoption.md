@@ -2,9 +2,15 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-For the standard **post-implementation review**, start with [Alder Plugin 0.1.0](plugin-adoption.md), currently pinned for GitHub distribution by tag `plugin-v0.1.0`: install/enable it once, provide a project Business Design path only when the conventional path does not apply, and use a short natural-language request. Plugin version `0.1.0` currently supports the read-only implementation-review workflow; workflows not yet packaged as skills still use this detailed manual/reference route. The prompt below remains available for external clients and reproducibility experiments; ordinary plugin use does not require copying it.
+For the standard **post-implementation review**, [Alder Plugin 0.1.0](plugin-adoption.md) packages the read-only review skill and review knowledge v0.3. Install and enable it once; with Business Design at `docs/business-design/`, ask for an Alder review in a new chat. The plugin does not yet package design authoring, Optimization Review, Check Item drafting, graph export, or follow-up. Use this guide for those workflows and for manual review with another client.
 
-Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual/reference route below requires no Alder installer or runtime dependency; the plugin is a distribution and routing layer for the same review knowledge. In either route, the reviewer needs readable Business Design and the selected Alder review knowledge.
+Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
+
+## One Business Design across three loops
+
+Alder has a **design loop** to describe, review and agree on current work; an **optional improvement loop** that first records and confirms a concrete Problem / Pain in Business Design for already viable work, reviews alternatives and returns an adopted change to Business Design; and a **realization and verification loop** that hands the agreed design and human-reviewed Check Items to implementation and checks the result in a separate Alder review/follow-up. Business Design is the one SSOT throughout. An incomplete or undecided business rule belongs in design; dissatisfaction with otherwise functioning work can start Optimization Review. Neither an unapproved candidate nor a passing Test approves business meaning.
+
+The [Business Design for using Alder](../business-design/alder/README.md) includes the optional improvement review as an in-scope Activity. It exchanges current design information and proposals with the requester through ordinary Input/Output, then returns an accepted decision to business design for revision and agreement. It is not an exception transition, nor a required step before every implementation. The standard design business still ends when the agreed Business Design and Check Items are handed to implementation; post-implementation review/follow-up is separate.
 
 ## 1. Place Business Design where the agent can read it
 
@@ -56,9 +62,9 @@ Apply this to explanations, business descriptions, and Input / Procedure / Outpu
 
 Business Design must be writable, readable and maintainable by a person alone, starting from interview findings. AI may draft and edit the same visible information alongside people; it is not an AI-only source format. For example, either a person or AI may choose and later revise an Object's visible Icon field. Keep information in understandable headings, sections and ordinary text. Do not require authors to maintain hidden HTML-comment IDs, annotations or machine-only fingerprints. Derive export data from the human-readable structure; tooling must fit the document. Business Design remains the SSOT and human business agreement is still required.
 
-### Recommended Business Design format
+### Business Design format
 
-The current research recommends **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, to make relationships between activities traceable. This is the current reference format used by the evaluated cases, not a mandatory input specification. Equivalent review behavior has not been established for arbitrary specification formats.
+Alder defines Business Design around **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, so users can read it as natural-language business documentation while AI can trace relationships between activities. New Business Design written for Alder should use this structure. The detailed visible structure is defined in [Business Design document structure](business-design-structure.ja.md), and the optional Business Graph profile uses the same headings and references. Existing documents in other formats can still be used as source material or reviewed where practical, but equivalent review behavior is not guaranteed until they are expressed in this structure.
 
 | Field | What to describe |
 | --- | --- |
@@ -79,6 +85,29 @@ The point is not to fill every field mechanically. It is to **identify the activ
 A When such as “whenever the person feels like doing it” makes timing depend on individual initiative. Check the real reason work begins, not merely whether the wording is passive. If human discretion itself is the operational trigger, state the concrete observation prompting that discretion. For example, the optional drift diagnosis starts when a synchronization gap is suspected in Business Design / Check / Test relationships, not on every edit or when an invented requester sends an undefined request. This is a normal start outside the standard flow, not an Exception When caused by another Activity. Use “any time” / 随時 only when no more specific start reason can be stated.
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
+
+### Business quality requirements belong where they constrain the work
+
+Alder does **not** omit business quality requirements. It also does not create a separate, general `Quality` bucket for them. When a deadline, continuity condition, retry invariant, authority rule or traceability period is part of what makes the work acceptable to the requester, it is **business meaning** and belongs in Business Design. Put it where that condition constrains the work, so the requirement stays connected to the Activity, Object or Result that gives it meaning.
+
+Use the existing fields according to what the condition governs:
+
+| Business condition | Put it primarily in | Example |
+| --- | --- | --- |
+| Completion deadline or normal completion guarantee | `Procedure` / `Result` | All payroll transfers are completed by 17:00 on the specified payday. |
+| Invariant that must survive retry, partial failure or re-execution | `Procedure` / `Exception` / `Result` | Retrying a partially failed payroll run must not pay the same employee twice for the same month. |
+| Continuity of the business when an ordinary path is unavailable | `Exception` / `Procedure` / `Result`; `Where` when the operating environment matters | Reception continues during an information-system outage by switching to the established fallback work. |
+| Authority or approval needed for an acceptable outcome | `Who` / `Procedure` | Only an approved bank-account change may be used for payment. |
+| Information that must remain traceable or available for a period | `Object.Information` plus the `Procedure` / `Result` that establishes or maintains it | The actor, approver, before/after values and change time remain reviewable for the required period. |
+| State guaranteed after successful work | `Result` | The accepted application and its reception time are established for later monthly reporting. |
+
+The same business condition may affect more than one part of the design, but do not copy it into a second category merely for visibility. Keep the governing statement close to the work that must preserve it. Repeat only the distinct meaning needed to describe, for example, both the action in Procedure and the state established in Result. A separate `Quality` heading that duplicates Procedure, Exception, Result or Object.Information creates another copy that can drift during later edits.
+
+A desired condition is also different from an observed operational problem. A requirement such as “complete payroll by 17:00” can exist even when no delay has occurred. If current work actually misses that condition or creates a burden, record that separate fact as a **Problem** and its relative impact as **Pain** when using [Optimization Review](optimization-review.md). Do not infer a Problem or Pain merely because a business quality condition exists.
+
+Likewise, state the **business condition**, not its technical implementation. “Reception must continue during business hours” can be Business Design; “use active-active servers” is a system-design candidate. “A change must remain attributable for two years” can be Business Design; an encryption algorithm, database, replica count or cloud topology belongs in technical requirements. Business Design defines what must hold. System Design chooses how to make it hold.
+
+This boundary was checked in [Issue #107](https://github.com/mk3008/alder/issues/107): the evaluated deadline, continuity, duplicate-payment and traceability conditions were expressible with the existing Business Design fields, while a separate experimental `Quality` heading mainly improved scanning, duplicated existing meaning and introduced an attribution defect in one run. Alder therefore keeps the business-quality concept but does not add a dedicated Quality field, grammar rule, exporter field or mandatory checklist.
 
 ### Normal triggers, exceptions and environment
 
@@ -121,18 +150,18 @@ Before presenting a draft, walk one representative passage through its named Obj
 Business Design may also record a concrete **Problem** and **Pain level** for an Activity when people actually experience a burden worth reviewing. These are not mandatory fields and should not be invented merely to make every Activity look optimizable.
 
 ```markdown
-### Problem
+## Problem
 
 Approved purchase requests require the purchasing operator to repeat purchase and result-registration work for each request.
 
-### Pain level
+## Pain level
 
 High
 ```
 
-Use a simple relative Pain level such as **Low / Medium / High**. Pain is a proportionality signal for review, not a numerical score or an automatic decision rule. If frequency, time, error rate, cost or other observed evidence is available, record it; do not fabricate measurements when none exist.
+For the [exportable v1 profile](business-graph.md#opt-in-markdown-profile-v1), place the two nonempty H2 fields after Result, in Problem then Pain level order, with **Low / Medium / High** as the entire Pain value. Both fields are optional as a pair; record at most one pair per Activity. Other Business Designs need not use the export profile, but keep Problem and Pain together as the inputs to this review. Pain is a proportionality signal for review, not a numerical score or an automatic decision rule. If frequency, time, error rate, cost or other observed evidence is available, record it; do not fabricate measurements when none exist.
 
-A recorded Problem is the entry point for [Optimization Review](optimization-review.md). The review stays centered on that Problem rather than trying to optimize the whole Business Design.
+The pair is current human-recorded business information. An AI-generated candidate, Expected benefit, Difficulty, Confidence or Narrow / Keep / Expand assessment is not a current fact. If people adopt a change, update and re-agree Business Design before deriving Checks, Tests or implementation; record any remaining Problem and Pain that still describes the revised current work. A recorded Problem is the entry point for [Optimization Review](optimization-review.md). The review stays centered on that Problem rather than trying to optimize the whole Business Design.
 
 
 ## 2. Point the agent to the design and review knowledge
@@ -164,7 +193,7 @@ Alder v0.6 retains the **Check Item** (Atomic Check in v0.3) traceability bounda
 
 ### Run Optimization Review for a recorded Problem
 
-When Business Design contains a concrete Problem and Pain level, use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
+When people recognize a new Problem / Pain, first record and confirm it in the current Business Design through the design loop. When Business Design contains that concrete Problem and Pain level, optionally use [Optimization Review](optimization-review.md) to explore whether a different business design could reduce that pain. This is an adopted Alder workflow capability, but it is not a requirement to optimize every Activity.
 
 The review:
 
@@ -179,7 +208,7 @@ The review:
 
 Return at most a few useful alternatives; the current guide uses a maximum of three for one Problem. Do not choose a winner. People decide whether a candidate is worth adopting.
 
-If people accept a candidate, **update and confirm Business Design first**, then update downstream Checks, Tests, Decisions and implementation. A candidate is not a requirement merely because the AI proposed it.
+If people accept a candidate, **update and confirm Business Design first**: apply the same writing-quality and business-correlation review used for any design revision, and use optional functional-consideration discovery where useful. Ask people to confirm the changed meaning and remaining Problem / Pain before Check Item design. Then update downstream Checks, Tests, Decisions and implementation. A candidate is not a requirement merely because the AI proposed it.
 
 Use the copyable prompt and output contract in [Optimization Review](optimization-review.md). The evidence and limits for this adopted workflow are recorded there and in [Validation](validation.md).
 
