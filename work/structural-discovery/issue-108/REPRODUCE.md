@@ -1,0 +1,10 @@
+# Issue #108 再現・監査
+
+基点：PR #100 の `68eb5ffab590ed20b78b7002d421304b7d3720a2` と同一 local tree `8f39ca10d7b1fb700e3d848aa0e63a1dd5e64d86`。#99/#105 の既存 raw と評価は再生成せず読み取るのみ。
+
+1. local `40cfaca6ef9520994a9e52e9bd289d3ba0646789` で [PROTOCOL.md](PROTOCOL.md)、[fixtures](fixtures/)、C/D の `design.md`、`prompt.txt`、`AGENTS.md`、[INPUT-SHA256](INPUT-SHA256) を固定。C/D の別 Fresh Agent は `/root/control_c_108`、`/root/control_d_108`。いずれも requested `gpt-6-sol` / effort `medium` / `fork_turns: none`。launch 指示はそれぞれ「Fresh control C/D. Read and execute the exact prompt in <run の絶対パス>/prompt.txt. Write only specified raw.md and read-log.md. Do not read other control or experiment files. Report completion.」。実際の全文は各 `prompt.txt` にある。
+2. C/D の初回 `raw.md`、`read-log.md` は local `34a00d7600314bb866b79b1f75599fa94e4218b1` で [CONTROL-SHA256](CONTROL-SHA256) とともに固定。成功するまで再実行していない。
+3. 独立評価指示は local `a5bc9d503f1b08574a16fb7b97eddfd1419e1e63` の `evaluation/prompt.txt` に固定。Agent `/root/evaluator_108` は requested `gpt-6-sol` / `medium` / `none`。launch 指示は「Independent Fresh evaluation. Read and execute the exact instructions in <evaluation の絶対パス>/prompt.txt. Write only evaluator-raw.md and read-log.md in that evaluation directory. Do not modify any raw or fixture. Report completion.」。[評価原文](evaluation/evaluator-raw.md) と [読取記録](evaluation/read-log.md) は local `b7117acd2abefa2d007d73016578e804284b083c` で固定。
+4. 独立評価に基づき [RESULT.md](RESULT.md) と文書導線を追加。既存 raw の改稿や Skill の変更は行わない。
+
+repo root で `sha256sum -c work/structural-discovery/issue-108/INPUT-SHA256` および `sha256sum -c work/structural-discovery/issue-108/CONTROL-SHA256` を実行する。既存研究の変更検査は local 基点 `c87d690a487277a368414fafe93a2569b05e9639` から `git diff --name-only c87d690..HEAD -- work/structural-discovery/issue-99 work/structural-discovery/issue-101 work/optimization-comparison/issue-103 work/optimization-comparison/issue-104 work/optimization-comparison/issue-105 work/authoring-lifecycle/issue-106` が空であることを確認する。hash は同一性の照合であり、実効モデル設定や共有 filesystem の非接触の証明ではない。
