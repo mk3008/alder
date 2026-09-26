@@ -2,6 +2,8 @@
 
 ブランチ `research/issue-99-authoring-discovery`。既存研究との差分基点 `be856b9a292e0405dfe2e68cb91999b001763741`。本件は合成事例一件であり、実在業務の承認ではない。
 
+GitHub 反映時の commit ID 対応は [`REMOTE-COMMITS.md`](REMOTE-COMMITS.md) に記録した。以下の短縮 SHA は検証時のローカル Git 系列を指す。
+
 ## 実行順と固定コミット
 
 1. `d9d6cd9`：シナリオ、`protocol.md`、Oracle plaintext の SHA-256 commitment。平文は `/tmp/alder-104-oracle.txt` に置き、Agent の許可入力から外した。後の `oracle-revealed.md` と同じハッシュ `d8443346e2bf6c9f414ec304a4135c24d067ad78d97260381566004a9fb18308`。
