@@ -5,6 +5,8 @@ on:
       - '.agents/plugins/**'
       - 'plugins/alder/**'
       - 'docs/phase2/review-knowledge-v0.3.md'
+      - 'docs/adoption.md'
+      - 'docs/business-graph.md'
       - 'tools/test_plugin_package.py'
       - '.github/workflows/plugin-package.yml'
   push:
@@ -13,6 +15,8 @@ on:
       - '.agents/plugins/**'
       - 'plugins/alder/**'
       - 'docs/phase2/review-knowledge-v0.3.md'
+      - 'docs/adoption.md'
+      - 'docs/business-graph.md'
       - 'tools/test_plugin_package.py'
       - '.github/workflows/plugin-package.yml'
 jobs:

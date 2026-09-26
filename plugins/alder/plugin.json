@@ -1,18 +1,18 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "alder",
-  "version": "0.1.0",
-  "description": "Review implementation against agreed Business Design with Alder.",
+  "version": "0.2.1",
+  "description": "Draft Business Design from interview notes and review implementation against agreed Business Design with Alder.",
   "repository": "https://github.com/mk3008/alder",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Alder",
-        "shortDescription": "Review implementation against Business Design",
+        "shortDescription": "Draft Business Design and review implementation",
         "developerName": "mk3008",
         "category": "Productivity",
-        "capabilities": ["Read"],
-        "defaultPrompt": ["実装が終わったのでAlderレビューして"]
+        "capabilities": ["Read", "Write"],
+        "defaultPrompt": ["このヒアリング結果をAlder業務設計書にして", "実装が終わったのでAlderレビューして"]
       }
     }
   }
