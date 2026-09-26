@@ -1,0 +1,24 @@
+{
+  "issue": "https://github.com/mk3008/alder/issues/98",
+  "source_revision": "af733229c7f20c5a9fc1c4f094a8fb8c548fe544",
+  "source_path": "business-design/purchase-request/README.md",
+  "input_path": "work/optimization-review/issue-98/purchase/business-design.md",
+  "input_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "prompt_path": "work/optimization-review/issue-98/purchase/launch.md",
+  "prompt_sha256": "9321fa1c05398f7443f14af76a5dd431322d31bcb961419b8eb5d24fb547e76f",
+  "protocol_path": "work/optimization-review/issue-98/protocol.md",
+  "protocol_sha256": "73a6f01e87606e7daaa3e6029a23c042184426850ca9b41cb9f8cde6d54bacdc",
+  "raw_output_path": "work/optimization-review/issue-98/purchase/raw.md",
+  "raw_output_sha256": "071124388fb17ea79f01ac04cf304760043281c7314ca8b2d128ba783de1695c",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/issue98_purchase",
+  "effective_model_and_effort_independently_attested": false,
+  "runs": 1,
+  "read_log_agent_report": [
+    "launch.md",
+    "business-design.md"
+  ],
+  "input_isolation": "fresh agent with explicit allowlist; shared filesystem not access-controlled"
+}
