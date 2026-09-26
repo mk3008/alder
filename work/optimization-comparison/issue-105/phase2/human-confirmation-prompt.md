@@ -1,0 +1,1 @@
+あなたは同じ合成顧客役です。`scenario/customer-role.md` と `runs/u1-raw.md` のみを業務入力として読み、Observation 1・2 をそれぞれ「改善対象として認識する」「現状維持の理由があり Problem としない」「追加事実が必要で保留」のいずれかに分類してください。根拠はカードの事実に限り、損失や苦情を発明せず、現行業務の失敗と再検討機会を区別してください。Observation ごとの短い理由を答え、改善解法や別の Problem 文を作らないでください。Known Problem、Oracle、K の出力、Optimization guidance、#99〜#104 は読まず、ファイル変更せず、読取パスを返してください。
