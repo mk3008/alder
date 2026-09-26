@@ -19,3 +19,5 @@
 リポジトリ root から `sha256sum -c` で `oracle-commitment.sha256` を使う場合は、記録内の `/tmp/...` を公開後の `oracle-revealed.md` に置き換えて照合する。`authoring/*.sha256`、`phase1/*.sha256` は repo root からそのまま `sha256sum -c` で照合できる。ハッシュはファイル同一性だけを示す。
 
 `git diff --name-only be856b9..HEAD -- work/structural-discovery/issue-99 work/structural-discovery/issue-101 work/authoring-loop/issue-102 work/optimization-comparison/issue-103` が空であることを確認する。raw の意味評価は `RESULT.md` と `evaluation-raw.md` を原文と照合する。
+
+`git diff --check be856b9..HEAD` は U3 の raw 二件の冒頭で、回答原文の Markdown 改行用の行末空白（各2行）を報告する。raw を一字も変更しない記録条件を優先して残す。他のファイルでこの指摘はない。
