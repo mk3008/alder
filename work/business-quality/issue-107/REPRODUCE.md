@@ -1,5 +1,7 @@
 # Issue #107 再現・監査
 
+以下の local commit と PR branch の commit ID の対応は [REMOTE-COMMITS.md](REMOTE-COMMITS.md) に記す。
+
 基点：Alder main merge commit `d9dba20f5c986f18542031cf9f24a12cfdd4ce57`、tree `2a2b06c1583e4648b0b88b4afa024a2bf8500015`。実験中、現行 Skill 0.2.6 と既存文書・研究 raw は変更しなかった。
 
 1. local `fe8a8e3acab13ae2bcbccf69d3a8b0a2403c7326` で [PROTOCOL.md](PROTOCOL.md)、[fixtures](fixtures/)、[guidance.md](guidance.md)、各 run の `notes.md` / `prompt.txt` / `AGENTS.md` と [INPUT-SHA256](INPUT-SHA256) を固定。baseline には Quality guidance を与えず、treatment のみ追加した。
