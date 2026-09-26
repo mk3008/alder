@@ -46,6 +46,9 @@ product/
 
 現行業務の関係が確認済みの業務設計書では、任意の[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)によって、Problemと決めずに再検討の問いを少数提示できます。人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を確認した場合に、既存の[Optimization Review](docs/optimization-review.md)で代替業務案を検討します。変更を決めるまでは現行の業務上の意味を維持し、採用時はBusiness Designを先に更新します。
 
+
+Alderは業務上の品質要求を省略するのではなく、**独立したQuality欄へ隔離しません**。依頼者が求める期限、業務継続、再実行時の不変条件、権限、追跡可能性などは、それが制約する既存のProcedure / Exception / Result / Who / Object.Information等へ業務意味として記述します。Multi-AZ、暗号方式、DB、冗長構成などの実現方式はSystem Design側で決めます。具体的な配置は[業務品質要求の記述指針](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work)を参照してください。
+
 この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
 
 **Alderは、アーキテクチャの形式や構造を導入する時期を規定しません。** 実装を担当するAIには、業務設計、明示的な要求・制約、実際に予見している将来のリスクを具体的に伝え、実現方法を任せます。アーキテクチャの知識はその判断に使えますが、形式の名前だけでは要求の代わりになりません。

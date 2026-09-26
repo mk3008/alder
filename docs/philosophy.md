@@ -8,6 +8,17 @@ Business Design is the basis for agreement with users/requesters. **Its prose mu
 
 Business Design must also be maintainable by a person alone and jointly editable with AI through the same visible information. Machine-readable export must adapt to that human-readable structure, without making people maintain hidden IDs or machine-only annotations. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
 
+
+## Business quality is business meaning, not a separate NFR bucket
+
+Alder does not treat quality as something omitted from Business Design and recovered later by a generic non-functional-requirements checklist. A deadline, continuity condition, retry invariant, authority rule or traceability requirement belongs in Business Design when the requester needs that property for the business to be acceptable. What matters is the **business condition that must hold**, not whether it fits a conventional quality category.
+
+Alder therefore does not add a separate Quality field merely to collect those conditions. The requirement stays with the Activity, Object, exception or Result that gives it meaning: a deadline with the work that must finish by it; retry safety with the retry/failure behavior it constrains; continuity with the fallback business work; traceability with the information that must remain reviewable. Keeping the condition there preserves its causal and operational context and avoids a second copy that can drift.
+
+This also separates business requirements from technical mechanisms. “Reception must continue during business hours” may be business meaning. “Use active-active servers” is not; it is one possible system-design response. “A bank-account change must remain attributable for two years” may be business meaning. The database, encryption and retention mechanism are technical choices.
+
+Problem and Pain remain different again: they describe a current difficulty and its impact, not the desired condition itself. A required deadline does not prove that a delay currently exists. See [business quality requirements in the adoption guidance](adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) for the concrete field mapping and examples.
+
 ## Why not settle every decision before implementing?
 
 Business Design needs enough detail to identify the current work and trace its connections. Alder does not treat careless specifications as sufficient, but it does not postpone implementation until every business decision is perfectly specified.

@@ -80,6 +80,30 @@ A When such as “whenever the person feels like doing it” makes timing depend
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
 
+
+### Business quality requirements belong where they constrain the work
+
+Alder does **not** omit business quality requirements. It also does not create a separate, general `Quality` bucket for them. When a deadline, continuity condition, retry invariant, authority rule or traceability period is part of what makes the work acceptable to the requester, it is **business meaning** and belongs in Business Design. Put it where that condition constrains the work, so the requirement stays connected to the Activity, Object or Result that gives it meaning.
+
+Use the existing fields according to what the condition governs:
+
+| Business condition | Put it primarily in | Example |
+| --- | --- | --- |
+| Completion deadline or normal completion guarantee | `Procedure` / `Result` | All payroll transfers are completed by 17:00 on the specified payday. |
+| Invariant that must survive retry, partial failure or re-execution | `Procedure` / `Exception` / `Result` | Retrying a partially failed payroll run must not pay the same employee twice for the same month. |
+| Continuity of the business when an ordinary path is unavailable | `Exception` / `Procedure` / `Result`; `Where` when the operating environment matters | Reception continues during an information-system outage by switching to the established fallback work. |
+| Authority or approval needed for an acceptable outcome | `Who` / `Procedure` | Only an approved bank-account change may be used for payment. |
+| Information that must remain traceable or available for a period | `Object.Information` plus the `Procedure` / `Result` that establishes or maintains it | The actor, approver, before/after values and change time remain reviewable for the required period. |
+| State guaranteed after successful work | `Result` | The accepted application and its reception time are established for later monthly reporting. |
+
+The same business condition may affect more than one part of the design, but do not copy it into a second category merely for visibility. Keep the governing statement close to the work that must preserve it. Repeat only the distinct meaning needed to describe, for example, both the action in Procedure and the state established in Result. A separate `Quality` heading that duplicates Procedure, Exception, Result or Object.Information creates another copy that can drift during later edits.
+
+A desired condition is also different from an observed operational problem. A requirement such as “complete payroll by 17:00” can exist even when no delay has occurred. If current work actually misses that condition or creates a burden, record that separate fact as a **Problem** and its relative impact as **Pain** when using [Optimization Review](optimization-review.md). Do not infer a Problem or Pain merely because a business quality condition exists.
+
+Likewise, state the **business condition**, not its technical implementation. “Reception must continue during business hours” can be Business Design; “use active-active servers” is a system-design candidate. “A change must remain attributable for two years” can be Business Design; an encryption algorithm, database, replica count or cloud topology belongs in technical requirements. Business Design defines what must hold. System Design chooses how to make it hold.
+
+This boundary was checked in [Issue #107](https://github.com/mk3008/alder/issues/107): the evaluated deadline, continuity, duplicate-payment and traceability conditions were expressible with the existing Business Design fields, while a separate experimental `Quality` heading mainly improved scanning, duplicated existing meaning and introduced an attribution defect in one run. Alder therefore keeps the business-quality concept but does not add a dedicated Quality field, grammar rule, exporter field or mandatory checklist.
+
 ### Normal triggers, exceptions and environment
 
 Keep When and Procedure focused on the normal, successful path. Put exceptions discovered during an Activity and their return/transition in its optional **How → Exception** section, not as “if ...” branches in Procedure. Put the corresponding exceptional restart condition in the destination Activity's **Exception When**, naming the originating Activity, trigger and necessary recovery/confirmation condition. These describe the producing and receiving sides of the same event. Do not enumerate speculative exceptions. In a graph, normal When remains an Activity attribute; the destination's Exception When becomes the single explicit Business → Business dashed relation. How → Exception explains the source behavior but creates no second relation. Reconcile the two descriptions by human review; the exporter checks their structure, not their semantic agreement. When a global Graph exception is used instead of Exception When, likewise declare its relation only once. The optional export profile defines the exact notation.

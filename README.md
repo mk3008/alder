@@ -46,6 +46,9 @@ product/
 
 When a Business Design's relevant current-state relationships are confirmed, an optional [Structural Discovery inquiry](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) can surface a few grounded questions without declaring a Problem. If people confirm a concrete operational **Problem** and **Pain level**, Alder can run the existing [Optimization Review](docs/optimization-review.md) to explore alternatives, evaluate Scope and business-change Difficulty, and preserve existing meaning until people decide to change it; accepted candidates update Business Design first.
 
+
+Business quality requirements are not omitted or collected in a separate Quality bucket. A requester-defined deadline, continuity condition, retry invariant, authority rule or traceability requirement is written into the existing Business Design field that it constrains—such as Procedure, Exception, Result, Who or Object.Information—while technical mechanisms remain in System Design. See [business quality requirements](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work).
+
 This layout and a local review-knowledge copy are optional. Prefer keeping design and implementation in the same repository; a known workspace path and revision also works. Review knowledge may instead come from a readable versioned GitHub URL or an Alder checkout in the workspace.
 
 **Alder does not prescribe an architecture style or when to introduce structure.** Give the implementation agent the Business Design, explicit requirements and constraints, and concrete future risks you actually foresee; let it choose how to realize them. Architecture knowledge can support that choice, but a style name does not replace requirements.
