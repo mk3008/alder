@@ -8,6 +8,34 @@ It is an adopted Alder workflow capability. It is **not** a claim that AI can fi
 
 Business Design remains the SSOT. The review proposes alternatives; people decide whether to change the business. If a candidate is accepted, update and confirm Business Design first, then update downstream Check Items, Tests, Decisions and implementation as needed.
 
+## Optional Structural Discovery before a Problem is known
+
+When people want to look for questions about the current way of working without supplying a Problem, they may run a **Structural Discovery** inquiry. First confirm that the Business Design faithfully describes the relevant current work and that the relationships needed for the inquiry are established. Read across Activities, Objects, roles, timing and Results. Report only a few grounded relationships that may be worth reconsidering; **zero observations is valid**. This inquiry is optional and does not change Business Design or approve an alternative.
+
+For each observation, keep these distinct:
+
+1. **Structural Observation** — the present relationship directly supported by Business Design.
+2. **Evidence** — the named Activities, Objects, roles, times, information flows or Results.
+3. **Why it may matter** — a possibility to investigate, without asserting a burden or benefit.
+4. **Unknowns** — facts needed to determine whether there is a real Problem.
+5. **Question** — something the people doing the work can verify or decide.
+
+If a proposed observation depends on an **unconfirmed** procedure, authority, state or relationship, return a plain Business Design confirmation question to Authoring / Quality Review instead. Count no improvement observation for that relation; do not use the observation template for a design defect. Preserve checks with different purposes, even when they share a time, person or object. Do not infer Pain, error, delay, cost or an optimal design from structure alone.
+
+People may reject every observation or leave it pending. Only after they confirm a specific operational Problem and a Pain level should they use the existing Optimization Review below. Discovery neither supplies that confirmation nor creates a separate Structural Optimization workflow.
+
+Copyable optional inquiry:
+
+```text
+Review this confirmed current-state Business Design for a small number of relationships across Activities, Objects, roles, times and Results that may be worth reconsidering. Review only; do not change files.
+For each supported relationship, separate Structural Observation, Evidence, Why it may matter, Unknowns and a Question people can verify.
+Do not turn an unconfirmed Business Design relation into an improvement: return a plain design-confirmation question first.
+Do not invent a Problem, Pain, benefit or implementation. Preserve checks with different purposes. Zero observations is valid.
+People decide whether any observation represents a Problem; use the existing Optimization Review only after that decision and a Pain level.
+```
+
+This narrow boundary is supported by the [Issue #108 comparison](../work/structural-discovery/issue-108/RESULT.md): #99 revealed one useful shared-tool commitment question amid many unfinished design correlations; #105's grounded observation was rejected as a Problem by the synthetic customer; new zero and incomplete-design controls returned no improvement candidates. These small synthetic cases do not establish a general discovery rate or operational benefit.
+
 ## Inputs
 
 Use the current Business Design plus:

@@ -4,10 +4,10 @@ English | [日本語](README.ja.md)
 
 **Talk with users through Business Design.**
 
-Alder does not treat the business agreement with users as an external handoff document.  
+Alder does not treat the business agreement with users as an external handoff document.
 It keeps the agreed **Business Design** as the source of truth and connects improvement, Check Items, AI implementation, and review to it.
 
-The method needs no framework or runtime package. Put Business Design where the agent can read it. An optional plugin packages one read-only implementation-review skill.
+The method needs no framework or runtime package. Put Business Design where the agent can read it. Plugin 0.2.6 provides Business Design drafting and revision plus read-only implementation review; the stable `plugin-v0.1.0` tag supports review only.
 
 ## Alder in 30 seconds
 
@@ -49,21 +49,25 @@ See the [adoption guide](docs/adoption.md) for Business Design authoring, Check 
 
 ## Review an implementation with the plugin
 
-1. [Install Alder Plugin](docs/plugin-adoption.md).
+1. [Install Alder Plugin](docs/plugin-adoption.md). Use 0.2.6 for Business Design authoring and review, or the stable `plugin-v0.1.0` tag for review only.
 2. Keep the agreed Business Design in the product repository at `docs/business-design/`.
 3. In a new chat, ask “Review this implementation with Alder.” Name the change if several are in progress.
 
-The skill performs a read-only post-implementation review. At the standard path, it needs no Alder-specific AGENTS.md entry or copied review knowledge. For installation details, other paths, and updates, see [Plugin setup](docs/plugin-adoption.md). For authoring, improvement, Check Items, graph export, and follow-up, use the [adoption guide](docs/adoption.md); these are not plugin skills in version 0.1.0.
+The review skill performs a read-only post-implementation review. At the standard path, it needs no Alder-specific AGENTS.md entry or copied review knowledge. For installation details, other paths, and updates, see [Plugin setup](docs/plugin-adoption.md). Plugin 0.2.6 also supports authoring and revision from interview notes; the stable `plugin-v0.1.0` tag does not. For improvement, Check Items, graph export, and follow-up, use the [adoption guide](docs/adoption.md). Graph JSON export is available through the CLI.
 
 ## When you want to improve the work
+
+For confirmed current-state relationships, optional [Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) can raise grounded questions before a Problem is known. Zero observations is valid. People confirm any actual Problem and Pain before Optimization Review.
 
 If the current work is viable but people experience a concrete problem, first record **Problem / Pain** in Business Design.
 
 Then run [Optimization Review](docs/optimization-review.md). AI proposes a small set of alternatives; people decide whether to adopt any of them.
 
+Business quality requirements belong in the existing Procedure, Exception, Result, Who, or Object.Information fields they constrain. A separate Quality field is not used; technical mechanisms belong in System Design. See the [field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work).
+
 ## Business Graph (optional)
 
-Business Design can be projected to JSON for external visualization or analysis.  
+Business Design can be projected to JSON for external visualization or analysis.
 JSON is an intermediate format; Business Design remains the source of truth.
 
 [Business Graph JSON v1 and exporter](docs/business-graph.md)

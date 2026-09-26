@@ -1,0 +1,2 @@
+01cd8445f5c8d5a52f99b97bb51c2cd6f46800ca616516b0c1dcf21bb7e31312  work/optimization-comparison/issue-103/phase0/customer-raw.md
+68c80bc9bea7b6d6d26387ac7c7b4f925ad07e93f807d9c8ac6041e312f2e33f  work/optimization-comparison/issue-103/phase0/customer-read-log.md
