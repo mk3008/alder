@@ -2,6 +2,8 @@
 
 作業ブランチ `research/issue-99-authoring-discovery` の既存 remote 基点 `94ff07f3b88e55b4575b0a9d57ddf40e42430817`。新規ファイルは `work/optimization-comparison/issue-105/` に限定。#99〜#104 の既存記録は変更しない。
 
+以下の commit ID は local の時系列。PR #100 の branch に作成した同一 tree の commit ID との対応は [REMOTE-COMMITS.md](REMOTE-COMMITS.md) を参照する。
+
 ## 固定順序
 
 1. `6ca2887`：シナリオ、顧客初回 brief、Oracle と Known Problem の平文 SHA-256 commitment、protocol。平文は Agent 入力外の `/tmp/alder-105-{oracle,known}.txt` に置いた。commitment が先に Git commit された事実は記録上の順序を示すが、共有 filesystem の物理的隔離は証明しない。
