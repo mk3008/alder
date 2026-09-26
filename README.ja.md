@@ -64,6 +64,7 @@ Alderは業務上の品質要求を省略するのではなく、**独立したQ
 | 一度のPlugin導入と短い実装後レビュー依頼 | [Alder Plugin（英語）](docs/plugin-adoption.md) |
 | 初期Plugin検証、Fresh A/B比較、残る限界 | [Issue #86検証記録（英語）](docs/plugin-poc-evaluation.md) |
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
+| Alderにおけるデータモデリング、業務側の構造要求、DB制約の位置づけ | [データモデリング](docs/data-modeling.ja.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
 | Problem / Pain / Scope / Difficultyを使って業務の代替案を検討するレビュー | [Optimization Review（英語）](docs/optimization-review.md) |

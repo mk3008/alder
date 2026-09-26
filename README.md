@@ -74,6 +74,7 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 | One-time plugin install and short implementation-review request | [Alder Plugin](docs/plugin-adoption.md) |
 | Initial plugin validation, Fresh A/B comparison, and remaining limits | [Issue #86 validation](docs/plugin-poc-evaluation.md) |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
+| How Alder treats data modeling, business-side structural requirements, and database constraints | [Data modeling](docs/data-modeling.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
 | Problem-driven review of alternative business designs using Problem / Pain / Scope / Difficulty | [Optimization Review](docs/optimization-review.md) |
