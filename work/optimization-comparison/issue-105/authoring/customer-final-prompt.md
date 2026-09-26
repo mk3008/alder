@@ -1,0 +1,1 @@
+同じ合成顧客役として、`scenario/customer-role.md` と修正後の `authoring/design.md` を通読し、現行業務の意味、役割と責任、Input/Output、正常/例外経路、月次区分の変換と当日の逆変換、negative control と表示確認が事実通りか確認してください。source にない断定や material open question があれば箇所とともに挙げ、なければ合成顧客としてこの current-state の業務意味を確認したと明示してください。Oracle、Known Problem、研究 protocol、改善判断は読まないでください。ファイル変更なし、読取パスを返してください。
