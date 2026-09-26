@@ -1,5 +1,7 @@
 # Issue #108 再現・監査
 
+以下の local commit と PR #100 branch 上の commit の対応は [REMOTE-COMMITS.md](REMOTE-COMMITS.md) に記す。
+
 基点：PR #100 の `68eb5ffab590ed20b78b7002d421304b7d3720a2` と同一 local tree `8f39ca10d7b1fb700e3d848aa0e63a1dd5e64d86`。#99/#105 の既存 raw と評価は再生成せず読み取るのみ。
 
 1. local `40cfaca6ef9520994a9e52e9bd289d3ba0646789` で [PROTOCOL.md](PROTOCOL.md)、[fixtures](fixtures/)、C/D の `design.md`、`prompt.txt`、`AGENTS.md`、[INPUT-SHA256](INPUT-SHA256) を固定。C/D の別 Fresh Agent は `/root/control_c_108`、`/root/control_d_108`。いずれも requested `gpt-6-sol` / effort `medium` / `fork_turns: none`。launch 指示はそれぞれ「Fresh control C/D. Read and execute the exact prompt in <run の絶対パス>/prompt.txt. Write only specified raw.md and read-log.md. Do not read other control or experiment files. Report completion.」。実際の全文は各 `prompt.txt` にある。
