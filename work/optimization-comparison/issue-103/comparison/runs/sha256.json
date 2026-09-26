@@ -1,0 +1,42 @@
+{
+  "L1": {
+    "AGENTS.md": "f4e2b8c88981f7983f8a9469324052bd8cb23dc2d66c1b2c8be3c48293088f04",
+    "run-prompt.md": "7493a2d810417849d43644776a1446d67456f4085316b5bd2e033ab43245f2da",
+    "raw.md": "2a03b695de3daa3bba64c411c3227c279a9ae1ec1dbcc44ab7fdbc1c93d5e747",
+    "read-log.md": "6b64a257c07c7f8cca349e33bd5837c4a506260f9aed1dd3b0284f164ae5e984",
+    "input_hashes": {
+      "business-design.md": "1b13ebe8bbd15aa112ed68bda6df58ba6647ad79db60d101ea0a71c1753c7bc4",
+      "optimization-review.md": "c2d6b98a57ac97cf0b78cfd544e1d8a9ab071016acdaaf937435251aa3166ad5"
+    }
+  },
+  "L2": {
+    "AGENTS.md": "18ec2d545a0fc87cad741dbf459c570bc1f41a656247db65d6508d598d34360c",
+    "run-prompt.md": "0ef0972df8a3f7693cf82c6682180f2c7848b10220e8270abe485db545b8b153",
+    "raw.md": "269d91a3e35001e9f2c6f2333dde18370b6be14a763ecdd343fa7e4762b70fcb",
+    "read-log.md": "5f35901b0d1bca8a9f79a535dc91cbf387934e72b5e1b83845eaa9e9fa4b0d20",
+    "input_hashes": {
+      "business-design.md": "1b13ebe8bbd15aa112ed68bda6df58ba6647ad79db60d101ea0a71c1753c7bc4",
+      "optimization-review.md": "c2d6b98a57ac97cf0b78cfd544e1d8a9ab071016acdaaf937435251aa3166ad5"
+    }
+  },
+  "L3": {
+    "AGENTS.md": "35f8480a46c2de0f81e9bb797bf3d07844511d27c793077db749205ce20e0d3c",
+    "run-prompt.md": "9ec4f472dc53792a2d27686f8389e00c559642a96ccdd83f014adaf7a1706ace",
+    "raw.md": "5acc5d709b76547a2b1b20468568d06d04441990d3ae61bf361815333957ab98",
+    "read-log.md": "8a205e95160ba912557e5f44d124f40169e7ef05ce45e71cf609e65cd457a17a",
+    "input_hashes": {
+      "business-design.md": "1b13ebe8bbd15aa112ed68bda6df58ba6647ad79db60d101ea0a71c1753c7bc4",
+      "optimization-review.md": "c2d6b98a57ac97cf0b78cfd544e1d8a9ab071016acdaaf937435251aa3166ad5"
+    }
+  },
+  "S": {
+    "AGENTS.md": "b88f4d4e4f512cb39ae0ca99c5656ee70f04efae7e46f1246a4e6c03f3254a50",
+    "run-prompt.md": "33440376f9674d72397855047d209495f23c89ba3488aceab9db9545dd5e03c8",
+    "raw.md": "794a6c6eb03cbda24f10d1f1f2f0f2851a80b135ba5a6625f67c7211a9f478f5",
+    "read-log.md": "2c2ebfd567aadcabc8647773c96318597a75880b897dbe7b652ccb9c2d155088",
+    "input_hashes": {
+      "business-design.md": "1b13ebe8bbd15aa112ed68bda6df58ba6647ad79db60d101ea0a71c1753c7bc4",
+      "optimization-review.md": "c2d6b98a57ac97cf0b78cfd544e1d8a9ab071016acdaaf937435251aa3166ad5"
+    }
+  }
+}
