@@ -66,12 +66,14 @@ Alderでは、詳細設計を実装前の独立した必須工程とはしてい
 | 一度のPlugin導入と短い実装後レビュー依頼 | [Alder Plugin（英語）](docs/plugin-adoption.md) |
 | 初期Plugin検証、Fresh A/B比較、残る限界 | [Issue #86検証記録（英語）](docs/plugin-poc-evaluation.md) |
 | 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
+| Alderにおけるデータモデリング、業務側の構造要求、DB制約の位置づけ | [データモデリング](docs/data-modeling.ja.md) |
 | 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
 | レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
 | Problem / Pain / Scope / Difficultyを使って業務の代替案を検討するレビュー | [Optimization Review（英語）](docs/optimization-review.md) |
 | Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
 | 必須の検査項目設計と人間レビュー、AIによる業務設計・Check Item・Testの対応関係の保守 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
 | 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
+| 研究の根拠を利用者向け説明へ反映する基準と、安全な追試記録の扱い | [研究成果の公開方針（英語）](docs/research-publication.md) |
 | 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
 
 **Alder v0.6** では、Problem起点のOptimization Reviewを正式なワークフロー能力として追加しつつ、恒久的なtraceabilityは **Business Design ↔ Check Item ↔ Test** のままです。リリース済みv0.6では検査項目の作成と追跡関係の保守は任意ですが、**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証し、Check Item ↔ Code の物理位置mappingは持ちません。研究候補の**レビュー知識 v0.3**も変更していません。Alder全体は引き続き研究候補ですが、Optimization Review自体はadoptedです。[v0.6リリースノート（英語）](docs/release-notes-v0.6.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。

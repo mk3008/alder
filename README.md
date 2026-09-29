@@ -76,12 +76,14 @@ Generate JSON when an external visualization, analysis or processing tool helps 
 | One-time plugin install and short implementation-review request | [Alder Plugin](docs/plugin-adoption.md) |
 | Initial plugin validation, Fresh A/B comparison, and remaining limits | [Issue #86 validation](docs/plugin-poc-evaluation.md) |
 | Workspace setup, Business Design format, AGENTS.md routing, prompts, optional SQL tools | [Adoption guide](docs/adoption.md) |
+| How Alder treats data modeling, business-side structural requirements, and database constraints | [Data modeling](docs/data-modeling.md) |
 | Why implementation helps validate requirements; reasoning, DDD and architecture | [Philosophy](docs/philosophy.md) |
 | Review questions, procedures, boundaries, and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) (Japanese) |
 | Problem-driven review of alternative business designs using Problem / Pain / Scope / Difficulty | [Optimization Review](docs/optimization-review.md) |
 | Optional discovery of undocumented functional conditions before Check/Test commitments | [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Required Check Item design and human review, with AI-maintained traceability from Business Design to tests; tests verify code by execution | [Check Item traceability](docs/check-item-traceability.md) |
 | Previous candidates, adoption decisions, established foundations, reasons and reconsideration boundaries | [Research Decision Index](docs/research-decisions.md) |
+| How research evidence becomes user-facing guidance, with reproducibility and sensitive-output boundaries | [Research publication practice](docs/research-publication.md) |
 | Evidence, limitations, current questions, and earlier research | [Validation](docs/validation.md) |
 
 **Alder v0.6** adds the adopted Problem-driven Optimization Review workflow while retaining **Business Design ↔ Check Item ↔ Test** as the permanent traceability boundary. In released v0.6, Check Item drafting and traceability remain optional; **this unreleased revision** makes Check Item design and human review required before handoff to implementation. The standard design business ends at that handoff, while the separate post-implementation Alder review and follow-up check Test expectations and maintain Check ↔ Test/assertion mappings before accepting the implementation change. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code location mappings. **Research review knowledge v0.3** remains unchanged. Alder remains a research candidate overall; see the [v0.6 release notes](docs/release-notes-v0.6.md). The method requires no framework, CLI, or runtime package; the Business Graph exporter is optional.

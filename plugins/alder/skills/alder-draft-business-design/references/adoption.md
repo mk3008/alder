@@ -80,6 +80,36 @@ A When such as “whenever the person feels like doing it” makes timing depend
 
 Examples (Japanese): [Facilities maintenance](../business-design/facilities-maintenance/README.md) / [Purchase requests](../business-design/purchase-request/README.md) / [Meeting-room reservation](../business-design/meeting-room/README.md)
 
+
+### Business quality requirements belong where they constrain the work
+
+Alder does **not** omit business quality requirements. It also does not create a separate, general `Quality` bucket for them. When a deadline, continuity condition, retry invariant, authority rule or traceability period is part of what makes the work acceptable to the requester, it is **business meaning** and belongs in Business Design. Put it where that condition constrains the work, so the requirement stays connected to the Activity, Object or Result that gives it meaning.
+
+Use the existing fields according to what the condition governs:
+
+| Business condition | Put it primarily in | Example |
+| --- | --- | --- |
+| Completion deadline or normal completion guarantee | `Procedure` / `Result` | All payroll transfers are completed by 17:00 on the specified payday. |
+| Invariant that must survive retry, partial failure or re-execution | `Procedure` / `Exception` / `Result` | Retrying a partially failed payroll run must not pay the same employee twice for the same month. |
+| Continuity of the business when an ordinary path is unavailable | `Exception` / `Procedure` / `Result`; `Where` when the operating environment matters | Reception continues during an information-system outage by switching to the established fallback work. |
+| Authority or approval needed for an acceptable outcome | `Who` / `Procedure` | Only an approved bank-account change may be used for payment. |
+| Information that must remain traceable or available for a period | `Object.Information` plus the `Procedure` / `Result` that establishes or maintains it | The actor, approver, before/after values and change time remain reviewable for the required period. |
+| State guaranteed after successful work | `Result` | The accepted application and its reception time are established for later monthly reporting. |
+
+The same business condition may affect more than one part of the design, but do not copy it into a second category merely for visibility. Keep the governing statement close to the work that must preserve it. Repeat only the distinct meaning needed to describe, for example, both the action in Procedure and the state established in Result. A separate `Quality` heading that duplicates Procedure, Exception, Result or Object.Information creates another copy that can drift during later edits.
+
+A desired condition is also different from an observed operational problem. A requirement such as “complete payroll by 17:00” can exist even when no delay has occurred. If current work actually misses that condition or creates a burden, record that separate fact as a **Problem** and its relative impact as **Pain** when using [Optimization Review](optimization-review.md). Do not infer a Problem or Pain merely because a business quality condition exists.
+
+Likewise, state the **business condition**, not its technical implementation. “Reception must continue during business hours” can be Business Design; “use active-active servers” is a system-design candidate. “A change must remain attributable for two years” can be Business Design; an encryption algorithm, database, replica count or cloud topology belongs in technical requirements. Business Design defines what must hold. System Design chooses how to make it hold.
+
+This boundary was checked in [Issue #107](https://github.com/mk3008/alder/issues/107): the evaluated deadline, continuity, duplicate-payment and traceability conditions were expressible with the existing Business Design fields, while a separate experimental `Quality` heading mainly improved scanning, duplicated existing meaning and introduced an attribution defect in one run. Alder therefore keeps the business-quality concept but does not add a dedicated Quality field, grammar rule, exporter field or mandatory checklist.
+
+### Business structure requirements follow the work they change
+
+When the way information is grouped, identified or retained changes what people can do or what a later activity can rely on, write that **business outcome difference** next to the affected work. For example, “one order can contain several items and quantities” belongs with the order's Procedure and established Result; “approve the entire request together, without approving individual items” belongs with the approval judgment. “Delivery requires an address; store pickup does not” belongs with the receiving conditions. Object.Information may name the corresponding concepts, without copying the operating rule there. If an interview does not decide whether approval is per item or for the whole request, ask which outcomes are allowed instead of inferring a policy from a proposed schema.
+
+Consider identity across changes, optional information, independent changes, uniqueness within a business scope, the state to retain and the unit of approval only when two plausible choices would change a concrete current or downstream outcome. For instance, “a membership number is unique within an organization, but may be reused in another” expresses the scope of rejection without prescribing a composite key. Do not fill a cardinality inventory for every Object. Business Design supplies the **business-side structural requirements**; later data modeling selects among structures that satisfy them together with system requirements and existing constraints. It does not follow uniquely from Business Design and does not require ER/DDL before agreement on the work. The [Issue #114 study](data-structure-requirements-study.md) contains further contrasts.
+
 ### Normal triggers, exceptions and environment
 
 Keep When and Procedure focused on the normal, successful path. Put exceptions discovered during an Activity and their return/transition in its optional **How → Exception** section, not as “if ...” branches in Procedure. Put the corresponding exceptional restart condition in the destination Activity's **Exception When**, naming the originating Activity, trigger and necessary recovery/confirmation condition. These describe the producing and receiving sides of the same event. Do not enumerate speculative exceptions. In a graph, normal When remains an Activity attribute; the destination's Exception When becomes the single explicit Business → Business dashed relation. How → Exception explains the source behavior but creates no second relation. Reconcile the two descriptions by human review; the exporter checks their structure, not their semantic agreement. When a global Graph exception is used instead of Exception When, likewise declare its relation only once. The optional export profile defines the exact notation.
@@ -302,6 +332,8 @@ Use the repository’s existing location and format for Decision Records, or a s
 ## 4. Run a separate Alder review after implementation (outside the standard design business)
 
 This is the **required post-implementation review in the current Alder development loop**, separate from the standard design business that ends at handoff. Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. Provide the design and implementation revisions, documented decisions, and readable review knowledge. After its read-only findings, the Alder follow-up maintains the Check ↔ Test/assertion mappings and evidence gaps; implementation authors and this read-only reviewer do not silently change Alder's Check records. This separation is not an additional rule in review knowledge v0.3.
+
+When implementation or DDL fixes grouping, optionality, identity, retention, uniqueness or the unit of work, apply P2/Q3 to its **effect on allowed business states and downstream guarantees**. A table layout alone is a technical choice; a structure that prevents a stated multi-item order is a mismatch; an unconfirmed partial-approval policy is a focused Business question. Do not treat an absent ER relationship description in Business Design as a defect by itself.
 
 ```text
 Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from the selected Alder revision. Review only; do not modify files.
