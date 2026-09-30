@@ -14,6 +14,8 @@ Use audience, reading goals, time budgets, evaluation criteria, research provena
 
 Persona is a Reader Walkthrough test condition. Fix the reader's prior knowledge, interaction environment, and goal internally, then verify that this persona can complete the intended path from the README alone. Do not narrate the persona in the README unless the reader truly needs that information.
 
+Do not add knowledge about the thing being tested merely to make the walkthrough easier. For example, when testing plugin installation, do not add "knows basic plugin operations" unless that was part of the original persona. Preserve persona fidelity so setup friction remains observable.
+
 Before accepting user-facing documentation, explicitly check that:
 
 - headings describe the subject itself rather than internal reading-time targets such as “1 minute”, “3 minutes”, or “5–10 minutes”;
