@@ -4,9 +4,9 @@
 
 **ユーザーと合意した業務を、動くシステムへ。**
 
-Alderは、業務の要求をAIが実装する前に、ユーザーが読んで確認できる**業務設計書（Business Design）**へ整理し、合意した内容を検査項目・コード・テストへつなぐための手順です。AIによるレビューで記述の不備や仕事のつながり、実装で具体化された判断を確かめ、未決の業務判断だけを人間へ戻します。
+Alderは、業務の要求を**ユーザーが読んで合意できる業務設計書（Business Design）**へ整理し、検査項目・コード・テストへつなぐ手順です。AIに実装を任せる前に、作るべき仕事をユーザーと確かめられます。
 
-業務設計書は、自然言語を決まった項目と記述ルールに沿って書く、ユーザー・設計者・AIの共通言語です。**業務上の意図を承認するのは人間で、業務設計書が正本（SSOT）**。AIの提案やTest成功は、その承認を代行しません。フレームワークや実行時パッケージは不要です。
+業務設計書は、自然言語を決まった項目に沿って書く共通言語です。**業務の承認は人間が行い、業務設計書を正本（SSOT）にします**。フレームワークや実行時パッケージは不要です。
 
 ## 導入する
 
@@ -29,7 +29,7 @@ Authoring Skillへ、ヒアリング結果を渡して依頼します。
 返却された組は整備担当の点検を待ちます。
 ```
 
-Skillへ回答を返しながら草案を整えます。工具の返却業務なら、次のように記述できます（Activityの一部）。
+Skillへ回答を返しながら草案を整えます。工具の返却業務なら、次のように記述できます（草案の一例、Activityの一部）。
 
 ```markdown
 # Activity 工具の返却受付
@@ -64,7 +64,7 @@ Skillへ回答を返しながら草案を整えます。工具の返却業務な
 番号と付属品の照合および返却日時の記録により受領が確認され、組は整備担当の点検を待つ。
 ```
 
-未決の記録媒体や引渡し方法は「未確認」として残り、人間へ確認します。出力は実行ごとに変わり、この草案も業務承認前です。[予約受付](docs/examples/meeting-room-reservation.ja.md)と[予約・取消](docs/examples/meeting-room-lifecycle.ja.md)の記述例も参照できます。
+記録媒体や引渡し方法は、AIが決めずに「未確認」として残します。この問いに答え、草案をユーザーと確かめるところから始めます。
 
 ## 標準的な使い方
 
@@ -79,7 +79,7 @@ Skillへ回答を返しながら草案を整えます。工具の返却業務な
 | Implementation | 合意したBusiness Design / Check Itemと技術条件からCode / Testを作成 | 未決の業務判断が生じた場合に回答 |
 | post-implementation review | 別エージェントや新しいコンテキストで読み取り専用レビュー | 未決の業務判断への回答。別のfollow-upで設計・実装・対応関係を更新 |
 
-標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。実装後のAlderレビューとfollow-upは別の開発ループです。System Requirementsの技術検討の詳細は、プロダクト側の責務です。
+標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。その後は、実装・独立レビュー・follow-upの開発ループへ進みます。
 
 作成はAuthoring Skill、実装後レビューはReview Skillへ依頼します。ほかの手順では、下記の参照文書をAIへ渡します。
 
@@ -87,15 +87,13 @@ Skillへ回答を返しながら草案を整えます。工具の返却業務な
 
 ヒアリングや要求をAuthoring Skillへ渡し、`docs/business-design/`に草案を作らせます。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
 
-Skillは仕事をActivity、情報・文書・台帳・外部の相手をObjectへ整理し、5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを書きます。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。**書式を暗記せず、生成された内容を読んで確かめられる草案**を用意します。
-
-各欄・Scope / Information・When・例外・情報の接続は[文書構造](docs/business-design-structure.ja.md)と[欄の説明](docs/adoption.md#business-design-format)を参照してください。
+**書式を暗記する必要はありません**。Skillが5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを整理します。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。生成された草案を読んで、実際の仕事と合うかを確かめます。
 
 ### 2. 業務設計をレビューし、ユーザーと合意する
 
 対象全文・版・範囲・合意済み判断を渡し、[記述品質](docs/business-design-quality-check.ja.md)と[業務相関](docs/business-design-correlation-check.ja.md)をレビューさせます。
 
-人間は責任、条件、例外、保証に関わる問いへ答え、業務設計書を更新して再レビューします。**ユーザーと合意した版が正本**です。品質要求も省略せず、独立Quality欄ではなく、それが制約するProcedure / Exception / Result / Who / Object.Information等へ書き、実現手段はSystem Designへ分けます。[配置例](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work)を参照してください。
+人間は責任、条件、例外、保証への問いに答え、設計を更新して再レビューします。**ユーザーと合意した版が正本**です。品質要求は独立Quality欄を増やさず、条件が関わる既存欄へ書きます。技術的な実現手段はSystem Designへ分けます。
 
 ### 3. Check Itemを作り、人間が期待結果を確認する
 
@@ -107,16 +105,16 @@ Skillは仕事をActivity、情報・文書・台帳・外部の相手をObject�
 
 ### 4. 先に守る制約をSystem Requirementsとして伝える
 
-人間が既存制約と希望を伝え、AIに実装で守る技術条件を整理させます。**必要な制約と、委譲できる判断の区別が伝われば完了**です。
+人間が既存制約と希望を伝え、AIに実装で守る技術条件を整理させます。技術検討の詳細はプロダクト側で進めます。
 
 | 先に伝えるもの | 実装へ委譲できるもの |
 | --- | --- |
 | 既存インフラ・DB/schema、必須クラウド/外部サービス、公開API、移行・互換性、安全性・法的義務 | 変更しやすいクラス/関数分割、内部モジュール、命名 |
 | 保守体制・既存資産・好みなど、言語や主要製品を指定する理由 | 制約や希望がなければ技術の選択も委譲可能 |
 
-アーキテクチャ名を先に選ぶ必要はなく、守りたい性質やリスクを伝えます。外部サービスは業務契約上の制約か技術手段かを理由で区別します。
+**なぜ全技術判断を先に決めないか：** 変更しやすい選択は実装時に具体化できます。先に必要なのは、守るべき性質・制約と変更リスクです。
 
-**なぜ詳細設計を独立必須工程にしないか：** 変更しやすい詳細はDDL・SQL・Code / Testと一緒に具体化し、後からレビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計します。[詳細設計](docs/detailed-design.ja.md)と[判断例](docs/philosophy.md#where-detailed-design-fits)へ進んでください。データモデリングも業務・システム要件と既存DB制約から行う後続設計です。[位置づけ](docs/data-modeling.ja.md)に詳細があります。
+**なぜ詳細設計を独立必須工程にしないか：** 詳細はDDL・SQL・Code / Testと一緒に具体化し、レビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計します。[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
 
 ### 5. 合意した設計とCheck ItemをAIへ渡す
 
@@ -131,7 +129,7 @@ docs/checks/meeting-room.md、プロダクトの技術要件を読み、
 重要な前提・判断と理由を、別コンテキストのレビューへ引き継いでください。
 ```
 
-**合意済み範囲のCode / Testと検証結果、重要な判断の根拠が用意できればレビューへ進めます**。未決の取消期限を勝手にTestの期待値にせず、独立した予約処理は進められます。ここまでの引き渡しで標準設計業務は完了し、実装・実装後レビューは別の開発ループです。
+合意済み範囲のCode / Test、検証結果、重要な判断の根拠を次のレビューへ渡します。未決の取消期限をTestの期待値にせず、独立した予約処理は進められます。
 
 ### 6. 別コンテキストでレビューし、対応を分ける
 
@@ -139,19 +137,17 @@ docs/checks/meeting-room.md、プロダクトの技術要件を読み、
 
 Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、ファイルを変更せず、根拠・業務への影響・分類・必要な確認を報告します。人間は未決の業務判断だけに答え、別follow-upで意味が変わるなら業務設計書を先に更新・再合意し、Code / Testを合わせます。
 
-**指摘への対応とCheck ↔ Test/assertionの根拠を確認したうえで実装変更の受入れを判断します**。恒久的な追跡はBusiness Design ↔ Check Item ↔ Testまでで、Check ↔ Code位置の表は維持しません。[レビュー知識](docs/phase2/review-knowledge-v0.3.md)、[手動依頼とfollow-up](docs/adoption.md)、[追跡の詳細](docs/check-item-traceability.md)を参照してください。
+**指摘への対応とCheck ↔ Test/assertionの根拠を確認して、実装変更の受入れを判断します**。[follow-upと追跡の詳細](docs/check-item-traceability.md)を参照してください。
 
 ## 必要に応じて使う
 
-現在の業務関係が確認できているなら、任意の[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)で見直す価値のある関係を問いとして探せます。観察ゼロも有効で、構造だけからProblemや負担、改善効果を認定しません。専用のStructural Optimization工程は設けません。
-
-成立している業務に具体的な困りごとがあれば、人間が確認した**Problem / Pain level**をActivityのResultの後へ任意の対として記録し、[Optimization Review](docs/optimization-review.md)へ進みます。購買なら、申請ごとの購入・登録を繰り返す負担から、まとめ買い、自動化、外部委託等を比較できます。[購買改善の提案例](docs/examples/purchase-improvement.ja.md)で、期待効果、Scope、業務変更のDifficulty、採用前の確認を示しています。
-
-採否を決めるのは人間です。Candidate / Difficulty / Confidence等は未承認提案で、現在仕様やGraphへ混ぜません。採用時は**業務設計書を先に更新・再合意**してからCheckや実装へ反映し、有益な候補がなければ現状を維持できます。[改善手順](docs/business-design-improvement.ja.md)を参照してください。
-
-業務設計書を外部ツールで可視化・解析したい場合は、任意の[Business Graph JSON v1 / CLI](docs/business-graph.md)を使えます。JSONは中間形式で、正本は業務設計書です。Business / Objectの明示されたScopeや、記載されたProblem / Painを投影し、未承認候補は投影しません。Procedureは投影の対象外で、構文の成功は業務合意を意味しません。JSON出力や保存は標準設計の完了条件ではなく、外部ツールで得た修正は業務設計書へ戻します。
+- **見直す関係を探す：** 確認済みの業務関係から、[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)で問いを探せます。構造だけからProblemを認定せず、専用のStructural Optimization工程は設けません。
+- **具体的な困りごとを改善する：** 人間が確認したProblem / Pain levelを記録し、[Optimization Review](docs/optimization-review.md)で候補を比較します。採用は人間が決め、[業務設計書の更新・再合意](docs/business-design-improvement.ja.md)を先に行います。
+- **業務を可視化・解析する：** 任意の[Business Graph JSON v1 / CLI](docs/business-graph.md)を使えます。JSONは中間形式で、業務設計書が正本です。未承認の改善候補は投影しません。
 
 ## 詳しく読む
+
+### 版とPluginの提供範囲
 
 版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.7を固定commitで指定し、Authoring Skillのクライアント起動は未検証です。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成Skillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
 
@@ -159,25 +155,28 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 **Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼します。
 
+現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
+
+### 目的別の文書
+
 | 知りたいこと | 文書 |
 | --- | --- |
 | ヒアリングと草案の記述例 | [ヒアリング](work/structural-discovery/issue-99/customer-transcript.md) / [草案](work/structural-discovery/issue-99/design/v4.md) |
-| 各欄の意味、見出し順、参照書式 | [業務設計書の文書構造](docs/business-design-structure.ja.md) |
+| 業務の記述例 | [予約受付](docs/examples/meeting-room-reservation.ja.md) / [予約・取消](docs/examples/meeting-room-lifecycle.ja.md) |
+| 各欄の意味、見出し順、参照書式 | [文書構造](docs/business-design-structure.ja.md) / [欄の説明](docs/adoption.md#business-design-format) / [品質要求の配置](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
 | 設計レビューの事例と根拠 | [レビュー事例](docs/business-design-review.ja.md) / [記述品質の根拠](docs/business-design-quality-review.md) / [考慮漏れ探索](docs/behavior-derivation/functional-considerations.md) |
 | 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) |
 | 文書配置、手順、コピーして使うプロンプト | [導入ガイド](docs/adoption.md) |
-| 詳細設計と技術判断のタイミング | [詳細設計の位置づけ](docs/detailed-design.ja.md) |
+| 詳細設計と技術判断のタイミング | [詳細設計の位置づけ](docs/detailed-design.ja.md) / [判断例](docs/philosophy.md#where-detailed-design-fits) |
 | データ構造要求とDB制約の扱い | [データモデリング](docs/data-modeling.ja.md) / [英語](docs/data-modeling.md) |
-| 業務改善の観点と採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) |
+| 業務改善の観点と採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) / [購買改善の提案例](docs/examples/purchase-improvement.ja.md) |
 | Checkの粒度、レビュー状態、Testとの対応 | [検査項目の作成・保守](docs/check-item-traceability.md) |
 | 実装レビューの観点と止める条件 | [レビュー知識v0.3](docs/phase2/review-knowledge-v0.3.md) |
 | JSON契約とexporter | [Business Graph](docs/business-graph.md) |
 | Alderを使った業務の責任範囲 | [Alder自身の業務設計書](business-design/alder/README.md) |
 | 根拠を説明へ反映する基準と安全な追試記録 | [研究成果の公開方針](docs/research-publication.md) |
 | 思想、採用判断、検証範囲と限界 | [設計思想](docs/philosophy.md) / [研究判断](docs/research-decisions.md) / [検証記録](docs/validation.md) |
-
-現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 
 ### 質問・改善提案
 
