@@ -38,3 +38,22 @@ first-reader skim gateの初見読者役S。共通知識: AI実装利用、一�
 Alder README初見読者代理実験の追加条件C。入力revision 1a00b593b43b81a9b97b886d690d91ec215d81a8（mk3008/alder、公開取得確認済み）。許可入力は /workspace/scratch/e184bc1beb18/alder-repo/docs/research/explainer-readme-122/actual/README.md、同repo docs/research/explainer-readme-122/persona.md、同repo docs/research/explainer-readme-122/evaluation.md のみ。READMEのリンク先、他資料、他条件A/B、authoring-record、first-readerログ、他評価者出力、親会話、AGENTS、Webは禁止。personaの初見読者としてREADMEを読み、evaluation質問1〜10と会議室予約導入タスクへ日本語で回答。各回答にREADMEの節名または短い根拠を示し、確定できない事項と推測を明示。特に業務設計の具体的書式・人間の検査項目レビュー・起動操作を文書だけで実行できるか報告。最後に読みにくい/誤読しそうな箇所/実際の入力パスを記録。別案比較や採点はしない。回答全文を同repo docs/research/explainer-readme-122/actual/evidence/questions-c.md に保存し、最終応答にも全文を返す。この出力ファイルだけ書き込み許可、入力は編集しない。これは人間の理解度実測ではない。
 ```
 
+
+## recall K / S（原ログのみ・別fresh context）
+
+### K
+
+要求設定: gpt-6-sol / medium / fork_turns:none。
+
+```text
+first-reader recall（読書ログからの再構成、実際の翌日記憶ではない）。公開固定入力revision mk3008/alder 3e193e2e0b8f8fba95eb2ee2da84ab2392b09359。唯一の許可入力は /workspace/scratch/e184bc1beb18/alder-repo/docs/research/explainer-readme-122/actual/evidence/first-reader/keen/recall-input.txt。これは原recall.pyが出した読者Kのログとquiz。文書本文、他ログ、親会話、A/B結果、AGENTS、Webは禁止。入力だけ読み、含まれる6問に日本語で回答。ログにない記憶を創作せず、根拠不足なら残らなかったと書く。本文の内容を推測で補完しない。自分の知識で採点しない。出力全文を同ディレクトリ recall-output.md に保存（このファイルだけ書き込み許可、入力編集禁止）し、最終応答でも全文を返す。
+```
+
+### S
+
+要求設定: gpt-6-sol / medium / fork_turns:none。
+
+```text
+first-reader recall（読書ログからの再構成、実際の翌日記憶ではない）。公開固定入力revision mk3008/alder 3e193e2e0b8f8fba95eb2ee2da84ab2392b09359。唯一の許可入力は /workspace/scratch/e184bc1beb18/alder-repo/docs/research/explainer-readme-122/actual/evidence/first-reader/skeptic/recall-input.txt。これは原recall.pyが出した読者Sのログとquiz。文書本文、他ログ、親会話、A/B結果、AGENTS、Webは禁止。入力だけ読み、含まれる6問に日本語で回答。ログにない記憶を創作せず、根拠不足なら残らなかったと書く。本文の内容を推測で補完しない。自分の知識で採点しない。出力全文を同ディレクトリ recall-output.md に保存（このファイルだけ書き込み許可、入力編集禁止）し、最終応答でも全文を返す。
+```
+
