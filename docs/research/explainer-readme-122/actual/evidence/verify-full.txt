@@ -1,0 +1,15 @@
+checks (checks.json を再実行)
+  ✓ source-evidence
+  ✓ meeting-room
+figures (vlmkit-anim)
+prose (本文の引用が実物と一致するか)
+  ✓ README.md:52: output of meeting-room
+  ✓ README.md:70: excerpt of examples/meeting-room.json
+  ✓ README.md:220: output of source-evidence
+page (vlmkit)
+  ✓ README.md: 0 figure(s) intact in the built page
+  ✗ check integrity (index.open.html): 
+  ✗ check integrity (index.html): 
+  ✗ check a11y contrast (index.html): 
+
+verdict: 3 FAILURE(S)

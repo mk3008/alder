@@ -1,5 +1,7 @@
 # README理解度比較の結果
 
+> 2026-09-30 レビュー後の位置づけ: このA/Bはexplainer-inspired prototypeの予備実験であり、Issue #122全体の完了判断ではない。元の原出力・条件・観測は保持する。実際のexplainer Skill適用条件Cは `actual/` に分けて追加する。
+
 - 日付: 2026-09-30
 - 入力revision: `90890e1c209af1b7f88f14e64bb27a7a0d2edbee`
 - [条件・完全プロンプト・追試手順](run-record.md)
