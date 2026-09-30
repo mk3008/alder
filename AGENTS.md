@@ -12,6 +12,8 @@ When drafting, polishing, or reviewing README content and other user-facing docu
 
 Use audience, reading goals, time budgets, evaluation criteria, research provenance, and review instructions to design the document internally. Do not expose them in the final text unless they materially help the reader decide or act.
 
+Persona is a Reader Walkthrough test condition. Fix the reader's prior knowledge, interaction environment, and goal internally, then verify that this persona can complete the intended path from the README alone. Do not narrate the persona in the README unless the reader truly needs that information.
+
 Before accepting user-facing documentation, explicitly check that:
 
 - headings describe the subject itself rather than internal reading-time targets such as “1 minute”, “3 minutes”, or “5–10 minutes”;
