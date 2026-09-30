@@ -76,6 +76,8 @@ Whenには、依頼の受領や状態の変化など、具体的な開始のき�
 
 記述した情報は、後続のデータ設計や実装の手掛かりにもなります。ただし、この段階でテーブル定義などを決めきる必要はありません。分かっている条件や手掛かりは残しつつ、業務全体を見渡せる粒度を保ち、必要な詳細化を後続の設計へつなぎます。
 
+Alderでは詳細設計を実装前の独立した必須工程とはしていません。技術的な詳細をすべて事前に決め切る必要もありません。変更しやすい技術判断は実装とともに具体化して実装後にもレビューし、後からの変更が難しい判断は必要な範囲で事前に設計します。従来なら先に決めがちな言語、インフラ、外部サービス、内部構造、アーキテクチャをどう扱うかは[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
+
 各欄の詳しい意味、見出しの順序、参照の書式は[業務設計書の文書構造](docs/business-design-structure.ja.md)を参照してください。
 
 ## 業務分析 — 仕事の流れを、ユーザーと確かめる
@@ -234,10 +236,13 @@ Plugin 0.2.6はヒアリングからの業務設計書の作成・改訂と、�
 | 記述の品質、未記載の条件、前後の業務のつながりを確かめる | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | Pluginのインストールと実装後レビュー | [Plugin導入ガイド（英語）](docs/plugin-adoption.md) |
 | 文書配置、各工程の手順とプロンプト | [導入ガイド（英語）](docs/adoption.md) |
+| 詳細設計をどこまで事前に決めるか | [詳細設計の位置づけ](docs/detailed-design.ja.md) |
+| Alderにおけるデータモデリング、業務側の構造要求、DB制約の位置づけ | [データモデリング](docs/data-modeling.ja.md) |
 | 業務改善の観点、プロンプト、採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) |
 | 実装レビューの観点と止める条件 | [レビュー知識](docs/phase2/review-knowledge-v0.3.md) |
 | 業務設計書をJSON化し、外部ツールで可視化・解析する | [Business Graph export](docs/business-graph.md) |
 | Alderを使った業務の全体像 | [Alder自身の業務設計書](business-design/alder/README.md) |
+| 研究の根拠を利用者向け説明へ反映する基準と、安全な追試記録の扱い | [研究成果の公開方針（英語）](docs/research-publication.md) |
 | 設計思想や検証の根拠 | [設計思想](docs/philosophy.md) / [検証記録](docs/validation.md) |
 
 ## 質問・改善提案

@@ -55,6 +55,8 @@ See the [adoption guide](docs/adoption.md) for Business Design authoring, Check 
 
 The review skill performs a read-only post-implementation review. At the standard path, it needs no Alder-specific AGENTS.md entry or copied review knowledge. For installation details, other paths, and updates, see [Plugin setup](docs/plugin-adoption.md). Plugin 0.2.6 also supports authoring and revision from interview notes; the stable `plugin-v0.1.0` tag does not. For improvement, Check Items, graph export, and follow-up, use the [adoption guide](docs/adoption.md). Graph JSON export is available through the CLI.
 
+A separate detailed-design gate is not required before implementation; technical details need not all be settled in advance. Make technical choices alongside implementation where they can be revised safely; design costly or hard-to-reverse changes in advance as needed, and review the resulting choices after implementation. See [where detailed design fits](docs/philosophy.md#where-detailed-design-fits).
+
 ## When you want to improve the work
 
 For confirmed current-state relationships, optional [Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) can raise grounded questions before a Problem is known. Zero observations is valid. People confirm any actual Problem and Pain before Optimization Review.
@@ -78,8 +80,11 @@ JSON is an intermediate format; Business Design remains the source of truth.
 | --- | --- |
 | Plugin installation and post-implementation review | [Plugin setup](docs/plugin-adoption.md) |
 | Business Design authoring, standard workflow, manual prompts | [Adoption guide](docs/adoption.md) |
+| Where detailed design fits and what need not be fixed up front | [Philosophy](docs/philosophy.md#where-detailed-design-fits) |
+| How Alder treats data modeling, business-side structural requirements, and database constraints | [Data modeling](docs/data-modeling.md) |
 | Business improvement proposals | [Optimization Review](docs/optimization-review.md) |
 | Implementation review questions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
 | Business Design → Check Item → Test traceability | [Check Item traceability](docs/check-item-traceability.md) |
 | Business Graph JSON / exporter | [Business Graph](docs/business-graph.md) |
 | Alder's reasoning and boundaries | [Philosophy](docs/philosophy.md) |
+| How research evidence becomes user-facing guidance, with reproducibility and sensitive-output boundaries | [Research publication practice](docs/research-publication.md) |
