@@ -30,7 +30,7 @@ return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
 ```
 
-You receive structured Business Design like this (one draft example, partial Activity, translated from Japanese):
+You receive structured Business Design like this:
 
 ```markdown
 # Activity Receive returned tools
@@ -65,7 +65,7 @@ Counter
 Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
 ```
 
-This structure makes business meaning, connections, and unresolved questions easier to read. See [document structure](docs/business-design-structure.ja.md) for the reasons. The recording medium and handoff method remain unconfirmed rather than being decided by AI. Continue to [Standard workflow](#standard-workflow) for the steps from design to implementation.
+This structure makes business meaning, connections, and unresolved questions easier to read. See [document structure](docs/business-design-structure.ja.md) for the reasons. Continue to [Standard workflow](#standard-workflow) for the steps from design to implementation.
 
 ## Standard workflow
 
