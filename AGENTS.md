@@ -32,6 +32,14 @@ In the Golden Path, prefer **one recommended path** over completeness. Do not su
 
 Apply this to the **entire README**, not only the Golden Path. The README's primary job is not to summarize the full specification; it is to help a reader understand what the project is, whether it matters to them, and how to reach the first successful use. Before writing, define the single most important message and the first outcome the reader should achieve. Add sections or detail only when they strengthen that message or help the reader start. Completeness, version matrices, alternatives, edge cases, and exhaustive caveats belong in Advanced, Reference, or dedicated documentation when they would obscure the onboarding path. Treat the README as an entry point, not a compressed specification. In the final pass, skim headings alone and confirm that they form one coherent journey from first use through standard use to optional depth.
 
+### Do not assume unstated reader context
+
+In user-facing documentation, do not use connective wording that treats an idea as already shared unless the document has actually introduced it. Expressions equivalent to “not only”, “on the other hand”, “furthermore”, “also”, “of course”, “already”, or “conversely” should only be used when the required prior proposition is explicit in the preceding text.
+
+For example, do not introduce existing-work analysis for the first time as “not only existing-work analysis, but also new-work hypotheses.” State both uses directly instead.
+
+During polishing, ask for every connective: **what prior statement is this adding to, contrasting with, or continuing, and has the reader actually seen that statement in this document?** Context from Issues, chats, author intent, or other documents does not count as reader-shared context.
+
 ## Publishing research decisions
 
 For adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.
