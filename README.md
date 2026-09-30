@@ -18,7 +18,7 @@ Run this command, install and enable Alder, then start a new chat.
 
 ## Getting Started
 
-To turn interview notes into Business Design, try sending this request to the Authoring Skill:
+To turn interview notes into Business Design, try asking Alder like this:
 
 ```text
 Turn these interview notes into an Alder Business Design.

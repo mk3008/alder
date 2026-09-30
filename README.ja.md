@@ -18,7 +18,7 @@ codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa43099
 
 ## まず使ってみる
 
-業務ヒアリングから業務設計書を作るには、次の依頼をAuthoring Skillへ送ってみてください。
+業務ヒアリングから業務設計書を作るには、Alderに次のように依頼してみてください。
 
 ```text
 このヒアリング結果をAlder業務設計書にして。
