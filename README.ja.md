@@ -8,9 +8,23 @@ Alderは、業務の要求をAIが実装する前に、ユーザーが読んで�
 
 業務設計書は、自然言語を決まった項目と記述ルールに沿って書く、ユーザー・設計者・AIの共通言語です。**業務上の意図を承認するのは人間で、業務設計書が正本（SSOT）**。AIの提案やTest成功は、その承認を代行しません。フレームワークや実行時パッケージは不要です。
 
+## 導入する
+
+**作成・改訂と実装後レビューを使うには、Plugin 0.2.7を導入します。** 0.2.7は未リリースのため、次のように確認済みcommitを指定します。
+
+```sh
+codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
+```
+
+[Plugin導入ガイド](docs/plugin-adoption.md#install-once)に従ってAlderをインストール・有効化し、新しいチャットを開始します。上のcommitには0.2.7が含まれます。Pluginの対応はクライアントにより異なり、Authoring Skillのクライアント起動は未検証です。
+
+業務設計書をプロダクトの`docs/business-design/`へ置けば、Plugin用の専用`AGENTS.md`設定や知識のコピーは不要です。別の配置ならパスを伝えます。**AIが対象の文書と版を読めれば準備完了**。Pluginを使わない場合も[導入ガイドの手動プロンプト](docs/adoption.md)で進められます。版・更新・クライアント対応と検証範囲の詳細はPlugin導入ガイドへまとめています。
+
+**実装後レビューだけを安定版で使う場合：** `plugin-v0.1.0`を指定してください。Authoring Skillは含まないため、次の草案作成には使えません。[安定版の導入手順](docs/plugin-adoption.md#install-once)を参照してください。
+
 ## まず使ってみる
 
-Authoring Skillへ、ヒアリング結果を渡して依頼します。未導入なら[導入する](#導入する)から準備してください。
+Authoring Skillへ、ヒアリング結果を渡して依頼します。
 
 ```text
 このヒアリング結果をAlder業務設計書にして。
@@ -57,16 +71,6 @@ Skillへ回答を返しながら草案を整えます。工具の返却業務な
 ```
 
 未決の記録媒体や引渡し方法は「未確認」として残り、人間へ確認します。出力は実行ごとに変わり、この草案も業務承認前です。[予約受付](docs/examples/meeting-room-reservation.ja.md)と[予約・取消](docs/examples/meeting-room-lifecycle.ja.md)の記述例も参照できます。
-
-## 導入する
-
-[Plugin導入ガイド](docs/plugin-adoption.md)に従い、作成・改訂から使うなら**0.2.7を含む確認済みcommit / branch**を指定してインストール・有効化し、新しいチャットを開始します。0.2.7は未リリースで、安定タグ`plugin-v0.1.0`は実装後レビューだけを提供します。
-
-```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
-```
-
-業務設計書をプロダクトの`docs/business-design/`へ置けば、Plugin用の専用`AGENTS.md`設定や知識のコピーは不要です。別の配置ならパスを伝えます。**AIが対象の文書と版を読めれば準備完了**。Pluginを使わない場合も[導入ガイドの手動プロンプト](docs/adoption.md)で進められます。版・更新・クライアント対応と検証範囲の詳細はPlugin導入ガイドへまとめています。
 
 ## 標準的な使い方
 

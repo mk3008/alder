@@ -8,9 +8,23 @@ Alder provides a workflow for organizing business requirements into **Business D
 
 Business Design is natural language written with defined fields and description rules: a shared language for users, designers, and AI. **People approve business intent; Business Design is the source of truth (SSOT).** AI proposals and passing Tests do not supply that approval. No framework or runtime package is required.
 
-## Quick Start
+## Install / Setup
 
-Give interview notes to the Authoring Skill with a short request. If it is not installed, follow [Install / Setup](#install--setup) first:
+**Install Plugin 0.2.7 for authoring/revision and implementation review.** Version 0.2.7 is unreleased; pin a reviewed commit as follows:
+
+```sh
+codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
+```
+
+Follow [Plugin setup](docs/plugin-adoption.md#install-once) to install and enable Alder, then start a new chat. The commit above contains 0.2.7. Plugin support varies by client; client routing for the Authoring Skill has not been validated.
+
+Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
+
+**For stable implementation review only:** use `plugin-v0.1.0`. It does not include the Authoring Skill and cannot run the drafting example below. See the [stable installation steps](docs/plugin-adoption.md#install-once).
+
+## Getting Started
+
+Give interview notes to the Authoring Skill with a short request:
 
 ```text
 Turn these interview notes into an Alder Business Design.
@@ -58,16 +72,6 @@ Receipt is confirmed by the equipment-number/accessory check and return-time rec
 ```
 
 The recording medium and handoff method remain unconfirmed for people to answer. Output varies between runs, and this draft is not business-approved. Also see the [booking](docs/examples/meeting-room-reservation.ja.md) and [booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) examples.
-
-## Install / Setup
-
-Follow [Plugin setup](docs/plugin-adoption.md). For authoring/revision, install and enable a **reviewed commit/branch containing 0.2.7**, then start a new chat. Version 0.2.7 is unreleased; the stable `plugin-v0.1.0` tag provides implementation review only.
-
-```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
-```
-
-Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
 
 ## Standard workflow
 
