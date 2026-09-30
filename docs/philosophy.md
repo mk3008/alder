@@ -43,6 +43,24 @@ For a new product, table design illustrates this timing: inspect a proposed sche
 
 Decide how much to settle in advance from the actual cost of changing the choice later. Data migrations, published interfaces, compatibility with existing schemas, disruptive cutovers, or security and legal obligations may warrant focused design before implementation. AI-assisted iteration can make proposed code and tests easier to revise, but it does not make persistent data, external contracts, or operational changes reversible. This is a project risk judgment, not a fixed Alder checklist or a new required artifact.
 
+Concrete examples help separate constraints that deserve human attention before implementation from reversible details that can be delegated and reviewed later:
+
+| Treatment | Examples | Why |
+| --- | --- | --- |
+| State early when constrained or costly to reverse | existing infrastructure, existing database/schema compatibility, required cloud or external services, published APIs, migration constraints, security or legal obligations | these materially constrain implementation choices or are expensive to change later |
+| State when there is a preference or organizational reason | programming language, database product, cloud product, major library | team ownership, existing assets, organizational standards, or a concrete preference can make the choice relevant; without such a reason, implementation may choose |
+| Usually leave to implementation and review | class/function decomposition, internal module boundaries, local implementation techniques, naming, other small reversible choices | they can be made concrete with code and tests and changed cheaply if review finds a better fit |
+
+“Leave to implementation” does not mean “unimportant.” It means the choice need not consume a human pre-implementation decision when the agent can make it from current requirements and constraints and expose it for review.
+
+An external service may be either a technical choice or part of the business constraint depending on why it is used. “Use Stripe as the payment API” can be a replaceable System Design choice. “The company’s payment operation is contracted to Stripe” constrains the business and implementation together. Classify the reason, not the product name.
+
+The same applies to language and other technology preferences: state C#, TypeScript, PostgreSQL, a cloud product, or another choice when there is an actual maintenance, compatibility, organizational, or personal reason to preserve it. If there is no such reason, Alder does not require inventing one merely to complete a design phase.
+
+Prefer communicating the property or risk that motivates structure over turning an architecture name into a requirement. For example, “core logic must be testable without external I/O,” “there is a concrete plan to replace the database,” or “read and write workloads may need independent scaling” gives the implementation agent a reason to choose an appropriate structure. Clean Architecture, DDD, Ports and Adapters, CQRS, or another style may still be valid when justified by those constraints or by an explicit project standard; Alder simply does not require the name first.
+
+The point is not to minimize design. It is to focus human pre-implementation attention on business meaning, existing constraints, external commitments, and expensive-to-reverse decisions, while letting routine reversible technical detail become concrete in implementation and remain reviewable.
+
 The [Functional Interface study](functional-interface/study.md) supports optional responsibility indexing where direct mapping becomes hard to navigate; it did not establish a mandatory standalone Functional Design phase or a general optimum split between design before and after implementation. See the [research decision](research-decisions.md#functional-interface-mapping) and [adoption steps](adoption.md#3-let-the-ai-implement-without-inventing-business-policy).
 
 ## Reasoning directs validation
