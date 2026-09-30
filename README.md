@@ -10,15 +10,17 @@ Business Design is a shared language written in natural language with defined fi
 
 ## Install / Setup
 
+Use an environment that supports plugins in ChatGPT / Codex. In a terminal where the `codex` command is available, run the following command to add Alder's marketplace:
+
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
 ```
 
-Run this command, install and enable Alder, then start a new chat.
+After running the command, restart the client, install and enable Alder in the plugin management screen, then start a new chat.
 
 ## Getting Started
 
-To turn interview notes into Business Design, try asking Alder like this:
+To turn interview notes into Business Design, try sending the following prompt in the new chat:
 
 ```text
 Turn these interview notes into an Alder Business Design.
@@ -82,11 +84,11 @@ Alder can be used to analyze existing work and explore hypotheses for new work. 
 
 The standard design business ends at **handoff to implementation after Business Design agreement and human Check Item review**. Then proceed through the development loop of implementation, independent review, and follow-up.
 
-Ask the Authoring Skill to draft and the Review Skill to review completed implementation. Give AI the linked reference documents for the other steps.
+The Authoring Skill provides drafting; the Review Skill provides post-implementation review. Give AI the linked reference documents for the other steps.
 
 ### 1. Draft and answer questions
 
-Give interview notes or requirements to the Authoring Skill to draft the design in `docs/business-design/`. People confirm source facts and unresolved questions, answer them, and revise the same document.
+In the target project's chat, provide interview notes or requirements and ask, “Draft an Alder Business Design in `docs/business-design/`.” People confirm source facts and unresolved questions, answer them, and revise the same document.
 
 **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
 
@@ -134,7 +136,7 @@ Pass Code / Test, verification results, and evidence for material choices in the
 
 ### 6. Review in a separate context and separate follow-up
 
-Give a fresh context the design/implementation revisions and scope. Ask the Review Skill to “Review this completed implementation with Alder.”
+In a new chat, make the design and implementation files accessible, identify their revisions and scope, and ask, “Review this completed implementation with Alder.”
 
 The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
