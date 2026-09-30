@@ -26,7 +26,7 @@ If a Japanese polishing or other writing/polish skill is used, this meta-leakage
 
 As a final test, ask of each sentence: **would this still help the target reader if they knew nothing about how this document was produced?** If not, remove it or rewrite it as direct reader-facing content.
 
-Use **task-oriented / user-goal-oriented headings**. Headings are navigation, not a taxonomy or summary of the prose. Prefer the reader's goal or next action (for example, “Quick start”, “Install”, “Hand off to implementation”, “Review”) over author-side topic labels or feature descriptions. In the final pass, skim headings alone and confirm that a reader can choose the right section by intent.
+Before changing headings, identify and preserve the document's existing **reader journey / progressive-disclosure axis**. For a README, a useful visible axis is often `Quick Start` → `Install / Setup` → `Golden Path` → `Advanced` → `Reference`, moving from first success to standard adoption and then optional depth. Task-oriented / user-goal-oriented headings support this axis; they do not replace it with a flat list of feature names or process steps. Persona, reading goals, time budgets, and evaluation criteria are secondary design inputs used to choose what belongs inside each section, and should normally remain invisible to readers. In the final pass, skim headings alone and confirm that they form one coherent journey from first use through standard use to optional depth.
 
 ## Publishing research decisions
 
