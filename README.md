@@ -69,7 +69,7 @@ The recording medium and handoff method remain unconfirmed rather than being dec
 
 ## Standard workflow
 
-Use Alder for existing work or a hypothesis for new work. Make the intended work concrete and check with users whether the connected activities can operate coherently.
+Use Alder to analyze existing work and explore hypotheses for new work. Make the intended work concrete and check with users whether the connected activities can operate coherently.
 
 | Stage | What to ask AI to do | What people confirm or decide |
 | --- | --- | --- |
