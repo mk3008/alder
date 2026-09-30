@@ -1,0 +1,10 @@
+{
+  "draft": "docs/research/explainer-readme-122/actual/README.md",
+  "input_revision": "1a00b593b43b81a9b97b886d690d91ec215d81a8",
+  "intended_gist": "Alderが自分のプロジェクトに必要かを判断し、人間が合意・レビューする内容、AIへ渡す内容、未決の扱い、利用開始の入口を区別できる。",
+  "casts": {
+    "keen": "K: AI実装利用、Alder初見。同僚推薦から小業務へ試す。人間が決めることとAIへ渡すものを判断。",
+    "skeptic": "S: AI実装利用、Alder初見。候補ツール比較。追加設計負担と開始手順を判断。"
+  },
+  "previous_run": null
+}
