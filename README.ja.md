@@ -6,13 +6,11 @@
 
 Alderは、業務の要求をAIが実装する前に、ユーザーが読んで確認できる**業務設計書（Business Design）**へ整理し、合意した内容を検査項目・コード・テストへつなぐための手順です。AIによるレビューで記述の不備や仕事のつながり、実装で具体化された判断を確かめ、未決の業務判断だけを人間へ戻します。
 
-初めてAlderを使うAI開発利用者に向けて、ヒアリングから草案を作り、ユーザーと合意し、AIへ実装を渡して別のコンテキストでレビューするまでを説明します。書式を最初から暗記する必要はありません。Skillと参照文書を使って整え、生成された内容が実際の業務に合うかを人間が確認します。
-
 業務設計書は、自然言語を決まった項目と記述ルールに沿って書く、ユーザー・設計者・AIの共通言語です。**業務上の意図を承認するのは人間で、業務設計書が正本（SSOT）**。AIの提案やTest成功は、その承認を代行しません。フレームワークや実行時パッケージは不要です。
 
-## まず1分 — ヒアリングから草案を作る
+## ヒアリングから草案を作る
 
-導入済みのAuthoring Skillへ、仮想ヒアリング結果を渡して依頼します。
+導入済みのAuthoring Skillへ、ヒアリング結果を渡して依頼します。
 
 ```text
 このヒアリング結果をAlder業務設計書にして。
@@ -23,7 +21,7 @@ Alderは、業務の要求をAIが実装する前に、ユーザーが読んで�
 返却された組は整備担当の点検を待ちます。
 ```
 
-[既存の仮想ヒアリング](work/structural-discovery/issue-99/customer-transcript.md)から関連する回答を抜き出しました。その対話を使ってSkillが作成・改訂した[草案](work/structural-discovery/issue-99/design/v4.md)には、次のように仕事が整理されています（1 Activityの抜粋）。
+Skillへ回答を返しながら草案を整えます。工具の返却業務なら、次のように記述できます（Activityの一部）。
 
 ```markdown
 # Activity 工具の返却受付
@@ -60,7 +58,7 @@ Alderは、業務の要求をAIが実装する前に、ユーザーが読んで�
 
 未決の記録媒体や引渡し方法は「未確認」として残り、人間へ確認します。出力は実行ごとに変わり、この草案も業務承認前です。[予約受付](docs/examples/meeting-room-reservation.ja.md)と[予約・取消](docs/examples/meeting-room-lifecycle.ja.md)の記述例も参照できます。
 
-## 3分で全体像 — 設計から実装後レビューまで
+## 設計から実装後レビューまで
 
 既存業務の分析だけでなく、新しい業務の仮説にも使えます。実現したい仕事を具体化し、一連の仕事が成立するかをユーザーと確かめます。
 
@@ -77,7 +75,7 @@ Alderは、業務の要求をAIが実装する前に、ユーザーが読んで�
 
 **Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。次の手順では、これらを参照文書とプロンプトでAIへ依頼します。
 
-## 5〜10分で使い方 — 自分のプロダクトで進める
+## 自分のプロダクトで使う
 
 ### 1. Pluginと文書の置き場を用意する
 
@@ -163,6 +161,7 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 | 知りたいこと | 文書 |
 | --- | --- |
+| ヒアリングと草案の記述例 | [ヒアリング](work/structural-discovery/issue-99/customer-transcript.md) / [草案](work/structural-discovery/issue-99/design/v4.md) |
 | 各欄の意味、見出し順、参照書式 | [業務設計書の文書構造](docs/business-design-structure.ja.md) |
 | 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) |
@@ -177,7 +176,7 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 | 根拠を説明へ反映する基準と安全な追試記録 | [研究成果の公開方針](docs/research-publication.md) |
 | 思想、採用判断、検証範囲と限界 | [設計思想](docs/philosophy.md) / [研究判断](docs/research-decisions.md) / [検証記録](docs/validation.md) |
 
-このREADMEはmain / PRの未リリース仕様を説明しています。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
+現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 
 ## 質問・改善提案
 

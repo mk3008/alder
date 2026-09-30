@@ -6,13 +6,11 @@ English | [日本語](README.ja.md)
 
 Alder provides a workflow for organizing business requirements into **Business Design that users can read and confirm**, before AI implements them, and connecting the agreement to Check Items, code, and tests. AI reviews the description, connections between activities, and choices made concrete in implementation; only unresolved business decisions return to people.
 
-This guide is for AI development users trying Alder for the first time. It takes you from interview notes to a draft, user agreement, implementation handoff, and review in a separate context. You do not need to memorize the format first. Use the skills and reference documents to organize the design, then have people confirm that it describes the actual work.
-
 Business Design is natural language written with defined fields and description rules: a shared language for users, designers, and AI. **People approve business intent; Business Design is the source of truth (SSOT).** AI proposals and passing Tests do not supply that approval. No framework or runtime package is required.
 
-## First minute — Turn interview notes into a draft
+## Turn interview notes into a draft
 
-Give synthetic interview notes to the installed Authoring Skill with a short request:
+Give interview notes to the installed Authoring Skill with a short request:
 
 ```text
 Turn these interview notes into an Alder Business Design.
@@ -24,7 +22,7 @@ return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
 ```
 
-These are translated excerpts of relevant answers from an [existing synthetic interview](work/structural-discovery/issue-99/customer-transcript.md). The skill used that dialogue to create and revise a [draft](work/structural-discovery/issue-99/design/v4.md). One Activity excerpt is shown below in translation:
+Refine the draft by answering the skill's questions. A tool-return activity can be described as follows (partial Activity, translated from Japanese):
 
 ```markdown
 # Activity Receive returned tools
@@ -61,7 +59,7 @@ Receipt is confirmed by the equipment-number/accessory check and return-time rec
 
 The recording medium and handoff method remain unconfirmed for people to answer. Output varies between runs, and this draft is not business-approved. Also see the [booking](docs/examples/meeting-room-reservation.ja.md) and [booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) examples.
 
-## Three-minute overview — From design to implementation review
+## From design to implementation review
 
 Use Alder for existing work or a hypothesis for new work. Make the intended work concrete and check with users whether the connected activities can operate coherently.
 
@@ -78,7 +76,7 @@ The standard design business ends at **handoff to implementation after Business 
 
 **Plugin 0.2.7 packages two skills: Business Design drafting/revision and read-only post-implementation review.** Description-quality/correlation/omission review, improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. The steps below use reference documents and prompts to ask AI to perform those stages.
 
-## Five to ten minutes — Use Alder in your product
+## Use Alder in your product
 
 ### 1. Prepare the plugin and document locations
 
@@ -164,6 +162,7 @@ For external visualization or analysis, use the optional [Business Graph JSON v1
 
 | Need | Document |
 | --- | --- |
+| Interview and draft examples | [Interview](work/structural-discovery/issue-99/customer-transcript.md) / [Draft](work/structural-discovery/issue-99/design/v4.md) |
 | Field meanings, heading order, reference notation | [Business Design structure](docs/business-design-structure.ja.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
 | Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) |
@@ -178,7 +177,7 @@ For external visualization or analysis, use the optional [Business Graph JSON v1
 | User-facing explanations and safe reproducible evidence | [Research publication practice](docs/research-publication.md) |
 | Rationale, adoption decisions, validation scope and limits | [Philosophy](docs/philosophy.md) / [Research decisions](docs/research-decisions.md) / [Validation](docs/validation.md) |
 
-This README describes the unreleased main / PR specification. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
+The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 
 ## Questions and improvement proposals
 
