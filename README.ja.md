@@ -14,7 +14,7 @@ Alderは、業務の要求を**ユーザーが読んで合意できる業務設�
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
 ```
 
-このコマンドを実行し、Alderをインストール・有効化して新しいチャットを開始します。
+このコマンドを実行し、Alderをインストール・有効化して新しいチャットを開始してください。
 
 ## まず使ってみる
 
@@ -64,11 +64,11 @@ codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa43099
 番号と付属品の照合および返却日時の記録により受領が確認され、組は整備担当の点検を待つ。
 ```
 
-この構造は、業務の意味・つながり・未確認事項を読みやすくするためのものです。詳しい理由は[文書構造](docs/business-design-structure.ja.md)を参照してください。設計から実装へ進む手順は[標準的な使い方](#標準的な使い方)を参照してください。
+この構造には意味があります。詳しい理由は[文書構造](docs/business-design-structure.ja.md)を参照してください。設計から実装へ進む手順は[標準的な使い方](#標準的な使い方)を参照してください。
 
 ## 標準的な使い方
 
-Alderは、既存業務の分析と新しい業務の仮説に使えます。実現したい仕事を具体化し、一連の仕事が成立するかをユーザーと確かめます。
+Alderは、既存業務の分析と新しい業務の仮説に使えます。業務設計書を通じてユーザーと認識を合わせ、一連の仕事が成立するかを確かめられます。
 
 | 工程 | AIに依頼すること | 人間が確認・判断すること |
 | --- | --- | --- |
@@ -81,23 +81,23 @@ Alderは、既存業務の分析と新しい業務の仮説に使えます。実
 
 標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。その後は、実装・独立レビュー・follow-upの開発ループへ進みます。
 
-作成はAuthoring Skill、実装後レビューはReview Skillへ依頼します。ほかの手順では、下記の参照文書をAIへ渡します。
+作成はAuthoring Skill、実装後レビューはReview Skillへ依頼します。ほかの手順では、下記の参照文書をAIへ渡してください。
 
 ### 1. 草案を作り、質問に答える
 
-ヒアリングや要求をAuthoring Skillへ渡し、`docs/business-design/`に草案を作らせます。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
+ヒアリングや要求をAuthoring Skillへ渡し、`docs/business-design/`に草案を作らせてください。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
 
-**書式を暗記する必要はありません**。Skillが5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを整理します。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。生成された草案を読んで、実際の仕事と合うかを確かめます。
+**書式を暗記する必要はありません**。Skillが5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを整理します。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。生成された草案を読んで、実際の仕事と合うかを確かめてください。
 
 ### 2. 業務設計をレビューし、ユーザーと合意する
 
-対象全文・版・範囲・合意済み判断を渡し、[記述品質](docs/business-design-quality-check.ja.md)と[業務相関](docs/business-design-correlation-check.ja.md)をレビューさせます。
+対象全文・版・範囲・合意済み判断を渡し、[記述品質](docs/business-design-quality-check.ja.md)と[業務相関](docs/business-design-correlation-check.ja.md)をレビューさせてください。
 
-人間は責任、条件、例外、保証への問いに答え、設計を更新して再レビューします。**ユーザーと合意した版が正本**です。品質要求は独立Quality欄を増やさず、条件が関わる既存欄へ書きます。技術的な実現手段はSystem Designへ分けます。
+人間は責任、条件、例外、保証への問いに答え、設計を更新して再レビューします。**ユーザーと合意した版が正本**です。品質要求は独立Quality欄を増やさず、条件が関わる既存欄へ書いてください。技術的な実現手段はSystem Designへ分けてください。
 
 ### 3. Check Itemを作り、人間が期待結果を確認する
 
-合意した設計と[検査項目の作成・保守](docs/check-item-traceability.md)をAIへ渡し、独立して確認できる期待結果ごとにCheck Itemを作らせます。たとえば「同時申込みでも重複予約が成立しない」を、条件と期待結果の組として確認します。
+合意した設計と[検査項目の作成・保守](docs/check-item-traceability.md)をAIへ渡し、独立して確認できる期待結果ごとにCheck Itemを作らせてください。たとえば「同時申込みでも重複予約が成立しない」を、条件と期待結果の組として確認してください。
 
 人間が`未レビュー / 要確認 / 確認済み / 要修正`を判断し、未決の業務条件は設計へ戻します。**確認済み項目と未確認候補を区別して引き渡せれば完了**です。
 
@@ -114,11 +114,11 @@ Alderは、既存業務の分析と新しい業務の仮説に使えます。実
 
 **なぜ全技術判断を先に決めないか：** 変更しやすい選択は実装時に具体化できます。先に必要なのは、守るべき性質・制約と変更リスクです。
 
-**なぜ詳細設計を独立必須工程にしないか：** 詳細はDDL・SQL・Code / Testと一緒に具体化し、レビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計します。[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
+**なぜ詳細設計を独立必須工程にしないか：** 詳細はDDL・SQL・Code / Testと一緒に具体化し、レビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計してください。[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
 
 ### 5. 合意した設計とCheck ItemをAIへ渡す
 
-設計の版、確認済みCheckのID、技術条件、今回の範囲を指定して依頼します。実際の配置に合わせてパスを置き換えてください。
+設計の版、確認済みCheckのID、技術条件、今回の範囲を指定して依頼してください。実際の配置に合わせてパスを置き換えてください。
 
 ```text
 確認済みの docs/business-design/meeting-room.md と
@@ -129,20 +129,20 @@ docs/checks/meeting-room.md、プロダクトの技術要件を読み、
 重要な前提・判断と理由を、別コンテキストのレビューへ引き継いでください。
 ```
 
-合意済み範囲のCode / Test、検証結果、重要な判断の根拠を次のレビューへ渡します。未決の取消期限をTestの期待値にせず、独立した予約処理は進められます。
+合意済み範囲のCode / Test、検証結果、重要な判断の根拠を次のレビューへ渡してください。未決の取消期限をTestの期待値にせず、独立した予約処理は進められます。
 
 ### 6. 別コンテキストでレビューし、対応を分ける
 
-新しいコンテキストへ設計・実装の版と範囲を渡します。Review Skillには「実装が終わったのでAlderレビューして」と依頼します。
+新しいコンテキストへ設計・実装の版と範囲を渡してください。Review Skillには「実装が終わったのでAlderレビューして」と依頼してください。
 
 Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、ファイルを変更せず、根拠・業務への影響・分類・必要な確認を報告します。人間は未決の業務判断だけに答え、別follow-upで意味が変わるなら業務設計書を先に更新・再合意し、Code / Testを合わせます。
 
-**指摘への対応とCheck ↔ Test/assertionの根拠を確認して、実装変更の受入れを判断します**。[follow-upと追跡の詳細](docs/check-item-traceability.md)を参照してください。
+**人間が指摘への対応とCheck ↔ Test/assertionの根拠を確認して、実装変更の受入れを判断します**。[follow-upと追跡の詳細](docs/check-item-traceability.md)を参照してください。
 
 ## 必要に応じて使う
 
-- **見直す関係を探す：** 確認済みの業務関係から、[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)で問いを探せます。構造だけからProblemを認定せず、専用のStructural Optimization工程は設けません。
-- **具体的な困りごとを改善する：** 人間が確認したProblem / Pain levelを記録し、[Optimization Review](docs/optimization-review.md)で候補を比較します。採用は人間が決め、[業務設計書の更新・再合意](docs/business-design-improvement.ja.md)を先に行います。
+- **見直す関係を探す：** 確認済みの業務関係から、[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)で問いを探せます。構造だけからProblemを認定することはできず、専用のStructural Optimization工程はありません。
+- **具体的な困りごとを改善する：** 人間が確認したProblem / Pain levelを記録し、[Optimization Review](docs/optimization-review.md)で候補を比較してください。採用は人間が決め、[業務設計書の更新・再合意](docs/business-design-improvement.ja.md)を先に行います。
 - **業務を可視化・解析する：** 任意の[Business Graph JSON v1 / CLI](docs/business-graph.md)を使えます。JSONは中間形式で、業務設計書が正本です。未承認の改善候補は投影しません。
 
 ## 詳しく読む
@@ -151,9 +151,9 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.7を固定commitで指定し、Authoring Skillのクライアント起動は未検証です。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成Skillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
 
-標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えます。手動作成でも文書構造と導入ガイドをAIへ渡します。
+標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。手動作成でも文書構造と導入ガイドをAIへ渡してください。
 
-**Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼します。
+**Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼してください。
 
 現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 

@@ -4,7 +4,7 @@ English | [日本語](README.ja.md)
 
 **Turn agreed business work into a working system.**
 
-Alder is a workflow for organizing business requirements into **Business Design that users can read and agree on**, then connecting it to Check Items, code, and tests. Confirm the work to build with users before delegating implementation to AI.
+Alder is a workflow for organizing business requirements into **Business Design that users can read and agree on**, then connecting it to Check Items, code, and tests. You can confirm the work to build with users before delegating implementation to AI.
 
 Business Design is a shared language written in natural language with defined fields. **People approve business intent; Business Design is the source of truth (SSOT).** No framework or runtime package is required.
 
@@ -65,11 +65,11 @@ Counter
 Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
 ```
 
-This structure makes business meaning, connections, and unresolved questions easier to read. See [document structure](docs/business-design-structure.ja.md) for the reasons. Continue to [Standard workflow](#standard-workflow) for the steps from design to implementation.
+This structure has a purpose. See [document structure](docs/business-design-structure.ja.md) for the reasons. Continue to [Standard workflow](#standard-workflow) for the steps from design to implementation.
 
 ## Standard workflow
 
-Use Alder to analyze existing work and explore hypotheses for new work. Make the intended work concrete and check with users whether the connected activities can operate coherently.
+Alder can be used to analyze existing work and explore hypotheses for new work. Through Business Design, you can align understanding with users and check whether the connected activities can operate coherently.
 
 | Stage | What to ask AI to do | What people confirm or decide |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ Give a fresh context the design/implementation revisions and scope. Ask the Revi
 
 The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
-**Judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** See [follow-up and traceability details](docs/check-item-traceability.md).
+**People judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** See [follow-up and traceability details](docs/check-item-traceability.md).
 
 ## Advanced
 
