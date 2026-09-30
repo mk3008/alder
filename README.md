@@ -12,29 +12,54 @@ Business Design is natural language written with defined fields and description 
 
 ## First minute — Turn interview notes into a draft
 
-[Install Plugin 0.2.7, which includes the authoring skill](docs/plugin-adoption.md), start a new chat, and ask in ordinary language. The steps below explain unreleased installation and manual use.
+Give synthetic interview notes to the installed Authoring Skill with a short request:
 
 ```text
 Turn these interview notes into an Alder Business Design.
-Write the prose in the language the users can review.
 
-We want meeting-room availability search, booking, changes, cancellation,
-and management of unavailable/available rooms.
-Overlapping bookings must not succeed.
-If a booking cannot be changed, preserve the original booking.
-We have not decided the cancellation deadline.
+The users are registered local residents.
+At return, the counter checks equipment numbers and accessories and records the return time.
+Loan handover is confirmed by the signature and handover record;
+return receipt is confirmed by the check and return-time record.
+Returned sets await inspection by the maintenance staff.
 ```
 
-The skill organizes the notes into work and information exchanges and retains unresolved matters as questions. For this input, read the draft and questions separately:
+These are translated excerpts of relevant answers from an [existing synthetic interview](work/structural-discovery/issue-99/customer-transcript.md). The skill used that dialogue to create and revise a [draft](work/structural-discovery/issue-99/design/v4.md). One Activity excerpt is shown below in translation:
 
-| What is organized | Content in this example |
-| --- | --- |
-| Work (Activity) | Availability search, booking, changes, cancellation, availability management |
-| Subjects handled (Object) | User, room register, booking register |
-| Confirmed rules | Prevent overlapping bookings. Preserve the original booking when a change cannot succeed |
-| Question for people | Until when is cancellation accepted? |
+```markdown
+# Activity Receive returned tools
 
-This illustrates the organization, not a complete Business Design or business approval. Answer the questions to revise the same draft, then check actual procedures, responsibility, and information transfers. See the [complete booking example](docs/examples/meeting-room-reservation.ja.md) and [booking/cancellation example](docs/examples/meeting-room-lifecycle.ja.md) (Japanese).
+## When
+
+When a resident returns borrowed tools.
+
+## Who
+
+Counter
+
+## How
+
+### Input
+
+- Registered local resident — Returned tools and accessories
+- Loan/return record — Loaned equipment numbers and handover record
+
+### Procedure
+
+1. The counter compares the loaned number with the returned equipment number and accessories and records the return time. The recording medium is unconfirmed.
+2. Returned sets await maintenance inspection. The specific handoff method is unconfirmed.
+
+### Output
+
+- Loan/return record — Check results and return-time record
+- Organization's tools — Returned sets awaiting inspection
+
+## Result
+
+Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
+```
+
+The recording medium and handoff method remain unconfirmed for people to answer. Output varies between runs, and this draft is not business-approved. Also see the [booking](docs/examples/meeting-room-reservation.ja.md) and [booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) examples.
 
 ## Three-minute overview — From design to implementation review
 
@@ -57,102 +82,73 @@ The standard design business ends at **handoff to implementation after Business 
 
 ### 1. Prepare the plugin and document locations
 
-| Version | Scope and entry point |
-| --- | --- |
-| Plugin 0.2.7 | Authoring/revision + implementation review. An unreleased package installed from a reviewed commit/branch containing this change |
-| Stable tag `plugin-v0.1.0` | Implementation review only; no interview-to-design authoring skill |
-
-To start with authoring, follow [Plugin setup](docs/plugin-adoption.md), select a revision containing 0.2.7, install/enable it, and start a new chat. Record the resolved commit when using a moving branch. The stable review-only entry point is:
+Follow [Plugin setup](docs/plugin-adoption.md). For authoring/revision, install and enable a **reviewed commit/branch containing 0.2.7**, then start a new chat. Version 0.2.7 is unreleased; the stable `plugin-v0.1.0` tag provides implementation review only.
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
 ```
 
-Plugin support and available marketplaces vary by client. GitHub distribution and public Plugins Directory publication are separate. Initial client validation covered 0.1.0 review; it does not establish client routing for the 0.2.7 authoring skill.
+Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
 
-Keep Business Design in the product's conventional `docs/business-design/` directory, or retain an established equivalent location. The conventional path needs no Alder-specific `AGENTS.md` configuration or copied review knowledge for the plugin; identify a different path when necessary. For manual use, provide a readable Alder checkout or version-pinned references and use the [manual adoption prompts](docs/adoption.md).
+### 2. Draft and answer questions
 
-### 2. Draft, then read the structure the skill organizes
+Give interview notes or requirements to the Authoring Skill to draft the design. People confirm source facts and unresolved questions, answer them, and revise the same document.
 
-Give the authoring skill notes or requirements, then answer its questions to revise the draft. For manual use, give AI readable [document-structure guidance](docs/business-design-structure.ja.md) and the [adoption guide](docs/adoption.md) and request a draft in the same format.
+The skill organizes work as Activity and information, documents, registers, and external parties as Object. It divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Prepare **a draft people can read and check without memorizing the format**.
 
-The draft organizes work as **Activity** and information, documents, registers, and external parties as **Object**. Activities use 5W1H, with How divided into **Input / Procedure / Output**, an Exception when needed, and **Result** for the state established after normal completion.
+See [document structure](docs/business-design-structure.ja.md) and the [field guidance](docs/adoption.md#business-design-format) for fields, Scope / Information, When, exceptions, and information connections. Give the same references to AI for manual authoring.
 
-For booking, Output is the registered booking information and the result communicated to the user; Result is the established booking that lets the user prepare for the meeting. Read the generated fields to check what is received, who decides, and what becomes true.
+### 3. Review and agree with users
 
-Activity / Object Scope describes responsibility boundaries; Object.Information describes business information. Avoid splitting continuous work excessively. Connect independently triggered work through its actual When and information exchanges via Objects. Document order is not execution order; exception returns are separate from normal I/O. See [document structure](docs/business-design-structure.ja.md) for field meanings, heading order, and reference notation, and the [adoption field table](docs/adoption.md#business-design-format) for details.
+Provide the full design, revision, scope, and agreed decisions. Ask for [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) review, plus an optional [omission check](docs/business-design-omission-check.ja.md) when needed.
 
-### 3. Review Business Design and agree with users
+People answer questions about responsibility, conditions, exceptions, and guarantees, then update and review again. **The user-agreed revision is SSOT.** Include business quality requirements in the Procedure / Exception / Result / Who / Object.Information field they constrain, rather than a separate Quality field; leave mechanisms to System Design. See the [field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work).
 
-A well-formatted draft still needs confirmation of business meaning. Provide the full design, revision, scope, and agreed decisions, then use these documents' prompts:
+The [review case](docs/business-design-review.ja.md), [quality rationale](docs/business-design-quality-review.md), and [optional functional consideration discovery](docs/behavior-derivation/functional-considerations.md) provide details.
 
-1. [Description-quality check](docs/business-design-quality-check.ja.md): actors, field roles, Input / Procedure / Output consistency
-2. [Correlation check](docs/business-design-correlation-check.ja.md): Result and When across activities, information transfers, units of work, authority, exceptions, and recovery
-3. Optional [omission check](docs/business-design-omission-check.ja.md): questions about concrete scenarios whose outcomes differ
+### 4. Draft Checks and have people confirm expectations
 
-Separate wording corrections that preserve meaning from questions requiring business judgment. Apply users' decisions to Business Design, review again, and keep the agreed revision as SSOT. See the [quality-review rationale](docs/business-design-quality-review.md), [review case](docs/business-design-review.ja.md), and [optional functional consideration discovery](docs/behavior-derivation/functional-considerations.md).
+Give AI the agreed design and [Check Item guidance](docs/check-item-traceability.md). Ask for independently reviewable expectations. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
-Write business quality requirements here too: deadlines, continuity, retry invariants, authority, and traceability. **Do not add a separate Quality field.** Use the Procedure / Exception / Result / Who / Object.Information field the condition constrains. A desired condition is different from an observed Problem / Pain. System Design chooses technical mechanisms such as topology or encryption. See the [field mapping and examples](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work).
+People assign `Unreviewed / Needs confirmation / Confirmed / Needs correction` (`未レビュー / 要確認 / 確認済み / 要修正`). Return undecided business conditions to design. **This stage is complete when confirmed items and unconfirmed candidates can be handed over separately.**
 
-### 4. Draft Check Items and have people confirm expectations
+**Why passing Tests are not business approval:** Tests compare implementation with written expectations. People confirm whether those expectations describe the desired work, so human review state and Test evidence are separate.
 
-Give AI the [adoption guide](docs/adoption.md) and [Check Item guidance](docs/check-item-traceability.md). Ask it to derive independently reviewable observable expectations from the agreed Business Design.
+### 5. State constraints as System Requirements
 
-| ID | Title | Expected result | Review state |
-| --- | --- | --- | --- |
-| MR-001 | Overlapping bookings cannot succeed for one room | Concurrent requests do not establish multiple bookings for the same room with overlapping time intervals | Unreviewed |
-| MR-002 | The original booking survives a failed change | When change conditions are not satisfied, the original booking remains intact | Unreviewed |
+People provide existing constraints and preferences; ask AI to organize technical conditions implementation must preserve. **This is complete when required constraints and delegated choices are clear.**
 
-This is part of a list derived from booking/change activities. People read the title, expectation, and necessary conditions and update `Unreviewed / Needs confirmation / Confirmed / Needs correction` (`未レビュー / 要確認 / 確認済み / 要修正`). If business meaning is undecided, return to Business Design rather than decide in the Check; update it after agreement. Human review state is separate from AI confidence and Test evidence strength.
-
-**Why passing Tests are not business approval:** Tests show that implementation matches the written expectation under the tested conditions. People must confirm whether that expectation is what users need. Code and Tests must not turn an unapproved expectation into policy; distinguish confirmed items from unconfirmed candidates.
-
-### 5. State constraints to preserve as System Requirements
-
-Alongside business requirements, state technical conditions implementation must respect, including existing infrastructure, databases, and published contracts. You need not fill in every technical decision first.
-
-| Treatment | Examples |
+| State early | May be delegated to implementation |
 | --- | --- |
-| State early when constrained or costly to change | Existing infrastructure or DB/schema compatibility, required cloud/services, public APIs, migration/compatibility, security or legal obligations |
-| State preferences or organizational reasons | Language, database product, major libraries. Without a maintenance, existing-asset, or preference reason, implementation may choose |
-| Usually delegate to implementation and review | Class/function decomposition, internal modules, naming, and other reversible local choices |
+| Existing infrastructure/DB/schema, required cloud/services, public APIs, migration/compatibility, security/legal obligations | Reversible class/function decomposition, internal modules, naming |
+| Reasons for language or major-product preferences, such as maintenance, existing assets, or personal preference | Technology selection where no constraint or preference applies |
 
-A service required by a business contract may also be a business condition; a replaceable mechanism is a technical choice. State the reason, not only the name. Architecture names are not required either. A property such as “test the core without external I/O” helps implementation select a structure. Explicit standards or justified styles remain constraints.
+No architecture name is required first: state properties or risks to protect. Distinguish business-contract constraints from technical mechanisms by the reason for using a service.
 
-**Why not settle every technical choice or require an independent detailed-design stage:** Reversible details can become concrete alongside actual DDL, SQL, Code, and Test and remain reviewable afterward. Design hard-to-reverse migrations, external contracts, or cutovers early where necessary. AI's ability to rewrite code does not remove persistent-data or external-contract change costs. See [detailed-design guidance](docs/detailed-design.ja.md) and the [rationale and examples](docs/philosophy.md#where-detailed-design-fits).
-
-Data modeling is also a downstream design choice based on business-side structural requirements, System Requirements, and existing DB constraints. Table definitions need not be settled before business agreement; normalization and database constraints remain useful design knowledge. See [data modeling](docs/data-modeling.ja.md).
+**Why a separate detailed-design stage is not mandatory:** Reversible details can become concrete with DDL, SQL, Code / Test and be reviewed afterward. Design costly changes, such as migrations or external contracts, early where necessary. See [detailed design](docs/detailed-design.ja.md) and the [decision examples](docs/philosophy.md#where-detailed-design-fits). Data modeling is also downstream design from business/system requirements and existing DB constraints; see its [position](docs/data-modeling.ja.md).
 
 ### 6. Hand the agreed design and Checks to AI
 
-Identify the Business Design revision, confirmed Check IDs, technical conditions, and implementation scope. Replace the example paths with your established document locations and development conventions.
+Identify the design revision, confirmed Check IDs, technical conditions, and current scope. Replace paths with actual product locations.
 
 ```text
 Read the confirmed docs/business-design/meeting-room.md,
 docs/checks/meeting-room.md, and the product's technical requirements.
-Implement the agreed scope using the existing development rules.
-Create/update code and executable tests that verify the conditions and
-expected results of confirmed Check Items.
-Do not decide unresolved business rules; return concrete questions to people.
-Continue independent work and hand material assumptions, choices, and reasons
-to the later review.
+Create/update code and executable tests for the agreed scope.
+Follow existing development rules and verify confirmed Check conditions/results.
+Return unresolved business decisions as questions to people; continue independent work.
+Hand material assumptions, choices, and reasons to a separate-context review.
 ```
 
-For example, do not invent a cancellation deadline in Test expectations while it is undecided. Retain that question without stopping independent, agreed booking work indiscriminately. Record material reasons in Decision Records or equivalent evidence; those records do not replace business approval.
+**Proceed to review when Code / Test, verification results, and evidence for material choices are available for the agreed scope.** Do not invent an undecided cancellation deadline in Test expectations; independent booking work may proceed. Handoff completes the standard design business; implementation and post-implementation review form a separate development loop.
 
 ### 7. Review in a separate context and separate follow-up
 
-After implementation and product verification, give a separate agent or fresh context the design and implementation revisions and scope. With a plugin that supports the review skill, ask:
+Give a separate AI agent or fresh context the design/implementation revisions and scope. Ask the Review Skill to “Review this completed implementation with Alder.”
 
-```text
-Review the completed implementation with Alder.
-The scope is the current meeting-room booking change.
-Use the attached references for the design and implementation revisions/scope.
-```
+The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
-The skill reads **Business Design → Decision Records → implementation / DDL / Tests**, leaves files unchanged, and reports evidence, business effects, classifications, and needed confirmation. Manual [post-implementation review prompts](docs/adoption.md) and [review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) are also available.
-
-Distinguish mismatches, Business confirmation, technical improvements, and sufficient behavior. Return only unresolved business decisions to the responsible people. In a separate follow-up, update/re-agree Business Design first if meaning changes, then change Code / Test as needed. Check and maintain Check ↔ representative Test/assertion mappings and evidence gaps there. Permanent traceability stops at **Business Design ↔ Check Item ↔ Test**; do not maintain Check ↔ Code-location mappings. Tests verify Code by execution.
+**Judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** Permanent traceability stops at Business Design ↔ Check Item ↔ Test; do not maintain Check ↔ Code-location tables. See [review knowledge](docs/phase2/review-knowledge-v0.3.md), [manual prompts/follow-up](docs/adoption.md), and [traceability details](docs/check-item-traceability.md).
 
 ## When needed — Business improvement and Business Graph
 
