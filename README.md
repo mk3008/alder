@@ -8,9 +8,9 @@ Alder provides a workflow for organizing business requirements into **Business D
 
 Business Design is natural language written with defined fields and description rules: a shared language for users, designers, and AI. **People approve business intent; Business Design is the source of truth (SSOT).** AI proposals and passing Tests do not supply that approval. No framework or runtime package is required.
 
-## Turn interview notes into a draft
+## Quick Start
 
-Give interview notes to the installed Authoring Skill with a short request:
+Give interview notes to the Authoring Skill with a short request. If it is not installed, follow [Install / Setup](#install--setup) first:
 
 ```text
 Turn these interview notes into an Alder Business Design.
@@ -59,7 +59,17 @@ Receipt is confirmed by the equipment-number/accessory check and return-time rec
 
 The recording medium and handoff method remain unconfirmed for people to answer. Output varies between runs, and this draft is not business-approved. Also see the [booking](docs/examples/meeting-room-reservation.ja.md) and [booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) examples.
 
-## From design to implementation review
+## Install / Setup
+
+Follow [Plugin setup](docs/plugin-adoption.md). For authoring/revision, install and enable a **reviewed commit/branch containing 0.2.7**, then start a new chat. Version 0.2.7 is unreleased; the stable `plugin-v0.1.0` tag provides implementation review only.
+
+```sh
+codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
+```
+
+Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
+
+## Standard workflow
 
 Use Alder for existing work or a hypothesis for new work. Make the intended work concrete and check with users whether the connected activities can operate coherently.
 
@@ -76,19 +86,7 @@ The standard design business ends at **handoff to implementation after Business 
 
 **Plugin 0.2.7 packages two skills: Business Design drafting/revision and read-only post-implementation review.** Description-quality/correlation/omission review, improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. The steps below use reference documents and prompts to ask AI to perform those stages.
 
-## Use Alder in your product
-
-### 1. Prepare the plugin and document locations
-
-Follow [Plugin setup](docs/plugin-adoption.md). For authoring/revision, install and enable a **reviewed commit/branch containing 0.2.7**, then start a new chat. Version 0.2.7 is unreleased; the stable `plugin-v0.1.0` tag provides implementation review only.
-
-```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
-```
-
-Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
-
-### 2. Draft and answer questions
+### 1. Draft and answer questions
 
 Give interview notes or requirements to the Authoring Skill to draft the design. People confirm source facts and unresolved questions, answer them, and revise the same document.
 
@@ -96,7 +94,7 @@ The skill organizes work as Activity and information, documents, registers, and 
 
 See [document structure](docs/business-design-structure.ja.md) and the [field guidance](docs/adoption.md#business-design-format) for fields, Scope / Information, When, exceptions, and information connections. Give the same references to AI for manual authoring.
 
-### 3. Review and agree with users
+### 2. Review and agree with users
 
 Provide the full design, revision, scope, and agreed decisions. Ask for [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) review, plus an optional [omission check](docs/business-design-omission-check.ja.md) when needed.
 
@@ -104,7 +102,7 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 The [review case](docs/business-design-review.ja.md), [quality rationale](docs/business-design-quality-review.md), and [optional functional consideration discovery](docs/behavior-derivation/functional-considerations.md) provide details.
 
-### 4. Draft Checks and have people confirm expectations
+### 3. Draft Checks and have people confirm expectations
 
 Give AI the agreed design and [Check Item guidance](docs/check-item-traceability.md). Ask for independently reviewable expectations. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
@@ -112,7 +110,7 @@ People assign `Unreviewed / Needs confirmation / Confirmed / Needs correction` (
 
 **Why passing Tests are not business approval:** Tests compare implementation with written expectations. People confirm whether those expectations describe the desired work, so human review state and Test evidence are separate.
 
-### 5. State constraints as System Requirements
+### 4. State constraints as System Requirements
 
 People provide existing constraints and preferences; ask AI to organize technical conditions implementation must preserve. **This is complete when required constraints and delegated choices are clear.**
 
@@ -125,7 +123,7 @@ No architecture name is required first: state properties or risks to protect. Di
 
 **Why a separate detailed-design stage is not mandatory:** Reversible details can become concrete with DDL, SQL, Code / Test and be reviewed afterward. Design costly changes, such as migrations or external contracts, early where necessary. See [detailed design](docs/detailed-design.ja.md) and the [decision examples](docs/philosophy.md#where-detailed-design-fits). Data modeling is also downstream design from business/system requirements and existing DB constraints; see its [position](docs/data-modeling.ja.md).
 
-### 6. Hand the agreed design and Checks to AI
+### 5. Hand the agreed design and Checks to AI
 
 Identify the design revision, confirmed Check IDs, technical conditions, and current scope. Replace paths with actual product locations.
 
@@ -140,7 +138,7 @@ Hand material assumptions, choices, and reasons to a separate-context review.
 
 **Proceed to review when Code / Test, verification results, and evidence for material choices are available for the agreed scope.** Do not invent an undecided cancellation deadline in Test expectations; independent booking work may proceed. Handoff completes the standard design business; implementation and post-implementation review form a separate development loop.
 
-### 7. Review in a separate context and separate follow-up
+### 6. Review in a separate context and separate follow-up
 
 Give a separate AI agent or fresh context the design/implementation revisions and scope. Ask the Review Skill to “Review this completed implementation with Alder.”
 
@@ -148,7 +146,7 @@ The skill reads **Business Design → Decision Records → implementation / DDL 
 
 **Judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** Permanent traceability stops at Business Design ↔ Check Item ↔ Test; do not maintain Check ↔ Code-location tables. See [review knowledge](docs/phase2/review-knowledge-v0.3.md), [manual prompts/follow-up](docs/adoption.md), and [traceability details](docs/check-item-traceability.md).
 
-## When needed — Business improvement and Business Graph
+## Advanced
 
 With confirmed current-state relationships, optional [Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) can raise grounded questions about relationships worth reconsidering. Zero observations is valid; structure alone does not establish a Problem, burden, or benefit. There is no dedicated Structural Optimization workflow.
 
@@ -179,6 +177,6 @@ For external visualization or analysis, use the optional [Business Graph JSON v1
 
 The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 
-## Questions and improvement proposals
+### Questions and improvement proposals
 
 Open [GitHub Issues](https://github.com/mk3008/alder/issues) with the Alder version, target work, and question you want to resolve.
