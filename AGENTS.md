@@ -26,6 +26,8 @@ If a Japanese polishing or other writing/polish skill is used, this meta-leakage
 
 As a final test, ask of each sentence: **would this still help the target reader if they knew nothing about how this document was produced?** If not, remove it or rewrite it as direct reader-facing content.
 
+Use **task-oriented / user-goal-oriented headings**. Headings are navigation, not a taxonomy or summary of the prose. Prefer the reader's goal or next action (for example, “Quick start”, “Install”, “Hand off to implementation”, “Review”) over author-side topic labels or feature descriptions. In the final pass, skim headings alone and confirm that a reader can choose the right section by intent.
+
 ## Publishing research decisions
 
 For adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.
