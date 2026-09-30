@@ -40,6 +40,12 @@ For example, do not introduce existing-work analysis for the first time as “no
 
 During polishing, ask for every connective: **what prior statement is this adding to, contrasting with, or continuing, and has the reader actually seen that statement in this document?** Context from Issues, chats, author intent, or other documents does not count as reader-shared context.
 
+### Bridge Getting Started into the first action
+
+In Getting Started / Quick Start, do not jump directly from the heading to a command or instruction. Guide the first success as **Goal → Material → Action → Observation → Next**.
+
+Briefly tell the reader what they are about to try, what sample/input to use, what action to take, what result to expect, and where that experience leads next. This is not extra exposition; it is the minimum context needed to keep the first action from feeling abrupt.
+
 ## Publishing research decisions
 
 For adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.
