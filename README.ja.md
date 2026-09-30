@@ -10,17 +10,11 @@ Alderは、業務の要求をAIが実装する前に、ユーザーが読んで�
 
 ## 導入する
 
-**作成・改訂と実装後レビューを使うには、Plugin 0.2.7を導入します。** 0.2.7は未リリースのため、次のように確認済みcommitを指定します。
-
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
 ```
 
-[Plugin導入ガイド](docs/plugin-adoption.md#install-once)に従ってAlderをインストール・有効化し、新しいチャットを開始します。上のcommitには0.2.7が含まれます。Pluginの対応はクライアントにより異なり、Authoring Skillのクライアント起動は未検証です。
-
-業務設計書をプロダクトの`docs/business-design/`へ置けば、Plugin用の専用`AGENTS.md`設定や知識のコピーは不要です。別の配置ならパスを伝えます。**AIが対象の文書と版を読めれば準備完了**。Pluginを使わない場合も[導入ガイドの手動プロンプト](docs/adoption.md)で進められます。版・更新・クライアント対応と検証範囲の詳細はPlugin導入ガイドへまとめています。
-
-**実装後レビューだけを安定版で使う場合：** `plugin-v0.1.0`を指定してください。Authoring Skillは含まないため、次の草案作成には使えません。[安定版の導入手順](docs/plugin-adoption.md#install-once)を参照してください。
+このコマンドを実行し、Alderをインストール・有効化して新しいチャットを開始します。
 
 ## まず使ってみる
 
@@ -87,23 +81,21 @@ Skillへ回答を返しながら草案を整えます。工具の返却業務な
 
 標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。実装後のAlderレビューとfollow-upは別の開発ループです。System Requirementsの技術検討の詳細は、プロダクト側の責務です。
 
-**Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。次の手順では、これらを参照文書とプロンプトでAIへ依頼します。
+作成はAuthoring Skill、実装後レビューはReview Skillへ依頼します。ほかの手順では、下記の参照文書をAIへ渡します。
 
 ### 1. 草案を作り、質問に答える
 
-ヒアリングや要求をAuthoring Skillへ渡し、草案を作らせます。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
+ヒアリングや要求をAuthoring Skillへ渡し、`docs/business-design/`に草案を作らせます。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
 
 Skillは仕事をActivity、情報・文書・台帳・外部の相手をObjectへ整理し、5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを書きます。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。**書式を暗記せず、生成された内容を読んで確かめられる草案**を用意します。
 
-各欄・Scope / Information・When・例外・情報の接続は[文書構造](docs/business-design-structure.ja.md)と[欄の説明](docs/adoption.md#business-design-format)を参照してください。手動作成でも同じ文書をAIへ渡します。
+各欄・Scope / Information・When・例外・情報の接続は[文書構造](docs/business-design-structure.ja.md)と[欄の説明](docs/adoption.md#business-design-format)を参照してください。
 
 ### 2. 業務設計をレビューし、ユーザーと合意する
 
-対象全文・版・範囲・合意済み判断を渡し、[記述品質](docs/business-design-quality-check.ja.md)と[業務相関](docs/business-design-correlation-check.ja.md)をレビューさせます。必要なら任意の[考慮漏れチェック](docs/business-design-omission-check.ja.md)も使います。
+対象全文・版・範囲・合意済み判断を渡し、[記述品質](docs/business-design-quality-check.ja.md)と[業務相関](docs/business-design-correlation-check.ja.md)をレビューさせます。
 
 人間は責任、条件、例外、保証に関わる問いへ答え、業務設計書を更新して再レビューします。**ユーザーと合意した版が正本**です。品質要求も省略せず、独立Quality欄ではなく、それが制約するProcedure / Exception / Result / Who / Object.Information等へ書き、実現手段はSystem Designへ分けます。[配置例](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work)を参照してください。
-
-[レビュー事例](docs/business-design-review.ja.md)、[記述品質の根拠](docs/business-design-quality-review.md)、[任意の考慮漏れ探索](docs/behavior-derivation/functional-considerations.md)に詳細をまとめています。
 
 ### 3. Check Itemを作り、人間が期待結果を確認する
 
@@ -143,7 +135,7 @@ docs/checks/meeting-room.md、プロダクトの技術要件を読み、
 
 ### 6. 別コンテキストでレビューし、対応を分ける
 
-別のAIエージェントや新しいコンテキストへ設計・実装の版と範囲を渡します。Review Skillには「実装が終わったのでAlderレビューして」と依頼します。
+新しいコンテキストへ設計・実装の版と範囲を渡します。Review Skillには「実装が終わったのでAlderレビューして」と依頼します。
 
 Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、ファイルを変更せず、根拠・業務への影響・分類・必要な確認を報告します。人間は未決の業務判断だけに答え、別follow-upで意味が変わるなら業務設計書を先に更新・再合意し、Code / Testを合わせます。
 
@@ -161,10 +153,17 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 ## 詳しく読む
 
+版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.7を固定commitで指定し、Authoring Skillのクライアント起動は未検証です。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成Skillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
+
+標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えます。手動作成でも文書構造と導入ガイドをAIへ渡します。
+
+**Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼します。
+
 | 知りたいこと | 文書 |
 | --- | --- |
 | ヒアリングと草案の記述例 | [ヒアリング](work/structural-discovery/issue-99/customer-transcript.md) / [草案](work/structural-discovery/issue-99/design/v4.md) |
 | 各欄の意味、見出し順、参照書式 | [業務設計書の文書構造](docs/business-design-structure.ja.md) |
+| 設計レビューの事例と根拠 | [レビュー事例](docs/business-design-review.ja.md) / [記述品質の根拠](docs/business-design-quality-review.md) / [考慮漏れ探索](docs/behavior-derivation/functional-considerations.md) |
 | 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) |
 | 文書配置、手順、コピーして使うプロンプト | [導入ガイド](docs/adoption.md) |

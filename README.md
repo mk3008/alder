@@ -10,17 +10,11 @@ Business Design is natural language written with defined fields and description 
 
 ## Install / Setup
 
-**Install Plugin 0.2.7 for authoring/revision and implementation review.** Version 0.2.7 is unreleased; pin a reviewed commit as follows:
-
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
 ```
 
-Follow [Plugin setup](docs/plugin-adoption.md#install-once) to install and enable Alder, then start a new chat. The commit above contains 0.2.7. Plugin support varies by client; client routing for the Authoring Skill has not been validated.
-
-Keep Business Design in the product's `docs/business-design/`: the plugin needs no dedicated `AGENTS.md` configuration or copied knowledge there. Identify a different path if used. **Preparation is complete when AI can read the target documents and revisions.** The [manual adoption prompts](docs/adoption.md) work without a plugin too. Plugin setup holds the version, update, client-support, and validation details.
-
-**For stable implementation review only:** use `plugin-v0.1.0`. It does not include the Authoring Skill and cannot run the drafting example below. See the [stable installation steps](docs/plugin-adoption.md#install-once).
+Run this command, install and enable Alder, then start a new chat.
 
 ## Getting Started
 
@@ -88,23 +82,21 @@ Use Alder for existing work or a hypothesis for new work. Make the intended work
 
 The standard design business ends at **handoff to implementation after Business Design agreement and human Check Item review**. Post-implementation Alder review and follow-up form a separate development loop. Detailed technical investigation for System Requirements is the product's responsibility.
 
-**Plugin 0.2.7 packages two skills: Business Design drafting/revision and read-only post-implementation review.** Description-quality/correlation/omission review, improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. The steps below use reference documents and prompts to ask AI to perform those stages.
+Ask the Authoring Skill to draft and the Review Skill to review completed implementation. Give AI the linked reference documents for the other steps.
 
 ### 1. Draft and answer questions
 
-Give interview notes or requirements to the Authoring Skill to draft the design. People confirm source facts and unresolved questions, answer them, and revise the same document.
+Give interview notes or requirements to the Authoring Skill to draft the design in `docs/business-design/`. People confirm source facts and unresolved questions, answer them, and revise the same document.
 
 The skill organizes work as Activity and information, documents, registers, and external parties as Object. It divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Prepare **a draft people can read and check without memorizing the format**.
 
-See [document structure](docs/business-design-structure.ja.md) and the [field guidance](docs/adoption.md#business-design-format) for fields, Scope / Information, When, exceptions, and information connections. Give the same references to AI for manual authoring.
+See [document structure](docs/business-design-structure.ja.md) and the [field guidance](docs/adoption.md#business-design-format) for fields, Scope / Information, When, exceptions, and information connections.
 
 ### 2. Review and agree with users
 
-Provide the full design, revision, scope, and agreed decisions. Ask for [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) review, plus an optional [omission check](docs/business-design-omission-check.ja.md) when needed.
+Provide the full design, revision, scope, and agreed decisions. Ask for [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) review.
 
 People answer questions about responsibility, conditions, exceptions, and guarantees, then update and review again. **The user-agreed revision is SSOT.** Include business quality requirements in the Procedure / Exception / Result / Who / Object.Information field they constrain, rather than a separate Quality field; leave mechanisms to System Design. See the [field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work).
-
-The [review case](docs/business-design-review.ja.md), [quality rationale](docs/business-design-quality-review.md), and [optional functional consideration discovery](docs/behavior-derivation/functional-considerations.md) provide details.
 
 ### 3. Draft Checks and have people confirm expectations
 
@@ -144,7 +136,7 @@ Hand material assumptions, choices, and reasons to a separate-context review.
 
 ### 6. Review in a separate context and separate follow-up
 
-Give a separate AI agent or fresh context the design/implementation revisions and scope. Ask the Review Skill to “Review this completed implementation with Alder.”
+Give a fresh context the design/implementation revisions and scope. Ask the Review Skill to “Review this completed implementation with Alder.”
 
 The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
@@ -162,10 +154,17 @@ For external visualization or analysis, use the optional [Business Graph JSON v1
 
 ## Read more
 
+See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins unreleased 0.2.7 to a commit; client routing for the Authoring Skill has not been validated. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring skill. Use the [manual prompts](docs/adoption.md) without a plugin.
+
+The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
+
+**Plugin 0.2.7 packages two skills: Business Design drafting/revision and read-only post-implementation review.** Description-quality/correlation/omission review, improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. Use reference documents and prompts to ask AI to perform those stages.
+
 | Need | Document |
 | --- | --- |
 | Interview and draft examples | [Interview](work/structural-discovery/issue-99/customer-transcript.md) / [Draft](work/structural-discovery/issue-99/design/v4.md) |
 | Field meanings, heading order, reference notation | [Business Design structure](docs/business-design-structure.ja.md) |
+| Design-review examples and rationale | [Review case](docs/business-design-review.ja.md) / [Quality rationale](docs/business-design-quality-review.md) / [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
 | Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) |
 | Document locations, steps, copyable prompts | [Adoption guide](docs/adoption.md) |
