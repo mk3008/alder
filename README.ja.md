@@ -13,7 +13,7 @@ Alderは、依頼者・設計者・AIが業務の意味を共有する共通言�
 ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIと、Plugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行し、Alderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
+codex plugin marketplace add mk3008/alder --ref 35dd2cec2fb173785f730a5c08d15c7fdfa85598
 ```
 
 コマンド実行後、ChatGPTデスクトップアプリを再起動し、Plugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後、新しいチャットを開始してください。
@@ -83,7 +83,7 @@ Alderは、既存業務の分析と新しい業務の仮説に使えます。業
 
 標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。その後は、実装・独立レビュー・follow-upの開発ループへ進みます。
 
-作成にはAuthoring Skill、実装後レビューにはReview Skillが用意されています。ほかの手順では、下記の参照文書をAIへ渡してください。
+Alder Pluginは、業務設計書の作成・レビューと実装レビューを短い依頼から実行できます。Check ItemやSystem Requirementsなど、ほかの手順では下記の参照文書を使います。
 
 ### 1. 草案を作り、質問に答える
 
@@ -93,13 +93,10 @@ Alderは、既存業務の分析と新しい業務の仮説に使えます。業
 
 ### 2. 業務設計をレビューし、依頼者と合意する
 
-対象の業務設計書のMarkdown全文と、[記述品質](docs/business-design-quality-check.ja.md)・[業務相関](docs/business-design-correlation-check.ja.md)の文書をチャットへ渡し、次のように依頼してください。
+対象の業務設計書を参照できるチャットで、次のように依頼してください。
 
 ```text
-この業務設計書を、記述品質と業務相関の観点でレビューしてください。
-問題がある箇所と根拠、修正案を示し、
-人間の業務判断が必要なことは分けてください。
-今回は読み取り専用とし、未決の業務ルールを決めないでください。
+業務設計書をAlderでレビューして
 ```
 
 人間は責任、条件、例外、保証への問いに答え、設計を更新して再レビューします。**依頼者と設計者が合意した版が正本**です。品質要求のために項目を増やさず、[各項目の役割](docs/business-design-structure.ja.md)に沿って関係する既存項目へ書いてください。技術的な実現手段はSystem Designへ分けてください。
@@ -142,7 +139,7 @@ docs/checks/meeting-room.md、プロダクトの技術要件を読み、
 
 ### 6. 別コンテキストでレビューし、対応を分ける
 
-新しいチャットで設計・実装のファイルを参照できるようにし、版と範囲を指定して「実装が終わったのでAlderレビューして」と依頼してください。
+新しいチャットで設計・実装のファイルを参照できるようにし、版と範囲を指定して「コードをAlderでレビューして」と依頼してください。
 
 Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、ファイルを変更せず、根拠・業務への影響・分類・必要な確認を報告します。人間は未決の業務判断だけに答え、別follow-upで意味が変わるなら業務設計書を先に更新・再合意し、Code / Testを合わせます。
 
@@ -158,11 +155,11 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 ### 版とPluginの提供範囲
 
-版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.7を固定commitで指定し、Authoring Skillのクライアント起動は未検証です。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成Skillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
+版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.8を固定commitで指定しています。実クライアントでは、業務設計書の作成・レビューとコードレビューの短文routingを確認済みです。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成・業務設計書レビューSkillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
 
 標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。手動作成でも文書構造と導入ガイドをAIへ渡してください。
 
-**Plugin 0.2.7の同梱Skillは、Business Designの作成・改訂と、実装後の読み取り専用レビューの二つ**です。記述品質・相関・考慮漏れレビュー、改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼してください。
+**Plugin 0.2.8の同梱Skillは、Business Designの作成・改訂、Business Designの読み取り専用レビュー、実装後の読み取り専用レビューの三つ**です。改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼してください。
 
 現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 
