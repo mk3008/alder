@@ -13,7 +13,7 @@ No framework or runtime package is required.
 Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
+codex plugin marketplace add mk3008/alder --ref 35dd2cec2fb173785f730a5c08d15c7fdfa85598
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -84,7 +84,7 @@ Alder can be used to analyze existing work and explore hypotheses for new work. 
 
 The standard design business ends at **handoff to implementation after Business Design agreement and human Check Item review**. Then proceed through the development loop of implementation, independent review, and follow-up.
 
-The Authoring Skill provides drafting; the Review Skill provides post-implementation review. Give AI the linked reference documents for the other steps.
+Alder Plugin can draft/revise and review Business Design and review implementation from short requests. Use the linked reference documents for Check Items, System Requirements, and the other steps.
 
 ### 1. Draft and answer questions
 
@@ -94,13 +94,10 @@ Business Design is written in natural language with defined fields. **You do not
 
 ### 2. Review and agree with requesters
 
-Give the chat the full Business Design Markdown and the [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) guidance, then send a request like this.
+In a chat that can access the target Business Design, ask:
 
 ```text
-Review this Business Design for description quality and business correlations.
-Report problem locations, evidence, and proposed corrections.
-Separate matters requiring human business decisions.
-Keep this review read-only and do not decide unresolved business rules.
+Review this Business Design with Alder.
 ```
 
 People answer questions about responsibility, conditions, exceptions, and guarantees, then update the design and review again. **The revision agreed on by the requester and designer is SSOT.** Do not add fields for quality requirements; write them in the relevant existing fields according to [each field's role](docs/business-design-structure.ja.md). Leave technical mechanisms to System Design.
@@ -143,7 +140,7 @@ Pass Code / Test, verification results, and evidence for material choices in the
 
 ### 6. Review in a separate context and separate follow-up
 
-In a new chat, make the design and implementation files accessible, identify their revisions and scope, and ask, “Review this completed implementation with Alder.”
+In a new chat, make the design and implementation files accessible, identify their revisions and scope, and ask, “Review the code with Alder.”
 
 The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
@@ -159,11 +156,11 @@ The skill reads **Business Design → Decision Records → implementation / DDL 
 
 ### Versions and plugin scope
 
-See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins unreleased 0.2.7 to a commit; client routing for the Authoring Skill has not been validated. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring skill. Use the [manual prompts](docs/adoption.md) without a plugin.
+See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins unreleased 0.2.8 to a commit. Bounded real-client checks confirmed short routing for Business Design authoring/review and code review under the tested client conditions. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring or Business Design review skill. Use the [manual prompts](docs/adoption.md) without a plugin.
 
 The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
 
-**Plugin 0.2.7 packages two skills: Business Design drafting/revision and read-only post-implementation review.** Description-quality/correlation/omission review, improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. Use reference documents and prompts to ask AI to perform those stages.
+**Plugin 0.2.8 packages three skills: Business Design drafting/revision, read-only Business Design review, and read-only post-implementation review.** Improvement proposals, Check Item drafting, graph export, and follow-up are not packaged skills. Use reference documents and prompts to ask AI to perform those stages.
 
 The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 
