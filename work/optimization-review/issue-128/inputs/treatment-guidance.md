@@ -75,25 +75,6 @@ Consider the following directions when they are relevant; they are lenses, not a
 
 When the Problem and Pain warrant it, briefly question whether the current Activity, its trigger, timing, unit of work or responsibility boundary must exist in its current form. An extreme alternative may reveal a different business model even if present constraints keep it from becoming a candidate. Restore those constraints before proposing a candidate. This is a light exploration heuristic, not a required sequence or a reason to enumerate every extreme. Stop when further variations add little information relative to their review cost.
 
-### Boundary decomposition (when useful)
-
-An extreme state can help discover a decision boundary. When a consequential candidate says “partly,” “some involvement,” or “as needed,” check whether that apparent degree combines decisions that can meaningfully vary separately. Decompose those decisions before comparing their compositions. Use 0/1 choices where the decision really is binary; keep amounts, durations, capacities and tolerances quantitative, with their units, constraints and unknowns.
-
-For example, “partly automate purchase reconciliation” may combine delegating quantity comparison, delegating amount comparison, and retaining human evidence-authenticity judgment. Compare those responsibilities separately while preserving each purchase's approval and evidence meaning. The approval amount remains a number; identifying whether its check is delegated does not replace that amount with a binary value. This is an illustration, not an assumption about the current Business Design.
-
-Add or subdivide a decision axis only when all four conditions hold:
-
-- **Problem relevance** — changing it affects a causal path to resolving the stated Problem.
-- **Grounding** — the axis itself has a traceable basis in the current Business Design, stated Problem, explicit facts, or a relevant relationship or gap observed in those inputs. A human-verifiable Unknown alone is not a basis for adding an axis.
-- **Independence** — its value can meaningfully change separately; it does not merely rename an existing axis.
-- **Decision impact** — the difference can materially change feasibility, composition, responsibility, Business meaning, Expected benefit or Difficulty.
-
-Independence does not make every combination valid. Record dependencies and exclude combinations that violate Business meaning or constraints before comparing materially distinct compositions. Do not enumerate all `2^n` combinations or turn the decomposition into a required sequence, axis inventory or candidate quota. An Unknown can ask about the feasibility, value or branch of an already grounded axis; it neither creates that axis nor establishes a fact or a feasible candidate. For example, the existing result-registration Activity can ground a result-source axis, with the availability of reusable purchase records left as an Unknown. Do not add external services, contract arrangements or adjacent work as new axes merely because people could check whether they exist; first identify their basis in the current inputs.
-
-Stop a branch when its axis lacks a basis in the current inputs, no further qualifying axis is found, subdivision would not change a decision, proceeding requires invented facts, Scope Expand cannot be justified from the Problem, or the information gained is small relative to Pain, Difficulty and review cost. A decision-changing Unknown about an already grounded axis may still be returned as a bounded question. Not finding another axis means the search stopped under the current context; it does not prove that no other axis exists.
-
-Explain only decision-relevant choices and dependencies in the existing candidate fields. Where it affects interpretation, briefly state the explored boundary and why exploration stopped. Additional context can reveal new axes. Compare candidates within the discovered dimensions, constraints and stated objectives; do not claim completeness, a global optimum, or a proved optimum or non-dominated set within that space without sufficient search evidence. If objectives conflict, expose the trade-offs for human judgment.
-
 For each useful candidate, evaluate:
 
 ### Scope
@@ -194,8 +175,6 @@ Return at most three useful candidates. Zero candidates is a valid result. Do no
 
 When the Problem and Pain justify it, briefly consider whether the current Activity, timing, unit of work or responsibility boundary is needed at all. Return to actual constraints before proposing candidates. Do not follow a fixed multi-step algorithm or generate weak variants to fill a quota. If a meaningfully different business model cannot become a candidate yet but would give people a useful question to investigate, report it separately under Extreme perspectives: the alternative model and its causal path to removing the Problem, why it is not a candidate, and the facts or human decisions needed to revisit it. Clearly label it as exploratory, not feasible or recommended. Omit this section when there is no useful perspective.
 
-When a consequential proposal uses an ambiguous degree such as “partly,” use the guidance's Boundary decomposition conditions to check whether it mixes separately variable decisions. Retain genuine quantities and constraint dependencies. Ground each axis in the current Business Design, Problem, explicit facts or an observed relevant relationship/gap, and require Problem relevance, meaningful independence and decision impact. Use Unknowns only to check an already grounded axis's feasibility, value or branches; verifiability alone must not generate axes for external services, contracts or adjacent work. Stop unsupported or low-information branches. Compare materially distinct compositions without exhaustive enumeration. Explain relevant choices in the existing fields and briefly state the search boundary/stop reason when needed. Do not claim an optimum or completeness from the discovered axes alone.
-
 For each candidate report:
 - Candidate
 - Relation to the Problem
@@ -236,6 +215,14 @@ The adopted behavior was evaluated on the existing purchase-request benchmark:
 - [Pain-isolation comparison](optimization-review/issue-82-pain-isolation.md) fixed a neutral Problem and ran High and Low twice each. Both High runs retained higher-difficulty investigation candidates; both Low runs stayed with narrower, lower-impact changes and explicitly stopped broader exploration.
 - [Issue #85 exploration](optimization-review/issue-85-followup.md) compared the existing purchase-request results with one extreme exploration and ran paired Fresh Control/Treatment reviews on facilities maintenance and meeting-room booking. The treatment exposed distinct alternative business models in all three, including ones that did not survive as candidates. The evidence supports returning a bounded perspective to people, not a claim of higher candidate quality or feasibility.
 
-- [Issue #128 boundary decomposition comparison](optimization-review/issue-128.md) retained the same candidate directions across three Control/Treatment cases while the treatment made independent choices and search boundaries explicit. Boundary decomposition clarifies the existing exploration; the trial does not establish superior discovery or measured non-inferiority.
-
 These are small qualitative evaluations, not measured proof of cost savings, optimal candidate count, general completeness, universal Pain behavior, or a causal improvement in candidate quality. The #85 purchase comparison used historical controls rather than a paired run. Candidate feasibility and expected benefit, and whether an extreme perspective is applicable, still require business evidence. Those evidence limits do not make Optimization Review experimental; they bound the claims Alder makes about the adopted workflow.
+
+## Boundary decomposition trial
+
+Use extreme states as a way to find decision boundaries, not to fill a list. When a consequential proposal says partly, some involvement, or as needed, first check whether it combines independently variable decisions. Decompose when this changes feasibility, causal path, responsibility, Business meaning, benefit or Difficulty. Do not force genuinely quantitative values (amount, duration, capacity, tolerance) into binary decisions; retain their units, bounds and unknowns. Two binary axes may be independently meaningful while constraints prohibit some combinations; record those dependencies rather than assuming all combinations work.
+
+Add an axis only if all four hold: it causally relates to the stated Problem; it is grounded in Business Design, explicit facts, or a specific human-verifiable Unknown; its value can vary meaningfully rather than merely rename an existing axis; and it materially changes a candidate decision. A verifiable Unknown permits a conditional question, not an invented fact or a feasible-candidate claim.
+
+Stop finding/decomposing axes when no qualifying axis is found, further subdivision would not change a decision, a branch requires invented facts, Scope Expand cannot be justified from the Problem, or added information is too small relative to Pain, Difficulty and review cost. Stop that unsupported branch; a decision-critical Unknown may still be returned as a bounded question. Do not enumerate all 2^n combinations. Remove constraint-violating combinations, compare materially different compositions, and keep at most three final candidates. Zero is valid.
+
+Explain only decision-relevant decomposed judgments and dependencies in the existing candidate fields, plus a brief search boundary and stop reason when needed to understand the result. Do not expose an exhaustive axis inventory. Comparing discovered dimensions does not prove even a local optimum without sufficient objectives and search evidence. Where objectives conflict, return trade-offs; do not claim global optimality, completeness or proven non-dominance of unsearched combinations. People still choose and approve Business changes.
