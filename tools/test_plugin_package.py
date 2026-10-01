@@ -47,6 +47,7 @@ class PluginPackageTest(unittest.TestCase):
         review_skill = (SKILL / "SKILL.md").read_text()
         self.assertIn("interview notes", author_skill)
         self.assertIn("Write only the requested Business Design file(s)", author_skill)
+        self.assertIn("Alder plugin 0.2.8", author_skill)
         self.assertIn("Review only; do not edit product files", review_skill)
 
     def test_business_design_review_sources_are_bundled_without_drift(self):
