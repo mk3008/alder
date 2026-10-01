@@ -10,7 +10,7 @@ Business Design is a shared language written in natural language with defined fi
 
 ## Install / Setup
 
-Prepare Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
+Prepare an account and environment that let you use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
@@ -94,19 +94,16 @@ In the target project's chat, provide interview notes or requirements and ask, â
 
 ### 2. Review and agree with users
 
-Give the chat the full Business Design Markdown and the [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) guidance, then send a request like this. Replace the angle-bracketed fields for your target.
+Give the chat the full Business Design Markdown and the [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) guidance, then send a request like this.
 
 ```text
-Review the Business Design using the supplied description-quality and correlation guidance.
-Target: <Business Design path>
-Revision: <target revision>
-Scope: <work and responsibility boundaries to check>
-Agreed decisions: <content or reference, or none>
-Report finding locations, evidence, and proposed corrections; separate questions needing human business decisions.
-Keep this review read-only: do not change files or decide unresolved business rules.
+Review this Business Design for description quality and business correlations.
+Report problem locations, evidence, and proposed corrections.
+Separate matters requiring human business decisions.
+Keep this review read-only and do not decide unresolved business rules.
 ```
 
-People answer questions about responsibility, conditions, exceptions, and guarantees, then update the design and review again. **The user-agreed revision is SSOT.** Write quality requirements in the existing fields they constrain, without adding a separate Quality field. Leave technical mechanisms to System Design.
+People answer questions about responsibility, conditions, exceptions, and guarantees, then update the design and review again. **The user-agreed revision is SSOT.** Do not add fields for quality requirements; write them in the relevant existing fields according to [each field's role](docs/business-design-structure.ja.md). Leave technical mechanisms to System Design.
 
 ### 3. Draft Checks and have people confirm expectations
 
