@@ -8,7 +8,7 @@
     "com.openai": {
       "interface": {
         "displayName": "Alder",
-        "shortDescription": "Draft/review Business Design and review implementation",
+        "shortDescription": "Design and code review",
         "developerName": "mk3008",
         "category": "Productivity",
         "capabilities": [
@@ -18,8 +18,7 @@
         "defaultPrompt": [
           "このヒアリング結果をAlder業務設計書にして",
           "業務設計書をAlderでレビューして",
-          "コードをAlderでレビューして",
-          "実装が終わったのでAlderレビューして"
+          "コードをAlderでレビューして"
         ]
       }
     }
