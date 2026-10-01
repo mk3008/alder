@@ -1,12 +1,12 @@
-# Alder — Talk with users through Business Design
+# Alder — Talk with requesters through Business Design
 
 English | [日本語](README.ja.md)
 
-**Turn agreed business work into a working system.**
+**Turn business work agreed on with requesters into a working system.**
 
-Alder is a workflow for organizing business requirements into **Business Design that users can read and agree on**, then connecting it to Check Items, code, and tests. You can confirm the work to build with users before delegating implementation to AI.
+Alder organizes a requester's requirements into **Business Design** as a shared language for the requester, designer, and AI to share business meaning. Business Design agreed on by the requester and designer serves as **the source of truth (SSOT) for business intent** and connects to Check Items, code, and tests.
 
-Business Design is a shared language written in natural language with defined fields. **People approve business intent; Business Design is the source of truth (SSOT).** No framework or runtime package is required.
+No framework or runtime package is required.
 
 ## Install / Setup
 
@@ -67,11 +67,11 @@ Counter
 Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
 ```
 
-Starting from this Business Design, you can check description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
+Starting from this Business Design, you can check Business Design description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
 
 ## Standard workflow
 
-Alder can be used to analyze existing work and explore hypotheses for new work. Through Business Design, you can align understanding with users and check whether the connected activities can operate coherently.
+Alder can be used to analyze existing work and explore hypotheses for new work. Through Business Design, you can align understanding with requesters and check whether the connected activities can operate coherently.
 
 | Stage | What to ask AI to do | What people confirm or decide |
 | --- | --- | --- |
@@ -90,9 +90,9 @@ The Authoring Skill provides drafting; the Review Skill provides post-implementa
 
 In the target project's chat, provide interview notes or requirements and ask, “Draft an Alder Business Design in `docs/business-design/`.” People confirm source facts and unresolved questions, answer them, and revise the same document.
 
-**You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
+Business Design is written in natural language with defined fields. **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
 
-### 2. Review and agree with users
+### 2. Review and agree with requesters
 
 Give the chat the full Business Design Markdown and the [description-quality](docs/business-design-quality-check.ja.md) and [correlation](docs/business-design-correlation-check.ja.md) guidance, then send a request like this.
 
@@ -103,7 +103,7 @@ Separate matters requiring human business decisions.
 Keep this review read-only and do not decide unresolved business rules.
 ```
 
-People answer questions about responsibility, conditions, exceptions, and guarantees, then update the design and review again. **The user-agreed revision is SSOT.** Do not add fields for quality requirements; write them in the relevant existing fields according to [each field's role](docs/business-design-structure.ja.md). Leave technical mechanisms to System Design.
+People answer questions about responsibility, conditions, exceptions, and guarantees, then update the design and review again. **The revision agreed on by the requester and designer is SSOT.** Do not add fields for quality requirements; write them in the relevant existing fields according to [each field's role](docs/business-design-structure.ja.md). Leave technical mechanisms to System Design.
 
 ### 3. Draft Checks and have people confirm expectations
 
