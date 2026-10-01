@@ -67,7 +67,7 @@ Counter
 Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
 ```
 
-This structure has a purpose. See [document structure](docs/business-design-structure.ja.md) for the reasons. Continue to [Standard workflow](#standard-workflow) for the steps from design to implementation.
+Starting from this Business Design, you can check description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
 
 ## Standard workflow
 
