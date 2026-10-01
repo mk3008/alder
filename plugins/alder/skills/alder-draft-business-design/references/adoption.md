@@ -2,7 +2,7 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-[Alder Plugin 0.2.6](plugin-adoption.md) packages Business Design drafting/revision from interview notes and a separate read-only post-implementation review skill. The stable `plugin-v0.1.0` tag provides review only. Install the appropriate version once; with Business Design at `docs/business-design/`, a new chat can use a short authoring or review request. Optimization Review, Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
+[Alder Plugin 0.2.8](plugin-adoption.md) packages Business Design drafting/revision, read-only Business Design review, and read-only post-implementation review. The stable `plugin-v0.1.0` tag provides implementation review only. Install the appropriate version once; with Business Design at `docs/business-design/`, a new chat can use short authoring or review requests. Optimization Review, Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
