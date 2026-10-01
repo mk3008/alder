@@ -4,7 +4,7 @@ English | [日本語](README.ja.md)
 
 **Turn business work agreed on with requesters into a working system.**
 
-Alder organizes a requester's requirements into **Business Design** as a shared language for the requester, designer, and AI to share business meaning. Business Design agreed on by the requester and designer serves as **the source of truth (SSOT) for business intent** and connects to Check Items, code, and tests.
+Alder organizes a requester's requirements into **Business Design**, the shared language for the requester, designer, and AI, and uses the content agreed on by the requester and designer as **the source of truth (SSOT) for business intent** to connect it to Check Items, code, and tests.
 
 No framework or runtime package is required.
 
