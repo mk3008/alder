@@ -210,6 +210,7 @@ The review:
 - judges Difficulty from affected roles, authority, Activities, systems, departments, external parties and contracts rather than code size
 - preserves existing Business meaning unless people explicitly decide to change it
 - allows zero useful candidates and does not count a restatement of the current Business Design as an optimization
+- can clarify consequential “partial” proposals through [boundary decomposition](optimization-review.md#boundary-decomposition-when-useful), keeping separately variable responsibilities and genuine quantities distinct, and stopping when further exploration cannot change a grounded decision
 - when the Problem warrants it, can return a few explicitly exploratory **Extreme perspectives** separately from candidates, so people can revisit a different business model if missing facts or business decisions become available
 
 Return at most a few useful alternatives; the current guide uses a maximum of three for one Problem. Do not choose a winner. People decide whether a candidate is worth adopting.
