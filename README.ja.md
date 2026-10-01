@@ -1,83 +1,189 @@
-# Alder
+# Alder — 依頼者と、業務設計書で話そう
 
 [English](README.md) | 日本語
 
-**設計書の抜けは、実装から見つける。**
+**依頼者と合意した業務を、動くシステムへ。**
 
-Alderは、誰が、いつ、何を受け取り、何を成果として渡すかを記述した**業務設計**をもとに、AIエージェントが実装し、別のエージェントや新しいセッションでレビューする開発の流れを研究しています。実装で具体化された業務上の意味が設計のどこから来たのかをさかのぼり、抜けや未決事項を人間が判断できる問いに絞り込みます。すべての業務判断が決まる前でも、コーディングを始められます。
+Alderは、依頼者の要求を、依頼者・設計者・AIの共通言語となる**業務設計書（Business Design）**に整理し、依頼者と設計者が合意した内容を**業務上の正本（SSOT）**として、検査項目・コード・テストへつなげます。
 
-要求の妥当性確認、ウォークスルー、要求と実装を双方向にたどること、判断記録、人間による判断といった既存のソフトウェア工学の手法を、AIで繰り返し使うために組み合わせます。新しい設計理論やアーキテクチャを提案するものではありません。
+フレームワークや実行時パッケージは不要です。
 
-**業務上の意図を定め、承認するのは人間。実装はAIが行い、別のAIがレビューする。未決の業務判断だけを人間に戻す。**
+## 導入する
 
-## プロダクトで始める
-
-**Alder Plugin（実装後レビュー）:** publicなAlder GitHub repositoryからversion `0.1.0`を一度インストール・有効化し、新しいチャットを開始します。業務設計書をプロダクト側に置いて「実装が終わったのでAlderレビューして」と依頼するだけで利用できます。現在の安定GitHub配布はtag `plugin-v0.1.0` で固定し、公開Plugins Directoryへの掲載は将来の別配布工程として扱います。標準の `docs/business-design/` を使う場合、Alder専用のプロジェクト設定は不要です。Pluginはreview knowledge v0.3を同梱し、短い自然言語からSkillを選択してBusiness Designを探索し、read-onlyでレビューして使用版と対象revisionを結果に記録します。初期の実クライアント検証では、従来手順との限定Fresh A/Bでも意味上同等の結論を確認しました。
+ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIと、Plugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行し、Alderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.1.0
+codex plugin marketplace add mk3008/alder --ref 35dd2cec2fb173785f730a5c08d15c7fdfa85598
 ```
 
-[Pluginの導入手順](docs/plugin-adoption.md)を参照してください。ほかのワークフローは従来の[導入ガイド](docs/adoption.md)を使います。
+コマンド実行後、ChatGPTデスクトップアプリを再起動し、Plugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後、新しいチャットを開始してください。
 
-### 手動・参照用の手順
+## まず使ってみる
 
-新規導入時は次の配置を推奨します。既存プロジェクトに相当する配置があれば、そのまま使えます。
+業務ヒアリングから業務設計書を作るには、新しいチャットで次のプロンプトを送ってみてください。
 
 ```text
-product/
-  AGENTS.md
-  docs/
-    business-design/
-      ...
-    decisions/
-      ...
-    alder/
-      review-knowledge.md
-  src/
-  tests/
+このヒアリング結果をAlder業務設計書にして。
+
+対象は登録済みの地域住民です。
+返却時は窓口で番号と付属品を照合して返却日時を記録します。
+貸出の受渡しは署名と引き渡しの記録、返却の受領は照合と返却日時の記録で確認します。
+返却された組は整備担当の点検を待ちます。
 ```
 
-1. 現在の業務設計を `docs/business-design/` に、選んだAlderバージョンのレビュー知識のローカルコピーを `docs/alder/review-knowledge.md` に置く。
-2. 今回の未リリース版では、業務設計を合意し、検査項目を人間がレビューしてから両方を実装へ引き渡す。ここで標準設計業務が完了する。v0.5/v0.5.1当時、検査項目の工程は任意だった。
-3. AGENTS.mdやタスクのプロンプトで参照先を案内する。AIに確認済みの業務設計と検査項目を読ませて実装させ、重要な前提・判断と理由を後続のAlderフォローアップへ渡す。未決の業務ルールは勝手に決めず、通常の可逆的な技術判断は進める。
-4. 実装後、別のAIエージェントや新しいセッションへレビュープロンプトを渡す。`docs/alder/review-knowledge.md` を使い、**業務設計 → 判断記録 → 実装・DDL・テスト**の順に読む。フォローアップでCheck ↔ Test/assertionの対応を確認して保守する。
-5. 未決の業務判断だけを人間に戻す。
+次のような構造化された業務設計書が得られます。
 
-現行業務の関係が確認済みの業務設計書では、任意の[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)によって、Problemと決めずに再検討の問いを少数提示できます。人間が具体的な**困っていること（Problem）**と**困っているレベル（Pain level）**を確認した場合に、既存の[Optimization Review](docs/optimization-review.md)で代替業務案を検討します。変更を決めるまでは現行の業務上の意味を維持し、採用時はBusiness Designを先に更新します。
+```markdown
+# Activity 工具の返却受付
 
+## When
 
-Alderは業務上の品質要求を省略するのではなく、**独立したQuality欄へ隔離しません**。依頼者が求める期限、業務継続、再実行時の不変条件、権限、追跡可能性などは、それが制約する既存のProcedure / Exception / Result / Who / Object.Information等へ業務意味として記述します。Multi-AZ、暗号方式、DB、冗長構成などの実現方式はSystem Design側で決めます。具体的な配置は[業務品質要求の記述指針](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work)を参照してください。
+住民が貸し出された工具を返却するとき。
 
-この配置やレビュー知識のローカルコピーは必須ではありません。業務設計と実装は同じリポジトリを推奨しますが、同じ作業環境から既知のパスとリビジョンで参照できれば別リポジトリでも構いません。レビュー知識も、読める状態にあるバージョン固定のGitHub URLや、作業環境内のAlderのチェックアウトを使えます。
+## Who
 
-Alderでは、詳細設計を実装前の独立した必須工程とはしていません。技術的な詳細をすべて事前に決め切る必要もありません。変更しやすい技術判断は実装とともに具体化して実装後にもレビューし、後からの変更が難しい判断は必要な範囲で事前に設計します。従来なら先に決めがちな言語、インフラ、外部サービス、内部構造、アーキテクチャをどう扱うかは[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
+窓口
 
-**Alderは、アーキテクチャの形式や構造を導入する時期を規定しません。** 実装を担当するAIには、業務設計、明示的な要求・制約、実際に予見している将来のリスクを具体的に伝え、実現方法を任せます。アーキテクチャの知識はその判断に使えますが、形式の名前だけでは要求の代わりになりません。
+## How
 
-技術候補を比較するときは、**測る前に推論します。** 要求、リスク、規模、実行時の振る舞い、既存の根拠から、結論を変え得る不確実性へ検証を集中します。任意の評価には上限と停止条件を持たせ、プロダクトがより深い最適化を明示的に求めていないなら、十分な根拠のある妥当解で止めます。数値目標がないことだけを理由に、人間へ確認を戻す必要はありません。
+### Input
 
-[Alder Pluginの導入へ（英語）→](docs/plugin-adoption.md) · [手動の導入手順と参照用プロンプトへ（英語）→](docs/adoption.md)
+- 登録済み地域住民 — 返却する工具と付属品
+- 貸出・返却の記録 — 貸し出した備品番号と引渡しの記録
+
+### Procedure
+
+1. 窓口は貸し出した番号と返却された現物の番号・付属品を照合し、返却日時を記録する。記録媒体は未確認。
+2. 返却された組は整備担当の点検を待つ。具体的な引渡し方法は未確認。
+
+### Output
+
+- 貸出・返却の記録 — 照合結果と返却日時の記録
+- 団体の工具 — 返却され点検を待つ組
+
+## Result
+
+番号と付属品の照合および返却日時の記録により受領が確認され、組は整備担当の点検を待つ。
+```
+
+この業務設計書を起点に、業務設計書の記述品質・業務間のつながり・考慮漏れを確認し、合意した業務からCheck Itemを作ってコードとテストへつなげられます。具体的な流れは[標準的な使い方](#標準的な使い方)、各項目の意味と構造の理由は[文書構造](docs/business-design-structure.ja.md)を参照してください。
+
+## 標準的な使い方
+
+Alderは、既存業務の分析と新しい業務の仮説に使えます。業務設計書を通じて依頼者と認識を合わせ、一連の仕事が成立するかを確かめられます。
+
+| 工程 | AIに依頼すること | 人間が確認・判断すること |
+| --- | --- | --- |
+| Authoring | ヒアリングや要求からBusiness Designを作成・改訂 | 入力事実と草案が合うか。未決の業務条件への答え |
+| Business Design review | 業務設計書の記述品質と業務間のつながりをレビューし、必要に応じて考慮漏れも確認 | 仕事の意味、責任、例外、保証への合意 |
+| Check Item | 合意した業務から検査すべき期待結果を作成 | 期待結果を確認し、要確認・要修正の項目を判断 |
+| System Requirements | 既存制約と技術条件を整理 | 先に守るべき制約、費用や変更リスク、技術上の希望 |
+| Implementation | 合意したBusiness Design / Check Itemと技術条件からCode / Testを作成 | 未決の業務判断が生じた場合に回答 |
+| post-implementation review | 別エージェントや新しいコンテキストで読み取り専用レビュー | 未決の業務判断への回答。別のfollow-upで設計・実装・対応関係を更新 |
+
+標準の設計業務は、**業務設計書の合意とCheck Itemの人間レビューを経た実装への引き渡し**で完了します。その後は、実装・独立レビュー・follow-upの開発ループへ進みます。
+
+Alder Pluginは、業務設計書の作成・レビューと実装レビューを短い依頼から実行できます。Check ItemやSystem Requirementsなど、ほかの手順では下記の参照文書を使います。
+
+### 1. 草案を作り、質問に答える
+
+対象プロジェクトのチャットへヒアリングや要求を渡し、「Alder業務設計書の草案を `docs/business-design/` に作って」と依頼してください。人間は入力事実と未決の問いを確認し、回答を返して同じ文書を改訂します。
+
+業務設計書は、自然言語を決まった項目に沿って書きます。**書式を暗記する必要はありません**。Skillが5W1HのHowをInput / Procedure / Outputへ分け、必要なExceptionと正常終了後のResultを整理します。たとえば予約結果の通知はOutput、予約が成立した状態はResultです。生成された草案を読んで、実際の仕事と合うかを確かめてください。
+
+### 2. 業務設計をレビューし、依頼者と合意する
+
+対象の業務設計書を参照できるチャットで、次のように依頼してください。
+
+```text
+業務設計書をAlderでレビューして
+```
+
+人間は責任、条件、例外、保証への問いに答え、設計を更新して再レビューします。**依頼者と設計者が合意した版が正本**です。品質要求のために項目を増やさず、[各項目の役割](docs/business-design-structure.ja.md)に沿って関係する既存項目へ書いてください。技術的な実現手段はSystem Designへ分けてください。
+
+### 3. Check Itemを作り、人間が期待結果を確認する
+
+合意した設計と[検査項目の作成・保守](docs/check-item-traceability.md)をAIへ渡し、独立して確認できる期待結果ごとにCheck Itemを作らせてください。たとえば「同時申込みでも重複予約が成立しない」を、条件と期待結果の組として確認してください。
+
+人間が`未レビュー / 要確認 / 確認済み / 要修正`を判断し、未決の業務条件は設計へ戻します。**確認済み項目と未確認候補を区別して引き渡せれば完了**です。
+
+**なぜTest成功だけでは業務承認にならないか：** Testは書かれた期待値と実装を照合します。その期待値が依頼者の望む業務かは人間が確認するため、レビュー状態とTest根拠は別に扱います。
+
+### 4. 先に守る制約をSystem Requirementsとして伝える
+
+人間が既存制約と希望を伝え、AIに実装で守る技術条件を整理させます。技術検討の詳細はプロダクト側で進めます。
+
+| 先に伝えるもの | 実装へ委譲できるもの |
+| --- | --- |
+| 既存インフラ・DB/schema、必須クラウド/外部サービス、公開API、移行・互換性、安全性・法的義務 | 変更しやすいクラス/関数分割、内部モジュール、命名 |
+| 保守体制・既存資産・好みなど、言語や主要製品を指定する理由 | 制約や希望がなければ技術の選択も委譲可能 |
+
+**なぜ全技術判断を先に決めないか：** 変更しやすい選択は実装時に具体化できます。先に必要なのは、守るべき性質・制約と変更リスクです。
+
+**なぜ詳細設計を独立必須工程にしないか：** 詳細はDDL・SQL・Code / Testと一緒に具体化し、レビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計してください。[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
+
+### 5. 合意した設計とCheck ItemをAIへ渡す
+
+設計の版、確認済みCheckのID、技術条件、今回の範囲を指定して依頼してください。実際の配置に合わせてパスを置き換えてください。
+
+```text
+確認済みの docs/business-design/meeting-room.md と
+docs/checks/meeting-room.md、プロダクトの技術要件を読み、
+今回合意した範囲のコードと実行可能なテストを作成・更新してください。
+既存の開発ルールに従い、確認済みCheckの条件と期待結果を検証してください。
+未決の業務判断は人間へ問いとして戻し、独立して進められる作業は続けてください。
+重要な前提・判断と理由を、別コンテキストのレビューへ引き継いでください。
+```
+
+合意済み範囲のCode / Test、検証結果、重要な判断の根拠を次のレビューへ渡してください。未決の取消期限をTestの期待値にせず、独立した予約処理は進められます。
+
+### 6. 別コンテキストでレビューし、対応を分ける
+
+新しいチャットで設計・実装のファイルを参照できるようにし、版と範囲を指定して「コードをAlderでレビューして」と依頼してください。
+
+Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、ファイルを変更せず、根拠・業務への影響・分類・必要な確認を報告します。人間は未決の業務判断だけに答え、別follow-upで意味が変わるなら業務設計書を先に更新・再合意し、Code / Testを合わせます。
+
+**人間が指摘への対応とCheck ↔ Test/assertionの根拠を確認して、実装変更の受入れを判断します**。[follow-upと追跡の詳細](docs/check-item-traceability.md)を参照してください。
+
+## 必要に応じて使う
+
+- **見直す関係を探す：** 確認済みの業務関係から、[Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known)で問いを探せます。構造だけからProblemを認定することはできず、専用のStructural Optimization工程はありません。
+- **具体的な困りごとを改善する：** 人間が確認したProblem / Pain levelを記録し、[Optimization Review](docs/optimization-review.md)で候補を比較してください。採用は人間が決め、[業務設計書の更新・再合意](docs/business-design-improvement.ja.md)を先に行います。
+- **業務を可視化・解析する：** 任意の[Business Graph JSON v1 / CLI](docs/business-graph.md)を使えます。JSONは中間形式で、業務設計書が正本です。未承認の改善候補は投影しません。
 
 ## 詳しく読む
 
+### 版とPluginの提供範囲
+
+版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.8を固定commitで指定しています。実クライアントでは、業務設計書の作成・レビューとコードレビューの短文routingを確認済みです。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成・業務設計書レビューSkillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
+
+標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。手動作成でも文書構造と導入ガイドをAIへ渡してください。
+
+**Plugin 0.2.8の同梱Skillは、Business Designの作成・改訂、Business Designの読み取り専用レビュー、実装後の読み取り専用レビューの三つ**です。改善提案、Check Item作成、Graph出力、follow-upは同梱Skillではありません。これらは参照文書とプロンプトでAIへ依頼してください。
+
+現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
+
+### 目的別の文書
+
 | 知りたいこと | 文書 |
 | --- | --- |
-| 一度のPlugin導入と短い実装後レビュー依頼 | [Alder Plugin（英語）](docs/plugin-adoption.md) |
-| 初期Plugin検証、Fresh A/B比較、残る限界 | [Issue #86検証記録（英語）](docs/plugin-poc-evaluation.md) |
-| 作業環境、業務設計の形式、AGENTS.mdでの参照先の案内、プロンプト、SQL関連ツールとの併用 | [導入ガイド（英語）](docs/adoption.md) |
-| Alderにおけるデータモデリング、業務側の構造要求、DB制約の位置づけ | [データモデリング](docs/data-modeling.ja.md) |
-| 実装を要求の妥当性確認に使う理由、推論、DDDやアーキテクチャとの関係 | [設計思想（英語）](docs/philosophy.md) |
-| レビューの観点・手順・適用範囲・止める条件 | [レビュー知識 v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| Problem / Pain / Scope / Difficultyを使って業務の代替案を検討するレビュー | [Optimization Review（英語）](docs/optimization-review.md) |
-| Check・Testを確定する前に未記載の機能条件を人間へ返す任意工程 | [考慮漏れ検証](docs/behavior-derivation/functional-considerations.md) |
-| 必須の検査項目設計と人間レビュー、AIによる業務設計・Check Item・Testの対応関係の保守 | [Check Item traceability（英語）](docs/check-item-traceability.md) |
-| 検討済みの仮説、採否、主要な既存工学上の由来、適用限界と再検討条件 | [研究判断の索引（英語）](docs/research-decisions.md) |
-| 研究の根拠を利用者向け説明へ反映する基準と、安全な追試記録の扱い | [研究成果の公開方針（英語）](docs/research-publication.md) |
-| 検証の根拠と限界、今後の問い、過去の研究 | [検証記録（英語）](docs/validation.md) |
+| ヒアリングと草案の記述例 | [ヒアリング](work/structural-discovery/issue-99/customer-transcript.md) / [草案](work/structural-discovery/issue-99/design/v4.md) |
+| 業務の記述例 | [予約受付](docs/examples/meeting-room-reservation.ja.md) / [予約・取消](docs/examples/meeting-room-lifecycle.ja.md) |
+| 各欄の意味、見出し順、参照書式 | [文書構造](docs/business-design-structure.ja.md) / [欄の説明](docs/adoption.md#business-design-format) / [品質要求の配置](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
+| 設計レビューの事例と根拠 | [レビュー事例](docs/business-design-review.ja.md) / [記述品質の根拠](docs/business-design-quality-review.md) / [考慮漏れ探索](docs/behavior-derivation/functional-considerations.md) |
+| 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
+| Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) |
+| 文書配置、手順、コピーして使うプロンプト | [導入ガイド](docs/adoption.md) |
+| 詳細設計と技術判断のタイミング | [詳細設計の位置づけ](docs/detailed-design.ja.md) / [判断例](docs/philosophy.md#where-detailed-design-fits) |
+| データ構造要求とDB制約の扱い | [データモデリング](docs/data-modeling.ja.md) / [英語](docs/data-modeling.md) |
+| 業務改善の観点と採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) / [購買改善の提案例](docs/examples/purchase-improvement.ja.md) |
+| Checkの粒度、レビュー状態、Testとの対応 | [検査項目の作成・保守](docs/check-item-traceability.md) |
+| 実装レビューの観点と止める条件 | [レビュー知識v0.3](docs/phase2/review-knowledge-v0.3.md) |
+| JSON契約とexporter | [Business Graph](docs/business-graph.md) |
+| Alderを使った業務の責任範囲 | [Alder自身の業務設計書](business-design/alder/README.md) |
+| 根拠を説明へ反映する基準と安全な追試記録 | [研究成果の公開方針](docs/research-publication.md) |
+| 思想、採用判断、検証範囲と限界 | [設計思想](docs/philosophy.md) / [研究判断](docs/research-decisions.md) / [検証記録](docs/validation.md) |
 
-**Alder v0.6** では、Problem起点のOptimization Reviewを正式なワークフロー能力として追加しつつ、恒久的なtraceabilityは **Business Design ↔ Check Item ↔ Test** のままです。リリース済みv0.6では検査項目の作成と追跡関係の保守は任意ですが、**今回の未リリース版**で、検査項目の設計と人間レビューを実装への引き渡し前の必須工程に変更します。標準設計業務は引き渡しで完了し、実装後の別運用であるAlderレビューとフォローアップがTestの期待結果を確認し、Check ↔ Test/assertionの対応を保守してから実装変更を受け入れます。Testは実行によってCodeを検証し、Check Item ↔ Code の物理位置mappingは持ちません。研究候補の**レビュー知識 v0.3**も変更していません。Alder全体は引き続き研究候補ですが、Optimization Review自体はadoptedです。[v0.6リリースノート（英語）](docs/release-notes-v0.6.md)も参照できます。フレームワーク、CLI、実行時パッケージの導入は不要です。
+### 質問・改善提案
 
-## 外部ツール向けBusiness Graph export（任意）
-
-[Alderを使った設計業務のBusiness Design](business-design/alder/README.md)を、外部ツールで可視化・解析・加工したい場合は、業務設計や依頼者レビュー、設計者のセルフレビュー時に任意でJSONへ投影できます。BusinessとObjectのScopeは、それぞれ原文で明示した真偽値を投影し、Objectの内外を接続の向きから推測しません。JSONは中間形式であり、標準Business Activityや依頼者への成果物ではありません。利用や生成ファイルのcommitは標準設計業務の完了条件ではなく、このリポジトリの生成例はexporterの回帰用fixtureです。外部ツールで見つけた修正はSSOTであるBusiness Designへ反映します。Procedureは投影対象外です。[CLIの利用方法と形式](docs/business-graph.md)を参照してください。
+使ったAlderの版と、対象業務や確認したい点を添えて[GitHub Issues](https://github.com/mk3008/alder/issues)へお寄せください。
