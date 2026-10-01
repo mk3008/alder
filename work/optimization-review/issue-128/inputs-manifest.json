@@ -1,0 +1,11 @@
+{
+  "public_input_revision": "1aeb3ea71f354236c4bb1f1cd54e1f523fd51580",
+  "public_retrieval": "anonymous git fetch and connector fetch_file(protocol.md) confirmed before spawning",
+  "sha256": {
+    "inputs/composition.md": "5acdff6ca4af1b5579f09590f6dbcb85fb0fef4d9e733c26deb7a91d5ef7a2ba",
+    "inputs/control-guidance.md": "2d733b1470a9f1ef83524772b98c195ca6c870af751129f5aedaef16365592ac",
+    "inputs/purchase.md": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+    "inputs/treatment-guidance.md": "57514baf07ffa283aabe1eda58821ddda52d5d86aa2014f6c39f0cc2fc2f7e33",
+    "inputs/zero.md": "6b0fcc4fd0ad70aa83c6c229d46abd0f0ec17bef1890e629f46d903a83ff3445"
+  }
+}
