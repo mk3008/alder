@@ -30,6 +30,11 @@ class PluginPackageTest(unittest.TestCase):
         self.assertTrue((SKILL / "SKILL.md").is_file())
         self.assertFalse((PLUGIN / "mcp.json").exists())
 
+    def test_openai_listing_fields_fit_client_limits(self):
+        interface = json.loads((PLUGIN / "plugin.json").read_text())["extensions"]["com.openai"]["interface"]
+        self.assertLessEqual(len(interface["shortDescription"]), 30)
+        self.assertLessEqual(len(interface["defaultPrompt"]), 3)
+
     def test_authoring_sources_are_bundled_without_drift(self):
         provenance = json.loads((AUTHOR / "references/provenance.json").read_text())
         self.assertEqual(len(provenance["alder_source_revision"]), 40)
