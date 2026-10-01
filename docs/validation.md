@@ -59,6 +59,8 @@ The same evaluations also exposed useful stopping behavior: a restatement of the
 These are evidence boundaries for the adopted workflow, not a beta/candidate status. Candidate feasibility and Business changes still require human evidence and approval.
 
 
+[Issue #128](optimization-review/issue-128.md) compares the current guide with boundary decomposition on three synthetic cases. Both groups returned the same candidate directions (2 / 3 / 0); the treatment made separate choices, preserved quantitative thresholds and stated search boundaries. This supports clarifying the existing exploration without observed regression in these cases, not superior discovery, completeness, measured non-inferiority or reduced review time. The finalized integrated wording was not independently rerun.
+
 ## Next questions
 
 The optimal division between pre-implementation and post-implementation review, workflow integration, and low-cost regression checks remain research questions. Long-term maintainability, comprehension costs, and generalization of the architecture observations remain unvalidated.

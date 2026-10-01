@@ -1,0 +1,25 @@
+{
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_identifier": "/root/boundary_control",
+  "public_input_revision": "1aeb3ea71f354236c4bb1f1cd54e1f523fd51580",
+  "base_revision": "18af981bc00bd624ad7f791fff12ba172aad8f00",
+  "effective_settings_independently_attested": false,
+  "isolation": "instruction only; shared filesystem",
+  "full_prompt": "invocation.txt",
+  "permitted_inputs": [
+    "inputs/control-guidance.md",
+    "inputs/purchase.md",
+    "inputs/composition.md",
+    "inputs/zero.md"
+  ],
+  "prohibited_inputs": "all other files, history, Web/GitHub, protocol, other guidance/results, Issue/PR, evaluation",
+  "sha256": {
+    "invocation.txt": "2ece842c7c8869d730f2042a83cb2f1310b0528ee0cbfdf7d285010023d46ce8",
+    "raw.md": "e319a3b573bafbaaad2a7083e7e1d43edcbb004a3ca6f5993ad09552a5886bfc",
+    "read-log.json": "3cab298cb5360882a7140cf2ad871db1ce420ea771c00e895c1dbc1981f9d157"
+  },
+  "raw_characters": 4934,
+  "sensitive_output_check": "Synthetic/public inputs; raw and read-log inspected; no customer/person/credential/private URL content. Scratch paths identify execution location only."
+}
