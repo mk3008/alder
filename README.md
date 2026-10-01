@@ -10,7 +10,7 @@ Business Design is a shared language written in natural language with defined fi
 
 ## Install / Setup
 
-Prepare an account and environment that let you use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
+Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
@@ -76,7 +76,7 @@ Alder can be used to analyze existing work and explore hypotheses for new work. 
 | Stage | What to ask AI to do | What people confirm or decide |
 | --- | --- | --- |
 | Authoring | Draft/revise Business Design from notes or requirements | Fidelity to source facts; answers to unresolved business conditions |
-| Business Design review | Review description quality, correlations, and optionally omissions | Agreement on meaning, responsibility, exceptions, and guarantees |
+| Business Design review | Review Business Design description quality and connections between business activities; check for omissions when needed | Agreement on meaning, responsibility, exceptions, and guarantees |
 | Check Item | Derive observable expectations from the agreed work | Confirm expectations and resolve items needing clarification or correction |
 | System Requirements | Organize existing constraints and technical conditions | Constraints to preserve, cost/change risks, and technology preferences |
 | Implementation | Create Code / Test from agreed Business Design / Check Items and technical conditions | Answer unresolved business decisions if they arise |

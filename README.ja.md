@@ -10,7 +10,7 @@ Alderは、業務の要求を**ユーザーが読んで合意できる業務設�
 
 ## 導入する
 
-ChatGPT / Codexを利用できるアカウントと環境を用意してください。Alderの導入にはCodex CLIと、Plugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行し、Alderをインストールできる配布元（marketplace）を登録してください。
+ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIと、Plugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行し、Alderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref 5cafd5109fe1a2b1806d2007aaa4309952de9418
@@ -75,7 +75,7 @@ Alderは、既存業務の分析と新しい業務の仮説に使えます。業
 | 工程 | AIに依頼すること | 人間が確認・判断すること |
 | --- | --- | --- |
 | Authoring | ヒアリングや要求からBusiness Designを作成・改訂 | 入力事実と草案が合うか。未決の業務条件への答え |
-| Business Design review | 記述品質、業務相関、必要なら考慮漏れをレビュー | 仕事の意味、責任、例外、保証への合意 |
+| Business Design review | 業務設計書の記述品質と業務間のつながりをレビューし、必要に応じて考慮漏れも確認 | 仕事の意味、責任、例外、保証への合意 |
 | Check Item | 合意した業務から検査すべき期待結果を作成 | 期待結果を確認し、要確認・要修正の項目を判断 |
 | System Requirements | 既存制約と技術条件を整理 | 先に守るべき制約、費用や変更リスク、技術上の希望 |
 | Implementation | 合意したBusiness Design / Check Itemと技術条件からCode / Testを作成 | 未決の業務判断が生じた場合に回答 |
