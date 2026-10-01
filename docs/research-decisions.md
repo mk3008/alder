@@ -95,7 +95,7 @@ Limits: 証拠は単一Business Designの少数Fresh実行で、実際の工数�
 **Extreme perspectives — Optimization Review の任意の出力として採用。** [#85の3ベンチマーク比較](optimization-review/issue-85-followup.md)では、現行のActivityや処理単位を外した別モデルがTreatmentのraw出力に現れた。制約を戻した結果、最終Candidateに残らない案にも、人間が新しい事実から再探索できる問いとしての価値がある。そこで[Optimization Review](optimization-review.md)に軽い探索ヒューリスティックと候補から分けた任意の出力欄を加えた。必須の複数案生成や固定手順にはしない。比較は少数の単回出力で、Controlが同じ視点を将来生成できないこと、候補の品質改善、採用可能性や費用対効果は示していない。意味の薄い視点や過剰な出力量が続く場合は、欄の条件を見直す。
 
 
-**境界分解による探索定義 — 既存Optimization Reviewを明確にする任意規則として採用。** [#128比較](optimization-review/issue-128.md)では両群の3ケースが同じ構成に収束し、新規構成の優位はなかった。Treatmentは独立判断、数量の保持、探索境界と停止を明示し、意味保持・Unknowns・Extreme perspectives・Scope・最大3候補・0件を保った。採用根拠は性能優位ではなく、観測範囲でのnon-regressionと定義の精度。独自の数理手法とはせず、[正式ガイド](optimization-review.md#boundary-decomposition-when-useful)に軸追加の4条件、枝の停止、組合せ制約と最適性主張の限界を統合した。各群1 Fresh run、架空入力、非盲検評価で一般的な非劣性や実務効果は未証明。完成文言の別Fresh再実行もない。出力は約7.4%増え、レビュー時間は未測定。過分解、弱いUnknownの量産、既存候補の消失やレビュー負担増で再検討する。
+**境界分解による探索定義 — 既存Optimization Reviewを明確にする任意規則として採用。** [#128比較](optimization-review/issue-128.md)では両群の3ケースが同じ構成に収束し、新規構成の優位はなかった。Treatmentは独立判断、数量の保持、探索境界と停止を明示し、意味保持・Unknowns・Extreme perspectives・Scope・最大3候補・0件を保った。採用根拠は性能優位ではなく、観測範囲でのnon-regressionと定義の精度。独自の数理手法とはせず、[正式ガイド](optimization-review.md#boundary-decomposition-when-useful)に軸追加の4条件、枝の停止、組合せ制約と最適性主張の限界を統合した。レビューでUnknown単独から軸を増やせる文言の抜けを修正し、軸自体は現在Contextへ根拠づけ、Unknownはその値・分岐・実現可能性の確認に限定した。凍結したtrial文言より狭い規則で、既存rawの挙動との整合を確認したが、修正後の別Fresh実行はしていない。各群1 Fresh run、架空入力、非盲検評価で一般的な非劣性や実務効果は未証明。完成文言の別Fresh再実行もない。出力は約7.4%増え、レビュー時間は未測定。過分解、弱いUnknownの量産、既存候補の消失やレビュー負担増で再検討する。
 
 ## Review structure and checklists
 
