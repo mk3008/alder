@@ -63,7 +63,13 @@ If measured frequency, time, error rate, cost, or other evidence is available, i
 
 ## Review behavior
 
-Review only the area relevant to the Problem first. Do not optimize the whole Business Design merely because further changes are imaginable.
+First read the current Business Design as a whole and locate the stated Problem in the actual workflow, including relevant handoffs and responsibility boundaries. Then review only the area relevant to that Problem. Do not optimize unrelated work merely because further changes are imaginable. For an ambiguous request such as reducing cognitive burden, do not fix the target to the latest report or artifact before locating the real work that causes the burden.
+
+Distinguish documented work, observed burden and burden hypotheses. If the requested workflow is outside the source design's scope, name the gap and return a focused current-work confirmation; do not fill it with invented Activities. Software development, library development and maintaining Alder can be review targets when their actual workflow is described; they are not excluded merely because they develop software or the method itself.
+
+Ground each candidate in named current Activities and their actual work, judgment or handoff. Explain the change from the existing division of responsibility: work that is already delegated is not a new delegation candidate. A proposed new presentation or artifact may be a means of changing an existing exchange, but is not evidence that an equivalent task currently exists. Do not optimize a research-only intermediate artifact as if it were operational work.
+
+When reducing human burden, first distinguish work that can disappear, work that can be delegated, and business judgment that must remain. Consider presentation changes for the remaining judgment. Do not add a human approval for a correction uniquely determined by the agreed design; technical verification and business adoption are different. Preserve required meaning review. Questions should identify only the missing fact or business decision that can change the candidate; do not send people to re-establish facts the supplied sources already settle.
 
 Consider the following directions when they are relevant; they are lenses, not a checklist:
 
@@ -184,7 +190,7 @@ Optimization Review guidance: <readable path or versioned URL to docs/optimizati
 
 Read the relevant Business Design and the referenced Optimization Review guidance.
 
-Start from the stated Problem. Do not optimize unrelated Activities merely because improvements are imaginable. Treat Pain level as a proportionality signal for how far investigation and business-change difficulty are worth exploring; do not use a fixed Pain-to-Difficulty matrix.
+Follow the guidance's Review behavior: read the current workflow as a whole before locating the Problem, ground candidates in actual work and explain their difference from existing responsibilities. Do not optimize unrelated Activities merely because improvements are imaginable. Treat Pain level as a proportionality signal for how far investigation and business-change difficulty are worth exploring; do not use a fixed Pain-to-Difficulty matrix.
 
 Consider Eliminate, Simplify/Merge, Automate, Delegate and Preserve only when they help this Problem. Evaluate whether the useful scope should be Narrow, Keep or Expand, and explain why. Evaluate Difficulty from affected roles, authority, Activities, systems, departments, external parties, contracts or other responsibility boundaries, not from code size.
 
