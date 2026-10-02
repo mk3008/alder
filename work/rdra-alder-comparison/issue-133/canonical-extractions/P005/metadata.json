@@ -23,7 +23,23 @@
   "prepared_at": "2026-10-02T08:37:29.252718+00:00",
   "final_response_deviation": {
     "actual_final": "actual-final-response-001.md",
-    "description": "Child returned path/count summary despite dispatch requirement to return full JSON. Child-written raw-response.md contains canonical JSON; actual final was distinct. Pure output-return followup requested; no semantic correction."
+    "description": "Child returned path/count summary despite dispatch requirement to return full JSON. Child-written raw-response.md contains canonical JSON; actual final was distinct. Pure output-return followup requested; no semantic correction.",
+    "followup_completed": true,
+    "followup_final_returned_full_schema": true,
+    "followup_final_byte_identity_independently_verified": false,
+    "child_written_raw_remains_primary_extraction_body": true,
+    "post_followup_hashes": {
+      "canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+      "raw-response.md": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+      "read-log.jsonl": "3b44954327c60a2e484fefa3b68d925cb8f473a5af4e6e8c7e3a3a645634ed8c"
+    },
+    "prior_extraction_output_hashes": {
+      "canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+      "raw-response.md": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+      "read-log.jsonl": "3b44954327c60a2e484fefa3b68d925cb8f473a5af4e6e8c7e3a3a645634ed8c"
+    },
+    "output_rewrite_detected": false,
+    "size_discrepancy_resolution": "Initial about56KB was child estimate. Postfollowup files match prefollowup verify saved SHA256 exactly; no output rewrite detected."
   },
   "output_sha256": {
     "canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",

@@ -1,0 +1,60 @@
+{
+  "packet_id": "P035",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T08:59:08.218675+00:00",
+  "packet_sha256": "3b7bb292858ec0488a85fd5caee51f1898bdfb222da10d96d94a729803759d04",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "9f24048afcaa31ae69939bad2f12c621c31557de8d9f410b27a2615e0cdf1a82",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P035/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P035/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p035",
+  "prepared_at": "2026-10-02T08:56:37.852642+00:00",
+  "pre_final_output_checkpoint": {
+    "canonical.json": {
+      "sha256": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+      "bytes": 65635
+    },
+    "raw-response.md": {
+      "sha256": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+      "bytes": 65635
+    }
+  },
+  "final_response_deviation": "Child returned paths instead of instructed JSON body; immutable original final saved.",
+  "output_return_followup_requested_at": "2026-10-02T09:01:36.363082+00:00",
+  "output_sha256": {
+    "canonical.json": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "raw-response.md": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "read-log.jsonl": "c8d44c96db7a59b94cfce98ff7a9ff57a252b2fb4c566dc3e57d999f578fe7be"
+  },
+  "finished_at": "2026-10-02T09:04:54.693981+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T09:04:54.717270+00:00",
+    "canonical_raw_unchanged": true,
+    "final_payload_returned": true,
+    "generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:10:46.302287+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log and received final/message declarations. Procedural isolation only; no independent filesystem attestation."
+  }
+}

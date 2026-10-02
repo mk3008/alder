@@ -13,7 +13,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P002",
@@ -21,13 +23,15 @@
       "case": "C2",
       "replicate": 1,
       "stage": "s2",
-      "execution_status": "running",
+      "execution_status": "complete",
       "continuation_status": null,
-      "technical_complete": false,
-      "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
-      "canonical_status": "pending",
-      "reason": null
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C2/r1/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P003",
@@ -41,7 +45,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P003/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P004",
@@ -55,7 +61,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C5/r2/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P005",
@@ -69,7 +77,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P006",
@@ -82,8 +92,10 @@
       "technical_complete": true,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C2/r1/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P007",
@@ -97,7 +109,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P007/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P008",
@@ -111,7 +125,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C4/r2/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P009",
@@ -125,7 +141,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P010",
@@ -133,13 +151,15 @@
       "case": "C3",
       "replicate": 2,
       "stage": "s2",
-      "execution_status": "pending",
+      "execution_status": "running",
       "continuation_status": null,
       "technical_complete": false,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C3/r2/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P011",
@@ -153,7 +173,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P012",
@@ -161,13 +183,15 @@
       "case": "C2",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "running",
+      "execution_status": "complete",
       "continuation_status": null,
-      "technical_complete": false,
-      "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C2/r2/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P013",
@@ -175,13 +199,15 @@
       "case": "C3",
       "replicate": 1,
       "stage": "s1",
-      "execution_status": "pending",
-      "continuation_status": null,
-      "technical_complete": false,
+      "execution_status": "protocol_failed",
+      "continuation_status": "complete",
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C3/r1/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P014",
@@ -195,7 +221,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P014/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C5/r2/s2/manifest.json"
     },
     {
       "blind_id": "P015",
@@ -209,7 +237,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P015/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P016",
@@ -223,7 +253,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C4/r1/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P017",
@@ -237,7 +269,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P018",
@@ -251,7 +285,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P019",
@@ -265,7 +301,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P020",
@@ -279,7 +317,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P020/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C3/r2/s2/manifest.json"
     },
     {
       "blind_id": "P021",
@@ -293,7 +333,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P022",
@@ -301,13 +343,15 @@
       "case": "C2",
       "replicate": 2,
       "stage": "s2",
-      "execution_status": "pending",
-      "continuation_status": null,
-      "technical_complete": false,
+      "execution_status": "protocol_failed",
+      "continuation_status": "complete",
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C2/r2/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P023",
@@ -321,7 +365,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C5/r1/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P024",
@@ -335,7 +381,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P025",
@@ -349,7 +397,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P026",
@@ -363,7 +413,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P027",
@@ -377,7 +429,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P028",
@@ -390,8 +444,10 @@
       "technical_complete": true,
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P029",
@@ -404,8 +460,10 @@
       "technical_complete": true,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "continuation_pending",
-      "reason": null
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P030",
@@ -419,7 +477,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C4/r2/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P031",
@@ -433,7 +493,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P032",
@@ -447,7 +509,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P033",
@@ -455,13 +519,15 @@
       "case": "C3",
       "replicate": 1,
       "stage": "s2",
-      "execution_status": "pending",
+      "execution_status": "complete",
       "continuation_status": null,
-      "technical_complete": false,
-      "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C3/r1/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P034",
@@ -475,7 +541,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P034/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P035",
@@ -488,8 +556,10 @@
       "technical_complete": true,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C1/r2/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P036",
@@ -503,7 +573,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P037",
@@ -517,7 +589,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P037/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P038",
@@ -530,8 +604,10 @@
       "technical_complete": true,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "success",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C1/r1/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P039",
@@ -545,7 +621,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P039/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P040",
@@ -559,7 +637,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P040/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C5/r1/s2/manifest.json"
     },
     {
       "blind_id": "P041",
@@ -567,13 +647,15 @@
       "case": "C3",
       "replicate": 1,
       "stage": "s3",
-      "execution_status": "pending",
+      "execution_status": "prepared",
       "continuation_status": null,
       "technical_complete": false,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P041/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C3/r1/s2/manifest.json"
     },
     {
       "blind_id": "P042",
@@ -581,13 +663,15 @@
       "case": "C3",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "pending",
+      "execution_status": "running",
       "continuation_status": null,
       "technical_complete": false,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C3/r2/s1/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P043",
@@ -595,13 +679,15 @@
       "case": "C2",
       "replicate": 1,
       "stage": "s3",
-      "execution_status": "pending",
+      "execution_status": "success",
       "continuation_status": null,
-      "technical_complete": false,
-      "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P043/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C2/r1/s2/manifest.json"
     },
     {
       "blind_id": "P044",
@@ -609,13 +695,15 @@
       "case": "C2",
       "replicate": 2,
       "stage": "s3",
-      "execution_status": "pending",
+      "execution_status": "success",
       "continuation_status": null,
-      "technical_complete": false,
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "source_clean_exploratory_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P044/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C2/r2/s2/manifest.json"
     },
     {
       "blind_id": "P045",
@@ -629,7 +717,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P045/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P046",
@@ -642,8 +732,10 @@
       "technical_complete": true,
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "running",
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P046/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C1/r2/s2/manifest.json"
     },
     {
       "blind_id": "P047",
@@ -657,7 +749,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P048",
@@ -670,8 +764,10 @@
       "technical_complete": true,
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
-      "canonical_status": "pending",
-      "reason": null
+      "canonical_status": "prepared",
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P049",
@@ -685,7 +781,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P050",
@@ -699,7 +797,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P050/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C4/r2/s2/manifest.json"
     },
     {
       "blind_id": "P051",
@@ -713,7 +813,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C5/r1/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P052",
@@ -727,7 +829,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P052/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P053",
@@ -741,7 +845,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P054",
@@ -755,7 +861,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P054/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C4/r1/s2/manifest.json"
     },
     {
       "blind_id": "P055",
@@ -769,7 +877,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P055/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P056",
@@ -783,7 +893,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C4/r1/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P057",
@@ -797,7 +909,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P057/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/alder/manifest.json"
     },
     {
       "blind_id": "P058",
@@ -811,7 +925,9 @@
       "primary_quality_eligible": true,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/alder/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P059",
@@ -825,7 +941,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "primary-runs/rdra/C5/r2/s2/manifest.json",
+      "upstream_classification_metadata_path": null
     },
     {
       "blind_id": "P060",
@@ -839,7 +957,9 @@
       "primary_quality_eligible": false,
       "source_clean_exploratory_eligible": true,
       "canonical_status": "continuation_pending",
-      "reason": null
+      "reason": null,
+      "classification_metadata_path": "blind-probes/P060/metadata.json",
+      "upstream_classification_metadata_path": "primary-runs/rdra/C1/r1/s2/manifest.json"
     }
   ],
   "counts": [
@@ -864,35 +984,47 @@
     {
       "arm": "rdra",
       "stage": "s1",
-      "status": "pending",
-      "count": 6
+      "status": "complete",
+      "count": 1
     },
     {
       "arm": "rdra",
       "stage": "s1",
+      "status": "pending",
+      "count": 4
+    },
+    {
+      "arm": "rdra",
+      "stage": "s1",
+      "status": "protocol_failed",
+      "count": 4
+    },
+    {
+      "arm": "rdra",
+      "stage": "s1",
+      "status": "running",
+      "count": 1
+    },
+    {
+      "arm": "rdra",
+      "stage": "s2",
+      "status": "complete",
+      "count": 2
+    },
+    {
+      "arm": "rdra",
+      "stage": "s2",
+      "status": "pending",
+      "count": 4
+    },
+    {
+      "arm": "rdra",
+      "stage": "s2",
       "status": "protocol_failed",
       "count": 3
     },
     {
       "arm": "rdra",
-      "stage": "s1",
-      "status": "running",
-      "count": 1
-    },
-    {
-      "arm": "rdra",
-      "stage": "s2",
-      "status": "pending",
-      "count": 7
-    },
-    {
-      "arm": "rdra",
-      "stage": "s2",
-      "status": "protocol_failed",
-      "count": 2
-    },
-    {
-      "arm": "rdra",
       "stage": "s2",
       "status": "running",
       "count": 1
@@ -901,13 +1033,19 @@
       "arm": "rdra",
       "stage": "s3",
       "status": "pending",
-      "count": 8
+      "count": 5
+    },
+    {
+      "arm": "rdra",
+      "stage": "s3",
+      "status": "prepared",
+      "count": 1
     },
     {
       "arm": "rdra",
       "stage": "s3",
       "status": "success",
-      "count": 2
+      "count": 4
     }
   ],
   "eligibility_counts": [
@@ -939,25 +1077,25 @@
       "arm": "rdra",
       "stage": "s1",
       "planned": 10,
-      "technical_complete": 3,
-      "strict_primary_eligible": 0,
-      "source_clean_exploratory_eligible": 3
+      "technical_complete": 5,
+      "strict_primary_eligible": 1,
+      "source_clean_exploratory_eligible": 5
     },
     {
       "arm": "rdra",
       "stage": "s2",
       "planned": 10,
-      "technical_complete": 2,
-      "strict_primary_eligible": 0,
-      "source_clean_exploratory_eligible": 2
+      "technical_complete": 5,
+      "strict_primary_eligible": 2,
+      "source_clean_exploratory_eligible": 5
     },
     {
       "arm": "rdra",
       "stage": "s3",
       "planned": 10,
-      "technical_complete": 2,
-      "strict_primary_eligible": 0,
-      "source_clean_exploratory_eligible": 2
+      "technical_complete": 4,
+      "strict_primary_eligible": 1,
+      "source_clean_exploratory_eligible": 4
     }
   ],
   "limits": [

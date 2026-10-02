@@ -1,0 +1,11 @@
+{
+  "start_utc": "2026-10-02T09:01:00Z",
+  "start_utc_precision": "estimated minute; exact task start unavailable",
+  "end_utc": "2026-10-02T09:02:06Z",
+  "failures": [
+    "An initial read attempted the prompt at the output-tree path and found no file; the exact official prompt was then read successfully.",
+    "The first output write failed because the phase4 output directory did not exist; it was created and the write succeeded."
+  ],
+  "unmet_restrictions": [],
+  "result": "Only the TSV header is present because every source BUC row has a blank external-system field."
+}

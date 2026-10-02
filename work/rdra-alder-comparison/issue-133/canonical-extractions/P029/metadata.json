@@ -1,16 +1,41 @@
 {
   "packet_id": "P029",
-  "status": "continuation_pending",
-  "reason": "upstream_authoring_protocol_failed",
-  "recorded_at": "2026-10-02T07:57:50.847488+00:00",
-  "partial_artifacts_excluded": true,
-  "semantic_scores_imputed": false,
-  "history": [
-    {
-      "status": "unavailable",
-      "reason": "upstream_authoring_protocol_failed",
-      "recorded_at": "2026-10-02T07:57:50.847488+00:00"
-    }
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T08:54:16.190567+00:00",
+  "packet_sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "459408a90b79ea1a95227a262794e3f4403344a8b4c4fbfcc228a2a9808668d1",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P029/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P029/extraction-prompt.txt"
   ],
-  "continuation_recorded_at": "2026-10-02T08:19:22.680164+00:00"
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p029",
+  "prepared_at": "2026-10-02T08:54:03.730500+00:00",
+  "output_sha256": {
+    "canonical.json": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "raw-response.md": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "read-log.jsonl": "e0565ec0e34f398708109fbfbd7a135a92fd611bd3ecd9e8f2841744c7afd23b"
+  },
+  "finished_at": "2026-10-02T08:57:17.165232+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:10:46.301877+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log and received final/message declarations. Procedural isolation only; no independent filesystem attestation."
+  }
 }

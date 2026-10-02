@@ -1,11 +1,12 @@
 {
-  "updated_at": "2026-10-02T08:43:05.390652+00:00",
+  "updated_at": "2026-10-02T08:54:16.258612+00:00",
   "planned_packets": 60,
   "counts": {
-    "continuation_pending": 2,
+    "continuation_pending": 1,
     "packet_prepared": 20,
-    "pending": 23,
-    "success": 15
+    "pending": 20,
+    "running": 1,
+    "success": 18
   },
   "packets": [
     {
@@ -20,10 +21,13 @@
     },
     {
       "packet_id": "P002",
-      "status": "pending",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p002",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "90a43657eab51d1fa9126cba1ee491e83f4cd2608925aa317beb2b7fd9e72ef4"
     },
     {
       "packet_id": "P003",
@@ -54,10 +58,13 @@
     },
     {
       "packet_id": "P006",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p006",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "9b7f59f8dda253ff3510449d8b5b58e16ecff6f314df690c2250638fd6d5afd0"
     },
     {
       "packet_id": "P007",
@@ -105,7 +112,7 @@
     },
     {
       "packet_id": "P012",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -244,15 +251,18 @@
     },
     {
       "packet_id": "P028",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p028",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "9773569112e4f712946372f6af0f1585cb8ba2c820784dc5eed9cdf25115092e"
     },
     {
       "packet_id": "P029",
-      "status": "continuation_pending",
-      "agent_id": null,
+      "status": "running",
+      "agent_id": "/root/blind_observation/extract_p029",
       "mechanical_validation": null,
       "artifact_hash": null
     },
@@ -349,7 +359,7 @@
     },
     {
       "packet_id": "P043",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null

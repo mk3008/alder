@@ -1,0 +1,7 @@
+{
+  "scope": "Collected UTF-8 files only; bounded automated pattern check, not complete privacy proof. Inputs are synthetic or pinned public fixtures; no real customer/person inputs supplied.",
+  "files_checked": 5153,
+  "pattern_hits": [],
+  "official_prompt_files_in_collection": [],
+  "snapshot_manifest_sha256": "fc3e594957ccd1154652a5b1ef82ee3d527c2f9d95fdf6d9543564a2dd3a03dd"
+}

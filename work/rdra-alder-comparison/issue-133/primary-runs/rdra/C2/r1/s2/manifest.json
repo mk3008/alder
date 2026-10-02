@@ -2,7 +2,7 @@
   "case": "C2",
   "replicate": "r1",
   "stage": "s2",
-  "status": "running",
+  "status": "complete",
   "source_sha256": "9cbc69acc31170d1d0bad5459f5f8760aca0db133caa53b24334eeb30c511874",
   "requested_model": "gpt-6-sol",
   "requested_reasoning_effort": "medium",
@@ -1734,7 +1734,7 @@
       "envelope_sha256": "8615ddd54512514df6303e32e08b304a9068c03798b46a39bb8104dbc4a08c1d",
       "spawn_message_sha256": "77ba217149ce811b75b1525a1ab74f4fbcbcec2cb63b2bc85612330dda2d7f90",
       "node": "ph4_external_system",
-      "status": "running",
+      "status": "complete",
       "prepared": "2026-10-02T08:42:54.918740+00:00",
       "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root",
       "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_external_system",
@@ -1777,7 +1777,54 @@
         "fork_turns": "none"
       },
       "agent_id": "/root/rdra_primary/c2r1s2_external_system",
-      "started": "2026-10-02T08:43:11.918847+00:00"
+      "started": "2026-10-02T08:43:11.918847+00:00",
+      "ended": "2026-10-02T08:43:44.571764+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {
+        "0_RDRAZeroOne/phase4/ph4外部システム.tsv": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293"
+      },
+      "agent_metadata": {
+        "start_utc": "2026-10-02T08:42:50Z",
+        "end_utc": "2026-10-02T08:43:29Z",
+        "failures": [
+          "Initial write failed because output directory did not exist; created directory and wrote output successfully."
+        ],
+        "unmet_restrictions": []
+      },
+      "read_log": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_external_system/envelope.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/AGENTS.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4外部システム生成.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/0_RDRAZeroOne/phase3/ph3BUC.tsv"
+      ],
+      "unchanged_input_hashes": {
+        "0_RDRAZeroOne/phase3/ph3BUC.tsv": true
+      },
+      "unchanged_official_hashes": {
+        "AGENTS.md": true,
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4外部システム生成.md": true,
+        "RDRA_Knowledge/.rdracore/RDRA.md": true,
+        "RDRA_Knowledge/.rdracore/RDRASheet.md": true,
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md": true,
+        "RDRA_Knowledge/_1_RDRA/RDRA.md": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_external_system/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_external_system/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4外部システム生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_external_system/root/0_RDRAZeroOne/phase3/ph3BUC.tsv"
+        ]
+      },
+      "missing_outputs": []
     },
     "ph4_condition": {
       "attempt": 1,
@@ -1786,7 +1833,7 @@
       "envelope_sha256": "4ad7daca379942199e618477d99acca2656a0d161db19d4fbfdb07491481ad42",
       "spawn_message_sha256": "8f44e352a643449a9687483d4f5390849f85f5f65328e3248c2f0406782a6dd0",
       "node": "ph4_condition",
-      "status": "running",
+      "status": "complete",
       "prepared": "2026-10-02T08:42:54.920391+00:00",
       "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root",
       "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_condition",
@@ -1831,7 +1878,57 @@
         "fork_turns": "none"
       },
       "agent_id": "/root/rdra_primary/c2r1s2_condition4",
-      "started": "2026-10-02T08:43:11.960201+00:00"
+      "started": "2026-10-02T08:43:11.960201+00:00",
+      "ended": "2026-10-02T08:44:03.523107+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {
+        "0_RDRAZeroOne/phase4/ph4条件.tsv": "e1b750c52c5fd5d5ee3f8fcc164cfb933f41239f1de7a3786ae5b4b461bcf8df"
+      },
+      "agent_metadata": {
+        "start_utc": "2026-10-02T08:43:00Z",
+        "end_utc": "2026-10-02T08:43:41Z",
+        "failures": [
+          "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created that output directory and retried successfully."
+        ],
+        "unmet_restrictions": []
+      },
+      "read_log": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_condition/envelope.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/AGENTS.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/RDRA_Knowledge/_1_RDRA/RDRA.md"
+      ],
+      "unchanged_input_hashes": {
+        "0_RDRAZeroOne/phase3/ph3BUC.tsv": true,
+        "0_RDRAZeroOne/phase3/ph3バリエーション.tsv": true
+      },
+      "unchanged_official_hashes": {
+        "AGENTS.md": true,
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md": true,
+        "RDRA_Knowledge/.rdracore/RDRA.md": true,
+        "RDRA_Knowledge/.rdracore/RDRASheet.md": true,
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md": true,
+        "RDRA_Knowledge/_1_RDRA/RDRA.md": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_condition/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/evidence/ph4_condition/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/nodes/ph4_condition/root/RDRA_Knowledge/_1_RDRA/RDRA.md"
+        ]
+      },
+      "missing_outputs": []
     }
   },
   "deviations": [
@@ -1842,8 +1939,48 @@
   "dag_fidelity_audit": "../../../operator/dag-fidelity-audit.json",
   "dag_exact_match": true,
   "strict_protocol_eligible": true,
-  "technical_complete": false,
+  "technical_complete": true,
   "source_clean_exploratory_eligible": true,
   "source_clean_attestation": "Self-reported read-log/metadata only; no independent trace guarantee.",
-  "final_freeze_sha": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95"
+  "final_freeze_sha": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
+  "ai_nodes_success": 18,
+  "script_outputs_exist": {
+    "rebuild_1_rdrA": true,
+    "phase5_graph_data": true
+  },
+  "ended": "2026-10-02T08:44:03.984727+00:00",
+  "artifacts": {
+    "初期要望.txt": "9cbc69acc31170d1d0bad5459f5f8760aca0db133caa53b24334eeb30c511874",
+    "1_RDRA/状態.tsv": "0f10a865d9c3c6a4b9c402315219dec3bbde010f06b609d9208ed61490df9e35",
+    "1_RDRA/外部システム.tsv": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293",
+    "1_RDRA/バリエーション.tsv": "3aa0591504ea85becd19ac79d6fecacb092597c39d322c68b6f7c4f8799641f9",
+    "1_RDRA/条件.tsv": "a67b5e8ef52d01d1fb81d6ce4fc923772cd2f4f18088594a1df2d5ba5364961b",
+    "1_RDRA/システム概要.json": "97ff9fd6ba41eec7a66089ef405b940f22a1aefee81fb0ae015d3195d38b20fa",
+    "1_RDRA/BUC.tsv": "bab4e8444aabdbdacd6885ed2aa5168d1b3e6549e612b484b152945dfb989519",
+    "1_RDRA/アクター.tsv": "dcce68d056dad47eb97722b9c63a0c8cdb81805988d01a8911958d1d654218af",
+    "1_RDRA/情報.tsv": "ec7805cbf0f821fd7eda05636b5e743647758b1b509d8c04fea5dd5e6c74b410",
+    "0_RDRAZeroOne/phase1/システム概要.json": "97ff9fd6ba41eec7a66089ef405b940f22a1aefee81fb0ae015d3195d38b20fa",
+    "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv": "042d4b99cd477095a753eb305812703deebc9e5fa54bcdd7a4281f6bb14d4616",
+    "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv": "28bf21c86b34a7785b1b79fbedcc8ded5d4e8b78750f976ac959b8b7c896cdde",
+    "0_RDRAZeroOne/phase1/ph1要求.tsv": "ab614e5a178da37193f03b5f5f2259a18f32c238080eeef7d82c793848ff4941",
+    "0_RDRAZeroOne/phase1/ph1業務.tsv": "169e78cc7c0a1eb381b806c5dcc3922525049b385b881599df679dcc4ea04a5d",
+    "0_RDRAZeroOne/phase3/ph3バリエーション.tsv": "e03980f407f17bab76899b987fd4e2de7c4fd5118aaf0e802432b258c0ec3e9e",
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv": "7cca7d05f8bc00d721e1e9c3e86c8616eddc1f9b7833f5baee5620b72faf93d5",
+    "0_RDRAZeroOne/phase2/ph2アクティビティ.tsv": "c812286f30100d19f5a8a2cf5f89b501221d9254f79ed1370837583791761684",
+    "0_RDRAZeroOne/phase2/ph2状態.tsv": "730734a96a30d19a6f12115f3782ced2e3bd68d05ebd62b766d71ed32b213f2e",
+    "0_RDRAZeroOne/phase2/ph2条件.tsv": "62e3f63f73f16c7162a8ae77d7f60fe6de9d22a8452adbdf5b01724f86d413df",
+    "0_RDRAZeroOne/phase4/ph4条件.tsv": "e1b750c52c5fd5d5ee3f8fcc164cfb933f41239f1de7a3786ae5b4b461bcf8df",
+    "0_RDRAZeroOne/phase4/ph4UCアクター.tsv": "01f6c9e74bcd3081c6d1022d6a75e8244e7bf49e87cbd82da1aad7c9f906dbe3",
+    "0_RDRAZeroOne/phase4/ph4情報.tsv": "ec7805cbf0f821fd7eda05636b5e743647758b1b509d8c04fea5dd5e6c74b410",
+    "0_RDRAZeroOne/phase4/ph4外部システム.tsv": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293",
+    "0_RDRAZeroOne/phase4/ph4UC外部システム.tsv": "75128644b59a9dfd8a99f9335d5f90952cbfd011b4d7ca2d0c002838860099b4",
+    "0_RDRAZeroOne/phase4/ph4アクター.tsv": "dcce68d056dad47eb97722b9c63a0c8cdb81805988d01a8911958d1d654218af",
+    "0_RDRAZeroOne/phase4/ph4UCタイマー.tsv": "c76856376b41ac324eb850487f2a2e5af3989f8cb23227351fbd4a235482a0cd",
+    "0_RDRAZeroOne/phase4/ph4状態.tsv": "2af7f72d771437ebaef3fbe3db3f0c11e6311238c53796177ef73a4e5b1c6ade",
+    "1_RDRA/if/関連データ.txt": "60226b1acea9a3dad5b4f69799ef991807426ffb8ab5440f93a42e87193806ab"
+  },
+  "validity_audit": "evidence/validity-audit.json",
+  "validity_all_pass": true,
+  "dag_run_trace_audit": "evidence/dag-run-trace-audit.json",
+  "dag_run_trace_all_pass": true
 }
