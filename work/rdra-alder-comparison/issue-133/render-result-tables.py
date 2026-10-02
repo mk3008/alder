@@ -55,7 +55,21 @@ for r in sorted((r for r in rows if r['case'] == 'C5'), key=lambda r: (r['replic
     cells = [r['replicate'], r['stage'], r['arm'], r['blind_id'], value(r['architecture_input_required']),
              value(r['unapproved_architecture_promotion']), value(r['handoff_readiness']), r['implementation_viability']]
     lines.append('| ' + ' | '.join(map(str, cells)) + ' |')
-lines += ['', '## paired資料の範囲', '', '| 分析 | s1 | s2 | s3 |', '|---|---:|---:|---:|']
+lines += ['', '## 出力量', '',
+          '| case | rep | 手法 | s1 artifact bytes/files | s1 response bytes | s2 artifact bytes/files | s2 response bytes | s3 probe response bytes |',
+          '|---|---:|---|---|---:|---|---:|---:|']
+by_run = {}
+for r in rows:
+    by_run.setdefault((r['case'], r['replicate'], r['arm']), {})[r['stage']] = r
+for (case, replicate, arm), stages in sorted(by_run.items()):
+    cells = [case, replicate, arm]
+    for stage in ['s1', 's2']:
+        r = stages.get(stage)
+        cells += [f"{r['artifact_bytes']}/{r['artifact_files']}" if r else 'NA', r['response_bytes'] if r else 'NA']
+    cells += [stages['s3']['response_bytes'] if 's3' in stages else 'NA']
+    lines.append('| ' + ' | '.join(map(str, cells)) + ' |')
+lines += ['', 'UTF-8 byte数。artifactとresponseには重複する本文があり、合算を意味量や品質点にしない。RDRAのs1/s2 artifactは完成した中間・最終資料を含む。s3はprobeのresponse本文。raw tool logやretry証跡の総量とは異なる。', '',
+          '## paired資料の範囲', '', '| 分析 | s1 | s2 | s3 |', '|---|---:|---:|---:|']
 for label, name in [('strict', 'strict-primary-paired-scores.json'), ('source-clean探索', 'exploratory-paired-scores.json')]:
     pairs = json.loads((OUT / name).read_text())
     lines.append('| ' + label + ' | ' + ' | '.join(str(sum(x['stage'] == s for x in pairs)) for s in ['s1', 's2', 's3']) + ' |')

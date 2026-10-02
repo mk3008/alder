@@ -33,8 +33,11 @@ def report():
             source_clean=source_clean and bool(up.get('source_clean_exploratory_eligible',up.get('status') in ['success','complete']))
             if not complete and up.get('exploratory_continuation_status')=='running':continuation='pending_upstream_continuation'
         extraction=read(ROOT/'canonical-extractions'/m['blind_id']/'metadata.json')
+        generation_strict=complete and strict
+        extraction_strict=extraction.get('strict_delivery_protocol_eligible',True) and extraction.get('strict_protocol_eligible',True)
+        source_clean=source_clean and extraction.get('source_clean_exploratory_eligible',True)
         upstream=(ROOT/'primary-runs/alder/manifest.json' if m['arm']=='alder' else base.parent/'s2/manifest.json') if m['stage']=='s3' else None
-        rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'primary_quality_eligible':complete and strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason'),'classification_metadata_path':str(classification.relative_to(ROOT)),'upstream_classification_metadata_path':str(upstream.relative_to(ROOT)) if upstream else None})
+        rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'generation_primary_eligible':generation_strict,'primary_quality_eligible':generation_strict and extraction_strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'canonical_strict_delivery_protocol_eligible':extraction.get('strict_delivery_protocol_eligible',True),'reason':d.get('reason') or d.get('failure_reason'),'classification_metadata_path':str(classification.relative_to(ROOT)),'canonical_classification_metadata_path':str((ROOT/'canonical-extractions'/m['blind_id']/'metadata.json').relative_to(ROOT)),'upstream_classification_metadata_path':str(upstream.relative_to(ROOT)) if upstream else None})
     counts=collections.Counter((r['arm'],r['stage'],r['execution_status']) for r in rows)
     groups=collections.defaultdict(list)
     for r in rows:groups[(r['arm'],r['stage'])].append(r)

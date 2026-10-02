@@ -1,0 +1,52 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-001-P006-1",
+      "packet_id": "P006",
+      "claim_question": "F15の再利用は即時性を明記しない。原文で範囲を確認。",
+      "audit_target_ids": [
+        "F15"
+      ],
+      "review_file": "P006-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P026-1",
+      "packet_id": "P026",
+      "claim_question": "F28/Q7は新規予約と変更先を一問にまとめており、原文で回答分離の明瞭さを確認。",
+      "audit_target_ids": [
+        "F28",
+        "Q7"
+      ],
+      "review_file": "P026-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P002-1",
+      "packet_id": "P002",
+      "claim_question": "F23-F25の追加データ項目が実装必須要件か、説明用整理かはcanonicalだけでは確定しない。",
+      "audit_target_ids": [
+        "F23",
+        "F24",
+        "F25"
+      ],
+      "review_file": "P002-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P043-1",
+      "packet_id": "P043",
+      "claim_question": "P043 F22の「未決列挙なし」は受領H043の要約表現。元原文を要する場合は別途確認。",
+      "audit_target_ids": [
+        "F22"
+      ],
+      "review_file": "P043-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P044-1",
+      "packet_id": "P044",
+      "claim_question": "F22の未決についてanswer_facts_preservedの同時要求項目はstage3では適用外として空にした。",
+      "audit_target_ids": [
+        "F22"
+      ],
+      "review_file": "P044-review.json"
+    }
+  ]
+}

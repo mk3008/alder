@@ -1,0 +1,21 @@
+要求	アクター	機能非機能
+購入申請を出せること	社員	機能
+10万円以上の購入申請を承認または却下できること	部長	機能
+10万円未満の購入申請を承認または却下できること	課長	機能
+承認後だけ購入し、却下時は購入しないこと	購買担当	機能
+購入結果を申請者へ伝えること		機能
+購入申請の金額と物品を記録すること		機能
+既存の公開REST APIを維持すること		非機能
+POST /purchase-requests は amount_yen（0以上の整数）と item（空でない文字列）を受け取り、201で id と status=pending を返すこと		機能
+POST /purchase-requests の不正入力には400を返すこと		機能
+POST /purchase-requests/{id}/decision は decision=approved または rejected と role=manager または director を受け取ること		機能
+購入申請の金額に対応する役割だけが承認または却下を決定できること		機能
+POST /purchase-requests/{id}/decision で金額に対応しない役割には403を返すこと		機能
+POST /purchase-requests/{id}/decision で存在しないidには404を返すこと		機能
+既存の purchase_requests schema を維持すること		非機能
+purchase_requests の id は bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY とすること		非機能
+purchase_requests の amount_yen は integer NOT NULL CHECK(amount_yen>=0) とすること		非機能
+purchase_requests の item は text NOT NULL CHECK(length(item)>0) とすること		非機能
+purchase_requests の status は text NOT NULL CHECK(status IN ('pending','approved','rejected')) とすること		非機能
+TypeScriptを使用すること		非機能
+PostgreSQLを使用すること		非機能

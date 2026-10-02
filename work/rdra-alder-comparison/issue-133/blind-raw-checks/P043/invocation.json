@@ -1,0 +1,12 @@
+{
+  "tool": "collaboration.spawn_agent",
+  "actual_arguments": {
+    "task_name": "raw_p043",
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none",
+    "message": "あなたは独立Fresh匿名raw reviewerです。cwd=/workspace/scratch/62be7f260abb/blind-raw-checks/P043。input read allowlistはこのdirectory内のP043-packet.md, P043-canonical.json, P002-packet.md, P002-canonical.json, extraction-prompt.txt, review-targets.json, received-upstream-packet.mdだけです。oracle/rubric/score本文/arm mapping/元source/手法情報/他packet/親会話/metadata/envelopeを取得しないでください。review-targets.jsonの指定canonical IDについて、自身の匿名packet原文の周辺引用、局所の意味・modality・範囲、明示的な不明点を根拠物理行番号とともに記録してください。extraction-prompt.txtの既定意味分離に沿い、業務意味を補完せず、正誤や採点を行わないでください。全体draft表記と局所asserted/provisional/proposed/unresolvedの関係も該当箇所の引用で示してください。匿名対応Stage2がある場合はその原文/canonical周辺をprovenanceの記載範囲比較だけに引用でき、他stageの内容で自身の意味を補完しないでください。原canonicalを書換せず、oracleの真偽や発明数を決めず、資料が明示する意味・未記載範囲だけを記録してください。review.jsonへJSON {\"packet_id\":\"P043\",\"checks\":[{\"canonical_id\":\"F22\",\"local_meaning\":\"...\",\"local_modality\":\"asserted|provisional|proposed|unresolved|ambiguous\",\"scope\":\"...\",\"evidence\":[{\"packet_id\":\"P043\",\"line_start\":1,\"line_end\":1,\"quote\":\"原文部分\"}],\"explicit_unknowns\":[],\"ambiguities\":[],\"correspondence_evidence\":[]}],\"limits\":[]} を保存してください。指定全IDを各1itemで記録し、原canonicalのIDを使ってください。correspondence_evidenceも同じ引用/line形式です。raw-response.mdへ同一JSON全文、read-log.jsonlへ実際のinput path/timestampを保存し、finalはJSON全文を返してください。生成outputs自体の検証readのみ追加許可します。received-upstream-packet.mdはprobeが実際に受け取った匿名handoff入力です。各指定IDの由来について、actual_handoff（実際handoffに引用あり）、full_stage2_only（full Stage2にのみ引用あり）、neither、ambiguousをhandoff_visibilityへ記録してください。correspondence_evidenceにはsource_file、input_sha256、input_kind（actual_handoffまたはfull_stage2）、packet_id、line_start、line_end、quoteを付けて区別してください。引用がない場合は断定を補わず未確認としてください。実際inputにない意味を、full Stage2に存在することだけで受領済みと扱わないでください。"
+  },
+  "returned_agent_id": "/root/blind_observation/raw_p043",
+  "recorded_at": "2026-10-02T10:13:31.623560+00:00"
+}

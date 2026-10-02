@@ -31,7 +31,8 @@ def setup(case,include_received=True):
    if x['stage3_packet_id'] not in pids:continue
    if x['canonical_status'] not in ['fresh_success','reused_byte_identical']:raise ValueError('received canonical not ready '+x['stage3_packet_id'])
    y={k:v for k,v in x.items() if k not in ['received_canonical_file','probe_execution_status','canonical_status']};fname=x['received_canonical_packet_id']+'.json';y['received_canonical_file']=fname
-   if not (d/fname).exists():shutil.copyfile(R/x['received_canonical_file'],d/fname);received_files.append(fname)
+   if not (d/fname).exists():shutil.copyfile(R/x['received_canonical_file'],d/fname)
+   if fname not in [r['blind_id']+'.json' for r in ready] and fname not in received_files:received_files.append(fname)
    received.append(y)
   (d/'received-handoff-index.json').write_text(json.dumps({'entries':received},ensure_ascii=False,indent=2)+'\n');received_files.append('received-handoff-index.json')
  allow=['case-reference.json','downstream-subset.json','rubric.md','evaluation-prompt.txt','packet-index.json']+[r['blind_id']+'.json' for r in ready]+received_files
@@ -58,7 +59,8 @@ def final_setup(case):
   if x['canonical_status'] not in ['fresh_success','reused_byte_identical']:raise ValueError('received canonical not ready '+x['stage3_packet_id'])
   y={k:v for k,v in x.items() if k not in ['received_canonical_file','probe_execution_status','canonical_status']}
   fname=x['received_canonical_packet_id']+'.json';y['received_canonical_file']=fname
-  if not (d/fname).exists():shutil.copyfile(R/x['received_canonical_file'],d/fname);added.append(fname)
+  if not (d/fname).exists():shutil.copyfile(R/x['received_canonical_file'],d/fname)
+  if str(d/fname) not in json.loads((d/'metadata.json').read_text())['read_allowlist'] and fname not in added:added.append(fname)
   received.append(y)
  (d/'received-handoff-index.json').write_text(json.dumps({'entries':received},ensure_ascii=False,indent=2)+'\n');added.append('received-handoff-index.json')
  ledger=json.loads((R/'blind-raw-checks'/case/'raw-check-ledger.json').read_text());requests=[]

@@ -1,0 +1,22 @@
+{
+  "packet_id": "H050",
+  "status": "prepared",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:00:31.742594+00:00",
+  "packet_sha256": "3088389556adf15794f81e23f8e9688fcdc946474cb3eb56a9955db7ca1ae05a",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "aa6d6733dd7243593e5cc94f9fcc4404faf970d88abde910ee749a4a3fde20d0",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H050/packet.md",
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H050/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ]
+}

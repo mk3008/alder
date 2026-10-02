@@ -1,0 +1,8 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:44:21.014Z",
+  "failures": [],
+  "unmet_restrictions": [
+    "Start time was not captured when execution began."
+  ]
+}

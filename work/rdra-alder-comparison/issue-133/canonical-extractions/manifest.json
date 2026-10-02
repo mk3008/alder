@@ -1,11 +1,12 @@
 {
-  "updated_at": "2026-10-02T09:15:49.665313+00:00",
+  "updated_at": "2026-10-02T10:27:49.075452+00:00",
   "planned_packets": 60,
   "counts": {
-    "packet_prepared": 21,
-    "pending": 15,
-    "running": 1,
-    "success": 23
+    "packet_prepared": 15,
+    "pending": 3,
+    "prepared": 1,
+    "running": 2,
+    "success": 39
   },
   "packets": [
     {
@@ -77,7 +78,7 @@
     },
     {
       "packet_id": "P008",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -94,8 +95,8 @@
     },
     {
       "packet_id": "P010",
-      "status": "pending",
-      "agent_id": null,
+      "status": "running",
+      "agent_id": "/root/blind_observation/extract_p010",
       "mechanical_validation": null,
       "artifact_hash": null
     },
@@ -111,17 +112,23 @@
     },
     {
       "packet_id": "P012",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p012",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "0dc95a283f014137789e9f81519ab8f7278db9a47cfb74e9b9806c8584e9caec"
     },
     {
       "packet_id": "P013",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p013",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33"
     },
     {
       "packet_id": "P014",
@@ -142,7 +149,7 @@
     },
     {
       "packet_id": "P016",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -179,7 +186,7 @@
     },
     {
       "packet_id": "P020",
-      "status": "pending",
+      "status": "prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -196,14 +203,17 @@
     },
     {
       "packet_id": "P022",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p022",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f"
     },
     {
       "packet_id": "P023",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -270,38 +280,50 @@
     },
     {
       "packet_id": "P030",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
     },
     {
       "packet_id": "P031",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p031",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "cc870bb3e2dff7306c51eb10f97439f71762836140b52a1db264ac9eee18a313"
     },
     {
       "packet_id": "P032",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p032",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "fa4295b0a3dd36a4af78cfa50db6a39cf8fcda53f7e8bc4adbefde314f238aef"
     },
     {
       "packet_id": "P033",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p033",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "deedd14364fe990274378ecd38016007142ce81fba60c5b46a3af16f38edb91f"
     },
     {
       "packet_id": "P034",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p034",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "93661d523ea655b1dcc134dd8df6460da7e60e3d6f2ba1761f2393e9d5fb8a84"
     },
     {
       "packet_id": "P035",
@@ -315,17 +337,23 @@
     },
     {
       "packet_id": "P036",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p036",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7"
     },
     {
       "packet_id": "P037",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p037",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "9a5dbd56453991cecadf9b6cef25bd4463d10baa4d2939d4bd6cb2b26ec7fdca"
     },
     {
       "packet_id": "P038",
@@ -339,45 +367,57 @@
     },
     {
       "packet_id": "P039",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p039",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "f0f88488df741fe3b0d0b0935cd0611b94256cec3912eed2375fcbf59719fb10"
     },
     {
       "packet_id": "P040",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
     },
     {
       "packet_id": "P041",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p041",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "54fbad42de0db1bb9f12068c5d937ad9ed1960090a295cdf1c051d50da053e5a"
     },
     {
       "packet_id": "P042",
-      "status": "pending",
-      "agent_id": null,
+      "status": "running",
+      "agent_id": "/root/blind_observation/extract_p042",
       "mechanical_validation": null,
       "artifact_hash": null
     },
     {
       "packet_id": "P043",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p043",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "21e750cc2d8a7b1faba08f435747e6cff2461ae20b010681f209bb1140e13502"
     },
     {
       "packet_id": "P044",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p044",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "a31bc5ccabba39631fbdeefb80d450ac152c18839df9483c15f8f916f84bb659"
     },
     {
       "packet_id": "P045",
@@ -422,14 +462,14 @@
     },
     {
       "packet_id": "P050",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
     },
     {
       "packet_id": "P051",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -450,21 +490,24 @@
     },
     {
       "packet_id": "P054",
-      "status": "pending",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
-    },
-    {
-      "packet_id": "P055",
       "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
     },
     {
+      "packet_id": "P055",
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p055",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "4afa7a6371128d2bf50d24158c1e70f67ff39f233a87b1c56030f096d8565da8"
+    },
+    {
       "packet_id": "P056",
-      "status": "pending",
+      "status": "packet_prepared",
       "agent_id": null,
       "mechanical_validation": null,
       "artifact_hash": null
@@ -478,10 +521,13 @@
     },
     {
       "packet_id": "P058",
-      "status": "packet_prepared",
-      "agent_id": null,
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "status": "success",
+      "agent_id": "/root/blind_observation/extract_p058",
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "838d8d7feff5d367b1afb1ab6a9422721be00b3193268a3334f5c57087437fe6"
     },
     {
       "packet_id": "P059",
@@ -492,10 +538,13 @@
     },
     {
       "packet_id": "P060",
-      "status": "running",
+      "status": "success",
       "agent_id": "/root/blind_observation/extract_p060",
-      "mechanical_validation": null,
-      "artifact_hash": null
+      "mechanical_validation": {
+        "errors": [],
+        "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+      },
+      "artifact_hash": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de"
     }
   ],
   "semantic_business_content_modified_by_operator": false

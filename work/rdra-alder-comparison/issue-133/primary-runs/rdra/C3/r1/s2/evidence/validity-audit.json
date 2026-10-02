@@ -2,7 +2,7 @@
   "audit_scope": "Original bytes and self-reported read-log only; metadata compliance and strict protocol eligibility are recorded separately.",
   "strict_protocol_eligible": true,
   "source_clean_exploratory_eligible": true,
-  "checked_utc": "2026-10-02T09:10:25.623794+00:00",
+  "checked_utc": "2026-10-02T10:29:46.676717+00:00",
   "nodes": [
     {
       "node": "ph1_system_overview",

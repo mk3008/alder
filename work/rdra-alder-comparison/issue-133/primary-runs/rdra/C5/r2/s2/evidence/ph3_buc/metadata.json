@@ -1,0 +1,7 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T10:24:41Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase3 did not exist; created the directory and completed the output."],
+  "unmet_restrictions": [],
+  "note": "Start timestamp was not captured."
+}

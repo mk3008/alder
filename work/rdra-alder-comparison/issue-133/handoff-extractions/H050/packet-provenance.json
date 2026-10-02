@@ -1,0 +1,6 @@
+{
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "recording": "Bytecopy of actual received anonymous probe input; no repacketization",
+  "received_packet_sha256": "3088389556adf15794f81e23f8e9688fcdc946474cb3eb56a9955db7ca1ae05a",
+  "probe_packet_id": "P050"
+}

@@ -1,6 +1,6 @@
 {
   "packet_id": "P036",
-  "status": "running",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -20,5 +20,20 @@
     "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
   ],
   "agent_id": "/root/blind_observation/extract_p036",
-  "prepared_at": "2026-10-02T09:52:29.351530+00:00"
+  "prepared_at": "2026-10-02T09:52:29.351530+00:00",
+  "output_sha256": {
+    "canonical.json": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7",
+    "raw-response.md": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7",
+    "read-log.jsonl": "6184516b26bce9703e8fc9b7501e31ff06d8acb57a50c337e6fc64060381d500"
+  },
+  "finished_at": "2026-10-02T09:56:11.312984+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "logged_outside_allowlist": [],
+    "declared_outside_read_attempts": [],
+    "basis": "Mechanical read-log validation and received final; no independent filesystem read attestation. Own generated output verification allowed."
+  }
 }

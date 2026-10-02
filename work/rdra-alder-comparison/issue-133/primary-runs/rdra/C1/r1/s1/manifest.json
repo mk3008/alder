@@ -1524,7 +1524,8 @@
   "availability": "failed",
   "technical_complete": true,
   "failed_nodes": [
-    "ph4_actor"
+    "ph4_actor",
+    "ph4_info"
   ],
   "primary_quality_pool_eligible": false,
   "source_clean_exploratory_eligible": true,
@@ -1539,5 +1540,26 @@
   "source_clean_attestation": "Self-reported read-log/metadata only; no independent trace guarantee.",
   "final_freeze_sha": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
   "dag_run_trace_audit": "evidence/dag-run-trace-audit.json",
-  "dag_run_trace_all_pass": true
+  "dag_run_trace_all_pass": true,
+  "failure": "Metadata-reported outside-allowlist path attempt: ph4_info",
+  "guard_failures": [
+    {
+      "node": "ph4_info",
+      "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+      "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+      "path_exists": false,
+      "metadata": {
+        "start_utc": "2026-10-02T07:45:00Z",
+        "start_time_note": "Approximate; exact start timestamp was not captured",
+        "end_utc": "2026-10-02T07:46:52Z",
+        "failures": [
+          "Initial attempt to read 0_RDRAZeroOne/phase4/ph4情報生成.md failed because the prompt is under RDRA_Knowledge; no file was read at that path.",
+          "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and wrote the requested file."
+        ],
+        "unmet_restrictions": []
+      },
+      "exposure": "No content reportedly acquired"
+    }
+  ],
+  "strict_failure_snapshot": "evidence/strict-failure-snapshot"
 }

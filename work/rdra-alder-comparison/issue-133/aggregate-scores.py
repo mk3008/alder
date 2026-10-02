@@ -16,11 +16,12 @@ def effective_score(path):
     """Apply explicit evaluator-authored rubric corrections; preserve original score files."""
     original=json.loads(path.read_text());result=copy.deepcopy(original)
     correction_file=path.parent/'score-correction.json'
-    if not correction_file.exists():return result,[]
+    if not correction_file.exists() and not (path.parent/'raw-flag-dispositions.json').exists():return result,[]
     followup=json.loads((path.parent/'metadata.json').read_text()).get('raw_flag_followup',{})
     if followup.get('status')!='success' or followup.get('mechanical_errors'):raise ValueError('unvalidated evaluator supplement')
     for name,digest in {**followup['original_output_sha256'],**followup['output_sha256']}.items():
         if hashlib.sha256((path.parent/name).read_bytes()).hexdigest()!=digest:raise ValueError('evaluator supplement/original hash mismatch')
+    if not correction_file.exists():return result,[]
     correction=json.loads(correction_file.read_text())
     if correction.get('case_id')!=result['case_id']:raise ValueError('correction case mismatch')
     seen=set();applied=[]

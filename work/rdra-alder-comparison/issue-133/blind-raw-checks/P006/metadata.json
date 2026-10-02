@@ -1,0 +1,40 @@
+{
+  "packet_id": "P006",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:10:58.595454+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P006-packet.md": "42741cbfe5ebcee42f3762e2969e29a887852d4d4eb1830b8038cd3a44bffb36",
+    "P006-canonical.json": "9b7f59f8dda253ff3510449d8b5b58e16ecff6f314df690c2250638fd6d5afd0",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "b9a9150350f4814eb490706beb54aadac7f6d57dcb31204c6fe6c3947a9927f0"
+  },
+  "envelope_sha256": "f9b6573f1db0d9984ff4479938dfc876515a289e70f5d894acede84c831101f4",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P006/P006-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P006/P006-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P006/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P006/review-targets.json"
+  ],
+  "operator_reason": "Preserve initial evaluator uncertainty. Target IDs copied mechanically from raw-check statements; no scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p006",
+  "started_at": "2026-10-02T10:11:26.254568+00:00",
+  "finished_at": "2026-10-02T10:12:11.099587+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "6d25583fc58c2af521bd67a189c5ca481eea8acb32455962c52ef23701188d2a",
+    "raw-response.md": "6d25583fc58c2af521bd67a189c5ca481eea8acb32455962c52ef23701188d2a",
+    "read-log.jsonl": "3029bf5636b70488f391ad244bdca077e55793dc2f55fa08c7d9b2274e3c3fb7"
+  },
+  "read_compliance_audit": {
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log mechanical allowlist validation and actual final; procedural only, no independent attestation."
+  }
+}

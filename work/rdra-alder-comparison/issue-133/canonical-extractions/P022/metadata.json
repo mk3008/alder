@@ -1,6 +1,6 @@
 {
   "packet_id": "P022",
-  "status": "running",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -31,5 +31,22 @@
       "sha256": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
       "bytes": 36442
     }
+  },
+  "output_sha256": {
+    "canonical.json": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "raw-response.md": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "read-log.jsonl": "5e40cfef7ed614466cfaee6b0c0c6f5a6389cd5739828f630c0374dc1fb7caf0"
+  },
+  "finished_at": "2026-10-02T09:54:03.420960+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T09:54:03.443971+00:00",
+    "canonical_raw_unchanged": true,
+    "final_payload_returned": true,
+    "generation_count_increment": 0,
+    "additional_model_turn": 1
   }
 }

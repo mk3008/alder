@@ -1,19 +1,19 @@
 {
-  "recorded": "2026-10-02T09:53:45.440643+00:00",
+  "recorded": "2026-10-02T10:29:44.406874+00:00",
   "planned_workflows": 20,
   "workflows": {
     "pending": 0,
-    "running": 4,
-    "protocol_failed": 12,
+    "running": 0,
+    "protocol_failed": 16,
     "failed": 0,
     "complete": 4
   },
   "current_nodes": {
-    "prepared": 10,
-    "running": 1,
-    "complete": 291,
+    "prepared": 0,
+    "running": 0,
+    "complete": 351,
     "completed_without_output": 0,
-    "failed": 6
+    "failed": 8
   },
   "retained_previous_attempts": 1,
   "manifest_paths": [

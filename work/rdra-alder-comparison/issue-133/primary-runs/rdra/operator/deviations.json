@@ -6,5 +6,25 @@
   {
     "type": "envelope_transport",
     "description": "First three actual equivalent short messages differed from pre-saved full envelopes; actual messages retained separately after start. First six nodes inline; later nodes file envelopes plus exact pre-saved spawn message."
+  },
+  {
+    "recorded": "2026-10-02T10:23:05.979164+00:00",
+    "kind": "Operator premature dispatch",
+    "workflow": "C5/r2/s2",
+    "agent_id": "/root/rdra_primary/c5r2s2_buc_wait_overview",
+    "requested_settings": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "medium",
+      "fork_turns": "none"
+    },
+    "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/evidence/ph3_buc/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+    "failure": "Dispatched before dependency completion and envelope preparation. Interrupted immediately; agent reported nonexistent envelope and inventory of evidence folders. No official Prompt/business inputs or outputs supplied; no business artifact generated. This aborted transport invocation is additional to planned AI nodes and retained separately.",
+    "agent_message": "The specified ph3_buc/envelope.txt is not present yet (cat returned No such file). I can see the s2 run and other evidence folders; please create the envelope or confirm its path.",
+    "timing": "Actual message recorded retrospectively after interrupt; not disguised as pre-start."
+  },
+  {
+    "kind": "Guard scope comparability and metadata limitations",
+    "description": "RDRA envelopes permit own-output validation reads; compare strict compliance only against each actual wrapper, never treat differing wrapper guard rates as method quality. Source-clean is only self-reported metadata/read-log with no provider trace guarantee. Some leaf start times are retrospective estimates, null, or implausible; operator prepared/started/ended timestamps retained separately. No business output repairs by operator.",
+    "recorded": "2026-10-02"
   }
 ]

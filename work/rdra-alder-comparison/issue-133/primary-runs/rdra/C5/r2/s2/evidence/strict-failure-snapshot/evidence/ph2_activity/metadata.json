@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T10:21:34Z",
+  "start_utc_note": "First captured UTC timestamp; initial envelope and instruction reads preceded it.",
+  "end_utc": "2026-10-02T10:22:24Z",
+  "failures": ["Initial write failed because phase2 directory did not exist; created the directory and successfully wrote the output."],
+  "unmet_restrictions": []
+}
