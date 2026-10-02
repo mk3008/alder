@@ -36,6 +36,37 @@
       "raw": "runs/phase1.raw.md",
       "scope": "preliminary source-grounding review; not a valid confirmed-Pain comparison",
       "correction": "Raw reports repository default gpt-6-sol. Actual spawn request was gpt-6.1-sol / medium / none. Raw preserved without alteration."
+    },
+    {
+      "id": "/root/phase2_regression",
+      "revision": "3be41c2ee122ccdb0870bf9f39463f80db34a42a",
+      "pain": "High, user confirmed",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "docs/optimization-review.md": {
+          "blob_sha": "13e57e7b6b7bca478cda6caf3da6f3604cf2cb32",
+          "sha256": "8c61644fdb1ff7423462bc8fe7c2fb92cac3b5cf2356728e66943e5e93de3941"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "f57bc48966c15e3d96bf5dc4401433adacd24cc7",
+          "sha256": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046"
+        },
+        "README.md": {
+          "blob_sha": "bc71ac63b7b0509c044a5d273d616f172df026c3",
+          "sha256": "13a389b6fce741388a73a058a7279a4558a6cae6ae246edb26b00b8c260ad623"
+        }
+      },
+      "prompt": "runs/phase2.prompt.txt",
+      "raw": "runs/phase2.raw.md",
+      "scope": "single bounded behavior check; different Pain and task wording from preliminary run; no causal comparison",
+      "metadata_followup": "Actual controller spawn request was gpt-6.1-sol / reasoning_effort medium / fork_turns none, explicit requester override of AGENTS default. Record as controller-reported request, not independent verification. No review findings supplied."
     }
   ]
 }

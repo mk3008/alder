@@ -41,7 +41,13 @@ Fresh出力は候補を2件返した。候補1は既存のレビュー交換で�
 
 変更先は正式authority `docs/optimization-review.md`。関連する全体フローの定位、実在Activityへの根拠、現行責務との差分、研究用artifactの扱い、人間の意味判断と一意な修正・技術検証の区別を追加した。既存のProblem限定、最大3件・0件、意味保持、read-only、人間採否、境界分解の停止条件は維持する。別のOptimization仕様は作らない。
 
-修正ガイドは公開commit `3be41c2ee122ccdb0870bf9f39463f80db34a42a` に固定し、公開APIで取得できることを確認した。Highで別Freshを実行する。旧出力・PR #137・研究記録は読ませない。初回とのPain差、詳細prompt差があるため、これは最小の挙動確認であり因果比較ではない。
+修正ガイドは公開commit `3be41c2ee122ccdb0870bf9f39463f80db34a42a` に固定し、公開APIで取得できることを確認した。Highで別Freshを実行した。旧出力・PR #137・研究記録は読ませない。初回とのPain差、詳細prompt差があるため、これは最小の挙動確認であり因果比較ではない。
+
+### 最小回帰の結果
+
+別Freshは候補1件を返した。業務設計と検査項目の既存レビュー交換を、同じ業務原文から追える形に調整する案である。既存のAI草案・更新・可逆的技術選択は新規候補へ数えず、Activityと責務変更を示した。現行モデルが含まない開発工程は、実際の担当・入出力・判断・差し戻しの現状確認へ返した。Business DesignやGitHubの書込み、候補採用、追加の承認工程はない。
+
+この単回出力は、上記の停止・根拠づけが使われたことを確認する範囲で合格。一般的な再発防止、優位性、人間負荷低減を証明しない。Phase 3のSkillはこのread-only境界をpackageする。未記述の開発業務へ適用した成功とは扱わない。
 
 ## PR #137の再評価
 
@@ -52,6 +58,19 @@ Fresh出力は候補を2件返した。候補1は既存のレビュー交換で�
 最終扱いの提案は **supersede**。#137のcommitと検証記録は保持し、本研究から参照する。#137単独の採用・mergeや、利用者への再読解テストを追加の必須Human taskにはしない。PRの実際のcloseは管理操作として別途記録する。
 
 ## 証跡・限界
+
+Phase 3では開発版Plugin 0.3.0に、正式Optimization Reviewをそのままbundleする独立Skillを追加した。短い改善依頼をdescriptionへ入れ、BD探索、Problem / Pain不足時の確認、read-only、未承認候補、対象外フローの停止を保持した。既存3 Skillの手順は版表記以外を変更しない。listingの既存3 defaultPromptは上限を守って維持する。新Skillは内部文書の選択を利用者へ要求しない。
+
+package検査は7/7成功。新authorityのbyte一致とdigest、4 Skillの同梱、既存bundleの一致を検査した。CIの監視対象にOptimization Reviewのsourceを加えた。static検査は自然言語routingや実際のread-only動作の証明ではない。現在の会話にロードされたPluginは0.2.8の3 Skillであり、0.3.0の実クライアント検証をしたとは報告しない。release・main merge・利用者Plugin更新はしていない。
+
+### 残る受入条件
+
+- 実際の開発運用で負荷が発生するpost-handoff交換の現在業務を確認する。誰が、何を受け、どの判断・修正をし、どこへ返すか。現行利用モデルの外を捏造しない。
+- 0.3.0を読み込んだ新しい実クライアントChatで、少なくとも「このProblemについてAlderで改善案を検討して」「Alderでこの業務を改善して」を試し、BD探索・read-only・候補未採用を確認する。
+- 別の新しいChatで、Authoring、BD review、Implementation reviewの既存短文回帰と誤routing、Problem / Pain / BD不足の停止を確認する。requestedモデルは6.1-sol、medium。取得元・Plugin版・provenance・入力revision・prompt・結果・対象差分・GitHub書込みの有無を記録する。
+- 候補の採否は人間に残し、技術検証や既決修正を新しい承認工程へ増やさない。人間負荷をAI内容保持や文字数だけで代用しない。
+
+未達なのでExecutionと全体TaskはOpenを維持する。今回の振り返り: Pain確認をFresh開始前に済ませるべきだった。初回をHighのControlに見せず、条件差をmanifestへ記録した。全体定位の既存ルールをOptimization authorityへ置き、重複したroot規則は追加しない。
 
 [manifest](manifest.json)にrequestedモデル、effort、fork、入力revision、各入力blobとSHA-256、完全prompt、rawを記録する。指定はすべて`gpt-6.1-sol / medium / fork_turns:none`で、AGENTS既定からのユーザー指定例外。初回rawにある`gpt-6-sol`はagentが読んだ既定値であり、実際のspawn要求と区別して訂正をmanifestに残した。実効設定と完全なツール通信ログの独立監査はない。
 

@@ -11,6 +11,7 @@ PLUGIN = ROOT / "plugins/alder"
 SKILL = PLUGIN / "skills/alder-review-implementation"
 AUTHOR = PLUGIN / "skills/alder-draft-business-design"
 DESIGN_REVIEW = PLUGIN / "skills/alder-review-business-design"
+OPTIMIZE = PLUGIN / "skills/alder-optimize-business"
 
 
 class PluginPackageTest(unittest.TestCase):
@@ -43,7 +44,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.2.8")
+        self.assertEqual(plugin["version"], "0.3.0")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         self.assertIn("業務設計書をAlderでレビューして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
@@ -52,7 +53,7 @@ class PluginPackageTest(unittest.TestCase):
         review_skill = (SKILL / "SKILL.md").read_text()
         self.assertIn("interview notes", author_skill)
         self.assertIn("Write only the requested Business Design file(s)", author_skill)
-        self.assertIn("Alder plugin 0.2.8", author_skill)
+        self.assertIn("Alder plugin 0.3.0", author_skill)
         self.assertIn("Review only; do not edit product files", review_skill)
 
     def test_business_design_review_sources_are_bundled_without_drift(self):
@@ -70,6 +71,19 @@ class PluginPackageTest(unittest.TestCase):
         self.assertIn("コードをAlderでレビューして", implementation_review_skill)
         self.assertIn("read-only", design_review_skill)
         self.assertIn("Review only; do not edit product files", implementation_review_skill)
+
+    def test_optimization_source_is_bundled_without_drift(self):
+        provenance = json.loads((OPTIMIZE / "references/provenance.json").read_text())
+        self.assertEqual(set(provenance["sources"]), {"docs/optimization-review.md"})
+        self.assertEqual(len(provenance["alder_source_revision"]), 40)
+        for source, digest in provenance["sources"].items():
+            bundled = OPTIMIZE / "references" / Path(source).name
+            self.assertEqual((ROOT / source).read_bytes(), bundled.read_bytes())
+            self.assertEqual(hashlib.sha256(bundled.read_bytes()).hexdigest(), digest)
+        self.assertEqual(
+            {p.name for p in (PLUGIN / "skills").iterdir() if (p / "SKILL.md").is_file()},
+            {SKILL.name, AUTHOR.name, DESIGN_REVIEW.name, OPTIMIZE.name},
+        )
 
     def test_interview_fixture_is_valid_and_leaves_policy_open(self):
         from tools.business_graph.export import parse_design

@@ -1,6 +1,6 @@
 # Alder Plugin
 
-Alder Plugin version `0.2.8` provides three skills: **Business Design drafting/revision**, **read-only Business Design review**, and **read-only post-implementation review**. The authoring and Business Design review skills bundle their versioned Alder guidance; the implementation review skill bundles review knowledge v0.3. No MCP server or product-side Alder checkout is needed. The plugin package version is separate from the Alder method release and review knowledge v0.3. The previous stable tag `plugin-v0.1.0` still provides implementation review only; version 0.2.8 is available from this change's commit/branch until separately released.
+Alder Plugin development version `0.3.0` adds **read-only Optimization Review** to Business Design drafting/revision, read-only Business Design review, and read-only post-implementation review. Each skill bundles its versioned authority. No MCP server or product-side Alder checkout is needed. The plugin package version is separate from the Alder method release and review knowledge v0.3. New 0.3.0 routing and regression in a real client remain unverified; the pinned 0.2.8 onboarding package retains its three validated workflows. The previous stable tag `plugin-v0.1.0` provides implementation review only.
 
 ## Install once
 
@@ -57,7 +57,15 @@ The existing `実装したのでAlderレビューして` wording remains support
 
 The plugin's `plugin.json` identifies the package version. Each skill's `references/provenance.json` records its source revision and the digests of bundled guidance. A review result records the plugin and knowledge versions, design and implementation revisions, and the plugin source commit when installed from a moving branch. Keep a released package's content immutable; bump its version when changing its workflow or bundled knowledge. A local marketplace installation is a snapshot; refresh/reinstall to use a later package version.
 
-Each skill owns its own routing and write boundary. Deterministic tools handle format, graph export and traceability checks when applicable; they cannot approve business meaning. Plugin 0.2.8 packages Business Design authoring, Business Design review, and implementation review. Optimization Review, Check Item drafting, graph export and follow-up are not packaged skills.
+Each skill owns its own routing and write boundary. Deterministic tools handle format, graph export and traceability checks when applicable; they cannot approve business meaning. Plugin 0.3.0 packages Business Design authoring, Business Design review, implementation review and Optimization Review. Check Item drafting, graph export and follow-up are not packaged skills.
+
+For improvement proposals, install the development revision containing 0.3.0 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
+
+```text
+Alderで改善提案して
+```
+
+The review reads the current workflow before locating the Problem, proposes alternatives and states unknowns. It asks for missing current-work context rather than inventing Activities or Pain. It does not change files or adopt a proposal. People decide adoption; a separate revision updates and re-agrees Business Design before downstream changes. The installed guidance is selected automatically; no internal Skill name or manual document selection is needed.
 
 ## Business Graph export in the same plugin (next step)
 
