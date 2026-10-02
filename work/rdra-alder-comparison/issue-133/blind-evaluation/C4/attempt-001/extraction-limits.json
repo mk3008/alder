@@ -1,0 +1,4 @@
+{
+  "packet_id": "P008",
+  "limitation": "Many canonical evidence quotes are single words. Mechanical quote presence/line validation does not establish complete semantic support. Canonical meanings were not modified. Apply the fixed rubric and preserve any context uncertainty in needs_raw_check; request local raw review where needed."
+}

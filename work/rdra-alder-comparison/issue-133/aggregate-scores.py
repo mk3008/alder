@@ -21,6 +21,18 @@ def effective_score(path):
     if followup.get('status')!='success' or followup.get('mechanical_errors'):raise ValueError('unvalidated evaluator supplement')
     for name,digest in {**followup['original_output_sha256'],**followup['output_sha256']}.items():
         if hashlib.sha256((path.parent/name).read_bytes()).hexdigest()!=digest:raise ValueError('evaluator supplement/original hash mismatch')
+    additional_file=path.parent/'additional-raw-check-resolutions.json'
+    if additional_file.exists():
+        if additional_file.name not in followup['output_sha256']:raise ValueError('unpinned additional resolutions')
+        additional=json.loads(additional_file.read_text())
+        if additional.get('case_id')!=result['case_id']:raise ValueError('additional resolution case mismatch')
+        ledger=json.loads((ROOT/'blind-raw-checks'/result['case_id']/'raw-check-ledger.json').read_text())
+        ledger_ids={x['claim_id'] for x in ledger['claims']}
+        original_ids={x['claim_id'] for x in result.get('raw_check_resolutions',[])}
+        for resolution in additional['raw_check_resolutions']:
+            if resolution['claim_id'] not in ledger_ids or resolution['claim_id'] in original_ids:raise ValueError('invalid additional resolution ID')
+            original_ids.add(resolution['claim_id'])
+            result.setdefault('raw_check_resolutions',[]).append(resolution)
     if not correction_file.exists():return result,[]
     correction=json.loads(correction_file.read_text())
     if correction.get('case_id')!=result['case_id']:raise ValueError('correction case mismatch')
@@ -30,7 +42,7 @@ def effective_score(path):
         if key in seen:raise ValueError('duplicate correction')
         seen.add(key)
         # This supplement corrects a documented distinction in the unchanged rubric.
-        if patch['field'] not in ['actionable_unknown_ids','coverage_evidence.actionable_unknown_ids']:
+        if patch['field'] not in ['actionable_unknown_ids','coverage_evidence.actionable_unknown_ids','architecture_input_required']:
             raise ValueError('unsupported correction field')
         if patch.get('status')!='rubric_correction' or not patch.get('reason'):raise ValueError('correction lacks rationale')
         score=next(x for x in result['scores'] if x['packet_id']==patch['packet_id'])
@@ -40,6 +52,7 @@ def effective_score(path):
         target=score;parts=patch['field'].split('.')
         for part in parts[:-1]:target=target[part]
         if target[parts[-1]]!=patch['original_value']:raise ValueError('correction original value mismatch')
+        if patch['field']=='architecture_input_required' and (result['case_id']!='C5' or patch['corrected_value'] not in [True,False,None]):raise ValueError('invalid architecture correction')
         target[parts[-1]]=patch['corrected_value'];applied.append(patch)
     return result,applied
 

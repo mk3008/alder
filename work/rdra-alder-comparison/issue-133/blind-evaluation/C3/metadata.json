@@ -120,6 +120,16 @@
       "scores.json": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
       "raw-response.md": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124"
     },
-    "operator_schema_key_fix_at": "2026-10-02T10:48:30.035517+00:00"
+    "operator_schema_key_fix_at": "2026-10-02T10:48:30.035517+00:00",
+    "read_compliance_audit": {
+      "checked_at": "2026-10-02T10:51:52.623326+00:00",
+      "declared_outside_read_attempts": [],
+      "basis": "Actual followup final and logged paths; no independent attestation"
+    }
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:51:52.623326+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Available actual final messages and logged reads checked for explicit outside-input declarations; mechanical verifier validates logged paths. Own output verification allowed. Not independent runtime/read attestation."
   }
 }

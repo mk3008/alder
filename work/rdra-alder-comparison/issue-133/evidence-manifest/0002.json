@@ -1,0 +1,2936 @@
+[
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P059/metadata.json",
+    "sha256": "0567203e5c90447684c3ae2d96aac2ceab6b81f7e17d43ad128a97b1cab756bf",
+    "bytes": 1996,
+    "git_blob_sha": "e12e432199c1f756cdd37ea38cbc28f7981e9bbb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P059/raw-response.md",
+    "sha256": "2279e5c80bf22df79f8f50b0e76f5c2c3c95ba30c643b6a0b9b3a9af97cb5894",
+    "bytes": 2060,
+    "git_blob_sha": "d768904cddb1b1337a22ecd78318ed200113d9d5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P059/read-log.jsonl",
+    "sha256": "d3d021b2733f15736d1e98211e6ffbba0b0fe4e7614f31ad43dbd5b7b868eb9f",
+    "bytes": 537,
+    "git_blob_sha": "ae2b28f25ea9254dada8c89a720f1f9b8e52aba1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P059/review-targets.json",
+    "sha256": "a7eb1b9c7d1fdb40e7ad6ba8b5cbf7bf222dbe132fd12483446924c1441aa36a",
+    "bytes": 129,
+    "git_blob_sha": "7790977c0650eded64d057ee9047152738293af8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P059/review.json",
+    "sha256": "2279e5c80bf22df79f8f50b0e76f5c2c3c95ba30c643b6a0b9b3a9af97cb5894",
+    "bytes": 2060,
+    "git_blob_sha": "d768904cddb1b1337a22ecd78318ed200113d9d5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/P029-canonical.json",
+    "sha256": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "bytes": 29234,
+    "git_blob_sha": "68d654f03ae99843bc292d08417ee2d5e9a53e45"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/P029-packet.md",
+    "sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+    "bytes": 67228,
+    "git_blob_sha": "2e7ff85ff84b41b22a2325656c45130ddcad9f3d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/P060-canonical.json",
+    "sha256": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "bytes": 17218,
+    "git_blob_sha": "4042fde39263a6f00dc9a33bc9a0514974e3991a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/P060-packet.md",
+    "sha256": "ae684f429dea9b8eeb658472696e97377c69991975050a22583c6855869571f8",
+    "bytes": 5451,
+    "git_blob_sha": "e4388d4ef8fb8dc860bc30a4b1e4542c8c88a954"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/envelope.txt",
+    "sha256": "260e1f74211dfe98dcf0a858e999bff844707043aa1f06b43de642c41e3a4d16",
+    "bytes": 2681,
+    "git_blob_sha": "77cd9c608ae4695c0af2697cb41a4b2aec987f8e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/invocation.json",
+    "sha256": "71fe776d96c751cb3134d29be81d88ff3cc288a49ea095b5fa5100fb26477978",
+    "bytes": 3041,
+    "git_blob_sha": "ab2f13ca8c6aae494967a89fb93ee3c50028213a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/metadata.json",
+    "sha256": "0a63712680a0a3195a162b2277990b13a71f267ab11bbdd250e07baabfc6cf99",
+    "bytes": 2758,
+    "git_blob_sha": "1c6522944516270d22f47b5e10f843ceb40b582f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/prepared-before-handoff-envelope.txt",
+    "sha256": "742cdd4951d6b8b8853dbd0363e00692e53200e2e6fdecb6035db4217dcabbe4",
+    "bytes": 1965,
+    "git_blob_sha": "7cdc7018de6929ad69aa584a8a18d28647db5d41"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/prepared-before-handoff-metadata.json",
+    "sha256": "175d434afd3ba5bf3b9371fb97ed97b9fd9fa451ba81a0fcf57ea7ffc61cabe0",
+    "bytes": 1637,
+    "git_blob_sha": "04a2702e25c7b80d9c38cdbda14d31bf051d1873"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/raw-response.md",
+    "sha256": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05",
+    "bytes": 9587,
+    "git_blob_sha": "d0022baa3cc2e793bab306c2b6adb6c9b19479e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/read-log.jsonl",
+    "sha256": "a0952c1a5a971fee54d3779dffbfb695ff5f27b2a0a00d6663a755852eabfb6b",
+    "bytes": 1272,
+    "git_blob_sha": "36bb3f81a475862ee6871117731453a577898c99"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/received-upstream-packet.md",
+    "sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+    "bytes": 45008,
+    "git_blob_sha": "d48475717174e7cc21435e60da6c7a9049964076"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/review-targets.json",
+    "sha256": "cc760d06e9c0bc46f577a6b1b6e8d9a1765203e498dd6b61819bd602eefaebfe",
+    "bytes": 173,
+    "git_blob_sha": "e2db4e6490b7fd45928fcb043fdb35ba77575a0b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind-raw-checks/P060/review.json",
+    "sha256": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05",
+    "bytes": 9587,
+    "git_blob_sha": "d0022baa3cc2e793bab306c2b6adb6c9b19479e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind_eval_ops.py",
+    "sha256": "30825072d503e558b3b7a2536bcb5080aee72e085ef35d1f29ae8654cc847065",
+    "bytes": 17957,
+    "git_blob_sha": "fef3e135f6694ce597e8e37fcf890636844c874d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind_probe_ops.py",
+    "sha256": "8ac6e77a0ed55d9020bf9eea34312ad380b5903828a77b75aa5f97a595cb57b3",
+    "bytes": 3882,
+    "git_blob_sha": "5b3be132f23d61c5d9b835e23d043ea305204ca4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/blind_raw_ops.py",
+    "sha256": "bccb75592e7e3fe5643ca723aebdc1af18a486caa118f45579540848fa7a9c20",
+    "bytes": 3801,
+    "git_blob_sha": "a50822337a46f4982203f9a7ac1e88f7f4a8bf2a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/call-counts.py",
+    "sha256": "9a5a0c7313110edfc2f59b297ba813a7f8ed1e61ee0b212c92df2dc799f63926",
+    "bytes": 2397,
+    "git_blob_sha": "df25f8dd4ac0f5d14f11844aec32cddee19ba3af"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/canonical.json",
+    "sha256": "27a52be3e39398841c353c4b0a2c7d5bf8f732049af160363d5cdfb68263d1da",
+    "bytes": 17465,
+    "git_blob_sha": "31679b8e4c1c68c62e4bf83bfe72c4c8c60f09c1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/envelope.txt",
+    "sha256": "b0559acddca3e079cd78f79af288c0115c85f62e67f0bb0954fbff1f2761307f",
+    "bytes": 993,
+    "git_blob_sha": "3dc4a0fb92ff88f2d73e1f7881607174bb43ceb1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/invocation.json",
+    "sha256": "031faf2561a72a1a17f35f44e30785b27e8b5253270fbd2780ab71fba634ce55",
+    "bytes": 1124,
+    "git_blob_sha": "62691ed3afbc00351b77acc91b386a8aad09c48d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/metadata.json",
+    "sha256": "0bfc89123b9024455bdc0d11fcdbaf0fba2798e1d1878ba45bb7f3d57bf73c3b",
+    "bytes": 1945,
+    "git_blob_sha": "5b9daf5c319dd0f7c2b066524d2122c0d82b5e1e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/packet.md",
+    "sha256": "0b41322d6d184a4c7c3a2ddefe0cf68169c585ef1ffb8fd947cd11397bc2e615",
+    "bytes": 7066,
+    "git_blob_sha": "f35de5a6f1331b7ad9ff9f9c969cfb461e8f6ea0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/raw-response.md",
+    "sha256": "27a52be3e39398841c353c4b0a2c7d5bf8f732049af160363d5cdfb68263d1da",
+    "bytes": 17465,
+    "git_blob_sha": "31679b8e4c1c68c62e4bf83bfe72c4c8c60f09c1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P001/read-log.jsonl",
+    "sha256": "606d83b4123e397510a76b96c504e7e0849828c3ef1f8f9f984e8c6c66c3640e",
+    "bytes": 272,
+    "git_blob_sha": "6cd47532a6d40bdf46b06618c8ac3c2c22de6356"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/build.py",
+    "sha256": "3512b9e2501a08ad1cd40247fa8891bd1e1b57c7ec14582ff210846803b83015",
+    "bytes": 10872,
+    "git_blob_sha": "cfdc1cac8ab07970551007bdc97be6f83cb57cd0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/canonical.json",
+    "sha256": "90a43657eab51d1fa9126cba1ee491e83f4cd2608925aa317beb2b7fd9e72ef4",
+    "bytes": 26779,
+    "git_blob_sha": "9bf22a39b5379e1f96384ded6bf2b94ad8f5f276"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/envelope.txt",
+    "sha256": "f8da335cc83c495422a0ccde49b3f57fc996681a6c4ca9c6d9d56c3a76016328",
+    "bytes": 993,
+    "git_blob_sha": "ff9a58e875b0299207e9d075b09c2247554a0d3c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/invocation.json",
+    "sha256": "eda34360ab40fd237459b3459c19dca0e22e98c91df02cf2459981ca85d701fb",
+    "bytes": 1452,
+    "git_blob_sha": "939f911a5073b8582b8a5dcbd3ab3b7b988cca32"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/metadata.json",
+    "sha256": "b5956fb4ee30157a13e9b96324317eeb39d4066da8c9e6a64a2d58ad2e6d83f8",
+    "bytes": 1564,
+    "git_blob_sha": "926181fd77762165f0644731392b7931e1b4ebf8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/packet.md",
+    "sha256": "292d7339034377722899bfe712a886c38428be4b26a9b677cee1661c27551292",
+    "bytes": 79969,
+    "git_blob_sha": "1ea9c0a33e81dcb71bb171ca46976fb8672a78b5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/raw-response.md",
+    "sha256": "90a43657eab51d1fa9126cba1ee491e83f4cd2608925aa317beb2b7fd9e72ef4",
+    "bytes": 26779,
+    "git_blob_sha": "9bf22a39b5379e1f96384ded6bf2b94ad8f5f276"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P002/read-log.jsonl",
+    "sha256": "d7bed43fdf19d5ad7478a3bc757d031c679957367f9cfe12713c6f27f7c2841e",
+    "bytes": 272,
+    "git_blob_sha": "dddbe168960c41e79c1b3bdcef81e64ccb2f6214"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/canonical.json",
+    "sha256": "db0e5b5cb9aed55c83cd78266e5c2a17ce2ab5448adc40d0f3f05d741d3a47c4",
+    "bytes": 8180,
+    "git_blob_sha": "fa60233fd5d704420b9d8b8bd5d29fcc61a1db7c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/envelope.txt",
+    "sha256": "30191e26323b92023285853092043a9042ca812d73d2fe411d56211b9c1ce589",
+    "bytes": 993,
+    "git_blob_sha": "0e64103949cfb3406618557a78bd81d898339ff5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/invocation.json",
+    "sha256": "d2c6c931c742a759cd2f49be41250f7bd3e7f635322a012d0db9f65c9ff8592b",
+    "bytes": 1124,
+    "git_blob_sha": "fbf7ad99cbee960d133499f5eb2cf0c55d18d243"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/metadata.json",
+    "sha256": "5ac7369dc0915a7011cb59aecfd6102ed8e292e27cf3eaec030ea5a1321b1723",
+    "bytes": 2228,
+    "git_blob_sha": "bd9422d958206a15520611edcbc4281a04f26c5b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/packet-provenance.json",
+    "sha256": "3b899b3745f3b901f394298712753d3d7fe571ccbd3910cbdf78fa68b4a87cf7",
+    "bytes": 231,
+    "git_blob_sha": "a7913f9de0259b0f55ecf2e7de4cc2ebc80730cb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/packet.md",
+    "sha256": "0220b23f07b8d566b50ae04f832caf19ef122ae11710ec7cba4eed8ca3f20bd7",
+    "bytes": 2170,
+    "git_blob_sha": "43bd42c94899212f2d2088d46499e011830638e0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/raw-response.md",
+    "sha256": "db0e5b5cb9aed55c83cd78266e5c2a17ce2ab5448adc40d0f3f05d741d3a47c4",
+    "bytes": 8180,
+    "git_blob_sha": "fa60233fd5d704420b9d8b8bd5d29fcc61a1db7c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P003/read-log.jsonl",
+    "sha256": "5afc8009adc9c7273afbe636c74ee6f2997e535b1d6a399816d6ebb979c186ad",
+    "bytes": 242,
+    "git_blob_sha": "281b39b86012d8fecb626067007070487acd3ad6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/canonical.json",
+    "sha256": "78eb92691e438a8ee4eb0fd5cea676372ed722545bed07ea5154b106d0637696",
+    "bytes": 40197,
+    "git_blob_sha": "1717de97b1fba4d460eee34502e27c6739a1c49c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/envelope.txt",
+    "sha256": "57483c2d34b23ac11eb67259471070aa9cd34fcbf7e8079c4daf044b8618014e",
+    "bytes": 993,
+    "git_blob_sha": "c08f8364edec84af8ae9b1a5812c92cabd7e36fe"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/metadata.json",
+    "sha256": "499d3e5e899e4edba9df24f0bfb76d712769f8d7acce56e03d3461407ecc177d",
+    "bytes": 1834,
+    "git_blob_sha": "d791e26492a6e77a44a84eef6e6e3d9fda1b319f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/packet.md",
+    "sha256": "2bb4f062577153e91ff8c9c93e9eb674618f1bb2a89460f03b77f7abfe5f0385",
+    "bytes": 87273,
+    "git_blob_sha": "8e9ccc20408d47463bc765e2ba724d5ca0a76503"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/raw-response.md",
+    "sha256": "78eb92691e438a8ee4eb0fd5cea676372ed722545bed07ea5154b106d0637696",
+    "bytes": 40197,
+    "git_blob_sha": "1717de97b1fba4d460eee34502e27c6739a1c49c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/read-log.jsonl",
+    "sha256": "235b55f8b500d1ad76bc3d39a6c82eb5c474b89e3ed3a73964f4b0bd1f99e9cc",
+    "bytes": 272,
+    "git_blob_sha": "1dcfb5db5c678efc8b396f3ba8bbc22d14de840f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P004/spawn-invocation.json",
+    "sha256": "f36f64f8df2b5392dd34b48d8385be295b3ca184d53e899cd6df7706f2bbaeba",
+    "bytes": 1368,
+    "git_blob_sha": "6c53965e180daf0f7969e05fc572f6c1e008c4ab"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/actual-final-response-001.md",
+    "sha256": "8f51f5c8509d80be4e82cbaed5a41ec27af3a6b115a0950a9fb022e58ee561f9",
+    "bytes": 157,
+    "git_blob_sha": "bbae30eadf64b7eeab591612e91cc75189cd99a6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/canonical.json",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/envelope.txt",
+    "sha256": "5b07219572228d33d3669611a56f2618dc4d32e946ee973cd013b12d7b9cbdbb",
+    "bytes": 993,
+    "git_blob_sha": "66dfc78061aeab9ae78e08c4c08351fa0fd1ce4c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/invocation.json",
+    "sha256": "fbc4e1c7b51c66834f6f4c9e2419d47de1f8830438dce9a000a119eecff2b2eb",
+    "bytes": 1452,
+    "git_blob_sha": "b162e979f2681e3cd797d6061a695bbe45c8fd50"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/metadata.json",
+    "sha256": "dc0f50bdc3f7149fce7882e4cd35fa48c7c2244622ac8ceb3d98f9f7e42b0a6c",
+    "bytes": 2957,
+    "git_blob_sha": "7a6386848cea200361ec6badc924b370d1987759"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/output-return-followup-state/canonical.json",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/output-return-followup-state/raw-response.md",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/output-return-followup-state/read-log.jsonl",
+    "sha256": "3b44954327c60a2e484fefa3b68d925cb8f473a5af4e6e8c7e3a3a645634ed8c",
+    "bytes": 272,
+    "git_blob_sha": "44dd298b5548b3063063d9b88ba9241b05534da1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/output-return-followup.txt",
+    "sha256": "1e4cbe6685f286f0a542d2cc828803f92d5d28a7f26c5f88a31ea362086d5ff9",
+    "bytes": 281,
+    "git_blob_sha": "7fc9b39bcf6a09ce6a6c131e52fcc048bfbef9ba"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/packet.md",
+    "sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+    "bytes": 68005,
+    "git_blob_sha": "450e6aeb638d7abf4ae88bcf670e68998bcc3a98"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/pre-followup-checkpoint-canonical.json",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/pre-followup-checkpoint-raw-response.md",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/raw-response.md",
+    "sha256": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "bytes": 41762,
+    "git_blob_sha": "22c059a84db599629e09d83bb28e5151a06ed8ca"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P005/read-log.jsonl",
+    "sha256": "3b44954327c60a2e484fefa3b68d925cb8f473a5af4e6e8c7e3a3a645634ed8c",
+    "bytes": 272,
+    "git_blob_sha": "44dd298b5548b3063063d9b88ba9241b05534da1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/canonical.json",
+    "sha256": "9b7f59f8dda253ff3510449d8b5b58e16ecff6f314df690c2250638fd6d5afd0",
+    "bytes": 25006,
+    "git_blob_sha": "09298d20bb1271a1cc64aa3ba62351b764a95093"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/envelope.txt",
+    "sha256": "d601d04348be7e0e63f01730e4dec4fc4244d98494027cf61d640d66210547d5",
+    "bytes": 993,
+    "git_blob_sha": "133b8bc874bfbe4a168ddc8e7d2a6763727d1eb7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/invocation.json",
+    "sha256": "001483abe6d4acc545ccc4df8be1de69a495daca90d08483e878dad66bc567ea",
+    "bytes": 1452,
+    "git_blob_sha": "47f1ec0703eee07c9c77ef3d5fc7f115e7aac7d3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/metadata.json",
+    "sha256": "5f0a7d66469b58a67dabac3dda8819d017094f39262f3b3730d082ebcfc8af0c",
+    "bytes": 1564,
+    "git_blob_sha": "42fe4042efa11b14fe2e1b7140cfe5dddcd2a08c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/packet.md",
+    "sha256": "42741cbfe5ebcee42f3762e2969e29a887852d4d4eb1830b8038cd3a44bffb36",
+    "bytes": 54014,
+    "git_blob_sha": "bea8eee54af9a61d285f27db51530dda37016118"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/raw-response.md",
+    "sha256": "9b7f59f8dda253ff3510449d8b5b58e16ecff6f314df690c2250638fd6d5afd0",
+    "bytes": 25006,
+    "git_blob_sha": "09298d20bb1271a1cc64aa3ba62351b764a95093"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P006/read-log.jsonl",
+    "sha256": "c00a8baf9644a2dc5c67b7174520689558efb690e703f22cf63621d4ef82c6b2",
+    "bytes": 272,
+    "git_blob_sha": "13942fd515ff2b331aa9640f220b6aa47982f9e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/canonical.json",
+    "sha256": "6ca06bf561e8fc6e03aaf1f832d6c2a390181dba10d051480d20ba4cdaa7d93e",
+    "bytes": 11949,
+    "git_blob_sha": "c23e969bff1554eb74c5d9e8ffd102b96da412e5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/envelope.txt",
+    "sha256": "ca679614cf42d51a31ca0a95e8da22efe36c7eba5ed98f8e834cdb4fb87bd99a",
+    "bytes": 993,
+    "git_blob_sha": "4b1ff856cc0d702aef6bbb5320f9cd258233049a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/invocation.json",
+    "sha256": "f675e6c6851b2db2834a3a1e9dd5ef73bde784f13cc1bfd140f84f29efffe27a",
+    "bytes": 1124,
+    "git_blob_sha": "b349483edff067aec59e0e0670d3140a34b34893"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/metadata.json",
+    "sha256": "ff6a24cb20a347f563802d9fd1a9d86081941af2d2564c1a69a6cef173de8648",
+    "bytes": 2281,
+    "git_blob_sha": "c66023ad6533fa6bd597012f4bb0253518403e24"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/packet-provenance.json",
+    "sha256": "8847a29a2ddae6453d3d4768e309cc473cf92cb896b822e3fa1e5aee8a799f28",
+    "bytes": 231,
+    "git_blob_sha": "cc04c8311f57f8588ea6f2ca46e1fedbc310c28b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/packet.md",
+    "sha256": "99b99ad7a8d1d04171507481511846d8cdfac2d218a29d8b3fdd8310c2b49417",
+    "bytes": 3048,
+    "git_blob_sha": "7a1dbffecbf36abb22ad2175bb6d3436cd6a62f9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/raw-response.md",
+    "sha256": "6ca06bf561e8fc6e03aaf1f832d6c2a390181dba10d051480d20ba4cdaa7d93e",
+    "bytes": 11949,
+    "git_blob_sha": "c23e969bff1554eb74c5d9e8ffd102b96da412e5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P007/read-log.jsonl",
+    "sha256": "903a6d5777b83cedc1ed6b71b9d0b85e5f26511f926be95b715e0d6f8f24cdd9",
+    "bytes": 272,
+    "git_blob_sha": "40c60a41a4dc297237e4117a02616b1362ef72bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/canonical.json",
+    "sha256": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "bytes": 27723,
+    "git_blob_sha": "8a97fbab7a6a449599d5129b0dae830e2598f78e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/envelope.txt",
+    "sha256": "aaabcc59938a2488800bbb899ba220b64f06236865517c6144370f379cccbb47",
+    "bytes": 993,
+    "git_blob_sha": "1231c67002c94db28733ac0c803c6a1938e784c1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/metadata.json",
+    "sha256": "0eeb91daaf36a6049b786a78b2d85a2ce54766c96c30693b20086d736447ad28",
+    "bytes": 2246,
+    "git_blob_sha": "5069ce9c951e1b475dc82dcdf42c1e1e76fd6455"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/packet.md",
+    "sha256": "058a6f991ebb9b74caccf8eb438aa9c92316180fd0a9895a0c05d9924ce36eff",
+    "bytes": 54125,
+    "git_blob_sha": "f8cb2cb804fe931cc8d7b3528c57564869765474"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/raw-response.md",
+    "sha256": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "bytes": 27723,
+    "git_blob_sha": "8a97fbab7a6a449599d5129b0dae830e2598f78e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/read-log.jsonl",
+    "sha256": "c0df959f467bc503d2b9d8de00861e7927d1e52981e2ecebfc6818513a128f02",
+    "bytes": 262,
+    "git_blob_sha": "3cdfbd732b8d2d073f620e7116d8348a0ba47aec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P008/spawn-invocation.json",
+    "sha256": "66d389e2072e3e3e650770d58befbfb9dbe9bba3fde172ce8ef953fea277c83e",
+    "bytes": 1426,
+    "git_blob_sha": "c708445a504c25039278c7b3974e8665173f05f1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/canonical.json",
+    "sha256": "46f429dedec0d759333252cbf43d9a3002d1a6f392c0bbf361f142daabed7ac3",
+    "bytes": 20868,
+    "git_blob_sha": "fd03394287ad86023440114c04b4ab11b626b596"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/envelope.txt",
+    "sha256": "ee50b46341c9f352c12e8c90147ee50c87616a926e386a61eda3bcca2c1faffc",
+    "bytes": 993,
+    "git_blob_sha": "da1a87f6138457e6e538e6ee08af740cd3792ebd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/invocation.json",
+    "sha256": "26f35f6593f92b8aedc382ff3c537fe2826bc0482426687e11c2c0667a7e70ce",
+    "bytes": 1124,
+    "git_blob_sha": "ec15d46e7d2a24bbf78301a166e4a845dc881c30"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/metadata.json",
+    "sha256": "d6c4ad63497d77b564279397b1ad4820e123147201e603577a6d94ea6e746a6e",
+    "bytes": 1945,
+    "git_blob_sha": "fdfcd0cbdc52067d80ba246ab64d48c180d9e98f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/packet-provenance.json",
+    "sha256": "a8711c9e7bc559a29d47d662ef9070372170120bd127e81ff7483c9dd7f01303",
+    "bytes": 231,
+    "git_blob_sha": "1c642c6dd87ed13e32d526f749e56eb3260dbaaa"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/packet.md",
+    "sha256": "bd37b91f428abfdf5fd7a5a54d8f9dad86f8afa1b94b8ac7ab1e2e973ea11f20",
+    "bytes": 10245,
+    "git_blob_sha": "8eb1fae0a6b9a64293a1e5a4eb8d96993d7eeead"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/raw-response.md",
+    "sha256": "46f429dedec0d759333252cbf43d9a3002d1a6f392c0bbf361f142daabed7ac3",
+    "bytes": 20868,
+    "git_blob_sha": "fd03394287ad86023440114c04b4ab11b626b596"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P009/read-log.jsonl",
+    "sha256": "e570cd98da5469d887515e6526bc57c14ab2d090805f2ca5d590ba6d3a183dad",
+    "bytes": 284,
+    "git_blob_sha": "0ec9fb6a852d5759a49a9f48aff04194d8cdeab6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/canonical.json",
+    "sha256": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "bytes": 37340,
+    "git_blob_sha": "bf99fbfb019564fd6252da70a7c633df79623bd5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/envelope.txt",
+    "sha256": "cf35768fc78e76b43d7da550b98932a630f1efb817a65f198a9cdb257d1f2ee0",
+    "bytes": 993,
+    "git_blob_sha": "761ad6685e4f183ddc74c684f3bf1a098477544c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/metadata.json",
+    "sha256": "5bdbaef0e539b53a6b2d5b82d4fab8eb6dc9468c3d7a57e156095affbf70a46a",
+    "bytes": 1835,
+    "git_blob_sha": "32f038a0bec48cb2e67fce05f4270469cc138791"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/packet.md",
+    "sha256": "2b3b1785b59b949692e6f32becbcc659bfeb1534ebda2e416a0f0c29bce6b4a5",
+    "bytes": 84037,
+    "git_blob_sha": "200fabb3b273f1a23ee22b9ed16fb4f837c6568c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/raw-response.md",
+    "sha256": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "bytes": 37340,
+    "git_blob_sha": "bf99fbfb019564fd6252da70a7c633df79623bd5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/read-log.jsonl",
+    "sha256": "b582a9e1ee11214ea984f48a3f71266e3dfe58f9547db7b8e404bf7cf48c1591",
+    "bytes": 272,
+    "git_blob_sha": "b34c15b2f8d3e312acc0c27fb7d3a540bfafa5a1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P010/spawn-invocation.json",
+    "sha256": "d0480c2afa7589dff8a90277a05dd64352e8a94a0eedfea4a81b05be89fa42d5",
+    "bytes": 1426,
+    "git_blob_sha": "837d9b47d55a250876ed361bc7a385158234c308"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/canonical.json",
+    "sha256": "895d68fa5a096f551713bb915a7126b6694c9a2b65afc290780dbc5677c4a642",
+    "bytes": 16870,
+    "git_blob_sha": "ff7ae9c0a5937b8be5c96f5dbf31e70ca37d6558"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/envelope.txt",
+    "sha256": "8782b1e669708df5d857f7b8a05470c812855adcd80d3b385a2e57108564554b",
+    "bytes": 993,
+    "git_blob_sha": "5edf084ba7a201ebe42930229eef2322fd68e737"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/invocation.json",
+    "sha256": "510db2b0a0a8f37646e52d8603590f1358a02632df7c36d61ae5b2539f245531",
+    "bytes": 1124,
+    "git_blob_sha": "79ecb5b33a05b40ca145c20158b953aab2f926b0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/metadata.json",
+    "sha256": "40272b5303a4a849eece1aa98734952cf5ad3443ad01f5a81f84fb1501f96565",
+    "bytes": 1945,
+    "git_blob_sha": "ada57d22cbfed6bc61d3460103ca385f27772d46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/packet.md",
+    "sha256": "0f142409f779dcd779f09f912c601c57467a28c7512b3ed334148a79e0f11ac7",
+    "bytes": 7893,
+    "git_blob_sha": "8eb3f00f529f8a6319fe4cd7fdbb2d33fb2d676b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/raw-response.md",
+    "sha256": "895d68fa5a096f551713bb915a7126b6694c9a2b65afc290780dbc5677c4a642",
+    "bytes": 16870,
+    "git_blob_sha": "ff7ae9c0a5937b8be5c96f5dbf31e70ca37d6558"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P011/read-log.jsonl",
+    "sha256": "df9bcd38c6a97e5d5bada0313344b966a6335c9e5e99b265bf4fe014875ceaf4",
+    "bytes": 272,
+    "git_blob_sha": "c032864a1f6e82523513aa92fee128f68b658a0f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/canonical.json",
+    "sha256": "0dc95a283f014137789e9f81519ab8f7278db9a47cfb74e9b9806c8584e9caec",
+    "bytes": 36124,
+    "git_blob_sha": "3cec71fba422389135fda20f0c4a60c8e2f0a858"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/envelope.txt",
+    "sha256": "6be055819fc46623a457291c0b423f5f869cf7cf3c8392746c8624b9d6507cd3",
+    "bytes": 993,
+    "git_blob_sha": "3f8eadc47c47a9e47d7f2cf3bedcb1ec11f50c2c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/invocation.json",
+    "sha256": "05403389d3f3c5bde5ee9a1ddba73457cdf1d97398b78ef38e4cb9149cfa03df",
+    "bytes": 1452,
+    "git_blob_sha": "770c45a8be82b03e0050b9494560fd100998786e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/metadata.json",
+    "sha256": "a0735d3926c7219db003f5cb78b7fc8ace6320839aa4045f706c281a6ade9c39",
+    "bytes": 1564,
+    "git_blob_sha": "248e2176718a694bea9f0eed52af3689b21ca34f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/packet.md",
+    "sha256": "7ace7792bff7029ea947b14cbf95d474e8b3ad5eaacb25a928e833545dc37412",
+    "bytes": 81826,
+    "git_blob_sha": "1f1d0a3bb4cda8074ea0054a0f8b22e67d6dcc12"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/raw-response.md",
+    "sha256": "0dc95a283f014137789e9f81519ab8f7278db9a47cfb74e9b9806c8584e9caec",
+    "bytes": 36124,
+    "git_blob_sha": "3cec71fba422389135fda20f0c4a60c8e2f0a858"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P012/read-log.jsonl",
+    "sha256": "941ddac5495d7871f0a4cd7715e89ad38dc99f70e14f2f466d9fe6159c996f7b",
+    "bytes": 262,
+    "git_blob_sha": "57d2760a183142ca3d1c4130d33688e132e0d92c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/actual-final-response-001.md",
+    "sha256": "7b9ea070a4da87ca0dbb02e3ba5a9ab1bd7a5dbdcddca7206c7c8906301c8a7d",
+    "bytes": 300,
+    "git_blob_sha": "b1e4cf4b937a403e9ed3c5279425c71525e16f52"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/actual-final-response-002.md",
+    "sha256": "e2dbd136fc441e45ec7cd8a2eea58d15c661a82794498f07797c5c523ae60082",
+    "bytes": 210,
+    "git_blob_sha": "c5af6d1883e46fa4026891dbcf46b357e42d0566"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/canonical.json",
+    "sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "bytes": 65280,
+    "git_blob_sha": "e7853583b8d113b1599db053d256f01ca295701e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/actual-final-response-001.md",
+    "sha256": "7b9ea070a4da87ca0dbb02e3ba5a9ab1bd7a5dbdcddca7206c7c8906301c8a7d",
+    "bytes": 300,
+    "git_blob_sha": "b1e4cf4b937a403e9ed3c5279425c71525e16f52"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/actual-final-response-002.md",
+    "sha256": "e2dbd136fc441e45ec7cd8a2eea58d15c661a82794498f07797c5c523ae60082",
+    "bytes": 210,
+    "git_blob_sha": "c5af6d1883e46fa4026891dbcf46b357e42d0566"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/metadata.json",
+    "sha256": "77d5ec18962d137f42d40674d19b5cb3de23a3cb15afe29a937eb1c0d699d804",
+    "bytes": 2556,
+    "git_blob_sha": "604af76b7f9221d171521a55ddb57a9fab532518"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/output-return-followup-invocation.json",
+    "sha256": "9e2f285dfd3bb1b5beb6f8ecb21ee230022eadf53643376a3ef39ee63006b668",
+    "bytes": 519,
+    "git_blob_sha": "6e684c461a1801110437f337ab0483c46038dbbf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/pure-return-clarification-message.json",
+    "sha256": "61eb5aabb50d32c8b8418e9408a8fbf9b47ce6993bd472363410d4051d28cb47",
+    "bytes": 573,
+    "git_blob_sha": "bd5934cf4e0863ef7842b2e14242bc36c723687a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/delivery-deviation-snapshot/sha256.json",
+    "sha256": "bc60de0a18e07e655c52afbf5d3a7ba1bd1373c5d0e7c4b7ab7dab37801bfbb0",
+    "bytes": 618,
+    "git_blob_sha": "0510cb5d035c70e277a938edf20a66f0263e184c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/envelope.txt",
+    "sha256": "d374ea6c4a2abf8bc6c56438a159c40618898c7be74d4e93ed4f715e62664a0f",
+    "bytes": 993,
+    "git_blob_sha": "d801e0838b59f622ff80d885729f0b8622eef714"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/metadata.json",
+    "sha256": "de41f5e7fed618b09671ddc9aac73ba3c7f910b8f57257fc8df2f667958be62a",
+    "bytes": 3477,
+    "git_blob_sha": "52f7ffec0c9b9e4ec9e62d862fdf23d79069ee60"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/output-return-followup-invocation.json",
+    "sha256": "9e2f285dfd3bb1b5beb6f8ecb21ee230022eadf53643376a3ef39ee63006b668",
+    "bytes": 519,
+    "git_blob_sha": "6e684c461a1801110437f337ab0483c46038dbbf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/packet.md",
+    "sha256": "b520a61039e3a253a591a89088d3df65e7a7421761d3faff702514c6b63f0c22",
+    "bytes": 72856,
+    "git_blob_sha": "43905af6159fe87aee74698a3473a40bca42703a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/pre-return-checkpoint-canonical.json",
+    "sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "bytes": 65280,
+    "git_blob_sha": "e7853583b8d113b1599db053d256f01ca295701e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/pre-return-checkpoint-raw-response.md",
+    "sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "bytes": 65280,
+    "git_blob_sha": "e7853583b8d113b1599db053d256f01ca295701e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/pure-return-clarification-message.json",
+    "sha256": "61eb5aabb50d32c8b8418e9408a8fbf9b47ce6993bd472363410d4051d28cb47",
+    "bytes": 573,
+    "git_blob_sha": "bd5934cf4e0863ef7842b2e14242bc36c723687a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/raw-response.md",
+    "sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "bytes": 65280,
+    "git_blob_sha": "e7853583b8d113b1599db053d256f01ca295701e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/read-log.jsonl",
+    "sha256": "872c368ff9dbc464100f7b82228afd7bee6dae3bc92c9556577c5d1846d534b9",
+    "bytes": 248,
+    "git_blob_sha": "13aafade3c8c75af7a0824081879ee6b0981f503"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P013/spawn-invocation.json",
+    "sha256": "996a216df9a77f0d50f6207ff33dd2be168e5351361bf022d0980bb16556435e",
+    "bytes": 1426,
+    "git_blob_sha": "a558169adf83064757cf6253829804c6daebbf45"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/canonical.json",
+    "sha256": "7896ee5577c74eff336d6d53a485255c268238d87d49bc98c7e244d9436f472d",
+    "bytes": 9390,
+    "git_blob_sha": "07424dfee9c17e233a3101b1488a47fad64099de"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/envelope.txt",
+    "sha256": "883b92e4b9f552ebfa81ab6fa5fc3ebcfe11369a34183389490107792e2813ca",
+    "bytes": 993,
+    "git_blob_sha": "395f80eaf5a337245df2524299f9e594b767b3f7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/metadata.json",
+    "sha256": "3179b8c2f97bcb52da4a740089e439690948a36e70f3230c7adc113c0708767f",
+    "bytes": 1834,
+    "git_blob_sha": "26573289704293b89389d9ea4a7fea5bf05d57f0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/packet.md",
+    "sha256": "bb4f786b75c9f7d4cdb28a4290c9f64b7733eb5e514521a0de7ed214f4a7d7aa",
+    "bytes": 3780,
+    "git_blob_sha": "319975839cbb4689cdd21369925a947e7039fcdc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/raw-response.md",
+    "sha256": "7896ee5577c74eff336d6d53a485255c268238d87d49bc98c7e244d9436f472d",
+    "bytes": 9390,
+    "git_blob_sha": "07424dfee9c17e233a3101b1488a47fad64099de"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/read-log.jsonl",
+    "sha256": "5432cb3bdabaa68f4f17496db3cff40694f25f44e9f60c235bff61d3c23eb274",
+    "bytes": 124,
+    "git_blob_sha": "864215a57a44e8b42951e4beb95d06a02b301377"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P014/spawn-invocation.json",
+    "sha256": "62506be448bbdc9c565f54a592ce2ee1143d6588c1d50dbad13c529c186a82ae",
+    "bytes": 1340,
+    "git_blob_sha": "6c299d8a23de52c65510a460f23d450d099f4bec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/canonical.json",
+    "sha256": "1ff4870ed8262350f3357327ed73df2fd9e306e52e788cf81b728972f42926f1",
+    "bytes": 9236,
+    "git_blob_sha": "6e7c784859d54dd9350aceb791cac3b7c2e47e48"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/envelope.txt",
+    "sha256": "c0e7aa255b0bc0e4ead74ae46b68e1c1ceaacfb49f8ac377898f93d134c90e62",
+    "bytes": 993,
+    "git_blob_sha": "62b0c7f94f7bcf46910403f5ffb8b05fa87a1668"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/invocation.json",
+    "sha256": "ac69fd094db3ad52daaf076a8bcc00808bdc2a73e3871fddd9750109977e1d44",
+    "bytes": 1124,
+    "git_blob_sha": "7d7b5e36c00111b20dcb1b5b18352def1ae4cacd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/metadata.json",
+    "sha256": "c1c7f20d6b1b2135482e4d9b2f529ebc8cd362485b428deb1c6f10f65a560e89",
+    "bytes": 1945,
+    "git_blob_sha": "06cd18832abe5553b8ad56fc58129c016f14b076"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/packet.md",
+    "sha256": "2d8865813ae87799e4673c9ae07761539c325b05f83e782119e52f5cca81804d",
+    "bytes": 3073,
+    "git_blob_sha": "e41d15dcdec1bfd564955c80186d82a32d2717c7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/raw-response.md",
+    "sha256": "1ff4870ed8262350f3357327ed73df2fd9e306e52e788cf81b728972f42926f1",
+    "bytes": 9236,
+    "git_blob_sha": "6e7c784859d54dd9350aceb791cac3b7c2e47e48"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P015/read-log.jsonl",
+    "sha256": "02e24b87e59b14b803660a31b26fcffbb86154cfdc5c02478a99774d32a960d0",
+    "bytes": 272,
+    "git_blob_sha": "134da5a384ef519c94dfc78428bc13e90f7ce6e6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/build.py",
+    "sha256": "2383ce84dbc39b4d7ce9952dc972af3e967b61d15ea3e619c872c6098b280d01",
+    "bytes": 19427,
+    "git_blob_sha": "d8ce85d9222dd0f0b5a873761724e9f5302f66c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/canonical.json",
+    "sha256": "74c1ee00669c25b50cf9cc0c924c28aef90ecd784f501bd69e17aa69da5b8cf7",
+    "bytes": 28578,
+    "git_blob_sha": "3286a5e2d12b72ef10c82c6475ee04c6a8c395e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/dispatch-failure-001.json",
+    "sha256": "c5110c8e97b73b3a81a7d62fe6cbbc1e9745122b5c07eb5bcfc1ca320fe5a8f8",
+    "bytes": 1422,
+    "git_blob_sha": "175b129453b76a2eb147fedb3eeedb99b9bd92fd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/envelope.txt",
+    "sha256": "b146d919c0dc4d54c2a9cf56733dfe90a9c85f5448222b03381d21d1478cf736",
+    "bytes": 993,
+    "git_blob_sha": "421c0cc126e2ff5398eb91605a656c53f103dde7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/metadata-before-dispatch-failure-001.json",
+    "sha256": "dd6a8d1605f5e8d92aa0a80dac56f839c480c277b9eb4babe483fc85e504d89f",
+    "bytes": 966,
+    "git_blob_sha": "87870956bd65ab62e6c6fb20562b5cc0cb72be8e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/metadata.json",
+    "sha256": "3479a0ff5cc9ef5b0a70e0e240b94a6c4301a1f199e10dd809ad32ef165a531b",
+    "bytes": 1908,
+    "git_blob_sha": "1e735937f7d0225ba090593af8ff15284c327da6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/packet.md",
+    "sha256": "ff96adcebe6e57a19a04c10e8ce047a98b2954b642bf93764b2efe8452f48927",
+    "bytes": 49877,
+    "git_blob_sha": "d900d4d504b5401715047fe32f2f93243f40a0ee"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/raw-response.md",
+    "sha256": "74c1ee00669c25b50cf9cc0c924c28aef90ecd784f501bd69e17aa69da5b8cf7",
+    "bytes": 28578,
+    "git_blob_sha": "3286a5e2d12b72ef10c82c6475ee04c6a8c395e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/read-log.jsonl",
+    "sha256": "7d35d00dc1c854aae36e6b6921d8f0ee5728d3b752c52058a212ed74458a211f",
+    "bytes": 272,
+    "git_blob_sha": "fb38bfcfbebe23c7448e9ada4c992f74b6585181"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P016/spawn-invocation.json",
+    "sha256": "389e7c572a3a523691306ecdba02f05752b5edc61b561e1a422c2d440e39d19b",
+    "bytes": 1426,
+    "git_blob_sha": "879e03327bd8a0e156fcf328b79e3a7a7af18a31"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/canonical.json",
+    "sha256": "bf3c4e4782bfc7d43d41b0d831d06c79fdc5bac2b2fc732abe22e8cf1ac2a6f4",
+    "bytes": 33452,
+    "git_blob_sha": "3d555fab449003cea12e9663540c50c79758b3f5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/envelope.txt",
+    "sha256": "ed37c98491857e8d5d26dd780bf15e1b22d0a1aea3653779c062a7162e45b54d",
+    "bytes": 993,
+    "git_blob_sha": "82ff20bbd7b5e480d379e8c892e54e20db7d017d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/invocation.json",
+    "sha256": "a60d2b279fa721f58ce97dce27b07cc2789a0b9b2eb6e062d5a803fc4401e7e1",
+    "bytes": 1124,
+    "git_blob_sha": "180502cafe6bcced00e02e6ed959d3863535a888"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/metadata.json",
+    "sha256": "94ecbebb1f202583ce78834c765c996e3e56009e211cb6e88d29c2ebf5105326",
+    "bytes": 1945,
+    "git_blob_sha": "3a431c716b5cce8b6549a712658651ef00ce17a3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/packet-provenance.json",
+    "sha256": "f1c23a15702dc1cb25bdc20ee494e420f59d0848531b96b1abdf70020c33dc95",
+    "bytes": 231,
+    "git_blob_sha": "ae4164fa5f392d0763a795a81d72055ac01d33d7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/packet.md",
+    "sha256": "d6489f2218bc24f3f23344b3d6b927fd5bbc443040894e1e343d8669585c3996",
+    "bytes": 12477,
+    "git_blob_sha": "6941d89b679b60cf92845225fe119a4adb8f2c5f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/raw-response.md",
+    "sha256": "09675a91fe04ea0723499370af44d10801ad2e3f4cf0c1ac82abb202929dee75",
+    "bytes": 23264,
+    "git_blob_sha": "a35bf72fc6d2ed54e10fcdaa787ea1c6f999cea0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P017/read-log.jsonl",
+    "sha256": "12f81f6301dbe36d5b9822a721e3040d749e02f29b6d1f484c2614cbf974155a",
+    "bytes": 248,
+    "git_blob_sha": "bab555215115b986d8708c7b7cfe895363569959"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/canonical.json",
+    "sha256": "2682a730a69c43391cb6a3768a4a9124fda8bbc886ed488e4984b7da5b40f5e4",
+    "bytes": 20515,
+    "git_blob_sha": "d1c3f94e4df6c638976694330a5577b4a6697bfc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/envelope.txt",
+    "sha256": "f91bbbbdba5e3f92f8b89d50895d0ddb6dba897c475a29dd57c2fb001ff84564",
+    "bytes": 993,
+    "git_blob_sha": "7c82a0ec73d5060d75017db1dc5b292fd19db0e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/invocation.json",
+    "sha256": "9c6ba3f878f3c41bf6847c57dc81dff5d7576e428d2834bad03a4e4524a537be",
+    "bytes": 1124,
+    "git_blob_sha": "426ff9b53f18eec86a93cae73bda818c5055dca6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/metadata.json",
+    "sha256": "84faa3ba282b5e25ef94eae0b325f856abefd40b568cbadeb44682b25b7e1899",
+    "bytes": 1945,
+    "git_blob_sha": "13d1cefa698fa38616c2ed56488fc2892428da06"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/packet.md",
+    "sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+    "bytes": 9454,
+    "git_blob_sha": "aff88ffb8dde882a31c74c2b739d42172dbd4e7e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/raw-response.md",
+    "sha256": "2682a730a69c43391cb6a3768a4a9124fda8bbc886ed488e4984b7da5b40f5e4",
+    "bytes": 20515,
+    "git_blob_sha": "d1c3f94e4df6c638976694330a5577b4a6697bfc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P018/read-log.jsonl",
+    "sha256": "515d41dd53592ba6135a584597c100f2fee534db28253213af430d4a1020d074",
+    "bytes": 272,
+    "git_blob_sha": "b3a425c9a674ae151ea5c20267fe5e62c239b39d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/canonical.json",
+    "sha256": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "bytes": 19634,
+    "git_blob_sha": "e9322884ae63c6f1edccf3ea73838d3ae4678ceb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/envelope.txt",
+    "sha256": "4a6e94916541c6e7c06c556262bc48475500165ebdba3cc213a217089be8cc78",
+    "bytes": 993,
+    "git_blob_sha": "5b5e2842c89847f2bf62a930dcb8f4fa29b09933"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/invocation.json",
+    "sha256": "e9417a4c62f1f1bf43c150397ecc08ae8de8e29ab14159bd7dff9c7967ad473d",
+    "bytes": 1124,
+    "git_blob_sha": "0c4b55c8a089201df308bbc638a0eb6a7b593eac"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/metadata.json",
+    "sha256": "1c9fc23566a1922724ae462376095626a252629c8528856b33a2c5fac7ea5a90",
+    "bytes": 2458,
+    "git_blob_sha": "ea7dabed631273dc3603f6ac7fe5c9832674ba2d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/packet-provenance.json",
+    "sha256": "4c7e2baad5ded0bd93a9e72059cafd44818aa6d1c739032d735c4953d1a55734",
+    "bytes": 231,
+    "git_blob_sha": "3332d6243b2bc7442c483ca6f8b59738b075df56"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/packet.md",
+    "sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+    "bytes": 7167,
+    "git_blob_sha": "f4ee36298c030c31d6c8814e87f4d77c396fd7af"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/raw-response.md",
+    "sha256": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "bytes": 19634,
+    "git_blob_sha": "e9322884ae63c6f1edccf3ea73838d3ae4678ceb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/read-log.jsonl",
+    "sha256": "0fb9eda222765e0a765cdd5a28c2d7240ec01980f6658244e6f05e9df1caf66c",
+    "bytes": 272,
+    "git_blob_sha": "12cc8c970de4b0f3da4a95840986f114dc1e0e5a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P019/spawn-failure-001.json",
+    "sha256": "2f8025e6a133991f6681bb289dba2ba77abadb15162bd9b83ec8a62fb27ca221",
+    "bytes": 986,
+    "git_blob_sha": "8504e82a63b75b785bf4b0fb5d12d5842fdbd699"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/canonical.json",
+    "sha256": "a1c7aaee1032de3ff2279229557ea9f52f2ffa2103b90f5fe75aef2134c369d6",
+    "bytes": 10755,
+    "git_blob_sha": "644479ac1c935ce901589eaf1dbd0d65cb96c931"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/envelope.txt",
+    "sha256": "8ecdd8508a00e18cb7056081be37e4937d21549ffd7878d2fe064da3c2a34b31",
+    "bytes": 993,
+    "git_blob_sha": "1efe7900e0f1eed2e7574df81dcb2f1fb6fa0566"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/metadata.json",
+    "sha256": "99152395f73ac12c68d75cd12332bed7804a35ed068a40c8c2ce7667a0b98973",
+    "bytes": 1835,
+    "git_blob_sha": "00959467b1fa33954344b68b8a558585b766c3e8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/packet.md",
+    "sha256": "2a535e5391e5b42b8e68adb99895e4f46778fd9d4bb48827a325a12708f3b9c6",
+    "bytes": 3439,
+    "git_blob_sha": "2d8e0aef001ad8d41df6843e24d92e0e6052d6ee"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/raw-response.md",
+    "sha256": "a1c7aaee1032de3ff2279229557ea9f52f2ffa2103b90f5fe75aef2134c369d6",
+    "bytes": 10755,
+    "git_blob_sha": "644479ac1c935ce901589eaf1dbd0d65cb96c931"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P020/read-log.jsonl",
+    "sha256": "02ffa514186eb3cb9ed54600b2aa543e4fee0ac07c327a38bd55c38e94ed59fe",
+    "bytes": 272,
+    "git_blob_sha": "b67712efa753260a940eb58ce24ad0ae6be2c151"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/canonical.json",
+    "sha256": "6a4bdb95da9a39e6e017caf83b089896c87a6e8446494e077c1c3b25a443e0b0",
+    "bytes": 20473,
+    "git_blob_sha": "49568a7c959e381857028fc0525c50e9dc0a7724"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/envelope.txt",
+    "sha256": "338a8050901b75ee38edf0a7b84ea8cbafa60c6a94147476eb90316622afef4b",
+    "bytes": 993,
+    "git_blob_sha": "68e54bb9988bb41b98eb28e5af086d8d984ec77e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/invocation.json",
+    "sha256": "2f6e8bec199244e625b2837333b134caea841b126c1d5a6104db2c80a13853fb",
+    "bytes": 1124,
+    "git_blob_sha": "30bba9db437c9d21fb7f6000210b64255046c7df"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/metadata.json",
+    "sha256": "ba7230aeb1734f03fa6236d6046294cb87e4fb6da0184fcee447a289748a9a2d",
+    "bytes": 1564,
+    "git_blob_sha": "46d3af08d8f26915685698d97ef3d58af85ba6e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/packet.md",
+    "sha256": "ef52d4aa51dc697a74ff4d2c87f1070d56635d8bcf10570f60c5dc5876857e57",
+    "bytes": 10525,
+    "git_blob_sha": "aba892b2250ee75a72c4d484ef1ca15257519db1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/raw-response.md",
+    "sha256": "6a4bdb95da9a39e6e017caf83b089896c87a6e8446494e077c1c3b25a443e0b0",
+    "bytes": 20473,
+    "git_blob_sha": "49568a7c959e381857028fc0525c50e9dc0a7724"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P021/read-log.jsonl",
+    "sha256": "457250aa9d6546b22466e7080c21d313dadee70406cba469d75fd6f9aeb95ad1",
+    "bytes": 272,
+    "git_blob_sha": "8084ed618646211669e1ae2a9ac452af6cdbe09f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/actual-final-response-001.md",
+    "sha256": "09a649573c0efb4c085f2d764a429957cbc0a6e37deba5433044c9ce68711e63",
+    "bytes": 437,
+    "git_blob_sha": "6436289eebf5ff9323b42771dfd45b68160db60b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/build.py",
+    "sha256": "ccb211661567d2abe9fef1a6106217ec1dca6f4b6ebd83b926b5eb65df76422a",
+    "bytes": 14358,
+    "git_blob_sha": "b4953e3a6bfead269ee840edb937a35fff6b3407"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/canonical.json",
+    "sha256": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "bytes": 36442,
+    "git_blob_sha": "b4eaf7d8d76c5f14514b823d453ca8bd5eb71886"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/envelope.txt",
+    "sha256": "6e1442ebb52e94af32be8e613b63e7ab2752aed8071da3a3200ff07ee4e4b477",
+    "bytes": 993,
+    "git_blob_sha": "2f2263ddbeaeb2ce7398b359d73f409d90ba4358"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/invocation.json",
+    "sha256": "d5831765b1040073a0ba868018e84ae8b6de01f38d9955d20f6a26b78ccbfe94",
+    "bytes": 1452,
+    "git_blob_sha": "e9461ae317045ff84ae0c106a850d7622bf19ae7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/metadata.json",
+    "sha256": "0c79557d97d1cbd31685ac8751e4b8d4ba7ca01c500dabc8ff396f9ac71353d6",
+    "bytes": 2215,
+    "git_blob_sha": "0fc1ee50cf63aa5bb405bb856f1164494affe879"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/packet.md",
+    "sha256": "7a42612781a41d9afc7305d9dd3582d5a6d9faf3327d5b5b01789a2ddc046263",
+    "bytes": 84045,
+    "git_blob_sha": "8ffb7d16f4d8eb926fe380fbd469517591bdf91b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/raw-response.md",
+    "sha256": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "bytes": 36442,
+    "git_blob_sha": "b4eaf7d8d76c5f14514b823d453ca8bd5eb71886"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/read-log.jsonl",
+    "sha256": "5e40cfef7ed614466cfaee6b0c0c6f5a6389cd5739828f630c0374dc1fb7caf0",
+    "bytes": 272,
+    "git_blob_sha": "41e8eda49e9819c46b7da1dbe3c07bd3671a87bd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P022/spawn-invocation.json",
+    "sha256": "f92d2b38f583b6e2558937fcb62a6219b96a38b158373b866aa6fb75051d7082",
+    "bytes": 1460,
+    "git_blob_sha": "b432b78a2d92c693543b25c87bb84d699c1dfbac"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/actual-final-payload-002.json",
+    "sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "bytes": 47732,
+    "git_blob_sha": "dc9ff0eaeecc89662214a0fb9d1815f7eafbb1bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/actual-final-record-002.json",
+    "sha256": "cc538c45ffba47fc10cb8452653aefaffdc4e3f8737fa1c37879c96fae1298b3",
+    "bytes": 487,
+    "git_blob_sha": "9fc876160e4a00de4af68984a8261fccbbe29e02"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/actual-final-response-001.md",
+    "sha256": "bdaae4f93deb0891be0969a7b9b65984af991cd66aac2678bed2a8b291f2b067",
+    "bytes": 369,
+    "git_blob_sha": "afbb93662d51d04c3dcff25a0b57b27e068b7ba2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/build.py",
+    "sha256": "e5cdd0d2b5d6b172a27644a4def53b3b0fc3593d6fb918f55058fd44305fe843",
+    "bytes": 15721,
+    "git_blob_sha": "564519219a50ff56053081643e6d0ae782335da8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/canonical.json",
+    "sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "bytes": 47732,
+    "git_blob_sha": "dc9ff0eaeecc89662214a0fb9d1815f7eafbb1bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/envelope.txt",
+    "sha256": "f4f69386f071ad32e993b82987632f7fd9623e8bb7629d72471649fd1b82dbe8",
+    "bytes": 993,
+    "git_blob_sha": "79131851aae5733dac26c8d92f2ae363942bf217"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/metadata.json",
+    "sha256": "a385bb74357e48c2f3b3fd2230b1a65bf7f448b3d18f41937e216ea1c6675f1c",
+    "bytes": 2593,
+    "git_blob_sha": "94d1775a545cb64427cac1777eb8e41693275c10"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/output-return-followup-invocation.json",
+    "sha256": "e4233005ed3c333c929278d89c151fa93f69532fcf5a30e2de36f9e0c2f5444b",
+    "bytes": 444,
+    "git_blob_sha": "96ddb22c7e86b9595a26f688e85be9a36766c3ea"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/packet.md",
+    "sha256": "53672a525c0ba3722ad9e1738294c2b28bde96b6d0c12f71d4cd8d2e5ee02cd5",
+    "bytes": 116117,
+    "git_blob_sha": "1031b0102a4f09721c6db3c5ffd505d41010cd22"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/pre-return-checkpoint-canonical.json",
+    "sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "bytes": 47732,
+    "git_blob_sha": "dc9ff0eaeecc89662214a0fb9d1815f7eafbb1bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/pre-return-checkpoint-raw-response.md",
+    "sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "bytes": 47732,
+    "git_blob_sha": "dc9ff0eaeecc89662214a0fb9d1815f7eafbb1bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/raw-response.md",
+    "sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "bytes": 47732,
+    "git_blob_sha": "dc9ff0eaeecc89662214a0fb9d1815f7eafbb1bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/read-log.jsonl",
+    "sha256": "cc6c87107ac6cbf1a58d81e31045af728a76b42f5588529db6b08150f6630938",
+    "bytes": 272,
+    "git_blob_sha": "9c814135221263cbdd772db43fe77e89dc222b9f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P023/spawn-invocation.json",
+    "sha256": "0653f9bfaf2e0868883708c3ece8d89eef6b74bbee1b4216daf2c8b704555c25",
+    "bytes": 1426,
+    "git_blob_sha": "70682b4c4cf3dea179055e9b59f4a2260b57f0ad"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/canonical.json",
+    "sha256": "9b30d1751d03ab8c49f6ef80357f167221009bc2d84137ca9672ad48625d5d6f",
+    "bytes": 24359,
+    "git_blob_sha": "ef5cf50fc46a60549fa13c2f0d1d80e80df1e45c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/envelope.txt",
+    "sha256": "e0b201e9ac630d79f8811ec0fea5a2224dfd0d6e36271beb01916e592c19099a",
+    "bytes": 993,
+    "git_blob_sha": "7351c3bfee7f4f29ebe2631ab7f7c0d86bee2b82"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/invocation.json",
+    "sha256": "437946970e51d44450a44c770fd044d3fe1ce59da3f12229763f81dd5679a68c",
+    "bytes": 1124,
+    "git_blob_sha": "3e830e81365ba3e248ee47f53b4a5c3095a3380a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/make_output.py",
+    "sha256": "7bfb95fd2f66117a3f4cf7f202755e968b6e25ea86e846475fdddc71d44f4c9a",
+    "bytes": 19142,
+    "git_blob_sha": "887dda3140c26b1b481065074fbbfdd2dbb86071"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/metadata.json",
+    "sha256": "abf2b96d56b67388b6afc05f15da36f91de8ad8281a5b1c432fbd667c906ad0b",
+    "bytes": 1564,
+    "git_blob_sha": "f0936eab44a9c89fa092ec90dd31aaf8e6979d11"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/packet.md",
+    "sha256": "d4573581289633ecb58be6a5a08303ade9e6a501311acc9c33c10dda3979b259",
+    "bytes": 11844,
+    "git_blob_sha": "c0db3c91f72b69aebe8601c5f2ed073fc0e4193c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/raw-response.md",
+    "sha256": "9b30d1751d03ab8c49f6ef80357f167221009bc2d84137ca9672ad48625d5d6f",
+    "bytes": 24359,
+    "git_blob_sha": "ef5cf50fc46a60549fa13c2f0d1d80e80df1e45c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P024/read-log.jsonl",
+    "sha256": "01c666f46e411060a2c57ce5754c4c4944dbb352edf71de639933daad329f7ca",
+    "bytes": 272,
+    "git_blob_sha": "5c5a7db35c64eb026804c9bc1a7f401b09ccdda2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/canonical.json",
+    "sha256": "308c51c86514376605c026893272879872075be0ae958d44d44c07e675bd7e88",
+    "bytes": 15829,
+    "git_blob_sha": "bedda95c52238953d46c154ab0057a3f5024da24"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/envelope.txt",
+    "sha256": "c4794be43bf1ab2459b6334b3c2c59dac015b7b631d95cab296942170ee17848",
+    "bytes": 993,
+    "git_blob_sha": "1432404e718cc4313b7f7afc848c36d0230f4705"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/invocation.json",
+    "sha256": "a72c253598a0a0bac10bb3512698e2960c0fd7b982046c878e5bc571f7ed13df",
+    "bytes": 1124,
+    "git_blob_sha": "465aa787af6cb7fc2e52c685c6ff8f19026fa086"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/metadata.json",
+    "sha256": "11b7e2df8b177f3a16eabb9bce8e5e055e294b07fb9cff316f639a3ce9f20ac2",
+    "bytes": 1564,
+    "git_blob_sha": "7cc7e9613e3329e600c07a841d0e68011a436c2e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/packet-provenance.json",
+    "sha256": "5e25ca75276f2f7b904fdd67c28849a5c6e9c2f5559537d91708755e326a572e",
+    "bytes": 231,
+    "git_blob_sha": "28ed12f8b6743c24a6a89f28dbc8b4e759ce7228"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/packet.md",
+    "sha256": "f2d9765faf7178528a9ff8703b0cab7102f0ec1034e3a447147b7e0ac9ecf9d4",
+    "bytes": 5899,
+    "git_blob_sha": "7de57a02fea4e43df2fd658503d584dd818b580c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/raw-response.md",
+    "sha256": "308c51c86514376605c026893272879872075be0ae958d44d44c07e675bd7e88",
+    "bytes": 15829,
+    "git_blob_sha": "bedda95c52238953d46c154ab0057a3f5024da24"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P025/read-log.jsonl",
+    "sha256": "3098c3cb135bbbc1fbb86e424928307348409c07aca83626bf608f2cdec795c5",
+    "bytes": 272,
+    "git_blob_sha": "d77d7fb02bd780366fd1d57eecf362f865eebe96"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/canonical.json",
+    "sha256": "d7a833ccaebf268002abd36e475fa2002f3647e3e43f49c91dfd87b0a528dc1e",
+    "bytes": 26939,
+    "git_blob_sha": "23800c8f2e571a820ea4b75add3c384d591eb01b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/envelope.txt",
+    "sha256": "592585540f484a5e5998d686f14586a8e850afdb6789c43dadd2cf476d272bc2",
+    "bytes": 993,
+    "git_blob_sha": "f0f67aee163036bff3920545434edce688105a89"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/invocation.json",
+    "sha256": "9251b24e61c762afaaddf772253e9882397b1779f51b9d0292159269c21d6f84",
+    "bytes": 1452,
+    "git_blob_sha": "0c7ed2074791b9f9959dfb1d3f910c2daf70eb70"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/metadata.json",
+    "sha256": "9102589ce6acc9cdd63bc53e8b365e011fd978cda1626c127d824168e5c8980b",
+    "bytes": 1564,
+    "git_blob_sha": "94770749ba7c5311e21a87b640cbe703cce463f6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/packet-provenance.json",
+    "sha256": "c0325bf8131d1d3423fd1eeb3d4550d458474c23c269758f28ed7e783a502010",
+    "bytes": 231,
+    "git_blob_sha": "bc5269fd7086b33916d4b7dafb1bba3d5f0e2c46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/packet.md",
+    "sha256": "8145458070a522533e30330360ac7c25ed3517b229f0d2fdd547799ba318c162",
+    "bytes": 11279,
+    "git_blob_sha": "087f0c7c08b9dc8aa1f5ca949c0e793e00a0ca9c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/raw-response.md",
+    "sha256": "d7a833ccaebf268002abd36e475fa2002f3647e3e43f49c91dfd87b0a528dc1e",
+    "bytes": 26939,
+    "git_blob_sha": "23800c8f2e571a820ea4b75add3c384d591eb01b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P026/read-log.jsonl",
+    "sha256": "3a32ff110aca25459b3310670bb965de628f4b26049025fb2b2d4c5af4b6dfdb",
+    "bytes": 272,
+    "git_blob_sha": "6f9dadbbfdd327b508281faab7c6d149e4ccf398"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/canonical.json",
+    "sha256": "576a6bb360ab34ef642888451c6442997dcf96d1e2e65b4b798af96b38064f77",
+    "bytes": 31158,
+    "git_blob_sha": "2a797c6cea1ce68294f3496722f8ea21a13bb2dc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/envelope.txt",
+    "sha256": "2e84431d2b612d2014ffd29cbcd29e25631197ef98ab7ca7418dd95cd9e42b1c",
+    "bytes": 993,
+    "git_blob_sha": "138ace34e15c637fd9a5f2448f975868d653f64d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/invocation.json",
+    "sha256": "67fe4eca20ef241b53903ab2db16d3213f334d2f1bcc5ca2490fe0a41ec1d9df",
+    "bytes": 1452,
+    "git_blob_sha": "0dbbc6c4cad0474dddb7c57eb857f1199fb7cba3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/metadata.json",
+    "sha256": "517859e33a97d542f84e4adcf4cbbf9ae43ea50cbed14ec12f529e3840f44203",
+    "bytes": 1564,
+    "git_blob_sha": "99393c1050beab7598348f80c6ee4842c3641334"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/packet-provenance.json",
+    "sha256": "bf91156f3761368307448fa69535504cc5372f827cc73256c5550d969851b50d",
+    "bytes": 231,
+    "git_blob_sha": "bf517d20cc1d848365f27c88cfb52217621300f6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/packet.md",
+    "sha256": "b571f5b1e94c2e8766b9314ac0c6112afb3ce557d8f833564832070d26348874",
+    "bytes": 14001,
+    "git_blob_sha": "72884ae74bcb4fece0bb7caa47a08a68bcc80f89"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/raw-response.md",
+    "sha256": "576a6bb360ab34ef642888451c6442997dcf96d1e2e65b4b798af96b38064f77",
+    "bytes": 31158,
+    "git_blob_sha": "2a797c6cea1ce68294f3496722f8ea21a13bb2dc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P027/read-log.jsonl",
+    "sha256": "6087a73d05a7a154fc7cfb54b29ae0b79ff508ab132b1977b637ef5b90afc759",
+    "bytes": 272,
+    "git_blob_sha": "3859b956b4ace90c7f24286ad4594874873e891f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/canonical.json",
+    "sha256": "9773569112e4f712946372f6af0f1585cb8ba2c820784dc5eed9cdf25115092e",
+    "bytes": 17916,
+    "git_blob_sha": "7830df9b6f83267fe6bc783f2bdfa37c06f15043"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/envelope.txt",
+    "sha256": "bed07b7b3fd1300d22fcc979d18a2bb1528148d71a46b6bb458239e017779418",
+    "bytes": 993,
+    "git_blob_sha": "9525917543463a7e6a4ecaf8e7247d46b0494348"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/invocation.json",
+    "sha256": "a649e16cfacc83f1ed7d4b80284b21013dfba5298594f6d26e13fff337c68bd5",
+    "bytes": 1452,
+    "git_blob_sha": "895ba5757abc3e4343a9b8270fef22b092c15a59"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/metadata.json",
+    "sha256": "6caf6b05003a23141a6749918a7ae0b1653a18d67223790ecd8539fd0f369843",
+    "bytes": 1564,
+    "git_blob_sha": "7beef31fdc80a0bd0f069d26229a8af0d97a93a6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/packet-provenance.json",
+    "sha256": "31e200f24dfd9e350c1c49c3e1992728b56495e7abdb06f8da8cad90a65ba18c",
+    "bytes": 231,
+    "git_blob_sha": "bf48c5eab360af493a4172e26f7879070e618f34"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/packet.md",
+    "sha256": "a2c63192dfafe65698eb8f658c62aaa97e4ea3cb986becb79be5b2bff5bd823a",
+    "bytes": 6567,
+    "git_blob_sha": "07ef66625007a7844502af416e89fe34622dbc48"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/raw-response.md",
+    "sha256": "9773569112e4f712946372f6af0f1585cb8ba2c820784dc5eed9cdf25115092e",
+    "bytes": 17916,
+    "git_blob_sha": "7830df9b6f83267fe6bc783f2bdfa37c06f15043"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P028/read-log.jsonl",
+    "sha256": "bba7a7be5e695ded9153d37e58f113da4796fb0cf747346064c2119bda5bf7e9",
+    "bytes": 248,
+    "git_blob_sha": "cf71cd2fbd91c80efd316735e42856593445c1bd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/canonical.json",
+    "sha256": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "bytes": 29234,
+    "git_blob_sha": "68d654f03ae99843bc292d08417ee2d5e9a53e45"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/continuation-pending-snapshot.json",
+    "sha256": "78647e7dac0d872628f561a167902ce65cfd1b736b86b4e7454c6befe0bd76ba",
+    "bytes": 478,
+    "git_blob_sha": "cd52ddc571aacfb6b5c7167a2282fbc285874d00"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/envelope.txt",
+    "sha256": "459408a90b79ea1a95227a262794e3f4403344a8b4c4fbfcc228a2a9808668d1",
+    "bytes": 993,
+    "git_blob_sha": "c404104817089584763469ca8864a6d8b05ecb9e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/initial-unavailable.json",
+    "sha256": "23d1491a341517004e3ce772749796fb8ba8745c70bb71126bcbe32b1b93f1dd",
+    "bytes": 230,
+    "git_blob_sha": "8b53d9e5c18f3225ad1a50d55ffea34d2ea5db3d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/invocation.json",
+    "sha256": "148f3d4bfd499a15afcb5b2d0a23a8d0cd25488539a541b9cb601d07b2df573f",
+    "bytes": 1452,
+    "git_blob_sha": "5b8f3142c47f9524e12b5c5d7f60a2ce34acab67"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/metadata.json",
+    "sha256": "d89d92dc4d0f6ac61bd5952dbb4316167953669ce815a3329409521701a64ece",
+    "bytes": 1921,
+    "git_blob_sha": "17324139291fb999dc8a1c77500f1fe9b6f617aa"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/packet.md",
+    "sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+    "bytes": 67228,
+    "git_blob_sha": "2e7ff85ff84b41b22a2325656c45130ddcad9f3d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/raw-response.md",
+    "sha256": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "bytes": 29234,
+    "git_blob_sha": "68d654f03ae99843bc292d08417ee2d5e9a53e45"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P029/read-log.jsonl",
+    "sha256": "e0565ec0e34f398708109fbfbd7a135a92fd611bd3ecd9e8f2841744c7afd23b",
+    "bytes": 154,
+    "git_blob_sha": "6bf94a13052db8fdc06a55703247460660865672"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/canonical.json",
+    "sha256": "53f9a6109fe6a3b3cb9a1aa4d6d02f18f6c0cf17cb4636189a049e1d74668287",
+    "bytes": 26932,
+    "git_blob_sha": "6266ebaa28d5c92259ca48bbfe61a3e64904286d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/envelope.txt",
+    "sha256": "2fa0ef646c887fc19e952c9a9258a34e7c2ae822b4ed461d712ba5ef5c152208",
+    "bytes": 993,
+    "git_blob_sha": "47df3492069b72f2a1c69337d57215d09f43524f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/metadata.json",
+    "sha256": "177da65577cae2b2e8f181248f3b9ca5c4b85dd2129fb682a1e9099d1d033a95",
+    "bytes": 1908,
+    "git_blob_sha": "ccba855e19596e0f6385d11aba0d421629d328d3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/packet.md",
+    "sha256": "13febd8b1f60dc788504f3a894eb5b18c8fe5ba5c50a20e53f939cb6fef584f1",
+    "bytes": 39861,
+    "git_blob_sha": "5e7117f12c0c5322961f625fd65e71ba76982ec3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/raw-response.md",
+    "sha256": "53f9a6109fe6a3b3cb9a1aa4d6d02f18f6c0cf17cb4636189a049e1d74668287",
+    "bytes": 26932,
+    "git_blob_sha": "6266ebaa28d5c92259ca48bbfe61a3e64904286d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/read-log.jsonl",
+    "sha256": "d95df05e3e4d55f8f4860132f610db48ec3270bf1385fcd3a455faf770f6e2cf",
+    "bytes": 272,
+    "git_blob_sha": "a29ed17e63dae5b608af9efbd3279a436164106a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P030/spawn-invocation.json",
+    "sha256": "06ba23e775f227c15d0f51ff48cfb9bb52f13b50c57cb41d68471d86e2465b7b",
+    "bytes": 1426,
+    "git_blob_sha": "4d2e2a893713f58869fd7c9c65dd6ae61333f9d6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/canonical.json",
+    "sha256": "cc870bb3e2dff7306c51eb10f97439f71762836140b52a1db264ac9eee18a313",
+    "bytes": 21647,
+    "git_blob_sha": "c6e982b5237d166253c6025a5ea27746f3db5573"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/envelope.txt",
+    "sha256": "5136838df254aa4c4f9329e6a4d45a9f9835650e7407680886bc6a1b1882864e",
+    "bytes": 993,
+    "git_blob_sha": "30f53a4a37e869c7db14cda2461d9a00e1110ff5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/metadata.json",
+    "sha256": "d29ea7b12f7380510e34a701e2eb4117c138b2e451afd22869ad2f9f7bc3e758",
+    "bytes": 1843,
+    "git_blob_sha": "7164eab8409c61ec32162ad42d8657d384218edb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/packet-provenance.json",
+    "sha256": "7ba3811742c0d2f5411bd0122b56fc314ba2517b1cc4de2d8192699c8c93f4ab",
+    "bytes": 231,
+    "git_blob_sha": "7636e11f2e555b7987b43f6d8a730e519386bb50"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/packet.md",
+    "sha256": "7cc5c430bc6351a950f4dcc8aa189ab66ada16fa41b31ec52a32061b10d5fb72",
+    "bytes": 12713,
+    "git_blob_sha": "ea33739821d206dbca7c9ced9f10182f83c68903"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/raw-response.md",
+    "sha256": "cc870bb3e2dff7306c51eb10f97439f71762836140b52a1db264ac9eee18a313",
+    "bytes": 21647,
+    "git_blob_sha": "c6e982b5237d166253c6025a5ea27746f3db5573"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/read-log.jsonl",
+    "sha256": "1efc4ec6cb4cdca6032d9ffa637963b34d0cfbe74d379710c5e98136bbb4f13a",
+    "bytes": 272,
+    "git_blob_sha": "c9544064c5b2a3668c34c7bda7e3c5b14f2c56bc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P031/spawn-invocation.json",
+    "sha256": "68257eccb8f11c4e550ac89e39f86e9a7d26386f78b0f1634cff2a97dea650ea",
+    "bytes": 1426,
+    "git_blob_sha": "9b9421e652636154fca80110e7d7d1d468855d94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/canonical.json",
+    "sha256": "fa4295b0a3dd36a4af78cfa50db6a39cf8fcda53f7e8bc4adbefde314f238aef",
+    "bytes": 28414,
+    "git_blob_sha": "c42b4984ae418de9c54492771ec678e093dfb958"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/envelope.txt",
+    "sha256": "9fe5be0b135dfe289d5adf17c36cf575e3f1117ed6ddc839bc67e6d74c86d4b3",
+    "bytes": 993,
+    "git_blob_sha": "bb02e575392ea104d701c6691199f8288398c439"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/metadata.json",
+    "sha256": "e25d8489767d82a89de69bedc40a940bb7a97f370720a6717bc99d4e53521d80",
+    "bytes": 1832,
+    "git_blob_sha": "ff7930d9770c9b70f6570c7041a82a277ca16dc4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/packet-provenance.json",
+    "sha256": "d62bbfd8c822f35af569546be546e1616aa9f588431c0068e72bb48f1ed2eefb",
+    "bytes": 231,
+    "git_blob_sha": "66c0a07431e84d559acf2bdfcd4b36925f9d0f4d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/packet.md",
+    "sha256": "d5e41529beaa97b42719b58ba9e75fdae20ed2aa2f818f1283857b4ba8b3c9ad",
+    "bytes": 12691,
+    "git_blob_sha": "70428d30f9cc3a0002a60918271aca6690b5c922"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/raw-response.md",
+    "sha256": "fa4295b0a3dd36a4af78cfa50db6a39cf8fcda53f7e8bc4adbefde314f238aef",
+    "bytes": 28414,
+    "git_blob_sha": "c42b4984ae418de9c54492771ec678e093dfb958"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/read-log.jsonl",
+    "sha256": "f7fc9f990bb9b6f1ba76fa18a4826a824e7bf868497fe63ed07ebf447ea52bb4",
+    "bytes": 272,
+    "git_blob_sha": "66249fd6376031e15e6bc68b4fa1784e78e508e9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P032/spawn-invocation.json",
+    "sha256": "9bbe75136aeb46fce29c95a5cecf98483c46569db24655a8cae2a55f9c331cd1",
+    "bytes": 1426,
+    "git_blob_sha": "df95d788f03c9bf2262d9206340143c843118c7b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/canonical.json",
+    "sha256": "deedd14364fe990274378ecd38016007142ce81fba60c5b46a3af16f38edb91f",
+    "bytes": 37475,
+    "git_blob_sha": "84cee849841408e4deadd44979f805bd947732f5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/envelope.txt",
+    "sha256": "495bcf15205bc88993d75820e2f32225918b6c7f12647e649b7bfcce6b986bb0",
+    "bytes": 993,
+    "git_blob_sha": "6ff8e8a95e0b1f04e4f4a91c47c5afbdafae9088"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/final-payload-reminder.json",
+    "sha256": "068d06a1a874afeb1ca8ba9cd884d6e8b135e082f8fbae33de62e292db429f78",
+    "bytes": 441,
+    "git_blob_sha": "16e57eb0af473bb2b4454314d69b1021924adc39"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/metadata.json",
+    "sha256": "1b7781941e2f6a1b46692bba2e9b8957f0692f33bfc53ec11c03195a5d446444",
+    "bytes": 1855,
+    "git_blob_sha": "dbc977738f4c56fcfac3f88446016d3edd024797"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/packet.md",
+    "sha256": "ee3dd842596eab875685f13e14be59a70312463c15f727a5ae8dcf7708effda4",
+    "bytes": 64274,
+    "git_blob_sha": "c9f15c0fe7de3b20cd959ea78b5e16efcb05ab09"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/raw-response.md",
+    "sha256": "deedd14364fe990274378ecd38016007142ce81fba60c5b46a3af16f38edb91f",
+    "bytes": 37475,
+    "git_blob_sha": "84cee849841408e4deadd44979f805bd947732f5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/read-log.jsonl",
+    "sha256": "d3141eccf884bf0124cbbf67f6202e9d62b67e596cb231a6e67f9bcca008de58",
+    "bytes": 284,
+    "git_blob_sha": "b1713895628a7e3773e156ae9f7f3517ac52278e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P033/spawn-invocation.json",
+    "sha256": "e5a933a609759b95ca891aa08b843366fe952d0f5767d74481ca0e467ccb886f",
+    "bytes": 1426,
+    "git_blob_sha": "1d97da55f080c288de362f0aba0207fd66d633dc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/canonical.json",
+    "sha256": "93661d523ea655b1dcc134dd8df6460da7e60e3d6f2ba1761f2393e9d5fb8a84",
+    "bytes": 10058,
+    "git_blob_sha": "b65a3a8350d7d5be8a78c584bf70be5aeef9f51c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/envelope.txt",
+    "sha256": "bb37ba41e10b353e5324be090af0184824dbf695fc6e36a6903919536f6fb3f5",
+    "bytes": 993,
+    "git_blob_sha": "5b4dbe2b7f6f923940641267ce0099c4f69798de"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/metadata.json",
+    "sha256": "1adb2033232bf998158fb60e8b5b833f97c839b9f7c0181620dbaea099756bc8",
+    "bytes": 1853,
+    "git_blob_sha": "a77e17e6f40a040f550f9c868a60af57291fed8f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/packet.md",
+    "sha256": "fc176bd31a564efc42d9066bd0bc41777c4cd83b0947e6e439373c34931269b5",
+    "bytes": 2874,
+    "git_blob_sha": "4d0a5d099a8b1834265d273f82feacea39fb074e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/raw-response.md",
+    "sha256": "93661d523ea655b1dcc134dd8df6460da7e60e3d6f2ba1761f2393e9d5fb8a84",
+    "bytes": 10058,
+    "git_blob_sha": "b65a3a8350d7d5be8a78c584bf70be5aeef9f51c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/read-log.jsonl",
+    "sha256": "eae9ff60b08862589e8b91e0c1b6b561c7ca6b8c67419e58eac82d05214d0854",
+    "bytes": 242,
+    "git_blob_sha": "c520fc5b523963ab51b48a4a1cbee7387a17e9bb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P034/spawn-invocation.json",
+    "sha256": "8d4952ace579b8988f9cac427e73e06658de3334558749f7baba87abd893bd57",
+    "bytes": 1426,
+    "git_blob_sha": "4c364f4961056f453d02840b567e2bf183a089c7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/actual-final-response-001.md",
+    "sha256": "fd4ca1462f74a69fbdbcc51bcbb3e84916709365e2ac22b947e9cab67790e829",
+    "bytes": 308,
+    "git_blob_sha": "2ece95dc5901e48344c3cd1b368ce45c09b0d196"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/build_output.py",
+    "sha256": "f66e16f4f2c402e0630830e24e0832158793898ad0b0a20d7701429fca273ff2",
+    "bytes": 20041,
+    "git_blob_sha": "153ea9f7e408ba63f61e7e0ff891b3464e27cce5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/canonical.json",
+    "sha256": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "bytes": 65635,
+    "git_blob_sha": "36a08c3dd189f647a6cb11876eb507ca1964869a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/envelope.txt",
+    "sha256": "9f24048afcaa31ae69939bad2f12c621c31557de8d9f410b27a2615e0cdf1a82",
+    "bytes": 993,
+    "git_blob_sha": "59a3238232d139e2976506a5ea901294be304cbb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/invocation.json",
+    "sha256": "d30e902e98f5c1c7f478bb4d1ced02a6805adc5b91cfb7bc7032ff44f38f99b4",
+    "bytes": 1452,
+    "git_blob_sha": "6c08b86640648992fc2b2375d7d7ba54ca0e96bd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/metadata.json",
+    "sha256": "a248859cd9c3eaeef9f40cff3d887a295d3dc504017a56d7413876ad484529b5",
+    "bytes": 2671,
+    "git_blob_sha": "197cc177b747021808671a1dbf967af227cfc555"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/output-return-followup.txt",
+    "sha256": "06c2466bb8c46b92a07e2103078f597385f0e53266173915bd68f274a097ad4b",
+    "bytes": 279,
+    "git_blob_sha": "33831b2f094a46d513781ad754bbbce28931b751"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/packet.md",
+    "sha256": "3b7bb292858ec0488a85fd5caee51f1898bdfb222da10d96d94a729803759d04",
+    "bytes": 105541,
+    "git_blob_sha": "e6d4d2853f9c73842f9ed6d148988dc849f7f7c7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/raw-response.md",
+    "sha256": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "bytes": 65635,
+    "git_blob_sha": "36a08c3dd189f647a6cb11876eb507ca1964869a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P035/read-log.jsonl",
+    "sha256": "c8d44c96db7a59b94cfce98ff7a9ff57a252b2fb4c566dc3e57d999f578fe7be",
+    "bytes": 272,
+    "git_blob_sha": "ead84c5fdc9f2e3cee09597241647d32058c745d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/canonical.json",
+    "sha256": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7",
+    "bytes": 25760,
+    "git_blob_sha": "e89c212026577543f70d1b7dade81f1ff8ae956d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/envelope.txt",
+    "sha256": "18ea3bea83010dc446224ede80da9d6df76ecf515ab8b8cf99e9ba1fbe0f413f",
+    "bytes": 993,
+    "git_blob_sha": "c9b8a618079dc4007eda88f167df9a5450c15ce4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/invocation.json",
+    "sha256": "f01b09d6732ccbaac1ce967ffbbb7ba9c3b2d51865de21a7420d2cdc7e92230f",
+    "bytes": 1452,
+    "git_blob_sha": "e054e666770d3b60d6299265dea58b53ea565ccd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/metadata.json",
+    "sha256": "baa4342180697cd17a1cfd718e74bf902fd0eca4d90c0422c34ae813336f0843",
+    "bytes": 1829,
+    "git_blob_sha": "0064c07c31957b68e032e4106deade93bb43e95d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/packet-provenance.json",
+    "sha256": "b16a5e37cffc1acd266ce7479468e93ca4ce4ab9d64b16fdfd32634419a37507",
+    "bytes": 231,
+    "git_blob_sha": "e18b7ec4680f304f2fbf792e88b3d1aa600ed704"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/packet.md",
+    "sha256": "7ee23893f313d71adc6ab15edbee80991f6fe63f3869e547d6df082bd646449c",
+    "bytes": 14606,
+    "git_blob_sha": "53ce9f6af747bd1d4c0a6542021fb3bafa25efe4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/raw-response.md",
+    "sha256": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7",
+    "bytes": 25760,
+    "git_blob_sha": "e89c212026577543f70d1b7dade81f1ff8ae956d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/read-log.jsonl",
+    "sha256": "6184516b26bce9703e8fc9b7501e31ff06d8acb57a50c337e6fc64060381d500",
+    "bytes": 272,
+    "git_blob_sha": "4b55e90c68c9d88985a06638bbe3a6829e16c97a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P036/spawn-invocation.json",
+    "sha256": "843ce0ab8bbb2a1dc8c9b1df719b9a3bb4bcf17e789958b036e9d3eb2ebaa5c0",
+    "bytes": 1460,
+    "git_blob_sha": "9701223de6173e1edeab8f34426abc0d939b5833"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/canonical.json",
+    "sha256": "9a5dbd56453991cecadf9b6cef25bd4463d10baa4d2939d4bd6cb2b26ec7fdca",
+    "bytes": 12485,
+    "git_blob_sha": "453d31faddcae968874e58ead1eeffa8ae367d70"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/envelope.txt",
+    "sha256": "71ce8c721a37fedffcd1d73690704bb81fc182f853e25f619abcb36f4cca0d42",
+    "bytes": 993,
+    "git_blob_sha": "2a072b1443fcf8e1cd68fabb0fba502a9427fba6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/metadata.json",
+    "sha256": "a760ccdeb1a2785c114bd39321edb5d9cefe5483f9df57ab904c184ea9bbe814",
+    "bytes": 1811,
+    "git_blob_sha": "1b5fc4b91307432478d3afbfae3ec22f6fa9a680"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/packet-provenance.json",
+    "sha256": "8a2043d13f07c34e0fe67ad0d586f98df1bfc8cc1cdd40fd08504f3cf3765801",
+    "bytes": 231,
+    "git_blob_sha": "1975768345dd9019506d1c4305fd00fa80ce7b3e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/packet.md",
+    "sha256": "87b48aab06b96ca7a4e85b3b7b67f1c475ddeaf74b17e2003858b315ed18df01",
+    "bytes": 3478,
+    "git_blob_sha": "bd0c7bb8e28cd5ba182095036216b65851b2291f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/raw-response.md",
+    "sha256": "9a5dbd56453991cecadf9b6cef25bd4463d10baa4d2939d4bd6cb2b26ec7fdca",
+    "bytes": 12485,
+    "git_blob_sha": "453d31faddcae968874e58ead1eeffa8ae367d70"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/read-log.jsonl",
+    "sha256": "39d478db3a44bdd1c623b18571c20051b07f12a9599903077c502b1d2091e24e",
+    "bytes": 242,
+    "git_blob_sha": "aa509dcb623f72bd5cfd8723ac823bfe6774dfbd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P037/spawn-invocation.json",
+    "sha256": "3e13e6267a8c41ccd8eb9178b6fee1ad7859c1790c89ccf713b8ac3af1435862",
+    "bytes": 1460,
+    "git_blob_sha": "779dd8b62e76c6de09056417da8356343cf4e179"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/canonical.json",
+    "sha256": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
+    "bytes": 32962,
+    "git_blob_sha": "71d1376acedfdc26382cf6699ac699d4dc291171"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/envelope.txt",
+    "sha256": "a504501911aa0eb12bafc961519c43fe762b76f490ef148e03d19e507e1a89aa",
+    "bytes": 993,
+    "git_blob_sha": "76b40e280e64eb2c7f4c6054ab0e38f74f0d2737"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/invocation.json",
+    "sha256": "a3b9dc105ccde4daf7a3c74fcbfe442bf8a05271ff1625c83daa5ebba8475308",
+    "bytes": 1452,
+    "git_blob_sha": "9848dc7231c49e22ef6d30da65f853c40a344355"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/make_output.py",
+    "sha256": "84cd2f0665929bf8211aa256f3eb1c6e71d8970dd1fe309a43b3e1ba9c4f5fde",
+    "bytes": 13092,
+    "git_blob_sha": "eac45daa9a3ded3416d60998b7f0d72f782722c6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/metadata.json",
+    "sha256": "bd0e72f62dbfb9acb68071de1cd8c9492a46b5e130a4c8d30b7634b95bd34700",
+    "bytes": 1921,
+    "git_blob_sha": "2b380b9016bcfac9cb7e25596cf385b38ecc84e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/packet-provenance.json",
+    "sha256": "e31defd890ce185f06cbb95d4b2707960a796557d22aa36455be2c9e10e8300b",
+    "bytes": 231,
+    "git_blob_sha": "64f4324dbc05259c194b8fdda40c4f9aeba9cc78"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/packet.md",
+    "sha256": "8764b9930224c5970045df3886a10c83118089c979a793cf135e4d850e49c3f4",
+    "bytes": 97889,
+    "git_blob_sha": "ef7cd07e20a20da3dd36bc049243a1a376d94aa9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/raw-response.md",
+    "sha256": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
+    "bytes": 32962,
+    "git_blob_sha": "71d1376acedfdc26382cf6699ac699d4dc291171"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P038/read-log.jsonl",
+    "sha256": "f9dd244e8ccb6233c58aa0ae6496da17ac855dbd4bff17e041c8805c8c0217ad",
+    "bytes": 272,
+    "git_blob_sha": "d929a00e6d15cf3ee13c9375c6636777d7059df9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/canonical.json",
+    "sha256": "f0f88488df741fe3b0d0b0935cd0611b94256cec3912eed2375fcbf59719fb10",
+    "bytes": 10370,
+    "git_blob_sha": "b5e000e13ce43f46c1517a318b0f0c049c82533b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/envelope.txt",
+    "sha256": "85e07ff109660eb21eb38a2d3821de5a656b853eefed169125e04d270110ea04",
+    "bytes": 993,
+    "git_blob_sha": "0e2578d7e8ca93f7bc4497e5a66db5f78d40ea7e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/metadata.json",
+    "sha256": "a834da7da953fbf0b31500810ddb51bc05cff9b36406eb415e8c9bd78232d0ff",
+    "bytes": 1832,
+    "git_blob_sha": "3277e958ce6e13212d6dc4e300dfd111b944fd72"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/packet.md",
+    "sha256": "4df211ea4195872b315bef5be4ba62632b660f3e0911ec67161e1d719c907aae",
+    "bytes": 2909,
+    "git_blob_sha": "68dabfe53f772eecfd4438e38d34d3d9d18d944a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/raw-response.md",
+    "sha256": "f0f88488df741fe3b0d0b0935cd0611b94256cec3912eed2375fcbf59719fb10",
+    "bytes": 10370,
+    "git_blob_sha": "b5e000e13ce43f46c1517a318b0f0c049c82533b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/read-log.jsonl",
+    "sha256": "86da3af20ab012ccbd36c24593f3114a3ef44e22b5f57f349312364190975cf3",
+    "bytes": 242,
+    "git_blob_sha": "271924ddb94a36ef698a4818454b9d3522fbd879"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P039/spawn-invocation.json",
+    "sha256": "97a17b59068a67669d7c0874256a46b6665172f5bcb91d2a5b4f6dcb1871d160",
+    "bytes": 1426,
+    "git_blob_sha": "582ef0e261a951fae2f6e21a6d8bd375c028399c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/canonical.json",
+    "sha256": "5106779cda5e7cd4f7ec75fe86ae31382f821739ccbb06e46518f442f82756c1",
+    "bytes": 12364,
+    "git_blob_sha": "5d5daf1030b3c7f8fda35163d55c65086b09bb79"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/envelope.txt",
+    "sha256": "5780974dade8696aaf4f084634b4f3c1edf421db6dc0d6941dc64fdfe1538b33",
+    "bytes": 993,
+    "git_blob_sha": "0f3a2362425befefa5c54439d2f9b4ac2ae1441d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/metadata.json",
+    "sha256": "d6c65727ef002f02f80dcd0269facdc9177677501b7c435487a1b2ede01e997f",
+    "bytes": 1926,
+    "git_blob_sha": "6fae73709dcadd87491f2f2a0ddf27604371b878"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/packet.md",
+    "sha256": "a52fdc9a8c67a347fa885af8c22d7aca3fe46f56e372ef96ba23d975aafa4535",
+    "bytes": 4800,
+    "git_blob_sha": "3a5c9e6f2a8e2f574d760254a7eb3014ddc1a846"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/raw-response.md",
+    "sha256": "5106779cda5e7cd4f7ec75fe86ae31382f821739ccbb06e46518f442f82756c1",
+    "bytes": 12364,
+    "git_blob_sha": "5d5daf1030b3c7f8fda35163d55c65086b09bb79"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/read-log.jsonl",
+    "sha256": "0713359d438fc611c6582c5c0056fad2abe327bddb5dcc3652aff70d7f194987",
+    "bytes": 248,
+    "git_blob_sha": "ad3e15768689079e1f52f479ec046888612e378c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P040/spawn-invocation.json",
+    "sha256": "f3226467130126dc125cf8ad50c6f93b231f207c19ec129392c16e6dd1691352",
+    "bytes": 1426,
+    "git_blob_sha": "ed110f5a3f35d34ecab4dfe011e2ccfa0be1b45e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/canonical.json",
+    "sha256": "54fbad42de0db1bb9f12068c5d937ad9ed1960090a295cdf1c051d50da053e5a",
+    "bytes": 17379,
+    "git_blob_sha": "edd06b1c4c25712b09f4e4525919591a8eac56c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/envelope.txt",
+    "sha256": "aba96e143f240e938b33347a63373fe97ffe1ca3069bb6e20da09416081a2fcd",
+    "bytes": 993,
+    "git_blob_sha": "86f7a46abb9c598374a6b4e4abc6484e1c192758"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/metadata.json",
+    "sha256": "d4a1d1dfe0b592eabf24fdacd98f0a76feda1109ffa91321f80c94bde1b51e0f",
+    "bytes": 1869,
+    "git_blob_sha": "3f952774688f427995d007f7ae4e420a4fd236ed"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/packet.md",
+    "sha256": "f0d6790d39ed6d0ba154ce044112b59200d4a2c32c7453da553586a0f41a1515",
+    "bytes": 4487,
+    "git_blob_sha": "ff27d1435c90b777f771692b8d68aaa4d4d0458c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/raw-response.md",
+    "sha256": "54fbad42de0db1bb9f12068c5d937ad9ed1960090a295cdf1c051d50da053e5a",
+    "bytes": 17379,
+    "git_blob_sha": "edd06b1c4c25712b09f4e4525919591a8eac56c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/read-log.jsonl",
+    "sha256": "cc00ece49047e25905c916a83f90f0a1605dceeafdee1cf349bda0d9ea77ad56",
+    "bytes": 284,
+    "git_blob_sha": "8a1ef54df7733c06c9211ede8016d1ae122e2920"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P041/spawn-invocation.json",
+    "sha256": "c91c4b2c0757e34fac4518750be754eae9aa8a99fee6a7ab7ea673bdbed553e4",
+    "bytes": 1426,
+    "git_blob_sha": "aa803eb3bedda1c437a7a9bb1ef6efc277f8bede"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/actual-final-response-001.md",
+    "sha256": "e258d01901ca0af087936836d147f493907d02ad6a732488623dc8559e74af5c",
+    "bytes": 274,
+    "git_blob_sha": "401bbab5b6c9bb6d915b79c2fc2eae6323fb1b4e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/actual-final-response-002.md",
+    "sha256": "8aca0ecfb2498fbd9162d6e039f5d75f1f97f531245db2886fd827e54a277ef9",
+    "bytes": 228,
+    "git_blob_sha": "e0a7828408382ecdcf1ddfa7b505bbeeeaa36792"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/canonical.json",
+    "sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "bytes": 132084,
+    "git_blob_sha": "4cc88492ec7ef7af5d8377c6319ee7859dc8bc75"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/actual-final-response-001.md",
+    "sha256": "e258d01901ca0af087936836d147f493907d02ad6a732488623dc8559e74af5c",
+    "bytes": 274,
+    "git_blob_sha": "401bbab5b6c9bb6d915b79c2fc2eae6323fb1b4e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/actual-final-response-002.md",
+    "sha256": "8aca0ecfb2498fbd9162d6e039f5d75f1f97f531245db2886fd827e54a277ef9",
+    "bytes": 228,
+    "git_blob_sha": "e0a7828408382ecdcf1ddfa7b505bbeeeaa36792"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/metadata.json",
+    "sha256": "5127c6154b7e8964df609882e8cf968f9576131e4723395d318b380c01b38928",
+    "bytes": 2563,
+    "git_blob_sha": "bfe9f728a50c3783e939188f2ecab71d37f4720d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/output-return-followup-invocation.json",
+    "sha256": "75c5737e2a7f36852f90fc2aeb803efdf51b2dae740069fad6bc966ae0139dfc",
+    "bytes": 519,
+    "git_blob_sha": "6bc476b008d4df8bc4801ca0d15ca027506d4211"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/delivery-deviation-snapshot/sha256.json",
+    "sha256": "e4e991a0e01a271ca103025cce3d42c73c94070a634e854741779617c91d5047",
+    "bytes": 506,
+    "git_blob_sha": "a1b31a196f19ef291f0e7e939b501eef7d053998"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/envelope.txt",
+    "sha256": "8b5dbaed0f6e7177b63849f156fefaf323d963861236fd7ff5de226928b44a21",
+    "bytes": 993,
+    "git_blob_sha": "aadce241ecaeb7f27b0d216e5d64d94495132010"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/metadata.json",
+    "sha256": "61556bf41a7b48a698aeda821a32dbbf57ae90ac068957b5d7c2f8ee47ffec88",
+    "bytes": 3602,
+    "git_blob_sha": "319251be3a46ec8b5a5bc550d5427d6dd1c75817"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/output-return-followup-invocation.json",
+    "sha256": "75c5737e2a7f36852f90fc2aeb803efdf51b2dae740069fad6bc966ae0139dfc",
+    "bytes": 519,
+    "git_blob_sha": "6bc476b008d4df8bc4801ca0d15ca027506d4211"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/packet.md",
+    "sha256": "d32b0da7f3d03f08ee862177c004776b1be1b395d324d86051b337fb82d4be23",
+    "bytes": 74227,
+    "git_blob_sha": "bcb83fbf51d0998f032ec672d6bccff5a1cb2574"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/pre-return-checkpoint-canonical.json",
+    "sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "bytes": 132084,
+    "git_blob_sha": "4cc88492ec7ef7af5d8377c6319ee7859dc8bc75"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/pre-return-checkpoint-raw-response.md",
+    "sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "bytes": 132084,
+    "git_blob_sha": "4cc88492ec7ef7af5d8377c6319ee7859dc8bc75"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/raw-response.md",
+    "sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "bytes": 132084,
+    "git_blob_sha": "4cc88492ec7ef7af5d8377c6319ee7859dc8bc75"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/read-log.jsonl",
+    "sha256": "74499c0f107ae99f4f500e9ed54e98c7ee7e3eb3cbfc931c79e7eff8f11a2fcc",
+    "bytes": 262,
+    "git_blob_sha": "e7d2dd234bbde73b8ebeae72ec01e61e9e258b25"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P042/spawn-invocation.json",
+    "sha256": "b747e64b61a9c1585fb4d83f355b985a83fa8d8a4179e1eb3848ecd283a6ddb9",
+    "bytes": 1426,
+    "git_blob_sha": "92d66ac8687c09f3982310cb165ceb703ca107f8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/canonical.json",
+    "sha256": "21e750cc2d8a7b1faba08f435747e6cff2461ae20b010681f209bb1140e13502",
+    "bytes": 15379,
+    "git_blob_sha": "0241b92a6946f7c9224acd226e155bed0f6921a1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/envelope.txt",
+    "sha256": "22b1daaa1c57f61444c78357e3de8b5cb08ebeb9bf3536e339d4446c5914a8ef",
+    "bytes": 993,
+    "git_blob_sha": "6ef24fd848c15f8b930a99d77ace8f8d5d50c4eb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/metadata.json",
+    "sha256": "6c57f9dae9e43599ac809686c4b6d0173b39046701f6d5688f2c1ca23ec26c0d",
+    "bytes": 1820,
+    "git_blob_sha": "3fc371857e3172bda3b293475b81cd9295eb844d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/packet.md",
+    "sha256": "dd75fdb0c35aeb0b12a634bdf92f8f3db7031868d51665f8784c9acc2181d450",
+    "bytes": 5250,
+    "git_blob_sha": "232b724db30c76b9d4e5418a7158137350356604"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/raw-response.md",
+    "sha256": "21e750cc2d8a7b1faba08f435747e6cff2461ae20b010681f209bb1140e13502",
+    "bytes": 15379,
+    "git_blob_sha": "0241b92a6946f7c9224acd226e155bed0f6921a1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/read-log.jsonl",
+    "sha256": "b50a9d8e0097e73e649eae1bd6cadcf2860d167f172e62902a0cbe6a71017cc3",
+    "bytes": 242,
+    "git_blob_sha": "b6244e839d313794f74c1de9669695c9a01ec8fa"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P043/spawn-invocation.json",
+    "sha256": "7ce0aa6aafe2da738be03933f054047cc1dd11028bf12e25fc603ff8517c92f8",
+    "bytes": 1431,
+    "git_blob_sha": "cd08ba492eeb1fbc2b223e923308eacfae1192e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/canonical.json",
+    "sha256": "a31bc5ccabba39631fbdeefb80d450ac152c18839df9483c15f8f916f84bb659",
+    "bytes": 20887,
+    "git_blob_sha": "c86609efb4057a5499676e24a30564d266fe38a2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/envelope.txt",
+    "sha256": "f533e7ef69de7a24ff959c29dee677f242ca5224c66255eb16aaa626d6c1fa81",
+    "bytes": 993,
+    "git_blob_sha": "add157f59011bc1ecf13cbe79c45e824c8e83eee"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/metadata.json",
+    "sha256": "c0e615beb145ae3642007d195025a8ff1401a3b8c2b3b178f2b786ca4f201d96",
+    "bytes": 1811,
+    "git_blob_sha": "8c9461ad6a26c29e4f3e833e1e195fb02ee290f4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/packet.md",
+    "sha256": "0c3f87e7e35c733e401ef92dbc4eba057bc6adb4afaaf4cdfdcd0bbe16be5044",
+    "bytes": 4472,
+    "git_blob_sha": "c31bd65d2a93856415e08f3f3e25adcd064e0485"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/raw-response.md",
+    "sha256": "a31bc5ccabba39631fbdeefb80d450ac152c18839df9483c15f8f916f84bb659",
+    "bytes": 20887,
+    "git_blob_sha": "c86609efb4057a5499676e24a30564d266fe38a2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/read-log.jsonl",
+    "sha256": "1e5b87a9fefb42f6b895ee263095cebeb69c68933cb02a7e540f3c6d3b03bc6b",
+    "bytes": 284,
+    "git_blob_sha": "96179bf04644edc61c74adcf56bd5faff94cbb8e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P044/spawn-invocation.json",
+    "sha256": "8f1c607b253493a0fc49c4612ba79e5b22bb6c79216771ad257c7e70d084264e",
+    "bytes": 1426,
+    "git_blob_sha": "6d755f5f74689753b9e952f72122dc41685251f4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/canonical.json",
+    "sha256": "54d178adf25afe70db2c3f98b98a73db418d9c7280fbee7b650c144a3ac6f271",
+    "bytes": 12951,
+    "git_blob_sha": "88a012a18575c4290ddff83de99a3de17534bc29"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/envelope.txt",
+    "sha256": "85c2996e0f638750fe8c408578ab39dde552e52fc300c8cf41ded3a18a328830",
+    "bytes": 993,
+    "git_blob_sha": "e52c44824b03060b93c8eb97e198c45dbde8a5bd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/metadata.json",
+    "sha256": "99fb81b2baf052f1e343a27fbfc53b92de2889d6189ecc8098ae11aecc285a9b",
+    "bytes": 1834,
+    "git_blob_sha": "db9d8242490ce2741fd6f54384c70b115c4a2864"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/packet.md",
+    "sha256": "79596ce45c6dbbb5e60ba1bf9291a40e78da629fe567a0332f754d2e5a8325d4",
+    "bytes": 3094,
+    "git_blob_sha": "cbe41996fdaf33e2ef846726b0c74cbc56988f7c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/raw-response.md",
+    "sha256": "54d178adf25afe70db2c3f98b98a73db418d9c7280fbee7b650c144a3ac6f271",
+    "bytes": 12951,
+    "git_blob_sha": "88a012a18575c4290ddff83de99a3de17534bc29"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/read-log.jsonl",
+    "sha256": "c755a4b92a6dc51be54fa77532d7c5aee449aae96d62af8e064c5708ec7b829e",
+    "bytes": 272,
+    "git_blob_sha": "a762c30e89f4b1ede2356b6c62dd89970fd2d030"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P045/spawn-invocation.json",
+    "sha256": "5096e163d544b2796d674cb56e00a19c62b7de2eacf9b94f35f071f67b323c4a",
+    "bytes": 1368,
+    "git_blob_sha": "c466b9320a88cfb6c9dbd42a52f4c8035771da7d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/canonical.json",
+    "sha256": "10865c509b20a4e42d27bfd00edc61ace046212138520028e1742f37d715811b",
+    "bytes": 14302,
+    "git_blob_sha": "1104b079832d72cae4d7835c0d33402cf2c23bc6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/envelope.txt",
+    "sha256": "25d4e4a68b9e680bf188e0f4e4426c2ad0fb4eeafac5aaa6fecaafa7f40ac3b3",
+    "bytes": 993,
+    "git_blob_sha": "f7d0b758fbe781ace44db6741651ae1f032fe01f"
+  }
+]

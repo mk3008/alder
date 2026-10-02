@@ -1,6 +1,6 @@
 {
   "packet_id": "P040",
-  "status": "running",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -20,5 +20,20 @@
     "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
   ],
   "agent_id": "/root/blind_observation/extract_p040",
-  "prepared_at": "2026-10-02T10:30:37.588073+00:00"
+  "prepared_at": "2026-10-02T10:30:37.588073+00:00",
+  "output_sha256": {
+    "canonical.json": "5106779cda5e7cd4f7ec75fe86ae31382f821739ccbb06e46518f442f82756c1",
+    "raw-response.md": "5106779cda5e7cd4f7ec75fe86ae31382f821739ccbb06e46518f442f82756c1",
+    "read-log.jsonl": "0713359d438fc611c6582c5c0056fad2abe327bddb5dcc3652aff70d7f194987"
+  },
+  "finished_at": "2026-10-02T10:50:54.521138+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:51:52.623326+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Available actual final messages and logged reads checked for explicit outside-input declarations; mechanical verifier validates logged paths. Own output verification allowed. Not independent runtime/read attestation."
+  }
 }

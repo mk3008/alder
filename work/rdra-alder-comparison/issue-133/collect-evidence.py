@@ -19,14 +19,14 @@ def collect():
         if d.exists():
             for p in sorted(d.rglob('*')):
                 if p.is_file() and permitted(p):
-                    try:text=p.read_text()
+                    try:text=p.read_bytes().decode('utf-8')
                     except UnicodeDecodeError:continue
                     # Probe packet copies are reconstructible from blind-packets.
                     if folder=='blind-probes' and p.name=='packet.md':continue
                     xs.append({'path':PREFIX+str(p.relative_to(ROOT)),'mode':'100644','type':'blob','content':text})
-    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py','call-counts.py','blind_eval_ops.py','blind_probe_ops.py','blind_raw_ops.py','handoff_extract_ops.py','verify-final-evidence.py','render-result-tables.py','make-evidence-manifest.py','raw_flag_ops.py']:
+    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py','call-counts.py','blind_eval_ops.py','blind_probe_ops.py','blind_raw_ops.py','handoff_extract_ops.py','verify-final-evidence.py','render-result-tables.py','make-evidence-manifest.py','raw_flag_ops.py','verify-evaluation-supplement.py']:
         p=ROOT/name
-        if p.exists():xs.append({'path':PREFIX+name,'mode':'100644','type':'blob','content':p.read_text()})
+        if p.exists():xs.append({'path':PREFIX+name,'mode':'100644','type':'blob','content':p.read_bytes().decode('utf-8')})
     return xs
 
 if __name__=='__main__':

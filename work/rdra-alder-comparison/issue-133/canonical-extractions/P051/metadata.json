@@ -30,5 +30,10 @@
   "mechanical_validation": {
     "errors": [],
     "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:51:52.623326+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Available actual final messages and logged reads checked for explicit outside-input declarations; mechanical verifier validates logged paths. Own output verification allowed. Not independent runtime/read attestation."
   }
 }

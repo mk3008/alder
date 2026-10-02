@@ -45,5 +45,10 @@
     "original_payload_hashes_unchanged": true,
     "new_fresh_generation_count_increment": 0,
     "additional_model_turn": 1
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:51:52.623326+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Available actual final messages and logged reads checked for explicit outside-input declarations; mechanical verifier validates logged paths. Own output verification allowed. Not independent runtime/read attestation."
   }
 }

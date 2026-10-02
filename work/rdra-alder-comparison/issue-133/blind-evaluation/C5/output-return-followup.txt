@@ -1,0 +1,1 @@
+既に保存した scores.json の JSON 本文を final にそのまま返してください。純粋な返却のみです。採点し直し・意味変更・ファイル書換をしないでください。own generated scores.json の返却readのみ許可されます。

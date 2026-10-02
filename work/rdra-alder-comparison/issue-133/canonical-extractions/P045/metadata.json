@@ -1,6 +1,6 @@
 {
   "packet_id": "P045",
-  "status": "prepared",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -8,7 +8,7 @@
   },
   "effective_settings_attestation": "unavailable",
   "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
-  "started_at": "2026-10-02T10:30:37.675429+00:00",
+  "started_at": "2026-10-02T10:50:54.488023+00:00",
   "packet_sha256": "79596ce45c6dbbb5e60ba1bf9291a40e78da629fe567a0332f754d2e5a8325d4",
   "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
   "envelope_sha256": "85c2996e0f638750fe8c408578ab39dde552e52fc300c8cf41ded3a18a328830",
@@ -18,5 +18,22 @@
   ],
   "limitations": [
     "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
-  ]
+  ],
+  "agent_id": "/root/blind_observation/extract_p045",
+  "prepared_at": "2026-10-02T10:30:37.675429+00:00",
+  "output_sha256": {
+    "canonical.json": "54d178adf25afe70db2c3f98b98a73db418d9c7280fbee7b650c144a3ac6f271",
+    "raw-response.md": "54d178adf25afe70db2c3f98b98a73db418d9c7280fbee7b650c144a3ac6f271",
+    "read-log.jsonl": "c755a4b92a6dc51be54fa77532d7c5aee449aae96d62af8e064c5708ec7b829e"
+  },
+  "finished_at": "2026-10-02T10:52:09.791669+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:56:00.696031+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths checked; own output verification allowed; no independent read/runtime attestation"
+  }
 }

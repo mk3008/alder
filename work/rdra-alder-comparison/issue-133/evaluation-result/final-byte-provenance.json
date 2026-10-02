@@ -20,6 +20,12 @@
       "actual_sha256": "0220b23f07b8d566b50ae04f832caf19ef122ae11710ec7cba4eed8ca3f20bd7"
     },
     {
+      "packet_id": "P004",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "2bb4f062577153e91ff8c9c93e9eb674618f1bb2a89460f03b77f7abfe5f0385",
+      "actual_sha256": "2bb4f062577153e91ff8c9c93e9eb674618f1bb2a89460f03b77f7abfe5f0385"
+    },
+    {
       "packet_id": "P005",
       "matches_completed_artifacts": true,
       "expected_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
@@ -72,6 +78,12 @@
       "matches_completed_artifacts": true,
       "expected_sha256": "b520a61039e3a253a591a89088d3df65e7a7421761d3faff702514c6b63f0c22",
       "actual_sha256": "b520a61039e3a253a591a89088d3df65e7a7421761d3faff702514c6b63f0c22"
+    },
+    {
+      "packet_id": "P014",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "bb4f786b75c9f7d4cdb28a4290c9f64b7733eb5e514521a0de7ed214f4a7d7aa",
+      "actual_sha256": "bb4f786b75c9f7d4cdb28a4290c9f64b7733eb5e514521a0de7ed214f4a7d7aa"
     },
     {
       "packet_id": "P015",
@@ -224,6 +236,12 @@
       "actual_sha256": "4df211ea4195872b315bef5be4ba62632b660f3e0911ec67161e1d719c907aae"
     },
     {
+      "packet_id": "P040",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "a52fdc9a8c67a347fa885af8c22d7aca3fe46f56e372ef96ba23d975aafa4535",
+      "actual_sha256": "a52fdc9a8c67a347fa885af8c22d7aca3fe46f56e372ef96ba23d975aafa4535"
+    },
+    {
       "packet_id": "P041",
       "matches_completed_artifacts": true,
       "expected_sha256": "f0d6790d39ed6d0ba154ce044112b59200d4a2c32c7453da553586a0f41a1515",
@@ -248,6 +266,12 @@
       "actual_sha256": "0c3f87e7e35c733e401ef92dbc4eba057bc6adb4afaaf4cdfdcd0bbe16be5044"
     },
     {
+      "packet_id": "P045",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "79596ce45c6dbbb5e60ba1bf9291a40e78da629fe567a0332f754d2e5a8325d4",
+      "actual_sha256": "79596ce45c6dbbb5e60ba1bf9291a40e78da629fe567a0332f754d2e5a8325d4"
+    },
+    {
       "packet_id": "P046",
       "matches_completed_artifacts": true,
       "expected_sha256": "a42fee8d08ed2ac93fc33fd510f8ac91bb44a1824dfc99d3c300b7e7f1bdbde1",
@@ -264,6 +288,12 @@
       "matches_completed_artifacts": true,
       "expected_sha256": "85b2a308e11e63332e64f4649a41d945cd6c84d41dbeb7e86b0acbf681351811",
       "actual_sha256": "85b2a308e11e63332e64f4649a41d945cd6c84d41dbeb7e86b0acbf681351811"
+    },
+    {
+      "packet_id": "P049",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+      "actual_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f"
     },
     {
       "packet_id": "P050",
@@ -308,10 +338,22 @@
       "actual_sha256": "1cd4973372882e691ce0ef01baa122ec8ff6882368d71344ba63db1c9e66606b"
     },
     {
+      "packet_id": "P057",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "849178f5bd453653065f9fec9b7d4c95d390697778c28ae311f3b407a2b268fd",
+      "actual_sha256": "849178f5bd453653065f9fec9b7d4c95d390697778c28ae311f3b407a2b268fd"
+    },
+    {
       "packet_id": "P058",
       "matches_completed_artifacts": true,
       "expected_sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e",
       "actual_sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e"
+    },
+    {
+      "packet_id": "P059",
+      "matches_completed_artifacts": true,
+      "expected_sha256": "fb2a820cc1781d74cb5e9372a5f93b2b4afacc3187d7fc64eead162f6dd96151",
+      "actual_sha256": "fb2a820cc1781d74cb5e9372a5f93b2b4afacc3187d7fc64eead162f6dd96151"
     },
     {
       "packet_id": "P060",
@@ -454,6 +496,11 @@
       "canonical_status": "reused_byte_identical"
     },
     {
+      "packet_id": "P014",
+      "matches_actual_received_input": true,
+      "canonical_status": "fresh_success"
+    },
+    {
       "packet_id": "P015",
       "matches_actual_received_input": true,
       "canonical_status": "reused_byte_identical"
@@ -479,6 +526,11 @@
       "canonical_status": "reused_byte_identical"
     },
     {
+      "packet_id": "P040",
+      "matches_actual_received_input": true,
+      "canonical_status": "fresh_success"
+    },
+    {
       "packet_id": "P041",
       "matches_actual_received_input": true,
       "canonical_status": "fresh_success"
@@ -492,6 +544,11 @@
       "packet_id": "P044",
       "matches_actual_received_input": true,
       "canonical_status": "fresh_success"
+    },
+    {
+      "packet_id": "P045",
+      "matches_actual_received_input": true,
+      "canonical_status": "reused_byte_identical"
     },
     {
       "packet_id": "P046",

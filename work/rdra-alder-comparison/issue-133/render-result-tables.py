@@ -7,6 +7,8 @@ OUT = ROOT / 'evaluation-result'
 
 
 def value(x):
+    if isinstance(x, dict) and 'meaning' in x:
+        return x['meaning'].replace('|', '\\|').replace('\n', ' ')
     return 'NA' if x is None else str(x)
 
 
