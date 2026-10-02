@@ -13,5 +13,6 @@
   "deviations": [
     "Shared filesystem read allowlist is operational isolation, not a security sandbox."
   ],
-  "started": "2026-10-02T07:38:42.830915+00:00"
+  "started": "2026-10-02T07:38:42.830915+00:00",
+  "official_directory_scaffolding_restored": "2026-10-02T07:50:25.197820+00:00"
 }

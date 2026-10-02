@@ -18,5 +18,9 @@
     "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
   },
   "created_at": "2026-10-02T07:38:23.424373+00:00",
-  "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested."
+  "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested.",
+  "envelope_variant": "compact-v2",
+  "envelope_sha256": "8f9609cd9da45b42ddf54b8573cdf521cf618000b344299ce8d0dce804827b3f",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "compact-v2"
 }

@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T07:50:31Z",
+  "end_utc": "2026-10-02T07:50:47Z",
+  "start_note": "First observed UTC timestamp after initial reads",
+  "failures": ["Initial output write failed because phase3 directory did not exist; created the directory and retried successfully."],
+  "unmet_restrictions": []
+}

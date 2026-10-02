@@ -28,5 +28,9 @@
   "raw_response_sha256": "c23e64403c45010662e2ba4fd2026bf883f80fbdc270a70af5986b0e9783853a",
   "read_log_sha256": "0716520c58211613c04f4d98771b3224fa7cc2f9c323d0d3f71d2fdf4a6d55f6",
   "failures": [],
-  "retries": 0
+  "retries": 0,
+  "envelope_variant": "verbose-v1",
+  "envelope_sha256": "708932e2177b386700420e08f4dc7880b731b8287eaf32e2de1764a9d697aaac",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "verbose-v1"
 }

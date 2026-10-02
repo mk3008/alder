@@ -18,5 +18,19 @@
     "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
   },
   "created_at": "2026-10-02T07:38:23.412683+00:00",
-  "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested."
+  "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested.",
+  "agent_id": "/root/alder_primary/c1_r2_s2",
+  "started_at": "2026-10-02T07:43:34.194819+00:00",
+  "status": "success",
+  "attempt": 1,
+  "finished_at": "2026-10-02T07:44:36.790468+00:00",
+  "failures": [],
+  "retries": 0,
+  "artifact_sha256": "bf08144a913d8c47d4ef9083400785d1c0aca19cc91e4824701a8506f69da476",
+  "raw_response_sha256": "4e35624cc3f58b5971405364c44919e650ab92bae77bf1f41650dc09571d0976",
+  "read_log_sha256": "062c9be03eef4723de3a64952aec18f7bbf81ac0aef21733a3d0bbba3a76e16a",
+  "envelope_variant": "compact-v2",
+  "envelope_sha256": "bd100c9f057bd7ac28b273c35483cb157d2a28d56b06627f78e7f5ae71b7c92a",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "compact-v2"
 }

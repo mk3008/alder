@@ -9,7 +9,7 @@ def permitted(p):
     if any(part in EXCLUDED_PARTS for part in rel.parts):return False
     if 'RDRA_Knowledge' in rel.parts:return False
     if p.name in {'source.txt','初期要望.txt','AGENTS.md','モデル設定.json'}:return False
-    if p.suffix in {'.pyc','.zip'}:return False
+    if p.suffix in {'.pyc','.zip','.tmp'}:return False
     return True
 
 def collect():

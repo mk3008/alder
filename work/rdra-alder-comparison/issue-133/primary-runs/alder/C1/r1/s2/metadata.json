@@ -28,5 +28,9 @@
   "retries": 0,
   "artifact_sha256": "08fc244704de0950c4988a5bfe04de869fcfb7e473d29dca87a50586d68ac338",
   "raw_response_sha256": "4f7535c14381a5d4b482853e0fe86da26ad1e6968970897909c29489553d7227",
-  "read_log_sha256": "7cdc7e004a1b6c4c04bc4352b5e4a54670b22514741a64a9d7e2e71fd62f2b53"
+  "read_log_sha256": "7cdc7e004a1b6c4c04bc4352b5e4a54670b22514741a64a9d7e2e71fd62f2b53",
+  "envelope_variant": "verbose-v1",
+  "envelope_sha256": "9a3d0d8ef01faa095b0a5beeda873a179d8b96d62f98e2b0572934b6060de04a",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "verbose-v1"
 }

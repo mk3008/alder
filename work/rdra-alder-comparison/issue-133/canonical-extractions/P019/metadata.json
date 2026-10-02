@@ -1,0 +1,29 @@
+{
+  "packet_id": "P019",
+  "status": "running",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "started_at": "2026-10-02T07:53:00.153285+00:00",
+  "packet_sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "4a6e94916541c6e7c06c556262bc48475500165ebdba3cc213a217089be8cc78",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P019/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P019/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "spawn_failure": {
+    "error": "agent thread limit reached",
+    "time": "2026-10-02T07:51:58.746299+00:00"
+  },
+  "agent_id": "/root/blind_observation/extract_p019",
+  "dispatch_prepared_at": "2026-10-02T07:51:49.116395+00:00",
+  "execution_retries": 0,
+  "dispatch_failures": 1
+}

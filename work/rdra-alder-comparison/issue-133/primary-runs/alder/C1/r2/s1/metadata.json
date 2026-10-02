@@ -21,6 +21,16 @@
   "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested.",
   "agent_id": "/root/alder_primary/c1_r2_s1",
   "started_at": "2026-10-02T07:42:05.415470+00:00",
-  "status": "running",
-  "attempt": 1
+  "status": "success",
+  "attempt": 1,
+  "finished_at": "2026-10-02T07:43:21.818705+00:00",
+  "failures": [],
+  "retries": 0,
+  "artifact_sha256": "ae8f1e227acfbf006abd7bffb0263e9f5525d4d3f9255d75a6f92189a941d192",
+  "raw_response_sha256": "28553a15044e80952e3c35c7fb3f70b7f6ef12f848637b656d29e52ce35b1a9e",
+  "read_log_sha256": "d64f2dda7e3cf5de98e9a13a8ec158672bd36d7a4142fc0bd1241f353d53d472",
+  "envelope_variant": "compact-v2",
+  "envelope_sha256": "5a65f964b1097acd81c8a2c6f73cf0a801fd2ab6615dd2dc5bd0dea36047fd7b",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "compact-v2"
 }

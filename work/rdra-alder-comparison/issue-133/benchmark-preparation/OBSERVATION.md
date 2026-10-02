@@ -12,3 +12,6 @@
 
 ## Downstream分母の操作定義
 最初のprobe/採点より前にdownstream-denominators.jsonで固定oracleからの必要期待結果subsetを明示した。rubric既定どおり未決・scope factを期待結果として要求しない。C1はHuman answerで更新された過去の重複候補表現、C5は技術選択/内部構造未指定とAPI実装範囲外の実行・連絡を期待結果の分母から除く。Stage2 semantic coverageの分母は変えない。上流資料の技術制約保持と未決伝達は別評価する。生成本文を見て分母を選んだものではなく、固定oracleのみから選定。生成開始後の操作補足であることを保存し、最終freeze時にこのsubset一覧まで固定済みだったとは表現しない。
+
+## Probeの呼出しmetadata
+最初のprobe前に、arm名を含むcoordinatorのtask pathからの起動を避け、非arm名のblind_observation coordinatorへ全20probeを集約した。元のarm別coordinatorはauthoringのみ担当する。業務task、匿名handoff packet、要求model/effortは変更しない。匿名化しても資料構造からの手法推定を防げないため、完全blindとは呼ばない。

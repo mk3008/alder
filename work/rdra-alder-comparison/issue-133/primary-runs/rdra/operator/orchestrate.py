@@ -14,6 +14,9 @@ def init():
   for rep in ['r1','r2']:
    for stage in ['s1','s2']:
     r=runpath(case,rep,stage); project=r/'project';project.mkdir(parents=True,exist_ok=True)
+    for d in ['0_RDRAZeroOne','1_RDRA','2_RDRASpec','3_RDRASdd']:
+     for x in [SOURCE/d]+list((SOURCE/d).rglob('*')):
+      if x.is_dir():(project/x.relative_to(SOURCE)).mkdir(parents=True,exist_ok=True)
     cp(BASE/'primary-inputs'/case/(stage+'.txt'),project/'初期要望.txt')
     dump(r/'manifest.json',dict(case=case,replicate=rep,stage=stage,status='pending',source_sha256=sha(project/'初期要望.txt'),requested_model='gpt-6-sol',requested_reasoning_effort='medium',fork_turns='none',provider='ChatGPT Work collaboration',effective_attestation='unavailable',nodes={},deviations=['Shared filesystem read allowlist is operational isolation, not a security sandbox.'],started=now()))
 def prepare(case,rep,stage,count=3):
@@ -23,9 +26,13 @@ def prepare(case,rep,stage,count=3):
  for n in DAG:
   if n['kind']!='ai':continue
   if all((p/x).exists() for x in n['outputs']):continue
-  if n['id'] in m['nodes']:continue
+  prior=m['nodes'].get(n['id'])
+  if prior and prior['status']!='completed_without_output':continue
+  attempt=(prior.get('attempt',1)+1) if prior else 1
+  if prior:m.setdefault('node_attempt_history',{}).setdefault(n['id'],[]).append(prior)
   if not all((p/x).exists() for x in n['inputs']):continue
-  root=r/'nodes'/n['id']/'root';ev=r/'evidence'/n['id'];ev.mkdir(parents=True,exist_ok=True)
+  suffix=[] if attempt==1 else ['attempt'+str(attempt)]
+  root=r.joinpath('nodes',n['id'],*suffix,'root');ev=r.joinpath('evidence',n['id'],*suffix);ev.mkdir(parents=True,exist_ok=True)
   cp(SOURCE/'AGENTS.md',root/'AGENTS.md');cp(SOURCE/n['prompt'],root/n['prompt'])
   shutil.copytree(SOURCE/'RDRA_Knowledge/.rdracore',root/'RDRA_Knowledge/.rdracore',dirs_exist_ok=True)
   cp(SOURCE/'RDRA_Knowledge/.rdracore/RDRA.md',root/'RDRA_Knowledge/_1_RDRA/RDRA.md')
@@ -35,7 +42,7 @@ def prepare(case,rep,stage,count=3):
   (ev/'envelope.txt').write_text(message)
   actual_message=f"Read and follow the orchestration envelope at {ev/'envelope.txt'}. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes."
   (ev/'spawn-message.txt').write_text(actual_message)
-  rec=dict(actual_spawn_message=actual_message,envelope_path=str(ev/'envelope.txt'),envelope_sha256=sha(ev/'envelope.txt'),spawn_message_sha256=sha(ev/'spawn-message.txt'),node=n['id'],status='prepared',prepared=now(),root=str(root),evidence=str(ev),prompt_path=n['prompt'],prompt_sha256=sha(root/n['prompt']),prompt_source_url='https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view',envelope=message,inputs={x:sha(root/x) for x in n['inputs']},outputs=n['outputs'],read_allowlist=allowed,alias=dict(source='RDRA_Knowledge/.rdracore/RDRA.md',target='RDRA_Knowledge/_1_RDRA/RDRA.md',source_sha256=sha(root/'RDRA_Knowledge/.rdracore/RDRA.md'),target_sha256=sha(root/'RDRA_Knowledge/_1_RDRA/RDRA.md')),requested_settings=dict(model='gpt-6-sol',reasoning_effort='medium',fork_turns='none'))
+  rec=dict(attempt=attempt,actual_spawn_message=actual_message,envelope_path=str(ev/'envelope.txt'),envelope_sha256=sha(ev/'envelope.txt'),spawn_message_sha256=sha(ev/'spawn-message.txt'),node=n['id'],status='prepared',prepared=now(),root=str(root),evidence=str(ev),prompt_path=n['prompt'],prompt_sha256=sha(root/n['prompt']),prompt_source_url='https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view',envelope=message,inputs={x:sha(root/x) for x in n['inputs']},outputs=n['outputs'],read_allowlist=allowed,alias=dict(source='RDRA_Knowledge/.rdracore/RDRA.md',target='RDRA_Knowledge/_1_RDRA/RDRA.md',source_sha256=sha(root/'RDRA_Knowledge/.rdracore/RDRA.md'),target_sha256=sha(root/'RDRA_Knowledge/_1_RDRA/RDRA.md')),source_hashes={x:sha(root/x) for x in allowed if x not in n['inputs']},requested_settings=dict(model='gpt-6-sol',reasoning_effort='medium',fork_turns='none'))
   dump(ev/'invocation.json',rec);append(r/'invocations.jsonl',rec);m['nodes'][n['id']]=rec;result.append(dict(node=n['id'],message=actual_message))
   if len(result)>=count:break
  dump(r/'manifest.json',m);return result
@@ -46,21 +53,24 @@ def finish(case,rep,stage,node,response):
  rec.update(ended=now(),raw_final_response=response,artifact_hashes={x:sha(root/x) for x in rec['outputs'] if (root/x).exists()})
  readlog=ev/'read-log.json';rec['read_log']=json.loads(readlog.read_text()) if readlog.exists() else None
  rec['unchanged_input_hashes']={x:sha(root/x)==h for x,h in rec['inputs'].items()}
+ rec['unchanged_official_hashes']={x:sha(root/x)==h for x,h in rec.get('source_hashes',{}).items()}
  rec['unchanged_prompt_hash']=sha(root/rec['prompt_path'])==rec['prompt_sha256']
  rec['allowed_evidence_read_paths']=[str(ev/'envelope.txt')] if 'envelope_path' in rec else []
  def extract_paths(obj):
   if isinstance(obj,str):return [obj] if ('/' in obj or obj.endswith('.txt') or obj.endswith('.md')) else []
   if isinstance(obj,list):return sum((extract_paths(x) for x in obj),[])
   if isinstance(obj,dict):
-   for key in ['paths','files','reads','read_log','read_paths']:
+   for key in ['paths','files','reads','read_log','read_paths','read_order']:
     if key in obj:return extract_paths(obj[key])
-   return sum((extract_paths(v) for k,v in obj.items() if k in ['path','file','file_path']),[])
+   return sum((extract_paths(v) for v in obj.values()),[])
   return []
  paths=extract_paths(rec['read_log']);allowed={(root/x).resolve() for x in rec['read_allowlist']+rec['outputs']}|{(ev/'envelope.txt').resolve()}
  resolved=[(pathlib.Path(x) if pathlib.Path(x).is_absolute() else root/x).resolve() for x in paths]
  rec['read_log_validity']=dict(prompt_read=(root/rec['prompt_path']).resolve() in resolved,outside_allowlist=[str(x) for x in resolved if x not in allowed],reported_paths=paths)
  missing=[x for x in rec['outputs'] if not (root/x).exists()];rec['missing_outputs']=missing
- if missing or not readlog.exists() or not rec['read_log_validity']['prompt_read'] or rec['read_log_validity']['outside_allowlist'] or not all(rec['unchanged_input_hashes'].values()) or not rec['unchanged_prompt_hash']:rec['status']='failed';m['status']='failed';m['failure']='Missing output or required read-log: '+node
+ if not readlog.exists() or not rec['read_log_validity']['prompt_read'] or rec['read_log_validity']['outside_allowlist'] or not all(rec['unchanged_input_hashes'].values()) or not rec['unchanged_prompt_hash'] or not all(rec['unchanged_official_hashes'].values()):rec['status']='failed';m['status']='failed';m['failure']='Missing output or required read-log: '+node
+ elif missing:
+  rec['status']='completed_without_output';rec['failure']='Missing official artifact';m['status']='running';m.setdefault('retry_failures',[]).append(dict(node=node,attempt=rec.get('attempt',1),failure=rec['failure'],ended=rec['ended']))
  else:
   rec['status']='complete'
   for x in rec['outputs']:cp(root/x,r/'project'/x)

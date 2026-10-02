@@ -1,0 +1,319 @@
+{
+  "case": "C1",
+  "replicate": "r1",
+  "stage": "s2",
+  "status": "failed",
+  "source_sha256": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "provider": "ChatGPT Work collaboration",
+  "effective_attestation": "unavailable",
+  "nodes": {
+    "ph1_system_overview": {
+      "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+      "envelope_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/envelope.txt",
+      "envelope_sha256": "542e0b214a6a145f12dfa4627ac141dec8edb5ede5bd6e53be778289394a9aab",
+      "spawn_message_sha256": "1dd5b957a332cc4b6905f3fc08cb639ac04f366fe6bac43f64291e39d483cf21",
+      "node": "ph1_system_overview",
+      "status": "complete",
+      "prepared": "2026-10-02T07:40:58.683107+00:00",
+      "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root",
+      "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview",
+      "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+      "prompt_sha256": "9b96491741cf27077a588064dcf395720c87ec2f87b7fb9976d591632505c74c",
+      "prompt_source_url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+      "envelope": "Execute the exact original official Prompt at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md. Cwd/project root: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root. Read the Prompt and AGENTS.md verbatim first. Read allowlist within root: AGENTS.md, this Prompt only, 初期要望.txt, RDRA_Knowledge/.rdracore/{RDRA.md,RDRASheet.md,RDRAGraph.md}, RDRA_Knowledge/_1_RDRA/RDRA.md (byte-identical alias). No reads outside this allowlist, other prompts, samples, parent directories, conversations, oracle, arms or runs. Write only 0_RDRAZeroOne/phase1/システム概要.json, by hand; never generate a program for AI outputs. You may read your own output. Do not alter inputs/Prompt/Knowledge. Evidence-only writes additionally permitted: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/read-log.json (every exact file path read, in read order) and metadata.json in that same evidence directory (start/end UTC, failures, unmet restrictions). Official Prompt determines the work. Preserve failures explicitly; final response may be brief or empty.",
+      "inputs": {
+        "初期要望.txt": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257"
+      },
+      "outputs": [
+        "0_RDRAZeroOne/phase1/システム概要.json"
+      ],
+      "read_allowlist": [
+        "AGENTS.md",
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+        "RDRA_Knowledge/.rdracore/RDRA.md",
+        "RDRA_Knowledge/.rdracore/RDRASheet.md",
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+        "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "初期要望.txt"
+      ],
+      "alias": {
+        "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+        "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+        "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+      },
+      "requested_settings": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium",
+        "fork_turns": "none"
+      },
+      "agent_id": "/root/rdra_primary/c1r1s2_overview",
+      "started": "2026-10-02T07:41:13.347384+00:00",
+      "ended": "2026-10-02T07:41:55.822855+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {
+        "0_RDRAZeroOne/phase1/システム概要.json": "6f4c7012c9412add9b653aad8d2fcc99dec5e0ff86447452ae9beb04311badcb"
+      },
+      "read_log": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/envelope.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/AGENTS.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/初期要望.txt"
+      ],
+      "unchanged_input_hashes": {
+        "初期要望.txt": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_system_overview/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_system_overview/root/初期要望.txt"
+        ]
+      },
+      "missing_outputs": []
+    },
+    "ph1_business_policy": {
+      "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+      "envelope_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/envelope.txt",
+      "envelope_sha256": "00d89db25614ec819f8c3d30492f657b89fc4efd1475cfcc776f84f5cbd698a1",
+      "spawn_message_sha256": "0a42c69373cc359bf63b25a5dd6679edd0bef1e05a0790571f4bef4ad303fd8e",
+      "node": "ph1_business_policy",
+      "status": "complete",
+      "prepared": "2026-10-02T07:41:13.414253+00:00",
+      "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root",
+      "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy",
+      "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md",
+      "prompt_sha256": "cfe79f0a26447f3b5d2f2cc920b3c91db515d7c54fdd72d01b5b01cde0eabb4b",
+      "prompt_source_url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+      "envelope": "Execute the exact original official Prompt at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md. Cwd/project root: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root. Read the Prompt and AGENTS.md verbatim first. Read allowlist within root: AGENTS.md, this Prompt only, 初期要望.txt, RDRA_Knowledge/.rdracore/{RDRA.md,RDRASheet.md,RDRAGraph.md}, RDRA_Knowledge/_1_RDRA/RDRA.md (byte-identical alias). No reads outside this allowlist, other prompts, samples, parent directories, conversations, oracle, arms or runs. Write only 0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv, by hand; never generate a program for AI outputs. You may read your own output. Do not alter inputs/Prompt/Knowledge. Evidence-only writes additionally permitted: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/read-log.json (every exact file path read, in read order) and metadata.json in that same evidence directory (start/end UTC, failures, unmet restrictions). Official Prompt determines the work. Preserve failures explicitly; final response may be brief or empty.",
+      "inputs": {
+        "初期要望.txt": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257"
+      },
+      "outputs": [
+        "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv"
+      ],
+      "read_allowlist": [
+        "AGENTS.md",
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md",
+        "RDRA_Knowledge/.rdracore/RDRA.md",
+        "RDRA_Knowledge/.rdracore/RDRASheet.md",
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+        "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "初期要望.txt"
+      ],
+      "alias": {
+        "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+        "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+        "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+      },
+      "requested_settings": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium",
+        "fork_turns": "none"
+      },
+      "agent_id": "/root/rdra_primary/c1r1s2_policy",
+      "started": "2026-10-02T07:41:21.699044+00:00",
+      "ended": "2026-10-02T07:42:05.178480+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {
+        "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv": "f37a84657e6c8b59320882ac5aadc502d00f261c58f508e9178de1ad0c624902"
+      },
+      "read_log": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/envelope.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/AGENTS.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/初期要望.txt"
+      ],
+      "unchanged_input_hashes": {
+        "初期要望.txt": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_policy/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_policy/root/初期要望.txt"
+        ]
+      },
+      "missing_outputs": []
+    },
+    "ph1_business_parameter": {
+      "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+      "envelope_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/envelope.txt",
+      "envelope_sha256": "3064f2d4025032de6f6bf8d0a925b56835ceb84e127250e232c1ae189ae1ba7a",
+      "spawn_message_sha256": "9f77af04f481a6877192c3009375a5c9b078a64a97e75d6b117d9ea12180ce3a",
+      "node": "ph1_business_parameter",
+      "status": "failed",
+      "prepared": "2026-10-02T07:42:28.619591+00:00",
+      "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root",
+      "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter",
+      "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md",
+      "prompt_sha256": "5b0b9fb471639daf19c82c0f59aa2d8911f71759e99ab7b2b366e804a56c2e67",
+      "prompt_source_url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+      "envelope": "Execute the exact original official Prompt at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md. Cwd/project root: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root. Read the Prompt and AGENTS.md verbatim first. Read allowlist within root: AGENTS.md, this Prompt only, 初期要望.txt, RDRA_Knowledge/.rdracore/{RDRA.md,RDRASheet.md,RDRAGraph.md}, RDRA_Knowledge/_1_RDRA/RDRA.md (byte-identical alias). No reads outside this allowlist, other prompts, samples, parent directories, conversations, oracle, arms or runs. Write only 0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv, by hand; never generate a program for AI outputs. You may read your own output. Do not alter inputs/Prompt/Knowledge. Evidence-only writes additionally permitted: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/read-log.json (every exact file path read, in read order) and metadata.json in that same evidence directory (start/end UTC, failures, unmet restrictions). Official Prompt determines the work. Preserve failures explicitly; final response may be brief or empty.",
+      "inputs": {
+        "初期要望.txt": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257"
+      },
+      "outputs": [
+        "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv"
+      ],
+      "read_allowlist": [
+        "AGENTS.md",
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md",
+        "RDRA_Knowledge/.rdracore/RDRA.md",
+        "RDRA_Knowledge/.rdracore/RDRASheet.md",
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+        "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "初期要望.txt"
+      ],
+      "alias": {
+        "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+        "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+        "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+      },
+      "requested_settings": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium",
+        "fork_turns": "none"
+      },
+      "agent_id": "/root/rdra_primary/c1r1s2_parameter",
+      "started": "2026-10-02T07:42:35.759872+00:00",
+      "ended": "2026-10-02T07:43:17.515993+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {},
+      "read_log": {
+        "read_order": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/初期要望.txt"
+        ]
+      },
+      "unchanged_input_hashes": {
+        "初期要望.txt": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business_parameter/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business_parameter/root/初期要望.txt"
+        ]
+      },
+      "missing_outputs": [
+        "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv"
+      ]
+    },
+    "ph1_business": {
+      "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+      "envelope_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/envelope.txt",
+      "envelope_sha256": "cec684a4bffc7435ebc01ecc6b630c4ceaf6a571f60bcc00229387c948938ac9",
+      "spawn_message_sha256": "63c7494e46ea6ba1e63923f5bdbca474c0338927225af83c0bf4a88d3f0f26db",
+      "node": "ph1_business",
+      "status": "complete",
+      "prepared": "2026-10-02T07:43:07.144465+00:00",
+      "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root",
+      "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business",
+      "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md",
+      "prompt_sha256": "fc05c907c7417e20acaaab9053fb656ccf0018fa190ed644ef300e2fdc0627df",
+      "prompt_source_url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+      "envelope": "Execute the exact original official Prompt at /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md. Cwd/project root: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root. Read the Prompt and AGENTS.md verbatim first. Read allowlist within root: AGENTS.md, this Prompt only, 初期要望.txt, RDRA_Knowledge/.rdracore/{RDRA.md,RDRASheet.md,RDRAGraph.md}, RDRA_Knowledge/_1_RDRA/RDRA.md (byte-identical alias). No reads outside this allowlist, other prompts, samples, parent directories, conversations, oracle, arms or runs. Write only 0_RDRAZeroOne/phase1/ph1業務.tsv, by hand; never generate a program for AI outputs. You may read your own output. Do not alter inputs/Prompt/Knowledge. Evidence-only writes additionally permitted: /workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/read-log.json (every exact file path read, in read order) and metadata.json in that same evidence directory (start/end UTC, failures, unmet restrictions). Official Prompt determines the work. Preserve failures explicitly; final response may be brief or empty.",
+      "inputs": {
+        "初期要望.txt": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257"
+      },
+      "outputs": [
+        "0_RDRAZeroOne/phase1/ph1業務.tsv"
+      ],
+      "read_allowlist": [
+        "AGENTS.md",
+        "RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md",
+        "RDRA_Knowledge/.rdracore/RDRA.md",
+        "RDRA_Knowledge/.rdracore/RDRASheet.md",
+        "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+        "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "初期要望.txt"
+      ],
+      "alias": {
+        "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+        "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+        "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+      },
+      "requested_settings": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium",
+        "fork_turns": "none"
+      },
+      "agent_id": "/root/rdra_primary/c1r1s2_business",
+      "started": "2026-10-02T07:43:17.462472+00:00",
+      "ended": "2026-10-02T07:44:17.629177+00:00",
+      "raw_final_response": "",
+      "artifact_hashes": {
+        "0_RDRAZeroOne/phase1/ph1業務.tsv": "dc5ccc6a6bdd44d5503d4eeb65f71d2731fdb78cc67b6a490e7f79f3846b7362"
+      },
+      "read_log": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/envelope.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/AGENTS.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/初期要望.txt",
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/0_RDRAZeroOne/phase1/ph1業務.tsv"
+      ],
+      "unchanged_input_hashes": {
+        "初期要望.txt": true
+      },
+      "unchanged_prompt_hash": true,
+      "allowed_evidence_read_paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/envelope.txt"
+      ],
+      "read_log_validity": {
+        "prompt_read": true,
+        "outside_allowlist": [],
+        "reported_paths": [
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/ph1_business/envelope.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/AGENTS.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/初期要望.txt",
+          "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph1_business/root/0_RDRAZeroOne/phase1/ph1業務.tsv"
+        ]
+      },
+      "missing_outputs": []
+    }
+  },
+  "deviations": [
+    "Shared filesystem read allowlist is operational isolation, not a security sandbox.",
+    "Read-log schema read_order was initially unparsed; operator parser corrected. Artifact absence independently causes failure; no artifact repaired or agent retried."
+  ],
+  "started": "2026-10-02T07:38:42.829914+00:00",
+  "failure": "Missing official artifact: ph1_business_parameter",
+  "ended": "2026-10-02T07:44:40.590265+00:00",
+  "semantic_comparison_missing": true,
+  "failed_nodes": [
+    "ph1_business_parameter"
+  ]
+}
