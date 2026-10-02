@@ -1,0 +1,14 @@
+{
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_settings_independent_attestation": "unavailable",
+  "provider": "ChatGPT Work collaboration",
+  "agent_id": "/root/change_rdra_once",
+  "fresh_dispatch_count": 1,
+  "agent_turn_attempts": 2,
+  "interruption": "first turn failed due to usage limit; user explicitly requested 再開; same agent continued without restarting completed analysis",
+  "publication_status": "blocked by automatic approval review; local-only",
+  "exact_spawn_message": "Read and follow the exact envelope at /workspace/scratch/f694891aa357/change-run/rdra/envelope.txt. You may read that envelope first without logging it; log all subsequent reads. This is one Fresh update run only. Do not read parent conversation, repository, other arms/runs/oracle. Use the official pinned impact-analysis Skill and revise only existing RDRA artifacts as the envelope directs. This is direct editing guided by impact analysis, not an official incremental updater nor a new full regeneration. No sub-agents, GitHub writes or Library uploads. Record start/end UTC, scripts, all touched/read/checked artifact paths and failures. Return the same final text saved to evidence/raw-response.md.",
+  "exact_resume_message": "ユーザーが利用上限による中断後に「再開」と明示しました。同じprobeの未完了部分を同じ成果物・既存contextから継続してください。新Fresh再試行・全再生成・反復ではありません。現在impact-analysis.mdは保存済み、業務artifactはまだbaselineです。影響分析をやり直さず、envelopeの残りの既存資料更新・整合確認・証跡保存を完了。利用上限中断とこの再開をmetadataに記録し、wall-clockは中断を含む値と明示してください。再度利用上限なら停止して状態報告し、別agentへは移らない。"
+}

@@ -74,3 +74,11 @@ C1の両手法は同じ2未決を保持し、C1–C4の全16probeは固定した
 ## 応答記録の範囲
 
 通常JSON runは子が保存したcanonicalとraw payloadのJSON同一性を機械照合する。tool FINALの表記はtool traceが原記録であり、全FINALの逐字byteを独立に永続保存したとは主張しない。summary/file-link/配送逸脱の実finalは別ファイルに残す。pure-return全文の一部もpayload bytecopyと原tool traceの役割を区別して記録した。出力量は保存artifact/raw-response.mdのUTF-8 bytesであり、provider wire serialization、token、費用ではない。
+
+## 追加の運用観測（post-hoc）
+
+保存timestampの再集計では、同一共有実行でAlderの20 authoringは先に完了した。その時点でRDRAは360 node中49終了・50開始、最終nodeまで終わったworkflowは2/20だった。Alderは最大同時実行1、RDRAは3。永続業務成果物はStage1/2の各runでAlder1ファイル、RDRA27ファイル。C1–C4の固定Stage3下流必要期待結果の保持は両手法とも全件で、この指標にRDRAの追加中間成果物が必要だったとは確認できない。全体の品質一致や少ない成果物による速度の因果を意味しない。RDRAの横断関係構造の追加価値と維持コストの関係は別途検討が必要。
+
+[実行時系列・成果物面積](change-cost-probe/EXECUTION-TIMELINE.md)と全timestampを保存した。scheduler/共有資源/DAG依存は統制しておらず、一般的な開発速度やcredit/token/実課金を主張しない。これはPrimary scoreの変更ではない。
+
+C2/r1/s2の既存資料に停止時予約維持→取消・利用不可の1変更を各arm1回反映した[変更コストprobe](change-cost-probe/CHANGE-COST-SUPPLEMENT.md)。Alder1ファイル、RDRA23ファイルが変わり、両最終資料に新しい意味が明示された。更新面積の仮説と整合するが、各arm1 Fresh dispatchでcall差は示していない。RDRAは公式影響分析＋直接編集＋公式派生scriptの探索経路で、公式incremental updaterの試験ではない。利用上限中断後に同じagentを継続したためwall spanを速度比較に使わず、未記録read1件も保存しstrict pairedとは扱わない。独立downstreamや実装動作は追加実行していない。Primaryの採点は変更しない。
