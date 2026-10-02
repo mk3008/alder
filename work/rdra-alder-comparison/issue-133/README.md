@@ -1,42 +1,29 @@
-# RDRAAgent 0.8とAlderの比較準備
+# RDRA / Alder same-model pilot
 
-2026-10-02 / Execution Issue: [#133](https://github.com/mk3008/alder/issues/133)
+Issue #133の5ケース・2反復の比較記録。全60資料の生成・匿名抽出・文脈評価を完了。厳密条件とsource-clean探索を分けた記述的pilot。
 
-**初回Primary run前の記録。比較結果・scoreはまだない。** この記録は配布物の取得確認、実行前点検と、第三者が点検できる試験材料を保存する。正式Alder仕様は変更しない。
+[実行報告](REPORT.md) · [全結果](evaluation-result/RESULT-TABLES.md) · [証跡manifest](EVIDENCE-MANIFEST.json) · [ふりかえり](RETROSPECTIVE.md)
 
-## 取得と起動確認
+## 記録を読む
 
-- 公式ページからRDRAAgent_v0.8.zipを取得した。archive SHA-256は `528b17deb76ac70050620b82118a6140f070f9e7b6282fc8b26d2a43420e074b`。取得先・全ファイルのhashは `source-manifest.json` に記録した。
-- Alder比較対象は `eb591bfbc1b077b0e93d62253cb1e7f3e392e462`。Plugin 0.2.8のAuthoring Skill、同梱参照、provenanceをpinする。provenance内のauthoring source revisionは `e9726b4c84608db42c5286d072b5ec762d31596a`。
-- 公式Web説明はClaude Haiku 4.5をPrompt構築の基準としている。しかし取得ZIPの `モデル設定.json` は `default.provider=cursor`、`model=gemini-3-flash`。Webの説明と配布物の実値を区別する。
-- Node v24.19.0は利用可能。`agent` / `claude` / `codex` はPATH上に存在しない。
-- 未改変の配布物で `node RDRA_Knowledge/helper_tools/parallelRun/dag-runner.js --menu7` を実行すると、最初のPhase1呼出しで `write EPIPE`、exit 1となった。生成された業務成果物は0件。サンプル初期要望で行った起動点検であり、C1–C4のbenchmark runではない。
-- CLI不在とEPIPEを観測した。認証・モデルアクセスの疎通には到達しておらず、それらが使用可能とは主張しない。
+- [固定条件](benchmark-preparation/PROTOCOL.md)、[cases/source/固定回答/oracle](benchmark-preparation/cases.json)、[rubric](benchmark-preparation/rubric.md)
+- [配布物・版・全file hash](benchmark-preparation/source-manifest.json)、[初回生成前のchecksums](benchmark-preparation/SHA256SUMS)
+- [実行上の逸脱と分析の境界](benchmark-preparation/EXECUTION-DEVIATIONS.md)
+- [原生成・script・spawn/read-log](primary-runs/)、[匿名packet](blind-packets/)、[canonical抽出と引用根拠](canonical-extractions/)
+- [実受領handoffの抽出と同一byte証明](handoff-extractions/)、[局所原文reviewと全claim ledger](blind-raw-checks/)
+- [匿名採点](blind-evaluation/)、[全60枠のavailability](evaluation-result/availability.json)、[記録されたFresh agent数](evaluation-result/call-counts.json)
+- [匿名化・観測の補足](benchmark-preparation/OBSERVATION.md)、[Stage3分母の補足](benchmark-preparation/downstream-denominators.json)
 
-## 試験材料の状態
+初回生成前のfinal freezeは `b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95`。benchmark-preparation/README.mdとSHA256SUMSは当時の記録として維持する。開始後の補足を当初のfreezeに含めたとは扱わない。
 
-後続の[PROTOCOL.md](PROTOCOL.md)で、5ケースとPrimary条件を最終固定した。旧preflight候補の内容は以下に履歴として残す。`cases.json` は最終版の同一入力・固定回答・oracleを収める。`rubric.md` は採点候補、`run-manifest-template.json` は各runの記録様式、`downstream-prompt.txt` は中立probeの候補である。生成結果を見てから材料を変えていない。
+## 再現と解釈の境界
 
-**材料候補の保存と実行protocolの最終freezeは別である。** 次の未解決事項を確定してから、変更履歴を残して最終freeze commitを公開し、初回runを行う。
+RDRAは公式0.8のPrompt/Knowledge本文と18 AI node/6 scriptsのDAGを維持し、AI呼出しだけWork Fresh agentへ置換した。公式ZIP本文は再配布せず、URLとhashから再取得する。native CLI runではない。AlderのAuthoring Skillはrevisionと4fileのhashを固定した。要求設定は全agent共通のgpt-6-sol/medium/fork_turns:noneであり、provider側の独立証明はない。
 
-1. 同一モデル・effortを使えるCLIまたは同等の隔離された実行経路を確保する。Fresh reviewのRepository既定値 `gpt-6-sol / medium / fork_turns:none` を予定値に置くが、benchmarkで実際に使用したモデルはまだない。実効設定を独立に確認できない場合はその限界を書く。
-2. RDRAZeroOneの18本の公式生成Promptには「質問や確認は不要」が含まれる。質問coverageは公式生成経路の観測値として報告し、対話能力全般の優劣と解釈しない。QA Skillによる追加対話を比較するなら別armとして事前登録し、原armへ混ぜない。
-3. Stage2は新しい実行ディレクトリ・Fresh contextを使用し、Stage1成果物と同一回答packetを渡す。既存成果物を置くとDAGが生成をskipし得るため、公式Promptを改変せず両者を読ませる入力配置と更新操作を、出力を見ないrouting点検で先に固定する。Stage1出力を渡さない再生成へ勝手に置き換えない。
-4. C1の「3日未満/7日未満」はIssueの記述に基づく。取得した通常ZIPの図書館初期要望と生成例ZIPでは、この文字列の出典を確認できなかった。現段階ではC1を**合成fixture候補**と明記する。歴史的公開例との対応が必要なら、その出典を別途確認してからfreezeする。
-5. oracleと回答packetは同じRepositoryに保存するが、generatorから物理的に分離した入力だけを用意する。アクセス可能な全Repositoryを渡し「読まないで」と言うだけでは隔離を保証しない。
+Stage2は元source+固定回答からFresh再生成し、Stage1 artifact/historyを渡さない。Stage3は最終handoffだけを受け取る。18nodeのRDRA定義までが対象で、後段のRDRASpec/RDRASdd/Code生成は実行していない。RDRA中間成果物一式やQA Skillを渡す追加armは試していない。C5実装/DB試験は行わずimplementation viabilityはnot_executed。
 
-## 第三者が確認できること
+実際のwrapper許可は同一でなく、RDRAはown output検証readを許可し、Alderはinput-onlyだった。厳密条件による有効資料と、自己生成output検証read/非存在path試行だけのsource-clean探索資料を分ける。後者は開始後の追加分類で、共有FSと自己申告traceの限界を伴う。guard無効を業務品質の0点へ変換しない。
 
-公式ZIPを再取得しarchive/file hashを照合できる。hashが違う場合は同じ0.8表記でも別配布物として停止する。公式配布物のコピーはこのPRへ再配布せず、取得先とhashを保存する。
+匿名抽出のJSONから根拠ID・引用・行番号でrawへ遡れる。mappingは第三者監査のため保存し、抽出者・採点者・probeには渡さない。形式からarmを推測できるsingle-blindの限界がある。同じ要求モデルによるFresh AI評価であり、人間/外部第三者の独立評価とは呼ばない。
 
-fixtures、固定回答、oracle、採点定義、予定metadata、起動失敗logをこのcommitで閲覧できる。実測raw・scoreはまだ存在しないので、差別化、同等性、勝敗、停止性を結論できない。後続実測ではrawから第三者が再採点できる行番号付き根拠、盲検ID対応表、全失敗runも保存する。
-
-## 再開条件
-
-実行経路と上記protocol上の未決を解消し、最終freeze SHAを公開する。4 cases × 2 arms × 2 replicatesの16 Stage1 run、対応する16 Fresh Stage2 run、16 Fresh probeを行う。RDRAの各DAG node呼出しも個別にmodel・prompt・read-log・rawを記録し、16 runを16 model callと誤記しない。
-
-Secondary/native comparisonはPrimaryと別集計にする。取得ZIPの既定Cursor/GeminiとWebで説明されるClaude/Haikuのどちらをnativeとするかも事前に明示する。CLIのインストール、外部認証、費用の発生をこの起動点検では行っていない。
-
-## 07:32 UTCレビュー後の決定
-
-同一モデルPrimaryはWork Fresh agentsへのAI呼出し置換で再開する。Stage2はresolved sourceから両armをFresh再生成する。C1はtango238/rdraのpinned公開sampleを照合済み、C5を追加した。旧READMEの未決・16 run計画は履歴であり、現在の固定条件はPROTOCOL.md・cases.json・20 run計画を優先する。Nativeは未実施。
+5ケース・2反復の記述的pilot。RDRA18calls対Alder1callというworkflow bundleの比較で、計算量を揃えた単一Prompt比較ではない。出力量を品質点にせず、一般優位や総合勝敗を主張しない。
