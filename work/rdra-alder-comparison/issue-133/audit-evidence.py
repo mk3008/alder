@@ -3,7 +3,7 @@ ROOT=pathlib.Path(__file__).resolve().parent
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 def audit():
-    result={'alder':collections.Counter(),'rdra':collections.Counter(),'rdra_nodes':collections.Counter(),'issues':[],'limits':['Requested settings and self-reported read-log are not independent attestation.']}
+    result={'alder':collections.Counter(),'rdra':collections.Counter(),'rdra_stage3':collections.Counter(),'rdra_nodes':collections.Counter(),'issues':[],'limits':['Requested settings and self-reported read-log are not independent attestation.']}
     ap=ROOT/'primary-runs/alder/manifest.json'
     if ap.exists():
         m=json.loads(ap.read_text())
@@ -16,8 +16,16 @@ def audit():
                 if not p.exists() or (field in r and digest(p)!=r[field]):result['issues'].append({'run':r['root'],'field':field,'problem':'missing_or_hash_mismatch'})
             source=ROOT/r['source_fixture']
             if not source.exists() or digest(source)!=r['source_sha256']:result['issues'].append({'run':r['root'],'problem':'source_fixture_mismatch'})
+            if digest(base/'source.txt')!=r['source_sha256']:result['issues'].append({'run':r['root'],'problem':'source_copy_mismatch'})
+            for rel,expected in r.get('method_sha256',{}).items():
+                f=base/'method/alder-draft-business-design'/rel
+                if not f.exists() or digest(f)!=expected:result['issues'].append({'run':r['root'],'problem':'method_copy_mismatch','path':rel})
     for p in sorted((ROOT/'primary-runs/rdra').glob('C*/r*/s*/manifest.json')):
-        m=json.loads(p.read_text());result['rdra'][m.get('status','unknown')]+=1
+        m=json.loads(p.read_text())
+        if p.parent.name=='s3':
+            result['rdra_stage3'][m.get('status','unknown')]+=1
+            continue
+        result['rdra'][m.get('status','unknown')]+=1
         for name,n in m.get('nodes',{}).items():
             result['rdra_nodes'][n.get('status','unknown')]+=1
             for attr in ['unchanged_prompt_hash']:
@@ -25,6 +33,14 @@ def audit():
             if any(v is False for v in n.get('unchanged_input_hashes',{}).values()):result['issues'].append({'run':str(p.relative_to(ROOT)),'node':name,'problem':'changed_input'})
             if n.get('read_log_validity',{}).get('outside_allowlist'):result['issues'].append({'run':str(p.relative_to(ROOT)),'node':name,'problem':'outside_allowlist','paths':n['read_log_validity']['outside_allowlist']})
             if n.get('status')=='complete':
+                nr=pathlib.Path(n['root'])
+                checks={n['prompt_path']:n['prompt_sha256'],**n.get('inputs',{})}
+                alias=n.get('alias') or {}
+                for key in ['source','target']:
+                    if key in alias:checks[alias[key]]=alias[key+'_sha256']
+                for rel,expected in checks.items():
+                    f=nr/rel
+                    if not f.exists() or digest(f)!=expected:result['issues'].append({'run':str(p.relative_to(ROOT)),'node':name,'problem':'actual_input_or_prompt_mismatch','path':rel})
                 for rel,expected in n.get('artifact_hashes',{}).items():
                     # Postprocessing may legitimately change the project copy; audit original node output.
                     original=pathlib.Path(n['root'])/rel

@@ -1,0 +1,29 @@
+{
+  "checked_utc": "2026-10-02T07:56:18.304239+00:00",
+  "official_dependency_sha256": "3fe43b4b79ee747172649148b4a1c5b144542acdc5441407e7d03cde43c33a3b",
+  "official_runner_sha256": "446baa2295b3e8d9600009e2a14a7b6a79cf25d4bbff77d15c2c3cacb2055484",
+  "frozen_dag_sha256": "ee1ef7bf01156ab50b6ec80c2153cb7b56cbd41d8144a06b56de224e499c4131",
+  "exact_nodes_inputs_outputs_prompts_scripts_equality": true,
+  "ai_count": 18,
+  "script_node_count": 2,
+  "official_script_order": [
+    "RDRA_Knowledge/helper_tools/enrichPh4InfoStateModels.js",
+    "RDRA_Knowledge/helper_tools/zeroOnePostCheck.js",
+    "RDRA_Knowledge/helper_tools/makeBUC.js",
+    "RDRA_Knowledge/helper_tools/attachContext.js",
+    "RDRA_Knowledge/helper_tools/rdraFileCopy.js",
+    "RDRA_Knowledge/helper_tools/makeGraphData.js"
+  ],
+  "official_menu8_semantics": {
+    "ai_runnable": "all declared inputs exist AND NOT all declared outputs exist",
+    "ai_priority": "Run runnable AI nodes before pipeline script nodes.",
+    "rebuild": "Only after phase4 complete, all rebuild inputs exist, and any rebuild output absent.",
+    "phase5": "Only after all phase5 inputs exist and any phase5 output absent.",
+    "script_order": "Per node, scripts sequential in listed order.",
+    "ai_after_script": "No AI node declares script-produced 1_RDRA outputs as inputs.",
+    "missing_ai_outputs_after_normal_completion": "Requeue under same unchanged prompt and inputs.",
+    "loop_upper_bound": 500
+  },
+  "no_phase2_interposed_postprocessor": true,
+  "no_ai_inputs_from_pipeline_outputs": true
+}

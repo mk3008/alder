@@ -22,5 +22,9 @@
   "envelope_variant": "compact-v2",
   "envelope_sha256": "6e498281c019699775602f0b378895e2737cf3d565d53e6b16561314ea6a00df",
   "planned_envelope_variant": "verbose-v1",
-  "actual_envelope_variant": "compact-v2"
+  "actual_envelope_variant": "compact-v2",
+  "agent_id": "/root/alder_primary/c4_r1_s2",
+  "started_at": "2026-10-02T08:01:42.580588+00:00",
+  "status": "running",
+  "attempt": 1
 }

@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+    "sha256": "22dc35ef6e7ec8739c2f519842d2cfd081d070535d4146971b553552dd5b02b9",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C3/r1/s1/raw-response.md",
+    "sha256": "eca7a43782b2596b7a7beb70d50b3d9471d2ce27cab704980b996cc9e234460f",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "[design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md) に草案を保存しました。ヒアリング結果（source.txt）を基にしています。Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`。業務上の確認を経るまで未合意の草案です。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

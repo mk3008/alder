@@ -21,7 +21,7 @@ def init():
     dump(r/'manifest.json',dict(case=case,replicate=rep,stage=stage,status='pending',source_sha256=sha(project/'初期要望.txt'),requested_model='gpt-6-sol',requested_reasoning_effort='medium',fork_turns='none',provider='ChatGPT Work collaboration',effective_attestation='unavailable',nodes={},deviations=['Shared filesystem read allowlist is operational isolation, not a security sandbox.'],started=now()))
 def prepare(case,rep,stage,count=3):
  r=runpath(case,rep,stage);p=r/'project';m=json.loads((r/'manifest.json').read_text());result=[]
- if m['status'] in ['failed','complete']: return []
+ if m['status'] in ['failed','protocol_failed','complete']: return []
  m['status']='running'
  for n in DAG:
   if n['kind']!='ai':continue
@@ -51,6 +51,8 @@ def started(case,rep,stage,node,agent):
 def finish(case,rep,stage,node,response):
  r=runpath(case,rep,stage);m=json.loads((r/'manifest.json').read_text());rec=m['nodes'][node];root=pathlib.Path(rec['root']);ev=pathlib.Path(rec['evidence']);(ev/'raw-final-response.txt').write_text(response)
  rec.update(ended=now(),raw_final_response=response,artifact_hashes={x:sha(root/x) for x in rec['outputs'] if (root/x).exists()})
+ for x in rec['outputs']:
+  if (root/x).exists():cp(root/x,ev/'artifacts'/x)
  readlog=ev/'read-log.json';rec['read_log']=json.loads(readlog.read_text()) if readlog.exists() else None
  rec['unchanged_input_hashes']={x:sha(root/x)==h for x,h in rec['inputs'].items()}
  rec['unchanged_official_hashes']={x:sha(root/x)==h for x,h in rec.get('source_hashes',{}).items()}
@@ -76,25 +78,40 @@ def finish(case,rep,stage,node,response):
   for x in rec['outputs']:cp(root/x,r/'project'/x)
  append(r/'invocations.jsonl',dict(event='finish',**rec));dump(ev/'completed.json',rec);dump(r/'manifest.json',m)
  print(json.dumps(dict(run=str(r),node=node,status=rec['status']),ensure_ascii=False))
+def audit(case,rep,stage):
+ r=runpath(case,rep,stage);m=json.loads((r/'manifest.json').read_text());checks=[]
+ def paths(v):
+  if isinstance(v,str):return [v] if ('/' in v or v.endswith('.md') or v.endswith('.txt')) else []
+  if isinstance(v,list):return sum((paths(x) for x in v),[])
+  if isinstance(v,dict):return sum((paths(x) for x in v.values()),[])
+  return []
+ for node,rec in m['nodes'].items():
+  root=pathlib.Path(rec['root']);ev=pathlib.Path(rec['evidence']);readpaths=paths(json.loads((ev/'read-log.json').read_text()));allowed={(root/x).resolve() for x in rec['read_allowlist']+rec['outputs']}|{(ev/'envelope.txt').resolve()};resolved=[(pathlib.Path(x) if pathlib.Path(x).is_absolute() else root/x).resolve() for x in readpaths]
+  checks.append(dict(node=node,prompt_original_bytes=sha(root/rec['prompt_path'])==rec['prompt_sha256'],official_agents_original_bytes=sha(root/'AGENTS.md')==sha(SOURCE/'AGENTS.md'),official_knowledge_original_bytes=all(sha(x)==sha(SOURCE/x.relative_to(root)) for x in (root/'RDRA_Knowledge/.rdracore').iterdir()),input_original_bytes=all(sha(root/x)==h for x,h in rec['inputs'].items()),prompt_read=(root/rec['prompt_path']).resolve() in resolved,outside_allowlist=[str(x) for x in resolved if x not in allowed]))
+ report=dict(checked_utc=now(),nodes=checks,all_pass=all(all(v for k,v in c.items() if k not in ['node','outside_allowlist']) and not c['outside_allowlist'] for c in checks))
+ dump(r/'evidence/validity-audit.json',report);m.update(validity_audit='evidence/validity-audit.json',validity_all_pass=report['all_pass']);dump(r/'manifest.json',m)
+ return report['all_pass']
 def snapshots(p): return {str(x.relative_to(p)):sha(x) for x in p.rglob('*') if x.is_file() and not str(x.relative_to(p)).startswith('RDRA_Knowledge/')}
 def post(case,rep,stage):
  r=runpath(case,rep,stage);m=json.loads((r/'manifest.json').read_text());p=r/'project';ev=r/'evidence/postprocess';ev.mkdir(parents=True,exist_ok=True)
- if m['status']=='failed':print('failed');return
+ if m['status'] in ['failed','protocol_failed']:print(m['status']);return
  if not all(m['nodes'].get(n['id'],{}).get('status')=='complete' for n in DAG if n['kind']=='ai'):print('not-ready');return
  shutil.copytree(SOURCE/'RDRA_Knowledge/helper_tools',p/'RDRA_Knowledge/helper_tools',dirs_exist_ok=True)
  shutil.copytree(SOURCE/'RDRA_Knowledge/.rdracore',p/'RDRA_Knowledge/.rdracore',dirs_exist_ok=True)
  for n in DAG:
   if n['kind']!='script':continue
+  if all((p/x).exists() for x in n['outputs']):
+   append(r/'postprocess.jsonl',dict(event='skip',node=n['id'],reason='all declared outputs exist',recorded=now()));continue
   if not all((p/x).exists() for x in n['inputs']):m.update(status='failed',failure='Missing script input: '+n['id']);break
   for script in n['scripts']:
    name=pathlib.Path(script).stem;se=ev/name;se.mkdir(parents=True,exist_ok=True)
    for outdir in ['0_RDRAZeroOne','1_RDRA']:
     if (p/outdir).exists():shutil.copytree(p/outdir,se/'before'/outdir)
-   before=snapshots(p);proc=subprocess.run(['node',str(p/script)],cwd=p,capture_output=True)
+   before=snapshots(p);script_started=now();proc=subprocess.run(['node',str(p/script)],cwd=p,capture_output=True)
    (se/'stdout.txt').write_bytes(proc.stdout);(se/'stderr.txt').write_bytes(proc.stderr)
    for outdir in ['0_RDRAZeroOne','1_RDRA']:
     if (p/outdir).exists():shutil.copytree(p/outdir,se/'after'/outdir)
-   rec=dict(script=script,script_sha256=sha(p/script),before=before,after=snapshots(p),exit_code=proc.returncode,ended=now());dump(se/'record.json',rec);append(r/'postprocess.jsonl',rec)
+   rec=dict(started=script_started,script=script,script_sha256=sha(p/script),before=before,after=snapshots(p),exit_code=proc.returncode,ended=now());dump(se/'record.json',rec);append(r/'postprocess.jsonl',rec)
    if proc.returncode:m.update(status='failed',failure='Official script failed: '+script);break
   if m['status']=='failed':break
  if m['status']!='failed':m['status']='complete'
@@ -106,3 +123,4 @@ if __name__=='__main__':
  elif cmd=='started':started(*sys.argv[2:])
  elif cmd=='finish':finish(*sys.argv[2:6],pathlib.Path(sys.argv[6]).read_text())
  elif cmd=='post':post(*sys.argv[2:])
+ elif cmd=='audit':print(audit(*sys.argv[2:]))

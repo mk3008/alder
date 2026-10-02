@@ -31,7 +31,9 @@ def anonymize(text):
             changes.append({'line':i,'original':line,'replacement':'[method metadata removed]'})
             out.append('[method metadata removed]')
         else:
-            new=re.sub(r'\b(?:Alder|RDRAAgent|RDRA)\b','[method]',line)
+            # Japanese characters are word characters in Python regex; \b can
+            # leave a method name visible in a phrase such as RDRA定義.
+            new=re.sub(r'(?<![A-Za-z0-9])(?:Alder|RDRAAgent|RDRA)(?![A-Za-z0-9])','[method]',line,flags=re.I)
             if new!=line:changes.append({'line':i,'original':line,'replacement':new})
             out.append(new)
     return '\n'.join(out)+'\n',changes

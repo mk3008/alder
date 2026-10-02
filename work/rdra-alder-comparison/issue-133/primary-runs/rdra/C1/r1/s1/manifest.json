@@ -1513,5 +1513,7 @@
     }
   ],
   "validity_audit": "evidence/validity-audit.json",
-  "validity_all_pass": true
+  "validity_all_pass": true,
+  "dag_fidelity_audit": "../../../operator/dag-fidelity-audit.json",
+  "dag_exact_match": true
 }

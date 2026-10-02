@@ -14,5 +14,7 @@
     "Shared filesystem read allowlist is operational isolation, not a security sandbox."
   ],
   "started": "2026-10-02T07:38:42.832285+00:00",
-  "official_directory_scaffolding_restored": "2026-10-02T07:50:25.188284+00:00"
+  "official_directory_scaffolding_restored": "2026-10-02T07:50:25.188284+00:00",
+  "dag_fidelity_audit": "../../../operator/dag-fidelity-audit.json",
+  "dag_exact_match": true
 }

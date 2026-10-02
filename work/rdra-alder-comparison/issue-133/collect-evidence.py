@@ -1,4 +1,4 @@
-import pathlib,json,hashlib
+import pathlib,json,hashlib,sys
 
 ROOT=pathlib.Path(__file__).resolve().parent
 PREFIX='work/rdra-alder-comparison/issue-133/'
@@ -24,13 +24,17 @@ def collect():
                     # Probe packet copies are reconstructible from blind-packets.
                     if folder=='blind-probes' and p.name=='packet.md':continue
                     xs.append({'path':PREFIX+str(p.relative_to(ROOT)),'mode':'100644','type':'blob','content':text})
-    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py']:
+    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py']:
         p=ROOT/name
         if p.exists():xs.append({'path':PREFIX+name,'mode':'100644','type':'blob','content':p.read_text()})
     return xs
 
 if __name__=='__main__':
     xs=collect();out=ROOT/'publish-batches';out.mkdir(exist_ok=True)
+    previous=ROOT/'published-evidence-manifest.json'
+    baseline={x['path']:x['sha256'] for x in json.loads(previous.read_text())} if '--delta' in sys.argv and previous.exists() else {}
+    all_manifest=[{'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode())} for e in xs]
+    xs=[e for e in xs if hashlib.sha256(e['content'].encode()).hexdigest()!=baseline.get(e['path'])]
     manifest=[];batch=[];size=0;bid=0
     for e in xs:
         estimate=len(json.dumps(e,ensure_ascii=False).encode())
@@ -41,4 +45,5 @@ if __name__=='__main__':
         manifest.append({'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode())})
     if batch:(out/f'{bid:04d}.json').write_text(json.dumps(batch,ensure_ascii=False));bid+=1
     (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+    (out/'all-manifest.json').write_text(json.dumps(all_manifest,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'files':len(xs),'batches':bid,'bytes':sum(x['bytes'] for x in manifest)}))

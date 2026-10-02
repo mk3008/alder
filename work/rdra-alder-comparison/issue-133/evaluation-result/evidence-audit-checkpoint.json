@@ -1,0 +1,34 @@
+{
+  "alder": {
+    "success": 13,
+    "running": 1,
+    "pending": 6
+  },
+  "rdra": {
+    "complete": 1,
+    "protocol_failed": 1,
+    "running": 1,
+    "pending": 17
+  },
+  "rdra_stage3": {
+    "unavailable_upstream_protocol_failed": 1
+  },
+  "rdra_nodes": {
+    "complete": 37,
+    "failed": 1,
+    "running": 1
+  },
+  "issues": [
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "node": "ph4_info",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+      ]
+    }
+  ],
+  "limits": [
+    "Requested settings and self-reported read-log are not independent attestation."
+  ]
+}
