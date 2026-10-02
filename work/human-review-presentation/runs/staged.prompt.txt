@@ -1,0 +1,3 @@
+公開リポジトリ mk3008/alder の 2687ebe816d21f534f81822058b2eabde7b7797f にある研究入力を読む。今回の提示は work/human-review-presentation/staged.md。これは小さな予約関数の実装受入レビューであり、あなたは人間判断を支援する読解者。最初に提示ファイルだけを読み、その時点の受入可否、必要な判断/対応、未確認事項を仮回答として記録する。その後、必要だと判断した根拠ファイルだけ追加で読む。
+許可: work/human-review-presentation/staged.md、work/human-review-presentation/fixture/ 内の6ファイル、work/human-review-presentation/details.md。禁止: 他armの提示、protocol.md、rubric.md、他研究・Issue/PRコメント、既存結果、親の会話履歴。GitHub fetch_fileで固定SHAを指定して取得する。ファイル編集・GitHub書込み・追加業務ルールの決定は禁止。
+最終回答は日本語で、初読仮回答、追加で読んだファイルと理由（順序付き）、最終の受入判断、実装不一致と影響、既決/未決の区別、原典のBD/Check/Testと具体的期待、未検証範囲、テスト成功と人間承認の関係を記載する。cancelの戻り値の解釈も述べる。必要なソースが読めなければその限界を明記し、推測して補完しない。読んだrevisionとpath、requested model/effort、agent IDを記録する。実効設定は独立確認できない。

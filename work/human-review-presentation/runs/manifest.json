@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-02",
+  "source_revision": "9d3a75442fdd064750c7410e9159ddaff8ca091b",
+  "input_revision": "2687ebe816d21f534f81822058b2eabde7b7797f",
+  "arms": [
+    {
+      "arm": "baseline",
+      "agent_id": "/root/baseline_read",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "settings_evidence": "collaboration.spawn_agent arguments; effective model/effort not independently attested",
+      "prompt_path": "runs/baseline.prompt.txt",
+      "output_path": "runs/baseline.raw.md",
+      "output_scope": "full final response; tool-result bodies and interim messages are not preserved as a full runtime transcript",
+      "read_order": [
+        "baseline.md",
+        "fixture/decision.md",
+        "fixture/business-design.md",
+        "fixture/checks.md",
+        "fixture/test_product.py",
+        "fixture/product.py",
+        "fixture/trace.json"
+      ],
+      "prohibited_read_disclosure": "none reported; full runtime tool trace not independently audited"
+    },
+    {
+      "arm": "staged",
+      "agent_id": "/root/staged_read",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "settings_evidence": "collaboration.spawn_agent arguments; effective model/effort not independently attested",
+      "prompt_path": "runs/staged.prompt.txt",
+      "output_path": "runs/staged.raw.md",
+      "output_scope": "full final response; tool-result bodies and interim messages are not preserved as a full runtime transcript",
+      "read_order": [
+        "staged.md",
+        "fixture/business-design.md",
+        "fixture/checks.md",
+        "fixture/test_product.py",
+        "fixture/product.py",
+        "details.md",
+        "fixture/decision.md",
+        "fixture/trace.json"
+      ],
+      "prohibited_read_disclosure": "none reported; full runtime tool trace not independently audited"
+    }
+  ],
+  "metadata_discrepancy": "Both final outputs say requested settings were not explicit in the task text. Model/effort were set in spawn arguments, not repeated in task text. Preserve outputs unchanged; requested configuration is operator-recorded and effective configuration remains unverified.",
+  "parent_model": "Codex GPT-6 family per runtime instructions; exact identifier/effort not exposed; not a comparison arm",
+  "public_safety": "synthetic public fixture and no private management links, secrets or personal/customer data in published prompts/outputs"
+}

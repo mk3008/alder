@@ -1,0 +1,98 @@
+{
+  "input_revision": "2687ebe816d21f534f81822058b2eabde7b7797f",
+  "source_revision": "9d3a75442fdd064750c7410e9159ddaff8ca091b",
+  "method": "Unicode code points including Markdown syntax; nonempty lines; no inference about time or cognitive load",
+  "presentation": {
+    "baseline.md": {
+      "characters": 1529,
+      "nonempty_lines": 17
+    },
+    "staged.md": {
+      "characters": 503,
+      "nonempty_lines": 6
+    },
+    "details.md": {
+      "characters": 1315,
+      "nonempty_lines": 12
+    },
+    "fixture/business-design.md": {
+      "characters": 245,
+      "nonempty_lines": 7
+    },
+    "fixture/checks.md": {
+      "characters": 308,
+      "nonempty_lines": 7
+    },
+    "fixture/product.py": {
+      "characters": 155,
+      "nonempty_lines": 6
+    },
+    "fixture/test_product.py": {
+      "characters": 482,
+      "nonempty_lines": 13
+    },
+    "fixture/trace.json": {
+      "characters": 803,
+      "nonempty_lines": 25
+    },
+    "fixture/decision.md": {
+      "characters": 420,
+      "nonempty_lines": 4
+    }
+  },
+  "initial_reduction": 0.671026814911707,
+  "staged_total_characters": 1818,
+  "reads": {
+    "baseline": {
+      "files": [
+        "baseline.md",
+        "fixture/decision.md",
+        "fixture/business-design.md",
+        "fixture/checks.md",
+        "fixture/test_product.py",
+        "fixture/product.py",
+        "fixture/trace.json"
+      ],
+      "source_files_after_presentation": 6,
+      "characters": 3942
+    },
+    "staged": {
+      "files": [
+        "staged.md",
+        "fixture/business-design.md",
+        "fixture/checks.md",
+        "fixture/test_product.py",
+        "fixture/product.py",
+        "details.md",
+        "fixture/decision.md",
+        "fixture/trace.json"
+      ],
+      "source_files_after_presentation": 6,
+      "additional_explanation_files": 1,
+      "characters": 4231
+    }
+  },
+  "rubric": {
+    "baseline": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "staged": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "scorer": "parent; not blinded"
+  }
+}
