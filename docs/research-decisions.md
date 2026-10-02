@@ -202,6 +202,16 @@ Reason: one concrete later-decided question meets the user's practical adoption 
 
 Limits: one product, two historical snapshots selected with hindsight, no no-prompt control or blind evaluator, no independent model/effort attestation, instruction-based input isolation. H1 Concepts were defined but its historical review still had unrelated open items; H2 was resolved. The success covers the correction boundary, not all-Run atomicity, durable failure records, configuration versions or bounded backlog recovery. The latter targets were not discovered. Reconsider if real usage mostly reopens settled choices or imposes review cost without useful decisions; broader mandatory adoption requires more evidence. No completeness guarantee or minimum candidate count is introduced.
 
+## Explore It! 補助観点による考慮漏れ検証
+
+| Proposal / question | Status | Decision and scope | Record |
+| --- | --- | --- | --- |
+| 探索ヒューリスティックと探索範囲申告を加えると、有用な未決論点を増やせるか | Inconclusive / deferred | 既存3ケース×A/B各1回のFresh比較。Bのみの有用論点3件とAのみの論点を観測し、出力量はほぼ同じ。観点追加による因果効果、読者の誤った網羅感、実レビュー負荷は未実証。正式採用・標準出力追加は保留し、現行の任意探索を維持。固定チェックリスト化しない。 | [結果・候補別評価](../work/explore-it/issue-125/results.md), [凍結計画](../work/explore-it/issue-125/protocol.md), [実行条件](../work/explore-it/issue-125/manifest.json), [#125](https://github.com/mk3008/alder/issues/125) |
+
+補助観点は外部知識を問いの発想材料にする現行原則と整合し、要件の答えを与えない。[発表資料](https://speakerdeck.com/sadonosake/explore-it-o-chizu-ni-suru)に整理された数・時間・状態・依存先の変化を試したが、書籍全体の再現ではない。Bの追加3件のうち1件は特定heuristicへの由来がrawで追えず、Aも同じ論点を見送っていた。出力上の網羅性否定は確認したが、実際の読者試験はない。
+
+Reflection: 正式Skill・ガイドへの変更なし。実利用で同じ重要論点を繰り返し逃す証拠、または探索範囲申告が具体的なレビュー判断を改善する証拠を再検討条件とする。反復なしの小規模pilotで、一般的な性能優位も無効果も主張しない。
+
 ## RDRA / Alder same-model pilot
 
 | Proposal / question | Status | Decision and scope | Record |

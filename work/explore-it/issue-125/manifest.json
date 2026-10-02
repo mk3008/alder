@@ -1,0 +1,274 @@
+{
+  "date": "2026-10-02",
+  "baseline_revision": "9d3a75442fdd064750c7410e9159ddaff8ca091b",
+  "intervention_revision": "00653bf3ca077a60f33df06be33a104410043b01",
+  "start_utc": "2026-10-02T13:59:19.999Z",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime_independently_attested": false,
+  "public_source": "https://speakerdeck.com/sadonosake/explore-it-o-chizu-ni-suru",
+  "source_checked_slides": [
+    9,
+    11,
+    12,
+    13,
+    14,
+    17,
+    18,
+    19
+  ],
+  "baseline": {
+    "path": "docs/behavior-derivation/functional-considerations.md",
+    "blob_sha": "4c5081c2574100c7fa0b051f1c7de3ebb51e79cc"
+  },
+  "runs": [
+    {
+      "case": "facilities-maintenance",
+      "arm": "a",
+      "agent_id": "/root/facilities_a",
+      "input": {
+        "path": "work/behavior-derivation/inputs/facilities-maintenance.md",
+        "blob_sha": "613bce90908cd28c8431e5165f9b7b2ad1356170"
+      },
+      "prompt_path": "prompts/facilities-maintenance-a.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/facilities-maintenance-a.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/facilities-maintenance-a.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/facilities-maintenance.md": {
+          "bytes": 11964,
+          "sha256": "6100753d65e8bc25c390b1a1cb87e450cdcaad05126ac5d222c5645850c046c3",
+          "git_blob_sha": "6b9a004d7887cdb27830ce407cf4abde8dbc312a"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/facilities-maintenance-a.md": {
+          "bytes": 1786,
+          "sha256": "c11582cf6527dbf33fde3b7201a8d2f17f470746c830c87a5d5cc238af84aefa",
+          "git_blob_sha": "81f75a28665b1b1ab42f42b7ad9b7c48736e1582"
+        }
+      },
+      "raw": {
+        "bytes": 6243,
+        "unicode_code_points": 2699,
+        "sha256": "d59f12b55f1b8d76fff2b7a01909b92b5aa06e4dbe1da4ee6712c74d16d8d5a7",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    },
+    {
+      "case": "facilities-maintenance",
+      "arm": "b",
+      "agent_id": "/root/facilities_b",
+      "input": {
+        "path": "work/behavior-derivation/inputs/facilities-maintenance.md",
+        "blob_sha": "613bce90908cd28c8431e5165f9b7b2ad1356170"
+      },
+      "prompt_path": "prompts/facilities-maintenance-b.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/facilities-maintenance-b.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/facilities-maintenance-b.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/facilities-maintenance.md": {
+          "bytes": 11964,
+          "sha256": "6100753d65e8bc25c390b1a1cb87e450cdcaad05126ac5d222c5645850c046c3",
+          "git_blob_sha": "6b9a004d7887cdb27830ce407cf4abde8dbc312a"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/facilities-maintenance-b.md": {
+          "bytes": 1889,
+          "sha256": "80be6f07bfea413a3463628311900492907aabab6d3aa907ac7a7a42863d9af9",
+          "git_blob_sha": "d2a641b9c0baaea76682744753cd1bf01bea93ab"
+        },
+        "heuristic.md": {
+          "bytes": 1506,
+          "sha256": "86ebf8c1e9335560d6ae08a27bc25dba2e770f1e55e519f471d81613b7b7e743",
+          "git_blob_sha": "81e8d5f322de6efe0cb30a7e455ffe6a550af187"
+        }
+      },
+      "raw": {
+        "bytes": 5227,
+        "unicode_code_points": 2255,
+        "sha256": "f97dc88ef7d2515baad093810d9dc6705a3b6c6c7262a5e34ad7b9bb9e07573e",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    },
+    {
+      "case": "meeting-room",
+      "arm": "a",
+      "agent_id": "/root/meeting_a",
+      "input": {
+        "path": "work/behavior-derivation/inputs/meeting-room.md",
+        "blob_sha": "f72313262ec1bfb1694315e3d69dec80aa5545c4"
+      },
+      "prompt_path": "prompts/meeting-room-a.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/meeting-room-a.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/meeting-room-a.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/meeting-room.md": {
+          "bytes": 9441,
+          "sha256": "b12fa6d67d138bc20a340cd3ebeb625a8d423a215b107064540d36746828f861",
+          "git_blob_sha": "e6eb1a2ec4a8b3c538f578b63ebbf423a5e3a694"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/meeting-room-a.md": {
+          "bytes": 1756,
+          "sha256": "d712e8049828d1e28dd562bd4c8dd35052aec3d5aa26db74ec785555ddf77a27",
+          "git_blob_sha": "869958bfc9a6c501f92b29a3f513dfc4b7ac1739"
+        }
+      },
+      "raw": {
+        "bytes": 7113,
+        "unicode_code_points": 2975,
+        "sha256": "a4a5a1d3d2a0ab136869f6459455b1ece7caa73228198d83a9ca09936b3ed3c9",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    },
+    {
+      "case": "meeting-room",
+      "arm": "b",
+      "agent_id": "/root/meeting_b",
+      "input": {
+        "path": "work/behavior-derivation/inputs/meeting-room.md",
+        "blob_sha": "f72313262ec1bfb1694315e3d69dec80aa5545c4"
+      },
+      "prompt_path": "prompts/meeting-room-b.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/meeting-room-b.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/meeting-room-b.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/meeting-room.md": {
+          "bytes": 9441,
+          "sha256": "b12fa6d67d138bc20a340cd3ebeb625a8d423a215b107064540d36746828f861",
+          "git_blob_sha": "e6eb1a2ec4a8b3c538f578b63ebbf423a5e3a694"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/meeting-room-b.md": {
+          "bytes": 1859,
+          "sha256": "35d34cd397913514cd5caf2fa0fc46f03c95c2db88633be69eaa545ce85d30ea",
+          "git_blob_sha": "bf001105df5f8be6a0abd075f3e795ab58c50220"
+        },
+        "heuristic.md": {
+          "bytes": 1506,
+          "sha256": "86ebf8c1e9335560d6ae08a27bc25dba2e770f1e55e519f471d81613b7b7e743",
+          "git_blob_sha": "81e8d5f322de6efe0cb30a7e455ffe6a550af187"
+        }
+      },
+      "raw": {
+        "bytes": 7313,
+        "unicode_code_points": 3145,
+        "sha256": "f00abace0e16e4c5e0bb7977813f0cfe88f588ff54cf5efef5f5c36df1493876",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    },
+    {
+      "case": "purchase-request",
+      "arm": "a",
+      "agent_id": "/root/purchase_a",
+      "input": {
+        "path": "work/behavior-derivation/inputs/purchase-request.md",
+        "blob_sha": "990e3977553bb5d2e938e61121db9245001add94"
+      },
+      "prompt_path": "prompts/purchase-request-a.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/purchase-request-a.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/purchase-request-a.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/purchase-request.md": {
+          "bytes": 7436,
+          "sha256": "6acc688422d4326a7000eaa04e6e224b26553c5f871d0d3b34f5368e83e9d488",
+          "git_blob_sha": "a0897a5982fcc093388a7667c3893d6042720734"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/purchase-request-a.md": {
+          "bytes": 1768,
+          "sha256": "9da164241ab5529114517288c8c118f502718318b52623708ff3624cc54b613f",
+          "git_blob_sha": "885f134420f24ea9490ab2c38ced69d1a74e0c85"
+        }
+      },
+      "raw": {
+        "bytes": 9473,
+        "unicode_code_points": 3831,
+        "sha256": "5cf9c9ea1566177dc94b7a92f86c0c35170196be0082686cdbad2b3d8d91ad2c",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    },
+    {
+      "case": "purchase-request",
+      "arm": "b",
+      "agent_id": "/root/purchase_b",
+      "input": {
+        "path": "work/behavior-derivation/inputs/purchase-request.md",
+        "blob_sha": "990e3977553bb5d2e938e61121db9245001add94"
+      },
+      "prompt_path": "prompts/purchase-request-b.md",
+      "startup_message": "Alder #125 Fresh run。実験介入revision: 00653bf3ca077a60f33df06be33a104410043b01（公開確認済み）。/workspace/scratch/0194c029b64d/explore125/prompts/purchase-request-b.md を読み、その完全promptに従って実行してください。読取はpromptが許可したファイルのみ。他のprompt、raw、研究記録は読まないでください。要求設定 gpt-6-sol / medium / fork_turns none。出力だけを指定rawファイルへ保存してください。",
+      "raw_path": "raw/purchase-request-b.md",
+      "completion": "completed",
+      "allowed_read_declaration_consistent": true,
+      "actual_files": {
+        "inputs/purchase-request.md": {
+          "bytes": 7436,
+          "sha256": "6acc688422d4326a7000eaa04e6e224b26553c5f871d0d3b34f5368e83e9d488",
+          "git_blob_sha": "a0897a5982fcc093388a7667c3893d6042720734"
+        },
+        "baseline.md": {
+          "bytes": 5130,
+          "sha256": "1a1d893272a655443fc79600e30d6b07560f68a4383cff7fc5cfc8f494ce42c4",
+          "git_blob_sha": "5de0f5e624aee9437c21ac0b0909a7bdfe411357"
+        },
+        "prompts/purchase-request-b.md": {
+          "bytes": 1871,
+          "sha256": "f7bee9b75d24d57131f07548ef5a8892313b9c0e0f236f4c768f5e313e3dfe37",
+          "git_blob_sha": "f119208a7e18d79a2697e166a4a06e25468363c5"
+        },
+        "heuristic.md": {
+          "bytes": 1506,
+          "sha256": "86ebf8c1e9335560d6ae08a27bc25dba2e770f1e55e519f471d81613b7b7e743",
+          "git_blob_sha": "81e8d5f322de6efe0cb30a7e455ffe6a550af187"
+        }
+      },
+      "raw": {
+        "bytes": 9894,
+        "unicode_code_points": 4122,
+        "sha256": "0603ef61dc55df27c584b44a921e5bccb13bbf48ed4d11958235e20e4de52719",
+        "safe_publication_review": "full output reviewed by experiment operator; no sensitive information detected"
+      }
+    }
+  ],
+  "completed_run_count": 6,
+  "input_normalization_deviation": "All three inputs, baseline, heuristic and prompt snapshots have one additional terminal LF relative to the connector content / preregistered text. No other source-content difference. A/B share identical input and baseline bytes.",
+  "reproduction": "Read immutable source files at baseline_revision, append one LF to their UTF-8 content; materialize prompt and heuristic with one extra terminal LF. Alternatively use snapshots for input and baseline.",
+  "evaluator": {
+    "agent_id": "/root",
+    "blinded": false,
+    "model": "effective primary Work model not independently exposed",
+    "reasoning_effort": "not independently exposed",
+    "business_meaning_approval": false
+  }
+}
