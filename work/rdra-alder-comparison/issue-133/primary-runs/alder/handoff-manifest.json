@@ -1,0 +1,87 @@
+{
+  "prepared_at": "2026-10-02T08:15:06.938051+00:00",
+  "packetize_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "packets": [
+    {
+      "blind_id": "P001",
+      "case": "C4",
+      "replicate": 2,
+      "packet_path": "blind-packets/P001-handoff.md",
+      "packet_sha256": "0b41322d6d184a4c7c3a2ddefe0cf68169c585ef1ffb8fd947cd11397bc2e615",
+      "mapping_path": "blind-packets/P001-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P017",
+      "case": "C3",
+      "replicate": 2,
+      "packet_path": "blind-packets/P017-handoff.md",
+      "packet_sha256": "d6489f2218bc24f3f23344b3d6b927fd5bbc443040894e1e343d8669585c3996",
+      "mapping_path": "blind-packets/P017-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P018",
+      "case": "C5",
+      "replicate": 1,
+      "packet_path": "blind-packets/P018-handoff.md",
+      "packet_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+      "mapping_path": "blind-packets/P018-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P019",
+      "case": "C1",
+      "replicate": 2,
+      "packet_path": "blind-packets/P019-handoff.md",
+      "packet_sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+      "mapping_path": "blind-packets/P019-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P025",
+      "case": "C1",
+      "replicate": 1,
+      "packet_path": "blind-packets/P025-handoff.md",
+      "packet_sha256": "f2d9765faf7178528a9ff8703b0cab7102f0ec1034e3a447147b7e0ac9ecf9d4",
+      "mapping_path": "blind-packets/P025-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P031",
+      "case": "C3",
+      "replicate": 1,
+      "packet_path": "blind-packets/P031-handoff.md",
+      "packet_sha256": "7cc5c430bc6351a950f4dcc8aa189ab66ada16fa41b31ec52a32061b10d5fb72",
+      "mapping_path": "blind-packets/P031-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P036",
+      "case": "C2",
+      "replicate": 2,
+      "packet_path": "blind-packets/P036-handoff.md",
+      "packet_sha256": "7ee23893f313d71adc6ab15edbee80991f6fe63f3869e547d6df082bd646449c",
+      "mapping_path": "blind-packets/P036-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P049",
+      "case": "C5",
+      "replicate": 2,
+      "packet_path": "blind-packets/P049-handoff.md",
+      "packet_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+      "mapping_path": "blind-packets/P049-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P053",
+      "case": "C4",
+      "replicate": 1,
+      "packet_path": "blind-packets/P053-handoff.md",
+      "packet_sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef",
+      "mapping_path": "blind-packets/P053-handoff-mapping.json"
+    },
+    {
+      "blind_id": "P058",
+      "case": "C2",
+      "replicate": 1,
+      "packet_path": "blind-packets/P058-handoff.md",
+      "packet_sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e",
+      "mapping_path": "blind-packets/P058-handoff-mapping.json"
+    }
+  ],
+  "probes_started_by_this_coordinator": 0
+}

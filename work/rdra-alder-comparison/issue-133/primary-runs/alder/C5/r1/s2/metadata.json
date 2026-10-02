@@ -22,5 +22,25 @@
   "envelope_variant": "compact-v2",
   "envelope_sha256": "c0f66a5afae308c216a041424757fe13de1323d507f85ceb989bdd72077184d7",
   "planned_envelope_variant": "verbose-v1",
-  "actual_envelope_variant": "compact-v2"
+  "actual_envelope_variant": "compact-v2",
+  "agent_id": "/root/alder_primary/c5_r1_s2",
+  "started_at": "2026-10-02T08:08:59.717278+00:00",
+  "status": "success",
+  "attempt": 1,
+  "finished_at": "2026-10-02T08:10:42.038741+00:00",
+  "failures": [],
+  "retries": 0,
+  "artifact_sha256": "cbef718650c75c7fa8561d1c931e6b28f36330ea49a150f147fb0e4b3110d10e",
+  "raw_response_sha256": "7d01a28246dbe829af7de99af41db9b634775ed87242a32eb416d7269ad9621d",
+  "read_log_sha256": "c438d8290e524aa840f2b0e4f90cf8e46e0a46589b3f706fbb0c5e44f371e6e1",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": false,
+    "read_log_entries": 7,
+    "read_allowlist_deviations": [
+      "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+    ]
+  }
 }

@@ -33,5 +33,15 @@
     "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
     "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
     "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "upstream_strict_eligible": false,
+  "upstream_source_clean_exploratory_eligible": true,
+  "upstream_classification_recorded_at": "2026-10-02T08:22:00.290244+00:00",
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
   }
 }

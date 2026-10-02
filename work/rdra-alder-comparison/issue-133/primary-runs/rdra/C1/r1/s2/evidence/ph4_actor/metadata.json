@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T08:22:15Z",
+  "failures": ["Initial output write and validation failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and retried successfully.", "Start time was not captured at task entry."],
+  "unmet_restrictions": []
+}

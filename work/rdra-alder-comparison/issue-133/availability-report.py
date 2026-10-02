@@ -31,7 +31,10 @@ def report():
         extraction=read(ROOT/'canonical-extractions'/m['blind_id']/'metadata.json')
         rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'primary_quality_eligible':complete and strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason')})
     counts=collections.Counter((r['arm'],r['stage'],r['execution_status']) for r in rows)
-    return {'planned_packets':len(rows),'rows':rows,'counts':[{'arm':a,'stage':s,'status':t,'count':n} for (a,s,t),n in sorted(counts.items())],'limits':['Failed/unavailable slots are retained in availability denominator, never silently scored as zero coverage. A protocol violation is not proof of business-quality or native-method failure.']}
+    groups=collections.defaultdict(list)
+    for r in rows:groups[(r['arm'],r['stage'])].append(r)
+    eligibility_counts=[{'arm':a,'stage':s,'planned':len(rs),'technical_complete':sum(r['technical_complete'] for r in rs),'strict_primary_eligible':sum(r['primary_quality_eligible'] for r in rs),'source_clean_exploratory_eligible':sum(r['source_clean_exploratory_eligible'] for r in rs)} for (a,s),rs in sorted(groups.items())]
+    return {'planned_packets':len(rows),'rows':rows,'counts':[{'arm':a,'stage':s,'status':t,'count':n} for (a,s,t),n in sorted(counts.items())],'eligibility_counts':eligibility_counts,'limits':['Failed/unavailable slots are retained in availability denominator, never silently scored as zero coverage. A protocol violation is not proof of business-quality or native-method failure.']}
 
 if __name__=='__main__':
     d=report();out=ROOT/'evaluation-result';out.mkdir(exist_ok=True)

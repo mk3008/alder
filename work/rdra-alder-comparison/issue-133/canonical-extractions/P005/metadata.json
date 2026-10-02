@@ -1,0 +1,38 @@
+{
+  "packet_id": "P005",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T08:38:45.445137+00:00",
+  "packet_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "5b07219572228d33d3669611a56f2618dc4d32e946ee973cd013b12d7b9cbdbb",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P005/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P005/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p005",
+  "prepared_at": "2026-10-02T08:37:29.252718+00:00",
+  "final_response_deviation": {
+    "actual_final": "actual-final-response-001.md",
+    "description": "Child returned path/count summary despite dispatch requirement to return full JSON. Child-written raw-response.md contains canonical JSON; actual final was distinct. Pure output-return followup requested; no semantic correction."
+  },
+  "output_sha256": {
+    "canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "raw-response.md": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "read-log.jsonl": "3b44954327c60a2e484fefa3b68d925cb8f473a5af4e6e8c7e3a3a645634ed8c"
+  },
+  "finished_at": "2026-10-02T08:41:56.191414+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  }
+}

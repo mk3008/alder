@@ -1,8 +1,16 @@
 {
   "packet_id": "P060",
-  "status": "unavailable",
+  "status": "continuation_pending",
   "reason": "upstream_stage2_unavailable",
   "recorded_at": "2026-10-02T07:57:50.847652+00:00",
   "partial_artifacts_excluded": true,
-  "semantic_scores_imputed": false
+  "semantic_scores_imputed": false,
+  "history": [
+    {
+      "status": "unavailable",
+      "reason": "upstream_stage2_unavailable",
+      "recorded_at": "2026-10-02T07:57:50.847652+00:00"
+    }
+  ],
+  "continuation_recorded_at": "2026-10-02T08:19:22.680393+00:00"
 }

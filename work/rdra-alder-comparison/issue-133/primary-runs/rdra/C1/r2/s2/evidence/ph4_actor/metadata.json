@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:31:00Z",
+  "start_utc_precision": "minute estimate",
+  "end_utc": "2026-10-02T08:31:54Z",
+  "failures": ["Initial read attempted a nonexistent output-tree Prompt path; the exact official Prompt was then read successfully."],
+  "unmet_restrictions": ["An attempted read of 0_RDRAZeroOne/phase4/ph4アクター生成.md was outside the read allowlist; it failed because the file did not exist."]
+}

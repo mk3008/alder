@@ -16,5 +16,10 @@
   "started": "2026-10-02T07:38:42.831176+00:00",
   "official_directory_scaffolding_restored": "2026-10-02T07:50:25.197366+00:00",
   "dag_fidelity_audit": "../../../operator/dag-fidelity-audit.json",
-  "dag_exact_match": true
+  "dag_exact_match": true,
+  "strict_protocol_eligible": true,
+  "technical_complete": false,
+  "source_clean_exploratory_eligible": true,
+  "source_clean_attestation": "Self-reported read-log/metadata only; no independent trace guarantee.",
+  "final_freeze_sha": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95"
 }

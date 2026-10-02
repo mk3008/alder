@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C5/r1/s2/docs/business-design/design.md",
+    "sha256": "cbef718650c75c7fa8561d1c931e6b28f36330ea49a150f147fb0e4b3110d10e",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C5/r1/s2/raw-response.md",
+    "sha256": "7d01a28246dbe829af7de99af41db9b634775ed87242a32eb416d7269ad9621d",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "[design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md) に、ヒアリング結果と固定Human answerを反映した未合意の草案を保存しました。Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a` に基づいています。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

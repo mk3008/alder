@@ -164,5 +164,8 @@
       "outside_allowlist": []
     }
   ],
-  "all_pass": true
+  "all_pass": true,
+  "audit_scope": "Original bytes and self-reported read-log only; metadata compliance and strict protocol eligibility are recorded separately.",
+  "strict_protocol_eligible": false,
+  "source_clean_exploratory_eligible": true
 }

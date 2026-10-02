@@ -7,9 +7,12 @@
       "case": "C4",
       "replicate": 2,
       "stage": "s2",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -18,8 +21,11 @@
       "case": "C2",
       "replicate": 1,
       "stage": "s2",
-      "execution_status": "pending",
+      "execution_status": "running",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -30,7 +36,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
       "reason": null
     },
@@ -41,7 +50,10 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -51,9 +63,12 @@
       "case": "C1",
       "replicate": 2,
       "stage": "s2",
-      "execution_status": "pending",
+      "execution_status": "protocol_failed",
+      "continuation_status": "complete",
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -62,8 +77,11 @@
       "case": "C2",
       "replicate": 1,
       "stage": "s1",
-      "execution_status": "pending",
+      "execution_status": "protocol_failed",
+      "continuation_status": "complete",
+      "technical_complete": true,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -74,7 +92,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
       "reason": null
     },
@@ -85,7 +106,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -96,8 +120,11 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "success",
-      "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -107,7 +134,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -118,8 +148,11 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -128,8 +161,11 @@
       "case": "C2",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "pending",
+      "execution_status": "running",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -140,7 +176,10 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -151,7 +190,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -161,9 +203,12 @@
       "case": "C4",
       "replicate": 1,
       "stage": "s3",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -173,7 +218,10 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -184,8 +232,11 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -194,9 +245,12 @@
       "case": "C5",
       "replicate": 1,
       "stage": "s2",
-      "execution_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -206,7 +260,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "success",
       "reason": null
     },
@@ -217,7 +274,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -227,9 +287,12 @@
       "case": "C5",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -239,7 +302,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -250,7 +316,10 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -260,9 +329,12 @@
       "case": "C5",
       "replicate": 1,
       "stage": "s1",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
-      "canonical_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -272,8 +344,11 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -283,8 +358,11 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -294,8 +372,11 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
-      "canonical_status": "pending",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "success",
       "reason": null
     },
     {
@@ -305,7 +386,10 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -316,8 +400,11 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "protocol_failed",
+      "continuation_status": "complete",
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "canonical_status": "unavailable",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "continuation_pending",
       "reason": null
     },
     {
@@ -327,7 +414,10 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -338,7 +428,10 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "success",
-      "primary_quality_eligible": true,
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -349,7 +442,10 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "success",
-      "primary_quality_eligible": true,
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -360,7 +456,10 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -371,7 +470,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "success",
-      "primary_quality_eligible": true,
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -381,8 +483,11 @@
       "case": "C1",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "running",
+      "execution_status": "protocol_failed",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -393,7 +498,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "success",
-      "primary_quality_eligible": true,
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -404,7 +512,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "success",
-      "primary_quality_eligible": true,
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -414,8 +525,11 @@
       "case": "C1",
       "replicate": 1,
       "stage": "s1",
-      "execution_status": "complete",
-      "primary_quality_eligible": true,
+      "execution_status": "protocol_failed",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -425,8 +539,11 @@
       "case": "C3",
       "replicate": 2,
       "stage": "s3",
-      "execution_status": "prepared",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -437,7 +554,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -448,7 +568,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -459,7 +582,10 @@
       "replicate": 2,
       "stage": "s1",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -470,7 +596,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -481,7 +610,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -491,8 +623,11 @@
       "case": "C5",
       "replicate": 2,
       "stage": "s3",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -502,8 +637,11 @@
       "case": "C1",
       "replicate": 2,
       "stage": "s3",
-      "execution_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -513,8 +651,11 @@
       "case": "C4",
       "replicate": 2,
       "stage": "s1",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -525,7 +666,10 @@
       "replicate": 1,
       "stage": "s1",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -535,8 +679,11 @@
       "case": "C5",
       "replicate": 2,
       "stage": "s2",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -547,7 +694,10 @@
       "replicate": 2,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -558,7 +708,10 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -568,8 +721,11 @@
       "case": "C4",
       "replicate": 2,
       "stage": "s3",
-      "execution_status": "pending",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -579,8 +735,11 @@
       "case": "C4",
       "replicate": 1,
       "stage": "s2",
-      "execution_status": "running",
-      "primary_quality_eligible": false,
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
+      "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -591,7 +750,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -602,7 +764,10 @@
       "replicate": 1,
       "stage": "s3",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -613,7 +778,10 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -623,8 +791,11 @@
       "case": "C5",
       "replicate": 1,
       "stage": "s3",
-      "execution_status": "pending",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -635,7 +806,10 @@
       "replicate": 1,
       "stage": "s2",
       "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": true,
+      "source_clean_exploratory_eligible": true,
       "canonical_status": "pending",
       "reason": null
     },
@@ -646,7 +820,10 @@
       "replicate": 2,
       "stage": "s2",
       "execution_status": "pending",
+      "continuation_status": null,
+      "technical_complete": false,
       "primary_quality_eligible": false,
+      "source_clean_exploratory_eligible": false,
       "canonical_status": "pending",
       "reason": null
     },
@@ -656,9 +833,12 @@
       "case": "C1",
       "replicate": 1,
       "stage": "s3",
-      "execution_status": "unavailable_upstream_protocol_failed",
+      "execution_status": "success",
+      "continuation_status": null,
+      "technical_complete": true,
       "primary_quality_eligible": false,
-      "canonical_status": "unavailable",
+      "source_clean_exploratory_eligible": true,
+      "canonical_status": "continuation_pending",
       "reason": null
     }
   ],
@@ -666,62 +846,32 @@
     {
       "arm": "alder",
       "stage": "s1",
-      "status": "pending",
-      "count": 3
+      "status": "success",
+      "count": 10
     },
     {
       "arm": "alder",
+      "stage": "s2",
+      "status": "success",
+      "count": 10
+    },
+    {
+      "arm": "alder",
+      "stage": "s3",
+      "status": "success",
+      "count": 10
+    },
+    {
+      "arm": "rdra",
       "stage": "s1",
-      "status": "success",
-      "count": 7
-    },
-    {
-      "arm": "alder",
-      "stage": "s2",
       "status": "pending",
-      "count": 3
-    },
-    {
-      "arm": "alder",
-      "stage": "s2",
-      "status": "running",
-      "count": 1
-    },
-    {
-      "arm": "alder",
-      "stage": "s2",
-      "status": "success",
       "count": 6
     },
     {
-      "arm": "alder",
-      "stage": "s3",
-      "status": "pending",
-      "count": 4
-    },
-    {
-      "arm": "alder",
-      "stage": "s3",
-      "status": "prepared",
-      "count": 1
-    },
-    {
-      "arm": "alder",
-      "stage": "s3",
-      "status": "success",
-      "count": 5
-    },
-    {
       "arm": "rdra",
       "stage": "s1",
-      "status": "complete",
-      "count": 1
-    },
-    {
-      "arm": "rdra",
-      "stage": "s1",
-      "status": "pending",
-      "count": 8
+      "status": "protocol_failed",
+      "count": 3
     },
     {
       "arm": "rdra",
@@ -733,25 +883,81 @@
       "arm": "rdra",
       "stage": "s2",
       "status": "pending",
-      "count": 9
+      "count": 7
     },
     {
       "arm": "rdra",
       "stage": "s2",
       "status": "protocol_failed",
+      "count": 2
+    },
+    {
+      "arm": "rdra",
+      "stage": "s2",
+      "status": "running",
       "count": 1
     },
     {
       "arm": "rdra",
       "stage": "s3",
       "status": "pending",
-      "count": 9
+      "count": 8
     },
     {
       "arm": "rdra",
       "stage": "s3",
-      "status": "unavailable_upstream_protocol_failed",
-      "count": 1
+      "status": "success",
+      "count": 2
+    }
+  ],
+  "eligibility_counts": [
+    {
+      "arm": "alder",
+      "stage": "s1",
+      "planned": 10,
+      "technical_complete": 10,
+      "strict_primary_eligible": 8,
+      "source_clean_exploratory_eligible": 10
+    },
+    {
+      "arm": "alder",
+      "stage": "s2",
+      "planned": 10,
+      "technical_complete": 10,
+      "strict_primary_eligible": 7,
+      "source_clean_exploratory_eligible": 10
+    },
+    {
+      "arm": "alder",
+      "stage": "s3",
+      "planned": 10,
+      "technical_complete": 10,
+      "strict_primary_eligible": 7,
+      "source_clean_exploratory_eligible": 10
+    },
+    {
+      "arm": "rdra",
+      "stage": "s1",
+      "planned": 10,
+      "technical_complete": 3,
+      "strict_primary_eligible": 0,
+      "source_clean_exploratory_eligible": 3
+    },
+    {
+      "arm": "rdra",
+      "stage": "s2",
+      "planned": 10,
+      "technical_complete": 2,
+      "strict_primary_eligible": 0,
+      "source_clean_exploratory_eligible": 2
+    },
+    {
+      "arm": "rdra",
+      "stage": "s3",
+      "planned": 10,
+      "technical_complete": 2,
+      "strict_primary_eligible": 0,
+      "source_clean_exploratory_eligible": 2
     }
   ],
   "limits": [

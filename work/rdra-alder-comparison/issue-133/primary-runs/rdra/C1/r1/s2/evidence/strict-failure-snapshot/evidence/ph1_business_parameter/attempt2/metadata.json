@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T07:46:07Z",
+  "end_utc": "2026-10-02T07:46:22Z",
+  "failures": ["Initial output write failed because the destination directory did not exist; created the directory and successfully wrote the TSV."],
+  "unmet_restrictions": [],
+  "start_time_note": "The start timestamp is the first captured clock reading; reading of the envelope and inputs preceded it."
+}

@@ -30,6 +30,16 @@ def compute():
             cp=ROOT/'canonical-extractions'/s['packet_id']/'canonical.json'
             canonical=json.loads(cp.read_text())
             ids={x['id'] for group in ['facts','questions'] for x in canonical.get(group,[])}
+            coverage=s.get('coverage_evidence')
+            coverage_keys=['unknown_ids_found','actionable_unknown_ids','source_facts_preserved','answer_facts_preserved','downstream_facts_preserved']
+            if not isinstance(coverage,dict):raise ValueError(f'{s["packet_id"]}: missing coverage_evidence object')
+            for key in coverage_keys:
+                evidence=coverage.get(key)
+                if not isinstance(evidence,dict) or set(evidence)!=set(s[key]):
+                    raise ValueError(f'{s["packet_id"]}: coverage evidence keys mismatch for {key}')
+                for claim,claim_ids in evidence.items():
+                    if not isinstance(claim_ids,list) or not claim_ids or set(claim_ids)-ids:
+                        raise ValueError(f'{s["packet_id"]}: invalid coverage evidence for {key}: {claim}')
             for key in ['unauthorized_decisions','unsupported_additions','unresolved_leakage','redundant_questions','probe_inventions']:
                 for item in s[key]:
                     if not item.get('meaning') or not item.get('evidence_ids') or set(item['evidence_ids'])-ids:

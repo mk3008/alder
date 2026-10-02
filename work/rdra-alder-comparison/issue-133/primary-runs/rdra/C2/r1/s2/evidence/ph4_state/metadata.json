@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T08:38:00Z",
+  "end_utc": "2026-10-02T08:39:59Z",
+  "failures": ["Initial output write failed because phase4 directory did not exist; created directory and retried successfully."],
+  "unmet_restrictions": ["会議室利用状態の初期状態『利用可能』に対応するUCは入力ph3BUC.tsvに存在しないため、初期行の遷移UCを空欄とした。"]
+}

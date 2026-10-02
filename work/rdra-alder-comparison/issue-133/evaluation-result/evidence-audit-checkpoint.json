@@ -1,23 +1,69 @@
 {
   "alder": {
-    "success": 13,
-    "running": 1,
-    "pending": 6
+    "success": 20
   },
   "rdra": {
-    "complete": 1,
-    "protocol_failed": 1,
+    "protocol_failed": 4,
     "running": 1,
-    "pending": 17
+    "pending": 15
   },
   "rdra_stage3": {
+    "prepared": 1,
     "unavailable_upstream_protocol_failed": 1
   },
   "rdra_nodes": {
-    "complete": 37,
+    "complete": 66,
     "failed": 1,
-    "running": 1
+    "protocol_failed": 1,
+    "running": 3
   },
+  "reported_strict_guard_deviations": [
+    {
+      "run": "primary-runs/alder/C2/r2/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r2/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C5/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    }
+  ],
   "issues": [
     {
       "run": "primary-runs/rdra/C1/r1/s2/manifest.json",

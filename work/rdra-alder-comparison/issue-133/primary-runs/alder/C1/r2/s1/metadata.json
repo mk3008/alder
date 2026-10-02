@@ -32,5 +32,13 @@
   "envelope_variant": "compact-v2",
   "envelope_sha256": "5a65f964b1097acd81c8a2c6f73cf0a801fd2ab6615dd2dc5bd0dea36047fd7b",
   "planned_envelope_variant": "verbose-v1",
-  "actual_envelope_variant": "compact-v2"
+  "actual_envelope_variant": "compact-v2",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": true,
+    "read_log_entries": 5,
+    "read_allowlist_deviations": []
+  }
 }

@@ -22,5 +22,23 @@
   "envelope_variant": "compact-v2",
   "envelope_sha256": "8876721a4a693c1c85e78f474cafc7627c8c6cc5f78ed38fd0a05d10fb2c1cae",
   "planned_envelope_variant": "verbose-v1",
-  "actual_envelope_variant": "compact-v2"
+  "actual_envelope_variant": "compact-v2",
+  "agent_id": "/root/alder_primary/c5_r2_s2",
+  "started_at": "2026-10-02T08:13:01.997830+00:00",
+  "status": "success",
+  "attempt": 1,
+  "finished_at": "2026-10-02T08:14:10.818414+00:00",
+  "failures": [],
+  "retries": 0,
+  "artifact_sha256": "553a5ed50b1229d76de0aec7efbcf4d489a0b0f70bd1b605ef979cf9bea07665",
+  "raw_response_sha256": "39541ddb1f98fa33633077e5c83f9dc9e74ce80c3646a72dd387e0dc8ded3152",
+  "read_log_sha256": "d064c2a62a641772479faa45a4201bc5ac1cfd644e61441a859bdf40f9927afb",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": true,
+    "read_log_entries": 6,
+    "read_allowlist_deviations": []
+  }
 }

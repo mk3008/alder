@@ -18,11 +18,21 @@ def init():
      for x in [SOURCE/d]+list((SOURCE/d).rglob('*')):
       if x.is_dir():(project/x.relative_to(SOURCE)).mkdir(parents=True,exist_ok=True)
     cp(BASE/'primary-inputs'/case/(stage+'.txt'),project/'初期要望.txt')
-    dump(r/'manifest.json',dict(case=case,replicate=rep,stage=stage,status='pending',source_sha256=sha(project/'初期要望.txt'),requested_model='gpt-6-sol',requested_reasoning_effort='medium',fork_turns='none',provider='ChatGPT Work collaboration',effective_attestation='unavailable',nodes={},deviations=['Shared filesystem read allowlist is operational isolation, not a security sandbox.'],started=now()))
+    dump(r/'manifest.json',dict(final_freeze_sha=(BASE/'FINAL-FREEZE-SHA').read_text().strip(),case=case,replicate=rep,stage=stage,status='pending',source_sha256=sha(project/'初期要望.txt'),requested_model='gpt-6-sol',requested_reasoning_effort='medium',fork_turns='none',provider='ChatGPT Work collaboration',effective_attestation='unavailable',nodes={},deviations=['Shared filesystem read allowlist is operational isolation, not a security sandbox.'],started=now()))
+def strict_snapshot(r,m):
+ target=r/'evidence/strict-failure-snapshot'
+ if target.exists():return
+ tmp=r/'strict-failure-snapshot-pending';tmp.mkdir(exist_ok=True)
+ dump(tmp/'manifest.json',m)
+ if (r/'invocations.jsonl').exists():cp(r/'invocations.jsonl',tmp/'invocations.jsonl')
+ shutil.copytree(r/'evidence',tmp/'evidence',dirs_exist_ok=True)
+ for folder in ['0_RDRAZeroOne','1_RDRA']:
+  if (r/'project'/folder).exists():shutil.copytree(r/'project'/folder,tmp/'project'/folder)
+ dump(tmp/'SHA256-manifest.json',{str(p.relative_to(tmp)):sha(p) for p in tmp.rglob('*') if p.is_file()});shutil.move(str(tmp),str(target))
 def prepare(case,rep,stage,count=3):
  r=runpath(case,rep,stage);p=r/'project';m=json.loads((r/'manifest.json').read_text());result=[]
- if m['status'] in ['failed','protocol_failed','complete']: return []
- m['status']='running'
+ if m['status'] in ['failed','protocol_failed','complete'] and m.get('exploratory_continuation_status')!='running': return []
+ if m.get('exploratory_continuation_status')!='running':m['status']='running'
  for n in DAG:
   if n['kind']!='ai':continue
   if all((p/x).exists() for x in n['outputs']):continue
@@ -53,6 +63,7 @@ def finish(case,rep,stage,node,response):
  rec.update(ended=now(),raw_final_response=response,artifact_hashes={x:sha(root/x) for x in rec['outputs'] if (root/x).exists()})
  for x in rec['outputs']:
   if (root/x).exists():cp(root/x,ev/'artifacts'/x)
+ metadata=ev/'metadata.json';rec['agent_metadata']=json.loads(metadata.read_text()) if metadata.exists() else None
  readlog=ev/'read-log.json';rec['read_log']=json.loads(readlog.read_text()) if readlog.exists() else None
  rec['unchanged_input_hashes']={x:sha(root/x)==h for x,h in rec['inputs'].items()}
  rec['unchanged_official_hashes']={x:sha(root/x)==h for x,h in rec.get('source_hashes',{}).items()}
@@ -70,13 +81,27 @@ def finish(case,rep,stage,node,response):
  resolved=[(pathlib.Path(x) if pathlib.Path(x).is_absolute() else root/x).resolve() for x in paths]
  rec['read_log_validity']=dict(prompt_read=(root/rec['prompt_path']).resolve() in resolved,outside_allowlist=[str(x) for x in resolved if x not in allowed],reported_paths=paths)
  missing=[x for x in rec['outputs'] if not (root/x).exists()];rec['missing_outputs']=missing
- if not readlog.exists() or not rec['read_log_validity']['prompt_read'] or rec['read_log_validity']['outside_allowlist'] or not all(rec['unchanged_input_hashes'].values()) or not rec['unchanged_prompt_hash'] or not all(rec['unchanged_official_hashes'].values()):rec['status']='failed';m['status']='failed';m['failure']='Missing output or required read-log: '+node
+ metadata_guard_admission=rec['agent_metadata'] and any(word in json.dumps(rec['agent_metadata'],ensure_ascii=False).lower() for word in ['non-allowlisted','nonallowlisted','outside allowlist','outside the allowlist'])
+ if metadata_guard_admission:rec['status']='protocol_failed';m['status']='protocol_failed';m['failure']='Agent metadata discloses read-allowlist violation: '+node
+ elif not readlog.exists() or not rec['read_log_validity']['prompt_read'] or rec['read_log_validity']['outside_allowlist'] or not all(rec['unchanged_input_hashes'].values()) or not rec['unchanged_prompt_hash'] or not all(rec['unchanged_official_hashes'].values()):rec['status']='failed';m['status']='failed';m['failure']='Missing output or required read-log: '+node
  elif missing:
   rec['status']='completed_without_output';rec['failure']='Missing official artifact';m['status']='running';m.setdefault('retry_failures',[]).append(dict(node=node,attempt=rec.get('attempt',1),failure=rec['failure'],ended=rec['ended']))
  else:
   rec['status']='complete'
   for x in rec['outputs']:cp(root/x,r/'project'/x)
+ if m.get('exploratory_continuation_status')=='running':
+  m['status']='protocol_failed'
+  for x in rec['outputs']:
+   if (root/x).exists():cp(root/x,r/'project'/x)
  append(r/'invocations.jsonl',dict(event='finish',**rec));dump(ev/'completed.json',rec);dump(r/'manifest.json',m)
+ if rec['status'] in ['failed','protocol_failed']:
+  strict_snapshot(r,m);m.update(status='protocol_failed',strict_protocol_eligible=False,primary_quality_pool_eligible=False,technical_complete=False,strict_failure_snapshot='evidence/strict-failure-snapshot')
+  outside=rec['read_log_validity']['outside_allowlist'];m['source_clean_exploratory_eligible']=not any(pathlib.Path(x).exists() for x in outside) and m.get('source_clean_exploratory_eligible',True)
+  m.setdefault('guard_failures',[]).append(dict(node=node,read_log=rec['read_log_validity'],metadata=rec['agent_metadata'],existing_outside_read_paths=[x for x in outside if pathlib.Path(x).exists()]))
+  m.setdefault('exploratory_continuation_started',now());m['exploratory_continuation_status']='running'
+  for x in rec['outputs']:
+   if (root/x).exists():cp(root/x,r/'project'/x)
+  dump(r/'manifest.json',m)
  print(json.dumps(dict(run=str(r),node=node,status=rec['status']),ensure_ascii=False))
 def audit(case,rep,stage):
  r=runpath(case,rep,stage);m=json.loads((r/'manifest.json').read_text());checks=[]
@@ -88,14 +113,17 @@ def audit(case,rep,stage):
  for node,rec in m['nodes'].items():
   root=pathlib.Path(rec['root']);ev=pathlib.Path(rec['evidence']);readpaths=paths(json.loads((ev/'read-log.json').read_text()));allowed={(root/x).resolve() for x in rec['read_allowlist']+rec['outputs']}|{(ev/'envelope.txt').resolve()};resolved=[(pathlib.Path(x) if pathlib.Path(x).is_absolute() else root/x).resolve() for x in readpaths]
   checks.append(dict(node=node,prompt_original_bytes=sha(root/rec['prompt_path'])==rec['prompt_sha256'],official_agents_original_bytes=sha(root/'AGENTS.md')==sha(SOURCE/'AGENTS.md'),official_knowledge_original_bytes=all(sha(x)==sha(SOURCE/x.relative_to(root)) for x in (root/'RDRA_Knowledge/.rdracore').iterdir()),input_original_bytes=all(sha(root/x)==h for x,h in rec['inputs'].items()),prompt_read=(root/rec['prompt_path']).resolve() in resolved,outside_allowlist=[str(x) for x in resolved if x not in allowed]))
- report=dict(checked_utc=now(),nodes=checks,all_pass=all(all(v for k,v in c.items() if k not in ['node','outside_allowlist']) and not c['outside_allowlist'] for c in checks))
+ report=dict(audit_scope='Original bytes and self-reported read-log only; metadata compliance and strict protocol eligibility are recorded separately.',strict_protocol_eligible=m.get('strict_protocol_eligible'),source_clean_exploratory_eligible=m.get('source_clean_exploratory_eligible'),checked_utc=now(),nodes=checks,all_pass=all(all(v for k,v in c.items() if k not in ['node','outside_allowlist']) and not c['outside_allowlist'] for c in checks))
  dump(r/'evidence/validity-audit.json',report);m.update(validity_audit='evidence/validity-audit.json',validity_all_pass=report['all_pass']);dump(r/'manifest.json',m)
  return report['all_pass']
 def snapshots(p): return {str(x.relative_to(p)):sha(x) for x in p.rglob('*') if x.is_file() and not str(x.relative_to(p)).startswith('RDRA_Knowledge/')}
 def post(case,rep,stage):
  r=runpath(case,rep,stage);m=json.loads((r/'manifest.json').read_text());p=r/'project';ev=r/'evidence/postprocess';ev.mkdir(parents=True,exist_ok=True)
- if m['status'] in ['failed','protocol_failed']:print(m['status']);return
- if not all(m['nodes'].get(n['id'],{}).get('status')=='complete' for n in DAG if n['kind']=='ai'):print('not-ready');return
+ exploratory=m.get('exploratory_continuation_status')=='running'
+ if m['status'] in ['failed','protocol_failed'] and not exploratory:print(m['status']);return
+ strict_status=m['status']
+ if exploratory:m['status']='running'
+ if not all(all((p/x).exists() for x in n['outputs']) for n in DAG if n['kind']=='ai'):print('not-ready');return
  shutil.copytree(SOURCE/'RDRA_Knowledge/helper_tools',p/'RDRA_Knowledge/helper_tools',dirs_exist_ok=True)
  shutil.copytree(SOURCE/'RDRA_Knowledge/.rdracore',p/'RDRA_Knowledge/.rdracore',dirs_exist_ok=True)
  for n in DAG:
@@ -114,7 +142,14 @@ def post(case,rep,stage):
    rec=dict(started=script_started,script=script,script_sha256=sha(p/script),before=before,after=snapshots(p),exit_code=proc.returncode,ended=now());dump(se/'record.json',rec);append(r/'postprocess.jsonl',rec)
    if proc.returncode:m.update(status='failed',failure='Official script failed: '+script);break
   if m['status']=='failed':break
- if m['status']!='failed':m['status']='complete'
+ m['ai_nodes_success']=sum(all((p/x).exists() for x in n['outputs']) for n in DAG if n['kind']=='ai')
+ m['script_outputs_exist']={n['id']:all((p/x).exists() for x in n['outputs']) for n in DAG if n['kind']=='script'}
+ if m['status']!='failed' and all(m['script_outputs_exist'].values()):m['status']='complete'
+ elif m['status']!='failed':m.update(status='failed',failure='Official script completed but declared outputs missing')
+ if exploratory:m['exploratory_continuation_status']=m['status'];m['exploratory_continuation_ended']=now();m['technical_complete']=m['status']=='complete';m['status']=strict_status
+ m['technical_complete']=all(m['script_outputs_exist'].values()) and m['ai_nodes_success']==18
+ m['strict_protocol_eligible']=m['status']=='complete'
+ m.setdefault('source_clean_exploratory_eligible',True);m['source_clean_attestation']='Self-reported read-log/metadata only; no independent trace guarantee.'
  m['ended']=now();m['artifacts']=snapshots(p);dump(r/'manifest.json',m);print(json.dumps(dict(run=str(r),status=m['status']),ensure_ascii=False))
 if __name__=='__main__':
  cmd=sys.argv[1]
@@ -124,3 +159,7 @@ if __name__=='__main__':
  elif cmd=='finish':finish(*sys.argv[2:6],pathlib.Path(sys.argv[6]).read_text())
  elif cmd=='post':post(*sys.argv[2:])
  elif cmd=='audit':print(audit(*sys.argv[2:]))
+
+if __name__=='__main__':
+ manifests=sorted(RUNS.glob('C*/r*/s[12]/manifest.json'));states=[json.loads(p.read_text()) for p in manifests]
+ dump(RUNS/'operator/status.json',dict(recorded=now(),planned_workflows=20,workflows={v:sum(m['status']==v for m in states) for v in ['pending','running','protocol_failed','failed','complete']},current_nodes={v:sum(n['status']==v for m in states for n in m['nodes'].values()) for v in ['prepared','running','complete','completed_without_output','failed']},retained_previous_attempts=sum(len(v) for m in states for v in m.get('node_attempt_history',{}).values()),manifest_paths=[str(p) for p in manifests]))

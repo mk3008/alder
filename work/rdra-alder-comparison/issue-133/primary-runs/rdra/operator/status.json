@@ -1,42 +1,41 @@
 {
-  "recorded": "2026-10-02T08:00:28.641672+00:00",
+  "recorded": "2026-10-02T08:43:11.968170+00:00",
   "planned_workflows": 20,
   "workflows": {
-    "pending": 17,
-    "running": 1,
-    "protocol_failed": 1,
+    "pending": 13,
+    "running": 2,
+    "protocol_failed": 5,
     "failed": 0,
-    "complete": 1
+    "complete": 0
   },
   "current_nodes": {
     "prepared": 0,
-    "running": 1,
-    "complete": 36,
+    "running": 3,
+    "complete": 110,
     "completed_without_output": 0,
-    "failed": 1
+    "failed": 4
   },
   "retained_previous_attempts": 1,
   "manifest_paths": [
-    "primary-runs/rdra/C4/r1/s2/manifest.json",
-    "primary-runs/rdra/C4/r1/s1/manifest.json",
-    "primary-runs/rdra/C4/r2/s2/manifest.json",
-    "primary-runs/rdra/C4/r2/s1/manifest.json",
-    "primary-runs/rdra/C1/r1/s2/manifest.json",
-    "primary-runs/rdra/C1/r1/s1/manifest.json",
-    "primary-runs/rdra/C1/r2/s2/manifest.json",
-    "primary-runs/rdra/C1/r2/s1/manifest.json",
-    "primary-runs/rdra/C5/r1/s2/manifest.json",
-    "primary-runs/rdra/C5/r1/s1/manifest.json",
-    "primary-runs/rdra/C5/r2/s2/manifest.json",
-    "primary-runs/rdra/C5/r2/s1/manifest.json",
-    "primary-runs/rdra/C2/r1/s2/manifest.json",
-    "primary-runs/rdra/C2/r1/s1/manifest.json",
-    "primary-runs/rdra/C2/r2/s2/manifest.json",
-    "primary-runs/rdra/C2/r2/s1/manifest.json",
-    "primary-runs/rdra/C3/r1/s2/manifest.json",
-    "primary-runs/rdra/C3/r1/s1/manifest.json",
-    "primary-runs/rdra/C3/r2/s2/manifest.json",
-    "primary-runs/rdra/C3/r2/s1/manifest.json"
-  ],
-  "active_child_limit": 1
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/manifest.json"
+  ]
 }

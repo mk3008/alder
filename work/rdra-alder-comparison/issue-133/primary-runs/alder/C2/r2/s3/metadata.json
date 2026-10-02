@@ -25,5 +25,16 @@
   "output_sha256": {
     "raw-response.md": "8ab624a18cef135b2d47afd6dd7d7a12f124639be2b4c247a768d4fe099f72f2",
     "read-log.jsonl": "455482bdcb22956cd89c27f5dbed7ab2a0d23defe96756bfe403dc66547a7a9b"
-  }
+  },
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.061488+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "upstream_strict_eligible": false,
+  "upstream_source_clean_exploratory_eligible": true,
+  "upstream_classification_recorded_at": "2026-10-02T08:22:00.289310+00:00"
 }

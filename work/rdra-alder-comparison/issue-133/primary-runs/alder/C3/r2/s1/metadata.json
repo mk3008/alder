@@ -32,5 +32,15 @@
   "retries": 0,
   "artifact_sha256": "afcf328336e62f0691fd09e16f5495c4ff60eaac09c909b3545e2f8e099d1ded",
   "raw_response_sha256": "bf1ce7c1f535f767018a35f189ae6f9738bbd7099564f4092894b15de2a2876a",
-  "read_log_sha256": "58724199dae5e3b5c47ca41d54e3478dae4104aa4236c353e425ca03e40ad02c"
+  "read_log_sha256": "58724199dae5e3b5c47ca41d54e3478dae4104aa4236c353e425ca03e40ad02c",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": false,
+    "read_log_entries": 6,
+    "read_allowlist_deviations": [
+      "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+    ]
+  }
 }

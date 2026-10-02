@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:32:11Z",
+  "end_utc": "2026-10-02T08:32:24Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and completed the output."],
+  "unmet_restrictions": [],
+  "note": "No external systems appear in the source BUC or initial request; output contains only the required header. Start time reflects the first recorded clock observation."
+}

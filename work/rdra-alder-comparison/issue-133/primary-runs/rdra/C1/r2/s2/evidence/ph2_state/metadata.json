@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:23:19Z",
+  "end_utc": "2026-10-02T08:23:19Z",
+  "timestamp_scope": "evidence recording; task start time not captured",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase2 did not exist; directory created and output write succeeded."],
+  "unmet_restrictions": []
+}

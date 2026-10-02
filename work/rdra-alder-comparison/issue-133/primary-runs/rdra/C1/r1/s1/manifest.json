@@ -2,7 +2,7 @@
   "case": "C1",
   "replicate": "r1",
   "stage": "s1",
-  "status": "complete",
+  "status": "protocol_failed",
   "source_sha256": "bd2d61f2ebb77ab2f36694dd0d5b8e159cd16d337f48b129719ea7157b571d5c",
   "requested_model": "gpt-6-sol",
   "requested_reasoning_effort": "medium",
@@ -1452,7 +1452,8 @@
     "First three nodes: equivalent short actual envelope differed from pre-saved full envelope; actual exact envelope recorded after start.",
     "Nodes 1-6 received full inline envelopes; subsequent nodes receive pre-saved envelope file through a pre-saved exact spawn message. Official Prompt bytes and read/input/output rules are unchanged.",
     "Operator read-log parser did not initially recognize read_paths_in_order; corrected parser and rechecked same unchanged artifacts, with false failure snapshot retained. No AI retry or artifact repair.",
-    "Operator omitted official ZIP empty artifact directories. makeBUC failed ENOENT; failed script attempt retained. Restored original empty directory scaffold and pristine pre-enrich AI outputs for unchanged official pipeline rerun."
+    "Operator omitted official ZIP empty artifact directories. makeBUC failed ENOENT; failed script attempt retained. Restored original empty directory scaffold and pristine pre-enrich AI outputs for unchanged official pipeline rerun.",
+    "Retrospective metadata audit found nonexistent outside-allowlist Prompt read attempt omitted by read-log-only audit. Original all-pass subset audit retained; strict protocol failure now recorded. Complete artifacts are retained for source-clean exploratory observation only."
   ],
   "started": "2026-10-02T07:38:42.829181+00:00",
   "ended": "2026-10-02T07:50:25.635974+00:00",
@@ -1515,5 +1516,28 @@
   "validity_audit": "evidence/validity-audit.json",
   "validity_all_pass": true,
   "dag_fidelity_audit": "../../../operator/dag-fidelity-audit.json",
-  "dag_exact_match": true
+  "dag_exact_match": true,
+  "script_outputs_exist": {
+    "rebuild_1_rdrA": true,
+    "phase5_graph_data": true
+  },
+  "availability": "failed",
+  "technical_complete": true,
+  "failed_nodes": [
+    "ph4_actor"
+  ],
+  "primary_quality_pool_eligible": false,
+  "source_clean_exploratory_eligible": true,
+  "exposure_details": {
+    "outside_allowlist_attempt": "0_RDRAZeroOne/phase4/ph4アクター生成.md",
+    "path_exists": false,
+    "actual_content_exposure_confirmed": false,
+    "source_of_evidence": "evidence/ph4_actor/metadata.json"
+  },
+  "strict_validity_all_pass": false,
+  "strict_protocol_eligible": false,
+  "source_clean_attestation": "Self-reported read-log/metadata only; no independent trace guarantee.",
+  "final_freeze_sha": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
+  "dag_run_trace_audit": "evidence/dag-run-trace-audit.json",
+  "dag_run_trace_all_pass": true
 }

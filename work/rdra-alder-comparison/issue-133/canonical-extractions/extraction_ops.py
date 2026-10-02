@@ -11,12 +11,18 @@ def ready(row):
  if row['arm']=='alder':
   m=json.loads((ROOT/'primary-runs/alder/manifest.json').read_text());entry=next(x for x in m['runs'] if all(x[k]==row[k] for k in ['case','replicate','stage']))
   return entry['status']=='success' and all((run/p).exists() for p in ['docs/business-design/design.md','raw-response.md'])
- p=run/'manifest.json';return p.exists() and json.loads(p.read_text()).get('status')=='complete' and bool(packetize.files_for(row['arm'],row['case'],row['replicate'],row['stage']))
+ p=run/'manifest.json';
+ if not p.exists():return False
+ m=json.loads(p.read_text())
+ if m.get('source_clean_exploratory_eligible') is False:return False
+ available=m.get('status')=='complete' or (m.get('technical_complete') is True and m.get('source_clean_exploratory_eligible') is True)
+ return available and bool(packetize.files_for(row['arm'],row['case'],row['replicate'],row['stage']))
 def prepare():
  out=[]
  for row in packetize.mapping:
   d=BASE/row['blind_id']
-  if (d/'metadata.json').exists() or not ready(row):continue
+  if (d/'metadata.json').exists() and json.loads((d/'metadata.json').read_text()).get('status')!='continuation_pending':continue
+  if not ready(row):continue
   d.mkdir(exist_ok=True)
   if not (d/'packet.md').exists():
    name=packetize.make_packet(row);shutil.copyfile(ROOT/'blind-packets'/f'{name}.md',d/'packet.md');shutil.copyfile(ROOT/'benchmark-preparation/extraction-prompt.txt',d/'extraction-prompt.txt')
@@ -65,5 +71,12 @@ def verify(pid):
  except Exception as e:errors.append(str(e))
  m.update(status='success' if not errors else 'needs_raw_check',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),mechanical_validation={'errors':errors,'scope':'JSON structure, IDs, raw quote and line ranges only; no semantic correction'})
  (d/'metadata.json').write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'packet_id':pid,'errors':errors}))
+def summary():
+ rows=[]
+ for r in packetize.mapping:
+  p=BASE/r['blind_id']/'metadata.json';m=json.loads(p.read_text()) if p.exists() else {'status':'packet_prepared' if (p.parent/'packet.md').exists() else 'pending'}
+  rows.append({'packet_id':r['blind_id'],'status':m['status'],'agent_id':m.get('agent_id'),'mechanical_validation':m.get('mechanical_validation'),'artifact_hash':m.get('output_sha256',{}).get('canonical.json')})
+ j={'updated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'planned_packets':60,'counts':{s:sum(x['status']==s for x in rows) for s in sorted(set(x['status'] for x in rows))},'packets':rows,'semantic_business_content_modified_by_operator':False}
+ (BASE/'manifest.json').write_text(json.dumps(j,ensure_ascii=False,indent=2)+'\n');print(json.dumps(j['counts']))
 if __name__=='__main__':
- {'prepare':prepare,'setup':lambda:setup(sys.argv[2]),'update':lambda:update(sys.argv[2],sys.argv[3]),'verify':lambda:verify(sys.argv[2])}[sys.argv[1]]()
+ {'summary':summary,'prepare':prepare,'setup':lambda:setup(sys.argv[2]),'update':lambda:update(sys.argv[2],sys.argv[3]),'verify':lambda:verify(sys.argv[2])}[sys.argv[1]]()

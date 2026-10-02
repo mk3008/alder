@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T08:36:47Z",
+  "end_utc": "2026-10-02T08:38:05Z",
+  "failures": ["Initial output write failed because the phase3 directory did not exist; created the directory and successfully wrote the output.", "Initial validation found 14 columns on line 15; corrected and revalidated all 18 lines as 13 columns."],
+  "unmet_restrictions": []
+}

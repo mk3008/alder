@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:23:27Z",
+  "end_utc": "2026-10-02T08:24:06Z",
+  "start_time_note": "First recorded clock check; initial envelope and source reads preceded it.",
+  "failures": ["First output write and verification failed because 0_RDRAZeroOne/phase2 did not exist; created the directory and retried successfully."],
+  "unmet_restrictions": []
+}

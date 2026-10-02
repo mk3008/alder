@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T08:19:27Z",
+  "end_utc": "2026-10-02T08:19:59Z",
+  "failures": ["Initial output write failed because phase4 directory was absent; directory was created and the write retried successfully."],
+  "unmet_restrictions": ["The checklist requires a terminal state for every model, but 返却遅延区分 and 蔵書の貸出状態 are cyclic in ph3BUC.tsv; each listed state has an outgoing transition. No false terminal state was invented."]
+}

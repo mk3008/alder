@@ -32,5 +32,13 @@
   "retries": 0,
   "artifact_sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
   "raw_response_sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
-  "read_log_sha256": "bef0e74cad17d9fb05ab687a1d496adfc97cf212db906779b2111ded6814cef3"
+  "read_log_sha256": "bef0e74cad17d9fb05ab687a1d496adfc97cf212db906779b2111ded6814cef3",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": true,
+    "read_log_entries": 6,
+    "read_allowlist_deviations": []
+  }
 }
