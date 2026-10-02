@@ -55,13 +55,21 @@ Fresh出力は候補を2件返した。候補1は既存のレビュー交換で�
 
 初期表示量削減とAIが原典へ辿れたことは、その限定条件での証跡として残せる。総読解量は増え、人間負荷は未測定。全体フローの不要化・委譲を検討する前に、このartifactやViewerを恒久化する根拠にはしない。
 
-最終扱いの提案は **supersede**。#137のcommitと検証記録は保持し、本研究から参照する。#137単独の採用・mergeや、利用者への再読解テストを追加の必須Human taskにはしない。PRの実際のcloseは管理操作として別途記録する。
+最終扱いの提案は **supersede**。#137のcommitと検証記録は保持し、本研究から参照する。#137単独の採用・mergeや、利用者への再読解テストを追加の必須Human taskにはしない。PR #137はsupersedeとしてcloseした。branchとcommitは削除せず、#136本文にも最終扱いを反映した。
 
 ## 証跡・限界
 
 Phase 3では開発版Plugin 0.3.0に、正式Optimization Reviewをそのままbundleする独立Skillを追加した。短い改善依頼をdescriptionへ入れ、BD探索、Problem / Pain不足時の確認、read-only、未承認候補、対象外フローの停止を保持した。既存3 Skillの手順は版表記以外を変更しない。listingの既存3 defaultPromptは上限を守って維持する。新Skillは内部文書の選択を利用者へ要求しない。
 
-package検査は7/7成功。新authorityのbyte一致とdigest、4 Skillの同梱、既存bundleの一致を検査した。CIの監視対象にOptimization Reviewのsourceを加えた。static検査は自然言語routingや実際のread-only動作の証明ではない。現在の会話にロードされたPluginは0.2.8の3 Skillであり、0.3.0の実クライアント検証をしたとは報告しない。release・main merge・利用者Plugin更新はしていない。
+package検査は7/7成功。新authorityのbyte一致とdigest、4 Skillの同梱、既存bundleの一致を検査した。CIの監視対象にOptimization Reviewのsourceを加えた。static検査は自然言語routingや実際のread-only動作の証明ではない。現在の会話にロードされたPluginは0.2.8の3 Skillであり、0.3.0の実クライアント検証をしたとは報告しない。release・main merge・利用者Plugin更新はしていない。公開package commit `07067860f2a055620d5cd19b00df3a54e4f0fb01`を取得したworktreeでも7/7成功し、全authorityがprovenanceの公開revisionと一致した。GitHub ActionsのPlugin package run `37075338990`もsuccess。
+
+[実クライアント検証の最小手順](CLIENT-VALIDATION.md)は、各短文を別Chatで実行し、取得元・版・差分を記録するための引き継ぎであり、検証成功の代用ではない。
+
+### 新SkillのFresh適用
+
+公開package commitを使い、4 Skillのfrontmatterから短文「Alderでこの業務を改善して」に適用するSkillを選ばせた別Freshは、`alder-optimize-business`を選びbundled authorityを読んだ。候補は0件。既存のAI Check支援と二層提示を新規改善として数えず、負荷がある現在業務の場面と具体例を確認して止まった。未記述の開発Activity生成、候補採用、source/GitHub書込みはない。
+
+この結果は、0件と現状確認の停止を新Skillが使えた証跡である。候補が得られたことや改善成果とは扱わない。初回2候補、修正ガイド1候補、Skill0候補の差を品質順位へ変換しない。追加の追跡関係ガイドも読んだため入力範囲が異なり、実クライアントroutingや既存3 Skillの実行回帰ではない。
 
 ### 残る受入条件
 

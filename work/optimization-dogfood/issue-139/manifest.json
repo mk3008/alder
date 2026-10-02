@@ -67,6 +67,62 @@
       "raw": "runs/phase2.raw.md",
       "scope": "single bounded behavior check; different Pain and task wording from preliminary run; no causal comparison",
       "metadata_followup": "Actual controller spawn request was gpt-6.1-sol / reasoning_effort medium / fork_turns none, explicit requester override of AGENTS default. Record as controller-reported request, not independent verification. No review findings supplied."
+    },
+    {
+      "id": "/root/skill_forward",
+      "revision": "07067860f2a055620d5cd19b00df3a54e4f0fb01",
+      "pain": "High",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "plugins/alder/plugin.json": {
+          "blob_sha": "0a1439815ab86b79a5f7b138fc4ad860282a6270",
+          "sha256": "0c94534558d1c0fbefd3428b73006aab5956f8179992bec2f3eb1a760f9446cd"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "6ab03ab190779ea8aafe2b54b122915a7f7d7582",
+          "sha256": "75a8809230c877c4ab33a38ffa091fe048eee752616678bedcedddaf4d4cdaf8"
+        },
+        "docs/check-item-traceability.md": {
+          "blob_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+          "sha256": "87b98910b3cc5be9b7b2ccba017d57dba38be2b18db4faa22a6ac24d5529a884"
+        },
+        "plugins/alder/skills/alder-draft-business-design/SKILL.md": {
+          "blob_sha": "5de8d8763c32464335c243089993fe20b21e73cf",
+          "sha256": "453226cb8503918f565742aebb4f8b80c98ce3bc23bb9ab86f5fa72641a48812"
+        },
+        "plugins/alder/skills/alder-review-business-design/SKILL.md": {
+          "blob_sha": "b223138ea432f156312feb17dc731fc6bbcf7f2c",
+          "sha256": "bb45419310ee42eb73184ccd860728180c1715d020cb7c2a1d1464f6cf76a833"
+        },
+        "plugins/alder/skills/alder-review-implementation/SKILL.md": {
+          "blob_sha": "52e44f218415a16682361edfb46d8145e2be51c2",
+          "sha256": "ea4021db6bb1df8bb0521c7fcae719a5a97c13d0a7c77d275977cd199b5ad138"
+        },
+        "plugins/alder/skills/alder-optimize-business/SKILL.md": {
+          "blob_sha": "20fede9fc55a30650646f296e8f278b5d1567a53",
+          "sha256": "d3a442a21384e555133eeed5680c84abbcc22ee41faca056fbf15fa50f8b05f1"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/optimization-review.md": {
+          "blob_sha": "13e57e7b6b7bca478cda6caf3da6f3604cf2cb32",
+          "sha256": "8c61644fdb1ff7423462bc8fe7c2fb92cac3b5cf2356728e66943e5e93de3941"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/provenance.json": {
+          "blob_sha": "d460c8eb561d354d257ef02c8023411844ede635",
+          "sha256": "df1409fbc8be82a2ce74094d664f89494930b1b5349e47fcc924013eee559637"
+        }
+      },
+      "prompt": "runs/skill-forward.prompt.txt",
+      "raw": "runs/skill-forward.raw.md",
+      "scope": "repository-source skill selection and application; not installed real-client routing; no existing-skill runtime regression claim",
+      "observations": "Selected optimization skill; zero candidates; asked for burden location/example; no source/GitHub writes",
+      "limits": "Single run with read-only PoC boundaries in task; full network/tool trace not independently audited"
     }
   ]
 }
