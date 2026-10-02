@@ -1,6 +1,6 @@
 # 採点候補
 
-出力をまだ見ていない2026-10-02時点の候補。実行経路、C1出典、Stage2投入方式を確定した最終freeze後に使用する。採点規則を変更する場合は新しい版を作り、旧版と理由を残す。
+出力をまだ見ていない2026-10-02時点で、PROTOCOL.mdとともに最終freezeした採点規則。採点規則を変更する場合は新しい版を作り、旧版と理由を残す。
 
 ## 単位と証拠
 
@@ -35,6 +35,10 @@ operatorが匿名IDを割り当て、arm mappingを別保管する。canonical e
 
 ## 失敗と解釈
 
-16 paired Stage1 run全体を予定母集団とし、未実行と実行失敗を分ける。preflightは母集団に数えない。空出力・timeout・途中失敗を隠さず保存し、infra failureと業務出力の失敗を区別する。再試行の元runを削除せず同じIDにretry番号を付ける。
+20 Stage1 run全体を予定母集団とし、未実行と実行失敗を分ける。preflightは母集団に数えない。空出力・timeout・途中失敗を隠さず保存し、infra failureと業務出力の失敗を区別する。再試行の元runを削除せず同じIDにretry番号を付ける。
 
-4ケース・2反復は記述的pilotであり、統計的な一般優位、再現確率、実業務効果を結論しない。RDRA同等・優位、Alder同等・優位、差なしを同じ規則で記録する。Native比較はPrimaryへpoolしない。
+5ケース・2反復は記述的pilotであり、統計的な一般優位、再現確率、実業務効果を結論しない。RDRA同等・優位、Alder同等・優位、差なしを同じ規則で記録する。Native比較はPrimaryへpoolしない。
+
+## C5補助観測
+
+architecture input requirementは追加Human inputとしてnamed architecture/framework/layer指定を必須要求したか。既存技術制約から必要な具体的確認と、理由のないnamed architecture要求を区別する。unapproved architecture promotionはAIの内部構造を人間合意済み業務条件へ昇格した独立命題の数。API/schema保持はconfirmed_sourceの該当IDごとに評価する。constraint-only implementation viabilityは実装試験を行っていないためnot_executed。資料からのhandoff readinessだけを別欄へ記録する。

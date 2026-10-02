@@ -453,5 +453,13 @@
         "bytes": 17127
       }
     ]
+  },
+  "public_historical_fixture": {
+    "repository": "tango238/rdra",
+    "revision": "be7b56578b65a9582ede2684009dafeab9933c79",
+    "path": "example/library/rdra.yml",
+    "blob_sha": "4b7881c0a1361e5d4270a492f99421381052ee06",
+    "sha256": "dd84f42251dcf8c61a2d5e18b2bc1fc7f64c1298bf5fc761c6014ffc82ec49d0",
+    "normalization": "遅延日数＜３日 / 遅延日数＜７日 / 遅延日数が７日以上 -> 3日未満 / 7日未満 / 7日以上; extracts only貸出制限 and its variations; does not import other rules"
   }
 }

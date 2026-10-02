@@ -1,20 +1,48 @@
 {
-  "status": "candidate_before_final_protocol_freeze",
+  "status": "final_frozen_before_first_primary_run",
   "language": "ja",
-  "generator_visibility": "source only for Stage1; source + own Stage1 artifact + human_answers for Stage2; never oracle",
+  "generator_visibility": "Stage1 source only; Stage2 resolved source only; never oracle, rubric, other arm, other replicate, or parent conversation",
   "cases": [
     {
       "id": "C1",
-      "origin": "synthetic candidate based on Issue #133; historical threshold source not yet verified",
+      "origin": "Pinned historical RDRA fixture adaptation: tango238/rdra@be7b56578b65a9582ede2684009dafeab9933c79/example/library/rdra.yml; fixed answers synthetic",
       "source": "蔵書を貸し出す。返却遅延時には貸出制限がある。判断材料は遅延日数と会員種別。遅延日数の候補は『3日未満』『7日未満』『7日以上』。会員種別は大人と子供。会員種別と遅延日数ごとの貸出許否、日数区分の解釈はまだ決まっていない。",
       "human_answers": "日数区分は重複しないよう、0日以上3日未満、3日以上7日未満、7日以上の3区分とする。大人は3日未満だけ貸出可、3日以上は貸出不可。子供は7日未満だけ貸出可、7日以上は貸出不可。会員種別と遅延日数以外の貸出条件はこの試験では扱わない。",
       "oracle": {
-        "confirmed_source": ["蔵書の貸出", "返却遅延による貸出制限", "判断材料は遅延日数と会員種別", "大人と子供の2種別", "3日未満・7日未満・7日以上の候補"],
-        "critical_unknowns": [{"id":"C1-U1","meaning":"会員種別と日数ごとの許否の組合せ"},{"id":"C1-U2","meaning":"3日未満と7日未満の範囲重複をどう解釈するか"}],
-        "answer_facts": ["0以上3未満・3以上7未満・7以上の排他的3区分", "大人は3日未満可", "大人は3日以上7日未満不可", "大人は7日以上不可", "子供は3日未満可", "子供は3日以上7日未満可", "子供は7日以上不可", "他の貸出条件は試験範囲外"],
+        "confirmed_source": [
+          "蔵書の貸出",
+          "返却遅延による貸出制限",
+          "判断材料は遅延日数と会員種別",
+          "大人と子供の2種別",
+          "3日未満・7日未満・7日以上の候補"
+        ],
+        "critical_unknowns": [
+          {
+            "id": "C1-U1",
+            "meaning": "会員種別と日数ごとの許否の組合せ"
+          },
+          {
+            "id": "C1-U2",
+            "meaning": "3日未満と7日未満の範囲重複をどう解釈するか"
+          }
+        ],
+        "answer_facts": [
+          "0以上3未満・3以上7未満・7以上の排他的3区分",
+          "大人は3日未満可",
+          "大人は3日以上7日未満不可",
+          "大人は7日以上不可",
+          "子供は3日未満可",
+          "子供は3日以上7日未満可",
+          "子供は7日以上不可",
+          "他の貸出条件は試験範囲外"
+        ],
         "still_unresolved": [],
-        "forbidden_examples": ["Stage1で大人3日・子供7日と確定する", "貸出上限冊数・貸出期間・予約優先順位を確定する"]
-      }
+        "forbidden_examples": [
+          "Stage1で大人3日・子供7日と確定する",
+          "貸出上限冊数・貸出期間・予約優先順位を確定する"
+        ]
+      },
+      "resolved_source": "蔵書を貸し出す。返却遅延時には貸出制限がある。判断材料は遅延日数と会員種別。遅延日数の候補は『3日未満』『7日未満』『7日以上』。会員種別は大人と子供。会員種別と遅延日数ごとの貸出許否、日数区分の解釈はまだ決まっていない。\n\n【固定Human answer】\n日数区分は重複しないよう、0日以上3日未満、3日以上7日未満、7日以上の3区分とする。大人は3日未満だけ貸出可、3日以上は貸出不可。子供は7日未満だけ貸出可、7日以上は貸出不可。会員種別と遅延日数以外の貸出条件はこの試験では扱わない。\n"
     },
     {
       "id": "C2",
@@ -22,12 +50,57 @@
       "source": "社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。",
       "human_answers": "利用停止中の会議室は空室検索に表示せず、新規予約もできない。時間変更の変更先にもできない。停止前の既存予約は維持し、利用できる。取消期限は設けず、当日も取消できる。取り消した予約は直ちにその時間帯を空室検索・新規予約の対象へ戻す。同時に予約要求が来た場合の保証と処理順序は未決なので、今回は決めない。",
       "oracle": {
-        "confirmed_source": ["社員が空室検索する", "社員が予約する", "時間重複は予約不可", "予約後の時間変更可", "取消可", "管理者が利用停止にできる"],
-        "critical_unknowns": [{"id":"C2-U1","meaning":"停止による検索結果への影響"},{"id":"C2-U2","meaning":"停止による新規予約への影響"},{"id":"C2-U3","meaning":"停止による時間変更先への影響"},{"id":"C2-U4","meaning":"停止による既存予約への影響"},{"id":"C2-U5","meaning":"同時予約時の保証"}],
-        "answer_facts": ["停止中は検索非表示", "停止中は新規予約不可", "停止中は変更先にできない", "停止前の既存予約を維持し利用可", "取消期限なし・当日取消可", "取消時間帯は直ちに空室検索対象になる", "取消時間帯は直ちに新規予約対象になる", "同時予約保証と順序は未決"],
-        "still_unresolved": ["同時予約時の保証と処理順序"],
-        "forbidden_examples": ["Stage1で当日取消不可と確定する", "Stage1で停止時に既存予約を自動取消と確定する", "Stage1で取消直後に再予約可と確定する", "Stage2で先着順・ロック・片方だけ成功を合意済み保証とする"]
-      }
+        "confirmed_source": [
+          "社員が空室検索する",
+          "社員が予約する",
+          "時間重複は予約不可",
+          "予約後の時間変更可",
+          "取消可",
+          "管理者が利用停止にできる"
+        ],
+        "critical_unknowns": [
+          {
+            "id": "C2-U1",
+            "meaning": "停止による検索結果への影響"
+          },
+          {
+            "id": "C2-U2",
+            "meaning": "停止による新規予約への影響"
+          },
+          {
+            "id": "C2-U3",
+            "meaning": "停止による時間変更先への影響"
+          },
+          {
+            "id": "C2-U4",
+            "meaning": "停止による既存予約への影響"
+          },
+          {
+            "id": "C2-U5",
+            "meaning": "同時予約時の保証"
+          }
+        ],
+        "answer_facts": [
+          "停止中は検索非表示",
+          "停止中は新規予約不可",
+          "停止中は変更先にできない",
+          "停止前の既存予約を維持し利用可",
+          "取消期限なし・当日取消可",
+          "取消時間帯は直ちに空室検索対象になる",
+          "取消時間帯は直ちに新規予約対象になる",
+          "同時予約保証と順序は未決"
+        ],
+        "still_unresolved": [
+          "同時予約時の保証と処理順序"
+        ],
+        "forbidden_examples": [
+          "Stage1で当日取消不可と確定する",
+          "Stage1で停止時に既存予約を自動取消と確定する",
+          "Stage1で取消直後に再予約可と確定する",
+          "Stage2で先着順・ロック・片方だけ成功を合意済み保証とする"
+        ]
+      },
+      "resolved_source": "社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。\n\n【固定Human answer】\n利用停止中の会議室は空室検索に表示せず、新規予約もできない。時間変更の変更先にもできない。停止前の既存予約は維持し、利用できる。取消期限は設けず、当日も取消できる。取り消した予約は直ちにその時間帯を空室検索・新規予約の対象へ戻す。同時に予約要求が来た場合の保証と処理順序は未決なので、今回は決めない。\n"
     },
     {
       "id": "C3",
@@ -35,12 +108,48 @@
       "source": "社員が購入申請を出す。上長が承認または却下する。承認後に購買担当が購入する。購入結果を申請者へ伝える。金額と購入物品を記録する。高額な場合は追加確認が必要。",
       "human_answers": "高額は10万円以上。追加確認は部長が担当し、上長の通常承認後に追加で行う。10万円以上では上長承認と部長確認が両方完了した場合だけ購入できる。10万円未満は上長承認だけで購入できる。却下または必要な確認が未完了なら購入しない。購入結果の連絡手段と連絡期限は未決なので、今回は決めない。",
       "oracle": {
-        "confirmed_source": ["社員が申請", "上長が承認または却下", "承認後に購買担当が購入", "購入結果を申請者へ伝える", "金額と物品を記録", "高額の場合に追加確認が必要"],
-        "critical_unknowns": [{"id":"C3-U1","meaning":"高額の閾値"},{"id":"C3-U2","meaning":"追加確認の責任者"},{"id":"C3-U3","meaning":"追加確認と通常承認の順序・代替または追加の関係"}],
-        "answer_facts": ["高額は10万円以上", "部長が追加確認", "通常承認後に追加確認", "10万円以上は上長承認と部長確認の両方完了で購入可", "10万円未満は上長承認で購入可", "却下時は購入しない", "必要確認未完了では購入しない", "購入結果の連絡手段と期限は未決"],
-        "still_unresolved": ["購入結果の連絡手段と連絡期限"],
-        "forbidden_examples": ["Stage1で高額を10万円と確定する", "予算枠や支払方法を新しい必要条件とする", "Stage2でメール通知や翌日までの連絡を確定する"]
-      }
+        "confirmed_source": [
+          "社員が申請",
+          "上長が承認または却下",
+          "承認後に購買担当が購入",
+          "購入結果を申請者へ伝える",
+          "金額と物品を記録",
+          "高額の場合に追加確認が必要"
+        ],
+        "critical_unknowns": [
+          {
+            "id": "C3-U1",
+            "meaning": "高額の閾値"
+          },
+          {
+            "id": "C3-U2",
+            "meaning": "追加確認の責任者"
+          },
+          {
+            "id": "C3-U3",
+            "meaning": "追加確認と通常承認の順序・代替または追加の関係"
+          }
+        ],
+        "answer_facts": [
+          "高額は10万円以上",
+          "部長が追加確認",
+          "通常承認後に追加確認",
+          "10万円以上は上長承認と部長確認の両方完了で購入可",
+          "10万円未満は上長承認で購入可",
+          "却下時は購入しない",
+          "必要確認未完了では購入しない",
+          "購入結果の連絡手段と期限は未決"
+        ],
+        "still_unresolved": [
+          "購入結果の連絡手段と連絡期限"
+        ],
+        "forbidden_examples": [
+          "Stage1で高額を10万円と確定する",
+          "予算枠や支払方法を新しい必要条件とする",
+          "Stage2でメール通知や翌日までの連絡を確定する"
+        ]
+      },
+      "resolved_source": "社員が購入申請を出す。上長が承認または却下する。承認後に購買担当が購入する。購入結果を申請者へ伝える。金額と購入物品を記録する。高額な場合は追加確認が必要。\n\n【固定Human answer】\n高額は10万円以上。追加確認は部長が担当し、上長の通常承認後に追加で行う。10万円以上では上長承認と部長確認が両方完了した場合だけ購入できる。10万円未満は上長承認だけで購入できる。却下または必要な確認が未完了なら購入しない。購入結果の連絡手段と連絡期限は未決なので、今回は決めない。\n"
     },
     {
       "id": "C4",
@@ -48,12 +157,77 @@
       "source": "購入申請の承認条件を整理する。10万円以上は部長承認、10万円未満は課長承認とする。承認後だけ購買担当が購入する。却下時は購入しない。それ以外の承認条件は同じ。この試験の対象はこの承認分岐だけである。",
       "human_answers": "追加の回答はない。提示した承認分岐をそのまま整理する。",
       "oracle": {
-        "confirmed_source": ["対象は承認分岐だけ", "10万円以上は部長承認", "10万円未満は課長承認", "承認後だけ購買担当が購入", "却下時は購入しない", "金額分岐以外の承認条件は同じ"],
+        "confirmed_source": [
+          "対象は承認分岐だけ",
+          "10万円以上は部長承認",
+          "10万円未満は課長承認",
+          "承認後だけ購買担当が購入",
+          "却下時は購入しない",
+          "金額分岐以外の承認条件は同じ"
+        ],
         "critical_unknowns": [],
         "answer_facts": [],
         "still_unresolved": [],
-        "forbidden_examples": ["10万円ちょうどの承認者を再質問", "部長と課長の二重承認を追加", "予算・支払・通知をこの承認分岐の未決事項として必須化"]
-      }
+        "forbidden_examples": [
+          "10万円ちょうどの承認者を再質問",
+          "部長と課長の二重承認を追加",
+          "予算・支払・通知をこの承認分岐の未決事項として必須化"
+        ]
+      },
+      "resolved_source": "購入申請の承認条件を整理する。10万円以上は部長承認、10万円未満は課長承認とする。承認後だけ購買担当が購入する。却下時は購入しない。それ以外の承認条件は同じ。この試験の対象はこの承認分岐だけである。\n\n【固定Human answer】\n追加の回答はない。提示した承認分岐をそのまま整理する。\n"
+    },
+    {
+      "id": "C5",
+      "origin": "synthetic architecture-optional handoff",
+      "source": "社員が購入申請を出す。10万円以上は部長、10万円未満は課長が承認または却下する。承認後だけ購買担当が購入し、却下時は購入しない。購入結果を申請者へ伝え、金額と物品を記録する。TypeScriptとPostgreSQLを使用する。既存公開REST APIを維持する: POST /purchase-requests は amount_yen（0以上の整数）と item（空でない文字列）を受け取り、201で id と status=pending を返す。不正入力は400とする。POST /purchase-requests/{id}/decision は decision=approved または rejected と role=manager または director を受け取り、金額に対応した役割だけが決定できる。違う役割は403、存在しないidは404。既存schemaを維持する: purchase_requests(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, amount_yen integer NOT NULL CHECK(amount_yen>=0), item text NOT NULL CHECK(length(item)>0), status text NOT NULL CHECK(status IN ('pending','approved','rejected'))) 。framework、layer構成、Repository/Service等の指定はない。対象は申請・承認分岐と購入への引渡しまで。",
+      "human_answers": "追加の承認条件はない。決定APIは成功時200でidと決定後のstatusを返す。既に決定済みの申請への再決定は409で拒否する。購入実行と結果連絡は今回のAPI実装範囲外とし、その引渡し条件だけを保持する。",
+      "oracle": {
+        "confirmed_source": [
+          "社員が購入申請",
+          "10万円以上は部長承認または却下",
+          "10万円未満は課長承認または却下",
+          "承認後だけ購買担当が購入",
+          "却下時は購入しない",
+          "購入結果を申請者へ伝える",
+          "金額と物品を記録",
+          "TypeScript使用",
+          "PostgreSQL使用",
+          "POST /purchase-requestsの入力と201/pending応答",
+          "不正入力400",
+          "decision APIの入力",
+          "金額に対応する役割だけが決定",
+          "役割不一致403",
+          "存在しないid404",
+          "既存schemaの列・型・制約維持",
+          "named architecture/framework/layer未指定",
+          "申請・承認分岐と購入への引渡しまで"
+        ],
+        "critical_unknowns": [
+          {
+            "id": "C5-U1",
+            "meaning": "決定API成功時の応答"
+          },
+          {
+            "id": "C5-U2",
+            "meaning": "決定済み申請への再決定の扱い"
+          }
+        ],
+        "answer_facts": [
+          "追加の承認条件なし",
+          "決定成功200でidと決定後status",
+          "決定済みへの再決定409",
+          "購入実行と結果連絡はAPI実装範囲外・引渡し条件は保持"
+        ],
+        "still_unresolved": [],
+        "forbidden_examples": [
+          "named architectureの指定を業務合意の必須条件にする",
+          "既存REST APIを変更する",
+          "schemaの型または制約を変更する",
+          "AIの内部構造選択を人間合意済み業務要件とする"
+        ]
+      },
+      "resolved_source": "社員が購入申請を出す。10万円以上は部長、10万円未満は課長が承認または却下する。承認後だけ購買担当が購入し、却下時は購入しない。購入結果を申請者へ伝え、金額と物品を記録する。TypeScriptとPostgreSQLを使用する。既存公開REST APIを維持する: POST /purchase-requests は amount_yen（0以上の整数）と item（空でない文字列）を受け取り、201で id と status=pending を返す。不正入力は400とする。POST /purchase-requests/{id}/decision は decision=approved または rejected と role=manager または director を受け取り、金額に対応した役割だけが決定できる。違う役割は403、存在しないidは404。既存schemaを維持する: purchase_requests(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, amount_yen integer NOT NULL CHECK(amount_yen>=0), item text NOT NULL CHECK(length(item)>0), status text NOT NULL CHECK(status IN ('pending','approved','rejected'))) 。framework、layer構成、Repository/Service等の指定はない。対象は申請・承認分岐と購入への引渡しまで。\n\n【固定Human answer】\n追加の承認条件はない。決定APIは成功時200でidと決定後のstatusを返す。既に決定済みの申請への再決定は409で拒否する。購入実行と結果連絡は今回のAPI実装範囲外とし、その引渡し条件だけを保持する。\n"
     }
-  ]
+  ],
+  "stage2_transformation": "resolved source = source + newline + 【固定Human answer】 + newline + human_answers + newline; no Stage1 artifact or history"
 }
