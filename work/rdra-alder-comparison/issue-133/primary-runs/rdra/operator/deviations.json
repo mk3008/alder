@@ -1,0 +1,10 @@
+[
+  {
+    "type": "operator_metadata_exposure",
+    "description": "Operator read source-manifest.json for official archive URL; its output included Alder source revision/path/hash metadata, no business text. Not supplied to generators."
+  },
+  {
+    "type": "envelope_transport",
+    "description": "First three actual equivalent short messages differed from pre-saved full envelopes; actual messages retained separately after start. First six nodes inline; later nodes file envelopes plus exact pre-saved spawn message."
+  }
+]

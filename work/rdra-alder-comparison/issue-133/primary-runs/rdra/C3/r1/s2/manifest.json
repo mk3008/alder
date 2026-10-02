@@ -1,0 +1,17 @@
+{
+  "case": "C3",
+  "replicate": "r1",
+  "stage": "s2",
+  "status": "pending",
+  "source_sha256": "40eebe81b51749814e5628d694a1558880e3ada09a21eadf266b7489425258fc",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "provider": "ChatGPT Work collaboration",
+  "effective_attestation": "unavailable",
+  "nodes": {},
+  "deviations": [
+    "Shared filesystem read allowlist is operational isolation, not a security sandbox."
+  ],
+  "started": "2026-10-02T07:38:42.831607+00:00"
+}
