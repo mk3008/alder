@@ -1,0 +1,11 @@
+[
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md","status":"failed: no such file"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/AGENTS.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4状態生成.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase3/ph3BUC.tsv","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase2/ph2状態.tsv","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRA.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRASheet.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRAGraph.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/_1_RDRA/RDRA.md","status":"read"}
+]

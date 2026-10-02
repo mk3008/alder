@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T09:21:34Z",
+  "end_utc": "2026-10-02T09:22:01Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the output directory and retried."],
+  "unmet_restrictions": []
+}

@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:21:00Z",
+  "start_utc_precision": "approximate; clock was first sampled at completion",
+  "end_utc": "2026-10-02T09:22:53Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase2 did not exist; created the directory and wrote the output successfully."],
+  "unmet_restrictions": []
+}

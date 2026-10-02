@@ -1,0 +1,95 @@
+{
+  "scope": "Completed actual probe inputs byte-for-byte against declared final handoff scope; no packet modified.",
+  "rows": [
+    {
+      "packet_id": "P003",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+      "actual_sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6"
+    },
+    {
+      "packet_id": "P007",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "f2d9765faf7178528a9ff8703b0cab7102f0ec1034e3a447147b7e0ac9ecf9d4",
+      "actual_sha256": "f2d9765faf7178528a9ff8703b0cab7102f0ec1034e3a447147b7e0ac9ecf9d4"
+    },
+    {
+      "packet_id": "P015",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef",
+      "actual_sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef"
+    },
+    {
+      "packet_id": "P034",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "7cc5c430bc6351a950f4dcc8aa189ab66ada16fa41b31ec52a32061b10d5fb72",
+      "actual_sha256": "7cc5c430bc6351a950f4dcc8aa189ab66ada16fa41b31ec52a32061b10d5fb72"
+    },
+    {
+      "packet_id": "P037",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "7ee23893f313d71adc6ab15edbee80991f6fe63f3869e547d6df082bd646449c",
+      "actual_sha256": "7ee23893f313d71adc6ab15edbee80991f6fe63f3869e547d6df082bd646449c"
+    },
+    {
+      "packet_id": "P039",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "d6489f2218bc24f3f23344b3d6b927fd5bbc443040894e1e343d8669585c3996",
+      "actual_sha256": "d6489f2218bc24f3f23344b3d6b927fd5bbc443040894e1e343d8669585c3996"
+    },
+    {
+      "packet_id": "P041",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "2fc944d6e1dbd8c3daf8ac24ae6b4d408eb3aac538585a111e9d704747e57402",
+      "actual_sha256": "2fc944d6e1dbd8c3daf8ac24ae6b4d408eb3aac538585a111e9d704747e57402"
+    },
+    {
+      "packet_id": "P043",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "731f826eb5f646c32cb7efbcea90b754117e885cb4d2838eff918453e966d846",
+      "actual_sha256": "731f826eb5f646c32cb7efbcea90b754117e885cb4d2838eff918453e966d846"
+    },
+    {
+      "packet_id": "P044",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "592d2042f8383fc87c9defbcec7b35584dfaf81cce1bfb5428a3f137f5929145",
+      "actual_sha256": "592d2042f8383fc87c9defbcec7b35584dfaf81cce1bfb5428a3f137f5929145"
+    },
+    {
+      "packet_id": "P045",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+      "actual_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f"
+    },
+    {
+      "packet_id": "P046",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+      "actual_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046"
+    },
+    {
+      "packet_id": "P052",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "0b41322d6d184a4c7c3a2ddefe0cf68169c585ef1ffb8fd947cd11397bc2e615",
+      "actual_sha256": "0b41322d6d184a4c7c3a2ddefe0cf68169c585ef1ffb8fd947cd11397bc2e615"
+    },
+    {
+      "packet_id": "P055",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e",
+      "actual_sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e"
+    },
+    {
+      "packet_id": "P057",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+      "actual_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730"
+    },
+    {
+      "packet_id": "P060",
+      "matches_final_handoff_scope": true,
+      "expected_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+      "actual_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd"
+    }
+  ]
+}

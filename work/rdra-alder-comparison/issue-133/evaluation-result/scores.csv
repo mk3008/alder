@@ -1,0 +1,13 @@
+blind_id,arm,case,replicate,stage,unknown_found,unknown_total,actionable_found,source_preserved,source_total,post_answer_preserved,post_answer_total,downstream_preserved,downstream_total,unauthorized_decisions,unresolved_leakage,unsupported_additions,redundant_questions,probe_inventions,correct_stop,needs_raw_check,score_status,pending_raw_claims,ambiguous_metrics,strict_primary_eligible,source_clean_exploratory_eligible,architecture_input_required,unapproved_architecture_promotion,handoff_readiness,implementation_viability,artifact_bytes,artifact_files,response_bytes
+P003,alder,C1,2,s3,,,,,,,,11,11,0,0,0,,0,,0,scored,[],[],True,True,,,,,0,0,2154
+P005,rdra,C1,2,s2,,,,,,12,13,,,5,0,3,,,,1,needs_raw_check,"['attempt-001-P005-1', 'attempt-002-P005-1']",[],False,True,,,,,67546,27,0
+P007,alder,C1,1,s3,,,,,,,,11,11,0,0,0,,0,,0,scored,[],[],True,True,,,,,0,0,3032
+P019,alder,C1,2,s2,,,,,,12,13,,,0,0,0,,,,1,needs_raw_check,['attempt-002-P019-1'],[],True,True,,,,,3333,1,4226
+P025,alder,C1,1,s2,,,,,,12,13,,,0,0,0,,,,0,scored,[],[],True,True,,,,,2841,1,3428
+P028,alder,C1,2,s1,2,2,2,5,5,,,,,0,,0,0,,,0,scored,[],[],True,True,,,,,2959,1,3943
+P029,rdra,C1,1,s2,,,,,,11,13,,,4,0,3,,,,1,needs_raw_check,['attempt-002-P029-1'],[],False,True,,,,,66769,27,0
+P035,rdra,C1,2,s1,2,2,0,5,5,,,,,4,,3,0,,,0,needs_raw_check,['attempt-001-P035-1'],[],False,True,,,,,105082,27,0
+P038,rdra,C1,1,s1,2,2,0,5,5,,,,,4,,3,0,,,0,needs_raw_check,['attempt-001-P038-1'],[],False,True,,,,,97430,27,0
+P046,rdra,C1,2,s3,,,,,,,,11,11,0,0,0,,1,,1,needs_raw_check,"['attempt-001-P046-1', 'attempt-002-P046-1']",[],False,True,,,,,0,0,5966
+P048,alder,C1,1,s1,2,2,2,5,5,,,,,0,,0,0,,,0,scored,[],[],True,True,,,,,3089,1,3936
+P060,rdra,C1,1,s3,,,,,,,,11,11,0,0,0,,0,,1,needs_raw_check,"['attempt-001-P060-1', 'attempt-002-P060-1']",[],False,True,,,,,0,0,5435

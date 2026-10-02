@@ -16,6 +16,21 @@ def compute():
     rows=[];seen=set();eligibility={r['blind_id']:r for r in availability.report()['rows']}
     for p in sorted((ROOT/'blind-evaluation').glob('C*/scores.json')):
         d=json.loads(p.read_text());case=cases[d['case_id']];o=case['oracle']
+        ledger_file=ROOT/'blind-raw-checks'/case['id']/'raw-check-ledger.json'
+        claims=json.loads(ledger_file.read_text()).get('claims',[]) if ledger_file.exists() else []
+        resolutions=d.get('raw_check_resolutions',[])
+        resolution_ids=[x['claim_id'] for x in resolutions]
+        if len(resolution_ids)!=len(set(resolution_ids)):raise ValueError('duplicate raw-check resolution')
+        if set(resolution_ids)-{x['claim_id'] for x in claims}:raise ValueError('unknown raw-check resolution')
+        resolution_by_id={x['claim_id']:x for x in resolutions}
+        for resolution in resolutions:
+            if resolution.get('status') not in ['resolved','artifact_ambiguous','pending']:raise ValueError('invalid raw-check resolution status')
+            if resolution['status']=='pending':continue
+            if not resolution.get('judgment') or not resolution.get('raw_quote_refs'):raise ValueError('raw-check resolution lacks evidence')
+            for ref in resolution['raw_quote_refs']:
+                ref_file=p.parent/ref['review_file']
+                if not ref_file.resolve().is_relative_to(p.parent.resolve()) or not ref_file.is_file() or not ref.get('canonical_id'):
+                    raise ValueError('invalid raw-review reference')
         unknowns=[x['id'] for x in o['critical_unknowns']]
         source=o['confirmed_source'];answers=o['answer_facts']
         pool=list(dict.fromkeys(source+answers))
@@ -58,6 +73,18 @@ def compute():
             row={**link,'unknown_found':len(u),'unknown_total':len(unknowns),'actionable_found':len(q),'source_preserved':len(f),'source_total':len(source),'post_answer_preserved':len(f|a),'post_answer_total':len(pool),'downstream_preserved':len(ds),'downstream_total':len(pool),'unauthorized_decisions':len(s.get('unauthorized_decisions',[])),'unresolved_leakage':len(s.get('unresolved_leakage',[])),'unsupported_additions':len(s.get('unsupported_additions',[])),'redundant_questions':len(s.get('redundant_questions',[])),'probe_inventions':len(s.get('probe_inventions',[])),'correct_stop':s.get('correct_stop'),'needs_raw_check':len(s.get('needs_raw_check',[]))}
             row['downstream_total']=len(ds_pool)
             row['score_status']='needs_raw_check' if s['needs_raw_check'] else 'scored'
+            packet_claims=[x for x in claims if x['packet_id']==s['packet_id']]
+            pending_claims=[x['claim_id'] for x in packet_claims if resolution_by_id.get(x['claim_id'],{}).get('status','pending')=='pending']
+            ambiguous=[]
+            for claim in packet_claims:
+                resolution=resolution_by_id.get(claim['claim_id'],{})
+                if resolution.get('status')=='artifact_ambiguous':
+                    if not resolution.get('affected_metrics'):raise ValueError('ambiguous judgment lacks affected metrics')
+                    ambiguous.extend(resolution['affected_metrics'])
+            row['pending_raw_claims']=pending_claims
+            row['ambiguous_metrics']=sorted(set(ambiguous))
+            if pending_claims:row['score_status']='needs_raw_check'
+            elif ambiguous and not s['needs_raw_check']:row['score_status']='scored_with_ambiguity'
             row['strict_primary_eligible']=eligibility[s['packet_id']]['primary_quality_eligible']
             row['source_clean_exploratory_eligible']=eligibility[s['packet_id']]['source_clean_exploratory_eligible']
             stage=s['stage']
@@ -73,6 +100,10 @@ def compute():
             row['unapproved_architecture_promotion']=len(s.get('unapproved_architecture_promotion',[])) if case['id']=='C5' else None
             row['handoff_readiness']=s.get('handoff_readiness') if case['id']=='C5' else None
             row['implementation_viability']='not_executed' if case['id']=='C5' else None
+            metric_columns={'unknown_ids_found':['unknown_found'],'actionable_unknown_ids':['actionable_found'],'source_facts_preserved':['source_preserved','post_answer_preserved'],'answer_facts_preserved':['post_answer_preserved'],'downstream_facts_preserved':['downstream_preserved'],'unauthorized_decisions':['unauthorized_decisions'],'unsupported_additions':['unsupported_additions'],'unresolved_leakage':['unresolved_leakage'],'probe_inventions':['probe_inventions'],'redundant_questions':['redundant_questions'],'correct_stop':['correct_stop'],'architecture_input_required':['architecture_input_required'],'unapproved_architecture_promotion':['unapproved_architecture_promotion'],'handoff_readiness':['handoff_readiness']}
+            for metric in row['ambiguous_metrics']:
+                if metric not in metric_columns:raise ValueError('unknown ambiguous metric '+metric)
+                for column in metric_columns[metric]:row[column]=None
             files=__import__('packetize').files_for(link['arm'],case['id'],link['replicate'],stage)
             artifacts=[p for p,rel in files if rel not in ['raw-response.md','response']]
             responses=[p for p,rel in files if rel in ['raw-response.md','response']]
@@ -91,7 +122,7 @@ if __name__=='__main__':
         expected={r['blind_id'] for r in planned if r['source_clean_exploratory_eligible']}
         found={r['blind_id'] for r in rows}
         if expected!=found:raise ValueError(f'score coverage mismatch: missing={sorted(expected-found)}, extra={sorted(found-expected)}')
-        unresolved=[r['blind_id'] for r in rows if r['score_status']!='scored']
+        unresolved=[r['blind_id'] for r in rows if r['score_status'] not in ['scored','scored_with_ambiguity']]
         if unresolved:raise ValueError('unresolved raw checks: '+','.join(unresolved))
     (out/'unblinded-scores.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
     if rows:
@@ -102,7 +133,7 @@ if __name__=='__main__':
         for r in rows:groups[(r['case'],r['replicate'],r['stage'])][r['arm']]=r
         for (case,replicate,stage),arms in sorted(groups.items()):
             if set(arms)!= {'alder','rdra'}:continue
-            if any(r['score_status']!='scored' for r in arms.values()):continue
+            if any(r['score_status'] not in ['scored','scored_with_ambiguity'] for r in arms.values()):continue
             pair={'case':case,'replicate':replicate,'stage':stage,'alder':arms['alder'],'rdra':arms['rdra']}
             if all(r['source_clean_exploratory_eligible'] for r in arms.values()):pairs.append(pair)
             if all(r['strict_primary_eligible'] for r in arms.values()):strict_pairs.append(pair)

@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:14:00Z",
+  "start_time_precision": "minute estimate; timestamp was not sampled at entry",
+  "end_utc": "2026-10-02T09:14:43Z",
+  "failures": [],
+  "unmet_restrictions": []
+}

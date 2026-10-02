@@ -18,3 +18,11 @@
 
 ## 匿名化実装の補正
 最初の4probe後、PythonのUnicode word boundaryが日本語隣接の手法名を残し得る点を修正し、ASCII英数字境界と大文字小文字非依存にした。既存packetのRDRA/Alder残存行の機械検索は0件であり、既に実行済みのpacketは変更せず再実行しない。今後のpacketにも同じ手法名除去ルールを適用する実装上の補正。変更位置は既定sidecarへ保存する。
+
+## 実受領handoffによるprovenance確認 — 2026-10-02、C1初回採点後
+
+原Stage2 canonicalはRDRAの完成0_RDRAZeroOne+1_RDRAから抽出しているが、probeへの実入力は1_RDRAのみ。Stage2全体にある意味を、probeが受領した意味と自動的に同一視しない。Probe inventionは実際のinputに対して評価する。C1の原採点attemptとraw-check claimsは保持し、判断をoperatorで削除/確定しない。
+
+全20 Stage3の実input packet hashと対応Stage2 canonical input hashを比較する。同一byteならそのcanonicalを再利用し、非同一なら実handoff packetだけを原extraction prompt/同じFresh設定で別canonicalへ抽出する。元source/oracle/rubric/他packetを抽出者へ渡さない。匿名handoff indexとhash、根拠quoteを最終scorerへ渡し、full Stage2はStage2 coverage、received handoffはprobe provenanceに用いる。実入力・oracle・rubric・分母を変更するものではなく、初回採点後の測定補正として時点と原attemptを公開する。
+
+Raw reviewerも原score/元source/oracleを読まず、当該匿名packet/canonicalだけから局所引用・modality・scopeを記録する。Stage3 provenanceのreviewでは対応Stage2と実受領packetを区別して引用する。異なるreplicateの意味で当該資料を補完しない。初回とretryの全raw-check claimsをledgerへ残し、別judgeでflagが消えただけでは解決済みにしない。原文でも曖昧な判断を無理に0へ置き換えない。

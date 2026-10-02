@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:28:08Z",
+  "failures": ["Initial write failed because the phase4 output directory did not exist; created the directory and successfully wrote the TSV."],
+  "unmet_restrictions": ["Exact start UTC time was not recorded at task entry."]
+}

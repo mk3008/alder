@@ -1,0 +1,946 @@
+{
+  "case_id": "C1",
+  "claims": [
+    {
+      "claim_id": "attempt-001-P035-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P035",
+      "claim": "F19/F20の返却済み遅延を次回判定へ適用する範囲はcanonicalでは断定困難。",
+      "audit_target_ids": [
+        "F19",
+        "F20"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P035/review.json",
+          "canonical_id": "F19",
+          "evidence": [
+            {
+              "packet_id": "P035",
+              "line_start": 41,
+              "line_end": 41,
+              "quote": "返却遅延確認・貸出制限フロー\t対象会員の貸出記録を確認する\t↓\t貸出返却担当者\t未返却と返却済みの貸出記録、返却期限と返却日を確認する。"
+            },
+            {
+              "packet_id": "P035",
+              "line_start": 86,
+              "line_end": 86,
+              "quote": "未返却と返却済みの貸出記録、期限と返却日を照会する。"
+            },
+            {
+              "packet_id": "P035",
+              "line_start": 224,
+              "line_end": 224,
+              "quote": "対象会員の未返却・返却済みの記録、返却期限と返却日を一覧で確認でき、遅延の判断に必要な記録を探せること。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P035/review.json",
+          "canonical_id": "F20",
+          "evidence": [
+            {
+              "packet_id": "P035",
+              "line_start": 87,
+              "line_end": 87,
+              "quote": "貸出ごとの返却期限、現在日または返却日から遅延日数を求める。"
+            },
+            {
+              "packet_id": "P035",
+              "line_start": 157,
+              "line_end": 157,
+              "quote": "貸出ごとに返却期限と現在日または返却日を比較して遅延日数を求める。期限内は遅延なしとして扱い、返却時や制限判定で参照する。"
+            },
+            {
+              "packet_id": "P035",
+              "line_start": 227,
+              "line_end": 227,
+              "quote": "貸出ごとの返却期限と現在日または返却日、算出した遅延日数を示し、未返却と返却済みを区別できること。"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-001-P038-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P038",
+      "claim": "F14/F23の返却済み遅延の次回利用とF15の複数記録未決との整合はrawで要確認。",
+      "audit_target_ids": [
+        "F14",
+        "F23",
+        "F15"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P038/review.json",
+          "canonical_id": "F14",
+          "evidence": [
+            {
+              "packet_id": "P038",
+              "line_start": 42,
+              "line_end": 42,
+              "quote": "会員に関する返却記録から遅延日数を確認する。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 59,
+              "line_end": 59,
+              "quote": "返却時に記録した遅延日数を次回の貸出可否判断に用いる。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 85,
+              "line_end": 85,
+              "quote": "返却記録の遅延日数を参照する。複数記録の扱いは未決定である。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P038/review.json",
+          "canonical_id": "F23",
+          "evidence": [
+            {
+              "packet_id": "P038",
+              "line_start": 52,
+              "line_end": 52,
+              "quote": "返却状況から遅延日数を算出し、後続の貸出制限判定で参照できるようにする。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 53,
+              "line_end": 53,
+              "quote": "貸出記録に返却と遅延日数を反映する。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 99,
+              "line_end": 99,
+              "quote": "期限内の返却を貸出記録に反映し、算定できた遅延日数を記録する。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 100,
+              "line_end": 100,
+              "quote": "期限超過後の返却を記録し、遅延日数を次回判定へ引き継ぐ。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 130,
+              "line_end": 130,
+              "quote": "期限内・期限超過のいずれの返却も記録でき、算定できた遅延日数を確認できること。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P038/review.json",
+          "canonical_id": "F15",
+          "evidence": [
+            {
+              "packet_id": "P038",
+              "line_start": 59,
+              "line_end": 59,
+              "quote": "遅延日数の算定方法や複数の貸出記録がある場合の扱いは未決定である。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 85,
+              "line_end": 85,
+              "quote": "複数記録の扱いは未決定である。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 95,
+              "line_end": 95,
+              "quote": "期限と遅延日数の算定方法は未決定である。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 160,
+              "line_end": 160,
+              "quote": "期限、日数の算定方法、複数の返却記録の扱いは未決定であり、値を推測しない。"
+            },
+            {
+              "packet_id": "P038",
+              "line_start": 129,
+              "line_end": 129,
+              "quote": "算定方法が未確定の間は確定した日数として扱わないこと。"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-001-P005-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P005",
+      "claim": "F2/F4の未返却限定が原資料の前提から自然に含意されるかはrawで要確認。",
+      "audit_target_ids": [
+        "F2",
+        "F4"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P005/review.json",
+          "canonical_id": "F2",
+          "evidence": [
+            {
+              "packet_id": "P005",
+              "line_start": 55,
+              "line_end": 55,
+              "quote": "貸出可否は会員種別と未返却の貸出記録に基づく返却遅延日数で判断する。この試験ではそれ以外の貸出条件を扱わない。"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 43,
+              "line_end": 43,
+              "quote": "大人は3日未満、子供は7日未満の返却遅延だけ貸出可とし、会員種別と遅延日数だけで判断する。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P005/review.json",
+          "canonical_id": "F4",
+          "evidence": [
+            {
+              "packet_id": "P005",
+              "line_start": 139,
+              "line_end": 139,
+              "quote": "貸出可否の判定では未返却の貸出記録だけを対象とし、返却済の記録は遅延日数の判定から除外する。"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 143,
+              "line_end": 143,
+              "quote": "貸出記録を未返却から返却済に更新した時点でその記録を遅延日数の判定対象から外し"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-001-P046-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P046",
+      "claim": "F34/F35が上流の状態モデルの説明かprobe独自の仕様化か、引用元の文脈をrawで要確認。",
+      "audit_target_ids": [
+        "F34",
+        "F35"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P046/review.json",
+          "canonical_id": "F34",
+          "evidence": [
+            {
+              "packet_id": "P046",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "## 確認済みの期待結果"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 9,
+              "line_end": 9,
+              "quote": "状態遷移表には3日到達で「3日以上7日未満」、7日到達で「7日以上」への遷移がある。ただし更新アクティビティの説明との不一致は下記のとおり。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "更新アクティビティの説明は「3日に達したとき区分を更新する」と限定している一方、同じ画面要求は「3日または7日」の到達を表示対象とし、状態遷移表も7日到達で「7日以上」へ更新するとしている。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "アクティビティ説明をどう直すか確認が要る。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 38,
+              "line_end": 38,
+              "quote": "未返却記録の期限からの経過日数が3日に達したとき区分を更新する。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 40,
+              "line_end": 40,
+              "quote": "3日または7日の到達に伴う遅延区分の更新結果を確認できること。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 132,
+              "line_end": 132,
+              "quote": "期限からの経過が7日に達したため区分を更新する。"
+            },
+            {
+              "source_file": "P005-packet.md",
+              "input_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+              "input_kind": "full_stage2",
+              "packet_id": "P005",
+              "line_start": 197,
+              "line_end": 197,
+              "quote": "未返却記録の期限からの経過日数が3日に達したとき区分を更新する。"
+            },
+            {
+              "source_file": "P005-packet.md",
+              "input_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+              "input_kind": "full_stage2",
+              "packet_id": "P005",
+              "line_start": 199,
+              "line_end": 199,
+              "quote": "3日または7日の到達に伴う遅延区分の更新結果を確認できること。"
+            }
+          ],
+          "handoff_visibility": "actual_handoff"
+        },
+        {
+          "review_file": "blind-raw-checks/P046/review.json",
+          "canonical_id": "F35",
+          "evidence": [
+            {
+              "packet_id": "P046",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "## 確認済みの期待結果"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "遅延日数は「0日以上3日未満」「3日以上7日未満」「7日以上」に重複なく区分する。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "状態遷移表は「返却遅延日数を判定する」の初回遷移先を一律「0日以上3日未満」としている。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "判定条件は判定対象の未返却貸出を算出結果に応じた三つの区分に分類するため、初回判定時点で既に3日以上の記録を扱う場合に両記述が一致しない。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 130,
+              "line_end": 130,
+              "quote": "返却遅延日数を判定する\t0日以上3日未満\t未返却記録の遅延日数を算出し、初回の区分を定める。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 120,
+              "line_end": 120,
+              "quote": "判定対象の未返却貸出について返却期限からの遅延日数を求め、0日以上3日未満、3日以上7日未満、7日以上の重複しない区分に分類する。"
+            },
+            {
+              "source_file": "P005-packet.md",
+              "input_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+              "input_kind": "full_stage2",
+              "packet_id": "P005",
+              "line_start": 150,
+              "line_end": 150,
+              "quote": "返却遅延日数を判定する\t0日以上3日未満\t未返却記録の遅延日数を算出し、初回の区分を定める。"
+            }
+          ],
+          "handoff_visibility": "actual_handoff"
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-001-P060-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P060",
+      "claim": "F37/Q4の追加受付条件は上流F8の貸出可能状態と一部隣接するため、境界外の必須質問かrawで要確認。",
+      "audit_target_ids": [
+        "F37",
+        "Q4"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P060/review.json",
+          "canonical_id": "F37",
+          "evidence": [
+            {
+              "packet_id": "P060",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "## 明示された未決事項・まだ決めてはいけない事項"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 20,
+              "line_end": 20,
+              "quote": "資料に「未決」と明示された事項は見当たらない。次は関連する記述はあるものの、具体的な業務ルールまでは確定できない事項であり、実装者の判断で補完せず確認が必要である。"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "貸出可能な蔵書だけを判定・記録の対象にするための追加条件や、貸出期限の設定方法。蔵書の状態と返却期限の属性はあるが、それらの具体的な受付・期限決定ルールは記載されていない。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 8,
+              "line_end": 8,
+              "quote": "識別した蔵書を登録し、貸出可能な状態として管理する。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 9,
+              "line_end": 9,
+              "quote": "登録後に貸出可能な状態を確認できること。"
+            },
+            {
+              "source_file": "P029-packet.md",
+              "input_sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+              "input_kind": "full_stage2",
+              "packet_id": "P029",
+              "line_start": 38,
+              "line_end": 38,
+              "quote": "識別した蔵書を登録し、貸出に利用できる状態として管理する。"
+            }
+          ],
+          "handoff_visibility": "neither"
+        },
+        {
+          "review_file": "blind-raw-checks/P060/review.json",
+          "canonical_id": "Q4",
+          "evidence": [
+            {
+              "packet_id": "P060",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "## 明示された未決事項・まだ決めてはいけない事項"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 20,
+              "line_end": 20,
+              "quote": "具体的な業務ルールまでは確定できない事項であり、実装者の判断で補完せず確認が必要である。"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "貸出可能な蔵書だけを判定・記録の対象にするための追加条件"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "具体的な受付・期限決定ルールは記載されていない。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 9,
+              "line_end": 9,
+              "quote": "識別した蔵書を登録し、貸出可能な状態として管理する。"
+            },
+            {
+              "source_file": "P029-packet.md",
+              "input_sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+              "input_kind": "full_stage2",
+              "packet_id": "P029",
+              "line_start": 17,
+              "line_end": 17,
+              "quote": "貸出対象の蔵書を識別して登録し、貸出に利用できる状態を管理する。"
+            }
+          ],
+          "handoff_visibility": "neither"
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-002-P005-1",
+      "source_attempt": "attempt-002",
+      "packet_id": "P005",
+      "claim": "F55-F56の文書構造上の配置が実際の業務要件として要求されたか、canonicalだけでは曖昧。",
+      "audit_target_ids": [
+        "F55",
+        "F56"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P005/review.json",
+          "canonical_id": "F55",
+          "evidence": [
+            {
+              "packet_id": "P005",
+              "line_start": 285,
+              "line_end": 285,
+              "quote": "コンテキスト\t状態モデル\t状態"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 286,
+              "line_end": 286,
+              "quote": "会員管理\t蔵書の貸出状態"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 289,
+              "line_end": 289,
+              "quote": "蔵書管理\t返却遅延日数区分"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 295,
+              "line_end": 295,
+              "quote": "会員管理\t貸出の返却状態"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P005/review.json",
+          "canonical_id": "F56",
+          "evidence": [
+            {
+              "packet_id": "P005",
+              "line_start": 132,
+              "line_end": 132,
+              "quote": "コンテキスト\t情報\t属性"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 133,
+              "line_end": 133,
+              "quote": "会員管理\t会員情報"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 134,
+              "line_end": 134,
+              "quote": "蔵書管理\t蔵書"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 135,
+              "line_end": 135,
+              "quote": "貸出管理\t貸出"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 271,
+              "line_end": 271,
+              "quote": "コンテキスト\t情報\t属性"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 272,
+              "line_end": 272,
+              "quote": "会員管理\t会員情報"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 273,
+              "line_end": 273,
+              "quote": "蔵書管理\t蔵書"
+            },
+            {
+              "packet_id": "P005",
+              "line_start": 274,
+              "line_end": 274,
+              "quote": "貸出管理\t貸出"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-002-P019-1",
+      "source_attempt": "attempt-002",
+      "packet_id": "P019",
+      "claim": "F7/F17の「担当者」は未確認の役割名を便宜的に使うのか、責任の確定なのか曖昧。",
+      "audit_target_ids": [
+        "F7",
+        "F17"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P019/review.json",
+          "canonical_id": "F7",
+          "evidence": [
+            {
+              "packet_id": "P019",
+              "line_start": 20,
+              "line_end": 20,
+              "quote": "蔵書を貸し出すにあたり、対象会員の会員種別と返却遅延日数を用いて貸出可否を判断する時"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 39,
+              "line_end": 39,
+              "quote": "担当者は対象会員の会員種別と返却遅延日数を受け取り、次の表で貸出可否を判断する"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "この文書全体について人のレビューを待つ"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "貸出可否を判断する担当者（未確認）"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 147,
+              "line_end": 147,
+              "quote": "担当者は対象会員の会員種別と返却遅延日数を受け取り、次の表で貸出可否を判断する"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P019/review.json",
+          "canonical_id": "F17",
+          "evidence": [
+            {
+              "packet_id": "P019",
+              "line_start": 62,
+              "line_end": 62,
+              "quote": "対象会員について上記の貸出判断が「貸出可」となった時"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 76,
+              "line_end": 77,
+              "quote": "- 対象会員の貸出可否（「貸出可」）。\n- 貸出対象の蔵書。"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 81,
+              "line_end": 81,
+              "quote": "担当者は貸出可の判断に従い、対象の蔵書を貸し出す"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 66,
+              "line_end": 66,
+              "quote": "蔵書を貸し出す担当者（未確認）"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 89,
+              "line_end": 89,
+              "quote": "貸出後の業務はこの設計では規定しない"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 112,
+              "line_end": 112,
+              "quote": "この文書全体について人のレビューを待つ"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 184,
+              "line_end": 185,
+              "quote": "- 対象会員の貸出可否（「貸出可」）。\n- 貸出対象の蔵書。"
+            },
+            {
+              "packet_id": "P019",
+              "line_start": 189,
+              "line_end": 189,
+              "quote": "担当者は貸出可の判断に従い、対象の蔵書を貸し出す"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-002-P029-1",
+      "source_attempt": "attempt-002",
+      "packet_id": "P029",
+      "claim": "F19-F21は複数貸出の代表値選択を含意する可能性があるが、集約規則はcanonicalで明示されない。",
+      "audit_target_ids": [
+        "F19",
+        "F20",
+        "F21"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P029/review.json",
+          "canonical_id": "F19",
+          "evidence": [
+            {
+              "packet_id": "P029",
+              "line_start": 84,
+              "line_end": 84,
+              "quote": "返却遅延区分\t3日以上7日未満\t0日以上3日未満\t返却後の未返却貸出を再評価し、遅延が3日未満になった場合に区分を更新する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 147,
+              "line_end": 147,
+              "quote": "返却遅延区分\t3日以上7日未満\t返却遅延区分を更新する\t0日以上3日未満\t返却後の未返却貸出を再評価し、遅延が3日未満になったことを反映する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 289,
+              "line_end": 289,
+              "quote": "返却遅延区分\t3日以上7日未満\t返却遅延区分を更新する\t0日以上3日未満\t返却後の未返却貸出を再評価し、遅延が3日未満になったことを反映する。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P029/review.json",
+          "canonical_id": "F20",
+          "evidence": [
+            {
+              "packet_id": "P029",
+              "line_start": 85,
+              "line_end": 85,
+              "quote": "返却遅延区分\t7日以上\t3日以上7日未満\t返却後にも別の貸出で3日以上7日未満の遅延が残る場合に区分を更新する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 148,
+              "line_end": 148,
+              "quote": "返却遅延区分\t7日以上\t返却遅延区分を更新する\t3日以上7日未満\t返却後も別の貸出に3日以上7日未満の遅延が残ることを反映する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 290,
+              "line_end": 290,
+              "quote": "返却遅延区分\t7日以上\t返却遅延区分を更新する\t3日以上7日未満\t返却後も別の貸出に3日以上7日未満の遅延が残ることを反映する。"
+            }
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "blind-raw-checks/P029/review.json",
+          "canonical_id": "F21",
+          "evidence": [
+            {
+              "packet_id": "P029",
+              "line_start": 86,
+              "line_end": 86,
+              "quote": "返却遅延区分\t7日以上\t0日以上3日未満\t返却後の未返却貸出に3日以上の遅延がなくなった場合に区分を更新する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 149,
+              "line_end": 149,
+              "quote": "返却遅延区分\t7日以上\t返却遅延区分を更新する\t0日以上3日未満\t返却後に3日以上の遅延がなくなったことを反映する。"
+            },
+            {
+              "packet_id": "P029",
+              "line_start": 291,
+              "line_end": 291,
+              "quote": "返却遅延区分\t7日以上\t返却遅延区分を更新する\t0日以上3日未満\t返却後に3日以上の遅延がなくなったことを反映する。"
+            }
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-002-P046-1",
+      "source_attempt": "attempt-002",
+      "packet_id": "P046",
+      "claim": "F35が上流P005の未抽出の状態表を引用している可能性があり、probe独自性の最終確認にはrawが要る。",
+      "audit_target_ids": [
+        "F35"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P046/review.json",
+          "canonical_id": "F35",
+          "evidence": [
+            {
+              "packet_id": "P046",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "## 確認済みの期待結果"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "遅延日数は「0日以上3日未満」「3日以上7日未満」「7日以上」に重複なく区分する。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "状態遷移表は「返却遅延日数を判定する」の初回遷移先を一律「0日以上3日未満」としている。"
+            },
+            {
+              "packet_id": "P046",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "判定条件は判定対象の未返却貸出を算出結果に応じた三つの区分に分類するため、初回判定時点で既に3日以上の記録を扱う場合に両記述が一致しない。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 130,
+              "line_end": 130,
+              "quote": "返却遅延日数を判定する\t0日以上3日未満\t未返却記録の遅延日数を算出し、初回の区分を定める。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+              "input_kind": "actual_handoff",
+              "packet_id": "P005",
+              "line_start": 120,
+              "line_end": 120,
+              "quote": "判定対象の未返却貸出について返却期限からの遅延日数を求め、0日以上3日未満、3日以上7日未満、7日以上の重複しない区分に分類する。"
+            },
+            {
+              "source_file": "P005-packet.md",
+              "input_sha256": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+              "input_kind": "full_stage2",
+              "packet_id": "P005",
+              "line_start": 150,
+              "line_end": 150,
+              "quote": "返却遅延日数を判定する\t0日以上3日未満\t未返却記録の遅延日数を算出し、初回の区分を定める。"
+            }
+          ],
+          "handoff_visibility": "actual_handoff"
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    },
+    {
+      "claim_id": "attempt-002-P060-1",
+      "source_attempt": "attempt-002",
+      "packet_id": "P060",
+      "claim": "F4の新規会員区分初期化はP029 F7に由来するが、未返却がない時の区分を決める妥当性は原資料で要確認。",
+      "audit_target_ids": [
+        "F4"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "blind-raw-checks/P060/review.json",
+          "canonical_id": "F4",
+          "evidence": [
+            {
+              "packet_id": "P060",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "## 確認済みの期待結果"
+            },
+            {
+              "packet_id": "P060",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "会員を一意に登録して種別を保持し、返却遅延区分を「0日以上3日未満」で初期化する。"
+            }
+          ],
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 5,
+              "line_end": 5,
+              "quote": "新規会員の返却遅延区分を初期化する。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "登録後の返却遅延区分が0日以上3日未満であることを確認できること。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+              "input_kind": "actual_handoff",
+              "packet_id": "P029",
+              "line_start": 129,
+              "line_end": 129,
+              "quote": "0日以上3日未満\t新規会員の遅延区分を初期値に設定"
+            },
+            {
+              "source_file": "P029-packet.md",
+              "input_sha256": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+              "input_kind": "full_stage2",
+              "packet_id": "P029",
+              "line_start": 69,
+              "line_end": 69,
+              "quote": "0日以上3日未満\t会員を一意に登録し、会員種別を記録する。新規会員の返却遅延区分を初期化する。"
+            }
+          ],
+          "handoff_visibility": "actual_handoff"
+        }
+      ],
+      "resolution_status": "quoted_context_available_pending_final_evaluator",
+      "final_evaluator_resolution": null
+    }
+  ],
+  "policy": "All first/retry claims persist; each needs audit quote correspondence. Intrinsic ambiguity remains ambiguity without endless retries."
+}

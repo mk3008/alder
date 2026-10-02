@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T09:12:50Z",
+  "end_utc": "2026-10-02T09:13:21Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase1 did not exist; created the output directory and successfully wrote the TSV."],
+  "unmet_restrictions": []
+}
