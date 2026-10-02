@@ -1,0 +1,13 @@
+{
+  "preregistration_commit": "40f084543c54aef3fe5f0f7dba9cb25a9e8a7f82",
+  "preregistration_blob": "117d775ae2d4a3f84eac115ba29a57c125eea98d",
+  "scoring_packet_commit": "2fd5459f6b1a1aeed506ca0cdbe5523f3277deea",
+  "scoring_packet_sha256": "d98a13c16674f861ce7dcd744c1bc0b098b0be40c756f360869d5fe06b34a3e6",
+  "local_evaluator_packet_matches_public_commit": true,
+  "revision_note": "blind-packet.json.source_revision identifies preregistration provenance, not the commit containing the scoring packet. The evaluator reported this naming ambiguity as a revision mismatch. Coordinator compared the full local packet bytes with git show 2fd5459:work/boundary-decomposition/issue-132/blind-packet.json and verified equality. Evaluator scores and original limitation are preserved without edits.",
+  "h2_source_url": "https://github.com/tango238/rdra/blob/be7b56578b65a9582ede2684009dafeab9933c79/example/library/rdra.yml",
+  "h2_provenance_check": "After generation, the coordinator retrieved this pinned public source and confirmed UC, condition, variations, description. Frozen prompt simplifies full-width numeric comparison notation to Japanese less-than phrases and omits all unrelated information. No generator or evaluator received the original full artifact. The preregistration's unverified-provenance limitation remains a historical pre-run fact, now resolved by this check.",
+  "scorer": {"agent_id": "/root/masked_scorer", "requested_model": "gpt-6-sol", "requested_effort": "medium", "fork_turns": "none", "effective_model": null, "effective_effort": null, "independent_runtime_attestation": "unavailable"},
+  "coordinator": {"role": "generation orchestration, capture, aggregation, interpretation", "exact_model": null, "reasoning_effort": null, "settings_note": "Current Work agent settings not exposed; do not infer from model family description."},
+  "third_party_evaluation": "Not performed. A separate history-free same-requested-model scorer evaluated arm-masked outputs. Published data enable third-party re-scoring and rerunning; this is not a claim of external human or cross-model validation."
+}
