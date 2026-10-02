@@ -1,20 +1,20 @@
 # RDRA / Alder same-model pilot
 
-Issue #133の5ケース・2反復の比較記録。全60資料の生成・匿名抽出・文脈評価を完了。厳密条件とsource-clean探索を分けた記述的pilot。
+Issue #133の5ケース・2反復の比較記録。Primary runは完了済み。全60資料の生成・匿名抽出・文脈評価を完了。厳密条件とsource-clean探索を分けた記述的pilot。
 
-[実行報告](REPORT.md) · [全結果](evaluation-result/RESULT-TABLES.md) · [証跡manifest](EVIDENCE-MANIFEST.json) · [ふりかえり](RETROSPECTIVE.md)
+[最終結果・実行報告](REPORT.md) · [詳細表](evaluation-result/RESULT-TABLES.md) · [証跡manifest](EVIDENCE-MANIFEST.json) · [ふりかえり](RETROSPECTIVE.md)
 
 ## 記録を読む
 
-- [固定条件](benchmark-preparation/PROTOCOL.md)、[cases/source/固定回答/oracle](benchmark-preparation/cases.json)、[rubric](benchmark-preparation/rubric.md)
-- [配布物・版・全file hash](benchmark-preparation/source-manifest.json)、[初回生成前のchecksums](benchmark-preparation/SHA256SUMS)
+- [固定条件](PROTOCOL.md)、[cases/source/固定回答/oracle](cases.json)、[rubric](rubric.md)
+- [配布物・版・全file hash](source-manifest.json)、[初回生成前のchecksums](SHA256SUMS)
 - [実行上の逸脱と分析の境界](benchmark-preparation/EXECUTION-DEVIATIONS.md)
 - [原生成・script・spawn/read-log](primary-runs/)、[匿名packet](blind-packets/)、[canonical抽出と引用根拠](canonical-extractions/)
 - [実受領handoffの抽出と同一byte証明](handoff-extractions/)、[局所原文reviewと全claim ledger](blind-raw-checks/)
 - [匿名採点](blind-evaluation/)、[全60枠のavailability](evaluation-result/availability.json)、[記録されたFresh agent数](evaluation-result/call-counts.json)
 - [匿名化・観測の補足](benchmark-preparation/OBSERVATION.md)、[Stage3分母の補足](benchmark-preparation/downstream-denominators.json)
 
-初回生成前のfinal freezeは `b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95`。benchmark-preparation/README.mdとSHA256SUMSは当時の記録として維持する。開始後の補足を当初のfreezeに含めたとは扱わない。
+初回生成前のfinal freezeは `b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95`。[preflight・準備時点のREADME](https://github.com/mk3008/alder/blob/b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95/work/rdra-alder-comparison/issue-133/README.md)と固定条件・SHA256SUMSは当時の履歴として参照する。このREADMEの本文は完了後の案内であり、準備時点の履歴本文は上記の固定revisionで保存している。開始後の補足を当初のfreezeに含めたとは扱わない。
 
 ## 再現と解釈の境界
 
