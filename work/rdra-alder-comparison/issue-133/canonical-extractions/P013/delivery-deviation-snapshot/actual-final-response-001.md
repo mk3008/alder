@@ -1,0 +1,1 @@
+{"packet_id": "P013", "canonical_json": "/workspace/scratch/62be7f260abb/canonical-extractions/P013/canonical.json", "raw_response": "/workspace/scratch/62be7f260abb/canonical-extractions/P013/raw-response.md", "read_log": "/workspace/scratch/62be7f260abb/canonical-extractions/P013/read-log.jsonl"}

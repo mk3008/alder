@@ -1,0 +1,52 @@
+{
+  "packet_id": "P037",
+  "facts": [
+    {"id":"F1","meaning":"社員の空室検索では利用停止中の会議室を検索結果に含めない。","modality":"asserted","evidence":[{"line_start":4,"line_end":4,"quote":"利用停止中の会議室を検索結果に含めず"},{"line_start":8,"line_end":8,"quote":"以後は空室検索、新規予約、時間変更の変更先から外す"}]},
+    {"id":"F2","meaning":"社員は空室検索の結果から会議室を選び、新規予約を依頼できる。","modality":"asserted","evidence":[{"line_start":4,"line_end":4,"quote":"結果から会議室を選んで新規予約を依頼できる"}]},
+    {"id":"F3","meaning":"取消済み予約の時間帯は、取消直後から空室検索の対象に戻る。","modality":"asserted","evidence":[{"line_start":4,"line_end":4,"quote":"取消済み予約の時間帯は取消直後から検索対象に戻る"},{"line_start":7,"line_end":7,"quote":"取り消した予約の時間帯を直ちに空室検索と新規予約の対象に戻す"}]},
+    {"id":"F4","meaning":"新規予約は、指定会議室が利用停止中でなく、予約時間が他の予約と重複しない場合に成立する。","modality":"asserted","evidence":[{"line_start":5,"line_end":5,"quote":"指定した会議室が利用停止中でなく、その予約時間が他の予約と重複しない場合に成立する"}]},
+    {"id":"F5","meaning":"指定会議室が利用停止中、または予約時間が他の予約と重複する場合、新規予約はできない。","modality":"asserted","evidence":[{"line_start":5,"line_end":5,"quote":"利用停止中または時間重複なら予約できない"},{"line_start":8,"line_end":8,"quote":"以後は空室検索、新規予約、時間変更の変更先から外す"}]},
+    {"id":"F6","meaning":"成立した予約には会議室と予約時間を記録する。","modality":"asserted","evidence":[{"line_start":5,"line_end":5,"quote":"成立した予約には会議室と予約時間を記録し"}]},
+    {"id":"F7","meaning":"成立した予約は後から時間変更または取消ができる。","modality":"asserted","evidence":[{"line_start":5,"line_end":5,"quote":"後から時間変更または取消ができる"}]},
+    {"id":"F8","meaning":"取消済み予約の時間帯は、取消直後から新規予約の対象に戻る。","modality":"asserted","evidence":[{"line_start":5,"line_end":5,"quote":"取消済み予約の時間帯は取消直後から新規予約の対象に戻る"},{"line_start":7,"line_end":7,"quote":"取り消した予約の時間帯を直ちに空室検索と新規予約の対象に戻す"}]},
+    {"id":"F9","meaning":"予約時間変更では、対象予約の会議室が利用停止中でないことを確認する。利用停止中の会議室を変更先にできない。","modality":"asserted","evidence":[{"line_start":6,"line_end":6,"quote":"対象予約の会議室が利用停止中でないことを確認して"},{"line_start":6,"line_end":6,"quote":"利用停止中の会議室を変更先にはできない"},{"line_start":8,"line_end":8,"quote":"以後は空室検索、新規予約、時間変更の変更先から外す"}]},
+    {"id":"F10","meaning":"成立した予約の時間変更では変更後の時間を記録し、予約を変更後の時間で維持する。","modality":"asserted","evidence":[{"line_start":6,"line_end":6,"quote":"変更後の時間を記録し、成立した予約を変更後の時間で維持する"}]},
+    {"id":"F11","meaning":"予約取消には期限がなく、当日も受け付ける。","modality":"asserted","evidence":[{"line_start":7,"line_end":7,"quote":"予約取消には期限を設けず、当日も受け付ける"}]},
+    {"id":"F12","meaning":"予約取消では取消状態を記録する。","modality":"asserted","evidence":[{"line_start":7,"line_end":7,"quote":"取消状態を記録し"}]},
+    {"id":"F13","meaning":"管理者が会議室を利用停止にすると、その状態を記録する。","modality":"asserted","evidence":[{"line_start":8,"line_end":8,"quote":"管理者が会議室を利用停止にすると、その状態を記録し"}]},
+    {"id":"F14","meaning":"会議室の利用停止前に成立した既存予約は取り消さず、その予約に基づく利用を認める。","modality":"asserted","evidence":[{"line_start":8,"line_end":8,"quote":"停止前に成立した既存予約は取り消さず、その予約に基づく利用を認める"},{"line_start":21,"line_end":21,"quote":"利用停止前の既存予約を維持・利用できること"}]},
+    {"id":"F15","meaning":"時間変更先が他の予約と重複する場合に変更を拒否するかは未決であり、新規予約の重複拒否を時間変更へ適用することは確定していない。","modality":"unresolved","evidence":[{"line_start":12,"line_end":12,"quote":"時間変更先が他の予約と重複する場合に変更を拒否するか"},{"line_start":12,"line_end":12,"quote":"新規予約の重複拒否を時間変更にも適用すると確定してはいけない"},{"line_start":21,"line_end":21,"quote":"後者が未確認と明記されている"}]},
+    {"id":"F16","meaning":"時間変更が失敗した場合に元の予約を維持するかは未決である。","modality":"unresolved","evidence":[{"line_start":12,"line_end":12,"quote":"失敗時に元の予約を維持するかは未決"}]},
+    {"id":"F17","meaning":"時間変更成立時、変更前の時間帯を空室検索と新規予約へ戻す時点は未決であり、取消時の即時復帰を適用することは確定していない。","modality":"unresolved","evidence":[{"line_start":13,"line_end":13,"quote":"変更前の時間帯をいつ空室検索・新規予約へ戻し"},{"line_start":13,"line_end":13,"quote":"取消時の即時復帰を時間変更に流用してはいけない"}]},
+    {"id":"F18","meaning":"時間変更成立時、変更後の時間帯の占有を反映する時点は未決である。","modality":"unresolved","evidence":[{"line_start":13,"line_end":13,"quote":"変更後の時間帯の占有をいつ反映するかは未決"}]},
+    {"id":"F19","meaning":"既存予約を変更できる人の範囲は未確認である。","modality":"unresolved","evidence":[{"line_start":14,"line_end":14,"quote":"既存予約を変更・取消できる人の範囲は未確認"}]},
+    {"id":"F20","meaning":"既存予約を取消できる人の範囲は未確認である。","modality":"unresolved","evidence":[{"line_start":14,"line_end":14,"quote":"既存予約を変更・取消できる人の範囲は未確認"}]},
+    {"id":"F21","meaning":"同時に予約要求が来た場合の保証と処理順序は未決である。競合時にどちらが成立するか、重複を確定判定する時点は決まっていない。","modality":"unresolved","evidence":[{"line_start":15,"line_end":15,"quote":"同時に予約要求が来た場合の保証と処理順序は明示的に未決"},{"line_start":15,"line_end":15,"quote":"競合時にどちらが成立するか、重複を確定判定する時点を決めてはいけない"}]},
+    {"id":"F22","meaning":"時間以外に会議室を変更できるかは未確認であり、この草案にある変更作業は時間変更だけである。","modality":"unresolved","evidence":[{"line_start":16,"line_end":16,"quote":"時間以外に会議室を変更できるかは未確認であり、この草案にあるのは時間変更の作業だけ"}]},
+    {"id":"F23","meaning":"結果の通知方法は未確認である。","modality":"unresolved","evidence":[{"line_start":17,"line_end":17,"quote":"結果の通知方法は未確認"}]},
+    {"id":"F24","meaning":"予約できなかった社員がその後どう選び直すかは規定されていない。","modality":"unresolved","evidence":[{"line_start":17,"line_end":17,"quote":"予約できなかった社員がその後どう選び直すかも規定されていない"}]},
+    {"id":"F25","meaning":"この資料では明確な矛盾は確認されていない。","modality":"asserted","evidence":[{"line_start":21,"line_end":21,"quote":"明確な矛盾は確認できない"}]}
+  ],
+  "questions": [
+    {"id":"Q1","meaning":"時間変更先が他の予約と重複する場合、変更を拒否するか。","evidence":[{"line_start":12,"line_end":12,"quote":"時間変更先が他の予約と重複する場合に変更を拒否するか"}]},
+    {"id":"Q2","meaning":"時間変更の失敗時に元の予約を維持するか。","evidence":[{"line_start":12,"line_end":12,"quote":"失敗時に元の予約を維持するか"}]},
+    {"id":"Q3","meaning":"時間変更成立時、変更前の時間帯をいつ空室検索と新規予約へ戻すか。","evidence":[{"line_start":13,"line_end":13,"quote":"変更前の時間帯をいつ空室検索・新規予約へ戻し"}]},
+    {"id":"Q4","meaning":"時間変更成立時、変更後の時間帯の占有をいつ反映するか。","evidence":[{"line_start":13,"line_end":13,"quote":"変更後の時間帯の占有をいつ反映するか"}]},
+    {"id":"Q5","meaning":"既存予約を変更・取消できるのは予約した社員だけか、他の社員や管理者も含むか。","evidence":[{"line_start":14,"line_end":14,"quote":"予約した社員だけか、他の社員や管理者も含むか"}]},
+    {"id":"Q6","meaning":"同時予約要求で競合した場合、どちらが成立するか。","evidence":[{"line_start":15,"line_end":15,"quote":"競合時にどちらが成立するか"}]},
+    {"id":"Q7","meaning":"同時予約要求で重複を確定判定する時点はいつか。","evidence":[{"line_start":15,"line_end":15,"quote":"重複を確定判定する時点"}]},
+    {"id":"Q8","meaning":"時間以外に会議室を変更できるか。","evidence":[{"line_start":16,"line_end":16,"quote":"時間以外に会議室を変更できるか"}]},
+    {"id":"Q9","meaning":"結果をどの方法で通知するか。","evidence":[{"line_start":17,"line_end":17,"quote":"結果の通知方法は未確認"}]},
+    {"id":"Q10","meaning":"予約できなかった社員はその後どう選び直すか。","evidence":[{"line_start":17,"line_end":17,"quote":"予約できなかった社員がその後どう選び直すか"}]}
+  ],
+  "contradictions": [],
+  "additional_human_inputs": [
+    {"meaning":"時間変更先が重複する場合の拒否と、失敗時に元の予約を維持するかの決定。","required":true,"evidence":[{"line_start":12,"line_end":12,"quote":"変更を拒否するか、失敗時に元の予約を維持するかは未決"}]},
+    {"meaning":"時間変更成立時の変更前時間帯の復帰時点と変更後時間帯の占有反映時点の決定。","required":true,"evidence":[{"line_start":13,"line_end":13,"quote":"いつ空室検索・新規予約へ戻し、変更後の時間帯の占有をいつ反映するかは未決"}]},
+    {"meaning":"既存予約を変更・取消できる人の範囲の確認。","required":true,"evidence":[{"line_start":14,"line_end":14,"quote":"既存予約を変更・取消できる人の範囲は未確認"}]},
+    {"meaning":"同時予約要求時の保証、処理順序、競合時の成立対象と重複判定時点の決定。","required":true,"evidence":[{"line_start":15,"line_end":15,"quote":"同時に予約要求が来た場合の保証と処理順序は明示的に未決"},{"line_start":15,"line_end":15,"quote":"競合時にどちらが成立するか、重複を確定判定する時点"}]},
+    {"meaning":"時間以外に会議室変更ができるかの確認。","required":true,"evidence":[{"line_start":16,"line_end":16,"quote":"時間以外に会議室を変更できるかは未確認"}]},
+    {"meaning":"結果の通知方法と予約できなかった社員の選び直し方の確認。","required":true,"evidence":[{"line_start":17,"line_end":17,"quote":"結果の通知方法は未確認であり、予約できなかった社員がその後どう選び直すかも規定されていない"}]}
+  ],
+  "limitations": ["資料は既にまとめられた期待結果と未決事項を記述しており、参照先として示された packet.md の別行はこの入力内に存在しない。根拠行番号は提示された packet.md 自体の物理行を指す。"]
+}

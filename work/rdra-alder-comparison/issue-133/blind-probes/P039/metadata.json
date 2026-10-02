@@ -1,0 +1,41 @@
+{
+  "packet_id": "P039",
+  "status": "success",
+  "started_at": "2026-10-02T08:02:40.985650+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "packet_sha256": "d6489f2218bc24f3f23344b3d6b927fd5bbc443040894e1e343d8669585c3996",
+  "prompt_sha256": "3caee12c4268e65df5e14db1b5464c33f4b5f3c5fa781438d326efae1f2dc857",
+  "envelope_sha256": "adaad37c7a5ca05b55ff08004d140956f9318444376d042a0dda27398518976b",
+  "observation_protocol_sha256": "d0ebef8842ad1a7eed8b01798f81f442f1854a68f916b8367e17531bfee61ada",
+  "observation_frozen_before_first_probe": true,
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-probes/P039/packet.md",
+    "/workspace/scratch/62be7f260abb/blind-probes/P039/downstream-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural read allowlist, not security isolation. Format may disclose method; single blind. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/p039_probe",
+  "prepared_at": "2026-10-02T08:01:02.897472+00:00",
+  "finished_at": "2026-10-02T08:03:17.510147+00:00",
+  "output_sha256": {
+    "raw-response.md": "a0c8910dbbf0f077d3257c10bd5e6524616d04040f7ea5fa9f2fa0c6b79946bc",
+    "read-log.jsonl": "505a39f0d9dd5901145351f7511064662c0169c1ec2a724af699a3a14567a8cf"
+  },
+  "upstream_strict_eligible": true,
+  "upstream_source_clean_exploratory_eligible": true,
+  "upstream_classification_recorded_at": "2026-10-02T08:22:00.289660+00:00",
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
+  }
+}

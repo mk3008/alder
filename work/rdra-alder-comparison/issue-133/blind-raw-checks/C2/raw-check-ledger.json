@@ -1,0 +1,615 @@
+{
+  "case_id": "C2",
+  "claims": [
+    {
+      "claim_id": "attempt-001-P006-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P006",
+      "claim": "F15の再利用は即時性を明記しない。原文で範囲を確認。",
+      "audit_target_ids": [
+        "F15"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P006-review.json",
+          "canonical_id": "F15",
+          "local_meaning": "予約が取消済になると、その予約の利用時間は占有対象から外れ、空室照会へ再反映される。取消された時間帯は、他の予約と重ならず会議室が利用停止中でなければ、空室として扱われ新たな予約を受け付ける。",
+          "local_modality": "asserted",
+          "scope": "取消済の当該予約時間帯についての占有・空室照会・新規予約。再予約可能性には他の予約との非重複および会議室が利用停止中でないことが条件として付く。",
+          "evidence": [
+            {
+              "packet_id": "P006",
+              "line_start": 49,
+              "line_end": 49,
+              "quote": "予約が取り消され、その時間帯が再び予約可能になったことを確認する。"
+            },
+            {
+              "packet_id": "P006",
+              "line_start": 61,
+              "line_end": 61,
+              "quote": "取り消された予約の時間帯は、他の予約との重複がなく会議室が利用停止中でなければ、空室として扱い新たな予約を受け付ける。"
+            },
+            {
+              "packet_id": "P006",
+              "line_start": 130,
+              "line_end": 130,
+              "quote": "予約が取消済になったとき、その予約の利用時間を占有対象から外し、空室照会に再び反映する。"
+            },
+            {
+              "packet_id": "P006",
+              "line_start": 133,
+              "line_end": 133,
+              "quote": "取消済の予約は占有対象に含めない。"
+            },
+            {
+              "packet_id": "P006",
+              "line_start": 265,
+              "line_end": 265,
+              "quote": "予約を取り消して利用時間を解放し、その時間帯を再び予約可能にする。"
+            }
+          ],
+          "explicit_unknowns": [],
+          "ambiguities": [
+            "「その時間帯を再び予約可能にする」という状態遷移の記述は単独では無条件にも読めるが、条件の記述は他予約との非重複と会議室の非利用停止を明記している。"
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P006-1",
+        "status": "resolved",
+        "judgment": "F15の原文は取消済み時間帯を占有から外し、非重複・非停止を条件に新規予約を受け付ける。即時性は記載されないのでStage1の先取り再利用規則だけを数え、即時反映は追加算入しない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P006-review.json",
+            "canonical_id": "F15"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ]
+      },
+      "raw_audit_status": "quote_mechanically_validated"
+    },
+    {
+      "claim_id": "attempt-001-P026-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P026",
+      "claim": "F28/Q7は新規予約と変更先を一問にまとめており、原文で回答分離の明瞭さを確認。",
+      "audit_target_ids": [
+        "F28",
+        "Q7"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P026-review.json",
+          "canonical_id": "F28",
+          "local_meaning": "利用停止中の会議室について、新規予約と予約時間変更での扱いは業務判断待ちであり、許否や成立条件は資料に定められていない。管理者が対象会議室を利用停止にすること自体は活動として記載される。",
+          "local_modality": "unresolved",
+          "scope": "利用停止中の会議室の新規予約・予約時間変更。空き検索と既存予約への影響も同じ未確認事項に併記されるが、このIDの焦点とは分ける。新規予約の重複不可という記載は、利用停止時の許否を確定しない。",
+          "evidence": [
+            {
+              "packet_id": "P026",
+              "line_start": 12,
+              "line_end": 12,
+              "quote": "利用停止中の会議室を空き検索・新規予約・予約時間変更でどう扱うか。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 88,
+              "line_end": 88,
+              "quote": "対象の会議室は利用停止となる。検索、予約、既存予約への影響は未確認。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 97,
+              "line_end": 97,
+              "quote": "利用停止中の会議室は検索・新規予約・時間変更でどう扱い"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 111,
+              "line_end": 111,
+              "quote": "利用停止中の会議室を空き検索・新規予約・予約時間変更でどう扱うか。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 187,
+              "line_end": 187,
+              "quote": "対象の会議室は利用停止となる。検索、予約、既存予約への影響は未確認。"
+            }
+          ],
+          "explicit_unknowns": [
+            "利用停止中の会議室の新規予約での扱い。",
+            "利用停止中の会議室の予約時間変更での扱い。",
+            "同じ項目では空き検索、既存予約への影響、社員への連絡・対応担当も未確認。"
+          ],
+          "ambiguities": [
+            "「どう扱うか」の具体的な許否、例外、結果は書かれていない。",
+            "活動の一般的な予約成立条件を利用停止中の会議室へ適用するかは明示されない。"
+          ],
+          "correspondence_evidence": [
+            {
+              "packet_id": "P026",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "会議室予約の業務設計書（草案・未合意）"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "ヒアリングで確認できた範囲を記した草案であり、下記の未確認事項について業務判断が必要である。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 86,
+              "line_end": 88,
+              "quote": "管理者は対象の会議室を利用停止にする。\n  - **Output**：会議室 — 利用停止の状態。\n- **Result**：対象の会議室は利用停止となる。検索、予約、既存予約への影響は未確認。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 99,
+              "line_end": 101,
+              "quote": "回答が得られるまで、これらは未確認として草案に残します。業務内容と各結果について人による確認・合意が必要です。草案全文は以下のとおりです。\n\n# 会議室予約の業務設計書（草案・未合意）"
+            }
+          ]
+        },
+        {
+          "review_file": "P026-review.json",
+          "canonical_id": "Q7",
+          "local_meaning": "利用停止中の会議室について、新規予約と予約時間変更でどう扱うかを問う業務上の質問。回答は示されていない。",
+          "local_modality": "unresolved",
+          "scope": "利用停止中の会議室での新規予約と予約時間変更。質問文は空き検索、既存予約への対応も併せて尋ねるが、このIDの対象は前二者。",
+          "evidence": [
+            {
+              "packet_id": "P026",
+              "line_start": 12,
+              "line_end": 12,
+              "quote": "利用停止中の会議室を空き検索・新規予約・予約時間変更でどう扱うか。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 97,
+              "line_end": 97,
+              "quote": "利用停止中の会議室は検索・新規予約・時間変更でどう扱い"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 111,
+              "line_end": 111,
+              "quote": "利用停止中の会議室を空き検索・新規予約・予約時間変更でどう扱うか。"
+            }
+          ],
+          "explicit_unknowns": [
+            "利用停止中の会議室で新規予約をどう扱うか。",
+            "利用停止中の会議室で予約時間変更をどう扱うか。"
+          ],
+          "ambiguities": [
+            "問いは「どう扱うか」にとどまり、選択肢や適用時点、結果の仕様は示されない。"
+          ],
+          "correspondence_evidence": [
+            {
+              "packet_id": "P026",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "会議室予約の業務設計書（草案・未合意）"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "下記の未確認事項について業務判断が必要である。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 97,
+              "line_end": 97,
+              "quote": "利用停止中の会議室は検索・新規予約・時間変更でどう扱い、既存予約には誰がどのように対応しますか。"
+            },
+            {
+              "packet_id": "P026",
+              "line_start": 99,
+              "line_end": 99,
+              "quote": "回答が得られるまで、これらは未確認として草案に残します。業務内容と各結果について人による確認・合意が必要です。"
+            }
+          ]
+        }
+      ],
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P026-1",
+        "status": "resolved",
+        "judgment": "Q7の原文は新規予約と予約時間変更をともに名指しし「どう扱うか」を問う。各回答が許否を変えるためU2とU3の具体質問として認めるが、詳細条件の未指定はneeds_raw_checkに残す。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P026-review.json",
+            "canonical_id": "F28"
+          },
+          {
+            "review_file": "P026-review.json",
+            "canonical_id": "Q7"
+          }
+        ],
+        "affected_metrics": [
+          "actionable_unknown_ids"
+        ]
+      },
+      "raw_audit_status": "quote_mechanically_validated"
+    },
+    {
+      "claim_id": "attempt-001-P002-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P002",
+      "claim": "F23-F25の追加データ項目が実装必須要件か、説明用整理かはcanonicalだけでは確定しない。",
+      "audit_target_ids": [
+        "F23",
+        "F24",
+        "F25"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P002-review.json",
+          "canonical_id": "F23",
+          "local_meaning": "会議室管理の情報「会議室」の属性として、会議室ID、会議室名、所在地、収容人数、設備、利用開始時刻、利用終了時刻が列挙される。空室検索や予約申込の対象となる会議室についての情報である。",
+          "local_modality": "asserted",
+          "scope": "「会議室」の属性欄と情報・属性の対応表に限る。各属性の必須性、型、値域、更新責任、利用開始・終了時刻の具体的な運用はここでは定義されていない。",
+          "evidence": [
+            {
+              "packet_id": "P002",
+              "line_start": 136,
+              "line_end": 137,
+              "quote": "コンテキスト\t情報\t属性\t関連情報\t状態モデル\tバリエーション\t説明\n会議室管理\t会議室\t会議室ID、会議室名、所在地、収容人数、設備、利用開始時刻、利用終了時刻"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 248,
+              "line_end": 248,
+              "quote": "#attribute\t情報\t属性\t会議室@@会議室ID、会議室名、所在地、収容人数、設備、利用開始時刻、利用終了時刻"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 286,
+              "line_end": 286,
+              "quote": "会議室管理\t会議室\t会議室ID、会議室名、所在地、収容人数、設備、利用開始時刻、利用終了時刻"
+            }
+          ],
+          "explicit_unknowns": [],
+          "ambiguities": [
+            "属性列挙はデータ型や必須性を示さない。"
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "P002-review.json",
+          "canonical_id": "F24",
+          "local_meaning": "予約管理の情報「予約」の属性として、予約ID、会議室ID、社員ID、利用開始日時、利用終了日時、予約日時、取消日時が列挙される。社員による会議室と時間帯の予約を記録する情報である。",
+          "local_modality": "asserted",
+          "scope": "「予約」の属性欄と情報・属性の対応表に限る。取消日時の未取消時の扱い、各属性の必須性、型、値域、採番・入力方法はここでは定義されていない。",
+          "evidence": [
+            {
+              "packet_id": "P002",
+              "line_start": 138,
+              "line_end": 138,
+              "quote": "予約管理\t予約\t予約ID、会議室ID、社員ID、利用開始日時、利用終了日時、予約日時、取消日時\t社員\t予約状態、会議室利用状態\t予約状態\t社員による会議室と時間帯の予約を記録する。"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 248,
+              "line_end": 248,
+              "quote": "予約@@予約ID、会議室ID、社員ID、利用開始日時、利用終了日時、予約日時、取消日時"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 287,
+              "line_end": 287,
+              "quote": "予約管理\t予約\t予約ID、会議室ID、社員ID、利用開始日時、利用終了日時、予約日時、取消日時"
+            }
+          ],
+          "explicit_unknowns": [],
+          "ambiguities": [
+            "取消日時が予約成立時にも値を持つかは属性列挙からは決まらない。"
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "P002-review.json",
+          "canonical_id": "F25",
+          "local_meaning": "社員管理の情報「社員」に社員ID、氏名、所属、連絡先が属性として列挙され、会議室を検索・予約し、自身の予約を変更・取消する社員を識別するためのマスター情報と説明される。",
+          "local_modality": "asserted",
+          "scope": "「社員」の属性と識別用途の説明に限る。所属や連絡先の形式、入力元、更新者、必須性はここでは定義されていない。",
+          "evidence": [
+            {
+              "packet_id": "P002",
+              "line_start": 136,
+              "line_end": 136,
+              "quote": "コンテキスト\t情報\t属性\t関連情報\t状態モデル\tバリエーション\t説明"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 139,
+              "line_end": 139,
+              "quote": "社員管理\t社員\t社員ID、氏名、所属、連絡先\t\t\t\t会議室を検索・予約し、自身の予約時間を変更または取り消す社員を識別するためのマスター情報。"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 248,
+              "line_end": 248,
+              "quote": "社員@@社員ID、氏名、所属、連絡先"
+            },
+            {
+              "packet_id": "P002",
+              "line_start": 288,
+              "line_end": 288,
+              "quote": "社員管理\t社員\t社員ID、氏名、所属、連絡先"
+            }
+          ],
+          "explicit_unknowns": [],
+          "ambiguities": [
+            "「連絡先」の媒体や「所属」の粒度は属性列挙からは決まらない。"
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P002-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F23-F25の原文は属性欄で局所的に断定形の列挙を行い、sourceにない属性の追加として記録できる。一方でデータ型・必須性や実装拘束の程度は書かれず、必須実装要件への昇格までは確定できない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P002-review.json",
+            "canonical_id": "F23"
+          },
+          {
+            "review_file": "P002-review.json",
+            "canonical_id": "F24"
+          },
+          {
+            "review_file": "P002-review.json",
+            "canonical_id": "F25"
+          }
+        ],
+        "affected_metrics": [
+          "unsupported_additions"
+        ]
+      },
+      "raw_audit_status": "quote_mechanically_validated"
+    },
+    {
+      "claim_id": "attempt-001-P043-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P043",
+      "claim": "P043 F22の「未決列挙なし」は受領H043の要約表現。元原文を要する場合は別途確認。",
+      "audit_target_ids": [
+        "F22"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P043-review.json",
+          "canonical_id": "F22",
+          "local_meaning": "この要約資料では「未決」と明示して列挙した項目はないと述べ、後続の規則・解釈が定義されていない事項を実装者が独自に業務ルールとして確定しないよう求めている。後続の箇条書きに未定義の例が示される。",
+          "local_modality": "asserted",
+          "scope": "P043の「明示された未決事項・まだ確定してはいけない事項」節における、資料の記載状況と実装者への扱いの指示。全体のdraft表記はこの匿名packet内では確認できず、確定した業務規則の宣言に拡張しない。",
+          "evidence": [
+            {
+              "packet_id": "P043",
+              "line_start": 13,
+              "line_end": 13,
+              "quote": "# 明示された未決事項・まだ確定してはいけない事項"
+            },
+            {
+              "packet_id": "P043",
+              "line_start": 15,
+              "line_end": 15,
+              "quote": "**「未決」と明示して列挙された項目はありません。** 以下は資料で規則・解釈が定義されていない事項であり、実装者が独自に業務ルールとして確定してはいけません。"
+            },
+            {
+              "packet_id": "P043",
+              "line_start": 17,
+              "line_end": 17,
+              "quote": "これらの詳細は書かれていない。"
+            },
+            {
+              "packet_id": "P043",
+              "line_start": 20,
+              "line_end": 20,
+              "quote": "これを禁止という追加ルールに読み替えず、未定義のまま扱う。"
+            }
+          ],
+          "explicit_unknowns": [
+            "列挙された未定義事項の具体的な判定・許否は本文で未定義のまま。",
+            "資料全体のdraft状態はこの匿名packet中に明記されていない。",
+            "このメタ記述が受領handoffまたは対応Stage2のどの原文から導かれたかは確認できない。"
+          ],
+          "ambiguities": [
+            "「未決」と明示していないことは、後続箇条書きに挙がる未定義事項が解決済みであることを意味しない。"
+          ],
+          "handoff_visibility": "neither",
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P043-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F22の局所原文は「未決」と明示列挙した項目なしと述べ、未定義事項の独自確定を禁じる。受領H043自体には同時要求の未決が明記されないが、P043のメタ記述がどの原文範囲を指すかは一意に確定しない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P043-review.json",
+            "canonical_id": "F22"
+          }
+        ],
+        "affected_metrics": [
+          "unresolved_leakage",
+          "probe_inventions"
+        ]
+      },
+      "raw_audit_status": "quote_mechanically_validated"
+    },
+    {
+      "claim_id": "attempt-001-P044-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P044",
+      "claim": "F22の未決についてanswer_facts_preservedの同時要求項目はstage3では適用外として空にした。",
+      "audit_target_ids": [
+        "F22"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P044-review.json",
+          "canonical_id": "F22",
+          "local_meaning": "同時要求に対する保証と処理順序は未決である。競合時の成立優先順位、排他方式、再試行は確定済みの業務ルールとして扱わない、という局所的な未決事項。",
+          "local_modality": "unresolved",
+          "scope": "会議室予約の同時要求に関する保証・処理順序と、競合時の成立優先順位、排他方式、再試行。単一要求時の予約可否条件や一般的な時間帯重複禁止の確定内容まで未決とする記述ではない。",
+          "evidence": [
+            {
+              "packet_id": "P044",
+              "line_start": 11,
+              "line_end": 13,
+              "quote": "## 明示された未決事項・まだ決めてはいけない事項\n\n- 同時要求に対する保証と処理順序は明示的に未決である。競合時の成立優先順位、排他方式、再試行などを確定済みの業務ルールとして扱わない。"
+            },
+            {
+              "packet_id": "P044",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "## 確認済みの期待結果"
+            },
+            {
+              "packet_id": "P044",
+              "line_start": 5,
+              "line_end": 5,
+              "quote": "利用停止中、または他の有効な予約と時間帯が重なる場合は予約できず、理由を示す。条件を満たす場合は予約が成立し、結果と内容を示す。"
+            }
+          ],
+          "explicit_unknowns": [
+            "同時要求に対する保証と処理順序",
+            "競合時の成立優先順位、排他方式、再試行の確定ルール"
+          ],
+          "ambiguities": [
+            "P044には全体をdraftとする表記が見当たらない。確認済みの期待結果という見出しと、F22の明示的な未決は局所的に別扱い。",
+            "実際のhandoffは保証と処理順序の未決まで明記し、成立優先順位・排他方式・再試行の各語はその引用箇所にはない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "592d2042f8383fc87c9defbcec7b35584dfaf81cce1bfb5428a3f137f5929145",
+              "input_kind": "actual_handoff",
+              "packet_id": "P022",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "予約可能な会議室と時間帯の予約を成立させる。同時要求の保証と処理順序は未決とする。"
+            },
+            {
+              "source_file": "P022-packet.md",
+              "input_sha256": "7a42612781a41d9afc7305d9dd3582d5a6d9faf3327d5b5b01789a2ddc046263",
+              "input_kind": "full_stage2",
+              "packet_id": "P022",
+              "line_start": 21,
+              "line_end": 21,
+              "quote": "社員の選んだ会議室と時間帯について、利用停止中でなく既存予約と時間が重複しない場合に予約を登録する。取消済み予約の時間帯は再予約できる。同時要求の保証と処理順序は未決とする。"
+            }
+          ]
+        }
+      ],
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P044-1",
+        "status": "resolved",
+        "judgment": "F22は同時要求の保証・順序を未決と明示し、受領handoffにも未決の対応記述がある。Stage3のanswer_facts_preservedは適用外で空とし、未決伝達をnotesで扱う。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P044-review.json",
+            "canonical_id": "F22"
+          }
+        ],
+        "affected_metrics": [
+          "answer_facts_preserved",
+          "unresolved_leakage"
+        ]
+      },
+      "raw_audit_status": "quote_mechanically_validated"
+    }
+  ],
+  "policy": "Initial and subsequent uncertainty remains pending until quote audit and evaluator resolution; judge replacement alone does not clear flags.",
+  "mechanical_audit_ledger_updated_at": "2026-10-02T10:15:02.254679+00:00",
+  "final_resolution_mechanical_transfer_at": "2026-10-02T10:20:56.456239+00:00",
+  "latest_flags": [
+    {
+      "packet_id": "P002",
+      "flag_index": 0,
+      "flag": "F23-F25の属性列挙は局所的にassertedだが必須実装項目への昇格範囲はartifact_ambiguous。"
+    },
+    {
+      "packet_id": "P006",
+      "flag_index": 0,
+      "flag": "F15の再利用に即時性はなく、取消後再利用の確定は認める一方、直ちに再利用という別命題は採点しない。"
+    },
+    {
+      "packet_id": "P026",
+      "flag_index": 0,
+      "flag": "Q7は新規予約と時間変更を一文で問うが、両方の扱いを明記し回答によって別々の可否が変わる。詳細条件の不足は残る。"
+    },
+    {
+      "packet_id": "P043",
+      "flag_index": 0,
+      "flag": "F22の「未決」列挙なしは受領H043に未決の明記がない事実と整合するが、P043本文の局所的なメタ記述であり、対応原文の見え方は限定的。"
+    }
+  ],
+  "raw_flag_dispositions": [
+    {
+      "packet_id": "P002",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P002-1"
+      ],
+      "disposition": "artifact_ambiguous",
+      "affected_metrics": [
+        "unsupported_additions"
+      ],
+      "judgment": "F23-F25の属性は局所的な断定形の追加として採点済み。必須実装項目へどこまで昇格するかは原文だけで定まらないため、既存の曖昧さを維持する。"
+    },
+    {
+      "packet_id": "P006",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P006-1"
+      ],
+      "disposition": "resolved_context_note",
+      "affected_metrics": [
+        "unauthorized_decisions",
+        "unsupported_additions"
+      ],
+      "judgment": "F15は取消後の条件付き再予約可能性を確定しており、即時性は述べない。既存の先取り判断の採点範囲を示す文脈注記で、新たな未確認claimではない。"
+    },
+    {
+      "packet_id": "P026",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P026-1"
+      ],
+      "disposition": "resolved_context_note",
+      "affected_metrics": [
+        "actionable_unknown_ids"
+      ],
+      "judgment": "Q7は新規予約と時間変更を明示して別々の許否回答を導くため両unknownにactionableと判断済み。詳細条件が未指定という限定は残すが、同じactionabilityの新しい未確認claimではない。"
+    },
+    {
+      "packet_id": "P043",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P043-1"
+      ],
+      "disposition": "artifact_ambiguous",
+      "affected_metrics": [
+        "unresolved_leakage",
+        "probe_inventions"
+      ],
+      "judgment": "F22の未決列挙なしは受領H043に未決明記がないことと整合する一方、そのメタ記述の原文参照範囲は一意に定まらない。既存の曖昧さを維持する。"
+    }
+  ],
+  "raw_flag_dispositions_mechanical_transfer_at": "2026-10-02T10:22:24.467351+00:00"
+}

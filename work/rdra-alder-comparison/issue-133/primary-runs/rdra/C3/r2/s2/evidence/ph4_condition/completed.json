@@ -1,0 +1,109 @@
+{
+  "attempt": 1,
+  "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.",
+  "envelope_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/envelope.txt",
+  "envelope_sha256": "bd2234717bf552ed749b71cf2766cb2a652070b63076fbd1fc961b6c5fb9b7c3",
+  "spawn_message_sha256": "21e0e52719f2898f42748e4cf18ccdb7cb8e8101ea2460439d95f4478a387734",
+  "node": "ph4_condition",
+  "status": "complete",
+  "prepared": "2026-10-02T09:21:33.899626+00:00",
+  "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root",
+  "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition",
+  "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+  "prompt_sha256": "8bfb0848148414508c23bfb13d60418e5fddbbc882355c93cbf343928f31e1b1",
+  "prompt_source_url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+  "envelope": "Execute the exact original official Prompt at /workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md. Cwd/project root: /workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root. Read the Prompt and AGENTS.md verbatim first. Read allowlist within root: AGENTS.md, this Prompt only, 0_RDRAZeroOne/phase3/ph3BUC.tsv, 0_RDRAZeroOne/phase3/ph3バリエーション.tsv, RDRA_Knowledge/.rdracore/{RDRA.md,RDRASheet.md,RDRAGraph.md}, RDRA_Knowledge/_1_RDRA/RDRA.md (byte-identical alias). No reads outside this allowlist, other prompts, samples, parent directories, conversations, oracle, arms or runs. Write only 0_RDRAZeroOne/phase4/ph4条件.tsv, by hand; never generate a program for AI outputs. You may read your own output. Do not alter inputs/Prompt/Knowledge. Evidence-only writes additionally permitted: /workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/read-log.json (every exact file path read, in read order) and metadata.json in that same evidence directory (start/end UTC, failures, unmet restrictions). Official Prompt determines the work. Preserve failures explicitly; final response may be brief or empty.",
+  "inputs": {
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv": "cb97fe39a492dda3a51d2c6a5cd1b04878469e4424eb7aa7d5ed3ea58036667c",
+    "0_RDRAZeroOne/phase3/ph3バリエーション.tsv": "4f37f7317d65417d2a54c97c12d64fc7f69992177f94eb9784a594a92a593da3"
+  },
+  "outputs": [
+    "0_RDRAZeroOne/phase4/ph4条件.tsv"
+  ],
+  "read_allowlist": [
+    "AGENTS.md",
+    "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+    "RDRA_Knowledge/.rdracore/RDRA.md",
+    "RDRA_Knowledge/.rdracore/RDRASheet.md",
+    "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+    "RDRA_Knowledge/_1_RDRA/RDRA.md",
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+    "0_RDRAZeroOne/phase3/ph3バリエーション.tsv"
+  ],
+  "alias": {
+    "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+    "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+    "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+    "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+  },
+  "source_hashes": {
+    "AGENTS.md": "3a74bc59a818563713538f4c940aea77009d076e5c6932d0cee2315c91e7e84a",
+    "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md": "8bfb0848148414508c23bfb13d60418e5fddbbc882355c93cbf343928f31e1b1",
+    "RDRA_Knowledge/.rdracore/RDRA.md": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+    "RDRA_Knowledge/.rdracore/RDRASheet.md": "94774bd075d94462e0f87a5e7b21e344c17ba6283148c592bea505427bf2ef6b",
+    "RDRA_Knowledge/.rdracore/RDRAGraph.md": "6088d05945767b0d62108b93a18d514add02ce2eaebf958d3f34f3a9bba9c834",
+    "RDRA_Knowledge/_1_RDRA/RDRA.md": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+  },
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "agent_id": "/root/rdra_primary/c3r2s2_condition4",
+  "started": "2026-10-02T09:21:55.996802+00:00",
+  "ended": "2026-10-02T09:23:24.058034+00:00",
+  "raw_final_response": "",
+  "artifact_hashes": {
+    "0_RDRAZeroOne/phase4/ph4条件.tsv": "3357f3a3bf1f2c9c3d008b352891045cc985c33321ff078e83ba8230af281788"
+  },
+  "agent_metadata": {
+    "start_utc": null,
+    "end_utc": "2026-10-02T09:22:59Z",
+    "failures": [
+      "The first output write failed because the phase4 directory did not exist; the directory was created and the write retried successfully.",
+      "Start UTC was not captured at task entry."
+    ],
+    "unmet_restrictions": [
+      "Exact start UTC unavailable in metadata."
+    ]
+  },
+  "read_log": [
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/envelope.txt",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/AGENTS.md",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase4/ph4条件.tsv"
+  ],
+  "unchanged_input_hashes": {
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv": true,
+    "0_RDRAZeroOne/phase3/ph3バリエーション.tsv": true
+  },
+  "unchanged_official_hashes": {
+    "AGENTS.md": true,
+    "RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md": true,
+    "RDRA_Knowledge/.rdracore/RDRA.md": true,
+    "RDRA_Knowledge/.rdracore/RDRASheet.md": true,
+    "RDRA_Knowledge/.rdracore/RDRAGraph.md": true,
+    "RDRA_Knowledge/_1_RDRA/RDRA.md": true
+  },
+  "unchanged_prompt_hash": true,
+  "allowed_evidence_read_paths": [
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/envelope.txt"
+  ],
+  "read_log_validity": {
+    "prompt_read": true,
+    "outside_allowlist": [],
+    "reported_paths": [
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/ph4_condition/envelope.txt",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/AGENTS.md",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+      "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_condition/root/0_RDRAZeroOne/phase4/ph4条件.tsv"
+    ]
+  },
+  "missing_outputs": []
+}

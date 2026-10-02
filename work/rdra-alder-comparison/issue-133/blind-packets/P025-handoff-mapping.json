@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C1/r1/s2/docs/business-design/design.md",
+    "sha256": "08fc244704de0950c4988a5bfe04de869fcfb7e473d29dca87a50586d68ac338",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C1/r1/s2/raw-response.md",
+    "sha256": "4f7535c14381a5d4b482853e0fe86da26ad1e6968970897909c29489553d7227",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "草案を [design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/docs/business-design/design.md) に作成しました。ヒアリング結果と固定Human answerを使用し、Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a` に従っています。確認待ちは担当者の責任範囲です。貸出許否の条件は固定回答で確定しています。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

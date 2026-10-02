@@ -1,0 +1,164 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv",
+    "sha256": "5d1321beee940c54ef5adc82fbe239c2688265381685da032b374896cad1fb61",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv",
+    "sha256": "9def600d32b803aae33d61570d944d61d12b12634ec31f973ac2312b62c10e7e",
+    "anonymization": []
+  },
+  {
+    "artifact": "003",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase1/ph1業務.tsv",
+    "sha256": "09b9f6e022fbeffefefd2c32357bb15d000fd732e1a8749d7f93d9d777fb8c36",
+    "anonymization": []
+  },
+  {
+    "artifact": "004",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase1/ph1要求.tsv",
+    "sha256": "ad8256dd02e5479518e3e9e94ba02a4d42cece05833fdc4c0505312705469cea",
+    "anonymization": []
+  },
+  {
+    "artifact": "005",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase1/システム概要.json",
+    "sha256": "12f96520dd74c36a7fe46df76da40ae7eff6e0033fade9e2b75b2ea03b7fea6b",
+    "anonymization": []
+  },
+  {
+    "artifact": "006",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase2/ph2アクティビティ.tsv",
+    "sha256": "7c1f23c102208a696b1c4c673ecb8742005c5ae8f6e1f758c81bb3a1e575d7c0",
+    "anonymization": []
+  },
+  {
+    "artifact": "007",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase2/ph2条件.tsv",
+    "sha256": "6873d58cc801dd5d2a00f1933cfa7e5176983be40d506b771efb7173f4285374",
+    "anonymization": []
+  },
+  {
+    "artifact": "008",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase2/ph2状態.tsv",
+    "sha256": "d414d417233027e6e18ccd5c803632ec40c9a1244c37ea30c0fb495e95b8e439",
+    "anonymization": []
+  },
+  {
+    "artifact": "009",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+    "sha256": "722b4a1ef2cc1438e65eb5a0fbd33e412c5d12a94c1162d9b2e0d3798bbcb753",
+    "anonymization": []
+  },
+  {
+    "artifact": "010",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+    "sha256": "f4256d130322228d4eff4d0914c61c668b588425a3ce07963816649927b50150",
+    "anonymization": []
+  },
+  {
+    "artifact": "011",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4UCアクター.tsv",
+    "sha256": "68ce52049172797533b5e54438920496b6669d5af420633486704f27aaaf3735",
+    "anonymization": []
+  },
+  {
+    "artifact": "012",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4UCタイマー.tsv",
+    "sha256": "c76856376b41ac324eb850487f2a2e5af3989f8cb23227351fbd4a235482a0cd",
+    "anonymization": []
+  },
+  {
+    "artifact": "013",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4UC外部システム.tsv",
+    "sha256": "75128644b59a9dfd8a99f9335d5f90952cbfd011b4d7ca2d0c002838860099b4",
+    "anonymization": []
+  },
+  {
+    "artifact": "014",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4アクター.tsv",
+    "sha256": "80087e1cc01f5b54d3ee3ca2fb38cc1c9930d4b6a83113dd727e33339a1a638d",
+    "anonymization": []
+  },
+  {
+    "artifact": "015",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4外部システム.tsv",
+    "sha256": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293",
+    "anonymization": []
+  },
+  {
+    "artifact": "016",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4情報.tsv",
+    "sha256": "336861ee576902933be9f416eb8043ff1e4bead0f19a80dbee3d830b4f9f7250",
+    "anonymization": []
+  },
+  {
+    "artifact": "017",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4条件.tsv",
+    "sha256": "edbdabf18731d27b36e723ccca47325777983da5f68623243df1ac7e0003b2db",
+    "anonymization": []
+  },
+  {
+    "artifact": "018",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/0_RDRAZeroOne/phase4/ph4状態.tsv",
+    "sha256": "f715535b6ea4d99c1b1b625d171918d93cffde33c8b22e10d87235ba7aef2e89",
+    "anonymization": []
+  },
+  {
+    "artifact": "019",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/BUC.tsv",
+    "sha256": "d204819f6796acdb15be3db292364a7ef4cb23c6cc52e5bfad35967bb564bb61",
+    "anonymization": []
+  },
+  {
+    "artifact": "020",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/if/関連データ.txt",
+    "sha256": "ce072386392c6a1f57bacdc40f158097b62aa6d6a9d312168c4b0938d2ded4be",
+    "anonymization": []
+  },
+  {
+    "artifact": "021",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/アクター.tsv",
+    "sha256": "80087e1cc01f5b54d3ee3ca2fb38cc1c9930d4b6a83113dd727e33339a1a638d",
+    "anonymization": []
+  },
+  {
+    "artifact": "022",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/システム概要.json",
+    "sha256": "12f96520dd74c36a7fe46df76da40ae7eff6e0033fade9e2b75b2ea03b7fea6b",
+    "anonymization": []
+  },
+  {
+    "artifact": "023",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/バリエーション.tsv",
+    "sha256": "8b4fc88e3b65e0051683443863bdf0f9d6f585856df88d798ee04cc7b54536af",
+    "anonymization": []
+  },
+  {
+    "artifact": "024",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/外部システム.tsv",
+    "sha256": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293",
+    "anonymization": []
+  },
+  {
+    "artifact": "025",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/情報.tsv",
+    "sha256": "336861ee576902933be9f416eb8043ff1e4bead0f19a80dbee3d830b4f9f7250",
+    "anonymization": []
+  },
+  {
+    "artifact": "026",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/条件.tsv",
+    "sha256": "54bcae46fe9a96a5ed0d3b4936e21c522e91e5c8696b5380d13865e437a4734a",
+    "anonymization": []
+  },
+  {
+    "artifact": "027",
+    "original_path": "primary-runs/rdra/C2/r2/s2/project/1_RDRA/状態.tsv",
+    "sha256": "0554f22bc6ee30c6ef00e8da6f09ee5c439a9e69d27bfa022ef91b40cb6a2ac1",
+    "anonymization": []
+  }
+]

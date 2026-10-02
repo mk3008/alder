@@ -1,0 +1,54 @@
+{
+  "packet_id": "P019",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "started_at": "2026-10-02T07:53:00.153285+00:00",
+  "packet_sha256": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "4a6e94916541c6e7c06c556262bc48475500165ebdba3cc213a217089be8cc78",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P019/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P019/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "spawn_failure": {
+    "error": "agent thread limit reached",
+    "time": "2026-10-02T07:51:58.746299+00:00"
+  },
+  "agent_id": "/root/blind_observation/extract_p019",
+  "dispatch_prepared_at": "2026-10-02T07:51:49.116395+00:00",
+  "execution_retries": 0,
+  "dispatch_failures": 1,
+  "output_sha256": {
+    "canonical.json": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "raw-response.md": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "read-log.jsonl": "0fb9eda222765e0a765cdd5a28c2d7240ec01980f6658244e6f05e9df1caf66c"
+  },
+  "finished_at": "2026-10-02T07:57:06.180477+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.061244+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
+  }
+}

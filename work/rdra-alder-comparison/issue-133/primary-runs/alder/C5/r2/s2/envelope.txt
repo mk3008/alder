@@ -1,0 +1,5 @@
+このヒアリング結果をAlder業務設計書にしてください。source.txtと指定Authoring Skillを読み、そのSkillの正規手順で草案を作成してください。出力はdocs/business-design/design.md。任意のBusiness Graph exportは要求しません。実装、Check Item、Optimization reviewは行わないでください。
+
+Orchestration guard: 作業root=/workspace/scratch/62be7f260abb/primary-runs/alder/C5/r2/s2。Read allowlistはroot/source.txtとroot/method/alder-draft-business-design/{SKILL.md,references/adoption.md,references/business-graph.md,references/provenance.json}のみ。Skill参照もこのallowlist内だけを読む。探索禁止。他case、他arm、他run、過去replicate、Stage1 output、親会話、全Issue、oracle/rubric/cases.json、metadata.jsonを読まない。
+Metadata: requested gpt-6-sol/medium/fork_turns none; plugin 0.2.8; baseline eb591bfbc1b077b0e93d62253cb1e7f3e392e462; authoring provenance e9726b4c84608db42c5286d072b5ec762d31596a; freeze b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95。共有FSはsecurity sandboxではなくmodel/effort独立attestation不能。
+各read前に絶対pathと時刻をroot/read-log.jsonlへ記録。指定artifactに草案を保存。root/raw-response.mdに最終回答全文を省略・要約せず保存し、最終回答にも同じ全文（草案全文を含む）を返す。書込みはroot内artifact/read-log/raw-responseのみ。Library保存/GitHub書込みはしない。質問が必要ならSkillに従い草案に残す。

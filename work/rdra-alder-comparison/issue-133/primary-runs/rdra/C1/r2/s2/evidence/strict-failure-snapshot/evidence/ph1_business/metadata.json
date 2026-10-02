@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:14:00Z",
+  "start_utc_precision": "approximate; initial timestamp not captured",
+  "end_utc": "2026-10-02T08:15:45Z",
+  "failures": ["Initial write failed because the output directory did not exist; created the directory and successfully wrote the TSV."],
+  "unmet_restrictions": []
+}

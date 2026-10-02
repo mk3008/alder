@@ -1,0 +1,45 @@
+{
+  "packet_id": "P045",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:59:28.235988+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P045-packet.md": "79596ce45c6dbbb5e60ba1bf9291a40e78da629fe567a0332f754d2e5a8325d4",
+    "P045-canonical.json": "54d178adf25afe70db2c3f98b98a73db418d9c7280fbee7b650c144a3ac6f271",
+    "P049-packet.md": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+    "P049-canonical.json": "4870377c120c94f9b36ba3303600f4df922461f885ba1cc47b8e446a5a6522ba",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "46b22b320c4054686ab45e25672cdc5a256197fa8ab1a3b13682ecbf50f6d6c6",
+    "received-upstream-packet.md": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f"
+  },
+  "envelope_sha256": "0bdf74eeea4c0166f998d6581372ec13cdf523dbec39e83e0a34750212473dc1",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/P045-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/P045-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/P049-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/P049-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/review-targets.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P045/received-upstream-packet.md"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p045",
+  "started_at": "2026-10-02T11:00:27.260568+00:00",
+  "finished_at": "2026-10-02T11:01:47.289371+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "647cf0a488e8bb5d7ec7fcc6029266191572efde9a079a7782224da7d783b8de",
+    "raw-response.md": "647cf0a488e8bb5d7ec7fcc6029266191572efde9a079a7782224da7d783b8de",
+    "read-log.jsonl": "f6d4c585ab8b2ae00147ec71e89fc4f935739f87eb7c4e99a2127bb6c2370d0e"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T11:01:47.356985+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths; no independent attestation"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "case_id": "C4",
+  "status": "success",
+  "attempt_number": 2,
+  "started_at": "2026-10-02T10:58:05.002462+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "case-reference.json": "c094b1ece626886687e2cd19482a1d5f78875d8d0f0c43409e87bcd035db4f96",
+    "downstream-subset.json": "4f9580e0639f17b6d1da6580cd2e000de9cd99fe6eb53b2a9d88666c3198ddf1",
+    "rubric.md": "95db0ccf3739bda00d588c8c6e1532625453d552354aeebb0190a7ced0c33080",
+    "evaluation-prompt.txt": "5b5373348e57cdc5e59f16158948064ac1b6bc4df1aa657a13383e5bcca858a7",
+    "packet-index.json": "bb09e83cc0aa50e9111b246545bfb346adf09811f607a289c72b33334ba2056c",
+    "P001.json": "27a52be3e39398841c353c4b0a2c7d5bf8f732049af160363d5cdfb68263d1da",
+    "P008.json": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "P011.json": "895d68fa5a096f551713bb915a7126b6694c9a2b65afc290780dbc5677c4a642",
+    "P015.json": "1ff4870ed8262350f3357327ed73df2fd9e306e52e788cf81b728972f42926f1",
+    "P016.json": "74c1ee00669c25b50cf9cc0c924c28aef90ecd784f501bd69e17aa69da5b8cf7",
+    "P030.json": "53f9a6109fe6a3b3cb9a1aa4d6d02f18f6c0cf17cb4636189a049e1d74668287",
+    "P047.json": "42d8b9b7ed24512f4c88a47fbc496599b676f2671a283357eaee521bd0da88eb",
+    "P050.json": "46dbd8a902e13ccaeefcddf0cc58022fe755de14cb6124220879527c5759bc85",
+    "P052.json": "095ad9c6c4bbebb946738a10adb58a015a8295da0a92747ba6dcd5b90c80653c",
+    "P053.json": "6da9060486492b87147ab97ea7a4b2c2ec8efc0b546c51e81ecc11a59c6e76c7",
+    "P054.json": "b32035ba3cddff4cd5b96cb694adb9f5629af49315b43f470546bac029fe16ab",
+    "P056.json": "59dcdb08b7515f2c4e9fc6e3628c28698444844f5f084354e689fe90810f45af",
+    "H050.json": "8ad012dd06e10cf28c00e20f6a0ed0895be61b1f7a9a47d5a1a1ffdbb293babf",
+    "H054.json": "5ff96ab3774e26c8304346a95b7da9ff1882cb49bbbc73dd1fcdc9b329bdf7e1",
+    "received-handoff-index.json": "2699250c0e08f4164ec251c55677222bad0d0f8661ca6a82ac400b1a86bcf268",
+    "raw-check-requests.json": "f8849289fb936918d85ef6ba8280894e447fbb22d4ba62641e096048d534e7d8",
+    "P008-review.json": "4c5e0685d8a37f68ccaefc51c301d3a74315ee974a6827df20e1c644e18a036a",
+    "P016-review.json": "944758d5258a6a745c5c150c076ce82825e51f899cd37019625325236b5e5cc3",
+    "P030-review.json": "e80a1da95af66c506736813d1d355ea696063a2cf04f803074ee8414cd365eed",
+    "P050-review.json": "8c8d5e309951cbce19190aab8d6b0052a4f2ecc9ea21971ec09ad3565fb0dd36",
+    "P054-review.json": "8beeb9fa7d78eda6afcecd7da5f15b7321894c3721601ebd42e1d488bcd17d8d",
+    "P056-review.json": "db255ea6d63b641d0873beca90e254b58b017879d804b7fd744b6c4911e6b6da",
+    "extraction-limits.json": "2590b40cca7e5e6f9aec7032e999fd679ee9e2cc5774f882610c9d7627f67860"
+  },
+  "envelope_sha256": "2c34d268d15874e5fd90d25126f96c7f0ecabfa98f4b51297915a10668d988a9",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/case-reference.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/downstream-subset.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/rubric.md",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/evaluation-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/packet-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P001.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P008.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P011.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P015.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P016.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P030.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P047.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P050.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P052.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P053.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P054.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P056.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/H050.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/H054.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/received-handoff-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/raw-check-requests.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P008-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P016-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P030-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P050-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P054-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/P056-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C4/extraction-limits.json"
+  ],
+  "limitations": [
+    "Single blind; format may disclose arm. Shared filesystem procedural isolation only. Requested runtime lacks independent attestation."
+  ],
+  "final_contextual_score": true,
+  "original_attempts": [
+    "attempt-001"
+  ],
+  "operator_preserved_extraction_limit_at": "2026-10-02T10:57:36.047893+00:00",
+  "agent_id": "/root/blind_observation/score_c4_final",
+  "prepared_at": "2026-10-02T10:57:29.744851+00:00",
+  "needs_raw_check_summary": [
+    {
+      "packet_id": "P008",
+      "count": 1
+    },
+    {
+      "packet_id": "P016",
+      "count": 1
+    },
+    {
+      "packet_id": "P030",
+      "count": 1
+    },
+    {
+      "packet_id": "P050",
+      "count": 1
+    },
+    {
+      "packet_id": "P054",
+      "count": 1
+    },
+    {
+      "packet_id": "P056",
+      "count": 1
+    }
+  ],
+  "finished_at": "2026-10-02T11:01:15.885470+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "scores.json": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c",
+    "raw-response.md": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c",
+    "read-log.jsonl": "871d2ec0f81528590be24f3e0773aeca9a76c9d24a50ef56ff9100a09a850e13"
+  },
+  "raw_flag_followup": {
+    "prepared_at": "2026-10-02T11:01:26.385377+00:00",
+    "original_output_sha256": {
+      "scores.json": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c",
+      "raw-response.md": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c"
+    },
+    "additional_model_turn": 1,
+    "new_fresh_generation_count_increment": 0,
+    "status": "success",
+    "finished_at": "2026-10-02T11:02:20.522696+00:00",
+    "mechanical_errors": [],
+    "output_sha256": {
+      "raw-flag-dispositions.json": "32a40dd22ae09180b7ec59be408b6346224c8eafd673d39bc2ff1ca905f71fb8",
+      "raw-flag-response.md": "32a40dd22ae09180b7ec59be408b6346224c8eafd673d39bc2ff1ca905f71fb8",
+      "raw-flag-read-log.jsonl": "40fc4c20c9a2c997fce513bff883c45b2582c6006649a6bd616f9031b6180dd8"
+    },
+    "read_compliance_audit": {
+      "checked_at": "2026-10-02T11:02:49.374820+00:00",
+      "declared_outside_read_attempts": [],
+      "basis": "Actual followup final and logged paths only; no independent attestation"
+    }
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T11:01:26.385377+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths; no independent attestation"
+  }
+}

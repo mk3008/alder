@@ -1,0 +1,9 @@
+{
+  "start_utc": "2026-10-02T10:05:37Z",
+  "end_utc": "2026-10-02T10:06:01Z",
+  "failures": [
+    "Attempted to read 0_RDRAZeroOne/phase4/ph4状態生成.md; file did not exist. Then read the official Prompt at the path specified by the envelope.",
+    "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist. Created the directory and wrote the requested TSV."
+  ],
+  "unmet_restrictions": []
+}

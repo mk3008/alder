@@ -1,0 +1,40 @@
+{
+  "packet_id": "P007",
+  "status": "success",
+  "started_at": "2026-10-02T07:55:23.527014+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "packet_sha256": "f2d9765faf7178528a9ff8703b0cab7102f0ec1034e3a447147b7e0ac9ecf9d4",
+  "prompt_sha256": "3caee12c4268e65df5e14db1b5464c33f4b5f3c5fa781438d326efae1f2dc857",
+  "envelope_sha256": "6c67677d1f2ebd4f3c22697b20f23f7578a54b45c8e8633ea9ae1fa64059d0b3",
+  "observation_protocol_sha256": "d0ebef8842ad1a7eed8b01798f81f442f1854a68f916b8367e17531bfee61ada",
+  "observation_frozen_before_first_probe": true,
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-probes/P007/packet.md",
+    "/workspace/scratch/62be7f260abb/blind-probes/P007/downstream-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural read allowlist, not security isolation. Format may disclose method; single blind. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/p007_probe",
+  "finished_at": "2026-10-02T07:56:49.252664+00:00",
+  "output_sha256": {
+    "raw-response.md": "015262690a9748e58e7d29d31dfd64323cca8a45a0a98ab0e1021f1abbd10f06",
+    "read-log.jsonl": "03ce8031c01d2f23c87981004eb878f8860deb84a3ddc5385007d82d64aab74b"
+  },
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.061843+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "upstream_strict_eligible": true,
+  "upstream_source_clean_exploratory_eligible": true,
+  "upstream_classification_recorded_at": "2026-10-02T08:22:00.290053+00:00"
+}

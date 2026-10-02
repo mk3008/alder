@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C2/r1/s1/docs/business-design/design.md",
+    "sha256": "62daee92c81ce15fa6c3b6531b600b3ae33a7c7d4eeb161a37bf09c5da4f51ed",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C2/r1/s1/raw-response.md",
+    "sha256": "575c35d4d290044c8c82d5b4839b2530732b6a3bd81e74dac476f6081e80e69e",
+    "anonymization": [
+      {
+        "line": 294,
+        "original": "保存先: `docs/business-design/design.md`。使用資料: `source.txt`。Alder plugin 0.2.8、Authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`（指定された移動中checkoutのsource commitは不明）。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

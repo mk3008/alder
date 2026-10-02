@@ -1,0 +1,80 @@
+{
+  "alder": {
+    "success": 20
+  },
+  "rdra": {
+    "protocol_failed": 4,
+    "running": 1,
+    "pending": 15
+  },
+  "rdra_stage3": {
+    "prepared": 1,
+    "unavailable_upstream_protocol_failed": 1
+  },
+  "rdra_nodes": {
+    "complete": 66,
+    "failed": 1,
+    "protocol_failed": 1,
+    "running": 3
+  },
+  "reported_strict_guard_deviations": [
+    {
+      "run": "primary-runs/alder/C2/r2/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r2/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C5/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    }
+  ],
+  "issues": [
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "node": "ph4_info",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+      ]
+    }
+  ],
+  "limits": [
+    "Requested settings and self-reported read-log are not independent attestation."
+  ]
+}

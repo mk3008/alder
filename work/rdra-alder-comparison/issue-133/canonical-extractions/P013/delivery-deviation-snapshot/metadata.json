@@ -1,0 +1,51 @@
+{
+  "packet_id": "P013",
+  "status": "delivery_deviation_pending_operator_policy",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:04:23.762491+00:00",
+  "packet_sha256": "b520a61039e3a253a591a89088d3df65e7a7421761d3faff702514c6b63f0c22",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "d374ea6c4a2abf8bc6c56438a159c40618898c7be74d4e93ed4f715e62664a0f",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P013/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P013/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p013",
+  "prepared_at": "2026-10-02T10:04:13.658688+00:00",
+  "output_return_followup": {
+    "prepared_at": "2026-10-02T10:07:56.372639+00:00",
+    "initial_actual_final_kind": "paths_summary",
+    "canonical_sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "raw_sha256": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "output_sha256": {
+    "canonical.json": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "raw-response.md": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "read-log.jsonl": "872c368ff9dbc464100f7b82228afd7bee6dae3bc92c9556577c5d1846d534b9"
+  },
+  "finished_at": "2026-10-02T10:08:36.913976+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T10:08:37.391243+00:00",
+    "final_json_payload_returned": false,
+    "original_payload_hashes_unchanged": true,
+    "actual_final_file": "actual-final-response-002.md",
+    "status": "output_delivery_deviation",
+    "reason": "Child claimed final output length limit and returned error summary; claim is not independently attested. Complete generated canonical/raw files structurally verified; no operator semantic replacement."
+  },
+  "canonical_quality_verification_status": "success"
+}

@@ -1,0 +1,49 @@
+{
+  "packet_id": "P060",
+  "status": "success",
+  "prepared_at": "2026-10-02T09:23:30.222189+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P060-packet.md": "ae684f429dea9b8eeb658472696e97377c69991975050a22583c6855869571f8",
+    "P060-canonical.json": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "P029-packet.md": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+    "P029-canonical.json": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "cc760d06e9c0bc46f577a6b1b6e8d9a1765203e498dd6b61819bd602eefaebfe",
+    "received-upstream-packet.md": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd"
+  },
+  "envelope_sha256": "260e1f74211dfe98dcf0a858e999bff844707043aa1f06b43de642c41e3a4d16",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/P060-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/P060-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/P029-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/P029-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/review-targets.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P060/received-upstream-packet.md"
+  ],
+  "operator_reason": "Preserve initial score raw-check independently of retry flags. No scoring/oracle provided.",
+  "targets_updated_before_spawn_at": "2026-10-02T09:26:38.227618+00:00",
+  "handoff_visibility_updated_before_spawn_at": "2026-10-02T09:29:06.413173+00:00",
+  "agent_id": "/root/blind_observation/raw_p060",
+  "started_at": "2026-10-02T09:32:13.527289+00:00",
+  "finished_at": "2026-10-02T09:33:51.389688+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05",
+    "raw-response.md": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05",
+    "read-log.jsonl": "a0952c1a5a971fee54d3779dffbfb695ff5f27b2a0a00d6663a755852eabfb6b"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:36:47.174399+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist check and received final declarations; shared filesystem has no independent enforcement/attestation"
+  }
+}

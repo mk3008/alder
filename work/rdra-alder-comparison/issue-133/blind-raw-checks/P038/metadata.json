@@ -1,0 +1,41 @@
+{
+  "packet_id": "P038",
+  "status": "success",
+  "prepared_at": "2026-10-02T09:23:30.220509+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P038-packet.md": "8764b9930224c5970045df3886a10c83118089c979a793cf135e4d850e49c3f4",
+    "P038-canonical.json": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "9bbb92831c5809767f621c1c6e947f858314d0bb75300ff36b94eeb7c3803e5d"
+  },
+  "envelope_sha256": "8eda54ff5cfc8f3a97044dd80fc5a44f1199aecf4aec30c336cbf6b6d8c6fa4e",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P038/P038-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P038/P038-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P038/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P038/review-targets.json"
+  ],
+  "operator_reason": "Preserve initial score raw-check independently of retry flags. No scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p038",
+  "started_at": "2026-10-02T09:27:16.036370+00:00",
+  "finished_at": "2026-10-02T09:28:19.151402+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "03ddfb87d4cbed18bc173f50c8349dc13e0ce17cae66718a4722a534254fea58",
+    "raw-response.md": "03ddfb87d4cbed18bc173f50c8349dc13e0ce17cae66718a4722a534254fea58",
+    "read-log.jsonl": "29d40a7b92b43fe27c52013c3e3605fe8f74a7597b71604030e49beb78e5aa52"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:36:47.174004+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist check and received final declarations; shared filesystem has no independent enforcement/attestation"
+  }
+}

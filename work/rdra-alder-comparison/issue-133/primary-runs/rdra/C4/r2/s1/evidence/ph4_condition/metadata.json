@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:41:11Z",
+  "end_utc": "2026-10-02T09:41:31Z",
+  "start_time_note": "Start timestamp was captured after the input reads and before output generation.",
+  "failures": ["Initial output write failed because phase4 directory was absent; created the directory and wrote successfully."],
+  "unmet_restrictions": []
+}

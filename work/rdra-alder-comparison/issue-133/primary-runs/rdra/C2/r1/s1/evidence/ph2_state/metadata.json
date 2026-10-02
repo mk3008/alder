@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T08:21:02Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase2 did not exist; created the directory and wrote the TSV successfully.", "Start UTC time was not captured at initiation."],
+  "unmet_restrictions": ["Exact start UTC timestamp unavailable."]
+}

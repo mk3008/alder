@@ -1,0 +1,1 @@
+{"case_id":"C1","scores_json":"/workspace/scratch/62be7f260abb/blind-evaluation/C1/scores.json","raw_response_md":"/workspace/scratch/62be7f260abb/blind-evaluation/C1/raw-response.md","read_log_jsonl":"/workspace/scratch/62be7f260abb/blind-evaluation/C1/read-log.jsonl","packet_count":12,"unavailable_packet_count":0}

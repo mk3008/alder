@@ -1,0 +1,39 @@
+{
+  "version": "pinned RDRAAgent 0.8",
+  "method": "official rdra-impact-analysis Skill followed by direct edits of existing artifacts; one update run, no official regeneration DAG",
+  "start_utc": "2026-10-02T13:22:07Z",
+  "end_utc": "2026-10-02T13:30:03Z",
+  "wall_clock_seconds_including_interruption": 476,
+  "interruption": "Usage-limit interruption followed by explicit user resumption of this same run; no fresh run or repeated completed output.",
+  "root": "/workspace/scratch/f694891aa357/change-run/rdra",
+  "read_log": "read-log.jsonl",
+  "read_artifact_paths": [
+    "AGENTS.md", ".claude/skills/rdra-impact-analysis/SKILL.md", "source-before.txt", "source-after.txt", "change.txt",
+    "RDRA_Knowledge/.rdracore/RDRA.md", "RDRA_Knowledge/.rdracore/RDRAGraph.md", "RDRA_Knowledge/.rdracore/RDRASheet.md", "RDRA_Knowledge/helper_tools/makeGraphData.js",
+    "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv", "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv", "0_RDRAZeroOne/phase1/ph1業務.tsv", "0_RDRAZeroOne/phase1/ph1要求.tsv", "0_RDRAZeroOne/phase1/システム概要.json",
+    "0_RDRAZeroOne/phase2/ph2アクティビティ.tsv", "0_RDRAZeroOne/phase2/ph2条件.tsv", "0_RDRAZeroOne/phase2/ph2状態.tsv",
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv", "0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+    "0_RDRAZeroOne/phase4/ph4UCアクター.tsv", "0_RDRAZeroOne/phase4/ph4UCタイマー.tsv", "0_RDRAZeroOne/phase4/ph4UC外部システム.tsv", "0_RDRAZeroOne/phase4/ph4アクター.tsv", "0_RDRAZeroOne/phase4/ph4外部システム.tsv", "0_RDRAZeroOne/phase4/ph4情報.tsv", "0_RDRAZeroOne/phase4/ph4条件.tsv", "0_RDRAZeroOne/phase4/ph4状態.tsv",
+    "1_RDRA/BUC.tsv", "1_RDRA/if/関連データ.txt", "1_RDRA/アクター.tsv", "1_RDRA/システム概要.json", "1_RDRA/バリエーション.tsv", "1_RDRA/外部システム.tsv", "1_RDRA/情報.tsv", "1_RDRA/条件.tsv", "1_RDRA/状態.tsv"
+  ],
+  "update_target_paths": [
+    "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv", "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv", "0_RDRAZeroOne/phase1/ph1業務.tsv", "0_RDRAZeroOne/phase1/ph1要求.tsv", "0_RDRAZeroOne/phase1/システム概要.json",
+    "0_RDRAZeroOne/phase2/ph2アクティビティ.tsv", "0_RDRAZeroOne/phase2/ph2条件.tsv", "0_RDRAZeroOne/phase2/ph2状態.tsv",
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv", "0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+    "0_RDRAZeroOne/phase4/ph4UCアクター.tsv", "0_RDRAZeroOne/phase4/ph4アクター.tsv", "0_RDRAZeroOne/phase4/ph4情報.tsv", "0_RDRAZeroOne/phase4/ph4条件.tsv", "0_RDRAZeroOne/phase4/ph4状態.tsv",
+    "1_RDRA/BUC.tsv", "1_RDRA/アクター.tsv", "1_RDRA/システム概要.json", "1_RDRA/バリエーション.tsv", "1_RDRA/情報.tsv", "1_RDRA/条件.tsv", "1_RDRA/状態.tsv", "1_RDRA/if/関連データ.txt"
+  ],
+  "changed_artifact_paths": [
+    "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv", "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv", "0_RDRAZeroOne/phase1/ph1業務.tsv", "0_RDRAZeroOne/phase1/ph1要求.tsv", "0_RDRAZeroOne/phase1/システム概要.json",
+    "0_RDRAZeroOne/phase2/ph2アクティビティ.tsv", "0_RDRAZeroOne/phase2/ph2条件.tsv", "0_RDRAZeroOne/phase2/ph2状態.tsv",
+    "0_RDRAZeroOne/phase3/ph3BUC.tsv", "0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+    "0_RDRAZeroOne/phase4/ph4UCアクター.tsv", "0_RDRAZeroOne/phase4/ph4アクター.tsv", "0_RDRAZeroOne/phase4/ph4情報.tsv", "0_RDRAZeroOne/phase4/ph4条件.tsv", "0_RDRAZeroOne/phase4/ph4状態.tsv",
+    "1_RDRA/BUC.tsv", "1_RDRA/アクター.tsv", "1_RDRA/システム概要.json", "1_RDRA/バリエーション.tsv", "1_RDRA/情報.tsv", "1_RDRA/条件.tsv", "1_RDRA/状態.tsv", "1_RDRA/if/関連データ.txt"
+  ],
+  "evidence_written": ["evidence/impact-analysis.md", "evidence/makeGraphData.log", "evidence/metadata.json", "evidence/raw-response.md", "read-log.jsonl"],
+  "checked_paths": ["0_RDRAZeroOne/phase1/システム概要.json", "0_RDRAZeroOne/phase3/ph3BUC.tsv", "0_RDRAZeroOne/phase4/ph4UCアクター.tsv", "0_RDRAZeroOne/phase4/ph4状態.tsv", "1_RDRA/システム概要.json", "1_RDRA/BUC.tsv", "1_RDRA/状態.tsv", "1_RDRA/条件.tsv", "1_RDRA/if/関連データ.txt", "evidence/makeGraphData.log"],
+  "helper_scripts": [{"command": "node RDRA_Knowledge/helper_tools/makeGraphData.js 1_RDRA > evidence/makeGraphData.log 2>&1", "result": "exit 0; generated 1_RDRA/if/関連データ.txt"}],
+  "checks": ["All existing TSV files have headers and consistent column counts", "No stale maintenance UC, activity, condition or old entitlement phrase in 0_RDRAZeroOne or 1_RDRA", "Phase3 BUC UC references resolve in 1_RDRA/BUC.tsv", "Reservation state transition to 取消済み appears in sheet and generated graph", "Both overview JSON files parse"],
+  "failures_and_constraints": ["Initial apply_patch for phase3 BUC failed expected-line match and made no change; the intended edit was then applied with Perl and verified", "One tail verification read of 0_RDRAZeroOne/phase3/ph3BUC.tsv occurred without a preceding read-log entry. This is a read-log protocol violation; subsequent verification reads were logged", "No independent proof of effective model version is available", "Simultaneous reservation guarantee and processing order remain undecided; lower-level specifications, implementation and Check Item were outside scope"],
+  "incomplete": []
+}

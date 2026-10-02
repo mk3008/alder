@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-10-02T11:10:30.094016+00:00",
+  "after_sha256": "c34e5ec93172063c03b8d404bea0d120a13ba405ebad9e865ea7e8019ce45d8a",
+  "scope": "Validation of separate supplemental new claim refs and freezing all supplement outputs; no score or canonical payload changes.",
+  "compile_status": "pass",
+  "C5_mechanical_result": "errors=[] before optional output hash list extension; same already-recorded hashes retained"
+}

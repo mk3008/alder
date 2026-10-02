@@ -1,0 +1,51 @@
+{
+  "case_id": "C5",
+  "source": "社員が購入申請を出す。10万円以上は部長、10万円未満は課長が承認または却下する。承認後だけ購買担当が購入し、却下時は購入しない。購入結果を申請者へ伝え、金額と物品を記録する。TypeScriptとPostgreSQLを使用する。既存公開REST APIを維持する: POST /purchase-requests は amount_yen（0以上の整数）と item（空でない文字列）を受け取り、201で id と status=pending を返す。不正入力は400とする。POST /purchase-requests/{id}/decision は decision=approved または rejected と role=manager または director を受け取り、金額に対応した役割だけが決定できる。違う役割は403、存在しないidは404。既存schemaを維持する: purchase_requests(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, amount_yen integer NOT NULL CHECK(amount_yen>=0), item text NOT NULL CHECK(length(item)>0), status text NOT NULL CHECK(status IN ('pending','approved','rejected'))) 。framework、layer構成、Repository/Service等の指定はない。対象は申請・承認分岐と購入への引渡しまで。",
+  "human_answers": "追加の承認条件はない。決定APIは成功時200でidと決定後のstatusを返す。既に決定済みの申請への再決定は409で拒否する。購入実行と結果連絡は今回のAPI実装範囲外とし、その引渡し条件だけを保持する。",
+  "oracle": {
+    "confirmed_source": [
+      "社員が購入申請",
+      "10万円以上は部長承認または却下",
+      "10万円未満は課長承認または却下",
+      "承認後だけ購買担当が購入",
+      "却下時は購入しない",
+      "購入結果を申請者へ伝える",
+      "金額と物品を記録",
+      "TypeScript使用",
+      "PostgreSQL使用",
+      "POST /purchase-requestsの入力と201/pending応答",
+      "不正入力400",
+      "decision APIの入力",
+      "金額に対応する役割だけが決定",
+      "役割不一致403",
+      "存在しないid404",
+      "既存schemaの列・型・制約維持",
+      "named architecture/framework/layer未指定",
+      "申請・承認分岐と購入への引渡しまで"
+    ],
+    "critical_unknowns": [
+      {
+        "id": "C5-U1",
+        "meaning": "決定API成功時の応答"
+      },
+      {
+        "id": "C5-U2",
+        "meaning": "決定済み申請への再決定の扱い"
+      }
+    ],
+    "answer_facts": [
+      "追加の承認条件なし",
+      "決定成功200でidと決定後status",
+      "決定済みへの再決定409",
+      "購入実行と結果連絡はAPI実装範囲外・引渡し条件は保持"
+    ],
+    "still_unresolved": [],
+    "forbidden_examples": [
+      "named architectureの指定を業務合意の必須条件にする",
+      "既存REST APIを変更する",
+      "schemaの型または制約を変更する",
+      "AIの内部構造選択を人間合意済み業務要件とする"
+    ]
+  },
+  "resolved_source": "社員が購入申請を出す。10万円以上は部長、10万円未満は課長が承認または却下する。承認後だけ購買担当が購入し、却下時は購入しない。購入結果を申請者へ伝え、金額と物品を記録する。TypeScriptとPostgreSQLを使用する。既存公開REST APIを維持する: POST /purchase-requests は amount_yen（0以上の整数）と item（空でない文字列）を受け取り、201で id と status=pending を返す。不正入力は400とする。POST /purchase-requests/{id}/decision は decision=approved または rejected と role=manager または director を受け取り、金額に対応した役割だけが決定できる。違う役割は403、存在しないidは404。既存schemaを維持する: purchase_requests(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, amount_yen integer NOT NULL CHECK(amount_yen>=0), item text NOT NULL CHECK(length(item)>0), status text NOT NULL CHECK(status IN ('pending','approved','rejected'))) 。framework、layer構成、Repository/Service等の指定はない。対象は申請・承認分岐と購入への引渡しまで。\n\n【固定Human answer】\n追加の承認条件はない。決定APIは成功時200でidと決定後のstatusを返す。既に決定済みの申請への再決定は409で拒否する。購入実行と結果連絡は今回のAPI実装範囲外とし、その引渡し条件だけを保持する。\n"
+}

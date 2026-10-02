@@ -1,0 +1,69 @@
+{
+  "packet_id": "P042",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:27:11.982524+00:00",
+  "packet_sha256": "d32b0da7f3d03f08ee862177c004776b1be1b395d324d86051b337fb82d4be23",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "8b5dbaed0f6e7177b63849f156fefaf323d963861236fd7ff5de226928b44a21",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P042/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P042/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p042",
+  "prepared_at": "2026-10-02T10:17:25.679925+00:00",
+  "output_return_followup": {
+    "prepared_at": "2026-10-02T10:28:36.220339+00:00",
+    "initial_actual_final_kind": "file_link_summary",
+    "canonical_sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "raw_sha256": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "output_sha256": {
+    "canonical.json": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "raw-response.md": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "read-log.jsonl": "74499c0f107ae99f4f500e9ed54e98c7ee7e3eb3cbfc931c79e7eff8f11a2fcc"
+  },
+  "finished_at": "2026-10-02T10:29:19.152573+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T10:29:19.622439+00:00",
+    "final_json_payload_returned": false,
+    "original_payload_hashes_unchanged": true,
+    "actual_final_file": "actual-final-response-002.md",
+    "status": "output_delivery_deviation",
+    "claimed_length_limit": "Child reported 78054 characters / 33021 formatted tokens, tool display truncation; not independently attested.",
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "canonical_quality_verification_status": "success",
+  "original_delivery_status": "delivery_deviation_pending_operator_policy",
+  "strict_delivery_protocol_eligible": false,
+  "source_clean_exploratory_eligible": true,
+  "delivery_deviation": "full JSON file preserved; final response file-link summary",
+  "operator_classification": {
+    "recorded_at": "2026-10-02T10:29:57.336305+00:00",
+    "authorization": "Parent explicitly authorized uniform P013 mechanical-complete / final-delivery-deviation rule for P042 and future identical conditions.",
+    "reason": "Complete saved canonical/raw equality, input hashes, evidence quotes/IDs/read-log mechanical checks passed; payload unchanged; final full JSON return deviated. Claimed length limit lacks independent attestation.",
+    "business_semantic_classification": "not performed"
+  },
+  "read_compliance_audit": {
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log mechanical validation and actual final; procedural allowlist, no independent attestation."
+  }
+}

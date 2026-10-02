@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:07:26Z",
+  "end_utc": "2026-10-02T09:07:42Z",
+  "failures": ["Initial output write failed because the phase3 directory did not exist; created it and completed output."],
+  "unmet_restrictions": [],
+  "timing_note": "Start time is the first recorded UTC timestamp during the task, after initial reads."
+}

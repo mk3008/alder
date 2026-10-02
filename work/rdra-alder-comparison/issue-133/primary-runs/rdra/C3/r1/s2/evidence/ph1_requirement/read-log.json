@@ -1,0 +1,8 @@
+[
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/evidence/ph1_requirement/envelope.txt","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/nodes/ph1_requirement/root/AGENTS.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/nodes/ph1_requirement/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1要求生成.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/nodes/ph1_requirement/root/初期要望.txt","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/nodes/ph1_requirement/root/0_RDRAZeroOne/phase1/ph1要求.tsv","status":"read attempted; file did not exist"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/nodes/ph1_requirement/root/0_RDRAZeroOne/phase1/ph1要求.tsv","status":"read for column verification"}
+]

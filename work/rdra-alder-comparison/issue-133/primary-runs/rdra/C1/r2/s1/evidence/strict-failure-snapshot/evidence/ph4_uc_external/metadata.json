@@ -1,0 +1,1 @@
+{"start_utc":"2026-10-02T08:08:00Z","end_utc":"2026-10-02T08:08:26Z","failures":["Initial output write failed because phase4 directory did not exist; created it and wrote output successfully."],"unmet_restrictions":[],"note":"No external system is named in the requirements or populated in ph3BUC.tsv, so only the required TSV header was emitted."}

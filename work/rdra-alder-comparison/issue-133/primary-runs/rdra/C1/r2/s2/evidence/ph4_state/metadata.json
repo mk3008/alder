@@ -1,0 +1,13 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T08:28:22Z",
+  "failures": [
+    "An initial mistaken path for the prompt was attempted and not found; the specified prompt was subsequently read verbatim.",
+    "The first output write failed because the phase4 directory was absent; the directory was created and the TSV was written.",
+    "No terminal state exists in the input transitions for 蔵書の貸出状態 or 返却遅延日数区分; terminal rows for those models cannot be truthfully supplied."
+  ],
+  "unmet_restrictions": [
+    "Start UTC was not captured at task entry, so no precise start time can be asserted.",
+    "The prompt's terminal-state-per-model checklist is unsatisfiable for two cyclic state models without inventing transitions or states."
+  ]
+}

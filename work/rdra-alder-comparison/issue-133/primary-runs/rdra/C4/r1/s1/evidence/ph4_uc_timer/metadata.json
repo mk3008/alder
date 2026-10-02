@@ -1,0 +1,9 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:27:24Z",
+  "failures": [
+    "Start timestamp was not captured at execution start.",
+    "The first output write failed because the phase4 directory did not exist; the directory was created and the write succeeded."
+  ],
+  "unmet_restrictions": []
+}

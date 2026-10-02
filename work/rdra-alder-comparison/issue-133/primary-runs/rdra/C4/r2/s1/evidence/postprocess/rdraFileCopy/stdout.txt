@@ -1,0 +1,27 @@
+=== RDRAファイルコピープログラム ===
+
+=== コピー計画（優先: phase4 > phase3 > phase2 > phase1） ===
+- システム概要.json: phase1 -> 1_RDRA
+- ph4アクター.tsv -> アクター.tsv: phase4 -> 1_RDRA
+- ph4外部システム.tsv -> 外部システム.tsv: phase4 -> 1_RDRA
+- ph4情報.tsv -> 情報.tsv: phase4 -> 1_RDRA
+=== ファイル存在チェック ===
+  ✓ システム概要.json (phase1) - 存在
+  ✓ ph4アクター.tsv (phase4) - 存在
+  ✓ ph4外部システム.tsv (phase4) - 存在
+  ✓ ph4情報.tsv (phase4) - 存在
+
+=== ファイルコピー開始 ===
+✓ コピー完了: システム概要.json
+✓ コピー完了: ph4アクター.tsv -> アクター.tsv
+✓ コピー完了: ph4外部システム.tsv -> 外部システム.tsv
+✓ コピー完了: ph4情報.tsv -> 情報.tsv
+
+=== コピー結果 ===
+成功: 4/4 ファイル
+
+=== 最終確認 ===
+✓ システム概要.json - 配置確認
+✓ アクター.tsv - 配置確認
+✓ 外部システム.tsv - 配置確認
+✓ 情報.tsv - 配置確認

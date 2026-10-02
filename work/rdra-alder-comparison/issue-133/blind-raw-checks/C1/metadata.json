@@ -1,0 +1,46 @@
+{
+  "case_id": "C1",
+  "status": "dispatch_cancelled_before_spawn",
+  "prepared_at": "2026-10-02T09:22:54.479310+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P035-packet.md": "3b7bb292858ec0488a85fd5caee51f1898bdfb222da10d96d94a729803759d04",
+    "P035-canonical.json": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "P038-packet.md": "8764b9930224c5970045df3886a10c83118089c979a793cf135e4d850e49c3f4",
+    "P038-canonical.json": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
+    "P005-packet.md": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+    "P005-canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "P046-packet.md": "a42fee8d08ed2ac93fc33fd510f8ac91bb44a1824dfc99d3c300b7e7f1bdbde1",
+    "P046-canonical.json": "10865c509b20a4e42d27bfd00edc61ace046212138520028e1742f37d715811b",
+    "P060-packet.md": "ae684f429dea9b8eeb658472696e97377c69991975050a22583c6855869571f8",
+    "P060-canonical.json": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "P029-packet.md": "345eb884e3b2ea3474b7d6315dd0c602d8bced044332851f259a5b80e7449ad0",
+    "P029-canonical.json": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "0174788516ed53eddba093e3f427dbc02c5cc148d3760c3f2d9ab0c41e1fc1ed"
+  },
+  "envelope_sha256": "17756e5af2e35129ef5a05f67519006f3900a1a1e690b0b8fff816d75603d56b",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P035-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P035-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P038-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P038-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P005-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P005-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P046-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P046-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P060-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P060-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P029-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/P029-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/C1/review-targets.json"
+  ],
+  "operator_reason": "Preserve attempt-001 raw-checks independently of retry flags. No scoring/oracle provided.",
+  "reason": "Parent requested packet-isolated five Fresh reviewers; no child executed this batch envelope"
+}

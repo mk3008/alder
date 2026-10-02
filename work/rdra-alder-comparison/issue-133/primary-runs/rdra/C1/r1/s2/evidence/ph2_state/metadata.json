@@ -1,0 +1,7 @@
+{
+  "start_utc": null,
+  "first_recorded_utc": "2026-10-02T07:51:24Z",
+  "end_utc": "2026-10-02T07:51:35Z",
+  "failures": ["Exact start timestamp was not captured before the first read."],
+  "unmet_restrictions": []
+}

@@ -1,0 +1,293 @@
+{
+  "completed_at": "2026-10-02T11:11:03.874138+00:00",
+  "operator_role": "Anonymous observation dispatch and mechanical validation only; no business supplementation, semantic correction or unblinding/aggregation by operator.",
+  "main_status_counts": {
+    "success": 60
+  },
+  "received_status_counts": {
+    "reused_byte_identical": 10,
+    "fresh_success": 10
+  },
+  "raw_review_status_counts": {
+    "success": 29
+  },
+  "cases": [
+    {
+      "case_id": "C1",
+      "score_status": "success",
+      "score_attempt_number": 3,
+      "scores_count": 12,
+      "claim_count": 10,
+      "claim_resolution_counts": {
+        "artifact_ambiguous": 3,
+        "resolved": 7
+      },
+      "raw_flag_counts": {
+        "artifact_ambiguous": 3,
+        "resolved_context_note": 3
+      },
+      "retained_original_flag_count": 6,
+      "ambiguous_metric_scopes": [
+        {
+          "claim_id": "attempt-001-P035-1",
+          "packet_id": "P035",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P005-1",
+          "packet_id": "P005",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-002-P029-1",
+          "packet_id": "P029",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        }
+      ],
+      "original_attempt_snapshots": [
+        "attempt-001",
+        "attempt-002"
+      ]
+    },
+    {
+      "case_id": "C2",
+      "score_status": "success",
+      "score_attempt_number": 2,
+      "scores_count": 12,
+      "claim_count": 5,
+      "claim_resolution_counts": {
+        "resolved": 3,
+        "artifact_ambiguous": 2
+      },
+      "raw_flag_counts": {
+        "artifact_ambiguous": 2,
+        "resolved_context_note": 2
+      },
+      "retained_original_flag_count": 4,
+      "ambiguous_metric_scopes": [
+        {
+          "claim_id": "attempt-001-P002-1",
+          "packet_id": "P002",
+          "affected_metrics": [
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P043-1",
+          "packet_id": "P043",
+          "affected_metrics": [
+            "unresolved_leakage",
+            "probe_inventions"
+          ]
+        }
+      ],
+      "original_attempt_snapshots": [
+        "attempt-001"
+      ]
+    },
+    {
+      "case_id": "C3",
+      "score_status": "success",
+      "score_attempt_number": 2,
+      "scores_count": 12,
+      "claim_count": 6,
+      "claim_resolution_counts": {
+        "resolved": 4,
+        "artifact_ambiguous": 2
+      },
+      "raw_flag_counts": {
+        "resolved_context_note": 2,
+        "artifact_ambiguous": 2
+      },
+      "retained_original_flag_count": 4,
+      "ambiguous_metric_scopes": [
+        {
+          "claim_id": "attempt-001-P042-1",
+          "packet_id": "P042",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P033-1",
+          "packet_id": "P033",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        }
+      ],
+      "original_attempt_snapshots": [
+        "attempt-001"
+      ]
+    },
+    {
+      "case_id": "C4",
+      "score_status": "success",
+      "score_attempt_number": 2,
+      "scores_count": 12,
+      "claim_count": 7,
+      "claim_resolution_counts": {
+        "resolved": 2,
+        "artifact_ambiguous": 5
+      },
+      "raw_flag_counts": {
+        "artifact_ambiguous": 5,
+        "resolved_context_note": 1
+      },
+      "retained_original_flag_count": 6,
+      "ambiguous_metric_scopes": [
+        {
+          "claim_id": "attempt-001-P008-2",
+          "packet_id": "P008",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P016-1",
+          "packet_id": "P016",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P030-1",
+          "packet_id": "P030",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P054-1",
+          "packet_id": "P054",
+          "affected_metrics": [
+            "probe_inventions",
+            "unresolved_leakage"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P056-1",
+          "packet_id": "P056",
+          "affected_metrics": [
+            "unauthorized_decisions",
+            "unsupported_additions"
+          ]
+        }
+      ],
+      "original_attempt_snapshots": [
+        "attempt-001"
+      ]
+    },
+    {
+      "case_id": "C5",
+      "score_status": "success",
+      "score_attempt_number": 2,
+      "scores_count": 12,
+      "claim_count": 5,
+      "claim_resolution_counts": {
+        "artifact_ambiguous": 3,
+        "resolved": 2
+      },
+      "raw_flag_counts": {
+        "artifact_ambiguous": 3,
+        "resolved_context_note": 3
+      },
+      "retained_original_flag_count": 6,
+      "ambiguous_metric_scopes": [
+        {
+          "claim_id": "attempt-001-P051-1",
+          "packet_id": "P051",
+          "affected_metrics": [
+            "source_facts_preserved",
+            "unauthorized_decisions"
+          ]
+        },
+        {
+          "claim_id": "attempt-001-P040-1",
+          "packet_id": "P040",
+          "affected_metrics": [
+            "downstream_facts_preserved",
+            "probe_inventions",
+            "unauthorized_decisions"
+          ]
+        },
+        {
+          "claim_id": "attempt-002-P059-1",
+          "packet_id": "P059",
+          "affected_metrics": [
+            "source_facts_preserved"
+          ]
+        }
+      ],
+      "original_attempt_snapshots": [
+        "attempt-001"
+      ]
+    }
+  ],
+  "claim_resolution_totals": {
+    "artifact_ambiguous": 15,
+    "resolved": 18
+  },
+  "mechanical_closure_errors": [],
+  "frozen_operator_output_sha256": {
+    "blind-evaluation/C1/scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "blind-evaluation/C1/raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "blind-evaluation/C1/metadata.json": "e252c2f8b6ace5de499b746c4bd045339ff3e15f7f004d4b730a79be4d7d3042",
+    "blind-raw-checks/C1/raw-check-ledger.json": "cf0b90651211f662e7701eda3cfb59adb4d43b7cbed12d8a1efeffdf84419f1d",
+    "blind-evaluation/C1/raw-flag-dispositions.json": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+    "blind-evaluation/C1/score-correction.json": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c",
+    "blind-evaluation/C2/scores.json": "eb8e842c54d1920f75f0c86b3b16b2b50ac712034a75c51e27524362bb9578a4",
+    "blind-evaluation/C2/raw-response.md": "eb8e842c54d1920f75f0c86b3b16b2b50ac712034a75c51e27524362bb9578a4",
+    "blind-evaluation/C2/metadata.json": "a22e0dec554aa0c5d97ada3cd9bf13b11a37b4975f6a9f7000ea28734a0a829f",
+    "blind-raw-checks/C2/raw-check-ledger.json": "c707fd654707d128de0e3affe28b2360699863bce2360ed6427db8eecb3056d6",
+    "blind-evaluation/C2/raw-flag-dispositions.json": "38c9caa1c6080682f3ff8425696f9633e7d0b05fe14cc7e8c760773d7825d7d7",
+    "blind-evaluation/C3/scores.json": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "blind-evaluation/C3/raw-response.md": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "blind-evaluation/C3/metadata.json": "83d052c4a7f2c9932d3105f7daa2ed0dc9586cde3f8d5b91b528dc698fc68d00",
+    "blind-raw-checks/C3/raw-check-ledger.json": "388273d0eacb7d08ecc10d9903f0992e37c451aa222d35570104a503731fb8de",
+    "blind-evaluation/C3/raw-flag-dispositions.json": "606e82d03a1e710c2c39ddeef7117c7a942bf9ee9e6c5663c4cbbe734a9bd393",
+    "blind-evaluation/C4/scores.json": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c",
+    "blind-evaluation/C4/raw-response.md": "809cf80f0a2143567793c3ccca94782b581ba4ccaa36978fa76c5bbe378d8e8c",
+    "blind-evaluation/C4/metadata.json": "471cc88f65338ab1f05b15983d1328f07de6518e2e18d435a728248530d9feeb",
+    "blind-raw-checks/C4/raw-check-ledger.json": "85d61b6f7bd8aaf033203dccbe1855d76882fba2ee6cbb75e522bc1ed3d857b5",
+    "blind-evaluation/C4/raw-flag-dispositions.json": "32a40dd22ae09180b7ec59be408b6346224c8eafd673d39bc2ff1ca905f71fb8",
+    "blind-evaluation/C5/scores.json": "ef40ac30c38c2b982cf248d6c7360e00e9d13919460313a2ca376fb5ed299d3b",
+    "blind-evaluation/C5/raw-response.md": "ef40ac30c38c2b982cf248d6c7360e00e9d13919460313a2ca376fb5ed299d3b",
+    "blind-evaluation/C5/metadata.json": "c276026fc66e511d49de8943e348e438d263db2e7d21efc07034b51aab45b87b",
+    "blind-raw-checks/C5/raw-check-ledger.json": "788ddcda9dce3dc45cb3bcb10a2e6267f2ee802e16a731c83e72eba8fdff62bb",
+    "blind-evaluation/C5/raw-flag-dispositions.json": "7de76888796fd8a7c576f64e54daa54f0e5e5a121242b0a9e5680a6eba5c2a9c",
+    "blind-evaluation/C5/score-correction.json": "a284d1181a0953a2edf63fb7523213e348e8e06eb0708dae1476e6137026875e",
+    "blind-evaluation/C5/additional-raw-check-resolutions.json": "aac6cfe4578fea33976d01a822a3939465383e76d82d7fd50182a53f5020bbae",
+    "blind-evaluation/C5/architecture-assessments.json": "a7f22bd709df3a4da8370e3c4bb3c33df019ba8751300c4cd15d70a6344470cd",
+    "blind-evaluation/C5/supplement-response.md": "1cc5a86265ec04741549d95e54d03223017d283efaafb7c8413e0e5f2cbed032"
+  },
+  "limitations": [
+    "Mechanical passes verify saved JSON identity, allowed ID membership, literal quotes within stated physical lines, input/output file bytes and recorded read paths. They do not establish full semantic extraction coverage or independent runtime/read compliance.",
+    "P008 many initial quotes were single words; fixed independent raw review and neutral extraction-limit record retained. Mechanical initial pass did not prove complete semantic support.",
+    "Original raw flags, failed measurement payloads, original evaluator attempts, separate rubric corrections, immutable raw evidence and supplemental new claim remain preserved. Artifact ambiguity affects only evaluator-named metrics for root aggregation.",
+    "Requested gpt-6-sol/medium/Fresh settings are dispatch requests; independent effective runtime settings attestation unavailable. Shared filesystem procedural isolation and single blind format inference limits remain.",
+    "Normal JSON-return runs preserve raw payload JSON identity and file bytes. Exact actual tool FINAL response formatting remains in tool trace and is not provider wire-response/byte attestation. Summary/file-path delivery responses were saved separately; pure return followup timestamps and unchanged hashes are retained.",
+    "Operator does not change canonical or scores semantics, apply evaluator patches, unblind methods, aggregate quality or infer whole-workflow capability under question prohibition."
+  ],
+  "checker_sha256": {
+    "raw_flag_ops.py": "c34e5ec93172063c03b8d404bea0d120a13ba405ebad9e865ea7e8019ce45d8a",
+    "verify-evaluation-supplement.py": "e906fe59f6818749ae5660909b5a8887864466deba59f885aabf1c645c9d9f57",
+    "verify-final-evidence.py": "5b92199492a6290359740f501d57bdece9b603b9dab52ecdeff67129bc7c19f4"
+  },
+  "final_byte_gate_reference": "evaluation-result/final-byte-provenance.json",
+  "archive_preservation_reference": "evaluation-result/operator-archive-preservation.json"
+}

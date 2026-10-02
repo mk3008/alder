@@ -1,0 +1,62 @@
+{
+  "start_utc": "2026-10-02T13:21:53Z",
+  "end_utc": "2026-10-02T13:22:46Z",
+  "read_artifact_paths": [
+    "/workspace/scratch/f694891aa357/change-run/alder/docs/business-design/design.md"
+  ],
+  "read_paths": [
+    "/workspace/scratch/f694891aa357/change-run/alder/method/alder-draft-business-design/SKILL.md",
+    "/workspace/scratch/f694891aa357/change-run/alder/method/alder-draft-business-design/references/adoption.md",
+    "/workspace/scratch/f694891aa357/change-run/alder/method/alder-draft-business-design/references/business-graph.md",
+    "/workspace/scratch/f694891aa357/change-run/alder/method/alder-draft-business-design/references/provenance.json",
+    "/workspace/scratch/f694891aa357/change-run/alder/source-before.txt",
+    "/workspace/scratch/f694891aa357/change-run/alder/source-after.txt",
+    "/workspace/scratch/f694891aa357/change-run/alder/change.txt",
+    "/workspace/scratch/f694891aa357/change-run/alder/docs/business-design/design.md"
+  ],
+  "update_target_paths": [
+    "/workspace/scratch/f694891aa357/change-run/alder/docs/business-design/design.md"
+  ],
+  "actually_changed_paths": [
+    "/workspace/scratch/f694891aa357/change-run/alder/docs/business-design/design.md"
+  ],
+  "consistency_checked_paths": [
+    "/workspace/scratch/f694891aa357/change-run/alder/docs/business-design/design.md",
+    "/workspace/scratch/f694891aa357/change-run/alder/source-before.txt",
+    "/workspace/scratch/f694891aa357/change-run/alder/source-after.txt",
+    "/workspace/scratch/f694891aa357/change-run/alder/change.txt"
+  ],
+  "auxiliary_script_commands": [
+    {
+      "command": "python -: read-log entry before each specified input read; print inputs",
+      "success": true
+    },
+    {
+      "command": "python -: read-log entry before adoption section 1 reread; print section",
+      "success": true
+    },
+    {
+      "command": "python -: read-log entry before Business Graph profile reread; print profile through minimal example",
+      "success": true
+    },
+    {
+      "command": "python -: guarded exact replacement of existing design Activity 会議室の利用停止",
+      "success": true
+    },
+    {
+      "command": "python -: read-log entry before updated design read; assert source and correlation consistency",
+      "success": true
+    },
+    {
+      "command": "python -: write metadata and raw-response evidence",
+      "success": true
+    }
+  ],
+  "failures": [],
+  "constraint_violations": [],
+  "incomplete": [],
+  "version": {
+    "alder_plugin": "0.2.8",
+    "authoring_source_revision": "e9726b4c84608db42c5286d072b5ec762d31596a"
+  }
+}

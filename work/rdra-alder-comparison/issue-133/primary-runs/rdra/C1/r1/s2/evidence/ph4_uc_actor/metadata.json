@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:20:20Z",
+  "end_utc": "2026-10-02T08:20:20Z",
+  "timestamp_note": "Start timestamp was captured after work and is therefore a lower-bound record of completion rather than an exact task-start time.",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and retried successfully."],
+  "unmet_restrictions": []
+}

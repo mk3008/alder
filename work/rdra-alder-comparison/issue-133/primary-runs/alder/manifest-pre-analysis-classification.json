@@ -1,0 +1,916 @@
+{
+  "arm": "alder",
+  "freeze": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
+  "method_repository": "https://github.com/mk3008/alder",
+  "method_baseline": "eb591bfbc1b077b0e93d62253cb1e7f3e392e462",
+  "plugin_version": "0.2.8",
+  "authoring_provenance": "e9726b4c84608db42c5286d072b5ec762d31596a",
+  "execution_only_exclusions": [
+    "**/source.txt",
+    "**/method/**"
+  ],
+  "limitations": [
+    "Shared filesystem; procedural read allowlist, not security isolation.",
+    "Requested model and effort cannot be independently attested."
+  ],
+  "runs": [
+    {
+      "case": "C1",
+      "replicate": 1,
+      "stage": "s1",
+      "root": "primary-runs/alder/C1/r1/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C1/s1.txt",
+      "source_sha256": "bd2d61f2ebb77ab2f36694dd0d5b8e159cd16d337f48b129719ea7157b571d5c",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C1/r1/s1/envelope.txt",
+        "primary-runs/alder/C1/r1/s1/metadata.json",
+        "primary-runs/alder/C1/r1/s1/read-log.jsonl",
+        "primary-runs/alder/C1/r1/s1/raw-response.md",
+        "primary-runs/alder/C1/r1/s1/docs/business-design/design.md"
+      ],
+      "agent_id": "/root/alder_primary/c1_r1_s1",
+      "started_at": "2026-10-02T07:38:43.794772+00:00",
+      "finished_at": "2026-10-02T07:40:06.366906+00:00",
+      "artifact_sha256": "c0cf47ae2a131c0e62df8599d440f65d726bc5502f2c7163bc629a58d512d4bb",
+      "raw_response_sha256": "c23e64403c45010662e2ba4fd2026bf883f80fbdc270a70af5986b0e9783853a",
+      "read_log_sha256": "0716520c58211613c04f4d98771b3224fa7cc2f9c323d0d3f71d2fdf4a6d55f6",
+      "envelope_variant": "verbose-v1",
+      "envelope_sha256": "708932e2177b386700420e08f4dc7880b731b8287eaf32e2de1764a9d697aaac",
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 5,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C1",
+      "replicate": 1,
+      "stage": "s2",
+      "root": "primary-runs/alder/C1/r1/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C1/s2.txt",
+      "source_sha256": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C1/r1/s2/envelope.txt",
+        "primary-runs/alder/C1/r1/s2/metadata.json",
+        "primary-runs/alder/C1/r1/s2/read-log.jsonl",
+        "primary-runs/alder/C1/r1/s2/raw-response.md",
+        "primary-runs/alder/C1/r1/s2/docs/business-design/design.md"
+      ],
+      "agent_id": "/root/alder_primary/c1_r1_s2",
+      "started_at": "2026-10-02T07:40:27.431331+00:00",
+      "finished_at": "2026-10-02T07:41:48.715096+00:00",
+      "artifact_sha256": "08fc244704de0950c4988a5bfe04de869fcfb7e473d29dca87a50586d68ac338",
+      "raw_response_sha256": "4f7535c14381a5d4b482853e0fe86da26ad1e6968970897909c29489553d7227",
+      "read_log_sha256": "7cdc7e004a1b6c4c04bc4352b5e4a54670b22514741a64a9d7e2e71fd62f2b53",
+      "failures": [],
+      "retries": 0,
+      "envelope_variant": "verbose-v1",
+      "envelope_sha256": "9a3d0d8ef01faa095b0a5beeda873a179d8b96d62f98e2b0572934b6060de04a",
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 5,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C1",
+      "replicate": 2,
+      "stage": "s1",
+      "root": "primary-runs/alder/C1/r2/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C1/s1.txt",
+      "source_sha256": "bd2d61f2ebb77ab2f36694dd0d5b8e159cd16d337f48b129719ea7157b571d5c",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C1/r2/s1/envelope.txt",
+        "primary-runs/alder/C1/r2/s1/metadata.json",
+        "primary-runs/alder/C1/r2/s1/read-log.jsonl",
+        "primary-runs/alder/C1/r2/s1/raw-response.md",
+        "primary-runs/alder/C1/r2/s1/docs/business-design/design.md"
+      ],
+      "agent_id": "/root/alder_primary/c1_r2_s1",
+      "started_at": "2026-10-02T07:42:05.415470+00:00",
+      "finished_at": "2026-10-02T07:43:21.818705+00:00",
+      "artifact_sha256": "ae8f1e227acfbf006abd7bffb0263e9f5525d4d3f9255d75a6f92189a941d192",
+      "raw_response_sha256": "28553a15044e80952e3c35c7fb3f70b7f6ef12f848637b656d29e52ce35b1a9e",
+      "read_log_sha256": "d64f2dda7e3cf5de98e9a13a8ec158672bd36d7a4142fc0bd1241f353d53d472",
+      "failures": [],
+      "retries": 0,
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "5a65f964b1097acd81c8a2c6f73cf0a801fd2ab6615dd2dc5bd0dea36047fd7b",
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 5,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C1",
+      "replicate": 2,
+      "stage": "s2",
+      "root": "primary-runs/alder/C1/r2/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C1/s2.txt",
+      "source_sha256": "b0ba9fc11ce1fce4bace6d59a23d77594b574bfb70c8dadb54266b3c472fa257",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C1/r2/s2/envelope.txt",
+        "primary-runs/alder/C1/r2/s2/metadata.json",
+        "primary-runs/alder/C1/r2/s2/read-log.jsonl",
+        "primary-runs/alder/C1/r2/s2/raw-response.md",
+        "primary-runs/alder/C1/r2/s2/docs/business-design/design.md"
+      ],
+      "agent_id": "/root/alder_primary/c1_r2_s2",
+      "started_at": "2026-10-02T07:43:34.194819+00:00",
+      "finished_at": "2026-10-02T07:44:36.790468+00:00",
+      "artifact_sha256": "bf08144a913d8c47d4ef9083400785d1c0aca19cc91e4824701a8506f69da476",
+      "raw_response_sha256": "4e35624cc3f58b5971405364c44919e650ab92bae77bf1f41650dc09571d0976",
+      "read_log_sha256": "062c9be03eef4723de3a64952aec18f7bbf81ac0aef21733a3d0bbba3a76e16a",
+      "failures": [],
+      "retries": 0,
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "bd100c9f057bd7ac28b273c35483cb157d2a28d56b06627f78e7f5ae71b7c92a",
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C2",
+      "replicate": 1,
+      "stage": "s1",
+      "root": "primary-runs/alder/C2/r1/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C2/s1.txt",
+      "source_sha256": "343d614cb8b25dbbe40f34921e375407d717737e77cdb46ed4b3aef2ed4ca1c3",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C2/r1/s1/envelope.txt",
+        "primary-runs/alder/C2/r1/s1/metadata.json",
+        "primary-runs/alder/C2/r1/s1/read-log.jsonl",
+        "primary-runs/alder/C2/r1/s1/raw-response.md",
+        "primary-runs/alder/C2/r1/s1/docs/business-design/design.md"
+      ],
+      "agent_id": "/root/alder_primary/c2_r1_s1",
+      "started_at": "2026-10-02T07:44:50.240394+00:00",
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "763c43fb46af88cd053df8ae470bf2d8f5cc0be8fcfeb6c11e4d59218149a8a1",
+      "finished_at": "2026-10-02T07:46:49.815297+00:00",
+      "artifact_sha256": "62daee92c81ce15fa6c3b6531b600b3ae33a7c7d4eeb161a37bf09c5da4f51ed",
+      "raw_response_sha256": "575c35d4d290044c8c82d5b4839b2530732b6a3bd81e74dac476f6081e80e69e",
+      "read_log_sha256": "c9b0e7f95f65bb084e6112d002f3ea2c8d3cc9a6b4b062716e825264dd9fb024",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C2",
+      "replicate": 1,
+      "stage": "s2",
+      "root": "primary-runs/alder/C2/r1/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C2/s2.txt",
+      "source_sha256": "9cbc69acc31170d1d0bad5459f5f8760aca0db133caa53b24334eeb30c511874",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C2/r1/s2/envelope.txt",
+        "primary-runs/alder/C2/r1/s2/metadata.json",
+        "primary-runs/alder/C2/r1/s2/read-log.jsonl",
+        "primary-runs/alder/C2/r1/s2/raw-response.md",
+        "primary-runs/alder/C2/r1/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "c0e1b49b276bae2ec52533fe23d3ffccba751972b8685ac953db3a0b416dac53",
+      "agent_id": "/root/alder_primary/c2_r1_s2",
+      "started_at": "2026-10-02T07:47:02.184175+00:00",
+      "finished_at": "2026-10-02T07:48:34.568532+00:00",
+      "artifact_sha256": "019ac63d5f6ca95a2a6cda43ef26099dd682df710d1e1b2870a10475f3d6deaa",
+      "raw_response_sha256": "92bfc5e9d49ed1196a30cf61f0bfa3b2ec9a587640d8413afe374f27cda08add",
+      "read_log_sha256": "fce63d16705d03cfeae492039f8ae8d341e9cc3f054bdde8298402009233a34b",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C2",
+      "replicate": 2,
+      "stage": "s1",
+      "root": "primary-runs/alder/C2/r2/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C2/s1.txt",
+      "source_sha256": "343d614cb8b25dbbe40f34921e375407d717737e77cdb46ed4b3aef2ed4ca1c3",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C2/r2/s1/envelope.txt",
+        "primary-runs/alder/C2/r2/s1/metadata.json",
+        "primary-runs/alder/C2/r2/s1/read-log.jsonl",
+        "primary-runs/alder/C2/r2/s1/raw-response.md",
+        "primary-runs/alder/C2/r2/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "4f04c9c50c69f39aae3f8df54bef8f3c1a665a2181ec2364a226dbe737b00a38",
+      "agent_id": "/root/alder_primary/c2_r2_s1",
+      "started_at": "2026-10-02T07:48:47.827400+00:00",
+      "finished_at": "2026-10-02T07:50:25.161569+00:00",
+      "artifact_sha256": "b4349d35ead9f04522be436c950318ffc7ce286cee9a4dc1a1a9b409cae5d7e0",
+      "raw_response_sha256": "adf36fe4e693911700c0c1a1ba82ffea88a6b1f38fa55318f45d59ef2a23136a",
+      "read_log_sha256": "8ab0b961efd51049e26d82b79da609e870901b636e42fc56e7bc3cc0e32f91e4",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C2",
+      "replicate": 2,
+      "stage": "s2",
+      "root": "primary-runs/alder/C2/r2/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C2/s2.txt",
+      "source_sha256": "9cbc69acc31170d1d0bad5459f5f8760aca0db133caa53b24334eeb30c511874",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C2/r2/s2/envelope.txt",
+        "primary-runs/alder/C2/r2/s2/metadata.json",
+        "primary-runs/alder/C2/r2/s2/read-log.jsonl",
+        "primary-runs/alder/C2/r2/s2/raw-response.md",
+        "primary-runs/alder/C2/r2/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "040658bd2803f1067ccf487103987a3868ae0af22710a5e15f5fd1d351504293",
+      "agent_id": "/root/alder_primary/c2_r2_s2",
+      "started_at": "2026-10-02T07:50:38.948739+00:00",
+      "finished_at": "2026-10-02T07:52:27.711945+00:00",
+      "artifact_sha256": "933cd706edbcc4ec390a2f105ea37a7819c8ba7604ded6ee654ba7aa84166056",
+      "raw_response_sha256": "de4cc01fff0ade3ffe0069858c6bbf39b28e587795c3f27a92bfaeda1051b703",
+      "read_log_sha256": "df8d83ef2b6180f516a0f977a70af5f9c744acbb4feffa11b4b27a16dd04fc52",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": false,
+        "read_log_entries": 9,
+        "read_allowlist_deviations": [
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
+        ]
+      }
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s1",
+      "root": "primary-runs/alder/C3/r1/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C3/s1.txt",
+      "source_sha256": "2edca44298d35abe4d07260ddbb7b12f44e38c25c01dd73d2de3be277b28a36a",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C3/r1/s1/envelope.txt",
+        "primary-runs/alder/C3/r1/s1/metadata.json",
+        "primary-runs/alder/C3/r1/s1/read-log.jsonl",
+        "primary-runs/alder/C3/r1/s1/raw-response.md",
+        "primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "b0d8601da1b9ac8ae61250706afc53b07e2010903c12eeef19e37a7ba6e41865",
+      "agent_id": "/root/alder_primary/c3_r1_s1",
+      "started_at": "2026-10-02T07:52:40.216335+00:00",
+      "finished_at": "2026-10-02T07:54:05.756556+00:00",
+      "artifact_sha256": "22dc35ef6e7ec8739c2f519842d2cfd081d070535d4146971b553552dd5b02b9",
+      "raw_response_sha256": "eca7a43782b2596b7a7beb70d50b3d9471d2ce27cab704980b996cc9e234460f",
+      "read_log_sha256": "f01a50c51287ff5204d10a2e589fba8d8f2c1b12edfcddf9030c7da708a0848e",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": false,
+        "read_log_entries": 8,
+        "read_allowlist_deviations": [
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
+        ]
+      }
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s2",
+      "root": "primary-runs/alder/C3/r1/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C3/s2.txt",
+      "source_sha256": "40eebe81b51749814e5628d694a1558880e3ada09a21eadf266b7489425258fc",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C3/r1/s2/envelope.txt",
+        "primary-runs/alder/C3/r1/s2/metadata.json",
+        "primary-runs/alder/C3/r1/s2/read-log.jsonl",
+        "primary-runs/alder/C3/r1/s2/raw-response.md",
+        "primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "314ac8ac8eb9dc5342f84ec20dacf817f447c9ae9ed5f881d6b8917056ede932",
+      "agent_id": "/root/alder_primary/c3_r1_s2",
+      "started_at": "2026-10-02T07:54:19.844336+00:00",
+      "finished_at": "2026-10-02T07:55:48.591113+00:00",
+      "artifact_sha256": "ef05125284c0b4105664aed8e5b7f84b524d9f94403d5ecadbdb504a3c5a4054",
+      "raw_response_sha256": "f34de79b86c27e827d0367b4ad17f998de67a9a043f48860f12deb7c0c53aeb4",
+      "read_log_sha256": "f13ef0d7508820d67800fa012ef7fc9a55dbc1910b3c2f66f29a4c99d00cda13",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": false,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": [
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
+        ]
+      }
+    },
+    {
+      "case": "C3",
+      "replicate": 2,
+      "stage": "s1",
+      "root": "primary-runs/alder/C3/r2/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C3/s1.txt",
+      "source_sha256": "2edca44298d35abe4d07260ddbb7b12f44e38c25c01dd73d2de3be277b28a36a",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C3/r2/s1/envelope.txt",
+        "primary-runs/alder/C3/r2/s1/metadata.json",
+        "primary-runs/alder/C3/r2/s1/read-log.jsonl",
+        "primary-runs/alder/C3/r2/s1/raw-response.md",
+        "primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "431571ba5df2b64adb9c5063bef3cb88e659ad2230d0158e797bcda6d8a4e442",
+      "agent_id": "/root/alder_primary/c3_r2_s1",
+      "started_at": "2026-10-02T07:56:01.427165+00:00",
+      "finished_at": "2026-10-02T07:57:24.741710+00:00",
+      "artifact_sha256": "afcf328336e62f0691fd09e16f5495c4ff60eaac09c909b3545e2f8e099d1ded",
+      "raw_response_sha256": "bf1ce7c1f535f767018a35f189ae6f9738bbd7099564f4092894b15de2a2876a",
+      "read_log_sha256": "58724199dae5e3b5c47ca41d54e3478dae4104aa4236c353e425ca03e40ad02c",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": false,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": [
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+        ]
+      }
+    },
+    {
+      "case": "C3",
+      "replicate": 2,
+      "stage": "s2",
+      "root": "primary-runs/alder/C3/r2/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C3/s2.txt",
+      "source_sha256": "40eebe81b51749814e5628d694a1558880e3ada09a21eadf266b7489425258fc",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C3/r2/s2/envelope.txt",
+        "primary-runs/alder/C3/r2/s2/metadata.json",
+        "primary-runs/alder/C3/r2/s2/read-log.jsonl",
+        "primary-runs/alder/C3/r2/s2/raw-response.md",
+        "primary-runs/alder/C3/r2/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "1cff22b2ab9d4a3e84b1ea7d825aa31f5642211d38ef29df3f7cab0711c67e7c",
+      "agent_id": "/root/alder_primary/c3_r2_s2",
+      "started_at": "2026-10-02T07:57:45.446798+00:00",
+      "finished_at": "2026-10-02T07:59:48.639198+00:00",
+      "artifact_sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+      "raw_response_sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+      "read_log_sha256": "bef0e74cad17d9fb05ab687a1d496adfc97cf212db906779b2111ded6814cef3",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C4",
+      "replicate": 1,
+      "stage": "s1",
+      "root": "primary-runs/alder/C4/r1/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C4/s1.txt",
+      "source_sha256": "9540b7f6402e0db206b08a7cf6eace03d8f33133bb11745d7f24ca6b23fcefe8",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C4/r1/s1/envelope.txt",
+        "primary-runs/alder/C4/r1/s1/metadata.json",
+        "primary-runs/alder/C4/r1/s1/read-log.jsonl",
+        "primary-runs/alder/C4/r1/s1/raw-response.md",
+        "primary-runs/alder/C4/r1/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "ed364f43e230706b0ba2c476b67fcc31382279ffb32be9b4431a04070f0adc70",
+      "agent_id": "/root/alder_primary/c4_r1_s1",
+      "started_at": "2026-10-02T08:00:07.371868+00:00",
+      "finished_at": "2026-10-02T08:01:28.206027+00:00",
+      "artifact_sha256": "84548dc9b33cfc9d587efef7ab4523a19ca065e9ba8c921f6fb8ac3b319aceae",
+      "raw_response_sha256": "918e9d087bcd56be605eb5e17f54d0ae9ed1746463b5c76b2615b997caa4a8d8",
+      "read_log_sha256": "e7eaa3e80be40db8660f916321e1b30d7bc5ca4731a83217278fe808e9017fb8",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C4",
+      "replicate": 1,
+      "stage": "s2",
+      "root": "primary-runs/alder/C4/r1/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C4/s2.txt",
+      "source_sha256": "9367ddec2a8784f7195a7a9704c569b6bd31fe044b2de8566b38330ba0c05efd",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C4/r1/s2/envelope.txt",
+        "primary-runs/alder/C4/r1/s2/metadata.json",
+        "primary-runs/alder/C4/r1/s2/read-log.jsonl",
+        "primary-runs/alder/C4/r1/s2/raw-response.md",
+        "primary-runs/alder/C4/r1/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "6e498281c019699775602f0b378895e2737cf3d565d53e6b16561314ea6a00df",
+      "agent_id": "/root/alder_primary/c4_r1_s2",
+      "started_at": "2026-10-02T08:01:42.580588+00:00",
+      "finished_at": "2026-10-02T08:02:50.858359+00:00",
+      "artifact_sha256": "5897426737ed1aedc6986a5d24b62294576d6ce3ee5b2c79d98f318c7dfd5075",
+      "raw_response_sha256": "08c985bbd6301017fd53cc7352bcbe0bddc3263c118d1d7295b6bb0a97df3771",
+      "read_log_sha256": "54238c963db7ab9388168eb2155cb447ac41bd6565dd3cb599f891f00215f982",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C4",
+      "replicate": 2,
+      "stage": "s1",
+      "root": "primary-runs/alder/C4/r2/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C4/s1.txt",
+      "source_sha256": "9540b7f6402e0db206b08a7cf6eace03d8f33133bb11745d7f24ca6b23fcefe8",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C4/r2/s1/envelope.txt",
+        "primary-runs/alder/C4/r2/s1/metadata.json",
+        "primary-runs/alder/C4/r2/s1/read-log.jsonl",
+        "primary-runs/alder/C4/r2/s1/raw-response.md",
+        "primary-runs/alder/C4/r2/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "d241468aba023b9dfc7102b77cec3d71a204853464a85dfa023d9b01d591edab",
+      "agent_id": "/root/alder_primary/c4_r2_s1",
+      "started_at": "2026-10-02T08:03:05.830088+00:00",
+      "finished_at": "2026-10-02T08:04:25.463401+00:00",
+      "artifact_sha256": "1b76a1f510e085bcdf5e1ac8feb8c67d82a011a7d80a3a3c9cd29f2b249a0bf2",
+      "raw_response_sha256": "bf1034a6369327b9e674e77859f78aed70c1305f250cdbb868d4d63a295e984c",
+      "read_log_sha256": "e20e40cc2b3c4ac7ac6797e4760251c3f9597259b77d83ff873793ec63e0166e",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C4",
+      "replicate": 2,
+      "stage": "s2",
+      "root": "primary-runs/alder/C4/r2/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C4/s2.txt",
+      "source_sha256": "9367ddec2a8784f7195a7a9704c569b6bd31fe044b2de8566b38330ba0c05efd",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C4/r2/s2/envelope.txt",
+        "primary-runs/alder/C4/r2/s2/metadata.json",
+        "primary-runs/alder/C4/r2/s2/read-log.jsonl",
+        "primary-runs/alder/C4/r2/s2/raw-response.md",
+        "primary-runs/alder/C4/r2/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "5e33c1952c500b3adf3e5996b36250f5bbdbb6e9dcc8e3441c4a56ef63bc5d72",
+      "agent_id": "/root/alder_primary/c4_r2_s2",
+      "started_at": "2026-10-02T08:04:40.388653+00:00",
+      "finished_at": "2026-10-02T08:05:59.733041+00:00",
+      "artifact_sha256": "f6e3a7ad18ab7b03f8aa2791eef1ac5843ffeda20194dcac0008d943bc44eaa2",
+      "raw_response_sha256": "f22418927da5e40e63e62f23ab2cdb10b0a3d5b1e486eafeb26c96d262f28942",
+      "read_log_sha256": "736490cf8174ca61580d1d0935ef7c494c7c44d571e99d9e058296cdbabf3685",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C5",
+      "replicate": 1,
+      "stage": "s1",
+      "root": "primary-runs/alder/C5/r1/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C5/s1.txt",
+      "source_sha256": "49358e00d896346509070ec45d7869c34d75248c76efce65df077a1bab7f1f6b",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C5/r1/s1/envelope.txt",
+        "primary-runs/alder/C5/r1/s1/metadata.json",
+        "primary-runs/alder/C5/r1/s1/read-log.jsonl",
+        "primary-runs/alder/C5/r1/s1/raw-response.md",
+        "primary-runs/alder/C5/r1/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "0cee5af57a5d3d10103c2596349413e2c1289acfb976933f8e31fb1b566191ac",
+      "agent_id": "/root/alder_primary/c5_r1_s1",
+      "started_at": "2026-10-02T08:06:12.929192+00:00",
+      "finished_at": "2026-10-02T08:08:46.184183+00:00",
+      "artifact_sha256": "a472bb024cc7ef0d82981dacceeb2dd667e2b222dbe6a4f1343840a957d9fd50",
+      "raw_response_sha256": "fa59767b01b32529c21fb137b0b4c903386ef6711e416ee30c480360a16291dc",
+      "read_log_sha256": "262eedca9e05c94710721979c8b8b03767e67da28860419b6546cab84b2c0025",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C5",
+      "replicate": 1,
+      "stage": "s2",
+      "root": "primary-runs/alder/C5/r1/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C5/s2.txt",
+      "source_sha256": "e6c7ebadd9a5697083d96ee36db9b2d98b20e6f91e93cc83ca91509a9fd65c9e",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C5/r1/s2/envelope.txt",
+        "primary-runs/alder/C5/r1/s2/metadata.json",
+        "primary-runs/alder/C5/r1/s2/read-log.jsonl",
+        "primary-runs/alder/C5/r1/s2/raw-response.md",
+        "primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "c0f66a5afae308c216a041424757fe13de1323d507f85ceb989bdd72077184d7",
+      "agent_id": "/root/alder_primary/c5_r1_s2",
+      "started_at": "2026-10-02T08:08:59.717278+00:00",
+      "finished_at": "2026-10-02T08:10:42.038741+00:00",
+      "artifact_sha256": "cbef718650c75c7fa8561d1c931e6b28f36330ea49a150f147fb0e4b3110d10e",
+      "raw_response_sha256": "7d01a28246dbe829af7de99af41db9b634775ed87242a32eb416d7269ad9621d",
+      "read_log_sha256": "c438d8290e524aa840f2b0e4f90cf8e46e0a46589b3f706fbb0c5e44f371e6e1",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": false,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": [
+          "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+        ]
+      }
+    },
+    {
+      "case": "C5",
+      "replicate": 2,
+      "stage": "s1",
+      "root": "primary-runs/alder/C5/r2/s1",
+      "status": "success",
+      "source_fixture": "primary-inputs/C5/s1.txt",
+      "source_sha256": "49358e00d896346509070ec45d7869c34d75248c76efce65df077a1bab7f1f6b",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C5/r2/s1/envelope.txt",
+        "primary-runs/alder/C5/r2/s1/metadata.json",
+        "primary-runs/alder/C5/r2/s1/read-log.jsonl",
+        "primary-runs/alder/C5/r2/s1/raw-response.md",
+        "primary-runs/alder/C5/r2/s1/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "8f9609cd9da45b42ddf54b8573cdf521cf618000b344299ce8d0dce804827b3f",
+      "agent_id": "/root/alder_primary/c5_r2_s1",
+      "started_at": "2026-10-02T08:10:58.889198+00:00",
+      "finished_at": "2026-10-02T08:12:44.754125+00:00",
+      "artifact_sha256": "1acdb0ff21a6e04226a3333c6f1b0b283c929c13f87095a17f78158400debe94",
+      "raw_response_sha256": "a4aef76aaf6202f2cfe395a7837f0890159d8e5b83e60359fa3d60b938eccfbe",
+      "read_log_sha256": "8a79b779ec6a58d0b7a19e34505f84dc65c2a68088aa49827255ee8aa0a96d23",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 7,
+        "read_allowlist_deviations": []
+      }
+    },
+    {
+      "case": "C5",
+      "replicate": 2,
+      "stage": "s2",
+      "root": "primary-runs/alder/C5/r2/s2",
+      "status": "success",
+      "source_fixture": "primary-inputs/C5/s2.txt",
+      "source_sha256": "e6c7ebadd9a5697083d96ee36db9b2d98b20e6f91e93cc83ca91509a9fd65c9e",
+      "method_sha256": {
+        "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+      },
+      "publish_paths": [
+        "primary-runs/alder/C5/r2/s2/envelope.txt",
+        "primary-runs/alder/C5/r2/s2/metadata.json",
+        "primary-runs/alder/C5/r2/s2/read-log.jsonl",
+        "primary-runs/alder/C5/r2/s2/raw-response.md",
+        "primary-runs/alder/C5/r2/s2/docs/business-design/design.md"
+      ],
+      "envelope_variant": "compact-v2",
+      "envelope_sha256": "8876721a4a693c1c85e78f474cafc7627c8c6cc5f78ed38fd0a05d10fb2c1cae",
+      "agent_id": "/root/alder_primary/c5_r2_s2",
+      "started_at": "2026-10-02T08:13:01.997830+00:00",
+      "finished_at": "2026-10-02T08:14:10.818414+00:00",
+      "artifact_sha256": "553a5ed50b1229d76de0aec7efbcf4d489a0b0f70bd1b605ef979cf9bea07665",
+      "raw_response_sha256": "39541ddb1f98fa33633077e5c83f9dc9e74ce80c3646a72dd387e0dc8ded3152",
+      "read_log_sha256": "d064c2a62a641772479faa45a4201bc5ac1cfd644e61441a859bdf40f9927afb",
+      "failures": [],
+      "retries": 0,
+      "verification": {
+        "input_integrity_pass": true,
+        "output_integrity_pass": true,
+        "full_artifact_present_in_raw": true,
+        "strict_read_allowlist_pass": true,
+        "read_log_entries": 6,
+        "read_allowlist_deviations": []
+      }
+    }
+  ],
+  "updated_at": "2026-10-02T08:15:06.938051+00:00",
+  "deviations": [
+    {
+      "id": "authoring-guard-wrapper-variant",
+      "description": "C1/r1/s1 and C1/r1/s2 used initially planned verbose orchestration guard. Remaining 18 runs use a compact equivalent guard; business task remains verbatim and source/method bytes unchanged. Wrapper wording variation is an experimental limitation. Current compact guard is fixed for remaining runs.",
+      "business_output_modified_by_operator": false
+    },
+    {
+      "id": "operator-validation-glob-stage3-metadata",
+      "description": "During raw completeness validation after 18 completed authorings, operator glob s* matched an existing Alder s3 metadata.json and read that metadata; then missing authoring artifact halted validation. Corrected to s[12]. No s3 raw/business output was read and no information was delivered to authoring agents.",
+      "generation_input_leakage": false,
+      "severity": "minor bookkeeping",
+      "primary_eligibility_changed": false,
+      "business_content_read": false,
+      "business_output_modified": false
+    },
+    {
+      "id": "authoring-own-generated-output-reads",
+      "description": "Five fresh authoring agents logged reads of their own generated design and/or raw response during output verification. These paths were outside the strict input-only read allowlist. No other case/arm/source/oracle paths appear in their declared read logs. Operator did not edit artifacts or retry runs.",
+      "runs": [
+        {
+          "case": "C2",
+          "replicate": 2,
+          "stage": "s2",
+          "reads": [
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
+          ]
+        },
+        {
+          "case": "C3",
+          "replicate": 1,
+          "stage": "s1",
+          "reads": [
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
+          ]
+        },
+        {
+          "case": "C3",
+          "replicate": 1,
+          "stage": "s2",
+          "reads": [
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
+          ]
+        },
+        {
+          "case": "C3",
+          "replicate": 2,
+          "stage": "s1",
+          "reads": [
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+          ]
+        },
+        {
+          "case": "C5",
+          "replicate": 1,
+          "stage": "s2",
+          "reads": [
+            "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+          ]
+        }
+      ],
+      "cross_run_input_leakage_in_declared_log": false
+    }
+  ],
+  "authoring_totals": {
+    "requested": 20,
+    "success": 20,
+    "failed": 0,
+    "retries": 0
+  },
+  "verification_path": "primary-runs/alder/verification.json",
+  "verified_at": "2026-10-02T08:14:35.978609+00:00",
+  "operator_business_output_modified": false,
+  "primary_eligibility": "Preserved; s3 metadata inspection was operator bookkeeping only, no business content read and no generator/probe input transmission.",
+  "verification_totals": {
+    "input_integrity_pass": 20,
+    "output_integrity_pass": 20,
+    "full_artifact_present_in_raw": 20,
+    "strict_read_allowlist_pass": 15,
+    "own_output_read_deviation": 5
+  },
+  "handoff_manifest_path": "primary-runs/alder/handoff-manifest.json",
+  "coordinator_status": "completed",
+  "completed_at": "2026-10-02T08:15:06.938051+00:00"
+}

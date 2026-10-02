@@ -1,0 +1,104 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-001-P035-1",
+      "packet_id": "P035",
+      "claim_question": "F19/F20の返却済み遅延を次回判定へ適用する範囲はcanonicalでは断定困難。",
+      "audit_target_ids": [
+        "F19",
+        "F20"
+      ],
+      "review_file": "P035-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P038-1",
+      "packet_id": "P038",
+      "claim_question": "F14/F23の返却済み遅延の次回利用とF15の複数記録未決との整合はrawで要確認。",
+      "audit_target_ids": [
+        "F14",
+        "F23",
+        "F15"
+      ],
+      "review_file": "P038-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P005-1",
+      "packet_id": "P005",
+      "claim_question": "F2/F4の未返却限定が原資料の前提から自然に含意されるかはrawで要確認。",
+      "audit_target_ids": [
+        "F2",
+        "F4"
+      ],
+      "review_file": "P005-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P046-1",
+      "packet_id": "P046",
+      "claim_question": "F34/F35が上流の状態モデルの説明かprobe独自の仕様化か、引用元の文脈をrawで要確認。",
+      "audit_target_ids": [
+        "F34",
+        "F35"
+      ],
+      "review_file": "P046-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P060-1",
+      "packet_id": "P060",
+      "claim_question": "F37/Q4の追加受付条件は上流F8の貸出可能状態と一部隣接するため、境界外の必須質問かrawで要確認。",
+      "audit_target_ids": [
+        "F37",
+        "Q4"
+      ],
+      "review_file": "P060-review.json"
+    },
+    {
+      "claim_id": "attempt-002-P005-1",
+      "packet_id": "P005",
+      "claim_question": "F55-F56の文書構造上の配置が実際の業務要件として要求されたか、canonicalだけでは曖昧。",
+      "audit_target_ids": [
+        "F55",
+        "F56"
+      ],
+      "review_file": "P005-review.json"
+    },
+    {
+      "claim_id": "attempt-002-P019-1",
+      "packet_id": "P019",
+      "claim_question": "F7/F17の「担当者」は未確認の役割名を便宜的に使うのか、責任の確定なのか曖昧。",
+      "audit_target_ids": [
+        "F7",
+        "F17"
+      ],
+      "review_file": "P019-review.json"
+    },
+    {
+      "claim_id": "attempt-002-P029-1",
+      "packet_id": "P029",
+      "claim_question": "F19-F21は複数貸出の代表値選択を含意する可能性があるが、集約規則はcanonicalで明示されない。",
+      "audit_target_ids": [
+        "F19",
+        "F20",
+        "F21"
+      ],
+      "review_file": "P029-review.json"
+    },
+    {
+      "claim_id": "attempt-002-P046-1",
+      "packet_id": "P046",
+      "claim_question": "F35が上流P005の未抽出の状態表を引用している可能性があり、probe独自性の最終確認にはrawが要る。",
+      "audit_target_ids": [
+        "F35"
+      ],
+      "review_file": "P046-review.json"
+    },
+    {
+      "claim_id": "attempt-002-P060-1",
+      "packet_id": "P060",
+      "claim_question": "F4の新規会員区分初期化はP029 F7に由来するが、未返却がない時の区分を決める妥当性は原資料で要確認。",
+      "audit_target_ids": [
+        "F4"
+      ],
+      "review_file": "P060-review.json"
+    }
+  ]
+}

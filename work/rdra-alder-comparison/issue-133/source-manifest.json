@@ -1,0 +1,465 @@
+{
+  "retrieved_date": "2026-10-02",
+  "official_page": "https://www.rdra.jp/rdra%E3%83%84%E3%83%BC%E3%83%AB/rdraagent0-8",
+  "archive": {
+    "file_name": "RDRAAgent_v0.8.zip",
+    "url": "https://drive.google.com/file/d/1ojI1f1tC4erawdZlkm7jtt3fnM0TTrs9/view",
+    "bytes": 233603,
+    "sha256": "528b17deb76ac70050620b82118a6140f070f9e7b6282fc8b26d2a43420e074b",
+    "drive_modified_time": "2026-06-03T02:34:59.992Z"
+  },
+  "historical_example_archive": {
+    "file_name": "RDRAAgent_v0.8_lib.zip",
+    "url": "https://drive.google.com/file/d/11GZ1wc7kWZ4MamyEkhh2ffKYWEpzfqba/view",
+    "bytes": 584065,
+    "sha256": "d06f015b763079fadddc5b846b5bfbae231d9d82ed3ab0ab7cc55c9dfd91d0d6",
+    "drive_modified_time": "2026-06-04T02:05:25.000Z",
+    "threshold_provenance_status": "strings 3日未満 and 7日未満 not found in UTF-8-readable entries"
+  },
+  "files": [
+    {
+      "path": "RDRAAgent_v0.8/.claude/CLAUDE.md",
+      "bytes": 177,
+      "sha256": "82459cb81baf0c3731d985d80752501966be3ea9fcb82d638ee588b2765c16a6"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/settings.local.json",
+      "bytes": 2308,
+      "sha256": "f6d48ae7d66b441c3fa23ceaea84be4611634d41acbe3ec720a8c8d60950528c"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/skills/rdra-business-system-qa/SKILL.md",
+      "bytes": 8101,
+      "sha256": "5ba38bb43486799232bec2f6dab5970708fc15f98d9e074512d0c11992eb87b9"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/skills/rdra-core-references/SKILL.md",
+      "bytes": 5126,
+      "sha256": "336d8b4c601aa9e233f24bfa31f96200361244bc5b2682fe1f71eb1db8cdb920"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/skills/rdra-impact-analysis/SKILL.md",
+      "bytes": 8078,
+      "sha256": "4adf9681bcd6df873d1587d34a23dec6eda805d2ce2f6c3c0938589c5140c738"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/skills/rdra-relation-explain/SKILL.md",
+      "bytes": 7086,
+      "sha256": "4c1b6b2a559647bd801c3b73a63be835f8a5616979bdbd5d13a8dcfb964a82d4"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.claude/skills/rdra-sdd-qa/SKILL.md",
+      "bytes": 5899,
+      "sha256": "caf48e73b75ba7f39a382f1dc60dca64d91c31d6acee5ba69b28b3b71750a45e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/.cursorignore",
+      "bytes": 141,
+      "sha256": "f657b65bddc622157a2daeeef93aeb6f05c4d04b1bddf06b102a4d362001e7f0"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/skills/rdra-business-system-qa/SKILL.md",
+      "bytes": 8101,
+      "sha256": "9437c9a1d140bdcb63ebd3973d642fe3ecfb06aefbdf6f71db9fdd8ce02aea58"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/skills/rdra-core-references/SKILL.md",
+      "bytes": 5126,
+      "sha256": "2283f980fdce02087174e9d81eb6de6bb7c1c73d87be4aa51d19fa7ab761d048"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/skills/rdra-impact-analysis/SKILL.md",
+      "bytes": 8078,
+      "sha256": "f5ef6cc16f4d98759452240bc5204e3a4735bd7dbecdf2a5bed604199c291d32"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/skills/rdra-relation-explain/SKILL.md",
+      "bytes": 7086,
+      "sha256": "828908e7144b096fc206a640efc5f3726de5539dcdf6baa0cfe0df3a0f19fb90"
+    },
+    {
+      "path": "RDRAAgent_v0.8/.cursor/skills/rdra-sdd-qa/SKILL.md",
+      "bytes": 5899,
+      "sha256": "caf48e73b75ba7f39a382f1dc60dca64d91c31d6acee5ba69b28b3b71750a45e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/AGENTS.md",
+      "bytes": 8717,
+      "sha256": "3a74bc59a818563713538f4c940aea77009d076e5c6932d0cee2315c91e7e84a"
+    },
+    {
+      "path": "RDRAAgent_v0.8/menu.js",
+      "bytes": 2382,
+      "sha256": "40c17713de900149d03527df139647e6b024690eed2d7b7ca08574fbd209f407"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/.rdracore/RDRA.md",
+      "bytes": 3401,
+      "sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/.rdracore/RDRAGraph.md",
+      "bytes": 9710,
+      "sha256": "6088d05945767b0d62108b93a18d514add02ce2eaebf958d3f34f3a9bba9c834"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/.rdracore/RDRASheet.md",
+      "bytes": 13296,
+      "sha256": "94774bd075d94462e0f87a5e7b21e344c17ba6283148c592bea505427bf2ef6b"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/attachContext.js",
+      "bytes": 9019,
+      "sha256": "15a299121ab7b61843d461391f50df70052ef9faf70fc94233d9ca8676e43b27"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/callgraph/callgraphServer.js",
+      "bytes": 13666,
+      "sha256": "40bb950660e0dc42c8244e613ed27c7f16c73f43278be708049cf2ba39c21570"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/callgraph/callgraphView.html",
+      "bytes": 31265,
+      "sha256": "3a73aeeed061343da434c3643c864214042798cc51dfc5e3d83a1bb2fbffd5a0"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/copyToClipboard.js",
+      "bytes": 3804,
+      "sha256": "e26147f11198ea52d9e671afa828b393a43384bd36ed09569b674b013a10802e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/deleteFiles.js",
+      "bytes": 5409,
+      "sha256": "7d3214b9eb72c50c066b92a09e5a442e54fb9bdbf191411cfae5f38af58ca918"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/enrichPh4InfoStateModels.js",
+      "bytes": 6403,
+      "sha256": "46fe89c884444e8acd9ebef8142c4461210ad6ab35454b3ea06b3c97b9b9cad5"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/makeBUC.js",
+      "bytes": 9410,
+      "sha256": "4068a629a020ed0c2671a20cc4dc67fb38d75ca7298ef6a1e48188f78452af1e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/makeGraphData.js",
+      "bytes": 82702,
+      "sha256": "3fbc16471f1b3e6c2d65300fd65ec1d51a61e87f926f43a4d5d05ab7387efebb"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/makeZeroOneData.js",
+      "bytes": 6800,
+      "sha256": "29ae8615e9095ef6f1a79bb413cbc1dadf26e49e0fca50f498e76e59796c55e4"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/menuAction.js",
+      "bytes": 50033,
+      "sha256": "c9eed8695b57733e7a7351cd9d9f2425e936047402e2dd3c4cc5e092a7d5b1bb"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/mergeCallgraphData.js",
+      "bytes": 22767,
+      "sha256": "08ad5239ce98ab7dfae645b08f98091bb0d02a731b4dba72d96999449b0d5065"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/parallelRun/dag-runner.js",
+      "bytes": 9523,
+      "sha256": "446baa2295b3e8d9600009e2a14a7b6a79cf25d4bbff77d15c2c3cacb2055484"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/parallelRun/node-file-runner-V3.js",
+      "bytes": 11005,
+      "sha256": "a2709a21cdf89d359ff3c6306ac82d75c1c7ef8993cbef6d9bd6b200c4507ce8"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/parallelRun/parallel-runner.js",
+      "bytes": 7122,
+      "sha256": "1620c99a99e3b75e490bfa5f2cbde5f777f1097a45efb320654a9f6fd3d030fb"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/rdraFileCopy.js",
+      "bytes": 5733,
+      "sha256": "502dd74bac99525e077a63646fee63091d4a4e4c5d806aae82373159213a0971"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/sddPostCheck.js",
+      "bytes": 21136,
+      "sha256": "d9cfe776bea260f28f59a1ed52ccb5f8c259921b8c58620b5bc8a85cda42d786"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/settings/rdraConfig.js",
+      "bytes": 3138,
+      "sha256": "ccb51f464488ab746001b986ff35f21ed930744a48468f083624721df845ef2f"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/settings/rdraDependency.js",
+      "bytes": 10420,
+      "sha256": "3fe43b4b79ee747172649148b4a1c5b144542acdc5441407e7d03cde43c33a3b"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/uiBucFolderName.js",
+      "bytes": 3723,
+      "sha256": "bd663bbbc992a8c214c4ef7fd4c7a29d07a744bc898345f6b36a586a0e88465e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/uiMenu33Helper.js",
+      "bytes": 3658,
+      "sha256": "3023d6da77d716a1b9dc966d87d2e311e7ac460cafe5583c9b2bb9caf89cbcc9"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/web_tool/bucActorUI.html",
+      "bytes": 34195,
+      "sha256": "d4c6ae30cd2dba8eed9ed0ecbc1e59510f7a8e74fb59083d9784ff1bf2341983"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/web_tool/bucActorUI.js",
+      "bytes": 5564,
+      "sha256": "0e78151e89ab513bfb06e739ae4f84cd6ec8d1be480cb0f39bf0ebac3c37bac4"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/helper_tools/zeroOnePostCheck.js",
+      "bytes": 4632,
+      "sha256": "4b5a8192c64c660077c7e449bce53d148f413d72f98ded0207561df9bfbee7c7"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md",
+      "bytes": 2084,
+      "sha256": "5b0b9fb471639daf19c82c0f59aa2d8911f71759e99ab7b2b366e804a56c2e67"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md",
+      "bytes": 1918,
+      "sha256": "cfe79f0a26447f3b5d2f2cc920b3c91db515d7c54fdd72d01b5b01cde0eabb4b"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md",
+      "bytes": 15669,
+      "sha256": "fc05c907c7417e20acaaab9053fb656ccf0018fa190ed644ef300e2fdc0627df"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1要求生成.md",
+      "bytes": 2352,
+      "sha256": "09628f63a7b7c0f5cd0820e535312dcf9a0b49af21354c413d4052998b4902f1"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+      "bytes": 1314,
+      "sha256": "9b96491741cf27077a588064dcf395720c87ec2f87b7fb9976d591632505c74c"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase2/ph2アクティビティ生成.md",
+      "bytes": 6797,
+      "sha256": "c5bc28d1499a35b64879927050480548108621b510da4ca6b5b90718e9e2ab19"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase2/ph2条件生成.md",
+      "bytes": 2277,
+      "sha256": "1dfc4882a75b55310428f33383244474b9fe17efbb36c60a306bb495a0227489"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase2/ph2状態生成.md",
+      "bytes": 2861,
+      "sha256": "ae72d9a7a24a964995bcb92437686a0c272367c1ca0eff82bffb38d21f012061"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase3/ph3BUC生成.md",
+      "bytes": 14663,
+      "sha256": "028429d438cbb3e7f4bff301a79b9a32dc6bce904b8ae96b5ed4b49f408e27f9"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase3/ph3バリエーション生成.md",
+      "bytes": 1842,
+      "sha256": "5079355ae6d9353b486309dcb3d5a9c71c0ced991332d5604cde2217101c266e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4UCアクター.md",
+      "bytes": 3419,
+      "sha256": "132e6e8d8b1d157fda6bd6ea471f13ff2bc8aae952160827c60a22fc2b1965eb"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4UCタイマー.md",
+      "bytes": 2189,
+      "sha256": "a0a5e0339dccbb7c21b732c834e3ea0803bfda788dcfe15d6089f5aabff8c6f2"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4UC外部システム.md",
+      "bytes": 2638,
+      "sha256": "fe6d8c55047ce7f184e3c1604b0704c6a871134f258266d7217497059fa16372"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4UC外部システム.tsv",
+      "bytes": 137,
+      "sha256": "e046d7b02671d5e63a579ca94d1b9bc4f7c0593480d77d64353ffcd29fd51ea9"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4アクター生成.md",
+      "bytes": 2101,
+      "sha256": "0ed52f8a6e548ac5e2c686c20792df61209516bad5e83ac4427445269e23cd17"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4外部システム生成.md",
+      "bytes": 1917,
+      "sha256": "c108af61d86ee8c07101079c06189916d09a893be89709a61deaba6698f215be"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4情報生成.md",
+      "bytes": 7535,
+      "sha256": "e89b68e8e2d64a5eac5c4c478a75be6533d2498dbc5892a9c87134c0c9616a92"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4条件生成.md",
+      "bytes": 3636,
+      "sha256": "8bfb0848148414508c23bfb13d60418e5fddbbc882355c93cbf343928f31e1b1"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4状態生成.md",
+      "bytes": 5494,
+      "sha256": "efc0dd763ddf03bc64d6efb8ef5bf8a6ec0870a028b94963e483a067e117b6c2"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_1_RDRA/影響度分析.md",
+      "bytes": 767,
+      "sha256": "6d71694633dff895860721690e4b810bb3e3e55389578ff18206b4a02e367ce4"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase1/21_論理データ生成.md",
+      "bytes": 3002,
+      "sha256": "b0b4214afbc8af963a79311e38e0a9ec10b7d3121c6493151ee045ea2692234f"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase1/22_ビジネスルール生成.md",
+      "bytes": 1951,
+      "sha256": "7dd7b7411ebad11920ea79cda99a85ffdd2838f36493e1fbe9f91db7a209d04c"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase1/23_画面一覧生成.md",
+      "bytes": 5255,
+      "sha256": "724d0b6e130fe504c20a1f6b53a4e326d7fa6696ed19c9f42bee3e2f6bc1120b"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase1/24_BUC画面生成.md",
+      "bytes": 2386,
+      "sha256": "311fbe28f7ea154c5d91bea5ac4b56955c42e54975422128791099d62e9a613e"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase1/25_アクター画面生成.md",
+      "bytes": 2079,
+      "sha256": "e90ab3445ff14aac24e604b74520a3c8f7c98b373b6ae738e3ad73fe01e2c3c8"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase2/26_画面照会生成.md",
+      "bytes": 4154,
+      "sha256": "faa6b0bb6965d12ab6d84c07a850865b6a22bbc2b024bf3147182cc1025e0e99"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_2_RDRASpec/phase2/27_イベント一覧生成.md",
+      "bytes": 4734,
+      "sha256": "fbb2020187f3db6a41dc5bc5ab13d6881d7ae6d5537e3c99d9882e3a44de2e52"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_3_RDRASdd/31_Create_Domain.md",
+      "bytes": 18132,
+      "sha256": "8263acae503ac7c811e86944ab1f8ae0533b408044835f3038e7499a2e1198ae"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_3_RDRASdd/32_Create_Base.md",
+      "bytes": 14062,
+      "sha256": "96b1ecdd4d4c9b4b6cd60bac47c48749466eef02e361028e82c204eaf68488f1"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_3_RDRASdd/33_Create_Application.md",
+      "bytes": 22272,
+      "sha256": "6f1af2298d8d5c61ea313ae6a3b1a3c7407e7fbea0b7995320902de3683da234"
+    },
+    {
+      "path": "RDRAAgent_v0.8/RDRA_Knowledge/_3_RDRASdd/34_Create_UI.md",
+      "bytes": 20314,
+      "sha256": "624ebae98b9ea35f760474c0c523d5f966f65d0a41be651c7828ee27367e772b"
+    },
+    {
+      "path": "RDRAAgent_v0.8/README.md",
+      "bytes": 23028,
+      "sha256": "3e64b727bd491ce63bc83b480a0b55c993b1cf11d08dcb4de1eef35827c5abf5"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/AsIs介護システム/初期要望.txt",
+      "bytes": 2818,
+      "sha256": "c96f7260aa46a05bd77907ad10276583a0b71c3114c643b609721c31b0d7112c"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/Project/AGENTS.md",
+      "bytes": 3818,
+      "sha256": "8e2449dff9d4107f0f9f060d1d1625fac86682c37f23a1b261805f427a37a5c4"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/マッチングシステム/初期要望.txt",
+      "bytes": 3942,
+      "sha256": "3202be6c97b0c8421f1db54b737d892a42ba889fe6f4a0d6dd00f3d293aa39ef"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/介護事業者向けシステム/初期要望.txt",
+      "bytes": 1545,
+      "sha256": "fe849a5f2541c4e6ef2f0b005ff548250d5a3d282c4828888e416f81f3367f84"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/図書館システム/初期要望.txt",
+      "bytes": 2113,
+      "sha256": "8d5e19fa307339979fec027653f5960f735e0b3231ceeccc206147db8a8599cf"
+    },
+    {
+      "path": "RDRAAgent_v0.8/Samples/貸し会議室SaaS/初期要望.txt",
+      "bytes": 2161,
+      "sha256": "65c222c7522153b466118e7d34e326ae9d0ea2ad140729a1f9d3a620fb01d156"
+    },
+    {
+      "path": "RDRAAgent_v0.8/モデル設定.json",
+      "bytes": 1075,
+      "sha256": "1e52cfc6202619dc5d27593663661fbf6547e24d53fee58e3c3b6150da40f9d2"
+    },
+    {
+      "path": "RDRAAgent_v0.8/初期要望.txt",
+      "bytes": 2113,
+      "sha256": "8d5e19fa307339979fec027653f5960f735e0b3231ceeccc206147db8a8599cf"
+    }
+  ],
+  "alder": {
+    "revision": "eb591bfbc1b077b0e93d62253cb1e7f3e392e462",
+    "plugin_version": "0.2.8",
+    "authoring_source_revision": "e9726b4c84608db42c5286d072b5ec762d31596a",
+    "files": [
+      {
+        "path": "plugins/alder/skills/alder-draft-business-design/SKILL.md",
+        "git_blob_sha": "13d762077337c7c689ee9d269790e2297c4b9017",
+        "sha256": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+        "bytes": 7088
+      },
+      {
+        "path": "plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+        "git_blob_sha": "c33d4712b96b3716fc8666566679ae874e31ba71",
+        "sha256": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29",
+        "bytes": 283
+      },
+      {
+        "path": "plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+        "git_blob_sha": "f57bc48966c15e3d96bf5dc4401433adacd24cc7",
+        "sha256": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+        "bytes": 63460
+      },
+      {
+        "path": "plugins/alder/skills/alder-draft-business-design/references/business-graph.md",
+        "git_blob_sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+        "sha256": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+        "bytes": 17127
+      }
+    ]
+  },
+  "public_historical_fixture": {
+    "repository": "tango238/rdra",
+    "revision": "be7b56578b65a9582ede2684009dafeab9933c79",
+    "path": "example/library/rdra.yml",
+    "blob_sha": "4b7881c0a1361e5d4270a492f99421381052ee06",
+    "sha256": "dd84f42251dcf8c61a2d5e18b2bc1fc7f64c1298bf5fc761c6014ffc82ec49d0",
+    "normalization": "遅延日数＜３日 / 遅延日数＜７日 / 遅延日数が７日以上 -> 3日未満 / 7日未満 / 7日以上; extracts only貸出制限 and its variations; does not import other rules"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "packets": [
+    {
+      "packet_id": "P001",
+      "stage": "s2",
+      "canonical_file": "P001.json"
+    },
+    {
+      "packet_id": "P008",
+      "stage": "s2",
+      "canonical_file": "P008.json"
+    },
+    {
+      "packet_id": "P011",
+      "stage": "s1",
+      "canonical_file": "P011.json"
+    },
+    {
+      "packet_id": "P015",
+      "stage": "s3",
+      "canonical_file": "P015.json"
+    },
+    {
+      "packet_id": "P016",
+      "stage": "s1",
+      "canonical_file": "P016.json"
+    },
+    {
+      "packet_id": "P030",
+      "stage": "s1",
+      "canonical_file": "P030.json"
+    },
+    {
+      "packet_id": "P047",
+      "stage": "s1",
+      "canonical_file": "P047.json"
+    },
+    {
+      "packet_id": "P050",
+      "stage": "s3",
+      "canonical_file": "P050.json"
+    },
+    {
+      "packet_id": "P052",
+      "stage": "s3",
+      "canonical_file": "P052.json"
+    },
+    {
+      "packet_id": "P053",
+      "stage": "s2",
+      "canonical_file": "P053.json"
+    },
+    {
+      "packet_id": "P054",
+      "stage": "s3",
+      "canonical_file": "P054.json"
+    },
+    {
+      "packet_id": "P056",
+      "stage": "s2",
+      "canonical_file": "P056.json"
+    }
+  ],
+  "s2_s3_correspondence": [
+    {
+      "stage2_packet_id": "P001",
+      "stage3_packet_id": "P052"
+    },
+    {
+      "stage2_packet_id": "P008",
+      "stage3_packet_id": "P050"
+    },
+    {
+      "stage2_packet_id": "P053",
+      "stage3_packet_id": "P015"
+    },
+    {
+      "stage2_packet_id": "P056",
+      "stage3_packet_id": "P054"
+    }
+  ],
+  "unavailable_packet_ids": []
+}

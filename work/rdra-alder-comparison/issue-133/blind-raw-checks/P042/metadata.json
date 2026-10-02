@@ -1,0 +1,41 @@
+{
+  "packet_id": "P042",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:38:20.008536+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P042-packet.md": "d32b0da7f3d03f08ee862177c004776b1be1b395d324d86051b337fb82d4be23",
+    "P042-canonical.json": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "343257002aa5399569b5d2da66a29086e137bdf6d1448cfef9a5c72b64aba675"
+  },
+  "envelope_sha256": "0e5c7cf8295b8597729da30af62ea87d920a7d7e7052aae56e72a7517d8f2604",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P042/P042-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P042/P042-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P042/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P042/review-targets.json"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p042",
+  "started_at": "2026-10-02T10:39:47.324244+00:00",
+  "finished_at": "2026-10-02T10:40:53.739121+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "d9a1627cf0398aad7ae56ed6e5b23e3587e707abe69ef0e7ecab455948b113e4",
+    "raw-response.md": "d9a1627cf0398aad7ae56ed6e5b23e3587e707abe69ef0e7ecab455948b113e4",
+    "read-log.jsonl": "ecd9aeeed3750d99ade913e5ebbb56bfac0e131926cc3277e258dcee3796ab03"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:41:46.765090+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log mechanical allowlist validation and actual final; procedural only, no independent attestation."
+  }
+}

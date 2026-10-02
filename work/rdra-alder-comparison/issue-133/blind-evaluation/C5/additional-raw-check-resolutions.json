@@ -1,0 +1,19 @@
+{
+  "case_id": "C5",
+  "raw_check_resolutions": [
+    {
+      "claim_id": "attempt-002-P059-1",
+      "status": "artifact_ambiguous",
+      "judgment": "F21の局所原文は既存schema維持を要求形で述べ、bigint自動採番主キー、非負の必須整数、空でない必須文字列、三状態の必須文字列を意味として保持する。一方でGENERATED ALWAYS AS IDENTITYとCHECK式の逐語形、既存定義そのものは提示されず、固定oracleの列型制約全体を厳密に保持したかはこの箇所だけで確定できない。元scoreを0または保持へ強制しない。",
+      "raw_quote_refs": [
+        {
+          "review_file": "P059-review.json",
+          "canonical_id": "F21"
+        }
+      ],
+      "affected_metrics": [
+        "source_facts_preserved"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/BUC.tsv",
+    "sha256": "8df705d397734398d1a2da7148987ffc271e9e8307ce63b68ef91975bf11ab5a",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/if/関連データ.txt",
+    "sha256": "a4d6a7c14e9cb6e9b795de6c3e6ec1e6c5cfbc313a979c139eedfcac42d16175",
+    "anonymization": []
+  },
+  {
+    "artifact": "003",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/アクター.tsv",
+    "sha256": "b6d11800e3c7e647fb83f7acb3aecd3a42211cdbb287a2b577e685b5722facf9",
+    "anonymization": []
+  },
+  {
+    "artifact": "004",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/システム概要.json",
+    "sha256": "86ecbef305a7e5c04b7ac8bad24825ec2ede01811192226344a768c2ab7cd18a",
+    "anonymization": []
+  },
+  {
+    "artifact": "005",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/バリエーション.tsv",
+    "sha256": "fc76400411ec66ed328d85abad601cd3afc928bd922f310b2292c05b1c09dfcf",
+    "anonymization": []
+  },
+  {
+    "artifact": "006",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/外部システム.tsv",
+    "sha256": "73afd2a8b5a2c400270187d4a7dd8ac461acaf8ce226b3b91ea5b35ef7e16293",
+    "anonymization": []
+  },
+  {
+    "artifact": "007",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/情報.tsv",
+    "sha256": "5635a601a401c267378acf82bf6a655d75caf78bcf3ae43ff09d9ae40ca3513e",
+    "anonymization": []
+  },
+  {
+    "artifact": "008",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/条件.tsv",
+    "sha256": "6744728fde54bbc3d2de17cf0c9664ae44230d7d945f21e2a343d73de5ad9124",
+    "anonymization": []
+  },
+  {
+    "artifact": "009",
+    "original_path": "primary-runs/rdra/C1/r2/s2/project/1_RDRA/状態.tsv",
+    "sha256": "6bf317724c9d2e4d6fbbeed9af0b58916f795bbcee3875359f111f7fc580ea38",
+    "anonymization": []
+  }
+]

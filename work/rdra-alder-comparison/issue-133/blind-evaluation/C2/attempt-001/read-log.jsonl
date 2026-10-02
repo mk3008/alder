@@ -1,0 +1,55 @@
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/evaluation-prompt.txt", "timestamp": "2026-10-02T10:07:03.453313+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/rubric.md", "timestamp": "2026-10-02T10:07:03.453465+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/case-reference.json", "timestamp": "2026-10-02T10:07:03.453577+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/downstream-subset.json", "timestamp": "2026-10-02T10:07:03.453624+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/packet-index.json", "timestamp": "2026-10-02T10:07:03.453656+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/received-handoff-index.json", "timestamp": "2026-10-02T10:07:03.453684+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P002.json", "timestamp": "2026-10-02T10:07:07.616441+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006.json", "timestamp": "2026-10-02T10:07:07.616854+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P012.json", "timestamp": "2026-10-02T10:07:07.616974+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P022.json", "timestamp": "2026-10-02T10:07:07.617063+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026.json", "timestamp": "2026-10-02T10:07:07.617550+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P027.json", "timestamp": "2026-10-02T10:07:07.617711+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P036.json", "timestamp": "2026-10-02T10:07:07.617895+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P037.json", "timestamp": "2026-10-02T10:07:07.618005+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043.json", "timestamp": "2026-10-02T10:07:07.618398+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044.json", "timestamp": "2026-10-02T10:07:07.618531+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P055.json", "timestamp": "2026-10-02T10:07:07.618601+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P058.json", "timestamp": "2026-10-02T10:07:07.618687+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H043.json", "timestamp": "2026-10-02T10:07:07.618804+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H044.json", "timestamp": "2026-10-02T10:07:07.618871+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P002.json", "timestamp": "2026-10-02T10:07:13.494234+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006.json", "timestamp": "2026-10-02T10:07:13.494488+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P012.json", "timestamp": "2026-10-02T10:07:13.494727+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P022.json", "timestamp": "2026-10-02T10:07:13.495299+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026.json", "timestamp": "2026-10-02T10:07:13.495870+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P027.json", "timestamp": "2026-10-02T10:07:13.496147+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P036.json", "timestamp": "2026-10-02T10:07:13.496781+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P037.json", "timestamp": "2026-10-02T10:07:13.496946+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043.json", "timestamp": "2026-10-02T10:07:13.497291+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044.json", "timestamp": "2026-10-02T10:07:13.497712+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P055.json", "timestamp": "2026-10-02T10:07:13.497927+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P058.json", "timestamp": "2026-10-02T10:07:13.498341+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H043.json", "timestamp": "2026-10-02T10:07:13.498712+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H044.json", "timestamp": "2026-10-02T10:07:13.499080+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026.json", "timestamp": "2026-10-02T10:07:18.089690+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P027.json", "timestamp": "2026-10-02T10:07:18.090151+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P036.json", "timestamp": "2026-10-02T10:07:18.090445+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P037.json", "timestamp": "2026-10-02T10:07:18.090934+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043.json", "timestamp": "2026-10-02T10:07:18.091353+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044.json", "timestamp": "2026-10-02T10:07:18.091790+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P055.json", "timestamp": "2026-10-02T10:07:18.092203+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006.json", "timestamp": "2026-10-02T10:07:37.359861+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P012.json", "timestamp": "2026-10-02T10:07:37.360245+00:00"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P002.json", "timestamp": "2026-10-02T10:08:38.200920+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006.json", "timestamp": "2026-10-02T10:08:38.200953+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P012.json", "timestamp": "2026-10-02T10:08:38.200968+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P022.json", "timestamp": "2026-10-02T10:08:38.200978+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026.json", "timestamp": "2026-10-02T10:08:38.200986+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P027.json", "timestamp": "2026-10-02T10:08:38.200993+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P036.json", "timestamp": "2026-10-02T10:08:38.201000+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P037.json", "timestamp": "2026-10-02T10:08:38.201006+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043.json", "timestamp": "2026-10-02T10:08:38.201014+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044.json", "timestamp": "2026-10-02T10:08:38.201020+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P055.json", "timestamp": "2026-10-02T10:08:38.201027+00:00", "purpose": "validation reread"}
+{"path": "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P058.json", "timestamp": "2026-10-02T10:08:38.201035+00:00", "purpose": "validation reread"}

@@ -1,0 +1,50 @@
+# Packetと匿名化の実行規約
+
+初回Stage3 probeとscore評価の前に固定する配置の詳細。PROTOCOL v1の生成入力・手法・採点分母は変更しない。
+
+- Stage1/2 direct評価はworkflowが生成した全business artifactsを参照する。RDRAは `0_RDRAZeroOne` と `1_RDRA`、Alderはbusiness-designとユーザーへのresponse。入力source、method、operator metadataは成果物扱いしない。
+- Stage3のhandoff packetは最終成果物。RDRAは `1_RDRA` 配下の全TSV/JSON/txt、AlderはBusiness Designとユーザーへのresponse。RDRAの中間Phase1–4をdownstreamへ追加提供しない。中間outputの消失と下流伝達を区別する。
+- 各artifactの相対pathを匿名番号へ置換し、その本文を連結する。手法名・plugin版・provenanceの行だけ除外または `[method metadata removed]` に置換し、変更箇所を記録する。業務内容・未決を削除しない。構造からのarm推定は防げないsingle-blind限界。
+- mapping seed `13320261002`、60個の匿名packet IDを事前割当。mappingはoperatorの評価後unblindingに使用し、evaluatorには渡さない。
+- 下流probeはStage2最終packetだけを受け取る。抽出者は各Stage1/2/probe packetだけからfacts/unknowns/questionsをcanonical化し、raw根拠行を付ける。oracleは見ない。score evaluatorは匿名canonical抽出とcaseのsource/回答/oracle/rubricを見る。
+- 要件事実が原文にない場合に抽出者が補完することを禁止する。canonical抽出がrawから誤っている可能性も第三者が再評価できるよう、raw packet・匿名化log・対応表を保存する。
+- 実効runtime設定と共有filesystemへのアクセス制御には独立証明がない。read-logとallowlist遵守の記録はsecurity isolationの証明ではない。
+
+## Downstream分母の操作定義
+最初のprobe/採点より前にdownstream-denominators.jsonで固定oracleからの必要期待結果subsetを明示した。rubric既定どおり未決・scope factを期待結果として要求しない。C1はHuman answerで更新された過去の重複候補表現、C5は技術選択/内部構造未指定とAPI実装範囲外の実行・連絡を期待結果の分母から除く。Stage2 semantic coverageの分母は変えない。上流資料の技術制約保持と未決伝達は別評価する。生成本文を見て分母を選んだものではなく、固定oracleのみから選定。生成開始後の操作補足であることを保存し、最終freeze時にこのsubset一覧まで固定済みだったとは表現しない。
+
+## Probeの呼出しmetadata
+最初のprobe前に、arm名を含むcoordinatorのtask pathからの起動を避け、非arm名のblind_observation coordinatorへ全20probeを集約した。元のarm別coordinatorはauthoringのみ担当する。業務task、匿名handoff packet、要求model/effortは変更しない。匿名化しても資料構造からの手法推定を防げないため、完全blindとは呼ばない。
+
+## 匿名化実装の補正
+最初の4probe後、PythonのUnicode word boundaryが日本語隣接の手法名を残し得る点を修正し、ASCII英数字境界と大文字小文字非依存にした。既存packetのRDRA/Alder残存行の機械検索は0件であり、既に実行済みのpacketは変更せず再実行しない。今後のpacketにも同じ手法名除去ルールを適用する実装上の補正。変更位置は既定sidecarへ保存する。
+
+## 実受領handoffによるprovenance確認 — 2026-10-02、C1初回採点後
+
+原Stage2 canonicalはRDRAの完成0_RDRAZeroOne+1_RDRAから抽出しているが、probeへの実入力は1_RDRAのみ。Stage2全体にある意味を、probeが受領した意味と自動的に同一視しない。Probe inventionは実際のinputに対して評価する。C1の原採点attemptとraw-check claimsは保持し、判断をoperatorで削除/確定しない。
+
+全20 Stage3の実input packet hashと対応Stage2 canonical input hashを比較する。同一byteならそのcanonicalを再利用し、非同一なら実handoff packetだけを原extraction prompt/同じFresh設定で別canonicalへ抽出する。元source/oracle/rubric/他packetを抽出者へ渡さない。匿名handoff indexとhash、根拠quoteを最終scorerへ渡し、full Stage2はStage2 coverage、received handoffはprobe provenanceに用いる。実入力・oracle・rubric・分母を変更するものではなく、初回採点後の測定補正として時点と原attemptを公開する。
+
+Raw reviewerも原score/元source/oracleを読まず、当該匿名packet/canonicalだけから局所引用・modality・scopeを記録する。Stage3 provenanceのreviewでは対応Stage2と実受領packetを区別して引用する。異なるreplicateの意味で当該資料を補完しない。初回とretryの全raw-check claimsをledgerへ残し、別judgeでflagが消えただけでは解決済みにしない。原文でも曖昧な判断を無理に0へ置き換えない。
+
+## 固定rubric適用確認と原採点保持 — C1最終文脈評価後
+
+C1の最終文脈評価は初回・retryの全10claimsをresolved 7 / artifact_ambiguous 3 / pending 0へ対応付けた。元needs_raw_checkの6文字列は削除せず、同じ評価者の追加model turnで既存claimとの対応を別raw-flag-dispositions.jsonへ保存した。原文の曖昧さ3件は影響するunauthorized_decisions/unsupported_additionsのみNA、残3flagは解決済みの出所・範囲の文脈注記であり、別の新pendingではないとの本人判断を保存した。
+
+canonical questionsが空なのにQuestion actionabilityが未決factを根拠に加点されていた2資料を固定rubricへ照合した。評価者自身が未決発見と具体的な質問を混同していたと確認し、actionable_unknown_idsと対応coverage_evidenceだけの訂正を別score-correction.jsonへ保存した。元scores.json/raw-response.md、unknown recall等の他fieldは変更しない。aggregateは元値一致・canonical evidence IDs・補足/元output hashesを機械照合してこの評価者作成patchを明示適用する。operatorによる業務判定や採点規則/分母の変更ではない。
+
+この追加確認は同じFresh起動済み評価者へのfollowupで、新しいFresh spawnではない。元採点、補足envelope、実agent ID、追加model turn、原応答、read-log、checkerの元誤検出と訂正を保存する。以降のcaseにも既定rubricの未決と具体的質問の区別を明示する。初回生成前にこの運用補足まで固定していたとは表現しない。
+
+## Canonical本文の保存と最終応答の配送逸脱 — P013、C3採点前
+
+P013は完全canonical JSONと同内容rawを保存し、入力hash・引用行・ID・read-logの機械検証は成功したが、最初finalはpath summary、同じ子への純返却followupも出力長制約を理由とするerror summaryだった。長さ制約は子の申告でありprovider側の独立attestationはない。元metadata、実final 2件、followup、SHAをimmutable snapshotへ保存した。
+
+新Fresh再生成で完成した意味抽出を差し替えず、保存payloadの技術検証成功と最終応答全文配送のstrict不合格を別fieldで記録する。完全保存payloadはsource-clean探索観測へ提供し、当該資料のstrict品質分析から除外する。availabilityには元generation eligibilityとcanonical delivery eligibilityを別々に残す。JSON/業務内容/採点分母をoperatorで修正せず、以降同じ逸脱には同じ扱いを適用する。本文が実際に欠けた・hash不一致・引用検証失敗の場合まで、この配送逸脱扱いで成功へ置換するものではない。
+
+## 計測payload retryと短い引用の限界 — C4採点前
+
+P050のcanonical attempt1/2は引用から原packetのMarkdown強調記号が除かれ、固定literal引用検証に不合格だった。原JSON、実final、metadata、read-log、input/output hashを別attemptへ保存し、同一packet・原extraction prompt・同Fresh設定だけの別抽出を行った。失敗内容・修正hint・旧payload・scoreを新子へ渡さない。attempt3で検証に合格した。元業務生成artifact/probe/sourceを再生成せず、追加business replicateとは数えない。checker、oracle、rubricを変更しない。
+
+P008には単語中心の短い引用がある。機械passは文字列の存在・範囲・IDを確認したもので、canonical意味解釈の完全な証明にはならない。原抽出を保持し、この観測限界を中立補足としてC4採点者へ提示した。原文確認が必要な場合は既定raw-check ledgerとFresh局所reviewを用い、意味本文をoperatorで補完しない。
+
+P013と同条件の完全payload配送逸脱には既定の一律分類を適用する。各当該metadataに元status、実finalとpure-return followup、snapshot hash、strict delivery false/source-clean探索可を残す。実際のquote検証失敗をこの配送分類で成功へ置換しない。

@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:21:08Z",
+  "end_utc": "2026-10-02T08:21:20Z",
+  "failures": ["Initial output write failed because phase4 directory did not exist; created the directory and successfully wrote and verified the TSV."],
+  "unmet_restrictions": [],
+  "note": "No external systems are specified in the allowed inputs, so the TSV contains the required header and no association rows. Start time is the first recorded UTC timestamp during execution."
+}
