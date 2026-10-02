@@ -24,7 +24,7 @@ def collect():
                     # Probe packet copies are reconstructible from blind-packets.
                     if folder=='blind-probes' and p.name=='packet.md':continue
                     xs.append({'path':PREFIX+str(p.relative_to(ROOT)),'mode':'100644','type':'blob','content':text})
-    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py','call-counts.py','blind_eval_ops.py','blind_probe_ops.py','blind_raw_ops.py','handoff_extract_ops.py']:
+    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py','call-counts.py','blind_eval_ops.py','blind_probe_ops.py','blind_raw_ops.py','handoff_extract_ops.py','verify-final-evidence.py','render-result-tables.py']:
         p=ROOT/name
         if p.exists():xs.append({'path':PREFIX+name,'mode':'100644','type':'blob','content':p.read_text()})
     return xs

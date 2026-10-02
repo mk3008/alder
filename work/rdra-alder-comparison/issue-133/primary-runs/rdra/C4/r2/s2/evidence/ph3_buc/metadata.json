@@ -1,0 +1,7 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:44:34Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase3 did not exist; created the output directory and retried successfully.", "Initial structural check found a 12-column row; corrected it and verified all 15 lines have 13 columns."],
+  "unmet_restrictions": [],
+  "note": "Start time was not captured at invocation."
+}

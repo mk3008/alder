@@ -62,8 +62,27 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P035-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F19は未返却と返却済の照会を明示し、F20は現在日または返却日で貸出ごとの日数を求め制限判定で参照する。しかし返却済み遅延を次回の可否へどう適用するかは直接定めない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P035-review.json",
+            "canonical_id": "F19"
+          },
+          {
+            "review_file": "P035-review.json",
+            "canonical_id": "F20"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217205+00:00"
     },
     {
       "claim_id": "attempt-001-P038-1",
@@ -176,8 +195,30 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P038-1",
+        "status": "resolved",
+        "judgment": "F14/F23は返却日数の次回判定への引継ぎを断定し、F15は複数記録からの選択・算定を未決とする。引継ぎという追加運用は数え、集約規則の創作は数えない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P038-review.json",
+            "canonical_id": "F14"
+          },
+          {
+            "review_file": "P038-review.json",
+            "canonical_id": "F23"
+          },
+          {
+            "review_file": "P038-review.json",
+            "canonical_id": "F15"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217213+00:00"
     },
     {
       "claim_id": "attempt-001-P005-1",
@@ -228,8 +269,27 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P005-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F2とF4は未返却限定および返却済除外を局所的に断定する。原sourceの返却遅延という語がこの対象集合を必然的に限定するかは資料だけでは確定しない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P005-review.json",
+            "canonical_id": "F2"
+          },
+          {
+            "review_file": "P005-review.json",
+            "canonical_id": "F4"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217215+00:00"
     },
     {
       "claim_id": "attempt-001-P046-1",
@@ -380,8 +440,26 @@
           "handoff_visibility": "actual_handoff"
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P046-1",
+        "status": "resolved",
+        "judgment": "F34は3日だけの説明と7日の画面・状態表の不一致、F35は初回一律区分と計算別三区分の不一致を指す。実受領H046に両記載があり、probe独自の規則ではない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P046-review.json",
+            "canonical_id": "F34"
+          },
+          {
+            "review_file": "P046-review.json",
+            "canonical_id": "F35"
+          }
+        ],
+        "affected_metrics": [
+          "probe_inventions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217217+00:00"
     },
     {
       "claim_id": "attempt-001-P060-1",
@@ -499,8 +577,27 @@
           "handoff_visibility": "neither"
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P060-1",
+        "status": "resolved",
+        "judgment": "F37/Q4は具体的な受付規則を確定せず、受領の貸出可能状態からは追加条件の必須確認までは導けない。範囲外の問いとして区別し、業務規則の独自発明には数えない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P060-review.json",
+            "canonical_id": "F37"
+          },
+          {
+            "review_file": "P060-review.json",
+            "canonical_id": "Q4"
+          }
+        ],
+        "affected_metrics": [
+          "unsupported_additions",
+          "probe_inventions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217218+00:00"
     },
     {
       "claim_id": "attempt-002-P005-1",
@@ -599,8 +696,27 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P005-1",
+        "status": "resolved",
+        "judgment": "F55/F56は状態モデル表・情報表の配置の記述であり、文書コンテキスト配置を業務上の所有権や必須アーキテクチャとして命じる引用ではない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P005-review.json",
+            "canonical_id": "F55"
+          },
+          {
+            "review_file": "P005-review.json",
+            "canonical_id": "F56"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217219+00:00"
     },
     {
       "claim_id": "attempt-002-P019-1",
@@ -705,8 +821,26 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P019-1",
+        "status": "resolved",
+        "judgment": "F7/F17は局所手順として担当者を呼称するが、担当の特定が未確認と明記される。仮の呼称による責任確定違反にはしない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P019-review.json",
+            "canonical_id": "F7"
+          },
+          {
+            "review_file": "P019-review.json",
+            "canonical_id": "F17"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217220+00:00"
     },
     {
       "claim_id": "attempt-002-P029-1",
@@ -795,8 +929,31 @@
           "correspondence_evidence": []
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P029-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F19-F21は返却後の区分遷移条件を確定形で記すが、複数の未返却貸出から代表日数を選ぶ規則は示されない。遷移運用の追加は数え、代表値選択の内容は確定できない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P029-review.json",
+            "canonical_id": "F19"
+          },
+          {
+            "review_file": "P029-review.json",
+            "canonical_id": "F20"
+          },
+          {
+            "review_file": "P029-review.json",
+            "canonical_id": "F21"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217221+00:00"
     },
     {
       "claim_id": "attempt-002-P046-1",
@@ -868,8 +1025,22 @@
           "handoff_visibility": "actual_handoff"
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P046-1",
+        "status": "resolved",
+        "judgment": "F35の初回一律区分と計算値別分類は実受領H046の状態表と条件に双方存在し、probeによる独自仕様化ではなく上流内の不一致の指摘。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P046-review.json",
+            "canonical_id": "F35"
+          }
+        ],
+        "affected_metrics": [
+          "probe_inventions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217222+00:00"
     },
     {
       "claim_id": "attempt-002-P060-1",
@@ -938,9 +1109,148 @@
           "handoff_visibility": "actual_handoff"
         }
       ],
-      "resolution_status": "quoted_context_available_pending_final_evaluator",
-      "final_evaluator_resolution": null
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P060-1",
+        "status": "resolved",
+        "judgment": "F4の新規会員の初期区分は実受領H060の会員登録と状態遷移に由来する。原sourceにない上流決定の伝達として扱い、probe独自発明にはしない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P060-review.json",
+            "canonical_id": "F4"
+          }
+        ],
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "probe_inventions"
+        ]
+      },
+      "resolution_recorded_at": "2026-10-02T09:48:55.217223+00:00"
     }
   ],
-  "policy": "All first/retry claims persist; each needs audit quote correspondence. Intrinsic ambiguity remains ambiguity without endless retries."
+  "policy": "All first/retry claims persist; each needs audit quote correspondence. Intrinsic ambiguity remains ambiguity without endless retries.",
+  "latest_score_needs_raw_check": [
+    {
+      "packet_id": "P035",
+      "needs_raw_check": [
+        "F19/F20の返却済記録を判定へ用いる範囲は、局所引用でも記録照会と算定の接続が曖昧。"
+      ]
+    },
+    {
+      "packet_id": "P038",
+      "needs_raw_check": [
+        "返却済記録利用と複数記録未決は併存する。具体的な選択規則まではF14/F23から補わない。"
+      ]
+    },
+    {
+      "packet_id": "P005",
+      "needs_raw_check": [
+        "F2/F4の未返却限定は局所では確定形だが原sourceの含意範囲は争点として残る。"
+      ]
+    },
+    {
+      "packet_id": "P029",
+      "needs_raw_check": [
+        "F19-F21の残存貸出再評価は確定形。代表値の選択規則までは記述から補えない。"
+      ]
+    },
+    {
+      "packet_id": "P046",
+      "needs_raw_check": [
+        "F34/F35は実受領本文の状態・画面記載に由来し、上流の不整合として記録。"
+      ]
+    },
+    {
+      "packet_id": "P060",
+      "needs_raw_check": [
+        "F37/Q4は具体的な許否条件を断定しないが、受領外の質問を必須化する範囲は残る。"
+      ]
+    }
+  ],
+  "raw_flag_dispositions": {
+    "case_id": "C1",
+    "flags": [
+      {
+        "packet_id": "P035",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-001-P035-1"
+        ],
+        "disposition": "artifact_ambiguous",
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ],
+        "judgment": "F19/F20は返却済記録の照会と日数算定を明示するが、その遅延を次回貸出可否へ適用する範囲は依然として確定できない。既存claimの本質的曖昧さであり、新規pendingではない。"
+      },
+      {
+        "packet_id": "P038",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-001-P038-1"
+        ],
+        "disposition": "resolved_context_note",
+        "affected_metrics": [
+          "unauthorized_decisions"
+        ],
+        "judgment": "F14/F23の返却遅延日数の次回利用は断定形であり、F15の複数記録の選択未決と両立する。既存解決の文脈注記であり、代表値規則を補完しない。"
+      },
+      {
+        "packet_id": "P005",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-001-P005-1"
+        ],
+        "disposition": "artifact_ambiguous",
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ],
+        "judgment": "F2/F4の未返却限定・返却済除外は局所的に断定されるが、固定sourceの返却遅延から必然的に導かれるかはなお曖昧。既存claimに対応し、新規pendingではない。"
+      },
+      {
+        "packet_id": "P029",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-002-P029-1"
+        ],
+        "disposition": "artifact_ambiguous",
+        "affected_metrics": [
+          "unauthorized_decisions",
+          "unsupported_additions"
+        ],
+        "judgment": "F19-F21の返却後遷移は条件付きで断定されるが、複数の未返却記録から代表日数を選ぶ規則までは示さない。既存claimの曖昧さを維持する。"
+      },
+      {
+        "packet_id": "P046",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-001-P046-1",
+          "attempt-002-P046-1"
+        ],
+        "disposition": "resolved_context_note",
+        "affected_metrics": [
+          "probe_inventions"
+        ],
+        "judgment": "F34/F35の対立する記載は実受領H046内にあり、probe独自の仕様化ではないと既存二claimで解決済み。原flagはその出所の文脈注記。"
+      },
+      {
+        "packet_id": "P060",
+        "flag_index": 0,
+        "claim_ids": [
+          "attempt-001-P060-1"
+        ],
+        "disposition": "resolved_context_note",
+        "affected_metrics": [
+          "unsupported_additions",
+          "probe_inventions"
+        ],
+        "judgment": "F37/Q4は受領にない追加受付条件の必須確認で、具体的な許否規則は断定しないと既存claimで解決済み。原flagは質問の範囲を示す文脈注記。"
+      }
+    ],
+    "limits": [
+      "元scoresのneeds_raw_checkは変更しない。6 flagを各1回対応付け、新規pending concernはない。"
+    ]
+  },
+  "score_correction_reference": "blind-evaluation/C1/score-correction.json"
 }

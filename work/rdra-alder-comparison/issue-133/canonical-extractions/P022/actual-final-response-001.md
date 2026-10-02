@@ -1,0 +1,1 @@
+P022の抽出結果を[canonical.json](sandbox:/workspace/scratch/62be7f260abb/canonical-extractions/P022/canonical.json)に保存しました。[raw-response.md](sandbox:/workspace/scratch/62be7f260abb/canonical-extractions/P022/raw-response.md)は同一内容で、[read-log.jsonl](sandbox:/workspace/scratch/62be7f260abb/canonical-extractions/P022/read-log.jsonl)も作成済みです。JSON形式と引用行を検証しました。

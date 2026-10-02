@@ -1,6 +1,6 @@
 {
   "packet_id": "H060",
-  "status": "running",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -20,5 +20,22 @@
     "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
   ],
   "agent_id": "/root/blind_observation/extract_h060",
-  "prepared_at": "2026-10-02T09:32:34.974895+00:00"
+  "prepared_at": "2026-10-02T09:32:34.974895+00:00",
+  "output_sha256": {
+    "canonical.json": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "raw-response.md": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "read-log.jsonl": "e35e2b4915d6111e371f9da8ca12f293e5f7bcd02d98b07765f4a111f63c5978"
+  },
+  "finished_at": "2026-10-02T09:42:51.430716+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:43:02.915236+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist validation and received final declarations; no independent filesystem attestations"
+  }
 }

@@ -1,12 +1,12 @@
 {
   "recorded_dispatch_counts": {
     "alder_authoring": 20,
-    "rdra_nodes": 252,
+    "rdra_nodes": 286,
     "downstream_probes": 15,
     "canonical_extractions": 24,
-    "score_evaluators": 2,
-    "raw_reviewers": 5,
-    "handoff_extractions": 0
+    "score_evaluators": 3,
+    "raw_reviewers": 7,
+    "handoff_extractions": 2
   },
   "agent_ids": {
     "alder_authoring": [
@@ -268,9 +268,12 @@
       "/root/rdra_primary/c4r1s1_uc_timer",
       "/root/rdra_primary/c4r1s1_variation",
       "/root/rdra_primary/c4r1s2_activity",
+      "/root/rdra_primary/c4r1s2_actor",
       "/root/rdra_primary/c4r1s2_buc",
       "/root/rdra_primary/c4r1s2_business",
       "/root/rdra_primary/c4r1s2_condition2",
+      "/root/rdra_primary/c4r1s2_condition4",
+      "/root/rdra_primary/c4r1s2_external_system",
       "/root/rdra_primary/c4r1s2_info",
       "/root/rdra_primary/c4r1s2_overview",
       "/root/rdra_primary/c4r1s2_parameter",
@@ -279,11 +282,42 @@
       "/root/rdra_primary/c4r1s2_state2",
       "/root/rdra_primary/c4r1s2_state4",
       "/root/rdra_primary/c4r1s2_uc_actor",
+      "/root/rdra_primary/c4r1s2_uc_external",
+      "/root/rdra_primary/c4r1s2_uc_timer",
       "/root/rdra_primary/c4r1s2_variation",
+      "/root/rdra_primary/c4r2s1_activity",
+      "/root/rdra_primary/c4r2s1_actor",
+      "/root/rdra_primary/c4r2s1_buc",
       "/root/rdra_primary/c4r2s1_business",
+      "/root/rdra_primary/c4r2s1_condition2",
+      "/root/rdra_primary/c4r2s1_condition4",
+      "/root/rdra_primary/c4r2s1_external_system",
+      "/root/rdra_primary/c4r2s1_info",
       "/root/rdra_primary/c4r2s1_overview",
       "/root/rdra_primary/c4r2s1_parameter",
-      "/root/rdra_primary/c4r2s1_policy"
+      "/root/rdra_primary/c4r2s1_policy",
+      "/root/rdra_primary/c4r2s1_requirement",
+      "/root/rdra_primary/c4r2s1_state2",
+      "/root/rdra_primary/c4r2s1_state4",
+      "/root/rdra_primary/c4r2s1_uc_actor",
+      "/root/rdra_primary/c4r2s1_uc_external",
+      "/root/rdra_primary/c4r2s1_uc_timer",
+      "/root/rdra_primary/c4r2s1_variation",
+      "/root/rdra_primary/c4r2s2_activity",
+      "/root/rdra_primary/c4r2s2_buc",
+      "/root/rdra_primary/c4r2s2_business",
+      "/root/rdra_primary/c4r2s2_condition2",
+      "/root/rdra_primary/c4r2s2_overview",
+      "/root/rdra_primary/c4r2s2_parameter",
+      "/root/rdra_primary/c4r2s2_policy",
+      "/root/rdra_primary/c4r2s2_requirement",
+      "/root/rdra_primary/c4r2s2_state2",
+      "/root/rdra_primary/c4r2s2_variation",
+      "/root/rdra_primary/c5r1s1_business",
+      "/root/rdra_primary/c5r1s1_overview",
+      "/root/rdra_primary/c5r1s1_parameter",
+      "/root/rdra_primary/c5r1s1_policy",
+      "/root/rdra_primary/c5r1s1_requirement"
     ],
     "downstream_probes": [
       "/root/blind_observation/p003_probe",
@@ -330,16 +364,22 @@
     ],
     "score_evaluators": [
       "/root/blind_observation/score_c1",
+      "/root/blind_observation/score_c1_final",
       "/root/blind_observation/score_c1_retry1"
     ],
     "raw_reviewers": [
       "/root/blind_observation/raw_p005",
+      "/root/blind_observation/raw_p019",
+      "/root/blind_observation/raw_p029",
       "/root/blind_observation/raw_p035",
       "/root/blind_observation/raw_p038",
       "/root/blind_observation/raw_p046",
       "/root/blind_observation/raw_p060"
     ],
-    "handoff_extractions": []
+    "handoff_extractions": [
+      "/root/blind_observation/extract_h046",
+      "/root/blind_observation/extract_h060"
+    ]
   },
   "planned_authoring_nodes": {
     "alder": 20,

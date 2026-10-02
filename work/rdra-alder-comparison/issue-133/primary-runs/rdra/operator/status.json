@@ -1,17 +1,17 @@
 {
-  "recorded": "2026-10-02T09:41:30.672786+00:00",
+  "recorded": "2026-10-02T09:53:45.440643+00:00",
   "planned_workflows": 20,
   "workflows": {
-    "pending": 2,
-    "running": 3,
-    "protocol_failed": 11,
+    "pending": 0,
+    "running": 4,
+    "protocol_failed": 12,
     "failed": 0,
     "complete": 4
   },
   "current_nodes": {
-    "prepared": 8,
-    "running": 3,
-    "complete": 267,
+    "prepared": 10,
+    "running": 1,
+    "complete": 291,
     "completed_without_output": 0,
     "failed": 6
   },

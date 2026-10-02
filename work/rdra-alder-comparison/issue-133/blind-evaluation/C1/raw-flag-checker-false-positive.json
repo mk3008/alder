@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-10-02T09:52:40.176899+00:00",
+  "prior_validation": {
+    "status": "mechanical_failed",
+    "prepared_at": "2026-10-02T09:49:54.728829+00:00",
+    "envelope_sha256": "4738ef2024d2e7259d4d0de00672e83ad44ef10b052fd320ac970d5acc55b6e7",
+    "original_output_sha256": {
+      "scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee"
+    },
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1,
+    "includes_actionability_rubric_check": true,
+    "started_at": "2026-10-02T09:51:16.380443+00:00",
+    "agent_id": "/root/blind_observation/score_c1_final",
+    "finished_at": "2026-10-02T09:52:29.323159+00:00",
+    "mechanical_errors": [
+      "outside read /workspace/scratch/62be7f260abb/blind-evaluation/C1/scores.json",
+      "outside read /workspace/scratch/62be7f260abb/blind-evaluation/C1/raw-response.md"
+    ],
+    "output_sha256": {
+      "raw-flag-dispositions.json": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-response.md": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-read-log.jsonl": "69a53776a1ed0acffc2ef0eae47ffd061d1bddc068608320e8c170547a9cd275",
+      "score-correction.json": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c",
+      "score-correction-response.md": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c"
+    }
+  },
+  "cause": "Inline checker stored own-output allowlist additions as relative paths while comparing absolute read paths. Both reported reads are explicitly allowed own outputs in actual followup envelope.",
+  "semantic_outputs_changed": false
+}

@@ -30,5 +30,12 @@
   "mechanical_validation": {
     "errors": [],
     "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:43:02.914967+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist validation and received final declarations; no independent filesystem attestations"
   }
 }

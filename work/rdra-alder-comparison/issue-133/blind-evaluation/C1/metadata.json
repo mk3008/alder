@@ -1,7 +1,7 @@
 {
   "case_id": "C1",
   "status": "success",
-  "started_at": "2026-10-02T09:21:48.072671+00:00",
+  "started_at": "2026-10-02T09:44:58.390686+00:00",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -25,9 +25,20 @@
     "P038.json": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
     "P046.json": "10865c509b20a4e42d27bfd00edc61ace046212138520028e1742f37d715811b",
     "P048.json": "88e5e953458897f78d6ee9fe98b409122126fd4e9e2762a3502ad4c5610c719e",
-    "P060.json": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de"
+    "P060.json": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "H046.json": "1566a98980d625cdf07c2c84e2c3cdd4834aafc669594a070ddc909db7d0ac45",
+    "H060.json": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "received-handoff-index.json": "0c07623e5d4a4e2a0fc13339f6d4704724c8b2c4e5812c66d0f43b4c139dc429",
+    "raw-check-requests.json": "34a71f7328ab7f682fccb75126bf2865524fd4bdc9561d276d489ad688cc3d04",
+    "P005-review.json": "8efa941afe3620b06a0873fa600c654e29f809b18c75d7b06e07d92bc9089c76",
+    "P019-review.json": "a255dd0eae7895472165284a397869ee6ddaab903ad633381e2b0bb6b6cbecf4",
+    "P029-review.json": "a3d7abdde7d5d5f07b1a88604c9c48435ae18f5902cfb3cfaf2e687a970a85a9",
+    "P035-review.json": "1bcdc524774b2388b963303a7da3091c1d00f25cc6e3cce1f3acbb518d22a6fe",
+    "P038-review.json": "03ddfb87d4cbed18bc173f50c8349dc13e0ce17cae66718a4722a534254fea58",
+    "P046-review.json": "94c77a9562458b3216e324b5be8e72aa0baa0be80a7c6db58fb78aac21be9ec6",
+    "P060-review.json": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05"
   },
-  "envelope_sha256": "14f0f0cd4e34fe4c144056ab1b5014e4a49285dcf4b64b7d751e0f60057a822e",
+  "envelope_sha256": "d05658b9582416cc3e8232a6e1806ff643cf3cb203bf22aae9d2919bae759162",
   "read_allowlist": [
     "/workspace/scratch/62be7f260abb/blind-evaluation/C1/case-reference.json",
     "/workspace/scratch/62be7f260abb/blind-evaluation/C1/downstream-subset.json",
@@ -45,23 +56,51 @@
     "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P038.json",
     "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P046.json",
     "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P048.json",
-    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P060.json"
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P060.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/H046.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/H060.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/received-handoff-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/raw-check-requests.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P005-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P019-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P029-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P035-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P038-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P046-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P060-review.json"
   ],
   "limitations": [
     "Single blind; format may disclose arm. Shared filesystem procedural isolation only. Requested runtime lacks independent attestation."
   ],
-  "agent_id": "/root/blind_observation/score_c1_retry1",
-  "prepared_at": "2026-10-02T09:21:26.850288+00:00",
-  "attempt_number": 2,
-  "original_attempt": "attempt-001",
-  "retry_reason": "Mechanical schema failure; original attempt immutable, no operator semantic correction",
+  "final_contextual_score": true,
+  "attempt_number": 3,
+  "original_attempts": [
+    "attempt-001",
+    "attempt-002"
+  ],
+  "agent_id": "/root/blind_observation/score_c1_final",
+  "prepared_at": "2026-10-02T09:44:31.427083+00:00",
+  "pre_final_output_checkpoint": {
+    "scores.json": {
+      "sha256": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "bytes": 43420
+    },
+    "raw-response.md": {
+      "sha256": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "bytes": 43420
+    }
+  },
   "needs_raw_check_summary": [
     {
-      "packet_id": "P005",
+      "packet_id": "P035",
       "count": 1
     },
     {
-      "packet_id": "P019",
+      "packet_id": "P038",
+      "count": 1
+    },
+    {
+      "packet_id": "P005",
       "count": 1
     },
     {
@@ -77,12 +116,41 @@
       "count": 1
     }
   ],
-  "finished_at": "2026-10-02T09:25:31.994506+00:00",
+  "finished_at": "2026-10-02T09:48:55.194116+00:00",
   "mechanical_errors": [],
   "output_sha256": {
-    "scores.json": "4fdea6e5f0e74fbad3d29b618400353b564fa7e8d31ef48a8b9c285f47e739a7",
-    "raw-response.md": "4fdea6e5f0e74fbad3d29b618400353b564fa7e8d31ef48a8b9c285f47e739a7",
-    "read-log.jsonl": "c1b480ee6daea812fedfd19a985cd71bc4e36adbf8571489472107302133559c"
+    "scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "read-log.jsonl": "12448bf35542690e4d248c3ccd4f6a26dc017c62c413278ed5c1c5dc31d93e25"
   },
-  "raw_audit_status": "pending; initial and retry flags persist independently"
+  "raw_audit_status": "final evaluator resolutions mechanically transcribed",
+  "raw_resolution_counts": {
+    "resolved": 7,
+    "artifact_ambiguous": 3
+  },
+  "raw_flag_followup": {
+    "status": "success",
+    "prepared_at": "2026-10-02T09:49:54.728829+00:00",
+    "envelope_sha256": "4738ef2024d2e7259d4d0de00672e83ad44ef10b052fd320ac970d5acc55b6e7",
+    "original_output_sha256": {
+      "scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee"
+    },
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1,
+    "includes_actionability_rubric_check": true,
+    "started_at": "2026-10-02T09:51:16.380443+00:00",
+    "agent_id": "/root/blind_observation/score_c1_final",
+    "finished_at": "2026-10-02T09:52:29.323159+00:00",
+    "mechanical_errors": [],
+    "output_sha256": {
+      "raw-flag-dispositions.json": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-response.md": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-read-log.jsonl": "69a53776a1ed0acffc2ef0eae47ffd061d1bddc068608320e8c170547a9cd275",
+      "score-correction.json": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c",
+      "score-correction-response.md": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c"
+    },
+    "read_checker_correction": "raw-flag-checker-false-positive.json",
+    "revalidated_at": "2026-10-02T09:52:40.178166+00:00"
+  }
 }

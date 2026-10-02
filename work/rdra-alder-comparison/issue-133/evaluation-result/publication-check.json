@@ -1,7 +1,7 @@
 {
   "scope": "Delta collected UTF-8 snapshot only; bounded pattern check, not complete privacy proof. Synthetic/pinned public inputs.",
-  "files_checked": 2653,
+  "files_checked": 1073,
   "pattern_hits": [],
   "official_prompt_files_in_collection": [],
-  "snapshot_manifest_sha256": "45766adcf617715284f2f60aa7b711f490ffc6f47940a92b38ecbfed1d2d57a2"
+  "snapshot_manifest_sha256": "6787b44998779f0293bc3eb2163b073c124afcc0316fccb6d729c791e6d74037"
 }
