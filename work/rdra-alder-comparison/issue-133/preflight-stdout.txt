@@ -1,0 +1,8 @@
+
+[menu7] Phase1 を並列実行します（5 本）
+projectRoot: {project}
+files: 5, provider(from config): cursor, timeout: 360000ms
+
+🚀 並行実行開始
+対象ファイル: RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md, RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスポリシー生成.md, RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1ビジネスパラメータ生成.md, RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1業務生成.md, RDRA_Knowledge/_0_RDRAZeroOne/phase1/ph1要求生成.md
+[システム概要生成] ---
