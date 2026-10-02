@@ -16,7 +16,9 @@ def count():
         for r in read(p).get('nodes',{}).values():
             if r.get('agent_id'):ids['rdra_nodes'].add(r['agent_id'])
     for folder,key,pattern in [('blind-probes','downstream_probes','P*/metadata.json'),('canonical-extractions','canonical_extractions','P*/metadata.json'),('blind-evaluation','score_evaluators','C*/metadata.json')]:
-        for p in (ROOT/folder).glob(pattern):
+        paths=set((ROOT/folder).glob(pattern))
+        paths.update(p for p in (ROOT/folder).rglob('*.json') if 'metadata' in p.name)
+        for p in paths:
             d=read(p)
             if d.get('agent_id'):ids[key].add(d['agent_id'])
     return {'recorded_dispatch_counts':{k:len(v) for k,v in ids.items()},'agent_ids':{k:sorted(v) for k,v in ids.items()},'planned_authoring_nodes':{'alder':20,'rdra':360},'planned_probes':20,'limits':['Counts are recorded agent identifiers, not independently attested provider token use, billing, or effective runtime settings. Dispatch failures without an agent identifier are reported in separate failure metadata. Coordinator calls and native preflight are not business generation calls.']}

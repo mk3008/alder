@@ -1,0 +1,6 @@
+{
+  "recorded_at": "2026-10-02T08:48:21.258236+00:00",
+  "before_sha256": "d1c181511dfdfa72f400ce856d7c1f34e42cb327def4cdb4f3c2a4c0f60d81a2",
+  "after_sha256": "1879970480201e6bf36ff3ee60fa9f7b8d1977b13a0f59d37519f526075b4b4f",
+  "change": "Align mechanical read-log checker with original envelope permission for own generated canonical/raw/read-log verification only; metadata remains prohibited; no business body edited."
+}

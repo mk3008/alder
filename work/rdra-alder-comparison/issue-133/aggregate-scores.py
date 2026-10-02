@@ -40,7 +40,12 @@ def compute():
                 for claim,claim_ids in evidence.items():
                     if not isinstance(claim_ids,list) or not claim_ids or set(claim_ids)-ids:
                         raise ValueError(f'{s["packet_id"]}: invalid coverage evidence for {key}: {claim}')
-            for key in ['unauthorized_decisions','unsupported_additions','unresolved_leakage','redundant_questions','probe_inventions']:
+            count_keys=['unauthorized_decisions','unsupported_additions','unresolved_leakage','redundant_questions','probe_inventions']
+            if case['id']=='C5':
+                if not isinstance(s.get('unapproved_architecture_promotion'),list):raise ValueError(f'{s["packet_id"]}: missing architecture promotion list')
+                if s.get('implementation_viability')!='not_executed':raise ValueError(f'{s["packet_id"]}: implementation was not tested')
+                count_keys.append('unapproved_architecture_promotion')
+            for key in count_keys:
                 for item in s[key]:
                     if not item.get('meaning') or not item.get('evidence_ids') or set(item['evidence_ids'])-ids:
                         raise ValueError(f'{s["packet_id"]}: invalid evidence for {key}')
