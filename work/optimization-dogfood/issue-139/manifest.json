@@ -1,0 +1,41 @@
+{
+  "requested_model": "gpt-6.1-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime_independently_verified": false,
+  "user_override_of_repo_default": true,
+  "public_input_retrieval": "Git clone and connector retrieval at immutable revisions",
+  "runs": [
+    {
+      "id": "/root/phase1_fresh",
+      "revision": "52ddd2b984d7ddfc1e1c7ee08d7d1394711c3198",
+      "pain": "unspecified at launch; user supplied High after run started",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "docs/optimization-review.md": {
+          "blob_sha": "e3fecabe53344ba070b8a38aa689f59bb3809a23",
+          "sha256": "8a6db7a3a61923ac917f1595138db1ca8381cf53ad83ca276f92c77177885a88"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "f57bc48966c15e3d96bf5dc4401433adacd24cc7",
+          "sha256": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046"
+        },
+        "README.md": {
+          "blob_sha": "bc71ac63b7b0509c044a5d273d616f172df026c3",
+          "sha256": "13a389b6fce741388a73a058a7279a4558a6cae6ae246edb26b00b8c260ad623"
+        }
+      },
+      "prompt": "runs/phase1.prompt.txt",
+      "raw": "runs/phase1.raw.md",
+      "scope": "preliminary source-grounding review; not a valid confirmed-Pain comparison",
+      "correction": "Raw reports repository default gpt-6-sol. Actual spawn request was gpt-6.1-sol / medium / none. Raw preserved without alteration."
+    }
+  ]
+}
