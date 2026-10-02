@@ -17,7 +17,10 @@
 
 ## 追加の記録
 
-- RDRA C2/r1/s1にも非存在cwd AGENTS/Prompt pathへのread試行が報告された。strict分類は無効、technical completeかつsource-clean探索対象とし、C1と同じ規則を適用する。最終件数は各run manifestとavailability.jsonで確認する。
+- RDRA C2/r1/s1にも非存在cwd AGENTS/Prompt pathへのread試行、C2/r2/s2のph4_uc_timerにも非存在の0_RDRAZeroOne/phase4/ph4UCタイマー.md lookupが報告された。strict分類は無効、technical completeかつsource-clean探索対象とし、C1と同じ規則を適用する。最終件数は各run manifestとavailability.jsonで確認する。
 - Canonical P005の子が約56KBと申告したが実bytesは41,762。初回検証hash、followup後hash、root保存checkpointのhashは一致し、内容変更や再抽出はない。初回finalのpath/count要約と、既生成JSONを返すfollowup履歴は区別して保存する。
 - 匿名観測wrapperが明示許可する自身の生成出力の検証readに機械checkerを整合させた。canonical.json/raw-response.md/read-log.jsonlに限定し、metadata・他資料は許可しない。before/after hashと時点をmechanical-checker-deviation.jsonへ保存した。業務内容のoperator修正ではない。
 - 評価JSONには保持事実/unknown/actionabilityの各claimにcanonical根拠IDを対応させるcoverage_evidence objectを追加した。元rubricが要求する根拠を機械検証するためのschema具体化であり、oracle/指標/分母は変えない。C5未承認architecture命題の根拠とnot_executedも検証する。初回semantic scoreより前の指示である。
+
+- RDRA C3/r1/s1のph4_state/ph4_external_systemでも非存在Prompt外path試行を記録し、原snapshotを保存した。内容取得なしの申告を保持し、strict無効のまま予定18 outputs/6 scriptsを完了した。
+- Canonical P035も初回finalがpath summaryだったため原応答を別保存し、既生成JSONを返す追加turnの前後hashを照合した。hashは一致し、再抽出/意味変更はない。記録されたFresh agent件数と追加turn件数を混同しない。

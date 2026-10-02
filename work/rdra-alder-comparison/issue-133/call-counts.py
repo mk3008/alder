@@ -21,7 +21,7 @@ def count():
         for p in paths:
             d=read(p)
             if d.get('agent_id'):ids[key].add(d['agent_id'])
-    return {'recorded_dispatch_counts':{k:len(v) for k,v in ids.items()},'agent_ids':{k:sorted(v) for k,v in ids.items()},'planned_authoring_nodes':{'alder':20,'rdra':360},'planned_probes':20,'limits':['Counts are recorded agent identifiers, not independently attested provider token use, billing, or effective runtime settings. Dispatch failures without an agent identifier are reported in separate failure metadata. Coordinator calls and native preflight are not business generation calls.']}
+    return {'recorded_dispatch_counts':{k:len(v) for k,v in ids.items()},'agent_ids':{k:sorted(v) for k,v in ids.items()},'planned_authoring_nodes':{'alder':20,'rdra':360},'planned_probes':20,'limits':['Counts are unique recorded agent identifiers (Fresh spawns), not total model turns: output-return followups on an existing agent are not new Fresh identifiers. They are not independently attested provider token use, billing, or effective runtime settings. Dispatch failures without an agent identifier are reported in separate failure metadata. Coordinator calls and native preflight are not business generation calls.']}
 
 if __name__=='__main__':
     d=count();out=ROOT/'evaluation-result';out.mkdir(exist_ok=True)

@@ -14,9 +14,13 @@ def report():
         base=ROOT/'primary-runs'/m['arm']/m['case']/f'r{m["replicate"]}'/m['stage']
         if m['stage']=='s3':
             d=read(ROOT/'blind-probes'/m['blind_id']/'metadata.json') or read(base/'manifest.json')
+            classification=ROOT/'blind-probes'/m['blind_id']/'metadata.json'
         elif m['arm']=='alder':
             d=ar.get((m['case'],m['replicate'],m['stage']),{})
-        else:d=read(base/'manifest.json')
+            classification=ROOT/'primary-runs/alder/manifest.json'
+        else:
+            d=read(base/'manifest.json')
+            classification=base/'manifest.json'
         status=d.get('status','pending')
         complete=bool(d.get('technical_complete',status in ['success','complete']))
         strict=bool(d.get('strict_protocol_eligible',status in ['success','complete']))
@@ -29,7 +33,8 @@ def report():
             source_clean=source_clean and bool(up.get('source_clean_exploratory_eligible',up.get('status') in ['success','complete']))
             if not complete and up.get('exploratory_continuation_status')=='running':continuation='pending_upstream_continuation'
         extraction=read(ROOT/'canonical-extractions'/m['blind_id']/'metadata.json')
-        rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'primary_quality_eligible':complete and strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason')})
+        upstream=(ROOT/'primary-runs/alder/manifest.json' if m['arm']=='alder' else base.parent/'s2/manifest.json') if m['stage']=='s3' else None
+        rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'primary_quality_eligible':complete and strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason'),'classification_metadata_path':str(classification.relative_to(ROOT)),'upstream_classification_metadata_path':str(upstream.relative_to(ROOT)) if upstream else None})
     counts=collections.Counter((r['arm'],r['stage'],r['execution_status']) for r in rows)
     groups=collections.defaultdict(list)
     for r in rows:groups[(r['arm'],r['stage'])].append(r)
