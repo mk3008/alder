@@ -1,0 +1,40 @@
+{
+  "packet_id": "P020",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:38:20.010941+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P020-packet.md": "2a535e5391e5b42b8e68adb99895e4f46778fd9d4bb48827a325a12708f3b9c6",
+    "P020-canonical.json": "a1c7aaee1032de3ff2279229557ea9f52f2ffa2103b90f5fe75aef2134c369d6",
+    "P010-packet.md": "2b3b1785b59b949692e6f32becbcc659bfeb1534ebda2e416a0f0c29bce6b4a5",
+    "P010-canonical.json": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "f3caae58ce0c713b97814c2e995c49927ea9caba14a734cb6129e83510420b88",
+    "received-upstream-packet.md": "7806f0bfaa8e843977b0d6f1b935b143037c635c25de9d98ed5bfe0d13425d97"
+  },
+  "envelope_sha256": "9c81f78ea768f1806ebf9c3c5decd37384381e5a6cfe213da45f2798ae697d36",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/P020-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/P020-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/P010-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/P010-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/review-targets.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P020/received-upstream-packet.md"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p020",
+  "started_at": "2026-10-02T10:40:52.470481+00:00",
+  "finished_at": "2026-10-02T10:42:03.719687+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "4512e6d6181eeb6c6c4db50650b344489af3ffcfa1c9051e63ba001fa122e0da",
+    "raw-response.md": "4512e6d6181eeb6c6c4db50650b344489af3ffcfa1c9051e63ba001fa122e0da",
+    "read-log.jsonl": "14f39ec69ccfae34ca8898b44425b197abba510e07dddddeca19d5e3c748a213"
+  }
+}

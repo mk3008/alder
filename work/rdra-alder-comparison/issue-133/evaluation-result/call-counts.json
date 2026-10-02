@@ -1,12 +1,12 @@
 {
   "recorded_dispatch_counts": {
     "alder_authoring": 20,
-    "rdra_nodes": 358,
-    "downstream_probes": 19,
-    "canonical_extractions": 39,
+    "rdra_nodes": 362,
+    "downstream_probes": 20,
+    "canonical_extractions": 44,
     "score_evaluators": 5,
     "raw_reviewers": 12,
-    "handoff_extractions": 5
+    "handoff_extractions": 8
   },
   "agent_ids": {
     "alder_authoring": [
@@ -376,10 +376,13 @@
       "/root/rdra_primary/c5r2s1_uc_timer",
       "/root/rdra_primary/c5r2s1_variation",
       "/root/rdra_primary/c5r2s2_activity",
+      "/root/rdra_primary/c5r2s2_actor",
       "/root/rdra_primary/c5r2s2_buc",
       "/root/rdra_primary/c5r2s2_buc_wait_overview",
       "/root/rdra_primary/c5r2s2_business",
       "/root/rdra_primary/c5r2s2_condition2",
+      "/root/rdra_primary/c5r2s2_condition4",
+      "/root/rdra_primary/c5r2s2_external_system",
       "/root/rdra_primary/c5r2s2_info",
       "/root/rdra_primary/c5r2s2_overview",
       "/root/rdra_primary/c5r2s2_parameter",
@@ -388,12 +391,14 @@
       "/root/rdra_primary/c5r2s2_state2",
       "/root/rdra_primary/c5r2s2_state4",
       "/root/rdra_primary/c5r2s2_uc_actor",
+      "/root/rdra_primary/c5r2s2_uc_external",
       "/root/rdra_primary/c5r2s2_uc_timer",
       "/root/rdra_primary/c5r2s2_variation"
     ],
     "downstream_probes": [
       "/root/blind_observation/p003_probe",
       "/root/blind_observation/p007_probe",
+      "/root/blind_observation/p014_probe",
       "/root/blind_observation/p015_probe",
       "/root/blind_observation/p020_probe",
       "/root/blind_observation/p034_probe",
@@ -420,13 +425,16 @@
       "/root/blind_observation/extract_p006",
       "/root/blind_observation/extract_p007",
       "/root/blind_observation/extract_p009",
+      "/root/blind_observation/extract_p010",
       "/root/blind_observation/extract_p011",
       "/root/blind_observation/extract_p012",
       "/root/blind_observation/extract_p013",
       "/root/blind_observation/extract_p015",
+      "/root/blind_observation/extract_p016",
       "/root/blind_observation/extract_p017",
       "/root/blind_observation/extract_p018",
       "/root/blind_observation/extract_p019",
+      "/root/blind_observation/extract_p020",
       "/root/blind_observation/extract_p021",
       "/root/blind_observation/extract_p022",
       "/root/blind_observation/extract_p024",
@@ -445,11 +453,13 @@
       "/root/blind_observation/extract_p038",
       "/root/blind_observation/extract_p039",
       "/root/blind_observation/extract_p041",
+      "/root/blind_observation/extract_p042",
       "/root/blind_observation/extract_p043",
       "/root/blind_observation/extract_p044",
       "/root/blind_observation/extract_p046",
       "/root/blind_observation/extract_p048",
       "/root/blind_observation/extract_p055",
+      "/root/blind_observation/extract_p056",
       "/root/blind_observation/extract_p058",
       "/root/blind_observation/extract_p060"
     ],
@@ -475,10 +485,13 @@
       "/root/blind_observation/raw_p060"
     ],
     "handoff_extractions": [
+      "/root/blind_observation/extract_h020",
       "/root/blind_observation/extract_h041",
       "/root/blind_observation/extract_h043",
       "/root/blind_observation/extract_h044",
       "/root/blind_observation/extract_h046",
+      "/root/blind_observation/extract_h050",
+      "/root/blind_observation/extract_h054",
       "/root/blind_observation/extract_h060"
     ]
   },

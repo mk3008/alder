@@ -1,0 +1,125 @@
+{
+  "case_id": "C3",
+  "status": "success",
+  "attempt_number": 2,
+  "started_at": "2026-10-02T10:43:17.084258+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "case-reference.json": "a8b403fbdd12b7d05b62b7cf9b76412e09e23708a681df61881fed9919225fcc",
+    "downstream-subset.json": "e447d450028d4f33530db40738cee85812732cb84b37e6e6a5eda8e72bb89740",
+    "rubric.md": "95db0ccf3739bda00d588c8c6e1532625453d552354aeebb0190a7ced0c33080",
+    "evaluation-prompt.txt": "5b5373348e57cdc5e59f16158948064ac1b6bc4df1aa657a13383e5bcca858a7",
+    "packet-index.json": "3d2f03a09184cbf34a7c7b9dc6b93da4ac7dc78080e675b7570a9bfc5b12d940",
+    "P009.json": "46f429dedec0d759333252cbf43d9a3002d1a6f392c0bbf361f142daabed7ac3",
+    "P010.json": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "P013.json": "ec310f9bb7c56d3bec51967fdf5e36e01c54e42620abd0985b5a3f4bd7a35d33",
+    "P017.json": "bf3c4e4782bfc7d43d41b0d831d06c79fdc5bac2b2fc732abe22e8cf1ac2a6f4",
+    "P020.json": "a1c7aaee1032de3ff2279229557ea9f52f2ffa2103b90f5fe75aef2134c369d6",
+    "P031.json": "cc870bb3e2dff7306c51eb10f97439f71762836140b52a1db264ac9eee18a313",
+    "P032.json": "fa4295b0a3dd36a4af78cfa50db6a39cf8fcda53f7e8bc4adbefde314f238aef",
+    "P033.json": "deedd14364fe990274378ecd38016007142ce81fba60c5b46a3af16f38edb91f",
+    "P034.json": "93661d523ea655b1dcc134dd8df6460da7e60e3d6f2ba1761f2393e9d5fb8a84",
+    "P039.json": "f0f88488df741fe3b0d0b0935cd0611b94256cec3912eed2375fcbf59719fb10",
+    "P041.json": "54fbad42de0db1bb9f12068c5d937ad9ed1960090a295cdf1c051d50da053e5a",
+    "P042.json": "0418a5bb643db851c5f6ff3c790231cac41edbcb47d66269f096acdbe8dbebe4",
+    "H020.json": "5f048367b5aed36f60b1589aca6ea7cf6bdced5049adfb200da59dd8d0db0d25",
+    "H041.json": "7af4d8efc21264faaada8593506d28f489ee5ff345d480186d38b144e514d25c",
+    "received-handoff-index.json": "d6db0b9fcce699bf379c71ec2ae35f6cd2f5912207f5158b2fe9ef1b04217643",
+    "raw-check-requests.json": "e57244c1831878c373e059c9047d8495e23f10318ae1343018f010a6ccbd67d3",
+    "P010-review.json": "a7cd4db7495a128983c867359ef7ba2169d48af4e691349fca070b5d52e430f4",
+    "P013-review.json": "fc52ed51428830c5e03f2c9862b3fd5444669c10bafedcdd4ba9f5dfd9e8736a",
+    "P020-review.json": "4512e6d6181eeb6c6c4db50650b344489af3ffcfa1c9051e63ba001fa122e0da",
+    "P033-review.json": "19b4b089885201b14052a7743252679665ad7592ba5e8c8939bd6d18439ba908",
+    "P041-review.json": "d477dc2ba7ea5f37627f69d0193d1e10d9d0db21d3507a4178733664e4b5129d",
+    "P042-review.json": "d9a1627cf0398aad7ae56ed6e5b23e3587e707abe69ef0e7ecab455948b113e4"
+  },
+  "envelope_sha256": "708bc73aba5bf5132d79ede2e106c56040f4521848bf146d5cb5b4e98923517b",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/case-reference.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/downstream-subset.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/rubric.md",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/evaluation-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/packet-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P009.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P010.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P013.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P017.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P020.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P031.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P032.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P033.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P034.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P039.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P041.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P042.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/H020.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/H041.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/received-handoff-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/raw-check-requests.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P010-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P013-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P020-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P033-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P041-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C3/P042-review.json"
+  ],
+  "limitations": [
+    "Single blind; format may disclose arm. Shared filesystem procedural isolation only. Requested runtime lacks independent attestation."
+  ],
+  "final_contextual_score": true,
+  "original_attempts": [
+    "attempt-001"
+  ],
+  "agent_id": "/root/blind_observation/score_c3_final",
+  "prepared_at": "2026-10-02T10:42:51.892499+00:00",
+  "needs_raw_check_summary": [
+    {
+      "packet_id": "P013",
+      "count": 1
+    },
+    {
+      "packet_id": "P033",
+      "count": 1
+    },
+    {
+      "packet_id": "P041",
+      "count": 1
+    },
+    {
+      "packet_id": "P042",
+      "count": 1
+    }
+  ],
+  "finished_at": "2026-10-02T10:46:46.733691+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "scores.json": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "raw-response.md": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "read-log.jsonl": "e5e9d3fd81c864ef25656b5a58fa4575c3c720b7143d3a60f8d4f168870b151a"
+  },
+  "raw_flag_followup": {
+    "prepared_at": "2026-10-02T10:46:58.759881+00:00",
+    "original_scores_sha256": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "original_raw_sha256": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+    "additional_model_turn": 1,
+    "new_fresh_generation_count_increment": 0,
+    "status": "success",
+    "finished_at": "2026-10-02T10:48:30.493869+00:00",
+    "mechanical_errors": [],
+    "output_sha256": {
+      "raw-flag-dispositions.json": "606e82d03a1e710c2c39ddeef7117c7a942bf9ee9e6c5663c4cbbe734a9bd393",
+      "raw-flag-response.md": "606e82d03a1e710c2c39ddeef7117c7a942bf9ee9e6c5663c4cbbe734a9bd393",
+      "raw-flag-read-log.jsonl": "d60d1d9425ae4720aa4106930af6228b39732010494873a4ab080421f753ab25"
+    },
+    "original_output_sha256": {
+      "scores.json": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124",
+      "raw-response.md": "feb93f9d4781ffc6bdcf5bdbb6476d00097ee83938e83a1a4e211e4db29ee124"
+    },
+    "operator_schema_key_fix_at": "2026-10-02T10:48:30.035517+00:00"
+  }
+}

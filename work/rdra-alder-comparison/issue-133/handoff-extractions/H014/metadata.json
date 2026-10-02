@@ -1,0 +1,49 @@
+{
+  "packet_id": "H014",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:43:37.910186+00:00",
+  "packet_sha256": "149152c0a7316804c4f8a1a849476ca1aea6ed10d3213bfa53164ef8ee555a2c",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "ed7e7584597a2eefeeaf9f169f2de65e5f9b49533c713f4f832aad0910bda6c1",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H014/packet.md",
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H014/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_h014",
+  "prepared_at": "2026-10-02T10:33:27.698703+00:00",
+  "output_return_followup": {
+    "prepared_at": "2026-10-02T10:45:27.874405+00:00",
+    "initial_actual_final_kind": "file_link_summary",
+    "canonical_sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "raw_sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "output_sha256": {
+    "canonical.json": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "raw-response.md": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "read-log.jsonl": "128c78ade40ac7983a51ce7b579bda865fa63a4d53d22b103c42b494f1b6e871"
+  },
+  "finished_at": "2026-10-02T10:47:49.809364+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T10:48:38.191696+00:00",
+    "final_json_payload_returned": true,
+    "original_payload_hashes_unchanged": true,
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  }
+}

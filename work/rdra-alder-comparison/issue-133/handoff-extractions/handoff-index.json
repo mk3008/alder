@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-10-02T10:25:31.187485+00:00",
+  "recorded_at": "2026-10-02T10:43:39.461980+00:00",
   "entries": [
     {
       "stage2_packet_id": "P019",
@@ -31,10 +31,10 @@
       "stage2_packet_id": "P059",
       "stage3_packet_id": "P014",
       "received_packet_id": "H014",
-      "received_input_sha256": null,
-      "full_stage2_input_sha256": null,
-      "canonical_status": "probe_pending",
-      "probe_execution_status": "pending"
+      "received_input_sha256": "149152c0a7316804c4f8a1a849476ca1aea6ed10d3213bfa53164ef8ee555a2c",
+      "full_stage2_input_sha256": "fb2a820cc1781d74cb5e9372a5f93b2b4afacc3187d7fc64eead162f6dd96151",
+      "canonical_status": "fresh_required",
+      "probe_execution_status": "success"
     },
     {
       "stage2_packet_id": "P053",
@@ -42,9 +42,12 @@
       "received_packet_id": "H015",
       "received_input_sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef",
       "full_stage2_input_sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef",
-      "canonical_status": "reuse_pending_full_canonical",
+      "canonical_status": "reused_byte_identical",
       "probe_execution_status": "success",
-      "byte_identity_proof": true
+      "byte_identity_proof": true,
+      "received_canonical_packet_id": "P053",
+      "received_canonical_file": "canonical-extractions/P053/canonical.json",
+      "received_canonical_sha256": "6da9060486492b87147ab97ea7a4b2c2ec8efc0b546c51e81ecc11a59c6e76c7"
     },
     {
       "stage2_packet_id": "P010",
@@ -52,8 +55,12 @@
       "received_packet_id": "H020",
       "received_input_sha256": "7806f0bfaa8e843977b0d6f1b935b143037c635c25de9d98ed5bfe0d13425d97",
       "full_stage2_input_sha256": "2b3b1785b59b949692e6f32becbcc659bfeb1534ebda2e416a0f0c29bce6b4a5",
-      "canonical_status": "fresh_required",
-      "probe_execution_status": "success"
+      "canonical_status": "fresh_success",
+      "probe_execution_status": "success",
+      "received_canonical_packet_id": "H020",
+      "received_canonical_file": "handoff-extractions/H020/canonical.json",
+      "received_canonical_sha256": "5f048367b5aed36f60b1589aca6ea7cf6bdced5049adfb200da59dd8d0db0d25",
+      "byte_identity_proof": false
     },
     {
       "stage2_packet_id": "P031",
@@ -171,8 +178,12 @@
       "received_packet_id": "H050",
       "received_input_sha256": "3088389556adf15794f81e23f8e9688fcdc946474cb3eb56a9955db7ca1ae05a",
       "full_stage2_input_sha256": "058a6f991ebb9b74caccf8eb438aa9c92316180fd0a9895a0c05d9924ce36eff",
-      "canonical_status": "fresh_required",
-      "probe_execution_status": "success"
+      "canonical_status": "fresh_success",
+      "probe_execution_status": "success",
+      "received_canonical_packet_id": "H050",
+      "received_canonical_file": "handoff-extractions/H050/canonical.json",
+      "received_canonical_sha256": "8ad012dd06e10cf28c00e20f6a0ed0895be61b1f7a9a47d5a1a1ffdbb293babf",
+      "byte_identity_proof": false
     },
     {
       "stage2_packet_id": "P001",
@@ -193,8 +204,12 @@
       "received_packet_id": "H054",
       "received_input_sha256": "51d7b4e54ccabd15cc0f9e667fcd94c54887e070a01dd868b80e73ecc160f818",
       "full_stage2_input_sha256": "1cd4973372882e691ce0ef01baa122ec8ff6882368d71344ba63db1c9e66606b",
-      "canonical_status": "fresh_required",
-      "probe_execution_status": "success"
+      "canonical_status": "fresh_success",
+      "probe_execution_status": "success",
+      "received_canonical_packet_id": "H054",
+      "received_canonical_file": "handoff-extractions/H054/canonical.json",
+      "received_canonical_sha256": "5ff96ab3774e26c8304346a95b7da9ff1882cb49bbbc73dd1fcdc9b329bdf7e1",
+      "byte_identity_proof": false
     },
     {
       "stage2_packet_id": "P058",

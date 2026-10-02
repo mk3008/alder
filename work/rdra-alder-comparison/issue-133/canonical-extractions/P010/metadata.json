@@ -1,6 +1,6 @@
 {
   "packet_id": "P010",
-  "status": "running",
+  "status": "success",
   "requested_settings": {
     "model": "gpt-6-sol",
     "reasoning_effort": "medium",
@@ -20,5 +20,22 @@
     "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
   ],
   "agent_id": "/root/blind_observation/extract_p010",
-  "prepared_at": "2026-10-02T10:17:25.708273+00:00"
+  "prepared_at": "2026-10-02T10:17:25.708273+00:00",
+  "output_sha256": {
+    "canonical.json": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "raw-response.md": "5eb3243c853127a001638e9aa76572891399bb9c70447537fdd5bf7ec688e43b",
+    "read-log.jsonl": "b582a9e1ee11214ea984f48a3f71266e3dfe58f9547db7b8e404bf7cf48c1591"
+  },
+  "finished_at": "2026-10-02T10:31:20.496460+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:33:38.488845+00:00",
+    "read_log_allowed_paths": true,
+    "actual_final_declared_outside_read_attempt": false,
+    "own_output_verification_allowed": true,
+    "independent_attestation": "unavailable"
+  }
 }

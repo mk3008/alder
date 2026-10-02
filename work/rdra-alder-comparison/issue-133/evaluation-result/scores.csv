@@ -23,3 +23,15 @@ P043,rdra,C2,1,s3,,,,,,,,13,13,0,,0,,,,1,[],[],scored_with_ambiguity,[],"['probe
 P044,rdra,C2,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,4456
 P055,alder,C2,1,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,3026
 P058,alder,C2,1,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,6385,1,7200
+P009,alder,C3,1,s1,3,3,3,6,6,,,,,0,,0,0,,,0,[],[],scored,[],[],False,True,,,,,4939,1,5609
+P010,rdra,C3,2,s2,,,,,,14,14,,,2,0,4,,,,0,[],[],scored,[],[],False,True,,,,,83578,27,0
+P013,rdra,C3,1,s1,2,3,0,6,6,,,,,2,,2,0,,,1,[],[],scored,[],[],False,True,,,,,72397,27,0
+P017,alder,C3,2,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,6304,1,6304
+P020,rdra,C3,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,3423
+P031,alder,C3,1,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],False,True,,,,,6087,1,6933
+P032,alder,C3,2,s1,3,3,3,6,6,,,,,0,,0,0,,,0,[],[],scored,[],[],False,True,,,,,6066,1,6991
+P033,rdra,C3,1,s2,,,,,,14,14,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",True,True,,,,,63815,27,0
+P034,alder,C3,1,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,2858
+P039,alder,C3,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,2893
+P041,rdra,C3,1,s3,,,,,,,,13,13,0,0,0,,0,,1,[],[],scored,[],[],True,True,,,,,0,0,4471
+P042,rdra,C3,2,s1,1,3,0,6,6,,,,,,,,0,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,73768,27,0

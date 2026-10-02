@@ -1,0 +1,11 @@
+{
+  "packet-provenance.json": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+  "packet.md": "cf39783d50359bd305f29f9ce63161388f388baf3db6b9895c719339d886f57b",
+  "spawn-invocation.json": "9b42cea678de4a23c9ed0de6dc35c53ca8f2ec21bb5cc5614684c7716d1abd3e",
+  "read-log.jsonl": "096a3de8e51577d5a8811042625cd65de0fac94dfe1fa8ba20a4f5319491b8fa",
+  "canonical.json": "1b10f3a1e9b0762044c0ce896a9e34b129fe42fcd47515b91a4c07ea8203d9d5",
+  "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "metadata.json": "5ec88f5033b064665a3c5c79eaf7372964cd1b8dbea2d76c6c6918c7b082b2bd",
+  "raw-response.md": "1b10f3a1e9b0762044c0ce896a9e34b129fe42fcd47515b91a4c07ea8203d9d5",
+  "envelope.txt": "9657d4802d30e5c12aff3f4bc0cf91eababb077da7cc3754e60e202de29d2826"
+}

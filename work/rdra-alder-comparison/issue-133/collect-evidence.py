@@ -33,7 +33,7 @@ if __name__=='__main__':
     xs=collect();out=ROOT/'publish-batches';out.mkdir(exist_ok=True)
     previous=ROOT/'published-evidence-manifest.json'
     baseline={x['path']:x['sha256'] for x in json.loads(previous.read_text())} if '--delta' in sys.argv and previous.exists() else {}
-    all_manifest=[{'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode())} for e in xs]
+    all_manifest=[{'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode()),'git_blob_sha':hashlib.sha1(b'blob '+str(len(e['content'].encode())).encode()+b'\0'+e['content'].encode()).hexdigest()} for e in xs]
     xs=[e for e in xs if hashlib.sha256(e['content'].encode()).hexdigest()!=baseline.get(e['path'])]
     manifest=[];batch=[];size=0;bid=0
     for e in xs:

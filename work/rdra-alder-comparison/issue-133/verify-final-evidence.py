@@ -30,12 +30,20 @@ def verify(require_complete=False):
         directory = ROOT / 'canonical-extractions' / pid
         meta = directory / 'metadata.json'
         if meta.exists() and json.loads(meta.read_text()).get('status') == 'success':
+            m = json.loads(meta.read_text())
             expected = assembled(row)
             actual = (directory / 'packet.md').read_bytes()
             canonical.append({'packet_id': pid, 'matches_completed_artifacts': expected == actual,
                               'expected_sha256': sha(expected), 'actual_sha256': sha(actual)})
             if expected != actual:
                 errors.append(pid + ': canonical input differs from complete artifact assembly')
+            recorded = {'packet.md': m['packet_sha256'],
+                        'extraction-prompt.txt': m['prompt_sha256'],
+                        'envelope.txt': m['envelope_sha256'], **m.get('output_sha256', {})}
+            for name, digest in recorded.items():
+                path = directory / name
+                if not path.is_file() or sha(path.read_bytes()) != digest:
+                    errors.append(pid + ': recorded canonical input/output hash differs: ' + name)
         if row['stage'] != 's3':
             continue
         directory = ROOT / 'blind-probes' / pid

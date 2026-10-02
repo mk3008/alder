@@ -1,0 +1,46 @@
+{
+  "packet_id": "P008",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:36:51.126516+00:00",
+  "packet_sha256": "058a6f991ebb9b74caccf8eb438aa9c92316180fd0a9895a0c05d9924ce36eff",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "aaabcc59938a2488800bbb899ba220b64f06236865517c6144370f379cccbb47",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P008/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P008/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p008",
+  "prepared_at": "2026-10-02T10:30:37.306713+00:00",
+  "output_sha256": {
+    "canonical.json": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "raw-response.md": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "read-log.jsonl": "c0df959f467bc503d2b9d8de00861e7927d1e52981e2ecebfc6818513a128f02"
+  },
+  "finished_at": "2026-10-02T10:40:18.015726+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:41:46.765090+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log mechanical allowlist validation and actual final; procedural only, no independent attestation."
+  },
+  "mechanical_evidence_limit": {
+    "recorded_at": "2026-10-02T10:41:53.444130+00:00",
+    "observation": "Many evidence quotes are single words; quote presence and line ranges passed mechanically. This does not attest complete semantic support. Canonical meaning was not modified.",
+    "operator_semantic_review": "not performed"
+  }
+}

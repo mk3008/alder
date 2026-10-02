@@ -1,0 +1,22 @@
+{
+  "packet_id": "P004",
+  "status": "prepared",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:30:37.619077+00:00",
+  "packet_sha256": "2bb4f062577153e91ff8c9c93e9eb674618f1bb2a89460f03b77f7abfe5f0385",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "57483c2d34b23ac11eb67259471070aa9cd34fcbf7e8079c4daf044b8618014e",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P004/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P004/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ]
+}
