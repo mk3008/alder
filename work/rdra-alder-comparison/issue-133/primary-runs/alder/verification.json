@@ -1,0 +1,297 @@
+{
+  "verified_at": "2026-10-02T08:14:35.978609+00:00",
+  "runs": [
+    {
+      "case": "C1",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c1_r1_s1",
+      "read_entries": 5,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C1",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c1_r1_s2",
+      "read_entries": 5,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C1",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c1_r2_s1",
+      "read_entries": 5,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C1",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c1_r2_s2",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C2",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c2_r1_s1",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C2",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c2_r1_s2",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C2",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c2_r2_s1",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C2",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c2_r2_s2",
+      "read_entries": 9,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c3_r1_s1",
+      "read_entries": 8,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c3_r1_s2",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c3_r2_s1",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c3_r2_s2",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C4",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c4_r1_s1",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C4",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c4_r1_s2",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C4",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c4_r2_s1",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C4",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c4_r2_s2",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C5",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c5_r1_s1",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C5",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c5_r1_s2",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C5",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c5_r2_s1",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    },
+    {
+      "case": "C5",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c5_r2_s2",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": []
+    }
+  ],
+  "failures": [
+    {
+      "case": "C2",
+      "replicate": 2,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c2_r2_s2",
+      "read_entries": 9,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c3_r1_s1",
+      "read_entries": 8,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c3_r1_s2",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C3",
+      "replicate": 2,
+      "stage": "s1",
+      "agent_id": "/root/alder_primary/c3_r2_s1",
+      "read_entries": 6,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+      ]
+    },
+    {
+      "case": "C5",
+      "replicate": 1,
+      "stage": "s2",
+      "agent_id": "/root/alder_primary/c5_r1_s2",
+      "read_entries": 7,
+      "source_and_method_verified": true,
+      "full_artifact_present_in_raw": true,
+      "errors": [
+        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
+      ]
+    }
+  ],
+  "success_count": 15,
+  "failed_validation_count": 5,
+  "read_log_keys": [
+    "at",
+    "path",
+    "read_at",
+    "time",
+    "timestamp"
+  ],
+  "input_integrity_pass_count": 20,
+  "output_integrity_pass_count": 20,
+  "strict_read_allowlist_pass_count": 15,
+  "own_output_read_deviation_count": 5,
+  "verification_failure_definition": "Strict input-only read allowlist; all file hashes and raw completeness pass."
+}

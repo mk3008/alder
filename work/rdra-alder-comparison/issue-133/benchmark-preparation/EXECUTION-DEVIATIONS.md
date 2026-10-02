@@ -1,0 +1,16 @@
+# 実行上の逸脱と分析の境界
+
+2026-10-02。最初のsemantic scoreより前に記録する。生成source、固定回答、oracle、rubric、公式Prompt/Knowledge、要求model/effortは変更しない。
+
+- Alder authoringは技術的に20/20完了し、入力・手法・artifact・raw hashを照合した。一方input-only wrapperは自身の生成artifact/rawの検証readを許可しておらず、5runでこのreadが報告された。厳密guard合格は15/20。自己生成output以外の追加入力は報告されていない。全出力のhashと原read-logを保存する。
+- RDRAでは非存在の誤Prompt pathへのread試行がread-logまたはnode metadataに記録された。correct Prompt/input/Knowledge hashは一致し、誤pathからの内容取得は報告されていない。C1は4runに該当。最初のread-logだけの監査で2runをall-passと報告した点は訂正する。以後metadataも監査し、attemptと内容取得を分ける。
+- **厳密なguard遵守の分析**では、両armのwrapper外read/attemptを同じ規則で除外する。失敗/無効runを予定母集団から消さず、欠測をsemantic coverage 0へ置換しない。Source/Promptが一致してもstrict complianceと混同しない。
+- **source-clean探索分析**は、申告された追加readが自己生成outputまたは非存在pathへの試行だけで、正規入力・Promptのhashが保たれた完成出力を別に扱う。これは結果を見てPrimary失敗を成功へ差替えるものではなく、実行開始後の追加観測である。共有FSと自己申告read-logには独立した完全性保証がない。「source-clean」は申告ログとhash照合に基づく限定的名称。
+- RDRA C1のStage2では、operatorがstrict failure判定後に残DAGまで止めた。公式output-existence skipを維持するため、原failure manifest/partial artifactsを不変snapshotへ保存し、正しい既出力を修正・再生成せず残node/scriptを**探索的に継続**する。原strict failureは維持し、補助完成状態を別fieldへ記録する。追加replicate、business内容repair、oracleを使ったヒントはない。元20workflow/360予定nodeの残りを完了するもの。
+- 実際に他case/arm/oracleなど禁止された内容の取得が判明した場合、source-clean探索比較からも除外する。
+- 初回RDRA postprocessで公式空`1_RDRA`ディレクトリsetup漏れによるENOENTがあった。失敗attemptを保存し、公式scaffoldingを作り、postprocess前の元AI出力から同一6scriptsを再実行した。business出力をoperatorが修正したものではない。
+- 空出力nodeは公式output-existence条件どおり同入力Freshで再queueし、元の空出力attemptを保存した。
+- 初回のorchestration envelopeには記載量のvariantがある。Alderのbusiness taskは全20同文、RDRAは原Prompt bytesのhashが一致。実際のspawn messageを保存し、完全に同一wrapperだったとは主張しない。
+- Alder operatorの最終検査globが一度s3 metadataにも一致した。業務本文は読まず、s[12]へ限定して検査し直した。generatorへの追加入力はない。
+
+匿名抽出者/score evaluatorにはarm mappingと上記eligibilityの分類を渡さず、完成した匿名business資料を同じ規則で評価する。operatorはscoreの後にmetadataからstrict/探索の集計を分ける。Primaryの厳密実測が欠けるcaseを、探索結果だけで「条件どおりの比較が完了した」と表現しない。

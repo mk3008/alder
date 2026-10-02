@@ -1,9 +1,11 @@
-import pathlib,json,csv,collections
+import pathlib,json,csv,collections,sys,importlib.util
 ROOT=pathlib.Path(__file__).resolve().parent
 BASE=ROOT/'benchmark-preparation'
 cases={c['id']:c for c in json.loads((BASE/'cases.json').read_text())['cases']}
 mapping={r['blind_id']:r for r in json.loads((ROOT/'blind-mapping.json').read_text())}
 downstream=json.loads((BASE/'downstream-denominators.json').read_text())['cases']
+spec=importlib.util.spec_from_file_location('availability',ROOT/'availability-report.py')
+availability=importlib.util.module_from_spec(spec);spec.loader.exec_module(availability)
 
 def checked_set(values,allowed,context):
     values=set(values or []);extras=values-set(allowed)
@@ -11,7 +13,7 @@ def checked_set(values,allowed,context):
     return values
 
 def compute():
-    rows=[];seen=set()
+    rows=[];seen=set();eligibility={r['blind_id']:r for r in availability.report()['rows']}
     for p in sorted((ROOT/'blind-evaluation').glob('C*/scores.json')):
         d=json.loads(p.read_text());case=cases[d['case_id']];o=case['oracle']
         unknowns=[x['id'] for x in o['critical_unknowns']]
@@ -41,6 +43,8 @@ def compute():
             row={**link,'unknown_found':len(u),'unknown_total':len(unknowns),'actionable_found':len(q),'source_preserved':len(f),'source_total':len(source),'post_answer_preserved':len(f|a),'post_answer_total':len(pool),'downstream_preserved':len(ds),'downstream_total':len(pool),'unauthorized_decisions':len(s.get('unauthorized_decisions',[])),'unresolved_leakage':len(s.get('unresolved_leakage',[])),'unsupported_additions':len(s.get('unsupported_additions',[])),'redundant_questions':len(s.get('redundant_questions',[])),'probe_inventions':len(s.get('probe_inventions',[])),'correct_stop':s.get('correct_stop'),'needs_raw_check':len(s.get('needs_raw_check',[]))}
             row['downstream_total']=len(ds_pool)
             row['score_status']='needs_raw_check' if s['needs_raw_check'] else 'scored'
+            row['strict_primary_eligible']=eligibility[s['packet_id']]['primary_quality_eligible']
+            row['source_clean_exploratory_eligible']=eligibility[s['packet_id']]['source_clean_exploratory_eligible']
             stage=s['stage']
             if stage!='s1':
                 for key in ['unknown_found','unknown_total','actionable_found','source_preserved','source_total','redundant_questions','correct_stop']:row[key]=None
@@ -65,8 +69,28 @@ def compute():
 
 if __name__=='__main__':
     rows=compute();out=ROOT/'evaluation-result';out.mkdir(exist_ok=True)
+    if '--require-complete' in sys.argv:
+        planned=availability.report()['rows']
+        incomplete=[r['blind_id'] for r in planned if not r['technical_complete'] and (r['execution_status'] in ['pending','running','prepared','unknown'] or r['continuation_status'] in ['pending','running','pending_upstream_continuation'])]
+        if incomplete:raise ValueError('incomplete planned slots: '+','.join(incomplete))
+        expected={r['blind_id'] for r in planned if r['source_clean_exploratory_eligible']}
+        found={r['blind_id'] for r in rows}
+        if expected!=found:raise ValueError(f'score coverage mismatch: missing={sorted(expected-found)}, extra={sorted(found-expected)}')
+        unresolved=[r['blind_id'] for r in rows if r['score_status']!='scored']
+        if unresolved:raise ValueError('unresolved raw checks: '+','.join(unresolved))
     (out/'unblinded-scores.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
     if rows:
         with (out/'scores.csv').open('w') as f:
             w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+        pairs=[];strict_pairs=[]
+        groups=collections.defaultdict(dict)
+        for r in rows:groups[(r['case'],r['replicate'],r['stage'])][r['arm']]=r
+        for (case,replicate,stage),arms in sorted(groups.items()):
+            if set(arms)!= {'alder','rdra'}:continue
+            if any(r['score_status']!='scored' for r in arms.values()):continue
+            pair={'case':case,'replicate':replicate,'stage':stage,'alder':arms['alder'],'rdra':arms['rdra']}
+            if all(r['source_clean_exploratory_eligible'] for r in arms.values()):pairs.append(pair)
+            if all(r['strict_primary_eligible'] for r in arms.values()):strict_pairs.append(pair)
+        (out/'exploratory-paired-scores.json').write_text(json.dumps(pairs,ensure_ascii=False,indent=2)+'\n')
+        (out/'strict-primary-paired-scores.json').write_text(json.dumps(strict_pairs,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'scored_packets':len(rows)},ensure_ascii=False))

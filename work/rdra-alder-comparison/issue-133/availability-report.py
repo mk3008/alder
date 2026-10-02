@@ -18,9 +18,18 @@ def report():
             d=ar.get((m['case'],m['replicate'],m['stage']),{})
         else:d=read(base/'manifest.json')
         status=d.get('status','pending')
-        valid=status in ['success','complete']
+        complete=bool(d.get('technical_complete',status in ['success','complete']))
+        strict=bool(d.get('strict_protocol_eligible',status in ['success','complete']))
+        source_clean=bool(d.get('source_clean_exploratory_eligible',status in ['success','complete']))
+        continuation=d.get('exploratory_continuation_status')
+        if m['stage']=='s3':
+            if m['arm']=='alder':up=ar.get((m['case'],m['replicate'],'s2'),{})
+            else:up=read(base.parent/'s2/manifest.json')
+            strict=strict and bool(up.get('strict_protocol_eligible',up.get('status') in ['success','complete']))
+            source_clean=source_clean and bool(up.get('source_clean_exploratory_eligible',up.get('status') in ['success','complete']))
+            if not complete and up.get('exploratory_continuation_status')=='running':continuation='pending_upstream_continuation'
         extraction=read(ROOT/'canonical-extractions'/m['blind_id']/'metadata.json')
-        rows.append({**m,'execution_status':status,'primary_quality_eligible':valid,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason')})
+        rows.append({**m,'execution_status':status,'continuation_status':continuation,'technical_complete':complete,'primary_quality_eligible':complete and strict,'source_clean_exploratory_eligible':complete and source_clean,'canonical_status':extraction.get('status','pending'),'reason':d.get('reason') or d.get('failure_reason')})
     counts=collections.Counter((r['arm'],r['stage'],r['execution_status']) for r in rows)
     return {'planned_packets':len(rows),'rows':rows,'counts':[{'arm':a,'stage':s,'status':t,'count':n} for (a,s,t),n in sorted(counts.items())],'limits':['Failed/unavailable slots are retained in availability denominator, never silently scored as zero coverage. A protocol violation is not proof of business-quality or native-method failure.']}
 

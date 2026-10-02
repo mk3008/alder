@@ -50,12 +50,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 5,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C1",
@@ -95,12 +90,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 5,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C1",
@@ -140,12 +130,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 5,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C1",
@@ -185,12 +170,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C2",
@@ -230,12 +210,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C2",
@@ -275,12 +250,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C2",
@@ -320,12 +290,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 7,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C2",
@@ -369,16 +334,7 @@
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
         ]
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": false,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": [
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C2/r2/s2/raw-response.md"
-      ]
+      }
     },
     {
       "case": "C3",
@@ -421,15 +377,7 @@
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
         ]
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": false,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": [
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s1/docs/business-design/design.md"
-      ]
+      }
     },
     {
       "case": "C3",
@@ -471,14 +419,7 @@
         "read_allowlist_deviations": [
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
         ]
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": false,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": [
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r1/s2/docs/business-design/design.md"
-      ]
+      }
     },
     {
       "case": "C3",
@@ -520,14 +461,7 @@
         "read_allowlist_deviations": [
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
         ]
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": false,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": [
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
-      ]
+      }
     },
     {
       "case": "C3",
@@ -567,12 +501,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C4",
@@ -612,12 +541,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C4",
@@ -657,12 +581,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C4",
@@ -702,12 +621,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C4",
@@ -747,12 +661,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 7,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C5",
@@ -792,12 +701,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 7,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C5",
@@ -839,14 +743,7 @@
         "read_allowlist_deviations": [
           "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
         ]
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": false,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": [
-        "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C5/r1/s2/docs/business-design/design.md"
-      ]
+      }
     },
     {
       "case": "C5",
@@ -886,12 +783,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 7,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     },
     {
       "case": "C5",
@@ -931,12 +823,7 @@
         "strict_read_allowlist_pass": true,
         "read_log_entries": 6,
         "read_allowlist_deviations": []
-      },
-      "technical_complete": true,
-      "strict_protocol_eligible": true,
-      "source_clean_exploratory_eligible": true,
-      "classification_recorded_at": "2026-10-02T08:20:44.182048+00:00",
-      "strict_guard_deviations": []
+      }
     }
   ],
   "updated_at": "2026-10-02T08:15:06.938051+00:00",
@@ -1025,12 +912,5 @@
   },
   "handoff_manifest_path": "primary-runs/alder/handoff-manifest.json",
   "coordinator_status": "completed",
-  "completed_at": "2026-10-02T08:15:06.938051+00:00",
-  "analysis_classification": {
-    "recorded_at": "2026-10-02T08:20:44.182048+00:00",
-    "timing": "after authoring completion, before first semantic score",
-    "strict_guard_eligible": 15,
-    "source_clean_exploratory_eligible": 20,
-    "rule": "Strict guard deviations excluded symmetrically in both arms. Self-generated-output reads without reported extra input analyzed separately as exploratory; runtime/read trace completeness not independently attested."
-  }
+  "completed_at": "2026-10-02T08:15:06.938051+00:00"
 }
