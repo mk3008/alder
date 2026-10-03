@@ -160,7 +160,7 @@ See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client suppor
 
 The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
 
-**Development Plugin 0.3.1 adds read-only improvement proposals to the three workflows in the pinned 0.2.8 package.** Give the current Business Design and confirmed Problem / Pain level, then ask “Alderで改善提案して”. New 0.3.1 client routing remains unverified; see [version and setup](docs/plugin-adoption.md). Check Item drafting, graph export and follow-up use reference documents and prompts.
+**Development Plugin 0.3.2 adds read-only improvement proposals to the three workflows in the pinned 0.2.8 package.** Give the current Business Design and confirmed Problem / Pain level, then ask “Alderで改善提案して”. New 0.3.2 client routing remains unverified; see [version and setup](docs/plugin-adoption.md). Check Item drafting, graph export and follow-up use reference documents and prompts.
 
 The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 

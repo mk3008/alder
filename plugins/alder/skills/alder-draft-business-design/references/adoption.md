@@ -2,7 +2,7 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-[Alder Plugin 0.3.1](plugin-adoption.md) adds read-only Optimization Review to Business Design drafting/revision, Business Design review, and post-implementation review. This development package's new routing is pending real-client validation; the pinned 0.2.8 onboarding package retains its three validated workflows. With Business Design at `docs/business-design/`, request an improvement review in ordinary language and provide the recorded Problem / Pain level. Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
+[Alder Plugin 0.3.2](plugin-adoption.md) adds read-only Optimization Review to Business Design drafting/revision, Business Design review, and post-implementation review. This development package's new routing is pending real-client validation; the pinned 0.2.8 onboarding package retains its three validated workflows. With Business Design at `docs/business-design/`, request an improvement review in ordinary language and provide the recorded Problem / Pain level. Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 

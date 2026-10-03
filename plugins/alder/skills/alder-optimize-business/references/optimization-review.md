@@ -162,6 +162,8 @@ Pain should influence how far the search is worth taking. For example, a Low-pai
 
 ## Output
 
+Start each candidate with a short category or effect-oriented title that tells the requester which work is affected and what burden is expected to change. In plain language, identify the current touchpoint, the work reduced or transferred, and the judgment retained by people before the detailed fields. A generic action title alone is insufficient; do not imply that an expected benefit is already observed.
+
 For each candidate, report:
 
 1. **Candidate**

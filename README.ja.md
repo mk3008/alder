@@ -159,7 +159,7 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。手動作成でも文書構造と導入ガイドをAIへ渡してください。
 
-**開発版Plugin 0.3.1は、上の導入例で固定した0.2.8の三つの用途に、読み取り専用の改善提案を追加しています。** 現行の業務設計書と確認済みのProblem / Pain levelを渡し、「Alderで改善提案して」と依頼できます。0.3.1の実クライアントroutingは未検証です。[版と導入手順](docs/plugin-adoption.md)を確認してください。Check Item作成、Graph出力、follow-upは参照文書とプロンプトでAIへ依頼してください。
+**開発版Plugin 0.3.2は、上の導入例で固定した0.2.8の三つの用途に、読み取り専用の改善提案を追加しています。** 現行の業務設計書と確認済みのProblem / Pain levelを渡し、「Alderで改善提案して」と依頼できます。0.3.2の実クライアントroutingは未検証です。[版と導入手順](docs/plugin-adoption.md)を確認してください。Check Item作成、Graph出力、follow-upは参照文書とプロンプトでAIへ依頼してください。
 
 現在のmain / PRは未リリース仕様です。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 
