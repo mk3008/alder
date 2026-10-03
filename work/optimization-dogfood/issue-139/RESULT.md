@@ -2,6 +2,8 @@
 
 2026-10-03。Execution: [#139](https://github.com/mk3008/alder/issues/139)。候補は未採用で、業務設計書は変更していない。
 
+**追加レビューによる判定訂正:** 対象業務未特定の候補生成と、運用改善案を依頼者の採否へ届けなかった不足を確認した。前回の限定的なPhase 2合格は責務順序全体の合格ではない。実際の対象確認、authority / Skill 0.3.1の責務順序、人間採否への引き継ぎは[追加対応記録](TARGET-AND-ADOPTION.md)を参照する。以下は旧実行の証跡として保持する。
+
 ## 対象と現状の境界
 
 入力は公開main `52ddd2b984d7ddfc1e1c7ee08d7d1394711c3198` のAlder利用業務のBusiness Design、READMEのStandard workflow、adoption、現行Optimization Review。Problemは「必要な業務判断の品質を保ち、Alderの実在する設計・開発運用の人間認知負荷を減らす」というprompt-only PoC入力とした。ユーザーは開始後にPainをHighと回答した。Problem / Painを合意済みBusiness Designへ書き込んだ通常運用とは区別する。

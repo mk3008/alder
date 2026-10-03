@@ -1,5 +1,7 @@
 # 0.3.0の実クライアント検証
 
+以下は旧0.3.0の未実施手順。追加レビュー後の検証対象は0.3.1のpackage revision `ea59c32059ec77ce46cc487c45d462a4d612fd11`。未特定ケースは候補生成なしで対象確認へ止まり、特定済みケースは`inputs/result-review-current.ja.md`を渡して有用な候補を人間採否へ返すことを追加で確認する。現在の対象・採否状態は[TARGET-AND-ADOPTION](TARGET-AND-ADOPTION.md)を参照する。どちらの版も実クライアント成功証跡はまだない。
+
 package入力revision: `07067860f2a055620d5cd19b00df3a54e4f0fb01`。このrevisionのPlugin 0.3.0を実クライアントへ読み込み、各ケースを別の新しいChatで実行する。モデル指定は`gpt-6.1-sol / medium`。選択できない場合は代用成功にせず、利用可能な設定と未検証範囲を記録する。
 
 repositoryのSkillをagentへ手動で渡した実行は、実クライアントがdescriptionからroutingした証跡に数えない。0.2.8の既存routing結果も0.3.0の回帰成功へ読み替えない。
