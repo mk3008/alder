@@ -1,0 +1,4 @@
+[
+  {"id": "room-a", "name": "会議室A", "location": "2F", "state": "available"},
+  {"id": "room-b", "name": "会議室B", "location": "3F", "state": "available"}
+]
