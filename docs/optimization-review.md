@@ -63,6 +63,18 @@ If measured frequency, time, error rate, cost, or other evidence is available, i
 
 ## Review behavior
 
+### Identify the work before proposing a change
+
+Use the following responsibility order: identify the actual target work → confirm its Problem → propose alternatives → wait for human adoption → revise and re-agree Business Design if accepted → update implementation. These are gates for responsibility, not a requirement to create additional artifacts or approve every technical correction.
+
+Read Business Design as a whole and help locate the affected Activity, handoff or Human task. Do not require users to know its internal name in advance. When a request only says “reduce cognitive burden,” offer a few source-grounded current touchpoints and ask where the burden actually occurs. **Do not generate Optimization Candidates or Extreme perspectives while the target work remains unidentified**, even when a Problem label and High Pain were supplied. A list of possible touchpoints is current-work confirmation, not improvement proposals.
+
+Once the work is identified, establish who experiences which difficulty in that work, judgment or handoff. Separate source facts from hypotheses and ask for a concrete example or Pain only where needed to understand the Problem. Existing explicit requester confirmation can satisfy this gate; do not repeatedly ask for already supplied facts. If the work is outside the design's scope or is not described, return to current-work description and confirmation rather than inventing an Activity. Prompt-only PoC input does not waive target identification or human adoption.
+
+Only after these gates are satisfied, compare grounded alternatives using the behavior below. Candidate generation does not mean adoption. If candidates are returned, explicitly present them to the requester for acceptance, modification, deferral or rejection and end in **awaiting human adoption**. Do not bury that decision in a raw research record or replace it with a package/CI checkpoint. Keep all proposals unapproved until an explicit responsible-person decision; no answer means pending, not accepted or rejected. If no candidate is useful, report zero and the reason without manufacturing an adoption choice. A deferred decision remains pending; do not repeat the same question immediately.
+
+Authorization to develop a Skill or improve the method is separate from adopting a proposed change to the target business operation. Do not revise target Business Design or implement that operational change before human adoption. After adoption, confirm the changed meaning and re-agree Business Design before downstream work. Uniquely derived corrections within already agreed meaning do not need a new business adoption decision.
+
 First read the current Business Design as a whole and locate the stated Problem in the actual workflow, including relevant handoffs and responsibility boundaries. Then review only the area relevant to that Problem. Do not optimize unrelated work merely because further changes are imaginable. For an ambiguous request such as reducing cognitive burden, do not fix the target to the latest report or artifact before locating the real work that causes the burden.
 
 Distinguish documented work, observed burden and burden hypotheses. If the requested workflow is outside the source design's scope, name the gap and return a focused current-work confirmation; do not fill it with invented Activities. Software development, library development and maintaining Alder can be review targets when their actual workflow is described; they are not excluded merely because they develop software or the method itself.
@@ -190,7 +202,7 @@ Optimization Review guidance: <readable path or versioned URL to docs/optimizati
 
 Read the relevant Business Design and the referenced Optimization Review guidance.
 
-Follow the guidance's Review behavior: read the current workflow as a whole before locating the Problem, ground candidates in actual work and explain their difference from existing responsibilities. Do not optimize unrelated Activities merely because improvements are imaginable. Treat Pain level as a proportionality signal for how far investigation and business-change difficulty are worth exploring; do not use a fixed Pain-to-Difficulty matrix.
+Follow the guidance's Review behavior and responsibility gates. Identify the actual target work first, helping the requester locate it in the whole current workflow. If it remains unknown, ask current-work confirmation questions and return no Optimization Candidates or Extreme perspectives. Then confirm the Problem, ground candidates in actual work and explain their difference from existing responsibilities. If candidates are returned, present an explicit human adoption decision and stop; Skill development authorization does not adopt a target-operation change. Do not optimize unrelated Activities merely because improvements are imaginable. Treat Pain level as a proportionality signal for how far investigation and business-change difficulty are worth exploring; do not use a fixed Pain-to-Difficulty matrix.
 
 Consider Eliminate, Simplify/Merge, Automate, Delegate and Preserve only when they help this Problem. Evaluate whether the useful scope should be Narrow, Keep or Expand, and explain why. Evaluate Difficulty from affected roles, authority, Activities, systems, departments, external parties, contracts or other responsibility boundaries, not from code size.
 
