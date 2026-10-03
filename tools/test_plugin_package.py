@@ -44,7 +44,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.3.0")
+        self.assertEqual(plugin["version"], "0.3.1")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         self.assertIn("業務設計書をAlderでレビューして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
@@ -53,7 +53,7 @@ class PluginPackageTest(unittest.TestCase):
         review_skill = (SKILL / "SKILL.md").read_text()
         self.assertIn("interview notes", author_skill)
         self.assertIn("Write only the requested Business Design file(s)", author_skill)
-        self.assertIn("Alder plugin 0.3.0", author_skill)
+        self.assertIn("Alder plugin 0.3.1", author_skill)
         self.assertIn("Review only; do not edit product files", review_skill)
 
     def test_business_design_review_sources_are_bundled_without_drift(self):
