@@ -1,0 +1,97 @@
+diff --git "a/work\\business-process-dogfood\\runs\\stage1\\consistency-resolution/src/app.js" "b/work\\business-process-dogfood\\runs\\stage1\\refactoring-rerun-1/src/app.js"
+index 1046526..c387213 100644
+--- "a/work\\business-process-dogfood\\runs\\stage1\\consistency-resolution/src/app.js"
++++ "b/work\\business-process-dogfood\\runs\\stage1\\refactoring-rerun-1/src/app.js"
+@@ -5,9 +5,9 @@ class QuotationStore {
+ 
+   async create(input) {
+     const { customerId, expiresAt, lines } = input ?? {};
+-    requireIdentifier(customerId, 'customerId');
++    this.requireIdentifier(customerId, 'customerId');
+     if (!Array.isArray(lines) || lines.length === 0) throw new Error('A quotation requires at least one line');
+-    for (const line of lines) validateLine(line);
++    for (const line of lines) this.validateLine(line);
+ 
+     const client = await this.pool.connect();
+     try {
+@@ -28,7 +28,7 @@ class QuotationStore {
+         );
+       }
+       await client.query('COMMIT');
+-      return readQuotation(client, quotationId);
++      return this.readQuotation(client, quotationId);
+     } catch (error) {
+       await client.query('ROLLBACK');
+       throw error;
+@@ -37,8 +37,8 @@ class QuotationStore {
+ 
+   async search(criteria = {}) {
+     const { quotationId, customerId, productId } = criteria ?? {};
+-    if (customerId !== undefined) requireIdentifier(customerId, 'customerId');
+-    if (productId !== undefined) requireIdentifier(productId, 'productId');
++    if (customerId !== undefined) this.requireIdentifier(customerId, 'customerId');
++    if (productId !== undefined) this.requireIdentifier(productId, 'productId');
+     const { rows } = await this.pool.query(
+       `SELECT q.quotation_id FROM quotation q
+         WHERE ($1::bigint IS NULL OR q.quotation_id = $1)
+@@ -49,7 +49,31 @@ class QuotationStore {
+         ORDER BY q.quotation_id`,
+       [quotationId ?? null, customerId ?? null, productId ?? null],
+     );
+-    return Promise.all(rows.map(({ quotation_id }) => readQuotation(this.pool, quotation_id)));
++    return Promise.all(rows.map(({ quotation_id }) => this.readQuotation(this.pool, quotation_id)));
++  }
++
++  requireIdentifier(value, name) {
++    if (typeof value !== 'string' || value.trim() === '') throw new Error(`${name} must be a nonblank identifier`);
++  }
++
++  validateLine(line) {
++    const { productId, quantity, unitPrice } = line ?? {};
++    this.requireIdentifier(productId, 'productId');
++    if (quantity === undefined || unitPrice === undefined) throw new Error('Each quotation line requires quantity and unitPrice');
++    if (Number.isNaN(quantity) || Number.isNaN(unitPrice)) throw new Error('quantity and unitPrice must not be NaN');
++  }
++
++  async readQuotation(queryable, quotationId) {
++    const quotation = await queryable.query(
++      `SELECT quotation_id AS "quotationId", customer_id AS "customerId", expires_at AS "expiresAt",
++              CASE WHEN status = 'open' AND expires_at <= CURRENT_TIMESTAMP THEN 'expired' ELSE status END AS status
++         FROM quotation WHERE quotation_id = $1`, [quotationId],
++    );
++    const lines = await queryable.query(
++      `SELECT quotation_line_id AS "quotationLineId", product_id AS "productId", quantity, unit_price AS "unitPrice"
++         FROM quotation_line WHERE quotation_id = $1 ORDER BY quotation_line_id`, [quotationId],
++    );
++    return { ...quotation.rows[0], lines: lines.rows };
+   }
+ }
+ 
+@@ -58,27 +82,3 @@ export function createApplication({ connectionString = process.env.DATABASE_URL
+   const quotations = new QuotationStore(new Pool({ connectionString, allowExitOnIdle: true }));
+   return { createQuotation: (input) => quotations.create(input), searchQuotations: (criteria) => quotations.search(criteria) };
+ }
+-
+-function requireIdentifier(value, name) {
+-  if (typeof value !== 'string' || value.trim() === '') throw new Error(`${name} must be a nonblank identifier`);
+-}
+-
+-function validateLine(line) {
+-  const { productId, quantity, unitPrice } = line ?? {};
+-  requireIdentifier(productId, 'productId');
+-  if (quantity === undefined || unitPrice === undefined) throw new Error('Each quotation line requires quantity and unitPrice');
+-  if (Number.isNaN(quantity) || Number.isNaN(unitPrice)) throw new Error('quantity and unitPrice must not be NaN');
+-}
+-
+-async function readQuotation(queryable, quotationId) {
+-  const quotation = await queryable.query(
+-    `SELECT quotation_id AS "quotationId", customer_id AS "customerId", expires_at AS "expiresAt",
+-            CASE WHEN status = 'open' AND expires_at <= CURRENT_TIMESTAMP THEN 'expired' ELSE status END AS status
+-       FROM quotation WHERE quotation_id = $1`, [quotationId],
+-  );
+-  const lines = await queryable.query(
+-    `SELECT quotation_line_id AS "quotationLineId", product_id AS "productId", quantity, unit_price AS "unitPrice"
+-       FROM quotation_line WHERE quotation_id = $1 ORDER BY quotation_line_id`, [quotationId],
+-  );
+-  return { ...quotation.rows[0], lines: lines.rows };
+-}
