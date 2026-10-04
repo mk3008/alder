@@ -1,0 +1,42 @@
+{
+  "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+  "evaluation": "Unblinded review of six first responses in one context, not six independent trials or complete draft acceptance.",
+  "cases": [
+    {
+      "case": "T1",
+      "observed": "CSVの採否状態を短く質問し、検討中なら困りごとを確認。変更フローを先に詳述しない。",
+      "target_boundary": "observed",
+      "limit": "実際の回答後にどの経路へ進むかは未検証。"
+    },
+    {
+      "case": "T2",
+      "observed": "500件／2時間残業という既知背景を使い、未採用CSV案を草案化。目的や採否状態を聞き直さず、別途比較は実施しない。",
+      "target_boundary": "observed",
+      "limit": "不一致時の全体／部分成立だけ質問し、未定なら残す。候補自体の効果は未測定。"
+    },
+    {
+      "case": "T3",
+      "observed": "CSVは決定済みとして反映し、選定理由を問い直さない。",
+      "target_boundary": "observed",
+      "limit": "草案は照合を登録前へ置く表現。元の手順との順序差が業務意味を変えないか、実文書への反映時には確認が必要。入口判別の観測を完全な草案妥当性としない。"
+    },
+    {
+      "case": "T4",
+      "observed": "既知の貸出／返却を先に草案化。再貸出は今回は回答不要とし、既知手順の確認へ進む。",
+      "target_boundary": "observed",
+      "limit": "実際の人間合意・利用開始は観測していない。"
+    },
+    {
+      "case": "T5",
+      "observed": "CSV制約を再正当化せず、精算／精算担当者／受領証の用語を保持。独立した送付ログ義務を追加しない。",
+      "target_boundary": "observed",
+      "limit": "fixtureは受領証記録の主体を受動形で書き、明示していない。応答が記録担当を未指定とした点を、既知役割の無視とも現実の設計欠陥とも断定しない。"
+    },
+    {
+      "case": "T6",
+      "observed": "二段階の採用を保持し、購買開始が発注を含むか、両承認前の発注禁止と矛盾するかだけ質問。",
+      "target_boundary": "observed",
+      "limit": "優先規則をAIで決めず返却。質問への人間回答・修正ターンは未検証。"
+    }
+  ]
+}

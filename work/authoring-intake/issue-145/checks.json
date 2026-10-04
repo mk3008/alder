@@ -1,0 +1,34 @@
+{
+  "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+  "checks": [
+    {
+      "command": "python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_plugin_release_workflow -v",
+      "passed": 13
+    },
+    {
+      "command": "python3 -m unittest discover -s tools/business_graph -p 'test_*.py'",
+      "passed": 44
+    },
+    {
+      "command": "python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'",
+      "passed": 12
+    },
+    {
+      "command": "python3 work/traceability-drift/evaluate.py --output <temporary-json>",
+      "passed_scenarios": 26
+    },
+    {
+      "check": "Skill frontmatter/name/scaffold validator",
+      "passed_skills": 10
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "No installed-client routing or agent script-execution validation.",
+    "Unit and structural checks do not prove business meaning or runtime model settings.",
+    "Release publication is mocked; no release or tag created."
+  ]
+}
