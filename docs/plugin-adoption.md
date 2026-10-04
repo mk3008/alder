@@ -55,6 +55,10 @@ Review completed scoped implementation separately with:
 
 The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for the separate authoring skill. Run its follow-up separately after a responsible person has answered unresolved business questions.
 
+### Clarifying a proposed change
+
+The unreleased 0.4.1 development package checks missing background before drafting a change when that background could change whether the proposed means should be adopted. It reuses information already supplied and does not reopen settled decisions or externally fixed means. When a means-only request leaves its decision status unclear, it asks briefly rather than assuming either a proposal or an approved requirement. Known work can still be drafted with deferrable matters left open. This adds no new Skill. The stable installation tag above remains 0.4.0 until a separate release. See [the authoring boundary](adoption.md#before-drafting-a-proposed-business-change).
+
 ## Reproducibility and scope
 
 The plugin's `plugin.json` identifies the package version. Each skill's `references/provenance.json` records its source revision and the digests of bundled guidance. A review result records the plugin and knowledge versions, design and implementation revisions, and the plugin source commit when installed from a moving branch. Keep a released package's content immutable; bump its version when changing its workflow or bundled knowledge. A local marketplace installation is a snapshot; refresh/reinstall to use a later package version.
