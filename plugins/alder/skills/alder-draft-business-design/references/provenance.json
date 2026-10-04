@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "9d67d886de8317ad4d884ba8e06c356b44370c9a",
+  "alder_source_revision": "0c78a4d1c937174fb52d0668abc85ff0534f80c4",
   "sources": {
-    "docs/adoption.md": "8350e28ac33aafb9a44bd26ecdf6c0052f42aed8fb613474b2368028533acac4",
+    "docs/adoption.md": "bb0e35a4d330f3b0464233805483802f7e7e4d95dcece603dc2196852ed98759",
     "docs/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
   }
 }

@@ -1,14 +1,14 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "alder",
-  "version": "0.3.2",
-  "description": "Draft and review Business Design, propose business improvements, and review implementation against agreed Business Design with Alder.",
+  "version": "0.4.0",
+  "description": "Draft and maintain Alder Business Design and Checks, discover questions, review improvements and implementation, follow up evidence, and run optional graph and drift tools.",
   "repository": "https://github.com/mk3008/alder",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Alder",
-        "shortDescription": "Design and code review",
+        "shortDescription": "Business design and checks",
         "developerName": "mk3008",
         "category": "Productivity",
         "capabilities": [
