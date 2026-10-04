@@ -22,19 +22,19 @@
 - **Technical improvement candidate:** `return_item()` on empty history raises `IndexError`; duplicate call overwrites the original return time. Whether retries/duplicate intake can reach it depends on an external contract not supplied. No unapproved business rule was derived from this.
 - No DDL, UI, persistence layer or external intake contract was present. Their absence was not treated by itself as a product defect. Review does not imply implementation acceptance. The omitted return tests, CK-01 assertions, and undecided reservation remain open.
 
-## Exact artifact diff
+## Artifact diff (blank context lines normalized)
 ```diff
 --- checks.md C1
 +++ checks.md C2
 @@ -1,4 +1,4 @@
 -# 検査項目 revision C1
 +# 検査項目 revision C2
- 
+
  | ID | タイトル | 期待結果 | レビュー状態 |
  | --- | --- | --- | --- |
 @@ -7,8 +7,8 @@
  | CK-03 | 返却後に次の人へ貸し出せる | 返却日時が記録され、備品が貸出可能になる | 確認済み |
- 
+
  ## 詳細
 -- CK-01: Business Design「備品を貸し出す」Procedure 1。明示。Test `test_lend_available`、assertion `self.assertEqual(item.status, "out")`。借り手・日時のassertion根拠は未確認。
 -- CK-02: Business Design「備品を貸し出す」Procedure 2。明示。Test mappingなし。
@@ -42,7 +42,7 @@
 +- CK-01: Business Design「備品を貸し出す」Procedure 1 / Output、Business Design revision（SHA-256: `2f9bd4672bc15fccc370f782aae687f3bfae9914a4ec2d1ccf18683cdcbbbea0`）。明示。Test `test_lend_available`（Test revision SHA-256: `25d5b51c210121011ecda2c7f6791f43e774e1ef4f6760f0946fd4c314b74a3b`）の `self.assertEqual(item.status, "out")` は貸出中への状態変更のみを検証。借り手・貸出日時のassertionはなく、Business Designが貸出記録に要求する備品番号と返却時の貸出特定も検証されていない。部分的なTest対応。2026-10-04 UTCの実行では当該Test成功（3件中3件成功）だが、未assertの期待結果を立証しない。
 +- CK-02: Business Design「備品を貸し出す」Procedure 2、同revision。明示。Test `test_refuse_busy`（同Test revision）の `self.assertEqual(result, "unavailable")` と `self.assertEqual(item.loans, before)` が、貸出中の拒否と既存記録不変を検証。Test対応あり。2026-10-04 UTCの実行で当該Test成功（3件中3件成功）。
 +- CK-03: Business Design「備品を返却する」Procedure 1 / Result、同revision。明示。返却日時・貸出可能状態・次の利用者への貸出を直接検証するTest/assertionはない。Test対応なし。2026-10-04 UTCに3件のTestが成功したが、返却を扱うTestは実行されていない。
- 
+
 -- CK-04: 返却前の予約を受け付ける案。レビュー状態: 未確認。業務設計上の採否は未決。Test mappingなし。
 +- CK-04: 返却前の予約を受け付ける案。レビュー状態: 未確認。業務設計上の採否は未決。`test_reserve`（同Test revision）は予約用の保存と戻り値をassertし、2026-10-04 UTCの実行で成功したが、承認済みのBusiness Design上の期待結果へのTest対応ではない。予約の採否と約束する権利・優先順位は業務責任者の判断待ち。承認済みCheckとしてのTest mappingなし。
 ```
