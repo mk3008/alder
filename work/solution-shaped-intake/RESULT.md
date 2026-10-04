@@ -17,7 +17,7 @@
 - B：手段を外しても成立するWhyを確認し、目的・背景が不足する既存業務変更を確定せず質問する。
 - C：未採用の解決策型要求を入口で識別し、現在業務・Problem / 意図・採否状態を確かめてから既存の工程へ渡す。
 
-[6ケース](cases.md)は合成入力。S1はProblem起点、S2はCSVのみ、S3は二段階承認のみ、S4は新規業務の明示決定、S5は合意済み実装、S6は外部I/Fで固定された手段。[入力・protocol](protocol.md)を公開commit `96056c2341a1e905951be7cf2c967e58a037c8c1` へ先に固定し、4ファイルをSHA指定で再取得・一致確認してから実行した。[raw](raw/control.md)と[全文prompt・metadata](runs.json)は公開commit `a3aa24f72f3fe3d37885015be6f64c26f5b35147` に保存した。
+[6ケース](cases.md)は合成入力。S1はProblem起点、S2はCSVのみ、S3は二段階承認のみ、S4は新規業務の明示決定、S5は合意済み実装、S6は外部I/Fで固定された手段。[入力・protocol](protocol.md)を公開commit `96056c2341a1e905951be7cf2c967e58a037c8c1` へ先に固定し、4ファイルをSHA指定で再取得・一致確認してから実行した。[raw](raw/control.md)は公開commit `a3aa24f72f3fe3d37885015be6f64c26f5b35147` に保存した。[公開用の実験指示・metadata](runs.json)は、実験外の実行情報を省き、パスと識別子を中立な表記へ置き換えたもの。完全な実行promptではない。訂正範囲は[公開情報の訂正記録](PUBLICATION-CORRECTION.md)を参照する。
 
 要求設定は各armとも `gpt-6-sol` / `medium` / `fork_turns: none`。元の比較の独立開始は4 contextsであり、各context内で同順序の6ケースを処理した。補足の純粋Whyを含む実行総数は5 contexts・30応答だが、事後追加であり同時の5arm試験ではない。**24独立試行ではない**。実効model・effort、内部routing、token使用量、課金は独立に確認できない。これは提供テキストを読ませた初回応答比較で、installed pluginの自動routingや対話完了、実装、実利用の試験ではない。
 
@@ -99,6 +99,10 @@ Authoring Step 2の「明示された事実と未決の意味を分ける」箇�
 ## 独立監査
 
 [監査記録](audit.md)は同じ要求model / effort、履歴なしの別contextで作成した。調査者のRESULTや先行結論は渡さず、ケース・protocol・全arm raw・必要な固定sourceを読ませた。明示的な誤承認は未再現、Control/Aの早期固定、B/Cの背景確認という主所見は一致した。C S5/S6の余分な要求・記録候補を限界へ追加した。これは非盲検の証跡監査で、第二の効果試験ではない。調査者がC S6の引用を再確認するよう求め、監査者は最終rawに実在すると確認した。最終rawと公開manifestの一致を保ち、都合のよい応答への置換はしていない。要求promptと追確認は[監査条件](audit-run.json)に残す。
+
+## 検証状態の区別
+
+GitHubのCodeRabbit statusはsuccessだったが、Draft PRのレビューをスキップした結果であり、研究内容の外部レビュー成功ではない。内容確認の根拠は保存した証跡監査と検証記録である。GitHub Actions / check-runsは0件で、製品testは実施していない。
 
 ## 研究上の返却状態
 

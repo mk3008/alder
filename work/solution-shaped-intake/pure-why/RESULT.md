@@ -14,7 +14,7 @@
 - 要求設定は `gpt-6-sol` / `medium` / 履歴forkなし。追加の独立contextは1つ。実効runtimeは独立確認不可。
 - 追加指示はWhyの意味・具体性・手段を除く検査だけ。入口分類、採否状態質問、背景への停止規則、Optimization routing、例外条件は追加しなかった。元のAlderが自然に質問することは禁止していない。
 - [補助protocol](protocol.md)とtreatmentを公開commit `19ce79e66e397084dae3589f505e9b296484b2da` に固定・再取得してからdispatch。
-- 完了rawと全文prompt/metadataは公開commit `474769d00a89566788f27fdb73307cf95275dc9c`。原4armは再実行していない。これは事後追加のhistorical-Control比較で、元のpreregistered armではない。
+- 完了rawは公開commit `474769d00a89566788f27fdb73307cf95275dc9c`。[公開実験指示](run.json)は実験外の実行情報を省き、ローカルパスと識別子を中立化した記録であり、完全な実行promptではない。原4armは再実行していない。これは事後追加のhistorical-Control比較で、元のpreregistered armではない。
 
 ## 同じ6ケースでの観測
 
@@ -45,6 +45,6 @@ B/Cの成功を全て入口規則の因果効果と断定はできない。各�
 
 ## 負担と終了判断
 
-[実行記録](run.json)は全文prompt、要求model/effort、入力版、SHA-256、入出力bytes、観測経過秒を保存する。課金・token数・実効runtimeは不明。質問の主な意図はS2で「入力経路」「部分成立」、S3で「判断者・兼務」「最終承認・却下結果」であり、数が少ないことを品質としない。S4の余分な合意停止条件も懸念として残す。
+[実行記録](run.json)は公開用の実験指示、要求model/effort、入力版、SHA-256、入出力bytes、観測経過秒を保存する。省略範囲は[公開情報の訂正](../PUBLICATION-CORRECTION.md)を参照する。課金・token数・実効runtimeは不明。質問の主な意図はS2で「入力経路」「部分成立」、S3で「判断者・兼務」「最終承認・却下結果」であり、数が少ないことを品質としない。S4の余分な合意停止条件も懸念として残す。
 
 この一回で純粋Whyを観測していなかった欠落を補った。追加の反復で好ましい答えを探さず終了する。元の研究提案は、既存Authoring入口に背景確認を短く置き、既存Draft / unconfirmedとOptimizationの責務を使うこと。採用・正式Skillへの反映・実効果は引き続き別Phaseである。
