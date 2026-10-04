@@ -1,7 +1,10 @@
 """Exercise release-script effects against a fake GitHub API; never publish."""
 from pathlib import Path
 import json
+import os
 import subprocess
+import sys
+import tempfile
 import textwrap
 import unittest
 
@@ -15,6 +18,31 @@ class PluginReleaseTest(unittest.TestCase):
         self.assertIn("if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'", source)
         self.assertIn('needs: validate', source)
         self.assertIn('contents: read', source.split('jobs:')[0])
+        self.assertIn("needs.validate.outputs.release_040 == 'true'", source)
+
+    def test_later_package_validates_without_authorizing_040_publication(self):
+        block = WORKFLOW.read_text().split('      - name: Validate release inputs\n', 1)[1]
+        code = textwrap.dedent(block.split("python3 - <<'PY'\n", 1)[1].split('\n          PY', 1)[0])
+        for version, expected in [('0.4.0', 'true'), ('0.4.1', 'false')]:
+            with self.subTest(version=version), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / 'plugins/alder').mkdir(parents=True)
+                (root / 'plugins/alder/plugin.json').write_text(json.dumps({'version': version}))
+                for i in range(10):
+                    folder = root / f'plugins/alder/skills/skill-{i}'
+                    folder.mkdir(parents=True)
+                    (folder / 'SKILL.md').write_text('fixture\n')
+                (root / '.agents/plugins').mkdir(parents=True)
+                (root / '.agents/plugins/marketplace.json').write_text(json.dumps({
+                    'plugins': [{'source': {'path': './plugins/alder'}}]}))
+                if version == '0.4.0':
+                    (root / 'docs').mkdir()
+                    (root / 'docs/plugin-release-notes-v0.4.0.md').write_text('# Alder Plugin 0.4.0\n')
+                output = root / 'output'
+                result = subprocess.run([sys.executable, '-c', code], cwd=root,
+                    env={**os.environ, 'GITHUB_OUTPUT': str(output)}, capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(output.read_text(), f'release_040={expected}\n')
 
     def test_release_script_preserves_tags_and_bounds_writes(self):
         script = textwrap.dedent(WORKFLOW.read_text().split('          script: |\n', 1)[1])

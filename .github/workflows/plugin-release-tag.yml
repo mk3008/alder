@@ -21,6 +21,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      release_040: ${{ steps.release_inputs.outputs.release_040 }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,22 +36,28 @@ jobs:
       - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
       - run: python3 work/traceability-drift/evaluate.py --output /tmp/drift-observations.json
       - name: Validate release inputs
+        id: release_inputs
         run: |
           python3 - <<'PY'
-          import json
+          import json, os, re
           from pathlib import Path
           plugin = json.loads(Path('plugins/alder/plugin.json').read_text())
-          assert plugin['version'] == '0.4.0'
-          notes = Path('docs/plugin-release-notes-v0.4.0.md').read_text()
-          assert notes.startswith('# Alder Plugin 0.4.0')
+          version = plugin['version']
+          assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version), 'Invalid package version'
+          release_040 = version == '0.4.0'
+          if release_040:
+              notes = Path('docs/plugin-release-notes-v0.4.0.md').read_text()
+              assert notes.startswith('# Alder Plugin 0.4.0')
           market = json.loads(Path('.agents/plugins/marketplace.json').read_text())
           entry, = market['plugins']
           assert Path(entry['source']['path']) == Path('plugins/alder')
           assert len(list(Path('plugins/alder/skills').glob('*/SKILL.md'))) == 10
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f"release_040={str(release_040).lower()}\n")
           PY
 
   release:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.validate.outputs.release_040 == 'true'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 5
