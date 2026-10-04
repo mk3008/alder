@@ -124,7 +124,7 @@ AIの指摘をそのまま仕様にせず、入力事実と照らし合わせて
 
 Alder Pluginは業務設計書の作成・レビューと実装レビューを短い依頼から実行できます。Check ItemやSystem Requirementsなど、ほかの手順では下記の参照文書を使います。
 
-<a id="3-check itemを作り人間が期待結果を確認する"></a>
+<a id="3-check-itemを作り人間が期待結果を確認する"></a>
 
 ### Check Itemを作り人間が期待結果を確認する
 
@@ -134,7 +134,7 @@ Alder Pluginは業務設計書の作成・レビューと実装レビューを�
 
 **なぜTest成功だけでは業務承認にならないか：** Testは書かれた期待値と実装を照合します。その期待値が依頼者の望む業務かは人間が確認するため、レビュー状態とTest根拠は別に扱います。
 
-<a id="4-先に守る制約をsystem requirementsとして伝える"></a>
+<a id="4-先に守る制約をsystem-requirementsとして伝える"></a>
 
 ### 先に守る制約をSystem Requirementsとして伝える
 
@@ -149,7 +149,7 @@ Alder Pluginは業務設計書の作成・レビューと実装レビューを�
 
 **なぜ詳細設計を独立必須工程にしないか：** 詳細はDDL・SQL・Code / Testと一緒に具体化し、レビューできます。移行や外部契約など変更費用が大きい判断は必要な範囲で先に設計してください。[詳細設計の位置づけ](docs/detailed-design.ja.md)を参照してください。
 
-<a id="5-合意した設計とcheck itemをaiへ渡す"></a>
+<a id="5-合意した設計とcheck-itemをaiへ渡す"></a>
 
 ### 合意した設計とCheck ItemをAIへ渡す
 
