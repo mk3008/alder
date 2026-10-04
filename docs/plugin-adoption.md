@@ -1,6 +1,6 @@
 # Alder Plugin
 
-The development package Alder Plugin `0.4.2` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
+Alder Plugin `0.4.2` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
 
 The package version is separate from the Alder method release and review knowledge v0.3. New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
 
@@ -9,7 +9,7 @@ The package version is separate from the Alder method release and review knowled
 Pin the Plugin release tag:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.1
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.2
 codex plugin marketplace list
 ```
 
@@ -53,7 +53,7 @@ Review completed scoped implementation separately with:
 コードをAlderでレビューして
 ```
 
-The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for other requested writing workflows. The 0.4.2 development package also accepts “Alderで実装をレビューして、チェックとテストの対応も更新して”. It runs a separate read-only reviewer first, then updates authorized records in the same interaction. “レビューだけ” or a review request without update authorization does not write. This combined route needs a host that can run a separate agent or fresh context; without it, the independent review remains pending and no combined-workflow writes occur. Release tag `plugin-v0.4.1` does not include this new route.
+The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for other requested writing workflows. Plugin 0.4.2 also accepts “Alderで実装をレビューして、チェックとテストの対応も更新して”. It runs a separate read-only reviewer first, then updates authorized records in the same interaction. “レビューだけ” or a review request without update authorization does not write. This combined route needs a host that can run a separate agent or fresh context; without it, the independent review remains pending and no combined-workflow writes occur. Release tag `plugin-v0.4.1` does not include this new route.
 
 ### Clarifying a proposed change
 
@@ -85,7 +85,7 @@ With confirmed current work but no known Problem, ask “Alderで今の業務の
 
 After design/correlation review, “Alderで未記載の機能条件を探して” explores a small set of concrete undecided outcomes. These are unapproved questions, not requirements or test assertions. Both inquiries are read-only and may return no useful findings.
 
-For improvement proposals, install version 0.4.1 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
+For improvement proposals, install version 0.4.2 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
 
 ```text
 Alderで改善提案して
