@@ -9,6 +9,15 @@ on:
       - 'docs/business-graph.md'
       - 'docs/optimization-review.md'
       - 'tools/test_plugin_package.py'
+      - 'tools/test_workflow_skills.py'
+      - 'tools/business_graph/export.py'
+      - 'work/traceability-drift/drift.py'
+      - 'work/traceability-drift/README.md'
+      - 'docs/check-item-traceability.md'
+      - 'docs/behavior-derivation/candidate-c3.md'
+      - 'docs/behavior-derivation/functional-considerations.md'
+      - 'docs/functional-interface/prompt.md'
+      - 'docs/traceability-drift/study.md'
       - '.github/workflows/plugin-package.yml'
   push:
     branches: [main]
@@ -20,6 +29,15 @@ on:
       - 'docs/business-graph.md'
       - 'docs/optimization-review.md'
       - 'tools/test_plugin_package.py'
+      - 'tools/test_workflow_skills.py'
+      - 'tools/business_graph/export.py'
+      - 'work/traceability-drift/drift.py'
+      - 'work/traceability-drift/README.md'
+      - 'docs/check-item-traceability.md'
+      - 'docs/behavior-derivation/candidate-c3.md'
+      - 'docs/behavior-derivation/functional-considerations.md'
+      - 'docs/functional-interface/prompt.md'
+      - 'docs/traceability-drift/study.md'
       - '.github/workflows/plugin-package.yml'
 jobs:
   check:
@@ -29,4 +47,4 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python3 -m unittest tools/test_plugin_package.py
+      - run: python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py
