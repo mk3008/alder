@@ -90,6 +90,8 @@ Alder Plugin can draft/revise and review Business Design and Check Items, review
 
 In the target project's chat, provide interview notes or requirements and ask, “Draft an Alder Business Design in `docs/business-design/`.” People confirm source facts and unresolved questions, answer them, and revise the same document.
 
+For a proposed feature or approach, Alder asks about missing background before drafting when it could change whether to adopt the proposal. It reuses known context and settled decisions, and drafts what is known while leaving unresolved matters visible.
+
 Business Design is written in natural language with defined fields. **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
 
 ### 2. Review and agree with requesters
