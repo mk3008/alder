@@ -57,7 +57,7 @@ async function scenario(opts={}) {
     readFileSync: (path) => path.endsWith('plugin.json') ? JSON.stringify({version:opts.version || '0.4.2'}) : '# Alder Plugin 0.4.2 — Test\nSafe notes.'
   } : require(name);
   const github={rest:{repos:{
-    getReleaseByTag:async () => opts.released ? {data:{html_url:'release',draft:opts.draft || false}} : missing(),
+    getReleaseByTag:async () => opts.released ? {data:{html_url:'release',draft:opts.draft || false,prerelease:opts.prerelease || false,tag_name:opts.wrongTag ? 'other' : 'plugin-v0.4.2'}} : missing(),
     createRelease:async (args)=>{calls.push(args);if(opts.fail)throw Error('network');return {data:{html_url:'new-release'}};}
   },git:{
     getRef:async ()=> opts.ref ? {data:{object:opts.ref}} : missing(),
@@ -73,17 +73,19 @@ async function scenario(opts={}) {
  r=await scenario({released:true});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({released:true,ref:{type:'commit',sha:'b'.repeat(40)}});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({released:true,draft:true,ref:{type:'commit',sha:'a'.repeat(40)}});assert(r.error);assert.equal(r.calls.length,0);
+ r=await scenario({released:true,prerelease:true,ref:{type:'commit',sha:'a'.repeat(40)}});assert(r.error);assert.equal(r.calls.length,0);
+ r=await scenario({released:true,wrongTag:true,ref:{type:'commit',sha:'a'.repeat(40)}});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({ref:{type:'commit',sha:'b'.repeat(40)}});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({ref:{type:'commit',sha:'a'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,1);
  r=await scenario({ref:{type:'tag',sha:'c'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,1);
  r=await scenario({version:'0.4.3'});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({fail:true});assert(r.error);assert.equal(r.calls.length,1);
- console.log('10 mocked release states passed; only createRelease can mutate');
+ console.log('12 mocked release states passed; only createRelease can mutate');
 })().catch(e=>{console.error(e);process.exit(1);});
 '''
         result = subprocess.run(['node', '-e', harness.replace('SCRIPT', json.dumps(script), 1)], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('10 mocked release states passed', result.stdout)
+        self.assertIn('12 mocked release states passed', result.stdout)
 
 
 if __name__ == '__main__':

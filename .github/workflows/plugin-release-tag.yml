@@ -96,7 +96,9 @@ jobs:
               }
             }
             if (released) {
-              if (!ref || released.draft) throw new Error('Existing release is missing its fixed tag or is still draft.');
+              if (!ref || released.draft || released.prerelease || released.tag_name !== tag) {
+                throw new Error('Existing release is not a stable non-draft release at its expected fixed tag.');
+              }
               core.info(`Verified existing release at ${context.sha}: ${released.html_url}`);
               return;
             }
