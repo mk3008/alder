@@ -1,0 +1,327 @@
+{
+  "source_revision": "5ca4ae84f2d1266dac445fcec27cb7319562bc29",
+  "verification": "GitHub connector tree/contents blob SHA compared with local Git blob SHA; effective model/effort not verified",
+  "files": [
+    {
+      "path": "plugins/alder/skills/alder-check-traceability-drift/SKILL.md",
+      "sha": "5f55ecf7ec9c645bd49b100943494e8feca3b844",
+      "observed_local_sha": "5f55ecf7ec9c645bd49b100943494e8feca3b844",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-check-traceability-drift/references/README.md",
+      "sha": "d9c98603c31516a254549355425df25ed7035b05",
+      "observed_local_sha": "d9c98603c31516a254549355425df25ed7035b05",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-check-traceability-drift/references/provenance.json",
+      "sha": "b7e4d3a960ec8074526baa13b95ad0a6e52fcc6e",
+      "observed_local_sha": "b7e4d3a960ec8074526baa13b95ad0a6e52fcc6e",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-check-traceability-drift/references/study.md",
+      "sha": "e6ee4e6bea60c594076758f00ef4c5c001d43a60",
+      "observed_local_sha": "e6ee4e6bea60c594076758f00ef4c5c001d43a60",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-check-traceability-drift/scripts/drift.py",
+      "sha": "b8981dce60c23ab7455026ece125fb201d16e255",
+      "observed_local_sha": "b8981dce60c23ab7455026ece125fb201d16e255",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-discover-business-questions/SKILL.md",
+      "sha": "2d83c995197950a0797f7991c919c043efac13c1",
+      "observed_local_sha": "2d83c995197950a0797f7991c919c043efac13c1",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-discover-business-questions/references/optimization-review.md",
+      "sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "observed_local_sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-discover-business-questions/references/provenance.json",
+      "sha": "daff41529226a26dd138ea7ee352e9cdfbf36381",
+      "observed_local_sha": "daff41529226a26dd138ea7ee352e9cdfbf36381",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-business-design/SKILL.md",
+      "sha": "d2541a6d9a463932c12f0c83bb970a1e5ac02518",
+      "observed_local_sha": "d2541a6d9a463932c12f0c83bb970a1e5ac02518",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+      "sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "observed_local_sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-business-design/references/business-graph.md",
+      "sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "observed_local_sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+      "sha": "53cd1a00dc5449b57dace96dc99b9e993b3f0bba",
+      "observed_local_sha": "53cd1a00dc5449b57dace96dc99b9e993b3f0bba",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/SKILL.md",
+      "sha": "873d99876607786b689d7fcb0d7ad2e260b51c68",
+      "observed_local_sha": "873d99876607786b689d7fcb0d7ad2e260b51c68",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/references/adoption.md",
+      "sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "observed_local_sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md",
+      "sha": "33e5cd77b91209c04789ad5f9d5524ae99713802",
+      "observed_local_sha": "33e5cd77b91209c04789ad5f9d5524ae99713802",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md",
+      "sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "observed_local_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/references/prompt.md",
+      "sha": "13e31491b84c134dc75ed31fc2ec9fffba597217",
+      "observed_local_sha": "13e31491b84c134dc75ed31fc2ec9fffba597217",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-draft-check-items/references/provenance.json",
+      "sha": "283746589d4f07e65a0a2a215196b87c35a81bd6",
+      "observed_local_sha": "283746589d4f07e65a0a2a215196b87c35a81bd6",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-explore-functional-conditions/SKILL.md",
+      "sha": "bb7ffb56a6a95eb8b0816b2a95b0e0855ded36d5",
+      "observed_local_sha": "a83cfb5c4a5a8f1e2b626a70fa332726ef622084",
+      "matches_pinned": false
+    },
+    {
+      "path": "plugins/alder/skills/alder-explore-functional-conditions/references/check-item-traceability.md",
+      "sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "observed_local_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-explore-functional-conditions/references/functional-considerations.md",
+      "sha": "4c5081c2574100c7fa0b051f1c7de3ebb51e79cc",
+      "observed_local_sha": "4c5081c2574100c7fa0b051f1c7de3ebb51e79cc",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-explore-functional-conditions/references/provenance.json",
+      "sha": "72fb0d51a378871a900e794c4386bea7d3680bbe",
+      "observed_local_sha": "72fb0d51a378871a900e794c4386bea7d3680bbe",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-export-business-graph/SKILL.md",
+      "sha": "d5a986ac1a953a7a81ea67f414713d081471c4f1",
+      "observed_local_sha": "d5a986ac1a953a7a81ea67f414713d081471c4f1",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-export-business-graph/references/business-graph.md",
+      "sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "observed_local_sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-export-business-graph/references/provenance.json",
+      "sha": "1a7560358379427d925df8320e94a754ada437d5",
+      "observed_local_sha": "1a7560358379427d925df8320e94a754ada437d5",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-export-business-graph/scripts/export.py",
+      "sha": "184e1ce910a3479ee294c1b3391083ba2aeee3f3",
+      "observed_local_sha": "184e1ce910a3479ee294c1b3391083ba2aeee3f3",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-follow-up-review/SKILL.md",
+      "sha": "65fd67e45475ff2af4b8b7e7ae613d1e4b43ffc2",
+      "observed_local_sha": "65fd67e45475ff2af4b8b7e7ae613d1e4b43ffc2",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-follow-up-review/references/adoption.md",
+      "sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "observed_local_sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-follow-up-review/references/check-item-traceability.md",
+      "sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "observed_local_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-follow-up-review/references/provenance.json",
+      "sha": "affdf5ba4d8fe5ae73f3355a0c5ef4276eaab32c",
+      "observed_local_sha": "affdf5ba4d8fe5ae73f3355a0c5ef4276eaab32c",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-follow-up-review/references/study.md",
+      "sha": "e6ee4e6bea60c594076758f00ef4c5c001d43a60",
+      "observed_local_sha": "e6ee4e6bea60c594076758f00ef4c5c001d43a60",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-optimize-business/SKILL.md",
+      "sha": "231f4e1ed3157f607f2e0d8b7764d9351c0f389e",
+      "observed_local_sha": "231f4e1ed3157f607f2e0d8b7764d9351c0f389e",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+      "sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "observed_local_sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+      "sha": "ddf0927f010727d26719efb1b5fb5b1387c1b809",
+      "observed_local_sha": "ddf0927f010727d26719efb1b5fb5b1387c1b809",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/SKILL.md",
+      "sha": "653c0e60a4f5a52ed710b1925646e1a6ed4cb7e6",
+      "observed_local_sha": "653c0e60a4f5a52ed710b1925646e1a6ed4cb7e6",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/references/business-design-correlation-check.ja.md",
+      "sha": "2d2e453e5bd6e4873bd430eb1ba863cd2a295649",
+      "observed_local_sha": "2d2e453e5bd6e4873bd430eb1ba863cd2a295649",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/references/business-design-omission-check.ja.md",
+      "sha": "2792be927a6ed2a86eec24b4ce2e26c6c60ce900",
+      "observed_local_sha": "2792be927a6ed2a86eec24b4ce2e26c6c60ce900",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/references/business-design-quality-check.ja.md",
+      "sha": "27cf8780d846dc2f87966b871daee49d8c725000",
+      "observed_local_sha": "27cf8780d846dc2f87966b871daee49d8c725000",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha": "095f4b9932d00cbc468826fa01ac88950ddc2e7b",
+      "observed_local_sha": "095f4b9932d00cbc468826fa01ac88950ddc2e7b",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-business-design/references/provenance.json",
+      "sha": "e87afe6d67abb3a88f068e475a7939f537b691f7",
+      "observed_local_sha": "e87afe6d67abb3a88f068e475a7939f537b691f7",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-implementation/SKILL.md",
+      "sha": "01de0979bbb488633b743b83dae167182df0f105",
+      "observed_local_sha": "01de0979bbb488633b743b83dae167182df0f105",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-implementation/references/provenance.json",
+      "sha": "105a11652879aee82a2a0de134527c3d0acc5b2a",
+      "observed_local_sha": "105a11652879aee82a2a0de134527c3d0acc5b2a",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/skills/alder-review-implementation/references/review-knowledge-v0.3.md",
+      "sha": "1af50d44ce53083ff758b4c9ca7a808bb0568856",
+      "observed_local_sha": "1af50d44ce53083ff758b4c9ca7a808bb0568856",
+      "matches_pinned": true
+    },
+    {
+      "path": "plugins/alder/plugin.json",
+      "sha": "85cad71f218daa5ae867ed2b1db1b3ab3e4d75bf",
+      "observed_local_sha": "85cad71f218daa5ae867ed2b1db1b3ab3e4d75bf",
+      "matches_pinned": true
+    },
+    {
+      "path": "work/workflow-skills/issue-143/fixtures/business-design.md",
+      "sha": "3be8268ee4292c75b0470f47b6ddc498daf0908a",
+      "observed_local_sha": "3be8268ee4292c75b0470f47b6ddc498daf0908a",
+      "matches_pinned": true
+    },
+    {
+      "path": "work/workflow-skills/issue-143/fixtures/checks.md",
+      "sha": "81324b44e5f04bec52df29ee3684576504dab61f",
+      "observed_local_sha": "81324b44e5f04bec52df29ee3684576504dab61f",
+      "matches_pinned": true
+    },
+    {
+      "path": "work/workflow-skills/issue-143/fixtures/review.md",
+      "sha": "cb67604ccf82ddba150c19d7eabfb9c1d3968ca7",
+      "observed_local_sha": "cb67604ccf82ddba150c19d7eabfb9c1d3968ca7",
+      "matches_pinned": true
+    },
+    {
+      "path": "work/workflow-skills/issue-143/fixtures/test_lending.py",
+      "sha": "6f1486ffcc566803e88c8e0bdc5266842276e244",
+      "observed_local_sha": "6f1486ffcc566803e88c8e0bdc5266842276e244",
+      "matches_pinned": true
+    },
+    {
+      "path": "docs/adoption.md",
+      "sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "observed_local_sha": "68d07d3af4f3ed5a4262950a061b4301fe256c73",
+      "matches_pinned": true
+    },
+    {
+      "path": "docs/business-graph.md",
+      "sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "observed_local_sha": "c8842f3ad60b238fdd07ec657684e9cbc2429e17",
+      "matches_pinned": true
+    },
+    {
+      "path": "docs/check-item-traceability.md",
+      "sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "observed_local_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+      "matches_pinned": true
+    },
+    {
+      "path": "docs/optimization-review.md",
+      "sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "observed_local_sha": "0ac2a79af9b9a0ea4b70c5326be46426ff565f35",
+      "matches_pinned": true
+    },
+    {
+      "path": "docs/plugin-adoption.md",
+      "sha": "cbe5b3c5e92c5ac09427d74a73f63ee667944ed6",
+      "observed_local_sha": "cbe5b3c5e92c5ac09427d74a73f63ee667944ed6",
+      "matches_pinned": true
+    }
+  ],
+  "later_edits": [
+    "plugins/alder/skills/alder-explore-functional-conditions/SKILL.md"
+  ]
+}

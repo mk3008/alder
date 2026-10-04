@@ -13,7 +13,7 @@ No framework or runtime package is required.
 Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.2.8
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.0
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -84,7 +84,7 @@ Alder can be used to analyze existing work and explore hypotheses for new work. 
 
 The standard design business ends at **handoff to implementation after Business Design agreement and human Check Item review**. Then proceed through the development loop of implementation, independent review, and follow-up.
 
-Alder Plugin can draft/revise and review Business Design and review implementation from short requests. Use the linked reference documents for Check Items, System Requirements, and the other steps.
+Alder Plugin can draft/revise and review Business Design and Check Items, review implementation, and maintain review records from short requests. Technical conditions and implementation remain product-side work.
 
 ### 1. Draft and answer questions
 
@@ -104,7 +104,7 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 ### 3. Draft Checks and have people confirm expectations
 
-Give AI the agreed design and [Check Item guidance](docs/check-item-traceability.md). Ask for independently reviewable expectations. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
+Give AI the agreed Business Design and ask “Draft Check Items with Alder.” The plugin loads its bundled guidance and drafts independently reviewable expectations. Give it human feedback to update the same list. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
 People assign `Unreviewed / Needs confirmation / Confirmed / Needs correction` (`未レビュー / 要確認 / 確認済み / 要修正`). Return undecided business conditions to design. **This stage is complete when confirmed items and unconfirmed candidates can be handed over separately.**
 
@@ -156,13 +156,13 @@ The skill reads **Business Design → Decision Records → implementation / DDL 
 
 ### Versions and plugin scope
 
-See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins Plugin 0.2.8 with the `plugin-v0.2.8` tag. Bounded real-client checks confirmed short routing for Business Design authoring/review and code review under the tested client conditions. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring or Business Design review skill. Use the [manual prompts](docs/adoption.md) without a plugin.
+The installation example pins [Plugin 0.4.0](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.0). It bundles the guidance for Business Design and Check Item drafting/maintenance, reviews, improvement proposals, and review follow-up. Users supply their product inputs rather than selecting Alder's internal guidance. See [installation, updates, and scope](docs/plugin-adoption.md).
 
-The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
+The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. Use the [manual prompts](docs/adoption.md) without a plugin.
 
-**Development Plugin 0.3.3 adds read-only improvement proposals to the three workflows in the pinned 0.2.8 package.** Give the current Business Design and confirmed Problem / Pain level, then ask “Alderで改善提案して”. New 0.3.3 client routing remains unverified; see [version and setup](docs/plugin-adoption.md). Check Item drafting, graph export and follow-up use reference documents and prompts.
+An isolated Codex CLI installation of 0.4.0 has been verified. New real-client routing and packaged-script execution remain unverified. Graph export and the restricted drift pilot require Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
 
-The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
+The current Alder method specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 
 ### Documents by purpose
 

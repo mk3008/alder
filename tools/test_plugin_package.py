@@ -44,7 +44,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.3.3")
+        self.assertEqual(plugin["version"], "0.4.0")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         self.assertIn("業務設計書をAlderでレビューして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
@@ -53,7 +53,7 @@ class PluginPackageTest(unittest.TestCase):
         review_skill = (SKILL / "SKILL.md").read_text()
         self.assertIn("interview notes", author_skill)
         self.assertIn("Write only the requested Business Design file(s)", author_skill)
-        self.assertIn("Alder plugin 0.3.3", author_skill)
+        self.assertIn("Alder plugin 0.4.0", author_skill)
         self.assertIn("Review only; do not edit product files", review_skill)
 
     def test_business_design_review_sources_are_bundled_without_drift(self):
@@ -82,7 +82,10 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256(bundled.read_bytes()).hexdigest(), digest)
         self.assertEqual(
             {p.name for p in (PLUGIN / "skills").iterdir() if (p / "SKILL.md").is_file()},
-            {SKILL.name, AUTHOR.name, DESIGN_REVIEW.name, OPTIMIZE.name},
+            {SKILL.name, AUTHOR.name, DESIGN_REVIEW.name, OPTIMIZE.name,
+             "alder-draft-check-items", "alder-explore-functional-conditions",
+             "alder-discover-business-questions", "alder-follow-up-review",
+             "alder-export-business-graph", "alder-check-traceability-drift"},
         )
 
     def test_interview_fixture_is_valid_and_leaves_policy_open(self):

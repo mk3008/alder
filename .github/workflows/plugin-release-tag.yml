@@ -2,35 +2,103 @@ name: Plugin release tag
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/plugin-release-tag.yml'
+      - 'docs/plugin-release-notes-v0.4.0.md'
+      - 'plugins/alder/**'
+      - 'tools/test_workflow_skills.py'
+      - 'tools/test_plugin_release_workflow.py'
   push:
     branches: [main]
     paths:
       - '.github/workflows/plugin-release-tag.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  tag:
+  validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: Resolve plugin tag
-        id: plugin
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_plugin_release_workflow
+      - run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
+      - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
+      - run: python3 work/traceability-drift/evaluate.py --output /tmp/drift-observations.json
+      - name: Validate release inputs
         run: |
-          version="$(python3 -c 'import json; print(json.load(open("plugins/alder/plugin.json"))["version"])')"
-          echo "tag=plugin-v${version}" >> "$GITHUB_OUTPUT"
-      - name: Create tag when absent
-        env:
-          TAG: ${{ steps.plugin.outputs.tag }}
-        run: |
-          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
-            echo "${TAG} already exists"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "${TAG}" -m "Alder Plugin ${TAG#plugin-v}"
-          git push origin "${TAG}"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          plugin = json.loads(Path('plugins/alder/plugin.json').read_text())
+          assert plugin['version'] == '0.4.0'
+          notes = Path('docs/plugin-release-notes-v0.4.0.md').read_text()
+          assert notes.startswith('# Alder Plugin 0.4.0')
+          market = json.loads(Path('.agents/plugins/marketplace.json').read_text())
+          entry, = market['plugins']
+          assert Path(entry['source']['path']) == Path('plugins/alder')
+          assert len(list(Path('plugins/alder/skills').glob('*/SKILL.md'))) == 10
+          PY
+
+  release:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    concurrency:
+      group: alder-plugin-release-v0.4.0
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Publish fixed Plugin 0.4.0 without moving existing tags
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const repo = context.repo;
+            const version = JSON.parse(fs.readFileSync('plugins/alder/plugin.json', 'utf8')).version;
+            if (version !== '0.4.0') throw new Error('This release workflow is scoped to Plugin 0.4.0.');
+            const tag = `plugin-v${version}`;
+            const getOptional = async (request) => {
+              try { return (await request()).data; }
+              catch (error) { if (error.status === 404) return null; throw error; }
+            };
+            const released = await getOptional(() => github.rest.repos.getReleaseByTag({ ...repo, tag }));
+            const ref = await getOptional(() => github.rest.git.getRef({ ...repo, ref: `tags/${tag}` }));
+            if (ref) {
+              let object = ref.object;
+              while (object.type === 'tag') {
+                object = (await github.rest.git.getTag({ ...repo, tag_sha: object.sha })).data.object;
+              }
+              if (object.type !== 'commit' || object.sha !== context.sha) {
+                throw new Error(`Existing ${tag} targets another revision; refusing to move or release it.`);
+              }
+            }
+            if (released) {
+              if (!ref || released.draft) throw new Error('Existing release is missing its fixed tag or is still draft.');
+              core.info(`Verified existing release at ${context.sha}: ${released.html_url}`);
+              return;
+            }
+            const body = fs.readFileSync('docs/plugin-release-notes-v0.4.0.md', 'utf8');
+            const title = body.split(/\r?\n/, 1)[0];
+            if (!title.startsWith('# Alder Plugin 0.4.0')) throw new Error('Invalid release notes.');
+            // One API action creates a missing tag and release at this checked revision.
+            const { data } = await github.rest.repos.createRelease({
+              ...repo, tag_name: tag, target_commitish: context.sha,
+              name: title.slice(2), body, draft: false, prerelease: false,
+              make_latest: 'false',
+            });
+            core.info(data.html_url);

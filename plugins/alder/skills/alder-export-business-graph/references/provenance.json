@@ -1,0 +1,9 @@
+{
+  "alder_source_revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+  "sources": {
+    "docs/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
+  },
+  "scripts": {
+    "tools/business_graph/export.py": "4f5cf06d2c3795cded69ab751110a11807ea580586b12805e06e175ecd60a9ed"
+  }
+}
