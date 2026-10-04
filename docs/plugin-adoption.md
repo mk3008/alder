@@ -1,6 +1,6 @@
 # Alder Plugin
 
-Alder Plugin `0.4.1` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
+The development package Alder Plugin `0.4.2` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
 
 The package version is separate from the Alder method release and review knowledge v0.3. New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
 
@@ -53,7 +53,7 @@ Review completed scoped implementation separately with:
 コードをAlderでレビューして
 ```
 
-The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for the separate authoring skill. Run its follow-up separately after a responsible person has answered unresolved business questions.
+The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for the separate authoring skill. The 0.4.2 development package also accepts “Alderで実装をレビューして、チェックとテストの対応も更新して”. It runs a separate read-only reviewer first, then updates authorized records in the same interaction. “レビューだけ” or a review request without update authorization does not write. This combined route needs a host that can run a separate agent or fresh context; without it, the independent review remains pending and no combined-workflow writes occur. Release tag `plugin-v0.4.1` does not include this new route.
 
 ### Clarifying a proposed change
 
@@ -77,7 +77,7 @@ The draft keeps one independently reviewable observable expectation per item. Pe
 
 An optional request such as “AlderでFunctional Interfaceを整理して” groups observable responsibilities only where that index is useful. It does not prescribe APIs or files.
 
-After the independent read-only implementation review, ask “Alderレビューのフォローアップをして” and provide actual decisions and the review/evidence. The follow-up maintains requested Decision Records and Check-to-Test/assertion evidence, keeps gaps separate from review states, and leaves undecided meaning open. It does not silently implement fixes or accept the result for the requester.
+To update records from an existing review, ask “Alderレビューのフォローアップをして” and provide actual decisions and the review/evidence. This does not add another review. In the 0.4.2 combined route, the same follow-up runs after the independent reviewer returns without a second skill invocation. The follow-up maintains requested Decision Records and Check-to-Test/assertion evidence, keeps gaps separate from review states, and leaves undecided meaning open. It does not silently implement fixes or accept the result for the requester.
 
 ### Optional questions before proposing a change
 
