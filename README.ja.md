@@ -13,7 +13,7 @@ Alderは依頼者の要求を、依頼者・設計者・実装を担うAIの共�
 ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.0
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.1
 ```
 
 コマンド実行後はChatGPTデスクトップアプリを再起動してPlugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後は新しいチャットを開始してください。
@@ -280,11 +280,11 @@ AIは候補、比較根拠、採用前に確認すべき事項を整理します
 
 ### 版とPluginの提供範囲
 
-導入例は[Plugin 0.4.0](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.0)を固定しています。業務設計書・チェック項目の作成と更新、レビュー、改善提案、レビュー後の記録更新などに必要なAlderの知識を同梱しています。利用者が内部ガイドを選んで渡す必要はありません。[導入・更新と提供範囲](docs/plugin-adoption.md)を参照してください。
+導入例は[Plugin 0.4.1](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.1)を固定しています。業務設計書・チェック項目の作成と更新、レビュー、改善提案、レビュー後の記録更新などに必要なAlderの知識を同梱しています。利用者が内部ガイドを選んで渡す必要はありません。[導入・更新と提供範囲](docs/plugin-adoption.md)を参照してください。
 
 標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。Pluginなしで使う場合は[手動プロンプト](docs/adoption.md)を参照してください。
 
-0.4.0は隔離環境でのCodex CLIインストールを確認済みです。実クライアントでの新しい依頼文のroutingとスクリプト実行は未検証です。Graph出力と制限付き同期漏れ診断にはPython 3.12以上とローカルスクリプト実行が必要です。過去の0.2.8での短文routing確認は、当時の三つの用途と検証環境に限られます。
+0.4.1は隔離環境でのCodex CLIインストールを確認済みです。実クライアントでの新しい依頼文のroutingとスクリプト実行は未検証です。Graph出力と制限付き同期漏れ診断にはPython 3.12以上とローカルスクリプト実行が必要です。過去の0.2.8での短文routing確認は、当時の三つの用途と検証環境に限られます。
 
 Alder手法の現行仕様は未リリースです。標準の設計業務ではCheck Itemの設計と人間レビューが必須で、released v0.6では任意でした。Plugin版、Alder手法の版、レビュー知識v0.3は別です。Alder全体は研究候補であり、効果や検証範囲は[検証記録](docs/validation.md)を参照してください。
 

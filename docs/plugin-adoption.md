@@ -1,6 +1,6 @@
 # Alder Plugin
 
-Alder Plugin `0.4.0` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
+Alder Plugin `0.4.1` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
 
 The package version is separate from the Alder method release and review knowledge v0.3. New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
 
@@ -9,7 +9,7 @@ The package version is separate from the Alder method release and review knowled
 Pin the Plugin release tag:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.0
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.1
 codex plugin marketplace list
 ```
 
@@ -37,7 +37,7 @@ For interview notes, request a draft with ordinary language, for example:
 このヒアリング結果をAlder業務設計書にして
 ```
 
-Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from unresolved business outcomes, responsibilities and handoffs. When an answer would change business meaning, correlations or responsibility, it asks a few concrete questions in its response; give it the answers to revise the same design. Details that do not affect current meaning may remain open. If the responsible person has not decided, the draft retains that decision for human review rather than inventing it or continuing questions indefinitely. It does not generate Check Items or implement the product. The 0.4.0 tag includes this workflow. Start a new chat after installing or updating the package.
+Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from unresolved business outcomes, responsibilities and handoffs. When an answer would change business meaning, correlations or responsibility, it asks a few concrete questions in its response; give it the answers to revise the same design. Details that do not affect current meaning may remain open. If the responsible person has not decided, the draft retains that decision for human review rather than inventing it or continuing questions indefinitely. It does not generate Check Items or implement the product. The 0.4.1 tag includes this workflow. Start a new chat after installing or updating the package.
 
 Review Business Design itself with:
 
@@ -54,6 +54,10 @@ Review completed scoped implementation separately with:
 ```
 
 The existing `実装したのでAlderレビューして` wording remains supported. If there are multiple unrelated changes or Business Designs, identify the target in the natural-language request. The implementation review reads the bundled review knowledge v0.3 and reports evidence and classifications without editing files, even though the package advertises Write for the separate authoring skill. Run its follow-up separately after a responsible person has answered unresolved business questions.
+
+### Clarifying a proposed change
+
+Plugin 0.4.1 checks missing background before drafting a change when that background could change whether the proposed means should be adopted. It reuses information already supplied and does not reopen settled decisions or externally fixed means. When a means-only request leaves its decision status unclear, it asks briefly rather than assuming either a proposal or an approved requirement. Known work can still be drafted with deferrable matters left open. This adds no new Skill. See [the authoring boundary](adoption.md#before-drafting-a-proposed-business-change).
 
 ## Reproducibility and scope
 
@@ -81,7 +85,7 @@ With confirmed current work but no known Problem, ask “Alderで今の業務の
 
 After design/correlation review, “Alderで未記載の機能条件を探して” explores a small set of concrete undecided outcomes. These are unapproved questions, not requirements or test assertions. Both inquiries are read-only and may return no useful findings.
 
-For improvement proposals, install version 0.4.0 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
+For improvement proposals, install version 0.4.1 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
 
 ```text
 Alderで改善提案して

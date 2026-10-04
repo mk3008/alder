@@ -13,7 +13,7 @@ No framework or runtime package is required.
 Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.0
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.1
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -156,11 +156,11 @@ The skill reads **Business Design → Decision Records → implementation / DDL 
 
 ### Versions and plugin scope
 
-The installation example pins [Plugin 0.4.0](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.0). It bundles the guidance for Business Design and Check Item drafting/maintenance, reviews, improvement proposals, and review follow-up. Users supply their product inputs rather than selecting Alder's internal guidance. See [installation, updates, and scope](docs/plugin-adoption.md).
+The installation example pins [Plugin 0.4.1](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.1). It bundles the guidance for Business Design and Check Item drafting/maintenance, reviews, improvement proposals, and review follow-up. Users supply their product inputs rather than selecting Alder's internal guidance. See [installation, updates, and scope](docs/plugin-adoption.md).
 
 The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. Use the [manual prompts](docs/adoption.md) without a plugin.
 
-An isolated Codex CLI installation of 0.4.0 has been verified. New real-client routing and packaged-script execution remain unverified. Graph export and the restricted drift pilot require Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
+An isolated Codex CLI installation of 0.4.1 has been verified. New real-client routing and packaged-script execution remain unverified. Graph export and the restricted drift pilot require Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
 
 The current Alder method specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 

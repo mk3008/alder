@@ -1,0 +1,56 @@
+[
+  {
+    "path": "docs/business-design-quality-check.ja.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "d1a3021da91de3f47ddc7a5fc18efbded598beebe1af5c089616f368886f803e",
+    "bytes": 4395
+  },
+  {
+    "path": "docs/business-design-structure.ja.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0",
+    "bytes": 9177
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/SKILL.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "4f6167944662e93d101334c1845c21993f58b3c4f02e38062231071982829029",
+    "bytes": 7088
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "8350e28ac33aafb9a44bd26ecdf6c0052f42aed8fb613474b2368028533acac4",
+    "bytes": 63534
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/business-graph.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+    "bytes": 17127
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "a1e34df2df1c26136f85f1f59a462ebcc0409f9deba2154a2de314713e09a923",
+    "bytes": 283
+  },
+  {
+    "path": "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "b339684e88af9ea61612c397b5b91e56ca64ce1bbf1c7d247489d4f94cbc2d9f",
+    "bytes": 4425
+  },
+  {
+    "path": "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "76f9dd4fd58629e689fadc8edbbdbeda5b975197758b410c44e953795b0c657f",
+    "bytes": 26907
+  },
+  {
+    "path": "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+    "sha256": "dd08e37b1b33ced101df64ccc6ed9821bfaaae80b051fcb98ec4a4b51efbfe67",
+    "bytes": 196
+  }
+]
