@@ -108,9 +108,9 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 Give AI the agreed Business Design and ask “Draft Check Items with Alder.” The plugin loads its bundled guidance and drafts independently reviewable expectations. Give it human feedback to update the same list. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
-People assign `Unreviewed / Needs confirmation / Confirmed / Needs correction` (`未レビュー / 要確認 / 確認済み / 要修正`). Return undecided business conditions to design. **This stage is complete when confirmed items and unconfirmed candidates can be handed over separately.**
+The designer and requester review the same list and provide their decisions or corrections. Alder records that feedback as `Needs confirmation / Confirmed / Needs correction` (`要確認 / 確認済み / 要修正`), leaving unreviewed items distinct. Return undecided business conditions to design. **Confirmed items and unconfirmed candidates can be handed over separately.**
 
-**Why passing Tests are not business approval:** Tests compare implementation with written expectations. People confirm whether those expectations describe the desired work, so human review state and Test evidence are separate.
+Alder includes conditions, expected results, source references to Business Design, IDs, and an Unreviewed state in each new draft Check. You do not need to add the source links by hand. When given human feedback, Alder updates the same list while preserving existing IDs and mappings.
 
 ### 4. State constraints as System Requirements
 
@@ -146,7 +146,14 @@ In a new chat, make the design and implementation files accessible, identify the
 
 The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
 
-**People judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** See [follow-up and traceability details](docs/check-item-traceability.md).
+Provide the review, human decisions, corrected tests, and execution results, then ask:
+
+```text
+Follow up this Alder review using these findings and human decisions.
+Update Check-to-Test mappings and remaining evidence gaps.
+```
+
+Alder inspects the actual assertions and results, then records which Checks they verify and what remains unverified. **People judge acceptance from the addressed findings and remaining questions.** See [follow-up and traceability details](docs/check-item-traceability.md).
 
 ## Advanced
 
