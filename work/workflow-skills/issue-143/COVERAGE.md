@@ -35,4 +35,4 @@
 
 ## 提供状態
 
-0.4.0は開発branch上の提案。既存4 + 新規6 = 10 Skills。登録済みPluginの更新、実クライアントrouting/script実行、release、main mergeはこの変更では行わない。ローカルpackage/CLIとFresh agentで確認できる事項を、インストール済みクライアントでの挙動と混同しない。
+0.4.0は公開許可を受けた実装。最終検証後にmainと固定tag/Releaseへ公開する。既存4 + 新規6 = 10 Skills。登録済みPluginの更新と実クライアントrouting/script実行は行わない。ローカルpackage/CLIとFresh agentで確認できる事項を、インストール済みクライアントでの挙動と混同しない。
