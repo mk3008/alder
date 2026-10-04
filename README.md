@@ -13,7 +13,7 @@ No framework or runtime package is required.
 Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref 35dd2cec2fb173785f730a5c08d15c7fdfa85598
+codex plugin marketplace add mk3008/alder --ref plugin-v0.2.8
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -156,7 +156,7 @@ The skill reads **Business Design → Decision Records → implementation / DDL 
 
 ### Versions and plugin scope
 
-See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins unreleased 0.2.8 to a commit. Bounded real-client checks confirmed short routing for Business Design authoring/review and code review under the tested client conditions. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring or Business Design review skill. Use the [manual prompts](docs/adoption.md) without a plugin.
+See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins Plugin 0.2.8 with the `plugin-v0.2.8` tag. Bounded real-client checks confirmed short routing for Business Design authoring/review and code review under the tested client conditions. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring or Business Design review skill. Use the [manual prompts](docs/adoption.md) without a plugin.
 
 The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
 

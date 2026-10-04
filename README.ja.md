@@ -13,7 +13,7 @@ Alderは依頼者の要求を、依頼者・設計者・AIの共通言語とな�
 ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref 35dd2cec2fb173785f730a5c08d15c7fdfa85598
+codex plugin marketplace add mk3008/alder --ref plugin-v0.2.8
 ```
 
 コマンド実行後はChatGPTデスクトップアプリを再起動してPlugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後は新しいチャットを開始してください。
@@ -155,7 +155,7 @@ Skillは**Business Design → 判断記録 → 実装・DDL・Test**を読み、
 
 ### 版とPluginの提供範囲
 
-版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例は未リリースの0.2.8を固定commitで指定しています。実クライアントでは業務設計書の作成・レビューとコードレビューの短文routingを確認済みです。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成・業務設計書レビューSkillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
+版・更新・クライアント対応・[導入手順](docs/plugin-adoption.md#install-once)は[Plugin導入ガイド](docs/plugin-adoption.md)を参照してください。上の導入例はPlugin 0.2.8をタグ`plugin-v0.2.8`で固定しています。実クライアントでは業務設計書の作成・レビューとコードレビューの短文routingを確認済みです。安定タグ`plugin-v0.1.0`は実装後レビュー専用で、作成・業務設計書レビューSkillは含みません。Pluginなしの利用は[手動プロンプト](docs/adoption.md)で進められます。
 
 標準配置`docs/business-design/`ではPlugin専用の`AGENTS.md`設定や知識コピーは不要です。別の配置ではパスを伝えてください。手動作成でも文書構造と導入ガイドをAIへ渡してください。
 
