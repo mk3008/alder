@@ -1,0 +1,69 @@
+{
+  "words": 358,
+  "sentences": 7,
+  "sentence_len": {
+    "mean": 51.1,
+    "sd": 91.4,
+    "burstiness": 1.79,
+    "max": 272,
+    "min": 6
+  },
+  "costly": {
+    "numbers": {
+      "count": 39,
+      "per100w": 10.89,
+      "sample": [
+        "\u672c\u6587\u7d0410\u5206\u3092\u60f3\u5b9a",
+        "\u6b21\u306e3\u3064\u3092\u5224\u5b9a\u3067\u304d\u308b\u3053\u3068\u3092\u76ee\u6307\u3057\u307e\u3059",
+        "0.1.0\u306f\u5b9f\u88c5\u5f8c\u30ec\u30d3\u30e5\u30fc\u306e\u307f",
+        "\u672a\u30ea\u30ea\u30fc\u30b90.2.7\u306f\u8a2d\u8a08\u8349\u6848\u3082\u652f\u63f4",
+        "mk3008",
+        "90890e1c209af1b7f88f14e64bb27a7a0d2edbee",
+        "mk3008",
+        "90890e1c209af1b7f88f14e64bb27a7a0d2edbee",
+        "5W1H",
+        "mk3008"
+      ]
+    },
+    "named_entities": {
+      "count": 39,
+      "per100w": 10.89,
+      "sample": [
+        "Business",
+        "HTML",
+        "DDL",
+        "Design",
+        "Record",
+        "Input",
+        "Procedure",
+        "Output",
+        "What",
+        "Why"
+      ]
+    },
+    "direct_quotes": 1,
+    "admissions_against_interest": {
+      "count": 0,
+      "sample": []
+    },
+    "first_person_sentences": 0
+  },
+  "free": {
+    "hedged_sentences": {
+      "count": 0,
+      "share": 0.0,
+      "sample": []
+    },
+    "certainty_sentences": {
+      "count": 0,
+      "share": 0.0
+    },
+    "epistemically_marked_share": 0.0
+  },
+  "portable_sentences": {
+    "count": 0,
+    "share": 0.0,
+    "sample": []
+  },
+  "type_token_ratio": 0.275
+}

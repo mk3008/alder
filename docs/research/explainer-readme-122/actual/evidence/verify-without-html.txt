@@ -1,0 +1,10 @@
+checks (checks.json を再実行)
+  ✓ source-evidence
+  ✓ meeting-room
+figures (vlmkit-anim)
+prose (本文の引用が実物と一致するか)
+  ✓ README.md:52: output of meeting-room
+  ✓ README.md:70: excerpt of examples/meeting-room.json
+  ✓ README.md:220: output of source-evidence
+
+verdict: VERIFIED
