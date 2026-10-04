@@ -2,7 +2,7 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-[Alder Plugin 0.3.2](plugin-adoption.md) adds read-only Optimization Review to Business Design drafting/revision, Business Design review, and post-implementation review. This development package's new routing is pending real-client validation; the pinned 0.2.8 onboarding package retains its three validated workflows. With Business Design at `docs/business-design/`, request an improvement review in ordinary language and provide the recorded Problem / Pain level. Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
+[Alder Plugin 0.3.3](plugin-adoption.md) adds read-only Optimization Review to Business Design drafting/revision, Business Design review, and post-implementation review. This development package's new routing is pending real-client validation; the pinned 0.2.8 onboarding package retains its three validated workflows. With Business Design at `docs/business-design/`, request an improvement review in ordinary language and provide the recorded Problem / Pain level. Check Item drafting, graph export, and follow-up use this guide or the CLI where applicable.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
@@ -16,18 +16,15 @@ The [Business Design for using Alder](../business-design/alder/README.md) includ
 
 When asked to create or revise Business Design, apply the authoring guidance in this section from the first draft, then check the resulting work and correlations before requesting agreement. These are reusable authoring principles, not notes limited to Alder’s self-design.
 
-For a new product, prefer this local arrangement in the product repository:
+For a new product, keep Business Design and material Decision Records alongside the implementation. Existing equivalent locations are fine:
 
 ```text
 product/
-  AGENTS.md
   docs/
     business-design/
       ...
     decisions/
       ...
-    alder/
-      review-knowledge.md
   src/
   tests/
 ```
@@ -36,9 +33,8 @@ product/
 | --- | --- |
 | `docs/business-design/` | Current Business Design. |
 | `docs/decisions/` | Decision Records for material implementation assumptions and choices. |
-| `docs/alder/review-knowledge.md` | A copy of the selected Alder version's review knowledge / review definition. |
 
-This is a recommended example, not a required layout. Keep existing equivalent locations when they are already established. Copy the selected review knowledge without changing its rules and record its source revision, so the local filename does not obscure which version is used.
+This is a recommended example, not a required layout. With the plugin and the conventional `docs/business-design/` path, no Alder-specific AGENTS.md entry or local review-knowledge copy is needed. For manual review, provide a readable, revision-pinned knowledge source as described under [Versions and access](#versions-and-access).
 
 This keeps design and implementation comparable in the same commit and PR, aligned on each branch, and available without additional repository discovery. The review can identify exactly which versions it compares.
 
@@ -50,7 +46,7 @@ workspace/
   business-design/
 ```
 
-State the design path and target revision in the task prompt or AGENTS.md. Pin a commit or tag where possible; if using a branch, record its resolved commit alongside the product revision at review time. A GitHub URL alone, or an expectation that the agent will discover the design, is not the standard arrangement. Make the access path known before reviewing.
+For nonconventional or cross-repository locations, state the design path in the task prompt or AGENTS.md and ensure the reviewer can read it. Pin a commit or tag where possible; if using a branch, record its resolved commit alongside the product revision at review time. The plugin discovers Business Design at the conventional product path. For manual review, provide a known readable path or versioned URL instead of relying on discovery.
 
 ### Language for agreement
 
@@ -172,7 +168,9 @@ The pair is current human-recorded business information. An AI-generated candida
 
 ## 2. Point the agent to the design and review knowledge
 
-Use root AGENTS.md as a router. Adapt the paths to your workspace:
+The plugin routes the request and bundles its guidance. For `docs/business-design/`, no Alder-specific AGENTS.md entry is needed; specify a different design path when used. See [Product setup](plugin-adoption.md#product-setup).
+
+For additional project-specific implementation instructions, AGENTS.md can route the agent. Adapt this example to your workspace:
 
 ```markdown
 ## Business Design
@@ -182,18 +180,19 @@ Use root AGENTS.md as a router. Adapt the paths to your workspace:
 - Before creating or updating Business Design, read section 1 of `docs/adoption.md` from the selected Alder revision (provide its readable path or URL with the task). Apply its authoring principles and correlation check from the first draft.
 - Do not invent business policy when the design does not decide it.
 - Make material implementation assumptions and choices, including their reasons, available to the Alder review; maintain confirmed Decision Records as part of the Alder review/follow-up under `docs/decisions/`.
-- For an Alder review, use `docs/alder/review-knowledge.md` from the selected Alder revision. Read Business Design, then Decision Records, then implementation, DDL, and tests.
 ```
 
-Record the selected review knowledge source revision in the routing instructions or alongside the copied document. Do not copy the full review knowledge into AGENTS.md or inject Q1–Q3 / P1 / P2 / S into every implementation task. Apply it explicitly during review.
+For manual review without the plugin, provide a readable path or versioned URL for the selected review knowledge. If you keep a local copy, record its source revision in the manual routing instructions or alongside the copied document. Do not copy the full review knowledge into AGENTS.md or inject Q1–Q3 / P1 / P2 / S into every implementation task. Apply it explicitly during review.
 
 ### Versions and access
 
 The current release is **Alder v0.6**, containing **research review knowledge v0.3**. v0.6 adds the adopted Problem-driven Optimization Review workflow; the review knowledge itself remains v0.3. Released v0.6 still keeps Check Item drafting and traceability optional. **This unreleased revision** makes Check Item design and human review required before handoff to implementation without retroactively changing v0.6.
 
-For the recommended local setup, copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md`. For a released version, select and record tag `v0.6`. If you intentionally use an unreleased commit, record that exact revision instead. The copied review knowledge remains research version v0.3, regardless of the Alder release tag or local filename.
+The plugin bundles review knowledge v0.3; no knowledge copy or Alder checkout in the product is required. Its package version is separate from the Alder method release. See [Plugin setup](plugin-adoption.md) for available versions and their validation limits.
 
-A local copy is optional. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
+For manual review, you may copy [the review knowledge](phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md` without changing its rules. For a released Alder method version, select and record tag `v0.6`. If you intentionally use an unreleased commit, record that exact revision instead. The copied review knowledge remains research version v0.3, regardless of the Alder release tag or local filename.
+
+A local copy is optional even for manual review. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
 
 Alder v0.6 retains the **Check Item** (Atomic Check in v0.3) traceability boundary: Business Design ↔ Check Item ↔ Test, while Check Item drafting and traceability remain optional in that released version. **This unreleased revision** makes Check Item design and human review required before handing the design to implementation. It does not retroactively change v0.6. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. v0.6 additionally adopts [Optimization Review](optimization-review.md). See the [v0.6 release notes](release-notes-v0.6.md). Existing Check IDs and review states remain valid.
 
@@ -339,9 +338,13 @@ Use the repository’s existing location and format for Decision Records, or a s
 
 ## 4. Run a separate Alder review after implementation (outside the standard design business)
 
-This is the **required post-implementation review in the current Alder development loop**, separate from the standard design business that ends at handoff. Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. Provide the design and implementation revisions, documented decisions, and readable review knowledge. After its read-only findings, the Alder follow-up maintains the Check ↔ Test/assertion mappings and evidence gaps; implementation authors and this read-only reviewer do not silently change Alder's Check records. This separation is not an additional rule in review knowledge v0.3.
+This is the **required post-implementation review in the current Alder development loop**, separate from the standard design business that ends at handoff. Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. With the plugin enabled, identify the design and implementation revisions and scope, make documented decisions readable, and ask in a new chat: “コードをAlderでレビューして”. The plugin reads **Business Design → Decision Records → implementation / DDL / Test** using its bundled review knowledge and discovers the conventional design path; specify another path or a target when needed. After its read-only findings, the Alder follow-up maintains the Check ↔ Test/assertion mappings and evidence gaps; implementation authors and this read-only reviewer do not silently change Alder's Check records. This separation is not an additional rule in review knowledge v0.3.
 
 When implementation or DDL fixes grouping, optionality, identity, retention, uniqueness or the unit of work, apply P2/Q3 to its **effect on allowed business states and downstream guarantees**. A table layout alone is a technical choice; a structure that prevents a stated multi-item order is a mismatch; an unconfirmed partial-approval policy is a focused Business question. Do not treat an absent ER relationship description in Business Design as a defect by itself.
+
+### Manual/reference review prompt
+
+For clients without the plugin or for reproducibility, provide a readable, revision-pinned review-knowledge source and use this prompt:
 
 ```text
 Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from the selected Alder revision. Review only; do not modify files.
@@ -397,10 +400,9 @@ For a product that chooses Raw SQL, these projects have independent responsibili
 
 Raw SQL Rules does not prescribe architecture or a framework. Serene is not an ORM, query builder, or mapper, and does not prove SQL meaning, authorization, or business behavior. Construction triage does not replace Alder review. They are optional companions, not a combined framework or Alder dependencies.
 
-After adopting your selected Raw SQL Rules version, a product can route both concerns from AGENTS.md:
+After adopting your selected Raw SQL Rules version, a product can add its SQL instructions to AGENTS.md without duplicating the plugin's review routing:
 
 ```text
-For business implementation and Alder review, use the Business Design under `docs/business-design/` and the selected Alder review knowledge referenced above.
 For Raw SQL data-access work, read `rules/raw-sql-rules.md` and follow it as the repository contract.
 ```
 
