@@ -166,6 +166,8 @@ Limits: c3 initially had one completed-input observation. Velvet Issue #39 / PR 
 
 ## Check Item traceability
 
+**Single-request review and record maintenance — adopted UX direction; implemented in Plugin 0.4.2.** [Issue #147](https://github.com/mk3008/alder/issues/147) removes mandatory user-level invocation of two Skills while retaining a separate Fresh read-only review and authorized record follow-up. [Plugin guidance](plugin-adoption.md#product-setup) distinguishes combined, review-only and existing-review requests. [Candidate verification](../work/review-entry/issue-147/RESULT.md) observed one-request orchestration and preserved boundaries in a synthetic native-agent setting; real-client auto-routing and measured user-effort reduction remain unverified. The host must support separate agents/contexts; an instruction alone does not provide that runtime.
+
 Terminology: **Atomic Check (v0.3 terminology; now Check Item)**. Historical artifacts keep their original wording and filenames.
 
 **Two-layer Check Item traceability — adopted; current required workflow is described above; v0.5 narrows the permanent boundary to Test.** [Issue #68](https://github.com/mk3008/alder/issues/68) established the human-facing Check list and supporting traceability details. [Issue #74](https://github.com/mk3008/alder/issues/74) removes permanent Check Item ↔ Code/file/symbol/SQL-location mappings from current guidance.
