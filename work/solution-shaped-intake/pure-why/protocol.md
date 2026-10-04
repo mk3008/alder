@@ -1,0 +1,13 @@
+# Pure-Why component supplement
+
+Status: post-hoc, decision-relevant supplement. This plan is frozen before this supplemental response, after the original Control/A/B/C outputs and audit were inspected. It is not a preregistered fifth arm of the original experiment.
+
+Reason: original B combines Why quality with a stop-and-ask rule for missing background. Therefore B cannot establish whether Why quality alone is sufficient for solution-shaped request intake. The original comparison's full completion claim is partial on this specific component question.
+
+Add exactly one Fresh context, requested `gpt-6-sol` / `medium` / `fork_turns: none`, processing the same six cases in the same order. Use unchanged original Control source revision `a971d60bb64fbc048a871d70dda277c93b680288`, source manifest, cases and task prompt shape. Supply only the additive paragraph in `treatment.md`. No intake classification, adoption-status question, background stop gate, Optimization routing, new state, or exception rule is added. Do not tell the responder the other arms' results, hypothesis or assessment. Do not forbid natural background questions that existing guidance or the Why check itself may elicit.
+
+The primary comparison is against the existing Control at the same input/source revision. B/C are contextual comparisons; do not repeat them. Historical-control timing and stochastic variation are explicit limits. One extra six-case batch is enough to address the missing component observation; do not repeat it to seek a desired outcome.
+
+Inspect actual initial responses under the original outcome distinctions. A means-independent Why with candidate-first drafting is not sufficient premise checking. If pure Why asks about the missing background in S2/S3 before candidate-shaped drafting, record that observed behavior and do not claim routing is uniquely necessary. If it misses either case, record insufficiency in this sampled setting, not a universal model failure. Check S4–S6 for unwarranted re-opening. Preserve S1 Problem-led operation. Record meaningful added artifacts/questions and negative observations.
+
+Raw response, full prompt, source/input SHA, requested runtime settings, agent ID, input/output hashes, observed timing and unavailable token/billing costs remain required. Publish safe inputs before dispatch and verify SHA retrieval. No product changes or automatic adoption. The condensed proposed rule remains analytically synthesized and untested unless separately evaluated later as part of an authorized implementation phase.
