@@ -1,0 +1,16 @@
+{
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime_independently_attested": false,
+  "token_usage": null,
+  "billing_cost": null,
+  "started_at_utc": "2026-10-04T10:22:46Z",
+  "initial_completion_observed_at_utc": "2026-10-04T10:25:14Z",
+  "followup_completion_observed_at_utc": "2026-10-04T10:26:32Z",
+  "followup_resolution": "The investigator's questioned wording came from a pre-completion working-file read. The auditor verified final raw C does contain a sending record Procedure and separate receipt Activity. Published raw and manifest refer to the completed outputs and were not replaced. Audit clarifies draft assertion versus adopted mandatory policy.",
+  "run_label": "evaluator-1",
+  "experimental_initial_prompt": "Independently audit the completed bounded Alder intake comparison, not the product and not its research hypothesis. Public input revision mk3008/alder 96056c2341a1e905951be7cf2c967e58a037c8c1; public raw-evidence revision a3aa24f72f3fe3d37885015be6f64c26f5b35147. Read local byte-equivalent files <study-root>/research/{cases.md,treatments.md,protocol.md,source-manifest.json,runs.json,raw/control.md,raw/A.md,raw/B.md,raw/C.md}. Source packet is under <study-root>/source/ at pinned main a971d60bb64fbc048a871d70dda277c93b680288; inspect relevant source text when necessary. Do not read any other worker output, prior research conclusions or investigator report. Apply the protocol's outcome distinctions independently. Report concrete evidence of unsupported promotion, anchoring, background checking, candidate preservation, legitimate-decision re-opening, unnecessary questions, new maintained states/artifacts, plus limits/confounds of A/B/C comparison. Say what the evidence can and cannot establish; do not approve business meaning or adopt a treatment. Keep quotations with case and arm references. Save full audit to <study-root>/research/audit.md; only change that file. Requested gpt-6-sol / medium / no fork, not independently attested runtime.",
+  "experimental_followup_prompt": "Please recheck one audit quotation against raw/C.md S6: your audit quotes 「送付した結果を記録する」, but the visible Procedure says 「取引先から受領書が返ったら、送付した結果に対応づけて記録する」. The object is indeed named 「送付・受領記録」, but it lists 「送付した精算結果と、それに対応する受領書」. Verify whether a new mandatory send log is genuinely asserted or only a possible representational choice. Correct the quote and calibrate that finding in your audit only; preserve any supported concern. Do not read RESULT.md or other investigator analysis. Completion timestamp nulls will be filled from observed tool-return times separately.",
+  "public_prompt_scope": "Public record preserves substantive experimental instructions. Nonexperimental execution administration is omitted, filesystem roots are normalized to <study-root>, and execution identifiers use neutral labels. This is not a full verbatim runtime prompt; see PUBLICATION-CORRECTION.md."
+}

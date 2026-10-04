@@ -1,0 +1,40 @@
+{
+  "available_source_packet_bytes": 133132,
+  "source_file_count": 9,
+  "actual_read_ranges": "Per Skill and run self-report; not all available bytes were read by every arm",
+  "runs": [
+    {
+      "arm": "control",
+      "assigned_treatment_bytes": 66,
+      "raw_bytes": 14104,
+      "elapsed_observed_seconds": 148.0,
+      "token_usage": null,
+      "billing_cost": null
+    },
+    {
+      "arm": "A",
+      "assigned_treatment_bytes": 478,
+      "raw_bytes": 16678,
+      "elapsed_observed_seconds": 224.0,
+      "token_usage": null,
+      "billing_cost": null
+    },
+    {
+      "arm": "B",
+      "assigned_treatment_bytes": 616,
+      "raw_bytes": 13923,
+      "elapsed_observed_seconds": 156.0,
+      "token_usage": null,
+      "billing_cost": null
+    },
+    {
+      "arm": "C",
+      "assigned_treatment_bytes": 1163,
+      "raw_bytes": 11956,
+      "elapsed_observed_seconds": 179.0,
+      "token_usage": null,
+      "billing_cost": null
+    }
+  ],
+  "scope": "Descriptive proxies only; no provider latency, token-cost, human reading-time, or cost saving claim."
+}
