@@ -2,7 +2,7 @@
 
 [Back to Alder](../README.md) · [Why this loop](philosophy.md)
 
-The [Alder Plugin](plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. Plugin 0.4.0 also packages the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its new routing and script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
+The [Alder Plugin](plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. Plugin 0.4.1 also packages the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its new routing and script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
@@ -47,6 +47,14 @@ workspace/
 ```
 
 For nonconventional or cross-repository locations, state the design path in the task prompt or AGENTS.md and ensure the reviewer can read it. Pin a commit or tag where possible; if using a branch, record its resolved commit alongside the product revision at review time. The plugin discovers Business Design at the conventional product path. For manual review, provide a known readable path or versioned URL instead of relying on discovery.
+
+### Before drafting a proposed business change
+
+**Check missing background before drafting a change when learning it could change whether the proposed means should be adopted.** Use the conversation, current Business Design and stated constraints first to understand the purpose and whether the means is a candidate or an established decision. If the supplied context already establishes the purpose, background or decision, do not ask for it again. If a means-only request leaves candidate versus decided status unclear, briefly ask whether the requester has selected the means or wants help considering how to meet the goal; this is not a question to ask on every request.
+
+For a still-open candidate whose purpose or actual Problem is unknown, retain the requester's idea and ask the smallest useful background question before expanding it into changed requirements. A plausible Why for the current Activity does not explain why its means should change. Do not invent a Problem or treat the proposed means as agreed. Once current work and a concrete Problem / Pain are established, use the existing optional Optimization Review when comparison is useful; keep that review separate from authoring and keep adoption with people.
+
+An explicit decision to begin new work, implementation of agreed meaning, or a means fixed by an external constraint does not need its adoption reopened. Ask only about remaining concrete consequences that are needed for the requested work, including a genuine contradiction. Continue drafting the known scope while leaving deferrable or explicitly undecided matters visible; do not make every unresolved question a condition for agreement on the known scope. Keep the existing Draft / unconfirmed distinction, without a new required document, field or lifecycle state. The bundled intake change is included in Plugin 0.4.1; the fixed 0.4.0 package remains unchanged.
 
 ### Language for agreement
 
