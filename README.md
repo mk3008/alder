@@ -138,7 +138,7 @@ Return unresolved business decisions as questions to people; continue independen
 Hand material assumptions, choices, and reasons to a separate-context review.
 ```
 
-Pass Code / Test, verification results, and evidence for material choices in the agreed scope to the next review. Do not invent an undecided cancellation deadline in Test expectations; independent booking work may proceed.
+The implementation AI repeats fixes and test execution until the confirmed expectations in scope are satisfied; ordinary test failures do not need a human verdict on every iteration. Unconfirmed candidates and missing evidence do not count as passing. Return genuinely undecided business meaning to people while continuing independent work. Pass the code, tests, results, and material decision evidence to the separate Alder review below.
 
 ### 6. Review in a separate context and separate follow-up
 
@@ -153,7 +153,7 @@ Follow up this Alder review using these findings and human decisions.
 Update Check-to-Test mappings and remaining evidence gaps.
 ```
 
-Alder inspects the actual assertions and results, then records which Checks they verify and what remains unverified. **People judge acceptance from the addressed findings and remaining questions.** See [follow-up and traceability details](docs/check-item-traceability.md).
+Alder inspects the actual assertions and results, then records which Checks they verify and what remains unverified. **People then review the result and judge acceptance.** They may return business-meaning changes to Business Design, Check corrections to the same Check list, or implementation-quality issues to coding and verification. See [follow-up and traceability details](docs/check-item-traceability.md).
 
 ## Advanced
 
