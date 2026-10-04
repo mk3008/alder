@@ -53,3 +53,7 @@ Briefly tell the reader what they are about to try, what sample/input to use, wh
 ## Publishing research decisions
 
 For adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.
+
+## Returning Alder work results
+
+For the actual AI-result exchange in this repository, follow [its Business Design](business-design/ai-result-review/README.md) and [the result-return guidance](docs/result-review.ja.md). Summarize purpose/condition correspondence, evidence references, unfinished work and genuine human decisions concisely; do not require a fixed report artifact. This is separate from the Alder design-use workflow. Keep business judgment with the requester and distinguish adoption, implementation and observed benefit.
