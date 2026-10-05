@@ -87,6 +87,8 @@ The standard design business ends at **handoff to implementation after Business 
 
 Alder Plugin can draft/revise and review Business Design and Check Items, review implementation, and maintain review records from short requests. Technical conditions and implementation remain product-side work.
 
+<a href="docs/images/business-design-workflow.en.png"><img src="docs/images/business-design-workflow.en.png" alt="Business Design workflow: the designer drafts and self-reviews, reviews the shared document with the requester, and incorporates feedback until agreement. Alder supports drafting, review, and revision." width="640"></a>
+
 ### 1. Draft and answer questions
 
 In the target project's chat, provide interview notes or requirements and ask, “Draft an Alder Business Design in `docs/business-design/`.” People confirm source facts and unresolved questions, answer them, and revise the same document.
@@ -107,11 +109,15 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 ### 3. Draft Checks and have people confirm expectations
 
+<a href="docs/images/check-item-workflow.en.png"><img src="docs/images/check-item-workflow.en.png" alt="Check Item workflow: draft, self-review, requester review, and update while preserving confirmation states. Business gaps return to Business Design revision and agreement before affected Checks are reviewed again." width="640"></a>
+
 Give AI the agreed Business Design and ask “Draft Check Items with Alder.” The plugin loads its bundled guidance and drafts independently reviewable expectations. Give it human feedback to update the same list. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
 The designer and requester review the same list and provide their decisions or corrections. Alder records that feedback as `Needs confirmation / Confirmed / Needs correction` (`要確認 / 確認済み / 要修正`), leaving unreviewed items distinct. Return undecided business conditions to design. **Confirmed items and unconfirmed candidates can be handed over separately.**
 
 Alder includes conditions, expected results, source references to Business Design, IDs, and an Unreviewed state in each new draft Check. You do not need to add the source links by hand. When given human feedback, Alder updates the same list while preserving existing IDs and mappings.
+
+<a href="docs/images/implementation-workflow.en.png"><img src="docs/images/implementation-workflow.en.png" alt="Implementation handoff and verification: product-side AI repeats implementation and tests, followed by independent Alder review, evidence updates, and human acceptance or return for correction." width="640"></a>
 
 ### 4. State constraints as System Requirements
 
@@ -158,6 +164,8 @@ Return Business Design problems to design authoring, missing or incorrect Checks
 ## Advanced
 
 ### Explore business improvements
+
+<a href="docs/images/business-improvement-workflow.en.png"><img src="docs/images/business-improvement-workflow.en.png" alt="Business improvement workflow: explore possible problems when needed, confirm them with people, compare improvement candidates, and review the decision. Adopted changes return to Business Design revision and agreement." width="640"></a>
 
 If the Problem is not yet clear, provide the current Business Design and ask:
 
