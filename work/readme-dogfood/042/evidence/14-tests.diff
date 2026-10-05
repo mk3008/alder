@@ -1,0 +1,18 @@
+--- tests/test_tool_return.py (before)
++++ tests/test_tool_return.py (after)
+@@ -60,6 +60,15 @@
+     def test_received_group_is_not_available_for_loan(self):
+         self.process()
+         self.assertFalse(self.records["loan-A"].available_for_loan)
++
++    def test_matching_return_clears_artificial_available_sentinel(self):
++        """Technical regression probe, not a legitimate real-world loan state."""
++        # True is an artificial nondefault sentinel to detect a missing write.
++        # It does not establish a new business precondition or lending policy.
++        self.records["loan-A"].available_for_loan = True
++        result = self.process()
++        self.assertEqual(result.status, ReceptionStatus.CONFIRMED)
++        self.assertIs(self.records["loan-A"].available_for_loan, False)
+ 
+     def test_failed_reception_does_not_confirm_receipt(self):
+         for name, arguments in self.failure_inputs():

@@ -1,0 +1,10 @@
+{
+  "source_plugin_commit": "6d30b93abf8ecdc8902fef5c16bfb53fda8617e9",
+  "source_readme_commit": "00600974872ff6cce41ecb6a0d4786d82b922f5d",
+  "protocol_commit": "b7971be8c7059f768a41524169421cd85c1277a1",
+  "real_client_routing": "blocked_before_model_initialization",
+  "desktop_ui": "not_run",
+  "diagnostic": "native source-catalog selection, manually provided all 10 Skill descriptors, no preselection",
+  "simulated_approval_business_body_unchanged": true,
+  "effective_model_attestation": "not_available"
+}
