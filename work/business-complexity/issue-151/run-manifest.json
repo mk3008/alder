@@ -1,0 +1,57 @@
+{
+  "packet_revision": "beea72b8eb9954ad37a2c7c5b4c89946700705e7",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_attested": false,
+  "all_six_generated_before_answer_key_release": true,
+  "source_or_input_edits_during_generation": false,
+  "case_mapping": {
+    "A": "Washington DOL document gathering",
+    "B": "Catchpole et al 2007 surgery-to-ICU handover"
+  },
+  "attempt_note": "B-discovery had one model-capacity failure before producing a review. It was retried once with the same settings and inputs. No result was regenerated.",
+  "runs": {
+    "A-discovery": {
+      "raw_path": "runs/A-discovery.raw.md",
+      "raw_sha256": "06ffa3d6f06a47f8be42161c1b8c0680ddfe1eae77c1c6adbd412b6e29d61711",
+      "read_log_path": "runs/A-discovery.read-log.json",
+      "read_log_sha256": "5750c88b5b4d28e70bcc31fe9f01af0ac39ff25e8499fafe53378f32fa0c29cb"
+    },
+    "A-minimal": {
+      "raw_path": "runs/A-minimal.raw.md",
+      "raw_sha256": "08b536923f81ef8ba9d9016805e02c1a906e7b85c52b52db4f0f0e3dccc54371",
+      "read_log_path": "runs/A-minimal.read-log.json",
+      "read_log_sha256": "20efa55d0971509f3332b16884d785265583cc87b5e570c9b53e76f9a4c9d892"
+    },
+    "A-context": {
+      "raw_path": "runs/A-context.raw.md",
+      "raw_sha256": "f40bfbbe34b338f4f9cb7a37d89706f79f824494ceef3fe0dbb83642b7816e6b",
+      "read_log_path": "runs/A-context.read-log.json",
+      "read_log_sha256": "699dc9a8370d9ca828eb26ab53a49b2f0e8d060b84a840d55b263bad5247b271"
+    },
+    "B-discovery": {
+      "raw_path": "runs/B-discovery.raw.md",
+      "raw_sha256": "f528e13e1e220e470a9c1a041681a592ad15565963b302612ca2d1479556baf6",
+      "read_log_path": "runs/B-discovery.read-log.json",
+      "read_log_sha256": "d6787e746ece5c71379d72412f7b04691658a70d03a2fdca0e134f7ff3ec7826"
+    },
+    "B-minimal": {
+      "raw_path": "runs/B-minimal.raw.md",
+      "raw_sha256": "d6cedbdaf192f8cc80c2ccc1a4b7406d048c545c9666724c3ce38166250e0915",
+      "read_log_path": "runs/B-minimal.read-log.json",
+      "read_log_sha256": "16848722ece3d84ff17c8b24d4d625f9e3766ef2353106ef948bc5e3301114cb"
+    },
+    "B-context": {
+      "raw_path": "runs/B-context.raw.md",
+      "raw_sha256": "f580c8b2171370422f75d20d1323d31593ff273adbbc261c5b23c9cfa1f91ad3",
+      "read_log_path": "runs/B-context.read-log.json",
+      "read_log_sha256": "62be25a77858d83129412a4c38a8720ecb863a8ad173cfc13e6669c69f691cc1"
+    }
+  },
+  "launch_wrapper_semantics": "Run each specified prompt once; add pinned public packet revision and frozen Skill revision; permit only the enumerated inputs; permit writing only the corresponding raw result and read-log evidence files. No external source lookup, other condition/output reading, source changes, or business adoption. Generic coordination instructions do not add business content.",
+  "public_evidence_note": "Full task text is preserved in prompts and read logs. Launch wrapper is summarized here; it adds no business or evaluation clues. Access isolation and no pretraining contamination are not independently proven."
+}

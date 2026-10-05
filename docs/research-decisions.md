@@ -93,6 +93,8 @@ Alder organizes established software engineering practices into a small AI-assis
 
 ## 業務最適化
 
+**複数業務の複雑性とcontext依存 — Inconclusive / definition proposal.** [Issue #151研究](business-complexity/issue-151.md)は5実例と非同期の対照から、情報・順序・準備状態・責任の整合として複雑性を定義する案を示す。[既存Skillの2事例6条件](../work/business-complexity/issue-151/RESULT.md)では、調整上の質問は両例で出たが、実例の中核改善への対応は一様でなかった。背景数値の追加が中核不一致を解消したとは言えない。現場の能力・権限・保証等が欠けた入力、単回生成、既知事例の影響を含み、一般的な汎化性能を示さない。正式guidanceは変更しない。定義案と判断に効くcontextの範囲をレビューしてから再検討する。
+
 **Problem起点の業務最適化レビュー — Adopted.** Alderは、Business Designに記録された具体的なProblemとPain levelを起点に、現在の業務上の意味を保ちながら少数の代替業務案をレビューする [Optimization Review](optimization-review.md) を正式なワークフロー能力として採用する。候補の採否は人間のBusiness判断に残し、採用する場合はBusiness Designを先に更新する。
 
 採用根拠は、既存の備品購入申請ベンチマークを再利用した一連のFresh検証である。[Issue #81の初期PoC](optimization-review/issue-81.md)では購入負荷に対してProblemへ直接関係する候補を出し、既存の承認・却下・購入成立の意味を維持した。[Problem / Pain / Scope追従性の追加検証](optimization-review/issue-82-followup.md)ではProblemを承認待ち・購入結果照合へ変えると探索焦点も切り替わり、Narrow / Keep / Expandの各ScopeがProblemとの関係を伴って観測された。[中立ProblemでのPain High/Low各2回比較](optimization-review/issue-82-pain-isolation.md)では、Highは両回とも関係先の広い高難度候補を未確認条件付きで残し、Lowは両回ともNarrowで低〜中難度の案へ絞り、広い調整をPainに見合わないとして止めた。
