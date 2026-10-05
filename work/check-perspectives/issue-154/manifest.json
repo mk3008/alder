@@ -1,0 +1,20 @@
+{
+  "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_model": "gpt-6-sol",
+  "requested_effort": "medium",
+  "fork_turns": "none",
+  "effective_settings": "not independently attested",
+  "files": {
+    "guidance/adoption-excerpt.md": "7000c36724cfa76cce637b1bdaf77120ce613eeff2a4efa834aa5a8cb4f41620",
+    "guidance/c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+    "guidance/skill.md": "a09f3b0404da2301b1da117d933e56be2fec083c4bfc4d2ebe7cbd8b57f06068",
+    "guidance/traceability.md": "87b98910b3cc5be9b7b2ccba017d57dba38be2b18db4faa22a6ac24d5529a884",
+    "inputs/facilities-maintenance.md": "1c64a1f71d5f2184077fba74ddfebfa6a4ef78333a0e66163909bd785f1c90bc",
+    "inputs/purchase-request.md": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+    "prompts/facilities-maintenance-control.md": "619d18a1b3aac9fd8b64e561b8f8427d4e08bff903286b751c870019eba8cf55",
+    "prompts/facilities-maintenance-treatment.md": "284880a04d003e54b5f65398917e794c4d5f389db92e0fbb61f2d8483e0a9026",
+    "prompts/purchase-request-control.md": "2a013fef746c5eb5073fb780d11486093da52a2c556c0b8a8987dce0c00bff48",
+    "prompts/purchase-request-treatment.md": "9f6df3980373135cbda50125601337d3d4ed7693e77b9a69755858e26a6e2189",
+    "protocol.md": "68809c1ea935b6484ac8f9d5e1f45621c3a77395f93c14c69af1a2db6851a31a"
+  }
+}
