@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+  "alder_source_revision": "1e76b958deb8594f66f3184dc644ef68c9235d38",
   "sources": {
-    "docs/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
+    "docs/business-graph.md": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e"
   },
   "scripts": {
     "tools/business_graph/export.py": "4f5cf06d2c3795cded69ab751110a11807ea580586b12805e06e175ecd60a9ed"

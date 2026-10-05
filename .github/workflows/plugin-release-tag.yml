@@ -1,11 +1,22 @@
-name: Plugin release tag
+name: Alder release
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Approved Alder X.Y.Z version'
+        required: true
+        type: string
+      revision:
+        description: 'Approved full main commit SHA'
+        required: true
+        type: string
   pull_request:
     paths:
       - '.github/workflows/plugin-release-tag.yml'
-      - 'docs/plugin-release-notes-v0.4.3.md'
+      - 'docs/release-notes-v*.md'
+      - 'docs/versioning.md'
+      - 'tools/validate_release.py'
       - 'plugins/alder/**'
       - '.agents/plugins/marketplace.json'
       - 'docs/adoption.md'
@@ -15,10 +26,6 @@ on:
       - 'tools/test_export_plugin_references.py'
       - 'tools/test_workflow_skills.py'
       - 'tools/test_plugin_release_workflow.py'
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/plugin-release-tag.yml'
 
 permissions:
   contents: read
@@ -27,8 +34,6 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    outputs:
-      release_043: ${{ steps.release_inputs.outputs.release_043 }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,53 +47,55 @@ jobs:
       - run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
       - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
       - run: python3 work/traceability-drift/evaluate.py --output /tmp/drift-observations.json
-      - name: Validate release inputs
-        id: release_inputs
-        run: |
-          python3 - <<'PY'
-          import json, os, re
-          from pathlib import Path
-          plugin = json.loads(Path('plugins/alder/plugin.json').read_text())
-          version = plugin['version']
-          assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version), 'Invalid package version'
-          release_043 = version == '0.4.3'
-          if release_043:
-              notes = Path('docs/plugin-release-notes-v0.4.3.md').read_text()
-              assert re.fullmatch(r'# Alder Plugin 0\.4\.3(?: — .+)?', notes.splitlines()[0]), 'Invalid release notes'
-          market = json.loads(Path('.agents/plugins/marketplace.json').read_text())
-          entry, = market['plugins']
-          assert Path(entry['source']['path']) == Path('plugins/alder')
-          assert len(list(Path('plugins/alder/skills').glob('*/SKILL.md'))) == 10
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
-              output.write(f"release_043={str(release_043).lower()}\n")
-          PY
+      - name: Validate candidate inputs
+        if: github.event_name == 'pull_request'
+        env:
+          REVISION: ${{ github.sha }}
+        run: python3 tools/validate_release.py --revision "$REVISION"
+      - name: Validate approved release inputs
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          REVISION: ${{ github.sha }}
+          APPROVED_VERSION: ${{ inputs.version }}
+          APPROVED_REVISION: ${{ inputs.revision }}
+        run: python3 tools/validate_release.py --revision "$REVISION" --approved-version "$APPROVED_VERSION" --approved-revision "$APPROVED_REVISION"
 
   release:
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && needs.validate.outputs.release_043 == 'true'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: write
     concurrency:
-      group: alder-plugin-release-v0.4.3
+      group: alder-product-release
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Publish fixed Plugin 0.4.3 without moving existing tags
+      - name: Publish approved Alder version without moving existing tags
         uses: actions/github-script@v7
         with:
           script: |
-            if (!['push', 'workflow_dispatch'].includes(context.eventName) || context.ref !== 'refs/heads/main') {
-              throw new Error('Plugin publication requires a main-branch push or manual dispatch.');
+            if (context.eventName !== 'workflow_dispatch' || context.ref !== 'refs/heads/main') {
+              throw new Error('Alder publication requires an explicit main-branch dispatch.');
             }
             const fs = require('node:fs');
             const repo = context.repo;
             const version = JSON.parse(fs.readFileSync('plugins/alder/plugin.json', 'utf8')).version;
-            if (version !== '0.4.3') throw new Error('This release workflow is scoped to Plugin 0.4.3.');
+            const inputs = context.payload.inputs || {};
+            if (!/^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) throw new Error('Invalid stable product version.');
+            const [major, minor, patch] = version.split('.').map(Number);
+            if (major === 0 && (minor < 4 || (minor === 4 && patch < 4))) throw new Error('Historical releases are immutable.');
+            if (inputs.version !== version || !/^[0-9a-f]{40}$/.test(inputs.revision || '') || inputs.revision !== context.sha) {
+              throw new Error('Approved version and revision must match the checked workflow commit.');
+            }
+            const body = fs.readFileSync(`docs/release-notes-v${version}.md`, 'utf8');
+            const title = body.split(/\r?\n/, 1)[0];
+            if (title !== `# Alder ${version}` && !title.startsWith(`# Alder ${version} — `)) throw new Error('Invalid release notes.');
+            if (!body.slice(title.length).trim()) throw new Error('Empty release notes.');
             const tag = `plugin-v${version}`;
             const getOptional = async (request) => {
               try { return (await request()).data; }
@@ -112,13 +119,10 @@ jobs:
               core.info(`Verified existing release at ${context.sha}: ${released.html_url}`);
               return;
             }
-            const body = fs.readFileSync('docs/plugin-release-notes-v0.4.3.md', 'utf8');
-            const title = body.split(/\r?\n/, 1)[0];
-            if (!/^# Alder Plugin 0\.4\.3(?: — .+)?$/.test(title)) throw new Error('Invalid release notes.');
             // One API action creates a missing tag and release at this checked revision.
             const { data } = await github.rest.repos.createRelease({
               ...repo, tag_name: tag, target_commitish: context.sha,
               name: title.slice(2), body, draft: false, prerelease: false,
-              make_latest: 'false',
+              make_latest: 'true',
             });
             core.info(data.html_url);

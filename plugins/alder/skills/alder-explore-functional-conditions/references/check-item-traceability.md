@@ -4,7 +4,7 @@
 
 Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming change avoids confusion with DB/transaction atomicity and does not change granularity, IDs or review states. v0.5 narrows permanent traceability to Business Design ↔ Check Item ↔ Automated Test; Code is verified by tests rather than maintained as a permanent mapping target.
 
-**Historical v0.5:** Check Item drafting and traceability were optional; v0.5 limited the permanent mapping boundary to Test when that workflow was used. **Current unreleased revision:** Check Item design and human review are required before the standard design business hands off to implementation. This changes the present method, not the meaning of the v0.5 release. AI creates and updates the list while preserving IDs and existing Business Design / Check / Test mappings; humans review expected results and return corrections and confirmation. Direct human edits are allowed, followed by a mapping consistency check. Business Design remains human-maintainable. Functional Interfaces and the drift pilot remain optional. See the [current workflow](adoption.md#draft-and-review-check-items-required).
+**Historical v0.5:** Check Item drafting and traceability were optional; v0.5 limited the permanent mapping boundary to Test when that workflow was used. **Current workflow (included in Plugin 0.4.0 and later):** Check Item design and human review are required before the standard design business hands off to implementation. This changes the present method, not the meaning of the v0.5 release. AI creates and updates the list while preserving IDs and existing Business Design / Check / Test mappings; humans review expected results and return corrections and confirmation. Direct human edits are allowed, followed by a mapping consistency check. Business Design remains human-maintainable. Functional Interfaces and the drift pilot remain optional. See the [current workflow](adoption.md#draft-and-review-check-items-required).
 
 The standard design business is complete at handoff of the agreed Business Design and Check Items, with their revisions and IDs. Newly written Tests and their assertion mappings do not yet exist at that point. The **separate, required post-implementation Alder review and follow-up** checks the Test oracle against confirmed Check expectations after Test execution and maintains the Check ↔ Test/assertion mapping and evidence gaps in the same Check Item. The independent Fresh review is read-only; its follow-up updates these records before accepting the implementation change. This later maintenance does not extend the bounded design business to Test execution or implementation review.
 
@@ -241,7 +241,7 @@ Observed in that bounded case:
 
 This is evidence that the format can be useful for one real product slice. It is not proof of lower review time, higher defect-detection rate, general applicability, or optimal title wording.
 
-The Check Item design and human-review stage is required in this unreleased revision. Functional Interface grouping and the drift pilot remain optional aids; continue human review.
+The Check Item design and human-review stage is required in the current workflow. Functional Interface grouping and the drift pilot remain optional aids; continue human review.
 
 ## 10. Optional item-level drift pilot
 
