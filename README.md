@@ -13,7 +13,7 @@ No framework or runtime package is required.
 Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.1
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.3
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -25,8 +25,9 @@ To turn interview notes into Business Design, try sending the following prompt i
 ```text
 Turn these interview notes into an Alder Business Design.
 
-The users are registered local residents.
-At return, the counter checks equipment numbers and accessories and records the return time.
+The organization lends its own tools to registered local residents.
+The loan/return record contains the loaned tool number, the list of issued accessories, and the handover record.
+At return, the counter compares the returned tool number and accessories against this record and records the check results and return time.
 Loan handover is confirmed by the signature and handover record;
 return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
@@ -50,7 +51,7 @@ Counter
 ### Input
 
 - Registered local resident — Returned tools and accessories
-- Loan/return record — Loaned equipment numbers and handover record
+- Loan/return record — Loaned tool number, issued accessory list, and handover record
 
 ### Procedure
 
@@ -84,11 +85,15 @@ Alder can be used to analyze existing work and explore hypotheses for new work. 
 
 The standard design business ends at **handoff to implementation after Business Design agreement and human Check Item review**. Then proceed through the development loop of implementation, independent review, and follow-up.
 
-Alder Plugin accepts short requests for Business Design authoring/review and implementation review. Check Item drafting/maintenance and follow-up use Plugin 0.4.1; check [versions and setup](docs/plugin-adoption.md). Technical conditions and implementation remain product-development work.
+Alder Plugin can draft/revise and review Business Design and Check Items, review implementation, and maintain review records from short requests. Technical conditions and implementation remain product-side work.
+
+<a href="docs/images/business-design-workflow.en.png"><img src="docs/images/business-design-workflow.en.png" alt="Business Design workflow: the designer drafts and self-reviews, reviews the shared document with the requester, and incorporates feedback until agreement. Alder supports drafting, review, and revision." width="640"></a>
 
 ### 1. Draft and answer questions
 
 In the target project's chat, provide interview notes or requirements and ask, “Draft an Alder Business Design in `docs/business-design/`.” People confirm source facts and unresolved questions, answer them, and revise the same document.
+
+For a proposed feature or approach, Alder asks about missing background before drafting when it could change whether to adopt the proposal. It reuses known context and settled decisions, and drafts what is known while leaving unresolved matters visible.
 
 Business Design is written in natural language with defined fields. **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
 
@@ -104,17 +109,15 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 ### 3. Draft Checks and have people confirm expectations
 
-In a chat with Plugin 0.4.1 enabled, provide the agreed Business Design and ask:
+<a href="docs/images/check-item-workflow.en.png"><img src="docs/images/check-item-workflow.en.png" alt="Check Item workflow: draft, self-review, requester review, and update while preserving confirmation states. Business gaps return to Business Design revision and agreement before affected Checks are reviewed again." width="640"></a>
 
-```text
-Draft Check Items with Alder.
-```
+Give AI the agreed Business Design and ask “Draft Check Items with Alder.” The plugin loads its bundled guidance and drafts independently reviewable expectations. Give it human feedback to update the same list. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
-The plugin supplies Alder guidance and drafts independently reviewable expectations. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair. For a revision, provide the existing list and feedback and ask “Update these Alder Check Items.”
+The designer and requester review the same list and provide their decisions or corrections. Alder records that feedback as `Needs confirmation / Confirmed / Needs correction` (`要確認 / 確認済み / 要修正`), leaving unreviewed items distinct. Return undecided business conditions to design. **Confirmed items and unconfirmed candidates can be handed over separately.**
 
-People assign `Unreviewed / Needs confirmation / Confirmed / Needs correction` (`未レビュー / 要確認 / 確認済み / 要修正`). Return undecided business conditions to design. **This stage is complete when confirmed items and unconfirmed candidates can be handed over separately.**
+Alder includes conditions, expected results, source references to Business Design, IDs, and an Unreviewed state in each new draft Check. You do not need to add the source links by hand. When given human feedback, Alder updates the same list while preserving existing IDs and mappings.
 
-**Why passing Tests are not business approval:** Tests compare implementation with written expectations. People confirm whether those expectations describe the desired work, so human review state and Test evidence are separate.
+<a href="docs/images/implementation-workflow.en.png"><img src="docs/images/implementation-workflow.en.png" alt="Implementation handoff and verification: product-side AI repeats implementation and tests, followed by independent Alder review, evidence updates, and human acceptance or return for correction." width="640"></a>
 
 ### 4. State constraints as System Requirements
 
@@ -131,46 +134,64 @@ People provide existing constraints and preferences; ask AI to organize technica
 
 ### 5. Hand the agreed design and Checks to AI
 
-Identify the design revision, confirmed Check IDs, technical conditions, and current scope. Replace paths with actual product locations.
+Hand over the agreed Business Design, confirmed Checks, System Requirements, and implementation scope. When asking AI, replace the example paths with the actual product locations.
 
 ```text
-Read the confirmed docs/business-design/meeting-room.md,
-docs/checks/meeting-room.md, and the product's technical requirements.
-Create/update code and executable tests for the agreed scope.
-Follow existing development rules and verify confirmed Check conditions/results.
-Return unresolved business decisions as questions to people; continue independent work.
-Hand material assumptions, choices, and reasons to a separate-context review.
+Read docs/business-design/meeting-room.md, docs/checks/meeting-room.md,
+and the product's System Requirements. Implement and test the agreed scope.
 ```
 
-Pass Code / Test, verification results, and evidence for material choices in the agreed scope to the next review. Do not invent an undecided cancellation deadline in Test expectations; independent booking work may proceed.
+The project chooses how to implement and test. Give the resulting code, tests, and execution results to the Alder review below.
 
-### 6. Review in a separate context and separate follow-up
+### 6. Review and maintain records
 
-In a new chat, make the design and implementation files accessible, identify their revisions and scope, and ask, “Review the code with Alder.”
+Implementation happens outside Alder. Alder review checks the resulting code against the agreed Business Design and confirmed Checks, and examines whether the tests verify their expected outcomes.
 
-The skill reads **Business Design → Decision Records → implementation / DDL / Test** without editing files, and reports evidence, business effects, classifications, and needed confirmation. People answer only unresolved business decisions. In a separate follow-up, update/re-agree Business Design first if meaning changes, then align Code / Test.
+Make the Business Design, confirmed Checks, decisions, implementation, tests, and execution results readable, and identify the scope. You can ask for review and record maintenance together:
 
-With Plugin 0.4.1, provide the review, actual human decisions, current Checks and Tests, then ask “Follow up this Alder review.”
+```text
+Review this implementation with Alder and update the Check-to-Test mappings.
+```
 
-**People judge acceptance after addressing findings and checking Check ↔ Test/assertion evidence.** See [follow-up and traceability details](docs/check-item-traceability.md).
+Alder performs an AI review. To avoid carrying over assumptions made during implementation, an AI without the implementation conversation history checks the design, Checks, and implementation. The review itself does not edit files.
+
+After the review, Alder updates the authorized records from its findings and actual test evidence. Return needed implementation fixes to the implementation AI, then verify and review again. Undecided business meaning remains open.
+
+A plain “Review the code with Alder” remains read-only. See [combined-request requirements](docs/plugin-adoption.md#combined-review-requirements) and [traceability](docs/check-item-traceability.md).
+
+Return Business Design problems to design authoring, missing or incorrect Checks to Check Item maintenance, and code-quality or implementation issues to implementation.
 
 ## Advanced
 
-- **Find relationships worth reconsidering:** Use [Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) to raise questions from confirmed business relationships. Structure alone does not establish a Problem; there is no dedicated Structural Optimization workflow.
-- **Improve a concrete difficulty:** Record human-confirmed Problem / Pain level, then compare candidates with [Optimization Review](docs/optimization-review.md). People decide adoption; [update and re-agree Business Design](docs/business-design-improvement.ja.md) first.
-- **Visualize or analyze the work:** Use the optional [Business Graph JSON v1 / CLI](docs/business-graph.md). JSON is an intermediate format; Business Design remains SSOT. Unapproved improvement candidates are not projected.
+### Explore business improvements
+
+<a href="docs/images/business-improvement-workflow.en.png"><img src="docs/images/business-improvement-workflow.en.png" alt="Business improvement workflow: explore possible problems when needed, confirm them with people, compare improvement candidates, and review the decision. Adopted changes return to Business Design revision and agreement." width="640"></a>
+
+If the Problem is not yet clear, provide the current Business Design and ask:
+
+```text
+Use Alder to find questions about work worth reconsidering.
+```
+
+Alder raises grounded questions about the current work and its handoffs. Confirm with the requester whether these reveal an actual Problem before moving to improvement proposals.
+
+For a known Problem, provide the current Business Design and the confirmed difficulty, then ask:
+
+```text
+Suggest business improvements with Alder.
+```
+
+Alder returns read-only candidates and comparison evidence. People decide whether to adopt, modify, defer, or reject them. Only adopted changes return to [Business Design revision and agreement](docs/business-design-improvement.ja.md), followed by affected Checks and implementation.
 
 ## Read more
 
-### Versions and plugin scope
+<a id="versions-and-plugin-scope"></a>
 
-See [Plugin setup](docs/plugin-adoption.md) for versions, updates, client support, and [installation steps](docs/plugin-adoption.md#install-once). The installation example pins Plugin 0.4.1 to a fixed tag. Earlier 0.2.8 client checks confirmed short routing for Business Design authoring/review and code review under bounded client conditions. The stable `plugin-v0.1.0` tag provides implementation review only and contains no authoring or Business Design review skill. Use the [manual prompts](docs/adoption.md) without a plugin.
+### Use the plugin or manual prompts
 
-The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. For manual authoring, give AI the document structure and adoption guide.
+Install the plugin to use the requests shown in this README. See the [plugin guide](docs/plugin-adoption.md) for setup and updates.
 
-**Plugin 0.4.1 supports natural-language Check Item drafting/maintenance and post-review follow-up.** It also packages optional functional and structural questions, improvement review, graph export and restricted drift diagnosis. These capabilities extend the earlier 0.2.8 package. Real-client routing and script execution for 0.4.1 remain unverified; graph and drift tools require local script execution and Python 3.12+. See [version and setup](docs/plugin-adoption.md).
-
-The current main / PR specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
+To use Alder without a plugin, follow the [manual prompts in the adoption guide](docs/adoption.md).
 
 ### Documents by purpose
 
@@ -188,7 +209,6 @@ The current main / PR specification is unreleased. Check Item design and human r
 | Business improvement and adoption follow-up | [Improvement guidance](docs/business-design-improvement.ja.md) / [Purchase-improvement example](docs/examples/purchase-improvement.ja.md) |
 | Check granularity, review states, Test mappings | [Check Item traceability](docs/check-item-traceability.md) |
 | Implementation review and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| JSON contract and exporter | [Business Graph](docs/business-graph.md) |
 | Responsibility boundaries when using Alder | [Alder's own Business Design](business-design/alder/README.md) |
 | User-facing explanations and safe reproducible evidence | [Research publication practice](docs/research-publication.md) |
 | Rationale, adoption decisions, validation scope and limits | [Philosophy](docs/philosophy.md) / [Research decisions](docs/research-decisions.md) / [Validation](docs/validation.md) |
