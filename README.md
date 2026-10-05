@@ -172,15 +172,13 @@ Alder returns read-only candidates and comparison evidence. People decide whethe
 
 ## Read more
 
-### Versions and plugin scope
+<a id="versions-and-plugin-scope"></a>
 
-The installation example pins [Plugin 0.4.2](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.2). It bundles the guidance for Business Design and Check Item drafting/maintenance, reviews, improvement proposals, and review follow-up. Users supply their product inputs rather than selecting Alder's internal guidance. See [installation, updates, and scope](docs/plugin-adoption.md).
+### Use the plugin or manual prompts
 
-The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. Use the [manual prompts](docs/adoption.md) without a plugin.
+Install the plugin to use the requests shown in this README. See the [plugin guide](docs/plugin-adoption.md) for setup and updates.
 
-An isolated Codex CLI installation of 0.4.2 has been verified. New real-client routing and packaged-script execution remain unverified. The restricted drift pilot requires Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
-
-The current Alder method specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
+To use Alder without a plugin, follow the [manual prompts in the adoption guide](docs/adoption.md).
 
 ### Documents by purpose
 
