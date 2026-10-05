@@ -1,6 +1,7 @@
 ---
 name: alder-export-business-graph
 description: Export an Alder Business Design to deterministic Business Graph JSON using the bundled official exporter. Use for requests such as "この業務設計をAlderでJSON化して", "AlderのBusiness Graphを出して", or "Export this Alder Business Design as Business Graph JSON". Do not use for arbitrary Markdown conversion, design authoring, or semantic review.
+license: MIT
 ---
 
 # Export Alder Business Graph

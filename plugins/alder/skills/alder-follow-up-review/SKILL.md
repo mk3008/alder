@@ -1,6 +1,7 @@
 ---
 name: alder-follow-up-review
 description: Apply supplied human decisions and maintain Alder Check-to-Test evidence after an implementation review. Use for "Alderレビューのフォローアップをして", "この人間判断をAlderレビューへ反映して", or "Alderのチェックとテストの対応を更新して". Scoped record maintenance, not independent read-only review, new Check drafting, generic implementation, or automatic business approval.
+license: MIT
 ---
 
 # Follow up an Alder review

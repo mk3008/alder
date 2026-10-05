@@ -1,6 +1,7 @@
 ---
 name: alder-discover-business-questions
 description: Use Alder Structural Discovery to find grounded questions about confirmed current work before a Problem is known. Use for "Alderで今の業務の見直しどころを探して" or "ProblemはまだないのでAlderで業務構造を見て". Read-only inquiry; do not infer Pain or propose Optimization candidates. Not design-quality review or functional-condition discovery.
+license: MIT
 ---
 
 # Discover questions about current business structure

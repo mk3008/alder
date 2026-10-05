@@ -216,3 +216,7 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 ### Questions and improvement proposals
 
 Open [GitHub Issues](https://github.com/mk3008/alder/issues) with the Alder version, target work, and question you want to resolve.
+
+## License
+
+Alder’s project-owned code, documentation, prompts, and Skills are available under the [MIT License](LICENSE). Third-party materials retain their respective licenses and notices.
