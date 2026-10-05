@@ -67,6 +67,31 @@ class PluginReleaseTest(unittest.TestCase):
                     with self.assertRaises((ValueError, FileNotFoundError)):
                         validate(root, version, sha, approved, revision)
 
+    def test_publication_requires_version_matched_tag_safe_docs(self):
+        from tools.validate_release import validate_publication_docs
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'docs').mkdir()
+            names = ('README.md', 'README.ja.md', 'docs/plugin-adoption.md')
+            good = 'Install after verifying the release.\n' + \
+                   'codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4\n'
+            for name in names:
+                (root / name).write_text(good)
+            (root / 'docs/versioning.md').write_text('Verify publication before announcing availability.\n')
+            validate_publication_docs(root, '0.4.4')
+            for name in names:
+                for invalid in (good.replace('0.4.4', '0.4.3'), 'Missing command',
+                                good + 'Alder Plugin `0.4.3` packages the current workflows.'):
+                    (root / name).write_text(invalid)
+                    with self.assertRaises(ValueError):
+                        validate_publication_docs(root, '0.4.4')
+                (root / name).write_text(good)
+            for text in ('The currently published package is 0.4.3.',
+                         'Version 0.4.4 on the development branch is an unpublished candidate.'):
+                (root / 'docs/versioning.md').write_text(text)
+                with self.assertRaises(ValueError):
+                    validate_publication_docs(root, '0.4.4')
+
     def test_release_script_preserves_tags_and_bounds_writes(self):
         script = textwrap.dedent(WORKFLOW.read_text().split('          script: |\n', 1)[1])
         harness = r'''

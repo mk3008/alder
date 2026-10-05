@@ -1,6 +1,6 @@
 # Alder Plugin
 
-Alder Plugin `0.4.3` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
+Alder Plugin packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
 
 Alder uses one product version, shared with `plugins/alder/plugin.json`. A published `plugin-vX.Y.Z` tag fixes the documentation, source and plugin together; the `plugin-` prefix is retained for installation compatibility. Review knowledge v0.3 is an internal knowledge identifier, not another product release. See [Versioning and releases](versioning.md). New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
 
@@ -87,7 +87,7 @@ With confirmed current work but no known Problem, ask “Alderで今の業務の
 
 After design/correlation review, “Alderで未記載の機能条件を探して” explores a small set of concrete undecided outcomes. These are unapproved questions, not requirements or test assertions. Both inquiries are read-only and may return no useful findings.
 
-For improvement proposals, install version 0.4.3 and identify the current Business Design and its confirmed Problem / Pain level, then ask:
+For improvement proposals, install the plugin and identify the current Business Design and its confirmed Problem / Pain level, then ask:
 
 ```text
 Alderで改善提案して

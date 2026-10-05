@@ -28,6 +28,21 @@ def validate(root, version, revision, requested_version, requested_revision):
     return version
 
 
+def validate_publication_docs(root, version):
+    """A candidate may retain old verified install links; a published tag may not."""
+    for name in ('README.md', 'README.ja.md', 'docs/plugin-adoption.md'):
+        text = (root / name).read_text()
+        refs = re.findall(r'codex plugin marketplace add mk3008/alder --ref ([^\s`]+)', text)
+        if not refs or set(refs) != {f'plugin-v{version}'}:
+            raise ValueError(f'{name}: prepare installation references for the approved version before publication')
+        named = re.findall(r'Alder Plugin `([^`]+)` packages', text)
+        if any(value != version for value in named):
+            raise ValueError(f'{name}: current package prose names another version')
+    policy = (root / 'docs/versioning.md').read_text()
+    if 'The currently published package is' in policy or re.search(r'Version [0-9.]+ .*is an unpublished candidate', policy):
+        raise ValueError('Versioning guide contains transient release-state prose')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--revision', required=True)
@@ -40,6 +55,10 @@ def main():
     validate(root, version, args.revision,
              args.approved_version if args.approved_version is not None else version,
              args.approved_revision if args.approved_revision is not None else args.revision)
+    if args.approved_version is not None or args.approved_revision is not None:
+        if args.approved_version is None or args.approved_revision is None:
+            raise ValueError('Publication requires both explicit approval inputs')
+        validate_publication_docs(root, version)
     print(f'Validated Alder {version} at {args.revision}')
 
 
