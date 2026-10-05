@@ -151,7 +151,7 @@ Alder dispatches a separate independent read-only reviewer, then updates the aut
 
 This combined request needs a host that can run separate agents. A plain “Review the code with Alder” remains read-only. See [availability and requirements](docs/plugin-adoption.md) and [traceability](docs/check-item-traceability.md).
 
-Acceptance methods and whether to use AI are up to the user. Return Business Design problems to design authoring, missing or incorrect Checks to Check Item maintenance, and code-quality or implementation issues to implementation.
+Return Business Design problems to design authoring, missing or incorrect Checks to Check Item maintenance, and code-quality or implementation issues to implementation.
 
 ## Advanced
 
