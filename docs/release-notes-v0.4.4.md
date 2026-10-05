@@ -6,6 +6,8 @@
 - Align bundled adoption and graph guidance with the published capabilities. Report the installed manifest version instead of hard-coded skill version strings.
 - Replace the independent method release path with an explicitly dispatched, version-and-commit-checked product release. Newly authorized stable releases become GitHub Latest; existing releases and tags remain untouched.
 
+- Distribute Alder under the MIT License, including the plugin and each installed Skill.
+
 ## Compatibility and migration
 
 Installations pinned to `plugin-v0.4.3` remain unchanged. This version changes distributed guidance and version reporting, which requires a new package identity; it is not a release solely to change a number. Before publication, test only at a reviewed development commit and record that commit. Update stable installation links only after publication is verified.

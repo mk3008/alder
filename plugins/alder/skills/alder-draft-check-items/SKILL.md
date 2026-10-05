@@ -1,6 +1,7 @@
 ---
 name: alder-draft-check-items
 description: Draft, review for consistency, or update Alder Check Items from agreed Business Design and human feedback. Use for "Alderでチェック項目を作って", "Alderの検査項目を更新して", or an explicit request to organize Functional Interfaces. Preserve human review states and existing IDs. Not an implementation review, Test-evidence follow-up, or business approval.
+license: MIT
 ---
 
 # Draft and maintain Alder Check Items

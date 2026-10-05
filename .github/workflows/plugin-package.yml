@@ -2,6 +2,7 @@ name: Plugin package
 on:
   pull_request:
     paths:
+      - 'LICENSE'
       - '.agents/plugins/**'
       - 'plugins/alder/**'
       - 'docs/phase2/review-knowledge-v0.3.md'
@@ -28,6 +29,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'LICENSE'
       - '.agents/plugins/**'
       - 'plugins/alder/**'
       - 'docs/phase2/review-knowledge-v0.3.md'

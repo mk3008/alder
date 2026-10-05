@@ -1,6 +1,7 @@
 ---
 name: alder-draft-business-design
 description: Draft or revise Alder Business Design from ordinary interview notes, meeting notes, or a natural-language description of current or intended work. Use for requests such as "このヒアリング結果をAlder業務設計書にして", "議事録から業務設計の草案を作って", or "draft Business Design from these notes". Write the requested design, ask a few material business questions when needed, and revise it after answers. Do not use for implementation review.
+license: MIT
 ---
 
 # Draft Alder Business Design

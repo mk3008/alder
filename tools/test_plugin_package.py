@@ -3,7 +3,10 @@
 import hashlib
 import json
 import re
+import shutil
+import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -16,6 +19,30 @@ OPTIMIZE = PLUGIN / "skills/alder-optimize-business"
 
 
 class PluginPackageTest(unittest.TestCase):
+    def test_license_is_preserved_at_distribution_boundaries(self):
+        license_text = (ROOT / "LICENSE").read_bytes()
+        self.assertIn(b"Copyright (c) 2026 mk3008", license_text)
+        self.assertIn(b"Permission is hereby granted, free of charge", license_text)
+        self.assertIn(b'THE SOFTWARE IS PROVIDED "AS IS"', license_text)
+        self.assertEqual(json.loads((PLUGIN / "plugin.json").read_text())["license"], "MIT")
+        skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
+        self.assertTrue(skills)
+        for skill in skills:
+            with self.subTest(skill=skill.parent.name):
+                self.assertIn("license: MIT", skill.read_text().split("---", 2)[1].splitlines())
+        # A plugin-only archive and individually copied Skills must retain the
+        # complete notice without depending on the repository root.
+        for directory in [PLUGIN, *(skill.parent for skill in skills)]:
+            with self.subTest(directory=directory.relative_to(ROOT)):
+                self.assertEqual((directory / "LICENSE").read_bytes(), license_text)
+                with tempfile.TemporaryDirectory() as temporary:
+                    archive = shutil.make_archive(str(Path(temporary) / "package"), "zip", directory)
+                    with zipfile.ZipFile(archive) as package:
+                        self.assertEqual(package.read("LICENSE"), license_text)
+                        for name in package.namelist():
+                            if name.endswith("/LICENSE"):
+                                self.assertEqual(package.read(name), license_text)
+
     def test_review_source_is_bundled_without_drift(self):
         provenance = json.loads((SKILL / "references/provenance.json").read_text())
         source = (ROOT / provenance["review_knowledge_source"]).read_bytes()

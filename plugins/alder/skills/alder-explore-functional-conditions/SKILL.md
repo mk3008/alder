@@ -1,6 +1,7 @@
 ---
 name: alder-explore-functional-conditions
 description: Explore undecided functional conditions with Alder after Business Design and correlation review. Use for "Alderで未記載の機能条件を探して" or "この業務設計の機能上の考慮漏れをAlderで確認して". Return read-only, unapproved questions, not Check Item drafting, design-quality review, optimization or implementation review.
+license: MIT
 ---
 
 # Explore functional conditions
