@@ -2,7 +2,7 @@
 
 Alder Plugin `0.4.3` packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
 
-The package version is separate from the Alder method release and review knowledge v0.3. New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
+Alder uses one product version, shared with `plugins/alder/plugin.json`. A published `plugin-vX.Y.Z` tag fixes the documentation, source and plugin together; the `plugin-` prefix is retained for installation compatibility. Review knowledge v0.3 is an internal knowledge identifier, not another product release. See [Versioning and releases](versioning.md). New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
 
 ## Install once
 
@@ -63,7 +63,7 @@ The authoring intake introduced in Plugin 0.4.1 checks missing background before
 
 ## Reproducibility and scope
 
-The plugin's `plugin.json` identifies the package version. Each skill's `references/provenance.json` records its source revision and the digests of bundled guidance. A review result records the plugin and knowledge versions, design and implementation revisions, and the plugin source commit when installed from a moving branch. Keep a released package's content immutable; bump its version when changing its workflow or bundled knowledge. A local marketplace installation is a snapshot; refresh/reinstall to use a later package version.
+The plugin's `plugin.json` identifies the package version. Each skill's `references/provenance.json` records its source revision and the digests of bundled guidance. A review result records the installed Alder version, applicable knowledge identifier, design and implementation revisions, and the plugin source commit when installed from a moving branch. Keep a released package's content immutable; bump its version when changing its workflow or bundled knowledge. A local marketplace installation is a snapshot; refresh/reinstall to use a later package version.
 
 Each skill owns its routing and write boundary. Deterministic tools cannot approve business meaning. Use the requested product's Business Design, Check list, review and evidence; the plugin selects its bundled Alder knowledge.
 
