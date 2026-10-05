@@ -4,13 +4,13 @@
 
 **依頼者と合意した業務を動くシステムへ。**
 
-Alderは依頼者の要求を、依頼者・設計者・実装を担うAIの共通言語となる**業務設計書**（Business Design）に整理します。そして、依頼者と設計者が合意した内容を**業務上の正本**（SSOT）として、検査項目・コード・テストへつなげます。
+Alderは依頼者の要求を、依頼者・設計者・実装者が共通の言葉で理解できる**業務設計書**（Business Design）に整理します。そして、依頼者と設計者が合意した内容を**業務上の正本**（SSOT）として、検査項目・コード・テストへつなげます。
 
 フレームワークや実行時パッケージは不要です。
 
 ## 導入する
 
-ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。[Alder 0.4.4の公開](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.4)を確認してから、ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
+ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Codex CLIを用意し、次のコマンドでAlderの配布元（marketplace）を登録してください。
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4
