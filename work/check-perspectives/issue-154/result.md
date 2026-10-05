@@ -36,7 +36,7 @@
 
 Business Designから導出し、人間が意味を確認したCheck Itemは、下流Testが照合する**期待の基準**と説明できる。ただしAI初稿を業務意味の決定者、Checkリスト自体を実装完了の証明器として扱わない。
 
-実装後はTestのassertionが確認済み期待を表すかを照合し、実行証拠と不足を別に確認する。恒久traceabilityはBusiness Design ↔ Check Item ↔ Testまで。Codeへの物理mappingは追加せず、DB制約・property-based test・形式検証等は下流の検証手段として選ぶ。起点記事の本文は今回取得できず、以上はAlderの現行文書に基づく解釈であり記事内容を引用・実証したものではない。
+実装後はTestのassertionが確認済み期待を表すかを照合し、実行証拠と不足を別に確認する。恒久traceabilityはBusiness Design ↔ Check Item ↔ Testまで。Codeへの物理mappingは追加せず、DB制約・property-based test・形式検証等は下流の検証手段として選ぶ。起点記事の本文はpilot実行時には未取得であり、生成・評価条件には使用していない。以上は、その時点のAlderの現行文書に基づく解釈である。後続Chatでは記事本文を別途確認したが、その確認をpilotの入力・結果・採否へ遡及反映していない。
 
 ## 実験条件と限界
 
