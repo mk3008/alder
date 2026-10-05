@@ -202,7 +202,7 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 | Field meanings, heading order, reference notation | [Document structure](docs/business-design-structure.ja.md) / [Field guidance](docs/adoption.md#business-design-format) / [Quality field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
 | Design-review examples and rationale | [Review case](docs/business-design-review.ja.md) / [Quality rationale](docs/business-design-quality-review.md) / [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
-| Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) |
+| Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) / [Versioning](docs/versioning.md) |
 | Document locations, steps, copyable prompts | [Adoption guide](docs/adoption.md) |
 | Timing of detailed design and technical decisions | [Detailed design](docs/detailed-design.ja.md) / [Decision examples](docs/philosophy.md#where-detailed-design-fits) |
 | Business structure requirements and DB constraints | [Data modeling](docs/data-modeling.ja.md) / [English](docs/data-modeling.md) |
