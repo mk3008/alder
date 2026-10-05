@@ -25,8 +25,9 @@ To turn interview notes into Business Design, try sending the following prompt i
 ```text
 Turn these interview notes into an Alder Business Design.
 
-The users are registered local residents.
-At return, the counter checks equipment numbers and accessories and records the return time.
+The organization lends its own tools to registered local residents.
+The loan/return record contains the loaned tool number, the list of issued accessories, and the handover record.
+At return, the counter compares the returned tool number and accessories against this record and records the check results and return time.
 Loan handover is confirmed by the signature and handover record;
 return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
@@ -50,7 +51,7 @@ Counter
 ### Input
 
 - Registered local resident — Returned tools and accessories
-- Loan/return record — Loaned equipment numbers and handover record
+- Loan/return record — Loaned tool number, issued accessory list, and handover record
 
 ### Procedure
 
