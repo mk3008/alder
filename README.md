@@ -4,13 +4,13 @@ English | [日本語](README.ja.md)
 
 **Turn business work agreed on with requesters into a working system.**
 
-Alder organizes a requester's requirements into **Business Design**, the shared language for the requester, designer, and AI, and uses the content agreed on by the requester and designer as **the source of truth (SSOT) for business intent** to connect it to Check Items, code, and tests.
+Alder organizes a requester's requirements into **Business Design**, a shared language that the requester, designer, and implementer can all understand, and uses the content agreed on by the requester and designer as **the source of truth (SSOT) for business intent** to connect it to Check Items, code, and tests.
 
 No framework or runtime package is required.
 
 ## Install / Setup
 
-Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. After confirming [Alder 0.4.4 is published](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.4), run the following command in a terminal to register the marketplace from which you can install Alder:
+Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. Set up Codex CLI, then run the following command to register the Alder marketplace:
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4
