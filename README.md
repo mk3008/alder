@@ -10,10 +10,10 @@ No framework or runtime package is required.
 
 ## Install / Setup
 
-Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
+Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. After confirming [Alder 0.4.4 is published](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.4), run the following command in a terminal to register the marketplace from which you can install Alder:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.3
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4
 ```
 
 After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
@@ -202,7 +202,7 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 | Field meanings, heading order, reference notation | [Document structure](docs/business-design-structure.ja.md) / [Field guidance](docs/adoption.md#business-design-format) / [Quality field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
 | Design-review examples and rationale | [Review case](docs/business-design-review.ja.md) / [Quality rationale](docs/business-design-quality-review.md) / [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
-| Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) |
+| Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) / [Versioning](docs/versioning.md) |
 | Document locations, steps, copyable prompts | [Adoption guide](docs/adoption.md) |
 | Timing of detailed design and technical decisions | [Detailed design](docs/detailed-design.ja.md) / [Decision examples](docs/philosophy.md#where-detailed-design-fits) |
 | Business structure requirements and DB constraints | [Data modeling](docs/data-modeling.ja.md) / [English](docs/data-modeling.md) |

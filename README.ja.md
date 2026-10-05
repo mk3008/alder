@@ -10,10 +10,10 @@ Alderは依頼者の要求を、依頼者・設計者・実装を担うAIの共�
 
 ## 導入する
 
-ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
+ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。[Alder 0.4.4の公開](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.4)を確認してから、ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.3
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4
 ```
 
 コマンド実行後は、ChatGPTデスクトップアプリを再起動してください。次に、Plugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後は新しいチャットを開始してください。
@@ -338,7 +338,7 @@ Pluginを使わない場合は、[導入ガイドの手動プロンプト](docs/
 | 各欄の意味、見出し順、参照書式 | [文書構造](docs/business-design-structure.ja.md) / [欄の説明](docs/adoption.md#business-design-format) / [品質要求の配置](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
 | 設計レビューの事例と根拠 | [レビュー事例](docs/business-design-review.ja.md) / [記述品質の根拠](docs/business-design-quality-review.md) / [考慮漏れ探索](docs/behavior-derivation/functional-considerations.md) |
 | 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
-| Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) |
+| Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) / [版管理](docs/versioning.md) |
 | 文書配置、手順、コピーして使うプロンプト | [導入ガイド](docs/adoption.md) |
 | 詳細設計と技術判断のタイミング | [詳細設計の位置づけ](docs/detailed-design.ja.md) / [判断例](docs/philosophy.md#where-detailed-design-fits) |
 | データ構造要求とDB制約の扱い | [データモデリング](docs/data-modeling.ja.md) / [英語](docs/data-modeling.md) |

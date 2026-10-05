@@ -63,12 +63,13 @@ class PluginPackageTest(unittest.TestCase):
         interface = json.loads((PLUGIN / "plugin.json").read_text())["extensions"]["com.openai"]["interface"]
         self.assertLessEqual(len(interface["shortDescription"]), 30)
         self.assertLessEqual(len(interface["defaultPrompt"]), 3)
-        version = json.loads((PLUGIN / "plugin.json").read_text())["version"]
         reporting = [*(PLUGIN / "skills").glob("*/SKILL.md"), SKILL / "references/read-only-review.md"]
         for document in reporting:
             with self.subTest(document=document):
-                for reported in re.findall(r"Alder plugin ([0-9]+\.[0-9]+\.[0-9]+)", document.read_text()):
-                    self.assertEqual(reported, version)
+                self.assertNotRegex(document.read_text(), r"Alder plugin [0-9]+\.[0-9]+\.[0-9]+")
+                relative = "../../plugin.json" if document.name == "SKILL.md" else "../../../plugin.json"
+                self.assertIn(relative, document.read_text())
+                self.assertEqual((document.parent / relative).resolve(), PLUGIN / "plugin.json")
 
     def test_authoring_sources_are_bundled_without_drift(self):
         provenance = json.loads((AUTHOR / "references/provenance.json").read_text())
@@ -78,7 +79,7 @@ class PluginPackageTest(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / source).read_bytes()).hexdigest(), digest)
         self.assertTrue((AUTHOR / "SKILL.md").is_file())
         plugin = json.loads((PLUGIN / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.4.3")
+        self.assertRegex(plugin["version"], r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertIn("Write", plugin["extensions"]["com.openai"]["interface"]["capabilities"])
         self.assertIn("このヒアリング結果をAlder業務設計書にして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
         self.assertIn("業務設計書をAlderでレビューして", plugin["extensions"]["com.openai"]["interface"]["defaultPrompt"])
@@ -87,7 +88,7 @@ class PluginPackageTest(unittest.TestCase):
         review_skill = (SKILL / "references/read-only-review.md").read_text()
         self.assertIn("interview notes", author_skill)
         self.assertIn("Write only the requested Business Design file(s)", author_skill)
-        self.assertIn("Alder plugin 0.4.3", author_skill)
+        self.assertIn("installed Alder version from `../../plugin.json`", author_skill)
         self.assertIn("Review only; do not edit product files", review_skill)
 
     def test_business_design_review_sources_are_bundled_without_drift(self):

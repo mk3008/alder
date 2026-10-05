@@ -35,6 +35,6 @@ The adoption guide's repository navigation, examples and optional further readin
 
 Authoring explicitly reads the already installed structure guide from the Business Design review skill and uses that guide's separate provenance. Its required adoption, structure and graph guidance therefore remain readable within the installed plugin, without copying all documentation and research into every skill.
 
-Both the package workflow and the Plugin 0.4.3 release-validation workflow use a full-history checkout for `tools/test_plugin_references.py`. In a shallow local checkout, fetch the referenced source commits or unshallow the checkout before running these reference checks.
+Both the package workflow and the Alder release-validation workflow use a full-history checkout for `tools/test_plugin_references.py`. In a shallow local checkout, fetch the referenced source commits or unshallow the checkout before running these reference checks.
 
 The focused regression checks all links directly in the changed adoption guide, verifies pinned file/heading targets, and resolves authoring's required local links in an isolated package copy. It also reproduces the three adoption-bearing skills from their recorded Git source commits. It does not claim recursive link closure for the unchanged graph/structure guides or unrelated skills; their pre-existing outbound navigation is outside this repair.

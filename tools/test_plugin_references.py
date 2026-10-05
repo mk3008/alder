@@ -35,7 +35,7 @@ class PluginReferencesTest(unittest.TestCase):
             for name in ("alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review")
         ]]:
             text = document.read_text()
-            self.assertIn("Plugin 0.4.3 is the current package", text)
+            self.assertIn("Alder uses one user-facing product version", text)
             self.assertIn("was introduced in Plugin 0.4.1", text)
             for target in re.findall(r"\]\(([^)]+)\)", text):
                 with self.subTest(document=document, target=target):
@@ -74,7 +74,8 @@ class PluginReferencesTest(unittest.TestCase):
     def test_adoption_bundles_reproduce_their_exact_source_commit(self):
         from tools.export_plugin_references import export_plan
 
-        names = ["alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review"]
+        names = ["alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review",
+                 "alder-explore-functional-conditions", "alder-export-business-graph"]
         for path, content in export_plan(ROOT, names).items():
             self.assertEqual((ROOT / path).read_bytes(), content, str(path))
 

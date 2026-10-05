@@ -2,7 +2,7 @@
 
 [Back to Alder](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/README.md) · [Why this loop](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/philosophy.md)
 
-The [Alder Plugin](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. Plugin 0.4.3 is the current package and includes the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its expanded ten-skill routing, combined implementation-review/follow-up route and agent-driven script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
+The [Alder Plugin](https://github.com/mk3008/alder/blob/e4c47ed227d055fb94cbfdc851573feb555f4406/docs/plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. The plugin includes the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its expanded ten-skill routing, combined implementation-review/follow-up route and agent-driven script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
@@ -176,7 +176,7 @@ The pair is current human-recorded business information. An AI-generated candida
 
 ## 2. Point the agent to the design and review knowledge
 
-The plugin routes the request and bundles its guidance. For `docs/business-design/`, no Alder-specific AGENTS.md entry is needed; specify a different design path when used. See [Product setup](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/plugin-adoption.md#product-setup).
+The plugin routes the request and bundles its guidance. For `docs/business-design/`, no Alder-specific AGENTS.md entry is needed; specify a different design path when used. See [Product setup](https://github.com/mk3008/alder/blob/e4c47ed227d055fb94cbfdc851573feb555f4406/docs/plugin-adoption.md#product-setup).
 
 For additional project-specific implementation instructions, AGENTS.md can route the agent. Adapt this example to your workspace:
 
@@ -194,15 +194,13 @@ For manual review without the plugin, provide a readable path or versioned URL f
 
 ### Versions and access
 
-The current release is **Alder v0.6**, containing **research review knowledge v0.3**. v0.6 adds the adopted Problem-driven Optimization Review workflow; the review knowledge itself remains v0.3. Released v0.6 still keeps Check Item drafting and traceability optional. **This unreleased revision** makes Check Item design and human review required before handoff to implementation without retroactively changing v0.6.
+Alder uses one user-facing product version, shared with the plugin manifest. A published `plugin-vX.Y.Z` tag fixes the documentation, source and plugin at one revision. The tag prefix remains compatible with existing installation commands; it does not identify a separate product version. A working branch or untagged commit is a development revision, not a published release.
 
-The plugin bundles review knowledge v0.3; no knowledge copy or Alder checkout in the product is required. Its package version is separate from the Alder method release. See [Plugin setup](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/plugin-adoption.md) for available versions and their validation limits.
+The plugin bundles review knowledge v0.3; no knowledge copy or Alder checkout in the product is required. Record the installed Alder version and applicable knowledge identifier with review results. The knowledge identifier is retained for reproducibility, not as another product release.
 
-For manual review, you may copy [the review knowledge](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/phase2/review-knowledge-v0.3.md) from the selected revision to `docs/alder/review-knowledge.md` without changing its rules. For a released Alder method version, select and record tag `v0.6`. If you intentionally use an unreleased commit, record that exact revision instead. The copied review knowledge remains research version v0.3, regardless of the Alder release tag or local filename.
+For manual review, select the same published tag as the plugin, or an explicit development commit. Provide a readable versioned URL or checkout for `docs/phase2/review-knowledge-v0.3.md` from that revision. An optional copy at `docs/alder/review-knowledge.md` must preserve the rules and record its source revision. The knowledge remains research version v0.3 regardless of the selected product tag or local filename. Confirm the reviewer can read it; the current review knowledge is in Japanese.
 
-A local copy is optional even for manual review. A readable versioned GitHub URL for `docs/phase2/review-knowledge-v0.3.md`, or a checkout of the selected Alder revision in the same workspace, also works. State its path or URL and revision and confirm the reviewer can read it. The current review knowledge is in Japanese.
-
-Alder v0.6 retains the **Check Item** (Atomic Check in v0.3) traceability boundary: Business Design ↔ Check Item ↔ Test, while Check Item drafting and traceability remain optional in that released version. **This unreleased revision** makes Check Item design and human review required before handing the design to implementation. It does not retroactively change v0.6. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. v0.6 additionally adopts [Optimization Review](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/optimization-review.md). See the [v0.6 release notes](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/release-notes-v0.6.md). Existing Check IDs and review states remain valid.
+Historical method tags such as `v0.6` retain their original meaning and optional Check Item workflow. The current standard workflow requires Check Item design and human review before implementation handoff; it is included in the published `plugin-v0.4.0` and later packages. Existing Check IDs and review states remain valid. Tests verify Code by execution; Alder does not maintain Check Item ↔ Code mappings. No independent method v0.7 release is planned.
 
 ### Run Optimization Review for a recorded Problem
 

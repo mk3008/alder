@@ -28,4 +28,4 @@ Use this mode only when requested or when the requester has chosen it to improve
 
 Write only the requested Check/Interface artifact(s), using the established format and location. Report changed IDs, retained guarantees, review questions and unresolved items. The design handoff comprises agreed Business Design and human-reviewed Checks with revisions/IDs; it does not require evidence from newly created Tests. Missing Test evidence is separate from business uncertainty. After implementation, the separate follow-up maintains assertions/evidence; this skill does not implement code or tests or accept an implementation.
 
-Record Alder plugin 0.4.3, authority revision/digests from [provenance](references/provenance.json), product inputs and plugin commit when known. Stop with a reviewable draft or requested update, never an AI declaration of human agreement.
+Record the installed Alder version from `../../plugin.json`, authority revision/digests from [provenance](references/provenance.json), product inputs and plugin commit when known. Stop with a reviewable draft or requested update, never an AI declaration of human agreement.
