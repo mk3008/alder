@@ -147,9 +147,11 @@ Make the Business Design, confirmed Checks, decisions, implementation, tests, an
 Review this implementation with Alder and update the Check-to-Test mappings.
 ```
 
-Alder dispatches a separate independent read-only reviewer, then updates the authorized records from its findings and actual test evidence in the same request. Return needed implementation fixes to the implementation AI, then verify and review again. Undecided business meaning remains open.
+Alder performs an AI review. To avoid carrying over assumptions made during implementation, an AI without the implementation conversation history checks the design, Checks, and implementation. The review itself does not edit files.
 
-This combined request needs a host that can run separate agents. A plain “Review the code with Alder” remains read-only. See [availability and requirements](docs/plugin-adoption.md) and [traceability](docs/check-item-traceability.md).
+After the review, Alder updates the authorized records from its findings and actual test evidence. Return needed implementation fixes to the implementation AI, then verify and review again. Undecided business meaning remains open.
+
+A plain “Review the code with Alder” remains read-only. See [combined-request requirements](docs/plugin-adoption.md#combined-review-requirements) and [traceability](docs/check-item-traceability.md).
 
 Return Business Design problems to design authoring, missing or incorrect Checks to Check Item maintenance, and code-quality or implementation issues to implementation.
 
