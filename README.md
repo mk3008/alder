@@ -10,7 +10,7 @@ No framework or runtime package is required.
 
 ## Install / Setup
 
-Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. In a terminal, run the following command to register the marketplace from which you can install Alder:
+Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. To install Alder, use Codex CLI and the ChatGPT desktop app with access to Plugins Directory. After confirming [Alder 0.4.4 is published](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.4), run the following command in a terminal to register the marketplace from which you can install Alder:
 
 ```sh
 codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4

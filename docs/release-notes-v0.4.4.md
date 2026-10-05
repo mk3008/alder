@@ -10,7 +10,7 @@
 
 ## Compatibility and migration
 
-Installations pinned to `plugin-v0.4.3` remain unchanged. This version changes distributed guidance and version reporting, which requires a new package identity; it is not a release solely to change a number. Before publication, test only at a reviewed development commit and record that commit. Update stable installation links only after publication is verified.
+Installations pinned to `plugin-v0.4.3` remain unchanged. This version changes distributed guidance and version reporting, which requires a new package identity; it is not a release solely to change a number. Before publication, test only at a reviewed development commit and record that commit. The installation commands select 0.4.4; use that tag only after its publication is verified.
 
 The historical method `v0.6` kept Check Item drafting optional. The current standard workflow requires Check Item design and human review before implementation; it includes the design, optional Problem-driven improvement, and realization/review loops. These capabilities, the graph exporter and the restricted drift pilot were already included in Plugin 0.4.0 and later, rather than awaiting a separate method v0.7 release.
 
