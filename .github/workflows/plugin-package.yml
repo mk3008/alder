@@ -9,6 +9,7 @@ on:
       - 'docs/business-graph.md'
       - 'docs/optimization-review.md'
       - 'tools/test_plugin_package.py'
+      - 'tools/test_plugin_references.py'
       - 'tools/export_plugin_references.py'
       - 'tools/test_export_plugin_references.py'
       - 'docs/business-design-structure.ja.md'
@@ -33,6 +34,7 @@ on:
       - 'docs/business-graph.md'
       - 'docs/optimization-review.md'
       - 'tools/test_plugin_package.py'
+      - 'tools/test_plugin_references.py'
       - 'tools/export_plugin_references.py'
       - 'tools/test_export_plugin_references.py'
       - 'docs/business-design-structure.ja.md'
@@ -57,4 +59,4 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py tools/test_plugin_release_workflow.py tools/test_export_plugin_references.py
+      - run: python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py tools/test_plugin_release_workflow.py tools/test_export_plugin_references.py tools/test_plugin_references.py

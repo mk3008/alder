@@ -23,7 +23,8 @@ python3 tools/export_plugin_references.py --check \
   --skill alder-draft-check-items \
   --skill alder-follow-up-review
 python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py \
-  tools/test_plugin_release_workflow.py tools/test_export_plugin_references.py
+  tools/test_plugin_release_workflow.py tools/test_export_plugin_references.py \
+  tools/test_plugin_references.py
 ```
 
 The exporter reads each listed source or script with `git show COMMIT:PATH`, preserves its bytes, and regenerates its digest. It uses the existing provenance source lists and rejects missing paths and flattened filename collisions before writing. `--check` reproduces each selected skill from its recorded revision and does not write. The tool validates Git object identity, not remote publication; maintainers must establish publication in step 1. Released packages remain immutable, and workflow changes follow the versioning policy in [Plugin adoption](plugin-adoption.md#reproducibility-and-scope).
@@ -33,5 +34,7 @@ The exporter reads each listed source or script with `git show COMMIT:PATH`, pre
 The adoption guide's repository navigation, examples and optional further reading use immutable source URLs, so its three flattened package copies do not promise nonexistent sibling files. Those URLs pin the referenced page independently from the adoption guide's own source revision. Further reading requires web access.
 
 Authoring explicitly reads the already installed structure guide from the Business Design review skill and uses that guide's separate provenance. Its required adoption, structure and graph guidance therefore remain readable within the installed plugin, without copying all documentation and research into every skill.
+
+The package workflow uses a full-history checkout for `tools/test_plugin_references.py`; the existing release-validation suite stays independent of historical Git objects. In a shallow local checkout, fetch the referenced source commits or unshallow the checkout before running these reference checks.
 
 The focused regression checks all links directly in the changed adoption guide, verifies pinned file/heading targets, and resolves authoring's required local links in an isolated package copy. It also reproduces the three adoption-bearing skills from their recorded Git source commits. It does not claim recursive link closure for the unchanged graph/structure guides or unrelated skills; their pre-existing outbound navigation is outside this repair.
