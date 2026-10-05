@@ -5,8 +5,14 @@ on:
   pull_request:
     paths:
       - '.github/workflows/plugin-release-tag.yml'
-      - 'docs/plugin-release-notes-v0.4.2.md'
+      - 'docs/plugin-release-notes-v0.4.3.md'
       - 'plugins/alder/**'
+      - '.agents/plugins/marketplace.json'
+      - 'docs/adoption.md'
+      - 'tools/test_plugin_package.py'
+      - 'tools/test_plugin_references.py'
+      - 'tools/export_plugin_references.py'
+      - 'tools/test_export_plugin_references.py'
       - 'tools/test_workflow_skills.py'
       - 'tools/test_plugin_release_workflow.py'
   push:
@@ -22,16 +28,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
-      release_042: ${{ steps.release_inputs.outputs.release_042 }}
+      release_043: ${{ steps.release_inputs.outputs.release_043 }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_plugin_release_workflow
+      - run: python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_plugin_release_workflow tools.test_export_plugin_references tools.test_plugin_references
       - run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
       - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
       - run: python3 work/traceability-drift/evaluate.py --output /tmp/drift-observations.json
@@ -44,41 +51,44 @@ jobs:
           plugin = json.loads(Path('plugins/alder/plugin.json').read_text())
           version = plugin['version']
           assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version), 'Invalid package version'
-          release_042 = version == '0.4.2'
-          if release_042:
-              notes = Path('docs/plugin-release-notes-v0.4.2.md').read_text()
-              assert notes.startswith('# Alder Plugin 0.4.2')
+          release_043 = version == '0.4.3'
+          if release_043:
+              notes = Path('docs/plugin-release-notes-v0.4.3.md').read_text()
+              assert re.fullmatch(r'# Alder Plugin 0\.4\.3(?: — .+)?', notes.splitlines()[0]), 'Invalid release notes'
           market = json.loads(Path('.agents/plugins/marketplace.json').read_text())
           entry, = market['plugins']
           assert Path(entry['source']['path']) == Path('plugins/alder')
           assert len(list(Path('plugins/alder/skills').glob('*/SKILL.md'))) == 10
           with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
-              output.write(f"release_042={str(release_042).lower()}\n")
+              output.write(f"release_043={str(release_043).lower()}\n")
           PY
 
   release:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.validate.outputs.release_042 == 'true'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && needs.validate.outputs.release_043 == 'true'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: write
     concurrency:
-      group: alder-plugin-release-v0.4.2
+      group: alder-plugin-release-v0.4.3
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Publish fixed Plugin 0.4.2 without moving existing tags
+      - name: Publish fixed Plugin 0.4.3 without moving existing tags
         uses: actions/github-script@v7
         with:
           script: |
+            if (!['push', 'workflow_dispatch'].includes(context.eventName) || context.ref !== 'refs/heads/main') {
+              throw new Error('Plugin publication requires a main-branch push or manual dispatch.');
+            }
             const fs = require('node:fs');
             const repo = context.repo;
             const version = JSON.parse(fs.readFileSync('plugins/alder/plugin.json', 'utf8')).version;
-            if (version !== '0.4.2') throw new Error('This release workflow is scoped to Plugin 0.4.2.');
+            if (version !== '0.4.3') throw new Error('This release workflow is scoped to Plugin 0.4.3.');
             const tag = `plugin-v${version}`;
             const getOptional = async (request) => {
               try { return (await request()).data; }
@@ -102,9 +112,9 @@ jobs:
               core.info(`Verified existing release at ${context.sha}: ${released.html_url}`);
               return;
             }
-            const body = fs.readFileSync('docs/plugin-release-notes-v0.4.2.md', 'utf8');
+            const body = fs.readFileSync('docs/plugin-release-notes-v0.4.3.md', 'utf8');
             const title = body.split(/\r?\n/, 1)[0];
-            if (!title.startsWith('# Alder Plugin 0.4.2')) throw new Error('Invalid release notes.');
+            if (!/^# Alder Plugin 0\.4\.3(?: — .+)?$/.test(title)) throw new Error('Invalid release notes.');
             // One API action creates a missing tag and release at this checked revision.
             const { data } = await github.rest.repos.createRelease({
               ...repo, tag_name: tag, target_commitish: context.sha,

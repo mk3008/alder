@@ -13,4 +13,4 @@ For a few grounded observations, separate Structural Observation, Evidence, Why 
 
 Keep this inquiry read-only. Do not rewrite Business Design, produce Optimization Candidates/Extreme perspectives, implement changes or update review states. Only an actual human-confirmed operational Problem and Pain level can enter Optimization Review; record/confirm that input in Business Design through the design loop first. If a known Problem was supplied and improvement proposals were requested, use the separate `alder-optimize-business` workflow rather than replacing it with this inquiry.
 
-Return the grounded questions or a brief zero-result explanation, unresolved design confirmations, Alder plugin 0.4.2, input revision and [authority provenance](references/provenance.json). Include plugin commit when known. Discovery does not make a business decision.
+Return the grounded questions or a brief zero-result explanation, unresolved design confirmations, Alder plugin 0.4.3, input revision and [authority provenance](references/provenance.json). Include plugin commit when known. Discovery does not make a business decision.

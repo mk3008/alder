@@ -13,7 +13,7 @@ Alderは依頼者の要求を、依頼者・設計者・実装を担うAIの共�
 ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Alderの導入にはCodex CLIとPlugins Directoryを利用できるChatGPTデスクトップアプリを使います。ターミナルで次のコマンドを実行してAlderをインストールできる配布元（marketplace）を登録してください。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.2
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.3
 ```
 
 コマンド実行後はChatGPTデスクトップアプリを再起動してPlugins Directoryで**Alder development**を選び、**Alder**をインストール・有効化してください。その後は新しいチャットを開始してください。
