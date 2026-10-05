@@ -1,6 +1,6 @@
 """Pinned reference navigation and provenance checks; require full Git history.
 
-The package workflow runs these separately from shallow-checkout release checks.
+The package and release-validation workflows provide full-history checkouts.
 """
 
 import re
@@ -35,7 +35,7 @@ class PluginReferencesTest(unittest.TestCase):
             for name in ("alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review")
         ]]:
             text = document.read_text()
-            self.assertIn("Plugin 0.4.2 is the current package", text)
+            self.assertIn("Plugin 0.4.3 is the current package", text)
             self.assertIn("was introduced in Plugin 0.4.1", text)
             for target in re.findall(r"\]\(([^)]+)\)", text):
                 with self.subTest(document=document, target=target):
