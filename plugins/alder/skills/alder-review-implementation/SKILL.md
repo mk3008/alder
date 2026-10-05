@@ -1,6 +1,7 @@
 ---
 name: alder-review-implementation
 description: Review completed implementation, DDL, and tests against agreed Alder Business Design. Use for "コードをAlderでレビューして", "実装したのでAlderレビューして", or "Alderで実装をレビューして、チェックとテストの対応も更新して". Coordinate authorized record maintenance after an independent read-only review. Review-only requests never write; record-only follow-up uses alder-follow-up-review.
+license: MIT
 ---
 
 # Review an implementation with Alder

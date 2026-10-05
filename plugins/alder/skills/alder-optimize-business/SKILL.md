@@ -1,6 +1,7 @@
 ---
 name: alder-optimize-business
 description: Propose business improvements with Alder Optimization Review from a current Business Design and a concrete Problem / Pain. Use for requests such as "Alderで改善提案して", "このProblemについてAlderで改善案を検討して", or "Alderでこの業務を改善して". Return read-only, unapproved candidates; do not implement or revise the design. Do not use for drafting Business Design, reviewing design quality or completed implementation, or finding problems without a stated Problem.
+license: MIT
 ---
 
 # Alder Optimization Review

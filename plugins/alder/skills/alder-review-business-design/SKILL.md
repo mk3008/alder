@@ -1,6 +1,7 @@
 ---
 name: alder-review-business-design
 description: Review an Alder Business Design itself for description quality, connections between business activities, and material omissions. Use for requests such as "業務設計書をAlderでレビューして", "この業務設計書をレビューして", or "Alderで業務設計書をレビューして". This is a read-only Business Design review, not implementation review, authoring, optimization, or follow-up.
+license: MIT
 ---
 
 # Alder Business Design review

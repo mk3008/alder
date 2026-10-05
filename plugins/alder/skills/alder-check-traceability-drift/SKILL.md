@@ -1,6 +1,7 @@
 ---
 name: alder-check-traceability-drift
 description: Run read-only item-level Business Design–Check–Test drift detection for an explicitly requested optional Alder pilot with compatible source units, reviewed saved mappings and current runner-discovered test IDs. Use for "Alderでトレーサビリティのずれを確認して", "Alderのdrift候補を調べて", or "Check this Alder traceability pilot for drift". Not a general Markdown parser, semantic implementation review, automatic reconciliation, or mandatory workflow gate.
+license: MIT
 ---
 
 # Check Alder traceability drift
