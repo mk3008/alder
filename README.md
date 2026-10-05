@@ -127,18 +127,14 @@ People provide existing constraints and preferences; ask AI to organize technica
 
 ### 5. Hand the agreed design and Checks to AI
 
-Identify the design revision, confirmed Check IDs, technical conditions, and current scope. Replace paths with actual product locations.
+Hand over the agreed Business Design, confirmed Checks, System Requirements, and implementation scope. When asking AI, replace the example paths with the actual product locations.
 
 ```text
-Read the confirmed docs/business-design/meeting-room.md,
-docs/checks/meeting-room.md, and the product's technical requirements.
-Create/update code and executable tests for the agreed scope.
-Follow existing development rules and verify confirmed Check conditions/results.
-Return unresolved business decisions as questions to people; continue independent work.
-Hand material assumptions, choices, and reasons to a separate-context review.
+Read docs/business-design/meeting-room.md, docs/checks/meeting-room.md,
+and the product's System Requirements. Implement and test the agreed scope.
 ```
 
-The implementation AI repeats fixes and test execution until the confirmed expectations in scope are satisfied; ordinary test failures do not need a human verdict on every iteration. Unconfirmed candidates and missing evidence do not count as passing. Return genuinely undecided business meaning to people while continuing independent work. Pass the code, tests, results, and material decision evidence to the separate Alder review below.
+The project chooses how to implement and test. Give the resulting code, tests, and execution results to the Alder review below.
 
 ### 6. Review and maintain records
 
@@ -152,13 +148,27 @@ Alder dispatches a separate independent read-only reviewer, then updates the aut
 
 This combined request needs a host that can run separate agents. A plain “Review the code with Alder” remains read-only. See [availability and requirements](docs/plugin-adoption.md) and [traceability](docs/check-item-traceability.md).
 
-**People then review the result and judge acceptance.** They may return business-meaning changes to Business Design, Check corrections to the same Check list, or implementation-quality issues to coding and verification.
+Acceptance methods and whether to use AI are up to the user. Return Business Design problems to design authoring, missing or incorrect Checks to Check Item maintenance, and code-quality or implementation issues to implementation.
 
 ## Advanced
 
-- **Find relationships worth reconsidering:** Use [Structural Discovery](docs/optimization-review.md#optional-structural-discovery-before-a-problem-is-known) to raise questions from confirmed business relationships. Structure alone does not establish a Problem; there is no dedicated Structural Optimization workflow.
-- **Improve a concrete difficulty:** Record human-confirmed Problem / Pain level, then compare candidates with [Optimization Review](docs/optimization-review.md). People decide adoption; [update and re-agree Business Design](docs/business-design-improvement.ja.md) first.
-- **Visualize or analyze the work:** Use the optional [Business Graph JSON v1 / CLI](docs/business-graph.md). JSON is an intermediate format; Business Design remains SSOT. Unapproved improvement candidates are not projected.
+### Explore business improvements
+
+If the Problem is not yet clear, provide the current Business Design and ask:
+
+```text
+Use Alder to find questions about work worth reconsidering.
+```
+
+Alder raises grounded questions about the current work and its handoffs. Confirm with the requester whether these reveal an actual Problem before moving to improvement proposals.
+
+For a known Problem, provide the current Business Design and the confirmed difficulty, then ask:
+
+```text
+Suggest business improvements with Alder.
+```
+
+Alder returns read-only candidates and comparison evidence. People decide whether to adopt, modify, defer, or reject them. Only adopted changes return to [Business Design revision and agreement](docs/business-design-improvement.ja.md), followed by affected Checks and implementation.
 
 ## Read more
 
@@ -168,7 +178,7 @@ The installation example pins [Plugin 0.4.2](https://github.com/mk3008/alder/rel
 
 The standard `docs/business-design/` location needs no plugin-specific `AGENTS.md` configuration or copied knowledge. Identify a different path if used. Use the [manual prompts](docs/adoption.md) without a plugin.
 
-An isolated Codex CLI installation of 0.4.2 has been verified. New real-client routing and packaged-script execution remain unverified. Graph export and the restricted drift pilot require Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
+An isolated Codex CLI installation of 0.4.2 has been verified. New real-client routing and packaged-script execution remain unverified. The restricted drift pilot requires Python 3.12+ and local script execution. Earlier 0.2.8 short-routing evidence is limited to its three workflows and the tested client conditions.
 
 The current Alder method specification is unreleased. Check Item design and human review are required in the standard design business; they were optional in released v0.6. The plugin version, Alder method release, and review knowledge v0.3 are distinct. Alder remains a research candidate overall; see [validation](docs/validation.md) for evidence and limits.
 
@@ -188,7 +198,6 @@ The current Alder method specification is unreleased. Check Item design and huma
 | Business improvement and adoption follow-up | [Improvement guidance](docs/business-design-improvement.ja.md) / [Purchase-improvement example](docs/examples/purchase-improvement.ja.md) |
 | Check granularity, review states, Test mappings | [Check Item traceability](docs/check-item-traceability.md) |
 | Implementation review and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| JSON contract and exporter | [Business Graph](docs/business-graph.md) |
 | Responsibility boundaries when using Alder | [Alder's own Business Design](business-design/alder/README.md) |
 | User-facing explanations and safe reproducible evidence | [Research publication practice](docs/research-publication.md) |
 | Rationale, adoption decisions, validation scope and limits | [Philosophy](docs/philosophy.md) / [Research decisions](docs/research-decisions.md) / [Validation](docs/validation.md) |
