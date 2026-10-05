@@ -139,7 +139,9 @@ The project chooses how to implement and test. Give the resulting code, tests, a
 
 ### 6. Review and maintain records
 
-Make the same Business Design, confirmed Checks, decisions, implementation, and tests readable, identify the scope, and ask:
+Implementation happens outside Alder. Alder review checks the resulting code against the agreed Business Design and confirmed Checks, and examines whether the tests verify their expected outcomes.
+
+Make the Business Design, confirmed Checks, decisions, implementation, tests, and execution results readable, and identify the scope. You can ask for review and record maintenance together:
 
 ```text
 Review this implementation with Alder and update the Check-to-Test mappings.
