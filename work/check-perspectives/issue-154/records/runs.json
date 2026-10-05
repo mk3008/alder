@@ -1,0 +1,58 @@
+[
+  {
+    "case": "purchase-request",
+    "arm": "control",
+    "agent": "/root/compare_alder_check_perspectives/derive_purchase_checks_x",
+    "requested_model": "gpt-6-sol",
+    "requested_effort": "medium",
+    "fork_turns": "none",
+    "effective_model_effort": "not independently attested",
+    "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "launch_prompt": "records/purchase-request-control-launch.txt",
+    "task_prompt": "prompts/purchase-request-control.md",
+    "raw": "raw/purchase-request-control.md"
+  },
+  {
+    "case": "purchase-request",
+    "arm": "treatment",
+    "agent": "/root/compare_alder_check_perspectives/derive_purchase_checks_y",
+    "requested_model": "gpt-6-sol",
+    "requested_effort": "medium",
+    "fork_turns": "none",
+    "effective_model_effort": "not independently attested",
+    "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "launch_prompt": "records/purchase-request-treatment-launch.txt",
+    "task_prompt": "prompts/purchase-request-treatment.md",
+    "raw": "raw/purchase-request-treatment.md"
+  },
+  {
+    "case": "facilities-maintenance",
+    "arm": "control",
+    "agent": "/root/compare_alder_check_perspectives/derive_facility_checks_x",
+    "requested_model": "gpt-6-sol",
+    "requested_effort": "medium",
+    "fork_turns": "none",
+    "effective_model_effort": "not independently attested",
+    "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "launch_prompt": "records/facilities-maintenance-control-launch.txt",
+    "task_prompt": "prompts/facilities-maintenance-control.md",
+    "raw": "raw/facilities-maintenance-control.md"
+  },
+  {
+    "case": "facilities-maintenance",
+    "arm": "treatment",
+    "agent": "/root/compare_alder_check_perspectives/derive_facility_checks_y",
+    "requested_model": "gpt-6-sol",
+    "requested_effort": "medium",
+    "fork_turns": "none",
+    "effective_model_effort": "not independently attested",
+    "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "launch_prompt": "records/facilities-maintenance-treatment-launch.txt",
+    "task_prompt": "prompts/facilities-maintenance-treatment.md",
+    "raw": "raw/facilities-maintenance-treatment.md"
+  }
+]

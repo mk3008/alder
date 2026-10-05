@@ -1,0 +1,10 @@
+{
+  "agent": "/root/compare_alder_check_perspectives/score_masked_check_candidates",
+  "requested_model": "gpt-6-sol",
+  "requested_effort": "medium",
+  "fork_turns": "none",
+  "effective_settings": "not independently attested",
+  "prompt": "records/evaluator-launch.txt",
+  "masking": "Only literal arm-bearing prompt filename replaced by prompts/assigned.md. Raw unchanged. Names X/Y allocated differently by case.",
+  "limitation": "Arm key and generator prompts were withheld. Evaluator launch was written after coordinator saw raw and added semantic cautions about stored state vs concurrent success and selection vs establishment. Rubric was precommitted, but this is not a wholly prespecified or investigator-blind scoring process. Content may suggest arm; no causal/fully blind claim."
+}

@@ -1,0 +1,71 @@
+{
+  "status": "blinded_correction_overlay",
+  "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+  "rubric": "evaluation/blinded/rubric.md",
+  "original_scores_preserved": true,
+  "corrections": [
+    {
+      "case": "purchase-request",
+      "output": "X",
+      "id": "X-02",
+      "original_category_retained": "same-meaning-view",
+      "corrected_unique_meaning_gain": false,
+      "correction": "X-02 is a separate, useful display of target isolation, but output Y already specifies that, for one or multiple applications, each result is established only for the uniquely selected target. Do not count X-02 as a meaning unavailable in Y just because Y lacks a standalone cross-workflow Check ID.",
+      "evidence": [
+        {
+          "file": "evaluation/blinded/purchase-request-X.md",
+          "location": "main Check table, X-02",
+          "text": "承認・却下・購入結果は選択した同一の購入申請に結びつき、別の申請の状態をその判断結果として変更しない。"
+        },
+        {
+          "file": "evaluation/blinded/purchase-request-Y.md",
+          "location": "接続・代表場面と境界, second bullet",
+          "text": "1件・複数件は、どの場合も一意な対象を選び、その対象にだけ各結果を成立させる範囲を`A1-04`、`A2-01`、`A3-01`、`A4-01`で扱う。"
+        },
+        {
+          "file": "inputs/purchase-request.md",
+          "location": "購入申請 paragraph and 業務2/3/4 Output",
+          "text": "購入申請は一意に識別できるものとする。 / 対象購入申請が `approved` / `rejected` / `purchased` になる。"
+        }
+      ],
+      "cross_output_semantic_counterparts": ["Y:A1-04", "Y:A2-01", "Y:A3-01", "Y:A4-01", "Y:接続・代表場面と境界 second bullet"],
+      "same_output_duplicate": false,
+      "unauthorized_decision": false,
+      "mispromoted_question": false,
+      "limit": "The shared meaning concerns the state/result of the selected application, not an unstated isolation level, rollback protocol, or behavior of concurrent operations."
+    },
+    {
+      "case": "facilities-maintenance",
+      "output": "X",
+      "id": "A3-04",
+      "original_main_table_category_retained": "direct",
+      "detail_subclaim_category": "unsupported",
+      "correction": "The detailed condition says completion must not be at or before the report time. The BD prohibits only completion before the report time, so equality is allowed by this particular boundary. This is a narrow source-grounding mismatch in the detail, not a finding that the main-table early-completion Check is wholly wrong.",
+      "evidence": [
+        {
+          "file": "evaluation/blinded/facilities-maintenance-X.md",
+          "location": "main Check table, A3-04",
+          "text": "完了日時が予定日時より前であることだけを理由に、完了を妨げない。"
+        },
+        {
+          "file": "evaluation/blinded/facilities-maintenance-X.md",
+          "location": "同一IDの根拠・条件・接続, A3-04",
+          "text": "作業完了時の時刻が予定日時より早く、報告日時以前という別の制限には当たらない。"
+        },
+        {
+          "file": "inputs/facilities-maintenance.md",
+          "location": "業務3 手順後段, line 203",
+          "text": "予定日時より前に作業が完了してもよい。ただし、業務上の完了日時が故障の報告日時より前になることはない。"
+        }
+      ],
+      "semantic_delta": "Detail implies completion_time > report_time; BD says completion_time >= report_time.",
+      "unauthorized_decision_in_detail": true,
+      "mispromoted_question": false,
+      "same_output_duplicate": false,
+      "corrected_detail_condition": "予定日時より前でも、完了日時が報告日時より前でなく、その他の成立条件を満たす場合。",
+      "limit": "This does not independently settle how an inconsistent input report time should be resolved or how timestamps are acquired."
+    }
+  ],
+  "overall_effect": "Remove the previously claimed purchase X-02 cross-output unique gain; add one narrow unsupported boundary in facilities X A3-04 detail. Preserve original per-ID main-table scores and all other comparisons."
+}

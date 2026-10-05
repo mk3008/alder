@@ -18,6 +18,10 @@ Initial coverage: repository research documents and major research Issue/PR deci
 
 A topic absent here is **not established as unexamined**: check related records and the evidence links before starting another study. “Reconsider” below identifies a possible changed premise or evidence need, not a mandatory experiment or a new adoption criterion. Where it extends a source's stated uncertainty, it is an index-level navigation suggestion, not a retroactive research decision.
 
+## Check Item falsification viewpoints
+
+**Not adopted for standard guidance.** [Issue #154 pilot](../work/check-perspectives/issue-154/result.md) compared two existing public Business Designs, one fresh generation per arm/case, against current c3. The assisted arm concretized a selection-to-establishment safety-closure scenario; most other views overlapped existing detail, while concurrent-decision wording risked stronger meaning than the design supports. A control detail also narrowed a time equality boundary. More checks or shorter output did not establish superiority. No formal guidance changed. Inputs lacked independent human-agreement/correlation-review evidence; requested runtime settings were not independently attested, and masked scoring included disclosed post-generation cautions/corrections. Reconsider only if current c3 repeatedly misses a concrete, already-defined establishment-time condition in use; the pilot does not show that viewpoints never help.
+
 ## Established foundations
 
 Alder organizes established software engineering practices into a small AI-assisted development loop. Requirements validation, scenario walkthroughs, traceability and decision rationale are not Alder inventions. **Q1–Q3 / P1 / P2 / S, their wording and their integration are Alder-specific.** The mapping below explains conceptual foundations, not a claim that every source was consulted during the original extraction or that Alder implements a standard.

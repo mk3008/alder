@@ -1,0 +1,1802 @@
+{
+  "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "preregistration": "25ec5216cbc2561d5c60e93ade22118c7f621272",
+  "rubric": "evaluation/blinded/rubric.md",
+  "blinded": true,
+  "items": {
+    "purchase-request": {
+      "X": [
+        {
+          "id": "A1-01",
+          "title": "購入申請を提出する",
+          "expectation": "申請者が必須の品名・数量・希望購入金額・購入理由を与えて登録すると、新しい購入申請が `submitted` で記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input（4項目すべて必須）、手順3-4、Output（submitted）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-01"
+          ]
+        },
+        {
+          "id": "A1-02",
+          "title": "申請内容と日時を保持する",
+          "expectation": "登録された申請には申請者、入力した品名・数量・希望購入金額・購入理由、申請日時が保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "購入申請の情報、業務1 Output（申請者・入力4項目・申請日時を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-02"
+          ]
+        },
+        {
+          "id": "A1-03",
+          "title": "必須情報がない申請を成立させない",
+          "expectation": "必須の4項目のいずれかがないとき、その購入要求は承認対象となる `submitted` の購入申請として成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input（4項目すべて必須）と Output（成立したsubmitted）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-03"
+          ]
+        },
+        {
+          "id": "A1-04",
+          "title": "申請を一意に特定する",
+          "expectation": "成立した各購入申請は、ほかの購入申請と区別して特定できる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "購入申請「一意に識別できる」",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-04"
+          ]
+        },
+        {
+          "id": "A1-05",
+          "title": "提出した申請を承認判断へ渡す",
+          "expectation": "成立した `submitted` の購入申請を、承認者がその同じ申請として確認し、購入可否の判断対象にできる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Why/Output（承認者が判断可能）、業務2 When/手順1",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-05"
+          ]
+        },
+        {
+          "id": "A2-01",
+          "title": "提出済みの対象を承認する",
+          "expectation": "承認者が選択した `submitted` の購入申請は `approved` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（submitted）、Who、Input、手順3、Output（approved）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-01"
+          ]
+        },
+        {
+          "id": "A2-02",
+          "title": "承認日時を残す",
+          "expectation": "承認された対象購入申請に承認日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 手順4、Output（承認日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-02"
+          ]
+        },
+        {
+          "id": "A2-03",
+          "title": "承認済み申請を購買へ渡す",
+          "expectation": "`approved` になったその申請を、購買担当者が購入対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Why/Output（購買対象）、業務4 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-03"
+          ]
+        },
+        {
+          "id": "A2-04",
+          "title": "提出済みでない申請を承認しない",
+          "expectation": "選択時点で対象が `submitted` でなければ、その対象について業務2の承認結果は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（submittedのみ）、手順1-3",
+          "justification": "submittedでない選択時には承認は成立しない。選択後・成立前の競合についてはBDに時点指定がないため、この文面以上に拡張しない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-04"
+          ]
+        },
+        {
+          "id": "A2-05",
+          "title": "承認対象がない場合は承認が成立しない",
+          "expectation": "承認する対象購入申請を選択できない場合、承認済みになる申請はない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Input（対象選択必須）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-05"
+          ]
+        },
+        {
+          "id": "A3-01",
+          "title": "提出済みの対象を却下する",
+          "expectation": "承認者が却下を選んだ `submitted` の購入申請は `rejected` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（submitted）、Who、手順4、Output（rejected）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-01"
+          ]
+        },
+        {
+          "id": "A3-02",
+          "title": "却下理由と日時を残す",
+          "expectation": "却下された対象購入申請に、入力した却下理由と却下日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input（理由必須）、手順3・5、Output（理由・日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-02"
+          ]
+        },
+        {
+          "id": "A3-03",
+          "title": "却下した申請を購買対象から外す",
+          "expectation": "`rejected` になったその申請は購買担当者の購入対象にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Why/Output（購買対象外）、業務相関5",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-03"
+          ]
+        },
+        {
+          "id": "A3-04",
+          "title": "理由のない却下を成立させない",
+          "expectation": "却下理由がない場合、対象を理由付きの `rejected` 申請として成立させない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input（却下理由必須）、手順3-4",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-05"
+          ]
+        },
+        {
+          "id": "A3-05",
+          "title": "提出済みでない申請を却下しない",
+          "expectation": "選択時点で対象が `submitted` でなければ、その対象について業務3の却下結果は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（submitted）、手順1-4",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-04"
+          ]
+        },
+        {
+          "id": "A3-06",
+          "title": "却下対象がない場合は却下が成立しない",
+          "expectation": "却下する対象購入申請を選択できない場合、却下済みになる申請はない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input（対象選択必須）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-05"
+          ]
+        },
+        {
+          "id": "A4-01",
+          "title": "承認済み申請の購入結果を登録する",
+          "expectation": "購買担当者が `approved` の申請に基づいて対象備品を購入し、実購入金額を与えると、その申請は `purchased` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（approvedの購入時）、Input、手順1-4、Output（purchased）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-01"
+          ]
+        },
+        {
+          "id": "A4-02",
+          "title": "実購入金額と日時を残す",
+          "expectation": "購入結果が登録された対象申請に実購入金額と購入日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Input（実購入金額必須）、手順3・5、Output（金額・日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-02"
+          ]
+        },
+        {
+          "id": "A4-03",
+          "title": "購入済みの申請として扱う",
+          "expectation": "`purchased` になったその申請を、購入済みとして扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Why/Output（purchasedの申請を購入済みとして扱える）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-05"
+          ]
+        },
+        {
+          "id": "A4-04",
+          "title": "承認済みでない申請を購入結果にしない",
+          "expectation": "選択時点で対象が `approved` でなければ、その申請を業務4の `purchased` にはしない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（approvedのみ）、手順1-4、業務相関4-5",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-03"
+          ]
+        },
+        {
+          "id": "A4-05",
+          "title": "実購入金額のない購入結果を成立させない",
+          "expectation": "実購入金額がない場合、対象申請の購入結果は登録完了として成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Input（実購入金額必須）、手順3-4",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-04"
+          ]
+        },
+        {
+          "id": "A4-06",
+          "title": "購入対象がない場合は購入結果が成立しない",
+          "expectation": "対象購入申請を選択できない場合、購入結果が登録済みになる申請はない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Input（対象選択必須）、手順1-4",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-04"
+          ]
+        },
+        {
+          "id": "X-01",
+          "title": "承認と却下を同一申請に両立させない",
+          "expectation": "同じ `submitted` 申請に対する承認と却下が近接して行われても、その申請の成立した判断結果は `approved` と `rejected` の両方にはならない。",
+          "kind": "check",
+          "category": "same-meaning-view",
+          "grounding": "購入申請の単一状態欄、業務2/3 When（ともにsubmitted）、両業務の相反する状態Output。並行処理の成功応答までは記載なし",
+          "justification": "限定すれば単一申請の最終状態は一値という有用な交差視点。ただし近接/並行する承認と却下が双方成功を返さない保証、裁定順、原子性はBDにない。",
+          "unauthorized_decision": true,
+          "mispromoted_question": false,
+          "meaning_flag": "possible-concurrency-overreach",
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "X-02",
+          "title": "後続判断で別申請を書き換えない",
+          "expectation": "承認・却下・購入結果は選択した同一の購入申請に結びつき、別の申請の状態をその判断結果として変更しない。",
+          "kind": "check",
+          "category": "same-meaning-view",
+          "grounding": "購入申請の一意性、業務2/3/4 Input（対象選択）、各手順・Output（対象申請）",
+          "justification": "複数申請で、選択対象以外を書き換えないという対象同一性の横断確認。Yの個別成功は対象を同じ申請と呼ぶが、別申請の非変更を独立Checkにしていない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-01",
+            "A3-01",
+            "A4-01"
+          ]
+        },
+        {
+          "id": "X-03",
+          "title": "購入済み申請を再び購入結果にしない",
+          "expectation": "`purchased` となった申請は、同じ申請を再選択しても業務4の `approved` 対象として再び購入結果を成立させない。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務4 When（approved）、Output（purchased）。XのA4-04の一例",
+          "justification": "purchasedの再選択はX A4-04の非approved状態の一例。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A4-04"
+          ],
+          "cross_output_semantic_counterparts": [
+            "A4-03"
+          ]
+        },
+        {
+          "id": "QX-01",
+          "title": "実物購入後に結果登録できなかった場合の業務上の扱い",
+          "expectation": "実物購入後に結果登録できなかった場合の業務上の扱い",
+          "kind": "explicit-question",
+          "category": "business-question",
+          "grounding": "業務4 手順2-5（購入→記録→purchased）。登録失敗時の扱いは記載なし",
+          "justification": "新しい回復・照合・再購入防止の業務判断が必要。質問に留めている。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "Q-01"
+          ]
+        },
+        {
+          "id": "QX-02",
+          "title": "数量・金額の業務上の許容範囲（0・負数等）",
+          "expectation": "数量・金額の業務上の許容範囲（0・負数等）",
+          "kind": "explicit-question",
+          "category": "business-question",
+          "grounding": "業務1 Input（数量・希望購入金額必須）、業務4 Input（実購入金額必須）。値域規定なし",
+          "justification": "必須性から値域は決まらない。質問に留めている。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": []
+        }
+      ],
+      "Y": [
+        {
+          "id": "A1-01",
+          "title": "購入申請を提出できる",
+          "expectation": "申請者が必須の購入希望情報を入力して登録すると、その購入要求が新しい`submitted`の購入申請になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input（4項目すべて必須）、手順3-4、Output（submitted）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-01"
+          ]
+        },
+        {
+          "id": "A1-02",
+          "title": "申請時の事実が残る",
+          "expectation": "登録された申請に、申請者、品名、数量、希望購入金額、購入理由、申請日時が保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "購入申請の情報、業務1 Output（申請者・入力4項目・申請日時を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-02"
+          ]
+        },
+        {
+          "id": "A1-03",
+          "title": "必須情報の欠落を提出としない",
+          "expectation": "品名・数量・希望購入金額・購入理由のいずれかが与えられない場合、提出済みの購入申請は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input（4項目すべて必須）と Output（成立したsubmitted）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-03"
+          ]
+        },
+        {
+          "id": "A1-04",
+          "title": "購入申請を識別できる",
+          "expectation": "成立した購入申請は、ほかの購入申請と一意に識別できる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "購入申請「一意に識別できる」",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-04"
+          ]
+        },
+        {
+          "id": "A1-05",
+          "title": "提出申請を承認判断へ渡せる",
+          "expectation": "`submitted`になった同じ購入申請とその希望内容を、承認者が購入可否を判断する対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Why/Output（承認者が判断可能）、業務2 When/手順1",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-05"
+          ]
+        },
+        {
+          "id": "A1-06",
+          "title": "申請は申請者の業務である",
+          "expectation": "備品購入の申請を成立させる担当ロールは申請者である。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務上のロール「申請者」、業務1 Who",
+          "justification": "担当ロールは明示されるが、同出力の成功Checkが同じロール条件をすでに含む。無権限者の否定的場面はこの文面にない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A1-01"
+          ],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "A2-01",
+          "title": "提出済み申請を承認する",
+          "expectation": "承認者が`submitted`の対象申請を購入してよいと判断して承認すると、選んだ同じ申請が`approved`になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（submitted）、Who、Input、手順3、Output（approved）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-01",
+            "X-02"
+          ]
+        },
+        {
+          "id": "A2-02",
+          "title": "承認日時が残る",
+          "expectation": "承認された対象申請に承認日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 手順4、Output（承認日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-02"
+          ]
+        },
+        {
+          "id": "A2-03",
+          "title": "承認申請を購買へ渡せる",
+          "expectation": "`approved`になった同じ申請を、購買担当者が購入対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Why/Output（購買対象）、業務4 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-03"
+          ]
+        },
+        {
+          "id": "A2-04",
+          "title": "提出前・決定後の申請を承認しない",
+          "expectation": "対象が`submitted`でなければ、この業務による`approved`への変更は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（submittedのみ）、手順1-3",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-04"
+          ]
+        },
+        {
+          "id": "A2-05",
+          "title": "対象を選ばず承認しない",
+          "expectation": "承認対象の購入申請が指定されない場合、承認は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Input（対象選択必須）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-05"
+          ]
+        },
+        {
+          "id": "A2-06",
+          "title": "承認は承認者の業務である",
+          "expectation": "購入申請の承認を成立させる担当ロールは承認者である。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務上のロール「承認者」、業務2 Who",
+          "justification": "担当ロールは明示されるが、同出力の成功Checkが同じロール条件をすでに含む。無権限者の否定的場面はこの文面にない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A2-01"
+          ],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "A3-01",
+          "title": "提出済み申請を却下する",
+          "expectation": "承認者が`submitted`の対象申請を購入しないと判断して却下すると、選んだ同じ申請が`rejected`になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（submitted）、Who、手順4、Output（rejected）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-01",
+            "X-02"
+          ]
+        },
+        {
+          "id": "A3-02",
+          "title": "却下の理由と日時が残る",
+          "expectation": "却下された対象申請に、入力された却下理由と却下日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input（理由必須）、手順3・5、Output（理由・日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-02"
+          ]
+        },
+        {
+          "id": "A3-03",
+          "title": "却下申請を購買対象にしない",
+          "expectation": "`rejected`の申請は、購買担当者が購入する対象にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Why/Output（購買対象外）、業務相関5",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-03"
+          ]
+        },
+        {
+          "id": "A3-04",
+          "title": "提出前・決定後の申請を却下しない",
+          "expectation": "対象が`submitted`でなければ、この業務による`rejected`への変更は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（submittedのみ）、手順1-4",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-05"
+          ]
+        },
+        {
+          "id": "A3-05",
+          "title": "対象または理由なしで却下しない",
+          "expectation": "却下対象の購入申請または却下理由が与えられない場合、却下は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input（対象・却下理由とも必須）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-04",
+            "A3-06"
+          ]
+        },
+        {
+          "id": "A3-06",
+          "title": "却下は承認者の業務である",
+          "expectation": "購入申請の却下を成立させる担当ロールは承認者である。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務上のロール「承認者」、業務3 Who",
+          "justification": "担当ロールは明示されるが、同出力の成功Checkが同じロール条件をすでに含む。無権限者の否定的場面はこの文面にない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A3-01"
+          ],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "A4-01",
+          "title": "購入済み申請を記録する",
+          "expectation": "購買担当者が`approved`の対象備品を購入し結果を登録すると、その同じ申請が`purchased`になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（approvedの購入時）、Input、手順1-4、Output（purchased）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-01",
+            "X-02"
+          ]
+        },
+        {
+          "id": "A4-02",
+          "title": "実購入金額と購入日時が残る",
+          "expectation": "購入済みの対象申請に、実購入金額と購入日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Input（実購入金額必須）、手順3・5、Output（金額・日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-02"
+          ]
+        },
+        {
+          "id": "A4-03",
+          "title": "未承認・却下申請を購入済みにしない",
+          "expectation": "対象が`approved`でなければ、この業務による`purchased`への変更は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（approvedのみ）、手順1-4、業務相関4-5",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-04",
+            "X-03"
+          ]
+        },
+        {
+          "id": "A4-04",
+          "title": "対象または実購入金額なしで完了しない",
+          "expectation": "購入対象の申請または実購入金額が与えられない場合、購入結果の登録は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Input（対象・実購入金額とも必須）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-05",
+            "A4-06"
+          ]
+        },
+        {
+          "id": "A4-05",
+          "title": "購入済みの同じ申請を扱える",
+          "expectation": "購入後は、承認を受けた同じ申請を購入済みとして扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Output（購入済みとして扱える）、購入申請の一意性",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-03"
+          ]
+        },
+        {
+          "id": "A4-06",
+          "title": "実際の購入前に購入済みとしない",
+          "expectation": "対象備品の購入が行われていなければ、購入結果の登録による`purchased`は成立しない。",
+          "kind": "check",
+          "category": "same-meaning-view",
+          "grounding": "業務4 When（購入したとき）、手順2→3→4、Why（実際の購入として完了）",
+          "justification": "購入結果登録より実物購入が先という境界を独立に確認する。X A4-01の成功前提には含まれるが、未購入を結果登録でpurchasedにしない否定例は独立していない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-01"
+          ]
+        },
+        {
+          "id": "A4-07",
+          "title": "購入は購買担当者の業務である",
+          "expectation": "承認済み備品の購入と結果登録を成立させる担当ロールは購買担当者である。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務上のロール「購買担当者」、業務4 Who",
+          "justification": "担当ロールは明示されるが、同出力の成功Checkが同じロール条件をすでに含む。無権限者の否定的場面はこの文面にない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A4-01"
+          ],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "Q-01",
+          "title": "実際の購入は済んだが結果登録が成立しなかった場合の扱い",
+          "expectation": "実際の購入は済んだが結果登録が成立しなかった場合の扱い",
+          "kind": "explicit-question",
+          "category": "business-question",
+          "grounding": "業務4 When・手順2-5。失敗/再開方法は規定なし",
+          "justification": "回復・再登録条件はBDにない。質問に留めている。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "QX-01"
+          ]
+        }
+      ]
+    },
+    "facilities-maintenance": {
+      "X": [
+        {
+          "id": "A1-01",
+          "title": "故障報告を新しい依頼にする",
+          "expectation": "登録済みの対象設備について、必須の対象設備・報告日時・報告者・症状を伴う故障報告から、新しい `open` の保守依頼が成立する。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 When（登録済み設備）、Input（4項目必須）、手順2-3、Output（新しいopen依頼）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M1-01"
+          ]
+        },
+        {
+          "id": "A1-02",
+          "title": "報告内容を依頼に保持する",
+          "expectation": "新しい保守依頼に、入力した対象設備・報告日時・報告者・症状が保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input/Output（対象設備・報告日時・報告者・症状を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M1-02"
+          ]
+        },
+        {
+          "id": "A1-03",
+          "title": "既存依頼があっても新規報告を受ける",
+          "expectation": "同じ設備に既存の保守依頼があっても、対象範囲の新しい故障報告は別の新しい保守依頼として受け付けられる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 When（既存依頼があっても新しい報告を受け付ける）、保守依頼の一意性",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M1-03"
+          ]
+        },
+        {
+          "id": "A1-04",
+          "title": "新しい依頼を後続の日程設定へ渡す",
+          "expectation": "成立した `open` の保守依頼を保守調整担当者が日程設定の対象として扱える。ただし、日程設定時には設備の安全状態など業務2の条件も満たす必要がある。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Output（後続の日程設定対象）、業務2 Whenの別条件",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M1-04"
+          ]
+        },
+        {
+          "id": "A2-01",
+          "title": "開いている依頼に日程を設定する",
+          "expectation": "保守調整担当者が `open` の依頼を選び、設備が `safety_closed` ではなく、設定時点より未来の予定日時を決めると、その依頼が `scheduled` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（open・非閉鎖・未来）、Who、手順3、Output（scheduled）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-01"
+          ]
+        },
+        {
+          "id": "A2-02",
+          "title": "決定した予定日時を記録する",
+          "expectation": "日程を設定した同じ保守依頼に、決定した予定日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Input（予定日時）、手順3、Output（決定日時を記録）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-01"
+          ]
+        },
+        {
+          "id": "A2-03",
+          "title": "予定済み依頼を完了業務へ渡す",
+          "expectation": "日程設定済みの保守依頼を技術者が後続の完了業務の対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Output（完了業務の対象）、業務3 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-02"
+          ]
+        },
+        {
+          "id": "A2-04",
+          "title": "安全閉鎖中は日程を設定しない",
+          "expectation": "対象設備が `safety_closed` の `open` 依頼には日程設定が成立せず、その依頼は `open` のまま残る。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（safety_closedでない）、不成立時Output（状態不変）、業務4 Output（閉鎖中設定不可）",
+          "justification": "BDの閉鎖時禁止を日程設定側から確認。A4-04と同じ保証を重ねている。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A4-04"
+          ],
+          "cross_output_semantic_counterparts": [
+            "M2-03",
+            "M4-03"
+          ]
+        },
+        {
+          "id": "A2-05",
+          "title": "未来でない予定日時は受け付けない",
+          "expectation": "予定日時が設定時点と同時または過去なら日程設定は成立せず、依頼の状態は変わらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（予定日時は設定時点より未来）、不成立時Output（状態不変）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-05"
+          ]
+        },
+        {
+          "id": "A2-06",
+          "title": "日程設定対象外の依頼を進めない",
+          "expectation": "`open` ではない既存依頼は日程設定の対象とならず、少なくとも依頼の状態は変わらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（openのみ、completed対象外）、不成立時Output",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-06"
+          ]
+        },
+        {
+          "id": "A2-07",
+          "title": "現場報告者の権限だけでは日程設定できない",
+          "expectation": "現場報告者という資格だけでは、日程設定業務は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Who（現場報告者だけでは権限なし）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M2-07"
+          ]
+        },
+        {
+          "id": "A2-08",
+          "title": "対象の依頼がなければ日程設定しない",
+          "expectation": "選べる `open` の保守依頼が0件なら、日程設定の対象がなく、予定済みの依頼はこの業務から成立しない。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務2 Input（対象依頼選択必須）、When（openのみ）",
+          "justification": "対象open依頼が0件なら対象選択できず、A2-01の必須対象・open条件から当然に未成立。独立した結果差はない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "A2-01"
+          ],
+          "cross_output_semantic_counterparts": []
+        },
+        {
+          "id": "A3-01",
+          "title": "予定済み依頼の完了を記録する",
+          "expectation": "技術者が作業を完了した `scheduled` の依頼を選ぶと、その依頼が `completed` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（scheduled作業を完了）、Who、手順2-3、Output（completed）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-01"
+          ]
+        },
+        {
+          "id": "A3-02",
+          "title": "完了操作に対応する時刻を記録する",
+          "expectation": "完了した同じ依頼に、成功した完了操作に対応する信頼できる完了日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input後段（成功操作に対応する信頼できる時刻、技術者入力ではない）、Output",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-02"
+          ]
+        },
+        {
+          "id": "A3-03",
+          "title": "元の予定日時を保持する",
+          "expectation": "完了後も、その依頼に既に記録された予定日時は保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順4、Output（予定日時を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-03"
+          ]
+        },
+        {
+          "id": "A3-04",
+          "title": "予定より早い完了も扱う",
+          "expectation": "完了日時が予定日時より前であることだけを理由に、完了を妨げない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順後段（予定日時は完了日時の下限ではない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-04"
+          ]
+        },
+        {
+          "id": "A3-05",
+          "title": "報告日時より前の完了日時を作らない",
+          "expectation": "記録される業務上の完了日時は、その依頼の故障報告日時より前にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順後段（完了日時は報告日時より前にならない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-05"
+          ]
+        },
+        {
+          "id": "A3-06",
+          "title": "未予定の依頼を完了しない",
+          "expectation": "`open` の保守依頼は、この完了業務の対象にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（open対象外）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-06"
+          ]
+        },
+        {
+          "id": "A3-07",
+          "title": "報告者の権限だけでは完了できない",
+          "expectation": "現場報告者という資格だけでは、技術者として完了を記録できない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Who（現場報告者だけでは技術者権限なし）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M3-07"
+          ]
+        },
+        {
+          "id": "A4-01",
+          "title": "危険と判断した設備を閉鎖する",
+          "expectation": "安全検査担当者が定期安全点検で危険と判断した対象設備を選ぶと、設備が `safety_closed` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（点検で危険と判断）、Who、手順2、Output（safety_closed）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M4-01"
+          ]
+        },
+        {
+          "id": "A4-02",
+          "title": "既存の未着手依頼を残す",
+          "expectation": "閉鎖した設備に既存の `open` 依頼が1件または複数件あれば、その各依頼は `open` のまま残る。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 手順3、Output（既存openはopenのまま）、業務1 When（同一設備に複数依頼可）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M4-02",
+            "M4-04"
+          ]
+        },
+        {
+          "id": "A4-03",
+          "title": "完了済み依頼を変えない",
+          "expectation": "対象設備を閉鎖しても、既に `completed` の保守依頼は変更されない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Output（既存completedは変更されない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M4-05"
+          ]
+        },
+        {
+          "id": "A4-04",
+          "title": "閉鎖中の未着手依頼を予定化しない",
+          "expectation": "`safety_closed` の間、その設備に残る `open` 依頼には日程設定が成立しない。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務4 Output（閉鎖中、当該設備のopen依頼の日程設定不成立）",
+          "justification": "A2-04の閉鎖中日程設定不成立と同じ保証を、安全閉鎖側から再掲している。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M4-03",
+            "M4-04"
+          ]
+        },
+        {
+          "id": "A5-01",
+          "title": "利用可能と判断した設備を戻す",
+          "expectation": "安全検査担当者が後続の定期安全点検で継続使用可能と判断した `safety_closed` 設備を選ぶと、設備が `available` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 When（後続点検で利用可能・safety_closed）、手順2、Output（available）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M5-01"
+          ]
+        },
+        {
+          "id": "A5-02",
+          "title": "既存の未着手依頼を残す",
+          "expectation": "閉鎖解除の前後で、その設備の既存の `open` 依頼は、1件または複数件それぞれが `open` のまま残る。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 手順3、Output（既存openは残る）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M5-02"
+          ]
+        },
+        {
+          "id": "A5-03",
+          "title": "解除だけでは日程を作らない",
+          "expectation": "閉鎖を解除すること自体では、残っている `open` 依頼の日程は設定されない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 Output後段（解除そのものは日程設定でない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M5-04"
+          ]
+        },
+        {
+          "id": "A5-04",
+          "title": "未着手依頼を日程設定の対象に戻す",
+          "expectation": "解除後、既存の `open` 依頼を、保守調整担当者が業務2の通常条件を満たす場合に再び日程設定の対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 Why/Output（通常条件を満たせばopen依頼の日程設定が再可能）、業務2 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "M5-03"
+          ]
+        }
+      ],
+      "Y": [
+        {
+          "id": "M1-01",
+          "title": "故障報告を新しい依頼として登録する",
+          "expectation": "登録済み設備について必要な報告内容が与えられると、新しい `open` の保守依頼が成立する。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 When（登録済み設備）、Input（4項目必須）、手順2-3、Output（新しいopen依頼）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-01"
+          ]
+        },
+        {
+          "id": "M1-02",
+          "title": "報告した内容を保持する",
+          "expectation": "新しい依頼に対象設備、報告日時、報告者、症状が入力どおり保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Input/Output（対象設備・報告日時・報告者・症状を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-02"
+          ]
+        },
+        {
+          "id": "M1-03",
+          "title": "同じ設備の別報告も受け付ける",
+          "expectation": "同じ設備に既存依頼があっても、新しい故障報告は別の新しい依頼として受け付けられる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 When（既存依頼があっても新しい報告を受け付ける）、保守依頼の一意性",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-03"
+          ]
+        },
+        {
+          "id": "M1-04",
+          "title": "新しい依頼を日程設定へ渡せる",
+          "expectation": "新しい `open` の依頼は、日程設定の対象として識別して扱える。ただし日程設定にはその時点の別条件も必要となる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務1 Output（後続の日程設定対象）、業務2 Whenの別条件",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A1-04"
+          ]
+        },
+        {
+          "id": "M2-01",
+          "title": "条件を満たす依頼に日程を設定する",
+          "expectation": "`open` の依頼について、設備が `safety_closed` でなく、設定時点より未来の予定日時を指定すると、当該依頼は `scheduled` になり予定日時が記録される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（open・非閉鎖・未来）、Who、手順3、Output（scheduled）、業務2 Output（予定日時）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-01",
+            "A2-02"
+          ]
+        },
+        {
+          "id": "M2-02",
+          "title": "予定済み依頼を完了業務へ渡せる",
+          "expectation": "日程設定に成功した同じ保守依頼を、技術者が完了業務の対象として扱える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Output（完了業務の対象）、業務3 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-03"
+          ]
+        },
+        {
+          "id": "M2-03",
+          "title": "閉鎖中の設備に新しい日程を設定しない",
+          "expectation": "設定時点で対象設備が `safety_closed` なら日程設定は成立せず、対象依頼の状態は変わらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（safety_closedでない）、不成立時Output（状態不変）、業務4 Output（閉鎖中設定不可）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-04"
+          ]
+        },
+        {
+          "id": "M2-04",
+          "title": "選択後に閉鎖された依頼も設定しない",
+          "expectation": "`open` の依頼を選択した後、日程設定が成立する前に対象設備が安全閉鎖されたなら、その選択だけを根拠に日程は成立しない。",
+          "kind": "check",
+          "category": "same-meaning-view",
+          "grounding": "業務2 When（設定する時点で非閉鎖が必要）、手順1（対象選択）と3（設定成立）は別段階、業務4 When（依頼進行と独立した安全点検）",
+          "justification": "依頼選択後、成立前に独立した安全点検で閉鎖される場面。BDが設定時点の非閉鎖を要求するため選択時の適格性だけでは足りない。具体的な同時実行方式は導出しない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-04"
+          ]
+        },
+        {
+          "id": "M2-05",
+          "title": "未来でない日時を設定しない",
+          "expectation": "予定日時が設定時点と同時刻または過去なら日程設定は成立せず、対象依頼の状態は変わらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（予定日時は設定時点より未来）、不成立時Output（状態不変）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-05"
+          ]
+        },
+        {
+          "id": "M2-06",
+          "title": "`open` 以外に新しい日程を設定しない",
+          "expectation": "`scheduled` または `completed` の依頼はこの日程設定業務の対象にならず、その状態は変わらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 When（openのみ、completed対象外）、不成立時Output",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-06"
+          ]
+        },
+        {
+          "id": "M2-07",
+          "title": "報告者だけでは日程設定しない",
+          "expectation": "現場報告者のロールしか持たない者によって、保守日程設定は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務2 Who（現場報告者だけでは権限なし）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A2-07"
+          ]
+        },
+        {
+          "id": "M3-01",
+          "title": "予定済み依頼を完了する",
+          "expectation": "技術者が作業を完了した `scheduled` の依頼を選ぶと、その同じ依頼が `completed` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（scheduled作業を完了）、Who、手順2-3、Output（completed）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-01"
+          ]
+        },
+        {
+          "id": "M3-02",
+          "title": "完了時刻を記録する",
+          "expectation": "成功した完了操作に対応する信頼できる時刻が完了日時として記録され、技術者の入力日時には依存しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Input後段（成功操作に対応する信頼できる時刻、技術者入力ではない）、Output",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-02"
+          ]
+        },
+        {
+          "id": "M3-03",
+          "title": "予定日時を保持する",
+          "expectation": "完了後も、その依頼に記録されていた予定日時は保持される。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順4、Output（予定日時を保持）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-03"
+          ]
+        },
+        {
+          "id": "M3-04",
+          "title": "予定より早い完了を認める",
+          "expectation": "実際の完了日時が予定日時より前であっても、その他の成立条件を満たす完了は成立する。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順後段（予定日時は完了日時の下限ではない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-04"
+          ]
+        },
+        {
+          "id": "M3-05",
+          "title": "報告前の完了日時を作らない",
+          "expectation": "完了日時は同じ依頼の故障報告日時より前にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 手順後段（完了日時は報告日時より前にならない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-05"
+          ]
+        },
+        {
+          "id": "M3-06",
+          "title": "未予定の依頼を完了しない",
+          "expectation": "`open` の依頼はこの完了業務の対象にならず、`completed` にならない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 When（open対象外）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-06"
+          ]
+        },
+        {
+          "id": "M3-07",
+          "title": "報告者だけでは完了しない",
+          "expectation": "現場報告者のロールしか持たない者によって、完了記録は成立しない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務3 Who（現場報告者だけでは技術者権限なし）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A3-07"
+          ]
+        },
+        {
+          "id": "M4-01",
+          "title": "危険と判断した設備を閉鎖する",
+          "expectation": "定期安全点検で危険と判断された対象設備が `safety_closed` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 When（点検で危険と判断）、Who、手順2、Output（safety_closed）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-01"
+          ]
+        },
+        {
+          "id": "M4-02",
+          "title": "閉鎖しても未解決依頼を残す",
+          "expectation": "対象設備に既存の `open` の依頼があっても、それぞれ同じ依頼として `open` のまま残る。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 手順3、Output（既存openはopenのまま）、業務1 When（同一設備に複数依頼可）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-02"
+          ]
+        },
+        {
+          "id": "M4-03",
+          "title": "閉鎖中は未解決依頼の日程を止める",
+          "expectation": "閉鎖中、その設備の既存 `open` の依頼について日程設定は成立しない。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務4 Output（閉鎖中、当該設備のopen依頼の日程設定不成立）",
+          "justification": "BDの閉鎖時禁止を閉鎖側から確認。M2-03と同じ保証を重ねている。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "M2-03"
+          ],
+          "cross_output_semantic_counterparts": [
+            "A2-04",
+            "A4-04"
+          ]
+        },
+        {
+          "id": "M4-04",
+          "title": "複数の未解決依頼すべてを閉鎖状態の制約下に置く",
+          "expectation": "同じ設備に複数の `open` の依頼があるとき、どれも `open` のまま残り、閉鎖中はいずれも日程設定の対象にならない。",
+          "kind": "check",
+          "category": "duplicate-noise",
+          "grounding": "業務1 When（同一設備に複数依頼可）、業務4 Output（既存open維持・その設備のopen日程設定不可）。M4-02/M4-03を複数件へ例示したもの",
+          "justification": "M4-02の各open依頼維持とM4-03の当該設備のopen依頼一律の日程禁止を複数件へ再結合したもの。BDの複数報告許容は明示されるが新しい成立条件はない。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [
+            "M4-02",
+            "M4-03"
+          ],
+          "cross_output_semantic_counterparts": [
+            "A4-02",
+            "A4-04"
+          ]
+        },
+        {
+          "id": "M4-05",
+          "title": "完了済み依頼を変更しない",
+          "expectation": "閉鎖した設備の既存 `completed` 依頼は変更されない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務4 Output（既存completedは変更されない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A4-03"
+          ]
+        },
+        {
+          "id": "M5-01",
+          "title": "後続点検の判断で閉鎖を解除する",
+          "expectation": "後続の定期安全点検で利用可能と判断された `safety_closed` の設備が `available` になる。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 When（後続点検で利用可能・safety_closed）、手順2、Output（available）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A5-01"
+          ]
+        },
+        {
+          "id": "M5-02",
+          "title": "解除しても未解決依頼を残す",
+          "expectation": "対象設備の既存 `open` 依頼は、解除後も同じ依頼として `open` のまま残る。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 手順3、Output（既存openは残る）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A5-02"
+          ]
+        },
+        {
+          "id": "M5-03",
+          "title": "残った依頼に再び日程を設定できる",
+          "expectation": "解除後、保守調整担当者は他の通常条件を満たす既存 `open` 依頼について日程設定を行える。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 Why/Output（通常条件を満たせばopen依頼の日程設定が再可能）、業務2 When",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A5-04"
+          ]
+        },
+        {
+          "id": "M5-04",
+          "title": "解除だけでは日程を設定しない",
+          "expectation": "安全閉鎖を解除しただけでは、残った `open` 依頼は `scheduled` にならず、予定日時も新たに決まらない。",
+          "kind": "check",
+          "category": "direct",
+          "grounding": "業務5 Output後段（解除そのものは日程設定でない）",
+          "justification": "BDの明示条件または新しい業務判断を要しない直接の帰結。",
+          "unauthorized_decision": false,
+          "mispromoted_question": false,
+          "meaning_flag": null,
+          "same_output_duplicate_links": [],
+          "cross_output_semantic_counterparts": [
+            "A5-03"
+          ]
+        }
+      ]
+    }
+  },
+  "summary": {
+    "purchase-request": {
+      "X": {
+        "unicode_characters": 6882,
+        "check_ids": 25,
+        "explicit_questions": 2,
+        "detailed_review_units": 27,
+        "categories": {
+          "direct": 22,
+          "same-meaning-view": 2,
+          "duplicate-noise": 1,
+          "business-question": 2
+        }
+      },
+      "Y": {
+        "unicode_characters": 7722,
+        "check_ids": 25,
+        "explicit_questions": 1,
+        "detailed_review_units": 26,
+        "categories": {
+          "direct": 20,
+          "duplicate-noise": 4,
+          "same-meaning-view": 1,
+          "business-question": 1
+        }
+      }
+    },
+    "facilities-maintenance": {
+      "X": {
+        "unicode_characters": 8342,
+        "check_ids": 27,
+        "explicit_questions": 0,
+        "detailed_review_units": 27,
+        "categories": {
+          "direct": 25,
+          "duplicate-noise": 2
+        }
+      },
+      "Y": {
+        "unicode_characters": 7821,
+        "check_ids": 27,
+        "explicit_questions": 0,
+        "detailed_review_units": 27,
+        "categories": {
+          "direct": 24,
+          "same-meaning-view": 1,
+          "duplicate-noise": 2
+        }
+      }
+    }
+  }
+}

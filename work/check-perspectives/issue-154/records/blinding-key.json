@@ -1,0 +1,6 @@
+{
+  "purchase-request-X": "purchase-request-treatment",
+  "purchase-request-Y": "purchase-request-control",
+  "facilities-maintenance-X": "facilities-maintenance-control",
+  "facilities-maintenance-Y": "facilities-maintenance-treatment"
+}
