@@ -2,7 +2,7 @@
 
 [Back to Alder](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/README.md) · [Why this loop](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/philosophy.md)
 
-The [Alder Plugin](https://github.com/mk3008/alder/blob/e12298a18a65ade9446403c93eb18d34fe16adac/docs/plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. The plugin includes the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its expanded ten-skill routing, combined implementation-review/follow-up route and agent-driven script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
+The [Alder Plugin](https://github.com/mk3008/alder/blob/993b585978987653e0c453b398786e7dfae16358/docs/plugin-adoption.md) bundles the guidance for Business Design drafting/revision and review, Check Item drafting/maintenance, optional structural and functional questions, Optimization Review, implementation review and its separate follow-up. The plugin includes the deterministic graph exporter and the explicitly opt-in, restricted drift pilot. Its expanded ten-skill routing, combined implementation-review/follow-up route and agent-driven script execution in a real client remain unverified; the earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. Supply your readable product inputs; no manual selection or copying of Alder's internal guidance is needed for the plugin route.
 
 Alder assumes an AI agent performs implementation, followed by a separate agent or fresh context for review. The manual workflow requires no installer, runtime dependency, proprietary DSL, submodule, or dedicated configuration. In either route, the reviewer needs readable Business Design; the plugin bundles its review knowledge, while the manual route needs access to the selected Alder review knowledge.
 
@@ -176,7 +176,7 @@ The pair is current human-recorded business information. An AI-generated candida
 
 ## 2. Point the agent to the design and review knowledge
 
-The plugin routes the request and bundles its guidance. For `docs/business-design/`, no Alder-specific AGENTS.md entry is needed; specify a different design path when used. See [Product setup](https://github.com/mk3008/alder/blob/e12298a18a65ade9446403c93eb18d34fe16adac/docs/plugin-adoption.md#product-setup).
+The plugin routes the request and bundles its guidance. For `docs/business-design/`, no Alder-specific AGENTS.md entry is needed; specify a different design path when used. See [Product setup](https://github.com/mk3008/alder/blob/993b585978987653e0c453b398786e7dfae16358/docs/plugin-adoption.md#product-setup).
 
 For additional project-specific implementation instructions, AGENTS.md can route the agent. Adapt this example to your workspace:
 
