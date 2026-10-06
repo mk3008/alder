@@ -70,37 +70,39 @@ Receipt is confirmed by the equipment-number/accessory check and return-time rec
 
 Starting from this Business Design, you can check Business Design description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
 
-## Connect business meaning to verification with fewer artifacts
+## Alder artifacts
 
-Alder keeps business meaning in **Business Design that people can read, correct, and agree on**. Rather than repeat that meaning in a separate detailed-design document, implementation, DDL, and Tests make technical details concrete. This avoids adding documents that must be synchronized and maintained. Material implementation choices and their reasons remain in Decision Records.
+The main artifacts Alder creates and hands over for implementation are Business Design and Check Items.
 
-Derivable views and machine representations such as Graph JSON are generated from the source of truth when needed. A machine-only representation that people cannot review, or a fingerprint, does not replace business authority or agreement.
+- **Business Design** describes business procedures, inputs, outputs, and results. It is the authoritative business document that requesters and designers read, revise, and agree on.
+- **Check Items** organize the conditions and expected results the system must satisfy, based on the agreed business design. Each item retains references to its business source and, after implementation, the tests that verify it.
 
-### Connect business work and Tests through Check Items
+Implementation uses these two artifacts to create code, DDL, and tests, with important implementation decisions and their reasons captured in Decision Records. Technical details take shape in the implementation rather than repeating the same business meaning in a separate detailed-design document. This avoids adding documents that must be synchronized and maintained.
 
-A Check Item is **one independently reviewable expectation**. Its stable ID (for example, `CK-01`) connects the condition and expected result to Business Design evidence and representative Tests/assertions. Design references use human-readable identifiers such as Activity names, pointing to a Procedure or Result when needed. Activities do not require fixed machine IDs.
+Derivable information, such as views and Graph JSON, is generated from the source of truth when needed. Machine-only representations that people cannot review for meaning, and fingerprints, do not replace the business source of truth or human agreement.
 
-<a href="docs/images/traceability-model.en.png"><img src="docs/images/traceability-model.en.png" alt="Conceptual traceability model, not a database schema: Business Design work and Check Items have a many-to-many (N:M) relationship, as do Check Items and automated Tests. Stable Check IDs connect business evidence and test assertions, allowing reverse navigation from Test to business meaning." width="640"></a>
+### Artifact relationships
 
-One activity can support several Checks, and one Check can draw on several activities. Test relationships are many-to-many too. Checks provide the bridge for asking why a Test exists. Mappings to newly written Tests are maintained in the post-implementation review and follow-up, after design handoff.
+Business Design and tests are connected through Check Items. Each item records two kinds of references:
 
-### Verify Code by executing Tests
+- **Business Design references** identify the source of the item's conditions and expected results. They use the source document and human-readable identifiers such as Activity names, pointing to a Procedure or Result when needed. Activities do not require fixed machine IDs.
+- **Test references** identify representative tests and assertions that verify those conditions and expected results. The test name and its location identify the test.
 
-Permanent traceability stops at Test. A Test is executable evidence: running it checks whether Code meets the Check's condition and expected result.
+<a href="docs/images/traceability-model.en.png"><img src="docs/images/traceability-model.en.png" alt="Conceptual artifact relationships, not a database schema. Business Design, a Check Item list, and tests are connected by many-to-many (N:M) relationships. Each card shows an identifying key, an example, and a summary. Business Design carries the green SSOT badge. Check Item creation and update skills maintain references to the source document and Activity name. During record maintenance after implementation review, AI compares conditions and expected results with test assertions and records the corresponding test names and what they verify. These references support reverse navigation from tests through Check Items to Business Design." width="640"></a>
 
-<a href="docs/images/traceability-execution.en.png"><img src="docs/images/traceability-execution.en.png" alt="Maintain traceability between Business Design, Check Items, and automated Tests. Tests execute and verify Code. There is no permanent mapping from Business Design or Checks to Code files, symbols, SQL, or lines." width="640"></a>
+The links between Business Design and Check Items, and between Check Items and tests, are each many-to-many (N:M). One Check Item can draw on several business activities or be verified by several tests. One activity or test can also relate to several Check Items.
 
-Code can be refactored without updating a permanent file/symbol/SQL/line map, provided business meaning and what the Tests verify are preserved. When implementation review needs to inspect Code, it locates it through current Test/runtime paths or repository exploration. That investigation is temporary diagnostic work. **A passing Test is insufficient evidence if its assertions do not adequately cover the condition and expected result.**
+These relationships let you find the tests that verify a business expectation and trace a test back to the business reason behind it.
 
-### Recheck meaning after changes
+See [Check Item traceability](docs/check-item-traceability.md) for when and how these relationships are recorded.
 
-In the standard workflow, AI reads current Business Design and Checks to assess whether the expectations follow from business meaning. After implementation, it reads Test assertions to assess whether they verify the conditions and expected results. Matching names or passing Tests alone do not establish the relationship. Gaps such as `partial / missing evidence` are recorded separately from unresolved business meaning.
+### Code and Alder artifacts
 
-<a href="docs/images/traceability-drift.en.png"><img src="docs/images/traceability-drift.en.png" alt="The standard workflow semantically compares Business Design with Checks and Checks with Test assertions. The optional, restricted drift pilot compares last-reconciled and current fingerprints of business sources and Check bodies to identify relationships needing rechecking. A mismatch is not a proven error." width="640"></a>
+Agreed Business Design and reviewed Check Items are handed over for implementation together with system requirements. Code is built from these inputs, and tests are run to check whether it satisfies the conditions and expected results. Maintained traceability stops at the test boundary.
 
-The optional drift pilot narrows recheck candidates by comparing current business-source and Check-body fingerprints with those saved at the last reconciliation. A mismatch signals a change since that check, not a proven error. This restricted PoC requires compatible inputs and saved mappings. It neither tracks arbitrary Activity Markdown nor imposes a mandatory check. Matching fingerprints do not guarantee semantic alignment or adequate assertions.
+<a href="docs/images/traceability-execution.en.png"><img src="docs/images/traceability-execution.en.png" alt="Maintained relationships connect Business Design, Check Items, and tests. Blue dashed lines show implementation inputs from Business Design, Check Items, and system requirements to code. The green arrow shows tests executing and verifying code. The business rationale for the code can be traced through tests and Check Items to Business Design." width="640"></a>
 
-See [Check Item traceability](docs/check-item-traceability.md) and the [optional drift pilot's prerequisites and limits](docs/traceability-drift/study.md).
+A direct mapping between code and Business Design is not maintained. Trace the business rationale through tests and their Check Items instead.
 
 
 ## Standard workflow

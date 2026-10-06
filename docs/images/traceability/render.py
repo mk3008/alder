@@ -7,9 +7,9 @@ Run from any directory:
 Requires Pillow and Noto Sans CJK JP (regular and bold TTC files). The default
 font directory is the Debian/Ubuntu fonts-noto-cjk location; --font-dir can
 select another installation. Rendering performs no network access. Each source
-canvas is 640 logical pixels wide. Japanese images use the creation-workflow
-scale (1160px source width); English images retain their existing 1280px width.
-Japanese typography is derived from the 1160px creation-workflow original:
+canvas is 640 logical pixels wide. Model and execution diagrams in both languages
+use the creation-workflow scale (1160px source width), as does Japanese drift.
+English drift retains its existing 1280px width. Creation-workflow typography:
 49px title / 35px card heading / 27px body, all displayed at README width=640.
 All text is checked against its allotted width.
 """
@@ -309,75 +309,85 @@ def drift_ja():
     return c
 
 
-def model(lang):
-    if lang == "ja":
-        return model_ja()
-    ja = lang == "ja"
-    c = Canvas(808)
-    c.title("業務の意味と検証をつなぐ" if ja else "Trace meaning in both directions",
-            "概念モデル：多対多の追跡関係" if ja else "Conceptual model · many-to-many relationships")
-    c.rect(24, 107, 592, 677, radius=14)
-    entity(c, 127, 143, "Business Design", "document", badge="SSOT")
-    c.text(66, 194, "Activity名（例：予約を受け付ける）" if ja
-           else "Activity name: e.g. “Accept a booking”", 20, max_width=507)
-    c.text(66, 231, "人が読める記述で参照。固定IDは不要" if ja
-           else "Readable references; no fixed ID required", 19, color="muted", max_width=507)
-    relation(c, 278, 329, "根拠" if ja else "Source")
-    entity(c, 338, 185, "Check Item", "check", fill="blue", ink="blue_ink",
-           badge="安定ID  CK-01" if ja else "Stable ID  CK-01")
-    c.text(66, 406, "条件 ＋ 独立してレビューできる期待結果" if ja
-           else "Condition + one reviewable expected result", 20, max_width=507)
-    c.text(66, 447, "根拠：Activity / Procedure / Result" if ja
-           else "Source: Activity / Procedure / Result", 19, color="muted", max_width=507)
-    c.text(66, 481, "検証根拠：代表Test / assertion" if ja
-           else "Evidence: representative Test / assertion", 19, color="muted", max_width=507)
-    relation(c, 531, 582, "検証根拠" if ja else "Test evidence")
-    entity(c, 591, 118, "Automated Test", "play", fill="green", ink="green_ink")
-    c.text(66, 662, "Checkの条件・期待結果をassertionで検証" if ja
-           else "Assertions verify the Check’s condition + result", 19, max_width=507)
-    c.text(320, 738, "Check Itemが双方向の追跡を中継する" if ja
-           else "Check Items connect the references both ways", 20, True,
-           "green_ink", max_width=540, center=True)
+def model_en():
+    c = JapaneseCanvas(890)
+    c.title("Artifact relationships", "Conceptual model: many-to-many relationships")
+    c.rect(39, 97, 574, 770, radius=13, width=1.1)
+    ja_entity(c, 113, 140, "Business Design", "document", badge=True)
+    c.text(74, 166, "Identifier: Activity name within the document", 15.45, True, max_width=503)
+    c.text(74, 193, "Example: Accept a booking", 14.9, color="muted", max_width=503)
+    c.text(74, 223, "Describes business steps, inputs, outputs, and results", 14.9, max_width=503)
+    ja_relation(c, 261, 299, "Derive expected results")
+    ja_entity(c, 308, 318, "Check Item list", "check", "blue", "blue_ink")
+    c.text(74, 361, "Item identifier: Check ID (stable key)", 15.45, True, "blue_ink", max_width=503)
+    c.text(74, 386, "Example: CK-01", 14.9, color="muted", max_width=503)
+    c.text(74, 411, "Independently reviewable conditions and expected results", 14.9, max_width=503)
+    c.line([(74, 435), (577, 435)], "line", 1.1)
+    c.text(74, 450, "• Links to Business Design", 15.45, True, "blue_ink", max_width=503)
+    c.text(88, 474, "Drafting and update skills maintain references", 14.9, max_width=489)
+    c.text(88, 495, "to the source document and Activity name.", 14.9, max_width=489)
+    c.text(74, 524, "• Links to tests", 15.45, True, "blue_ink", max_width=503)
+    c.text(88, 548, "When using the record-update skill after implementation review,", 14.9, max_width=489)
+    c.text(88, 569, "AI compares conditions and expected results with what tests verify,", 14.9, max_width=489)
+    c.text(88, 590, "then records the matching test names and what they verify.", 14.9, max_width=489)
+    ja_relation(c, 634, 672, "Verify expected results")
+    ja_entity(c, 680, 140, "Tests", "play", "green", "green_ink")
+    c.text(74, 733, "Identifier: test name", 15.45, True, "green_ink", max_width=503)
+    c.text(74, 758, "Example: test_accept_booking", 14.9, color="muted", max_width=503)
+    c.text(74, 783, "Run code to verify conditions and expected results", 14.9, max_width=503)
+    c.text(326, 842, "Tests trace back through Check Items to the SSOT.", 16.55, True,
+           "green_ink", max_width=535, center=True)
     return c
+
+
+def execution_en():
+    c = JapaneseCanvas(576)
+    c.title("Code and Alder artifacts", "Maintained traceability ends at tests")
+    c.rect(39, 97, 574, 271, radius=13, width=1.1)
+    c.text(58, 113, "Maintained traceability", 17.65, True, "muted", max_width=535)
+    for y, title, kind, fill, ink in [(148, "Business Design", "document", "gray", "ink"),
+                                     (221, "Check Item list", "check", "blue", "blue_ink"),
+                                     (294, "Tests", "play", "green", "green_ink")]:
+        c.rect(58, y, 535, 44, fill, "line", radius=10, width=1.1)
+        ja_icon(c, kind, 74, y + 12, ink if ink != "ink" else "muted")
+        size = 35 * 640 / 1160
+        bbox = c.draw.textbbox((0, 0), title, font=font(size, True), anchor="lt")
+        c.text(108, y + 22 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2, title, size, True, ink)
+    c.rect(515, 157, 62, 25, "green", "green_line", radius=6, width=1.1)
+    c.text(546, 163, "SSOT", 13.8, True, "green_ink", center=True, max_width=50)
+    c.arrow(326, 198, 215, True, width=1.65)
+    c.arrow(326, 271, 288, True, width=1.65)
+    # Blue dashed one-way input flow is not a maintained Code mapping.
+    def input_line(x1, y1, x2, y2):
+        distance = abs(x2 - x1) + abs(y2 - y1)
+        for start in range(0, int(distance), 11):
+            end = min(start + 6, distance)
+            c.line([(x1 + (x2-x1)*start/distance, y1 + (y2-y1)*start/distance),
+                    (x1 + (x2-x1)*end/distance, y1 + (y2-y1)*end/distance)], "blue_ink", 1.65)
+    for segment in [(58, 170, 21, 170), (58, 243, 21, 243),
+                    (21, 170, 21, 480), (21, 480, 58, 480)]:
+        input_line(*segment)
+    c.line([(51, 475), (58, 480), (51, 485)], "blue_ink", 1.65)
+    c.text(58, 385, "Code inputs (blue dashed)", 15.45, True, "blue_ink", max_width=245)
+    c.text(58, 408, "Business Design + Check Items", 14.9, color="blue_ink", max_width=245)
+    c.text(58, 431, "+ system requirements", 14.9, color="blue_ink", max_width=245)
+    c.arrow(326, 346, 438, color="green_ink", width=1.9)
+    c.text(346, 397, "Execute and verify", 19.3, True, "green_ink", max_width=230)
+    c.rect(58, 448, 535, 64, "gray", "line", radius=10, width=1.1)
+    ja_icon(c, "code", 74, 462)
+    c.text(108, 463, "Code", 19.3, True)
+    c.text(108, 490, "Implements business logic", 14.9, color="muted", max_width=465)
+    c.text(326, 537, "Tests verify code, enabling indirect tracing to Business Design.", 14.9,
+           color="green_ink", center=True, max_width=535)
+    return c
+
+
+def model(lang):
+    return model_ja() if lang == "ja" else model_en()
 
 
 def execution(lang):
-    if lang == "ja":
-        return execution_ja()
-    ja = lang == "ja"
-    c = Canvas(823)
-    c.title("Testが実行でCodeを検証する" if ja else "Tests verify Code by execution",
-            "恒久トレーサビリティはTestまで" if ja else "Permanent traceability ends at Test")
-    c.rect(24, 107, 592, 331, radius=14)
-    c.text(48, 125, "保守する追跡関係" if ja else "Maintained traceability", 21, True, "muted")
-    for y, title, kind, fill, ink in [(166, "Business Design", "document", "gray", "ink"),
-                                      (260, "Check Item", "check", "blue", "blue_ink"),
-                                      (354, "Automated Test", "play", "green", "green_ink")]:
-        c.rect(48, y, 544, 58, fill, "line")
-        c.icon(kind, 68, y + 16, ink if ink != "ink" else "muted")
-        c.text(108, y + 15, title, 24, True, ink)
-    c.arrow(320, 230, 253, True)
-    c.arrow(320, 324, 347, True)
-    c.dashed(40, 294, 460)
-    c.dashed(346, 600, 460)
-    c.arrow(320, 421, 514, color="green_ink", width=2.5)
-    c.text(344, 468, "実行して検証" if ja else "Execute + verify", 22, True, "green_ink", max_width=250)
-    c.rect(48, 523, 544, 118, "gray", "line")
-    c.icon("code", 68, 541)
-    c.text(108, 539, "Code", 25, True)
-    c.text(68, 585, "file / symbol / SQL / line", 20, color="muted", max_width=504)
-    c.text(68, 614, "物理位置の対応表は保守しない" if ja
-           else "No permanent physical-location map", 18, color="muted", max_width=504)
-    c.text(48, 665, "レビュー時は実行経路やリポジトリを探索" if ja
-           else "Review explores current runtime paths / repository", 19, color="muted", max_width=544)
-    c.text(48, 695, "必要なときだけ調べる。一時的な診断として扱う" if ja
-           else "Temporary diagnosis, only when needed", 19, color="muted", max_width=544)
-    c.rect(48, 738, 544, 63, "yellow", "yellow_line", radius=10)
-    c.text(64, 749, "passだけでは、Checkを証明できない" if ja
-           else "Passing alone does not prove a Check", 21, True, "yellow_ink", max_width=513)
-    c.text(64, 778, "assertionが条件・期待結果まで確認していること" if ja
-           else "Assertions must cover its condition + expected result", 18, color="yellow_ink", max_width=513)
-    return c
+    return execution_ja() if lang == "ja" else execution_en()
 
 
 def drift(lang):
