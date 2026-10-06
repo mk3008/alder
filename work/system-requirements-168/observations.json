@@ -1,0 +1,42 @@
+{
+  "case01": {
+    "persisted_keys": [
+      "customer_key",
+      "event",
+      "request_id"
+    ],
+    "SR1_conforms": false
+  },
+  "case02": {
+    "forged_header_response": 200,
+    "business_authority_and_SR2_conform": false
+  },
+  "case03": {
+    "response": {
+      "case_id": "c1",
+      "status": "accepted"
+    },
+    "SR3_conforms": false
+  },
+  "case04": {
+    "old_reader_after_up": false,
+    "old_reader_error": "no such column: legacy_title",
+    "new_reader_rows": [
+      [
+        "c1",
+        "Help"
+      ]
+    ],
+    "down_restores_old_rows": true,
+    "SR4_coexistence_conforms": false
+  },
+  "case05": {
+    "planned_downtime_conforms": true,
+    "stated_restore_duration_conforms": true,
+    "restore_point_interval_conforms": false,
+    "production_observed": false
+  },
+  "case06": {
+    "unchanged_behavior": true
+  }
+}
