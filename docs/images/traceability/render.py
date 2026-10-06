@@ -239,34 +239,50 @@ def model_ja():
 
 
 def execution_ja():
-    c = JapaneseCanvas(705)
-    c.title("Testが実行でCodeを検証する", "恒久トレーサビリティはTestまで")
+    c = JapaneseCanvas(712)
+    c.title("設計をコードにし、テストで確かめる", "記録する対応はテストまで")
     c.rect(39, 97, 574, 271, radius=13, width=1.1)
-    c.text(58, 113, "保守する追跡関係", 17.65, True, "muted", max_width=535)
-    for y, title, kind, fill, ink in [(148, "Business Design", "document", "gray", "ink"),
-                                     (221, "Check Item", "check", "blue", "blue_ink"),
-                                     (294, "Automated Test", "play", "green", "green_ink")]:
+    c.text(58, 113, "記録しておく対応関係", 17.65, True, "muted", max_width=535)
+    for y, title, kind, fill, ink in [(148, "業務設計書", "document", "gray", "ink"),
+                                     (221, "チェック項目リスト", "check", "blue", "blue_ink"),
+                                     (294, "テスト", "play", "green", "green_ink")]:
         c.rect(58, y, 535, 44, fill, "line", radius=10, width=1.1)
         ja_icon(c, kind, 74, y + 12, ink if ink != "ink" else "muted")
         size = 35 * 640 / 1160
         bbox = c.draw.textbbox((0, 0), title, font=font(size, True), anchor="lt")
         c.text(108, y + 22 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2, title, size, True, ink)
+    c.rect(515, 157, 62, 25, "green", "green_line", radius=6, width=1.1)
+    c.text(546, 163, "SSOT", 13.8, True, "green_ink", center=True, max_width=50)
     c.arrow(326, 198, 215, True, width=1.65)
     c.arrow(326, 271, 288, True, width=1.65)
-    c.dashed(58, 303, 385)
-    c.dashed(349, 593, 385)
+    # Blue dashed one-way input flow is not a maintained Code mapping.
+    def input_line(x1, y1, x2, y2):
+        distance = abs(x2 - x1) + abs(y2 - y1)
+        for start in range(0, int(distance), 11):
+            end = min(start + 6, distance)
+            c.line([(x1 + (x2-x1)*start/distance, y1 + (y2-y1)*start/distance),
+                    (x1 + (x2-x1)*end/distance, y1 + (y2-y1)*end/distance)], "blue_ink", 1.65)
+    for segment in [(58, 170, 21, 170), (58, 243, 21, 243),
+                    (21, 170, 21, 480), (21, 480, 58, 480)]:
+        input_line(*segment)
+    c.line([(51, 475), (58, 480), (51, 485)], "blue_ink", 1.65)
+    c.text(58, 385, "実装の入力（青点線）", 15.45, True, "blue_ink", max_width=245)
+    c.text(58, 408, "業務設計書・チェック項目", 14.9, color="blue_ink", max_width=245)
+    c.text(58, 431, "＋システム要件", 14.9, color="blue_ink", max_width=245)
     c.arrow(326, 346, 438, color="green_ink", width=1.9)
     c.text(346, 397, "実行して検証", 19.3, True, "green_ink", max_width=230)
-    c.rect(58, 448, 535, 96, "gray", "line", radius=10, width=1.1)
+    c.rect(58, 448, 535, 64, "gray", "line", radius=10, width=1.1)
     ja_icon(c, "code", 74, 462)
-    c.text(108, 463, "Code", 19.3, True)
-    c.text(74, 495, "file / symbol / SQL / line", 15.45, color="muted", max_width=503)
-    c.text(74, 520, "物理位置の対応表は保守しない", 14.9, color="muted", max_width=503)
-    c.text(58, 565, "レビュー時は実行経路やリポジトリを探索", 14.9, color="muted", max_width=535)
-    c.text(58, 588, "必要なときだけ調べる。一時的な診断として扱う", 14.9, color="muted", max_width=535)
-    c.rect(58, 627, 535, 57, "yellow", "yellow_line", radius=8, width=1.1)
-    c.text(74, 638, "passだけでは、Checkを証明できない", 17.65, True, "yellow_ink", max_width=503)
-    c.text(74, 662, "assertionが条件・期待結果まで確認していること", 14.9, color="yellow_ink", max_width=503)
+    c.text(108, 463, "コード", 19.3, True)
+    c.text(108, 490, "業務の処理を実装", 14.9, color="muted", max_width=465)
+    c.text(326, 537, "コードの業務上の根拠は、テストを起点に確認", 14.9,
+           color="green_ink", center=True, max_width=535)
+    c.text(326, 562, "テスト → チェック項目 → 業務設計書（SSOT）", 16.55, True,
+           "green_ink", center=True, max_width=535)
+    c.rect(58, 605, 535, 84, "blue", "blue_line", radius=8, width=1.1)
+    c.text(74, 617, "Alderレビューで対応を確認", 17.65, True, "blue_ink", max_width=503)
+    c.text(74, 645, "テストの検証内容が、チェック項目の", 14.9, color="blue_ink", max_width=503)
+    c.text(74, 666, "条件・期待結果に対応しているかを確かめる", 14.9, color="blue_ink", max_width=503)
     return c
 
 
