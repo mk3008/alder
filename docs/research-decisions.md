@@ -39,6 +39,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 | Candidate / question | Current disposition | Detail |
 | --- | --- | --- |
+| 変更リスクによる追加の人間ゲート / 固定Risk分類 | Inconclusive / deferred; current workflow retained | [変更リスクと人間ゲート](#変更リスクと人間ゲート) |
 | Item-level Business Design / Check / Test freshness | Optional bounded pilot; universal tooling deferred | [Traceability drift](#item-level-traceability-drift) |
 | Scope-First as a new architecture or repository contract | Existing concepts sufficient; candidate contract not adopted | [Scope and placement](#scope-and-placement) |
 | Architecture labels and semantic ownership across structural ranges | Inconclusive / deferred; historical checkpoint | [Scope and placement](#scope-and-placement) |
@@ -240,3 +241,9 @@ Reconsider broader differentiation after a separately fixed study with symmetric
 For new research decisions, follow [the index maintenance policy](evaluation-plan.md#research-decision-index-maintenance). Current validation summarizes demonstrated scope and open questions; this index maps candidate-level decisions, including rejected and historical work. Neither replaces the original evidence.
 
 For adopted decisions that affect user behavior, also provide a [user-facing explanation and navigation](research-publication.md) when warranted; the index and original research remain the evidence, not a substitute for that explanation.
+
+## 変更リスクと人間ゲート
+
+[Issue #166](https://github.com/mk3008/alder/issues/166) / [研究とraw証跡](../work/risk-gates/issue-166/README.md): **Inconclusive / deferred.** 6系統12合成ケースを分類式・直接式それぞれ2 Fresh contextで評価し、全ケースでゲート結論が一致した。与えられた事実の範囲では危険な継続や局所変更への追加ブロッカーを観測しなかったが、両方式とも既存のBusiness confirmationを追加ゲートとして数え得る曖昧さが残った。固定Risk fieldや一律の新承認工程を導入する根拠は得ていない。現行規則を維持し、既存所見に「残る判断・担当・止める段階」を示す最小補足は人間の採否に委ねる。
+
+現行の[詳細設計原則](detailed-design.ja.md)とP2 / Sによる業務意味・可逆性・外部責任の区別を適用する設計候補で、新しい安全保証ではない。反映先は現時点で研究記録のみ。潜在経路を実repoから発見する精度、現行guidanceとの差、実際の認知負荷・時間・事故率は未検証。4実行48判断は4独立contextであり、実効モデル設定は独立検証できない。採用する場合は別Taskで最小guidanceと評価を扱い、既存人間合意・Check確認・権限・自動検証は省略しない。
