@@ -344,9 +344,13 @@ Use the repository’s existing location and format for Decision Records, or a s
 
 ## 4. Run a separate Alder review after implementation (outside the standard design business)
 
-This is the **required post-implementation review in the current Alder development loop**, separate from the standard design business that ends at handoff. Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. With the plugin enabled, identify the design and implementation revisions and scope, make documented decisions readable, and ask in a new chat: “コードをAlderでレビューして”. The plugin reads **Business Design → Decision Records → implementation / DDL / Test** using its bundled review knowledge and discovers the conventional design path; specify another path or a target when needed. With a package supporting combined requests, ask “Alderで実装をレビューして、チェックとテストの対応も更新して” to run the independent read-only stage and then maintain the requested Check ↔ Test/assertion mappings and evidence gaps in one interaction. The orchestrating agent performs authorized record maintenance after the separate reviewer returns; the reviewer itself remains read-only. “レビューだけ” and an ordinary review request without update authorization do not write. Record-only follow-up remains available without a new review. If the host cannot run a separate context, it reports the missing independent stage instead of substituting self-review or starting combined-workflow writes. This separation is not an additional rule in review knowledge v0.3.
+This is the **required post-implementation review in the current Alder development loop**, separate from the standard design business that ends at handoff. Use a separate agent or fresh context so that implementation assumptions are not simply carried forward as justification. With the plugin enabled, identify the design and implementation revisions and scope, make documented decisions and provided System Requirements (SR), including their sources, revisions and applicable scope, readable, and ask in a new chat: “コードをAlderでレビューして”. The plugin reads **Business Design → Decision Records / confirmed Checks / provided SR → implementation / DDL / Test / available execution evidence** using its bundled review knowledge and discovers the conventional design path; specify another path or a target when needed. With a package supporting combined requests, ask “Alderで実装をレビューして、チェックとテストの対応も更新して” to run the independent read-only stage and then maintain the requested Check ↔ Test/assertion mappings and evidence gaps in one interaction. The orchestrating agent performs authorized record maintenance after the separate reviewer returns; the reviewer itself remains read-only. “レビューだけ” and an ordinary review request without update authorization do not write. Record-only follow-up remains available without a new review. If the host cannot run a separate context, it reports the missing independent stage instead of substituting self-review or starting combined-workflow writes. This separation is not an additional rule in review knowledge v0.3.
 
 When implementation or DDL fixes grouping, optionality, identity, retention, uniqueness or the unit of work, apply P2/Q3 to its **effect on allowed business states and downstream guarantees**. A table layout alone is a technical choice; a structure that prevents a stated multi-item order is a mismatch; an unconfirmed partial-approval policy is a focused Business question. Do not treat an absent ER relationship description in Business Design as a defect by itself.
+
+The independent review checks provided SR constraints relevant to the change; the product remains responsible for SR authoring, validity and completeness. Preserve the SR version used for implementation and its applicable scope alongside project instructions and decisions so a history-free reviewer can find the same constraints. Missing or unreadable SR leaves that part unverified, not requirement-free; scope-based non-applicability needs a reason. Code inspection, passing tests and configuration targets do not establish unobserved operational guarantees.
+
+Keep business meaning in Business Design and technical constraints in their supplied sources. If they are ambiguous or conflict, retain both, explain the impact and ask the relevant business/technical owner for the smallest needed decision. Continue unaffected review; do not require a general NFR checklist, SR Check ledger, Risk classification or new human gate. If a source revision or scope changes, retain the old review pin and re-review affected scope before relying on its conclusion or updating dependent records.
 
 ### Manual/reference review prompt
 
@@ -355,18 +359,19 @@ For clients without the plugin or for reproducibility, provide a readable, revis
 ```text
 Review the current implementation against the relevant Business Design using Alder review knowledge v0.3 from the selected Alder revision. Review only; do not modify files.
 
-Business Design: <path and revision>
+Business Design / confirmed Checks: <paths and revisions>
+Project instructions / decisions / provided SR: <readable sources, revisions and applicable scope, including SR used for implementation; distinguish not provided, unreadable and not applicable>
 Implementation: <path and revision or precise working-tree scope>
 Review knowledge: <readable path or versioned URL and revision>
 
 Read in this order:
 1. Business Design
-2. Decision Records / documented assumptions
-3. implementation, DDL, and tests
+2. Project instructions / Decision Records / documented assumptions / confirmed Checks / provided SR
+3. implementation, DDL, tests and available execution evidence
 
 Apply the referenced review knowledge, including its boundaries and stopping conditions. Check whether the implemented work can continue truthfully, whether constraints have explainable causes and remaining effects, and whether meaning, conditions, units of work, authority, and guarantees connect across preceding and subsequent activities.
 
-Walk through representative work from each participant's perspective, then trace business-significant choices in the implementation back to the Business Design.
+Walk through representative work from each participant's perspective, then trace business-significant choices in the implementation back to the Business Design. Compare provided SR constraints relevant to this change against the implementation and evidence; cite the clause and any evidence gap. Do not claim SR completeness or unobserved operational guarantees. Preserve BD/SR ambiguity or conflict and ask the relevant owners for the smallest decision; continue unaffected work. Keep missing SR unverified and explain scoped non-applicability. Re-review affected scope if an input revision or scope changes before claiming current conformity.
 
 For each important finding, report:
 - evidence
