@@ -142,36 +142,37 @@ def relation(c, top, bottom, label):
 
 
 def model_ja():
-    c = Canvas(1088)
+    c = Canvas(1115)
     c.title("成果物の相関", "概念モデル：多対多の追跡関係")
-    c.rect(24, 107, 592, 957, radius=14)
-    entity(c, 127, 176, "Business Design", "document", badge="SSOT",
+    c.rect(24, 107, 592, 984, radius=14)
+    entity(c, 127, 176, "業務設計書", "document", badge="SSOT",
            center_header=True, green_badge=True)
     c.text(66, 194, "識別キー：文書内のActivity名", 20, True, max_width=507)
     c.text(66, 230, "例：予約を受け付ける", 19, color="muted", max_width=507)
     c.text(66, 268, "業務の手順・入出力・結果を記した文書", 19, max_width=507)
     relation(c, 311, 362, "期待結果を導く")
-    entity(c, 371, 380, "Check Item", "check", fill="blue", ink="blue_ink",
+    entity(c, 371, 407, "チェック項目リスト", "check", fill="blue", ink="blue_ink",
            center_header=True)
-    c.text(66, 438, "識別キー：Check ID（安定キー）", 20, True,
+    c.text(66, 438, "各項目の識別キー：Check ID（安定キー）", 20, True,
            color="blue_ink", max_width=507)
     c.text(66, 474, "例：CK-01", 19, color="muted", max_width=507)
-    c.text(66, 512, "独立して確認できる、条件と期待結果", 19, max_width=507)
+    c.text(66, 512, "独立して確認できる、条件と期待結果の一覧", 19, max_width=507)
     c.line([(66, 546), (574, 546)], "line", 1)
-    c.text(66, 561, "・Business Designとの結合", 19, True, "blue_ink", max_width=507)
+    c.text(66, 561, "・業務設計書との結合", 19, True, "blue_ink", max_width=507)
     c.text(84, 592, "作成・更新スキル利用時に、", 18, max_width=489)
     c.text(84, 619, "文書とActivity名を紐づけて管理", 18, max_width=489)
     c.text(66, 661, "・テストとの結合", 19, True, "blue_ink", max_width=507)
     c.text(84, 692, "実装レビュー後の記録更新スキル利用時に、", 18, max_width=489)
-    c.text(84, 719, "テスト名と検証内容を紐づけて管理", 18, max_width=489)
-    relation(c, 759, 810, "期待結果を検証")
-    entity(c, 819, 176, "テスト", "play", fill="green", ink="green_ink",
+    c.text(84, 719, "AIが条件・期待結果とテストの検証内容を照合し、", 18, max_width=489)
+    c.text(84, 746, "対応するテスト名・検証内容を記録", 18, max_width=489)
+    relation(c, 786, 837, "期待結果を検証")
+    entity(c, 846, 176, "テスト", "play", fill="green", ink="green_ink",
            center_header=True)
-    c.text(66, 886, "識別キー：テスト名", 20, True,
+    c.text(66, 913, "識別キー：テスト名", 20, True,
            color="green_ink", max_width=507)
-    c.text(66, 922, "例：test_accept_booking", 19, color="muted", max_width=507)
-    c.text(66, 960, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
-    c.text(320, 1021, "テストもCheck Itemを経由してSSOTまで遡れる", 20, True,
+    c.text(66, 949, "例：test_accept_booking", 19, color="muted", max_width=507)
+    c.text(66, 987, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
+    c.text(320, 1048, "テストもチェック項目を経由してSSOTまで遡れる", 20, True,
            "green_ink", max_width=540, center=True)
     return c
 
