@@ -1,0 +1,53 @@
+{
+  "installed_skill_source": "skills.read c0/alder-draft-business-design and c0/alder-review-business-design",
+  "release": "plugin-v0.4.4",
+  "release_commit": "eb177dab8d30383f0a5e084ad22a8eca59455d27",
+  "authoring_guidance_revision": "02093f4d4e957ae851f7812e958aab3827190f31",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "release_byte_equal": true
+    },
+    {
+      "path": "plugin.json",
+      "sha256": "b6d4e02e3382e50d939b1f2947b49cbe71176042fe45545de597289ed4907a68",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-draft-business-design/LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-draft-business-design/SKILL.md",
+      "sha256": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-draft-business-design/references/adoption.md",
+      "sha256": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-draft-business-design/references/business-graph.md",
+      "sha256": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-draft-business-design/references/provenance.json",
+      "sha256": "89ef696d829d4b3e33647fb8a4e34593da32346fbc7c06c531fcaddb000b2451",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0",
+      "release_byte_equal": true
+    },
+    {
+      "path": "skills/alder-review-business-design/references/provenance.json",
+      "sha256": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc",
+      "release_byte_equal": true
+    }
+  ]
+}
