@@ -39,6 +39,7 @@ Alder organizes established software engineering practices into a small AI-assis
 
 | Candidate / question | Current disposition | Detail |
 | --- | --- | --- |
+| Provided System Requirements handoff | Minimal clarification adopted; completeness remains product-owned | [System Requirements handoff](#system-requirements-handoff) |
 | Item-level Business Design / Check / Test freshness | Optional bounded pilot; universal tooling deferred | [Traceability drift](#item-level-traceability-drift) |
 | Scope-First as a new architecture or repository contract | Existing concepts sufficient; candidate contract not adopted | [Scope and placement](#scope-and-placement) |
 | Architecture labels and semantic ownership across structural ranges | Inconclusive / deferred; historical checkpoint | [Scope and placement](#scope-and-placement) |
@@ -232,6 +233,12 @@ Reflection: 正式Skill・ガイドへの変更なし。実利用で同じ重要
 A post-hoc one-change C2 supplement edited existing artifacts once per arm: Alder changed 1 file, RDRA changed 23, and both final artifacts explicitly retained the new cancellation rule. This supports the direction of larger update surface in this selected case, not a greater AI dispatch count (one Fresh dispatch each), general maintenance cost, or independent handoff-quality equivalence. RDRA used official impact analysis plus direct edits and a graph-rebuild script, not a dedicated incremental updater; its usage-limit interruption/resumption and one unlogged read are retained. [Supplement](../work/rdra-alder-comparison/issue-133/change-cost-probe/CHANGE-COST-SUPPLEMENT.md), [primary timeline observation](../work/rdra-alder-comparison/issue-133/change-cost-probe/EXECUTION-TIMELINE.md).
 
 Reconsider broader differentiation after a separately fixed study with symmetric input guards, QA-inclusive RDRA dialogue where relevant, independent evaluation and concrete implementation checks for architecture handoff. The current comparison substituted Work Fresh calls for the official AI call layer while preserving the RDRA DAG; it did not run native Cursor/Claude or downstream RDRASpec/RDRASdd/Code.
+
+## System Requirements handoff
+
+**Explicit supplied-SR revision and scope handoff — adopted, 2026-10-06.** Preserve the SR used for implementation as a pinned input to independent implementation review, alongside existing project instructions, decisions, BD and Checks. Check applicable provided constraints against code, DDL, tests and execution evidence. SR authoring, validity and completeness remain product-owned; missing inputs are unverified and BD/SR conflicts return to their responsible owners. No new NFR checklist, SR Check ledger, Risk taxonomy or human gate. Reflection: implementation-review entry/read-only stage, follow-up freshness check, adoption guidance and README inputs. Implementation is tracked in [#170](https://github.com/mk3008/alder/issues/170).
+
+Reason and evidence: [#168](https://github.com/mk3008/alder/issues/168) / [frozen research report](https://github.com/mk3008/alder/blob/9b55a4e9050725416cdd894941d60c5c89cd4743/work/system-requirements-168/report.ja.md). In three independent contexts over six synthetic cases, the existing readable-SR route and explicit-handoff candidate found the same five mismatches and accepted the benign change. This supports clarifying the handoff, not a new review capability or improved detection rate. Source ambiguity/conflict, stale inputs and operational proof gaps require targeted regression checks; this research did not prove their handling. Reconsider if real product use shows missed handoffs, unsupported conformity claims or duplicate-maintenance cost. No completeness, real-client routing or user-effort benefit is established.
 
 ## Research operation
 

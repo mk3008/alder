@@ -137,6 +137,27 @@ class PluginPackageTest(unittest.TestCase):
         self.assertEqual((SKILL / "references/review-knowledge-v0.3.md").read_bytes(),
                          (ROOT / "docs/phase2/review-knowledge-v0.3.md").read_bytes())
 
+    def test_sr_handoff_keeps_inputs_and_evidence_boundaries(self):
+        # Packaging contracts, not an assertion about stochastic agent behavior.
+        entry = (SKILL / "SKILL.md").read_text()
+        stage = (SKILL / "references/read-only-review.md").read_text()
+        followup = (PLUGIN / "skills/alder-follow-up-review/SKILL.md").read_text()
+        for required in ["provided System Requirements (SR)", "source, revision and applicable scope",
+                         "including the SR used for implementation", "separate Fresh read-only",
+                         "SR revision or applicable scope"]:
+            self.assertIn(required, entry)
+        for required in ["not provided, unreadable and not applicable", "not no requirements",
+                         "authoring, validity and completeness", "preserve both sources",
+                         "continue genuinely unaffected work", "unobserved operational guarantee",
+                         "source clause and evidence or gap", "Review only; do not edit product files"]:
+            self.assertIn(required, stage)
+        self.assertIn("SR sources, revisions, applicable scope and evidence gaps", followup)
+        self.assertIn("Do not convert SR findings into new Check Items", followup)
+        for name in ["alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review"]:
+            adoption = (PLUGIN / "skills" / name / "references/adoption.md").read_text()
+            self.assertIn("SR authoring, validity and completeness", adoption)
+            self.assertIn("re-review affected scope", adoption)
+
     def test_interview_fixture_is_valid_and_leaves_policy_open(self):
         from tools.business_graph.export import parse_design
 

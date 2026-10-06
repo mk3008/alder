@@ -18,7 +18,7 @@ Explicit read-only wording wins over earlier broad write permission. Clarify onl
 
 ## Independent review, fixed inputs
 
-Locate project instructions, requested scope and Business Design using declared paths or `docs/business-design/`. Pin the design, confirmed Checks, documented decisions, implementation and tests to commits or an exact working-tree snapshot before review. Uncommitted work is allowed, but identify the included paths and content digests so the reviewed state can be compared later. Do not create a commit merely to obtain a pin.
+Locate project instructions, requested scope and Business Design using declared paths or `docs/business-design/`. Pin the design, confirmed Checks, documented decisions, provided System Requirements (SR) and related project constraints, implementation, DDL, tests and available execution evidence to commits or an exact working-tree snapshot before review. Include each supplied SR source, revision and applicable scope, including the SR used for implementation; preserve the existing project-instruction and decision inputs. Uncommitted work is allowed, but identify the included paths and content digests so the reviewed state can be compared later. Do not create a commit merely to obtain a pin.
 
 For review-and-records, dispatch a **separate Fresh read-only agent/context** with no conversation-history fork. Give it only the original scoped review request, pinned inputs, project instructions, installed package version/source and [read-only review stage](references/read-only-review.md). It must read the full bundled knowledge and return evidence/questions without editing files. Exclude implementer conversation, proposed fixes, prior review outputs and the orchestrator's conclusions; documented project decisions remain legitimate inputs. Follow the target project's Fresh settings when specified. Record requested settings and disclose if effective runtime settings cannot be verified.
 
@@ -28,7 +28,7 @@ A skill cannot create capabilities the host lacks. If separate-context execution
 
 ## Continue only the authorized follow-up
 
-After the Fresh result, compare the current inputs with the reviewed pins. If relevant source changed, keep the old review's revision visible and re-review the changed scope before dependent updates; do not attach old evidence to a new revision. Preserve concurrent changes and continue genuinely unaffected records.
+After the Fresh result, compare the current inputs with the reviewed pins. If relevant source changed, including SR revision or applicable scope, keep the old review's revision visible and re-review the changed scope before dependent updates; do not attach old evidence to a new revision. Preserve concurrent changes and continue genuinely unaffected records.
 
 In review-and-records mode, invoke [the existing follow-up procedure](../alder-follow-up-review/SKILL.md) in the orchestration context using the pinned result, actual decisions and original write scope. The read-only reviewer never performs these writes. This does not require the user to call another skill. Update only the requested records supported by actual assertions and execution evidence; retain IDs, expectation meaning and human review states.
 
