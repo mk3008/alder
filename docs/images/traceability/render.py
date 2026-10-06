@@ -239,7 +239,7 @@ def model_ja():
 
 
 def execution_ja():
-    c = JapaneseCanvas(628)
+    c = JapaneseCanvas(576)
     c.title("コードとAlder成果物の相関", "記録する対応はテストまで")
     c.rect(39, 97, 574, 271, radius=13, width=1.1)
     c.text(58, 113, "記録しておく対応関係", 17.65, True, "muted", max_width=535)
@@ -275,12 +275,8 @@ def execution_ja():
     ja_icon(c, "code", 74, 462)
     c.text(108, 463, "コード", 19.3, True)
     c.text(108, 490, "業務の処理を実装", 14.9, color="muted", max_width=465)
-    c.text(326, 537, "コードはテストで検証できるため、", 14.9,
+    c.text(326, 537, "コードはテストで検証し、間接的に業務設計書まで遡れる", 14.9,
            color="green_ink", center=True, max_width=535)
-    c.text(326, 560, "間接的に業務設計書まで遡れる", 14.9,
-           color="green_ink", center=True, max_width=535)
-    c.text(326, 590, "テスト → チェック項目 → 業務設計書（SSOT）", 16.55, True,
-           "green_ink", center=True, max_width=535)
     return c
 
 
