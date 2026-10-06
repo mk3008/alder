@@ -77,6 +77,39 @@ codex plugin marketplace add mk3008/alder --ref plugin-v0.4.4
 - 合意した業務から検査項目を作り、期待結果を確認できます。
 - 実装・DDL・テストが合意した業務に沿っているかをレビューできます。
 
+## 少ない成果物で、業務から検証までつなぐ
+
+Alderは、業務上の意味を**人間が読み、修正し、合意できる業務設計書**へ集約します。同じ意味を独立した詳細設計書へ書き直さず、技術的な詳細は実装・DDL・Testで具体化することで、同期・保守する文書を増やしません。重要な実装判断と理由は、判断記録に残します。
+
+自動導出できるビューやGraph JSONなどの機械表現は、正本から必要に応じて生成します。人間が意味をレビューできない機械専用表現やfingerprintを、業務上の正本や合意の代わりにはしません。
+
+### 業務とTestを、チェック項目でつなぐ
+
+チェック項目は、**独立してレビューできる一つの期待結果**です。安定したID（例：`CK-01`）に、条件・期待結果、業務設計書の根拠、代表Testと検証するassertionを結び付けます。業務設計書の参照にはActivity名などの人間可読な識別子を使い、必要ならProcedure / Resultの箇所まで示します。Activityに機械的な固定IDは要求しません。
+
+<a href="docs/images/traceability-model.ja.png"><img src="docs/images/traceability-model.ja.png" alt="追跡関係の概念モデル。業務設計書の業務とチェック項目、チェック項目と自動Testはそれぞれ多対多（N:M）でつながる。チェック項目の安定IDから業務上の根拠とTestのassertionをたどり、Testから業務へも逆引きできる。実DBスキーマではない。" width="640"></a>
+
+一つの業務から複数のチェック項目が生まれ、一つのチェック項目が複数の業務を根拠にすることがあります。Testとの対応も多対多です。チェック項目を中継点にすると、「このTestは何のためか」を業務まで逆引きできます。新規Testとの対応は、設計の引き渡し後に行う実装レビューとフォローアップで保守します。
+
+### CodeはTestの実行で検証する
+
+恒久的な追跡関係はTestまでです。Testは、実行によってCodeがチェック項目の条件・期待結果を満たすかを確かめる、実行可能な証拠になります。
+
+<a href="docs/images/traceability-execution.ja.png"><img src="docs/images/traceability-execution.ja.png" alt="業務設計書、チェック項目、自動Testの間は追跡関係を保守する。TestからCodeへは実行して検証する。業務設計書やチェック項目からCodeのファイル・symbol・SQL・lineへの恒久対応表は持たない。" width="640"></a>
+
+業務上の意味とTestの検証内容を保っていれば、Codeをリファクタリングしても、ファイル・symbol・SQL・lineの恒久対応表を更新する必要はありません。実装レビューでCodeを調べる際は、その時点のTestの実行経路やリポジトリ探索から対象を見つけます。この調査は一時的な診断です。**Testがpassしても、assertionが条件・期待結果を十分に検証していなければ、根拠は不足です。**
+
+### 変更後は、対応の意味を確かめる
+
+標準フローでは、AIが現在の業務設計書とチェック項目を読み、期待結果を業務上の意味から導けるか確認します。実装後はTestのassertionも読み、条件・期待結果を検証できているか確かめます。Test名の一致やpassだけでは対応が成立したとはみなしません。`partial / missing evidence`などの検証根拠の不足は、業務上の意味の未決と分けて記録します。
+
+<a href="docs/images/traceability-drift.ja.png"><img src="docs/images/traceability-drift.ja.png" alt="標準フローは業務設計書とチェック項目、チェック項目とTestのassertionを意味で照合する。任意の限定drift pilotは、前回照合時と現在の業務根拠・Check本文のfingerprintを比較し、変わった対応を再確認候補として示す。不一致は誤りの確定ではない。" width="640"></a>
+
+任意のdrift pilotでは、前回対応を照合した時点の業務根拠・Check本文のfingerprintと現在値を比べ、再確認する候補を絞ります。不一致は「前回確認後に内容が変わった」という合図で、誤りの確定ではありません。この限定PoCには対応する入力形式と保存済みの対応関係が必要です。一般的なActivity Markdownをすべて自動追跡する機能でも、必須の検査でもありません。fingerprintの一致は意味の整合性やassertionの十分さを保証しません。
+
+詳しくは[チェック項目の追跡関係](docs/check-item-traceability.md)と[任意のdrift pilotの条件・限界](docs/traceability-drift/study.md)を参照してください。
+
+
 <a id="標準的な使い方"></a>
 
 ## 業務設計書を作成する
