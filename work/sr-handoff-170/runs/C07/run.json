@@ -1,0 +1,13 @@
+{
+  "case": "C07",
+  "agent_id": "/root/implement_system_requirements_handoff/review_sr_case07",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "effective_runtime_attestation": false,
+  "public_input_revision": "a3a824eedb3ad4a0ebc648de615e0ca88278035f",
+  "isolation": "instruction-based independent contexts; shared filesystem, not OS isolation",
+  "result_safety_review": "synthetic product and technical constraints; no credentials, personal/customer data or private URLs",
+  "output_retention_messages": [],
+  "raw_sha256": "8a3abb1331aba03556ffd2086d17c3b453bd2e0f15d207dd4f5e652278a8c61c"
+}

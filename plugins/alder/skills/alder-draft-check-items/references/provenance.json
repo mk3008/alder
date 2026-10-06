@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "02093f4d4e957ae851f7812e958aab3827190f31",
+  "alder_source_revision": "b9ac9a3b44a02790f03a77b1b8d128934be06636",
   "sources": {
-    "docs/adoption.md": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9",
+    "docs/adoption.md": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8",
     "docs/check-item-traceability.md": "a71b6eb102f7115d202f7c02ec19bdb7f2fcbebc151ed3b2faa2547ccda7b0cd",
     "docs/behavior-derivation/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
     "docs/functional-interface/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e"
