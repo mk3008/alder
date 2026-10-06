@@ -1,0 +1,27 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "alder",
+  "version": "0.4.4",
+  "description": "Draft and maintain Alder Business Design and Checks, discover questions, review improvements and implementation, follow up evidence, and run optional graph and drift tools.",
+  "repository": "https://github.com/mk3008/alder",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Alder",
+        "shortDescription": "Business design and checks",
+        "developerName": "mk3008",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "defaultPrompt": [
+          "このヒアリング結果をAlder業務設計書にして",
+          "業務設計書をAlderでレビューして",
+          "コードをAlderでレビューして"
+        ]
+      }
+    }
+  },
+  "license": "MIT"
+}
