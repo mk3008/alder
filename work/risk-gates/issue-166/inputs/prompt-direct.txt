@@ -1,0 +1,3 @@
+これは合成事例による研究上の判断です。実装・実行・承認は行いません。提示されたBusiness Design、確認済みCheck、変更、system/operationの順に読み、各caseを別々に評価してください。既存の業務合意、Checkの人間確認、法令・セキュリティ、実行権限、merge/release等の既存ゲートは保持します。自動テストと独立Alderレビューは全caseで維持します。未知の事実を創作せず、技術的に調べられる不明点と人間が決める意味を区別してください。
+各caseについてJSON配列で、id、risk_reason（根拠となる入力箇所）、additional_human_gate（required / not_required / unresolved）、gate_target_and_timing、existing_gate（保持する既存ゲート）、automatic_only_reason（追加ゲート不要とした理由、または不可の理由）、uncertainties、actual_human_decision、automatic_verificationを返してください。必要な追加ゲートを既存ゲートと二重計上しないでください。
+固定リスク等級を作らず、人間ゲートの要否を直接判断してください。
