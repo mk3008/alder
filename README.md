@@ -70,6 +70,41 @@ Receipt is confirmed by the equipment-number/accessory check and return-time rec
 
 Starting from this Business Design, you can check Business Design description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
 
+## Alder artifacts
+
+The main artifacts Alder creates and hands over for implementation are Business Design and Check Items.
+
+- **Business Design** describes business procedures, inputs, outputs, and results. It is the authoritative business document that requesters and designers read, revise, and agree on.
+- **Check Items** organize the conditions and expected results the system must satisfy, based on the agreed business design. Each item retains references to its business source and, after implementation, the tests that verify it.
+
+Implementation uses these two artifacts to create code, DDL, and tests, with important implementation decisions and their reasons captured in Decision Records. Technical details take shape in the implementation rather than repeating the same business meaning in a separate detailed-design document. This avoids adding documents that must be synchronized and maintained.
+
+Derivable information, such as views and Graph JSON, is generated from the source of truth when needed. Machine-only representations that people cannot review for meaning, and fingerprints, do not replace the business source of truth or human agreement.
+
+### Artifact relationships
+
+Business Design and tests are connected through Check Items. Each item records two kinds of references:
+
+- **Business Design references** identify the source of the item's conditions and expected results. They use the source document and human-readable identifiers such as Activity names, pointing to a Procedure or Result when needed. Activities do not require fixed machine IDs.
+- **Test references** identify representative tests and assertions that verify those conditions and expected results. The test name and its location identify the test.
+
+<a href="docs/images/traceability-model.en.png"><img src="docs/images/traceability-model.en.png" alt="Conceptual artifact relationships, not a database schema. Business Design, a Check Item list, and tests are connected by many-to-many (N:M) relationships. Each card shows an identifying key, an example, and a summary. Business Design carries the green SSOT badge. Check Item creation and update skills maintain references to the source document and Activity name. During record maintenance after implementation review, AI compares conditions and expected results with test assertions and records the corresponding test names and what they verify. These references support reverse navigation from tests through Check Items to Business Design." width="640"></a>
+
+The links between Business Design and Check Items, and between Check Items and tests, are each many-to-many (N:M). One Check Item can draw on several business activities or be verified by several tests. One activity or test can also relate to several Check Items.
+
+These relationships let you find the tests that verify a business expectation and trace a test back to the business reason behind it.
+
+See [Check Item traceability](docs/check-item-traceability.md) for when and how these relationships are recorded.
+
+### Code and Alder artifacts
+
+Agreed Business Design and reviewed Check Items are handed over for implementation together with system requirements. Code is built from these inputs, and tests are run to check whether it satisfies the conditions and expected results. Maintained traceability stops at the test boundary.
+
+<a href="docs/images/traceability-execution.en.png"><img src="docs/images/traceability-execution.en.png" alt="Maintained relationships connect Business Design, Check Items, and tests. Blue dashed lines show implementation inputs from Business Design, Check Items, and system requirements to code. The green arrow shows tests executing and verifying code. The business rationale for the code can be traced through tests and Check Items to Business Design." width="640"></a>
+
+A direct mapping between code and Business Design is not maintained. Trace the business rationale through tests and their Check Items instead.
+
+
 ## Standard workflow
 
 Alder can be used to analyze existing work and explore hypotheses for new work. Through Business Design, you can align understanding with requesters and check whether the connected activities can operate coherently.
