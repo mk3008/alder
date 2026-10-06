@@ -90,12 +90,12 @@ Alderで作成し、実装へ引き渡す主な成果物は、業務設計書と
 
 ### 成果物の相関
 
-業務設計書とTestは、チェック項目の安定したID（例：`CK-01`）を介して結び付きます。各IDには、次の二つの参照を保持します。
+業務設計書とTestは、チェック項目の安定したIDを介して結び付きます。各IDには、次の二つの参照を保持します。
 
-- **業務設計書への参照**：チェック項目の条件・期待結果の根拠となる箇所を示します。Activity名などの人間可読な識別子を使い、必要ならProcedure / Resultまでたどれるようにします。Activityに機械的な固定IDは要求しません。
+- **業務設計書への参照**：チェック項目の条件・期待結果の根拠となる箇所を示します。参照元文書とActivity名などの人間可読な識別子を使い、必要ならProcedure / Resultまでたどれるようにします。Activityに機械的な固定IDは要求しません。
 - **Testへの参照**：その条件・期待結果を検証する代表Testとassertionを示します。
 
-<a href="docs/images/traceability-model.ja.png"><img src="docs/images/traceability-model.ja.png" alt="追跡関係の概念モデル。業務設計書の業務とチェック項目、チェック項目と自動Testはそれぞれ多対多（N:M）でつながる。チェック項目の安定IDから業務上の根拠とTestのassertionをたどり、Testから業務へも逆引きできる。実DBスキーマではない。" width="640"></a>
+<a href="docs/images/traceability-model.ja.png"><img src="docs/images/traceability-model.ja.png" alt="成果物の相関を示す概念モデル。識別キーを同じ位置に示し、Business Designの正本としての役割（SSOT）は別の欄に示す。Activity名は参照元文書とあわせて参照し、Check IDは安定キー、Testは既存の名前やIDを使う。業務設計書の業務とチェック項目、チェック項目と自動Testはそれぞれ多対多（N:M）でつながる。チェック項目の安定IDから業務上の根拠とTestのassertionをたどり、Testから業務へも逆引きできる。実DBスキーマではない。" width="640"></a>
 
 業務設計書とチェック項目、チェック項目とTestは、それぞれ多対多（N:M）で結び付きます。一つのチェック項目が複数の業務を根拠にしたり、複数のTestで検証されたりすることがあります。逆に、一つの業務やTestが複数のチェック項目に関係することもあります。
 

@@ -128,7 +128,39 @@ def relation(c, top, bottom, label):
     c.text(346, (top + bottom) / 2 - 11, label, 20, color="muted", max_width=230)
 
 
+def model_ja():
+    c = Canvas(910)
+    c.title("成果物の相関", "概念モデル：多対多の追跡関係")
+    c.rect(24, 107, 592, 779, radius=14)
+    entity(c, 127, 188, "Business Design", "document")
+    c.text(66, 194, "識別キー：文書内のActivity名", 20, True, max_width=507)
+    c.text(66, 230, "参照元文書とあわせて参照。固定IDは不要", 19,
+           color="muted", max_width=507)
+    c.line([(66, 259), (574, 259)], "line", 1)
+    c.text(66, 274, "役割：業務上の正本（SSOT）", 19, True,
+           color="muted", max_width=507)
+    relation(c, 323, 370, "根拠")
+    entity(c, 379, 213, "Check Item", "check", fill="blue", ink="blue_ink")
+    c.text(66, 446, "識別キー：Check ID（安定キー）", 20, True,
+           color="blue_ink", max_width=507)
+    c.text(66, 484, "条件 ＋ 独立してレビューできる期待結果", 19, max_width=507)
+    c.text(66, 521, "根拠：Activity / Procedure / Result", 19,
+           color="muted", max_width=507)
+    c.text(66, 554, "検証根拠：代表Test / assertion", 19,
+           color="muted", max_width=507)
+    relation(c, 600, 647, "検証根拠")
+    entity(c, 656, 150, "Automated Test", "play", fill="green", ink="green_ink")
+    c.text(66, 723, "識別キー：Test名／ID（既存のもの）", 20, True,
+           color="green_ink", max_width=507)
+    c.text(66, 760, "Checkの条件・期待結果をassertionで検証", 19, max_width=507)
+    c.text(320, 840, "Check Itemが双方向の追跡を中継する", 20, True,
+           "green_ink", max_width=540, center=True)
+    return c
+
+
 def model(lang):
+    if lang == "ja":
+        return model_ja()
     ja = lang == "ja"
     c = Canvas(808)
     c.title("業務の意味と検証をつなぐ" if ja else "Trace meaning in both directions",
