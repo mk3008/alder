@@ -1,0 +1,10 @@
+direct-1 {'F1': 'not_required', 'F2': 'required', 'D1': 'not_required', 'D2': 'unresolved', 'P1': 'not_required', 'P2': 'required', 'B1': 'not_required', 'B2': 'required', 'M1': 'not_required', 'M2': 'required', 'U1': 'not_required', 'U2': 'required'}
+label-1 {'F1': 'not_required', 'F2': 'required', 'D1': 'not_required', 'D2': 'unresolved', 'P1': 'not_required', 'P2': 'required', 'B1': 'not_required', 'B2': 'required', 'M1': 'not_required', 'M2': 'required', 'U1': 'not_required', 'U2': 'required'}
+direct-2 {'F1': 'not_required', 'F2': 'required', 'D1': 'not_required', 'D2': 'unresolved', 'P1': 'not_required', 'P2': 'required', 'B1': 'not_required', 'B2': 'required', 'M1': 'not_required', 'M2': 'required', 'U1': 'not_required', 'U2': 'required'}
+label-2 {'F1': 'not_required', 'F2': 'required', 'D1': 'not_required', 'D2': 'unresolved', 'P1': 'not_required', 'P2': 'required', 'B1': 'not_required', 'B2': 'required', 'M1': 'not_required', 'M2': 'required', 'U1': 'not_required', 'U2': 'required'}
+PASS: four saved outputs, 48 case decisions, required fields and pinned input hashes. Semantic scores require the authored audit.
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 0.726s
+
+OK

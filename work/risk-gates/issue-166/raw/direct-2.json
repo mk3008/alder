@@ -1,0 +1,134 @@
+[
+  {
+    "id": "F1",
+    "risk_reason": "業務設計と確認済みCheckは表示名の空白除去・空文字を合意済み。変更はprivate関数の同値置換で、system_and_operationでは表示専用1箇所、保存・送信・権限・金銭への経路なしと検索済み。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。関連テストと独立Alderレビューの結果を確認してから既存の次工程へ進む。",
+    "existing_gate": "業務意味の合意、Checkの人間確認、既存の実行権限とmerge/release承認を保持する。",
+    "automatic_only_reason": "影響範囲が表示に限定され、合意済みの意味を変えず、差分撤回で復旧可能。自動テストと独立レビューで同値性を検証できる。",
+    "uncertainties": ["関連テストと独立Alderレビューはまだ完了していない。"],
+    "actual_human_decision": "空白除去と空文字の期待は既に人間確認済み。追加で決める業務意味は提示されていない。",
+    "automatic_verification": "旧・新関数の空白種別と空文字の境界テスト、呼出先検索、関連テスト、独立Alderレビュー。"
+  },
+  {
+    "id": "F2",
+    "risk_reason": "system_and_operationで取引先識別キー生成への呼出し、ASCII spaceとNBSPの挙動差、同一視されたキーへの送金先紐付けが示される。衝突方針と既存キー移行が未決で、表示テスト成功だけでは不足。",
+    "additional_human_gate": "required",
+    "gate_target_and_timing": "識別キーの同一視、衝突時の送金先扱い、既存キー移行方針を権限ある業務・決済責任者が変更採用前に決める。実際の送金、移行、merge/releaseは各既存承認後に限る。",
+    "existing_gate": "表示名の業務合意とCheckの人間確認、自動テスト、独立Alderレビュー、送金・移行・merge/releaseに関する既存の権限と承認を保持する。",
+    "automatic_only_reason": "不可。1行差分でも送金先キーの意味が変わり得る。衝突の検出は自動化できても、どの送金先を正とするかは決められない。",
+    "uncertainties": ["NBSPを含む既存キーの件数と衝突有無", "衝突時方針", "既存キー移行方針"],
+    "actual_human_decision": "権限ある責任者によるキーの業務同一性、衝突処理、移行方針の決定が必要。現時点で承認済みとは扱わない。",
+    "automatic_verification": "全呼出経路の確認、ASCII space/NBSPの差分テスト、既存キーの衝突調査、送金先対応の回帰テスト、独立Alderレビュー。"
+  },
+  {
+    "id": "D1",
+    "risk_reason": "nullableな内部note列の追加で既存列・制約は不変。対象は再生成可能な使い捨て合成DBのみで、sandbox実行は運用者が承認済み。本番移行は範囲外。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。migration/互換テストと独立Alderレビューを終えてから、承認済みsandbox範囲で実行する。",
+    "existing_gate": "業務合意、Checkの人間確認、sandboxでのmigration実行承認を保持する。本番移行を行うなら別途既存の実行・releaseゲートが必要。",
+    "automatic_only_reason": "合成データを捨てて再生成でき、外部利用者もなく、変更範囲と実行権限が確定している。追加の業務意味の判断は提示されていない。",
+    "uncertainties": ["migration/互換テストと独立Alderレビューの結果は未提示。"],
+    "actual_human_decision": "内部メモの業務意味と未入力・既存読取の期待、sandbox実行は確認・承認済み。追加判断なし。",
+    "automatic_verification": "migration実行・再生成、既存レコード読取と未入力の互換テスト、スキーマ差分検証、独立Alderレビュー。"
+  },
+  {
+    "id": "D2",
+    "risk_reason": "本番800万行へのDDLだが、DB製品/版、lock時間、旧worker互換性、復元試験、deployment権限の記録がない。空DBテストでは本番の運用影響を判定できない。新たな公開・保持方針変更は依頼されていない。",
+    "additional_human_gate": "unresolved",
+    "gate_target_and_timing": "本番変更前にDB製品/版、lock・負荷、旧worker互換性、復元可能性、deployment権限を調べる。その結果、既存の本番実行・release承認だけで足りるか、追加の運用判断が必要かを判定する。調査中は本番適用しない。",
+    "existing_gate": "業務合意とCheckの人間確認、自動テスト、独立Alderレビュー、本番deployment権限と既存の実行・release承認を保持する。",
+    "automatic_only_reason": "現状では不可。additiveという説明と空DBテストだけでは本番適用の安全性を確認できない。一方、未知の技術事実だけから新たな業務承認が必須とも断定しない。",
+    "uncertainties": ["DB製品と版", "実際のlock時間・負荷", "旧workerとの互換性", "復元試験の成否", "deployment権限", "本番影響を踏まえた既存承認の適用範囲"],
+    "actual_human_decision": "追加の人間ゲートの要否は調査後に判定。新しい公開・保持方針の判断は現入力にはない。本番実行には既存の権限と承認が必要。",
+    "automatic_verification": "実環境のDB版確認、規模を反映したmigration/lock測定、旧worker互換テスト、復元リハーサル、権限記録確認、独立Alderレビュー。"
+  },
+  {
+    "id": "P1",
+    "risk_reason": "変更は連絡先ラベルの誤字修正。関連diffと経路で認可・API・ログ・テレメトリ差分なし、表示と操作の意味不変、CSS内に収まると確認済み。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。関連テストと独立Alderレビュー後、既存のmerge/release手順に従う。",
+    "existing_gate": "本人のみ閲覧・他者拒否のCheck確認、既存のプライバシー・認可規則、merge/release承認を保持する。",
+    "automatic_only_reason": "連絡先の新規公開もデータ経路変更もなく、既存の人間確認済み期待を保つ。flagで表示差分を戻せる。",
+    "uncertainties": ["関連テストと独立Alderレビューの結果は未提示。"],
+    "actual_human_decision": "公開範囲は既存の本人限定のまま。新たな同意や公開方針の決定は不要。",
+    "automatic_verification": "diff・認可経路・API出力・ログ・テレメトリの差分検査、表示幅と操作のUIテスト、独立Alderレビュー。"
+  },
+  {
+    "id": "P2",
+    "risk_reason": "本人用画面だけというBusiness Design・Checkに反し、匿名利用可能な公開検索JSONへemailを追加する。CDN cacheと外部clientへ届き、UI非表示とflag rollbackでは既公開データを回収できない。",
+    "additional_human_gate": "required",
+    "gate_target_and_timing": "公開検索でのemail公開の可否、対象・同意・cache/外部配布を権限ある業務・プライバシー責任者が出荷前に決める。既存の法令・セキュリティ・releaseゲートも通す。",
+    "existing_gate": "本人限定の業務設計とCheckの人間確認、法令・プライバシー・セキュリティ要件、自動テスト、独立Alderレビュー、merge/release承認を保持する。",
+    "automatic_only_reason": "不可。snapshotを新出力へ更新しても、本人以外への新たな公開の正当性や同意は証明できない。rollbackは既配布データを消さない。",
+    "uncertainties": ["本人同意の有無と範囲", "既存cacheと外部clientへの実際の配布範囲", "公開判断に必要な法令・契約条件"],
+    "actual_human_decision": "本人以外へのemail公開を認めるか、どの条件で認めるかの明示判断が必要。現時点では承認なし。",
+    "automatic_verification": "匿名API・CDN・外部client経路の検査、他者拒否の契約テスト、cache挙動確認、独立Alderレビュー。"
+  },
+  {
+    "id": "B1",
+    "risk_reason": "与信成功かつ在庫確保後のみ成立という条件は不変。private helperへの抽出で呼出経路・順序・例外・transaction境界・外部API引数の同値がdiffとテストで確認され、決済adapter差分もない。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。独立Alderレビューを維持し、merge/releaseには別の既存承認を得る。",
+    "existing_gate": "予約成立条件、金額、承認権限の既存業務方針、Checkの人間確認、決済に関する既存ゲートとmerge/release承認を保持する。",
+    "automatic_only_reason": "合意済みの成立条件と外部作用が同値で、新たな業務判断を要する変更は示されていない。ローカル合成テストは本番承認の代替にはしない。",
+    "uncertainties": ["独立Alderレビューは未完了。", "ローカル合成テスト以外の実環境での結果は提示されていない。"],
+    "actual_human_decision": "成立条件と失敗時不成立の期待は既に確認済み。追加の条件変更判断なし。",
+    "automatic_verification": "条件、順序、例外、transaction、外部API引数の同値テストとdiff確認、失敗・在庫切れの回帰テスト、独立Alderレビュー。"
+  },
+  {
+    "id": "B2",
+    "risk_reason": "与信成功後に成立するBusiness DesignとCheckに反し、タイムアウトでも先に予約確定する。請求重複防止、補償、確定通知取消が未仕様で、金銭と予約成立の意味を変える。",
+    "additional_human_gate": "required",
+    "gate_target_and_timing": "タイムアウト時の予約成立、与信再試行、二重請求防止、補償と通知取消の方針を権限ある業務・決済責任者が実装採用・出荷前に決める。決済やreleaseの既存承認も別途必要。",
+    "existing_gate": "既存の予約成立条件とCheck確認、金額・承認権限、法令・決済・セキュリティ要件、自動テスト、独立Alderレビュー、merge/release承認を保持する。",
+    "automatic_only_reason": "不可。happy-pathテストとコードrollbackは、確定済み予約や請求・通知の影響を解消せず、失敗時の業務意味を決められない。",
+    "uncertainties": ["二重請求防止仕様", "補償手順", "確定通知取消手順", "判断権限を持つ責任者"],
+    "actual_human_decision": "与信未成功でも予約成立を認めるか、失敗・再試行時の責任と補償をどう扱うかの新たな業務決定が必要。",
+    "automatic_verification": "タイムアウト、再試行、重複請求、補償、通知取消のシナリオテスト、外部API・transaction経路確認、独立Alderレビュー。"
+  },
+  {
+    "id": "M1",
+    "risk_reason": "削除対象は100件の合成sandbox集計で、元データは別に残り再生成試験成功。DB名・件数preview確認済み、共有接続なし、sandbox削除権限は付与済み。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。対象DBと件数を実行直前に再確認し、テストと独立Alderレビュー後に既存権限内で実行する。",
+    "existing_gate": "再生成の業務期待の人間確認、sandbox内の明示削除権限、自動テスト、独立Alderレビューを保持する。共有・本番環境には適用しない。",
+    "automatic_only_reason": "対象と範囲が限定され、個人・顧客データがなく、再生成できる。既存権限が追加の実行承認を満たしている。",
+    "uncertainties": ["実行直前のDB接続と件数がpreviewから変わっていないか。"],
+    "actual_human_decision": "再生成結果の期待とsandbox削除権限は確認済み。追加の意味・実行判断なし。",
+    "automatic_verification": "接続先・対象件数の再preview、再生成結果照合、削除範囲テスト、独立Alderレビュー。"
+  },
+  {
+    "id": "M2",
+    "risk_reason": "法定保管中の取引原本を消さないBusiness DesignとCheckに対し、本番全tenantで操作者入力cutoffによるDELETEを計画。件数不明、復元・保持期間未確認、実行承認なし。transactionメモと小規模合成テストでは足りない。",
+    "additional_human_gate": "required",
+    "gate_target_and_timing": "法定保持期間と削除対象・cutoffの業務妥当性を権限ある法務・記録管理責任者が本番実行前に判断する。対象確定後、既存の本番削除実行承認と権限を得る。",
+    "existing_gate": "法定保管とCheckの人間確認、法令・セキュリティ・本番削除権限、自動テスト、独立Alderレビュー、実行承認を保持する。追加ゲートは未決の保持・cutoff判断であり、実行承認を重複計上しない。",
+    "automatic_only_reason": "不可。誤削除は不可逆になり得て、法定保管の意味とcutoffの正しさはテストやtransactionの有無では決まらない。",
+    "uncertainties": ["tenant別・全体の対象件数", "cutoffと法定保持期間の対応", "復元可否と復元試験", "backupの保持期間", "本番実行権限"],
+    "actual_human_decision": "どの原本が保管義務を満たしたか、削除対象とcutoffを認めるかの判断が必要。現時点で削除承認はない。",
+    "automatic_verification": "read-only件数preview、tenant別保持期間照合、cutoff検証、復元試験、削除範囲テスト、独立Alderレビュー。"
+  },
+  {
+    "id": "U1",
+    "risk_reason": "内部管理画面のカード間余白のみ8pxから12pxへ変更。確認したviewportとkeyboard操作で内容欠落なく、金額・権限・送信・確定操作に無関係。",
+    "additional_human_gate": "not_required",
+    "gate_target_and_timing": "追加の人間ゲートなし。関連UIテストと独立Alderレビュー後、既存のmerge/release手順へ進む。",
+    "existing_gate": "既存表示内容・操作のCheck人間確認、自動UIテスト、独立Alderレビュー、merge/release承認を保持する。",
+    "automatic_only_reason": "確認済みの表示内容・操作の意味を変えず、影響は視覚的余白に限られ、flagで戻せる。",
+    "uncertainties": ["未確認viewportでの表示結果は提示されていない。"],
+    "actual_human_decision": "既存内容と操作は人間確認済み。追加で決める業務意味なし。",
+    "automatic_verification": "対象viewportとkeyboard操作のUI/アクセシビリティ回帰テスト、内容欠落検査、独立Alderレビュー。"
+  },
+  {
+    "id": "U2",
+    "risk_reason": "料金説明と確認dialogを隠し1-click取消に変えるため、取消前に料金を見せ明示確認するBusiness Design・Checkに反する。click handlerは直ちに外部取消APIを呼び取消料が確定する。",
+    "additional_human_gate": "required",
+    "gate_target_and_timing": "料金表示と明示確認を廃止して暗黙同意で課金を確定させる可否を権限ある業務・法務責任者が変更採用・出荷前に判断する。既存の法令・決済・release承認も保持する。",
+    "existing_gate": "キャンセル料の事前表示と明示確認のCheck人間確認、法令・決済・セキュリティ要件、自動テスト、独立Alderレビュー、merge/release承認を保持する。",
+    "automatic_only_reason": "不可。UI差分だけでも外部取消と料金確定に直結する。pixelテストとflag rollbackでは利用者の明示同意不足や発生済み料金を解消できない。",
+    "uncertainties": ["新しい暗黙同意の業務・法的可否", "既に取消された予約と料金の補償方法"],
+    "actual_human_decision": "料金説明・確認操作を省いて取消と料金を確定してよいかの明示的な業務判断が必要。現時点で承認なし。",
+    "automatic_verification": "料金表示・確認dialogの有無、keyboard操作、clickから外部取消APIまでの経路と契約テスト、料金確定テスト、独立Alderレビュー。"
+  }
+]

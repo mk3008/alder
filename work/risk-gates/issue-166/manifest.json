@@ -1,0 +1,98 @@
+{
+  "base_source": "f716c1a1ea8fa8b3adebb9001d9762eee89eadb0",
+  "published_input_revision": "26171a3eee45d169640c3a2d858a1da7f3653692",
+  "rubric_pre_run_sha256": "8e9d5e8d81574a5a608f7e0674d436a626649f014fd1c870091c4883ba99cbff",
+  "input_sha256": {
+    "dispatch-direct-2.txt": "444b337e3edaac536bb0facdaac84ab3b18c17a779fe151af8602404598117e3",
+    "cases.json": "598ac02d81b7b12b6f1c2af76748cb74b56a34536e190b8069d151f445913c1c",
+    "dispatch-direct-1.txt": "da16102cf7d190bc1565b1ee0c7afc0c23f5cd8c270de6d12260d2ac0866b763",
+    "prompt-direct.txt": "6706e01a8770532903301c14452393bc580a1cc07e21fffd5b9f1492dbebeff0",
+    "dispatch-label-1.txt": "efe6430d9a4fa84ccd9fe5070ff96b3b5fcd32c8189ebe859ea142819fbfd759",
+    "prompt-label.txt": "d4e7290309698a965ac5133a7a67d97a45b51c0d03546804fd628e97f7bbaf62",
+    "dispatch-label-2.txt": "a9bfd156556e8271a51d233b88e44665490f9bd176f5f803a4e02bf47643491f"
+  },
+  "runs": [
+    {
+      "run": "direct-1",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "agent_id": "/root/research_alder_risk_gates/evaluate_direct_gates_1",
+      "effective_settings": "not independently attested",
+      "input_revision": "26171a3eee45d169640c3a2d858a1da7f3653692",
+      "prompt": "inputs/dispatch-direct-1.txt",
+      "condition_prompt": "inputs/prompt-direct.txt",
+      "raw": "raw/direct-1.json",
+      "actual_paths_read": [
+        "AGENTS.md",
+        "work/risk-gates/issue-166/inputs/cases.json",
+        "work/risk-gates/issue-166/inputs/prompt-direct.txt",
+        "docs/detailed-design.ja.md",
+        "plugins/alder/skills/alder-review-implementation/references/read-only-review.md"
+      ],
+      "output_sha256": "60bd8d30f171c93d03c8f463f3aac8cc3dec8cd2f871b90304d20c2ff97dafc9"
+    },
+    {
+      "run": "label-1",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "agent_id": "/root/research_alder_risk_gates/evaluate_label_gates_1",
+      "effective_settings": "not independently attested",
+      "input_revision": "26171a3eee45d169640c3a2d858a1da7f3653692",
+      "prompt": "inputs/dispatch-label-1.txt",
+      "condition_prompt": "inputs/prompt-label.txt",
+      "raw": "raw/label-1.json",
+      "actual_paths_read": [
+        "AGENTS.md",
+        "work/risk-gates/issue-166/inputs/cases.json",
+        "work/risk-gates/issue-166/inputs/prompt-label.txt",
+        "docs/detailed-design.ja.md",
+        "plugins/alder/skills/alder-review-implementation/references/read-only-review.md"
+      ],
+      "output_sha256": "dc87060474c93cb7b80a22b3638b95da0d1cb0bead240e673f10bca2ee8a3d18"
+    },
+    {
+      "run": "direct-2",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "agent_id": "/root/research_alder_risk_gates/evaluate_direct_gates_2",
+      "effective_settings": "not independently attested",
+      "input_revision": "26171a3eee45d169640c3a2d858a1da7f3653692",
+      "prompt": "inputs/dispatch-direct-2.txt",
+      "condition_prompt": "inputs/prompt-direct.txt",
+      "raw": "raw/direct-2.json",
+      "actual_paths_read": [
+        "AGENTS.md",
+        "work/risk-gates/issue-166/inputs/cases.json",
+        "work/risk-gates/issue-166/inputs/prompt-direct.txt"
+      ],
+      "output_sha256": "6252170334d51218742c48a01f2b131e763ba91ea37de17f68e400e1939a4a59"
+    },
+    {
+      "run": "label-2",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "agent_id": "/root/research_alder_risk_gates/evaluate_label_gates_2",
+      "effective_settings": "not independently attested",
+      "input_revision": "26171a3eee45d169640c3a2d858a1da7f3653692",
+      "prompt": "inputs/dispatch-label-2.txt",
+      "condition_prompt": "inputs/prompt-label.txt",
+      "raw": "raw/label-2.json",
+      "actual_paths_read": [
+        "AGENTS.md",
+        "work/risk-gates/issue-166/inputs/cases.json",
+        "work/risk-gates/issue-166/inputs/prompt-label.txt"
+      ],
+      "output_sha256": "cffa4ba3aab1e5e8fed52f2ac2121f1b3c9e5076f8ada0957457337685e1ec9a"
+    }
+  ],
+  "deviations": [
+    "Both first replicates read the two permitted contextual documents; both second replicates did not. This is recorded, not normalized after results.",
+    "Local checkout base eb177dab8d30383f0a5e084ad22a8eca59455d27 differs from public main only in README.md and README.ja.md, verified through GitHub compare. Neither file was a run input. Remote research branch derives from pinned public main.",
+    "Dispatch prompts were recorded verbatim after dispatch; condition prompts and fixtures were published before runs. Rubric digest was fixed before runs and full rubric published afterward.",
+    "A label-1 progress summary initially misstated label counts, then corrected itself. Stored raw JSON was unchanged and independently recounted."
+  ]
+}
