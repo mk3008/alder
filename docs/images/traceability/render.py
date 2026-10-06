@@ -239,8 +239,8 @@ def model_ja():
 
 
 def execution_ja():
-    c = JapaneseCanvas(712)
-    c.title("設計をコードにし、テストで確かめる", "記録する対応はテストまで")
+    c = JapaneseCanvas(628)
+    c.title("コードとAlder成果物の相関", "記録する対応はテストまで")
     c.rect(39, 97, 574, 271, radius=13, width=1.1)
     c.text(58, 113, "記録しておく対応関係", 17.65, True, "muted", max_width=535)
     for y, title, kind, fill, ink in [(148, "業務設計書", "document", "gray", "ink"),
@@ -275,14 +275,12 @@ def execution_ja():
     ja_icon(c, "code", 74, 462)
     c.text(108, 463, "コード", 19.3, True)
     c.text(108, 490, "業務の処理を実装", 14.9, color="muted", max_width=465)
-    c.text(326, 537, "コードの業務上の根拠は、テストを起点に確認", 14.9,
+    c.text(326, 537, "コードはテストで検証できるため、", 14.9,
            color="green_ink", center=True, max_width=535)
-    c.text(326, 562, "テスト → チェック項目 → 業務設計書（SSOT）", 16.55, True,
+    c.text(326, 560, "間接的に業務設計書まで遡れる", 14.9,
+           color="green_ink", center=True, max_width=535)
+    c.text(326, 590, "テスト → チェック項目 → 業務設計書（SSOT）", 16.55, True,
            "green_ink", center=True, max_width=535)
-    c.rect(58, 605, 535, 84, "blue", "blue_line", radius=8, width=1.1)
-    c.text(74, 617, "Alderレビューで対応を確認", 17.65, True, "blue_ink", max_width=503)
-    c.text(74, 645, "テストの検証内容が、チェック項目の", 14.9, color="blue_ink", max_width=503)
-    c.text(74, 666, "条件・期待結果に対応しているかを確かめる", 14.9, color="blue_ink", max_width=503)
     return c
 
 

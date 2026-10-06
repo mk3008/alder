@@ -103,24 +103,13 @@ Alderで作成し、実装へ引き渡す主な成果物は、業務設計書と
 
 対応を記録する時期と方法は、[チェック項目の追跡関係](docs/check-item-traceability.md)を参照してください。
 
-### テストとコード
+### コードとAlder成果物の相関
 
 合意した業務設計書と確認済みのチェック項目を、システム要件とともに実装へ渡します。コードはこれらをもとに作り、テストを実行して条件・期待結果を満たすか確かめます。記録して保守する追跡関係はテストまでです。
 
-<a href="docs/images/traceability-execution.ja.png"><img src="docs/images/traceability-execution.ja.png" alt="業務設計書・チェック項目・テストの対応を記録して保守する。青点線は業務設計書・チェック項目とシステム要件からコードを実装する入力、緑の矢印はテストの実行によるコードの検証を示す。業務上の根拠はテストからチェック項目を経由して業務設計書へ辿る。Alderレビューで、テストの検証内容がチェック項目の条件・期待結果に対応しているか確かめる。" width="640"></a>
+<a href="docs/images/traceability-execution.ja.png"><img src="docs/images/traceability-execution.ja.png" alt="業務設計書・チェック項目・テストの対応を記録して保守する。青点線は業務設計書・チェック項目とシステム要件からコードを実装する入力、緑の矢印はテストの実行によるコードの検証を示す。業務上の根拠はテストからチェック項目を経由して業務設計書へ辿る。" width="640"></a>
 
-コードと業務設計書の直接の対応表は保守せず、テストからチェック項目を経由して業務上の根拠を確認します。Alderレビューでは、テストの検証内容がチェック項目の条件・期待結果に対応しているかを確かめます。
-
-### 変更後の対応確認
-
-標準フローでは、AIが現在の業務設計書とチェック項目を読み、期待結果を業務上の意味から導けるか確認します。実装後はTestのassertionも読み、条件・期待結果を検証できているか確かめます。Test名の一致やpassだけでは対応が成立したとはみなしません。`partial / missing evidence`などの検証根拠の不足は、業務上の意味の未決と分けて記録します。
-
-<a href="docs/images/traceability-drift.ja.png"><img src="docs/images/traceability-drift.ja.png" alt="標準フローは業務設計書とチェック項目、チェック項目とTestのassertionを意味で照合する。任意の限定drift pilotは、前回照合時と現在の業務根拠・Check本文のfingerprintを比較し、変わった対応を再確認候補として示す。不一致は誤りの確定ではない。" width="640"></a>
-
-任意のdrift pilotでは、前回対応を照合した時点の業務根拠・Check本文のfingerprintと現在値を比べ、再確認する候補を絞ります。不一致は「前回確認後に内容が変わった」という合図で、誤りの確定ではありません。この限定PoCには対応する入力形式と保存済みの対応関係が必要です。一般的なActivity Markdownをすべて自動追跡する機能でも、必須の検査でもありません。fingerprintの一致は意味の整合性やassertionの十分さを保証しません。
-
-詳しくは[チェック項目の追跡関係](docs/check-item-traceability.md)と[任意のdrift pilotの条件・限界](docs/traceability-drift/study.md)を参照してください。
-
+コードと業務設計書の直接の対応表は保守せず、テストからチェック項目を経由して業務上の根拠を確認します。
 
 <a id="標準的な使い方"></a>
 
