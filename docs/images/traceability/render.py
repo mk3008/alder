@@ -7,8 +7,11 @@ Run from any directory:
 Requires Pillow and Noto Sans CJK JP (regular and bold TTC files). The default
 font directory is the Debian/Ubuntu fonts-noto-cjk location; --font-dir can
 select another installation. Rendering performs no network access. Each source
-canvas is 640 logical pixels wide; checked-in PNGs are rendered at 2x for sharp
-README display at width=640. All text is checked against its allotted width.
+canvas is 640 logical pixels wide. Japanese images use the creation-workflow
+scale (1160px source width); English images retain their existing 1280px width.
+Japanese typography is derived from the 1160px creation-workflow original:
+49px title / 35px card heading / 27px body, all displayed at README width=640.
+All text is checked against its allotted width.
 """
 from __future__ import annotations
 
@@ -37,24 +40,25 @@ FONT_DIR: Path
 def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
     weight = "Bold" if bold else "Regular"
     return ImageFont.truetype(str(FONT_DIR / f"NotoSansCJK-{weight}.ttc"),
-                              size * SUPERSAMPLE, index=0)
+                              round(size * SUPERSAMPLE), index=0)
 
 
 class Canvas:
     def __init__(self, height: int):
         self.height = height
-        self.im = Image.new("RGB", (WIDTH * SUPERSAMPLE, height * SUPERSAMPLE), P["bg"])
+        self.palette = P
+        self.im = Image.new("RGB", (WIDTH * SUPERSAMPLE, height * SUPERSAMPLE), self.palette["bg"])
         self.draw = ImageDraw.Draw(self.im)
 
     def rect(self, x, y, w, h, fill="white", outline="line", radius=12, width=1):
         box = tuple(round(v * SUPERSAMPLE) for v in (x, y, x + w, y + h))
         self.draw.rounded_rectangle(box, radius=radius * SUPERSAMPLE,
-                                    fill=P.get(fill, fill), outline=P.get(outline, outline),
+                                    fill=self.palette.get(fill, fill), outline=self.palette.get(outline, outline),
                                     width=round(width * SUPERSAMPLE))
 
     def line(self, xy, color="arrow", width=1.6):
         self.draw.line([(round(x * SUPERSAMPLE), round(y * SUPERSAMPLE)) for x, y in xy],
-                       fill=P.get(color, color), width=round(width * SUPERSAMPLE), joint="curve")
+                       fill=self.palette.get(color, color), width=round(width * SUPERSAMPLE), joint="curve")
 
     def dashed(self, x1, x2, y, color="line"):
         for x in range(int(x1), int(x2), 12):
@@ -68,7 +72,7 @@ class Canvas:
         if center:
             x -= measured / 2
         self.draw.text((round(x * SUPERSAMPLE), round(y * SUPERSAMPLE)), value,
-                       fill=P[color], font=face, anchor="lt")
+                       fill=self.palette[color], font=face, anchor="lt")
 
     def arrow(self, x, y1, y2, bidirectional=False, color="arrow", width=2):
         self.line([(x, y1), (x, y2)], color, width)
@@ -141,39 +145,157 @@ def relation(c, top, bottom, label):
     c.text(346, (top + bottom) / 2 - 11, label, 20, color="muted", max_width=230)
 
 
+class JapaneseCanvas(Canvas):
+    """Match creation-workflow typography at the same 640px README width."""
+    def __init__(self, height):
+        super().__init__(height)
+        self.palette = dict(P, ink="#253347", muted="#526477", line="#D5DEE8",
+                            arrow="#8A98AA", blue_line="#B6D3E8", blue_ink="#285B7E",
+                            green_line="#8DB9A4", green_ink="#245C47",
+                            yellow_line="#E2BF71", yellow_ink="#795A1D")
+
+    def title(self, title, subtitle):
+        self.text(58, 31, title, 49 * 640 / 1160, True, max_width=535)
+        self.text(58, 65, subtitle, 31 * 640 / 1160, color="muted", max_width=535)
+
+    def save(self, path):
+        self.im.resize((1160, round(self.height * 1160 / 640)),
+                       Image.Resampling.LANCZOS).save(path, optimize=True)
+
+
+def ja_icon(c, kind, x, y, color="muted"):
+    scale = 20 / 26
+    def line(points, width=1.4):
+        c.line([(x + xx * scale, y + yy * scale) for xx, yy in points], color, width)
+    if kind == "document":
+        line([(0, 26), (0, 0), (17, 0), (24, 7), (24, 26), (0, 26)])
+        line([(17, 0), (17, 7), (24, 7)])
+        line([(5, 13), (18, 13)])
+        line([(5, 19), (18, 19)])
+    elif kind == "check":
+        c.rect(x, y, 20, 20, "white", color, radius=4, width=1.4)
+        line([(5, 13), (11, 19), (21, 7)], 1.6)
+    elif kind == "play":
+        c.rect(x, y, 20, 20, "white", color, radius=10, width=1.4)
+        line([(10, 7), (19, 13), (10, 19), (10, 7)], 1.4)
+    elif kind == "code":
+        line([(8, 5), (0, 13), (8, 21)], 1.6)
+        line([(20, 5), (28, 13), (20, 21)], 1.6)
+        line([(16, 2), (12, 24)], 1.6)
+
+
+def ja_entity(c, y, h, title, icon, fill="gray", ink="ink", badge=False):
+    c.rect(58, y, 535, h, radius=10, width=1.1)
+    c.rect(59, y + 1, 533, 41, fill, fill, radius=9, width=1.1)
+    c.draw.rectangle((59 * SUPERSAMPLE, (y + 30) * SUPERSAMPLE,
+                      592 * SUPERSAMPLE, (y + 42) * SUPERSAMPLE), fill=c.palette[fill])
+    c.line([(59, y + 42), (592, y + 42)], "line", 1.1)
+    ja_icon(c, icon, 74, y + 11, ink if ink != "ink" else "muted")
+    size = 35 * 640 / 1160
+    bbox = c.draw.textbbox((0, 0), title, font=font(size, True), anchor="lt")
+    c.text(108, y + 21 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2,
+           title, size, True, ink, max_width=390)
+    if badge:
+        c.rect(515, y + 9, 62, 25, "green", "green_line", radius=6, width=1.1)
+        c.text(546, y + 15, "SSOT", 13.8, True, "green_ink", center=True, max_width=50)
+
+
+def ja_relation(c, top, bottom, label):
+    c.arrow(326, top, bottom, True, width=1.65)
+    c.text(310, top, "N", 14.9, True, "muted", center=True)
+    c.text(310, bottom - 16, "M", 14.9, True, "muted", center=True)
+    c.text(347, (top + bottom) / 2 - 8, label, 15.45, color="muted", max_width=230)
+
+
 def model_ja():
-    c = Canvas(1115)
+    c = JapaneseCanvas(890)
     c.title("成果物の相関", "概念モデル：多対多の追跡関係")
-    c.rect(24, 107, 592, 984, radius=14)
-    entity(c, 127, 176, "業務設計書", "document", badge="SSOT",
-           center_header=True, green_badge=True)
-    c.text(66, 194, "識別キー：文書内のActivity名", 20, True, max_width=507)
-    c.text(66, 230, "例：予約を受け付ける", 19, color="muted", max_width=507)
-    c.text(66, 268, "業務の手順・入出力・結果を記した文書", 19, max_width=507)
-    relation(c, 311, 362, "期待結果を導く")
-    entity(c, 371, 407, "チェック項目リスト", "check", fill="blue", ink="blue_ink",
-           center_header=True)
-    c.text(66, 438, "各項目の識別キー：Check ID（安定キー）", 20, True,
-           color="blue_ink", max_width=507)
-    c.text(66, 474, "例：CK-01", 19, color="muted", max_width=507)
-    c.text(66, 512, "独立して確認できる、条件と期待結果の一覧", 19, max_width=507)
-    c.line([(66, 546), (574, 546)], "line", 1)
-    c.text(66, 561, "・業務設計書との結合", 19, True, "blue_ink", max_width=507)
-    c.text(84, 592, "作成・更新スキル利用時に、", 18, max_width=489)
-    c.text(84, 619, "文書とActivity名を紐づけて管理", 18, max_width=489)
-    c.text(66, 661, "・テストとの結合", 19, True, "blue_ink", max_width=507)
-    c.text(84, 692, "実装レビュー後の記録更新スキル利用時に、", 18, max_width=489)
-    c.text(84, 719, "AIが条件・期待結果とテストの検証内容を照合し、", 18, max_width=489)
-    c.text(84, 746, "対応するテスト名・検証内容を記録", 18, max_width=489)
-    relation(c, 786, 837, "期待結果を検証")
-    entity(c, 846, 176, "テスト", "play", fill="green", ink="green_ink",
-           center_header=True)
-    c.text(66, 913, "識別キー：テスト名", 20, True,
-           color="green_ink", max_width=507)
-    c.text(66, 949, "例：test_accept_booking", 19, color="muted", max_width=507)
-    c.text(66, 987, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
-    c.text(320, 1048, "テストもチェック項目を経由してSSOTまで遡れる", 20, True,
-           "green_ink", max_width=540, center=True)
+    c.rect(39, 97, 574, 770, radius=13, width=1.1)
+    ja_entity(c, 113, 140, "業務設計書", "document", badge=True)
+    c.text(74, 166, "識別キー：文書内のActivity名", 15.45, True, max_width=503)
+    c.text(74, 193, "例：予約を受け付ける", 14.9, color="muted", max_width=503)
+    c.text(74, 223, "業務の手順・入出力・結果を記した文書", 14.9, max_width=503)
+    ja_relation(c, 261, 299, "期待結果を導く")
+    ja_entity(c, 308, 318, "チェック項目リスト", "check", "blue", "blue_ink")
+    c.text(74, 361, "各項目の識別キー：Check ID（安定キー）", 15.45, True, "blue_ink", max_width=503)
+    c.text(74, 386, "例：CK-01", 14.9, color="muted", max_width=503)
+    c.text(74, 411, "独立して確認できる、条件と期待結果の一覧", 14.9, max_width=503)
+    c.line([(74, 435), (577, 435)], "line", 1.1)
+    c.text(74, 450, "・業務設計書との結合", 15.45, True, "blue_ink", max_width=503)
+    c.text(88, 474, "作成・更新スキル利用時に、", 14.9, max_width=489)
+    c.text(88, 495, "文書とActivity名を紐づけて管理", 14.9, max_width=489)
+    c.text(74, 524, "・テストとの結合", 15.45, True, "blue_ink", max_width=503)
+    c.text(88, 548, "実装レビュー後の記録更新スキル利用時に、", 14.9, max_width=489)
+    c.text(88, 569, "AIが条件・期待結果とテストの検証内容を照合し、", 14.9, max_width=489)
+    c.text(88, 590, "対応するテスト名・検証内容を記録", 14.9, max_width=489)
+    ja_relation(c, 634, 672, "期待結果を検証")
+    ja_entity(c, 680, 140, "テスト", "play", "green", "green_ink")
+    c.text(74, 733, "識別キー：テスト名", 15.45, True, "green_ink", max_width=503)
+    c.text(74, 758, "例：test_accept_booking", 14.9, color="muted", max_width=503)
+    c.text(74, 783, "条件・期待結果をコードの実行で確かめる", 14.9, max_width=503)
+    c.text(326, 842, "テストもチェック項目を経由してSSOTまで遡れる", 16.55, True,
+           "green_ink", max_width=535, center=True)
+    return c
+
+
+def execution_ja():
+    c = JapaneseCanvas(705)
+    c.title("Testが実行でCodeを検証する", "恒久トレーサビリティはTestまで")
+    c.rect(39, 97, 574, 271, radius=13, width=1.1)
+    c.text(58, 113, "保守する追跡関係", 17.65, True, "muted", max_width=535)
+    for y, title, kind, fill, ink in [(148, "Business Design", "document", "gray", "ink"),
+                                     (221, "Check Item", "check", "blue", "blue_ink"),
+                                     (294, "Automated Test", "play", "green", "green_ink")]:
+        c.rect(58, y, 535, 44, fill, "line", radius=10, width=1.1)
+        ja_icon(c, kind, 74, y + 12, ink if ink != "ink" else "muted")
+        size = 35 * 640 / 1160
+        bbox = c.draw.textbbox((0, 0), title, font=font(size, True), anchor="lt")
+        c.text(108, y + 22 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2, title, size, True, ink)
+    c.arrow(326, 198, 215, True, width=1.65)
+    c.arrow(326, 271, 288, True, width=1.65)
+    c.dashed(58, 303, 385)
+    c.dashed(349, 593, 385)
+    c.arrow(326, 346, 438, color="green_ink", width=1.9)
+    c.text(346, 397, "実行して検証", 19.3, True, "green_ink", max_width=230)
+    c.rect(58, 448, 535, 96, "gray", "line", radius=10, width=1.1)
+    ja_icon(c, "code", 74, 462)
+    c.text(108, 463, "Code", 19.3, True)
+    c.text(74, 495, "file / symbol / SQL / line", 15.45, color="muted", max_width=503)
+    c.text(74, 520, "物理位置の対応表は保守しない", 14.9, color="muted", max_width=503)
+    c.text(58, 565, "レビュー時は実行経路やリポジトリを探索", 14.9, color="muted", max_width=535)
+    c.text(58, 588, "必要なときだけ調べる。一時的な診断として扱う", 14.9, color="muted", max_width=535)
+    c.rect(58, 627, 535, 57, "yellow", "yellow_line", radius=8, width=1.1)
+    c.text(74, 638, "passだけでは、Checkを証明できない", 17.65, True, "yellow_ink", max_width=503)
+    c.text(74, 662, "assertionが条件・期待結果まで確認していること", 14.9, color="yellow_ink", max_width=503)
+    return c
+
+
+def drift_ja():
+    c = JapaneseCanvas(735)
+    c.title("変更後も意味の対応を確かめる", "標準レビューと任意のdrift pilot")
+    c.rect(39, 97, 574, 270, radius=13, width=1.1)
+    c.text(58, 113, "標準：AIが意味の対応を確認", 19.3, True, "blue_ink", max_width=535)
+    c.rect(58, 151, 535, 70, "blue", "blue_line", radius=10, width=1.1)
+    c.text(74, 164, "Business Design → Check Item", 17.65, True, "blue_ink", max_width=503)
+    c.text(74, 196, "期待結果を現在の業務の意味から導けるか", 14.9, color="blue_ink", max_width=503)
+    c.rect(58, 235, 535, 70, "green", "green_line", radius=10, width=1.1)
+    c.text(74, 248, "Check Item → Test assertion", 17.65, True, "green_ink", max_width=503)
+    c.text(74, 280, "条件・期待結果を十分に検証しているか", 14.9, color="green_ink", max_width=503)
+    c.text(326, 330, "検証根拠の不足 ≠ 業務の意味の未決", 16.55, True, "muted", center=True, max_width=535)
+    c.rect(39, 388, 574, 324, radius=13, width=1.1)
+    c.text(58, 405, "任意：限定的なdrift pilot", 19.3, True, "yellow_ink", max_width=535)
+    c.text(58, 442, "Business Design source / Check body", 15.45, color="muted", max_width=535)
+    c.text(58, 469, "fingerprintを比較", 14.9, color="muted", max_width=535)
+    for x, title in [(58, "前回の整合確認時"), (354, "現在")]:
+        c.rect(x, 505, 239, 52, "gray", "line", radius=8, width=1.1)
+        c.text(x + 119.5, 517, title, 16.55, True, center=True, max_width=215)
+        c.text(x + 119.5, 539, "fingerprint", 13.8, color="muted", center=True, max_width=215)
+    c.text(326, 520, "≠", 21, True, "yellow_ink", center=True)
+    c.arrow(326, 565, 588, color="yellow_ink", width=1.65)
+    c.rect(58, 595, 535, 63, "yellow", "yellow_line", radius=8, width=1.1)
+    c.text(326, 607, "不一致 → 再確認候補", 19.3, True, "yellow_ink", center=True, max_width=503)
+    c.text(326, 635, "誤りが確定したわけではない", 15.45, color="yellow_ink", center=True, max_width=503)
+    c.text(326, 680, "対応形式を限定した任意PoC", 14.9, color="muted", center=True, max_width=535)
     return c
 
 
@@ -210,6 +332,8 @@ def model(lang):
 
 
 def execution(lang):
+    if lang == "ja":
+        return execution_ja()
     ja = lang == "ja"
     c = Canvas(823)
     c.title("Testが実行でCodeを検証する" if ja else "Tests verify Code by execution",
@@ -247,6 +371,8 @@ def execution(lang):
 
 
 def drift(lang):
+    if lang == "ja":
+        return drift_ja()
     ja = lang == "ja"
     c = Canvas(878)
     c.title("変更後も意味の対応を確かめる" if ja else "Check alignment after changes",
