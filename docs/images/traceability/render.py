@@ -105,7 +105,8 @@ class Canvas:
                        Image.Resampling.LANCZOS).save(path, optimize=True)
 
 
-def entity(c, y, h, title, icon, fill="gray", ink="ink", badge=None):
+def entity(c, y, h, title, icon, fill="gray", ink="ink", badge=None,
+           center_header=False, green_badge=False):
     c.rect(48, y, 544, h)
     c.rect(49, y + 1, 542, 53, fill, fill, radius=11)
     # Flat lower edge on the tinted header, with a single separating rule.
@@ -113,11 +114,23 @@ def entity(c, y, h, title, icon, fill="gray", ink="ink", badge=None):
                       591 * SUPERSAMPLE, (y + 54) * SUPERSAMPLE), fill=P[fill])
     c.line([(49, y + 54), (591, y + 54)], "line", 1)
     c.icon(icon, 66, y + 14, ink if ink != "ink" else "muted")
-    c.text(105, y + 13, title, 24, True, ink, max_width=374 if badge else 467)
+    # Center actual glyph ink with the 26px icon, not the font's em box.
+    title_top = 13
+    if center_header:
+        bbox = c.draw.textbbox((0, 0), title, font=font(24, True), anchor="lt")
+        title_top = 27 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2
+    c.text(105, y + title_top, title, 24, True, ink, max_width=374 if badge else 467)
     if badge:
         badge_width = 84 if badge == "SSOT" else 166
-        c.rect(574 - badge_width, y + 12, badge_width, 31, "white", "line", radius=7)
-        c.text(574 - badge_width / 2, y + 17, badge, 17, True, color=ink,
+        c.rect(574 - badge_width, y + 12, badge_width, 31,
+               "green" if green_badge else "white",
+               "green_line" if green_badge else "line", radius=7)
+        badge_top = 17
+        if center_header:
+            bbox = c.draw.textbbox((0, 0), badge, font=font(17, True), anchor="lt")
+            badge_top = 27.5 - (bbox[3] - bbox[1]) / SUPERSAMPLE / 2
+        c.text(574 - badge_width / 2, y + badge_top, badge, 17, True,
+               color="green_ink" if green_badge else ink,
                center=True, max_width=badge_width - 12)
 
 
@@ -129,31 +142,31 @@ def relation(c, top, bottom, label):
 
 
 def model_ja():
-    c = Canvas(910)
+    c = Canvas(916)
     c.title("成果物の相関", "概念モデル：多対多の追跡関係")
-    c.rect(24, 107, 592, 779, radius=14)
-    entity(c, 127, 188, "Business Design", "document")
+    c.rect(24, 107, 592, 785, radius=14)
+    entity(c, 127, 176, "Business Design", "document", badge="SSOT",
+           center_header=True, green_badge=True)
     c.text(66, 194, "識別キー：文書内のActivity名", 20, True, max_width=507)
-    c.text(66, 230, "参照元文書とあわせて参照。固定IDは不要", 19,
-           color="muted", max_width=507)
-    c.line([(66, 259), (574, 259)], "line", 1)
-    c.text(66, 274, "役割：業務上の正本（SSOT）", 19, True,
-           color="muted", max_width=507)
-    relation(c, 323, 370, "根拠")
-    entity(c, 379, 213, "Check Item", "check", fill="blue", ink="blue_ink")
-    c.text(66, 446, "識別キー：Check ID（安定キー）", 20, True,
+    c.text(66, 230, "例：予約を受け付ける", 19, color="muted", max_width=507)
+    c.text(66, 268, "業務の手順・入出力・結果を記した文書", 19, max_width=507)
+    relation(c, 311, 362, "期待結果を導く")
+    entity(c, 371, 176, "Check Item", "check", fill="blue", ink="blue_ink",
+           center_header=True)
+    c.text(66, 438, "識別キー：Check ID（安定キー）", 20, True,
            color="blue_ink", max_width=507)
-    c.text(66, 484, "条件 ＋ 独立してレビューできる期待結果", 19, max_width=507)
-    c.text(66, 521, "根拠：Activity / Procedure / Result", 19,
-           color="muted", max_width=507)
-    c.text(66, 554, "検証根拠：代表Test / assertion", 19,
-           color="muted", max_width=507)
-    relation(c, 600, 647, "検証根拠")
-    entity(c, 656, 150, "Automated Test", "play", fill="green", ink="green_ink")
-    c.text(66, 723, "識別キー：Test名／ID（既存のもの）", 20, True,
+    c.text(66, 474, "例：CK-01", 19, color="muted", max_width=507)
+    c.text(66, 512, "独立して確認できる、条件と期待結果", 19, max_width=507)
+    relation(c, 555, 606, "期待結果を検証")
+    entity(c, 615, 176, "Automated Test", "play", fill="green", ink="green_ink",
+           center_header=True)
+    c.text(66, 682, "識別キー：既存のTest名／ID", 20, True,
            color="green_ink", max_width=507)
-    c.text(66, 760, "Checkの条件・期待結果をassertionで検証", 19, max_width=507)
-    c.text(320, 840, "Check Itemが双方向の追跡を中継する", 20, True,
+    c.text(66, 718, "例：test_accept_booking", 19, color="muted", max_width=507)
+    c.text(66, 756, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
+    c.text(320, 817, "TestからCheck Itemを経由して、", 20, True,
+           "green_ink", max_width=540, center=True)
+    c.text(320, 849, "業務設計書（SSOT）まで遡れる", 20, True,
            "green_ink", max_width=540, center=True)
     return c
 
