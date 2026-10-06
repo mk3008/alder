@@ -141,32 +141,59 @@ def relation(c, top, bottom, label):
     c.text(346, (top + bottom) / 2 - 11, label, 20, color="muted", max_width=230)
 
 
+def recorded_relation(c, top, bottom, label, heading, lines):
+    """Solid N:M relation beside a dashed explanatory note, not another edge."""
+    c.arrow(96, top, bottom, True)
+    c.text(78, top + 1, "N", 18, True, "muted", center=True)
+    c.text(78, bottom - 20, "M", 18, True, "muted", center=True)
+    c.text(134, top + 3, label, 20, color="muted", max_width=442)
+    x, y, w, h = 134, top + 35, 458, 142
+    c.rect(x, y, w, h, "gray", "gray", radius=8)
+    for xx in range(x + 8, x + w - 8, 12):
+        for yy in [y, y + h]:
+            c.line([(xx, yy), (min(xx + 6, x + w - 8), yy)], "arrow", 1)
+    for yy in range(y + 8, y + h - 8, 12):
+        for xx in [x, x + w]:
+            c.line([(xx, yy), (xx, min(yy + 6, y + h - 8))], "arrow", 1)
+    c.text(x + 16, y + 13, heading, 19, True, "blue_ink", max_width=w - 32)
+    for i, line in enumerate(lines):
+        c.text(x + 16, y + 46 + i * 28, line, 18, max_width=w - 32)
+
+
 def model_ja():
-    c = Canvas(916)
-    c.title("成果物の相関", "概念モデル：多対多の追跡関係")
-    c.rect(24, 107, 592, 785, radius=14)
+    c = Canvas(1198)
+    c.title("成果物の相関", "多対多の相関（実線）と、対応の記録（点線枠）")
+    c.rect(24, 107, 592, 1067, radius=14)
     entity(c, 127, 176, "Business Design", "document", badge="SSOT",
            center_header=True, green_badge=True)
     c.text(66, 194, "識別キー：文書内のActivity名", 20, True, max_width=507)
     c.text(66, 230, "例：予約を受け付ける", 19, color="muted", max_width=507)
     c.text(66, 268, "業務の手順・入出力・結果を記した文書", 19, max_width=507)
-    relation(c, 311, 362, "期待結果を導く")
-    entity(c, 371, 176, "Check Item", "check", fill="blue", ink="blue_ink",
+    recorded_relation(c, 311, 503, "期待結果を導く", "記録①  Check作成時", [
+        "AIが文書・Activityへの参照を",
+        "同じCheck IDの詳細に保存",
+        "新規Testへの参照はまだない",
+    ])
+    entity(c, 512, 176, "Check Item", "check", fill="blue", ink="blue_ink",
            center_header=True)
-    c.text(66, 438, "識別キー：Check ID（安定キー）", 20, True,
+    c.text(66, 579, "識別キー：Check ID（安定キー）", 20, True,
            color="blue_ink", max_width=507)
-    c.text(66, 474, "例：CK-01", 19, color="muted", max_width=507)
-    c.text(66, 512, "独立して確認できる、条件と期待結果", 19, max_width=507)
-    relation(c, 555, 606, "期待結果を検証")
-    entity(c, 615, 176, "Automated Test", "play", fill="green", ink="green_ink",
+    c.text(66, 615, "例：CK-01", 19, color="muted", max_width=507)
+    c.text(66, 653, "独立して確認できる、条件と期待結果", 19, max_width=507)
+    recorded_relation(c, 696, 888, "期待結果を検証", "記録②  Test実行・レビュー後", [
+        "更新依頼を受けたAIが",
+        "Test／assertionへの参照を",
+        "同じCheck IDの詳細に保存",
+    ])
+    entity(c, 897, 176, "Automated Test", "play", fill="green", ink="green_ink",
            center_header=True)
-    c.text(66, 682, "識別キー：既存のTest名／ID", 20, True,
+    c.text(66, 964, "識別キー：既存のTest名／ID", 20, True,
            color="green_ink", max_width=507)
-    c.text(66, 718, "例：test_accept_booking", 19, color="muted", max_width=507)
-    c.text(66, 756, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
-    c.text(320, 817, "TestからCheck Itemを経由して、", 20, True,
+    c.text(66, 1000, "例：test_accept_booking", 19, color="muted", max_width=507)
+    c.text(66, 1038, "条件・期待結果をコードの実行で確かめる", 19, max_width=507)
+    c.text(320, 1099, "TestからCheck Itemを経由して、", 20, True,
            "green_ink", max_width=540, center=True)
-    c.text(320, 849, "業務設計書（SSOT）まで遡れる", 20, True,
+    c.text(320, 1131, "業務設計書（SSOT）まで遡れる", 20, True,
            "green_ink", max_width=540, center=True)
     return c
 
