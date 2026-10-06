@@ -1,6 +1,6 @@
 {
-  "checked_at_utc": "2026-10-06T22:34:23.117768+00:00",
-  "scope": "Complete synthetic fixture, frozen raw draft, progress/final replies and read audit",
+  "checked_at_utc": "2026-10-06T22:41:35.518083+00:00",
+  "scope": "Complete synthetic fixture, frozen raw draft/replies/read audit, final evaluation, initial evaluation revision, report and retrospective",
   "manual_review": "No real customer, private control-plane/chat URL, credential, personal contact or real transaction data found. Filesystem paths and agent identifier are task provenance. The package sources are already public MIT-licensed Alder materials.",
   "pattern_checks": {
     "github.com/mk3008/root": false,
@@ -10,5 +10,6 @@
     "password": false,
     "@": false
   },
-  "limitations": "Pattern scan supplements manual content review; not a general secret-scanning guarantee."
+  "limitations": "Pattern scan supplements manual content review; not a general secret-scanning guarantee.",
+  "evaluation_prompt_note": "Evaluation-specific instructions and follow-up adjudications retained; generic non-evaluation coordination/permission boilerplate omitted with label. Actual author dispatch remains complete and hash-identical."
 }
