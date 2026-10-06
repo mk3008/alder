@@ -95,7 +95,7 @@ Alderで作成し、実装へ引き渡す主な成果物は、業務設計書と
 - **業務設計書への参照**：チェック項目の条件・期待結果の根拠となる箇所を示します。参照元文書とActivity名などの人間可読な識別子を使い、必要ならProcedure / Resultまでたどれるようにします。Activityに機械的な固定IDは要求しません。
 - **Testへの参照**：その条件・期待結果を検証する代表Testとassertionを示します。
 
-<a href="docs/images/traceability-model.ja.png"><img src="docs/images/traceability-model.ja.png" alt="成果物の相関と記録時期を示す概念モデル。実線は多対多の相関、点線枠は記録の説明。Check作成時にAIが業務設計書への参照を保存し、新規Testへの参照はまだない。Test実行・レビュー後、更新依頼を受けたAIがTest/assertionへの参照を同じCheck IDの詳細へ保存する。各カードに識別キー、その例、内容の概要を示す。Business DesignはSSOTの緑バッジで業務上の正本と示す。業務から期待結果を導き、Testが期待結果を検証する。業務設計書の業務とチェック項目、チェック項目と自動Testはそれぞれ多対多（N:M）でつながる。チェック項目の安定IDから業務上の根拠とTestのassertionをたどり、Testから業務へも逆引きできる。実DBスキーマではない。" width="640"></a>
+<a href="docs/images/traceability-model.ja.png"><img src="docs/images/traceability-model.ja.png" alt="成果物の相関を示す概念モデル。Check Item内に二つの結合管理を示す。作成・更新スキル利用時に文書とActivity名を紐づけて管理し、実装レビュー後の記録更新スキル利用時にTest名/IDと検証内容を紐づけて管理する。各カードに識別キー、その例、内容の概要を示す。Business DesignはSSOTの緑バッジで業務上の正本と示す。業務から期待結果を導き、Testが期待結果を検証する。業務設計書の業務とチェック項目、チェック項目と自動Testはそれぞれ多対多（N:M）でつながる。チェック項目の安定IDから業務上の根拠とTestのassertionをたどり、Testから業務へも逆引きできる。実DBスキーマではない。" width="640"></a>
 
 業務設計書とチェック項目、チェック項目とTestは、それぞれ多対多（N:M）で結び付きます。一つのチェック項目が複数の業務を根拠にしたり、複数のTestで検証されたりすることがあります。逆に、一つの業務やTestが複数のチェック項目に関係することもあります。
 
