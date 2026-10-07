@@ -6,10 +6,10 @@ Alder uses one product version, shared with `plugins/alder/plugin.json`. A publi
 
 ## Install once
 
-After verifying its publication on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.5), pin the Plugin release tag:
+After verifying its publication on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.6), pin the Plugin release tag:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.5
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.6
 codex plugin marketplace list
 ```
 
