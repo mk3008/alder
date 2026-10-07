@@ -1,5 +1,7 @@
 # Business Design field-role review: bounded regression result
 
+This file records candidates 1–2 and their initial comparison. A later, separately authorized candidate 3 simplifies the intervention around reader clarity; its one four-case comparison and remaining gaps are recorded in [Name-first reader check](reader-check/RESULT.md). The failures below remain unchanged.
+
 ## Decision
 
 **Do not call this correction validated or ready for adoption.** The two guidance candidates did not recover the motivating naming issue in fresh reviews. The synthetic comparison is tied: both installed guidance and candidate 2 detected all four designed defects and preserved all four normal cases. There is no observed detection improvement in this set.
@@ -66,4 +68,4 @@ Use the existing quality guide's purpose (a person can understand and correct th
 
 A minimal proposed change would ask for the reading of the name before relying on the body to repair it, then compare that reading with the described work. If a plausible reading confuses setting a behavior with executing it, report the concrete competing readings and a meaning-preserving name. Do not require a name to encode all fields, and preserve qualifiers that identify distinct objects or activities.
 
-Before making another candidate, prepare a small discriminating comparison: names alone (what action and target do they suggest?) followed by their full designs (does that reading match?). Include grammatically valid but confusing modifiers as well as clear contradictions and necessary target/time qualifiers. Freeze expected distinctions before the run, retain disagreements, and compare with the installed baseline. No candidate 3, additional authoring trial or larger benchmark was run here. The parent review decides the next execution.
+At this initial checkpoint, the proposal was to prepare a small discriminating comparison: names alone (what action and target do they suggest?) followed by their full designs (does that reading match?). Include grammatically valid but confusing modifiers as well as clear contradictions and necessary target/time qualifiers. Freeze expected distinctions before the run, retain disagreements, and compare with the installed baseline. No candidate 3 had been run at that checkpoint; the subsequent authorized check is linked above. No additional authoring trial or larger benchmark was added.

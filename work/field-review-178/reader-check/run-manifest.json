@@ -1,0 +1,29 @@
+{
+  "input_revision": "d3344965020bb2101227d5208a71be8380629f10",
+  "candidate_revision": "d0ed8850fa9823b2dad39fe275a628d8d3a00897",
+  "candidate_source_revision": "d3c17aedb6ec411680c00dcdf1ca1e8eead21577",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_independently_verified": false,
+  "agents": {
+    "installed": "/root/improve_alder_field_review/review_design_cases_a",
+    "candidate": "/root/improve_alder_field_review/review_design_cases_b"
+  },
+  "acquisition_logs": "Agent-created contemporaneous reports, not independently captured complete tool traces",
+  "pre_body_interpretations": "Not externally preserved; reviewer confirmed missing, no reconstruction requested",
+  "sha256": {
+    "RESULT.md": "26c1c2b88c97b511ddf0a4f27426c86ffa13cbb79fb055fc0d3d2b0f7fddb60a",
+    "designs.md": "3857ce392ed2749f87f7ae79e2a7181aa5bb395cb15ee70b8f02fee19957401a",
+    "expected.md": "a1b533d28a33552f9f9640eb5c0ac7f84c6337fbed1dc6b0798c1d4781b1a4bd",
+    "names.md": "f3be1270f6a922af69b5402749ac30d0b0d336a75a58ab15c5fd0d4255834398",
+    "runs/candidate/acquisition-log.txt": "8d84691fdcc4a6be29b6481489bef2d5faf248a81dd31e99c495973c9a2dc38a",
+    "runs/candidate/final-response.txt": "ecd825252633751d067540e051c880d3f5de90663fff90f7369ba94886d1902a",
+    "runs/candidate/request.txt": "7721939c02825c90342cf11d1256b2360de35d9f96524786d242350950741184",
+    "runs/installed/acquisition-log.txt": "396cae18f11b3fed55a4bb6a2b48139dfe6477c22f22098a3bc95f473107ffd0",
+    "runs/installed/final-response.txt": "cc5bca843490c871bc50af4da2f5ca839cec47a3a7b732ce470f6dfb9059b755",
+    "runs/installed/request.txt": "649cdeeb0357584ef33ce6c7214eb3ed2f6b6a32079f4cf9b5af0809711f48c9"
+  }
+}
