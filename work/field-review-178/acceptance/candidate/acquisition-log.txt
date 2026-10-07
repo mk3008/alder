@@ -1,0 +1,5 @@
+1. Candidate package snapshot: skills/alder-review-business-design/SKILL.md; listed its references directory. No installed plugin was exercised.
+2. Input files: read only Activity and Case heading lines from designs-a.md and designs-b.md before their bodies, for name-first check.
+3. Candidate package snapshot: references/business-design-structure.ja.md, references/business-design-quality-check.ja.md, references/business-design-correlation-check.ja.md, references/business-design-omission-check.ja.md, references/provenance.json, and plugin.json, in that order.
+4. Isolated input bytes: read full designs-a.md, then full designs-b.md.
+No external links or other repo files were opened. No acquisition failed.

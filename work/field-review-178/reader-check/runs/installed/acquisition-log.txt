@@ -1,0 +1,9 @@
+1. skills.read package=c0/alder-review-business-design, resource omitted (SKILL.md only). Acquired installed SKILL.md; required: four references, provenance.json, ../../plugin.json. Target-repo discovery excluded by the request’s one-input-file boundary.
+2. skills.read package=c0/alder-review-business-design, resource=references/business-design-structure.ja.md. Acquired complete document-structure reference.
+3. skills.read package=c0/alder-review-business-design, resource=references/business-design-quality-check.ja.md. Acquired complete description-quality reference.
+4. skills.read package=c0/alder-review-business-design, resource=references/business-design-correlation-check.ja.md. Acquired complete business-correlation reference.
+5. skills.read package=c0/alder-review-business-design, resource=references/business-design-omission-check.ja.md. Acquired complete omission-review reference.
+6. skills.read package=c0/alder-review-business-design, resource=references/provenance.json. Acquired complete provenance metadata.
+7. skills.read package=c0/alder-review-business-design, resource=skill://Plugin_c07da18d57d08191ade15f71e7618afa/plugin.json (attempt to resolve ../../plugin.json). Failed: resource not readable; no metadata acquired.
+8. exec_command requested SHA-256, line count, and full contents of the single allowed input file /workspace/shared/alder-designs-178-b/designs.md. Acquired full file.
+9. skills.read package=c0/alder-review-business-design, resource=../../plugin.json. Failed: resource not readable; installed Alder version remains unconfirmed.

@@ -71,11 +71,12 @@ class PluginReferencesTest(unittest.TestCase):
             self.assertEqual((document.parent / structure).read_bytes(),
                              (ROOT / "docs/business-design-structure.ja.md").read_bytes())
 
-    def test_adoption_bundles_reproduce_their_exact_source_commit(self):
+    def test_selected_bundles_reproduce_their_exact_source_commit(self):
         from tools.export_plugin_references import export_plan
 
         names = ["alder-draft-business-design", "alder-draft-check-items", "alder-follow-up-review",
-                 "alder-explore-functional-conditions", "alder-export-business-graph"]
+                 "alder-explore-functional-conditions", "alder-export-business-graph",
+                 "alder-review-business-design"]
         for path, content in export_plan(ROOT, names).items():
             self.assertEqual((ROOT / path).read_bytes(), content, str(path))
 

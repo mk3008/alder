@@ -1,0 +1,4 @@
+These six files were saved by transcribing the bodies returned by the installed skills.read calls during the review. No new skill retrieval was performed for this capture.
+The four business-design-*.ja.md files match the SHA-256 values listed for their respective sources in the returned provenance.json.
+SKILL.md and provenance.json were also transcribed from returned bodies, but no independent upstream digest was available for them.
+This directory is a capture of the returned content bodies, not a raw or complete tool execution log. Tool envelopes, timestamps, metadata, and errors are not reproduced here. The plugin.json version read failed during the review; no version is asserted.

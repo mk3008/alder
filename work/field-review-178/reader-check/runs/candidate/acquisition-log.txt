@@ -1,0 +1,12 @@
+
+01 exec_command cat exact package skill path /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/SKILL.md (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/references/business-design-structure.ja.md (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/references/business-design-quality-check.ja.md (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/references/business-design-correlation-check.ja.md (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/references/business-design-omission-check.ja.md (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/references/provenance.json (full file)
+exec_command cat exact package file /workspace/shared/alder-package-178-r3/alder/plugin.json (full file)
+02 exec_command grep -n only top-level Activity name headings from input file /workspace/shared/alder-designs-178-b/designs.md (name-first; no body)
+03 exec_command nl -ba entire input file /workspace/shared/alder-designs-178-b/designs.md (full document with line numbers)
+04 exec_command sha256sum exact input file /workspace/shared/alder-designs-178-b/designs.md
+05 exec_command sha256sum four exact mandatory guide files to compare provenance hashes

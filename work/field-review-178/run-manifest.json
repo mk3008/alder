@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "input_revision": "f8c25e68561b730dc35a3927eb9d75c35ede2205",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_independently_verified": false,
+  "runs": {
+    "installed": {
+      "agent": "/root/improve_alder_field_review/review_synthetic_designs_installed",
+      "route": "skills.read installed plugin",
+      "version_reported_by_reviewer": "unknown",
+      "source_revision": "9cf192c5bced1eeb872795eec8ced21b7bcbf492"
+    },
+    "candidate": {
+      "agent": "/root/improve_alder_field_review/review_synthetic_designs_candidate",
+      "route": "published candidate package snapshot",
+      "package_revision": "6b3d53082d53f1bfecdb7a069d5775175e103001",
+      "source_revision": "71116bb6a90250249314810f27d9f022c659bd62",
+      "manifest_version": "0.4.5",
+      "installed_or_released": false
+    }
+  },
+  "evaluation": "RESULT.md; designed expectations were fixed before dispatch; both arms detect S01-S04 and preserve S05-S08; no observed advantage",
+  "sha256": {
+    "RESULT.md": "87d8388d46222b2a9019dd14ee4f8767019f84c3e3cdb2394b3ee4d525c622ad",
+    "expected.md": "b38e6af1ecd294d78d32148560ad271dfa759e032006e0e5ebbb743d760b12cd",
+    "inputs/designs-a.md": "ed183f52cfc2f5abc8bf0702760bd12a8bc1c8a85c29b5665e3bf02f5e36e9a4",
+    "inputs/designs-b.md": "07a17a8ed41907fc1e5f94e509dfd44d463b666626496d9ab5dffbd147b48443",
+    "review-prompt.md": "ff51b3b4f592885ac66ff789e69e41d626196620f83d0d93ff0df67b5e4086f6",
+    "runs/candidate/final-response.txt": "af894da0f23b8b08dfd0cf23a76bc67fc399f9bc92953f17c381a2c009fd2e27",
+    "runs/candidate/request.txt": "b75a388a92931fdd0b5cbcb62068b450924292afc9958da1770f2bd616591951",
+    "runs/installed/final-response.txt": "7255c6a594034c4117c885aeb2d4b4216e160767adbf85577ffbd6c1698cbc44",
+    "runs/installed/request.txt": "67ead165bc7fb3cc6c8a3c91ac0d16abc2dbcc6993ae83f4ba304a8198aeb1c1"
+  }
+}

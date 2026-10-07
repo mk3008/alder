@@ -1,0 +1,23 @@
+業務設計レビュー結果（読み取り専用）
+
+意味を変えずに直せる記述
+
+- S01「仕分け完了時に荷札の印刷部数を設定する」：Activity名は仕分け完了時に設定を始めるように読めます。一方、前提とWhenでは出荷担当者が変更したいときに保存し、仕分け・印刷は後続の対象外業務です。「荷札の印刷部数を設定する」など、設定時点を誤示しない名前へ直すのが適切です。
+- S02「回収容器の振り分け先を設定する」/When：本文は「回収容器が搬入口に到着したとき」ですが、前提は変更依頼の受領時に、入庫前に設定するという決定済み事実です。到着後に設定を始めると読み違えるため、「振り分け先変更依頼を受け取ったとき」へ直すのが適切です。
+- S03「温室の散水時間を設定する」/Result：「設定した時間の散水が完了している」は、保存時点で散水が終わったと読めます。前提・Scope・Procedureでは、この仕事は設定保存までで、散水は翌日の対象外業務です。「対象の温室の開始時刻と散水時間が変更案どおり保存され、翌日の制御装置が参照できる」など、保存後の状態を示すのが適切です。翌日の散水完了をこのActivityの結果にしないでください。
+- S04「貸出用具を引き渡す」/Who・Where：Whoが「備品窓口」、Whereが「貸出担当者」となっています。前提では備品窓口は場所、貸出担当者は責任者であり、Procedureにも貸出担当者が行うとあります。Whoを「貸出担当者」、Whereを「備品窓口」に入れ替えるのが適切です。現状では誰が引き渡すかを読み違えます。
+
+業務判断が必要な未決事項として新たに挙げるものはありません。S07の既存予定への適用方針は本文に未決と明示され、試行用登録と実運用を分離できています。このレビューで方針を決める必要はありません。
+
+問題を認めなかったCase
+
+- S05：開館時に使う設定を事前に保存する仕事として、前提、When、Input→Procedure→Output、Resultが整合しています。
+- S06：指定した座席図を表示して参照可能にする仕事として整合しています。内容理解や配置案との照合まで結果に含めていません。
+- S07：試行用の登録と未決の運用方針が区別され、正常な登録場面の入出力と結果は整合しています。
+- S08：登録から再生への再生設定を介した受け渡し、開場信号による再生開始、一回の再生と履歴記録が整合しています。
+
+確認範囲と限界：各Caseを独立文書として全文確認し、Object・Activityの欄の役割、正常場面の入出力、開始条件、結果、記載されたActivity間の接続を確認しました。各前提を決定済み事実として扱いました。例外の網羅、実装・テスト、架空業務の外部運用、未提示の合意事項は確認していません。文書、業務判断、GitHub、plugin登録は変更していません。
+
+証跡：使用したinstalled plugin IDはPlugin_c07da18d57d08191ade15f71e7618afa（skills.read package c0/alder-review-business-design）です。installed Skillのplugin.jsonをskills.readの ../../plugin.json およびplugin rootへのパスで取得しようとしましたが、いずれも「failed to read skill resource」でした。取得可能なmetadataからplugin versionは確認できず、versionは不明です。plugin検索「Alder」も結果0件で、versionを補完できませんでした。正式Skillをrepoや別copyで代用していません。provenanceから取得したBusiness Design review資料のsource revisionは9cf192c5bced1eeb872795eec8ced21b7bcbf492です。入力の指定source revisionはmk3008/alder f8c25e68561b730dc35a3927eb9d75c35ede2205であり、隔離入力の由来として受領した値です。入力bytesをrepoと再照合していません。requested modelはgpt-6-sol/medium/fork none、effective runtimeの独立確認は未実施です。
+
+読んだ入力paths：/workspace/shared/alder-review-inputs-178/designs-a.md、/workspace/shared/alder-review-inputs-178/designs-b.md。読んだinstalled package paths：skill://Plugin_c07da18d57d08191ade15f71e7618afa/alder-review-business-design/SKILL.md、同ディレクトリのreferences/business-design-structure.ja.md、references/business-design-quality-check.ja.md、references/business-design-correlation-check.ja.md、references/business-design-omission-check.ja.md、references/provenance.json。これら以外の文書、文書内リンク先、repoの期待判定、他レビュー、Issue/PRは参照していません。
