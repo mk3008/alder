@@ -158,7 +158,7 @@ Alder includes conditions, expected results, source references to Business Desig
 
 People provide existing constraints and preferences; ask AI to organize technical conditions implementation must preserve. Detailed technical investigation belongs to the product.
 
-At handoff, keep security requirements that are provided, explicitly inapplicable, or unresolved distinct. Missing requirements do not mean no requirements. [Security requirement intake](docs/adoption.md#carry-security-requirements-into-implementation) offers a small product-side drafting prompt; Alder does not decide or certify those requirements.
+If security requirements are missing, have the product team identify the needed conditions. Carry unknowns into the handoff as unresolved rather than treating them as no requirements. Use the [drafting prompt](docs/adoption.md#carry-security-requirements-into-implementation) to get started.
 
 | State early | May be delegated to implementation |
 | --- | --- |
