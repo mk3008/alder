@@ -1,0 +1,18 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "plugin_id": "Plugin_c07da18d57d08191ade15f71e7618afa",
+    "name": "alder",
+    "description": "Draft and maintain Alder Business Design and Checks, discover questions, review improvements and implementation, follow up evidence, and run optional graph and drift tools.",
+    "version": "0.4.5",
+    "current_release_id": "pluginrel_6ac5b2ea5e908191bd97df6d00ba208f",
+    "scope": "USER",
+    "discoverability": "PRIVATE"
+  },
+  "isError": false
+}
