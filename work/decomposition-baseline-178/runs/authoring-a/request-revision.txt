@@ -1,0 +1,2 @@
+草案へ次の変更を反映してください。変更依頼は /workspace/shared/decomposition-inputs-178/change/request.txt です。元の説明と今回の変更以外に追加の業務判断はありません。インストール済みAlderの同じauthoring Skillに従って、改稿版を /workspace/shared/decomposition-runs-178/authoring-a/draft-revised.md へ保存し、元のdraft-initial.mdと初回証跡は変更しないでください。
+今回の受信payload全文を同directory/request-revision.txt、最終返答全文をresponse-revision.txt、実読した資料と取得範囲・source revision・制約をacquisition-revision.txtに保存してください。読み取ってよいのは元の入力、初稿、今回の変更依頼とinstalled Skill必須資料だけです。ほかのケース・結果・期待判定・repo・外部リンクは読みません。草案は未承認のままです。新しい実装、送信、GitHub・plugin操作はしないでください。以上のファイル保存だけ許可します。

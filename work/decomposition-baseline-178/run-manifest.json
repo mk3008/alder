@@ -1,0 +1,48 @@
+{
+  "input_revision": "743e2779fa2e8bd2c02028d3618418c7f682951f",
+  "scope": "installed baseline only: drafts A/B, one A revision, one review of two independent cases",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none",
+    "revision_context": "same as authoring A"
+  },
+  "effective_runtime_independently_verified": false,
+  "installed_metadata_observed_by_coordinator": {
+    "version": "0.4.5",
+    "release": "pluginrel_6ac5b2ea5e908191bd97df6d00ba208f",
+    "at": "2026-10-07T06:22:26Z"
+  },
+  "authoring_source": "b9ac9a3b44a02790f03a77b1b8d128934be06636",
+  "structure_and_review_source": "9cf192c5bced1eeb872795eec8ced21b7bcbf492",
+  "agents": {
+    "authoring-a": "/root/improve_alder_field_review/draft_business_case_a",
+    "authoring-b": "/root/improve_alder_field_review/draft_business_case_b",
+    "review": "/root/improve_alder_field_review/review_decomposition_cases"
+  },
+  "sha256": {
+    "RESULT.md": "077b3673c030e2c4b4d4c4e87d409941f835991d06f6916793d323615dbc181c",
+    "authoring/a-change.txt": "6fadcc50ec474bc7d4c9c3cd1ead4b9f8d5c466f809f7291e5d9acec8e41b1a2",
+    "authoring/a.txt": "1a80a0fdb18b45c1d413e8c425d43cfed50135ce402ddeed491ea28169b767fa",
+    "authoring/b.txt": "29ed78e7dfa44ef901befe291541bba37a3f51223ecb14329b51f92cdc174fa7",
+    "expected.md": "256f1a7c6c6f8b51017ebf8bc980094d3ec79eaeb4cac5e1fe4402c6967d6e4a",
+    "protocol.md": "2535fc1f9d90301265f7c7064f7c2d063fec17237485fdcb0f69c929f8f8ff15",
+    "review/designs.md": "f50a29988d11d0cfcf83d91e695314dcc9d423075b9554d3e0d7be840003220b",
+    "runs/authoring-a/acquisition-initial.txt": "2f95301c2effa51cf96c3032f52d09078a5b93dec18437ae8bb1a418da8b9761",
+    "runs/authoring-a/acquisition-revision.txt": "860735274754700a887635f5af93869e91db43265715da7a52b5871e26e5951f",
+    "runs/authoring-a/draft-initial.md": "4381e2f7cf8d11b7a67475fbe2d37f20ce79a0e6da3cfcd0dc66facfddbf1ad1",
+    "runs/authoring-a/draft-revised.md": "b977a19f3c3ef2341eae9c79ea5d2aa64bb6bd45988a91b8aadcec0bd07090b0",
+    "runs/authoring-a/request-initial.txt": "39597bc7fd511704c130036f241f5f571b253dc37402aed54f09fe5588437cc1",
+    "runs/authoring-a/request-revision.txt": "a982a42fb8bf1270a3875cb23b44fec5378cfe2b42790ff851923363abddffaf",
+    "runs/authoring-a/response-initial.txt": "e9d30e198dad82a7d7a789b336f0590e6484d56191dd9cd5121ec19f00249c5a",
+    "runs/authoring-a/response-revision.txt": "fa10e7f4a828bc3b9d9ec94a880445350909f7a586d44c08acd58b86ea37cc78",
+    "runs/authoring-b/acquisition-initial.txt": "a6f336b32a1a05adb364b66f31e937c66ceaa4c1cd4a8dc5382acce54620bf6e",
+    "runs/authoring-b/draft-initial.md": "04df1516fde062d4632731cc3896960105caf557d68934506fc470ec3e3841cc",
+    "runs/authoring-b/request-initial.txt": "b2a7c26e68d6eddab0f11979c09f254957a42dcc1e6bba3b39374a6b04412c3a",
+    "runs/authoring-b/response-initial.txt": "bcde330309072c8750367ce3afe06e739c7b7067aba4e410c8a6e1f329bcd66c",
+    "runs/review/acquisition-log.txt": "9f9575fe6ef0c9b0717b634f0306626135c5b2437e0b9d644c76980cda287286",
+    "runs/review/final-response.txt": "ce7f6a1d04cca335f1bcfe0c2ce72763a697523aaf835cda7d9677ba1ea2acae",
+    "runs/review/request.txt": "431f156bb8281f94b3c37c017098ff5dfa01a5fdc39cbd7d62f89192b37170f3",
+    "structural-check.json": "4a4bfe41473df5eb19df5001ac70570e618c97487bc7e001c89bf07a11430fa3"
+  }
+}

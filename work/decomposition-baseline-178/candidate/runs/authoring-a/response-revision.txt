@@ -1,0 +1,5 @@
+改稿版を /workspace/shared/allocation-runs-178/authoring-a/draft-revised.md に保存しました。不足一覧の並び順をProcedureとOutputの両方で商品コード順に変更し、ほかの条件と未確認事項は維持しました。草案は未承認です。
+
+複数倉庫時の不足判定単位と一覧での倉庫の識別方法は、引き続き確認待ちです。保存期間も未決のままです。
+
+参照したのは元の合成入力、初稿、今回の変更依頼とcandidate packageの必須資料です。manifest versionは0.4.5、authoring source revisionはb0caf05d61f598c8e0af251a91e7dfb3153d1d5e、文書構造のsource revisionは979bf6b214f0ef805b9d407a04fc23c55dd17d4dです。指定candidate commitはf4408db27e8735e75a7f43d480df7461bbe00de1です。installed pluginの動作試験ではありません。
