@@ -1,0 +1,10 @@
+{
+  "requested_model": "gpt-6-sol",
+  "requested_effort": "medium",
+  "fork_turns": "none",
+  "agent_id": "/root/prevent_missing_security_requirements/review_candidate_security_handoff",
+  "effective_runtime_settings_independently_verified": false,
+  "authority": "dea838056f75796bdc1eef9622a94a0aeb11f82b",
+  "input_revision": "b0caf05d61f598c8e0af251a91e7dfb3153d1d5e",
+  "capture_limit": "Returned answer and resource report retained; complete tool/runtime transcript not retained."
+}
