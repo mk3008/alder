@@ -1,0 +1,25 @@
+{
+  "commit": "68836f6899ac263dcd68d038daaa72f3e54d08ce",
+  "files": [
+    {
+      "path": "inputs/transcript.txt",
+      "equal": true,
+      "blob": "6fd6281d8f79cb7c2a64860fe88ffa664e00f2db"
+    },
+    {
+      "path": "preparation/requirement-oracle.json",
+      "equal": true,
+      "blob": "6e6853162d981a6e44b85eed24fecdaf6fc2354f"
+    },
+    {
+      "path": "provenance/author-dispatch.txt",
+      "equal": true,
+      "blob": "a26389434646177ec9c65609ab83c9bc5acd1b7e"
+    },
+    {
+      "path": "provenance/input-freeze.json",
+      "equal": true,
+      "blob": "dec807d717ab476a2ed65d3e704185307232a08b"
+    }
+  ]
+}
