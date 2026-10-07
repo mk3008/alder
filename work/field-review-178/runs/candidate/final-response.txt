@@ -1,0 +1,20 @@
+Alder Business Designレビュー（読み取り専用、完全合成8 Case）
+
+【意味を変えずに直せる記述上の指摘】
+- S01「荷札の印刷条件」／Activity名「仕分け完了時に荷札の印刷部数を設定する」：前提とWhenでは、出荷担当者が部数を変更したいときに設定し、仕分け完了後の印刷は別の対象外業務である。名前の「仕分け完了時に」により、設定作業が仕分け完了を待って始まると読める。Activity名を「荷札の印刷部数を設定する」など設定する仕事そのものにし、後日の印刷時点は前提・Why・Resultで扱う。Whenは現状のままで意味が通る。
+- S02「空容器の振り分け設定」／Activity「回収容器の振り分け先を設定する」のWhen：前提では変更依頼の受領時に設定し、到着では設定を始めないと明記されている。一方、Whenは「回収容器が搬入口に到着したとき」としており、担当者が到着まで登録しないと読める。Whenを「容器管理担当者が振り分け先変更依頼を受け取ったとき」など、前提に一致する開始条件に直す。到着は対象外の後続振り分けの契機として残す。
+- S03「温室の散水時間」／Activity「温室の散水時間を設定する」のResult：ProcedureとOutputは設定値の保存・確認までで、前提では散水は翌日の開始時刻に別の制御装置が実行する。現Result「設定した時間の散水が完了している」は、設定保存時に散水も終わったと誤解させる。Resultを「変更案の開始時刻と散水時間が保存され、翌日の制御装置が参照できる」など、設定の成立状態に直す。散水の完了はこのActivityの結果に含めない。
+- S04「貸出用具の引き渡し」／Activity「貸出用具を引き渡す」のWho・Where：前提は貸出担当者を担当ロール、備品窓口を引き渡し場所と明記する。Procedureでも貸出担当者が再確認し、渡している。現在のWho「備品窓口」、Where「貸出担当者」では場所が実行主体、担当者が場所と読まれる。Whoを「貸出担当者」、Whereを「備品窓口」に入れ替える。
+
+【業務判断が必要な問い】
+今回の明示された正常な場面に限れば、新たな業務判断を求める指摘はない。S07の既存予定への適用方針は未決と明示され、試行用登録のScope・Procedure・Resultで実運用から切り離されているため、ここで方針を決めない。
+
+【指摘なしとしたCase】
+- S05：開館時用という設定対象の区別がActivity名にあり、保存の開始はWhenで事前の保存操作と明示される。点灯を保存のResultに含めず、Inputから台帳Outputへつながる。
+- S06：閲覧希望と台帳から指定図を表示へ渡し、Resultは画面で参照可能な状態に限られる。内容の理解や配置案との照合を完了した扱いにしていない。
+- S07：対象区画・間隔を試行用として保存し、実運用へ適用しないことと未決事項が一貫している。
+- S08：選曲案から再生設定へ登録し、登録済み設定と開場信号から一度再生して音響出力・履歴へ渡す接続が成立する。登録時点と再生終了時点のResultが分かれている。
+
+確認範囲：各Caseを独立文書として、全10 Activityの実施場面とWhat/Why/When/Who/Where/Input/Procedure/Output/Resultを双方向に照合し、Object、Scope、正常時の入出力、後続との接続、明示された境界を確認した。S04とS08の複数Activityについては、Output→Object→InputおよびResult→Whenのつながりも確認した。S04では引き渡し時に用具台帳を再確認するので、先の空き確認だけに依存しない。明示された正常な一場面にない例外、実装、実運用や他Caseの事実は補わず、網羅性も主張しない。業務設計、業務判断、GitHub、plugin登録は変更していない。
+
+取得・再現情報：未配布candidate packageのローカルsnapshot /workspace/shared/package-review-20261007-r2/alder（指定Alder commit 6b3d53082d53f1bfecdb7a069d5775175e103001）のsource-level reviewであり、installed pluginの実行・評価ではない。plugin.jsonのmanifest versionは0.4.5、provenance.jsonに記録されたBusiness Designレビュー資料のsource revisionは71116bb6a90250249314810f27d9f022c659bd62。入力は固定公開revision mk3008/alder f8c25e68561b730dc35a3927eb9d75c35ede2205 に由来する隔離bytes。読んだpaths：/workspace/shared/package-review-20261007-r2/alder/skills/alder-review-business-design/SKILL.md、同skills/alder-review-business-design/references/business-design-structure.ja.md、business-design-quality-check.ja.md、business-design-correlation-check.ja.md、business-design-omission-check.ja.md、provenance.json、/workspace/shared/package-review-20261007-r2/alder/plugin.json、/workspace/shared/alder-review-inputs-178/designs-a.md、designs-b.md。取得失敗なし。指定された許可資料以外は参照していないため、製品repository・そのAGENTS.md、文書内リンク先、他のレビュー資料や合意記録による検証は行っていない。requested modelはgpt-6-sol/medium/fork none（Alder repo指定）だが、effective runtimeの独立確認は未実施。
