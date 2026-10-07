@@ -1,0 +1,7 @@
+入力: /workspace/shared/decomposition-inputs-178/a/request.txt を全件実読。ほかのproject資料なし。
+正式Skill authority: skills.read package c0/alder-draft-business-design、skill://Plugin_c07da18d57d08191ade15f71e7618afa/alder-draft-business-design/SKILL.md を全件実読。
+必須資料: 同packageの references/adoption.md の第1節（第2節見出し直前まで、authoring/correlation guidanceを含む）を実読。references/business-graph.md は opt-in Markdown profile v1 から minimal example まで実読。references/provenance.json を実読。authoring source revision b9ac9a3b44a02790f03a77b1b8d128934be06636。
+別source revisionの必須構造: skills.read package c0/alder-review-business-design により references/business-design-structure.ja.md と references/provenance.json を全件実読。structure source revision 9cf192c5bced1eeb872795eec8ced21b7bcbf492。
+取得失敗: 初回にauthoring packageからreview-business-design配下の必須構造資料を読もうとして失敗。review-business-design packageで再取得し、実読成功。plugin.json は両package経由のskills.readで失敗し、独立確認できず。
+版の制約: coordinatorの選択plugin metadata 0.4.5/release pluginrel_6ac5b2ea5e908191bd97df6d00ba208f は受信payloadからの参考情報であり、当方では独立確認していない。moving checkoutのsource commitも未確認。版探索の追加plugin検索はしていない。
+範囲制約: repo、他ケース、過去成果、比較結果、期待判定、外部リンク、会話履歴は読んでいない。実装・実運用・外部送信はしていない。

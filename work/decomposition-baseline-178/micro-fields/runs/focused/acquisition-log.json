@@ -1,0 +1,26 @@
+{
+  "input": {
+    "path": "/workspace/shared/micro-fields-178/input-review/extracts.md",
+    "sha256_expected": "c2b2ee81c16142a66f558ebfbf9fb1ba543542748a908b9c2b8fcad343e06dc6",
+    "sha256_observed": "c2b2ee81c16142a66f558ebfbf9fb1ba543542748a908b9c2b8fcad343e06dc6"
+  },
+  "skill_package": "c0/alder-review-business-design",
+  "skill_resources_saved": [
+    "SKILL.md",
+    "business-design-structure.ja.md",
+    "business-design-quality-check.ja.md",
+    "business-design-correlation-check.ja.md",
+    "business-design-omission-check.ja.md",
+    "provenance.json"
+  ],
+  "pinned_source_revision": "9cf192c5bced1eeb872795eec8ced21b7bcbf492",
+  "guide_hashes_match_provenance": true,
+  "plugin_json_attempt": {
+    "resource": "skill://INSTALLED_ALDER_PLUGIN/plugin.json",
+    "result": "failed to read skill resource"
+  },
+  "coordinator_metadata_unverified": {
+    "version": "0.4.5",
+    "release": "INSTALLED_RELEASE_ID"
+  }
+}

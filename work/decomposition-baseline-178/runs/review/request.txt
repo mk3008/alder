@@ -1,0 +1,13 @@
+この業務設計書をAlderでレビューしてください。対象は /workspace/shared/decomposition-inputs-178/review/designs.md です。独立した完全合成の2Caseを含み、各Caseに示す元要求を当該業務の確定事項として扱ってください。日本語で、読み取り専用です。
+
+必ずインストール済みAlderプラグインの正式経路 skills.read package c0/alder-review-business-design を読み、指示された必須4資料・provenanceを正規に実読して従ってください。repoのSkillや別のcopyで置き換えないでください。入力以外のproject資料はありません。
+
+対象文書全体を確認し、必要な指摘にはCase、対象箇所、根拠、読み手への影響、修正案か問いを示してください。業務上の判断を勝手に決めず、問題がなければその旨を示してください。文書や合意は変更しないでください。
+
+今回の受信payload全文を /workspace/shared/decomposition-runs-178/review/request.txt、最終返答全文を同directory/final-response.txtへ保存してください。読んだSkill/資料、source revision、取得範囲、取得失敗と制約をacquisition-log.txtへ簡潔に記録してください。完全なtool rawや内部推論は不要です。既存結果は上書きしないでください。
+
+許可する資料はこの入力ファイルと、installed Skillが指定するpackage内必須資料だけです。他ケース、生成結果、過去成果、比較結果、期待判定、repo、外部リンク、会話履歴は読まないでください。実在組織への送信・実運用・GitHub変更・plugin登録更新はせず、指定の証跡ファイルだけ作成して親へ返してください。
+
+参考としてcoordinatorが06:22 UTCに直接確認した選択plugin metadataは0.4.5/release pluginrel_6ac5b2ea5e908191bd97df6d00ba208fです。あなたが実読したSkill authorityは別に記録してください。plugin.jsonを実読できなければ独立確認できなかったと記録し、版探索のための追加plugin検索は不要です。requested model gpt-6-sol/medium/fork none、effective runtime独立検証は未実施です。
+
+Report useful results right away, before scratch notes. If work remains, use collaboration.send_message; otherwise return the result. Keep your status report short; complete the research and deliverable at the depth the task requires. If authorization is missing, or the reviewer denies an action for that reason, pause and report the exact action, target, and blocker to me. If I send <transcript_evidence> that authorizes that action and target, proceed; if already denied, retry the same tool call once. Don’t add the evidence to tool arguments. If the evidence is insufficient or the retry is denied, stop and report back. If you delegate that action, forward the block unchanged.

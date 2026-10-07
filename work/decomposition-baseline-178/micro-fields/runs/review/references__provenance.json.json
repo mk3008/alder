@@ -1,0 +1,8 @@
+{
+  "name": "references/provenance.json",
+  "result": {
+    "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/references/provenance.json",
+    "contents": "{\n  \"alder_source_revision\": \"9cf192c5bced1eeb872795eec8ced21b7bcbf492\",\n  \"sources\": {\n    \"docs/business-design-quality-check.ja.md\": \"d1a3021da91de3f47ddc7a5fc18efbded598beebe1af5c089616f368886f803e\",\n    \"docs/business-design-correlation-check.ja.md\": \"b02d76cb9c9a2d3f7882fa80c67cd6a806c69866ecf84ce0dbdc32052cdd4988\",\n    \"docs/business-design-omission-check.ja.md\": \"a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d\",\n    \"docs/business-design-structure.ja.md\": \"10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0\"\n  }\n}\n",
+    "next_cursor": null
+  }
+}

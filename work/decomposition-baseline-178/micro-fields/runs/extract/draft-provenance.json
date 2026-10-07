@@ -1,0 +1,5 @@
+{
+  "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-draft-business-design/references/provenance.json",
+  "contents": "{\n  \"alder_source_revision\": \"b9ac9a3b44a02790f03a77b1b8d128934be06636\",\n  \"sources\": {\n    \"docs/adoption.md\": \"0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8\",\n    \"docs/business-graph.md\": \"d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e\"\n  }\n}\n",
+  "next_cursor": null
+}
