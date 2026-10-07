@@ -1,0 +1,29 @@
+[
+  {
+    "argv": [
+      "<python-executable>",
+      "run_tests.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "cwd": "<dogfood><workspace-root>",
+    "stdout": "15-final-tests.stdout.txt",
+    "stderr": "15-final-tests.stderr.txt",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "<python-executable>",
+      "-c",
+      "import unittest,json; s=unittest.defaultTestLoader.discover('tests'); flat=lambda s:[t.id() for c in s for t in (flat_tests(c) if isinstance(c,unittest.TestSuite) else [c])]; def_placeholder=0\ndef flat_tests(s):\n for c in s:\n  if isinstance(c,unittest.TestSuite): yield from flat_tests(c)\n  else: yield c\nprint(json.dumps([t.id() for t in flat_tests(s)],indent=2))"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "cwd": "<dogfood><workspace-root>",
+    "stdout": "15-discovery.stdout.txt",
+    "stderr": "15-discovery.stderr.txt",
+    "exit": 0
+  }
+]

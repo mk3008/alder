@@ -1,0 +1,9 @@
+{
+  "ids_preserved": true,
+  "expected_results_preserved": true,
+  "all_initial_unreviewed": true,
+  "all_updated_simulated_confirmed": true,
+  "only_TR08_title_changed": true,
+  "detail_expectations_preserved": true,
+  "BD_Q01_04_present": true
+}
