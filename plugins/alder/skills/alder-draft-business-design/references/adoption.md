@@ -248,6 +248,29 @@ When external visualization, analysis or processing would help the designer's ow
 
 Pass the human-reviewed, AI-maintained list and the same Business Design revision to the implementation agent. During Alder review/follow-up, map design revision + list revision + item ID to representative test assertions after checking their meaning. Do not maintain Code, file, symbol, SQL-entry-point, or line mappings as permanent Alder artifacts; tests verify the current implementation by execution. Do not turn unapproved candidates into pass/fail expectations. The [Check Item traceability guide](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/check-item-traceability.md) defines the two-layer view, review states, authority boundary, and meaning-preservation audit. The [research conclusion](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/behavior-derivation/conclusion.md) records evidence and limits. Review knowledge v0.3 is unchanged.
 
+### Carry security requirements into implementation
+
+When preparing an implementation handoff, identify the security conditions for the actual scope alongside the agreed Business Design and reviewed Checks. Reuse readable project instructions, decisions and existing System Requirements (SR); a separate security document is not required. Keep the security input's state explicit:
+
+- **Provided:** identify the project-specific SR source, revision and applicable scope. If the product has adopted a standard baseline, identify that baseline's version, adoption decision, applicable scope and any known exclusions or open tailoring decisions. Naming a standard alone is not adoption or proof that it covers this product.
+- **Not applicable:** retain the responsible product-side decision and concrete scope-based reason. “Local-only,” “no login,” silence, or “I do not know” alone does not establish non-applicability.
+- **Unresolved:** distinguish not provided, unreadable, and a known undecided condition. Say what is missing, what affected work cannot yet be justified, and which product-side business or technical owner can resolve it. If the owner is unknown, say so rather than assigning authority to the AI.
+
+Do not force an unknown into Provided or Not applicable just to complete the handoff. Carry unresolved scope forward visibly; do not describe that part as requirement-free, security-approved or ready for acceptance. Continue independent work. Hold only decisions or dependent work whose security-relevant outcome cannot be justified from the available requirements; this is not a blanket stop on design, Check drafting or implementation, and not a new universal human-approval stage.
+
+Separate **business meaning** from **technical constraints**. Whether one person may view or change another person's information changes the allowed business result and belongs with the affected Activity or Object after human confirmation. An authorization mechanism, dependency-vulnerability handling, credential storage or untrusted-input boundary belongs in product-side SR. Missing technical policy must not generate speculative Business Design rules or Check Items. Ordinary reversible implementation choices within known constraints remain delegated.
+
+If the product has no security SR, offer bounded creation support rather than silently applying an Alder baseline. For the actual feature and inputs, the product-side owner and AI can use this small prompt in their existing requirement location:
+
+```text
+For <feature and scope>, identify the data/assets and input, authority or external-service boundaries actually present.
+Reuse <existing constraints and their revisions>. Identify the security properties implementation must preserve, remaining unknowns, and the responsible business/technical decision-maker.
+For each relevant proposed condition, state its source or rationale, applicability, unapproved/decided status, and how evidence could verify it. Mark unavailable information as unknown.
+Use a named standard baseline only if the product chooses it; record its version, scope and tailoring. Do not claim this draft is approved, complete, or a security assessment.
+```
+
+This is optional SR-authoring support, not a new required artifact or an Alder-owned catalog of security requirements. Select concrete questions from the product's actual operations; do not inject a general security checklist into Business Design or Checks. A person answering “not sure” leaves the affected question unresolved. Preserve a deferral without asking the same question repeatedly; identify the dependent step and resume condition instead. The product remains responsible for SR creation, validity and completeness. The later independent review continues to compare provided applicable SR and evidence under its existing boundary.
+
 ### Optional: explore undocumented functional conditions
 
 After Business Design and its business-correlation review are complete, use [functional consideration discovery](https://github.com/mk3008/alder/blob/6d30b93abf8ecdc8902fef5c16bfb53fda8617e9/docs/behavior-derivation/functional-considerations.md) before or alongside Check Item drafting when the feature warrants it. This adopted optional step asks which real-system conditions still need a decision. Read the whole applicable Business Design, Scope, existing Decisions and shared contracts. Use relevant general knowledge to describe concrete situations with different observable outcomes, then close already settled questions before asking a person. It is not a mandatory gate, an exhaustive checklist, or a repeat of PoC/business-correlation review.
@@ -326,9 +349,11 @@ Replace the placeholders with the requested task and actual design path:
 Task: <requested work and acceptance conditions>
 Business Design: <path and revision>
 Current requirements / constraints / review concerns: <concrete requirements and desired properties>
+Security requirements: <provided source/version/scope, explicit non-applicability and reason, or unresolved status/owner; do not treat an unknown as no requirements>
 Known risks / likely future changes: <concrete foresight, separate from current requirements; omit if none>
 
 Read the relevant Business Design before implementing this task.
+Apply “Carry security requirements into implementation” from the selected Alder adoption guidance. Preserve unresolved security inputs and the affected dependent steps; do not invent their resolution or block unrelated work.
 Implement the requested work using the existing project conventions. Use the stated risks and desired properties to choose the implementation; do not treat architecture names as substitutes for requirements. Treat future foresight as design context, not authorization to implement undecided future behavior. Do not invent unforeseen future requirements or business policy that the Business Design does not decide.
 
 When implementation makes a material assumption or choice that is not obvious from the Business Design, report what was chosen, why, and which evidence or constraint led to it, so the separate Alder review can verify and record it. Do not treat a rationale as approved business meaning or create a Decision Record for every routine, reversible technical choice.

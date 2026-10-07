@@ -158,6 +158,8 @@ Alder includes conditions, expected results, source references to Business Desig
 
 People provide existing constraints and preferences; ask AI to organize technical conditions implementation must preserve. Detailed technical investigation belongs to the product.
 
+If security requirements are missing, have the product team identify the needed conditions. Carry unknowns into the handoff as unresolved rather than treating them as no requirements. Use the [drafting prompt](docs/adoption.md#carry-security-requirements-into-implementation) to get started.
+
 | State early | May be delegated to implementation |
 | --- | --- |
 | Existing infrastructure/DB/schema, required cloud/services, public APIs, migration/compatibility, security/legal obligations | Reversible class/function decomposition, internal modules, naming |

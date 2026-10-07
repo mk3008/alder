@@ -1,0 +1,14 @@
+{
+  "work/security-intake-180/inputs/cases.md": "8faca12e72a9a4491e7bb328a515a9f8a30580d29b826cc46e0a8ddc0fee62e5",
+  "work/security-intake-180/protocol.md": "f538f267c353f38dc68a310087ffc028d4884c4fc92d657970c71306d9cb4af5",
+  "work/security-intake-180/results.ja.md": "d8615f6dacd693512cd8ad096081acdadc93f4daa664250ecbf68cfbcdecdfcb",
+  "work/security-intake-180/runs/audit/prompt.txt": "d52339e83e058acde92efe044477185ecb9fbffc5d92728f1abae9c47f11dd7e",
+  "work/security-intake-180/runs/audit/returned-answer.md": "931e5fbf6b513baca17a2bf54754fb65815a33d4e774728b46eaf008794945eb",
+  "work/security-intake-180/runs/audit/run.json": "abf73543d87c744528af9563fb6c3445392cc49fed6c20b41ff626c4a8cf6c43",
+  "work/security-intake-180/runs/baseline/prompt.txt": "4000cfb2cbffe71640ec4785f4647d15437f7f76697a04fc215a695381c94e82",
+  "work/security-intake-180/runs/baseline/returned-answer.md": "1b0fc70d077d458cef05325a0c1f4c121f3e47a5c66891a8c01ab2d60dc10b86",
+  "work/security-intake-180/runs/baseline/run.json": "f50ffd2722c593d25b877c6b50fdbec3a68a74421017db02b1141558d76d35f4",
+  "work/security-intake-180/runs/candidate/prompt.txt": "b0ba118d70d76255749e265596b0192ce2f04de6d62f09f1aae9a88e9ca6272f",
+  "work/security-intake-180/runs/candidate/returned-answer.md": "f4852d933e8e1dd57210f457eef1f465fbad93ad6ccc10942fcd8b4b060cc696",
+  "work/security-intake-180/runs/candidate/run.json": "ec5acd3304e42e232c46b956a363780ea8a0686aae1b3e4fb06988db36daf0d6"
+}

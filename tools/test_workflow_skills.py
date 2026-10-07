@@ -16,6 +16,24 @@ NEW = ['alder-draft-check-items', 'alder-explore-functional-conditions',
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_security_intake_is_reachable_and_preserves_product_authority(self):
+        guide = (ROOT / 'docs/adoption.md').read_text()
+        start = guide.index('### Carry security requirements into implementation')
+        end = guide.index('### Optional: explore undocumented functional conditions', start)
+        section = guide[start:end]
+        for term in ['**Provided:**', '**Not applicable:**', '**Unresolved:**',
+                     'not provided, unreadable', 'I do not know',
+                     'product remains responsible for SR creation, validity and completeness',
+                     'Continue independent work', 'optional SR-authoring support',
+                     'not a new required artifact', 'ordinary reversible']:
+            self.assertIn(term.lower(), section.lower())
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('references/adoption.md#carry-security-requirements-into-implementation', skill)
+        self.assertIn('Check-only draft can continue without a complete SR', skill)
+        for readme in ['README.md', 'README.ja.md']:
+            self.assertIn('docs/adoption.md#carry-security-requirements-into-implementation',
+                          (ROOT / readme).read_text())
+
     def test_all_new_authorities_and_scripts_match_canonical_sources(self):
         for name in NEW:
             d = SKILLS / name
