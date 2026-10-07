@@ -21,7 +21,7 @@ codex plugin marketplace add mk3008/alder --ref plugin-v0.4.6
 codex plugin marketplace list
 ```
 
-ChatGPTデスクトップアプリを再起動し、Plugins DirectoryのAlder developmentからAlderを更新・有効化して、新しいチャットを開始する。詳しい手順は[Plugin導入ガイド](plugin-adoption.md)を参照。
+ChatGPTデスクトップアプリを再起動し、Plugins DirectoryのAlder developmentからAlderを更新・有効化して、新しいチャットを開始する。詳しい手順は[Plugin導入ガイド](https://github.com/mk3008/alder/blob/plugin-v0.4.6/docs/plugin-adoption.md)を参照。
 
 ## 検証範囲と限界
 
