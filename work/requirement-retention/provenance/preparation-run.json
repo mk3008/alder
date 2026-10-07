@@ -1,0 +1,9 @@
+{
+  "agent": "/root/test_transcript_requirement_retention/prepare_mixed_requirement_fixture",
+  "requested_reasoning": "xhigh",
+  "requested_model": "inherited native default",
+  "effective_model": "unknown",
+  "fork_turns": "none",
+  "read_scope": "prior input and pinned package; no prior raw/evaluation per agent report",
+  "coordinator_review": "pre-run full transcript, ledger, expected BD and provenance review; documented corrections before freeze"
+}
