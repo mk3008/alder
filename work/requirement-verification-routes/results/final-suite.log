@@ -1,0 +1,21 @@
+test_OPS1_breaking_candidate_blocked_by_app_behavior (test_routes.MaintenanceTests.test_OPS1_breaking_candidate_blocked_by_app_behavior) ... ok
+test_OPS1_clean_scan_records_success (test_routes.MaintenanceTests.test_OPS1_clean_scan_records_success) ... ok
+test_OPS1_failed_run_alert_and_no_false_success (test_routes.MaintenanceTests.test_OPS1_failed_run_alert_and_no_false_success) ... ok
+test_OPS1_fixable_runs_real_regression_without_apply (test_routes.MaintenanceTests.test_OPS1_fixable_runs_real_regression_without_apply) ... ok
+test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) ... ok
+test_OPS1_probe_uses_same_app_and_current_still_passes (test_routes.MaintenanceTests.test_OPS1_probe_uses_same_app_and_current_still_passes) ... ok
+test_OPS1_unfixable_stays_manual (test_routes.MaintenanceTests.test_OPS1_unfixable_stays_manual) ... ok
+test_SEC1_body_owner_spoof (test_routes.SecurityTests.test_SEC1_body_owner_spoof) ... ok
+test_SEC1_other_owner_direct_cancel (test_routes.SecurityTests.test_SEC1_other_owner_direct_cancel) ... ok
+test_SEC1_other_owner_direct_read (test_routes.SecurityTests.test_SEC1_other_owner_direct_read) ... ok
+test_SEC1_owner_can_read_and_cancel (test_routes.SecurityTests.test_SEC1_owner_can_read_and_cancel) ... ok
+test_SEC1_unknown_or_anonymous (test_routes.SecurityTests.test_SEC1_unknown_or_anonymous) ... ok
+test_SYS1_after_commit_cut_then_same_receipt (test_routes.SystemTests.test_SYS1_after_commit_cut_then_same_receipt) ... ok
+test_SYS1_before_commit_cut_then_retry (test_routes.SystemTests.test_SYS1_before_commit_cut_then_retry) ... ok
+test_SYS1_changed_payload_is_not_replayed (test_routes.SystemTests.test_SYS1_changed_payload_is_not_replayed) ... ok
+test_SYS1_request_id_is_owner_scoped (test_routes.SystemTests.test_SYS1_request_id_is_owner_scoped) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.014s
+
+OK

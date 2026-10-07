@@ -1,0 +1,11 @@
+--- app.py
++++ app.py
+@@ -59,7 +59,7 @@
+     @staticmethod
+     def _authorized(row, principal):
+         # Mutation anchor: owner authorization.
+-        return row["owner"] == principal
++        return True
+ 
+     def request(self, method, path, token, body=None, fault=None):
+         principal = self.PRINCIPALS.get(token)

@@ -1,0 +1,14 @@
+--- app.py
++++ app.py
+@@ -51,10 +51,7 @@
+     @staticmethod
+     def _lookup_request(connection, owner, request_id):
+         # Mutation anchor: request lookup.
+-        return connection.execute(
+-            "SELECT * FROM reservations WHERE owner = ? AND request_id = ?",
+-            (owner, request_id),
+-        ).fetchone()
++        return None
+ 
+     @staticmethod
+     def _authorized(row, principal):

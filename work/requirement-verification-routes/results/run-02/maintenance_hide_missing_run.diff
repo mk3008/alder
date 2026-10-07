@@ -1,0 +1,10 @@
+--- maintenance.py
++++ maintenance.py
+@@ -90,6 +90,5 @@
+     events = []
+     if now - reference > interval + grace:
+         # Mutation anchor: overdue notification.
+-        events.append({"type": "overdue", "at": now, "last_success": max(successes) if successes else None,
+-                       "due_at": reference + interval + grace})
++        pass
+     return events
