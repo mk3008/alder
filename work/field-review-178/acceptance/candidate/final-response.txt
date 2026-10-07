@@ -1,0 +1,19 @@
+レビュー結果：8つの独立したCaseのうち、S01・S02・S03・S04に計4件の記述上の問題があります。いずれも各Case内の決定済み前提から意味を変えずに直せます。新たな業務判断を求める指摘はありません。
+
+意味を変えない修正
+
+1. S01、Activity名「仕分け完了時に荷札の印刷部数を設定する」。前提・When・Procedureでは、出荷担当者が変更したいときに保存し、仕分け完了後に行うのは対象外の印刷です。現名称は「仕分け完了時に設定を始める」と読め、設定と後続の印刷を取り違えさせます。「荷札の印刷部数を設定する」など、設定の仕事だけを表す名前に直すのが適切です。
+
+2. S02、Activity「回収容器の振り分け先を設定する」のWhen。現記述は「回収容器が搬入口に到着したとき」ですが、前提は変更依頼を受け取った時点で設定し、到着は設定の開始契機ではないと明記しています。読み手は入庫まで設定を待つと誤解します。「振り分け先変更依頼を受け取ったとき」に直してください。
+
+3. S03、Activity「温室の散水時間を設定する」のResult。現記述は「設定した時間の散水が完了している」ですが、前提とScopeでは、この仕事は保存までであり、散水は翌日に実行され、その結果も後で判明します。読み手は保存を散水完了の保証と誤解します。「変更後の開始時刻と散水時間が保存され、翌日の制御装置が参照できる」など、保存直後の状態に直してください。
+
+4. S04、Activity「貸出用具を引き渡す」のWhoとWhere。Whoが「備品窓口」、Whereが「貸出担当者」ですが、前提では備品窓口は場所、貸出担当者は責任を負うロールであり、Procedureの主体も貸出担当者です。読み手は担当と場所を逆に理解します。Whoを「貸出担当者」、Whereを「備品窓口」に直してください。受付票から引き渡しへ至るInput・再確認・Output・Resultのつながり自体は成立しています。
+
+指摘なし：S05は「開館時の照明」を保存対象として特定しており、保存時点はWhenで事前の保存操作と分かります。S06は指定した保存済み座席図を表示し参照可能にするまでをResultとし、理解や照合を保証していません。S07は試行用の登録と実運用を分け、既存予定への適用方針を未決として保持しています。S08は登録・再生を分け、保存した再生設定と開場信号が再生のInput・Whenにつながり、一回の再生と履歴まで記述しています。これら4件について、記述された正常な一場面に関する追加指摘はありません。
+
+確認範囲と限界：各Caseを別文書として、全Object・ActivityのScope、各欄の役割、Input→Procedure→Output→Result、複数Activityの受け渡しと開始条件を確認しました。与えられた正常場面の外の例外、実装、実運用の検証、業務上の承認は行っていません。必要な新規業務ルールは確認されませんでした。
+
+取得情報：未配布candidate packageのsource-level reviewです。package snapshotは /workspace/shared/alder-package-178-r3/alder（指定Alder commit d0ed8850fa9823b2dad39fe275a628d8d3a00897）。manifest plugin.json のversionは0.4.5、references/provenance.json が示すBusiness Design reviewのsource revisionはd3c17aedb6ec411680c00dcdf1ca1e8eead21577です。入力は指定の固定公開revision mk3008/alder f8c25e68561b730dc35a3927eb9d75c35ede2205 から隔離されたと提示されたbytesを読みました。これらのcommitと入力の同一性は独立には検証していません。
+
+読んだpaths：/workspace/shared/alder-package-178-r3/alder/skills/alder-review-business-design/SKILL.md、同skills/alder-review-business-design/references/のbusiness-design-structure.ja.md、business-design-quality-check.ja.md、business-design-correlation-check.ja.md、business-design-omission-check.ja.md、provenance.json、同packageのplugin.json、/workspace/shared/alder-review-inputs-178/designs-a.md、designs-b.md。取得失敗はありません。文書内のリンクや他の資料は開かず、対象文書やGitHub、plugin登録は変更していません。requested modelはgpt-6-sol/medium/fork noneとの指定ですが、effective runtimeの独立確認は未実施です。

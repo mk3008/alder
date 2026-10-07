@@ -1,5 +1,7 @@
 # Business Design field-role review: bounded regression result
 
+**Current disposition:** final candidate 3 acceptance did not detect the original issue; the primary outcome remains unmet. See [Final acceptance: not met](acceptance/RESULT.md). Do not treat the candidate as an adopted fix.
+
 This file records candidates 1–2 and their initial comparison. A later, separately authorized candidate 3 simplifies the intervention around reader clarity; its one four-case comparison and remaining gaps are recorded in [Name-first reader check](reader-check/RESULT.md). The failures below remain unchanged.
 
 ## Decision

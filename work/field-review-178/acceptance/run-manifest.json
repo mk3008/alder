@@ -1,0 +1,19 @@
+{
+  "candidate_revision": "d0ed8850fa9823b2dad39fe275a628d8d3a00897",
+  "source_revision": "d3c17aedb6ec411680c00dcdf1ca1e8eead21577",
+  "synthetic_input_revision": "f8c25e68561b730dc35a3927eb9d75c35ede2205",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_independently_verified": false,
+  "synthetic_agent": "/root/improve_alder_field_review/review_synthetic_acceptance",
+  "scope": "one original private case and one existing synthetic suite; separate fresh agents; no source edits or baseline rerun",
+  "public_evidence": "synthetic only; original case retained in authorized private storage",
+  "sha256": {
+    "candidate/acquisition-log.txt": "e690e69a17e71ab41911dc0f56f1ee86944e3079a6042df25dc38eaf355a17ef",
+    "candidate/final-response.txt": "9e12865012f85968db8d04b56f7e6f2769e6c295b119a2c0347f47901c12bec2",
+    "candidate/request.txt": "f113b45198dac03fec8f5998ed42e9500c7391e8bd11c34b0f182faa71f660de"
+  }
+}

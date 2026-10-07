@@ -1,5 +1,7 @@
 # Name-first reader check: one bounded comparison
 
+**Later acceptance result:** the unchanged candidate 3 still missed the original issue in its final fresh check; the existing eight-case regression passed. See [Final acceptance: not met](../acceptance/RESULT.md). The limited observations below remain valid but do not establish resolution of the original requirement.
+
 ## Result
 
 Candidate 3 produced a useful **limited clarity-review observation**. Under a generic request to review the design, it identified two concrete configuration-versus-execution readings and proposed meaning-preserving names. The installed arm did not report those name ambiguities. Both preserved the two necessary target qualifiers.
