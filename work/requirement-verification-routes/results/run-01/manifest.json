@@ -1,0 +1,507 @@
+{
+  "started_at_utc": "2026-10-07T22:29:38.205848+00:00",
+  "protocol_revision": "a85c9e56e767071a45a59ac68a90c1836c8a9e53",
+  "code_and_test_revision": "ad74b002fc91ef49a8e76ac902d9ddffc4fa33bf",
+  "environment": {
+    "python": "3.12.14",
+    "implementation": "CPython",
+    "sqlite": "3.53.1",
+    "os": "Linux",
+    "machine": "x86_64"
+  },
+  "source_sha256": {
+    "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+    "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+    "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+    "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+    "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+    "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+    "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+    "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+  },
+  "runs": [
+    {
+      "mutation": "system_skip_replay",
+      "domain": "system",
+      "phase": "normal",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SystemTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "system_skip_replay-normal.log",
+      "log_sha256": "346e5bf8921833d818e90846c357aeed4ecacc4e72e52534249dc24d858ab407",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "system_skip_replay",
+      "domain": "system",
+      "phase": "violated",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SystemTests"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "failure_tests": [
+        "test_SYS1_after_commit_cut_then_same_receipt"
+      ],
+      "error_tests": [],
+      "expected_failure_test": "test_SYS1_after_commit_cut_then_same_receipt",
+      "experiment_expectation_met": true,
+      "log": "system_skip_replay-violated.log",
+      "log_sha256": "29b34a285c3f4732247a3ffe784d9c1116c06d1f75ba66056fa3445bd7f56a6f",
+      "source_sha256": {
+        "app.py": "8731613af0fb58646dd32872867bf226dfdebefb67c486c5fe1760bfdb3abf7d",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "system_skip_replay",
+      "domain": "system",
+      "phase": "repaired",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SystemTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "system_skip_replay-repaired.log",
+      "log_sha256": "eed0af0acbce1532d53f79baff5fa814639990934fc24ce0e940621649102e75",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "security_allow_other_owner",
+      "domain": "security",
+      "phase": "normal",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SecurityTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "security_allow_other_owner-normal.log",
+      "log_sha256": "c12b4719c7f8db61f08ca54f89d0a437308f25d684318fc0a11f76879ca5ca0d",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "security_allow_other_owner",
+      "domain": "security",
+      "phase": "violated",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SecurityTests"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "failure_tests": [
+        "test_SEC1_body_owner_spoof",
+        "test_SEC1_other_owner_direct_cancel",
+        "test_SEC1_other_owner_direct_read"
+      ],
+      "error_tests": [],
+      "expected_failure_test": "test_SEC1_other_owner_direct_read",
+      "experiment_expectation_met": true,
+      "log": "security_allow_other_owner-violated.log",
+      "log_sha256": "47cd6c035755c5761169af1f170dd312dfded4bf285e594f63fb578bbbebd192",
+      "source_sha256": {
+        "app.py": "07d9358092bde7d80fcb42a6521076bfa278a8aaae5711e74033621d17456f1d",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "security_allow_other_owner",
+      "domain": "security",
+      "phase": "repaired",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.SecurityTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "security_allow_other_owner-repaired.log",
+      "log_sha256": "c12b4719c7f8db61f08ca54f89d0a437308f25d684318fc0a11f76879ca5ca0d",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_skip_regression",
+      "domain": "maintenance",
+      "phase": "normal",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_skip_regression-normal.log",
+      "log_sha256": "373d5917e3e6a45c3838c821b782ffd8cc4f51eaa8c9741272cdeeb652b5282e",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_skip_regression",
+      "domain": "maintenance",
+      "phase": "violated",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "failure_tests": [
+        "test_OPS1_breaking_candidate_blocked_by_app_behavior"
+      ],
+      "error_tests": [],
+      "expected_failure_test": "test_OPS1_breaking_candidate_blocked_by_app_behavior",
+      "experiment_expectation_met": true,
+      "log": "maintenance_skip_regression-violated.log",
+      "log_sha256": "81b7a0e31453ba0b4e92d56a2974a1201646a00c4d3901728ce89b37b921786c",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "7fea6346732b38963f41add810c0baa2cff413ecbfa2a3b0ab4adc5339b3db5e",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_skip_regression",
+      "domain": "maintenance",
+      "phase": "repaired",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_skip_regression-repaired.log",
+      "log_sha256": "f36646b3becc49bb013f4f156c4867331f2b016c79586cd822d76fffd54d6ff9",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_failed_run",
+      "domain": "maintenance",
+      "phase": "normal",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_failed_run-normal.log",
+      "log_sha256": "f36646b3becc49bb013f4f156c4867331f2b016c79586cd822d76fffd54d6ff9",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_failed_run",
+      "domain": "maintenance",
+      "phase": "violated",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "failure_tests": [
+        "test_OPS1_failed_run_alert_and_no_false_success"
+      ],
+      "error_tests": [],
+      "expected_failure_test": "test_OPS1_failed_run_alert_and_no_false_success",
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_failed_run-violated.log",
+      "log_sha256": "29f23570998dac11c6b92d2e35b04f96f8587a984e8ad27cf0af44993a9fe56d",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "7156282414d1596472fab3fe4b07819f74db3a3e2a694f5fdf0df3d418ce486e",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_failed_run",
+      "domain": "maintenance",
+      "phase": "repaired",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_failed_run-repaired.log",
+      "log_sha256": "373d5917e3e6a45c3838c821b782ffd8cc4f51eaa8c9741272cdeeb652b5282e",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_missing_run",
+      "domain": "maintenance",
+      "phase": "normal",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_missing_run-normal.log",
+      "log_sha256": "f36646b3becc49bb013f4f156c4867331f2b016c79586cd822d76fffd54d6ff9",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_missing_run",
+      "domain": "maintenance",
+      "phase": "violated",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "failure_tests": [
+        "test_OPS1_missing_and_stale_execution_boundaries",
+        "test_OPS1_missing_and_stale_execution_boundaries",
+        "test_OPS1_missing_and_stale_execution_boundaries"
+      ],
+      "error_tests": [],
+      "expected_failure_test": "test_OPS1_missing_and_stale_execution_boundaries",
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_missing_run-violated.log",
+      "log_sha256": "8b8e99a95e6148eb0a18e3b466ee97546be812fdaf2ed12900c808a2e035c626",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "78feef6d31f4f0b93abdd5b29b2ed8cef95575636602557c9d06ec9e556b1e25",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    },
+    {
+      "mutation": "maintenance_hide_missing_run",
+      "domain": "maintenance",
+      "phase": "repaired",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_routes.MaintenanceTests"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "failure_tests": [],
+      "error_tests": [],
+      "expected_failure_test": null,
+      "experiment_expectation_met": true,
+      "log": "maintenance_hide_missing_run-repaired.log",
+      "log_sha256": "f36646b3becc49bb013f4f156c4867331f2b016c79586cd822d76fffd54d6ff9",
+      "source_sha256": {
+        "app.py": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+        "maintenance.py": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+        "test_routes.py": "95f591aeedd27fec21ca00210802c60dd8cc422442e032d118cf600cb18996f7",
+        "fixtures.json": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+        "oracle.json": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+        "protocol.ja.md": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+        "interface-addendum.ja.md": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+        "run_experiment.py": "f1f5babc570b86fcbffcd14ae31bf03e3060ceac87bf7f5bb71f3c41049d8d9c"
+      }
+    }
+  ],
+  "log_redaction": "Only disposable scenario directory replaced with <scenario>; application payloads are synthetic.",
+  "finished_at_utc": "2026-10-07T22:29:39.444970+00:00",
+  "all_expectations_met": true,
+  "source_unchanged": true
+}
