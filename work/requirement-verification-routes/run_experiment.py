@@ -17,6 +17,9 @@ ROOT = Path(__file__).resolve().parent
 SOURCES = ['app.py', 'maintenance.py', 'test_routes.py', 'fixtures.json', 'oracle.json',
            'protocol.ja.md', 'interface-addendum.ja.md', 'run_experiment.py']
 MUTATIONS = [
+    {'id': 'system_corrupt_replay_receipt', 'domain': 'system', 'suite': 'SystemTests', 'file': 'app.py',
+     'old': 'return 201, dict(existing)', 'new': 'return 201, {**dict(existing), \'room\': \'wrong-room\'}',
+     'expected_failure': 'test_SYS1_after_commit_cut_then_same_receipt'},
     {'id': 'system_skip_replay', 'domain': 'system', 'suite': 'SystemTests', 'file': 'app.py',
      'old': '''return connection.execute(
             "SELECT * FROM reservations WHERE owner = ? AND request_id = ?",
@@ -49,6 +52,7 @@ def hashes(directory):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--source-revision', required=True, help='Verified immutable commit used for this run')
     parser.add_argument('--output', required=True, help='New output directory (must not already exist)')
     args = parser.parse_args()
     output = Path(args.output).resolve()
@@ -56,7 +60,8 @@ def main():
     manifest = {
         'started_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'protocol_revision': 'a85c9e56e767071a45a59ac68a90c1836c8a9e53',
-        'code_and_test_revision': 'ad74b002fc91ef49a8e76ac902d9ddffc4fa33bf',
+        'source_revision': args.source_revision,
+        'revision_claim': 'Caller-provided revision; verify source_sha256 against that commit.',
         'environment': {'python': platform.python_version(), 'implementation': platform.python_implementation(),
                         'sqlite': sqlite3.sqlite_version, 'os': platform.system(), 'machine': platform.machine()},
         'source_sha256': hashes(ROOT), 'runs': [],

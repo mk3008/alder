@@ -47,11 +47,14 @@ class SystemTests(AppCase):
         committed = self.rows()
         self.assertEqual(len(committed), ORACLE['SYS1']['after_commit_rows'])
         with sqlite3.connect(self.db) as conn:
-            identifier = conn.execute('SELECT id FROM reservations').fetchone()[0]
+            conn.row_factory = sqlite3.Row
+            expected_receipt = dict(conn.execute('SELECT * FROM reservations').fetchone())
+            identifier = expected_receipt['id']
         self.app = ReservationApp(self.db)
         status, receipt = self.create()
         self.assertEqual(status, ORACLE['SYS1']['retry_status'])
         self.assertEqual(receipt['id'], identifier)
+        self.assertEqual(receipt, expected_receipt)
         self.assertEqual(self.rows(), committed)
 
     def test_SYS1_changed_payload_is_not_replayed(self):
@@ -130,6 +133,9 @@ class MaintenanceTests(unittest.TestCase):
 
     def event(self, result, kind):
         self.assertIn(kind, [e['type'] for e in result['events']])
+        event = next(e for e in result['events'] if e['type'] == kind)
+        self.assertEqual(event['at'], self.now)
+        return event
 
     def test_OPS1_clean_scan_records_success(self):
         r = self.scan('clean')
@@ -141,7 +147,10 @@ class MaintenanceTests(unittest.TestCase):
     def test_OPS1_fixable_runs_real_regression_without_apply(self):
         r = self.scan('fixable')
         self.assertEqual(r['status'], ORACLE['OPS1']['fixable'])
-        self.event(r, 'candidate_ready')
+        event = self.event(r, 'candidate_ready')
+        self.assertEqual(event['advisory_id'], 'SYN-001')
+        self.assertEqual(event['version'], '1.1')
+        self.assertEqual(event['regression'], r['candidate']['regression'])
         self.assertEqual(r['candidate']['advisory_id'], 'SYN-001')
         self.assertEqual(r['candidate']['version'], '1.1')
         probe = r['candidate']['regression']
@@ -166,6 +175,9 @@ class MaintenanceTests(unittest.TestCase):
                 overdue = watchdog(history, self.now, self.now - age - 1)
                 self.assertEqual(any(e['type'] == 'overdue' for e in exact), ORACLE['OPS1']['missing_exactly_25h'])
                 self.assertEqual(any(e['type'] == 'overdue' for e in overdue), ORACLE['OPS1']['missing_25h_plus_one_second'])
+                self.assertEqual(overdue[0]['at'], self.now)
+                self.assertEqual(overdue[0]['due_at'], self.now - 1)
+                self.assertIsNone(overdue[0]['last_success'])
         stale = [{'status': 'success', 'at': self.now - age - 1}, {'status': 'failed', 'at': self.now - 1}]
         self.assertIn('overdue', [e['type'] for e in watchdog(stale, self.now, self.now - 500000)])
         self.assertEqual(watchdog([{'status': 'success', 'at': self.now}], self.now, self.now - 500000), [])
@@ -173,14 +185,18 @@ class MaintenanceTests(unittest.TestCase):
     def test_OPS1_unfixable_stays_manual(self):
         r = self.scan('no_fix')
         self.assertEqual(r['status'], ORACLE['OPS1']['no_fix'])
-        self.event(r, 'manual_action')
+        event = self.event(r, 'manual_action')
+        self.assertEqual(event['advisory_id'], 'SYN-002')
         self.assertIsNone(r['candidate'])
         self.assertEqual(r['history'][-1]['status'], 'success')
 
     def test_OPS1_breaking_candidate_blocked_by_app_behavior(self):
         r = self.scan('breaking')
         self.assertEqual(r['status'], ORACLE['OPS1']['breaking'])
-        self.event(r, 'candidate_blocked')
+        event = self.event(r, 'candidate_blocked')
+        self.assertEqual(event['advisory_id'], 'SYN-003')
+        self.assertEqual(event['version'], '2.0')
+        self.assertEqual(event['regression'], r['candidate']['regression'])
         self.assertEqual(r['candidate']['version'], '2.0')
         self.assertEqual(r['candidate']['advisory_id'], 'SYN-003')
         self.assertFalse(r['candidate']['regression']['passed'])
