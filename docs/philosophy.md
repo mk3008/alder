@@ -47,7 +47,7 @@ Concrete examples help separate constraints that deserve human attention before 
 
 | Treatment | Examples | Why |
 | --- | --- | --- |
-| State early when constrained or costly to reverse | existing infrastructure, existing database/schema compatibility, required cloud or external services, published APIs, migration constraints, security or legal obligations | these materially constrain implementation choices or are expensive to change later |
+| State early when constrained or costly to reverse | existing infrastructure, existing database/schema compatibility, required cloud or external services, published APIs, migration constraints, UI requirements, security or legal obligations | these materially constrain implementation choices or are expensive to change later |
 | State when there is a preference or organizational reason | programming language, database product, cloud product, major library | team ownership, existing assets, organizational standards, or a concrete preference can make the choice relevant; without such a reason, implementation may choose |
 | Usually leave to implementation and review | class/function decomposition, internal module boundaries, local implementation techniques, naming, other small reversible choices | they can be made concrete with code and tests and changed cheaply if review finds a better fit |
 
