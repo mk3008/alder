@@ -1,0 +1,42 @@
+{
+  "SYS1": {
+    "before_commit_rows": 0,
+    "after_commit_rows": 1,
+    "retry_status": 201,
+    "retry_rows": 1,
+    "retry_same_id": true,
+    "changed_payload_status": 409,
+    "distinct_owner_request_id_independent": true
+  },
+  "SEC1": {
+    "owner_get": 200,
+    "owner_cancel": 200,
+    "other_get": 403,
+    "other_cancel": 403,
+    "body_spoof_cancel": 403,
+    "anonymous": 401,
+    "unknown_token": 401,
+    "denied_state_unchanged": true,
+    "denied_payload_no_record": true
+  },
+  "OPS1": {
+    "clean": "clean",
+    "fixable": "candidate_ready",
+    "failed": "scan_failed",
+    "missing": "overdue",
+    "no_fix": "manual_action",
+    "breaking": "candidate_blocked",
+    "live_version_after_all_cases": "1.0",
+    "missing_exactly_25h": false,
+    "missing_25h_plus_one_second": true,
+    "regression_valid_status": 201,
+    "regression_invalid_status": 400
+  },
+  "experiment": {
+    "normal_exit": 0,
+    "mutant_exit": 1,
+    "repaired_exit": 0,
+    "mutant_failures_must_be_assertions": true,
+    "domains": ["system", "security", "maintenance"]
+  }
+}
