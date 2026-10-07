@@ -1,0 +1,39 @@
+test_OPS1_breaking_candidate_blocked_by_app_behavior (test_routes.MaintenanceTests.test_OPS1_breaking_candidate_blocked_by_app_behavior) ... ok
+test_OPS1_clean_scan_records_success (test_routes.MaintenanceTests.test_OPS1_clean_scan_records_success) ... ok
+test_OPS1_failed_run_alert_and_no_false_success (test_routes.MaintenanceTests.test_OPS1_failed_run_alert_and_no_false_success) ... ok
+test_OPS1_fixable_runs_real_regression_without_apply (test_routes.MaintenanceTests.test_OPS1_fixable_runs_real_regression_without_apply) ... ok
+test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) ... 
+  test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) (history=[]) ... FAIL
+  test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) (history=[{'status': 'failed', 'at': 199999}]) ... FAIL
+test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) ... FAIL
+test_OPS1_probe_uses_same_app_and_current_still_passes (test_routes.MaintenanceTests.test_OPS1_probe_uses_same_app_and_current_still_passes) ... ok
+test_OPS1_unfixable_stays_manual (test_routes.MaintenanceTests.test_OPS1_unfixable_stays_manual) ... ok
+
+======================================================================
+FAIL: test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) (history=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 168, in test_OPS1_missing_and_stale_execution_boundaries
+    self.assertEqual(any(e['type'] == 'overdue' for e in overdue), ORACLE['OPS1']['missing_25h_plus_one_second'])
+AssertionError: False != True
+
+======================================================================
+FAIL: test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) (history=[{'status': 'failed', 'at': 199999}])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 168, in test_OPS1_missing_and_stale_execution_boundaries
+    self.assertEqual(any(e['type'] == 'overdue' for e in overdue), ORACLE['OPS1']['missing_25h_plus_one_second'])
+AssertionError: False != True
+
+======================================================================
+FAIL: test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 170, in test_OPS1_missing_and_stale_execution_boundaries
+    self.assertIn('overdue', [e['type'] for e in watchdog(stale, self.now, self.now - 500000)])
+AssertionError: 'overdue' not found in []
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.005s
+
+FAILED (failures=3)

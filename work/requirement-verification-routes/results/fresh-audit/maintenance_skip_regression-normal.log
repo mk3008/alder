@@ -1,0 +1,12 @@
+test_OPS1_breaking_candidate_blocked_by_app_behavior (test_routes.MaintenanceTests.test_OPS1_breaking_candidate_blocked_by_app_behavior) ... ok
+test_OPS1_clean_scan_records_success (test_routes.MaintenanceTests.test_OPS1_clean_scan_records_success) ... ok
+test_OPS1_failed_run_alert_and_no_false_success (test_routes.MaintenanceTests.test_OPS1_failed_run_alert_and_no_false_success) ... ok
+test_OPS1_fixable_runs_real_regression_without_apply (test_routes.MaintenanceTests.test_OPS1_fixable_runs_real_regression_without_apply) ... ok
+test_OPS1_missing_and_stale_execution_boundaries (test_routes.MaintenanceTests.test_OPS1_missing_and_stale_execution_boundaries) ... ok
+test_OPS1_probe_uses_same_app_and_current_still_passes (test_routes.MaintenanceTests.test_OPS1_probe_uses_same_app_and_current_still_passes) ... ok
+test_OPS1_unfixable_stays_manual (test_routes.MaintenanceTests.test_OPS1_unfixable_stays_manual) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.014s
+
+OK
