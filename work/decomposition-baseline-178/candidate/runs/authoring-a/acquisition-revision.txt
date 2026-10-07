@@ -1,0 +1,8 @@
+入力: /workspace/shared/decomposition-inputs-178/a/request.txt 全文、/workspace/shared/decomposition-inputs-178/change/request.txt 全文、初稿 /workspace/shared/allocation-runs-178/authoring-a/draft-initial.md 全文を実読。
+Candidate package: /workspace/shared/allocation-candidate-178/alder、指定commit f4408db27e8735e75a7f43d480df7461bbe00de1。source-level評価であり、installed pluginの動作試験ではない。
+Manifest: plugin.json 全文を実読。version 0.4.5。
+Skill: skills/alder-draft-business-design/SKILL.md 全文を実読。
+必須資料: 同references/adoption.md 第1節（15～176行、次節見出しまで）、同references/business-graph.md のOpt-in Markdown profile v1からMinimal example末尾（19～128行）、skills/alder-review-business-design/references/business-design-structure.ja.md 全文を初稿作成時に実読し、改稿時にも同範囲を取得。
+Provenance: draft側references/provenance.jsonを実読。authoring source revision b0caf05d61f598c8e0af251a91e7dfb3153d1d5e。review側references/provenance.jsonを実読。structure source revision 979bf6b214f0ef805b9d407a04fc23c55dd17d4d。
+取得失敗: なし。
+制約: 元入力、初稿、変更依頼、指定candidate Skill必須資料のみを参照。他ケース、結果、期待判定、repo、外部リンクは参照していない。初稿と初回証跡は変更していない。実装、送信、GitHub・plugin操作は行っていない。草案の業務意味は未承認。

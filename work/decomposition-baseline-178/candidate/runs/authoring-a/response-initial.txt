@@ -1,0 +1,5 @@
+Alder業務設計の確認待ち草案を /workspace/shared/allocation-runs-178/authoring-a/draft-initial.md に保存しました。条件登録と毎朝7時の不足一覧作成を分け、登録直後には一覧を作らない点、在庫台帳の管理と発注が対象外である点、保存期間が未決である点を反映しています。業務意味は未承認です。
+
+確認したい点は1つです。対象倉庫が複数の場合、不足は各倉庫の在庫数ごとに共通基準と比較しますか、それとも対象倉庫の合計在庫数で比較しますか。倉庫別なら、一覧に倉庫を識別する情報が必要かも教えてください。
+
+参照元は指定の合成入力とcandidate packageの必須資料です。manifest versionは0.4.5、authoring source revisionはb0caf05d61f598c8e0af251a91e7dfb3153d1d5e、文書構造のsource revisionは979bf6b214f0ef805b9d407a04fc23c55dd17d4dです。指定candidate commitはf4408db27e8735e75a7f43d480df7461bbe00de1です。installed pluginの動作試験ではありません。

@@ -1,0 +1,5 @@
+草案を /workspace/shared/allocation-runs-178/authoring-b/draft-initial.md に保存しました。申込票と原本が揃ってから、指定ページ・部数の複写、各部への申込番号付き表紙の添付、受取棚への配置、作業台帳への記録までを記述しています。受付・承認と引渡しは対象外です。業務上の意味は未承認です。
+
+確認したい点は1つです。原本に読めないページがある場合、複写担当はその申込の作業をどう扱い、誰に何を伝えますか。複写を続ける・止めるなどの対応は草案で決めていません。
+
+資料は提示された入力と指定candidate package内の必須資料のみを使用しました。package manifestは0.4.5、authoring資料のsource revisionはb0caf05d61f598c8e0af251a91e7dfb3153d1d5e、文書構造のsource revisionは979bf6b214f0ef805b9d407a04fc23c55dd17d4dです。candidate checkout commitは指定されたf4408db27e8735e75a7f43d480df7461bbe00de1です。installed pluginやeffective runtimeの独立検証は行っていません。
