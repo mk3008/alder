@@ -1,0 +1,1334 @@
+{
+  "schema_version": "1.0",
+  "source": "preparation/observability.json",
+  "raw_output": "raw/draft.md",
+  "elements": [
+    {
+      "id": "S01",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T006",
+        "T016",
+        "T018",
+        "T026",
+        "T032",
+        "T042",
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L1,13-15,140,365,413,464,509,601",
+      "explanation": "End-to-end one-store boundary is present, but the company/organization clientele and example equipment types from T006 are absent."
+    },
+    {
+      "id": "S02",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T005",
+        "T006"
+      ],
+      "raw_output_reference": "raw/draft.md:L15,433,476",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受取り・返却は同じ店舗で行う。配送は対象外。"
+    },
+    {
+      "id": "S03",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T036",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L15,111-138,546,641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 修理作業、請求書の発行、入金の追跡は範囲外。修理担当・経理との受渡しは含む。"
+    },
+    {
+      "id": "S04",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T010",
+        "T070",
+        "T071",
+        "T072"
+      ],
+      "raw_output_reference": "raw/draft.md:L1-3,15",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 現行業務の整理を草案にし、店の人の確認に回す。紙廃止・画面設計・自動化の採用は未決。"
+    },
+    {
+      "id": "S05",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T002",
+        "T004",
+        "T070"
+      ],
+      "raw_output_reference": "raw/draft.md:L3,472,505-507",
+      "explanation": "The receive-versus-re-lendable distinction is recovered; the motivating next-morning search/alternative and cross-role shared view are not explicitly recorded."
+    },
+    {
+      "id": "S06",
+      "verdict": "appropriate_silence",
+      "source_turns": [
+        "T002",
+        "T004",
+        "T070"
+      ],
+      "raw_output_reference": "absent",
+      "explanation": "No Low/Medium/High rating was spoken; silence is appropriate."
+    },
+    {
+      "id": "U01",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T043",
+        "T044"
+      ],
+      "raw_output_reference": "raw/draft.md:L9,123-124,634,645",
+      "explanation": "Responsibility and estimate-to-decision handoff are held open; the undecided repair charge stays out."
+    },
+    {
+      "id": "U02",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T053",
+        "T054"
+      ],
+      "raw_output_reference": "raw/draft.md:L7,452",
+      "explanation": "Proxy verification is marked pending the manager, without invented eligibility rule."
+    },
+    {
+      "id": "U03",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T058",
+        "T060"
+      ],
+      "raw_output_reference": "raw/draft.md:L8,242,262-264",
+      "explanation": "The two possible email times are retained as unresolved; no holiday-email fee result is asserted."
+    },
+    {
+      "id": "U04",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T024",
+        "T042",
+        "T048",
+        "T049",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L10,93-94,629,634",
+      "explanation": "The fee table and amounts are pending; the change-related cancellation detail is not separately named."
+    },
+    {
+      "id": "U05",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T065",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L11,636",
+      "explanation": "Follow-up timing remains unresolved and no-reply confirmation is refused."
+    },
+    {
+      "id": "U06",
+      "verdict": "uncertainty_success",
+      "source_turns": [
+        "T019",
+        "T020"
+      ],
+      "raw_output_reference": "raw/draft.md:L167-174",
+      "explanation": "The operational comparison is stated without an invented precise arithmetic formula."
+    },
+    {
+      "id": "U07",
+      "verdict": "unsupported_assertion",
+      "source_turns": [
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L45-47,138,166,178,628,641",
+      "explanation": "The transcript requires billing destination and identifying number but never assigns their storage to the reservation sheet; lines cited assert that location. No channel for accounting handoff is invented."
+    },
+    {
+      "id": "P01",
+      "verdict": "appropriate_silence",
+      "source_turns": [
+        "T009",
+        "T010"
+      ],
+      "raw_output_reference": "raw/draft.md:L3",
+      "explanation": "The barcode suggestion is not adopted as an operating rule; omission of the rejected proposal is acceptable."
+    },
+    {
+      "id": "O01",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T006",
+        "T016",
+        "T024",
+        "T048",
+        "T050",
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L17-31,166,211,303,630",
+      "explanation": "Customer exchanges are covered, but company/organization identity from T006 is not."
+    },
+    {
+      "id": "O02",
+      "verdict": "unsupported_assertion",
+      "source_turns": [
+        "T008",
+        "T016",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L33-47,166-178",
+      "explanation": "Known reservation-sheet fields are recovered; reservation number and billing destination are asserted as sheet fields although their storage location is unsaid in T008 and T068."
+    },
+    {
+      "id": "O03",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T022",
+        "T046",
+        "T048"
+      ],
+      "raw_output_reference": "raw/draft.md:L45-47,174,218,262",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約確定、変更後の内容、取消の状態。個体番号の割当てとは区別する。"
+    },
+    {
+      "id": "O04",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T020",
+        "T028",
+        "T030",
+        "T032",
+        "T036"
+      ],
+      "raw_output_reference": "raw/draft.md:L49-62,167,397,448,496,542",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材の管理番号・型・稼働台数と、貸出可、貸出中、点検待ち、修理中等の状態。"
+    },
+    {
+      "id": "O05",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T012",
+        "T026",
+        "T028",
+        "T030",
+        "T050"
+      ],
+      "raw_output_reference": "raw/draft.md:L64-79,305,406,439-456,496",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 対象予約の貸出機材番号、付属品、利用者の受領サイン、実際の受取時刻、返却を受け取った時刻、変更後の返却予定。紙で扱う。"
+    },
+    {
+      "id": "O06",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T030",
+        "T032",
+        "T034",
+        "T036",
+        "T038",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L76-79,535-556",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材ごとの点検結果、検収済み・保留、不足品・故障症状。全予約を一括完了にしない。"
+    },
+    {
+      "id": "O07",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T040",
+        "T046"
+      ],
+      "raw_output_reference": "raw/draft.md:L76,258,263,393,397",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 準備済みの機材番号の割当てを、倉庫でほかの予約との重複確認に用いる。"
+    },
+    {
+      "id": "O08",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T004",
+        "T008",
+        "T012",
+        "T018",
+        "T026",
+        "T032",
+        "T036"
+      ],
+      "raw_output_reference": "raw/draft.md:L397-411,446-458,484-503,541-552",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 管理番号で区別する実物機材、付属品、準備した箱、返却後の黄色い札。受付・倉庫・修理担当との間を移動する。"
+    },
+    {
+      "id": "O09",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T024",
+        "T042",
+        "T048",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L81-94,629,634",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 基本料金、延滞の追加料金、取消料を調べる基準。表の管理・制定はこの相談では扱っておらず、具体額は未提供。"
+    },
+    {
+      "id": "O10",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T062",
+        "T064",
+        "T066",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L609-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材ごとの基本料金・追加料金または取消料の内訳、金額、利用者の確認状況、経理へ渡す予約番号・請求先・確定した内訳と金額。"
+    },
+    {
+      "id": "O11",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T036",
+        "T044"
+      ],
+      "raw_output_reference": "raw/draft.md:L111-124,546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 故障機材と症状の受領先。修理見積りは負担の決定に関係するが、判断責任者は未確認。"
+    },
+    {
+      "id": "O12",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L126-138,641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 確定済みの請求依頼を受け取る。請求書発行・入金の追跡は範囲外で担当する。"
+    },
+    {
+      "id": "A1-WHAT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T016",
+        "T022",
+        "T024",
+        "T038",
+        "T048",
+        "T050",
+        "T052"
+      ],
+      "raw_output_reference": "raw/draft.md:L140-363,402,546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用希望の確定、既存予約の変更・取消、利用中の延長、貸出不能・遅延に伴う利用者との調整を行う。"
+    },
+    {
+      "id": "A1-WHY",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T020",
+        "T022",
+        "T038",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L146-148,191-193,236-238,283-285,329-331",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者が了解した型・台数・利用期間の機材を確保し、用意できない約束や無断の代替を避ける。"
+    },
+    {
+      "id": "A1-WHEN",
+      "verdict": "oracle_error",
+      "source_turns": [
+        "T016",
+        "T024",
+        "T048",
+        "T050",
+        "T052"
+      ],
+      "raw_output_reference": "raw/draft.md:L150-152,195-197,240-242,287-289,333-335",
+      "explanation": "Oracle overstates communication channels: T016/T024 support phone and email for new/cancellation, T049 supports a phone extension, and change channel is unspecified. Draft preserves the grounded timing and does not invent the change channel."
+    },
+    {
+      "id": "A1-XWHEN",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T038",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L400-402,544-546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材を準備して貸し出す — 用意できないことが倉庫から戻されたとき。返却機材を受け取り点検する — 不足・故障が報告され、後続予約への影響調整が必要なとき。"
+    },
+    {
+      "id": "A1-WHO",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T016",
+        "T022",
+        "T038",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L154-156,199-201,244-246,291-293,337-339",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受付。代替する型・日程の採否は利用者に確認する。"
+    },
+    {
+      "id": "A1-WHERE",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T006",
+        "T008",
+        "T016",
+        "T020",
+        "T024"
+      ],
+      "raw_output_reference": "raw/draft.md:L158-160,203-205,248-250,295-297,341-343",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 店舗の受付で電話・メールを受け、予約表・在庫表等を参照する。"
+    },
+    {
+      "id": "A1-I1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T016",
+        "T024",
+        "T048",
+        "T050",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L164-166,211,256,303",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 希望する型・台数・受取予定・返却予定、連絡先、請求先、変更・取消・延長の依頼。用途は相談時に聞くことがあるが必須ではない。"
+    },
+    {
+      "id": "A1-I2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T020",
+        "T038",
+        "T048",
+        "T050",
+        "T052"
+      ],
+      "raw_output_reference": "raw/draft.md:L168,212,257,304,349",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約表 — 既存の同型・重複期間の予約台数、変更対象、後続予約と返却予定。"
+    },
+    {
+      "id": "A1-I3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T020"
+      ],
+      "raw_output_reference": "raw/draft.md:L167,213,217",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 在庫表 — 型ごとの稼働台数、点検待ち・修理中の状態。"
+    },
+    {
+      "id": "A1-I4",
+      "verdict": "oracle_error",
+      "source_turns": [
+        "T038",
+        "T040",
+        "T046",
+        "T050"
+      ],
+      "raw_output_reference": "raw/draft.md:L258,305,350,402,546",
+      "explanation": "Oracle overstates the medium for a preparation-failure handoff: T040 says warehouse returns the failure to reception, not that it is written on a ticket. Shortage/fault ticket data are recovered. Draft line 350 independently invents an unreturned-status ticket field."
+    },
+    {
+      "id": "A1-P1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T019",
+        "T020"
+      ],
+      "raw_output_reference": "raw/draft.md:L172-174",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 型ごとの稼働台数と受取りから返却まで重なる予約台数を確認する。点検待ち・修理中を貸せる台数から外す。"
+    },
+    {
+      "id": "A1-P2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T021",
+        "T022"
+      ],
+      "raw_output_reference": "raw/draft.md:L173-179",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 両表の確認が済み、必要な型・日程への利用者の了解が取れてから予約表へ確定で登録し、受付から確保できた旨を返す。個体番号はこの時点では決めない。"
+    },
+    {
+      "id": "A1-P3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T047",
+        "T048"
+      ],
+      "raw_output_reference": "raw/draft.md:L215-228",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 変更は変更先の空きを先に確認し、利用者の了解後に同じ予約を更新して倉庫へ伝える。空きがなければ元の予約を残す。"
+    },
+    {
+      "id": "A1-P4",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T045",
+        "T046",
+        "T060"
+      ],
+      "raw_output_reference": "raw/draft.md:L260-275",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 取消を予約表へ反映した時点で、その予約の台数を別の利用者へ回せる。用意済みなら倉庫へ通知して個体割当てを外してもらう。取消料の有無とは独立して扱う。"
+    },
+    {
+      "id": "A1-P5",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T024",
+        "T058",
+        "T060"
+      ],
+      "raw_output_reference": "raw/draft.md:L8,262-264,385",
+      "explanation": "Corrected prior-business-day 17:00 free-cancellation cutoff is in the initial pending-note, so it is recovered semantically; the cancellation procedure fails to cross-reference it. Sunday closure is only in preparation."
+    },
+    {
+      "id": "A1-P6",
+      "verdict": "unsupported_assertion",
+      "source_turns": [
+        "T024",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L264,613,634",
+      "explanation": "The fee-bearing cancellation handoff is grounded, but line 264 additionally sends every cancellation to calculation staff, exceeding T024/T066."
+    },
+    {
+      "id": "A1-P7",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T049",
+        "T050"
+      ],
+      "raw_output_reference": "raw/draft.md:L307-321",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用中の延長は次の予約を確認し、可能なら新しい返却予定を利用者へ伝え、予約表・貸出票を更新して倉庫へ知らせる。不可なら元の返却期限を伝える。"
+    },
+    {
+      "id": "A1-P8",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T051",
+        "T052"
+      ],
+      "raw_output_reference": "raw/draft.md:L352-363",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 無断の遅延は自動的な延長承認にしない。受付が返却予定を過ぎた対象を予約表で確認して利用者へ連絡し、次の貸出しに響く場合は後続の利用者にも連絡して調整する。"
+    },
+    {
+      "id": "A1-X1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T020",
+        "T022",
+        "T038",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L174,355,402,546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 台数が足りなければ別の日・型を相談する。倉庫から不足や故障が届いた場合は、受付が予約表で次の予約への影響を確認する。利用者の了解なしで似た機材へ替えない。"
+    },
+    {
+      "id": "A1-O1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T022",
+        "T046",
+        "T048",
+        "T050"
+      ],
+      "raw_output_reference": "raw/draft.md:L178,222,268,314",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約表 — 確定、取消、了解済みの変更・延長後の内容。"
+    },
+    {
+      "id": "A1-O2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T046",
+        "T048",
+        "T050",
+        "T060"
+      ],
+      "raw_output_reference": "raw/draft.md:L223,263,271,315-316",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 延長した返却予定。用意済みの割当て解除・変更に必要な内容を倉庫へ知らせる。"
+    },
+    {
+      "id": "A1-O3",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T022",
+        "T038",
+        "T040",
+        "T050",
+        "T052"
+      ],
+      "raw_output_reference": "raw/draft.md:L179,224,270,317,359",
+      "explanation": "Main customer responses and consultations are grounded; lines 224 and 270 add outward change/cancellation result notices that T024/T046/T048 do not specify."
+    },
+    {
+      "id": "A1-O4",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T024",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L264,613,628,634",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 料金内訳・請求依頼 — 計算担当が取消料を計算するための取消情報。"
+    },
+    {
+      "id": "A1-RESULT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T022",
+        "T040",
+        "T046",
+        "T048"
+      ],
+      "raw_output_reference": "raw/draft.md:L181-183,226-228,273-275,319-321",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 了解済みの予約内容を基に倉庫で準備できる。取消した予約の台数は再受付でき、変更不能時は元の予約が維持される。相談中・未解決の代替は確約にしない。"
+    },
+    {
+      "id": "A2-WHAT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026",
+        "T028"
+      ],
+      "raw_output_reference": "raw/draft.md:L365-462",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約に対応する個体と付属品を準備し、来店した利用者と内容を確かめて貸し出す。"
+    },
+    {
+      "id": "A2-WHY",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026",
+        "T056"
+      ],
+      "raw_output_reference": "raw/draft.md:L371-373,419-421",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約どおりに使える機材をそろえ、受付が渡す物を判断できるようにする。"
+    },
+    {
+      "id": "A2-WHEN",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026",
+        "T057",
+        "T058"
+      ],
+      "raw_output_reference": "raw/draft.md:L375-385,423-425",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 倉庫の準備は貸出しの前営業日。日曜定休のため月曜分は土曜に準備する。受付での受渡しは利用者の来店時。"
+    },
+    {
+      "id": "A2-WHO",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026",
+        "T028",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L379-381,395-402,427-429,444-448",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 倉庫担当が個体選択・動作と付属品の確認・箱詰めを行い、受付が来店時の確認・サイン受領・貸出記録を行う。"
+    },
+    {
+      "id": "A2-WHERE",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T006",
+        "T018",
+        "T026"
+      ],
+      "raw_output_reference": "raw/draft.md:L383-385,431-433",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 店舗の倉庫で準備し、同じ店舗の受付で受け渡す。"
+    },
+    {
+      "id": "A2-I1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T018",
+        "T026",
+        "T046",
+        "T048"
+      ],
+      "raw_output_reference": "raw/draft.md:L391,440",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約表 — 確定した型・台数・受取予定等、受付からの変更・取消内容。"
+    },
+    {
+      "id": "A2-I2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T018",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L392,442",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 在庫表 — 個体の管理番号と現在貸せる状態。"
+    },
+    {
+      "id": "A2-I3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T026",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L393,441",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 別予約で使う個体の割当て、受渡しに用いる番号・付属品。"
+    },
+    {
+      "id": "A2-I4",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026"
+      ],
+      "raw_output_reference": "raw/draft.md:L397-411,446-458",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材と付属品 — 選択・点検・箱詰めして受渡す実物。"
+    },
+    {
+      "id": "A2-I5",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T026",
+        "T053",
+        "T054"
+      ],
+      "raw_output_reference": "raw/draft.md:L439,446-447",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 来店時の予約内容の照合、内容の確認、受領サイン。"
+    },
+    {
+      "id": "A2-P1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T018",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L395-411",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 倉庫担当は在庫表と貸出票を見て、今貸せる状態で、別の予約に割り当てられていない個体を選ぶ。番号・付属品を貸出票に記し、付属品と動作を確認して箱にまとめる。"
+    },
+    {
+      "id": "A2-P2",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T025",
+        "T026"
+      ],
+      "raw_output_reference": "raw/draft.md:L439-447",
+      "explanation": "Customer reconciliation, accessory check and signature are covered, but T026 explicitly says payment is afterward and the draft does not state this at the handoff."
+    },
+    {
+      "id": "A2-P3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T027",
+        "T028"
+      ],
+      "raw_output_reference": "raw/draft.md:L448,456-457",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受付は実際の受取時刻を貸出票に記録し、在庫表を貸出中にする。"
+    },
+    {
+      "id": "A2-X1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T039",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L400-402",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 準備時に用意できなければ受付へ戻し、予約と利用予定を調整する業務で利用者と相談する。出せない機材を貸出済みと扱わない。"
+    },
+    {
+      "id": "A2-X2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T055",
+        "T056"
+      ],
+      "raw_output_reference": "raw/draft.md:L450-452",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 来店時に型・台数と箱の中身が違えば受付から倉庫へ戻して確認する。直った内容を利用者と再確認するまでは、サイン受領・受渡しに進まない。"
+    },
+    {
+      "id": "A2-X3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T053",
+        "T054"
+      ],
+      "raw_output_reference": "raw/draft.md:L7,452",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 代理の受取りは U02 の未確認事項を残す。本人確認書類や委任状、許可条件などを創作しない。"
+    },
+    {
+      "id": "A2-O1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T026"
+      ],
+      "raw_output_reference": "raw/draft.md:L454-458",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 確認済みの機材・付属品の引渡し。"
+    },
+    {
+      "id": "A2-O2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T026",
+        "T028",
+        "T032"
+      ],
+      "raw_output_reference": "raw/draft.md:L406,441,447-456",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 貸した個体番号・付属品、サイン、実際の受取時刻。返却確認が照合できる記録。"
+    },
+    {
+      "id": "A2-O3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T028"
+      ],
+      "raw_output_reference": "raw/draft.md:L448,457",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 在庫表 — 貸出中の状態。"
+    },
+    {
+      "id": "A2-RESULT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T026",
+        "T028",
+        "T032",
+        "T056"
+      ],
+      "raw_output_reference": "raw/draft.md:L409-411,460-462",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約に対応する機材を確認のうえ利用者へ渡し、個体・付属品・時刻の記録により返却時の照合ができる。未解決の不一致では引渡しが成立しない。"
+    },
+    {
+      "id": "A3-WHAT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T012",
+        "T030",
+        "T032",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L464-599",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 返却の受領と時刻記録、個体・付属品・動作の点検を区別し、機材ごとに再貸出し可否と検収結果を残す。"
+    },
+    {
+      "id": "A3-WHY",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T002",
+        "T004",
+        "T010",
+        "T032",
+        "T042",
+        "T062",
+        "T070"
+      ],
+      "raw_output_reference": "raw/draft.md:L470-472,505-507,515-517",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受け取っただけの機材を貸せると扱わず、次の貸出しや料金計算に使える検収結果を残す。"
+    },
+    {
+      "id": "A3-WHEN",
+      "verdict": "partial_recovery",
+      "source_turns": [
+        "T006",
+        "T012",
+        "T013",
+        "T014"
+      ],
+      "raw_output_reference": "raw/draft.md:L474-476,496-497,519-521",
+      "explanation": "Warehouse checks when free, but the explicit no-same-day guarantee and possible next-morning inspection from T014 are missing."
+    },
+    {
+      "id": "A3-WHO",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T012",
+        "T028",
+        "T030",
+        "T032"
+      ],
+      "raw_output_reference": "raw/draft.md:L478-480,523-525,539-546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受付は返却受領と時刻記録・点検待ちへの更新を行う。倉庫担当が点検し検収済みを付ける。「受付が全部戻ったら完了」は訂正済み。"
+    },
+    {
+      "id": "A3-WHERE",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T006",
+        "T012",
+        "T014",
+        "T032"
+      ],
+      "raw_output_reference": "raw/draft.md:L482-484,527-529",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 同じ店舗で受け取り、黄色い札を付けた返却用の棚へ置く。倉庫で点検する。"
+    },
+    {
+      "id": "A3-I1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T006",
+        "T012",
+        "T034"
+      ],
+      "raw_output_reference": "raw/draft.md:L490,584",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 返却機材、遅れて持参する不足品。"
+    },
+    {
+      "id": "A3-I2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T012",
+        "T032",
+        "T034"
+      ],
+      "raw_output_reference": "raw/draft.md:L491,535,585",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 貸出時の個体番号・付属品、実際の返却時刻、前回の不足・保留内容。"
+    },
+    {
+      "id": "A3-I3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T004",
+        "T012",
+        "T032"
+      ],
+      "raw_output_reference": "raw/draft.md:L490,497,537,541",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 機材と付属品 — 返却された実物と箱。"
+    },
+    {
+      "id": "A3-P1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T012",
+        "T014",
+        "T030"
+      ],
+      "raw_output_reference": "raw/draft.md:L494-507",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受付は返却を受け取った時刻を貸出票に記入し、在庫表を点検待ちにする。箱に貸出票を添えて黄色い札の棚へ置く。この段階では再貸出し不可。"
+    },
+    {
+      "id": "A3-P2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T031",
+        "T032"
+      ],
+      "raw_output_reference": "raw/draft.md:L539-556",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 倉庫担当は貸出票の個体番号・付属品との一致と動作を確かめる。問題がなければ結果と検収済みを記し、在庫表を貸出可へ戻す。箱数の確認だけでは戻さない。"
+    },
+    {
+      "id": "A3-P3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T061",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L541-556,627,634",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 同じ予約でも機材ごとに結果を扱う。検収済みの分だけ計算担当へ回し、不足・故障分はまだ計算しないと分かるよう残す。"
+    },
+    {
+      "id": "A3-X1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T033",
+        "T034",
+        "T037",
+        "T038"
+      ],
+      "raw_output_reference": "raw/draft.md:L544-546,558-599",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 付属品不足は貸出票に残して検収を保留し、機材は点検待ちのままにする。受付が利用者に連絡して持参を依頼し、届いた後に倉庫担当が残りを確認する。"
+    },
+    {
+      "id": "A3-X2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T035",
+        "T036",
+        "T043",
+        "T044"
+      ],
+      "raw_output_reference": "raw/draft.md:L9,546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 故障は倉庫担当が症状を記録し修理中に更新する。機材と症状を修理担当へ渡す。その場で利用者の負担は決めない。"
+    },
+    {
+      "id": "A3-X3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T037",
+        "T038"
+      ],
+      "raw_output_reference": "raw/draft.md:L546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 不足・故障の記録を受付へ渡し、予約と利用予定を調整する業務で後続予約への影響を確認・調整できるようにする。"
+    },
+    {
+      "id": "A3-O1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T012",
+        "T030",
+        "T032",
+        "T034",
+        "T038",
+        "T042",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L501,535,550,594",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 実返却時刻、機材ごとの検収結果、不足品・故障症状、保留。受付・計算担当が必要な内容を受け取る。"
+    },
+    {
+      "id": "A3-O2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T030",
+        "T032",
+        "T034",
+        "T036"
+      ],
+      "raw_output_reference": "raw/draft.md:L496,502,542,546,551,590,595",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 在庫表 — 点検待ち、検収後の貸出可、故障時の修理中。"
+    },
+    {
+      "id": "A3-O3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T036"
+      ],
+      "raw_output_reference": "raw/draft.md:L546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 修理担当 — 故障した機材と症状。"
+    },
+    {
+      "id": "A3-O4",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T034"
+      ],
+      "raw_output_reference": "raw/draft.md:L546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 受付からの不足品持参依頼。"
+    },
+    {
+      "id": "A3-RESULT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T032",
+        "T034",
+        "T042",
+        "T062",
+        "T069",
+        "T070"
+      ],
+      "raw_output_reference": "raw/draft.md:L505-507,554-556,597-599",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 正常に検収した機材は再貸出しでき、該当分の料金計算を進められる。不足・故障のある分は保留を維持し、同じ予約の正常分を止めない。店で受領したことだけを検収完了・再貸出し可としない。"
+    },
+    {
+      "id": "A4-WHAT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T042",
+        "T062",
+        "T064",
+        "T066",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L601-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 検収済みの貸出分または取消料がある予約の料金を計算し、利用者の確認を得た分を経理へ渡す。"
+    },
+    {
+      "id": "A4-WHY",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T042",
+        "T044",
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L607-609,643-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約・返却実績に基づく内訳を利用者と確認し、未確定額を混ぜずに経理が請求できる材料をそろえる。"
+    },
+    {
+      "id": "A4-WHEN",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T024",
+        "T042",
+        "T062",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L611-613",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 検収済みの貸出票が計算担当へ届いたとき。取消料の対象となる取消の連絡を受けたとき。"
+    },
+    {
+      "id": "A4-WHO",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T041",
+        "T042",
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L615-617,634-641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 受付とは別の計算担当。内容の確認・異議の提示は利用者が行い、請求書発行は範囲外の経理が担う。"
+    },
+    {
+      "id": "A4-WHERE",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L619-621",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 計算担当から利用者への内訳提示はメール。計算作業場所と経理への送付チャネルは発言されていないため未確認とする。"
+    },
+    {
+      "id": "A4-I1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T042",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L625-627",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出票 — 機材ごとの検収済みの結果、実際の返却時刻。"
+    },
+    {
+      "id": "A4-I2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T024",
+        "T066",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L628",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約表 — 予約した期間と対象予約の情報。取消の場合は受付から取消の連絡を受ける。"
+    },
+    {
+      "id": "A4-I5",
+      "verdict": "unsupported_assertion",
+      "source_turns": [
+        "T067",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L166,178,628,641",
+      "explanation": "Billing destination was collected at reception, but its placement in the reservation sheet at line 628 has no transcript basis."
+    },
+    {
+      "id": "A4-I3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T024",
+        "T042",
+        "T048",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L629",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 料金表 — 基本・延滞・取消料の計算基準。具体額等は U04 の未提供を残す。"
+    },
+    {
+      "id": "A4-I4",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L630,636",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 料金内訳に間違いがない旨の返信、または異議。"
+    },
+    {
+      "id": "A4-P1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T042",
+        "T062",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L634",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 検収済みの分について、予約期間の基本料金と実返却時刻を料金表に照らし、遅延の追加料金を計算する。取消料は取消の連絡と料金表から計算する。"
+    },
+    {
+      "id": "A4-P2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T063",
+        "T064"
+      ],
+      "raw_output_reference": "raw/draft.md:L635-636",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 計算担当が内訳を利用者へメールし、間違いがないとの返信を得た分を確定する。"
+    },
+    {
+      "id": "A4-P3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T067",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L636,641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 確定した分について予約番号、請求先、内訳、金額を経理へ請求依頼として渡す。"
+    },
+    {
+      "id": "A4-X1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T065",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L11,636",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 異議のある分は貸出票・料金表を確認して利用者へ再説明する。無返信では確定せず、催促日数は U05 の未確認を残す。"
+    },
+    {
+      "id": "A4-X2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T044",
+        "T061",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L9,634,645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 不足・故障のある未検収分を計算対象に混ぜない。正常な検収済み分は進める。故障分の負担決定は U01 の保留を維持する。"
+    },
+    {
+      "id": "A4-O1",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L635,640",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者 — 基本・追加・取消料の内訳と、異議があった場合の再説明。"
+    },
+    {
+      "id": "A4-O2",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T062",
+        "T064",
+        "T066"
+      ],
+      "raw_output_reference": "raw/draft.md:L634-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 料金内訳・請求依頼 — 利用者が確認した確定分と、未確認・保留の区別。"
+    },
+    {
+      "id": "A4-O3",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L636,641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 経理 — 予約番号、請求先、確定した内訳と金額を含む請求依頼。"
+    },
+    {
+      "id": "A4-RESULT",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T044",
+        "T064",
+        "T066",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L636,641,643-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 利用者が確認した分の請求依頼が経理へ渡り、経理が請求書を発行できる。無返信・異議・未決の故障負担は請求確定に変えず、入金済みまで主張しない。"
+    },
+    {
+      "id": "HOF01",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T008",
+        "T018",
+        "T022"
+      ],
+      "raw_output_reference": "raw/draft.md:L178,183,391",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 予約表の確定した型・台数・日時が、倉庫の前営業日の準備の入力になる。"
+    },
+    {
+      "id": "HOF02",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T018",
+        "T026",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L397-411,439-447",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 倉庫の個体選択・付属品確認が箱と貸出票に残り、受付での利用者との照合へ渡る。"
+    },
+    {
+      "id": "HOF03",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T026",
+        "T032",
+        "T062"
+      ],
+      "raw_output_reference": "raw/draft.md:L441,490-503,535-556",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 貸出時の個体・付属品記録と返却物を照合し、倉庫が機材ごとの検収結果を貸出票へ残す。"
+    },
+    {
+      "id": "HOF04",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T038",
+        "T040"
+      ],
+      "raw_output_reference": "raw/draft.md:L402,546",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 不足・故障・準備不能は受付へ戻り、受付が後続予約と利用者への影響を調整する。"
+    },
+    {
+      "id": "HOF05",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T042",
+        "T062",
+        "T064",
+        "T068"
+      ],
+      "raw_output_reference": "raw/draft.md:L542,556,627,634-641",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 正常に検収した分の貸出票が計算担当へ渡り、利用者が確認した料金情報が経理へ渡る。"
+    },
+    {
+      "id": "HOF06",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T046",
+        "T048",
+        "T050",
+        "T060"
+      ],
+      "raw_output_reference": "raw/draft.md:L218-223,262-271,310-316",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 取消は予約上の台数を解放し、用意済みなら倉庫で個体の割当てを解除する。変更・延長も倉庫へ知らせる。"
+    },
+    {
+      "id": "HOF07",
+      "verdict": "grounded_success",
+      "source_turns": [
+        "T030",
+        "T032",
+        "T064",
+        "T069",
+        "T070"
+      ],
+      "raw_output_reference": "raw/draft.md:L3,496-507,541-556,634-645",
+      "explanation": "The cited draft passage preserves this source-grounded proposition, allowing an equivalent Activity/Object decomposition: 店での返却受領、検収、再貸出し可能、料金確定は別の状態である。受領と検収の区別は設計者のまとめを依頼者が明示的に確認した。"
+    },
+    {
+      "id": "HIDDEN01",
+      "verdict": "appropriate_silence",
+      "source_turns": [],
+      "raw_output_reference": "absent",
+      "explanation": "Not spoken and no transcript cue; no recovery or question obligation, no positive credit."
+    },
+    {
+      "id": "HIDDEN02",
+      "verdict": "appropriate_silence",
+      "source_turns": [],
+      "raw_output_reference": "absent",
+      "explanation": "Not spoken and no transcript cue; no recovery or question obligation, no positive credit."
+    },
+    {
+      "id": "HIDDEN03",
+      "verdict": "appropriate_silence",
+      "source_turns": [],
+      "raw_output_reference": "absent",
+      "explanation": "Not spoken and no transcript cue; no recovery or question obligation, no positive credit."
+    }
+  ]
+}

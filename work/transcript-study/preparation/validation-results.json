@@ -1,0 +1,43 @@
+{
+  "checked_at_utc": "2026-10-06T22:26:24.978729+00:00",
+  "checks": {
+    "turn_ids_sequential_72": true,
+    "allowed_turn_count": true,
+    "draft_v1_preserved_exactly": true,
+    "unique_element_ids": true,
+    "exact_ledger_bd_id_parity": true,
+    "source_ids_valid": true,
+    "visible_elements_have_sources": true,
+    "hidden_elements_have_no_sources": true,
+    "hidden_silence_explicitly_allowed": true,
+    "input_digest_matches": true,
+    "no_private_urls": true,
+    "four_primary_activities": true,
+    "explicit_alternative_decompositions": true,
+    "transcript_contains_no_schema_headers": true
+  },
+  "turn_count": 72,
+  "transcript_characters": 5062,
+  "element_count": 118,
+  "statuses": {
+    "observed": 101,
+    "corrected": 3,
+    "proposal-not-adopted": 1,
+    "uncertain": 10,
+    "hidden-unspoken": 3
+  },
+  "files": {
+    "build_oracle.py": "e5e899078523e501bdcfb01dde5c695124c3e1f15da37b26a013ca7f6e2b82cc",
+    "drafts/transcript.v1.txt": "1d4924023499670253c23c436a649aff3955832c3877a807e98e063746901ffd",
+    "expected-business-design.md": "3ee23ff13a9eccb4a9760dfe4f7faaeb5d33fa75cede45ba1ed1879034b1b6a9",
+    "observability.json": "c1381afaac6df62beac078483cf546aaf690ee935b904a12eaecf6493b623ce7",
+    "realism-review.md": "1b37d3dcf0dc6a7b6d4c99bd6e8a1c7348c3db1aca68ea2c97349ebb70ccc8c6",
+    "scenario.md": "fb7e1307881da1cf28d6c6d4d8738bdd425e716c3a319713441578794d6b0974",
+    "transcript.txt": "1d4924023499670253c23c436a649aff3955832c3877a807e98e063746901ffd"
+  },
+  "limits": [
+    "Content/source audit is a manual author-side review, not a proof of semantic completeness.",
+    "No authoring or evaluation result has been used to revise these inputs.",
+    "Parent owns the final freeze and authoring dispatch."
+  ]
+}
