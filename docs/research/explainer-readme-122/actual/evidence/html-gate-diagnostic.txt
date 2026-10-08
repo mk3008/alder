@@ -1,0 +1,5 @@
+error: Playwright 1.63.0 has no chromium browser executable installed.
+       missing:  /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
+       resolved: playwright@1.63.0 at /tmp/explainer-runtime-122/node_modules/playwright
+       run:      /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node /tmp/explainer-runtime-122/node_modules/playwright/cli.js install chromium
+       (`npx/pnpm exec playwright install` may resolve a different playwright and download a different build)

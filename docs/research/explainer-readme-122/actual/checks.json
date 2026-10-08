@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "name": "source-evidence",
+      "cmd": "python3 examples/extract-evidence.py",
+      "cwd": ".",
+      "expect": [
+        "method-version: The current release is **Alder v0.6**, containing **research review knowledge v0.3**.",
+        "required-checks: After humans have completed Business Design and its business-correlation review, Alder requires Check Item design and human review before test implementation.",
+        "stable-plugin: The previous stable tag `plugin-v0.1.0` still provides only read-only review; version 0.2.7 is available from this change's commit/branch until separately released.",
+        "plugin-limit: Plugin 0.2.7 packages design authoring and implementation review; design-quality/correlation/omission review, Optimization Review, Check Item drafting, graph export and follow-up are not packaged skills.",
+        "structure: The current research recommends **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, to make relationships between activities traceable.",
+        "result: The business state established when Procedure finishes normally and the subsequent business it enables. Keep it separate from Output's transferred information and Why's purpose.",
+        "no-detail-gate: Alder does not require a separate detailed-design gate before implementation.",
+        "trace-boundary: Do not maintain a permanent Check Item ↔ Code, file, symbol, SQL-entry-point, or line mapping."
+      ]
+    },
+    {
+      "name": "meeting-room",
+      "cmd": "python3 examples/inspect-meeting-room.py",
+      "cwd": ".",
+      "expect": [
+        "架空fixture: 未合意の草案（製品の実装・テストではない）",
+        "構造: Activity / Why / When / Who / Where / Input / Procedure / Exception / Output / Result",
+        "業務名: 会議室の予約",
+        "Output: 登録した予約",
+        "Result: 空きがある場合の予約が登録され、利用者が利用予定を把握できる。",
+        "未決 Q1: 重複する予約希望は拒否するか、調整するか。 decision=null",
+        "ROOM-01: 未レビュー / Test根拠=未作成",
+        "ROOM-02: 要確認 / Test根拠=未作成",
+        "System Design: DB=未選定",
+        "Code永続mapping: false"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "kind": "架空ヒアリングから作った未合意の説明fixture",
+  "activity": "会議室の予約",
+  "why": "利用予定を確保する",
+  "when": "利用者から予約希望を受け取ったとき",
+  "who": "予約担当者",
+  "where": "社内",
+  "input": [{"object":"利用者","information":"希望する会議室・日時"},{"object":"予約台帳","information":"既存の予約"}],
+  "procedure": ["予約担当者は利用者から希望する会議室・日時を受け取る。", "予約担当者は予約台帳の既存の予約を確認する。", "空きがある場合は予約台帳へ予約を登録し、利用者へ予約結果を伝える。"],
+  "exception": "重複時に拒否するか調整するかは未決。責任者への確認事項として残す。",
+  "output": [{"object":"予約台帳","information":"登録した予約"},{"object":"利用者","information":"予約結果"}],
+  "result": "空きがある場合の予約が登録され、利用者が利用予定を把握できる。",
+  "open": [{"id":"Q1","question":"重複する予約希望は拒否するか、調整するか。","decision":null}],
+  "checks": [{"id":"ROOM-01","title":"空きがある場合に予約を登録できる","expected":"空きがある場合、予約台帳へ登録し利用者へ結果を伝える。","review_state":"未レビュー","test_evidence":"未作成"},{"id":"ROOM-02","title":"重複時の扱いを確認する","expected":null,"review_state":"要確認","test_evidence":"未作成"}],
+  "system_design": {"database":"未選定","internal_function_split":"実装時に検討"},
+  "permanent_code_mapping": false
+}
