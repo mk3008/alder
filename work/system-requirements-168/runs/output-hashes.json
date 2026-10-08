@@ -1,0 +1,10 @@
+{
+  "runs/A-prompt.txt": "fb93be20bb43c26f0e2e08195ce5be190b6f5c61f9206d19802580d141828fba",
+  "runs/A-raw.md": "1ec34bac0f7b6cf07300e7a67f79f3aef0ce8472d1ac2c6a45bdabec1bd7921e",
+  "runs/B-prompt.txt": "169ece65951580f3d7d1ec3c67275344c075703514cb2c6b65a0b900099780a8",
+  "runs/B-raw.md": "9ff9df77e9702633876efaf2266ae3cabbcaf14d3bb4b030a908bdb394b8406f",
+  "runs/C-final.md": "7d4bf32ca8972daaa7043dd72a4d26f96f509772144c914f9c9a584be5552847",
+  "runs/C-prompt.txt": "6673aa6bc1dd66ada0352f96b5f24b1400a826ea58b49b42fe5be51957d833e9",
+  "runs/C-raw.md": "244a4e2a339fabe20f5f1426db5712213dc3351933d86d390e7cea933b3ec0e6",
+  "runs/execution.json": "089a5dc0b851e89b0efe388f80c5e88c04c657bcb4e59d6e33258d3346936b87"
+}
