@@ -1,0 +1,18 @@
+{
+  "actual_inputs_read": [
+    "work/business-complexity/issue-151/prompts/B-context.txt",
+    "AGENTS.md",
+    "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "work/business-complexity/issue-151/inputs/B-workflow.md",
+    "work/business-complexity/issue-151/inputs/B-context.md"
+  ],
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "requested_fork_turns": "none",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "input_packet_revision": "beea72b8eb9954ad37a2c7c5b4c89946700705e7",
+  "prompt_path": "work/business-complexity/issue-151/prompts/B-context.txt",
+  "runtime_settings_independently_verified": false
+}

@@ -1,0 +1,35 @@
+{
+  "packet_revision": "70fee9a59b619d56475330472b78aa6c1bf27390",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_attested": false,
+  "conditions": "Q unknown boundary reason; R historical allocation and no distinct-person requirement; S distinct-person requirement protected",
+  "runs": {
+    "Q": {
+      "raw_path": "runs/Q.raw.md",
+      "read_log_path": "runs/Q.read-log.json",
+      "raw_sha256": "73f39fc7eacc305b2cdd5a32271168ef3058623188fe9ffd957e3e2ec9a937ee",
+      "read_log_sha256": "8d134ef50d332156662d0e63649870226b3890a6b6ba167d93b6b5a09f40195e"
+    },
+    "R": {
+      "raw_path": "runs/R.raw.md",
+      "read_log_path": "runs/R.read-log.json",
+      "raw_sha256": "aca491a40694f31b12d79ce12ad84bb06cc83d9b53b4e56ebd0eafbc204b10e3",
+      "read_log_sha256": "92d67f9c852997d0a3abe0754c9eb4a0a7095b4a927f6bfa68075359f8cf0c90"
+    },
+    "S": {
+      "raw_path": "runs/S.raw.md",
+      "read_log_path": "runs/S.read-log.json",
+      "raw_sha256": "9e1ecc37bcf85b276306d0722774cd9ed3ba95e5bf2e7b9a476be6437455073f",
+      "read_log_sha256": "3d628df395ea22b1f9f1c876117d75881c5eb69998d0e84f2da3902b05f57da5"
+    }
+  },
+  "all_three_generated_before_key_release": true,
+  "capacity_retries": 0,
+  "content_followup": "Only requested launch settings were clarified to workers; no review content was changed or requested for regeneration.",
+  "launch_wrapper": "Read the corresponding fixed prompt and its enumerated files only. Add the public packet and frozen Skill revisions. Permit writing only the corresponding raw result and read log as an evidence-delivery exception; no source edits, browsing, other conditions or prior outputs. Generic coordination text adds no business facts or evaluation targets."
+}

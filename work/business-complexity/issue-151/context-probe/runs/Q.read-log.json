@@ -1,0 +1,24 @@
+{
+  "condition": "Q",
+  "public_packet_revision": "70fee9a59b619d56475330472b78aa6c1bf27390",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_runtime_settings": "not independently verified",
+  "full_task_prompt": "Alderで、この研究用業務モデルのProblemに対する改善案を検討してください。提案は与えられたcontextの範囲でよく、候補の採用は人間の判断に残してください。読み取り専用です。\n\nRepository root: /workspace/scratch/ff98173bedea/alder-simplification-151\n凍結Skill: 公開a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168のPlugin 0.4.3。入力packet revisionは起動時に指定します。\n最初にAGENTS.md、plugins/alder/skills/alder-optimize-business/SKILL.md、同梱authorityとprovenanceを読んでください。\n業務入力は次の2ファイルです。\n- work/business-complexity/issue-151/context-probe/inputs/common.md\n- work/business-complexity/issue-151/context-probe/inputs/Q.md\n\n入力に明示した研究用仮定を、この条件内の前提として扱ってください。実例の事実や現場の採用済み変更とは扱いません。\n今回検討する範囲には、担当の分担、処理順序、記録の扱いを含みます。入力が示す目的・保証を守り、現在の担当名だけを固定制約にはしないでください。これは検討範囲であり、業務変更の実施許可ではありません。\n\n許可したファイルとこのprompt以外を読まないでください。記事、Issue、別条件、過去出力、評価記録、他の研究文書、外部検索は使いません。入力・Skillを変更しないでください。\n結果全文、根拠、残る未知と判断待ち、読んだ相対パスを返してください。実測されていない効果や採用を確定しないでください。\n",
+  "read_relative_paths": [
+    "work/business-complexity/issue-151/context-probe/prompts/Q.txt",
+    "AGENTS.md",
+    "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "work/business-complexity/issue-151/context-probe/inputs/common.md",
+    "work/business-complexity/issue-151/context-probe/inputs/Q.md"
+  ],
+  "output_relative_path": "work/business-complexity/issue-151/context-probe/runs/Q.raw.md",
+  "source_files_changed": false,
+  "external_browsing_used": false
+}

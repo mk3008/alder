@@ -1,0 +1,18 @@
+{
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_model": "gpt-6-sol",
+  "reasoning_effort": "medium",
+  "fork_turns": "none",
+  "heldout_sha256": "3646009206db0def4e5440a90571cdcffa3c812a59bead70219f581a314c0bb8",
+  "input_sha256": {
+    "inputs/Q.md": "fea6d6c05d25f4985f16b5579fde5fbee99ceaf9e3ae89116289d6374bc3f026",
+    "inputs/R.md": "9e2fd6e55c6f9c48b06d215344c90f2b102a52b26f1ac7f8de0563129a7ed88c",
+    "inputs/S.md": "d3dad09d6c64400ad6a5a8a73f0c112134490837fbcb2c7ef295320edbf017d3",
+    "inputs/common.md": "e2f98a4c7a5b9911fc9ac2aae4df79c921c0393a890454183a6a744822c54593"
+  },
+  "prompt_sha256": {
+    "prompts/Q.txt": "29fd74e3fe6eda9f7dabd95d03963f41f38ce0c9595492772fe9ce6fe7ae5c0c",
+    "prompts/R.txt": "d3bbfbfd97e21a441469c0d9fa77e610d6f730e129e7aabf1e309816a8e9598b",
+    "prompts/S.txt": "e6453d81288fa38fac557f8c1828f756d795afe6fa92942c2ab15346310575fb"
+  }
+}
