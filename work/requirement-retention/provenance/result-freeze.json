@@ -1,0 +1,210 @@
+{
+  "frozen_at_utc": "2026-10-07T00:08:25Z",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "663437f5565a0afc1e3385986a5d38a107394f1eff1f3daa9a94bc2ff4e7f286"
+    },
+    {
+      "path": "evaluation/coordinator-challenge-response.md",
+      "sha256": "6e1c4faedec09be8efd525c53ce12603e3cd05d43d5c4fe753afaacbbae999d5"
+    },
+    {
+      "path": "evaluation/mapping.json",
+      "sha256": "0211fe4e2a1fe70f97863b925a6a501027c38d23df56c73799c0abe652713c82"
+    },
+    {
+      "path": "evaluation/original/mapping.json",
+      "sha256": "8f410bb19a22cf16c6f3fa7884767924b799608a9ad19a6134c27d98e11bb5b0"
+    },
+    {
+      "path": "evaluation/original/provenance.json",
+      "sha256": "55609c4ff324e042318a70f31772a15dcb3acd9b8fe141163e69a4fb54eb899c"
+    },
+    {
+      "path": "evaluation/original/report.md",
+      "sha256": "6431e8acf487e1ac60b8b922783dec6319bd173fc0a32569152e466dbd2c3155"
+    },
+    {
+      "path": "evaluation/provenance.json",
+      "sha256": "55609c4ff324e042318a70f31772a15dcb3acd9b8fe141163e69a4fb54eb899c"
+    },
+    {
+      "path": "evaluation/report.md",
+      "sha256": "47ea21ffc982f05b94c7e60e7dc406240217f441a52fa0e779a33352a2d10ce2"
+    },
+    {
+      "path": "inputs/package/LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/plugin.json",
+      "sha256": "b6d4e02e3382e50d939b1f2947b49cbe71176042fe45545de597289ed4907a68"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/SKILL.md",
+      "sha256": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/adoption.md",
+      "sha256": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/business-graph.md",
+      "sha256": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/provenance.json",
+      "sha256": "89ef696d829d4b3e33647fb8a4e34593da32346fbc7c06c531fcaddb000b2451"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/provenance.json",
+      "sha256": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc"
+    },
+    {
+      "path": "inputs/transcript.txt",
+      "sha256": "9279efa5d3f0bac163006885cfd71b8f2279d735200495d6269918cdc9006b8e"
+    },
+    {
+      "path": "preparation/build_oracle.py",
+      "sha256": "da70ab10ce2fce79a930707829260121839a94c55abcdbb74b9a3b867758fee0"
+    },
+    {
+      "path": "preparation/change-provenance.md",
+      "sha256": "85dd94e02b4182c17036cd0110222d02f0aa478c89c62ad28595bac870abd5ad"
+    },
+    {
+      "path": "preparation/expected-business-design.md",
+      "sha256": "43fcebaeb7340540027f9f8e0858b1349bf18018acba33813619b9adb2aeeae5"
+    },
+    {
+      "path": "preparation/realism-review.md",
+      "sha256": "37c7b30eafd92270380c6ba768734ae720d8e1039c6d9b07701d25b683b7e261"
+    },
+    {
+      "path": "preparation/requirement-oracle.json",
+      "sha256": "d9688c0573051f3b4e4419d409d265360d82082152a4954fd17694b7977c9a64"
+    },
+    {
+      "path": "preparation/scenario.md",
+      "sha256": "b7cfe222de3e07980a32d79a17a0e65118e4f082c33d0a7ae01e067bace63f91"
+    },
+    {
+      "path": "preparation/transcript-before-coordinator-review.txt",
+      "sha256": "a1706e8264a3f210f91d5bcd87b843e60410504ca4645c397d7ea9bf56114e5a"
+    },
+    {
+      "path": "protocol.md",
+      "sha256": "c3b1b52a01af45162139225863f6b839ce740598e5a44804cc44afef9cdbf4e5"
+    },
+    {
+      "path": "provenance/author-dispatch.txt",
+      "sha256": "a4187c6de8d0506f35a6fcd624a2382f47db1850cf7e28f318e0057b599e2cfa"
+    },
+    {
+      "path": "provenance/author-run.json",
+      "sha256": "46d77885f3abd6bc4fdad1b44257af10db0de43112ae32bd0842b29b3e4335f1"
+    },
+    {
+      "path": "provenance/coordinator-input-review.md",
+      "sha256": "91cc3440c02c7f9912e3e4774fa114987ab3c72ad2bd33e00263a74bdb21233b"
+    },
+    {
+      "path": "provenance/current-adoption-evaluator-only.md",
+      "sha256": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8"
+    },
+    {
+      "path": "provenance/current-boundary-source.json",
+      "sha256": "1b1f930846fae2bce491f35bc9b82c1d3e213944bb28f226a891063384cefac4"
+    },
+    {
+      "path": "provenance/evaluator-correction-dispatch.txt",
+      "sha256": "4a70495593de2baf8b5d5dd81b01d6fa9ecff4726f7dfdc8bbaf55d898f8eb1c"
+    },
+    {
+      "path": "provenance/evaluator-dispatch.txt",
+      "sha256": "51ecf46258fc6a844e829ecbf47f42033c749ec9af97c94b4e4b273700beaabf"
+    },
+    {
+      "path": "provenance/evaluator-run.json",
+      "sha256": "dc8e304594c14160750d1f0e87b651207b74d8ccf5887990b8c86ff0bff2b252"
+    },
+    {
+      "path": "provenance/initial-evaluation-freeze.json",
+      "sha256": "dc11a9748d3654291354822578d145857a7356fb747163dcda1f6ded704e0d2c"
+    },
+    {
+      "path": "provenance/input-freeze.json",
+      "sha256": "79afa37c12ab93bc43ef8f701cb7800bb0eb1c0277196aca45759c16259c0e53"
+    },
+    {
+      "path": "provenance/input-validation.json",
+      "sha256": "9c5a41b31ca638c9da9fb0a46e33cba4fe670acecbc792b56b346dcc46c8bcf3"
+    },
+    {
+      "path": "provenance/open.py",
+      "sha256": "3536c0408532f5873b3d80a77b551f68e5494d6e1cff30a594540933465d50a6"
+    },
+    {
+      "path": "provenance/package-manifest.json",
+      "sha256": "22273466211006d4cb2781b0e62c4ca4edbf0f8fcf2ab25629671a108dd3fca3"
+    },
+    {
+      "path": "provenance/preparation-run.json",
+      "sha256": "91d7a0c55ae1e750a3403aab6d7d6425655231667407b46415b5d5573303b8b2"
+    },
+    {
+      "path": "provenance/public-input-readback.json",
+      "sha256": "e6b31631b52a5f94d8b311ea81f0d2f0323c54e41c29505e7a2022edebca0099"
+    },
+    {
+      "path": "provenance/raw-public-safety-review.json",
+      "sha256": "b4fe5a809841b84a6c41a60de1c79aed97d05125d51fdf5f1bf9c9bc3f065814"
+    },
+    {
+      "path": "raw/access-report.json",
+      "sha256": "76287b9ca89edee0da33b76dd976929d47ddea80fbcf9ab009145a994c897b9f"
+    },
+    {
+      "path": "raw/author-final-reply.txt",
+      "sha256": "6355b15ab3de48b54ab940e41da2d5c371b33925c4e7ceb1ecc7011969e6c2c2"
+    },
+    {
+      "path": "raw/author-progress-messages.txt",
+      "sha256": "049ff1fc11fdd521c355868758cb87837a8a99cf078d7acef715b9205dc24759"
+    },
+    {
+      "path": "raw/draft.md",
+      "sha256": "08b12768856ba59855b4c28d18adeb27877d81ef612d3d6d977a2729fecf445c"
+    },
+    {
+      "path": "raw/output-freeze.json",
+      "sha256": "288c4d5a2e84ec3ab6d9d1db73216cd7b36b823cee2ca6807246846c56782d9e"
+    },
+    {
+      "path": "raw/reads.jsonl",
+      "sha256": "59e46e831888969b9d4c8ea58e468ead5d46322dd44ba7f6142a607aed3fa428"
+    },
+    {
+      "path": "retrospective.md",
+      "sha256": "89b463e9af2fcbdf63ea3f188e6d2b71c6bb5fb720a4d14b91a91cdbd4c8bffd"
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "87944719deec50dab108e9a6fa45a896e0a6dd3faa1174df6a44b34ccc89f9fe"
+    },
+    {
+      "path": "verify_final.py",
+      "sha256": "ecd73c02c1180f51cadaaa4dedb01af2fb1aabc835b0bc6df7142526f10e485b"
+    }
+  ],
+  "scope": "complete evidence through coordinator correction, before public final commit; no raw rewrites"
+}

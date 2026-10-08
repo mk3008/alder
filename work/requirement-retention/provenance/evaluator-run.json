@@ -1,0 +1,14 @@
+{
+  "agent": "/root/test_transcript_requirement_retention/evaluate_requirement_retention",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "launched_at_utc": "2026-10-07T00:01:39Z",
+  "tool_accepted": true,
+  "effective_model": "unknown",
+  "effective_reasoning": "unknown",
+  "full_dispatch_sha256": "51ecf46258fc6a844e829ecbf47f42033c749ec9af97c94b4e4b273700beaabf",
+  "public_input_commit": "68836f6899ac263dcd68d038daaa72f3e54d08ce",
+  "public_raw_commit": "abdfb9a95cf3b0b6a069ee98e6baf0495e257bbc",
+  "dispatch_note": "Saved terminal newline removed to match exact spawn prompt; prior public raw commit preserved the same text with a terminal newline."
+}

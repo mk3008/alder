@@ -1,0 +1,13 @@
+{
+  "reviewed_at_utc": "2026-10-07T00:00:15Z",
+  "files": [
+    "raw/draft.md",
+    "raw/author-final-reply.txt",
+    "raw/author-progress-messages.txt",
+    "raw/access-report.json",
+    "raw/reads.jsonl"
+  ],
+  "result": "safe synthetic case; no real customer data, credentials, or private links found",
+  "method": "coordinator full text read; author access reports and helper logs checked",
+  "limitation": "manual safety review; no proof of all possible runtime reads"
+}
