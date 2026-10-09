@@ -58,6 +58,9 @@ class WorkflowSkillsTest(unittest.TestCase):
         guide = (ROOT / 'docs/check-item-traceability.md').read_text()
         section = guide[guide.index('## 3. Human-facing view'):guide.index('## 5. Evidence and mapping states')]
         for term in ["Show each Check's condition, expected result and human review state **once**",
+                     'same-level Activity headings in the same order',
+                     'H2 Activity and H3 Check',
+                     'Do not split the document into a special current Activity and other Activities',
                      'same Check ID and item', 'A reference count is not a Check count',
                      'Moving to another Activity', 'is not approval',
                      '### Write conditions without changing their logic',
@@ -71,6 +74,9 @@ class WorkflowSkillsTest(unittest.TestCase):
         skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
         for term in ['references/check-item-traceability.md',
                      "rather than copying historical c3's table/detail layout",
+                     'Activity index and Activity sections in the same order',
+                     'H2 Activity and H3 Check',
+                     'Do not split the document into current versus other Activities',
                      'current Activity', 'Shared Checks keep one ID, item and review state',
                      'nested groups for mixed conditions', 'retain the original wording',
                      'resuming are not approval', 'no mandatory schema, viewer or ledger']:
@@ -332,6 +338,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
     about arbitrary agent output, human comprehension or review-time gains.
     """
 
+    BASELINE_REVISION = '12b18600bb7d64cb3495671df1d127c98c1e44d5'
+    EXAMPLE_PATH = 'docs/examples/purchase-check-review.ja.md'
     SOURCE_REVISION = '587cbce54afa261810e10eeb819d9935055de13d'
     SOURCE_PATH = 'business-design/purchase-request/README.md'
     SOURCE = f'https://github.com/mk3008/alder/blob/{SOURCE_REVISION}/{SOURCE_PATH}'
@@ -359,27 +367,41 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                       '申請金額によって承認者や承認段階が変わる場合。',
                       '候補・未承認。どの承認者・承認段階を経て、いつ承認済みとするかは未決定。', 'L248-L259'),
     }
+    ACTIVITIES = ('備品購入を申請する', '購入申請を承認する',
+                  '購入申請を却下する', '承認済み備品を購入する')
+    ACTIVITY_ITEMS = (('JA-EX-01',), ('JA-EX-02', 'JA-EX-Q01'),
+                      ('JA-EX-03', 'JA-EX-04'), ('JA-EX-05',))
+    UNRESOLVED_CONTEXT = ('次の候補は、業務2「購入申請を承認する」に関わる未決事項です。'
+                          '通常のチェック項目と分けて残します。'
+                          '元の業務設計で未決定とされているため、この文書では判断を保留します。')
+    SHARED_REFERENCE = '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。'
+    REVIEW_INSTRUCTION = ('確認する場合は、IDを指定して「確認」「修正」「保留」を伝えてください。'
+                          '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。'
+                          '返答がない場合も状態は変えません。')
     QUESTION = ('- 確認事項：金額別の承認経路を今回の業務設計で扱う必要が生じた場合、'
                 'どの金額条件で誰の承認を必要とし、何をもって承認完了とするか。')
     GAP = '- テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。'
 
     @classmethod
     def setUpClass(cls):
-        cls.example = (ROOT / 'docs/examples/purchase-check-review.ja.md').read_text(encoding='utf-8')
-        # The full-history workflow supplies the pinned revision. Later changes
+        cls.example = (ROOT / cls.EXAMPLE_PATH).read_text(encoding='utf-8')
+        cls.baseline = subprocess.run(
+            ['git', 'show', f'{cls.BASELINE_REVISION}:{cls.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
+        # The full-history workflow supplies the pinned revisions. Later changes
         # to the working-tree design do not redefine this historical example.
         cls.design = subprocess.run(
             ['git', 'show', f'{cls.SOURCE_REVISION}:{cls.SOURCE_PATH}'],
             cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
 
     def assert_original_example(self, text):
-        self.assertEqual(re.findall(r'^### (JA-EX-\w+) — ', text, re.M), list(self.ITEMS))
+        self.assertCountEqual(re.findall(r'^### (JA-EX-\w+) — ', text, re.M), self.ITEMS)
         self.assertEqual(set(re.findall(r'JA-EX-(?:Q)?\d+', text)), set(self.ITEMS))
         for field in ['条件', '期待結果', '人間レビュー状態', '根拠', '導出分類', 'AI確度', 'テスト証拠']:
             self.assertEqual(text.count('- ' + field + '：'), len(self.ITEMS), field)
         for check_id, (title, condition, result, lines) in self.ITEMS.items():
             match = re.search(r'^### ' + re.escape(check_id + ' — ' + title) +
-                              r'\n(.*?)(?=^### |\Z)', text, re.M | re.S)
+                              r'\n(.*?)(?=^#{1,3} |\Z)', text, re.M | re.S)
             self.assertIsNotNone(match, check_id)
             item = match[1]
             state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
@@ -395,14 +417,12 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertTrue(urls)
         for url in urls:
             self.assertRegex(url, '^' + re.escape(self.SOURCE) + r'(?:#L\d+-L\d+)?$')
-        for number, name in enumerate(['備品購入を申請する', '購入申請を承認する',
-                                       '購入申請を却下する', '承認済み備品を購入する'], 1):
+        for number, name in enumerate(self.ACTIVITIES, 1):
             self.assertIn(f'[{name}](#activity-{number})', text)
             self.assertIn(f'業務{number} — {name}', self.design)
         for term in ['人間レビュー前の参考たたき台', '合意済みとは扱っていません',
                      '実装への引き渡し用の完成版でもありません',
-                     '## 現在の業務：購入申請を却下する',
-                     '次に読むIDは JA-EX-03。これは読み進める位置であり、項目の確認状況を表すものではありません。',
+                     'これは読み進める位置であり、項目の確認状況を表すものではありません。',
                      '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。返答がない場合も状態は変えません。',
                      '共有項目 [JA-EX-04](#ja-ex-04)',
                      '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。',
@@ -413,6 +433,147 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                      '金額境界や承認者をこの項目だけで決めない',
                      '未決定の結果を、確定したテストの期待結果にしない']:
             self.assertIn(term, text)
+
+    def assert_activity_layout(self, text):
+        self.assertEqual(re.findall(r'^## (.+)$', text, re.M),
+                         ['業務一覧', *self.ACTIVITIES, 'この例の範囲'])
+        sections = dict(re.findall(r'^## ([^\n]+)\n(.*?)(?=^## |\Z)', text, re.M | re.S))
+        index_rows = re.findall(r'^\| \[([^]]+)\]\(#activity-(\d)\)(.*)$',
+                                sections['業務一覧'], re.M)
+        self.assertEqual([(name, number) for name, number, _ in index_rows],
+                         [(name, str(number)) for number, name in enumerate(self.ACTIVITIES, 1)])
+        ordered_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids]
+        self.assertEqual(re.findall(r'^### (.+)$', text, re.M),
+                         [f'{check_id} — {self.ITEMS[check_id][0]}' for check_id in ordered_ids])
+        for number, (name, ids) in enumerate(zip(self.ACTIVITIES, self.ACTIVITY_ITEMS), 1):
+            section = sections[name]
+            self.assertEqual(text.count(f'<a id="activity-{number}"></a>'), 1)
+            self.assertIn(f'<a id="activity-{number}"></a>\n\n## {name}\n', text)
+            self.assertEqual(re.findall(r'^### (JA-EX-\w+) — ', section, re.M), list(ids))
+            for check_id in ids:
+                self.assertIn(f'<a id="{check_id.lower()}"></a>', section)
+            index_ids = re.findall(r'\[(JA-EX-\w+)\]\(([^)]+)\)', index_rows[number - 1][2])
+            expected_ids = [*ids, 'JA-EX-04'] if number == 4 else list(ids)
+            self.assertEqual(index_ids, [(check_id, '#' + check_id.lower()) for check_id in expected_ids])
+        approval = sections[self.ACTIVITIES[1]]
+        self.assertEqual(text.count('**未決事項**'), 1)
+        self.assertIn('**未決事項**\n\n' + self.UNRESOLVED_CONTEXT, approval)
+        self.assertLess(approval.index('### JA-EX-02'), approval.index('**未決事項**'))
+        self.assertLess(approval.index('**未決事項**'), approval.index('### JA-EX-Q01'))
+        self.assertIn('未決事項 [JA-EX-Q01](#ja-ex-q01)', index_rows[1][2])
+        self.assertIn(self.SHARED_REFERENCE, sections[self.ACTIVITIES[3]])
+        self.assertNotRegex(text, r'</?(?:details|summary)(?:[ >])')
+        self.assertNotIn('## 現在の業務', text)
+        self.assertNotIn('## ほかの業務', text)
+
+    def content_lines(self, text, item=False):
+        # Normalize only this authored example's known presentation changes.
+        # Keep complete field/support text, links, literals and bullet nesting;
+        # this is a test-only baseline audit, not an accepted product format.
+        layout_lines = {
+            '## 業務から選ぶ', '## 業務一覧', '## 現在の業務：購入申請を却下する',
+            '## ほかの業務の項目', '## 業務設計へ戻す候補', '**未決事項**',
+            '現在の確認対象は JA-EX-03 と JA-EX-04 です。次に読むIDは JA-EX-03。'
+            'これは読み進める位置であり、項目の確認状況を表すものではありません。',
+            '再開する際は、業務と次に読むIDを指定できます。'
+            'これは読み進める位置であり、項目の確認状況を表すものではありません。',
+            '<summary>備品購入を申請する：JA-EX-01</summary>',
+            '<summary>購入申請を承認する：JA-EX-02</summary>',
+            '<summary>承認済み備品を購入する：JA-EX-05、共有項目 JA-EX-04</summary>',
+            '<details>', '</details>',
+            *(f'## {name}' for name in self.ACTIVITIES),
+        }
+        if item:
+            # These paragraphs moved across Check boundaries, but remain in the
+            # full-document audit below; they are not evidence for the last ID.
+            layout_lines.update((self.UNRESOLVED_CONTEXT, self.SHARED_REFERENCE,
+                                 self.REVIEW_INSTRUCTION))
+        lines = []
+        for line in text.splitlines():
+            if not line or line in layout_lines or re.fullmatch(r'<a id="[^"<>]+"></a>', line):
+                continue
+            if line.startswith('| [購入申請を承認する](#activity-2) |'):
+                line = line.replace('、未決事項 [JA-EX-Q01](#ja-ex-q01)', '')
+            line = re.sub(r'^<summary>(.*)</summary>$', r'\1', line)
+            line = re.sub(r'^#{1,4} ', '', line)
+            lines.append(line)
+        return lines
+
+    def assert_baseline_content_preserved(self, text):
+        pattern = r'^### (JA-EX-\w+) — (.*?)(?=^#{1,3} |\Z)'
+        baseline_items = re.findall(pattern, self.baseline, re.M | re.S)
+        actual_items = re.findall(pattern, text, re.M | re.S)
+        self.assertCountEqual([check_id for check_id, _ in actual_items], self.ITEMS)
+        expected = {check_id: self.content_lines(body, item=True)
+                    for check_id, body in baseline_items}
+        actual = {check_id: self.content_lines(body, item=True)
+                  for check_id, body in actual_items}
+        self.assertEqual(actual, expected)
+        # Also preserve context, all purpose/connection cells and scope text,
+        # allowing block reordering and the explicitly added Q01 index link.
+        self.assertCountEqual(self.content_lines(text), self.content_lines(self.baseline))
+        self.assertCountEqual(re.findall(r'https://github.com/[^)\s]+', text),
+                              re.findall(r'https://github.com/[^)\s]+', self.baseline))
+
+    def test_saved_example_uses_index_ordered_activity_and_check_hierarchy(self):
+        self.assert_activity_layout(self.example)
+
+    def test_layout_only_change_preserves_baseline_content_under_the_same_ids(self):
+        self.assertEqual(hashlib.sha256(self.baseline.encode('utf-8')).hexdigest(),
+                         '0956cad2c2ddbe1bbd25d37042a4a669e56ce440fa94b6f800f95ca7e375ace2')
+        self.assert_baseline_content_preserved(self.example)
+
+    def test_layout_contract_rejects_misgrouping_and_duplicate_or_lost_shared_items(self):
+        text = self.example
+        activity_one = text[text.index('<a id="activity-1">'):text.index('<a id="activity-2">')]
+        activity_two = text[text.index('<a id="activity-2">'):text.index('<a id="activity-3">')]
+        unresolved = text[text.index('**未決事項**'):text.index('<a id="activity-3">')]
+        shared = text[text.index('<a id="ja-ex-04">'):text.index('<a id="activity-4">')]
+        rows = re.findall(r'^\| \[[^]]+\]\(#activity-\d\).*$', text, re.M)
+        mutations = {
+            'Activity hierarchy demoted': text.replace('## 購入申請を却下する', '### 購入申請を却下する'),
+            'Check hierarchy demoted': text.replace('### JA-EX-01 —', '#### JA-EX-01 —'),
+            'Activity bodies disagree with index order': text.replace(activity_one + activity_two,
+                                                                       activity_two + activity_one),
+            'index rows reordered': text.replace(rows[0] + '\n' + rows[1], rows[1] + '\n' + rows[0]),
+            'Activity anchors point to swapped headings': text.replace('id="activity-1"', 'id="swapped"')
+                .replace('id="activity-2"', 'id="activity-1"').replace('id="swapped"', 'id="activity-2"'),
+            'unresolved candidate moved outside approval': text.replace(unresolved, '').replace(
+                '<a id="ja-ex-03"></a>', unresolved + '<a id="ja-ex-03"></a>'),
+            'unresolved label lost': text.replace('**未決事項**', ''),
+            'unresolved index label lost': text.replace('未決事項 [JA-EX-Q01]', '[JA-EX-Q01]'),
+            'shared full body duplicated in purchase': text.replace('<a id="ja-ex-05"></a>',
+                                                                     shared + '<a id="ja-ex-05"></a>'),
+            'shared purchase body reference lost but index retained': text.replace(self.SHARED_REFERENCE, ''),
+            'new folding wrapper': text.replace('### JA-EX-01 —', '<details>\n### JA-EX-01 —'),
+        }
+        for name, mutated in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_activity_layout(mutated)
+
+    def test_baseline_audit_rejects_each_primary_or_support_line_loss(self):
+        text = self.example
+        for match in re.finditer(r'^### (JA-EX-\w+) — (.*?)(?=^#{1,3} |\Z)', text, re.M | re.S):
+            check_id, body = match.groups()
+            # Delete each complete primary/support field and each condition
+            # bullet in turn, including text the earlier meaning oracle samples.
+            for line in body.splitlines():
+                if not re.match(r'^(?:- |  - |#### )', line):
+                    continue
+                with self.subTest(check_id=check_id, lost_line=line):
+                    mutated = text[:match.start(2)] + body.replace(line, '', 1) + text[match.end(2):]
+                    self.assertNotEqual(mutated, text)
+                    with self.assertRaises(AssertionError):
+                        self.assert_baseline_content_preserved(mutated)
+        first = '- AI確度：高。根拠から期待結果を読み取れる確かさであり、人間の確認を代わりに行うものではない。'
+        second = '- AI確度：要精査'
+        swapped = text.replace(first, '__FIRST_SUPPORT__').replace(second, first).replace('__FIRST_SUPPORT__', second)
+        # A whole-document text comparison alone would miss this reassignment.
+        self.assertCountEqual(self.content_lines(swapped), self.content_lines(text))
+        with self.assertRaises(AssertionError):
+            self.assert_baseline_content_preserved(swapped)
 
     def test_saved_japanese_example_preserves_items_questions_and_navigation(self):
         self.assert_original_example(self.example)
