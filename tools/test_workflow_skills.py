@@ -18,6 +18,42 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_requester_language_reaches_canonical_guidance_and_check_skill(self):
+        # These are authored guidance checks, not a language detector or proof
+        # that an agent follows the guidance or a person comprehends its output.
+        expected = {
+            'docs/adoption.md': [
+                '### Language for agreement', 'human-facing **Check Items**',
+                'Activity names, Check titles, conditions, expected results, review questions and supporting explanations',
+                'original saved artifact and the conversational review',
+                "requester's working language", 'Headings alone being Japanese is insufficient',
+                'Preserve stable IDs, technical identifiers and literal values',
+                'review language is genuinely unclear', 'internal English test fixture may remain English',
+                'later chat translation does not establish'],
+            'docs/check-item-traceability.md': [
+                '[language for agreement](adoption.md#language-for-agreement)',
+                "requester's working language for the original Check artifact and review response",
+                'Activity names, Check titles, conditions, expected results, questions and supporting explanations',
+                'not just headings', "Business Design's business terms",
+                'Preserve IDs, technical identifiers and literal values',
+                'Ask if the language is genuinely unclear', 'Verify the saved artifact itself',
+                'later chat translation or an internal English fixture is not evidence'],
+            'plugins/alder/skills/alder-draft-check-items/SKILL.md': [
+                '[language for agreement](references/adoption.md#language-for-agreement)',
+                "requester's working language", 'original saved artifact and review response',
+                'Activity names, Check titles, conditions, expected results, questions and supporting explanations in Japanese',
+                'not just headings', 'Preserve stable IDs, technical identifiers and literal values',
+                'do not change meaning or human review states when adjusting language',
+                'review language is genuinely unclear', 'inspect the saved artifact itself',
+                'internal English fixture may remain English',
+                'later chat translation is not evidence'],
+        }
+        for path, terms in expected.items():
+            text = (ROOT / path).read_text(encoding='utf-8')
+            for term in terms:
+                with self.subTest(path=path, term=term):
+                    self.assertIn(term, text)
+
     def test_current_check_presentation_guidance_is_reachable(self):
         guide = (ROOT / 'docs/check-item-traceability.md').read_text()
         section = guide[guide.index('## 3. Human-facing view'):guide.index('## 5. Evidence and mapping states')]
@@ -287,6 +323,143 @@ class CheckPresentationContractTest(unittest.TestCase):
         for name, mutated in mutations.items():
             with self.subTest(mutation=name), self.assertRaises(AssertionError):
                 self.assert_presentation_contract(mutated)
+
+
+class JapaneseCheckExampleTest(unittest.TestCase):
+    """Bounded authored-example regressions, not a schema or Japanese detector.
+
+    This checks the saved original, not a chat translation. Passing says nothing
+    about arbitrary agent output, human comprehension or review-time gains.
+    """
+
+    SOURCE_REVISION = '587cbce54afa261810e10eeb819d9935055de13d'
+    SOURCE_PATH = 'business-design/purchase-request/README.md'
+    SOURCE = f'https://github.com/mk3008/alder/blob/{SOURCE_REVISION}/{SOURCE_PATH}'
+    # Specific Japanese expectations from this limited purchase example only.
+    ITEMS = {
+        'JA-EX-03': ('対象の申請が却下済みになる',
+                     '承認者が `submitted` の購入申請について購入を認めないと判断し、次の必須入力をすべて与えて却下する。\n'
+                     '  - 却下する対象購入申請\n  - 却下理由',
+                     '対象購入申請が `rejected` になる。', 'L154-L187'),
+        'JA-EX-04': ('却下済みの申請は購買対象にならない',
+                     '購入申請の状態が `rejected` である。',
+                     'その申請は購買担当者の購入対象にならない。', 'L183-L187'),
+        'JA-EX-01': ('新しい購入申請が提出済みになる',
+                     '申請者が業務上必要な備品を購入したいと判断し、次の必須入力をすべて与えて新しい購入申請として登録する。\n'
+                     '  - 品名\n  - 数量\n  - 希望購入金額\n  - 購入理由',
+                     '購入要求が `submitted` の購入申請として記録される。', 'L61-L95'),
+        'JA-EX-02': ('対象の申請が承認済みになる',
+                     '承認者が `submitted` の購入申請について購入してよいと判断し、対象購入申請を選択して承認する。'
+                     '金額により承認者や承認段階が変わる場合の扱いは JA-EX-Q01 に残す。',
+                     '対象購入申請が `approved` になる。', 'L109-L140'),
+        'JA-EX-05': ('購入した対象の申請が購入済みになる',
+                     '購買担当者が `approved` の購入申請に基づいて対象備品を購入し、対象購入申請と実購入金額を選択・入力して購入結果を登録する。',
+                     '対象購入申請が `purchased` になる。', 'L201-L234'),
+        'JA-EX-Q01': ('金額によって承認者や承認段階が変わる場合の扱い',
+                      '申請金額によって承認者や承認段階が変わる場合。',
+                      '候補・未承認。どの承認者・承認段階を経て、いつ承認済みとするかは未決定。', 'L248-L259'),
+    }
+    QUESTION = ('- 確認事項：金額別の承認経路を今回の業務設計で扱う必要が生じた場合、'
+                'どの金額条件で誰の承認を必要とし、何をもって承認完了とするか。')
+    GAP = '- テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.example = (ROOT / 'docs/examples/purchase-check-review.ja.md').read_text(encoding='utf-8')
+        # The full-history workflow supplies the pinned revision. Later changes
+        # to the working-tree design do not redefine this historical example.
+        cls.design = subprocess.run(
+            ['git', 'show', f'{cls.SOURCE_REVISION}:{cls.SOURCE_PATH}'],
+            cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
+
+    def assert_original_example(self, text):
+        self.assertEqual(re.findall(r'^### (JA-EX-\w+) — ', text, re.M), list(self.ITEMS))
+        self.assertEqual(set(re.findall(r'JA-EX-(?:Q)?\d+', text)), set(self.ITEMS))
+        for field in ['条件', '期待結果', '人間レビュー状態', '根拠', '導出分類', 'AI確度', 'テスト証拠']:
+            self.assertEqual(text.count('- ' + field + '：'), len(self.ITEMS), field)
+        for check_id, (title, condition, result, lines) in self.ITEMS.items():
+            match = re.search(r'^### ' + re.escape(check_id + ' — ' + title) +
+                              r'\n(.*?)(?=^### |\Z)', text, re.M | re.S)
+            self.assertIsNotNone(match, check_id)
+            item = match[1]
+            state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
+            primary = f'- 条件：{condition}\n- 期待結果：{result}\n- 人間レビュー状態：{state}'
+            self.assertEqual(text.count(primary), 1, check_id)
+            self.assertIn(primary, item)
+            self.assertIn(self.SOURCE + '#' + lines, item)
+            self.assertIn(self.GAP, item)
+            self.assertIn('- 導出分類：' + ('考慮候補' if state == '要確認' else '明示'), item)
+            self.assertIn('- AI確度：' + ('要精査' if state == '要確認' else '高'), item)
+            self.assertEqual(text.count(f'<a id="{check_id.lower()}"></a>'), 1)
+        urls = re.findall(r'https://github.com/[^)\s]+', text)
+        self.assertTrue(urls)
+        for url in urls:
+            self.assertRegex(url, '^' + re.escape(self.SOURCE) + r'(?:#L\d+-L\d+)?$')
+        for number, name in enumerate(['備品購入を申請する', '購入申請を承認する',
+                                       '購入申請を却下する', '承認済み備品を購入する'], 1):
+            self.assertIn(f'[{name}](#activity-{number})', text)
+            self.assertIn(f'業務{number} — {name}', self.design)
+        for term in ['人間レビュー前の参考たたき台', '合意済みとは扱っていません',
+                     '実装への引き渡し用の完成版でもありません',
+                     '## 現在の業務：購入申請を却下する',
+                     '次に読むIDは JA-EX-03。これは読み進める位置であり、項目の確認状況を表すものではありません。',
+                     '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。返答がない場合も状態は変えません。',
+                     '共有項目 [JA-EX-04](#ja-ex-04)',
+                     '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。',
+                     '業務4からもこの項目を参照し、別のIDやレビュー状態は持たない。',
+                     '業務2「購入申請を承認する」に関わる未決事項',
+                     '新しい承認段階やActivityは定義しない', self.QUESTION,
+                     '保留を続ける場合、この候補を実装上の合否条件に使わない',
+                     '金額境界や承認者をこの項目だけで決めない',
+                     '未決定の結果を、確定したテストの期待結果にしない']:
+            self.assertIn(term, text)
+
+    def test_saved_japanese_example_preserves_items_questions_and_navigation(self):
+        self.assert_original_example(self.example)
+
+    def test_pinned_source_and_line_evidence_match_readable_pinned_design(self):
+        # Offline content/line checks; this does not test GitHub availability.
+        self.assertEqual(hashlib.sha256(self.design.encode('utf-8')).hexdigest(),
+                         '2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc')
+        lines = self.design.splitlines()
+        for start, end in re.findall(re.escape(self.SOURCE) + r'#L(\d+)-L(\d+)', self.example):
+            self.assertTrue(1 <= int(start) <= int(end) <= len(lines))
+        for span, evidence in [('L61-L95', '購入要求が `submitted` の購入申請として記録される。'),
+                               ('L109-L140', '対象購入申請が `approved` になる。'),
+                               ('L154-L187', '対象購入申請が `rejected` になる。'),
+                               ('L183-L187', '購買担当者の購入対象にはならない。'),
+                               ('L201-L234', '対象購入申請が `purchased` になる。'),
+                               ('L248-L259', '申請金額によって承認者や承認段階が変わる場合の扱い')]:
+            start, end = map(int, re.findall(r'\d+', span))
+            self.assertIn(self.SOURCE + '#' + span, self.example)
+            self.assertIn(evidence, '\n'.join(lines[start - 1:end]))
+
+    def test_example_contract_rejects_representative_losses_and_inventions(self):
+        text = self.example
+        mutations = {
+            'Japanese headings with English field bodies': re.sub(
+                r'^- (条件|期待結果|根拠|確認事項|テスト証拠)：.*$', r'- \1：English body.', text, flags=re.M),
+            'one English expected result': text.replace('対象購入申請が `approved` になる。',
+                                                        'The request becomes `approved`.'),
+            'literal business state changed': text.replace('`rejected`', '`approved`'),
+            'stable ID replaced': text.replace('JA-EX-04', 'JA-EX-104'),
+            'human confirmation invented': text.replace('人間レビュー状態：未レビュー',
+                                                         '人間レビュー状態：確認済み', 1),
+            'source revision changed': text.replace(self.SOURCE_REVISION, '0' * 40),
+            'source evidence mislinked': text.replace('#L183-L187', '#L109-L140'),
+            'question removed': text.replace(self.QUESTION, ''),
+            'unresolved outcome decided': text.replace(self.ITEMS['JA-EX-Q01'][2],
+                                                       '10万円以上の申請は部長の承認で確定する。'),
+            'shared primary item duplicated': text + '\n### JA-EX-04 — 却下済みの申請は購買対象にならない\n',
+            'shared Activity reference removed': text.replace('共有項目 [JA-EX-04](#ja-ex-04)', ''),
+            'navigation treated as confirmation': text.replace('項目の確認状況を表すものではありません。',
+                                                                  '項目の確認が完了したことを表します。'),
+        }
+        for name, mutated in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_original_example(mutated)
 
 
 if __name__ == '__main__':
