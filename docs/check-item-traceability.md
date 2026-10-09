@@ -84,14 +84,33 @@ A product can use direct Business Design → Check → Test traceability where a
 
 ## 3. Human-facing view
 
-The primary human-facing view is intentionally small.
+Start with an index of the Business Design's Activity names, purposes and connections. Let the requester choose the current Activity, then show its Checks one at a time or as a small review group. Read the whole Business Design when preparing the list; selecting an Activity only limits what is shown now. A list of names is enough when the source does not establish an order. Do not present ID order as business sequence.
+
+Show each Check's condition, expected result and human review state **once** in the current review view. Use one readable item instead of repeating the same content in an overview table and a later detail block. Keep its stable ID visible. A document can use an Activity index linking to the same item; a conversation can show the selected Activity's items and offer the next Activity after the current discussion. This is presentation guidance, not a required document schema, viewer or additional ledger.
 
 | Field | Purpose |
 | --- | --- |
 | ID | Stable reference within a versioned Check list |
 | Title | Fast entry point: what behavior or guarantee is being reviewed |
+| Condition | The precise circumstances in which the expectation applies |
 | Expected result | Human-readable result that should hold |
 | Review state | Where the item is in the human review loop |
+
+Related Activities reference the **same Check ID and item**, including the same human review state; they do not own independent copies. Keep cross-Activity relationships visible. Show unconnected items separately without guessing their Activity. Mark new candidates with unresolved meaning 要確認. If an existing item has an unresolved Activity link, identify that mapping question separately and preserve its human review state; missing navigation does not undo confirmed meaning. A reference count is not a Check count.
+
+Ask which IDs the requester confirms, wants corrected or leaves open. Moving to another Activity, recording a resume position, opening an item or receiving no response is not approval. On resumption, retain the selected Activity and next ID as navigation context, separately from each Check's existing review state. Do not add a required resume artifact.
+
+### Write conditions without changing their logic
+
+When the source explicitly establishes the relationship, make it visible:
+
+- **All of the following / すべて満たす (AND):** list the independent required conditions as bullets.
+- **Any of the following / いずれか (OR):** keep the alternatives in one labelled group. Preserve whether more than one may hold; do not silently turn inclusive OR into exclusive OR or the reverse.
+- **Mixed conditions:** preserve the source's groups and nesting. For `A AND (B OR C)`, show A and the entire B-or-C group under “all”, with B and C under “any”. Do not flatten it into three required conditions or `(A AND B) OR C`.
+
+These symbols illustrate logical grouping, not additional business rules. Keep exact boundaries, negation, exceptions, exclusivity and priority. If the source leaves AND/OR or any of these relationships ambiguous, retain the original condition text and return a focused 要確認 question; do not infer a rule to make the bullets tidy. Presentation uncertainty does not silently overwrite a previously human-confirmed Check state. Keep that state, identify the uncertainty beside it, and use the Business Design review loop only if the meaning itself needs a decision or change.
+
+The condition and expected result remain one reviewable Check. Do not split one Check merely because its condition contains several bullets. Source evidence, derivation class, AI confidence and Test evidence/gaps stay reachable under the same ID without repeating the primary condition/result/state.
 
 Recommended review states:
 
@@ -123,11 +142,10 @@ Alder does not currently prescribe a universal title-writing grammar. Improve ti
 
 ## 4. AI / developer detail
 
-The same Check ID keeps precise detail for implementation and maintenance.
+The same Check ID keeps supporting detail for implementation and maintenance. Keep the precise condition in the primary item, including any internal names, DB state, model names or system terms needed to retain its meaning. Supporting detail should add evidence and context, not repeat the condition, expected result or human review state.
 
 The supporting detail may contain:
 
-- exact condition / precondition, including internal names, DB state, model names, and system terms
 - Business Design / Concept / Decision evidence
 - derivation classification: 明示 / 強い導出 / 考慮候補
 - AI confidence: 高 / 要精査
@@ -135,7 +153,7 @@ The supporting detail may contain:
 - representative automated test and the assertion that supports the Check
 - evidence state or mapping gap
 
-The human-facing summary must not remove information the AI needs to preserve semantics.
+The human-facing view must not remove information the AI needs to preserve semantics. Keep every supporting field reachable when changing the presentation. This guidance does not establish an improvement in human comprehension or review time; those effects require separate observation.
 
 The detail is not required to be one wide table. It may be an appendix, generated mapping, machine-readable sidecar, or nearby section, as long as the Check ID keeps the relation unambiguous.
 
