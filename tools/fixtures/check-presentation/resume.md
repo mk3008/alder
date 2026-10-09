@@ -5,9 +5,11 @@ Next Check: [CHECK-004](checks.md#check-004)
 
 ## Business index
 
-- [ACT-RECEIVE Receive request](checks.md#act-receive)
-- [ACT-ROUTE Route request](checks.md#act-route)
+- [ACT-ROUTE Route request](checks.md#act-route): Send accepted requests to an eligible destination.
+- [ACT-RECEIVE Receive request](checks.md#act-receive): Capture requests and establish their completeness.
 - [Unassigned](checks.md#unassigned)
+- Connection: ACT-RECEIVE supplies accepted requests to ACT-ROUTE.
+- No total Activity order is established.
 
 ## Current review
 

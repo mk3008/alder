@@ -5,9 +5,11 @@ Next Check: [CHECK-001](#check-001)
 
 ## Business index
 
-- [ACT-RECEIVE Receive request](#act-receive)
-- [ACT-ROUTE Route request](#act-route)
+- [ACT-ROUTE Route request](#act-route): Send accepted requests to an eligible destination.
+- [ACT-RECEIVE Receive request](#act-receive): Capture requests and establish their completeness.
 - [Unassigned](#unassigned)
+- Connection: ACT-RECEIVE supplies accepted requests to ACT-ROUTE.
+- No total Activity order is established.
 
 ## Current review
 
@@ -80,6 +82,7 @@ Next Check: [CHECK-001](#check-001)
 - Condition (relationship unresolved): Reviewer or delegate exclusively accepts; urgent requests first; blocked requests cannot proceed except with emergency approval
 - Expected result: Acceptance preserves the recorded authorization and exception boundaries.
 - Human review state: 確認済み
+- [Presentation question (要確認) for CHECK-005](#detail-check-005)
 - [Supporting detail for CHECK-005](#detail-check-005)
 
 ### CHECK-006

@@ -6,6 +6,15 @@ are made by the display transformation. Tests do not demonstrate agent behavior
 or a human-review benefit. CHECK-005 carries a pre-existing human-confirmed
 state; a question about decomposing its wording does not revoke that state.
 
+## Activity context
+
+- ACT-ROUTE: Route request. Purpose: Send accepted requests to an eligible destination.
+- ACT-RECEIVE: Receive request. Purpose: Capture requests and establish their completeness.
+- Connection: ACT-RECEIVE supplies accepted requests to ACT-ROUTE.
+- No total Activity order is established.
+
+## Check input
+
 | ID | Title | Condition | Expected result | Human review state | Activities | Business Design | Derivation | AI confidence | Test/assertion | Evidence gap |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CHECK-001 | Accept a complete request | Request supplied AND required fields complete | The request is accepted. | 未レビュー | ACT-RECEIVE | BD-01 | 明示 | 高 | none | missing test evidence |

@@ -129,8 +129,9 @@ class CheckPresentationContractTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.source_text = (CHECK_FIXTURES / 'source.md').read_text()
         rows = [line.strip('|').split('|') for line in
-                (CHECK_FIXTURES / 'source.md').read_text().splitlines()
+                cls.source_text.splitlines()
                 if line.startswith('|')]
         fields = [cell.strip() for cell in rows[0]]
         cls.source = {row[0].strip(): dict(zip(fields, map(str.strip, row)))
@@ -155,7 +156,25 @@ class CheckPresentationContractTest(unittest.TestCase):
         return [check_id for check_id, row in self.source.items()
                 if activity in row['Activities'].split('; ')]
 
+    def assert_activity_index(self, text, prefix=''):
+        activities = {
+            'ACT-ROUTE': ('Route request', 'Send accepted requests to an eligible destination.'),
+            'ACT-RECEIVE': ('Receive request', 'Capture requests and establish their completeness.'),
+        }
+        source = self.section(self.source_text, 'Activity context')
+        expected = [f'- [Unassigned]({prefix}#unassigned)']
+        for activity, (name, purpose) in activities.items():
+            self.assertIn(f'- {activity}: {name}. Purpose: {purpose}', source.splitlines())
+            expected.append(f'- [{activity} {name}]({prefix}#{activity.lower()}): {purpose}')
+        for line in ['- Connection: ACT-RECEIVE supplies accepted requests to ACT-ROUTE.',
+                     '- No total Activity order is established.']:
+            self.assertIn(line, source.splitlines())
+            expected.append(line)
+        # Index order may vary; it must not invent an ordered business sequence.
+        self.assertCountEqual(self.section(text, 'Business index').splitlines(), expected)
+
     def assert_presentation_contract(self, text):
+        self.assert_activity_index(text)
         self.assertEqual(set(self.source), set(self.CONDITIONS))
         self.assertEqual(re.findall(r'^### (CHECK-\d+)$', text, re.M),
                          list(self.source))
@@ -190,6 +209,8 @@ class CheckPresentationContractTest(unittest.TestCase):
             for field in ['Business Design', 'Derivation', 'AI confidence',
                           'Test/assertion', 'Evidence gap']:
                 self.assertIn('- ' + field + ': ' + row[field], detail.splitlines())
+        self.assertIn('- [Presentation question (要確認) for CHECK-005](#detail-check-005)',
+                      self.section(text, 'CHECK-005').splitlines())
         for activity in ['ACT-RECEIVE', 'ACT-ROUTE', 'unassigned']:
             heading = 'Unassigned' if activity == 'unassigned' else activity
             self.assertEqual(self.check_links(self.section(text, heading)),
@@ -212,9 +233,7 @@ class CheckPresentationContractTest(unittest.TestCase):
                                        (self.resume, 'ACT-ROUTE', 'checks.md')]:
             with self.subTest(activity=activity):
                 self.assertEqual(re.findall(r'^Current Activity: (.+)$', text, re.M), [activity])
-                index = self.section(text, 'Business index')
-                for anchor in ['act-receive', 'act-route', 'unassigned']:
-                    self.assertIn(f']({prefix}#{anchor})', index)
+                self.assert_activity_index(text, prefix)
                 self.assertEqual(self.check_links(self.section(text, 'Current review'), prefix),
                                  self.activity_ids(activity))
                 next_line, = re.findall(r'^Next Check: (.+)$', text, re.M)
@@ -257,6 +276,13 @@ class CheckPresentationContractTest(unittest.TestCase):
             'support removed': self.presentation.replace('AI confidence: 要精査', 'AI confidence: 高', 1),
             'detail mislinked': self.presentation.replace('](#detail-check-001)', '](#detail-check-002)'),
             'shared item omitted': self.presentation.replace('- [CHECK-002](#check-002)\n', '', 1),
+            'primary question hidden': self.presentation.replace(
+                '- [Presentation question (要確認) for CHECK-005](#detail-check-005)\n', ''),
+            'Activity purpose changed': self.presentation.replace(
+                'Capture requests and establish their completeness.', 'Approve every request.'),
+            'Activity connection reversed': self.presentation.replace(
+                'ACT-RECEIVE supplies accepted requests to ACT-ROUTE.',
+                'ACT-ROUTE supplies accepted requests to ACT-RECEIVE.'),
         }
         for name, mutated in mutations.items():
             with self.subTest(mutation=name), self.assertRaises(AssertionError):
