@@ -36,7 +36,7 @@ If feedback changes business meaning, conditions or guarantees, or exposes a gen
 
 ## Before returning Check Items
 
-For every initial draft and update, run the [return-time quality check](references/check-item-traceability.md#before-returning-a-draft-or-update) as part of the ordinary request, without asking the requester to invoke another review Skill. Correct only source-grounded, meaning-preserving defects within scope, then re-read the final saved artifact and repeat the affected checks. Return genuine business decisions and unperformed checks explicitly; quality checking does not grant human approval. For consistency-review-only requests, use the same gate without edits. An Interface-only request still does not authorize generating or changing Checks.
+For every initial draft and update, run the [return-time quality check](references/check-item-traceability.md#before-returning-a-draft-or-update) as part of the ordinary request, without asking the requester to invoke another review Skill. Check applicable description-rule conformance first; report evidenced NG findings separately from undecided business meaning and optional wording suggestions, without making NG a human review state. Correct only source-grounded, meaning-preserving defects within scope, then re-read the final saved artifact and repeat the affected checks. Return genuine business decisions and unperformed checks explicitly; quality checking does not grant human approval. For consistency-review-only requests, use the same gate without edits. An Interface-only request still does not authorize generating or changing Checks.
 
 ## Optional Functional Interface index
 
