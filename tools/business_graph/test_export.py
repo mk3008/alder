@@ -288,7 +288,7 @@ class ExportTests(unittest.TestCase):
                      and r['from'] == '検査項目' and r['to'] == target]
             self.assertEqual(len(edges), 1)
             self.assertIn('期待結果', edges[0]['label'])
-        implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity 同期漏れ検査\n', 1)[0]
+        implementation = DESIGN.read_text().split('# Activity 実装\n', 1)[1].split('# Activity ', 1)[0]
         self.assertIn('コードと実行可能なテストを作成・更新する', implementation)
         self.assertNotIn('検査項目に記録', implementation)
         self.assertNotIn('判断記録へ残す', implementation)
@@ -308,10 +308,38 @@ class ExportTests(unittest.TestCase):
         edges = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']}
         self.assertEqual({r for r in edges if 'システム設計' in r[1:3]}, {
             ('input', '業務設計書', 'システム設計', '業務要件'),
-            ('output', 'システム設計', 'システム要件書', '技術要件'),
+            ('input', '依頼者', 'システム設計', '製品全体の要求 / 既存の技術・運用上の制約'),
+            ('output', 'システム設計', 'システム要件書',
+             '適用SR / 技術要件 / 品質の検証条件 / 画面設計・検証の適用有無 / 未決事項と担当責任者'),
         })
         self.assertIn(('input', '業務設計書', '実装', '業務要件'), edges)
-        self.assertIn(('input', 'システム要件書', '実装', '技術要件'), edges)
+        self.assertIn(('input', 'システム要件書', '実装',
+                       '適用SR / 技術要件 / 品質の検証条件 / 未決事項'), edges)
+        self.assertIn(('input', '画面設計資料', '実装',
+                       'GUI対象範囲の画面Reference / 画面チェックリスト・検証条件 / 未決事項'), edges)
+
+    def test_external_verification_results_keep_sources_and_scope(self):
+        graph = parse_design(DESIGN.read_text())
+        nodes = {n['id']: n for n in graph['nodes']}
+        edges = {(r['kind'], r['from'], r['to']) for r in graph['relations']}
+        for activity in ('画面設計', 'Alder実装レビュー', '製品検証', '検証結果の統合'):
+            self.assertFalse(nodes[activity]['scope'])
+        for obj in ('画面設計資料', '検証結果', '統合検証結果'):
+            self.assertFalse(nodes[obj]['scope'])
+        for source in ('Alder実装レビュー', '製品検証'):
+            self.assertIn(('output', source, '検証結果'), edges)
+        self.assertIn(('input', '検証結果', '検証結果の統合'), edges)
+        self.assertIn(('output', '検証結果の統合', '統合検証結果'), edges)
+        self.assertIn(('output', '検証結果の統合', '依頼者'), edges)
+        self.assertTrue(any('Alder実装レビュー・画面検証・システム要件／品質検証' in value
+                            for value in nodes['検証結果']['information']))
+        self.assertFalse(any(r['kind'] == 'output'
+                             and r['from'] in ('Alder実装レビュー', '製品検証', '検証結果の統合')
+                             and r['to'] in ('業務設計書', '検査項目')
+                             for r in graph['relations']))
+        self.assertIn('GUIを持たない製品では画面設計・画面検証を理由付きで非適用にできる',
+                      DESIGN.read_text())
+        self.assertIn('統合の完了は採用・merge・releaseの承認ではない', DESIGN.read_text())
 
     def test_visible_name_rename_updates_identity_and_connections(self):
         with self.assertRaisesRegex(DesignError, 'dangling relation'):
@@ -610,12 +638,14 @@ class ExportTests(unittest.TestCase):
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
             '業務設計', '検査項目の設計', 'システム設計', '実装',
             '同期漏れ検査', '業務改善レビュー',
+            '画面設計', 'Alder実装レビュー', '製品検証', '検証結果の統合',
         })
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'business' and not n['scope']},
-                         {'システム設計', '実装'})
-        self.assertEqual(len(nodes), 18)
-        self.assertEqual(len(graph['relations']), 34)
+                         {'システム設計', '実装', '画面設計', 'Alder実装レビュー',
+                          '製品検証', '検証結果の統合'})
+        self.assertEqual(len(nodes), 25)
+        self.assertEqual(len(graph['relations']), 63)
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'object' and n['scope']}, {
             '業務設計書', '検査項目', '判断記録', '同期照合情報', '同期漏れの候補',
@@ -624,6 +654,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'object' and not n['scope']}, {
             '依頼者', 'システム要件書', 'コード', 'テスト',
+            '画面設計資料', '検証結果', '統合検証結果',
         })
         self.assertNotIn('業務グラフ出力', nodes)
         self.assertNotIn('業務グラフJSON', nodes)
@@ -637,7 +668,7 @@ class ExportTests(unittest.TestCase):
             '業務範囲・目的', '業務手順・入出力', '業務間の相関・例外',
             '現在の業務で経験されるProblem / Pain（ある場合）', '期待結果・未決事項'])
         self.assertFalse({'研究の証拠と採否判断', 'プルリクエスト・リリース',
-                          '検証結果', 'レビュー結果',
+                          'レビュー結果',
                           'Alder: 業務設計品質レビュー知識'} & nodes.keys())
         linked = {r[endpoint] for r in graph['relations'] for endpoint in ('from', 'to')}
         self.assertTrue({n['id'] for n in nodes.values() if n['type'] == 'object'} <= linked)
@@ -646,7 +677,7 @@ class ExportTests(unittest.TestCase):
         self.assertTrue(all('scope' in n for n in nodes.values() if n['type'] == 'business'))
         self.assertEqual({r['from'] for r in graph['relations']
                           if r['kind'] == 'input' and r['to'] == 'システム設計'},
-                         {'業務設計書'})
+                         {'業務設計書', '依頼者'})
         self.assertFalse(any(r['kind'] == 'business-exception' and r['to'] == 'システム設計'
                              for r in graph['relations']))
         self.assertEqual(nodes['依頼者']['type'], 'object')
