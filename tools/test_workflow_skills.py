@@ -121,6 +121,71 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'other Markdown viewers may display the content without folding']:
             self.assertIn(term, adoption)
 
+    def test_default_check_return_gate_reaches_bundled_canonical_guidance(self):
+        # Static routing/packaging contract, not evidence that an agent runs
+        # the gate or correctly judges a product's business meaning.
+        skill_path = SKILLS / 'alder-draft-check-items/SKILL.md'
+        skill = skill_path.read_text(encoding='utf-8')
+        heading = '## Before returning Check Items'
+        self.assertEqual(skill.count(heading), 1)
+        start = skill.index(heading)
+        end = skill.index('## Optional Functional Interface index')
+        self.assertLess(skill.index('- Initial draft:'), start)
+        self.assertLess(skill.index('- Update:'), start)
+        self.assertLess(skill.index('- Consistency review only:'), start)
+        self.assertLess(start, end)
+        gate = skill[start:end]
+        for term in ['For every initial draft and update',
+                     'as part of the ordinary request',
+                     'without asking the requester to invoke another review Skill',
+                     'For consistency-review-only requests, use the same gate without edits',
+                     'An Interface-only request still does not authorize generating or changing Checks']:
+            self.assertIn(term, gate)
+        link = re.search(r'\[return-time quality check\]\(([^)#]+)#([^)]+)\)', gate)
+        self.assertIsNotNone(link)
+        target, anchor = link.groups()
+        self.assertEqual(target, 'references/check-item-traceability.md')
+        bundled = (skill_path.parent / target).read_text(encoding='utf-8')
+        canonical = (ROOT / 'docs/check-item-traceability.md').read_text(encoding='utf-8')
+        self.assertEqual(bundled, canonical)
+        # This fixed ASCII heading uses the normal GitHub Markdown anchor.
+        title = 'Before returning a draft or update'
+        self.assertEqual(anchor, title.lower().replace(' ', '-'))
+        self.assertIn('### ' + title + '\n', bundled)
+
+    def test_default_check_return_gate_documents_safeguards_and_limits(self):
+        # Pin the authored obligations only; phrase presence cannot establish
+        # their execution, semantic correctness or nonmutation by an agent.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text(encoding='utf-8')
+        start = guide.index('### Before returning a draft or update')
+        gate = guide[start:guide.index('## 8. Maintenance and stopping', start)]
+        for term in ['Every Check creation or update includes a quality check before return',
+                     'whole applicable Business Design and the current guidance',
+                     'source names and references against the source itself',
+                     'independently reviewable condition/result pairs',
+                     'not every AND/OR bullet or Test assertion',
+                     "Respect an explicitly limited example's scope",
+                     'visible item kind, derivation, human review state, language and unresolved questions',
+                     'Missing Test evidence is a separate gap',
+                     'IDs, guarantees, conditions, review states, source links, shared items and existing Test mappings',
+                     'not an authority for business meaning',
+                     'repair is unambiguous from the source and stays within the requested scope',
+                     'Preserve human review states for display-only changes',
+                     'If business meaning is undecided or needs to change, retain that uncertainty',
+                     '要確認 / Business Designへ戻す事項', 'continue independent items',
+                     'Keep an outstanding human-requested correction as 要修正 until it is made',
+                     'correcting it does not assert renewed confirmation',
+                     'A correction already determined by confirmed Business Design is not itself a new business decision',
+                     'Do not invent missing rules, promote a candidate to confirmed, or silently delete an unsupported expectation',
+                     're-read the final saved artifact and affected references, and repeat the relevant checks',
+                     'scope actually checked, material corrections and retained guarantees, unresolved decisions and verification limits',
+                     'If a check could not be performed, say so; do not claim that the gate passed',
+                     'No separate report, parser or mandatory data format is required',
+                     'In consistency-review-only mode, perform the same checks and report findings without editing files or review states',
+                     'AI quality checking never substitutes for human confirmation']:
+            with self.subTest(term=term):
+                self.assertIn(term, gate)
+
     def test_security_intake_is_reachable_and_preserves_product_authority(self):
         guide = (ROOT / 'docs/adoption.md').read_text()
         start = guide.index('### Carry security requirements into implementation')
