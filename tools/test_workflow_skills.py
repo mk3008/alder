@@ -69,6 +69,13 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'retain the original condition text',
                      'Presentation uncertainty does not silently overwrite a previously human-confirmed Check state',
                      'Test evidence/gaps stay reachable under the same ID',
+                     'default-closed `<details><summary>` blocks under the same ID',
+                     'outside the block and always visible', 'omit the `open` attribute',
+                     'blank lines around the Markdown body',
+                     'Activity/Check anchors and shared references outside the block',
+                     'Unresolved items stay fully visible',
+                     'source evidence, questions, alternatives and effects',
+                     'Other Markdown viewers may show the content without folding',
                      'not a required document schema', 'require separate observation']:
             self.assertIn(term, section)
         skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
@@ -79,8 +86,20 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'Do not split the document into current versus other Activities',
                      'current Activity', 'Shared Checks keep one ID, item and review state',
                      'nested groups for mixed conditions', 'retain the original wording',
-                     'resuming are not approval', 'no mandatory schema, viewer or ledger']:
+                     'resuming are not approval', 'no mandatory schema, viewer or ledger',
+                     'default-closed `<details><summary>` blocks without an `open` attribute',
+                     'human review state, anchors and shared references outside',
+                     'Leave unresolved items fully visible',
+                     'evidence, questions, alternatives and effects',
+                     'Other Markdown viewers may not fold the content']:
             self.assertIn(term, skill)
+        adoption = (ROOT / 'docs/adoption.md').read_text()
+        for term in ['ordinary Check supplements in default-closed `<details><summary>` blocks',
+                     'condition, expected result and human review state remain visible',
+                     'Keep unresolved items fully visible, including evidence, questions, alternatives and effects',
+                     'Preserve every field and navigation link',
+                     'other Markdown viewers may display the content without folding']:
+            self.assertIn(term, adoption)
 
     def test_security_intake_is_reachable_and_preserves_product_authority(self):
         guide = (ROOT / 'docs/adoption.md').read_text()
@@ -462,9 +481,51 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertLess(approval.index('**未決事項**'), approval.index('### JA-EX-Q01'))
         self.assertIn('未決事項 [JA-EX-Q01](#ja-ex-q01)', index_rows[1][2])
         self.assertIn(self.SHARED_REFERENCE, sections[self.ACTIVITIES[3]])
-        self.assertNotRegex(text, r'</?(?:details|summary)(?:[ >])')
+        self.assert_supplement_folding(text)
         self.assertNotIn('## 現在の業務', text)
         self.assertNotIn('## ほかの業務', text)
+
+    def assert_supplement_folding(self, text):
+        # An exact, test-only contract for these five authored supplements, not
+        # a Markdown renderer or a product parser. Bare tags keep them closed by
+        # default; blank lines let GitHub render the unchanged Markdown body.
+        supplement = re.compile(
+            r'^<details>\n<summary>(JA-EX-\d+) の根拠・関連業務・テスト証拠</summary>\n\n'
+            r'((?:- (?:根拠|導出分類|AI確度|関連業務|テスト証拠)：[^\n]+\n)+)'
+            r'\n</details>(?=\n\n|\Z)', re.M)
+        blocks = list(supplement.finditer(text))
+        normal_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids
+                      if check_id != 'JA-EX-Q01']
+        self.assertEqual([block[1] for block in blocks], normal_ids)
+        folding_tag = r'(?i)<\s*/?\s*(?:details|summary)\b'
+        for block in blocks:
+            check_id, body = block.groups()
+            self.assertEqual(re.findall(r'^- ([^：]+)：', body, re.M),
+                             ['根拠', '導出分類', 'AI確度', '関連業務', 'テスト証拠'])
+            self.assertNotRegex(body, folding_tag)
+            item = re.search(r'^### ' + check_id + r' — [^\n]+\n.*?(?=^#{1,3} |\Z)',
+                             text, re.M | re.S)
+            self.assertIsNotNone(item, check_id)
+            self.assertTrue(item.start() < block.start() < block.end() <= item.end(), check_id)
+        visible = supplement.sub('', text)
+        # Reject any unmatched, attributed, nested, malformed or extra wrapper,
+        # including one around an entire Activity, Check or unresolved item.
+        self.assertNotRegex(visible, folding_tag)
+        for check_id, (_, condition, result, _) in self.ITEMS.items():
+            state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
+            primary = f'- 条件：{condition}\n- 期待結果：{result}\n- 人間レビュー状態：{state}'
+            self.assertEqual(visible.count(primary), 1, check_id)
+        for pattern in [r'^#{2,3} .+$', r'<a id="[^"<>]+"></a>']:
+            self.assertEqual(re.findall(pattern, visible, re.M), re.findall(pattern, text, re.M))
+        unresolved = r'^### JA-EX-Q01 — .*?(?=^#{1,3} |\Z)'
+        visible_unresolved = re.search(unresolved, visible, re.M | re.S)
+        full_unresolved = re.search(unresolved, text, re.M | re.S)
+        self.assertIsNotNone(visible_unresolved)
+        self.assertIsNotNone(full_unresolved)
+        self.assertEqual(visible_unresolved[0], full_unresolved[0])
+        for context in ['**未決事項**', self.UNRESOLVED_CONTEXT,
+                        self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION]:
+            self.assertIn(context, visible)
 
     def content_lines(self, text, item=False):
         # Normalize only this authored example's known presentation changes.
@@ -545,7 +606,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             'shared full body duplicated in purchase': text.replace('<a id="ja-ex-05"></a>',
                                                                      shared + '<a id="ja-ex-05"></a>'),
             'shared purchase body reference lost but index retained': text.replace(self.SHARED_REFERENCE, ''),
-            'new folding wrapper': text.replace('### JA-EX-01 —', '<details>\n### JA-EX-01 —'),
+            'unsafe whole Check folding': text.replace('### JA-EX-01 —', '<details>\n### JA-EX-01 —'),
         }
         for name, mutated in mutations.items():
             with self.subTest(mutation=name):
@@ -553,14 +614,80 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                 with self.assertRaises(AssertionError):
                     self.assert_activity_layout(mutated)
 
+    def test_saved_example_folds_only_normal_supplements_and_keeps_questions_visible(self):
+        self.assert_supplement_folding(self.example)
+
+    def test_supplement_contract_rejects_unsafe_folding(self):
+        text = self.example
+        first = re.search(r'^<details>\n.*?^</details>', text, re.M | re.S)[0]
+        summary = '<summary>JA-EX-01 の根拠・関連業務・テスト証拠</summary>'
+        q01 = text[text.index('<a id="ja-ex-q01">'):text.index('<a id="activity-3">')].strip()
+        q01_support = q01[q01.index('#### JA-EX-Q01'):]
+        options = re.search(r'^- 選択肢と影響：.*$', q01, re.M)[0]
+
+        def fold(content):
+            return '<details>\n<summary>補足</summary>\n\n' + content + '\n\n</details>'
+
+        mutations = {
+            'default open': text.replace('<details>', '<details open>', 1),
+            'false open attribute still opens HTML': text.replace('<details>', '<details open="false">', 1),
+            'mixed-case open attribute': text.replace('<details>', '<details OPEN>', 1),
+            'details attribute': text.replace('<details>', '<details class="supplement">', 1),
+            'summary hidden attribute': text.replace('<summary>', '<summary hidden>', 1),
+            'opening tag malformed': text.replace('<details>', '<details', 1),
+            'closing tag missing': text.replace('</details>', '', 1),
+            'summary closing tag missing': text.replace('</summary>', '', 1),
+            'stray closing tag': text + '\n</details>\n',
+            'summary separated from details': text.replace('<details>\n<summary>', '<details>\n補足\n<summary>', 1),
+            'Markdown blank after summary missing': text.replace(summary + '\n\n', summary + '\n', 1),
+            'Markdown blank before closing missing': text.replace('\n\n</details>', '\n</details>', 1),
+            'Markdown blank after closing missing': text.replace('</details>\n\n', '</details>\n', 1),
+            'supplement nested': text.replace(first, fold(first), 1),
+            'inline nested tags': text.replace('- AI確度：高', '- AI確度：<details><summary>高</summary></details>', 1),
+            'supplement label assigned to another ID': text.replace(summary, summary.replace('01', '02'), 1),
+            'supplement duplicated': text.replace(first, first + '\n\n' + first, 1),
+            'normal supplement unfolded': text.replace(first, first.replace('<details>\n' + summary,
+                '#### JA-EX-01 の根拠・関連業務・テスト証拠').replace('\n\n</details>', ''), 1),
+            'unresolved entire item hidden': text.replace(q01, fold(q01), 1),
+            'unresolved support hidden': text.replace(q01_support, fold(q01_support), 1),
+            'unresolved question hidden': text.replace(self.QUESTION, fold(self.QUESTION), 1),
+            'unresolved options and effects hidden': text.replace(options, fold(options), 1),
+            'unresolved context hidden': text.replace(self.UNRESOLVED_CONTEXT, fold(self.UNRESOLVED_CONTEXT), 1),
+            'shared reference hidden': text.replace(self.SHARED_REFERENCE, fold(self.SHARED_REFERENCE), 1),
+        }
+        for check_id in ['JA-EX-01', 'JA-EX-Q01']:
+            title, condition, result, _ = self.ITEMS[check_id]
+            state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
+            for label, content in [('condition', '- 条件：' + condition),
+                                   ('expected result', '- 期待結果：' + result),
+                                   ('human review state', '- 人間レビュー状態：' + state),
+                                   ('Check heading', f'### {check_id} — {title}')]:
+                mutations[f'{check_id} {label} hidden'] = text.replace(content, fold(content), 1)
+        for label, content in [('condition bullet', '  - 品名'),
+                               ('Activity heading', '## 備品購入を申請する'),
+                               ('Activity anchor', '<a id="activity-1"></a>'),
+                               ('Check anchor', '<a id="ja-ex-01"></a>')]:
+            mutations[label + ' hidden'] = text.replace(content, fold(content), 1)
+        # Keep otherwise valid supplement syntax so projection must detect an
+        # anchor moved into its body, rather than only rejecting malformed tags.
+        anchor = '<a id="ja-ex-01"></a>'
+        mutations['Check anchor moved inside support line'] = text.replace(anchor, '', 1).replace(
+            '- 関連業務：', '- 関連業務：' + anchor, 1)
+        for name, mutated in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_supplement_folding(mutated)
+
     def test_baseline_audit_rejects_each_primary_or_support_line_loss(self):
         text = self.example
         for match in re.finditer(r'^### (JA-EX-\w+) — (.*?)(?=^#{1,3} |\Z)', text, re.M | re.S):
             check_id, body = match.groups()
             # Delete each complete primary/support field and each condition
-            # bullet in turn, including text the earlier meaning oracle samples.
+            # bullet and supplement label in turn, including text the earlier
+            # meaning oracle samples. Summary labels replace the normal H4s.
             for line in body.splitlines():
-                if not re.match(r'^(?:- |  - |#### )', line):
+                if not re.match(r'^(?:- |  - |#### |<summary>)', line):
                     continue
                 with self.subTest(check_id=check_id, lost_line=line):
                     mutated = text[:match.start(2)] + body.replace(line, '', 1) + text[match.end(2):]
