@@ -138,6 +138,9 @@ class WorkflowSkillsTest(unittest.TestCase):
         for term in ['For every initial draft and update',
                      'as part of the ordinary request',
                      'without asking the requester to invoke another review Skill',
+                     'Check applicable description-rule conformance first',
+                     'report evidenced NG findings separately from undecided business meaning and optional wording suggestions',
+                     'without making NG a human review state',
                      'For consistency-review-only requests, use the same gate without edits',
                      'An Interface-only request still does not authorize generating or changing Checks']:
             self.assertIn(term, gate)
@@ -161,6 +164,12 @@ class WorkflowSkillsTest(unittest.TestCase):
         gate = guide[start:guide.index('## 8. Maintenance and stopping', start)]
         for term in ['Every Check creation or update includes a quality check before return',
                      'whole applicable Business Design and the current guidance',
+                     'Start with conformance to the existing description rules that apply to this artifact',
+                     "do not create a rule or impose one format's syntax on every output",
+                     'For each clear nonconformance (NG), identify the affected location, cite the applicable rule and source evidence, and explain the violation',
+                     'An undeclared Activity abbreviation is NG even when its meaning is understandable',
+                     'structure, heading relationships, visible ID and primary fields, unresolved-item kind and shared-item identity',
+                     'Apply heading or folding conventions only where the target format calls for them',
                      'source names and references against the source itself',
                      'Check every occurrence, including folded supplements and link labels',
                      'compare it directly with that heading rather than reconstructing a variant from its parts',
@@ -174,6 +183,11 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'Preserve established source revisions and URLs when the input is only a local or temporary copy',
                      'An unvisited or unavailable URL is not evidence of a wrong mapping',
                      'Retarget only for an evidenced source change or mapping defect',
+                     'Keep rule nonconformance (NG), undecided business meaning (要確認 / Business Designへ戻す事項), and optional wording suggestions distinct',
+                     'NG is a diagnostic finding, not a new human review state; never write it into that field',
+                     'A style preference or an unspecified requirement is not an NG',
+                     'If rule applicability or evidence cannot be established, report that verification limit instead of asserting a violation or a pass',
+                     'do not treat description conformance as a score for business policy, complete coverage, or human approval',
                      'repair is unambiguous from the source and stays within the requested scope',
                      'Preserve human review states for display-only changes',
                      'If business meaning is undecided or needs to change, retain that uncertainty',
@@ -450,6 +464,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
     BASELINE_REVISION = '12b18600bb7d64cb3495671df1d127c98c1e44d5'
     PRE_Q01_FOLD_REVISION = '1d9730c3c0d4501d9a8b2530b3aa10c299a49c05'
     PRE_A12_REVISION = 'a9c9b5aac1218fd0c43a61477c8050511c1ffd00'
+    PRE_A3_REVISION = 'dbec3ba462ae13782533a31df94ceeb3c2949432'
     EXAMPLE_PATH = 'docs/examples/purchase-check-review.ja.md'
     SOURCE_REVISION = '587cbce54afa261810e10eeb819d9935055de13d'
     SOURCE_PATH = 'business-design/purchase-request/README.md'
@@ -513,6 +528,9 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         cls.pre_a12 = subprocess.run(
             ['git', 'show', f'{cls.PRE_A12_REVISION}:{cls.EXAMPLE_PATH}'],
             cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
+        cls.pre_a3 = subprocess.run(
+            ['git', 'show', f'{cls.PRE_A3_REVISION}:{cls.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
         # The full-history workflow supplies the pinned revisions. Later changes
         # to the working-tree design do not redefine this historical example.
         cls.design = subprocess.run(
@@ -521,7 +539,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         # The historical source has numbered headings, not declared aliases or
         # a later Graph schema. Use its literal heading text as the local oracle.
         cls.ACTIVITIES = tuple(re.findall(r'^## (業務[1-4] — .+)$', cls.design, re.M))
-        cls.UNRESOLVED_CONTEXT = cls.LEGACY_UNRESOLVED_CONTEXT.replace(
+        cls.PRE_A3_CONTEXT = cls.LEGACY_UNRESOLVED_CONTEXT.replace(
             '業務2「購入申請を承認する」', '「' + cls.ACTIVITIES[1] + '」')
 
     def approved_a12_text(self, historical):
@@ -541,6 +559,16 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertEqual(text.count(condition), 1)
         self.assertNotIn(self.Q01_KIND, text)
         return text.replace(condition, self.Q01_KIND + '\n' + condition, 1)
+
+    def approved_a3_text(self, historical, *, has_label=True):
+        """Remove only the approved preface from pinned expected text."""
+        label = '**未決事項**\n\n'
+        context = self.PRE_A3_CONTEXT + '\n\n'
+        self.assertEqual(historical.count(label), int(has_label))
+        self.assertEqual(historical.count(context), 1)
+        if has_label:
+            self.assertIn(label + context + '<a id="ja-ex-q01"></a>', historical)
+        return historical.replace(label, '', 1).replace(context, '', 1)
 
     def assert_source_design_unchanged(self, design):
         # This A-1/A-2 example change does not authorize repairing its source by
@@ -594,6 +622,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertIn('- 導出分類：考慮候補\n', q01[0])
         self.assertEqual(q01[0].count('- 導出分類：'), 1)
         self.assertEqual(q01[0].count('- 人間レビュー状態：'), 1)
+        self.assertIn(f'- 関連業務：「{self.ACTIVITIES[1]}」。新しい承認段階やActivityは定義しない。', q01[0])
 
     def assert_original_example(self, text):
         self.assert_source_activity_references(text)
@@ -630,7 +659,6 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                      '共有項目 [JA-EX-04](#ja-ex-04)',
                      '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。',
                      f'「{self.ACTIVITIES[3]}」からもこの項目を参照し、別のIDやレビュー状態は持たない。',
-                     f'「{self.ACTIVITIES[1]}」に関わる未決事項',
                      '新しい承認段階やActivityは定義しない', self.QUESTION,
                      '保留を続ける場合、この候補を実装上の合否条件に使わない',
                      '金額境界や承認者をこの項目だけで決めない',
@@ -659,10 +687,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             expected_ids = [*ids, 'JA-EX-04'] if number == 4 else list(ids)
             self.assertEqual(index_ids, [(check_id, '#' + check_id.lower()) for check_id in expected_ids])
         approval = sections[self.ACTIVITIES[1]]
-        self.assertEqual(text.count('**未決事項**'), 1)
-        self.assertIn('**未決事項**\n\n' + self.UNRESOLVED_CONTEXT, approval)
-        self.assertLess(approval.index('### JA-EX-02'), approval.index('**未決事項**'))
-        self.assertLess(approval.index('**未決事項**'), approval.index('### JA-EX-Q01'))
+        self.assertLess(approval.index('### JA-EX-02'), approval.index('### JA-EX-Q01'))
+        self.assert_q01_kind(approval)
         self.assertIn('未決事項 [JA-EX-Q01](#ja-ex-q01)', index_rows[1][2])
         self.assertIn(self.SHARED_REFERENCE, sections[self.ACTIVITIES[3]])
         self.assert_supplement_folding(text)
@@ -711,8 +737,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertIn(decision, visible_unresolved[0])
         self.assertEqual(visible.count(self.QUESTION), 1)
         self.assertEqual(visible.count(self.OPTIONS), 1)
-        for context in ['**未決事項**', self.UNRESOLVED_CONTEXT,
-                        self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION]:
+        for context in [self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION]:
             self.assertIn(context, visible)
 
     def content_lines(self, text, item=False):
@@ -721,7 +746,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         # this is a test-only baseline audit, not an accepted product format.
         layout_lines = {
             '## 業務から選ぶ', '## 業務一覧', '## 現在の業務：購入申請を却下する',
-            '## ほかの業務の項目', '## 業務設計へ戻す候補', '**未決事項**',
+            '## ほかの業務の項目', '## 業務設計へ戻す候補',
             '現在の確認対象は JA-EX-03 と JA-EX-04 です。次に読むIDは JA-EX-03。'
             'これは読み進める位置であり、項目の確認状況を表すものではありません。',
             '再開する際は、業務と次に読むIDを指定できます。'
@@ -736,8 +761,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         if item:
             # These paragraphs moved across Check boundaries, but remain in the
             # full-document audit below; they are not evidence for the last ID.
-            layout_lines.update((self.UNRESOLVED_CONTEXT, self.LEGACY_UNRESOLVED_CONTEXT, self.SHARED_REFERENCE,
-                                 self.REVIEW_INSTRUCTION))
+            layout_lines.update((self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION))
         lines = []
         for line in text.splitlines():
             if not line or line in layout_lines or re.fullmatch(r'<a id="[^"<>]+"></a>', line):
@@ -751,9 +775,10 @@ class JapaneseCheckExampleTest(unittest.TestCase):
 
     def assert_baseline_content_preserved(self, text):
         pattern = r'^### (JA-EX-\w+) — (.*?)(?=^#{1,3} |\Z)'
-        # A-1/A-2 explicitly replace historical reference labels and add one
-        # kind line. Candidate content is never normalized to hide regressions.
-        allowed_baseline = self.approved_a12_text(self.baseline)
+        # A-1/A-2 replace historical reference labels and add one kind line;
+        # A-3 removes only the old preface. This oldest baseline has no bold
+        # label. Candidate content is never normalized to hide regressions.
+        allowed_baseline = self.approved_a3_text(self.approved_a12_text(self.baseline), has_label=False)
         baseline_items = re.findall(pattern, allowed_baseline, re.M | re.S)
         actual_items = re.findall(pattern, text, re.M | re.S)
         self.assertCountEqual([check_id for check_id, _ in actual_items], self.ITEMS)
@@ -785,7 +810,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
     def assert_only_approved_q01_change(self, text):
         # Exact transformation of the last pre-change artifact. It permits only
         # Q01's two moved lines, renamed support label and wrapper/spacing
-        # lines plus the separately pinned A-1/A-2 changes, not arbitrary
+        # lines plus the separately pinned A-1/A-2/A-3 changes, not arbitrary
         # normalization elsewhere in the document.
         start = self.pre_q01_fold.index('<a id="ja-ex-q01"></a>')
         end = self.pre_q01_fold.index('<a id="activity-3"></a>', start)
@@ -799,10 +824,15 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                  support.rstrip('\n') + '\n\n</details>\n\n')
         expected = self.pre_q01_fold[:start] + after + self.pre_q01_fold[end:]
         expected = self.approved_a12_text(expected)
-        self.assertEqual(text.encode('utf-8'), expected.encode('utf-8'))
+        self.assertEqual(self.pre_a3.encode('utf-8'), expected.encode('utf-8'))
+        self.assert_only_approved_a3_changes(text)
 
     def assert_only_approved_a12_changes(self, text):
-        self.assertEqual(text.encode('utf-8'), self.approved_a12_text(self.pre_a12).encode('utf-8'))
+        self.assertEqual(self.pre_a3.encode('utf-8'), self.approved_a12_text(self.pre_a12).encode('utf-8'))
+        self.assert_only_approved_a3_changes(text)
+
+    def assert_only_approved_a3_changes(self, text):
+        self.assertEqual(text.encode('utf-8'), self.approved_a3_text(self.pre_a3).encode('utf-8'))
 
     def test_pinned_prechange_allows_q01_fold_and_only_a12_edits_to_normal_five_bytes(self):
         self.assertEqual(hashlib.sha256(self.pre_q01_fold.encode('utf-8')).hexdigest(),
@@ -813,8 +843,9 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                 continue
             pattern = (r'^<a id="' + check_id.lower() + r'"></a>\n\n'
                        r'### ' + check_id + r' — .*?'
-                       r'(?=^<a id=|^\*\*未決事項\*\*|^## |\Z)')
-            before = re.search(pattern, self.approved_a12_text(self.pre_q01_fold), re.M | re.S)
+                       r'(?=^<a id=|^## |\Z)')
+            before = re.search(pattern, self.approved_a3_text(self.approved_a12_text(self.pre_q01_fold)),
+                               re.M | re.S)
             after = re.search(pattern, self.example, re.M | re.S)
             with self.subTest(check_id=check_id):
                 self.assertIsNotNone(before)
@@ -831,6 +862,27 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             self.assert_source_activity_references(self.pre_a12)
         with self.assertRaises(AssertionError):
             self.assert_q01_kind(self.pre_a12)
+
+    def test_pinned_a3_change_removes_only_preface_and_preserves_all_item_bytes(self):
+        self.assertEqual(hashlib.sha256(self.pre_a3.encode('utf-8')).hexdigest(),
+                         'c57630bf0045a81aa8f8a6bf85f934a86d21511c4dc4be60dc866f0fc4f24c90')
+        self.assert_only_approved_a3_changes(self.example)
+        for check_id in self.ITEMS:
+            # Include the whole item from its anchor through its supplement,
+            # but not the removed prose between the approval and Q01 items.
+            pattern = r'^<a id="' + check_id.lower() + r'"></a>\n.*?^</details>\n'
+            before = re.search(pattern, self.pre_a3, re.M | re.S)
+            after = re.search(pattern, self.example, re.M | re.S)
+            with self.subTest(check_id=check_id):
+                self.assertIsNotNone(before)
+                self.assertIsNotNone(after)
+                self.assertEqual(after[0].encode('utf-8'), before[0].encode('utf-8'))
+        for restored in ['**未決事項**\n\n', self.PRE_A3_CONTEXT + '\n\n']:
+            with self.subTest(restored_preface=restored):
+                mutated = self.example.replace('<a id="ja-ex-q01"></a>',
+                                               restored + '<a id="ja-ex-q01"></a>', 1)
+                with self.assertRaises(AssertionError):
+                    self.assert_only_approved_a3_changes(mutated)
 
     def test_source_name_oracle_rejects_every_numeric_alias_and_truncated_reference(self):
         text = self.example
@@ -893,6 +945,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             'kind replaced with review state': text.replace(kind, '- 種別：要確認', 1),
             'kind copied into derivation': text.replace('- 導出分類：考慮候補', '- 導出分類：未決事項（候補）', 1),
             'kind copied into state': text.replace('- 人間レビュー状態：要確認', '- 人間レビュー状態：未決事項（候補）', 1),
+            'diagnostic NG overwrites human review state': text.replace(
+                '- 人間レビュー状態：要確認', '- 人間レビュー状態：NG', 1),
             'derivation copied into state': text.replace('- 人間レビュー状態：要確認', '- 人間レビュー状態：考慮候補', 1),
             'state copied into derivation': text.replace('- 導出分類：考慮候補', '- 導出分類：要確認', 1),
             'candidate result used instead of kind': text.replace(kind, '- 種別：候補・未承認', 1),
@@ -975,7 +1029,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         text = self.example
         activity_one = text[text.index('<a id="activity-1">'):text.index('<a id="activity-2">')]
         activity_two = text[text.index('<a id="activity-2">'):text.index('<a id="activity-3">')]
-        unresolved = text[text.index('**未決事項**'):text.index('<a id="activity-3">')]
+        unresolved = text[text.index('<a id="ja-ex-q01">'):text.index('<a id="activity-3">')]
         shared = text[text.index('<a id="ja-ex-04">'):text.index('<a id="activity-4">')]
         rows = re.findall(r'^\| \[[^]]+\]\(#activity-\d\).*$', text, re.M)
         mutations = {
@@ -988,7 +1042,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                 .replace('id="activity-2"', 'id="activity-1"').replace('id="swapped"', 'id="activity-2"'),
             'unresolved candidate moved outside approval': text.replace(unresolved, '').replace(
                 '<a id="ja-ex-03"></a>', unresolved + '<a id="ja-ex-03"></a>'),
-            'unresolved label lost': text.replace('**未決事項**', ''),
+            'unresolved item kind lost': text.replace(self.Q01_KIND + '\n', '', 1),
             'unresolved index label lost': text.replace('未決事項 [JA-EX-Q01]', '[JA-EX-Q01]'),
             'shared full body duplicated in purchase': text.replace('<a id="ja-ex-05"></a>',
                                                                      shared + '<a id="ja-ex-05"></a>'),
@@ -1046,7 +1100,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                 .replace('\n\n</details>', ''), 1),
             'unresolved question hidden': text.replace(self.QUESTION, fold(self.QUESTION), 1),
             'unresolved options and effects hidden': text.replace(self.OPTIONS, fold(self.OPTIONS), 1),
-            'unresolved context hidden': text.replace(self.UNRESOLVED_CONTEXT, fold(self.UNRESOLVED_CONTEXT), 1),
+            'unresolved item kind hidden': text.replace(self.Q01_KIND, fold(self.Q01_KIND), 1),
             'shared reference hidden': text.replace(self.SHARED_REFERENCE, fold(self.SHARED_REFERENCE), 1),
         }
         for check_id in ['JA-EX-01', 'JA-EX-Q01']:
