@@ -6,16 +6,16 @@
 
 ## 業務一覧
 
-業務名から該当の項目へ進めます。業務2と業務3は、業務1の後の異なる判断に対応します。下の並びやチェックIDの順に全業務を実行する意味ではありません。
+業務名から該当の項目へ進めます。「業務2 — 購入申請を承認する」と「業務3 — 購入申請を却下する」は、「業務1 — 備品購入を申請する」の後の異なる判断に対応します。下の並びやチェックIDの順に全業務を実行する意味ではありません。
 
 | 業務（Activity） | 目的 | 業務設計に記載された接続 | チェック項目 |
 | --- | --- | --- | --- |
-| [備品購入を申請する](#activity-1) | 購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にする | `submitted` の購入申請を、承認または却下の判断へ渡す | [JA-EX-01](#ja-ex-01) |
-| [購入申請を承認する](#activity-2) | 申請内容の妥当性を確認し、購買担当者が購入を進められる状態にする | `submitted` を `approved` とし、業務4の購入対象にする | [JA-EX-02](#ja-ex-02)、未決事項 [JA-EX-Q01](#ja-ex-q01) |
-| [購入申請を却下する](#activity-3) | 購入を認めない申請を、購買対象から外す | `submitted` を `rejected` とし、業務4の購入対象から外す | [JA-EX-03](#ja-ex-03)、[JA-EX-04](#ja-ex-04) |
-| [承認済み備品を購入する](#activity-4) | 承認された購入要求を実際の購入として完了させ、購入済みであることを記録する | `approved` の申請に基づく購入を `purchased` として記録する。業務3の却下対象は含めない | [JA-EX-05](#ja-ex-05)、共有項目 [JA-EX-04](#ja-ex-04) |
+| [業務1 — 備品購入を申請する](#activity-1) | 購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にする | `submitted` の購入申請を、承認または却下の判断へ渡す | [JA-EX-01](#ja-ex-01) |
+| [業務2 — 購入申請を承認する](#activity-2) | 申請内容の妥当性を確認し、購買担当者が購入を進められる状態にする | `submitted` を `approved` とし、「業務4 — 承認済み備品を購入する」の購入対象にする | [JA-EX-02](#ja-ex-02)、未決事項 [JA-EX-Q01](#ja-ex-q01) |
+| [業務3 — 購入申請を却下する](#activity-3) | 購入を認めない申請を、購買対象から外す | `submitted` を `rejected` とし、「業務4 — 承認済み備品を購入する」の購入対象から外す | [JA-EX-03](#ja-ex-03)、[JA-EX-04](#ja-ex-04) |
+| [業務4 — 承認済み備品を購入する](#activity-4) | 承認された購入要求を実際の購入として完了させ、購入済みであることを記録する | `approved` の申請に基づく購入を `purchased` として記録する。「業務3 — 購入申請を却下する」の却下対象は含めない | [JA-EX-05](#ja-ex-05)、共有項目 [JA-EX-04](#ja-ex-04) |
 
-目的の根拠は、業務設計の[業務1](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L51-L67)、[業務2](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L99-L115)、[業務3](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L144-L160)、[業務4](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L191-L207)です。接続は[業務相関](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に基づきます。
+目的の根拠は、業務設計の[業務1 — 備品購入を申請する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L51-L67)、[業務2 — 購入申請を承認する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L99-L115)、[業務3 — 購入申請を却下する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L144-L160)、[業務4 — 承認済み備品を購入する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L191-L207)です。接続は[業務相関](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に基づきます。
 
 再開する際は、業務と次に読むIDを指定できます。これは読み進める位置であり、項目の確認状況を表すものではありません。
 
@@ -23,7 +23,7 @@
 
 <a id="activity-1"></a>
 
-## 備品購入を申請する
+## 業務1 — 備品購入を申請する
 
 <a id="ja-ex-01"></a>
 
@@ -40,17 +40,17 @@
 <details>
 <summary>JA-EX-01 の根拠・関連業務・テスト証拠</summary>
 
-- 根拠：[業務1の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L61-L95)。入力欄の「すべて必須」をそのまま適用している。
+- 根拠：[「業務1 — 備品購入を申請する」の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L61-L95)。入力欄の「すべて必須」をそのまま適用している。
 - 導出分類：明示
 - AI確度：高
-- 関連業務：成立した申請を、業務2または業務3で扱う。申請しただけで購入可否の判断が済むわけではない。
+- 関連業務：成立した申請を、「業務2 — 購入申請を承認する」または「業務3 — 購入申請を却下する」で扱う。申請しただけで購入可否の判断が済むわけではない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
 
 </details>
 
 <a id="activity-2"></a>
 
-## 購入申請を承認する
+## 業務2 — 購入申請を承認する
 
 <a id="ja-ex-02"></a>
 
@@ -63,22 +63,23 @@
 <details>
 <summary>JA-EX-02 の根拠・関連業務・テスト証拠</summary>
 
-- 根拠：[業務2の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L109-L140)。手順3と出力に申請の状態が明記されている。金額別の扱いは[未決定の事項](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L248-L259)である。
+- 根拠：[「業務2 — 購入申請を承認する」の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L109-L140)。手順3と出力に申請の状態が明記されている。金額別の扱いは[未決定の事項](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L248-L259)である。
 - 導出分類：明示
 - AI確度：高
-- 関連業務：業務1で成立した申請を扱い、業務4の購入対象へつなぐ。承認した時点で購入を済ませたことにはならない。
+- 関連業務：「業務1 — 備品購入を申請する」で成立した申請を扱い、「業務4 — 承認済み備品を購入する」の購入対象へつなぐ。承認した時点で購入を済ませたことにはならない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
 
 </details>
 
 **未決事項**
 
-次の候補は、業務2「購入申請を承認する」に関わる未決事項です。通常のチェック項目と分けて残します。元の業務設計で未決定とされているため、この文書では判断を保留します。
+次の候補は、「業務2 — 購入申請を承認する」に関わる未決事項です。通常のチェック項目と分けて残します。元の業務設計で未決定とされているため、この文書では判断を保留します。
 
 <a id="ja-ex-q01"></a>
 
 ### JA-EX-Q01 — 金額によって承認者や承認段階が変わる場合の扱い
 
+- 種別：未決事項（候補）
 - 条件：申請金額によって承認者や承認段階が変わる場合。
 - 期待結果：候補・未承認。どの承認者・承認段階を経て、いつ承認済みとするかは未決定。
 - 人間レビュー状態：要確認
@@ -92,14 +93,14 @@
 - 根拠：[現在の業務設計で未決定の事項](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L248-L259)の最初の項目。
 - 導出分類：考慮候補
 - AI確度：要精査
-- 関連業務：業務2「購入申請を承認する」。新しい承認段階やActivityは定義しない。
+- 関連業務：「業務2 — 購入申請を承認する」。新しい承認段階やActivityは定義しない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。未決定の結果を、確定したテストの期待結果にしない。
 
 </details>
 
 <a id="activity-3"></a>
 
-## 購入申請を却下する
+## 業務3 — 購入申請を却下する
 
 <a id="ja-ex-03"></a>
 
@@ -114,10 +115,10 @@
 <details>
 <summary>JA-EX-03 の根拠・関連業務・テスト証拠</summary>
 
-- 根拠：[業務3の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L154-L187)。対象と理由は必須入力であり、手順4と出力に申請の状態が明記されている。
+- 根拠：[「業務3 — 購入申請を却下する」の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L154-L187)。対象と理由は必須入力であり、手順4と出力に申請の状態が明記されている。
 - 導出分類：明示
 - AI確度：高。根拠から期待結果を読み取れる確かさであり、人間の確認を代わりに行うものではない。
-- 関連業務：業務1で成立した申請を扱う。業務4の対象から外す期待結果は JA-EX-04 を参照する。
+- 関連業務：「業務1 — 備品購入を申請する」で成立した申請を扱う。「業務4 — 承認済み備品を購入する」の対象から外す期待結果は JA-EX-04 を参照する。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。この記載はテストの不存在や実装不備を示すものではない。
 
 </details>
@@ -133,17 +134,17 @@
 <details>
 <summary>JA-EX-04 の根拠・関連業務・テスト証拠</summary>
 
-- 根拠：[業務3の出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L183-L187)と[業務相関5](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に、購買対象からの除外が明記されている。
+- 根拠：[「業務3 — 購入申請を却下する」の出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L183-L187)と[業務相関5](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に、購買対象からの除外が明記されている。
 - 導出分類：明示
 - AI確度：高
-- 関連業務：業務3「購入申請を却下する」と業務4「承認済み備品を購入する」の共有項目。業務4からもこの項目を参照し、別のIDやレビュー状態は持たない。
+- 関連業務：「業務3 — 購入申請を却下する」と「業務4 — 承認済み備品を購入する」の共有項目。「業務4 — 承認済み備品を購入する」からもこの項目を参照し、別のIDやレビュー状態は持たない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。業務上の期待結果と、その検証証拠の有無は分けて扱う。
 
 </details>
 
 <a id="activity-4"></a>
 
-## 承認済み備品を購入する
+## 業務4 — 承認済み備品を購入する
 
 共有項目は [JA-EX-04](#ja-ex-04) を参照してください。
 
@@ -158,10 +159,10 @@
 <details>
 <summary>JA-EX-05 の根拠・関連業務・テスト証拠</summary>
 
-- 根拠：[業務4の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L201-L234)。購入した対象と実購入金額は必須入力であり、手順4と出力に申請の状態が明記されている。
+- 根拠：[「業務4 — 承認済み備品を購入する」の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L201-L234)。購入した対象と実購入金額は必須入力であり、手順4と出力に申請の状態が明記されている。
 - 導出分類：明示
 - AI確度：高
-- 関連業務：業務2で承認された申請を扱う。業務3からの除外条件は JA-EX-04 を参照する。購入後の備品管理などへの接続は定めない。
+- 関連業務：「業務2 — 購入申請を承認する」で承認された申請を扱う。「業務3 — 購入申請を却下する」からの除外条件は JA-EX-04 を参照する。購入後の備品管理などへの接続は定めない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
 
 </details>
