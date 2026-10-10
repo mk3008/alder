@@ -1,12 +1,8 @@
 # 備品購入申請のチェック項目
 
-人間レビュー前の参考たたき台です。入力は[備品購入申請の業務設計](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md)（版 `587cbce54afa261810e10eeb819d9935055de13d`）です。この業務設計には未決定の事項があり、合意済みとは扱っていません。
-
-この例では、各業務で成立する申請の状態と、却下した申請を購買対象から外すことを扱います。入力値や日時の記録を含む全項目の一覧ではなく、実装への引き渡し用の完成版でもありません。IDの `JA-EX-` はこの例の中だけで使い、製品や過去の項目のIDを置き換えません。
+原典は未合意の[備品購入申請の業務設計](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md)です。[使い方](#使い方)
 
 ## 業務一覧
-
-業務名から該当の項目へ進めます。「購入申請を承認する」と「購入申請を却下する」は、「備品購入を申請する」の後の異なる判断に対応します。下の並びやチェックIDの順に全業務を実行する意味ではありません。
 
 | 業務（Activity） | 目的 | 業務設計に記載された接続 | チェック項目 |
 | --- | --- | --- | --- |
@@ -14,12 +10,6 @@
 | [購入申請を承認する](#activity-2) | 申請内容の妥当性を確認し、購買担当者が購入を進められる状態にする | `submitted` を `approved` とし、「承認済み備品を購入する」の購入対象にする | [JA-EX-02](#ja-ex-02)、未決事項 [JA-EX-Q01](#ja-ex-q01) |
 | [購入申請を却下する](#activity-3) | 購入を認めない申請を、購買対象から外す | `submitted` を `rejected` とし、「承認済み備品を購入する」の購入対象から外す | [JA-EX-03](#ja-ex-03)、[JA-EX-04](#ja-ex-04) |
 | [承認済み備品を購入する](#activity-4) | 承認された購入要求を実際の購入として完了させ、購入済みであることを記録する | `approved` の申請に基づく購入を `purchased` として記録する。「購入申請を却下する」の却下対象は含めない | [JA-EX-05](#ja-ex-05)、共有項目 [JA-EX-04](#ja-ex-04) |
-
-目的の根拠と原典見出しとの対応は、「備品購入を申請する」＝[業務1 — 備品購入を申請する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L51-L67)、「購入申請を承認する」＝[業務2 — 購入申請を承認する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L99-L115)、「購入申請を却下する」＝[業務3 — 購入申請を却下する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L144-L160)、「承認済み備品を購入する」＝[業務4 — 承認済み備品を購入する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L191-L207)です。接続は[業務相関](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に基づきます。
-
-再開する際は、業務と次に読むIDを指定できます。これは読み進める位置であり、項目の確認状況を表すものではありません。
-
-確認する場合は、IDを指定して「確認」「修正」「保留」を伝えてください。業務を切り替えたり項目を開いたりしても、確認済みにはなりません。返答がない場合も状態は変えません。
 
 <a id="activity-1"></a>
 
@@ -160,5 +150,22 @@
 - AI確度：高
 - 関連業務：「購入申請を承認する」で承認された申請を扱う。「購入申請を却下する」からの除外条件は JA-EX-04 を参照する。購入後の備品管理などへの接続は定めない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
+
+</details>
+
+## 使い方
+
+- 表の業務名やIDから項目へ進めます。表やIDの並びは、業務の実行順を示しません。
+- IDを指定して「確認」「修正」「保留」を伝えてください。業務を切り替えたり項目を開いたりしても、確認済みにはなりません。返答がない場合も状態は変えません。
+- 再開する際は、業務と次に読むIDを指定できます。再開位置は、項目の確認状況を表すものではありません。
+
+<details>
+<summary>原典の版・業務名との対応</summary>
+
+原典の版：`587cbce54afa261810e10eeb819d9935055de13d`。
+
+目的の根拠と原典見出しとの対応は、「備品購入を申請する」＝[業務1 — 備品購入を申請する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L51-L67)、「購入申請を承認する」＝[業務2 — 購入申請を承認する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L99-L115)、「購入申請を却下する」＝[業務3 — 購入申請を却下する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L144-L160)、「承認済み備品を購入する」＝[業務4 — 承認済み備品を購入する](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L191-L207)です。接続は[業務相関](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に基づきます。
+
+IDの `JA-EX-` はこの例の中だけで使い、製品や過去の項目のIDを置き換えません。
 
 </details>

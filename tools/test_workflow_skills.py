@@ -70,7 +70,8 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'Distinguish this from old-Check-to-new-Check correspondence',
                      'Do not automatically append unrequested H2 sections or scope/exclusion summaries to a Check review document',
                      'Keep authoring-scope investigations and quality explanations in the work record, not as relocated reader-facing prose',
-                     'Preserve existing opening notices, including unapproved status, and information needed for decisions within each Check',
+                     'Preserve unapproved status and information needed for decisions within each Check',
+                     'An explicit request to simplify the opening may remove redundant authoring notices while preserving source/version links and name correspondences',
                      "Keep an individual Check's kind, decision, condition and expectation with that ID",
                      'Useful introductory or navigation prose is allowed',
                      'This does not prohibit all prose between headings',
@@ -1240,10 +1241,13 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
 
     Keep the old byte audit intact above, then permit only the separately
     approved display mapping and exact trailing-section removal below.
+    Freeze these tests at the last pre-opening-change revision; the separate
+    mobile-opening audit below chains this result into the current artifact.
     Never normalize the candidate artifact.
     """
 
     H = HistoricalJapaneseCheckExampleTest
+    PRE_OPENING_REVISION = '36aa45ea87e02b95e6a73670359ec1b9802afc89'
     PRE_SCOPE_REMOVAL_REVISION = '5387aea7226ea0c7e1cae4a3f49a28fa7053d1a3'
     PRE_SCOPE_REMOVAL_SHA256 = '104ce2bbcc1b38e1a42338ec451b057e3ae338483d4f3432b7a2a96691b9ad4f'
     SCOPE_BOUNDARY = '\n## この例の範囲\n'
@@ -1273,7 +1277,9 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
         cls.pre_scope_removal = subprocess.run(
             ['git', 'show', f'{cls.PRE_SCOPE_REMOVAL_REVISION}:{cls.H.EXAMPLE_PATH}'],
             cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
-        cls.current = (ROOT / cls.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+        cls.current = subprocess.run(
+            ['git', 'show', f'{cls.PRE_OPENING_REVISION}:{cls.H.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
 
     def approved_display_text(self):
         # Preserve each external source quotation byte-for-byte. Only expected
@@ -1604,6 +1610,221 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
                      'Unknown names remain a focused question',
                      'A style preference or an unspecified requirement is not an NG']:
             self.assertIn(term, guide)
+
+
+class JapaneseMobileOpeningTest(unittest.TestCase):
+    """One approved opening/usage edit, not a generic document-size rule.
+
+    The predecessor's audits run unchanged on their pinned final bytes above.
+    This audit transforms only that frozen input, never candidate content.
+    It checks authored Markdown, not a rendered phone view or human benefit.
+    """
+
+    H = HistoricalJapaneseCheckExampleTest
+    D = ApprovedJapaneseDisplayTest
+    BEFORE_REVISION = '36aa45ea87e02b95e6a73670359ec1b9802afc89'
+    BEFORE_SHA256 = 'eab72d9fe70c31f7ca298058c0936b51d54d55857e5f1ad386fd4d188981b7ad'
+    FIRST_ACTIVITY = '<a id="activity-1"></a>'
+    USAGE_BOUNDARY = '\n## 使い方\n'
+    OPENING = f'原典は未合意の[備品購入申請の業務設計]({H.SOURCE})です。[使い方](#使い方)'
+    USAGE = ('## 使い方\n\n'
+             '- 表の業務名やIDから項目へ進めます。表やIDの並びは、業務の実行順を示しません。\n'
+             '- IDを指定して「確認」「修正」「保留」を伝えてください。'
+             '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。'
+             '返答がない場合も状態は変えません。\n'
+             '- 再開する際は、業務と次に読むIDを指定できます。'
+             '再開位置は、項目の確認状況を表すものではありません。\n')
+    SOURCE_SUMMARY = '原典の版・業務名との対応'
+    ID_NOTICE = 'IDの `JA-EX-` はこの例の中だけで使い、製品や過去の項目のIDを置き換えません。'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.D.setUpClass()
+        cls.before = subprocess.run(
+            ['git', 'show', f'{cls.BEFORE_REVISION}:{cls.H.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
+        cls.current = (ROOT / cls.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+        cls.table = '\n'.join(line for line in cls.before.splitlines() if line.startswith('| '))
+        cls.mapping = next(line for line in cls.before.splitlines()
+                           if line.startswith('目的の根拠と原典見出しとの対応は、'))
+        cls.activities = cls.before[cls.before.index(cls.FIRST_ACTIVITY):]
+
+    def source_details(self):
+        return (f'<details>\n<summary>{self.SOURCE_SUMMARY}</summary>\n\n'
+                f'原典の版：`{self.H.SOURCE_REVISION}`。\n\n'
+                + self.mapping + '\n\n' + self.ID_NOTICE + '\n\n</details>\n')
+
+    def approved_opening_text(self):
+        # Rebuild only the approved prefix and usage/source context from the
+        # frozen predecessor. Its complete Activity/Check suffix is unchanged.
+        title = self.before.split('\n', 1)[0]
+        return (title + '\n\n' + self.OPENING + '\n\n## 業務一覧\n\n'
+                + self.table + '\n\n' + self.activities
+                + '\n' + self.USAGE + '\n' + self.source_details())
+
+    def assert_approved_bytes(self, text):
+        self.assertEqual(text.encode('utf-8'), self.approved_opening_text().encode('utf-8'))
+
+    def assert_preserved_content(self, text):
+        self.assertEqual(text.count(self.USAGE_BOUNDARY), 1)
+        self.assertEqual(text.count(self.FIRST_ACTIVITY), 1)
+        start = text.index(self.FIRST_ACTIVITY)
+        end = text.index(self.USAGE_BOUNDARY)
+        self.assertLess(start, end)
+        # No normalization of whitespace, individual fields or the last Check.
+        self.assertEqual(text[start:end].encode('utf-8'), self.activities.encode('utf-8'))
+        table_lines = '\n'.join(line for line in text.splitlines() if line.startswith('| '))
+        self.assertEqual(table_lines.encode('utf-8'), self.table.encode('utf-8'))
+        self.assertEqual(re.findall(r'<a id="[^"<>]+"></a>', text),
+                         re.findall(r'<a id="[^"<>]+"></a>', self.before))
+        # Only the document-level evidence moves; every external URL and exact
+        # quotation/target pair remains, including repeated evidence links.
+        for pattern in [r'https://github.com/[^)\s]+', r'\[[^]\n]+\]\(https://[^)\n]+\)']:
+            self.assertCountEqual(re.findall(pattern, text), re.findall(pattern, self.before))
+        self.assertEqual(text.count(self.mapping), 1)
+        self.assertEqual(text.count(self.ID_NOTICE), 1)
+        self.assertIn(f'原典の版：`{self.H.SOURCE_REVISION}`。', text)
+        self.assertIn('原典は未合意の', text)
+        self.assertEqual(re.findall(r'^- 人間レビュー状態：(.+)$', text, re.M),
+                         ['未レビュー', '未レビュー', '要確認', '未レビュー', '未レビュー', '未レビュー'])
+
+    def assert_mobile_layout(self, text):
+        self.assert_preserved_content(text)
+        self.assertEqual(re.findall(r'^## (.+)$', text, re.M),
+                         ['業務一覧', *self.D.ACTIVITIES, '使い方'])
+        self.assertEqual(re.findall(r'^### (JA-EX-(?:Q)?\d+) — ', text, re.M),
+                         [check_id for ids in self.D.ACTIVITY_ITEMS for check_id in ids])
+        title, opening, rest = text.split('\n\n', 2)
+        self.assertEqual(title, '# 備品購入申請のチェック項目')
+        self.assertEqual(opening, self.OPENING)
+        index_end = rest.index(self.FIRST_ACTIVITY)
+        self.assertEqual(rest[:index_end], '## 業務一覧\n\n' + self.table + '\n\n')
+        usage = text[text.index('## 使い方\n'):]
+        self.assertEqual(usage, self.USAGE + '\n' + self.source_details())
+        # Document-level source evidence has its own closed wrapper, separate
+        # from the six unchanged per-ID supplements. No decisions are folded.
+        document_details = re.findall(
+            r'^<details>\n<summary>原典の版・業務名との対応</summary>\n\n.*?\n\n</details>\n',
+            text, re.M | re.S)
+        self.assertEqual(document_details, [self.source_details()])
+        self.assertEqual(text.count('<details>'), 7)
+        self.assertEqual(text.count('</details>'), 7)
+        self.assertEqual(re.findall(r'^<summary>(.+)</summary>$', text, re.M),
+                         [check_id + ' の根拠・関連業務・テスト証拠'
+                          for ids in self.D.ACTIVITY_ITEMS for check_id in ids] + [self.SOURCE_SUMMARY])
+        self.assertNotRegex(text, r'(?i)<details\s')
+
+    def test_pinned_audits_chain_into_only_approved_opening_bytes(self):
+        self.assertEqual(hashlib.sha256(self.before.encode()).hexdigest(), self.BEFORE_SHA256)
+        self.assertEqual(self.before, self.D.current)
+        self.D().assert_approved_bytes(self.before)
+        self.D().assert_current_structure(self.before)
+        self.assert_approved_bytes(self.current)
+        self.assert_preserved_content(self.current)
+        self.assert_mobile_layout(self.current)
+
+    def test_every_activity_check_and_table_line_is_byte_preserved(self):
+        text = self.current
+        blocks = [('activities', text.index(self.FIRST_ACTIVITY), self.activities),
+                  ('index', text.index(self.table), self.table)]
+        for label, block_start, block in blocks:
+            for match in re.finditer(r'[^\n]+\n?', block):
+                start, end = block_start + match.start(), block_start + match.end()
+                for replacement in ['', '変更した内容\n']:
+                    changed = text[:start] + replacement + text[end:]
+                    with self.subTest(block=label, position=start, replacement=replacement):
+                        self.assertNotEqual(changed, text)
+                        with self.assertRaises((AssertionError, ValueError)):
+                            self.assert_preserved_content(changed)
+                        with self.assertRaises(AssertionError):
+                            self.assert_approved_bytes(changed)
+
+    def test_long_notices_and_removed_scope_cannot_return_anywhere(self):
+        text = self.current
+        old_prefix = self.before[:self.before.index('## 業務一覧')]
+        notices = [paragraph for paragraph in old_prefix.split('\n\n')
+                   if paragraph and not paragraph.startswith('#')]
+        scope = self.D.pre_scope_removal.split(self.D.SCOPE_BOUNDARY, 1)[1]
+        notices += [line for line in scope.splitlines() if line.startswith('- ')]
+        notices += ['この例の範囲を確認してから実装へ引き渡してください。']
+        positions = [text.index('## 業務一覧'), text.index(self.FIRST_ACTIVITY),
+                     text.index('## 使い方'), text.index('<summary>' + self.SOURCE_SUMMARY), len(text)]
+        for notice in notices:
+            for position in positions:
+                changed = text[:position] + notice + '\n\n' + text[position:]
+                with self.subTest(notice=notice[:25], position=position):
+                    with self.assertRaises(AssertionError):
+                        self.assert_approved_bytes(changed)
+                    with self.assertRaises((AssertionError, ValueError)):
+                        self.assert_mobile_layout(changed)
+
+    def test_usage_source_placement_and_default_closed_wrapper_mutations_fail(self):
+        text = self.current
+        usage = self.USAGE + '\n' + self.source_details()
+        without_usage = text[:text.index('## 使い方\n')]
+        cases = {
+            'usage before table': without_usage.replace('## 業務一覧', usage + '\n## 業務一覧', 1),
+            'usage before first Check': without_usage.replace(self.FIRST_ACTIVITY, usage + '\n' + self.FIRST_ACTIVITY, 1),
+            'usage inside index': text.replace(self.USAGE, self.USAGE.replace('## 使い方\n\n', '', 1), 1),
+            'usage link lost': text.replace('[使い方](#使い方)', '', 1),
+            'usage link wrong': text.replace('[使い方](#使い方)', '[使い方](#activity-1)', 1),
+            'extra H2': text + '\n## 補足事項\n',
+            'source left unfolded': text.replace(self.source_details(), self.mapping + '\n', 1),
+            'source wrapper open': text.replace('<details>\n<summary>' + self.SOURCE_SUMMARY,
+                                                 '<details open>\n<summary>' + self.SOURCE_SUMMARY, 1),
+            'source wrapper malformed': text.replace('<summary>' + self.SOURCE_SUMMARY + '</summary>',
+                                                      '<summary>' + self.SOURCE_SUMMARY, 1),
+            'source wrapper nested': text.replace(self.source_details(), '<details>\n' + self.source_details() + '</details>\n', 1),
+            'source moved into Check': without_usage.replace('<details>', self.source_details() + '\n<details>', 1) + self.USAGE,
+            'Q01 decision folded': text.replace(self.H.QUESTION, '<details>\n<summary>判断</summary>\n\n' + self.H.QUESTION + '\n\n</details>', 1),
+            'Check supplement opened': text.replace('<details>', '<details open>', 1),
+        }
+        for label, changed in cases.items():
+            with self.subTest(mutation=label):
+                self.assertNotEqual(changed, text)
+                with self.assertRaises((AssertionError, ValueError)):
+                    self.assert_mobile_layout(changed)
+                with self.assertRaises(AssertionError):
+                    self.assert_approved_bytes(changed)
+
+    def test_usage_cannot_approve_states_invent_rules_or_drop_resume_contract(self):
+        text = self.current
+        cases = {
+            'reading approves': ('確認済みにはなりません。', '確認済みになります。'),
+            'silence approves': ('返答がない場合も状態は変えません。', '返答がなければ確認済みです。'),
+            'resume approves': ('再開位置は、項目の確認状況を表すものではありません。', '再開位置まで確認済みです。'),
+            'new state': ('「確認」「修正」「保留」', '「確認」「修正」「保留」「自動承認」'),
+            'ID omitted': ('IDを指定して「確認」', '「確認」'),
+            'resume ID omitted': ('業務と次に読むID', '業務'),
+            'row order becomes business order': ('業務の実行順を示しません。', '業務の実行順を示します。'),
+            'new approval gate': ('## 使い方\n', '## 使い方\n\nレビュー開始前に担当者の承認を得てください。\n'),
+        }
+        for label, (old, new) in cases.items():
+            changed = text.replace(old, new, 1)
+            with self.subTest(mutation=label):
+                self.assertNotEqual(changed, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_mobile_layout(changed)
+                with self.assertRaises(AssertionError):
+                    self.assert_approved_bytes(changed)
+
+    def test_original_urls_name_correspondences_and_unapproved_status_survive(self):
+        text = self.current
+        replacements = [('原典は未合意の', '原典は合意済みの'),
+                        (self.ID_NOTICE, ''),
+                        (f'原典の版：`{self.H.SOURCE_REVISION}`。', '原典の版：最新版。')]
+        for match in re.finditer(r'\[([^]\n]+)\]\((https://[^)\n]+)\)', text):
+            replacements.append((match[0], match[0].replace(match[2], self.H.SOURCE + '#L1-L2')))
+            if '業務' in match[1] and ' — ' in match[1]:
+                replacements.append((match[0], match[0].replace(match[1], '短縮名')))
+        for old, new in replacements:
+            changed = text.replace(old, new, 1)
+            with self.subTest(original=old):
+                self.assertNotEqual(changed, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_preserved_content(changed)
+                with self.assertRaises(AssertionError):
+                    self.assert_approved_bytes(changed)
 
 
 if __name__ == '__main__':
