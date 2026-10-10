@@ -229,6 +229,19 @@ When splitting, renaming, regrouping, or regenerating Checks:
 
 This audit is especially important when converting a broad Check into smaller Check Items.
 
+### Before returning a draft or update
+
+Every Check creation or update includes a quality check before return; the requester does not need to ask for a separate review or invoke another Skill. Re-read the actual candidate against the whole applicable Business Design and the current guidance, not just against the previous Check text or passing fixture tests.
+
+- Check source names and references against the source itself, including any declared aliases; apply the [human-facing view](#3-human-facing-view) without inventing a naming rule. Check every occurrence, including folded supplements and link labels, not only the index and headings. Where the current view requires a full source heading, compare it directly with that heading rather than reconstructing a variant from its parts.
+- Check independently reviewable condition/result pairs using [Check granularity](#2-functional-interface-and-check-item-have-different-roles). Separate independently decidable expectations, not every AND/OR bullet or Test assertion. Respect an explicitly limited example's scope instead of silently expanding it into a complete handoff.
+- Check visible item kind, derivation, human review state, language and unresolved questions against the [human-facing view](#3-human-facing-view). Missing Test evidence is a separate gap, not evidence of unapproved business meaning.
+- For updates, apply the meaning-preservation audit above to IDs, guarantees, conditions, review states, source links, shared items and existing Test mappings. The old output is a transformation baseline, not an authority for business meaning. Preserve established source revisions and URLs when the input is only a local or temporary copy. An unvisited or unavailable URL is not evidence of a wrong mapping: report the access limit instead of replacing the reference. Retarget only for an evidenced source change or mapping defect, keeping the old-to-new basis visible.
+
+Correct a presentation or reference defect only when its repair is unambiguous from the source and stays within the requested scope. Preserve human review states for display-only changes. If business meaning is undecided or needs to change, retain that uncertainty and return the affected item as 要確認 / Business Designへ戻す事項 under [the Business Design loop](#1-business-design-is-the-ssot); continue independent items. Keep an outstanding human-requested correction as 要修正 until it is made; correcting it does not assert renewed confirmation. A correction already determined by confirmed Business Design is not itself a new business decision. Do not invent missing rules, promote a candidate to confirmed, or silently delete an unsupported expectation.
+
+After any correction, re-read the final saved artifact and affected references, and repeat the relevant checks. Briefly report the scope actually checked, material corrections and retained guarantees, unresolved decisions and verification limits in the normal response. If a check could not be performed, say so; do not claim that the gate passed. No separate report, parser or mandatory data format is required. In consistency-review-only mode, perform the same checks and report findings without editing files or review states. AI quality checking never substitutes for human confirmation.
+
 ## 8. Maintenance and stopping
 
 Keep the index lighter than the codebase it describes.
