@@ -58,6 +58,15 @@ class WorkflowSkillsTest(unittest.TestCase):
         guide = (ROOT / 'docs/check-item-traceability.md').read_text()
         section = guide[guide.index('## 3. Human-facing view'):guide.index('## 5. Evidence and mapping states')]
         for term in ["Show each Check's condition, expected result and human review state **once**",
+                     'source-established full Activity names in visible references',
+                     'do not invent aliases by shortening numbered headings',
+                     'quote its full heading rather than guessing an abbreviation',
+                     'Preserve the source and existing link targets',
+                     'state its kind on the item itself and keep it visible', '種別：未決事項（候補）',
+                     'Keep kind separate from derivation class, AI confidence and human review state',
+                     'do not relabel one as the other without evidence',
+                     'Retain unapproved wording in the expected result',
+                     'not a new required schema or parser',
                      'same-level Activity headings in the same order',
                      'H2 Activity and H3 Check',
                      'Do not split the document into a special current Activity and other Activities',
@@ -81,6 +90,13 @@ class WorkflowSkillsTest(unittest.TestCase):
             self.assertIn(term, section)
         skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
         for term in ['references/check-item-traceability.md',
+                     'Use source-established full Activity names in visible references',
+                     'do not invent shortened aliases or position-based names',
+                     'quote its full heading while retaining the existing source and link targets',
+                     'Give each unresolved item its own visible kind', '種別：未決事項（候補）',
+                     'Keep kind distinct from derivation class, AI confidence and human review state',
+                     'Preserve source-undecided versus AI-proposed origin and the unapproved expected result',
+                     'no required schema or parser',
                      "rather than copying historical c3's table/detail layout",
                      'Activity index and Activity sections in the same order',
                      'H2 Activity and H3 Check',
@@ -363,6 +379,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
 
     BASELINE_REVISION = '12b18600bb7d64cb3495671df1d127c98c1e44d5'
     PRE_Q01_FOLD_REVISION = '1d9730c3c0d4501d9a8b2530b3aa10c299a49c05'
+    PRE_A12_REVISION = 'a9c9b5aac1218fd0c43a61477c8050511c1ffd00'
     EXAMPLE_PATH = 'docs/examples/purchase-check-review.ja.md'
     SOURCE_REVISION = '587cbce54afa261810e10eeb819d9935055de13d'
     SOURCE_PATH = 'business-design/purchase-request/README.md'
@@ -391,13 +408,13 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                       '申請金額によって承認者や承認段階が変わる場合。',
                       '候補・未承認。どの承認者・承認段階を経て、いつ承認済みとするかは未決定。', 'L248-L259'),
     }
-    ACTIVITIES = ('備品購入を申請する', '購入申請を承認する',
-                  '購入申請を却下する', '承認済み備品を購入する')
+    LEGACY_ACTIVITY_NAMES = ('備品購入を申請する', '購入申請を承認する',
+                             '購入申請を却下する', '承認済み備品を購入する')
     ACTIVITY_ITEMS = (('JA-EX-01',), ('JA-EX-02', 'JA-EX-Q01'),
                       ('JA-EX-03', 'JA-EX-04'), ('JA-EX-05',))
-    UNRESOLVED_CONTEXT = ('次の候補は、業務2「購入申請を承認する」に関わる未決事項です。'
-                          '通常のチェック項目と分けて残します。'
-                          '元の業務設計で未決定とされているため、この文書では判断を保留します。')
+    LEGACY_UNRESOLVED_CONTEXT = ('次の候補は、業務2「購入申請を承認する」に関わる未決事項です。'
+                                 '通常のチェック項目と分けて残します。'
+                                 '元の業務設計で未決定とされているため、この文書では判断を保留します。')
     SHARED_REFERENCE = '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。'
     REVIEW_INSTRUCTION = ('確認する場合は、IDを指定して「確認」「修正」「保留」を伝えてください。'
                           '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。'
@@ -409,7 +426,9 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                '影響するチェック項目を更新する。金額境界や承認者をこの項目だけで決めない。')
     Q01_OLD_LABEL = 'JA-EX-Q01 の根拠・確認事項・テスト証拠'
     Q01_LABEL = 'JA-EX-Q01 の根拠・関連業務・テスト証拠'
+    Q01_KIND = '- 種別：未決事項（候補）'
     GAP = '- テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。'
+    SOURCE_SHA256 = '2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc'
 
     @classmethod
     def setUpClass(cls):
@@ -421,13 +440,94 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         cls.pre_q01_fold = subprocess.run(
             ['git', 'show', f'{cls.PRE_Q01_FOLD_REVISION}:{cls.EXAMPLE_PATH}'],
             cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
+        cls.pre_a12 = subprocess.run(
+            ['git', 'show', f'{cls.PRE_A12_REVISION}:{cls.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
         # The full-history workflow supplies the pinned revisions. Later changes
         # to the working-tree design do not redefine this historical example.
         cls.design = subprocess.run(
             ['git', 'show', f'{cls.SOURCE_REVISION}:{cls.SOURCE_PATH}'],
             cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
+        # The historical source has numbered headings, not declared aliases or
+        # a later Graph schema. Use its literal heading text as the local oracle.
+        cls.ACTIVITIES = tuple(re.findall(r'^## (業務[1-4] — .+)$', cls.design, re.M))
+        cls.UNRESOLVED_CONTEXT = cls.LEGACY_UNRESOLVED_CONTEXT.replace(
+            '業務2「購入申請を承認する」', '「' + cls.ACTIVITIES[1] + '」')
+
+    def approved_a12_text(self, historical):
+        """Apply the two approved fixture edits only to pinned expected text."""
+        text = historical
+        for number, (old, full) in enumerate(zip(self.LEGACY_ACTIVITY_NAMES, self.ACTIVITIES), 1):
+            alias = f'業務{number}'
+            text = text.replace(f'## {old}\n', f'## {full}\n')
+            text = text.replace(f'[{old}](#activity-{number})', f'[{full}](#activity-{number})')
+            text = text.replace(f'{alias}「{old}」', f'「{full}」')
+            text = text.replace(f'[{alias}]({self.SOURCE}', f'[{full}]({self.SOURCE}')
+            text = text.replace(f'[{alias}の', f'[「{full}」の')
+            # This runs on frozen fixture bytes, never on the candidate being
+            # checked. It changes the remaining numeric references only.
+            text = re.sub(re.escape(alias) + r'(?! — )', '「' + full + '」', text)
+        condition = '- 条件：' + self.ITEMS['JA-EX-Q01'][1]
+        self.assertEqual(text.count(condition), 1)
+        self.assertNotIn(self.Q01_KIND, text)
+        return text.replace(condition, self.Q01_KIND + '\n' + condition, 1)
+
+    def assert_source_design_unchanged(self, design):
+        # This A-1/A-2 example change does not authorize repairing its source by
+        # inventing aliases/IDs, or otherwise changing the historical design.
+        self.assertEqual(hashlib.sha256(design.encode('utf-8')).hexdigest(), self.SOURCE_SHA256)
+        self.assertEqual(re.findall(r'^## (業務[1-4] — .+)$', design, re.M), list(self.ACTIVITIES))
+
+    def assert_source_activity_references(self, text):
+        self.assert_source_design_unchanged(self.design)
+        self.assertEqual(len(self.ACTIVITIES), 4)
+        self.assertEqual([heading.split(' — ', 1)[1] for heading in self.ACTIVITIES],
+                         list(self.LEGACY_ACTIVITY_NAMES))
+        for match in re.finditer(r'業務[0-9０-９]+', text):
+            matches = [heading for heading in self.ACTIVITIES
+                       if text.startswith(heading, match.start())]
+            self.assertEqual(len(matches), 1, text[match.start():match.start() + 50])
+        for number, old in enumerate(self.LEGACY_ACTIVITY_NAMES, 1):
+            prefix = f'業務{number} — '
+            for match in re.finditer(re.escape(old), text):
+                self.assertEqual(text[max(0, match.start() - len(prefix)):match.start()], prefix)
+        # Literal source label/target pairs, including the five per-Check
+        # evidence spans. A correct heading linked to another Activity fails.
+        evidence = [(0, 'L51-L67', ''), (1, 'L99-L115', ''),
+                    (2, 'L144-L160', ''), (3, 'L191-L207', ''),
+                    (0, 'L61-L95', 'の開始条件・担当者・入力・手順・出力'),
+                    (1, 'L109-L140', 'の開始条件・担当者・入力・手順・出力'),
+                    (2, 'L154-L187', 'の開始条件・担当者・入力・手順・出力'),
+                    (2, 'L183-L187', 'の出力'),
+                    (3, 'L201-L234', 'の開始条件・担当者・入力・手順・出力')]
+        expected = []
+        for index, span, suffix in evidence:
+            heading = self.ACTIVITIES[index]
+            label = '「' + heading + '」' + suffix if suffix else heading
+            expected.append((label, self.SOURCE + '#' + span))
+        links = re.findall(r'\[([^]\n]+)\]\(([^)\n]+)\)', text)
+        self.assertCountEqual([(label, target) for label, target in links
+                               if re.search(r'業務[0-9０-９]+', label) and target.startswith('https://')],
+                              expected)
+
+    def assert_q01_kind(self, text):
+        q01 = re.search(r'^### JA-EX-Q01 — [^\n]+\n(.*?)(?=^#{1,3} |\Z)',
+                        text, re.M | re.S)
+        self.assertIsNotNone(q01)
+        self.assertEqual(text.count('- 種別：'), 1)
+        self.assertEqual(text.count(self.Q01_KIND), 1)
+        self.assertIn('\n\n' + self.Q01_KIND + '\n- 条件：' + self.ITEMS['JA-EX-Q01'][1], q01[0])
+        visible = re.sub(r'<details>.*?</details>', '', q01[0], flags=re.S)
+        self.assertIn(self.Q01_KIND, visible)
+        self.assertIn('- 期待結果：' + self.ITEMS['JA-EX-Q01'][2], visible)
+        self.assertIn('- 人間レビュー状態：要確認\n', visible)
+        self.assertIn('- 導出分類：考慮候補\n', q01[0])
+        self.assertEqual(q01[0].count('- 導出分類：'), 1)
+        self.assertEqual(q01[0].count('- 人間レビュー状態：'), 1)
 
     def assert_original_example(self, text):
+        self.assert_source_activity_references(text)
+        self.assert_q01_kind(text)
         self.assertCountEqual(re.findall(r'^### (JA-EX-\w+) — ', text, re.M), self.ITEMS)
         self.assertEqual(set(re.findall(r'JA-EX-(?:Q)?\d+', text)), set(self.ITEMS))
         for field in ['条件', '期待結果', '人間レビュー状態', '根拠', '導出分類', 'AI確度', 'テスト証拠']:
@@ -452,15 +552,15 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             self.assertRegex(url, '^' + re.escape(self.SOURCE) + r'(?:#L\d+-L\d+)?$')
         for number, name in enumerate(self.ACTIVITIES, 1):
             self.assertIn(f'[{name}](#activity-{number})', text)
-            self.assertIn(f'業務{number} — {name}', self.design)
+            self.assertIn('## ' + name + '\n', self.design)
         for term in ['人間レビュー前の参考たたき台', '合意済みとは扱っていません',
                      '実装への引き渡し用の完成版でもありません',
                      'これは読み進める位置であり、項目の確認状況を表すものではありません。',
                      '業務を切り替えたり項目を開いたりしても、確認済みにはなりません。返答がない場合も状態は変えません。',
                      '共有項目 [JA-EX-04](#ja-ex-04)',
                      '共有項目は [JA-EX-04](#ja-ex-04) を参照してください。',
-                     '業務4からもこの項目を参照し、別のIDやレビュー状態は持たない。',
-                     '業務2「購入申請を承認する」に関わる未決事項',
+                     f'「{self.ACTIVITIES[3]}」からもこの項目を参照し、別のIDやレビュー状態は持たない。',
+                     f'「{self.ACTIVITIES[1]}」に関わる未決事項',
                      '新しい承認段階やActivityは定義しない', self.QUESTION,
                      '保留を続ける場合、この候補を実装上の合否条件に使わない',
                      '金額境界や承認者をこの項目だけで決めない',
@@ -533,6 +633,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         unresolved = r'^### JA-EX-Q01 — .*?(?=^#{1,3} |\Z)'
         visible_unresolved = re.search(unresolved, visible, re.M | re.S)
         self.assertIsNotNone(visible_unresolved)
+        self.assert_q01_kind(text)
+        self.assertIn(self.Q01_KIND, visible_unresolved[0])
         # The approved change folds Q01's five supporting fields, while its
         # question and alternatives/effects follow the still-visible state.
         decision = '- 人間レビュー状態：要確認\n\n' + self.QUESTION + '\n' + self.OPTIONS
@@ -559,17 +661,18 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             '<summary>承認済み備品を購入する：JA-EX-05、共有項目 JA-EX-04</summary>',
             '<details>', '</details>',
             *(f'## {name}' for name in self.ACTIVITIES),
+            *(f'## {name}' for name in self.LEGACY_ACTIVITY_NAMES),
         }
         if item:
             # These paragraphs moved across Check boundaries, but remain in the
             # full-document audit below; they are not evidence for the last ID.
-            layout_lines.update((self.UNRESOLVED_CONTEXT, self.SHARED_REFERENCE,
+            layout_lines.update((self.UNRESOLVED_CONTEXT, self.LEGACY_UNRESOLVED_CONTEXT, self.SHARED_REFERENCE,
                                  self.REVIEW_INSTRUCTION))
         lines = []
         for line in text.splitlines():
             if not line or line in layout_lines or re.fullmatch(r'<a id="[^"<>]+"></a>', line):
                 continue
-            if line.startswith('| [購入申請を承認する](#activity-2) |'):
+            if line.startswith(f'| [{self.ACTIVITIES[1]}](#activity-2) |'):
                 line = line.replace('、未決事項 [JA-EX-Q01](#ja-ex-q01)', '')
             line = re.sub(r'^<summary>(.*)</summary>$', r'\1', line)
             line = re.sub(r'^#{1,4} ', '', line)
@@ -578,7 +681,10 @@ class JapaneseCheckExampleTest(unittest.TestCase):
 
     def assert_baseline_content_preserved(self, text):
         pattern = r'^### (JA-EX-\w+) — (.*?)(?=^#{1,3} |\Z)'
-        baseline_items = re.findall(pattern, self.baseline, re.M | re.S)
+        # A-1/A-2 explicitly replace historical reference labels and add one
+        # kind line. Candidate content is never normalized to hide regressions.
+        allowed_baseline = self.approved_a12_text(self.baseline)
+        baseline_items = re.findall(pattern, allowed_baseline, re.M | re.S)
         actual_items = re.findall(pattern, text, re.M | re.S)
         self.assertCountEqual([check_id for check_id, _ in actual_items], self.ITEMS)
         expected = {check_id: self.content_lines(body, item=True)
@@ -599,7 +705,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertEqual(actual, expected)
         # Also preserve context, all purpose/connection cells and scope text,
         # allowing block reordering and the explicitly added Q01 index link.
-        baseline_lines = self.content_lines(self.baseline)
+        baseline_lines = self.content_lines(allowed_baseline)
         self.assertEqual(baseline_lines.count(self.Q01_OLD_LABEL), 1)
         baseline_lines[baseline_lines.index(self.Q01_OLD_LABEL)] = self.Q01_LABEL
         self.assertCountEqual(self.content_lines(text), baseline_lines)
@@ -609,7 +715,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
     def assert_only_approved_q01_change(self, text):
         # Exact transformation of the last pre-change artifact. It permits only
         # Q01's two moved lines, renamed support label and wrapper/spacing
-        # lines, not arbitrary normalization elsewhere in the document.
+        # lines plus the separately pinned A-1/A-2 changes, not arbitrary
+        # normalization elsewhere in the document.
         start = self.pre_q01_fold.index('<a id="ja-ex-q01"></a>')
         end = self.pre_q01_fold.index('<a id="activity-3"></a>', start)
         before = self.pre_q01_fold[start:end]
@@ -621,9 +728,13 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                  '<details>\n<summary>' + self.Q01_LABEL + '</summary>\n\n' +
                  support.rstrip('\n') + '\n\n</details>\n\n')
         expected = self.pre_q01_fold[:start] + after + self.pre_q01_fold[end:]
+        expected = self.approved_a12_text(expected)
         self.assertEqual(text.encode('utf-8'), expected.encode('utf-8'))
 
-    def test_pinned_prechange_allows_only_q01_support_fold_and_preserves_normal_five_bytes(self):
+    def assert_only_approved_a12_changes(self, text):
+        self.assertEqual(text.encode('utf-8'), self.approved_a12_text(self.pre_a12).encode('utf-8'))
+
+    def test_pinned_prechange_allows_q01_fold_and_only_a12_edits_to_normal_five_bytes(self):
         self.assertEqual(hashlib.sha256(self.pre_q01_fold.encode('utf-8')).hexdigest(),
                          '816db14883e9792e7d0dcd89cd8852adbc5e6354197576313e4d519e28e75819')
         self.assert_only_approved_q01_change(self.example)
@@ -633,12 +744,111 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             pattern = (r'^<a id="' + check_id.lower() + r'"></a>\n\n'
                        r'### ' + check_id + r' — .*?'
                        r'(?=^<a id=|^\*\*未決事項\*\*|^## |\Z)')
-            before = re.search(pattern, self.pre_q01_fold, re.M | re.S)
+            before = re.search(pattern, self.approved_a12_text(self.pre_q01_fold), re.M | re.S)
             after = re.search(pattern, self.example, re.M | re.S)
             with self.subTest(check_id=check_id):
                 self.assertIsNotNone(before)
                 self.assertIsNotNone(after)
                 self.assertEqual(after[0].encode('utf-8'), before[0].encode('utf-8'))
+
+    def test_pinned_a12_change_allows_only_source_names_and_visible_q01_kind(self):
+        self.assertEqual(hashlib.sha256(self.pre_a12.encode('utf-8')).hexdigest(),
+                         'b7f7338587a9f6dd31757c2daf200de6692098b88c82d5568f8dd03bff218c82')
+        self.assert_only_approved_a12_changes(self.example)
+        self.assert_source_activity_references(self.example)
+        self.assert_q01_kind(self.example)
+        with self.assertRaises(AssertionError):
+            self.assert_source_activity_references(self.pre_a12)
+        with self.assertRaises(AssertionError):
+            self.assert_q01_kind(self.pre_a12)
+
+    def test_source_name_oracle_rejects_every_numeric_alias_and_truncated_reference(self):
+        text = self.example
+        for number, heading in enumerate(self.ACTIVITIES, 1):
+            occurrences = list(re.finditer(re.escape(heading), text))
+            self.assertTrue(occurrences)
+            for occurrence in occurrences:
+                # Exercise visible prose, headings, index and evidence labels,
+                # as well as references in the closed supporting details.
+                for label, replacement in [('bare numeric alias', f'業務{number}'),
+                                           ('missing source numbering', self.LEGACY_ACTIVITY_NAMES[number - 1])]:
+                    with self.subTest(activity=heading, position=occurrence.start(), mutation=label):
+                        mutated = text[:occurrence.start()] + replacement + text[occurrence.end():]
+                        with self.assertRaises(AssertionError):
+                            self.assert_source_activity_references(mutated)
+                        with self.assertRaises(AssertionError):
+                            self.assert_only_approved_a12_changes(mutated)
+        for alias in ['業務1〜4', '業務１', '業務２', '業務３', '業務４', '業務5']:
+            with self.subTest(alias=alias), self.assertRaises(AssertionError):
+                self.assert_source_activity_references(text + '\n' + alias + '\n')
+
+    def test_source_name_oracle_rejects_wrong_source_link_labels_and_targets(self):
+        text = self.example
+        links = re.findall(r'\[([^]\n]*業務[1-4][^]\n]*)\]\((https://[^)\n]+)\)', text)
+        self.assertEqual(len(links), 9)
+        for label, target in links:
+            number = next(i for i, heading in enumerate(self.ACTIVITIES) if heading in label)
+            other = self.ACTIVITIES[(number + 1) % len(self.ACTIVITIES)]
+            original = f'[{label}]({target})'
+            wrong_label = label.replace(self.ACTIVITIES[number], other)
+            wrong_target = self.SOURCE + ('#L99-L115' if '#L51-L67' in target else '#L51-L67')
+            for name, replacement in [('wrong source label', f'[{wrong_label}]({target})'),
+                                      ('wrong source target', f'[{label}]({wrong_target})')]:
+                with self.subTest(link=original, mutation=name):
+                    mutated = text.replace(original, replacement, 1)
+                    self.assertNotEqual(mutated, text)
+                    with self.assertRaises(AssertionError):
+                        self.assert_source_activity_references(mutated)
+                    with self.assertRaises(AssertionError):
+                        self.assert_only_approved_a12_changes(mutated)
+
+    def test_q01_kind_contract_rejects_missing_hidden_misclassified_or_conflated_fields(self):
+        text = self.example
+        kind = self.Q01_KIND
+        q01 = text[text.index('<a id="ja-ex-q01">'):text.index('<a id="activity-3">')]
+        condition = '- 条件：' + self.ITEMS['JA-EX-Q01'][1]
+        hidden = q01.replace(kind + '\n', '', 1).replace(
+            '- 関連業務：', '- 関連業務：' + kind, 1)
+        mutations = {
+            'kind missing': text.replace(kind + '\n', '', 1),
+            'kind hidden in supporting field': text.replace(q01, hidden, 1),
+            'kind hidden in HTML comment': text.replace(kind, '<!-- ' + kind + ' -->', 1),
+            'kind hidden in additional details': text.replace(kind,
+                '<details>\n<summary>補足</summary>\n\n' + kind + '\n\n</details>', 1),
+            'kind moved after condition': text.replace(kind + '\n' + condition, condition + '\n' + kind, 1),
+            'kind moved above Q01 heading': text.replace(kind + '\n', '', 1).replace(
+                '<a id="ja-ex-q01"></a>', kind + '\n\n<a id="ja-ex-q01"></a>', 1),
+            'kind misclassified as AI proposal': text.replace(kind, '- 種別：AI提案（候補）', 1),
+            'kind replaced with derivation': text.replace(kind, '- 種別：考慮候補', 1),
+            'kind replaced with review state': text.replace(kind, '- 種別：要確認', 1),
+            'kind copied into derivation': text.replace('- 導出分類：考慮候補', '- 導出分類：未決事項（候補）', 1),
+            'kind copied into state': text.replace('- 人間レビュー状態：要確認', '- 人間レビュー状態：未決事項（候補）', 1),
+            'derivation copied into state': text.replace('- 人間レビュー状態：要確認', '- 人間レビュー状態：考慮候補', 1),
+            'state copied into derivation': text.replace('- 導出分類：考慮候補', '- 導出分類：要確認', 1),
+            'candidate result used instead of kind': text.replace(kind, '- 種別：候補・未承認', 1),
+            'candidate and unapproved result removed': text.replace('候補・未承認。', '', 1),
+        }
+        for name, mutated in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_q01_kind(mutated)
+                with self.assertRaises(AssertionError):
+                    self.assert_only_approved_a12_changes(mutated)
+
+    def test_source_design_audit_rejects_edits_and_retroactive_alias_or_graph_definitions(self):
+        mutations = {
+            'source heading changed': self.design.replace(self.ACTIVITIES[0], '業務1 — 備品購入を申し込む', 1),
+            'source alias definition added': self.design + '\n業務1 = 備品購入を申請する\n',
+            'source Graph ID retrofitted': self.design.replace('## ' + self.ACTIVITIES[0],
+                '## ACT-01 — 備品購入を申請する', 1),
+            'source business result changed': self.design.replace('`submitted`', '`approved`', 1),
+        }
+        for name, mutated in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, self.design)
+                with self.assertRaises(AssertionError):
+                    self.assert_source_design_unchanged(mutated)
 
     def test_approved_q01_requirement_supersedes_only_old_support_visibility(self):
         # This is an explicit requirement change, not evidence that the old
@@ -699,7 +909,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         shared = text[text.index('<a id="ja-ex-04">'):text.index('<a id="activity-4">')]
         rows = re.findall(r'^\| \[[^]]+\]\(#activity-\d\).*$', text, re.M)
         mutations = {
-            'Activity hierarchy demoted': text.replace('## 購入申請を却下する', '### 購入申請を却下する'),
+            'Activity hierarchy demoted': text.replace('## ' + self.ACTIVITIES[2], '### ' + self.ACTIVITIES[2]),
             'Check hierarchy demoted': text.replace('### JA-EX-01 —', '#### JA-EX-01 —'),
             'Activity bodies disagree with index order': text.replace(activity_one + activity_two,
                                                                        activity_two + activity_one),
@@ -778,7 +988,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                                    ('Check heading', f'### {check_id} — {title}')]:
                 mutations[f'{check_id} {label} hidden'] = text.replace(content, fold(content), 1)
         for label, content in [('condition bullet', '  - 品名'),
-                               ('Activity heading', '## 備品購入を申請する'),
+                               ('Activity heading', '## ' + self.ACTIVITIES[0]),
                                ('Activity anchor', '<a id="activity-1"></a>'),
                                ('Check anchor', '<a id="ja-ex-01"></a>')]:
             mutations[label + ' hidden'] = text.replace(content, fold(content), 1)
@@ -787,7 +997,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         anchor = '<a id="ja-ex-01"></a>'
         mutations['Check anchor moved inside support line'] = text.replace(anchor, '', 1).replace(
             '- 関連業務：', '- 関連業務：' + anchor, 1)
-        for label, content in [('unresolved question', self.QUESTION),
+        for label, content in [('unresolved kind', self.Q01_KIND),
+                               ('unresolved question', self.QUESTION),
                                ('unresolved alternatives and effects', self.OPTIONS),
                                ('unresolved Check anchor', '<a id="ja-ex-q01"></a>')]:
             # Valid five-field Q01 support syntax must not hide a pending
@@ -829,8 +1040,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
 
     def test_pinned_source_and_line_evidence_match_readable_pinned_design(self):
         # Offline content/line checks; this does not test GitHub availability.
-        self.assertEqual(hashlib.sha256(self.design.encode('utf-8')).hexdigest(),
-                         '2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc')
+        self.assert_source_design_unchanged(self.design)
+        self.assert_source_design_unchanged((ROOT / self.SOURCE_PATH).read_bytes().decode('utf-8'))
         lines = self.design.splitlines()
         for start, end in re.findall(re.escape(self.SOURCE) + r'#L(\d+)-L(\d+)', self.example):
             self.assertTrue(1 <= int(start) <= int(end) <= len(lines))
