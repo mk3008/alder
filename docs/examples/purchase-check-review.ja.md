@@ -37,13 +37,16 @@
 - 期待結果：購入要求が `submitted` の購入申請として記録される。
 - 人間レビュー状態：未レビュー
 
-#### JA-EX-01 の根拠・関連業務・テスト証拠
+<details>
+<summary>JA-EX-01 の根拠・関連業務・テスト証拠</summary>
 
 - 根拠：[業務1の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L61-L95)。入力欄の「すべて必須」をそのまま適用している。
 - 導出分類：明示
 - AI確度：高
 - 関連業務：成立した申請を、業務2または業務3で扱う。申請しただけで購入可否の判断が済むわけではない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
+
+</details>
 
 <a id="activity-2"></a>
 
@@ -57,13 +60,16 @@
 - 期待結果：対象購入申請が `approved` になる。
 - 人間レビュー状態：未レビュー
 
-#### JA-EX-02 の根拠・関連業務・テスト証拠
+<details>
+<summary>JA-EX-02 の根拠・関連業務・テスト証拠</summary>
 
 - 根拠：[業務2の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L109-L140)。手順3と出力に申請の状態が明記されている。金額別の扱いは[未決定の事項](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L248-L259)である。
 - 導出分類：明示
 - AI確度：高
 - 関連業務：業務1で成立した申請を扱い、業務4の購入対象へつなぐ。承認した時点で購入を済ませたことにはならない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
+
+</details>
 
 **未決事項**
 
@@ -101,13 +107,16 @@
 - 期待結果：対象購入申請が `rejected` になる。
 - 人間レビュー状態：未レビュー
 
-#### JA-EX-03 の根拠・関連業務・テスト証拠
+<details>
+<summary>JA-EX-03 の根拠・関連業務・テスト証拠</summary>
 
 - 根拠：[業務3の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L154-L187)。対象と理由は必須入力であり、手順4と出力に申請の状態が明記されている。
 - 導出分類：明示
 - AI確度：高。根拠から期待結果を読み取れる確かさであり、人間の確認を代わりに行うものではない。
 - 関連業務：業務1で成立した申請を扱う。業務4の対象から外す期待結果は JA-EX-04 を参照する。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。この記載はテストの不存在や実装不備を示すものではない。
+
+</details>
 
 <a id="ja-ex-04"></a>
 
@@ -117,13 +126,16 @@
 - 期待結果：その申請は購買担当者の購入対象にならない。
 - 人間レビュー状態：未レビュー
 
-#### JA-EX-04 の根拠・関連業務・テスト証拠
+<details>
+<summary>JA-EX-04 の根拠・関連業務・テスト証拠</summary>
 
 - 根拠：[業務3の出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L183-L187)と[業務相関5](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L238-L246)に、購買対象からの除外が明記されている。
 - 導出分類：明示
 - AI確度：高
 - 関連業務：業務3「購入申請を却下する」と業務4「承認済み備品を購入する」の共有項目。業務4からもこの項目を参照し、別のIDやレビュー状態は持たない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。業務上の期待結果と、その検証証拠の有無は分けて扱う。
+
+</details>
 
 <a id="activity-4"></a>
 
@@ -139,13 +151,16 @@
 - 期待結果：対象購入申請が `purchased` になる。
 - 人間レビュー状態：未レビュー
 
-#### JA-EX-05 の根拠・関連業務・テスト証拠
+<details>
+<summary>JA-EX-05 の根拠・関連業務・テスト証拠</summary>
 
 - 根拠：[業務4の開始条件・担当者・入力・手順・出力](https://github.com/mk3008/alder/blob/587cbce54afa261810e10eeb819d9935055de13d/business-design/purchase-request/README.md#L201-L234)。購入した対象と実購入金額は必須入力であり、手順4と出力に申請の状態が明記されている。
 - 導出分類：明示
 - AI確度：高
 - 関連業務：業務2で承認された申請を扱う。業務3からの除外条件は JA-EX-04 を参照する。購入後の備品管理などへの接続は定めない。
 - テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。
+
+</details>
 
 ## この例の範囲
 

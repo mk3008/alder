@@ -146,6 +146,8 @@ Alder does not currently prescribe a universal title-writing grammar. Improve ti
 
 The same Check ID keeps supporting detail for implementation and maintenance. Keep the precise condition in the primary item, including any internal names, DB state, model names or system terms needed to retain its meaning. Supporting detail should add evidence and context, not repeat the condition, expected result or human review state.
 
+In GitHub Markdown, keep ordinary Check supplements in default-closed `<details><summary>` blocks under the same ID. Leave the ID/title, condition, expected result and human review state outside the block and always visible. Put a descriptive label in `<summary>`, omit the `open` attribute, and leave blank lines around the Markdown body. Keep Activity/Check anchors and shared references outside the block. Unresolved items stay fully visible, including source evidence, questions, alternatives and effects; do not collapse their supporting detail. Preserve every field when wrapping it. Other Markdown viewers may show the content without folding; verify the target view and keep all information readable.
+
 The supporting detail may contain:
 
 - Business Design / Concept / Decision evidence
