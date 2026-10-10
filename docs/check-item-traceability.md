@@ -84,14 +84,37 @@ A product can use direct Business Design → Check → Test traceability where a
 
 ## 3. Human-facing view
 
-The primary human-facing view is intentionally small.
+Use the requester's working language for the original Check artifact and review response, following [language for agreement](adoption.md#language-for-agreement). This includes Activity names, Check titles, conditions, expected results, questions and supporting explanations, not just headings. For a Japanese review, write Japanese prose using the Business Design's business terms. Preserve IDs, technical identifiers and literal values. Retain source-established proper business names when translating them would change their identity; explain them in the review language when needed. Ask if the language is genuinely unclear. Verify the saved artifact itself; a later chat translation or an internal English fixture is not evidence of a Japanese reviewable output. Internal fixtures may use another language for their own test purpose.
+
+Start with an index of the Business Design's Activity names, purposes and connections. Use the source-established full Activity names in visible references; do not invent aliases by shortening numbered headings or replacing names with positions. For a historical source without an explicit name/alias contract, quote its full heading rather than guessing an abbreviation. Preserve the source and existing link targets; this does not rename Activities or retrofit another Markdown profile. Let the requester choose the current Activity, then show its Checks one at a time or as a small review group. Read the whole Business Design when preparing the list; selecting an Activity only limits what is shown now. A list of names is enough when the source does not establish an order. Do not present ID order as business sequence.
+
+Show each Check's condition, expected result and human review state **once** in the current review view. Use one readable item instead of repeating the same content in an overview table and a later detail block. Keep its stable ID visible. For a document, use an Activity index followed by same-level Activity headings in the same order, with each Check one heading level below its Activity (for example, H2 Activity and H3 Check). Do not split the document into a special current Activity and other Activities. Link shared IDs to one primary item; place a clearly related unresolved item within that Activity as an unresolved matter without changing its state or meaning, and keep genuinely unassigned items separate. A conversation can still show the selected Activity's items and offer the next Activity after the current discussion. This is presentation guidance, not a required document schema, viewer or additional ledger.
 
 | Field | Purpose |
 | --- | --- |
 | ID | Stable reference within a versioned Check list |
 | Title | Fast entry point: what behavior or guarantee is being reviewed |
+| Condition | The precise circumstances in which the expectation applies |
 | Expected result | Human-readable result that should hold |
 | Review state | Where the item is in the human review loop |
+
+For an unresolved item, state its kind on the item itself and keep it visible, for example `種別：未決事項（候補）`; a nearby heading is not sufficient when the item is read directly. Keep kind separate from derivation class, AI confidence and human review state. Preserve whether the issue comes from an undecided Business Design or an AI proposal; do not relabel one as the other without evidence. Retain unapproved wording in the expected result and the decision question. This is display guidance, not a new required schema or parser.
+
+Related Activities reference the **same Check ID and item**, including the same human review state; they do not own independent copies. Keep cross-Activity relationships visible. Show unconnected items separately without guessing their Activity. Mark new candidates with unresolved meaning 要確認. If an existing item has an unresolved Activity link, identify that mapping question separately and preserve its human review state; missing navigation does not undo confirmed meaning. A reference count is not a Check count.
+
+Ask which IDs the requester confirms, wants corrected or leaves open. Moving to another Activity, recording a resume position, opening an item or receiving no response is not approval. On resumption, retain the selected Activity and next ID as navigation context, separately from each Check's existing review state. Do not add a required resume artifact.
+
+### Write conditions without changing their logic
+
+When the source explicitly establishes the relationship, make it visible:
+
+- **All of the following / すべて満たす (AND):** list the independent required conditions as bullets.
+- **Any of the following / いずれか (OR):** keep the alternatives in one labelled group. Preserve whether more than one may hold; do not silently turn inclusive OR into exclusive OR or the reverse.
+- **Mixed conditions:** preserve the source's groups and nesting. For `A AND (B OR C)`, show A and the entire B-or-C group under “all”, with B and C under “any”. Do not flatten it into three required conditions or `(A AND B) OR C`.
+
+These symbols illustrate logical grouping, not additional business rules. Keep exact boundaries, negation, exceptions, exclusivity and priority. If the source leaves AND/OR or any of these relationships ambiguous, retain the original condition text and return a focused 要確認 question; do not infer a rule to make the bullets tidy. Presentation uncertainty does not silently overwrite a previously human-confirmed Check state. Keep that state, identify the uncertainty beside it, and use the Business Design review loop only if the meaning itself needs a decision or change.
+
+The condition and expected result remain one reviewable Check. Do not split one Check merely because its condition contains several bullets. Source evidence, derivation class, AI confidence and Test evidence/gaps stay reachable under the same ID without repeating the primary condition/result/state.
 
 Recommended review states:
 
@@ -123,11 +146,12 @@ Alder does not currently prescribe a universal title-writing grammar. Improve ti
 
 ## 4. AI / developer detail
 
-The same Check ID keeps precise detail for implementation and maintenance.
+The same Check ID keeps supporting detail for implementation and maintenance. Keep the precise condition in the primary item, including any internal names, DB state, model names or system terms needed to retain its meaning. Supporting detail should add evidence and context, not repeat the condition, expected result or human review state.
+
+In GitHub Markdown, keep Check supplements in default-closed `<details><summary>` blocks under the same ID. Leave the ID/title, condition, expected result and human review state outside the block and always visible. Put a descriptive label in `<summary>`, omit the `open` attribute, and leave blank lines around the Markdown body. Keep Activity/Check anchors and shared references outside the block. For unresolved items, keep questions, alternatives and effects visible with the primary fields; collapse only supplemental source evidence, derivation class, AI confidence, related Activities and Test evidence. Never put a pending decision inside a collapsed block. Preserve every field when wrapping it. Other Markdown viewers may show the content without folding; verify the target view and keep all information readable.
 
 The supporting detail may contain:
 
-- exact condition / precondition, including internal names, DB state, model names, and system terms
 - Business Design / Concept / Decision evidence
 - derivation classification: 明示 / 強い導出 / 考慮候補
 - AI confidence: 高 / 要精査
@@ -135,7 +159,7 @@ The supporting detail may contain:
 - representative automated test and the assertion that supports the Check
 - evidence state or mapping gap
 
-The human-facing summary must not remove information the AI needs to preserve semantics.
+The human-facing view must not remove information the AI needs to preserve semantics. Keep every supporting field reachable when changing the presentation. This guidance does not establish an improvement in human comprehension or review time; those effects require separate observation.
 
 The detail is not required to be one wide table. It may be an appendix, generated mapping, machine-readable sidecar, or nearby section, as long as the Check ID keeps the relation unambiguous.
 
@@ -204,6 +228,24 @@ When splitting, renaming, regrouping, or regenerating Checks:
 5. Use the previous Check set only as a regression oracle for the transformation.
 
 This audit is especially important when converting a broad Check into smaller Check Items.
+
+### Before returning a draft or update
+
+Every Check creation or update includes a quality check before return; the requester does not need to ask for a separate review or invoke another Skill. Re-read the actual candidate against the whole applicable Business Design and the current guidance, not just against the previous Check text or passing fixture tests.
+
+Start with conformance to the existing description rules that apply to this artifact: its format, structure, source names/references and field visibility. Identify the applicable rules before judging the output; do not create a rule or impose one format's syntax on every output. For each clear nonconformance (NG), identify the affected location, cite the applicable rule and source evidence, and explain the violation. An undeclared Activity abbreviation is NG even when its meaning is understandable.
+
+- Check the artifact's structure, heading relationships, visible ID and primary fields, unresolved-item kind and shared-item identity against the [human-facing view](#3-human-facing-view). Apply heading or folding conventions only where the target format calls for them; this does not introduce a universal schema.
+- Check source names and references against the source itself, including any declared aliases; apply the [human-facing view](#3-human-facing-view) without inventing a naming rule. Check every occurrence, including folded supplements and link labels, not only the index and headings. Where the current view requires a full source heading, compare it directly with that heading rather than reconstructing a variant from its parts.
+- Check independently reviewable condition/result pairs using [Check granularity](#2-functional-interface-and-check-item-have-different-roles). Separate independently decidable expectations, not every AND/OR bullet or Test assertion. Respect an explicitly limited example's scope instead of silently expanding it into a complete handoff.
+- Check visible item kind, derivation, human review state, language and unresolved questions against the [human-facing view](#3-human-facing-view). Missing Test evidence is a separate gap, not evidence of unapproved business meaning.
+- For updates, apply the meaning-preservation audit above to IDs, guarantees, conditions, review states, source links, shared items and existing Test mappings. The old output is a transformation baseline, not an authority for business meaning. Preserve established source revisions and URLs when the input is only a local or temporary copy. An unvisited or unavailable URL is not evidence of a wrong mapping: report the access limit instead of replacing the reference. Retarget only for an evidenced source change or mapping defect, keeping the old-to-new basis visible.
+
+Keep rule nonconformance (NG), undecided business meaning (要確認 / Business Designへ戻す事項), and optional wording suggestions distinct. NG is a diagnostic finding, not a new human review state; never write it into that field. A style preference or an unspecified requirement is not an NG. If rule applicability or evidence cannot be established, report that verification limit instead of asserting a violation or a pass. Retain the granularity and meaning-preservation checks above, but do not treat description conformance as a score for business policy, complete coverage, or human approval.
+
+Correct a presentation or reference defect only when its repair is unambiguous from the source and stays within the requested scope. Preserve human review states for display-only changes. If business meaning is undecided or needs to change, retain that uncertainty and return the affected item as 要確認 / Business Designへ戻す事項 under [the Business Design loop](#1-business-design-is-the-ssot); continue independent items. Keep an outstanding human-requested correction as 要修正 until it is made; correcting it does not assert renewed confirmation. A correction already determined by confirmed Business Design is not itself a new business decision. Do not invent missing rules, promote a candidate to confirmed, or silently delete an unsupported expectation.
+
+After any correction, re-read the final saved artifact and affected references, and repeat the relevant checks. Briefly report the scope actually checked, material corrections and retained guarantees, unresolved decisions and verification limits in the normal response. If a check could not be performed, say so; do not claim that the gate passed. No separate report, parser or mandatory data format is required. In consistency-review-only mode, perform the same checks and report findings without editing files or review states. AI quality checking never substitutes for human confirmation.
 
 ## 8. Maintenance and stopping
 
