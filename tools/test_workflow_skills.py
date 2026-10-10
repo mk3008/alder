@@ -73,8 +73,9 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'outside the block and always visible', 'omit the `open` attribute',
                      'blank lines around the Markdown body',
                      'Activity/Check anchors and shared references outside the block',
-                     'Unresolved items stay fully visible',
-                     'source evidence, questions, alternatives and effects',
+                     'For unresolved items, keep questions, alternatives and effects visible with the primary fields',
+                     'collapse only supplemental source evidence, derivation class, AI confidence, related Activities and Test evidence',
+                     'Never put a pending decision inside a collapsed block',
                      'Other Markdown viewers may show the content without folding',
                      'not a required document schema', 'require separate observation']:
             self.assertIn(term, section)
@@ -89,14 +90,17 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'resuming are not approval', 'no mandatory schema, viewer or ledger',
                      'default-closed `<details><summary>` blocks without an `open` attribute',
                      'human review state, anchors and shared references outside',
-                     'Leave unresolved items fully visible',
-                     'evidence, questions, alternatives and effects',
+                     'For unresolved items, keep questions, alternatives and effects visible with the primary fields',
+                     'collapse only supplemental source evidence, derivation class, AI confidence, related Activities and Test evidence',
+                     'Never put a pending decision inside a collapsed block',
                      'Other Markdown viewers may not fold the content']:
             self.assertIn(term, skill)
         adoption = (ROOT / 'docs/adoption.md').read_text()
-        for term in ['ordinary Check supplements in default-closed `<details><summary>` blocks',
+        for term in ['Check supplements in default-closed `<details><summary>` blocks',
                      'condition, expected result and human review state remain visible',
-                     'Keep unresolved items fully visible, including evidence, questions, alternatives and effects',
+                     'For unresolved items, keep questions, alternatives and effects visible with the primary fields',
+                     'collapse only supplemental source evidence, derivation class, AI confidence, related Activities and Test evidence',
+                     'Never put a pending decision inside a collapsed block',
                      'Preserve every field and navigation link',
                      'other Markdown viewers may display the content without folding']:
             self.assertIn(term, adoption)
@@ -358,6 +362,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
     """
 
     BASELINE_REVISION = '12b18600bb7d64cb3495671df1d127c98c1e44d5'
+    PRE_Q01_FOLD_REVISION = '1d9730c3c0d4501d9a8b2530b3aa10c299a49c05'
     EXAMPLE_PATH = 'docs/examples/purchase-check-review.ja.md'
     SOURCE_REVISION = '587cbce54afa261810e10eeb819d9935055de13d'
     SOURCE_PATH = 'business-design/purchase-request/README.md'
@@ -399,14 +404,23 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                           '返答がない場合も状態は変えません。')
     QUESTION = ('- 確認事項：金額別の承認経路を今回の業務設計で扱う必要が生じた場合、'
                 'どの金額条件で誰の承認を必要とし、何をもって承認完了とするか。')
+    OPTIONS = ('- 選択肢と影響：保留を続ける場合、この候補を実装上の合否条件に使わない。'
+               '扱いを決める場合は、業務設計に条件と結果を記載して人間が確認した後、'
+               '影響するチェック項目を更新する。金額境界や承認者をこの項目だけで決めない。')
+    Q01_OLD_LABEL = 'JA-EX-Q01 の根拠・確認事項・テスト証拠'
+    Q01_LABEL = 'JA-EX-Q01 の根拠・関連業務・テスト証拠'
     GAP = '- テスト証拠：対応する自動テスト・検証内容・実行結果は未収集。'
 
     @classmethod
     def setUpClass(cls):
-        cls.example = (ROOT / cls.EXAMPLE_PATH).read_text(encoding='utf-8')
+        # Decode raw bytes without newline normalization for the byte audit.
+        cls.example = (ROOT / cls.EXAMPLE_PATH).read_bytes().decode('utf-8')
         cls.baseline = subprocess.run(
             ['git', 'show', f'{cls.BASELINE_REVISION}:{cls.EXAMPLE_PATH}'],
             cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
+        cls.pre_q01_fold = subprocess.run(
+            ['git', 'show', f'{cls.PRE_Q01_FOLD_REVISION}:{cls.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
         # The full-history workflow supplies the pinned revisions. Later changes
         # to the working-tree design do not redefine this historical example.
         cls.design = subprocess.run(
@@ -486,17 +500,16 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertNotIn('## ほかの業務', text)
 
     def assert_supplement_folding(self, text):
-        # An exact, test-only contract for these five authored supplements, not
+        # An exact, test-only contract for these six authored supplements, not
         # a Markdown renderer or a product parser. Bare tags keep them closed by
         # default; blank lines let GitHub render the unchanged Markdown body.
         supplement = re.compile(
-            r'^<details>\n<summary>(JA-EX-\d+) の根拠・関連業務・テスト証拠</summary>\n\n'
+            r'^<details>\n<summary>(JA-EX-(?:Q)?\d+) の根拠・関連業務・テスト証拠</summary>\n\n'
             r'((?:- (?:根拠|導出分類|AI確度|関連業務|テスト証拠)：[^\n]+\n)+)'
             r'\n</details>(?=\n\n|\Z)', re.M)
         blocks = list(supplement.finditer(text))
-        normal_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids
-                      if check_id != 'JA-EX-Q01']
-        self.assertEqual([block[1] for block in blocks], normal_ids)
+        ordered_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids]
+        self.assertEqual([block[1] for block in blocks], ordered_ids)
         folding_tag = r'(?i)<\s*/?\s*(?:details|summary)\b'
         for block in blocks:
             check_id, body = block.groups()
@@ -519,10 +532,13 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             self.assertEqual(re.findall(pattern, visible, re.M), re.findall(pattern, text, re.M))
         unresolved = r'^### JA-EX-Q01 — .*?(?=^#{1,3} |\Z)'
         visible_unresolved = re.search(unresolved, visible, re.M | re.S)
-        full_unresolved = re.search(unresolved, text, re.M | re.S)
         self.assertIsNotNone(visible_unresolved)
-        self.assertIsNotNone(full_unresolved)
-        self.assertEqual(visible_unresolved[0], full_unresolved[0])
+        # The approved change folds Q01's five supporting fields, while its
+        # question and alternatives/effects follow the still-visible state.
+        decision = '- 人間レビュー状態：要確認\n\n' + self.QUESTION + '\n' + self.OPTIONS
+        self.assertIn(decision, visible_unresolved[0])
+        self.assertEqual(visible.count(self.QUESTION), 1)
+        self.assertEqual(visible.count(self.OPTIONS), 1)
         for context in ['**未決事項**', self.UNRESOLVED_CONTEXT,
                         self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION]:
             self.assertIn(context, visible)
@@ -567,14 +583,105 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         self.assertCountEqual([check_id for check_id, _ in actual_items], self.ITEMS)
         expected = {check_id: self.content_lines(body, item=True)
                     for check_id, body in baseline_items}
+        # Only Q01's approved question/options relocation and support label
+        # change differ from the old ordered per-ID content. Do not weaken
+        # every item to an unordered comparison to accommodate this exception.
+        q01 = expected['JA-EX-Q01']
+        self.assertEqual(q01.count(self.Q01_OLD_LABEL), 1)
+        for line in (self.QUESTION, self.OPTIONS):
+            self.assertEqual(q01.count(line), 1)
+            q01.remove(line)
+        after_state = q01.index('- 人間レビュー状態：要確認') + 1
+        q01[after_state:after_state] = [self.QUESTION, self.OPTIONS]
+        q01[q01.index(self.Q01_OLD_LABEL)] = self.Q01_LABEL
         actual = {check_id: self.content_lines(body, item=True)
                   for check_id, body in actual_items}
         self.assertEqual(actual, expected)
         # Also preserve context, all purpose/connection cells and scope text,
         # allowing block reordering and the explicitly added Q01 index link.
-        self.assertCountEqual(self.content_lines(text), self.content_lines(self.baseline))
+        baseline_lines = self.content_lines(self.baseline)
+        self.assertEqual(baseline_lines.count(self.Q01_OLD_LABEL), 1)
+        baseline_lines[baseline_lines.index(self.Q01_OLD_LABEL)] = self.Q01_LABEL
+        self.assertCountEqual(self.content_lines(text), baseline_lines)
         self.assertCountEqual(re.findall(r'https://github.com/[^)\s]+', text),
                               re.findall(r'https://github.com/[^)\s]+', self.baseline))
+
+    def assert_only_approved_q01_change(self, text):
+        # Exact transformation of the last pre-change artifact. It permits only
+        # Q01's two moved lines, renamed support label and wrapper/spacing
+        # lines, not arbitrary normalization elsewhere in the document.
+        start = self.pre_q01_fold.index('<a id="ja-ex-q01"></a>')
+        end = self.pre_q01_fold.index('<a id="activity-3"></a>', start)
+        before = self.pre_q01_fold[start:end]
+        primary, support = before.split('#### ' + self.Q01_OLD_LABEL + '\n\n')
+        for line in (self.QUESTION, self.OPTIONS):
+            self.assertEqual(support.count(line + '\n'), 1)
+            support = support.replace(line + '\n', '', 1)
+        after = (primary + self.QUESTION + '\n' + self.OPTIONS + '\n\n'
+                 '<details>\n<summary>' + self.Q01_LABEL + '</summary>\n\n' +
+                 support.rstrip('\n') + '\n\n</details>\n\n')
+        expected = self.pre_q01_fold[:start] + after + self.pre_q01_fold[end:]
+        self.assertEqual(text.encode('utf-8'), expected.encode('utf-8'))
+
+    def test_pinned_prechange_allows_only_q01_support_fold_and_preserves_normal_five_bytes(self):
+        self.assertEqual(hashlib.sha256(self.pre_q01_fold.encode('utf-8')).hexdigest(),
+                         '816db14883e9792e7d0dcd89cd8852adbc5e6354197576313e4d519e28e75819')
+        self.assert_only_approved_q01_change(self.example)
+        for check_id in self.ITEMS:
+            if check_id == 'JA-EX-Q01':
+                continue
+            pattern = (r'^<a id="' + check_id.lower() + r'"></a>\n\n'
+                       r'### ' + check_id + r' — .*?'
+                       r'(?=^<a id=|^\*\*未決事項\*\*|^## |\Z)')
+            before = re.search(pattern, self.pre_q01_fold, re.M | re.S)
+            after = re.search(pattern, self.example, re.M | re.S)
+            with self.subTest(check_id=check_id):
+                self.assertIsNotNone(before)
+                self.assertIsNotNone(after)
+                self.assertEqual(after[0].encode('utf-8'), before[0].encode('utf-8'))
+
+    def test_approved_q01_requirement_supersedes_only_old_support_visibility(self):
+        # This is an explicit requirement change, not evidence that the old
+        # five-fold artifact already met the new six-fold contract.
+        self.assertEqual(self.pre_q01_fold.count('<details>'), 5)
+        self.assertIn('#### ' + self.Q01_OLD_LABEL, self.pre_q01_fold)
+        with self.assertRaises(AssertionError):
+            self.assert_supplement_folding(self.pre_q01_fold)
+        self.assert_supplement_folding(self.example)
+
+    def test_q01_change_audit_rejects_reordering_and_out_of_scope_changes(self):
+        text = self.example
+        q01_start = text.index('<a id="ja-ex-q01"></a>')
+        q01_end = text.index('<a id="activity-3"></a>', q01_start)
+        q01 = text[q01_start:q01_end]
+        ordered_mutations = {
+            'unresolved question and effects reordered': text.replace(
+                self.QUESTION + '\n' + self.OPTIONS, self.OPTIONS + '\n' + self.QUESTION),
+            'unresolved support fields reordered': text.replace(q01, q01.replace(
+                '- 導出分類：考慮候補\n- AI確度：要精査', '- AI確度：要精査\n- 導出分類：考慮候補')),
+            'normal support fields reordered': text.replace(
+                '- 導出分類：明示\n- AI確度：高\n', '- AI確度：高\n- 導出分類：明示\n', 1),
+        }
+        for name, mutated in ordered_mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                # Every line still exists; only ordered per-ID checks catch it.
+                self.assertCountEqual(self.content_lines(mutated), self.content_lines(text))
+                with self.assertRaises(AssertionError):
+                    self.assert_baseline_content_preserved(mutated)
+                with self.assertRaises(AssertionError):
+                    self.assert_only_approved_q01_change(mutated)
+        for name, mutated in {
+            'normal whitespace changed': text.replace('- 人間レビュー状態：未レビュー\n',
+                                                       '- 人間レビュー状態：未レビュー\n\n', 1),
+            'unresolved supplement text changed': text.replace('- AI確度：要精査', '- AI確度：高'),
+            'document context changed': text.replace('## この例の範囲', '## 今回の範囲'),
+            'newline bytes changed': text.replace('\n', '\r\n'),
+        }.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutated, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_only_approved_q01_change(mutated)
 
     def test_saved_example_uses_index_ordered_activity_and_check_hierarchy(self):
         self.assert_activity_layout(self.example)
@@ -614,7 +721,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
                 with self.assertRaises(AssertionError):
                     self.assert_activity_layout(mutated)
 
-    def test_saved_example_folds_only_normal_supplements_and_keeps_questions_visible(self):
+    def test_saved_example_folds_all_supplements_and_keeps_questions_visible(self):
         self.assert_supplement_folding(self.example)
 
     def test_supplement_contract_rejects_unsafe_folding(self):
@@ -622,8 +729,8 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         first = re.search(r'^<details>\n.*?^</details>', text, re.M | re.S)[0]
         summary = '<summary>JA-EX-01 の根拠・関連業務・テスト証拠</summary>'
         q01 = text[text.index('<a id="ja-ex-q01">'):text.index('<a id="activity-3">')].strip()
-        q01_support = q01[q01.index('#### JA-EX-Q01'):]
-        options = re.search(r'^- 選択肢と影響：.*$', q01, re.M)[0]
+        q01_support = q01[q01.index('<details>'):]
+        q01_summary = '<summary>' + self.Q01_LABEL + '</summary>'
 
         def fold(content):
             return '<details>\n<summary>補足</summary>\n\n' + content + '\n\n</details>'
@@ -649,9 +756,16 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             'normal supplement unfolded': text.replace(first, first.replace('<details>\n' + summary,
                 '#### JA-EX-01 の根拠・関連業務・テスト証拠').replace('\n\n</details>', ''), 1),
             'unresolved entire item hidden': text.replace(q01, fold(q01), 1),
-            'unresolved support hidden': text.replace(q01_support, fold(q01_support), 1),
+            # Q01 support folding is now required. The old prohibition on
+            # folding it is superseded, while unsafe wrappers remain invalid.
+            'unresolved support nested': text.replace(q01_support, fold(q01_support), 1),
+            'unresolved support default open': text.replace(q01_support,
+                q01_support.replace('<details>', '<details open>', 1), 1),
+            'unresolved support unfolded': text.replace(q01_support, q01_support.replace(
+                '<details>\n' + q01_summary, '#### ' + self.Q01_LABEL)
+                .replace('\n\n</details>', ''), 1),
             'unresolved question hidden': text.replace(self.QUESTION, fold(self.QUESTION), 1),
-            'unresolved options and effects hidden': text.replace(options, fold(options), 1),
+            'unresolved options and effects hidden': text.replace(self.OPTIONS, fold(self.OPTIONS), 1),
             'unresolved context hidden': text.replace(self.UNRESOLVED_CONTEXT, fold(self.UNRESOLVED_CONTEXT), 1),
             'shared reference hidden': text.replace(self.SHARED_REFERENCE, fold(self.SHARED_REFERENCE), 1),
         }
@@ -673,6 +787,14 @@ class JapaneseCheckExampleTest(unittest.TestCase):
         anchor = '<a id="ja-ex-01"></a>'
         mutations['Check anchor moved inside support line'] = text.replace(anchor, '', 1).replace(
             '- 関連業務：', '- 関連業務：' + anchor, 1)
+        for label, content in [('unresolved question', self.QUESTION),
+                               ('unresolved alternatives and effects', self.OPTIONS),
+                               ('unresolved Check anchor', '<a id="ja-ex-q01"></a>')]:
+            # Valid five-field Q01 support syntax must not hide a pending
+            # decision or anchor merely by appending it to an allowed field.
+            hidden = q01.replace(content + '\n', '', 1).replace(
+                '- 関連業務：', '- 関連業務：' + content, 1)
+            mutations[label + ' moved inside support line'] = text.replace(q01, hidden, 1)
         for name, mutated in mutations.items():
             with self.subTest(mutation=name):
                 self.assertNotEqual(mutated, text)
@@ -685,7 +807,7 @@ class JapaneseCheckExampleTest(unittest.TestCase):
             check_id, body = match.groups()
             # Delete each complete primary/support field and each condition
             # bullet and supplement label in turn, including text the earlier
-            # meaning oracle samples. Summary labels replace the normal H4s.
+            # meaning oracle samples. Summary labels replace all six H4s.
             for line in body.splitlines():
                 if not re.match(r'^(?:- |  - |#### |<summary>)', line):
                     continue
