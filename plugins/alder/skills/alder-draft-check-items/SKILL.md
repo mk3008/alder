@@ -34,6 +34,10 @@ New AI drafts start 未レビュー; an unresolved meaning is 要確認. Apply �
 
 If feedback changes business meaning, conditions or guarantees, or exposes a genuinely undecided outcome, mark the affected item 要確認 and return a focused Business Design question with alternatives and effects. Do not settle it inside Checks. Business Design must be revised and human-confirmed first; only then re-derive affected Checks. Continue independent items. Do not repeatedly solicit explicitly deferred decisions.
 
+## Before returning Check Items
+
+For every initial draft and update, run the [return-time quality check](references/check-item-traceability.md#before-returning-a-draft-or-update) as part of the ordinary request, without asking the requester to invoke another review Skill. Correct only source-grounded, meaning-preserving defects within scope, then re-read the final saved artifact and repeat the affected checks. Return genuine business decisions and unperformed checks explicitly; quality checking does not grant human approval. For consistency-review-only requests, use the same gate without edits. An Interface-only request still does not authorize generating or changing Checks.
+
 ## Optional Functional Interface index
 
 Use this mode only when requested or when the requester has chosen it to improve navigation. Read [f1](references/prompt.md) sections 1–2 and 4, subject to the current Test-only boundary above. A small Interface describes observable responsibility, actor, input/precondition, result, preserved facts, source and related Check IDs; it is not a required API, function or file. Preserve existing reviewed interfaces and IDs. Do not generate Checks as a side effect of an interface-only request, and do not turn a draft interface into approved meaning. Direct Business Design → Check → Test needs no extra index where already clear.
