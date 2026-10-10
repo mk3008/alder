@@ -68,6 +68,11 @@ class WorkflowSkillsTest(unittest.TestCase):
                      "direct link to that ID's single primary item",
                      'including shared or unresolved items',
                      'Distinguish this from old-Check-to-new-Check correspondence',
+                     'Do not automatically append unrequested H2 sections or scope/exclusion summaries to a Check review document',
+                     'Keep authoring-scope investigations and quality explanations in the work record, not as relocated reader-facing prose',
+                     'Preserve existing opening notices, including unapproved status, and information needed for decisions within each Check',
+                     "Keep an individual Check's kind, decision, condition and expectation with that ID",
+                     'Useful introductory or navigation prose is allowed',
                      'This does not prohibit all prose between headings',
                      'Titles, purpose sentences, evidence explanations and other business prose need not match a fixed wording template',
                      'do not invent aliases by shortening numbered headings',
@@ -1234,10 +1239,14 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
     """Finite Markdown fixtures, not a production parser or approval evidence.
 
     Keep the old byte audit intact above, then permit only the separately
-    approved display mapping below. Never normalize the candidate artifact.
+    approved display mapping and exact trailing-section removal below.
+    Never normalize the candidate artifact.
     """
 
     H = HistoricalJapaneseCheckExampleTest
+    PRE_SCOPE_REMOVAL_REVISION = '5387aea7226ea0c7e1cae4a3f49a28fa7053d1a3'
+    PRE_SCOPE_REMOVAL_SHA256 = '104ce2bbcc1b38e1a42338ec451b057e3ae338483d4f3432b7a2a96691b9ad4f'
+    SCOPE_BOUNDARY = '\n## この例の範囲\n'
     # Explicitly approved pairs for this example, never a numbering heuristic.
     DISPLAY_PAIRS = (
         ('業務1 — 備品購入を申請する', '備品購入を申請する'),
@@ -1256,13 +1265,14 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
     HEADER = '| 業務（Activity） | 目的 | 業務設計に記載された接続 | チェック項目 |'
     SEPARATOR = '| --- | --- | --- | --- |'
     assert_q01_kind = H.assert_q01_kind
-    assert_supplement_folding = H.assert_supplement_folding
-    assert_activity_layout = H.assert_activity_layout
 
     @classmethod
     def setUpClass(cls):
         cls.H.setUpClass()
         cls.before = cls.H.example
+        cls.pre_scope_removal = subprocess.run(
+            ['git', 'show', f'{cls.PRE_SCOPE_REMOVAL_REVISION}:{cls.H.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
         cls.current = (ROOT / cls.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
 
     def approved_display_text(self):
@@ -1281,23 +1291,112 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
         self.assertEqual(expected.count(original), 1)
         return expected.replace(original, mapping, 1)
 
+    def approved_scope_removed_text(self):
+        # Cut only the approved suffix of the pinned input. Do not strip,
+        # rewrite or relocate any candidate content, including its final newline.
+        self.assertEqual(self.pre_scope_removal.count(self.SCOPE_BOUNDARY), 1)
+        prefix, boundary, tail = self.pre_scope_removal.partition(self.SCOPE_BOUNDARY)
+        self.assertEqual(boundary, self.SCOPE_BOUNDARY)
+        self.assertEqual(len(re.findall(r'^- .+$', tail, re.M)), 5)
+        self.assertNotRegex(tail, r'(?m)^#{1,6} ')
+        self.assertTrue(prefix.endswith('</details>\n'))
+        return prefix
+
     def assert_approved_bytes(self, text):
-        self.assertEqual(text.encode('utf-8'), self.approved_display_text().encode('utf-8'))
+        self.assertEqual(text.encode('utf-8'), self.approved_scope_removed_text().encode('utf-8'))
 
     def assert_names_and_quotes(self, text):
         links = r'\[[^]\n]+\]\(https://[^)\n]+\)'
-        self.assertEqual(re.findall(links, text), re.findall(links, self.before))
+        expected = self.approved_scope_removed_text()
+        self.assertEqual(re.findall(links, text), re.findall(links, expected))
         outside_quotes = re.sub(links, '', text)
         self.assertNotRegex(outside_quotes, r'業務[0-9０-９]+')
         self.assertEqual(re.findall(r'^## (.+)$', text, re.M),
-                         ['業務一覧', *self.ACTIVITIES, 'この例の範囲'])
+                         ['業務一覧', *self.ACTIVITIES])
         for i, name in enumerate(self.ACTIVITIES, 1):
             self.assertIn(f'[{name}](#activity-{i})', text)
         # Inspect all other authored references, including folded supplements.
         # Only this finite mapping is checked, without interpreting free prose.
-        expected = self.approved_display_text()
         for name in self.ACTIVITIES:
             self.assertEqual(text.count(name), expected.count(name))
+
+    # Keep the frozen historical helpers above unchanged. These current-layout
+    # checks retain every assertion, with only the approved H2 removal and the
+    # now-final supplement's single terminal newline differing.
+    def assert_activity_layout(self, text):
+        self.assertEqual(re.findall(r'^## (.+)$', text, re.M),
+                         ['業務一覧', *self.ACTIVITIES])
+        sections = dict(re.findall(r'^## ([^\n]+)\n(.*?)(?=^## |\Z)', text, re.M | re.S))
+        index_rows = re.findall(r'^\| \[([^]]+)\]\(#activity-(\d)\)(.*)$',
+                                sections['業務一覧'], re.M)
+        self.assertEqual([(name, number) for name, number, _ in index_rows],
+                         [(name, str(number)) for number, name in enumerate(self.ACTIVITIES, 1)])
+        ordered_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids]
+        self.assertEqual(re.findall(r'^### (.+)$', text, re.M),
+                         [f'{check_id} — {self.ITEMS[check_id][0]}' for check_id in ordered_ids])
+        for number, (name, ids) in enumerate(zip(self.ACTIVITIES, self.ACTIVITY_ITEMS), 1):
+            section = sections[name]
+            self.assertEqual(text.count(f'<a id="activity-{number}"></a>'), 1)
+            self.assertIn(f'<a id="activity-{number}"></a>\n\n## {name}\n', text)
+            self.assertEqual(re.findall(r'^### (JA-EX-\w+) — ', section, re.M), list(ids))
+            for check_id in ids:
+                self.assertIn(f'<a id="{check_id.lower()}"></a>', section)
+            index_ids = re.findall(r'\[(JA-EX-\w+)\]\(([^)]+)\)', index_rows[number - 1][2])
+            expected_ids = [*ids, 'JA-EX-04'] if number == 4 else list(ids)
+            self.assertEqual(index_ids, [(check_id, '#' + check_id.lower()) for check_id in expected_ids])
+        approval = sections[self.ACTIVITIES[1]]
+        self.assertLess(approval.index('### JA-EX-02'), approval.index('### JA-EX-Q01'))
+        self.assert_q01_kind(approval)
+        self.assertIn('未決事項 [JA-EX-Q01](#ja-ex-q01)', index_rows[1][2])
+        self.assertIn(self.SHARED_REFERENCE, sections[self.ACTIVITIES[3]])
+        self.assert_supplement_folding(text)
+        self.assertNotIn('## 現在の業務', text)
+        self.assertNotIn('## ほかの業務', text)
+
+    def assert_supplement_folding(self, text):
+        # An exact, test-only contract for these six authored supplements, not
+        # a Markdown renderer or a product parser. Bare tags keep them closed by
+        # default; blank lines let GitHub render the unchanged Markdown body.
+        supplement = re.compile(
+            r'^<details>\n<summary>(JA-EX-(?:Q)?\d+) の根拠・関連業務・テスト証拠</summary>\n\n'
+            r'((?:- (?:根拠|導出分類|AI確度|関連業務|テスト証拠)：[^\n]+\n)+)'
+            r'\n</details>(?=\n\n|\n?\Z)', re.M)
+        blocks = list(supplement.finditer(text))
+        ordered_ids = [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids]
+        self.assertEqual([block[1] for block in blocks], ordered_ids)
+        folding_tag = r'(?i)<\s*/?\s*(?:details|summary)\b'
+        for block in blocks:
+            check_id, body = block.groups()
+            self.assertEqual(re.findall(r'^- ([^：]+)：', body, re.M),
+                             ['根拠', '導出分類', 'AI確度', '関連業務', 'テスト証拠'])
+            self.assertNotRegex(body, folding_tag)
+            item = re.search(r'^### ' + check_id + r' — [^\n]+\n.*?(?=^#{1,3} |\Z)',
+                             text, re.M | re.S)
+            self.assertIsNotNone(item, check_id)
+            self.assertTrue(item.start() < block.start() < block.end() <= item.end(), check_id)
+        visible = supplement.sub('', text)
+        # Reject any unmatched, attributed, nested, malformed or extra wrapper,
+        # including one around an entire Activity, Check or unresolved item.
+        self.assertNotRegex(visible, folding_tag)
+        for check_id, (_, condition, result, _) in self.ITEMS.items():
+            state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
+            primary = f'- 条件：{condition}\n- 期待結果：{result}\n- 人間レビュー状態：{state}'
+            self.assertEqual(visible.count(primary), 1, check_id)
+        for pattern in [r'^#{2,3} .+$', r'<a id="[^"<>]+"></a>']:
+            self.assertEqual(re.findall(pattern, visible, re.M), re.findall(pattern, text, re.M))
+        unresolved = r'^### JA-EX-Q01 — .*?(?=^#{1,3} |\Z)'
+        visible_unresolved = re.search(unresolved, visible, re.M | re.S)
+        self.assertIsNotNone(visible_unresolved)
+        self.assert_q01_kind(text)
+        self.assertIn(self.Q01_KIND, visible_unresolved[0])
+        # The approved change folds Q01's five supporting fields, while its
+        # question and alternatives/effects follow the still-visible state.
+        decision = '- 人間レビュー状態：要確認\n\n' + self.QUESTION + '\n' + self.OPTIONS
+        self.assertIn(decision, visible_unresolved[0])
+        self.assertEqual(visible.count(self.QUESTION), 1)
+        self.assertEqual(visible.count(self.OPTIONS), 1)
+        for context in [self.SHARED_REFERENCE, self.REVIEW_INSTRUCTION]:
+            self.assertIn(context, visible)
 
     def assert_current_structure(self, text):
         self.assert_names_and_quotes(text)
@@ -1316,8 +1415,55 @@ class ApprovedJapaneseDisplayTest(unittest.TestCase):
         historical.assert_only_approved_a12_changes(self.before)
         historical.assert_only_approved_a3_changes(self.before)
         historical.assert_baseline_content_preserved(self.before)
+        self.assertEqual(hashlib.sha256(self.pre_scope_removal.encode('utf-8')).hexdigest(),
+                         self.PRE_SCOPE_REMOVAL_SHA256)
+        self.assertEqual(self.pre_scope_removal.encode('utf-8'),
+                         self.approved_display_text().encode('utf-8'))
         self.assert_approved_bytes(self.current)
         self.assert_current_structure(self.current)
+
+    def test_scope_removal_rejects_reinsertion_relocation_and_rephrased_summaries(self):
+        expected = self.approved_scope_removed_text()
+        removed = self.pre_scope_removal[len(expected):]
+        self.assertEqual(self.pre_scope_removal, expected + removed)
+        bullets = re.findall(r'^- .+$', removed, re.M)
+        self.assertEqual(len(bullets), 5)
+        mutations = {
+            'original trailing section restored': expected + removed,
+            'renamed trailing section': expected + removed.replace('この例の範囲', '補足事項', 1),
+            'rephrased summary appended': expected + '\nこの例の対象外の項目は作成記録に整理しています。\n',
+        }
+        positions = [0, expected.index('## 業務一覧'), expected.index('<details>')]
+        for number, bullet in enumerate(bullets, 1):
+            for position in positions:
+                mutations[f'bullet {number} relocated to {position}'] = (
+                    expected[:position] + bullet + '\n\n' + expected[position:])
+            mutations[f'bullet {number} appended without heading'] = expected + '\n' + bullet + '\n'
+        for label, changed in mutations.items():
+            with self.subTest(mutation=label):
+                self.assertNotEqual(changed, expected)
+                with self.assertRaises(AssertionError):
+                    self.assert_approved_bytes(changed)
+
+    def test_scope_removal_preserves_opening_notices_and_every_check_line(self):
+        text = self.approved_scope_removed_text()
+        opening = text[:text.index('## 業務一覧')]
+        blocks = [('opening', 0, opening)]
+        blocks.extend((match[1], match.start(), match[0]) for match in re.finditer(
+            r'^### (JA-EX-(?:Q)?\d+) — [^\n]+\n.*?(?=^#{1,3} |\Z)', text, re.M | re.S))
+        self.assertEqual([label for label, _, _ in blocks[1:]],
+                         [check_id for ids in self.ACTIVITY_ITEMS for check_id in ids])
+        # Every original nonempty line is protected, including nested condition
+        # bullets, supporting evidence, questions, states, anchors and literals.
+        for label, block_start, block in blocks:
+            for match in re.finditer(r'[^\n]+\n?', block):
+                start, end = block_start + match.start(), block_start + match.end()
+                for replacement in ['', '変更した内容\n']:
+                    changed = text[:start] + replacement + text[end:]
+                    with self.subTest(block=label, position=start, replacement=replacement):
+                        self.assertNotEqual(changed, text)
+                        with self.assertRaises(AssertionError):
+                            self.assert_approved_bytes(changed)
 
     def test_current_display_rejects_numbering_shortening_and_wrong_names_everywhere(self):
         for heading, name in self.DISPLAY_PAIRS:
