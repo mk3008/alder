@@ -1618,12 +1618,15 @@ class JapaneseMobileOpeningTest(unittest.TestCase):
     The predecessor's audits run unchanged on their pinned final bytes above.
     This audit transforms only that frozen input, never candidate content.
     It checks authored Markdown, not a rendered phone view or human benefit.
+    Freeze its result before the separately approved usage deletions below.
     """
 
     H = HistoricalJapaneseCheckExampleTest
     D = ApprovedJapaneseDisplayTest
     BEFORE_REVISION = '36aa45ea87e02b95e6a73670359ec1b9802afc89'
     BEFORE_SHA256 = 'eab72d9fe70c31f7ca298058c0936b51d54d55857e5f1ad386fd4d188981b7ad'
+    PRE_USAGE_TRIM_REVISION = '5da052ef0e51c91263b06cb5b87852dac834c8a4'
+    PRE_USAGE_TRIM_SHA256 = 'c181f2bb875dcbccd446a6cb4f5bbbcbcbb1748ce40c0d061a4f76b649addc43'
     FIRST_ACTIVITY = '<a id="activity-1"></a>'
     USAGE_BOUNDARY = '\n## 使い方\n'
     OPENING = f'原典は未合意の[備品購入申請の業務設計]({H.SOURCE})です。[使い方](#使い方)'
@@ -1643,7 +1646,9 @@ class JapaneseMobileOpeningTest(unittest.TestCase):
         cls.before = subprocess.run(
             ['git', 'show', f'{cls.BEFORE_REVISION}:{cls.H.EXAMPLE_PATH}'],
             cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
-        cls.current = (ROOT / cls.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+        cls.current = subprocess.run(
+            ['git', 'show', f'{cls.PRE_USAGE_TRIM_REVISION}:{cls.H.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
         cls.table = '\n'.join(line for line in cls.before.splitlines() if line.startswith('| '))
         cls.mapping = next(line for line in cls.before.splitlines()
                            if line.startswith('目的の根拠と原典見出しとの対応は、'))
@@ -1716,6 +1721,7 @@ class JapaneseMobileOpeningTest(unittest.TestCase):
 
     def test_pinned_audits_chain_into_only_approved_opening_bytes(self):
         self.assertEqual(hashlib.sha256(self.before.encode()).hexdigest(), self.BEFORE_SHA256)
+        self.assertEqual(hashlib.sha256(self.current.encode()).hexdigest(), self.PRE_USAGE_TRIM_SHA256)
         self.assertEqual(self.before, self.D.current)
         self.D().assert_approved_bytes(self.before)
         self.D().assert_current_structure(self.before)
@@ -1825,6 +1831,78 @@ class JapaneseMobileOpeningTest(unittest.TestCase):
                     self.assert_preserved_content(changed)
                 with self.assertRaises(AssertionError):
                     self.assert_approved_bytes(changed)
+
+
+class JapaneseUsageTrimTest(unittest.TestCase):
+    """Only the two approved usage deletions, not a review-state rule change.
+
+    Transform the pinned predecessor only; compare candidate bytes unchanged.
+    All earlier audits remain pinned above. This is an authored-text audit,
+    not rendered-client evidence or proof of reduced human review effort.
+    """
+
+    M = JapaneseMobileOpeningTest
+    REMOVED_STATE_NOTICE = ('業務を切り替えたり項目を開いたりしても、確認済みにはなりません。'
+                            '返答がない場合も状態は変えません。')
+    REMOVED_RESUME_LINE = ('- 再開する際は、業務と次に読むIDを指定できます。'
+                           '再開位置は、項目の確認状況を表すものではありません。\n')
+    USAGE = ('## 使い方\n\n'
+             '- 表の業務名やIDから項目へ進めます。表やIDの並びは、業務の実行順を示しません。\n'
+             '- IDを指定して「確認」「修正」「保留」を伝えてください。\n')
+
+    @classmethod
+    def setUpClass(cls):
+        cls.M.setUpClass()
+        cls.before = cls.M.current
+        cls.current = (ROOT / cls.M.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+
+    def approved_usage_text(self):
+        expected = self.before
+        for deletion in [self.REMOVED_STATE_NOTICE, self.REMOVED_RESUME_LINE]:
+            self.assertEqual(expected.count(deletion), 1)
+            expected = expected.replace(deletion, '', 1)
+        return expected
+
+    def assert_approved_bytes(self, text):
+        self.assertEqual(text.encode('utf-8'), self.approved_usage_text().encode('utf-8'))
+
+    def test_only_two_deletions_follow_the_pinned_opening_audit(self):
+        self.M().assert_approved_bytes(self.before)
+        self.M().assert_mobile_layout(self.before)
+        self.assert_approved_bytes(self.current)
+        self.M().assert_preserved_content(self.current)
+        usage = self.current[self.current.index('## 使い方\n'):]
+        self.assertEqual(usage, self.USAGE + '\n' + self.M().source_details())
+        self.assertEqual(self.current.count('<details>'), 7)
+        self.assertEqual(self.current.count('</details>'), 7)
+        self.assertNotRegex(self.current, r'(?i)<details\s')
+
+    def test_every_remaining_line_and_whitespace_is_byte_preserved(self):
+        position = 0
+        for line in self.current.splitlines(keepends=True):
+            for replacement in ['', '変更した内容\n']:
+                changed = self.current[:position] + replacement + self.current[position + len(line):]
+                with self.subTest(position=position, replacement=replacement):
+                    self.assertNotEqual(changed, self.current)
+                    with self.assertRaises(AssertionError):
+                        self.assert_approved_bytes(changed)
+            position += len(line)
+
+    def test_deleted_notices_cannot_return_or_move_elsewhere(self):
+        text = self.current
+        notices = [self.REMOVED_STATE_NOTICE, self.REMOVED_RESUME_LINE]
+        # Partial relocation is also outside the two-deletion approval.
+        notices += [sentence + '。' for notice in notices[:]
+                    for sentence in notice.removeprefix('- ').strip().split('。') if sentence]
+        positions = [0, text.index('## 業務一覧'), text.index(self.M.FIRST_ACTIVITY),
+                     text.index('<details>'), text.index('## 使い方'),
+                     text.index('<summary>' + self.M.SOURCE_SUMMARY), len(text)]
+        for notice in notices:
+            for position in positions:
+                changed = text[:position] + notice + '\n' + text[position:]
+                with self.subTest(notice=notice[:25], position=position):
+                    with self.assertRaises(AssertionError):
+                        self.assert_approved_bytes(changed)
 
 
 if __name__ == '__main__':
