@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
+import {verifyDocumentOrder} from './test-document-order-browser.mjs';
 import {verifyLayoutLock} from './test-controls-browser.mjs';
 import {verifyTouchZoom} from './test-touch-browser.mjs';
 import {verifyLabelLayout} from './test-label-layout.mjs';
@@ -20,6 +21,7 @@ try {
   const touchZoom=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});checks.push({touchZoom});
   checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
   checks.push({layoutLock:await verifyLayoutLock(browser)});
+  checks.push({documentOrder:await verifyDocumentOrder(browser)});
   checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
   checks.push({edgeOption:await verifyEdgeOption(browser)});

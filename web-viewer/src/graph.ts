@@ -1,7 +1,7 @@
 export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean; [key: string]: unknown };
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
-export type Design = { graph: Graph; sections: Record<string, string>; markdown: string };
+export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
 const fail = (ok: unknown, message: string): void => { if (!ok) throw new Error(message); };
 const text = (v: unknown): v is string => typeof v === 'string' && !!v.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '');
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -76,6 +76,7 @@ export function parseDesign(markdown: string): Design {
       lines(v[field]).filter(l=>l.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '')).forEach(l=>{const r=/^- (.+?) — (\S.*)$/.exec(l); fail(r,'Invalid relation in '+name); graph.relations.push({kind,from:kind==='output'?name:r![1],to:kind==='output'?r![1]:name,label:r![2].replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '')});});
     }
   });
+  const activityOrder=graph.nodes.filter(node=>node.type==='business').map(node=>node.id);
   validateGraph(graph); graph.nodes.sort((a,b)=>codepointCompare(a.id,b.id)); graph.relations.sort((a,b)=>{for(const k of ['kind','from','to','label'] as const){const d=codepointCompare(a[k],b[k]);if(d)return d;}return 0;});
-  return {graph,sections:sourceSections,markdown};
+  return {graph,sections:sourceSections,markdown,activityOrder};
 }

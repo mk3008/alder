@@ -10,7 +10,7 @@ export function reconcile(tab:Tab,design:Design):Tab{
   for(const [id,p] of Object.entries(tab.positions))if(ids.has(id))positions[id]=[...p];
   const missing=design.graph.nodes.filter(n=>!positions[n.id]);
   if(missing.length){
-    const initial=initialPositions(design.graph),occupied=Object.values(positions);
+    const initial=initialPositions(design.graph,design.activityOrder),occupied=Object.values(positions);
     for(const n of missing){
       const p:Point=[...initial[n.id]];
       // Only new cards move. Retained user coordinates are never normalized or
