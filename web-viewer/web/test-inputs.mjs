@@ -86,7 +86,7 @@ try {
   checks.push('Escape closes text entry while retaining draft input and existing graph');
 
   const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'refresh');
-  closedEdit.$('source-text').value=markdown+'\n';tabs(closedEdit)[0].querySelector('.close').click();await submit(closedEdit);
+  closedEdit.$('source-text').value=markdown+'\n';await tabs(closedEdit)[0].querySelector('.close').onclick();await submit(closedEdit);
   assert.equal(tabs(closedEdit).length,0);assert.ok(dialogOpen(closedEdit));assert.equal(closedEdit.$('source-text').value,markdown+'\n');assert.ok(status(closedEdit).trim());
   checks.push('closing an edited text tab never resurrects it or discards the draft');
 
@@ -144,7 +144,7 @@ try {
 
   let refreshPending;const closing=await ready({fetch:async()=>refreshPending?refreshPending.promise:response()});await openURL(closing);
   refreshPending=deferred();const refreshing=invoke(closing,'refresh');await tick();await invoke(closing,'refresh');assert.equal(closing.calls.length,2);
-  tabs(closing)[0].querySelector('.close').click();refreshPending.resolve(response());await refreshing;
+  await tabs(closing)[0].querySelector('.close').onclick();refreshPending.resolve(response());await refreshing;
   assert.equal(tabs(closing).length,0);assert.equal(closing.w.document.querySelectorAll('.node').length,0);
   checks.push('duplicate URL refresh is blocked and closing its tab discards late result');
 

@@ -54,7 +54,7 @@ assert.equal(w.document.querySelector('.node').style.left,priorLeft);assert.matc
 selected=file('first.md');pending=deferred();let reads=0;
 h.getFile=async()=>{reads++;return pending.promise;};
 const refresh=$('refresh').onclick();await tick();await $('refresh').onclick();assert.equal(reads,1);assert.equal($('refresh').disabled,true);
-w.document.querySelector('.close').click();pending.resolve(selected);await refresh;
+await w.document.querySelector('.close').onclick();pending.resolve(selected);await refresh;
 assert.equal(w.document.querySelectorAll('.tab').length,0);assert.equal(w.document.querySelectorAll('.node').length,0);checks.push('duplicate refresh blocked and close discards in-flight update');
 pending=undefined;h.getFile=async()=>selected;await $('open').onclick();permission='denied';
 w.showOpenFilePicker=async()=>{throw Object.assign(new Error('cancelled'),{name:'AbortError'});};
@@ -63,7 +63,7 @@ await $('refresh').onclick();assert.equal(w.document.querySelectorAll('.tab').le
 $('status-close').click();permission='granted';await $('refresh').onclick();assert.match($('status').textContent,/更新しました/);
 const permissionWait=deferred();h.queryPermission=()=>permissionWait.promise;
 const latePermission=$('refresh').onclick();let pickerCalls=0;w.showOpenFilePicker=async()=>{pickerCalls++;return [h];};
-w.document.querySelector('.close').click();permissionWait.resolve('denied');await latePermission;assert.equal(pickerCalls,0);
+await w.document.querySelector('.close').onclick();permissionWait.resolve('denied');await latePermission;assert.equal(pickerCalls,0);
 h.queryPermission=async()=>'granted';await $('open').onclick();checks.push('close during permission query prevents stale picker');
 w.showOpenFilePicker=undefined;
 const fallback=$('fallback');Object.defineProperty(fallback,'files',{configurable:true,value:[file('second.md')]});await fallback.onchange();
