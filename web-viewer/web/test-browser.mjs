@@ -1,3 +1,4 @@
+import {verifyNodeEdgeDrag} from './test-node-edge-drag-browser.mjs';
 import {verifyRouteCache} from './test-route-cache-browser.mjs';
 import {verifyScopeShortcut} from './test-scope-shortcut-browser.mjs';
 import {verifyExceptionOption} from './test-exception-browser.mjs';
@@ -34,6 +35,7 @@ try {
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
+   {name:'nodeEdgeDrag',run:()=>verifyNodeEdgeDrag(browser)},
    {name:'bottomClearance',run:()=>verifyBottomClearance(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
    ...[['routeCache',verifyRouteCache],['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption],['exceptionOption',verifyExceptionOption],['scopeShortcut',verifyScopeShortcut]].map(([name,verify])=>({name,run:()=>verify(browser)})),

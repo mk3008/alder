@@ -162,12 +162,15 @@ async function verifyDragAndPan(browser){
  const context=await browser.newContext({viewport:{width:1280,height:960}}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
-  await openFixture(page);await seedSavedView(page,1,[100,700]);
-  await page.locator('#viewport').evaluate(v=>{v.scrollTop=340;v.scrollLeft=0;});
+  await openFixture(page);await seedSavedView(page,1,[100,700],[0,400]);
+  // Keep this ordinary +100 drag outside the new edge-pan band. Camera padding
+  // provides scroll room without moving the fixture or weakening its oracle.
+  await page.locator('#viewport').evaluate(v=>{v.scrollTop=740;v.scrollLeft=0;});
   await settle(page);
   const before=await page.locator('#viewport').evaluate(v=>v.scrollHeight),box=await page.locator('.node').boundingBox();
   const x=box.x+40,y=box.y+30;
-  assert.ok(y>110&&y+100<900,'drag path must stay inside the viewport and above the toolbar');
+  const bounds=await page.evaluate(()=>{const v=document.querySelector('#viewport'),r=v.getBoundingClientRect(),bar=document.querySelector('.toolbar').getBoundingClientRect();return {left:r.left+v.clientLeft,right:r.left+v.clientLeft+v.clientWidth,top:r.top+v.clientTop,bottom:Math.min(r.top+v.clientTop+v.clientHeight,bar.top-12)};});
+  assert.ok(x>bounds.left+48&&x<bounds.right-48&&y>bounds.top+48&&y+100<bounds.bottom-48,'ordinary drag must stay outside every measured 48px edge-pan band');
   await page.locator('#layout-lock').click();
   await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x,y+100,{steps:8});await page.mouse.up();
   const moved=await page.locator('.node').evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]);

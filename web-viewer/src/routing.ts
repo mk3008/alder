@@ -59,7 +59,7 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
@@ -67,7 +67,7 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
   const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
   let best=mid,bestScore=[Infinity,Infinity];
   const consider=(p:Point)=>{
-    let collisions=p[0]<width/2||p[1]<height/2?1:0;
+    let collisions=p[0]<minimum[0]+width/2||p[1]<minimum[1]+height/2?1:0;
     for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
     const score=[collisions,distance(p,mid)];
     if(better(score,bestScore)){best=p;bestScore=score;}
@@ -135,6 +135,10 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
 export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
+  // Preserve positive-world routing exactly. A signed axis has no fixed zero
+  // boundary: the camera expands to contain its finite route and label bounds.
+  const minimum:Point=[nodes.some(n=>n.x<0)?-Infinity:0,nodes.some(n=>n.y<0)?-Infinity:0];
+  const offCanvas=(points:Point[])=>points.some(p=>p[0]<minimum[0]+1||p[1]<minimum[1]+1)?1:0;
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
   const preferred:[Side,Side]=returning?['right','right']:['bottom',bc[0]>=ac[0]?'left':'right'];
@@ -146,8 +150,8 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     const v=geometry.vertices,a=v[0],next=v[1],b=v.at(-1)!,previous=v.at(-2)!;
     if((next[0]-a[0])*normals[pair[0]][0]+(next[1]-a[1])*normals[pair[0]][1]<=0||(previous[0]-b[0])*normals[pair[1]][0]+(previous[1]-b[1])*normals[pair[1]][1]<=0)return;
     const collisions=routeCollisionCount(geometry.points,obstacles,CLEARANCE+geometry.error)+routeCollisionCount(geometry.points,endpoints,-.1);
-    const offCanvas=geometry.points.some(p=>p[0]<1||p[1]<1)?1:0;
-    const score=[collisions,offCanvas,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
+    const outside=offCanvas(geometry.points);
+    const score=[collisions,outside,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
     if(better(score,bestScore)){chosen=geometry;bestScore=score;rerouted=!primary;}
   };
   const tried=new Set<string>();
@@ -179,8 +183,8 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
   if(!chosen){
     const a=port(source,'right'),b=port(target,'top'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=Math.min(source.y,target.y)-reach;
     chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
-    bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),chosen.points.some(p=>p[0]<1||p[1]<1)?1:0];rerouted=true;
+    bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

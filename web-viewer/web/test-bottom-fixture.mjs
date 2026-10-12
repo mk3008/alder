@@ -28,3 +28,14 @@ try{
  for(const width of [1280,393,320])for(const zoom of [.25,.28,1,2.5])for(const scrollbar of [0,15]){const obstruction=(width===1280?62:54)-scrollbar,required=obstruction+12,height=Math.max(850,5220,5068+required/zoom);assert.ok((height-5068)*zoom-obstruction>=12-1e-9);}
  console.log(JSON.stringify({bottomFixturePreflight:'passed',nodes:1,relations:0,objectOnlyRejected:true,invalidUIErrorDetected:true,selectors:selectors.length,overlaysClosed:true,arithmeticCases:24,limit:'DOM/parser setup and arithmetic only; real geometry, hit testing, resize and pointer behavior require Chrome'}));
 }finally{w.close();}
+// Ordinary-drag setup arithmetic with the preserved [100,700] fixture. Camera
+// inset creates scroll room; the browser test still measures real boundaries.
+{
+ const nodeY=700,inset=400,scroll=740,header=109,clientHeight=851,toolbarTop=841;
+ const canvasHeight=Math.max(850,nodeY+220)+inset*2;
+ assert.ok(canvasHeight-clientHeight>=scroll);
+ const start=header+nodeY+inset-scroll+30,end=start+100;
+ assert.ok(start>header+48&&end<toolbarTop-12-48);
+ assert.equal((Math.max(850,nodeY+100+220)+inset*2)-canvasHeight,100);
+ console.log(JSON.stringify({ordinaryDragCameraPreflight:'arithmetic-only',start,end,expectedPosition:[100,800],canvasHeight,scroll}));
+}
