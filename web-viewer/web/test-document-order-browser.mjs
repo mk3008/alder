@@ -13,7 +13,7 @@ export async function verifyDocumentOrder(browser){
   for(let i=0;i<boxes.length;i++)for(let j=0;j<i;j++){const a=boxes[i],b=boxes[j];assert.ok(a.x+a.w<=b.x||b.x+b.w<=a.x||a.y+a.h<=b.y||b.y+b.h<=a.y);}
   const extent=await page.locator('#edges').evaluate(svg=>{const b=svg.getBBox();return {width:parseFloat(svg.style.width),height:parseFloat(svg.style.height),right:b.x+b.width,bottom:b.y+b.height};});assert.ok(extent.width>=extent.right&&extent.height>=extent.bottom);
   for(const path of await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')))){assert.match(path,/ Q/);assert.doesNotMatch(path,/[LHV]/);}
-  await page.locator('#scope-outside').selectOption('dim');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),25);assert.deepEqual(await positions(),initial);
+  await page.locator('#scope-outside').selectOption('hide');assert.equal(await page.locator('.node.outside').count(),0);await page.locator('#scope-outside').selectOption('show');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),25);assert.deepEqual(await positions(),initial);
   await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();assert.deepEqual(await positions(),initial);
   // A new input follows the new section order; editing the same input keeps its layout.
   const sections=raw.split(/(?=^# (?:Activity|Object|Scope|Graph exceptions) )/m),reversed=sections.filter(s=>s.startsWith('# Activity ')).reverse();let next=0;

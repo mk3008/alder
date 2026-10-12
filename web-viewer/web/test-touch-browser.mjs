@@ -161,16 +161,16 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);
   const dragged=await positions();
-  await page.locator('#scope-outside').selectOption('dim');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),25);assert.equal(await page.locator('.edge').count(),53);await pinch(500,400,200,300);
+  await page.locator('#scope-outside').selectOption('hide');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
   const savedView=await view(),visible=await positions();assert.equal(savedView.zoom,1.5);assert.equal(await page.locator('#zoom').textContent(),'150%');
   await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);
-  assert.equal(await page.locator('#scope-outside').inputValue(),'dim');assert.equal(await page.locator('#prefer-write').isChecked(),true);await page.locator('#scope-outside').selectOption('show');assert.deepEqual(await positions(),dragged);
+  assert.equal(await page.locator('#scope-outside').inputValue(),'hide');assert.equal(await page.locator('#prefer-write').isChecked(),true);await page.locator('#scope-outside').selectOption('show');assert.deepEqual(await positions(),dragged);
  },{blocked:!basic});
  if(nativeScrollDiagnostics){
  await run('diagnostic: native scroll in isolated overflow element',nativeScroll,{controlHtml:'<!doctype html><style>body{margin:0}#detail{width:380px;height:500px;overflow:auto;touch-action:auto}</style><div id="detail"><div style="height:3000px">Native scroll control</div></div>'});
  await run('product: Drawer native touch scroll is independent of graph',async({page,cdp,driver,view})=>{
-  await page.locator('#scope-outside').selectOption('dim');await page.locator('#scope-outside').selectOption('show');await page.locator('#drawer').click();
+  await page.locator('#scope-outside').selectOption('hide');await page.locator('#scope-outside').selectOption('show');await page.locator('#drawer').click();
   assert.equal(await page.locator('#detail').evaluate(n=>getComputedStyle(n).touchAction),'auto');
   await nativeScroll({page,cdp,driver});assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
  });

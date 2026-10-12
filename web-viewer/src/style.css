@@ -65,9 +65,6 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 #preview-badge[hidden]{display:none}
 @media(max-width:800px){header:has(#preview-badge:not([hidden])) strong{font-size:14px}#preview-badge{max-width:140px;font-size:10px}}
 
-/* Scope dimming preserves type backgrounds and Who colors. Selection stays legible. */
-.node.scope-dim,.edge.scope-dim,.edge-label.scope-dim{opacity:.4}
-.node.scope-dim.selected,.node.scope-dim.review-neighbor,.edge.scope-dim.review-related,.edge-label.scope-dim.review-related{opacity:1}
 #layout-lock{border-right:1px solid var(--subtle)}
 #layout-lock[aria-pressed=true]{background:var(--select)}
 #viewport[data-layout-locked=true] .node{cursor:grab}

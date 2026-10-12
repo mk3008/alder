@@ -1,4 +1,4 @@
-const toggleScope=el=>{el.value=el.value==='dim'?'show':'dim';el.dispatchEvent(new el.ownerDocument.defaultView.Event('change'));};
+const toggleScope=el=>{el.value=el.value==='hide'?'show':'hide';el.dispatchEvent(new el.ownerDocument.defaultView.Event('change'));};
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
@@ -13,9 +13,9 @@ async function open(path){const w=new JSDOM('<div id="app"></div>',{url:'https:/
 try{
  const root=await open('/alder/');assert.equal(root.getElementById('preview-badge').hidden,true);root.getElementById('open-sample').click();await wait();
  const first=await open(a);assert.equal(first.querySelectorAll('.tab').length,0);assert.equal(first.getElementById('preview-badge').hidden,false);assert.match(first.getElementById('preview-badge').textContent,/scope-20261012-01/);first.getElementById('open-sample').click();toggleScope(first.getElementById('scope-outside'));first.getElementById('theme').click();await wait();
- const same=await open(a+'index.html?view=anything#node');assert.equal(same.querySelectorAll('.node').length,25);assert.equal(same.documentElement.dataset.theme,'dark');
+ const same=await open(a+'index.html?view=anything#node');assert.equal(same.querySelectorAll('.node').length,12);assert.equal(same.documentElement.dataset.theme,'dark');
  const second=await open(b);assert.equal(second.querySelectorAll('.tab').length,0);second.getElementById('open-sample').click();second.getElementById('prefer-write').click();await wait();
  const production=await open('/alder/index.html');assert.equal(production.getElementById('preview-badge').hidden,true);assert.equal(production.querySelectorAll('.node').length,25);assert.equal(production.querySelectorAll('.edge').length,63);assert.equal(production.documentElement.dataset.theme,'light');assert.equal(production.getElementById('scope-outside').value,'show');
- const again=await open(a+'?another=value#other');assert.equal(again.querySelectorAll('.node').length,25);assert.equal(again.getElementById('prefer-write').checked,false);assert.equal(again.documentElement.dataset.theme,'dark');
+ const again=await open(a+'?another=value#other');assert.equal(again.querySelectorAll('.node').length,12);assert.equal(again.getElementById('prefer-write').checked,false);assert.equal(again.documentElement.dataset.theme,'dark');
  console.log(JSON.stringify({model:'DOM/IndexedDB',checks:['production DB and old session retained','preview never imports production','version-specific DB isolation','same version slash/index/query/hash restoration','runtime-only badge and database with identical bundle','production data/theme/options unchanged after previews']},null,2));
 }finally{windows.forEach(w=>w.close());}
