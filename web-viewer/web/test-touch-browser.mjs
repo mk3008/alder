@@ -1,11 +1,43 @@
 import assert from 'node:assert/strict';
 import {touchDriver} from './touch-driver.mjs';
 
+// Test diagnostics only; inspect actual scroll limits rather than infer them.
+const readScrollMetrics=({id,x,y})=>{
+ const n=document.getElementById(id),r=n.getBoundingClientRect(),hit=x===undefined?null:document.elementFromPoint(x,y),ancestors=[];
+ for(let e=hit||n;e;e=e.parentElement)ancestors.push({tag:e.tagName,id:e.id,overflowY:getComputedStyle(e).overflowY,touchAction:getComputedStyle(e).touchAction});
+ return {scroll:[n.scrollLeft,n.scrollTop],client:[n.clientWidth,n.clientHeight],extent:[n.scrollWidth,n.scrollHeight],max:[Math.max(0,n.scrollWidth-n.clientWidth),Math.max(0,n.scrollHeight-n.clientHeight)],rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?{tag:hit.tagName,id:hit.id,inTarget:n.contains(hit)}:null,ancestors,heading:n.querySelector('h1')?.textContent??null};
+};
+const nativeScroll=async({page,cdp,driver})=>{
+ const detail=page.locator('#detail');driver.idle();
+ await detail.evaluate(n=>{n.scrollTop=0;});await driver.painted();
+ const rect=await detail.boundingBox(),point={x:rect.x+rect.width/2,y:rect.y+Math.min(300,rect.height/2)};
+ const before=await page.evaluate(readScrollMetrics,{id:'detail',...point});
+ assert.ok(before.max[1]>150,'native scroll test needs real overflowing content');assert.ok(before.hit?.inTarget,'native scroll start must hit the detail region');
+ await detail.evaluate(n=>{n.scrollTop=100;});const programmatic=await page.evaluate(readScrollMetrics,{id:'detail',...point});
+ assert.equal(programmatic.scroll[1],100,'confirm the actual element is scrollable before touch');
+ await detail.evaluate(n=>{n.scrollTop=0;});await driver.painted();
+ const baseline=await page.evaluate(()=>({serial:window.touchObserved.serial,scroll:document.querySelector('#detail').scrollTop}));assert.equal(baseline.scroll,0);
+ const command={...point,yDistance:-150,gestureSourceType:'touch',speed:400,preventFling:true};
+ await page.evaluate(probe=>{window.drawerProbe=probe;document.querySelector('#detail').addEventListener('scroll',e=>window.drawerProbe.scrollEvents.push({top:e.target.scrollTop,serial:window.touchObserved.serial}),{passive:true});},{before,programmatic,baseline,command,scrollEvents:[]});
+ await cdp.send('Input.synthesizeScrollGesture',command);
+ await page.evaluate(metrics=>{window.drawerProbe.afterDispatch=metrics;},await page.evaluate(readScrollMetrics,{id:'detail',...point}));
+ try{
+  await page.waitForFunction(({serial,scroll})=>{
+   const state=window.touchObserved,down=state.downs.find(e=>e.seq>serial),end=down&&state.last[down.id];
+   return down&&end&&end.seq>down.seq&&['pointerup','pointercancel'].includes(end.type)&&Object.keys(state.active).length===0&&document.querySelector('#detail').scrollTop>scroll;
+  },baseline);
+ }finally{
+  await page.evaluate(metrics=>{window.drawerProbe.afterWait=metrics;},await page.evaluate(readScrollMetrics,{id:'detail',...point}));
+  console.log('Native scroll probe',JSON.stringify(await page.evaluate(()=>window.drawerProbe)));
+ }
+ const down=await page.evaluate(serial=>window.touchObserved.downs.find(e=>e.seq>serial),baseline.serial);assert.equal(down.region,'drawer');
+};
+
 // One attempt per case, independent contexts, no retries. Collect all failures
 // so a protocol issue cannot conceal unrelated product and regression results.
 export async function verifyTouchZoom(browser){
  const results=[];
- const run=async(name,body,{protocol=false,blocked=false}={})=>{
+ const run=async(name,body,{protocol=false,controlHtml,blocked=false}={})=>{
   if(blocked){results.push({name,status:'blocked',reason:'required input protocol preflight failed'});console.error('Touch case',JSON.stringify(results.at(-1)));return false;}
   let context,page,result;const errors=[];
   try{
@@ -22,8 +54,8 @@ export async function verifyTouchZoom(browser){
    await waitZoom(expected);await send(end,[]);
   };
    await driver.install();
-   if(protocol){
-    await page.goto('data:text/html,'+encodeURIComponent('<!doctype html><style>body{margin:0}#viewport{width:100vw;height:100vh;touch-action:none}</style><div id="viewport"></div>'));
+   if(protocol||controlHtml){
+    await page.goto('data:text/html,'+encodeURIComponent(controlHtml||'<!doctype html><style>body{margin:0}#viewport{width:100vw;height:100vh;touch-action:none}</style><div id="viewport"></div>'));
    }else{
     await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     await page.locator('#open-sample').click();await page.locator('#drawer').click();
@@ -88,14 +120,19 @@ export async function verifyTouchZoom(browser){
     document.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')window.panProbe.actualDown={id:e.pointerId,target:e.target.id||e.target.className,node:e.target.closest('.node')?.dataset.node??null,inViewport:n.contains(e.target),x:e.clientX,y:e.clientY};},{capture:true,once:true});
     return best;
   });
-  const beforePanPositions=await positions();await send('touchStart',[[1,background.x,background.y]]);
+  const beforePanPositions=await positions(),panBefore=await page.evaluate(readScrollMetrics,{id:'viewport',x:background.x,y:background.y});
+  const expected=panBefore.scroll.map((value,i)=>Math.min(value+50,panBefore.max[i]));assert.ok(expected.every((value,i)=>value>panBefore.scroll[i]),'both axes need available pan range');
+  await page.evaluate(data=>{Object.assign(window.panProbe,data);},{before:panBefore,expected});
+  await send('touchStart',[[1,background.x,background.y]]);
   await page.waitForFunction(()=>window.panProbe.actualDown!==null);const probe=await page.evaluate(()=>window.panProbe);console.log('Background pan probe',JSON.stringify(probe));
   assert.ok(probe.actualDown?.inViewport,'touch must really target the graph');
   assert.equal(probe.actualDown.node,null,'a touch adjusted onto a node is not a background pan test');
   assert.ok(Math.abs(probe.actualDown.x-background.x)<=1&&Math.abs(probe.actualDown.y-background.y)<=1,'touch coordinates must match the inspected scene');
   await send('touchMove',[[1,background.x-50,background.y-50]]);await send('touchEnd',[]);
-  await page.waitForFunction(()=>{const n=document.querySelector('#viewport');return n.scrollLeft===150&&n.scrollTop===150;});
-  assert.deepEqual((await view()).scroll,[150,150]);assert.deepEqual(await positions(),beforePanPositions);
+  await page.evaluate(metrics=>{window.panProbe.afterInput=metrics;},await page.evaluate(readScrollMetrics,{id:'viewport',x:background.x-50,y:background.y-50}));
+  try{await page.waitForFunction(expected=>{const n=document.querySelector('#viewport');return n.scrollLeft===expected[0]&&n.scrollTop===expected[1];},expected);}
+  finally{await page.evaluate(metrics=>{window.panProbe.afterWait=metrics;},await page.evaluate(readScrollMetrics,{id:'viewport'}));console.log('Background pan result',JSON.stringify(await page.evaluate(()=>window.panProbe)));}
+  assert.deepEqual((await view()).scroll,expected);assert.deepEqual(await positions(),beforePanPositions);
  },{blocked:!basic});
  await run('product: Scope/Write and pinch save-close-reload-reopen',async({page,send,positions,view,pinch})=>{
   const target=await page.locator('.node').first().boundingBox();
@@ -107,20 +144,11 @@ export async function verifyTouchZoom(browser){
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);
   assert.equal(await page.locator('#hide-outside').isChecked(),true);assert.equal(await page.locator('#prefer-write').isChecked(),true);await page.locator('#hide-outside').uncheck();assert.deepEqual(await positions(),dragged);
  },{blocked:!basic});
+ await run('diagnostic: native scroll in isolated overflow element',nativeScroll,{controlHtml:'<!doctype html><style>body{margin:0}#detail{width:380px;height:500px;overflow:auto;touch-action:auto}</style><div id="detail"><div style="height:3000px">Native scroll control</div></div>'});
  await run('product: Drawer native touch scroll is independent of graph',async({page,cdp,driver,view})=>{
-  await page.locator('.node.outside').first().click();await page.locator('#hide-outside').check();await page.locator('#hide-outside').uncheck();await page.locator('#drawer').click();const detail=page.locator('#detail');assert.equal(await detail.evaluate(n=>getComputedStyle(n).touchAction),'auto');driver.idle();await detail.evaluate(n=>{n.scrollTop=0;});await driver.painted();const d=await detail.boundingBox();
-  const nativeStart=await detail.evaluate(n=>({serial:window.touchObserved.serial,scroll:n.scrollTop}));
-  assert.equal(nativeStart.scroll,0,'native scroll needs a fresh zero-scroll baseline');
-  await page.evaluate(probe=>{window.drawerProbe=probe;},{...nativeStart,x:d.x+d.width/2,y:d.y+300});
-  await cdp.send('Input.synthesizeScrollGesture',{x:d.x+d.width/2,y:d.y+300,yDistance:-150,gestureSourceType:'touch',speed:400,preventFling:true});
-  await page.waitForFunction(({serial,scroll})=>{
-    const state=window.touchObserved,down=state.downs.find(e=>e.seq>serial);
-    const end=down&&state.last[down.id];
-    return down&&end&&end.seq>down.seq&&['pointerup','pointercancel'].includes(end.type)&&Object.keys(state.active).length===0&&document.querySelector('#detail').scrollTop>scroll;
-  },nativeStart);
-  const nativeDown=await page.evaluate(serial=>window.touchObserved.downs.find(e=>e.seq>serial),nativeStart.serial);
-  assert.equal(nativeDown.region,'drawer','native touch must really start inside the Drawer');
-  assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
+  await page.locator('.node.outside').first().click();await page.locator('#hide-outside').check();await page.locator('#hide-outside').uncheck();await page.locator('#drawer').click();
+  assert.equal(await page.locator('#detail').evaluate(n=>getComputedStyle(n).touchAction),'auto');
+  await nativeScroll({page,cdp,driver});assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
  });
  await run('product: 393px viewport pinch and unchanged browser scale',async({page,view,pinch})=>{
   await page.setViewportSize({width:393,height:852});await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});const before=await view();
