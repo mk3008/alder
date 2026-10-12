@@ -7,6 +7,7 @@ export async function verifyTouchZoom(browser){
  const view=()=>page.locator('#viewport').evaluate(n=>({scroll:[n.scrollLeft,n.scrollTop],zoom:parseFloat(document.querySelector('#nodes').style.transform.slice(6)),scale:visualViewport.scale,rect:{x:n.getBoundingClientRect().left+n.clientLeft,y:n.getBoundingClientRect().top+n.clientTop,width:n.clientWidth,height:n.clientHeight}}));
  const pinch=async(cx,cy,from,to,end='touchEnd')=>{await send('touchStart',[[1,cx-from/2,cy],[2,cx+from/2,cy]]);for(let i=1;i<=5;i++){const gap=from+(to-from)*i/5;await send('touchMove',[[1,cx-gap/2,cy],[2,cx+gap/2,cy]]);}await send(end,[]);};
  try{
+  await page.addInitScript(()=>{window.touchTrace=[];for(const type of ['pointerdown','pointermove','pointerup','pointercancel','gotpointercapture','lostpointercapture'])document.addEventListener(type,e=>{if(e.pointerType==='touch'){window.touchTrace.push({type,id:e.pointerId,target:e.target.id||e.target.className,x:e.clientX,y:e.clientY});if(window.touchTrace.length>60)window.touchTrace.shift();}},true);});
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await page.locator('#drawer').click();
   const initial=await positions(),box=await page.locator('.node').first().boundingBox(),x=box.x+80,y=box.y+30;
   await send('touchStart',[[1,x,y]]);await send('touchEnd',[]);const selected=await page.locator('.node.selected').getAttribute('data-node');
@@ -26,5 +27,5 @@ export async function verifyTouchZoom(browser){
   await page.locator('.node.outside').first().click();await page.locator('#hide-outside').check();await page.locator('#hide-outside').uncheck();await page.locator('#drawer').click();const detail=page.locator('#detail');assert.equal(await detail.evaluate(n=>getComputedStyle(n).touchAction),'auto');const d=await detail.boundingBox();await send('touchStart',[[1,d.x+d.width/2,d.y+300]]);for(let i=1;i<=5;i++)await send('touchMove',[[1,d.x+d.width/2,d.y+300-i*30]]);await send('touchEnd',[]);await page.waitForFunction(()=>document.querySelector('#detail').scrollTop>0);assert.equal((await view()).zoom,1);await page.locator('#drawer').click();checks.push('Drawer keeps native touch scrolling outside graph');
   await page.setViewportSize({width:393,height:852});await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});before=await view();await pinch(before.rect.x+before.rect.width/2,before.rect.y+200,80,120);assert.equal((await view()).zoom,1.5);assert.equal((await view()).scale,1);checks.push('393px viewport touch pinch with graph-only control');
   assert.deepEqual(errors,[]);return {input:'Chrome CDP touch emulation, not physical Android',checks,pageErrors:errors};
- }finally{await context.close();}
+ }catch(error){console.error('Touch event trace',JSON.stringify(await page.evaluate(()=>window.touchTrace)));throw error;}finally{await context.close();}
 }

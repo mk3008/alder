@@ -49,6 +49,9 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
     }
   },true);
   const end=(e:PointerEvent)=>{
+    // A child's implicit capture can be released when capture transfers here.
+    // Only loss of the viewport's own capture terminates our gesture.
+    if(e.type==='lostpointercapture'&&e.target!==viewport)return;
     if(!points.has(e.pointerId))return;consume(e);
     if(e.type==='pointerup'&&!blocked&&valid()&&gesture?.kind==='single'&&!gesture.moved&&gesture.node)host.change({selected:gesture.node.id});
     points.delete(e.pointerId);

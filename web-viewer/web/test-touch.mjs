@@ -16,11 +16,11 @@ async function boot(){
 let {dom,w,d,$,fire}=await boot();$('open-sample').click();
 const positions=()=>Object.fromEntries([...d.querySelectorAll('.node')].map(n=>[n.dataset.node,[n.style.left,n.style.top]]));
 let before=positions(),first=d.querySelector('.node'),id=first.dataset.node;
-fire('pointerdown',1,100,100,first);fire('pointermove',1,104,110);assert.notDeepEqual(positions(),before);
-fire('pointerdown',2,200,100);assert.deepEqual(positions(),before);fire('pointermove',1,50,100);fire('pointermove',2,250,100);
+fire('pointerdown',1,100,100,first);fire('pointermove',1,104,110);assert.equal(first.isConnected,true);assert.notDeepEqual(positions(),before);
+fire('pointerdown',2,200,100);assert.equal(first.isConnected,true);assert.deepEqual(positions(),before);fire('lostpointercapture',2,200,100,d.querySelector('.node'));fire('pointermove',1,50,100);fire('pointermove',2,250,100);
 assert.equal($('zoom').textContent,'207%');
 assert.deepEqual(positions(),before);assert.equal(d.querySelector('.selected'),null);
-const z=$('zoom').textContent;fire('pointerup',1,50,100);fire('pointermove',2,300,130);fire('pointerup',2,300,130);assert.equal($('zoom').textContent,z);assert.deepEqual(positions(),before);checks.push('second finger rolls back tentative drag; pinch/release never selects or moves nodes');
+const z=$('zoom').textContent;fire('pointerup',1,50,100);fire('pointermove',2,300,130);fire('pointerup',2,300,130);assert.equal($('zoom').textContent,z);assert.deepEqual(positions(),before);checks.push('second finger rolls back tentative drag; child implicit-capture loss does not end viewport pinch; release never selects or moves nodes');
 $('viewport').scrollLeft=300;$('viewport').scrollTop=200;
 const initialZoom=parseFloat(d.querySelector('#nodes').style.transform.match(/[\d.]+/)[0]);
 fire('pointerdown',10,100,100);fire('pointerdown',11,300,100);fire('pointermove',10,125,120);fire('pointermove',11,275,120);
