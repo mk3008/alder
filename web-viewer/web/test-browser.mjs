@@ -1,3 +1,4 @@
+import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
 import {runBrowserCases} from './browser-cases.mjs';
 import {verifyNodeDrawer} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
@@ -24,6 +25,7 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
    ...[['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption]].map(([name,verify])=>({name,run:()=>verify(browser)})),
    {name:'legacySmoke',run:async()=>{

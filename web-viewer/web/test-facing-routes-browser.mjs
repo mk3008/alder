@@ -1,14 +1,9 @@
+import {waitSavedViewer} from './wait-saved-viewer.mjs';
 import {installFacingTrace,readFacingStorage} from './trace-facing-storage.mjs';
 import assert from 'node:assert/strict';
 // Wait for the real debounced IndexedDB write, not an arbitrary delay. This
 // test checks reload after save; it does not promise immediate unload durability.
-export async function waitForSavedPositions(page,positions){
- await page.waitForFunction(async ({positions})=>new Promise((resolve,reject)=>{
-  const open=indexedDB.open('alder-web-viewer',1);open.onerror=()=>reject(open.error);
-  open.onsuccess=()=>{const db=open.result;const tx=db.transaction('session','readonly');const get=tx.objectStore('session').get('current');let matches=false;get.onsuccess=()=>{const s=get.result,p=s?.tabs?.find(t=>t.key===s.active)?.positions;matches=!!p&&Object.keys(p).length===Object.keys(positions).length&&Object.entries(positions).every(([id,point])=>Array.isArray(p[id])&&p[id].length===2&&p[id].every((v,i)=>v===point[i]));};tx.oncomplete=()=>{db.close();resolve(matches);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Session read failed'));};};
- }),{positions},{timeout:5000,polling:50});
- console.log('Facing route committed positions',JSON.stringify(positions));
-}
+export async function waitForSavedPositions(page,positions){return await waitSavedViewer(page,{positions});}
 export async function verifyFacingRoutes(browser){
  const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  const trace=[];page.on('console',m=>{if(m.text().startsWith('FACING_TRACE ')){try{trace.push(JSON.parse(m.text().slice(13)));}catch(e){errors.push('Diagnostic trace parse: '+e.message);}}});await page.addInitScript(installFacingTrace);

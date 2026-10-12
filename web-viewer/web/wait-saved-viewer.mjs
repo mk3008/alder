@@ -1,11 +1,29 @@
-// Read only after the transaction completes. A stale/mismatched snapshot stays
-// false and fails the bounded wait; it never changes expected state or storage.
-export function savedViewerMatches({expected}){
- return new Promise((resolve,reject)=>{
-  const r=indexedDB.open('alder-web-viewer',1);r.onerror=()=>reject(r.error);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let result=false;
-   get.onsuccess=()=>{const s=get.result,t=s?.tabs?.find(t=>t.key===s.active);if(!t)return;const p=t.positions,want=expected.positions;const positions=!!p&&Object.keys(p).length===Object.keys(want).length&&Object.entries(want).every(([id,point])=>Array.isArray(p[id])&&p[id].length===2&&p[id].every((v,i)=>v===point[i]));const hidden=[...(t.hiddenNodes??[])].sort(),wantHidden=[...expected.hiddenNodes].sort();if(positions&&JSON.stringify(hidden)===JSON.stringify(wantHidden)&&(t.selected??null)===expected.selected&&t.zoom===expected.zoom&&s.dark===expected.dark&&s.preferWrite===expected.preferWrite)result=s;};
-   tx.oncomplete=()=>{db.close();resolve(result);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Saved state read failed'));};
-  };
- });
+import {isDeepStrictEqual} from 'node:util';
+// Node-side polling: await the actual async value before deciding whether to
+// continue. Never pass an async predicate to Playwright1.56 waitForFunction.
+export async function waitForExactRead(read,expected,{timeoutMs=5000,intervalMs=50,project=value=>value,observe=()=>{}}={}){
+ const deadline=performance.now()+timeoutMs;let actual,observed,reads=0;
+ const timeout=()=>Object.assign(new Error('Saved state deadline exceeded; last observed='+JSON.stringify(observed)),{actual,observed,reads});
+ while(true){const remaining=deadline-performance.now();if(remaining<=0)throw timeout();let timer;
+  try{actual=await Promise.race([Promise.resolve().then(read),new Promise((_,reject)=>{timer=setTimeout(()=>reject(timeout()),remaining);})]);reads++;}finally{clearTimeout(timer);}
+  observed=project(actual);observe({reads,actual,observed});if(performance.now()>=deadline)throw timeout();
+  if(isDeepStrictEqual(observed,expected))return {actual,observed,reads};
+  await new Promise(resolve=>setTimeout(resolve,Math.min(intervalMs,Math.max(0,deadline-performance.now()))));
+ }
 }
-export async function waitSavedViewer(page,expected){const handle=await page.waitForFunction(savedViewerMatches,{expected},{timeout:5000,polling:50});try{return await handle.jsonValue();}finally{await handle.dispose();}}
+// Serialized into the real browser by page.evaluate. Complete transaction,
+// missing database/store, request error and abort all have explicit outcomes.
+export function readSessionInPage(){return new Promise((resolve,reject)=>{
+ const request=indexedDB.open('alder-web-viewer',1);let missing=false;
+ request.onupgradeneeded=()=>{missing=true;request.transaction?.abort();};
+ request.onerror=()=>reject(missing?Error('Missing viewer database'):request.error);
+ request.onsuccess=()=>{const db=request.result;try{if(!db.objectStoreNames.contains('session'))throw Error('Missing session store');const tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let actual;
+  get.onsuccess=()=>{actual=get.result;};tx.oncomplete=()=>{db.close();resolve(actual??null);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Readonly transaction failed'));};
+ }catch(error){db.close();reject(error);}};
+});}
+export function viewerProjection(snapshot,fields){const tab=snapshot?.tabs?.find(t=>t.key===snapshot.active);if(!tab)return null;const projected={};for(const key of fields){if(key==='dark'||key==='preferWrite')projected[key]=snapshot[key];else if(key==='selected')projected[key]=tab.selected??null;else if(key==='hiddenNodes')projected[key]=[...(tab.hiddenNodes??[])].sort();else projected[key]=tab[key];}return projected;}
+export async function waitSavedViewer(page,expected,options={}){
+ const normalized={...expected,...('hiddenNodes' in expected?{hiddenNodes:[...expected.hiddenNodes].sort()}:{})};
+ const result=await waitForExactRead(()=>page.evaluate(readSessionInPage),normalized,{...options,project:snapshot=>viewerProjection(snapshot,Object.keys(normalized))});
+ console.log('SAVED_VIEWER_OBSERVED '+JSON.stringify({active:result.actual.active,observed:result.observed,reads:result.reads}));return result.actual;
+}
