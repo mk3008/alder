@@ -21,7 +21,7 @@ export async function verifyTabStrip(browser){
     await page.locator('.tab').last().locator('button').first().click();await page.locator('.tab').last().locator('.close').scrollIntoViewIfNeeded();const last=await page.locator('.tab').last().locator('.close').boundingBox(),nav=await page.locator('#tabs').boundingBox();assert.ok(last.x>=nav.x&&last.x+last.width<=nav.x+nav.width+1,'last close button reachable horizontally');results.push({theme,width,cssZoom:zoom,client:m.client,extent:m.scroll});
    }
   }
-  await page.evaluate(()=>{document.body.style.zoom='1';});await page.setViewportSize({width:1280,height:960});const before=await page.locator('.tab').count();await page.locator('.tab').last().locator('.close').click();assert.equal(await page.locator('.tab').count(),before-1);await checkVertical();assert.deepEqual(errors,[]);
+  await page.evaluate(()=>{document.body.style.zoom='1';});await page.setViewportSize({width:1280,height:960});const before=await page.locator('.tab').count();await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(n=>document.querySelectorAll('.tab').length===n,before-1,{timeout:5000});assert.equal(await page.locator('.tab').count(),before-1);await checkVertical();assert.deepEqual(errors,[]);
   return {checks:'one tab no scroll; many tabs horizontal scrolling; no vertical overflow or clipped close controls; light/dark; 320/393/1280; CSS zoom1/1.25; classic17px scrollbar fixture',results,pageErrors:errors,limit:'CSS scrollbar/zoom fixture in Linux Chrome, not Windows OS/native browser zoom'};
  }finally{await context.close();}
 }

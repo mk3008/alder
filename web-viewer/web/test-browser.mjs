@@ -1,3 +1,4 @@
+import {runBrowserCases} from './browser-cases.mjs';
 import {verifyNodeDrawer} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
 import {setScope} from './scope-control.mjs';
@@ -22,16 +23,10 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
-  const touchZoom=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});checks.push({touchZoom});
-  checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
-  checks.push({layoutLock:await verifyLayoutLock(browser)});
-  checks.push({documentOrder:await verifyDocumentOrder(browser)});
-  checks.push({facingRoutes:await verifyFacingRoutes(browser)});
-  checks.push({nodeDrawer:await verifyNodeDrawer(browser)});
-  checks.push({tabStrip:await verifyTabStrip(browser)});
-  checks.push({scopeOption:await verifyScopeOption(browser)});
-  checks.push({labelLayout:await verifyLabelLayout(browser)});
-  checks.push({edgeOption:await verifyEdgeOption(browser)});
+  await runBrowserCases([
+   {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
+   ...[['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption]].map(([name,verify])=>({name,run:()=>verify(browser)})),
+   {name:'legacySmoke',run:async()=>{
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];
   sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));
   await sample.goto('http://127.0.0.1:4173/');await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
@@ -113,6 +108,7 @@ try {
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
   assert.deepEqual(errors,[]);
-  assert.ok(touchZoom.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');
-  console.log(JSON.stringify({browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']},null,2));
+  return {browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']};
+   }}
+  ]);
 } finally {await browser.close();}
