@@ -42,3 +42,5 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 [data-theme=dark] .node .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}
 
 header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:nowrap}
+
+#open-sample{display:inline-block;color:var(--fg);text-underline-offset:3px;padding:8px}#open-sample:hover{text-decoration-thickness:2px}#open-sample:focus-visible{outline:2px solid var(--fg);outline-offset:3px}#open-sample[aria-disabled=true]{opacity:.4;cursor:default}

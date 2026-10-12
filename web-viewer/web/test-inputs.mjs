@@ -9,7 +9,7 @@ import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
 
 const markdown=readFileSync(new URL('./authorities/business-design.md',import.meta.url),'utf8');
-const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});
+const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const code=outputFiles[0].text;
 const tick=()=>new Promise(resolve=>setTimeout(resolve,25));
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};

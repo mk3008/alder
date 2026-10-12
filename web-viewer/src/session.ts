@@ -1,6 +1,6 @@
 import type {Design} from './graph';
 export type Point=[number,number];
-export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'};handle?:FileSystemFileHandle};
+export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
 export type Session={tabs:Tab[];active?:string;dark:boolean;drawer:boolean;width:number};
 export function reconcile(tab:Tab,design:Design):Tab{
   const ids=new Set(design.graph.nodes.map(n=>n.id)),positions:Record<string,Point>=Object.create(null);

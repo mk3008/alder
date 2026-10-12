@@ -29,7 +29,7 @@ for(const rule of rules) if(rule.cssText.includes('--role-color')) assert.ok(rul
 assert.ok(!css.replace(/[^{}]*\.who-badge[^{}]*\{[^{}]*\}/g,'').includes('--role-color'),'No role-color outside badge declarations');
 styleDom.window.close();
 
-const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});
+const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const dom=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true});
 const w=dom.window,d=w.document,$=id=>d.getElementById(id);
 w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;

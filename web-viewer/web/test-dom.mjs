@@ -6,7 +6,7 @@ import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
 
 const markdown=readFileSync(new URL('./authorities/business-design.md',import.meta.url),'utf8');
-const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});
+const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const code=compiled.outputFiles[0].text;
 const tick=()=>new Promise(r=>setTimeout(r,25));
 const restored=async $=>{for(let i=0;i<120&&$('open').disabled;i++)await tick();assert.equal($('open').disabled,false);};

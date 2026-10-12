@@ -1,0 +1,33 @@
+// DOM/IndexedDB model checks for the bundled public sample; no network.
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {JSDOM} from 'jsdom';
+import {IDBFactory} from 'fake-indexeddb';
+import {build} from 'esbuild';
+import {parseDesign} from '../src/graph.ts';
+const raw=readFileSync('../business-design/alder/README.md','utf8');
+const design=parseDesign(raw);
+assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
+assert.ok(design.graph.relations.every(r=>design.graph.nodes.some(n=>n.id===r.from)&&design.graph.nodes.some(n=>n.id===r.to)));
+const bundle=async invalid=>(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:invalid?[{name:'invalid-sample',setup(b){b.onLoad({filter:/README\.md$/},()=>({contents:'# Invalid sample',loader:'text'}));}}]:[]})).outputFiles[0].text;
+const code=await bundle(false),windows=[],checks=[];
+const tick=ms=>new Promise(r=>setTimeout(r,ms));
+function env(db=new IDBFactory(),script=code){const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;let fetches=0,pickers=0;w.fetch=()=>{fetches++;throw Error('Unexpected network');};w.showOpenFilePicker=()=>{pickers++;throw Error('Unexpected picker');};w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(script);const $=id=>w.document.getElementById(id);return {w,$,calls:()=>({fetches,pickers}),tabs:()=>w.document.querySelectorAll('.tab'),nodes:()=>w.document.querySelectorAll('.node')};}
+async function ready(e){for(let i=0;i<120&&e.$('open').disabled;i++)await tick(25);assert.equal(e.$('open').disabled,false);return e;}
+const click=(e,id)=>e.$(id).click();
+function choose(e,node){node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointerup({pointerId:1});}
+try{
+ const db=new IDBFactory(),e=env(db),history=e.w.history.length;
+ assert.equal(e.$('open-sample').getAttribute('aria-disabled'),'true');click(e,'open-sample');assert.equal(e.tabs().length,0);await ready(e);
+ assert.equal(e.$('open-sample').textContent,'サンプルを開く');assert.equal(e.$('empty').hidden,false);assert.ok(e.$('empty').textContent.startsWith('Business Design Markdownを開いてください。'));
+ click(e,'open-sample');click(e,'open-sample');click(e,'open-sample');
+ assert.equal(e.tabs().length,1);assert.equal(e.nodes().length,25);assert.equal(e.$('edges').querySelectorAll('.edge').length,63);assert.equal(e.$('empty').hidden,true);assert.equal(e.$('status').hidden,true);assert.equal(e.w.location.hash,'');assert.equal(e.w.history.length,history);assert.equal(e.w.document.activeElement,e.$('viewport'));assert.match(e.$('detail').textContent,/Alderを使った設計業務/);checks.push('restore guard, no-file sample, 25 nodes/63 relations, silent duplicate-safe open, unchanged history');
+ const key=e.tabs()[0].dataset.key,node=e.nodes()[0],id=node.dataset.node;choose(e,node);const n=e.w.document.querySelector('.node.selected');n.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});n.onpointermove({clientX:80,clientY:50});n.onpointerup({pointerId:1});const pos=[e.nodes()[0].style.left,e.nodes()[0].style.top];
+ click(e,'theme');await e.$('refresh').onclick();assert.equal(e.tabs().length,1);assert.equal(e.tabs()[0].dataset.key,key);assert.deepEqual([e.nodes()[0].style.left,e.nodes()[0].style.top],pos);assert.equal(e.w.document.querySelector('.node.selected').dataset.node,id);assert.deepEqual(e.calls(),{fetches:0,pickers:0});click(e,'status-close');await tick(300);e.w.close();
+ const restored=await ready(env(db));assert.equal(restored.tabs().length,1);assert.equal(restored.tabs()[0].dataset.key,key);assert.equal(restored.w.document.documentElement.dataset.theme,'dark');assert.equal(restored.w.document.querySelector('.node.selected').dataset.node,id);assert.deepEqual([restored.nodes()[0].style.left,restored.nodes()[0].style.top],pos);assert.equal(restored.$('status').hidden,true);assert.deepEqual(restored.calls(),{fetches:0,pickers:0});checks.push('sample refresh and IndexedDB reload preserve selected node/layout/theme with no fetch or picker');
+ click(restored,'open-text');restored.$('source-text').value='# invalid';await restored.$('source-submit').onclick();assert.equal(restored.tabs().length,1);assert.equal(restored.nodes().length,25);click(restored,'source-cancel');
+ click(restored,'open-text');restored.$('source-text').value=raw;await restored.$('source-submit').onclick();assert.equal(restored.tabs().length,2);click(restored,'open-sample');assert.equal(restored.tabs().length,2);assert.equal(restored.w.document.querySelector('.tab.active').dataset.key,key);restored.w.document.querySelector('.tab.active .close').click();assert.equal(restored.tabs().length,1);assert.equal(restored.nodes().length,25);restored.w.document.querySelector('.close').click();assert.equal(restored.$('empty').hidden,false);click(restored,'open-sample');assert.equal(restored.tabs().length,1);assert.equal(restored.nodes().length,25);checks.push('invalid input keeps sample; switching and closing tabs returns to sample link; reopening succeeds');
+ const broken=await ready(env(new IDBFactory(),await bundle(true)));click(broken,'open-sample');assert.equal(broken.tabs().length,0);assert.equal(broken.$('empty').hidden,false);assert.match(broken.$('status-text').textContent,/サンプルを開けません/);click(broken,'open-sample');assert.equal(broken.tabs().length,0);assert.deepEqual(broken.calls(),{fetches:0,pickers:0});checks.push('invalid bundled sample leaves empty state and retry link with visible error');
+ const saving=await ready(env());saving.w.structuredClone=()=>{throw Error('storage unavailable');};click(saving,'open-sample');await tick(230);assert.equal(saving.nodes().length,25);assert.match(saving.$('status-text').textContent,/保存できません/);click(saving,'open-sample');assert.equal(saving.tabs().length,1);assert.match(saving.$('status-text').textContent,/保存できません/);checks.push('save failure retains usable sample and persistent error without duplicate tabs');
+ console.log(JSON.stringify({model:'JSDOM/IndexedDB, no real browser',publicSource:'business-design/alder/README.md',nodes:25,relations:63,checks,passed:checks.length},null,2));
+}finally{windows.forEach(w=>w.close());}
