@@ -26,7 +26,10 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 .node:hover{filter:brightness(1.035)}
 .node>svg{width:23px;height:23px;color:var(--review-blue)!important}
 .node.object>svg{color:var(--review-green)!important}
-.node .node-text{flex:1;gap:2px;min-width:0}
+/* Shared icon column and three text rows keep Activity/Object labels aligned. */
+.node,.node.business{display:grid;grid-template-columns:28px minmax(0,1fr)}
+.node>svg{justify-self:center}
+.node .node-text{display:grid;grid-template-rows:10.8px 16.25px 12px;gap:2px;min-width:0}
 .node .node-name{font-size:13px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
 .node .review-kind{font-size:9px;letter-spacing:.03em;font-weight:650;opacity:.9;line-height:1.2;max-height:none}
 .node small{font-size:10px;line-height:1.2;opacity:1;color:inherit;max-width:166px}
@@ -44,3 +47,9 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:nowrap}
 
 #open-sample{display:inline-block;color:var(--fg);text-underline-offset:3px;padding:8px}#open-sample:hover{text-decoration-thickness:2px}#open-sample:focus-visible{outline:2px solid var(--fg);outline-offset:3px}#open-sample[aria-disabled=true]{opacity:.4;cursor:default}
+
+/* Display-only edge preference shares the existing graph toolbar. */
+.toolbar .edge-option{display:flex;align-items:center;gap:5px;padding:0 10px;font-size:11px;white-space:normal;min-width:0;line-height:1.2;border-right:1px solid var(--subtle);height:40px;cursor:pointer}
+.toolbar .edge-option input{margin:0;accent-color:var(--review-blue);flex-shrink:0}
+.toolbar{max-width:calc(100% - 24px)}
+.toolbar button,.toolbar #zoom{flex-shrink:0}

@@ -1,4 +1,4 @@
-name: Web Viewer sample validation
+name: Web Viewer display validation
 on:
   pull_request:
     types: [opened, synchronize]
@@ -9,7 +9,7 @@ permissions:
   contents: read
 jobs:
   verify:
-    if: github.head_ref == 'feature/web-viewer-public' && github.run_number == 3 && github.run_attempt == 1
+    if: github.head_ref == 'feature/web-viewer-public' && github.run_number == 4 && github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     defaults:

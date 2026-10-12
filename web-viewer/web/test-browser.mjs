@@ -2,6 +2,8 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
+import {verifyLabelLayout} from './test-label-layout.mjs';
+import {verifyEdgeOption} from './test-edge-browser.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/usr/bin/google-chrome',headless:true});
@@ -11,6 +13,8 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
+  checks.push({labelLayout:await verifyLabelLayout(browser)});
+  checks.push({edgeOption:await verifyEdgeOption(browser)});
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];
   sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));
   await sample.goto('http://127.0.0.1:4173/');await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
