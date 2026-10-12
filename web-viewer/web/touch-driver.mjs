@@ -49,8 +49,15 @@ export function touchDriver(page,cdp){
    // New hit testing must see the previously rendered scroll/transform.
    if(type==='touchStart')await painted();
    const serial=await page.evaluate(()=>window.touchObserved.serial);
-   await page.evaluate(command=>{window.touchCommand=command;},{type,points,serial});
-   await cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points.map(([id,x,y])=>({id,x,y,radiusX:1,radiusY:1,force:1}))});
+   // This API describes contacts remaining AFTER the action, not raw CDP.
+   // Chromium's observed legacy CreateWebTouchEvents path accepts partial end
+   // as the IDs TO RELEASE. Public CDP docs/its synthetic path differ; a real
+   // browser protocol preflight must validate this adapter before product tests.
+   // Full end and cancel use the documented empty payload.
+   const wirePoints=type==='touchEnd'&&plan.next.size>0
+     ?plan.removed.map(id=>[id,physical.get(id).x,physical.get(id).y]):points;
+   await page.evaluate(command=>{window.touchCommand=command;},{type,points,wirePoints,serial});
+   await cdp.send('Input.dispatchTouchEvent',{type,touchPoints:wirePoints.map(([id,x,y])=>({id,x,y,radiusX:1,radiusY:1,force:1}))});
    if(type==='touchStart'){
      await page.waitForFunction(({serial,count})=>window.touchObserved.downs.filter(e=>e.seq>serial).length===count,{serial,count:plan.added.length});
      const events=await page.evaluate(serial=>window.touchObserved.downs.filter(e=>e.seq>serial),serial);
@@ -64,7 +71,8 @@ export function touchDriver(page,cdp){
      for(const id of plan.removed)pointerIDs.delete(id);
    }
    physical=plan.next;
-   assert.equal(await page.evaluate(()=>Object.keys(window.touchObserved.active).length),physical.size,'DOM pointer lifetime must match dispatched touch lifetime');
+   const active=await page.evaluate(()=>Object.keys(window.touchObserved.active).map(Number).sort((a,b)=>a-b));
+   assert.deepEqual(active,[...physical.keys()].map(id=>pointerIDs.get(id)).sort((a,b)=>a-b),'DOM pointer identity/lifetime must match the remaining contacts');
  };
  const idle=()=>{assert.equal(physical.size,0,'previous gesture must end before starting native scroll');};
  return {install,send,painted,idle};

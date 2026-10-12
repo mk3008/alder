@@ -16,7 +16,7 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
-  checks.push({touchZoom:await verifyTouchZoom(browser)});
+  const touchZoom=await verifyTouchZoom(browser);checks.push({touchZoom});
   checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
   checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
@@ -102,5 +102,6 @@ try {
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
   assert.deepEqual(errors,[]);
+  assert.ok(touchZoom.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');
   console.log(JSON.stringify({browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']},null,2));
 } finally {await browser.close();}
