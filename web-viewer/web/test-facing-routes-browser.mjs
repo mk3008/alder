@@ -1,4 +1,13 @@
 import assert from 'node:assert/strict';
+// Wait for the real debounced IndexedDB write, not an arbitrary delay. This
+// test checks reload after save; it does not promise immediate unload durability.
+export async function waitForSavedPositions(page,positions){
+ await page.waitForFunction(async ({positions})=>new Promise((resolve,reject)=>{
+  const open=indexedDB.open('alder-web-viewer',1);open.onerror=()=>reject(open.error);
+  open.onsuccess=()=>{const db=open.result;const tx=db.transaction('session','readonly');const get=tx.objectStore('session').get('current');let matches=false;get.onsuccess=()=>{const s=get.result,p=s?.tabs?.find(t=>t.key===s.active)?.positions;matches=!!p&&Object.keys(p).length===Object.keys(positions).length&&Object.entries(positions).every(([id,point])=>Array.isArray(p[id])&&p[id].length===2&&p[id].every((v,i)=>v===point[i]));};tx.oncomplete=()=>{db.close();resolve(matches);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Session read failed'));};};
+ }),{positions},{timeout:5000,polling:50});
+ console.log('Facing route committed positions',JSON.stringify(positions));
+}
 export async function verifyFacingRoutes(browser){
  const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  const text='# Facing route fixture\n\n'+['A source','B obstacle'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic routing test\n\n').join('')+'# Activity C target\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- A source — Input\n\n### Procedure\n\nTest\n\n### Output\n\n- B obstacle — Output\n\n## Result\n\nTest\n';
@@ -8,7 +17,7 @@ export async function verifyFacingRoutes(browser){
   await page.mouse.move(box.x+100,box.y+30);await page.mouse.down();await page.mouse.move(box.x+780,box.y+30,{steps:8});await page.mouse.up();
   const inspect=()=>page.evaluate(()=>{const node=id=>{const n=document.querySelector(`.node[data-node="${id}"]`);return {x:parseFloat(n.style.left),y:parseFloat(n.style.top),w:260,h:68};};const edge=document.querySelector('.edge[data-relation="0"]'),end=edge.getPointAtLength(edge.getTotalLength()),start=edge.getPointAtLength(0);return {source:node('A source'),target:node('C target'),obstacle:node('B obstacle'),start:[start.x,start.y],end:[end.x,end.y],path:edge.getAttribute('d'),collisions:edge.dataset.collisions,maxX:Math.max(...Array.from({length:257},(_,i)=>edge.getPointAtLength(edge.getTotalLength()*i/256).x))};});
   const route=await inspect();assert.ok(route.target.x>route.obstacle.x+route.obstacle.w,'target was dragged beyond the intervening card');assert.equal(route.target.x,1080);assert.ok(Math.abs(route.start[0]-(route.source.x+route.source.w))<1);assert.ok(Math.abs(route.end[0]-route.target.x)<1,'far-right target must receive from its facing left side');assert.equal(route.collisions,'0','dragged route avoids intervening card');assert.ok(route.maxX<=route.target.x+1,'route never loops behind far-right target');assert.match(route.path,/ Q/);assert.doesNotMatch(route.path,/[LHV]/);
-  const paths=await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')));await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');assert.deepEqual(await inspect(),route);assert.deepEqual(await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d'))),paths);assert.deepEqual(errors,[]);
+  const paths=await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')));await waitForSavedPositions(page,{'A source':[route.source.x,route.source.y],'B obstacle':[route.obstacle.x,route.obstacle.y],'C target':[route.target.x,route.target.y]});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');assert.deepEqual(await inspect(),route);assert.deepEqual(await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d'))),paths);assert.deepEqual(errors,[]);
   return {checks:'real pointer drag beyond obstacle; facing ports retained; quadratic route; endpoint direction; reload exact routes and positions',route,pageErrors:errors};
  }finally{await page.close();}
 }
