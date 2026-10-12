@@ -22,7 +22,14 @@ try {
   await sample.evaluate(()=>{document.querySelector('#open-sample').click();document.querySelector('#open-sample').click();});assert.equal(await sample.locator('.tab').count(),1);
   assert.equal(sample.url(),startURL);assert.equal(await sample.evaluate(()=>history.length),historyLength);
   const sampleFirst=sample.locator('.node').first(),sampleId=await sampleFirst.getAttribute('data-node');await sampleFirst.click();
-  assert.ok((await sample.locator('#detail').textContent()).includes('依頼者'));
+  assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
+  const sampleSource=readFileSync('../business-design/alder/README.md','utf8');
+  const sampleHeading=sampleSource.split('\n').find(line=>line===`# Object ${sampleId}`||line===`# Activity ${sampleId}`);
+  assert.ok(sampleHeading,'Selected node must have a canonical source section');
+  assert.equal(await sample.locator('#detail h1').textContent(),sampleHeading.slice(2));
+  const sampleSection=sampleSource.slice(sampleSource.indexOf(sampleHeading)).split('\n# ')[0];
+  const sampleItems=sampleSection.split('\n').filter(line=>line.startsWith('- ')).map(line=>line.slice(2));
+  assert.ok(sampleItems.length>0);for(const item of sampleItems)assert.ok((await sample.locator('#detail').textContent()).includes(item));
   const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
   const sampleAfter=await sampleFirst.boundingBox();assert.ok(sampleAfter.x>sampleBefore.x+30);
   await sample.locator('#theme').click();await sample.locator('#refresh').click();assert.equal(await sample.locator('.tab').count(),1);
