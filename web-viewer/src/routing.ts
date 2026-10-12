@@ -15,10 +15,17 @@ export interface EdgeRoute {
 const CLEARANCE = 14, SAMPLES = 32, LANE_GAP = 30;
 const center = (r: RouteNode): Point => [r.x + r.width / 2, r.y + r.height / 2];
 const distance = (a: Point, b: Point) => Math.hypot(b[0] - a[0], b[1] - a[1]);
-function boundary(r: RouteNode, toward: Point): Point {
-  const c = center(r), dx = toward[0] - c[0], dy = toward[1] - c[1];
-  const scale = 1 / Math.max(Math.abs(dx) / (r.width / 2), Math.abs(dy) / (r.height / 2));
-  return Number.isFinite(scale) ? [c[0] + dx * scale, c[1] + dy * scale] : c;
+type Side = 'left' | 'right' | 'top' | 'bottom';
+const normals: Record<Side, Point> = {left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
+const add = (a:Point,b:Point,k=1):Point => [a[0]+b[0]*k,a[1]+b[1]*k];
+const unit = (a:Point,b:Point):Point => {const d=distance(a,b)||1;return [(b[0]-a[0])/d,(b[1]-a[1])/d];};
+function port(r:RouteNode,side:Side):Point {
+  const n=normals[side],c=center(r);return [c[0]+n[0]*r.width/2,c[1]+n[1]*r.height/2];
+}
+/** Ports depend on the endpoints, never on a moving obstacle or detour handle. */
+function facing(a:RouteNode,b:RouteNode):[Side,Side] {
+  const ac=center(a),bc=center(b),dx=bc[0]-ac[0],dy=bc[1]-ac[1];
+  return Math.abs(dx)>=Math.abs(dy)?(dx>=0?['right','left']:['left','right']):(dy>=0?['bottom','top']:['top','bottom']);
 }
 /** Segment/slab intersection also catches a small obstacle between sampled vertices. */
 function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean {
@@ -96,40 +103,85 @@ function curve(a:Point,c:Point,b:Point){
   const bounds={right:Math.max(...extents.map(p=>p[0])),bottom:Math.max(...extents.map(p=>p[1]))};
   return {points,error,bounds,path:`M${a} Q${c} ${b}`};
 }
+/** Interpolate waypoints with tangent-continuous pairs of quadratic curves.
+ * Short handles round local bends without pulling endpoint ports toward a lane.
+ */
+function smooth(waypoints:Point[], departure:Point, arrival:Point) {
+  const vertices=waypoints.filter((p,i)=>!i||distance(p,waypoints[i-1])>1e-6);
+  if(vertices.length<2)vertices.push(add(vertices[0],[1,0],1));
+  const tangents=vertices.map((p,i):Point=>{
+    if(!i)return departure;
+    if(i===vertices.length-1)return arrival;
+    const before=unit(vertices[i-1],p),after=unit(p,vertices[i+1]);
+    return unit([0,0],add(before,after));
+  });
+  const segments:ReturnType<typeof curve>[]=[];
+  for(let i=1;i<vertices.length;i++){
+    const a=vertices[i-1],b=vertices[i],handle=Math.min(28,distance(a,b)*.24);
+    const c=add(a,tangents[i-1],handle),d=add(b,tangents[i],-handle);
+    const mid:Point=[(c[0]+d[0])/2,(c[1]+d[1])/2];
+    segments.push(curve(a,c,mid),curve(mid,d,b));
+  }
+  return {
+    points:segments.flatMap((s,i)=>i?s.points.slice(1):s.points),
+    error:Math.max(...segments.map(s=>s.error)),
+    bounds:{right:Math.max(...segments.map(s=>s.bounds.right)),bottom:Math.max(...segments.map(s=>s.bounds.bottom))},
+    path:segments.map((s,i)=>i?s.path.slice(s.path.indexOf(' Q')):s.path).join('')
+  };
+}
 /**
- * Every route stays a quadratic curve, including obstacle detours. Compare at
- * most eight bowed candidates by card collisions, then length and turning.
- * Recomputed from current positions on drag; never edits the layout. Sampled
- * chords are inflated by their analytic error. Dense graphs can still contain
- * crossings or collisions; fallback reports the latter and blocked labels.
+ * Facing ports are preferred even when a shorter detour uses another side.
+ * Try local and global curved lanes with these ports first; alternative sides
+ * are considered only if all facing candidates collide. Candidate counts and
+ * sampling are bounded independently of graph density. Coordinates are read
+ * fresh on every drag. Fallback exposes unavoidable collisions/blocked labels.
  */
 export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelHeight = 20 }: RouteOptions): EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),ac=center(source),bc=center(target);
-  const a=boundary(source,bc),b=boundary(target,ac),dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy)||1,bend=40+(Math.abs(index)%3)*16;
-  const c:Point=[(a[0]+b[0])/2-dy/length*bend,(a[1]+b[1])/2+dx/length*bend];
-  let chosen=curve(a,c,b),bestScore=score(chosen.points,obstacles,CLEARANCE+chosen.error),rerouted=false;
+  const sides=facing(source,target),a=port(source,sides[0]),b=port(target,sides[1]);
+  const direction=unit(a,b),bend=40+(Math.abs(Math.trunc(index))%3)*16;
+  const middle:Point=[(a[0]+b[0])/2-direction[1]*bend,(a[1]+b[1])/2+direction[0]*bend];
+  let chosen=smooth([a,middle,b],normals[sides[0]],add([0,0],normals[sides[1]],-1));
+  // End cards are tested with a tiny inset: touching a port is allowed, but
+  // departing through or returning through the card is not.
+  const evaluate=(candidate:ReturnType<typeof smooth>)=>{
+    const s=score(candidate.points,obstacles,CLEARANCE+candidate.error);
+    s[0]+=routeCollisionCount(candidate.points,[source,target],-.1);
+    return s;
+  };
+  let bestScore=evaluate(chosen),rerouted=false;
   if(bestScore[0]){
     const reverse=ac[0]>bc[0]||(ac[0]===bc[0]&&ac[1]>bc[1]);
     const laneOffset=(Math.abs(Math.trunc(index))%4)*12+(reverse?72:0);
     const blockers=obstacles.filter(n=>routeCollisionCount(chosen.points,[n],CLEARANCE+chosen.error));
-    for(const group of [blockers,obstacles]){
-      const bounds=[...group,source,target];
-      const left=Math.min(...bounds.map(n=>n.x))-CLEARANCE-LANE_GAP-laneOffset;
-      const right=Math.max(...bounds.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+laneOffset;
-      const top=Math.min(...bounds.map(n=>n.y))-CLEARANCE-LANE_GAP-laneOffset;
-      const bottom=Math.max(...bounds.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+laneOffset;
-      for(const control of [
-        [(ac[0]+bc[0])/2,2*top-(ac[1]+bc[1])/2],[(ac[0]+bc[0])/2,2*bottom-(ac[1]+bc[1])/2],
-        [2*left-(ac[0]+bc[0])/2,(ac[1]+bc[1])/2],[2*right-(ac[0]+bc[0])/2,(ac[1]+bc[1])/2]
-      ] as Point[]){
-        const candidate=curve(boundary(source,control),control,boundary(target,control));
-        // Control points may lie outside the canvas; the actual curve may not.
-        if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
-        const candidateScore=score(candidate.points,obstacles,CLEARANCE+candidate.error);
-        if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
+    const groups=[blockers,obstacles];
+    const tryPorts=(pair:[Side,Side])=>{
+      const start=port(source,pair[0]),end=port(target,pair[1]);
+      const normalA=normals[pair[0]],normalB=normals[pair[1]];
+      const reach=Math.min(36,Math.max(8,distance(start,end)*.08));
+      const exit=add(start,normalA,reach),entry=add(end,normalB,reach);
+      for(const group of groups){
+        const bounds=[...group,source,target];
+        const left=Math.min(...bounds.map(n=>n.x))-CLEARANCE-LANE_GAP-laneOffset;
+        const right=Math.max(...bounds.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+laneOffset;
+        const top=Math.min(...bounds.map(n=>n.y))-CLEARANCE-LANE_GAP-laneOffset;
+        const bottom=Math.max(...bounds.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+laneOffset;
+        for(const lane of [
+          [[exit[0],top],[entry[0],top]],[[exit[0],bottom],[entry[0],bottom]],
+          [[left,exit[1]],[left,entry[1]]],[[right,exit[1]],[right,entry[1]]]
+        ] as Point[][]){
+          const candidate=smooth([start,exit,...lane,entry,end],normalA,add([0,0],normalB,-1));
+          if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
+          const candidateScore=evaluate(candidate);
+          if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
+        }
       }
+    };
+    tryPorts(sides);
+    if(bestScore[0]){
+      for(const side of ['top','bottom','left','right'] as Side[])tryPorts([side,side]);
     }
   }
   const label=labelAt(chosen.points,nodes,labelWidth,labelHeight);

@@ -111,10 +111,18 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   assert.equal(after.scale,1);assert.deepEqual(await positions(),initial);
   await pinch(cx,cy,200,300);assert.equal((await view()).zoom,2.5);await pinch(cx,cy,300,20,'touchCancel');assert.equal((await view()).zoom,.25);await pinch(cx,cy,100,200);assert.equal((await view()).zoom,.5);assert.deepEqual(await positions(),initial);
  },{blocked:!basic});
- await run('product: one-finger node drag and confirmed-background pan',async({page,driver,send,positions,view,pinch})=>{
+ for(const panCase of ['sample-clamp','fixture-zero-y','fixture-two-axes'])await run('product: one-finger node drag and background pan '+panCase,async({page,driver,send,positions,view,pinch})=>{
   await page.locator('#layout-lock').click();const initial=await positions();await pinch(500,400,200,300);await pinch(500,400,300,200);assert.equal((await view()).zoom,1);assert.deepEqual(await positions(),initial);
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
+  if(panCase!=='sample-clamp'){
+   // Explicit input fixture, not artificial canvas/body overflow. A three-card dependency
+   // chain leaves the actual minimum canvas height850; viewport height controls
+   // whether a real vertical pan range exists.
+   const fixture='# Pan fixture\n\n'+['Pan A','Pan B'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic pan test\n\n').join('')+'# Activity Pan activity\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- Pan A — Test\n\n### Procedure\n\nTest\n\n### Output\n\n- Pan B — Test\n\n## Result\n\nTest\n';
+   await page.locator('#open-text').click();await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
+   await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:960});
+  }
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=100;n.scrollTop=100;});
   // Wait for a painted frame after programmatic scroll/scale, then keep well clear
   // of every node rectangle. A point on a rounded corner is not a safe touch area.
@@ -133,7 +141,9 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
     return best;
   });
   const beforePanPositions=await positions(),panBefore=await page.evaluate(readScrollMetrics,{id:'viewport',x:background.x,y:background.y});
-  const expected=panBefore.scroll.map((value,i)=>Math.min(value+50,panBefore.max[i]));assert.ok(expected.every((value,i)=>value>panBefore.scroll[i]),'both axes need available pan range');
+  const expected=panBefore.scroll.map((value,i)=>Math.min(value+50,panBefore.max[i]));assert.ok(expected.some((value,i)=>value>panBefore.scroll[i]),'at least one real pan axis');
+  if(panCase==='fixture-zero-y'){assert.equal(panBefore.max[1],0);assert.equal(expected[1],0);}
+  if(panCase==='fixture-two-axes')assert.ok(expected.every((value,i)=>value>panBefore.scroll[i]),'explicit small-viewport fixture has both axes');
   await page.evaluate(data=>{Object.assign(window.panProbe,data);},{before:panBefore,expected});
   await send('touchStart',[[1,background.x,background.y]]);
   await page.waitForFunction(()=>window.panProbe.actualDown!==null);const probe=await page.evaluate(()=>window.panProbe);console.log('Background pan probe',JSON.stringify(probe));
