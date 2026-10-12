@@ -4,6 +4,18 @@ import {parseDesign} from '../src/graph.ts';
 import {setScope} from './scope-control.mjs';
 import {waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
 
+// At zoom1, an integer pointer delta produces an independently known integer
+// world coordinate. Never derive the persistence oracle from serialized CSS.
+export function integerDragPlan(fixture,moving,box,crossing){
+ const start=[Math.round(box.x+130),Math.round(box.y+34)],end=crossing.screen.map(Math.round);
+ const expected=Object.fromEntries(Object.entries(fixture).map(([id,p])=>[id,[...p]]));
+ expected[moving]=fixture[moving].map((v,i)=>v+end[i]-start[i]);
+ assert.ok(start[0]>box.x&&start[0]<box.x+box.width&&start[1]>box.y&&start[1]<box.y+box.height,'integer pointer starts inside card');
+ assert.ok([...start,...end,...expected[moving]].every(Number.isSafeInteger));
+ const p=expected[moving];assert.ok(crossing.world[0]>p[0]&&crossing.world[0]<p[0]+260&&crossing.world[1]>p[1]&&crossing.world[1]<p[1]+68,'integer drag still covers original unrelated path');
+ return {start,end,expected};
+}
+
 // Caller owns Chromium and the shared saved-state preflight. This module only
 // runs one isolated case, with public fixture data and bounded committed writes.
 export async function verifyRouteCache(browser){
@@ -33,8 +45,13 @@ export async function verifyRouteCache(browser){
   // Use the real rendered path's midpoint, not a fresh routeEdge prediction.
   const crossing=await page.locator(`.edge[data-relation="${unrelated}"]`).evaluate(path=>{const point=path.getPointAtLength(path.getTotalLength()/2),screen=point.matrixTransform(path.getScreenCTM());return {world:[point.x,point.y],screen:[screen.x,screen.y]};});
   await page.locator('#layout-lock').click();const card=page.locator('.node[data-node="person"]'),box=await card.boundingBox();
-  await page.mouse.move(box.x+130,box.y+34);await page.mouse.down();await page.mouse.move(crossing.screen[0],crossing.screen[1],{steps:6});
+  assert.equal(await page.locator('#zoom').textContent(),'100%');
+  const drag=integerDragPlan(fixture,moving,box,crossing);
+  console.log('ROUTE_CACHE_EXPECTED '+JSON.stringify({start:drag.start,end:drag.end,expected:drag.expected,crossing}));
+  await page.mouse.move(...drag.start);await page.mouse.down();await page.mouse.move(...drag.end,{steps:6});
   const during=await routes(),moved=await positions(),p=moved[moving];
+  console.log('ROUTE_CACHE_DOM '+JSON.stringify({stage:'during-drag',expected:drag.expected,observed:moved}));
+  assert.deepEqual(moved,drag.expected,'DOM matches independently calculated integer input delta');
   assert.ok(crossing.world[0]>p[0]&&crossing.world[0]<p[0]+260&&crossing.world[1]>p[1]&&crossing.world[1]<p[1]+68,'moved card covers the original unrelated path');
   assert.notDeepEqual(moved,fixture);
   let changedIncident=0;
@@ -56,12 +73,14 @@ export async function verifyRouteCache(browser){
   const firstKey=await page.locator('.tab').first().getAttribute('data-key');
   await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.locator('.tab').nth(1).waitFor();
   await page.locator(`.tab[data-key="${firstKey}"]`).locator('button').first().click();assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'tab switch preserves route history');
-  await waitSavedViewer(page,{positions:moved,hiddenNodes:[],zoom:1});await page.reload();await ready();assert.deepEqual(await positions(),moved,'cold restore preserves coordinates');
+  let lastObserved;
+  await waitSavedViewer(page,{positions:drag.expected,hiddenNodes:[],zoom:1},{observe:({reads,observed})=>{const serialized=JSON.stringify(observed);if(serialized!==lastObserved){console.log('ROUTE_CACHE_DB '+JSON.stringify({reads,expected:drag.expected,observed}));lastObserved=serialized;}}});
+  await page.reload();await ready();const restored=await positions();console.log('ROUTE_CACHE_DOM '+JSON.stringify({stage:'cold-restore',expected:drag.expected,observed:restored}));assert.deepEqual(restored,drag.expected,'cold restore matches independent integer coordinates');
   const cold=await routes();assert.equal(Object.keys(cold).length,relations.length);
   // Reload is a fresh full routing pass. Equality with history-dependent routes
   // is deliberately not an invariant; report changes rather than require them.
   const coldChanged=relations.map((_,i)=>i).filter(i=>cold[i].path!==during[i].path||JSON.stringify(cold[i].label)!==JSON.stringify(during[i].label));
   assert.deepEqual(errors,[]);
-  return {checks:'real pointer crossing unrelated cached path; exact path/label retention; incident endpoint follows; pointerup and selection preserve geometry; selected-only/exception/Write/Scope roundtrips; per-tab history; bounded IDB commit; cold reload coordinates',unrelatedRelation:unrelated,changedIncident,coldChangedRelations:coldChanged,pageErrors:errors,limit:'Runtime route history is intentionally not persisted; cold reload may change paths and labels.'};
+  return {checks:'real pointer crossing unrelated cached path; exact path/label retention; incident endpoint follows; pointerup and selection preserve geometry; selected-only/exception/Write/Scope roundtrips; per-tab history; bounded IDB commit; cold reload coordinates',expectedPositions:drag.expected,observedPositions:moved,restoredPositions:restored,unrelatedRelation:unrelated,changedIncident,coldChangedRelations:coldChanged,pageErrors:errors,limit:'Runtime route history is intentionally not persisted; cold reload may change paths and labels.'};
  }finally{await context.close();}
 }

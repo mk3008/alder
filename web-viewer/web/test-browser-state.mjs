@@ -1,3 +1,4 @@
+import {integerDragPlan} from './test-route-cache-browser.mjs';
 import assert from 'node:assert/strict';
 import {indexedDB,IDBFactory} from 'fake-indexeddb';
 import {runBrowserCases} from './browser-cases.mjs';
@@ -14,3 +15,14 @@ for(const mutate of [s=>{s.tabs[0].positions.A[0]=995;},s=>{s.tabs[0].hiddenNode
 const good=make();await put(good);assert.deepEqual(await waitSavedViewer({evaluate:async fn=>await fn()},expected),good);db.close();globalThis.indexedDB=new IDBFactory();const missing=indexedDB.open('unused'); // Different object below deliberately has no store.
 missing.onsuccess=()=>missing.result.close();const noStore=globalThis.indexedDB.open('alder-web-viewer',1);await new Promise(r=>noStore.onsuccess=()=>{noStore.result.close();r();});await assert.rejects(readSessionInPage(),/Missing session store/);
 console.log('case collection and Node-side bounded actual reads passed; stale/false/null/timeout/error, old Promise bug, exact state projection, missing database/store. Real Playwright preflight remains separate.');
+
+// Fractional SVG midpoint is quantized at the input boundary, not in the saved
+// value assertion. A viewport origin need not itself be an integer.
+const dragFixture={person:[1040,100],record:[80,100],read:[650,420],approve:[1040,650]};
+const dragPlan=integerDragPlan(dragFixture,'person',{x:1040,y:209,width:260,height:68},{screen:[252.1070556640625,563],world:[252.1070556640625,454]});
+assert.deepEqual(dragPlan,{start:[1170,243],end:[252,563],expected:{...dragFixture,person:[122,420]}});
+assert.deepEqual(dragFixture.person,[1040,100]);
+const fractionalOrigin=integerDragPlan(dragFixture,'person',{x:1040.25,y:209.25,width:260,height:68},{screen:[252.3570556640625,563.25],world:[252.1070556640625,454]});
+assert.deepEqual(fractionalOrigin.expected.person,[122,420]);
+assert.throws(()=>integerDragPlan(dragFixture,'person',{x:1040,y:209,width:260,height:68},{screen:[500,500],world:[0,0]}),/still covers/);
+console.log('integer drag plan: independent exact coordinates, fractional target/origin, input nonmutation, crossing validity');
