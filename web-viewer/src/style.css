@@ -53,3 +53,14 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 .toolbar .edge-option input{margin:0;accent-color:var(--review-blue);flex-shrink:0}
 .toolbar{max-width:calc(100% - 24px)}
 .toolbar button,.toolbar #zoom{flex-shrink:0}
+
+/* Keep both display options readable without widening the compact zoom controls. */
+.toolbar{height:auto;align-items:center}
+.display-options{display:flex;flex-direction:column;min-width:0}
+.toolbar .edge-option{height:32px}
+#scope-empty{position:absolute;inset:30% 20px auto;text-align:center;color:var(--line);font-size:14px;pointer-events:none}
+#scope-empty[hidden]{display:none}
+
+#preview-badge{font-size:11px;line-height:1.3;max-width:220px;overflow-wrap:anywhere;flex-shrink:0;border:1px solid #ffffff70;border-radius:4px;padding:3px 6px}
+#preview-badge[hidden]{display:none}
+@media(max-width:800px){header:has(#preview-badge:not([hidden])) strong{font-size:14px}#preview-badge{max-width:140px;font-size:10px}}

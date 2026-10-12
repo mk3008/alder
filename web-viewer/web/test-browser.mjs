@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 import {verifyLabelLayout} from './test-label-layout.mjs';
+import {verifyPreviewIsolation} from './test-preview-browser.mjs';
+import {verifyScopeOption} from './test-scope-browser.mjs';
 import {verifyEdgeOption} from './test-edge-browser.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
@@ -13,6 +15,8 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
+  checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
+  checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
   checks.push({edgeOption:await verifyEdgeOption(browser)});
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];

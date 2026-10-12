@@ -51,7 +51,7 @@ export async function verifyLabelLayout(browser) {
       await page.setViewportSize({width,height:852});
       const toolbar=await page.locator('.toolbar').boundingBox();
       assert.ok(toolbar.x>=0&&toolbar.x+toolbar.width<=width,'display option and zoom fit narrow viewport');
-      assert.ok(toolbar.height<=42,'toolbar stays one compact row');
+      assert.ok(toolbar.height<=66,'two options remain compact beside zoom controls');
     }
     assert.deepEqual(errors,[]);
     return results;
