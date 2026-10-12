@@ -1,3 +1,4 @@
+import {assertToolbarLayout} from './test-toolbar-layout.mjs';
 // Real rendered geometry; select nodes by their type/scope, never their list order.
 import assert from 'node:assert/strict';
 export async function verifyLabelLayout(browser) {
@@ -51,11 +52,7 @@ export async function verifyLabelLayout(browser) {
       await page.setViewportSize({width,height:852});
       for(const [id,label] of [['open','ファイルを開く'],['open-url','URLを開く'],['open-text','テキストを入力']]){const button=page.locator('#'+id);assert.equal(await button.getAttribute('aria-label'),label);assert.equal(await button.getAttribute('title'),label);assert.equal(await button.locator('svg').isVisible(),true);assert.equal(await button.locator('.source-caption').isVisible(),false);const box=await button.boundingBox();assert.ok(box.width>=36&&box.height>=40&&box.x>=0&&box.x+box.width<=width,'source icons remain accessible and touchable');}
       for(const id of ['open-url','open-text']){await page.locator('#'+id).click();assert.equal(await page.locator('#source-dialog').isVisible(),true);await page.keyboard.press('Escape');assert.equal(await page.locator('#source-dialog').isVisible(),false);}
-      const toolbar=await page.locator('.toolbar').boundingBox();
-      assert.ok(toolbar.x>=0&&toolbar.x+toolbar.width<=width,'display option and zoom fit narrow viewport');
-      assert.ok(toolbar.height<=100,'options and lock/zoom controls remain bounded on narrow screens');
-      for(const item of await page.locator('.edge-option').evaluateAll(ns=>ns.map(n=>({scroll:n.scrollHeight,client:n.clientHeight}))))assert.ok(item.scroll<=item.client,'wrapped option labels must not clip');
-      for(const id of ['prefer-write','layout-lock','out','in']){const control=await page.locator('#'+id).boundingBox();assert.ok(control.x>=toolbar.x&&control.x+control.width<=toolbar.x+toolbar.width&&control.y>=toolbar.y&&control.y+control.height<=toolbar.y+toolbar.height);} 
+      results.push({toolbar:await assertToolbarLayout(page)});
     }
     await page.setViewportSize({width:1280,height:960});for(const id of ['open','open-url','open-text']){assert.equal(await page.locator('#'+id+' svg').isVisible(),true);assert.equal(await page.locator('#'+id+' .source-caption').isVisible(),true);}
     assert.deepEqual(errors,[]);

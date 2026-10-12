@@ -9,25 +9,21 @@ export interface RouteOptions {
 }
 export interface EdgeRoute {
   path: string; label: Point; points: Point[]; bounds: {right:number;bottom:number}; collisions: number; rerouted: boolean;
-  /** Best effort: remaining card collisions or no card-free label candidate. */
+  /** Best effort: remaining card collisions, off-canvas geometry or a blocked label. */
   fallback: boolean;
 }
-const CLEARANCE = 14, SAMPLES = 32, LANE_GAP = 30;
+const CLEARANCE = 14, RADIUS = 8, CORNER_STEPS = 4, LANE_GAP = 30;
 const center = (r: RouteNode): Point => [r.x + r.width / 2, r.y + r.height / 2];
 const distance = (a: Point, b: Point) => Math.hypot(b[0] - a[0], b[1] - a[1]);
 type Side = 'left' | 'right' | 'top' | 'bottom';
 const normals: Record<Side, Point> = {left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
 const add = (a:Point,b:Point,k=1):Point => [a[0]+b[0]*k,a[1]+b[1]*k];
-const unit = (a:Point,b:Point):Point => {const d=distance(a,b)||1;return [(b[0]-a[0])/d,(b[1]-a[1])/d];};
 function port(r:RouteNode,side:Side):Point {
-  const n=normals[side],c=center(r);return [c[0]+n[0]*r.width/2,c[1]+n[1]*r.height/2];
+  // Left-biased vertical ports leave room for the next small staircase step.
+  // Ports depend only on the endpoint, never on obstacle/detour coordinates.
+  return side==='top'||side==='bottom'?[r.x+r.width*.22,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height/2];
 }
-/** Ports depend on the endpoints, never on a moving obstacle or detour handle. */
-function facing(a:RouteNode,b:RouteNode):[Side,Side] {
-  const ac=center(a),bc=center(b),dx=bc[0]-ac[0],dy=bc[1]-ac[1];
-  return Math.abs(dx)>=Math.abs(dy)?(dx>=0?['right','left']:['left','right']):(dy>=0?['bottom','top']:['top','bottom']);
-}
-/** Segment/slab intersection also catches a small obstacle between sampled vertices. */
+/** Segment/slab intersection also catches a tiny obstacle between vertices. */
 function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean {
   let low = 0, high = 1;
   for (let axis = 0; axis < 2; axis++) {
@@ -44,28 +40,16 @@ function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean 
   return true;
 }
 export function routeCollisionCount(points: readonly Point[], nodes: readonly RouteNode[], padding = CLEARANCE): number {
-  return nodes.filter(r => points.some((p, i) => i > 0 && intersects(points[i - 1], p, r, padding))).length;
+  let count=0;
+  for(const r of nodes)for(let i=1;i<points.length;i++)if(intersects(points[i-1],points[i],r,padding)){count++;break;}
+  return count;
 }
-function score(points: Point[], obstacles: readonly RouteNode[], padding = CLEARANCE): number[] {
-  let length = 0, turn = 0;
-  for (let i = 1; i < points.length; i++) {
-    length += distance(points[i - 1], points[i]);
-    if (i > 1) {
-      const a = points[i - 2], b = points[i - 1], c = points[i];
-      const ab = distance(a, b), bc = distance(b, c);
-      if (ab && bc) turn += Math.acos(Math.max(-1, Math.min(1,
-        ((b[0] - a[0]) * (c[0] - b[0]) + (b[1] - a[1]) * (c[1] - b[1])) / (ab * bc))));
-    }
-  }
-  return [routeCollisionCount(points, obstacles, padding), length, turn];
-}
-function better(a: number[], b: number[]): boolean {
+function better(a: readonly number[], b: readonly number[]): boolean {
   for (let i = 0; i < a.length; i++) if (Math.abs(a[i] - b[i]) > 1e-7) return a[i] < b[i];
   return false;
 }
-function pointAlong(points: Point[], fraction: number): Point {
-  const lengths = points.slice(1).map((p, i) => distance(points[i], p));
-  let remaining = lengths.reduce((a, b) => a + b, 0) * fraction;
+function pointAlong(points: readonly Point[], lengths: readonly number[], total:number, fraction: number): Point {
+  let remaining=total*fraction;
   for (let i = 0; i < lengths.length; i++) {
     if (remaining <= lengths[i] && lengths[i]) {
       const t = remaining / lengths[i];
@@ -76,130 +60,126 @@ function pointAlong(points: Point[], fraction: number): Point {
   return points.at(-1)!;
 }
 function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number): { point: Point; blocked: boolean } {
-  const mid = pointAlong(points, .5);
-  // Fixed 63 candidates: prefer near the middle, but leave space for the entire text box.
-  const candidates: Point[] = [];
-  for (const fraction of [.5, .4, .6, .3, .7, .2, .8]) {
-    const p = pointAlong(points, fraction);
-    for (const [dx, dy] of [[0, 0], [0, -20], [0, 20], [-24, 0], [24, 0], [0, -48], [0, 48], [-64, 0], [64, 0]]) candidates.push([p[0] + dx, p[1] + dy]);
-  }
-  let best = candidates[0], bestScore = [Infinity, Infinity];
-  for (const p of candidates) {
-    const collisions = nodes.filter(r => p[0] + width / 2 + 4 >= r.x && p[0] - width / 2 - 4 <= r.x + r.width && p[1] + height / 2 + 4 >= r.y && p[1] - height / 2 - 4 <= r.y + r.height).length;
-    const s = [collisions + (p[0] < width / 2 || p[1] < height / 2 ? 1 : 0), distance(p, mid)];
-    if (better(s, bestScore)) { best = p; bestScore = s; }
-  }
-  return { point: best, blocked: bestScore[0] > 0 };
-}
-/** Sample the same quadratic that is drawn; use an analytic chord-error margin. */
-function curve(a:Point,c:Point,b:Point){
-  const points:Point[]=Array.from({length:SAMPLES+1},(_,i)=>{const t=i/SAMPLES,s=1-t;return [s*s*a[0]+2*s*t*c[0]+t*t*b[0],s*s*a[1]+2*s*t*c[1]+t*t*b[1]];});
-  const error=Math.hypot(a[0]-2*c[0]+b[0],a[1]-2*c[1]+b[1])/(4*SAMPLES*SAMPLES);
-  const extents=[a,b];
-  for(let axis=0;axis<2;axis++){
-    const denominator=a[axis]-2*c[axis]+b[axis],t=denominator?(a[axis]-c[axis])/denominator:0;
-    if(t>0&&t<1){const s=1-t;extents.push([s*s*a[0]+2*s*t*c[0]+t*t*b[0],s*s*a[1]+2*s*t*c[1]+t*t*b[1]]);}
-  }
-  const bounds={right:Math.max(...extents.map(p=>p[0])),bottom:Math.max(...extents.map(p=>p[1]))};
-  return {points,error,bounds,path:`M${a} Q${c} ${b}`};
-}
-/** Interpolate waypoints with tangent-continuous pairs of quadratic curves.
- * Short handles round local bends without pulling endpoint ports toward a lane.
- */
-function smooth(waypoints:Point[], departure:Point, arrival:Point) {
-  const vertices=waypoints.filter((p,i)=>!i||distance(p,waypoints[i-1])>1e-6);
-  if(vertices.length<2)vertices.push(add(vertices[0],[1,0],1));
-  const tangents=vertices.map((p,i):Point=>{
-    if(!i)return departure;
-    if(i===vertices.length-1)return arrival;
-    const before=unit(vertices[i-1],p),after=unit(p,vertices[i+1]);
-    return unit([0,0],add(before,after));
-  });
-  const segments:ReturnType<typeof curve>[]=[];
-  for(let i=1;i<vertices.length;i++){
-    const a=vertices[i-1],b=vertices[i],handle=Math.min(28,distance(a,b)*.24);
-    const c=add(a,tangents[i-1],handle),d=add(b,tangents[i],-handle);
-    const mid:Point=[(c[0]+d[0])/2,(c[1]+d[1])/2];
-    segments.push(curve(a,c,mid),curve(mid,d,b));
-  }
-  return {
-    points:segments.flatMap((s,i)=>i?s.points.slice(1):s.points),
-    error:Math.max(...segments.map(s=>s.error)),
-    bounds:{right:Math.max(...segments.map(s=>s.bounds.right)),bottom:Math.max(...segments.map(s=>s.bounds.bottom))},
-    path:segments.map((s,i)=>i?s.path.slice(s.path.indexOf(' Q')):s.path).join('')
+  const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
+  const mid=pointAlong(points,lengths,total,.5);
+  // 63 bounded candidates. Horizontal displacement accounts for the full label
+  // width; a long label next to a vertical leg must not sit over the next card.
+  const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
+  let best=mid,bestScore=[Infinity,Infinity];
+  const consider=(p:Point)=>{
+    let collisions=p[0]<width/2||p[1]<height/2?1:0;
+    for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
+    const score=[collisions,distance(p,mid)];
+    if(better(score,bestScore)){best=p;bestScore=score;}
   };
+  for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
+    const anchor=pointAlong(points,lengths,total,fraction);
+    for(const offset of offsets)consider(add(anchor,offset));
+  }
+  // A 28-unit staircase gap has room for an 18-unit label, but only a narrow
+  // interval of legal centers. Snap to nearby card boundaries rather than
+  // hoping a sampled fraction happens to land in that interval.
+  if(bestScore[0])for(const r of nodes){
+    for(const y of [r.y-height/2-5,r.y+r.height+height/2+5])if(Math.abs(y-mid[1])<=64)consider([mid[0],y]);
+    for(const x of [r.x-width/2-5,r.x+r.width+width/2+5])if(Math.abs(x-mid[0])<=width/2+24)consider([x,mid[1]]);
+  }
+  return {point:best,blocked:bestScore[0]>0};
+}
+type Geometry={vertices:Point[];points:Point[];error:number;length:number;path:string;bounds:{right:number;bottom:number}};
+/** Keep long legs exactly straight; only 90-degree corners get a short Q.
+ * Four chords per corner have <= 0.177 graph-unit error (included in obstacle
+ * tests). There are at most six vertices / 22 points in a template.
+ */
+function rounded(waypoints:readonly Point[]):Geometry|undefined {
+  const vertices:Point[]=[];
+  for(const p of waypoints){
+    if(vertices.length&&distance(vertices.at(-1)!,p)<1e-7)continue;
+    if(vertices.length){const last=vertices.at(-1)!;if(last[0]!==p[0]&&last[1]!==p[1])return;}
+    while(vertices.length>1){
+      const a=vertices.at(-2)!,b=vertices.at(-1)!;
+      if((a[0]===b[0]&&b[0]===p[0])||(a[1]===b[1]&&b[1]===p[1])){
+        if((b[0]-a[0])*(p[0]-b[0])+(b[1]-a[1])*(p[1]-b[1])<0)return;
+        vertices.pop();
+      }else break;
+    }
+    vertices.push(p);
+  }
+  if(vertices.length<2)return;
+  const points:Point[]=[vertices[0]];let path=`M${vertices[0]}`,error=0,length=0;
+  const line=(p:Point)=>{if(distance(points.at(-1)!,p)>1e-7){length+=distance(points.at(-1)!,p);points.push(p);path+=` L${p}`;}};
+  for(let i=1;i<vertices.length-1;i++){
+    const previous=vertices[i-1],corner=vertices[i],next=vertices[i+1];
+    const before=distance(previous,corner),after=distance(corner,next),radius=Math.min(RADIUS,before/2,after/2);
+    const a:Point=[corner[0]+(previous[0]-corner[0])*radius/before,corner[1]+(previous[1]-corner[1])*radius/before];
+    const b:Point=[corner[0]+(next[0]-corner[0])*radius/after,corner[1]+(next[1]-corner[1])*radius/after];
+    line(a);path+=` Q${corner} ${b}`;
+    for(let step=1;step<=CORNER_STEPS;step++){
+      const t=step/CORNER_STEPS,s=1-t,p:Point=[s*s*a[0]+2*s*t*corner[0]+t*t*b[0],s*s*a[1]+2*s*t*corner[1]+t*t*b[1]];
+      length+=distance(points.at(-1)!,p);points.push(p);
+    }
+    error=Math.max(error,Math.SQRT2*radius/(4*CORNER_STEPS*CORNER_STEPS));
+  }
+  line(vertices.at(-1)!);
+  // Axis-monotone quarter corners stay within the extrema of the straight legs.
+  return {vertices,points,error,length,path,bounds:{right:Math.max(...points.map(p=>p[0])),bottom:Math.max(...points.map(p=>p[1]))}};
 }
 /**
- * Prefer vertical departure and horizontal arrival, toward the other endpoint.
- * Compact curved elbows are tried before outer lanes; only blocked/off-canvas
- * preferred candidates allow other sides. Nearby, overlapping and return edges
- * use the same collision tests, without changing node positions or semantics.
- * Candidate counts, lane offsets and sampling are bounded. Coordinates are read
- * fresh on every drag. Fallback exposes unavoidable collisions/blocked labels.
+ * Bounded orthogonal templates: at most 16 port pairs x 12 candidates plus
+ * one preferred return lane (193 total). Clear
+ * preferred bottom/left routes finish after one pair. Returns try the outer
+ * right lane first. No search graph, large curve sampling, or input mutation.
+ * The runtime cache can therefore reroute only incident edges after a drag.
+ * Overlaps and obstructed ports may be unavoidable; a finite best effort is
+ * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelHeight = 20 }: RouteOptions): EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
-  const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),ac=center(source),bc=center(target);
-  const sides:[Side,Side]=[bc[1]>ac[1]||(bc[1]===ac[1]&&bc[0]>=ac[0])?'bottom':'top',bc[0]>=ac[0]?'left':'right'],a=port(source,sides[0]),b=port(target,sides[1]);
-  const direction=unit(a,b),bend=40+(Math.abs(Math.trunc(index))%3)*16;
-  const middle:Point=[(a[0]+b[0])/2-direction[1]*bend,(a[1]+b[1])/2+direction[0]*bend];
-  let chosen=smooth([a,middle,b],normals[sides[0]],add([0,0],normals[sides[1]],-1));
-  // End cards are tested with a tiny inset: touching a port is allowed, but
-  // departing through or returning through the card is not.
-  const evaluate=(candidate:ReturnType<typeof smooth>)=>{
-    const s=score(candidate.points,obstacles,CLEARANCE+candidate.error);
-    s[0]+=routeCollisionCount(candidate.points,[source,target],-.1);
-    // A clear route must also stay inside the nonnegative drawing surface.
-    s.splice(1,0,candidate.points.some(p=>p[0]<1||p[1]<1)?1:0);
-    return s;
+  const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
+  const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
+  const preferred:[Side,Side]=returning?['right','right']:['bottom',bc[0]>=ac[0]?'left':'right'];
+  const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
+  const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
+  let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity],rerouted=false;
+  const evaluate=(waypoints:Point[],pair:[Side,Side],primary:boolean)=>{
+    const geometry=rounded(waypoints);if(!geometry)return;
+    const v=geometry.vertices,a=v[0],next=v[1],b=v.at(-1)!,previous=v.at(-2)!;
+    if((next[0]-a[0])*normals[pair[0]][0]+(next[1]-a[1])*normals[pair[0]][1]<=0||(previous[0]-b[0])*normals[pair[1]][0]+(previous[1]-b[1])*normals[pair[1]][1]<=0)return;
+    const collisions=routeCollisionCount(geometry.points,obstacles,CLEARANCE+geometry.error)+routeCollisionCount(geometry.points,endpoints,-.1);
+    const offCanvas=geometry.points.some(p=>p[0]<1||p[1]<1)?1:0;
+    const score=[collisions,offCanvas,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
+    if(better(score,bestScore)){chosen=geometry;bestScore=score;rerouted=!primary;}
   };
-  let bestScore=evaluate(chosen),rerouted=false;
+  const tried=new Set<string>();
+  const tryPorts=(pair:[Side,Side])=>{
+    const key=pair.join('/');if(tried.has(key))return;tried.add(key);
+    const a=port(source,pair[0]),b=port(target,pair[1]),exit=add(a,normals[pair[0]],reach),entry=add(b,normals[pair[1]],reach);
+    const localRight=Math.max(source.x+source.width,target.x+target.width)+CLEARANCE+LANE_GAP+spread;
+    const localLeft=Math.min(source.x,target.x)-CLEARANCE-LANE_GAP-spread;
+    const localTop=Math.min(source.y,target.y)-CLEARANCE-LANE_GAP-spread;
+    const localBottom=Math.max(source.y+source.height,target.y+target.height)+CLEARANCE+LANE_GAP+spread;
+    const primary=pair[0]===preferred[0]&&pair[1]===preferred[1];
+    // Return routes stay outside the complete graph on the right when possible.
+    if(returning&&primary){evaluate([a,[bounds.right,a[1]],[bounds.right,b[1]],b],pair,false);if(bestScore[0]===0&&bestScore[1]===0)return;}
+    evaluate([a,[a[0],b[1]],b],pair,primary&&!returning);
+    evaluate([a,[b[0],a[1]],b],pair,primary&&!returning);
+    evaluate([a,exit,[entry[0],exit[1]],entry,b],pair,primary&&!returning);
+    evaluate([a,exit,[exit[0],entry[1]],entry,b],pair,primary&&!returning);
+    for(const x of [localRight,localLeft,bounds.right,bounds.left])evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
+    for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
+  };
+  tryPorts(preferred);
   if(bestScore[0]||bestScore[1]){
-    const reverse=ac[0]>bc[0]||(ac[0]===bc[0]&&ac[1]>bc[1]);
-    const laneOffset=(Math.abs(Math.trunc(index))%4)*12+(reverse?72:0);
-    const blockers=obstacles.filter(n=>routeCollisionCount(chosen.points,[n],CLEARANCE+chosen.error));
-    const groups=[blockers,obstacles];
-    const tryPorts=(pair:[Side,Side])=>{
-      const start=port(source,pair[0]),end=port(target,pair[1]);
-      const normalA=normals[pair[0]],normalB=normals[pair[1]];
-      const spread=(Math.abs(Math.trunc(index))%3)*8;
-      const reach=Math.min(36,Math.max(8,distance(start,end)*.08))+spread;
-      const exit=add(start,normalA,reach),entry=add(end,normalB,reach);
-      // Compact elbows keep the departure vertical and the arrival horizontal
-      // without forcing a detour around the complete endpoint bounding box.
-      for(const waypoints of [
-        [start,[start[0]+normalB[0]*spread,end[1]+normalA[1]*spread] as Point,end],
-        [start,exit,[entry[0],exit[1]] as Point,entry,end],
-        [start,exit,[exit[0],entry[1]] as Point,entry,end]
-      ]){
-        const candidate=smooth(waypoints,normalA,add([0,0],normalB,-1));
-        if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
-        const candidateScore=evaluate(candidate);
-        if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
-      }
-      for(const group of groups){
-        const bounds=[...group,source,target];
-        const left=Math.min(...bounds.map(n=>n.x))-CLEARANCE-LANE_GAP-laneOffset;
-        const right=Math.max(...bounds.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+laneOffset;
-        const top=Math.min(...bounds.map(n=>n.y))-CLEARANCE-LANE_GAP-laneOffset;
-        const bottom=Math.max(...bounds.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+laneOffset;
-        for(const lane of [
-          [[exit[0],top],[entry[0],top]],[[exit[0],bottom],[entry[0],bottom]],
-          [[left,exit[1]],[left,entry[1]]],[[right,exit[1]],[right,entry[1]]]
-        ] as Point[][]){
-          const candidate=smooth([start,exit,...lane,entry,end],normalA,add([0,0],normalB,-1));
-          if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
-          const candidateScore=evaluate(candidate);
-          if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
-        }
-      }
-    };
-    tryPorts(sides);
-    if(bestScore[0]||bestScore[1]){
-      for(const sourceSide of ['top','bottom'] as Side[])for(const targetSide of ['left','right'] as Side[])tryPorts([sourceSide,targetSide]);
-      if(bestScore[0]||bestScore[1]){tryPorts(facing(source,target));for(const side of ['top','bottom','left','right'] as Side[])tryPorts([side,side]);}
-    }
+    // Keep vertical departure / horizontal arrival before trying side departures.
+    vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break vertical;}
+    if(bestScore[0]||bestScore[1])other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break other;}
+  }
+  // Coincident/covered ports can invalidate every direction. A short exterior
+  // loop always exists geometrically; collision reporting remains honest.
+  if(!chosen){
+    const a=port(source,'right'),b=port(target,'top'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=Math.min(source.y,target.y)-reach;
+    chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
+    bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),chosen.points.some(p=>p[0]<1||p[1]<1)?1:0];rerouted=true;
   }
   const label=labelAt(chosen.points,nodes,labelWidth,labelHeight);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};

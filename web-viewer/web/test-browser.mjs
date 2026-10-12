@@ -1,3 +1,6 @@
+import {verifyRouteCache} from './test-route-cache-browser.mjs';
+import {verifyScopeShortcut} from './test-scope-shortcut-browser.mjs';
+import {verifyExceptionOption} from './test-exception-browser.mjs';
 import {verifyHeaderControls} from './test-header-controls-browser.mjs';
 import {verifyBottomClearance} from './test-bottom-clearance-browser.mjs';
 import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
@@ -33,7 +36,7 @@ try {
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'bottomClearance',run:()=>verifyBottomClearance(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
-   ...[['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption]].map(([name,verify])=>({name,run:()=>verify(browser)})),
+   ...[['routeCache',verifyRouteCache],['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption],['exceptionOption',verifyExceptionOption],['scopeShortcut',verifyScopeShortcut]].map(([name,verify])=>({name,run:()=>verify(browser)})),
    ...['fixed-drawer','drawer-only','combined'].map(mode=>({name:'scopeGeometry:'+mode,run:()=>diagnoseScopeGeometry(browser,mode)})),
    {name:'legacySmoke',run:async()=>{
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];

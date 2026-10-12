@@ -3,8 +3,8 @@ import {deploymentContext} from './deployment.ts';
 import type {Design} from './graph';
 export type Point=[number,number];
 /** viewInset is optional camera-only padding in world units, never a node offset. */
-export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;hiddenNodes?:string[];viewInset?:Point;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
-export type SampleLayout=Pick<Tab,'positions'|'selected'|'scroll'|'zoom'|'hiddenNodes'|'viewInset'>;
+export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;hiddenNodes?:string[];showExceptions?:boolean;selectedEdgesOnly?:boolean;viewInset?:Point;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
+export type SampleLayout=Pick<Tab,'positions'|'selected'|'scroll'|'zoom'|'hiddenNodes'|'showExceptions'|'selectedEdgesOnly'|'viewInset'>;
 export type ScopeOutside='show'|'hide';
 export type Session={sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;nodeDrawer?:boolean;width:number;preferWrite?:boolean};
 export function reconcile(tab:Tab,design:Design):Tab{

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign,validateGraph} from '../src/graph.ts';
-import {initialPositions} from '../src/layout.ts';
+import {initialPositions,layoutPlan} from '../src/layout.ts';
 import {reconcile} from '../src/session.ts';
 const raw=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(raw),g=design.graph;
 const expected=raw.split('\n').filter(l=>l.startsWith('# Activity ')).map(l=>l.slice(11));
@@ -25,7 +25,19 @@ assert.equal(JSON.stringify(g),snapshot);
 // Acyclic direction takes precedence over contradictory document order.
 const chain={version:1,nodes:[{id:'A',type:'business'},{id:'B',type:'business'},{id:'O',type:'object'}],relations:[{kind:'output',from:'A',to:'O'},{kind:'input',from:'O',to:'B'}]};
 const cp=initialPositions(chain,['B','A']);assert.ok(cp.A[0]<cp.O[0]&&cp.O[0]<cp.B[0]);
+assert.ok(cp.A[1]<cp.O[1]&&cp.O[1]<cp.B[1]);
 assert.deepEqual(initialPositions({...chain,relations:[...chain.relations,...chain.relations]},['B','A']),cp);
+// Spacing must not reinterpret cycle edges. Document order only chooses which
+// normal edge breaks the layout cycle; the graph itself remains untouched.
+const cycle={version:1,nodes:[...chain.nodes,{id:'P',type:'object'}],relations:[...chain.relations,{kind:'output',from:'B',to:'P'},{kind:'input',from:'P',to:'A'}]};
+const cycleSnapshot=JSON.stringify(cycle),ab=layoutPlan(cycle,['A','B']),ba=layoutPlan(cycle,['B','A']);
+assert.deepEqual(ab.feedbackRelations,[3]);assert.deepEqual(ba.feedbackRelations,[1]);
+for(const plan of [ab,ba])for(const i of plan.forwardRelations){const r=cycle.relations[i];assert.ok(plan.positions[r.from][0]<plan.positions[r.to][0]);assert.ok(plan.positions[r.from][1]<plan.positions[r.to][1]);}
+assert.equal(JSON.stringify(cycle),cycleSnapshot);
+const rename=new Map([['A','zeta'],['O','middle'],['B','alpha']]);
+const renamed={...chain,nodes:chain.nodes.map(n=>({...n,id:rename.get(n.id)})),relations:chain.relations.map(r=>({...r,from:rename.get(r.from),to:rename.get(r.to)}))};
+const renamedPositions=initialPositions(renamed,['alpha','zeta']);
+for(const [id,renamedID] of rename)assert.deepEqual(renamedPositions[renamedID],cp[id],'unambiguous dependencies do not rely on node names');
 const saved={key:'sample',name:'sample',design,positions:p,scroll:[17,91],zoom:.8};
 assert.deepEqual(reconcile(saved,reversed).positions,p,'all existing coordinates outrank a new document order');
 const legacy={...design};delete legacy.activityOrder;

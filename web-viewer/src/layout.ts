@@ -1,6 +1,6 @@
 import type {Graph} from './graph';
 import type {Point} from './session';
-const STEP_X=220, STEP_Y=96, MARGIN=40, ORDER_PASSES=4;
+const STEP_X=128, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
 export type LayoutPlan={positions:Record<string,Point>;forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
 
@@ -12,8 +12,9 @@ const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
  * and each Object's earliest-listed output Activity choose a display ordering.
  * This breaks layout cycles; it neither defines execution order nor edits edges.
  * Ranks and crossing-reduced row order form a downward staircase. A forward
- * parent is at least one 96-unit step above its child. Cards are 260 by 68,
- * so only the same/adjacent 220-unit columns need a 28-unit vertical gap.
+ * parent is at least one 96-unit step above its child. Compact 128-unit columns
+ * overlap the 260-unit card width, so every horizontally overlapping column
+ * participates in placement with a 28-unit vertical gap between cards.
  * Graph walks and occupied-slot lookup are iterative, including long chains.
  */
 export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutPlan{
@@ -68,13 +69,15 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
     }
   }
   const positions:Record<string,Point>=Object.create(null);
-  const slot=nodes.map(()=>0);let previousSlots:number[]=[];
+  const slot=nodes.map(()=>0),recentSlots:number[][]=[];
+  const overlappingColumns=Math.ceil(CARD_WIDTH/STEP_X)-1;
   for(let column=0;column<layers.length;column++){
     // All y coordinates are on a 96-unit grid: a card plus its 28-unit gap
-    // blocks exactly its own slot. Earlier columns beyond the adjacent one
-    // cannot overlap horizontally. Successor links skip occupied runs without
+    // blocks exactly its own slot. Retain every earlier column whose cards
+    // still overlap horizontally. Successor links skip occupied runs without
     // repeatedly scanning all cards (including wide isolated-node layers).
-    const occupied=new Map(previousSlots.map(y=>[y,y+1]));
+    const occupied=new Map<number,number>();
+    for(const slots of recentSlots)for(const y of slots)occupied.set(y,y+1);
     const firstFree=(start:number)=>{
       let free=start;
       while(occupied.has(free))free=occupied.get(free)!;
@@ -89,7 +92,8 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
       const y=firstFree(earliest);slot[n]=y;occupied.set(y,y+1);currentSlots.push(y);
       positions[nodes[n].id]=[MARGIN+column*STEP_X,MARGIN+y*STEP_Y];
     }
-    previousSlots=currentSlots;
+    recentSlots.push(currentSlots);
+    if(recentSlots.length>overlappingColumns)recentSlots.shift();
   }
   return {positions,forwardRelations,feedbackRelations,exceptionRelations};
 }

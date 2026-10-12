@@ -54,7 +54,7 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 .toolbar{max-width:calc(100% - 24px)}
 .toolbar button,.toolbar #zoom{flex-shrink:0}
 
-/* Keep both display options readable without widening the compact zoom controls. */
+/* Keep display options readable without widening the compact zoom controls. */
 .toolbar{height:auto;align-items:center}
 .display-options{display:flex;flex-direction:column;min-width:0}
 .toolbar .edge-option{height:32px}
@@ -72,7 +72,7 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 /* Let wrapped option labels grow instead of clipping on a narrow screen. */
 .toolbar .edge-option{height:auto;min-height:32px;padding-block:5px}
 
-@media(max-width:480px){.toolbar button{width:32px}.toolbar #zoom{min-width:48px;padding-inline:4px}.toolbar .edge-option{padding-inline:6px}.display-options{flex:1}}
+@media(max-width:480px){.toolbar button{width:32px}.toolbar #zoom{min-width:48px;padding-inline:4px}.toolbar .edge-option{padding-inline:6px;padding-block:3px}.display-options{flex:1}}
 
 @media(max-width:600px){header .source-caption{display:none}header #open svg{display:block}header #open,header #open-url,header #open-text{min-width:36px}header #refresh{font-size:0;gap:0;min-width:36px}}
 
@@ -104,3 +104,11 @@ header{flex-shrink:0}
    overflow at the explicitly computed canvas, which includes every card, routed
    curve, label, their safety margins and any camera inset. */
 #canvas{overflow:clip}
+
+/* Four display choices use two full-width rows above the zoom controls.
+   At 320px the long selected-edge label wraps within its half-width cell;
+   the canvas reserves this toolbar's measured height rather than a fixed tail. */
+.toolbar{width:460px;flex-wrap:wrap}
+.display-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:0 0 100%;width:100%;border-bottom:1px solid var(--subtle)}
+.toolbar .edge-option{min-height:32px}
+.toolbar #layout-lock{margin-left:auto}
