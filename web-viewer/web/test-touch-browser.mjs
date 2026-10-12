@@ -1,3 +1,4 @@
+import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {touchDriver} from './touch-driver.mjs';
 
@@ -121,7 +122,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
    // whether a real vertical pan range exists.
    const fixture='# Pan fixture\n\n'+['Pan A','Pan B'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic pan test\n\n').join('')+'# Activity Pan activity\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- Pan A — Test\n\n### Procedure\n\nTest\n\n### Output\n\n- Pan B — Test\n\n## Result\n\nTest\n';
    await page.locator('#open-text').click();await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
-   await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:960});
+   await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:1100});
   }
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=100;n.scrollTop=100;});
   // Wait for a painted frame after programmatic scroll/scale, then keep well clear
@@ -161,16 +162,16 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);
   const dragged=await positions();
-  await page.locator('#scope-outside').selectOption('hide');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
+  await setScope(page,'hide');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
   const savedView=await view(),visible=await positions();assert.equal(savedView.zoom,1.5);assert.equal(await page.locator('#zoom').textContent(),'150%');
   await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);
-  assert.equal(await page.locator('#scope-outside').inputValue(),'hide');assert.equal(await page.locator('#prefer-write').isChecked(),true);await page.locator('#scope-outside').selectOption('show');assert.deepEqual(await positions(),dragged);
+  assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'false');assert.equal(await page.locator('#prefer-write').isChecked(),true);await setScope(page,'show');assert.deepEqual(await positions(),dragged);
  },{blocked:!basic});
  if(nativeScrollDiagnostics){
  await run('diagnostic: native scroll in isolated overflow element',nativeScroll,{controlHtml:'<!doctype html><style>body{margin:0}#detail{width:380px;height:500px;overflow:auto;touch-action:auto}</style><div id="detail"><div style="height:3000px">Native scroll control</div></div>'});
  await run('product: Drawer native touch scroll is independent of graph',async({page,cdp,driver,view})=>{
-  await page.locator('#scope-outside').selectOption('hide');await page.locator('#scope-outside').selectOption('show');await page.locator('#drawer').click();
+  await setScope(page,'hide');await setScope(page,'show');await page.locator('#drawer').click();
   assert.equal(await page.locator('#detail').evaluate(n=>getComputedStyle(n).touchAction),'auto');
   await nativeScroll({page,cdp,driver});assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
  });

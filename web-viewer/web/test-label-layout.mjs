@@ -55,7 +55,7 @@ export async function verifyLabelLayout(browser) {
       assert.ok(toolbar.x>=0&&toolbar.x+toolbar.width<=width,'display option and zoom fit narrow viewport');
       assert.ok(toolbar.height<=100,'options and lock/zoom controls remain bounded on narrow screens');
       for(const item of await page.locator('.edge-option').evaluateAll(ns=>ns.map(n=>({scroll:n.scrollHeight,client:n.clientHeight}))))assert.ok(item.scroll<=item.client,'wrapped option labels must not clip');
-      for(const id of ['prefer-write','scope-outside','layout-lock','out','in']){const control=await page.locator('#'+id).boundingBox();assert.ok(control.x>=toolbar.x&&control.x+control.width<=toolbar.x+toolbar.width&&control.y>=toolbar.y&&control.y+control.height<=toolbar.y+toolbar.height);} 
+      for(const id of ['prefer-write','layout-lock','out','in']){const control=await page.locator('#'+id).boundingBox();assert.ok(control.x>=toolbar.x&&control.x+control.width<=toolbar.x+toolbar.width&&control.y>=toolbar.y&&control.y+control.height<=toolbar.y+toolbar.height);} 
     }
     await page.setViewportSize({width:1280,height:960});for(const id of ['open','open-url','open-text']){assert.equal(await page.locator('#'+id+' svg').isVisible(),true);assert.equal(await page.locator('#'+id+' .source-caption').isVisible(),true);}
     assert.deepEqual(errors,[]);

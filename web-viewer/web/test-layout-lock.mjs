@@ -27,6 +27,6 @@ try{
  // A toggle cancels a live touch, and the remaining finger cannot edit/pan anew.
  $('layout-lock').click();fire('touch','pointerdown',1,100,100,d.querySelector('.node'));$('layout-lock').click();const scroll=[$('viewport').scrollLeft,$('viewport').scrollTop];fire('touch','pointermove',1,50,50);fire('touch','pointerup',1,50,50);assert.deepEqual(positions(),before);assert.deepEqual([$('viewport').scrollLeft,$('viewport').scrollTop],scroll);
  // Reload always locks, even when the user had left adjustment mode on.
- $('layout-lock').click();await d.querySelector('.close').onclick();e.w.close();const restored=await boot();assert.equal(restored.$('layout-lock').getAttribute('aria-pressed'),'true');restored.$('open-sample').click();assert.deepEqual(restored.positions(),before);assert.equal(restored.$('scope-outside').value,'show');
+ $('layout-lock').click();await d.querySelector('.close').onclick();e.w.close();const restored=await boot();assert.equal(restored.$('layout-lock').getAttribute('aria-pressed'),'true');restored.$('open-sample').click();assert.deepEqual(restored.positions(),before);assert.equal(restored.$('scope-outside').getAttribute('aria-pressed'),'true');
  console.log(JSON.stringify({model:'DOM/IndexedDB',passed:7,checks:['default locked','locked mouse/pen/touch node pan and tap selection','shown outside selection','locked-node pinch and finger-release safety','unlocked mouse/pen/touch movement','lock change cancels active/stale input','reload locks and preserves sample coordinates']},null,2));
 }finally{windows.forEach(w=>w.close());}

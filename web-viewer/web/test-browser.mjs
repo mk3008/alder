@@ -1,3 +1,6 @@
+import {verifyNodeDrawer} from './test-node-drawer-browser.mjs';
+import {verifyTabStrip} from './test-tab-strip-browser.mjs';
+import {setScope} from './scope-control.mjs';
 // Real Chromium smoke checks against the built app. Synthetic/public input only.
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
@@ -24,6 +27,8 @@ try {
   checks.push({layoutLock:await verifyLayoutLock(browser)});
   checks.push({documentOrder:await verifyDocumentOrder(browser)});
   checks.push({facingRoutes:await verifyFacingRoutes(browser)});
+  checks.push({nodeDrawer:await verifyNodeDrawer(browser)});
+  checks.push({tabStrip:await verifyTabStrip(browser)});
   checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
   checks.push({edgeOption:await verifyEdgeOption(browser)});
@@ -61,8 +66,8 @@ try {
   await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),0);assert.equal(await sample.locator('#empty').isVisible(),true);
   await sample.locator('#open-sample').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
-  await sample.locator('#scope-outside').selectOption('hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),12);await sample.locator('#scope-outside').selectOption('show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
+  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
   assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
   await page.goto('http://127.0.0.1:4173/');
   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
