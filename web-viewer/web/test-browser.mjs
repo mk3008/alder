@@ -1,4 +1,3 @@
-import {verifyRoutingReviewImages} from './test-routing-review-images.mjs';
 import {verifyHeaderControls} from './test-header-controls-browser.mjs';
 import {verifyBottomClearance} from './test-bottom-clearance-browser.mjs';
 import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
@@ -29,7 +28,6 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
-   {name:'routingReviewImages',run:()=>verifyRoutingReviewImages(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},

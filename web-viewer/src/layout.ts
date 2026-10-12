@@ -1,6 +1,6 @@
 import type {Graph} from './graph';
 import type {Point} from './session';
-const STEP_X=360, STEP_Y=180, MARGIN=40, ORDER_PASSES=4;
+const STEP_X=220, STEP_Y=96, MARGIN=40, ORDER_PASSES=4;
 export type LayoutPlan={positions:Record<string,Point>;forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
 
@@ -11,7 +11,10 @@ const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
  * Inside a cycle, document Activity order (stable ID order without a valid hint)
  * and each Object's earliest-listed output Activity choose a display ordering.
  * This breaks layout cycles; it neither defines execution order nor edits edges.
- * O(V log V + E + ORDER_PASSES * (V log V + E)), with iterative graph walks.
+ * Ranks and crossing-reduced row order form a downward staircase. A forward
+ * parent is at least one 96-unit step above its child. Cards are 260 by 68,
+ * so only the same/adjacent 220-unit columns need a 28-unit vertical gap.
+ * Graph walks and occupied-slot lookup are iterative, including long chains.
  */
 export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutPlan{
   const nodes=[...graph.nodes].sort((a,b)=>compare(a.id,b.id)),count=nodes.length;
@@ -65,7 +68,29 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
     }
   }
   const positions:Record<string,Point>=Object.create(null);
-  nodes.forEach((n,i)=>positions[n.id]=[MARGIN+rank[i]*STEP_X,MARGIN+row[i]*STEP_Y]);
+  const slot=nodes.map(()=>0);let previousSlots:number[]=[];
+  for(let column=0;column<layers.length;column++){
+    // All y coordinates are on a 96-unit grid: a card plus its 28-unit gap
+    // blocks exactly its own slot. Earlier columns beyond the adjacent one
+    // cannot overlap horizontally. Successor links skip occupied runs without
+    // repeatedly scanning all cards (including wide isolated-node layers).
+    const occupied=new Map(previousSlots.map(y=>[y,y+1]));
+    const firstFree=(start:number)=>{
+      let free=start;
+      while(occupied.has(free))free=occupied.get(free)!;
+      let current=start;
+      while(occupied.has(current)){const next=occupied.get(current)!;occupied.set(current,free);current=next;}
+      return free;
+    };
+    const currentSlots:number[]=[];
+    for(const n of layers[column]){
+      let earliest=column;
+      for(const parent of parents[n])earliest=Math.max(earliest,slot[parent]+1);
+      const y=firstFree(earliest);slot[n]=y;occupied.set(y,y+1);currentSlots.push(y);
+      positions[nodes[n].id]=[MARGIN+column*STEP_X,MARGIN+y*STEP_Y];
+    }
+    previousSlots=currentSlots;
+  }
   return {positions,forwardRelations,feedbackRelations,exceptionRelations};
 }
 export function initialPositions(graph:Graph,activityOrder?:readonly string[]):Record<string,Point>{return layoutPlan(graph,activityOrder).positions;}

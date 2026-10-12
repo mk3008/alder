@@ -1,7 +1,7 @@
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 export async function verifyPreviewIsolation(browser){
- const context=await browser.newContext({viewport:{width:393,height:852}}),errors=[],origin='http://127.0.0.1:4173',a='/preview/pr-194/scope-20261012-01/',b='/preview/pr-194/second/';
+ const context=await browser.newContext({viewport:{width:393,height:852}}),errors=[],origin='http://127.0.0.1:4173',a='/preview/pr-194/stairs-20261012-01/',b='/preview/pr-194/second/';
  // Mount the same built bytes at nested URLs. Production deployment is verified separately.
  await context.route('**/preview/pr-194/**',async route=>{const u=new URL(route.request().url()),path=u.pathname.replace(/^\/preview\/pr-194\/[^/]+\//,'/');await route.fulfill({response:await route.fetch({url:origin+path+u.search})});});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
@@ -9,7 +9,7 @@ export async function verifyPreviewIsolation(browser){
  const saved=()=>page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onerror=()=>reject(r.error);r.onsuccess=()=>{const db=r.result,g=db.transaction('session').objectStore('session').get('current');g.onsuccess=()=>{db.close();resolve(g.result);};};}));
  try{
   await ready('/');assert.equal(await page.locator('#preview-badge').isVisible(),false);await page.locator('#drawer').click();await page.locator('#open-sample').click();await page.waitForTimeout(300);const production=await saved();
-  await ready(a);assert.equal(await page.locator('.tab').count(),0);assert.equal(await page.locator('#preview-badge').textContent(),'確認用 · scope-20261012-01');
+  await ready(a);assert.equal(await page.locator('.tab').count(),0);assert.equal(await page.locator('#preview-badge').textContent(),'確認用 · stairs-20261012-01');
   for(const width of [393,320]){await page.setViewportSize({width,height:852});const badge=await page.locator('#preview-badge').boundingBox();assert.ok(badge.x>=0&&badge.x+badge.width<=width&&badge.y>=0&&badge.y+badge.height<=64);}
   await page.locator('#drawer').click();await page.locator('#open-sample').click();await setScope(page,'hide');await page.locator('#theme').click();await page.waitForTimeout(300);
   assert.deepEqual(await saved(),production);

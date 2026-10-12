@@ -8,7 +8,7 @@ export async function verifyDocumentOrder(browser){
  const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await page.locator('#drawer').click();
-  const initial=await positions();assert.ok(initial['業務設計書'][0]<initial['同期漏れ検査'][0]);assert.ok(Math.max(...Object.values(initial).map(p=>p[0]))>4000);
+  const initial=await positions();assert.ok(initial['業務設計書'][0]<initial['同期漏れ検査'][0]);assert.deepEqual(initial,JSON.parse(readFileSync('web/review-routing/positions-staircase.json','utf8')),'new auto layout matches the reviewed dependency staircase');assert.ok(Math.max(...Object.values(initial).map(p=>p[0]))>1280,'flow extends beyond desktop viewport rather than wrapping');
   for(const width of [320,393,1280]){await page.setViewportSize({width,height:960});assert.deepEqual(await positions(),initial,'viewport does not change initial layout');}
   const boxes=await page.locator('.node').evaluateAll(ns=>ns.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
   for(let i=0;i<boxes.length;i++)for(let j=0;j<i;j++){const a=boxes[i],b=boxes[j];assert.ok(a.x+a.w<=b.x||b.x+b.w<=a.x||a.y+a.h<=b.y||b.y+b.h<=a.y);}

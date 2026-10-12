@@ -130,17 +130,18 @@ function smooth(waypoints:Point[], departure:Point, arrival:Point) {
   };
 }
 /**
- * Facing ports are preferred even when a shorter detour uses another side.
- * Try local and global curved lanes with these ports first; alternative sides
- * are considered only if all facing candidates collide. Candidate counts and
- * sampling are bounded independently of graph density. Coordinates are read
+ * Prefer vertical departure and horizontal arrival, toward the other endpoint.
+ * Compact curved elbows are tried before outer lanes; only blocked/off-canvas
+ * preferred candidates allow other sides. Nearby, overlapping and return edges
+ * use the same collision tests, without changing node positions or semantics.
+ * Candidate counts, lane offsets and sampling are bounded. Coordinates are read
  * fresh on every drag. Fallback exposes unavoidable collisions/blocked labels.
  */
 export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelHeight = 20 }: RouteOptions): EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),ac=center(source),bc=center(target);
-  const sides=facing(source,target),a=port(source,sides[0]),b=port(target,sides[1]);
+  const sides:[Side,Side]=[bc[1]>ac[1]||(bc[1]===ac[1]&&bc[0]>=ac[0])?'bottom':'top',bc[0]>=ac[0]?'left':'right'],a=port(source,sides[0]),b=port(target,sides[1]);
   const direction=unit(a,b),bend=40+(Math.abs(Math.trunc(index))%3)*16;
   const middle:Point=[(a[0]+b[0])/2-direction[1]*bend,(a[1]+b[1])/2+direction[0]*bend];
   let chosen=smooth([a,middle,b],normals[sides[0]],add([0,0],normals[sides[1]],-1));
@@ -149,10 +150,12 @@ export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelH
   const evaluate=(candidate:ReturnType<typeof smooth>)=>{
     const s=score(candidate.points,obstacles,CLEARANCE+candidate.error);
     s[0]+=routeCollisionCount(candidate.points,[source,target],-.1);
+    // A clear route must also stay inside the nonnegative drawing surface.
+    s.splice(1,0,candidate.points.some(p=>p[0]<1||p[1]<1)?1:0);
     return s;
   };
   let bestScore=evaluate(chosen),rerouted=false;
-  if(bestScore[0]){
+  if(bestScore[0]||bestScore[1]){
     const reverse=ac[0]>bc[0]||(ac[0]===bc[0]&&ac[1]>bc[1]);
     const laneOffset=(Math.abs(Math.trunc(index))%4)*12+(reverse?72:0);
     const blockers=obstacles.filter(n=>routeCollisionCount(chosen.points,[n],CLEARANCE+chosen.error));
@@ -160,8 +163,21 @@ export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelH
     const tryPorts=(pair:[Side,Side])=>{
       const start=port(source,pair[0]),end=port(target,pair[1]);
       const normalA=normals[pair[0]],normalB=normals[pair[1]];
-      const reach=Math.min(36,Math.max(8,distance(start,end)*.08));
+      const spread=(Math.abs(Math.trunc(index))%3)*8;
+      const reach=Math.min(36,Math.max(8,distance(start,end)*.08))+spread;
       const exit=add(start,normalA,reach),entry=add(end,normalB,reach);
+      // Compact elbows keep the departure vertical and the arrival horizontal
+      // without forcing a detour around the complete endpoint bounding box.
+      for(const waypoints of [
+        [start,[start[0]+normalB[0]*spread,end[1]+normalA[1]*spread] as Point,end],
+        [start,exit,[entry[0],exit[1]] as Point,entry,end],
+        [start,exit,[exit[0],entry[1]] as Point,entry,end]
+      ]){
+        const candidate=smooth(waypoints,normalA,add([0,0],normalB,-1));
+        if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
+        const candidateScore=evaluate(candidate);
+        if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
+      }
       for(const group of groups){
         const bounds=[...group,source,target];
         const left=Math.min(...bounds.map(n=>n.x))-CLEARANCE-LANE_GAP-laneOffset;
@@ -180,10 +196,11 @@ export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelH
       }
     };
     tryPorts(sides);
-    if(bestScore[0]){
-      for(const side of ['top','bottom','left','right'] as Side[])tryPorts([side,side]);
+    if(bestScore[0]||bestScore[1]){
+      for(const sourceSide of ['top','bottom'] as Side[])for(const targetSide of ['left','right'] as Side[])tryPorts([sourceSide,targetSide]);
+      if(bestScore[0]||bestScore[1]){tryPorts(facing(source,target));for(const side of ['top','bottom','left','right'] as Side[])tryPorts([side,side]);}
     }
   }
   const label=labelAt(chosen.points,nodes,labelWidth,labelHeight);
-  return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||label.blocked};
+  return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }
