@@ -34,6 +34,7 @@ export async function diagnoseScopeGeometry(browser,mode){
   // These separate diagnostics establish content/position facts and report
   // camera changes even when they do not change saved world coordinates.
   for(const r of records){assert.deepEqual(r.saved.positions,positions);assert.deepEqual(r.content,before.content);for(const n of r.dom.nodes)assert.deepEqual(n.position,positions[n.id]);for(let i=0;i<2;i++)assert.ok(r.dom.canvas[i]+1>=r.content.requiredWorld[i]*r.dom.zoom,'canvas covers all-node content bounds');}
+  for(const r of records){assert.deepEqual(r.dom.scroll,before.dom.scroll,'list/Scope preserves camera scroll');for(let i=0;i<2;i++)assert.ok(Math.abs(r.dom.canvas[i]-before.dom.canvas[i])<=1,'no canvas growth beyond integer scroll rounding');}
   if(mode==='fixed-drawer')for(const r of records)assert.deepEqual(r.dom.client,before.dom.client);
   assert.deepEqual(errors,[]);return {mode,records,pageErrors:errors,limit:'test-only observations; no product geometry/position/storage writes except normal viewer UI and viewport scroll'};
  }finally{console.log('SCOPE_GEOMETRY_CASE '+JSON.stringify({mode,records,pageErrors:errors}));await context.close();}
