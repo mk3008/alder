@@ -3,8 +3,7 @@ import {readSessionInPage, waitForExactRead, waitSavedViewer} from './wait-saved
 
 // A single, isolated card makes the physical bottom edge unambiguous. It also
 // keeps graph routing and sample-layout reuse out of this canvas regression.
-const fixture='# Clearance fixture\n\n# Object Clearance card\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic canvas boundary test\n';
-const id='Clearance card';
+import {bottomFixture as fixture,bottomNodeID as id} from './bottom-clearance-fixture.mjs';
 const origin='http://127.0.0.1:4173/';
 const at=[7000,5000];
 const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -15,7 +14,8 @@ async function openFixture(page){
  await page.locator('#open-text').click();
  await page.locator('#source-text').fill(fixture);
  await page.locator('#source-submit').click();
- await page.locator('.node').waitFor();
+ await page.waitForFunction(()=>!!document.querySelector('.node')||!!document.querySelector('#status[data-kind=error]:not([hidden])'),null,{timeout:5000});
+ assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'Fixture input failed: '+await page.locator('#status-text').textContent());
  assert.equal(await page.locator('.node').count(),1);
  assert.equal(await page.locator('.node').getAttribute('data-node'),id);
  // The Markdown drawer is an unrelated overlay, and is not part of this case.
