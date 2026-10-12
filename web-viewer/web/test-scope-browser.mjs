@@ -1,3 +1,4 @@
+import {recordScopeGeometry} from './diagnose-scope-geometry.mjs';
 import {waitSavedViewer} from './wait-saved-viewer.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
@@ -28,7 +29,7 @@ export async function verifyScopeOption(browser){
   await page.locator('#open-text').click();await page.locator('#source-text').fill(source.replace(/(## Scope\s+)true/g,'$1false'));await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),25);assert.equal(await page.locator('#empty').isVisible(),false);
   await setScope(page,'hide');assert.equal(await page.locator('.node,.edge,.edge-label').count(),0);await setScope(page,'show');assert.equal(await page.locator('.node').count(),25);await page.locator('.tab>button:first-child').first().click();assert.equal(await page.locator('.selected').getAttribute('data-node'),id);
   const beforeHide=await positions(),extent=await page.locator('#canvas').evaluate(n=>[n.style.width,n.style.height]);
-  await setScope(page,'hide');assert.equal(await page.locator('.node.outside').count(),0);assert.equal(await page.locator('.selected').count(),0);assert.notEqual(await page.locator('#detail').textContent(),detail);
+  await recordScopeGeometry(page,'original-before-hide',design);await setScope(page,'hide');await recordScopeGeometry(page,'original-after-hide',design);assert.equal(await page.locator('.node.outside').count(),0);assert.equal(await page.locator('.selected').count(),0);assert.notEqual(await page.locator('#detail').textContent(),detail);
   for(const css of ['.edge','.edge-label'])for(const index of await page.locator(css).evaluateAll(ns=>ns.map(n=>+n.dataset.relation))){const r=design.graph.relations[index];assert.ok(!ids.has(r.from)&&!ids.has(r.to));}
   assert.deepEqual(await page.locator('#canvas').evaluate(n=>[n.style.width,n.style.height]),extent);
   const hiddenSnapshot=await waitSavedViewer(page,{...expected,positions:Object.fromEntries(beforeHide.map(([id,x,y])=>[id,[parseFloat(x),parseFloat(y)]])),hiddenNodes:[...ids],selected:null});assert.equal(hiddenSnapshot.tabs.find(t=>t.key===hiddenSnapshot.active).hiddenNodes.length,ids.size);await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'false');assert.equal(await page.locator('.node.outside').count(),0);

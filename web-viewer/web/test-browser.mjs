@@ -1,3 +1,4 @@
+import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
 import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
 import {runBrowserCases} from './browser-cases.mjs';
 import {verifyNodeDrawer} from './test-node-drawer-browser.mjs';
@@ -28,6 +29,7 @@ try {
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
    ...[['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption]].map(([name,verify])=>({name,run:()=>verify(browser)})),
+   ...['fixed-drawer','drawer-only','combined'].map(mode=>({name:'scopeGeometry:'+mode,run:()=>diagnoseScopeGeometry(browser,mode)})),
    {name:'legacySmoke',run:async()=>{
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];
   sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));
