@@ -74,3 +74,11 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 #viewport[data-layout-locked=false] .node{cursor:move}
 /* Let wrapped option labels grow instead of clipping on a narrow screen. */
 .toolbar .edge-option{height:auto;min-height:32px;padding-block:5px}
+
+/* Keep the scope select and both captions readable on narrow screens. */
+.toolbar .scope-option{white-space:nowrap;gap:6px}
+.scope-option select{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--subtle);border-radius:3px;padding:3px 2px;min-width:64px}
+.scope-option select:focus-visible{outline:2px solid var(--review-blue);outline-offset:1px}
+@media(max-width:480px){.toolbar button{width:32px}.toolbar #zoom{min-width:48px;padding-inline:4px}.toolbar .edge-option{padding-inline:6px}.display-options{flex:1}}
+
+@media(max-width:600px){header .source-caption{display:none}header #open svg{display:block}header #open,header #open-url,header #open-text{min-width:36px;min-height:40px;justify-content:center}header #refresh{font-size:0;gap:0;min-width:36px;min-height:40px;justify-content:center}}
