@@ -1,17 +1,23 @@
+import {initialPositions} from './layout.ts';
 import {deploymentContext} from './deployment.ts';
 import type {Design} from './graph';
 export type Point=[number,number];
 export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
 export type SampleLayout=Pick<Tab,'positions'|'selected'|'scroll'|'zoom'>;
-export type Session={sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;width:number;preferWrite?:boolean;hideOutside?:boolean};
+export type Session={sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;width:number;preferWrite?:boolean;dimOutside?:boolean;/** Legacy preference, migrated on restore. */hideOutside?:boolean};
 export function reconcile(tab:Tab,design:Design):Tab{
   const ids=new Set(design.graph.nodes.map(n=>n.id)),positions:Record<string,Point>=Object.create(null);
   for(const [id,p] of Object.entries(tab.positions))if(ids.has(id))positions[id]=[...p];
-  const occupied=Object.values(positions);
-  for(const n of design.graph.nodes)if(!positions[n.id]){
-    let i=0,p:Point;
-    do{p=[40+(i%4)*320,40+Math.floor(i/4)*140];i++;}while(occupied.some(q=>Math.abs(q[0]-p[0])<280&&Math.abs(q[1]-p[1])<88));
-    positions[n.id]=p;occupied.push(p);
+  const missing=design.graph.nodes.filter(n=>!positions[n.id]);
+  if(missing.length){
+    const initial=initialPositions(design.graph),occupied=Object.values(positions);
+    for(const n of missing){
+      const p:Point=[...initial[n.id]];
+      // Only new cards move. Retained user coordinates are never normalized or
+      // re-optimized, including deliberately overlapping manually placed cards.
+      while(occupied.some(q=>Math.abs(q[0]-p[0])<280&&Math.abs(q[1]-p[1])<88))p[1]+=180;
+      positions[n.id]=p;occupied.push(p);
+    }
   }
   return {...tab,design,positions,selected:tab.selected&&ids.has(tab.selected)?tab.selected:undefined};
 }

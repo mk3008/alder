@@ -8,7 +8,7 @@ export interface RouteOptions {
   labelWidth?: number; labelHeight?: number;
 }
 export interface EdgeRoute {
-  path: string; label: Point; points: Point[]; collisions: number; rerouted: boolean;
+  path: string; label: Point; points: Point[]; bounds: {right:number;bottom:number}; collisions: number; rerouted: boolean;
   /** Best effort: remaining card collisions or no card-free label candidate. */
   fallback: boolean;
 }
@@ -84,52 +84,54 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
   }
   return { point: best, blocked: bestScore[0] > 0 };
 }
+/** Sample the same quadratic that is drawn; use an analytic chord-error margin. */
+function curve(a:Point,c:Point,b:Point){
+  const points:Point[]=Array.from({length:SAMPLES+1},(_,i)=>{const t=i/SAMPLES,s=1-t;return [s*s*a[0]+2*s*t*c[0]+t*t*b[0],s*s*a[1]+2*s*t*c[1]+t*t*b[1]];});
+  const error=Math.hypot(a[0]-2*c[0]+b[0],a[1]-2*c[1]+b[1])/(4*SAMPLES*SAMPLES);
+  const extents=[a,b];
+  for(let axis=0;axis<2;axis++){
+    const denominator=a[axis]-2*c[axis]+b[axis],t=denominator?(a[axis]-c[axis])/denominator:0;
+    if(t>0&&t<1){const s=1-t;extents.push([s*s*a[0]+2*s*t*c[0]+t*t*b[0],s*s*a[1]+2*s*t*c[1]+t*t*b[1]]);}
+  }
+  const bounds={right:Math.max(...extents.map(p=>p[0])),bottom:Math.max(...extents.map(p=>p[1]))};
+  return {points,error,bounds,path:`M${a} Q${c} ${b}`};
+}
 /**
- * Stateless local routing, recalculated from the caller's current positions on drag.
- * Preserve the fixed quadratic when clear. Otherwise compare at most eight lane
- * detours by unique card collisions, then length, then total turning angle.
- * No graph search or dependency: O(nodes * (32 + 8*3 + 63)) per edge.
- * Curve chords are inflated by their analytic maximum approximation error.
- * Dense/overlapping layouts fall back to the least-colliding candidate; edge-edge
- * crossings and complete collision elimination are deliberately not guaranteed.
+ * Every route stays a quadratic curve, including obstacle detours. Compare at
+ * most eight bowed candidates by card collisions, then length and turning.
+ * Recomputed from current positions on drag; never edits the layout. Sampled
+ * chords are inflated by their analytic error. Dense graphs can still contain
+ * crossings or collisions; fallback reports the latter and blocked labels.
  */
 export function routeEdge({ from, to, nodes, index = 0, labelWidth = 100, labelHeight = 20 }: RouteOptions): EdgeRoute {
-  const source = nodes.find(n => n.id === from), target = nodes.find(n => n.id === to);
-  if (!source || !target) throw new Error('Route endpoint is missing');
-  const obstacles = nodes.filter(n => n.id !== from && n.id !== to);
-  const ac = center(source), bc = center(target), a = boundary(source, bc), b = boundary(target, ac);
-  const dx = b[0] - a[0], dy = b[1] - a[1], length = Math.hypot(dx, dy) || 1, bend = 40 + (index % 3) * 16;
-  const c: Point = [(a[0] + b[0]) / 2 - dy / length * bend, (a[1] + b[1]) / 2 + dx / length * bend];
-  let points: Point[] = Array.from({ length: SAMPLES + 1 }, (_, i) => {
-    const t = i / SAMPLES, s = 1 - t;
-    return [s * s * a[0] + 2 * s * t * c[0] + t * t * b[0], s * s * a[1] + 2 * s * t * c[1] + t * t * b[1]];
-  });
-  const curveError = Math.hypot(a[0] - 2 * c[0] + b[0], a[1] - 2 * c[1] + b[1]) / (4 * SAMPLES * SAMPLES);
-  let bestScore = score(points, obstacles, CLEARANCE + curveError), path = `M${a} Q${c} ${b}`, rerouted = false;
-  if (bestScore[0]) {
-    // Separate opposite directions into disjoint lane-offset bands; index adds a
-    // small bounded spread for parallel relations. This is best effort, not a
-    // global edge-edge router, and never changes an already-clear fixed curve.
-    const reverseDirection = ac[0] > bc[0] || (ac[0] === bc[0] && ac[1] > bc[1]);
-    const laneOffset = (Math.abs(Math.trunc(index)) % 4) * 4 + (reverseDirection ? 40 : 0);
-    const blockers = obstacles.filter(r => routeCollisionCount(points, [r], CLEARANCE + curveError));
-    for (const group of [blockers, obstacles]) {
-      const bounds = [...group, source, target];
-      const left = Math.min(...bounds.map(r => r.x)) - CLEARANCE - LANE_GAP - laneOffset;
-      const right = Math.max(...bounds.map(r => r.x + r.width)) + CLEARANCE + LANE_GAP + laneOffset;
-      const top = Math.min(...bounds.map(r => r.y)) - CLEARANCE - LANE_GAP - laneOffset;
-      const bottom = Math.max(...bounds.map(r => r.y + r.height)) + CLEARANCE + LANE_GAP + laneOffset;
-      for (const [first, last] of [
-        [[ac[0], top], [bc[0], top]], [[ac[0], bottom], [bc[0], bottom]],
-        [[left, ac[1]], [left, bc[1]]], [[right, ac[1]], [right, bc[1]]]
-      ] as [Point, Point][]) {
-        if (first.some(v => v < 0) || last.some(v => v < 0)) continue;
-        const candidate = [boundary(source, first), first, last, boundary(target, last)].filter((p, i, all) => !i || distance(p, all[i - 1]) > 1e-7);
-        const s = score(candidate, obstacles);
-        if (better(s, bestScore)) { points = candidate; bestScore = s; path = `M${candidate.map(p => p.join(',')).join(' L')}`; rerouted = true; }
+  const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
+  if(!source||!target)throw new Error('Route endpoint is missing');
+  const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),ac=center(source),bc=center(target);
+  const a=boundary(source,bc),b=boundary(target,ac),dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy)||1,bend=40+(Math.abs(index)%3)*16;
+  const c:Point=[(a[0]+b[0])/2-dy/length*bend,(a[1]+b[1])/2+dx/length*bend];
+  let chosen=curve(a,c,b),bestScore=score(chosen.points,obstacles,CLEARANCE+chosen.error),rerouted=false;
+  if(bestScore[0]){
+    const reverse=ac[0]>bc[0]||(ac[0]===bc[0]&&ac[1]>bc[1]);
+    const laneOffset=(Math.abs(Math.trunc(index))%4)*12+(reverse?72:0);
+    const blockers=obstacles.filter(n=>routeCollisionCount(chosen.points,[n],CLEARANCE+chosen.error));
+    for(const group of [blockers,obstacles]){
+      const bounds=[...group,source,target];
+      const left=Math.min(...bounds.map(n=>n.x))-CLEARANCE-LANE_GAP-laneOffset;
+      const right=Math.max(...bounds.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+laneOffset;
+      const top=Math.min(...bounds.map(n=>n.y))-CLEARANCE-LANE_GAP-laneOffset;
+      const bottom=Math.max(...bounds.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+laneOffset;
+      for(const control of [
+        [(ac[0]+bc[0])/2,2*top-(ac[1]+bc[1])/2],[(ac[0]+bc[0])/2,2*bottom-(ac[1]+bc[1])/2],
+        [2*left-(ac[0]+bc[0])/2,(ac[1]+bc[1])/2],[2*right-(ac[0]+bc[0])/2,(ac[1]+bc[1])/2]
+      ] as Point[]){
+        const candidate=curve(boundary(source,control),control,boundary(target,control));
+        // Control points may lie outside the canvas; the actual curve may not.
+        if(candidate.points.some(p=>p[0]<1||p[1]<1))continue;
+        const candidateScore=score(candidate.points,obstacles,CLEARANCE+candidate.error);
+        if(better(candidateScore,bestScore)){chosen=candidate;bestScore=candidateScore;rerouted=true;}
       }
     }
   }
-  const label = labelAt(points, nodes, labelWidth, labelHeight);
-  return { path, label: label.point, points, collisions: bestScore[0], rerouted, fallback: bestScore[0] > 0 || label.blocked };
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight);
+  return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||label.blocked};
 }

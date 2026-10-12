@@ -13,7 +13,7 @@ async function boot(){
  const fire=(type,id,x,y,target=$('viewport'))=>{const e=new w.Event(type,{bubbles:true,cancelable:true});Object.assign(e,{pointerId:id,pointerType:'touch',button:0,clientX:x,clientY:y});target.dispatchEvent(e);return e;};
  return {dom,w,d,$,fire};
 }
-let {dom,w,d,$,fire}=await boot();$('open-sample').click();
+let {dom,w,d,$,fire}=await boot();$('layout-lock').click();$('open-sample').click();
 const positions=()=>Object.fromEntries([...d.querySelectorAll('.node')].map(n=>[n.dataset.node,[n.style.left,n.style.top]]));
 let before=positions(),first=d.querySelector('.node'),id=first.dataset.node;
 fire('pointerdown',1,100,100,first);fire('pointermove',1,104,110);assert.equal(first.isConnected,true);assert.notDeepEqual(positions(),before);
@@ -34,10 +34,10 @@ fire('pointerdown',1,100,100);fire('lostpointercapture',1,100,100);fire('pointer
 first=d.querySelector('.node');fire('pointerdown',1,100,100,first);fire('pointerup',1,100,100);assert.equal(d.querySelector('.selected').dataset.node,id);
 first=d.querySelector('.node');fire('pointerdown',1,100,100,first);fire('pointermove',1,120,110);fire('pointerup',1,120,110);assert.notDeepEqual(positions(),before);before=positions();
 $('viewport').scrollLeft=300;$('viewport').scrollTop=200;fire('pointerdown',1,400,400);fire('pointermove',1,350,380);fire('pointerup',1,350,380);assert.equal($('viewport').scrollLeft,350);assert.equal($('viewport').scrollTop,220);checks.push('one-finger node selection/drag and background pan retained');
-$('hide-outside').click();$('prefer-write').click();const visible=positions();assert.equal(Object.keys(visible).length,12);
+$('dim-outside').click();$('prefer-write').click();const visible=positions();assert.equal(Object.keys(visible).length,25);
 fire('pointerdown',1,100,100);fire('pointerdown',2,200,100);fire('pointermove',2,300,100);fire('pointerup',1,100,100);fire('pointerup',2,300,100);assert.equal($('zoom').textContent,'100%');assert.deepEqual(positions(),visible);
 fire('pointerdown',1,100,100);fire('pointerdown',2,200,100);$('drawer').click();fire('pointermove',2,400,100);assert.equal($('zoom').textContent,'100%');fire('pointerup',1,100,100);fire('pointerup',2,400,100);
 const scroll=[$('viewport').scrollLeft,$('viewport').scrollTop];await d.querySelector('.close').onclick();assert.equal(d.querySelectorAll('.tab').length,0);dom.window.close();
-({dom,w,d,$,fire}=await boot());$('open-sample').click();assert.equal($('zoom').textContent,'100%');assert.deepEqual(positions(),visible);assert.deepEqual([$('viewport').scrollLeft,$('viewport').scrollTop],scroll);assert.equal($('hide-outside').checked,true);assert.equal($('prefer-write').checked,true);$('hide-outside').click();assert.deepEqual(positions(),before);checks.push('Scope/Write, interrupted toolbar gesture and save→close→reboot→reopen retain full layout');
+({dom,w,d,$,fire}=await boot());$('open-sample').click();assert.equal($('zoom').textContent,'100%');assert.deepEqual(positions(),visible);assert.deepEqual([$('viewport').scrollLeft,$('viewport').scrollTop],scroll);assert.equal($('dim-outside').checked,true);assert.equal($('prefer-write').checked,true);$('dim-outside').click();assert.deepEqual(positions(),before);checks.push('Scope/Write, interrupted toolbar gesture and save→close→reboot→reopen retain full layout');
 const css=readFileSync('src/style.css','utf8');assert.ok(css.includes('touch-action:none'));assert.ok(!readFileSync('index.html','utf8').match(/user-scalable\s*=\s*no|maximum-scale/));checks.push('no page-wide browser zoom prohibition');
 dom.window.close();console.log(JSON.stringify({model:'synthetic DOM/IndexedDB',checks,passed:checks.length},null,2));

@@ -11,7 +11,7 @@ const db=new IDBFactory(),windows=[];
 const tick=()=>new Promise(r=>setTimeout(r,25));
 async function open(){const dom=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true});const w=dom.window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(outputFiles[0].text);for(let i=0;i<120&&w.document.querySelector('#open').disabled;i++)await tick();return w.document;}
 const d=await open(),$=id=>d.getElementById(id);
-assert.equal($('prefer-write').checked,false);$('open-sample').click();
+$('layout-lock').click();assert.equal($('prefer-write').checked,false);$('open-sample').click();
 const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8')),before=JSON.stringify(design),hidden=hiddenReadIndexes(design.graph.relations,true);
 assert.ok(hidden.size>0);const all=design.graph.relations.map((_,i)=>String(i));
 const visible=()=>[...d.querySelectorAll('.edge')].map(n=>n.dataset.relation).sort((a,b)=>+a-+b);

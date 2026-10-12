@@ -64,3 +64,13 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 #preview-badge{font-size:11px;line-height:1.3;max-width:220px;overflow-wrap:anywhere;flex-shrink:0;border:1px solid #ffffff70;border-radius:4px;padding:3px 6px}
 #preview-badge[hidden]{display:none}
 @media(max-width:800px){header:has(#preview-badge:not([hidden])) strong{font-size:14px}#preview-badge{max-width:140px;font-size:10px}}
+
+/* Scope dimming preserves type backgrounds and Who colors. Selection stays legible. */
+.node.scope-dim,.edge.scope-dim,.edge-label.scope-dim{opacity:.4}
+.node.scope-dim.selected,.node.scope-dim.review-neighbor,.edge.scope-dim.review-related,.edge-label.scope-dim.review-related{opacity:1}
+#layout-lock{border-right:1px solid var(--subtle)}
+#layout-lock[aria-pressed=true]{background:var(--select)}
+#viewport[data-layout-locked=true] .node{cursor:grab}
+#viewport[data-layout-locked=false] .node{cursor:move}
+/* Let wrapped option labels grow instead of clipping on a narrow screen. */
+.toolbar .edge-option{height:auto;min-height:32px;padding-block:5px}

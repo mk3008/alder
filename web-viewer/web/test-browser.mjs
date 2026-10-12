@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
+import {verifyLayoutLock} from './test-controls-browser.mjs';
 import {verifyTouchZoom} from './test-touch-browser.mjs';
 import {verifyLabelLayout} from './test-label-layout.mjs';
 import {verifyPreviewIsolation} from './test-preview-browser.mjs';
@@ -16,8 +17,9 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
-  const touchZoom=await verifyTouchZoom(browser);checks.push({touchZoom});
+  const touchZoom=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});checks.push({touchZoom});
   checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
+  checks.push({layoutLock:await verifyLayoutLock(browser)});
   checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
   checks.push({edgeOption:await verifyEdgeOption(browser)});
@@ -40,7 +42,7 @@ try {
   const sampleSection=sampleSource.slice(sampleSource.indexOf(sampleHeading)).split('\n# ')[0];
   const sampleItems=sampleSection.split('\n').filter(line=>line.startsWith('- ')).map(line=>line.slice(2));
   assert.ok(sampleItems.length>0);for(const item of sampleItems)assert.ok((await sample.locator('#detail').textContent()).includes(item));
-  const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
+  await sample.locator('#layout-lock').click();const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
   const sampleAfter=await sampleFirst.boundingBox();assert.ok(sampleAfter.x>sampleBefore.x+30);
   await sample.locator('#theme').click();await sample.locator('#refresh').click();assert.equal(await sample.locator('.tab').count(),1);
   await sample.locator('#status-close').click();await sample.waitForTimeout(300);assert.deepEqual(sampleRequests,[]);
@@ -55,9 +57,9 @@ try {
   await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),0);assert.equal(await sample.locator('#empty').isVisible(),true);
   await sample.locator('#open-sample').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
-  await sample.locator('#hide-outside').check();assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),12);await sample.locator('#hide-outside').uncheck();assert.deepEqual(await sampleLayout(),retainedSampleLayout);
-  assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
+  await sample.locator('#dim-outside').check();assert.equal(await sample.locator('.node').count(),25);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),25);await sample.locator('#dim-outside').uncheck();assert.deepEqual(await sampleLayout(),retainedSampleLayout);
+  assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, refresh/reload, close/reopen exact coordinates, closed-tab reload/open, dimmed-node positions');
   await page.goto('http://127.0.0.1:4173/');
   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   await page.locator('#fallback').setInputFiles({name:'sample.md',mimeType:'text/markdown',buffer:readFileSync('web/authorities/business-design.md')});
@@ -74,7 +76,7 @@ try {
   const before=await first.boundingBox();
   await page.keyboard.press('Shift+ArrowRight');
   assert.deepEqual(await first.boundingBox(),before);
-  await page.mouse.move(before.x+60,before.y+30);await page.mouse.down();await page.mouse.move(before.x+140,before.y+90,{steps:5});await page.mouse.up();
+  await page.locator('#layout-lock').click();await page.mouse.move(before.x+60,before.y+30);await page.mouse.down();await page.mouse.move(before.x+140,before.y+90,{steps:5});await page.mouse.up();
   const after=await first.boundingBox();assert.ok(after.x>before.x+60);assert.ok(after.y>before.y+40);
   checks.push('pointer selects and drags; keyboard does not move shapes');
   for(const theme of ['dark','light']){

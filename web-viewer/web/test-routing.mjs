@@ -35,3 +35,6 @@ const dense=routeEdge({...input,nodes:[...nodes,{id:'cover',x:0,y:0,width:2000,h
 assert.equal(dense.fallback,true);assert.ok(dense.collisions>0);assert.ok(!/NaN|Infinity/.test(dense.path));
 assert.throws(()=>routeEdge({...input,to:'missing'}),/endpoint/);
 console.log(JSON.stringify({passed:13,checks:['seven-card obstacle avoidance','full-label clearance','purity','position change','live drag recomputation','direction','reciprocal detours and labels','parallel detour spread','ID independence','endpoint exclusion','segment intersection','dense fallback','missing endpoint']},null,2));
+
+// Clear and obstructed routes remain curves throughout a coordinate sweep.
+for(let x=320;x<=1000;x+=40){const r=routeEdge({...input,nodes:nodes.map(n=>n.id==='finish'?{...n,x,y:180}:n)});assert.ok(r.points.every(p=>p[0]<=r.bounds.right+1e-6&&p[1]<=r.bounds.bottom+1e-6));assert.match(r.path,/ Q/);assert.doesNotMatch(r.path,/[LHV]/);assert.ok(!/NaN|Infinity/.test(r.path));}

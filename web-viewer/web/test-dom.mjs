@@ -22,7 +22,7 @@ function createWindow(indexedDB=new IDBFactory()){
 const checks=[];
 const {w,dom,$}=createWindow();
 assert.equal($('open').disabled,true);assert.equal($('theme').disabled,true);await $('open').onclick();$('theme').onclick();assert.equal(w.document.querySelectorAll('.tab').length,0);
-await restored($);assert.equal($('open').disabled,false);checks.push('restore disables conflicting open');
+await restored($);$('layout-lock').click();assert.equal($('open').disabled,false);checks.push('restore disables conflicting open');
 let selected=file('first.md'),permission='granted',pending;
 const h={getFile:async()=>pending?pending.promise:selected,queryPermission:async()=>permission,isSameEntry:async x=>x===h};
 w.showOpenFilePicker=async()=>[h];

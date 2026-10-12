@@ -1,7 +1,7 @@
 import type {Point} from './session';
 
 export const clampZoom=(zoom:number)=>Math.max(.25,Math.min(2.5,zoom));
-type View={key:string;zoom:number;scroll:Point};
+type View={key:string;zoom:number;scroll:Point;locked?:boolean};
 type Change={zoom?:number;scroll?:Point;node?:{id:string;position:Point};selected?:string};
 type Host={read:()=>View|undefined;position:(id:string)=>Point|undefined;change:(value:Change)=>void;finish:()=>void};
 type Single={kind:'single';view:View;start:Point;node?:{id:string;position:Point};moved:boolean};
@@ -29,7 +29,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
     }else if(points.size===2){
       // A first finger may have started a drag while the second was landing.
       // Undo that tentative node movement before starting the two-finger gesture.
-      if(gesture?.kind==='single'&&gesture.node)host.change({node:gesture.node});
+      if(gesture?.kind==='single'&&gesture.node&&!gesture.view.locked)host.change({node:gesture.node});
       const [a,b]=[...points.values()],mid=local(middle(a,b)),now=host.read();
       if(!now){cancel();return;}
       gesture={kind:'pinch',view:now,distance:Math.max(1,distance(a,b)),anchor:[(now.scroll[0]+mid[0])/now.zoom,(now.scroll[1]+mid[1])/now.zoom]};
@@ -44,7 +44,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
       host.change({zoom,scroll:[Math.max(0,g.anchor[0]*zoom-mid[0]),Math.max(0,g.anchor[1]*zoom-mid[1])]});
     }else{
       const dx=e.clientX-g.start[0],dy=e.clientY-g.start[1];if(Math.hypot(dx,dy)>3)g.moved=true;
-      if(g.node){if(g.moved)host.change({node:{id:g.node.id,position:[Math.max(0,g.node.position[0]+dx/g.view.zoom),Math.max(0,g.node.position[1]+dy/g.view.zoom)]}});}
+      if(g.node&&!g.view.locked){if(g.moved)host.change({node:{id:g.node.id,position:[Math.max(0,g.node.position[0]+dx/g.view.zoom),Math.max(0,g.node.position[1]+dy/g.view.zoom)]}});}
       else host.change({scroll:[Math.max(0,g.view.scroll[0]-dx),Math.max(0,g.view.scroll[1]-dy)]});
     }
   },true);

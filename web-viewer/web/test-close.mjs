@@ -13,7 +13,7 @@ async function until(test){for(let i=0;i<300&&!test();i++)await tick();assert.ok
 async function env(db=new IDBFactory()){
  const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};
  const writes=[];w.__saveSession=(value,commit)=>new Promise((resolve,reject)=>writes.push({value,fail:()=>reject(Error('storage failed')),commit:async()=>{await commit();resolve();}}));w.eval(code);
- const e={w,db,writes,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab'))};await until(()=>!e.$('open').disabled);return e;
+ const e={w,db,writes,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab'))};await until(()=>!e.$('open').disabled);e.$('layout-lock').click();return e;
 }
 const open=e=>e.$('open-sample').click();
 const close=(e,index=0)=>e.tabs()[index].querySelector('.close').onclick();
