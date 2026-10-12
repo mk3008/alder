@@ -1,3 +1,4 @@
+import {verifyBottomClearance} from './test-bottom-clearance-browser.mjs';
 import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
 import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
 import {runBrowserCases} from './browser-cases.mjs';
@@ -27,6 +28,7 @@ const checks=[];
 try {
   await runBrowserCases([
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
+   {name:'bottomClearance',run:()=>verifyBottomClearance(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
    ...[['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption]].map(([name,verify])=>({name,run:()=>verify(browser)})),
    ...['fixed-drawer','drawer-only','combined'].map(mode=>({name:'scopeGeometry:'+mode,run:()=>diagnoseScopeGeometry(browser,mode)})),
