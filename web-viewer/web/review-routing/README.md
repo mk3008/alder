@@ -73,11 +73,11 @@ device scale factor 1 and blocked network. There is no app navigation, storage,
 external font fetch or product bundle import.
 
 Each PNG is captured once into memory, with no file path. The PNG signature and
-IHDR dimensions are checked. Combined PNG bytes must be at most 196,608; the
-combined base64 strings must be at most 262,144 characters. If any check,
+IHDR dimensions are checked. Combined PNG bytes must be at most 393,216; the
+combined base64 strings must be at most 524,288 characters. If any check,
 capture, font setup or size cap fails, there is no retry, resize, compression
 pass, recapture, automatic re-run or artifact fallback. Both aggregate caps are
-checked before any payload is logged.
+checked before any payload is logged. Small per-image dimensions, byte counts and hashes are logged before this gate so an oversized capture remains diagnosable without releasing image data.
 
 ## Bounded log delivery and recovery
 

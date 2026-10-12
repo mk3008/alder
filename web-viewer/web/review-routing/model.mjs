@@ -17,7 +17,7 @@ export const SOURCE_HASHES={
   currentPositions:'4fbf3a95abb67f667161f30621716438944827d57cf1ea6b390b907a99827229',
   staircasePositions:'d0dbaf1fcc3afc3030cb746815a1442dd05970ab78bb124e488e5f011f40aa6d'
 };
-export const REVIEW_LIMITS=Object.freeze({pngBytes:192*1024,base64Characters:256*1024,chunkCharacters:6000,imageCount:2,maxPixelsPerImage:1_500_000});
+export const REVIEW_LIMITS=Object.freeze({pngBytes:384*1024,base64Characters:512*1024,chunkCharacters:6000,imageCount:2,maxPixelsPerImage:1_500_000});
 const read=path=>readFileSync(new URL(path,import.meta.url),'utf8');
 export function overlap(a,b){return a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;}
 export function union(boxes,padding=0){
