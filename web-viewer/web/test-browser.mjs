@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
+import {verifyTouchZoom} from './test-touch-browser.mjs';
 import {verifyLabelLayout} from './test-label-layout.mjs';
 import {verifyPreviewIsolation} from './test-preview-browser.mjs';
 import {verifyScopeOption} from './test-scope-browser.mjs';
@@ -15,6 +16,7 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
 const checks=[];
 try {
+  checks.push({touchZoom:await verifyTouchZoom(browser)});
   checks.push({previewIsolation:await verifyPreviewIsolation(browser)});
   checks.push({scopeOption:await verifyScopeOption(browser)});
   checks.push({labelLayout:await verifyLabelLayout(browser)});
@@ -100,5 +102,5 @@ try {
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
   assert.deepEqual(errors,[]);
-  console.log(JSON.stringify({browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','mobile and touch not tested']},null,2));
+  console.log(JSON.stringify({browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']},null,2));
 } finally {await browser.close();}
