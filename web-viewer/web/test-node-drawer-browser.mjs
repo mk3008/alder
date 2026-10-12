@@ -14,8 +14,15 @@ export async function verifyNodeDrawer(browser){
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   const initial=await positions(),zoom=await page.locator('#zoom').textContent();assert.equal(Object.keys(initial).length,25);
-  await openList();await page.locator('[data-category="activity"]').click();assert.equal(await page.locator('[data-list-node]').count(),10);
-  await page.locator('#node-list-search').fill(activity);assert.ok(await page.locator('[data-list-node]').count()>=1);await exactRow(activity).locator('.node-navigate').click();await centered(activity);assert.deepEqual(await positions(),initial);assert.equal(await page.locator('#zoom').textContent(),zoom);assert.equal(await page.locator('.node.selected').getAttribute('data-node'),activity);
+  await openList();
+  for(const category of ['activity','object','role']){
+   await page.locator(`[data-category="${category}"]`).click();
+   const rows=await page.locator('.node-list-row').evaluateAll(ns=>ns.map(n=>getComputedStyle(n).borderBottomWidth));assert.ok(rows.length>0);assert.ok(rows.every(w=>w==='0px'),category+' item dividers removed');
+  }
+  const retained=await page.evaluate(()=>({scope:getComputedStyle(document.querySelector('.scope-bulk')).borderBottomWidth,search:getComputedStyle(document.querySelector('#node-list-search')).borderBottomWidth,role:getComputedStyle(document.querySelector('.role-group')).borderBottomWidth,active:getComputedStyle(document.querySelector('#node-categories [aria-selected=true]')).borderBottomWidth}));
+  assert.deepEqual(retained,{scope:'1px',search:'1px',role:'1px',active:'2px'});
+  await page.locator('[data-category="activity"]').click();assert.equal(await page.locator('[data-list-node]').count(),10);
+  await page.locator('#node-list-search').fill(activity);assert.ok(await page.locator('[data-list-node]').count()>=1);await exactRow(activity).locator('.node-navigate').click();await centered(activity);assert.deepEqual(await positions(),initial);assert.equal(await page.locator('#zoom').textContent(),zoom);assert.equal(await page.locator('.node.selected').getAttribute('data-node'),activity);assert.notEqual(await exactRow(activity).evaluate(n=>getComputedStyle(n).backgroundColor),'rgba(0, 0, 0, 0)','selected row keeps its highlight');
   await page.locator('#in').click();assert.deepEqual(await positions(),initial);const zoomExtent=await page.locator('#viewport').evaluate(v=>{const c=document.querySelector('#canvas');return {scroll:[v.scrollWidth,v.scrollHeight],client:[v.clientWidth,v.clientHeight],canvas:[parseFloat(c.style.width),parseFloat(c.style.height)]};});assert.ok(zoomExtent.scroll.every((n,i)=>n<=Math.max(zoomExtent.canvas[i],zoomExtent.client[i])+2),'zoomed wrappers do not multiply scroll extent twice');await page.locator('#out').click();assert.deepEqual(await positions(),initial);assert.equal(await page.locator('#zoom').textContent(),zoom);
   // A graph selection reveals the appropriate category, clears a conflicting
   // search if needed, and highlights its matching list row.
@@ -43,5 +50,30 @@ export async function verifyNodeDrawer(browser){
    }finally{await zc.close();}
   }
   assert.deepEqual(errors,[]);return {checks:'Activity/Object/Role and search; currentColor/file-tab colors; per-node/bulk/mixed visibility; hidden name inert; graph/list sync; exact center without layout/zoom changes; persistence; mobile overlay and Escape',pageErrors:errors};
+ }finally{await context.close();}
+}
+
+// Browser focus/viewport evidence, not a claim about an Android native keyboard.
+export async function verifyDrawerOpeningFocus(browser){
+ const context=await browser.newContext(),page=await context.newPage(),results=[];
+ const view=()=>page.evaluate(()=>({height:innerHeight,visualHeight:visualViewport?.height??null,graphHeight:document.querySelector('#viewport').clientHeight,graphWidth:document.querySelector('#viewport').clientWidth,drawerPosition:getComputedStyle(document.querySelector('#node-list-drawer')).position,active:document.activeElement.id,editable:document.activeElement.matches('input,textarea,[contenteditable=true]')}));
+ try{
+  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled,null,{timeout:5000});await page.locator('#open-sample').click();
+  for(const width of [1280,393,320])for(const theme of ['light','dark']){
+   if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+   await page.setViewportSize({width,height:960});
+   if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+   const before=await view();
+   for(let i=0;i<3;i++){
+    await page.locator('#node-list-toggle').click();const opened=await view();assert.equal(opened.active,'node-list-close');assert.equal(opened.editable,false);assert.equal(opened.height,before.height);assert.equal(opened.visualHeight,before.visualHeight);assert.equal(opened.graphHeight,before.graphHeight);if(width<=800){assert.equal(opened.graphWidth,before.graphWidth,'mobile list overlays without shrinking graph');assert.equal(opened.drawerPosition,'absolute');}assert.ok(await page.locator('.node-list-row').evaluateAll(ns=>ns.length>0&&ns.every(n=>getComputedStyle(n).borderBottomWidth==='0px')),'item divider absent at each viewport');
+    await page.keyboard.press('Tab');await page.keyboard.press('Tab');assert.equal((await view()).active,'node-list-search','keyboard Tab still reaches search');await page.keyboard.type('業務');assert.equal(await page.locator('#node-list-search').inputValue(),'業務');await page.locator('#node-list-search').fill('');
+    await page.locator('#node-list-close').click();assert.equal((await view()).active,'node-list-toggle');results.push({width,theme,cycle:i,opened});
+   }
+   await page.locator('#node-list-toggle').click();await page.locator('#node-list-search').click();assert.equal((await view()).active,'node-list-search','explicit click can focus search');await page.locator('#node-list-close').click();
+   // A graph selection followed by reopening must still land on a non-input.
+   if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+   await page.locator('.node').first().click();await page.locator('#node-list-toggle').click();assert.equal((await view()).active,'node-list-close');await page.locator('#node-list-close').click();
+  }
+  return {results,limit:'Desktop Chrome resized viewports; native Android keyboard appearance has not been measured.'};
  }finally{await context.close();}
 }

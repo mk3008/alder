@@ -6,6 +6,11 @@ import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
 assert.match(readFileSync('src/style.css','utf8'),/#canvas\{overflow:clip\}/);
+const drawerCSS=readFileSync('src/style.css','utf8');
+const rowRule=drawerCSS.match(/\.node-list-row\{([^}]+)\}/)?.[1];assert.ok(rowRule);assert.doesNotMatch(rowRule,/border(?:-bottom)?\s*:/,'item rows have no divider');
+assert.match(drawerCSS,/\.node-list-row\.list-selected\{background:var\(--select\)\}/,'selected item highlight remains');
+assert.match(drawerCSS,/\.scope-bulk\{[^}]*border-block:1px solid/);assert.match(drawerCSS,/\.role-group\{border-bottom:1px solid/);assert.match(drawerCSS,/#node-list-search\{[^}]*border:1px solid/);assert.match(drawerCSS,/#node-categories \[aria-selected=true\]\{[^}]*border-bottom-color:/);
+
 const source=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(source);
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const db=new IDBFactory(),windows=[];
@@ -13,7 +18,7 @@ async function boot(){const w=new JSDOM('<div id="app"></div>',{url:'https://vie
 const layouts=d=>Object.fromEntries([...d.querySelectorAll('.node')].map(n=>[n.dataset.node,[n.style.left,n.style.top]]));
 try{
  const d=await boot(),$=id=>d.getElementById(id),rows=()=>[...d.querySelectorAll('[data-list-node]')],row=id=>rows().find(r=>r.dataset.listNode===id),input=value=>{$('node-list-search').value=value;$('node-list-search').dispatchEvent(new d.defaultView.Event('input'));};
- assert.equal($('node-list-drawer').hidden,true);$('open-sample').click();$('node-list-toggle').click();assert.equal(d.activeElement.id,'node-list-search');assert.equal($('node-list-drawer').hidden,false);assert.equal(rows().length,10);
+ assert.equal($('node-list-drawer').hidden,true);$('open-sample').click();$('node-list-toggle').click();assert.equal(d.activeElement.id,'node-list-close');assert.equal($('node-list-drawer').hidden,false);assert.equal(rows().length,10);for(let i=0;i<3;i++){$('node-list-close').click();assert.equal(d.activeElement.id,'node-list-toggle');$('node-list-toggle').click();assert.equal(d.activeElement.id,'node-list-close');}$('node-list-search').focus();assert.equal(d.activeElement.id,'node-list-search');
  const initial=layouts(d),inside=design.graph.nodes.find(n=>n.scope&&n.type==='business'),outside=design.graph.nodes.find(n=>!n.scope&&n.type==='business');
  // Model actual graph client dimensions and a desktop flank (no right overlay).
  const viewport=$('viewport');Object.defineProperty(viewport,'clientWidth',{value:900});Object.defineProperty(viewport,'clientHeight',{value:800});viewport.getBoundingClientRect=()=>({left:300,right:1200,top:108,bottom:908,width:900,height:800});$('formattedMarkdownDrawer').getBoundingClientRect=()=>({left:1200,right:1580,top:108,bottom:908,width:380,height:800});

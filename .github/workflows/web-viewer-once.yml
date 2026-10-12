@@ -9,7 +9,7 @@ permissions:
   contents: read
 jobs:
   verify:
-    if: github.head_ref == 'feature/web-viewer-public' && github.run_number == 30 && github.run_attempt == 1
+    if: github.head_ref == 'feature/web-viewer-public' && github.run_number == 31 && github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     defaults:
@@ -27,6 +27,11 @@ jobs:
       - run: npm run build
       - name: Install browser driver
         run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-match -f '%{family}\n' ':lang=ja'
       - name: Verify built app in Chrome
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &

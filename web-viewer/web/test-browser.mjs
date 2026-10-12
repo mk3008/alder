@@ -1,8 +1,10 @@
+import {verifyRoutingReviewImages} from './test-routing-review-images.mjs';
+import {verifyHeaderControls} from './test-header-controls-browser.mjs';
 import {verifyBottomClearance} from './test-bottom-clearance-browser.mjs';
 import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
 import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
 import {runBrowserCases} from './browser-cases.mjs';
-import {verifyNodeDrawer} from './test-node-drawer-browser.mjs';
+import {verifyNodeDrawer,verifyDrawerOpeningFocus} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
 import {setScope} from './scope-control.mjs';
 // Real Chromium smoke checks against the built app. Synthetic/public input only.
@@ -27,6 +29,9 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'routingReviewImages',run:()=>verifyRoutingReviewImages(browser)},
+   {name:'headerControls',run:()=>verifyHeaderControls(browser)},
+   {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'bottomClearance',run:()=>verifyBottomClearance(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},
