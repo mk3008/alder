@@ -8,6 +8,8 @@ Alderは依頼者の要求を、依頼者・設計者・実装者が共通の言
 
 フレームワークや実行時パッケージは不要です。
 
+**Web Viewer：** [ブラウザーで開く](https://mk3008.github.io/alder/) — 業務設計書を図とMarkdownで確認できます。Alderプラグインとは別の閲覧ツールです。
+
 ## 導入する
 
 ChatGPT / Codexを利用できる契約・権限のあるアカウントと環境を用意してください。Codex CLIを用意し、[GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.6)でAlder 0.4.6の公開を確認してから、次のコマンドでAlderの配布元（marketplace）を登録してください。
