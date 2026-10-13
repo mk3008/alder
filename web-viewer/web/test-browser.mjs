@@ -1,3 +1,5 @@
+import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
+import {verifyLifecycleSave} from './test-lifecycle-save-browser.mjs';
 import {verifyToolbarSettings} from './test-toolbar-settings-browser.mjs';
 import {verifyInitialLeftMargin} from './test-initial-left-margin-browser.mjs';
 import {verifyReturnRoutes} from './test-return-route-browser.mjs';
@@ -36,6 +38,8 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
+   {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},

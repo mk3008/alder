@@ -25,7 +25,7 @@ const layout=t=>Object.fromEntries(['positions','selected','scroll','zoom','hidd
 const positions=e=>Object.fromEntries([...e.d.querySelectorAll('.node')].map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]]));
 const scroll=e=>[e.v.scrollLeft,e.v.scrollTop];
 async function boot({db=new IDBFactory(),width=1280,height=800,seed}={}){
- globalThis.indexedDB=db;if(seed)await saveSession(seed);
+ globalThis.indexedDB=db;await loadSession();if(seed)await saveSession(seed);
  const w=new JSDOM('<style></style><div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);
  w.innerWidth=width;w.innerHeight=height;w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;
  w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};

@@ -3,7 +3,7 @@ import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,Link,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings} from 'lucide';
 import {parseDesign,validateGraph} from './graph';
 import {formattedMarkdown} from './markdown';
-import {reconcile,saveSession,loadSession,type Session,type Tab,type Point} from './session';
+import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
 import {createNodeDrag} from './node-drag';
 import {hiddenReadIndexes} from './edge-visibility';
@@ -17,25 +17,35 @@ const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
 for(const [id,value] of [['open',FolderOpen],['open-url',Link],['open-text',Text],['refresh',RefreshCw],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
-let state:Session={tabs:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0;
+let state:Session={tabs:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0;
 const updating=new WeakSet<Tab>();
 const current=()=>state.tabs.find(t=>t.key===state.active);
 const status=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('status-close'),$('viewport'));
-function persist(delay=180){if(restoring)return;revision++;clearTimeout(timer);if(closing)return;timer=window.setTimeout(()=>{let snapshot:Session;try{snapshot=structuredClone(state);}catch{status('表示状態を保存できません。','error','storage');return;}saving=saving.catch(()=>{}).then(()=>saveSession(snapshot)).catch(()=>status('表示状態を保存できません。ブラウザーの保存設定を確認してください。','error','storage'));},delay);}
+function protectedStorage(){status('前回の表示を復元できません。元の保存内容を保護するため、この画面の変更は保存しません。再読み込みで復元を再試行してください。','error','storage');}
+function conflictedStorage(){status('別の画面で先に保存されました。この画面の変更は保存していません。入力は画面内に保持しています。必要な内容をコピーしてから再読み込みしてください。','error','storage');}
+async function writeSnapshot(snapshot:Session){if(saveConflict)throw new SessionConflictError();try{await saveSession(snapshot);}catch(error){if(error instanceof SessionConflictError){saveConflict=true;clearTimeout(timer);conflictedStorage();}throw error;}}
+function persist(delay=180){
+  if(restoring)return;if(restoreFailed){protectedStorage();return;}if(saveConflict){conflictedStorage();return;}revision++;clearTimeout(timer);if(closing)return;
+  const write=()=>{timer=undefined;let snapshot:Session;try{snapshot=structuredClone(state);}catch{status('表示状態を保存できません。','error','storage');return;}saving=saving.catch(()=>{}).then(()=>writeSnapshot(snapshot)).catch(error=>{if(error instanceof SessionConflictError)conflictedStorage();else status('表示状態を保存できません。ブラウザーの保存設定を確認してください。','error','storage');});};
+  // Lifecycle flushing must enqueue the snapshot now, rather than schedule a
+  // timer that may never run after pagehide or a hidden document is suspended.
+  if(delay===0)write();else timer=window.setTimeout(write,delay);
+}
 async function closeTab(t:Tab){
   if(restoring||closing||!state.tabs.includes(t))return;
+  if(restoreFailed){protectedStorage();return;}if(saveConflict){conflictedStorage();return;}
   touch.cancel();capture();clearTimeout(timer);closing=t;renderTabs();displaySettingsChrome();
   const version=revision;
   try{
     const projected:Session={...state,tabs:state.tabs.filter(x=>x!==t),active:state.active===t.key?state.tabs.find(x=>x!==t)?.key:state.active};
     if(t.source?.kind==='sample')projected.sampleLayout={positions:t.positions,selected:t.selected,scroll:t.scroll,zoom:t.zoom,hiddenNodes:t.hiddenNodes,showExceptions:t.showExceptions,selectedEdgesOnly:t.selectedEdgesOnly,viewInset:t.viewInset,canvasOrigin:t.canvasOrigin};
-    const snapshot=structuredClone(projected),write=saving.catch(()=>{}).then(()=>saveSession(snapshot));
+    const snapshot=structuredClone(projected),write=saving.catch(()=>{}).then(()=>writeSnapshot(snapshot));
     saving=write.catch(()=>{});await write;
     state.tabs=state.tabs.filter(x=>x!==t);if(state.active===t.key)state.active=state.tabs[0]?.key;
     if(t.source?.kind==='sample')state.sampleLayout=snapshot.sampleLayout;
     closing=undefined;render();
     if(version!==revision)persist(0);
-  }catch{closing=undefined;renderTabs();displaySettingsChrome();status('表示状態を保存できないため、タブを閉じませんでした。ブラウザーの保存設定を確認してください。','error','storage');}
+  }catch(error){closing=undefined;render();if(error instanceof SessionConflictError){conflictedStorage();return;}status('表示状態を保存できないため、タブを閉じませんでした。ブラウザーの保存設定を確認してください。','error','storage');persist();}
 }
 // Empty presentation hides graph-only controls without changing drawer preferences.
 function chrome(){const hasTab=!!current(),drawerOpen=hasTab&&state.drawer,listOpen=hasTab&&!!state.nodeDrawer;document.querySelector<HTMLElement>('.toolbar')!.hidden=!hasTab;if(!hasTab)displaySettingsOpen=false;displaySettingsChrome();$('layout-lock').replaceChildren(icon(layoutLocked?LockKeyhole:LockKeyholeOpen));$('layout-lock').setAttribute('aria-pressed',String(layoutLocked));$('layout-lock').title=layoutLocked?'配置をロック中。項目の上から図をスクロールできます。':'配置を調整中。項目をドラッグして移動できます。';$('layout-lock').toggleAttribute('disabled',restoring);$('viewport').dataset.layoutLocked=String(layoutLocked);$<HTMLInputElement>('prefer-write').checked=state.preferWrite===true;$<HTMLInputElement>('prefer-write').disabled=restoring;$<HTMLInputElement>('show-exceptions').checked=current()?.showExceptions!==false;$<HTMLInputElement>('show-exceptions').disabled=restoring||!current()||closing===current();$<HTMLInputElement>('selected-edges-only').checked=current()?.selectedEdgesOnly===true;$<HTMLInputElement>('selected-edges-only').disabled=restoring||!current()||closing===current();document.documentElement.dataset.theme=state.dark?'dark':'light';$('theme').replaceChildren(icon(state.dark?Sun:Moon));$('formattedMarkdownDrawer').hidden=!drawerOpen;$('formattedMarkdownDrawer').style.width=Math.max(260,Math.min(state.width,innerWidth*.65))+'px';$('drawer').setAttribute('aria-expanded',String(drawerOpen));$('drawer').toggleAttribute('disabled',restoring||!hasTab);$('node-list-drawer').hidden=!listOpen;$('node-list-toggle').setAttribute('aria-expanded',String(listOpen));$('node-list-toggle').toggleAttribute('disabled',restoring||!hasTab);}
@@ -218,7 +228,7 @@ const touch=installTouchGestures(viewport,{
   },
   finish:()=>{const t=current();if(t)layoutCanvas(t);capture();persist();}
 });
-const cancelInteractions=()=>{touch.cancel();pan=undefined;capture();persist();};
+const cancelInteractions=()=>{touch.cancel();pan=undefined;capture();persist(0);};
 window.addEventListener('blur',cancelInteractions);
 window.addEventListener('pagehide',cancelInteractions);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelInteractions();});
@@ -233,6 +243,14 @@ let resizing=false;$('resize').onpointerdown=e=>{if(restoring)return;resizing=tr
 // Viewport resize and wrapped toolbar labels can change the required tail.
 // Recompute from current content, never from a historical maximum; keep pan.
 if(typeof ResizeObserver!=='undefined'){const canvasResize=new ResizeObserver(()=>{const t=current();if(t)layoutCanvas(t);});canvasResize.observe($('viewport'));canvasResize.observe(document.querySelector<HTMLElement>('.toolbar')!);}
-render();loadSession().then(saved=>{if(!saved)return;if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateGraph(t.design.graph);if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if((t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
+// Validate all fields consumed by rendering before adopting a stored tab.
+function validateRestoredTab(t:Tab){
+  if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||!t.design||typeof t.design.markdown!=='string'||!t.design.sections||typeof t.design.sections!=='object'||Array.isArray(t.design.sections)||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
+  validateGraph(t.design.graph);
+  if(!t.design.graph.nodes.every(n=>Object.hasOwn(t.design.sections,n.id)&&typeof t.design.sections[n.id]==='string')||(t.design.activityOrder!==undefined&&(!Array.isArray(t.design.activityOrder)||!t.design.activityOrder.every(id=>typeof id==='string'))))throw Error('Invalid saved sections');
+  if(t.source!==undefined&&(!t.source||!['text','sample','url'].includes(t.source.kind)||(t.source.kind==='url'&&typeof t.source.url!=='string')))throw Error('Invalid saved source');
+}
+const initialState=state;
+render();loadSession().then(saved=>{if(!saved)return;if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateRestoredTab(t);if(new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length||(saved.active!==undefined&&typeof saved.active!=='string'))throw Error('Invalid saved tab keys');if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if(!t||!t.positions||typeof t.positions!=='object'||Array.isArray(t.positions)||(t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||t.scroll.length!==2||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
 const {dimOutside:_dimOutside,hideOutside:_hideOutside,scopeOutside:_scopeOutside,...restored}=saved;
-const migrate=(t:Tab)=>({...t,hiddenNodes:t.hiddenNodes??(saved.scopeOutside==='hide'?t.design.graph.nodes.filter(n=>!n.scope).map(n=>n.id):[])});state={...restored,tabs:saved.tabs.map(t=>reconcile(migrate(t),t.design))};if(saved.sampleLayout&&saved.sampleLayout.hiddenNodes===undefined&&saved.scopeOutside==='hide')state.sampleLayout={...saved.sampleLayout,hiddenNodes:parseDesign(sampleMarkdown).graph.nodes.filter(n=>!n.scope).map(n=>n.id)};if(!state.tabs.some(t=>t.key===state.active))state.active=state.tabs[0]?.key;if(current()?.selected)revealListNode(current()!.selected!);render();if(state.tabs.some(t=>t.source?.kind!=='text'&&t.source?.kind!=='sample'))status('保存時の内容です。最新の取得元は「更新」で確認できます。','warning');}).catch(()=>status('前回の表示を復元できません。Markdownを開き直してください。','error')).finally(()=>{restoring=false;render();});
+const migrate=(t:Tab)=>({...t,hiddenNodes:t.hiddenNodes??(saved.scopeOutside==='hide'?t.design.graph.nodes.filter(n=>!n.scope).map(n=>n.id):[])});state={...restored,tabs:saved.tabs.map(t=>reconcile(migrate(t),t.design))};if(saved.sampleLayout&&saved.sampleLayout.hiddenNodes===undefined&&saved.scopeOutside==='hide')state.sampleLayout={...saved.sampleLayout,hiddenNodes:parseDesign(sampleMarkdown).graph.nodes.filter(n=>!n.scope).map(n=>n.id)};if(!state.tabs.some(t=>t.key===state.active))state.active=state.tabs[0]?.key;if(current()?.selected)revealListNode(current()!.selected!);render();if(state.tabs.some(t=>t.source?.kind!=='text'&&t.source?.kind!=='sample'))status('保存時の内容です。最新の取得元は「更新」で確認できます。','warning');}).catch(()=>{state=initialState;restoreFailed=true;protectedStorage();}).finally(()=>{restoring=false;render();});

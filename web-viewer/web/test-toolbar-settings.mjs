@@ -36,7 +36,7 @@ async function until(test){for(let i=0;i<300&&!await test();i++)await tick();ass
 async function saved(e){globalThis.indexedDB=e.db;return loadSession();}
 async function flush(e){e.w.dispatchEvent(new e.w.Event('blur'));await new Promise(r=>setTimeout(r,230));return saved(e);}
 async function boot({db=new IDBFactory(),seed,width=1280,height=800}={}){
- globalThis.indexedDB=db;if(seed)await saveSession(seed);
+ globalThis.indexedDB=db;await loadSession();if(seed)await saveSession(seed);
  const w=new JSDOM('<style></style><div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);
  w.innerWidth=width;w.innerHeight=height;w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;
  w.__calls=Object.fromEntries(['graph','render','persist','drawEdges','routes','reconcile','save'].map(k=>[k,0]));
