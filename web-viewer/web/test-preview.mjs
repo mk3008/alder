@@ -5,6 +5,20 @@ import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
 import {deploymentContext} from '../src/deployment.ts';
+import {normalizeRootRestoredSession} from './test-preview-browser.mjs';
+const original={tabs:[{key:'synthetic',hiddenNodes:undefined,design:{markdown:'Synthetic input'},positions:{node:[40,40]}}],dark:false};
+const restored=structuredClone(original);restored.tabs[0].hiddenNodes=[];
+assert.notDeepEqual(restored,original,'preview-only exact comparison still detects this write');
+assert.deepEqual(normalizeRootRestoredSession(restored),normalizeRootRestoredSession(original));
+assert.equal(original.tabs[0].hiddenNodes,undefined,'comparison must not mutate the stored fixture');
+for(const change of [
+ s=>{s.tabs[0].hiddenNodes=null;},s=>{s.tabs[0].hiddenNodes=['node'];},
+ s=>{s.tabs[0].design.markdown='Changed';},s=>{s.tabs[0].positions.node[0]++;},s=>{s.dark=true;},
+ s=>{s.tabs[0].selected=undefined;},s=>{s.tabs.push({...s.tabs[0],key:'extra'});},
+]){
+ const changed=structuredClone(restored);change(changed);
+ assert.notDeepEqual(normalizeRootRestoredSession(changed),normalizeRootRestoredSession(original),'only undefined hiddenNodes and [] may compare equal');
+}
 const prod='alder-web-viewer',a='/alder/preview/pr-194/scope-20261012-01/',b='/alder/preview/pr-194/second/';
 assert.equal(deploymentContext('/alder/').database,prod);assert.equal(deploymentContext('/alder/index.html').database,prod);
 assert.equal(deploymentContext(a).database,prod+':preview:pr-194:scope-20261012-01');assert.deepEqual(deploymentContext(a+'index.html'),deploymentContext(a));assert.notEqual(deploymentContext(a).database,deploymentContext(b).database);

@@ -144,7 +144,7 @@ async function storageCases(browser,url,sessionCode){
   assert.deepEqual(await a.evaluate(readConcurrencyRecord),{current:undefined,generation:undefined},'read does not initialize storage');
   const proposals=[{...emptySession(),dark:true,width:411},{...emptySession(),dark:false,width:522}];
   const race=await Promise.all(pages.map((page,i)=>page.evaluate(async value=>{
-   try{await concurrencySession.saveSession(value);return {ok:true};}catch(error){return {ok:false,name:error.name,message:error.message};}
+   try{await concurrencySession.saveSession(value);return {ok:true};}catch(error){return {ok:false,name:error?.name??null,message:error?.message??String(error)};}
   },proposals[i])));
   assert.equal(race.filter(r=>r.ok).length,1,'exactly one independent same-generation writer commits');
   assert.equal(race.find(r=>!r.ok).name,'SessionConflictError');
@@ -153,14 +153,16 @@ async function storageCases(browser,url,sessionCode){
   const next={...proposals[winner],width:633};
   await pages[winner].evaluate(value=>concurrencySession.saveSession(value),next);
   for(let retry=0;retry<3;retry++){
-   const error=await pages[loser].evaluate(async value=>{try{await concurrencySession.saveSession(value);return null;}catch(error){return error.name;}},proposals[loser]);
+   const error=await pages[loser].evaluate(async value=>{try{await concurrencySession.saveSession(value);return null;}catch(error){return error?.name??String(error);}},proposals[loser]);
    assert.equal(error,'SessionConflictError');
    assert.deepEqual(await a.evaluate(readConcurrencyRecord),{current:next,generation:2});
   }
   results.push({name:'native IndexedDB atomic race and repeated stale rejection',race,generation:2});
   await pages[winner].evaluate(abortNextGenerationPut);
-  const aborted=await pages[winner].evaluate(async value=>{try{await concurrencySession.saveSession(value);return null;}catch(error){return error.name;}},{...next,width:744});
+  const aborted=await pages[winner].evaluate(async value=>{try{await concurrencySession.saveSession(value);return null;}catch(error){return {name:error?.name??null,message:error?.message??String(error)};}},{...next,width:744});
   assert.ok(aborted,'injected transaction abort rejects the write');
+  assert.equal(typeof aborted.name,'string','abort must reject with a named error, not null or undefined');assert.ok(aborted.name);
+  assert.equal(typeof aborted.message,'string');assert.ok(aborted.message);
   assert.deepEqual(await a.evaluate(readConcurrencyRecord),{current:next,generation:2},'aborted puts change neither record nor generation');
   const recovered={...next,width:855};await pages[winner].evaluate(value=>concurrencySession.saveSession(value),recovered);
   assert.deepEqual(await a.evaluate(readConcurrencyRecord),{current:recovered,generation:3},'retry after abort uses the unchanged expected generation');

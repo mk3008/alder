@@ -91,7 +91,11 @@ if(!values['app-only']){
  await caseOf('abort after both puts rolls back record and generation; retry remains writable',async()=>{
   const e=moduleRealm(new IDBFactory()),initial=emptySession();await e.api.loadSession();await e.api.saveSession(initial);
   e.w.eval('('+abortNextGenerationPut.toString()+')()');
-  await assert.rejects(()=>e.api.saveSession({...initial,width:411}));
+  await assert.rejects(()=>e.api.saveSession({...initial,width:411}),error=>{
+   assert.ok(error!=null,'abort must reject with an error, not null or undefined');
+   assert.equal(typeof error.name,'string');assert.ok(error.name);
+   assert.equal(typeof error.message,'string');assert.ok(error.message);return true;
+  });
   assert.deepEqual(await e.read(),{current:initial,generation:1},'aborted transaction leaves both committed keys unchanged');
   await e.api.saveSession({...initial,width:522});
   assert.deepEqual(await e.read(),{current:{...initial,width:522},generation:2},'only completion advanced expected generation');

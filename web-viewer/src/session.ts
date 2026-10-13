@@ -41,7 +41,8 @@ export async function saveSession(value:Session):Promise<void>{
       store.put(value,'current');store.put(next,'generation');
     }catch(error){failure=error;t.abort();}};
     t.oncomplete=()=>{generation=next;resolve();};
-    t.onerror=()=>reject(failure??t.error);t.onabort=()=>reject(failure??t.error??Error('Session save aborted'));
+    // Aborted requests can bubble an error before the transaction has an error.
+    t.onerror=()=>reject(failure??t.error??Error('Session save failed'));t.onabort=()=>reject(failure??t.error??Error('Session save aborted'));
   });}finally{d.close();}
 }
 /** Read-only compatibility shape; removed display modes never enter live Session. */
