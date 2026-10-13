@@ -72,11 +72,11 @@ try {
   await openText(text,multibyte);assert.equal(tabs(text).length,1);assert.equal(graph(text),initial);assert.ok(dialogOpen(text));assert.match(status(text),/2MiB/);assert.equal(text.$('source-text').value,multibyte);await invoke(text,'source-cancel');
   checks.push('text size limit counts UTF-8 bytes, retaining oversized multibyte input');
 
-  assert.equal(text.$('refresh').disabled,true);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));await invoke(text,'source-edit');assert.equal(text.$('source-text').value,markdown);
+  assert.equal(text.$('refresh').disabled,true);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
   text.$('source-text').value='# invalid edit';await submit(text);
   assert.equal(graph(text),initial);assert.equal(tabs(text)[0].dataset.key,key);assert.equal(text.$('source-text').value,'# invalid edit');assert.ok(dialogOpen(text));
   text.$('source-text').value=markdown+'\n';await submit(text);assert.equal(dialogOpen(text),false);assert.equal(tabs(text).length,1);assert.equal(tabs(text)[0].dataset.key,key);
-  await invoke(text,'edit-markdown');await invoke(text,'source-edit');assert.equal(text.$('source-text').value,markdown+'\n');text.$('source-text').value='unsaved cancellation';await invoke(text,'source-cancel');
+  await invoke(text,'edit-markdown');assert.equal(text.$('source-text').value,markdown+'\n');text.$('source-text').value='unsaved cancellation';await invoke(text,'source-cancel');
   await invoke(text,'edit-markdown');assert.equal(text.$('source-text').value,'unsaved cancellation');await invoke(text,'source-cancel');
   checks.push('text editing swaps only after parse success and closing preserves a tab-local draft');
 
@@ -85,7 +85,7 @@ try {
   assert.equal(dialogOpen(text),false);assert.equal(text.$('source-text').value,'retained Escape input');assert.equal(tabs(text).length,1);
   checks.push('Escape closes text entry while retaining draft input and existing graph');
 
-  const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'edit-markdown');await invoke(closedEdit,'source-edit');
+  const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'edit-markdown');
   closedEdit.$('source-text').value=markdown+'\n';closedEdit.w.confirm=()=>false;await tabs(closedEdit)[0].querySelector('.close').onclick();
   assert.equal(tabs(closedEdit).length,1);assert.ok(dialogOpen(closedEdit));assert.equal(closedEdit.$('source-text').value,markdown+'\n');
   closedEdit.w.confirm=()=>true;await tabs(closedEdit)[0].querySelector('.close').onclick();await submit(closedEdit);

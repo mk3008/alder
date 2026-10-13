@@ -54,7 +54,7 @@ async function flush(){await new Promise(resolve=>setTimeout(resolve,260));}
 const extra=name=>`\n# Object ${name}\n\n## Scope\n\ntrue\n\n## Icon\n\nbox\n\n## Information\n\n- edited locally\n`;
 const edited=markdown+extra('Editor A'),twice=edited+extra('Editor B');
 const input=(env,value)=>{env.$('source-text').value=value;env.$('source-text').dispatchEvent(new env.w.Event('input',{bubbles:true}));};
-const edit=async env=>{env.$('edit-markdown').focus();await invoke(env,'edit-markdown');assert.equal(env.w.document.activeElement,env.$('source-text'));assert.equal(env.$('source-text').readOnly,true);assert.equal(env.$('source-submit').hidden,true);await invoke(env,'source-edit');assert.equal(env.$('source-text').readOnly,false);assert.equal(env.$('source-submit').textContent,'図に反映');};
+const edit=async env=>{env.$('edit-markdown').focus();await invoke(env,'edit-markdown');assert.equal(env.w.document.activeElement,env.$('source-text'));assert.equal(env.$('source-submit').hidden,false);assert.equal(env.$('source-edit'),null);assert.equal(env.$('source-state'),null);assert.equal(env.$('source-text').readOnly,false);assert.equal(env.$('source-submit').textContent,'反映する');};
 const local=async(env,name='local.md')=>{Object.defineProperty(env.$('fallback'),'files',{value:[file(name)],configurable:true});await env.$('fallback').onchange();};
 try {
  for(const origin of ['file','url','text']){
@@ -62,16 +62,26 @@ try {
   if(origin==='file')await local(env);else if(origin==='url')await openURL(env);else await openText(env);
   const key=tabs(env)[0].dataset.key,count=env.$('nodes').children.length,requests=env.calls.length;
   const initialIDs=new Set([...env.$('nodes').children].map(n=>n.dataset.node));const coordinates=()=>[...env.$('nodes').children].filter(n=>initialIDs.has(n.dataset.node)).map(n=>[n.dataset.node,n.style.left,n.style.top]);const before=coordinates();
-  await edit(env);assert.equal(env.$('source-text').value,markdown);input(env,edited);await submit(env);
+  await edit(env);assert.equal(env.$('source-text').value,markdown);assert.equal(env.$('source-submit').disabled,true);
+  await submit(env);assert.ok(dialogOpen(env));assert.deepEqual(coordinates(),before,'unchanged submit is a no-op');
+  input(env,edited);assert.equal(env.$('source-submit').disabled,false);
+  input(env,markdown);assert.equal(env.$('source-submit').disabled,true,'exact revert clears dirty state');
+  input(env,markdown+'\n');assert.equal(env.$('source-submit').disabled,false,'whitespace differences are real edits');
+  input(env,edited);await submit(env);
   assert.equal(dialogOpen(env),false);assert.equal(env.w.document.activeElement,env.$('edit-markdown'));assert.equal(env.$('nodes').children.length,count+1);assert.equal(tabs(env)[0].dataset.key,key);assert.deepEqual(coordinates(),before);assert.equal(env.calls.length,requests);
   let snapshot=await saved(db);assert.equal(snapshot.tabs[0].design.markdown,edited);assert.equal(snapshot.tabs[0].edited,true);assert.equal(snapshot.tabs[0].draft,undefined);
   if(origin==='url')assert.equal(snapshot.tabs[0].source.url,'https://raw.example.test/design.md');
   if(origin==='file')assert.equal(snapshot.tabs[0].name,'local.md');
-  await edit(env);assert.equal(env.$('source-text').value,edited);input(env,twice);await submit(env);assert.equal(env.$('nodes').children.length,count+2);assert.equal(tabs(env).length,1);
+  await edit(env);assert.equal(env.$('source-text').value,edited);assert.equal(env.$('source-submit').disabled,true,'successful apply resets dirty state');input(env,twice);await submit(env);assert.equal(env.$('nodes').children.length,count+2);assert.equal(tabs(env).length,1);
   snapshot=await saved(db);assert.equal(snapshot.tabs[0].design.markdown,twice);env.w.close();
-  const restored=await ready({indexedDB:db});await edit(restored);assert.equal(restored.$('source-text').value,twice);assert.equal(restored.calls.length,0);assert.equal(restored.$('nodes').children.length,count+2);restored.w.close();
-  checks.push(`${origin}: common read/edit, two apply cycles, stable key/coordinates, full Markdown persisted before completion, restore without fetch or source writes`);
+  const restored=await ready({indexedDB:db});await edit(restored);assert.equal(restored.$('source-text').value,twice);assert.equal(restored.$('source-submit').disabled,true);assert.equal(restored.calls.length,0);assert.equal(restored.$('nodes').children.length,count+2);restored.w.close();
+  checks.push(`${origin}: direct common editor; unchanged/reverted disabled; whitespace dirty; two apply cycles, stable key/coordinates, full Markdown persisted before completion, restore without fetch or source writes`);
  }
+ const crlf=await ready({fetch:async()=>response(markdown.replace(/\n/g,'\r\n'))});await openURL(crlf);await edit(crlf);
+ assert.equal(crlf.$('source-submit').disabled,true,'CRLF normalization alone is not a change');
+ input(crlf,edited);assert.equal(crlf.$('source-submit').disabled,false);input(crlf,markdown);assert.equal(crlf.$('source-submit').disabled,true);
+ await invoke(crlf,'source-cancel');await flush();assert.equal((await saved(crlf.w.indexedDB)).tabs[0].draft,undefined);crlf.w.close();
+ checks.push('CRLF sources remain clean when opened and reverted without changing stored source');
  const db=new IDBFactory(),env=await ready({indexedDB:db});await local(env,'first.md');await edit(env);input(env,'invalid draft A');await invoke(env,'source-cancel');
  assert.equal(dialogOpen(env),false);assert.equal((await saved(db)).tabs[0].draft,'invalid draft A');
  await openText(env);const second=tabs(env)[1].dataset.key;await edit(env);input(env,'invalid draft B');
@@ -82,7 +92,7 @@ try {
  checks.push('drafts survive close, tab switching, separate new text entry and reload without cross-tab mixing');
 
  const errors=await ready();await openText(errors);const previous=graph(errors),key=tabs(errors)[0].dataset.key;await edit(errors);
- for(const raw of ['# invalid','あ'.repeat(750000)]){input(errors,raw);await submit(errors);assert.equal(graph(errors),previous);assert.equal(errors.$('source-text').value,raw);assert.ok(dialogOpen(errors));assert.equal(errors.$('source-text').disabled,false);}
+ for(const raw of ['# invalid','あ'.repeat(750000)]){input(errors,raw);await submit(errors);assert.equal(graph(errors),previous);assert.equal(errors.$('source-text').value,raw);assert.ok(dialogOpen(errors));assert.equal(errors.$('source-text').disabled,false);assert.equal(errors.$('source-submit').disabled,false,'invalid draft remains available to fix and retry');}
  input(errors,edited);const originalClone=errors.w.structuredClone;errors.w.structuredClone=()=>{throw Error('synthetic clone failure');};await submit(errors);assert.equal(graph(errors),previous);assert.equal(errors.$('source-text').value,edited);assert.ok(dialogOpen(errors));assert.equal(tabs(errors)[0].dataset.key,key);errors.w.structuredClone=originalClone;
  const originalDB=errors.w.indexedDB;errors.w.indexedDB={open(){throw Error('synthetic write failure');}};await submit(errors);assert.equal(graph(errors),previous);assert.equal(errors.$('source-text').value,edited);assert.ok(dialogOpen(errors));await invoke(errors,'source-cancel');assert.ok(dialogOpen(errors));assert.equal(graph(errors),previous);
  errors.w.indexedDB=originalDB;await submit(errors);assert.equal(dialogOpen(errors),false);assert.notEqual(graph(errors),previous);assert.equal((await saved(originalDB)).tabs[0].design.markdown,edited);errors.w.close();

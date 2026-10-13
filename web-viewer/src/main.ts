@@ -12,7 +12,7 @@ import './style.css';
 import sampleMarkdown from '../../business-design/alder/README.md?raw';
 import {createSnackbar} from './snackbar';
 const app=document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open" aria-label="ファイルを開く" title="ファイルを開く"><span class="source-caption">ファイルを開く</span></button><button id="open-url" aria-label="URLを開く" title="URLを開く"><span class="source-caption">URLを開く</span></button><button id="open-text" aria-label="テキストを入力" title="テキストを入力"><span class="source-caption">テキストを入力</span></button><button id="refresh" aria-label="更新" title="更新">更新</button><button id="theme" aria-label="テーマ切替"></button><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="開いているファイル"></nav><button id="edit-markdown" aria-label="原文を見る／編集する" title="原文を見る／編集する"><span class="editor-caption">原文を見る／編集する</span></button></div><section id="status" class="info-bar" hidden><span id="status-text" role="status" aria-live="polite"></span><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><p>Business Design Markdownを開いてください。</p><a id="open-sample" href="#alder-sample">サンプルを開く</a></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-state" role="status" hidden></p><p id="source-help"></p><div class="source-actions"><button id="source-edit" hidden>編集する</button><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple hidden>`;
+app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open" aria-label="ファイルを開く" title="ファイルを開く"><span class="source-caption">ファイルを開く</span></button><button id="open-url" aria-label="URLを開く" title="URLを開く"><span class="source-caption">URLを開く</span></button><button id="open-text" aria-label="テキストを入力" title="テキストを入力"><span class="source-caption">テキストを入力</span></button><button id="refresh" aria-label="更新" title="更新">更新</button><button id="theme" aria-label="テーマ切替"></button><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="開いているファイル"></nav><button id="edit-markdown" aria-label="原文を見る／編集する" title="原文を見る／編集する"><span class="editor-caption">原文を見る／編集する</span></button></div><section id="status" class="info-bar" hidden><span id="status-text" role="status" aria-live="polite"></span><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><p>Business Design Markdownを開いてください。</p><a id="open-sample" href="#alder-sample">サンプルを開く</a></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple hidden>`;
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
@@ -28,7 +28,7 @@ async function closeTab(t:Tab){
   if(restoring||closing||documentSaving||!state.tabs.includes(t))return;
   rememberEditorInput();if(t.draft!==undefined&&!window.confirm('図に反映していない編集を破棄して、このタブを閉じますか？'))return;
   if(sourceTarget===t.key)hideSource();
-  touch.cancel();capture();clearTimeout(timer);closing=t;renderTabs();displaySettingsChrome();sourceChrome(!sourceText().readOnly);
+  touch.cancel();capture();clearTimeout(timer);closing=t;renderTabs();displaySettingsChrome();sourceChrome();
   const version=revision;
   try{
     const projected:Session={...state,tabs:state.tabs.filter(x=>x!==t),active:state.active===t.key?state.tabs.find(x=>x!==t)?.key:state.active};
@@ -39,7 +39,7 @@ async function closeTab(t:Tab){
     if(t.source?.kind==='sample')state.sampleLayout=snapshot.sampleLayout;
     unsavedDrafts.delete(t.key);closing=undefined;render();
     if(version!==revision)persist(0);
-  }catch{closing=undefined;renderTabs();displaySettingsChrome();sourceChrome(!sourceText().readOnly);status('表示状態を保存できないため、タブを閉じませんでした。ブラウザーの保存設定を確認してください。','error','storage');}
+  }catch{closing=undefined;renderTabs();displaySettingsChrome();sourceChrome();status('表示状態を保存できないため、タブを閉じませんでした。ブラウザーの保存設定を確認してください。','error','storage');}
 }
 // Empty presentation hides graph-only controls without changing drawer preferences.
 function chrome(){const hasTab=!!current(),drawerOpen=hasTab&&state.drawer,listOpen=hasTab&&!!state.nodeDrawer;document.querySelector<HTMLElement>('.toolbar')!.hidden=!hasTab;if(!hasTab)displaySettingsOpen=false;displaySettingsChrome();$('layout-lock').replaceChildren(icon(layoutLocked?LockKeyhole:LockKeyholeOpen));$('layout-lock').setAttribute('aria-pressed',String(layoutLocked));$('layout-lock').title=layoutLocked?'配置をロック中。項目の上から図をスクロールできます。':'配置を調整中。項目をドラッグして移動できます。';$('layout-lock').toggleAttribute('disabled',restoring);$('viewport').dataset.layoutLocked=String(layoutLocked);$<HTMLInputElement>('prefer-write').checked=state.preferWrite===true;$<HTMLInputElement>('prefer-write').disabled=restoring;$<HTMLInputElement>('show-exceptions').checked=current()?.showExceptions!==false;$<HTMLInputElement>('show-exceptions').disabled=restoring||!current()||closing===current();$<HTMLInputElement>('selected-edges-only').checked=current()?.selectedEdgesOnly===true;$<HTMLInputElement>('selected-edges-only').disabled=restoring||!current()||closing===current();document.documentElement.dataset.theme=state.dark?'dark':'light';$('theme').replaceChildren(icon(state.dark?Sun:Moon));$('formattedMarkdownDrawer').hidden=!drawerOpen;$('formattedMarkdownDrawer').style.width=Math.max(260,Math.min(state.width,innerWidth*.65))+'px';$('drawer').setAttribute('aria-expanded',String(drawerOpen));$('drawer').toggleAttribute('disabled',restoring||!hasTab);$('node-list-drawer').hidden=!listOpen;$('node-list-toggle').setAttribute('aria-expanded',String(listOpen));$('node-list-toggle').toggleAttribute('disabled',restoring||!hasTab);}
@@ -148,7 +148,7 @@ function buildGraph(){nodeDrag.cancel();redrawEdges=()=>{};edgeExtent=[0,0];edge
     const cancel=(e:PointerEvent)=>{if(pointer===undefined||pointer!==e.pointerId)return;pointer=undefined;if(!b.isConnected)return;nodeDrag.cancel();capture();persist();};
     b.onpointercancel=cancel;b.onlostpointercapture=cancel;$('nodes').append(b);});$('zoom').textContent=Math.round(t.zoom*100)+'%';detail();renderNodeList();
 }
-function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||updating.has(t));$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(t));$('edit-markdown').hidden=!t;for(const id of ['open','open-url','open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome(!sourceText().readOnly);}
+function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||updating.has(t));$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(t));$('edit-markdown').hidden=!t;for(const id of ['open','open-url','open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();}
 // New documents start with extra camera padding on the left. Reconcile and
 // restored tabs keep their existing camera, including an absent legacy inset.
 type PickerWindow=Window & {showOpenFilePicker?: (options:unknown)=>Promise<FileSystemFileHandle[]>};
@@ -207,18 +207,17 @@ let sourceMode:SourceMode='text',sourceTarget:string|undefined,sourceBusy=false,
 const sourceText=()=>($('source-text') as HTMLTextAreaElement),sourceURL=()=>($('source-url') as HTMLInputElement);
 const editingTab=()=>state.tabs.find(t=>t.key===sourceTarget);
 function rememberEditorInput(){
-  const t=editingTab();if(sourceMode!=='edit'||$('source-dialog').hidden||!t||sourceText().readOnly||documentSaving||closing)return;
-  const value=sourceText().value,draft=value===t.design.markdown?undefined:value;
-  if(t.draft!==draft){t.draft=draft;unsavedDrafts.add(t.key);persist();}editorState();
+  const t=editingTab();if(sourceMode!=='edit'||$('source-dialog').hidden||!t||documentSaving||closing)return;
+  const value=sourceText().value,draft=value===t.design.markdown.replace(/\r\n?/g,'\n')?undefined:value;
+  if(t.draft!==draft){t.draft=draft;unsavedDrafts.add(t.key);persist();}sourceChrome();
 }
-function editorState(){$('source-state').hidden=sourceMode!=='edit';$('source-state').textContent=editingTab()?.draft!==undefined?'図に未反映の編集があります。':'図に反映済みの原文です。';}
-function sourceChrome(editing=false){
-  editorState();
-  const edit=sourceMode==='edit',busy=sourceBusy||documentSaving||(edit&&!!closing);sourceText().readOnly=edit&&!editing;sourceText().disabled=busy;
-  $('source-edit').hidden=!edit;$('source-edit').textContent=editing?'原文を確認':'編集する';
-  $<HTMLButtonElement>('source-edit').disabled=busy;
-  $('source-submit').hidden=edit&&!editing;$('source-submit').textContent=edit?'図に反映':'表示';
-  $<HTMLButtonElement>('source-submit').disabled=busy;$<HTMLButtonElement>('source-cancel').disabled=edit&&busy;
+// Textareas normalize line endings; opening CRLF source alone is not an edit.
+function editorChanged(){const t=editingTab();return !!t&&sourceText().value!==t.design.markdown.replace(/\r\n?/g,'\n');}
+function sourceChrome(){
+  const edit=sourceMode==='edit',busy=sourceBusy||documentSaving||(edit&&!!closing);sourceText().disabled=busy;
+  $('source-dialog').dataset.mode=sourceMode;
+  $('source-submit').textContent=edit?'反映する':'表示';
+  $<HTMLButtonElement>('source-submit').disabled=busy||(edit&&!editorChanged());$<HTMLButtonElement>('source-cancel').disabled=edit&&busy;
   $('source-cancel').textContent=edit?'閉じる':'キャンセル';
 }
 function showSource(mode:SourceMode,target?:Tab){
@@ -226,7 +225,7 @@ function showSource(mode:SourceMode,target?:Tab){
   rememberEditorInput();sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target?.key;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;
   $('source-dialog').hidden=false;$('source-title').textContent=target?`Markdown原文 · ${target.name}`:mode==='url'?'URLを開く':'テキストを入力';
   for(const id of ['url-label','source-url'])$(id).hidden=mode!=='url';for(const id of ['text-label','source-text'])$(id).hidden=mode==='url';
-  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。未反映の編集はこのタブに保持します。「図に反映」で保存と再解析を行います。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
+  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。未反映の編集はこのタブに保持します。「反映する」で保存と再解析を行います。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
   if(target)sourceText().value=target.draft??target.design.markdown;
   else if(mode==='text')sourceText().value=newTextDraft;
   sourceChrome();(mode==='url'?sourceURL():sourceText()).focus();
@@ -237,21 +236,20 @@ async function closeSource(){
   if(documentSaving)return false;
   rememberEditorInput();const t=editingTab();
   if(sourceMode==='edit'&&t&&(t.draft!==undefined||unsavedDrafts.has(t.key))){
-    sourceBusy=true;sourceChrome(true);
+    sourceBusy=true;sourceChrome();
     try{await saveDocument(()=>state,()=>{});}
     catch{status('編集を保存できません。本文を保持しています。保存設定を確認してから閉じてください。','error','storage');return false;}
-    finally{sourceBusy=false;sourceChrome(true);}
+    finally{sourceBusy=false;sourceChrome();}
   }
   if(sourceMode==='text')newTextDraft=sourceText().value;hideSource();return true;
 }
 sourceText().oninput=()=>{if(sourceMode==='edit')rememberEditorInput();else if(sourceMode==='text')newTextDraft=sourceText().value;};
-$('source-edit').onclick=()=>{if(sourceBusy||documentSaving||closing)return;rememberEditorInput();sourceChrome(sourceText().readOnly);sourceText().focus();};
 $('edit-markdown').onclick=()=>{const t=current();if(t)showSource('edit',t);};
 $('open-url').onclick=()=>showSource('url');$('open-text').onclick=()=>showSource('text');$('source-cancel').onclick=()=>closeSource();
 $('source-dialog').onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();void closeSource();}};
 $('source-submit').onclick=async()=>{
-  if(sourceBusy||documentSaving||(sourceMode==='edit'&&closing)||$('source-dialog').hidden||(sourceMode==='edit'&&sourceText().readOnly))return;
-  rememberEditorInput();sourceBusy=true;sourceChrome(true);const token=++sourceToken,target=editingTab(),mode=sourceMode;sourceAbort=new AbortController();
+  if(sourceBusy||documentSaving||(sourceMode==='edit'&&closing)||$('source-dialog').hidden||(sourceMode==='edit'&&!editorChanged()))return;
+  rememberEditorInput();sourceBusy=true;sourceChrome();const token=++sourceToken,target=editingTab(),mode=sourceMode;sourceAbort=new AbortController();
   try{
     const url=sourceURL().value.trim(),raw=mode==='url'?await fetchMarkdown(url,sourceAbort.signal):sourceText().value;
     if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');
@@ -265,7 +263,7 @@ $('source-submit').onclick=async()=>{
     }
     hideSource();
   }catch(e){if(token===sourceToken)status('表示できません。入力と旧表示を保持しています: '+(e as Error).message,'error');}
-  finally{if(token===sourceToken){sourceBusy=false;sourceChrome(true);}}
+  finally{if(token===sourceToken){sourceBusy=false;sourceChrome();}}
 };
 $('layout-lock').onclick=()=>{if(restoring)return;touch.cancel();pan=undefined;capture();layoutLocked=!layoutLocked;chrome();graph();};
 $<HTMLInputElement>('selected-edges-only').onchange=()=>{const t=current();if(!t||restoring||closing===t)return;touch.cancel();pan=undefined;capture();t.selectedEdgesOnly=$<HTMLInputElement>('selected-edges-only').checked;redrawEdges();persist();};

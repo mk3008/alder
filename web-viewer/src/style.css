@@ -122,6 +122,13 @@ header{flex-shrink:0}
 #edit-markdown{display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;min-width:40px;height:40px;margin:2px 8px;padding:6px 10px;border-radius:5px;font-size:12px}
 #edit-markdown[hidden]{display:none}
 #edit-markdown:hover{background:var(--select)}
-#source-text:read-only{background:var(--bg)}
 #source-dialog .source-actions{flex-wrap:wrap}
 @media(max-width:600px){.editor-caption{display:none}#edit-markdown{margin-inline:4px;padding:6px}}
+
+/* Give desktop Markdown editing the available viewport, keeping actions in view. */
+@media(min-width:801px){
+  #source-dialog:not([hidden]):is([data-mode=edit],[data-mode=text]){top:124px;width:min(1120px,calc(100vw - 64px));height:calc(100dvh - 148px);max-height:calc(100dvh - 148px);display:flex;flex-direction:column}
+  #source-dialog:is([data-mode=edit],[data-mode=text])> :not(textarea){flex-shrink:0}
+  #source-dialog:is([data-mode=edit],[data-mode=text]) textarea{flex:1;min-height:120px;resize:none}
+  body:has(.info-bar:not([hidden])) #source-dialog:is([data-mode=edit],[data-mode=text]){top:112px;height:calc(100dvh - 316px);max-height:calc(100dvh - 316px)}
+}
