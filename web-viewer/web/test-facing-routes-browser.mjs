@@ -16,6 +16,7 @@ export async function verifyFacingRoutes(browser){
   const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
   await waitForSavedPositions(page,await positions());
   const fixturePositions={'A source':[40,40],'B obstacle':[760,40],'C target':[400,40]};
+  await page.goto('http://127.0.0.1:4173/LICENSE.txt');
   await page.evaluate(positions=>new Promise((resolve,reject)=>{
    const request=indexedDB.open('alder-web-viewer',1);
    request.onerror=()=>reject(request.error);
@@ -24,15 +25,15 @@ export async function verifyFacingRoutes(browser){
     get.onsuccess=()=>{
      const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
      if(!tab){failure=Error('Routing fixture session not saved');tx.abort();return;}
-     tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];delete tab.viewInset;
+     tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];
      session.drawer=false;store.put(session,'current');
     };
     tx.oncomplete=()=>{db.close();resolve();};
     tx.onerror=tx.onabort=()=>{db.close();reject(failure??tx.error??Error('Routing fixture transaction failed'));};
    };
   }),fixturePositions);
-  await waitSavedViewer(page,{positions:fixturePositions,zoom:1,scroll:[0,0]});
-  await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===3);
+  await waitSavedViewer(page,{positions:fixturePositions,zoom:1,scroll:[0,0],viewInset:[0,0],canvasOrigin:[0,0]});
+  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===3);
   assert.deepEqual(await positions(),fixturePositions,'saved obstacle geometry restores without migration');
   assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
   const target=page.locator('.node[data-node="C target"]');await page.locator('#layout-lock').click();const box=await target.boundingBox();

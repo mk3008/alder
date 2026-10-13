@@ -25,7 +25,8 @@ async function openFixture(page){
  await waitForExactRead(()=>page.evaluate(readSessionInPage),false,{project:s=>s?.drawer});
 }
 
-async function seedSavedView(page,zoom,position=at,viewInset){
+async function seedSavedView(page,zoom,position=at,viewInset=[0,0]){
+ await page.goto(origin+'LICENSE.txt');
  await page.evaluate(async({zoom,position,id,viewInset})=>{
   const request=indexedDB.open('alder-web-viewer',1);
   const db=await new Promise((resolve,reject)=>{request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});
@@ -35,12 +36,12 @@ async function seedSavedView(page,zoom,position=at,viewInset){
    const tab=current.tabs.find(t=>t.key===current.active);
    if(!tab)throw Error('Fixture tab not saved');
    tab.positions[id]=position;tab.zoom=zoom;tab.scroll=[0,0];
-   if(viewInset)tab.viewInset=viewInset;else delete tab.viewInset;
+   tab.viewInset=viewInset;tab.canvasOrigin=[0,0];
    await new Promise((resolve,reject)=>{const tx=db.transaction('session','readwrite');tx.objectStore('session').put(current,'current');tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error);});
   }finally{db.close();}
  },{zoom,position,id,viewInset});
- await waitSavedViewer(page,{positions:{[id]:position},zoom,scroll:[0,0],...(viewInset?{viewInset}:{})});
- await page.reload();
+ await waitSavedViewer(page,{positions:{[id]:position},zoom,scroll:[0,0],viewInset,canvasOrigin:[0,0]});
+ await page.goto(origin);
  await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===1);
  await page.waitForFunction(expected=>document.querySelector('#zoom').textContent===`${expected}%`,Math.round(zoom*100));
  assert.deepEqual(await page.locator('.node').evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]),position);

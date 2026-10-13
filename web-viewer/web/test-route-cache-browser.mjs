@@ -33,14 +33,15 @@ export async function verifyRouteCache(browser){
   await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await ready();
   await waitSavedViewer(page,{positions:await positions()});
   const fixture={record:[80,100],read:[650,420],person:[1040,100],approve:[1040,650]};
+  await page.goto('http://127.0.0.1:4173/LICENSE.txt');
   await waitForExactRead(()=>page.evaluate(positions=>new Promise((resolve,reject)=>{
    const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
    request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');let failure;
-    get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);if(!tab){failure=Error('Route-cache fixture session missing');tx.abort();return;}tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.hiddenNodes=[];delete tab.viewInset;session.drawer=false;store.put(session,'current');};
+    get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);if(!tab){failure=Error('Route-cache fixture session missing');tx.abort();return;}tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.hiddenNodes=[];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];session.drawer=false;store.put(session,'current');};
     tx.oncomplete=()=>{db.close();resolve(true);};tx.onerror=tx.onabort=()=>{db.close();reject(failure??tx.error??Error('Route-cache fixture commit failed'));};
    };
   }),fixture),true,{timeoutMs:5000});
-  await waitSavedViewer(page,{positions:fixture,zoom:1,scroll:[0,0]});await page.reload();await ready();assert.deepEqual(await positions(),fixture);
+  await waitSavedViewer(page,{positions:fixture,zoom:1,scroll:[0,0],viewInset:[0,0],canvasOrigin:[0,0]});await page.goto('http://127.0.0.1:4173/');await ready();assert.deepEqual(await positions(),fixture);
   const initial=await routes();assert.equal(Object.keys(initial).length,relations.length);
   // Use the real rendered path's midpoint, not a fresh routeEdge prediction.
   const crossing=await page.locator(`.edge[data-relation="${unrelated}"]`).evaluate(path=>{const point=path.getPointAtLength(path.getTotalLength()/2),screen=point.matrixTransform(path.getScreenCTM());return {world:[point.x,point.y],screen:[screen.x,screen.y]};});
