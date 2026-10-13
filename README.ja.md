@@ -8,7 +8,7 @@ Alderは依頼者の要求を、依頼者・設計者・実装者が共通の言
 
 フレームワークや実行時パッケージは不要です。
 
-**Web Viewer：** [公開版をブラウザーで開く](https://mk3008.github.io/alder/) — 業務設計書をGraphとMarkdownで確認できます。Web ViewerはAlderプラグインとは別の閲覧ツールです。[開発中の変更と検証用プレビュー](https://github.com/mk3008/alder/pull/194)は公開版と区別しています。
+**Web Viewer：** [ブラウザーで開く](https://mk3008.github.io/alder/) — 業務設計書を図とMarkdownで確認できます。Alderプラグインとは別の閲覧ツールです。
 
 ## 導入する
 
