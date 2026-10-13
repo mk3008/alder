@@ -10,7 +10,7 @@ export async function verifyFacingRoutes(browser){
  const trace=[];page.on('console',m=>{if(m.text().startsWith('FACING_TRACE ')){try{trace.push(JSON.parse(m.text().slice(13)));}catch(e){errors.push('Diagnostic trace parse: '+e.message);}}});await page.addInitScript(installFacingTrace);
  const text='# Facing route fixture\n\n'+['A source','B obstacle'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic routing test\n\n').join('')+'# Activity C target\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- A source — Input\n\n### Procedure\n\nTest\n\n### Output\n\n- B obstacle — Output\n\n## Result\n\nTest\n';
  try{
-  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#drawer').click();await page.locator('#open-text').click();await page.locator('#source-text').fill(text);await page.locator('#source-submit').click();
+  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-text').click();await page.locator('#source-text').fill(text);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();
   // Preserve this obstacle regression independently of the initial-layout policy.
   // Commit explicit saved geometry, then restore it through the normal product path.
   const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));

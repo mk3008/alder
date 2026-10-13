@@ -83,6 +83,9 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
     for(const y of [r.y-height/2-5,r.y+r.height+height/2+5])if(Math.abs(y-mid[1])<=64)consider([mid[0],y]);
     for(const x of [r.x-width/2-5,r.x+r.width+width/2+5])if(Math.abs(x-mid[0])<=width/2+24)consider([x,mid[1]]);
   }
+  // A left-hand lane can leave a clear label anchor partly beyond the fixed
+  // canvas boundary. Try bringing that label inside before reporting fallback.
+  if(bestScore[0])consider([Math.max(minimum[0]+width/2+1,best[0]),Math.max(minimum[1]+height/2+1,best[1])]);
   return {point:best,blocked:bestScore[0]>0};
 }
 type Geometry={vertices:Point[];points:Point[];error:number;length:number;path:string;bounds:{right:number;bottom:number}};
@@ -126,8 +129,10 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
 /**
  * Bounded orthogonal templates: at most 16 port pairs x 12 candidates plus
  * one preferred return lane (193 total). Clear
- * preferred bottom/left routes finish after one pair. Returns try the outer
- * right lane first. No search graph, large curve sampling, or input mutation.
+ * preferred bottom/left routes finish after one pair. Forward routes exhaust
+ * left-target pairs (vertical departures first) before changing the arrival
+ * side. Returns try the outer right lane first. No search graph, large curve
+ * sampling, or input mutation.
  * The runtime cache can therefore reroute only incident edges after a drag.
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
@@ -141,7 +146,7 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
   const offCanvas=(points:Point[])=>points.some(p=>p[0]<minimum[0]+1||p[1]<minimum[1]+1)?1:0;
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
-  const preferred:[Side,Side]=returning?['right','right']:['bottom',bc[0]>=ac[0]?'left':'right'];
+  const preferred:[Side,Side]=returning?['right','right']:['bottom','left'];
   const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
   let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity],rerouted=false;
@@ -173,6 +178,12 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
   };
   tryPorts(preferred);
+  if(!returning&&(bestScore[0]||bestScore[1])){
+    // Keep the reading direction at the target before relaxing the source
+    // departure. An obstructed bottom/left pair must not choose bottom/right
+    // while a clear top/left or side/left pair is still available.
+    for(const a of ['top','right','left'] as Side[]){tryPorts([a,'left']);if(!bestScore[0]&&!bestScore[1])break;}
+  }
   if(bestScore[0]||bestScore[1]){
     // Keep vertical departure / horizontal arrival before trying side departures.
     vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break vertical;}

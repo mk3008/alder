@@ -7,8 +7,9 @@ export async function verifyLabelLayout(browser) {
   try {
     await page.goto('http://127.0.0.1:4173/');
     await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-    await page.locator('#drawer').click();
     await page.locator('#open-sample').click();
+    await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);
+    await page.locator('#drawer').click();
     const graph=await page.locator('.edge').evaluateAll(nodes=>nodes.map(n=>[n.dataset.relation,n.getAttribute('d')]));
     const positions=await page.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.style.left,n.style.top]));
     const results=[];

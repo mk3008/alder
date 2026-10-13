@@ -8,7 +8,7 @@ export async function verifyEdgeOption(browser){
   try {
     await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     assert.equal(await page.locator('#prefer-write').isChecked(),false);
-    await page.locator('#drawer').click();await page.locator('#open-sample').click();
+    await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();
     const relations=parseDesign(readFileSync('../business-design/alder/README.md','utf8')).graph.relations;
     const hidden=hiddenReadIndexes(relations,true),expected=relations.map((_,i)=>i).filter(i=>!hidden.has(i));
     const selected=page.locator('.node.business').first(),id=await selected.getAttribute('data-node');await selected.click();

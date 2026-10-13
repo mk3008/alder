@@ -1,3 +1,4 @@
+import {verifyEmptyState} from './test-empty-state-browser.mjs';
 import {verifyNodeEdgeDrag} from './test-node-edge-drag-browser.mjs';
 import {verifyRouteCache} from './test-route-cache-browser.mjs';
 import {verifyScopeShortcut} from './test-scope-shortcut-browser.mjs';
@@ -35,6 +36,7 @@ try {
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
+   {name:'emptyState',run:()=>verifyEmptyState(browser)},
    {name:'nodeEdgeDrag',run:()=>verifyNodeEdgeDrag(browser)},
    {name:'bottomClearance',run:()=>verifyBottomClearance(browser)},
    {name:'touchZoom',run:async()=>{const result=await verifyTouchZoom(browser,{nativeScrollDiagnostics:false});assert.ok(result.ok,'Touch suite contains failed or blocked cases; see per-case diagnostics');return result;}},

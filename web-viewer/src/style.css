@@ -112,3 +112,5 @@ header{flex-shrink:0}
 .display-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:0 0 100%;width:100%;border-bottom:1px solid var(--subtle)}
 .toolbar .edge-option{min-height:32px}
 .toolbar #layout-lock{margin-left:auto}
+/* Empty documents have no graph controls; keep the explanation unobscured. */
+.toolbar[hidden]{display:none}

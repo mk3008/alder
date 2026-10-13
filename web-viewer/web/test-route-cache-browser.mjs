@@ -30,7 +30,7 @@ export async function verifyRouteCache(browser){
  const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-  await page.locator('#drawer').click();await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready();
+  await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await ready();
   await waitSavedViewer(page,{positions:await positions()});
   const fixture={record:[80,100],read:[650,420],person:[1040,100],approve:[1040,650]};
   await waitForExactRead(()=>page.evaluate(positions=>new Promise((resolve,reject)=>{
