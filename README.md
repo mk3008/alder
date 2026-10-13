@@ -8,7 +8,7 @@ Alder organizes a requester's requirements into **Business Design**, a shared la
 
 No framework or runtime package is required.
 
-**Web Viewer:** [Open the published browser viewer](https://mk3008.github.io/alder/) to view Business Design as a graph alongside its Markdown. The viewer works separately from the Alder plugin. [In-progress changes and preview versions](https://github.com/mk3008/alder/pull/194) are distinct from the published site.
+**Web Viewer:** [Open in your browser](https://mk3008.github.io/alder/) to view Business Design as a graph alongside its Markdown. The viewer works independently of the Alder plugin.
 
 ## Install / Setup
 
