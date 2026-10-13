@@ -72,23 +72,25 @@ try {
   await openText(text,multibyte);assert.equal(tabs(text).length,1);assert.equal(graph(text),initial);assert.ok(dialogOpen(text));assert.match(status(text),/2MiB/);assert.equal(text.$('source-text').value,multibyte);await invoke(text,'source-cancel');
   checks.push('text size limit counts UTF-8 bytes, retaining oversized multibyte input');
 
-  await invoke(text,'refresh');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
+  assert.equal(text.$('refresh').disabled,true);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));await invoke(text,'source-edit');assert.equal(text.$('source-text').value,markdown);
   text.$('source-text').value='# invalid edit';await submit(text);
   assert.equal(graph(text),initial);assert.equal(tabs(text)[0].dataset.key,key);assert.equal(text.$('source-text').value,'# invalid edit');assert.ok(dialogOpen(text));
   text.$('source-text').value=markdown+'\n';await submit(text);assert.equal(dialogOpen(text),false);assert.equal(tabs(text).length,1);assert.equal(tabs(text)[0].dataset.key,key);
-  await invoke(text,'refresh');assert.equal(text.$('source-text').value,markdown+'\n');text.$('source-text').value='unsaved cancellation';await invoke(text,'source-cancel');
-  await invoke(text,'refresh');assert.equal(text.$('source-text').value,markdown+'\n');await invoke(text,'source-cancel');
-  checks.push('text editing swaps only after parse success and cancellation discards edits');
+  await invoke(text,'edit-markdown');await invoke(text,'source-edit');assert.equal(text.$('source-text').value,markdown+'\n');text.$('source-text').value='unsaved cancellation';await invoke(text,'source-cancel');
+  await invoke(text,'edit-markdown');assert.equal(text.$('source-text').value,'unsaved cancellation');await invoke(text,'source-cancel');
+  checks.push('text editing swaps only after parse success and closing preserves a tab-local draft');
 
   await invoke(text,'open-text');text.$('source-text').value='retained Escape input';
   text.$('source-dialog').dispatchEvent(new text.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
   assert.equal(dialogOpen(text),false);assert.equal(text.$('source-text').value,'retained Escape input');assert.equal(tabs(text).length,1);
   checks.push('Escape closes text entry while retaining draft input and existing graph');
 
-  const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'refresh');
-  closedEdit.$('source-text').value=markdown+'\n';await tabs(closedEdit)[0].querySelector('.close').onclick();await submit(closedEdit);
-  assert.equal(tabs(closedEdit).length,0);assert.ok(dialogOpen(closedEdit));assert.equal(closedEdit.$('source-text').value,markdown+'\n');assert.ok(status(closedEdit).trim());
-  checks.push('closing an edited text tab never resurrects it or discards the draft');
+  const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'edit-markdown');await invoke(closedEdit,'source-edit');
+  closedEdit.$('source-text').value=markdown+'\n';closedEdit.w.confirm=()=>false;await tabs(closedEdit)[0].querySelector('.close').onclick();
+  assert.equal(tabs(closedEdit).length,1);assert.ok(dialogOpen(closedEdit));assert.equal(closedEdit.$('source-text').value,markdown+'\n');
+  closedEdit.w.confirm=()=>true;await tabs(closedEdit)[0].querySelector('.close').onclick();await submit(closedEdit);
+  assert.equal(tabs(closedEdit).length,0);assert.equal(dialogOpen(closedEdit),false);
+  checks.push('tab close protects unreflected drafts; explicit discard cannot resurrect the tab');
 
   // Graph and drawer selection are independent from dismissing a status message.
   const beforeDismiss=graph(text);assert.ok(status(text).trim());await invoke(text,'status-close');assert.equal(status(text),'');assert.equal(text.$('status').hidden,true);assert.equal(graph(text),beforeDismiss);
@@ -161,7 +163,7 @@ try {
   assert.equal(snapshot.tabs.find(t=>t.source?.kind==='text').design.markdown,markdown+'\n');assert.equal(snapshot.tabs.find(t=>t.source?.kind==='url').source.url,'https://raw.example.test/design.md');
   const keys=tabs(one).map(t=>t.dataset.key);one.w.close();
   const restored=await ready({indexedDB:db});assert.deepEqual(tabs(restored).map(t=>t.dataset.key),keys);assert.equal(restored.calls.length,0);assert.equal(restored.w.document.documentElement.dataset.theme,'dark');assert.equal(restored.$('formattedMarkdownDrawer').hidden,true);
-  await invoke(restored,'refresh');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
+  await invoke(restored,'edit-markdown');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
   checks.push('file/URL/text tabs and source bodies restore from IndexedDB without automatic network access');
 
   // Persistence failures must be announced as errors, not success notices.

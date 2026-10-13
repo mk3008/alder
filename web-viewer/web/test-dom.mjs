@@ -59,8 +59,9 @@ assert.equal(w.document.querySelectorAll('.tab').length,0);assert.equal(w.docume
 pending=undefined;h.getFile=async()=>selected;await $('open').onclick();permission='denied';
 w.showOpenFilePicker=async()=>{throw Object.assign(new Error('cancelled'),{name:'AbortError'});};
 await $('refresh').onclick();assert.equal(w.document.querySelectorAll('.tab').length,1);assert.equal($('refresh').disabled,false);checks.push('permission reselect cancellation keeps graph and allows retry');
-// Modeled handles are not structured-cloneable: dismiss the persistent save error explicitly.
-$('status-close').click();permission='granted';await $('refresh').onclick();assert.match($('status').textContent,/更新しました/);
+// Function-bearing mock handles are not structured-cloneable. A transactional
+// refresh must keep the old Graph rather than claim it saved successfully.
+$('status-close').click();permission='granted';await $('refresh').onclick();assert.match($('status').textContent,/更新失敗.*could not be cloned/);assert.equal(w.document.querySelector('.node').style.left,'40px');checks.push('noncloneable mock handle cannot commit a refresh');
 const permissionWait=deferred();h.queryPermission=()=>permissionWait.promise;
 const latePermission=$('refresh').onclick();let pickerCalls=0;w.showOpenFilePicker=async()=>{pickerCalls++;return [h];};
 await w.document.querySelector('.close').onclick();permissionWait.resolve('denied');await latePermission;assert.equal(pickerCalls,0);

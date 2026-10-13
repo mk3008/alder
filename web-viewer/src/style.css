@@ -115,3 +115,13 @@ header{flex-shrink:0}
 .toolbar #layout-lock{margin-left:auto}
 /* Empty documents have no graph controls; keep the explanation unobscured. */
 .toolbar[hidden]{display:none}
+
+/* A document action stays beside the scrollable tab strip at every width. */
+.tab-strip{display:flex;height:auto;min-height:44px;flex-shrink:0;min-width:0;background:var(--panel);border-bottom:1px solid var(--subtle)}
+.tab-strip #tabs{flex:1;min-width:0;border-bottom:0}
+#edit-markdown{display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;min-width:40px;height:40px;margin:2px 8px;padding:6px 10px;border-radius:5px;font-size:12px}
+#edit-markdown[hidden]{display:none}
+#edit-markdown:hover{background:var(--select)}
+#source-text:read-only{background:var(--bg)}
+#source-dialog .source-actions{flex-wrap:wrap}
+@media(max-width:600px){.editor-caption{display:none}#edit-markdown{margin-inline:4px;padding:6px}}

@@ -47,7 +47,7 @@ export async function verifyDocumentOrder(browser){
   const sections=raw.split(/(?=^# (?:Activity|Object|Scope|Graph exceptions) )/m),reversed=sections.filter(s=>s.startsWith('# Activity ')).reverse();let next=0;
   const flipped=sections.map(s=>s.startsWith('# Activity ')?reversed[next++]:s).join('');
   await page.locator('#open-text').click();await page.locator('#source-text').fill(flipped);await page.locator('#source-submit').click();const reversedPositions=await positions();assert.notDeepEqual(reversedPositions,initial);assertCompactStaircase(reversedPositions,parseDesign(flipped));
-  await page.locator('#refresh').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();assert.deepEqual(await positions(),reversedPositions);
+  await page.locator('#edit-markdown').click();await page.locator('#source-edit').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();assert.deepEqual(await positions(),reversedPositions);
   assert.deepEqual(errors,[]);return {activities:order,constraints,knownOrderExceptions:'Cycles use document order only as display hint; return arrows keep original endpoints',checks:'directed sample geometry; viewport independent320/393/1280; no card overlap; rounded route/label extent; finite L/Q routes; compact128 ranks; forward downward constraints; Scope/Write preserve positions; close/reload/reopen exact layout; new input uses reversed order; editing retains saved positions',pageErrors:errors};
  }finally{await page.close();}
 }
