@@ -127,11 +127,12 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
   return {vertices,points,error,length,path,bounds:{right:Math.max(...points.map(p=>p[0])),bottom:Math.max(...points.map(p=>p[1]))}};
 }
 /**
- * Bounded orthogonal templates: at most 16 port pairs x 12 candidates plus
- * one preferred return lane (193 total). Clear
+ * Bounded orthogonal templates: at most 16 port pairs x 12 candidates
+ * (192 total). Clear
  * preferred bottom/left routes finish after one pair. Forward routes exhaust
  * left-target pairs (vertical departures first) before changing the arrival
- * side. Returns try the outer right lane first. No search graph, large curve
+ * side. Returns prefer right/right ports and the shortest clear lane, retaining
+ * graph-wide lanes as obstacle fallbacks. No search graph, large curve
  * sampling, or input mutation.
  * The runtime cache can therefore reroute only incident edges after a drag.
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
@@ -168,8 +169,9 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     const localTop=Math.min(source.y,target.y)-CLEARANCE-LANE_GAP-spread;
     const localBottom=Math.max(source.y+source.height,target.y+target.height)+CLEARANCE+LANE_GAP+spread;
     const primary=pair[0]===preferred[0]&&pair[1]===preferred[1];
-    // Return routes stay outside the complete graph on the right when possible.
-    if(returning&&primary){evaluate([a,[bounds.right,a[1]],[bounds.right,b[1]],b],pair,false);if(bestScore[0]===0&&bestScore[1]===0)return;}
+    // Score local and global lanes together, including for returns. Accepting
+    // a clear graph-wide return first would stretch it past unrelated distant
+    // cards; accepting localRight first could skip an even shorter clear lane.
     evaluate([a,[a[0],b[1]],b],pair,primary&&!returning);
     evaluate([a,[b[0],a[1]],b],pair,primary&&!returning);
     evaluate([a,exit,[entry[0],exit[1]],entry,b],pair,primary&&!returning);
