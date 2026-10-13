@@ -133,6 +133,26 @@ async function closeAndReopen(page,layout,world){
  await page.locator('#open-sample').focus();await page.keyboard.press('Enter');await ready(page,1);
  await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'closed-session reload and reopen preserve every coordinate and route');return empty;
 }
+// Coordinates and path geometry are exact semantic data. Native glyph boxes
+// are measured layout results; compare only those in the existing CSS-pixel
+// tolerance while keeping label x/y/text and every saved coordinate exact.
+export function assertInsetWorldGeometry(kind,actual,previous,zoom){
+ if(kind!=='labels'){assert.deepEqual(actual,previous,'inset does not change native '+kind+' geometry');return;}
+ assert.ok(Number.isFinite(zoom)&&zoom>0,'finite positive comparison zoom');
+ for(const box of [actual,previous])assert.ok(Array.isArray(box)&&box.length===4&&box.every(Number.isFinite),'four finite native label bbox values');
+ for(let axis=0;axis<4;axis++)near((actual[axis]-previous[axis])*zoom,0,'native label bbox component '+axis+' screen delta');
+}
+function preflightInsetWorldGeometry(){
+ const actual=[1110.5770263671875,495.3662414550781,214.84591674804688,19.44464111328125],previous=[1110.577392578125,495.3662414550781,214.84535217285156,19.444589614868164];
+ assertInsetWorldGeometry('labels',actual,previous,.36);
+ for(const kind of ['nodes','edges']){assertInsetWorldGeometry(kind,previous,previous,.36);assert.throws(()=>assertInsetWorldGeometry(kind,actual,previous,.36),{name:'AssertionError'});}
+ for(const zoom of [.25,.36,1,2.5])for(let axis=0;axis<4;axis++)for(const sign of [-1,1]){
+  const a=[0,0,0,0],b=[0,0,0,0];a[axis]=sign*.079/zoom;assertInsetWorldGeometry('labels',a,b,zoom);a[axis]=sign*.081/zoom;assert.throws(()=>assertInsetWorldGeometry('labels',a,b,zoom),{name:'AssertionError'});
+ }
+ for(const sign of [-1,1])assert.throws(()=>assertInsetWorldGeometry('labels',[sign*.08,0,0,0],[0,0,0,0],1),{name:'AssertionError'});
+ for(const bad of [[NaN,0,0,0],[0,0,0]])assert.throws(()=>assertInsetWorldGeometry('labels',bad,[0,0,0,0],1),{name:'AssertionError'});
+ return {observedCI41LabelDifferenceAccepted:true,exactNodePathRejects:2,screenPositiveCases:32,screenNegativeCases:32,strictBoundaryRejects:2,invalidBoxesRejected:2,screenTolerancePx:.08,coordinatesAndLabelAttributes:'remain exact in browser case'};
+}
 async function verifyFreshZoom(page,zoom){
  const fresh=await openFreshSample(page),layout={...fresh.layout,zoom};
  // 100% remains a direct fresh open. Lower zooms are committed through IDB only
@@ -150,7 +170,7 @@ async function verifyFreshZoom(page,zoom){
   await page.setViewportSize({width:1280,height:960});const legacy=await seedAndRestore(page,layout,{omitInset:true});await assertCamera(page,legacy);
   assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),fresh.world,'removing only camera inset changes no node, SVG path, label or routing status');
   const native=await page.evaluate(readInitialMarginGeometryInPage);noInsetReference=assertInitialMarginGeometry(native,{zoom,inset:0,width:1280});
-  for(const kind of ['nodes','edges','labels'])for(const item of paddedReference[kind]){const previous=native[kind].find(old=>old.id===item.id);assert.ok(previous);assert.deepEqual(item.world,previous.world,'inset does not change native '+kind+' geometry');near(item.left-previous.left,40*zoom,'36% exact per-element camera translation '+kind+' '+item.id);}
+  for(const kind of ['nodes','edges','labels'])for(const item of paddedReference[kind]){const previous=native[kind].find(old=>old.id===item.id);assert.ok(previous);assertInsetWorldGeometry(kind,item.world,previous.world,zoom);near(item.left-previous.left,40*zoom,'36% exact per-element camera translation '+kind+' '+item.id);}
   near(measurements[0].nodeLeft,noInsetReference.nodeLeft*2,'36% initial node margin doubles');
   for(const key of ['nodeLeft','edgeLeft','labelGlyphLeft'])near(measurements[0][key]-noInsetReference[key],40*zoom,'same 40-world-unit translation for '+key);
  }
@@ -209,7 +229,7 @@ function preflightInitialMarginGeometryAssertions(){
 }
 
 export async function preflightInitialLeftMargin(){
- const svgViewportOracle=preflightSvgViewportOracle(),geometryAssertionControls=preflightInitialMarginGeometryAssertions();
+ const insetWorldGeometry=preflightInsetWorldGeometry(),svgViewportOracle=preflightSvgViewportOracle(),geometryAssertionControls=preflightInitialMarginGeometryAssertions();
  const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
  const source=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),mainSha256=createHash('sha256').update(source).digest('hex');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
@@ -254,7 +274,7 @@ export async function preflightInitialLeftMargin(){
   await storagePage.evaluate(seedInitialLeftMarginSession,{layout:manual,closed:true,omitInset:true});const historical=await storagePage.evaluate(readSessionInPage);assert.equal(historical.tabs.length,0);assert.equal(Object.hasOwn(historical.sampleLayout,'viewInset'),false);
   const reopen=await boot();assert.equal(reopen.document.querySelectorAll('.tab').length,0);reopen.document.querySelector('#open-sample').click();await assertModel(reopen,manual,legacyWorld);
   assert.equal(createHash('sha256').update(readFileSync(new URL('../src/main.ts',import.meta.url))).digest('hex'),mainSha256,'product source stays pinned during preflight');
-  const result={initialLeftMarginPreflight:'passed',mainSha256,svgViewportOracle,geometryAssertionControls,nodes:25,relations:63,browserCases:4,zoomCases:initialLeftMarginZooms,widths:initialLeftMarginWidths,selectors:selectors.length,newInset:[40,0],legacyInset:'absent remains zero',manualCamera:{zoom:manual.zoom,scroll:manual.scroll},limits:initialLeftMarginLimits,browserExecuted:false,limit:'Real parser, DOM control order, committed fake-IDB, pure SVG viewport oracle controls and independent case/error aggregation only. CI 40 native SVG scale failure remains unresolved until new native measurements. Native SVG/glyph bounds, hit testing, scroll clamping and Chromium restore cases are prepared, not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
+  const result={initialLeftMarginPreflight:'passed',mainSha256,svgViewportOracle,insetWorldGeometry,geometryAssertionControls,nodes:25,relations:63,browserCases:4,zoomCases:initialLeftMarginZooms,widths:initialLeftMarginWidths,selectors:selectors.length,newInset:[40,0],legacyInset:'absent remains zero',manualCamera:{zoom:manual.zoom,scroll:manual.scroll},limits:initialLeftMarginLimits,browserExecuted:false,limit:'Real parser, DOM control order, committed fake-IDB, pure SVG viewport oracle controls and independent case/error aggregation only. CI 40 native SVG scale failure remains unresolved until new native measurements. Native SVG/glyph bounds, hit testing, scroll clamping and Chromium restore cases are prepared, not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());}
 }
 if(process.argv.includes('--preflight')&&process.argv[1]===fileURLToPath(import.meta.url))await preflightInitialLeftMargin();
