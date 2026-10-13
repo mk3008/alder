@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {parseDesign} from '../src/graph.ts';
 import {runBrowserCases} from './browser-cases.mjs';
 import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
+import {svgViewportTransform,assertSvgMatrix,assertSvgLogicalExtent,preflightSvgViewportOracle,svgMatrixTolerance,svgScreenTolerance} from './test-svg-viewport-oracle.mjs';
 
 // Import and --preflight never launch Chromium or make network requests. The
 // browser runner supplies its own browser and serves the built product.
@@ -48,16 +49,36 @@ export function readInitialMarginWorldInPage(){return {
 // label widths. Record all rendered glyphs, even those below the visible area;
 // this is neither a zero-overlap assertion nor a full clipping/paint proof.
 export function readInitialMarginGeometryInPage(){
- const viewport=document.querySelector('#viewport'),v=viewport.getBoundingClientRect(),left=v.left+viewport.clientLeft;
- const svgBox=element=>{const b=element.getBBox(),m=element.getScreenCTM(),p=new DOMPoint(b.x,b.y).matrixTransform(m),q=new DOMPoint(b.x+b.width,b.y+b.height).matrixTransform(m),r=element.getBoundingClientRect();return {id:element.dataset.relation,world:[b.x,b.y,b.width,b.height],left:r.left-left,transformedLeft:p.x-left,screen:[r.width,r.height],transformedSize:[q.x-p.x,q.y-p.y],matrix:[m.a,m.b,m.c,m.d]};};
- return {viewportLeft:left,scroll:[viewport.scrollLeft,viewport.scrollTop],nodes:[...document.querySelectorAll('.node')].map(node=>{const r=node.getBoundingClientRect();return {id:node.dataset.node,world:[parseFloat(node.style.left),parseFloat(node.style.top)],left:r.left-left,width:r.width};}),edges:[...document.querySelectorAll('.edge')].map(svgBox),labels:[...document.querySelectorAll('.edge-label')].map(svgBox)};
+ const viewport=document.querySelector('#viewport'),v=viewport.getBoundingClientRect(),left=v.left+viewport.clientLeft,top=v.top+viewport.clientTop;
+ const rect=r=>[r.left,r.top,r.width,r.height],matrix=m=>m?[m.a,m.b,m.c,m.d,m.e,m.f]:null;
+ const svg=document.querySelector('#edges'),box=svg.viewBox.baseVal,style=getComputedStyle(svg),ratio=svg.preserveAspectRatio.baseVal;
+ const svgBox=element=>{const b=element.getBBox(),m=element.getScreenCTM(),p=m?new DOMPoint(b.x,b.y).matrixTransform(m):null,q=m?new DOMPoint(b.x+b.width,b.y+b.height).matrixTransform(m):null,r=element.getBoundingClientRect();return {id:element.dataset.relation,world:[b.x,b.y,b.width,b.height],left:r.left-left,transformedLeft:p?p.x-left:null,screen:[r.width,r.height],transformedSize:p&&q?[q.x-p.x,q.y-p.y]:null,matrix:matrix(m)};};
+ return {viewportLeft:left,viewportOrigin:[left,top],viewportSize:[viewport.clientWidth,viewport.clientHeight],scroll:[viewport.scrollLeft,viewport.scrollTop],svg:{usedRect:rect(svg.getBoundingClientRect()),viewBoxAttribute:svg.getAttribute('viewBox'),viewBox:[box.x,box.y,box.width,box.height],preserveAspectRatio:{attribute:svg.getAttribute('preserveAspectRatio'),align:ratio.align,meetOrSlice:ratio.meetOrSlice},inlineCss:{left:svg.style.left,top:svg.style.top,width:svg.style.width,height:svg.style.height},computedCss:{width:style.width,height:style.height,transform:style.transform,border:['Left','Top','Right','Bottom'].map(side=>parseFloat(style['border'+side+'Width'])),padding:['Left','Top','Right','Bottom'].map(side=>parseFloat(style['padding'+side]))},matrix:matrix(svg.getScreenCTM())},nodes:[...document.querySelectorAll('.node')].map(node=>{const r=node.getBoundingClientRect();return {id:node.dataset.node,world:[parseFloat(node.style.left),parseFloat(node.style.top)],left:r.left-left,width:r.width};}),edges:[...document.querySelectorAll('.edge')].map(svgBox),labels:[...document.querySelectorAll('.edge-label')].map(svgBox)};
 }
-export function assertInitialMarginGeometry(measured,{zoom,inset=40}){
+export function assertInitialMarginGeometry(measured,{zoom,inset=40,width,report=console.log}){
+ const {svg}=measured,logicalMatrix=[zoom,0,0,zoom,measured.viewportOrigin[0]+inset*zoom-measured.scroll[0],measured.viewportOrigin[1]-measured.scroll[1]];
+ let expectedMatrix,oracleError;try{expectedMatrix=svgViewportTransform({rect:svg.usedRect,viewBox:svg.viewBox,preserveAspectRatio:svg.preserveAspectRatio.attribute});}catch(error){oracleError=error.message;}
+ const boxes=[...measured.nodes.map(node=>[...node.world,260,68]),...measured.edges.map(item=>item.world),...measured.labels.map(item=>item.world)];
+ const worldBounds=[Math.min(...boxes.map(b=>b[0])),Math.min(...boxes.map(b=>b[1])),Math.max(...boxes.map(b=>b[0]+b[2])),Math.max(...boxes.map(b=>b[1]+b[3]))];
+ const viewBoxBounds=[svg.viewBox[0],svg.viewBox[1],svg.viewBox[0]+svg.viewBox[2],svg.viewBox[1]+svg.viewBox[3]],intendedCssDimensions=svg.viewBox.slice(2).map(n=>n*zoom);
+ const matrices=[{kind:'root',id:'edges',matrix:svg.matrix},...['edges','labels'].flatMap(kind=>measured[kind].map(item=>({kind,id:item.id,matrix:item.matrix})))];
+ const mismatches=matrices.filter(item=>!expectedMatrix||!item.matrix||item.matrix.length!==6||item.matrix.some((n,i)=>!Number.isFinite(n)||Math.abs(n-expectedMatrix[i])>=svgMatrixTolerance));
+ const fullExtentDeviations=matrices.filter(item=>item.matrix?.length===6).map(item=>({...item,maxScreenDelta:Math.max(...[viewBoxBounds,worldBounds].flatMap(b=>[b[0],b[2]].flatMap(x=>[b[1],b[3]].flatMap(y=>[0,1].map(axis=>Math.abs((item.matrix[axis]-logicalMatrix[axis])*x+(item.matrix[axis+2]-logicalMatrix[axis+2])*y+item.matrix[axis+4]-logicalMatrix[axis+4]))))))})).sort((a,b)=>b.maxScreenDelta-a.maxScreenDelta);
+ // Emit bounded evidence before any geometry assertion can fail. Include all
+ // six coefficients and the independent expected matrix even on a failed run.
+ report('INITIAL_LEFT_MARGIN_NATIVE_INPUT '+JSON.stringify({width,viewportSize:measured.viewportSize,viewportOrigin:measured.viewportOrigin,scroll:measured.scroll,logicalZoom:zoom,inset,intendedCssDimensions,svg,expectedMatrix,oracleError,logicalMatrix,viewBoxBounds,worldBounds,matrixTolerance:svgMatrixTolerance,screenTolerancePx:svgScreenTolerance,ctmCount:matrices.length,ctmSamples:[matrices[0],matrices.find(item=>item.kind==='edges'),matrices.find(item=>item.kind==='labels')],mismatchingCtmCount:mismatches.length,mismatchingCtms:mismatches.slice(0,4),largestFullExtentDeviations:fullExtentDeviations.slice(0,2)}));
+ assert.equal(oracleError,undefined,'independent SVG viewport oracle inputs');
  assert.deepEqual(measured.scroll,[0,0]);assert.equal(measured.nodes.length,25);assert.equal(measured.edges.length,63);assert.equal(measured.labels.length,63);
+ assert.deepEqual(svg.computedCss.border,[0,0,0,0],'SVG measured border box is its viewport');assert.deepEqual(svg.computedCss.padding,[0,0,0,0],'SVG viewport has no CSS padding');assert.equal(svg.computedCss.transform,'none','root SVG has no additional CSS transform');
+ assert.deepEqual(svg.preserveAspectRatio,{attribute:null,align:6,meetOrSlice:1},'product retains SVG default xMidYMid meet');
+ assertSvgMatrix(svg.matrix,expectedMatrix,'native SVG root matrix');
+ for(const bounds of [viewBoxBounds,worldBounds])assertSvgLogicalExtent(svg.matrix,logicalMatrix,bounds,'native SVG root full extent at intended zoom');
+ for(const axis of [0,1]){near(parseFloat(svg.inlineCss[axis?'height':'width']),intendedCssDimensions[axis],'intended SVG CSS dimension');near(svg.usedRect[axis+2],intendedCssDimensions[axis],'used SVG CSS dimension');near(svg.usedRect[axis],logicalMatrix[axis+4]+svg.viewBox[axis]*zoom,'SVG viewport position at intended zoom');}
  for(const node of measured.nodes){near(node.left,(node.world[0]+inset)*zoom,'native card left '+node.id);near(node.width,260*zoom,'native card width '+node.id);}
  for(const kind of ['edges','labels'])for(const item of measured[kind]){
   assert.ok(item.world.every(Number.isFinite),'finite native '+kind+' box');
-  assert.ok(item.matrix.every((value,i)=>Math.abs(value-[zoom,0,0,zoom][i])<1e-6),'native SVG matrix '+kind+' '+item.id);
+  assertSvgMatrix(item.matrix,expectedMatrix,'native SVG matrix '+kind+' '+item.id);
+  for(const bounds of [viewBoxBounds,worldBounds])assertSvgLogicalExtent(item.matrix,logicalMatrix,bounds,'native '+kind+' '+item.id+' full extent at intended zoom');
   near(item.left,(item.world[0]+inset)*zoom,'native '+kind+' left '+item.id);near(item.left,item.transformedLeft,'getBBox transformed to screen agrees with DOM rect');
   for(const axis of [0,1]){near(item.screen[axis],item.world[axis+2]*zoom,'native SVG size');near(item.screen[axis],item.transformedSize[axis],'native SVG transformed size');}
  }
@@ -122,13 +143,13 @@ async function verifyFreshZoom(page,zoom){
   await page.setViewportSize({width,height:960});await assertCamera(page,layout);
   assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),fresh.world,'zoom and viewport change no world geometry');
   const native=await page.evaluate(readInitialMarginGeometryInPage);if(width===1280)paddedReference=native;
-  const measurement={width,...assertInitialMarginGeometry(native,{zoom})};measurements.push(measurement);console.log('INITIAL_LEFT_MARGIN_GEOMETRY '+JSON.stringify(measurement));
+  const measurement={width,...assertInitialMarginGeometry(native,{zoom,width})};measurements.push(measurement);console.log('INITIAL_LEFT_MARGIN_GEOMETRY '+JSON.stringify(measurement));
  }
  const empty=await closeAndReopen(page,layout,fresh.world);let noInsetReference;
  if(zoom===.36){
   await page.setViewportSize({width:1280,height:960});const legacy=await seedAndRestore(page,layout,{omitInset:true});await assertCamera(page,legacy);
   assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),fresh.world,'removing only camera inset changes no node, SVG path, label or routing status');
-  const native=await page.evaluate(readInitialMarginGeometryInPage);noInsetReference=assertInitialMarginGeometry(native,{zoom,inset:0});
+  const native=await page.evaluate(readInitialMarginGeometryInPage);noInsetReference=assertInitialMarginGeometry(native,{zoom,inset:0,width:1280});
   for(const kind of ['nodes','edges','labels'])for(const item of paddedReference[kind]){const previous=native[kind].find(old=>old.id===item.id);assert.ok(previous);assert.deepEqual(item.world,previous.world,'inset does not change native '+kind+' geometry');near(item.left-previous.left,40*zoom,'36% exact per-element camera translation '+kind+' '+item.id);}
   near(measurements[0].nodeLeft,noInsetReference.nodeLeft*2,'36% initial node margin doubles');
   for(const key of ['nodeLeft','edgeLeft','labelGlyphLeft'])near(measurements[0][key]-noInsetReference[key],40*zoom,'same 40-world-unit translation for '+key);
@@ -166,7 +187,29 @@ export async function verifyInitialLeftMargin(browser){return runBrowserCases([
  {name:'legacy manual camera and missing sample inset',run:()=>isolated(browser,verifyLegacy)}
 ]);}
 
+function preflightInitialMarginGeometryAssertions(){
+ // Synthetic caller-contract controls only; these never stand in for native
+ // measurements from the real browser cases or the JSDOM/IDB product checks.
+ const zoom=.36,viewBox=[0,0,1916,2564],logs=[];
+ function fixture(rect){
+  const matrix=svgViewportTransform({rect,viewBox}),shape=(id,world)=>({id,world,left:matrix[0]*world[0]+matrix[4],transformedLeft:matrix[0]*world[0]+matrix[4],screen:[world[2]*matrix[0],world[3]*matrix[3]],transformedSize:[world[2]*matrix[0],world[3]*matrix[3]],matrix:[...matrix]});
+  return {viewportLeft:0,viewportOrigin:[0,108],viewportSize:[1280,852],scroll:[0,0],svg:{usedRect:rect,viewBoxAttribute:'0 0 1916 2564',viewBox,preserveAspectRatio:{attribute:null,align:6,meetOrSlice:1},inlineCss:{left:'14.4px',top:'0px',width:'689.76px',height:'923.04px'},computedCss:{width:rect[2]+'px',height:rect[3]+'px',transform:'none',border:[0,0,0,0],padding:[0,0,0,0]},matrix},nodes:Array.from({length:25},(_,i)=>({id:'node-'+i,world:[40,40+i*96],left:80*zoom,width:260*zoom})),edges:Array.from({length:63},(_,i)=>shape('edge-'+i,[8,40+i*10,100,40])),labels:Array.from({length:63},(_,i)=>shape('label-'+i,[1,40+i*10,20,10]))};
+ }
+ const options={zoom,width:1280,report:line=>logs.push(JSON.parse(line.slice(line.indexOf(' ')+1)))};
+ for(const rect of [[14.4,108,689.76,923.04],[14.390625,108,689.75,923.03125]]){
+  assertInitialMarginGeometry(fixture(rect),options);const log=logs.at(-1);assert.equal(log.ctmCount,127);assert.equal(log.expectedMatrix.length,6);assert.equal(log.svg.matrix.length,6);assert.equal(log.mismatchingCtmCount,0);
+ }
+ const corrupted=fixture([14.4,108,689.76,923.04]);corrupted.labels.at(-1).matrix[4]+=2e-6;
+ const before=logs.length;assert.throws(()=>assertInitialMarginGeometry(corrupted,options),/native SVG matrix labels label-62.e/);assert.equal(logs.length,before+1,'diagnostic is emitted before failure');assert.equal(logs.at(-1).mismatchingCtms[0].id,'label-62');
+ assert.throws(()=>assertInitialMarginGeometry(fixture([14.5,108,689.76,923.04]),options),/root full extent at intended zoom/);
+ const far=fixture([14.4,108,689.76,923.04]);far.labels.at(-1).world[2]=1e6;far.labels.at(-1).matrix[0]+=5e-7;
+ assert.throws(()=>assertInitialMarginGeometry(far,options),/label-62 full extent at intended zoom/);assert.equal(logs.at(-1).largestFullExtentDeviations[0].id,'label-62');
+ for(const log of logs){assert.ok(log.mismatchingCtms.length<=4);assert.ok(log.largestFullExtentDeviations.length<=2);assert.ok(JSON.stringify(log).length<6000,'bounded synthetic diagnostic size');}
+ return {syntheticPositiveCases:2,syntheticRejections:3,diagnosticBeforeFailure:true,nativeBrowserExecuted:false};
+}
+
 export async function preflightInitialLeftMargin(){
+ const svgViewportOracle=preflightSvgViewportOracle(),geometryAssertionControls=preflightInitialMarginGeometryAssertions();
  const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
  const source=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),mainSha256=createHash('sha256').update(source).digest('hex');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
@@ -211,7 +254,7 @@ export async function preflightInitialLeftMargin(){
   await storagePage.evaluate(seedInitialLeftMarginSession,{layout:manual,closed:true,omitInset:true});const historical=await storagePage.evaluate(readSessionInPage);assert.equal(historical.tabs.length,0);assert.equal(Object.hasOwn(historical.sampleLayout,'viewInset'),false);
   const reopen=await boot();assert.equal(reopen.document.querySelectorAll('.tab').length,0);reopen.document.querySelector('#open-sample').click();await assertModel(reopen,manual,legacyWorld);
   assert.equal(createHash('sha256').update(readFileSync(new URL('../src/main.ts',import.meta.url))).digest('hex'),mainSha256,'product source stays pinned during preflight');
-  const result={initialLeftMarginPreflight:'passed',mainSha256,nodes:25,relations:63,browserCases:4,zoomCases:initialLeftMarginZooms,widths:initialLeftMarginWidths,selectors:selectors.length,newInset:[40,0],legacyInset:'absent remains zero',manualCamera:{zoom:manual.zoom,scroll:manual.scroll},limits:initialLeftMarginLimits,browserExecuted:false,limit:'Real parser, DOM control order, committed fake-IDB and independent case/error aggregation only. Native SVG/glyph bounds, hit testing, scroll clamping and Chromium restore cases are prepared, not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
+  const result={initialLeftMarginPreflight:'passed',mainSha256,svgViewportOracle,geometryAssertionControls,nodes:25,relations:63,browserCases:4,zoomCases:initialLeftMarginZooms,widths:initialLeftMarginWidths,selectors:selectors.length,newInset:[40,0],legacyInset:'absent remains zero',manualCamera:{zoom:manual.zoom,scroll:manual.scroll},limits:initialLeftMarginLimits,browserExecuted:false,limit:'Real parser, DOM control order, committed fake-IDB, pure SVG viewport oracle controls and independent case/error aggregation only. CI 40 native SVG scale failure remains unresolved until new native measurements. Native SVG/glyph bounds, hit testing, scroll clamping and Chromium restore cases are prepared, not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());}
 }
 if(process.argv.includes('--preflight')&&process.argv[1]===fileURLToPath(import.meta.url))await preflightInitialLeftMargin();
