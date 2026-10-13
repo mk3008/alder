@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -68,7 +69,7 @@ export async function verifyRouteCache(browser){
   await page.mouse.up();assert.deepEqual(await routes(),during,'pointer release retains final cached geometry');
   await page.locator('.node[data-node="record"]').click();assert.deepEqual(await routes(),during,'selection after drag retains cached geometry');
   for(const id of ['selected-edges-only','show-exceptions','prefer-write']){
-   const control=page.locator('#'+id),before=await control.isChecked();await control.setChecked(!before);await control.setChecked(before);assert.deepEqual(await routes(),during,id+' roundtrip retains cached paths and labels');
+   await openDisplaySettings(page);const control=page.locator('#'+id),before=await control.isChecked();await control.setChecked(!before);await control.setChecked(before);assert.deepEqual(await routes(),during,id+' roundtrip retains cached paths and labels');
   }
   await setScope(page,'hide');await setScope(page,'show');assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'Scope roundtrip retains hidden incident and unrelated routes');
   const firstKey=await page.locator('.tab').first().getAttribute('data-key');

@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -13,7 +14,7 @@ export async function verifyEdgeOption(browser){
     const hidden=hiddenReadIndexes(relations,true),expected=relations.map((_,i)=>i).filter(i=>!hidden.has(i));
     const selected=page.locator('.node.business').first(),id=await selected.getAttribute('data-node');await selected.click();
     const positions=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));
-    await page.locator('#prefer-write').check();
+    await openDisplaySettings(page);await page.locator('#prefer-write').check();
     const assertEdges=async()=>{
       const edges=await page.locator('.edge').evaluateAll(ns=>ns.map(n=>({i:+n.dataset.relation,related:n.classList.contains('review-related'),exception:n.classList.contains('exception')})));
       assert.deepEqual(edges.map(n=>n.i).sort((a,b)=>a-b),expected);
@@ -25,7 +26,7 @@ export async function verifyEdgeOption(browser){
     await assertEdges();await page.locator('#out').click();await page.locator('#theme').click();await assertEdges();
     await page.waitForTimeout(300);await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     assert.equal(await page.locator('#prefer-write').isChecked(),true);await assertEdges();
-    await page.locator('#prefer-write').uncheck();assert.equal(await page.locator('.edge').count(),relations.length);assert.equal(await page.locator('.edge-label').count(),relations.length);
+    await openDisplaySettings(page);await page.locator('#prefer-write').uncheck();assert.equal(await page.locator('.edge').count(),relations.length);assert.equal(await page.locator('.edge-label').count(),relations.length);
     assert.deepEqual(errors,[]);return {all:relations.length,hiddenReads:hidden.size,visible:expected.length,checks:'default OFF; paired Reads/labels hidden; standalone Reads/Writes/exceptions retained; selection, positions, zoom/theme and reload'};
   } finally {await page.close();}
 }

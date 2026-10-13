@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {touchDriver} from './touch-driver.mjs';
@@ -162,7 +163,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);
   const dragged=await positions();
-  await setScope(page,'hide');await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
+  await setScope(page,'hide');await openDisplaySettings(page);await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
   const savedView=await view(),visible=await positions();assert.equal(savedView.zoom,1.5);assert.equal(await page.locator('#zoom').textContent(),'150%');
   await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);

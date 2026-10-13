@@ -1,5 +1,6 @@
 // DOM model: real application handlers and persisted Session, not rendered geometry.
 import assert from 'node:assert/strict';
+import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
@@ -18,13 +19,13 @@ const visible=()=>[...d.querySelectorAll('.edge')].map(n=>n.dataset.relation).so
 assert.deepEqual(visible(),all);
 const selected=d.querySelector('.node.business');selected.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});selected.onpointerup({pointerId:1});const selectedID=selected.dataset.node;
 const positions=()=>[...d.querySelectorAll('.node')].map(n=>[n.dataset.node,n.style.left,n.style.top]);const initialPositions=positions();
-$('prefer-write').click();const expected=all.filter(i=>!hidden.has(+i));assert.deepEqual(visible(),expected);
+openDisplaySettingsDOM(d);$('prefer-write').click();const expected=all.filter(i=>!hidden.has(+i));assert.deepEqual(visible(),expected);
 assert.equal(d.querySelector('.node.selected').dataset.node,selectedID);
 for(const label of d.querySelectorAll('.edge-label'))assert.ok(expected.includes(label.dataset.relation));
 for(const edge of d.querySelectorAll('.edge')){const r=design.graph.relations[+edge.dataset.relation];assert.equal(edge.classList.contains('review-related'),r.from===selectedID||r.to===selectedID);assert.equal(edge.classList.contains('exception'),r.kind.endsWith('exception'));}
 $('out').click();$('theme').click();assert.deepEqual(visible(),expected);assert.deepEqual(positions(),initialPositions);
 await new Promise(r=>setTimeout(r,300));const restored=await open();assert.equal(restored.getElementById('prefer-write').checked,true);assert.equal(restored.querySelector('.node.selected').dataset.node,selectedID);assert.equal(restored.querySelectorAll('.edge').length,expected.length);
-restored.getElementById('prefer-write').click();assert.equal(restored.querySelectorAll('.edge').length,all.length);assert.equal(restored.querySelectorAll('.edge-label').length,all.length);
+openDisplaySettingsDOM(restored);restored.getElementById('prefer-write').click();assert.equal(restored.querySelectorAll('.edge').length,all.length);assert.equal(restored.querySelectorAll('.edge-label').length,all.length);
 await new Promise(r=>setTimeout(r,300));
 await new Promise((resolve,reject)=>{const req=db.open('alder-web-viewer',1);req.onerror=()=>reject(req.error);req.onsuccess=()=>{const database=req.result,tx=database.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');get.onsuccess=()=>{const saved=get.result;delete saved.preferWrite;store.put(saved,'current');};tx.oncomplete=()=>{database.close();resolve();};tx.onerror=()=>reject(tx.error);};});
 const legacy=await open();assert.equal(legacy.getElementById('prefer-write').checked,false);assert.equal(legacy.querySelectorAll('.edge').length,all.length);

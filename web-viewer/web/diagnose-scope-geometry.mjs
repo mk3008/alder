@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -17,7 +18,7 @@ export async function recordScopeGeometry(page,label,design){
 export async function diagnoseScopeGeometry(browser,mode){
  const context=await browser.newContext({viewport:{width:1280,height:960}}),page=await context.newPage(),errors=[],records=[];page.on('pageerror',e=>errors.push(e.message));const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8'));
  try{
-  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await page.locator('#drawer').click();await page.locator('#prefer-write').check();await page.locator('#out').click();const positions=await page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
+  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await page.locator('#drawer').click();await openDisplaySettings(page);await page.locator('#prefer-write').check();await page.locator('#out').click();const positions=await page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
   await page.locator('#viewport').evaluate(v=>{v.scrollLeft=v.scrollWidth-v.clientWidth;v.scrollTop=v.scrollHeight-v.clientHeight;});const initialScroll=await page.locator('#viewport').evaluate(v=>[v.scrollLeft,v.scrollTop]);await waitSavedViewer(page,{positions,hiddenNodes:[],scroll:initialScroll,zoom:1/1.2,preferWrite:true});
   const record=async label=>{const r=await recordScopeGeometry(page,mode+':'+label,design);records.push(r);return r;};
   if(mode==='fixed-drawer')await page.locator('#node-list-toggle').click();

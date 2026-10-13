@@ -26,3 +26,30 @@ const fractionalOrigin=integerDragPlan(dragFixture,'person',{x:1040.25,y:209.25,
 assert.deepEqual(fractionalOrigin.expected.person,[122,420]);
 assert.throws(()=>integerDragPlan(dragFixture,'person',{x:1040,y:209,width:260,height:68},{screen:[500,500],world:[0,0]}),/still covers/);
 console.log('integer drag plan: independent exact coordinates, fractional target/origin, input nonmutation, crossing validity');
+
+// Toolbar browser gate lifecycle only; these stubs never launch a browser or
+// assert rendered geometry. Setup, case and cleanup failures stay observable.
+const {verifyToolbarSettings,withToolbarPage,toolbarSettingsLimits}=await import('./test-toolbar-settings-browser.mjs');
+assert.deepEqual(toolbarSettingsLimits,{caseMs:30000,cleanupMs:3000});
+const oldLog=console.log;console.log=()=>{};
+try{
+ let attempts=0;
+ await assert.rejects(verifyToolbarSettings({newContext:async()=>{attempts++;throw Error('controlled toolbar setup failure');}}),error=>error instanceof AggregateError&&error.results.length===9&&error.results.every(r=>r.status==='failed'&&r.error.message.includes('controlled toolbar setup failure')));
+ assert.equal(attempts,9,'a setup failure never skips a later toolbar case');
+}finally{console.log=oldLog;}
+let closeCount=0;
+await assert.rejects(withToolbarPage({newContext:async()=>({newPage:async()=>{throw Error('controlled toolbar page failure');},close:async()=>{closeCount++;throw Error('controlled toolbar cleanup failure');}})},{width:320,height:568},()=>{}),error=>error instanceof AggregateError&&error.errors.map(e=>e.message).join('|')==='controlled toolbar page failure|controlled toolbar cleanup failure');
+assert.equal(closeCount,1,'page creation failure closes its owned context once');
+const mockPage={setDefaultTimeout:ms=>assert.equal(ms,4000),setDefaultNavigationTimeout:ms=>assert.equal(ms,5000),on:(event)=>assert.equal(event,'pageerror')};
+closeCount=0;let configuredViewport;
+const mockBrowser={newContext:async({viewport})=>{configuredViewport=viewport;return {newPage:async()=>mockPage,close:async()=>{closeCount++;}};}};
+assert.equal(await withToolbarPage(mockBrowser,{width:320,height:568},async(page,errors)=>{assert.equal(page,mockPage);assert.deepEqual(errors,[]);return 'completed';}),'completed');
+assert.deepEqual(configuredViewport,{width:320,height:568});assert.equal(closeCount,1);
+closeCount=0;await assert.rejects(withToolbarPage(mockBrowser,{width:393,height:960},()=>new Promise(()=>{}),{caseMs:15,cleanupMs:15}),/Toolbar case deadline exceeded/);assert.equal(closeCount,1,'case timeout still closes its context');
+await assert.rejects(withToolbarPage({newContext:async()=>({newPage:async()=>mockPage,close:()=>new Promise(()=>{})})},{width:1280,height:960},async()=>true,{caseMs:50,cleanupMs:15}),/Toolbar cleanup deadline exceeded/);
+let resolveContext,lateClose,lateClosed=new Promise(resolve=>{lateClose=resolve;});
+const lateBrowser={newContext:()=>new Promise(resolve=>{resolveContext=resolve;})};
+await assert.rejects(withToolbarPage(lateBrowser,{width:320,height:568},()=>{assert.fail('late context may not execute a case');},{caseMs:15,cleanupMs:15}),/Toolbar case deadline exceeded/);
+resolveContext({close:async()=>lateClose(),newPage:async()=>assert.fail('late context may not create a page')});
+let lateTimer;try{await Promise.race([lateClosed,new Promise((_,reject)=>{lateTimer=setTimeout(()=>reject(Error('late context was not closed')),500);})]);}finally{clearTimeout(lateTimer);}
+console.log('toolbar gate lifecycle: all nine independent setup failures collected; exact viewport; page failure and cleanup error both retained; case/cleanup deadlines and late-context disposal. Controlled Node harness only, no browser.');

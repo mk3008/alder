@@ -1,3 +1,4 @@
+import {verifyToolbarSettings} from './test-toolbar-settings-browser.mjs';
 import {verifyInitialLeftMargin} from './test-initial-left-margin-browser.mjs';
 import {verifyReturnRoutes} from './test-return-route-browser.mjs';
 import {verifyEmptyState} from './test-empty-state-browser.mjs';
@@ -36,6 +37,7 @@ const checks=[];
 try {
   await runBrowserCases([
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
+   {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'emptyState',run:()=>verifyEmptyState(browser)},

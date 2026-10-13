@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 export async function verifyPreviewIsolation(browser){
@@ -14,7 +15,7 @@ export async function verifyPreviewIsolation(browser){
   await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await setScope(page,'hide');await page.locator('#theme').click();await page.waitForTimeout(300);
   assert.deepEqual(await saved(),production);
   await ready(a+'index.html?mode=test#ignored');assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
-  await ready(b);assert.equal(await page.locator('.tab').count(),0);await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await page.locator('#prefer-write').check();await page.waitForTimeout(300);
+  await ready(b);assert.equal(await page.locator('.tab').count(),0);await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await openDisplaySettings(page);await page.locator('#prefer-write').check();await page.waitForTimeout(300);
   const root=await context.newPage();await root.goto(origin+'/');await root.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await root.locator('.node').count(),25);assert.equal(await root.locator('.edge').count(),63);assert.equal(await root.locator('html').getAttribute('data-theme'),'light');assert.equal(await root.locator('#preview-badge').isVisible(),false);await root.close();
   await ready('/');assert.deepEqual(await saved(),production);assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.edge').count(),63);
   await ready(a+'?new=value#another');assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('#prefer-write').isChecked(),false);

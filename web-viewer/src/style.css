@@ -105,11 +105,12 @@ header{flex-shrink:0}
    curve, label, their safety margins and any camera inset. */
 #canvas{overflow:clip}
 
-/* Four display choices use two full-width rows above the zoom controls.
-   At 320px the long selected-edge label wraps within its half-width cell;
-   the canvas reserves this toolbar's measured height rather than a fixed tail. */
-.toolbar{width:460px;flex-wrap:wrap}
-.display-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:0 0 100%;width:100%;border-bottom:1px solid var(--subtle)}
+/* The compact control row stays visible. Expanded settings grow upward in the
+   toolbar's normal flow so its measured top remains the camera/drag boundary. */
+.toolbar{width:max-content;flex-wrap:wrap}
+.toolbar[data-settings-open=true]{width:460px}
+.display-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:0 0 100%;width:100%;order:-1;border-bottom:1px solid var(--subtle)}
+.display-options[hidden]{display:none}
 .toolbar .edge-option{min-height:32px}
 .toolbar #layout-lock{margin-left:auto}
 /* Empty documents have no graph controls; keep the explanation unobscured. */

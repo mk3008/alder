@@ -1,5 +1,6 @@
 // Application DOM/IndexedDB model; rendered opacity is checked in browser QA.
 import assert from 'node:assert/strict';
+import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
@@ -20,7 +21,7 @@ try{
  const outside=d.querySelector('.node.outside'),outsideID=outside.dataset.node;select(outside);const selectedDetail=$('detail').textContent;setMode(d,'show');
  assert.equal(d.querySelectorAll('.node').length,25);assert.equal(d.querySelectorAll('.node.scope-dim').length,0);assert.equal(d.querySelector('.selected').dataset.node,outsideID);assert.equal($('detail').textContent,selectedDetail);
  const verify=(prefer,mode)=>{const hidden=hiddenReadIndexes(all,prefer),expected=all.map((r,i)=>({r,i})).filter(({r,i})=>!hidden.has(i)&&(mode!=='hide'||(!ids.has(r.from)&&!ids.has(r.to)))).map(({i})=>i);for(const css of ['.edge','.edge-label']){assert.deepEqual([...d.querySelectorAll(css)].map(n=>+n.dataset.relation).sort((a,b)=>a-b),expected);for(const el of d.querySelectorAll(css)){const r=all[+el.dataset.relation];assert.equal(el.classList.contains('scope-dim'),false);}}return expected.length;};
- verify(false,'show');$('prefer-write').click();const combinedEdges=verify(true,'show');assert.deepEqual(layout(d),initial);
+ verify(false,'show');openDisplaySettingsDOM(d);$('prefer-write').click();const combinedEdges=verify(true,'show');assert.deepEqual(layout(d),initial);
  const moving=d.querySelector('.node.outside');moving.onpointerdown(pointer);moving.onpointermove({...pointer,clientX:55,clientY:35});moving.onpointerup(pointer);const moved=layout(d);assert.notDeepEqual(moved,initial);
  const fullExtent=[$('canvas').style.width,$('canvas').style.height];setMode(d,'hide');assert.equal(d.querySelectorAll('.node').length,25-ids.size);assert.equal(d.querySelector('.selected'),null);assert.notEqual($('detail').textContent,selectedDetail);assert.equal($('detail').querySelector('h1').textContent,design.markdown.match(/^# (.+)/m)[1]);verify(true,'hide');assert.deepEqual([$('canvas').style.width,$('canvas').style.height],fullExtent);
  const inside=d.querySelector('.node'),insideID=inside.dataset.node;select(inside);const insideDetail=$('detail').textContent;

@@ -1,3 +1,4 @@
+import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readSessionInPage, waitForExactRead, waitSavedViewer} from './wait-saved-viewer.mjs';
 
@@ -59,8 +60,40 @@ async function maxGeometry(page){
  });
 }
 
-async function verifyClearanceAt(browser,width,zoom){
- const context=await browser.newContext({viewport:{width,height:960}}),page=await context.newPage(),errors=[];
+// Real gear transitions complement the synthetic min-height observer case.
+// Check full top-of-toolbar clearance in both states without interpreting a
+// retained tail camera as an extent leak. At origin each state must repeat.
+async function verifyDisplaySettingsGeometry(page,first){
+ const read=()=>page.locator('#viewport').evaluate(v=>({scroll:[v.scrollLeft,v.scrollTop],maxX:v.scrollWidth-v.clientWidth,scrollHeight:v.scrollHeight,canvasHeight:document.querySelector('#canvas').getBoundingClientRect().height}));
+ const toOrigin=async()=>{await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});await settle(page);};
+ await toOrigin();await closeDisplaySettings(page);const closedOrigin=await read();let openOrigin;const transitions=[];
+ for(let cycle=0;cycle<3;cycle++){
+  await openDisplaySettings(page);const atOrigin=await read();
+  assert.deepEqual(atOrigin.scroll,[0,0],'settings expansion must not move origin camera');
+  if(openOrigin)assert.deepEqual(atOrigin,openOrigin,'repeated expansion at origin must not accumulate extent');else openOrigin=atOrigin;
+  const openTail=await maxGeometry(page);
+  assert.deepEqual(openTail.position,first.position,'gear expansion retains exact card coordinates');
+  assert.ok(openTail.gap>=11.5,`expanded settings need 12px bottom gap; got ${openTail.gap}`);
+  assert.ok(Math.abs(openTail.maxX-first.maxX)<.5,'settings panel does not change horizontal extent');
+  await closeDisplaySettings(page);const retainedClosed=await read();
+  assert.deepEqual(retainedClosed.scroll,[openTail.scrollX,openTail.scrollY],'closing retains camera at the previous maximum');
+  const closedTail=await maxGeometry(page);
+  assert.ok(closedTail.gap>=11.5,'closed settings retain bottom gap after expansion');
+  assert.deepEqual(closedTail.position,first.position);
+  await openDisplaySettings(page);const retainedOpen=await read();
+  assert.deepEqual(retainedOpen.scroll,[closedTail.scrollX,closedTail.scrollY],'opening retains the current maximum-scroll camera');
+  const repeated=await maxGeometry(page);
+  assert.ok(Math.abs(repeated.scrollHeight-openTail.scrollHeight)<.5&&Math.abs(repeated.canvasHeight-openTail.canvasHeight)<.5,'tail open/close roundtrip must not grow canvas');
+  assert.ok(repeated.gap>=11.5,'repeated expanded settings retain bottom gap');
+  await toOrigin();await closeDisplaySettings(page);const restoredOrigin=await read();
+  assert.deepEqual(restoredOrigin,closedOrigin,'returning to origin restores closed extent without accumulation');
+  transitions.push({cycle,openGap:openTail.gap,closedGap:closedTail.gap,repeatedGap:repeated.gap,openScrollHeight:openTail.scrollHeight});
+ }
+ return {closedOrigin,openOrigin,transitions};
+}
+
+async function verifyClearanceAt(browser,width,zoom,height=960){
+ const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   await openFixture(page);await seedSavedView(page,zoom);
@@ -86,8 +119,9 @@ async function verifyClearanceAt(browser,width,zoom){
    assert.ok(Math.abs(again.maxX-first.maxX)<0.5&&Math.abs(again.scrollX-first.scrollX)<0.5,'redraw must retain horizontal pan extent');
    assert.ok(again.gap>=11.5,'redraw must retain toolbar clearance');
   }
+  const settingsTransitions=await verifyDisplaySettingsGeometry(page,first);
   assert.deepEqual(errors,[]);
-  return {width,zoom,toolbarTop:first.toolbar.top,nodeBottom:first.node.bottom,gap:first.gap,scrollHeight:first.scrollHeight,oldFormulaArithmeticOnly:{height:oldHeight,gap:oldGap},redraws:redraws.length};
+  return {width,height,zoom,settingsTransitions,toolbarTop:first.toolbar.top,nodeBottom:first.node.bottom,gap:first.gap,scrollHeight:first.scrollHeight,oldFormulaArithmeticOnly:{height:oldHeight,gap:oldGap},redraws:redraws.length};
  }finally{await context.close();}
 }
 
@@ -198,7 +232,7 @@ async function verifyDragAndPan(browser){
 
 // Each independent real-Chrome case runs even when an earlier one fails.
 export async function verifyBottomClearance(browser){
- const cases=[...[1280,393,320].flatMap(width=>[.25,.28,1,2.5].map(zoom=>({name:`clearance ${width}px ${zoom*100}%`,run:()=>verifyClearanceAt(browser,width,zoom)}))),{name:'resize recalculation',run:()=>verifyResize(browser)},{name:'nonzero camera inset',run:()=>verifyInset(browser)},{name:'toolbar-only ResizeObserver',run:()=>verifyToolbarObserver(browser)},{name:'downward drag, persistence and horizontal pan',run:()=>verifyDragAndPan(browser)}];
+ const cases=[...[1280,393,320].flatMap(width=>[.25,.28,1,2.5].map(zoom=>({name:`clearance ${width}px ${zoom*100}%`,run:()=>verifyClearanceAt(browser,width,zoom)}))),...[.25,.28,1,2.5].map(zoom=>({name:`clearance 320x568 ${zoom*100}%`,run:()=>verifyClearanceAt(browser,320,zoom,568)})),{name:'resize recalculation',run:()=>verifyResize(browser)},{name:'nonzero camera inset',run:()=>verifyInset(browser)},{name:'toolbar-only ResizeObserver',run:()=>verifyToolbarObserver(browser)},{name:'downward drag, persistence and horizontal pan',run:()=>verifyDragAndPan(browser)}];
  const results=[];
  for(const test of cases){try{results.push({name:test.name,status:'passed',result:await test.run()});}catch(error){results.push({name:test.name,status:'failed',error:error?.stack??String(error)});}}
  const failed=results.filter(result=>result.status==='failed');

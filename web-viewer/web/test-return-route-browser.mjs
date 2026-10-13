@@ -1,3 +1,4 @@
+import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
@@ -146,25 +147,25 @@ async function verifyZoom(page,zoom){
  for(const width of returnRouteWidths){
   await page.setViewportSize({width,height:960});assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions,'all 25 coordinates stay fixed at '+width);
   assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
-  await page.locator('#show-outside').uncheck();assert.equal(await page.locator('.node').count(),12);
+  await openDisplaySettings(page);await page.locator('#show-outside').uncheck();assert.equal(await page.locator('.node').count(),12);
   assert.equal(await page.locator('#prefer-write').isChecked(),false);assert.equal(await page.locator('#show-exceptions').isChecked(),false);
   const shown=await page.evaluate(readReturnRoutesInPage);assert.equal(Object.keys(shown).length,16);assertVisible(shown,baseline,{outside:false});
   const visiblePositions=Object.fromEntries(Object.entries(returnRoutePositions).filter(([id])=>!hiddenNodes.includes(id)));
   assert.deepEqual(await page.evaluate(readPositionsInPage),visiblePositions);const normalGlyphs=await page.evaluate(readGlyphOverlapsInPage);assert.equal(normalGlyphs.edges,16);assert.equal(normalGlyphs.labels,16);labelMetrics.push({width,zoom,mode:'Scope OFF / Write OFF / exceptions OFF',...normalGlyphs});console.log('RETURN_ROUTE_LABEL_GEOMETRY '+JSON.stringify(labelMetrics.at(-1)));measurements.push({width,zoom,...await assertNativeRoute(page,zoom)});
-  await page.locator('#prefer-write').check();const preferred=await page.evaluate(readReturnRoutesInPage);
+  await openDisplaySettings(page);await page.locator('#prefer-write').check();const preferred=await page.evaluate(readReturnRoutesInPage);
   assert.equal(Object.keys(preferred).length,13);assert.equal(preferred[relationIndex],undefined,'Write preference hides this paired read');assertVisible(preferred,baseline,{outside:false,write:true});const preferredGlyphs=await page.evaluate(readGlyphOverlapsInPage);assert.equal(preferredGlyphs.edges,13);assert.equal(preferredGlyphs.labels,13);labelMetrics.push({width,zoom,mode:'Scope OFF / Write ON / exceptions OFF',...preferredGlyphs});console.log('RETURN_ROUTE_LABEL_GEOMETRY '+JSON.stringify(labelMetrics.at(-1)));
-  await page.locator('#prefer-write').uncheck();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
-  await page.locator('#show-outside').check();assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions);assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
+  await openDisplaySettings(page);await page.locator('#prefer-write').uncheck();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
+  await openDisplaySettings(page);await page.locator('#show-outside').check();assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions);assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
  }
- await page.locator('#show-exceptions').check();const exceptions=await page.evaluate(readReturnRoutesInPage);assert.deepEqual(Object.keys(exceptions).sort(),expectedIndexes({exceptions:true}));
+ await openDisplaySettings(page);await page.locator('#show-exceptions').check();const exceptions=await page.evaluate(readReturnRoutesInPage);assert.deepEqual(Object.keys(exceptions).sort(),expectedIndexes({exceptions:true}));
  for(const [index,route] of Object.entries(baseline))assert.deepEqual(exceptions[index],route,'exceptions toggle preserves normal geometry');
- await page.locator('#show-exceptions').uncheck();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
- await page.locator('#show-outside').uncheck();const before=await page.evaluate(readReturnRoutesInPage);
+ await openDisplaySettings(page);await page.locator('#show-exceptions').uncheck();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
+ await openDisplaySettings(page);await page.locator('#show-outside').uncheck();const before=await page.evaluate(readReturnRoutesInPage);
  const saved=await waitSavedViewer(page,fields(zoom,hiddenNodes));assert.equal(saved.drawer,false);assert.equal(saved.nodeDrawer,false);
  await page.reload();await ready(page);assert.equal(await page.locator('#zoom').textContent(),`${zoom*100}%`);
  assert.deepEqual(await page.evaluate(readReturnRoutesInPage),before,'committed cold reload preserves paths and labels');await assertNativeRoute(page,zoom);
  await waitSavedViewer(page,fields(zoom,hiddenNodes));
- await page.locator('#show-outside').check();assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions,'hidden coordinates also survive reload');assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
+ await openDisplaySettings(page);await page.locator('#show-outside').check();assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions,'hidden coordinates also survive reload');assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
  return {zoom,measurements,labelMetrics,scopeOff:16,writePreferred:13,positions:25,reload:'exact committed positions and routes'};
 }
 async function isolatedReturn(browser,zoom){
@@ -182,6 +183,7 @@ export async function verifyReturnRoutes(browser){
 }
 
 export async function preflightReturnRoutes(){
+ const {openDisplaySettingsDOM}=await import('./toolbar-settings-control.mjs');
  const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
  assert.deepEqual(Object.keys(returnRoutePositions).sort(),design.graph.nodes.map(n=>n.id).sort());
@@ -212,12 +214,12 @@ export async function preflightReturnRoutes(){
    assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions);assert.equal(doc.querySelector('#zoom').textContent,`${zoom*100}%`);
    assert.equal(doc.querySelector('#formattedMarkdownDrawer').hidden,true);assert.equal(doc.querySelector('#node-list-drawer').hidden,true);
    const baseline=await page.evaluate(readReturnRoutesInPage);assertVisible(baseline,baseline,{});assertLocalReturnPath(baseline[relationIndex].path);
-   doc.querySelector('#show-outside').click();assert.equal(doc.querySelectorAll('.node').length,12);assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
-   doc.querySelector('#prefer-write').click();const preferred=await page.evaluate(readReturnRoutesInPage);assert.equal(preferred[relationIndex],undefined);assertVisible(preferred,baseline,{outside:false,write:true});
-   doc.querySelector('#prefer-write').click();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
+   openDisplaySettingsDOM(doc);doc.querySelector('#show-outside').click();assert.equal(doc.querySelectorAll('.node').length,12);assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
+   openDisplaySettingsDOM(doc);doc.querySelector('#prefer-write').click();const preferred=await page.evaluate(readReturnRoutesInPage);assert.equal(preferred[relationIndex],undefined);assertVisible(preferred,baseline,{outside:false,write:true});
+   openDisplaySettingsDOM(doc);doc.querySelector('#prefer-write').click();assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{outside:false});
    await waitSavedViewer(page,fields(zoom,hiddenNodes));restored.close();
    const cold=await boot(),coldPage=adapter(cold);assertVisible(await coldPage.evaluate(readReturnRoutesInPage),baseline,{outside:false});assertLocalReturnPath((await coldPage.evaluate(readReturnRoutesInPage))[relationIndex].path);
-   await waitSavedViewer(coldPage,fields(zoom,hiddenNodes));cold.document.querySelector('#show-outside').click();assert.deepEqual(await coldPage.evaluate(readPositionsInPage),returnRoutePositions);cold.close();
+   await waitSavedViewer(coldPage,fields(zoom,hiddenNodes));openDisplaySettingsDOM(cold.document);cold.document.querySelector('#show-outside').click();assert.deepEqual(await coldPage.evaluate(readPositionsInPage),returnRoutePositions);cold.close();
   }
   // Exercise oracle sensitivity without invoking product routing as an oracle.
   const good='M556,554 L580,554 Q588,554 588,546 L588,370 Q588,362 580,362 L428,362';
