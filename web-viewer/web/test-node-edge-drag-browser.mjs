@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 import {touchDriver} from './touch-driver.mjs';
-import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
+import {readSessionInPage,waitForExactRead,waitSavedViewer,viewerProjection} from './wait-saved-viewer.mjs';
 
 const origin='http://127.0.0.1:4173/';
 const caseTimeoutMs=8000, suiteBudgetMs=360000; // Global budget leaves room for the existing CI gates.
@@ -27,6 +27,36 @@ const clone=value=>structuredClone(value);
 export function expectedEdgePosition(initial,start,end,zoom,before,after){
  return initial.map((value,axis)=>value+(end[axis]-start[axis])/zoom+
   ((after.scroll[axis]/zoom-after.offset[axis]/zoom)-(before.scroll[axis]/zoom-before.offset[axis]/zoom)));
+}
+// Negative world movement is a camera invariant, not a requirement that native
+// scroll stay at zero after layout adds compensated origin reserve.
+export function assertNegativeBoundary(initial,frames,axis){
+ assert.equal(initial.scroll[axis],0,'negative-boundary fixture starts at native scroll zero');
+ assert.ok(frames.length>=2,'stationary boundary hold needs multiple observed frames');
+ const camera=sample=>sample.scroll[axis]-sample.offset[axis],first=frames[0],last=frames.at(-1);
+ for(const sample of frames)assert.ok([sample.scroll[axis],sample.offset[axis]].every(Number.isFinite),'boundary camera samples must be finite');
+ assert.ok(last.offset[axis]>first.offset[axis],'camera origin continues growing during the stationary hold');
+ assert.ok(camera(last)<camera(first),'physical camera keeps moving into the negative world during the stationary hold');
+ for(let i=1;i<frames.length;i++)assert.ok(camera(frames[i])<=camera(frames[i-1]),'negative edge hold must not reverse physical camera direction');
+ return {initialScroll:initial.scroll[axis],offsetGrowth:last.offset[axis]-first.offset[axis],physicalCameraDelta:camera(last)-camera(first)};
+}
+// The pointer coordinates here must be observed trusted events, not requested
+// CDP packets or CSS scale strings. Keep the product's arithmetic grouping.
+export function expectedPinchZoom(initialZoom,before,after){
+ assert.ok(Number.isFinite(initialZoom)&&initialZoom>=.25&&initialZoom<=2.5);
+ for(const contacts of [before,after]){
+  assert.equal(contacts.length,2,'pinch needs exactly two observed contacts');
+  assert.equal(new Set(contacts.map(e=>e.id)).size,2,'pinch pointer IDs must be distinct');
+  for(const e of contacts)assert.ok(e.trusted===true&&e.kind==='touch'&&['pointerdown','pointermove'].includes(e.type)&&[e.id,e.x,e.y].every(Number.isFinite),'pinch geometry requires trusted finite touch coordinates');
+ }
+ assert.deepEqual(before.map(e=>e.id).sort((a,b)=>a-b),after.map(e=>e.id).sort((a,b)=>a-b),'pinch contacts must retain identity');
+ const distance=points=>Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);
+ return Math.max(.25,Math.min(2.5,initialZoom*distance(after)/Math.max(1,distance(before))));
+}
+export function canonicalZoomInPage(zoom){const style=document.createElement('div').style;style.transform=`scale(${zoom})`;return style.transform;}
+function trustedContactsInPage(){
+ const ids=Object.keys(window.touchObserved.active).map(Number);
+ return ids.map(id=>[...window.edgeDragTrace].reverse().find(e=>e.id===id&&e.kind==='touch'&&['pointerdown','pointermove'].includes(e.type)));
 }
 export const edgeDragMatrix=[1280,393,320].flatMap(width=>[.25,1].flatMap(zoom=>['mouse','touch'].flatMap(input=>['left','right','top','bottom'].map(edge=>({width,zoom,input,edge})))));
 
@@ -57,7 +87,7 @@ function readFrame(){
  const left=r.left+v.clientLeft,top=r.top+v.clientTop;
  const scroll=[v.scrollLeft,v.scrollTop],offset=[parseFloat(nodes.style.left)||0,parseFloat(nodes.style.top)||0],plan=window.edgeDragOracle;let oracle;
  if(plan){const {position,start,end,zoom,before}=plan,expected=position.map((value,axis)=>value+(end[axis]-start[axis])/zoom+((scroll[axis]/zoom-offset[axis]/zoom)-(before.scroll[axis]/zoom-before.offset[axis]/zoom))),style=document.createElement('div').style;style.left=expected[0]+'px';style.top=expected[1]+'px';oracle={id:plan.id,position:expected,style:[style.left,style.top]};}
- return {positions,styles,rects,routes,scroll,offset,oracle,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
+ return {positions,styles,rects,routes,scroll,offset,oracle,transform:nodes.style.transform,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
 }
 const frame=page=>page.evaluate(readFrame);
 async function paintedFrames(page,count=4){
@@ -87,7 +117,7 @@ function assertDrag(current,initial,start,end,zoom,grip){
  assertUnchangedOthers(current,initial);assertGrip(current,grip,end);
  return {...clone(initial.positions),[moving]:expected};
 }
-function stoppedProjection(value){return {positions:value.positions,styles:value.styles,routes:value.routes,scroll:value.scroll,offset:value.offset,extent:value.extent,zoom:value.zoom};}
+function stoppedProjection(value){return {positions:value.positions,styles:value.styles,routes:value.routes,scroll:value.scroll,offset:value.offset,extent:value.extent,transform:value.transform,zoom:value.zoom};}
 async function assertStopped(page,baseline){
  for(const sample of await paintedFrames(page,8))assert.deepEqual(stoppedProjection(sample),stoppedProjection(baseline),'released/interrupted edge hold must stop on every painted frame');
 }
@@ -157,6 +187,7 @@ async function beginHold(env,edge){
  await driver.down(start);await driver.move(end);
  await page.waitForFunction(({input,end})=>window.edgeDragTrace.some(e=>e.type==='pointermove'&&e.kind===input&&e.trusted&&Math.abs(e.x-end[0])<.01&&Math.abs(e.y-end[1])<.01),{input,end});
  const first=await frame(page),samples=await paintedFrames(page,env.atExtent&&['left','top'].includes(edge)?24:10),last=samples.at(-1),axis=['left','right'].includes(edge)?0:1,direction=['left','top'].includes(edge)?-1:1;
+ if(env.atExtent&&direction<0)console.log('NODE_EDGE_DRAG_TRACE '+JSON.stringify({edge,zoom,input,initial:{scroll:initial.scroll,offset:initial.offset},frames:[first,...samples].map(s=>({scroll:s.scroll,offset:s.offset,physicalCamera:s.scroll.map((v,i)=>v-s.offset[i]),position:s.positions[moving],style:s.styles[moving],grip:s.rects[moving].slice(0,2).map((v,i)=>v+grip[i])}))}));
  assert.ok(direction*(last.positions[moving][axis]-first.positions[moving][axis])*zoom>=4,'stationary pointer hold must advance world position on successive painted frames');
  for(const sample of samples){assertDrag(sample,initial,start,end,zoom,grip);assert.equal(sample.events,first.events,'stationary hold must not depend on fresh pointer events');}
  const incident=design.graph.relations.flatMap((r,i)=>r.from===moving||r.to===moving?[String(i)]:[]);
@@ -164,20 +195,35 @@ async function beginHold(env,edge){
  if(direction<0){assert.ok(last.positions[moving][axis]<0,'left/top drag must cross zero into signed world coordinates');assert.ok(last.offset[axis]>initial.offset[axis],'signed drag must grow the camera origin');}
  return {end,last,samples:samples.length,frames:samples};
 }
-async function committedReload(env,expected){
- const {page,zoom,viewInset}=env,current=await frame(page),canvasOrigin=current.offset.map((v,i)=>v/zoom-viewInset[i]);
- const fields={positions:expected,zoom,scroll:current.scroll,viewInset,canvasOrigin:canvasOrigin.some(Boolean)?canvasOrigin:undefined};
- const committed=await waitSavedViewer(page,fields);
+async function committedReload(env,expected,knownView={}){
+ const {page,zoom,viewInset}=env,current=await frame(page),originFromPixels=current.offset.map((v,i)=>v/zoom-viewInset[i]);
+ // Power-of-two drag cases have exact integer CSS offsets. Fractional pinch
+ // supplies its independently known unchanged origin, never a CSS-derived DB value.
+ const canvasOrigin='canvasOrigin' in knownView?knownView.canvasOrigin:(originFromPixels.some(Boolean)?originFromPixels:undefined);
+ const fields={positions:expected,zoom,scroll:current.scroll,viewInset,canvasOrigin,selected:env.moving,hiddenNodes:[],showExceptions:true,selectedEdgesOnly:false};
+ const transform=await page.evaluate(canonicalZoomInPage,zoom),detailed='canvasOrigin' in knownView;
+ if(detailed)console.log('NODE_EDGE_DRAG_EXPECTED '+JSON.stringify({stage:'before-commit',expected:fields,observedDOM:{positions:current.positions,zoom:current.zoom,transform:current.transform,scroll:current.scroll,offset:current.offset}}));
+ assert.equal(current.transform,transform,'rendered scale is the exact canonical CSSOM representation of independent zoom');
+ let lastObserved;const observe=stage=>({observed,reads})=>{const encoded=JSON.stringify(observed);if(detailed&&encoded!==lastObserved){console.log('NODE_EDGE_DRAG_DB '+JSON.stringify({stage,reads,expected:fields,observed}));lastObserved=encoded;}};
+ const committed=await waitSavedViewer(page,fields,{observe:observe('committed')});
+ assert.deepEqual({drawer:committed.drawer,nodeDrawer:committed.nodeDrawer,preferWrite:committed.preferWrite},{drawer:false,nodeDrawer:false,preferWrite:false});
  const tab=committed.tabs.find(t=>t.key===committed.active);assert.deepEqual(tab.positions,expected,'actual committed DB values must equal independent world coordinates');
  await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);await paintedFrames(page,2);
- const restored=await frame(page),canonical=await page.evaluate(expected=>Object.fromEntries(Object.entries(expected).map(([id,p])=>{const style=document.createElement('div').style;style.left=p[0]+'px';style.top=p[1]+'px';return [id,[style.left,style.top]];})),expected);assert.deepEqual(restored.styles,canonical,'cold reload DOM exactly serializes the independently expected world coordinates');assert.equal(restored.zoom,zoom);
+ const restored=await frame(page),canonical=await page.evaluate(expected=>Object.fromEntries(Object.entries(expected).map(([id,p])=>{const style=document.createElement('div').style;style.left=p[0]+'px';style.top=p[1]+'px';return [id,[style.left,style.top]];})),expected);assert.deepEqual(restored.styles,canonical,'cold reload DOM exactly serializes the independently expected world coordinates');assert.equal(restored.transform,transform,'cold reload scale exactly matches canonical CSSOM of independent zoom');
  // Cold routing may discover a more-negative route and grow canvasOrigin.
  // The saved DB snapshot above remains exact. This check is solely the screen
  // representation: matching origin/scroll compensation must retain every card.
  const screenCameraDelta=restored.scroll.map((value,axis)=>(value-current.scroll[axis])-(restored.offset[axis]-current.offset[axis]));
  assert.ok(screenCameraDelta.every(v=>Math.abs(v)<=1),'cold route-origin compensation must preserve the physical camera within 1 CSS pixel');
  for(const [id,box] of Object.entries(current.rects))for(const axis of [0,1])assert.ok(Math.abs(restored.rects[id][axis]-box[axis])<=1,`cold reload actual card screen position ${id} axis ${axis} must stay within 1 CSS pixel`);
- const readback=await page.evaluate(readSessionInPage);assert.deepEqual(readback.tabs.find(t=>t.key===readback.active).positions,expected,'cold DB readback remains exact');
+ const readback=await page.evaluate(readSessionInPage),stableFields={...fields};delete stableFields.scroll;delete stableFields.canvasOrigin;
+ if(detailed)console.log('NODE_EDGE_DRAG_DB '+JSON.stringify({stage:'cold-readback',expected:fields,observed:viewerProjection(readback,Object.keys(fields)),observedDOM:{positions:restored.positions,zoom:restored.zoom,transform:restored.transform,scroll:restored.scroll,offset:restored.offset}}));
+ assert.deepEqual(viewerProjection(readback,Object.keys(stableFields)),stableFields,'cold DB positions, exact numeric zoom, inset, selection and visibility remain exact');
+ assert.deepEqual({drawer:readback.drawer,nodeDrawer:readback.nodeDrawer,preferWrite:readback.preferWrite},{drawer:false,nodeDrawer:false,preferWrite:false});
+ // Raw scroll/origin were checked exactly before reload. A cold route pass may
+ // legitimately grow/compensate them; screen representation is checked above.
+ // Pinch has no negative nodes or origin, so its camera fields also remain exact.
+ if('canvasOrigin' in knownView)assert.deepEqual(viewerProjection(readback,Object.keys(fields)),fields,'fractional pinch cold DB snapshot remains exact in every checked field');
  return {positions:expected,scroll:current.scroll,canvasOrigin,coldView:{scroll:restored.scroll,offset:restored.offset,originScreenChange:restored.offset.map((v,i)=>v-current.offset[i]),screenCameraDelta}};
 }
 async function runIsolated(browser,options,body){
@@ -193,7 +239,7 @@ async function runIsolated(browser,options,body){
  }finally{clearTimeout(timer);await context.close();}
 }
 async function verifyEdge(browser,options){return runIsolated(browser,options,async env=>{
- await unlock(env.page);const hold=await beginHold(env,options.edge);if(options.atExtent){const axis=['left','right'].includes(options.edge)?0:1;if(['left','top'].includes(options.edge)){const exhausted=hold.frames.filter(s=>s.scroll[axis]<=1);assert.ok(exhausted.length>=2,'hold must actually exhaust the negative native scroll reserve');assert.ok(exhausted.at(-1).offset[axis]>exhausted[0].offset[axis],'origin must keep growing after native scroll reaches zero');}else assert.ok(hold.last.extent[axis]>env.initial.extent[axis]+4,'holding at the existing positive scroll limit must grow the real canvas extent');}await env.driver.up();const released=await frame(env.page),expected=assertDrag(released,env.initial,env.start,hold.end,env.zoom,env.grip);
+ await unlock(env.page);const hold=await beginHold(env,options.edge);if(options.atExtent){const axis=['left','right'].includes(options.edge)?0:1;if(['left','top'].includes(options.edge)){assertNegativeBoundary(env.initial,hold.frames,axis);}else assert.ok(hold.last.extent[axis]>env.initial.extent[axis]+4,'holding at the existing positive scroll limit must grow the real canvas extent');}await env.driver.up();const released=await frame(env.page),expected=assertDrag(released,env.initial,env.start,hold.end,env.zoom,env.grip);
  await assertStopped(env.page,released);const saved=await committedReload(env,expected);
  return {...options,moving:env.moving,paintedHoldFrames:hold.samples,screenGripTolerance:1,...saved};
 });}
@@ -222,13 +268,17 @@ async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return ru
 });}
 async function verifySecondFinger(browser,zoom){return runIsolated(browser,{width:393,zoom,input:'touch'},async env=>{
  const {page,driver,start}=env;await unlock(page);const hold=await beginHold(env,'right'),second=[start[0],start[1]+100];
- await driver.touch('touchStart',[[1,...hold.end],[2,...second]]);const rollback=await frame(page);assert.deepEqual(rollback.positions,edgeDragPositions,'second finger rolls back the tentative node movement exactly');
+ await driver.touch('touchStart',[[1,...hold.end],[2,...second]]);const rollback=await frame(page),beforeContacts=await page.evaluate(trustedContactsInPage);assert.deepEqual(rollback.positions,edgeDragPositions,'second finger rolls back the tentative node movement exactly');
  await assertStopped(page,rollback);
- const spread=[second[0]-20,second[1]+20];await driver.touch('touchMove',[[1,...hold.end],[2,...spread]]);const pinched=await frame(page);assert.notEqual(pinched.zoom,zoom,'second finger must enter working pinch zoom');assert.deepEqual(pinched.positions,edgeDragPositions);
+ const spread=[second[0]-20,second[1]+20];await driver.touch('touchMove',[[1,...hold.end],[2,...spread]]);const pinched=await frame(page),afterContacts=await page.evaluate(trustedContactsInPage),expectedZoom=expectedPinchZoom(zoom,beforeContacts,afterContacts),expectedTransform=await page.evaluate(canonicalZoomInPage,expectedZoom);
+ console.log('NODE_EDGE_DRAG_PINCH '+JSON.stringify({initialZoom:zoom,beforeContacts,afterContacts,expected:{zoom:expectedZoom,transform:expectedTransform,positions:edgeDragPositions},observedDOM:{zoom:pinched.zoom,transform:pinched.transform,scroll:pinched.scroll,positions:pinched.positions}}));
+ assert.notEqual(expectedZoom,zoom,'observed finger geometry must request a real pinch');assert.equal(pinched.transform,expectedTransform,'pinch CSS scale must canonically serialize the independently calculated exact zoom');assert.deepEqual(pinched.positions,edgeDragPositions);
  await driver.touch('touchEnd',[[2,...spread]]);const lifted=await frame(page);await driver.touch('touchMove',[[2,spread[0]+15,spread[1]+15]]);assert.deepEqual(stoppedProjection(await frame(page)),stoppedProjection(lifted),'remaining finger is blocked from resuming node drag or pinch');
- await driver.touch('touchEnd',[]);const final=await frame(page);await assertStopped(page,final);
- await waitSavedViewer(page,{positions:edgeDragPositions,zoom:final.zoom,scroll:final.scroll});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);assert.deepEqual((await frame(page)).positions,edgeDragPositions);
- return {zoom,pinchZoom:final.zoom,rolledBackPositions:edgeDragPositions,remainingFingerBlocked:true};
+ await driver.touch('touchEnd',[]);const final=await frame(page);await assertStopped(page,final);assert.equal(final.transform,expectedTransform);
+ // Right-edge tentative movement and its rollback never create negative world
+ // coordinates. The seed's absent canvasOrigin therefore remains exactly known.
+ const saved=await committedReload({...env,zoom:expectedZoom},edgeDragPositions,{canvasOrigin:undefined});
+ return {zoom,pinchZoom:expectedZoom,renderedZoom:final.zoom,rolledBackPositions:edgeDragPositions,remainingFingerBlocked:true,...saved};
 });}
 async function verifyLocked(browser,input){return runIsolated(browser,{width:320,zoom:1,input},async env=>{
  const {page,driver,start,initial}=env,end=edgeTarget(initial,start,'left');assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');

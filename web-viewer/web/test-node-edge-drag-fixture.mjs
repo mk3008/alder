@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {edgeDragFixture,edgeDragMoving,edgeDragPositions,edgeDragMatrix,expectedEdgePosition,seedEdgeDragSession} from './test-node-edge-drag-browser.mjs';
+import {edgeDragFixture,edgeDragMoving,edgeDragPositions,edgeDragMatrix,expectedEdgePosition,seedEdgeDragSession,assertNegativeBoundary,expectedPinchZoom,canonicalZoomInPage} from './test-node-edge-drag-browser.mjs';
 import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
 
 const {raw,design}=edgeDragFixture();
@@ -27,6 +27,29 @@ for(const width of [1280,393,320])for(const zoom of [.25,1]){
   after.scroll[axis]+=80;after.offset[axis]+=80;assert.deepEqual(expectedEdgePosition([0,0],start,end,zoom,before,after),expected);
  }
 }
+// Native scroll can become positive when origin growth compensates it; only
+// physical camera progress establishes continued negative-world movement.
+for(const axis of [0,1]){
+ const sample=(scroll,offset)=>{const s={scroll:[50,50],offset:[100,100]};s.scroll[axis]=scroll;s.offset[axis]=offset;return s;},initial=sample(0,0),frames=[sample(24,40),sample(24,52),sample(30,70)];
+ assert.deepEqual(assertNegativeBoundary(initial,frames,axis),{initialScroll:0,offsetGrowth:30,physicalCameraDelta:-24});
+ assert.throws(()=>assertNegativeBoundary(sample(1,0),frames,axis),/starts at native scroll zero/);
+ assert.throws(()=>assertNegativeBoundary(initial,[sample(24,40),sample(10,40)],axis),/origin continues growing/);
+ assert.throws(()=>assertNegativeBoundary(initial,[sample(24,40),sample(54,70)],axis),/physical camera keeps moving/);
+ assert.throws(()=>assertNegativeBoundary(initial,[sample(24,40),sample(80,70)],axis),/physical camera keeps moving/);
+ assert.throws(()=>assertNegativeBoundary(initial,[sample(24,40),sample(50,60),sample(30,70)],axis),/must not reverse/);
+ assert.throws(()=>assertNegativeBoundary(initial,[sample(24,40),sample(NaN,70)],axis),/must be finite/);
+}
+const pinchFixtures=[{zoom:.25,left:197,afterLeft:177,expected:0.28103226403475356,scroll:[1171,797]},{zoom:1,left:196,afterLeft:176,expected:1.1235494436920053,scroll:[4731,4276]}].map(f=>{
+ const contact=(id,x,y,type='pointermove')=>({id,x,y,type,kind:'touch',trusted:true});
+ const before=[contact(2,391,469),contact(3,f.left,569,'pointerdown')],after=[contact(2,391,469),contact(3,f.afterLeft,589)];
+ assert.equal(expectedPinchZoom(f.zoom,before,after),f.expected,'CI36 trusted contact geometry has an independently exact zoom');
+ assert.throws(()=>expectedPinchZoom(f.zoom,before,[{...after[0],trusted:false},after[1]]),/trusted finite/);
+ assert.throws(()=>expectedPinchZoom(f.zoom,before,[after[0],{...after[1],id:4}]),/retain identity/);
+ assert.throws(()=>expectedPinchZoom(f.zoom,before,[after[0],{...after[1],id:2}]),/must be distinct/);
+ assert.throws(()=>expectedPinchZoom(f.zoom,before,[after[0],{...after[1],x:NaN}]),/trusted finite/);
+ const shortened=Number(f.expected.toPrecision(6));assert.notEqual(shortened,f.expected,'CSS-like shortening must never become the DB oracle');
+ return {...f,before,after,shortened};
+});
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 let restoredWindow;
 const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
@@ -65,5 +88,16 @@ try{
  await assert.rejects(waitSavedViewer(fakePage,{positions:expectedPositions},{timeoutMs:75,intervalMs:5}),e=>e.message.includes('deadline')&&e.reads>=2,'even subpixel DB corruption must fail exact asynchronous persistence');
  await seedEdgeDragSession(seed);assert.deepEqual((await readSessionInPage()).tabs[0].positions,expectedPositions);
  const activityPositions={...structuredClone(edgeDragPositions),person:[1300,600],read:[0,0]};await seedEdgeDragSession({...seed,positions:activityPositions,moving:'read'});const activitySaved=await readSessionInPage(),activityTab=activitySaved.tabs.find(t=>t.key===activitySaved.active);assert.deepEqual(activityTab.positions,activityPositions);assert.equal(activityTab.selected,'read');
- console.log(JSON.stringify({nodeEdgeDragFixturePreflight:'passed',publicFixture:'test_explicit_exception_kinds',nodes:4,relations:10,incident:5,nonincident:5,matrixCases:48,selectors:15,committedSeeds:6,exactOracleCases:49,activitySeedSelected:true,signedFractionalCSSOMRestore:true,subpixelDBMismatchRejected:true,limit:'Parser/DOM/fake-IDB and arithmetic only. Native pointer capture, actual screen grip, RAF edge pan and Chromium persistence/reload have not run here.'}));
+ // Full-field fractional pinch persistence: both rounded CSS-derived zoom and
+ // an unrequested camera change must fail, even though node positions match.
+ const serialize=new Function('document','zoom',`return (${canonicalZoomInPage.toString()})(zoom)`);
+ for(const f of pinchFixtures){
+  const fields={positions:edgeDragPositions,zoom:f.expected,scroll:f.scroll,viewInset:[4096,4096],canvasOrigin:undefined,selected:edgeDragMoving,hiddenNodes:[],showExceptions:true,selectedEdgesOnly:false};
+  await seedEdgeDragSession(fields);await waitSavedViewer(fakePage,fields,{timeoutMs:100,intervalMs:5});
+  const style=d.createElement('div').style;style.transform=`scale(${f.expected})`;assert.equal(style.transform,serialize(d,f.expected),'canonical zoom oracle is the same exact CSSOM operation used by the browser gate');
+  await seedEdgeDragSession({...fields,zoom:f.shortened});await assert.rejects(waitSavedViewer(fakePage,fields,{timeoutMs:75,intervalMs:5}),e=>e.message.includes('deadline')&&e.observed.zoom===f.shortened,'rounded zoom must not pass the exact numeric DB check');
+  await seedEdgeDragSession({...fields,scroll:[f.scroll[0]+1,f.scroll[1]]});await assert.rejects(waitSavedViewer(fakePage,fields,{timeoutMs:75,intervalMs:5}),e=>e.message.includes('deadline')&&e.observed.scroll[0]===f.scroll[0]+1,'wrong saved camera must not pass while positions and zoom match');
+  await seedEdgeDragSession(fields);await waitSavedViewer(fakePage,fields,{timeoutMs:100,intervalMs:5});
+ }
+ console.log(JSON.stringify({nodeEdgeDragFixturePreflight:'passed',publicFixture:'test_explicit_exception_kinds',nodes:4,relations:10,incident:5,nonincident:5,matrixCases:48,selectors:15,committedSeeds:14,exactOracleCases:51,activitySeedSelected:true,signedFractionalCSSOMRestore:true,subpixelDBMismatchRejected:true,negativeBoundaryFalsePassesRejected:12,pinchInvalidContactCasesRejected:8,roundedZoomAndWrongScrollDBRejected:4,limit:'Parser/DOM/fake-IDB and arithmetic only. Native pointer capture, actual screen grip, RAF edge pan and Chromium persistence/reload have not run here.'}));
 }finally{w.close();restoredWindow?.close();delete globalThis.indexedDB;}
