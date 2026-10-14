@@ -385,7 +385,7 @@ function sharingReason(){
 function sharingChrome(){
   const reason=sharingReason(),button=$('share-source');button.hidden=!current();
   button.setAttribute('aria-disabled',String(copyingSource||!!reason));
-  button.title=reason??'取得元URLは相手に見えます。共有先では元URLの最新の文書を表示します。';
+  button.title=reason??'取得元URLは相手に見えます。共有先では取得元URLのタブを開きます。';
 }
 $('share-source').onclick=async()=>{
   if(copyingSource)return;
@@ -396,11 +396,13 @@ $('share-source').onclick=async()=>{
   catch{status('共有リンクをコピーできませんでした。ブラウザーのクリップボード許可を確認して、もう一度操作してください。','error');}
   finally{copyingSource=false;sharingChrome();}
 };
-let sharedSourceAbort:AbortController|undefined,sharedSourceToken=0,pendingSharedHash:string|undefined;
+let sharedSourceAbort:AbortController|undefined,sharedSourceToken=0,sharedSourceNavigation=0,pendingSharedHash:string|undefined;
 function drainSharedSource(){if(restoring||opening||sourceBusy||closing||documentSaving||sharedSourceAbort||pendingSharedHash===undefined)return;const hash=pendingSharedHash;pendingSharedHash=undefined;void openSharedSource(hash);}
 async function openSharedSource(requestedHash=location.hash){
   // A different explicit navigation supersedes a fetch, but never interrupts a save.
   const hash=requestedHash;if(restoring)return;
+  // Expire a prompt-waiting selection without interrupting an atomic save.
+  const navigation=++sharedSourceNavigation;
   if(!/^#source(?:=|$)/.test(hash)){pendingSharedHash=undefined;if(sharedSourceAbort&&!documentSaving){sharedSourceAbort.abort();sharedSourceAbort=undefined;sharedSourceToken++;opening=false;render();}return;}
   if(location.hash===hash)history.replaceState(history.state,'',location.pathname+location.search);
   if(documentSaving){pendingSharedHash=hash;return;}
@@ -409,6 +411,17 @@ async function openSharedSource(requestedHash=location.hash){
   try{
     const url=readSharedSource(hash)!;
     ensureWritable();rememberEditorInput();
+    const existing=state.tabs.find(t=>t.source?.kind==='url'&&t.source.url===url);
+    if(existing){
+      // Revisit selects the saved document, including local edits and its view.
+      // Only explicit Refresh may replace it with the source's current content.
+      if(sourceTarget&&sourceTarget!==existing.key&&!(await (sourceClosePrompt??closeSource())))return;
+      if(token!==sharedSourceToken||navigation!==sharedSourceNavigation)return;
+      const changed=capture()||state.active!==existing.key;
+      state.active=existing.key;render();persist(180,changed);
+      status('開いている共有元のタブを選択しました。保存内容と編集は保持しています。');
+      return;
+    }
     sharedSourceAbort=new AbortController();opening=true;render();
     const design=parseDesign(await fetchMarkdown(url,sharedSourceAbort.signal));
     if(token!==sharedSourceToken)return;
