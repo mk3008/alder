@@ -16,10 +16,10 @@ export async function verifyFindings(browser){
     assert.equal(await page.locator('.finding-badges').count(),2);
     const geometry=await page.locator('.node').evaluateAll(cards=>cards.map(card=>{
       const badge=card.querySelector('.finding-badges'),c=card.getBoundingClientRect(),b=badge?.getBoundingClientRect(),style=getComputedStyle(card);
-      const overlaps=b&&Array.from(card.querySelectorAll('.node-name,.node-text small,.who-badge,svg')).some(e=>{const r=e.getBoundingClientRect();return b.left<r.right&&b.right>r.left&&b.top<r.bottom&&b.bottom>r.top;});
-      return {width:card.offsetWidth,height:card.offsetHeight,font:style.fontSize,padding:style.padding,badge:b&&{above:b.top<c.top,right:b.right<=c.right,upperHalf:b.bottom<c.top+c.height/2,overlaps}};
+      const overlaps=b&&Array.from(card.querySelectorAll('.review-kind,.node-name,.node-text small,.who-badge,svg')).some(e=>{const r=e.getBoundingClientRect();return b.left<r.right&&b.right>r.left&&b.top<r.bottom&&b.bottom>r.top;});
+      return {width:card.offsetWidth,height:card.offsetHeight,font:style.fontSize,padding:style.padding,radius:style.borderRadius,badge:b&&{above:b.top<c.top,right:b.right<=c.right,upperHalf:b.bottom<c.top+c.height/2,overlaps}};
     }));
-    for(const card of geometry){assert.equal(card.width,260);assert.equal(card.height,68);assert.equal(card.font,'13px');assert.equal(card.padding,'12px 20px');if(card.badge){assert.ok(card.badge.above&&card.badge.right&&card.badge.upperHalf);assert.equal(card.badge.overlaps,false);}}
+    for(const card of geometry){assert.equal(card.width,260);assert.equal(card.height,68);assert.equal(card.font,'13px');assert.equal(card.padding,'9px 12px');assert.equal(card.radius,'8px');if(card.badge){assert.ok(card.badge.above&&card.badge.right&&card.badge.upperHalf);assert.equal(card.badge.overlaps,false);}}
     // Observe the real PNG raster input without replacing the native encoder.
     await page.evaluate(()=>{const d=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');Object.defineProperty(HTMLImageElement.prototype,'src',{...d,set(value){if(String(value).startsWith('data:image/svg+xml'))window.findingExportSvg=decodeURIComponent(String(value).split(',').slice(1).join(','));d.set.call(this,value);}});});
     const download=page.waitForEvent('download');await page.locator('#save-image').click();await download;
