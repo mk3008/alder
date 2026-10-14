@@ -116,6 +116,62 @@ header{flex-shrink:0}
 /* Empty documents have no graph controls; keep the explanation unobscured. */
 .toolbar[hidden]{display:none}
 
+/* A document action stays beside the scrollable tab strip at every width. */
+.tab-strip{display:flex;height:auto;min-height:44px;flex-shrink:0;min-width:0;background:var(--panel);border-bottom:1px solid var(--subtle)}
+.tab-strip #tabs{flex:1;min-width:0;border-bottom:0}
+#edit-markdown{display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;min-width:40px;height:40px;margin:2px 8px;padding:6px 10px;border-radius:5px;font-size:12px}
+#edit-markdown[hidden]{display:none}
+#edit-markdown:hover{background:var(--select)}
+#source-dialog .source-actions{flex-wrap:wrap}
+@media(max-width:600px){.editor-caption{display:none}#edit-markdown{margin-inline:4px;padding:6px}}
+
+/* Give desktop Markdown editing the available viewport, keeping actions in view. */
+@media(min-width:801px){
+  #source-dialog:not([hidden]):is([data-mode=edit],[data-mode=text]){top:124px;width:min(1120px,calc(100vw - 64px));height:calc(100dvh - 148px);max-height:calc(100dvh - 148px);display:flex;flex-direction:column}
+  #source-dialog:is([data-mode=edit],[data-mode=text])> :not(textarea){flex-shrink:0}
+  #source-dialog:is([data-mode=edit],[data-mode=text]) textarea{flex:1;min-height:120px;resize:none}
+  body:has(.info-bar:not([hidden])) #source-dialog:is([data-mode=edit],[data-mode=text]){top:112px;height:calc(100dvh - 316px);max-height:calc(100dvh - 316px)}
+}
+
+/* Recovery is exceptional, non-modal, and never reserves normal work space.
+   Keep this after the desktop editor rules: the taller panel needs its own lane. */
+.info-content{flex:1;min-width:0}.info-content #status-text{display:block}
+#save-actions[hidden],#save-actions [hidden],#status-close[hidden]{display:none}
+.info-bar.has-save-actions{align-items:flex-start;max-height:min(40dvh,300px);overflow:auto}
+body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,15dvh);height:auto;max-height:calc(100dvh - min(112px,15dvh) - min(40dvh,300px) - 92px)}
+#save-actions{font-size:12px;overflow-wrap:anywhere}.save-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.save-buttons button{padding:6px 10px;border:1px solid currentColor;border-radius:4px;font:inherit;color:inherit;background:transparent}
+.save-buttons button:disabled{opacity:.6;cursor:wait}.save-buttons button:focus-visible,#save-rescue-text:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+#save-actions p{margin:8px 0 0}#save-rescue-text{display:block;width:100%;min-height:100px;margin-top:6px;resize:vertical;font:12px/1.5 monospace}
+
+/* A two-choice modal protects dismissal without discarding the stored draft. */
+#source-close-dialog{width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:20px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 48px #0005}#source-close-dialog::backdrop{background:#0006}#source-close-message{margin:0 0 20px;line-height:1.6;overflow-wrap:anywhere}#source-close-dialog .source-close-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}#source-close-dialog button{min-height:44px;border:1px solid var(--line);border-radius:4px;padding:8px 18px}#source-close-continue{background:#1d73b7;color:#fff}
+
+#share-source{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;height:40px;margin:2px;border-radius:5px}
+#share-source[aria-disabled="true"]{opacity:.5}
+#share-source:hover{background:var(--select)}
+
+#share-source[hidden]{display:none}
+
+/* Icon-only header actions share the existing 40px height as a square target.
+   Captioned source actions keep their labels and responsive visibility. */
+header{--header-control-width:40px}
+header strong{min-width:0;flex-shrink:1;white-space:normal}
+header #node-list-toggle,header #theme,header #drawer,header #github-link{width:var(--header-control-width);min-width:var(--header-control-width);height:40px;min-height:40px;padding:7px;gap:0}
+@media(min-width:801px) and (max-width:1100px){header{padding-inline:12px;gap:6px}header strong{font-size:16px}header button{font-size:12px}}
+@media(max-width:600px){header>button,header #open,header #open-url,header #open-text,header #refresh{width:var(--header-control-width);min-width:var(--header-control-width);padding:7px;gap:0}}
+/* The preview identifier gets its own lane instead of stealing control width.
+   Keep all actions visible; the flex workspace follows the measured header. */
+header:has(#preview-badge:not([hidden])){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
+header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;padding:3px 6px}
+
+/* Eight persistent actions still fit a 320px viewport without hiding a link. */
+@media(max-width:359px){header{--header-control-width:36px;padding-inline:4px;column-gap:2px}}
+@media(min-width:481px) and (max-width:600px){
+  header:has(#github-link){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
+  header:has(#github-link) strong{order:-1;flex-basis:100%}
+}
+
 /* Repository and authoring entry points do not change graph/session behavior. */
 #github-link{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border:1px solid #ffffff30;border-radius:5px;color:inherit}
 #github-link svg{width:19px;height:19px}
@@ -126,7 +182,6 @@ header{flex-shrink:0}
 #authoring-guide p{margin:8px 0}
 #authoring-guide a{display:inline-block;padding-block:8px;color:inherit;text-underline-offset:3px}
 #authoring-guide a:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
-@media(max-width:1000px){#github-link{display:none}}
 #empty{max-height:calc(70% - 20px);overflow-y:auto;overscroll-behavior:contain}
 #viewport:has(>#empty:not([hidden])){touch-action:pan-y}
 @media(max-width:600px),(max-height:600px){#empty{top:20px;max-height:calc(100% - 40px)}}

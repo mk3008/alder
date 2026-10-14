@@ -7,11 +7,11 @@ import {readSessionInPage,waitForExactRead} from './wait-saved-viewer.mjs';
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
  try{
-  for(const width of [1440,1001,1000,800,393,320]){
-   await page.setViewportSize({width,height:width===320?568:852});await page.goto(origin);
+  for(const preview of [false,true])for(const width of [1440,1001,1000,800,600,481,393,360,320]){
+   await page.setViewportSize({width,height:width===320?568:852});await page.goto(preview?new URL('preview/pr-204/always-visible/',origin).href:origin);
    await page.waitForFunction(()=>!document.querySelector('#open').disabled);
    const github=page.locator('#github-link'),guide=page.locator('#authoring-guide');
-   assert.equal(await github.isVisible(),width>1000);assert.equal(await guide.isVisible(),true);
+   assert.equal(await github.isVisible(),true);assert.equal(await guide.isVisible(),true);
    const frame=await page.locator('#empty').evaluate(e=>{
     const r=e.getBoundingClientRect(),v=e.parentElement.getBoundingClientRect();
     return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,viewport:{top:v.top,bottom:v.bottom,left:v.left,right:v.right},touch:getComputedStyle(e.parentElement).touchAction};
@@ -21,17 +21,24 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(frame.touch,'pan-y','overflowing empty help permits native touch scrolling');
    assert.equal(await github.getAttribute('href'),'https://github.com/mk3008/alder');
    assert.equal(await guide.locator('a').getAttribute('href'),'https://github.com/mk3008/alder/blob/main/README.ja.md');
-   if(width>1000){
+   {
     await page.locator('body').click({position:{x:1,y:1}});
     let reached=false;
     for(let i=0;i<15;i++){await page.keyboard.press('Tab');if(await github.evaluate(e=>document.activeElement===e)){reached=true;break;}}
     assert.ok(reached,'repository link is in keyboard traversal');
     assert.equal(await github.evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
    }
-   for(const id of ['open','open-url','open-text','theme']){
-    const control=page.locator('#'+id);await control.scrollIntoViewIfNeeded();
+   for(const id of ['node-list-toggle','github-link','open','open-url','open-text','refresh','theme','drawer']){
+    const control=page.locator('#'+id);assert.equal(await control.isVisible(),true,id+' always visible');
     const r=await control.boundingBox();assert.ok(r.x>=-.5&&r.x+r.width<=width+.5,id+' remains reachable');
    }
+   const header=await page.locator('header').evaluate(e=>{
+    const nodes=[...e.querySelectorAll('button,a#github-link,strong,#preview-badge')].filter(n=>!n.hidden&&getComputedStyle(n).display!=='none');
+    return {scroll:e.scrollWidth,width:e.clientWidth,rects:nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.id||'brand',x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};})};
+   });
+   assert.ok(header.scroll<=header.width+1,'header has no horizontal overflow');
+   for(const r of header.rects){assert.ok(r.width>0&&r.height>0&&r.x>=0&&r.right<=width+.5,r.id+' fits');for(const q of header.rects){if(q.id!==r.id)assert.ok(Math.min(q.right,r.right)-Math.max(q.x,r.x)<=.5||Math.min(q.bottom,r.bottom)-Math.max(q.y,r.y)<=.5,r.id+' overlaps '+q.id);}}
+   assert.equal(await page.locator('#preview-badge').isVisible(),preview);
    const readme=guide.locator('a');await readme.scrollIntoViewIfNeeded();await readme.focus();
    assert.equal(await readme.evaluate(e=>document.activeElement===e),true);
    assert.equal(await readme.evaluate(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return hit===e||e.contains(hit);}),true,'README link is reachable after scrolling');
@@ -47,7 +54,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
-   results.push({width,repositoryVisible:width>1000,guide:'no horizontal overflow; sample/file/reload/close passed'});
+   results.push({width,preview,repositoryVisible:true,guide:'no horizontal overflow; sample/file/reload/close passed'});
   }
   return {results,limits:'Chromium desktop emulation; native mobile and human acceptance remain separate.'};
  }finally{await context.close();}

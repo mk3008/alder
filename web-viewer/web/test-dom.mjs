@@ -59,8 +59,11 @@ assert.equal(w.document.querySelectorAll('.tab').length,0);assert.equal(w.docume
 pending=undefined;h.getFile=async()=>selected;await $('open').onclick();permission='denied';
 w.showOpenFilePicker=async()=>{throw Object.assign(new Error('cancelled'),{name:'AbortError'});};
 await $('refresh').onclick();assert.equal(w.document.querySelectorAll('.tab').length,1);assert.equal($('refresh').disabled,false);checks.push('permission reselect cancellation keeps graph and allows retry');
-// Modeled handles are not structured-cloneable: dismiss the persistent save error explicitly.
-$('status-close').click();permission='granted';await $('refresh').onclick();assert.match($('status').textContent,/更新しました/);
+// Function-bearing mock handles cannot be structured-cloned. A failed
+// transactional refresh retains the exact Graph and exposes storage recovery.
+const cloneFailureGraph=$('nodes').innerHTML;
+$('status-close').click();permission='granted';await $('refresh').onclick();
+assert.doesNotMatch($('status-text').textContent,/更新しました/);assert.equal($('status').dataset.key,'storage');assert.match($('status-text').textContent,/保存できません/);assert.equal($('save-actions').hidden,false);assert.equal($('nodes').innerHTML,cloneFailureGraph);checks.push('noncloneable mock handle cannot commit a refresh or mask storage recovery');
 const permissionWait=deferred();h.queryPermission=()=>permissionWait.promise;
 const latePermission=$('refresh').onclick();let pickerCalls=0;w.showOpenFilePicker=async()=>{pickerCalls++;return [h];};
 await w.document.querySelector('.close').onclick();permissionWait.resolve('denied');await latePermission;assert.equal(pickerCalls,0);
