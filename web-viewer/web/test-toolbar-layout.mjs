@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 /** Read-only rendered assertions; does not resize, click, scroll or alter styles.
  * Closed: one 40px gear/lock/zoom row. Open: four options in two equal-width
- * rows and a PNG action above that same control row. Both states retain the existing height,
+ * rows and layout-reset and PNG actions above that same control row. Retain the
  * text bounds, native hit testing and touch-size requirements.
  */
 export async function assertToolbarLayout(page,{open}={}){
@@ -15,12 +15,14 @@ export async function assertToolbarLayout(page,{open}={}){
    const rect=box(e),hit=document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2),walker=document.createTreeWalker(e,NodeFilter.SHOW_TEXT),textRects=[];
    let text;while(text=walker.nextNode()){if(!text.textContent.trim())continue;const range=document.createRange();range.selectNodeContents(text);for(const r of range.getClientRects())textRects.push({left:r.left,right:r.right,top:r.top,bottom:r.bottom});}
    const checkbox=e.querySelector('input[type="checkbox"]');
-   return {id:checkbox?.id||e.id,name:e.textContent||e.getAttribute('aria-label'),kind:e.classList.contains('edge-option')?'option':e.id==='zoom'?'zoom-value':'button',...rect,hit:e===hit||e.contains(hit),textRects,checkbox:checkbox&&box(checkbox),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight};
+   const icon=e.querySelector('svg'),caption=e.querySelector('span'),style=getComputedStyle(e),naturalWidth=e.classList.contains('graph-action')&&icon&&caption?icon.getBoundingClientRect().width+caption.getBoundingClientRect().width+['columnGap','paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((n,k)=>n+parseFloat(style[k]),0):null;
+   return {fontSize:parseFloat(style.fontSize),naturalWidth,icon:icon&&{...box(icon),hidden:icon.getAttribute('aria-hidden')},id:checkbox?.id||e.id,name:e.textContent||e.getAttribute('aria-label'),kind:e.classList.contains('edge-option')?'option':e.id==='zoom'?'zoom-value':'button',...rect,hit:e===hit||e.contains(hit),textRects,checkbox:checkbox&&box(checkbox),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight};
   });
-  return {window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
+  const actionRow=panel.querySelector('.graph-actions');
+  return {actionRow:actionRow&&{...box(actionRow),display:getComputedStyle(actionRow).display,wrap:getComputedStyle(actionRow).flexWrap},window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
  });
  const epsilon=.75,contains=(outer,inner)=>inner.left>=outer.left-epsilon&&inner.right<=outer.right+epsilon&&inner.top>=outer.top-epsilon&&inner.bottom<=outer.bottom+epsilon,near=(a,b)=>Math.abs(a-b)<=epsilon;
- const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='save-image'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='save-image'),buttons=controls.filter(i=>i.kind==='button');
+ const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>['reset-layout','save-image'].includes(i.id)),controls=items.filter(i=>i.kind!=='option'&&!['reset-layout','save-image'].includes(i.id)),buttons=controls.filter(i=>i.kind==='button');
  const message=label=>label+': '+JSON.stringify(measured);
  assert.ok(measured.expanded==='true'||measured.expanded==='false',message('gear exposes expansion state'));
  const expanded=measured.expanded==='true';if(open!==undefined)assert.equal(expanded,open,message('requested expansion state'));
@@ -28,8 +30,8 @@ export async function assertToolbarLayout(page,{open}={}){
  assert.equal(measured.controls,'display-options',message('gear controls display options'));
  assert.equal(measured.panel.hidden,!expanded,message('hidden attribute follows gear'));
  assert.deepEqual(measured.allOptions.map(i=>i.id),['show-outside','prefer-write','show-exceptions','selected-edges-only'],message('all four display options retained'));
- assert.equal(actions.length,expanded?1:0,message('PNG action only appears in expanded settings'));
  assert.equal(options.length,expanded?4:0,message('only expanded settings have visible option cells'));
+ assert.deepEqual(actions.map(i=>i.id),expanded?['reset-layout','save-image']:[],message('both graph actions appear only inside expanded settings'));
  assert.deepEqual(controls.map(i=>i.id),['display-settings-toggle','layout-lock','out','zoom','in'],message('gear, lock and zoom order'));
  assert.ok(contains({left:0,top:0,right:measured.window.width,bottom:measured.window.height},toolbar),message('toolbar within window'));
  assert.ok(contains(viewport,toolbar),message('toolbar within graph viewport'));
@@ -63,8 +65,16 @@ export async function assertToolbarLayout(page,{open}={}){
   assert.ok(near(options[0].bottom,options[2].top),message('exactly two adjoining option rows'));
   assert.ok(options.every(i=>i.bottom<=buttonRow.top+epsilon),message('settings expand above control row'));
   assert.ok(measured.panel.bottom<=buttonRow.top+epsilon,message('panel ends above always-visible controls'));
-  assert.ok(actions[0].top>=options[3].bottom&&actions[0].bottom<=buttonRow.top,message('PNG action follows filters above controls'));
-  rowsHeight+=options[0].height+options[2].height+actions[0].height;
+  assert.ok(actions.every(a=>a.top>=options[3].bottom&&a.bottom<=buttonRow.top),message('both actions follow filters above controls'));
+  assert.ok(actions.every(a=>a.fontSize>=12),message('graph action captions keep the normal readable 12px font'));
+  assert.ok(near(actions[0].top,actions[1].top)&&near(actions[0].bottom,actions[1].bottom),message('reset and PNG fit one readable action row'));
+  assert.ok(actions[1].left>=actions[0].right+2,message('reset and PNG have distinct hit targets'));
+  assert.ok(near(actions[1].width,actions[1].naturalWidth)&&actions[1].icon?.hidden==='true'&&contains(actions[1],actions[1].icon),message('PNG uses a natural-width icon and caption'));
+  assert.equal(measured.actionRow.display,'flex',message('actions share a horizontal flow'));assert.equal(measured.actionRow.wrap,'wrap',message('future actions may wrap at narrow widths'));
+  assert.ok(near(actions[0].left,measured.actionRow.left)&&near(measured.actionRow.left,measured.panel.left+6),message('reset action is left aligned'));
+  assert.ok(near(actions[0].width,actions[0].naturalWidth)&&actions[0].width<measured.actionRow.width-8,message('reset width fits icon and text without stretching across the row'));
+  assert.ok(actions[0].icon?.hidden==='true'&&contains(actions[0],actions[0].icon),message('decorative reset icon is visible inside the button'));
+  rowsHeight+=options[0].height+options[2].height+actions[0].height+4;
  }else{
   assert.equal(measured.panel.display,'none',message('collapsed panel has no rendered display'));
   assert.ok(measured.allOptions.every(i=>i.rects===0&&i.width===0&&i.height===0),message('collapsed options have no rendered hit targets'));

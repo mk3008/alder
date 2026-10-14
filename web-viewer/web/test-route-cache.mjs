@@ -37,6 +37,8 @@ const secondTab={};calls=[];const secondRoutes=cache.update(secondTab,design,nod
 cache.update(tab,design,nodes,relations);const secondPositions=nodes.map(n=>({...n}));
 nodes[0].y+=50;cache.update(tab,design,nodes,relations);calls=[];
 assert.deepEqual(cache.update(secondTab,design,secondPositions,relations),secondRoutes);assert.equal(calls.length,0);
+cache.invalidate(tab);calls=[];cache.update(tab,design,nodes,relations);assert.equal(calls.length,relations.length,'explicit layout reset reroutes every edge');
+calls=[];assert.deepEqual(cache.update(secondTab,design,secondPositions,relations),secondRoutes);assert.equal(calls.length,0,'layout reset does not invalidate another tab');
 // In-place graph structure changes are detected even with the same identity.
 calls=[];relations.push({kind:'output',from:'a',to:'d',label:'Added'});cache.update(tab,design,nodes,relations);assert.equal(calls.length,4);
 relations.pop();calls=[];nodes[0].width+=10;cache.update(tab,design,nodes,relations);assert.equal(calls.length,3);

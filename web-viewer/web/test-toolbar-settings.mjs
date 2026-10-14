@@ -106,7 +106,7 @@ try{
  gear.focus();const focusCount=e.focusCalls.length;stable(e,()=>toggle(e));assertOpen(e,true);
  assert.equal(e.d.activeElement,gear);assert.equal(e.focusCalls.length,focusCount,'opening does not autofocus an input');
  const focusable=[...e.bar.querySelectorAll('button,input')].filter(n=>!n.disabled&&n.tabIndex>=0&&!n.closest('[hidden]'));
- assert.deepEqual(focusable.map(n=>n.id),['display-settings-toggle',...inputIDs,'save-image','layout-lock','out','in']);
+ assert.deepEqual(focusable.map(n=>n.id),['display-settings-toggle',...inputIDs,'reset-layout','save-image','layout-lock','out','in']);
  e.$('selected-edges-only').focus();stable(e,()=>assert.equal(escape(e,e.$('selected-edges-only')).defaultPrevented,true));assertOpen(e,false);
  assert.equal(e.d.activeElement,gear);assert.deepEqual(json(e.focusCalls.at(-1)),{id:'display-settings-toggle',options:{preventScroll:true}});
  assert.equal(escape(e).defaultPrevented,false,'Escape when already closed is untouched');
@@ -177,6 +177,8 @@ try{
  assert.match(css,/\.toolbar\{max-width:calc\(100% - 24px\)\}/);
  assert.match(css,/\.display-options\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)[^}]*order:-1/);
  assert.match(css,/\.display-options\[hidden\]\{display:none\}/);
+ assert.match(css,/\.graph-actions\{[^}]*display:flex;flex-wrap:wrap;[^}]*justify-content:flex-start/);
+ assert.match(css,/\.display-options \.graph-action\{[^}]*flex:0 1 auto;width:max-content;max-width:100%/);
  assert.match(css,/\.toolbar button\{height:40px;width:40px/);
  assert.match(css,/@media\(max-width:480px\)\{\.toolbar button\{width:32px\}\.toolbar #zoom\{min-width:48px/);
  assert.doesNotMatch(source.match(/function setDisplaySettings\([\s\S]*?\n\}/)[0],/graph\(|render\(|redrawEdges\(|persist\(|reconcile\(/);

@@ -8,6 +8,7 @@ import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 import {runBrowserCases} from './browser-cases.mjs';
+import {assertToolbarLayout} from './test-toolbar-layout.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {readConcurrencyRecord} from './test-session-concurrency-browser.mjs';
 
@@ -303,10 +304,13 @@ export async function verifyGraphPng(browser){
  });
  for(const width of [320,393])add('native touch download is reachable at '+width+'px',async f=>{
   const {page}=f;await openFixture(page);await openDisplaySettings(page);
+  assert.equal(await page.locator('#save-image').getAttribute('aria-label'),'グラフ全体をPNGで保存');
+  console.log('GRAPH_PNG_TOOLBAR_IMAGE '+JSON.stringify({width,height:width===320?568:852,base64:(await page.screenshot({type:'png'})).toString('base64'),note:'Synthetic fixture, reset and PNG actions together; exact native screenshot.'}));
+  const toolbar=await assertToolbarLayout(page,{open:true});
   const reach=await page.locator('#save-image').evaluate(button=>{const r=button.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {box:[r.left,r.top,r.right,r.bottom],size:[r.width,r.height],window:[innerWidth,innerHeight],hit:hit===button||button.contains(hit)};});
   assert.ok(reach.box[0]>=0&&reach.box[1]>=0&&reach.box[2]<=reach.window[0]+1&&reach.box[3]<=reach.window[1]+1);assert.ok(reach.size[0]>=40&&reach.size[1]>=40);assert.equal(reach.hit,true,'download action is native hit-testable');
-  const result=await exportPng(f,{input:'tap'});return {width,hitTest:true,nativeTapDownload:true,png:result.png};
- },{width,height:740,touch:true});
+  const result=await exportPng(f,{input:'tap'});return {width,toolbarHeight:toolbar.toolbar.height,viewportHeight:toolbar.viewport.height,hitTest:true,nativeTapDownload:true,png:result.png};
+ },{width,height:width===320?568:852,touch:true});
  for(const failure of ['empty','huge','toBlob'])add(failure+' failure preserves saved state and unlocks retry',async f=>{
   const {page,downloads}=f;assert.equal(await page.locator('#save-image').isDisabled(),true,'no document has no export action');await prepare(page);
   if(failure==='empty')await seed(page,{hiddenNodes:fixture.design.graph.nodes.map(n=>n.id)});
