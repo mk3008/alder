@@ -9,7 +9,9 @@ export async function verifyFindings(browser){
   for(const width of [320,393,1280])results.push(await withToolbarPage(browser,{width,height:800},async(page,errors)=>{
     await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open-text').disabled);
     await page.locator('#open-text').click();await page.locator('#source-text').fill(markdown);await page.locator('#source-submit').click();
-    await page.waitForSelector('.node');
+    await page.waitForSelector('.node');await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden);
+    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     assert.equal(await page.locator('#display-settings-toggle').getAttribute('data-finding-count'),'4');
     assert.equal(await page.locator('.finding-badges').count(),2);
     await assertToolbarLayout(page,{open:false});
