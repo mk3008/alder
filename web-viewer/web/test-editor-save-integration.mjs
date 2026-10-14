@@ -49,6 +49,7 @@ for(const operation of ['apply','refresh'])await caseOf(operation+' waits for co
  const before=await e.read(),key=e.tabs()[0].dataset.key,oldGraph=graph(e);e.probe.holdWrites=true;
  if(operation==='apply')await edit(e,changedMarkdown);
  const first=e.probe.writes.length+1,pending=invoke(e,operation==='apply'?'source-submit':'refresh');await held(e,first);
+ assert.equal(e.$('refresh').disabled,true,'document save blocks source refresh');assert.equal(e.$('refresh').hidden,operation==='apply','source eligibility stays independent of the saving guard');const requests=e.requests.length;await invoke(e,'refresh');assert.equal(e.requests.length,requests,'direct refresh handler cannot fetch during a document save');
  assert.equal(e.probe.writes[first-1].complete,false);assert.equal(graph(e),oldGraph,'Graph cannot publish an uncommitted document');guard(e,true);
  e.$('theme').click();e.$('drawer').click();e.$('viewport').scrollLeft=123;e.$('viewport').scrollTop=67;e.$('viewport').onscroll();
  if(operation==='apply'){await invoke(e,'source-submit');await invoke(e,'source-cancel');await e.tabs()[0].querySelector('.close').onclick();await invoke(e,'open-text');assert.equal(e.$('source-dialog').dataset.mode,'edit');assert.equal(e.$('source-dialog').hidden,false);}

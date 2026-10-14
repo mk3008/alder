@@ -74,7 +74,7 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 
 @media(max-width:480px){.toolbar button{width:32px}.toolbar #zoom{min-width:48px;padding-inline:4px}.toolbar .edge-option{padding-inline:6px;padding-block:3px}.display-options{flex:1}}
 
-@media(max-width:600px){header .source-caption{display:none}header #open svg{display:block}header #open,header #open-url,header #open-text{min-width:36px}header #refresh{font-size:0;gap:0;min-width:36px}}
+@media(max-width:600px){header .source-caption{display:none}header #open svg{display:block}header #open,header #open-url,header #open-text{min-width:36px}}
 
 /* The list is a normal desktop column; on narrow screens only it overlays the graph. */
 .tab.active{background:var(--select)}
@@ -161,9 +161,9 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
-.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
-.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
-.tab-strip>.png-action[hidden]{display:none}
+.tab-strip>#refresh,.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+.tab-strip>#refresh:hover:not(:disabled),.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
+.tab-strip>#refresh[hidden],.tab-strip>.png-action[hidden]{display:none}
 
 /* Icon-only header actions share the existing 40px height as a square target.
    Captioned source actions keep their labels and responsive visibility. */
@@ -171,13 +171,13 @@ header{--header-control-width:40px}
 header strong{min-width:0;flex-shrink:1;white-space:normal}
 header #node-list-toggle,header #theme,header #drawer,header #github-link{width:var(--header-control-width);min-width:var(--header-control-width);height:40px;min-height:40px;padding:7px;gap:0}
 @media(min-width:801px) and (max-width:1100px){header{padding-inline:12px;gap:6px}header strong{font-size:16px}header button{font-size:12px}}
-@media(max-width:600px){header>button,header #open,header #open-url,header #open-text,header #refresh{width:var(--header-control-width);min-width:var(--header-control-width);padding:7px;gap:0}}
+@media(max-width:600px){header>button,header #open,header #open-url,header #open-text{width:var(--header-control-width);min-width:var(--header-control-width);padding:7px;gap:0}}
 /* The preview identifier gets its own lane instead of stealing control width.
    Keep all actions visible; the flex workspace follows the measured header. */
 header:has(#preview-badge:not([hidden])){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
 header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;padding:3px 6px}
 
-/* Eight persistent actions still fit a 320px viewport without hiding a link. */
+/* Persistent actions still fit a 320px viewport without hiding a link. */
 @media(max-width:359px){header{--header-control-width:36px;padding-inline:4px;column-gap:2px}}
 @media(min-width:481px) and (max-width:800px){
   header:has(#github-link){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}

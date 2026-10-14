@@ -40,10 +40,11 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
     assert.ok(reached,'repository link is in keyboard traversal');
     assert.equal(await github.evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
    }
-   for(const id of ['node-list-toggle','github-link','open','open-url','open-text','refresh','theme','drawer']){
+   for(const id of ['node-list-toggle','github-link','open','open-url','open-text','theme','drawer']){
     const control=page.locator('#'+id);assert.equal(await control.isVisible(),true,id+' always visible');
     const r=await control.boundingBox();assert.ok(r.x>=-.5&&r.x+r.width<=width+.5,id+' remains reachable');
    }
+   assert.equal(await page.locator('#refresh').isVisible(),false,'no document hides source refresh');
    const header=await page.locator('header').evaluate(e=>{
     const nodes=[...e.querySelectorAll('button,a#github-link,strong,#preview-badge')].filter(n=>!n.hidden&&getComputedStyle(n).display!=='none');
     return {scroll:e.scrollWidth,width:e.clientWidth,rects:nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.id||'brand',x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};})};
@@ -65,8 +66,9 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
     await page.locator('#source-cancel').click();assert.equal(await page.locator('#source-dialog').isVisible(),false);assert.equal(await action.evaluate(e=>document.activeElement===e),true);
    }
    await page.locator('#status-close').click();
-   await page.locator('#guide-open-url').click();await page.locator('#source-url').fill('https://viewer-guide.test/design.md');await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await page.locator('.close').click();
-   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await page.locator('.close').click();
+   await page.locator('#guide-open-url').click();await page.locator('#source-url').fill('https://viewer-guide.test/design.md');await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
+   const refetch=page.waitForRequest('https://viewer-guide.test/design.md');await page.locator('#refresh').click();await refetch;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').count(),1,'native refresh rereads the existing URL document');await page.locator('.close').click();
+   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),false);assert.equal(await page.locator('#refresh').isDisabled(),true);await page.locator('.close').click();
    for(const id of ['guide-open','guide-open-url','guide-open-text','open-sample']){const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();const r=await action.boundingBox();assert.ok(r.height>=44&&r.x>=0&&r.x+r.width<=width,'guide action target '+id);}
    const readme=guide.locator('a');await readme.scrollIntoViewIfNeeded();await readme.focus();
    assert.equal(await readme.evaluate(e=>document.activeElement===e),true);
@@ -74,16 +76,16 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    const bounds=await page.locator('#empty').evaluate(e=>({width:e.getBoundingClientRect().width,scroll:e.scrollWidth}));
    assert.ok(bounds.scroll<=bounds.width+1,'guide has no horizontal overflow');
    if([1440,393,320].includes(width)){if(await page.locator('#status').isVisible())await page.locator('#status-close').click();await readme.scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-end-${width}-${preview?'preview':'production'}.png`});}
-   await page.locator('#open-sample').click();await page.waitForSelector('.node');
+   await page.locator('#open-sample').click();await page.waitForSelector('.node');assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
    assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
    const chooserPromise=page.waitForEvent('filechooser');await page.locator('#guide-open').click();const chooser=await chooserPromise;await chooser.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
-   await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
+   await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
    await waitForExactRead(()=>page.evaluate(readSession,preview?'alder-web-viewer:preview:pr-204:always-visible':'alder-web-viewer'),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
-   await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
+   await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
-   assert.equal(await guide.isVisible(),true);
+   assert.equal(await guide.isVisible(),true);assert.equal(await page.locator('#refresh').isVisible(),false);
    results.push({width,preview,repositoryVisible:true,guide:'no horizontal overflow; sample/file/reload/close passed'});
   }
   return {results,limits:'Chromium desktop emulation; native mobile and human acceptance remain separate.'};

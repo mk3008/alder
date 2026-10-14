@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 export async function verifyHeaderControls(browser){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
- const ids=['node-list-toggle','open','open-url','open-text','refresh','theme','drawer'];
+ const ids=['node-list-toggle','open','open-url','open-text','theme','drawer'];
  try{
   mkdirSync('web/evidence/header-controls',{recursive:true});
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled,null,{timeout:5000});
