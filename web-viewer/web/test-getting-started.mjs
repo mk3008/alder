@@ -19,6 +19,13 @@ try{
  assert.equal(github.querySelector('svg').getAttribute('aria-hidden'),'true');
  assert.equal(readme.href,'https://github.com/mk3008/alder/blob/main/README.ja.md');
  for(const a of [github,readme]){assert.equal(a.target,'_blank');assert.ok(a.relList.contains('noopener'));assert.ok(a.relList.contains('noreferrer'));a.focus();assert.equal(d.activeElement,a);}
+ assert.equal($('opening-title').textContent,'業務設計書を開くには');
+ let picked=0;w.showOpenFilePicker=async()=>{picked++;throw Object.assign(new Error('cancel'),{name:'AbortError'});};
+ $('guide-open').click();await new Promise(r=>setTimeout(r,10));assert.equal(picked,1);assert.equal(d.querySelectorAll('.tab').length,0);assert.equal($('guide-open').disabled,false);
+ for(const [id,title,input] of [['guide-open-url','URLを開く','source-url'],['guide-open-text','テキストを入力','source-text']]){
+  $(id).focus();$(id).click();assert.equal($('source-dialog').hidden,false);assert.equal($('source-title').textContent,title);assert.equal(d.activeElement,$(input));
+  await $('source-cancel').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.activeElement,$(id));
+ }
  assert.equal(guide.closest('#empty').hidden,false);assert.equal(d.querySelectorAll('.tab').length,0);
  for(const text of ['Alderプラグイン','ヒアリングメモ・議事録・発言内容','このヒアリング結果をAlder業務設計書にして','草案','合意する前にレビュー','このViewerで開くと、図で確認'])assert.ok(guide.textContent.includes(text),text);
  const readmeText=readFileSync('../README.ja.md','utf8');assert.match(readmeText,/## 導入する/);assert.match(readmeText,/## まず使ってみる/);

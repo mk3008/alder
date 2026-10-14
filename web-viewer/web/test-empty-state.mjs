@@ -39,7 +39,7 @@ function empty(e){
  const {$,w,d,v}=e;
  assert.equal(d.querySelectorAll('.tab').length,0);
  assert.equal($('empty').hidden,false,'the explanation is present');
- assert.match($('empty').textContent,/Business Design Markdownを開いてください。/);
+ assert.match($('empty').textContent,/業務設計書を開くには/);
  assert.deepEqual(scroll(e),[0,0],'empty presentation has no historical camera scroll');
  assert.equal($('canvas').hidden,true,'huge canvas and transformed children cannot contribute empty scroll overflow');
  for(const [drawer,toggle] of [['node-list-drawer','node-list-toggle'],['formattedMarkdownDrawer','drawer']]){
@@ -50,7 +50,7 @@ function empty(e){
  const link=$('open-sample');assert.equal(link.tabIndex,0);assert.equal(link.getAttribute('aria-disabled'),'false');
  assert.equal(w.getComputedStyle($('canvas')).display,'none');
  assert.equal(w.getComputedStyle($('empty')).position,'absolute');
- assert.equal(w.getComputedStyle($('empty')).inset,'30% 20px auto','hint stays relative to the unscrolled viewport');
+ assert.equal(w.getComputedStyle($('empty')).inset,'24px 20px','hint stays relative to the unscrolled viewport');
  assert.equal($('empty').parentElement,v);
  assert.equal(w.getComputedStyle(link).pointerEvents,'auto');
  link.focus();assert.equal(d.activeElement,link,'sample remains keyboard-focusable');

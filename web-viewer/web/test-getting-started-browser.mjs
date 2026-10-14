@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,mkdirSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 export const gettingStartedFile=readFileSync(new URL('./authorities/business-design.md',import.meta.url),'utf8');
 assert.ok(parseDesign(gettingStartedFile).graph.nodes.length,'file fixture must satisfy the real parser');
@@ -10,6 +10,10 @@ function readSession(database){return new Promise((resolve,reject)=>{
 });}
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
+ // Exercise the supported input-file fallback with a real browser file chooser.
+ await context.addInitScript(()=>{window.showOpenFilePicker=undefined;});
+ mkdirSync('web/evidence/header-controls',{recursive:true});
+ await context.route('https://viewer-guide.test/design.md',route=>route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:gettingStartedFile}));
  // Serve identical built bytes at the nested path, as the preview-isolation gate does.
  await context.route('**/preview/pr-204/always-visible/**',async route=>{const url=new URL(route.request().url()),path=url.pathname.replace(/^\/preview\/pr-204\/always-visible\//,'/');await route.fulfill({response:await route.fetch({url:new URL(path+url.search,origin).href})});});
  try{
@@ -47,6 +51,21 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.ok(header.scroll<=header.width+1,'header has no horizontal overflow');
    for(const r of header.rects){assert.ok(r.width>0&&r.height>0&&r.x>=0&&r.right<=width+.5,r.id+' fits');for(const q of header.rects){if(q.id!==r.id)assert.ok(Math.min(q.right,r.right)-Math.max(q.x,r.x)<=.5||Math.min(q.bottom,r.bottom)-Math.max(q.y,r.y)<=.5,r.id+' overlaps '+q.id);}}
    assert.equal(await page.locator('#preview-badge').isVisible(),preview);
+   const opening=page.locator('#opening-guide');
+   assert.equal(await opening.isVisible(),true);
+   const typography=await page.locator('.empty-guide').evaluateAll(nodes=>nodes.map(n=>{const h=n.querySelector('h2'),r=n.getBoundingClientRect();return {x:r.x,width:r.width,font:getComputedStyle(h).fontSize,align:getComputedStyle(n).textAlign};}));
+   assert.deepEqual(typography[0],typography[1],'both guides share heading style and alignment');
+   for(const [id,title,input] of [['guide-open-url','URLを開く','source-url'],['guide-open-text','テキストを入力','source-text']]){
+    const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();await action.focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#source-title').textContent(),title);assert.equal(await page.locator('#source-dialog').isVisible(),true);
+    await page.locator('#'+input).fill(id==='guide-open-url'?'http://invalid.example/design.md':'# invalid');
+    await page.locator('#source-submit').click();assert.equal(await page.locator('#source-dialog').isVisible(),true);assert.equal(await page.locator('.tab').count(),0);
+    await page.locator('#source-cancel').click();assert.equal(await page.locator('#source-dialog').isVisible(),false);assert.equal(await action.evaluate(e=>document.activeElement===e),true);
+   }
+   await page.locator('#status-close').click();
+   await page.locator('#guide-open-url').click();await page.locator('#source-url').fill('https://viewer-guide.test/design.md');await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await page.locator('.close').click();
+   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await page.locator('.close').click();
+   for(const id of ['guide-open','guide-open-url','guide-open-text','open-sample']){const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();const r=await action.boundingBox();assert.ok(r.height>=44&&r.x>=0&&r.x+r.width<=width,'guide action target '+id);}
    const readme=guide.locator('a');await readme.scrollIntoViewIfNeeded();await readme.focus();
    assert.equal(await readme.evaluate(e=>document.activeElement===e),true);
    assert.equal(await readme.evaluate(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return hit===e||e.contains(hit);}),true,'README link is reachable after scrolling');
@@ -56,12 +75,13 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
-   await page.locator('#fallback').setInputFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
+   const chooserPromise=page.waitForEvent('filechooser');await page.locator('#guide-open').click();const chooser=await chooserPromise;await chooser.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await waitForExactRead(()=>page.evaluate(readSession,preview?'alder-web-viewer:preview:pr-204:always-visible':'alder-web-viewer'),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
+   if([1440,393,320].includes(width)){await page.locator('#opening-title').scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-${width}-${preview?'preview':'production'}.png`});}
    results.push({width,preview,repositoryVisible:true,guide:'no horizontal overflow; sample/file/reload/close passed'});
   }
   return {results,limits:'Chromium desktop emulation; native mobile and human acceptance remain separate.'};
