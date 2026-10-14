@@ -162,11 +162,7 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
 /* Explicit findings are separate from business Problem/Pain and Graph edges. */
-#findings-toggle{font-size:11px;white-space:nowrap;padding:4px 8px;min-width:0}
 .finding-badges{position:absolute;right:4px;top:-9px;display:block!important;max-height:none!important;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px!important;line-height:16px!important;padding:0 5px;border:1px solid currentColor;border-radius:8px;background:var(--panel);color:var(--fg);pointer-events:none}
-#findings-dialog{width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px}
-#findings-dialog::backdrop{background:#0006}
-#findings-dialog>button{float:right;min-height:40px;min-width:56px}
 .findings-panel{overflow-wrap:anywhere;min-width:0}
 .findings-panel h2{font-size:18px}.findings-panel h3{font-size:14px}
 .finding-filter{display:flex;align-items:center;gap:8px;min-height:40px;font-size:13px}
@@ -174,8 +170,6 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .finding-card{border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0;overflow-wrap:anywhere}
 .finding-summary{font-weight:650}.finding-target{font-size:12px}.finding-reference-warning{font-weight:650;border-left:3px solid currentColor;padding-left:8px}
 .finding-card .markdown{padding:0;font-size:13px}
-#display-settings-toggle{position:relative}
-#display-settings-toggle[data-finding-count]:not([data-finding-count=""])::after{content:attr(data-finding-count);position:absolute;right:0;top:0;min-width:14px;max-width:32px;box-sizing:border-box;overflow:hidden;padding:0 2px;border:1px solid currentColor;border-radius:8px;font-size:9px;line-height:14px;background:var(--panel);color:var(--fg);pointer-events:none}
 .tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
 .tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
 .tab-strip>.png-action[hidden]{display:none}
@@ -214,3 +208,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .empty-guide a:hover,.empty-guide button:hover{text-decoration-thickness:2px}
 .empty-guide a:focus-visible,.empty-guide button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 #viewport:has(>#empty:not([hidden])){touch-action:pan-y}
+
+#drawer-modes{display:flex;margin:0 14px 12px;gap:4px}#drawer-modes button{flex:1;min-height:40px;font-size:13px;border-bottom:2px solid transparent}#drawer-modes [aria-selected=true]{background:var(--select);border-bottom-color:#357aa6;font-weight:650}
+#node-categories[hidden],.scope-bulk[hidden],#node-list-search[hidden]{display:none}
+.findings-index{overflow-wrap:anywhere}.findings-index h3{font-size:13px;margin:18px 0 6px}.finding-index-row{display:block;text-align:left;width:100%;padding:10px 6px;min-height:44px;border-bottom:1px solid var(--subtle);overflow-wrap:anywhere}.finding-index-row strong,.finding-index-row span{display:block}.finding-index-row strong{font-size:12px}.finding-index-row span{font-size:13px;margin-top:4px}.finding-index-row:hover{background:var(--select)}.finding-back,.finding-target-link{display:block;max-width:100%;min-height:40px;padding:8px;border:1px solid var(--line);border-radius:5px;margin:8px 0;text-align:left;overflow-wrap:anywhere}
