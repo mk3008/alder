@@ -2,6 +2,7 @@ import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
 import {verifySaveState} from './test-save-state-browser.mjs';
 import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
+import {verifySaveConflictNoop} from './test-save-conflict-noop-browser.mjs';
 import {verifyLifecycleSave} from './test-lifecycle-save-browser.mjs';
 import {verifyMarkdownEditor} from './test-editor-browser.mjs';
 import {verifyToolbarSettings} from './test-toolbar-settings-browser.mjs';
@@ -44,6 +45,7 @@ try {
   await runBrowserCases([
    {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
+   {name:'saveConflictNoop',run:()=>verifySaveConflictNoop(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
    {name:'markdownEditor',run:()=>verifyMarkdownEditor(browser)},
    {name:'editorViewport',run:()=>verifyEditorViewport(browser)},
