@@ -1,7 +1,8 @@
 export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean; [key: string]: unknown };
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
-export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
+export type Finding = { id: string; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };
+export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
 const fail = (ok: unknown, message: string): void => { if (!ok) throw new Error(message); };
 const text = (v: unknown): v is string => typeof v === 'string' && !!v.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '');
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -50,13 +51,42 @@ function sections(body: string, expected: string[], context: string, empty: stri
   fail(marks.map(m=>m[1]).join('|') === expected.join('|'), context + ': invalid field order'); return values;
 }
 const codepointCompare = (a: string,b: string): number => { const aa = Array.from(a), bb = Array.from(b); for(let i=0;i<Math.min(aa.length,bb.length);i++) { const d=aa[i].codePointAt(0)!-bb[i].codePointAt(0)!; if(d) return d; } return aa.length-bb.length; };
+function parseFindings(body: string): Finding[] {
+  const ls = lines(body), marks = headings(body).filter(([,h])=>h.startsWith('## ')), seen = new Set<string>();
+  fail(marks.length && !ls.slice(0, marks[0][0]).join('\n').trim(), 'Findings require Finding sections');
+  return marks.map(([start,h], index) => {
+    const m = /^## Finding ([A-Za-z][A-Za-z0-9_-]{0,63})$/.exec(h);
+    fail(m, 'Invalid Finding ID'); const id = m![1]; fail(!seen.has(id), 'Duplicate Finding ID'); seen.add(id);
+    const v = sections(ls.slice(start+1,marks[index+1]?.[0] ?? ls.length).join('\n'), ['### Kind','### Status','### Scope','### Targets','### Summary','### Content'], 'Finding '+id);
+    fail(['question','correction'].includes(v['### Kind']), 'Invalid Finding Kind');
+    fail(['open','resolved'].includes(v['### Status']), 'Invalid Finding Status');
+    fail(['items','document','unassigned'].includes(v['### Scope']), 'Invalid Finding Scope');
+    const targets = v['### Targets']==='(none)' ? [] : lines(v['### Targets']).filter(l=>l.trim()).map(l=>{fail(l.startsWith('- ') && visible(l.slice(2)), 'Invalid Finding target'); return l.slice(2);});
+    fail(new Set(targets).size===targets.length, 'Duplicate Finding target');
+    fail(v['### Scope']==='items' ? targets.length>0 : v['### Targets']==='(none)', 'Finding Scope and Targets disagree');
+    return {id,kind:v['### Kind'] as Finding['kind'],status:v['### Status'] as Finding['status'],scope:v['### Scope'] as Finding['scope'],targets,summary:v['### Summary'],content:v['### Content'],unresolvedTargets:[]};
+  });
+}
+/** Recover only explicit annotations; legacy saved designs without them stay valid. */
+export function findingsFromSource(markdown: string, names: Set<string>): Finding[] {
+  if(!lines(markdown).some(l=>l==='# Findings'))return [];
+  const ls=lines(markdown),roots=headings(markdown).filter(([,h])=>h.startsWith('# '));
+  const matches=roots.map(([start,h],i)=>({start,h,end:roots[i+1]?.[0]??ls.length})).filter(r=>r.h==='# Findings');
+  fail(matches.length<=1,'Duplicate Findings');
+  if(!matches.length)return [];
+  const result=parseFindings(ls.slice(matches[0].start+1,matches[0].end).join('\n'));
+  for(const finding of result)finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
+  return result;
+}
 export function parseDesign(markdown: string): Design {
   fail(!markdown.includes('<!--'), 'HTML comments are unsupported'); const ls = lines(markdown), roots = headings(markdown).filter(m=>m[1].startsWith('# '));
   const entity = /^# (Activity|Object) (\S.*)$/;
-  fail(roots.length && !entity.test(roots[0][1]) && !['# Scope','# Graph exceptions'].includes(roots[0][1]), 'Document title required');
+  fail(roots.length && !entity.test(roots[0][1]) && !['# Scope','# Graph exceptions','# Findings'].includes(roots[0][1]), 'Document title required');
+  let findings: Finding[] = [];
   const graph: Graph = {version:1,nodes:[],relations:[]}, sourceSections: Record<string,string> = Object.create(null), special = new Set<string>();
   roots.slice(1).forEach(([start,h], index) => {
     const end = roots[index+2]?.[0] ?? ls.length, body = ls.slice(start+1,end).join('\n').replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, ''); fail(body, 'Empty section ' + h);
+    if (h === '# Findings') { fail(!special.has(h), 'Duplicate Findings'); special.add(h); findings=parseFindings(body); return; }
     if (['# Scope','# Graph exceptions'].includes(h)) { fail(!special.has(h), 'Duplicate ' + h); special.add(h);
       if (h === '# Scope') { fail(!headings(body).length, 'Scope must be prose'); graph.scope = body; }
       else lines(body).filter(l=>l.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '')).forEach(l=>{const m=/^- (business-exception|object-exception) (.+?) → (.+?) — (\S.*)$/.exec(l); fail(m, 'Invalid exception'); graph.relations.push({kind:m![1] as Relation['kind'],from:m![2],to:m![3],label:m![4].replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '')});}); return;
@@ -78,5 +108,7 @@ export function parseDesign(markdown: string): Design {
   });
   const activityOrder=graph.nodes.filter(node=>node.type==='business').map(node=>node.id);
   validateGraph(graph); graph.nodes.sort((a,b)=>codepointCompare(a.id,b.id)); graph.relations.sort((a,b)=>{for(const k of ['kind','from','to','label'] as const){const d=codepointCompare(a[k],b[k]);if(d)return d;}return 0;});
-  return {graph,sections:sourceSections,markdown,activityOrder};
+  const names=new Set(graph.nodes.map(n=>n.id));
+  for(const finding of findings) finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
+  return {graph,sections:sourceSections,markdown,activityOrder,findings};
 }

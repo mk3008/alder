@@ -1,3 +1,4 @@
+import {verifyFindings} from './test-findings-browser.mjs';
 import {verifyLayoutReset} from './test-layout-reset-browser.mjs';
 import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
@@ -44,6 +45,7 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'findings',run:()=>verifyFindings(browser)},
    {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'saveConflictNoop',run:()=>verifySaveConflictNoop(browser)},

@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {JSDOM} from 'jsdom';
+import {build} from 'esbuild';
+const dom=new JSDOM('<body></body>',{runScripts:'outside-only'});
+const compiled=await build({entryPoints:['src/findings.ts'],bundle:true,write:false,format:'iife',globalName:'findingUI'});
+dom.window.eval(compiled.outputFiles[0].text+'\nwindow.findingUI=findingUI;');
+const {parseDesign}=await import('../src/graph.ts');
+const design=parseDesign(readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8'));
+const panel=dom.window.findingUI.findingsPanel(design);dom.window.document.body.append(panel);
+assert.equal(panel.querySelectorAll('[data-finding-id=F01]').length,1);
+assert.equal(panel.querySelectorAll('[data-finding-id=F04]').length,0);
+assert.match(panel.textContent,/関連先未設定/);assert.match(panel.textContent,/参照先不一致/);
+assert.equal(panel.querySelectorAll('img,script').length,0);
+const toggle=panel.querySelector('input');toggle.checked=true;toggle.dispatchEvent(new dom.window.Event('change'));
+assert.equal(panel.querySelectorAll('[data-finding-id=F04]').length,1);
+assert.deepEqual(Array.from(dom.window.findingUI.nodeFindingLabels(design,design.graph.nodes.find(n=>n.type==='business'))),['困りごと','要確認 1']);
+dom.window.close();console.log('findings DOM model checks passed (not browser geometry)');

@@ -159,3 +159,19 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action{display:inline-flex;align-items:center;justify-content:flex-start;gap:6px;flex:0 1 auto;width:max-content;max-width:100%;height:auto;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:4px;text-align:left;white-space:normal;overflow-wrap:anywhere}
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
+
+/* Explicit findings are separate from business Problem/Pain and Graph edges. */
+#findings-toggle{font-size:11px;white-space:nowrap;padding:4px 8px;min-width:0}
+.finding-badges{position:absolute;right:4px;bottom:-9px;display:block!important;max-height:none!important;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px!important;line-height:16px!important;padding:0 5px;border:1px solid currentColor;border-radius:8px;background:var(--panel);color:var(--fg);pointer-events:none}
+#findings-dialog{width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px}
+#findings-dialog::backdrop{background:#0006}
+#findings-dialog>button{float:right;min-height:40px;min-width:56px}
+.findings-panel{overflow-wrap:anywhere;min-width:0}
+.findings-panel h2{font-size:18px}.findings-panel h3{font-size:14px}
+.finding-filter{display:flex;align-items:center;gap:8px;min-height:40px;font-size:13px}
+.finding-filter input{width:18px;height:18px}
+.finding-card{border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0;overflow-wrap:anywhere}
+.finding-summary{font-weight:650}.finding-target{font-size:12px}.finding-reference-warning{font-weight:650;border-left:3px solid currentColor;padding-left:8px}
+.finding-card .markdown{padding:0;font-size:13px}
+#display-settings-toggle{position:relative}
+#display-settings-toggle[data-finding-count]:not([data-finding-count=""])::after{content:attr(data-finding-count);position:absolute;right:-5px;top:-5px;min-width:14px;padding:0 2px;border:1px solid currentColor;border-radius:8px;font-size:9px;line-height:14px;background:var(--panel);color:var(--fg);pointer-events:none}

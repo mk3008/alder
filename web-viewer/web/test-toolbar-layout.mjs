@@ -22,7 +22,7 @@ export async function assertToolbarLayout(page,{open}={}){
   return {actionRow:actionRow&&{...box(actionRow),display:getComputedStyle(actionRow).display,wrap:getComputedStyle(actionRow).flexWrap},window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
  });
  const epsilon=.75,contains=(outer,inner)=>inner.left>=outer.left-epsilon&&inner.right<=outer.right+epsilon&&inner.top>=outer.top-epsilon&&inner.bottom<=outer.bottom+epsilon,near=(a,b)=>Math.abs(a-b)<=epsilon;
- const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='reset-layout'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='reset-layout'),buttons=controls.filter(i=>i.kind==='button');
+ const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='reset-layout'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='reset-layout'&&i.id!=='findings-toggle'),buttons=controls.filter(i=>i.kind==='button');
  const message=label=>label+': '+JSON.stringify(measured);
  assert.ok(measured.expanded==='true'||measured.expanded==='false',message('gear exposes expansion state'));
  const expanded=measured.expanded==='true';if(open!==undefined)assert.equal(expanded,open,message('requested expansion state'));
@@ -70,7 +70,7 @@ export async function assertToolbarLayout(page,{open}={}){
   assert.ok(near(actions[0].left,measured.actionRow.left)&&near(measured.actionRow.left,measured.panel.left+6),message('reset action is left aligned'));
   assert.ok(near(actions[0].width,actions[0].naturalWidth)&&actions[0].width<measured.actionRow.width-8,message('reset width fits icon and text without stretching across the row'));
   assert.ok(actions[0].icon?.hidden==='true'&&contains(actions[0],actions[0].icon),message('decorative reset icon is visible inside the button'));
-  rowsHeight+=options[0].height+options[2].height+actions[0].height+4;
+  rowsHeight+=options[0].height+options[2].height+measured.actionRow.height+4;
  }else{
   assert.equal(measured.panel.display,'none',message('collapsed panel has no rendered display'));
   assert.ok(measured.allOptions.every(i=>i.rects===0&&i.width===0&&i.height===0),message('collapsed options have no rendered hit targets'));
