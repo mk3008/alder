@@ -113,7 +113,7 @@ async function verifyKeyboardAndRetention(browser){
   for(const id of ['layout-lock','out','in','viewport']){await page.keyboard.press('Tab');assert.equal(await active(),id,'collapsed settings never enter Tab order');}
   await page.locator('#layout-lock').focus();await page.keyboard.press('Shift+Tab');assert.equal(await active(),'display-settings-toggle');
   await page.keyboard.press('Enter');assert.equal(await gear.getAttribute('aria-expanded'),'true');await assertToolbarLayout(page,{open:true});
-  for(const id of [...optionIDs,'layout-lock']){await page.keyboard.press('Tab');assert.equal(await active(),id,'expanded keyboard order: '+id);}
+  for(const id of [...optionIDs,'reset-layout','layout-lock']){await page.keyboard.press('Tab');assert.equal(await active(),id,'expanded keyboard order: '+id);}
   await page.locator('#prefer-write').focus();await page.keyboard.press('Escape');
   assert.equal(await gear.getAttribute('aria-expanded'),'false');assert.equal(await active(),'display-settings-toggle','Escape returns focus to gear');
   await page.keyboard.press('Space');assert.equal(await gear.getAttribute('aria-expanded'),'true','Space opens gear');
