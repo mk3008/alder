@@ -32,7 +32,7 @@ const notify=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('s
 // Recomputing save chrome must not move an unchanged storage error ahead of a newer input error.
 function status(message:string,kind:'success'|'warning'|'error'='success',key:'operation'|'storage'='operation'){if(key==='storage'){if(storageMessage===message){recoveryChrome();return;}storageMessage=message;}notify(message,kind,key);recoveryChrome();}
 function protectedStorage(){status('前回の表示を復元できません。元の保存内容を保護するため、この画面の変更は保存しません。新しく入力した本文を退避してから、再読み込みで復元を再試行できます。','error','storage');}
-function conflictedStorage(){status('別の画面で先に保存されました。この画面の変更は保存していません。必要な本文をファイルに保存するかコピーしてから、再読み込みしてください。','error','storage');}
+function conflictedStorage(){status('別の画面（ブラウザーのタブやウィンドウ）で、本文または表示設定が先に保存されました。上書きを防ぐため、この画面の変更は保存していません。本文・入力途中の編集・図の配置は、この画面を閉じるまで残っています。必要な本文をファイルに保存するかコピーしてから、再読み込みしてください。','error','storage');}
 function markChanged(){if(!restoring){revision++;saveStateChrome();}}
 function beforeUnsavedLeave(event:BeforeUnloadEvent){event.preventDefault();event.returnValue=true;}
 function saveStateChrome(){
