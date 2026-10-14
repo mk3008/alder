@@ -167,7 +167,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 /* Eight persistent actions still fit a 320px viewport without hiding a link. */
 @media(max-width:359px){header{--header-control-width:36px;padding-inline:4px;column-gap:2px}}
-@media(min-width:481px) and (max-width:600px){
+@media(min-width:481px) and (max-width:800px){
   header:has(#github-link){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
   header:has(#github-link) strong{order:-1;flex-basis:100%}
 }

@@ -3,13 +3,19 @@ import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 export const gettingStartedFile=readFileSync(new URL('./authorities/business-design.md',import.meta.url),'utf8');
 assert.ok(parseDesign(gettingStartedFile).graph.nodes.length,'file fixture must satisfy the real parser');
-import {readSessionInPage,waitForExactRead} from './wait-saved-viewer.mjs';
+import {waitForExactRead} from './wait-saved-viewer.mjs';
+function readSession(database){return new Promise((resolve,reject)=>{
+ const request=indexedDB.open(database,1);request.onupgradeneeded=()=>request.transaction.abort();request.onerror=()=>reject(request.error);
+ request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let value;get.onsuccess=()=>{value=get.result;};tx.oncomplete=()=>{db.close();resolve(value);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};
+});}
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
+ // Serve identical built bytes at the nested path, as the preview-isolation gate does.
+ await context.route('**/preview/pr-204/always-visible/**',async route=>{const url=new URL(route.request().url()),path=url.pathname.replace(/^\/preview\/pr-204\/always-visible\//,'/');await route.fulfill({response:await route.fetch({url:new URL(path+url.search,origin).href})});});
  try{
   for(const preview of [false,true])for(const width of [1440,1001,1000,800,600,481,393,360,320]){
    await page.setViewportSize({width,height:width===320?568:852});await page.goto(preview?new URL('preview/pr-204/always-visible/',origin).href:origin);
-   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+   await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);
    const github=page.locator('#github-link'),guide=page.locator('#authoring-guide');
    assert.equal(await github.isVisible(),true);assert.equal(await guide.isVisible(),true);
    const frame=await page.locator('#empty').evaluate(e=>{
@@ -50,7 +56,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await guide.isVisible(),true);
    await page.locator('#fallback').setInputFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
-   await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
+   await waitForExactRead(()=>page.evaluate(readSession,preview?'alder-web-viewer:preview:pr-204:always-visible':'alder-web-viewer'),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
