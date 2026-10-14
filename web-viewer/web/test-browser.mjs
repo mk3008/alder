@@ -1,3 +1,4 @@
+import {verifySourceSharing} from './test-source-sharing-browser.mjs';
 import {verifySaveState} from './test-save-state-browser.mjs';
 import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
 import {verifyLifecycleSave} from './test-lifecycle-save-browser.mjs';
@@ -44,6 +45,7 @@ try {
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
    {name:'markdownEditor',run:()=>verifyMarkdownEditor(browser)},
+   {name:'sourceSharing',run:()=>verifySourceSharing(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
@@ -139,6 +141,22 @@ try {
   await clean(page);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
+  // The existing public source is also read from only the copied link in fresh storage.
+  // Capture clipboard boundary only; real OS clipboard permission is not asserted.
+  await page.evaluate(()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async value=>{globalThis.__publicSourceShare=value;}}});});
+  await page.locator('#share-source').click();await page.waitForFunction(()=>!!globalThis.__publicSourceShare);
+  const shared=await page.evaluate(()=>globalThis.__publicSourceShare),expectedNodes=await page.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.textContent]));
+  assert.equal(shared,'http://127.0.0.1:4173/#source='+encodeURIComponent(source));
+  const recipientContext=await browser.newContext(),recipient=await recipientContext.newPage(),recipientReads=[],recipientErrors=[];
+  recipient.on('request',r=>{if(r.url()===source)recipientReads.push({url:r.url(),method:r.method(),headers:r.headers()});});recipient.on('pageerror',e=>recipientErrors.push(e.message));
+  try{
+   await recipient.goto(shared);await recipient.waitForFunction(()=>document.querySelectorAll('.tab').length===1,{},{timeout:45000});await clean(recipient);
+   assert.deepEqual(await recipient.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.textContent])),expectedNodes);
+   assert.equal(new URL(recipient.url()).hash,'');assert.equal(recipientReads.length,1);assert.equal(recipientReads[0].method,'GET');assert.equal(recipientReads[0].headers.cookie,undefined);assert.equal(recipientReads[0].headers.referer,undefined);
+   await recipient.reload();await recipient.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await recipient.locator('.tab').count(),1);assert.equal(recipientReads.length,1);assert.deepEqual(recipientErrors,[]);
+   checks.push('copied source-only link loads matching Graph via real public HTTPS/CORS in independent context; consumed-link reload never re-fetches');
+  }finally{await recipientContext.close();}
+
   assert.deepEqual(errors,[]);
   return {browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']};
    }}
