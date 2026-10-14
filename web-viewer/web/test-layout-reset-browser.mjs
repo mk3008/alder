@@ -52,6 +52,13 @@ const geometry=page=>page.evaluate(()=>({nodes:[...document.querySelectorAll('.n
 async function seed(page,value){
  await page.evaluate(value=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session','readwrite'),s=tx.objectStore('session');s.put(value,'current');s.put(1,'generation');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};r.onerror=()=>reject(r.error);}),value);
  await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===3);
+ // The other URL tab intentionally exercises source retention. Its normal
+ // restore notice overlaps narrow toolbars until explicitly dismissed.
+ if(await page.locator('#status').isVisible()){
+  assert.equal(await page.locator('#status').getAttribute('data-key'),'operation');
+  assert.match(await page.locator('#status-text').textContent(),/保存時の内容です/);
+  await page.locator('#status-close').click();
+ }
 }
 export async function verifyLayoutReset(browser){
  return runBrowserCases([320,393,1280].map(width=>({name:`layout reset ${width}`,run:()=>withToolbarPage({newContext:options=>browser.newContext({...options,hasTouch:width<800})},{width,height:800},async(page,errors)=>{
