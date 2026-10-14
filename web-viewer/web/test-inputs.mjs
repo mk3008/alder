@@ -55,9 +55,10 @@ async function flush(){await new Promise(resolve=>setTimeout(resolve,260));}
 try {
   // Restore guards cover every source entry, including direct handler calls.
   const loading=createWindow();
-  for(const id of ['open','open-url','open-text']){assert.equal(loading.$(id).disabled,true);await invoke(loading,id);}
+  for(const id of ['open','open-url','open-text','refresh']){assert.equal(loading.$(id).disabled,true);await invoke(loading,id);}
+  assert.equal(loading.$('refresh').hidden,true,'restoring with no active document hides refresh');
   assert.equal(tabs(loading).length,0);assert.equal(dialogOpen(loading),false);assert.equal(loading.calls.length,0);
-  await waitRestored(loading);for(const id of ['open','open-url','open-text'])assert.equal(loading.$(id).disabled,false);
+  await waitRestored(loading);assert.equal(loading.$('refresh').hidden,true);assert.equal(loading.$('refresh').disabled,true);await invoke(loading,'refresh');assert.equal(loading.calls.length,0,'no-document refresh handler is inert');for(const id of ['open','open-url','open-text'])assert.equal(loading.$(id).disabled,false);
   checks.push('restore blocks all three input entry points');
 
   const text=await ready();
@@ -74,7 +75,7 @@ try {
   await openText(text,multibyte);assert.equal(tabs(text).length,1);assert.equal(graph(text),initial);assert.ok(dialogOpen(text));assert.match(status(text),/2MiB/);assert.equal(text.$('source-text').value,multibyte);await invoke(text,'source-cancel');
   checks.push('text size limit counts UTF-8 bytes, retaining oversized multibyte input');
 
-  assert.equal(text.$('refresh').disabled,true);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
+  assert.equal(text.$('refresh').hidden,false);assert.equal(text.$('refresh').disabled,true);await invoke(text,'refresh');assert.equal(graph(text),initial,'direct refresh cannot change a text document');assert.equal(text.calls.length,0);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
   text.$('source-text').value='# invalid edit';await submit(text);
   assert.equal(graph(text),initial);assert.equal(tabs(text)[0].dataset.key,key);assert.equal(text.$('source-text').value,'# invalid edit');assert.ok(dialogOpen(text));
   text.$('source-text').value=markdown+'\n';await submit(text);assert.equal(dialogOpen(text),false);assert.equal(tabs(text).length,1);assert.equal(tabs(text)[0].dataset.key,key);
@@ -105,6 +106,7 @@ try {
 
   const url=await ready({fetch:async()=>response()});
   await openURL(url);assert.equal(tabs(url).length,1);assert.ok(url.w.document.querySelector('.node'));assert.equal(url.calls.length,1);
+  assert.equal(url.$('refresh').hidden,false);assert.equal(url.$('refresh').disabled,false);
   const [requested,options]=url.calls[0];assert.equal(String(requested),'https://raw.example.test/design.md');
   assert.equal(options.credentials,'omit');assert.equal(options.referrerPolicy,'no-referrer');assert.equal(options.mode,'cors');assert.equal(options.redirect,'error');assert.ok(options.signal);
   await invoke(url,'refresh');assert.equal(url.calls.length,2);assert.equal(tabs(url).length,1);assert.equal(url.$('refresh').disabled,false);
@@ -148,9 +150,9 @@ try {
   checks.push('switching URL entry to text discards stale URL completion');
 
   let refreshPending;const closing=await ready({fetch:async()=>refreshPending?refreshPending.promise:response()});await openURL(closing);
-  refreshPending=deferred();const refreshing=invoke(closing,'refresh');await tick();await invoke(closing,'refresh');assert.equal(closing.calls.length,2);
+  refreshPending=deferred();const refreshing=invoke(closing,'refresh');await tick();assert.equal(closing.$('refresh').hidden,false);assert.equal(closing.$('refresh').disabled,true);await invoke(closing,'refresh');assert.equal(closing.calls.length,2);
   await tabs(closing)[0].querySelector('.close').onclick();refreshPending.resolve(response());await refreshing;
-  assert.equal(tabs(closing).length,0);assert.equal(closing.w.document.querySelectorAll('.node').length,0);
+  assert.equal(tabs(closing).length,0);assert.equal(closing.w.document.querySelectorAll('.node').length,0);assert.equal(closing.$('refresh').hidden,true);assert.equal(closing.$('refresh').disabled,true);
   checks.push('duplicate URL refresh is blocked and closing its tab discards late result');
 
   let timedOut=false;const timeout=await ready({fastTimeout:true,fetch:async(_url,{signal})=>new Promise((_resolve,reject)=>{
@@ -162,11 +164,14 @@ try {
   const db=new IDBFactory();const one=await ready({indexedDB:db,fetch:async()=>response()});
   Object.defineProperty(one.$('fallback'),'files',{value:[file('local.md')]});await one.$('fallback').onchange();await openURL(one);await openText(one,markdown+'\n');
   await invoke(one,'theme');await invoke(one,'drawer');await flush();const snapshot=await saved(db);
-  assert.equal(snapshot.tabs.length,3);assert.equal(snapshot.tabs.filter(t=>t.source?.kind==='url').length,1);assert.equal(snapshot.tabs.filter(t=>t.source?.kind==='text').length,1);
+  assert.equal(snapshot.tabs.find(t=>t.name==='local.md').source,undefined,'legacy file tabs omit source metadata');assert.equal(snapshot.tabs.length,3);assert.equal(snapshot.tabs.filter(t=>t.source?.kind==='url').length,1);assert.equal(snapshot.tabs.filter(t=>t.source?.kind==='text').length,1);
   assert.equal(snapshot.tabs.find(t=>t.source?.kind==='text').design.markdown,markdown+'\n');assert.equal(snapshot.tabs.find(t=>t.source?.kind==='url').source.url,'https://raw.example.test/design.md');
   const keys=tabs(one).map(t=>t.dataset.key);one.w.close();
   const restored=await ready({indexedDB:db});assert.deepEqual(tabs(restored).map(t=>t.dataset.key),keys);assert.equal(restored.calls.length,0);assert.equal(restored.w.document.documentElement.dataset.theme,'dark');assert.equal(restored.$('formattedMarkdownDrawer').hidden,true);
   await invoke(restored,'edit-markdown');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
+  assert.equal(restored.$('refresh').hidden,false,'restored text source keeps disabled refresh visible');
+  for(const index of [0,1,2]){tabs(restored)[index].querySelector('button').click();assert.equal(restored.$('refresh').hidden,false,'every restored active source keeps refresh visible');assert.equal(restored.$('refresh').disabled,index===2);}assert.equal(restored.calls.length,0,'switching sources never fetches');
+  while(tabs(restored).length)await tabs(restored).at(-1).querySelector('.close').onclick();assert.equal(restored.$('refresh').hidden,true,'closing all restored sources hides refresh');assert.equal(restored.$('refresh').disabled,true);await invoke(restored,'refresh');assert.equal(restored.calls.length,0);
   checks.push('file/URL/text tabs and source bodies restore from IndexedDB without automatic network access');
 
   // Persistence failures must be announced as errors, not success notices.

@@ -161,9 +161,9 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
-.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
-.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
-.tab-strip>.png-action[hidden]{display:none}
+.tab-strip>#refresh,.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+.tab-strip>#refresh:hover:not(:disabled),.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
+.tab-strip>#refresh[hidden],.tab-strip>.png-action[hidden]{display:none}
 
 /* One ordered responsive policy: full -> no title -> icons only.
    Expanded typography/spacing never changes with the viewport, so canonical
@@ -181,7 +181,7 @@ header.header-icons-only>button{width:var(--header-control-width);min-width:var(
 header:has(#preview-badge:not([hidden])){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
 header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;padding:3px 6px}
 
-/* Eight persistent actions still fit a 320px viewport without hiding a link. */
+/* Seven persistent actions still fit a 320px viewport without hiding a link. */
 @media(max-width:359px){header.header-icons-only{--header-control-width:36px}}
 
 

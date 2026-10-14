@@ -55,8 +55,8 @@ try{
  await close(fresh);assert.equal(fresh.$('canvas').hidden,true);assert.deepEqual([fresh.v.scrollLeft,fresh.v.scrollTop],[0,0]);
  assert.deepEqual(layout((await saved(fresh)).sampleLayout),layout(freshTab));
  const db=fresh.db;fresh.w.close();const reopened=await boot({db});assert.equal(reopened.$('canvas').hidden,true);reopened.$('open-sample').click();geometry(reopened);
- await reopened.$('refresh').onclick();geometry(reopened);assert.deepEqual(layout((await flush(reopened)).tabs[0]),layout(freshTab));
- checks.push('fresh sample doubles the left node margin from 40 to 80; repeated open, refresh, close, empty-state reload and reopen retain one inset');
+ assert.equal(reopened.$('refresh').disabled,true);await reopened.$('refresh').onclick();geometry(reopened);assert.deepEqual(layout((await flush(reopened)).tabs[0]),layout(freshTab));
+ checks.push('fresh sample doubles the left node margin from 40 to 80; repeated open, disabled refresh, close, empty-state reload and reopen retain one inset');
 
  for(const entry of ['text','url','file']){
   const e=await boot();
@@ -71,12 +71,13 @@ try{
   const tab=structuredClone(legacy);tab.positions[design.graph.nodes[0].id]=[-640,654];tab.scroll=[137,219];tab.zoom=.8;tab.canvasOrigin=[1000,0];
   if(mode!=='absent')tab.viewInset=mode==='zero'?[0,0]:[450,300];
   let e=await boot({seed:state(tab)});assert.deepEqual(positions(e),tab.positions);assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));
-  await e.$('refresh').onclick();assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));
+  assert.equal(e.$('refresh').disabled,true);await e.$('refresh').onclick();assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));
   await close(e);assert.deepEqual(layout((await saved(e)).sampleLayout),layout(tab));const db=e.db;e.w.close();
   e=await boot({db});e.$('open-sample').click();assert.deepEqual(positions(e),tab.positions);assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));e.w.close();
+  const urlTab={...structuredClone(tab),source:{kind:'url',url:'https://source.example.test/design.md'}};const url=await boot({seed:state(urlTab)});assert.equal(url.$('refresh').disabled,false);await url.$('refresh').onclick();assert.deepEqual(positions(url),tab.positions);assert.deepEqual(layout((await flush(url)).tabs[0]),layout(tab),'eligible URL refresh preserves the same historical camera and geometry');url.w.close();
  }
  const old=await boot({seed:state(structuredClone(legacy))});geometry(old,0);await close(old);old.$('open-sample').click();geometry(old,0);old.w.close();
- checks.push('legacy tab and saved sample preserve absent/zero/custom inset, manual signed coordinates, origin, zoom and scroll across refresh/reload/reopen');
+ checks.push('legacy tab and saved sample preserve absent/zero/custom inset, manual signed coordinates, origin, zoom and scroll across disabled sample refresh/reload/reopen and eligible URL refresh');
 
  // A narrow host keeps the canonical extent even at 25% zoom, so these exact
  // expectations test scaling, not the separate viewport-minimum width rule.

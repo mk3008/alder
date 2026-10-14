@@ -92,7 +92,7 @@ try {
   assert.ok(sampleItems.length>0);for(const item of sampleItems)assert.ok((await sample.locator('#detail').textContent()).includes(item));
   await sample.locator('#layout-lock').click();const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
   const sampleAfter=await sampleFirst.boundingBox();assert.ok(sampleAfter.x>sampleBefore.x+30);
-  await sample.locator('#theme').click();await sample.locator('#refresh').click();assert.equal(await sample.locator('.tab').count(),1);
+  await sample.locator('#theme').click();assert.equal(await sample.locator('#refresh').isVisible(),true);assert.equal(await sample.locator('#refresh').isDisabled(),true);await sample.locator('#refresh').evaluate(button=>button.click());assert.equal(await sample.locator('.tab').count(),1);
   assert.equal(await sample.locator('#status').isVisible(),false);await clean(sample);assert.deepEqual(sampleRequests,[]);
   await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
   assert.ok(sampleRequests.every(url=>url.startsWith('http://127.0.0.1:4173/')));
@@ -107,7 +107,7 @@ try {
   await sample.locator('#open-sample').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
   await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
-  assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
+  assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, disabled refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
   await page.goto('http://127.0.0.1:4173/');
   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   await page.locator('#fallback').setInputFiles({name:'sample.md',mimeType:'text/markdown',buffer:readFileSync('web/authorities/business-design.md')});
