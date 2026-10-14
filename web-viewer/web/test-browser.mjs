@@ -1,3 +1,4 @@
+import {verifyLayoutReset} from './test-layout-reset-browser.mjs';
 import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
 import {verifySaveState} from './test-save-state-browser.mjs';
@@ -50,6 +51,7 @@ try {
    {name:'sourceSharing',run:()=>verifySourceSharing(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
+   {name:'layoutReset',run:()=>verifyLayoutReset(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'emptyState',run:()=>verifyEmptyState(browser)},

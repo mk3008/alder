@@ -18,6 +18,9 @@ export class RouteCache {
   private router: (options: RouteOptions) => EdgeRoute;
   constructor(router: (options: RouteOptions) => EdgeRoute = routeEdge) { this.router = router; }
 
+  /** Explicit whole-layout changes need a fresh route pass for this tab only. */
+  invalidate(tab: object): void { this.tabs.delete(tab); }
+
   update(tab: object, design: object, nodes: readonly RouteNode[], relations: readonly Relation[]): readonly (EdgeRoute | undefined)[] {
     const structure = JSON.stringify([
       nodes.map(n => [n.id, n.width, n.height]),
