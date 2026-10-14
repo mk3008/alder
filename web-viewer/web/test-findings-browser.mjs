@@ -52,6 +52,14 @@ export async function verifyFindings(browser){
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
     assert.equal(await page.locator('#node-list [data-finding-target]').count(),2);
     assert.equal(await page.locator('#node-list img,#node-list script').count(),0);
+    assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
+    await page.locator('#node-list [data-finding-target="受付情報"]').focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false,'related target preserves closed right drawer');
+    if(width<=800)await page.locator('#node-list-toggle').click();
+    await page.locator('#drawer').click();assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),true);
+    await page.locator('#node-list [data-finding-target="依頼を受け付ける"]').focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),true,'related target preserves open right drawer');assert.match(await page.locator('#detail').textContent(),/依頼を受け付ける/);
+    await page.locator('#drawer').click();if(width<=800)await page.locator('#node-list-toggle').click();
     await page.locator('#node-list [data-finding-target="受付情報"]').click();
     assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'受付情報');assert.match(await page.locator('#detail').textContent(),/受付情報/);assert.equal(await page.locator('#detail .finding-card').count(),0);if(width<=800)await page.locator('#node-list-toggle').click();
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
