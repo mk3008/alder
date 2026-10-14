@@ -115,3 +115,7 @@ header{flex-shrink:0}
 .toolbar #layout-lock{margin-left:auto}
 /* Empty documents have no graph controls; keep the explanation unobscured. */
 .toolbar[hidden]{display:none}
+
+/* Persistent save feedback has its own compact row; it never covers controls. */
+#save-state{flex-shrink:0;min-height:24px;padding:3px 12px;font-size:11px;line-height:18px;background:var(--panel);color:var(--fg);border-bottom:1px solid var(--subtle);overflow-wrap:anywhere}
+#save-state[data-state=error],#save-state[data-state=conflict],#save-state[data-state=protected]{font-weight:650}

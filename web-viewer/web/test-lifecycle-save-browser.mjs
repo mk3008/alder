@@ -9,7 +9,11 @@ export async function verifyLifecycleSave(browser,{url='http://127.0.0.1:4173/',
  for(const committed of [true,false])for(const kind of ['reload','navigation'])for(let run=1;run<=(committed?1:3);run++){
   const context=await browser.newContext();
   try{
-   const page=await context.newPage();page.setDefaultTimeout(5000);page.setDefaultNavigationTimeout(10000);await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);
+   const page=await context.newPage();let beforeUnloadPrompts=0;
+   // This diagnostic explicitly chooses to leave, even if unsaved-work protection
+   // warns. Dismissing/remaining and clean departures are tested in save-state.
+   page.on('dialog',async dialog=>{assert.equal(dialog.type(),'beforeunload');beforeUnloadPrompts++;await dialog.accept();});
+   page.setDefaultTimeout(5000);page.setDefaultNavigationTimeout(10000);await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);
    // Native storage must have committed the empty baseline before this case.
    await page.locator('#theme').click();
    await waitForExactRead(()=>page.evaluate(readSessionInPage),{dark:true,tabs:0},{project:value=>({dark:value?.dark,tabs:value?.tabs?.length})});
@@ -21,7 +25,7 @@ export async function verifyLifecycleSave(browser,{url='http://127.0.0.1:4173/',
    await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.evaluate(async ({kind,committed})=>{if(!committed)await document.getElementById('source-submit').onclick();if(kind==='reload')location.reload();else location.href='about:blank';},{kind,committed})]);
    if(kind==='navigation')await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);
    const observation=await page.evaluate(()=>({tabs:document.querySelectorAll('.tab').length,text:document.getElementById('detail').textContent,status:document.getElementById('status-text').textContent}));
-   const retained=observation.tabs===1&&observation.text.includes('Synthetic lifecycle');results.push({kind,run,committed,retained,tabs:observation.tabs,status:observation.status});
+   const retained=observation.tabs===1&&observation.text.includes('Synthetic lifecycle');results.push({kind,run,committed,retained,tabs:observation.tabs,status:observation.status,beforeUnloadPrompts,confirmationPolicy:'accept and leave'});
   }finally{await context.close();}
  }
  const result={browser:browser.version(),model:'isolated local Chromium, native reload/navigation',expectLoss,results,immediateDeparture:{retained:results.filter(r=>!r.committed&&r.retained).length,lost:results.filter(r=>!r.committed&&!r.retained).length,guaranteed:false}};console.log('LIFECYCLE_SAVE '+JSON.stringify(result));

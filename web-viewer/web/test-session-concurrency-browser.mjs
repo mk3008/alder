@@ -261,6 +261,9 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
     await assertConflict(b);await assertLocalWork(b,initialKeys);assert.deepEqual(await read(a),committedA);
    }
    await b.waitForTimeout(260);assert.deepEqual(await read(a),committedA,'queued timers cannot overwrite the winner');
+   // Deliberately discard this stale page only after checking all local work.
+   // The separate save-state suite verifies dismissal keeps the user on-page.
+   b.once('dialog',async dialog=>{assert.equal(dialog.type(),'beforeunload');await dialog.accept();});
    await b.reload();await ready(b);
    assert.deepEqual(await keys(b),committedA.current.tabs.map(tab=>tab.key),'reload restores the winner including deletion');
    await select(b,shared);

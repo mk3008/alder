@@ -1,3 +1,4 @@
+import {verifySaveState} from './test-save-state-browser.mjs';
 import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
 import {verifyLifecycleSave} from './test-lifecycle-save-browser.mjs';
 import {verifyToolbarSettings} from './test-toolbar-settings-browser.mjs';
@@ -38,6 +39,7 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
@@ -53,8 +55,10 @@ try {
    ...[['routeCache',verifyRouteCache],['previewIsolation',verifyPreviewIsolation],['layoutLock',verifyLayoutLock],['documentOrder',verifyDocumentOrder],['facingRoutes',verifyFacingRoutes],['nodeDrawer',verifyNodeDrawer],['tabStrip',verifyTabStrip],['scopeOption',verifyScopeOption],['labelLayout',verifyLabelLayout],['edgeOption',verifyEdgeOption],['exceptionOption',verifyExceptionOption],['scopeShortcut',verifyScopeShortcut]].map(([name,verify])=>({name,run:()=>verify(browser)})),
    ...['fixed-drawer','drawer-only','combined'].map(mode=>({name:'scopeGeometry:'+mode,run:()=>diagnoseScopeGeometry(browser,mode)})),
    {name:'legacySmoke',run:async()=>{
+  page.on('dialog',async dialog=>{errors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
+  const clean=p=>p.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#save-state')?.dataset.state));
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];
-  sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));
+  sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));sample.on('dialog',async dialog=>{sampleErrors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
   await sample.goto('http://127.0.0.1:4173/');await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('#open-sample').textContent(),'サンプルを開く');
   const historyLength=await sample.evaluate(()=>history.length),startURL=sample.url();sampleRequests.length=0;
@@ -75,8 +79,8 @@ try {
   await sample.locator('#layout-lock').click();const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
   const sampleAfter=await sampleFirst.boundingBox();assert.ok(sampleAfter.x>sampleBefore.x+30);
   await sample.locator('#theme').click();await sample.locator('#refresh').click();assert.equal(await sample.locator('.tab').count(),1);
-  await sample.locator('#status-close').click();await sample.waitForTimeout(300);assert.deepEqual(sampleRequests,[]);
-  await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
+  await sample.locator('#status-close').click();await clean(sample);assert.deepEqual(sampleRequests,[]);
+  await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
   assert.ok(sampleRequests.every(url=>url.startsWith('http://127.0.0.1:4173/')));
   await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});assert.equal(await sample.locator('#empty').isVisible(),true);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);
   assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);
@@ -84,10 +88,10 @@ try {
   await sample.locator('#out').click();await sample.locator('#viewport').evaluate(e=>{e.scrollLeft=100;e.scrollTop=40;});await sample.waitForTimeout(250);
   const retainedSampleLayout=await sampleLayout(),retainedSampleView=await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleZoom=await sample.locator('#zoom').textContent();
   assert.ok(retainedSampleView[0]>0);
-  await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),0);assert.equal(await sample.locator('#empty').isVisible(),true);
   await sample.locator('#open-sample').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
-  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
   assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
   await page.goto('http://127.0.0.1:4173/');
@@ -120,7 +124,7 @@ try {
   await page.locator('#status-text').filter({hasText:'表示できません'}).waitFor();assert.ok(await page.locator('.node').count()>0);
   await page.keyboard.press('Escape');assert.equal(await page.locator('#source-dialog').isVisible(),false);
   await page.locator('#status-close').click();
-  await page.waitForTimeout(300);await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await clean(page);await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await page.locator('.node.selected').getAttribute('data-node'),id);
   assert.deepEqual(await page.locator('.node').first().boundingBox(),after);
   checks.push('invalid text keeps previous graph; Escape closes; reload restores selection/position');
@@ -130,7 +134,7 @@ try {
   await page.locator('#open-url').click();await page.locator('#source-url').fill(source);await page.locator('#source-submit').click();
   await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden,{},{timeout:45000});
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[source]);
-  await page.waitForTimeout(300);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await clean(page);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
   assert.deepEqual(errors,[]);

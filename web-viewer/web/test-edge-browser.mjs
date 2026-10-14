@@ -5,7 +5,7 @@ import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 export async function verifyEdgeOption(browser){
   const page=await browser.newPage({viewport:{width:1280,height:960}}),errors=[];
-  page.on('pageerror',e=>errors.push(e.message));
+  page.on('pageerror',e=>errors.push(e.message));page.on('dialog',async dialog=>{errors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
   try {
     await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     assert.equal(await page.locator('#prefer-write').isChecked(),false);
@@ -24,7 +24,7 @@ export async function verifyEdgeOption(browser){
       assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),positions);
     };
     await assertEdges();await page.locator('#out').click();await page.locator('#theme').click();await assertEdges();
-    await page.waitForTimeout(300);await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+    await page.waitForFunction(()=>document.querySelector('#save-state')?.dataset.state==='saved');await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     assert.equal(await page.locator('#prefer-write').isChecked(),true);await assertEdges();
     await openDisplaySettings(page);await page.locator('#prefer-write').uncheck();assert.equal(await page.locator('.edge').count(),relations.length);assert.equal(await page.locator('.edge-label').count(),relations.length);
     assert.deepEqual(errors,[]);return {all:relations.length,hiddenReads:hidden.size,visible:expected.length,checks:'default OFF; paired Reads/labels hidden; standalone Reads/Writes/exceptions retained; selection, positions, zoom/theme and reload'};

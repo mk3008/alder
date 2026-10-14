@@ -18,7 +18,7 @@ const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:f
  b.onLoad({filter:/\/src\/(main|routing|session)\.ts$/},args=>{
   let text=readFileSync(args.path,'utf8');
   if(args.path.endsWith('/main.ts')){
-   for(const [needle,name] of [['function graph(){','graph'],['function render(){','render'],['function persist(delay=180){','persist'],['const drawEdges=()=>{','drawEdges']])text=replaceOnce(text,needle,needle+count(name));
+   for(const [needle,name] of [['function graph(){','graph'],['function render(){','render'],['function persist(delay=180,changed=true){','persist'],['const drawEdges=()=>{','drawEdges']])text=replaceOnce(text,needle,needle+count(name));
    text+='\nglobalThis.__toolbarState=()=>structuredClone(state);';
   }else if(args.path.endsWith('/routing.ts'))text=replaceOnce(text,'const source=nodes.find',count('routes')+'const source=nodes.find');
   else{
