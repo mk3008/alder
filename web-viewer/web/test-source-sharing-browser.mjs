@@ -1,0 +1,157 @@
+// Import-safe #201 native browser gate. The caller owns browser and local server.
+// All documents are synthetic HTTPS route fixtures. Native DOM, hash navigation,
+// IndexedDB, anonymous fetch/CORS behavior and keyboard activation are exercised.
+// Clipboard writes are captured at the API boundary; OS clipboard permission and
+// a live third-party Markdown host are deliberately outside this bounded gate.
+// Nested preview paths mount the same local built bytes through route rewriting;
+// this is a modeled static mount, not evidence about a public deployment.
+import assert from 'node:assert/strict';
+import {runBrowserCases} from './browser-cases.mjs';
+import {installSaveStateControls} from './test-save-state-browser.mjs';
+import {concurrencyBodies,changedMarkdown,readConcurrencyRecord,seedLegacyRecord} from './test-session-concurrency-browser.mjs';
+
+const source='https://source-sharing.test/public/design.md',latest='https://source-sharing.test/public/latest.md',body=concurrencyBodies.shared;
+const fragment=value=>'#source='+encodeURIComponent(value);
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const databaseFor=url=>{const m=new URL(url).pathname.match(/\/preview\/pr-(\d+)\/([A-Za-z0-9][A-Za-z0-9._-]*)\/(?:index\.html)?$/);return m?`alder-web-viewer:preview:pr-${m[1]}:${m[2]}`:'alder-web-viewer';};
+function observeSharing({fastTimeout=false}={}){
+ globalThis.__sharing={requests:[],copies:[],failClipboard:false,replacements:[]};
+ const fetchOriginal=globalThis.fetch.bind(globalThis),replace=history.replaceState.bind(history);
+ globalThis.fetch=(url,options={})=>{globalThis.__sharing.requests.push({url:String(url),hash:location.hash,method:options.method,mode:options.mode,credentials:options.credentials,referrerPolicy:options.referrerPolicy,redirect:options.redirect,accept:options.headers?.Accept,signal:!!options.signal});return fetchOriginal(url,options);};
+ history.replaceState=(...args)=>{globalThis.__sharing.replacements.push(args[2]);return replace(...args);};
+ Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{if(globalThis.__sharing.failClipboard)throw new DOMException('Synthetic clipboard rejection','NotAllowedError');globalThis.__sharing.copies.push(text);}}});
+ if(fastTimeout){const original=globalThis.setTimeout.bind(globalThis);globalThis.setTimeout=(fn,ms,...args)=>original(fn,ms===30000?40:ms,...args);}
+}
+const ready=page=>page.waitForFunction(()=>document.getElementById('open-text')&&!document.getElementById('open-text').disabled);
+const tabs=page=>page.locator('.tab').evaluateAll(elements=>elements.map(el=>el.dataset.key));
+const graph=page=>page.locator('#nodes').innerHTML();
+const record=page=>page.evaluate(readConcurrencyRecord,databaseFor(page.url()));
+const observation=page=>page.evaluate(()=>globalThis.__sharing);
+async function saved(page){await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='saved');return record(page);}
+async function openText(page,value=body){await page.locator('#open-text').click();await page.locator('#source-text').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
+async function openURL(page,value=source){await page.locator('#open-url').click();await page.locator('#source-url').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
+async function closeEditor(page){await page.locator('#source-cancel').click();if(await page.locator('#source-close-dialog').isVisible())await page.locator('#source-close-confirm').click();await page.locator('#source-dialog').waitFor({state:'hidden'});}
+async function sharedHash(page,value){await page.evaluate(value=>{location.hash=value;},value);await page.waitForFunction(()=>location.hash==='');}
+async function share(page,eligible=true){
+ const button=page.locator('#share-source');assert.equal(await button.isVisible(),true);assert.equal(await button.evaluate(el=>el.disabled),false);assert.ok(await button.evaluate(el=>el.tabIndex>=0));assert.equal(await button.getAttribute('aria-disabled')==='true',!eligible);
+ const before=(await observation(page)).copies.length;await button.focus();assert.equal(await button.evaluate(el=>el===document.activeElement),true);await page.keyboard.press('Enter');
+ if(eligible)await page.waitForFunction(n=>globalThis.__sharing.copies.length===n+1,before);
+ else{await page.waitForFunction(()=>!document.getElementById('status').hidden&&!!document.getElementById('status-text').textContent.trim());assert.equal((await observation(page)).copies.length,before);}
+ return (await observation(page)).copies.at(-1);
+}
+async function settledError(page){await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await ready(page);}
+async function fixture(browser,url,{fastTimeout=false,controls={},fetcher}={}){
+ const context=await browser.newContext({viewport:{width:1280,height:960}}),errors=[],unexpected=[],requests=[],origin=new URL(url).origin;
+ await context.addInitScript(installSaveStateControls,controls);await context.addInitScript(observeSharing,{fastTimeout});
+ const behavior={fetcher};
+ await context.route('**/*',async route=>{
+  const request=route.request(),target=new URL(request.url());
+  if(target.origin===origin){
+   // Vite's relative asset base requires an explicit same-byte nested mount.
+   if(/^\/preview\/pr-201\/[^/]+\//.test(target.pathname)){const path=target.pathname.replace(/^\/preview\/pr-201\/[^/]+\//,'/');return route.fulfill({response:await route.fetch({url:origin+path+target.search})});}
+   return route.continue();
+  }
+  if(target.origin!=='https://source-sharing.test'){unexpected.push(target.href);return route.abort();}
+  requests.push({url:target.href,method:request.method(),headers:request.headers()});
+  if(behavior.fetcher)return behavior.fetcher(route);
+  return route.fulfill({status:200,headers:{'content-type':'text/markdown','access-control-allow-origin':'*'},body:target.href===latest?changedMarkdown:body});
+ });
+ const page=await context.newPage();page.setDefaultTimeout(8000);page.setDefaultNavigationTimeout(12000);page.on('pageerror',error=>errors.push(error.message));
+ return {context,page,errors,unexpected,requests,behavior,async start(target=url){await page.goto(target);await ready(page);return page;},async close(){for(const p of context.pages()){try{await p.evaluate(()=>globalThis.__saveStateControl?.dispose());}catch{}}await context.close();},check(){assert.deepEqual(errors,[],'no unhandled page errors');assert.deepEqual(unexpected,[],'no unapproved external requests');assert.ok(requests.every(r=>r.method==='GET'),'source fetching never writes');}};
+}
+async function withFixture(browser,url,run,options){const f=await fixture(browser,url,options);try{await f.start();const result=await run(f);f.check();return result;}finally{await f.close();}}
+
+export async function verifySourceSharing(browser,{url='http://127.0.0.1:4173/'}={}){
+ assert.ok(['127.0.0.1','localhost','[::1]'].includes(new URL(url).hostname),'source-sharing gate requires an isolated local server');
+ const cases=[],add=(name,run,options)=>cases.push({name,run:()=>withFixture(browser,url,run,options)});
+ cases.push({name:'source sharing: sender and recipient use independent browser contexts and source-only preview link',run:async()=>{
+  const preview=new URL('/preview/pr-201/source-sharing/index.html?private=viewer#alder-sample',url).href;
+  const sender=await fixture(browser,preview),recipient=await fixture(browser,preview);
+  try{
+   await sender.start();const a=sender.page;await openText(a);await openURL(a);await a.locator('#theme').click();await a.locator('#drawer').click();await a.locator('.node').first().click();await a.locator('#in').click();await saved(a);
+   const before=await record(a),link=await share(a);assert.equal(link,new URL('/preview/pr-201/source-sharing/index.html',url).href+fragment(source));assert.equal(new URL(link).search,'');assert.equal(decodeURIComponent(new URL(link).hash.slice(8)),source);assert.deepEqual(await record(a),before);
+   await recipient.start(link);const b=recipient.page;await b.waitForFunction(()=>document.querySelectorAll('.tab').length===1);const after=await saved(b);
+   assert.equal(after.current.tabs.length,1);assert.equal(after.current.tabs[0].source.url,source);assert.equal(after.current.tabs[0].design.markdown,body);assert.equal(after.current.tabs[0].draft,undefined);assert.equal(after.current.tabs[0].edited===true,false);assert.equal(after.current.tabs[0].zoom,1);assert.equal(after.current.tabs[0].selected,undefined);assert.equal(after.current.dark,false);assert.equal(after.current.drawer,true);assert.equal(after.generation,1);assert.equal(new URL(b.url()).hash,'');assert.equal(recipient.requests.length,1);
+   const observed=await observation(b);assert.equal(observed.requests[0].hash,'');assert.equal(observed.replacements.length,1);assert.equal(observed.requests[0].credentials,'omit');assert.equal(observed.requests[0].referrerPolicy,'no-referrer');assert.equal(observed.requests[0].mode,'cors');assert.equal(observed.requests[0].redirect,'error');assert.equal(observed.requests[0].method,'GET');assert.equal(observed.requests[0].signal,true);assert.match(observed.requests[0].accept,/text\/markdown/);assert.equal(recipient.requests[0].headers.referer,undefined);assert.equal(recipient.requests[0].headers.cookie,undefined);
+   await b.reload();await ready(b);assert.equal(recipient.requests.length,1,'consumed link never automatically re-fetches on restore');assert.equal((await observation(b)).requests.length,0);assert.deepEqual(await record(b),after);assert.equal((await tabs(a)).length,2);assert.equal((await tabs(b)).length,1);
+   sender.check();recipient.check();return {independentContexts:2,recipientTabs:1,sourceRequests:1,previewPath:new URL(link).pathname,clipboardBoundaryCaptured:true,previewMount:'same local built bytes mounted through route rewriting'};
+  }finally{await sender.close();await recipient.close();}
+ }});
+ add('source sharing: origin restrictions, accessible reason control and responsive geometry',async({page})=>{
+  await openText(page);await share(page,false);
+  await page.locator('#fallback').setInputFiles({name:'synthetic-local.md',mimeType:'text/markdown',buffer:Buffer.from(body)});await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await saved(page);await share(page,false);
+  await page.evaluate(()=>document.getElementById('open-sample').click());await saved(page);await share(page,false);
+  for(const value of [source+'?token=synthetic',source+'?',source+'#section',source+'#']){await openURL(page,value);await share(page,false);}
+  await openURL(page);const geometry=[];
+  for(const width of [1280,800,393,320])for(const theme of ['light','dark']){
+   await page.setViewportSize({width,height:800});if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+   const button=page.locator('#share-source');await button.scrollIntoViewIfNeeded();const measured=await button.evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height,hit:el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),strip:!!el.closest('.tab-strip'),name:el.getAttribute('aria-label')};});
+   assert.ok(measured.x>=0&&measured.right<=width+.5,'share control fits '+width);assert.ok(measured.width>=40&&measured.height>=40);assert.equal(measured.hit,true,'share target is not covered');assert.equal(measured.strip,true);assert.ok(measured.name?.trim());await share(page);geometry.push({width,theme,...measured});
+   if(process.env.SOURCE_SHARING_SCREENSHOTS&&(width===1280||width===320))await page.screenshot({path:process.env.SOURCE_SHARING_SCREENSHOTS+`/source-sharing-${width}-${theme}.png`});
+  }
+  return {geometry,reasonControlsKeyboardOperable:true};
+ });
+ add('source sharing: opening editor is eligible; draft and Apply stay blocked across restore; refresh re-enables',async({page,requests})=>{
+  await openURL(page);await page.locator('#edit-markdown').click();await share(page);await page.locator('#source-text').fill(changedMarkdown);await share(page,false);await closeEditor(page);await saved(page);
+  await page.reload();await ready(page);assert.equal(requests.length,1);await share(page,false);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});await saved(page);await share(page,false);
+  await page.reload();await ready(page);assert.equal(requests.length,1);await share(page,false);page.once('dialog',dialog=>dialog.accept());await page.locator('#refresh').click();await page.waitForFunction(()=>document.getElementById('share-source').getAttribute('aria-disabled')!=='true');await saved(page);await share(page);assert.equal(requests.length,2);assert.equal((await record(page)).current.tabs[0].edited,false);
+  await page.locator('#edit-markdown').click();await page.locator('#source-text').fill(changedMarkdown);await share(page,false);await page.locator('#source-text').fill(body);await share(page);await closeEditor(page);await saved(page);
+  return {draftRestoreBlocked:true,appliedRestoreBlocked:true,explicitRefreshReenabled:true,exactRevertReenabled:true,requests:requests.length};
+ });
+ add('source sharing: rejected and unavailable clipboard report failure without mutation',async({page,requests})=>{
+  await openURL(page);const before=await record(page),old=await graph(page);await page.evaluate(()=>{globalThis.__sharing.failClipboard=true;});await page.locator('#share-source').click();await settledError(page);assert.equal((await observation(page)).copies.length,0);
+  await page.evaluate(()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:undefined});});await page.locator('#share-source').click();await settledError(page);assert.deepEqual(await record(page),before);assert.equal(await graph(page),old);assert.equal(requests.length,1);return {clipboardFailurePreservesState:true};
+ });
+ for(const invalid of ['#source=%','#source=',fragment('http://source-sharing.test/a.md'),fragment('https://name:pass@source-sharing.test/a.md'),fragment(source+'?'),fragment(source+'#')])add('source sharing: invalid '+invalid+' is consumed before any request',async({page,requests})=>{
+  const before=await openText(page),old=await graph(page);await sharedHash(page,invalid);await settledError(page);assert.equal(requests.length,0);assert.equal((await tabs(page)).length,1);assert.equal(await graph(page),old);assert.deepEqual(await record(page),before);await wait(230);assert.equal(requests.length,0);return {requests:0,existingTabPreserved:true};
+ });
+ const failedResponses=[
+  ['HTTP 404',route=>route.fulfill({status:404,headers:{'access-control-allow-origin':'*'},body:'not found'})],
+  ['native CORS rejection',route=>route.fulfill({status:200,headers:{'content-type':'text/markdown','access-control-allow-origin':'https://different-origin.test'},body})],
+  ['redirect rejection',route=>route.fulfill({status:302,headers:{location:latest,'access-control-allow-origin':'*'},body:''})],
+  ['HTML content type',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/html'},body:'<html>synthetic sign in</html>'})],
+  ['HTML disguised as text',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/plain'},body:'<!doctype html><html>synthetic sign in</html>'})],
+  ['invalid graph',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body:'# invalid design'})],
+  ['oversized body',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body:'x'.repeat(2*1024*1024+1)})],
+  ['network rejection',route=>route.abort('failed')],
+ ];
+ for(const [name,fetcher] of failedResponses)add('source sharing: '+name+' retains existing graph and DB without retry',async({page,requests})=>{
+  const before=await openText(page),old=await graph(page);await sharedHash(page,fragment(source));await settledError(page);assert.equal(new URL(page.url()).hash,'');assert.equal((await tabs(page)).length,1);assert.equal(await graph(page),old);assert.deepEqual(await record(page),before);await wait(230);assert.equal(requests.length,1);await page.reload();await ready(page);assert.equal(requests.length,1);assert.deepEqual(await record(page),before);return {requests:1,reloadRequests:0,existingSessionUnchanged:true};
+ },{fetcher});
+ add('source sharing: timeout aborts once and preserves session (accelerated 30-second timer)',async({page,requests})=>{
+  const before=await openText(page),old=await graph(page);await sharedHash(page,fragment(source));await settledError(page);assert.match(await page.locator('#status-text').textContent(),/中止|再試行/);assert.equal(await graph(page),old);assert.deepEqual(await record(page),before);await wait(230);assert.equal(requests.length,1);return {requests:1,timeoutAccelerated:true};
+ },{fastTimeout:true,fetcher:async route=>{await wait(500);try{await route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body});}catch{}}});
+ add('source sharing: native transaction commits before publishing one new tab',async({page})=>{
+  const before=await openText(page),old=await graph(page);await page.evaluate(()=>{globalThis.__saveStateControl.holdWrites=true;});await sharedHash(page,fragment(source));await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);assert.equal((await tabs(page)).length,1);assert.equal(await graph(page),old);assert.equal(await page.evaluate(()=>globalThis.__saveStateControl.writes[1].complete),false);
+  await page.evaluate(()=>globalThis.__saveStateControl.writes[1].release());await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);const after=await saved(page);assert.deepEqual(after.current.tabs[0],before.current.tabs[0]);assert.equal(after.current.tabs[1].source.url,source);assert.equal(after.generation,before.generation+1);return {commitBeforePublication:true,addedTabs:1};
+ });
+ for(const fault of ['Error','QuotaExceededError','abort'])add('source sharing: native '+fault+' import failure rolls back session and generation',async({page,requests})=>{
+  const before=await openText(page),old=await graph(page);await page.evaluate(fault=>{if(fault==='abort')globalThis.__saveStateControl.holdWrites=true;else{globalThis.__saveStateControl.failWrites=1;globalThis.__saveStateControl.failWriteName=fault;}},fault);
+  await sharedHash(page,fragment(source));if(fault==='abort'){await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);await page.evaluate(()=>globalThis.__saveStateControl.writes[1].abort());}await settledError(page);assert.equal((await tabs(page)).length,1);assert.equal(await graph(page),old);assert.deepEqual(await record(page),before);await wait(230);assert.equal(requests.length,1);assert.deepEqual(await record(page),before);return {nativeRollback:true,failedTabAdded:false};
+ });
+ add('source sharing: protected existing storage remains byte-equivalent',async({page})=>{
+  const bad={tabs:'synthetic corrupt session',privateMarker:'retain original bytes'};await page.evaluate(seedLegacyRecord,{value:bad,database:databaseFor(page.url())});await page.evaluate(value=>history.replaceState(null,'',value),url+fragment(source));await page.reload();await ready(page);await page.waitForFunction(()=>location.hash==='');await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='protected');assert.equal((await tabs(page)).length,0);assert.deepEqual((await record(page)).current,bad);assert.equal(await page.evaluate(()=>globalThis.__saveStateControl.writes.length),0);return {protectedBytesUnchanged:true};
+ });
+ add('source sharing: rapidly superseded request never publishes obsolete document',async({page,behavior,requests})=>{
+  await openText(page);let release;const held=new Promise(resolve=>{release=resolve;});behavior.fetcher=async route=>{if(route.request().url()===source)await held;try{return await route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body:route.request().url()===source?body:changedMarkdown});}catch{}};
+  await sharedHash(page,fragment(source));await page.waitForFunction(()=>globalThis.__sharing.requests.length===1);await sharedHash(page,fragment(latest));await page.waitForFunction(()=>globalThis.__sharing.requests.length===2);release();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await wait(230);const after=await saved(page);assert.equal(after.current.tabs.length,2);assert.equal(after.current.tabs[1].source.url,latest);assert.equal(after.current.tabs.some(t=>t.source?.url===source),false);assert.equal(requests.length,2);return {latestIntentWins:true,requests:2,addedTabs:1};
+ });
+ add('source sharing: held native commit keeps only latest queued source and never fetches superseded hash',async({page,requests})=>{
+  const before=await openText(page),c='https://source-sharing.test/public/last.md';await page.evaluate(()=>{globalThis.__saveStateControl.holdWrites=true;});await sharedHash(page,fragment(source));await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);await sharedHash(page,fragment(latest));await sharedHash(page,fragment(c));assert.equal(requests.length,1);assert.equal((await tabs(page)).length,1);
+  await page.evaluate(()=>globalThis.__saveStateControl.writes[1].release());await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===3);assert.deepEqual(requests.map(r=>r.url),[source,c]);assert.equal((await tabs(page)).length,2);await page.evaluate(()=>globalThis.__saveStateControl.writes[2].release());await page.waitForFunction(()=>document.querySelectorAll('.tab').length===3);const after=await saved(page);assert.deepEqual(after.current.tabs.map(t=>t.source?.url).filter(Boolean),[source,c]);assert.equal(after.current.active,after.current.tabs[2].key);assert.equal(after.generation,before.generation+2);assert.equal(new URL(page.url()).hash,'');return {latestQueuedSourceRetained:true,atomicImports:2,supersededSourceFetched:false};
+ });
+ add('source sharing: unrelated hash clears queued source during native commit',async({page,requests})=>{
+  const before=await openText(page);await page.evaluate(()=>{globalThis.__saveStateControl.holdWrites=true;});await sharedHash(page,fragment(source));await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);await sharedHash(page,fragment(latest));await page.evaluate(()=>{location.hash='#unrelated';});await page.waitForFunction(()=>location.hash==='#unrelated');await wait(30);await page.evaluate(()=>globalThis.__saveStateControl.writes[1].release());await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await wait(230);const after=await saved(page);assert.deepEqual(requests.map(r=>r.url),[source]);assert.equal(after.current.tabs.length,2);assert.equal(after.current.tabs[1].source.url,source);assert.equal(after.generation,before.generation+1);assert.equal(new URL(page.url()).hash,'#unrelated');return {queuedSourceCanceled:true,atomicCommitRetained:true};
+ });
+ add('source sharing: queued source drains after native Apply has finished publishing edited document',async({page,requests})=>{
+  await openText(page);await page.locator('#edit-markdown').click();await page.locator('#source-text').fill(changedMarkdown);await page.evaluate(()=>{globalThis.__saveStateControl.holdWrites=true;});await page.locator('#source-submit').click();await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);await sharedHash(page,fragment(source));assert.equal(requests.length,0);
+  await page.evaluate(()=>globalThis.__saveStateControl.writes[1].release());await page.locator('#source-dialog').waitFor({state:'hidden'});await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===3);assert.equal(requests.length,1);await page.evaluate(()=>globalThis.__saveStateControl.writes[2].release());await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);const after=await saved(page);assert.equal(after.current.tabs[0].design.markdown,changedMarkdown);assert.equal(after.current.tabs[0].edited,true);assert.equal(after.current.tabs[1].source.url,source);assert.equal(after.generation,3);return {applyPreserved:true,queuedSourceImported:true};
+ });
+ add('source sharing: unrelated hash cancels pending share and existing sample hash is left intact',async({page,requests,behavior})=>{
+  await page.goto(url+'#alder-sample');await ready(page);assert.equal(new URL(page.url()).hash,'#alder-sample');assert.equal(requests.length,0);await page.locator('#open-sample').click();const before=await saved(page);await share(page,false);
+  let release;const pending=new Promise(resolve=>{release=resolve;});behavior.fetcher=async route=>{await pending;try{await route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body});}catch{}};
+  await sharedHash(page,fragment(source));await page.waitForFunction(()=>globalThis.__sharing.requests.length===1);await page.evaluate(()=>{location.hash='#unrelated';});await ready(page);release();await wait(230);assert.equal(new URL(page.url()).hash,'#unrelated');assert.equal((await tabs(page)).length,1);assert.deepEqual(await record(page),before);return {sampleHashPreserved:true,unknownHashCancelsPending:true};
+ });
+ const results=await runBrowserCases(cases);
+ return {results,limitations:'Synthetic HTTPS routes only; no private or live external documents. Clipboard is captured/rejected at API boundary. Timeout is accelerated. Native DOM/CORS/hash/IndexedDB and keyboard behavior are exercised. Nested preview static mounting is modeled through same-byte route rewriting, not a public deployment check.'};
+}
