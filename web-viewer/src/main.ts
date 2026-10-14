@@ -133,8 +133,9 @@ $('reset-layout').onclick=()=>{
   // Stop every gesture before replacing positions so late pointer events cannot
   // move the reset graph. The layout lock itself remains the user's choice.
   touch.cancel();nodeDrag.cancel();pan=undefined;capture();
-  const next=resetLayout(t);if(next===t)return;
-  Object.assign(t,next);routeCache.invalidate(t);render();persist();
+  const next=resetLayout(t);if(next!==t)Object.assign(t,next);
+  // Even initial coordinates can retain routes computed during an earlier drag.
+  routeCache.invalidate(t);render();if(next!==t)persist();
 };
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&displaySettingsOpen&&$('source-dialog').hidden){e.preventDefault();setDisplaySettings(false,true);}});
 // Capture may precede the native scroll event (for example a toolbar click).

@@ -48,7 +48,7 @@ const tab={key:'reset',name:'Reset',design,positions,scroll:[0,0],zoom:1,viewIns
 const state={tabs:[tab,{...tab,key:'other',name:'Other',positions:{Request:[1500,300],Archive:[2000,1000],Review:[1000,800]},scroll:[600,200],zoom:.5,viewInset:[80,60],canvasOrigin:[100,200],source:{kind:'url',url:'https://example.org/other.md'}}],active:'reset',dark:false,drawer:false,nodeDrawer:false,width:380,preferWrite:true};
 const plain=value=>JSON.parse(JSON.stringify(value));
 const nonLayout=t=>{const {positions,scroll,zoom,viewInset,canvasOrigin,...rest}=t;return rest;};
-const geometry=page=>page.evaluate(()=>({nodes:[...document.querySelectorAll('.node')].map(n=>[n.dataset.node,n.style.left,n.style.top]),edges:[...document.querySelectorAll('.edge,.edge-label')].map(e=>[e.dataset.relation,e.getAttribute('d'),e.getAttribute('x'),e.getAttribute('y')]),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],zoom:document.querySelector('#zoom').textContent}));
+const geometry=page=>page.evaluate(()=>({nodes:[...document.querySelectorAll('.node')].map(n=>{const r=n.getBoundingClientRect();return [n.dataset.node,n.style.left,n.style.top,r.left,r.top,r.width,r.height];}),edges:[...document.querySelectorAll('.edge,.edge-label')].map(e=>[e.dataset.relation,e.getAttribute('d'),e.getAttribute('x'),e.getAttribute('y')]),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],zoom:document.querySelector('#zoom').textContent,nodeOffset:[document.querySelector('#nodes').style.left,document.querySelector('#nodes').style.top],edgeViewBox:document.querySelector('#edges').getAttribute('viewBox')}));
 async function seed(page,value){
  await page.evaluate(value=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session','readwrite'),s=tx.objectStore('session');s.put(value,'current');s.put(1,'generation');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};r.onerror=()=>reject(r.error);}),value);
  await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===3);
@@ -57,7 +57,7 @@ export async function verifyLayoutReset(browser){
  return runBrowserCases([320,393,1280].map(width=>({name:`layout reset ${width}`,run:()=>withToolbarPage({newContext:options=>browser.newContext({...options,hasTouch:width<800})},{width,height:800},async(page,errors)=>{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
   await seed(page,state);const original=await geometry(page);
-  const modified=structuredClone(state);modified.tabs[0].positions={Request:[20,40],Archive:[30,280],Review:[20,160]};modified.tabs[0].viewInset=[0,0];modified.tabs[0].canvasOrigin=[0,0];
+  const modified=structuredClone(state);modified.tabs[0].positions={Request:[20,40],Archive:[30,280],Review:[20,160]};modified.tabs[0].viewInset=[16,12];modified.tabs[0].canvasOrigin=[32,24];
   await seed(page,modified);await page.locator('#layout-lock').click();
   for(const id of ['Request','Review']){
    const box=await page.locator('.node').evaluateAll((nodes,id)=>{const r=nodes.find(n=>n.dataset.node===id).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},id);
@@ -69,6 +69,7 @@ export async function verifyLayoutReset(browser){
   await page.locator('#display-settings-toggle').click();await assertToolbarLayout(page,{open:true});
   const button=page.getByRole('button',{name:'レイアウトを初期値に戻す',exact:true});await button.focus();await page.keyboard.press('Enter');
   const saved=await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1,viewInset:[40,0]});
+  assert.equal(saved.tabs[0].canvasOrigin,undefined,'reset clears the prior camera origin');
   assert.deepEqual(nonLayout(saved.tabs[0]),nonLayout(before.tabs[0]));assert.deepEqual(saved.tabs[1],before.tabs[1]);assert.deepEqual({...saved,tabs:[]},{...before,tabs:[]});
   assert.deepEqual(await geometry(page),original,'nodes, routes, labels and camera match fresh initial rendering');
   assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'false');assert.equal(await page.evaluate(()=>document.activeElement.id),'reset-layout');
