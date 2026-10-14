@@ -225,7 +225,7 @@ function showSource(mode:SourceMode,target?:Tab){
   rememberEditorInput();sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target?.key;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;
   $('source-dialog').hidden=false;$('source-title').textContent=target?`Markdown原文 · ${target.name}`:mode==='url'?'URLを開く':'テキストを入力';
   for(const id of ['url-label','source-url'])$(id).hidden=mode!=='url';for(const id of ['text-label','source-text'])$(id).hidden=mode==='url';
-  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。未反映の編集はこのタブに保持します。「反映する」で保存と再解析を行います。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
+  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
   if(target)sourceText().value=target.draft??target.design.markdown;
   else if(mode==='text')sourceText().value=newTextDraft;
   sourceChrome();(mode==='url'?sourceURL():sourceText()).focus();
