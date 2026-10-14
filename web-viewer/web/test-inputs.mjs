@@ -75,7 +75,7 @@ try {
   await openText(text,multibyte);assert.equal(tabs(text).length,1);assert.equal(graph(text),initial);assert.ok(dialogOpen(text));assert.match(status(text),/2MiB/);assert.equal(text.$('source-text').value,multibyte);await invoke(text,'source-cancel');
   checks.push('text size limit counts UTF-8 bytes, retaining oversized multibyte input');
 
-  assert.equal(text.$('refresh').hidden,true);assert.equal(text.$('refresh').disabled,true);await invoke(text,'refresh');assert.equal(graph(text),initial,'direct refresh cannot change a text document');assert.equal(text.calls.length,0);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
+  assert.equal(text.$('refresh').hidden,false);assert.equal(text.$('refresh').disabled,true);await invoke(text,'refresh');assert.equal(graph(text),initial,'direct refresh cannot change a text document');assert.equal(text.calls.length,0);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
   text.$('source-text').value='# invalid edit';await submit(text);
   assert.equal(graph(text),initial);assert.equal(tabs(text)[0].dataset.key,key);assert.equal(text.$('source-text').value,'# invalid edit');assert.ok(dialogOpen(text));
   text.$('source-text').value=markdown+'\n';await submit(text);assert.equal(dialogOpen(text),false);assert.equal(tabs(text).length,1);assert.equal(tabs(text)[0].dataset.key,key);
@@ -169,8 +169,8 @@ try {
   const keys=tabs(one).map(t=>t.dataset.key);one.w.close();
   const restored=await ready({indexedDB:db});assert.deepEqual(tabs(restored).map(t=>t.dataset.key),keys);assert.equal(restored.calls.length,0);assert.equal(restored.w.document.documentElement.dataset.theme,'dark');assert.equal(restored.$('formattedMarkdownDrawer').hidden,true);
   await invoke(restored,'edit-markdown');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
-  assert.equal(restored.$('refresh').hidden,true,'restored text source hides refresh');
-  for(const index of [0,1,2]){tabs(restored)[index].querySelector('button').click();assert.equal(restored.$('refresh').hidden,index===2,'refresh visibility follows restored active source');assert.equal(restored.$('refresh').disabled,index===2);}assert.equal(restored.calls.length,0,'switching sources never fetches');
+  assert.equal(restored.$('refresh').hidden,false,'restored text source keeps disabled refresh visible');
+  for(const index of [0,1,2]){tabs(restored)[index].querySelector('button').click();assert.equal(restored.$('refresh').hidden,false,'every restored active source keeps refresh visible');assert.equal(restored.$('refresh').disabled,index===2);}assert.equal(restored.calls.length,0,'switching sources never fetches');
   while(tabs(restored).length)await tabs(restored).at(-1).querySelector('.close').onclick();assert.equal(restored.$('refresh').hidden,true,'closing all restored sources hides refresh');assert.equal(restored.$('refresh').disabled,true);await invoke(restored,'refresh');assert.equal(restored.calls.length,0);
   checks.push('file/URL/text tabs and source bodies restore from IndexedDB without automatic network access');
 

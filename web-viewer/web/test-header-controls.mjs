@@ -30,7 +30,7 @@ try{
  let branches=0;function inspect(rules){for(const r of rules){if(r.cssRules?.length){branches++;inspect(r.cssRules);}if(r.selectorText&&[...ids,...actionIDs].some(id=>d.getElementById(id).matches(r.selectorText))){for(const p of ['height','min-height']){const value=r.style.getPropertyValue(p);if(value)assert.equal(value,'40px',`${r.selectorText} ${p}`);}}}}
  inspect(d.styleSheets[0].cssRules);
  d.querySelector('#open-sample').click();for(let i=0;i<120&&!d.querySelector('.node');i++)await new Promise(r=>setTimeout(r,25));
- for(const id of actionIDs){assert.equal(d.getElementById(id).hidden,false);assert.equal(d.getElementById(id).disabled,false);assert.equal(w.getComputedStyle(d.getElementById(id)).display,'flex');}
- assert.deepEqual([...d.querySelectorAll('.tab-strip > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),stripIDs.slice(1),'sample refresh and both exports follow tabs in natural order');
+ for(const id of actionIDs){assert.equal(d.getElementById(id).hidden,false);assert.equal(d.getElementById(id).disabled,id==='refresh');assert.equal(w.getComputedStyle(d.getElementById(id)).display,'flex');}
+ assert.deepEqual([...d.querySelectorAll('.tab-strip > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),stripIDs.slice(2),'disabled sample refresh is skipped while PNG exports and sharing retain natural order');
  console.log(JSON.stringify({tabStripDocumentActions:'passed',headerControls:'passed',controls:ids.length,mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
 }finally{w.close();}

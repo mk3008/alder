@@ -68,7 +68,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    await page.locator('#status-close').click();
    await page.locator('#guide-open-url').click();await page.locator('#source-url').fill('https://viewer-guide.test/design.md');await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
    const refetch=page.waitForRequest('https://viewer-guide.test/design.md');await page.locator('#refresh').click();await refetch;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').count(),1,'native refresh rereads the existing URL document');await page.locator('.close').click();
-   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),false);assert.equal(await page.locator('#refresh').isDisabled(),true);await page.locator('.close').click();
+   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isDisabled(),true);await page.locator('.close').click();
    for(const id of ['guide-open','guide-open-url','guide-open-text','open-sample']){const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();const r=await action.boundingBox();assert.ok(r.height>=44&&r.x>=0&&r.x+r.width<=width,'guide action target '+id);}
    const readme=guide.locator('a');await readme.scrollIntoViewIfNeeded();await readme.focus();
    assert.equal(await readme.evaluate(e=>document.activeElement===e),true);
@@ -76,12 +76,14 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    const bounds=await page.locator('#empty').evaluate(e=>({width:e.getBoundingClientRect().width,scroll:e.scrollWidth}));
    assert.ok(bounds.scroll<=bounds.width+1,'guide has no horizontal overflow');
    if([1440,393,320].includes(width)){if(await page.locator('#status').isVisible())await page.locator('#status-close').click();await readme.scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-end-${width}-${preview?'preview':'production'}.png`});}
-   await page.locator('#open-sample').click();await page.waitForSelector('.node');assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
+   await page.locator('#open-sample').click();await page.waitForSelector('.node');assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isDisabled(),true);
    assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
    const chooserPromise=page.waitForEvent('filechooser');await page.locator('#guide-open').click();const chooser=await chooserPromise;await chooser.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
+   const fileKey=await page.locator('.tab').getAttribute('data-key');await page.locator('#refresh').focus();assert.equal(await page.locator('#refresh').evaluate(el=>document.activeElement===el),true);
+   const reselectPromise=page.waitForEvent('filechooser');await page.keyboard.press('Enter');const reselect=await reselectPromise;await reselect.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').getAttribute('data-key'),fileKey,'native file refresh keeps the same document tab');
    await waitForExactRead(()=>page.evaluate(readSession,preview?'alder-web-viewer:preview:pr-204:always-visible':'alder-web-viewer'),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));

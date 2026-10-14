@@ -245,7 +245,7 @@ function buildGraph(){nodeDrag.cancel();redrawEdges=()=>{};edgeExtent=[0,0];edge
     const cancel=(e:PointerEvent)=>{if(pointer===undefined||pointer!==e.pointerId)return;pointer=undefined;if(!b.isConnected)return;nodeDrag.cancel();capture();persist(180,false);};
     b.onpointercancel=cancel;b.onlostpointercapture=cancel;$('nodes').append(b);});$('zoom').textContent=Math.round(t.zoom*100)+'%';detail();renderNodeList();
 }
-function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||updating.has(t));$('refresh').hidden=!t||t.source?.kind==='text';$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(t));$('edit-markdown').hidden=!t;for(const id of ['open','open-url','open-text','guide-open','guide-open-url','guide-open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();}
+function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(t));$('refresh').hidden=!t;$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(t));$('edit-markdown').hidden=!t;for(const id of ['open','open-url','open-text','guide-open','guide-open-url','guide-open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();}
 // New documents start with extra camera padding on the left. Reconcile and
 // restored tabs keep their existing camera, including an absent legacy inset.
 type PickerWindow=Window & {showOpenFilePicker?: (options:unknown)=>Promise<FileSystemFileHandle[]>};
@@ -288,12 +288,11 @@ async function reselect(t:Tab){
 }
 type PermissionHandle=FileSystemFileHandle & {queryPermission:(o:{mode:'read'})=>Promise<PermissionState>};
 $('refresh').onclick=async()=>{
-  const t=current();if(restoring||documentSaving||closing||!t||t.source?.kind==='text'||updating.has(t))return;
+  const t=current();if(restoring||documentSaving||closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(t))return;
   rememberEditorInput();
   if((t.edited||t.draft!==undefined)&&!window.confirm('ブラウザー内の編集を破棄し、取得元のMarkdownで更新しますか？取得や保存に失敗した場合は編集を保持します。'))return;
   if(sourceTarget===t.key)hideSource();updating.add(t);render();
   try{
-    if(t.source?.kind==='sample'){await replace(t,parseDesign(sampleMarkdown));return;}
     if(t.source?.kind==='url'){const d=parseDesign(await fetchMarkdown(t.source.url));await replace(t,d);return;}
     if(!t.handle){await reselect(t);return;}
     const permission=await (t.handle as PermissionHandle).queryPermission({mode:'read'});
