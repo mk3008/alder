@@ -1,3 +1,4 @@
+import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Native Chromium layout under CDP page scaling, not physical Android/CCT.
 import assert from 'node:assert/strict';
 export async function verifyEditorViewport(browser){
@@ -34,7 +35,7 @@ export async function verifyEditorViewport(browser){
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
    await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
    const camera=()=>page.evaluate(()=>({zoom:document.querySelector('#zoom').textContent,left:document.querySelector('#viewport').scrollLeft,top:document.querySelector('#viewport').scrollTop,nodes:document.querySelector('#nodes').innerHTML}));
-   const before=await camera();await page.locator('#edit-markdown').click();const original=await page.locator('#source-text').inputValue();await page.locator('#source-text').fill(original+'\n');
+   const before=await camera();await ensureDocumentActions(page);await page.locator('#edit-markdown').click();const original=await page.locator('#source-text').inputValue();await page.locator('#source-text').fill(original+'\n');
    const cdp=await context.newCDPSession(page);await cdp.send('Emulation.setPageScaleFactor',{pageScaleFactor:scale});
    evidence.beforeClose=await inspect(page);evidence.playwrightCancelBox=await page.locator('#source-cancel').boundingBox();phase='open confirmation';
    if(input==='pointer'){if(scale===1)await page.locator('#source-cancel').click({timeout:5000});else await clickScaled(page,'#source-cancel');}else await page.keyboard.press('Escape');
@@ -51,7 +52,7 @@ export async function verifyEditorViewport(browser){
    const closed=await page.evaluate(()=>({hidden:document.querySelector('#source-dialog').hidden,style:document.querySelector('#source-close-dialog').style.cssText,scale:visualViewport.scale,header:document.querySelector('header').getBoundingClientRect().toJSON(),visualTop:visualViewport.offsetTop}));
    if(accept)assert.ok(closed.header.bottom>closed.visualTop,'header is reachable before any auto-scrolling locator click');
    assert.equal(closed.hidden,accept);assert.equal(closed.style,'');assert.ok(Math.abs(closed.scale-scale)<.02,'browser scale retained');assert.deepEqual(await camera(),before,'graph layout, zoom and camera retained');
-   if(accept){phase='reopen draft';evidence.closed=closed;if(input==='keyboard'){assert.equal(await page.evaluate(()=>document.activeElement.id),'edit-markdown');await page.keyboard.press('Enter');}else if(scale===1)await page.locator('#edit-markdown').click();else await clickScaled(page,'#edit-markdown');await page.locator('#source-dialog').waitFor({state:'visible'});}
+   if(accept){phase='reopen draft';evidence.closed=closed;if(input==='keyboard'){assert.equal(await page.evaluate(()=>document.activeElement.id),'edit-markdown');await page.keyboard.press('Enter');}else if(scale===1){await ensureDocumentActions(page);await page.locator('#edit-markdown').click();}else await clickScaled(page,'#edit-markdown');await page.locator('#source-dialog').waitFor({state:'visible'});}
    assert.equal(await page.locator('#source-text').inputValue(),original+'\n','draft retained on both choices');
    results.push({...evidence,closed});console.log('EDITOR_VIEWPORT_CASE '+JSON.stringify({...evidence,closed,status:'passed'}));
   }catch(error){
