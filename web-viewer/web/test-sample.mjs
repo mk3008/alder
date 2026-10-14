@@ -54,7 +54,7 @@ try{
  checks.push('purchase request: four activities, four objects, eleven relations, branch states, six unresolved items, Python parity and every node Markdown reference');
  const db=new IDBFactory(),e=env(db),history=e.w.history.length;
  assert.equal(e.$('open-sample').getAttribute('aria-disabled'),'true');click(e,'open-sample');assert.equal(e.tabs().length,0);await ready(e);
- assert.equal(e.$('open-sample').textContent,'サンプルを開く');assert.equal(e.$('empty').hidden,false);assert.ok(e.$('empty').textContent.startsWith('Business Design Markdownを開いてください。'));
+ assert.equal(e.$('open-sample').textContent,'サンプルを開く');assert.equal(e.$('empty').hidden,false);assert.ok(e.$('empty').textContent.startsWith('業務設計書を開くには'));
  click(e,'open-sample');click(e,'open-sample');click(e,'open-sample');
  assert.equal(e.tabs().length,1);assert.equal(e.nodes().length,25);assert.equal(e.$('edges').querySelectorAll('.edge').length,63);assert.equal(e.$('empty').hidden,true);assert.equal(e.$('status').hidden,true);assert.equal(e.w.location.hash,'');assert.equal(e.w.history.length,history);assert.equal(e.w.document.activeElement,e.$('viewport'));assert.match(e.$('detail').textContent,/Alderを使った設計業務/);checks.push('restore guard, no-file sample, 25 nodes/63 relations, silent duplicate-safe open, unchanged history');
  const key=e.tabs()[0].dataset.key,node=e.nodes()[0],id=node.dataset.node;choose(e,node);const n=e.w.document.querySelector('.node.selected');n.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});n.onpointermove({clientX:80,clientY:50});n.onpointerup({pointerId:1});const pos=[e.nodes()[0].style.left,e.nodes()[0].style.top];

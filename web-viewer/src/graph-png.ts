@@ -75,7 +75,7 @@ export function pngName(name:string){
   return 'alder-'+(clean||'graph')+'.png';
 }
 
-export async function saveGraphPng(image:GraphImage,name:string){
+export async function graphPngBlob(image:GraphImage):Promise<Blob>{
   const canvas=document.createElement('canvas'),bitmap=new Image();
   try{
     await new Promise<void>((resolve,reject)=>{
@@ -88,13 +88,30 @@ export async function saveGraphPng(image:GraphImage,name:string){
     canvas.width=image.width;canvas.height=image.height;
     const context=canvas.getContext('2d');if(!context)throw Error('画像用のメモリを確保できませんでした。');
     context.drawImage(bitmap,0,0,image.width,image.height);
-    const blob=await new Promise<Blob>((resolve,reject)=>{
+    return await new Promise<Blob>((resolve,reject)=>{
       const timer=window.setTimeout(()=>reject(Error('PNG画像の生成が時間内に終わりませんでした。')),15000);
       try{canvas.toBlob(value=>{clearTimeout(timer);value?resolve(value):reject(Error('PNG画像を生成できませんでした。'));},'image/png');}
       catch(error){clearTimeout(timer);reject(error);}
     });
-    const url=URL.createObjectURL(blob),link=document.createElement('a');
-    try{link.href=url;link.download=pngName(name);link.hidden=true;document.body.append(link);link.click();}
-    finally{link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1500);}
   }finally{bitmap.onload=bitmap.onerror=null;bitmap.src='';canvas.width=canvas.height=0;}
+}
+
+export async function saveGraphPng(image:GraphImage,name:string){
+  const blob=await graphPngBlob(image),url=URL.createObjectURL(blob),link=document.createElement('a');
+  try{link.href=url;link.download=pngName(name);link.hidden=true;document.body.append(link);link.click();}
+  finally{link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1500);}
+}
+
+export async function copyGraphPng(image:GraphImage){
+  if(!window.isSecureContext||!navigator.clipboard?.write||typeof ClipboardItem==='undefined'||ClipboardItem.supports?.('image/png')===false)throw Error('このブラウザーではPNGをコピーできません。「PNG保存」で画像ファイルを保存してください。');
+  const png=graphPngBlob(image),settled=png.catch(()=>undefined);
+  try{
+    // Start the clipboard write in the click/tap gesture, before async raster
+    // work finishes. WebKit requires this Promise-valued ClipboardItem flow.
+    await navigator.clipboard.write([new ClipboardItem({'image/png':png})]);
+    await png;
+  }catch{throw Error('PNGをコピーできませんでした。ブラウザーの許可を確認するか、「PNG保存」で画像ファイルを保存してください。');}
+  // Even an early permission rejection must settle/release its canvas before
+  // the shared UI guard unlocks another potentially expensive export.
+  finally{await settled;}
 }

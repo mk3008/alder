@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {imageSize,snapshotGraph,pngName,saveGraphPng} from '../src/graph-png.ts';
+import {imageSize,snapshotGraph,pngName,graphPngBlob,saveGraphPng,copyGraphPng} from '../src/graph-png.ts';
 
 assert.deepEqual(imageSize([{x:-100,y:50,width:260,height:68}]),{bounds:{x:-124,y:26,width:308,height:116},width:616,height:232,scale:2});
 assert.equal(imageSize([{x:0,y:0,width:5000,height:1000}]).width,8192);
@@ -67,5 +67,43 @@ w.document.createElement=(name)=>{const element=successfulCreate(name);if(name==
 await assert.rejects(saveGraphPng(base,'test'),/メモリ/);assert.equal(canvas.width,0);assert.equal(clicked,1);
 globalThis.Image=class{set src(value){if(value)queueMicrotask(()=>this.onerror?.());}};
 await assert.rejects(saveGraphPng(base,'test'),/ブラウザー/);assert.equal(clicked,1);
+// Clipboard tests use isolated fakes: no OS clipboard reads or permissions.
+w.document.createElement=successfulCreate;
+Object.defineProperty(w,'isSecureContext',{value:true,writable:true,configurable:true});
+let clipboardWrites=0,pngPromise,releaseImage;
+const support={png:true};
+globalThis.ClipboardItem=class{static supports(type){assert.equal(type,'image/png');return support.png;}constructor(data){assert.deepEqual(Object.keys(data),['image/png']);assert.ok(data['image/png'] instanceof Promise);this.png=data['image/png'];}};
+const clipboard={async write(items){clipboardWrites++;assert.equal(items.length,1);pngPromise=items[0].png;const blob=await pngPromise;assert.equal(blob.type,'image/png');},get read(){throw Error('clipboard must never be read');}};
+Object.defineProperty(globalThis,'navigator',{value:{clipboard},configurable:true});
+const controlledImage=()=>{globalThis.Image=class{constructor(){imageCount++;}set src(value){if(value)releaseImage=()=>this.onload?.();}};};
+controlledImage();
+const beforeURLs=urlCreated,beforeDownloads=clicked;
+const copying=copyGraphPng(base);
+assert.equal(clipboardWrites,1,'clipboard.write starts synchronously in the gesture, before image decode');assert.ok(pngPromise instanceof Promise);assert.equal(canvas.width,300,'raster dimensions are not allocated before decode');
+releaseImage();await copying;assert.equal(canvas.width,0);assert.equal(canvas.height,0);
+assert.equal(clicked,beforeDownloads);assert.equal(urlCreated,beforeURLs,'copy uses the PNG blob directly, not an object URL');
+for(const unsupported of ['insecure','write absent','ClipboardItem absent','PNG type']){
+ const Item=globalThis.ClipboardItem,write=clipboard.write,images=imageCount;
+ if(unsupported==='insecure')w.isSecureContext=false;
+ if(unsupported==='write absent')delete clipboard.write;
+ if(unsupported==='ClipboardItem absent')delete globalThis.ClipboardItem;
+ if(unsupported==='PNG type')support.png=false;
+ await assert.rejects(copyGraphPng(base),/PNG保存/);assert.equal(imageCount,images,'unsupported copy never starts rasterization');
+ w.isSecureContext=true;clipboard.write=write;globalThis.ClipboardItem=Item;support.png=true;
+}
+const write=clipboard.write;let rejected=false;
+clipboard.write=()=>Promise.reject(new DOMException('controlled denial','NotAllowedError'));
+const denial=assert.rejects(copyGraphPng(base),/PNG保存/).then(()=>{rejected=true;});
+await new Promise(r=>setTimeout(r,0));assert.equal(rejected,false,'busy guard waits for in-flight canvas cleanup after a rejected write');
+releaseImage();await denial;assert.equal(canvas.width,0);assert.equal(clicked,beforeDownloads);
+clipboard.write=write;
+w.document.createElement=(name)=>{const element=successfulCreate(name);if(name==='canvas')element.toBlob=callback=>callback(null);return element;};
+const rasterFailure=assert.rejects(copyGraphPng(base),/PNG保存/);releaseImage();await rasterFailure;assert.equal(canvas.width,0);
+clipboard.write=async()=>{};
+const earlyWrite=assert.rejects(copyGraphPng(base),/PNG保存/);releaseImage();await earlyWrite;
+clipboard.write=write;
+w.document.createElement=successfulCreate;
+const blobResult=graphPngBlob(base);releaseImage();assert.equal((await blobResult).type,'image/png');assert.equal(canvas.width,0);
+assert.equal(clicked,beforeDownloads,'copy failure never triggers an automatic download');
 w.close();
-console.log(JSON.stringify({passed:9,checks:['signed full bounds and margin','2x or capped readable resolution','empty/invalid/oversized limits','safe Japanese filename','HTML/SVG theme style serialization','long label includes full measured bounds','zoom/scroll/camera independence','source DOM unchanged','raster failures and URL/canvas cleanup']}));
+console.log(JSON.stringify({passed:15,checks:['signed full bounds and margin','2x or capped readable resolution','empty/invalid/oversized limits','safe Japanese filename','HTML/SVG theme style serialization','long label includes full measured bounds','zoom/scroll/camera independence','source DOM unchanged','raster failures and URL/canvas cleanup','shared PNG Blob generation','immediate Promise-valued clipboard write','unsupported copy skips raster work','denied copy keeps cleanup guard','copy errors offer explicit PNG-save fallback','no clipboard reads or automatic download']}));

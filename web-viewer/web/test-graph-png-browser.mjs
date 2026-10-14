@@ -1,7 +1,10 @@
 // Native Chromium gate against the built viewer. Synthetic/public input only.
 // Importing this module never starts a browser or server. Download events and
 // decoded PNG pixels are native; SVG interception observes, never substitutes,
-// the image passed to Chromium. This is not screenshot visual acceptance.
+// the image passed to Chromium. Clipboard checks write only this synthetic graph
+// and paste only after a successful write, in an isolated CI browser context.
+// No clipboard-read API or permission override is used. This is not screenshot
+// visual acceptance or an OS/browser compatibility claim.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -9,6 +12,7 @@ import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 import {runBrowserCases} from './browser-cases.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
+import {assertTabStripActions} from './test-tab-strip-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {readConcurrencyRecord} from './test-session-concurrency-browser.mjs';
 
@@ -49,7 +53,7 @@ async function saved(page){
 // Observe real browser boundaries. Only explicit failure/concurrency cases
 // alter toBlob delivery; normal cases retain the native encoder unchanged.
 function installPngProbe(){
- const probe=globalThis.__graphPng={svgs:[],blobCalls:0,failBlob:false,holdBlob:false,pending:[],urls:[],revoked:[]};
+ const probe=globalThis.__graphPng={svgs:[],blobCalls:0,failBlob:false,holdBlob:false,pending:[],urls:[],revoked:[],clipboardItems:[],writes:[],denyWrite:false};
  const descriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');
  Object.defineProperty(HTMLImageElement.prototype,'src',{...descriptor,set(value){
   if(String(value).startsWith('data:image/svg+xml'))probe.svgs.push(decodeURIComponent(String(value).split(',').slice(1).join(',')));
@@ -66,7 +70,24 @@ function installPngProbe(){
  const create=URL.createObjectURL.bind(URL),revoke=URL.revokeObjectURL.bind(URL);
  URL.createObjectURL=blob=>{const url=create(blob);probe.urls.push({url,type:blob.type});return url;};
  URL.revokeObjectURL=url=>{probe.revoked.push(url);return revoke(url);};
+ // Observe constructor data and write timing without replacing native encoding,
+ // ClipboardItem or the clipboard service in successful cases.
+ if(typeof ClipboardItem==='function'){
+  globalThis.ClipboardItem=new Proxy(ClipboardItem,{construct(target,args){
+   const png=args[0]?.['image/png'];probe.clipboardItems.push({types:Object.keys(args[0]??{}),promise:png instanceof Promise,activation:navigator.userActivation.isActive});
+   return Reflect.construct(target,args);
+  }});
+ }
+ if(navigator.clipboard?.write){
+  const write=navigator.clipboard.write.bind(navigator.clipboard);
+  Object.defineProperty(navigator.clipboard,'write',{configurable:true,value(items){
+   const entry={types:items.map(item=>[...item.types]),blobCalls:probe.blobCalls,pending:probe.pending.length,activation:navigator.userActivation.isActive,completed:false,error:null};probe.writes.push(entry);
+   const result=probe.denyWrite?Promise.reject(new DOMException('Synthetic write denial','NotAllowedError')):write(items);
+   return result.then(()=>{entry.completed=true;},error=>{entry.error=error.name;throw error;});
+  }});
+ }
 }
+
 
 // Seed only after navigating away from the app, so no live debounce can race
 // the fixture transaction. Leave the saved generation intact and read it back.
@@ -90,7 +111,6 @@ async function seed(page,layout,global){
  // File-source restore has an expected warning; dismiss its actual close
  // control before native hit testing the toolbar underneath.
  if(await page.locator('#status').isVisible()){assert.match(await page.locator('#status-text').textContent(),/保存時の内容/);await page.locator('#status-close').click();}
- await openDisplaySettings(page);await saved(page);
  return tab;
 }
 async function openFixture(page,name='日本語の業務図.md',raw=fixture.raw){
@@ -210,12 +230,70 @@ function assertPixels(pixels){
  assert.ok(pixels.paths.length===0||pixels.paths.some(samples=>samples.some(count=>count>4)),'native SVG route stroke appears in PNG');
  assert.ok(pixels.labels.length===0||pixels.labels.some(label=>label.pixels>20),'native SVG label glyphs appear in PNG');
 }
+const exportIDs=['save-image','copy-image'];
+const idleExports=page=>page.waitForFunction(()=>['save-image','copy-image'].every(id=>{const b=document.getElementById(id);return !b.disabled&&b.getAttribute('aria-busy')==='false';}));
+async function assertExportBusy(page,busy){
+ for(const id of exportIDs){assert.equal(await page.locator('#'+id).isDisabled(),busy,id+' synchronized busy guard');assert.equal(await page.locator('#'+id).getAttribute('aria-busy'),String(busy),id+' accessible busy state');}
+}
+async function pressExport(page,id,input){
+ const button=page.locator('#'+id);
+ if(input==='keyboard'){await button.focus();await page.keyboard.press('Enter');}
+ else if(input==='tap')await button.tap();
+ else await button.click();
+}
+// This page exists only in the test router. Never paste before a successful
+// native write of our fixed synthetic graph, and never request clipboard-read
+// permission or call navigator.clipboard.read/readText. The ephemeral browser
+// used by test-browser.mjs is not attached to an owner's browser or clipboard.
+async function pasteSyntheticPng(f){
+ const {page,context}=f;
+ assert.equal(await page.evaluate(()=>__graphPng.writes.at(-1)?.completed),true,'paste is armed only after successful synthetic native write');
+ const url=origin+'__graph-png-paste-fixture.html',handler=route=>route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><meta charset="utf-8"><title>Synthetic PNG paste test</title><link rel="icon" href="data:,"><div id="paste" contenteditable="true" aria-label="Synthetic PNG paste target" style="min-height:100px"></div>'});
+ await context.route(url,handler);let target;
+ try{
+  target=await context.newPage();target.setDefaultTimeout(8000);await target.goto(url);
+  await target.evaluate(()=>{
+   globalThis.__pastedPng={events:0,result:null,error:null};
+   document.getElementById('paste').addEventListener('paste',async event=>{
+    event.preventDefault();const state=globalThis.__pastedPng;state.events++;
+    try{
+     if(!event.isTrusted)throw Error('Paste must be a native trusted event');
+     const files=[...event.clipboardData.files];
+     if(files.length!==1||files[0].type!=='image/png')throw Error('Expected one synthetic PNG clipboard file');
+     const bytes=new Uint8Array(await files[0].arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+     state.result={type:files[0].type,size:files[0].size,base64:btoa(binary),trusted:event.isTrusted};
+    }catch(error){state.error=error.message;}
+   },{once:true});
+  });
+  await target.locator('#paste').click();await target.keyboard.press('Control+V');
+  await target.waitForFunction(()=>__pastedPng.result||__pastedPng.error);
+  const pasted=await target.evaluate(()=>__pastedPng);assert.equal(pasted.error,null);assert.equal(pasted.events,1);assert.equal(pasted.result.trusted,true);assert.ok(pasted.result.size>0);
+  return Buffer.from(pasted.result.base64,'base64');
+ }finally{if(target)await target.close();await context.unroute(url,handler);await page.bringToFront();}
+}
+async function copyPng(f,{input='click'}={}){
+ const {page}=f;await saved(page);
+ const state=await page.evaluate(stateInPage),before=await record(page),scene=await page.evaluate(sceneInPage),requestCount=f.requests.length,downloadCount=f.downloads.length;
+ const counts=await page.evaluate(()=>({sources:__graphPng.svgs.length,writes:__graphPng.writes.length,items:__graphPng.clipboardItems.length,blobs:__graphPng.blobCalls}));
+ await pressExport(page,'copy-image',input);
+ await page.waitForFunction(n=>__graphPng.writes.length===n+1&&__graphPng.writes.at(-1).completed,counts.writes);await idleExports(page);
+ const probe=await page.evaluate(()=>({svgs:__graphPng.svgs,writes:__graphPng.writes,items:__graphPng.clipboardItems}));
+ assert.equal(probe.svgs.length,counts.sources+1);assert.equal(probe.items.length,counts.items+1);assert.deepEqual(probe.items.at(-1),{types:['image/png'],promise:true,activation:true},'native ClipboardItem receives a promised PNG while user activation is live');
+ assert.deepEqual(probe.writes.at(-1),{types:[['image/png']],blobCalls:counts.blobs,pending:0,activation:true,completed:true,error:null},'native write starts before asynchronous raster encoding');
+ assert.equal(f.requests.length,requestCount,'copy has no network read or upload');assert.equal(f.downloads.length,downloadCount,'copy never starts a download');
+ await saved(page);assert.deepEqual(await record(page),before,'copy leaves session and generation untouched');assert.deepEqual(await page.evaluate(stateInPage),state,'copy retains graph, view, tabs, selection, settings and drafts');
+ const buffer=await pasteSyntheticPng(f),png=inspectPng(buffer),svg=await page.evaluate(inspectSvgInPage,probe.svgs.at(-1));
+ assertSvg(scene,svg,png);const pixels=await pixelEvidence(page,buffer,scene,svg);assertPixels(pixels);
+ assert.equal(f.requests.length,requestCount+1,'only the test-owned paste page is requested');await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);
+ return {png,svg,pixels,scene,buffer,nativePaste:true};
+}
+
 async function exportPng(f,{input='click',nonmutation=true}={}){
- const {page}=f;await openDisplaySettings(page);await saved(page);
+ const {page}=f;await saved(page);
  const state=await page.evaluate(stateInPage),before=await record(page),scene=await page.evaluate(sceneInPage),requestCount=f.requests.length,sourceCount=await page.evaluate(()=>__graphPng.svgs.length);
  const [download]=await Promise.all([page.waitForEvent('download'),input==='tap'?page.locator('#save-image').tap():page.locator('#save-image').click()]);
  const buffer=await bytesOf(download),png=inspectPng(buffer);
- await page.waitForFunction(()=>!document.querySelector('#save-image').disabled&&document.querySelector('#save-image').getAttribute('aria-busy')==='false');
+ await idleExports(page);
  const sources=await page.evaluate(()=>__graphPng.svgs);assert.equal(sources.length,sourceCount+1,'one export creates one raster input');
  const svg=await page.evaluate(inspectSvgInPage,sources.at(-1));assertSvg(scene,svg,png);
  const pixels=await pixelEvidence(page,buffer,scene,svg);assertPixels(pixels);
@@ -254,7 +332,7 @@ async function withPage(browser,{width=1280,height=960,touch=false}={},run){
   const page=await context.newPage();page.setDefaultTimeout(8000);page.setDefaultNavigationTimeout(12000);page.on('pageerror',error=>errors.push(error.message));page.on('download',download=>downloads.push(download));
   page.on('dialog',async dialog=>{errors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
   await page.goto(origin);await ready(page);
-  const result=await run({page,requests,downloads});assert.deepEqual(errors,[]);assert.deepEqual(external,[],'PNG regression never sends data to an external service');return result;
+  const result=await run({page,context,requests,downloads});assert.deepEqual(errors,[]);assert.deepEqual(external,[],'PNG regression never sends data to an external service');return result;
  })();
  let result;try{result=await bounded(work,75000,'PNG browser case timed out');}catch(error){failures.push(error);}
  finally{expired=true;if(context)try{await close();}catch(error){failures.push(error);}}
@@ -279,7 +357,7 @@ export async function verifyGraphPng(browser){
   return {nodes:4,paths:10,japaneseLabels:10,light:light.png,dark:dark.png,negativeAndOffscreen:true,cameraInvariant:true,blobURLsReleased:true};
  });
  add('current visibility and selected-edge settings, open drawers and saved editor draft stay unchanged',async f=>{
-  const {page}=f;await prepare(page);
+  const {page}=f;await prepare(page);await openDisplaySettings(page);
   await page.locator('#show-outside').uncheck();await page.locator('#prefer-write').check();await page.locator('#show-exceptions').uncheck();await page.locator('#selected-edges-only').check();await saved(page);
   const relations=fixture.design.graph.relations,hidden=hiddenReadIndexes(relations,true),visible=relations.flatMap((r,i)=>!hidden.has(i)&&!r.kind.endsWith('exception')&&r.from!==names.person&&r.to!==names.person&&(r.from===names.read||r.to===names.read)?[String(i)]:[]);
   assert.ok(visible.length>0&&visible.length<10);assert.deepEqual(await page.locator('.edge').evaluateAll(es=>es.map(e=>e.dataset.relation).sort()),visible.sort());
@@ -302,17 +380,17 @@ export async function verifyGraphPng(browser){
   assert.ok(result.svg.cards[0].text.includes(names.read));assert.ok(result.png.width<1000&&result.png.height<500,'hidden nodes do not expand the exported crop');
   return {visibleNodes:1,paths:0,labels:0,png:result.png};
  });
- for(const width of [320,393])add('native touch download is reachable at '+width+'px',async f=>{
-  const {page}=f;await openFixture(page);await openDisplaySettings(page);
-  assert.equal(await page.locator('#save-image').getAttribute('aria-label'),'グラフ全体をPNGで保存');
-  console.log('GRAPH_PNG_TOOLBAR_IMAGE '+JSON.stringify({width,height:width===320?568:852,base64:(await page.screenshot({type:'png'})).toString('base64'),note:'Synthetic fixture, reset and PNG actions together; exact native screenshot.'}));
-  const toolbar=await assertToolbarLayout(page,{open:true});
-  const reach=await page.locator('#save-image').evaluate(button=>{const r=button.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {box:[r.left,r.top,r.right,r.bottom],size:[r.width,r.height],window:[innerWidth,innerHeight],hit:hit===button||button.contains(hit)};});
-  assert.ok(reach.box[0]>=0&&reach.box[1]>=0&&reach.box[2]<=reach.window[0]+1&&reach.box[3]<=reach.window[1]+1);assert.ok(reach.size[0]>=40&&reach.size[1]>=40);assert.equal(reach.hit,true,'download action is native hit-testable');
-  const result=await exportPng(f,{input:'tap'});return {width,toolbarHeight:toolbar.toolbar.height,viewportHeight:toolbar.viewport.height,hitTest:true,nativeTapDownload:true,png:result.png};
+ for(const width of [320,393])add('native touch PNG actions precede source sharing at '+width+'px',async f=>{
+  const {page}=f;await openFixture(page);assert.equal(await page.locator('#display-settings-toggle').getAttribute('aria-expanded'),'false','PNG actions need no gear expansion');
+  const strip=await assertTabStripActions(page),closed=await assertToolbarLayout(page,{open:false});
+  console.log('GRAPH_PNG_TOOLBAR_IMAGE '+JSON.stringify({width,height:width===320?568:852,base64:(await page.screenshot({type:'png',fullPage:true})).toString('base64'),note:'Synthetic full-page native screenshot: PNG save/copy immediately before source sharing, settings closed.'}));
+  const result=await exportPng(f,{input:'tap'});assert.equal(await page.locator('#display-settings-toggle').getAttribute('aria-expanded'),'false');
+  await openDisplaySettings(page);const opened=await assertToolbarLayout(page,{open:true});await assertTabStripActions(page);
+  console.log('GRAPH_PNG_SETTINGS_IMAGE '+JSON.stringify({width,height:width===320?568:852,base64:(await page.screenshot({type:'png',fullPage:true})).toString('base64'),note:'Synthetic full-page native screenshot: compact PNG actions stay in tab-strip; expanded settings contain only reset action.'}));
+  return {width,tabActions:strip.actions.map(a=>({id:a.id,width:a.width,height:a.height,hit:a.hit})),closedToolbarHeight:closed.toolbar.height,openedToolbarHeight:opened.toolbar.height,viewportHeight:opened.viewport.height,hitTest:true,nativeTapDownload:true,png:result.png};
  },{width,height:width===320?568:852,touch:true});
  for(const failure of ['empty','huge','toBlob'])add(failure+' failure preserves saved state and unlocks retry',async f=>{
-  const {page,downloads}=f;assert.equal(await page.locator('#save-image').isDisabled(),true,'no document has no export action');await prepare(page);
+  const {page,downloads}=f;for(const id of ['save-image','copy-image']){assert.equal(await page.locator('#'+id).isVisible(),false,'no document hides '+id);assert.equal(await page.locator('#'+id).isDisabled(),true);}await prepare(page);
   if(failure==='empty')await seed(page,{hiddenNodes:fixture.design.graph.nodes.map(n=>n.id)});
   if(failure==='huge')await seed(page,{positions:{...positions,[names.record]:[100000,700]}});
   if(failure==='toBlob')await page.evaluate(()=>{__graphPng.failBlob=true;});
@@ -328,20 +406,74 @@ export async function verifyGraphPng(browser){
  });
  add('repeat native clicks and tab change during encoding keep the original snapshot/name',async f=>{
   const {page,downloads}=f;await openFixture(page,'first-original.md');await openFixture(page,'second-current.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
-  const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await openDisplaySettings(page);await saved(page);
+  const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
   const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await page.locator('#save-image').click();
-  await page.waitForFunction(()=>__graphPng.pending.length===1);assert.equal(await page.locator('#save-image').isDisabled(),true);assert.equal(await page.locator('#save-image').getAttribute('aria-busy'),'true');
+  await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const box=await page.locator('#save-image').boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
+  const copyBox=await page.locator('#copy-image').boundingBox();await page.mouse.click(copyBox.x+copyBox.width/2,copyBox.y+copyBox.height/2);
+  assert.equal(await page.evaluate(()=>__graphPng.writes.length),0,'save in flight blocks clipboard copy');
   assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(await page.evaluate(()=>__graphPng.svgs.length),1);assert.equal(downloads.length,0);
-  await page.locator(`.tab[data-key="${keys[1]}"] > button`).first().click();await saved(page);assert.equal(await page.locator('#save-image').isDisabled(),true);
+  await page.locator(`.tab[data-key="${keys[1]}"] > button`).first().click();await saved(page);await assertExportBusy(page,true);
   const before=await record(page),state=await page.evaluate(stateInPage),requestCount=f.requests.length;
   const [download]=await Promise.all([page.waitForEvent('download'),page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());})]);
   const buffer=await bytesOf(download),png=inspectPng(buffer),svg=await page.evaluate(inspectSvgInPage,await page.evaluate(()=>__graphPng.svgs[0]));
   assert.equal(download.suggestedFilename(),'alder-first-original.png');assertSvg(first,svg,png);assertPixels(await pixelEvidence(page,buffer,first,svg));
-  await page.waitForFunction(()=>!document.querySelector('#save-image').disabled);await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requestCount);assert.equal(downloads.length,1);
+  await idleExports(page);await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requestCount);assert.equal(downloads.length,1);
   const next=await exportPng(f);assert.equal(next.filename,'alder-second-current.png');assert.equal(downloads.length,2);
   return {firstSnapshotRetained:true,duplicateDownloads:0,tabSwitchPreserved:true,retryAfterCompletion:true};
  });
+ add('native clipboard write and trusted paste retain the whole graph in light/dark without changing the viewer',async f=>{
+  const {page}=f;await prepare(page);assert.equal(await page.locator('#display-settings-toggle').getAttribute('aria-expanded'),'false');
+  const light=await copyPng(f,{input:'keyboard'});assert.ok(light.scene.cards.some(n=>n.offscreen));assert.ok(light.scene.cards.some(n=>n.box.x<0&&n.box.y<0));
+  await page.locator('#theme').click();await saved(page);const dark=await copyPng(f);
+  assert.deepEqual([light.png.width,light.png.height],[dark.png.width,dark.png.height]);assert.notEqual(light.png.sha256,dark.png.sha256);assert.notDeepEqual(light.pixels.background,dark.pixels.background);
+  assert.equal(f.downloads.length,0);return {nativeClipboardWrites:2,nativeTrustedPastes:2,promisedPng:true,light:light.png,dark:dark.png,settingsStayedClosed:true};
+ });
+ for(const fault of ['clipboard missing','write missing','ClipboardItem missing','PNG type unsupported'])add(fault+' explains PNG save and allows explicit download fallback',async f=>{
+  const {page,downloads}=f;await prepare(page);
+  await page.evaluate(fault=>{
+   if(fault==='clipboard missing')Object.defineProperty(navigator,'clipboard',{configurable:true,value:undefined});
+   if(fault==='write missing')Object.defineProperty(navigator,'clipboard',{configurable:true,value:{}});
+   if(fault==='ClipboardItem missing')Object.defineProperty(globalThis,'ClipboardItem',{configurable:true,value:undefined});
+   if(fault==='PNG type unsupported')Object.defineProperty(ClipboardItem,'supports',{configurable:true,value:()=>false});
+  },fault);
+  const before=await saved(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
+  await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
+  assert.match(await page.locator('#status-text').textContent(),/PNG.*保存/);assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');
+  assert.equal(await page.evaluate(()=>__graphPng.writes.length),0,'unsupported API cannot attempt a clipboard write');assert.equal(await page.evaluate(()=>__graphPng.blobCalls),0,'unsupported API fails before raster encoding');
+  assert.equal(downloads.length,0,'unsupported copy never silently downloads');await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);
+  await page.locator('#status-close').click();const fallback=await exportPng(f);assert.equal(downloads.length,1);
+  return {fault,copyErrorAnnounced:true,noAutomaticDownload:true,explicitSaveWorks:true,png:fallback.png};
+ });
+ add('clipboard write denial preserves graph and offers working PNG save without silent download',async f=>{
+  const {page,downloads}=f;await prepare(page);await page.evaluate(()=>{__graphPng.denyWrite=true;});
+  const before=await saved(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
+  await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
+  assert.match(await page.locator('#status-text').textContent(),/PNG.*保存/);assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');
+  const write=await page.evaluate(()=>__graphPng.writes.at(-1));assert.equal(write.error,'NotAllowedError');assert.equal(write.completed,false);assert.equal(downloads.length,0);
+  await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);
+  await page.locator('#status-close').click();const fallback=await exportPng(f);assert.equal(downloads.length,1);assert.equal(await page.evaluate(()=>__graphPng.writes.length),1,'fallback does not retry rejected clipboard write');
+  return {deniedWrite:true,noAutomaticDownload:true,explicitSaveWorks:true,png:fallback.png};
+ });
+ add('delayed clipboard encoding writes immediately and blocks both actions across tab switching',async f=>{
+  const {page,downloads}=f;await openFixture(page,'first-copy.md');await openFixture(page,'second-copy.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
+  const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
+  const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await page.locator('#copy-image').click();
+  await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
+  const observation=await page.evaluate(()=>({item:__graphPng.clipboardItems[0],write:__graphPng.writes[0]}));
+  assert.deepEqual(observation.item,{types:['image/png'],promise:true,activation:true});assert.deepEqual(observation.write,{types:[['image/png']],blobCalls:0,pending:0,activation:true,completed:false,error:null},'write receives a promise before generation completes');
+  for(const id of ['copy-image','copy-image','save-image']){const box=await page.locator('#'+id).boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);}
+  assert.equal(await page.evaluate(()=>__graphPng.writes.length),1);assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(downloads.length,0);
+  await page.locator(`.tab[data-key="${keys[1]}"] > button`).first().click();await saved(page);await assertExportBusy(page,true);
+  const before=await record(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
+  await page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());});
+  await page.waitForFunction(()=>__graphPng.writes[0].completed);await idleExports(page);await saved(page);
+  assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);assert.equal(downloads.length,0);
+  const buffer=await pasteSyntheticPng(f),png=inspectPng(buffer),svg=await page.evaluate(inspectSvgInPage,await page.evaluate(()=>__graphPng.svgs[0]));assertSvg(first,svg,png);assertPixels(await pixelEvidence(page,buffer,first,svg));
+  await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);
+  const next=await exportPng(f);assert.equal(next.filename,'alder-second-copy.png');assert.equal(downloads.length,1);
+  return {nativeWriteBeforeEncoding:true,originalSnapshotPasted:true,duplicateWrites:0,crossActionBusyGuard:true,tabSwitchPreserved:true,saveAfterCopy:true,png};
+ });
  const results=await runBrowserCases(cases);
- return {cases:results.length,passed:results.length,limits:['Native Chromium pixels and touch emulation; no screenshot visual acceptance, physical mobile, OS save dialog or cross-browser claim.']};
+ return {cases:results.length,passed:results.length,limits:['Native Chromium download, clipboard write and trusted paste on isolated localhost CI; PNG pixels and touch emulation. API/denial faults are injected. No user clipboard read, permission grant, screenshot visual acceptance, physical mobile, OS save dialog or cross-browser claim.']};
 }

@@ -38,7 +38,7 @@ async function openURL(page,value=source){await page.locator('#open-url').click(
 async function closeEditor(page){await page.locator('#source-cancel').click();if(await page.locator('#source-close-dialog').isVisible())await page.locator('#source-close-confirm').click();await page.locator('#source-dialog').waitFor({state:'hidden'});}
 async function sharedHash(page,value){await page.evaluate(value=>{location.hash=value;},value);await page.waitForFunction(()=>location.hash==='');}
 async function share(page,eligible=true){
- const button=page.locator('#share-source');assert.equal(await button.isVisible(),true);assert.equal(await button.evaluate(el=>el.disabled),false);assert.ok(await button.evaluate(el=>el.tabIndex>=0));assert.equal(await button.getAttribute('aria-disabled')==='true',!eligible);
+ const button=page.locator('#share-source');assert.deepEqual(await button.evaluate(el=>[el.previousElementSibling?.previousElementSibling?.id,el.previousElementSibling?.id]),['save-image','copy-image'],'PNG controls immediately precede sharing');assert.equal(await button.isVisible(),true);assert.equal(await button.evaluate(el=>el.disabled),false);assert.ok(await button.evaluate(el=>el.tabIndex>=0));assert.equal(await button.getAttribute('aria-disabled')==='true',!eligible);
  const before=(await observation(page)).copies.length;await button.focus();assert.equal(await button.evaluate(el=>el===document.activeElement),true);await page.keyboard.press('Enter');
  if(eligible)await page.waitForFunction(n=>globalThis.__sharing.copies.length===n+1,before);
  else{await page.waitForFunction(()=>!document.getElementById('status').hidden&&!!document.getElementById('status-text').textContent.trim());assert.equal((await observation(page)).copies.length,before);}
