@@ -46,9 +46,11 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    }
    assert.equal(await page.locator('#refresh').isVisible(),false,'no document hides source refresh');
    const header=await page.locator('header').evaluate(e=>{
-    const nodes=[...e.querySelectorAll('button,a#github-link,strong,#preview-badge')].filter(n=>!n.hidden&&getComputedStyle(n).display!=='none');
+    const nodes=[...e.querySelectorAll('button,a#github-link,strong,#preview-badge')].filter(n=>!n.hidden&&getComputedStyle(n).display!=='none'&&getComputedStyle(n).visibility!=='hidden');
     return {scroll:e.scrollWidth,width:e.clientWidth,rects:nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.id||'brand',x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};})};
    });
+   const brand=page.locator('header strong');
+   if(!await brand.isVisible())assert.equal(await brand.evaluate(e=>getComputedStyle(e).pointerEvents),'none','hidden title cannot intercept controls');
    assert.ok(header.scroll<=header.width+1,'header has no horizontal overflow');
    for(const r of header.rects){assert.ok(r.width>0&&r.height>0&&r.x>=0&&r.right<=width+.5,r.id+' fits');for(const q of header.rects){if(q.id!==r.id)assert.ok(Math.min(q.right,r.right)-Math.max(q.x,r.x)<=.5||Math.min(q.bottom,r.bottom)-Math.max(q.y,r.y)<=.5,r.id+' overlaps '+q.id);}}
    assert.equal(await page.locator('#preview-badge').isVisible(),preview);

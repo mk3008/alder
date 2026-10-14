@@ -1,3 +1,4 @@
+import {installHeaderTitleFit} from './header-layout';
 import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
 import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
@@ -20,6 +21,7 @@ const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
 for(const [id,value] of [['open',FolderOpen],['open-url',FolderSymlink],['open-text',Text],['edit-markdown',FileText],['share-source',Share2],['refresh',RefreshCw],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['reset-layout',RotateCcw],['save-image',ImageDown],['copy-image',ClipboardCopy],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
+installHeaderTitleFit(document.querySelector('header')!);
 let state:Session={tabs:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0,documentSaving=false;
 let exportingImage=false;
 let savedRevision=0,pendingWrites=0,saveFailed=false,savedOnce=false,draftDirty=false,leaveWarning=false,quotaFailed=false,closeFailed=false;
