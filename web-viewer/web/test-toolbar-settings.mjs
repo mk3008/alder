@@ -106,7 +106,7 @@ try{
  gear.focus();const focusCount=e.focusCalls.length;stable(e,()=>toggle(e));assertOpen(e,true);
  assert.equal(e.d.activeElement,gear);assert.equal(e.focusCalls.length,focusCount,'opening does not autofocus an input');
  const focusable=[...e.bar.querySelectorAll('button,input')].filter(n=>!n.disabled&&n.tabIndex>=0&&!n.closest('[hidden]'));
- assert.deepEqual(focusable.map(n=>n.id),['display-settings-toggle',...inputIDs,'reset-layout','layout-lock','out','in']);
+ assert.deepEqual(focusable.map(n=>n.id),['display-settings-toggle',...inputIDs,'reset-layout','findings-toggle','layout-lock','out','in']);
  e.$('selected-edges-only').focus();stable(e,()=>assert.equal(escape(e,e.$('selected-edges-only')).defaultPrevented,true));assertOpen(e,false);
  assert.equal(e.d.activeElement,gear);assert.deepEqual(json(e.focusCalls.at(-1)),{id:'display-settings-toggle',options:{preventScroll:true}});
  assert.equal(escape(e).defaultPrevented,false,'Escape when already closed is untouched');
