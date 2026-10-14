@@ -152,3 +152,7 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 #share-source:hover{background:var(--select)}
 
 #share-source[hidden]{display:none}
+
+/* Graph export is an action inside settings, with a stable label while busy. */
+.toolbar #save-image{width:auto;min-height:40px;padding:8px 10px;grid-column:1/-1;justify-content:flex-start;font-size:11px;border-top:1px solid var(--subtle)}
+.toolbar #save-image:hover{background:var(--select)}

@@ -1,3 +1,4 @@
+import {verifyGraphPng} from './test-graph-png-browser.mjs';
 import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
 import {verifySaveState} from './test-save-state-browser.mjs';
@@ -42,6 +43,7 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'graphPng',run:()=>verifyGraphPng(browser)},
    {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},

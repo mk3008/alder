@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 /** Read-only rendered assertions; does not resize, click, scroll or alter styles.
  * Closed: one 40px gear/lock/zoom row. Open: four options in two equal-width
- * rows above that same control row. Both states retain the existing height,
+ * rows and a PNG action above that same control row. Both states retain the existing height,
  * text bounds, native hit testing and touch-size requirements.
  */
 export async function assertToolbarLayout(page,{open}={}){
@@ -20,7 +20,7 @@ export async function assertToolbarLayout(page,{open}={}){
   return {window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
  });
  const epsilon=.75,contains=(outer,inner)=>inner.left>=outer.left-epsilon&&inner.right<=outer.right+epsilon&&inner.top>=outer.top-epsilon&&inner.bottom<=outer.bottom+epsilon,near=(a,b)=>Math.abs(a-b)<=epsilon;
- const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),controls=items.filter(i=>i.kind!=='option'),buttons=controls.filter(i=>i.kind==='button');
+ const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='save-image'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='save-image'),buttons=controls.filter(i=>i.kind==='button');
  const message=label=>label+': '+JSON.stringify(measured);
  assert.ok(measured.expanded==='true'||measured.expanded==='false',message('gear exposes expansion state'));
  const expanded=measured.expanded==='true';if(open!==undefined)assert.equal(expanded,open,message('requested expansion state'));
@@ -28,6 +28,7 @@ export async function assertToolbarLayout(page,{open}={}){
  assert.equal(measured.controls,'display-options',message('gear controls display options'));
  assert.equal(measured.panel.hidden,!expanded,message('hidden attribute follows gear'));
  assert.deepEqual(measured.allOptions.map(i=>i.id),['show-outside','prefer-write','show-exceptions','selected-edges-only'],message('all four display options retained'));
+ assert.equal(actions.length,expanded?1:0,message('PNG action only appears in expanded settings'));
  assert.equal(options.length,expanded?4:0,message('only expanded settings have visible option cells'));
  assert.deepEqual(controls.map(i=>i.id),['display-settings-toggle','layout-lock','out','zoom','in'],message('gear, lock and zoom order'));
  assert.ok(contains({left:0,top:0,right:measured.window.width,bottom:measured.window.height},toolbar),message('toolbar within window'));
@@ -62,7 +63,8 @@ export async function assertToolbarLayout(page,{open}={}){
   assert.ok(near(options[0].bottom,options[2].top),message('exactly two adjoining option rows'));
   assert.ok(options.every(i=>i.bottom<=buttonRow.top+epsilon),message('settings expand above control row'));
   assert.ok(measured.panel.bottom<=buttonRow.top+epsilon,message('panel ends above always-visible controls'));
-  rowsHeight+=options[0].height+options[2].height;
+  assert.ok(actions[0].top>=options[3].bottom&&actions[0].bottom<=buttonRow.top,message('PNG action follows filters above controls'));
+  rowsHeight+=options[0].height+options[2].height+actions[0].height;
  }else{
   assert.equal(measured.panel.display,'none',message('collapsed panel has no rendered display'));
   assert.ok(measured.allOptions.every(i=>i.rects===0&&i.width===0&&i.height===0),message('collapsed options have no rendered hit targets'));
