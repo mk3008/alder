@@ -1,3 +1,4 @@
+import {verifyLayoutReset} from './test-layout-reset-browser.mjs';
 import {verifyGettingStarted} from './test-getting-started-browser.mjs';
 import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
@@ -54,6 +55,7 @@ try {
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'gettingStarted',run:()=>verifyGettingStarted(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
+   {name:'layoutReset',run:()=>verifyLayoutReset(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
    {name:'savedStatePreflight',run:()=>verifySavedStatePreflight(browser)},
    {name:'emptyState',run:()=>verifyEmptyState(browser)},
