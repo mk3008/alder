@@ -10,7 +10,7 @@ AIの疑問から実業務のProblemやPainを作りません。種類は深刻�
 
 ## サンプルを開く
 
-[架空の図書貸出のMarkdown](../examples/design-findings/library-lending.md)をViewerで開くと、図形の印と指摘一覧を試せます。返却期限の記述を意図的に異ならせた例です。複数対象の指摘、文書全体、関連先未設定、解消済みの表示も確認できます。実際の運用規則には使わないでください。
+[架空の図書貸出のMarkdown](https://github.com/mk3008/alder/blob/1d629a9a5df26149e518473d05045e6a733235fb/examples/design-findings/library-lending.md)をViewerで開くと、図形の印と指摘一覧を試せます。返却期限の記述を意図的に異ならせた例です。複数対象の指摘、文書全体、関連先未設定、解消済みの表示も確認できます。実際の運用規則には使わないでください。
 
 ## Markdownに指摘を記載する
 
