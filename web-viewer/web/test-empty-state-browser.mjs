@@ -47,7 +47,7 @@ export function readEmptyFrameInPage(){
 }
 export function assertEmptyFrame(frame){
  const contains=(outer,inner)=>inner.left>=outer.left-.75&&inner.top>=outer.top-.75&&inner.right<=outer.right+.75&&inner.bottom<=outer.bottom+.75;
- assert.equal(frame.tabs,0);assert.equal(frame.hint.visible,true);assert.match(frame.hint.text,/Business Design Markdownを開いてください。/);
+ assert.equal(frame.tabs,0);assert.equal(frame.hint.visible,true);assert.match(frame.hint.text,/業務設計書を開くには/);
  assert.equal(frame.link.visible,true);assert.ok(frame.link.width>0&&frame.link.height>0);
  assert.ok(contains(frame.viewport,frame.hint),'whole explanation is inside the visible graph viewport');
  assert.ok(contains(frame.viewport,frame.link),'sample link is inside the visible graph viewport');

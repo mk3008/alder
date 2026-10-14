@@ -41,6 +41,14 @@ jobs:
             sleep 1
           done
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs
+
+      - name: Preserve header review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: header-controls-${{ github.sha }}
+          path: web-viewer/web/evidence/header-controls/*.png
+          if-no-files-found: ignore
       - name: Retain save-conflict review screenshots
         if: always()
         uses: actions/upload-artifact@v4
