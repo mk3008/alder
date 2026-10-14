@@ -6,7 +6,7 @@ export async function verifyHeaderControls(browser){
  try{
   mkdirSync('web/evidence/header-controls',{recursive:true});
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled,null,{timeout:5000});
-  if(await page.locator('#github-link').count())ids.splice(1,0,'github-link');
+  if(await page.locator('#github-link').count())ids.splice(ids.indexOf('drawer'),0,'github-link');
   for(const width of [1440,1280,1101,1100,1001,1000,801,800,601,600,481,480,393,360,359,320])for(const theme of ['light','dark'])for(const preview of [false,true]){
    await page.setViewportSize({width,height:960});
    // Display-only fixture represents the exact long badge in the published URL.

@@ -49,3 +49,11 @@ jobs:
           name: header-controls-${{ github.sha }}
           path: web-viewer/web/evidence/header-controls/*.png
           if-no-files-found: ignore
+      - name: Retain save-conflict review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: save-conflict-review-${{ github.sha }}
+          path: web-viewer/web/evidence/save-conflict-212/*.png
+          if-no-files-found: ignore
+          retention-days: 7

@@ -17,6 +17,8 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    await page.setViewportSize({width,height:width===320?568:852});await page.goto(preview?new URL('preview/pr-204/always-visible/',origin).href:origin);
    await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);
    const github=page.locator('#github-link'),guide=page.locator('#authoring-guide');
+   assert.equal(await github.getAttribute('aria-label'),'GitHubを開く');assert.equal(await github.getAttribute('title'),'GitHubを開く');
+   assert.deepEqual(await github.evaluate(e=>[e.previousElementSibling.id,e.nextElementSibling.id]),['theme','drawer']);
    assert.equal(await github.isVisible(),true);assert.equal(await guide.isVisible(),true);
    const frame=await page.locator('#empty').evaluate(e=>{
     const r=e.getBoundingClientRect(),v=e.parentElement.getBoundingClientRect();

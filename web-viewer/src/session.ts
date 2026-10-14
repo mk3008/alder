@@ -1,5 +1,6 @@
 import {initialPositions} from './layout.ts';
 import {deploymentContext} from './deployment.ts';
+import {sameSession} from './session-equality.ts';
 import type {Design} from './graph';
 export type Point=[number,number];
 /** Camera-only padding/origin in world units. Stored node coordinates never change. */
@@ -32,10 +33,14 @@ export async function saveSession(value:Session):Promise<void>{
   // Loading establishes which committed snapshot this window is editing.
   const expected=generation;if(expected===undefined)throw Error('Session has not been loaded');
   const d=await db();try{await new Promise<void>((resolve,reject)=>{
-    const t=d.transaction('session','readwrite'),store=t.objectStore('session'),read=store.get('generation');
+    const t=d.transaction('session','readwrite'),store=t.objectStore('session'),read=store.get('generation'),current=store.get('current');
     let failure:unknown,next:number;
-    read.onsuccess=()=>{try{
-      if(savedGeneration(read.result)!==expected)throw new SessionConflictError();
+    current.onsuccess=()=>{try{
+      const actual=savedGeneration(read.result);
+      // Equal content needs no overwrite, even if another page committed it.
+      // Equality, generation comparison and writes stay in one transaction.
+      if(sameSession(current.result,value)){next=actual;return;}
+      if(actual!==expected)throw new SessionConflictError();
       next=expected+1;if(!Number.isSafeInteger(next))throw Error('Session generation exhausted');
       // The comparison and both writes share one serialized readwrite transaction.
       store.put(value,'current');store.put(next,'generation');
