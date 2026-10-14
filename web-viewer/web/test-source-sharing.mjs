@@ -57,7 +57,7 @@ await caseOf('source helpers accept only source-only HTTPS and preserve exact or
  for(const value of ['#source=','#source=%','#source=%E0%A4%A','#source='+encodeURIComponent(source)+'&other=1','#source='+encodeURIComponent(source)+'&source='+encodeURIComponent(source)])assert.throws(()=>readSharedSource(value),undefined,value);
  for(const value of ['','#alder-sample','#unrelated','#sources=ignored'])assert.equal(readSharedSource(value),undefined);
  const link=createSourceShareLink('https://viewer.test/preview/pr-201/v7/index.html?private=viewer#alder-sample',source);
- assert.equal(link,'https://viewer.test/preview/pr-201/v7/index.html'+fragment(source));assert.equal(new URL(link).search,'');assert.equal(decodeURIComponent(new URL(link).hash.slice('#source='.length)),source);
+ assert.equal(link,'https://viewer.test/preview/pr-201/v7/index.html'+fragment(source));assert.equal(createSourceShareLink('https://synthetic:password@viewer.test/preview/pr-201/v7/index.html?token=synthetic#other',source),link,'viewer URL credentials must not enter the shared link');assert.equal(new URL(link).search,'');assert.equal(decodeURIComponent(new URL(link).hash.slice('#source='.length)),source);
  return {accepted:good.length,rejected:bad.length+5};
 });
 await caseOf('eligibility requires URL origin without any draft or applied edit',async()=>{

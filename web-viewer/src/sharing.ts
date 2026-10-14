@@ -15,7 +15,7 @@ export function sourceSharingReason(tab?:Tab):string|undefined{
   if(tab.draft!==undefined)return '未反映の編集があるため共有できません。編集を元に戻すか、取得元を「更新」してください。';
 }
 export function createSourceShareLink(viewerURL:string,sourceURL:string):string{
-  const url=new URL(viewerURL);url.search='';url.hash='source='+encodeURIComponent(validateShareSource(sourceURL));return url.href;
+  const url=new URL(viewerURL);url.username='';url.password='';url.search='';url.hash='source='+encodeURIComponent(validateShareSource(sourceURL));return url.href;
 }
 export function readSharedSource(hash:string):string|undefined{
   if(!/^#source(?:=|$)/.test(hash))return;
