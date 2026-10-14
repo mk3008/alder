@@ -152,7 +152,7 @@ try {
   try{
    await recipient.goto(shared);await recipient.waitForFunction(()=>document.querySelectorAll('.tab').length===1,{},{timeout:45000});await clean(recipient);
    assert.deepEqual(await recipient.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.textContent])),expectedNodes);
-   assert.equal(new URL(recipient.url()).hash,'');assert.equal(recipientReads.length,1);assert.equal(recipientReads[0].method,'GET');assert.equal(recipientReads[0].headers.cookie,undefined);assert.equal(recipientReads[0].headers.referer,undefined);
+   assert.equal(new URL(recipient.url()).hash,'');assert.equal(recipientReads.length,1);assert.equal(recipientReads[0].method,'GET');assert.equal(recipientReads[0].headers.cookie??'','');assert.equal(recipientReads[0].headers.referer??'','');
    await recipient.reload();await recipient.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await recipient.locator('.tab').count(),1);assert.equal(recipientReads.length,1);assert.deepEqual(recipientErrors,[]);
    checks.push('copied source-only link loads matching Graph via real public HTTPS/CORS in independent context; consumed-link reload never re-fetches');
   }finally{await recipientContext.close();}

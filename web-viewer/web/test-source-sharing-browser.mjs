@@ -107,7 +107,7 @@ export async function verifySourceSharing(browser,{url='http://127.0.0.1:4173/'}
  });
  const failedResponses=[
   ['HTTP 404',route=>route.fulfill({status:404,headers:{'access-control-allow-origin':'*'},body:'not found'})],
-  ['native CORS rejection',route=>route.fulfill({status:200,contentType:'text/markdown',body})],
+  ['native CORS rejection',route=>route.fulfill({status:200,headers:{'content-type':'text/markdown','access-control-allow-origin':'https://different-origin.test'},body})],
   ['redirect rejection',route=>route.fulfill({status:302,headers:{location:latest,'access-control-allow-origin':'*'},body:''})],
   ['HTML content type',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/html'},body:'<html>synthetic sign in</html>'})],
   ['HTML disguised as text',route=>route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/plain'},body:'<!doctype html><html>synthetic sign in</html>'})],
@@ -130,7 +130,7 @@ export async function verifySourceSharing(browser,{url='http://127.0.0.1:4173/'}
   await sharedHash(page,fragment(source));if(fault==='abort'){await page.waitForFunction(()=>globalThis.__saveStateControl.writes.length===2);await page.evaluate(()=>globalThis.__saveStateControl.writes[1].abort());}await settledError(page);assert.equal((await tabs(page)).length,1);assert.equal(await graph(page),old);assert.deepEqual(await record(page),before);await wait(230);assert.equal(requests.length,1);assert.deepEqual(await record(page),before);return {nativeRollback:true,failedTabAdded:false};
  });
  add('source sharing: protected existing storage remains byte-equivalent',async({page})=>{
-  const bad={tabs:'synthetic corrupt session',privateMarker:'retain original bytes'};await page.evaluate(seedLegacyRecord,{value:bad,database:databaseFor(page.url())});await page.goto(url+fragment(source));await ready(page);await page.waitForFunction(()=>location.hash==='');await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='protected');assert.equal((await tabs(page)).length,0);assert.deepEqual((await record(page)).current,bad);assert.equal(await page.evaluate(()=>globalThis.__saveStateControl.writes.length),0);return {protectedBytesUnchanged:true};
+  const bad={tabs:'synthetic corrupt session',privateMarker:'retain original bytes'};await page.evaluate(seedLegacyRecord,{value:bad,database:databaseFor(page.url())});await page.evaluate(value=>history.replaceState(null,'',value),url+fragment(source));await page.reload();await ready(page);await page.waitForFunction(()=>location.hash==='');await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='protected');assert.equal((await tabs(page)).length,0);assert.deepEqual((await record(page)).current,bad);assert.equal(await page.evaluate(()=>globalThis.__saveStateControl.writes.length),0);return {protectedBytesUnchanged:true};
  });
  add('source sharing: rapidly superseded request never publishes obsolete document',async({page,behavior,requests})=>{
   await openText(page);let release;const held=new Promise(resolve=>{release=resolve;});behavior.fetcher=async route=>{if(route.request().url()===source)await held;try{return await route.fulfill({status:200,headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body:route.request().url()===source?body:changedMarkdown});}catch{}};
