@@ -115,3 +115,18 @@ header{flex-shrink:0}
 .toolbar #layout-lock{margin-left:auto}
 /* Empty documents have no graph controls; keep the explanation unobscured. */
 .toolbar[hidden]{display:none}
+
+/* Repository and authoring entry points do not change graph/session behavior. */
+#github-link{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border:1px solid #ffffff30;border-radius:5px;color:inherit}
+#github-link svg{width:19px;height:19px}
+#github-link:hover{background:#ffffff18}
+#github-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#authoring-guide{max-width:560px;margin:20px auto 24px;text-align:left;line-height:1.7;color:var(--fg);overflow-wrap:anywhere}
+#authoring-guide h2{font-size:15px;margin:0 0 8px}
+#authoring-guide p{margin:8px 0}
+#authoring-guide a{display:inline-block;padding-block:8px;color:inherit;text-underline-offset:3px}
+#authoring-guide a:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+@media(max-width:1000px){#github-link{display:none}}
+#empty{max-height:calc(70% - 20px);overflow-y:auto;overscroll-behavior:contain}
+#viewport:has(>#empty:not([hidden])){touch-action:pan-y}
+@media(max-width:600px),(max-height:600px){#empty{top:20px;max-height:calc(100% - 40px)}}
