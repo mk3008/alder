@@ -161,6 +161,10 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
+.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
+.tab-strip>.png-action[hidden]{display:none}
+
 /* Icon-only header actions share the existing 40px height as a square target.
    Captioned source actions keep their labels and responsive visibility. */
 header{--header-control-width:40px}

@@ -13,6 +13,15 @@ try{
  for(let i=0;i<120&&d.querySelector('#open').disabled;i++)await new Promise(r=>setTimeout(r,25));
  assert.equal(d.querySelector('#open').disabled,false);
  const strip=w.getComputedStyle(d.querySelector('.tab-strip'));assert.equal(strip.height,'auto');assert.equal(strip.minHeight,'44px');assert.equal(strip.flexShrink,'0');assert.equal(w.getComputedStyle(d.querySelector('#tabs')).overflowX,'auto');
+ const exportIDs=['save-image','copy-image'],stripIDs=['tabs',...exportIDs,'share-source','edit-markdown'];
+ assert.deepEqual([...d.querySelector('.tab-strip').children].map(n=>n.id),stripIDs,'exports precede source sharing in natural document order');
+ for(const [id,label] of [['save-image','グラフ全体をPNGで保存'],['copy-image','グラフ全体をPNGでコピー']]){
+  const n=d.getElementById(id),c=w.getComputedStyle(n);assert.equal(n.hidden,true,'no active document hides '+id);assert.equal(n.disabled,true);assert.equal(n.tabIndex,0);assert.equal(n.type,'button');
+  assert.equal(n.getAttribute('aria-label'),label);assert.equal(n.title,label);assert.equal(n.textContent.trim(),'','compact action is icon-only');assert.equal(n.querySelectorAll('svg').length,1);assert.equal(n.querySelector('svg').getAttribute('aria-hidden'),'true');
+  for(const property of ['width','height','minWidth','minHeight'])assert.equal(c[property],'40px',id+' '+property);
+  assert.equal(c.flexShrink,'0');assert.equal(c.display,'none','hidden action has no rendered target');
+  assert.equal(n.closest('.toolbar'),null);assert.equal(n.parentElement,d.querySelector('.tab-strip'));
+ }
  const ids=['node-list-toggle','open','open-url','open-text','refresh','theme','drawer'];
  assert.equal(d.querySelectorAll('header>button').length,ids.length);assert.deepEqual([...d.querySelectorAll('header>button')].map(n=>n.id),ids);
  for(const id of ids){const n=d.getElementById(id),c=w.getComputedStyle(n);assert.ok(n.getAttribute('aria-label'));assert.equal(n.querySelectorAll('svg').length,1);assert.equal(c.height,'40px',id);assert.equal(c.minHeight,'40px',id);if(['node-list-toggle','theme','drawer'].includes(id)){assert.equal(c.width,'var(--header-control-width)',id+' shared width');assert.equal(c.minWidth,'var(--header-control-width)');assert.equal(c.padding,'7px');}assert.equal(c.alignItems,'center');assert.equal(c.justifyContent,'center');}
@@ -34,7 +43,10 @@ try{
  header.removeAttribute('style');
  // Inspect every media branch, including inactive ones: no individual header
  // control may silently acquire a different height at a breakpoint.
- let branches=0;function inspect(rules){for(const r of rules){if(r.cssRules?.length){branches++;inspect(r.cssRules);}if(r.selectorText&&ids.some(id=>d.getElementById(id).matches(r.selectorText))){for(const p of ['height','min-height']){const value=r.style.getPropertyValue(p);if(value)assert.equal(value,'40px',`${r.selectorText} ${p}`);}}}}
+ let branches=0;function inspect(rules){for(const r of rules){if(r.cssRules?.length){branches++;inspect(r.cssRules);}if(r.selectorText&&[...ids,...exportIDs].some(id=>d.getElementById(id).matches(r.selectorText))){for(const p of ['height','min-height']){const value=r.style.getPropertyValue(p);if(value)assert.equal(value,'40px',`${r.selectorText} ${p}`);}}}}
  inspect(d.styleSheets[0].cssRules);
- console.log(JSON.stringify({headerControls:'passed',controls:ids.length,mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
+ d.querySelector('#open-sample').click();for(let i=0;i<120&&!d.querySelector('.node');i++)await new Promise(r=>setTimeout(r,25));
+ for(const id of exportIDs){assert.equal(d.getElementById(id).hidden,false);assert.equal(d.getElementById(id).disabled,false);assert.equal(w.getComputedStyle(d.getElementById(id)).display,'flex');}
+ assert.deepEqual([...d.querySelectorAll('.tab-strip > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),stripIDs.slice(1),'tab-strip action order is natural and contains both exports');
+ console.log(JSON.stringify({tabStripExports:'passed',headerControls:'passed',controls:ids.length,mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
 }finally{w.close();}
