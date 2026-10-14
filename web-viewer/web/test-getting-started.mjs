@@ -1,5 +1,7 @@
 // DOM contract only; real layout and keyboard traversal are covered in the browser gate.
 import assert from 'node:assert/strict';
+import {gettingStartedFile} from './test-getting-started-browser.mjs';
+assert.ok(gettingStartedFile.length>0);
 import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';

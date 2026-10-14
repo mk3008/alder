@@ -1,4 +1,8 @@
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {parseDesign} from '../src/graph.ts';
+export const gettingStartedFile=readFileSync(new URL('./authorities/business-design.md',import.meta.url),'utf8');
+assert.ok(parseDesign(gettingStartedFile).graph.nodes.length,'file fixture must satisfy the real parser');
 import {readSessionInPage,waitForExactRead} from './wait-saved-viewer.mjs';
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
@@ -37,7 +41,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
-   await page.locator('#fallback').setInputFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from('# Object 文書\n\n## Information\n\n- 内容\n')});
+   await page.locator('#fallback').setInputFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
