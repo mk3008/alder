@@ -161,9 +161,9 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
-#document-actions>#refresh,#document-actions>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
-#document-actions>#refresh:hover:not(:disabled),#document-actions>.png-action:hover:not(:disabled){background:var(--select)}
-#document-actions>#refresh[hidden],#document-actions>.png-action[hidden]{display:none}
+#document-actions>[id=refresh],#document-actions>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+#document-actions>[id=refresh]:hover:not(:disabled),#document-actions>.png-action:hover:not(:disabled){background:var(--select)}
+#document-actions>[id=refresh][hidden],#document-actions>.png-action[hidden]{display:none}
 
 /* One ordered responsive policy: full -> no title -> icons only.
    Expanded typography/spacing never changes with the viewport, so canonical

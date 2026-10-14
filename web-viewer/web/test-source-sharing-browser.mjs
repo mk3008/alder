@@ -152,7 +152,7 @@ export async function verifySourceSharing(browser,{url='http://127.0.0.1:4173/'}
   await openURL(page);const geometry=[];
   for(const width of [1280,800,393,320])for(const theme of ['light','dark']){
    await page.setViewportSize({width,height:800});if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
-   const button=page.locator('#share-source');await button.scrollIntoViewIfNeeded();const measured=await button.evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height,hit:el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),strip:!!el.closest('.tab-strip'),name:el.getAttribute('aria-label')};});
+   await ensureDocumentActions(page);const button=page.locator('#share-source');await button.scrollIntoViewIfNeeded();const measured=await button.evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height,hit:el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),strip:!!el.closest('.tab-strip'),name:el.getAttribute('aria-label')};});
    assert.ok(measured.x>=0&&measured.right<=width+.5,'share control fits '+width);assert.ok(measured.width>=40&&measured.height>=40);assert.equal(measured.hit,true,'share target is not covered');assert.equal(measured.strip,true);assert.ok(measured.name?.trim());await share(page);geometry.push({width,theme,...measured});
    if(process.env.SOURCE_SHARING_SCREENSHOTS&&(width===1280||width===320))await page.screenshot({path:process.env.SOURCE_SHARING_SCREENSHOTS+`/source-sharing-${width}-${theme}.png`});
   }
