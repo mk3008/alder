@@ -185,7 +185,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .empty-guide h2{font-size:16px;margin:0 0 8px}
 .empty-guide p{margin:8px 0}
 .empty-actions{display:flex;flex-wrap:wrap;column-gap:20px;row-gap:0}
-.empty-guide a,.empty-guide button{display:inline-flex;align-items:center;min-height:44px;max-width:100%;padding:8px 0;font:inherit;color:inherit;text-align:left;text-decoration:underline;text-underline-offset:3px;white-space:normal}
+#empty .empty-guide a,#empty .empty-guide button{display:inline-flex;align-items:center;min-height:44px;max-width:100%;padding:8px 0;font:inherit;color:inherit;text-align:left;text-decoration:underline;text-underline-offset:3px;white-space:normal}
 .empty-guide a:hover,.empty-guide button:hover{text-decoration-thickness:2px}
 .empty-guide a:focus-visible,.empty-guide button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 #viewport:has(>#empty:not([hidden])){touch-action:pan-y}

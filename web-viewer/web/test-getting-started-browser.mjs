@@ -55,6 +55,8 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await opening.isVisible(),true);
    const typography=await page.locator('.empty-guide').evaluateAll(nodes=>nodes.map(n=>{const h=n.querySelector('h2'),r=n.getBoundingClientRect();return {x:r.x,width:r.width,font:getComputedStyle(h).fontSize,align:getComputedStyle(n).textAlign};}));
    assert.deepEqual(typography[0],typography[1],'both guides share heading style and alignment');
+   const actionLeft=await page.locator('#open-sample').evaluate(e=>({x:e.getBoundingClientRect().x,padding:getComputedStyle(e).paddingLeft}));assert.equal(actionLeft.x,typography[0].x);assert.equal(actionLeft.padding,'0px');
+   if([1440,393,320].includes(width)){await page.screenshot({path:`web/evidence/header-controls/guide-${width}-${preview?'preview':'production'}.png`});}
    for(const [id,title,input] of [['guide-open-url','URLを開く','source-url'],['guide-open-text','テキストを入力','source-text']]){
     const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();await action.focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#source-title').textContent(),title);assert.equal(await page.locator('#source-dialog').isVisible(),true);
@@ -71,6 +73,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await readme.evaluate(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return hit===e||e.contains(hit);}),true,'README link is reachable after scrolling');
    const bounds=await page.locator('#empty').evaluate(e=>({width:e.getBoundingClientRect().width,scroll:e.scrollWidth}));
    assert.ok(bounds.scroll<=bounds.width+1,'guide has no horizontal overflow');
+   if([1440,393,320].includes(width)){if(await page.locator('#status').isVisible())await page.locator('#status-close').click();await readme.scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-end-${width}-${preview?'preview':'production'}.png`});}
    await page.locator('#open-sample').click();await page.waitForSelector('.node');
    assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
@@ -81,7 +84,6 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
-   if([1440,393,320].includes(width)){await page.locator('#opening-title').scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-${width}-${preview?'preview':'production'}.png`});}
    results.push({width,preview,repositoryVisible:true,guide:'no horizontal overflow; sample/file/reload/close passed'});
   }
   return {results,limits:'Chromium desktop emulation; native mobile and human acceptance remain separate.'};
