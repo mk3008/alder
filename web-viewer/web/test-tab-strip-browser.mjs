@@ -1,31 +1,44 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
-// Read-only shared geometry oracle. Source refresh and image actions precede
+// Open the native disclosure only when responsive layout collapsed the actions.
+export async function ensureDocumentActions(page){
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const toggle=page.locator('#document-actions-toggle');
+ if(await toggle.isVisible()&&await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+}
+// Shared geometry oracle. Source refresh and image actions precede
 // sharing while the tab navigation itself owns horizontal scrolling.
 export async function assertTabStripActions(page,{refreshDisabled=false}={}){
+ await ensureDocumentActions(page);
  const measured=await page.locator('.tab-strip').evaluate(strip=>{
   const box=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-  return {strip:box(strip),window:{width:innerWidth,height:innerHeight},order:[...strip.children].map(el=>el.id),tabs:box(document.querySelector('#tabs')),actions:[...strip.querySelectorAll(':scope > button')].map(button=>{
+  return {mode:strip.dataset.actionsMode,group:box(strip.querySelector('#document-actions')),toggle:box(strip.querySelector('#document-actions-toggle')),strip:box(strip),window:{width:innerWidth,height:innerHeight},order:[...strip.children].map(el=>el.id),actionOrder:[...strip.querySelector('#document-actions').children].map(el=>el.id),tabs:box(document.querySelector('#tabs')),actions:[...strip.querySelectorAll('#document-actions > button')].map(button=>{
    const r=box(button),hit=document.elementFromPoint((r.left+r.right)/2,(r.top+r.bottom)/2),icon=button.querySelector('svg');
-   return {id:button.id,...r,hidden:button.hidden,disabled:button.disabled,hit:hit===button||button.contains(hit),label:button.getAttribute('aria-label'),title:button.title,text:button.textContent.trim(),tabIndex:button.tabIndex,icon:icon&&{...box(icon),hidden:icon.getAttribute('aria-hidden')},opacity:getComputedStyle(button).opacity,css:{width:getComputedStyle(button).width,height:getComputedStyle(button).height}};
+   return {id:button.id,...r,hidden:button.hidden,disabled:button.disabled,hit:hit===button||button.contains(hit),label:button.getAttribute('aria-label'),title:button.title,text:button.innerText.trim(),tabIndex:button.tabIndex,icon:icon&&{...box(icon),hidden:icon.getAttribute('aria-hidden')},opacity:getComputedStyle(button).opacity,css:{width:getComputedStyle(button).width,height:getComputedStyle(button).height}};
   })};
  });
  const tolerance=.75,contains=(outer,inner)=>inner.left>=outer.left-tolerance&&inner.right<=outer.right+tolerance&&inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
- assert.deepEqual(measured.order,['tabs','refresh','save-image','copy-image','share-source','edit-markdown'],'natural tab-strip order places refresh before PNG actions and sharing');
+ assert.deepEqual(measured.order,['tabs','document-actions-toggle','document-actions'],'tabs precede the document-action disclosure');
+ assert.deepEqual(measured.actionOrder,['refresh','save-image','copy-image','share-source','edit-markdown'],'natural document-action order places refresh before PNG actions and sharing');
+ const menu=measured.mode==='menu',windowBox={left:0,top:0,right:measured.window.width,bottom:measured.window.height};
+ assert.ok(['menu','inline'].includes(measured.mode),'document actions have an explicit responsive mode');
+ if(menu){assert.ok(contains(measured.strip,measured.toggle),'disclosure remains inside tab-strip');assert.ok(measured.toggle.left>=measured.tabs.right-tolerance,'disclosure does not overlap tabs');assert.ok(contains(windowBox,measured.group),'open actions fit the window');}
  assert.ok(measured.tabs.width>0,'tabs retain a usable scrolling region');
  assert.ok(contains({left:0,top:0,right:measured.window.width,bottom:measured.window.height},measured.strip),'tab-strip stays inside the visible window');
- let previous=measured.tabs;
+ let previous=menu?null:measured.tabs;
  for(const action of measured.actions){
   if(action.id==='refresh'){assert.equal(action.disabled,refreshDisabled,'refresh eligibility follows the active source');assert.equal(action.opacity,refreshDisabled?'0.4':'1','disabled refresh is visibly gray');}
-  assert.equal(action.hidden,false,action.id+' visible with an active document');assert.ok(contains(measured.strip,action),action.id+' remains within tab-strip');
-  assert.ok(action.left>=previous.right-tolerance,action.id+' has a separate target after previous control');assert.equal(action.hit,true,action.id+' native center hit-test');assert.equal(action.tabIndex,0,'natural keyboard order');
+  assert.equal(action.hidden,false,action.id+' visible with an active document');assert.ok(contains(menu?measured.group:measured.strip,action),action.id+' remains within its action container');
+  if(previous)assert.ok(menu?action.top>=previous.bottom-tolerance:action.left>=previous.right-tolerance,action.id+' has a separate target after previous control');assert.equal(action.hit,true,action.id+' native center hit-test');assert.equal(action.tabIndex,0,'natural keyboard order');
   assert.ok(action.width>=40-tolerance&&action.height>=40-tolerance,action.id+' at least 40px target');previous=action;
  }
+ for(const [id,label] of [['share-source','取得元の共有リンクをコピー'],['edit-markdown','原文を見る／編集する']]){const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);assert.equal(action.title,label);if(menu)assert.equal(action.text,label,'menu action exposes its label');}
  for(const [id,label] of [['refresh','現在の文書を取得元から読み直す'],['save-image','グラフ全体をPNGで保存'],['copy-image','グラフ全体をPNGでコピー']]){
-  const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);assert.equal(action.title,label);assert.equal(action.text,'','document action remains icon-only');assert.deepEqual(action.css,{width:'40px',height:'40px'});
+  const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);assert.equal(action.title,label);assert.equal(action.text,menu?label:'',menu?'menu action exposes its label':'inline document action remains icon-only');if(!menu)assert.deepEqual(action.css,{width:'40px',height:'40px'});else assert.ok(action.height>=44-tolerance,'menu action at least 44px high');
   assert.ok(action.icon&&contains(action,action.icon),'document-action icon inside its target');assert.equal(action.icon.hidden,'true','document-action icon is decorative');
-  assert.ok(Math.abs((action.icon.left+action.icon.right)-(action.left+action.right))<1.5,'document-action icon horizontally centered');assert.ok(Math.abs((action.icon.top+action.icon.bottom)-(action.top+action.bottom))<1.5,'document-action icon vertically centered');
+  if(!menu)assert.ok(Math.abs((action.icon.left+action.icon.right)-(action.left+action.right))<1.5,'document-action icon horizontally centered');assert.ok(Math.abs((action.icon.top+action.icon.bottom)-(action.top+action.bottom))<1.5,'document-action icon vertically centered');
  }
+ if(menu){await page.keyboard.press('Escape');assert.equal(await page.locator('#document-actions-toggle').getAttribute('aria-expanded'),'false','geometry inspection closes the disclosure');}
  return measured;
 }
 

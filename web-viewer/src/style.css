@@ -161,9 +161,9 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .display-options .graph-action:hover:not(:disabled){background:var(--select)}
 .display-options .graph-action:focus-visible{outline-offset:-3px}
 
-.tab-strip>#refresh,.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
-.tab-strip>#refresh:hover:not(:disabled),.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
-.tab-strip>#refresh[hidden],.tab-strip>.png-action[hidden]{display:none}
+#document-actions>#refresh,#document-actions>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+#document-actions>#refresh:hover:not(:disabled),#document-actions>.png-action:hover:not(:disabled){background:var(--select)}
+#document-actions>#refresh[hidden],#document-actions>.png-action[hidden]{display:none}
 
 /* One ordered responsive policy: full -> no title -> icons only.
    Expanded typography/spacing never changes with the viewport, so canonical
@@ -200,3 +200,19 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .empty-guide a:hover,.empty-guide button:hover{text-decoration-thickness:2px}
 .empty-guide a:focus-visible,.empty-guide button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 #viewport:has(>#empty:not([hidden])){touch-action:pan-y}
+
+/* One document action surface: inline when a complete active tab fits, otherwise
+   one disclosure. The same buttons keep their existing handlers and guards. */
+.tab-strip{position:relative}
+#document-actions{display:flex;flex-shrink:0;align-items:center}
+#document-actions-toggle{flex-shrink:0;align-self:center;width:44px;height:44px;font-size:24px;line-height:1;border-radius:5px;margin-inline:2px}
+#document-actions-toggle[hidden]{display:none}
+#document-actions-toggle:hover{background:var(--select)}
+.document-action-label{display:none}
+.tab-strip[data-actions-mode=menu] #document-actions{position:absolute;right:4px;top:100%;z-index:12;display:flex;flex-direction:column;align-items:stretch;width:max-content;max-width:calc(100vw - 16px);max-height:calc(100dvh - 120px);overflow:auto;padding:4px;background:var(--panel);border:1px solid var(--subtle);border-radius:6px;box-shadow:0 6px 20px #0003}
+.tab-strip[data-actions-mode=menu][data-actions-open=false] #document-actions{display:none}
+.tab-strip[data-actions-mode=menu] #document-actions>button{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-shrink:0;width:100%;min-width:0;min-height:44px;height:auto;margin:0;padding:10px;border-radius:4px;font-size:13px;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.tab-strip[data-actions-mode=menu] #document-actions>button[hidden]{display:none}
+.tab-strip[data-actions-mode=menu] .document-action-label{display:inline}
+.tab-strip[data-actions-mode=menu] .editor-caption{display:none}
+#document-actions>button:focus-visible{outline-offset:-3px}

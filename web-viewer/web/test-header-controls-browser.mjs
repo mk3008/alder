@@ -1,3 +1,4 @@
+import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
@@ -192,7 +193,7 @@ export async function verifyHeaderControls(browser){
   assert.equal(await page.locator('#refresh').isVisible(),false,'no active document hides refresh');
   await page.locator('#open-sample').click();await page.locator('.node').first().waitFor();await settle(page);
   const withSample=await readHeader(page);assertHeader(withSample,'sample open');assert.deepEqual(withSample.canonical,canonical,'sample document does not change canonical header measurements');
-  assert.equal(await page.locator('#refresh').isVisible(),true,'selected sample keeps refresh visible');assert.equal(await page.locator('#refresh').isDisabled(),true,'sample has no reloadable external source');assert.equal(await page.locator('#refresh').evaluate(button=>getComputedStyle(button).opacity),'0.4','sample refresh remains gray');
+  await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true,'selected sample keeps refresh reachable');assert.equal(await page.locator('#refresh').isDisabled(),true,'sample has no reloadable external source');assert.equal(await page.locator('#refresh').evaluate(button=>getComputedStyle(button).opacity),'0.4','sample refresh remains gray');
   assert.deepEqual(pageErrors,[],'header resize/font tests have no page errors, including ResizeObserver loops');
   assert.deepEqual(resizeObserverErrors,[],'header resize/font tests do not log ResizeObserver loop errors');
   return {results,boundaries,sweeps,sampleRefresh:{visible:true,disabled:true,headerMetricsUnchanged:true},pageErrors,resizeObserverErrors,fontChange:{width:fontBoundary,before:beforeFont.visibleSet,after:afterFont.visibleSet},zoomResults,limit:'Chromium CSS viewport/DPR zoom-equivalent coverage; native browser zoom UI, physical mobile devices and human interaction review are separate.'};
