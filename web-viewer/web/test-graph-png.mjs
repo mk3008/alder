@@ -18,8 +18,12 @@ const w=new JSDOM(`<style>${css}</style><div id="nodes"><div class="node busines
 Object.assign(globalThis,{document:w.document,window:w,getComputedStyle:w.getComputedStyle.bind(w),XMLSerializer:w.XMLSerializer});
 const nodes=w.document.querySelector('#nodes'),edges=w.document.querySelector('#edges'),card=nodes.firstElementChild;
 Object.defineProperties(card,{offsetWidth:{value:260},offsetHeight:{value:68}});
-edges.querySelector('.edge').getBBox=()=>({x:-80,y:-60,width:240,height:120});
-edges.querySelector('.edge-label').getBBox=()=>({x:-200,y:-100,width:460,height:20});
+w.SVGElement.prototype.getBBox=function(){
+ assert.notEqual(this.ownerSVGElement,edges,'measure a copy, never the live zoomed SVG');
+ assert.equal(this.ownerSVGElement.getAttribute('viewBox'),'0 0 1 1');
+ assert.equal(this.ownerSVGElement.style.width,'1px');
+ return this.matches('.edge')?{x:-80,y:-60,width:240,height:120}:{x:-200,y:-100,width:460,height:20};
+};
 const original=nodes.outerHTML+edges.outerHTML;
 for(const theme of ['light','dark']){
  w.document.documentElement.dataset.theme=theme;
@@ -34,6 +38,7 @@ for(const theme of ['light','dark']){
  assert.match(image.svg,/日本語の長い名前/);assert.match(image.svg,/長い日本語ラベル/);
  assert.ok(!image.svg.includes('https:')&&!image.svg.includes('id="nodes"')&&!image.svg.includes('id="edges"'));
  assert.equal(nodes.outerHTML+edges.outerHTML,original,'source DOM untouched');
+ assert.equal(w.document.querySelectorAll('body > svg').length,1,'temporary measurement is removed');
 }
 const base=snapshotGraph(nodes,edges,'#fff');
 nodes.style.transform='scale(.25)';nodes.style.left='3000px';nodes.style.width='100000px';edges.setAttribute('viewBox','-1000 -2000 50000 90000');
@@ -42,6 +47,8 @@ card.remove();assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/項目があ�
 const excess=w.document.createElement('div');excess.innerHTML='<span></span>'.repeat(4001);nodes.append(excess);
 assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/大きすぎる/);excess.remove();
 const text=w.document.createTextNode('a'.repeat(1_000_001));nodes.append(text);assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/大きすぎる/);text.remove();
+const bbox=w.SVGElement.prototype.getBBox;w.SVGElement.prototype.getBBox=()=>{throw Error('controlled measurement failure');};
+assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/controlled measurement failure/);assert.equal(w.document.querySelectorAll('body > svg').length,1,'failed measurement is removed');w.SVGElement.prototype.getBBox=bbox;
 
 // Pixel generation failures must release the bitmap/canvas; native download and
 // nonblank pixels are verified separately in Chrome, not by these mocks.

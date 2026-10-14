@@ -40,18 +40,27 @@ export function snapshotGraph(nodes:HTMLElement,edges:SVGSVGElement,background:s
   if(nodes.querySelectorAll('*').length+edges.querySelectorAll('*').length>MAX_ELEMENTS||(nodes.textContent?.length??0)+(edges.textContent?.length??0)>MAX_TEXT)throw Error(sizeError);
   const cards=Array.from(nodes.querySelectorAll<HTMLElement>(':scope > .node'));
   const boxes:Box[]=cards.map(n=>({x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight}));
-  for(const element of Array.from(edges.querySelectorAll<SVGGraphicsElement>(':scope > .edge,:scope > .edge-label'))){
-    const b=element.getBBox();
-    // getBBox excludes strokes and arrow markers; their maximum graph radius is
-    // below 12px, including the selected 3.2px stroke and 7-unit arrow marker.
-    boxes.push({x:b.x-12,y:b.y-12,width:b.width+24,height:b.height+24});
-  }
   if(!cards.length)throw Error('画像にする項目がありません。');
-  const size=imageSize(boxes),doc=nodes.ownerDocument,root=doc.createElementNS(SVG,'svg');
+  const doc=nodes.ownerDocument,edgeCopies=Array.from(edges.children).map(styledClone);
+  const measured=edgeCopies.filter(e=>e.matches('.edge,.edge-label')) as SVGGraphicsElement[];
+  if(measured.length){
+    // Native SVG text bounds are subtly scale-dependent. Measure the styled
+    // copies at exactly 1 graph unit per CSS pixel without touching the camera.
+    const measurement=doc.createElementNS(SVG,'svg');measurement.setAttribute('viewBox','0 0 1 1');measurement.setAttribute('width','1');measurement.setAttribute('height','1');measurement.setAttribute('aria-hidden','true');
+    measurement.style.cssText='position:fixed;inset:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none;contain:strict';
+    measurement.append(...measured);doc.body.append(measurement);
+    try{for(const element of measured){
+      const b=element.getBBox();
+      // getBBox excludes strokes and arrow markers. Reserve their radius in
+      // addition to the outer crop margin, including selected 3.2px strokes.
+      boxes.push({x:b.x-12,y:b.y-12,width:b.width+24,height:b.height+24});
+    }}finally{measurement.remove();}
+  }
+  const size=imageSize(boxes),root=doc.createElementNS(SVG,'svg');
   root.setAttribute('width',String(size.width));root.setAttribute('height',String(size.height));root.setAttribute('viewBox',`0 0 ${size.bounds.width} ${size.bounds.height}`);
   const backdrop=doc.createElementNS(SVG,'rect');backdrop.setAttribute('width','100%');backdrop.setAttribute('height','100%');backdrop.setAttribute('fill',background);root.append(backdrop);
   const lines=doc.createElementNS(SVG,'g');lines.setAttribute('transform',`translate(${-size.bounds.x} ${-size.bounds.y})`);
-  for(const child of Array.from(edges.children))lines.append(styledClone(child));root.append(lines);
+  for(const child of edgeCopies)lines.append(child);root.append(lines);
   const foreign=doc.createElementNS(SVG,'foreignObject');foreign.setAttribute('width',String(size.bounds.width));foreign.setAttribute('height',String(size.bounds.height));
   const content=doc.createElementNS(HTML,'div');content.style.cssText=`position:relative;width:${size.bounds.width}px;height:${size.bounds.height}px;`;
   for(const card of cards){const clone=styledClone(card);clone.style.left=(parseFloat(card.style.left)-size.bounds.x)+'px';clone.style.top=(parseFloat(card.style.top)-size.bounds.y)+'px';content.append(clone);}

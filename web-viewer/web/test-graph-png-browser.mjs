@@ -226,6 +226,7 @@ async function exportPng(f,{input='click',nonmutation=true}={}){
 // Emit only these fixed synthetic-fixture images, never arbitrary app data.
 // CI can inspect the actual downloaded pixels separately from geometric checks.
 async function reportSyntheticImage(page,theme,result){
+ if(theme==='light'&&result.buffer.length<=2_000_000)console.log('GRAPH_PNG_NATIVE_IMAGE '+JSON.stringify({theme,...result.png,base64:result.buffer.toString('base64'),note:'Original synthetic native PNG download for full-resolution Japanese glyph review.'}));
  const source={width:result.png.width,height:result.png.height,sha256:result.png.sha256};
  if(result.buffer.length<200_000){
   console.log('GRAPH_PNG_IMAGE '+JSON.stringify({theme,...source,base64:result.buffer.toString('base64'),note:'Original bytes from the native PNG download; no resizing or screenshot substitution.'}));return;
@@ -270,6 +271,7 @@ export async function verifyGraphPng(browser){
   await page.locator('#out').click();await page.locator('#out').click();await page.locator('#viewport').evaluate(v=>{v.scrollLeft+=170;v.scrollTop+=90;});await saved(page);
   const camera=await exportPng(f);
   await page.locator('#theme').click();await saved(page);const dark=await exportPng(f);await reportSyntheticImage(page,'dark',dark);
+  if(camera.png.sha256!==light.png.sha256){const inputs=await page.evaluate(()=>__graphPng.svgs.slice(0,2));let at=0;while(at<Math.min(inputs[0].length,inputs[1].length)&&inputs[0][at]===inputs[1][at])at++;console.log('GRAPH_PNG_CAMERA_DIAGNOSTIC '+JSON.stringify({light:light.png,camera:camera.png,firstDifference:at,before:inputs[0].slice(Math.max(0,at-120),at+240),after:inputs[1].slice(Math.max(0,at-120),at+240)}));}
   assert.deepEqual(camera.png,light.png,'zoom/scroll have no effect on full-graph raster dimensions or bytes');
   assert.deepEqual([dark.png.width,dark.png.height],[light.png.width,light.png.height]);assert.notEqual(dark.png.sha256,light.png.sha256);assert.notDeepEqual(dark.pixels.background,light.pixels.background);
   await page.waitForFunction(()=>__graphPng.urls.length>0&&__graphPng.urls.every(item=>__graphPng.revoked.includes(item.url)));
