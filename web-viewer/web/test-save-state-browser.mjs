@@ -94,6 +94,7 @@ async function cleanReload(page){const before=await page.evaluate(saveStateSnaps
 
 async function recovery(page,expected){
  assert.equal(await page.locator('#status').isVisible(),true);assert.equal(await page.locator('#status').getAttribute('data-key'),'storage');assert.equal(await page.locator('#save-actions').isVisible(),true);assert.equal(await page.locator('#status-close').isVisible(),false);assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');assert.equal(await page.locator('#status-text').getAttribute('aria-live'),'assertive');
+ if(expected.includes('save-reload'))assert.equal(await page.locator('#save-reload').textContent(),'未保存の変更を破棄して読み直す','reload action names unsaved-change discard explicitly');
  const visible=await page.locator('#save-actions button').evaluateAll(buttons=>buttons.filter(button=>!button.hidden).map(button=>({id:button.id,tag:button.tagName,name:button.getAttribute('aria-label')||button.textContent,tabIndex:button.tabIndex,disabled:button.disabled})));assert.deepEqual(visible.map(button=>button.id).sort(),[...expected].sort());for(const button of visible){assert.equal(button.tag,'BUTTON');assert.ok(button.name.trim());if(!button.disabled)assert.ok(button.tabIndex>=0);}
  const help=await page.locator('#save-help').textContent();assert.match(help,/Markdown/);assert.match(help,/座標|位置|配置/);assert.match(help,/タブ/);assert.match(help,/含[まみ]|対象外|保存し|保存され|含め/);assert.match(help,/開|読/);
 }

@@ -1,3 +1,4 @@
+import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
 import {verifySourceSharing} from './test-source-sharing-browser.mjs';
 import {verifySaveState} from './test-save-state-browser.mjs';
 import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
@@ -45,6 +46,7 @@ try {
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
    {name:'markdownEditor',run:()=>verifyMarkdownEditor(browser)},
+   {name:'editorViewport',run:()=>verifyEditorViewport(browser)},
    {name:'sourceSharing',run:()=>verifySourceSharing(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
