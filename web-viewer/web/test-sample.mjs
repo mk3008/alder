@@ -1,6 +1,7 @@
 // DOM/IndexedDB model checks for the bundled public sample; no network.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
@@ -17,6 +18,40 @@ async function ready(e){for(let i=0;i<120&&e.$('open').disabled;i++)await tick(2
 const click=(e,id)=>e.$(id).click();
 function choose(e,node){node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointerup({pointerId:1});}
 try{
+ // Purchase-request format migration: source, graph, exporter and rendered body agree.
+ const purchasePath='../business-design/purchase-request/README.md';
+ const purchaseRaw=readFileSync(purchasePath,'utf8'),purchaseDesign=parseDesign(purchaseRaw);
+ const activityNames=['備品購入を申請する','購入申請を承認する','購入申請を却下する','承認済み備品を購入する'];
+ assert.deepEqual(purchaseDesign.activityOrder,activityNames);
+ assert.equal(purchaseDesign.graph.nodes.filter(n=>n.type==='business').length,4);
+ assert.deepEqual(purchaseDesign.graph.nodes.filter(n=>n.type==='object').map(n=>n.name).sort(),['申請者','承認者','購買担当者','購入申請'].sort());
+ assert.equal(purchaseDesign.graph.relations.length,11);
+ const exported=JSON.parse(execFileSync('python3',['../tools/business_graph/export.py',purchasePath],{encoding:'utf8'}));
+ assert.deepEqual(purchaseDesign.graph,exported,'Viewer and existing Python exporter project the same graph');
+ const outputs=activityNames.map(name=>purchaseDesign.graph.relations.filter(r=>r.kind==='output'&&r.from===name));
+ for(const [i,state] of ['submitted','approved','rejected','purchased'].entries()){
+  assert.equal(outputs[i].length,1);assert.equal(outputs[i][0].to,'購入申請');assert.ok(outputs[i][0].label.includes(state));
+  assert.ok(purchaseDesign.graph.nodes.find(n=>n.id===activityNames[i]).result.includes(state));
+ }
+ for(const [name,state] of [[activityNames[1],'submitted'],[activityNames[2],'submitted'],[activityNames[3],'approved']]){
+  const input=purchaseDesign.graph.relations.find(r=>r.kind==='input'&&r.from==='購入申請'&&r.to===name);
+  assert.ok(input?.label.includes(state));assert.ok(purchaseDesign.graph.nodes.find(n=>n.id===name).when.includes(state));
+ }
+ assert.ok(purchaseDesign.graph.nodes.find(n=>n.id===activityNames[2]).result.includes('購入対象にはならない'));
+ assert.ok(purchaseRaw.includes('識別子の採番・入力方法はこの業務設計では規定しない'));
+ for(const unresolved of ['申請金額によって承認者や承認段階が変わる場合の扱い','在庫確認、発注、納品、検収、支払に関する業務','購入先の選定方法','購入後の備品管理、資産管理、廃棄','外部システムとの連携','監査履歴や通知に関する業務'])assert.ok(purchaseRaw.includes('- '+unresolved));
+ const purchase=await ready(env());click(purchase,'open-text');purchase.$('source-text').value=purchaseRaw;await purchase.$('source-submit').onclick();
+ assert.equal(purchase.nodes().length,8);assert.equal(purchase.$('edges').querySelectorAll('.edge').length,11);
+ assert.ok(purchase.$('detail').textContent.includes('現在の業務設計で未決定の事項'));
+ for(const name of purchaseDesign.graph.nodes.map(n=>n.name)){
+  assert.ok(purchaseDesign.sections[name].startsWith('# '+(activityNames.includes(name)?'Activity ':'Object ')+name));
+  const node=Array.from(purchase.nodes()).find(n=>n.dataset.node===name);assert.ok(node);choose(purchase,node);
+  assert.equal(purchase.$('detail').querySelector('h1').textContent,(activityNames.includes(name)?'Activity ':'Object ')+name);
+  assert.ok(purchase.$('detail').textContent.includes(name),'selected graph node resolves to its Markdown section');
+ }
+ click(purchase,'edit-markdown');assert.equal(purchase.$('source-text').value,purchaseRaw);
+ assert.deepEqual(purchase.calls(),{fetches:0,pickers:0});
+ checks.push('purchase request: four activities, four objects, eleven relations, branch states, six unresolved items, Python parity and every node Markdown reference');
  const db=new IDBFactory(),e=env(db),history=e.w.history.length;
  assert.equal(e.$('open-sample').getAttribute('aria-disabled'),'true');click(e,'open-sample');assert.equal(e.tabs().length,0);await ready(e);
  assert.equal(e.$('open-sample').textContent,'サンプルを開く');assert.equal(e.$('empty').hidden,false);assert.ok(e.$('empty').textContent.startsWith('Business Design Markdownを開いてください。'));
