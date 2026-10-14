@@ -396,11 +396,13 @@ $('share-source').onclick=async()=>{
   catch{status('共有リンクをコピーできませんでした。ブラウザーのクリップボード許可を確認して、もう一度操作してください。','error');}
   finally{copyingSource=false;sharingChrome();}
 };
-let sharedSourceAbort:AbortController|undefined,sharedSourceToken=0,pendingSharedHash:string|undefined;
+let sharedSourceAbort:AbortController|undefined,sharedSourceToken=0,sharedSourceNavigation=0,pendingSharedHash:string|undefined;
 function drainSharedSource(){if(restoring||opening||sourceBusy||closing||documentSaving||sharedSourceAbort||pendingSharedHash===undefined)return;const hash=pendingSharedHash;pendingSharedHash=undefined;void openSharedSource(hash);}
 async function openSharedSource(requestedHash=location.hash){
   // A different explicit navigation supersedes a fetch, but never interrupts a save.
   const hash=requestedHash;if(restoring)return;
+  // Expire a prompt-waiting selection without interrupting an atomic save.
+  const navigation=++sharedSourceNavigation;
   if(!/^#source(?:=|$)/.test(hash)){pendingSharedHash=undefined;if(sharedSourceAbort&&!documentSaving){sharedSourceAbort.abort();sharedSourceAbort=undefined;sharedSourceToken++;opening=false;render();}return;}
   if(location.hash===hash)history.replaceState(history.state,'',location.pathname+location.search);
   if(documentSaving){pendingSharedHash=hash;return;}
@@ -413,8 +415,8 @@ async function openSharedSource(requestedHash=location.hash){
     if(existing){
       // Revisit selects the saved document, including local edits and its view.
       // Only explicit Refresh may replace it with the source's current content.
-      if(sourceTarget&&sourceTarget!==existing.key&&!await closeSource())return;
-      if(token!==sharedSourceToken)return;
+      if(sourceTarget&&sourceTarget!==existing.key&&!(await (sourceClosePrompt??closeSource())))return;
+      if(token!==sharedSourceToken||navigation!==sharedSourceNavigation)return;
       const changed=capture()||state.active!==existing.key;
       state.active=existing.key;render();persist(180,changed);
       status('開いている共有元のタブを選択しました。保存内容と編集は保持しています。');
