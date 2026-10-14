@@ -153,6 +153,7 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 
 #share-source[hidden]{display:none}
 
-.display-options #reset-layout{grid-column:1 / -1;width:auto;height:auto;min-height:40px;margin:2px 6px;padding:8px 12px;border:1px solid var(--line);border-radius:4px;white-space:normal;overflow-wrap:anywhere}
-.display-options #reset-layout:hover:not(:disabled){background:var(--select)}
-.display-options #reset-layout:focus-visible{outline-offset:-3px}
+.graph-actions{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:6px;margin:2px 6px}
+.display-options .graph-action{display:inline-flex;align-items:center;justify-content:flex-start;gap:6px;flex:0 1 auto;width:max-content;max-width:100%;height:auto;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:4px;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.display-options .graph-action:hover:not(:disabled){background:var(--select)}
+.display-options .graph-action:focus-visible{outline-offset:-3px}

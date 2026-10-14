@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
+import {RotateCcw} from 'lucide';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
@@ -48,6 +49,8 @@ try{
 
  const e=await boot({seed:session(modified())});await flush(e);const baseline=e.state(),oldGeometry=geometry(e),button=e.$('reset-layout');
  assert.equal(button.type,'button');assert.equal(button.textContent,'レイアウトを初期値に戻す');assert.equal(button.closest('#display-options').hidden,true);
+ assert.equal(button.parentElement.className,'graph-actions');assert.ok(button.classList.contains('graph-action'));
+ assert.equal(button.querySelector('svg').getAttribute('aria-hidden'),'true','decorative reset icon does not change the accessible name');assert.deepEqual([...button.querySelector('svg').children].map(n=>[n.tagName,n.getAttribute('d')]),RotateCcw.map(([tag,attrs])=>[tag,attrs.d]));assert.equal(button.querySelector('span').textContent,'レイアウトを初期値に戻す');
  e.$('display-settings-toggle').click();button.focus();button.click();
  const after=e.state();assert.deepEqual(after.tabs[0].positions,json(initial().positions));assert.deepEqual(layout(after.tabs[0]),json(layout(initial())));
  assert.deepEqual(fields(after.tabs[0]),fields(baseline.tabs[0]));assert.deepEqual(after.tabs[1],baseline.tabs[1]);assert.deepEqual({...after,tabs:[]},{...baseline,tabs:[]});
