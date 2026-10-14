@@ -22,7 +22,7 @@ export async function assertToolbarLayout(page,{open}={}){
   return {actionRow:actionRow&&{...box(actionRow),display:getComputedStyle(actionRow).display,wrap:getComputedStyle(actionRow).flexWrap},window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
  });
  const epsilon=.75,contains=(outer,inner)=>inner.left>=outer.left-epsilon&&inner.right<=outer.right+epsilon&&inner.top>=outer.top-epsilon&&inner.bottom<=outer.bottom+epsilon,near=(a,b)=>Math.abs(a-b)<=epsilon;
- const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='reset-layout'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='reset-layout'&&i.id!=='findings-toggle'),buttons=controls.filter(i=>i.kind==='button');
+ const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='reset-layout'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='reset-layout'),buttons=controls.filter(i=>i.kind==='button');
  const message=label=>label+': '+JSON.stringify(measured);
  assert.ok(measured.expanded==='true'||measured.expanded==='false',message('gear exposes expansion state'));
  const expanded=measured.expanded==='true';if(open!==undefined)assert.equal(expanded,open,message('requested expansion state'));

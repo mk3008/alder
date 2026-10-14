@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
+import {IDBFactory} from 'fake-indexeddb';
 const dom=new JSDOM('<body></body>',{runScripts:'outside-only'});
 const compiled=await build({entryPoints:['src/findings.ts'],bundle:true,write:false,format:'iife',globalName:'findingUI'});
 dom.window.eval(compiled.outputFiles[0].text+'\nwindow.findingUI=findingUI;');
@@ -22,3 +23,29 @@ index.querySelector('[data-finding-key="finding:F01"]').click();assert.equal(sel
 assert.match(index.textContent,/関連先未設定/);assert.match(index.textContent,/参照先不一致/);assert.equal(index.querySelectorAll('img,script').length,0);
 assert.equal(dom.window.findingUI.findingsCount(design),4);
 dom.window.close();console.log('findings DOM model checks passed (not browser geometry)');
+
+// Real app wiring; native geometry is checked separately in Chromium.
+const app=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
+const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
+w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.HTMLElement.prototype.scrollIntoView=()=>{};w.eval(app.outputFiles[0].text);
+const $=id=>w.document.getElementById(id),tick=()=>new Promise(r=>setTimeout(r,20));
+try{
+ for(let i=0;i<100&&$('open-text').disabled;i++)await tick();assert.equal($('open-text').disabled,false);
+ $('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');$('source-submit').click();
+ for(let i=0;i<100&&!w.document.querySelector('.node');i++)await tick();assert.ok(w.document.querySelector('.node'));
+ assert.equal($('findings-toggle'),null);assert.equal($('display-settings-toggle').dataset.findingCount,undefined);
+ $('node-list-toggle').click();$('drawer-mode-findings').click();assert.equal($('node-categories').hidden,true);assert.equal($('node-list-search').hidden,true);
+ assert.match($('drawer-mode-findings').textContent,/4/);assert.equal($('node-list').querySelectorAll('[data-finding-key="finding:F01"]').length,1);
+ $('node-list').querySelector('[data-finding-key="finding:F01"]').click();assert.equal($('detail').querySelectorAll('[data-finding-target]').length,2);
+ $('detail').querySelector('[data-finding-target="受付情報"]').click();assert.equal(w.document.querySelector('.node.selected').dataset.node,'受付情報');assert.ok($('detail').querySelector('[data-finding-id="F01"]'));
+ $('detail').querySelector('.finding-back').click();$('node-list').querySelector('[data-finding-key="finding:F03"]').click();assert.equal($('detail').querySelectorAll('[data-finding-target]').length,0);
+ $('detail').querySelector('.finding-back').click();$('node-list').querySelector('[data-finding-key="finding:F02"]').click();assert.equal($('detail').querySelector('[data-finding-target]').disabled,true);assert.equal($('detail').querySelectorAll('img,script').length,0);
+ $('detail').querySelector('.finding-back').click();const resolved=$('node-list').querySelector('input');resolved.checked=true;resolved.dispatchEvent(new w.Event('change'));assert.ok($('node-list').querySelector('[data-finding-key="finding:F04"]'));
+ $('drawer-mode-items').click();assert.equal($('node-categories').hidden,false);assert.equal($('node-list-search').hidden,false);assert.ok($('node-list').querySelector('[data-list-node]'));
+ $('node-category-object').click();const objectRow=Array.from($('node-list').querySelectorAll('[data-list-node]')).find(row=>row.dataset.listNode==='受付情報');objectRow.querySelector('.node-eye').click();
+ $('drawer-mode-findings').click();$('node-list').querySelector('[data-finding-key="finding:F01"]').click();assert.equal($('detail').querySelector('[data-finding-target="受付情報"]').disabled,true,'hidden target stays hidden');
+ $('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8').split('# Findings')[0];$('source-submit').click();
+ for(let i=0;i<100&&$('tabs').children.length<2;i++)await tick();assert.equal($('tabs').children.length,2);assert.equal($('drawer-mode-items').getAttribute('aria-selected'),'true','new document has independent mode');assert.equal($('detail').querySelector('.finding-back'),null,'old finding detail does not leak to new document');
+ $('tabs').querySelector('.tab button').click();assert.equal($('drawer-mode-findings').getAttribute('aria-selected'),'true','original document retains its navigation mode');assert.ok($('detail').querySelector('[data-finding-id="F01"]'));
+ console.log('findings drawer application DOM wiring passed');
+}finally{w.close();}
