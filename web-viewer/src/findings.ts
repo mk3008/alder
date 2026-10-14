@@ -42,14 +42,14 @@ export function findingsPanel(design: Design, nodeId?: string): HTMLElement {
 export type FindingSelection = {type:'finding'|'problem';id:string};
 export function findingsCount(design:Design):number{return (design.findings??[]).filter(f=>f.status==='open').length+design.graph.nodes.filter(n=>typeof n.problem==='string').length;}
 /** Compact navigation, distinct from the full read-only detail panel. */
-export function findingsIndex(design:Design,showResolved:boolean,onResolved:(show:boolean)=>void,onSelect:(selection:FindingSelection)=>void):HTMLElement{
+export function findingsIndex(design:Design,showResolved:boolean,onResolved:(show:boolean)=>void,onSelect:(selection:FindingSelection)=>void,nodeId?:string):HTMLElement{
  const root=document.createElement('section');root.className='findings-index';
  const label=document.createElement('label');label.className='finding-filter';const toggle=document.createElement('input');toggle.type='checkbox';toggle.checked=showResolved;toggle.onchange=()=>onResolved(toggle.checked);label.append(toggle,document.createTextNode('解消済みも表示'));root.append(label);
  const row=(selection:FindingSelection,title:string,summary:string)=>{const button=document.createElement('button');button.className='finding-index-row';button.dataset.findingKey=selection.type+':'+selection.id;const kind=document.createElement('strong');kind.textContent=title;const text=document.createElement('span');text.textContent=summary;button.append(kind,text);button.onclick=()=>onSelect(selection);return button;};
- const problems=design.graph.nodes.filter(n=>typeof n.problem==='string');
+ const problems=design.graph.nodes.filter(n=>(!nodeId||n.id===nodeId)&&typeof n.problem==='string');
  if(problems.length){const h=document.createElement('h3');h.textContent='困りごと';root.append(h);for(const n of problems)root.append(row({type:'problem',id:n.id},`${n.name}（${String(n.pain_level)}）`,String(n.problem)));}
  for(const [scope,caption] of [['items','項目に関連'],['document','文書全体'],['unassigned','関連先未設定'],['broken','参照先不一致']]){
-  const found=(design.findings??[]).filter(f=>(showResolved||f.status==='open')&&(scope==='broken'?f.unresolvedTargets.length>0:f.scope===scope&&!f.unresolvedTargets.length));
+  const found=(design.findings??[]).filter(f=>(!nodeId||f.targets.includes(nodeId))&&(showResolved||f.status==='open')&&(scope==='broken'?f.unresolvedTargets.length>0:f.scope===scope&&!f.unresolvedTargets.length));
   if(!found.length)continue;const h=document.createElement('h3');h.textContent=`${caption}（${found.length}件）`;root.append(h);
   for(const f of found)root.append(row({type:'finding',id:f.id},`${findingLabel(f.kind)} · ${f.id}${f.status==='resolved'?' · 解消済み':''}`,f.summary));
  }

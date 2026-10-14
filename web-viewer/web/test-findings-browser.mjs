@@ -45,19 +45,19 @@ export async function verifyFindings(browser){
     assert.ok(await panel.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
     await page.screenshot({path:`web/evidence/design-findings-96/list-${width}.png`});
     assert.match(await panel.textContent(),/文書全体/);
-    await panel.locator('[data-finding-key="finding:F04"]').click();assert.match(await page.locator('#detail').textContent(),/解消済み/);await page.locator('.finding-back').click();
-    await panel.locator('[data-finding-key="finding:F02"]').click();assert.equal(await page.locator('#detail [data-finding-target]').isDisabled(),true);assert.equal(await page.locator('#detail img').count(),0);await page.locator('.finding-back').click();
+    await panel.locator('[data-finding-key="finding:F04"]').click();assert.match(await page.locator('#node-list').textContent(),/解消済み/);await page.locator('.finding-back').click();
+    await panel.locator('[data-finding-key="finding:F02"]').click();assert.equal(await page.locator('#node-list [data-finding-target]').isDisabled(),true);assert.equal(await page.locator('#node-list img').count(),0);await page.locator('.finding-back').click();
     await panel.locator('[data-finding-key="finding:F01"]').focus();await page.keyboard.press('Enter');
-    assert.equal(await page.locator('#detail [data-finding-id="F01"]').count(),1);
-    assert.equal(await page.locator('#detail [data-finding-target]').count(),2);
-    assert.equal(await page.locator('#detail img,#detail script').count(),0);
-    await page.locator('#detail [data-finding-target="受付情報"]').click();
-    assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'受付情報');
-    assert.equal(await page.locator('#detail [data-finding-id="F01"]').count(),1);
+    assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
+    assert.equal(await page.locator('#node-list [data-finding-target]').count(),2);
+    assert.equal(await page.locator('#node-list img,#node-list script').count(),0);
+    await page.locator('#node-list [data-finding-target="受付情報"]').click();
+    assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'受付情報');assert.match(await page.locator('#detail').textContent(),/受付情報/);assert.equal(await page.locator('#detail .finding-card').count(),0);if(width<=800)await page.locator('#node-list-toggle').click();
+    assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
     await page.locator('.finding-back').click();
     await panel.locator('[data-finding-key="finding:F03"]').click();
-    assert.match(await page.locator('#detail').textContent(),/関連先：未設定/);
-    assert.equal(await page.locator('#detail [data-finding-target]').count(),0);
+    assert.match(await page.locator('#node-list').textContent(),/関連先：未設定/);
+    assert.equal(await page.locator('#node-list [data-finding-target]').count(),0);
     await page.locator('.finding-back').click();
     await page.locator('#drawer-mode-items').click();
     // The existing accessible item list remains the keyboard selection route.
@@ -65,8 +65,15 @@ export async function verifyFindings(browser){
     const row=page.locator('#node-list button').filter({hasText:'依頼を受け付ける'}).first();
     await row.focus();await page.keyboard.press('Enter');
     await page.locator('#drawer').evaluate(e=>{if(e.getAttribute('aria-expanded')!=='true')e.click();});
-    assert.match(await page.locator('#detail').textContent(),/この項目の指摘/);
-    assert.equal(await page.locator('#detail [data-finding-id="F01"]').count(),1);
+    assert.match(await page.locator('#detail').textContent(),/依頼を受け付ける/);assert.equal(await page.locator('#detail .finding-card').count(),0);
+    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+    if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+    // Badge selection enters the left index without replacing the right source.
+    const badge=page.locator('.node[data-node="受付情報"] .finding-badges');await badge.focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#node-list-drawer').isVisible(),true);assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);assert.equal(await page.locator('#detail .finding-card').count(),0);
+    const leftDetail=await page.locator('#node-list').boundingBox();assert.ok(leftDetail.x>=0&&leftDetail.x+leftDetail.width<=width+.5);assert.ok(await page.locator('#node-list').evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+    await page.screenshot({path:`web/evidence/design-findings-96/detail-${width}.png`});
+    await page.locator('.finding-back').click();assert.equal(await page.locator('.finding-all').count(),1);await page.locator('.finding-all').click();assert.match(await page.locator('#node-list').textContent(),/関連先未設定/);
     assert.equal(await page.locator('.node button button').count(),0);
     assert.deepEqual(errors,[]);return {width,uniqueSharedFinding:true,unassignedVisible:true,inertContent:true};
   }));return results;
