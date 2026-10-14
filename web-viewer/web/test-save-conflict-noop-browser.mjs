@@ -46,7 +46,10 @@ export async function verifySaveConflictNoop(browser,{url='http://127.0.0.1:4173
   try{
    const a=await context.newPage();a.on('pageerror',e=>errors.push(e.message));await ready(a,url);
    assert.deepEqual(await record(a),{current:undefined,generation:undefined});
-   await input(a,concurrencyBodies.shared);const initial=await record(a);
+   await input(a,concurrencyBodies.shared);
+   // On narrow screens the Markdown drawer overlays graph controls. Close it
+   // through the actual button before establishing both readers' baseline.
+   await a.locator('#drawer').click();await saved(a);const initial=await record(a);
    // Real reload plus repeated native focus changes leave a settled page clean.
    await a.reload();await a.waitForFunction(()=>!document.getElementById('open-text').disabled);
    const b=await context.newPage();b.on('pageerror',e=>errors.push(e.message));await ready(b,url);
