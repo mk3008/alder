@@ -43,6 +43,13 @@ for(const theme of ['light','dark']){
 const base=snapshotGraph(nodes,edges,'#fff');
 nodes.style.transform='scale(.25)';nodes.style.left='3000px';nodes.style.width='100000px';edges.setAttribute('viewBox','-1000 -2000 50000 90000');
 assert.deepEqual(snapshotGraph(nodes,edges,'#fff'),base,'camera wrappers never change image bounds or styles');
+// Protruding badges keep their absolute anchor and participate in the crop.
+const badge=w.document.createElement('span');badge.className='finding-badges';badge.textContent='要確認 1';badge.style.cssText='position:absolute;top:-9px;right:4px';card.append(badge);
+Object.defineProperties(badge,{offsetLeft:{value:180},offsetTop:{value:-90},offsetWidth:{value:76},offsetHeight:{value:18}});
+const badgeImage=snapshotGraph(nodes,w.document.createElementNS('http://www.w3.org/2000/svg','svg'),'#fff');
+assert.equal(badgeImage.bounds.y,-64,'crop includes badge top plus margin');
+const badgeCopy=new w.DOMParser().parseFromString(badgeImage.svg,'image/svg+xml').querySelector('.finding-badges');
+assert.equal(badgeCopy.style.top,'-9px');assert.equal(badgeCopy.style.right,'4px');badge.remove();
 card.remove();assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/項目がありません/);nodes.append(card);
 const excess=w.document.createElement('div');excess.innerHTML='<span></span>'.repeat(4001);nodes.append(excess);
 assert.throws(()=>snapshotGraph(nodes,edges,'#fff'),/大きすぎる/);excess.remove();

@@ -163,7 +163,7 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 
 /* Explicit findings are separate from business Problem/Pain and Graph edges. */
 #findings-toggle{font-size:11px;white-space:nowrap;padding:4px 8px;min-width:0}
-.finding-badges{position:absolute;right:4px;bottom:-9px;display:block!important;max-height:none!important;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px!important;line-height:16px!important;padding:0 5px;border:1px solid currentColor;border-radius:8px;background:var(--panel);color:var(--fg);pointer-events:none}
+.finding-badges{position:absolute;right:4px;top:-9px;display:block!important;max-height:none!important;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px!important;line-height:16px!important;padding:0 5px;border:1px solid currentColor;border-radius:8px;background:var(--panel);color:var(--fg);pointer-events:none}
 #findings-dialog{width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px}
 #findings-dialog::backdrop{background:#0006}
 #findings-dialog>button{float:right;min-height:40px;min-width:56px}
