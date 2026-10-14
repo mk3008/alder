@@ -1,6 +1,6 @@
 import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
-import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,Link,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings} from 'lucide';
+import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings} from 'lucide';
 import {parseDesign,validateGraph} from './graph';
 import {formattedMarkdown} from './markdown';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
@@ -12,54 +12,91 @@ import './style.css';
 import sampleMarkdown from '../../business-design/alder/README.md?raw';
 import {createSnackbar} from './snackbar';
 const app=document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open" aria-label="ファイルを開く" title="ファイルを開く"><span class="source-caption">ファイルを開く</span></button><button id="open-url" aria-label="URLを開く" title="URLを開く"><span class="source-caption">URLを開く</span></button><button id="open-text" aria-label="テキストを入力" title="テキストを入力"><span class="source-caption">テキストを入力</span></button><button id="refresh" aria-label="更新" title="更新">更新</button><button id="theme" aria-label="テーマ切替"></button><button id="drawer" aria-label="Markdown開閉"></button></header><nav id="tabs" aria-label="開いているファイル"></nav><div id="save-state" role="status" aria-live="polite" aria-atomic="true" data-state="restoring">復元中…</div><section id="status" class="info-bar" hidden><span id="status-text" role="status" aria-live="polite"></span><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><p>Business Design Markdownを開いてください。</p><a id="open-sample" href="#alder-sample">サンプルを開く</a></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple hidden>`;
+app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open" aria-label="ファイルを開く" title="ファイルを開く"><span class="source-caption">ファイルを開く</span></button><button id="open-url" aria-label="URLを開く" title="URLを開く"><span class="source-caption">URLを開く</span></button><button id="open-text" aria-label="テキストを入力" title="テキストを入力"><span class="source-caption">テキストを入力</span></button><button id="refresh" aria-label="更新" title="更新">更新</button><button id="theme" aria-label="テーマ切替"></button><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="開いているファイル"></nav><button id="edit-markdown" aria-label="原文を見る／編集する" title="原文を見る／編集する"><span class="editor-caption">原文を見る／編集する</span></button></div><section id="status" class="info-bar" hidden><div class="info-content"><span id="status-text" role="status" aria-live="polite"></span><div id="save-actions" hidden><div class="save-buttons"><button id="save-retry">保存を再試行</button><button id="save-download">表示中の本文をファイルに保存</button><button id="save-draft-download">入力中の本文をファイルに保存</button><button id="save-reload">保存済みの内容を読み直す</button></div><p id="save-help">保存するのはMarkdown本文だけです。図の配置や開いたタブは含みません。「ファイルを開く」で読み込めますが、入力途中の本文は修正が必要な場合があります。複数の文書がある場合は、タブごとに保存してください。</p><p id="save-draft-note" hidden>入力中のURLは、入力欄からコピーして控えてください。</p><p id="save-reload-warning" hidden>読み直すと、この画面の未保存の本文・入力・図の配置は失われます。必要な本文を先にファイルへ保存してください。</p><p id="save-download-error" role="alert" hidden></p><label id="save-rescue-label" for="save-rescue-text" hidden>コピーする本文</label><textarea id="save-rescue-text" readonly hidden></textarea></div></div><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><p>Business Design Markdownを開いてください。</p><a id="open-sample" href="#alder-sample">サンプルを開く</a></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><dialog id="source-close-dialog" aria-labelledby="source-close-message"><p id="source-close-message">グラフには反映されません。編集内容は保持されます。閉じますか？</p><div class="source-close-actions"><button id="source-close-confirm">閉じる</button><button id="source-close-continue" autofocus>編集を続ける</button></div></dialog><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple hidden>`;
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
-for(const [id,value] of [['open',FolderOpen],['open-url',Link],['open-text',Text],['refresh',RefreshCw],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
-let state:Session={tabs:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0;
-let savedRevision=0,pendingWrites=0,saveFailed=false,savedOnce=false,draftDirty=false,leaveWarning=false;
+for(const [id,value] of [['open',FolderOpen],['open-url',FolderSymlink],['open-text',Text],['edit-markdown',FileText],['refresh',RefreshCw],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
+let state:Session={tabs:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0,documentSaving=false;
+let savedRevision=0,pendingWrites=0,saveFailed=false,savedOnce=false,draftDirty=false,leaveWarning=false,quotaFailed=false,closeFailed=false;
 // Repeated lifecycle/no-op events must not commit the same revision twice.
 const queuedRevisions=new Set<number>();
-const updating=new WeakSet<Tab>();
+const updating=new WeakSet<Tab>(),unsavedDrafts=new Set<string>();
+function acknowledgeDrafts(snapshot:Session){for(const key of unsavedDrafts){const live=state.tabs.find(t=>t.key===key),stored=snapshot.tabs.find(t=>t.key===key);if(live&&stored&&live.draft===stored.draft)unsavedDrafts.delete(key);}}
 const current=()=>state.tabs.find(t=>t.key===state.active);
-const status=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('status-close'),$('viewport'));
-function protectedStorage(){status('前回の表示を復元できません。元の保存内容を保護するため、この画面の変更は保存しません。再読み込みで復元を再試行してください。','error','storage');}
-function conflictedStorage(){status('別の画面で先に保存されました。この画面の変更は保存していません。入力は画面内に保持しています。必要な内容をコピーしてから再読み込みしてください。','error','storage');}
+let storageMessage='';
+const notify=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('status-close'),$('viewport'),()=>$('status').dataset.key!=='storage',recoveryChrome);
+// Recomputing save chrome must not move an unchanged storage error ahead of a newer input error.
+function status(message:string,kind:'success'|'warning'|'error'='success',key:'operation'|'storage'='operation'){if(key==='storage'){if(storageMessage===message){recoveryChrome();return;}storageMessage=message;}notify(message,kind,key);recoveryChrome();}
+function protectedStorage(){status('前回の表示を復元できません。元の保存内容を保護するため、この画面の変更は保存しません。新しく入力した本文を退避してから、再読み込みで復元を再試行できます。','error','storage');}
+function conflictedStorage(){status('別の画面で先に保存されました。この画面の変更は保存していません。必要な本文をファイルに保存するかコピーしてから、再読み込みしてください。','error','storage');}
 function markChanged(){if(!restoring){revision++;saveStateChrome();}}
 function beforeUnsavedLeave(event:BeforeUnloadEvent){event.preventDefault();event.returnValue=true;}
 function saveStateChrome(){
-  const unsaved=revision>savedRevision||pendingWrites>0||!!closing||draftDirty||saveFailed||saveConflict;
+  const unsaved=revision>savedRevision||pendingWrites>0||!!closing||documentSaving||unsavedDrafts.size>0||draftDirty||saveFailed||saveConflict;
   const warning=!restoring&&unsaved;
   if(warning!==leaveWarning){leaveWarning=warning;window[warning?'addEventListener':'removeEventListener']('beforeunload',beforeUnsavedLeave);}
-  const mode=restoring?'restoring':restoreFailed?'protected':saveConflict?'conflict':saveFailed?'error':draftDirty?'draft':pendingWrites>0?'saving':revision>savedRevision?'dirty':savedOnce?'saved':'unchanged';
-  const labels={restoring:'復元中…',protected:'保存停止（復元失敗）',conflict:'未保存（別の画面と競合）',error:'保存に失敗しました',draft:'未保存の入力があります',saving:'保存中…',dirty:'未保存（保存待ち）',saved:'このブラウザーに保存済み',unchanged:'変更なし'};
-  const display=$('save-state');if(display.dataset.state!==mode)display.dataset.state=mode;
-  if(display.textContent!==labels[mode])display.textContent=labels[mode];
+  const mode=restoring?'restoring':restoreFailed?'protected':saveConflict?'conflict':saveFailed?'error':draftDirty||unsavedDrafts.size>0?'draft':pendingWrites>0||documentSaving?'saving':revision>savedRevision?'dirty':savedOnce?'saved':'unchanged';
+  if(app.dataset.saveState!==mode)app.dataset.saveState=mode;
+  if(restoreFailed)protectedStorage();
+  else if(saveConflict)conflictedStorage();
+  else if(saveFailed)status((closeFailed?'保存できないため、タブを閉じませんでした。':'')+(quotaFailed?'保存容量が足りず保存できません。本文を退避してから、保存容量やブラウザーの設定を確認してください。':'表示状態を保存できません。本文と図の配置はこの画面に残っています。保存を再試行するか、本文をファイルに退避してください。'),'error','storage');
+  else status('','success','storage');
 }
-async function writeSnapshot(snapshot:Session){if(saveConflict)throw new SessionConflictError();try{await saveSession(snapshot);}catch(error){if(error instanceof SessionConflictError){saveConflict=true;clearTimeout(timer);timer=undefined;conflictedStorage();}throw error;}}
+function recoveryChrome(){
+  const visible=!$('status').hidden&&$('status').dataset.key==='storage';
+  $('save-actions').hidden=!visible;$('status').classList.toggle('has-save-actions',visible);$('status-close').hidden=visible;
+  if(!visible){for(const id of ['save-download-error','save-rescue-label','save-rescue-text'])$(id).hidden=true;return;}
+  const retry=$<HTMLButtonElement>('save-retry');retry.hidden=restoreFailed||saveConflict;retry.disabled=pendingWrites>0||documentSaving||!!closing;
+  const retryLabel=retry.disabled?'保存を再試行中…':'保存を再試行';if(retry.textContent!==retryLabel)retry.textContent=retryLabel;
+  $('save-download').hidden=!current();
+  const dialogOpen=!$('source-dialog').hidden;
+  const draftDownload=$('save-draft-download');draftDownload.hidden=rescueDraft()===undefined;
+  const draftLabel=dialogOpen&&sourceMode==='text'?'入力中の本文をファイルに保存':'図に未反映の本文をファイルに保存';if(draftDownload.textContent!==draftLabel)draftDownload.textContent=draftLabel;
+  $('save-draft-note').hidden=!dialogOpen||sourceMode!=='url'||!sourceURL().value;
+  $('save-reload').hidden=!restoreFailed&&!saveConflict;$('save-reload-warning').hidden=$('save-reload').hidden;
+}
+function saveFailure(error:unknown){saveFailed=true;quotaFailed=(error as {name?:unknown}|null)?.name==='QuotaExceededError';closeFailed=!!closing;}
+function rescueName(name:string){const clean=Array.from(name.normalize('NFKC').replace(/\.(?:md|markdown)$/i,'').replace(/[\\/:*?"<>|\x00-\x1f\x7f]/g,'_').replace(/^\.+|[.\s]+$/g,'')).slice(0,80).join('');return 'alder-'+(clean||'document')+'.md';}
+function downloadMarkdown(raw:string,name:string){
+  let url:string|undefined,link:HTMLAnchorElement|undefined;
+  try{url=URL.createObjectURL(new Blob([raw],{type:'text/markdown;charset=utf-8'}));link=document.createElement('a');link.href=url;link.download=rescueName(name);link.hidden=true;document.body.append(link);link.click();for(const id of ['save-download-error','save-rescue-label','save-rescue-text'])$(id).hidden=true;}
+  catch{const error=$('save-download-error');error.textContent='本文ファイルを作れませんでした。下の本文を選択してコピーし、別のテキストファイルに保存してください。';error.hidden=false;$('save-rescue-label').hidden=false;const field=$<HTMLTextAreaElement>('save-rescue-text');field.value=raw;field.hidden=false;field.focus();field.select();}
+  finally{link?.remove();if(url){const value=url;window.setTimeout(()=>URL.revokeObjectURL(value),1500);}}
+}
+$('save-retry').onclick=()=>{if(!saveFailed||restoreFailed||saveConflict||pendingWrites||documentSaving||closing)return;rememberEditorInput();capture();persist(0,false);};
+$('save-download').onclick=()=>{const tab=current();if(tab)downloadMarkdown(tab.design.markdown,tab.name);};
+function rescueDraft(){if(!$('source-dialog').hidden&&sourceMode==='text')return sourceText().value||undefined;if(!$('source-dialog').hidden&&sourceMode==='edit')return sourceText().value;return current()?.draft;}
+$('save-draft-download').onclick=()=>{const raw=rescueDraft();if(raw!==undefined)downloadMarkdown(raw,((sourceMode==='edit'&&!$('source-dialog').hidden?editingTab():current())?.name??'input')+'-draft');};
+$('save-reload').onclick=()=>{if(restoreFailed||saveConflict)location.reload();};
+
+function ensureWritable(){if(restoreFailed)throw Error('前回の保存内容を保護しています。本文を退避してから読み直してください。');if(saveConflict)throw new SessionConflictError();}
+async function writeSnapshot(snapshot:Session){ensureWritable();try{await saveSession(snapshot);}catch(error){if(error instanceof SessionConflictError){saveConflict=true;clearTimeout(timer);timer=undefined;conflictedStorage();}throw error;}}
 function queueSnapshot(snapshot:Session,version:number){
   pendingWrites++;queuedRevisions.add(version);saveStateChrome();
   const write=saving.catch(()=>{}).then(()=>writeSnapshot(snapshot)).then(()=>{
-    savedRevision=Math.max(savedRevision,version);savedOnce=true;
-    if(savedRevision===revision)saveFailed=false;
-  },error=>{saveFailed=true;throw error;}).finally(()=>{pendingWrites--;queuedRevisions.delete(version);saveStateChrome();});
+    savedRevision=Math.max(savedRevision,version);savedOnce=true;acknowledgeDrafts(snapshot);
+    if(savedRevision===revision){saveFailed=false;quotaFailed=false;closeFailed=false;}
+  },error=>{saveFailure(error);throw error;}).finally(()=>{pendingWrites--;queuedRevisions.delete(version);saveStateChrome();});
   saving=write.catch(()=>{});return write;
 }
 function persist(delay=180,changed=true){
   if(restoring)return;if(changed)revision++;clearTimeout(timer);timer=undefined;
   if(restoreFailed){protectedStorage();saveStateChrome();return;}if(saveConflict){conflictedStorage();saveStateChrome();return;}
-  if(closing||queuedRevisions.has(revision)||(!changed&&revision<=savedRevision&&!saveFailed)){saveStateChrome();return;}
-  const write=()=>{timer=undefined;let snapshot:Session;try{snapshot=structuredClone(state);}catch{saveFailed=true;status('表示状態を保存できません。','error','storage');saveStateChrome();return;}
-    void queueSnapshot(snapshot,revision).catch(error=>{if(error instanceof SessionConflictError)conflictedStorage();else status('表示状態を保存できません。ブラウザーの保存設定を確認してください。','error','storage');});};
+  if(closing||documentSaving||queuedRevisions.has(revision)||(!changed&&revision<=savedRevision&&!saveFailed)){saveStateChrome();return;}
+  const write=()=>{timer=undefined;let snapshot:Session;try{snapshot=structuredClone(state);}catch(error){saveFailure(error);saveStateChrome();return;}
+    void queueSnapshot(snapshot,revision).catch(()=>saveStateChrome());};
   // Lifecycle flushing starts queued work now, but does not invent a new edit.
   if(delay===0)write();else timer=window.setTimeout(write,delay);
   saveStateChrome();
 }
 async function closeTab(t:Tab){
-  if(restoring||closing||!state.tabs.includes(t))return;
+  if(restoring||closing||documentSaving||!state.tabs.includes(t))return;
+  rememberEditorInput();
   if(restoreFailed){protectedStorage();return;}if(saveConflict){conflictedStorage();return;}
-  touch.cancel();capture();clearTimeout(timer);timer=undefined;closing=t;revision++;renderTabs();displaySettingsChrome();saveStateChrome();
+  if(t.draft!==undefined&&!window.confirm('図に反映していない編集を破棄して、このタブを閉じますか？'))return;
+  if(sourceTarget===t.key)hideSource();
+  touch.cancel();capture();clearTimeout(timer);timer=undefined;closing=t;revision++;renderTabs();displaySettingsChrome();sourceChrome();saveStateChrome();
   const version=revision;
   try{
     const projected:Session={...state,tabs:state.tabs.filter(x=>x!==t),active:state.active===t.key?state.tabs.find(x=>x!==t)?.key:state.active};
@@ -67,9 +104,9 @@ async function closeTab(t:Tab){
     const snapshot=structuredClone(projected);await queueSnapshot(snapshot,version);
     state.tabs=state.tabs.filter(x=>x!==t);if(state.active===t.key)state.active=state.tabs[0]?.key;
     if(t.source?.kind==='sample')state.sampleLayout=snapshot.sampleLayout;
-    closing=undefined;render();saveStateChrome();
+    unsavedDrafts.delete(t.key);closing=undefined;render();saveStateChrome();
     if(version!==revision)persist(0,false);
-  }catch(error){closing=undefined;saveFailed=true;render();saveStateChrome();if(error instanceof SessionConflictError){conflictedStorage();return;}status('表示状態を保存できないため、タブを閉じませんでした。ブラウザーの保存設定を確認してください。','error','storage');persist(180,false);}
+  }catch(error){saveFailure(error);closing=undefined;render();saveStateChrome();if(error instanceof SessionConflictError)return;persist(180,false);}
 }
 // Empty presentation hides graph-only controls without changing drawer preferences.
 function chrome(){const hasTab=!!current(),drawerOpen=hasTab&&state.drawer,listOpen=hasTab&&!!state.nodeDrawer;document.querySelector<HTMLElement>('.toolbar')!.hidden=!hasTab;if(!hasTab)displaySettingsOpen=false;displaySettingsChrome();$('layout-lock').replaceChildren(icon(layoutLocked?LockKeyhole:LockKeyholeOpen));$('layout-lock').setAttribute('aria-pressed',String(layoutLocked));$('layout-lock').title=layoutLocked?'配置をロック中。項目の上から図をスクロールできます。':'配置を調整中。項目をドラッグして移動できます。';$('layout-lock').toggleAttribute('disabled',restoring);$('viewport').dataset.layoutLocked=String(layoutLocked);$<HTMLInputElement>('prefer-write').checked=state.preferWrite===true;$<HTMLInputElement>('prefer-write').disabled=restoring;$<HTMLInputElement>('show-exceptions').checked=current()?.showExceptions!==false;$<HTMLInputElement>('show-exceptions').disabled=restoring||!current()||closing===current();$<HTMLInputElement>('selected-edges-only').checked=current()?.selectedEdgesOnly===true;$<HTMLInputElement>('selected-edges-only').disabled=restoring||!current()||closing===current();document.documentElement.dataset.theme=state.dark?'dark':'light';$('theme').replaceChildren(icon(state.dark?Sun:Moon));$('formattedMarkdownDrawer').hidden=!drawerOpen;$('formattedMarkdownDrawer').style.width=Math.max(260,Math.min(state.width,innerWidth*.65))+'px';$('drawer').setAttribute('aria-expanded',String(drawerOpen));$('drawer').toggleAttribute('disabled',restoring||!hasTab);$('node-list-drawer').hidden=!listOpen;$('node-list-toggle').setAttribute('aria-expanded',String(listOpen));$('node-list-toggle').toggleAttribute('disabled',restoring||!hasTab);}
@@ -97,7 +134,7 @@ function retainFocus(update:()=>void){
   if(tab)Array.from(document.querySelectorAll<HTMLElement>('.tab')).find(e=>e.dataset.key===tab)?.querySelector<HTMLElement>(close?'.close':'button')?.focus({preventScroll:true});
 }
 function renderTabs(){retainFocus(buildTabs);}
-function buildTabs(){const root=$('tabs');root.replaceChildren();state.tabs.forEach(t=>{const wrap=document.createElement('div');wrap.className='tab'+(t.key===state.active?' active':'');wrap.draggable=true;wrap.dataset.key=t.key;const b=document.createElement('button');b.textContent=t.name;b.title=t.name;b.prepend(icon(FileText));b.setAttribute('aria-current',String(t.key===state.active));b.onclick=()=>{const changed=capture()||state.active!==t.key;state.active=t.key;render();persist(180,changed);};const close=document.createElement('button');close.className='close';close.setAttribute('aria-label',t.name+'を閉じる');close.append(icon(X));close.disabled=!!closing;close.onclick=()=>closeTab(t);wrap.append(b,close);wrap.ondragstart=e=>e.dataTransfer?.setData('text/plain',t.key);wrap.ondragover=e=>e.preventDefault();wrap.ondrop=e=>{e.preventDefault();const from=state.tabs.findIndex(x=>x.key===e.dataTransfer?.getData('text/plain')),to=state.tabs.indexOf(t);if(from>=0&&from!==to){const [m]=state.tabs.splice(from,1);state.tabs.splice(to,0,m);renderTabs();persist();}};wrap.onkeydown=e=>{if(e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();const i=state.tabs.indexOf(t),j=i+(e.key==='ArrowLeft'?-1:1);if(j>=0&&j<state.tabs.length){[state.tabs[i],state.tabs[j]]=[state.tabs[j],state.tabs[i]];renderTabs();persist();}}};root.append(wrap);});}
+function buildTabs(){const root=$('tabs');root.replaceChildren();state.tabs.forEach(t=>{const wrap=document.createElement('div');wrap.className='tab'+(t.key===state.active?' active':'');wrap.draggable=true;wrap.dataset.key=t.key;const b=document.createElement('button');b.textContent=t.name;b.title=t.name;b.prepend(icon(FileText));b.setAttribute('aria-current',String(t.key===state.active));b.disabled=documentSaving;b.onclick=async()=>{if(documentSaving)return;if(sourceTarget&&sourceTarget!==t.key&&!await closeSource())return;const changed=capture()||state.active!==t.key;state.active=t.key;render();persist(180,changed);};const close=document.createElement('button');close.className='close';close.setAttribute('aria-label',t.name+'を閉じる');close.append(icon(X));close.disabled=!!closing||documentSaving;close.onclick=()=>closeTab(t);wrap.append(b,close);wrap.ondragstart=e=>e.dataTransfer?.setData('text/plain',t.key);wrap.ondragover=e=>e.preventDefault();wrap.ondrop=e=>{e.preventDefault();if(documentSaving)return;const from=state.tabs.findIndex(x=>x.key===e.dataTransfer?.getData('text/plain')),to=state.tabs.indexOf(t);if(from>=0&&from!==to){const [m]=state.tabs.splice(from,1);state.tabs.splice(to,0,m);renderTabs();persist();}};wrap.onkeydown=e=>{if(documentSaving)return;if(e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();const i=state.tabs.indexOf(t),j=i+(e.key==='ArrowLeft'?-1:1);if(j>=0&&j<state.tabs.length){[state.tabs[i],state.tabs[j]]=[state.tabs[j],state.tabs[i]];renderTabs();persist();}}};root.append(wrap);});}
 function detail(){const t=current(),root=$('detail'),key=t?t.key+':'+(t.selected??''):'';const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;const n=t.design.graph.nodes.find(n=>n.id===t.selected);root.append(formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown));root.scrollTop=scroll;}
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>}>();
@@ -179,28 +216,153 @@ function buildGraph(){nodeDrag.cancel();redrawEdges=()=>{};edgeExtent=[0,0];edge
     const cancel=(e:PointerEvent)=>{if(pointer===undefined||pointer!==e.pointerId)return;pointer=undefined;if(!b.isConnected)return;nodeDrag.cancel();capture();persist(180,false);};
     b.onpointercancel=cancel;b.onlostpointercapture=cancel;$('nodes').append(b);});$('zoom').textContent=Math.round(t.zoom*100)+'%';detail();renderNodeList();
 }
-function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||!t||updating.has(t)||closing===t);for(const id of ['open','open-url','open-text'])$(id).toggleAttribute('disabled',restoring||opening);$('open-sample').setAttribute('aria-disabled',String(restoring||opening));$('open-sample').tabIndex=restoring||opening?-1:0;$('theme').toggleAttribute('disabled',restoring);}
+function render(){touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||updating.has(t));$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(t));$('edit-markdown').hidden=!t;for(const id of ['open','open-url','open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();}
 // New documents start with extra camera padding on the left. Reconcile and
 // restored tabs keep their existing camera, including an absent legacy inset.
 type PickerWindow=Window & {showOpenFilePicker?: (options:unknown)=>Promise<FileSystemFileHandle[]>};
-async function addFile(file:File,handle?:FileSystemFileHandle){const design=parseDesign(await file.text());let existing:Tab|undefined;if(handle){for(const t of state.tabs)if(t.handle&&await t.handle.isSameEntry(handle)){existing=t;break;}}if(existing){const changed=capture()||state.active!==existing.key;state.active=existing.key;render();persist(180,changed);return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);capture();const index=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(index+1,0,tab);state.active=tab.key;render();persist();status('');}
+async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=parseDesign(await file.text());let existing:Tab|undefined;if(handle){for(const t of state.tabs)if(t.handle&&await t.handle.isSameEntry(handle)){existing=t;break;}}if(existing){const changed=capture()||state.active!==existing.key;state.active=existing.key;render();persist(180,changed);return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);capture();const index=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(index+1,0,tab);state.active=tab.key;render();persist();status('');}
 $('open-sample').onpointerdown=e=>e.stopPropagation();
-$('open-sample').onclick=e=>{e.preventDefault();if(restoring||opening)return;try{let tab=state.tabs.find(t=>t.source?.kind==='sample');if(!tab){const design=parseDesign(sampleMarkdown);tab=reconcile({key:crypto.randomUUID(),name:'Alderを使った設計業務',source:{kind:'sample'},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:state.sampleLayout?undefined:[40,0],...state.sampleLayout},design);const index=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(index+1,0,tab);}capture();state.active=tab.key;render();persist();status('');$('viewport').focus({preventScroll:true});}catch(e){status('サンプルを開けません: '+(e as Error).message,'error');}};
-$('open').onclick=async()=>{if(restoring||opening)return;opening=true;render();try{const picker=(window as PickerWindow).showOpenFilePicker;if(picker){const handles=await picker({multiple:true,types:[{description:'Business Design Markdown',accept:{'text/markdown':['.md','.markdown']}}]});for(const h of handles)await addFile(await h.getFile(),h);}else $('fallback').click();}catch(e){if((e as Error).name!=='AbortError')status('開けません: '+(e as Error).message,'error');}finally{opening=false;render();}};
-($('fallback') as HTMLInputElement).onchange=async()=>{const input=$('fallback') as HTMLInputElement;if(restoring||opening)return;opening=true;render();try{for(const f of Array.from(input.files??[]))await addFile(f);}catch(e){status('開けません: '+(e as Error).message,'error');}input.value='';opening=false;render();};
-function replace(t:Tab,d:ReturnType<typeof parseDesign>,handle=t.handle){const index=state.tabs.indexOf(t);if(index<0||closing===t)return;const changed=capture()||t.design.markdown!==d.markdown||t.handle!==handle;state.tabs[index]=reconcile({...t,handle},d);render();persist(180,changed);status('更新しました。');}
-async function reselect(t:Tab){if(!state.tabs.includes(t)||closing===t)return;const picker=(window as PickerWindow).showOpenFilePicker;if(picker){const [h]=await picker({multiple:false});const d=parseDesign(await (await h.getFile()).text());replace(t,d,h);}else{await new Promise<void>((resolve,reject)=>{const input=document.createElement('input');input.type='file';input.accept='.md,.markdown';input.hidden=true;document.body.append(input);const done=()=>{input.remove();resolve();};input.oncancel=done;input.onchange=async()=>{try{const f=input.files?.[0];if(f)replace(t,parseDesign(await f.text()));done();}catch(e){input.remove();reject(e);}};input.click();});}}
+$('open-sample').onclick=e=>{e.preventDefault();if(restoring||opening||documentSaving)return;try{let tab=state.tabs.find(t=>t.source?.kind==='sample');if(!tab){const design=parseDesign(sampleMarkdown);tab=reconcile({key:crypto.randomUUID(),name:'Alderを使った設計業務',source:{kind:'sample'},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:state.sampleLayout?undefined:[40,0],...state.sampleLayout},design);const index=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(index+1,0,tab);}capture();state.active=tab.key;render();persist();status('');$('viewport').focus({preventScroll:true});}catch(e){status('サンプルを開けません: '+(e as Error).message,'error');}};
+$('open').onclick=async()=>{if(restoring||opening||documentSaving)return;opening=true;render();try{const picker=(window as PickerWindow).showOpenFilePicker;if(picker){const handles=await picker({multiple:true,types:[{description:'Business Design Markdown',accept:{'text/markdown':['.md','.markdown']}}]});for(const h of handles)await addFile(await h.getFile(),h);}else $('fallback').click();}catch(e){if((e as Error).name!=='AbortError')status('開けません: '+(e as Error).message,'error');}finally{opening=false;render();}};
+($('fallback') as HTMLInputElement).onchange=async()=>{const input=$('fallback') as HTMLInputElement;if(restoring||opening||documentSaving)return;opening=true;render();try{for(const f of Array.from(input.files??[]))await addFile(f);}catch(e){status('開けません: '+(e as Error).message,'error');}input.value='';opening=false;render();};
+// Save a replacement before changing the displayed Graph. A failed transaction
+// leaves the old design and the per-tab draft available for an explicit retry.
+class DocumentSaveError extends Error{constructor(error:unknown){super(error instanceof Error?error.message:'表示状態を保存できません。');this.name='DocumentSaveError';}}
+async function saveDocument(project:()=>Session,commit:()=>void){
+  if(documentSaving||closing)throw Error('表示状態を保存しています。完了後に再試行してください。');
+  try{ensureWritable();}catch(error){throw new DocumentSaveError(error);}capture();clearTimeout(timer);timer=undefined;documentSaving=true;revision++;const version=revision;render();saveStateChrome();let saved=false;
+  try{
+    const snapshot=structuredClone(project());await queueSnapshot(snapshot,version);
+    commit();acknowledgeDrafts(snapshot);saved=true;
+  }catch(error){saveFailure(error);throw new DocumentSaveError(error);}
+  finally{documentSaving=false;render();saveStateChrome();if(saved&&revision!==version)persist(0,false);}
+}
+async function replace(t:Tab,d:ReturnType<typeof parseDesign>,handle=t.handle,edited=false){
+  if(!state.tabs.includes(t)||closing===t)return false;
+  await saveDocument(()=>({...state,tabs:state.tabs.map(x=>x===t?reconcile({...t,handle,edited,draft:undefined},d):x)}),()=>{
+    // Keep identity and any camera/selection changes made while storage settled.
+    Object.assign(t,reconcile({...t,handle,edited,draft:undefined},d));
+  });
+  status('');return true;
+}
+async function reselect(t:Tab){
+  if(!state.tabs.includes(t)||closing===t)return;
+  const picker=(window as PickerWindow).showOpenFilePicker;
+  if(picker){const [h]=await picker({multiple:false});if(h)await replace(t,parseDesign(await (await h.getFile()).text()),h);}
+  else await new Promise<void>((resolve,reject)=>{
+    const input=document.createElement('input');input.type='file';input.accept='.md,.markdown';input.hidden=true;document.body.append(input);
+    const done=()=>{input.remove();resolve();};input.oncancel=done;
+    input.onchange=async()=>{try{const f=input.files?.[0];if(f)await replace(t,parseDesign(await f.text()));done();}catch(e){input.remove();reject(e);}};input.click();
+  });
+}
 type PermissionHandle=FileSystemFileHandle & {queryPermission:(o:{mode:'read'})=>Promise<PermissionState>};
-$('refresh').onclick=async()=>{const t=current();if(restoring||!t||updating.has(t)||closing===t)return;updating.add(t);render();try{if(t.source?.kind==='sample'){replace(t,parseDesign(sampleMarkdown));return;}if(t.source?.kind==='text'){showSource('text',t);return;}if(t.source?.kind==='url'){const d=parseDesign(await fetchMarkdown(t.source.url));replace(t,d);return;}if(!t.handle){await reselect(t);return;}const permission=await (t.handle as PermissionHandle).queryPermission({mode:'read'});if(!state.tabs.includes(t)||closing===t)return;if(permission!=='granted'){status('読取権限がありません。同じMarkdownを再選択してください。','warning');await reselect(t);return;}replace(t,parseDesign(await (await t.handle.getFile()).text()));}catch(e){if(state.tabs.includes(t)&&(e as Error).name!=='AbortError')status('更新失敗。旧表示を保持しています: '+(e as Error).message,'error');}finally{updating.delete(t);render();}};
-type SourceMode='url'|'text';
-let sourceMode:SourceMode='text',sourceTarget:Tab|undefined,sourceBusy=false,sourceToken=0,sourceAbort:AbortController|undefined,sourceOpener:HTMLElement|null=null,sourceBaseline='';
+$('refresh').onclick=async()=>{
+  const t=current();if(restoring||documentSaving||closing||!t||t.source?.kind==='text'||updating.has(t))return;
+  rememberEditorInput();
+  if((t.edited||t.draft!==undefined)&&!window.confirm('ブラウザー内の編集を破棄し、取得元のMarkdownで更新しますか？取得や保存に失敗した場合は編集を保持します。'))return;
+  if(sourceTarget===t.key)hideSource();updating.add(t);render();
+  try{
+    if(t.source?.kind==='sample'){await replace(t,parseDesign(sampleMarkdown));return;}
+    if(t.source?.kind==='url'){const d=parseDesign(await fetchMarkdown(t.source.url));await replace(t,d);return;}
+    if(!t.handle){await reselect(t);return;}
+    const permission=await (t.handle as PermissionHandle).queryPermission({mode:'read'});
+    if(!state.tabs.includes(t)||closing===t)return;
+    if(permission!=='granted'){status('読取権限がありません。同じMarkdownを再選択してください。','warning');await reselect(t);return;}
+    await replace(t,parseDesign(await (await t.handle.getFile()).text()));
+  }catch(e){if(state.tabs.includes(t)&&(e as Error).name!=='AbortError'&&!(e instanceof DocumentSaveError))status('更新失敗。編集と旧表示を保持しています: '+(e as Error).message,'error');}
+  finally{updating.delete(t);render();}
+};
+type SourceMode='url'|'text'|'edit';
+let sourceMode:SourceMode='text',sourceTarget:string|undefined,sourceBusy=false,sourceToken=0,sourceAbort:AbortController|undefined,sourceOpener:HTMLElement|null=null;
 const sourceText=()=>($('source-text') as HTMLTextAreaElement),sourceURL=()=>($('source-url') as HTMLInputElement);
-function updateSourceDirty(){draftDirty=!$('source-dialog').hidden&&(sourceMode==='text'?sourceText().value:sourceURL().value)!==sourceBaseline;saveStateChrome();}
-sourceText().addEventListener('input',updateSourceDirty);sourceURL().addEventListener('input',updateSourceDirty);
-function showSource(mode:SourceMode,target?:Tab){if(restoring)return;sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;$('source-dialog').hidden=false;$('source-title').textContent=target?'入力したMarkdownを編集':mode==='url'?'URLを開く':'テキストを入力';for(const id of ['url-label','source-url'])$(id).hidden=mode!=='url';for(const id of ['text-label','source-text'])$(id).hidden=mode!=='text';$('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':'入力本文はこのブラウザーのIndexedDBに保存します。外部送信しません。更新から再編集できます。';if(target)sourceText().value=target.design.markdown;sourceBaseline=mode==='text'&&target?target.design.markdown:'';updateSourceDirty();$('source-submit').removeAttribute('disabled');(mode==='url'?sourceURL():sourceText()).focus();}
-function closeSource(){sourceToken++;sourceAbort?.abort();sourceBusy=false;$('source-dialog').hidden=true;draftDirty=false;saveStateChrome();$('source-submit').removeAttribute('disabled');sourceOpener?.focus({preventScroll:true});}
-$('open-url').onclick=()=>showSource('url');$('open-text').onclick=()=>showSource('text');$('source-cancel').onclick=closeSource;$('source-dialog').onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();closeSource();}};
-$('source-submit').onclick=async()=>{if(sourceBusy||$('source-dialog').hidden)return;updateSourceDirty();sourceBusy=true;$('source-submit').setAttribute('disabled','');const token=++sourceToken,target=sourceTarget,mode=sourceMode;sourceAbort=new AbortController();try{const url=sourceURL().value.trim(),raw=mode==='url'?await fetchMarkdown(url,sourceAbort.signal):sourceText().value;if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');const design=parseDesign(raw);if(token!==sourceToken)return;if(target){if(!state.tabs.includes(target)||closing===target){status('編集対象のタブは閉じる操作中か、閉じられました。入力は保持しています。','warning');return;}replace(target,design);}else{const tab=reconcile({key:crypto.randomUUID(),name:mode==='text'?'入力したMarkdown':new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:mode==='text'?{kind:'text'}:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);capture();const i=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(i+1,0,tab);state.active=tab.key;render();persist();status('');}closeSource();}catch(e){if(token===sourceToken)status('表示できません。入力と旧表示を保持しています: '+(e as Error).message,'error');}finally{if(token===sourceToken){sourceBusy=false;$('source-submit').removeAttribute('disabled');}}};
+function updateSourceDirty(){draftDirty=!$('source-dialog').hidden&&sourceMode!=='edit'&&(sourceMode==='text'?sourceText().value:sourceURL().value)!=='';saveStateChrome();}
+sourceURL().addEventListener('input',updateSourceDirty);
+const editingTab=()=>state.tabs.find(t=>t.key===sourceTarget);
+function rememberEditorInput(){
+  const t=editingTab();if(sourceMode!=='edit'||$('source-dialog').hidden||!t||documentSaving||closing)return;
+  const value=sourceText().value,draft=value===t.design.markdown.replace(/\r\n?/g,'\n')?undefined:value;
+  if(t.draft!==draft){t.draft=draft;unsavedDrafts.add(t.key);persist();}sourceChrome();
+}
+// Textareas normalize line endings; opening CRLF source alone is not an edit.
+function editorChanged(){const t=editingTab();return !!t&&sourceText().value!==t.design.markdown.replace(/\r\n?/g,'\n');}
+function sourceChrome(){
+  const edit=sourceMode==='edit',busy=sourceBusy||documentSaving||(edit&&!!closing);sourceText().disabled=busy;
+  $('source-dialog').dataset.mode=sourceMode;
+  $('source-submit').textContent=edit?'反映する':'表示';
+  $<HTMLButtonElement>('source-submit').disabled=busy||(edit&&!editorChanged());$<HTMLButtonElement>('source-cancel').disabled=edit&&busy;
+  $('source-cancel').textContent=edit?'閉じる':'キャンセル';
+  updateSourceDirty();
+}
+function showSource(mode:SourceMode,target?:Tab){
+  if(restoring||opening||documentSaving||(target&&(updating.has(target)||!!closing)))return;
+  rememberEditorInput();sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target?.key;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;
+  $('source-dialog').hidden=false;$('source-title').textContent=target?`Markdown原文 · ${target.name}`:mode==='url'?'URLを開く':'テキストを入力';
+  for(const id of ['url-label','source-url'])$(id).hidden=mode!=='url';for(const id of ['text-label','source-text'])$(id).hidden=mode==='url';
+  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
+  if(target)sourceText().value=target.draft??target.design.markdown;
+  else if(mode==='text')sourceText().value=newTextDraft;
+  sourceChrome();(mode==='url'?sourceURL():sourceText()).focus();
+}
+let newTextDraft='';
+function hideSource(){sourceToken++;sourceAbort?.abort();sourceBusy=false;sourceTarget=undefined;$('source-dialog').hidden=true;sourceChrome();if(sourceOpener?.isConnected)sourceOpener.focus({preventScroll:true});}
+async function closeSource(){
+  if(documentSaving)return false;
+  rememberEditorInput();const t=editingTab();
+  if(sourceMode==='edit'&&t&&(t.draft!==undefined||unsavedDrafts.has(t.key))){
+    sourceBusy=true;sourceChrome();
+    try{await saveDocument(()=>state,()=>{});}
+    catch{saveStateChrome();return false;}
+    finally{sourceBusy=false;sourceChrome();}
+  }
+  if(sourceMode==='text')newTextDraft=sourceText().value;hideSource();return true;
+}
+// Explicit Close/Escape asks before hiding changed text; switching tabs still saves quietly.
+let sourceClosePrompt:Promise<boolean>|undefined;
+function requestCloseSource():Promise<boolean>{
+  if(sourceClosePrompt)return sourceClosePrompt;
+  if(documentSaving||(sourceMode==='edit'&&sourceBusy))return Promise.resolve(false);
+  if(sourceMode!=='edit'||$('source-dialog').hidden||!editorChanged())return closeSource();
+  rememberEditorInput();
+  const dialog=$<HTMLDialogElement>('source-close-dialog'),confirm=$<HTMLButtonElement>('source-close-confirm'),keep=$<HTMLButtonElement>('source-close-continue');
+  const target=sourceTarget,text=sourceText(),selection=[text.selectionStart,text.selectionEnd,text.selectionDirection] as const;
+  sourceClosePrompt=new Promise(resolve=>{
+    let settling=false;
+    const finish=async(accepted:boolean)=>{
+      if(settling)return;settling=true;confirm.disabled=keep.disabled=true;
+      const closed=accepted&&sourceMode==='edit'&&sourceTarget===target?await closeSource():false;
+      dialog.close();sourceClosePrompt=undefined;confirm.disabled=keep.disabled=false;
+      if(closed){if(sourceOpener?.isConnected)sourceOpener.focus({preventScroll:true});}
+      else if(!$('source-dialog').hidden){text.focus({preventScroll:true});text.setSelectionRange(...selection);}
+      resolve(closed);
+    };
+    confirm.onclick=()=>finish(true);keep.onclick=()=>finish(false);
+    dialog.oncancel=e=>{e.preventDefault();void finish(false);};
+    dialog.showModal();keep.focus();
+  });
+  return sourceClosePrompt;
+}
+sourceText().oninput=()=>{if(sourceMode==='edit')rememberEditorInput();else if(sourceMode==='text'){newTextDraft=sourceText().value;updateSourceDirty();}};
+$('edit-markdown').onclick=()=>{const t=current();if(t)showSource('edit',t);};
+$('open-url').onclick=()=>showSource('url');$('open-text').onclick=()=>showSource('text');$('source-cancel').onclick=()=>requestCloseSource();
+$('source-dialog').onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();void requestCloseSource();}};
+$('source-submit').onclick=async()=>{
+  if(sourceBusy||documentSaving||(sourceMode==='edit'&&closing)||$('source-dialog').hidden||(sourceMode==='edit'&&!editorChanged()))return;
+  rememberEditorInput();sourceBusy=true;sourceChrome();const token=++sourceToken,target=editingTab(),mode=sourceMode;sourceAbort=new AbortController();
+  try{
+    const url=sourceURL().value.trim(),raw=mode==='url'?await fetchMarkdown(url,sourceAbort.signal):sourceText().value;
+    if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');
+    const design=parseDesign(raw);if(token!==sourceToken)return;
+    if(mode==='edit'){
+      if(!target||!state.tabs.includes(target)||closing===target){status('編集対象のタブは閉じる操作中か、閉じられました。入力は保持しています。','warning');return;}
+      await replace(target,design,target.handle,target.edited===true||raw!==target.design.markdown);
+    }else{
+      const tab=reconcile({key:crypto.randomUUID(),name:mode==='text'?'入力したMarkdown':new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:mode==='text'?{kind:'text'}:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);
+      capture();const i=state.tabs.findIndex(t=>t.key===state.active);state.tabs.splice(i+1,0,tab);state.active=tab.key;render();persist();status('');if(mode==='text')newTextDraft=raw;
+    }
+    hideSource();
+  }catch(e){if(token===sourceToken&&!(e instanceof DocumentSaveError))status('表示できません。入力と旧表示を保持しています: '+(e as Error).message,'error');}
+  finally{if(token===sourceToken){sourceBusy=false;sourceChrome();}}
+};
 $('layout-lock').onclick=()=>{if(restoring)return;touch.cancel();pan=undefined;capture();layoutLocked=!layoutLocked;chrome();graph();};
 $<HTMLInputElement>('selected-edges-only').onchange=()=>{const t=current();if(!t||restoring||closing===t)return;touch.cancel();pan=undefined;capture();t.selectedEdgesOnly=$<HTMLInputElement>('selected-edges-only').checked;redrawEdges();persist();};
 $<HTMLInputElement>('show-exceptions').onchange=()=>{const t=current();if(!t||restoring||closing===t)return;touch.cancel();pan=undefined;capture();t.showExceptions=$<HTMLInputElement>('show-exceptions').checked;redrawEdges();persist();};
@@ -275,10 +437,11 @@ if(typeof ResizeObserver!=='undefined'){const canvasResize=new ResizeObserver(()
 function validateRestoredTab(t:Tab){
   if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||!t.design||typeof t.design.markdown!=='string'||!t.design.sections||typeof t.design.sections!=='object'||Array.isArray(t.design.sections)||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
   validateGraph(t.design.graph);
+  if((t.draft!==undefined&&typeof t.draft!=='string')||(t.edited!==undefined&&typeof t.edited!=='boolean'))throw Error('Invalid editor state');
   if(!t.design.graph.nodes.every(n=>Object.hasOwn(t.design.sections,n.id)&&typeof t.design.sections[n.id]==='string')||(t.design.activityOrder!==undefined&&(!Array.isArray(t.design.activityOrder)||!t.design.activityOrder.every(id=>typeof id==='string'))))throw Error('Invalid saved sections');
   if(t.source!==undefined&&(!t.source||!['text','sample','url'].includes(t.source.kind)||(t.source.kind==='url'&&typeof t.source.url!=='string')))throw Error('Invalid saved source');
 }
 const initialState=state;
-render();loadSession().then(saved=>{if(!saved)return;if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateRestoredTab(t);if(new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length||(saved.active!==undefined&&typeof saved.active!=='string'))throw Error('Invalid saved tab keys');if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if(!t||!t.positions||typeof t.positions!=='object'||Array.isArray(t.positions)||(t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||t.scroll.length!==2||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
+render();saveStateChrome();loadSession().then(saved=>{if(saved===undefined)return;if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateRestoredTab(t);if(new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length||(saved.active!==undefined&&typeof saved.active!=='string'))throw Error('Invalid saved tab keys');if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if(!t||!t.positions||typeof t.positions!=='object'||Array.isArray(t.positions)||(t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||t.scroll.length!==2||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
 const {dimOutside:_dimOutside,hideOutside:_hideOutside,scopeOutside:_scopeOutside,...restored}=saved;
 const migrate=(t:Tab)=>({...t,hiddenNodes:t.hiddenNodes??(saved.scopeOutside==='hide'?t.design.graph.nodes.filter(n=>!n.scope).map(n=>n.id):[])});state={...restored,tabs:saved.tabs.map(t=>reconcile(migrate(t),t.design))};if(saved.sampleLayout&&saved.sampleLayout.hiddenNodes===undefined&&saved.scopeOutside==='hide')state.sampleLayout={...saved.sampleLayout,hiddenNodes:parseDesign(sampleMarkdown).graph.nodes.filter(n=>!n.scope).map(n=>n.id)};if(!state.tabs.some(t=>t.key===state.active))state.active=state.tabs[0]?.key;if(current()?.selected)revealListNode(current()!.selected!);render();if(state.tabs.some(t=>t.source?.kind!=='text'&&t.source?.kind!=='sample'))status('保存時の内容です。最新の取得元は「更新」で確認できます。','warning');savedOnce=true;}).catch(()=>{state=initialState;restoreFailed=true;protectedStorage();}).finally(()=>{restoring=false;render();saveStateChrome();});

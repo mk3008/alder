@@ -3,7 +3,7 @@ import {deploymentContext} from './deployment.ts';
 import type {Design} from './graph';
 export type Point=[number,number];
 /** Camera-only padding/origin in world units. Stored node coordinates never change. */
-export type Tab={key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;hiddenNodes?:string[];showExceptions?:boolean;selectedEdgesOnly?:boolean;viewInset?:Point;canvasOrigin?:Point;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
+export type Tab={draft?:string;edited?:boolean;key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;hiddenNodes?:string[];showExceptions?:boolean;selectedEdgesOnly?:boolean;viewInset?:Point;canvasOrigin?:Point;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
 export type SampleLayout=Pick<Tab,'positions'|'selected'|'scroll'|'zoom'|'hiddenNodes'|'showExceptions'|'selectedEdgesOnly'|'viewInset'|'canvasOrigin'>;
 export type ScopeOutside='show'|'hide';
 export type Session={sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;nodeDrawer?:boolean;width:number;preferWrite?:boolean};

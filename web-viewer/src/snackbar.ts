@@ -1,7 +1,7 @@
 type Kind = 'success' | 'warning' | 'error';
 
 /** One non-modal message. Errors stay until dismissed; routine results expire. */
-export function createSnackbar(bar: HTMLElement, text: HTMLElement, close: HTMLButtonElement, fallback: HTMLElement) {
+export function createSnackbar(bar: HTMLElement, text: HTMLElement, close: HTMLButtonElement, fallback: HTMLElement, canDismiss:()=>boolean=()=>true, onChange:()=>void=()=>{}) {
   const doc = bar.ownerDocument, win = doc.defaultView!;
   let timer: number | undefined, remaining = 0, started = 0, hovered = false;
   let returnFocus: HTMLElement | null = null, activeKey = '';
@@ -13,7 +13,8 @@ export function createSnackbar(bar: HTMLElement, text: HTMLElement, close: HTMLB
       timer = undefined;
     }
   };
-  const dismiss = () => {
+  const dismiss = (userAction=false) => {
+    if(userAction&&!canDismiss())return;
     stop();
     errors.delete(activeKey);
     const pending = [...errors].at(-1);
@@ -21,6 +22,7 @@ export function createSnackbar(bar: HTMLElement, text: HTMLElement, close: HTMLB
     const focused = bar.contains(doc.activeElement);
     bar.hidden = true;
     text.textContent = '';
+    onChange();
     if (focused) (returnFocus?.isConnected ? returnFocus : fallback).focus({preventScroll:true});
   };
   const resume = () => {
@@ -38,20 +40,22 @@ export function createSnackbar(bar: HTMLElement, text: HTMLElement, close: HTMLB
   });
   bar.addEventListener('focusout', () => win.setTimeout(resume, 0));
   bar.addEventListener('keydown', event => {
-    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); dismiss(); }
+    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); dismiss(true); }
   });
   doc.addEventListener('visibilitychange', () => doc.hidden ? stop() : resume());
-  close.onclick = dismiss;
+  close.onclick = () => dismiss(true);
   const show = (message: string, kind: Kind, key: string) => {
     stop();
     if (!bar.contains(doc.activeElement)) returnFocus = doc.activeElement as HTMLElement | null;
     activeKey = key;
     bar.dataset.kind = kind;
+    bar.dataset.key = key;
     text.setAttribute('role', kind === 'error' ? 'alert' : 'status');
     text.setAttribute('aria-live', kind === 'error' ? 'assertive' : 'polite');
     text.setAttribute('aria-atomic', 'true');
     bar.hidden = false;
     text.textContent = message;
+    onChange();
     remaining = kind === 'warning' ? 8000 : 5000;
     resume();
   };

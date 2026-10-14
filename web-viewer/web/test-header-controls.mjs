@@ -12,6 +12,7 @@ try{
  w.eval(outputFiles[0].text);const d=w.document;d.querySelector('style').textContent=css;
  for(let i=0;i<120&&d.querySelector('#open').disabled;i++)await new Promise(r=>setTimeout(r,25));
  assert.equal(d.querySelector('#open').disabled,false);
+ const strip=w.getComputedStyle(d.querySelector('.tab-strip'));assert.equal(strip.height,'auto');assert.equal(strip.minHeight,'44px');assert.equal(strip.flexShrink,'0');assert.equal(w.getComputedStyle(d.querySelector('#tabs')).overflowX,'auto');
  const ids=['node-list-toggle','open','open-url','open-text','refresh','theme','drawer'];
  assert.equal(d.querySelectorAll('header>button').length,ids.length);assert.deepEqual([...d.querySelectorAll('header>button')].map(n=>n.id),ids);
  for(const id of ids){const n=d.getElementById(id),c=w.getComputedStyle(n);assert.ok(n.getAttribute('aria-label'));assert.equal(n.querySelectorAll('svg').length,1);assert.equal(c.height,'40px',id);assert.equal(c.minHeight,'40px',id);assert.equal(c.alignItems,'center');assert.equal(c.justifyContent,'center');}

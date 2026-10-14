@@ -11,8 +11,8 @@ export async function verifyPreviewIsolation(browser){
  // Mount the same built bytes at nested URLs. Production deployment is verified separately.
  await context.route('**/preview/pr-194/**',async route=>{const u=new URL(route.request().url()),path=u.pathname.replace(/^\/preview\/pr-194\/[^/]+\//,'/');await route.fulfill({response:await route.fetch({url:origin+path+u.search})});});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('dialog',async dialog=>{errors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
- const clean=()=>page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#save-state')?.dataset.state));
- const ready=async path=>{if(await page.locator('#save-state').count())await clean();await page.goto(origin+path);await page.waitForFunction(()=>!document.querySelector('#open').disabled);};
+ const clean=()=>page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
+ const ready=async path=>{if(await page.locator('#app[data-save-state]').count())await clean();await page.goto(origin+path);await page.waitForFunction(()=>!document.querySelector('#open').disabled);};
  const saved=()=>page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onerror=()=>reject(r.error);r.onsuccess=()=>{const db=r.result,g=db.transaction('session').objectStore('session').get('current');g.onsuccess=()=>{db.close();resolve(g.result);};};}));
  try{
   await ready('/');assert.equal(await page.locator('#preview-badge').isVisible(),false);await page.locator('#open-sample').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await clean();const production=await saved();

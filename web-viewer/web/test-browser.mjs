@@ -1,6 +1,7 @@
 import {verifySaveState} from './test-save-state-browser.mjs';
 import {verifySessionConcurrency} from './test-session-concurrency-browser.mjs';
 import {verifyLifecycleSave} from './test-lifecycle-save-browser.mjs';
+import {verifyMarkdownEditor} from './test-editor-browser.mjs';
 import {verifyToolbarSettings} from './test-toolbar-settings-browser.mjs';
 import {verifyInitialLeftMargin} from './test-initial-left-margin-browser.mjs';
 import {verifyReturnRoutes} from './test-return-route-browser.mjs';
@@ -42,6 +43,7 @@ try {
    {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'lifecycleSave',run:()=>verifyLifecycleSave(browser)},
+   {name:'markdownEditor',run:()=>verifyMarkdownEditor(browser)},
    {name:'headerControls',run:()=>verifyHeaderControls(browser)},
    {name:'toolbarSettings',run:()=>verifyToolbarSettings(browser)},
    {name:'drawerOpeningFocus',run:()=>verifyDrawerOpeningFocus(browser)},
@@ -56,7 +58,7 @@ try {
    ...['fixed-drawer','drawer-only','combined'].map(mode=>({name:'scopeGeometry:'+mode,run:()=>diagnoseScopeGeometry(browser,mode)})),
    {name:'legacySmoke',run:async()=>{
   page.on('dialog',async dialog=>{errors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
-  const clean=p=>p.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#save-state')?.dataset.state));
+  const clean=p=>p.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
   const sample=await browser.newPage({viewport:{width:1280,height:960}}),sampleRequests=[],sampleErrors=[];
   sample.on('request',r=>sampleRequests.push(r.url()));sample.on('pageerror',e=>sampleErrors.push(e.message));sample.on('dialog',async dialog=>{sampleErrors.push('Unexpected dialog: '+dialog.type());await dialog.dismiss();});
   await sample.goto('http://127.0.0.1:4173/');await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
@@ -79,7 +81,7 @@ try {
   await sample.locator('#layout-lock').click();const sampleBefore=await sampleFirst.boundingBox();await sample.mouse.move(sampleBefore.x+70,sampleBefore.y+30);await sample.mouse.down();await sample.mouse.move(sampleBefore.x+110,sampleBefore.y+50,{steps:4});await sample.mouse.up();
   const sampleAfter=await sampleFirst.boundingBox();assert.ok(sampleAfter.x>sampleBefore.x+30);
   await sample.locator('#theme').click();await sample.locator('#refresh').click();assert.equal(await sample.locator('.tab').count(),1);
-  await sample.locator('#status-close').click();await clean(sample);assert.deepEqual(sampleRequests,[]);
+  assert.equal(await sample.locator('#status').isVisible(),false);await clean(sample);assert.deepEqual(sampleRequests,[]);
   await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
   assert.ok(sampleRequests.every(url=>url.startsWith('http://127.0.0.1:4173/')));
   await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});assert.equal(await sample.locator('#empty').isVisible(),true);await sample.locator('#open-sample').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);

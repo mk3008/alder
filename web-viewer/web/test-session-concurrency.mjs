@@ -59,7 +59,7 @@ function assertLocalWork(e,expectedKeys){
  assert.deepEqual(keys(e),expectedKeys,'stale local tabs and rejected close target remain');
  assert.equal(e.$('source-dialog').hidden,false,'unsubmitted editor remains open');
  assert.equal(e.$('source-text').value,unsubmittedMarkdown,'unsubmitted input remains exact');
- assert.ok(e.$('detail').textContent.includes('Retain B local submitted edit.'),'submitted local edit remains displayed');
+ assert.ok(e.$('detail').textContent.includes('Exercise isolated session persistence.'),'the applied Graph remains unchanged until commit');e.$('edit-markdown').click();assert.equal(e.$('source-text').value,changedMarkdown,'per-tab draft remains exact');e.$('open-text').click();assert.equal(e.$('source-text').value,unsubmittedMarkdown,'separate new-input draft remains exact');
 }
 async function caseOf(name,test){
  const originalPut=IDBObjectStore.prototype.put;
@@ -136,8 +136,8 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
  assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
  assert.deepEqual(keys(b),initialKeys);
- select(b,shared);await b.$('refresh').onclick();b.$('source-text').value=changedMarkdown;await b.$('source-submit').onclick();
- b.$('open-text').click();b.$('source-text').value=unsubmittedMarkdown;
+ select(b,shared);await b.$('edit-markdown').onclick();b.$('source-text').value=changedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
+ b.$('open-text').click();b.$('source-text').value=unsubmittedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
  if(trigger==='close')await tabs(b).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  else if(trigger!=='debounce')lifecycle(b,trigger);
  const warning=await assertConflict(b);assertLocalWork(b,initialKeys);
@@ -158,7 +158,7 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  assert.deepEqual(consecutive.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
  assert.equal(consecutive.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
  for(const e of [seed,a,b,fresh])assert.equal(e.networkCalls(),0);
- return {trigger,warning,retained:['A added document','A exact coordinates','A tab deletion','B local edit','B unsubmitted draft'],reloadWritable:true,consecutiveSaves:true};
+ return {trigger,warning,retained:['A added document','A exact coordinates','A tab deletion','B unapplied per-tab draft','B separate unsubmitted input'],reloadWritable:true,consecutiveSaves:true};
 });
 await pause();process.off('unhandledRejection',onRejection);windows.forEach(w=>w.close());
 console.log(JSON.stringify({model:'Independent unchanged bundled modules and apps in JSDOM + fresh fake IndexedDB; no network or user browser data',limitations:'Dispatched lifecycle events and modeled pointer calls; native browser/process/origin/lifecycle durability requires separate evidence',sourceRoot,appOnly:values['app-only'],results,unhandledRejections:unhandled,passed:results.filter(r=>r.passed).length,failed:results.filter(r=>!r.passed).length},null,2));

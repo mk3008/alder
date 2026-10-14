@@ -88,7 +88,7 @@ async function assertLocalWork(page,expectedKeys){
  assert.deepEqual(await keys(page),expectedKeys,'stale local tabs, including the close target, are retained');
  assert.equal(await page.locator('#source-dialog').isVisible(),true,'unsubmitted editor remains open');
  assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'unsubmitted input is retained exactly');
- assert.ok((await page.locator('#detail').textContent()).includes('Retain B local submitted edit.'),'local changed document is still displayed');
+ assert.ok((await page.locator('#detail').textContent()).includes('Exercise isolated session persistence.'),'prior Graph remains displayed until Apply commits');await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await page.locator('#open-text').click();assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
 }
 // Observe the first generation read without replacing requests, transactions,
 // values, or save behavior. It proves each app really loaded the same version.
@@ -236,13 +236,12 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and close');
    assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
    assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
-   // One browser task prepares a local edit and draft, then invokes the chosen
+   // One browser task prepares per-tab and new-input drafts, then invokes the chosen
    // first stale write. The debounce case lets the normal 180ms timer fire.
    await b.evaluate(async ({shared,closed,changed,draft,trigger})=>{
     document.querySelector(`.tab[data-key="${shared}"] > button`).click();
-    await document.getElementById('refresh').onclick();document.getElementById('source-text').value=changed;
-    await document.getElementById('source-submit').onclick();
-    document.getElementById('open-text').click();document.getElementById('source-text').value=draft;
+    await document.getElementById('edit-markdown').onclick();document.getElementById('source-text').value=changed;document.getElementById('source-text').dispatchEvent(new Event('input',{bubbles:true}));
+    document.getElementById('open-text').click();document.getElementById('source-text').value=draft;document.getElementById('source-text').dispatchEvent(new Event('input',{bubbles:true}));
     if(trigger==='close')await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();
     else if(trigger==='hidden'){
      Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));

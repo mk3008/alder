@@ -24,7 +24,7 @@ export async function verifyEdgeOption(browser){
       assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),positions);
     };
     await assertEdges();await page.locator('#out').click();await page.locator('#theme').click();await assertEdges();
-    await page.waitForFunction(()=>document.querySelector('#save-state')?.dataset.state==='saved');await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+    await page.waitForFunction(()=>document.querySelector('#app')?.dataset.saveState==='saved');await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
     assert.equal(await page.locator('#prefer-write').isChecked(),true);await assertEdges();
     await openDisplaySettings(page);await page.locator('#prefer-write').uncheck();assert.equal(await page.locator('.edge').count(),relations.length);assert.equal(await page.locator('.edge-label').count(),relations.length);
     assert.deepEqual(errors,[]);return {all:relations.length,hiddenReads:hidden.size,visible:expected.length,checks:'default OFF; paired Reads/labels hidden; standalone Reads/Writes/exceptions retained; selection, positions, zoom/theme and reload'};
