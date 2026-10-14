@@ -84,7 +84,7 @@ header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:now
 .node-search-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 #node-list-search{margin:16px 18px;width:calc(100% - 36px);padding:9px 10px;border:1px solid var(--subtle);border-radius:5px;color:var(--fg);background:var(--panel);font:inherit;font-size:13px}
 .scope-bulk{display:flex;align-items:center;gap:8px;padding:10px 12px;border-block:1px solid var(--subtle);font-size:13px;font-weight:650}.scope-bulk small{margin-left:auto;color:var(--line);font-size:11px;font-weight:400}.scope-bulk button,.node-eye{width:36px;height:36px;flex-shrink:0;display:grid;place-items:center;color:inherit}.scope-bulk [aria-pressed=false],.node-eye[aria-pressed=false]{color:var(--line)}
-#node-list{overflow:auto;flex:1;min-height:0;padding:10px 12px;font-size:13px;overscroll-behavior:contain}.node-list-row{display:flex;align-items:center;gap:3px;min-height:44px;border-radius:3px}.node-list-row.list-selected{background:var(--select)}.node-navigate{padding:10px 5px;text-align:left;flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.5}.node-navigate[aria-disabled=true]{color:var(--line);cursor:default}.node-eye:hover,.node-navigate:not([aria-disabled=true]):hover{background:var(--select)}
+#node-list{overflow:auto;flex:1;min-height:0;padding:10px 12px;font-size:13px;overscroll-behavior:contain}.node-list-row{display:flex;align-items:center;gap:3px;min-height:44px;border-radius:3px}.node-list-row.list-selected{background:var(--select)}.node-navigate{padding:10px 5px;text-align:left;flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.5}.node-navigate[aria-disabled=true]{color:var(--line);cursor:default}.node-eye:hover,.node-navigate:not([aria-disabled=true]):not(:disabled):hover{background:var(--select)}
 .role-group{border-bottom:1px solid var(--subtle);padding-bottom:6px;margin-bottom:8px}.role-heading{display:flex;width:100%;align-items:center;gap:9px;padding:10px 2px;text-align:left;font-weight:650}.role-heading>span:not(.who-badge){flex:1;overflow-wrap:anywhere}.role-children{padding-left:14px}.role-children[hidden]{display:none}.role-children .node-list-row:last-child{border-bottom:0}
 .role-heading .who-badge{width:28px;height:28px;min-width:28px;border-radius:50%;border:2px solid var(--role-color);background:var(--role-color);color:white;display:grid;place-items:center}.role-heading .who-badge svg{width:16px;height:16px;stroke-width:2}
 @media(max-width:800px){#node-list-drawer{position:absolute;left:0;right:auto;top:108px;bottom:0;z-index:6;box-shadow:8px 0 24px #0003}#node-list-toggle{min-width:32px}}
@@ -167,13 +167,13 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .findings-panel h2{font-size:18px}.findings-panel h3{font-size:14px}
 .finding-filter{display:flex;align-items:center;gap:8px;min-height:40px;font-size:13px}
 .finding-filter input{width:18px;height:18px}
-.finding-card{border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0;overflow-wrap:anywhere}
+.finding-card{padding:0;margin:16px 0;overflow-wrap:anywhere}
 .finding-summary{font-weight:650}.finding-target{font-size:12px}.finding-reference-warning{font-weight:650;border-left:3px solid currentColor;padding-left:8px}
 .finding-card .markdown{padding:0;font-size:13px}
 
-.tab-strip>#refresh,.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
-.tab-strip>#refresh:hover:not(:disabled),.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
-.tab-strip>#refresh[hidden],.tab-strip>.png-action[hidden]{display:none}
+#document-actions>[id=refresh],#document-actions>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+#document-actions>[id=refresh]:hover:not(:disabled),#document-actions>.png-action:hover:not(:disabled){background:var(--select)}
+#document-actions>[id=refresh][hidden],#document-actions>.png-action[hidden]{display:none}
 
 /* One ordered responsive policy: full -> no title -> icons only.
    Expanded typography/spacing never changes with the viewport, so canonical
@@ -213,6 +213,21 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 #drawer-modes{display:flex;margin:0 14px 12px;gap:4px}#drawer-modes button{flex:1;min-height:40px;font-size:13px;border-bottom:2px solid transparent}#drawer-modes [aria-selected=true]{background:var(--select);border-bottom-color:#357aa6;font-weight:650}
 #node-categories[hidden],.scope-bulk[hidden],#node-list-search[hidden]{display:none}
-.findings-index{overflow-wrap:anywhere}.findings-index h3{font-size:13px;margin:18px 0 6px}.finding-index-row{display:block;text-align:left;width:100%;padding:10px 6px;min-height:44px;border-bottom:1px solid var(--subtle);overflow-wrap:anywhere}.finding-index-row strong,.finding-index-row span{display:block}.finding-index-row strong{font-size:12px}.finding-index-row span{font-size:13px;margin-top:4px}.finding-index-row:hover{background:var(--select)}.finding-back,.finding-target-link,.finding-all{display:block;max-width:100%;min-height:40px;padding:8px;border:1px solid var(--line);border-radius:5px;margin:8px 0;text-align:left;overflow-wrap:anywhere}
+.findings-index{overflow-wrap:anywhere}.findings-index h3{font-size:13px;margin:18px 0 6px}.finding-index-row{display:block;width:100%}.finding-index-row strong,.finding-index-row span{display:block}.finding-index-row strong{font-size:12px}.finding-index-row span{font-size:13px;margin-top:4px}.finding-back,.finding-target-link,.finding-all{display:block;width:100%;max-width:100%;margin:4px 0}.finding-index-row,.finding-back,.finding-target-link,.finding-all{min-height:44px;border-radius:3px}.node-navigate:disabled:hover{background:transparent}
 
 .finding-badges:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+/* One document action surface: inline when a complete active tab fits, otherwise
+   one disclosure. The same buttons keep their existing handlers and guards. */
+.tab-strip{position:relative}
+#document-actions{display:flex;flex-shrink:0;align-items:center}
+#document-actions-toggle{flex-shrink:0;align-self:center;width:44px;height:44px;font-size:24px;line-height:1;border-radius:5px;margin-inline:2px}
+#document-actions-toggle[hidden]{display:none}
+#document-actions-toggle:hover{background:var(--select)}
+.document-action-label{display:none}
+.tab-strip[data-actions-mode=menu] #document-actions{position:absolute;right:4px;top:100%;z-index:12;display:flex;flex-direction:column;align-items:stretch;width:max-content;max-width:calc(100vw - 16px);max-height:calc(100dvh - 120px);overflow:auto;padding:4px;background:var(--panel);border:1px solid var(--subtle);border-radius:6px;box-shadow:0 6px 20px #0003}
+.tab-strip[data-actions-mode=menu][data-actions-open=false] #document-actions{display:none}
+.tab-strip[data-actions-mode=menu] #document-actions>button{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-shrink:0;width:100%;min-width:0;min-height:44px;height:auto;margin:0;padding:10px;border-radius:4px;font-size:13px;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.tab-strip[data-actions-mode=menu] #document-actions>button[hidden]{display:none}
+.tab-strip[data-actions-mode=menu] .document-action-label{display:inline}
+.tab-strip[data-actions-mode=menu] .editor-caption{display:none}
+#document-actions>button:focus-visible{outline-offset:-3px}

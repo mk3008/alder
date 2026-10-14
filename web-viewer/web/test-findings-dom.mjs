@@ -17,7 +17,7 @@ const toggle=panel.querySelector('input');toggle.checked=true;toggle.dispatchEve
 assert.equal(panel.querySelectorAll('[data-finding-id=F04]').length,1);
 assert.deepEqual(Array.from(dom.window.findingUI.nodeFindingLabels(design,design.graph.nodes.find(n=>n.type==='business'))),['困りごと','要確認 1']);
 let selection;const index=dom.window.findingUI.findingsIndex(design,false,()=>{},value=>selection=value);dom.window.document.body.append(index);
-assert.equal(index.querySelectorAll('[data-finding-key="finding:F01"]').length,1);
+assert.equal(index.querySelectorAll('[data-finding-key="finding:F01"]').length,1);assert.ok(index.querySelector('button').classList.contains('node-navigate'));assert.equal(panel.querySelector('.finding-card').tagName,'SECTION');
 assert.equal(index.querySelectorAll('[data-finding-key="finding:F04"]').length,0);
 index.querySelector('[data-finding-key="finding:F01"]').click();assert.equal(selection.id,'F01');
 assert.match(index.textContent,/関連先未設定/);assert.match(index.textContent,/参照先不一致/);assert.equal(index.querySelectorAll('img,script').length,0);
@@ -36,7 +36,7 @@ try{
  assert.equal($('findings-toggle'),null);assert.equal($('display-settings-toggle').dataset.findingCount,undefined);
  $('node-list-toggle').click();$('drawer-mode-findings').click();assert.equal($('node-categories').hidden,true);assert.equal($('node-list-search').hidden,true);
  assert.match($('drawer-mode-findings').textContent,/4/);assert.equal($('node-list').querySelectorAll('[data-finding-key="finding:F01"]').length,1);
- $('node-list').querySelector('[data-finding-key="finding:F01"]').click();assert.equal($('node-list').querySelectorAll('[data-finding-target]').length,2);
+ $('node-list').querySelector('[data-finding-key="finding:F01"]').click();assert.ok($('node-list').querySelector('.finding-back').classList.contains('node-navigate'));assert.ok($('node-list').querySelector('.finding-target-link').classList.contains('node-navigate'));assert.equal($('node-list').querySelectorAll('[data-finding-target]').length,2);
  $('node-list').querySelector('[data-finding-target="受付情報"]').click();assert.equal(w.document.querySelector('.node.selected').dataset.node,'受付情報');assert.match($('detail').textContent,/受付情報/);assert.equal($('detail').querySelector('.finding-card'),null);assert.ok($('node-list').querySelector('[data-finding-id="F01"]'));
  $('node-list').querySelector('.finding-back').click();$('node-list').querySelector('[data-finding-key="finding:F03"]').click();assert.equal($('node-list').querySelectorAll('[data-finding-target]').length,0);
  $('node-list').querySelector('.finding-back').click();$('node-list').querySelector('[data-finding-key="finding:F02"]').click();assert.equal($('node-list').querySelector('[data-finding-target]').disabled,true);assert.equal($('node-list').querySelectorAll('img,script').length,0);

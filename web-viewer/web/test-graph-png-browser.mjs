@@ -12,7 +12,7 @@ import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 import {runBrowserCases} from './browser-cases.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
-import {assertTabStripActions} from './test-tab-strip-browser.mjs';
+import {assertTabStripActions,ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {readConcurrencyRecord} from './test-session-concurrency-browser.mjs';
 
@@ -272,7 +272,7 @@ async function pasteSyntheticPng(f){
  }finally{if(target)await target.close();await context.unroute(url,handler);await page.bringToFront();}
 }
 async function copyPng(f,{input='click'}={}){
- const {page}=f;await saved(page);
+ const {page}=f;await saved(page);await ensureDocumentActions(page);
  const state=await page.evaluate(stateInPage),before=await record(page),scene=await page.evaluate(sceneInPage),requestCount=f.requests.length,downloadCount=f.downloads.length;
  const counts=await page.evaluate(()=>({sources:__graphPng.svgs.length,writes:__graphPng.writes.length,items:__graphPng.clipboardItems.length,blobs:__graphPng.blobCalls}));
  await pressExport(page,'copy-image',input);
@@ -289,7 +289,7 @@ async function copyPng(f,{input='click'}={}){
 }
 
 async function exportPng(f,{input='click',nonmutation=true}={}){
- const {page}=f;await saved(page);
+ const {page}=f;await saved(page);await ensureDocumentActions(page);
  const state=await page.evaluate(stateInPage),before=await record(page),scene=await page.evaluate(sceneInPage),requestCount=f.requests.length,sourceCount=await page.evaluate(()=>__graphPng.svgs.length);
  const [download]=await Promise.all([page.waitForEvent('download'),input==='tap'?page.locator('#save-image').tap():page.locator('#save-image').click()]);
  const buffer=await bytesOf(download),png=inspectPng(buffer);
@@ -368,7 +368,7 @@ export async function verifyGraphPng(browser){
 // is part of the graph export. Keep the click path reachable by closing its
 // modal surface before exporting; the draft is preserved by the real dialog.
   const draftText=fixture.raw.replace('Determine the next action.','Synthetic unsent draft.');assert.notEqual(draftText,fixture.raw,'draft fixture must change the original Markdown');
-  await page.locator('#edit-markdown').click();await page.locator('#source-text').fill(draftText);
+  await ensureDocumentActions(page);await page.locator('#edit-markdown').click();await page.locator('#source-text').fill(draftText);
   await page.locator('#source-cancel').click();if(await page.locator('#source-close-dialog').isVisible())await page.locator('#source-close-confirm').click();await page.locator('#source-dialog').waitFor({state:'hidden'});await saved(page);
   const draft=await record(page);assert.equal(draft.current.tabs.find(t=>t.key===draft.current.active).draft,draftText,'read the exact committed editor draft, not merely a save-state label');
   const retained=await exportPng(f);assert.equal(retained.png.sha256,result.png.sha256,'saved editor draft is excluded from graph raster');
@@ -395,7 +395,7 @@ export async function verifyGraphPng(browser){
   if(failure==='huge')await seed(page,{positions:{...positions,[names.record]:[100000,700]}});
   if(failure==='toBlob')await page.evaluate(()=>{__graphPng.failBlob=true;});
   const before=await saved(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
-  await page.locator('#save-image').click();await page.waitForFunction(()=>!document.querySelector('#save-image').disabled&&document.querySelector('#status').dataset.kind==='error'&&!document.querySelector('#status').hidden);
+  await ensureDocumentActions(page);await page.locator('#save-image').click();await page.waitForFunction(()=>!document.querySelector('#save-image').disabled&&document.querySelector('#status').dataset.kind==='error'&&!document.querySelector('#status').hidden);
   const message=await page.locator('#status-text').textContent();assert.match(message,/画像/);assert.match(message,failure==='empty'?/項目がありません/:failure==='huge'?/大きすぎる/:/PNG/);
   assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');assert.equal(downloads.length,0);assert.equal(await page.locator('#save-image').getAttribute('aria-busy'),'false');
   await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);
@@ -407,7 +407,7 @@ export async function verifyGraphPng(browser){
  add('repeat native clicks and tab change during encoding keep the original snapshot/name',async f=>{
   const {page,downloads}=f;await openFixture(page,'first-original.md');await openFixture(page,'second-current.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
   const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
-  const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await page.locator('#save-image').click();
+  const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#save-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const box=await page.locator('#save-image').boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
   const copyBox=await page.locator('#copy-image').boundingBox();await page.mouse.click(copyBox.x+copyBox.width/2,copyBox.y+copyBox.height/2);
@@ -438,7 +438,7 @@ export async function verifyGraphPng(browser){
    if(fault==='PNG type unsupported')Object.defineProperty(ClipboardItem,'supports',{configurable:true,value:()=>false});
   },fault);
   const before=await saved(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
-  await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
+  await ensureDocumentActions(page);await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
   assert.match(await page.locator('#status-text').textContent(),/PNG.*保存/);assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');
   assert.equal(await page.evaluate(()=>__graphPng.writes.length),0,'unsupported API cannot attempt a clipboard write');assert.equal(await page.evaluate(()=>__graphPng.blobCalls),0,'unsupported API fails before raster encoding');
   assert.equal(downloads.length,0,'unsupported copy never silently downloads');await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);
@@ -448,7 +448,7 @@ export async function verifyGraphPng(browser){
  add('clipboard write denial preserves graph and offers working PNG save without silent download',async f=>{
   const {page,downloads}=f;await prepare(page);await page.evaluate(()=>{__graphPng.denyWrite=true;});
   const before=await saved(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
-  await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
+  await ensureDocumentActions(page);await page.locator('#copy-image').click();await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status').dataset.kind==='error');await idleExports(page);
   assert.match(await page.locator('#status-text').textContent(),/PNG.*保存/);assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');
   const write=await page.evaluate(()=>__graphPng.writes.at(-1));assert.equal(write.error,'NotAllowedError');assert.equal(write.completed,false);assert.equal(downloads.length,0);
   await saved(page);assert.deepEqual(await record(page),before);assert.deepEqual(await page.evaluate(stateInPage),state);assert.equal(f.requests.length,requests);
@@ -458,7 +458,7 @@ export async function verifyGraphPng(browser){
  add('delayed clipboard encoding writes immediately and blocks both actions across tab switching',async f=>{
   const {page,downloads}=f;await openFixture(page,'first-copy.md');await openFixture(page,'second-copy.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
   const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
-  const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await page.locator('#copy-image').click();
+  const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#copy-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const observation=await page.evaluate(()=>({item:__graphPng.clipboardItems[0],write:__graphPng.writes[0]}));
   assert.deepEqual(observation.item,{types:['image/png'],promise:true,activation:true});assert.deepEqual(observation.write,{types:[['image/png']],blobCalls:0,pending:0,activation:true,completed:false,error:null},'write receives a promise before generation completes');

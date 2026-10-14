@@ -1,3 +1,4 @@
+import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Isolated same-origin pages, synthetic input, and native IndexedDB only.
 // Importing this module never launches a browser. The parent gate owns the
 // browser/server and calls verifySessionConcurrency(browser, {url}). Lifecycle
@@ -88,7 +89,7 @@ async function assertLocalWork(page,expectedKeys){
  assert.deepEqual(await keys(page),expectedKeys,'stale local tabs, including the close target, are retained');
  assert.equal(await page.locator('#source-dialog').isVisible(),true,'unsubmitted editor remains open');
  assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'unsubmitted input is retained exactly');
- assert.ok((await page.locator('#detail').textContent()).includes('Exercise isolated session persistence.'),'prior Graph remains displayed until Apply commits');await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await page.locator('#open-text').click();assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
+ assert.ok((await page.locator('#detail').textContent()).includes('Exercise isolated session persistence.'),'prior Graph remains displayed until Apply commits');await ensureDocumentActions(page);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await page.locator('#open-text').click();assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
 }
 // Observe the first generation read without replacing requests, transactions,
 // values, or save behavior. It proves each app really loaded the same version.

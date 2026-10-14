@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {withToolbarPage} from './test-toolbar-settings-browser.mjs';
+import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
 
 const markdown=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');
@@ -22,7 +23,7 @@ export async function verifyFindings(browser){
     for(const card of geometry){assert.equal(card.width,260);assert.equal(card.height,68);assert.equal(card.font,'13px');assert.equal(card.padding,'9px 12px');assert.equal(card.radius,'8px');if(card.badge){assert.ok(card.badge.above&&card.badge.right&&card.badge.upperHalf);assert.equal(card.badge.overlaps,false);}}
     // Observe the real PNG raster input without replacing the native encoder.
     await page.evaluate(()=>{const d=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');Object.defineProperty(HTMLImageElement.prototype,'src',{...d,set(value){if(String(value).startsWith('data:image/svg+xml'))window.findingExportSvg=decodeURIComponent(String(value).split(',').slice(1).join(','));d.set.call(this,value);}});});
-    const download=page.waitForEvent('download');await page.locator('#save-image').click();await download;
+    await ensureDocumentActions(page);const download=page.waitForEvent('download');await page.locator('#save-image').click();await download;
     const exported=await page.evaluate(()=>{const doc=new DOMParser().parseFromString(window.findingExportSvg,'image/svg+xml'),height=+doc.querySelector('foreignObject').getAttribute('height');return Array.from(doc.querySelectorAll('.finding-badges')).map(b=>({top:b.style.top,right:b.style.right,y:parseFloat(b.parentElement.style.top)+parseFloat(b.style.top),height}));});
     assert.equal(exported.length,2);for(const b of exported){assert.equal(b.top,'-9px');assert.equal(b.right,'4px');assert.ok(b.y>=0&&b.y+18<=b.height);}
     await assertToolbarLayout(page,{open:false});
@@ -72,6 +73,13 @@ export async function verifyFindings(browser){
     const badge=page.locator('.node[data-node="受付情報"] .finding-badges');await badge.focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#node-list-drawer').isVisible(),true);assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);assert.equal(await page.locator('#detail .finding-card').count(),0);
     const leftDetail=await page.locator('#node-list').boundingBox();assert.ok(leftDetail.x>=0&&leftDetail.x+leftDetail.width<=width+.5);assert.ok(await page.locator('#node-list').evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+    const flat=await page.locator('#node-list').evaluate(root=>{
+      const props=e=>{const s=getComputedStyle(e);return {border:s.borderWidth,padding:s.padding,font:s.fontSize,line:s.lineHeight,radius:s.borderRadius,minHeight:s.minHeight};};
+      const probe=document.createElement('button');probe.className='node-navigate';root.append(probe);const base=props(probe);probe.remove();
+      return {base,buttons:[...root.querySelectorAll('.finding-back,.finding-target-link')].map(props),card:props(root.querySelector('.finding-card')),interactiveCard:root.querySelector('.finding-card').matches('button,[tabindex]')};
+    });
+    for(const button of flat.buttons){assert.equal(button.border,'0px');assert.equal(button.padding,flat.base.padding);assert.equal(button.font,flat.base.font);assert.equal(button.line,flat.base.line);assert.equal(button.minHeight,'44px');}
+    assert.equal(flat.card.border,'0px');assert.equal(flat.card.radius,'0px');assert.equal(flat.interactiveCard,false);
     await page.screenshot({path:`web/evidence/design-findings-96/detail-${width}.png`});
     await page.locator('.finding-back').click();assert.equal(await page.locator('.finding-all').count(),1);await page.locator('.finding-all').click();assert.match(await page.locator('#node-list').textContent(),/関連先未設定/);
     assert.equal(await page.locator('.node button button').count(),0);
