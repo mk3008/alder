@@ -385,7 +385,7 @@ function sharingReason(){
 function sharingChrome(){
   const reason=sharingReason(),button=$('share-source');button.hidden=!current();
   button.setAttribute('aria-disabled',String(copyingSource||!!reason));
-  button.title=reason??'取得元URLは相手に見えます。共有先では元URLの最新の文書を表示します。';
+  button.title=reason??'取得元URLは相手に見えます。共有先では取得元URLのタブを開きます。';
 }
 $('share-source').onclick=async()=>{
   if(copyingSource)return;
@@ -409,6 +409,17 @@ async function openSharedSource(requestedHash=location.hash){
   try{
     const url=readSharedSource(hash)!;
     ensureWritable();rememberEditorInput();
+    const existing=state.tabs.find(t=>t.source?.kind==='url'&&t.source.url===url);
+    if(existing){
+      // Revisit selects the saved document, including local edits and its view.
+      // Only explicit Refresh may replace it with the source's current content.
+      if(sourceTarget&&sourceTarget!==existing.key&&!await closeSource())return;
+      if(token!==sharedSourceToken)return;
+      const changed=capture()||state.active!==existing.key;
+      state.active=existing.key;render();persist(180,changed);
+      status('開いている共有元のタブを選択しました。保存内容と編集は保持しています。');
+      return;
+    }
     sharedSourceAbort=new AbortController();opening=true;render();
     const design=parseDesign(await fetchMarkdown(url,sharedSourceAbort.signal));
     if(token!==sharedSourceToken)return;
