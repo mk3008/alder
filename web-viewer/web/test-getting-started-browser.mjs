@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readSessionInPage,waitForExactRead} from './wait-saved-viewer.mjs';
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
  try{
@@ -38,6 +39,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    assert.equal(await guide.isVisible(),true);
    await page.locator('#fallback').setInputFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from('# Object 文書\n\n## Information\n\n- 内容\n')});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
+   await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);
    await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
