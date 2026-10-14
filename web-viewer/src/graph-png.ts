@@ -42,7 +42,7 @@ export function snapshotGraph(nodes:HTMLElement,edges:SVGSVGElement,background:s
   const boxes:Box[]=cards.map(n=>({x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight}));
   // Badges protrude beyond the unchanged routing/card rectangle. Include their
   // layout-space bounds, independent of camera zoom, in the image crop.
-  for(const card of cards)for(const badge of card.querySelectorAll<HTMLElement>('.finding-badges')){
+  for(const card of cards)for(const badge of Array.from(card.querySelectorAll<HTMLElement>('.finding-badges'))){
     boxes.push({x:parseFloat(card.style.left)+card.clientLeft+badge.offsetLeft,y:parseFloat(card.style.top)+card.clientTop+badge.offsetTop,width:badge.offsetWidth,height:badge.offsetHeight});
   }
   if(!cards.length)throw Error('画像にする項目がありません。');
