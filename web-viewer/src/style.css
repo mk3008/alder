@@ -164,7 +164,8 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 /* Icon-only header actions share the existing 40px height as a square target.
    Captioned source actions keep their labels and responsive visibility. */
 header{--header-control-width:40px}
-header strong{min-width:0;flex-shrink:1;white-space:normal}
+header strong{display:block;min-width:0;flex-shrink:0;white-space:nowrap}
+header strong.header-title-hidden{position:absolute;visibility:hidden;pointer-events:none}
 header #node-list-toggle,header #theme,header #drawer,header #github-link{width:var(--header-control-width);min-width:var(--header-control-width);height:40px;min-height:40px;padding:7px;gap:0}
 @media(min-width:801px) and (max-width:1100px){header{padding-inline:12px;gap:6px}header strong{font-size:16px}header button{font-size:12px}}
 @media(max-width:600px){header>button,header #open,header #open-url,header #open-text,header #refresh{width:var(--header-control-width);min-width:var(--header-control-width);padding:7px;gap:0}}
@@ -175,10 +176,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 /* Eight persistent actions still fit a 320px viewport without hiding a link. */
 @media(max-width:359px){header{--header-control-width:36px;padding-inline:4px;column-gap:2px}}
-@media(min-width:481px) and (max-width:800px){
-  header:has(#github-link){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
-  header:has(#github-link) strong{order:-1;flex-basis:100%}
-}
+
 
 /* Repository and authoring entry points do not change graph/session behavior. */
 #github-link{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border:1px solid #ffffff30;border-radius:5px;color:inherit}
