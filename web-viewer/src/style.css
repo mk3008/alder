@@ -152,3 +152,14 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 #share-source:hover{background:var(--select)}
 
 #share-source[hidden]{display:none}
+
+/* Icon-only header actions share the existing 40px height as a square target.
+   Captioned source actions keep their labels and responsive visibility. */
+header strong{min-width:0;flex-shrink:1;white-space:normal}
+header #node-list-toggle,header #theme,header #drawer{width:40px;min-width:40px;padding:7px;gap:0}
+@media(min-width:801px) and (max-width:1100px){header{padding-inline:12px;gap:6px}header strong{font-size:16px}header button{font-size:12px}}
+@media(max-width:600px){header>button,header #open,header #open-url,header #open-text,header #refresh{width:40px;min-width:40px;padding:7px;gap:0}}
+/* The preview identifier gets its own lane instead of stealing control width.
+   Keep all actions visible; the flex workspace follows the measured header. */
+header:has(#preview-badge:not([hidden])){height:auto;min-height:64px;flex-wrap:wrap;padding-block:8px;row-gap:6px}
+header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;padding:3px 6px}
