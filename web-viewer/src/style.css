@@ -138,6 +138,8 @@ header{flex-shrink:0}
 .info-content{flex:1;min-width:0}.info-content #status-text{display:block}
 #save-actions[hidden],#save-actions [hidden],#status-close[hidden]{display:none}
 .info-bar.has-save-actions{align-items:flex-start;max-height:min(40dvh,300px);overflow:auto}
+/* Recovery has one scroll surface so a complete explanation is reachable. */
+.info-bar.has-save-actions #status-text{max-height:none;overflow:visible}
 body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,15dvh);height:auto;max-height:calc(100dvh - min(112px,15dvh) - min(40dvh,300px) - 92px)}
 #save-actions{font-size:12px;overflow-wrap:anywhere}.save-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .save-buttons button{padding:6px 10px;border:1px solid currentColor;border-radius:4px;font:inherit;color:inherit;background:transparent}
