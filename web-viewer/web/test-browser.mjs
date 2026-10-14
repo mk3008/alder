@@ -1,4 +1,5 @@
 import {verifyFindings} from './test-findings-browser.mjs';
+import {verifyGraphPng} from './test-graph-png-browser.mjs';
 import {verifyLayoutReset} from './test-layout-reset-browser.mjs';
 import {verifyGettingStarted} from './test-getting-started-browser.mjs';
 import {verifyEditorViewport} from './test-editor-viewport-browser.mjs';
@@ -47,6 +48,7 @@ const checks=[];
 try {
   await runBrowserCases([
    {name:'findings',run:()=>verifyFindings(browser)},
+   {name:'graphPng',run:()=>verifyGraphPng(browser)},
    {name:'saveState',run:()=>verifySaveState(browser)},
    {name:'sessionConcurrency',run:()=>verifySessionConcurrency(browser)},
    {name:'saveConflictNoop',run:()=>verifySaveConflictNoop(browser)},

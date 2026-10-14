@@ -176,6 +176,10 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 .finding-card .markdown{padding:0;font-size:13px}
 #display-settings-toggle{position:relative}
 #display-settings-toggle[data-finding-count]:not([data-finding-count=""])::after{content:attr(data-finding-count);position:absolute;right:0;top:0;min-width:14px;max-width:32px;box-sizing:border-box;overflow:hidden;padding:0 2px;border:1px solid currentColor;border-radius:8px;font-size:9px;line-height:14px;background:var(--panel);color:var(--fg);pointer-events:none}
+.tab-strip>.png-action{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;border-radius:5px}
+.tab-strip>.png-action:hover:not(:disabled){background:var(--select)}
+.tab-strip>.png-action[hidden]{display:none}
+
 /* Icon-only header actions share the existing 40px height as a square target.
    Captioned source actions keep their labels and responsive visibility. */
 header{--header-control-width:40px}
