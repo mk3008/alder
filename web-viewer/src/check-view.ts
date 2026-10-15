@@ -50,7 +50,7 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
-  if(!doc||!usable){content.append(management);return {controls:root,content};}
+  if(!doc||!usable){if(view.manage||view.error||view.candidate||view.busy||tab.checks)content.append(management);else{const guide=document.createElement('section');guide.className='empty-guide';const heading=document.createElement('h2');heading.textContent='チェックリストを開くには';guide.append(heading);paragraph(guide,'文書ツールバーの「チェックリストを開く」アイコンから、この業務設計書に対応するファイルやURLを指定してください。');content.append(guide);}return {controls:root,content};}
   if(view.manage||view.error||view.candidate||view.busy)content.append(management);
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
   if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
