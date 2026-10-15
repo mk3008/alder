@@ -9,7 +9,7 @@ export function installDropdown(toggle:HTMLButtonElement,menu:HTMLElement,before
   toggle.onclick=()=>menu.hidden?show():close(true);
   toggle.onkeydown=e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();show(e.key==='ArrowUp');}};
   menu.addEventListener('keydown',e=>{const event=e as KeyboardEvent,enabled=items(),i=enabled.indexOf(document.activeElement as HTMLButtonElement);let next:number|undefined;if(event.key==='ArrowDown')next=(i+1)%enabled.length;if(event.key==='ArrowUp')next=(i+enabled.length-1)%enabled.length;if(event.key==='Home')next=0;if(event.key==='End')next=enabled.length-1;if(next!==undefined){event.preventDefault();enabled[next]?.focus();}});
-  menu.addEventListener('click',e=>{const b=(e.target as Element).closest('button');if(b&&!b.disabled)close(true);},true);
+  menu.addEventListener('click',e=>{const b=(e.target as Element).closest('button');if(!menu.hidden&&b&&!b.disabled)close(true);},true);
   document.addEventListener('keydown',e=>{if(!menu.hidden&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();close(true);}},true);
   document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!menu.contains(e.target as Node)&&!toggle.contains(e.target as Node))close();});
   document.addEventListener('focusin',e=>{if(!menu.hidden&&!menu.contains(e.target as Node)&&e.target!==toggle)close();});
