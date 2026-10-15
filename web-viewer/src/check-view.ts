@@ -14,14 +14,17 @@ function renderBody(root:HTMLElement,body:string){
 export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=>void;url:(url:string)=>void;confirm:(candidate:RelatedChecks)=>void;remove:()=>void;redraw:()=>void;disabled:boolean;sample?:()=>void}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
   const management=document.createElement('section');management.className='check-management check-controls';
-  const controls=document.createElement('fieldset');controls.disabled=actions.disabled||view.busy===true;management.append(controls);
+  const controls=document.createElement('fieldset');controls.className='empty-guide check-guide';controls.disabled=actions.disabled||view.busy===true;management.append(controls);
+  const title=document.createElement('h2');title.textContent='チェックリストを開くには';controls.append(title);
+  paragraph(controls,'この業務設計書に対応するチェックリスト（Check Items、Markdown形式）を開くと、選択したActivityの関連項目を確認できます。ファイル、URLから開き方を選べます。');
+  const entries=document.createElement('div');entries.className='empty-actions';controls.append(entries);
   const file=document.createElement('input');file.type='file';file.accept='.md,.markdown,text/markdown,text/plain';file.id='check-file';file.hidden=true;
   file.onchange=()=>{const f=file.files?.[0];file.value='';if(f)actions.file(f);};
-  const open=button('ファイルを開く',()=>file.click());open.id='check-open';open.setAttribute('aria-label','関連Checkのファイルを開く');controls.append(open,file);
-  const disclosure=document.createElement('details'),summary=document.createElement('summary');summary.textContent='URLを開く';disclosure.append(summary);
-  const form=document.createElement('form'),label=document.createElement('label'),input=document.createElement('input');input.type='url';input.id='check-url';input.required=true;input.placeholder='https://…/checks.md';input.value=view.url??'';input.oninput=()=>view.url=input.value;label.htmlFor=input.id;label.textContent='匿名取得できるHTTPSのMarkdown本文URL';
-  const submit=document.createElement('button');submit.type='submit';submit.textContent='Checkを読み込む';submit.id='check-url-submit';form.onsubmit=e=>{e.preventDefault();actions.url(input.value.trim());};form.append(label,input,submit);disclosure.append(form);controls.append(disclosure);
-  if(actions.sample){const sample=document.createElement('a');sample.id='check-open-sample';sample.href='#check-sample';sample.textContent='チェックリストのサンプルを開く';sample.setAttribute('aria-disabled',String(actions.disabled||view.busy===true));sample.onclick=e=>{e.preventDefault();if(!actions.disabled&&!view.busy)actions.sample!();};controls.append(sample);}
+  const open=button('ファイルを開く',()=>file.click());open.id='check-open';open.setAttribute('aria-label','関連Checkのファイルを開く');entries.append(open);controls.append(file);
+  const form=document.createElement('form'),label=document.createElement('label'),input=document.createElement('input');form.id='check-url-form';form.hidden=true;input.type='url';input.id='check-url';input.required=true;input.placeholder='https://…/checks.md';input.value=view.url??'';input.oninput=()=>view.url=input.value;label.htmlFor=input.id;label.textContent='匿名取得できるHTTPSのMarkdown本文URL';
+  const submit=document.createElement('button');submit.type='submit';submit.textContent='Checkを読み込む';submit.id='check-url-submit';form.onsubmit=e=>{e.preventDefault();actions.url(input.value.trim());};form.append(label,input,submit);controls.append(form);
+  const openURL=button('URLを開く',()=>{form.hidden=!form.hidden;openURL.setAttribute('aria-expanded',String(!form.hidden));if(!form.hidden)input.focus();});openURL.id='check-open-url';openURL.setAttribute('aria-expanded','false');openURL.setAttribute('aria-controls',form.id);entries.append(openURL);
+  if(actions.sample){const note=document.createElement('p');note.textContent='サンプルのチェックリストで、表示を試してみてください。';const sample=document.createElement('a');sample.id='check-open-sample';sample.href='#check-sample';sample.textContent='チェックリストのサンプルを開く';sample.setAttribute('aria-disabled',String(actions.disabled||view.busy===true));sample.onclick=e=>{e.preventDefault();if(!actions.disabled&&!view.busy)actions.sample!();};note.append(document.createElement('br'),sample);controls.append(note);}
   if(view.busy)paragraph(management,'関連Checkを読み込み・保存しています…');
   if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;management.append(error);}
   let doc:CheckDocument|undefined,usable=false;
@@ -45,10 +48,7 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   for(const [mode,label] of [['business','業務内容'],['checks','Check Items']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
-  if(!doc||!usable){paragraph(content,'関連Checkを読み込み、業務設計書との対応を確認してください。');content.append(management);return {controls:root,content};}
-  content.append(management);
-  paragraph(content,'原典の記載を表示しています。読込・関連付けは業務意味の承認ではありません。');
-  const intro=document.createElement('details'),introSummary=document.createElement('summary');introSummary.textContent='Checkの原典参照';intro.append(introSummary,formattedMarkdown(doc.intro));content.append(intro);
+  if(!doc||!usable){content.append(management);return {controls:root,content};}
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
   if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
   else{
@@ -59,5 +59,6 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   const names=new Set(tab.design.graph.nodes.filter(n=>n.type==='business').map(n=>n.name)),unknown=Object.keys(doc.index).filter(n=>!names.has(n)),unassigned=doc.items.filter(i=>!i.activities.length);
   if(unknown.length||unassigned.length)paragraph(content,'対応先不明: '+[...unknown,...unassigned.map(i=>i.id)].join('、'));
   const full=document.createElement('details'),fullSummary=document.createElement('summary');fullSummary.textContent='業務別インデックスとCheck原文全文';full.append(fullSummary,originalMarkdown(doc.markdown));content.append(full);
+  const manage=document.createElement('details'),manageSummary=document.createElement('summary');manage.id='check-manage';manageSummary.textContent='チェックリストを再指定・解除する';manage.open=Boolean(view.busy||view.error||view.candidate);manage.append(manageSummary,management);content.append(manage);
   return {controls:root,content};
 }
