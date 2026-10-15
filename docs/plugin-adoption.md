@@ -6,10 +6,10 @@ Alder uses one product version, shared with `plugins/alder/plugin.json`. A publi
 
 ## Install once
 
-After verifying its publication on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.6), pin the Plugin release tag:
+After verifying its publication on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8), pin the Plugin release tag:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.6
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.8
 codex plugin marketplace list
 ```
 
@@ -39,7 +39,7 @@ For interview notes, request a draft with ordinary language, for example:
 
 Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from unresolved business outcomes, responsibilities and handoffs. When an answer would change business meaning, correlations or responsibility, it asks a few concrete questions in its response; give it the answers to revise the same design. Details that do not affect current meaning may remain open. If the responsible person has not decided, the draft retains that decision for human review rather than inventing it or continuing questions indefinitely. It does not generate Check Items or implement the product. This workflow is included in the current package. Start a new chat after installing or updating the package.
 
-In the 0.4.8 candidate package, authoring then runs the existing read-only Business Design review as a distinct phase, using a separate agent or fresh context when available and useful, repairs source-supported findings and re-reviews the revision before returning it. Missing facts remain concrete questions, and ambiguous interpretations remain unapproved candidates. Repeated findings without improvement or unavailable/failed review stop the loop with the unresolved scope reported; an unreviewed draft is never presented as passing. A host without a separate reviewer can apply the complete review skill in the same agent, clearly reporting that the review was not independent. If the review itself cannot run, the draft is returned with review pending. These instructions do not establish real-client execution or general semantic-review accuracy.
+In Alder 0.4.8, authoring then runs the existing read-only Business Design review as a distinct phase, using a separate agent or fresh context when available and useful, repairs source-supported findings and re-reviews the revision before returning it. Missing facts remain concrete questions, and ambiguous interpretations remain unapproved candidates. Repeated findings without improvement or unavailable/failed review stop the loop with the unresolved scope reported; an unreviewed draft is never presented as passing. A host without a separate reviewer can apply the complete review skill in the same agent, clearly reporting that the review was not independent. If the review itself cannot run, the draft is returned with review pending. These instructions do not establish real-client execution or general semantic-review accuracy.
 
 Review Business Design itself with:
 
