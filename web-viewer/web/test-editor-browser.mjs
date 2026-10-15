@@ -65,7 +65,7 @@ export async function verifyMarkdownEditor(browser){
     const large=await page.locator('#source-text').boundingBox();assert.ok(large.height>geometry.find(g=>g.width===1280).textarea.height+250,'taller desktop grows textarea');
     await page.locator('#source-text').fill('# invalid');await page.locator('#source-submit').click();
     assert.equal(await page.locator('#source-dialog').isVisible(),true);assert.equal(await page.locator('#source-submit').isEnabled(),true);
-    const error=await page.locator('#status').boundingBox(),actions=await page.locator('.source-actions').boundingBox();assert.ok(actions.y+actions.height<error.y,'error notification does not cover actions');
+    const error=await page.locator('#status').boundingBox(),actions=await page.locator('#source-dialog .source-actions').boundingBox();assert.ok(actions.y+actions.height<error.y,'error notification does not cover actions');
     await page.locator('#source-text').fill(edited+'\n');assert.equal(await page.locator('#source-submit').isDisabled(),true,'reverting invalid input clears dirty state');
     assert.equal(await closeEditor(page),false);
     await page.setViewportSize({width:1024,height:600});await ensureDocumentActions(page);await page.locator('#edit-markdown').click();
