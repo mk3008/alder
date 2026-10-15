@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Native IndexedDB in isolated contexts; built app is never instrumented.
 // These checks do not reproduce an Android OS lifecycle or inspect user data.
@@ -8,7 +9,7 @@ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function record(page){return page.evaluate(readConcurrencyRecord);}
 async function ready(page,url){await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);}
 async function saved(page){await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='saved');}
-async function input(page,body){await page.locator('#open-text').click();await page.locator('#source-text').fill(body);await page.locator('#source-submit').click();await saved(page);}
+async function input(page,body){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(body);await page.locator('#source-submit').click();await saved(page);}
 export async function verifySaveConflictNoop(browser,{url='http://127.0.0.1:4173/'}={}){
  const results=[],storageCode=await concurrencySessionBundle();
  // Product storage modules in independent native realms verify exact generation

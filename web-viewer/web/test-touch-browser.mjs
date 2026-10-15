@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
@@ -122,7 +123,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
    // chain leaves the actual minimum canvas height850; viewport height controls
    // whether a real vertical pan range exists.
    const fixture='# Pan fixture\n\n'+['Pan A','Pan B'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic pan test\n\n').join('')+'# Activity Pan activity\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- Pan A — Test\n\n### Procedure\n\nTest\n\n### Output\n\n- Pan B — Test\n\n## Result\n\nTest\n';
-   await page.locator('#open-text').click();await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
+   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
    await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:1100});
   }
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=100;n.scrollTop=100;});
@@ -172,7 +173,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  if(nativeScrollDiagnostics){
  await run('diagnostic: native scroll in isolated overflow element',nativeScroll,{controlHtml:'<!doctype html><style>body{margin:0}#detail{width:380px;height:500px;overflow:auto;touch-action:auto}</style><div id="detail"><div style="height:3000px">Native scroll control</div></div>'});
  await run('product: Drawer native touch scroll is independent of graph',async({page,cdp,driver,view})=>{
-  await setScope(page,'hide');await setScope(page,'show');await page.locator('#drawer').click();
+  await setScope(page,'hide');await setScope(page,'show');await page.locator('#drawer').click();if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
   assert.equal(await page.locator('#detail').evaluate(n=>getComputedStyle(n).touchAction),'auto');
   await nativeScroll({page,cdp,driver});assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
  });

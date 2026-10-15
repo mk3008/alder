@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -31,7 +32,7 @@ export async function verifyRouteCache(browser){
  const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-  await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await ready();
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();await ready();
   await waitSavedViewer(page,{positions:await positions()});
   const fixture={record:[80,100],read:[650,420],person:[1040,100],approve:[1040,650]};
   await page.goto('http://127.0.0.1:4173/LICENSE.txt');
@@ -73,7 +74,7 @@ export async function verifyRouteCache(browser){
   }
   await setScope(page,'hide');await setScope(page,'show');assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'Scope roundtrip retains hidden incident and unrelated routes');
   const firstKey=await page.locator('.tab').first().getAttribute('data-key');
-  await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.locator('.tab').nth(1).waitFor();
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.locator('.tab').nth(1).waitFor();
   await page.locator(`.tab[data-key="${firstKey}"]`).locator('button').first().click();assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'tab switch preserves route history');
   let lastObserved;
   await waitSavedViewer(page,{positions:drag.expected,hiddenNodes:[],zoom:1},{observe:({reads,observed})=>{const serialized=JSON.stringify(observed);if(serialized!==lastObserved){console.log('ROUTE_CACHE_DB '+JSON.stringify({reads,expected:drag.expected,observed}));lastObserved=serialized;}}});

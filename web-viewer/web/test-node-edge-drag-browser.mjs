@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -142,7 +143,7 @@ async function pointerDriver(page,context,input){
 }
 async function openFixture(page,zoom,atExtent,moving=edgeDragMoving){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();
  await page.waitForFunction(()=>document.querySelectorAll('.node').length===4||!!document.querySelector('#status[data-kind=error]:not([hidden])'));
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
  await waitSavedViewer(page,{positions:(await frame(page)).positions});

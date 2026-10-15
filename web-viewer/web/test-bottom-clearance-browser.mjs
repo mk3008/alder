@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readSessionInPage, waitForExactRead, waitSavedViewer} from './wait-saved-viewer.mjs';
@@ -12,7 +13,7 @@ const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(
 async function openFixture(page){
  await page.goto(origin);
  await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await page.locator('#open-text').click();
+ await openSourceAction(page,'open-text');
  await page.locator('#source-text').fill(fixture);
  await page.locator('#source-submit').click();
  await page.waitForFunction(()=>!!document.querySelector('.node')||!!document.querySelector('#status[data-kind=error]:not([hidden])'),null,{timeout:5000});

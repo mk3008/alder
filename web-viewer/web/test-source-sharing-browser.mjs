@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Import-safe #201 native browser gate. The caller owns browser and local server.
 // Documents use synthetic HTTPS fixtures and one checked-in public README route. Native DOM, hash navigation,
@@ -34,8 +35,8 @@ const graph=page=>page.locator('#nodes').innerHTML();
 const record=page=>page.evaluate(readConcurrencyRecord,databaseFor(page.url()));
 const observation=page=>page.evaluate(()=>globalThis.__sharing);
 async function saved(page){await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>document.getElementById('app').dataset.saveState==='saved');return record(page);}
-async function openText(page,value=body){await page.locator('#open-text').click();await page.locator('#source-text').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
-async function openURL(page,value=source){await page.locator('#open-url').click();await page.locator('#source-url').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
+async function openText(page,value=body){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
+async function openURL(page,value=source){await openSourceAction(page,'open-url');await page.locator('#source-url').fill(value);await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});return saved(page);}
 async function closeEditor(page){await page.locator('#source-cancel').click();if(await page.locator('#source-close-dialog').isVisible())await page.locator('#source-close-confirm').click();await page.locator('#source-dialog').waitFor({state:'hidden'});}
 async function sharedHash(page,value){await page.evaluate(value=>{location.hash=value;},value);await page.waitForFunction(()=>location.hash==='');}
 async function share(page,eligible=true){

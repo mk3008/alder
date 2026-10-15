@@ -1,6 +1,7 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
-const ids=['refresh','save-image','copy-image','share-source','edit-markdown'];
+const ids=['refresh','save-image','copy-image','share-source','open-checks','edit-markdown'];
 export async function verifyDocumentActions(browser){
  const context=await browser.newContext({viewport:{width:1280,height:900},hasTouch:true}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -24,12 +25,12 @@ export async function verifyDocumentActions(browser){
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   await page.evaluate(ids=>{window.__documentActionNodes=ids.map(id=>document.getElementById(id));},ids);
   assert.equal(await mode(),'inline');await geometry();
-  for(let i=0;i<4;i++){await page.locator('#open-text').click();await page.locator('#source-text').fill(sample.replace(/^# .+/,`# A very long document title ${i} for responsive tab navigation`));await page.locator('#source-submit').click();}
+  for(let i=0;i<4;i++){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(sample.replace(/^# .+/,`# A very long document title ${i} for responsive tab navigation`));await page.locator('#source-submit').click();}
   const results=[];
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
    for(const width of [320,375,393,480,600,800,1280]){
-    await page.setViewportSize({width,height:900});await page.waitForTimeout(80);await open();results.push({theme,width,...await geometry()});
+    await page.setViewportSize({width,height:900});await page.waitForTimeout(80);await open();results.push({theme,width,...await geometry()});assert.equal(await page.locator('#edit-markdown .document-action-label').isVisible(),false,'editor uses only its icon at every width');assert.equal(await page.locator('#edit-markdown .editor-caption').count(),0);
     if(width<=393)assert.equal(await mode(),'menu','long title uses disclosure on phone');
     assert.equal(await page.locator('#refresh').isDisabled(),true,'text refresh disabled');
     if(await mode()==='menu')await page.keyboard.press('Escape');
@@ -50,7 +51,7 @@ export async function verifyDocumentActions(browser){
   await open();await page.locator('#theme').click();assert.equal(await page.locator('#document-actions-toggle').getAttribute('aria-expanded'),'false','outside pointer dismisses');
   await open();await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-dialog').isVisible(),true,'editor reachable');await page.locator('#source-cancel').click();
   let reads=0;await context.route('https://actions.test/design.md',route=>{reads++;return route.fulfill({contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await page.locator('#open-url').click();await page.locator('#source-url').fill('https://actions.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===6);
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://actions.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===6);
   await open();assert.equal(await page.locator('#refresh').isDisabled(),false);const read=page.waitForRequest('https://actions.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(reads,2,'selected URL refresh uses original handler');assert.equal(await page.locator('.tab').count(),6);
   await open();const downloaded=page.waitForEvent('download');await page.locator('#save-image').click();const download=await downloaded;assert.match(download.suggestedFilename(),/\.png$/,'PNG export reachable');assert.equal(await download.failure(),null);
   await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===5);await open();assert.equal(await page.locator('#refresh').isDisabled(),true,'closing URL restores text eligibility');

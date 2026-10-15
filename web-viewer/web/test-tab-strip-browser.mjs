@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 // Open the native disclosure only when responsive layout collapsed the actions.
@@ -19,7 +20,7 @@ export async function assertTabStripActions(page,{refreshDisabled=false}={}){
  });
  const tolerance=.75,contains=(outer,inner)=>inner.left>=outer.left-tolerance&&inner.right<=outer.right+tolerance&&inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
  assert.deepEqual(measured.order,['tabs','document-actions-toggle','document-actions'],'tabs precede the document-action disclosure');
- assert.deepEqual(measured.actionOrder,['refresh','save-image','copy-image','share-source','edit-markdown'],'natural document-action order places refresh before PNG actions and sharing');
+ assert.deepEqual(measured.actionOrder,['refresh','save-image','copy-image','share-source','open-checks','edit-markdown'],'natural document-action order places refresh before PNG actions and sharing');
  const menu=measured.mode==='menu',windowBox={left:0,top:0,right:measured.window.width,bottom:measured.window.height};
  assert.ok(['menu','inline'].includes(measured.mode),'document actions have an explicit responsive mode');
  if(menu){assert.ok(contains(measured.strip,measured.toggle),'disclosure remains inside tab-strip');assert.ok(measured.toggle.left>=measured.tabs.right-tolerance,'disclosure does not overlap tabs');assert.ok(contains(windowBox,measured.group),'open actions fit the window');}
@@ -32,7 +33,7 @@ export async function assertTabStripActions(page,{refreshDisabled=false}={}){
   if(previous)assert.ok(menu?action.top>=previous.bottom-tolerance:action.left>=previous.right-tolerance,action.id+' has a separate target after previous control');assert.equal(action.hit,true,action.id+' native center hit-test');assert.equal(action.tabIndex,0,'natural keyboard order');
   assert.ok(action.width>=40-tolerance&&action.height>=40-tolerance,action.id+' at least 40px target');previous=action;
  }
- for(const [id,label] of [['share-source','取得元の共有リンクをコピー'],['edit-markdown','原文を見る／編集する']]){const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);if(id==='share-source')assert.ok(action.title.trim(),'sharing keeps the current eligibility explanation');else assert.equal(action.title,label);if(menu)assert.equal(action.text,label,'menu action exposes its label');}
+ for(const [id,label] of [['share-source','取得元の共有リンクをコピー'],['edit-markdown','原文を見る／編集する']]){const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);if(id==='share-source')assert.ok(action.title.trim(),'sharing keeps the current eligibility explanation');else assert.equal(action.title,label);if(id==='edit-markdown')assert.equal(action.text,'','editor remains icon-only');else if(menu)assert.equal(action.text,label,'menu action exposes its label');}
  for(const [id,label] of [['refresh','現在の文書を取得元から読み直す'],['save-image','グラフ全体をPNGで保存'],['copy-image','グラフ全体をPNGでコピー']]){
   const action=measured.actions.find(a=>a.id===id);assert.equal(action.label,label);assert.equal(action.title,label);assert.equal(action.text,menu?label:'',menu?'menu action exposes its label':'inline document action remains icon-only');if(!menu)assert.deepEqual(action.css,{width:'40px',height:'40px'});else assert.ok(action.height>=44-tolerance,'menu action at least 44px high');
   assert.ok(action.icon&&contains(action,action.icon),'document-action icon inside its target');assert.equal(action.icon.hidden,'true','document-action icon is decorative');
@@ -59,18 +60,18 @@ export async function verifyTabStrip(browser){
    for(const id of ids.slice(0,-1).reverse()){await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement?.id),id,'native reverse Tab order: '+id);}
    await page.keyboard.press('Shift+Tab');assert.equal(await page.locator('.tab').last().locator('.close').evaluate(el=>document.activeElement===el),true,'reverse traversal returns to the tab close control');
   };
-  await keyboardOrder(['save-image','copy-image','share-source','edit-markdown']);
+  await keyboardOrder(['save-image','copy-image','share-source','open-checks','edit-markdown']);
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
   let sourceReads=0;
   await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await page.locator('#open-url').click();await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await assertTabStripActions(page);
-  await keyboardOrder(['refresh','save-image','copy-image','share-source','edit-markdown']);
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await assertTabStripActions(page);
+  await keyboardOrder(['refresh','save-image','copy-image','share-source','open-checks','edit-markdown']);
   assert.equal(sourceReads,1);
   for(const key of ['Enter','Space']){const before=sourceReads;await page.locator('#refresh').focus();assert.equal(await page.locator('#refresh').evaluate(el=>document.activeElement===el),true);const read=page.waitForRequest('https://tab-strip.test/design.md');await page.keyboard.press(key);await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,before+1,'native keyboard refresh rereads the URL');assert.equal(await page.locator('.tab').count(),2,'URL keyboard refresh keeps the same tab');}
   const read=page.waitForRequest('https://tab-strip.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,4,'native pointer refresh rereads the URL');await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
   assert.ok(single.scroll[0]<=single.client[0],'one short tab needs no horizontal scroll');
-  for(let i=0;i<8;i++){await page.locator('#open-text').click();await page.locator('#source-text').fill(sample.replace(/^# .+/,`# Long tab ${i} synthetic title for horizontal scrolling`));await page.locator('#source-submit').click();}
-  assert.equal(await page.locator('.tab').count(),9);await keyboardOrder(['save-image','copy-image','share-source','edit-markdown']);
+  for(let i=0;i<8;i++){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(sample.replace(/^# .+/,`# Long tab ${i} synthetic title for horizontal scrolling`));await page.locator('#source-submit').click();}
+  assert.equal(await page.locator('.tab').count(),9);await keyboardOrder(['save-image','copy-image','share-source','open-checks','edit-markdown']);
   const results=[];
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();

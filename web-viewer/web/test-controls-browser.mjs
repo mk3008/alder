@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 // Inspect the rendered SVG, so mixed L/Q paths do not depend on a Q-only parser.
@@ -34,7 +35,7 @@ export async function verifyLayoutLock(browser){
   await page.mouse.move(unlocked.x+100,unlocked.y+30);await page.mouse.down();await page.mouse.move(unlocked.x+130,unlocked.y+50,{steps:4});assert.notDeepEqual(await page.locator('.edge').evaluateAll(ns=>ns.map(n=>n.getAttribute('d'))),paths);await routes();await page.mouse.up();const moved=await positions();assert.notDeepEqual(moved,initial);
   await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');await page.locator('#open-sample').click();assert.deepEqual(await positions(),moved);
   // Wheel scrolling exercises the unchanged Drawer independently of graph gestures.
-  await page.locator('#open-text').click();await page.locator('#source-text').fill(readFileSync('../business-design/alder/README.md','utf8'));await page.locator('#source-submit').click();await page.locator('#drawer').click();
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(readFileSync('../business-design/alder/README.md','utf8'));await page.locator('#source-submit').click();await page.locator('#drawer').click();if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();await page.locator('#node-list-close').click();
   const detail=page.locator('#detail');assert.ok(await detail.evaluate(n=>n.scrollHeight>n.clientHeight+100));const graphBefore=await positions(),zoom=await page.locator('#zoom').textContent();await detail.hover();await page.mouse.wheel(0,200);await page.waitForFunction(()=>document.querySelector('#detail').scrollTop>0);assert.deepEqual(await positions(),graphBefore);assert.equal(await page.locator('#zoom').textContent(),zoom);
   assert.deepEqual(errors,[]);return {checks:'default lock mouse node pan and click selection; keyboard unlock; immediate rounded-orthogonal edges/arrow/exception retention on drag; save-close-reload locks again without moving coordinates; independent Drawer wheel scroll',pageErrors:errors};
  }finally{await page.close();}

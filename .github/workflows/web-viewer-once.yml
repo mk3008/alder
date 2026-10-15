@@ -65,3 +65,36 @@ jobs:
           path: web-viewer/web/evidence/design-findings-96/*.png
           if-no-files-found: ignore
           retention-days: 7
+      - name: Package isolated review Preview
+        if: success()
+        env:
+          REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+          REVIEW_PR: ${{ github.event.pull_request.number }}
+        run: |
+          node --input-type=module <<'JS'
+          import {mkdirSync,cpSync,writeFileSync,readdirSync,readFileSync} from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const head=process.env.REVIEW_HEAD,pr=process.env.REVIEW_PR;
+          const path=`review-package/preview/pr-${pr}/${head}/`;
+          mkdirSync(path,{recursive:true});cpSync('dist',path,{recursive:true});
+          const files=readdirSync('dist',{recursive:true}).filter(f=>/\.(?:html|js|css|txt)$/.test(f));
+          const manifest={source:head,checkout:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),urlPath:`/preview/pr-${pr}/${head}/`,files:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(`dist/${f}`)).digest('hex')]))};
+          writeFileSync('review-package/manifest.json',JSON.stringify(manifest,null,2));
+          writeFileSync('review-package/README.txt',`本番とは分離した操作確認用ビルドです。\nsource: ${head}\n展開先で python3 -m http.server 4173 を実行し、http://localhost:4173/preview/pr-${pr}/${head}/ を開きます。\n一般公開や本番配備は行いません。\n`);
+          JS
+      - name: Retain isolated review Preview
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-preview-pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/review-package/
+          retention-days: 14
+      - name: Retain related Check screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: related-checks-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/related-checks/*.png
+          if-no-files-found: ignore
+          retention-days: 14

@@ -2,8 +2,8 @@ import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
-const actionIDs=['node-list-toggle','open','open-url','open-text','theme','github-link','drawer'];
-const captionIDs=['open','open-url','open-text'];
+const actionIDs=['node-list-toggle','open-menu-toggle','theme','github-link','drawer'];
+const captionIDs=['open-menu-toggle'];
 const fixedIconIDs=['node-list-toggle','theme','github-link','drawer'];
 const matrixWidths=[1440,1280,1101,1100,1001,1000,801,800,768,640,601,600,481,480,393,390,375,360,359,320,768,320,1440];
 const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -40,7 +40,7 @@ async function readHeader(page){
 
 function assertHeader(m,label){
  const width=m.width;
- assert.equal(m.controls.length,7,label+' all seven header actions retained');
+ assert.equal(m.controls.length,5,label+' all five header actions retained');
  assert.equal(m.brand.visible,m.canonical.fullRequired<=m.header.clientWidth,label+' title follows expanded fit');
  assert.equal(m.iconsOnly,m.canonical.captionedRequired>m.header.clientWidth,label+' captions follow expanded fit');
  assert.ok(!m.iconsOnly||!m.brand.visible,label+' title is removed before captions');

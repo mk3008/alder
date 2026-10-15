@@ -31,14 +31,14 @@ await $('open').onclick();assert.equal(w.document.querySelectorAll('.tab').lengt
 const first=w.document.querySelector('.node');const id=first.dataset.node;
 assert.equal(first.tagName,'DIV');assert.equal(first.hasAttribute('tabindex'),false);
 assert.equal(first.getAttribute('role'),'group');assert.equal(first.onkeydown,null);
-$('open').focus();first.focus();assert.equal(w.document.activeElement.id,'open');
+$('open-menu-toggle').focus();first.focus();assert.equal(w.document.activeElement.id,'open-menu-toggle');
 const initialPosition=[first.style.left,first.style.top];
 for(const key of ['Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'])first.dispatchEvent(new w.KeyboardEvent('keydown',{key,shiftKey:true,bubbles:true}));
 assert.deepEqual([first.style.left,first.style.top],initialPosition);assert.equal(first.classList.contains('selected'),false);
 first.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});first.onpointerup({pointerId:1});
 const picked=Array.from(w.document.querySelectorAll('.node')).find(n=>n.dataset.node===id);
 assert.equal(picked.classList.contains('selected'),true);assert.match(picked.getAttribute('aria-label'),/選択中/);
-assert.equal(w.document.activeElement.id,'open');checks.push('shapes omit focus and keyboard commands; pointer selection retains toolbar focus');
+assert.equal(w.document.activeElement.id,'open-menu-toggle');checks.push('shapes omit focus and keyboard commands; pointer selection retains toolbar focus');
 const node=w.document.querySelector('.node');
 const connected=()=>Array.from($('edges').querySelectorAll('.edge')).find(e=>e.querySelector('title').textContent.includes(node.dataset.node));
 const oldPath=connected().getAttribute('d');
@@ -71,7 +71,7 @@ h.queryPermission=async()=>'granted';await $('open').onclick();checks.push('clos
 w.showOpenFilePicker=undefined;
 const fallback=$('fallback');Object.defineProperty(fallback,'files',{configurable:true,value:[file('second.md')]});await fallback.onchange();
 assert.equal(w.document.querySelectorAll('.tab').length,2);assert.equal($('refresh').hidden,false,'reselection-only file shows refresh');assert.equal($('refresh').disabled,false);
-const fallbackRefresh=$('refresh').onclick();const reselect=w.document.querySelector('input[type=file]:not(#fallback)');
+const fallbackRefresh=$('refresh').onclick();const reselect=w.document.querySelector('input[type=file]:not(#fallback):not(#check-file)');
 assert.ok(reselect);assert.equal($('refresh').hidden,false);assert.equal($('refresh').disabled,true);reselect.dispatchEvent(new w.Event('cancel'));await fallbackRefresh;assert.equal($('refresh').disabled,false);checks.push('fallback reselect cancellation allows retry');
 const tab=w.document.querySelectorAll('.tab')[1];tab.querySelector('button').focus();tab.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft',altKey:true,bubbles:true}));
 assert.equal(w.document.querySelector('.tab').dataset.key,w.document.activeElement.closest('.tab').dataset.key);checks.push('tab reorder retains focus');
@@ -89,5 +89,5 @@ assert.equal(two.w.document.querySelector('.tab').dataset.key,key);assert.equal(
 // Script/link/image text must remain inert.
 const unsafe=markdown+'\n<script>window.pwned=true</script>\n<img src="https://invalid.test" onerror="window.pwned=true">';
 const three=createWindow();await restored(three.$);Object.defineProperty(three.$('fallback'),'files',{value:[file('safe.md',unsafe)]});await three.$('fallback').onchange();
-assert.equal(three.w.pwned,undefined);assert.equal(three.$('detail').querySelectorAll('script,img,a').length,0);three.w.close();checks.push('Markdown remains inert text');
+three.$('scope-outside').click();three.$('node-category-activity').click();three.w.document.querySelector('[data-list-node="同期漏れ検査"] .node-navigate').click();assert.match(three.$('detail').textContent,/<script>/);assert.equal(three.w.pwned,undefined);assert.equal(three.$('detail').querySelectorAll('script,img,a').length,0);three.w.close();checks.push('Markdown remains inert text');
 console.log(JSON.stringify({model:'jsdom + fake-indexeddb; mocked file handles/pointer capture',checks,passed:checks.length},null,2));

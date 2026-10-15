@@ -23,6 +23,8 @@ try{
  assert.equal($('refresh').hidden,true);assert.equal($('refresh').disabled,true);assert.equal($('refresh').closest('header'),null);
  let picked=0;w.showOpenFilePicker=async()=>{picked++;throw Object.assign(new Error('cancel'),{name:'AbortError'});};
  $('guide-open').click();await new Promise(r=>setTimeout(r,10));assert.equal(picked,1);assert.equal(d.querySelectorAll('.tab').length,0);assert.equal($('guide-open').disabled,false);
+ // Model a rendered header toggle so hidden-menu dispatch cannot steal guide focus.
+ $('open-menu-toggle').getBoundingClientRect=()=>({width:40});
  for(const [id,title,input] of [['guide-open-url','URLを開く','source-url'],['guide-open-text','テキストを入力','source-text']]){
   $(id).focus();$(id).click();assert.equal($('source-dialog').hidden,false);assert.equal($('source-title').textContent,title);assert.equal(d.activeElement,$(input));
   await $('source-cancel').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.activeElement,$(id));
