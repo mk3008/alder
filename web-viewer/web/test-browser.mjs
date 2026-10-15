@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
 import {verifyDocumentActions} from './test-document-actions-browser.mjs';
@@ -120,7 +121,7 @@ try {
   await page.locator('.node').first().waitFor();
   assert.ok(await page.locator('.node').count()>0);
   assert.equal(await page.locator('.node[tabindex],button.node').count(),0);
-  await page.locator('#open').focus();
+  await page.locator('#open-menu-toggle').focus();
   for(let i=0;i<30;i++){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>Boolean(document.activeElement?.classList.contains('node'))),false);}
   checks.push('file-input opens public fixture; Tab skips graph shapes');
   const first=page.locator('.node').first(),id=await first.getAttribute('data-node');
@@ -140,7 +141,7 @@ try {
     assert.equal(await page.locator('.node.object .who-badge').count(),0);
   }
   checks.push('light/dark keep white person lines and 28px role circles');
-  await page.locator('#open-text').click();await page.locator('#source-text').fill('# invalid');await page.locator('#source-submit').click();
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill('# invalid');await page.locator('#source-submit').click();
   await page.locator('#status-text').filter({hasText:'表示できません'}).waitFor();assert.ok(await page.locator('.node').count()>0);
   await page.keyboard.press('Escape');assert.equal(await page.locator('#source-dialog').isVisible(),false);
   await page.locator('#status-close').click();
@@ -151,7 +152,7 @@ try {
   assert.deepEqual(external,[]);
   // One real anonymous CORS fetch from the existing public fixture source.
   const source='https://raw.githubusercontent.com/mk3008/alder/aa950a7c29366e33c281803b086c3e00c9769933/business-design/alder/README.md';
-  await page.locator('#open-url').click();await page.locator('#source-url').fill(source);await page.locator('#source-submit').click();
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill(source);await page.locator('#source-submit').click();
   await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden,{},{timeout:45000});
   assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[source]);
   await clean(page);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);

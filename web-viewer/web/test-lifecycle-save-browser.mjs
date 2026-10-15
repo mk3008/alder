@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 // Local isolated Chromium contexts and synthetic documents only.
 // Native reload/navigation are tested; abrupt OS termination is not guaranteed.
 import assert from 'node:assert/strict';
@@ -17,14 +18,14 @@ export async function verifyLifecycleSave(browser,{url='http://127.0.0.1:4173/',
    // Native storage must have committed the empty baseline before this case.
    await page.locator('#theme').click();
    await waitForExactRead(()=>page.evaluate(readSessionInPage),{dark:true,tabs:0},{project:value=>({dark:value?.dark,tabs:value?.tabs?.length})});
-   await page.locator('#open-text').click();await page.locator('#source-text').fill(markdown);
+   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(markdown);
    // Committed reload is a correctness gate. Immediate departure only observes
    // best-effort durability: navigation may end the asynchronous IDB operation.
    if(committed){await page.locator('#source-submit').click();await waitForExactRead(()=>page.evaluate(readSessionInPage),markdown,{project:value=>value?.tabs?.[0]?.design?.markdown});}
    // In immediate cases, submit and leave before the 180ms debounce.
    await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.evaluate(async ({kind,committed})=>{if(!committed)await document.getElementById('source-submit').onclick();if(kind==='reload')location.reload();else location.href='about:blank';},{kind,committed})]);
    if(kind==='navigation')await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);
-   const observation=await page.evaluate(()=>({tabs:document.querySelectorAll('.tab').length,text:document.getElementById('detail').textContent,status:document.getElementById('status-text').textContent}));
+   const observation=await page.evaluate(()=>({tabs:document.querySelectorAll('.tab').length,text:document.querySelector('.tab')?.textContent??'',status:document.getElementById('status-text').textContent}));
    const retained=observation.tabs===1&&observation.text.includes('Synthetic lifecycle');results.push({kind,run,committed,retained,tabs:observation.tabs,status:observation.status,beforeUnloadPrompts,confirmationPolicy:'accept and leave'});
   }finally{await context.close();}
  }

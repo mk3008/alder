@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Isolated same-origin pages, synthetic input, and native IndexedDB only.
 // Importing this module never launches a browser. The parent gate owns the
@@ -11,7 +12,7 @@ import {fileURLToPath} from 'node:url';
 export const concurrencyTriggers=['blur','pagehide','hidden','debounce','close'];
 export const concurrencyMarkdown=label=>`# Synthetic ${label} design\n\n# Object Synthetic ${label} record\n\n## Scope\ntrue\n\n## Icon\nfile-text\n\n## Information\n- Synthetic ${label} data only\n\n# Activity Synthetic ${label} activity\n\n## Scope\ntrue\n\n## Why\nExercise isolated session persistence.\n\n## When\nDuring this synthetic regression.\n\n## Who\nSynthetic operator\n\n## Where\nIsolated test context\n\n## How\n\n### Input\n(none)\n\n### Procedure\n- Create the synthetic record.\n\n### Output\n- Synthetic ${label} record — Synthetic result\n\n## Result\nA synthetic result exists.\n`;
 export const concurrencyBodies=Object.fromEntries(['shared','closed','added'].map(label=>[label,concurrencyMarkdown(label)]));
-export const changedMarkdown=concurrencyBodies.shared.replace('Exercise isolated session persistence.','Retain B local submitted edit.');
+export const changedMarkdown=concurrencyBodies.shared.replace('Exercise isolated session persistence.','Retain B local submitted edit.').replace('Synthetic shared activity','Synthetic edited activity');
 export const unsubmittedMarkdown=concurrencyMarkdown('unsubmitted B draft');
 export const emptySession=()=>({tabs:[],dark:false,drawer:true,width:380});
 
@@ -89,7 +90,7 @@ async function assertLocalWork(page,expectedKeys){
  assert.deepEqual(await keys(page),expectedKeys,'stale local tabs, including the close target, are retained');
  assert.equal(await page.locator('#source-dialog').isVisible(),true,'unsubmitted editor remains open');
  assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'unsubmitted input is retained exactly');
- assert.ok((await page.locator('#detail').textContent()).includes('Exercise isolated session persistence.'),'prior Graph remains displayed until Apply commits');await ensureDocumentActions(page);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await page.locator('#open-text').click();assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
+ assert.equal(await page.locator('.node[data-node="Synthetic shared activity"]').count(),1,'prior Graph remains displayed until Apply commits');await ensureDocumentActions(page);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await openSourceAction(page,'open-text');assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
 }
 // Observe the first generation read without replacing requests, transactions,
 // values, or save behavior. It proves each app really loaded the same version.

@@ -205,7 +205,7 @@ try {
   const unsafe=markdown+'\n<script>window.pwned=true</script>\n<img src="https://invalid.test" onerror="window.pwned=true">\n[unsafe](javascript:alert(1))';
   for(const kind of ['text','url']){
     const env=await ready({fetch:async()=>response(unsafe)});if(kind==='text')await openText(env,unsafe);else await openURL(env);
-    assert.equal(tabs(env).length,1);assert.equal(env.w.pwned,undefined);assert.equal(env.$('detail').querySelectorAll('script,img,a,iframe').length,0);assert.match(env.$('detail').textContent,/<script>/);env.w.close();
+    assert.equal(tabs(env).length,1);env.$('scope-outside').click();env.$('node-category-activity').click();env.w.document.querySelector('[data-list-node="同期漏れ検査"] .node-navigate').click();assert.equal(env.w.pwned,undefined);assert.equal(env.$('detail').querySelectorAll('script,img,a,iframe').length,0);assert.match(env.$('detail').textContent,/<script>/);env.w.close();
   }
   checks.push('text and URL Markdown keep script/image/link payloads inert');
   console.log(JSON.stringify({model:'jsdom + fake-indexeddb; direct handler calls, modeled source dialog and mocked fetch, accelerated timeout; no real network or geometry',checks,passed:checks.length},null,2));

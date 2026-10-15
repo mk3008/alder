@@ -1,7 +1,7 @@
 import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
-export type CheckViewState={mode:'business'|'checks';manage?:boolean;candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
+export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
@@ -11,29 +11,16 @@ function renderBody(root:HTMLElement,body:string){
   for(const m of body.matchAll(pattern)){root.append(formattedMarkdown(body.slice(end,m.index)));end=m.index!+m[0].length;}
   root.append(formattedMarkdown(body.slice(end)));
 }
-export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=>void;url:(url:string)=>void;confirm:(candidate:RelatedChecks)=>void;remove:()=>void;redraw:()=>void;disabled:boolean;sample?:()=>void}):{controls:HTMLElement;content?:HTMLElement}{
+export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
-  const management=document.createElement('section');management.className='check-management check-controls';
-  const controls=document.createElement('fieldset');controls.className='empty-guide check-guide';controls.disabled=actions.disabled||view.busy===true;management.append(controls);
-  const title=document.createElement('h2');title.textContent='チェックリストを開くには';controls.append(title);
-  paragraph(controls,'この業務設計書に対応するチェックリスト（Check Items、Markdown形式）を開くと、選択したActivityの関連項目を確認できます。ファイル、URLから開き方を選べます。');
-  const entries=document.createElement('div');entries.className='empty-actions';controls.append(entries);
-  const file=document.createElement('input');file.type='file';file.accept='.md,.markdown,text/markdown,text/plain';file.id='check-file';file.hidden=true;
-  file.onchange=()=>{const f=file.files?.[0];file.value='';if(f)actions.file(f);};
-  const open=button('ファイルを開く',()=>file.click());open.id='check-open';open.setAttribute('aria-label','関連Checkのファイルを開く');entries.append(open);controls.append(file);
-  const form=document.createElement('form'),label=document.createElement('label'),input=document.createElement('input');form.id='check-url-form';form.hidden=true;input.type='url';input.id='check-url';input.required=true;input.placeholder='https://…/checks.md';input.value=view.url??'';input.oninput=()=>view.url=input.value;label.htmlFor=input.id;label.textContent='匿名取得できるHTTPSのMarkdown本文URL';
-  const submit=document.createElement('button');submit.type='submit';submit.textContent='Checkを読み込む';submit.id='check-url-submit';form.onsubmit=e=>{e.preventDefault();actions.url(input.value.trim());};form.append(label,input,submit);controls.append(form);
-  const openURL=button('URLを開く',()=>{form.hidden=!form.hidden;openURL.setAttribute('aria-expanded',String(!form.hidden));if(!form.hidden)input.focus();});openURL.id='check-open-url';openURL.setAttribute('aria-expanded','false');openURL.setAttribute('aria-controls',form.id);entries.append(openURL);
-  if(actions.sample){const note=document.createElement('p');note.textContent='サンプルのチェックリストで、表示を試してみてください。';const sample=document.createElement('a');sample.id='check-open-sample';sample.href='#check-sample';sample.textContent='チェックリストのサンプルを開く';sample.setAttribute('aria-disabled',String(actions.disabled||view.busy===true));sample.onclick=e=>{e.preventDefault();if(!actions.disabled&&!view.busy)actions.sample!();};note.append(document.createElement('br'),sample);controls.append(note);}
-  if(view.busy)paragraph(management,'関連Checkを読み込み・保存しています…');
-  if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;management.append(error);}
+  const notices=document.createElement('section');notices.className='check-notices';
+  if(view.busy)paragraph(notices,'関連Checkを読み込み・保存しています…');
+  if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;notices.append(error);}
   let doc:CheckDocument|undefined,usable=false;
   if(tab.checks){
-    paragraph(management,'読込済み: '+tab.checks.name);doc=parseChecks(tab.checks.markdown);const match=checkCompatibility(doc,tab);
+    doc=parseChecks(tab.checks.markdown);const match=checkCompatibility(doc,tab);
     usable=match.state==='matched'||(match.state==='unverified'&&tab.checks.confirmedFor===confirmationKey(tab));
-    paragraph(management,usable?(match.state==='matched'?match.reason:'一致未確認・利用者が表示を選択しました。'+match.reason):'現在のBDとの対応を再確認してください。'+match.reason);
-    if(!usable&&match.state==='unverified')controls.append(button('現在のBDとの対応を確認して表示する',()=>actions.confirm(tab.checks!)));
-    controls.append(button('関連Checkを解除',actions.remove));
+    if(!usable){paragraph(notices,'現在のBDとの対応を再確認してください。'+match.reason);if(match.state==='unverified'){const confirm=button('現在のBDとの対応を確認して表示する',()=>actions.confirm(tab.checks!));confirm.disabled=actions.disabled||view.busy===true;notices.append(confirm);}}
   }
   if(view.candidate){
     const candidate=view.candidate,parsed=parseChecks(candidate.markdown),match=checkCompatibility(parsed,tab);
@@ -42,18 +29,17 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
     paragraph(panel,'関連付けの確認は、Checkの人間レビュー状態や業務意味の承認を変更しません。');
     const evidence=document.createElement('details'),summary=document.createElement('summary');summary.textContent='原典参照・業務別インデックス・Check本文を確認';evidence.append(summary,originalMarkdown(parsed.markdown));panel.append(evidence);
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
-    const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);management.append(panel);
+    const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);notices.append(panel);
   }
-  if(doc){const full=document.createElement('details'),summary=document.createElement('summary');summary.textContent='チェックリストの原文を確認';full.append(summary,originalMarkdown(doc.markdown));management.append(full);}
-  if(usable&&view.manage)controls.append(button('チェック項目に戻る',()=>{view.manage=false;actions.redraw();}));
   const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
   for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
-  if(!doc||!usable){if(view.manage||view.error||view.candidate||view.busy||tab.checks)content.append(management);else{const guide=document.createElement('section');guide.className='empty-guide';const heading=document.createElement('h2');heading.textContent='チェックリストを開くには';guide.append(heading);paragraph(guide,'文書ツールバーの「チェックリストを開く」アイコンから、この業務設計書に対応するファイルやURLを指定してください。');content.append(guide);}return {controls:root,content};}
-  if(view.manage||view.error||view.candidate||view.busy)content.append(management);
+  if(notices.childNodes.length)content.append(notices);
+  if(!doc||!usable){if(!notices.childNodes.length)paragraph(content,'チェックリストが開かれていません。');return {controls:root,content};}
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
-  if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
+  if(!selected)paragraph(content,'図の業務やObjectを選択してください');
+  else if(selected.type!=='business')paragraph(content,'このObjectに対応するCheckは業務一覧に記載されていません。');
   else{
     const ids=doc.index[selected.name]??[];
     if(!ids.length)paragraph(content,'このActivityに対応するCheckは業務一覧に記載されていません。');

@@ -59,7 +59,7 @@ function assertLocalWork(e,expectedKeys){
  assert.deepEqual(keys(e),expectedKeys,'stale local tabs and rejected close target remain');
  assert.equal(e.$('source-dialog').hidden,false,'unsubmitted editor remains open');
  assert.equal(e.$('source-text').value,unsubmittedMarkdown,'unsubmitted input remains exact');
- assert.ok(e.$('detail').textContent.includes('Exercise isolated session persistence.'),'the applied Graph remains unchanged until commit');e.$('edit-markdown').click();assert.equal(e.$('source-text').value,changedMarkdown,'per-tab draft remains exact');e.$('open-text').click();assert.equal(e.$('source-text').value,unsubmittedMarkdown,'separate new-input draft remains exact');
+ assert.ok(e.w.document.querySelector('.node[data-node="Synthetic shared activity"]'),'the applied Graph remains unchanged until commit');e.$('edit-markdown').click();assert.equal(e.$('source-text').value,changedMarkdown,'per-tab draft remains exact');e.$('open-text').click();assert.equal(e.$('source-text').value,unsubmittedMarkdown,'separate new-input draft remains exact');
 }
 async function caseOf(name,test){
  const originalPut=IDBObjectStore.prototype.put;

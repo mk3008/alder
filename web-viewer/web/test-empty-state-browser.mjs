@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -128,7 +129,7 @@ async function verifyOneEmpty({page,touch,options}){
 }
 async function verifyRemainingTab({page}){
  const expected=emptyStateFixture(1),sampleKey=await seedAndRestore(page,expected);
- await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
  const both=await waitForExactRead(()=>page.evaluate(readSessionInPage),2,{project:s=>s?.tabs?.length}),other=both.actual.tabs.find(t=>t.key!==sampleKey),otherKey=other.key;
  const activeView=()=>page.evaluate(()=>({active:document.querySelector('.tab.active')?.dataset.key,positions:Object.fromEntries([...document.querySelectorAll('.node')].map(n=>[n.dataset.node,[n.style.left,n.style.top]])),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],transform:document.querySelector('#nodes').style.transform}));
  const before=await activeView();
@@ -137,7 +138,7 @@ async function verifyRemainingTab({page}){
  let saved=await page.evaluate(readSessionInPage);assert.equal(saved.active,otherKey);assert.deepEqual(saved.tabs[0],other);assert.equal(await page.locator('#empty').isVisible(),false);assert.equal(await page.locator('.toolbar').isVisible(),true);
  // Create another public document via the real source dialog. Closing the
  // active one selects the unchanged remaining tab, without an empty reset.
- await page.locator('#open-text').click();await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
  await waitForExactRead(()=>page.evaluate(readSessionInPage),2,{project:s=>s?.tabs?.length});
  await page.locator('.tab.active .close').click();await ready(page,1);assert.deepEqual(await activeView(),before);
  saved=await page.evaluate(readSessionInPage);assert.equal(saved.active,otherKey);assert.deepEqual(saved.tabs[0],other);assert.equal(await page.locator('#empty').isVisible(),false);

@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 // Open the native disclosure only when responsive layout collapsed the actions.
@@ -63,13 +64,13 @@ export async function verifyTabStrip(browser){
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
   let sourceReads=0;
   await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await page.locator('#open-url').click();await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await assertTabStripActions(page);
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===2);await assertTabStripActions(page);
   await keyboardOrder(['refresh','save-image','copy-image','share-source','open-checks','edit-markdown']);
   assert.equal(sourceReads,1);
   for(const key of ['Enter','Space']){const before=sourceReads;await page.locator('#refresh').focus();assert.equal(await page.locator('#refresh').evaluate(el=>document.activeElement===el),true);const read=page.waitForRequest('https://tab-strip.test/design.md');await page.keyboard.press(key);await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,before+1,'native keyboard refresh rereads the URL');assert.equal(await page.locator('.tab').count(),2,'URL keyboard refresh keeps the same tab');}
   const read=page.waitForRequest('https://tab-strip.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,4,'native pointer refresh rereads the URL');await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
   assert.ok(single.scroll[0]<=single.client[0],'one short tab needs no horizontal scroll');
-  for(let i=0;i<8;i++){await page.locator('#open-text').click();await page.locator('#source-text').fill(sample.replace(/^# .+/,`# Long tab ${i} synthetic title for horizontal scrolling`));await page.locator('#source-submit').click();}
+  for(let i=0;i<8;i++){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(sample.replace(/^# .+/,`# Long tab ${i} synthetic title for horizontal scrolling`));await page.locator('#source-submit').click();}
   assert.equal(await page.locator('.tab').count(),9);await keyboardOrder(['save-image','copy-image','share-source','open-checks','edit-markdown']);
   const results=[];
   for(const theme of ['light','dark']){
