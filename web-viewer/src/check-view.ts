@@ -1,14 +1,14 @@
 import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
-export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
+export type CheckViewState={mode:'business'|'checks';manage?:boolean;candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
 function renderBody(root:HTMLElement,body:string){
-  // Interpret only disclosure wrappers; source HTML remains inert.
+  // Supplemental disclosures stay in the original text available through the toolbar.
   const pattern=/<details>\s*<summary>([^<]*)<\/summary>([\s\S]*?)<\/details>/g;let end=0;
-  for(const m of body.matchAll(pattern)){root.append(formattedMarkdown(body.slice(end,m.index)));const d=document.createElement('details'),s=document.createElement('summary');s.textContent=m[1];d.append(s,formattedMarkdown(m[2]));root.append(d);end=m.index!+m[0].length;}
+  for(const m of body.matchAll(pattern)){root.append(formattedMarkdown(body.slice(end,m.index)));end=m.index!+m[0].length;}
   root.append(formattedMarkdown(body.slice(end)));
 }
 export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=>void;url:(url:string)=>void;confirm:(candidate:RelatedChecks)=>void;remove:()=>void;redraw:()=>void;disabled:boolean;sample?:()=>void}):{controls:HTMLElement;content?:HTMLElement}{
@@ -44,11 +44,14 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);management.append(panel);
   }
+  if(doc){const full=document.createElement('details'),summary=document.createElement('summary');summary.textContent='チェックリストの原文を確認';full.append(summary,originalMarkdown(doc.markdown));management.append(full);}
+  if(usable&&view.manage)controls.append(button('チェック項目に戻る',()=>{view.manage=false;actions.redraw();}));
   const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
   for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
   if(!doc||!usable){content.append(management);return {controls:root,content};}
+  if(view.manage||view.error||view.candidate||view.busy)content.append(management);
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
   if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
   else{
@@ -58,7 +61,5 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   }
   const names=new Set(tab.design.graph.nodes.filter(n=>n.type==='business').map(n=>n.name)),unknown=Object.keys(doc.index).filter(n=>!names.has(n)),unassigned=doc.items.filter(i=>!i.activities.length);
   if(unknown.length||unassigned.length)paragraph(content,'対応先不明: '+[...unknown,...unassigned.map(i=>i.id)].join('、'));
-  const full=document.createElement('details'),fullSummary=document.createElement('summary');fullSummary.textContent='業務別インデックスとCheck原文全文';full.append(fullSummary,originalMarkdown(doc.markdown));content.append(full);
-  const manage=document.createElement('details'),manageSummary=document.createElement('summary');manage.id='check-manage';manageSummary.textContent='チェックリストを再指定・解除する';manage.open=Boolean(view.busy||view.error||view.candidate);manage.append(manageSummary,management);content.append(manage);
   return {controls:root,content};
 }

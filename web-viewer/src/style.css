@@ -245,3 +245,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .check-source{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;font:inherit;line-height:1.7}
 
 .check-management{border:0;padding:0;margin:14px 0}.check-controls fieldset.check-guide{display:block}.check-management .check-guide .empty-actions>button{border:0;border-radius:0}.check-controls form[hidden]{display:none}.check-management a{line-height:1.7}.check-management a[aria-disabled=true]{color:var(--line);pointer-events:none}
+
+#document-actions>#open-checks,#document-actions>#edit-markdown{width:40px;min-width:40px;height:40px;min-height:40px;margin:2px;padding:6px;flex-shrink:0;align-items:center;justify-content:center}#document-actions>#open-checks{display:flex;border-radius:5px}#document-actions>#open-checks[hidden]{display:none}#document-actions>#open-checks:hover{background:var(--select)}.tab-strip[data-actions-mode=menu] #edit-markdown .document-action-label{display:none}
+
+.tab-strip[data-actions-mode=menu] #document-actions>#open-checks,.tab-strip[data-actions-mode=menu] #document-actions>#edit-markdown{width:100%;min-width:0;min-height:44px;height:auto;margin:0;padding:10px;justify-content:flex-start}

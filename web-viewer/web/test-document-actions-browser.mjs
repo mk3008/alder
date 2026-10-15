@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
-const ids=['refresh','save-image','copy-image','share-source','edit-markdown'];
+const ids=['refresh','save-image','copy-image','share-source','open-checks','edit-markdown'];
 export async function verifyDocumentActions(browser){
  const context=await browser.newContext({viewport:{width:1280,height:900},hasTouch:true}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -29,7 +29,7 @@ export async function verifyDocumentActions(browser){
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
    for(const width of [320,375,393,480,600,800,1280]){
-    await page.setViewportSize({width,height:900});await page.waitForTimeout(80);await open();results.push({theme,width,...await geometry()});
+    await page.setViewportSize({width,height:900});await page.waitForTimeout(80);await open();results.push({theme,width,...await geometry()});assert.equal(await page.locator('#edit-markdown .document-action-label').isVisible(),false,'editor uses only its icon at every width');assert.equal(await page.locator('#edit-markdown .editor-caption').count(),0);
     if(width<=393)assert.equal(await mode(),'menu','long title uses disclosure on phone');
     assert.equal(await page.locator('#refresh').isDisabled(),true,'text refresh disabled');
     if(await mode()==='menu')await page.keyboard.press('Escape');
