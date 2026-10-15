@@ -17,6 +17,7 @@ try{
  await file(markdown);assert.ok($('check-confirm'));assert.equal($('tabs').children.length,1);assert.equal(w.document.querySelectorAll('.check-item').length,0,'unverified candidate is not associated silently');
  $('check-confirm').click();await until(()=>!$('check-confirm'));select('購入申請を却下する');assert.ok(w.document.querySelector('[data-check-id="JA-EX-04"]'));assert.equal(w.document.querySelectorAll('[data-check-id="JA-EX-04"]').length,1);
  select('承認済み備品を購入する');assert.ok(w.document.querySelector('[data-check-id="JA-EX-04"]'));assert.match($('detail').textContent,/人間レビュー状態：未レビュー/);select('購入申請を承認する');assert.match(w.document.querySelector('[data-check-id="JA-EX-Q01"]').textContent,/人間レビュー状態：要確認/);
+ assert.equal($('detail').querySelector('.check-source').textContent,markdown);
  assert.equal($('detail').querySelectorAll('img,script,a').length,0,'source links/HTML are inert');
  $('detail-mode-business').click();assert.match($('detail').textContent,/# Activity 購入申請を承認する|購入申請を承認する/);$('detail-mode-checks').click();
  $('edit-markdown').click();$('source-text').value=bd+'\n';$('source-text').dispatchEvent(new w.Event('input'));
@@ -33,6 +34,7 @@ try{
  $('open-url').click();$('source-url').value='https://raw.githubusercontent.com/mk3008/alder/main/business-design/purchase-request/README.md';response=bd;$('source-submit').click();await until(()=>$('source-dialog').hidden);
  response=markdown.replaceAll('purchase-request/README.md','other/README.md');$('check-url').value='https://example.test/checks.md';$('check-url-submit').click();await until(()=>$('detail').textContent.includes('原典参照が'));assert.equal($('check-confirm'),null);assert.equal(w.document.querySelectorAll('.check-item').length,0);
  response=markdown;$('check-url').value='https://example.test/checks.md';$('check-url-submit').click();await until(()=>!!$('check-confirm'));$('check-confirm').click();await until(()=>!$('check-confirm'));select('購入申請を承認する');assert.ok(w.document.querySelector('[data-check-id="JA-EX-Q01"]'));
+ response=markdown.replaceAll('purchase-request/README.md','other/README.md');$('check-url').value='https://example.test/checks.md';$('check-url-submit').click();await until(()=>$('detail').textContent.includes('原典参照が'));assert.ok(w.document.querySelector('[data-check-id="JA-EX-Q01"]'),'wrong replacement keeps existing association');
  response='broken';$('check-url').value='https://example.test/checks.md';$('check-url-submit').click();await until(()=>$('detail').textContent.includes('読み込めません'));assert.ok(w.document.querySelector('[data-check-id="JA-EX-Q01"]'));
  await until(()=>$('app').dataset.saveState==='saved');w.close();w=boot();await until(()=>!$('open').disabled);$('detail-mode-checks').click();select('購入申請を承認する');assert.ok(w.document.querySelector('[data-check-id="JA-EX-Q01"]'),'reload restores association without network');
  Array.from($('detail').querySelectorAll('button')).find(b=>b.textContent==='関連Checkを解除').click();await until(()=>!$('detail').textContent.includes('読込済み:'));assert.equal(graph(),initial);assert.equal(w.document.querySelectorAll('.check-item').length,0);

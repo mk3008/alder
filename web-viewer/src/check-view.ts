@@ -4,6 +4,7 @@ import type {Tab} from './session';
 export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
+function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
 function renderBody(root:HTMLElement,body:string){
   // Interpret only disclosure wrappers; source HTML remains inert.
   const pattern=/<details>\s*<summary>([^<]*)<\/summary>([\s\S]*?)<\/details>/g;let end=0;
@@ -35,7 +36,7 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
     const panel=document.createElement('section');panel.className='check-candidate';panel.id='check-candidate';
     paragraph(panel,'一致未確認: '+candidate.name+' — '+match.reason);
     paragraph(panel,'関連付けの確認は、Checkの人間レビュー状態や業務意味の承認を変更しません。');
-    const evidence=document.createElement('details'),summary=document.createElement('summary');summary.textContent='原典参照・業務別インデックス・Check本文を確認';evidence.append(summary,formattedMarkdown(parsed.markdown));panel.append(evidence);
+    const evidence=document.createElement('details'),summary=document.createElement('summary');summary.textContent='原典参照・業務別インデックス・Check本文を確認';evidence.append(summary,originalMarkdown(parsed.markdown));panel.append(evidence);
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);root.append(panel);
   }
@@ -55,6 +56,6 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   }
   const names=new Set(tab.design.graph.nodes.filter(n=>n.type==='business').map(n=>n.name)),unknown=Object.keys(doc.index).filter(n=>!names.has(n)),unassigned=doc.items.filter(i=>!i.activities.length);
   if(unknown.length||unassigned.length)paragraph(content,'対応先不明: '+[...unknown,...unassigned.map(i=>i.id)].join('、'));
-  const full=document.createElement('details'),fullSummary=document.createElement('summary');fullSummary.textContent='業務別インデックスとCheck原文全文';full.append(fullSummary,formattedMarkdown(doc.markdown));content.append(full);
+  const full=document.createElement('details'),fullSummary=document.createElement('summary');fullSummary.textContent='業務別インデックスとCheck原文全文';full.append(fullSummary,originalMarkdown(doc.markdown));content.append(full);
   return {controls:root,content};
 }

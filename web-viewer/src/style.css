@@ -242,3 +242,5 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .check-warning,.check-candidate{border-inline-start:3px solid #b97816;padding-inline-start:10px}
 .check-content{overflow-wrap:anywhere}.check-content details>summary,.check-controls summary{cursor:pointer;padding:8px 0}
 .check-item{border-top:1px solid #8886;margin-top:16px;padding-top:4px}
+
+.check-source{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;font:inherit;line-height:1.7}
