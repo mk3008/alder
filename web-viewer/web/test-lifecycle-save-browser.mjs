@@ -25,8 +25,8 @@ export async function verifyLifecycleSave(browser,{url='http://127.0.0.1:4173/',
    // In immediate cases, submit and leave before the 180ms debounce.
    await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.evaluate(async ({kind,committed})=>{if(!committed)await document.getElementById('source-submit').onclick();if(kind==='reload')location.reload();else location.href='about:blank';},{kind,committed})]);
    if(kind==='navigation')await page.goto(url);await page.waitForFunction(()=>!document.getElementById('open-text').disabled);
-   const observation=await page.evaluate(()=>({tabs:document.querySelectorAll('.tab').length,text:document.querySelector('.tab')?.textContent??'',status:document.getElementById('status-text').textContent}));
-   const retained=observation.tabs===1&&observation.text.includes('Synthetic lifecycle');results.push({kind,run,committed,retained,tabs:observation.tabs,status:observation.status,beforeUnloadPrompts,confirmationPolicy:'accept and leave'});
+   const observation=await page.evaluate(()=>({tabs:document.querySelectorAll('.tab').length,text:document.getElementById('nodes').textContent,status:document.getElementById('status-text').textContent}));
+   const retained=observation.tabs===1&&observation.text.includes('Synthetic task')&&(await page.evaluate(readSessionInPage))?.tabs?.[0]?.design?.markdown===markdown;results.push({kind,run,committed,retained,tabs:observation.tabs,status:observation.status,beforeUnloadPrompts,confirmationPolicy:'accept and leave'});
   }finally{await context.close();}
  }
  const result={browser:browser.version(),model:'isolated local Chromium, native reload/navigation',expectLoss,results,immediateDeparture:{retained:results.filter(r=>!r.committed&&r.retained).length,lost:results.filter(r=>!r.committed&&!r.retained).length,guaranteed:false}};console.log('LIFECYCLE_SAVE '+JSON.stringify(result));

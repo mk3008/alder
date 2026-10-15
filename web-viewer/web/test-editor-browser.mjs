@@ -1,3 +1,4 @@
+import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -12,7 +13,7 @@ export async function verifyMarkdownEditor(browser){
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
    if(origin==='file')await page.locator('#fallback').setInputFiles({name:'fixture.md',mimeType:'text/markdown',buffer:Buffer.from(markdown)});
-   else{await page.locator('#open-'+origin).click();await page.locator('#source-'+origin).fill(origin==='url'?'https://editor-fixture.test/source.md':markdown);await page.locator('#source-submit').click();}
+   else{await openSourceAction(page,'open-'+origin);await page.locator('#source-'+origin).fill(origin==='url'?'https://editor-fixture.test/source.md':markdown);await page.locator('#source-submit').click();}
    await page.locator('.node').first().waitFor();const key=await page.locator('.tab').getAttribute('data-key'),count=await page.locator('.node').count();
    await page.locator('.node').first().click();const selected=await page.locator('.node.selected').getAttribute('data-node');
    await ensureDocumentActions(page);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),markdown,'common editor contains full source despite selected drawer section');assert.equal(await page.locator('#source-text').getAttribute('readonly'),null);assert.equal(await page.locator('#source-submit').textContent(),'反映する');assert.equal(await page.locator('#source-submit').isDisabled(),true);assert.equal(await page.locator('#source-state,#source-edit').count(),0);assert.equal(await page.locator('#source-help').textContent(),'元ファイルやURLは書き換えません。');
