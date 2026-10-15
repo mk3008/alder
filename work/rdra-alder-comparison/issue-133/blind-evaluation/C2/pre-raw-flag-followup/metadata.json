@@ -1,0 +1,114 @@
+{
+  "case_id": "C2",
+  "status": "success",
+  "attempt_number": 2,
+  "started_at": "2026-10-02T10:16:05.548793+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "case-reference.json": "0b8b368f12e2487ae291d54604a166f96663fb97e89b469c81353b2573c59fb5",
+    "downstream-subset.json": "785acdc32b93446dae222aeb5cbfa9a3794fdeed498abc52a00b7c5898db3296",
+    "rubric.md": "95db0ccf3739bda00d588c8c6e1532625453d552354aeebb0190a7ced0c33080",
+    "evaluation-prompt.txt": "5b5373348e57cdc5e59f16158948064ac1b6bc4df1aa657a13383e5bcca858a7",
+    "packet-index.json": "8286d6a5da6f5cb374ce6998f0108545e6d469db57adecd23dd29923f4d4f788",
+    "P002.json": "90a43657eab51d1fa9126cba1ee491e83f4cd2608925aa317beb2b7fd9e72ef4",
+    "P006.json": "9b7f59f8dda253ff3510449d8b5b58e16ecff6f314df690c2250638fd6d5afd0",
+    "P012.json": "0dc95a283f014137789e9f81519ab8f7278db9a47cfb74e9b9806c8584e9caec",
+    "P022.json": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "P026.json": "d7a833ccaebf268002abd36e475fa2002f3647e3e43f49c91dfd87b0a528dc1e",
+    "P027.json": "576a6bb360ab34ef642888451c6442997dcf96d1e2e65b4b798af96b38064f77",
+    "P036.json": "3ae0bb40eebadc7f260f7b8f568e0a9476cfb29c25e29498570d2e19c08c8fe7",
+    "P037.json": "9a5dbd56453991cecadf9b6cef25bd4463d10baa4d2939d4bd6cb2b26ec7fdca",
+    "P043.json": "21e750cc2d8a7b1faba08f435747e6cff2461ae20b010681f209bb1140e13502",
+    "P044.json": "a31bc5ccabba39631fbdeefb80d450ac152c18839df9483c15f8f916f84bb659",
+    "P055.json": "4afa7a6371128d2bf50d24158c1e70f67ff39f233a87b1c56030f096d8565da8",
+    "P058.json": "838d8d7feff5d367b1afb1ab6a9422721be00b3193268a3334f5c57087437fe6",
+    "received-handoff-index.json": "2c8dc8ad45db5798b923d20d5c25e76225ef5628effd51d4a32ff9c218674e6d",
+    "raw-check-requests.json": "895f8c3b4d1757226b6dce59074041dcb0870d1fcdc1c6530030da3ca361c9d0",
+    "P002-review.json": "efa7a40d655ac8f4a34a8c889c6878c4418e68e0db76819dfa6dd23d805a599a",
+    "P006-review.json": "6d25583fc58c2af521bd67a189c5ca481eea8acb32455962c52ef23701188d2a",
+    "P026-review.json": "82ee5dff5394def3d5cdba56e65f08f8acefa756dd5f0f0874f8e6be1efe2ad5",
+    "P043-review.json": "61fe68db7cd9b2875590dcb5d4bd3eae0c27944790ed6ff47f6511d233b15210",
+    "P044-review.json": "aaec114fabe7b6c22faf624959094250f40a830f2453f3efaff521b0794568db",
+    "H043.json": "2143c3e74f0d81e758eba69f7d7b923972ac5d67f6524e89992341002842fe94",
+    "H044.json": "355755b9099f66a4587614091fd81af557b1cc85157ca531b07459fad7ba7227"
+  },
+  "envelope_sha256": "6e90f03a375497c3172f0cfd97408aea7ef23022c6b3e97dcb6caf9d367bb2cd",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/case-reference.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/downstream-subset.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/rubric.md",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/evaluation-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/packet-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P002.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P012.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P022.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P027.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P036.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P037.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P055.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P058.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/received-handoff-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/raw-check-requests.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P002-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P006-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P026-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P043-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/P044-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H043.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C2/H044.json"
+  ],
+  "limitations": [
+    "Single blind; format may disclose arm. Shared filesystem procedural isolation only. Requested runtime lacks independent attestation."
+  ],
+  "final_contextual_score": true,
+  "original_attempts": [
+    "attempt-001"
+  ],
+  "pre_dispatch_allowlist_correction": {
+    "timestamp": "2026-10-02T10:15:25.813516+00:00",
+    "reason": "Previously copied received canonical files must remain explicit allowlist members; file-exists copy skip incorrectly skipped membership. No child dispatched with incomplete final allowlist.",
+    "added_files": [
+      "H043.json",
+      "H044.json"
+    ],
+    "helper_before_sha256": "7c7abfb14a652c75a316f8ca98618c6d345da510aecef2a59b82edbe30f8e9be",
+    "helper_after_sha256": "30825072d503e558b3b7a2536bcb5080aee72e085ef35d1f29ae8654cc847065",
+    "snapshot": "prepared-before-received-allowlist-fix"
+  },
+  "agent_id": "/root/blind_observation/score_c2_final",
+  "prepared_at": "2026-10-02T10:15:02.731372+00:00",
+  "needs_raw_check_summary": [
+    {
+      "packet_id": "P002",
+      "count": 1
+    },
+    {
+      "packet_id": "P006",
+      "count": 1
+    },
+    {
+      "packet_id": "P026",
+      "count": 1
+    },
+    {
+      "packet_id": "P043",
+      "count": 1
+    }
+  ],
+  "finished_at": "2026-10-02T10:20:55.828531+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "scores.json": "eb8e842c54d1920f75f0c86b3b16b2b50ac712034a75c51e27524362bb9578a4",
+    "raw-response.md": "eb8e842c54d1920f75f0c86b3b16b2b50ac712034a75c51e27524362bb9578a4",
+    "read-log.jsonl": "3841bb7ee3b9a13c636d824313e4bfc9bc12438fcd730176971913199919abb2"
+  }
+}

@@ -1,0 +1,415 @@
+{
+  "status": "unblinded evaluator judgment; initial hunks deliberately left inseparable",
+  "entries": [
+    {
+      "hunk_id": "A/S0/entry.mjs:0:0:0:90",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 90
+    },
+    {
+      "hunk_id": "A/U1/entry.mjs:28:29:28:29",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "A/U1/entry.mjs:55:55:55:57",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "A/U1/entry.mjs:57:58:59:60",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "A/U1/entry.mjs:86:87:88:92",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 5
+    },
+    {
+      "hunk_id": "A/U2/entry.mjs:87:89:87:92",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 7
+    },
+    {
+      "hunk_id": "A/F1/entry.mjs:65:67:65:68",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 5
+    },
+    {
+      "hunk_id": "A/F2/entry.mjs:65:66:65:66",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "B/S0/entry.mjs:0:0:0:100",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 100
+    },
+    {
+      "hunk_id": "B/U1/entry.mjs:29:29:29:39",
+      "classification": "X",
+      "rationale": "Note behavior and extraction/reuse of detail projection occur together; requirement cost versus deferred extraction cannot be separated by this hunk.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ],
+      "churn": 10
+    },
+    {
+      "hunk_id": "B/U1/entry.mjs:47:48:57:58",
+      "classification": "X",
+      "rationale": "Note behavior and extraction/reuse of detail projection occur together; requirement cost versus deferred extraction cannot be separated by this hunk.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ],
+      "churn": 2
+    },
+    {
+      "hunk_id": "B/U1/entry.mjs:63:63:73:74",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 1
+    },
+    {
+      "hunk_id": "B/U1/entry.mjs:92:93:103:104",
+      "classification": "X",
+      "rationale": "Note behavior and extraction/reuse of detail projection occur together; requirement cost versus deferred extraction cannot be separated by this hunk.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ],
+      "churn": 2
+    },
+    {
+      "hunk_id": "B/U1/entry.mjs:96:97:107:111",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 5
+    },
+    {
+      "hunk_id": "B/U2/entry.mjs:106:108:106:111",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 7
+    },
+    {
+      "hunk_id": "B/F1/entry.mjs:0:1:0:1",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "B/F1/entry.mjs:39:41:39:40",
+      "classification": "X",
+      "rationale": "Comment-only replacement of the prior foresight explanation; changes no executable behavior. Business documentation versus structure maintenance is ambiguous.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 3
+    },
+    {
+      "hunk_id": "B/F1/entry.mjs:42:43:41:42",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "B/F2/entry.mjs:41:42:41:42",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/S0/entry.mjs:0:0:0:18",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 18
+    },
+    {
+      "hunk_id": "C/S0/slices/approve.mjs:0:0:0:8",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 8
+    },
+    {
+      "hunk_id": "C/S0/slices/detail.mjs:0:0:0:5",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 5
+    },
+    {
+      "hunk_id": "C/S0/slices/list.mjs:0:0:0:5",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 5
+    },
+    {
+      "hunk_id": "C/S0/slices/purchase.mjs:0:0:0:11",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 11
+    },
+    {
+      "hunk_id": "C/S0/slices/reject.mjs:0:0:0:11",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 11
+    },
+    {
+      "hunk_id": "C/S0/slices/submit.mjs:0:0:0:15",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 15
+    },
+    {
+      "hunk_id": "C/S0/validation.mjs:0:0:0:24",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 24
+    },
+    {
+      "hunk_id": "C/U1/slices/list.mjs:3:4:3:4",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/U1/slices/submit.mjs:7:7:7:9",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/U1/slices/submit.mjs:10:11:12:13",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/U1/validation.mjs:22:23:22:23",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/U2/entry.mjs:15:16:15:16",
+      "classification": "M",
+      "rationale": "Forwards the new argument through the selected slice-composition boundary; filtering itself is implemented in the list slice.",
+      "plausible_alternatives": [
+        "R"
+      ],
+      "churn": 2
+    },
+    {
+      "hunk_id": "C/U2/slices/list.mjs:0:1:0:5",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 6
+    },
+    {
+      "hunk_id": "C/U2/slices/list.mjs:2:2:6:7",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 1
+    },
+    {
+      "hunk_id": "C/F1/slices/approve.mjs:3:5:3:7",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 6
+    },
+    {
+      "hunk_id": "C/F2/slices/approve.mjs:4:5:4:5",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "D/S0/application.mjs:0:0:0:40",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 40
+    },
+    {
+      "hunk_id": "D/S0/domain.mjs:0:0:0:43",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 43
+    },
+    {
+      "hunk_id": "D/S0/entry.mjs:0:0:0:7",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 7
+    },
+    {
+      "hunk_id": "D/S0/memory.mjs:0:0:0:10",
+      "classification": "X",
+      "rationale": "Initial new-file hunk combines current behavior with its selected structure; no separate before-state identifies an incremental boundary cost.",
+      "plausible_alternatives": [
+        "R",
+        "M"
+      ],
+      "churn": 10
+    },
+    {
+      "hunk_id": "D/U1/application.mjs:8:9:8:9",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "D/U1/application.mjs:35:36:35:36",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    },
+    {
+      "hunk_id": "D/U1/domain.mjs:19:19:19:23",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 4
+    },
+    {
+      "hunk_id": "D/U1/domain.mjs:26:26:30:31",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 1
+    },
+    {
+      "hunk_id": "D/U2/application.mjs:34:36:34:40",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 8
+    },
+    {
+      "hunk_id": "D/F1/application.mjs:22:24:22:23",
+      "classification": "X",
+      "rationale": "Moves authorization from orchestration into the amount-aware domain operation and changes the actor argument together; required policy change, boundary upkeep and deferred reorganization overlap.",
+      "plausible_alternatives": [
+        "R",
+        "M",
+        "D"
+      ],
+      "churn": 3
+    },
+    {
+      "hunk_id": "D/F1/domain.mjs:36:37:36:38",
+      "classification": "X",
+      "rationale": "Moves authorization from orchestration into the amount-aware domain operation and changes the actor argument together; required policy change, boundary upkeep and deferred reorganization overlap.",
+      "plausible_alternatives": [
+        "R",
+        "M",
+        "D"
+      ],
+      "churn": 3
+    },
+    {
+      "hunk_id": "D/F1/domain.mjs:38:39:39:40",
+      "classification": "M",
+      "rationale": "Preserves existing approvedBy behavior after the domain boundary changes from actor ID to actor object; no new event data is introduced.",
+      "plausible_alternatives": [
+        "R",
+        "D"
+      ],
+      "churn": 2
+    },
+    {
+      "hunk_id": "D/F2/domain.mjs:37:38:37:38",
+      "classification": "R",
+      "rationale": "Direct change to current data validation, result projection, filtering, or approval behavior.",
+      "plausible_alternatives": [],
+      "churn": 2
+    }
+  ]
+}

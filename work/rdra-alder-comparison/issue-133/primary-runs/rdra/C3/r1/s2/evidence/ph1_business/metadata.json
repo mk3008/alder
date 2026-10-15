@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:03:53Z",
+  "end_utc": "2026-10-02T09:03:53Z",
+  "timing_note": "Start time was recorded retrospectively at evidence-writing time; actual task start was earlier and was not captured.",
+  "failures": ["Initial write failed because output directory did not exist; created directory and retried successfully."],
+  "unmet_restrictions": []
+}

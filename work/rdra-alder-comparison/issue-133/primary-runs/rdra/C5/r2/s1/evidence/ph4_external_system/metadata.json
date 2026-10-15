@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T10:17:00Z",
+  "end_utc": "2026-10-02T10:17:37Z",
+  "failures": [],
+  "unmet_restrictions": [],
+  "observation": "The source BUC external-system column contains no named external systems; output is header only. Start time is approximate because it was not captured before the first read."
+}

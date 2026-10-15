@@ -1,0 +1,422 @@
+[
+  {
+    "blind_id": "P001",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P002",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P003",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P004",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P005",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P006",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P007",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P008",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P009",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P010",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P011",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P012",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P013",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P014",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P015",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P016",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P017",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P018",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P019",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P020",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P021",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P022",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P023",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P024",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P025",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P026",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P027",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P028",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P029",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P030",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P031",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P032",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P033",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P034",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P035",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P036",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P037",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P038",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P039",
+    "arm": "alder",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P040",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P041",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P042",
+    "arm": "rdra",
+    "case": "C3",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P043",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P044",
+    "arm": "rdra",
+    "case": "C2",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P045",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P046",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P047",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P048",
+    "arm": "alder",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s1"
+  },
+  {
+    "blind_id": "P049",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P050",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P051",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P052",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 2,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P053",
+    "arm": "alder",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P054",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P055",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P056",
+    "arm": "rdra",
+    "case": "C4",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P057",
+    "arm": "alder",
+    "case": "C5",
+    "replicate": 1,
+    "stage": "s3"
+  },
+  {
+    "blind_id": "P058",
+    "arm": "alder",
+    "case": "C2",
+    "replicate": 1,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P059",
+    "arm": "rdra",
+    "case": "C5",
+    "replicate": 2,
+    "stage": "s2"
+  },
+  {
+    "blind_id": "P060",
+    "arm": "rdra",
+    "case": "C1",
+    "replicate": 1,
+    "stage": "s3"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:58:00Z",
+  "start_utc_precision": "approximate; clock not sampled at start",
+  "end_utc": "2026-10-02T08:59:09Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created directory and successfully wrote TSV."],
+  "unmet_restrictions": []
+}

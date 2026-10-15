@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "attempts_per_snapshot": 1,
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning_effort": "omitted; inherited",
+  "runtime_attestation": null,
+  "fork_turns": "none",
+  "feedback": false,
+  "evaluator": "/root",
+  "protocol_sha256": "c52e88873cd43f5231ec09313bef94f01959cb331c2dacf30413bdc65743ffd7",
+  "snapshots": [
+    {
+      "id": "H1",
+      "revision": "ccc1edc8547aac1a36777d158639d7d7c20db113",
+      "packet": "/workspace/scratch/4b97af274e82/history-input-H1",
+      "agent": "/root/history_h1",
+      "status": "completed",
+      "output_sha256": {
+        "raw.md": "a77d7781ee18ec73b595624c8216d4e5c59eb8d8afdf4e244e3a1a9aa3a97c45",
+        "read-log.json": "8ed232d8cfe5de66444ca5f7f1d2d7e5ca8b34e644c02ac536a686ff5aee2f3d"
+      }
+    },
+    {
+      "id": "H2",
+      "revision": "43c8e57d6d7e8fe67433d8aa0f8ce48232f03999",
+      "packet": "/workspace/scratch/4b97af274e82/history-input-H2",
+      "agent": "/root/history_h2",
+      "output_sha256": {
+        "raw.md": "4bf51b8939cb229bde7bd2d43813c50f211434c75535f2cf9fa42452d62a0928",
+        "read-log.json": "c14fbe75a431b221759b3fe0eeb4bad1c925ec353985e6b536e2a09d22c9d82d"
+      },
+      "status": "completed"
+    }
+  ]
+}

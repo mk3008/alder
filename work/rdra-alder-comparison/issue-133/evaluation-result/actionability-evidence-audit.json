@@ -1,0 +1,24 @@
+{
+  "rows": [
+    {
+      "case": "C1",
+      "packet_id": "P035",
+      "claim_ids_without_question_id": [
+        "C1-U1",
+        "C1-U2"
+      ],
+      "questions_in_canonical": 0,
+      "interpretation": "Requires evaluator rubric/evidence check; no operator score correction."
+    },
+    {
+      "case": "C1",
+      "packet_id": "P038",
+      "claim_ids_without_question_id": [
+        "C1-U1",
+        "C1-U2"
+      ],
+      "questions_in_canonical": 0,
+      "interpretation": "Requires evaluator rubric/evidence check; no operator score correction."
+    }
+  ]
+}

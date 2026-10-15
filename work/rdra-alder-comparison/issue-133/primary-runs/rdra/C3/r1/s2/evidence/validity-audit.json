@@ -1,0 +1,171 @@
+{
+  "audit_scope": "Original bytes and self-reported read-log only; metadata compliance and strict protocol eligibility are recorded separately.",
+  "strict_protocol_eligible": true,
+  "source_clean_exploratory_eligible": true,
+  "checked_utc": "2026-10-02T10:29:46.676717+00:00",
+  "nodes": [
+    {
+      "node": "ph1_system_overview",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph1_business_policy",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph1_business_parameter",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph1_business",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph1_requirement",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph3_variation",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph2_state",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph2_activity",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph2_condition",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph3_buc",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_info",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_state",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_uc_actor",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_uc_timer",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_uc_external",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_actor",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_external_system",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    },
+    {
+      "node": "ph4_condition",
+      "prompt_original_bytes": true,
+      "official_agents_original_bytes": true,
+      "official_knowledge_original_bytes": true,
+      "input_original_bytes": true,
+      "prompt_read": true,
+      "outside_allowlist": []
+    }
+  ],
+  "all_pass": true
+}

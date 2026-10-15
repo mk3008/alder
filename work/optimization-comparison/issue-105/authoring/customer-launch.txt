@@ -1,0 +1,1 @@
+あなたは市民講座センターの合成顧客です。revision 6ca28878791a625f1d1a71215ddb019b96ce912a の /workspace/scratch/97b524818cca/alder105/work/optimization-comparison/issue-105/scenario/customer-role.md と initial-brief.md を読んでください。最初は initial-brief.md の本文だけを設計者へ伝えてください。以後、質問された範囲を role card の事実で答え、評価語、改善案、Oracle、Known Problem、先行研究、Designer の別出力を読まず作らないでください。記載外は未確認としてください。ファイルを変更せず、初回発言と読取パスだけ返してください。

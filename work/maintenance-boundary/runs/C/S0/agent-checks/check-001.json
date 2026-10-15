@@ -1,0 +1,68 @@
+{
+  "started_at": "2026-09-12T04:45:41.772870+00:00",
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "acceptance.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "entry.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "features/book.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "features/cancel.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "features/detail.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "acceptance.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "TAP version 13\n# Subtest: actual book/cancel HTTP contract, copies, state and duplicate guards\nok 1 - actual book/cancel HTTP contract, copies, state and duplicate guards\n  ---\n  duration_ms: 33.945887\n  type: 'test'\n  ...\n# Subtest: invalid inputs and unknown targets have no side effects\nok 2 - invalid inputs and unknown targets have no side effects\n  ---\n  duration_ms: 2.311377\n  type: 'test'\n  ...\n# Subtest: failed bookings do not reserve id or retry\nok 3 - failed bookings do not reserve id or retry\n  ---\n  duration_ms: 31.612206\n  type: 'test'\n  ...\n# Subtest: failed cancellations preserve booked state without retry\nok 4 - failed cancellations preserve booked state without retry\n  ---\n  duration_ms: 9.656847\n  type: 'test'\n  ...\n# Subtest: independent instances and minimum valid grams\nok 5 - independent instances and minimum valid grams\n  ---\n  duration_ms: 2.602466\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 157.180429\n",
+      "stderr": ""
+    }
+  ],
+  "finished_at": "2026-09-12T04:45:42.231760+00:00",
+  "passed": true
+}

@@ -1,0 +1,15 @@
+{
+  "arm": "D",
+  "stage": "S0",
+  "frozen_at": "2026-09-12T04:16:11.854197+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "application.mjs": "9033638eb6f29a7e58cb94e0dfdea218fe10d790c42160df5be1a4b54e1389f6",
+    "boundaries.test.mjs": "e49993999fc8d58b70ba1b03eba5f76bbda8db5898f989bab4e54c2da1afb661",
+    "domain.mjs": "8c4222075d9be2a657b6b6624e7d8e1f2e57b0732ef24568ed10cdf167a4bbc1",
+    "entry.mjs": "a9f8cc570607c36999fd69eb9fcc9756b9e75f6abcb460ea3370d284f8fd855b",
+    "memory.mjs": "8a64d95d5962485c9dbddaa9b3529e902ffcb9a25558d0164f8309a3ecb47569"
+  }
+}

@@ -1,0 +1,29 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,7 @@
++# Activity
++
++1. Read packet instructions, task, philosophy, adoption guidance, Business Design, accepted decisions, operations context, and relevant implementation/tests.
++2. Checked the requested means: no evidence-backed material disadvantage to the explicit, reversible heading-only change. Mirror-related operations context does not require a mirror for this task. No question or material policy assumption is needed.
++3. Changed only the receipt heading constant from `Booking` to `Reservation`; left service and existing tests unchanged.
++4. Ran existing Node tests: 1 passed, 0 failed. Directly imported the exported heading and asserted it equals `Reservation`: passed.
++5. Saved report.md. No remaining decision or clarification.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,11 @@
++# Report
++
++Changed `src/receipt.mjs` so `receiptHeading` exports `Reservation` instead of `Booking`. This is the only product change; service behavior and existing tests are unchanged. No receipt reader or workflow redesign was implemented.
++
++The task explicitly authorizes this reversible wording change. Business Design and accepted decisions reveal no conflict, and supplied evidence identifies no material disadvantage to the heading change. Operations discussion of a disk mirror does not apply to this task. No material assumption or Decision Record was needed.
++
++Verification:
++- `node --test test/existing.test.mjs`: 1 passed, 0 failed; availability, booking, and independent copies remain covered.
++- Direct module import and strict equality assertion: `receiptHeading === 'Reservation'` passed.
++
++Remaining decision: none.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1 @@
+-export const receiptHeading = 'Booking';
++export const receiptHeading = 'Reservation';

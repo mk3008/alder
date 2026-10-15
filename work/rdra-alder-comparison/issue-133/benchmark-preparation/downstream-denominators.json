@@ -1,0 +1,105 @@
+{
+  "status": "operational_subset_before_first_probe_and_score",
+  "rule": "Fixed Stage2 oracle facts required as confirmed business expectations; exclude scope, unresolved, historical candidate partitions superseded by answer, technology selections not business expectations. Unresolved/scope/technical constraint preservation reported separately, not forced into expected business outcomes. No new fact/unknown added.",
+  "cases": {
+    "C1": {
+      "included_facts": [
+        "蔵書の貸出",
+        "返却遅延による貸出制限",
+        "判断材料は遅延日数と会員種別",
+        "大人と子供の2種別",
+        "0以上3未満・3以上7未満・7以上の排他的3区分",
+        "大人は3日未満可",
+        "大人は3日以上7日未満不可",
+        "大人は7日以上不可",
+        "子供は3日未満可",
+        "子供は3日以上7日未満可",
+        "子供は7日以上不可"
+      ],
+      "excluded_facts": [
+        "3日未満・7日未満・7日以上の候補",
+        "他の貸出条件は試験範囲外"
+      ]
+    },
+    "C2": {
+      "included_facts": [
+        "社員が空室検索する",
+        "社員が予約する",
+        "時間重複は予約不可",
+        "予約後の時間変更可",
+        "取消可",
+        "管理者が利用停止にできる",
+        "停止中は検索非表示",
+        "停止中は新規予約不可",
+        "停止中は変更先にできない",
+        "停止前の既存予約を維持し利用可",
+        "取消期限なし・当日取消可",
+        "取消時間帯は直ちに空室検索対象になる",
+        "取消時間帯は直ちに新規予約対象になる"
+      ],
+      "excluded_facts": [
+        "同時予約保証と順序は未決"
+      ]
+    },
+    "C3": {
+      "included_facts": [
+        "社員が申請",
+        "上長が承認または却下",
+        "承認後に購買担当が購入",
+        "購入結果を申請者へ伝える",
+        "金額と物品を記録",
+        "高額の場合に追加確認が必要",
+        "高額は10万円以上",
+        "部長が追加確認",
+        "通常承認後に追加確認",
+        "10万円以上は上長承認と部長確認の両方完了で購入可",
+        "10万円未満は上長承認で購入可",
+        "却下時は購入しない",
+        "必要確認未完了では購入しない"
+      ],
+      "excluded_facts": [
+        "購入結果の連絡手段と期限は未決"
+      ]
+    },
+    "C4": {
+      "included_facts": [
+        "10万円以上は部長承認",
+        "10万円未満は課長承認",
+        "承認後だけ購買担当が購入",
+        "却下時は購入しない",
+        "金額分岐以外の承認条件は同じ"
+      ],
+      "excluded_facts": [
+        "対象は承認分岐だけ"
+      ]
+    },
+    "C5": {
+      "included_facts": [
+        "社員が購入申請",
+        "10万円以上は部長承認または却下",
+        "10万円未満は課長承認または却下",
+        "承認後だけ購買担当が購入",
+        "却下時は購入しない",
+        "金額と物品を記録",
+        "POST /purchase-requestsの入力と201/pending応答",
+        "不正入力400",
+        "decision APIの入力",
+        "金額に対応する役割だけが決定",
+        "役割不一致403",
+        "存在しないid404",
+        "既存schemaの列・型・制約維持",
+        "追加の承認条件なし",
+        "決定成功200でidと決定後status",
+        "決定済みへの再決定409"
+      ],
+      "excluded_facts": [
+        "PostgreSQL使用",
+        "TypeScript使用",
+        "named architecture/framework/layer未指定",
+        "申請・承認分岐と購入への引渡しまで",
+        "購入実行と結果連絡はAPI実装範囲外・引渡し条件は保持",
+        "購入結果を申請者へ伝える"
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# Packet instructions
+
+Work only inside this packet. Do not read sibling/parent files, use network tools,
+or delegate. All task sources are supplied here. Do not follow external document
+links. Do not change these instructions, TASK.md, context, or existing tests.
+
+Current Business Design is `context/business-design.md`; it is the source of
+operational intent. Do not invent business policy. Record material implementation
+assumptions in `decisions/`; routine reversible choices need no Decision Record.
+
+Read `context/philosophy.md` and `context/adoption.md`. For implementation use
+adoption section 3. For review use section 4 and `context/review-knowledge.md`,
+reading Business Design, decisions, and then implementation/DDL/tests.
+
+Keep a brief chronological `activity.md` of actions, verification, and any question
+you actually need answered. Finish with `report.md` containing changes or findings,
+evidence, verification, and any remaining decision. These are task records, not
+permission to modify product files in a review-only task.

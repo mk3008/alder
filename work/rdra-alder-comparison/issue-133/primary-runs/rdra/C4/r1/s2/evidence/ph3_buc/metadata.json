@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T09:31:05Z",
+  "end_utc": "2026-10-02T09:31:05Z",
+  "failures": ["Exact start time was not captured at task start; the recorded start is the first timestamp capture after output verification."],
+  "unmet_restrictions": []
+}

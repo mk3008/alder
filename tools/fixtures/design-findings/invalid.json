@@ -1,0 +1,12 @@
+[
+  {"name":"duplicate-id","from":"## Finding F02","to":"## Finding F01"},
+  {"name":"bad-id","from":"## Finding F01","to":"## Finding あ"},
+  {"name":"bad-kind","from":"question","to":"warning"},
+  {"name":"bad-status","from":"open","to":"unknown"},
+  {"name":"bad-scope","from":"items","to":"global"},
+  {"name":"empty-item-targets","from":"- 受付情報\n- 依頼を受け付ける","to":"(none)"},
+  {"name":"nonitem-targets","from":"### Scope\n\nunassigned","to":"### Scope\n\nitems"},
+  {"name":"duplicate-target","from":"- 受付情報\n- 依頼を受け付ける","to":"- 受付情報\n- 受付情報"},
+  {"name":"empty-summary","from":"確認できる情報の範囲","to":""},
+  {"name":"unknown-field","from":"### Summary","to":"### Severity"}
+]

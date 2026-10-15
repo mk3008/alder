@@ -1,0 +1,1 @@
+The specified ph3_buc/envelope.txt is not present yet (cat returned No such file). I can see the s2 run and other evidence folders; please create the envelope or confirm its path.

@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C4/r2/s2/docs/business-design/design.md",
+    "sha256": "f6e3a7ad18ab7b03f8aa2791eef1ac5843ffeda20194dcac0008d943bc44eaa2",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C4/r2/s2/raw-response.md",
+    "sha256": "f22418927da5e40e63e62f23ab2cdb10b0a3d5b1e486eafeb26c96d262f28942",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "草案を [design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C4/r2/s2/docs/business-design/design.md) に作成しました。出典は提示されたヒアリング結果と固定Human answerです。追加の質問はありません。金額以外の共通承認条件などは対象外として未確認のまま残し、業務上の合意はまだ得ていません。Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`を使用しました。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

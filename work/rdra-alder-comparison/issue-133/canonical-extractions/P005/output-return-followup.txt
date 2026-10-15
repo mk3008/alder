@@ -1,0 +1,1 @@
+前dispatchのJSON本文return要件を満たすため、あなたが既に生成したcanonical.jsonの内容をそのままfinalに返してください。追加入力取得・再抽出・意味変更は不要です。raw-response.mdと同一JSON本文を返してください。

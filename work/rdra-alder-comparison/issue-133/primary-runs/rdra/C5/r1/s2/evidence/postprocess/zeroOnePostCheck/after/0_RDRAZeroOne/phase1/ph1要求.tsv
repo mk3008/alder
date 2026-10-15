@@ -1,0 +1,20 @@
+要求	アクター	機能非機能
+社員が購入申請を出せる	社員	機能
+10万円以上の購入申請は部長が承認または却下できる	部長	機能
+10万円未満の購入申請は課長が承認または却下できる	課長	機能
+金額に対応した役割だけが購入申請を決定でき、追加の承認条件は設けない		機能
+承認された申請だけを購買担当へ購入のために引き渡し、却下された申請は購入しない	購買担当	機能
+購入結果を申請者へ伝える。ただし今回のAPI実装範囲には含めない	申請者	機能
+購入申請の金額と物品を記録する		機能
+既存のPOST /purchase-requestsでamount_yen（0以上の整数）とitem（空でない文字列）を受け付ける		機能
+POST /purchase-requestsの成功時は201でidとstatus=pendingを返す		機能
+POST /purchase-requestsの不正入力時は400を返す		機能
+既存のPOST /purchase-requests/{id}/decisionでdecision=approvedまたはrejectedとrole=managerまたはdirectorを受け付ける		機能
+POST /purchase-requests/{id}/decisionでは金額に対応しない役割の決定を403で拒否する		機能
+POST /purchase-requests/{id}/decisionでは存在しないidを404とする		機能
+POST /purchase-requests/{id}/decisionの成功時は200でidと決定後のstatusを返す		機能
+既に決定済みの申請への再決定は409で拒否する		機能
+既存公開REST APIを維持する		非機能
+既存のpurchase_requestsスキーマを維持する（id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY、amount_yen integer NOT NULL CHECK(amount_yen>=0)、item text NOT NULL CHECK(length(item)>0)、status text NOT NULL CHECK(status IN ('pending','approved','rejected'))）		非機能
+TypeScriptとPostgreSQLを使用する		非機能
+今回のAPI実装は申請・承認分岐と購入への引渡し条件までを対象とし、購入実行と結果連絡は対象外とする		非機能

@@ -1,0 +1,1 @@
+同じ独立 Designer として Plugin 0.2.6 の Authoring Skill を使い、work/optimization-comparison/issue-104/authoring/customer-followup-raw.md の回答を受けて、既存 design.md を同じファイルで改訂してください。未確認・未決定を確定しないでください。質問を反復し続けず、レビュー可能な current-state 草案で止めてください。変更は design.md のみ。role card、oracle、比較 protocol、#99〜#103 は読まないでください。変更点、残る人間判断、読取パス、Plugin version と provenance revision を返してください。

@@ -1,0 +1,348 @@
+[
+  {
+    "arm": "A",
+    "stage": "S0",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: no style/flatness constraint supplied; agent naturally used one file with shared validation and a transition helper.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "A",
+    "stage": "U1",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: no style/flatness constraint supplied; agent naturally used one file with shared validation and a transition helper.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "A",
+    "stage": "U2",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: no style/flatness constraint supplied; agent naturally used one file with shared validation and a transition helper.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "A",
+    "stage": "F1",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: no style/flatness constraint supplied; agent naturally used one file with shared validation and a transition helper.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "A",
+    "stage": "F2",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: no style/flatness constraint supplied; agent naturally used one file with shared validation and a transition helper.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "B",
+    "stage": "S0",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: explicit local authority seam; S0 has no speculative amount threshold. Current behavior checked by common gate. No required artifact count.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "B",
+    "stage": "U1",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: explicit local authority seam; S0 has no speculative amount threshold. Current behavior checked by common gate. No required artifact count.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "B",
+    "stage": "U2",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: explicit local authority seam; S0 has no speculative amount threshold. Current behavior checked by common gate. No required artifact count.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "B",
+    "stage": "F1",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: explicit local authority seam; S0 has no speculative amount threshold. Current behavior checked by common gate. No required artifact count.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "B",
+    "stage": "F2",
+    "imports": {
+      "entry.mjs": []
+    },
+    "inspection": "Pass: explicit local authority seam; S0 has no speculative amount threshold. Current behavior checked by common gate. No required artifact count.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "imports": {
+      "entry.mjs": [
+        "./slices/submit.mjs",
+        "./slices/approve.mjs",
+        "./slices/reject.mjs",
+        "./slices/purchase.mjs",
+        "./slices/detail.mjs",
+        "./slices/list.mjs"
+      ],
+      "slices/approve.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/detail.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/list.mjs": [],
+      "slices/purchase.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/reject.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/submit.mjs": [
+        "../validation.mjs"
+      ],
+      "validation.mjs": []
+    },
+    "inspection": "Pass: separate use-case slices; changes stay within their slice plus current shared validators/composition. No mandatory horizontal layer stack.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "C",
+    "stage": "U1",
+    "imports": {
+      "entry.mjs": [
+        "./slices/submit.mjs",
+        "./slices/approve.mjs",
+        "./slices/reject.mjs",
+        "./slices/purchase.mjs",
+        "./slices/detail.mjs",
+        "./slices/list.mjs"
+      ],
+      "slices/approve.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/detail.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/list.mjs": [],
+      "slices/purchase.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/reject.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/submit.mjs": [
+        "../validation.mjs"
+      ],
+      "validation.mjs": []
+    },
+    "inspection": "Pass: separate use-case slices; changes stay within their slice plus current shared validators/composition. No mandatory horizontal layer stack.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "C",
+    "stage": "U2",
+    "imports": {
+      "entry.mjs": [
+        "./slices/submit.mjs",
+        "./slices/approve.mjs",
+        "./slices/reject.mjs",
+        "./slices/purchase.mjs",
+        "./slices/detail.mjs",
+        "./slices/list.mjs"
+      ],
+      "slices/approve.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/detail.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/list.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/purchase.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/reject.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/submit.mjs": [
+        "../validation.mjs"
+      ],
+      "validation.mjs": []
+    },
+    "inspection": "Pass: separate use-case slices; changes stay within their slice plus current shared validators/composition. No mandatory horizontal layer stack.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "C",
+    "stage": "F1",
+    "imports": {
+      "entry.mjs": [
+        "./slices/submit.mjs",
+        "./slices/approve.mjs",
+        "./slices/reject.mjs",
+        "./slices/purchase.mjs",
+        "./slices/detail.mjs",
+        "./slices/list.mjs"
+      ],
+      "slices/approve.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/detail.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/list.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/purchase.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/reject.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/submit.mjs": [
+        "../validation.mjs"
+      ],
+      "validation.mjs": []
+    },
+    "inspection": "Pass: separate use-case slices; changes stay within their slice plus current shared validators/composition. No mandatory horizontal layer stack.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "C",
+    "stage": "F2",
+    "imports": {
+      "entry.mjs": [
+        "./slices/submit.mjs",
+        "./slices/approve.mjs",
+        "./slices/reject.mjs",
+        "./slices/purchase.mjs",
+        "./slices/detail.mjs",
+        "./slices/list.mjs"
+      ],
+      "slices/approve.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/detail.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/list.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/purchase.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/reject.mjs": [
+        "../validation.mjs"
+      ],
+      "slices/submit.mjs": [
+        "../validation.mjs"
+      ],
+      "validation.mjs": []
+    },
+    "inspection": "Pass: separate use-case slices; changes stay within their slice plus current shared validators/composition. No mandatory horizontal layer stack.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "imports": {
+      "application.mjs": [
+        "./domain.mjs"
+      ],
+      "domain.mjs": [],
+      "entry.mjs": [
+        "./application.mjs",
+        "./memory.mjs"
+      ],
+      "memory.mjs": []
+    },
+    "inspection": "Pass: domain has no imports; application imports only domain and consumes injected repository; concrete memory implementation is composed in entry.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "D",
+    "stage": "U1",
+    "imports": {
+      "application.mjs": [
+        "./domain.mjs"
+      ],
+      "domain.mjs": [],
+      "entry.mjs": [
+        "./application.mjs",
+        "./memory.mjs"
+      ],
+      "memory.mjs": []
+    },
+    "inspection": "Pass: domain has no imports; application imports only domain and consumes injected repository; concrete memory implementation is composed in entry.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "D",
+    "stage": "U2",
+    "imports": {
+      "application.mjs": [
+        "./domain.mjs"
+      ],
+      "domain.mjs": [],
+      "entry.mjs": [
+        "./application.mjs",
+        "./memory.mjs"
+      ],
+      "memory.mjs": []
+    },
+    "inspection": "Pass: domain has no imports; application imports only domain and consumes injected repository; concrete memory implementation is composed in entry.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "D",
+    "stage": "F1",
+    "imports": {
+      "application.mjs": [
+        "./domain.mjs"
+      ],
+      "domain.mjs": [],
+      "entry.mjs": [
+        "./application.mjs",
+        "./memory.mjs"
+      ],
+      "memory.mjs": []
+    },
+    "inspection": "Pass: domain has no imports; application imports only domain and consumes injected repository; concrete memory implementation is composed in entry.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  },
+  {
+    "arm": "D",
+    "stage": "F2",
+    "imports": {
+      "application.mjs": [
+        "./domain.mjs"
+      ],
+      "domain.mjs": [],
+      "entry.mjs": [
+        "./application.mjs",
+        "./memory.mjs"
+      ],
+      "memory.mjs": []
+    },
+    "inspection": "Pass: domain has no imports; application imports only domain and consumes injected repository; concrete memory implementation is composed in entry.",
+    "method": "evaluator source inspection plus recorded simple-import inventory; not a general architecture linter"
+  }
+]

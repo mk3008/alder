@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C1/r2/s2/docs/business-design/design.md",
+    "sha256": "bf08144a913d8c47d4ef9083400785d1c0aca19cc91e4824701a8506f69da476",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C1/r2/s2/raw-response.md",
+    "sha256": "4e35624cc3f58b5971405364c44919e650ab92bae77bf1f41650dc09571d0976",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "[業務設計書の草案](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r2/s2/docs/business-design/design.md)を作成しました。ヒアリング結果と固定Human answerを使用し、大人・子供それぞれの遅延日数による貸出可否を反映しています。Alder plugin 0.2.8、Authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a` に基づきます。文書全体はレビュー待ちです。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

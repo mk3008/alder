@@ -1,0 +1,183 @@
+{
+  "reviewer": "unblinded evaluator; not an independent agent",
+  "reviews": [
+    {
+      "arm": "A",
+      "stage": "S0",
+      "files": [
+        "entry.mjs"
+      ],
+      "imports": {
+        "entry.mjs": []
+      },
+      "http_files": [
+        "entry.mjs"
+      ],
+      "observed": "One file owns state and wire handling; S1 uses local conditionals and response normalization without module extraction. No prescribed architecture to violate.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "A",
+      "stage": "S1",
+      "files": [
+        "entry.mjs"
+      ],
+      "imports": {
+        "entry.mjs": []
+      },
+      "http_files": [
+        "entry.mjs"
+      ],
+      "observed": "One file owns state and wire handling; S1 uses local conditionals and response normalization without module extraction. No prescribed architecture to violate.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "files": [
+        "alpha.mjs",
+        "entry.mjs"
+      ],
+      "imports": {
+        "alpha.mjs": [],
+        "entry.mjs": [
+          "./alpha.mjs"
+        ]
+      },
+      "http_files": [
+        "alpha.mjs"
+      ],
+      "observed": "Application owns state; Alpha client implements book/cancel. S1 adds Beta client with the same operation shapes and indexes clients by saved provider; Alpha source unchanged. Foresight response is observed, not mandatory extra abstraction.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "B",
+      "stage": "S1",
+      "files": [
+        "alpha.mjs",
+        "beta.mjs",
+        "entry.mjs"
+      ],
+      "imports": {
+        "alpha.mjs": [],
+        "beta.mjs": [],
+        "entry.mjs": [
+          "./alpha.mjs",
+          "./beta.mjs"
+        ]
+      },
+      "http_files": [
+        "alpha.mjs",
+        "beta.mjs"
+      ],
+      "observed": "Application owns state; Alpha client implements book/cancel. S1 adds Beta client with the same operation shapes and indexes clients by saved provider; Alpha source unchanged. Foresight response is observed, not mandatory extra abstraction.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "files": [
+        "entry.mjs",
+        "features/book.mjs",
+        "features/cancel.mjs",
+        "features/detail.mjs"
+      ],
+      "imports": {
+        "entry.mjs": [
+          "./features/book.mjs",
+          "./features/cancel.mjs",
+          "./features/detail.mjs"
+        ],
+        "features/book.mjs": [],
+        "features/cancel.mjs": [],
+        "features/detail.mjs": []
+      },
+      "http_files": [
+        "features/book.mjs",
+        "features/cancel.mjs"
+      ],
+      "observed": "Entry composes book/cancel/detail feature slices. Both mutating slices own their HTTP details; S1 branches by provider within each slice and passes additional config through context. Detail remains unchanged. This is feature locality, not an I/O isolation promise.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "C",
+      "stage": "S1",
+      "files": [
+        "entry.mjs",
+        "features/book.mjs",
+        "features/cancel.mjs",
+        "features/detail.mjs"
+      ],
+      "imports": {
+        "entry.mjs": [
+          "./features/book.mjs",
+          "./features/cancel.mjs",
+          "./features/detail.mjs"
+        ],
+        "features/book.mjs": [],
+        "features/cancel.mjs": [],
+        "features/detail.mjs": []
+      },
+      "http_files": [
+        "features/book.mjs",
+        "features/cancel.mjs"
+      ],
+      "observed": "Entry composes book/cancel/detail feature slices. Both mutating slices own their HTTP details; S1 branches by provider within each slice and passes additional config through context. Detail remains unchanged. This is feature locality, not an I/O isolation promise.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "files": [
+        "alpha-shipments.mjs",
+        "booking.mjs",
+        "entry.mjs",
+        "memory-records.mjs"
+      ],
+      "imports": {
+        "alpha-shipments.mjs": [],
+        "booking.mjs": [],
+        "entry.mjs": [
+          "./booking.mjs",
+          "./memory-records.mjs",
+          "./alpha-shipments.mjs"
+        ],
+        "memory-records.mjs": []
+      },
+      "http_files": [
+        "alpha-shipments.mjs"
+      ],
+      "observed": "Composition injects shipment service(s) and memory store into booking application; application imports no HTTP/storage detail. S1 adds an outward Beta adapter and provider-keyed dependency; Alpha and memory files unchanged. Policy validates provider names (a current business choice), not HTTP contract details.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    },
+    {
+      "arm": "D",
+      "stage": "S1",
+      "files": [
+        "alpha-shipments.mjs",
+        "beta-shipments.mjs",
+        "booking.mjs",
+        "entry.mjs",
+        "memory-records.mjs"
+      ],
+      "imports": {
+        "alpha-shipments.mjs": [],
+        "beta-shipments.mjs": [],
+        "booking.mjs": [],
+        "entry.mjs": [
+          "./booking.mjs",
+          "./memory-records.mjs",
+          "./alpha-shipments.mjs",
+          "./beta-shipments.mjs"
+        ],
+        "memory-records.mjs": []
+      },
+      "http_files": [
+        "alpha-shipments.mjs",
+        "beta-shipments.mjs"
+      ],
+      "observed": "Composition injects shipment service(s) and memory store into booking application; application imports no HTTP/storage detail. S1 adds an outward Beta adapter and provider-keyed dependency; Alpha and memory files unchanged. Policy validates provider names (a current business choice), not HTTP contract details.",
+      "structure_gate": "passes assigned instruction; no particular folder/class inventory required"
+    }
+  ]
+}

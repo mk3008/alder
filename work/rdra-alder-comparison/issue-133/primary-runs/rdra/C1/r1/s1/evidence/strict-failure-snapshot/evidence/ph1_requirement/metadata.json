@@ -1,0 +1,9 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T07:40:30Z",
+  "failures": [
+    "The first attempt to write and then read 0_RDRAZeroOne/phase1/ph1要求.tsv failed because the output directory did not exist. Created the directory and completed the output on retry.",
+    "The exact start UTC time was not captured before the initial read. The earliest captured UTC time was 2026-10-02T07:40:25Z."
+  ],
+  "unmet_restrictions": []
+}

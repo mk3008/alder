@@ -1,0 +1,165 @@
+{
+  "frozen_revision": "dbbd6ee6beb6d45ee216e009628c8692a90159ca",
+  "requested_model": "gpt-6-sol",
+  "requested_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime": "not independently verified",
+  "files": [
+    {
+      "path": "runs/extract/acquisition-log.json",
+      "sha256": "50e462a616f59069bea859c4ca8691934c5b8494413ce4b559eb63821238f956",
+      "bytes": 3815
+    },
+    {
+      "path": "runs/extract/adoption.json",
+      "sha256": "24b02ec5ddaacf690917a5080fc337bae8a906a77a57bbb00b83875c9dc39703",
+      "bytes": 72320
+    },
+    {
+      "path": "runs/extract/business-graph.json",
+      "sha256": "2d7ac9795d2ba9223cc9206b4628f9a3d5d3920e468bb851f606ae4a183fee2d",
+      "bytes": 17951
+    },
+    {
+      "path": "runs/extract/draft-provenance.json",
+      "sha256": "b2b338d04e035064fb91aa4bc3d1355c4ebf343641fd3be51900a0daf7d98ae5",
+      "bytes": 468
+    },
+    {
+      "path": "runs/extract/draft-skill.json",
+      "sha256": "17e4e21180740b858c1dbc6497236bcb94ba7796a0526cc712c82e452e909c40",
+      "bytes": 8285
+    },
+    {
+      "path": "runs/extract/final-response.txt",
+      "sha256": "b4295d06c24b978a56ba9436a486fc2a063dac6d7e392dde772cc1f4d28c164e",
+      "bytes": 1831
+    },
+    {
+      "path": "runs/extract/request.txt",
+      "sha256": "4015beba48239a8061f4390c5a9aa959e1e47c4b9c3f518d507393da8172c7a5",
+      "bytes": 2330
+    },
+    {
+      "path": "runs/extract/review-provenance.json",
+      "sha256": "b38949363c9dfd0658b3a5d43340f5c77afe80ffbaa28e7e23c4322628038e85",
+      "bytes": 754
+    },
+    {
+      "path": "runs/extract/structure.json",
+      "sha256": "2fe7bdcd7645008783c07925e864183fbe587352594b6294c82a420c9bafdf89",
+      "bytes": 9551
+    },
+    {
+      "path": "runs/focused/SKILL.md.skills-read.json",
+      "sha256": "c471cc9c196bf7131b2b0632eab4cf35deb8c51340f3d18e62e1dd318dd7b372",
+      "bytes": 3387
+    },
+    {
+      "path": "runs/focused/acquisition-log.json",
+      "sha256": "5647486cfc59379ec438694def35e2de42bd828131f29175699559670e1df962",
+      "bytes": 974
+    },
+    {
+      "path": "runs/focused/business-design-correlation-check.ja.md.skills-read.json",
+      "sha256": "3d30073b537ce3b46cac0090e96690b405a44c6e151ae6654b02bccc9d3e7504",
+      "bytes": 4451
+    },
+    {
+      "path": "runs/focused/business-design-omission-check.ja.md.skills-read.json",
+      "sha256": "315dfc52f651fdbe8110b1cb75b4b6b0c15a4012e74d9d476faa51e763a83c80",
+      "bytes": 4117
+    },
+    {
+      "path": "runs/focused/business-design-quality-check.ja.md.skills-read.json",
+      "sha256": "3708b02063afff1f1255e773a4413326a4879253a82a856baeb1a50426b1c49f",
+      "bytes": 4637
+    },
+    {
+      "path": "runs/focused/business-design-structure.ja.md.skills-read.json",
+      "sha256": "2fe7bdcd7645008783c07925e864183fbe587352594b6294c82a420c9bafdf89",
+      "bytes": 9551
+    },
+    {
+      "path": "runs/focused/final-response.txt",
+      "sha256": "4e1d479f0f2c5355a6dbd0dcab6e2e53e7db7f1d3d490442806630f497383d17",
+      "bytes": 1730
+    },
+    {
+      "path": "runs/focused/provenance.json.skills-read.json",
+      "sha256": "b38949363c9dfd0658b3a5d43340f5c77afe80ffbaa28e7e23c4322628038e85",
+      "bytes": 754
+    },
+    {
+      "path": "runs/focused/request.txt",
+      "sha256": "fd8bd201ac02d98ac7558a40e9a35757cd84e9b6e425f8cf125b735d5141d604",
+      "bytes": 2498
+    },
+    {
+      "path": "runs/review/SKILL.md.json",
+      "sha256": "c8bb9684b263320e015fe5fe1291982ba395cd8f214dd2bb30981f13f3787c79",
+      "bytes": 3433
+    },
+    {
+      "path": "runs/review/acquisition-log.txt",
+      "sha256": "7b7e3f7bb0de04d6d34c7c9aaf29f9b499fa31d567051b033c709ee284af9377",
+      "bytes": 1835
+    },
+    {
+      "path": "runs/review/final-response.txt",
+      "sha256": "c25f58e276cd754b7a8a538aed26483c54660e48106ece5d62f136a33e29dcb9",
+      "bytes": 1833
+    },
+    {
+      "path": "runs/review/plugin-attempt-0.json",
+      "sha256": "8ff9e2cf19b4df44b6cc5db5c22aa53b9c72ea59e1c82a085e3e456f7d77e71e",
+      "bytes": 189
+    },
+    {
+      "path": "runs/review/plugin-attempt-1.json",
+      "sha256": "46965db6b741a0c3c00a2cbde5d79197c7e7a5647b202dd2b23e63206f1a3167",
+      "bytes": 186
+    },
+    {
+      "path": "runs/review/plugin-root.json",
+      "sha256": "2547b8db6243fb5cd4d64e46cf1a57e37ee4991feec27ab54e6b6f7e9d5bbe17",
+      "bytes": 47
+    },
+    {
+      "path": "runs/review/plugin.json.json",
+      "sha256": "2d34da335b2f92367dbe52d95eadf91cba022fee40b6445d0a567d7df1d6d500",
+      "bytes": 72
+    },
+    {
+      "path": "runs/review/references__business-design-correlation-check.ja.md.json",
+      "sha256": "f9fb4d3eed903b86fea6dd2143b6a3e14143f698bb668444df3297058c6652c5",
+      "bytes": 4539
+    },
+    {
+      "path": "runs/review/references__business-design-omission-check.ja.md.json",
+      "sha256": "965cacf40a4687df77b48de6058788745a70b88878b6dad7d62915ffcfc2c021",
+      "bytes": 4202
+    },
+    {
+      "path": "runs/review/references__business-design-quality-check.ja.md.json",
+      "sha256": "77cdd517117d1c92e8c091dbe563958ab5e69f527cf45f847465689e6ea4b0ee",
+      "bytes": 4721
+    },
+    {
+      "path": "runs/review/references__business-design-structure.ja.md.json",
+      "sha256": "fb110a5d4625a05933b7a735ddce0e9c0f5c4479f0ec977467d43a9095d56996",
+      "bytes": 9631
+    },
+    {
+      "path": "runs/review/references__provenance.json.json",
+      "sha256": "7939f49bf28fea45ddd527450d758a711eb60bdf8e4d0df4409d2ea827bdfdef",
+      "bytes": 818
+    },
+    {
+      "path": "runs/review/request.txt",
+      "sha256": "b8b339cf8a87a6f775c2284731ef019720ff15b1bc890d1ee8a930689335d91a",
+      "bytes": 2342
+    }
+  ],
+  "public_copy_redaction": "Account plugin and release identifiers replaced with stable placeholders; listed original hashes refer to retained original acquisition files, not redacted copies."
+}

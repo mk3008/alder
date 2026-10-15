@@ -1,0 +1,1 @@
+Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/blind-probes/P043/envelope.txt. You are permitted to read that envelope. Execute its task using only the specified packet and unchanged task text.

@@ -1,0 +1,542 @@
+{
+  "first_experiment_unchanged": true,
+  "hashes_verified": true,
+  "results": [
+    {
+      "arm": "A",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:42.414692+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: actual book/cancel HTTP contract, copies, state and duplicate guards\nok 1 - actual book/cancel HTTP contract, copies, state and duplicate guards\n  ---\n  duration_ms: 28.751584\n  type: 'test'\n  ...\n# Subtest: invalid inputs and unknown targets have no side effects\nok 2 - invalid inputs and unknown targets have no side effects\n  ---\n  duration_ms: 2.137956\n  type: 'test'\n  ...\n# Subtest: failed bookings do not reserve id or retry\nok 3 - failed bookings do not reserve id or retry\n  ---\n  duration_ms: 28.406695\n  type: 'test'\n  ...\n# Subtest: failed cancellations preserve booked state without retry\nok 4 - failed cancellations preserve booked state without retry\n  ---\n  duration_ms: 10.753196\n  type: 'test'\n  ...\n# Subtest: independent instances and minimum valid grams\nok 5 - independent instances and minimum valid grams\n  ---\n  duration_ms: 3.000563\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 153.726089\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:42.716036+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "A",
+      "stage": "S1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:42.745766+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: alpha: actual booking and cancellation wire contract, copies, state\nok 1 - alpha: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 33.18912\n  type: 'test'\n  ...\n# Subtest: alpha: invalid local inputs have no side effects\nok 2 - alpha: invalid local inputs have no side effects\n  ---\n  duration_ms: 1.907749\n  type: 'test'\n  ...\n# Subtest: alpha: unsuccessful bookings reject without reserving id or retry\nok 3 - alpha: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 31.425118\n  type: 'test'\n  ...\n# Subtest: alpha: failed cancellations preserve booked record without retry\nok 4 - alpha: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 11.694546\n  type: 'test'\n  ...\n# Subtest: beta: actual booking and cancellation wire contract, copies, state\nok 5 - beta: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 3.862608\n  type: 'test'\n  ...\n# Subtest: beta: invalid local inputs have no side effects\nok 6 - beta: invalid local inputs have no side effects\n  ---\n  duration_ms: 0.850704\n  type: 'test'\n  ...\n# Subtest: beta: unsuccessful bookings reject without reserving id or retry\nok 7 - beta: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 17.976095\n  type: 'test'\n  ...\n# Subtest: beta: failed cancellations preserve booked record without retry\nok 8 - beta: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 15.739295\n  type: 'test'\n  ...\n# Subtest: instances have independent records and minimum valid grams is accepted\nok 9 - instances have independent records and minimum valid grams is accepted\n  ---\n  duration_ms: 2.249605\n  type: 'test'\n  ...\n# Subtest: default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\nok 10 - default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\n  ---\n  duration_ms: 6.853622\n  type: 'test'\n  ...\n# Subtest: invalid supplied provider fails before network\nok 11 - invalid supplied provider fails before network\n  ---\n  duration_ms: 0.889652\n  type: 'test'\n  ...\n1..11\n# tests 11\n# suites 0\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 202.110414\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:43.105608+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:43.134875+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "alpha.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: actual book/cancel HTTP contract, copies, state and duplicate guards\nok 1 - actual book/cancel HTTP contract, copies, state and duplicate guards\n  ---\n  duration_ms: 34.11653\n  type: 'test'\n  ...\n# Subtest: invalid inputs and unknown targets have no side effects\nok 2 - invalid inputs and unknown targets have no side effects\n  ---\n  duration_ms: 2.202774\n  type: 'test'\n  ...\n# Subtest: failed bookings do not reserve id or retry\nok 3 - failed bookings do not reserve id or retry\n  ---\n  duration_ms: 30.483974\n  type: 'test'\n  ...\n# Subtest: failed cancellations preserve booked state without retry\nok 4 - failed cancellations preserve booked state without retry\n  ---\n  duration_ms: 8.848191\n  type: 'test'\n  ...\n# Subtest: independent instances and minimum valid grams\nok 5 - independent instances and minimum valid grams\n  ---\n  duration_ms: 2.748828\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 153.036254\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:43.506756+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "B",
+      "stage": "S1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:43.536592+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "alpha.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "beta.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: alpha: actual booking and cancellation wire contract, copies, state\nok 1 - alpha: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 30.261503\n  type: 'test'\n  ...\n# Subtest: alpha: invalid local inputs have no side effects\nok 2 - alpha: invalid local inputs have no side effects\n  ---\n  duration_ms: 1.548227\n  type: 'test'\n  ...\n# Subtest: alpha: unsuccessful bookings reject without reserving id or retry\nok 3 - alpha: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 28.213563\n  type: 'test'\n  ...\n# Subtest: alpha: failed cancellations preserve booked record without retry\nok 4 - alpha: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 8.497062\n  type: 'test'\n  ...\n# Subtest: beta: actual booking and cancellation wire contract, copies, state\nok 5 - beta: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 4.079436\n  type: 'test'\n  ...\n# Subtest: beta: invalid local inputs have no side effects\nok 6 - beta: invalid local inputs have no side effects\n  ---\n  duration_ms: 0.948912\n  type: 'test'\n  ...\n# Subtest: beta: unsuccessful bookings reject without reserving id or retry\nok 7 - beta: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 19.201223\n  type: 'test'\n  ...\n# Subtest: beta: failed cancellations preserve booked record without retry\nok 8 - beta: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 15.954434\n  type: 'test'\n  ...\n# Subtest: instances have independent records and minimum valid grams is accepted\nok 9 - instances have independent records and minimum valid grams is accepted\n  ---\n  duration_ms: 1.973228\n  type: 'test'\n  ...\n# Subtest: default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\nok 10 - default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\n  ---\n  duration_ms: 5.97098\n  type: 'test'\n  ...\n# Subtest: invalid supplied provider fails before network\nok 11 - invalid supplied provider fails before network\n  ---\n  duration_ms: 0.787558\n  type: 'test'\n  ...\n1..11\n# tests 11\n# suites 0\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 188.002225\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:43.992821+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:44.020847+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/book.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/cancel.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/detail.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: actual book/cancel HTTP contract, copies, state and duplicate guards\nok 1 - actual book/cancel HTTP contract, copies, state and duplicate guards\n  ---\n  duration_ms: 33.306768\n  type: 'test'\n  ...\n# Subtest: invalid inputs and unknown targets have no side effects\nok 2 - invalid inputs and unknown targets have no side effects\n  ---\n  duration_ms: 2.511449\n  type: 'test'\n  ...\n# Subtest: failed bookings do not reserve id or retry\nok 3 - failed bookings do not reserve id or retry\n  ---\n  duration_ms: 33.007607\n  type: 'test'\n  ...\n# Subtest: failed cancellations preserve booked state without retry\nok 4 - failed cancellations preserve booked state without retry\n  ---\n  duration_ms: 10.330068\n  type: 'test'\n  ...\n# Subtest: independent instances and minimum valid grams\nok 5 - independent instances and minimum valid grams\n  ---\n  duration_ms: 2.893115\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 165.701145\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:44.506577+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "C",
+      "stage": "S1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:44.537604+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/book.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/cancel.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "features/detail.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: alpha: actual booking and cancellation wire contract, copies, state\nok 1 - alpha: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 35.117881\n  type: 'test'\n  ...\n# Subtest: alpha: invalid local inputs have no side effects\nok 2 - alpha: invalid local inputs have no side effects\n  ---\n  duration_ms: 1.691042\n  type: 'test'\n  ...\n# Subtest: alpha: unsuccessful bookings reject without reserving id or retry\nok 3 - alpha: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 28.435047\n  type: 'test'\n  ...\n# Subtest: alpha: failed cancellations preserve booked record without retry\nok 4 - alpha: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 11.460484\n  type: 'test'\n  ...\n# Subtest: beta: actual booking and cancellation wire contract, copies, state\nok 5 - beta: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 4.378287\n  type: 'test'\n  ...\n# Subtest: beta: invalid local inputs have no side effects\nok 6 - beta: invalid local inputs have no side effects\n  ---\n  duration_ms: 0.899097\n  type: 'test'\n  ...\n# Subtest: beta: unsuccessful bookings reject without reserving id or retry\nok 7 - beta: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 17.85382\n  type: 'test'\n  ...\n# Subtest: beta: failed cancellations preserve booked record without retry\nok 8 - beta: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 15.861083\n  type: 'test'\n  ...\n# Subtest: instances have independent records and minimum valid grams is accepted\nok 9 - instances have independent records and minimum valid grams is accepted\n  ---\n  duration_ms: 2.389366\n  type: 'test'\n  ...\n# Subtest: default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\nok 10 - default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\n  ---\n  duration_ms: 6.777867\n  type: 'test'\n  ...\n# Subtest: invalid supplied provider fails before network\nok 11 - invalid supplied provider fails before network\n  ---\n  duration_ms: 0.94104\n  type: 'test'\n  ...\n1..11\n# tests 11\n# suites 0\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 203.743969\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:45.057978+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:45.087107+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "alpha-shipments.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "booking.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "memory-records.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: actual book/cancel HTTP contract, copies, state and duplicate guards\nok 1 - actual book/cancel HTTP contract, copies, state and duplicate guards\n  ---\n  duration_ms: 30.024536\n  type: 'test'\n  ...\n# Subtest: invalid inputs and unknown targets have no side effects\nok 2 - invalid inputs and unknown targets have no side effects\n  ---\n  duration_ms: 2.276525\n  type: 'test'\n  ...\n# Subtest: failed bookings do not reserve id or retry\nok 3 - failed bookings do not reserve id or retry\n  ---\n  duration_ms: 31.700414\n  type: 'test'\n  ...\n# Subtest: failed cancellations preserve booked state without retry\nok 4 - failed cancellations preserve booked state without retry\n  ---\n  duration_ms: 10.069704\n  type: 'test'\n  ...\n# Subtest: independent instances and minimum valid grams\nok 5 - independent instances and minimum valid grams\n  ---\n  duration_ms: 3.653413\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 155.815187\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:45.550132+00:00",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "arm": "D",
+      "stage": "S1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": "",
+      "checks": [
+        {
+          "started_at": "2026-09-12T04:49:45.581501+00:00",
+          "commands": [
+            {
+              "argv": [
+                "node",
+                "--check",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "alpha-shipments.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "beta-shipments.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "booking.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "entry.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--check",
+                "memory-records.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "acceptance.test.mjs"
+              ],
+              "exit_code": 0,
+              "stdout": "TAP version 13\n# Subtest: alpha: actual booking and cancellation wire contract, copies, state\nok 1 - alpha: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 30.883352\n  type: 'test'\n  ...\n# Subtest: alpha: invalid local inputs have no side effects\nok 2 - alpha: invalid local inputs have no side effects\n  ---\n  duration_ms: 1.657792\n  type: 'test'\n  ...\n# Subtest: alpha: unsuccessful bookings reject without reserving id or retry\nok 3 - alpha: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 27.013933\n  type: 'test'\n  ...\n# Subtest: alpha: failed cancellations preserve booked record without retry\nok 4 - alpha: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 10.245861\n  type: 'test'\n  ...\n# Subtest: beta: actual booking and cancellation wire contract, copies, state\nok 5 - beta: actual booking and cancellation wire contract, copies, state\n  ---\n  duration_ms: 4.183473\n  type: 'test'\n  ...\n# Subtest: beta: invalid local inputs have no side effects\nok 6 - beta: invalid local inputs have no side effects\n  ---\n  duration_ms: 0.832366\n  type: 'test'\n  ...\n# Subtest: beta: unsuccessful bookings reject without reserving id or retry\nok 7 - beta: unsuccessful bookings reject without reserving id or retry\n  ---\n  duration_ms: 18.595519\n  type: 'test'\n  ...\n# Subtest: beta: failed cancellations preserve booked record without retry\nok 8 - beta: failed cancellations preserve booked record without retry\n  ---\n  duration_ms: 15.354759\n  type: 'test'\n  ...\n# Subtest: instances have independent records and minimum valid grams is accepted\nok 9 - instances have independent records and minimum valid grams is accepted\n  ---\n  duration_ms: 2.254272\n  type: 'test'\n  ...\n# Subtest: default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\nok 10 - default Alpha, mixed-provider history, global uniqueness and stable cancellation routing\n  ---\n  duration_ms: 6.755213\n  type: 'test'\n  ...\n# Subtest: invalid supplied provider fails before network\nok 11 - invalid supplied provider fails before network\n  ---\n  duration_ms: 0.78838\n  type: 'test'\n  ...\n1..11\n# tests 11\n# suites 0\n# pass 11\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 189.696142\n",
+              "stderr": ""
+            }
+          ],
+          "finished_at": "2026-09-12T04:49:46.146480+00:00",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

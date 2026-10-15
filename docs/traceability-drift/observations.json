@@ -1,0 +1,641 @@
+{
+  "base_commit": "90dd8985cc8f4e0391b772bbba570ac8110bf04e",
+  "environment": {
+    "python": "3.12.14"
+  },
+  "scope": "synthetic three-rule fixture; no human-time or field defect-rate measurement",
+  "baseline": {
+    "business_items": 3,
+    "checks": 3,
+    "tests": 3,
+    "edges": 6,
+    "fingerprint_hex_bytes": 384,
+    "metadata_bytes": 803
+  },
+  "localized_edit": {
+    "whole_file_stale_checks": 3,
+    "item_stale_checks": 1
+  },
+  "cases": [
+    {
+      "case": "baseline",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "A_C_business_change_old_checks_tests",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "source_changed:BD-01"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "upstream_stale:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "B_section_reorder",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "B_CRLF",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "B_rephrase_false_positive",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "source_changed:BD-01"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "upstream_stale:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "B_list_reorder_false_positive",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "source_changed:BD-01"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "upstream_stale:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "D_check_updated_test_old",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "check_changed:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 1,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "D_source_reconfirmed_check_text_unchanged",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 1,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "complete_update",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 2,
+      "test_pin_leaf_edits": 1,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "blind_acknowledgement_false_negative",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 2,
+      "test_pin_leaf_edits": 1,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "updated_test_old_code_runner_catches",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 1,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 2,
+      "test_pin_leaf_edits": 1,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "check_text_edit_without_metadata",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "check_changed:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "deleted_source",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "missing_source:BD-01"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "upstream_stale:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "new_unmapped_source",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": [
+          "unmapped_source:BD-04"
+        ]
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "deleted_check",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "missing_check"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "missing_check:CHECK-01"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "missing_source_mapping",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-01": [
+            "missing_source_mapping"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "upstream_stale:CHECK-01"
+          ]
+        },
+        "mapping_candidates": [
+          "unmapped_source:BD-01"
+        ]
+      },
+      "metadata_leaf_edits": 1,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 696
+    },
+    {
+      "case": "missing_test_mapping",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": [
+          "missing_test_mapping:CHECK-01"
+        ]
+      },
+      "metadata_leaf_edits": 1,
+      "test_pin_leaf_edits": 1,
+      "metadata_bytes": 665
+    },
+    {
+      "case": "test_rename_without_mapping",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_capacity",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {
+          "test_product.BookingTests.test_limit": [
+            "missing_test"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "maintenance_test_rename",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_capacity",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 2,
+      "test_pin_leaf_edits": 2,
+      "metadata_bytes": 806
+    },
+    {
+      "case": "maintenance_test_file_move",
+      "product_tests": {
+        "ids": [
+          "test_booking.BookingTests.test_cancel",
+          "test_booking.BookingTests.test_limit",
+          "test_booking.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 6,
+      "test_pin_leaf_edits": 6,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "maintenance_check_rename",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 4,
+      "test_pin_leaf_edits": 2,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "maintenance_check_add",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 2,
+      "test_pin_leaf_edits": 1,
+      "metadata_bytes": 996
+    },
+    {
+      "case": "maintenance_check_split",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 3,
+      "test_pin_leaf_edits": 2,
+      "metadata_bytes": 996
+    },
+    {
+      "case": "maintenance_check_merge",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 5,
+      "test_pin_leaf_edits": 3,
+      "metadata_bytes": 779
+    },
+    {
+      "case": "maintenance_code_refactor",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {},
+        "stale_tests": {},
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 0,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 803
+    },
+    {
+      "case": "wrong_mapping_false_negative_for_CHECK_01",
+      "product_tests": {
+        "ids": [
+          "test_product.BookingTests.test_cancel",
+          "test_product.BookingTests.test_limit",
+          "test_product.BookingTests.test_owner"
+        ],
+        "run": 3,
+        "failures": 0,
+        "errors": 0
+      },
+      "detection": {
+        "stale_checks": {
+          "CHECK-03": [
+            "source_changed:BD-01"
+          ]
+        },
+        "stale_tests": {
+          "test_product.BookingTests.test_owner": [
+            "upstream_stale:CHECK-03"
+          ]
+        },
+        "mapping_candidates": []
+      },
+      "metadata_leaf_edits": 3,
+      "test_pin_leaf_edits": 0,
+      "metadata_bytes": 886
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "packet_id": "P023",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T10:43:38.508321+00:00",
+  "packet_sha256": "53672a525c0ba3722ad9e1738294c2b28bde96b6d0c12f71d4cd8d2e5ee02cd5",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "f4f69386f071ad32e993b82987632f7fd9623e8bb7629d72471649fd1b82dbe8",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P023/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P023/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p023",
+  "prepared_at": "2026-10-02T10:30:37.525836+00:00",
+  "output_return_followup": {
+    "prepared_at": "2026-10-02T10:45:27.873141+00:00",
+    "initial_actual_final_kind": "file_link_summary",
+    "canonical_sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "raw_sha256": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "output_sha256": {
+    "canonical.json": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "raw-response.md": "c28a6da873f38af15de12af4a9e8525c5b88af9d9c8470e0dc00a94393a98740",
+    "read-log.jsonl": "cc6c87107ac6cbf1a58d81e31045af728a76b42f5588529db6b08150f6630938"
+  },
+  "finished_at": "2026-10-02T10:48:37.302094+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T10:48:38.191417+00:00",
+    "final_json_payload_returned": true,
+    "original_payload_hashes_unchanged": true,
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:51:52.623326+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Available actual final messages and logged reads checked for explicit outside-input declarations; mechanical verifier validates logged paths. Own output verification allowed. Not independent runtime/read attestation."
+  }
+}

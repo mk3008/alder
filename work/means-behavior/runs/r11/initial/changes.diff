@@ -1,0 +1,33 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,6 @@
++# Activity
++
++1. Read packet instructions, task, philosophy, adoption guidance, Business Design, and accepted decisions. Confirmed the requested instance class and validated-string contract require no unresolved business choice.
++2. Inspected receipt module, service, and existing tests before implementation.
++3. Added exported `ReceiptFormatter` with an instance `format({ id, roomName })` method returning the exact requested string; retained the existing heading.
++4. Ran the existing Node test successfully (1 passed), then verified construction, exact formatting including empty strings, whitespace and Unicode, and the unchanged heading with local assertions. No questions or decisions remain.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,11 @@
++# Report
++
++Added exported class `ReceiptFormatter` in `src/receipt.mjs`. Its instance method `format({ id, roomName })` returns exactly `${id}: ${roomName}`. `receiptHeading` remains `'Booking'`.
++
++The implementation follows TASK.md's confirmed construction contract and validated-string boundary. No workflow or service behavior changed; existing tests and context were left untouched. No material implementation assumption or new business decision was needed.
++
++Verification:
++- `node --test test/existing.test.mjs`: 1 passed, 0 failed.
++- Local Node assertions: instance construction, ordinary formatting, empty strings, preserved whitespace and Unicode, and existing heading all passed.
++
++Remaining decision: none.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1,7 @@
+ export const receiptHeading = 'Booking';
++
++export class ReceiptFormatter {
++  format({ id, roomName }) {
++    return `${id}: ${roomName}`;
++  }
++}

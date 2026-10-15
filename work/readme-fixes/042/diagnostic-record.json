@@ -1,0 +1,99 @@
+{
+  "status": "done",
+  "diagnostic_kind": "One bounded source-catalog diagnostic; not actual app/CLI routing verification or business approval",
+  "exact_prompt": "このヒアリング結果をAlder業務設計書にして。\n\n団体が所有する工具を、登録済みの地域住民に貸し出しています。\n貸出・返却の記録には、貸し出した工具番号と付属品一覧、引渡しの記録があります。\n返却時は窓口で現物の番号と付属品をこの記録と照合し、照合結果と返却日時を記録します。\n貸出の受渡しは署名と引き渡しの記録、返却の受領は照合と返却日時の記録で確認します。\n返却された組は整備担当の点検を待ちます。\n",
+  "chosen_skill": {
+    "name": "alder-draft-business-design",
+    "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/SKILL.md",
+    "rationale": "The exact request asks to draft an Alder Business Design from interview notes. The catalog description explicitly contains this Japanese trigger; no implementation, business-design review, optimization, Check Item creation, export, or drift check was requested."
+  },
+  "source_catalog_plugin_version": "0.4.2",
+  "source_catalog_commit_supplied_by_parent": "6d30b93abf8ecdc8902fef5c16bfb53fda8617e9",
+  "bundled_authoring_revision_from_provenance": "f904fe1e584ed6693983d58749b1f9dec83b3c8c",
+  "requested_settings": {
+    "model": "inherited model",
+    "reasoning_effort": "xhigh",
+    "fork_turns": "none"
+  },
+  "effective_runtime_settings": "Unverified. The worker has no independent runtime attestation for model, reasoning effort, or fork behavior.",
+  "readpaths": [
+    {
+      "path": "exact-prompt.txt",
+      "scope": "Entire exact prompt",
+      "sha256": "04d0b76749e9b7ba8aff8d5c22956ab875b559d14e0be9c95bf9c3fe937533a1"
+    },
+    {
+      "path": "all-ten-skill-catalog.txt",
+      "scope": "Entire source catalog, 10 Skill descriptions and paths",
+      "sha256": "e4b66c8464ecb8f5ed65ca99185140f6335b1753bddb482eccd866bc6cb41436"
+    },
+    {
+      "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/SKILL.md",
+      "scope": "Entire selected Skill",
+      "sha256": "26f2ca7095ef36aa63a55cf410386478c4be8cdf09857503f754ee51af532bf3"
+    },
+    {
+      "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+      "scope": "Section 1 through Section 2 heading. Initial combined output was truncated; authoring/correlation subsection and remainder of Section 1 were reread completely.",
+      "sha256": "c2d153263b765f8870531e658b8e410d9a90043d585056c16146159bf29b0547"
+    },
+    {
+      "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/references/business-graph.md",
+      "scope": "Entire file, including optional Markdown profile through minimal example",
+      "sha256": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
+    },
+    {
+      "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+      "scope": "Entire bundled provenance",
+      "sha256": "160d8f176a2927c277237ca6d6d764d7df04356983d4b7f53c6c94e37183216f"
+    }
+  ],
+  "missing_files": [
+    {
+      "path": "plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/references/business-design-structure.ja.md",
+      "verification": "Exact linked path existence checked; missing. No replacement searched."
+    }
+  ],
+  "unavailable_project_context": "No product AGENTS.md, established Business Design, or product constraints supplied for this bounded prompt. Repository research was prohibited; no additional project discovery performed. The existing user-supplied AGENTS.md instructions in conversation were available but contain no business semantics for this example.",
+  "questions_asked": [
+    "When returned item numbers/accessories do not match the loan record, how does the window handle receipt and who decides subsequent action?",
+    "Who performs lending and handover confirmation, and who signs?",
+    "How does maintenance receive the returned set and necessary information for inspection?"
+  ],
+  "deferrable_questions_or_out_of_scope": [
+    "Concrete lending start trigger",
+    "Lending handover location",
+    "Signature storage location and exact artifact arrangement",
+    "Maintenance inspection steps, completion conditions, and post-inspection treatment are outside the supplied boundary"
+  ],
+  "structural_choices": [
+    "Two Activities distinguish lending from later returned-item inspection at the window.",
+    "The confirmation-information Object groups source-provided records and signature without claiming a new form or common storage.",
+    "Role name for lending and absent specifics are explicitly provisional.",
+    "Only supplied normal flow is drafted; unprovided exception behavior is not invented."
+  ],
+  "human_confirmation_needed": "Draft scope, provisional role names, and open business decisions remain subject to human review; no agreement inferred.",
+  "checks_performed": [
+    "Walked loan-number/accessory record through return comparison and receipt confirmation.",
+    "Kept loan signature/handover confirmation distinct from return comparison/date confirmation.",
+    "Preserved inspection-waiting outcome without inferring availability, completed maintenance, or restocking.",
+    "Matched declared Input/Output information with uses/writes in Procedures."
+  ],
+  "no_external_changes": true,
+  "no_cli_execution_or_actual_routing_claim": true,
+  "not_read": [
+    "Full README output",
+    "Old generated artifacts",
+    "Other evidence files besides permitted catalog",
+    "Simulated decisions",
+    "Repository research",
+    "Account-installed c0/c11 Skills",
+    "Other agent conclusions"
+  ],
+  "artifacts": [
+    "docs/business-design/tool-lending.md",
+    "response-ja.txt",
+    "exact-prompt.txt",
+    "diagnostic-record.json"
+  ]
+}

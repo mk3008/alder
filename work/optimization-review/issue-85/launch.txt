@@ -1,0 +1,14 @@
+Independent Fresh exploration for Alder Issue #85. Read only these two source files at the pinned repository revision d0a5f28fc1bd12472bb001cfc750b91377610f06:
+- /workspace/scratch/ef15bb86674b/alder/business-design/purchase-request/README.md
+- /workspace/scratch/ef15bb86674b/alder/docs/optimization-review.md
+
+Do not read prior Optimization Review outputs, issue discussions, work/optimization-review/issue-85/protocol.md, or other conversation history. Do not modify either source file. This is a research review, not an approval of business meaning.
+
+Problem (experiment-only input, not an observed fact in the Business Design): 承認済みの購入申請が増えると、購買担当者が申請ごとに購入を行い、その結果を登録する作業の負荷が高い。
+Pain level: High. No workload, cost, frequency, supplier, contract, or inventory facts are supplied.
+
+Explore whether an alternative search yields a useful business improvement or investigation hypothesis. Briefly form at least two meaningfully different extreme desirable states that would remove this Problem if practical constraints were relaxed. For each, explain the causal path. Then restore the actual Business Design constraints and unknowns; shrink to a plausible limited or staged hypothesis, or combine useful properties from different directions if that creates a distinct business change. Treat this as a heuristic, not a fixed algorithm. Stop rather than multiply weak variations.
+
+For each resulting hypothesis, explain the operational change, why it could relieve the Problem, Scope, business-change Difficulty and affected parties, current meaning preserved or explicitly requiring a human decision to change, assumptions/unknowns, and the next factual question. Include the abandoned extreme states and why they were reduced. Distinguish established facts from conjecture. No need for immediate adoptability; an important question enabling a materially different business design also counts. Avoid implementation-only variants and invented facts. Do not select a winner or change the Business Design.
+
+Write the complete raw response in Japanese to /workspace/scratch/ef15bb86674b/alder/work/optimization-review/issue-85/raw.md exactly once. Do not edit it after writing. In your final message report only the source paths you actually read and that you saved the output.

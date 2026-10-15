@@ -1,0 +1,50 @@
+--- before/application.mjs
++++ after/application.mjs
+@@ -32,8 +32,12 @@
+       return save(purchase(detail(id), actualYen, actor.id, now));
+     },
+     detail,
+-    list() {
+-      return repository.all().map(({ note, ...record }) => record)
++    list(filter = {}) {
++      const itemContains = 'itemContains' in filter ? filter.itemContains : '';
++      if (typeof itemContains !== 'string') throw new Error('Invalid itemContains');
++      return repository.all()
++        .filter(record => record.item.includes(itemContains))
++        .map(({ note, ...record }) => record)
+         .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+     },
+   };
+--- before/filtering.test.mjs
++++ after/filtering.test.mjs
+@@ -0,0 +1,30 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { createApp } from './entry.mjs';
++const requester = { id: 'r', role: 'requester' };
++
++test('filter validation applies to empty stores and supplied undefined', () => {
++  const app = createApp();
++  for (const itemContains of [undefined, {}, /desk/, Symbol('desk')]) {
++    assert.throws(() => app.list({ itemContains }), Error);
++    assert.deepEqual(app.list(), []);
++  }
++  assert.deepEqual(app.list(undefined), []);
++});
++
++test('literal substring filtering preserves whitespace and result isolation', () => {
++  const app = createApp();
++  for (const [id, item] of [['z', 'Blue  Desk'], ['A', 'Blue Desk'], ['a', 'Desk [x]']]) {
++    app.submit({ id, item, quantity: 1, requestedYen: 1, reason: 'work', note: 'private' }, requester, 0);
++  }
++  assert.deepEqual(app.list({ itemContains: '  ' }).map(row => row.id), ['z']);
++  assert.deepEqual(app.list({ itemContains: '[x]' }).map(row => row.id), ['a']);
++  assert.deepEqual(app.list({ itemContains: 'desk' }), []);
++  const results = app.list({ itemContains: 'Desk' });
++  assert.deepEqual(results.map(row => row.id), ['A', 'a', 'z']);
++  assert.ok(results.every(row => !Object.hasOwn(row, 'note')));
++  results[0].item = 'changed';
++  results.length = 0;
++  assert.equal(app.detail('A').item, 'Blue Desk');
++  assert.equal(app.detail('A').note, 'private');
++});

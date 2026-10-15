@@ -1,0 +1,1377 @@
+{
+  "case_id": "C5",
+  "claims": [
+    {
+      "claim_id": "attempt-001-P051-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P051",
+      "claim": {
+        "meaning": "少額決定の部長アクターとの矛盾が同一活動の表示誤りか業務規則の競合かはraw文脈が必要。",
+        "evidence_ids": [
+          "F7",
+          "F38"
+        ]
+      },
+      "audit_target_ids": [
+        "F7",
+        "F38"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P051-review.json",
+          "canonical_id": "F7",
+          "local_meaning": "10万円未満で未決定の購入申請は課長だけが承認または却下できる。金額に対応しない役職の決定は拒否する。",
+          "local_modality": "asserted",
+          "scope": "購入申請決定の権限条件。金額が10万円未満かつ申請が未決定の場合に限る。追加の承認条件は設けないとの記載がある。統合フロー一行のアクター欄の異同はF38に記録する。",
+          "evidence": [
+            {
+              "packet_id": "P051",
+              "line_start": 72,
+              "line_end": 72,
+              "quote": "課長の決定権限\t金額が10万円未満の未決定の購入申請は課長だけが承認または却下できる。"
+            },
+            {
+              "packet_id": "P051",
+              "line_start": 305,
+              "line_end": 305,
+              "quote": "申請金額が10万円未満で、決定担当が課長、かつ申請が未決定のときに承認または却下を許可する。金額に対応しない役職の決定は拒否する。"
+            },
+            {
+              "packet_id": "P051",
+              "line_start": 27,
+              "line_end": 27,
+              "quote": "金額に対応した役割だけが購入申請を決定でき、追加の承認条件は設けない"
+            }
+          ],
+          "explicit_unknowns": [],
+          "ambiguities": [
+            "統合フローの200行は同じ「10万円未満の申請を決定する」に「アクター\t部長」を結び付ける。どちらを修正すべきかの説明はない。"
+          ],
+          "correspondence_evidence": []
+        },
+        {
+          "review_file": "P051-review.json",
+          "canonical_id": "F38",
+          "local_meaning": "統合フローの一行で「10万円未満の申請を決定する」活動と「購入申請の決定を入力する」UCに対し、画面のアクター欄が「部長」と記載される。同一行の説明は課長による10万円未満の申請への入力、画面要求は10万円以上の申請を記す。",
+          "local_modality": "asserted",
+          "scope": "統合フローの200行における活動・UC・画面・アクターの対応記載に限る。部長に10万円未満の決定権限を付与する確定規則とまでは読まない。",
+          "evidence": [
+            {
+              "packet_id": "P051",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "10万円未満の申請を決定する\t\t購入申請の決定を入力する\t画面\t購入申請決定画面\tアクター\t部長\t課長が10万円未満の未決定申請に承認または却下の判断を入力する。\t10万円以上の未決定申請の金額と物品を確認し、承認または却下を一度だけ選択できること。"
+            },
+            {
+              "packet_id": "P051",
+              "line_start": 199,
+              "line_end": 199,
+              "quote": "10万円未満の申請を決定する\t\t購入申請の決定を入力する\t画面\t購入申請決定画面\tアクター\t課長"
+            }
+          ],
+          "explicit_unknowns": [
+            "200行の「部長」対応が意図した別の活動の記載か、対応関係の誤記かは明示されない。"
+          ],
+          "ambiguities": [
+            "200行の活動名・説明・アクター欄・画面要求は金額区分と役職の組合せが一致しない。72行の課長だけが決定できる条件とも整合しない。"
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P051-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F7の少額は課長だけという断定と、統合フロー単一行F38の部長アクター・高額画面要求は不整合。引用は局所表示の競合を裏づけるが、部長へ少額決定権を与える確定規則とは判定できず、修正意図は未記載。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P051-review.json",
+            "canonical_id": "F7"
+          },
+          {
+            "review_file": "P051-review.json",
+            "canonical_id": "F38"
+          }
+        ],
+        "affected_metrics": [
+          "source_facts_preserved",
+          "unauthorized_decisions"
+        ]
+      }
+    },
+    {
+      "claim_id": "attempt-001-P040-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P040",
+      "claim": {
+        "meaning": "状態名・活動と画面の対応不整合はreceived handoffにもあり、画面細部の確定範囲はraw確認が要る。",
+        "evidence_ids": [
+          "F24",
+          "F25",
+          "F26",
+          "F27",
+          "F28",
+          "F29",
+          "F30",
+          "F31"
+        ]
+      },
+      "audit_target_ids": [
+        "F24",
+        "F25",
+        "F26",
+        "F27",
+        "F28",
+        "F29",
+        "F30",
+        "F31"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F24",
+          "local_meaning": "二組の状態名の対外表示・保存値への採用と相互の対応付けは未確定と明記される。",
+          "local_modality": "unresolved",
+          "scope": "状態名の表示、保存値、対応付けに限る。業務状態の存在自体を未決とはしていない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 14,
+              "line_end": 14,
+              "quote": "資料に「未決」と明記された業務判断はない"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 16,
+              "line_end": 16,
+              "quote": "どちらを対外表示・保存値に使うか、対応付けは未確定"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "両者の対応は資料中で明示されない"
+            }
+          ],
+          "explicit_unknowns": [
+            "二組の状態名の表示・保存値・対応関係"
+          ],
+          "ambiguities": [
+            "「未決」と明記された判断はないとの総論と、資料から確定できないとの局所記載は区別する。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 120,
+              "line_end": 120,
+              "quote": "購入申請状態\t申請中、承認、却下"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 143,
+              "line_end": 143,
+              "quote": "購入申請を登録する\t未決定"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F25",
+          "local_meaning": "状態バリエーションは「申請中、承認、却下」と記載される。",
+          "local_modality": "asserted",
+          "scope": "バリエーション名の記載に限り、対外表示・保存値だとは確定しない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "状態バリエーションは「申請中、承認、却下」"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 16,
+              "line_end": 16,
+              "quote": "「申請中・承認・却下」"
+            }
+          ],
+          "explicit_unknowns": [
+            "この三語を対外表示・保存値に使うか"
+          ],
+          "ambiguities": [],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 120,
+              "line_end": 120,
+              "quote": "購入申請状態\t申請中、承認、却下"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F26",
+          "local_meaning": "条件と状態モデルでは「未決定、承認済、却下済」が使われる。",
+          "local_modality": "asserted",
+          "scope": "条件・状態モデルの語彙に限り、もう一組との厳密な対応や保存値を決めない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 24,
+              "line_end": 24,
+              "quote": "条件と状態モデルは「未決定、承認済、却下済」を使用する"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 16,
+              "line_end": 16,
+              "quote": "「未決定・承認済・却下済」"
+            }
+          ],
+          "explicit_unknowns": [
+            "バリエーション名との対応、対外表示・保存値"
+          ],
+          "ambiguities": [],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 137,
+              "line_end": 137,
+              "quote": "未決定の場合に限り一度だけ承認済または却下済へ遷移"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 143,
+              "line_end": 143,
+              "quote": "購入申請を登録する\t未決定"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F27",
+          "local_meaning": "却下確定のUC・画面上の具体的経路は、この資料からは確定できないと明記される。",
+          "local_modality": "unresolved",
+          "scope": "P040の活動表から却下確定への対応の欠落に限る。却下結果や状態遷移がないという意味ではない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 17,
+              "line_end": 17,
+              "quote": "却下を確定する処理のUC・画面上の具体的な経路は未確定"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 26,
+              "line_end": 26,
+              "quote": "その活動からの対応が欠けている"
+            }
+          ],
+          "explicit_unknowns": [
+            "活動から却下確定UC・画面への具体的経路"
+          ],
+          "ambiguities": [
+            "状態モデルにUCがあることと活動表の対応経路があることは別。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 37,
+              "line_end": 37,
+              "quote": "承認または却下を確定する\t↓\t購入申請の承認を確定する"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 145,
+              "line_end": 145,
+              "quote": "購入申請の却下を確定する\t却下済"
+            },
+            {
+              "source_file": "P051-packet.md",
+              "input_sha256": "12d8ec06a9a356b54abcc0ee9d54038f9e66f09de53a39be48513fc391225ee1",
+              "input_kind": "full_stage2",
+              "packet_id": "P051",
+              "line_start": 94,
+              "line_end": 94,
+              "quote": "承認または却下を確定する\t↓\t購入申請の却下を確定する"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F28",
+          "local_meaning": "状態遷移には別の却下確定UCが存在すると記載される。",
+          "local_modality": "asserted",
+          "scope": "状態モデル上のUCと未決定から却下済への遷移に限る。活動表・画面の経路の確定ではない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 17,
+              "line_end": 17,
+              "quote": "状態遷移には却下確定UCがある"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 26,
+              "line_end": 26,
+              "quote": "状態モデルには別の「購入申請の却下を確定する」UCと却下済への遷移がある"
+            }
+          ],
+          "explicit_unknowns": [
+            "活動から却下UCへの対応経路"
+          ],
+          "ambiguities": [],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 145,
+              "line_end": 145,
+              "quote": "未決定\t購入申請の却下を確定する\t却下済"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F29",
+          "local_meaning": "活動表の「承認または却下を確定する」は承認確定UCに結び付き、その説明・画面要求は承認側だけを記す。",
+          "local_modality": "asserted",
+          "scope": "P040で観察される活動表の対応と記述範囲。却下の期待結果全体を否定しない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 17,
+              "line_end": 17,
+              "quote": "活動表の「承認または却下を確定する」は承認確定UCに結び付く"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 26,
+              "line_end": 26,
+              "quote": "結び付くUCと説明・画面要求は承認の確定だけを記す"
+            }
+          ],
+          "explicit_unknowns": [
+            "同じ活動から却下確定UCへ至る具体的対応"
+          ],
+          "ambiguities": [],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 37,
+              "line_end": 37,
+              "quote": "承認または却下を確定する\t↓\t購入申請の承認を確定する"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 41,
+              "line_end": 41,
+              "quote": "権限を満たす未決定申請だけを承認済に確定"
+            },
+            {
+              "source_file": "P051-packet.md",
+              "input_sha256": "12d8ec06a9a356b54abcc0ee9d54038f9e66f09de53a39be48513fc391225ee1",
+              "input_kind": "full_stage2",
+              "packet_id": "P051",
+              "line_start": 94,
+              "line_end": 94,
+              "quote": "承認または却下を確定する\t↓\t購入申請の却下を確定する"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F30",
+          "local_meaning": "課長・部長の画面操作と活動の対応は30行の混在が解消するまで確定できないと明記される。",
+          "local_modality": "unresolved",
+          "scope": "混在した活動・画面対応に限る。金額別の決定権限そのものは期待結果として別途記される。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "課長・部長の画面操作と活動の対応は、30行の混在を解消するまで確定できない"
+            },
+            {
+              "packet_id": "P040",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "同じ活動の課長行および権限条件・アクター定義とは整合しない"
+            }
+          ],
+          "explicit_unknowns": [
+            "30行の活動と部長画面操作の正しい対応"
+          ],
+          "ambiguities": [
+            "権限条件の金額別記載と30行のアクター・画面要求が混在する。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 29,
+              "line_end": 29,
+              "quote": "アクター\t課長\t課長が10万円未満"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 30,
+              "line_end": 30,
+              "quote": "アクター\t部長\t課長が10万円未満"
+            },
+            {
+              "source_file": "P051-packet.md",
+              "input_sha256": "12d8ec06a9a356b54abcc0ee9d54038f9e66f09de53a39be48513fc391225ee1",
+              "input_kind": "full_stage2",
+              "packet_id": "P051",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "アクター\t部長\t課長が10万円未満"
+            }
+          ]
+        },
+        {
+          "review_file": "P040-review.json",
+          "canonical_id": "F31",
+          "local_meaning": "「10万円未満の申請を決定する」活動の部長行に、課長が少額を決定する説明、部長アクター、高額の画面要求が併記されている。",
+          "local_modality": "asserted",
+          "scope": "単一の活動表行の記載不整合。部長に10万円未満の権限を確定するものではない。",
+          "evidence": [
+            {
+              "packet_id": "P040",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "説明で「課長が10万円未満」と記しながら、アクターが部長、画面要求が「10万円以上」となる"
+            }
+          ],
+          "explicit_unknowns": [
+            "当該行の正しい活動・画面対応"
+          ],
+          "ambiguities": [
+            "同じ行の活動名・説明・アクター・画面要求が食い違う。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 30,
+              "line_end": 30,
+              "quote": "10万円未満の申請を決定する\t\t購入申請の決定を入力する\t画面\t購入申請決定画面\tアクター\t部長\t課長が10万円未満"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+              "input_kind": "actual_handoff",
+              "packet_id": "P040",
+              "line_start": 30,
+              "line_end": 30,
+              "quote": "10万円以上の未決定申請の金額と物品を確認"
+            },
+            {
+              "source_file": "P051-packet.md",
+              "input_sha256": "12d8ec06a9a356b54abcc0ee9d54038f9e66f09de53a39be48513fc391225ee1",
+              "input_kind": "full_stage2",
+              "packet_id": "P051",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "10万円未満の申請を決定する\t\t購入申請の決定を入力する\t画面\t購入申請決定画面\tアクター\t部長"
+            }
+          ]
+        }
+      ],
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P040-1",
+        "status": "artifact_ambiguous",
+        "judgment": "二系統の状態名は保存値・表示値への対応が未確定。却下UCは状態モデルにあるが活動・画面経路は欠け、少額活動の部長行も矛盾する。受領handoffに由来する記載を独自発明としないが、実装上の対応は推測しない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F24"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F25"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F26"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F27"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F28"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F29"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F30"
+          },
+          {
+            "review_file": "P040-review.json",
+            "canonical_id": "F31"
+          }
+        ],
+        "affected_metrics": [
+          "downstream_facts_preserved",
+          "probe_inventions",
+          "unauthorized_decisions"
+        ]
+      }
+    },
+    {
+      "claim_id": "attempt-001-P045-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P045",
+      "claim": {
+        "meaning": "参照先を含む要約で、既存schemaの列型制約やdecision入力値が省略された可能性がある。",
+        "evidence_ids": [
+          "F7",
+          "F9",
+          "F10"
+        ]
+      },
+      "audit_target_ids": [
+        "F7",
+        "F9",
+        "F10"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P045-review.json",
+          "canonical_id": "F7",
+          "local_meaning": "既存の公開REST APIおよび purchase_requests の既存schemaを維持するという技術条件。",
+          "local_modality": "asserted",
+          "scope": "既存の公開APIと既存テーブルschemaの維持。具体的なAPI全体の形状やschema列定義まではこの命題だけで確定しない。",
+          "evidence": [
+            {
+              "packet_id": "P045",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "確認済みの期待結果"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 5,
+              "line_end": 5,
+              "quote": "既存公開REST APIと `purchase_requests` の既存schemaを維持し"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 14,
+              "line_end": 14,
+              "quote": "草案の人による内容確認は未了であるため、草案全体を最終合意済みとして扱わない。"
+            }
+          ],
+          "explicit_unknowns": [
+            "既存公開REST APIの全エンドポイント・契約の詳細は自身のpacketには列挙されない。",
+            "schemaの列型・制約の厳密な定義は自身のpacketのF7の記述にはない。",
+            "草案全体の人による内容確認は未了。"
+          ],
+          "ambiguities": [
+            "「維持する」の具体的な互換性判定範囲は自身のpacketでは詳述されない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 12,
+              "line_end": 12,
+              "quote": "既存公開REST APIと既存schemaを維持する。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 95,
+              "line_end": 95,
+              "quote": "既存の `purchase_requests` は"
+            }
+          ]
+        },
+        {
+          "review_file": "P045-review.json",
+          "canonical_id": "F9",
+          "local_meaning": "既存schemaにID、金額、物品、および pending・approved・rejected の状態の記載がある。",
+          "local_modality": "asserted",
+          "scope": "既存schemaについてpacketが列挙した項目と状態名。データ型やSQL制約の逐語的仕様はこの局所記載からは決めない。",
+          "evidence": [
+            {
+              "packet_id": "P045",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "確認済みの期待結果"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 5,
+              "line_end": 5,
+              "quote": "schemaにはID、金額、物品、`pending`・`approved`・`rejected` の状態に関する記載がある。"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 14,
+              "line_end": 14,
+              "quote": "草案の人による内容確認は未了であるため、草案全体を最終合意済みとして扱わない。"
+            }
+          ],
+          "explicit_unknowns": [
+            "自身のpacketは列の厳密なSQL定義と制約式を明記していない。",
+            "草案全体の人による内容確認は未了。"
+          ],
+          "ambiguities": [
+            "「状態に関する記載」が列の型・制約式まで意味するかは自身のpacketだけでは特定されない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 42,
+              "line_end": 42,
+              "quote": "申請ID"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 43,
+              "line_end": 43,
+              "quote": "金額（円）"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 44,
+              "line_end": 44,
+              "quote": "物品"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 45,
+              "line_end": 45,
+              "quote": "状態（pending、approved、rejected）"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 95,
+              "line_end": 95,
+              "quote": "既存の `purchase_requests` は `id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY`、`amount_yen integer NOT NULL CHECK(amount_yen>=0)`、`item text NOT NULL CHECK(length(item)>0)`、`status text NOT NULL CHECK(status IN ('pending','approved','rejected'))` を維持する。"
+            }
+          ]
+        },
+        {
+          "review_file": "P045-review.json",
+          "canonical_id": "F10",
+          "local_meaning": "決定APIは対象の購入申請を参照し、金額と現在の状態を確認する。",
+          "local_modality": "asserted",
+          "scope": "POST /purchase-requests/{id}/decision の決定処理における対象申請の参照と金額・現状態の確認。役割や本人性の照合方式までは含めない。",
+          "evidence": [
+            {
+              "packet_id": "P045",
+              "line_start": 2,
+              "line_end": 2,
+              "quote": "確認済みの期待結果"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "`POST /purchase-requests/{id}/decision` は対象申請の金額と現在状態を確認し"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 12,
+              "line_end": 12,
+              "quote": "`role` 値だけで権限を判断してよいか、実際の課長・部長の本人性と役職を別途照合するかは未確認。"
+            },
+            {
+              "packet_id": "P045",
+              "line_start": 14,
+              "line_end": 14,
+              "quote": "草案の人による内容確認は未了であるため、草案全体を最終合意済みとして扱わない。"
+            }
+          ],
+          "explicit_unknowns": [
+            "決定APIに渡されたrole値だけで権限を判断できるか、本人性と役職の別途照合が要るかは未確認。",
+            "照合が必要な場合の情報と確認不能時の扱いは未決。",
+            "草案全体の人による内容確認は未了。"
+          ],
+          "ambiguities": [
+            "金額と状態の確認の具体的な実装手順や順序は自身のpacketでは定めない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 131,
+              "line_end": 131,
+              "quote": "公開REST APIの `POST /purchase-requests/{id}/decision`。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 142,
+              "line_end": 142,
+              "quote": "対象の購入申請を参照し、金額と現在の状態を確認する。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+              "input_kind": "actual_handoff",
+              "packet_id": "P049",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "APIに渡された `role` の値だけで決定権限を判断してよいか。"
+            }
+          ]
+        }
+      ],
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P045-1",
+        "status": "resolved",
+        "judgment": "局所引用は既存API/schema維持とID・金額・物品・状態の要約に限定。列型・CHECK制約の具体内容はこのprobe canonicalに保持されない。決定APIの経路、役職とapproved/rejectedの意味はF10-F13から追えるがbodyフィールドの逐語列挙はないため精度に限界。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P045-review.json",
+            "canonical_id": "F7"
+          },
+          {
+            "review_file": "P045-review.json",
+            "canonical_id": "F9"
+          },
+          {
+            "review_file": "P045-review.json",
+            "canonical_id": "F10"
+          }
+        ],
+        "affected_metrics": [
+          "downstream_facts_preserved"
+        ]
+      }
+    },
+    {
+      "claim_id": "attempt-001-P057-1",
+      "source_attempt": "attempt-001",
+      "packet_id": "P057",
+      "claim": {
+        "meaning": "決定APIの本人性照合は未決としているが、追加Human inputの必要性の強さは原文の文脈確認を要する。",
+        "evidence_ids": [
+          "F30",
+          "F31",
+          "Q1",
+          "Q2"
+        ]
+      },
+      "audit_target_ids": [
+        "F30",
+        "F31",
+        "Q1",
+        "Q2"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P057-review.json",
+          "canonical_id": "F30",
+          "local_meaning": "決定APIへ渡されたroleと金額の一致だけで決定を認めるか、実際の利用者の課長・部長の役職も確認するかは未確認。どちらかの運用を確定していない。",
+          "local_modality": "unresolved",
+          "scope": "決定APIの決定許可条件に限る。資料全体は草案・未合意であり、この選択はその中でも明示的な未決事項。",
+          "evidence": [
+            {
+              "packet_id": "P057",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "以下は草案に記載された期待結果であり、業務上の合意済み要件という意味ではありません。資料自体が「草案・未合意」と明記しています"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "決定APIに渡された `role` と金額の一致だけで決定を認めるか、実際の利用者が課長・部長であることも確認するかは未確認です。後者なら誰の役職をどの情報で確かめるかも未決で、本人・役職の確認方法を要件として確定してはいけません"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 23,
+              "line_end": 23,
+              "quote": "実際の決定者の役職まで確認するかどうかが明示的に未決"
+            }
+          ],
+          "explicit_unknowns": [
+            "role値と金額の一致だけで足りるか",
+            "実際の利用者の役職確認も必要か"
+          ],
+          "ambiguities": [
+            "「課長または部長が決定する」という草案上の表現と、APIのrole値による照合の関係は、この未決事項により確定しない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 170,
+              "line_end": 170,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            }
+          ]
+        },
+        {
+          "review_file": "P057-review.json",
+          "canonical_id": "F31",
+          "local_meaning": "実際の役職確認を必要とする場合、誰の役職をどの情報で確かめるかは未決。",
+          "local_modality": "unresolved",
+          "scope": "F30で実際の利用者の役職確認が必要と判断された場合に限る条件付きの未決。草案全体も未合意。",
+          "evidence": [
+            {
+              "packet_id": "P057",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "以下は草案に記載された期待結果であり、業務上の合意済み要件という意味ではありません。資料自体が「草案・未合意」と明記しています"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "決定APIに渡された `role` と金額の一致だけで決定を認めるか、実際の利用者が課長・部長であることも確認するかは未確認です。後者なら誰の役職をどの情報で確かめるかも未決で、本人・役職の確認方法を要件として確定してはいけません"
+            }
+          ],
+          "explicit_unknowns": [
+            "確認対象となる人物",
+            "役職確認に用いる情報"
+          ],
+          "ambiguities": [
+            "役職確認が必要か自体が未確認なので、その方法の確定はできない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 170,
+              "line_end": 170,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            }
+          ]
+        },
+        {
+          "review_file": "P057-review.json",
+          "canonical_id": "Q1",
+          "local_meaning": "role値と金額の一致だけで決定を認める運用か、実際の利用者が課長・部長であることの確認も要るか、という質問。",
+          "local_modality": "unresolved",
+          "scope": "決定APIにおける許可判断の未確認事項。草案の確認質問であり、合意済みの追加要件ではない。",
+          "evidence": [
+            {
+              "packet_id": "P057",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "以下は草案に記載された期待結果であり、業務上の合意済み要件という意味ではありません。資料自体が「草案・未合意」と明記しています"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "決定APIに渡された `role` と金額の一致だけで決定を認めるか、実際の利用者が課長・部長であることも確認するかは未確認です。後者なら誰の役職をどの情報で確かめるかも未決で、本人・役職の確認方法を要件として確定してはいけません"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 23,
+              "line_end": 23,
+              "quote": "実際の決定者の役職まで確認するかどうかが明示的に未決"
+            }
+          ],
+          "explicit_unknowns": [
+            "二択のどちらの運用を採るか"
+          ],
+          "ambiguities": [
+            "本文の役職表現から本人確認方法を導くことはできない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 170,
+              "line_end": 170,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            }
+          ]
+        },
+        {
+          "review_file": "P057-review.json",
+          "canonical_id": "Q2",
+          "local_meaning": "実際の役職確認が必要なら、誰の役職をどの情報で確かめるか、という条件付きの質問。",
+          "local_modality": "unresolved",
+          "scope": "Q1の後者が必要とされた場合だけの確認事項。草案段階で確認方法は未確定。",
+          "evidence": [
+            {
+              "packet_id": "P057",
+              "line_start": 4,
+              "line_end": 4,
+              "quote": "以下は草案に記載された期待結果であり、業務上の合意済み要件という意味ではありません。資料自体が「草案・未合意」と明記しています"
+            },
+            {
+              "packet_id": "P057",
+              "line_start": 18,
+              "line_end": 18,
+              "quote": "決定APIに渡された `role` と金額の一致だけで決定を認めるか、実際の利用者が課長・部長であることも確認するかは未確認です。後者なら誰の役職をどの情報で確かめるかも未決で、本人・役職の確認方法を要件として確定してはいけません"
+            }
+          ],
+          "explicit_unknowns": [
+            "確認する人物",
+            "確認に用いる役職情報",
+            "本人・役職の確認方法"
+          ],
+          "ambiguities": [
+            "確認要否が未決であり、確認情報や方式の指定もない。"
+          ],
+          "handoff_visibility": "actual_handoff",
+          "correspondence_evidence": [
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 6,
+              "line_end": 6,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "received-upstream-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "actual_handoff",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 170,
+              "line_end": 170,
+              "quote": "決定APIに渡された `role` の値と金額の一致だけを確認するのか、実際の決定者が課長または部長であることも確認するのか。後者が必要なら、誰の役職をどの情報で確かめるかの判断が必要です。現時点では本人・役職の確認方法を要件として確定しません。"
+            },
+            {
+              "source_file": "P018-packet.md",
+              "input_sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730",
+              "input_kind": "full_stage2",
+              "packet_id": "P018",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "決定APIの `role` 値が金額に対応していれば決定を認める運用ですか。それとも、実際の利用者が課長・部長であることの確認も必要ですか。後者なら確認に用いる役職情報も決める必要があります。草案にはこの点を未確認として残しました。"
+            }
+          ]
+        }
+      ],
+      "resolution_status": "resolved",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-001-P057-1",
+        "status": "resolved",
+        "judgment": "role値だけか実利用者の役職確認も要るか、さらに確認対象と情報をどう定めるかは明示的未決であり、Q1/Q2は具体的な選択質問。実受領handoffにも同内容があり、probe独自の確定要件ではない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P057-review.json",
+            "canonical_id": "F30"
+          },
+          {
+            "review_file": "P057-review.json",
+            "canonical_id": "F31"
+          },
+          {
+            "review_file": "P057-review.json",
+            "canonical_id": "Q1"
+          },
+          {
+            "review_file": "P057-review.json",
+            "canonical_id": "Q2"
+          }
+        ],
+        "affected_metrics": [
+          "probe_inventions",
+          "unauthorized_decisions",
+          "unresolved_leakage"
+        ]
+      }
+    },
+    {
+      "claim_id": "attempt-002-P059-1",
+      "source_attempt": "attempt-002",
+      "source_artifact_path": "blind-evaluation/C5/scores.json",
+      "source_artifact_sha256": "ef40ac30c38c2b982cf248d6c7360e00e9d13919460313a2ca376fb5ed299d3b",
+      "packet_id": "P059",
+      "claim": {
+        "meaning": "既存schemaの自動採番・必須・状態値はあるがGENERATED ALWAYS、具体的CHECK式の厳密保持は曖昧",
+        "evidence_ids": [
+          "F21"
+        ]
+      },
+      "audit_target_ids": [
+        "F21"
+      ],
+      "raw_audit_evidence": [
+        {
+          "review_file": "P059-review.json",
+          "canonical_id": "F21",
+          "local_meaning": "既存のpurchase_requestsスキーマを維持する要求。idはbigintの自動採番主キー、amount_yenは0以上の必須整数、itemは空でない必須文字列、statusはpending・approved・rejectedのいずれかの必須文字列とする。",
+          "local_modality": "asserted",
+          "scope": "Artifact 004の非機能要求として記載されたpurchase_requestsの既存スキーマ維持と列の型・必須性・値域。実際のDDLや実装完了の証明ではない。",
+          "evidence": [
+            {
+              "packet_id": "P059",
+              "line_start": 42,
+              "line_end": 42,
+              "quote": "既存のpurchase_requestsスキーマを維持し、idはbigintの自動採番主キー、amount_yenは0以上の必須整数、itemは空でない必須文字列、statusはpending・approved・rejectedのいずれかの必須文字列とすること"
+            },
+            {
+              "packet_id": "P059",
+              "line_start": 44,
+              "line_end": 44,
+              "quote": "今回のAPI実装範囲は申請・承認分岐と購入への引渡しまでとし、購入実行と結果連絡は含めないこと"
+            }
+          ],
+          "explicit_unknowns": [
+            "実際のDDL、制約の実装方法、移行手順、既存スキーマの全列はこの箇所で明示されていない。"
+          ],
+          "ambiguities": [
+            "「既存のスキーマを維持」と各列の指定の関係について、既存定義そのものの提示はない。",
+            "全体を草案と明示する文言はpacket内に見当たらず、この局所文は「とすること」という要求表現である。"
+          ],
+          "correspondence_evidence": []
+        }
+      ],
+      "resolution_status": "artifact_ambiguous",
+      "final_evaluator_resolution": {
+        "claim_id": "attempt-002-P059-1",
+        "status": "artifact_ambiguous",
+        "judgment": "F21の局所原文は既存schema維持を要求形で述べ、bigint自動採番主キー、非負の必須整数、空でない必須文字列、三状態の必須文字列を意味として保持する。一方でGENERATED ALWAYS AS IDENTITYとCHECK式の逐語形、既存定義そのものは提示されず、固定oracleの列型制約全体を厳密に保持したかはこの箇所だけで確定できない。元scoreを0または保持へ強制しない。",
+        "raw_quote_refs": [
+          {
+            "review_file": "P059-review.json",
+            "canonical_id": "F21"
+          }
+        ],
+        "affected_metrics": [
+          "source_facts_preserved"
+        ]
+      }
+    }
+  ],
+  "policy": "Initial and subsequent uncertainty remains pending until quote audit and evaluator resolution; judge replacement alone does not clear flags.",
+  "latest_evaluator_attempt": "attempt-002",
+  "latest_flag_snapshot": [
+    {
+      "packet_id": "P051",
+      "flag_index": 0,
+      "flag": {
+        "meaning": "10万円未満の課長権限F7と統合フローの部長アクターF38の表示不整合。対応行の修正意図は未確定",
+        "evidence_ids": [
+          "F7",
+          "F38"
+        ]
+      }
+    },
+    {
+      "packet_id": "P059",
+      "flag_index": 0,
+      "flag": {
+        "meaning": "既存schemaの自動採番・必須・状態値はあるがGENERATED ALWAYS、具体的CHECK式の厳密保持は曖昧",
+        "evidence_ids": [
+          "F21"
+        ]
+      }
+    },
+    {
+      "packet_id": "P040",
+      "flag_index": 0,
+      "flag": {
+        "meaning": "状態名の二系統、却下UC経路、少額決定の部長行は局所対応未確定",
+        "evidence_ids": [
+          "F24",
+          "F25",
+          "F26",
+          "F27",
+          "F28",
+          "F29",
+          "F30",
+          "F31"
+        ]
+      }
+    },
+    {
+      "packet_id": "P045",
+      "flag_index": 0,
+      "flag": {
+        "meaning": "schemaは維持・列名と状態名の要約に止まり、列型・CHECK式は参照先省略の可能性",
+        "evidence_ids": [
+          "F7",
+          "F9"
+        ]
+      }
+    },
+    {
+      "packet_id": "P045",
+      "flag_index": 1,
+      "flag": {
+        "meaning": "decision入力は役職・決定結果の語から意味上追えるが具体的body列挙は局所要約にない。原資料省略の可能性を残す",
+        "evidence_ids": [
+          "F10",
+          "F11",
+          "F12",
+          "F13"
+        ]
+      }
+    },
+    {
+      "packet_id": "P057",
+      "flag_index": 0,
+      "flag": {
+        "meaning": "本人性照合の追加判断がHuman answer後に必要か、その強さは未決として残る",
+        "evidence_ids": [
+          "F30",
+          "F31",
+          "Q1",
+          "Q2"
+        ]
+      }
+    }
+  ],
+  "raw_flag_dispositions": [
+    {
+      "packet_id": "P051",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P051-1"
+      ],
+      "disposition": "artifact_ambiguous",
+      "affected_metrics": [
+        "source_facts_preserved",
+        "unauthorized_decisions"
+      ],
+      "judgment": "既存引用はF7の課長だけの条件とF38の統合フロー単一行の部長アクターを照合済み。行の修正意図は未確定なので同じraw照会を再試行しない。"
+    },
+    {
+      "packet_id": "P059",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-002-P059-1"
+      ],
+      "disposition": "artifact_ambiguous",
+      "affected_metrics": [
+        "source_facts_preserved"
+      ],
+      "judgment": "新規局所引用F21はschema維持と各列の意味的制約を確認するが、GENERATED ALWAYSとCHECK式の逐語形は示さず、厳密な維持判定は未確定。"
+    },
+    {
+      "packet_id": "P040",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P040-1"
+      ],
+      "disposition": "artifact_ambiguous",
+      "affected_metrics": [
+        "downstream_facts_preserved",
+        "probe_inventions",
+        "unauthorized_decisions"
+      ],
+      "judgment": "F24-F31の状態名、却下UC、少額画面行の競合は既存引用で確認済み。受領H040由来の記載をprobe発明に転嫁せず、対応付けの意図は曖昧なまま。"
+    },
+    {
+      "packet_id": "P045",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P045-1"
+      ],
+      "disposition": "resolved_context_note",
+      "affected_metrics": [
+        "downstream_facts_preserved"
+      ],
+      "judgment": "既存F7,F9引用はschema維持と列名・状態名の要約に限られ、型・CHECK式欠落を確認済み。参照先省略の可能性は採点限界の注記であり同一claimを新pendingにしない。"
+    },
+    {
+      "packet_id": "P045",
+      "flag_index": 1,
+      "claim_ids": [
+        "attempt-001-P045-1"
+      ],
+      "disposition": "resolved_context_note",
+      "affected_metrics": [
+        "downstream_facts_preserved"
+      ],
+      "judgment": "同じ既存claimのF10引用とcanonical F11-F13により経路・金額別役職・approved/rejectedの意味は追える。bodyフィールドの逐語列挙の欠落は精度限界として残し、別の新規raw concernを増やさない。"
+    },
+    {
+      "packet_id": "P057",
+      "flag_index": 0,
+      "claim_ids": [
+        "attempt-001-P057-1"
+      ],
+      "disposition": "resolved_context_note",
+      "affected_metrics": [
+        "probe_inventions",
+        "unauthorized_decisions",
+        "unresolved_leakage"
+      ],
+      "judgment": "既存F30,F31,Q1,Q2引用でrole値と実利用者照合の選択・条件付き確認方法は明示的未決と確認済み。実受領handoffにもあり、probe独自の確定要件ではない。"
+    }
+  ],
+  "raw_flag_dispositions_mechanical_transfer_at": "2026-10-02T11:09:52.651365+00:00",
+  "additional_evaluator_resolutions_mechanical_transfer_at": "2026-10-02T11:09:52.708961+00:00"
+}

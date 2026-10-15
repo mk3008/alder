@@ -1,0 +1,1 @@
+P023の抽出結果を[canonical.json](sandbox:/workspace/scratch/62be7f260abb/canonical-extractions/P023/canonical.json)に保存しました。[raw-response.md](sandbox:/workspace/scratch/62be7f260abb/canonical-extractions/P023/raw-response.md)は同一JSON本文です。46命題、376根拠位置を記録し、引用と行番号の整合性を確認しました。

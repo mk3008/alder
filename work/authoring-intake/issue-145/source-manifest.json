@@ -1,0 +1,32 @@
+[
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/SKILL.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "bytes": 7654,
+    "sha256": "910916f31cccd24a2180d6e9dc972867f0375b1993ea83c7f012d108935017ff"
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "bytes": 66510,
+    "sha256": "8ecc1969266ceee81195d70a0680448345a01064d3f1955f8a0f9168c5d5b382"
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/business-graph.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "bytes": 17127,
+    "sha256": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "bytes": 283,
+    "sha256": "6ac5755131e2815d8850b14a3572b10f03e955a9ed7c59dde44f97d097ca50f7"
+  },
+  {
+    "path": "work/authoring-intake/issue-145/cases.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "bytes": 3567,
+    "sha256": "3c6d57e35416286e1ede56153be56b1530103426ee3c115e1e4d3ea3be2c0b42"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "base_revision": "7963018494a1b159763c8747b4a0a4fa86982c9c",
+  "candidate": "docs/behavior-derivation/candidate-c2.md",
+  "model_effort": "inherited; no independent runtime attestation",
+  "runs": [
+    {
+      "case": "meeting-room-c2",
+      "input": "work/behavior-derivation/stage2/inputs/meeting-room.md",
+      "agent": "/root/meeting_c2_final",
+      "prompt": "work/behavior-derivation/stage3/records/meeting-room-c2-launch.txt",
+      "output": "work/behavior-derivation/stage3/outputs/meeting-room-c2.md",
+      "attempts": 1,
+      "feedback": false
+    },
+    {
+      "case": "facilities-maintenance-c2",
+      "input": "work/behavior-derivation/inputs/facilities-maintenance.md",
+      "agent": "/root/facilities_c2_final",
+      "prompt": "work/behavior-derivation/stage3/records/facilities-maintenance-c2-launch.txt",
+      "output": "work/behavior-derivation/stage3/outputs/facilities-maintenance-c2.md",
+      "attempts": 1,
+      "feedback": false
+    }
+  ],
+  "sha256": {
+    "docs/behavior-derivation/candidate-c2.md": "497673b11c20a45226e2f6a14eff85fabe3666b9ec72e2ddc06a7e938c3b7371",
+    "work/behavior-derivation/stage3/records/continuation.json": "507f283f1769909673d2757adff45ac83a7ad80e2a7c163135151157f2aa150b",
+    "work/behavior-derivation/stage2/inputs/meeting-room.md": "f114d732ed9dff18fad55204b6823945fd4e9c462f785e34d544cfa34cebc2af",
+    "work/behavior-derivation/stage3/records/meeting-room-c2-launch.txt": "40bafdb26ba6cafc85be289f352321a01415ad2164ef29047ea0a6c79be83c7e",
+    "work/behavior-derivation/stage3/outputs/meeting-room-c2.md": "89324336ae74a5be4362f8baf0a351e32eda717adc12eac9ef7d3674b6bbb527",
+    "work/behavior-derivation/inputs/facilities-maintenance.md": "1c64a1f71d5f2184077fba74ddfebfa6a4ef78333a0e66163909bd785f1c90bc",
+    "work/behavior-derivation/stage3/records/facilities-maintenance-c2-launch.txt": "bc8f5ec756e674f9db348d2937016264d07d38adbf13342b703629b6f0f51f39",
+    "work/behavior-derivation/stage3/outputs/facilities-maintenance-c2.md": "f29c865341ffd11d1155d14a9b75ee01138cfd78adb0f72fba0ee5a71edf8073"
+  }
+}

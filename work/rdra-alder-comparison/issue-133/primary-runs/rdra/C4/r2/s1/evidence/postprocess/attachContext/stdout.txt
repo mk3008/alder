@@ -1,0 +1,4 @@
+[attachContext] done
+- 1_RDRA/条件.tsv
+- 1_RDRA/バリエーション.tsv
+- 1_RDRA/状態.tsv

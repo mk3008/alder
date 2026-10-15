@@ -1,0 +1,15 @@
+{
+  "case": "C04",
+  "agent_id": "/root/implement_system_requirements_handoff/review_sr_case04",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "effective_runtime_attestation": false,
+  "public_input_revision": "a3a824eedb3ad4a0ebc648de615e0ca88278035f",
+  "isolation": "instruction-based independent contexts; shared filesystem, not OS isolation",
+  "result_safety_review": "synthetic product and technical constraints; no credentials, personal/customer data or private URLs",
+  "output_retention_messages": [
+    "For evidence retention, also save your exact final report (no additional review or input reads) to /tmp/alder170-C04-result.md. This authorizes only that output file; review inputs remain read-only."
+  ],
+  "raw_sha256": "7d845f4d93a7b312b6da29aafeacf58b3a20a301f787038e2415d6a84a2ec75c"
+}

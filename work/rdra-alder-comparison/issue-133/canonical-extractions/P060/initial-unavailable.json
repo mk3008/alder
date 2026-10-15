@@ -1,0 +1,8 @@
+{
+  "packet_id": "P060",
+  "status": "unavailable",
+  "reason": "upstream_stage2_unavailable",
+  "recorded_at": "2026-10-02T07:57:50.847652+00:00",
+  "partial_artifacts_excluded": true,
+  "semantic_scores_imputed": false
+}

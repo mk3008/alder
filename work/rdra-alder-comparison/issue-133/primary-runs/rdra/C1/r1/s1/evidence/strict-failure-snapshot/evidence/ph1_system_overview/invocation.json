@@ -1,0 +1,37 @@
+{
+  "node": "ph1_system_overview",
+  "status": "prepared",
+  "prepared": "2026-10-02T07:38:42.864087+00:00",
+  "root": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph1_system_overview/root",
+  "evidence": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview",
+  "prompt_path": "RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+  "prompt_sha256": "9b96491741cf27077a588064dcf395720c87ec2f87b7fb9976d591632505c74c",
+  "prompt_source_url": "https://rdra.jp/",
+  "envelope": "Your sole task is to execute the exact original official Prompt file `/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph1_system_overview/root/RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md`. First read that file and `/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph1_system_overview/root/AGENTS.md` verbatim. Project cwd/root is `/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph1_system_overview/root`.\nRead allowlist (relative to project root): [\"AGENTS.md\", \"RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md\", \"RDRA_Knowledge/.rdracore/RDRA.md\", \"RDRA_Knowledge/.rdracore/RDRASheet.md\", \"RDRA_Knowledge/.rdracore/RDRAGraph.md\", \"RDRA_Knowledge/_1_RDRA/RDRA.md\", \"初期要望.txt\"]. Do not read outside this allowlist, other prompts, samples, parent directories or conversations, oracle, other arms, other runs. The sole alias RDRA_Knowledge/_1_RDRA/RDRA.md has identical bytes to official .rdracore/RDRA.md.\nWrite only these official artifacts relative to project root: [\"0_RDRAZeroOne/phase1/システム概要.json\"]. Create artifact content by hand; do not generate a program for AI outputs. You may read your own output for verification. Do not change the Prompt, Knowledge, AGENTS.md, or inputs.\nFor evidence only, write `/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/read-log.json` containing the exact paths of every file you read, in read order, and `/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/metadata.json` containing start/end UTC timestamps, failures and any restrictions you could not meet. These two evidence paths are the only additional permitted write paths. Read all business inputs solely from allowlist. The official Prompt itself determines the work. Final response may be brief or empty; preserve any failure explicitly.",
+  "inputs": {
+    "初期要望.txt": "bd2d61f2ebb77ab2f36694dd0d5b8e159cd16d337f48b129719ea7157b571d5c"
+  },
+  "outputs": [
+    "0_RDRAZeroOne/phase1/システム概要.json"
+  ],
+  "read_allowlist": [
+    "AGENTS.md",
+    "RDRA_Knowledge/_0_RDRAZeroOne/phase1/システム概要生成.md",
+    "RDRA_Knowledge/.rdracore/RDRA.md",
+    "RDRA_Knowledge/.rdracore/RDRASheet.md",
+    "RDRA_Knowledge/.rdracore/RDRAGraph.md",
+    "RDRA_Knowledge/_1_RDRA/RDRA.md",
+    "初期要望.txt"
+  ],
+  "alias": {
+    "source": "RDRA_Knowledge/.rdracore/RDRA.md",
+    "target": "RDRA_Knowledge/_1_RDRA/RDRA.md",
+    "source_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333",
+    "target_sha256": "f75c10eabd13bbf04e470123df528c5ff7c7e8f64a9bd946dd8ab90b7616a333"
+  },
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  }
+}

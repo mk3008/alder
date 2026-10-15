@@ -1,0 +1,1 @@
+Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s1/evidence/ph2_condition/envelope.txt. You are permitted to read that envelope. It specifies your independent project root, exact official Prompt, read allowlist, output paths and evidence paths. Execute the official Prompt from its unchanged file bytes.

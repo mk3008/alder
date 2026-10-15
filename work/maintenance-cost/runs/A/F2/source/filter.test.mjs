@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createApp } from './entry.mjs';
+
+function fixture() {
+  const app = createApp();
+  for (const [id, item] of [['z', ' Desk  Blue '], ['A', 'Desk 😀'], ['a', 'desk Blue']]) {
+    app.submit({ id, item, quantity: 1, requestedYen: 1, reason: 'Work', note: 'private' },
+      { id: 'r', role: 'requester' }, 0);
+  }
+  return app;
+}
+
+test('filter uses stored item text literally, including spaces and Unicode', () => {
+  const app = fixture();
+  assert.deepEqual(app.list({ itemContains: '  ' }).map(row => row.id), ['z']);
+  assert.deepEqual(app.list({ itemContains: '😀' }).map(row => row.id), ['A']);
+  assert.deepEqual(app.list({ itemContains: ' Desk' }), []);
+  assert.deepEqual(app.list({ itemContains: 'Blue ' }), []);
+  assert.deepEqual(app.list(undefined), app.list());
+});
+
+test('invalid filters fail on empty and populated apps without state changes', () => {
+  for (const app of [createApp(), fixture()]) {
+    const before = app.list().map(row => app.detail(row.id));
+    for (const itemContains of [undefined, {}, new String('Desk'), /Desk/, Symbol('x')]) {
+      assert.throws(() => app.list({ itemContains }), Error);
+      assert.deepEqual(app.list().map(row => app.detail(row.id)), before);
+    }
+  }
+});
+
+test('filtered results remain isolated and contain all non-note fields', () => {
+  const app = fixture();
+  app.approve('A', { id: 'a', role: 'approver' }, 1);
+  const filter = Object.freeze({ itemContains: 'Desk' });
+  const rows = app.list(filter);
+  assert.deepEqual(rows.map(row => row.id), ['A', 'z']);
+  for (const row of rows) {
+    const { note, ...expected } = app.detail(row.id);
+    assert.deepEqual(row, expected);
+    assert.equal('note' in row, false);
+    row.item = 'changed';
+    row.note = 'injected';
+  }
+  rows.length = 0;
+  assert.equal(app.detail('A').item, 'Desk 😀');
+  assert.equal(app.detail('A').note, 'private');
+  assert.equal(app.list(filter).length, 2);
+});

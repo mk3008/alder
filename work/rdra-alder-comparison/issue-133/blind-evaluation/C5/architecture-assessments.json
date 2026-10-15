@@ -1,0 +1,119 @@
+{
+  "case_id": "C5",
+  "assessments": [
+    {
+      "packet_id": "P004",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F21",
+        "F27",
+        "F32"
+      ]
+    },
+    {
+      "packet_id": "P021",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F28",
+        "F29"
+      ]
+    },
+    {
+      "packet_id": "P023",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F23",
+        "F26",
+        "F27"
+      ]
+    },
+    {
+      "packet_id": "P024",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F2",
+        "F4"
+      ]
+    },
+    {
+      "packet_id": "P018",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F7",
+        "F8"
+      ]
+    },
+    {
+      "packet_id": "P049",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F8",
+        "F9"
+      ]
+    },
+    {
+      "packet_id": "P051",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F19",
+        "F23",
+        "F24"
+      ]
+    },
+    {
+      "packet_id": "P059",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F21",
+        "F22"
+      ]
+    },
+    {
+      "packet_id": "P014",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F29",
+        "F30",
+        "F31"
+      ]
+    },
+    {
+      "packet_id": "P040",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F36"
+      ]
+    },
+    {
+      "packet_id": "P045",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F26"
+      ]
+    },
+    {
+      "packet_id": "P057",
+      "assessment": "not_requested",
+      "judgment": "named architecture/framework/layerの追加Human inputを必須要求していない。canonicalの技術条件・未指定記載と追加Human input欄を照合。元nullは固定C5指標の適用漏れであり、要求ありとは扱わない。",
+      "evidence_ids": [
+        "F29",
+        "F33"
+      ]
+    }
+  ],
+  "limits": [
+    "不要求はcanonical全体のadditional_human_inputs欄も確認した陰性判定。evidence_idsは各packet内の技術制約または内部構造未指定に関する局所根拠。",
+    "採点元ファイルのnullは保持し、別patchに訂正提案を記録する。"
+  ]
+}

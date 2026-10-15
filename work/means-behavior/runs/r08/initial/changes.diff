@@ -1,0 +1,28 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,4 @@
++1. Read packet instructions, task, philosophy, adoption guidance, Business Design, accepted decisions, and existing test.
++2. Changed only the receipt heading export from Booking to Reservation. No material business assumption or question was required.
++3. Verified the existing test passes (1/1) and a direct import assertion confirms receiptHeading equals Reservation.
++4. Saved report.md; no remaining decision.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,13 @@
++# Changes
++
++Changed `src/receipt.mjs` from `export const receiptHeading = 'Booking';` to `export const receiptHeading = 'Reservation';`. This is the only product-file change; behavior and existing tests are preserved. No receipt reader or workflow changes were made.
++
++# Evidence and verification
++
++- Confirmed the original receipt file contained only the heading export; replacement preserved all other content.
++- `node --test test/existing.test.mjs`: passed, 1 test, 0 failures.
++- Direct ES module import with a strict assertion that `receiptHeading === 'Reservation'`: passed.
++
++# Remaining decision
++
++None. The task explicitly specifies this reversible wording change; no material implementation assumption or business policy decision was required.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1 @@
+-export const receiptHeading = 'Booking';
++export const receiptHeading = 'Reservation';

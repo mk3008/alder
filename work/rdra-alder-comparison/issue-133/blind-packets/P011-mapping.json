@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C4/r1/s1/docs/business-design/design.md",
+    "sha256": "84548dc9b33cfc9d587efef7ab4523a19ca065e9ba8c921f6fb8ac3b319aceae",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C4/r1/s1/raw-response.md",
+    "sha256": "918e9d087bcd56be605eb5e17f54d0ae9ed1746463b5c76b2615b997caa4a8d8",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "[design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C4/r1/s1/docs/business-design/design.md) に草案を作成しました。根拠は指定のヒアリング原文と Alder plugin 0.2.8 の Authoring Skill（固定された作成指針の原典 revision `e9726b4c84608db42c5286d072b5ec762d31596a`）です。次の二点を確認してください。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

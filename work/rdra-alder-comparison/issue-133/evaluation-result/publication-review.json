@@ -1,0 +1,12 @@
+{
+  "freeze": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
+  "evidence_commit": "674bc41cf4c06d0faea07c2412d0d226e41878e8",
+  "main_after_experiment": "8036b0308587408271baad3747723e5bd78f987a",
+  "main_imported_during_experiment": false,
+  "pr_draft": true,
+  "mergeable": true,
+  "mergeable_state": "clean",
+  "main_difference": "PR #135 adds ten work/boundary-decomposition/issue-132 files, with no formal method or research index overlap. Verified after experiment; no merge performed.",
+  "limits": "Mergeability is GitHub's observed state and may change. Publication files are later than the immutable evidence manifest.",
+  "fresh_agent_ids": 514
+}

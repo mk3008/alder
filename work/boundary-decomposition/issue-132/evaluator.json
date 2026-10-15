@@ -1,0 +1,710 @@
+{
+  "source_revision_requested": "2fd5459f6b1a1aeed506ca0cdbe5523f3277deea",
+  "source_revision_in_packet": "40f084543c54aef3fe5f0f7dba9cb25a9e8a7f82",
+  "rows": [
+    {
+      "blind_id": "B01",
+      "case": "N1",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 25
+    },
+    {
+      "blind_id": "B02",
+      "case": "H1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "axis_evidence": [
+        "検索候補への掲載は未言及",
+        "停止中の新規予約成立を直接問わない",
+        "停止会議室への予約変更は未言及",
+        "「既存の予約は有効のままですか、それとも取り消しますか」"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 4,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "予約変更・キャンセルの操作権限",
+          "evidence": "「時間変更・キャンセルができるのは予約した社員だけですか。管理者もできますか」"
+        },
+        {
+          "axis": "維持された既存予約での実際の利用可否",
+          "evidence": "「利用停止中でもその予約に基づいて会議室を使えますか」"
+        },
+        {
+          "axis": "利用停止の解除可否",
+          "evidence": "「再び利用可能にできますか」"
+        }
+      ],
+      "notes": "第3問は既存予約の利用であり、変更先としての予約可否とは異なる。",
+      "char_count": 328
+    },
+    {
+      "blind_id": "B03",
+      "case": "P1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "axis_evidence": [
+        "具体的な未決事項なしと述べ、各固定対象を列挙しない",
+        "具体的な未決事項なしと述べ、各固定対象を列挙しない",
+        "具体的な未決事項なしと述べ、各固定対象を列挙しない",
+        "具体的な未決事項なしと述べ、各固定対象を列挙しない",
+        "具体的な未決事項なしと述べ、各固定対象を列挙しない"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 74
+    },
+    {
+      "blind_id": "B04",
+      "case": "N2",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 38
+    },
+    {
+      "blind_id": "B05",
+      "case": "N1",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 62
+    },
+    {
+      "blind_id": "B06",
+      "case": "N1",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 40
+    },
+    {
+      "blind_id": "B07",
+      "case": "P1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "axis_evidence": [
+        "対象業務の質問のみで、各固定対象を切り分けない",
+        "対象業務の質問のみで、各固定対象を切り分けない",
+        "対象業務の質問のみで、各固定対象を切り分けない",
+        "対象業務の質問のみで、各固定対象を切り分けない",
+        "対象業務の質問のみで、各固定対象を切り分けない"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 1,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "対象システムと実現すべき業務結果",
+          "evidence": "「どのシステムで、どのような業務結果を実現したいですか」"
+        }
+      ],
+      "notes": "箇条書きの単一主質問として数えた。",
+      "char_count": 70
+    },
+    {
+      "blind_id": "B08",
+      "case": "P2",
+      "axis_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「領収書の読み取り結果は、どの範囲で人が確認・確定」",
+        "「社内ルールへの適合は、AIの判定で確定してよい範囲」",
+        "「承認はすべて人が行いますか」",
+        "「支払対象の確定はすべて人が行いますか」"
+      ],
+      "actionable_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 4,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 262
+    },
+    {
+      "blind_id": "B09",
+      "case": "P2",
+      "axis_matches": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「読み取りと社内ルールの確認結果について、どのケースを人間が確認」は両者を一括した確認範囲",
+        "同左。ルール適合の判定責任を独立に問わない",
+        "「承認と支払対象の確定は、それぞれ人間が最終判断」中の承認",
+        "同文中の「それぞれ」支払対象の確定"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "conflation_count": 1,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "第1問の『読み取りと社内ルールの確認結果』を双方の独立回答を促す列挙と解釈すれば、最初の2軸もtrue、conflation 0となる。第2問は『それぞれ』で独立回答でき、番号が1つでもconflationに数えない。",
+      "char_count": 131
+    },
+    {
+      "blind_id": "B10",
+      "case": "P1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "axis_evidence": [
+        "対象を挙げず「既存環境から離れてよい」だけを尋ねる",
+        "対象を挙げず「既存環境から離れてよい」だけを尋ねる",
+        "対象を挙げず「既存環境から離れてよい」だけを尋ねる",
+        "対象を挙げず「既存環境から離れてよい」だけを尋ねる",
+        "対象を挙げず「既存環境から離れてよい」だけを尋ねる"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "conflation_count": 1,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 4,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "人間が決めるシステム要件の範囲",
+          "evidence": "「人間が決める『システム要件』の範囲はどこまで」"
+        },
+        {
+          "axis": "判断主体を決める主体",
+          "evidence": "「人間の判断が必要かどうかは誰が決めますか」"
+        },
+        {
+          "axis": "既存環境を変更してよい例外条件",
+          "evidence": "「どのような条件なら既存環境から離れてよいですか」"
+        },
+        {
+          "axis": "AIへの技術選定委任の例外と決定者",
+          "evidence": "「特別な事情」は何で、その場合は誰が決めますか"
+        }
+      ],
+      "notes": "第3問は固定対象の列挙がなく5軸を区別できない。conflationは一つの包括的問いとして1件。",
+      "char_count": 219
+    },
+    {
+      "blind_id": "B11",
+      "case": "H1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "axis_evidence": [
+        "検索候補は未言及",
+        "停止中の新規予約は未言及",
+        "停止中の変更先は未言及",
+        "「既存の予約はどう扱いますか」"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "予約変更・キャンセルの操作権限",
+          "evidence": "「予約した社員だけが行えますか」"
+        }
+      ],
+      "notes": "",
+      "char_count": 128
+    },
+    {
+      "blind_id": "B12",
+      "case": "P2",
+      "axis_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「読み取った領収書の内容は、どの場合に人が確認」",
+        "「社内ルールへの適合は、AIの判断で確定できますか」",
+        "「承認は全件で人が行いますか」",
+        "「支払対象の確定は全件で人が行いますか」"
+      ],
+      "actionable_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 4,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 278
+    },
+    {
+      "blind_id": "B13",
+      "case": "H2",
+      "axis_matches": [
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「大人・子供それぞれ」「3日未満」「3日以上7日未満」「7日以上」の場合の貸出許否",
+        "「7日未満」は「3日以上7日未満」を指すか"
+      ],
+      "actionable_matches": [
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 148
+    },
+    {
+      "blind_id": "B14",
+      "case": "H2",
+      "axis_matches": [
+        false,
+        true
+      ],
+      "axis_evidence": [
+        "「何日になったら」は会員別閾値を聞くが、各区分の組合せごとの許否を明示しない",
+        "「3日未満」と「7日未満」の重複を指摘し後者の意味を問う"
+      ],
+      "actionable_matches": [
+        false,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [
+        {
+          "axis": "遅延0日を遅延した会員として対象に含むか",
+          "evidence": "「また、遅延0日は対象に含みますか」／入力は「返却が遅延している場合」で、遅延0日はこの明示範囲外。"
+        }
+      ],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 3,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "貸出制限の具体的な効果",
+          "evidence": "「貸出登録をすべて認めないのですか。それとも貸出の条件を制限するのですか」"
+        }
+      ],
+      "notes": "第1問には重複解釈の独立した質問と0日質問が同居するが、oracleの2軸は束ねていない。第2問を全区分の許否表に相当すると読む場合、axis 1/actionableをtrueにする感度分析候補。0日の範囲外判定にも解釈余地がある。",
+      "char_count": 212
+    },
+    {
+      "blind_id": "B15",
+      "case": "N2",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 39
+    },
+    {
+      "blind_id": "B16",
+      "case": "H1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "axis_evidence": [
+        "検索候補は未言及",
+        "停止中の新規予約は未言及",
+        "停止中の変更先は未言及",
+        "「既存の予約は維持しますか、取り消しますか」"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 3,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "時間変更時の予約重複の扱い",
+          "evidence": "「変更時も、他の予約と重複する変更を禁止しますか」"
+        },
+        {
+          "axis": "予約変更・キャンセルの操作権限",
+          "evidence": "「予約した社員だけができますか」"
+        }
+      ],
+      "notes": "",
+      "char_count": 171
+    },
+    {
+      "blind_id": "B17",
+      "case": "N2",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 49
+    },
+    {
+      "blind_id": "B18",
+      "case": "H1",
+      "axis_matches": [
+        false,
+        true,
+        false,
+        true
+      ],
+      "axis_evidence": [
+        "検索候補は未言及",
+        "「利用停止中の会議室について、新しい予約を受け付けますか」",
+        "利用停止中の既存予約の変更先は未言及",
+        "「既存の予約は引き続き利用できますか」"
+      ],
+      "actionable_matches": [
+        false,
+        true,
+        false,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 5,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "時間変更時の予約重複の扱い",
+          "evidence": "「別の予約と重なる場合、変更を認めますか」"
+        },
+        {
+          "axis": "他社員の予約の変更権限",
+          "evidence": "「社員は他の社員の予約時間も変更できますか」"
+        },
+        {
+          "axis": "他社員の予約のキャンセル権限",
+          "evidence": "「社員は他の社員の予約もキャンセルできますか」"
+        }
+      ],
+      "notes": "第4問の『引き続き利用』は既存予約の維持・取消の帰結と読んだ。純粋に利用行為だけを問うと読む感度分析では4軸目false。",
+      "char_count": 289
+    },
+    {
+      "blind_id": "B19",
+      "case": "P2",
+      "axis_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「領収書の確認、社内ルールとの照合、承認、支払対象の確定のうち、どの判断を人間が行いますか」の領収書部分",
+        "同一列挙の社内ルール部分",
+        "同一列挙の承認部分",
+        "同一列挙の支払対象部分"
+      ],
+      "actionable_matches": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "判定不能・不適合申請の例外処理主体",
+          "evidence": "「社内ルールに合わない、または領収書から判断できない申請は、誰がどう判断しますか」"
+        }
+      ],
+      "notes": "第1問は具体的な4段階を列挙して人間が行うものを複数選べる。番号数だけでconflationとはしない。『領収書の確認』を読取結果の確定と読む。",
+      "char_count": 134
+    },
+    {
+      "blind_id": "B20",
+      "case": "N2",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 38
+    },
+    {
+      "blind_id": "B21",
+      "case": "H2",
+      "axis_matches": [
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「大人・子供それぞれ」「各遅延日数の区分で貸出を認めるか」",
+        "「3日未満」と「7日未満」の重複を指摘し解釈を問う"
+      ],
+      "actionable_matches": [
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 141
+    },
+    {
+      "blind_id": "B22",
+      "case": "P1",
+      "axis_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "axis_evidence": [
+        "「既存環境のうち、維持が必須のものは何」はインフラを名指ししない",
+        "同文はDB/schemaを名指ししない",
+        "同文はクラウド・サービスを名指ししない",
+        "同文は言語・ランタイムを名指ししない",
+        "同文は公開API・互換性を名指ししない"
+      ],
+      "actionable_matches": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "conflation_count": 1,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [
+        {
+          "axis": "システム要件の人間・AIへの決定権配分",
+          "evidence": "「人間が決定しますか。それともAIが決定してよい範囲がありますか」"
+        },
+        {
+          "axis": "既存環境変更の例外条件",
+          "evidence": "「どのような事情なら変更を認めますか」"
+        }
+      ],
+      "notes": "維持対象を単一の包括的問いにまとめ、oracle 5対象を区別しない。回答者が5対象を任意列挙すれば回収し得るという感度分析では再判定余地。",
+      "char_count": 196
+    },
+    {
+      "blind_id": "B23",
+      "case": "N1",
+      "axis_matches": [],
+      "axis_evidence": [],
+      "actionable_matches": [],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": true,
+      "question_count": 0,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 67
+    },
+    {
+      "blind_id": "B24",
+      "case": "H2",
+      "axis_matches": [
+        true,
+        true
+      ],
+      "axis_evidence": [
+        "「各遅延日数の区分について、大人・子供それぞれの貸出登録をどう制限」",
+        "「7日未満」は「3日以上7日未満」を意味するか"
+      ],
+      "actionable_matches": [
+        true,
+        true
+      ],
+      "conflation_count": 0,
+      "unsupported_axes": [],
+      "unauthorized_decisions": [],
+      "correct_stop": null,
+      "question_count": 2,
+      "duplicate_question_count": 0,
+      "novel_useful_axes": [],
+      "notes": "",
+      "char_count": 133
+    }
+  ],
+  "limitations": [
+    "指定revisionと許可パケットのsource_revisionが不一致。許可されたパケットのみを一度読んでその内容を採点したため、指定revisionの同一性を確認できない。",
+    "生成モデルgpt-6-sol、effort=medium、fork_turns=noneという実効設定は許可された入力から独立確認できない。",
+    "arm対応、preregistration、他ファイルを見ておらず、arm別比較や生成経路の検証は行っていない。",
+    "char_countは表示された各output文字列のUnicodeコードポイント数。質問数は番号付き主質問（単一箇条書き質問も1）でありatomic節数ではない。曖昧な判定の感度分析候補は各row.notesに記した。"
+  ]
+}

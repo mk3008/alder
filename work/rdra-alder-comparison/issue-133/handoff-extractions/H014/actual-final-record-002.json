@@ -1,0 +1,8 @@
+{
+  "recorded_at": "2026-10-02T10:52:56.163508+00:00",
+  "basis": "Completed pure return followup delivered full JSON in actual FINAL. Saved raw-response JSON materializes payload; tool trace retains exact response formatting. Canonical/raw pre-followup hashes verified unchanged.",
+  "payload_sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+  "independent_response_byte_attestation": false,
+  "additional_model_turn": 1,
+  "fresh_generation_increment": 0
+}

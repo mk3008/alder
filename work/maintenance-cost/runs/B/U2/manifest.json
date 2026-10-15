@@ -1,0 +1,12 @@
+{
+  "arm": "B",
+  "stage": "U2",
+  "frozen_at": "2026-09-12T04:20:05.264955+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "additional.test.mjs": "4bdc430d05a5f96c4fc021b136c239ecc5b93ac3ca73697e919f5d6db5e72833",
+    "entry.mjs": "a8a1093b4f1bab70e60e0adc09fe29b69164b3e04f80725b9cd66ad1d0b86128"
+  }
+}

@@ -1,0 +1,2 @@
+BUC.tsv を出力しました: /workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s1/project/1_RDRA/BUC.tsv
+  出力行数: 69 行（ヘッダー除く）

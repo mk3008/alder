@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T09:34:37Z",
+  "end_utc": "2026-10-02T09:34:53Z",
+  "failures": ["Initial write failed because output directory did not exist; created directory and retried successfully."],
+  "unmet_restrictions": []
+}

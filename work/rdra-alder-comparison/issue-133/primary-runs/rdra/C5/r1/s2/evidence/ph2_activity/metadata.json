@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T10:02:32Z",
+  "end_utc": "2026-10-02T10:02:32Z",
+  "failures": [],
+  "unmet_restrictions": [],
+  "note": "Start and end are the observed metadata recording time; the earlier execution start was not timestamped."
+}

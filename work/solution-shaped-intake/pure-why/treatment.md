@@ -1,0 +1,1 @@
+For each Activity's Why, describe its concrete business purpose or intended business condition rather than paraphrasing Procedure or naming the chosen means. Check that the Why still makes sense when the chosen means is removed. Keep the connection to the actual work; do not replace a concrete purpose with a vague phrase such as "improve efficiency".

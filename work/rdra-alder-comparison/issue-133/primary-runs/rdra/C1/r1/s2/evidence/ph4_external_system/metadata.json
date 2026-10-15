@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:22:03Z",
+  "end_utc": "2026-10-02T08:22:20Z",
+  "failures": ["Initial output write failed because the phase4 directory did not exist; created the directory and wrote the file successfully."],
+  "unmet_restrictions": [],
+  "result": "The input external-system column contained no external systems; emitted the required header only."
+}

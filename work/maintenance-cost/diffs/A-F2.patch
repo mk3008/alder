@@ -1,0 +1,49 @@
+--- before/approval.test.mjs
++++ after/approval.test.mjs
+@@ -12,7 +12,7 @@
+ 
+ test('authority uses requested total without multiplying by quantity', () => {
+   const app = createApp();
+-  app.submit(input('low', 99999, Number.MAX_SAFE_INTEGER), requester, 10);
++  app.submit(input('low', 49999, Number.MAX_SAFE_INTEGER), requester, 10);
+   assert.equal(app.approve('low', approver, 0).approvedBy, 'a');
+   app.submit(input('high', Number.MAX_SAFE_INTEGER), requester, 10);
+   const approved = app.approve('high', senior, 0);
+@@ -24,6 +24,26 @@
+   assert.equal(purchased.approvedBy, requester.id);
+   approved.approvedBy = 'changed';
+   assert.equal(app.detail('high').approvedBy, requester.id);
++});
++
++test('pending requests use current authority and later commands preserve event history', () => {
++  const app = createApp();
++  const pending = [50000, 99999].map(amount => app.submit(input(String(amount), amount), requester, 0));
++  app.submit(input('approved', 49999), requester, 0);
++  const approved = app.approve('approved', approver, 1);
++  app.submit(input('purchased', 49999), requester, 0);
++  app.approve('purchased', approver, 1);
++  const purchased = app.purchase('purchased', 100000, buyer, 2);
++  for (const original of pending) {
++    assert.throws(() => app.approve(original.id, approver, 100), Error);
++    assert.deepEqual(app.detail(original.id), original);
++    assert.equal(app.approve(original.id, senior, 101).approvedBy, senior.id);
++    assert.deepEqual(app.detail('approved'), approved);
++    assert.deepEqual(app.detail('purchased'), purchased);
++  }
++  assert.deepEqual(app.purchase('approved', 50000, buyer, 102), {
++    ...approved, purchasedAt: 102, purchasedBy: buyer.id, actualYen: 50000, status: 'purchased',
++  });
+ });
+ 
+ test('senior approval validates actor and time before mutation', () => {
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -63,7 +63,7 @@
+       return copy(record);
+     },
+     approve(id, actor, now) {
+-      const role = get(id).requestedYen >= 100000 ? 'seniorApprover' : 'approver';
++      const role = get(id).requestedYen >= 50000 ? 'seniorApprover' : 'approver';
+       validateCommand(actor, role, now);
+       return transition(id, actor, role, now, 'submitted', {
+         approvedAt: now, approvedBy: actor.id, status: 'approved',

@@ -1,0 +1,4 @@
+docs/behavior-derivation/functional-considerations.mdを使い、work/behavior-derivation/stage2/inputs/meeting-room.md全文について、品質化で未記載の機能条件を探す。
+出力先はwork/behavior-derivation/issue-71/discovery/output.md。検査項目の全再生成は不要。
+既知文脈・参照済み資料は同ディレクトリprotocol.mdのとおり。初回出力には同ファイルの出自区別を記載する。後付けで独立発見と扱わない。
+Business Design・既存Check・c3・製品実装は変更しない。外部資料は問いの材料であり、未記載事項を自動的に要件化しない。

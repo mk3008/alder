@@ -1,0 +1,9 @@
+{
+  "case": "C1",
+  "replicate": "r2",
+  "stage": "s3",
+  "status": "unavailable_upstream_protocol_failed",
+  "upstream_manifest": "../s2/manifest.json",
+  "recorded": "2026-10-02T08:17:09.736830+00:00",
+  "primary_quality_pool_eligible": false
+}

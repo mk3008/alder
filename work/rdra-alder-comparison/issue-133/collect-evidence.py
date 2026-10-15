@@ -1,0 +1,49 @@
+import pathlib,json,hashlib,sys
+
+ROOT=pathlib.Path(__file__).resolve().parent
+PREFIX='work/rdra-alder-comparison/issue-133/'
+EXCLUDED_PARTS={'method','root'}
+
+def permitted(p):
+    rel=p.relative_to(ROOT)
+    if any(part in EXCLUDED_PARTS for part in rel.parts):return False
+    if 'RDRA_Knowledge' in rel.parts:return False
+    if p.name in {'source.txt','初期要望.txt','AGENTS.md','モデル設定.json'}:return False
+    if p.suffix in {'.pyc','.zip','.tmp'}:return False
+    return True
+
+def collect():
+    xs=[]
+    for folder in ['primary-runs','blind-packets','canonical-extractions','blind-evaluation','blind-probes','evaluation-result','handoff-extractions','blind-raw-checks']:
+        d=ROOT/folder
+        if d.exists():
+            for p in sorted(d.rglob('*')):
+                if p.is_file() and permitted(p):
+                    try:text=p.read_bytes().decode('utf-8')
+                    except UnicodeDecodeError:continue
+                    # Probe packet copies are reconstructible from blind-packets.
+                    if folder=='blind-probes' and p.name=='packet.md':continue
+                    xs.append({'path':PREFIX+str(p.relative_to(ROOT)),'mode':'100644','type':'blob','content':text})
+    for name in ['rdra-orchestrate.py','alder-orchestrate.py','packetize.py','blind-mapping.json','audit-evidence.py','aggregate-scores.py','collect-evidence.py','availability-report.py','call-counts.py','blind_eval_ops.py','blind_probe_ops.py','blind_raw_ops.py','handoff_extract_ops.py','verify-final-evidence.py','render-result-tables.py','make-evidence-manifest.py','raw_flag_ops.py','verify-evaluation-supplement.py']:
+        p=ROOT/name
+        if p.exists():xs.append({'path':PREFIX+name,'mode':'100644','type':'blob','content':p.read_bytes().decode('utf-8')})
+    return xs
+
+if __name__=='__main__':
+    xs=collect();out=ROOT/'publish-batches';out.mkdir(exist_ok=True)
+    previous=ROOT/'published-evidence-manifest.json'
+    baseline={x['path']:x['sha256'] for x in json.loads(previous.read_text())} if '--delta' in sys.argv and previous.exists() else {}
+    all_manifest=[{'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode()),'git_blob_sha':hashlib.sha1(b'blob '+str(len(e['content'].encode())).encode()+b'\0'+e['content'].encode()).hexdigest()} for e in xs]
+    xs=[e for e in xs if hashlib.sha256(e['content'].encode()).hexdigest()!=baseline.get(e['path'])]
+    manifest=[];batch=[];size=0;bid=0
+    for e in xs:
+        estimate=len(json.dumps(e,ensure_ascii=False).encode())
+        if batch and size+estimate>60000:
+            (out/f'{bid:04d}.json').write_text(json.dumps(batch,ensure_ascii=False))
+            bid+=1;batch=[];size=0
+        batch.append(e);size+=estimate
+        manifest.append({'path':e['path'],'sha256':hashlib.sha256(e['content'].encode()).hexdigest(),'bytes':len(e['content'].encode())})
+    if batch:(out/f'{bid:04d}.json').write_text(json.dumps(batch,ensure_ascii=False));bid+=1
+    (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+    (out/'all-manifest.json').write_text(json.dumps(all_manifest,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps({'files':len(xs),'batches':bid,'bytes':sum(x['bytes'] for x in manifest)}))

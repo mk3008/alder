@@ -1,0 +1,86 @@
+{
+  "base_revision": "e84ea9b12da22368adf9da0dc49fc10e39b7701a",
+  "actor": "/root",
+  "model_effort": "inherited; no independent runtime attestation",
+  "fresh": false,
+  "source_selection_before_protocol": true,
+  "control_created_after_output": true,
+  "human_approval": false,
+  "attempts": {
+    "discovery": 1,
+    "contract_control": 1
+  },
+  "input": "work/behavior-derivation/stage2/inputs/meeting-room.md",
+  "input_lines": 389,
+  "prompt": "docs/behavior-derivation/functional-considerations.md",
+  "sha256": {
+    "docs/behavior-derivation/functional-considerations.md": "182f21693a3033fe3ddea25a6f658cf188c4362d43ee9ee60b345276b7f21dcc",
+    "work/behavior-derivation/stage2/inputs/meeting-room.md": "f114d732ed9dff18fad55204b6823945fd4e9c462f785e34d544cfa34cebc2af",
+    "work/behavior-derivation/issue-71/discovery/assessment.md": "8e5aae4eb40fc4e73ce0113fa52541a775a49f551533d98703488684a3b6d7e5",
+    "work/behavior-derivation/issue-71/discovery/control-assumptions.md": "5a3c5faf3a03e76551a745d7b922b2b6fa43698c06343525ce5e55150a757828",
+    "work/behavior-derivation/issue-71/discovery/control-output.md": "7b39cccfa9887bdcf001235bf87c506dbd19356edb013253b25e443788895b86",
+    "work/behavior-derivation/issue-71/discovery/output.md": "6c1b6a663bdd3014ca8f08f54bbe96a745a797dc5f88cc4bd2a12616a83a38b6",
+    "work/behavior-derivation/issue-71/discovery/protocol.md": "02b354d3cdc3eabfb4b722a81034c06b928a374c1065ecd576dd221a288e9324",
+    "work/behavior-derivation/issue-71/discovery/sources.md": "dc2a8d34256bcd88515ebefae6abc675ada9d3697ea3e8df7fc5f31c19d425ec",
+    "work/behavior-derivation/issue-71/discovery/launch.txt": "cc8e4f434913d6c8c94b8eec6e5b526e0f7d3df8e37281c9d1ead721c9c02208"
+  },
+  "protected_previous_study_sha256": {
+    "work/behavior-derivation/issue-71/outputs/meeting-room.md": "4de822b61bd043291f84df06c033c84d4dba7629dc21239e30294ce799a63b49",
+    "work/behavior-derivation/issue-71/records/audit.tsv": "39a9153ad72f4c32e836918e426d30566a3b8b573bc351b1ecef547aebe666aa",
+    "work/behavior-derivation/issue-71/records/launch.txt": "5f0d920cfc06223e28e5bb3445c268dfdfa4acf7814cec7f7e94f3f756c7227a",
+    "work/behavior-derivation/issue-71/records/manifest.json": "8e28b24a3aca1aa884dd7ea67fc4831d2677a786c0aba1e03662daf51cdcf717",
+    "work/behavior-derivation/issue-71/records/protocol.md": "518a4877e85a4e3df7337da4433dbf63d5c9e4d5ea5256bacab13701127572e0",
+    "work/behavior-derivation/issue-71/records/verification.json": "8de5ac9949d4a9e3b086f1a487be0eab63f5fa6f93766511ed7c7af2e4f7a93d",
+    "work/behavior-derivation/issue-71/verify.py": "d934f4544b1a7b9925a7d299133061b0fcf89e3ff21c8f94401b1207a1a3e6b0"
+  },
+  "candidates": [
+    {
+      "id": "N01",
+      "origin": "source_assisted_additional_topic",
+      "sources": [
+        "S01"
+      ],
+      "human_status": "unapproved",
+      "control": "closed_by_contract"
+    },
+    {
+      "id": "N02",
+      "origin": "source_assisted_additional_topic",
+      "sources": [
+        "S02"
+      ],
+      "human_status": "unapproved",
+      "control": "closed_by_contract"
+    },
+    {
+      "id": "N03",
+      "origin": "reviewer_seeded",
+      "sources": [
+        "S03"
+      ],
+      "human_status": "unapproved",
+      "control": "closed_by_contract"
+    },
+    {
+      "id": "N04",
+      "origin": "known_topic_source_elaboration",
+      "sources": [
+        "S04"
+      ],
+      "human_status": "unapproved",
+      "control": "remains_candidate"
+    }
+  ],
+  "screened_out": [
+    "X01",
+    "X02",
+    "X03",
+    "X04",
+    "X05"
+  ],
+  "derived_existing": [
+    "I01",
+    "I02",
+    "I03"
+  ]
+}

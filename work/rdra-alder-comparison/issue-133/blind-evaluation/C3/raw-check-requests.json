@@ -1,0 +1,72 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-001-P013-1",
+      "packet_id": "P013",
+      "claim_question": "F7–F11の順序・追加確認の購入不可判断が提案扱いだったか、原文で確認余地がある。",
+      "audit_target_ids": [
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11"
+      ],
+      "review_file": "P013-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P042-1",
+      "packet_id": "P042",
+      "claim_question": "F8–F9の高額担当・拒否判断はsourceの「追加確認」の自然な具体化とも読めるため、原文の位置づけ確認を要する。",
+      "audit_target_ids": [
+        "F8",
+        "F9"
+      ],
+      "review_file": "P042-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P010-1",
+      "packet_id": "P010",
+      "claim_question": "F19の「実際の購入額」確定とF21の連絡担当は元回答にないが、実務的具体化か業務決定かの原文確認余地。",
+      "audit_target_ids": [
+        "F19",
+        "F21",
+        "F35"
+      ],
+      "review_file": "P010-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P033-1",
+      "packet_id": "P033",
+      "claim_question": "却下時の「購入結果」通知がsourceの連絡対象に含まれるか、原文で確認余地。",
+      "audit_target_ids": [
+        "F15",
+        "F42",
+        "F17",
+        "F32"
+      ],
+      "review_file": "P033-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P020-1",
+      "packet_id": "P020",
+      "claim_question": "F33–F34の文書内不一致は受領canonical H020にない情報で、probe原資料参照の真偽はcanonicalだけでは確認できない。",
+      "audit_target_ids": [
+        "F33",
+        "F34"
+      ],
+      "review_file": "P020-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P041-1",
+      "packet_id": "P041",
+      "claim_question": "F26–F29の文書内UC不整合は受領canonical H041にないため、原資料による裏取りが必要。",
+      "audit_target_ids": [
+        "F26",
+        "F27",
+        "F28",
+        "F29"
+      ],
+      "review_file": "P041-review.json"
+    }
+  ]
+}

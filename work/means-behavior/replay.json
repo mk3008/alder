@@ -1,0 +1,559 @@
+{
+  "frozen_files_verified": 67,
+  "stages": [
+    {
+      "run": "r01",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-bfxxdmy2/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.46773ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 82.15397\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r01",
+      "stage": "confirmed",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-_0kxpfum/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.325221ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 84.492398\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.891382ms)\n\u2714 requested mirror, refresh, rebuild, unknown ID and heading (2.45207ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 80.051481\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r02",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-gaxd_1le/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.316859ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 72.329595\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r02",
+      "stage": "confirmed",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-6nrrxlrj/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.621036ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 74.868141\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.923509ms)\n\u2714 requested mirror, refresh, rebuild, unknown ID and heading (2.399392ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 80.827914\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r03",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-2fa0s5o_/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.420831ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 78.713031\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r03",
+      "stage": "confirmed",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-bt39r76q/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.464175ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.25963\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.933073ms)\n\u2714 requested mirror, refresh, rebuild, unknown ID and heading (2.389247ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 83.762083\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r04",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-z88ayrg7/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.348745ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 77.989175\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r04",
+      "stage": "confirmed",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-jxsd008j/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.309377ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.375389\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.880707ms)\n\u2714 requested mirror, refresh, rebuild, unknown ID and heading (2.223953ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 79.967838\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r05",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-t01e6b4q/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.378158ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 70.956694\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (1.007403ms)\n\u2714 only requested heading contract (0.128119ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 81.327179\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r06",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-af8qm9vp/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.749145ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.175421\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.941386ms)\n\u2714 only requested heading contract (0.118003ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 81.114761\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r07",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-j5xv7j5c/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.316207ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 79.581719\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.892093ms)\n\u2714 only requested heading contract (0.121398ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 77.474087\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r08",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-61uspfz0/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.393771ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 74.572468\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.905924ms)\n\u2714 only requested heading contract (0.126546ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 80.730209\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r09",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-ty9caiio/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.478335ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 78.56258\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.913183ms)\n\u2714 confirmed class consumer contract and heading (0.153896ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 75.38288\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r10",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-kvp8oogy/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.493778ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 77.725994\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.990558ms)\n\u2714 confirmed class consumer contract and heading (0.145964ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 79.872376\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r11",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-iqnc9x6a/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.442402ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 74.571596\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.880446ms)\n\u2714 confirmed class consumer contract and heading (0.141789ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 79.882191\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r12",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-5rfdtmzy/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.349485ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 77.894406\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/gates.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 unchanged booking guarantee, boundaries, and snapshots (0.884071ms)\n\u2714 confirmed class consumer contract and heading (0.144403ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.47675\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r13",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-bloli6zu/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.42051ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 77.334742\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-bloli6zu"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": \"overlap\"\n}\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r14",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-4utv0cnu/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.385409ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.285208\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-4utv0cnu"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": \"overlap\"\n}\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r15",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-m91qtldl/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.419529ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 83.468638\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-m91qtldl"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": {\n    \"id\": \"2\",\n    \"roomId\": \"a\",\n    \"start\": 250,\n    \"end\": 350,\n    \"actor\": \"other\",\n    \"state\": \"reserved\"\n  }\n}\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r16",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-ykcpq910/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.398588ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 79.643245\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-ykcpq910"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": {\n    \"id\": \"2\",\n    \"roomId\": \"a\",\n    \"start\": 250,\n    \"end\": 350,\n    \"actor\": \"other\",\n    \"state\": \"reserved\"\n  }\n}\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r17",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-lgjryytv/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.401642ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 80.916178\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-lgjryytv"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": \"overlap\"\n}\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "run": "r18",
+      "stage": "initial",
+      "hashes_match": true,
+      "commands": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "/tmp/alder49-replay-xq59a4zi/test/existing.test.mjs"
+          ],
+          "exit_code": 0,
+          "stdout": "\u2714 availability, booking, and independent copies (1.410556ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 80.460021\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "node",
+            "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+            "/tmp/alder49-replay-xq59a4zi"
+          ],
+          "exit_code": 0,
+          "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": \"overlap\"\n}\n",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

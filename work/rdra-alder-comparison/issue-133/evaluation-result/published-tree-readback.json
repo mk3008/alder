@@ -1,0 +1,9 @@
+{
+  "evidence_commit": "674bc41cf4c06d0faea07c2412d0d226e41878e8",
+  "tree_sha": "82ce8d5fe93e17a50a6b5b0f3c295ec2e981272d",
+  "expected_files": 13649,
+  "matched_files": 13649,
+  "mismatches": [],
+  "truncated": false,
+  "scope": "All listed collected UTF-8 evidence Git blob SHAs, traversed bounded subtree responses; frozen protocol independently pinned. Manifest itself and later report/navigation excluded."
+}

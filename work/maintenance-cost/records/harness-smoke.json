@@ -1,0 +1,64 @@
+[
+  {
+    "command": [
+      "node",
+      "--check",
+      "gates/F1.test.mjs"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "gates/F2.test.mjs"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "gates/S0.test.mjs"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "gates/U1.test.mjs"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "gates/U2.test.mjs"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "probe_source": "export function createApp() { throw new Error('deliberately broken harness probe'); }\n",
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "acceptance.test.mjs"
+    ],
+    "exit_code": 1,
+    "stdout": "TAP version 13\n# Subtest: submission normalizes text, stores required data and only current event fields\nnot ok 1 - submission normalizes text, stores required data and only current event fields\n  ---\n  duration_ms: 1.004025\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:16:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:17:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.start (node:internal/test_runner/test:1242:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)\n  ...\n# Subtest: approval and purchase retain data; actual total may exceed requested\nnot ok 2 - approval and purchase retain data; actual total may exceed requested\n  ---\n  duration_ms: 0.134393\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:23:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:24:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)\n  ...\n# Subtest: rejection stores its reason and prevents purchase\nnot ok 3 - rejection stores its reason and prevents purchase\n  ---\n  duration_ms: 0.093732\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:33:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:34:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: role checks for each command preserve state\nnot ok 4 - role checks for each command preserve state\n  ---\n  duration_ms: 0.20543\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:40:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:41:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: actor IDs and timestamps are validated by every mutation\nnot ok 5 - actor IDs and timestamps are validated by every mutation\n  ---\n  duration_ms: 0.176397\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:52:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:56:17)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: invalid quantity, total, ID and text never create records\nnot ok 6 - invalid quantity, total, ID and text never create records\n  ---\n  duration_ms: 0.148694\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:66:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:67:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: invalid actual total and rejection reason preserve records\nnot ok 7 - invalid actual total and rejection reason preserve records\n  ---\n  duration_ms: 0.135565\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:78:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:79:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: duplicates and unknown targets fail without mutation\nnot ok 8 - duplicates and unknown targets fail without mutation\n  ---\n  duration_ms: 0.104828\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:87:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:88:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: invalid transitions and repeat commands fail atomically\nnot ok 9 - invalid transitions and repeat commands fail atomically\n  ---\n  duration_ms: 0.15951\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:94:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:95:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: instances are isolated and IDs sort by JavaScript string comparison\nnot ok 10 - instances are isolated and IDs sort by JavaScript string comparison\n  ---\n  duration_ms: 0.197828\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:108:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:109:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: input and output mutations cannot alter stored state\nnot ok 11 - input and output mutations cannot alter stored state\n  ---\n  duration_ms: 0.135966\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:115:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:116:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n# Subtest: self approval and non-monotonic valid timestamps are permitted\nnot ok 12 - self approval and non-monotonic valid timestamps are permitted\n  ---\n  duration_ms: 0.096736\n  type: 'test'\n  location: '/tmp/tmpxrx0h25r/acceptance.test.mjs:132:1'\n  failureType: 'testCodeFailure'\n  error: 'deliberately broken harness probe'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    createApp (file:///tmp/tmpxrx0h25r/entry.mjs:1:37)\n    TestContext.<anonymous> (file:///tmp/tmpxrx0h25r/acceptance.test.mjs:133:15)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:960:18)\n    Test.postRun (node:internal/test_runner/test:1522:19)\n    Test.run (node:internal/test_runner/test:1447:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 0\n# fail 12\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 98.244731\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,2918 @@
+[
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/invocation.json",
+    "sha256": "d31f3a9b1e6549922568c8a1f60bb512f0014d057097b4232ab67ce950616794",
+    "bytes": 1452,
+    "git_blob_sha": "5024d78c5da33fdde3a8a14e450c244873571c4c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/metadata.json",
+    "sha256": "e7aff02cb3306e0583ec22ac6aaf9be8a4b8d87e2839a1b1a1fbed7b363af201",
+    "bytes": 1564,
+    "git_blob_sha": "611dc911d537b5fa919e8bf26d8d918ae6fe8b07"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/packet.md",
+    "sha256": "a42fee8d08ed2ac93fc33fd510f8ac91bb44a1824dfc99d3c300b7e7f1bdbde1",
+    "bytes": 5982,
+    "git_blob_sha": "ba637e199b0f8e40450ab83c69279278a3003b6b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/raw-response.md",
+    "sha256": "10865c509b20a4e42d27bfd00edc61ace046212138520028e1742f37d715811b",
+    "bytes": 14302,
+    "git_blob_sha": "1104b079832d72cae4d7835c0d33402cf2c23bc6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P046/read-log.jsonl",
+    "sha256": "c95c5a6c2e7aab70bf86666ddb8a9729e3a1c5a5d0955970c7324cf881b8c228",
+    "bytes": 272,
+    "git_blob_sha": "0727d3f03d4963f35eb7c44a69e5d7667aacc168"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/canonical.json",
+    "sha256": "42d8b9b7ed24512f4c88a47fbc496599b676f2671a283357eaee521bd0da88eb",
+    "bytes": 12650,
+    "git_blob_sha": "09130717bf192e72b94e7d456b15fec7e2a8611d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/envelope.txt",
+    "sha256": "5a1d84c0de9d1d54afbdde6ade8e911328307fe7b77a3e993c3b46b25166c0d7",
+    "bytes": 993,
+    "git_blob_sha": "d9801e9c21791a7de98e1b3b60435a466ed3b705"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/metadata.json",
+    "sha256": "54aac22792a9dafc9a9dd96576f859f4fe6ea838bed4fa9c1fdd47bb76bf78f7",
+    "bytes": 1908,
+    "git_blob_sha": "73b15b9e8ea00e19015582604f0d79fa2ae9fb80"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/packet.md",
+    "sha256": "ed84a710b0708f0eb613be316c2637dd855d91b3c6f7764168c28b9fee1c64fb",
+    "bytes": 5795,
+    "git_blob_sha": "06e515c8e1f38a148cf2415323f146c602378154"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/raw-response.md",
+    "sha256": "42d8b9b7ed24512f4c88a47fbc496599b676f2671a283357eaee521bd0da88eb",
+    "bytes": 12650,
+    "git_blob_sha": "09130717bf192e72b94e7d456b15fec7e2a8611d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/read-log.jsonl",
+    "sha256": "5ef40e60265c95f8d6cabbcd9cd997a8e71659eb2d381a77097ebd095d46232e",
+    "bytes": 272,
+    "git_blob_sha": "9434d234a3693a421c7fecfab43a2133ded9c51d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P047/spawn-invocation.json",
+    "sha256": "20b3db1655ec0918adf1f081d85bd7e890385c4b4dbcbe7fc3dbe2217dd54870",
+    "bytes": 1426,
+    "git_blob_sha": "6c1342910a7be308b89d4ce972f5619e6d63e1ff"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/canonical.json",
+    "sha256": "88e5e953458897f78d6ee9fe98b409122126fd4e9e2762a3502ad4c5610c719e",
+    "bytes": 18242,
+    "git_blob_sha": "1091b6737c33b0ad173cf8a8460c51963596c3e5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/envelope.txt",
+    "sha256": "2ea2419015d135c60f9a45e7921cacc6eca992bebdf34911c6766f3ac9652759",
+    "bytes": 993,
+    "git_blob_sha": "9934224f13d9c6946f6fbca96f5e751b00a6ae40"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/invocation.json",
+    "sha256": "f48fe017e6cd8a3adffeacf67b8b6242955171ab7db3d7f33cdeccba095380e1",
+    "bytes": 1452,
+    "git_blob_sha": "6e506fdbe41638f9dda9a5f61fa1434df428ea55"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/metadata.json",
+    "sha256": "262fac1b3eaf7d7b3bbacd24d7d6dd03b04bf816ebb97ae923f7d7df72caff9b",
+    "bytes": 1564,
+    "git_blob_sha": "4d1d8b3cff985632e567cf9de22a5c65199f37c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/packet-provenance.json",
+    "sha256": "8bdca282e001d457e3ec00daf25f0264e39bb1eae27c2967351758e695808b69",
+    "bytes": 231,
+    "git_blob_sha": "d6abec0ef3e09e198d3f33fadf82943f5e881380"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/packet.md",
+    "sha256": "85b2a308e11e63332e64f4649a41d945cd6c84d41dbeb7e86b0acbf681351811",
+    "bytes": 6739,
+    "git_blob_sha": "636980fbfddedd1265d41663966229797b63198f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/raw-response.md",
+    "sha256": "88e5e953458897f78d6ee9fe98b409122126fd4e9e2762a3502ad4c5610c719e",
+    "bytes": 18242,
+    "git_blob_sha": "1091b6737c33b0ad173cf8a8460c51963596c3e5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P048/read-log.jsonl",
+    "sha256": "03ef0afa7593a94c687d92ca76f0eb83dea76de99d3b4980ef2f8d2b95bbdd7c",
+    "bytes": 248,
+    "git_blob_sha": "af24b82bbb2a66b6ca80e052cc4a1d15ab70070f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/canonical.json",
+    "sha256": "4870377c120c94f9b36ba3303600f4df922461f885ba1cc47b8e446a5a6522ba",
+    "bytes": 22867,
+    "git_blob_sha": "19cbbb5b04b8f7d57bf79755e0a241ea92e6afbc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/envelope.txt",
+    "sha256": "7d2a908e81dd53be7c82ba62bf167709e1a092075bcca59b9513af0366a489a1",
+    "bytes": 993,
+    "git_blob_sha": "44ee838805bf554202086c0997a12091d5f86186"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/metadata.json",
+    "sha256": "bc15d7fd253ad2e2f109178badfefad4ab064726d50ad76050dcccff241b32f9",
+    "bytes": 1834,
+    "git_blob_sha": "010de94a3f20f3ed83fe3ae7049441cc79505411"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/packet.md",
+    "sha256": "e1cbb6ccdae550843fc67764e8dd3b36e801e99eb99258e144a7fc4e0cc5cf6f",
+    "bytes": 9952,
+    "git_blob_sha": "1816027790f92af19a240f89fb0739e261387e28"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/raw-response.md",
+    "sha256": "4870377c120c94f9b36ba3303600f4df922461f885ba1cc47b8e446a5a6522ba",
+    "bytes": 22867,
+    "git_blob_sha": "19cbbb5b04b8f7d57bf79755e0a241ea92e6afbc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/read-log.jsonl",
+    "sha256": "237c2b843c6692d3673e8c3cc6233ae9ac74d82f070bd0816af5f44717fd2b5d",
+    "bytes": 262,
+    "git_blob_sha": "18a6446bf420bb531b26d1a1384c1d05b48f4af6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P049/spawn-invocation.json",
+    "sha256": "87432a0e85cface0179a1337aa8c50444fc85c35e527d107357af04447109094",
+    "bytes": 1340,
+    "git_blob_sha": "ba78fcbee586721e896893eca8b53aef709d1110"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/SHA256.json",
+    "sha256": "dbf8c89c4ef9c7f8ff6002e19609b46f707f01d25b1a38ab456977bfd836995d",
+    "bytes": 810,
+    "git_blob_sha": "ec4a83f9dddf7c85a479843b3175b6bce6eaa821"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/actual-final-SHA256.json",
+    "sha256": "b1b424a3fbe88938423c7b8ab68be4fdf2976bf7d47f2dc74145e34639538e97",
+    "bytes": 200,
+    "git_blob_sha": "5248970b63513ddf89556371b58a23505b58ea38"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/actual-final-payload.json",
+    "sha256": "1b10f3a1e9b0762044c0ce896a9e34b129fe42fcd47515b91a4c07ea8203d9d5",
+    "bytes": 9966,
+    "git_blob_sha": "b7731daca97e04693bc8960f3b650cb8b724b54d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/actual-final-record.json",
+    "sha256": "5067d075ebac47e6334ce05eb3f6eba13c0eea1d3cbf3799f8fd5b909536e1f4",
+    "bytes": 507,
+    "git_blob_sha": "3d4599f17492056e902ebd186b47e55e8f4a6b64"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/canonical.json",
+    "sha256": "1b10f3a1e9b0762044c0ce896a9e34b129fe42fcd47515b91a4c07ea8203d9d5",
+    "bytes": 9966,
+    "git_blob_sha": "b7731daca97e04693bc8960f3b650cb8b724b54d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/envelope.txt",
+    "sha256": "9657d4802d30e5c12aff3f4bc0cf91eababb077da7cc3754e60e202de29d2826",
+    "bytes": 993,
+    "git_blob_sha": "8f7fa219fe29ec554d8eb80fb6b8f44a897d1b3c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/metadata.json",
+    "sha256": "5ec88f5033b064665a3c5c79eaf7372964cd1b8dbea2d76c6c6918c7b082b2bd",
+    "bytes": 1623,
+    "git_blob_sha": "425892c2074a75339de75ca9d6c0ba6a9feec49e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/packet.md",
+    "sha256": "cf39783d50359bd305f29f9ce63161388f388baf3db6b9895c719339d886f57b",
+    "bytes": 2932,
+    "git_blob_sha": "9bf9f48fdff8c27066dfc3108b9adc11907ec195"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/raw-response.md",
+    "sha256": "1b10f3a1e9b0762044c0ce896a9e34b129fe42fcd47515b91a4c07ea8203d9d5",
+    "bytes": 9966,
+    "git_blob_sha": "b7731daca97e04693bc8960f3b650cb8b724b54d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/read-log.jsonl",
+    "sha256": "096a3de8e51577d5a8811042625cd65de0fac94dfe1fa8ba20a4f5319491b8fa",
+    "bytes": 272,
+    "git_blob_sha": "7a4fa7196a23aa8fed5c912ef5e15e8be3fd5cfc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-001/spawn-invocation.json",
+    "sha256": "9b42cea678de4a23c9ed0de6dc35c53ca8f2ec21bb5cc5614684c7716d1abd3e",
+    "bytes": 1426,
+    "git_blob_sha": "b5672e946078d5126bb3c499033dc38165ae16d6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/SHA256.json",
+    "sha256": "2482c29215a4e45d671470b6af619d7d6d11059faaec2625ff27310a3fffef66",
+    "bytes": 810,
+    "git_blob_sha": "8713ef544b258f116725059d6adf8fc7e5fc8e11"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/canonical.json",
+    "sha256": "94a6b932f2f7d079426e2a303bd3fc89e9a834e0b2b64c88ff0f536bbb321dfa",
+    "bytes": 10015,
+    "git_blob_sha": "e8893ba72708a574f3c3e12dabbd919dc3bb5fb8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/envelope.txt",
+    "sha256": "9657d4802d30e5c12aff3f4bc0cf91eababb077da7cc3754e60e202de29d2826",
+    "bytes": 993,
+    "git_blob_sha": "8f7fa219fe29ec554d8eb80fb6b8f44a897d1b3c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/metadata.json",
+    "sha256": "d0002f137e647e291256c6b934e5f6946c2bc2b9f0dac008bce576d68b689054",
+    "bytes": 1807,
+    "git_blob_sha": "8eb183299732cdb45caebb578d95a035ed13b387"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/packet.md",
+    "sha256": "cf39783d50359bd305f29f9ce63161388f388baf3db6b9895c719339d886f57b",
+    "bytes": 2932,
+    "git_blob_sha": "9bf9f48fdff8c27066dfc3108b9adc11907ec195"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/raw-response.md",
+    "sha256": "94a6b932f2f7d079426e2a303bd3fc89e9a834e0b2b64c88ff0f536bbb321dfa",
+    "bytes": 10015,
+    "git_blob_sha": "e8893ba72708a574f3c3e12dabbd919dc3bb5fb8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/read-log.jsonl",
+    "sha256": "64a9adb1ebe2ea3f896b39da3cf29a8390434273fd698ac7f68f64da12389b66",
+    "bytes": 248,
+    "git_blob_sha": "1e493a29c1de57e501f17176fa07ebd0766e15c8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/attempt-002/spawn-invocation.json",
+    "sha256": "424e318cff002dd1ec5c65def25024a2597e1d9d1fa69692af853f6ee2a786d3",
+    "bytes": 1438,
+    "git_blob_sha": "4b359357e1f5db8953df21a4dfb8707b676d2222"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/canonical.json",
+    "sha256": "46dbd8a902e13ccaeefcddf0cc58022fe755de14cb6124220879527c5759bc85",
+    "bytes": 10118,
+    "git_blob_sha": "bda0f69da8bea413e6b343696f8dc6bf7a03a2c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/envelope.txt",
+    "sha256": "9657d4802d30e5c12aff3f4bc0cf91eababb077da7cc3754e60e202de29d2826",
+    "bytes": 993,
+    "git_blob_sha": "8f7fa219fe29ec554d8eb80fb6b8f44a897d1b3c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/metadata.json",
+    "sha256": "a696883e423125d10a3641ffaf33f1ac96f0ebee251869c9392f426addd1a9b3",
+    "bytes": 2131,
+    "git_blob_sha": "1e914789c8110c9b7e455f525a3020a607e43763"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/packet.md",
+    "sha256": "cf39783d50359bd305f29f9ce63161388f388baf3db6b9895c719339d886f57b",
+    "bytes": 2932,
+    "git_blob_sha": "9bf9f48fdff8c27066dfc3108b9adc11907ec195"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/raw-response.md",
+    "sha256": "46dbd8a902e13ccaeefcddf0cc58022fe755de14cb6124220879527c5759bc85",
+    "bytes": 10118,
+    "git_blob_sha": "bda0f69da8bea413e6b343696f8dc6bf7a03a2c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/read-log.jsonl",
+    "sha256": "04e40d34c353ff66335c40b664d55b14481d0d6d455b8a331a0e004f2105a852",
+    "bytes": 272,
+    "git_blob_sha": "2922fc07b36feed817e1b452c5e993aa4f4b69ec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P050/spawn-invocation.json",
+    "sha256": "28abb7c6f06a484761d1cfe1382ef4edaa3d76652745f899dcd424eb11fbe9fe",
+    "bytes": 1440,
+    "git_blob_sha": "6bd4517af1445845d1b293ab2bbfb966bb43c86d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/canonical.json",
+    "sha256": "c2a424c8b4a0ec65fe4373ea3122bdbfcc3bfb2e7c370aa5fa2ee6ebaf3344d8",
+    "bytes": 25802,
+    "git_blob_sha": "ae2ed69c1f9eb44815db316581e013f5ef9c6198"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/envelope.txt",
+    "sha256": "c01205495914e2912a7daf4a8082e6e61a0b2c2459e3430128e5e0219afe5e83",
+    "bytes": 993,
+    "git_blob_sha": "f63ca8b82eb0bcc9de05b20969c4c508d057cf67"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/metadata.json",
+    "sha256": "a70e89366f48c810791fdd45400f7c0ad4e341584672a7e4972d57ee5213584a",
+    "bytes": 1926,
+    "git_blob_sha": "ae602ac2b6327069ee2dd58fe9b8dd273471fdc5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/packet.md",
+    "sha256": "12d8ec06a9a356b54abcc0ee9d54038f9e66f09de53a39be48513fc391225ee1",
+    "bytes": 78118,
+    "git_blob_sha": "df8c3e31dfd2ad6c46cbc69b067cac03e21b65cf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/raw-response.md",
+    "sha256": "c2a424c8b4a0ec65fe4373ea3122bdbfcc3bfb2e7c370aa5fa2ee6ebaf3344d8",
+    "bytes": 25802,
+    "git_blob_sha": "ae2ed69c1f9eb44815db316581e013f5ef9c6198"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/read-log.jsonl",
+    "sha256": "06716512c63247a0c2a334721bc251a3ff9ee398ffff5d1e1105b91ce071cfed",
+    "bytes": 272,
+    "git_blob_sha": "2dd8f3dde67bed140840289900e1527668c2f1ac"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P051/spawn-invocation.json",
+    "sha256": "1135e426ef38496ae86fee8f8ddc96f4b063b4e116b9e9378f6cdc4d5bed3eba",
+    "bytes": 1426,
+    "git_blob_sha": "b709c8f865393c4217b489779a45edf3c57c2bfc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/canonical.json",
+    "sha256": "095ad9c6c4bbebb946738a10adb58a015a8295da0a92747ba6dcd5b90c80653c",
+    "bytes": 7110,
+    "git_blob_sha": "401f583ef58e4feb9fbdd92a9cf1afc47497ad81"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/envelope.txt",
+    "sha256": "4d25e17461707a269d26ecdc1785e50bc61c78ce5f2783333a3ae084c374798f",
+    "bytes": 993,
+    "git_blob_sha": "abe52e1aa5f06304549c9397173c143032422e66"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/metadata.json",
+    "sha256": "39de444aba7dca950366c7ec17c6e622930c204a9e5769c9d1d57ca6e990f8e9",
+    "bytes": 1908,
+    "git_blob_sha": "7f720c7a7ce5019548d79e207871d57e7742e4ab"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/packet.md",
+    "sha256": "800473d253fdeb6de982d137cda0d91af7d9fad24913ce430b4abbefbeb147ae",
+    "bytes": 2441,
+    "git_blob_sha": "fd7047f379a463da40a06ad99c885dff12073761"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/raw-response.md",
+    "sha256": "095ad9c6c4bbebb946738a10adb58a015a8295da0a92747ba6dcd5b90c80653c",
+    "bytes": 7110,
+    "git_blob_sha": "401f583ef58e4feb9fbdd92a9cf1afc47497ad81"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/read-log.jsonl",
+    "sha256": "28b4c9fa7ec40280d447da09ffec674c9e10c5d6249b05ccc661b103bdd12245",
+    "bytes": 242,
+    "git_blob_sha": "01baf7d77403abe5bb009dd1d30cdde1df952f46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P052/spawn-invocation.json",
+    "sha256": "86230d21014b73838123d062c30e9566efccd59f15114225476951706d7c7708",
+    "bytes": 1426,
+    "git_blob_sha": "6ed9849e213dd2615e9b85ce226c41497054a238"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/canonical.json",
+    "sha256": "6da9060486492b87147ab97ea7a4b2c2ec8efc0b546c51e81ecc11a59c6e76c7",
+    "bytes": 16207,
+    "git_blob_sha": "634bdaadc1cd6d9300e84c6d29131a4b234e01cb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/envelope.txt",
+    "sha256": "9a89572ceead663d0ae79d2e00aeea65ee1e411d05c7d3630de79d1389ffcad2",
+    "bytes": 993,
+    "git_blob_sha": "ea45432f63b29d7193e1da1db2024838139e96d9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/metadata.json",
+    "sha256": "7b39bd2904b42d976cef5996cf45c3572249a18933c557e4e21dd884e2277c5b",
+    "bytes": 1564,
+    "git_blob_sha": "37fbd328ebd00b239ba36c567089ea79cd20dd46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/packet.md",
+    "sha256": "b7990ab29f29c163c4d408c6cc4bf7491f6f4e1ed2be990c2a01e906d7b0faef",
+    "bytes": 7338,
+    "git_blob_sha": "9488e0315f75199af7fe947378c4b1966febe07d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/raw-response.md",
+    "sha256": "6da9060486492b87147ab97ea7a4b2c2ec8efc0b546c51e81ecc11a59c6e76c7",
+    "bytes": 16207,
+    "git_blob_sha": "634bdaadc1cd6d9300e84c6d29131a4b234e01cb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/read-log.jsonl",
+    "sha256": "c6451f37deea75e37b190a4909d0f40c1bdb0de7184a835a4653f407a87f31b8",
+    "bytes": 154,
+    "git_blob_sha": "ee60d55c0f212d681db666918e4971471a95d575"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P053/spawn-invocation.json",
+    "sha256": "abcf624ad709a266864c529a85ca28c4247102055a2cd6611d9ab188396dfb22",
+    "bytes": 1426,
+    "git_blob_sha": "9f744c25154397a51bbac5922eb3fedcd0b1ea39"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/canonical.json",
+    "sha256": "b32035ba3cddff4cd5b96cb694adb9f5629af49315b43f470546bac029fe16ab",
+    "bytes": 8995,
+    "git_blob_sha": "931239de5d4cac7b1da3119ecacf9ee42619ab7b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/envelope.txt",
+    "sha256": "aae729c51efc312aa47fb62b42ab2a2140bc3dbe5bf6e482bf791566fb62a543",
+    "bytes": 993,
+    "git_blob_sha": "9cbc73167320a79614f045d3fe76ce3b1660f0d9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/metadata.json",
+    "sha256": "bf53569b85bffd0585e5e1551818721757a188e30409ac2baa2fc5a6eef01c34",
+    "bytes": 1564,
+    "git_blob_sha": "98f3bcce20bc13a95ccc514e97c9cd5b4378348e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/packet.md",
+    "sha256": "92fcb18859d0f49ff0eec19a682131c4f3e166d14f55292de2217a03844e116a",
+    "bytes": 3730,
+    "git_blob_sha": "27259bbc56ddb10aae115f72c8ecf79b1c1f4a51"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/raw-response.md",
+    "sha256": "b32035ba3cddff4cd5b96cb694adb9f5629af49315b43f470546bac029fe16ab",
+    "bytes": 8995,
+    "git_blob_sha": "931239de5d4cac7b1da3119ecacf9ee42619ab7b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/read-log.jsonl",
+    "sha256": "56f1f7fad3e36119504356d82470f2b92f75a43559aa9f1343a5b9b2c3838d24",
+    "bytes": 272,
+    "git_blob_sha": "72b75ed7ea94d6d4145c0f31f592512bb93b08c8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P054/spawn-invocation.json",
+    "sha256": "27655e63f1634cc9bfad875b4ef05a8562450b53d5e6c247ccc2b994b91125fb",
+    "bytes": 1426,
+    "git_blob_sha": "5d47892f9059c9d1d42b3ad93fe5728b7c7f965d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/canonical.json",
+    "sha256": "4afa7a6371128d2bf50d24158c1e70f67ff39f233a87b1c56030f096d8565da8",
+    "bytes": 11949,
+    "git_blob_sha": "426c3d4fdefc35cf490a4eae6c256141cfd9e838"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/envelope.txt",
+    "sha256": "40340504cb6f743ac090a33c29d7a1aac4e7bdb519132fa36e9a2625a6b77d79",
+    "bytes": 993,
+    "git_blob_sha": "a5f36f2dbfbc543c79dbf21f5cecb1c5165d3f1b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/metadata.json",
+    "sha256": "fd3fa18358264eb03894ecd54e84184519660f873bd6f2c2ac50d04ef8f13736",
+    "bytes": 1801,
+    "git_blob_sha": "0c3a8ba2c2f23701c2f4f19155f4c627d0d63761"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/packet-provenance.json",
+    "sha256": "bc2d3f3f0f31d4f35ebe2d009a627a23ccd82079a41707bba6392f571bf600de",
+    "bytes": 231,
+    "git_blob_sha": "e9f3177f152e8e0d6b6d5013a3ff070a01945dbf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/packet.md",
+    "sha256": "19628fcd00690afe765e8cdc78536737160bebab43b44a6e6ce2a86fac771ecd",
+    "bytes": 3042,
+    "git_blob_sha": "ab89571ee45d9c9f1aef8e546ef79562cfdc32c9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/raw-response.md",
+    "sha256": "4afa7a6371128d2bf50d24158c1e70f67ff39f233a87b1c56030f096d8565da8",
+    "bytes": 11949,
+    "git_blob_sha": "426c3d4fdefc35cf490a4eae6c256141cfd9e838"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/read-log.jsonl",
+    "sha256": "f74cd9415fd5dfdf1a381992e909c810ce9e218d85b0db0cba58de78e22f5207",
+    "bytes": 248,
+    "git_blob_sha": "13283397551d4446f2dcb7efb6a4a83f50b960e2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P055/spawn-invocation.json",
+    "sha256": "8859dc8091294d54feb09df38d9dfe8b049d869ddccead3dfca8a8584ff0ea48",
+    "bytes": 1426,
+    "git_blob_sha": "779c211caa9c82c2a3863a99c0cbf8fa7402f841"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/canonical.json",
+    "sha256": "59dcdb08b7515f2c4e9fc6e3628c28698444844f5f084354e689fe90810f45af",
+    "bytes": 32656,
+    "git_blob_sha": "a3e139485162e7a1380e4147bd82ae7d35e2933c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/envelope.txt",
+    "sha256": "51beefb7c60d3b670c7def9184fde3942e3b9986ef532a4c4e61d9bce8445a76",
+    "bytes": 993,
+    "git_blob_sha": "2b8394776a994e168426a1895ec6a5a41c01bf78"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/metadata.json",
+    "sha256": "09fe8c3993e77f5f240a8bf1bf44ac8cbf58476ed590d255fa37880033a68e53",
+    "bytes": 1908,
+    "git_blob_sha": "4df2aeb7d69efb990e64345663d4835e54581269"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/packet.md",
+    "sha256": "1cd4973372882e691ce0ef01baa122ec8ff6882368d71344ba63db1c9e66606b",
+    "bytes": 53571,
+    "git_blob_sha": "4f9e1311ec1e5b82782e36c1e799e8c6397fcc76"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/raw-response.md",
+    "sha256": "59dcdb08b7515f2c4e9fc6e3628c28698444844f5f084354e689fe90810f45af",
+    "bytes": 32656,
+    "git_blob_sha": "a3e139485162e7a1380e4147bd82ae7d35e2933c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/read-log.jsonl",
+    "sha256": "86a55c534af866b29f6996c31059971c43cc392ee016da5868a2ad126a7c277b",
+    "bytes": 272,
+    "git_blob_sha": "c8042420bf3ab23b7980801d930bbd34a247ab45"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P056/spawn-invocation.json",
+    "sha256": "68b8c731037d40491d0f34f3a07784c26d7ba4b48e9a2de524019b6d3ea90dc9",
+    "bytes": 1426,
+    "git_blob_sha": "797ed4f7ab0c9e2ceb0f049730be7cd8807cd858"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/canonical.json",
+    "sha256": "5b36fbc576aaed1c6adaa85a90c1981daf03723e10018644114a8dcf6ba4109c",
+    "bytes": 10667,
+    "git_blob_sha": "5c8497717597dae38f697543b72bfb4f8dacec7f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/envelope.txt",
+    "sha256": "1f48c858a6660a47a4e9473a84821a5cd12546a79b85989eeec32ef892050777",
+    "bytes": 993,
+    "git_blob_sha": "66f49f4c970fb41d93fe26def38534816e7a42ab"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/metadata.json",
+    "sha256": "e626707f8c4bb26935efd529e16b7684282fa775059aff17b0c6deb67eb053ef",
+    "bytes": 1834,
+    "git_blob_sha": "8baf453f08ccce5b35880715b5d4004dadf1d720"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/packet.md",
+    "sha256": "849178f5bd453653065f9fec9b7d4c95d390697778c28ae311f3b407a2b268fd",
+    "bytes": 3417,
+    "git_blob_sha": "42ce90a149783bfbe584406fa6ef3cb917aa9e9d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/raw-response.md",
+    "sha256": "5b36fbc576aaed1c6adaa85a90c1981daf03723e10018644114a8dcf6ba4109c",
+    "bytes": 10667,
+    "git_blob_sha": "5c8497717597dae38f697543b72bfb4f8dacec7f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/read-log.jsonl",
+    "sha256": "c53bd9e90dfd5b4ed76f5cc4e1ff4d9240b414ea1d9ea15255a3f8c9ca8c4dcd",
+    "bytes": 272,
+    "git_blob_sha": "a787a0f401034640a8f6c1b19c412a22818e991b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P057/spawn-invocation.json",
+    "sha256": "b6002382d158fb50df2a7c7be8e6cb313f1835897bb94b56084312d5fd33c6e1",
+    "bytes": 1340,
+    "git_blob_sha": "fa4d35731d169e32bb07265db8bb16c01a491c89"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/canonical.json",
+    "sha256": "838d8d7feff5d367b1afb1ab6a9422721be00b3193268a3334f5c57087437fe6",
+    "bytes": 26481,
+    "git_blob_sha": "bc9ed281f354cc087b8877fc58e094c1071aa11c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/envelope.txt",
+    "sha256": "67bc995112031b44c179dfb8b2e9f3dfb5be98ab4f0596c8f75c2d5c0912d4c4",
+    "bytes": 993,
+    "git_blob_sha": "e24929474173b96cd81b4107a0408a3ade03eb3b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/metadata.json",
+    "sha256": "b7412261e7c55ae614ad7120c2523e371559d6a84f7fc0e75d3349109d2f1d60",
+    "bytes": 1810,
+    "git_blob_sha": "79099a205e6eb3a670fd198d16f4fa8494aedad6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/packet-provenance.json",
+    "sha256": "07807926d5dfe74868e2099d172fdfa2440b3b503b9029db360efe1118428270",
+    "bytes": 231,
+    "git_blob_sha": "778b488e711e8e19754ef1c61250e6a528b4b71b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/packet.md",
+    "sha256": "3368e735ab37e25ae0c8d12ffe03ae4d17e9b79193b8a9bf4fbf79638882820e",
+    "bytes": 13282,
+    "git_blob_sha": "8ac5a5952ec4d8e9454a1dd8c46973d68c1b1b63"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/raw-response.md",
+    "sha256": "838d8d7feff5d367b1afb1ab6a9422721be00b3193268a3334f5c57087437fe6",
+    "bytes": 26481,
+    "git_blob_sha": "bc9ed281f354cc087b8877fc58e094c1071aa11c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/read-log.jsonl",
+    "sha256": "d09893fdc1dcf59ce292a73341ce1b730baee8e05bd7005bccc0e02b4d852de0",
+    "bytes": 272,
+    "git_blob_sha": "c41122bb4e2b7a3a6915c9b95c8d026c53abddd8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P058/spawn-invocation.json",
+    "sha256": "762104e5e20a2dc17ba5119eab22b380ab6a277c2be38cc59a34c4658eef18b5",
+    "bytes": 1426,
+    "git_blob_sha": "fcdd5a96523946e579fd78550aad3a21d89c6775"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/build.py",
+    "sha256": "5f64c2d53ada3b13c288a868f7342e4b2a874d7116778354e8c999ed93ca1d43",
+    "bytes": 11006,
+    "git_blob_sha": "628293d5e9836b29511d0d059f8ebebae58ba039"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/canonical.json",
+    "sha256": "4e5e1a2a34f2b4362b6daae3600fe2a2e89b7ad8888ece8da2663cd4cdd5222f",
+    "bytes": 35005,
+    "git_blob_sha": "c1807d8570c37a3364c76ed9590f1318d2b95d68"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/envelope.txt",
+    "sha256": "554c609b58ace26d66b92c63088bebcea6860eaa4b5f861dc53da782a237ccd4",
+    "bytes": 993,
+    "git_blob_sha": "0b88272f39d835eb7c7e67b18e1544a123b11e81"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/metadata.json",
+    "sha256": "43de1f3964b0d0887f990f65bb4cc6a11471cb8d6453a9fe5196a16e6056ce00",
+    "bytes": 1834,
+    "git_blob_sha": "7a34a54d6115df876f9d9c5f0c70ce1a78dffe06"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/packet.md",
+    "sha256": "fb2a820cc1781d74cb5e9372a5f93b2b4afacc3187d7fc64eead162f6dd96151",
+    "bytes": 86039,
+    "git_blob_sha": "097fdf839f35e1fb1d0a7ae698976d8b2ea627ef"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/raw-response.md",
+    "sha256": "4e5e1a2a34f2b4362b6daae3600fe2a2e89b7ad8888ece8da2663cd4cdd5222f",
+    "bytes": 35005,
+    "git_blob_sha": "c1807d8570c37a3364c76ed9590f1318d2b95d68"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/read-log.jsonl",
+    "sha256": "a7144b18df819797ff2e1718d825fffe37509724bde8015cd082805bf4db7da4",
+    "bytes": 272,
+    "git_blob_sha": "a76cf560959d39f2bf2b1461b0b28825049ad7cd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P059/spawn-invocation.json",
+    "sha256": "379f98f7f7cbc060f0b7e9833163259c339a20e77277784b399af7e0a3d73ea3",
+    "bytes": 1368,
+    "git_blob_sha": "9974d37a5f090191c11c4daa7a914dfdc30fe192"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/canonical.json",
+    "sha256": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "bytes": 17218,
+    "git_blob_sha": "4042fde39263a6f00dc9a33bc9a0514974e3991a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/continuation-pending-snapshot.json",
+    "sha256": "94661d02e40ccc892e09cd16c9c79d2ccb2cbc363cf93c19cf2500513e0ae5d6",
+    "bytes": 464,
+    "git_blob_sha": "6e6321c726572af347e8a8c2c0f1e8851f418b7c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/envelope.txt",
+    "sha256": "5e502b5270573bd77b46d5e6cd87a19c16e8a6d819ed0f92e3de571ecfa4502f",
+    "bytes": 993,
+    "git_blob_sha": "a2b19b25f4e8884b48e00e763d5a8c1adf6ddf46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/initial-unavailable.json",
+    "sha256": "81c520145c8ec8d5f03c652419824ce32b0b0d5297bcf4e483e22bc46868f1e8",
+    "bytes": 223,
+    "git_blob_sha": "870cdf941ee84f39156d6954260e3f8d802801c1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/invocation.json",
+    "sha256": "3bc1e006158cbdaa3dc89561964232e4120ed2a605711cb07cdc6bc088370b71",
+    "bytes": 1452,
+    "git_blob_sha": "fc9968598469497b4b21554766895f2daf5a900e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/metadata.json",
+    "sha256": "e7a024445659f05f04fcf7c139c102bffb1863bbbae783ad289bf949dc89e693",
+    "bytes": 1564,
+    "git_blob_sha": "6ba25a39ff4a7b13294e96246ef61ffef3c93d95"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/packet-provenance.json",
+    "sha256": "f11b22809038b3f6534d35a241125784b7f8a9ff662cc353c651478332669024",
+    "bytes": 141,
+    "git_blob_sha": "e755010c56791a727ba02bdbdeecafbc8a9abe94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/packet.md",
+    "sha256": "ae684f429dea9b8eeb658472696e97377c69991975050a22583c6855869571f8",
+    "bytes": 5451,
+    "git_blob_sha": "e4388d4ef8fb8dc860bc30a4b1e4542c8c88a954"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/raw-response.md",
+    "sha256": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "bytes": 17218,
+    "git_blob_sha": "4042fde39263a6f00dc9a33bc9a0514974e3991a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/P060/read-log.jsonl",
+    "sha256": "f90a6644c77d9b2ff2a00adfe5fe5359cdb6b1719b2e40ecae15365e639deb17",
+    "bytes": 242,
+    "git_blob_sha": "8552db0a79f36ae943283cb025e6c10071ce4966"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/extraction_ops.py",
+    "sha256": "7f30760f2409dbd8517bf97b66d3ea36c9cf6886c0128ff0154a9b6f5c10c595",
+    "bytes": 8082,
+    "git_blob_sha": "867dfff2783396d1c81098ea40c4546c566ad24b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/manifest.json",
+    "sha256": "67ff7cfc41b323f8191ae89ce162747e12ae9890f37b35c1dad63ee7ddb35eb7",
+    "bytes": 22642,
+    "git_blob_sha": "96d19e305fa1bfb7432f8ef37e711a4e2498ac2e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/canonical-extractions/mechanical-checker-deviation.json",
+    "sha256": "c9b29fa92f8f2bf7574d81ef8672f31bcae7870f115b1c8eb807189f9c59af32",
+    "bytes": 426,
+    "git_blob_sha": "c61e08d78efd7cd7c54425d20e982471d52a7e74"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/collect-evidence.py",
+    "sha256": "c29acbe2a32d14e537385f3eeb170bbdd5b5c6554bf1e8af0eb9fb27c57b43c6",
+    "bytes": 3291,
+    "git_blob_sha": "7537512a32126805f77a7b6ca7d6544aa21d0971"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/RESULT-TABLES.md",
+    "sha256": "3af0a07b508a70f4e228a8a165d41486f6c3ded5e6b0390fc2dc6d9c1a060dfb",
+    "bytes": 8583,
+    "git_blob_sha": "4617c32aef2422ae9299a777c3250b51748f8016"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/actionability-evidence-audit.json",
+    "sha256": "95d04ecd146a0b527b3dff827a3c731ce2567c98096bd4e5d2f4e55768310d10",
+    "bytes": 571,
+    "git_blob_sha": "6a709a9bef02950001173e260efd975dd3de96ed"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/availability.json",
+    "sha256": "823fc3c52120df8fbf95e8fc71dbedba420143665e329904c9fade9144172800",
+    "bytes": 45214,
+    "git_blob_sha": "752edfeadd1cea9be8cc0ab085994ea0b13d31b8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/call-counts.json",
+    "sha256": "b55006403b8d7f92217a014284d52818436bf1807f17f3a7a67f4d088a81da3b",
+    "bytes": 23659,
+    "git_blob_sha": "8ff02d8bcc7ffbd0475e5a768c41b40305b805cf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/canonical-packet-completeness.json",
+    "sha256": "a9b85fef847fb85a0eaa95e958a6de3f90d93323eaf3c1afc4eb12ac9eb506ba",
+    "bytes": 6534,
+    "git_blob_sha": "8be70da7d183ca19fb62671962623de7dd0c0b95"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/evidence-audit-checkpoint.json",
+    "sha256": "39a171411e5e6f22971c80aa9363172301de2c2023abcf9e4166d22956f0bf37",
+    "bytes": 2157,
+    "git_blob_sha": "81fd21257d3e07b023ca7a8906e28f0075c4623b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/exploratory-paired-scores.json",
+    "sha256": "8d1d2d6559b0f9da31025a80b399f71559d22cb7d305836d9f6db0179b732d13",
+    "bytes": 74216,
+    "git_blob_sha": "76b89cfa9a838c998855002eee65e78bc7cc3c42"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/final-byte-provenance.json",
+    "sha256": "482e1a4a27e1405cb76a1b75807d654ad4f29c32bcd3a45994e4ce1182dba4eb",
+    "bytes": 24102,
+    "git_blob_sha": "d0b6c4198a1813e9fb7174c1c607820e9266a2e9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/freeze-verification.json",
+    "sha256": "f9d84f58a942f2f4c55e1f450b63aff932eee5bba3fa953c51196d3b1593215a",
+    "bytes": 5718,
+    "git_blob_sha": "f673f507e9a237d1199145de07e4d433b0784e61"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/generator-byte-audit.json",
+    "sha256": "008316679182988a17845c4a3408620a076b3ea50cc3060b561901ec192f14bc",
+    "bytes": 6315,
+    "git_blob_sha": "319936ddb48bbb4d8e7b009e9262496b90f33d2d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/observation-operator-completion.json",
+    "sha256": "3572b83a6ac36214c83b458c012ebf68522f6af6003d30dde53c082d7b317e6c",
+    "bytes": 11730,
+    "git_blob_sha": "08088eacab63fbf91c22ea5e28e8997cd3e3bada"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/operator-archive-preservation.json",
+    "sha256": "a2920b28e76df82892f55dea07f35dc8137f3c08d0c32d3df9f223e001053e22",
+    "bytes": 52545,
+    "git_blob_sha": "68f8d5ce6dbb3df228f9beff88f8c2f87374ce07"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/operator-structure-notes.md",
+    "sha256": "4bef6a623ee16bd5dbda1750db0e178c7fd7fbdcd0c0afa2c6f4f5c1944a056a",
+    "bytes": 2345,
+    "git_blob_sha": "a14c86fd8bf0937fb04a144f45f59f6af83d0d78"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/probe-input-completeness.json",
+    "sha256": "a2ff1133489c306438a0f22d8fa9498da19565797c5df3f893105c43f25e25f4",
+    "bytes": 4125,
+    "git_blob_sha": "971158f7e515702e4fc48a1d96668f2d6ef52bbf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/publication-check.json",
+    "sha256": "d3804afa364151ab161874cf9fb215429b284f630ec40fecac9da3338c568d53",
+    "bytes": 327,
+    "git_blob_sha": "1bbbc6180f7a27ac3cfcf371cceb2869bf160456"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/raw-flag-checker-history/additional-resolutions-change.json",
+    "sha256": "d749117030846ec12434a3b0e9dc26ba43475c87f954bb250d33b986aa19fe23",
+    "bytes": 432,
+    "git_blob_sha": "a91d91a9b2ba8d059cf744c986b2934ade1c4d9c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/raw-flag-checker-history/before-additional-resolutions.json",
+    "sha256": "8c65b06f36e74f8db0be51aab62d4d261bb8931d9d07ae25ef4318d1b0ffea1a",
+    "bytes": 251,
+    "git_blob_sha": "244a14e059aa22e62a24bfba4314700793032076"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/raw-flag-checker-history/before-additional-resolutions.py",
+    "sha256": "4c95001634381a091dfb8e6e7779f95a615863e1e224d133c29ab0c091f11802",
+    "bytes": 3094,
+    "git_blob_sha": "073f67090ae55093e5a9df37eea8606e07a0a64c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/scores.csv",
+    "sha256": "dd920544a14f42c164935e71cb229d3a63e45fc180dfbc8b82a480117730e29c",
+    "bytes": 8600,
+    "git_blob_sha": "ee1c59c963c8cabb891683af64dd514052e7c2e7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/strict-primary-paired-scores.json",
+    "sha256": "e2f4bd54ea4ec6b2a6a6c6b5e92c6825e508430c30fbbbf2faf415ec92b5176b",
+    "bytes": 12152,
+    "git_blob_sha": "1a4496948d70581826eca7070ea8420f40c0bd18"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/evaluation-result/unblinded-scores.json",
+    "sha256": "8f819e0ff0ad6cc6375ff45c2ea5d77d9cde1a0fd30ba1cf7129269b73eefee3",
+    "bytes": 67168,
+    "git_blob_sha": "8e5a8a8bba0f01d26cd068365605e01211b9953e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/actual-final-payload-002.json",
+    "sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "bytes": 46546,
+    "git_blob_sha": "72f0e785b278717767ca703307f7c447cdedda35"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/actual-final-record-002.json",
+    "sha256": "86d9129a879ea56190e5cef6fd25aac000010d540d73613986cb6af1f9a2bd1e",
+    "bytes": 487,
+    "git_blob_sha": "fd8750e2ea8eeea143f17d5e141ebcc65f438043"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/actual-final-response-001.md",
+    "sha256": "2404e74b23bc54f0aa8de8ae74d88e9395a7cb4becef9b6cfa96d354c4e1750b",
+    "bytes": 286,
+    "git_blob_sha": "6c260cbd7a1b688da81f4d464d57a58c17b16fd4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/canonical.json",
+    "sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "bytes": 46546,
+    "git_blob_sha": "72f0e785b278717767ca703307f7c447cdedda35"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/envelope.txt",
+    "sha256": "ed7e7584597a2eefeeaf9f169f2de65e5f9b49533c713f4f832aad0910bda6c1",
+    "bytes": 991,
+    "git_blob_sha": "309ceb360e25f819cae73adc307cde7634d9c982"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/invocation.json",
+    "sha256": "35d21a0938d67b033fdec36647cea4faeeed3a22fbe4784f97e268967e35cb7e",
+    "bytes": 1315,
+    "git_blob_sha": "041cf68acfb1ec745a28369b5c483f7099095498"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/metadata.json",
+    "sha256": "659bfbc46be38e6000fd6d2996f2365afdfe7ed96b1cd428193bb2e518b2aae9",
+    "bytes": 2589,
+    "git_blob_sha": "c4cc5a0b318fea189d154a82f4455ccafcd5cfc6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/output-return-followup-invocation.json",
+    "sha256": "d2ab7bfc23b59c374101935b8b30a03749d8ceeea091f3d1f5f8ecc87b956fe0",
+    "bytes": 444,
+    "git_blob_sha": "85d506388f47dae817affeeb62da34d8fab535c2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/output-return-followup.txt",
+    "sha256": "c1b6780aee78f563708fdb7732fd47b502ee05c602b91383a877b425a5a29c15",
+    "bytes": 278,
+    "git_blob_sha": "8d4f651b61739b456c12746954bb958b07080be0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/packet-provenance.json",
+    "sha256": "5ab999406b04f6f7ed71c1c4e24a118cc14b618f164a02a442876771acb41708",
+    "bytes": 317,
+    "git_blob_sha": "71d2a45e8997ae416a600550170e65e6a3d04853"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/packet.md",
+    "sha256": "149152c0a7316804c4f8a1a849476ca1aea6ed10d3213bfa53164ef8ee555a2c",
+    "bytes": 59159,
+    "git_blob_sha": "7e4f78b0d568f20f23cf908966921cbd0301291e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/pre-return-checkpoint-canonical.json",
+    "sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "bytes": 46546,
+    "git_blob_sha": "72f0e785b278717767ca703307f7c447cdedda35"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/pre-return-checkpoint-raw-response.md",
+    "sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "bytes": 46546,
+    "git_blob_sha": "72f0e785b278717767ca703307f7c447cdedda35"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/raw-response.md",
+    "sha256": "62d88d55a3d6bfbbf000e1279fd14342adcb15c18fa8424cff9bd7cdb6ac2110",
+    "bytes": 46546,
+    "git_blob_sha": "72f0e785b278717767ca703307f7c447cdedda35"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H014/read-log.jsonl",
+    "sha256": "128c78ade40ac7983a51ce7b579bda865fa63a4d53d22b103c42b494f1b6e871",
+    "bytes": 268,
+    "git_blob_sha": "1598c74288a24d2833ace0678c851134eb76b391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/canonical.json",
+    "sha256": "5f048367b5aed36f60b1589aca6ea7cf6bdced5049adfb200da59dd8d0db0d25",
+    "bytes": 29898,
+    "git_blob_sha": "a839011da6a445c722060f160aa941f96bf32d94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/envelope.txt",
+    "sha256": "c578633851cbbbf5ae5f28f21ad5f6d26a0e5c008706947c41be0db517d0a355",
+    "bytes": 991,
+    "git_blob_sha": "76ab38c06b8c35dbcb519a2c76f8f3dfb8c57477"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/invocation.json",
+    "sha256": "9cfc01522df1772402610ed9be5b79e5d4ae5e480caf8c8553029b4c8d3bfe26",
+    "bytes": 1315,
+    "git_blob_sha": "d6963bcc5c0132d92ca0f69af141d56c134aa731"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/metadata.json",
+    "sha256": "f55bee347238401906b42cfde7d757d5d01e9f76f976cc2639bc051619e90248",
+    "bytes": 1904,
+    "git_blob_sha": "e3e66cdb12159c68862c5f652a4fb93ce97e7cf4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/packet-provenance.json",
+    "sha256": "931b6064e05a58cd9760f884b609f34fa594759303a32d7be85b4af59c1cf4c8",
+    "bytes": 317,
+    "git_blob_sha": "15d1247db03566d3ef2662925a9ce9429abbbd0b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/packet.md",
+    "sha256": "7806f0bfaa8e843977b0d6f1b935b143037c635c25de9d98ed5bfe0d13425d97",
+    "bytes": 58518,
+    "git_blob_sha": "c34b1e63a794229d007575f79f63313cb4f5cb2f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/raw-response.md",
+    "sha256": "5f048367b5aed36f60b1589aca6ea7cf6bdced5049adfb200da59dd8d0db0d25",
+    "bytes": 29898,
+    "git_blob_sha": "a839011da6a445c722060f160aa941f96bf32d94"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H020/read-log.jsonl",
+    "sha256": "a890ee9d332f643f98c45e2e79a09ed5b722aefabe14b2aa2ef2e39b64d37676",
+    "bytes": 268,
+    "git_blob_sha": "f6df1d7743b328514d978df0172ff6fbd0f2b0dc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/build.py",
+    "sha256": "af6a57e183b9719cb15d6f775761cecbf9d9fb936001c0d22d7a4f47ec8b79e0",
+    "bytes": 11954,
+    "git_blob_sha": "201db3765c958a0a3db55af53c6ccb503f5ebff0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/canonical.json",
+    "sha256": "3561016f41096b8c84ed72a865c1113a2318a66bfa5a5e62a250f682f8e8ceff",
+    "bytes": 27770,
+    "git_blob_sha": "5202e4bcec6bb84423be68ecbf5fc80e8412ca97"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/envelope.txt",
+    "sha256": "5d06094a7960feb1c8318b0ab3c1235bc762d715e1cebb75f7eaf41a5a40d8ba",
+    "bytes": 991,
+    "git_blob_sha": "fa12314d611f9834d917ce1caa8cd491941adbd2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/invocation.json",
+    "sha256": "379c108384a2cabb1c8e63514c6de2d864efbefa6779fe1af701d941e66b2dc8",
+    "bytes": 1315,
+    "git_blob_sha": "9d5463b7765d7f39df322b5ccfee95aca4bcd211"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/metadata.json",
+    "sha256": "ec76e7ad8857eaf981724f8bbb6781237a5336ab87f366958f84e89321fd6408",
+    "bytes": 1922,
+    "git_blob_sha": "79eb1a84071ce22ce88150265515a5c01c19b201"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/packet-provenance.json",
+    "sha256": "eae3dca31691d31b43326a2244195aa55350b2a622fbf9d8e57dcfc85fbdff96",
+    "bytes": 317,
+    "git_blob_sha": "13a6d683b39c0f03bfe85b0eaefe28b9db1af11d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/packet.md",
+    "sha256": "6ed60ceeb6f623625dc9ae4a4ebbad3dc0e9aeca7166580bfc1010e9da931886",
+    "bytes": 53871,
+    "git_blob_sha": "058f3bce0a76728cbd98d3ab4efbcfd684c907ce"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/raw-response.md",
+    "sha256": "3561016f41096b8c84ed72a865c1113a2318a66bfa5a5e62a250f682f8e8ceff",
+    "bytes": 27770,
+    "git_blob_sha": "5202e4bcec6bb84423be68ecbf5fc80e8412ca97"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H040/read-log.jsonl",
+    "sha256": "4c6231a8f0a4a74871105c070fdc2a32b2e74ca2792b670b256ed147ea76b0f5",
+    "bytes": 268,
+    "git_blob_sha": "61debf5352c18e8f389da65b946af30c6f37aa90"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/canonical.json",
+    "sha256": "7af4d8efc21264faaada8593506d28f489ee5ff345d480186d38b144e514d25c",
+    "bytes": 26862,
+    "git_blob_sha": "ddc101a50ebcb673e834f3956ef423be8760088b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/envelope.txt",
+    "sha256": "c013d04b785511feaeafbe8f085e78ef2604419c88261b2b6cf3ee91f7e6b43d",
+    "bytes": 991,
+    "git_blob_sha": "5cb8699d5e66deda886c453a311f100dee09ddb6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/invocation.json",
+    "sha256": "68153c48f4d304e7aad17300c137fba8446bdfa84b15734b9e464e7a70662752",
+    "bytes": 1315,
+    "git_blob_sha": "1fd345efa3bb80900002f8a512d690c26c7778a1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/metadata.json",
+    "sha256": "e6f111ee83b21842a3f7ace0106edf4281eb0d00cac1b853a08a3924761ac58c",
+    "bytes": 1850,
+    "git_blob_sha": "ce764a8de717322652f11fa946f856acf251967b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/packet-provenance.json",
+    "sha256": "58fd0feeef0c9a614504af1a8a99c8833a892a5408ce01c1f2b187501f7b46ee",
+    "bytes": 317,
+    "git_blob_sha": "b2add0e87f84a52e3582ba71b08be62fbab66164"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/packet.md",
+    "sha256": "2fc944d6e1dbd8c3daf8ac24ae6b4d408eb3aac538585a111e9d704747e57402",
+    "bytes": 43345,
+    "git_blob_sha": "17c595ba156c4475d472d26d7d2e3ac55cc45315"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/raw-response.md",
+    "sha256": "7af4d8efc21264faaada8593506d28f489ee5ff345d480186d38b144e514d25c",
+    "bytes": 26862,
+    "git_blob_sha": "ddc101a50ebcb673e834f3956ef423be8760088b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H041/read-log.jsonl",
+    "sha256": "7440eb3b8245df87c04ae9669a6c9bd069fd2e5cee4654a556ea59f1be07179a",
+    "bytes": 268,
+    "git_blob_sha": "598ceea71b575e52155f6f151791a6f2b4edd467"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/canonical.json",
+    "sha256": "2143c3e74f0d81e758eba69f7d7b923972ac5d67f6524e89992341002842fe94",
+    "bytes": 23433,
+    "git_blob_sha": "1dfbe9acb53471a1781fd71b3d120381dcf6b779"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/envelope.txt",
+    "sha256": "1ba705340de6a3e22f4a3d9b621f806db1ff223d6fae387e36da625f70d2cd5e",
+    "bytes": 991,
+    "git_blob_sha": "41f63c36704e91d9eb5a2139061aabc4d313fa6e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/invocation.json",
+    "sha256": "d923bbede524cffc8448c425263d524be359f12af599a500d7f71a9f7b16b008",
+    "bytes": 1315,
+    "git_blob_sha": "204325dc81df7fd173135a20c3b25c8ef0aa0f59"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/metadata.json",
+    "sha256": "626a5e01c541e4ccfca8011a86ff58bd8559ef07037bdc63a27e8924001548b1",
+    "bytes": 1797,
+    "git_blob_sha": "7cc64dc3412d1a6228f4cd371e7bceef8d2987f6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/packet-provenance.json",
+    "sha256": "49ab26ed864566fa5df7fdb6cbe40e7253474e81d34afabe0406ceb882a386db",
+    "bytes": 317,
+    "git_blob_sha": "6ab7d0693519faa41ceee4852c290c2e17b007f0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/packet.md",
+    "sha256": "731f826eb5f646c32cb7efbcea90b754117e885cb4d2838eff918453e966d846",
+    "bytes": 56928,
+    "git_blob_sha": "03848d20485ede2fec18e5f0025fe5e46fa104ce"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/raw-response.md",
+    "sha256": "2143c3e74f0d81e758eba69f7d7b923972ac5d67f6524e89992341002842fe94",
+    "bytes": 23433,
+    "git_blob_sha": "1dfbe9acb53471a1781fd71b3d120381dcf6b779"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H043/read-log.jsonl",
+    "sha256": "43aaf08648a20bca8ce9297d82b5e179ac59cb8a78bd1c423086b6206697b1b5",
+    "bytes": 268,
+    "git_blob_sha": "6281f0f7a2387eb51a13acc0cabdafafb2c71adf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/canonical.json",
+    "sha256": "355755b9099f66a4587614091fd81af557b1cc85157ca531b07459fad7ba7227",
+    "bytes": 23137,
+    "git_blob_sha": "562129384b543226265c13f136b04355404362b0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/envelope.txt",
+    "sha256": "6dfedb252c8cda7f6da0a12139a4a826fd54f096d66f05493b931c571e3a5318",
+    "bytes": 991,
+    "git_blob_sha": "81df986bb8fb3764c70500f26a3b0dd46e52c069"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/invocation.json",
+    "sha256": "a77a74bcf0e0773164296051bb667bfe0018df455a058e870f7001f3c779513c",
+    "bytes": 1315,
+    "git_blob_sha": "da75b6c16c7d9d4d42cf1f58fa0745a3caa9cf4b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/metadata.json",
+    "sha256": "43dba782f628e8fb1e93e9ed1eae11b4b6f4358e99b1228f2204167612f257c6",
+    "bytes": 1816,
+    "git_blob_sha": "f5bf9d1e0a09f4af0fdf9b7ed1fae9b9c21c85dd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/packet-provenance.json",
+    "sha256": "bd44235f71b71cdc65cd5abb76fb0cceb2983a0dab11c58c8168134590ea521e",
+    "bytes": 317,
+    "git_blob_sha": "bfba3c175676d7726a9d571790ddd235ff040252"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/packet.md",
+    "sha256": "592d2042f8383fc87c9defbcec7b35584dfaf81cce1bfb5428a3f137f5929145",
+    "bytes": 59945,
+    "git_blob_sha": "42b9f398728efe4f7c67d72276e8c03fe43005e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/raw-response.md",
+    "sha256": "355755b9099f66a4587614091fd81af557b1cc85157ca531b07459fad7ba7227",
+    "bytes": 23137,
+    "git_blob_sha": "562129384b543226265c13f136b04355404362b0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H044/read-log.jsonl",
+    "sha256": "7727d82a3ff71753afd38532348dfebc654fca0054795ba93b6aa6bbc61b1c2b",
+    "bytes": 280,
+    "git_blob_sha": "0660217095ca444681399610fa707e48b5fcaa31"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/canonical.json",
+    "sha256": "1566a98980d625cdf07c2c84e2c3cdd4834aafc669594a070ddc909db7d0ac45",
+    "bytes": 28364,
+    "git_blob_sha": "ef5c364e0bbef3db9a1d48aa143bbaa02ff9d2d9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/envelope.txt",
+    "sha256": "1ea1ce747f68dc93a95ec2c251e001523cb6c6ba6d0d25ab6c20e70eb159f5a9",
+    "bytes": 991,
+    "git_blob_sha": "144cb9b8c77058d5f50edd3ed3c6b0259d176ae1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/invocation.json",
+    "sha256": "c282fcded14a717e378c88269b39076fe336b55d38f2fcdcdd688a7b70872641",
+    "bytes": 1315,
+    "git_blob_sha": "121a23e9dc6f4e6fdff6d93e710af9916679cf70"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/metadata.json",
+    "sha256": "559b25d35a4cd2ca4d14f08b9b36a8edad6d9b8be32979f8e13915e406112046",
+    "bytes": 1914,
+    "git_blob_sha": "9648023a0119cbbfca9128db0f1297659657ba85"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/packet-provenance.json",
+    "sha256": "19269fdf9c04cedeccef7c024500ec2adf16dffa81c83246c8c44aee950099ac",
+    "bytes": 317,
+    "git_blob_sha": "4b39a96275028ddddd58883157918689300c4819"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/packet.md",
+    "sha256": "ea15fdd0389949caeaa6d2ccee060f4d8be9ebd6f8ceba60fbf286fcb5271046",
+    "bytes": 44011,
+    "git_blob_sha": "c8a0a1521082d184b70e5f7682850da78259203d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/raw-response.md",
+    "sha256": "1566a98980d625cdf07c2c84e2c3cdd4834aafc669594a070ddc909db7d0ac45",
+    "bytes": 28364,
+    "git_blob_sha": "ef5c364e0bbef3db9a1d48aa143bbaa02ff9d2d9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H046/read-log.jsonl",
+    "sha256": "2da1f59fb11c6b483d48efafdd648f6ad882c7d876bc39f9c9229fa46043c2cb",
+    "bytes": 268,
+    "git_blob_sha": "529fa0a495c358b1482c3575846509939fab916e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/canonical.json",
+    "sha256": "8ad012dd06e10cf28c00e20f6a0ed0895be61b1f7a9a47d5a1a1ffdbb293babf",
+    "bytes": 25575,
+    "git_blob_sha": "aca6adc198e18624b53c19542e8eef427d4ac6ae"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/envelope.txt",
+    "sha256": "aa6d6733dd7243593e5cc94f9fcc4404faf970d88abde910ee749a4a3fde20d0",
+    "bytes": 991,
+    "git_blob_sha": "484d98c7d85356650ae4bd3439129d8d5b267fa4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/invocation.json",
+    "sha256": "e0013ff998d82887917c498172f6c6f08e8af98fb663ea2611a3ba704515fd19",
+    "bytes": 1315,
+    "git_blob_sha": "132997292ed4667923be13661608e2a6fa6e6815"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/metadata.json",
+    "sha256": "7b5adbea2a315db6bc14305cc90b5a2515faafe888a1693d72f11fa9f43cf68f",
+    "bytes": 1904,
+    "git_blob_sha": "8a859148e65914eceaafa9b69fd6ca3bc9d1b582"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/packet-provenance.json",
+    "sha256": "373cf4235e36a883fe8541451665f371fc699cc663b93d553870b25e72d6c3e6",
+    "bytes": 317,
+    "git_blob_sha": "86e4b0666309df11a924df75a0ce3cc5f13e7fad"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/packet.md",
+    "sha256": "3088389556adf15794f81e23f8e9688fcdc946474cb3eb56a9955db7ca1ae05a",
+    "bytes": 36271,
+    "git_blob_sha": "c7050103496d02d3e4301b6b96dd77691ead74c9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/raw-response.md",
+    "sha256": "8ad012dd06e10cf28c00e20f6a0ed0895be61b1f7a9a47d5a1a1ffdbb293babf",
+    "bytes": 25575,
+    "git_blob_sha": "aca6adc198e18624b53c19542e8eef427d4ac6ae"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H050/read-log.jsonl",
+    "sha256": "3a0ec173b2b3ec9b9cbb63573ce39f6ad5328aec6652cf502b7fbfa60b8be923",
+    "bytes": 268,
+    "git_blob_sha": "7ddfe416bf2f5238e38f700493e45990f9bd5c3e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/canonical.json",
+    "sha256": "5ff96ab3774e26c8304346a95b7da9ff1882cb49bbbc73dd1fcdc9b329bdf7e1",
+    "bytes": 21354,
+    "git_blob_sha": "4edad61d6ac3dcef031bda570ae1b3b09e1b9202"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/envelope.txt",
+    "sha256": "dd5fa67fca9cfae55fd5c6a50e9c26a04cbea0f36830676ca214f03c6a72ee4a",
+    "bytes": 991,
+    "git_blob_sha": "b694a0091a219540bcb5637762cf3456c5889552"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/invocation.json",
+    "sha256": "c728e2d192bc99069927394cf1e054a842e6e071a1f62bc7148026518667f770",
+    "bytes": 1315,
+    "git_blob_sha": "099f9fa3146196ba8b58126070b9f87eccc5e4f1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/metadata.json",
+    "sha256": "52ce7c19122d9aa1f650b7e96b6d395c1398c16ad59a5215ae965bde643f9b2a",
+    "bytes": 1904,
+    "git_blob_sha": "be2c8c5ae9939038305f35353019b2a71a7b5ecd"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/packet-provenance.json",
+    "sha256": "f0a7148f7c6f2a3eab93385a57aa08ca259d728a358f91c1533035c4382ca1e4",
+    "bytes": 317,
+    "git_blob_sha": "692a7894fd647f8ddc41b42a5488adcee3603b31"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/packet.md",
+    "sha256": "51d7b4e54ccabd15cc0f9e667fcd94c54887e070a01dd868b80e73ecc160f818",
+    "bytes": 36085,
+    "git_blob_sha": "57784d3689d5772570f9a18337636861247b60de"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/raw-response.md",
+    "sha256": "5ff96ab3774e26c8304346a95b7da9ff1882cb49bbbc73dd1fcdc9b329bdf7e1",
+    "bytes": 21354,
+    "git_blob_sha": "4edad61d6ac3dcef031bda570ae1b3b09e1b9202"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H054/read-log.jsonl",
+    "sha256": "890769fc480652d2b09a4d11447326b81f485dfe03a0e81d6766c6b6ae966dd7",
+    "bytes": 268,
+    "git_blob_sha": "56e46b917b1ce094abd94745a194d5eb9874761a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/canonical.json",
+    "sha256": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "bytes": 25099,
+    "git_blob_sha": "5006de2718c2a9db7d34958ef42e11a8278bbb22"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/envelope.txt",
+    "sha256": "39168011aa78332216cf9fd27359ce39af83d3d702196e0c90002a31f526b2d4",
+    "bytes": 991,
+    "git_blob_sha": "7d9316c7b8518ef890159ee0c876dfbb0f3b22d8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/extraction-prompt.txt",
+    "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "bytes": 1612,
+    "git_blob_sha": "0dabbe9e53c7e8261d4cbd5315be63f132da9df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/invocation.json",
+    "sha256": "022b5ecb32fbf7cfdd88d1b17617120b03c67d045043b319003bb507f5679d1a",
+    "bytes": 1315,
+    "git_blob_sha": "3f9c07d1189a729b3636dd6941d50126470cc30f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/metadata.json",
+    "sha256": "101b2f54083742ba0f6d7a7d3970bf95c686da5998a89a848fc4e20a3d13395a",
+    "bytes": 1914,
+    "git_blob_sha": "64a0c4e9fc3ffc80c49d3d503d6d5ce1cf325362"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/packet-provenance.json",
+    "sha256": "d996c4b435a11f92293edea2935d94280d2cba2b85e07833623df03ed960e7ca",
+    "bytes": 317,
+    "git_blob_sha": "9ade4e2ed9f7e656298cb56dfcddb3d10a1729d3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/packet.md",
+    "sha256": "41da62d07d9201d39e64176824b18624422232c7de991404b0b26a2b3e911dfd",
+    "bytes": 45008,
+    "git_blob_sha": "d48475717174e7cc21435e60da6c7a9049964076"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/raw-response.md",
+    "sha256": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "bytes": 25099,
+    "git_blob_sha": "5006de2718c2a9db7d34958ef42e11a8278bbb22"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/H060/read-log.jsonl",
+    "sha256": "e35e2b4915d6111e371f9da8ca12f293e5f7bcd02d98b07765f4a111f63c5978",
+    "bytes": 244,
+    "git_blob_sha": "300bc6d57264a900ba9f97b57955fe84d4dcad9d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff-extractions/handoff-index.json",
+    "sha256": "b2abd62660fd0b058626f91fa31eb1ac3cbb43519888049447de57baa5b27e4b",
+    "bytes": 13445,
+    "git_blob_sha": "09cda80bc104eaeffe3a29badd564f1139903c3f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/handoff_extract_ops.py",
+    "sha256": "ce104ce3b3320a98a0104b6c577647dbb9bdd609d9164c08d634f5678885aa3f",
+    "bytes": 4212,
+    "git_blob_sha": "8be9a8ec132e79689c50c758798edb7b83406aad"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/make-evidence-manifest.py",
+    "sha256": "179daa43af395ee01483d13e0e794be5bef47dafaacf04d0c196b98353bf39cc",
+    "bytes": 2445,
+    "git_blob_sha": "a93a76e9da6445bf58c9a42b6c848b3efde89a2c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/packetize.py",
+    "sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+    "bytes": 2873,
+    "git_blob_sha": "b151a427aa2ee9b6669f85fe16c62c0bf4b5c5e8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s1/docs/business-design/design.md",
+    "sha256": "c0cf47ae2a131c0e62df8599d440f65d726bc5502f2c7163bc629a58d512d4bb",
+    "bytes": 3089,
+    "git_blob_sha": "5859cffbeb25f3984370aaf206c1d68ee9e41fa1"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s1/envelope.txt",
+    "sha256": "708932e2177b386700420e08f4dc7880b731b8287eaf32e2de1764a9d697aaac",
+    "bytes": 2351,
+    "git_blob_sha": "302e3a4df233dfa7fc7e24e5db79f12f1b1bf84d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s1/metadata.json",
+    "sha256": "1bd1d81b9e8e719b9b7c894d70af27922be278bed3562dbedf62215e13e7ffe4",
+    "bytes": 2075,
+    "git_blob_sha": "e3233d56172677292294b027727d83a6668cd5d2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s1/raw-response.md",
+    "sha256": "c23e64403c45010662e2ba4fd2026bf883f80fbdc270a70af5986b0e9783853a",
+    "bytes": 3936,
+    "git_blob_sha": "a2392442b83d7864a6122450e02dd5c3ac4841cb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s1/read-log.jsonl",
+    "sha256": "0716520c58211613c04f4d98771b3224fa7cc2f9c323d0d3f71d2fdf4a6d55f6",
+    "bytes": 763,
+    "git_blob_sha": "b91f585065ac4aba9bf25861d124f4ac3a5142d7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s2/docs/business-design/design.md",
+    "sha256": "08fc244704de0950c4988a5bfe04de869fcfb7e473d29dca87a50586d68ac338",
+    "bytes": 2841,
+    "git_blob_sha": "01001da248d92f25a0c0bc1820d6001e6c07c2ec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s2/envelope.txt",
+    "sha256": "9a3d0d8ef01faa095b0a5beeda873a179d8b96d62f98e2b0572934b6060de04a",
+    "bytes": 2351,
+    "git_blob_sha": "97ae87819310517c50a91dd0aac03cb540b3e4ec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s2/metadata.json",
+    "sha256": "7b2e0db38427d06a94fd238590a93ba43622c5bbb0d9e9bd4253de7aa2854bcd",
+    "bytes": 2075,
+    "git_blob_sha": "fe20c88ab7d23b1ab57379135b125b58a7e3cea8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s2/raw-response.md",
+    "sha256": "4f7535c14381a5d4b482853e0fe86da26ad1e6968970897909c29489553d7227",
+    "bytes": 3428,
+    "git_blob_sha": "acd7926c27aba386c08da101842ef113d8d5fdde"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s2/read-log.jsonl",
+    "sha256": "7cdc7e004a1b6c4c04bc4352b5e4a54670b22514741a64a9d7e2e71fd62f2b53",
+    "bytes": 728,
+    "git_blob_sha": "da230160e247c7b1f57219cb41777bf454e7246f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s3/envelope.txt",
+    "sha256": "6c67677d1f2ebd4f3c22697b20f23f7578a54b45c8e8633ea9ae1fa64059d0b3",
+    "bytes": 828,
+    "git_blob_sha": "bdcc81f7800addcc265df70d73288cedcb4f8d6e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s3/metadata.json",
+    "sha256": "453862b3d81defc17c0dbed60317bf886fdd895c92d8940ae86ece3d7b994a67",
+    "bytes": 1958,
+    "git_blob_sha": "75d3d186315fab2043eb922a71ab06470eac4b7c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s3/raw-response.md",
+    "sha256": "015262690a9748e58e7d29d31dfd64323cca8a45a0a98ab0e1021f1abbd10f06",
+    "bytes": 3032,
+    "git_blob_sha": "97db544ab9326c25ee472fbe67cd77637802fb1a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r1/s3/read-log.jsonl",
+    "sha256": "03ce8031c01d2f23c87981004eb878f8860deb84a3ddc5385007d82d64aab74b",
+    "bytes": 254,
+    "git_blob_sha": "80e409ce620cba4f2a4f6345c7fcaadca2dc3db5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s1/docs/business-design/design.md",
+    "sha256": "ae8f1e227acfbf006abd7bffb0263e9f5525d4d3f9255d75a6f92189a941d192",
+    "bytes": 2959,
+    "git_blob_sha": "228cacc6b447041bc240c84b3b87a0343b1f6ce9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s1/envelope.txt",
+    "sha256": "5a65f964b1097acd81c8a2c6f73cf0a801fd2ab6615dd2dc5bd0dea36047fd7b",
+    "bytes": 1545,
+    "git_blob_sha": "591171fb5e0c4c7454d71e2108d875d9ac6268ce"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s1/metadata.json",
+    "sha256": "64174254c6164f5ed4140fce763f3c70cf8cca55d9a77739f49c3e03dd49996c",
+    "bytes": 2075,
+    "git_blob_sha": "f46a9b838bc3c6ad0647ef32c8e42e1b0aeac88a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s1/raw-response.md",
+    "sha256": "28553a15044e80952e3c35c7fb3f70b7f6ef12f848637b656d29e52ce35b1a9e",
+    "bytes": 3943,
+    "git_blob_sha": "90f7d3be798e3d8019c4c6fabcf58a8617c7b690"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s1/read-log.jsonl",
+    "sha256": "d64f2dda7e3cf5de98e9a13a8ec158672bd36d7a4142fc0bd1241f353d53d472",
+    "bytes": 763,
+    "git_blob_sha": "129e64372e0bdfb7af2e0ceae50507ff95de5d28"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s2/docs/business-design/design.md",
+    "sha256": "bf08144a913d8c47d4ef9083400785d1c0aca19cc91e4824701a8506f69da476",
+    "bytes": 3333,
+    "git_blob_sha": "4dfc19077fa081fd2c6a633bd5c3fa68d32e3b2d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s2/envelope.txt",
+    "sha256": "bd100c9f057bd7ac28b273c35483cb157d2a28d56b06627f78e7f5ae71b7c92a",
+    "bytes": 1545,
+    "git_blob_sha": "bcae7a0ecc458db040654d732181d8bba34dd07f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s2/metadata.json",
+    "sha256": "b19598d6666292a7be33d96c67d2e52e54fd11b8cf5782686e47619e0a231b9e",
+    "bytes": 2075,
+    "git_blob_sha": "2c706243bf316defab9e85a6c930cbe26c333df5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s2/raw-response.md",
+    "sha256": "4e35624cc3f58b5971405364c44919e650ab92bae77bf1f41650dc09571d0976",
+    "bytes": 4226,
+    "git_blob_sha": "3ca9a41e41a1bf0e6b6425d41939e65213737eed"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s2/read-log.jsonl",
+    "sha256": "062c9be03eef4723de3a64952aec18f7bbf81ac0aef21733a3d0bbba3a76e16a",
+    "bytes": 993,
+    "git_blob_sha": "e4d06b3f6f57f8e098de5f1512c963a92511ca33"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s3/envelope.txt",
+    "sha256": "b199cf8d13bccce9d04d374639684f5d88eb3def767198435cb1e5d0481b54c0",
+    "bytes": 828,
+    "git_blob_sha": "93accd8d131bb8ef517d3473005704c390eeff5f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s3/metadata.json",
+    "sha256": "7c50b6b4f01de89de3d7fd1361fb0101897992af2615201e1c66449b423fc7f6",
+    "bytes": 1958,
+    "git_blob_sha": "ec1d310419e921e48bcda86a5e47d5f09cfca2b4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s3/raw-response.md",
+    "sha256": "bbf19ae6dfd65fac589b2aff6b730f93d5854d3930099a6140d0ada6ed2053d7",
+    "bytes": 2154,
+    "git_blob_sha": "ba8e1377069db2b55cf35c531de801ce8ba6b074"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C1/r2/s3/read-log.jsonl",
+    "sha256": "acfaafceb0163716e7df23237fc0d79792d295bf4b22e103a10702eb1d34c1f4",
+    "bytes": 224,
+    "git_blob_sha": "c397affa057526fcd140d879199afcc4ca05fe03"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s1/docs/business-design/design.md",
+    "sha256": "62daee92c81ce15fa6c3b6531b600b3ae33a7c7d4eeb161a37bf09c5da4f51ed",
+    "bytes": 6675,
+    "git_blob_sha": "0d8ef830b0f78670358b30d21cfb04c4b00335be"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s1/envelope.txt",
+    "sha256": "763c43fb46af88cd053df8ae470bf2d8f5cc0be8fcfeb6c11e4d59218149a8a1",
+    "bytes": 1545,
+    "git_blob_sha": "5ee12a356ba7d35363317dfce8767569dea94db4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s1/metadata.json",
+    "sha256": "24f3fb08ca3031a224fc5797f8a8c8224c20f35501ed0935b8d1b819890f26bb",
+    "bytes": 2075,
+    "git_blob_sha": "0e7e1c212326a94c26888e58094303f202798c18"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s1/raw-response.md",
+    "sha256": "575c35d4d290044c8c82d5b4839b2530732b6a3bd81e74dac476f6081e80e69e",
+    "bytes": 7498,
+    "git_blob_sha": "c6022f5a2269d00bc4c1335ec920e317082b70c5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s1/read-log.jsonl",
+    "sha256": "c9b0e7f95f65bb084e6112d002f3ea2c8d3cc9a6b4b062716e825264dd9fb024",
+    "bytes": 921,
+    "git_blob_sha": "0abda19e924b43a311e3a15196ad00cb1163adf3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s2/docs/business-design/design.md",
+    "sha256": "019ac63d5f6ca95a2a6cda43ef26099dd682df710d1e1b2870a10475f3d6deaa",
+    "bytes": 6385,
+    "git_blob_sha": "105d27c6e123aae4b5444b9731350e029a50842b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s2/envelope.txt",
+    "sha256": "c0e1b49b276bae2ec52533fe23d3ffccba751972b8685ac953db3a0b416dac53",
+    "bytes": 1545,
+    "git_blob_sha": "5fe6a7171794f306c6199724f4c0a9fc3ff25736"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s2/metadata.json",
+    "sha256": "74d72982707a653eeba69bc6ce0245b7a5d4e713a5c09b205c120aed074fe89b",
+    "bytes": 2075,
+    "git_blob_sha": "f2735d2df923901014b007ee9042da4a991953b3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s2/raw-response.md",
+    "sha256": "92bfc5e9d49ed1196a30cf61f0bfa3b2ec9a587640d8413afe374f27cda08add",
+    "bytes": 7200,
+    "git_blob_sha": "142a93d205118b65f7193d624744e8246ca06b10"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s2/read-log.jsonl",
+    "sha256": "fce63d16705d03cfeae492039f8ae8d341e9cc3f054bdde8298402009233a34b",
+    "bytes": 903,
+    "git_blob_sha": "979c7ae74be1d6998dc6cd644b0667701cd22a53"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s3/envelope.txt",
+    "sha256": "2bfd2a22a0bb6489c08d7d5dca6ca979a5f0c04123f3d9721c6ba9c6fc37c6ca",
+    "bytes": 828,
+    "git_blob_sha": "d6804dd60158d38006004c18fbe4e5922b1c806c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s3/metadata.json",
+    "sha256": "c3f9dc63a33705df75ebd7fb4371b234d4bdd49c15c4d5849d385b7ecf8bc578",
+    "bytes": 1958,
+    "git_blob_sha": "d8d90fc26df24eea4c6a5288a0983b71f0d55c9f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s3/raw-response.md",
+    "sha256": "efe3028e7181e4c12788e8933127eada637de2db06cd79b04fda4c5ea5c7af3b",
+    "bytes": 3026,
+    "git_blob_sha": "b3be9141c626bf02d494cf6067f61bacdc2a9f7e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r1/s3/read-log.jsonl",
+    "sha256": "7b1ce23e10d9e71b3c8270d23b3c8aa10d1af05bfdb22af347803ecade49570c",
+    "bytes": 254,
+    "git_blob_sha": "5c3a41a2dd3140f99931251d38714adf12a618a0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s1/docs/business-design/design.md",
+    "sha256": "b4349d35ead9f04522be436c950318ffc7ce286cee9a4dc1a1a9b409cae5d7e0",
+    "bytes": 5278,
+    "git_blob_sha": "554242642fc386a414d6f2d6e2781a60a3e92acb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s1/envelope.txt",
+    "sha256": "4f04c9c50c69f39aae3f8df54bef8f3c1a665a2181ec2364a226dbe737b00a38",
+    "bytes": 1545,
+    "git_blob_sha": "11583d110b80f56d17911f8a2fb6d43757411c18"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s1/metadata.json",
+    "sha256": "a10374e67b8bfe8e1ba739117d9570ab279dec00ff40339c55dda0a2efe1e24d",
+    "bytes": 2075,
+    "git_blob_sha": "7a2b2cd327cc59b5af48132e2fb8b41493e27873"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s1/raw-response.md",
+    "sha256": "adf36fe4e693911700c0c1a1ba82ffea88a6b1f38fa55318f45d59ef2a23136a",
+    "bytes": 6295,
+    "git_blob_sha": "9e38b771d93c4b47623e1f2cf920ffbdc5c2beac"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s1/read-log.jsonl",
+    "sha256": "8ab0b961efd51049e26d82b79da609e870901b636e42fc56e7bc3cc0e32f91e4",
+    "bytes": 1097,
+    "git_blob_sha": "f3df4e7a6538fb9afc188d34a2e65a49e85c9edb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s2/docs/business-design/design.md",
+    "sha256": "933cd706edbcc4ec390a2f105ea37a7819c8ba7604ded6ee654ba7aa84166056",
+    "bytes": 7013,
+    "git_blob_sha": "7ccf30aabcdb271439affeaea5d35a91fd032c43"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s2/envelope.txt",
+    "sha256": "040658bd2803f1067ccf487103987a3868ae0af22710a5e15f5fd1d351504293",
+    "bytes": 1545,
+    "git_blob_sha": "b9c161160a6a77725833e79b1ea7f17bdf6056e8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s2/metadata.json",
+    "sha256": "8e574e8800dc4296c2a41d2ec5e1a0e3b592289b38c5c30ca58f6c824568458a",
+    "bytes": 2452,
+    "git_blob_sha": "0f1e37acba0f8bef94a49762c77aaeb716f90219"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s2/raw-response.md",
+    "sha256": "de4cc01fff0ade3ffe0069858c6bbf39b28e587795c3f27a92bfaeda1051b703",
+    "bytes": 7921,
+    "git_blob_sha": "a2c37c155409d8ea5a7a0585d6eab136a58d1f6d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s2/read-log.jsonl",
+    "sha256": "df8d83ef2b6180f516a0f977a70af5f9c744acbb4feffa11b4b27a16dd04fc52",
+    "bytes": 1401,
+    "git_blob_sha": "1c9ee40ce353d05857e4bf49962eb6f9901c0c8b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s3/envelope.txt",
+    "sha256": "b50bd9d895b6b1c32551f43b2140569e7a44dded52a9dd2d220118e9a3459a57",
+    "bytes": 828,
+    "git_blob_sha": "aa0f00257783f377dab5ed6597f5014e31db139e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s3/metadata.json",
+    "sha256": "fc1b6bdd1cedc5785de0203c01da97da27083fabb4f1c2a1b1404712d85eeb2a",
+    "bytes": 1959,
+    "git_blob_sha": "c442530aba24d6a9dfd6c296b62fd82b35f8a0b4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s3/raw-response.md",
+    "sha256": "8ab624a18cef135b2d47afd6dd7d7a12f124639be2b4c247a768d4fe099f72f2",
+    "bytes": 3462,
+    "git_blob_sha": "6b77a90f179faf042837d1863c3f353072c3bb3d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C2/r2/s3/read-log.jsonl",
+    "sha256": "455482bdcb22956cd89c27f5dbed7ab2a0d23defe96756bfe403dc66547a7a9b",
+    "bytes": 224,
+    "git_blob_sha": "149833213f9d7a2a19cdeb2f9327abdb4c1c7cc2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s1/docs/business-design/design.md",
+    "sha256": "22dc35ef6e7ec8739c2f519842d2cfd081d070535d4146971b553552dd5b02b9",
+    "bytes": 4939,
+    "git_blob_sha": "f2cb24bba25eecbe10c63a744bff62a2f8d0f882"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s1/envelope.txt",
+    "sha256": "b0d8601da1b9ac8ae61250706afc53b07e2010903c12eeef19e37a7ba6e41865",
+    "bytes": 1545,
+    "git_blob_sha": "afcfd1c6285cc46593f889e6cdc9bfb006524842"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s1/metadata.json",
+    "sha256": "070c5998a9c1c3769f1d1762a1f1cbf139ecd775d5ae9c909b6a1adbeb71be44",
+    "bytes": 2338,
+    "git_blob_sha": "c3c8c8f90cec4d82d7ecae1e53aeadcc010df6df"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s1/raw-response.md",
+    "sha256": "eca7a43782b2596b7a7beb70d50b3d9471d2ce27cab704980b996cc9e234460f",
+    "bytes": 5609,
+    "git_blob_sha": "39039c837b3543fc24c50fef1f114ad773d29641"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s1/read-log.jsonl",
+    "sha256": "f01a50c51287ff5204d10a2e589fba8d8f2c1b12edfcddf9030c7da708a0848e",
+    "bytes": 1271,
+    "git_blob_sha": "b55e13193d4dc954e0d9f8652d9831d2bf7cb8b7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s2/docs/business-design/design.md",
+    "sha256": "ef05125284c0b4105664aed8e5b7f84b524d9f94403d5ecadbdb504a3c5a4054",
+    "bytes": 6087,
+    "git_blob_sha": "11d55544e479ce2b9d00a914619e5ba28c48eb24"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s2/envelope.txt",
+    "sha256": "314ac8ac8eb9dc5342f84ec20dacf817f447c9ae9ed5f881d6b8917056ede932",
+    "bytes": 1545,
+    "git_blob_sha": "adeb6771630415e5740ffe79d33f488a8ccf8c82"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s2/metadata.json",
+    "sha256": "42ba5323890751e5d3e2561343b90359ad6e4c9dfb98c73fb73fb79ab7f21ac0",
+    "bytes": 2209,
+    "git_blob_sha": "36b74620984f5333f11a40da6a3795d31d6e61ec"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s2/raw-response.md",
+    "sha256": "f34de79b86c27e827d0367b4ad17f998de67a9a043f48860f12deb7c0c53aeb4",
+    "bytes": 6933,
+    "git_blob_sha": "efa42898ffd022270b44853cbe0e058b10024486"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s2/read-log.jsonl",
+    "sha256": "f13ef0d7508820d67800fa012ef7fc9a55dbc1910b3c2f66f29a4c99d00cda13",
+    "bytes": 1035,
+    "git_blob_sha": "720190021eca2539b60302d8eb4f21f4efc77897"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s3/envelope.txt",
+    "sha256": "0d75f3df8374db8dedbc8f7b962459ec8fb20e6f97158a3cf5e9ce06df6a2fef",
+    "bytes": 828,
+    "git_blob_sha": "6e84c9edfa6c231536fcc1ca2a4782b27aa4ccd3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s3/metadata.json",
+    "sha256": "96a6a9b2799c0dd1ebec05b5d635db774fa07cc4d934ea3fbebda88137cad05a",
+    "bytes": 1959,
+    "git_blob_sha": "e9e63492d661d9662ee40a3316dac206b82b47b2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s3/raw-response.md",
+    "sha256": "c72181036bef3101d0aaf9e369276ae245281c27bb38c121ed949dec947e1d5e",
+    "bytes": 2858,
+    "git_blob_sha": "2ff86f782606f920b465eb574b1a09dcf9cff94e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r1/s3/read-log.jsonl",
+    "sha256": "b6b4408972cc1bfdfaf3dc7e6d2a3565fbcceb0d085e317126b442eefe698205",
+    "bytes": 224,
+    "git_blob_sha": "702522cb0f50a6f4cced5223067d34e873ebbf0e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s1/docs/business-design/design.md",
+    "sha256": "afcf328336e62f0691fd09e16f5495c4ff60eaac09c909b3545e2f8e099d1ded",
+    "bytes": 6066,
+    "git_blob_sha": "2c8b2c4e6e6f14303bcc7b1a3739041122bca881"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s1/envelope.txt",
+    "sha256": "431571ba5df2b64adb9c5063bef3cb88e659ad2230d0158e797bcda6d8a4e442",
+    "bytes": 1545,
+    "git_blob_sha": "deafe2d21e3efbab6819a10887e8a0f2b45942b8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s1/metadata.json",
+    "sha256": "7e62fe03e3a072bdf9c55500532defbb7c658a248f3f191ff6f116b16a1b4976",
+    "bytes": 2209,
+    "git_blob_sha": "9f61ea1b654d47a06479a7623fe6b4fec4017289"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s1/raw-response.md",
+    "sha256": "bf1ce7c1f535f767018a35f189ae6f9738bbd7099564f4092894b15de2a2876a",
+    "bytes": 6991,
+    "git_blob_sha": "ffd90ec5bb7d7a91d88081c4bbdd08f20e6d7a3a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s1/read-log.jsonl",
+    "sha256": "58724199dae5e3b5c47ca41d54e3478dae4104aa4236c353e425ca03e40ad02c",
+    "bytes": 996,
+    "git_blob_sha": "8af2fdb4604285c6aeaf44b39d061cc16f4d7dc5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s2/docs/business-design/design.md",
+    "sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+    "bytes": 6304,
+    "git_blob_sha": "ea2985d8f665dbbc691f7dba4aee410d76d165be"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s2/envelope.txt",
+    "sha256": "1cff22b2ab9d4a3e84b1ea7d825aa31f5642211d38ef29df3f7cab0711c67e7c",
+    "bytes": 1545,
+    "git_blob_sha": "f0e22fa0cd1075cbda49ba434d37c8e1e9dec52d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s2/metadata.json",
+    "sha256": "7b7421f6918ccb8bc5eb79baceb5253b519311081c1db89d587b369413e79ebf",
+    "bytes": 2075,
+    "git_blob_sha": "09e48096f00c2f0a6b449045311f8ede554beabc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s2/raw-response.md",
+    "sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+    "bytes": 6304,
+    "git_blob_sha": "ea2985d8f665dbbc691f7dba4aee410d76d165be"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s2/read-log.jsonl",
+    "sha256": "bef0e74cad17d9fb05ab687a1d496adfc97cf212db906779b2111ded6814cef3",
+    "bytes": 981,
+    "git_blob_sha": "a51c6c011705be571974ff7d931798c76e652d6b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s3/envelope.txt",
+    "sha256": "adaad37c7a5ca05b55ff08004d140956f9318444376d042a0dda27398518976b",
+    "bytes": 828,
+    "git_blob_sha": "f02fe175e3df6871c908631e45ae7d70adfe953b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s3/metadata.json",
+    "sha256": "35cc195434f71daa5031814620d473008534a7df21f150ecf9393a81a2ab9c35",
+    "bytes": 1675,
+    "git_blob_sha": "00d936cf122972a2d3b0053b9f732429854a36eb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s3/raw-response.md",
+    "sha256": "a0c8910dbbf0f077d3257c10bd5e6524616d04040f7ea5fa9f2fa0c6b79946bc",
+    "bytes": 2893,
+    "git_blob_sha": "c9df6c85ad0ea09ef14b1414088421df7ed1c64c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C3/r2/s3/read-log.jsonl",
+    "sha256": "505a39f0d9dd5901145351f7511064662c0169c1ec2a724af699a3a14567a8cf",
+    "bytes": 272,
+    "git_blob_sha": "09d85a34f3dd304652028c3772ebbd607e269944"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s1/docs/business-design/design.md",
+    "sha256": "84548dc9b33cfc9d587efef7ab4523a19ca065e9ba8c921f6fb8ac3b319aceae",
+    "bytes": 3723,
+    "git_blob_sha": "8ce496a0fdb2714201c272da5ff0e95d8f8e1d3e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s1/envelope.txt",
+    "sha256": "ed364f43e230706b0ba2c476b67fcc31382279ffb32be9b4431a04070f0adc70",
+    "bytes": 1545,
+    "git_blob_sha": "e29a262d0a822e7fbd33034be6dd54e072451508"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s1/metadata.json",
+    "sha256": "2a300fb51e8f41a62e6c8203d313cdb19447ac3c79f1db17ba78dae56ec2a706",
+    "bytes": 2075,
+    "git_blob_sha": "9fdc6668e9abb2183aa3e6352fb5f87852f2c144"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s1/raw-response.md",
+    "sha256": "918e9d087bcd56be605eb5e17f54d0ae9ed1746463b5c76b2615b997caa4a8d8",
+    "bytes": 4483,
+    "git_blob_sha": "52204d49c752ca107c819f66e529aad1f0c93b4e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s1/read-log.jsonl",
+    "sha256": "e7eaa3e80be40db8660f916321e1b30d7bc5ca4731a83217278fe808e9017fb8",
+    "bytes": 993,
+    "git_blob_sha": "46a37388f6fd2323fb184dab0d7f37230189b29c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s2/docs/business-design/design.md",
+    "sha256": "5897426737ed1aedc6986a5d24b62294576d6ce3ee5b2c79d98f318c7dfd5075",
+    "bytes": 3639,
+    "git_blob_sha": "3b905fae19e23b18dc838489fa6159c95f3b0101"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s2/envelope.txt",
+    "sha256": "6e498281c019699775602f0b378895e2737cf3d565d53e6b16561314ea6a00df",
+    "bytes": 1545,
+    "git_blob_sha": "f0413b54256f64c3e83bcc334df56565ede7f640"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s2/metadata.json",
+    "sha256": "d68663b15c2f41ad856bdbc7d055bda2f07e396cf3b318891e3d8a3cd3757646",
+    "bytes": 2075,
+    "git_blob_sha": "caf842ec03f255004d8e402b0545d935ce905501"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s2/raw-response.md",
+    "sha256": "08c985bbd6301017fd53cc7352bcbe0bddc3263c118d1d7295b6bb0a97df3771",
+    "bytes": 4256,
+    "git_blob_sha": "a65f6fac24bff5b3ddb27e9a3ba51b4f16a8fc11"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s2/read-log.jsonl",
+    "sha256": "54238c963db7ab9388168eb2155cb447ac41bd6565dd3cb599f891f00215f982",
+    "bytes": 993,
+    "git_blob_sha": "6f9ef610318dc79f1bb0c56b8d0a05d9a0a0e3c8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s3/envelope.txt",
+    "sha256": "406f0da0bce7d84e53f3df940c606484edb2f620be215f36e7d1b85e61399a01",
+    "bytes": 828,
+    "git_blob_sha": "c3c8bbfeb993d2785557494ea295ada0c3fe4903"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s3/metadata.json",
+    "sha256": "495348933035354009569181a899b96eced259f7fe5b9bd44ae3a8abf44c4ee7",
+    "bytes": 1675,
+    "git_blob_sha": "e7478ff98e87517b7095636290d3c325d171b260"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s3/raw-response.md",
+    "sha256": "849cd3d5b7eafd6358eb54115c0cf8ba7c8123125242c5ba45a983764d86647d",
+    "bytes": 3057,
+    "git_blob_sha": "ba6be3c96269c9f07c8512851cd86d16f95ad431"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r1/s3/read-log.jsonl",
+    "sha256": "d05fe590554cf33988a84e813fdb8c55c28d946f49febbdb8c0b719011fe973e",
+    "bytes": 220,
+    "git_blob_sha": "33b5b82d3d4d15ab107d5a828576b726463520b7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s1/docs/business-design/design.md",
+    "sha256": "1b76a1f510e085bcdf5e1ac8feb8c67d82a011a7d80a3a3c9cd29f2b249a0bf2",
+    "bytes": 2749,
+    "git_blob_sha": "a959aede4f0f9fd987a99c501f3d73134fe393bf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s1/envelope.txt",
+    "sha256": "d241468aba023b9dfc7102b77cec3d71a204853464a85dfa023d9b01d591edab",
+    "bytes": 1545,
+    "git_blob_sha": "60bc2bff84c016df47449ae5d32d2ca8bbacb860"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s1/metadata.json",
+    "sha256": "ab6247726247b9ce53baf50b37995495535a43698bb7104ffaa0e362df40e19b",
+    "bytes": 2075,
+    "git_blob_sha": "cdfb5f599d3a4cad873b666c10c4c9f0878d9165"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s1/raw-response.md",
+    "sha256": "bf1034a6369327b9e674e77859f78aed70c1305f250cdbb868d4d63a295e984c",
+    "bytes": 3417,
+    "git_blob_sha": "92001466651d7b651fb8b20338d47131b3f9bebf"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s1/read-log.jsonl",
+    "sha256": "e20e40cc2b3c4ac7ac6797e4760251c3f9597259b77d83ff873793ec63e0166e",
+    "bytes": 891,
+    "git_blob_sha": "eafbc95b6b1b7d31c38b13b82db70b7e1b5b0efb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s2/docs/business-design/design.md",
+    "sha256": "f6e3a7ad18ab7b03f8aa2791eef1ac5843ffeda20194dcac0008d943bc44eaa2",
+    "bytes": 3503,
+    "git_blob_sha": "63c0b541f7d621221a1d4de8210e3adca8b5e0d6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s2/envelope.txt",
+    "sha256": "5e33c1952c500b3adf3e5996b36250f5bbdbb6e9dcc8e3441c4a56ef63bc5d72",
+    "bytes": 1545,
+    "git_blob_sha": "9df047e98381a79a2ed94ef8f1a5fec8e70559bc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s2/metadata.json",
+    "sha256": "c08de59fcc621263986339bbe928093f9af21e5302799ac6d2ce816a488bd009",
+    "bytes": 2075,
+    "git_blob_sha": "23f48b79f8bc4897695a01b85148ce8bfbf61f1a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s2/raw-response.md",
+    "sha256": "f22418927da5e40e63e62f23ab2cdb10b0a3d5b1e486eafeb26c96d262f28942",
+    "bytes": 4010,
+    "git_blob_sha": "2e4a23355418505149ac9b1d21b138c195d360db"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s2/read-log.jsonl",
+    "sha256": "736490cf8174ca61580d1d0935ef7c494c7c44d571e99d9e058296cdbabf3685",
+    "bytes": 1048,
+    "git_blob_sha": "c53dd13085445289cd7c4cf373eb10aa4f58f84a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s3/envelope.txt",
+    "sha256": "2514041a5f2354adcd6e6bb1df75b42037b54d3b88009e0f3c5e424abdf2760c",
+    "bytes": 828,
+    "git_blob_sha": "56a46193b2b2ffa3ba8db8386dfd70d5b5856745"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s3/metadata.json",
+    "sha256": "0909395dfebd4005e169f7c5c9fee87db7f7b2e45d6a71eb99b9d3297c846230",
+    "bytes": 1675,
+    "git_blob_sha": "40c6296026063001cd2f1ad9be85274da8f6b9d7"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s3/raw-response.md",
+    "sha256": "5d44c2d35686f4d5b524fd6720963de3c731b2a8e308a2d8aeaeb2dd58bfd018",
+    "bytes": 2425,
+    "git_blob_sha": "984b0d97c3fb6d8db3a80ae0a62d8a3c97672134"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C4/r2/s3/read-log.jsonl",
+    "sha256": "e3deb7f9098c9816f7e473d7d1a0372a82c05298ff4c80aa867c0852f3091e83",
+    "bytes": 224,
+    "git_blob_sha": "f4f4795eb7fd18fd3700cd76b9b3c37067737a90"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s1/docs/business-design/design.md",
+    "sha256": "a472bb024cc7ef0d82981dacceeb2dd667e2b222dbe6a4f1343840a957d9fd50",
+    "bytes": 5694,
+    "git_blob_sha": "39c940cbfcb7615955cf1763fa8b7eaad06bea0e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s1/envelope.txt",
+    "sha256": "0cee5af57a5d3d10103c2596349413e2c1289acfb976933f8e31fb1b566191ac",
+    "bytes": 1545,
+    "git_blob_sha": "e4e5e43eead5957114f4a1ed4308a3501d782c4d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s1/metadata.json",
+    "sha256": "9bbe20d5bea615f24d58ccc14a27bbaae4b696cc34e6af454f0bc9abf4786d99",
+    "bytes": 2075,
+    "git_blob_sha": "7a59b922558a351823a04c6ef2cda25c70f8c731"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s1/raw-response.md",
+    "sha256": "fa59767b01b32529c21fb137b0b4c903386ef6711e416ee30c480360a16291dc",
+    "bytes": 6509,
+    "git_blob_sha": "54e66ed3666f59350f2ae4c15de7107b8b8f2d56"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s1/read-log.jsonl",
+    "sha256": "262eedca9e05c94710721979c8b8b03767e67da28860419b6546cab84b2c0025",
+    "bytes": 1083,
+    "git_blob_sha": "d4bef66c8494aae53e491ba7b2742ff97bff16c4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s2/docs/business-design/design.md",
+    "sha256": "cbef718650c75c7fa8561d1c931e6b28f36330ea49a150f147fb0e4b3110d10e",
+    "bytes": 4515,
+    "git_blob_sha": "951f1f2d800866cd00627173fed5418984cd21f2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s2/envelope.txt",
+    "sha256": "c0f66a5afae308c216a041424757fe13de1323d507f85ceb989bdd72077184d7",
+    "bytes": 1545,
+    "git_blob_sha": "f93543c66a5430da23e1f71a38441ffd8f91ed04"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s2/metadata.json",
+    "sha256": "00052a0364631cbd16990d6d2821da3310a2a65f47f499e3126730970bdf59a5",
+    "bytes": 2209,
+    "git_blob_sha": "23afd2f6c0701c42c701c698d4000180d2b6ec9b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s2/raw-response.md",
+    "sha256": "7d01a28246dbe829af7de99af41db9b634775ed87242a32eb416d7269ad9621d",
+    "bytes": 5215,
+    "git_blob_sha": "e83c29906e5f6d836339703d9a08e7bfc5e5a79c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s2/read-log.jsonl",
+    "sha256": "c438d8290e524aa840f2b0e4f90cf8e46e0a46589b3f706fbb0c5e44f371e6e1",
+    "bytes": 1140,
+    "git_blob_sha": "7f0f17408893b110b08a436ff99eb34fc07c8cef"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s3/envelope.txt",
+    "sha256": "2bcf0b80fcaa1acc7808c5852e7f3c7ac041e0563f289bf151de1132e538628c",
+    "bytes": 828,
+    "git_blob_sha": "f38f5b5422797fccfaf8654a8959c97da35986d0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s3/metadata.json",
+    "sha256": "d419c01b50f934f7b5b031ed8d4ce81f4930a953c15302d966469278a80d0a2f",
+    "bytes": 1676,
+    "git_blob_sha": "52d85974d848f712978a145ebce1667b079b2d0a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s3/raw-response.md",
+    "sha256": "abde4a0ffb01a1dd6d1cfa749294dde5c2a6bade4002a20b290b29b09e58cd9c",
+    "bytes": 3401,
+    "git_blob_sha": "f6bf6353a336ef6bfc27d6b8de8c1484ebd6baba"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r1/s3/read-log.jsonl",
+    "sha256": "e027d4f84c8e0fff9fe86480c944d914cd915129313950f0ca8c7f91cb05ef15",
+    "bytes": 220,
+    "git_blob_sha": "f1bc11b9153ba01008d4eed298ed5fe54946a2a4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s1/docs/business-design/design.md",
+    "sha256": "1acdb0ff21a6e04226a3333c6f1b0b283c929c13f87095a17f78158400debe94",
+    "bytes": 5001,
+    "git_blob_sha": "9ddd020378693835bef7e3661711b475f54ec1eb"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s1/envelope.txt",
+    "sha256": "8f9609cd9da45b42ddf54b8573cdf521cf618000b344299ce8d0dce804827b3f",
+    "bytes": 1545,
+    "git_blob_sha": "05e25c7a8bcd988dcd57effa0e423057dabb5156"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s1/metadata.json",
+    "sha256": "1071d91d84c727d2808455355a21ee9c8a374d96f46b0e8abe271220c20febde",
+    "bytes": 2075,
+    "git_blob_sha": "a49c8a2786d31812dea8d393a6ef1a04179e2e19"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s1/raw-response.md",
+    "sha256": "a4aef76aaf6202f2cfe395a7837f0890159d8e5b83e60359fa3d60b938eccfbe",
+    "bytes": 5808,
+    "git_blob_sha": "cadf2f8d0996644a2f3419358394025b26334ce3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s1/read-log.jsonl",
+    "sha256": "8a79b779ec6a58d0b7a19e34505f84dc65c2a68088aa49827255ee8aa0a96d23",
+    "bytes": 1097,
+    "git_blob_sha": "a6270f478e600cb3123d7907594aaf3327594464"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s2/docs/business-design/design.md",
+    "sha256": "553a5ed50b1229d76de0aec7efbcf4d489a0b0f70bd1b605ef979cf9bea07665",
+    "bytes": 4744,
+    "git_blob_sha": "c6f54f0e69d1c706deecf1b1d0fa052d89f041ee"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s2/envelope.txt",
+    "sha256": "8876721a4a693c1c85e78f474cafc7627c8c6cc5f78ed38fd0a05d10fb2c1cae",
+    "bytes": 1545,
+    "git_blob_sha": "4145825c5e68d75453f1b4ad92c823948ba36ca3"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s2/metadata.json",
+    "sha256": "372cbb8b67fedb5757ad7b04412e3d8807517d1ae198fcd5282e0f1637590b30",
+    "bytes": 2075,
+    "git_blob_sha": "7691ff697b0fc9e3d0420d30b5006c824569b6e4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s2/raw-response.md",
+    "sha256": "39541ddb1f98fa33633077e5c83f9dc9e74ce80c3646a72dd387e0dc8ded3152",
+    "bytes": 5579,
+    "git_blob_sha": "febdaa5a3c3a9f61f7cdcbe2121ae805042fd373"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s2/read-log.jsonl",
+    "sha256": "d064c2a62a641772479faa45a4201bc5ac1cfd644e61441a859bdf40f9927afb",
+    "bytes": 1023,
+    "git_blob_sha": "7a1bbc42dc4ec19453c90066433eb5a011f2d56a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s3/envelope.txt",
+    "sha256": "e1eec217c406a6cd1301e2dbc3f590fa4d3ace4e9a21d88e7e9204cdb958d24d",
+    "bytes": 828,
+    "git_blob_sha": "c61752ecb17e4a2f44460f53ec867930e378a217"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s3/metadata.json",
+    "sha256": "6a0e1a3e309fd14a87e518652316ec71f5760917bd8befd395adf714ae2b0bfd",
+    "bytes": 1675,
+    "git_blob_sha": "d47dc7f60419b95c5a1a05e26a98512e28c0e2f2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s3/raw-response.md",
+    "sha256": "bbe9e6334398495cf9feadbd95899a16ad3c085ec48e90e5a5f59463579903a0",
+    "bytes": 3078,
+    "git_blob_sha": "5f9832bbefdbb30a36a3cb0241bf73c10b89a4a4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/C5/r2/s3/read-log.jsonl",
+    "sha256": "40fa45d695964b086e21bcdf742693d96309bac8e6b7f38b4fbecf86d713ede6",
+    "bytes": 220,
+    "git_blob_sha": "1b8b23db976fdb0be85640512e5eb19db9a16015"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/handoff-manifest.json",
+    "sha256": "df828558daa3012d7cab657ef144d32548ae09c583714c0bdcabf30ea3f78dbd",
+    "bytes": 3115,
+    "git_blob_sha": "12c4fe5fc71897d5ba728e595c71b849487dd8a9"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/manifest-pre-analysis-classification.json",
+    "sha256": "3f5741b2ac4f2a2d949d5150b97fc0be208699422bde5a906a6b2a6d141ee569",
+    "bytes": 44420,
+    "git_blob_sha": "82dbf8e2d1195034e42c62ecb1beaacb7a436fb0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/manifest.json",
+    "sha256": "173bcc684ca3f3a8f43c3ab60b89cbf910d37e5afd2814db28be6d277c864759",
+    "bytes": 50598,
+    "git_blob_sha": "c39ee2423f29a8f6020926ec4a8e9e7ba83e3d3d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/method-hashes.json",
+    "sha256": "4fe39ef60f7542ae1d92e79a2ae8c9f2587024451ddc689fb4348b39ee7628aa",
+    "bytes": 383,
+    "git_blob_sha": "3feb4c50d82c5278aa4d1d5887e35c6f7caa34c6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/update-run.py",
+    "sha256": "d8b787acbf8e800206173147587c0769dbd26e8e6fec2b812524c19ba9735f06",
+    "bytes": 1115,
+    "git_blob_sha": "88b35a5cbd6471164ee3a68891a1baf62f2e7c96"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/alder/verification.json",
+    "sha256": "72fb4d0242d11bdfe16628fef02d5b718a16a2335e244db8be59f41cf0bd8da8",
+    "bytes": 9036,
+    "git_blob_sha": "62daad8f5156109737a5bd264892cffdc76d1447"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/dag-run-trace-audit.json",
+    "sha256": "05dd8b8416d30a4fa20be959f53fc6f3b57bf7471ed349f64682f7b3904ee49c",
+    "bytes": 9652,
+    "git_blob_sha": "1c92d7a72a789383c712f1dc73ecbf33827b1b02"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business/completed.json",
+    "sha256": "88ee1abd7cf18bdc774e3c8c88f4b8ae6974c32be84205e083f8f6b3ea638e9d",
+    "bytes": 3770,
+    "git_blob_sha": "b2465aab60339568a821916dce071cc3c00a9381"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business/invocation.json",
+    "sha256": "ac215b715969c0cf3d05aa6d21da2541500f33659aa96e5353023f3159b598c1",
+    "bytes": 2643,
+    "git_blob_sha": "9cd6d0cd6d99acb517e5eeed29892dab5f05dbc5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business/metadata.json",
+    "sha256": "dc42e01845ea84b0cd3415cfeef59c1796b671cb8390be298a05ad78f8cac7ce",
+    "bytes": 368,
+    "git_blob_sha": "8cd32fabb81189e68279c49589feef577fb0ed26"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business/read-log.json",
+    "sha256": "8aff74c29744326e2637ab8fbf24c71c2185861c5cb6d0e5891739b3770fc6eb",
+    "bytes": 624,
+    "git_blob_sha": "20e1c2189db9ae6a24bb123eab22b43a13c03a3a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_parameter/completed.json",
+    "sha256": "8546f1624a248202e35f8e2490ec7a411f8827989b5bf192d761de978ae40907",
+    "bytes": 5608,
+    "git_blob_sha": "7e0dca1dcf3a92154abe84bdb34d29570ee38776"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_parameter/invocation.json",
+    "sha256": "f45445ed57947a4b48105ef4deba81085fb02f67edb028fe5c07f9bda8567b1f",
+    "bytes": 3483,
+    "git_blob_sha": "5259bb37f8926054089cc2ea4ea56e476ec148be"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_parameter/metadata.json",
+    "sha256": "2a159cac8d432367ccf9f914a443c7a2ec7b837a2fc66d1c6b455c1145856471",
+    "bytes": 249,
+    "git_blob_sha": "eb1f77b8030523f8a9cab064beb8d08d8c51006d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_parameter/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_parameter/read-log.json",
+    "sha256": "898eea7f9cdfc837fbd03dec4efd2c4d7bf41c1697e6b8a77dda0e75a5b5e6b1",
+    "bytes": 401,
+    "git_blob_sha": "408544a112a5965e3ea4ea0e57083dd8d554f024"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_policy/completed.json",
+    "sha256": "c5ccdc9f874ddd8ef76daef62199b7a9701187eae902281a334b0861ff398634",
+    "bytes": 5533,
+    "git_blob_sha": "e0e65bc295e3113e81b7cf24f66993349e178786"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_policy/invocation.json",
+    "sha256": "eceba2426e639f6b71ede0bb70bcd50cd6a7f862864a4c9fb2aa2305628df4d0",
+    "bytes": 3441,
+    "git_blob_sha": "5a433f593496eef7f00342f00bd7f2968b43846a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_policy/metadata.json",
+    "sha256": "e3c491b5a8bbed2d89d9bb801d0def674b6682629e065424a6532e47bc8083b5",
+    "bytes": 252,
+    "git_blob_sha": "46f67ac6d50a997e3949756ab8523f71e84dae3a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_policy/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_business_policy/read-log.json",
+    "sha256": "c1cd4746ffb89e638e22b48263c6906ab5bde2c29b6e1d1d5fdbb664be26526a",
+    "bytes": 389,
+    "git_blob_sha": "54c3f2545e97ef16118c8f8c14f95577b4eb432c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_requirement/completed.json",
+    "sha256": "a2c30cd72feb228b1efadcf52d6f44a59effd99d77d62a16c0c4904b0cb53b84",
+    "bytes": 3774,
+    "git_blob_sha": "de41653b87c1eb3bf0b99f07e8c046ea82c60593"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_requirement/invocation.json",
+    "sha256": "8d4b4f953b48f0d3e35780a11137a3a76ee1bf47cf4d23052758a2065c24d1ae",
+    "bytes": 2661,
+    "git_blob_sha": "454549d1ec850208e1a697323066ef15399110b0"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_requirement/metadata.json",
+    "sha256": "02d15c312d4d881010ae143295db3f07b536df257a2d8252524bc3cc11773f7b",
+    "bytes": 431,
+    "git_blob_sha": "74fa1c570a65d906c5d330d86509f984516ef7dc"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_requirement/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_requirement/read-log.json",
+    "sha256": "0d79be71c582bf2c29807dd01a3019975ccccfcc58263432ca2cb4653b2e08d5",
+    "bytes": 611,
+    "git_blob_sha": "520b995b0cc6286ffe546487e90b6dc4276dac46"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/completed.json",
+    "sha256": "67414a1af845deee7d5419ad9b7966eb83d133bcaf5c0cc7e139e04245ea4314",
+    "bytes": 5449,
+    "git_blob_sha": "099feaedb6db394943fac772b932ba9a0757fd9b"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/invocation.json",
+    "sha256": "d43b0b8781d04eef2b0576cc0411d81c5bdc61de9abaa541c0ea0c0a1fbce73b",
+    "bytes": 3389,
+    "git_blob_sha": "44d5a366f4fd0a6f60428e7e0bd009e792dfe089"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/metadata.json",
+    "sha256": "a2facf3d68750b1261b2186d52e3546ef0e2d295070bb4571cde65b16603eeca",
+    "bytes": 236,
+    "git_blob_sha": "433d7f5f43ed48b67a92a9b5237c126aa4b6ddd2"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph1_system_overview/read-log.json",
+    "sha256": "837f7a7922c251f7c9e2f9240719f1ae8e4023c1870d81459fa8e54617e1e34c",
+    "bytes": 370,
+    "git_blob_sha": "cddeca0968321c786196c2e2faf97ba829ae0c6a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/completed.json",
+    "sha256": "5a8157dc2ad3cdd7124296342b95b1918d771333158dd4bcdee757c657ded62c",
+    "bytes": 7170,
+    "git_blob_sha": "4e561cb3e01d6391e23a490826d218b847697e9a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/envelope.txt",
+    "sha256": "4f68337aeeecfa4e69005964883ae7255de5a5515954763b1f06abe0ccd2e12f",
+    "bytes": 1346,
+    "git_blob_sha": "f882e66cc69cab47f95e45e7ccd0758179c1caf5"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/invocation.json",
+    "sha256": "8cf239c8717a4365f7e728856232b46924e1c1c720213b0a2c048dee37aa88d1",
+    "bytes": 4021,
+    "git_blob_sha": "42dd4eac28b421b31c2235ac84e7a8d649936fa8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/metadata.json",
+    "sha256": "e0b6f2996f8ee3775c0981fd177053ca07e721274ac512822b5b02bd2a71c682",
+    "bytes": 211,
+    "git_blob_sha": "92fff94b8e70a4f8c12781bcede34c1fe68b60a4"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/read-log.json",
+    "sha256": "784882278a7408613fb38ba867719a0c8a86314f35434ff1e1feb6c898543485",
+    "bytes": 1108,
+    "git_blob_sha": "1226a9f210f623db4e8a22283240c2db3bf7400a"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_activity/spawn-message.txt",
+    "sha256": "1131c3d182d1df791686cac9aa94ff361af98d39301fb808362018222cb91ef5",
+    "bytes": 356,
+    "git_blob_sha": "8b084371d0aa052a5cd4da595add6f4bb3cd3a30"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/completed.json",
+    "sha256": "990ffcac1fbb681ae02e076fbf48c3e5e097425a0d979567e514752b37e2f195",
+    "bytes": 6559,
+    "git_blob_sha": "7510a97869c7b34325307acab2fc3c2b223f7751"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/envelope.txt",
+    "sha256": "685e2e6101e8c9b4b59d8ddd42499eeb9b693cfab55d566bce68c6b58fae1ed4",
+    "bytes": 1283,
+    "git_blob_sha": "de2bbc45a9be8be7fe11fe23049a9d86b4d3ac84"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/invocation.json",
+    "sha256": "b5044b49baf4b403b1452556defc6824e07f85009365d0f8d33180330ab7d876",
+    "bytes": 3766,
+    "git_blob_sha": "5f217e700ba0b1dddbebda9fdb3ae1eb177070e6"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/metadata.json",
+    "sha256": "d30765f66fb9aef2d3081232b932d298c520531082f3db559230ec4ba28b5fb2",
+    "bytes": 278,
+    "git_blob_sha": "ba60910949134583b074d4a152d1490780414d1e"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/read-log.json",
+    "sha256": "bbc7a7e31a341d232f24cf6ec6154316b861ab371b1324e3072ffbd80f95c2d2",
+    "bytes": 963,
+    "git_blob_sha": "ac805e19c190077bcebd55f3fcb1d0c66b390c77"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_condition/spawn-message.txt",
+    "sha256": "0a1a348783997da36d36f0d15a0e0293e2fef516d17f66ae32d61abb902fb0d2",
+    "bytes": 357,
+    "git_blob_sha": "7b795ec42f51d95640c139e08894bdcfca56cc1f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/completed.json",
+    "sha256": "3ae992e34538802c2ba65edaba1dada89fabcd683a72799a95f495e172d61792",
+    "bytes": 6937,
+    "git_blob_sha": "8c92699c8330e7a19f85958378f3fa8ce42a4bfa"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/envelope.txt",
+    "sha256": "c75d1a72c60356e37b70a2381b74420d9666af3fd4e21b5050fb141f476f5d3e",
+    "bytes": 1307,
+    "git_blob_sha": "e2e26f89d44f93a3c4666ce9fe22936d2b3ff098"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/invocation.json",
+    "sha256": "531e2f8b557ee063e0524db21804ed272e6d8b04ac8c6b38ed9264a67c72b316",
+    "bytes": 3922,
+    "git_blob_sha": "6518694903af69a8f2edcf2fd2196830d995a318"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/metadata.json",
+    "sha256": "44dce5912547b6f902f4e37e31e2f814f146769e8b2a012dd918c357e12e7707",
+    "bytes": 337,
+    "git_blob_sha": "771978b6af5dc2fd557cfa680571150a698beb9f"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/read-log.json",
+    "sha256": "a29c1d706eb7f910a63a1c2ca08e78d8b3208c0cb3206fcab9c8aad5e2a7677e",
+    "bytes": 1051,
+    "git_blob_sha": "042185635647f09edf7e607b00f659030178a22d"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph2_state/spawn-message.txt",
+    "sha256": "d871e70984ac19adf88e82954d5b5e599b859c5b6692d921a0542b070e22254c",
+    "bytes": 353,
+    "git_blob_sha": "b905d31aee741b24617c0fd9cc16cfb467b1bf30"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/completed.json",
+    "sha256": "6977eea006a6688f1c2cdb66856dd29c1ebad08a06fbe0f766153a93fa2b7665",
+    "bytes": 8414,
+    "git_blob_sha": "8aa00de987f3643acc55a0a9c2d67302cd33fe17"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/envelope.txt",
+    "sha256": "9ec200ddcafc7d3bd331d4ab782b65c6a1d682d9adfacd7da8710b4747e8dcb6",
+    "bytes": 1457,
+    "git_blob_sha": "0c13d49cf3aad45b4f9e0c875476f57d7018be81"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/invocation.json",
+    "sha256": "f66d700c8a08351334bed99c08d98255375c1e6456f748517609ca292b9f1ceb",
+    "bytes": 4617,
+    "git_blob_sha": "594fe895814eb8071dbac087ac81fe4d6894ea72"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/metadata.json",
+    "sha256": "4a9c1930d6c3e2d3f3cad099696033873eddda7d93c0d659fc11d921fa694cdc",
+    "bytes": 244,
+    "git_blob_sha": "c4a93fe4f5d711fef794d8ea28ce80b8d93bf8e8"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/raw-final-response.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/read-log.json",
+    "sha256": "c6dfdc883898446d942aa4585d6436df6c3f41ba263ff894d58648f446d5a99b",
+    "bytes": 1341,
+    "git_blob_sha": "8ef9555b3d7ba6f675d187d8ffac5765d162bb3c"
+  },
+  {
+    "path": "work/rdra-alder-comparison/issue-133/primary-runs/rdra/C1/r1/s1/evidence/ph3_buc/spawn-message.txt",
+    "sha256": "d357fbc6e29722514bfcddc9a7a66d2de127ffacdea7228c87d521db99ab7a9d",
+    "bytes": 351,
+    "git_blob_sha": "92298bff5e01467973f04aac53a1e8bee64521bb"
+  }
+]

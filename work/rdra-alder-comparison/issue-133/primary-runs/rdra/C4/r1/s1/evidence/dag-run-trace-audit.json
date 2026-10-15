@@ -1,0 +1,272 @@
+{
+  "checked_utc": "2026-10-02T10:29:46.803974+00:00",
+  "dependencies": [
+    {
+      "consumer": "ph1_system_overview",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph1_business_policy",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph1_business_parameter",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph1_business",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph1_requirement",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph3_variation",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv",
+      "producer": "ph1_business_parameter",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_condition",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph2_condition",
+      "input": "0_RDRAZeroOne/phase1/ph1業務.tsv",
+      "producer": "ph1_business",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_condition",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv",
+      "producer": "ph1_business_policy",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_state",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph2_state",
+      "input": "0_RDRAZeroOne/phase1/ph1業務.tsv",
+      "producer": "ph1_business",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_state",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv",
+      "producer": "ph1_business_policy",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_state",
+      "input": "0_RDRAZeroOne/phase1/ph1要求.tsv",
+      "producer": "ph1_requirement",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_activity",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph2_activity",
+      "input": "0_RDRAZeroOne/phase1/ph1業務.tsv",
+      "producer": "ph1_business",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_activity",
+      "input": "0_RDRAZeroOne/phase1/ph1要求.tsv",
+      "producer": "ph1_requirement",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph2_activity",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv",
+      "producer": "ph1_business_policy",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase1/ph1業務.tsv",
+      "producer": "ph1_business",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスポリシー.tsv",
+      "producer": "ph1_business_policy",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase1/ph1ビジネスパラメータ.tsv",
+      "producer": "ph1_business_parameter",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase1/ph1要求.tsv",
+      "producer": "ph1_requirement",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase2/ph2状態.tsv",
+      "producer": "ph2_state",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase2/ph2条件.tsv",
+      "producer": "ph2_condition",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph3_buc",
+      "input": "0_RDRAZeroOne/phase2/ph2アクティビティ.tsv",
+      "producer": "ph2_activity",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_info",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_info",
+      "input": "0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+      "producer": "ph3_variation",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_state",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_state",
+      "input": "0_RDRAZeroOne/phase2/ph2状態.tsv",
+      "producer": "ph2_state",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_uc_actor",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph4_uc_actor",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_uc_timer",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_uc_timer",
+      "input": "0_RDRAZeroOne/phase1/ph1要求.tsv",
+      "producer": "ph1_requirement",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_uc_external",
+      "input": "初期要望.txt",
+      "input_byte_hash_equals_frozen_stage_source": true
+    },
+    {
+      "consumer": "ph4_uc_external",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_actor",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_external_system",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_condition",
+      "input": "0_RDRAZeroOne/phase3/ph3BUC.tsv",
+      "producer": "ph3_buc",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    },
+    {
+      "consumer": "ph4_condition",
+      "input": "0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+      "producer": "ph3_variation",
+      "input_byte_hash_equals_producer_output": true,
+      "input_producer_finished_before_consumer_prepared": true
+    }
+  ],
+  "all_dependency_hashes_and_order_pass": true,
+  "official_script_order": [
+    "RDRA_Knowledge/helper_tools/enrichPh4InfoStateModels.js",
+    "RDRA_Knowledge/helper_tools/zeroOnePostCheck.js",
+    "RDRA_Knowledge/helper_tools/makeBUC.js",
+    "RDRA_Knowledge/helper_tools/attachContext.js",
+    "RDRA_Knowledge/helper_tools/rdraFileCopy.js",
+    "RDRA_Knowledge/helper_tools/makeGraphData.js"
+  ],
+  "observed_successful_pipeline_order": [
+    "RDRA_Knowledge/helper_tools/enrichPh4InfoStateModels.js",
+    "RDRA_Knowledge/helper_tools/zeroOnePostCheck.js",
+    "RDRA_Knowledge/helper_tools/makeBUC.js",
+    "RDRA_Knowledge/helper_tools/attachContext.js",
+    "RDRA_Knowledge/helper_tools/rdraFileCopy.js",
+    "RDRA_Knowledge/helper_tools/makeGraphData.js"
+  ],
+  "script_order_equals_official": true,
+  "all_18_ai_artifacts_present_before_first_pipeline_script": true,
+  "no_ai_declared_input_from_pipeline_outputs": true,
+  "scope": "Operator staging and recorded snapshots; no independent provider access trace."
+}

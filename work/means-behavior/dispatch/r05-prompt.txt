@@ -1,0 +1,1 @@
+Complete the task in /workspace/scratch/41e46e3be08e/means-runs/r05/TASK.md. First read /workspace/scratch/41e46e3be08e/means-runs/r05/AGENTS.md. Work only in that packet and save report.md before your final response.

@@ -1,0 +1,450 @@
+[
+  {
+    "arm": "A",
+    "stage": "S0",
+    "path": "boundaries.test.mjs",
+    "category": "tests",
+    "added": 36,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 90,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "U1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 8,
+    "deleted": 3
+  },
+  {
+    "arm": "A",
+    "stage": "U1",
+    "path": "notes.test.mjs",
+    "category": "tests",
+    "added": 46,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "U2",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 2
+  },
+  {
+    "arm": "A",
+    "stage": "U2",
+    "path": "filter.test.mjs",
+    "category": "tests",
+    "added": 50,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "F1",
+    "path": "approval.test.mjs",
+    "category": "tests",
+    "added": 45,
+    "deleted": 0
+  },
+  {
+    "arm": "A",
+    "stage": "F1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 3,
+    "deleted": 2
+  },
+  {
+    "arm": "A",
+    "stage": "F2",
+    "path": "approval.test.mjs",
+    "category": "tests",
+    "added": 21,
+    "deleted": 1
+  },
+  {
+    "arm": "A",
+    "stage": "F2",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "B",
+    "stage": "S0",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 36,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 100,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "U1",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 40,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "U1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 17,
+    "deleted": 3
+  },
+  {
+    "arm": "B",
+    "stage": "U2",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 25,
+    "deleted": 0
+  },
+  {
+    "arm": "B",
+    "stage": "U2",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 2
+  },
+  {
+    "arm": "B",
+    "stage": "F1",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 34,
+    "deleted": 4
+  },
+  {
+    "arm": "B",
+    "stage": "F1",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 3,
+    "deleted": 4
+  },
+  {
+    "arm": "B",
+    "stage": "F2",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 25,
+    "deleted": 1
+  },
+  {
+    "arm": "B",
+    "stage": "F2",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "additional.test.mjs",
+    "category": "tests",
+    "added": 35,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 18,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/approve.mjs",
+    "category": "production",
+    "added": 8,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/detail.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/list.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/purchase.mjs",
+    "category": "production",
+    "added": 11,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/reject.mjs",
+    "category": "production",
+    "added": 11,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "slices/submit.mjs",
+    "category": "production",
+    "added": 15,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "S0",
+    "path": "validation.mjs",
+    "category": "production",
+    "added": 24,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "U1",
+    "path": "note.test.mjs",
+    "category": "tests",
+    "added": 55,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "U1",
+    "path": "slices/list.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "U1",
+    "path": "slices/submit.mjs",
+    "category": "production",
+    "added": 3,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "U1",
+    "path": "validation.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "U2",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "U2",
+    "path": "filter.test.mjs",
+    "category": "tests",
+    "added": 41,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "U2",
+    "path": "slices/list.mjs",
+    "category": "production",
+    "added": 6,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "F1",
+    "path": "approval.test.mjs",
+    "category": "tests",
+    "added": 52,
+    "deleted": 0
+  },
+  {
+    "arm": "C",
+    "stage": "F1",
+    "path": "slices/approve.mjs",
+    "category": "production",
+    "added": 4,
+    "deleted": 2
+  },
+  {
+    "arm": "C",
+    "stage": "F2",
+    "path": "approval.test.mjs",
+    "category": "tests",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "F2",
+    "path": "slices/approve.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "C",
+    "stage": "F2",
+    "path": "threshold.test.mjs",
+    "category": "tests",
+    "added": 37,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "application.mjs",
+    "category": "production",
+    "added": 40,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "boundaries.test.mjs",
+    "category": "tests",
+    "added": 38,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "domain.mjs",
+    "category": "production",
+    "added": 43,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "entry.mjs",
+    "category": "production",
+    "added": 7,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "S0",
+    "path": "memory.mjs",
+    "category": "production",
+    "added": 10,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "U1",
+    "path": "application.mjs",
+    "category": "production",
+    "added": 2,
+    "deleted": 2
+  },
+  {
+    "arm": "D",
+    "stage": "U1",
+    "path": "domain.mjs",
+    "category": "production",
+    "added": 5,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "U1",
+    "path": "notes.test.mjs",
+    "category": "tests",
+    "added": 39,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "U2",
+    "path": "application.mjs",
+    "category": "production",
+    "added": 6,
+    "deleted": 2
+  },
+  {
+    "arm": "D",
+    "stage": "U2",
+    "path": "filtering.test.mjs",
+    "category": "tests",
+    "added": 30,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "F1",
+    "path": "application.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 2
+  },
+  {
+    "arm": "D",
+    "stage": "F1",
+    "path": "domain.mjs",
+    "category": "production",
+    "added": 3,
+    "deleted": 2
+  },
+  {
+    "arm": "D",
+    "stage": "F1",
+    "path": "senior.test.mjs",
+    "category": "tests",
+    "added": 40,
+    "deleted": 0
+  },
+  {
+    "arm": "D",
+    "stage": "F2",
+    "path": "domain.mjs",
+    "category": "production",
+    "added": 1,
+    "deleted": 1
+  },
+  {
+    "arm": "D",
+    "stage": "F2",
+    "path": "threshold.test.mjs",
+    "category": "tests",
+    "added": 44,
+    "deleted": 0
+  }
+]

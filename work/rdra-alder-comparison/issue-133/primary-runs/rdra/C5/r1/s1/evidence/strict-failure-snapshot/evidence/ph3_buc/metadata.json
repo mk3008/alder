@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:53:26Z",
+  "failures": ["Start UTC was not captured before the first read."],
+  "unmet_restrictions": []
+}

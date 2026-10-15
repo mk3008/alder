@@ -1,0 +1,145 @@
+{
+  "hashes_verified": true,
+  "results": [
+    {
+      "arm": "A",
+      "stage": "F1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "A",
+      "stage": "F2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "A",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "A",
+      "stage": "U1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "A",
+      "stage": "U2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "B",
+      "stage": "F1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "B",
+      "stage": "F2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "B",
+      "stage": "U1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "B",
+      "stage": "U2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "C",
+      "stage": "F1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "C",
+      "stage": "F2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "C",
+      "stage": "U1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "C",
+      "stage": "U2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "D",
+      "stage": "F1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "D",
+      "stage": "F2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "D",
+      "stage": "U1",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "D",
+      "stage": "U2",
+      "exit_code": 0,
+      "stdout": "{\"record\": \".audit/check-001.json\", \"passed\": true}\n",
+      "stderr": ""
+    }
+  ]
+}

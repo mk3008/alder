@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-10-02T11:09:52.684802+00:00",
+  "case_id": "C5",
+  "errors": [],
+  "scope": "JSON identity, canonical ID membership, exact original field value, schema and count coverage only; no business semantic judgment or score mutation.",
+  "checker_sha256": "e906fe59f6818749ae5660909b5a8887864466deba59f885aabf1c645c9d9f57",
+  "output_sha256": {
+    "raw-flag-dispositions.json": "7de76888796fd8a7c576f64e54daa54f0e5e5a121242b0a9e5680a6eba5c2a9c",
+    "additional-raw-check-resolutions.json": "aac6cfe4578fea33976d01a822a3939465383e76d82d7fd50182a53f5020bbae",
+    "architecture-assessments.json": "a7f22bd709df3a4da8370e3c4bb3c33df019ba8751300c4cd15d70a6344470cd",
+    "score-correction.json": "a284d1181a0953a2edf63fb7523213e348e8e06eb0708dae1476e6137026875e",
+    "supplement-response.md": "1cc5a86265ec04741549d95e54d03223017d283efaafb7c8413e0e5f2cbed032"
+  }
+}

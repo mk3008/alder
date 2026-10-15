@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C1/r2/s1/docs/business-design/design.md",
+    "sha256": "ae8f1e227acfbf006abd7bffb0263e9f5525d4d3f9255d75a6f92189a941d192",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C1/r2/s1/raw-response.md",
+    "sha256": "28553a15044e80952e3c35c7fb3f70b7f6ef12f848637b656d29e52ce35b1a9e",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "[design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r2/s1/docs/business-design/design.md) に草案を保存しました。ヒアリング結果 `source.txt` と、Alder plugin 0.2.8 のAuthoring Skill（固定されたauthoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`）を使用しました。人による業務判断と確認はまだ必要です。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

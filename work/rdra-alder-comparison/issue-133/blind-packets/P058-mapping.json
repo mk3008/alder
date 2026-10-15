@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C2/r1/s2/docs/business-design/design.md",
+    "sha256": "019ac63d5f6ca95a2a6cda43ef26099dd682df710d1e1b2870a10475f3d6deaa",
+    "anonymization": []
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C2/r1/s2/raw-response.md",
+    "sha256": "92bfc5e9d49ed1196a30cf61f0bfa3b2ec9a587640d8413afe374f27cda08add",
+    "anonymization": [
+      {
+        "line": 1,
+        "original": "草案を [design.md](sandbox:/workspace/scratch/62be7f260abb/primary-runs/alder/C2/r1/s2/docs/business-design/design.md) に作成しました。根拠は提供されたヒアリング結果と固定Human answerです。Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a` に基づきます。以下が草案全文です。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

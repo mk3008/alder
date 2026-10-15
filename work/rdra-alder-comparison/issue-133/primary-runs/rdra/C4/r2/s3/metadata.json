@@ -1,0 +1,38 @@
+{
+  "packet_id": "P050",
+  "status": "success",
+  "started_at": "2026-10-02T09:58:31.905808+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "packet_sha256": "3088389556adf15794f81e23f8e9688fcdc946474cb3eb56a9955db7ca1ae05a",
+  "prompt_sha256": "3caee12c4268e65df5e14db1b5464c33f4b5f3c5fa781438d326efae1f2dc857",
+  "envelope_sha256": "d17701182ac6b86e81b9e8931d922b109a297e5b0b109dbb8a48bf9d3c5be993",
+  "observation_protocol_sha256": "d339223932c8246b01eb45449253964d88eb8af01b8728ae8290084d525741f9",
+  "observation_frozen_before_first_probe": true,
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-probes/P050/packet.md",
+    "/workspace/scratch/62be7f260abb/blind-probes/P050/downstream-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural read allowlist, not security isolation. Format may disclose method; single blind. Requested settings lack independent attestation."
+  ],
+  "upstream_strict_eligible": false,
+  "exploratory_continuation": true,
+  "agent_id": "/root/blind_observation/p050_probe",
+  "prepared_at": "2026-10-02T09:57:04.117697+00:00",
+  "finished_at": "2026-10-02T09:59:18.162423+00:00",
+  "output_sha256": {
+    "raw-response.md": "c4ab63759f5b0d5ed2d7574aacd83f16c91ee02cda0fb516109ac4fc8613735a",
+    "read-log.jsonl": "12d8b45e3f10d8370c330810ff283cd62dfbfa1d781f3ed8ec785987ad85a40f"
+  },
+  "read_compliance_audit": {
+    "logged_outside_allowlist": [],
+    "declared_outside_read_attempts": [],
+    "basis": "Read-log and actual final; procedural allowlist only, no independent attestation; own-output verification allowed."
+  }
+}

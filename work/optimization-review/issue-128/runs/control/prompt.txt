@@ -1,0 +1,11 @@
+あなたは独立したAlder Optimization Review担当です。会話履歴なしで実行してください。
+公開入力revision: <PUBLIC_INPUT_SHA>
+作業root: <REPO>
+読むことを許可するファイルは下記の4つだけです（全文読む）。GitHub/Web、AGENTS、他のファイル、protocol、他groupのguidance、既存結果、Issue/PR、評価は読まないでください。
+- <REPO>/work/optimization-review/issue-128/inputs/control-guidance.md
+- <REPO>/work/optimization-review/issue-128/inputs/purchase.md
+- <REPO>/work/optimization-review/issue-128/inputs/composition.md
+- <REPO>/work/optimization-review/issue-128/inputs/zero.md
+
+指定guidanceに従って各ケースを別々にレビューしてください。purchaseの追加入力はProblem「承認済み申請ごとの購入・結果登録の負担が高い」、Pain High。compositionとzeroはファイル中のReview inputを使用してください。各ケース最大3候補、0件は正常、人間が業務判断します。日本語で結果を記述してください。参照箇所を明記してください。
+出力を<REPO>/work/optimization-review/issue-128/runs/control/raw.mdへ保存し、読んだpath/revision、参照外入力の有無を同directoryのread-log.jsonへ保存してください。許可される書込みはこの2ファイルだけです。生成後のrawを編集しないでください。業務設計・guidance・コード・他groupを変更しないでください。最終応答は保存先と要点だけにしてください。

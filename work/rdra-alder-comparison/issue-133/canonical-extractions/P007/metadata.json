@@ -1,0 +1,48 @@
+{
+  "packet_id": "P007",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "started_at": "2026-10-02T08:01:02.855403+00:00",
+  "packet_sha256": "99b99ad7a8d1d04171507481511846d8cdfac2d218a29d8b3fdd8310c2b49417",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "ca679614cf42d51a31ca0a95e8da22efe36c7eba5ed98f8e834cdb4fb87bd99a",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P007/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P007/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p007",
+  "prepared_at": "2026-10-02T08:00:14.100582+00:00",
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.060687+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "output_sha256": {
+    "canonical.json": "6ca06bf561e8fc6e03aaf1f832d6c2a390181dba10d051480d20ba4cdaa7d93e",
+    "raw-response.md": "6ca06bf561e8fc6e03aaf1f832d6c2a390181dba10d051480d20ba4cdaa7d93e",
+    "read-log.jsonl": "903a6d5777b83cedc1ed6b71b9d0b85e5f26511f926be95b715e0d6f8f24cdd9"
+  },
+  "finished_at": "2026-10-02T08:02:30.350190+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
+  }
+}

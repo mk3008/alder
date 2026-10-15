@@ -1,0 +1,195 @@
+{
+  "alder": {
+    "success": 20
+  },
+  "rdra": {
+    "protocol_failed": 16,
+    "complete": 4
+  },
+  "rdra_stage3": {
+    "prepared": 10
+  },
+  "rdra_nodes": {
+    "complete": 351,
+    "failed": 8,
+    "protocol_failed": 1
+  },
+  "reported_strict_guard_deviations": [
+    {
+      "run": "primary-runs/alder/C2/r2/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C3/r2/s1",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/alder/C5/r1/s2",
+      "kind": "self_generated_output_read",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C2/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C2/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C3/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C3/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C3/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C4/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C4/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C4/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C5/r1/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C5/r1/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C5/r2/s1/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    },
+    {
+      "run": "primary-runs/rdra/C5/r2/s2/manifest.json",
+      "kind": "reported_wrapper_deviation",
+      "source_clean_exploratory_eligible": true
+    }
+  ],
+  "issues": [
+    {
+      "run": "primary-runs/rdra/C1/r1/s2/manifest.json",
+      "node": "ph4_info",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "node": "ph4_info",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "node": "ph4_state",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C1/r2/s2/manifest.json",
+      "node": "ph4_actor",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C3/r1/s1/manifest.json",
+      "node": "ph4_external_system",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/0_RDRAZeroOne/phase4/ph4外部システム生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C3/r2/s1/manifest.json",
+      "node": "ph4_state",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C5/r1/s2/manifest.json",
+      "node": "ph4_state",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+      ]
+    },
+    {
+      "run": "primary-runs/rdra/C5/r2/s2/manifest.json",
+      "node": "ph4_info",
+      "problem": "outside_allowlist",
+      "paths": [
+        "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+      ]
+    }
+  ],
+  "limits": [
+    "Requested settings and self-reported read-log are not independent attestation."
+  ],
+  "technical_hash_or_source_issues": [],
+  "scope": "Pinned source/method and original output byte audit; metadata-only guard declarations are separately audited by each coordinator. Does not prove independent access isolation."
+}

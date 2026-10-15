@@ -1,0 +1,58 @@
+--- before/domain.mjs
++++ after/domain.mjs
+@@ -35,7 +35,7 @@
+   if (record.status !== status) throw new Error('Invalid transition');
+ }
+ export function approval(record, actor, now) {
+-  authorize(actor, now, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');
++  authorize(actor, now, record.requestedYen >= 50000 ? 'seniorApprover' : 'approver');
+   requireStatus(record, 'submitted');
+   return { ...record, approvedAt: now, approvedBy: actor.id, status: 'approved' };
+ }
+--- before/threshold.test.mjs
++++ after/threshold.test.mjs
+@@ -0,0 +1,44 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { createWorkflow } from './application.mjs';
++import { createMemoryRepository } from './memory.mjs';
++const approver = { id: 'a', role: 'approver' };
++const senior = { id: 's', role: 'seniorApprover' };
++const buyer = { id: 'b', role: 'buyer' };
++const base = { item: 'Desk', quantity: 2, reason: 'work', note: 'private', requesterId: 'r', submittedAt: 0 };
++
++test('pending records from the previous rule use the new exclusive approval threshold', () => {
++  const repository = createMemoryRepository();
++  for (const amount of [49999, 50000, 99999, 100000]) {
++    repository.save({ ...base, id: String(amount), requestedYen: amount, status: 'submitted' });
++  }
++  const app = createWorkflow(repository);
++  for (const amount of [49999, 50000, 99999, 100000]) {
++    const id = String(amount);
++    const before = app.list().map(row => app.detail(row.id));
++    const allowed = amount >= 50000 ? senior : approver;
++    const denied = amount >= 50000 ? approver : senior;
++    assert.throws(() => app.approve(id, denied, 1), Error);
++    assert.deepEqual(app.list().map(row => app.detail(row.id)), before);
++    const approved = app.approve(id, allowed, 2);
++    assert.equal(approved.approvedBy, allowed.id);
++    assert.equal(approved.submittedAt, 0);
++    assert.equal(approved.note, 'private');
++  }
++});
++
++test('prior approvals in the newly affected range remain valid for purchase', () => {
++  const repository = createMemoryRepository();
++  const approved = { ...base, id: 'old', requestedYen: 50000, status: 'approved', approvedBy: 'old-ordinary-approver', approvedAt: 1 };
++  const purchased = { ...approved, id: 'bought', requestedYen: 99999, status: 'purchased', actualYen: 99999, purchasedBy: 'old-buyer', purchasedAt: 2 };
++  repository.save(approved);
++  repository.save(purchased);
++  const app = createWorkflow(repository);
++  assert.deepEqual(app.detail('old'), approved);
++  assert.deepEqual(app.detail('bought'), purchased);
++  assert.deepEqual(app.purchase('old', 55000, buyer, 3), {
++    ...approved, status: 'purchased', actualYen: 55000, purchasedBy: 'b', purchasedAt: 3,
++  });
++  assert.deepEqual(app.detail('bought'), purchased);
++  assert.deepEqual(repository.get('bought'), purchased);
++});

@@ -1,0 +1,39 @@
+name: alder-check-traceability-drift
+description: Run read-only item-level Business Design–Check–Test drift detection for an explicitly requested optional Alder pilot with compatible source units, reviewed saved mappings and current runner-discovered test IDs. Use for "Alderでトレーサビリティのずれを確認して", "Alderのdrift候補を調べて", or "Check this Alder traceability pilot for drift". Not a general Markdown parser, semantic implementation review, automatic reconciliation, or mandatory workflow gate.
+path: plugin-v0.4.2/plugins/alder/skills/alder-check-traceability-drift/SKILL.md
+
+name: alder-discover-business-questions
+description: Use Alder Structural Discovery to find grounded questions about confirmed current work before a Problem is known. Use for "Alderで今の業務の見直しどころを探して" or "ProblemはまだないのでAlderで業務構造を見て". Read-only inquiry; do not infer Pain or propose Optimization candidates. Not design-quality review or functional-condition discovery.
+path: plugin-v0.4.2/plugins/alder/skills/alder-discover-business-questions/SKILL.md
+
+name: alder-draft-business-design
+description: Draft or revise Alder Business Design from ordinary interview notes, meeting notes, or a natural-language description of current or intended work. Use for requests such as "このヒアリング結果をAlder業務設計書にして", "議事録から業務設計の草案を作って", or "draft Business Design from these notes". Write the requested design, ask a few material business questions when needed, and revise it after answers. Do not use for implementation review.
+path: plugin-v0.4.2/plugins/alder/skills/alder-draft-business-design/SKILL.md
+
+name: alder-draft-check-items
+description: Draft, review for consistency, or update Alder Check Items from agreed Business Design and human feedback. Use for "Alderでチェック項目を作って", "Alderの検査項目を更新して", or an explicit request to organize Functional Interfaces. Preserve human review states and existing IDs. Not an implementation review, Test-evidence follow-up, or business approval.
+path: plugin-v0.4.2/plugins/alder/skills/alder-draft-check-items/SKILL.md
+
+name: alder-explore-functional-conditions
+description: Explore undecided functional conditions with Alder after Business Design and correlation review. Use for "Alderで未記載の機能条件を探して" or "この業務設計の機能上の考慮漏れをAlderで確認して". Return read-only, unapproved questions, not Check Item drafting, design-quality review, optimization or implementation review.
+path: plugin-v0.4.2/plugins/alder/skills/alder-explore-functional-conditions/SKILL.md
+
+name: alder-export-business-graph
+description: Export an Alder Business Design to deterministic Business Graph JSON using the bundled official exporter. Use for requests such as "この業務設計をAlderでJSON化して", "AlderのBusiness Graphを出して", or "Export this Alder Business Design as Business Graph JSON". Do not use for arbitrary Markdown conversion, design authoring, or semantic review.
+path: plugin-v0.4.2/plugins/alder/skills/alder-export-business-graph/SKILL.md
+
+name: alder-follow-up-review
+description: Apply supplied human decisions and maintain Alder Check-to-Test evidence after an implementation review. Use for "Alderレビューのフォローアップをして", "この人間判断をAlderレビューへ反映して", or "Alderのチェックとテストの対応を更新して". Scoped record maintenance, not independent read-only review, new Check drafting, generic implementation, or automatic business approval.
+path: plugin-v0.4.2/plugins/alder/skills/alder-follow-up-review/SKILL.md
+
+name: alder-optimize-business
+description: Propose business improvements with Alder Optimization Review from a current Business Design and a concrete Problem / Pain. Use for requests such as "Alderで改善提案して", "このProblemについてAlderで改善案を検討して", or "Alderでこの業務を改善して". Return read-only, unapproved candidates; do not implement or revise the design. Do not use for drafting Business Design, reviewing design quality or completed implementation, or finding problems without a stated Problem.
+path: plugin-v0.4.2/plugins/alder/skills/alder-optimize-business/SKILL.md
+
+name: alder-review-business-design
+description: Review an Alder Business Design itself for description quality, connections between business activities, and material omissions. Use for requests such as "業務設計書をAlderでレビューして", "この業務設計書をレビューして", or "Alderで業務設計書をレビューして". This is a read-only Business Design review, not implementation review, authoring, optimization, or follow-up.
+path: plugin-v0.4.2/plugins/alder/skills/alder-review-business-design/SKILL.md
+
+name: alder-review-implementation
+description: Review completed implementation, DDL, and tests against agreed Alder Business Design. Use for "コードをAlderでレビューして", "実装したのでAlderレビューして", or "Alderで実装をレビューして、チェックとテストの対応も更新して". Coordinate authorized record maintenance after an independent read-only review. Review-only requests never write; record-only follow-up uses alder-follow-up-review.
+path: plugin-v0.4.2/plugins/alder/skills/alder-review-implementation/SKILL.md

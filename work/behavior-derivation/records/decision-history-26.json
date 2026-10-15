@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://github.com/mk3008/alder/pull/26#issuecomment-5627605137",
+    "body": "Human Blockerの推奨案で進めてください。\n\n- `unavailable`化しても既存の`reserved`予約は維持する\n- 利用不可中も予約者は別の`available`会議室への変更・取消を行える\n- 利用再開後は、維持した予約を通常どおり占有として扱う\n\nただし、`reserved`であることは「その会議室を実際に利用できる保証」ではありません。\n\nこの判断をBusiness DesignとDecision Recordへ反映し、該当実装・テストを完成させてください。"
+  },
+  {
+    "url": "https://github.com/mk3008/alder/pull/26#issuecomment-5627652574",
+    "body": "承認コメントに対応し、`94f6f639b850a92ce5ad55812a4899e7a2c7bc33` へ反映しました。\n\n- 利用不可化時の既存予約を維持し、暫定の `human_decision_required` 停止を撤去\n- 利用不可中の本人による別室への変更・取消、再開後の通常占有を確認\n- `reserved` は実際の利用を保証しないことをBusiness DesignとDecision Recordへ明記\n- Business Designの該当Activity/Ruleを更新し、既存予約の扱いを未決事項から除外\n- 過去/進行中/将来の予約保持、移動失敗時の原状維持、取消/移動済み枠が復活しないこと、利用不可化と予約/変更の別プロセス競合を検証\n\n回帰テストは旧実装で失敗することを確認し、修正後は全20テストと差分検査が成功しました。Human Blockerは解消済みです。PR説明を更新し、Ready for reviewへ変更しました。未マージです。"
+  }
+]

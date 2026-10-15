@@ -1,0 +1,41 @@
+{
+  "packet_id": "P019",
+  "status": "success",
+  "prepared_at": "2026-10-02T09:26:38.228218+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P019-packet.md": "cf822c108191be150cbf6d5f15c96828bdca4f7142f4f2c7fb9c072f0ffdc2a6",
+    "P019-canonical.json": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "567785ab0932d3495c01dc688a848873df68240d82020e9eafe5a073dc1ba382"
+  },
+  "envelope_sha256": "139a371afe15113ccb2c94a8ded6dc10c91779495102c4a84473b2b4a15257d2",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P019/P019-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P019/P019-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P019/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P019/review-targets.json"
+  ],
+  "operator_reason": "Retry score raw-check; no scores/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p019",
+  "started_at": "2026-10-02T09:34:13.868344+00:00",
+  "finished_at": "2026-10-02T09:35:09.667768+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "a255dd0eae7895472165284a397869ee6ddaab903ad633381e2b0bb6b6cbecf4",
+    "raw-response.md": "a255dd0eae7895472165284a397869ee6ddaab903ad633381e2b0bb6b6cbecf4",
+    "read-log.jsonl": "8e6b23407e51250397b8f710b70cb21668e3649c7d79fc91f34d302f22fffc20"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:36:47.174546+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist check and received final declarations; shared filesystem has no independent enforcement/attestation"
+  }
+}

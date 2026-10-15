@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T08:34:12Z",
+  "end_utc": "2026-10-02T08:34:12Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 directory did not exist; created the output directory and wrote the file successfully."],
+  "unmet_restrictions": [],
+  "note": "ph3BUC.tsv の外部システム列は全行空欄のため、ヘッダーのみを出力した。"
+}

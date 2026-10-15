@@ -1,0 +1,13 @@
+このヒアリング結果をAlder業務設計書にしてください。source.txtと指定Authoring Skillを読み、そのSkillの正規手順で草案を作成してください。出力はdocs/business-design/design.md。任意のBusiness Graph exportは要求しません。実装、Check Item、Optimization reviewは行わないでください。
+
+Orchestration guard (業務判断誘導ではありません):
+作業root: /workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2
+Read allowlist（この入力とSkill参照のみ）:
+/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/source.txt
+/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/method/alder-draft-business-design/SKILL.md
+/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/method/alder-draft-business-design/references/adoption.md
+/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/method/alder-draft-business-design/references/business-graph.md
+/workspace/scratch/62be7f260abb/primary-runs/alder/C1/r1/s2/method/alder-draft-business-design/references/provenance.json
+他ケース・他arm・他run・親会話・Issue・oracle・rubric・cases.json・過去replicate・Stage1出力を読まないでください。探索コマンドは禁止。指定Skillが参照するallowlist内ファイルは必要に応じて読めます。メタデータはこのprompt中だけを使用し、metadata.jsonは読まないでください。
+requested model=gpt-6-sol, reasoning_effort=medium, fork_turns=none; Alder plugin=0.2.8; method baseline=eb591bfbc1b077b0e93d62253cb1e7f3e392e462; authoring provenance=e9726b4c84608db42c5286d072b5ec762d31596a; final freeze=b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95.
+記録: 作業root/read-log.jsonlに、各read前に絶対pathと時刻を記録してください。業務出力は指定artifactに保存してください。raw-response.mdに最終回答の全文を省略・要約せず保存し、最終回答にも同じ全文を返してください（草案の全文を含めてください）。許可された書込みは作業root内のartifact/read-log/raw-responseのみ。Library保存やGitHub書込みはしないでください。質問が必要ならSkillに従い草案中に残してください。共有FSはsecurity sandboxではなく、設定の独立attestationも不能です。

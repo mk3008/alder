@@ -1,0 +1,11 @@
+{
+  "README.md": "2a30f59695b0591f269310a9ada27a0828dc7fa8450f27791c3cde1a842266a9",
+  "blind-packet.json": "d98a13c16674f861ce7dcd744c1bc0b098b0be40c756f360869d5fe06b34a3e6",
+  "evaluator-prompt.txt": "8c355063a7a244436605ff0c954f42169f5df4b64865b362dc58a59ae25770a6",
+  "evaluator.json": "40f4d772ef1f4e171e9b9b50343b52e3babd003a0b7d474dcc0b7ed216f93b65",
+  "metrics.json": "de177190903ce75c3baece88d71484def0fa650092138e3f6d5f9f75cbc8a0ca",
+  "preregistration.json": "0e5d1110b4d6082eb2c0978c858c011b02d95e2f32faf14bac62b0722f51a255",
+  "recompute.py": "7fae3d7bc4c91dc7b69413ea78bc86a56b712bb56fab2e1737cf5a668d67b3cd",
+  "runs.json": "ad6c1bef78fabddb4fe165c5572ae3acfa22403bbd626bc65fe5a6ef6bcc66b9",
+  "verification.json": "fa8dd2a103dae5a2902aa2876b325c451c46846694cfb0ac8a0523920ea5372a"
+}

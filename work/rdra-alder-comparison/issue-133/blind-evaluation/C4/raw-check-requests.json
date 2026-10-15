@@ -1,0 +1,124 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-001-P008-1",
+      "packet_id": "P008",
+      "claim_question": "F1-F27の引用には単語単位のものが多く、特にF5/F6/F8/F9/F13/F14/F19-F24の局所文脈と要求の強さは原文確認が必要。抽出限界は意味を補う根拠にしない。",
+      "audit_target_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F23",
+        "F24",
+        "F25",
+        "F26",
+        "F27"
+      ],
+      "review_file": "P008-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P008-2",
+      "packet_id": "P008",
+      "claim_question": "F25/F26の高額フローと課長画面の関連は抽出上の配置と矛盾するため局所原文を確認。",
+      "audit_target_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22",
+        "F23",
+        "F24",
+        "F25",
+        "F26",
+        "F27"
+      ],
+      "review_file": "P008-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P016-1",
+      "packet_id": "P016",
+      "claim_question": "F31の高額フローに置かれた課長向け画面行はF1と矛盾し、局所原文で適用範囲を確認。",
+      "audit_target_ids": [
+        "F31"
+      ],
+      "review_file": "P016-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P030-1",
+      "packet_id": "P030",
+      "claim_question": "F23の高額フローと課長向け画面の関連はF1と配置矛盾があり、原文の行文脈を確認。",
+      "audit_target_ids": [
+        "F23"
+      ],
+      "review_file": "P030-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P050-1",
+      "packet_id": "P050",
+      "claim_question": "F20/F21の結果記録と却下遷移の不整合は受領H050のF18-F23にもあり、局所原文で確定度を確認。",
+      "audit_target_ids": [
+        "F20",
+        "F21"
+      ],
+      "review_file": "P050-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P054-1",
+      "packet_id": "P054",
+      "claim_question": "F18-F22の高額フローと課長画面の食い違いは実受領H054のF29/F30にもある。参照先の原文行はこの抽出から確認できず局所確認が必要。",
+      "audit_target_ids": [
+        "F18",
+        "F19",
+        "F20",
+        "F21",
+        "F22"
+      ],
+      "review_file": "P054-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P056-1",
+      "packet_id": "P056",
+      "claim_question": "F27の高額フローと課長画面の関連はF1と矛盾し、局所原文を確認。",
+      "audit_target_ids": [
+        "F27"
+      ],
+      "review_file": "P056-review.json"
+    }
+  ]
+}

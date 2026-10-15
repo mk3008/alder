@@ -1,0 +1,12 @@
+{
+  "start_utc": "2026-10-02T07:46:00Z",
+  "start_utc_precision": "approximate minute; no timestamp captured at invocation",
+  "end_utc": "2026-10-02T07:46:56Z",
+  "failures": [
+    "Initial write failed because 0_RDRAZeroOne/phase4 did not exist; directory was created and the write retried successfully."
+  ],
+  "unmet_restrictions": [
+    "No terminal state exists in the source transition graph for 蔵書利用状態 or 会員貸出制限状態, so the checklist requirement for a terminal row per model cannot be met without inventing a state or contradicting a source transition.",
+    "No source UC creates 会員貸出制限状態 with an empty From状態, so its initial-state row cannot be source-grounded."
+  ]
+}

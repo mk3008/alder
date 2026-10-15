@@ -1,0 +1,85 @@
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -26,7 +26,7 @@
+ 
+ export function createApp() {
+   const records = new Map();
+-  const copy = record => ({ ...record });
++  const copy = record => ({ ...record, note: record.note ?? '' });
+ 
+   function get(id) {
+     if (!records.has(id)) throw new Error('Unknown ID');
+@@ -53,9 +53,11 @@
+       const cleanReason = trimmedText(reason, 'Reason');
+       positiveInteger(quantity, 'Quantity');
+       positiveInteger(requestedYen, 'Requested yen');
++      const note = 'note' in input ? input.note : '';
++      if (typeof note !== 'string' || note.length > 280) throw new Error('Invalid note');
+       const record = {
+         id, requesterId: actor.id, item: cleanItem, quantity, requestedYen,
+-        reason: cleanReason, submittedAt: now, status: 'submitted',
++        reason: cleanReason, submittedAt: now, status: 'submitted', note,
+       };
+       records.set(id, record);
+       return copy(record);
+@@ -84,7 +86,10 @@
+       return copy(get(id));
+     },
+     list() {
+-      return [...records.keys()].sort().map(id => copy(records.get(id)));
++      return [...records.keys()].sort().map(id => {
++        const { note, ...summary } = records.get(id);
++        return summary;
++      });
+     },
+   };
+ }
+--- before/notes.test.mjs
++++ after/notes.test.mjs
+@@ -0,0 +1,46 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { createApp } from './entry.mjs';
++
++const actor = role => ({ id: role, role });
++const input = (id, note) => ({ id, item: 'Desk', quantity: 1, requestedYen: 1, reason: 'Work', note });
++
++test('supplied undefined and nonprimitive strings reject without reserving IDs', () => {
++  const app = createApp();
++  app.submit(input('existing', 'keep'), actor('requester'), 0);
++  const before = app.detail('existing');
++  for (const note of [undefined, new String('text'), [], {}, Symbol('note')]) {
++    assert.throws(() => app.submit(input('new', note), actor('requester'), 0), Error);
++    assert.deepEqual(app.detail('existing'), before);
++    assert.deepEqual(app.list().map(row => row.id), ['existing']);
++  }
++  assert.equal(app.submit(input('new', 'valid'), actor('requester'), 0).note, 'valid');
++});
++
++test('note copies and list omission hold in every state', () => {
++  const app = createApp();
++  const note = '\t\n' + '😀'.repeat(139);
++  const request = input('buy', note);
++  app.submit(request, actor('requester'), 0).note = 'changed';
++  request.note = 'changed';
++  const check = id => {
++    assert.equal(app.detail(id).note, note);
++    app.detail(id).note = 'changed';
++    const rows = app.list();
++    for (const row of rows) {
++      assert.equal('note' in row, false);
++      const { note: omitted, ...expected } = app.detail(row.id);
++      assert.deepEqual(row, expected);
++      row.note = 'injected';
++    }
++    assert.equal(app.detail(id).note, note);
++  };
++  check('buy');
++  app.approve('buy', actor('approver'), 0).note = 'changed';
++  check('buy');
++  app.purchase('buy', 1, actor('buyer'), 0).note = 'changed';
++  check('buy');
++  app.submit(input('reject', note), actor('requester'), 0);
++  app.reject('reject', 'no', actor('approver'), 0).note = 'changed';
++  check('reject');
++});

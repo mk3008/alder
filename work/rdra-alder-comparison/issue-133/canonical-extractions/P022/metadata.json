@@ -1,0 +1,52 @@
+{
+  "packet_id": "P022",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T09:49:16.341368+00:00",
+  "packet_sha256": "7a42612781a41d9afc7305d9dd3582d5a6d9faf3327d5b5b01789a2ddc046263",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "6e1442ebb52e94af32be8e613b63e7ab2752aed8071da3a3200ff07ee4e4b477",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P022/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P022/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p022",
+  "prepared_at": "2026-10-02T09:49:06.508418+00:00",
+  "final_response_deviation": "path summary instead of JSON body; pending pure-return followup",
+  "pre_final_output_checkpoint": {
+    "canonical.json": {
+      "sha256": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+      "bytes": 36442
+    },
+    "raw-response.md": {
+      "sha256": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+      "bytes": 36442
+    }
+  },
+  "output_sha256": {
+    "canonical.json": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "raw-response.md": "4d03f808596c2ce7ff178ff0cde4512c5bcd393c577fd97696397e4feaa2100f",
+    "read-log.jsonl": "5e40cfef7ed614466cfaee6b0c0c6f5a6389cd5739828f630c0374dc1fb7caf0"
+  },
+  "finished_at": "2026-10-02T09:54:03.420960+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "output_return_followup_resolution": {
+    "recorded_at": "2026-10-02T09:54:03.443971+00:00",
+    "canonical_raw_unchanged": true,
+    "final_payload_returned": true,
+    "generation_count_increment": 0,
+    "additional_model_turn": 1
+  }
+}

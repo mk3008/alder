@@ -1,0 +1,21 @@
+{
+  "candidates": [
+    {
+      "id": "H2-C01",
+      "category": "A",
+      "reason": "Decision0002 and 0008 already require full work rollback at this cutoff.",
+      "qualifies": false
+    },
+    {
+      "id": "H2-C02",
+      "category": "A",
+      "reason": "Decision0002 already evaluates the complete stored source query once per nonempty snapshot; later phases retain it.",
+      "qualifies": false
+    }
+  ],
+  "counts": {
+    "A": 2
+  },
+  "target_hits": [],
+  "disposition": "No qualifying discovery at H2"
+}

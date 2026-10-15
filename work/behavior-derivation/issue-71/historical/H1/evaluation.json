@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "id": "H1-01",
+      "category": "B",
+      "reason": "At H1, successful Red/Black invariants and order do not settle partial correction after failure. Later human Issue5 and Decision0003 explicitly require Red and new Black to commit or roll back together.",
+      "qualifies": true,
+      "target": "T1 partial correspondence: correction-level failure boundary, not full Run/independent-key guarantee"
+    },
+    {
+      "id": "H1-02",
+      "category": "C",
+      "reason": "Conditional unresolved distinction between argument-limited admission and source-result absence. Later Decision0004 defines absence after admission but does not explicitly record a human choice of argument-scoped admission. Not credited as historical target discovery.",
+      "qualifies": false,
+      "conditional": true
+    }
+  ],
+  "counts": {
+    "B": 1,
+    "C": 1
+  },
+  "target_hits": [
+    "T1 (correction boundary only)"
+  ],
+  "disposition": "One qualifying historical finding; propose adopting optional discovery practice, not a mandatory gate"
+}

@@ -1,0 +1,13 @@
+Scope first.
+Identify the smallest meaningful scope for the change.
+
+Encapsulate by default.
+Keep code used only by that scope inside it.
+
+Structure as needed.
+Add internal structure only when the current scope needs it.
+
+Share only when earned.
+Promote code only when multiple current scopes need the same meaning and contract.
+
+Preserve explicit existing requirements.

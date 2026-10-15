@@ -1,0 +1,71 @@
+--- before/additional.test.mjs
++++ after/additional.test.mjs
+@@ -6,13 +6,43 @@
+ const approver = { id: 'r', role: 'approver' };
+ const input = (id, requestedYen = 1) => ({ id, item: 'desk', quantity: 1, requestedYen, reason: 'work' });
+ 
+-test('approval authority is unchanged across amounts, including the maximum total', () => {
++test('approval authority uses the total, including maximum quantity and total', () => {
+   const app = createApp();
+-  for (const amount of [1, 100000, Number.MAX_SAFE_INTEGER]) {
++  for (const [amount, role, deniedRole] of [
++    [1, 'approver', 'seniorApprover'],
++    [99999, 'approver', 'seniorApprover'],
++    [100000, 'seniorApprover', 'approver'],
++    [Number.MAX_SAFE_INTEGER, 'seniorApprover', 'approver'],
++  ]) {
+     const id = String(amount);
+-    app.submit(input(id, amount), requester, Number.MAX_SAFE_INTEGER);
+-    assert.equal(app.approve(id, approver, 0).status, 'approved');
++    const initial = app.submit({ ...input(id, amount), quantity: Number.MAX_SAFE_INTEGER }, requester, Number.MAX_SAFE_INTEGER);
++    assert.throws(() => app.approve(id, { id: 'denied', role: deniedRole }, 0), Error);
++    assert.deepEqual(app.detail(id), initial);
++    const approved = app.approve(id, { id: requester.id, role }, 0);
++    assert.deepEqual(approved, { ...initial, status: 'approved', approvedAt: 0, approvedBy: requester.id });
+   }
++});
++
++test('senior approval validates actor and timestamp before writing and preserves its event', () => {
++  const app = createApp();
++  const initial = app.submit({ ...input('p', 100000), note: 'private' }, requester, 10);
++  const senior = { id: 'senior', role: 'seniorApprover' };
++  for (const actor of [{ ...senior, id: '' }, { ...senior, id: 1 }]) {
++    assert.throws(() => app.approve('p', actor, 0), Error);
++    assert.deepEqual(app.detail('p'), initial);
++  }
++  for (const now of [-1, 0.5, Number.MAX_SAFE_INTEGER + 1]) {
++    assert.throws(() => app.approve('p', senior, now), Error);
++    assert.deepEqual(app.detail('p'), initial);
++  }
++  const approved = app.approve('p', senior, 0);
++  senior.id = 'changed';
++  assert.deepEqual(app.detail('p'), approved);
++  const purchased = app.purchase('p', 1, { id: 'buyer', role: 'buyer' }, 0);
++  assert.deepEqual(purchased, { ...approved, status: 'purchased', purchasedAt: 0, purchasedBy: 'buyer', actualYen: 1 });
++  assert.throws(() => app.approve('p', senior, 0), Error);
++  assert.deepEqual(app.detail('p'), purchased);
++  assert.ok(!Object.hasOwn(app.list({ itemContains: 'desk' })[0], 'note'));
+ });
+ 
+ test('IDs are preserved exactly and sort by UTF-16 string comparison', () => {
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -1,4 +1,4 @@
+-const roles = new Set(['requester', 'approver', 'buyer']);
++const roles = new Set(['requester', 'approver', 'seniorApprover', 'buyer']);
+ 
+ function requireCondition(condition, message) {
+   if (!condition) throw new Error(message);
+@@ -37,10 +37,9 @@
+   return { ...record, note: record.note ?? '' };
+ }
+ 
+-// Keep the approval authority decision in one place for future amount-based rules.
+-// The record supplies requestedYen; today's rule deliberately has no amount limit.
++// Approval roles are exclusive and depend on the requested total, not unit price.
+ function requireApprovalAuthority(record, actor) {
+-  requireRole(actor, 'approver');
++  requireRole(actor, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');
+ }
+ 
+ export function createApp() {

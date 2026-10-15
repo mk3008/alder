@@ -1,0 +1,6 @@
+{
+  "requested_resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/../../plugin.json",
+  "result": {
+    "error": "failed to read skill resource"
+  }
+}

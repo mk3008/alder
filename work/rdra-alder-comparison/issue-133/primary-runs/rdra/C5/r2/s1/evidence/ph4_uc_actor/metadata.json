@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T10:15:24Z",
+  "end_utc": "2026-10-02T10:16:08Z",
+  "start_note": "First recorded UTC checkpoint; initial reads preceded it.",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and wrote the TSV successfully."],
+  "unmet_restrictions": []
+}

@@ -1,0 +1,20 @@
+{
+  "issue": "https://github.com/mk3008/alder/issues/96",
+  "source_revision": "5405a5069fc13e1a1e27de8b06e4a375a3653e5e",
+  "execution_repository_revision": "af733229c7f20c5a9fc1c4f094a8fb8c548fe544",
+  "input_path": "work/optimization-review/issue-96/aggregate/business-design.md",
+  "input_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "prompt_path": "work/optimization-review/issue-96/aggregate/launch.md",
+  "prompt_sha256": "64f2c4956193b9657beee19c2b4da64ac9598bb717d6d10f7a9f3bec2640810c",
+  "protocol_sha256": "8c5ebe9a6a6dee1843ae153afa862e286fd4eaf5491e1055d893214347a4fc8d",
+  "raw_output_path": "work/optimization-review/issue-96/aggregate/raw.md",
+  "raw_output_sha256": "d4687bab6442c80edbc7f289ddb7799d29918ee7a6ddde2c3c22abb989d435e8",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/issue96_aggregate_fixed",
+  "effective_model_and_effort_independently_attested": false,
+  "runs": 1,
+  "isolation": "fresh agent, explicit two-file allowlist; shared filesystem not access-controlled",
+  "discovery": "not_run: preregistered useful-difference gate not met"
+}

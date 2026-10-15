@@ -1,0 +1,174 @@
+{
+  "scope": "Collected UTF-8 evidence files at this snapshot, including raw outputs, metadata and helpers. Frozen protocol files use benchmark-preparation/SHA256SUMS. This manifest excludes its own chunks and later report/navigation commits.",
+  "snapshot_manifest_sha256": "8ca4020fd0c1104a105dab2490a2ba1a0d37b480d1a30d3e1bb792457c392506",
+  "files": 13649,
+  "bytes": 64429576,
+  "parts": [
+    {
+      "path": "evidence-manifest/0000.json",
+      "files": 500,
+      "sha256": "0ea42b08b83e1fa7ac7ac38f2a3cb742f6548054c126e95ba70f732f0d345a03"
+    },
+    {
+      "path": "evidence-manifest/0001.json",
+      "files": 504,
+      "sha256": "9e0a084fd2d73a824011f05cd2f52160478ce3201cddf2f109dcd249d08f360f"
+    },
+    {
+      "path": "evidence-manifest/0002.json",
+      "files": 489,
+      "sha256": "a79d0f08a17b2b1a03b6c41a42cf5c95f8a468603b82310a4bc6c392b1194f55"
+    },
+    {
+      "path": "evidence-manifest/0003.json",
+      "files": 486,
+      "sha256": "10d63d8b9182ea2f761553208ee136de83ee5d7e696dfabeb0e37a29b4f5d1d4"
+    },
+    {
+      "path": "evidence-manifest/0004.json",
+      "files": 407,
+      "sha256": "63299df3b6d8ed98ee1a90aa87f245a15255ad34f377ceb787b76cbf0c40586f"
+    },
+    {
+      "path": "evidence-manifest/0005.json",
+      "files": 379,
+      "sha256": "fdc1d94017fbd5e236bbca86da42567625ae8f3133af0b77e0d0e3fbd8f58889"
+    },
+    {
+      "path": "evidence-manifest/0006.json",
+      "files": 408,
+      "sha256": "70bd32965d9ba9f40997909e673a890aad3bb50965175afe403b47f565150ad9"
+    },
+    {
+      "path": "evidence-manifest/0007.json",
+      "files": 414,
+      "sha256": "7faf661c39b045572b5b8387b63543112321fa7681ead4ac2ed5302aabb66b62"
+    },
+    {
+      "path": "evidence-manifest/0008.json",
+      "files": 414,
+      "sha256": "b43f2b2fc36f121112f5f168714540d56b9d695bdaa1f135ccec8733220bda59"
+    },
+    {
+      "path": "evidence-manifest/0009.json",
+      "files": 379,
+      "sha256": "a3346ab6af0adda7331461a11ced5943684eaedd00f9112048fb1ddede278dd9"
+    },
+    {
+      "path": "evidence-manifest/0010.json",
+      "files": 422,
+      "sha256": "3b4a318ec48070655f9395e2275a54e95c0a4daa190b8fee9aab84af7f1af2dd"
+    },
+    {
+      "path": "evidence-manifest/0011.json",
+      "files": 422,
+      "sha256": "0f68b15d040b466109b0aebced726313635fd20f8676080d4ea00bec7afa6594"
+    },
+    {
+      "path": "evidence-manifest/0012.json",
+      "files": 423,
+      "sha256": "f87fc59f7e20cdce065cbb1c271079ee06b1839942ba2e90e6dfd8c31323a4d8"
+    },
+    {
+      "path": "evidence-manifest/0013.json",
+      "files": 419,
+      "sha256": "281e4cd1fdd95cc9fc1cf83287e42676c5b4a829386d50b14c0f6f0822ef9107"
+    },
+    {
+      "path": "evidence-manifest/0014.json",
+      "files": 419,
+      "sha256": "bc913d3677f3c7f35a05e178d501f724222d0c43d3093a9eca7d572c740b5100"
+    },
+    {
+      "path": "evidence-manifest/0015.json",
+      "files": 410,
+      "sha256": "a90afb96504b54918dfcae210c97b3734d51034dc9cc6eca915c32d0a9b3735f"
+    },
+    {
+      "path": "evidence-manifest/0016.json",
+      "files": 423,
+      "sha256": "a7bcee6ae889d097653bad44a0ab53506aa7c65bbef59a41b95c24e927997a5f"
+    },
+    {
+      "path": "evidence-manifest/0017.json",
+      "files": 423,
+      "sha256": "550f92850ad4e9d679d5cfc0a5a33a6c847799210b92f798e64b2a9e681b6a96"
+    },
+    {
+      "path": "evidence-manifest/0018.json",
+      "files": 421,
+      "sha256": "cd356f557cfdd05aa92b1ee9ea1bb5af8aa73c0c8d68d6b84790797d3aaa853f"
+    },
+    {
+      "path": "evidence-manifest/0019.json",
+      "files": 406,
+      "sha256": "08daed255d1c2d978d34f4b6292e8fbc3a6ce3072239c7924ed0145c414a7c33"
+    },
+    {
+      "path": "evidence-manifest/0020.json",
+      "files": 422,
+      "sha256": "60612da026c919f1af4c9cb88d916cec37a38019dd4a4dad243f5a2019e1bade"
+    },
+    {
+      "path": "evidence-manifest/0021.json",
+      "files": 422,
+      "sha256": "1881c5d4ede6f68f98e2c708b7d4d0e4512e6bbc46bb7e62d53080a2cd87a16e"
+    },
+    {
+      "path": "evidence-manifest/0022.json",
+      "files": 418,
+      "sha256": "17bbb3205ed8f21425843bc4ed371a56f78a2cea952c91dd8434d4b9c7f8e9b3"
+    },
+    {
+      "path": "evidence-manifest/0023.json",
+      "files": 419,
+      "sha256": "f74deb802d88991a402626d7900a5940c15914f114496f9b4ea6f20fac9a29f2"
+    },
+    {
+      "path": "evidence-manifest/0024.json",
+      "files": 414,
+      "sha256": "285a3019780767bffca842b31d658b299a7ef227bc147213e0a33951b4e4370a"
+    },
+    {
+      "path": "evidence-manifest/0025.json",
+      "files": 423,
+      "sha256": "d36553d07fc13d8632968eacbf5d54baee3f9d7f41ab2d26bef53cddb6d5d494"
+    },
+    {
+      "path": "evidence-manifest/0026.json",
+      "files": 424,
+      "sha256": "422c80c8fa5c69f0b9d07946a5d1472267d0e50bbc0949e7fa8552f5a3da9a65"
+    },
+    {
+      "path": "evidence-manifest/0027.json",
+      "files": 409,
+      "sha256": "7fb08a18e068937f6a1f499f7dad7eaeb16e2c589c9757f55a1e94c1d129d581"
+    },
+    {
+      "path": "evidence-manifest/0028.json",
+      "files": 418,
+      "sha256": "149a4fa3208119c56e708cc582737954170e9e1c3fb9616faf81e7b3109fbd1e"
+    },
+    {
+      "path": "evidence-manifest/0029.json",
+      "files": 423,
+      "sha256": "6421373c032b856a62605d5f5aaef4a910444845f768e55e48d13464539d6902"
+    },
+    {
+      "path": "evidence-manifest/0030.json",
+      "files": 422,
+      "sha256": "ef4f1bffe5c358c101991e1736ebd968997d19e161adeb808678790accc090db"
+    },
+    {
+      "path": "evidence-manifest/0031.json",
+      "files": 406,
+      "sha256": "b40df77dc3bb283004f73f3e23615fc5666a8b6e3a87df4079aa0dae9ca74c9b"
+    },
+    {
+      "path": "evidence-manifest/0032.json",
+      "files": 61,
+      "sha256": "ee09389ca8185a16e0c726e1dbd1cbdf4bcc1569724b6fe4bf9ba9e657fbba64"
+    }
+  ],
+  "verification": "At the evidence commit, concatenate these chunks and compare each listed file sha256/bytes. Paths are repository-relative. Manifest chunks are checked by their sha256 above."
+}

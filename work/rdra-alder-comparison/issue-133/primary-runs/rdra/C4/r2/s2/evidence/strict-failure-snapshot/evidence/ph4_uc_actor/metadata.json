@@ -1,0 +1,9 @@
+{
+  "start_utc": "2026-10-02T09:46:34Z",
+  "end_utc": "2026-10-02T09:47:05Z",
+  "failures": [
+    "Initial output write failed because the phase4 directory did not exist; created the directory and wrote the TSV successfully.",
+    "A batched cat invocation included literal 'cat' operands, causing two No such file or directory diagnostics; the three intended allowlisted input files were read in full."
+  ],
+  "unmet_restrictions": []
+}

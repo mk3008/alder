@@ -1,0 +1,86 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-001-P051-1",
+      "packet_id": "P051",
+      "claim_question": {
+        "meaning": "少額決定の部長アクターとの矛盾が同一活動の表示誤りか業務規則の競合かはraw文脈が必要。",
+        "evidence_ids": [
+          "F7",
+          "F38"
+        ]
+      },
+      "audit_target_ids": [
+        "F7",
+        "F38"
+      ],
+      "review_file": "P051-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P040-1",
+      "packet_id": "P040",
+      "claim_question": {
+        "meaning": "状態名・活動と画面の対応不整合はreceived handoffにもあり、画面細部の確定範囲はraw確認が要る。",
+        "evidence_ids": [
+          "F24",
+          "F25",
+          "F26",
+          "F27",
+          "F28",
+          "F29",
+          "F30",
+          "F31"
+        ]
+      },
+      "audit_target_ids": [
+        "F24",
+        "F25",
+        "F26",
+        "F27",
+        "F28",
+        "F29",
+        "F30",
+        "F31"
+      ],
+      "review_file": "P040-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P045-1",
+      "packet_id": "P045",
+      "claim_question": {
+        "meaning": "参照先を含む要約で、既存schemaの列型制約やdecision入力値が省略された可能性がある。",
+        "evidence_ids": [
+          "F7",
+          "F9",
+          "F10"
+        ]
+      },
+      "audit_target_ids": [
+        "F7",
+        "F9",
+        "F10"
+      ],
+      "review_file": "P045-review.json"
+    },
+    {
+      "claim_id": "attempt-001-P057-1",
+      "packet_id": "P057",
+      "claim_question": {
+        "meaning": "決定APIの本人性照合は未決としているが、追加Human inputの必要性の強さは原文の文脈確認を要する。",
+        "evidence_ids": [
+          "F30",
+          "F31",
+          "Q1",
+          "Q2"
+        ]
+      },
+      "audit_target_ids": [
+        "F30",
+        "F31",
+        "Q1",
+        "Q2"
+      ],
+      "review_file": "P057-review.json"
+    }
+  ]
+}

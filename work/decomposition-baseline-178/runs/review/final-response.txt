@@ -1,0 +1,8 @@
+Alder業務設計レビュー結果：両Caseとも、元要求に照らして修正を要する指摘はありません。
+
+- Case 1：確定済み到着明細と部署台帳をInputとして、照合・部署別集約・指定順での整列・保存がProcedureにあり、配布リストへのOutputと、後続の配達で参照できるResultまでつながっています。部署コードはすべて登録済みという確定事項に従い、未登録時の処理を追加要求しません。同じ配布担当が連続して行う作業なので、Activityの分割も不要です。
+- Case 2：借用資料台帳と展示中の借用資料をInputとして、開館前の照合・観察・変化の有無を問わない記録がProcedureにあり、点検簿へのOutputと、資料管理担当が判断に利用できるResultまでつながっています。資料管理担当による対応判断は後続利用として示されており、今回の点検Activityに取り込む必要はありません。
+
+両Caseの保存期間は、文書で明示された未決事項です。ここでは期間を決めたり、欠陥として再指摘したりしません。対象文書の全198行と、各CaseのObject・Activity・元要求を確認しました。外部運用や合意記録は提示されていないため、それらによる保証までは評価していません。文書・合意は変更していません。
+
+使用した正式なinstalled Skill authorityは c0/alder-review-business-design（skill://Plugin_c07da18d57d08191ade15f71e7618afa/alder-review-business-design/SKILL.md）です。必須4資料とprovenanceを実読しました。固定されたAlder Business Design資料のsource revisionは 9cf192c5bced1eeb872795eec8ced21b7bcbf492。plugin.jsonの取得は失敗したため、plugin版は独立検証できていません。coordinator報告値は0.4.5/release（pluginrel_6ac5b2ea5e908191bd97df6d00ba208f）です。

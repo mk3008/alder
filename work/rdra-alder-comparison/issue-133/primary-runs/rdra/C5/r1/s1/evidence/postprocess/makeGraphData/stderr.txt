@@ -1,0 +1,1 @@
+ファイル /workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/project/1_RDRA/外部システム.tsv にはヘッダーとデータがありません

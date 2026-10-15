@@ -1,0 +1,4 @@
+現行 docs/behavior-derivation/candidate-c3.md を適用して、work/behavior-derivation/stage2/inputs/meeting-room.md 全文から、全6 Activityの機能・検査項目のたたき台を作る。業務相関レビューは完了済みとして扱う。
+根拠は同入力の行番号で示す。指定の主表示と詳細を保ち、必要な考慮候補とBusiness Designへ戻す事項、決定済みの非対象を区別する。
+出力先: work/behavior-derivation/issue-71/outputs/meeting-room.md。
+これは既知文脈の適用probeでありFresh実行ではない。既に知った過去レビュー・別出力を根拠にしない。会議室の実装・テストは読まない。入力・c3・過去成果を変更せず、出力後の修正は別評価記録へ残す。

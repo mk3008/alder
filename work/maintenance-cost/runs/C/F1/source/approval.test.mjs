@@ -1,0 +1,52 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createApp } from './entry.mjs';
+import { detail } from './slices/detail.mjs';
+import { approve } from './slices/approve.mjs';
+import { purchase } from './slices/purchase.mjs';
+const requester = { id: 'r', role: 'requester' };
+const approver = { id: 'a', role: 'approver' };
+const senior = { id: 's', role: 'seniorApprover' };
+const buyer = { id: 'b', role: 'buyer' };
+const input = (id, requestedYen, quantity = 1) => ({ id, requestedYen, quantity, item: 'Desk', reason: 'Work', note: 'private' });
+
+test('authority depends on total, including safe-integer maximum; self-approval remains allowed', () => {
+  const app = createApp();
+  app.submit(input('small', 99999, 100), requester, 10);
+  assert.equal(app.approve('small', approver, 0).approvedBy, 'a');
+  app.submit(input('large', Number.MAX_SAFE_INTEGER), requester, 10);
+  const before = app.detail('large');
+  assert.throws(() => app.approve('large', approver, 0), Error);
+  assert.deepEqual(app.detail('large'), before);
+  assert.equal(app.approve('large', { ...senior, id: requester.id }, 0).approvedBy, requester.id);
+});
+
+test('senior approvals validate actor, timestamp, and repeat transitions atomically', () => {
+  const app = createApp();
+  app.submit(input('p', 100000), requester, 0);
+  const before = app.detail('p');
+  for (const actor of [null, {}, { id: '', role: 'seniorApprover' }, { id: 1, role: 'seniorApprover' }, buyer, requester]) {
+    assert.throws(() => app.approve('p', actor, 0), Error);
+    assert.deepEqual(app.detail('p'), before);
+  }
+  for (const now of [-1, 0.5, undefined, null, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.throws(() => app.approve('p', senior, now), Error);
+    assert.deepEqual(app.detail('p'), before);
+  }
+  const approved = app.approve('p', senior, Number.MAX_SAFE_INTEGER);
+  assert.throws(() => app.approve('p', senior, 0), Error);
+  assert.deepEqual(app.detail('p'), approved);
+});
+
+test('historical high-value approvals are retained and still purchasable', () => {
+  const old = { ...input('old', 200000), requesterId: 'r', submittedAt: 0, status: 'approved', approvedAt: 1, approvedBy: 'ordinary-before-policy' };
+  const bought = { ...old, id: 'bought', status: 'purchased', purchasedAt: 2, purchasedBy: 'b', actualYen: 300000 };
+  const records = new Map([['old', old], ['bought', bought]]);
+  assert.deepEqual(detail(records, 'old'), old);
+  assert.deepEqual(detail(records, 'bought'), bought);
+  assert.throws(() => approve(records, 'old', senior, 3), Error);
+  assert.deepEqual(detail(records, 'old'), old);
+  assert.deepEqual(purchase(records, 'old', 250000, buyer, 3), { ...old, status: 'purchased', purchasedAt: 3, purchasedBy: 'b', actualYen: 250000 });
+  assert.deepEqual(detail(records, 'bought'), bought);
+  assert.equal(old.status, 'approved');
+});

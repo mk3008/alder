@@ -1,0 +1,19 @@
+{
+  "status": "blocked_before_benchmark",
+  "command": "node RDRA_Knowledge/helper_tools/parallelRun/dag-runner.js --menu7",
+  "node_version": "v24.19.0",
+  "agent_cli": null,
+  "claude_cli": null,
+  "codex_cli": null,
+  "configuration_changed": false,
+  "provider_from_distribution": "cursor",
+  "model_from_distribution": "gemini-3-flash",
+  "effective_model_used": null,
+  "effective_reasoning_effort_used": null,
+  "exit_code": 1,
+  "error_observed": "write EPIPE",
+  "benchmark_runs_started": 0,
+  "business_artifacts_generated": 0,
+  "sample_input": "distribution 初期要望.txt",
+  "redactions": "absolute project prefix replaced with {project}; business content and error unchanged"
+}

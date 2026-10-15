@@ -1,0 +1,27 @@
+{
+  "strict_protocol_eligible": true,
+  "source_clean_exploratory_eligible": true,
+  "analysis_scope": "strict_primary",
+  "upstream_manifest": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s2/manifest.json",
+  "blind_id": "P054",
+  "case": "C4",
+  "replicate": 1,
+  "stage": "s3",
+  "status": "prepared",
+  "prepared": "2026-10-02T09:35:26.569223+00:00",
+  "directory": "/workspace/scratch/62be7f260abb/blind-probes/P054",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_attestation": "unavailable",
+  "packet_sha256": "51d7b4e54ccabd15cc0f9e667fcd94c54887e070a01dd868b80e73ecc160f818",
+  "prompt_sha256": "3caee12c4268e65df5e14db1b5464c33f4b5f3c5fa781438d326efae1f2dc857",
+  "envelope": "Cwd is /workspace/scratch/62be7f260abb/blind-probes/P054. Read exactly /workspace/scratch/62be7f260abb/blind-probes/P054/downstream-prompt.txt and /workspace/scratch/62be7f260abb/blind-probes/P054/packet.md; execute the unchanged task text in downstream-prompt.txt using only packet.md as the business material. This envelope is also permitted to read. Do not read parent directories, source inputs, human answers, oracle, rubric, method materials, other packets, conversation history, or other files. Write your full response to /workspace/scratch/62be7f260abb/blind-probes/P054/raw-response.md. Additionally write /workspace/scratch/62be7f260abb/blind-probes/P054/read-log.json with each exact read path in read order and /workspace/scratch/62be7f260abb/blind-probes/P054/metadata.json with start/end UTC, failures and any restrictions not met. Only these three outputs are allowed. You may read your own response to verify it. Do not modify task text or packet. Do not compensate for missing evidence.",
+  "envelope_sha256": "65950949b2b37c457bb4a47d1dd708ff7ce3042a151dc48350fbc0e60706c2c4",
+  "actual_spawn_message": "Read and follow the orchestration envelope at /workspace/scratch/62be7f260abb/blind-probes/P054/envelope.txt. You are permitted to read that envelope. Execute its task using only the specified packet and unchanged task text.",
+  "spawn_message_sha256": "2c2bad655bf1ec41da569c6c581e62760228e7b20e11a3cea6836ec12aa58174",
+  "packet_source": "/workspace/scratch/62be7f260abb/blind-packets/P056-handoff.md",
+  "anonymization_mapping": "/workspace/scratch/62be7f260abb/blind-packets/P056-handoff-mapping.json"
+}

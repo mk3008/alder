@@ -1,0 +1,6 @@
+取得日時: 2026-10-07 UTC
+対象入力: /workspace/shared/decomposition-inputs-178/review/designs.md（全文、Case 1・Case 2）
+Candidate snapshot: /workspace/shared/allocation-candidate-178/alder、指定commit f4408db27e8735e75a7f43d480df7461bbe00de1（commit実体の独立検証は未実施）
+実読: skills/alder-review-business-design/SKILL.md、同references/business-design-structure.ja.md、business-design-quality-check.ja.md、business-design-correlation-check.ja.md、business-design-omission-check.ja.md、provenance.json、package root plugin.json。
+実読manifest version: 0.4.5。provenance alder_source_revision: 979bf6b214f0ef805b9d407a04fc23c55dd17d4d。
+取得失敗: なし。制約: 指定入力以外のproject資料・外部運用・合意記録なし。参照文書中の他リンク先、repo、外部リンク、他ケース、過去結果は取得していない。installed pluginの実行やeffective runtimeの独立検証はしていない。読み取り専用で、証跡3ファイル以外の変更なし。

@@ -1,0 +1,17 @@
+{
+  "gates/S0.test.mjs": "80afc85f60551c572205fb1af678c7940ce8ac9ae2bd5afd36e3d93f68af41ce",
+  "gates/S1.test.mjs": "4d9153ac00fbb740d936f67648d78059d869b6404d593fa67716254fbd4d2124",
+  "gates/template.txt": "aa589bb24946a462dd52e252d85c4732b6c97b6de704a4fe3bf8ca5c0e57409b",
+  "prompts/A-S0.md": "bc586ab9f9fe29cabb29156eeb17d59e8bfd20e8db57510ed5a6fcd2e18bbf88",
+  "prompts/A-S1.md": "a88fb49656c943098f55f68f4ed7d09c7e1c944e529b578ca5b2d8a931b25ecf",
+  "prompts/B-S0.md": "a390a8442912f83a9a473512ce58bed909f7abcfe37c66c40d8d88d3c96f7671",
+  "prompts/B-S1.md": "a88fb49656c943098f55f68f4ed7d09c7e1c944e529b578ca5b2d8a931b25ecf",
+  "prompts/C-S0.md": "978e3acdcb760f5716f33066161a8c17a5f5f24dbf7c93cff69dfa36c5c80ff2",
+  "prompts/C-S1.md": "a88fb49656c943098f55f68f4ed7d09c7e1c944e529b578ca5b2d8a931b25ecf",
+  "prompts/D-S0.md": "4e41dba171687f7fd0ca2e4f2738df6a2dcb96fc32bb1d27f0b4d88212c7b080",
+  "prompts/D-S1.md": "a88fb49656c943098f55f68f4ed7d09c7e1c944e529b578ca5b2d8a931b25ecf",
+  "tools/capture.py": "8d90d294a5b61461d529ad28816b4fd3bf68d874099fc3ef12fae7518b679a8c",
+  "tools/check.py": "46288186193bf14bd852a20b6ee8301bc5c9a635710718aa9cecb0038facb6ac",
+  "tools/export_diffs.py": "d59cf1861812640942ec78efb32d7a1f895ff474e4bc276980923f19121e550d",
+  "tools/measure.py": "7715a9ee5b769c91f39b23eb8464da9430d3850271fb5ad9d98e1e9491030bce"
+}

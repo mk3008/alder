@@ -1,0 +1,11 @@
+{
+  "packet_id": "P005",
+  "target_ids": [
+    "F2",
+    "F4",
+    "F55",
+    "F56"
+  ],
+  "stage2_correspondence_packet_id": null,
+  "stage2_target_ids": []
+}

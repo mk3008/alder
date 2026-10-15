@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:56:00Z",
+  "end_utc": "2026-10-02T09:57:05Z",
+  "failures": [],
+  "unmet_restrictions": [],
+  "note": "ph3BUC.tsv has no external-system values; output contains the required header only. Start time is approximate."
+}

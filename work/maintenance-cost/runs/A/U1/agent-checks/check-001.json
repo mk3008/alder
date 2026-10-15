@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-09-12T04:17:15.575843+00:00",
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "acceptance.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "boundaries.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "entry.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "notes.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "acceptance.test.mjs",
+        "boundaries.test.mjs",
+        "notes.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "TAP version 13\n# Subtest: submission normalizes text, stores required data and only current event fields\nok 1 - submission normalizes text, stores required data and only current event fields\n  ---\n  duration_ms: 2.010344\n  type: 'test'\n  ...\n# Subtest: approval and purchase retain data; actual total may exceed requested\nok 2 - approval and purchase retain data; actual total may exceed requested\n  ---\n  duration_ms: 0.282056\n  type: 'test'\n  ...\n# Subtest: rejection stores its reason and prevents purchase\nok 3 - rejection stores its reason and prevents purchase\n  ---\n  duration_ms: 0.675981\n  type: 'test'\n  ...\n# Subtest: role checks for each command preserve state\nok 4 - role checks for each command preserve state\n  ---\n  duration_ms: 0.355206\n  type: 'test'\n  ...\n# Subtest: actor IDs and timestamps are validated by every mutation\nok 5 - actor IDs and timestamps are validated by every mutation\n  ---\n  duration_ms: 0.687758\n  type: 'test'\n  ...\n# Subtest: invalid quantity, total, ID and text never create records\nok 6 - invalid quantity, total, ID and text never create records\n  ---\n  duration_ms: 0.455768\n  type: 'test'\n  ...\n# Subtest: invalid actual total and rejection reason preserve records\nok 7 - invalid actual total and rejection reason preserve records\n  ---\n  duration_ms: 0.459874\n  type: 'test'\n  ...\n# Subtest: duplicates and unknown targets fail without mutation\nok 8 - duplicates and unknown targets fail without mutation\n  ---\n  duration_ms: 0.258911\n  type: 'test'\n  ...\n# Subtest: invalid transitions and repeat commands fail atomically\nok 9 - invalid transitions and repeat commands fail atomically\n  ---\n  duration_ms: 0.56979\n  type: 'test'\n  ...\n# Subtest: instances are isolated and IDs sort by JavaScript string comparison\nok 10 - instances are isolated and IDs sort by JavaScript string comparison\n  ---\n  duration_ms: 0.268435\n  type: 'test'\n  ...\n# Subtest: input and output mutations cannot alter stored state\nok 11 - input and output mutations cannot alter stored state\n  ---\n  duration_ms: 0.175145\n  type: 'test'\n  ...\n# Subtest: self approval and non-monotonic valid timestamps are permitted\nok 12 - self approval and non-monotonic valid timestamps are permitted\n  ---\n  duration_ms: 0.091308\n  type: 'test'\n  ...\n# Subtest: optional notes have exact UTF-16 boundary and preserve whitespace\nok 13 - optional notes have exact UTF-16 boundary and preserve whitespace\n  ---\n  duration_ms: 0.400955\n  type: 'test'\n  ...\n# Subtest: IDs retain whitespace and use UTF-16 string ordering\nok 14 - IDs retain whitespace and use UTF-16 string ordering\n  ---\n  duration_ms: 1.421856\n  type: 'test'\n  ...\n# Subtest: malformed input and unknown roles fail atomically\nok 15 - malformed input and unknown roles fail atomically\n  ---\n  duration_ms: 0.410599\n  type: 'test'\n  ...\n# Subtest: valid decreasing timestamps apply to rejection and purchase as well\nok 16 - valid decreasing timestamps apply to rejection and purchase as well\n  ---\n  duration_ms: 0.347955\n  type: 'test'\n  ...\n# Subtest: supplied undefined and nonprimitive strings reject without reserving IDs\nok 17 - supplied undefined and nonprimitive strings reject without reserving IDs\n  ---\n  duration_ms: 1.948651\n  type: 'test'\n  ...\n# Subtest: note copies and list omission hold in every state\nok 18 - note copies and list omission hold in every state\n  ---\n  duration_ms: 0.406183\n  type: 'test'\n  ...\n1..18\n# tests 18\n# suites 0\n# pass 18\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 93.129421\n",
+      "stderr": ""
+    }
+  ],
+  "finished_at": "2026-09-12T04:17:15.955115+00:00",
+  "passed": true
+}

@@ -1,0 +1,41 @@
+{
+  "recorded": "2026-10-02T10:29:44.406874+00:00",
+  "planned_workflows": 20,
+  "workflows": {
+    "pending": 0,
+    "running": 0,
+    "protocol_failed": 16,
+    "failed": 0,
+    "complete": 4
+  },
+  "current_nodes": {
+    "prepared": 0,
+    "running": 0,
+    "complete": 351,
+    "completed_without_output": 0,
+    "failed": 8
+  },
+  "retained_previous_attempts": 1,
+  "manifest_paths": [
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s1/manifest.json",
+    "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/manifest.json"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "issue": 85,
+  "source_revision": "d0a5f28fc1bd12472bb001cfc750b91377610f06",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/fresh_exploration",
+  "runs": 1,
+  "effective_model_and_effort_independently_attested": false,
+  "input_sha256": {
+    "business-design/purchase-request/README.md": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+    "docs/optimization-review.md": "1b5951fb2505d98b440ffb022da860dcec61cc2dffab685d9ce6cbab57037096"
+  },
+  "record_sha256": {
+    "launch.txt": "0f739e3a5ef8403cf52fee7947edd0adf1ee324e172b89b8e60bcdcafc18cd0e",
+    "raw.md": "3d22a0e0516cfbad528520b9455e4e252e72a841cb8a7dc5a34786bb8279183e"
+  }
+}

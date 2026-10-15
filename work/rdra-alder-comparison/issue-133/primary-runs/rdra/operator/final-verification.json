@@ -1,0 +1,811 @@
+{
+  "recorded_utc": "2026-10-02T10:29:47.112056+00:00",
+  "planned_workflows": 20,
+  "planned_ai_nodes": 360,
+  "technical_complete": 20,
+  "strict_protocol_eligible": 4,
+  "strict_protocol_failed": 16,
+  "source_clean_exploratory_eligible": 20,
+  "workflow_dag_all_pass": 20,
+  "fresh_agent_calls": 361,
+  "unique_agent_ids": 361,
+  "additional_aborted_transport_calls": 1,
+  "all_fresh_agent_calls_including_aborted_transport": 362,
+  "all_unique_agent_ids_including_aborted_transport": 362,
+  "retained_retries": 1,
+  "script_invocations": 123,
+  "successful_script_invocations": 122,
+  "failed_script_invocations": 1,
+  "metadata_records": 361,
+  "unexpected_node_root_files": [],
+  "strict_snapshot_integrity": [
+    {
+      "workflow": "C1/r1/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 533
+    },
+    {
+      "workflow": "C1/r1/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 98
+    },
+    {
+      "workflow": "C1/r2/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 438
+    },
+    {
+      "workflow": "C1/r2/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 57
+    },
+    {
+      "workflow": "C2/r1/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 124
+    },
+    {
+      "workflow": "C2/r2/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 158
+    },
+    {
+      "workflow": "C3/r1/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 130
+    },
+    {
+      "workflow": "C3/r2/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 126
+    },
+    {
+      "workflow": "C3/r2/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 119
+    },
+    {
+      "workflow": "C4/r1/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 127
+    },
+    {
+      "workflow": "C4/r2/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 112
+    },
+    {
+      "workflow": "C4/r2/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 125
+    },
+    {
+      "workflow": "C5/r1/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 134
+    },
+    {
+      "workflow": "C5/r1/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 116
+    },
+    {
+      "workflow": "C5/r2/s1",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s1/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 128
+    },
+    {
+      "workflow": "C5/r2/s2",
+      "snapshot": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/evidence/strict-failure-snapshot",
+      "hashes_unchanged": true,
+      "files": 122
+    }
+  ],
+  "workflows": [
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/manifest.json",
+      "case": "C1",
+      "replicate": "r1",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s1/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T07:45:00Z",
+            "start_time_note": "Approximate; exact start timestamp was not captured",
+            "end_utc": "2026-10-02T07:46:52Z",
+            "failures": [
+              "Initial attempt to read 0_RDRAZeroOne/phase4/ph4情報生成.md failed because the prompt is under RDRA_Knowledge; no file was read at that path.",
+              "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created the directory and wrote the requested file."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_info",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r1/s2/manifest.json",
+      "case": "C1",
+      "replicate": "r1",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [],
+      "failure": "Read allowlist violation: ph4_info attempted nonexistent wrong Prompt path",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s1/manifest.json",
+      "case": "C1",
+      "replicate": "r2",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": null,
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/manifest.json",
+      "case": "C1",
+      "replicate": "r2",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/evidence/ph4_info/envelope.txt",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4情報生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/RDRA_Knowledge/.rdracore/RDRASheet.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報.tsv"
+            ]
+          },
+          "metadata": {
+            "start_utc": "2026-10-02T08:26:00Z",
+            "start_utc_note": "Approximate; timestamp was not captured at entry.",
+            "end_utc": "2026-10-02T08:27:35Z",
+            "failures": [
+              "Initial read attempted 0_RDRAZeroOne/phase4/ph4情報生成.md and failed because the Prompt is under RDRA_Knowledge/.",
+              "First output write failed because 0_RDRAZeroOne/phase4 did not exist; created directory and wrote output successfully."
+            ],
+            "unmet_restrictions": []
+          },
+          "existing_outside_read_paths": []
+        },
+        {
+          "node": "ph4_state",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/evidence/ph4_state/envelope.txt",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4状態生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase2/ph2状態.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+            ]
+          },
+          "metadata": {
+            "start_utc": null,
+            "end_utc": "2026-10-02T08:28:22Z",
+            "failures": [
+              "An initial mistaken path for the prompt was attempted and not found; the specified prompt was subsequently read verbatim.",
+              "The first output write failed because the phase4 directory was absent; the directory was created and the TSV was written.",
+              "No terminal state exists in the input transitions for 蔵書の貸出状態 or 返却遅延日数区分; terminal rows for those models cannot be truthfully supplied."
+            ],
+            "unmet_restrictions": [
+              "Start UTC was not captured at task entry, so no precise start time can be asserted.",
+              "The prompt's terminal-state-per-model checklist is unsatisfiable for two cyclic state models without inventing transitions or states."
+            ]
+          },
+          "existing_outside_read_paths": []
+        },
+        {
+          "node": "ph4_actor",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4アクター生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター.tsv"
+            ]
+          },
+          "metadata": {
+            "start_utc": "2026-10-02T08:31:00Z",
+            "start_utc_precision": "minute estimate",
+            "end_utc": "2026-10-02T08:31:54Z",
+            "failures": [
+              "Initial read attempted a nonexistent output-tree Prompt path; the exact official Prompt was then read successfully."
+            ],
+            "unmet_restrictions": [
+              "An attempted read of 0_RDRAZeroOne/phase4/ph4アクター生成.md was outside the read allowlist; it failed because the file did not exist."
+            ]
+          },
+          "existing_outside_read_paths": []
+        }
+      ],
+      "failure": "Missing output or required read-log: ph4_actor",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s1/manifest.json",
+      "case": "C2",
+      "replicate": "r1",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": "Metadata discloses nonexistent outside-allowlist AGENTS/Prompt read attempts from RDRA_Knowledge cwd",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r1/s2/manifest.json",
+      "case": "C2",
+      "replicate": "r1",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": null,
+      "status": "complete"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s1/manifest.json",
+      "case": "C2",
+      "replicate": "r2",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": null,
+      "status": "complete"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C2/r2/s2/manifest.json",
+      "case": "C2",
+      "replicate": "r2",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": "Metadata discloses mistaken nonexistent outside-allowlist Prompt lookup with no bytes read",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/manifest.json",
+      "case": "C3",
+      "replicate": "r1",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [
+        {
+          "node": "ph4_state",
+          "classification": "outside-allowlist attempted read, nonexistent path; no content reportedly acquired",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T08:58:33Z",
+            "end_utc": "2026-10-02T08:59:03Z",
+            "start_note": "The first captured UTC time was after initial reads; the exact task start was not captured.",
+            "failures": [
+              "An initial attempt to read 0_RDRAZeroOne/phase4/ph4状態生成.md failed because the prompt resides under RDRA_Knowledge.",
+              "An initial output write failed because 0_RDRAZeroOne/phase4 did not exist; the directory was created and the write succeeded."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "none reported"
+        },
+        {
+          "node": "ph4_external_system",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/0_RDRAZeroOne/phase4/ph4外部システム生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/evidence/ph4_external_system/envelope.txt",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/0_RDRAZeroOne/phase4/ph4外部システム生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4外部システム生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s1/nodes/ph4_external_system/root/RDRA_Knowledge/_1_RDRA/RDRA.md"
+            ]
+          },
+          "metadata": {
+            "start_utc": "2026-10-02T09:01:00Z",
+            "start_utc_precision": "estimated minute; exact task start unavailable",
+            "end_utc": "2026-10-02T09:02:06Z",
+            "failures": [
+              "An initial read attempted the prompt at the output-tree path and found no file; the exact official prompt was then read successfully.",
+              "The first output write failed because the phase4 output directory did not exist; it was created and the write succeeded."
+            ],
+            "unmet_restrictions": [],
+            "result": "Only the TSV header is present because every source BUC row has a blank external-system field."
+          },
+          "existing_outside_read_paths": []
+        }
+      ],
+      "failure": "Missing output or required read-log: ph4_external_system",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r1/s2/manifest.json",
+      "case": "C3",
+      "replicate": "r1",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": null,
+      "status": "complete"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/manifest.json",
+      "case": "C3",
+      "replicate": "r2",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [
+        {
+          "node": "ph4_state",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4状態生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase2/ph2状態.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRA.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRASheet.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/.rdracore/RDRAGraph.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_state/root/RDRA_Knowledge/_1_RDRA/RDRA.md"
+            ]
+          },
+          "metadata": {
+            "start_utc": null,
+            "end_utc": "2026-10-02T09:14:31Z",
+            "failures": [
+              "Initial read attempted 0_RDRAZeroOne/phase4/ph4状態生成.md instead of the specified knowledge path and failed; the correct Prompt was then read.",
+              "First output write failed because phase4 directory did not exist; directory was created and output written."
+            ],
+            "unmet_restrictions": [
+              "Start UTC timestamp was not captured at task start; cannot reconstruct exactly."
+            ]
+          },
+          "existing_outside_read_paths": []
+        },
+        {
+          "node": "ph4_info",
+          "classification": "metadata-reported outside-allowlist nonexistent Prompt path attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s1/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:13:00Z",
+            "end_utc": "2026-10-02T09:14:12Z",
+            "failures": [
+              "Initial attempt to read 0_RDRAZeroOne/phase4/ph4情報生成.md failed because the official Prompt resides under RDRA_Knowledge; corrected path was then read."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "none reported"
+        }
+      ],
+      "failure": "Missing output or required read-log: ph4_state",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/manifest.json",
+      "case": "C3",
+      "replicate": "r2",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "classification": "outside-allowlist attempted read, nonexistent path; no content reportedly acquired",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C3/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:19:53Z",
+            "end_utc": "2026-10-02T09:20:09Z",
+            "failures": [
+              "Initial attempted cat of 0_RDRAZeroOne/phase4/ph4情報生成.md failed because the prompt resides under RDRA_Knowledge/_0_RDRAZeroOne/phase4; the correct prompt was then read."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "none reported"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist nonexistent Prompt path attempt: ph4_info",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s1/manifest.json",
+      "case": "C4",
+      "replicate": "r1",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_state",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:26:00Z",
+            "end_utc": "2026-10-02T09:27:00Z",
+            "failures": [
+              "Initial attempt to read 0_RDRAZeroOne/phase4/ph4状態生成.md failed because the Prompt is under RDRA_Knowledge; corrected and read exact official Prompt.",
+              "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created that output directory and retried."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_state",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r1/s2/manifest.json",
+      "case": "C4",
+      "replicate": "r1",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": true,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [],
+      "failure": null,
+      "status": "complete"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s1/manifest.json",
+      "case": "C4",
+      "replicate": "r2",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s1/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:38:00Z",
+            "end_utc": "2026-10-02T09:38:59Z",
+            "start_time_precision": "approximate minute; exact start time was not captured",
+            "failures": [
+              "Initial attempt to read 0_RDRAZeroOne/phase4/ph4情報生成.md failed because that path does not exist; the exact Prompt was then read from RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4情報生成.md.",
+              "Initial write failed because 0_RDRAZeroOne/phase4 did not exist; directory was created and the output was written successfully."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_info",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s2/manifest.json",
+      "case": "C4",
+      "replicate": "r2",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_uc_actor",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C4/r2/s2/nodes/ph4_uc_actor/root/cat",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:46:34Z",
+            "end_utc": "2026-10-02T09:47:05Z",
+            "failures": [
+              "Initial output write failed because the phase4 directory did not exist; created the directory and wrote the TSV successfully.",
+              "A batched cat invocation included literal 'cat' operands, causing two No such file or directory diagnostics; the three intended allowlisted input files were read in full."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_uc_actor",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/manifest.json",
+      "case": "C5",
+      "replicate": "r1",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_uc_timer",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/nodes/ph4_uc_timer/root/0_RDRAZeroOne/phase4/ph4UCタイマー.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:56:12Z",
+            "end_utc": "2026-10-02T09:56:40Z",
+            "failures": [
+              "Initial relative-path read of 0_RDRAZeroOne/phase4/ph4UCタイマー.md failed: no such file; corrected to the specified RDRA_Knowledge Prompt path.",
+              "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; created it and wrote the requested file."
+            ],
+            "unmet_restrictions": []
+          },
+          "exposure": "No content reportedly acquired"
+        },
+        {
+          "node": "ph4_actor",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s1/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T09:57:31Z",
+            "end_utc": "2026-10-02T09:57:49Z",
+            "failures": [
+              "Initial attempt to read 0_RDRAZeroOne/phase4/ph4アクター生成.md failed because that path did not exist; the official Prompt at RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4アクター生成.md was then read.",
+              "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist; directory was created and the output write succeeded."
+            ],
+            "unmet_restrictions": [],
+            "timestamp_note": "The start timestamp was captured after the initial reads."
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_actor",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/manifest.json",
+      "case": "C5",
+      "replicate": "r1",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": "2026-10-02T10:05:16Z",
+            "end_utc": "2026-10-02T10:05:37Z",
+            "failures": [
+              "Initial mistaken cat attempted 0_RDRAZeroOne/phase4/ph4情報生成.md, a path outside the read allowlist; it did not exist and no content was read.",
+              "First output write failed because 0_RDRAZeroOne/phase4 did not exist; created the output directory and retried successfully."
+            ],
+            "unmet_restrictions": [
+              "Attempted a disallowed read path in the first combined cat command; the file was absent and no content was returned."
+            ]
+          },
+          "exposure": "No content reportedly acquired"
+        },
+        {
+          "node": "ph4_state",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/evidence/ph4_state/envelope.txt",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4状態生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/0_RDRAZeroOne/phase2/ph2状態.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r1/s2/nodes/ph4_state/root/RDRA_Knowledge/_1_RDRA/RDRA.md"
+            ]
+          },
+          "metadata": {
+            "start_utc": "2026-10-02T10:05:37Z",
+            "end_utc": "2026-10-02T10:06:01Z",
+            "failures": [
+              "Attempted to read 0_RDRAZeroOne/phase4/ph4状態生成.md; file did not exist. Then read the official Prompt at the path specified by the envelope.",
+              "Initial output write failed because 0_RDRAZeroOne/phase4 did not exist. Created the directory and wrote the requested TSV."
+            ],
+            "unmet_restrictions": []
+          },
+          "existing_outside_read_paths": []
+        }
+      ],
+      "failure": "Missing output or required read-log: ph4_state",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s1/manifest.json",
+      "case": "C5",
+      "replicate": "r2",
+      "stage": "s1",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": true,
+      "guard_failures": [
+        {
+          "node": "ph4_state",
+          "classification": "Manually verified metadata-reported outside-allowlist read attempt",
+          "attempted_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s1/nodes/ph4_state/root/0_RDRAZeroOne/phase4/ph4状態生成.md",
+          "path_exists": false,
+          "metadata": {
+            "start_utc": null,
+            "end_utc": "2026-10-02T10:15:25Z",
+            "failures": [
+              "初回の相対パス指定でPromptの場所を誤り、存在しない0_RDRAZeroOne/phase4/ph4状態生成.mdの読み取りが失敗した。後続で正しいPromptを読んだ。",
+              "初回の成果物書き込みはphase4ディレクトリが存在せず失敗した。ディレクトリ作成後に再実行して成功した。"
+            ],
+            "unmet_restrictions": [
+              "実行開始時刻を記録していなかったため、正確なstart_utcを提示できない。"
+            ]
+          },
+          "exposure": "No content reportedly acquired"
+        }
+      ],
+      "failure": "Metadata-reported outside-allowlist path attempt: ph4_state",
+      "status": "protocol_failed"
+    },
+    {
+      "manifest_path": "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/manifest.json",
+      "case": "C5",
+      "replicate": "r2",
+      "stage": "s2",
+      "technical_complete": true,
+      "strict_protocol_eligible": false,
+      "source_clean_exploratory_eligible": true,
+      "dag_all_pass": true,
+      "validity_subset_all_pass": false,
+      "guard_failures": [
+        {
+          "node": "ph4_info",
+          "read_log": {
+            "prompt_read": true,
+            "outside_allowlist": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md"
+            ],
+            "reported_paths": [
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/evidence/ph4_info/envelope.txt",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/AGENTS.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4情報生成.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase3/ph3BUC.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase3/ph3バリエーション.tsv",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/RDRA_Knowledge/_1_RDRA/RDRA.md",
+              "/workspace/scratch/62be7f260abb/primary-runs/rdra/C5/r2/s2/nodes/ph4_info/root/0_RDRAZeroOne/phase4/ph4情報.tsv"
+            ]
+          },
+          "metadata": {
+            "start_utc": "2026-10-02T10:24:00Z",
+            "end_utc": "2026-10-02T10:25:29Z",
+            "failures": [
+              "Initial attempted read of 0_RDRAZeroOne/phase4/ph4情報生成.md failed because that path does not exist; the specified RDRA_Knowledge Prompt was subsequently read."
+            ],
+            "unmet_restrictions": []
+          },
+          "existing_outside_read_paths": []
+        }
+      ],
+      "failure": "Missing output or required read-log: ph4_info",
+      "status": "protocol_failed"
+    }
+  ],
+  "limitations": [
+    "Shared filesystem allowlist is operational isolation, not security enforcement.",
+    "Source-clean is self-reported read-log/metadata only, without independent trace guarantee.",
+    "Effective provider model/reasoning/context isolation attestation unavailable.",
+    "RDRA wrapper allows own-output reads; other method wrappers may differ. Do not compare guard failure rate as method quality.",
+    "Source original Prompt/Knowledge copies excluded from publication; archive URL and original hashes permit reconstruction."
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/AGENTS.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター生成.md","status":"failed: not found"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/RDRA_Knowledge/_0_RDRAZeroOne/phase4/ph4アクター生成.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase3/ph3BUC.tsv","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/RDRA_Knowledge/_1_RDRA/RDRA.md","status":"read"},
+  {"path":"/workspace/scratch/62be7f260abb/primary-runs/rdra/C1/r2/s2/nodes/ph4_actor/root/0_RDRAZeroOne/phase4/ph4アクター.tsv","status":"read after write"}
+]

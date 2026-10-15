@@ -1,0 +1,3 @@
+# Isolated Authoring fixture
+
+Use only this run's `notes.md`, repo `AGENTS.md`, and `plugins/alder/skills/alder-draft-business-design/SKILL.md` with its bundled references. Also read `work/authoring-lifecycle/issue-106/guidance.md` and apply it as supplementary authoring guidance. Do not read Issue #106, protocol, other fixtures, other run outputs, prior benchmark outputs or evaluation criteria. Do not edit the plugin. Write only in this run directory: `docs/business-design/meeting-room.md`, `response.md`, `read-log.md`. Read log must list files actually read, model / effort requested (not asserted effective), and any limits. Preserve the first output without later revision.

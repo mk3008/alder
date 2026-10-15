@@ -1,0 +1,39 @@
+{
+  "packet_id": "H043",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "anonymization_script_sha256": "f2f602eccfc6a853781374051276a15b1520c908712b1ca8666a364ec28b08a5",
+  "started_at": "2026-10-02T09:56:23.726356+00:00",
+  "packet_sha256": "731f826eb5f646c32cb7efbcea90b754117e885cb4d2838eff918453e966d846",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "1ba705340de6a3e22f4a3d9b621f806db1ff223d6fae387e36da625f70d2cd5e",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H043/packet.md",
+    "/workspace/scratch/62be7f260abb/handoff-extractions/H043/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_h043",
+  "prepared_at": "2026-10-02T09:53:28.136546+00:00",
+  "output_sha256": {
+    "canonical.json": "2143c3e74f0d81e758eba69f7d7b923972ac5d67f6524e89992341002842fe94",
+    "raw-response.md": "2143c3e74f0d81e758eba69f7d7b923972ac5d67f6524e89992341002842fe94",
+    "read-log.jsonl": "43aaf08648a20bca8ce9297d82b5e179ac59cb8a78bd1c423086b6206697b1b5"
+  },
+  "finished_at": "2026-10-02T09:58:57.806675+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "read_compliance_audit": {
+    "logged_outside_allowlist": [],
+    "declared_outside_read_attempts": [],
+    "basis": "Read-log mechanical validation and actual final; own output verification allowed; no independent attestation."
+  }
+}

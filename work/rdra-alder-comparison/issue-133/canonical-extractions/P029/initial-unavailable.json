@@ -1,0 +1,8 @@
+{
+  "packet_id": "P029",
+  "status": "unavailable",
+  "reason": "upstream_authoring_protocol_failed",
+  "recorded_at": "2026-10-02T07:57:50.847488+00:00",
+  "partial_artifacts_excluded": true,
+  "semantic_scores_imputed": false
+}

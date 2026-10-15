@@ -1,0 +1,12 @@
+Independent Fresh Treatment review for Alder PR #87. Read only these two files from Alder revision d0a5f28fc1bd12472bb001cfc750b91377610f06:
+- /workspace/scratch/ef15bb86674b/alder/business-design/facilities-maintenance/README.md
+- /workspace/scratch/ef15bb86674b/alder/docs/optimization-review.md
+
+Do not read prior runs, other task prompts, PR discussions, experiment protocol or conversation history. Do not modify either source file. This is a research review, not business approval.
+
+Problem (experiment-only, not a measured fact in the Business Design): 故障報告を受けた保守依頼が増えると、保守調整担当者が `open` の依頼ごとに予定日時を決める作業の負荷が高い。
+Pain level: High. No workload, frequency, duration or equipment facts are supplied.
+
+Run an Alder Optimization Review with an additional exploratory heuristic. Briefly form at least two meaningfully different extreme desirable states that could eliminate the Problem if current constraints were relaxed; explain the causal path for each. Restore the actual Business Design constraints and unknowns, then shrink each to a plausible limited investigation or combine their useful properties when that creates a distinct business change. Consider whether the current Activity, its trigger, timing, unit or business boundary should exist as currently defined. This is a heuristic rather than a mandatory algorithm; stop instead of producing weak variations. Keep the current guidance's meaning preservation, proportionality, Scope, Difficulty, affected parties, assumptions, human decisions, questions and confidence. Return at most three useful hypotheses. Distinguish established facts from conjecture, and do not select or approve a candidate.
+
+Write the complete raw response in Japanese to /workspace/scratch/ef15bb86674b/alder/work/optimization-review/issue-85/followup/facilities-treatment/raw.md exactly once. Do not edit it afterward. Final message: report only the two source paths read and that the raw output was saved.

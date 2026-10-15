@@ -1,0 +1,79 @@
+{
+  "input": {
+    "path": "/workspace/shared/micro-fields-178/input-extract/passages.md",
+    "sha256": "820221340766775d864204178affef821325278b5336a3c3b34a90b806c36196",
+    "hash_verified": true,
+    "frozen_revision_from_task": "dbbd6ee6beb6d45ee216e009628c8692a90159ca"
+  },
+  "acquired": [
+    {
+      "saved_file": "draft-skill.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-draft-business-design/SKILL.md",
+      "contents_sha256": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072",
+      "contents_bytes": 8116
+    },
+    {
+      "saved_file": "adoption.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-draft-business-design/references/adoption.md",
+      "contents_sha256": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8",
+      "contents_bytes": 71734
+    },
+    {
+      "saved_file": "business-graph.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-draft-business-design/references/business-graph.md",
+      "contents_sha256": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e",
+      "contents_bytes": 17624
+    },
+    {
+      "saved_file": "draft-provenance.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-draft-business-design/references/provenance.json",
+      "contents_sha256": "f0e3691d3db63440fa24ec0c772eb2f4065d6392ccc3ae1cdf7df0af49108a7d",
+      "contents_bytes": 283
+    },
+    {
+      "saved_file": "structure.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/references/business-design-structure.ja.md",
+      "contents_sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0",
+      "contents_bytes": 9177
+    },
+    {
+      "saved_file": "review-provenance.json",
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/references/provenance.json",
+      "contents_sha256": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc",
+      "contents_bytes": 558
+    }
+  ],
+  "failed_attempts": [
+    {
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/references/business-design-structure.ja.md",
+      "package": "c0/alder-draft-business-design",
+      "error": "failed to read skill resource",
+      "resolution": "Read successfully with c0/alder-review-business-design package; see structure.json."
+    },
+    {
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/references/provenance.json",
+      "package": "c0/alder-draft-business-design",
+      "error": "failed to read skill resource",
+      "resolution": "Read successfully with c0/alder-review-business-design package; see review-provenance.json."
+    },
+    {
+      "resource": "skill://INSTALLED_ALDER_PLUGIN/plugin.json",
+      "package": "c0/alder-draft-business-design",
+      "error": "failed to read skill resource",
+      "resolution": "Not read; plugin version and release identifier are coordinator-provided, not independently measured."
+    }
+  ],
+  "pinned_sources_from_provenance": {
+    "draft_authoring_revision": "b9ac9a3b44a02790f03a77b1b8d128934be06636",
+    "draft_source_hashes": {
+      "docs/adoption.md": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8",
+      "docs/business-graph.md": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e"
+    },
+    "structure_revision": "9cf192c5bced1eeb872795eec8ced21b7bcbf492",
+    "structure_source_hash": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0"
+  },
+  "coordinator_provided_metadata_unverified": {
+    "plugin_version": "0.4.5",
+    "release": "INSTALLED_RELEASE_ID"
+  }
+}

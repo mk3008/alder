@@ -1,0 +1,39 @@
+{
+  "packet_id": "P059",
+  "status": "success",
+  "prepared_at": "2026-10-02T11:05:40.736470+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P059-packet.md": "fb2a820cc1781d74cb5e9372a5f93b2b4afacc3187d7fc64eead162f6dd96151",
+    "P059-canonical.json": "4e5e1a2a34f2b4362b6daae3600fe2a2e89b7ad8888ece8da2663cd4cdd5222f",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "a7eb1b9c7d1fdb40e7ad6ba8b5cbf7bf222dbe132fd12483446924c1441aa36a"
+  },
+  "envelope_sha256": "e57b77be5c0feba654f2d6414843136c35aa5e08eecc45b694d2fa2aecf9a756",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P059/P059-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P059/P059-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P059/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P059/review-targets.json"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p059",
+  "started_at": "2026-10-02T11:05:54.539881+00:00",
+  "finished_at": "2026-10-02T11:06:38.198276+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "2279e5c80bf22df79f8f50b0e76f5c2c3c95ba30c643b6a0b9b3a9af97cb5894",
+    "raw-response.md": "2279e5c80bf22df79f8f50b0e76f5c2c3c95ba30c643b6a0b9b3a9af97cb5894",
+    "read-log.jsonl": "d3d021b2733f15736d1e98211e6ffbba0b0fe4e7614f31ad43dbd5b7b868eb9f"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T11:07:22.346473+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths; no independent attestation"
+  }
+}

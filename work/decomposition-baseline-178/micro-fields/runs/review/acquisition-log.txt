@@ -1,0 +1,15 @@
+Input: /workspace/shared/micro-fields-178/input-review/extracts.md
+SHA256: c2b2ee81c16142a66f558ebfbf9fb1ba543542748a908b9c2b8fcad343e06dc6 (matches expected)
+Frozen input revision, supplied by coordinator: dbbd6ee6beb6d45ee216e009628c8692a90159ca. Revision was not fetched.
+Installed skill package read with skills.read: c0/alder-review-business-design.
+Full skills.read results, including resource and contents, are saved as adjacent .json files.
+SKILL.md contents SHA256: 75e53f34cc9cc2ec5c24d6e11eca9f022138244fd314d426413f16d36a62fb23
+business-design-structure.ja.md contents SHA256: 10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0
+business-design-quality-check.ja.md contents SHA256: d1a3021da91de3f47ddc7a5fc18efbded598beebe1af5c089616f368886f803e
+business-design-correlation-check.ja.md contents SHA256: b02d76cb9c9a2d3f7882fa80c67cd6a806c69866ecf84ce0dbdc32052cdd4988
+business-design-omission-check.ja.md contents SHA256: a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d
+provenance.json contents SHA256: 939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc
+provenance.json alder_source_revision: 9cf192c5bced1eeb872795eec8ced21b7bcbf492
+All four guide content hashes match provenance.json source hashes.
+Attempt to read plugin.json through skills.read at skill://INSTALLED_ALDER_PLUGIN/alder-review-business-design/plugin.json, skill://INSTALLED_ALDER_PLUGIN/plugin.json, and relative ../ and ../../ resource paths failed with "failed to read skill resource". Attempts are recorded in plugin.json.json, plugin-root.json and plugin-attempt-*.json.
+Version 0.4.5 and release INSTALLED_RELEASE_ID were supplied by the coordinator as installed metadata. They could not be independently verified from plugin.json via skills.read.

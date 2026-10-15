@@ -1,0 +1,17 @@
+{
+  "facilities-maintenance": {
+    "revision": "7b8f566ad18fa2c5f79dd72404ac85a3525672f1",
+    "source_path": "business-design/facilities-maintenance/README.md",
+    "sha256": "1c64a1f71d5f2184077fba74ddfebfa6a4ef78333a0e66163909bd785f1c90bc"
+  },
+  "purchase-request": {
+    "revision": "071d8f6c1028b9cd48ecde597ca0b019138839b6",
+    "source_path": "business-design/purchase-request/README.md",
+    "sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc"
+  },
+  "meeting-room": {
+    "revision": "94f6f639b850a92ce5ad55812a4899e7a2c7bc33",
+    "source_path": "business-design/meeting-room/README.md",
+    "sha256": "0eac1f1b10c9fbb311938a0e985912cfa8f75989ded24c2f2a66b83befb6fb51"
+  }
+}

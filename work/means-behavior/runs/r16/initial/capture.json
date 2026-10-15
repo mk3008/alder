@@ -1,0 +1,48 @@
+{
+  "run": "r16",
+  "stage": "initial",
+  "case": "defect",
+  "arm": "T",
+  "hashes": {
+    "AGENTS.md": "19c4997f8e68e8bcfbadac35ca07d4e0ecfb29dfda9f712652afa09b7c32f78d",
+    "TASK.md": "28141e02efdf6af18a484e85ca9f65943d0d49329ceda3764e9d39004297a30d",
+    "activity.md": "003852ed5cc3a27e7397f1672453a5c8364c27ff3538034da5699ca30e82110b",
+    "context/adoption.md": "b37d2c3c2fb48a3d9d23e4b0e511ef02c9f06a6bad50197da526ed82f8d71e7d",
+    "context/business-design.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+    "context/operations.md": "dd6c1b49031eed4bcb9a90829cbe1181795de6b1bf233e683f99502372133917",
+    "context/philosophy.md": "5ac664784781a804de16fb6cfc17f5d7d34563a8b22926cae4733af2bd82cc51",
+    "context/review-knowledge.md": "564c52831d438d9b49f4ca098dd1884167f2be096cc56f959c7847002ffe0351",
+    "decisions/accepted.md": "07259bc531cebab53428153c7cfae4b7136c6853026d82473f825946eaa103a2",
+    "report.md": "4ced21ec1fc9555ad0219d2c015166b228f836c82fb3317760c4e1b261eb4f47",
+    "src/receipt.mjs": "a0a225c5610db1baa37245d05f6f9a23f3a129b1a3088ef7ef88599cdb27b23a",
+    "src/service.mjs": "7dda7d7ec24a43624fc606f93c109765dfb50df30ac263559817e1ef3b7815ea",
+    "test/existing.test.mjs": "2f221cc5902d9c825dad300d4ae4afc8ff751273a9a2e39019c74559de77d53c"
+  },
+  "changed_paths": [
+    "activity.md",
+    "report.md"
+  ],
+  "protected_mutations": [],
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "/workspace/scratch/41e46e3be08e/means-runs/r16/test/existing.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "\u2714 availability, booking, and independent copies (1.455223ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 82.389506\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "/workspace/scratch/41e46e3be08e/alder/work/means-behavior/tools/probe.mjs",
+        "/workspace/scratch/41e46e3be08e/means-runs/r16"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"pastAvailability\": [\n    {\n      \"id\": \"a\",\n      \"name\": \"North\",\n      \"state\": \"available\"\n    }\n  ],\n  \"pastBooking\": \"input\",\n  \"first\": {\n    \"id\": \"1\",\n    \"roomId\": \"a\",\n    \"start\": 200,\n    \"end\": 300,\n    \"actor\": \"user\",\n    \"state\": \"reserved\"\n  },\n  \"second\": {\n    \"id\": \"2\",\n    \"roomId\": \"a\",\n    \"start\": 250,\n    \"end\": 350,\n    \"actor\": \"other\",\n    \"state\": \"reserved\"\n  }\n}\n",
+      "stderr": ""
+    }
+  ]
+}

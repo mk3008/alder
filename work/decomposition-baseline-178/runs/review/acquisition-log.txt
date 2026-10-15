@@ -1,0 +1,5 @@
+正式取得：skills.read package c0/alder-review-business-design で SKILL.md を実読。skill authority: skill://Plugin_c07da18d57d08191ade15f71e7618afa/alder-review-business-design/SKILL.md。
+同packageの必須資料4件を実読：references/business-design-structure.ja.md、business-design-quality-check.ja.md、business-design-correlation-check.ja.md、business-design-omission-check.ja.md。references/provenance.jsonも実読。provenance記載のAlder source revision: 9cf192c5bced1eeb872795eec8ced21b7bcbf492。
+対象取得：/workspace/shared/decomposition-inputs-178/review/designs.md 全198行・5508 bytes、SHA-256 f50a29988d11d0cfcf83d91e695314dcc9d423075b9554d3e0d7be840003220b。Case 1とCase 2の元要求および全文を確認。
+取得失敗：skills.readで skill://Plugin_c07da18d57d08191ade15f71e7618afa/plugin.json の取得を試みたが failed to read skill resource。plugin版は独立確認できない。coordinator報告値は0.4.5/release、pluginrel_6ac5b2ea5e908191bd97df6d00ba208f。版探索の追加検索は行っていない。
+制約：他のproject資料・合意記録・外部運用は提示されず、ユーザー指定に従って入力と正式package内必須資料以外を読んでいない。文書や合意は変更せず、指定証跡ファイルだけ作成した。

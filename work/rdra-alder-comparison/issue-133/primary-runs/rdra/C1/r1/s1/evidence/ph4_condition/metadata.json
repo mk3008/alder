@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T07:47:00Z",
+  "start_utc_note": "approximate; task start clock was not captured",
+  "end_utc": "2026-10-02T07:49:16Z",
+  "failures": ["Initial output write failed because the phase4 directory did not exist; created it and wrote the requested TSV."],
+  "unmet_restrictions": []
+}

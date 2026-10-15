@@ -1,0 +1,20 @@
+{
+  "case2": {
+    "AGENTS.md": "cf80797cde5df9bf6a2fff81d34a152a866e9b2b89b3c435b92f8d43e5445ecd",
+    "docs/business-design/case2.md": "4536e6708d308aa3e3de7221c667fd384ae11e9317c1862513e93787ae168d52",
+    "draft-v1.md": "4536e6708d308aa3e3de7221c667fd384ae11e9317c1862513e93787ae168d52",
+    "notes.md": "e01e92a4870633d369ca6478c2fcd2d3804bf708cdfb8abe202cdfcb007ddfdc",
+    "read-log.md": "1a9d011e52827521a36e3e4abbb009b5eafde76e645ea0c7aed7f972d7794fe8",
+    "response-v1.md": "62ef335be64e6de481b6e15c3b4ed354d7cee99b7c615bb4f31f5df32458c951"
+  },
+  "case4": {
+    "AGENTS.md": "8c18dba54e1dacdc38a6ae4409b8d62a557fd9cd85b32730670ea41bc0580a98",
+    "diff-v1-v2.patch": "2d5779599cde72a77e92d117e85697e52b8dcae7af04005751ed7394b446d2d5",
+    "docs/business-design/case4.md": "7c9e19c15ef761654a18d1ebb5f16c7d26bf964d4c006f870b46a74fc3cffe9c",
+    "draft-v1.md": "1c15343c91f68ca500c69d5148e4768d11de2ea45e4ce502386081f9bcb4f531",
+    "notes.md": "6a9451211d9c7d90a2c87aa34900002599758233c4840608febb02af1ad400b0",
+    "read-log.md": "616220e47035d0c180ad7a04253c99413dd0df1403cc5cee1179ec564c71189e",
+    "response-v1.md": "012e59bb657d678cfc553ce9b1cde070362d8e19bfc1aa5d5d877023faa27198",
+    "response-v2.md": "14cdde9a26de8bbb83a81150091e89c4380b418931a1cd216bfef498b590574f"
+  }
+}

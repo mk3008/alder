@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:24:59Z",
+  "failures": ["開始時刻を実行開始時に記録できず、正確な時刻は不明。"],
+  "unmet_restrictions": []
+}

@@ -1,0 +1,46 @@
+{
+  "candidate_sha256": "272ffcfda91b2837e28a7d4277b0554679410f35a0fee6c95d72a250740947ce",
+  "runs": [
+    {
+      "case": "facilities-maintenance",
+      "agent": "/root/derive_facilities",
+      "fork_turns": "none",
+      "model": "inherited; not independently attested",
+      "effort": "inherited; not independently attested",
+      "prompt_sha256": "8c7f25ce14a34fc49352b642c15fce500083e8d87217ad6af3e45d8968321a65",
+      "status": "completed; no feedback or rerun"
+    },
+    {
+      "case": "purchase-request",
+      "agent": "/root/derive_purchase",
+      "fork_turns": "none",
+      "model": "inherited; not independently attested",
+      "effort": "inherited; not independently attested",
+      "prompt_sha256": "2d76dd09fedd3a00002f6c860aa9abf91d6e0227c17bb8cb2d22e3480ca68f58",
+      "status": "completed; no feedback or rerun"
+    },
+    {
+      "case": "meeting-room",
+      "agent": "/root/derive_meeting",
+      "fork_turns": "none",
+      "model": "inherited; not independently attested",
+      "effort": "inherited; not independently attested",
+      "prompt_sha256": "aa0fdea330190a9e776dd788737787e0c59e25dd2954150b8ba4cef132bc6c58",
+      "status": "completed; no feedback or rerun"
+    }
+  ],
+  "probe": {
+    "agent": "/root/downstream_probe",
+    "fork_turns": "none",
+    "model": "inherited; not independently attested",
+    "effort": "inherited; not independently attested",
+    "prompt_sha256": "898ff95727c031db748434bd20918d544a2e9a85dc5f76668f14c4e456b0aed0",
+    "scope": "test design only; no test execution"
+  },
+  "output_sha256": {
+    "work/behavior-derivation/outputs/downstream-probe.md": "dc61353d87c52a1d15cb8a8bc8e9b83e734d51c883c610b603159ca13dd00e94",
+    "work/behavior-derivation/outputs/facilities-maintenance.md": "0b4779ba669d6135ef0ceeddb7652480f9cc05776071b8fc537b9d56e6e7d9cc",
+    "work/behavior-derivation/outputs/meeting-room.md": "2f938046bd784e31d319724e87c1429390c0bee67cf981d496c42459903cc8c4",
+    "work/behavior-derivation/outputs/purchase-request.md": "5025276626102728f8657cc645574c2aba6c407d9242b481cac8209d3240cf38"
+  }
+}

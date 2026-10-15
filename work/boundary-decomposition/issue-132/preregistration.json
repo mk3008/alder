@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-02T07:15:39.535Z",
+  "source_revision": "eb591bfbc1b077b0e93d62253cb1e7f3e392e462",
+  "issue": 132,
+  "requested_model": "gpt-6-sol",
+  "requested_effort": "medium",
+  "fork_turns": "none",
+  "client": "ChatGPT Work collaboration.spawn_agent",
+  "effective_runtime_settings": "independent attestation unavailable; record tool routing request/response",
+  "protocol_snapshot": "Related:\n- #128 — Optimization Reviewでの境界分解 trial\n\n## Goal\n\n境界分解思考を明示した場合に、通常の要求探索と比べて何が改善し、何が改善せず、どんなコストが増えるかをFreshなControl/Treatment比較で実測する。\n\n#128では候補方向自体はControl/Treatmentで同じだった一方、Treatmentは独立判断・探索境界・停止理由を明示し、出力は約7.4%長かった。今回は「候補数」ではなく、境界分解そのものの効果を測る。\n\n## 主仮説\n\n境界分解は、新規案の数を増やすより次を改善する可能性がある。\n\n1. 曖昧に束ねられた判断を独立した判断軸へ分ける\n2. 人間へ返す質問を、独立に回答できる粒度へ具体化する\n3. 未確定な業務値をAIが勝手に埋めることを減らす\n4. 根拠のない次元追加を停止条件で抑える\n\n副作用として、出力量・レビュー負荷が増える可能性がある。\n\n## Experimental boundary\n\n今回は「要求・業務上の未決事項の探索」に限定する。Optimization Reviewの候補最適化そのものは#128で評価済みなので再評価しない。\n\nコード、Business Design、正式ガイド、Pluginは変更しない。研究用の入力・raw・score・resultだけを追加してよい。\n\n## Arms\n\n### Control\n\n同じ入力から、現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出する。\n\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n### Treatment\n\nControlの全条件に加え、次の境界分解規則だけを追加する。\n\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\nTreatmentであることや「境界分解」という名称は生成結果へ書かせない。\n\n## Cases\n\n全caseをgeneratorから見て独立にする。別case、oracle、他arm出力を読ませない。\n\n### P1 — sealed positive: 人間関与の束\n\n入力:\n「システム要件は必要に応じて人間が決め、その他はAIに任せたい。既存環境はできるだけ使い、特別な事情がなければ技術選定はAIに任せる。」\n\ngeneratorにはこれだけを業務/設計方針として与える。\n\nOracle axes:\n- 既存インフラを固定する必要\n- 既存DB/schemaを固定する必要\n- 必須クラウド/外部サービス\n- 言語/ランタイムを固定する必要\n- 公開API/互換性を固定する必要\n\nOracleは「すべて必ず質問する」意味ではない。入力から独立判断として分けられるかを評価する。\n\n### P2 — sealed positive: 一部自動化の束\n\n入力:\n「経費精算は一部をAIで自動化したい。ただし最終的に人間が必要なところは残す。領収書を読み、社内ルールに合うか確認し、承認して、支払対象を確定する業務である。」\n\nOracle axes:\n- 領収書から情報を読み取る\n- ルール適合を判定する\n- 承認権限を行使する\n- 支払対象を確定する\n\n各軸のAI/人間分担は独立し得る。承認・支払確定を勝手にAIへ委譲しないことも見る。\n\n### H1 — historical: 会議室利用停止\n\n入力:\n「社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。」\n\n後続の既存Business Designをoracleとしてgeneratorから隠す。\n\nOracle decisions:\n- 利用停止中の会議室を空き検索候補へ出すか\n- 利用停止中に新規予約を成立させるか\n- 既存予約の変更先として利用停止会議室を許すか\n- 利用停止時点で既に存在する予約をどう扱うか\n\n既存設計では前三者は不可、最後は未決。値を当てるのではなく、独立した影響として発見できるかを評価する。\n\n### H2 — historical/public: RDRA図書館の貸出制限\n\n入力は公開sampleの該当情報だけを固定する。\n\n- UC: 蔵書の貸出を登録する\n- 条件: 貸出制限\n- variation: 遅延日数 = 「3日未満」「7日未満」「7日以上」\n- variation: 会員種別 = 「大人」「子供」\n- description: 返却が遅延している場合の貸出制限\n\nOracle:\n- 会員種別と遅延日数の組合せごとの許否が未決\n- 「3日未満」と「7日未満」の範囲が重複し、区分解釈が未決\n- 「大人は3日、子供は7日」と勝手に対応付けない\n\n値そのものの正解はoracleにしない。\n\n### N1 — no-decomposition control: 単一閾値\n\n入力:\n「10万円以上の購入申請は部長が承認し、10万円未満は課長が承認する。承認者以外の条件は同じである。」\n\n期待:\n- 既知の閾値を複数の新しい判断軸へ分解しない\n- 金額区分・承認者を未決として再質問しない\n- 追加の未決事項がなければ0件でよい\n\n### N2 — no-decomposition control: 既に独立化済み\n\n入力:\n「既存DBは必ず使用する。クラウド事業者は固定しない。外部決済サービスはA社を使う。実装言語は指定しない。既存公開APIとの互換性は維持する。」\n\n期待:\n- 既に独立して決まっている軸を再分解しない\n- 値が確定している項目を再質問しない\n- 根拠のない新軸を追加しない\n\n## Runs\n\nPilotは各case・各arm **2 Fresh run**、合計24 generator run。\n\n- 同一model / effort / client条件に固定\n- fork_turns: none 相当で履歴を持たせない\n- generatorは自分のarm promptと当該caseだけを読む\n- Control generatorにTreatment規則、#128、境界分解Knowledge、他runを読ませない\n- Treatment generatorにoracle、他runを読ませない\n- 実効model/effort、入力hash、出力rawを保存\n- run順序はarmが連続しないよう交互またはランダム化する\n\nPilotでcase間の差が大きく結論が揺れる場合だけ、該当caseを追加2 run/armする。明確なら不要。\n\n## Metrics\n\n統計的優位を無理に主張せず、case-paired descriptive comparisonを行う。\n\n### Primary\n\n1. **Independent-axis recall**\n   - oracle axisのうち、独立して回答可能な判断として発見した割合\n\n2. **Conflation count**\n   - 本来独立なoracle axesを一つの曖昧な質問/判断に束ねた数\n\n3. **Unsupported-axis count**\n   - 現入力に根拠がなく、回答差が現在の業務判断を変えない追加軸の数\n\n4. **Unauthorized-decision count**\n   - 未決の業務値・ポリシーを質問せず確定した数\n\n### Secondary\n\n5. **Actionable-question coverage**\n   - oracleの未決事項について、何が変わるか分かる具体的質問まで落とせた割合\n\n6. **Correct-stop**\n   - N1/N2で不要な質問・新軸を0件に抑えられたか\n\n7. **Output cost**\n   - 文字数\n   - 質問数\n   - 重複質問数\n\n8. **Novel useful axis**\n   - oracle外でも、入力に根拠があり独立性とdecision impactを満たす軸があれば別枠で記録する\n   - oracle外という理由だけでfalse positiveにしない\n\n## Scoring\n\ngenerator出力のarm名を隠して A/B 等へシャッフルし、固定rubricでscoreする。\n\n各axisは次の条件を満たすとmatch:\n- 入力上の同じ意思決定を指している\n- 他axisとは独立に回答できる\n- 回答差で業務結果・責任・成立条件のどれかが変わる\n\n表現一致は要求しない。\n\nUnsupported判定は、単にoracleにないことでは決めず、Grounding / Independence / Decision impactを全て欠く、または明示的なscope外を根拠なく追加した場合に限定する。\n\n可能なら一次score後にarmを開示し、集計ミスだけを再確認する。評価基準を結果を見て変更しない。\n\n## Report\n\ncaseごとにControl/Treatmentの各run値を残し、最後に以下をまとめる。\n\n- Independent-axis recall の差\n- Conflation の差\n- Unsupported-axis / Unauthorized-decision の差\n- N1/N2 correct-stop\n- 出力文字数・質問数の増減\n- #128の「候補は同じだが説明が明確になった」という観測と整合するか\n- 境界分解の効果が「探索能力」「表現精度」「停止性」のどこに出たか\n- 効果がなかった項目\n- 副作用\n- generalizationを主張できる範囲\n\n## Done\n\n- 24 runのpilotがFresh条件で完了\n- raw / run metadata / scoreが再確認可能\n- arm-blindまたは固定oracle評価を完了\n- 結果を研究記録へ保存\n- Control/Treatmentの差がない場合もそのまま記録\n- 差があっても、6 caseの小規模比較を超えて一般化しない\n- 正式仕様の変更はこのIssueでは行わない",
+  "rules": "# Agent routing for Alder\n\n## Fresh review settings\n\nFor a new independent Fresh agent review in this repository, request model `gpt-6-sol` with reasoning effort `medium` and no conversation-history fork (`fork_turns: none`). Give each agent the pinned source revision, readable input paths, the exact task prompt and the prohibited prior outputs. Record the requested model, effort, revision and full prompt with the review result. Do not claim independent verification of effective runtime settings when it is unavailable.\n\nThis is the default for future Fresh reviews, not a retroactive change to frozen historical research runs. If a specific experiment has preregistered model settings or the requester explicitly specifies different settings, use those settings and record the exception. A Fresh review reports evidence and questions; it does not approve business meaning or edit the source under review.\n\n## User-facing documentation polish gate\n\nWhen drafting, polishing, or reviewing README content and other user-facing documentation, check for **author-side meta information leaking into the reader-facing text** in addition to grammar and style.\n\nUse audience, reading goals, time budgets, evaluation criteria, research provenance, and review instructions to design the document internally. Do not expose them in the final text unless they materially help the reader decide or act.\n\nPersona is a Reader Walkthrough test condition. Fix the reader's prior knowledge, interaction environment, and goal internally, then verify that this persona can complete the intended path from the README alone. Do not narrate the persona in the README unless the reader truly needs that information.\n\nDo not add knowledge about the thing being tested merely to make the walkthrough easier. For example, when testing plugin installation, do not add \"knows basic plugin operations\" unless that was part of the original persona. Preserve persona fidelity so setup friction remains observable.\n\nBefore accepting user-facing documentation, explicitly check that:\n\n- headings describe the subject itself rather than internal reading-time targets such as “1 minute”, “3 minutes”, or “5–10 minutes”;\n- the prose does not explain the intended persona, authoring strategy, document plan, reviewer instructions, or why a section was written;\n- research / benchmark / Fresh-run provenance does not occupy reader-facing space when only the verified fact or limitation is needed;\n- worker prompts, evaluation criteria, Done conditions, and review notes have not leaked into the artifact;\n- necessary capability, version, validation, safety, or operational limitations remain visible when they can change user behavior.\n\nResearch evidence and reproduction details normally belong in Issues, Decisions, or research records. Reader-facing documents should state the supported claim and the limitation that matters to use.\n\nIf a Japanese polishing or other writing/polish skill is used, this meta-leakage check is still a mandatory final pass even when the skill does not perform it itself.\n\nAs a final test, ask of each sentence: **would this still help the target reader if they knew nothing about how this document was produced?** If not, remove it or rewrite it as direct reader-facing content.\n\nBefore changing headings, identify and preserve the document's existing **reader journey / progressive-disclosure axis**. For a README, a useful visible axis is often `Install / Setup` → `Getting Started / Quick Start` → `Golden Path` → `Advanced` → `Reference`, moving from setup to first success, standard adoption, and then optional depth. Task-oriented / user-goal-oriented headings support this axis; they do not replace it with a flat list of feature names or process steps. Persona, reading goals, time budgets, and evaluation criteria are secondary design inputs used to choose what belongs inside each section, and should normally remain invisible to readers.\n\nIn the Golden Path, prefer **one recommended path** over completeness. Do not surface every valid alternative, legacy version, compatibility detail, fallback, or validation caveat unless it changes the reader's immediate action. Move those details to Advanced or Reference. Evaluate each sentence not only by whether it is true, but by whether the reader needs it now to take the next step.\n\nApply this to the **entire README**, not only the Golden Path. The README's primary job is not to summarize the full specification; it is to help a reader understand what the project is, whether it matters to them, and how to reach the first successful use. Before writing, define the single most important message and the first outcome the reader should achieve. Add sections or detail only when they strengthen that message or help the reader start. Completeness, version matrices, alternatives, edge cases, and exhaustive caveats belong in Advanced, Reference, or dedicated documentation when they would obscure the onboarding path. Treat the README as an entry point, not a compressed specification. In the final pass, skim headings alone and confirm that they form one coherent journey from first use through standard use to optional depth.\n\n### Do not assume unstated reader context\n\nIn user-facing documentation, do not use connective wording that treats an idea as already shared unless the document has actually introduced it. Expressions equivalent to “not only”, “on the other hand”, “furthermore”, “also”, “of course”, “already”, or “conversely” should only be used when the required prior proposition is explicit in the preceding text.\n\nFor example, do not introduce existing-work analysis for the first time as “not only existing-work analysis, but also new-work hypotheses.” State both uses directly instead.\n\nDuring polishing, ask for every connective: **what prior statement is this adding to, contrasting with, or continuing, and has the reader actually seen that statement in this document?** Context from Issues, chats, author intent, or other documents does not count as reader-shared context.\n\n### Bridge Getting Started into the first action\n\nIn Getting Started / Quick Start, do not jump directly from the heading to a command or instruction. Guide the first success as **Goal → Material → Action → Observation → Next**.\n\nBriefly tell the reader what they are about to try, what sample/input to use, what action to take, what result to expect, and where that experience leads next. This is not extra exposition; it is the minimum context needed to keep the first action from feeling abrupt.\n\n## Publishing research decisions\n\nFor adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.\n",
+  "runs": [
+    {
+      "id": "P1-control-1",
+      "case": "P1",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\nシステム要件は必要に応じて人間が決め、その他はAIに任せたい。既存環境はできるだけ使い、特別な事情がなければ技術選定はAIに任せる。"
+    },
+    {
+      "id": "P1-treatment-1",
+      "case": "P1",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\nシステム要件は必要に応じて人間が決め、その他はAIに任せたい。既存環境はできるだけ使い、特別な事情がなければ技術選定はAIに任せる。"
+    },
+    {
+      "id": "P2-control-1",
+      "case": "P2",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n経費精算は一部をAIで自動化したい。ただし最終的に人間が必要なところは残す。領収書を読み、社内ルールに合うか確認し、承認して、支払対象を確定する業務である。"
+    },
+    {
+      "id": "P2-treatment-1",
+      "case": "P2",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n経費精算は一部をAIで自動化したい。ただし最終的に人間が必要なところは残す。領収書を読み、社内ルールに合うか確認し、承認して、支払対象を確定する業務である。"
+    },
+    {
+      "id": "H1-control-1",
+      "case": "H1",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。"
+    },
+    {
+      "id": "H1-treatment-1",
+      "case": "H1",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。"
+    },
+    {
+      "id": "H2-control-1",
+      "case": "H2",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\nUC: 蔵書の貸出を登録する\n条件: 貸出制限\nvariation: 遅延日数 = 「3日未満」「7日未満」「7日以上」\nvariation: 会員種別 = 「大人」「子供」\ndescription: 返却が遅延している場合の貸出制限"
+    },
+    {
+      "id": "H2-treatment-1",
+      "case": "H2",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\nUC: 蔵書の貸出を登録する\n条件: 貸出制限\nvariation: 遅延日数 = 「3日未満」「7日未満」「7日以上」\nvariation: 会員種別 = 「大人」「子供」\ndescription: 返却が遅延している場合の貸出制限"
+    },
+    {
+      "id": "N1-control-1",
+      "case": "N1",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n10万円以上の購入申請は部長が承認し、10万円未満は課長が承認する。承認者以外の条件は同じである。"
+    },
+    {
+      "id": "N1-treatment-1",
+      "case": "N1",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n10万円以上の購入申請は部長が承認し、10万円未満は課長が承認する。承認者以外の条件は同じである。"
+    },
+    {
+      "id": "N2-control-1",
+      "case": "N2",
+      "arm": "control",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n既存DBは必ず使用する。クラウド事業者は固定しない。外部決済サービスはA社を使う。実装言語は指定しない。既存公開APIとの互換性は維持する。"
+    },
+    {
+      "id": "N2-treatment-1",
+      "case": "N2",
+      "arm": "treatment",
+      "repeat": 1,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n既存DBは必ず使用する。クラウド事業者は固定しない。外部決済サービスはA社を使う。実装言語は指定しない。既存公開APIとの互換性は維持する。"
+    },
+    {
+      "id": "P1-control-2",
+      "case": "P1",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\nシステム要件は必要に応じて人間が決め、その他はAIに任せたい。既存環境はできるだけ使い、特別な事情がなければ技術選定はAIに任せる。"
+    },
+    {
+      "id": "P1-treatment-2",
+      "case": "P1",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\nシステム要件は必要に応じて人間が決め、その他はAIに任せたい。既存環境はできるだけ使い、特別な事情がなければ技術選定はAIに任せる。"
+    },
+    {
+      "id": "P2-control-2",
+      "case": "P2",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n経費精算は一部をAIで自動化したい。ただし最終的に人間が必要なところは残す。領収書を読み、社内ルールに合うか確認し、承認して、支払対象を確定する業務である。"
+    },
+    {
+      "id": "P2-treatment-2",
+      "case": "P2",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n経費精算は一部をAIで自動化したい。ただし最終的に人間が必要なところは残す。領収書を読み、社内ルールに合うか確認し、承認して、支払対象を確定する業務である。"
+    },
+    {
+      "id": "H1-control-2",
+      "case": "H1",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。"
+    },
+    {
+      "id": "H1-treatment-2",
+      "case": "H1",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n社員が空いている会議室を探して予約する。予約時間が重複していたら予約できない。予約後でも時間は変更できる。キャンセルもできる。管理者は会議室を利用停止にできる。"
+    },
+    {
+      "id": "H2-control-2",
+      "case": "H2",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\nUC: 蔵書の貸出を登録する\n条件: 貸出制限\nvariation: 遅延日数 = 「3日未満」「7日未満」「7日以上」\nvariation: 会員種別 = 「大人」「子供」\ndescription: 返却が遅延している場合の貸出制限"
+    },
+    {
+      "id": "H2-treatment-2",
+      "case": "H2",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\nUC: 蔵書の貸出を登録する\n条件: 貸出制限\nvariation: 遅延日数 = 「3日未満」「7日未満」「7日以上」\nvariation: 会員種別 = 「大人」「子供」\ndescription: 返却が遅延している場合の貸出制限"
+    },
+    {
+      "id": "N1-control-2",
+      "case": "N1",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n10万円以上の購入申請は部長が承認し、10万円未満は課長が承認する。承認者以外の条件は同じである。"
+    },
+    {
+      "id": "N1-treatment-2",
+      "case": "N1",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n10万円以上の購入申請は部長が承認し、10万円未満は課長が承認する。承認者以外の条件は同じである。"
+    },
+    {
+      "id": "N2-control-2",
+      "case": "N2",
+      "arm": "control",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n\n入力:\n既存DBは必ず使用する。クラウド事業者は固定しない。外部決済サービスはA社を使う。実装言語は指定しない。既存公開APIとの互換性は維持する。"
+    },
+    {
+      "id": "N2-treatment-2",
+      "case": "N2",
+      "arm": "treatment",
+      "repeat": 2,
+      "prompt": "以下の入力だけを対象に、一度だけ回答してください。外部情報・ファイル・他の会話・ツールを参照しないでください。日本語で質問とその判断への影響を示し、未決事項がなければその旨を簡潔に示してください。手法名・比較条件名は回答に書かないでください。\n\n現在の事実だけに基づき、業務結果・責任・条件を変える未決事項を少数の具体的な質問として抽出してください。\n- 未提示の業務や外部サービスを想像して増やさない\n- 未確定の業務値を勝手に決めない\n- 既に決まっている内容を再質問しない\n- 実装方法は提案しない\n- 重要な未決事項がなければ0件でよい\n- 「一部」「少し」「必要に応じて」「利用停止」「自動化」など、一つの表現が複数の独立判断を束ねていないか、両端・極端な状態との差から確認する\n- 子判断は、他の子判断と独立に変えられ、その値が業務結果・責任・成立条件のいずれかを変える場合だけ残す\n- 数量・時間・閾値は無理に二値化しない\n- 新しい軸は現在の入力に根拠があり、既存軸の言い換えでなく、回答差が判断を変える場合だけ追加する\n- 新しい適格軸がない、分解しても判断が変わらない、創作が必要になる場合は止める\n- 全組合せを列挙しない\n\n入力:\n既存DBは必ず使用する。クラウド事業者は固定しない。外部決済サービスはA社を使う。実装言語は指定しない。既存公開APIとの互換性は維持する。"
+    }
+  ],
+  "scoring_method": "fixed oracle; coordinator has seen arms so no arm-blind evaluator claim; publish per-axis evidence and all raw for independent rescoring",
+  "limitations": [
+    "6 deliberately selected cases; 2 runs per arm; descriptive comparison only",
+    "common platform instructions/tools are not independently exportable; tool-free prompt requested",
+    "H2 uses issue-frozen excerpt; original RDRA artifact source has not been independently verified in this run"
+  ]
+}

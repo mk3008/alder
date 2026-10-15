@@ -1,0 +1,100 @@
+{
+  "previousSource": "ae4f43fe",
+  "previous": {
+    "nodeOverlaps": 0,
+    "edgeCrossings": 189,
+    "edgeCrossingPairs": 178,
+    "edgeNodeCollisions": 21,
+    "routedLength": 48051,
+    "reroutedEdges": 20,
+    "fallbacks": 13,
+    "labelNodeOverlaps": 0,
+    "labelLabelOverlaps": 29,
+    "centerDistance": 53320,
+    "activityVerticalInversions": 13,
+    "activities": [
+      {
+        "id": "業務設計",
+        "position": [
+          400,
+          40
+        ]
+      },
+      {
+        "id": "業務改善レビュー",
+        "position": [
+          1120,
+          400
+        ]
+      },
+      {
+        "id": "検査項目の設計",
+        "position": [
+          1120,
+          220
+        ]
+      },
+      {
+        "id": "システム設計",
+        "position": [
+          1120,
+          40
+        ]
+      },
+      {
+        "id": "画面設計",
+        "position": [
+          1840,
+          40
+        ]
+      },
+      {
+        "id": "実装",
+        "position": [
+          2560,
+          40
+        ]
+      },
+      {
+        "id": "Alder実装レビュー",
+        "position": [
+          3280,
+          40
+        ]
+      },
+      {
+        "id": "製品検証",
+        "position": [
+          3280,
+          220
+        ]
+      },
+      {
+        "id": "検証結果の統合",
+        "position": [
+          4000,
+          40
+        ]
+      },
+      {
+        "id": "同期漏れ検査",
+        "position": [
+          3280,
+          400
+        ]
+      }
+    ]
+  },
+  "directedFacing": {
+    "nodeOverlaps": 0,
+    "edgeCrossings": 275,
+    "edgeCrossingPairs": 209,
+    "edgeNodeCollisions": 0,
+    "routedLength": 59635,
+    "reroutedEdges": 32,
+    "fallbacks": 0,
+    "labelNodeOverlaps": 0,
+    "labelLabelOverlaps": 30,
+    "centerDistance": 53320
+  }
+}

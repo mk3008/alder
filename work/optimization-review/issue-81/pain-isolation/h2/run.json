@@ -1,0 +1,19 @@
+{
+  "source_revision": "5405a5069fc13e1a1e27de8b06e4a375a3653e5e",
+  "source_path": "business-design/purchase-request/README.md",
+  "input_packet_path": "/workspace/scratch/501257125b1f/pain-isolation/h2/business-design.md",
+  "input_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/pain_h2",
+  "effective_model_and_effort_independently_attested": false,
+  "isolation": "fresh conversation and explicit file allowlist; shared filesystem was not sandbox-isolated",
+  "runs": 1,
+  "sha256": {
+    "launch.txt": "6563216818ddac13cb9cd4127456ad153a69c0275d3e269c4b6a19cb4bb90aec",
+    "invocation.txt": "c35153c5e8795c63998efb4b86d7d98320be6f014cda2dd5b439b49db948312f",
+    "raw.md": "0e0234c49f211ed4e61c329440acce35c0a5b5b89f13b42b58e0277bc6befd96",
+    "read-log.json": "cbb3c2559507ee85c3f2f0c3ef6bdfcb9cffebced2f21bd95581e78367d3157b"
+  }
+}

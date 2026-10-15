@@ -1,0 +1,17 @@
+{
+  "arm": "D",
+  "stage": "U2",
+  "frozen_at": "2026-09-12T04:20:05.692403+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "application.mjs": "bccee8d54911d743bca7a1df46724d33109740aee51672decf2391a9fed827a0",
+    "boundaries.test.mjs": "e49993999fc8d58b70ba1b03eba5f76bbda8db5898f989bab4e54c2da1afb661",
+    "domain.mjs": "7b0ed402ac62041bde162934cda9754c5223fc3cb3d4a8d920a852de4cf160e2",
+    "entry.mjs": "a9f8cc570607c36999fd69eb9fcc9756b9e75f6abcb460ea3370d284f8fd855b",
+    "filtering.test.mjs": "84d63f992ce9cb28cd1754293034121ae8e4451c66147ff69cd47417880a3d2e",
+    "memory.mjs": "8a64d95d5962485c9dbddaa9b3529e902ffcb9a25558d0164f8309a3ecb47569",
+    "notes.test.mjs": "7380dc1b4150fc8c686d2a26885506533dc2c8ed1521b0ba6a31bdc3cc387347"
+  }
+}

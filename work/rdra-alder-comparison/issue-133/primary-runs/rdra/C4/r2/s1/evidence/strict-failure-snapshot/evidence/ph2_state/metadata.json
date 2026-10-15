@@ -1,0 +1,1 @@
+{"start_utc":null,"end_utc":"2026-10-02T09:36:09Z","failures":["First output write failed because 0_RDRAZeroOne/phase2 did not exist; created the directory and retried."],"unmet_restrictions":[],"time_note":"Start time was not captured; end time is an approximate UTC observation shortly before the final write."}

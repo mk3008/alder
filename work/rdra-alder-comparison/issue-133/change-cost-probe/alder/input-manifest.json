@@ -1,0 +1,10 @@
+{
+  "source-after.txt": "21f16609aafb3bfad74cb2aa216841c04d1b2d2b908101bcb01d214594319153",
+  "source-before.txt": "9cbc69acc31170d1d0bad5459f5f8760aca0db133caa53b24334eeb30c511874",
+  "change.txt": "b8a44aba8d6afed156bd042686dd8bdf557054aacdc6026ddc02ff06240618a7",
+  "docs/business-design/design.md": "019ac63d5f6ca95a2a6cda43ef26099dd682df710d1e1b2870a10475f3d6deaa",
+  "method/alder-draft-business-design/SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+  "method/alder-draft-business-design/references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+  "method/alder-draft-business-design/references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29",
+  "method/alder-draft-business-design/references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746"
+}

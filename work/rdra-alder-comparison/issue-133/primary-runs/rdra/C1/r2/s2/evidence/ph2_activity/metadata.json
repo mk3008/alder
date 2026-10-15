@@ -1,0 +1,7 @@
+{
+  "start_utc": null,
+  "start_note": "A precise start timestamp was not captured. The first captured timestamp, after reading inputs, was 2026-10-02T08:23:33Z.",
+  "end_utc": "2026-10-02T08:24:17Z",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase2 did not exist; created the destination directory and retried successfully."],
+  "unmet_restrictions": []
+}

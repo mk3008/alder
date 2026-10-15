@@ -1,0 +1,35 @@
+{
+  "alder_revision": "f428ef40b5045abadcacaef7bd08eb79897dbcff",
+  "velvet_revision": "6b64e3b99845a315a394fee8e500564c3631e2af",
+  "packet_sha256": {
+    "SYSTEM_SCOPE.md": "9f89a2875dd41d857ad8c6d2229f6523f0476bd8ad7e78693c7575a1a3984813",
+    "transfer-execution-process.md": "c21740f36019debfee80ce1829637ad5d48944475c8dee4dd38cca744f773a6b",
+    "change-detection-dirty-key-registration.md": "66ed0be90b01e66d24f981d4bfbcf7069613b86f1c847a12dac0768d1a88a4c0",
+    "concepts.md": "3d5e05e1cec6289ffdbc1c813d94eb931e77c3901b9cf6b68817eae8d60fdfbd",
+    "functional-considerations.md": "182f21693a3033fe3ddea25a6f658cf188c4362d43ee9ee60b345276b7f21dcc",
+    "common-contract.md": "1493221c378eadb2c82f57d82427ecb8f9459d4f05e771f21e3d5bd7f4e2dfe7"
+  },
+  "source_sha256": {
+    "docs/scope/SYSTEM_SCOPE.md": "9f89a2875dd41d857ad8c6d2229f6523f0476bd8ad7e78693c7575a1a3984813",
+    "docs/processes/transfer-execution-process.md": "c21740f36019debfee80ce1829637ad5d48944475c8dee4dd38cca744f773a6b",
+    "docs/dfd/change-detection-dirty-key-registration.md": "66ed0be90b01e66d24f981d4bfbcf7069613b86f1c847a12dac0768d1a88a4c0",
+    "docs/concepts/active-black/concept.json": "ae61274a4aa15fcc4c4a6f6b299234bde3416d8b51a289caadd3ef7a158c1299",
+    "docs/concepts/black-transfer/concept.json": "6e1b775ca3f73b76d39d46dc163ed8d8ca846c04332b712d599f8463330d9764",
+    "docs/concepts/destination-link/concept.json": "6e2c2ecafb83d05acc0c4cb37e2eac479fa37f80e4cdd1e30e26207fa8cb73c5",
+    "docs/concepts/destination/concept.json": "99301fd7458b4cd3cfa832d793cd31553f816c5964c2db90d9d8512d412bb4f3",
+    "docs/concepts/dirty-key-processing/concept.json": "21f50a3ca27e4184717eb017f626b1a8a602ee8923541b58b90b494a6d6db62f",
+    "docs/concepts/dirty-key/concept.json": "9e6162edee2cf1158cee67c83f8f4718257ad02a1e5c714fe6421c61ebdce692",
+    "docs/concepts/duplicate-control/concept.json": "58b225cb8df3b26259d59a9cf03286e351d4d5c100cd0df64c99f925718f53a2",
+    "docs/concepts/lineage/concept.json": "7b187ca9000de384468c65a34a22298856a7463b724ca9261209b5b42d95c701",
+    "docs/concepts/physical-delete-transfer/concept.json": "c3364379f991ec87c71f8ac54e34557d97be55d298cc50c28be42c736b9dd7f2",
+    "docs/concepts/posting-date-lower-bound/concept.json": "181a6476e66af720423525d305a52a8936afc59e1b44e0e0f21d264f0324ea07",
+    "docs/concepts/red-transfer/concept.json": "f91aee83ad142dfece543d1c180fb0e9881c8fd9cec746a7172894733a0884a3",
+    "docs/concepts/transfer-execution/concept.json": "0e07ba3f5426b08ea83dd919d34ba1532cfc6a6765c93201948cc34781e9eda4",
+    "docs/concepts/transfer-run/concept.json": "2f1ed38571c7410917459ea7ea7e8ec9104569046277feb28c79e65c23c3c1f5",
+    "docs/concepts/transfer-setting/concept.json": "4dce5abee8691e147d87bb429398aba83572e20fe0eca231b18bd469fa7d500e",
+    "docs/concepts/transfer-target-decision/concept.json": "d0e1017cff1d5a1cd55b95b29550b354fba119b759677c78925b9a08415f86e0",
+    "docs/concepts/work-item/concept.json": "7bb48ad850218a96c8b55cc4028e4de7a32ff69e0e09e629ad009b1e333bd22c",
+    "docs/business-design/README.md": "9981259defb248cc2bca773c200f3c95b80ca0102e7437c827e1fc408a7432a2"
+  },
+  "transform": "Concepts: include id, lifecycle assertion, full definition.summary, every definition.statements[].id/text, every externalRelationships[].to/kind/reason. Omit reviewState and navigation metadata. No statement is filtered by topic. Three Markdown sources copied byte-for-byte. Common contract is the final paragraph of the Business Design entrypoint. Prompt copied byte-for-byte."
+}

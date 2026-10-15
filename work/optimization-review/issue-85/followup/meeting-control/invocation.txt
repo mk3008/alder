@@ -1,0 +1,3 @@
+spawn_agent task_name=meeting_control, fork_turns=none, model=gpt-6-sol, reasoning_effort=medium
+
+Independent Fresh review. Exact task prompt: /workspace/scratch/ef15bb86674b/alder/work/optimization-review/issue-85/followup/meeting-control/launch.txt. Read that prompt and only the two source files it names. Follow all restrictions. Save raw.md exactly once. Do not read any other run, protocol, issue discussion or context.

@@ -1,0 +1,31 @@
+# Read log
+
+## Requested settings
+
+- Model: `gpt-6-sol` (requested; effective runtime setting was not independently verified)
+- Reasoning effort: `medium` (requested; effective runtime setting was not independently verified)
+- Conversation fork: `none` (requested; effective runtime setting was not independently verified)
+- Pinned source tree: `8f39ca10d7b1fb700e3d848aa0e63a1dd5e64d86`
+
+## File contents read
+
+- `/workspace/scratch/97b524818cca/alder105/AGENTS.md`
+- `/workspace/scratch/97b524818cca/alder105/work/structural-discovery/issue-108/controls/C/AGENTS.md`
+- `/workspace/scratch/97b524818cca/alder105/work/structural-discovery/issue-108/controls/C/design.md`
+- `/workspace/scratch/97b524818cca/alder105/work/structural-discovery/issue-108/controls/C/prompt.txt`
+
+## Exact task prompt
+
+```text
+Fresh read-only Structural Discovery. Requested model gpt-6-sol, reasoning effort medium, fork_turns none. Repo root /workspace/scratch/97b524818cca/alder105. Pinned source tree 8f39ca10d7b1fb700e3d848aa0e63a1dd5e64d86. Read only repo AGENTS.md, this run's AGENTS.md, design.md and this prompt; do not read other control, issue text, prior outputs or experiment protocol. This is a structural analysis, not a Business Design edit. Return complete actual output in raw.md and paths actually read plus requested settings in read-log.md.
+
+この Business Design は current-state の業務記述として成立している前提で、
+個別 Activity の記述品質ではなく、複数 Activity / Object / Role / When / Result の関係を横断して、
+現行業務構造そのものを再検討する価値があり得る箇所だけを探してください。
+
+各候補は Structural Observation / Evidence / Why it may matter / Unknowns / Question を分離してください。
+Business Design にない Pain、負荷、遅延、件数、制度を事実化しないでください。
+改善案や技術実装を採用しないでください。
+本当に Problem かは人間に確認してください。
+有用な候補がなければゼロ件で構いません。
+```

@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T10:04:18Z",
+  "failures": ["The initial write failed because the output directory did not exist; the directory was created and the write succeeded."],
+  "unmet_restrictions": ["The exact start UTC timestamp was not captured before the first read."]
+}

@@ -1,0 +1,30 @@
+{
+  "issue": {
+    "url": "https://github.com/mk3008/velvet/issues/3",
+    "title": "Implement Transfer Execution Phase 1: immutable black-insert vertical slice",
+    "issue_number": 3,
+    "body": "## Goal\n\nVelvet の最初の本実装フェーズとして、既存 Business Design / Concept / DFD / Process Map に従い、`Transfer Execution` の **immutable model における初回 Black Insert** を end-to-end で実装する。\n\nこの Phase では、以下の1経路を完成させる。\n\n1. 対象 `Transfer Setting` で Transfer Execution を開始する\n2. `Transfer Run` を作成する\n3. 未処理の `Dirty Key` を `Work Item` として固定化する\n4. 転送元の現在値が存在し、対象 Destination Link が immutable、かつ `Active Black` が存在しないケースを評価する\n5. `Transfer Target Decision` により Black Insert 対象とする\n6. 転送先へ Black row を追加する\n7. 成功した Black row を `Active Black` として記録する\n8. immutable model の `Lineage` を記録する\n9. `Dirty Key Processing` に `succeeded / black_insert` を記録する\n10. Transfer Run を正常終了させる\n\nRed Transfer、mutable update/delete、source row 消失時の削除系、再転送系はこの Issue に含めない。\n\n## Source of truth\n\n実装前に少なくとも以下を確認し、意味を実装側で再定義しないこと。\n\n- `AGENTS.md`\n- `docs/business-design/README.md`\n- `docs/decisions/README.md`\n- `docs/scope/SYSTEM_SCOPE.md`\n- `docs/concepts/transfer-execution/concept.json`\n- `docs/concepts/transfer-run/concept.json`\n- `docs/concepts/work-item/concept.json`\n- `docs/concepts/transfer-target-decision/concept.json`\n- `docs/concepts/black-transfer/concept.json`\n- `docs/concepts/active-black/concept.json`\n- `docs/concepts/lineage/concept.json`\n- `docs/concepts/dirty-key-processing/concept.json`\n- `docs/concepts/duplicate-control/concept.json`\n- `docs/processes/transfer-execution-process.md`\n- 関連 DFD\n- `docs/technology/TECHNOLOGY_POLICY.md`\n- `docs/testing/TEST_POLICY.md`\n- `docs/adoption.md`\n- `rules/raw-sql-rules.md`\n- `db/ddl/`\n\n## Constraints\n\n- Human-owned な意味、責務、業務ルールを新しく発明しない。\n- Concept / DFD / Process Map 間に矛盾があり、この Phase の意味が一意に決まらない場合は、解釈で埋めず根拠を示して停止する。\n- この Phase のために Red Transfer / mutable / scheduler / CDC / file loading へスコープを広げない。\n- `source_sql_body` や生成SQLがDBに保存されていること自体を「実行許可」とみなさない。`docs/adoption.md` にある application-owned review/approval boundary を守る。既存仕様だけで安全な実行境界を成立させられない場合は、その点を blocker として報告する。\n- executable Raw SQL は `rules/raw-sql-rules.md` に従い、Serene を既定の構築経路として使う。文字列結合でSQLを組み立てない。\n- 既存の Business Design / Concept / DFD / Process Map を実装都合で変更しない。\n- DDLに明確な実装上の不具合が見つかった場合は、この Phase を成立させる最小修正に限って同一PRで修正してよい。意味変更が必要なら停止する。\n\n## Acceptance criteria\n\n- [ ] Transfer Execution の入力は対象 Transfer Setting と実行引数であり、転送対象行を直接 Run 引数として受け取らない。\n- [ ] Transfer Run が作成され、対象 Setting と実行引数・実行状態を追跡できる。\n- [ ] `Dirty Key Processing` ですでに最終処理済みの Dirty Key / Destination Link 組を再処理しない。\n- [ ] 未処理 Dirty Key から、対象 Setting / Destination Link / source key の文脈を持つ Work Item が作成される。\n- [ ] source current row が存在し、immutable model で Active Black がない場合、Black Insert 対象として判定される。\n- [ ] Destination Link の mapping に従って転送先テーブルへ1行が追加される。\n- [ ] Black Insert 成功後、その転送先行を指す Active Black が作成される。\n- [ ] immutable Black Insert の Lineage が作成され、Run / source / destination の追跡に必要な既存DDL上の文脈が保持される。\n- [ ] Dirty Key Processing に `processing_status = succeeded` / `processing_result = black_insert` が記録される。\n- [ ] 同じ処理済み Dirty Key を再実行しても同じ Destination Link へ二重転送しない。\n- [ ] 正常系の Transfer Run が成功状態で完了する。\n- [ ] 既存 create-destination / create-setting の挙動を壊さない。\n\n## Required tests\n\n最低限、以下を機械検証すること。\n\n- PostgreSQL 実DBを使った上記 end-to-end 正常系\n- 既処理 Dirty Key の再実行で二重 Black Insert しない回帰テスト\n- Setting / Destination Link / Dirty Key / Work Item の文脈が交差しない境界テスト\n- 不正な mapping / 必要な source row を取得できない等、この Phase で既存仕様から一意に期待結果が決まる異常系\n- 追加するSQLの binding / construction 回帰\n\nテスト期待値を実装から逆算せず、Business Design / Concept / DFD / Process / DDL の既存根拠から導くこと。\n\n## Verification\n\n- `pnpm verify` を PostgreSQL 実DB経路込みで成功させる。\n- `pnpm audit:sql` の unresolved/review-required を隠さず、violation は残さない。\n- 実装完了後、Alder review を別エージェントまたは fresh context で実施し、この Phase に関係する finding をPRへ記録する。Human-owned な未決事項が見つかった場合は勝手に決めない。\n\n## Deliverable\n\n- この Issue 専用ブランチで実装する。\n- CI と上記検証を通して PR を作成する。\n- PR 本文に **`Closes #3`** を含め、マージ時にこの Issue が自動クローズされるようにする。\n- PR はマージせず、レビュー可能な状態で提出する。\n- Phase 2 以降の実装はこの PR に混ぜない。",
+    "state": "closed",
+    "user": {
+      "login": "mk3008",
+      "name": "mk3008",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/7686540?v=4",
+      "id": 7686540
+    },
+    "assignees": null,
+    "labels": null,
+    "milestone": null,
+    "state_reason": "completed",
+    "comments": 1,
+    "created_at": "2026-09-12T04:53:52Z",
+    "updated_at": "2026-09-12T21:53:44Z",
+    "closed_at": "2026-09-12T21:53:44Z",
+    "display_url": "https://github.com/mk3008/velvet/issues/3",
+    "display_title": "Implement Transfer Execution Phase 1: immutable black-insert vertical slice"
+  },
+  "url": "https://github.com/mk3008/velvet/issues/3",
+  "title": "Implement Transfer Execution Phase 1: immutable black-insert vertical slice",
+  "display_url": "https://github.com/mk3008/velvet/issues/3",
+  "display_title": "Implement Transfer Execution Phase 1: immutable black-insert vertical slice"
+}

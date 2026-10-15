@@ -1,0 +1,11 @@
+{
+  "method": "GitHub connector Git tree/commit APIs after git push failed for missing HTTPS credentials",
+  "first_local_commit": "75241d0",
+  "first_remote_commit": "ba620d4a27e55357a1fffe7b60c7e2ed7c090c4b",
+  "first_tree": "ede2a916ae67912491263911818893dd357e7758",
+  "second_local_commit": "e90dd47a794195c89232d92480d85517a90259a4",
+  "second_remote_commit": "04969077b00c791c3fffe316ca44610c81226446",
+  "second_tree": "635dcd77258201b53e75da6019038d5f3b90a33c",
+  "tree_equality_verified": true,
+  "note": "Remote commits were created at publication time with connector metadata, so commit SHAs differ. The local initial checkpoint predates S1 reveal; matching trees contain identical frozen input/snapshot evidence. Neither remote timestamp is presented as the original dispatch time."
+}

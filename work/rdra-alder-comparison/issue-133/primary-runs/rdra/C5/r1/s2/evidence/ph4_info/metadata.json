@@ -1,0 +1,9 @@
+{
+  "start_utc": "2026-10-02T10:05:16Z",
+  "end_utc": "2026-10-02T10:05:37Z",
+  "failures": [
+    "Initial mistaken cat attempted 0_RDRAZeroOne/phase4/ph4情報生成.md, a path outside the read allowlist; it did not exist and no content was read.",
+    "First output write failed because 0_RDRAZeroOne/phase4 did not exist; created the output directory and retried successfully."
+  ],
+  "unmet_restrictions": ["Attempted a disallowed read path in the first combined cat command; the file was absent and no content was returned."]
+}

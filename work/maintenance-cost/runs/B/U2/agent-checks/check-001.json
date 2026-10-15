@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-09-12T04:19:11.752905+00:00",
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "acceptance.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "additional.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "entry.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "acceptance.test.mjs",
+        "additional.test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "TAP version 13\n# Subtest: submission normalizes text, stores required data and only current event fields\nok 1 - submission normalizes text, stores required data and only current event fields\n  ---\n  duration_ms: 1.490099\n  type: 'test'\n  ...\n# Subtest: approval and purchase retain data; actual total may exceed requested\nok 2 - approval and purchase retain data; actual total may exceed requested\n  ---\n  duration_ms: 0.330989\n  type: 'test'\n  ...\n# Subtest: rejection stores its reason and prevents purchase\nok 3 - rejection stores its reason and prevents purchase\n  ---\n  duration_ms: 0.496519\n  type: 'test'\n  ...\n# Subtest: role checks for each command preserve state\nok 4 - role checks for each command preserve state\n  ---\n  duration_ms: 0.436579\n  type: 'test'\n  ...\n# Subtest: actor IDs and timestamps are validated by every mutation\nok 5 - actor IDs and timestamps are validated by every mutation\n  ---\n  duration_ms: 0.887019\n  type: 'test'\n  ...\n# Subtest: invalid quantity, total, ID and text never create records\nok 6 - invalid quantity, total, ID and text never create records\n  ---\n  duration_ms: 0.619866\n  type: 'test'\n  ...\n# Subtest: invalid actual total and rejection reason preserve records\nok 7 - invalid actual total and rejection reason preserve records\n  ---\n  duration_ms: 0.425122\n  type: 'test'\n  ...\n# Subtest: duplicates and unknown targets fail without mutation\nok 8 - duplicates and unknown targets fail without mutation\n  ---\n  duration_ms: 0.358882\n  type: 'test'\n  ...\n# Subtest: invalid transitions and repeat commands fail atomically\nok 9 - invalid transitions and repeat commands fail atomically\n  ---\n  duration_ms: 1.392581\n  type: 'test'\n  ...\n# Subtest: instances are isolated and IDs sort by JavaScript string comparison\nok 10 - instances are isolated and IDs sort by JavaScript string comparison\n  ---\n  duration_ms: 0.312341\n  type: 'test'\n  ...\n# Subtest: input and output mutations cannot alter stored state\nok 11 - input and output mutations cannot alter stored state\n  ---\n  duration_ms: 0.194644\n  type: 'test'\n  ...\n# Subtest: self approval and non-monotonic valid timestamps are permitted\nok 12 - self approval and non-monotonic valid timestamps are permitted\n  ---\n  duration_ms: 0.09271\n  type: 'test'\n  ...\n# Subtest: optional notes have exact UTF-16 boundary and preserve whitespace\nok 13 - optional notes have exact UTF-16 boundary and preserve whitespace\n  ---\n  duration_ms: 0.586455\n  type: 'test'\n  ...\n# Subtest: list filtering is case-sensitive, sorted, optional and excludes notes\nok 14 - list filtering is case-sensitive, sorted, optional and excludes notes\n  ---\n  duration_ms: 0.365221\n  type: 'test'\n  ...\n# Subtest: approval authority is unchanged across amounts, including the maximum total\nok 15 - approval authority is unchanged across amounts, including the maximum total\n  ---\n  duration_ms: 1.007581\n  type: 'test'\n  ...\n# Subtest: IDs are preserved exactly and sort by UTF-16 string comparison\nok 16 - IDs are preserved exactly and sort by UTF-16 string comparison\n  ---\n  duration_ms: 0.729741\n  type: 'test'\n  ...\n# Subtest: missing inputs and unrecognized actor roles fail without altering existing records\nok 17 - missing inputs and unrecognized actor roles fail without altering existing records\n  ---\n  duration_ms: 0.538242\n  type: 'test'\n  ...\n# Subtest: note validation is atomic and counts mixed UTF-16 code units\nok 18 - note validation is atomic and counts mixed UTF-16 code units\n  ---\n  duration_ms: 0.309647\n  type: 'test'\n  ...\n# Subtest: note copies and list omission survive every event\nok 19 - note copies and list omission survive every event\n  ---\n  duration_ms: 0.538943\n  type: 'test'\n  ...\n# Subtest: filters validate even on empty state and retain no query state\nok 20 - filters validate even on empty state and retain no query state\n  ---\n  duration_ms: 0.266483\n  type: 'test'\n  ...\n1..20\n# tests 20\n# suites 0\n# pass 20\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 91.242279\n",
+      "stderr": ""
+    }
+  ],
+  "finished_at": "2026-09-12T04:19:12.083761+00:00",
+  "passed": true
+}

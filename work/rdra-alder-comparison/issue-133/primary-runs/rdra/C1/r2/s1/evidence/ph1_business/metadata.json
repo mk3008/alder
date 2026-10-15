@@ -1,0 +1,7 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T07:45:46Z",
+  "failures": ["Initial output write and read failed because the output directory did not exist; created the directory and wrote the TSV successfully."],
+  "unmet_restrictions": [],
+  "note": "Start timestamp was not captured at launch."
+}

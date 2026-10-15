@@ -1,0 +1,20 @@
+{
+  "arm": "C",
+  "stage": "U1",
+  "frozen_at": "2026-09-12T04:18:29.679651+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "additional.test.mjs": "261259d0ccb13fb6ecb289870c1679ee0ce41abf55bc8d8191212e4232b903b7",
+    "entry.mjs": "6948e3ee807c21781eeaf9339acd42e06bbccff14066516744d0e404fe2ba35c",
+    "note.test.mjs": "e18795a73c361bc27b6865693f3005979114a78996724e95f39037ba18face20",
+    "slices/approve.mjs": "23e422da12a18d4eab007794a8cf38c1a2d724b4b814c1a8ef0fe4171831b71b",
+    "slices/detail.mjs": "6e8fbe01f1dc768dc790cafe734743163038e32704e5afcac184afa6d8212600",
+    "slices/list.mjs": "f43c25539f12cba9b3e740b4d2718291f206d1b26bc0a717cf11d07140769c9f",
+    "slices/purchase.mjs": "677e529ce9b8581c41dada82b0b16e1edf11f8ddcb968a6e66256343aeb42126",
+    "slices/reject.mjs": "02a1b649bedd638082b6ada7f87571dca037fadb36ade2488d3cedfca389dfc9",
+    "slices/submit.mjs": "462cf89e40c3802ca9c82b59ea9670c1ff68eb6036c040c47b9b19102174d09c",
+    "validation.mjs": "6abd03f106335b8f77c35b7c6250e82a0f87085992fa97d89c10f67a94b29041"
+  }
+}

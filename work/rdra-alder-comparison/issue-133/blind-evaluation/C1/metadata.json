@@ -1,0 +1,156 @@
+{
+  "case_id": "C1",
+  "status": "success",
+  "started_at": "2026-10-02T09:44:58.390686+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "case-reference.json": "af1783ce61a9e06739868131d3a7abd6d2f64b56662e9d8ceb40cf0383413ac7",
+    "downstream-subset.json": "43d8fae0ef97fa9b8f83596b0c093e6eff844af962e3dffe9260104aa0e0f8da",
+    "rubric.md": "95db0ccf3739bda00d588c8c6e1532625453d552354aeebb0190a7ced0c33080",
+    "evaluation-prompt.txt": "5b5373348e57cdc5e59f16158948064ac1b6bc4df1aa657a13383e5bcca858a7",
+    "packet-index.json": "6cbaab9d019b986724442d38e58016157bf1bb0137488b8a91546b548f530664",
+    "P003.json": "db0e5b5cb9aed55c83cd78266e5c2a17ce2ab5448adc40d0f3f05d741d3a47c4",
+    "P005.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "P007.json": "6ca06bf561e8fc6e03aaf1f832d6c2a390181dba10d051480d20ba4cdaa7d93e",
+    "P019.json": "4f1eb60aa887a3c9f1117fc4ab0754cda6aec0d66084b7180c049db6f5083a44",
+    "P025.json": "308c51c86514376605c026893272879872075be0ae958d44d44c07e675bd7e88",
+    "P028.json": "9773569112e4f712946372f6af0f1585cb8ba2c820784dc5eed9cdf25115092e",
+    "P029.json": "4dfb537833b7191452d73ac9f7237e81eb7a0ce5bca92315f6781797a131b4c2",
+    "P035.json": "0435292de1a45a13d1bd63543ece10022aec53cbbb4d9c00e55914c85b7f6db4",
+    "P038.json": "690bfcf0cccdae252bd142fbcf09c4849ae9fd13e08507333d9828682258fde7",
+    "P046.json": "10865c509b20a4e42d27bfd00edc61ace046212138520028e1742f37d715811b",
+    "P048.json": "88e5e953458897f78d6ee9fe98b409122126fd4e9e2762a3502ad4c5610c719e",
+    "P060.json": "d8b5af9bb23b6ce8f4df638fc0011c417b11b86368831803c3f70b331aff36de",
+    "H046.json": "1566a98980d625cdf07c2c84e2c3cdd4834aafc669594a070ddc909db7d0ac45",
+    "H060.json": "db2779aa2537d17ae7362950b324c0e744cbe19d5f696a5c2265424903d5a235",
+    "received-handoff-index.json": "0c07623e5d4a4e2a0fc13339f6d4704724c8b2c4e5812c66d0f43b4c139dc429",
+    "raw-check-requests.json": "34a71f7328ab7f682fccb75126bf2865524fd4bdc9561d276d489ad688cc3d04",
+    "P005-review.json": "8efa941afe3620b06a0873fa600c654e29f809b18c75d7b06e07d92bc9089c76",
+    "P019-review.json": "a255dd0eae7895472165284a397869ee6ddaab903ad633381e2b0bb6b6cbecf4",
+    "P029-review.json": "a3d7abdde7d5d5f07b1a88604c9c48435ae18f5902cfb3cfaf2e687a970a85a9",
+    "P035-review.json": "1bcdc524774b2388b963303a7da3091c1d00f25cc6e3cce1f3acbb518d22a6fe",
+    "P038-review.json": "03ddfb87d4cbed18bc173f50c8349dc13e0ce17cae66718a4722a534254fea58",
+    "P046-review.json": "94c77a9562458b3216e324b5be8e72aa0baa0be80a7c6db58fb78aac21be9ec6",
+    "P060-review.json": "e890297274feb525271701c38a159abcbaa769ee2d742765489e6c939f64ec05"
+  },
+  "envelope_sha256": "d05658b9582416cc3e8232a6e1806ff643cf3cb203bf22aae9d2919bae759162",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/case-reference.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/downstream-subset.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/rubric.md",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/evaluation-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/packet-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P003.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P005.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P007.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P019.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P025.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P028.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P029.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P035.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P038.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P046.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P048.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P060.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/H046.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/H060.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/received-handoff-index.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/raw-check-requests.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P005-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P019-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P029-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P035-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P038-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P046-review.json",
+    "/workspace/scratch/62be7f260abb/blind-evaluation/C1/P060-review.json"
+  ],
+  "limitations": [
+    "Single blind; format may disclose arm. Shared filesystem procedural isolation only. Requested runtime lacks independent attestation."
+  ],
+  "final_contextual_score": true,
+  "attempt_number": 3,
+  "original_attempts": [
+    "attempt-001",
+    "attempt-002"
+  ],
+  "agent_id": "/root/blind_observation/score_c1_final",
+  "prepared_at": "2026-10-02T09:44:31.427083+00:00",
+  "pre_final_output_checkpoint": {
+    "scores.json": {
+      "sha256": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "bytes": 43420
+    },
+    "raw-response.md": {
+      "sha256": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "bytes": 43420
+    }
+  },
+  "needs_raw_check_summary": [
+    {
+      "packet_id": "P035",
+      "count": 1
+    },
+    {
+      "packet_id": "P038",
+      "count": 1
+    },
+    {
+      "packet_id": "P005",
+      "count": 1
+    },
+    {
+      "packet_id": "P029",
+      "count": 1
+    },
+    {
+      "packet_id": "P046",
+      "count": 1
+    },
+    {
+      "packet_id": "P060",
+      "count": 1
+    }
+  ],
+  "finished_at": "2026-10-02T09:48:55.194116+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+    "read-log.jsonl": "12448bf35542690e4d248c3ccd4f6a26dc017c62c413278ed5c1c5dc31d93e25"
+  },
+  "raw_audit_status": "final evaluator resolutions mechanically transcribed",
+  "raw_resolution_counts": {
+    "resolved": 7,
+    "artifact_ambiguous": 3
+  },
+  "raw_flag_followup": {
+    "status": "success",
+    "prepared_at": "2026-10-02T09:49:54.728829+00:00",
+    "envelope_sha256": "4738ef2024d2e7259d4d0de00672e83ad44ef10b052fd320ac970d5acc55b6e7",
+    "original_output_sha256": {
+      "scores.json": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee",
+      "raw-response.md": "9de7ef5fa3c44c74d5d7789a111b56230d14b46e2fb9e006ba9bc7504bccd4ee"
+    },
+    "new_fresh_generation_count_increment": 0,
+    "additional_model_turn": 1,
+    "includes_actionability_rubric_check": true,
+    "started_at": "2026-10-02T09:51:16.380443+00:00",
+    "agent_id": "/root/blind_observation/score_c1_final",
+    "finished_at": "2026-10-02T09:52:29.323159+00:00",
+    "mechanical_errors": [],
+    "output_sha256": {
+      "raw-flag-dispositions.json": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-response.md": "9e8d5f436bea141398ef3ea484f8facb16f494a672ff472c90a083bfe31e2218",
+      "raw-flag-read-log.jsonl": "69a53776a1ed0acffc2ef0eae47ffd061d1bddc068608320e8c170547a9cd275",
+      "score-correction.json": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c",
+      "score-correction-response.md": "2c5083fbfa36972b7f994b8cb6a1e2d9e3b8f42c71f3fab708e3fa964b3e607c"
+    },
+    "read_checker_correction": "raw-flag-checker-false-positive.json",
+    "revalidated_at": "2026-10-02T09:52:40.178166+00:00"
+  }
+}

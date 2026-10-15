@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:02:41Z",
+  "end_utc": "2026-10-02T09:02:59Z",
+  "start_time_note": "The first timestamp was captured after input reads; the actual start was earlier.",
+  "failures": ["Initial output write failed because 0_RDRAZeroOne/phase1 did not exist; created the output directory and wrote the TSV successfully."],
+  "unmet_restrictions": []
+}

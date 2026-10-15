@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T08:45:04Z",
+  "failures": ["Initial output write failed because phase4 directory did not exist; directory was created and the write succeeded."],
+  "unmet_restrictions": ["会議室利用状態 has no terminal state in the supplied transitions; its 利用可能 and 利用停止 states form a cycle, so the terminal-state checklist cannot be met without inventing a state."]
+}

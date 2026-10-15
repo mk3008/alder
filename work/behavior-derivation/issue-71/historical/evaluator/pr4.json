@@ -1,0 +1,19 @@
+{
+  "comments": [
+    {
+      "id": 5645913309,
+      "url": "https://github.com/mk3008/velvet/pull/4#issuecomment-5645913309",
+      "created_at": "2026-09-12T12:34:41Z",
+      "updated_at": "2026-09-12T12:34:41Z",
+      "body": "Alder再レビューの2点について方針を決めます。\n\n1. COMMIT時失敗で failed Run を残せない件\n\nこれは修正してください。Sagaのような補償処理を導入する意図ではなく、Transfer Runの永続化と実際の転送処理のトランザクション境界を分けたいです。\n\n- Transfer Runは作成後、一度独立して確定する\n- Work Item / Destination / Active Black / Lineage / Dirty Key Processingは別トランザクションで処理する\n- 正常終了時のRun=succeededは転送処理と同じトランザクションで確定する\n- 転送処理またはそのCOMMITが失敗した場合は、そのトランザクションを破棄した後、別トランザクションでRun=failedを記録する\n- 元の失敗原因を後続の復旧エラーで上書きしない\n\nTx間でプロセス自体が停止してcreated/running Runが残るケースの一般的なリカバリ設計までは、今回のPhaseには広げなくて構いません。可能ならCOMMIT時失敗もPostgreSQL実DBで回帰確認してください。\n\n2. 転送済みキーの新しいDirty KeyがRun全体を止める件\n\nこれはPhase 1の区切りによって生じている既知制限として今回は許容します。\n\nDirty Keyは変更イベントそのものではなく、「このSource Table + Keyを現在値で再評価する必要がある」という変更検知履歴です。同じキーのDirty Keyが複数回登録されること自体は正常で、Velvetは各変更時点を逐次再生するイベントソーシングではなくsnapshot転送です。同一Run/link内の同一logical keyを1回のsnapshot評価にまとめ、残りをduplicate_ignoreにする方向は問題ありません。\n\n今回の問題は、一度Black Insert済みのlogical keyが再びdirtyになったとき、Active Blackが存在するため本来は現在snapshotを再評価して no-op / Red+Black / update / delete 等を判断すべきところ、Phase 1では初回Black Insertしか実装していないためunsupported routeとしてRun全体を失敗させる点です。\n\n最終仕様としてActive Blackの存在を恒久的なエラー条件にする意図はありませんが、Issue #3は初回Black Insertのvertical sliceなので、再評価ルートやpartial success/deferまで今回実装する必要はありません。継続的にDirty Keyを投入する用途ではこの制限があることをDecision Record / PRに明記し、次Phaseでsnapshot再評価ルートとして解消してください。\n\n1を修正後、2は既知制限として残したまま再検証・Alder reviewをお願いします。"
+    },
+    {
+      "id": 5645987584,
+      "url": "https://github.com/mk3008/velvet/pull/4#issuecomment-5645987584",
+      "created_at": "2026-09-12T12:49:55Z",
+      "updated_at": "2026-09-12T12:49:55Z",
+      "body": "2件の方針コメントに対応しました。コミット `8aac36e` / `6ffab6f`。\n\n- Runの独立確定 → 転送結果とsucceededの同時確定 → 失敗時の独立failed記録に分離。Tx間で設定を再確認し、未処理対象を取得し直します。\n- 元の失敗はcauseに保持し、復旧失敗はrecoveryErrorsへ分離。COMMIT応答だけが失われた場合は、確定済みsucceededをfailedへ上書きしません。\n- PostgreSQL実DBの遅延FK違反で、INSERT後のCOMMIT失敗・転送結果の取消・failed Run保存を回帰確認しました。別接続からRunの独立確定も確認しています。\n- 既存Active Blackへの新Dirty KeyがRun全体を止める挙動は、承認されたPhase 1制限としてDecision Record/README/PRに明記し、回帰テストを追加。snapshot再評価ルートは次Phaseのままです。\n- 必須boundary.ts、再帰構造、固定的なfeatures/libraries/adapters責務などのframework規約を必要最小限整理。動作するコード構造・製品の意味・PostgreSQL前提は維持しています。\n\n[最終CI](https://github.com/mk3008/velvet/actions/runs/34694663167)で `pnpm verify` 全体成功。120テスト成功（実DBのPhase 1テスト19件を含む）、スキップなし。SQL auditはordinary 15 / review-required 33 / violation 0。\n\n別エージェントでAlder再レビュー実施。追加指摘のCOMMIT応答失敗時の成功上書きも修正・再確認済みで、追加の確定的不一致はありません。一般的なプロセス停止後の回復は今回追加していません。未マージです。"
+    }
+  ],
+  "selection": "Owner decision and implementation confirmation relevant to the frozen targets; unrelated architecture-policy comments omitted."
+}

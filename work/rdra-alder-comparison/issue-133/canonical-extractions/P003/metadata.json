@@ -1,0 +1,47 @@
+{
+  "packet_id": "P003",
+  "status": "success",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "started_at": "2026-10-02T07:58:23.683592+00:00",
+  "packet_sha256": "0220b23f07b8d566b50ae04f832caf19ef122ae11710ec7cba4eed8ca3f20bd7",
+  "prompt_sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+  "envelope_sha256": "30191e26323b92023285853092043a9042ca812d73d2fe411d56211b9c1ce589",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P003/packet.md",
+    "/workspace/scratch/62be7f260abb/canonical-extractions/P003/extraction-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural allowlist, not security isolation. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/extract_p003",
+  "output_sha256": {
+    "canonical.json": "db0e5b5cb9aed55c83cd78266e5c2a17ce2ab5448adc40d0f3f05d741d3a47c4",
+    "raw-response.md": "db0e5b5cb9aed55c83cd78266e5c2a17ce2ab5448adc40d0f3f05d741d3a47c4",
+    "read-log.jsonl": "5afc8009adc9c7273afbe636c74ee6f2997e535b1d6a399816d6ebb979c186ad"
+  },
+  "finished_at": "2026-10-02T08:00:03.717994+00:00",
+  "mechanical_validation": {
+    "errors": [],
+    "scope": "JSON structure, IDs, raw quote and line ranges only; no semantic correction"
+  },
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.060990+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
+  }
+}

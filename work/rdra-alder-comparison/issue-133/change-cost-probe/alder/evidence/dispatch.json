@@ -1,0 +1,12 @@
+{
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "provider": "ChatGPT Work collaboration",
+  "effective_settings_independent_attestation": "unavailable",
+  "agent_id": "/root/change_alder_once",
+  "attempts": 1,
+  "supplement_input_commit": "ce0204c1af8703b3cfdedf8c34ee9fd1249af93a",
+  "publication_status": "blocked by automatic approval review; commit exists locally only",
+  "exact_spawn_message": "Read and follow the exact envelope at /workspace/scratch/f694891aa357/change-run/alder/envelope.txt. You may read that envelope first without logging it; log all subsequent reads. This is one Fresh update run only. Do not read parent conversation, repository, other arms/runs/oracle. Execute the existing design revision according to the pinned Skill in the envelope. No sub-agents, GitHub writes or Library uploads. Record actual start/end UTC and evidence exactly as instructed. This is not a review; edit only allowed existing Business Design. Return the same final text saved to evidence/raw-response.md."
+}

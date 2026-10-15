@@ -1,0 +1,100 @@
+{
+  "coding": "Unblinded investigator observations; semantically grouped intents, not atomic question or effort counts. Post-hoc single-batch supplement.",
+  "cells": [
+    {
+      "case": "S1",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": null,
+      "requester_means_retained": null,
+      "candidate_first_anchoring": null,
+      "human_decision_distinguished": true,
+      "comparison": "read-only candidates, human adoption pending",
+      "immediate_question_intent_groups": [
+        "一覧形式",
+        "不一致解消の担当と情報",
+        "転記と照合の時間配分",
+        "候補の人間採否"
+      ],
+      "immediate_question_group_count": 4,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "Second candidate affects matching rather than manual entry; direct Problem benefit limited."
+    },
+    {
+      "case": "S2",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": false,
+      "requester_means_retained": true,
+      "candidate_first_anchoring": "mild: current-flow draft with conditional CSV, questions confined to CSV mechanics",
+      "human_decision_distinguished": true,
+      "comparison": "no change-background or alternative comparison",
+      "immediate_question_intent_groups": [
+        "CSV入力経路の位置づけ",
+        "一部行問題時の全体／部分成立"
+      ],
+      "immediate_question_group_count": 2,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "CSV remains conditional, so do not score as fully specified CSV implementation."
+    },
+    {
+      "case": "S3",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": false,
+      "requester_means_retained": true,
+      "candidate_first_anchoring": "yes: two Activities and provisional first-approved-to-second transition",
+      "human_decision_distinguished": true,
+      "comparison": "no change-background or alternative comparison",
+      "immediate_question_intent_groups": [
+        "各段階の判断者・兼務",
+        "最終承認条件・却下後の扱い"
+      ],
+      "immediate_question_group_count": 2,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "Unconfirmed intermediate approval transition enters draft; no explicit approval claim."
+    },
+    {
+      "case": "S4",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": null,
+      "requester_means_retained": null,
+      "candidate_first_anchoring": null,
+      "human_decision_distinguished": true,
+      "comparison": "no forced alternative search for settled decision",
+      "immediate_question_intent_groups": [],
+      "immediate_question_group_count": 0,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "Possible whole-draft agreement blocker until already-deferred re-lending choice resolves; added material-state representation."
+    },
+    {
+      "case": "S5",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": null,
+      "requester_means_retained": null,
+      "candidate_first_anchoring": null,
+      "human_decision_distinguished": true,
+      "comparison": "no forced alternative search for settled decision",
+      "immediate_question_intent_groups": [],
+      "immediate_question_group_count": 0,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "Implementation not performed."
+    },
+    {
+      "case": "S6",
+      "arm": "pure-Why",
+      "explicit_false_promotion_to_agreed": false,
+      "background_question_before_candidate_design": null,
+      "requester_means_retained": null,
+      "candidate_first_anchoring": null,
+      "human_decision_distinguished": true,
+      "comparison": "no forced alternative search for settled decision",
+      "immediate_question_intent_groups": [],
+      "immediate_question_group_count": 0,
+      "new_required_intake_artifact_or_state": false,
+      "side_effect_or_limit": "Terminology shifts settlement to payment, preserve original language before adoption."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T09:13:04Z",
+  "failures": ["Initial output attempt failed because phase3 directory did not exist; directory created and output written successfully.", "Exact start UTC timestamp was not captured before first read."],
+  "unmet_restrictions": []
+}

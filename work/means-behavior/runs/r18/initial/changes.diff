@@ -1,0 +1,58 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,7 @@
++# Activity
++
++1. Read packet instructions and task, then supplied philosophy/adoption/review knowledge, Business Design, accepted decisions and operational context before implementation/tests.
++2. Inspected the selected availability and reservation path and existing test. Traced interval filtering, booking eligibility, stored booking facts and external responsibility boundaries against Activities 1–2 and cross-activity rules.
++3. Identified an explicitly unresolved availability-output guarantee and definite omissions of booking purpose and registration time. No user question was needed to finish this review; the output guarantee remains for the product owner.
++4. Ran the existing Node test (1 passed) and read-only inline assertions for the past-interval divergence, missing booking facts, overlap refusal, adjacency and retrieval; all probes matched the inspected behavior.
++5. Saved report.md with three findings, owners/minimal decisions, sufficient behavior and scope boundaries. Modified only activity.md and report.md.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,45 @@
++# Availability and booking review
++
++Review-only comparison of the supplied working-tree `src/service.mjs`, `src/receipt.mjs` and `test/existing.test.mjs` against `context/business-design.md`, `decisions/accepted.md`, operational context and Alder review knowledge v0.3. Implementation and existing tests were not changed.
++
++## Findings
++
++### 1. Availability Output guarantee remains unresolved — Business confirmation
++
++**Evidence:** Activity 1 calls its Output “指定時間帯に予約可能な会議室の一覧” (rooms bookable for the specified interval), while its procedure checks interval ordering, room state and conflicts. Activity 2 additionally requires a start strictly after booking time. `src/service.mjs:12–14` follows Activity 1's listed checks without consulting the clock; `:16–18` checks the future-start condition at booking. `decisions/accepted.md` explicitly states that the product owner has not decided the Output guarantee and no separate contract clarifies it.
++
++**Concrete effect / walkthrough (Q1, Q3):** With clock fixed at 100 and no reservations, a user receives room `a` for 50–60 but cannot reserve that same interval immediately. This is not merely another user taking the room or time passing between requests: eligibility already fails when the result is produced. Calling the result bookable may therefore imply more than the procedure establishes. Booking's recheck is correct and necessary but does not settle the meaning of the preceding Output.
++
++**Minimal decision / owner:** The product owner must establish whether this Output promises only vacancy and room availability, with future-start eligibility explicitly left to booking, or eligibility to book at the time of the query subject to later revalidation. Clarify that contract in Business Design and align the behavior/communication as needed. No particular query restriction, UI or architecture is prescribed; no approved solution currently exists. This is a business ambiguity, not a definite defect in the booking recheck.
++
++### 2. Booking cannot receive or preserve its required purpose — Definite mismatch
++
++**Evidence:** Activity 2 lists use purpose as mandatory Input and the booking Business Data includes it. `src/service.mjs:16` has only room, start, end and actor parameters; the persisted object at `:19–20` contains no purpose. `booking()` at `:11` returns that same incomplete record. The accepted scope does not waive required booking fields.
++
++**Concrete effect (Q1, Q3):** A reservation becomes `reserved` without collecting why the room is needed, and the registered-booking Output cannot hand that required fact onward. This affects the selected booking activity itself, without assuming any future reporting requirement.
++
++**Minimal action / owner:** The implementation owner should enable mandatory purpose input and preserve it in the registered reservation. No new business decision is needed to establish that requirement; no additional formatting or content policy is implied.
++
++### 3. Booking registration time is never recorded — Definite mismatch
++
++**Evidence:** Activity 2 step 6 explicitly requires reservation owner and registration timestamp. `src/service.mjs:17` reads the clock to validate the interval, but the stored object at `:19–20` records only identity, room, interval, actor and state. No registration timestamp is stored elsewhere in the supplied implementation.
++
++**Concrete effect (Q3):** The registered reservation Output records who booked but cannot state when it was registered, losing a fact explicitly required at the activity's completion.
++
++**Minimal action / owner:** The implementation owner should record registration time when establishing the reservation. The business requirement is already decided; its technical representation needs no further business approval.
++
++## Sufficient behavior and stopping boundaries
++
++- Ordinary future booking flows from availability to a saved `reserved` record with room, interval, owner and unique per-service identity. Authentication responsibility and actor trust are explicitly assigned externally; do not reopen authentication or proxy-booking policy here.
++- Activity 1's stated vacancy procedure is implemented: ordered intervals, available rooms and overlapping reserved bookings. Its procedure is sufficient independently of the unresolved Output wording above.
++- Booking revalidates current room state, future start, interval ordering and overlap before insertion. A rejected request does not create a reservation. The strict overlap inequalities permit adjacent bookings, as explicitly required by cross-activity rule 3.
++- In the accepted single-process, in-memory environment, `reserve()` performs its overlap check and insertion synchronously without a yield. Competing calls to the same service cannot both establish overlapping reservations. No distributed persistence or locking requirement is inferred.
++- Availability is a snapshot, not a hold. Rechecking after another reservation or elapsed time is legitimate; no guaranteed reservation solely from search results is assumed.
++- Other Activities and room administration have external owners under the accepted scope. This review does not demand their implementation, decide treatment of existing bookings after room closure, or add recovery/notification policy.
++- `src/receipt.mjs` only exports a heading; there is no supplied receipt-name/mirror path to validate. Operational context establishes that current room names come from the authoritative local dictionary, and `room()` returns its current value. A disk mirror is neither implemented nor required by this review. Its estimated support burden is not a booking-policy finding.
++
++## Verification and limits
++
++`node --test means-runs/r18/test/existing.test.mjs`: 1 test passed, 0 failed. Additional read-only assertions reproduced past-interval availability followed by booking rejection, inspected absence of purpose/registration-time facts, verified overlap rejection, verified adjacent booking success and checked retrieval of the saved record.
++
++These are source-level and synthetic participant walkthroughs, not observations of live users. Passing tests establish the checked behavior, not business approval or completeness. No DDL or additional application path was supplied. No implementation, test or decision file was changed. The sole unresolved business decision is the availability Output guarantee; the two booking data omissions have explicit requirements already.

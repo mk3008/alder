@@ -1,0 +1,6 @@
+{
+  "recorded_at": "2026-10-02T09:21:26.820053+00:00",
+  "reason": "Mechanical schema failure: Stage3 P060 has nonempty Stage1-only redundant_questions; no operator semantic modification. Original attempt preserved.",
+  "original_attempt": "attempt-001",
+  "attempt_number": 2
+}

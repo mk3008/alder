@@ -1,0 +1,19 @@
+{
+  "source_revision": "5405a5069fc13e1a1e27de8b06e4a375a3653e5e",
+  "source_path": "business-design/purchase-request/README.md",
+  "input_packet_path": "/workspace/scratch/501257125b1f/optimization-followup/b-low/business-design.md",
+  "input_sha256": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "agent_task": "/root/b_low",
+  "effective_model_and_effort_independently_attested": false,
+  "isolation": "fresh conversation and explicit file allowlist; shared filesystem was not sandbox-isolated",
+  "runs": 1,
+  "sha256": {
+    "launch.txt": "301a774cb2bb0063bff3befd2d1908ac6fe8ad95aaeffd205f800aeabafac348",
+    "invocation.txt": "0aa49fa343cea55aa5e3e5d3ff1ee778f65d88bc2217ea1b25c0123d663ba8e2",
+    "raw.md": "6d917fe0a4389dd6154e60ddc27e40b1aeea45642a215fd8598970b1db298405",
+    "read-log.json": "81d07ae43d63f0bd3b5f415da33334ae51c0a12a74ff8fd036bbbc3837f918c0"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "packet_id": "P043",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:10:58.595454+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P043-packet.md": "dd75fdb0c35aeb0b12a634bdf92f8f3db7031868d51665f8784c9acc2181d450",
+    "P043-canonical.json": "21e750cc2d8a7b1faba08f435747e6cff2461ae20b010681f209bb1140e13502",
+    "P002-packet.md": "292d7339034377722899bfe712a886c38428be4b26a9b677cee1661c27551292",
+    "P002-canonical.json": "90a43657eab51d1fa9126cba1ee491e83f4cd2608925aa317beb2b7fd9e72ef4",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "1f9eca8a285305e8f18fb8ffac62be73edb515a7ac43c75bea3d6ef146694c85",
+    "received-upstream-packet.md": "731f826eb5f646c32cb7efbcea90b754117e885cb4d2838eff918453e966d846"
+  },
+  "envelope_sha256": "05b06a67ff57f5b079a6b9359ed7f5934c5a5eb5b975650cd4492661ee8b4393",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/P043-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/P043-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/P002-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/P002-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/review-targets.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P043/received-upstream-packet.md"
+  ],
+  "operator_reason": "Preserve initial evaluator uncertainty. Target IDs copied mechanically from raw-check statements; no scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p043",
+  "started_at": "2026-10-02T10:13:31.623178+00:00",
+  "finished_at": "2026-10-02T10:14:29.092862+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "61fe68db7cd9b2875590dcb5d4bd3eae0c27944790ed6ff47f6511d233b15210",
+    "raw-response.md": "61fe68db7cd9b2875590dcb5d4bd3eae0c27944790ed6ff47f6511d233b15210",
+    "read-log.jsonl": "3f9b3d2650ddf205974bc56252bd30dd2b7a97b94a0789c7aa5e5a7bb8c5e7be"
+  },
+  "read_compliance_audit": {
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Read-log mechanical allowlist validation and actual final; procedural only, no independent attestation."
+  }
+}

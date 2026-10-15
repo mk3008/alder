@@ -1,0 +1,11 @@
+{
+  "arm": "A",
+  "stage": "S1",
+  "frozen_at": "2026-09-12T04:48:02.374628+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "entry.mjs": "05a8aaa2a9a9e6fc5c6f4a60d77c9d604994bae17797ce42fd2cd23ef230c85a"
+  }
+}

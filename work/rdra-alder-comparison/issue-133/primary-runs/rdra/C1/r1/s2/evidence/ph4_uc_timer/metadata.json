@@ -1,0 +1,1 @@
+{"start_utc":"2026-10-02T08:20:00Z","end_utc":"2026-10-02T08:21:04Z","failures":["Initial output write failed because the phase4 directory did not exist; directory was created and output was written."],"unmet_restrictions":[],"note":"Start time is approximate; no timed UC identified from allowed inputs."}

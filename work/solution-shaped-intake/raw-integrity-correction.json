@@ -1,0 +1,9 @@
+{
+  "raw_sha256_unchanged_by_publication_correction": {
+    "raw/A.md": "83b0a860bbcb6d1130ca592652e0a9d4f62878b0ff940309d5175e8c75740bf1",
+    "raw/B.md": "20517222caf34bd829e5b8be9db37b61201cfd4d1d44853b3261567f9b7d5f2c",
+    "raw/C.md": "5bc4ae8877696e4d314b74ea9989b5e65820f0dbf52d83080ec01ee321e499d7",
+    "raw/control.md": "0b49396043c107b1eefe5bf055aeaec2f5d537164249080b96c5f12c731e38fd",
+    "pure-why/raw.md": "a5f2d417e52ea3c144dd7256a4bd47bd2c8c00de5828f74a4128eef4c18b2f6e"
+  }
+}

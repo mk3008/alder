@@ -1,0 +1,10 @@
+{
+  "alder_source_revision": "a971d60bb64fbc048a871d70dda277c93b680288",
+  "sources": {
+    "docs/traceability-drift/study.md": "6ec4fa905cbc9647f7803074db354b0eed3cba0c6a91e8ef08345e112844e818",
+    "work/traceability-drift/README.md": "7c61a435a60702660d2a753c2da1aa8b5df64c50048ec97d551ff71a3fe38d31"
+  },
+  "scripts": {
+    "work/traceability-drift/drift.py": "c5db8c5c878be26554f70394fd27a127411f2a10e8a0320ba26259eff6cff75e"
+  }
+}

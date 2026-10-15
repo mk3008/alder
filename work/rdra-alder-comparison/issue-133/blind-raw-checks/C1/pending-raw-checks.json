@@ -1,0 +1,62 @@
+{
+  "case_id": "C1",
+  "status": "pending",
+  "source_attempt": "blind-evaluation/C1/attempt-001",
+  "targets": {
+    "P035": [
+      "F19",
+      "F20"
+    ],
+    "P038": [
+      "F14",
+      "F23",
+      "F15"
+    ],
+    "P005": [
+      "F2",
+      "F4"
+    ],
+    "P046": [
+      "F34",
+      "F35"
+    ],
+    "P060": [
+      "F37",
+      "Q4"
+    ]
+  },
+  "created_at": "2026-10-02T09:22:54.479310+00:00",
+  "retry_attempt_flags": [
+    {
+      "packet_id": "P005",
+      "needs_raw_check": [
+        "F55-F56の文書構造上の配置が実際の業務要件として要求されたか、canonicalだけでは曖昧。"
+      ]
+    },
+    {
+      "packet_id": "P019",
+      "needs_raw_check": [
+        "F7/F17の「担当者」は未確認の役割名を便宜的に使うのか、責任の確定なのか曖昧。"
+      ]
+    },
+    {
+      "packet_id": "P029",
+      "needs_raw_check": [
+        "F19-F21は複数貸出の代表値選択を含意する可能性があるが、集約規則はcanonicalで明示されない。"
+      ]
+    },
+    {
+      "packet_id": "P046",
+      "needs_raw_check": [
+        "F35が上流P005の未抽出の状態表を引用している可能性があり、probe独自性の最終確認にはrawが要る。"
+      ]
+    },
+    {
+      "packet_id": "P060",
+      "needs_raw_check": [
+        "F4の新規会員区分初期化はP029 F7に由来するが、未返却がない時の区分を決める妥当性は原資料で要確認。"
+      ]
+    }
+  ],
+  "retry_attempt_flags_recorded_at": "2026-10-02T09:25:53.767455+00:00"
+}

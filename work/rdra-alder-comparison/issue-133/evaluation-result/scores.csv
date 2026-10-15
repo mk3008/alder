@@ -1,0 +1,61 @@
+blind_id,arm,case,replicate,stage,unknown_found,unknown_total,actionable_found,source_preserved,source_total,post_answer_preserved,post_answer_total,downstream_preserved,downstream_total,unauthorized_decisions,unresolved_leakage,unsupported_additions,redundant_questions,probe_inventions,correct_stop,needs_raw_check,unresolved_raw_flag_indices,evaluator_rubric_corrections,score_status,pending_raw_claims,ambiguous_metrics,strict_primary_eligible,source_clean_exploratory_eligible,architecture_input_required,unapproved_architecture_promotion,handoff_readiness,implementation_viability,artifact_bytes,artifact_files,response_bytes
+P028,alder,C1,2,s1,2,2,2,5,5,,,,,0,,1,0,,,0,[],[],scored,[],[],True,True,,,,,2959,1,3943
+P048,alder,C1,1,s1,2,2,2,5,5,,,,,0,,1,0,,,0,[],[],scored,[],[],True,True,,,,,3089,1,3936
+P035,rdra,C1,2,s1,2,2,0,5,5,,,,,,,,0,,,1,[],"['actionable_unknown_ids', 'coverage_evidence.actionable_unknown_ids']",scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,105082,27,0
+P038,rdra,C1,1,s1,2,2,0,5,5,,,,,5,,1,0,,,1,[],"['actionable_unknown_ids', 'coverage_evidence.actionable_unknown_ids']",scored,[],[],False,True,,,,,97430,27,0
+P005,rdra,C1,2,s2,,,,,,13,13,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,67546,27,0
+P019,alder,C1,2,s2,,,,,,13,13,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,3333,1,4226
+P025,alder,C1,1,s2,,,,,,13,13,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,2841,1,3428
+P029,rdra,C1,1,s2,,,,,,12,13,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,66769,27,0
+P003,alder,C1,2,s3,,,,,,,,11,11,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,2154
+P007,alder,C1,1,s3,,,,,,,,11,11,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,3032
+P046,rdra,C1,2,s3,,,,,,,,11,11,1,0,1,,0,,1,[],[],scored,[],[],False,True,,,,,0,0,5966
+P060,rdra,C1,1,s3,,,,,,,,11,11,1,0,1,,0,,1,[],[],scored,[],[],False,True,,,,,0,0,5435
+P002,rdra,C2,1,s2,,,,,,13,14,,,0,0,,,,,1,[],[],scored_with_ambiguity,[],['unsupported_additions'],True,True,,,,,79510,27,0
+P006,rdra,C2,1,s1,0,5,0,6,6,,,,,5,,7,0,,,1,[],[],scored,[],[],False,True,,,,,53555,27,0
+P012,rdra,C2,2,s1,0,5,0,6,6,,,,,5,,7,0,,,0,[],[],scored,[],[],True,True,,,,,81367,27,0
+P022,rdra,C2,2,s2,,,,,,14,14,,,0,0,3,,,,0,[],[],scored,[],[],False,True,,,,,83586,27,0
+P026,alder,C2,2,s1,4,5,4,6,6,,,,,0,,0,0,,,1,[],[],scored,[],[],True,True,,,,,5278,1,6295
+P027,alder,C2,1,s1,3,5,3,6,6,,,,,0,,0,0,,,0,[],[],scored,[],[],True,True,,,,,6675,1,7498
+P036,alder,C2,2,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],False,True,,,,,7013,1,7921
+P037,alder,C2,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,3462
+P043,rdra,C2,1,s3,,,,,,,,13,13,0,,0,,,,1,[],[],scored_with_ambiguity,[],"['probe_inventions', 'unresolved_leakage']",True,True,,,,,0,0,5234
+P044,rdra,C2,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,4456
+P055,alder,C2,1,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,3026
+P058,alder,C2,1,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,6385,1,7200
+P009,alder,C3,1,s1,3,3,3,6,6,,,,,0,,0,0,,,0,[],[],scored,[],[],False,True,,,,,4939,1,5609
+P010,rdra,C3,2,s2,,,,,,14,14,,,2,0,4,,,,0,[],[],scored,[],[],False,True,,,,,83578,27,0
+P013,rdra,C3,1,s1,2,3,0,6,6,,,,,2,,2,0,,,1,[],[],scored,[],[],False,True,,,,,72397,27,0
+P017,alder,C3,2,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,6304,1,6304
+P020,rdra,C3,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,3423
+P031,alder,C3,1,s2,,,,,,14,14,,,0,0,0,,,,0,[],[],scored,[],[],False,True,,,,,6087,1,6933
+P032,alder,C3,2,s1,3,3,3,6,6,,,,,0,,0,0,,,0,[],[],scored,[],[],False,True,,,,,6066,1,6991
+P033,rdra,C3,1,s2,,,,,,14,14,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",True,True,,,,,63815,27,0
+P034,alder,C3,1,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],False,True,,,,,0,0,2858
+P039,alder,C3,2,s3,,,,,,,,13,13,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,2893
+P041,rdra,C3,1,s3,,,,,,,,13,13,0,0,0,,0,,1,[],[],scored,[],[],True,True,,,,,0,0,4471
+P042,rdra,C3,2,s1,1,3,0,6,6,,,,,,,,0,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,73768,27,0
+P001,alder,C4,2,s2,,,,,,6,6,,,0,0,1,,,,0,[],[],scored,[],[],True,True,,,,,3503,1,4010
+P008,rdra,C4,2,s2,,,,,,5,6,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,53666,27,0
+P011,alder,C4,1,s1,,,,6,6,,,,,0,,2,2,,False,0,[],[],scored,[],[],True,True,,,,,3723,1,4483
+P015,alder,C4,1,s3,,,,,,,,5,5,0,0,0,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,3057
+P016,rdra,C4,1,s1,,,,5,6,,,,,,,,0,,False,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,49418,27,0
+P030,rdra,C4,2,s1,,,,6,6,,,,,,,,0,,False,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",False,True,,,,,39402,27,0
+P047,alder,C4,2,s1,,,,6,6,,,,,0,,1,1,,False,0,[],[],scored,[],[],True,True,,,,,2749,1,3417
+P050,rdra,C4,2,s3,,,,,,,,5,5,0,0,1,,0,,1,[],[],scored,[],[],False,True,,,,,0,0,2916
+P052,alder,C4,2,s3,,,,,,,,5,5,0,0,1,,0,,0,[],[],scored,[],[],True,True,,,,,0,0,2425
+P053,alder,C4,1,s2,,,,,,6,6,,,0,0,0,,,,0,[],[],scored,[],[],True,True,,,,,3639,1,4256
+P054,rdra,C4,1,s3,,,,,,,,5,5,0,,1,,,,1,[],[],scored_with_ambiguity,[],"['probe_inventions', 'unresolved_leakage']",True,True,,,,,0,0,3714
+P056,rdra,C4,1,s2,,,,,,6,6,,,,0,,,,,1,[],[],scored_with_ambiguity,[],"['unauthorized_decisions', 'unsupported_additions']",True,True,,,,,53112,27,0
+P004,rdra,C5,2,s1,1,2,0,17,18,,,,,1,,2,0,,,0,[],['architecture_input_required'],scored,[],[],False,True,False,1,API・分岐は概ね追えるがschema外属性と再決定の先決めで要修正,not_executed,86814,27,0
+P021,alder,C5,2,s1,1,2,1,18,18,,,,,0,,0,0,,,0,[],['architecture_input_required'],scored,[],[],True,True,False,0,既存制約と範囲を保持し、再決定判断を確認可能,not_executed,5001,1,5808
+P023,rdra,C5,1,s1,1,2,0,17,18,,,,,1,,2,0,,,0,[],['architecture_input_required'],scored,[],[],False,True,False,1,APIの重要分岐は伝わるが範囲外の画面・データ構造を除く必要,not_executed,115658,27,0
+P024,alder,C5,1,s1,1,2,1,18,18,,,,,0,,0,0,,,0,[],['architecture_input_required'],scored,[],[],True,True,False,0,既存APIとschemaを保持し、再決定は未決として引渡しへの影響を示す,not_executed,5694,1,6509
+P018,alder,C5,1,s2,,,,,,21,22,,,0,0,0,,,,0,[],['architecture_input_required'],scored,[],[],False,True,False,0,主要フローと応答は揃うが既存schemaの列型制約を展開していない,not_executed,4515,1,5215
+P049,alder,C5,2,s2,,,,,,22,22,,,0,0,0,,,,0,[],['architecture_input_required'],scored,[],[],True,True,False,0,既存APIと列型制約、分岐応答を追跡できる。本人性の未決を維持,not_executed,4744,1,5579
+P051,rdra,C5,1,s2,,,,,,,22,,,,0,1,,,,1,[],['architecture_input_required'],scored_with_ambiguity,[],"['source_facts_preserved', 'unauthorized_decisions']",False,True,False,1,分岐と既存制約はあるが統合フロー行のアクター不整合を要確認,not_executed,77659,27,0
+P059,rdra,C5,2,s2,,,,,,,22,,,0,0,1,,,,1,[],['architecture_input_required'],scored_with_ambiguity,[],['source_facts_preserved'],False,True,False,1,応答と承認から購買引渡しの連続性を保持。schema逐語制約と追加社員モデルは要点検,not_executed,85580,27,0
+P014,rdra,C5,2,s3,,,,,,,,14,16,0,0,0,,0,,0,[],['architecture_input_required'],scored,[],[],False,True,False,0,流れとHTTP分岐は有用。既存API入力の具体形・schema制約は欠ける,not_executed,0,0,3764
+P040,rdra,C5,1,s3,,,,,,,,,16,,0,0,,,,1,[],['architecture_input_required'],scored_with_ambiguity,[],"['downstream_facts_preserved', 'probe_inventions', 'unauthorized_decisions']",False,True,False,0,業務分岐は読めるがHTTP値とschema詳細欠落、活動・画面対応に未確定箇所,not_executed,0,0,4784
+P045,alder,C5,2,s3,,,,,,,,15,16,0,0,0,,0,,2,[],['architecture_input_required'],scored,[],[],True,True,False,0,API分岐と応答、承認後引渡しは追える。schemaの列型制約は要約で欠落,not_executed,0,0,3078
+P057,alder,C5,1,s3,,,,,,,,15,16,0,0,0,,0,,1,[],['architecture_input_required'],scored,[],[],False,True,False,0,API分岐と回答反映は明瞭。schema列型制約は維持宣言だけ,not_executed,0,0,3401

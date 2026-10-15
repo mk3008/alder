@@ -1,0 +1,53 @@
+--- before/additional.test.mjs
++++ after/additional.test.mjs
+@@ -10,7 +10,9 @@
+   const app = createApp();
+   for (const [amount, role, deniedRole] of [
+     [1, 'approver', 'seniorApprover'],
+-    [99999, 'approver', 'seniorApprover'],
++    [49999, 'approver', 'seniorApprover'],
++    [50000, 'seniorApprover', 'approver'],
++    [99999, 'seniorApprover', 'approver'],
+     [100000, 'seniorApprover', 'approver'],
+     [Number.MAX_SAFE_INTEGER, 'seniorApprover', 'approver'],
+   ]) {
+@@ -21,6 +23,28 @@
+     const approved = app.approve(id, { id: requester.id, role }, 0);
+     assert.deepEqual(approved, { ...initial, status: 'approved', approvedAt: 0, approvedBy: requester.id });
+   }
++});
++
++test('pending requests use the current threshold regardless of submission timestamp', () => {
++  const app = createApp();
++  const senior = { id: 's', role: 'seniorApprover' };
++  const buyer = { id: 'b', role: 'buyer' };
++  app.submit(input('approved'), requester, 0);
++  const approved = app.approve('approved', approver, 0);
++  app.submit(input('purchased'), requester, 0);
++  app.approve('purchased', approver, 0);
++  const purchased = app.purchase('purchased', 100000, buyer, 0);
++  for (const [id, time] of [['old-pending', 0], ['new-pending', Number.MAX_SAFE_INTEGER]]) {
++    const pending = app.submit(input(id, 75000), requester, time);
++    assert.throws(() => app.approve(id, approver, 1), Error);
++    assert.deepEqual(app.detail(id), pending);
++    assert.equal(app.approve(id, senior, 1).approvedBy, 's');
++    assert.deepEqual(app.detail('approved'), approved);
++    assert.deepEqual(app.detail('purchased'), purchased);
++  }
++  app.submit(input('reject', 50000), requester, 0);
++  assert.throws(() => app.reject('reject', 'no', senior, 0), Error);
++  assert.equal(app.reject('reject', 'no', approver, 0).status, 'rejected');
+ });
+ 
+ test('senior approval validates actor and timestamp before writing and preserves its event', () => {
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -39,7 +39,7 @@
+ 
+ // Approval roles are exclusive and depend on the requested total, not unit price.
+ function requireApprovalAuthority(record, actor) {
+-  requireRole(actor, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');
++  requireRole(actor, record.requestedYen >= 50000 ? 'seniorApprover' : 'approver');
+ }
+ 
+ export function createApp() {

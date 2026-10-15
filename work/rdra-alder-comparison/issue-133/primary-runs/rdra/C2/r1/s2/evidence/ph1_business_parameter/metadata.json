@@ -1,0 +1,1 @@
+{"start_utc":"2026-10-02T08:29:00Z","end_utc":"2026-10-02T08:30:15Z","failures":["Initial write failed because output directory did not exist; created the directory and wrote the TSV successfully."],"unmet_restrictions":[]}

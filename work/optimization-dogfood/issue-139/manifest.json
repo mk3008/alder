@@ -1,0 +1,226 @@
+{
+  "requested_model": "gpt-6.1-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime_independently_verified": false,
+  "user_override_of_repo_default": true,
+  "public_input_retrieval": "Git clone and connector retrieval at immutable revisions",
+  "runs": [
+    {
+      "id": "/root/phase1_fresh",
+      "revision": "52ddd2b984d7ddfc1e1c7ee08d7d1394711c3198",
+      "pain": "unspecified at launch; user supplied High after run started",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "docs/optimization-review.md": {
+          "blob_sha": "e3fecabe53344ba070b8a38aa689f59bb3809a23",
+          "sha256": "8a6db7a3a61923ac917f1595138db1ca8381cf53ad83ca276f92c77177885a88"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "f57bc48966c15e3d96bf5dc4401433adacd24cc7",
+          "sha256": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046"
+        },
+        "README.md": {
+          "blob_sha": "bc71ac63b7b0509c044a5d273d616f172df026c3",
+          "sha256": "13a389b6fce741388a73a058a7279a4558a6cae6ae246edb26b00b8c260ad623"
+        }
+      },
+      "prompt": "runs/phase1.prompt.txt",
+      "raw": "runs/phase1.raw.md",
+      "scope": "preliminary source-grounding review; not a valid confirmed-Pain comparison",
+      "correction": "Raw reports repository default gpt-6-sol. Actual spawn request was gpt-6.1-sol / medium / none. Raw preserved without alteration."
+    },
+    {
+      "id": "/root/phase2_regression",
+      "revision": "3be41c2ee122ccdb0870bf9f39463f80db34a42a",
+      "pain": "High, user confirmed",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "docs/optimization-review.md": {
+          "blob_sha": "13e57e7b6b7bca478cda6caf3da6f3604cf2cb32",
+          "sha256": "8c61644fdb1ff7423462bc8fe7c2fb92cac3b5cf2356728e66943e5e93de3941"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "f57bc48966c15e3d96bf5dc4401433adacd24cc7",
+          "sha256": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046"
+        },
+        "README.md": {
+          "blob_sha": "bc71ac63b7b0509c044a5d273d616f172df026c3",
+          "sha256": "13a389b6fce741388a73a058a7279a4558a6cae6ae246edb26b00b8c260ad623"
+        }
+      },
+      "prompt": "runs/phase2.prompt.txt",
+      "raw": "runs/phase2.raw.md",
+      "scope": "single bounded behavior check; different Pain and task wording from preliminary run; no causal comparison",
+      "metadata_followup": "Actual controller spawn request was gpt-6.1-sol / reasoning_effort medium / fork_turns none, explicit requester override of AGENTS default. Record as controller-reported request, not independent verification. No review findings supplied."
+    },
+    {
+      "id": "/root/skill_forward",
+      "revision": "07067860f2a055620d5cd19b00df3a54e4f0fb01",
+      "pain": "High",
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        },
+        "plugins/alder/plugin.json": {
+          "blob_sha": "0a1439815ab86b79a5f7b138fc4ad860282a6270",
+          "sha256": "0c94534558d1c0fbefd3428b73006aab5956f8179992bec2f3eb1a760f9446cd"
+        },
+        "docs/adoption.md": {
+          "blob_sha": "6ab03ab190779ea8aafe2b54b122915a7f7d7582",
+          "sha256": "75a8809230c877c4ab33a38ffa091fe048eee752616678bedcedddaf4d4cdaf8"
+        },
+        "docs/check-item-traceability.md": {
+          "blob_sha": "4778b97bd0212c1f83a3edf434c57c58540480e0",
+          "sha256": "87b98910b3cc5be9b7b2ccba017d57dba38be2b18db4faa22a6ac24d5529a884"
+        },
+        "plugins/alder/skills/alder-draft-business-design/SKILL.md": {
+          "blob_sha": "5de8d8763c32464335c243089993fe20b21e73cf",
+          "sha256": "453226cb8503918f565742aebb4f8b80c98ce3bc23bb9ab86f5fa72641a48812"
+        },
+        "plugins/alder/skills/alder-review-business-design/SKILL.md": {
+          "blob_sha": "b223138ea432f156312feb17dc731fc6bbcf7f2c",
+          "sha256": "bb45419310ee42eb73184ccd860728180c1715d020cb7c2a1d1464f6cf76a833"
+        },
+        "plugins/alder/skills/alder-review-implementation/SKILL.md": {
+          "blob_sha": "52e44f218415a16682361edfb46d8145e2be51c2",
+          "sha256": "ea4021db6bb1df8bb0521c7fcae719a5a97c13d0a7c77d275977cd199b5ad138"
+        },
+        "plugins/alder/skills/alder-optimize-business/SKILL.md": {
+          "blob_sha": "20fede9fc55a30650646f296e8f278b5d1567a53",
+          "sha256": "d3a442a21384e555133eeed5680c84abbcc22ee41faca056fbf15fa50f8b05f1"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/optimization-review.md": {
+          "blob_sha": "13e57e7b6b7bca478cda6caf3da6f3604cf2cb32",
+          "sha256": "8c61644fdb1ff7423462bc8fe7c2fb92cac3b5cf2356728e66943e5e93de3941"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/provenance.json": {
+          "blob_sha": "d460c8eb561d354d257ef02c8023411844ede635",
+          "sha256": "df1409fbc8be82a2ce74094d664f89494930b1b5349e47fcc924013eee559637"
+        }
+      },
+      "prompt": "runs/skill-forward.prompt.txt",
+      "raw": "runs/skill-forward.raw.md",
+      "scope": "repository-source skill selection and application; not installed real-client routing; no existing-skill runtime regression claim",
+      "observations": "Selected optimization skill; zero candidates; asked for burden location/example; no source/GitHub writes",
+      "limits": "Single run with read-only PoC boundaries in task; full network/tool trace not independently audited"
+    },
+    {
+      "id": "/root/target_gate_unknown",
+      "revision": "ea59c32059ec77ce46cc487c45d462a4d612fd11",
+      "pain": "High",
+      "target_confirmed": false,
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "plugins/alder/plugin.json": {
+          "blob_sha": "006d062797b1ff6bacece087aef52979df98d815",
+          "sha256": "a21eab01996444966a2e984e55d8901320ad2eb3954eb38a89d56ea17fee5d62"
+        },
+        "plugins/alder/skills/alder-draft-business-design/SKILL.md": {
+          "blob_sha": "d8a74db0b7d9af8be685779020c205bf9e9b7196",
+          "sha256": "61ecd905c7423d944644a03970b1b0036aca26642180c5d49f7e29e4ee680447"
+        },
+        "plugins/alder/skills/alder-review-business-design/SKILL.md": {
+          "blob_sha": "490effd3f455174d7b26b57209679a5526b91e5e",
+          "sha256": "943d0611a09f527f5959c55620fc351bc04cd07a56ec195562e6841b375c004e"
+        },
+        "plugins/alder/skills/alder-review-implementation/SKILL.md": {
+          "blob_sha": "2afde8b9a77ba8d3186c4ff3c084e78441b49846",
+          "sha256": "bd0680266d31c11ab99fb9a288928c9cc18e9396e3bddb877c228e25f7bd3415"
+        },
+        "plugins/alder/skills/alder-optimize-business/SKILL.md": {
+          "blob_sha": "14799df1345fb9f509acf81f9391f7f8e6538758",
+          "sha256": "4c2404f003208b6b34c2b79341a32dd6e57551c22c37efb55b79c763c9813c20"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/optimization-review.md": {
+          "blob_sha": "d2edf5b9db614d26fc3ca917db1086487c9516f6",
+          "sha256": "b7ef5e0ab19aec6dab1ef7a96ce85e0a8d34647513fdcff34e2e966629bfa229"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/provenance.json": {
+          "blob_sha": "2a2f4ddbd9df7f411f7f3d6b1af975bf04b7eeaa",
+          "sha256": "aaaeae51944cd6e3925674b2b26819d53bc14ddebb98dd006c81bfb91e0791e2"
+        },
+        "business-design/alder/README.md": {
+          "blob_sha": "da821ef55a9f464b2b6a2d67092851bf327fe635",
+          "sha256": "9a8d25a81e45e11f17cee4083847ebe847854da8e521f3b2b66da45fcc26e635"
+        }
+      },
+      "prompt": "runs/target-gate-unknown.prompt.txt",
+      "raw": "runs/target-gate-unknown.raw.md",
+      "scope": "repository-source selection and application; not installed-client routing; inputs differ, no causal effect comparison",
+      "observations": "0 candidates; asked to identify actual burden; no Extreme perspectives",
+      "limits": "Runtime not independently verified; agent-reported read/write trace; benefit unmeasured"
+    },
+    {
+      "id": "/root/target_gate_known",
+      "revision": "ea59c32059ec77ce46cc487c45d462a4d612fd11",
+      "pain": "High",
+      "target_confirmed": true,
+      "inputs": {
+        "AGENTS.md": {
+          "blob_sha": "bd3f6081325b6465056e96c0aca490291e85ca7d",
+          "sha256": "333c34f90f39f85fbef4918c7612f06784fa561bed71f3b5569104b24b26ba2c"
+        },
+        "plugins/alder/plugin.json": {
+          "blob_sha": "006d062797b1ff6bacece087aef52979df98d815",
+          "sha256": "a21eab01996444966a2e984e55d8901320ad2eb3954eb38a89d56ea17fee5d62"
+        },
+        "plugins/alder/skills/alder-draft-business-design/SKILL.md": {
+          "blob_sha": "d8a74db0b7d9af8be685779020c205bf9e9b7196",
+          "sha256": "61ecd905c7423d944644a03970b1b0036aca26642180c5d49f7e29e4ee680447"
+        },
+        "plugins/alder/skills/alder-review-business-design/SKILL.md": {
+          "blob_sha": "490effd3f455174d7b26b57209679a5526b91e5e",
+          "sha256": "943d0611a09f527f5959c55620fc351bc04cd07a56ec195562e6841b375c004e"
+        },
+        "plugins/alder/skills/alder-review-implementation/SKILL.md": {
+          "blob_sha": "2afde8b9a77ba8d3186c4ff3c084e78441b49846",
+          "sha256": "bd0680266d31c11ab99fb9a288928c9cc18e9396e3bddb877c228e25f7bd3415"
+        },
+        "plugins/alder/skills/alder-optimize-business/SKILL.md": {
+          "blob_sha": "14799df1345fb9f509acf81f9391f7f8e6538758",
+          "sha256": "4c2404f003208b6b34c2b79341a32dd6e57551c22c37efb55b79c763c9813c20"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/optimization-review.md": {
+          "blob_sha": "d2edf5b9db614d26fc3ca917db1086487c9516f6",
+          "sha256": "b7ef5e0ab19aec6dab1ef7a96ce85e0a8d34647513fdcff34e2e966629bfa229"
+        },
+        "plugins/alder/skills/alder-optimize-business/references/provenance.json": {
+          "blob_sha": "2a2f4ddbd9df7f411f7f3d6b1af975bf04b7eeaa",
+          "sha256": "aaaeae51944cd6e3925674b2b26819d53bc14ddebb98dd006c81bfb91e0791e2"
+        },
+        "work/optimization-dogfood/issue-139/inputs/result-review-current.ja.md": {
+          "blob_sha": "e1d797345d0a3a561967b5db022fd3c0735b03d7",
+          "sha256": "fe634a784ae6134bbf3a7036e6062774241519df251402b3a53c5f86b08b0880"
+        }
+      },
+      "prompt": "runs/target-gate-known.prompt.txt",
+      "raw": "runs/target-gate-known.raw.md",
+      "scope": "repository-source selection and application; not installed-client routing; inputs differ, no causal effect comparison",
+      "observations": "2 candidates; grounded responsibility changes; explicit independent human accept/modify/defer/reject question; no adoption",
+      "limits": "Runtime not independently verified; agent-reported read/write trace; benefit unmeasured"
+    }
+  ]
+}

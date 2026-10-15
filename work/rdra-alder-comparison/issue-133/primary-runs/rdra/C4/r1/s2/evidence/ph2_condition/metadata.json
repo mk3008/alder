@@ -1,0 +1,7 @@
+{
+  "start_utc": "2026-10-02T09:28:00Z",
+  "start_utc_accuracy": "estimated; exact start time was not captured",
+  "end_utc": "2026-10-02T09:29:51Z",
+  "failures": ["Initial output write and validation failed because the phase2 directory did not exist; created the directory and successfully wrote and validated the TSV."],
+  "unmet_restrictions": []
+}

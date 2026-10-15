@@ -1,0 +1,47 @@
+{
+  "packet_id": "P037",
+  "status": "success",
+  "started_at": "2026-10-02T07:56:10.471885+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "packet_sha256": "7ee23893f313d71adc6ab15edbee80991f6fe63f3869e547d6df082bd646449c",
+  "prompt_sha256": "3caee12c4268e65df5e14db1b5464c33f4b5f3c5fa781438d326efae1f2dc857",
+  "envelope_sha256": "b50bd9d895b6b1c32551f43b2140569e7a44dded52a9dd2d220118e9a3459a57",
+  "observation_protocol_sha256": "d0ebef8842ad1a7eed8b01798f81f442f1854a68f916b8367e17531bfee61ada",
+  "observation_frozen_before_first_probe": true,
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-probes/P037/packet.md",
+    "/workspace/scratch/62be7f260abb/blind-probes/P037/downstream-prompt.txt"
+  ],
+  "limitations": [
+    "Shared filesystem procedural read allowlist, not security isolation. Format may disclose method; single blind. Requested settings lack independent attestation."
+  ],
+  "agent_id": "/root/blind_observation/p037_probe",
+  "finished_at": "2026-10-02T07:57:37.620308+00:00",
+  "output_sha256": {
+    "raw-response.md": "8ab624a18cef135b2d47afd6dd7d7a12f124639be2b4c247a768d4fe099f72f2",
+    "read-log.jsonl": "455482bdcb22956cd89c27f5dbed7ab2a0d23defe96756bfe403dc66547a7a9b"
+  },
+  "anonymization_script_sha256": "b2337834fac93857c95a9d4b09aa705a6b23bf03b4793838611007f3dfaac6a5",
+  "script_hash_recording": {
+    "mode": "retrospective",
+    "recorded_at": "2026-10-02T08:02:12.061488+00:00",
+    "source_commit": "2a34233b0b4089af9df291ca878d408d2c8d5712",
+    "source_blob": "6ec5a53a8d87e68a016359f271c345e93c7a576b",
+    "verification": "root independently retrieved original blob; prior packets unchanged"
+  },
+  "upstream_strict_eligible": false,
+  "upstream_source_clean_exploratory_eligible": true,
+  "upstream_classification_recorded_at": "2026-10-02T08:22:00.289310+00:00",
+  "read_compliance_audit": {
+    "strict_protocol_eligible": true,
+    "source_clean_exploratory_eligible": true,
+    "basis": "read-log input paths plus child final response declarations; own generated output verification explicitly permitted by original dispatch envelope",
+    "independent_access_attestation": "unavailable",
+    "declared_outside_input_read_attempts": []
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "packet_id": "P016",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:51:14.826505+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P016-packet.md": "ff96adcebe6e57a19a04c10e8ce047a98b2954b642bf93764b2efe8452f48927",
+    "P016-canonical.json": "74c1ee00669c25b50cf9cc0c924c28aef90ecd784f501bd69e17aa69da5b8cf7",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "7521921de0094583e54bf539b0fc291849f3b35db4ef547f790340ce56b99760"
+  },
+  "envelope_sha256": "e2bc9cf3045a94949ded8aa5725c4916c0208767e6e9405848c8ef152bf3ce18",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P016/P016-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P016/P016-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P016/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P016/review-targets.json"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p016",
+  "started_at": "2026-10-02T10:54:21.532154+00:00",
+  "finished_at": "2026-10-02T10:55:27.464944+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "944758d5258a6a745c5c150c076ce82825e51f899cd37019625325236b5e5cc3",
+    "raw-response.md": "944758d5258a6a745c5c150c076ce82825e51f899cd37019625325236b5e5cc3",
+    "read-log.jsonl": "3839f04ed451359372696080c9d64f0153308f62869d1054dda68582b98dda67"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:55:44.660299+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths only; own output verification allowed; no independent attestation"
+  }
+}

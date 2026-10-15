@@ -1,0 +1,42 @@
+{
+  "packet_id": "P005",
+  "status": "success",
+  "prepared_at": "2026-10-02T09:23:30.220992+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P005-packet.md": "45b41a6e6b0c961e2d1910c2882f43c2ffaa6a59dc054a0bdcdcd1ade1514f16",
+    "P005-canonical.json": "d9884283fb30d9ae724364b96b86a36b7d830b2663bd97fa16572d12abc64cfc",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "c3e460146e48c719b04ca13ee82c1f81b9f406240fabdf90b4620dbd06dd9c19"
+  },
+  "envelope_sha256": "c987e4c915e045a951e6fcf227522fcf22a3a84dd1602acb177f3ac8b623608f",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P005/P005-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P005/P005-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P005/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P005/review-targets.json"
+  ],
+  "operator_reason": "Preserve initial score raw-check independently of retry flags. No scoring/oracle provided.",
+  "targets_updated_before_spawn_at": "2026-10-02T09:26:38.227415+00:00",
+  "agent_id": "/root/blind_observation/raw_p005",
+  "started_at": "2026-10-02T09:28:36.089246+00:00",
+  "finished_at": "2026-10-02T09:29:47.469618+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "8efa941afe3620b06a0873fa600c654e29f809b18c75d7b06e07d92bc9089c76",
+    "raw-response.md": "8efa941afe3620b06a0873fa600c654e29f809b18c75d7b06e07d92bc9089c76",
+    "read-log.jsonl": "3da4c12297a9d58f2818b478018fb9b648f628122d0d178763b0d1506f08875a"
+  },
+  "read_compliance_audit": {
+    "recorded_at": "2026-10-02T09:36:47.174117+00:00",
+    "logged_outside_read_attempts": [],
+    "declared_outside_read_attempts": [],
+    "own_generated_output_verification_allowed": true,
+    "basis": "Successful read-log allowlist check and received final declarations; shared filesystem has no independent enforcement/attestation"
+  }
+}

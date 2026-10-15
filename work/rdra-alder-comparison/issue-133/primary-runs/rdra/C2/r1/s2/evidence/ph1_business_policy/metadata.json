@@ -1,0 +1,6 @@
+{
+  "start_utc": "2026-10-02T08:26:28Z",
+  "end_utc": "2026-10-02T08:26:53Z",
+  "failures": ["Initial output write failed because the phase1 directory did not exist; created the output directory and retried successfully."],
+  "unmet_restrictions": []
+}

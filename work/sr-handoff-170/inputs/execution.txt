@@ -1,0 +1,22 @@
+E-1: actual local synthetic fixture execution
+Record written UTC: 2026-10-06T14:43:02.516107+00:00
+Scope: IMPL-1, tests and inline DDL; in-memory SQLite only
+Command (from inputs/): PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v test_order_register
+Python: 3.12.14
+SQLite: 3.53.1
+Source hashes (SHA-256):
+  order_register.py: f0829a3820d7c565ab891ca88573751a60fd6bc8f05ff9358d6e29960088f377
+  test_order_register.py: eb2e60e008be4562069feac5e738ee3f5733d434fe85634de3daaaa2fcd07b78
+
+Runner output:
+test_receipt_preserves_saved_identifiers (test_order_register.ReceiptTests.test_receipt_preserves_saved_identifiers) ... ok
+test_other_partner_may_reuse_reference (test_order_register.RegistrationTests.test_other_partner_may_reuse_reference) ... ok
+test_same_partner_reference_is_rejected (test_order_register.RegistrationTests.test_same_partner_reference_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+
+Exit code: 0
+This execution is not available to C08. It does not prove production operation.

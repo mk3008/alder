@@ -1,0 +1,21 @@
+{
+  "integrity": "pass",
+  "candidate_count": 4,
+  "origin_counts": {
+    "source_assisted_additional_topic": 2,
+    "reviewer_seeded": 1,
+    "known_topic_source_elaboration": 1
+  },
+  "control_dispositions": {
+    "closed_by_contract": 3,
+    "remains_candidate": 1
+  },
+  "screened_out_count": 5,
+  "protected_previous_artifacts": 7,
+  "previous_study_integrity": "pass",
+  "protected_baseline_files": 57,
+  "pinned_velvet_blobs_checked": 13,
+  "semantic_quality": "AI assessment is separate; not machine-proven",
+  "independent_discovery_validated": false,
+  "human_approval": false
+}

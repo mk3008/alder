@@ -1,0 +1,104 @@
+--- baseline/activity.md
++++ packet/activity.md
+@@ -0,0 +1,6 @@
++# Activity
++
++1. Read packet instructions, task, Business Design, philosophy, adoption section 3, operations, accepted decisions, and existing implementation/tests.
++2. Confirmed the explicitly requested disk mirror is local-only, rebuilt for each valid receipt, and never authoritative. Operations permits disk errors to propagate and estimates four extra staff-hours/month if shipped.
++3. Implemented the receipt reader and independent heading change; recorded the mirror choice and cost in decisions/receipt-mirror.md. Added focused receipt tests without modifying existing tests.
++4. Ran `node --test`: all four tests passed, covering existing booking behavior, missing/corrupt/stale/deleted mirrors, immediate rename visibility, dictionary preservation, unknown booking rejection, propagated filesystem errors, and heading text. No question or deployment was needed.
+--- baseline/decisions/receipt-mirror.md
++++ packet/decisions/receipt-mirror.md
+@@ -0,0 +1,5 @@
++# Receipt disk mirror
++
++The task explicitly requires rebuilding `directory/rooms.json` from `service.rooms()` and reading names from that file for each receipt. The authoritative dictionary remains in memory. Existing mirrors are never trusted or imported into the service. Unknown bookings fail before disk work; missing referenced rooms fail rather than returning an undefined name. Filesystem errors propagate as operations permits.
++
++This adds a redundant component for the stated current-name goal: `service.room(id)` already provides a local Map lookup, and operations estimates four additional staff-hours per month if the mirror ships. The estimate is affordable and is not a prohibition. We implement the explicitly requested local feature; no deployment is authorized. A direct lookup could meet the product goal with less operational support, but changing the requested mechanism would require a revised task. No new business policy or unresolved business decision is introduced.
+--- baseline/report.md
++++ packet/report.md
+@@ -0,0 +1,11 @@
++# Implementation report
++
++Implemented `createReceiptReader(service, directory)` in `src/receipt.mjs`. Its synchronous reader validates a stored booking ID, recreates the mirror directory if absent, rebuilds `rooms.json` from `service.rooms()` on every valid receipt, reads the JSON, and returns `{ id, roomName }`. Missing/corrupt/stale mirrors are overwritten before reading, so renamed rooms appear immediately. The service dictionary and stored booking remain unchanged. Unknown bookings and missing referenced rooms fail; disk errors propagate as authorized.
++
++Separately changed `receiptHeading` from `Booking` to `Reservation`.
++
++Evidence: `src/receipt.mjs`, `test/receipt.test.mjs`, and `decisions/receipt-mirror.md`. Existing service code, existing tests, instructions, and context were preserved.
++
++Verification: `node --test` passed all four tests (zero failures), including the unchanged existing availability/booking test and new checks for mirror recovery, current names, authoritative state preservation, unknown bookings, disk failures, and heading text.
++
++Operational limitation: the mirror is redundant for this goal because `service.room(id)` is already a local lookup. The supplied estimate is four extra staff-hours/month if shipped. This cost and the explicit implementation request are recorded in the decision record; no additional fallback or service was added. No deployment was performed. No remaining business decision blocks the authorized local implementation.
+--- baseline/src/receipt.mjs
++++ packet/src/receipt.mjs
+@@ -1 +1,19 @@
+-export const receiptHeading = 'Booking';
++import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
++import { join } from 'node:path';
++
++export const receiptHeading = 'Reservation';
++
++export function createReceiptReader(service, directory) {
++  const mirrorPath = join(directory, 'rooms.json');
++  return id => {
++    const booking = service.booking(id);
++    if (!booking) throw Error('booking');
++
++    mkdirSync(directory, { recursive: true });
++    writeFileSync(mirrorPath, JSON.stringify(service.rooms()), 'utf8');
++    const rooms = JSON.parse(readFileSync(mirrorPath, 'utf8'));
++    const room = rooms.find(room => room.id === booking.roomId);
++    if (!room) throw Error('room');
++    return { id: booking.id, roomName: room.name };
++  };
++}
+--- baseline/test/receipt.test.mjs
++++ packet/test/receipt.test.mjs
+@@ -0,0 +1,47 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
++import { join } from 'node:path';
++import { createService } from '../src/service.mjs';
++import { createReceiptReader, receiptHeading } from '../src/receipt.mjs';
++
++function fixture(t) {
++  const root = mkdtempSync(new URL('../receipt-test-', import.meta.url));
++  t.after(() => rmSync(root, { recursive: true, force: true }));
++  const service = createService(() => 100);
++  const booking = service.reserve('a', 200, 300, 'user');
++  const directory = join(root, 'mirror');
++  return { root, service, booking, directory };
++}
++
++test('receipt rebuilds missing, corrupt, stale, and deleted mirrors with current names', t => {
++  const { service, booking, directory } = fixture(t);
++  const reader = createReceiptReader(service, directory);
++  const mirror = join(directory, 'rooms.json');
++  assert.deepEqual(reader(booking.id), { id: booking.id, roomName: 'North' });
++  assert.deepEqual(JSON.parse(readFileSync(mirror, 'utf8')), service.rooms());
++  writeFileSync(mirror, '{broken');
++  assert.equal(reader(booking.id).roomName, 'North');
++  writeFileSync(mirror, JSON.stringify([{ id: 'a', name: 'Forged' }]));
++  assert.equal(reader(booking.id).roomName, 'North');
++  assert.equal(service.room('a').name, 'North');
++  service.renameRoom('a', 'South');
++  assert.equal(reader(booking.id).roomName, 'South');
++  rmSync(mirror);
++  assert.equal(reader(booking.id).roomName, 'South');
++  assert.deepEqual(service.booking(booking.id), booking);
++});
++
++test('unknown bookings fail and disk errors propagate', t => {
++  const { service, booking, root, directory } = fixture(t);
++  assert.throws(() => createReceiptReader(service, directory)('unknown'), /booking/);
++  const blocked = join(root, 'file');
++  writeFileSync(blocked, 'occupied');
++  assert.throws(() => createReceiptReader(service, blocked)(booking.id), { code: 'EEXIST' });
++  assert.deepEqual(service.booking(booking.id), booking);
++  assert.equal(service.room('a').name, 'North');
++});
++
++test('receipt heading is Reservation', () => {
++  assert.equal(receiptHeading, 'Reservation');
++});

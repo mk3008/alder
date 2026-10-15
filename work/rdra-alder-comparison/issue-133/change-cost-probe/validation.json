@@ -1,0 +1,20 @@
+{
+  "alder": {
+    "immutable_count": 7,
+    "immutable_mismatches": [],
+    "read_log_entries": 11,
+    "stale_old_policy_candidates": [],
+    "agent_reported_trace_violations": [],
+    "effective_settings_attestation": "unavailable"
+  },
+  "rdra": {
+    "immutable_count": 68,
+    "immutable_mismatches": [],
+    "read_log_entries": 69,
+    "stale_old_policy_candidates": [],
+    "agent_reported_trace_violations": [
+      "One tail read of phase3/ph3BUC.tsv unlogged; output quality is separate from read-log eligibility."
+    ],
+    "effective_settings_attestation": "unavailable"
+  }
+}

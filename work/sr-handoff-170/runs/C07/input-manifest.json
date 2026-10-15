@@ -1,0 +1,12 @@
+{
+  "public_revision": "a3a824eedb3ad4a0ebc648de615e0ca88278035f",
+  "public_source_directory": "work/sr-handoff-170/inputs",
+  "case_extraction": "case.md is the introductory paragraph and selected section of cases.md",
+  "sha256": {
+    "case.md": "08db895e74ad4c0ae1c10c03033f5e62eb5a11a4e08fad317baefbb73f0aa633",
+    "execution.txt": "b57ffb39e63cc2b4a6671ea3dfb7a916a1911845932607ff8828ce23acd6120d",
+    "test_order_register.py": "eb2e60e008be4562069feac5e738ee3f5733d434fe85634de3daaaa2fcd07b78",
+    "order_register.py": "f0829a3820d7c565ab891ca88573751a60fd6bc8f05ff9358d6e29960088f377",
+    "design-and-checks.md": "a69efbbb6791674002e96879200512b0309af86452f701120f8c62d6451b57c8"
+  }
+}

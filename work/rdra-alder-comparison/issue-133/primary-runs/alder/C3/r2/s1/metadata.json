@@ -1,0 +1,46 @@
+{
+  "arm": "alder",
+  "case": "C3",
+  "replicate": 2,
+  "stage": "s1",
+  "freeze": "b6d579a4d9c5a90f7e1de84fa2eccd36d0a14a95",
+  "method_baseline": "eb591bfbc1b077b0e93d62253cb1e7f3e392e462",
+  "plugin_version": "0.2.8",
+  "authoring_provenance": "e9726b4c84608db42c5286d072b5ec762d31596a",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "source_sha256": "2edca44298d35abe4d07260ddbb7b12f44e38c25c01dd73d2de3be277b28a36a",
+  "method_sha256": {
+    "SKILL.md": "f1f100f23782fcda045d6dd75d471a7b7ae5aa6bf485e2f4e9551a6de7cff91d",
+    "references/adoption.md": "7ac0df340ac97db344a8ace374188fd0779e549445b0bab6dca5446035e37046",
+    "references/business-graph.md": "3924abae22875512c46a74fad6720ef88b5c9144d873588d6bf5b02fcb396746",
+    "references/provenance.json": "cbc93a3febb4d4877de646862d17250c6439ff6224f9b43f8ea5eccd30ffbd29"
+  },
+  "created_at": "2026-10-02T07:38:23.418238+00:00",
+  "isolation_limit": "Shared filesystem; read allowlist is procedural, not a security sandbox. Model and reasoning effort are requested settings and cannot be independently attested.",
+  "envelope_variant": "compact-v2",
+  "envelope_sha256": "431571ba5df2b64adb9c5063bef3cb88e659ad2230d0158e797bcda6d8a4e442",
+  "planned_envelope_variant": "verbose-v1",
+  "actual_envelope_variant": "compact-v2",
+  "agent_id": "/root/alder_primary/c3_r2_s1",
+  "started_at": "2026-10-02T07:56:01.427165+00:00",
+  "status": "success",
+  "attempt": 1,
+  "finished_at": "2026-10-02T07:57:24.741710+00:00",
+  "failures": [],
+  "retries": 0,
+  "artifact_sha256": "afcf328336e62f0691fd09e16f5495c4ff60eaac09c909b3545e2f8e099d1ded",
+  "raw_response_sha256": "bf1ce7c1f535f767018a35f189ae6f9738bbd7099564f4092894b15de2a2876a",
+  "read_log_sha256": "58724199dae5e3b5c47ca41d54e3478dae4104aa4236c353e425ca03e40ad02c",
+  "verification": {
+    "input_integrity_pass": true,
+    "output_integrity_pass": true,
+    "full_artifact_present_in_raw": true,
+    "strict_read_allowlist_pass": false,
+    "read_log_entries": 6,
+    "read_allowlist_deviations": [
+      "read path outside allowlist: /workspace/scratch/62be7f260abb/primary-runs/alder/C3/r2/s1/docs/business-design/design.md"
+    ]
+  }
+}

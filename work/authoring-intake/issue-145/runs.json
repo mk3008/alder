@@ -1,0 +1,38 @@
+[
+  {
+    "run_label": "responder-implementation",
+    "started_at_utc": "2026-10-04T11:16:17Z",
+    "experimental_task_prompt": "Use the Alder Business Design authoring Skill to respond to the six separate synthetic requester conversations in work/authoring-intake/issue-145/cases.md. Your readable checkout is <study-root>, pinned to publicly retrievable mk3008/alder commit 541fc89ae65cf35e1e2e6e2a711b521aa4a9764e (Plugin 0.4.1 development). Read plugins/alder/skills/alder-draft-business-design/SKILL.md and the bundled references it requires; use this actual Skill rather than an invented substitute. Treat each case independently; do not import facts across them. Return the first Japanese response you would give each requester, with a reviewable draft excerpt when appropriate and only questions you would actually ask. Do not evaluate the experiment or speculate about expected answers. Do not read protocol.md, prior research, other responses or investigator reports. No external actions or product edits; only write your complete responses and source/access notes to work/authoring-intake/issue-145/raw-intake.md. Use source-relative paths in the notes. Do not claim to have implemented a product or independently attested runtime settings. Requested model gpt-6-sol, reasoning medium, no history.",
+    "output": "raw-intake.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime_independently_attested": false,
+    "token_usage": null,
+    "billing_cost": null,
+    "public_prompt_scope": "Substantive experimental instructions; nonexperimental execution metadata is omitted and local path/identifier labels normalized. Not a full verbatim runtime prompt.",
+    "completion_observed_at_utc": "2026-10-04T11:24:41Z",
+    "elapsed_observed_seconds": 504.0,
+    "output_bytes": 8933,
+    "output_sha256": "844bad3a4525f07a91f0b7030cf3188d114ee058656057fc7424be82a500d0e2"
+  },
+  {
+    "run_label": "reviewer-implementation",
+    "started_at_utc": "2026-10-04T11:16:38Z",
+    "completion_observed_at_utc": "2026-10-04T11:18:25Z",
+    "experimental_task_prompt": "Review the narrow Alder implementation diff in the readable checkout <study-root>. Public base is released Plugin 0.4.0 commit 554414c2df623ecb23ef724624f8e1920d5f1d23; public head is 541fc89ae65cf35e1e2e6e2a711b521aa4a9764e, draft PR146, implementing Issue145. Inspect git diff base...head, affected authority/Skill/bundle/provenance/package/CI tests and relevant surrounding code. The authorized adopted principle is: check missing background before drafting a change when learning it could change whether a still-open means is adopted; reuse known background and settled decisions, ask candidate-versus-decided only if unclear, keep deferrable unknowns from blocking known scope, and retain real contradiction checking. No new Skill, release, merge, operational adoption or blanket intake question is authorized. Check especially whether the 0.4.1 validation adjustment can inadvertently publish a release, preserve tag immutability and ten Skills, stale copies or version claims, broken routing, excessive generalization, and unsupported source meaning. Run focused read-only verification if useful. Do not read the behavioral responder's raw output, old research responses, or other reviewer/investigator conclusions. Only write your full review findings and checks to work/authoring-intake/issue-145/diff-review.md; do not edit source. Use source-relative paths and distinguish requested model gpt-6-sol / medium / no history from independently verified runtime.",
+    "output": "diff-review.md",
+    "source_revision": "541fc89ae65cf35e1e2e6e2a711b521aa4a9764e",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime_independently_attested": false,
+    "token_usage": null,
+    "billing_cost": null,
+    "public_prompt_scope": "Substantive experimental instructions; nonexperimental execution metadata is omitted and local path/identifier labels normalized. Not a full verbatim runtime prompt.",
+    "elapsed_observed_seconds": 107.0,
+    "output_bytes": 3706,
+    "output_sha256": "654a889f588b0a8aa6885707e3039515293cd94a29a34e299204ac8594f02fab"
+  }
+]

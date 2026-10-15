@@ -1,0 +1,18 @@
+{
+  "claims": [
+    {
+      "claim_id": "attempt-002-P059-1",
+      "packet_id": "P059",
+      "claim_question": {
+        "meaning": "既存schemaの自動採番・必須・状態値はあるがGENERATED ALWAYS、具体的CHECK式の厳密保持は曖昧",
+        "evidence_ids": [
+          "F21"
+        ]
+      },
+      "audit_target_ids": [
+        "F21"
+      ],
+      "review_file": "P059-review.json"
+    }
+  ]
+}

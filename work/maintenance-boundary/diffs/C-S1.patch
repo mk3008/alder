@@ -1,0 +1,127 @@
+--- before/entry.mjs
++++ after/entry.mjs
+@@ -2,9 +2,9 @@
+ import { cancelShipment } from './features/cancel.mjs';
+ import { shipmentDetail } from './features/detail.mjs';
+ 
+-export function createApp({ alphaUrl, alphaToken }) {
++export function createApp({ alphaUrl, alphaToken, betaUrl, betaToken }) {
+   const records = new Map();
+-  const context = { records, alphaUrl, alphaToken };
++  const context = { records, alphaUrl, alphaToken, betaUrl, betaToken };
+   return {
+     book: input => bookShipment(context, input),
+     cancel: id => cancelShipment(context, id),
+--- before/features/book.mjs
++++ after/features/book.mjs
+@@ -1,4 +1,4 @@
+-export async function bookShipment({ records, alphaUrl, alphaToken }, input) {
++export async function bookShipment({ records, alphaUrl, alphaToken, betaUrl, betaToken }, input) {
+   if (typeof input?.id !== 'string' || !input.id.trim()) {
+     throw new Error('id must be a nonempty string');
+   }
+@@ -8,28 +8,50 @@
+   if (!Number.isSafeInteger(input.grams) || input.grams <= 0) {
+     throw new Error('grams must be a positive safe integer');
+   }
++  const provider = Object.hasOwn(input, 'provider') ? input.provider : 'alpha';
++  if (provider !== 'alpha' && provider !== 'beta') throw new Error('Invalid provider');
+   const id = input.id.trim();
+   const address = input.address.trim();
+   const grams = input.grams;
+   if (records.has(id)) throw new Error('Shipment id already exists');
+ 
+-  const response = await fetch(alphaUrl + '/shipments', {
+-    method: 'POST',
+-    redirect: 'manual',
+-    headers: {
+-      'Content-Type': 'application/json',
+-      Authorization: 'Bearer ' + alphaToken,
+-    },
+-    body: JSON.stringify({ reference: id, destination: address, weightGrams: grams }),
+-  });
+-  if (response.status !== 201) throw new Error('Booking was not accepted');
+-  const payload = await response.json();
+-  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)
+-      || payload.accepted !== true || typeof payload.shipmentId !== 'string'
+-      || payload.shipmentId.length === 0) {
+-    throw new Error('Invalid booking response');
++  let trackingId;
++  if (provider === 'alpha') {
++    const response = await fetch(alphaUrl + '/shipments', {
++      method: 'POST',
++      redirect: 'manual',
++      headers: {
++        'Content-Type': 'application/json',
++        Authorization: 'Bearer ' + alphaToken,
++      },
++      body: JSON.stringify({ reference: id, destination: address, weightGrams: grams }),
++    });
++    if (response.status !== 201) throw new Error('Booking was not accepted');
++    const payload = await response.json();
++    if (payload === null || typeof payload !== 'object' || Array.isArray(payload)
++        || payload.accepted !== true || typeof payload.shipmentId !== 'string'
++        || payload.shipmentId.length === 0) {
++      throw new Error('Invalid booking response');
++    }
++    trackingId = payload.shipmentId;
++  } else {
++    const response = await fetch(betaUrl + '/v2/jobs', {
++      method: 'POST',
++      redirect: 'manual',
++      headers: { 'Content-Type': 'application/json', 'X-Api-Key': betaToken },
++      body: JSON.stringify({ client_ref: id, parcel: { destination: address, mass_kg: grams / 1000 } }),
++    });
++    if (response.status !== 200) throw new Error('Booking was not accepted');
++    const payload = await response.json();
++    if (payload === null || typeof payload !== 'object' || Array.isArray(payload)
++        || payload.ok !== true || payload.job === null || typeof payload.job !== 'object'
++        || Array.isArray(payload.job) || typeof payload.job.code !== 'string'
++        || payload.job.code.length === 0) {
++      throw new Error('Invalid booking response');
++    }
++    trackingId = payload.job.code;
+   }
+-  const record = { id, address, grams, trackingId: payload.shipmentId, status: 'booked' };
++  const record = { id, address, grams, trackingId, status: 'booked', provider };
+   records.set(id, record);
+   return { ...record };
+ }
+--- before/features/cancel.mjs
++++ after/features/cancel.mjs
+@@ -1,14 +1,28 @@
+-export async function cancelShipment({ records, alphaUrl, alphaToken }, id) {
++export async function cancelShipment({ records, alphaUrl, alphaToken, betaUrl, betaToken }, id) {
+   const record = records.get(id);
+   if (!record) throw new Error('Unknown shipment');
+   if (record.status === 'cancelled') throw new Error('Shipment is already cancelled');
+ 
+-  const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(record.trackingId), {
+-    method: 'DELETE',
+-    redirect: 'manual',
+-    headers: { Authorization: 'Bearer ' + alphaToken },
+-  });
+-  if (response.status !== 204) throw new Error('Cancellation was not accepted');
++  if (record.provider === 'alpha') {
++    const response = await fetch(alphaUrl + '/shipments/' + encodeURIComponent(record.trackingId), {
++      method: 'DELETE',
++      redirect: 'manual',
++      headers: { Authorization: 'Bearer ' + alphaToken },
++    });
++    if (response.status !== 204) throw new Error('Cancellation was not accepted');
++  } else {
++    const response = await fetch(betaUrl + '/v2/void', {
++      method: 'POST',
++      redirect: 'manual',
++      headers: { 'Content-Type': 'application/json', 'X-Api-Key': betaToken },
++      body: JSON.stringify({ job_code: record.trackingId }),
++    });
++    if (response.status !== 200) throw new Error('Cancellation was not accepted');
++    const payload = await response.json();
++    if (payload === null || typeof payload !== 'object' || Array.isArray(payload) || payload.ok !== true) {
++      throw new Error('Invalid cancellation response');
++    }
++  }
+   record.status = 'cancelled';
+   return { ...record };
+ }

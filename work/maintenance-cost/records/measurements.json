@@ -1,0 +1,2468 @@
+{
+  "algorithm": "Python difflib.SequenceMatcher, autojunk=False, physical lines including whitespace, zero-context non-equal opcodes",
+  "rows": [
+    {
+      "arm": "A",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 90,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 83,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 36,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 32,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 90,
+        "tests": 36,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 83,
+        "tests": 32,
+        "support": 0
+      },
+      "changed_paths": [
+        "boundaries.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 90
+    },
+    {
+      "arm": "A",
+      "stage": "U1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 8,
+          "deleted": 3,
+          "nonblank_noncomment_churn": 11,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 46,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 43,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 101,
+        "tests": 82,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 94,
+        "tests": 75,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs",
+        "notes.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 95
+    },
+    {
+      "arm": "A",
+      "stage": "U2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 5,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 7,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 50,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 46,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 108,
+        "tests": 132,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 101,
+        "tests": 121,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs",
+        "filter.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 98
+    },
+    {
+      "arm": "A",
+      "stage": "F1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 3,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 5,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 45,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 42,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 113,
+        "tests": 177,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 106,
+        "tests": 163,
+        "support": 0
+      },
+      "changed_paths": [
+        "approval.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 99
+    },
+    {
+      "arm": "A",
+      "stage": "F2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [
+        {
+          "file": "check-001.json",
+          "sha256": "01605744c06caed348aed79e272987bc8c5f7eaec2bc42af29c341519907f9d7"
+        }
+      ],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 1,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 2,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 21,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 21,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 115,
+        "tests": 199,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 108,
+        "tests": 184,
+        "support": 0
+      },
+      "changed_paths": [
+        "approval.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 99
+    },
+    {
+      "arm": "B",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 100,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 82,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 36,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 32,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 100,
+        "tests": 36,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 82,
+        "tests": 32,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 100
+    },
+    {
+      "arm": "B",
+      "stage": "U1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 17,
+          "deleted": 3,
+          "nonblank_noncomment_churn": 18,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 40,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 38,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 120,
+        "tests": 76,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 100,
+        "tests": 70,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 114
+    },
+    {
+      "arm": "B",
+      "stage": "U2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 5,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 7,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 25,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 24,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 127,
+        "tests": 101,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 107,
+        "tests": 94,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 117
+    },
+    {
+      "arm": "B",
+      "stage": "F1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 3,
+          "deleted": 4,
+          "nonblank_noncomment_churn": 4,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 34,
+          "deleted": 4,
+          "nonblank_noncomment_churn": 37,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 134,
+        "tests": 139,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 111,
+        "tests": 131,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 116
+    },
+    {
+      "arm": "B",
+      "stage": "F2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [
+        {
+          "file": "check-001.json",
+          "sha256": "4311b5695d00abfb0e2142cea74a428d410748ed04c7bb6efe3994c23bb88f3c"
+        }
+      ],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 1,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 2,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 25,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 25,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 136,
+        "tests": 165,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 113,
+        "tests": 156,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 116
+    },
+    {
+      "arm": "C",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 97,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 91,
+          "changed_files": 8,
+          "new_files": 8,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 35,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 32,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 97,
+        "tests": 35,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 91,
+        "tests": 32,
+        "support": 0
+      },
+      "changed_paths": [
+        "additional.test.mjs",
+        "entry.mjs",
+        "slices/approve.mjs",
+        "slices/detail.mjs",
+        "slices/list.mjs",
+        "slices/purchase.mjs",
+        "slices/reject.mjs",
+        "slices/submit.mjs",
+        "validation.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 97
+    },
+    {
+      "arm": "C",
+      "stage": "U1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 5,
+          "deleted": 3,
+          "nonblank_noncomment_churn": 8,
+          "changed_files": 3,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 55,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 52,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 105,
+        "tests": 90,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 99,
+        "tests": 84,
+        "support": 0
+      },
+      "changed_paths": [
+        "note.test.mjs",
+        "slices/list.mjs",
+        "slices/submit.mjs",
+        "validation.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 99
+    },
+    {
+      "arm": "C",
+      "stage": "U2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 7,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 8,
+          "changed_files": 2,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 41,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 38,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 114,
+        "tests": 131,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 107,
+        "tests": 122,
+        "support": 0
+      },
+      "changed_paths": [
+        "entry.mjs",
+        "filter.test.mjs",
+        "slices/list.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 104
+    },
+    {
+      "arm": "C",
+      "stage": "F1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 4,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 6,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 52,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 49,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 120,
+        "tests": 183,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 113,
+        "tests": 171,
+        "support": 0
+      },
+      "changed_paths": [
+        "approval.test.mjs",
+        "slices/approve.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 106
+    },
+    {
+      "arm": "C",
+      "stage": "F2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [
+        {
+          "file": "check-001.json",
+          "sha256": "167e76ed358803633d8a4b68081e7db5937536ac613c92744c3354857f976e59"
+        }
+      ],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 1,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 2,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 38,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 37,
+          "changed_files": 2,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 122,
+        "tests": 222,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 115,
+        "tests": 208,
+        "support": 0
+      },
+      "changed_paths": [
+        "approval.test.mjs",
+        "slices/approve.mjs",
+        "threshold.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 106
+    },
+    {
+      "arm": "D",
+      "stage": "S0",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 100,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 93,
+          "changed_files": 4,
+          "new_files": 4,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 38,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 35,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 100,
+        "tests": 38,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 93,
+        "tests": 35,
+        "support": 0
+      },
+      "changed_paths": [
+        "application.mjs",
+        "boundaries.test.mjs",
+        "domain.mjs",
+        "entry.mjs",
+        "memory.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 100
+    },
+    {
+      "arm": "D",
+      "stage": "U1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 7,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 9,
+          "changed_files": 2,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 39,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 36,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 109,
+        "tests": 77,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 102,
+        "tests": 71,
+        "support": 0
+      },
+      "changed_paths": [
+        "application.mjs",
+        "domain.mjs",
+        "notes.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 105
+    },
+    {
+      "arm": "D",
+      "stage": "U2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 6,
+          "deleted": 2,
+          "nonblank_noncomment_churn": 8,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 30,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 28,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 117,
+        "tests": 107,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 110,
+        "tests": 99,
+        "support": 0
+      },
+      "changed_paths": [
+        "application.mjs",
+        "filtering.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 109
+    },
+    {
+      "arm": "D",
+      "stage": "F1",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 4,
+          "deleted": 4,
+          "nonblank_noncomment_churn": 8,
+          "changed_files": 2,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 40,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 38,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 125,
+        "tests": 147,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 118,
+        "tests": 137,
+        "support": 0
+      },
+      "changed_paths": [
+        "application.mjs",
+        "domain.mjs",
+        "senior.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 109
+    },
+    {
+      "arm": "D",
+      "stage": "F2",
+      "gate_passed": true,
+      "agent_check_attempts": 1,
+      "inherited_check_records_not_recounted": [
+        {
+          "file": "check-001.json",
+          "sha256": "4c08787d3853368ab55ae4e091f541c3dd42fcbe88ca4f5d175439bd13f2f413"
+        }
+      ],
+      "failed_agent_checks": 0,
+      "stats": {
+        "production": {
+          "added": 1,
+          "deleted": 1,
+          "nonblank_noncomment_churn": 2,
+          "changed_files": 1,
+          "new_files": 0,
+          "deleted_files": 0
+        },
+        "tests": {
+          "added": 44,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 42,
+          "changed_files": 1,
+          "new_files": 1,
+          "deleted_files": 0
+        },
+        "support": {
+          "added": 0,
+          "deleted": 0,
+          "nonblank_noncomment_churn": 0,
+          "changed_files": 0,
+          "new_files": 0,
+          "deleted_files": 0
+        }
+      },
+      "cumulative_churn": {
+        "production": 127,
+        "tests": 191,
+        "support": 0
+      },
+      "cumulative_nonblank_noncomment_churn": {
+        "production": 120,
+        "tests": 179,
+        "support": 0
+      },
+      "changed_paths": [
+        "domain.mjs",
+        "threshold.test.mjs"
+      ],
+      "exact_content_moves": [],
+      "production_lines_present": 109
+    }
+  ],
+  "hunks": [
+    {
+      "id": "A/S0/boundaries.test.mjs:0:0:0:36",
+      "arm": "A",
+      "stage": "S0",
+      "path": "boundaries.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        36
+      ],
+      "added": 36,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\n\nconst actor = role => ({ id: ' ', role });\nconst input = id => ({ id, item: '\\t Desk\\n', reason: '\\n Work\\t', quantity: 1, requestedYen: 1 });\n\ntest('IDs retain whitespace and use UTF-16 string ordering', () => {\n  const app = createApp();\n  const ids = [' ', 'x ', 'x', '\\u{10000}', '\\uE000'];\n  for (const id of ids) app.submit(input(id), actor('requester'), 0);\n  assert.deepEqual(app.list().map(row => row.id), [' ', 'x', 'x ', '\\u{10000}', '\\uE000']);\n  assert.equal(app.detail(' ').requesterId, ' ');\n  assert.equal(app.detail(' ').item, 'Desk');\n});\n\ntest('malformed input and unknown roles fail atomically', () => {\n  const app = createApp();\n  for (const invalid of [undefined, null, 1, 'text']) {\n    assert.throws(() => app.submit(invalid, actor('requester'), 0), Error);\n    assert.deepEqual(app.list(), []);\n  }\n  for (const role of [undefined, 'admin', 'Requester']) {\n    assert.throws(() => app.submit(input('x'), actor(role), 0), Error);\n    assert.deepEqual(app.list(), []);\n  }\n});\n\ntest('valid decreasing timestamps apply to rejection and purchase as well', () => {\n  const app = createApp();\n  app.submit(input('reject'), actor('requester'), Number.MAX_SAFE_INTEGER);\n  assert.equal(app.reject('reject', ' no ', actor('approver'), 0).rejectedAt, 0);\n  app.submit(input('buy'), actor('requester'), Number.MAX_SAFE_INTEGER);\n  app.approve('buy', actor('approver'), 2);\n  assert.equal(app.purchase('buy', 1, actor('buyer'), 0).purchasedAt, 0);\n});\n"
+    },
+    {
+      "id": "A/S0/entry.mjs:0:0:0:90",
+      "arm": "A",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        90
+      ],
+      "added": 90,
+      "deleted": 0,
+      "old": "",
+      "new": "function requireNonemptyString(value, name) {\n  if (typeof value !== 'string' || value.length === 0) {\n    throw new Error(`${name} must be a nonempty string`);\n  }\n}\n\nfunction trimmedText(value, name) {\n  requireNonemptyString(value, name);\n  const result = value.trim();\n  if (!result) throw new Error(`${name} must contain text`);\n  return result;\n}\n\nfunction positiveInteger(value, name) {\n  if (!Number.isSafeInteger(value) || value <= 0) {\n    throw new Error(`${name} must be a positive safe integer`);\n  }\n}\n\nfunction validateCommand(actor, role, now) {\n  if (actor === null || typeof actor !== 'object') throw new Error('Invalid actor');\n  requireNonemptyString(actor.id, 'Actor ID');\n  if (actor.role !== role) throw new Error('Wrong role');\n  if (!Number.isSafeInteger(now) || now < 0) throw new Error('Invalid timestamp');\n}\n\nexport function createApp() {\n  const records = new Map();\n  const copy = record => ({ ...record });\n\n  function get(id) {\n    if (!records.has(id)) throw new Error('Unknown ID');\n    return records.get(id);\n  }\n\n  function transition(id, actor, role, now, fromStatus, fields) {\n    validateCommand(actor, role, now);\n    const current = get(id);\n    if (current.status !== fromStatus) throw new Error('Invalid transition');\n    const result = { ...current, ...fields };\n    records.set(id, result);\n    return copy(result);\n  }\n\n  return {\n    submit(input, actor, now) {\n      validateCommand(actor, 'requester', now);\n      if (input === null || typeof input !== 'object') throw new Error('Invalid input');\n      const { id, item, quantity, requestedYen, reason } = input;\n      requireNonemptyString(id, 'ID');\n      if (records.has(id)) throw new Error('Duplicate ID');\n      const cleanItem = trimmedText(item, 'Item');\n      const cleanReason = trimmedText(reason, 'Reason');\n      positiveInteger(quantity, 'Quantity');\n      positiveInteger(requestedYen, 'Requested yen');\n      const record = {\n        id, requesterId: actor.id, item: cleanItem, quantity, requestedYen,\n        reason: cleanReason, submittedAt: now, status: 'submitted',\n      };\n      records.set(id, record);\n      return copy(record);\n    },\n    approve(id, actor, now) {\n      validateCommand(actor, 'approver', now);\n      return transition(id, actor, 'approver', now, 'submitted', {\n        approvedAt: now, approvedBy: actor.id, status: 'approved',\n      });\n    },\n    reject(id, reason, actor, now) {\n      validateCommand(actor, 'approver', now);\n      const rejectionReason = trimmedText(reason, 'Rejection reason');\n      return transition(id, actor, 'approver', now, 'submitted', {\n        rejectedAt: now, rejectedBy: actor.id, rejectionReason, status: 'rejected',\n      });\n    },\n    purchase(id, actualYen, actor, now) {\n      validateCommand(actor, 'buyer', now);\n      positiveInteger(actualYen, 'Actual yen');\n      return transition(id, actor, 'buyer', now, 'approved', {\n        purchasedAt: now, purchasedBy: actor.id, actualYen, status: 'purchased',\n      });\n    },\n    detail(id) {\n      return copy(get(id));\n    },\n    list() {\n      return [...records.keys()].sort().map(id => copy(records.get(id)));\n    },\n  };\n}\n"
+    },
+    {
+      "id": "A/U1/entry.mjs:28:29:28:29",
+      "arm": "A",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        28,
+        29
+      ],
+      "new_range": [
+        28,
+        29
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  const copy = record => ({ ...record });\n",
+      "new": "  const copy = record => ({ ...record, note: record.note ?? '' });\n"
+    },
+    {
+      "id": "A/U1/entry.mjs:55:55:55:57",
+      "arm": "A",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        55,
+        55
+      ],
+      "new_range": [
+        55,
+        57
+      ],
+      "added": 2,
+      "deleted": 0,
+      "old": "",
+      "new": "      const note = 'note' in input ? input.note : '';\n      if (typeof note !== 'string' || note.length > 280) throw new Error('Invalid note');\n"
+    },
+    {
+      "id": "A/U1/entry.mjs:57:58:59:60",
+      "arm": "A",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        57,
+        58
+      ],
+      "new_range": [
+        59,
+        60
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "        reason: cleanReason, submittedAt: now, status: 'submitted',\n",
+      "new": "        reason: cleanReason, submittedAt: now, status: 'submitted', note,\n"
+    },
+    {
+      "id": "A/U1/entry.mjs:86:87:88:92",
+      "arm": "A",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        86,
+        87
+      ],
+      "new_range": [
+        88,
+        92
+      ],
+      "added": 4,
+      "deleted": 1,
+      "old": "      return [...records.keys()].sort().map(id => copy(records.get(id)));\n",
+      "new": "      return [...records.keys()].sort().map(id => {\n        const { note, ...summary } = records.get(id);\n        return summary;\n      });\n"
+    },
+    {
+      "id": "A/U1/notes.test.mjs:0:0:0:46",
+      "arm": "A",
+      "stage": "U1",
+      "path": "notes.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        46
+      ],
+      "added": 46,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\n\nconst actor = role => ({ id: role, role });\nconst input = (id, note) => ({ id, item: 'Desk', quantity: 1, requestedYen: 1, reason: 'Work', note });\n\ntest('supplied undefined and nonprimitive strings reject without reserving IDs', () => {\n  const app = createApp();\n  app.submit(input('existing', 'keep'), actor('requester'), 0);\n  const before = app.detail('existing');\n  for (const note of [undefined, new String('text'), [], {}, Symbol('note')]) {\n    assert.throws(() => app.submit(input('new', note), actor('requester'), 0), Error);\n    assert.deepEqual(app.detail('existing'), before);\n    assert.deepEqual(app.list().map(row => row.id), ['existing']);\n  }\n  assert.equal(app.submit(input('new', 'valid'), actor('requester'), 0).note, 'valid');\n});\n\ntest('note copies and list omission hold in every state', () => {\n  const app = createApp();\n  const note = '\\t\\n' + '\ud83d\ude00'.repeat(139);\n  const request = input('buy', note);\n  app.submit(request, actor('requester'), 0).note = 'changed';\n  request.note = 'changed';\n  const check = id => {\n    assert.equal(app.detail(id).note, note);\n    app.detail(id).note = 'changed';\n    const rows = app.list();\n    for (const row of rows) {\n      assert.equal('note' in row, false);\n      const { note: omitted, ...expected } = app.detail(row.id);\n      assert.deepEqual(row, expected);\n      row.note = 'injected';\n    }\n    assert.equal(app.detail(id).note, note);\n  };\n  check('buy');\n  app.approve('buy', actor('approver'), 0).note = 'changed';\n  check('buy');\n  app.purchase('buy', 1, actor('buyer'), 0).note = 'changed';\n  check('buy');\n  app.submit(input('reject', note), actor('requester'), 0);\n  app.reject('reject', 'no', actor('approver'), 0).note = 'changed';\n  check('reject');\n});\n"
+    },
+    {
+      "id": "A/U2/entry.mjs:87:89:87:92",
+      "arm": "A",
+      "stage": "U2",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        87,
+        89
+      ],
+      "new_range": [
+        87,
+        92
+      ],
+      "added": 5,
+      "deleted": 2,
+      "old": "    list() {\n      return [...records.keys()].sort().map(id => {\n",
+      "new": "    list(filter = {}) {\n      const itemContains = 'itemContains' in filter ? filter.itemContains : '';\n      if (typeof itemContains !== 'string') throw new Error('Invalid item filter');\n      return [...records.keys()].sort()\n        .filter(id => records.get(id).item.includes(itemContains)).map(id => {\n"
+    },
+    {
+      "id": "A/U2/filter.test.mjs:0:0:0:50",
+      "arm": "A",
+      "stage": "U2",
+      "path": "filter.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        50
+      ],
+      "added": 50,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\n\nfunction fixture() {\n  const app = createApp();\n  for (const [id, item] of [['z', ' Desk  Blue '], ['A', 'Desk \ud83d\ude00'], ['a', 'desk Blue']]) {\n    app.submit({ id, item, quantity: 1, requestedYen: 1, reason: 'Work', note: 'private' },\n      { id: 'r', role: 'requester' }, 0);\n  }\n  return app;\n}\n\ntest('filter uses stored item text literally, including spaces and Unicode', () => {\n  const app = fixture();\n  assert.deepEqual(app.list({ itemContains: '  ' }).map(row => row.id), ['z']);\n  assert.deepEqual(app.list({ itemContains: '\ud83d\ude00' }).map(row => row.id), ['A']);\n  assert.deepEqual(app.list({ itemContains: ' Desk' }), []);\n  assert.deepEqual(app.list({ itemContains: 'Blue ' }), []);\n  assert.deepEqual(app.list(undefined), app.list());\n});\n\ntest('invalid filters fail on empty and populated apps without state changes', () => {\n  for (const app of [createApp(), fixture()]) {\n    const before = app.list().map(row => app.detail(row.id));\n    for (const itemContains of [undefined, {}, new String('Desk'), /Desk/, Symbol('x')]) {\n      assert.throws(() => app.list({ itemContains }), Error);\n      assert.deepEqual(app.list().map(row => app.detail(row.id)), before);\n    }\n  }\n});\n\ntest('filtered results remain isolated and contain all non-note fields', () => {\n  const app = fixture();\n  app.approve('A', { id: 'a', role: 'approver' }, 1);\n  const filter = Object.freeze({ itemContains: 'Desk' });\n  const rows = app.list(filter);\n  assert.deepEqual(rows.map(row => row.id), ['A', 'z']);\n  for (const row of rows) {\n    const { note, ...expected } = app.detail(row.id);\n    assert.deepEqual(row, expected);\n    assert.equal('note' in row, false);\n    row.item = 'changed';\n    row.note = 'injected';\n  }\n  rows.length = 0;\n  assert.equal(app.detail('A').item, 'Desk \ud83d\ude00');\n  assert.equal(app.detail('A').note, 'private');\n  assert.equal(app.list(filter).length, 2);\n});\n"
+    },
+    {
+      "id": "A/F1/approval.test.mjs:0:0:0:45",
+      "arm": "A",
+      "stage": "F1",
+      "path": "approval.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        45
+      ],
+      "added": 45,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\n\nconst requester = { id: 'r', role: 'requester' };\nconst senior = { id: 'r', role: 'seniorApprover' };\nconst approver = { id: 'a', role: 'approver' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst input = (id, requestedYen, quantity = 1) => ({\n  id, requestedYen, quantity, item: 'Desk', reason: 'Work', note: ' preserved ',\n});\n\ntest('authority uses requested total without multiplying by quantity', () => {\n  const app = createApp();\n  app.submit(input('low', 99999, Number.MAX_SAFE_INTEGER), requester, 10);\n  assert.equal(app.approve('low', approver, 0).approvedBy, 'a');\n  app.submit(input('high', Number.MAX_SAFE_INTEGER), requester, 10);\n  const approved = app.approve('high', senior, 0);\n  assert.equal(approved.approvedBy, requester.id);\n  assert.equal(approved.approvedAt, 0);\n  assert.equal(approved.note, ' preserved ');\n  const purchased = app.purchase('high', 1, buyer, 0);\n  assert.equal(purchased.actualYen, 1);\n  assert.equal(purchased.approvedBy, requester.id);\n  approved.approvedBy = 'changed';\n  assert.equal(app.detail('high').approvedBy, requester.id);\n});\n\ntest('senior approval validates actor and time before mutation', () => {\n  const app = createApp();\n  const original = app.submit(input('high', 100000), requester, 0);\n  for (const actor of [null, {}, { id: '', role: 'seniorApprover' }, { id: 1, role: 'seniorApprover' }, buyer, requester]) {\n    assert.throws(() => app.approve('high', actor, 0), Error);\n    assert.deepEqual(app.detail('high'), original);\n  }\n  for (const now of [-1, 0.1, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, '0', null]) {\n    assert.throws(() => app.approve('high', senior, now), Error);\n    assert.deepEqual(app.detail('high'), original);\n  }\n  const approved = app.approve('high', senior, 0);\n  for (const actor of [senior, approver]) {\n    assert.throws(() => app.approve('high', actor, 0), Error);\n    assert.deepEqual(app.detail('high'), approved);\n  }\n});\n"
+    },
+    {
+      "id": "A/F1/entry.mjs:65:67:65:68",
+      "arm": "A",
+      "stage": "F1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        65,
+        67
+      ],
+      "new_range": [
+        65,
+        68
+      ],
+      "added": 3,
+      "deleted": 2,
+      "old": "      validateCommand(actor, 'approver', now);\n      return transition(id, actor, 'approver', now, 'submitted', {\n",
+      "new": "      const role = get(id).requestedYen >= 100000 ? 'seniorApprover' : 'approver';\n      validateCommand(actor, role, now);\n      return transition(id, actor, role, now, 'submitted', {\n"
+    },
+    {
+      "id": "A/F2/approval.test.mjs:14:15:14:15",
+      "arm": "A",
+      "stage": "F2",
+      "path": "approval.test.mjs",
+      "category": "tests",
+      "old_range": [
+        14,
+        15
+      ],
+      "new_range": [
+        14,
+        15
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  app.submit(input('low', 99999, Number.MAX_SAFE_INTEGER), requester, 10);\n",
+      "new": "  app.submit(input('low', 49999, Number.MAX_SAFE_INTEGER), requester, 10);\n"
+    },
+    {
+      "id": "A/F2/approval.test.mjs:26:26:26:46",
+      "arm": "A",
+      "stage": "F2",
+      "path": "approval.test.mjs",
+      "category": "tests",
+      "old_range": [
+        26,
+        26
+      ],
+      "new_range": [
+        26,
+        46
+      ],
+      "added": 20,
+      "deleted": 0,
+      "old": "",
+      "new": "});\n\ntest('pending requests use current authority and later commands preserve event history', () => {\n  const app = createApp();\n  const pending = [50000, 99999].map(amount => app.submit(input(String(amount), amount), requester, 0));\n  app.submit(input('approved', 49999), requester, 0);\n  const approved = app.approve('approved', approver, 1);\n  app.submit(input('purchased', 49999), requester, 0);\n  app.approve('purchased', approver, 1);\n  const purchased = app.purchase('purchased', 100000, buyer, 2);\n  for (const original of pending) {\n    assert.throws(() => app.approve(original.id, approver, 100), Error);\n    assert.deepEqual(app.detail(original.id), original);\n    assert.equal(app.approve(original.id, senior, 101).approvedBy, senior.id);\n    assert.deepEqual(app.detail('approved'), approved);\n    assert.deepEqual(app.detail('purchased'), purchased);\n  }\n  assert.deepEqual(app.purchase('approved', 50000, buyer, 102), {\n    ...approved, purchasedAt: 102, purchasedBy: buyer.id, actualYen: 50000, status: 'purchased',\n  });\n"
+    },
+    {
+      "id": "A/F2/entry.mjs:65:66:65:66",
+      "arm": "A",
+      "stage": "F2",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        65,
+        66
+      ],
+      "new_range": [
+        65,
+        66
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "      const role = get(id).requestedYen >= 100000 ? 'seniorApprover' : 'approver';\n",
+      "new": "      const role = get(id).requestedYen >= 50000 ? 'seniorApprover' : 'approver';\n"
+    },
+    {
+      "id": "B/S0/additional.test.mjs:0:0:0:36",
+      "arm": "B",
+      "stage": "S0",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        36
+      ],
+      "added": 36,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\n\nconst requester = { id: 'r', role: 'requester' };\nconst approver = { id: 'r', role: 'approver' };\nconst input = (id, requestedYen = 1) => ({ id, item: 'desk', quantity: 1, requestedYen, reason: 'work' });\n\ntest('approval authority is unchanged across amounts, including the maximum total', () => {\n  const app = createApp();\n  for (const amount of [1, 100000, Number.MAX_SAFE_INTEGER]) {\n    const id = String(amount);\n    app.submit(input(id, amount), requester, Number.MAX_SAFE_INTEGER);\n    assert.equal(app.approve(id, approver, 0).status, 'approved');\n  }\n});\n\ntest('IDs are preserved exactly and sort by UTF-16 string comparison', () => {\n  const app = createApp();\n  const ids = ['constructor', ' ', 'a ', 'a', '\\u{10000}', '\\uE000'];\n  for (const id of ids) app.submit(input(id), requester, 0);\n  assert.deepEqual(app.list().map(row => row.id), [' ', 'a', 'a ', 'constructor', '\\u{10000}', '\\uE000']);\n});\n\ntest('missing inputs and unrecognized actor roles fail without altering existing records', () => {\n  const app = createApp();\n  app.submit(input('existing'), requester, 0);\n  const before = app.list();\n  for (const value of [null, undefined, {}, []]) {\n    assert.throws(() => app.submit(value, requester, 0), Error);\n  }\n  for (const role of ['', 'admin', undefined]) {\n    assert.throws(() => app.approve('existing', { id: 'a', role }, 0), Error);\n  }\n  assert.deepEqual(app.list(), before);\n});\n"
+    },
+    {
+      "id": "B/S0/entry.mjs:0:0:0:100",
+      "arm": "B",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        100
+      ],
+      "added": 100,
+      "deleted": 0,
+      "old": "",
+      "new": "const roles = new Set(['requester', 'approver', 'buyer']);\n\nfunction requireCondition(condition, message) {\n  if (!condition) throw new Error(message);\n}\n\nfunction nonemptyString(value) {\n  return typeof value === 'string' && value.length > 0;\n}\n\nfunction validateCommand(actor, now) {\n  requireCondition(actor && nonemptyString(actor.id) && roles.has(actor.role), 'Invalid actor');\n  requireCondition(Number.isSafeInteger(now) && now >= 0, 'Invalid timestamp');\n}\n\nfunction requireRole(actor, role) {\n  requireCondition(actor.role === role, 'Wrong role');\n}\n\nfunction positiveInteger(value) {\n  requireCondition(Number.isSafeInteger(value) && value > 0, 'Expected positive safe integer');\n  return value;\n}\n\nfunction trimmedText(value) {\n  requireCondition(typeof value === 'string' && value.trim().length > 0, 'Expected nonempty text');\n  return value.trim();\n}\n\n// Keep the approval authority decision in one place for future amount-based rules.\n// The record supplies requestedYen; today's rule deliberately has no amount limit.\nfunction requireApprovalAuthority(record, actor) {\n  requireRole(actor, 'approver');\n}\n\nexport function createApp() {\n  const records = new Map();\n\n  function lookup(id, status) {\n    requireCondition(records.has(id), 'Unknown request');\n    const record = records.get(id);\n    if (status !== undefined) requireCondition(record.status === status, 'Invalid transition');\n    return record;\n  }\n\n  function save(record) {\n    records.set(record.id, record);\n    return { ...record };\n  }\n\n  return {\n    submit(input, actor, now) {\n      validateCommand(actor, now);\n      requireRole(actor, 'requester');\n      requireCondition(input && nonemptyString(input.id), 'Invalid ID');\n      requireCondition(!records.has(input.id), 'Duplicate ID');\n      return save({\n        id: input.id,\n        requesterId: actor.id,\n        item: trimmedText(input.item),\n        quantity: positiveInteger(input.quantity),\n        requestedYen: positiveInteger(input.requestedYen),\n        reason: trimmedText(input.reason),\n        submittedAt: now,\n        status: 'submitted',\n      });\n    },\n\n    approve(id, actor, now) {\n      validateCommand(actor, now);\n      const record = lookup(id, 'submitted');\n      requireApprovalAuthority(record, actor);\n      return save({ ...record, approvedAt: now, approvedBy: actor.id, status: 'approved' });\n    },\n\n    reject(id, reason, actor, now) {\n      validateCommand(actor, now);\n      requireRole(actor, 'approver');\n      const record = lookup(id, 'submitted');\n      const rejectionReason = trimmedText(reason);\n      return save({ ...record, rejectedAt: now, rejectedBy: actor.id, rejectionReason, status: 'rejected' });\n    },\n\n    purchase(id, actualYen, actor, now) {\n      validateCommand(actor, now);\n      requireRole(actor, 'buyer');\n      const record = lookup(id, 'approved');\n      positiveInteger(actualYen);\n      return save({ ...record, purchasedAt: now, purchasedBy: actor.id, actualYen, status: 'purchased' });\n    },\n\n    detail(id) {\n      return { ...lookup(id) };\n    },\n\n    list() {\n      return [...records.keys()].sort().map(id => ({ ...records.get(id) }));\n    },\n  };\n}\n"
+    },
+    {
+      "id": "B/U1/additional.test.mjs:36:36:36:76",
+      "arm": "B",
+      "stage": "U1",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        36,
+        36
+      ],
+      "new_range": [
+        36,
+        76
+      ],
+      "added": 40,
+      "deleted": 0,
+      "old": "",
+      "new": "\ntest('note validation is atomic and counts mixed UTF-16 code units', () => {\n  const app = createApp();\n  const note = '\ud83d\ude00'.repeat(139) + ' x';\n  app.submit({ ...input('kept'), note }, requester, 0);\n  const before = app.detail('kept');\n  for (const invalid of [undefined, {}, [], new String('text'), note + 'x']) {\n    assert.throws(() => app.submit({ ...input('retry'), note: invalid }, requester, 0), Error);\n    assert.deepEqual(app.detail('kept'), before);\n    assert.throws(() => app.detail('retry'), Error);\n  }\n  assert.equal(app.submit({ ...input('retry'), note: '' }, requester, 0).note, '');\n});\n\ntest('note copies and list omission survive every event', () => {\n  const app = createApp();\n  const request = { ...input('p'), note: ' \\nprivate\\t ' };\n  const note = request.note;\n  const submitted = app.submit(request, requester, 0);\n  request.note = 'changed';\n  submitted.note = 'changed';\n  app.detail('p').note = 'changed';\n  function verify() {\n    const detail = app.detail('p');\n    assert.equal(detail.note, note);\n    const { note: omitted, ...expected } = detail;\n    assert.deepEqual(app.list(), [expected]);\n    app.list()[0].note = 'injected';\n    assert.equal(app.detail('p').note, note);\n  }\n  verify();\n  app.approve('p', approver, 0).note = 'changed';\n  verify();\n  app.purchase('p', 2, { id: 'b', role: 'buyer' }, 0).note = 'changed';\n  verify();\n  app.submit({ ...input('r'), note }, requester, 0);\n  app.reject('r', 'no', approver, 0).note = 'changed';\n  assert.equal(app.detail('r').note, note);\n  assert.ok(app.list().every(row => !Object.hasOwn(row, 'note')));\n});\n"
+    },
+    {
+      "id": "B/U1/entry.mjs:29:29:29:39",
+      "arm": "B",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        29,
+        29
+      ],
+      "new_range": [
+        29,
+        39
+      ],
+      "added": 10,
+      "deleted": 0,
+      "old": "",
+      "new": "function submissionNote(input) {\n  if (!Object.hasOwn(input, 'note')) return '';\n  requireCondition(typeof input.note === 'string' && input.note.length <= 280, 'Invalid note');\n  return input.note;\n}\n\nfunction detailRecord(record) {\n  return { ...record, note: record.note ?? '' };\n}\n\n"
+    },
+    {
+      "id": "B/U1/entry.mjs:47:48:57:58",
+      "arm": "B",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        47,
+        48
+      ],
+      "new_range": [
+        57,
+        58
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    return { ...record };\n",
+      "new": "    return detailRecord(record);\n"
+    },
+    {
+      "id": "B/U1/entry.mjs:63:63:73:74",
+      "arm": "B",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        63,
+        63
+      ],
+      "new_range": [
+        73,
+        74
+      ],
+      "added": 1,
+      "deleted": 0,
+      "old": "",
+      "new": "        note: submissionNote(input),\n"
+    },
+    {
+      "id": "B/U1/entry.mjs:92:93:103:104",
+      "arm": "B",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        92,
+        93
+      ],
+      "new_range": [
+        103,
+        104
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "      return { ...lookup(id) };\n",
+      "new": "      return detailRecord(lookup(id));\n"
+    },
+    {
+      "id": "B/U1/entry.mjs:96:97:107:111",
+      "arm": "B",
+      "stage": "U1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        96,
+        97
+      ],
+      "new_range": [
+        107,
+        111
+      ],
+      "added": 4,
+      "deleted": 1,
+      "old": "      return [...records.keys()].sort().map(id => ({ ...records.get(id) }));\n",
+      "new": "      return [...records.keys()].sort().map(id => {\n        const { note, ...summary } = records.get(id);\n        return summary;\n      });\n"
+    },
+    {
+      "id": "B/U2/additional.test.mjs:76:76:76:101",
+      "arm": "B",
+      "stage": "U2",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        76,
+        76
+      ],
+      "new_range": [
+        76,
+        101
+      ],
+      "added": 25,
+      "deleted": 0,
+      "old": "",
+      "new": "\ntest('filters validate even on empty state and retain no query state', () => {\n  const app = createApp();\n  for (const value of [undefined, {}, /desk/, new String('desk')]) {\n    assert.throws(() => app.list({ itemContains: value }), Error);\n    assert.deepEqual(app.list(), []);\n  }\n  app.submit({ ...input('p'), item: '  Desk [Blue]  ', note: 'secret' }, requester, 0);\n  const before = app.detail('p');\n  const filter = { itemContains: '[Blue]' };\n  const rows = app.list(filter);\n  assert.equal(rows.length, 1);\n  assert.ok(!Object.hasOwn(rows[0], 'note'));\n  rows[0].item = 'changed';\n  rows[0].note = 'injected';\n  rows.length = 0;\n  filter.itemContains = ' Desk';\n  assert.deepEqual(app.list(filter), []);\n  assert.equal(app.list({ itemContains: 'k [' }).length, 1);\n  assert.deepEqual(app.list({ itemContains: '.*' }), []);\n  assert.deepEqual(app.list({ itemContains: 'secret' }), []);\n  assert.deepEqual(app.detail('p'), before);\n  assert.equal(app.list().length, 1);\n  assert.deepEqual(app.list(undefined), app.list());\n});\n"
+    },
+    {
+      "id": "B/U2/entry.mjs:106:108:106:111",
+      "arm": "B",
+      "stage": "U2",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        106,
+        108
+      ],
+      "new_range": [
+        106,
+        111
+      ],
+      "added": 5,
+      "deleted": 2,
+      "old": "    list() {\n      return [...records.keys()].sort().map(id => {\n",
+      "new": "    list(filter = {}) {\n      const hasItemContains = Object.hasOwn(filter, 'itemContains');\n      const itemContains = hasItemContains ? filter.itemContains : '';\n      requireCondition(typeof itemContains === 'string', 'Invalid item filter');\n      return [...records.keys()].sort().filter(id => records.get(id).item.includes(itemContains)).map(id => {\n"
+    },
+    {
+      "id": "B/F1/additional.test.mjs:8:9:8:9",
+      "arm": "B",
+      "stage": "F1",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        8,
+        9
+      ],
+      "new_range": [
+        8,
+        9
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "test('approval authority is unchanged across amounts, including the maximum total', () => {\n",
+      "new": "test('approval authority uses the total, including maximum quantity and total', () => {\n"
+    },
+    {
+      "id": "B/F1/additional.test.mjs:10:11:10:16",
+      "arm": "B",
+      "stage": "F1",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        10,
+        11
+      ],
+      "new_range": [
+        10,
+        16
+      ],
+      "added": 6,
+      "deleted": 1,
+      "old": "  for (const amount of [1, 100000, Number.MAX_SAFE_INTEGER]) {\n",
+      "new": "  for (const [amount, role, deniedRole] of [\n    [1, 'approver', 'seniorApprover'],\n    [99999, 'approver', 'seniorApprover'],\n    [100000, 'seniorApprover', 'approver'],\n    [Number.MAX_SAFE_INTEGER, 'seniorApprover', 'approver'],\n  ]) {\n"
+    },
+    {
+      "id": "B/F1/additional.test.mjs:12:14:17:22",
+      "arm": "B",
+      "stage": "F1",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        12,
+        14
+      ],
+      "new_range": [
+        17,
+        22
+      ],
+      "added": 5,
+      "deleted": 2,
+      "old": "    app.submit(input(id, amount), requester, Number.MAX_SAFE_INTEGER);\n    assert.equal(app.approve(id, approver, 0).status, 'approved');\n",
+      "new": "    const initial = app.submit({ ...input(id, amount), quantity: Number.MAX_SAFE_INTEGER }, requester, Number.MAX_SAFE_INTEGER);\n    assert.throws(() => app.approve(id, { id: 'denied', role: deniedRole }, 0), Error);\n    assert.deepEqual(app.detail(id), initial);\n    const approved = app.approve(id, { id: requester.id, role }, 0);\n    assert.deepEqual(approved, { ...initial, status: 'approved', approvedAt: 0, approvedBy: requester.id });\n"
+    },
+    {
+      "id": "B/F1/additional.test.mjs:15:15:23:45",
+      "arm": "B",
+      "stage": "F1",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        15,
+        15
+      ],
+      "new_range": [
+        23,
+        45
+      ],
+      "added": 22,
+      "deleted": 0,
+      "old": "",
+      "new": "});\n\ntest('senior approval validates actor and timestamp before writing and preserves its event', () => {\n  const app = createApp();\n  const initial = app.submit({ ...input('p', 100000), note: 'private' }, requester, 10);\n  const senior = { id: 'senior', role: 'seniorApprover' };\n  for (const actor of [{ ...senior, id: '' }, { ...senior, id: 1 }]) {\n    assert.throws(() => app.approve('p', actor, 0), Error);\n    assert.deepEqual(app.detail('p'), initial);\n  }\n  for (const now of [-1, 0.5, Number.MAX_SAFE_INTEGER + 1]) {\n    assert.throws(() => app.approve('p', senior, now), Error);\n    assert.deepEqual(app.detail('p'), initial);\n  }\n  const approved = app.approve('p', senior, 0);\n  senior.id = 'changed';\n  assert.deepEqual(app.detail('p'), approved);\n  const purchased = app.purchase('p', 1, { id: 'buyer', role: 'buyer' }, 0);\n  assert.deepEqual(purchased, { ...approved, status: 'purchased', purchasedAt: 0, purchasedBy: 'buyer', actualYen: 1 });\n  assert.throws(() => app.approve('p', senior, 0), Error);\n  assert.deepEqual(app.detail('p'), purchased);\n  assert.ok(!Object.hasOwn(app.list({ itemContains: 'desk' })[0], 'note'));\n"
+    },
+    {
+      "id": "B/F1/entry.mjs:0:1:0:1",
+      "arm": "B",
+      "stage": "F1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        1
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "const roles = new Set(['requester', 'approver', 'buyer']);\n",
+      "new": "const roles = new Set(['requester', 'approver', 'seniorApprover', 'buyer']);\n"
+    },
+    {
+      "id": "B/F1/entry.mjs:39:41:39:40",
+      "arm": "B",
+      "stage": "F1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        39,
+        41
+      ],
+      "new_range": [
+        39,
+        40
+      ],
+      "added": 1,
+      "deleted": 2,
+      "old": "// Keep the approval authority decision in one place for future amount-based rules.\n// The record supplies requestedYen; today's rule deliberately has no amount limit.\n",
+      "new": "// Approval roles are exclusive and depend on the requested total, not unit price.\n"
+    },
+    {
+      "id": "B/F1/entry.mjs:42:43:41:42",
+      "arm": "B",
+      "stage": "F1",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        42,
+        43
+      ],
+      "new_range": [
+        41,
+        42
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  requireRole(actor, 'approver');\n",
+      "new": "  requireRole(actor, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');\n"
+    },
+    {
+      "id": "B/F2/additional.test.mjs:12:13:12:15",
+      "arm": "B",
+      "stage": "F2",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        12,
+        13
+      ],
+      "new_range": [
+        12,
+        15
+      ],
+      "added": 3,
+      "deleted": 1,
+      "old": "    [99999, 'approver', 'seniorApprover'],\n",
+      "new": "    [49999, 'approver', 'seniorApprover'],\n    [50000, 'seniorApprover', 'approver'],\n    [99999, 'seniorApprover', 'approver'],\n"
+    },
+    {
+      "id": "B/F2/additional.test.mjs:23:23:25:47",
+      "arm": "B",
+      "stage": "F2",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        23,
+        23
+      ],
+      "new_range": [
+        25,
+        47
+      ],
+      "added": 22,
+      "deleted": 0,
+      "old": "",
+      "new": "});\n\ntest('pending requests use the current threshold regardless of submission timestamp', () => {\n  const app = createApp();\n  const senior = { id: 's', role: 'seniorApprover' };\n  const buyer = { id: 'b', role: 'buyer' };\n  app.submit(input('approved'), requester, 0);\n  const approved = app.approve('approved', approver, 0);\n  app.submit(input('purchased'), requester, 0);\n  app.approve('purchased', approver, 0);\n  const purchased = app.purchase('purchased', 100000, buyer, 0);\n  for (const [id, time] of [['old-pending', 0], ['new-pending', Number.MAX_SAFE_INTEGER]]) {\n    const pending = app.submit(input(id, 75000), requester, time);\n    assert.throws(() => app.approve(id, approver, 1), Error);\n    assert.deepEqual(app.detail(id), pending);\n    assert.equal(app.approve(id, senior, 1).approvedBy, 's');\n    assert.deepEqual(app.detail('approved'), approved);\n    assert.deepEqual(app.detail('purchased'), purchased);\n  }\n  app.submit(input('reject', 50000), requester, 0);\n  assert.throws(() => app.reject('reject', 'no', senior, 0), Error);\n  assert.equal(app.reject('reject', 'no', approver, 0).status, 'rejected');\n"
+    },
+    {
+      "id": "B/F2/entry.mjs:41:42:41:42",
+      "arm": "B",
+      "stage": "F2",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        41,
+        42
+      ],
+      "new_range": [
+        41,
+        42
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  requireRole(actor, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');\n",
+      "new": "  requireRole(actor, record.requestedYen >= 50000 ? 'seniorApprover' : 'approver');\n"
+    },
+    {
+      "id": "C/S0/additional.test.mjs:0:0:0:35",
+      "arm": "C",
+      "stage": "S0",
+      "path": "additional.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        35
+      ],
+      "added": 35,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst input = id => ({ id, item: 'Monitor', quantity: 3, requestedYen: 1, reason: 'Work' });\n\ntest('IDs retain whitespace; totals are not multiplied by quantity', () => {\n  const app = createApp();\n  assert.equal(app.submit(input(' '), requester, 0).id, ' ');\n  assert.equal(app.detail(' ').requestedYen, 1);\n});\n\ntest('missing input, unsupported role, and malformed query IDs fail without changing state', () => {\n  const app = createApp();\n  for (const value of [undefined, null, 1, 'text']) assert.throws(() => app.submit(value, requester, 0), Error);\n  assert.throws(() => app.submit(input('x'), { id: 'r', role: 'admin' }, 0), Error);\n  assert.deepEqual(app.list(), []);\n  app.submit(input('x'), requester, 0);\n  const before = app.list();\n  for (const id of [null, undefined, {}, 1]) assert.throws(() => app.detail(id), Error);\n  assert.deepEqual(app.list(), before);\n});\n\ntest('previous snapshots and another application remain independent through transitions', () => {\n  const first = createApp();\n  const second = createApp();\n  const submitted = first.submit(input('x'), requester, 100);\n  second.submit(input('x'), requester, 100);\n  const approved = first.approve('x', { id: 'r', role: 'approver' }, 0);\n  first.purchase('x', 2, { id: 'b', role: 'buyer' }, 0);\n  assert.equal(submitted.status, 'submitted');\n  assert.equal(approved.status, 'approved');\n  assert.equal(second.detail('x').status, 'submitted');\n  assert.equal('approvedAt' in submitted, false);\n});\n"
+    },
+    {
+      "id": "C/S0/entry.mjs:0:0:0:18",
+      "arm": "C",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        18
+      ],
+      "added": 18,
+      "deleted": 0,
+      "old": "",
+      "new": "import { submit } from './slices/submit.mjs';\nimport { approve } from './slices/approve.mjs';\nimport { reject } from './slices/reject.mjs';\nimport { purchase } from './slices/purchase.mjs';\nimport { detail } from './slices/detail.mjs';\nimport { list } from './slices/list.mjs';\n\nexport function createApp() {\n  const records = new Map();\n  return {\n    submit: (input, actor, now) => submit(records, input, actor, now),\n    approve: (id, actor, now) => approve(records, id, actor, now),\n    reject: (id, reason, actor, now) => reject(records, id, reason, actor, now),\n    purchase: (id, actualYen, actor, now) => purchase(records, id, actualYen, actor, now),\n    detail: id => detail(records, id),\n    list: () => list(records),\n  };\n}\n"
+    },
+    {
+      "id": "C/S0/slices/approve.mjs:0:0:0:8",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/approve.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        8
+      ],
+      "added": 8,
+      "deleted": 0,
+      "old": "",
+      "new": "import { commandContext, target } from '../validation.mjs';\n\nexport function approve(records, id, actor, now) {\n  commandContext(actor, now, 'approver');\n  const record = { ...target(records, id, 'submitted'), approvedAt: now, approvedBy: actor.id, status: 'approved' };\n  records.set(id, record);\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/slices/detail.mjs:0:0:0:5",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/detail.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        5
+      ],
+      "added": 5,
+      "deleted": 0,
+      "old": "",
+      "new": "import { target } from '../validation.mjs';\n\nexport function detail(records, id) {\n  return { ...target(records, id) };\n}\n"
+    },
+    {
+      "id": "C/S0/slices/list.mjs:0:0:0:5",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/list.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        5
+      ],
+      "added": 5,
+      "deleted": 0,
+      "old": "",
+      "new": "export function list(records) {\n  return [...records.values()]\n    .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)\n    .map(record => ({ ...record }));\n}\n"
+    },
+    {
+      "id": "C/S0/slices/purchase.mjs:0:0:0:11",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/purchase.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        11
+      ],
+      "added": 11,
+      "deleted": 0,
+      "old": "",
+      "new": "import { commandContext, positiveInteger, target } from '../validation.mjs';\n\nexport function purchase(records, id, actualYen, actor, now) {\n  commandContext(actor, now, 'buyer');\n  const record = {\n    ...target(records, id, 'approved'), actualYen: positiveInteger(actualYen),\n    purchasedAt: now, purchasedBy: actor.id, status: 'purchased',\n  };\n  records.set(id, record);\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/slices/reject.mjs:0:0:0:11",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/reject.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        11
+      ],
+      "added": 11,
+      "deleted": 0,
+      "old": "",
+      "new": "import { commandContext, target, trimmedText } from '../validation.mjs';\n\nexport function reject(records, id, reason, actor, now) {\n  commandContext(actor, now, 'approver');\n  const record = {\n    ...target(records, id, 'submitted'), rejectionReason: trimmedText(reason),\n    rejectedAt: now, rejectedBy: actor.id, status: 'rejected',\n  };\n  records.set(id, record);\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/slices/submit.mjs:0:0:0:15",
+      "arm": "C",
+      "stage": "S0",
+      "path": "slices/submit.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        15
+      ],
+      "added": 15,
+      "deleted": 0,
+      "old": "",
+      "new": "import { commandContext, nonemptyString, positiveInteger, requireCondition, trimmedText } from '../validation.mjs';\n\nexport function submit(records, input, actor, now) {\n  commandContext(actor, now, 'requester');\n  requireCondition(input !== null && typeof input === 'object', 'Invalid input');\n  const { id, item, quantity, requestedYen, reason } = input;\n  requireCondition(nonemptyString(id) && !records.has(id), 'Invalid or duplicate ID');\n  const record = {\n    id, requesterId: actor.id, item: trimmedText(item),\n    quantity: positiveInteger(quantity), requestedYen: positiveInteger(requestedYen),\n    reason: trimmedText(reason), submittedAt: now, status: 'submitted',\n  };\n  records.set(id, record);\n  return { ...record };\n}\n"
+    },
+    {
+      "id": "C/S0/validation.mjs:0:0:0:24",
+      "arm": "C",
+      "stage": "S0",
+      "path": "validation.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        24
+      ],
+      "added": 24,
+      "deleted": 0,
+      "old": "",
+      "new": "export function requireCondition(condition, message) {\n  if (!condition) throw new Error(message);\n}\nexport function nonemptyString(value) {\n  return typeof value === 'string' && value.length > 0;\n}\nexport function commandContext(actor, now, role) {\n  requireCondition(actor !== null && typeof actor === 'object' && nonemptyString(actor.id) && actor.role === role, 'Invalid actor or role');\n  requireCondition(Number.isSafeInteger(now) && now >= 0, 'Invalid timestamp');\n}\nexport function positiveInteger(value) {\n  requireCondition(Number.isSafeInteger(value) && value > 0, 'Expected positive safe integer');\n  return value;\n}\nexport function trimmedText(value) {\n  requireCondition(typeof value === 'string' && value.trim().length > 0, 'Expected nonempty text');\n  return value.trim();\n}\nexport function target(records, id, status) {\n  requireCondition(records.has(id), 'Unknown ID');\n  const record = records.get(id);\n  if (status !== undefined) requireCondition(record.status === status, 'Invalid transition');\n  return record;\n}\n"
+    },
+    {
+      "id": "C/U1/note.test.mjs:0:0:0:55",
+      "arm": "C",
+      "stage": "U1",
+      "path": "note.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        55
+      ],
+      "added": 55,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nimport { detail } from './slices/detail.mjs';\nimport { list } from './slices/list.mjs';\nimport { approve } from './slices/approve.mjs';\nimport { reject } from './slices/reject.mjs';\nimport { purchase } from './slices/purchase.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst approver = { id: 'a', role: 'approver' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst input = id => ({ id, item: 'Desk', quantity: 1, requestedYen: 10, reason: 'Work' });\n\ntest('supplied non-string notes are rejected atomically, including undefined', () => {\n  const app = createApp();\n  const initial = app.submit({ ...input('existing'), note: 'private' }, requester, 0);\n  for (const note of [undefined, {}, [], new String('text'), 0n, Symbol('note')]) {\n    assert.throws(() => app.submit({ ...input('new'), note }, requester, 0), Error);\n    assert.deepEqual(app.list().map(row => app.detail(row.id)), [initial]);\n  }\n});\n\ntest('note snapshots and list omission hold after every event', () => {\n  const app = createApp();\n  const note = ' \\n' + '\ud83d\ude00'.repeat(139);\n  const source = { ...input('p'), note };\n  const submitted = app.submit(source, requester, 0);\n  source.note = 'changed';\n  submitted.note = 'changed';\n  assert.equal(app.detail('p').note, note);\n  for (const result of [app.approve('p', approver, 1), app.purchase('p', 1, buyer, 2)]) {\n    assert.equal(result.note, note);\n    result.note = 'changed';\n    assert.equal(app.detail('p').note, note);\n    const rows = app.list();\n    assert.equal('note' in rows[0], false);\n    rows[0].note = 'injected';\n    assert.equal(app.detail('p').note, note);\n  }\n  app.submit({ ...input('r'), note }, requester, 0);\n  assert.equal(app.reject('r', 'no', approver, 0).note, note);\n  assert.ok(app.list().every(row => !('note' in row)));\n});\n\ntest('legacy records normalize on read and transition without mutating queries', () => {\n  const legacy = { ...input('old'), requesterId: 'r', submittedAt: 0, status: 'submitted' };\n  const records = new Map([['old', legacy]]);\n  assert.deepEqual(detail(records, 'old'), { ...legacy, note: '' });\n  assert.equal('note' in legacy, false);\n  assert.deepEqual(list(records), [legacy]);\n  assert.equal(approve(records, 'old', approver, 0).note, '');\n  assert.equal(purchase(records, 'old', 1, buyer, 0).note, '');\n  records.set('old', legacy);\n  assert.equal(reject(records, 'old', 'no', approver, 0).note, '');\n});\n"
+    },
+    {
+      "id": "C/U1/slices/list.mjs:3:4:3:4",
+      "arm": "C",
+      "stage": "U1",
+      "path": "slices/list.mjs",
+      "category": "production",
+      "old_range": [
+        3,
+        4
+      ],
+      "new_range": [
+        3,
+        4
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    .map(record => ({ ...record }));\n",
+      "new": "    .map(({ note, ...record }) => record);\n"
+    },
+    {
+      "id": "C/U1/slices/submit.mjs:7:7:7:9",
+      "arm": "C",
+      "stage": "U1",
+      "path": "slices/submit.mjs",
+      "category": "production",
+      "old_range": [
+        7,
+        7
+      ],
+      "new_range": [
+        7,
+        9
+      ],
+      "added": 2,
+      "deleted": 0,
+      "old": "",
+      "new": "  const note = 'note' in input ? input.note : '';\n  requireCondition(typeof note === 'string' && note.length <= 280, 'Invalid note');\n"
+    },
+    {
+      "id": "C/U1/slices/submit.mjs:10:11:12:13",
+      "arm": "C",
+      "stage": "U1",
+      "path": "slices/submit.mjs",
+      "category": "production",
+      "old_range": [
+        10,
+        11
+      ],
+      "new_range": [
+        12,
+        13
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    reason: trimmedText(reason), submittedAt: now, status: 'submitted',\n",
+      "new": "    reason: trimmedText(reason), submittedAt: now, status: 'submitted', note,\n"
+    },
+    {
+      "id": "C/U1/validation.mjs:22:23:22:23",
+      "arm": "C",
+      "stage": "U1",
+      "path": "validation.mjs",
+      "category": "production",
+      "old_range": [
+        22,
+        23
+      ],
+      "new_range": [
+        22,
+        23
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  return record;\n",
+      "new": "  return { note: '', ...record };\n"
+    },
+    {
+      "id": "C/U2/entry.mjs:15:16:15:16",
+      "arm": "C",
+      "stage": "U2",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        15,
+        16
+      ],
+      "new_range": [
+        15,
+        16
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    list: () => list(records),\n",
+      "new": "    list: (filter = {}) => list(records, filter),\n"
+    },
+    {
+      "id": "C/U2/filter.test.mjs:0:0:0:41",
+      "arm": "C",
+      "stage": "U2",
+      "path": "filter.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        41
+      ],
+      "added": 41,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst submit = (app, id, item) => app.submit({ id, item, quantity: 1, requestedYen: 10, reason: 'Work', note: 'private' }, requester, 0);\n\ntest('invalid supplied filters reject even without records', () => {\n  const app = createApp();\n  for (const itemContains of [undefined, {}, Symbol('x'), 1n, new String('Desk')]) {\n    assert.throws(() => app.list({ itemContains }), Error);\n    assert.deepEqual(app.list(), []);\n  }\n  assert.deepEqual(app.list(undefined), []);\n});\n\ntest('matching is literal, preserves spaces, and uses normalized stored item', () => {\n  const app = createApp();\n  submit(app, 'z', '  Desk [Blue]  ');\n  submit(app, 'A', 'Desk [Blue] Plus');\n  submit(app, 'a', 'DeskXBlue');\n  assert.deepEqual(app.list({ itemContains: '[Blue]' }).map(row => row.id), ['A', 'z']);\n  assert.deepEqual(app.list({ itemContains: 'Desk ' }).map(row => row.id), ['A', 'z']);\n  assert.deepEqual(app.list({ itemContains: '  Desk' }), []);\n  assert.deepEqual(app.list({ itemContains: 'desk' }), []);\n});\n\ntest('filtered rows preserve event fields and cannot change stored data', () => {\n  const app = createApp();\n  submit(app, 'p', 'Desk');\n  app.approve('p', { id: 'a', role: 'approver' }, 1);\n  const purchased = app.purchase('p', 20, { id: 'b', role: 'buyer' }, 2);\n  const { note, ...expected } = purchased;\n  const filter = Object.freeze({ itemContains: 'esk' });\n  const rows = app.list(filter);\n  assert.deepEqual(rows, [expected]);\n  rows[0].actualYen = 999;\n  rows[0].note = 'injected';\n  rows.length = 0;\n  assert.deepEqual(app.detail('p'), purchased);\n  assert.deepEqual(app.list(filter), [expected]);\n});\n"
+    },
+    {
+      "id": "C/U2/slices/list.mjs:0:1:0:5",
+      "arm": "C",
+      "stage": "U2",
+      "path": "slices/list.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        1
+      ],
+      "new_range": [
+        0,
+        5
+      ],
+      "added": 5,
+      "deleted": 1,
+      "old": "export function list(records) {\n",
+      "new": "import { requireCondition } from '../validation.mjs';\n\nexport function list(records, filter = {}) {\n  const itemContains = 'itemContains' in filter ? filter.itemContains : '';\n  requireCondition(typeof itemContains === 'string', 'Invalid item filter');\n"
+    },
+    {
+      "id": "C/U2/slices/list.mjs:2:2:6:7",
+      "arm": "C",
+      "stage": "U2",
+      "path": "slices/list.mjs",
+      "category": "production",
+      "old_range": [
+        2,
+        2
+      ],
+      "new_range": [
+        6,
+        7
+      ],
+      "added": 1,
+      "deleted": 0,
+      "old": "",
+      "new": "    .filter(record => record.item.includes(itemContains))\n"
+    },
+    {
+      "id": "C/F1/approval.test.mjs:0:0:0:52",
+      "arm": "C",
+      "stage": "F1",
+      "path": "approval.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        52
+      ],
+      "added": 52,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nimport { detail } from './slices/detail.mjs';\nimport { approve } from './slices/approve.mjs';\nimport { purchase } from './slices/purchase.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst approver = { id: 'a', role: 'approver' };\nconst senior = { id: 's', role: 'seniorApprover' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst input = (id, requestedYen, quantity = 1) => ({ id, requestedYen, quantity, item: 'Desk', reason: 'Work', note: 'private' });\n\ntest('authority depends on total, including safe-integer maximum; self-approval remains allowed', () => {\n  const app = createApp();\n  app.submit(input('small', 99999, 100), requester, 10);\n  assert.equal(app.approve('small', approver, 0).approvedBy, 'a');\n  app.submit(input('large', Number.MAX_SAFE_INTEGER), requester, 10);\n  const before = app.detail('large');\n  assert.throws(() => app.approve('large', approver, 0), Error);\n  assert.deepEqual(app.detail('large'), before);\n  assert.equal(app.approve('large', { ...senior, id: requester.id }, 0).approvedBy, requester.id);\n});\n\ntest('senior approvals validate actor, timestamp, and repeat transitions atomically', () => {\n  const app = createApp();\n  app.submit(input('p', 100000), requester, 0);\n  const before = app.detail('p');\n  for (const actor of [null, {}, { id: '', role: 'seniorApprover' }, { id: 1, role: 'seniorApprover' }, buyer, requester]) {\n    assert.throws(() => app.approve('p', actor, 0), Error);\n    assert.deepEqual(app.detail('p'), before);\n  }\n  for (const now of [-1, 0.5, undefined, null, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {\n    assert.throws(() => app.approve('p', senior, now), Error);\n    assert.deepEqual(app.detail('p'), before);\n  }\n  const approved = app.approve('p', senior, Number.MAX_SAFE_INTEGER);\n  assert.throws(() => app.approve('p', senior, 0), Error);\n  assert.deepEqual(app.detail('p'), approved);\n});\n\ntest('historical high-value approvals are retained and still purchasable', () => {\n  const old = { ...input('old', 200000), requesterId: 'r', submittedAt: 0, status: 'approved', approvedAt: 1, approvedBy: 'ordinary-before-policy' };\n  const bought = { ...old, id: 'bought', status: 'purchased', purchasedAt: 2, purchasedBy: 'b', actualYen: 300000 };\n  const records = new Map([['old', old], ['bought', bought]]);\n  assert.deepEqual(detail(records, 'old'), old);\n  assert.deepEqual(detail(records, 'bought'), bought);\n  assert.throws(() => approve(records, 'old', senior, 3), Error);\n  assert.deepEqual(detail(records, 'old'), old);\n  assert.deepEqual(purchase(records, 'old', 250000, buyer, 3), { ...old, status: 'purchased', purchasedAt: 3, purchasedBy: 'b', actualYen: 250000 });\n  assert.deepEqual(detail(records, 'bought'), bought);\n  assert.equal(old.status, 'approved');\n});\n"
+    },
+    {
+      "id": "C/F1/slices/approve.mjs:3:5:3:7",
+      "arm": "C",
+      "stage": "F1",
+      "path": "slices/approve.mjs",
+      "category": "production",
+      "old_range": [
+        3,
+        5
+      ],
+      "new_range": [
+        3,
+        7
+      ],
+      "added": 4,
+      "deleted": 2,
+      "old": "  commandContext(actor, now, 'approver');\n  const record = { ...target(records, id, 'submitted'), approvedAt: now, approvedBy: actor.id, status: 'approved' };\n",
+      "new": "  const submitted = target(records, id, 'submitted');\n  const requiredRole = submitted.requestedYen >= 100000 ? 'seniorApprover' : 'approver';\n  commandContext(actor, now, requiredRole);\n  const record = { ...submitted, approvedAt: now, approvedBy: actor.id, status: 'approved' };\n"
+    },
+    {
+      "id": "C/F2/approval.test.mjs:14:15:14:15",
+      "arm": "C",
+      "stage": "F2",
+      "path": "approval.test.mjs",
+      "category": "tests",
+      "old_range": [
+        14,
+        15
+      ],
+      "new_range": [
+        14,
+        15
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  app.submit(input('small', 99999, 100), requester, 10);\n",
+      "new": "  app.submit(input('small', 49999, 100), requester, 10);\n"
+    },
+    {
+      "id": "C/F2/slices/approve.mjs:4:5:4:5",
+      "arm": "C",
+      "stage": "F2",
+      "path": "slices/approve.mjs",
+      "category": "production",
+      "old_range": [
+        4,
+        5
+      ],
+      "new_range": [
+        4,
+        5
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  const requiredRole = submitted.requestedYen >= 100000 ? 'seniorApprover' : 'approver';\n",
+      "new": "  const requiredRole = submitted.requestedYen >= 50000 ? 'seniorApprover' : 'approver';\n"
+    },
+    {
+      "id": "C/F2/threshold.test.mjs:0:0:0:37",
+      "arm": "C",
+      "stage": "F2",
+      "path": "threshold.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        37
+      ],
+      "added": 37,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { approve } from './slices/approve.mjs';\nimport { purchase } from './slices/purchase.mjs';\nimport { detail } from './slices/detail.mjs';\nconst approver = { id: 'a', role: 'approver' };\nconst senior = { id: 's', role: 'seniorApprover' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst pending = (id, amount) => ({ id, requestedYen: amount, quantity: 2, item: 'Desk', reason: 'Work', note: 'private', requesterId: 'r', submittedAt: 0, status: 'submitted' });\n\ntest('pre-change pending requests use current exclusive roles at every boundary', () => {\n  const records = new Map([49999, 50000, 99999, 100000].map(amount => [String(amount), pending(String(amount), amount)]));\n  for (const amount of [49999, 50000, 99999, 100000]) {\n    const id = String(amount);\n    const before = [...records.values()].map(row => ({ ...row }));\n    const allowed = amount >= 50000 ? senior : approver;\n    const denied = amount >= 50000 ? approver : senior;\n    assert.throws(() => approve(records, id, denied, 10), Error);\n    assert.deepEqual([...records.values()], before);\n    assert.deepEqual(approve(records, id, allowed, 11), { ...pending(id, amount), status: 'approved', approvedAt: 11, approvedBy: allowed.id });\n  }\n});\n\ntest('approvals in the changed band retain historical authority and remain purchasable', () => {\n  for (const amount of [50000, 99999]) {\n    const old = { ...pending('old', amount), status: 'approved', approvedAt: 1, approvedBy: 'ordinary-under-100000-rule' };\n    const bought = { ...old, id: 'bought', status: 'purchased', purchasedAt: 2, purchasedBy: 'b', actualYen: amount + 1 };\n    const records = new Map([['old', old], ['bought', bought], ['pending', pending('pending', amount)]]);\n    approve(records, 'pending', senior, 3);\n    assert.deepEqual(detail(records, 'old'), old);\n    assert.deepEqual(detail(records, 'bought'), bought);\n    for (const actor of [approver, senior]) assert.throws(() => approve(records, 'old', actor, 4), Error);\n    assert.deepEqual(detail(records, 'old'), old);\n    assert.deepEqual(purchase(records, 'old', amount + 2, buyer, 4), { ...old, status: 'purchased', purchasedAt: 4, purchasedBy: 'b', actualYen: amount + 2 });\n    assert.deepEqual(detail(records, 'bought'), bought);\n  }\n});\n"
+    },
+    {
+      "id": "D/S0/application.mjs:0:0:0:40",
+      "arm": "D",
+      "stage": "S0",
+      "path": "application.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        40
+      ],
+      "added": 40,
+      "deleted": 0,
+      "old": "",
+      "new": "import { authorize, submission, approval, rejection, purchase } from './domain.mjs';\n\n// Repository port: has(id), get(id), save(record), all().\n// Storage is injected; use cases depend only on this port and domain rules.\nexport function createWorkflow(repository) {\n  function detail(id) {\n    const record = repository.get(id);\n    if (!record) throw new Error('Unknown ID');\n    return { ...record };\n  }\n  function save(record) {\n    repository.save(record);\n    return { ...record };\n  }\n  return {\n    submit(input, actor, now) {\n      authorize(actor, now, 'requester');\n      const record = submission(input, actor.id, now);\n      if (repository.has(record.id)) throw new Error('Duplicate ID');\n      return save(record);\n    },\n    approve(id, actor, now) {\n      authorize(actor, now, 'approver');\n      return save(approval(detail(id), actor.id, now));\n    },\n    reject(id, reason, actor, now) {\n      authorize(actor, now, 'approver');\n      return save(rejection(detail(id), reason, actor.id, now));\n    },\n    purchase(id, actualYen, actor, now) {\n      authorize(actor, now, 'buyer');\n      return save(purchase(detail(id), actualYen, actor.id, now));\n    },\n    detail,\n    list() {\n      return repository.all().map(record => ({ ...record }))\n        .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);\n    },\n  };\n}\n"
+    },
+    {
+      "id": "D/S0/boundaries.test.mjs:0:0:0:38",
+      "arm": "D",
+      "stage": "S0",
+      "path": "boundaries.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        38
+      ],
+      "added": 38,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nconst actor = { id: ' ', role: 'requester' };\nconst input = { id: ' ', item: '\\t desk\\n', quantity: 1, requestedYen: 1, reason: '\\n work\\t' };\n\ntest('IDs are literal nonempty strings and extra input fields are excluded', () => {\n  const app = createApp();\n  const row = app.submit({ ...input, actualYen: 999, status: 'purchased', nested: {} }, actor, 0);\n  assert.equal(row.id, ' ');\n  assert.equal(row.requesterId, ' ');\n  assert.equal(row.item, 'desk');\n  assert.equal(row.reason, 'work');\n  assert.equal(row.status, 'submitted');\n  assert.equal('actualYen' in row, false);\n  assert.equal('nested' in row, false);\n});\n\ntest('malformed input and unknown roles do not reserve IDs', () => {\n  const app = createApp();\n  for (const value of [null, undefined, {}, 3, 'x']) {\n    assert.throws(() => app.submit(value, actor, 0), Error);\n    assert.deepEqual(app.list(), []);\n  }\n  assert.throws(() => app.submit(input, { id: 'r', role: 'admin' }, 0), Error);\n  assert.equal(app.submit(input, actor, 0).status, 'submitted');\n});\n\ntest('failed duplicate and unknown commands preserve every existing record', () => {\n  const app = createApp();\n  app.submit(input, actor, 0);\n  const before = app.list();\n  assert.throws(() => app.submit({ ...input, item: 'replacement' }, actor, 0));\n  assert.throws(() => app.approve(undefined, { id: 'a', role: 'approver' }, 0));\n  assert.deepEqual(app.list(), before);\n  app.approve(' ', { id: 'a', role: 'approver' }, 100);\n  assert.equal(app.purchase(' ', 2, { id: 'b', role: 'buyer' }, 0).purchasedAt, 0);\n});\n"
+    },
+    {
+      "id": "D/S0/domain.mjs:0:0:0:43",
+      "arm": "D",
+      "stage": "S0",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        43
+      ],
+      "added": 43,
+      "deleted": 0,
+      "old": "",
+      "new": "// Pure domain rules: no dependency on application orchestration or storage.\nexport function nonempty(value, name) {\n  if (typeof value !== 'string' || value.length === 0) throw new Error(`Invalid ${name}`);\n  return value;\n}\nfunction trimmed(value, name) {\n  nonempty(value, name);\n  return nonempty(value.trim(), name);\n}\nfunction positive(value, name) {\n  if (!Number.isSafeInteger(value) || value <= 0) throw new Error(`Invalid ${name}`);\n  return value;\n}\nexport function authorize(actor, now, role) {\n  if (!actor || typeof actor !== 'object') throw new Error('Invalid actor');\n  nonempty(actor.id, 'actor ID');\n  if (actor.role !== role) throw new Error('Wrong role');\n  if (!Number.isSafeInteger(now) || now < 0) throw new Error('Invalid timestamp');\n}\nexport function submission(input, requesterId, now) {\n  if (!input || typeof input !== 'object') throw new Error('Invalid input');\n  return {\n    id: nonempty(input.id, 'ID'), requesterId,\n    item: trimmed(input.item, 'item'), quantity: positive(input.quantity, 'quantity'),\n    requestedYen: positive(input.requestedYen, 'requested yen'),\n    reason: trimmed(input.reason, 'reason'), submittedAt: now, status: 'submitted',\n  };\n}\nfunction requireStatus(record, status) {\n  if (record.status !== status) throw new Error('Invalid transition');\n}\nexport function approval(record, actorId, now) {\n  requireStatus(record, 'submitted');\n  return { ...record, approvedAt: now, approvedBy: actorId, status: 'approved' };\n}\nexport function rejection(record, reason, actorId, now) {\n  requireStatus(record, 'submitted');\n  return { ...record, rejectionReason: trimmed(reason, 'rejection reason'), rejectedAt: now, rejectedBy: actorId, status: 'rejected' };\n}\nexport function purchase(record, actualYen, actorId, now) {\n  requireStatus(record, 'approved');\n  return { ...record, actualYen: positive(actualYen, 'actual yen'), purchasedAt: now, purchasedBy: actorId, status: 'purchased' };\n}\n"
+    },
+    {
+      "id": "D/S0/entry.mjs:0:0:0:7",
+      "arm": "D",
+      "stage": "S0",
+      "path": "entry.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        7
+      ],
+      "added": 7,
+      "deleted": 0,
+      "old": "",
+      "new": "import { createWorkflow } from './application.mjs';\nimport { createMemoryRepository } from './memory.mjs';\n\n// Composition root creates one independent adapter per application instance.\nexport function createApp() {\n  return createWorkflow(createMemoryRepository());\n}\n"
+    },
+    {
+      "id": "D/S0/memory.mjs:0:0:0:10",
+      "arm": "D",
+      "stage": "S0",
+      "path": "memory.mjs",
+      "category": "production",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        10
+      ],
+      "added": 10,
+      "deleted": 0,
+      "old": "",
+      "new": "// Outward storage adapter. All persisted fields are primitives.\nexport function createMemoryRepository() {\n  const records = new Map();\n  return {\n    has: id => records.has(id),\n    get: id => records.has(id) ? { ...records.get(id) } : undefined,\n    save: record => { records.set(record.id, { ...record }); },\n    all: () => Array.from(records.values(), record => ({ ...record })),\n  };\n}\n"
+    },
+    {
+      "id": "D/U1/application.mjs:8:9:8:9",
+      "arm": "D",
+      "stage": "U1",
+      "path": "application.mjs",
+      "category": "production",
+      "old_range": [
+        8,
+        9
+      ],
+      "new_range": [
+        8,
+        9
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "    return { ...record };\n",
+      "new": "    return { note: '', ...record };\n"
+    },
+    {
+      "id": "D/U1/application.mjs:35:36:35:36",
+      "arm": "D",
+      "stage": "U1",
+      "path": "application.mjs",
+      "category": "production",
+      "old_range": [
+        35,
+        36
+      ],
+      "new_range": [
+        35,
+        36
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "      return repository.all().map(record => ({ ...record }))\n",
+      "new": "      return repository.all().map(({ note, ...record }) => record)\n"
+    },
+    {
+      "id": "D/U1/domain.mjs:19:19:19:23",
+      "arm": "D",
+      "stage": "U1",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        19,
+        19
+      ],
+      "new_range": [
+        19,
+        23
+      ],
+      "added": 4,
+      "deleted": 0,
+      "old": "",
+      "new": "function note(value) {\n  if (typeof value !== 'string' || value.length > 280) throw new Error('Invalid note');\n  return value;\n}\n"
+    },
+    {
+      "id": "D/U1/domain.mjs:26:26:30:31",
+      "arm": "D",
+      "stage": "U1",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        26,
+        26
+      ],
+      "new_range": [
+        30,
+        31
+      ],
+      "added": 1,
+      "deleted": 0,
+      "old": "",
+      "new": "    note: 'note' in input ? note(input.note) : '',\n"
+    },
+    {
+      "id": "D/U1/notes.test.mjs:0:0:0:39",
+      "arm": "D",
+      "stage": "U1",
+      "path": "notes.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        39
+      ],
+      "added": 39,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nimport { createWorkflow } from './application.mjs';\nimport { createMemoryRepository } from './memory.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst approver = { id: 'a', role: 'approver' };\nconst input = { id: 'p', item: 'Desk', quantity: 1, requestedYen: 1, reason: 'work' };\n\ntest('supplied undefined note fails atomically and does not reserve ID', () => {\n  const app = createApp();\n  assert.throws(() => app.submit({ ...input, note: undefined }, requester, 0), Error);\n  assert.deepEqual(app.list(), []);\n  assert.equal(app.submit(input, requester, 0).note, '');\n});\n\ntest('legacy records read with empty note and transitions retain it', () => {\n  const repository = createMemoryRepository();\n  const legacy = { ...input, requesterId: 'r', submittedAt: 0, status: 'submitted' };\n  repository.save(legacy);\n  const app = createWorkflow(repository);\n  assert.deepEqual(app.detail('p'), { ...legacy, note: '' });\n  assert.deepEqual(app.list(), [legacy]);\n  assert.deepEqual(repository.get('p'), legacy);\n  assert.equal(app.approve('p', approver, 1).note, '');\n  assert.equal(app.detail('p').note, '');\n  assert.equal(Object.hasOwn(app.list()[0], 'note'), false);\n});\n\ntest('note is isolated in results and never appears in serialized lists', () => {\n  const app = createApp();\n  const submitted = app.submit({ ...input, note: ' private\\n' }, requester, 0);\n  submitted.note = 'changed';\n  app.detail('p').note = 'changed';\n  assert.equal(app.detail('p').note, ' private\\n');\n  assert.equal(JSON.stringify(app.list()).includes('note'), false);\n  app.list()[0].note = 'injected';\n  assert.equal(app.approve('p', approver, 1).note, ' private\\n');\n});\n"
+    },
+    {
+      "id": "D/U2/application.mjs:34:36:34:40",
+      "arm": "D",
+      "stage": "U2",
+      "path": "application.mjs",
+      "category": "production",
+      "old_range": [
+        34,
+        36
+      ],
+      "new_range": [
+        34,
+        40
+      ],
+      "added": 6,
+      "deleted": 2,
+      "old": "    list() {\n      return repository.all().map(({ note, ...record }) => record)\n",
+      "new": "    list(filter = {}) {\n      const itemContains = 'itemContains' in filter ? filter.itemContains : '';\n      if (typeof itemContains !== 'string') throw new Error('Invalid itemContains');\n      return repository.all()\n        .filter(record => record.item.includes(itemContains))\n        .map(({ note, ...record }) => record)\n"
+    },
+    {
+      "id": "D/U2/filtering.test.mjs:0:0:0:30",
+      "arm": "D",
+      "stage": "U2",
+      "path": "filtering.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        30
+      ],
+      "added": 30,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nconst requester = { id: 'r', role: 'requester' };\n\ntest('filter validation applies to empty stores and supplied undefined', () => {\n  const app = createApp();\n  for (const itemContains of [undefined, {}, /desk/, Symbol('desk')]) {\n    assert.throws(() => app.list({ itemContains }), Error);\n    assert.deepEqual(app.list(), []);\n  }\n  assert.deepEqual(app.list(undefined), []);\n});\n\ntest('literal substring filtering preserves whitespace and result isolation', () => {\n  const app = createApp();\n  for (const [id, item] of [['z', 'Blue  Desk'], ['A', 'Blue Desk'], ['a', 'Desk [x]']]) {\n    app.submit({ id, item, quantity: 1, requestedYen: 1, reason: 'work', note: 'private' }, requester, 0);\n  }\n  assert.deepEqual(app.list({ itemContains: '  ' }).map(row => row.id), ['z']);\n  assert.deepEqual(app.list({ itemContains: '[x]' }).map(row => row.id), ['a']);\n  assert.deepEqual(app.list({ itemContains: 'desk' }), []);\n  const results = app.list({ itemContains: 'Desk' });\n  assert.deepEqual(results.map(row => row.id), ['A', 'a', 'z']);\n  assert.ok(results.every(row => !Object.hasOwn(row, 'note')));\n  results[0].item = 'changed';\n  results.length = 0;\n  assert.equal(app.detail('A').item, 'Blue Desk');\n  assert.equal(app.detail('A').note, 'private');\n});\n"
+    },
+    {
+      "id": "D/F1/application.mjs:22:24:22:23",
+      "arm": "D",
+      "stage": "F1",
+      "path": "application.mjs",
+      "category": "production",
+      "old_range": [
+        22,
+        24
+      ],
+      "new_range": [
+        22,
+        23
+      ],
+      "added": 1,
+      "deleted": 2,
+      "old": "      authorize(actor, now, 'approver');\n      return save(approval(detail(id), actor.id, now));\n",
+      "new": "      return save(approval(detail(id), actor, now));\n"
+    },
+    {
+      "id": "D/F1/domain.mjs:36:37:36:38",
+      "arm": "D",
+      "stage": "F1",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        36,
+        37
+      ],
+      "new_range": [
+        36,
+        38
+      ],
+      "added": 2,
+      "deleted": 1,
+      "old": "export function approval(record, actorId, now) {\n",
+      "new": "export function approval(record, actor, now) {\n  authorize(actor, now, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');\n"
+    },
+    {
+      "id": "D/F1/domain.mjs:38:39:39:40",
+      "arm": "D",
+      "stage": "F1",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        38,
+        39
+      ],
+      "new_range": [
+        39,
+        40
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  return { ...record, approvedAt: now, approvedBy: actorId, status: 'approved' };\n",
+      "new": "  return { ...record, approvedAt: now, approvedBy: actor.id, status: 'approved' };\n"
+    },
+    {
+      "id": "D/F1/senior.test.mjs:0:0:0:40",
+      "arm": "D",
+      "stage": "F1",
+      "path": "senior.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        40
+      ],
+      "added": 40,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createApp } from './entry.mjs';\nimport { createWorkflow } from './application.mjs';\nimport { createMemoryRepository } from './memory.mjs';\nconst requester = { id: 'r', role: 'requester' };\nconst senior = { id: 'r', role: 'seniorApprover' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst input = { id: 'p', item: 'Desk', quantity: 2, requestedYen: 100000, reason: 'work', note: 'private' };\n\ntest('senior approval validates actor and time, permits self-approval, and uses total', () => {\n  const app = createApp();\n  const before = app.submit(input, requester, 10);\n  for (const [actor, time] of [[null, 1], [{ id: '', role: 'seniorApprover' }, 1], [senior, -1], [senior, 0.5]]) {\n    assert.throws(() => app.approve('p', actor, time), Error);\n    assert.deepEqual(app.detail('p'), before);\n  }\n  const approved = app.approve('p', senior, 0);\n  assert.equal(approved.approvedBy, requester.id);\n  assert.equal(approved.approvedAt, 0);\n  assert.equal(approved.note, 'private');\n  assert.equal(app.purchase('p', 200000, buyer, 0).actualYen, 200000);\n});\n\ntest('pre-rule high-value approvals and purchases are retained without reauthorization', () => {\n  const repository = createMemoryRepository();\n  const oldApproved = { ...input, requesterId: 'r', submittedAt: 0, status: 'approved', approvedAt: 1, approvedBy: 'ordinary-old-approver' };\n  const oldPurchased = { ...oldApproved, id: 'bought', status: 'purchased', actualYen: 150000, purchasedAt: 2, purchasedBy: 'historical-buyer' };\n  repository.save(oldApproved);\n  repository.save(oldPurchased);\n  const app = createWorkflow(repository);\n  assert.deepEqual(app.detail('p'), oldApproved);\n  assert.deepEqual(app.detail('bought'), oldPurchased);\n  const result = app.purchase('p', 120000, buyer, 3);\n  assert.equal(result.approvedBy, oldApproved.approvedBy);\n  assert.equal(result.approvedAt, oldApproved.approvedAt);\n  assert.deepEqual(app.detail('bought'), oldPurchased);\n  assert.throws(() => app.approve('bought', senior, 4), Error);\n  assert.deepEqual(app.detail('bought'), oldPurchased);\n});\n"
+    },
+    {
+      "id": "D/F2/domain.mjs:37:38:37:38",
+      "arm": "D",
+      "stage": "F2",
+      "path": "domain.mjs",
+      "category": "production",
+      "old_range": [
+        37,
+        38
+      ],
+      "new_range": [
+        37,
+        38
+      ],
+      "added": 1,
+      "deleted": 1,
+      "old": "  authorize(actor, now, record.requestedYen >= 100000 ? 'seniorApprover' : 'approver');\n",
+      "new": "  authorize(actor, now, record.requestedYen >= 50000 ? 'seniorApprover' : 'approver');\n"
+    },
+    {
+      "id": "D/F2/threshold.test.mjs:0:0:0:44",
+      "arm": "D",
+      "stage": "F2",
+      "path": "threshold.test.mjs",
+      "category": "tests",
+      "old_range": [
+        0,
+        0
+      ],
+      "new_range": [
+        0,
+        44
+      ],
+      "added": 44,
+      "deleted": 0,
+      "old": "",
+      "new": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createWorkflow } from './application.mjs';\nimport { createMemoryRepository } from './memory.mjs';\nconst approver = { id: 'a', role: 'approver' };\nconst senior = { id: 's', role: 'seniorApprover' };\nconst buyer = { id: 'b', role: 'buyer' };\nconst base = { item: 'Desk', quantity: 2, reason: 'work', note: 'private', requesterId: 'r', submittedAt: 0 };\n\ntest('pending records from the previous rule use the new exclusive approval threshold', () => {\n  const repository = createMemoryRepository();\n  for (const amount of [49999, 50000, 99999, 100000]) {\n    repository.save({ ...base, id: String(amount), requestedYen: amount, status: 'submitted' });\n  }\n  const app = createWorkflow(repository);\n  for (const amount of [49999, 50000, 99999, 100000]) {\n    const id = String(amount);\n    const before = app.list().map(row => app.detail(row.id));\n    const allowed = amount >= 50000 ? senior : approver;\n    const denied = amount >= 50000 ? approver : senior;\n    assert.throws(() => app.approve(id, denied, 1), Error);\n    assert.deepEqual(app.list().map(row => app.detail(row.id)), before);\n    const approved = app.approve(id, allowed, 2);\n    assert.equal(approved.approvedBy, allowed.id);\n    assert.equal(approved.submittedAt, 0);\n    assert.equal(approved.note, 'private');\n  }\n});\n\ntest('prior approvals in the newly affected range remain valid for purchase', () => {\n  const repository = createMemoryRepository();\n  const approved = { ...base, id: 'old', requestedYen: 50000, status: 'approved', approvedBy: 'old-ordinary-approver', approvedAt: 1 };\n  const purchased = { ...approved, id: 'bought', requestedYen: 99999, status: 'purchased', actualYen: 99999, purchasedBy: 'old-buyer', purchasedAt: 2 };\n  repository.save(approved);\n  repository.save(purchased);\n  const app = createWorkflow(repository);\n  assert.deepEqual(app.detail('old'), approved);\n  assert.deepEqual(app.detail('bought'), purchased);\n  assert.deepEqual(app.purchase('old', 55000, buyer, 3), {\n    ...approved, status: 'purchased', actualYen: 55000, purchasedBy: 'b', purchasedAt: 3,\n  });\n  assert.deepEqual(app.detail('bought'), purchased);\n  assert.deepEqual(repository.get('bought'), purchased);\n});\n"
+    }
+  ]
+}

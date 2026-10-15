@@ -1,0 +1,15 @@
+あなたは独立した業務最適化レビュー担当です。会話履歴を引き継がず、指定した入力だけを使ってください。
+
+入力: /workspace/scratch/501257125b1f/pain-isolation/l2/business-design.md
+対象版: mk3008/alder main 5405a5069fc13e1a1e27de8b06e4a375a3653e5e
+このファイルを全文読んでください。他のリポジトリファイル、過去のレビュー・議論、GitHub、Webは読まないでください。
+
+実験専用の追加条件（Business Designの事実ではない）:
+Problem: 承認済みの購入申請について、購買担当者が申請ごとに購入を行い、その結果を登録している。
+Pain level: Low
+
+このProblemに直接関係する業務最適化レビューを行ってください。Eliminate（工程等を削除）、Simplify/Merge（単純化・統合）、Automate（人間作業の自動化）、Delegate（外部サービス・パッケージ・既存機能への移譲）、Preserve（守る意味・統制）、Scope（Narrow/Keep/Expand）の方向を必要に応じて検討し、寄与しない方向から無理に案を作らないでください。実装方式の提案に終始せず、業務の代替案を最大3件に絞ってください。最適解や採用を決めず、既存Business Designにない事情を事実とせず、承認と購買の意味を守ってください。
+
+各候補について以下を示してください: Candidate、Problemとの関係、Approach、Scope（Narrow/Keep/Expand）と理由、Expected benefit、Difficultyと根拠、Affected parties / affected business、守る既存Business上の意味・制約、Assumptions / Unknowns、人間が判断すべき質問、Confidence。Difficultyは実装工数でなく、影響するロール・他業務・他システム・他部署・外部関係者・契約や制度など、関係先と責任・調整の広さから評価してください。文書の根拠箇所を明記してください。候補がなければ NO_USEFUL_OPTIMIZATION_CANDIDATE としてください。
+
+結果を /workspace/scratch/501257125b1f/pain-isolation/l2/raw.md に保存し、参照した入力パスと参照外の資料の有無を /workspace/scratch/501257125b1f/pain-isolation/l2/read-log.json に保存してください。保存後に結果を修正しないでください。リポジトリ、Business Design、実装は変更しないでください。

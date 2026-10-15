@@ -1,0 +1,26 @@
+[
+  {
+    "artifact": "001",
+    "original_path": "primary-runs/alder/C3/r2/s2/docs/business-design/design.md",
+    "sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+    "anonymization": [
+      {
+        "line": 5,
+        "original": "作成根拠：Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  },
+  {
+    "artifact": "002",
+    "original_path": "primary-runs/alder/C3/r2/s2/raw-response.md",
+    "sha256": "f71a1621e4562dcc4710d3540ae5005d447cc941b897508162acb3eda0adc3ef",
+    "anonymization": [
+      {
+        "line": 5,
+        "original": "作成根拠：Alder plugin 0.2.8、authoring source revision `e9726b4c84608db42c5286d072b5ec762d31596a`。",
+        "replacement": "[method metadata removed]"
+      }
+    ]
+  }
+]

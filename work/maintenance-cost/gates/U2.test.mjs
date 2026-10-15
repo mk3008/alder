@@ -1,0 +1,164 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createApp } from './entry.mjs';
+
+const requester = { id: 'r', role: 'requester' };
+const approver = { id: 'a', role: 'approver' };
+const buyer = { id: 'b', role: 'buyer' };
+const input = (id = 'p', extra = {}) => ({ id, item: '  Desk  ', quantity: 2, requestedYen: 100, reason: '  work  ', ...extra });
+const submit = (app, id = 'p', extra = {}) => app.submit(input(id, extra), requester, 0);
+const unchanged = (app, fn) => {
+  const before = app.list().map(row => app.detail(row.id));
+  assert.throws(fn, Error);
+  assert.deepEqual(app.list().map(row => app.detail(row.id)), before);
+};
+
+test('submission normalizes text, stores required data and only current event fields', () => {
+  const app = createApp();
+  const row = submit(app);
+  assert.deepEqual(row, { id: 'p', requesterId: 'r', item: 'Desk', quantity: 2, requestedYen: 100, reason: 'work', submittedAt: 0, status: 'submitted', note: '' });
+  assert.deepEqual(app.detail('p'), row);
+});
+
+test('approval and purchase retain data; actual total may exceed requested', () => {
+  const app = createApp();
+  const initial = submit(app);
+  const approved = app.approve('p', approver, 1);
+  assert.deepEqual(approved, { ...initial, approvedBy: 'a', approvedAt: 1, status: 'approved' });
+  const purchased = app.purchase('p', 200, buyer, 2);
+  assert.deepEqual(purchased, { ...approved, purchasedBy: 'b', purchasedAt: 2, actualYen: 200, status: 'purchased' });
+  assert.deepEqual(app.detail('p'), purchased);
+});
+
+test('rejection stores its reason and prevents purchase', () => {
+  const app = createApp();
+  const initial = submit(app);
+  assert.deepEqual(app.reject('p', '  budget  ', approver, 3), { ...initial, rejectedBy: 'a', rejectedAt: 3, rejectionReason: 'budget', status: 'rejected' });
+  unchanged(app, () => app.purchase('p', 100, buyer, 4));
+});
+
+test('role checks for each command preserve state', () => {
+  const app = createApp();
+  for (const actor of [approver, buyer]) unchanged(app, () => app.submit(input(), actor, 0));
+  submit(app);
+  for (const actor of [requester, buyer]) {
+    unchanged(app, () => app.approve('p', actor, 1));
+    unchanged(app, () => app.reject('p', 'no', actor, 1));
+  }
+  app.approve('p', approver, 1);
+  for (const actor of [requester, approver]) unchanged(app, () => app.purchase('p', 100, actor, 2));
+});
+
+test('actor IDs and timestamps are validated by every mutation', () => {
+  const badActors = [null, {}, { id: '', role: 'requester' }, { id: 1, role: 'requester' }];
+  const times = [-1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, '0', null];
+  for (const operation of ['submit', 'approve', 'reject', 'purchase']) {
+    const app = createApp();
+    if (operation !== 'submit') submit(app);
+    if (operation === 'purchase') app.approve('p', approver, 1);
+    const validActor = operation === 'submit' ? requester : operation === 'purchase' ? buyer : approver;
+    const call = (actor, time) => operation === 'submit' ? app.submit(input('new'), actor, time) : operation === 'approve' ? app.approve('p', actor, time) : operation === 'reject' ? app.reject('p', 'no', actor, time) : app.purchase('p', 100, actor, time);
+    for (const actor of badActors) unchanged(app, () => call(actor && { ...actor, role: validActor.role }, 0));
+    for (const time of times) unchanged(app, () => call(validActor, time));
+  }
+});
+
+test('invalid quantity, total, ID and text never create records', () => {
+  const app = createApp();
+  for (const field of ['quantity', 'requestedYen']) {
+    for (const value of [0, -1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, '1', null]) unchanged(app, () => submit(app, 'p', { [field]: value }));
+  }
+  for (const field of ['item', 'reason']) {
+    for (const value of ['', '  ', null, 3]) unchanged(app, () => submit(app, 'p', { [field]: value }));
+  }
+  for (const value of ['', null, 3]) unchanged(app, () => submit(app, value));
+  assert.equal(submit(app, 'max', { quantity: Number.MAX_SAFE_INTEGER, requestedYen: Number.MAX_SAFE_INTEGER }).requestedYen, Number.MAX_SAFE_INTEGER);
+});
+
+test('invalid actual total and rejection reason preserve records', () => {
+  const app = createApp();
+  submit(app);
+  for (const reason of ['', ' ', null, 1]) unchanged(app, () => app.reject('p', reason, approver, 1));
+  app.approve('p', approver, 1);
+  for (const value of [0, -1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, '1', null]) unchanged(app, () => app.purchase('p', value, buyer, 2));
+  assert.equal(app.purchase('p', Number.MAX_SAFE_INTEGER, buyer, Number.MAX_SAFE_INTEGER).actualYen, Number.MAX_SAFE_INTEGER);
+});
+
+test('duplicates and unknown targets fail without mutation', () => {
+  const app = createApp();
+  submit(app);
+  unchanged(app, () => submit(app));
+  for (const fn of [() => app.detail('missing'), () => app.approve('missing', approver, 1), () => app.reject('missing', 'no', approver, 1), () => app.purchase('missing', 100, buyer, 1)]) unchanged(app, fn);
+});
+
+test('invalid transitions and repeat commands fail atomically', () => {
+  const app = createApp();
+  for (const id of ['submitted', 'approved', 'rejected', 'purchased']) submit(app, id);
+  app.approve('approved', approver, 1);
+  app.reject('rejected', 'no', approver, 1);
+  app.approve('purchased', approver, 1);
+  app.purchase('purchased', 100, buyer, 2);
+  for (const id of ['approved', 'rejected', 'purchased']) {
+    unchanged(app, () => app.approve(id, approver, 3));
+    unchanged(app, () => app.reject(id, 'no', approver, 3));
+  }
+  for (const id of ['submitted', 'rejected', 'purchased']) unchanged(app, () => app.purchase(id, 100, buyer, 3));
+});
+
+test('instances are isolated and IDs sort by JavaScript string comparison', () => {
+  const app = createApp();
+  for (const id of ['z', 'a', 'Z', 'A', '__proto__']) submit(app, id);
+  assert.deepEqual(app.list().map(row => row.id), ['A', 'Z', '__proto__', 'a', 'z']);
+  assert.deepEqual(createApp().list(), []);
+});
+
+test('input and output mutations cannot alter stored state', () => {
+  const app = createApp();
+  const request = input();
+  const first = app.submit(request, requester, 0);
+  request.item = 'changed'; first.item = 'changed';
+  app.detail('p').item = 'changed';
+  const rows = app.list(); rows[0].item = 'changed'; rows.length = 0;
+  assert.equal(app.detail('p').item, 'Desk');
+  const approved = app.approve('p', approver, 1); approved.status = 'submitted';
+  assert.equal(app.detail('p').status, 'approved');
+  const purchased = app.purchase('p', 100, buyer, 2); purchased.actualYen = 1;
+  assert.equal(app.detail('p').actualYen, 100);
+  submit(app, 'rejected');
+  app.reject('rejected', 'no', approver, 1).rejectionReason = 'changed';
+  assert.equal(app.detail('rejected').rejectionReason, 'no');
+});
+
+test('self approval and non-monotonic valid timestamps are permitted', () => {
+  const app = createApp();
+  app.submit(input(), requester, 10);
+  assert.equal(app.approve('p', { ...approver, id: requester.id }, 0).approvedAt, 0);
+});
+
+test('optional notes have exact UTF-16 boundary and preserve whitespace', () => {
+  const app = createApp();
+  assert.equal(submit(app, 'absent').note, '');
+  for (const [id, note] of [['empty', ''], ['space', '  x  '], ['limit', 'x'.repeat(280)], ['unicode', '😀'.repeat(140)]]) {
+    assert.equal(submit(app, id, { note }).note, note);
+    assert.equal(app.detail(id).note, note);
+  }
+  for (const note of ['x'.repeat(281), '😀'.repeat(141), null, 1, false]) unchanged(app, () => submit(app, 'bad', { note }));
+  assert.ok(app.list().every(row => !Object.hasOwn(row, 'note')));
+  assert.equal(app.approve('space', approver, 1).note, '  x  ');
+  assert.equal(app.purchase('space', 100, buyer, 2).note, '  x  ');
+  assert.equal(app.reject('limit', 'no', approver, 1).note, 'x'.repeat(280));
+});
+
+test('list filtering is case-sensitive, sorted, optional and excludes notes', () => {
+  const app = createApp();
+  submit(app, 'z', { item: 'Desk Blue', note: 'private' });
+  submit(app, 'a', { item: 'Desk Red', note: 'private' });
+  submit(app, 'm', { item: 'desk Blue', note: 'private' });
+  assert.deepEqual(app.list({ itemContains: 'Desk' }).map(row => row.id), ['a', 'z']);
+  assert.deepEqual(app.list({ itemContains: 'Blue' }).map(row => row.id), ['m', 'z']);
+  assert.deepEqual(app.list({ itemContains: ' Desk' }), []);
+  assert.deepEqual(app.list({ itemContains: '' }), app.list());
+  assert.deepEqual(app.list({}), app.list());
+  assert.ok(app.list({ itemContains: 'Blue' }).every(row => !Object.hasOwn(row, 'note')));
+  for (const value of [null, 1, false, []]) unchanged(app, () => app.list({ itemContains: value }));
+});

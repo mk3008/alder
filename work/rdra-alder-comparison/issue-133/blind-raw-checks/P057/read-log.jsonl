@@ -1,0 +1,8 @@
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/review-targets.json", "timestamp": "2026-10-02T11:00:31.337275+00:00", "sha256": "8852751e88178f00523f094993b98c82fbbc7c5354e2c55941afcaa2286ec6cd"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/extraction-prompt.txt", "timestamp": "2026-10-02T11:00:31.337364+00:00", "sha256": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/P057-canonical.json", "timestamp": "2026-10-02T11:00:31.337462+00:00", "sha256": "5b36fbc576aaed1c6adaa85a90c1981daf03723e10018644114a8dcf6ba4109c"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/P057-packet.md", "timestamp": "2026-10-02T11:00:31.337612+00:00", "sha256": "849178f5bd453653065f9fec9b7d4c95d390697778c28ae311f3b407a2b268fd"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/P018-canonical.json", "timestamp": "2026-10-02T11:00:31.337688+00:00", "sha256": "2682a730a69c43391cb6a3768a4a9124fda8bbc886ed488e4984b7da5b40f5e4"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/P018-packet.md", "timestamp": "2026-10-02T11:00:31.337864+00:00", "sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/received-upstream-packet.md", "timestamp": "2026-10-02T11:00:31.338181+00:00", "sha256": "ae62692a5175b05a62e8ffc8780e73d98d67b57dd8fe8f6666103c306ccf6730"}
+{"path": "/workspace/scratch/62be7f260abb/blind-raw-checks/P057/P018-packet.md", "timestamp": "2026-10-02T11:01:02.797854+00:00", "purpose": "input_sha256 for correspondence"}

@@ -1,0 +1,10 @@
+Candidate source-level evaluation; installed plugin use is not claimed.
+Candidate checkout commit (provided in task): f4408db27e8735e75a7f43d480df7461bbe00de1
+Read package manifest: /workspace/shared/allocation-candidate-178/alder/plugin.json, version 0.4.5.
+Read package skill: skills/alder-draft-business-design/SKILL.md, entire file.
+Read required bundled authoring guidance: skills/alder-draft-business-design/references/adoption.md, section 1 from line 15 through just before section 2 at line 177. Source revision per adjacent provenance.json: b0caf05d61f598c8e0af251a91e7dfb3153d1d5e.
+Read optional format specification: skills/alder-draft-business-design/references/business-graph.md, opt-in Markdown profile v1 from line 19 through minimal example ending at line 128. Source revision per adjacent provenance.json: b0caf05d61f598c8e0af251a91e7dfb3153d1d5e.
+Read required document structure: skills/alder-review-business-design/references/business-design-structure.ja.md, entire file (201 lines). Source revision per adjacent provenance.json: 979bf6b214f0ef805b9d407a04fc23c55dd17d4d.
+Read input: /workspace/shared/decomposition-inputs-178/b/request.txt, entire file.
+Acquisition failures: none. One combined tool output was truncated, so the required adoption correlation section and format specification were re-read separately; the structure document was visible in the combined result.
+Constraints: No other project materials were provided or read; no other cases, prior results, repo, external links, or conversation history were consulted. No installed-plugin or effective-runtime independent validation was performed. Business meaning remains unapproved.

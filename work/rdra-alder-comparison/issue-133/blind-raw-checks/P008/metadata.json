@@ -1,0 +1,39 @@
+{
+  "packet_id": "P008",
+  "status": "success",
+  "prepared_at": "2026-10-02T10:51:14.825969+00:00",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_settings_attestation": "unavailable",
+  "input_sha256": {
+    "P008-packet.md": "058a6f991ebb9b74caccf8eb438aa9c92316180fd0a9895a0c05d9924ce36eff",
+    "P008-canonical.json": "7efb157b5f0815b6950e84a9040168f58d2d5cde7394bfe7597d8991da311e6c",
+    "extraction-prompt.txt": "52a7dde7c1df946bf912e5c9f9afb89ade69159804f2b6d0a9c5f2ac74b3f8d7",
+    "review-targets.json": "6d2b9081b3ec7892639fad3e302e4a3ffef748f65fbae1fd118ec037a99eeb9b"
+  },
+  "envelope_sha256": "da259fbdbbf2b6292965b696c5fdf3aa6c0a9dfcc75f210226de79a62a302a20",
+  "read_allowlist": [
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P008/P008-packet.md",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P008/P008-canonical.json",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P008/extraction-prompt.txt",
+    "/workspace/scratch/62be7f260abb/blind-raw-checks/P008/review-targets.json"
+  ],
+  "operator_reason": "Preserve evaluator uncertainty; target IDs copied from flag ranges or existing count evidence IDs when flag omits IDs. No semantic supplementation or scoring/oracle provided.",
+  "agent_id": "/root/blind_observation/raw_p008",
+  "started_at": "2026-10-02T10:53:29.111721+00:00",
+  "finished_at": "2026-10-02T10:55:51.451650+00:00",
+  "mechanical_errors": [],
+  "output_sha256": {
+    "review.json": "4c5e0685d8a37f68ccaefc51c301d3a74315ee974a6827df20e1c644e18a036a",
+    "raw-response.md": "4c5e0685d8a37f68ccaefc51c301d3a74315ee974a6827df20e1c644e18a036a",
+    "read-log.jsonl": "0938eb511f37ba702ca4aed582c2edfaa8a1330df87b3cf4c9269ef60a9005b6"
+  },
+  "read_compliance_audit": {
+    "checked_at": "2026-10-02T10:56:00.696031+00:00",
+    "declared_outside_read_attempts": [],
+    "basis": "Actual final declarations and logged paths only; no independent attestation"
+  }
+}

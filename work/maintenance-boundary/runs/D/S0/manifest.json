@@ -1,0 +1,14 @@
+{
+  "arm": "D",
+  "stage": "S0",
+  "frozen_at": "2026-09-12T04:46:29.044838+00:00",
+  "evaluator_exit_code": 0,
+  "evaluator_stdout": "{\"record\": \".audit/check-002.json\", \"passed\": true}\n",
+  "evaluator_stderr": "",
+  "source_sha256": {
+    "alpha-shipments.mjs": "35329698e66c15e6bd65301ad852432cc93f0bda6ab2c85a3c8db34866027344",
+    "booking.mjs": "25e722d46c68cb6928f716ff0fddea325cab86f30fbf40b591d72f95537b2b49",
+    "entry.mjs": "9042affe2d528f430400c5d5005f4b548c187396043d377e1cd4bae51d0a683c",
+    "memory-records.mjs": "c9dd329d208465ec427441795336141d9a5aad4386575ba6affaf38e96fb8037"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "frozen_at": "2026-09-12T04:13:27.713386+00:00",
+  "model_requested": "gpt-6-astra",
+  "reasoning_effort_requested": "low",
+  "fork_turns": "none",
+  "runner": "collaboration.spawn_agent / followup_task",
+  "runtime": "v24.19.0",
+  "provider_effective_model": null,
+  "provider_effective_effort": null,
+  "evaluator_model": null,
+  "evaluator_effort": null,
+  "note": "Requested settings are recorded exactly. No independent provider receipt/evaluator identity is exposed; unknown is not inferred. User authorized four fresh agents and requested minimum Astra effort before any dispatch. Shared filesystem isolation is instruction-based, not OS enforcement.",
+  "check_script_sha256": "46288186193bf14bd852a20b6ee8301bc5c9a635710718aa9cecb0038facb6ac"
+}

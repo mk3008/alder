@@ -1,0 +1,12 @@
+{
+  "start_utc": null,
+  "end_utc": "2026-10-02T07:56:27Z",
+  "failures": [
+    "Start UTC was not recorded at invocation; exact value unavailable.",
+    "Initial Prompt read attempted at an incorrect non-allowlisted path and failed: 0_RDRAZeroOne/phase4/ph4情報生成.md.",
+    "Initial output write failed because phase4 directory did not exist; directory was created and output write succeeded."
+  ],
+  "unmet_restrictions": [
+    "Attempted read of non-allowlisted path (failed; no content read)."
+  ]
+}

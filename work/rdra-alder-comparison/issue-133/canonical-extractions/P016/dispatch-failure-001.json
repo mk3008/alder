@@ -1,0 +1,14 @@
+{
+  "recorded_at": "2026-10-02T10:31:20.958482+00:00",
+  "tool": "collaboration.spawn_agent",
+  "requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "task_name": "extract_p016",
+  "message": "あなたは独立Fresh匿名canonical抽出者です。cwd=/workspace/scratch/62be7f260abb/canonical-extractions/P016。入力read allowlistはこのdirectoryのpacket.mdとextraction-prompt.txtだけです。この2ファイル以外、他packet/source/oracle/rubric/method、親会話を取得しないでください。extraction-prompt.txtをそのまま実行し、packet_idはP016としてください。根拠line_start/line_endはpacket.md全体の物理行番号（1始まり）です。業務意味を補完せず、同一意味の全根拠位置を保持してください。canonical.jsonに正規化JSON、read-log.jsonlに実際に読んだinput pathとtimestampを保存してください。raw-response.mdへfinal responseと同一のJSON本文を保存し、finalではJSON本文を返してください。metadata.jsonやenvelope.txtを読まないでください。生成出力自身の整合性確認だけは許可します。採点・評価はしないでください。",
+  "error": "collab spawn failed: agent thread limit reached",
+  "generation_started": false,
+  "failure_class": "dispatch preparation, not business generation or retry"
+}
