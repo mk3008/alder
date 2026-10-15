@@ -7,7 +7,7 @@ import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy} from 'lucide';
 import {parseDesign,validateGraph,findingsFromSource} from './graph';
-import {formattedMarkdown} from './markdown';
+import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
@@ -213,7 +213,7 @@ function detail(){
     confirm:candidate=>{void confirmChecks(t,candidate);},
     remove:()=>{const v=checkState(t);if(v.busy)return;v.busy=true;void saveChecks(t,undefined).then(()=>{v.candidate=undefined;v.error=undefined;}).catch(e=>{v.error=(e as Error).message;}).finally(()=>{v.busy=false;detail();});}
   });
-  root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown,n?.name));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  if(n)root.append(detailHeading(n.name));root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown,!!n));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();

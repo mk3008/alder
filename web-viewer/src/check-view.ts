@@ -1,4 +1,4 @@
-import {formattedMarkdown,detailHeading} from './markdown';
+import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
 export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
@@ -45,12 +45,11 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);management.append(panel);
   }
   const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
-  for(const [mode,label] of [['business','業務内容'],['checks','Check Items']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
+  for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
   if(!doc||!usable){content.append(management);return {controls:root,content};}
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
-  if(selected)content.append(detailHeading(selected.name));
   if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
   else{
     const ids=doc.index[selected.name]??[];
