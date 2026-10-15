@@ -70,7 +70,7 @@ export async function assertToolbarLayout(page,{open}={}){
   assert.ok(near(actions[0].left,measured.actionRow.left)&&near(measured.actionRow.left,measured.panel.left+6),message('reset action is left aligned'));
   assert.ok(near(actions[0].width,actions[0].naturalWidth)&&actions[0].width<measured.actionRow.width-8,message('reset width fits icon and text without stretching across the row'));
   assert.ok(actions[0].icon?.hidden==='true'&&contains(actions[0],actions[0].icon),message('decorative reset icon is visible inside the button'));
-  rowsHeight+=options[0].height+options[2].height+actions[0].height+4;
+  rowsHeight+=options[0].height+options[2].height+measured.actionRow.height+4;
  }else{
   assert.equal(measured.panel.display,'none',message('collapsed panel has no rendered display'));
   assert.ok(measured.allOptions.every(i=>i.rects===0&&i.width===0&&i.height===0),message('collapsed options have no rendered hit targets'));

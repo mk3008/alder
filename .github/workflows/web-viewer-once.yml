@@ -57,3 +57,11 @@ jobs:
           path: web-viewer/web/evidence/save-conflict-212/*.png
           if-no-files-found: ignore
           retention-days: 7
+      - name: Retain findings review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-findings-review-${{ github.sha }}
+          path: web-viewer/web/evidence/design-findings-96/*.png
+          if-no-files-found: ignore
+          retention-days: 7

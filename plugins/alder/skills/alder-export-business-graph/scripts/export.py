@@ -126,19 +126,58 @@ def sections(body, expected, context, empty=()):
     return result
 
 
-def parse_design(text):
+def parse_findings(body):
+    lines = body.splitlines()
+    marks = [(n, h) for n, h in headings(body) if h.startswith('## ')]
+    require(marks and not '\n'.join(lines[:marks[0][0]]).strip(), 'Findings require Finding sections')
+    result, seen = [], set()
+    expected = ['### Kind', '### Status', '### Scope', '### Targets', '### Summary', '### Content']
+    for i, (start, heading) in enumerate(marks):
+        match = re.fullmatch(r'## Finding ([A-Za-z][A-Za-z0-9_-]{0,63})', heading)
+        require(match, 'invalid Finding ID')
+        identity = match.group(1)
+        require(identity not in seen, 'duplicate Finding ID')
+        seen.add(identity)
+        part = '\n'.join(lines[start + 1:marks[i + 1][0] if i + 1 < len(marks) else len(lines)])
+        values = sections(part, expected, 'Finding ' + identity)
+        require([h for _, h in headings(part)] == expected, 'invalid Finding field order')
+        kind, status, scope = (values['### ' + k] for k in ('Kind', 'Status', 'Scope'))
+        require(kind in ('question', 'correction'), 'invalid Finding Kind')
+        require(status in ('open', 'resolved'), 'invalid Finding Status')
+        require(scope in ('items', 'document', 'unassigned'), 'invalid Finding Scope')
+        targets = []
+        if values['### Targets'] != '(none)':
+            for line in values['### Targets'].splitlines():
+                if line.strip():
+                    require(line.startswith('- ') and visible_name(line[2:]), 'invalid Finding target')
+                    targets.append(line[2:])
+        require(len(set(targets)) == len(targets), 'duplicate Finding target')
+        require(bool(targets) if scope == 'items' else values['### Targets'] == '(none)', 'Finding Scope and Targets disagree')
+        result.append(dict(id=identity, kind=kind, status=status, scope=scope, targets=targets,
+                           summary=values['### Summary'], content=values['### Content'], unresolvedTargets=[]))
+    return result
+
+
+def parse_document(text):
+    """Read the graph and explicit findings without changing the Graph v1 schema."""
     text = text.replace('\r\n', '\n')
     require('<!--' not in text, 'HTML comments are unsupported; keep source information visible')
     lines = text.splitlines()
     roots = [(n, h) for n, h in headings(text) if h.startswith('# ')]
     require(roots, 'document title is required')
-    require(not ENTITY.fullmatch(roots[0][1]) and roots[0][1] not in ('# Scope', '# Graph exceptions'), 'first H1 must be a document title')
+    require(not ENTITY.fullmatch(roots[0][1]) and roots[0][1] not in ('# Scope', '# Graph exceptions', '# Findings'), 'first H1 must be a document title')
     graph = {'version': 1, 'nodes': [], 'relations': []}
+    findings = []
     special = set()
     for i, (start, heading) in enumerate(roots[1:], 1):
         end = roots[i + 1][0] if i + 1 < len(roots) else len(lines)
         body = '\n'.join(lines[start + 1:end]).strip()
         require(body, f'empty section: {heading}')
+        if heading == '# Findings':
+            require(heading not in special, 'duplicate Findings')
+            special.add(heading)
+            findings = parse_findings(body)
+            continue
         if heading in ('# Scope', '# Graph exceptions'):
             require(heading not in special, f'duplicate {heading}')
             special.add(heading)
@@ -225,7 +264,15 @@ def parse_design(text):
     validate_graph(graph)
     graph['nodes'].sort(key=lambda node: node['id'])
     graph['relations'].sort(key=lambda relation: tuple(relation[key] for key in ('kind', 'from', 'to', 'label')))
-    return graph
+    names = {node['id'] for node in graph['nodes']}
+    for finding in findings:
+        finding['unresolvedTargets'] = [target for target in finding['targets'] if target not in names]
+    return {'graph': graph, 'findings': findings}
+
+
+def parse_design(text):
+    """Legacy Graph-only projection. Use parse_document to retain findings."""
+    return parse_document(text)['graph']
 
 
 def render(graph):
@@ -244,7 +291,10 @@ def main(argv=None):
             require(args.design.resolve() != args.output.resolve(), 'output must not overwrite Business Design')
             if args.output.exists():
                 require(not args.design.samefile(args.output), 'output must not overwrite Business Design')
-        result = render(parse_design(args.design.read_text(encoding='utf-8')))
+        document = parse_document(args.design.read_text(encoding='utf-8'))
+        result = render(document['graph'])
+        if document['findings']:
+            print(f'business-graph: warning: {len(document["findings"])} findings omitted from Graph v1; retain the source Markdown or use parse_document.', file=sys.stderr)
         if args.output:
             # Validate before touching the destination; replace atomically in its directory.
             with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', newline='\n', dir=args.output.parent, delete=False) as handle:

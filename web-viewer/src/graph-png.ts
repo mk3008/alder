@@ -21,7 +21,7 @@ export function imageSize(boxes:Box[]){
 
 // Capture resolved values, including theme/role colors, rather than importing the
 // app stylesheet or font URLs into the image. This list covers graph-only styles.
-const properties=('display position width height min-width min-height max-width max-height box-sizing margin padding border-top border-right border-bottom border-left border-radius outline outline-offset box-shadow background-color color opacity filter font-family font-size font-weight font-style font-stretch font-kerning font-feature-settings line-height letter-spacing text-align text-overflow white-space overflow overflow-x overflow-y vertical-align grid-template-columns grid-template-rows gap align-items align-self justify-items justify-self flex-direction flex-shrink z-index fill fill-opacity stroke stroke-width stroke-opacity stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin paint-order text-anchor dominant-baseline visibility').split(' ');
+const properties=('display position top right bottom left width height min-width min-height max-width max-height box-sizing margin padding border-top border-right border-bottom border-left border-radius outline outline-offset box-shadow background-color color opacity filter font-family font-size font-weight font-style font-stretch font-kerning font-feature-settings line-height letter-spacing text-align text-overflow white-space overflow overflow-x overflow-y vertical-align grid-template-columns grid-template-rows gap align-items align-self justify-items justify-self flex-direction flex-shrink z-index fill fill-opacity stroke stroke-width stroke-opacity stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin paint-order text-anchor dominant-baseline visibility').split(' ');
 function styledClone<T extends Element>(source:T):T{
   const copy=source.cloneNode(true) as T,original=[source,...Array.from(source.querySelectorAll('*'))],clones=[copy,...Array.from(copy.querySelectorAll('*'))];
   original.forEach((node,index)=>{
@@ -40,6 +40,11 @@ export function snapshotGraph(nodes:HTMLElement,edges:SVGSVGElement,background:s
   if(nodes.querySelectorAll('*').length+edges.querySelectorAll('*').length>MAX_ELEMENTS||(nodes.textContent?.length??0)+(edges.textContent?.length??0)>MAX_TEXT)throw Error(sizeError);
   const cards=Array.from(nodes.querySelectorAll<HTMLElement>(':scope > .node'));
   const boxes:Box[]=cards.map(n=>({x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight}));
+  // Badges protrude beyond the unchanged routing/card rectangle. Include their
+  // layout-space bounds, independent of camera zoom, in the image crop.
+  for(const card of cards)for(const badge of Array.from(card.querySelectorAll<HTMLElement>('.finding-badges'))){
+    boxes.push({x:parseFloat(card.style.left)+card.clientLeft+badge.offsetLeft,y:parseFloat(card.style.top)+card.clientTop+badge.offsetTop,width:badge.offsetWidth,height:badge.offsetHeight});
+  }
   if(!cards.length)throw Error('画像にする項目がありません。');
   const doc=nodes.ownerDocument,edgeCopies=Array.from(edges.children).map(styledClone);
   const measured=edgeCopies.filter(e=>e.matches('.edge,.edge-label')) as SVGGraphicsElement[];
