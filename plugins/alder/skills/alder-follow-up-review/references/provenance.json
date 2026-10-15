@@ -1,8 +1,8 @@
 {
-  "alder_source_revision": "ff18116ebe13a75b548a7855ec04ffd039af4ace",
+  "alder_source_revision": "0de6770a7df70bfe64324bb3e8a29496f8650f09",
   "sources": {
-    "docs/adoption.md": "fa15c1afb844609690586bdd253390c72fbb10e25340e8726282d1319ef487c9",
-    "docs/check-item-traceability.md": "b4bfe4ff933141078a470a3f4573b63b0141c6754f4963c61c20de82cab26334",
+    "docs/adoption.md": "491470539d9d76de786c0ad6bac164d292bbcc24a48ac3f2c924809ccfc39dd6",
+    "docs/check-item-traceability.md": "a71b6eb102f7115d202f7c02ec19bdb7f2fcbebc151ed3b2faa2547ccda7b0cd",
     "docs/traceability-drift/study.md": "6ec4fa905cbc9647f7803074db354b0eed3cba0c6a91e8ef08345e112844e818"
   }
 }

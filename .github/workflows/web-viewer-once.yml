@@ -1,0 +1,67 @@
+name: Web Viewer display validation
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'web-viewer/**'
+      - '.github/workflows/web-viewer-once.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - name: Install browser driver
+        run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-match -f '%{family}\n' ':lang=ja'
+      - name: Verify built app in Chrome
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs
+
+      - name: Preserve header review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: header-controls-${{ github.sha }}
+          path: web-viewer/web/evidence/header-controls/*.png
+          if-no-files-found: ignore
+      - name: Retain save-conflict review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: save-conflict-review-${{ github.sha }}
+          path: web-viewer/web/evidence/save-conflict-212/*.png
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Retain findings review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-findings-review-${{ github.sha }}
+          path: web-viewer/web/evidence/design-findings-96/*.png
+          if-no-files-found: ignore
+          retention-days: 7

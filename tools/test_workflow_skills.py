@@ -60,6 +60,9 @@ class WorkflowSkillsTest(unittest.TestCase):
         for term in ["Show each Check's condition, expected result and human review state **once**",
                      'source-established full Activity names in visible references',
                      'Do not add a display-order number to an ActivityName',
+                     'When the current Business Design explicitly declares `# Activity ActivityName`',
+                     'use that declared ActivityName throughout the current Check artifact',
+                     'do not substitute a historical heading or require an old-name correspondence table',
                      'explicitly human-confirmed display-name-to-source-heading correspondence',
                      '### GitHub Markdown document layout',
                      'four-column Activity index even when the selected scope contains only one Activity',
@@ -110,6 +113,9 @@ class WorkflowSkillsTest(unittest.TestCase):
         for term in ['references/check-item-traceability.md',
                      'Use source-established full Activity names in visible references',
                      'Do not add display-order numbers to ActivityName',
+                     'When the current Business Design declares `# Activity ActivityName`',
+                     'use that declared ActivityName throughout',
+                     'do not substitute historical headings or add an old-name correspondence table',
                      'references/check-item-traceability.md#github-markdown-document-layout',
                      'four-column index, direct Check links, display-name/source-quotation distinction',
                      'separate Activity sharing versus old-Check correspondence',
@@ -117,7 +123,7 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'report the naming uncertainty',
                      'summary containing the Check ID and a descriptive label',
                      'do not invent shortened aliases or position-based names',
-                     'quote its full heading while retaining the existing source and link targets',
+                     'quote the historical source’s full heading while retaining the existing source and link targets',
                      'Give each unresolved item its own visible kind', '種別：未決事項（候補）',
                      'Keep kind distinct from derivation class, AI confidence and human review state',
                      'Preserve source-undecided versus AI-proposed origin and the unapproved expected result',
@@ -163,6 +169,8 @@ class WorkflowSkillsTest(unittest.TestCase):
         for term in ['For every initial draft and update',
                      'as part of the ordinary request',
                      'without asking the requester to invoke another review Skill',
+                     'Verify source labels and anchors or line ranges against the referenced revision',
+                     'do not carry old source locations into a new revision',
                      'Check applicable description-rule conformance first',
                      'report evidenced NG findings separately from undecided business meaning and optional wording suggestions',
                      'without making NG a human review state',
@@ -197,6 +205,8 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'Apply heading or folding conventions only where the target format calls for them',
                      'source names and references against the source itself',
                      'Check every occurrence, including folded supplements and link labels',
+                     'Verify evidence labels and anchors or line ranges against the actual referenced revision',
+                     'a new revision with old line ranges is not a repaired reference',
                      'compare it directly with that heading rather than reconstructing a variant from its parts',
                      'independently reviewable condition/result pairs',
                      'not every AND/OR bullet or Test assertion',
@@ -229,6 +239,82 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'AI quality checking never substitutes for human confirmation']:
             with self.subTest(term=term):
                 self.assertIn(term, gate)
+
+    def test_draft_review_loop_routes_to_actual_read_only_reviewer(self):
+        # Distribution/instruction contract only: this does not run an agent.
+        draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
+        review = (SKILLS / 'alder-review-business-design/SKILL.md').read_text()
+        link = '../alder-review-business-design/SKILL.md'
+        self.assertIn(link, draft)
+        self.assertTrue((SKILLS / 'alder-draft-business-design' / link).resolve().is_file())
+        for phrase in ['separate reviewer agent or fresh context',
+                       'perform the review and return findings',
+                       'distinct read-only review phase in the same agent',
+                       'report that it was not independent',
+                       'merely requesting a review is not completion',
+                       "step 4's authoring self-check", 'review pending',
+                       'After correction, run the read-only review again',
+                       'whole requested boundary', 'business agreement with people',
+                       'wording/structure defects grounded in the applicable guidance']:
+            self.assertIn(phrase, draft)
+        self.assertIn('Keep the review read-only', review)
+        self.assertIn('Do not edit the Business Design', review)
+
+    def test_draft_review_loop_scenario_contracts_are_distributed(self):
+        # Synthetic review records + expected actions are static examples, not
+        # observations of an agent choosing or executing those actions.
+        fixtures = ROOT / 'tools/fixtures/plugin-draft-review-loop'
+        cases = {c['scenario']: c for c in json.loads((fixtures / 'scenarios.json').read_text())}
+        phrases = {
+            'normal': ['no source-supported correction', 'Human agreement remains necessary'],
+            'repairable_omission': ['Supported source fact omitted or distorted',
+                                    'repair the draft from that evidence', 'actual read-only review'],
+            'missing_fact': ['Information absent from the source', 'Do not turn absence into',
+                             'specific missing fact or question'],
+            'ambiguity': ['Source meaning ambiguous or contradictory',
+                          'possible interpretations as candidates', 'Do not silently choose one'],
+            'no_progress': ['substantially the same finding', 'without new evidence or improvement',
+                            'rather than repeating or merely rewording'],
+            'rereview_failure': ['review fails, is unavailable', 'runtime/context limit',
+                                 'last version actually reviewed', 'unreviewed changes',
+                                 'Never turn a failed or unperformed re-review'],
+        }
+        self.assertEqual(set(cases), set(phrases))
+        guides = [ROOT / 'docs/adoption.md', *[
+            SKILLS / name / 'references/adoption.md' for name in
+            ['alder-draft-business-design', 'alder-draft-check-items', 'alder-follow-up-review']]]
+        for guide in guides:
+            section = guide.read_text().split('### Review and revise a draft before returning it', 1)[1]
+            section = section.split('### Record operational Problems', 1)[0]
+            for name, required in phrases.items():
+                with self.subTest(guide=guide, scenario=name):
+                    for phrase in required:
+                        self.assertIn(phrase, section)
+                    case = cases[name]
+                    self.assertTrue(case['source'] and case['draft'])
+                    self.assertFalse(case['expected']['human_agreed'])
+        normal = cases['normal']
+        self.assertEqual(normal['source'], normal['draft'])
+        self.assertTrue(normal['review']['completed'])
+        self.assertEqual(normal['review']['findings'], [])
+        repair = cases['repairable_omission']
+        evidence = repair['review']['findings'][0]['evidence']
+        self.assertIn(evidence, repair['source'])
+        self.assertNotIn(evidence, repair['draft'])
+        self.assertIn(evidence, repair['expected']['revision'])
+        self.assertEqual(repair['expected']['review_status'], 'pending_until_actual_rereview')
+        self.assertFalse(cases['missing_fact']['expected']['new_transfer'])
+        self.assertIsNone(cases['ambiguity']['expected']['selected_interpretation'])
+        stalled = cases['no_progress']
+        self.assertNotEqual(stalled['previous_finding'], stalled['current_finding'])
+        self.assertFalse(stalled['new_evidence'] or stalled['improved'])
+        self.assertEqual(stalled['expected']['action'], 'stop_report_unresolved')
+        failed = cases['rereview_failure']
+        self.assertFalse(failed['review']['completed'])
+        self.assertIsNone(failed['review']['findings'])
+        self.assertNotEqual(failed['last_reviewed_version'], failed['latest_version'])
+        self.assertEqual(failed['expected']['review_status'], 'incomplete')
+        self.assertTrue(failed['expected']['unreviewed_changes'])
 
     def test_security_intake_is_reachable_and_preserves_product_authority(self):
         guide = (ROOT / 'docs/adoption.md').read_text()
@@ -1194,7 +1280,12 @@ class HistoricalJapaneseCheckExampleTest(unittest.TestCase):
     def test_pinned_source_and_line_evidence_match_readable_pinned_design(self):
         # Offline content/line checks; this does not test GitHub availability.
         self.assert_source_design_unchanged(self.design)
-        self.assert_source_design_unchanged((ROOT / self.SOURCE_PATH).read_bytes().decode('utf-8'))
+        # Audit the example's then-current source at its frozen revision, not
+        # a later working-tree BD that has legitimately migrated formats.
+        example_design = subprocess.run(
+            ['git', 'show', f'{self.PRE_DISPLAY_REVISION}:{self.SOURCE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
+        self.assert_source_design_unchanged(example_design)
         lines = self.design.splitlines()
         for start, end in re.findall(re.escape(self.SOURCE) + r'#L(\d+)-L(\d+)', self.example):
             self.assertTrue(1 <= int(start) <= int(end) <= len(lines))
@@ -1842,6 +1933,7 @@ class JapaneseUsageTrimTest(unittest.TestCase):
     """
 
     M = JapaneseMobileOpeningTest
+    FINAL_USAGE_REVISION = '669bea33a29e8bc02e2d0a66a7e64ac16c973225'
     REMOVED_STATE_NOTICE = ('業務を切り替えたり項目を開いたりしても、確認済みにはなりません。'
                             '返答がない場合も状態は変えません。')
     REMOVED_RESUME_LINE = ('- 再開する際は、業務と次に読むIDを指定できます。'
@@ -1854,7 +1946,11 @@ class JapaneseUsageTrimTest(unittest.TestCase):
     def setUpClass(cls):
         cls.M.setUpClass()
         cls.before = cls.M.current
-        cls.current = (ROOT / cls.M.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+        # Freeze the original two-deletion audit; current source migration is
+        # checked separately, without redefining any historical expectation.
+        cls.current = subprocess.run(
+            ['git', 'show', f'{cls.FINAL_USAGE_REVISION}:{cls.M.H.EXAMPLE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
 
     def approved_usage_text(self):
         expected = self.before
@@ -1903,6 +1999,173 @@ class JapaneseUsageTrimTest(unittest.TestCase):
                 with self.subTest(notice=notice[:25], position=position):
                     with self.assertRaises(AssertionError):
                         self.assert_approved_bytes(changed)
+
+
+class CurrentJapaneseSourceAlignmentTest(unittest.TestCase):
+    """Current authored example against its declared BD, separate from old audits.
+
+    This tests this bounded example's preservation and references, not an agent's
+    execution, full business coverage, human approval, or rendered-client UX.
+    """
+
+    H = HistoricalJapaneseCheckExampleTest
+    U = JapaneseUsageTrimTest
+    SOURCE_REVISION = 'c2852531ad62691c375e87818d8c3a49fd19803f'
+    SOURCE = f'https://github.com/mk3008/alder/blob/{SOURCE_REVISION}/{H.SOURCE_PATH}'
+    BEFORE_SHA256 = '0ae4b0767e73478a163bd1a51fcf861af1d10d5f1160defb7b45e4d971ccde6a'
+    ACTIVITY_SPANS = ('L123-L168', 'L170-L216', 'L218-L265', 'L267-L314')
+    ITEM_SPANS = {'JA-EX-01': ['L123-L168'], 'JA-EX-02': ['L170-L216', 'L33-L44'],
+                  'JA-EX-Q01': ['L33-L44'], 'JA-EX-03': ['L218-L265'],
+                  'JA-EX-04': ['L261-L265', 'L23-L31'], 'JA-EX-05': ['L267-L314']}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.U.setUpClass()
+        cls.before = cls.U.current
+        cls.current = (ROOT / cls.H.EXAMPLE_PATH).read_bytes().decode('utf-8')
+        cls.design = subprocess.run(
+            ['git', 'show', f'{cls.SOURCE_REVISION}:{cls.H.SOURCE_PATH}'],
+            cwd=ROOT, capture_output=True, check=True).stdout.decode('utf-8')
+        cls.activities = tuple(re.findall(r'^# Activity (.+)$', cls.design, re.M))
+
+    def assert_current_contract(self, text):
+        self.assertEqual(len(self.activities), 4)
+        self.assertEqual(self.activities, self.H.LEGACY_ACTIVITY_NAMES)
+        self.assertEqual(re.findall(r'^## (.+)$', text, re.M),
+                         ['業務一覧', *self.activities, '使い方'])
+        self.assertNotRegex(text, r'業務[0-9０-９]+[ —「]')
+        self.assertNotIn('原典の版・業務名との対応', text)
+        self.assertNotIn('原典見出しとの対応', text)
+        self.assertNotIn(self.H.SOURCE_REVISION, text)
+        self.assertIn('原典は未合意の', text)
+        self.assertEqual(text.count(self.U.M.ID_NOTICE), 1)
+        self.assertEqual(text.count('<details>'), 6)
+        self.assertEqual(text.count('</details>'), 6)
+        self.assertNotRegex(text, r'(?i)<details\s')
+        # Stable primary items, anchors, visible decisions, shared references,
+        # table cells and all supplemental facts other than source citations.
+        # Remove evidence lines on both sides, not conditions or arbitrary prose.
+        old_body = self.before[:self.before.index('<details>\n<summary>' + self.U.M.SOURCE_SUMMARY)]
+        old_body += self.U.M.ID_NOTICE + '\n'
+        def without_source_citations(value):
+            value = value.replace(self.H.SOURCE, self.SOURCE)
+            return re.sub(r'^- 根拠：.*\n', '', value, flags=re.M)
+        self.assertEqual(without_source_citations(text), without_source_citations(old_body))
+        expected_evidence = re.findall(r'^- 根拠：.+$', self.before, re.M)
+        replacements = [(self.H.SOURCE, self.SOURCE),
+                        ('の開始条件・担当者・入力・手順・出力', 'のWhen・Who・How・Result'),
+                        ('の出力]', 'のResult]'), ('入力欄の', 'Inputの'),
+                        ('手順3と出力', 'Procedureの手順3とResult'),
+                        ('手順4と出力', 'Procedureの手順4とResult')]
+        replacements += [(f'業務{i} — {name}', f'Activity {name}')
+                         for i, name in enumerate(self.activities, 1)]
+        replacements += list(zip(['L61-L95', 'L109-L140', 'L154-L187',
+                                   'L201-L234', 'L183-L187', 'L248-L259', 'L238-L246'],
+                                  [*self.ACTIVITY_SPANS, 'L261-L265', 'L33-L44', 'L23-L31']))
+        for old, new in replacements:
+            expected_evidence = [line.replace(old, new) for line in expected_evidence]
+        self.assertEqual(re.findall(r'^- 根拠：.+$', text, re.M), expected_evidence)
+        links = re.findall(r'\[([^]\n]+)\]\((https://[^)\n]+)\)', text)
+        self.assertTrue(links)
+        self.assertTrue(all(url == self.SOURCE or url.startswith(self.SOURCE + '#L')
+                            for _, url in links))
+        self.assertEqual(sum(url == self.SOURCE for _, url in links), 1)
+        for check_id, spans in self.ITEM_SPANS.items():
+            item = re.search(r'^### ' + check_id + r' — [^\n]+\n.*?(?=^#{1,3} |\Z)',
+                             text, re.M | re.S)
+            self.assertIsNotNone(item, check_id)
+            evidence = re.findall(r'^- 根拠：(.+)$', item[0], re.M)
+            self.assertEqual(len(evidence), 1, check_id)
+            item_links = re.findall(r'\[([^]\n]+)\]\(([^)\n]+)\)', evidence[0])
+            self.assertEqual([url for _, url in item_links],
+                             [self.SOURCE + '#' + span for span in spans])
+            if check_id != 'JA-EX-Q01':
+                activity = self.activities[{'JA-EX-01': 0, 'JA-EX-02': 1,
+                    'JA-EX-03': 2, 'JA-EX-04': 2, 'JA-EX-05': 3}[check_id]]
+                suffix = 'のResult' if check_id == 'JA-EX-04' else 'のWhen・Who・How・Result'
+                self.assertEqual(item_links[0][0], '「Activity ' + activity + '」' + suffix)
+            visible = re.sub(r'<details>.*?</details>', '', item[0], flags=re.S)
+            _, condition, result, _ = self.H.ITEMS[check_id]
+            state = '要確認' if check_id == 'JA-EX-Q01' else '未レビュー'
+            self.assertIn(f'- 条件：{condition}\n- 期待結果：{result}\n- 人間レビュー状態：{state}', visible)
+            if check_id == 'JA-EX-Q01':
+                for field in [self.H.Q01_KIND, self.H.QUESTION, self.H.OPTIONS]:
+                    self.assertIn(field, visible)
+        self.assertEqual(len(links), 1 + sum(map(len, self.ITEM_SPANS.values())))
+
+    def test_historical_final_bytes_are_frozen_and_current_meaning_is_preserved(self):
+        self.assertEqual(hashlib.sha256(self.before.encode()).hexdigest(), self.BEFORE_SHA256)
+        self.U().assert_approved_bytes(self.before)
+        self.assert_current_contract(self.current)
+
+    def assert_current_design(self, design):
+        # This bounded example declares this exact source revision. Updating
+        # that declaration requires rechecking its current evidence mappings;
+        # historical fixtures keep their independent original revisions.
+        self.assertEqual(design.encode('utf-8'), self.design.encode('utf-8'))
+
+    def test_working_design_matches_declared_source_and_rejects_drift(self):
+        current_design = (ROOT / self.H.SOURCE_PATH).read_bytes().decode('utf-8')
+        self.assert_current_design(current_design)
+        for old, new in [
+                ('対象備品を購入するとき。', '対象備品を購入したとき。'),
+                ('# Activity 購入申請を却下する', '# Activity 却下'),
+                ('- 対象購入申請が `purchased` になる。', '- 対象購入申請が `approved` になる。'),
+                ('## Result', '## Unspecified')]:
+            changed = current_design.replace(old, new, 1)
+            with self.subTest(original=old):
+                self.assertNotEqual(changed, current_design)
+                with self.assertRaises(AssertionError):
+                    self.assert_current_design(changed)
+
+    def test_current_source_spans_really_contain_named_activities_and_results(self):
+        lines = self.design.splitlines()
+        for name, span in zip(self.activities, self.ACTIVITY_SPANS):
+            start, end = map(int, re.findall(r'\d+', span))
+            selected = '\n'.join(lines[start - 1:end])
+            self.assertTrue(selected.startswith('# Activity ' + name + '\n'))
+            for heading in ['## Why', '## When', '## Who', '### Input',
+                            '### Procedure', '### Output', '## Result']:
+                self.assertIn(heading, selected)
+        for span, fact in [('L123-L168', '購入要求が `submitted` の購入申請として記録される。'),
+                           ('L170-L216', '対象購入申請が `approved` になる。'),
+                           ('L218-L265', '対象購入申請が `rejected` になる。'),
+                           ('L261-L265', '購買担当者の購入対象にはならない。'),
+                           ('L267-L314', '対象購入申請が `purchased` になる。'),
+                           ('L33-L44', '申請金額によって承認者や承認段階が変わる場合の扱い'),
+                           ('L23-L31', '`rejected` の購入申請は購買対象にならない。')]:
+            start, end = map(int, re.findall(r'\d+', span))
+            self.assertIn(fact, '\n'.join(lines[start - 1:end]))
+        activity4 = self.design.split('# Activity ' + self.activities[3], 1)[1]
+        when = activity4.split('## When\n\n', 1)[1].split('\n\n', 1)[0]
+        self.assertEqual(when, '`approved` の購入申請について、購買担当者が対象備品を購入するとき。')
+
+    def test_current_contract_rejects_stale_sources_and_semantic_losses(self):
+        text = self.current
+        changes = [
+            (self.SOURCE_REVISION, self.H.SOURCE_REVISION),
+            ('#L261-L265', '#L170-L216'),
+            ('「Activity 購入申請を却下する」の', '「却下」の'),
+            ('人間レビュー状態：未レビュー', '人間レビュー状態：確認済み'),
+            ('- 種別：未決事項（候補）', ''),
+            (self.H.QUESTION, ''), (self.H.OPTIONS, ''),
+            ('共有項目 [JA-EX-04](#ja-ex-04)', ''),
+            ('共有項目は [JA-EX-04](#ja-ex-04) を参照してください。', ''),
+            ('JA-EX-04', 'JA-EX-104'),
+            ('対象購入申請が `purchased` になる。', '購入申請は自動で承認される。'),
+            ('  - 数量\n', ''),
+            ('#activity-4', '#activity-3'),
+        ]
+        for old, new in changes:
+            changed = text.replace(old, new, 1)
+            with self.subTest(original=old):
+                self.assertNotEqual(changed, text)
+                with self.assertRaises(AssertionError):
+                    self.assert_current_contract(changed)
+        for addition in ['\n### JA-EX-04 — 共有項目のコピー\n',
+                         '\n原典見出しとの対応：業務1 — 備品購入を申請する\n']:
+            with self.subTest(addition=addition), self.assertRaises(AssertionError):
+                self.assert_current_contract(text + addition)
 
 
 if __name__ == '__main__':
