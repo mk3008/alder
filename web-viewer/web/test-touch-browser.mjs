@@ -173,7 +173,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  if(nativeScrollDiagnostics){
  await run('diagnostic: native scroll in isolated overflow element',nativeScroll,{controlHtml:'<!doctype html><style>body{margin:0}#detail{width:380px;height:500px;overflow:auto;touch-action:auto}</style><div id="detail"><div style="height:3000px">Native scroll control</div></div>'});
  await run('product: Drawer native touch scroll is independent of graph',async({page,cdp,driver,view})=>{
-  await setScope(page,'hide');await setScope(page,'show');await page.locator('#drawer').click();
+  await setScope(page,'hide');await setScope(page,'show');await page.locator('#drawer').click();if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
   assert.equal(await page.locator('#detail').evaluate(n=>getComputedStyle(n).touchAction),'auto');
   await nativeScroll({page,cdp,driver});assert.equal((await view()).zoom,1);await page.locator('#drawer').click();
  });
