@@ -1,3 +1,4 @@
+import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
 import {verifyDocumentActions} from './test-document-actions-browser.mjs';
 import {verifyGraphPng} from './test-graph-png-browser.mjs';
@@ -48,6 +49,7 @@ page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/
 const checks=[];
 try {
   await runBrowserCases([
+   {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},
    {name:'documentActions',run:()=>verifyDocumentActions(browser)},
    {name:'graphPng',run:()=>verifyGraphPng(browser)},

@@ -71,7 +71,7 @@ h.queryPermission=async()=>'granted';await $('open').onclick();checks.push('clos
 w.showOpenFilePicker=undefined;
 const fallback=$('fallback');Object.defineProperty(fallback,'files',{configurable:true,value:[file('second.md')]});await fallback.onchange();
 assert.equal(w.document.querySelectorAll('.tab').length,2);assert.equal($('refresh').hidden,false,'reselection-only file shows refresh');assert.equal($('refresh').disabled,false);
-const fallbackRefresh=$('refresh').onclick();const reselect=w.document.querySelector('input[type=file]:not(#fallback)');
+const fallbackRefresh=$('refresh').onclick();const reselect=w.document.querySelector('input[type=file]:not(#fallback):not(#check-file)');
 assert.ok(reselect);assert.equal($('refresh').hidden,false);assert.equal($('refresh').disabled,true);reselect.dispatchEvent(new w.Event('cancel'));await fallbackRefresh;assert.equal($('refresh').disabled,false);checks.push('fallback reselect cancellation allows retry');
 const tab=w.document.querySelectorAll('.tab')[1];tab.querySelector('button').focus();tab.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft',altKey:true,bubbles:true}));
 assert.equal(w.document.querySelector('.tab').dataset.key,w.document.activeElement.closest('.tab').dataset.key);checks.push('tab reorder retains focus');

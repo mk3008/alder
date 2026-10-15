@@ -231,3 +231,14 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .tab-strip[data-actions-mode=menu] .document-action-label{display:inline}
 .tab-strip[data-actions-mode=menu] .editor-caption{display:none}
 #document-actions>button:focus-visible{outline-offset:-3px}
+
+.check-controls{border-bottom:1px solid #8886;padding-bottom:12px;margin-bottom:16px;overflow-wrap:anywhere}
+.check-controls fieldset{border:0;padding:0;margin:8px 0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.check-controls button{height:auto;min-height:34px;white-space:normal;padding:6px 10px}
+.check-controls form{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.check-controls input[type=url]{box-sizing:border-box;width:100%;min-width:0;padding:8px;font:inherit;color:inherit;background:transparent;border:1px solid #8888;border-radius:5px}
+.check-modes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.check-modes [aria-pressed=true]{outline:2px solid currentColor;outline-offset:-2px}
+.check-warning,.check-candidate{border-inline-start:3px solid #b97816;padding-inline-start:10px}
+.check-content{overflow-wrap:anywhere}.check-content details>summary,.check-controls summary{cursor:pointer;padding:8px 0}
+.check-item{border-top:1px solid #8886;margin-top:16px;padding-top:4px}

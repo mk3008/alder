@@ -1,3 +1,5 @@
+import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
+import {checkView,type CheckViewState} from './check-view';
 import {installDocumentActions} from './document-actions';
 import {installHeaderTitleFit} from './header-layout';
 import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
@@ -169,7 +171,48 @@ function retainFocus(update:()=>void){
 }
 function renderTabs(){documentActions.close();retainFocus(buildTabs);documentActions.update();}
 function buildTabs(){const root=$('tabs');root.replaceChildren();state.tabs.forEach(t=>{const wrap=document.createElement('div');wrap.className='tab'+(t.key===state.active?' active':'');wrap.draggable=true;wrap.dataset.key=t.key;const b=document.createElement('button');b.textContent=t.name;b.title=t.name;b.prepend(icon(FileText));b.setAttribute('aria-current',String(t.key===state.active));b.disabled=documentSaving;b.onclick=async()=>{if(documentSaving)return;if(sourceTarget&&sourceTarget!==t.key&&!await closeSource())return;const changed=capture()||state.active!==t.key;state.active=t.key;render();persist(180,changed);};const close=document.createElement('button');close.className='close';close.setAttribute('aria-label',t.name+'を閉じる');close.append(icon(X));close.disabled=!!closing||documentSaving;close.onclick=()=>closeTab(t);wrap.append(b,close);wrap.ondragstart=e=>e.dataTransfer?.setData('text/plain',t.key);wrap.ondragover=e=>e.preventDefault();wrap.ondrop=e=>{e.preventDefault();if(documentSaving)return;const from=state.tabs.findIndex(x=>x.key===e.dataTransfer?.getData('text/plain')),to=state.tabs.indexOf(t);if(from>=0&&from!==to){const [m]=state.tabs.splice(from,1);state.tabs.splice(to,0,m);renderTabs();persist();}};wrap.onkeydown=e=>{if(documentSaving)return;if(e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();const i=state.tabs.indexOf(t),j=i+(e.key==='ArrowLeft'?-1:1);if(j>=0&&j<state.tabs.length){[state.tabs[i],state.tabs[j]]=[state.tabs[j],state.tabs[i]];renderTabs();persist();}}};root.append(wrap);});}
-function detail(){const t=current(),root=$('detail'),key=t?t.key+':'+(t.selected??''):'';const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;const n=t.design.graph.nodes.find(n=>n.id===t.selected);root.append(formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown));root.scrollTop=scroll;}
+const checkViews=new Map<string,CheckViewState>();
+function checkState(t:Tab){let v=checkViews.get(t.key);if(!v){v={mode:'business'};checkViews.set(t.key,v);}return v;}
+async function saveChecks(t:Tab,checks:RelatedChecks|undefined){
+  if(!state.tabs.includes(t)||closing===t)throw Error('対象タブは閉じられました。');
+  rememberEditorInput();
+  await saveDocument(()=>({...state,tabs:state.tabs.map(x=>x===t?{...x,checks}:x)}),()=>{t.checks=checks;});
+}
+async function readChecks(t:Tab,read:()=>Promise<RelatedChecks>){
+  const v=checkState(t);if(v.busy||documentSaving||restoring||closing===t)return;
+  const original=confirmationKey(t);v.busy=true;v.error=undefined;v.candidate=undefined;detail();
+  try{
+    const checks=await read();if(!state.tabs.includes(t)||closing===t)return;
+    if(original!==confirmationKey(t))throw Error('読込中にBDが更新されました。関連Checkを再指定してください。');
+    const doc=parseChecks(checks.markdown),match=checkCompatibility(doc,t);
+    if(match.state==='mismatch')throw Error('この業務設計書に対応するCheck Itemとは確認できません。'+match.reason);
+    if(match.state==='unverified'){v.candidate=checks;v.mode='checks';}
+    else{await saveChecks(t,checks);v.candidate=undefined;v.mode='checks';}
+  }catch(e){v.error='関連Checkを読み込めません。現在の関連付けとBDは保持しています: '+(e as Error).message;status(v.error,'error');}
+  finally{v.busy=false;detail();}
+}
+async function confirmChecks(t:Tab,candidate:RelatedChecks){
+  const v=checkState(t);if(v.busy||documentSaving)return;
+  const match=checkCompatibility(parseChecks(candidate.markdown),t);if(match.state==='mismatch'){v.error=match.reason;detail();return;}
+  v.busy=true;v.error=undefined;
+  try{await saveChecks(t,{...candidate,confirmedFor:confirmationKey(t)});v.candidate=undefined;v.mode='checks';}
+  catch(e){v.error='関連Checkを保存できません: '+(e as Error).message;}
+  finally{v.busy=false;detail();}
+}
+function detail(){
+  const t=current(),root=$('detail'),view=t?checkState(t):undefined,key=t?t.key+':'+(t.selected??'')+':'+view!.mode:'';
+  const focus=root.contains(document.activeElement)?(document.activeElement as HTMLElement)?.id:undefined;
+  const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
+  const n=t.design.graph.nodes.find(n=>n.id===t.selected);
+  const panel=checkView(t,view!,{
+    disabled:restoring||documentSaving||closing===t,redraw:detail,
+    file:file=>{void readChecks(t,async()=>{if(file.size>2*1024*1024)throw Error('本文は2MiB以内にしてください。');return {name:file.name,markdown:await file.text()};});},
+    url:url=>{void readChecks(t,async()=>({name:url,url,markdown:await fetchMarkdown(url)}));},
+    confirm:candidate=>{void confirmChecks(t,candidate);},
+    remove:()=>{const v=checkState(t);if(v.busy)return;v.busy=true;void saveChecks(t,undefined).then(()=>{v.candidate=undefined;v.error=undefined;}).catch(e=>{v.error=(e as Error).message;}).finally(()=>{v.busy=false;detail();});}
+  });
+  root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+}
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();
 const listView=()=>{const key=state.active??'';let value=listViews.get(key);if(!value){value={category:'activity',search:'',collapsed:new Set(),mode:'items',resolved:false};listViews.set(key,value);}return value;};
@@ -576,6 +619,8 @@ let resizing=false;$('resize').onpointerdown=e=>{if(restoring)return;resizing=tr
 if(typeof ResizeObserver!=='undefined'){const canvasResize=new ResizeObserver(()=>{const t=current();if(t)layoutCanvas(t);});canvasResize.observe($('viewport'));canvasResize.observe(document.querySelector<HTMLElement>('.toolbar')!);}
 // Validate all fields consumed by rendering before adopting a stored tab.
 function validateRestoredTab(t:Tab){
+  if(t.checks!==undefined){if(!t.checks||typeof t.checks.markdown!=='string'||typeof t.checks.name!=='string'||(t.checks.url!==undefined&&typeof t.checks.url!=='string')||(t.checks.confirmedFor!==undefined&&typeof t.checks.confirmedFor!=='string'))throw Error('Invalid related Check');parseChecks(t.checks.markdown);}
+
   if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||!t.design||typeof t.design.markdown!=='string'||!t.design.sections||typeof t.design.sections!=='object'||Array.isArray(t.design.sections)||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
   validateGraph(t.design.graph);
   // Recompute annotations from the source, never trust stored derived metadata.
