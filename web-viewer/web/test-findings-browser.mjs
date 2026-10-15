@@ -38,7 +38,7 @@ export async function verifyFindings(browser){
     const panel=page.locator('#node-list');
     assert.equal(await panel.locator('[data-finding-key="finding:F01"]').count(),1);
     assert.match(await panel.textContent(),/関連先未設定/);assert.match(await panel.textContent(),/参照先不一致/);
-    assert.match(await panel.textContent(),/困りごと/);assert.match(await panel.textContent(),/要確認/);assert.match(await panel.textContent(),/要修正/);
+    assert.match(await panel.textContent(),/困りごと/);const problem=panel.locator('[data-finding-key^="problem:"]').first();await problem.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#node-list-drawer').isVisible(),true);await page.locator('.finding-back').click();assert.match(await panel.textContent(),/要確認/);assert.match(await panel.textContent(),/要修正/);
     assert.equal(await panel.locator('[data-finding-key="finding:F04"]').count(),0);
     await panel.locator('input[type=checkbox]').check();assert.equal(await panel.locator('[data-finding-key="finding:F04"]').count(),1);
     assert.equal(await panel.locator('img,script').count(),0);
@@ -54,14 +54,14 @@ export async function verifyFindings(browser){
     assert.equal(await page.locator('#node-list img,#node-list script').count(),0);
     assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
     await page.locator('#node-list [data-finding-target="受付情報"]').focus();await page.keyboard.press('Enter');
-    assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false,'related target preserves closed right drawer');
-    if(width<=800)await page.locator('#node-list-toggle').click();
+    assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false,'related target preserves closed right drawer');assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-finding-target')),'受付情報','keyboard focus stays on related target');
+    assert.equal(await page.locator('#node-list-drawer').isVisible(),true,'left drawer stays open after selection');
     await page.locator('#drawer').click();assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),true);
     await page.locator('#node-list [data-finding-target="依頼を受け付ける"]').focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),true,'related target preserves open right drawer');assert.match(await page.locator('#detail').textContent(),/依頼を受け付ける/);
-    await page.locator('#drawer').click();if(width<=800)await page.locator('#node-list-toggle').click();
+    await page.locator('#drawer').click();assert.equal(await page.locator('#node-list-drawer').isVisible(),true,'left drawer stays open after selection');
     await page.locator('#node-list [data-finding-target="受付情報"]').click();
-    assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'受付情報');assert.match(await page.locator('#detail').textContent(),/受付情報/);assert.equal(await page.locator('#detail .finding-card').count(),0);if(width<=800)await page.locator('#node-list-toggle').click();
+    assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'受付情報');assert.match(await page.locator('#detail').textContent(),/受付情報/);assert.equal(await page.locator('#detail .finding-card').count(),0);assert.equal(await page.locator('#node-list-drawer').isVisible(),true,'left drawer stays open after selection');
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
     await page.locator('.finding-back').click();
     await panel.locator('[data-finding-key="finding:F03"]').click();
