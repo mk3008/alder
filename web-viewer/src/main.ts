@@ -213,7 +213,7 @@ function detail(){
     confirm:candidate=>{void confirmChecks(t,candidate);},
     remove:()=>{const v=checkState(t);if(v.busy)return;v.busy=true;void saveChecks(t,undefined).then(()=>{v.candidate=undefined;v.error=undefined;}).catch(e=>{v.error=(e as Error).message;}).finally(()=>{v.busy=false;detail();});}
   });
-  root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:t.design.markdown,n?.name));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();

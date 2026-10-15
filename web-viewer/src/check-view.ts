@@ -1,4 +1,4 @@
-import {formattedMarkdown} from './markdown';
+import {formattedMarkdown,detailHeading} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
 export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
@@ -50,9 +50,10 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{file:(file:File)=
   const content=document.createElement('section');content.className='check-content';
   if(!doc||!usable){content.append(management);return {controls:root,content};}
   const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
+  if(selected)content.append(detailHeading(selected.name));
   if(selected?.type!=='business')paragraph(content,'Activityを選択すると、業務別のCheck Itemsが表示されます。');
   else{
-    const heading=document.createElement('h2');heading.textContent=selected.name;content.append(heading);const ids=doc.index[selected.name]??[];
+    const ids=doc.index[selected.name]??[];
     if(!ids.length)paragraph(content,'このActivityに対応するCheckは業務一覧に記載されていません。');
     for(const id of ids){const item=doc.items.find(i=>i.id===id)!;const section=document.createElement('section');section.className='check-item';section.dataset.checkId=id;const h=document.createElement('h3');h.textContent=item.title;section.append(h);renderBody(section,item.body);content.append(section);}
   }

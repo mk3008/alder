@@ -92,7 +92,7 @@ try {
   const sampleSource=readFileSync('../business-design/alder/README.md','utf8');
   const sampleHeading=sampleSource.split('\n').find(line=>line===`# Object ${sampleId}`||line===`# Activity ${sampleId}`);
   assert.ok(sampleHeading,'Selected node must have a canonical source section');
-  assert.equal(await sample.locator('#detail h1').textContent(),sampleHeading.slice(2));
+  assert.equal(await sample.locator('#detail h1').textContent(),sampleId);
   const sampleSection=sampleSource.slice(sampleSource.indexOf(sampleHeading)).split('\n# ')[0];
   const sampleItems=sampleSection.split('\n').filter(line=>line.startsWith('- ')).map(line=>line.slice(2));
   assert.ok(sampleItems.length>0);for(const item of sampleItems)assert.ok((await sample.locator('#detail').textContent()).includes(item));

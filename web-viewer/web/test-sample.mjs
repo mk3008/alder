@@ -46,7 +46,7 @@ try{
  for(const name of purchaseDesign.graph.nodes.map(n=>n.name)){
   assert.ok(purchaseDesign.sections[name].startsWith('# '+(activityNames.includes(name)?'Activity ':'Object ')+name));
   const node=Array.from(purchase.nodes()).find(n=>n.dataset.node===name);assert.ok(node);choose(purchase,node);
-  assert.equal(purchase.$('detail').querySelector('h1').textContent,(activityNames.includes(name)?'Activity ':'Object ')+name);
+  assert.equal(purchase.$('detail').querySelector('h1').textContent,name);
   assert.ok(purchase.$('detail').textContent.includes(name),'selected graph node resolves to its Markdown section');
  }
  click(purchase,'edit-markdown');assert.equal(purchase.$('source-text').value,purchaseRaw);
