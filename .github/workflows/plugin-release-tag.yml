@@ -25,6 +25,7 @@ on:
       - 'tools/export_plugin_references.py'
       - 'tools/test_export_plugin_references.py'
       - 'tools/test_workflow_skills.py'
+      - 'tools/check_activity_names.py'
       - 'tools/test_plugin_release_workflow.py'
 
 permissions:
