@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/mk3008/alder",
+  "pullRequest": "https://github.com/mk3008/alder/pull/239",
+  "sourceCommit": "dc40d84f5c114f3b57970e80a95df3de5b14ffd2",
+  "sourceTree": "109ce10ed153bf7a8931f99ca9059fa53700f14a",
+  "urlPath": "/preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/",
+  "node": "v24.19.0",
+  "files": {
+    "preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/assets/index-BjWCJ5Kz.js": "df507c7ec047f6a465d5ebedbc31983e99000a99bdf8602f0b68bf83443aedfe",
+    "preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/assets/index-CSNKSuNR.css": "71d444752f2662c2ea172f53c726f6dd458b3dbd9a506a3241af1436eb4584bc",
+    "preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/index.html": "48549723b3a0ff2008d4a42d2df33c17ebcdd1aeaecf327fc953a645ee7c8233",
+    "preview/pr-239/dc40d84f5c114f3b57970e80a95df3de5b14ffd2/THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40"
+  }
+}
