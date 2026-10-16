@@ -15,3 +15,9 @@
 購買の最終更新 `update-candidate-3.md` には旧限定監査を無変更で適用し、`52 checks / 6 ids` が成功した。これは保持6フィールド・原典URL・単一本文・見出し先の限定監査である。一般的な意味の同値判定ではない。
 
 新規診断の正例では宣言名自体の `Activity` を保持し、表示に余計な接頭辞を足した反例と索引の別名を検出する。コード例中の見出しを無視し、対応外入力は未検証を返す。repositoryなしのコピーでも実行できることを検査した。共有参照/例値の意味判定はこの診断へ移していない。
+
+コード・workflowを含む公開 `40d8510f3fc6280fd1b350c801ef9f0771a16a55` の [Plugin package](https://github.com/mk3008/alder/actions/runs/38892908468) / [Alder release validation](https://github.com/mk3008/alder/actions/runs/38892908458) は成功。後者のvalidate jobはsuccess、release jobはskippedであり公開していない。最終の証拠/説明のみのheadについてはPRの最終Checkpointに同headのCIを記録する。
+
+公式exporterの `--check` も4 Skill/17 filesで成功。canonicalとbundled script/guidance/provenanceの再現を検査した。
+
+source517e6ddaの順序修正を公式exportした作業木でも84 testsが成功。source宣言と別順の正当なnavigationを通し、索引とH2が互いに別順なら検出する検査を追加した。先行のprefix検出・対応外・repositoryなし実行も保持。新しい業務順制約を作らないための修正であり、既存製品テストを弱めていない。

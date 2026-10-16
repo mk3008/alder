@@ -4,6 +4,7 @@ Diagnostic only: no semantic coverage, alias resolution, link or shared-Check au
 Exit 2 means this narrow profile was not verified; it is never a passing review.
 """
 import argparse
+from collections import Counter
 import json
 import re
 from pathlib import Path
@@ -38,7 +39,9 @@ def compare(design, checks):
             labels.append(m.group(1))
     supported = bool(declared and headings and labels) and len(set(declared)) == len(declared)
     mismatches = [name for name, values in [('headings', headings), ('index', labels)]
-                  if values != declared] if supported else []
+                  if Counter(values) != Counter(declared)] if supported else []
+    if supported and headings != labels:
+        mismatches.append('index-heading-order')
     return {'status': ('mismatch' if mismatches else 'match') if supported else 'not-verified',
             'declared': declared, 'headings': headings, 'index': labels,
             'mismatches': mismatches}

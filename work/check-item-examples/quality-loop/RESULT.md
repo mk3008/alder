@@ -2,7 +2,7 @@
 
 2026-10-16。PR #235の継続検証。最終採用・マージ・リリースは未承認。旧raw・失敗結果を保持し、生成結果を統括/評価担当が手直しして成功扱いにはしていない。
 
-既存規則に反する元の16 ID出力は、共有導線・一般値の保持・表示名を生成担当が修復した。別に、見本を与えない新規初稿・限定6件更新・相談受付4件更新を既存Skillで実行した。**最終独立評価と元出力の修復後読取は進行中。** 以下はその前の比較記録であり、完了・採用判定ではない。
+既存規則に反する元の16 ID出力は、共有導線・一般値の保持・表示名を生成担当が修復した。別に、見本を与えない新規初稿・限定6件更新・相談受付4件更新を既存Skillで実行した。**最終独立評価は3クラスの修正を確認したが、元出力の既存粒度NGを指摘した。作者が追加分離を行い、その再評価は進行中。** 以下は追加分離の再評価前の比較記録であり、完了・採用判定ではない。
 
 ## 見逃しの調査と方式比較
 
@@ -17,7 +17,7 @@
 | C 原典起点の2パス | 検出 | 両方検出 | 最初未検出 | [rawと訂正](review-c-source-led.md)。共有の過剰指摘を、単なる前段依存と区別して撤回 |
 | C追補 raw名の逐語抽出 | 維持 | 維持 | 検出 | 語を除去しない実比較で初めて検出。新規Freshではない |
 | D 逐語比較指示を含む公開Skill | 検出 | 両方検出 | 未検出 | [raw](detection-d.md)。実際にはH2 suffixだけを比較。指示追記だけでは安定しない |
-| E 読取専用診断を同梱した公開Skill | 検出 | 両方検出 | 検出（exit 1） | [raw](detection-e.md)。PR-02の仮識別子について追加指摘があり、妥当性は別途判定 |
+| E 読取専用診断を同梱した公開Skill | 検出 | 両方検出 | 検出（exit 1） | [raw](detection-e.md)。PR-02の仮識別子について過剰指摘があり、source/記法再照合で撤回 |
 
 方法は既存のConsistency review-onlyを別の読取工程にし、原典→表示/共有経路、原典の一般入力→結果と主欄/例を比較する。作者は原典で指摘を検証し、裏付けのある修復のみ行って保存後に再読取する。未決業務や不支持の指摘を自動で政策/人間状態へ昇格させない。名前だけは小さな実行可能診断を同梱した。新しいSkill、DSL、必須の中間成果物、業務意味の変更はない。
 
@@ -27,7 +27,7 @@
 
 | 対象 | 一次出力→保存版 | 読取による検出と処置 |
 | --- | --- | --- |
-| 元の不良16 ID | 旧[runs/candidate-v3-initial.md](../runs/candidate-v3-initial.md)→[original-repaired.md](original-repaired.md) | 実際の人間フィードバックを元作者contextへ渡し、名前/リンク・理由/金額を一般形へ修復。16 IDと状態を維持。読取再レビュー中 |
+| 元の不良16 ID | 旧[runs/candidate-v3-initial.md](../runs/candidate-v3-initial.md)→[original-repaired.md](original-repaired.md)→[original-final.md](original-final.md)→[original-granular.md](original-granular.md) | 実際の人間フィードバックを元作者contextへ渡し、名前/リンク・理由/金額を一般形へ修復。旧16 IDと状態を維持。readerが差額例の意味後退を検出し作者が一行修復。no-NG再読取後も独立評価が既存粒度NGを検出し、作者が日時用3 IDを追加して19項目へ分離 |
 | 新規初稿 | [initial-raw.md](initial-raw.md)→[initial-repaired.md](initial-repaired.md)→[initial-granular.md](initial-granular.md)→[initial-final.md](initial-final.md) | readerが共有導線を検出。統括の追加点検が複合結果の粒度を指摘し、14 IDへ保証を保存して分離。分離で生じた成功先取り条件をreaderが検出し作者が修復。最終readerはNGなしと報告 |
 | 限定購買更新 | 原典snapshot [update-raw.md](update-raw.md)→[candidate1](update-candidate-1.md)→[candidate2](update-candidate-2.md)→[candidate3](update-candidate-3.md) | readerが状態のみの旧4項目への別保証の追加を検出。作者が限定範囲へ修復。名前診断がActivity以外の余分なH2を検出し、作者が見出し/リンクを修復。最終readerはNGなしと報告 |
 | 小規模相談受付更新 | [regression-raw.md](regression-raw.md)→[regression-repair-1.md](regression-repair-1.md) | readerがC-04の受付後という時点欠落を検出し作者が修復。最終readerは表示NGなしと報告 |
@@ -49,3 +49,7 @@ AGENTS指定のFreshはgpt-6-sol/medium/fork none要求。実効runtimeは独立
 原則2回の修復という比較方針に対し、新初稿は統括追加指摘とその修復で生じた新NGを直すため3回になった。途中結果を捨てず保持し、統括介入を独立readerの自動検出成功へ数えない。注意文/別contextだけで安定するとは示せず、意味比較の見逃し・誤検出は依然残る。
 
 関連テストは[記録](tests.md)。既存テストは弱めていない。最終CI・採否は独立評価後に追記する。マージ・tag・dispatch・releaseは実施しない。
+
+raw内のローカル入力パスは実行時表記のまま保持した。公開先への移動で相対パスが解決しない場合は、`product/consultation/README.md`→[相談受付BD](../fixtures/README.md)、同`checks.md`→[元Check](../fixtures/checks.md)、購買入力→[購買BD](../../../business-design/purchase-request/README.md)を用いる（正しいrepository-relative先は上位のmanifestのinputキーでも特定できる）。これは研究用rawの移設上の制約で、正式な既存Check文書を置換していない。
+
+[最初の最終独立評価](final-assessment.md)は3件を確認したが、元出力の粒度NGを検出した。旧readerのno-NGを全体の合格へ拡大しない。新19項目は原典の一般保証と旧IDを保持し、追加分離の再評価を待つ。診断のsource順強制も統括が修正し、navigationは原典と別順でよいことをtestで確認した。原典名の一致と索引/節の相互順序だけを検査する。
