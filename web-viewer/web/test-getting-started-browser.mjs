@@ -7,7 +7,7 @@ assert.ok(parseDesign(gettingStartedFile).graph.nodes.length,'file fixture must 
 import {waitForExactRead} from './wait-saved-viewer.mjs';
 function readSession(database){return new Promise((resolve,reject)=>{
  const request=indexedDB.open(database,1);request.onupgradeneeded=()=>request.transaction.abort();request.onerror=()=>reject(request.error);
- request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let value;get.onsuccess=()=>{value=get.result;};tx.oncomplete=()=>{db.close();resolve(value?.format===2?{...value,tabs:value.views.map(v=>({...value.document,...v}))}:value);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};
+ request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let value;get.onsuccess=()=>{value=get.result;};tx.oncomplete=()=>{db.close();resolve(value?.format>=2?{...value,tabs:value.views.map(v=>({...value.document,...v}))}:value);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};
 });}
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];

@@ -42,7 +42,7 @@ async function boot({db=new IDBFactory(),seed,width=1280}={}){
 }
 async function saved(e){globalThis.indexedDB=e.db;return json(await loadSession());}
 async function flush(e){e.w.dispatchEvent(new e.w.Event('blur'));await until(()=>['saved','error','conflict','unchanged'].includes(e.$('app').dataset.saveState));return saved(e);}
-const fire=(e,node,type,x,y,id=1)=>{const event=new e.w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{button:0,pointerId:id,pointerType:'mouse',clientX:x,clientY:y});node.dispatchEvent(event);};
+const fire=(e,node,type,x,y,id=1)=>{const event=new e.w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{button:0,pointerId:id,pointerType:'mouse',clientX:x,clientY:y});(node.querySelector?.('.node-drag-handle')??node).dispatchEvent(event);};
 const geometry=e=>[...e.d.querySelectorAll('.edge,.edge-label')].map(n=>[n.dataset.relation,n.getAttribute('d'),n.getAttribute('x'),n.getAttribute('y')]);
 const checks=[];
 try{
@@ -89,7 +89,7 @@ try{
  fail.w.__failSave=false;fail.$('save-retry').click();await flush(fail);assert.deepEqual((await saved(fail)).tabs[0].positions,json(initial().positions));fail.w.close();
  checks.push('storage failure is visible, reset stays in memory, stored document unchanged, explicit retry persists');
 
- const conflict=await boot({seed:session(modified())});await flush(conflict);globalThis.indexedDB=conflict.db;const newer=await loadStoredSession();(newer.format===2?newer.recovery.find(x=>x.key==='b'):newer.tabs[1]).name='Newer other window';await saveSession(newer);
+ const conflict=await boot({seed:session(modified())});await flush(conflict);globalThis.indexedDB=conflict.db;const newer=await loadStoredSession();(newer.format>=2?newer.recovery.find(x=>x.key==='b'):newer.tabs[1]).name='Newer other window';await saveSession(newer);
  conflict.$('reset-layout').click();await flush(conflict);assert.equal(conflict.$('app').dataset.saveState,'conflict');assert.equal(conflict.$('reset-layout').disabled,true);assert.deepEqual(json(await loadStoredSession()),json(newer));assert.deepEqual(conflict.state().tabs[0].positions,json(initial().positions));
  const memory=conflict.state();conflict.$('reset-layout').onclick();assert.deepEqual(conflict.state(),memory);assert.equal(conflict.$('save-retry').hidden,true);conflict.w.close();
  checks.push('CAS conflict never overwrites newer storage, retains local document/reset and blocks further reset');

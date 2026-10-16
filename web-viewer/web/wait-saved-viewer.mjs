@@ -18,10 +18,10 @@ export function readSessionInPage(){return new Promise((resolve,reject)=>{
  request.onupgradeneeded=()=>{missing=true;request.transaction?.abort();};
  request.onerror=()=>reject(missing?Error('Missing viewer database'):request.error);
  request.onsuccess=()=>{const db=request.result;try{if(!db.objectStoreNames.contains('session'))throw Error('Missing session store');const tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let actual;
-  get.onsuccess=()=>{actual=get.result;};tx.oncomplete=()=>{db.close();if(actual?.format===2){const {format,document,views,recovery,...rest}=actual;actual={...rest,tabs:views.map(view=>({...document,...view}))};}resolve(actual??null);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Readonly transaction failed'));};
+  get.onsuccess=()=>{actual=get.result;};tx.oncomplete=()=>{db.close();if(actual?.format>=2){const {format,document,views,recovery,...rest}=actual;actual={...rest,tabs:views.map(view=>({...document,...view}))};}resolve(actual??null);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Readonly transaction failed'));};
  }catch(error){db.close();reject(error);}};
 });}
-export function viewerProjection(snapshot,fields){const tab=snapshot?.format===2?{...snapshot.document,...snapshot.views.find(t=>t.key===snapshot.active)}:snapshot?.tabs?.find(t=>t.key===snapshot.active);if(!tab)return null;const projected={};for(const key of fields){if(key==='dark'||key==='preferWrite')projected[key]=snapshot[key];else if(key==='selected')projected[key]=tab.selected??null;else if(key==='hiddenNodes')projected[key]=[...(tab.hiddenNodes??[])].sort();else projected[key]=tab[key];}return projected;}
+export function viewerProjection(snapshot,fields){const tab=snapshot?.format>=2?{...snapshot.document,...snapshot.views.find(t=>t.key===snapshot.active)}:snapshot?.tabs?.find(t=>t.key===snapshot.active);if(!tab)return null;const projected={};for(const key of fields){if(key==='dark'||key==='preferWrite')projected[key]=snapshot[key];else if(key==='selected')projected[key]=tab.selected??null;else if(key==='hiddenNodes')projected[key]=[...(tab.hiddenNodes??[])].sort();else projected[key]=tab[key];}return projected;}
 export async function waitSavedViewer(page,expected,options={}){
  const normalized={...expected,...('hiddenNodes' in expected?{hiddenNodes:[...expected.hiddenNodes].sort()}:{})};
  const result=await waitForExactRead(()=>page.evaluate(readSessionInPage),normalized,{...options,project:snapshot=>viewerProjection(snapshot,Object.keys(normalized))});

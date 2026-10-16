@@ -31,7 +31,7 @@ export function seedEmptyStateSession({layout,drawer=true,nodeDrawer=true}){retu
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
+   get.onsuccess=()=>{const session=get.result;if(session?.format>=2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
     if(!tab||tab.source?.kind!=='sample'){failure=Error('Empty-state fixture needs an active saved public sample');tx.abort();return;}
     Object.assign(tab,layout);session.drawer=drawer;session.nodeDrawer=nodeDrawer;store.put(session,'current');
    };

@@ -1,4 +1,3 @@
-import {withTestGroups} from './document-test-view.mjs';
 import {joinedSession} from './session-test-view.mjs';
 const loadSession=async()=>joinedSession(await loadStoredSession());
 // Legacy no-Group input regression; the current Group sample is tested separately.
@@ -154,9 +153,9 @@ try{
  checks.push('desktop/393/320 width models, 25/36/100/250% zoom, dark/light, signed nodes, selection, inset/origin, max-scroll preservation and origin nonaccumulation');
 
  // Group view closure uses the durable-save path; the document overview stays available.
- const grouped=withTestGroups(markdown,[['First',[design.graph.nodes.find(n=>n.type==='business').id]]]);
+ const grouped=markdown;
  const groupDesign=parseDesign(grouped),groupTab={...structuredClone(initial),design:groupDesign};
- const closing=await boot({seed:session(groupTab)});closing.d.querySelector('.node[data-group]').click();toggle(closing);await flush(closing);
+ const closing=await boot({seed:session(groupTab)});closing.d.querySelector('.node[data-activity]').click();toggle(closing);await flush(closing);
  closing.w.__holdNextSave=true;closing.w.__failNextSave=true;
  const closePromise=closing.d.querySelector('.tab.active .close').onclick();
  await until(()=>typeof closing.w.__releaseSave==='function');assert.equal(closing.$('display-settings-toggle').disabled,true);

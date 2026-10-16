@@ -68,8 +68,8 @@ export async function verifyLayoutReset(browser){
   const modified=structuredClone(state);modified.tabs[0].positions={Request:[20,40],Archive:[30,280],Review:[20,160]};modified.tabs[0].viewInset=[16,12];modified.tabs[0].canvasOrigin=[32,24];
   await seed(page,modified);await page.locator('#layout-lock').click();
   for(const id of ['Request','Review']){
-   const box=await page.locator('.node').evaluateAll((nodes,id)=>{const r=nodes.find(n=>n.dataset.node===id).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},id);
-   const x=Math.round(box.x+100),y=Math.round(box.y+30);await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+20,y+18,{steps:3});await page.mouse.up();
+   const box=await page.locator('.node').evaluateAll((nodes,id)=>{const n=nodes.find(n=>n.dataset.node===id),r=(n.querySelector('.node-drag-handle')??n).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},id);
+   const x=Math.round(box.x+box.width/2),y=Math.round(box.y+box.height/2);await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+20,y+18,{steps:3});await page.mouse.up();
   }
   await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');const before=await page.evaluate(readSessionInPage),rawBefore=await page.evaluate(readConcurrencyRecord,{database:'alder-web-viewer',raw:true});
   assert.notDeepEqual(before.tabs[0].positions.Request,modified.tabs[0].positions.Request);assert.notDeepEqual(before.tabs[0].positions.Review,modified.tabs[0].positions.Review);

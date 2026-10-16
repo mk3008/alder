@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
-import {parseGroups,groupDesign} from '../src/groups.ts';
+import {activityDesign} from '../src/activities.ts';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
-const source=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(source),groups=parseGroups(source,design);
-export async function verifyGroupWorkspace(browser){
- const results=[];mkdirSync('web/evidence/group-workspace',{recursive:true});
+const source=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(source),activities=design.activityOrder.map(id=>design.graph.nodes.find(n=>n.id===id));
+export async function verifyActivityWorkspace(browser){
+ const results=[];mkdirSync('web/evidence/activity-workspace',{recursive:true});
  for(const width of [1280,393,320]){
   const context=await browser.newContext({viewport:{width,height:900},hasTouch:width!==1280}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(5000);
   const saved=()=>page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
@@ -14,16 +14,26 @@ export async function verifyGroupWorkspace(browser){
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
    await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);
-   assert.deepEqual(await ids(),groupDesign(design).graph.nodes.map(n=>n.id).sort());
+   assert.deepEqual(await ids(),activityDesign(design).graph.nodes.map(n=>n.id).sort());
    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-   const card=page.locator('.node[data-group]').first();await card.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(await ids(),groupDesign(design,groups[0].name).graph.nodes.map(n=>n.id).sort());
+   // A separate grip is the only Activity layout target; native keys and
+   // mouse/CDP touch exercise the shipped controls without synthetic DOM edits.
+   await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+   const position=()=>page.locator('.node[data-activity="業務設計"]').evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]),grip=page.locator('.node[data-activity="業務設計"] .node-drag-handle');
+   const locked=await position();await grip.press('ArrowRight');assert.deepEqual(await position(),locked);assert.equal(await page.locator('.tab').count(),1);
+   await page.locator('#layout-lock').click();await grip.press('ArrowRight');await grip.press('Shift+ArrowDown');assert.deepEqual(await position(),[locked[0]+10,locked[1]+1]);
+   const rectangle=await grip.boundingBox(),start=[rectangle.x+rectangle.width/2,rectangle.y+rectangle.height/2],beforeDrag=await position();
+   if(width===1280){await page.mouse.move(...start);await page.mouse.down();await page.mouse.move(start[0]-30,start[1]-20,{steps:4});await page.mouse.up();}
+   else{const cdp=await context.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start[0],y:start[1],id:1}]});for(let i=1;i<=4;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start[0]-30*i/4,y:start[1]-20*i/4,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}
+   const dragged=await position();assert.notDeepEqual(dragged,beforeDrag);assert.equal(await page.locator('.tab').count(),1,'grip drag never opens details');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await position(),dragged);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');
+   const card=page.locator('.node[data-activity="業務設計"] .activity-open').first();await card.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(await ids(),activityDesign(design,activities[0].id).graph.nodes.map(n=>n.id).sort());
    await page.locator('#in').click();const zoom=await page.locator('#zoom').textContent();await page.locator('.tab').first().locator('button').first().click();assert.equal(await page.locator('#zoom').textContent(),'100%');
    if(width===1280)await card.click();else await card.tap();assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);
    await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('.tab').count(),1);
    await scope();const hidden=await ids();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await ids(),hidden,'scope visibility survives aggregate restore');await scope();assert.ok((await ids()).includes('画面設計'));
    await ensureDocumentActions(page);await page.locator('#open-checks').click();await page.locator('#check-open-sample').click();await saved();
-   await page.locator('.node[data-group]').first().press('Enter');await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('[data-check-id="SAMPLE-01"]').waitFor();
-   await saved();const record=await page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result);};};r.onerror=()=>reject(r.error);}));assert.equal(record.format,2);assert.equal(record.document.design.markdown,source);assert.ok(record.document.checks);assert.ok(record.views.every(v=>!('design' in v)&&!('draft' in v)&&!('checks' in v)));
+   await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('[data-check-id="SAMPLE-01"]').waitFor();
+   await saved();const record=await page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result);};};r.onerror=()=>reject(r.error);}));assert.equal(record.format,3);assert.equal(record.document.design.markdown,source);assert.ok(record.document.checks);assert.ok(record.views.every(v=>!('design' in v)&&!('draft' in v)&&!('checks' in v)));
    if(width===1280){
     // Close the initiating view while a real intercepted Check request waits.
     const rawChecks=readFileSync('src/samples/alder-checks.md','utf8')+'\n';let finishCheck,seenCheck;const requestedCheck=new Promise(resolve=>{seenCheck=resolve;});
@@ -35,11 +45,11 @@ export async function verifyGroupWorkspace(browser){
     // The same original continues its refresh after the initiating Group closes.
     let reads=0,finishRefresh,seenRefresh;const requestedRefresh=new Promise(resolve=>{seenRefresh=resolve;});
     await context.route('https://refresh-fixture.test/original.md',async route=>{const refreshing=reads++>0;if(refreshing)await new Promise(resolve=>{finishRefresh=resolve;seenRefresh();});await route.fulfill({headers:{'access-control-allow-origin':'*','content-type':'text/markdown'},body:source+(refreshing?'\nRefreshed original':'')});});
-    await page.locator('#open-menu-toggle').click();await page.locator('#open-url').click();await page.locator('#source-url').fill('https://refresh-fixture.test/original.md');await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});await page.locator('.node[data-group]').first().press('Enter');await saved();await ensureDocumentActions(page);await page.locator('#refresh').click();await requestedRefresh;
+    await page.locator('#open-menu-toggle').click();await page.locator('#open-url').click();await page.locator('#source-url').fill('https://refresh-fixture.test/original.md');await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await saved();await ensureDocumentActions(page);await page.locator('#refresh').click();await requestedRefresh;
     await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('#refresh').isDisabled(),true);finishRefresh();await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);await saved();
     const raw=await page.evaluate(()=>new Promise(resolve=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result.document.design.markdown);};};}));assert.equal(raw,source+'\nRefreshed original');
    }
-   await page.screenshot({path:`web/evidence/group-workspace/${width}.png`});assert.deepEqual(errors,[]);results.push({width,keyboard:true,singleTap:true,duplicateSafe:true,independentZoom:true,scopeReload:true,sharedChecks:true,canonicalDocument:true});
+   await page.screenshot({path:`web/evidence/activity-workspace/${width}.png`});assert.deepEqual(errors,[]);results.push({width,keyboard:true,singleTap:true,duplicateSafe:true,independentZoom:true,scopeReload:true,sharedChecks:true,canonicalDocument:true,handleKeys:true,handleDrag:true,noDragOpen:true,dragReload:true});
   }finally{await context.close();}
  }
  return results;

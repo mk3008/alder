@@ -1,4 +1,3 @@
-import {withTestGroups} from './document-test-view.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Isolated same-origin pages, synthetic input, and native IndexedDB only.
@@ -28,7 +27,7 @@ export function readConcurrencyRecord(database='alder-web-viewer',raw=false){
   request.onsuccess=()=>{
    const db=request.result,tx=db.transaction('session'),store=tx.objectStore('session');
    const current=store.get('current'),generation=store.get('generation');
-   tx.oncomplete=()=>{db.close();let value=current.result;if(!raw&&value?.format===2){const {format,document,views,recovery,...settings}=value;value={...settings,tabs:views.map(v=>({...document,...v}))};}resolve({current:value,generation:generation.result});};
+   tx.oncomplete=()=>{db.close();let value=current.result;if(!raw&&value?.format>=2){const {format,document,views,recovery,...settings}=value;value={...settings,tabs:views.map(v=>({...document,...v}))};}resolve({current:value,generation:generation.result});};
    tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Read aborted'));};
   };
  });
@@ -203,10 +202,10 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
   try{
    const seed=await context.newPage();await seed.goto(url);await ready(seed);
    const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
-   const source=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']]]);
+   const source=combine(concurrencyBodies.shared,concurrencyBodies.closed);
    await input(seed,source);const overall=(await keys(seed))[0];
-   await seed.locator('.node[data-group="Closed"]').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
-   await select(seed,overall);await seed.locator('.node[data-group="Shared"]').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
+   await seed.locator('.node[data-activity="Synthetic closed activity"]').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
+   await select(seed,overall);await seed.locator('.node[data-activity="Synthetic shared activity"]').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
    const read=page=>page.evaluate(readConcurrencyRecord,database);
    await until(()=>read(seed),v=>v.current?.tabs.length===3,'seed views did not commit');
    const seedRecord=await seed.evaluate(readConcurrencyRecord,{database,raw:true});
@@ -233,15 +232,15 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
     if(document.getElementById('layout-lock').getAttribute('aria-pressed')==='true')document.getElementById('layout-lock').click();
     const node=[...document.querySelectorAll('.node')].find(node=>node.dataset.node===nodeID);
     const noop=()=>{};node.setPointerCapture=noop;node.releasePointerCapture=noop;
-    node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation:noop});
-    node.onpointermove({clientX:70,clientY:45,pointerId:1});node.onpointerup({pointerId:1});
+    (node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation:noop});
+    (node.querySelector('.node-drag-handle')??node).onpointermove({clientX:70,clientY:45,pointerId:1});(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
     const after=[...document.querySelectorAll('.node')].find(node=>node.dataset.node===nodeID);
     return [parseFloat(after.style.left),parseFloat(after.style.top)];
    },{nodeID});
    assert.deepEqual(moved,[before[0]+70,before[1]+45]);
-   const addedSource=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']],['Added',['Synthetic added activity']]]);
+   const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
    await a.evaluate(async text=>{await document.querySelector('#edit-markdown').onclick();const t=document.querySelector('#source-text');t.value=text;t.dispatchEvent(new Event('input',{bubbles:true}));await document.querySelector('#source-submit').onclick();},addedSource);
-   await select(a,overall);await a.locator('.node[data-group="Added"]').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
+   await select(a,overall);await a.locator('.node[data-activity="Synthetic added activity"]').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
    await a.evaluate(async closed=>{document.getElementById('theme').click();await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();},closed);
    const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and Group close');
    assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);

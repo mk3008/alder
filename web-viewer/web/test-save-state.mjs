@@ -119,7 +119,7 @@ await caseOf('old completion cannot clean a newer unsubmitted text or URL draft'
 for(const kind of ['node drag','drawer resize'])await caseOf('old save completion cannot clean an unfinished '+kind,async()=>{
  const e=await env({holdWrites:true});await document(e);flush(e);await held(e,1);let finish;
  if(kind==='node drag'){
-  e.$('layout-lock').click();const node=e.w.document.querySelector('.node');node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>node.onpointerup({pointerId:1});
+  e.$('layout-lock').click();const node=e.w.document.querySelector('.node.object');(node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});(node.querySelector('.node-drag-handle')??node).onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
  }else{e.$('resize').onpointerdown({pointerId:1});e.$('resize').onpointermove({clientX:e.w.innerWidth-470});finish=()=>e.$('resize').onpointerup({pointerId:1});}
  e.probe.states=[];await release(e,1);await until(()=>state(e),value=>value!=='saving','old save has settled');guard(e,true,['dirty']);assert.ok(!e.probe.states.includes('saved'),'an in-progress mutation is newer than completed transaction');finish();flush(e);await held(e,2);await release(e,2);const value=await saved(e);if(kind==='drawer resize')assert.equal(value.current.width,470);
 });
@@ -178,7 +178,7 @@ await caseOf('successful save clears a queued storage error beneath an operation
 });
 await caseOf('document rescue downloads the complete exact Markdown, not the selected detail or a backup',async()=>{
  const body=concurrencyBodies.shared+'\nLiteral rescue bytes: <script>globalThis.__rescueExecuted=true</script> 日本語 🪵\n';const e=await failedDocument({body});
- const node=e.w.document.querySelector('.node');e.probe.failWrites=1;mouseTap(e,node);flush(e);await until(()=>e.probe.failWrites,value=>value===0,'selection save failure');await stateIs(e,'error');recovery(e,['save-retry','save-download']);const download=await assertRescue(e,'save-download',body);assert.equal(e.w.__rescueExecuted,undefined);assert.equal(e.w.document.querySelector('#detail script,#status script'),null);await until(()=>e.revoked.includes(download.url),Boolean,'download URL is eventually released');assert.equal(e.$('source-dialog').hidden,true);guard(e,true,['error']);assert.equal(e.network(),0);
+ const node=e.w.document.querySelector('.node.object');e.probe.failWrites=1;mouseTap(e,node);flush(e);await until(()=>e.probe.failWrites,value=>value===0,'selection save failure');await stateIs(e,'error');recovery(e,['save-retry','save-download']);const download=await assertRescue(e,'save-download',body);assert.equal(e.w.__rescueExecuted,undefined);assert.equal(e.w.document.querySelector('#detail script,#status script'),null);await until(()=>e.revoked.includes(download.url),Boolean,'download URL is eventually released');assert.equal(e.$('source-dialog').hidden,true);guard(e,true,['error']);assert.equal(e.network(),0);
 });
 await caseOf('invalid unsubmitted text remains exact through operation error, draft rescue and current-document rescue',async()=>{
  const e=await failedDocument(),raw='  invalid <img src=x onerror="globalThis.__rescueExecuted=true">\n日本語 🪵\n\n';draft(e,raw);await e.$('source-submit').onclick();assert.equal(e.$('source-dialog').hidden,false);assert.equal(e.$('source-text').value,raw);assert.equal(e.$('status').dataset.key,'operation');assert.equal(e.$('save-actions').hidden,true,'generic parse error does not expose unrelated storage actions');
@@ -222,11 +222,11 @@ for(const empty of [true,false])await caseOf('no-op background pointer click on 
  const e=empty?await env():await cleanDocument();return noOp(e,()=>mouseTap(e));
 });
 await caseOf('no-op already-selected locked-node pointer click stays clean',async()=>{
- const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node'));flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>mouseTap(e,e.w.document.querySelector('.node.selected')));
+ const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node.object'));flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>mouseTap(e,e.w.document.querySelector('.node.selected')));
 });
 for(const end of ['onpointerup','onpointercancel','onlostpointercapture'])await caseOf('no-op selected unlocked-node '+end+' without movement stays clean',async()=>{
- const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node'));flush(e);const baseline=await saved(e);assert.equal(baseline.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);e.$('layout-lock').click();
- return noOp(e,()=>{const node=e.w.document.querySelector('.node.selected');node.onpointerdown({button:0,pointerId:94,clientX:100,clientY:100,stopPropagation(){}});node[end]({pointerId:94});});
+ const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node.object'));flush(e);const baseline=await saved(e);assert.equal(baseline.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);e.$('layout-lock').click();
+ return noOp(e,()=>{const node=e.w.document.querySelector('.node.selected');(node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,pointerId:94,clientX:100,clientY:100,stopPropagation(){}});(node.querySelector('.node-drag-handle')??node)[end]({pointerId:94});});
 });
 for(const end of ['onpointerup','onpointercancel'])await caseOf('no-op drawer resize '+end+' without movement stays clean',async()=>{
  const e=await cleanDocument();return noOp(e,()=>{e.$('resize').onpointerdown({pointerId:93});e.$('resize')[end]({pointerId:93});});
@@ -238,7 +238,7 @@ await caseOf('no-op touch movement with identical coordinates stays clean',async
  const e=await cleanDocument();return noOp(e,()=>{touchEvent(e,'pointerdown');touchEvent(e,'pointermove');touchEvent(e,'pointerup');});
 });
 await caseOf('no-op already-selected locked-node touch tap stays clean',async()=>{
- const e=await cleanDocument();touchEvent(e,'pointerdown',e.w.document.querySelector('.node'));touchEvent(e,'pointerup');flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>{touchEvent(e,'pointerdown',e.w.document.querySelector('.node.selected'));touchEvent(e,'pointerup');});
+ const e=await cleanDocument();touchEvent(e,'pointerdown',e.w.document.querySelector('.node.object'));touchEvent(e,'pointerup');flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>{touchEvent(e,'pointerdown',e.w.document.querySelector('.node.selected'));touchEvent(e,'pointerup');});
 });
 await caseOf('no-op current active-tab click stays clean',async()=>{const e=await cleanDocument();return noOp(e,()=>e.tabs()[0].querySelector('button').click());});
 await caseOf('no-op tab drop at its existing index stays clean',async()=>{

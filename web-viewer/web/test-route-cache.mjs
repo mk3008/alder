@@ -1,4 +1,3 @@
-import {withTestGroups} from './document-test-view.mjs';
 // Legacy no-Group input regression; the current Group sample is tested separately.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
@@ -63,18 +62,18 @@ const paths=()=>new Map([...d.querySelectorAll('.edge')].map(e=>[e.dataset.relat
 openDisplaySettingsDOM(d);const initial=paths(),viewBox=$('edges').getAttribute('viewBox');
 w.__routeCalls=0;$('layout-lock').click();
 let card=d.querySelector('.node');const id=card.dataset.node;
-card.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});card.onpointerup({pointerId:1});
+(card.querySelector('.node-drag-handle')??card).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});(card.querySelector('.node-drag-handle')??card).onpointerup({pointerId:1});
 $('out').click();$('in').click();$('drawer').click();$('drawer').click();$('node-list-toggle').click();$('node-list-close').click();
 openDisplaySettingsDOM(d);$('prefer-write').click();$('scope-outside').click();$('scope-outside').click();openDisplaySettingsDOM(d);$('prefer-write').click();
 assert.equal(w.__routeCalls,0,'selection, zoom, drawers, lock, Scope and Write do not route');
 assert.deepEqual(paths(),initial,'filters restore original geometry');
 assert.equal($('edges').getAttribute('viewBox'),viewBox,'filter changes retain all extents');
-card=d.querySelector(`[data-node="${id}"]`);card.onpointerdown({button:0,clientX:0,clientY:0,pointerId:2,stopPropagation(){}});
-card.onpointermove({clientX:35,clientY:40});
+card=d.querySelector(`[data-node="${id}"]`);(card.querySelector('.node-drag-handle')??card).onpointerdown({button:0,clientX:0,clientY:0,pointerId:2,stopPropagation(){}});
+(card.querySelector('.node-drag-handle')??card).onpointermove({clientX:35,clientY:40});
 const incident=sample.graph.relations.map((r,i)=>r.from===id||r.to===id?i:-1).filter(i=>i>=0);
 assert.equal(w.__routeCalls,incident.length);
 for(const [index,path] of paths())if(!incident.includes(+index))assert.equal(path,initial.get(index));
-card.onpointerup({pointerId:2});assert.equal(w.__routeCalls,incident.length,'pointer release keeps route geometry');
+(card.querySelector('.node-drag-handle')??card).onpointerup({pointerId:2});assert.equal(w.__routeCalls,incident.length,'pointer release keeps route geometry');
 assert.ok([...d.querySelectorAll('.edge')].every(e=>['true','false'].includes(e.dataset.fallback)));
 const fire=(type,pointerId,x,y,target=$('viewport'))=>{const event=new w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{pointerId,pointerType:'touch',button:0,clientX:x,clientY:y});target.dispatchEvent(event);};
 const beforeTouch=paths();w.__routeCalls=0;
@@ -85,14 +84,14 @@ fire('pointerup',3,130,140);assert.equal(w.__routeCalls,incident.length,'touch r
 
 const afterDrag=paths();w.__routeCalls=0;
 card=[...d.querySelectorAll('.node')].find(n=>n.dataset.node!==id);
-card.onpointerdown({button:0,clientX:0,clientY:0,pointerId:4,stopPropagation(){}});card.onpointerup({pointerId:4});
+(card.querySelector('.node-drag-handle')??card).onpointerdown({button:0,clientX:0,clientY:0,pointerId:4,stopPropagation(){}});(card.querySelector('.node-drag-handle')??card).onpointerup({pointerId:4});
 assert.equal(w.__routeCalls,0,'selection after dragging preserves cached routes');
 assert.deepEqual(paths(),afterDrag);
 // Cache isolation now follows graph views of the same original.
-const grouped=withTestGroups(readFileSync('web/authorities/ungrouped-alder.md','utf8'),[['First',sample.activityOrder.slice(0,2)],['Second',sample.activityOrder.slice(2,4)]]);
+const grouped=readFileSync('web/authorities/ungrouped-alder.md','utf8');
 $('open-text').click();$('source-text').value=grouped;await $('source-submit').onclick();
-d.querySelector('.node[data-group="First"]').click();const firstTab=d.querySelector('.tab.active').dataset.key;
-const groupPaths=paths();await d.querySelector('.tab button').onclick();d.querySelector('.node[data-group="Second"]').click();
+d.querySelector('.node[data-activity="'+sample.activityOrder[0]+'"]').click();const firstTab=d.querySelector('.tab.active').dataset.key;
+const groupPaths=paths();await d.querySelector('.tab button').onclick();d.querySelector('.node[data-activity="'+sample.activityOrder[2]+'"]').click();
 w.__routeCalls=0;await [...d.querySelectorAll('.tab')].find(t=>t.dataset.key===firstTab).querySelector('button').onclick();
 assert.equal(w.__routeCalls,0,'switching back to a Group view reuses its cache');assert.deepEqual(paths(),groupPaths);
 

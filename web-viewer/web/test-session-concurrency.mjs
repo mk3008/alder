@@ -1,6 +1,5 @@
 import {parseDesign} from '../src/graph.ts';
-import {createWorkspace,openGroup,snapshotWorkspace} from '../src/workspace.ts';
-import {withTestGroups} from './document-test-view.mjs';
+import {createWorkspace,openActivity,snapshotWorkspace} from '../src/workspace.ts';
 import {joinedSession} from './session-test-view.mjs';
 // Independent unchanged bundles in JSDOM share fresh fake IndexedDB. This is
 // model evidence only; native IndexedDB tests are in the paired browser module.
@@ -47,8 +46,8 @@ async function select(e,key){const tab=tabs(e).find(tab=>tab.dataset.key===key);
 function drag(e,id,dx,dy){
  if(e.$('layout-lock').getAttribute('aria-pressed')==='true')e.$('layout-lock').click();
  const node=Array.from(e.w.document.querySelectorAll('.node')).find(node=>node.dataset.node===id);assert.ok(node);
- node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});
- node.onpointermove({clientX:dx,clientY:dy,pointerId:1});node.onpointerup({pointerId:1});
+ (node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});
+ (node.querySelector('.node-drag-handle')??node).onpointermove({clientX:dx,clientY:dy,pointerId:1});(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
 }
 function lifecycle(e,event){
  if(event==='hidden'){Object.defineProperty(e.w.document,'hidden',{configurable:true,value:true});e.w.document.dispatchEvent(new e.w.Event('visibilitychange'));}
@@ -127,9 +126,9 @@ if(!values['app-only'])await caseOf('same-page queued lifecycle saves use the la
 for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' preserves winner and local work',async()=>{
  const db=new IDBFactory();
  const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
- const source=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']]]);
+ const source=combine(concurrencyBodies.shared,concurrencyBodies.closed);
  const d=parseDesign(source),ws=createWorkspace({...emptySession(),tabs:[{key:'original',name:'race.md',design:d,positions:{},scroll:[0,0],zoom:1}]});
- const closed=openGroup(ws,'Closed').key,shared=openGroup(ws,'Shared').key;
+ const closed=openActivity(ws,'Synthetic closed activity').key,shared=openActivity(ws,'Synthetic shared activity').key;
  const seedRealm=realm(db);seedRealm.w.__seed=snapshotWorkspace(ws);await seedRealm.w.eval('('+seedLegacyRecord.toString()+')({value:globalThis.__seed})');seedRealm.w.close();
  const seed=await boot(db),initial=await seed.read();seed.w.close();
  const a=await boot(db),b=await boot(db),initialKeys=initial.current.tabs.map(t=>t.key);
@@ -137,9 +136,9 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  assert.deepEqual(keys(a),initialKeys);assert.deepEqual(keys(b),initialKeys);assert.deepEqual(await a.read(),initial,'both windows read the same untouched committed generation');
  await select(a,shared);const nodeID='Synthetic shared activity',before=initial.current.tabs.find(t=>t.key===shared).positions[nodeID],moved=[before[0]+70,before[1]+45];
  drag(a,nodeID,70,45);assert.deepEqual(coords(a)[nodeID],moved);
- const addedSource=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']],['Added',['Synthetic added activity']]]);
+ const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
  await a.$('edit-markdown').onclick();a.$('source-text').value=addedSource;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();
- await select(a,'original');a.w.document.querySelector('.node[data-group="Added"]').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
+ await select(a,'original');a.w.document.querySelector('.node[data-activity="Synthetic added activity"]').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
  a.$('theme').click();await tabs(a).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  const committedA=await until(()=>a.read(),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, coordinates and Group close');
  assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);

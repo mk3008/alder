@@ -94,7 +94,7 @@ try{
 
  const e=await boot();e.$('open-sample').click();const initial=positions(e),beforeRoutes=routes(e);e.$('layout-lock').click();
  const id=design.graph.nodes[0].id,node=[...e.d.querySelectorAll('.node')].find(n=>n.dataset.node===id),start=initial[id];
- node.onpointerdown({button:0,clientX:400,clientY:400,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:430,clientY:425,pointerId:1});node.onpointerup({pointerId:1});
+ (node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:400,clientY:400,pointerId:1,stopPropagation(){}});(node.querySelector('.node-drag-handle')??node).onpointermove({clientX:430,clientY:425,pointerId:1});(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
  assert.deepEqual(positions(e)[id],[start[0]+30,start[1]+25]);for(const [other,p] of Object.entries(initial))if(other!==id)assert.deepEqual(positions(e)[other],p);
  const moved=positions(e);assert.notDeepEqual(routes(e),beforeRoutes);assert.deepEqual((await flush(e)).tabs[0].viewInset,[40,0]);
  e.$('node-list-toggle').click();const row=e.d.querySelector('[data-list-node]');row.querySelector('.node-navigate').click();

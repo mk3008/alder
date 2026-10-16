@@ -29,7 +29,7 @@ export function seedInitialLeftMarginSession({layout,closed=false,omitInset=fals
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);if(closed&&session.tabs.length){session.sampleLayout={...tab};session.tabs=[];delete session.active;}const target=closed?session?.sampleLayout:tab;
+   get.onsuccess=()=>{const session=get.result;if(session?.format>=2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);if(closed&&session.tabs.length){session.sampleLayout={...tab};session.tabs=[];delete session.active;}const target=closed?session?.sampleLayout:tab;
     if(!target||(!closed&&tab.source?.kind!=='sample')||(closed&&session.tabs.length!==0)){failure=Error('Margin fixture needs the committed public sample or its closed layout');tx.abort();return;}
     Object.assign(target,layout);if(omitInset)delete target.viewInset;
     session.drawer=false;session.nodeDrawer=false;store.put(session,'current');

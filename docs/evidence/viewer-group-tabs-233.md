@@ -1,3 +1,5 @@
+> 旧方針の履歴。2026-10-16にGroup階層化を廃止し、[Activity詳細](viewer-activity-tabs-233.md)へ変更した。以下は変更前の記録。
+
 # Viewerの単一原本とGroup表示
 
 Control: [root #122](https://github.com/mk3008/root/issues/122) / Execution: [Alder #233](https://github.com/mk3008/alder/issues/233) / Draft: [PR #239](https://github.com/mk3008/alder/pull/239)

@@ -1,4 +1,3 @@
-import {parseGroups} from './groups.ts';
 export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean; [key: string]: unknown };
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
@@ -111,5 +110,5 @@ export function parseDesign(markdown: string): Design {
   validateGraph(graph); graph.nodes.sort((a,b)=>codepointCompare(a.id,b.id)); graph.relations.sort((a,b)=>{for(const k of ['kind','from','to','label'] as const){const d=codepointCompare(a[k],b[k]);if(d)return d;}return 0;});
   const names=new Set(graph.nodes.map(n=>n.id));
   for(const finding of findings) finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
-  const design={graph,sections:sourceSections,markdown,activityOrder,findings};parseGroups(markdown,design);return design;
+  const design={graph,sections:sourceSections,markdown,activityOrder,findings};return design;
 }

@@ -1,4 +1,3 @@
-import {withTestGroups} from './document-test-view.mjs';
 import {joinedSession} from './session-test-view.mjs';
 // DOM/IndexedDB MODEL regression tests, not a real-browser test.
 // Handlers may be called directly; source dialog, fetch, file handles and timers
@@ -142,7 +141,7 @@ try {
  checks.push('pending save blocks duplicate apply, conflicting source entry, close and draft changes until the persisted Graph swap completes');
 
 
- const closeFirst=await ready();const activities=[...markdown.matchAll(/^# Activity (.+)$/gm)].map(m=>m[1]);const grouped=raw=>withTestGroups(raw,[['First',[activities[0]]],['Second',[activities[1]]]]);await openText(closeFirst,grouped(markdown));closeFirst.$('nodes').querySelector('[data-group=First]').click();await tabs(closeFirst)[0].querySelector('button').onclick();closeFirst.$('nodes').querySelector('[data-group=Second]').click();await edit(closeFirst);input(closeFirst,grouped(edited));await flush();
+ const closeFirst=await ready();const activities=[...markdown.matchAll(/^# Activity (.+)$/gm)].map(m=>m[1]);const grouped=raw=>raw;await openText(closeFirst,grouped(markdown));closeFirst.$('nodes').querySelector('[data-activity="'+activities[0]+'"]').click();await tabs(closeFirst)[0].querySelector('button').onclick();closeFirst.$('nodes').querySelector('[data-activity="'+activities[1]+'"]').click();await edit(closeFirst);input(closeFirst,grouped(edited));await flush();
  const closeDB=closeFirst.w.indexedDB,closeGate=deferred();let closeTransactions=0;
  closeFirst.w.indexedDB={open(...args){
   const real=closeDB.open(...args),request={};real.onerror=()=>{request.error=real.error;request.onerror?.();};

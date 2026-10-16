@@ -1,4 +1,4 @@
-import {withTestGroups} from './document-test-view.mjs';
+import {activityTabFixture} from './document-test-view.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
@@ -73,8 +73,8 @@ export async function verifyTabStrip(browser){
   const read=page.waitForRequest('https://tab-strip.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,4,'native pointer refresh rereads the URL');await openSourceAction(page,'open-sample-menu');await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
   assert.ok(single.scroll[0]<=single.client[0],'one short tab needs no horizontal scroll');
   const names=parseDesign(sample).activityOrder.slice(0,8).map((id,i)=>['Long Group '+i+' synthetic title for horizontal scrolling',[id]]);
-  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(withTestGroups(sample,names));await page.locator('#source-submit').click();
-  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-group]').filter({hasText:name}).press('Enter');}
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(activityTabFixture(names.map(([name])=>name)));await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});
+  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-activity] .activity-open').filter({hasText:name}).press('Enter');}
   assert.equal(await page.locator('.tab').count(),9);await keyboardOrder(['save-image','copy-image','share-source','open-checks','edit-markdown']);
   const results=[];
   for(const theme of ['light','dark']){

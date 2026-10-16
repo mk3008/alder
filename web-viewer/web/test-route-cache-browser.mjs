@@ -1,4 +1,3 @@
-import {withTestGroups} from './document-test-view.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
@@ -24,7 +23,7 @@ export function integerDragPlan(fixture,moving,box,crossing){
 export async function verifyRouteCache(browser){
  const context=await browser.newContext({viewport:{width:1440,height:960}}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
- const raw=withTestGroups(JSON.parse(readFileSync('web/authorities/contract-cases.json','utf8')).find(c=>c.name==='test_explicit_exception_kinds').input,[['Detail',['read','approve']]]);
+ const raw=JSON.parse(readFileSync('web/authorities/contract-cases.json','utf8')).find(c=>c.name==='test_explicit_exception_kinds').input;
  const design=parseDesign(raw),relations=design.graph.relations,moving='person';
  const unrelated=relations.findIndex(r=>r.from==='record'&&r.to==='read');
  assert.ok(unrelated>=0);assert.ok(relations.some(r=>r.from===moving||r.to===moving));
@@ -33,14 +32,14 @@ export async function verifyRouteCache(browser){
  const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.locator('.node[data-group]').press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.node').length===4);await page.locator('#drawer').click();await ready();
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length===4);await page.locator('#drawer').click();await ready();
   await waitSavedViewer(page,{positions:await positions()});
   const fixture={record:[80,100],read:[650,420],person:[1040,100],approve:[1040,650]};
   await page.goto('http://127.0.0.1:4173/LICENSE.txt');
   await waitForExactRead(()=>page.evaluate(positions=>new Promise((resolve,reject)=>{
    const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
    request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');let failure;
-    get.onsuccess=()=>{const session=get.result,tab=(session?.format===2?session.views:session?.tabs)?.find(t=>t.key===session.active);if(!tab){failure=Error('Route-cache fixture session missing');tx.abort();return;}tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.hiddenNodes=[];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];session.drawer=false;store.put(session,'current');};
+    get.onsuccess=()=>{const session=get.result,tab=(session?.format>=2?session.views:session?.tabs)?.find(t=>t.key===session.active);if(!tab){failure=Error('Route-cache fixture session missing');tx.abort();return;}tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.hiddenNodes=[];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];session.drawer=false;store.put(session,'current');};
     tx.oncomplete=()=>{db.close();resolve(true);};tx.onerror=tx.onabort=()=>{db.close();reject(failure??tx.error??Error('Route-cache fixture commit failed'));};
    };
   }),fixture),true,{timeoutMs:5000});
@@ -75,7 +74,7 @@ export async function verifyRouteCache(browser){
   }
   await setScope(page,'hide');await setScope(page,'show');assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'Scope roundtrip retains hidden incident and unrelated routes');
   const firstKey=await page.locator('.tab.active').getAttribute('data-key');
-  await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-group]').press('Enter');
+  await page.locator('.node[data-activity] .activity-open').first().press('Enter');await page.locator('.tab').first().locator('button').first().click();
   assert.equal(await page.locator('.tab.active').getAttribute('data-key'),firstKey);assert.deepEqual(await positions(),moved);assert.deepEqual(await routes(),during,'Group tab switch preserves route history');
   let lastObserved;
   await waitSavedViewer(page,{positions:drag.expected,hiddenNodes:[],zoom:1},{observe:({reads,observed})=>{const serialized=JSON.stringify(observed);if(serialized!==lastObserved){console.log('ROUTE_CACHE_DB '+JSON.stringify({reads,expected:drag.expected,observed}));lastObserved=serialized;}}});
