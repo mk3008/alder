@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 // Only root restoration may turn the omitted "no hidden nodes" into [].
 // Preview-only isolation checks below deliberately keep exact stored equality.
 export function normalizeRootRestoredSession(session){
+ if(session.format>=2)return {...session,views:session.views.map(v=>({...v,hiddenNodes:v.hiddenNodes??[]}))};
  return {...session,tabs:session.tabs.map(tab=>({...tab,hiddenNodes:tab.hiddenNodes===undefined?[]:tab.hiddenNodes}))};
 }
 export async function verifyPreviewIsolation(browser){

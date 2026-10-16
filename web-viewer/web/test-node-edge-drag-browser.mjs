@@ -68,7 +68,7 @@ export function seedEdgeDragSession({positions,zoom,scroll,viewInset,moving='per
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+   get.onsuccess=()=>{const session=get.result,tab=(session?.format>=2?session.views:session?.tabs)?.find(t=>t.key===session.active);
     if(!tab){failure=Error('Edge-drag fixture has no active saved tab');tx.abort();return;}
     Object.assign(tab,{positions,zoom,scroll,viewInset,selected:moving,hiddenNodes:[],showExceptions:true,selectedEdgesOnly:false});delete tab.canvasOrigin;
     session.drawer=false;session.nodeDrawer=false;session.preferWrite=false;store.put(session,'current');
@@ -88,7 +88,7 @@ function readFrame(){
  const left=r.left+v.clientLeft,top=r.top+v.clientTop;
  const scroll=[v.scrollLeft,v.scrollTop],offset=[parseFloat(nodes.style.left)||0,parseFloat(nodes.style.top)||0],plan=window.edgeDragOracle;let oracle;
  if(plan){const {position,start,end,zoom,before}=plan,expected=position.map((value,axis)=>value+(end[axis]-start[axis])/zoom+((scroll[axis]/zoom-offset[axis]/zoom)-(before.scroll[axis]/zoom-before.offset[axis]/zoom))),style=document.createElement('div').style;style.left=expected[0]+'px';style.top=expected[1]+'px';oracle={id:plan.id,position:expected,style:[style.left,style.top]};}
- return {positions,styles,rects,routes,scroll,offset,oracle,transform:nodes.style.transform,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
+ return {activity:document.querySelector('.tab.active')?.dataset.activity,positions,styles,rects,routes,scroll,offset,oracle,transform:nodes.style.transform,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
 }
 const frame=page=>page.evaluate(readFrame);
 async function paintedFrames(page,count=4){
@@ -100,8 +100,9 @@ async function paintedFrames(page,count=4){
   return samples;
  },{source:readFrame.toString(),count}),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Edge-drag painted-frame deadline exceeded')),4000);})]);}finally{clearTimeout(timer);}
 }
+function relationsFor(view){const activity=view.activity;if(!activity)return design.graph.relations;return design.graph.relations.filter(r=>(r.kind==='input'&&r.to===activity)||(r.kind==='output'&&r.from===activity)||(r.kind==='business-exception'&&(r.from===activity||r.to===activity)));}
 function assertUnchangedOthers(current,initial){
- const moving=current.oracle?.id??edgeDragMoving,unrelated=design.graph.relations.flatMap((r,i)=>r.from!==moving&&r.to!==moving?[String(i)]:[]);
+ const moving=current.oracle?.id??edgeDragMoving,unrelated=relationsFor(initial).flatMap((r,i)=>r.from!==moving&&r.to!==moving?[String(i)]:[]);
  for(const [id,p] of Object.entries(initial.positions))if(id!==moving)assert.deepEqual(current.positions[id],p,`other world position ${id}`);
  for(const id of unrelated)assert.deepEqual(current.routes[id],initial.routes[id],`nonincident path and label ${id}`);
 }
@@ -141,17 +142,18 @@ async function pointerDriver(page,context,input){
  }
  return {down:async p=>{await page.mouse.move(...p);await page.mouse.down();},move:p=>page.mouse.move(...p),up:()=>page.mouse.up()};
 }
-async function openFixture(page,zoom,atExtent,moving=edgeDragMoving){
+async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView=false){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();
- await page.waitForFunction(()=>document.querySelectorAll('.node').length===4||!!document.querySelector('#status[data-kind=error]:not([hidden])'));
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();if(activityView)await page.locator('.node[data-activity] .activity-open').first().press('Enter');
+ await page.waitForFunction(count=>document.querySelectorAll('.node').length===count||!!document.querySelector('#status[data-kind=error]:not([hidden])'),4);
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
+ if(activityView)assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node).sort()),['approve','person','read','record'],'detail adds the directly adjacent exception Activity');
  await waitSavedViewer(page,{positions:(await frame(page)).positions});
  // Explicitly close both overlays before measuring the visible viewport.
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
  await waitForExactRead(()=>page.evaluate(readSessionInPage),{drawer:false,nodeDrawer:false},{project:s=>({drawer:s?.drawer,nodeDrawer:!!s?.nodeDrawer})});
- const measured=await frame(page),viewInset=[4096,4096],positions=clone(edgeDragPositions);
+ const measured=await frame(page),viewInset=[4096,4096],positions=Object.fromEntries(Object.entries(clone(edgeDragPositions)).filter(([id])=>!activityView||id in measured.positions));
  if(moving!==edgeDragMoving){positions[edgeDragMoving]=positions[moving];positions[moving]=[0,0];}
  if(atExtent==='right'){positions[moving]=[7000,0];viewInset[0]=0;}
  if(atExtent==='bottom'){positions[moving]=[0,5000];viewInset[1]=0;}
@@ -163,14 +165,14 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving){
  await page.evaluate(seedEdgeDragSession,{positions,zoom,scroll,viewInset,moving});
  const saved=await waitSavedViewer(page,{positions,zoom,scroll,viewInset,selected:moving});
  assert.equal(saved.drawer,false);assert.equal(saved.nodeDrawer,false);
- await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);
+ await page.goto(origin);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);
  if(atExtent)await page.locator('#viewport').evaluate((v,edge)=>{if(edge==='right')v.scrollLeft=v.scrollWidth;else if(edge==='bottom')v.scrollTop=v.scrollHeight;else if(edge==='left')v.scrollLeft=0;else v.scrollTop=0;},atExtent);
  await paintedFrames(page,2);const initial=await frame(page);
  assert.deepEqual(initial.positions,positions);assert.equal(initial.zoom,zoom);
  if(!atExtent)assert.deepEqual(initial.scroll,scroll);
  else {const axis=['left','right'].includes(atExtent)?0:1,negative=['left','top'].includes(atExtent);assert.equal(initial.scroll[axis],negative?0:initial.extent[axis]-initial.client[axis],'boundary fixture begins at the realized scroll limit');}
  assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);assert.equal(await page.locator('#node-list-drawer').isVisible(),false);
- assert.equal(Object.keys(initial.routes).length,design.graph.relations.length);
+ assert.equal(Object.keys(initial.routes).length,relationsFor(initial).length);
  const box=initial.rects[moving],start=[Math.round(box[0]+130*zoom),Math.round(box[1]+34*zoom)];
  // A near-leading-edge grip exhausts the 24-world-pixel negative reserve in
  // a bounded frame window without a long arbitrary hold. Still inside the card.
@@ -231,7 +233,7 @@ async function runIsolated(browser,options,body){
  const context=await browser.newContext({viewport:{width:options.width,height:960},hasTouch:options.input==='touch'}),page=await context.newPage(),errors=[];
  page.setDefaultTimeout(4000);page.setDefaultNavigationTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
  let timer;try{
-  return await Promise.race([(async()=>{await installTrace(page);const driver=await pointerDriver(page,context,options.input),fixture=await openFixture(page,options.zoom,options.atExtent,options.moving),env={...options,...fixture,page,context,driver};
+  return await Promise.race([(async()=>{await installTrace(page);const driver=await pointerDriver(page,context,options.input),fixture=await openFixture(page,options.zoom,options.atExtent,options.moving,options.activityView),env={...options,...fixture,page,context,driver};
    const result=await body(env);assert.deepEqual(errors,[],'browser page errors');return result;
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`Independent edge-drag case exceeded ${caseTimeoutMs}ms`)),caseTimeoutMs);})]);
  }catch(error){
@@ -244,17 +246,17 @@ async function verifyEdge(browser,options){return runIsolated(browser,options,as
  await assertStopped(env.page,released);const saved=await committedReload(env,expected);
  return {...options,moving:env.moving,paintedHoldFrames:hold.samples,screenGripTolerance:1,...saved};
 });}
-async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return runIsolated(browser,{width:393,zoom,input},async env=>{
+async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return runIsolated(browser,{width:393,zoom,input,activityView:stop==='tab-close'},async env=>{
  const {page,driver}=env;await unlock(page);const hold=await beginHold(env,'right');
  if(stop==='cancel')await driver.cancel();
  else if(stop==='capture-loss')await page.locator('.node[data-node="person"]').evaluate(node=>{const event=[...window.edgeDragTrace].reverse().find(e=>e.type==='pointerdown'&&e.kind==='mouse');if(!event||!node.hasPointerCapture(event.id))throw Error('Expected native pointer capture');node.releasePointerCapture(event.id);});
  else if(stop==='lock'){await page.locator('#layout-lock').focus();await page.keyboard.press('Space');assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');}
  else if(stop==='blur')await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
  else if(stop==='tab-close'){
-  await page.locator('.tab .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab,.node').length===0);
-  await driver.up();await paintedFrames(page,8);assert.equal(await page.locator('.node').count(),0);
-  await waitForExactRead(()=>page.evaluate(readSessionInPage),[],{project:s=>s?.tabs});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab,.node').count(),0);
-  return {stop,input,zoom,closedSavedTabs:0};
+  await page.locator('.tab.active .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
+  await driver.up();const baseline=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));await paintedFrames(page,8);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline,'detached Group drag cannot change the overview');
+  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
+  return {stop,input,zoom,closedGroupViews:1,retainedOriginal:true};
  }
  else throw Error('Unknown stop '+stop);
  // Capture-loss is asynchronously delivered by Chromium, not dispatchEvent.

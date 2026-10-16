@@ -1,3 +1,4 @@
+import {readDocumentRecord} from './document-test-view.mjs';
 // Native Chromium gate against the built viewer. Synthetic/public input only.
 // Importing this module never starts a browser or server. Download events and
 // decoded PNG pixels are native; SVG interception observes, never substitutes,
@@ -95,7 +96,7 @@ function seedPngSession({layout,global={}}){return new Promise((resolve,reject)=
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-  get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+  get.onsuccess=()=>{const session=get.result;if(session?.format>=2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
    if(!tab){failure=Error('PNG fixture needs a saved active tab');tx.abort();return;}
    Object.assign(tab,layout);Object.assign(session,{drawer:false,nodeDrawer:false},global);store.put(session,'current');
   };
@@ -340,6 +341,10 @@ async function withPage(browser,{width=1280,height=960,touch=false}={},run){
  if(failures.length>1)throw new AggregateError(failures,'PNG case and cleanup failed');if(failures.length)throw failures[0];return result;
 }
 
+async function recover(page,key){
+ if(!await page.locator('#recovery-documents').isVisible())await page.locator('#document-recovery summary').click();
+ await page.locator(`[data-document-key="${key}"] button`).last().click();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+}
 export async function verifyGraphPng(browser){
  const cases=[],add=(name,run,options)=>cases.push({name:'graph PNG: '+name,run:()=>withPage(browser,options,run)});
  add('whole signed/offscreen graph, long Japanese names/labels, light/dark, exact camera invariance',async f=>{
@@ -407,14 +412,14 @@ export async function verifyGraphPng(browser){
  });
  add('repeat native clicks and tab change during encoding keep the original snapshot/name',async f=>{
   const {page,downloads}=f;await openFixture(page,'first-original.md');await openFixture(page,'second-current.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
-  const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
+  const docs=(await page.evaluate(readDocumentRecord)).current.documents,keys=docs.map(d=>d.key);await recover(page,keys[0]);await saved(page);
   const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#save-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const box=await page.locator('#save-image').boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
   const copyBox=await page.locator('#copy-image').boundingBox();await page.mouse.click(copyBox.x+copyBox.width/2,copyBox.y+copyBox.height/2);
   assert.equal(await page.evaluate(()=>__graphPng.writes.length),0,'save in flight blocks clipboard copy');
   assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(await page.evaluate(()=>__graphPng.svgs.length),1);assert.equal(downloads.length,0);
-  await page.locator(`.tab[data-key="${keys[1]}"] > button`).first().click();await saved(page);await assertExportBusy(page,true);
+  await recover(page,keys[1]);await saved(page);await assertExportBusy(page,true);
   const before=await record(page),state=await page.evaluate(stateInPage),requestCount=f.requests.length;
   const [download]=await Promise.all([page.waitForEvent('download'),page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());})]);
   const buffer=await bytesOf(download),png=inspectPng(buffer),svg=await page.evaluate(inspectSvgInPage,await page.evaluate(()=>__graphPng.svgs[0]));
@@ -458,14 +463,14 @@ export async function verifyGraphPng(browser){
  });
  add('delayed clipboard encoding writes immediately and blocks both actions across tab switching',async f=>{
   const {page,downloads}=f;await openFixture(page,'first-copy.md');await openFixture(page,'second-copy.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
-  const keys=await page.locator('.tab').evaluateAll(ts=>ts.map(t=>t.dataset.key));await page.locator(`.tab[data-key="${keys[0]}"] > button`).first().click();await saved(page);
+  const docs=(await page.evaluate(readDocumentRecord)).current.documents,keys=docs.map(d=>d.key);await recover(page,keys[0]);await saved(page);
   const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#copy-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const observation=await page.evaluate(()=>({item:__graphPng.clipboardItems[0],write:__graphPng.writes[0]}));
   assert.deepEqual(observation.item,{types:['image/png'],promise:true,activation:true});assert.deepEqual(observation.write,{types:[['image/png']],blobCalls:0,pending:0,activation:true,completed:false,error:null},'write receives a promise before generation completes');
   for(const id of ['copy-image','copy-image','save-image']){const box=await page.locator('#'+id).boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);}
   assert.equal(await page.evaluate(()=>__graphPng.writes.length),1);assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(downloads.length,0);
-  await page.locator(`.tab[data-key="${keys[1]}"] > button`).first().click();await saved(page);await assertExportBusy(page,true);
+  await recover(page,keys[1]);await saved(page);await assertExportBusy(page,true);
   const before=await record(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
   await page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());});
   await page.waitForFunction(()=>__graphPng.writes[0].completed);await idleExports(page);await saved(page);

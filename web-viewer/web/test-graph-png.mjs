@@ -24,11 +24,12 @@ w.SVGElement.prototype.getBBox=function(){
  assert.equal(this.ownerSVGElement.style.width,'1px');
  return this.matches('.edge')?{x:-80,y:-60,width:240,height:120}:{x:-200,y:-100,width:460,height:20};
 };
+const detailButton=w.document.createElement('button');detailButton.className='activity-open';detailButton.title='詳細タブを開く';detailButton.innerHTML='<svg><path d="M0 0L2 2"/></svg>';card.append(detailButton);
 const original=nodes.outerHTML+edges.outerHTML;
 for(const theme of ['light','dark']){
  w.document.documentElement.dataset.theme=theme;
  const image=snapshotGraph(nodes,edges,theme==='light'?'#f6f6f6':'#111d28'),parsed=new w.DOMParser().parseFromString(image.svg,'image/svg+xml');
- assert.equal(parsed.querySelector('parsererror'),null);
+ assert.equal(parsed.querySelector('parsererror'),null);assert.equal(parsed.querySelector('.activity-open'),null,'detail navigation control is excluded from exported graph');assert.ok(card.querySelector('.activity-open'),'live control stays intact');
  assert.deepEqual(image.bounds,{x:-236,y:-136,width:532,height:278});
  assert.equal(parsed.querySelector('g').getAttribute('transform'),'translate(236 136)');
  assert.equal(parsed.querySelector('.node').style.left,'136px');assert.equal(parsed.querySelector('.node').style.top,'186px');

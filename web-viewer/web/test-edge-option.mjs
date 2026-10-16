@@ -1,10 +1,11 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // DOM model: real application handlers and persisted Session, not rendered geometry.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
@@ -13,7 +14,7 @@ const tick=()=>new Promise(r=>setTimeout(r,25));
 async function open(){const dom=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true});const w=dom.window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(outputFiles[0].text);for(let i=0;i<120&&w.document.querySelector('#open').disabled;i++)await tick();return w.document;}
 const d=await open(),$=id=>d.getElementById(id);
 $('layout-lock').click();assert.equal($('prefer-write').checked,false);$('open-sample').click();
-const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8')),before=JSON.stringify(design),hidden=hiddenReadIndexes(design.graph.relations,true);
+const design=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),before=JSON.stringify(design),hidden=hiddenReadIndexes(design.graph.relations,true);
 assert.ok(hidden.size>0);const all=design.graph.relations.map((_,i)=>String(i));
 const visible=()=>[...d.querySelectorAll('.edge')].map(n=>n.dataset.relation).sort((a,b)=>+a-+b);
 assert.deepEqual(visible(),all);

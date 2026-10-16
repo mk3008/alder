@@ -1,16 +1,19 @@
+import {joinedSession} from './session-test-view.mjs';
+const loadSession=async()=>joinedSession(await loadStoredSession());
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // DOM/IndexedDB model. Browser text bounds, clipping and native edge dragging
 // are separate gates; this pins camera changes without moving graph geometry.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
 import {initialPositions} from '../src/layout.ts';
-import {loadSession,saveSession} from '../src/session.ts';
+import {loadSession as loadStoredSession,saveSession} from '../src/session.ts';
 
-const markdown=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(markdown);
+const markdown=readFileSync('web/authorities/ungrouped-alder.md','utf8'),design=parseDesign(markdown);
 const code=(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}})).outputFiles[0].text;
 const windows=[],checks=[],tick=()=>new Promise(r=>setTimeout(r,10));
 const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -52,9 +55,9 @@ try{
  const fresh=await boot();fresh.$('open-sample').click();geometry(fresh);
  fresh.$('open-sample').click();assert.equal(fresh.d.querySelectorAll('.tab').length,1);geometry(fresh);
  const freshTab=(await flush(fresh)).tabs[0];assert.deepEqual(freshTab.viewInset,[40,0]);assert.deepEqual(freshTab.scroll,[0,0]);
- await close(fresh);assert.equal(fresh.$('canvas').hidden,true);assert.deepEqual([fresh.v.scrollLeft,fresh.v.scrollTop],[0,0]);
- assert.deepEqual(layout((await saved(fresh)).sampleLayout),layout(freshTab));
- const db=fresh.db;fresh.w.close();const reopened=await boot({db});assert.equal(reopened.$('canvas').hidden,true);reopened.$('open-sample').click();geometry(reopened);
+ assert.equal(fresh.d.querySelector('.close').hidden,true);await close(fresh);assert.equal(fresh.$('canvas').hidden,false);assert.deepEqual([fresh.v.scrollLeft,fresh.v.scrollTop],[0,0]);
+ assert.deepEqual(layout((await saved(fresh)).tabs[0]),layout(freshTab));
+ const db=fresh.db;fresh.w.close();const reopened=await boot({db});assert.equal(reopened.$('canvas').hidden,false);reopened.$('open-sample').click();geometry(reopened);
  assert.equal(reopened.$('refresh').disabled,true);await reopened.$('refresh').onclick();geometry(reopened);assert.deepEqual(layout((await flush(reopened)).tabs[0]),layout(freshTab));
  checks.push('fresh sample doubles the left node margin from 40 to 80; repeated open, disabled refresh, close, empty-state reload and reopen retain one inset');
 
@@ -72,7 +75,7 @@ try{
   if(mode!=='absent')tab.viewInset=mode==='zero'?[0,0]:[450,300];
   let e=await boot({seed:state(tab)});assert.deepEqual(positions(e),tab.positions);assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));
   assert.equal(e.$('refresh').disabled,true);await e.$('refresh').onclick();assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));
-  await close(e);assert.deepEqual(layout((await saved(e)).sampleLayout),layout(tab));const db=e.db;e.w.close();
+  await close(e);assert.deepEqual(layout((await saved(e)).tabs[0]),layout(tab));const db=e.db;e.w.close();
   e=await boot({db});e.$('open-sample').click();assert.deepEqual(positions(e),tab.positions);assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));e.w.close();
   const urlTab={...structuredClone(tab),source:{kind:'url',url:'https://source.example.test/design.md'}};const url=await boot({seed:state(urlTab)});assert.equal(url.$('refresh').disabled,false);await url.$('refresh').onclick();assert.deepEqual(positions(url),tab.positions);assert.deepEqual(layout((await flush(url)).tabs[0]),layout(tab),'eligible URL refresh preserves the same historical camera and geometry');url.w.close();
  }

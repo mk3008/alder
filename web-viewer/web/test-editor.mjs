@@ -1,3 +1,4 @@
+import {joinedSession} from './session-test-view.mjs';
 // DOM/IndexedDB MODEL regression tests, not a real-browser test.
 // Handlers may be called directly; source dialog, fetch, file handles and timers
 // are modeled. CORS enforcement, focus trapping and overlay geometry need the
@@ -49,7 +50,7 @@ function response(body=markdown,{type='text/markdown',status=200,url='https://ra
   const headers={'content-type':type};if(length!==undefined)headers['content-length']=String(length);
   const result=new Response(body,{status,headers});Object.defineProperty(result,'url',{value:url});return result;
 }
-async function saved(indexedDB){return new Promise((resolve,reject)=>{const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result;const get=db.transaction('session').objectStore('session').get('current');get.onsuccess=()=>{db.close();resolve(get.result);};get.onerror=()=>{db.close();reject(get.error);};};});}
+async function saved(indexedDB,raw=false){return new Promise((resolve,reject)=>{const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result;const get=db.transaction('session').objectStore('session').get('current');get.onsuccess=()=>{db.close();resolve(raw?get.result:joinedSession(get.result));};get.onerror=()=>{db.close();reject(get.error);};};});}
 async function flush(){await new Promise(resolve=>setTimeout(resolve,260));}
 
 
@@ -86,11 +87,13 @@ try {
  checks.push('CRLF sources remain clean when opened and reverted without changing stored source');
  const db=new IDBFactory(),env=await ready({indexedDB:db});await local(env,'first.md');await edit(env);input(env,'invalid draft A');await invoke(env,'source-cancel');
  assert.equal(dialogOpen(env),false);assert.equal((await saved(db)).tabs[0].draft,'invalid draft A');
- await openText(env);const second=tabs(env)[1].dataset.key;await edit(env);input(env,'invalid draft B');
- await tabs(env)[0].querySelector('button').onclick();assert.equal(dialogOpen(env),false);await invoke(env,'edit-markdown');assert.equal(env.$('source-text').value,'invalid draft A');
- await invoke(env,'source-cancel');await tabs(env).find(t=>t.dataset.key===second).querySelector('button').onclick();await invoke(env,'edit-markdown');assert.equal(env.$('source-text').value,'invalid draft B');
+ await openText(env);const second=tabs(env)[0].dataset.key;await edit(env);input(env,'invalid draft B');
+ const recover=async(e,key)=>{const row=[...e.w.document.querySelectorAll('[data-document-key]')].find(n=>n.dataset.documentKey===key);assert.ok(row);await row.querySelector('button').onclick();};
+ const first=[...env.w.document.querySelectorAll('[data-document-key]')][0].dataset.documentKey;
+ await recover(env,first);assert.equal(dialogOpen(env),false);await invoke(env,'edit-markdown');assert.equal(env.$('source-text').value,'invalid draft A');
+ await invoke(env,'source-cancel');await recover(env,second);await invoke(env,'edit-markdown');assert.equal(env.$('source-text').value,'invalid draft B');
  await invoke(env,'source-cancel');env.w.close();const restored=await ready({indexedDB:db});await invoke(restored,'edit-markdown');assert.equal(restored.$('source-text').value,'invalid draft B');
- await invoke(restored,'source-cancel');await tabs(restored)[0].querySelector('button').onclick();await invoke(restored,'edit-markdown');assert.equal(restored.$('source-text').value,'invalid draft A');restored.w.close();
+ await invoke(restored,'source-cancel');await recover(restored,first);await invoke(restored,'edit-markdown');assert.equal(restored.$('source-text').value,'invalid draft A');assert.equal(tabs(restored).length,1);restored.w.close();
  checks.push('drafts survive close, tab switching, separate new text entry and reload without cross-tab mixing');
 
  const errors=await ready();await openText(errors);const previous=graph(errors),key=tabs(errors)[0].dataset.key;await edit(errors);
@@ -110,7 +113,7 @@ try {
 
  let pending;const slow=await ready({fetch:async()=>pending?pending.promise:response()});await openURL(slow);await edit(slow);input(slow,edited);await submit(slow);slow.w.confirm=()=>true;
  pending=deferred();const refresh=invoke(slow,'refresh');await tick();assert.equal(slow.$('edit-markdown').disabled,true);await invoke(slow,'edit-markdown');assert.equal(dialogOpen(slow),false);
- await tabs(slow)[0].querySelector('.close').onclick();pending.resolve(response());await refresh;assert.equal(tabs(slow).length,0);assert.equal(slow.$('nodes').children.length,0);slow.w.close();
+ await openText(slow);pending.resolve(response());await refresh;assert.equal(tabs(slow).length,1);assert.equal((await saved(slow.w.indexedDB)).tabs[0].source.kind,'text');assert.equal(slow.$('nodes').children.length,markdown.match(/^# (?:Activity|Object) /gm).length);slow.w.close();
  checks.push('pending source refresh prevents same-tab editor and cannot resurrect a closed tab');
 
 
@@ -138,7 +141,7 @@ try {
  checks.push('pending save blocks duplicate apply, conflicting source entry, close and draft changes until the persisted Graph swap completes');
 
 
- const closeFirst=await ready();await openText(closeFirst);await openText(closeFirst);await edit(closeFirst);input(closeFirst,edited);await flush();
+ const closeFirst=await ready();const activities=[...markdown.matchAll(/^# Activity (.+)$/gm)].map(m=>m[1]);const grouped=raw=>raw;await openText(closeFirst,grouped(markdown));closeFirst.$('nodes').querySelector('[data-activity="'+activities[0]+'"]'+' .activity-open').click();await tabs(closeFirst)[0].querySelector('button').onclick();closeFirst.$('nodes').querySelector('[data-activity="'+activities[1]+'"]'+' .activity-open').click();await edit(closeFirst);input(closeFirst,grouped(edited));await flush();
  const closeDB=closeFirst.w.indexedDB,closeGate=deferred();let closeTransactions=0;
  closeFirst.w.indexedDB={open(...args){
   const real=closeDB.open(...args),request={};real.onerror=()=>{request.error=real.error;request.onerror?.();};
@@ -146,11 +149,11 @@ try {
    const tx=db.transaction(...args);if(args[1]==='readwrite'){const first=++closeTransactions===1;let complete;Object.defineProperty(tx,'oncomplete',{set(callback){complete=callback;}});tx.addEventListener('complete',()=>{if(first)closeGate.promise.then(()=>complete?.());else complete?.();});}return tx;
   }};request.onsuccess?.();};return request;
  }};
- const closedKey=tabs(closeFirst)[0].dataset.key,closing=tabs(closeFirst)[0].querySelector('.close').onclick();await tick();assert.equal(closeTransactions,1);
+ const closedKey=tabs(closeFirst)[1].dataset.key,closing=tabs(closeFirst)[1].querySelector('.close').onclick();await tick();assert.equal(closeTransactions,1);
  assert.equal(closeFirst.$('source-submit').disabled,true);assert.equal(closeFirst.$('source-text').disabled,true);
  await submit(closeFirst);assert.equal(closeTransactions,1,'apply must not enqueue a snapshot containing the closing tab');
- closeGate.resolve();await closing;assert.equal(tabs(closeFirst).length,1);assert.equal(closeFirst.$('source-submit').disabled,false);assert.equal(closeFirst.$('source-text').value,edited);
- await submit(closeFirst);await flush();const afterClose=await saved(closeDB);assert.equal(afterClose.tabs.length,1);assert.equal(afterClose.tabs.some(t=>t.key===closedKey),false);assert.equal(afterClose.tabs[0].design.markdown,edited);closeFirst.w.close();
+ closeGate.resolve();await closing;assert.equal(tabs(closeFirst).length,2);assert.equal(closeFirst.$('source-submit').disabled,false);assert.equal(closeFirst.$('source-text').value,grouped(edited));
+ await submit(closeFirst);await flush();const afterClose=await saved(closeDB);assert.equal(afterClose.tabs.length,2);assert.equal(afterClose.tabs.some(t=>t.key===closedKey),false);assert.equal(afterClose.tabs[0].design.markdown,grouped(edited));closeFirst.w.close();
  checks.push('close-A then apply-B cannot resurrect closed A in IndexedDB; editor unblocks and B can apply after close completion');
 
  const inert=await ready();await openText(inert);await edit(inert);input(inert,edited+'\n<script>window.pwned=true</script>\n<img src="https://invalid.test" onerror="window.pwned=true">');await submit(inert);assert.equal(inert.w.pwned,undefined);assert.equal(inert.$('detail').querySelectorAll('script,img,iframe,a').length,0);assert.equal(inert.calls.length,0);inert.w.close();
@@ -220,10 +223,10 @@ try {
 
  const switched=await ready();await openText(switched);await openText(switched);await edit(switched);input(switched,blankLineDraft);
  let switchPrompts=0;switched.$('source-close-dialog').showModal=function(){switchPrompts++;this.open=true;};
- const switchedFrom=tabs(switched)[1].dataset.key;
- await tabs(switched)[0].querySelector('button').onclick();assert.equal(dialogOpen(switched),false);assert.equal(switchPrompts,0,'shared tab-switch close remains prompt-free');
- assert.equal((await saved(switched.w.indexedDB)).tabs.find(tab=>tab.key===switchedFrom).draft,blankLineDraft);
- await tabs(switched).find(tab=>tab.dataset.key===switchedFrom).querySelector('button').onclick();await edit(switched);
+ const switchedFrom=tabs(switched)[0].dataset.key,earlier=switched.w.document.querySelector('[data-document-key]').dataset.documentKey;
+ await recover(switched,earlier);assert.equal(dialogOpen(switched),false);assert.equal(switchPrompts,0,'shared tab-switch close remains prompt-free');
+ assert.equal((await saved(switched.w.indexedDB,true)).recovery.find(tab=>tab.key===switchedFrom).draft,blankLineDraft);
+ await recover(switched,switchedFrom);await edit(switched);
  assert.equal(switched.$('source-text').value,blankLineDraft);switched.w.close();
  checks.push('tab switching keeps its quiet save-and-close behavior and returns the draft to the original tab');
 

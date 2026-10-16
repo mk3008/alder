@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
@@ -9,7 +10,7 @@ export async function verifyLabelLayout(browser) {
   try {
     await page.goto('http://127.0.0.1:4173/');
     await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-    await page.locator('#open-sample').click();
+    await page.locator('#open-sample').click();await useUngroupedSample(page);
     await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);
     await page.locator('#drawer').click();
     const graph=await page.locator('.edge').evaluateAll(nodes=>nodes.map(n=>[n.dataset.relation,n.getAttribute('d')]));
@@ -30,7 +31,7 @@ export async function verifyLabelLayout(browser) {
         for(const type of ['Activity','Object'])for(const outside of [false,true])assert.ok(rows.some(n=>n.type===type&&n.outside===outside),`${type} Scope ${outside?'outside':'inside'} fixture`);
         const baseline=rows.find(n=>n.type==='Activity');
         for(const n of rows) {
-          for(const label of ['kind','name'])for(const axis of ['x','y'])assert.ok(Math.abs(n[label][axis]-baseline[label][axis])<0.02,`${n.id} ${label}.${axis}`);
+          for(const label of ['kind','name'])for(const axis of ['x','y'])assert.ok(Math.abs(n[label][axis]-baseline[label][axis])<0.02,`${n.id} ${label}.${axis}: ${n[label][axis]} versus ${baseline[label][axis]}`);
           assert.ok(Math.abs(n.height-68)<0.02);assert.ok(Math.abs(n.width-260)<0.02);
           const colors=theme==='light'?(n.outside?(n.type==='Object'?['rgb(233, 238, 235)','rgb(168, 184, 176)']:['rgb(233, 237, 242)','rgb(166, 178, 193)']):(n.type==='Object'?['rgb(228, 244, 235)','rgb(121, 188, 161)']:['rgb(231, 240, 255)','rgb(117, 163, 229)'])):(n.outside?(n.type==='Object'?['rgb(48, 60, 54)','rgb(116, 135, 123)']:['rgb(48, 57, 65)','rgb(113, 128, 141)']):(n.type==='Object'?['rgb(29, 65, 55)','rgb(83, 143, 120)']:['rgb(32, 59, 88)','rgb(86, 132, 183)']));
           assert.deepEqual([n.bg,n.border],colors);

@@ -259,3 +259,16 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 #check-url-dialog{position:fixed;z-index:25;top:120px;left:50%;transform:translateX(-50%);width:min(540px,calc(100vw - 32px));padding:20px;background:var(--panel);color:var(--fg);border:1px solid var(--subtle);border-radius:8px;box-shadow:0 12px 48px #0005}#check-url-dialog[hidden]{display:none}#check-url-dialog h2{font-size:20px;margin:0 0 16px}#check-url-dialog label{display:block;margin-bottom:8px}#check-url-dialog input{box-sizing:border-box;width:100%;padding:8px;margin-bottom:16px;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:4px}#check-url-dialog button{min-height:40px;padding:8px 12px}
 
 .toolbar-menu a{text-decoration:none}#help-menu-toggle{width:var(--header-control-width);min-width:var(--header-control-width)}
+/* Document recovery stays discoverable without covering the graph. */
+#document-recovery{padding:6px 14px;border-bottom:1px solid var(--border);font-size:13px;max-height:30vh;overflow:auto}
+#document-recovery summary{cursor:pointer;font-weight:600}
+#document-recovery p{margin:6px 0}
+#recovery-documents{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+#recovery-documents button,#recovery-export{padding:6px 10px}
+
+.tab .close[hidden]{display:none}
+
+/* Only this icon opens Activity details; the card retains selection/drag. */
+.node.business .node-text{padding-right:36px}
+.activity-open{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
+.activity-open svg{width:20px;height:20px}.activity-open:hover{background:var(--select)}.activity-open:focus-visible{outline-offset:-4px}

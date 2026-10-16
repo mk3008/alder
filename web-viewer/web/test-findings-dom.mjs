@@ -31,7 +31,7 @@ w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.HTMLElement.pro
 const $=id=>w.document.getElementById(id),tick=()=>new Promise(r=>setTimeout(r,20));
 try{
  for(let i=0;i<100&&$('open-text').disabled;i++)await tick();assert.equal($('open-text').disabled,false);
- $('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');$('source-submit').click();
+ for(let i=0;i<100&&$('open-text').disabled;i++)await tick();$('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');$('source-submit').click();
  for(let i=0;i<100&&!w.document.querySelector('.node');i++)await tick();assert.ok(w.document.querySelector('.node'));
  assert.equal($('findings-toggle'),null);assert.equal($('display-settings-toggle').dataset.findingCount,undefined);
  $('node-list-toggle').click();$('drawer-mode-findings').click();assert.equal($('node-categories').hidden,true);assert.equal($('node-list-search').hidden,true);
@@ -44,9 +44,9 @@ try{
  $('drawer-mode-items').click();assert.equal($('node-categories').hidden,false);assert.equal($('node-list-search').hidden,false);assert.ok($('node-list').querySelector('[data-list-node]'));
  $('node-category-object').click();const objectRow=Array.from($('node-list').querySelectorAll('[data-list-node]')).find(row=>row.dataset.listNode==='受付情報');objectRow.querySelector('.node-eye').click();
  $('drawer-mode-findings').click();$('node-list').querySelector('[data-finding-key="finding:F01"]').click();assert.equal($('node-list').querySelector('[data-finding-target="受付情報"]').disabled,true,'hidden target stays hidden');
- $('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8').split('# Findings')[0];$('source-submit').click();
- for(let i=0;i<100&&$('tabs').children.length<2;i++)await tick();assert.equal($('tabs').children.length,2);assert.equal($('drawer-mode-items').getAttribute('aria-selected'),'true','new document has independent mode');assert.equal($('node-list').querySelector('.finding-back'),null,'old finding detail does not leak to new document');
- $('tabs').querySelector('.tab button').click();assert.equal($('drawer-mode-findings').getAttribute('aria-selected'),'true','original document retains its navigation mode');assert.ok($('node-list').querySelector('[data-finding-id="F01"]'));
+ for(let i=0;i<100&&$('open-text').disabled;i++)await tick();$('open-text').click();$('source-text').value=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8').split('# Findings')[0];await $('source-submit').onclick();
+ for(let i=0;i<100&&!$('source-dialog').hidden;i++)await tick();assert.equal($('tabs').children.length,1);assert.equal($('recovery-documents').children.length,1);assert.equal($('drawer-mode-items').getAttribute('aria-selected'),'true','new document has independent mode');assert.equal($('node-list').querySelector('.finding-back'),null,'old finding detail does not leak to new document');
+ await $('recovery-documents').querySelector('button').onclick();assert.equal($('drawer-mode-findings').getAttribute('aria-selected'),'true','original document retains its navigation mode');assert.ok($('node-list').querySelector('[data-finding-id="F01"]'));
  $('node-list').querySelector('.finding-back').click();$('drawer-mode-items').click();$('node-category-object').click();const hiddenObject=Array.from($('node-list').querySelectorAll('[data-list-node]')).find(row=>row.dataset.listNode==='受付情報');hiddenObject.querySelector('.node-eye').click();
  w.document.querySelector('.node[data-node="受付情報"] .finding-badges').click();assert.equal($('node-list-drawer').hidden,false);assert.ok($('node-list').querySelector('[data-finding-id="F01"]'));assert.equal($('detail').querySelector('.finding-card'),null);$('node-list').querySelector('.finding-back').click();$('node-list').querySelector('.finding-all').click();assert.match($('node-list').textContent,/関連先未設定/);
  console.log('findings drawer application DOM wiring passed');

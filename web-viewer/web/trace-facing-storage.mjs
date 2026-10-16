@@ -2,7 +2,7 @@
 // unchanged; addEventListener never replaces the application's handlers.
 export function installFacingTrace(){
  const doc=Date.now()+':'+Math.random().toString(16).slice(2),txIDs=new WeakMap();let seq=0,txSeq=0;
- const snapshot=value=>value&&({active:value.active,tabs:value.tabs?.map(t=>({key:t.key,positions:t.positions,scroll:t.scroll,zoom:t.zoom,viewInset:t.viewInset}))});
+ const snapshot=value=>value&&({active:value.active,tabs:(value.format>=2?value.views:value.tabs)?.map(t=>({key:t.key,positions:t.positions,scroll:t.scroll,zoom:t.zoom,viewInset:t.viewInset}))});
  const emit=(kind,data={})=>{if(seq>=400){if(seq===400){seq++;console.log('FACING_TRACE '+JSON.stringify({doc,seq,time:performance.now(),kind:'truncated',limit:400}));}return;}console.log('FACING_TRACE '+JSON.stringify({doc,seq:++seq,time:performance.now(),kind,...data}));};
  const dom=()=>{const n=document.querySelector('.node[data-node="C target"]'),v=document.querySelector('#viewport');if(!n)return {node:null};const r=n.getBoundingClientRect();return {left:n.style.left,top:n.style.top,computedLeft:getComputedStyle(n).left,rect:[r.x,r.y,r.width,r.height],scroll:v?[v.scrollLeft,v.scrollTop]:null,zoom:document.querySelector('#zoom')?.textContent,openDisabled:document.querySelector('#open')?.disabled};};
  const watch=tx=>{if(txIDs.has(tx))return txIDs.get(tx);const id=++txSeq;txIDs.set(tx,id);for(const type of ['complete','abort','error'])tx.addEventListener(type,()=>emit('tx:'+type,{tx:id,db:tx.db.name,mode:tx.mode,error:tx.error?.name}));return id;};
@@ -16,6 +16,6 @@ export function installFacingTrace(){
 export async function readFacingStorage(page,label){
  const result=await page.evaluate(async()=>{
   const value=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Diagnostic read exceeded5000ms')),5000);const req=indexedDB.open('alder-web-viewer',1);req.onerror=()=>reject(req.error);req.onsuccess=()=>{const db=req.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let saved;get.onsuccess=()=>{saved=get.result;};tx.oncomplete=()=>{clearTimeout(timer);db.close();resolve(saved);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Diagnostic read failed'));};};});
-  return {url:location.href,database:'alder-web-viewer',store:'session',key:'current',active:value?.active,tabs:value?.tabs?.map(t=>({key:t.key,positions:t.positions,scroll:t.scroll,zoom:t.zoom,viewInset:t.viewInset})),dom:[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,left:n.style.left,top:n.style.top}))};
+  return {url:location.href,database:'alder-web-viewer',store:'session',key:'current',active:value?.active,tabs:(value?.format>=2?value.views:value?.tabs)?.map(t=>({key:t.key,positions:t.positions,scroll:t.scroll,zoom:t.zoom,viewInset:t.viewInset})),dom:[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,left:n.style.left,top:n.style.top}))};
  });console.log('FACING_STORAGE '+label+' '+JSON.stringify(result));return result;
 }

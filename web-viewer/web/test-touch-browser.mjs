@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import {setScope} from './scope-control.mjs';
@@ -60,8 +61,8 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
    if(protocol||controlHtml){
     await page.goto('data:text/html,'+encodeURIComponent(controlHtml||'<!doctype html><style>body{margin:0}#viewport{width:100vw;height:100vh;touch-action:none}</style><div id="viewport"></div>'));
    }else{
-    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-    await page.locator('#open-sample').click();await page.locator('#drawer').click();
+    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);
+    await page.locator('#open-sample').click();await useUngroupedSample(page);await page.locator('#drawer').click();
    }
    await body({page,cdp,driver,send,positions,view,pinch,waitZoom});driver.idle();assert.deepEqual(errors,[]);
    result={name,status:'passed'};
@@ -85,8 +86,8 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await send('touchMove',[[2,440,210]]);await send('touchEnd',[]);
  },{protocol:true,blocked:!basic});
  await run('product: second finger rollback and remaining finger isolation',async({page,send,positions,view,waitZoom})=>{
-  await page.locator('#layout-lock').click();await page.locator('.node').first().scrollIntoViewIfNeeded();
-  const initial=await positions(),box=await page.locator('.node').first().boundingBox(),x=box.x+80,y=box.y+30;
+  await page.locator('#layout-lock').click();await page.locator('.node.object').first().scrollIntoViewIfNeeded();
+  const initial=await positions(),box=await page.locator('.node.object').first().boundingBox(),x=box.x+80,y=box.y+30;
   await send('touchStart',[[1,x,y]]);await send('touchEnd',[]);const selected=await page.locator('.node.selected').getAttribute('data-node');
   await send('touchStart',[[1,x,y]]);await send('touchMove',[[1,x+15,y+8]]);assert.notDeepEqual(await positions(),initial);
   await send('touchStart',[[1,x+15,y+8],[2,x+115,y+8]]);assert.deepEqual(await positions(),initial);
@@ -96,14 +97,14 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  },{blocked:!partial});
  await run('product: locked node pan, selection, pinch and explicit unlock',async({page,driver,send,positions,view,pinch})=>{
   assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');const initial=await positions();
-  await page.locator('.node').first().scrollIntoViewIfNeeded();await driver.painted();const node=await page.locator('.node').first().boundingBox(),x=node.x+100,y=node.y+30;
+  await page.locator('.node.object').first().scrollIntoViewIfNeeded();await driver.painted();const node=await page.locator('.node.object').first().boundingBox(),x=node.x+100,y=node.y+30;
   const before=await page.evaluate(readScrollMetrics,{id:'viewport',x,y});
   // Pan toward whichever direction has space; node target is confirmed by driver.
   const delta=before.scroll.map((v,i)=>before.max[i]-v>=30?-30:30),expected=before.scroll.map((v,i)=>Math.max(0,Math.min(before.max[i],v-delta[i])));
   assert.ok(expected.some((v,i)=>v!==before.scroll[i]));await send('touchStart',[[1,x,y]]);await send('touchMove',[[1,x+delta[0],y+delta[1]]]);await send('touchEnd',[]);
   assert.deepEqual((await view()).scroll,expected);assert.deepEqual(await positions(),initial);
-  await page.locator('.node').first().scrollIntoViewIfNeeded();const pick=await page.locator('.node').first().boundingBox();await send('touchStart',[[1,pick.x+100,pick.y+30]]);await send('touchEnd',[]);assert.equal(await page.locator('.selected').count(),1);
-  await pinch(500,400,200,300);assert.deepEqual(await positions(),initial);await page.locator('#layout-lock').click();await page.locator('.node').first().scrollIntoViewIfNeeded();const move=await page.locator('.node').first().boundingBox();await send('touchStart',[[1,move.x+100,move.y+30]]);await send('touchMove',[[1,move.x+120,move.y+40]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
+  await page.locator('.node.object').first().scrollIntoViewIfNeeded();const pick=await page.locator('.node.object').first().boundingBox();await send('touchStart',[[1,pick.x+100,pick.y+30]]);await send('touchEnd',[]);assert.equal(await page.locator('.selected').count(),1);
+  await pinch(500,400,200,300);assert.deepEqual(await positions(),initial);await page.locator('#layout-lock').click();await page.locator('.node.object').first().scrollIntoViewIfNeeded();const move=await page.locator('.node.object').first().boundingBox();await send('touchStart',[[1,move.x+100,move.y+30]]);await send('touchMove',[[1,move.x+120,move.y+40]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
  },{blocked:!basic});
  await run('product: midpoint, zoom limits, cancel and consecutive gestures',async({page,positions,view,pinch})=>{
   const initial=await positions(),cx=500,cy=400;await pinch(cx,cy,200,300);assert.equal((await view()).zoom,1.5);
@@ -116,14 +117,14 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  },{blocked:!basic});
  for(const panCase of ['sample-clamp','fixture-zero-y','fixture-two-axes'])await run('product: one-finger node drag and background pan '+panCase,async({page,driver,send,positions,view,pinch})=>{
   await page.locator('#layout-lock').click();const initial=await positions();await pinch(500,400,200,300);await pinch(500,400,300,200);assert.equal((await view()).zoom,1);assert.deepEqual(await positions(),initial);
-  await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
+  await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});await page.locator('.node.object').first().scrollIntoViewIfNeeded();const target=await page.locator('.node.object').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
   if(panCase!=='sample-clamp'){
    // Explicit input fixture, not artificial canvas/body overflow. A three-card dependency
    // chain leaves the actual minimum canvas height850; viewport height controls
    // whether a real vertical pan range exists.
    const fixture='# Pan fixture\n\n'+['Pan A','Pan B'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic pan test\n\n').join('')+'# Activity Pan activity\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- Pan A — Test\n\n### Procedure\n\nTest\n\n### Output\n\n- Pan B — Test\n\n## Result\n\nTest\n';
-   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
+   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden&&!document.querySelector('#open').disabled&&document.querySelector('#app').dataset.saveState==='saved');assert.equal(await page.locator('.node').count(),3);
    await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:1100});
   }
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=100;n.scrollTop=100;});
@@ -161,12 +162,12 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  },{blocked:!basic});
  await run('product: Scope/Write and pinch save-close-reload-reopen',async({page,send,positions,view,pinch})=>{
   await page.locator('#layout-lock').click();
-  await page.locator('.node').first().scrollIntoViewIfNeeded();const target=await page.locator('.node').first().boundingBox();
+  await page.locator('.node.object').first().scrollIntoViewIfNeeded();const target=await page.locator('.node.object').first().boundingBox();
   await send('touchStart',[[1,target.x+30,target.y+15]]);await send('touchMove',[[1,target.x+60,target.y+35]]);await send('touchEnd',[]);
   const dragged=await positions();
   await setScope(page,'hide');await openDisplaySettings(page);await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
   const savedView=await view(),visible=await positions();assert.equal(savedView.zoom,1.5);assert.equal(await page.locator('#zoom').textContent(),'150%');
-  await page.locator('.close').click();await page.locator('.tab').waitFor({state:'detached'});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
+  assert.equal(await page.locator('.close').isVisible(),false);await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');await page.reload();await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);await openSourceAction(page,'open-sample-menu');
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);
   assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'false');assert.equal(await page.locator('#prefer-write').isChecked(),true);await setScope(page,'show');assert.deepEqual(await positions(),dragged);
  },{blocked:!basic});

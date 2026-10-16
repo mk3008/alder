@@ -24,7 +24,7 @@ export async function verifyFacingRoutes(browser){
    request.onsuccess=()=>{
     const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');let failure;
     get.onsuccess=()=>{
-     const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+     const session=get.result,tab=(session?.format>=2?session.views:session?.tabs)?.find(t=>t.key===session.active);
      if(!tab){failure=Error('Routing fixture session not saved');tx.abort();return;}
      tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];
      session.drawer=false;store.put(session,'current');
@@ -38,7 +38,7 @@ export async function verifyFacingRoutes(browser){
   assert.deepEqual(await positions(),fixturePositions,'saved obstacle geometry restores without migration');
   assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
   const target=page.locator('.node[data-node="C target"]');await page.locator('#layout-lock').click();const box=await target.boundingBox();
-  await page.mouse.move(box.x+100,box.y+30);await page.mouse.down();await page.mouse.move(box.x+780,box.y+30,{steps:8});await page.mouse.up();
+  await page.mouse.move(box.x+20,box.y+22);await page.mouse.down();await page.mouse.move(box.x+700,box.y+22,{steps:8});await page.mouse.up();
   const inspect=()=>page.evaluate(()=>{
    const node=id=>{const n=document.querySelector(`.node[data-node="${id}"]`);return {x:parseFloat(n.style.left),y:parseFloat(n.style.top),w:260,h:68};};
    const edge=document.querySelector('.edge[data-relation="0"]'),length=edge.getTotalLength(),at=distance=>{const p=edge.getPointAtLength(distance);return [p.x,p.y];},box=edge.getBBox(),obstacle=node('B obstacle');

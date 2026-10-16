@@ -1,9 +1,10 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {RouteCache} from '../src/route-cache.ts';
 import {routeEdge, routeCollisionCount} from '../src/routing.ts';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
@@ -55,7 +56,7 @@ w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.HTMLElement.pro
 const d=w.document,$=id=>d.getElementById(id);
 for(let i=0;i<120&&$('open').disabled;i++)await new Promise(r=>setTimeout(r,25));
 $('open-sample').click();
-const sample=parseDesign(readFileSync('../business-design/alder/README.md','utf8'));
+const sample=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8'));
 assert.equal(w.__routeCalls,sample.graph.relations.length);
 const paths=()=>new Map([...d.querySelectorAll('.edge')].map(e=>[e.dataset.relation,e.getAttribute('d')]));
 openDisplaySettingsDOM(d);const initial=paths(),viewBox=$('edges').getAttribute('viewBox');
@@ -86,12 +87,13 @@ card=[...d.querySelectorAll('.node')].find(n=>n.dataset.node!==id);
 card.onpointerdown({button:0,clientX:0,clientY:0,pointerId:4,stopPropagation(){}});card.onpointerup({pointerId:4});
 assert.equal(w.__routeCalls,0,'selection after dragging preserves cached routes');
 assert.deepEqual(paths(),afterDrag);
-const firstTab=d.querySelector('.tab').dataset.key;
-$('open-text').click();$('source-text').value=readFileSync('../business-design/alder/README.md','utf8');await $('source-submit').onclick();
-w.__routeCalls=0;
-[...d.querySelectorAll('.tab')].find(t=>t.dataset.key===firstTab).querySelector('button').click();
-assert.equal(w.__routeCalls,0,'switching back to the dragged tab does not route');
-assert.deepEqual(paths(),afterDrag,'tab switch retains incident and nonincident paths');
+// Cache isolation now follows graph views of the same original.
+const grouped=readFileSync('web/authorities/ungrouped-alder.md','utf8');
+$('open-text').click();$('source-text').value=grouped;await $('source-submit').onclick();
+d.querySelector('.node[data-activity="'+sample.activityOrder[0]+'"]'+' .activity-open').click();const firstTab=d.querySelector('.tab.active').dataset.key;
+const groupPaths=paths();await d.querySelector('.tab button').onclick();d.querySelector('.node[data-activity="'+sample.activityOrder[2]+'"]'+' .activity-open').click();
+w.__routeCalls=0;await [...d.querySelectorAll('.tab')].find(t=>t.dataset.key===firstTab).querySelector('button').onclick();
+assert.equal(w.__routeCalls,0,'switching back to a Group view reuses its cache');assert.deepEqual(paths(),groupPaths);
 
 w.close();
 console.log(JSON.stringify({checks:'cache initial full graph; zero display-only routes; incident-only mouse/touch drag; unrelated crossing retained; multi-node union; structural/design invalidation; tab isolation; missing endpoints; filters restore paths/extents; fallback exposed',initialRoutes:sample.graph.relations.length,dragRoutes:incident.length}));

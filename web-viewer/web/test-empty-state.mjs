@@ -1,18 +1,21 @@
+import {joinedSession} from './session-test-view.mjs';
+const loadSession=async()=>joinedSession(await loadStoredSession());
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // DOM/IndexedDB + explicit viewport-size model. This does not measure browser
 // pixels, native scroll clamping, text wrapping, pointer hit targets or overlays.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
-import {reconcile,saveSession,loadSession} from '../src/session.ts';
+import {reconcile,saveSession,loadSession as loadStoredSession} from '../src/session.ts';
 
 const css=readFileSync('src/style.css','utf8');
-const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8'));
+const design=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8'));
 const initial=reconcile({key:'empty-regression',name:'Alder',design,positions:{},scroll:[0,0],zoom:1,source:{kind:'sample'}},design);
 const session=readFileSync('src/session.ts','utf8').replace('export async function saveSession(', 'async function realSaveSession(')+`
-export async function saveSession(value:Session):Promise<void>{
+export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{
  if((globalThis as any).__failNextSave){(globalThis as any).__failNextSave=false;throw Error('controlled storage failure');}
  return realSaveSession(value);
 }`;
@@ -74,23 +77,19 @@ try{
   const seed={tabs:[tab],active:tab.key,dark,drawer:true,nodeDrawer:true,width:380};
   let e=await boot({width,height,seed});
   assert.ok(parseFloat(e.$('canvas').style.width)>10000);assert.ok(parseFloat(e.$('canvas').style.height)>10000);
-  // Native pan/zoom can leave any positive scroll in this huge extent. Closing
-  // must snapshot the actual viewport, not an older saved scroll value.
-  e.v.scrollLeft+=217;e.v.scrollTop+=391;const expected={...layout(tab),scroll:scroll(e)};
+  // The overview is permanent. Hidden close handlers must leave huge/signed
+  // coordinates and the actual camera intact, including after restoration.
+  e.v.scrollLeft+=217;e.v.scrollTop+=391;e.v.onscroll();const expected={...layout(tab),scroll:scroll(e)};
   for(let round=0;round<2;round++){
-   await e.d.querySelector('.close').onclick();empty(e);
-   const closed=await saved(e);assert.deepEqual(layout(closed.sampleLayout),expected);assert.equal(closed.drawer,true);assert.equal(closed.nodeDrawer,true);
-   // Theme/resize/empty controls cannot overwrite the closed sample camera.
-   e.$('theme').click();e.w.dispatchEvent(new e.w.Event('resize'));e.v.dispatchEvent(new e.w.Event('scroll'));e.$('drawer').click();e.$('node-list-toggle').click();empty(e);
-   const history=e.w.history.length;e.$('open-sample').click();restored(e,expected);assert.equal(e.w.location.hash,'');assert.equal(e.w.history.length,history);
+   assert.equal(e.d.querySelector('.close').hidden,true);await e.d.querySelector('.close').onclick();restored(e,expected);
+   e.w.dispatchEvent(new e.w.Event('resize'));restored(e,expected);
+   await e.$('open-sample').onclick({preventDefault(){}});restored(e,expected);
   }
-  await e.d.querySelector('.close').onclick();empty(e);const db=e.db;e.w.close();e=await boot({db,width,height});empty(e);
-  e.$('open-sample').click();restored(e,expected);e.w.dispatchEvent(new e.w.Event('blur'));await until(async()=>Boolean((await saved(e))?.tabs.length));assert.deepEqual(layout((await saved(e)).tabs[0]),expected);
-  e.w.__failNextSave=true;await e.d.querySelector('.close').onclick();restored(e,expected);assert.match(e.$('status-text').textContent,/タブを閉じませんでした/);
-  await e.d.querySelector('.close').onclick();empty(e);e.w.close();
-  checks.push(`${width}×${height}, zoom ${zoom}: huge/signed layout + actual scroll + origin/inset survive repeated close/reopen, empty redraw, reload and failed close; both drawer preferences restored`);
+  e.w.dispatchEvent(new e.w.Event('blur'));await until(async()=>Boolean((await saved(e))?.tabs.length));await new Promise(r=>setTimeout(r,240));
+  assert.deepEqual(layout((await saved(e)).tabs[0]),expected);const db=e.db;e.w.close();e=await boot({db,width,height});restored(e,expected);e.w.close();
+  checks.push(`${width}×${height}, zoom ${zoom}: permanent overview preserves huge/signed layout, actual camera and both drawer preferences across repeated close attempts/reselection/reload`);
  }
  const fresh=await boot({width:320,height:568});empty(fresh);fresh.$('open-sample').click();assert.equal(fresh.d.querySelectorAll('.tab').length,1);fresh.w.close();checks.push('fresh no-tab state has visible explanation contract and keyboard/pointer-safe sample action');
- const e=await boot();e.$('open-sample').click();e.$('drawer').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);await e.d.querySelector('.close').onclick();empty(e);e.$('open-sample').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);assert.equal(e.$('node-list-drawer').hidden,true);e.w.close();checks.push('closed drawer preferences stay closed after sample reopening');
+ const e=await boot();e.$('open-sample').click();e.$('drawer').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);await e.d.querySelector('.close').onclick();assert.equal(e.d.querySelectorAll('.tab').length,1);e.$('open-sample').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);assert.equal(e.$('node-list-drawer').hidden,true);e.w.close();checks.push('closed drawer preferences stay closed after sample reopening');
  console.log(JSON.stringify({model:'JSDOM + fake IndexedDB + explicit viewport dimensions; no browser pixel/hit-test evidence',checks,passed:checks.length},null,2));
 }finally{windows.forEach(w=>w.close());delete globalThis.indexedDB;}

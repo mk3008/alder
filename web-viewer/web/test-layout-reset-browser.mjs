@@ -1,3 +1,4 @@
+import {readConcurrencyRecord} from './test-session-concurrency-browser.mjs';
 import assert from 'node:assert/strict';
 import {parseDesign} from '../src/graph.ts';
 import {initialPositions} from '../src/layout.ts';
@@ -56,7 +57,7 @@ async function seed(page,value){
  // restore notice overlaps narrow toolbars until explicitly dismissed.
  if(await page.locator('#status').isVisible()){
   assert.equal(await page.locator('#status').getAttribute('data-key'),'operation');
-  assert.match(await page.locator('#status-text').textContent(),/保存時の内容です/);
+  assert.match(await page.locator('#status-text').textContent(),/保存時の内容です|保存文書の復旧/);
   await page.locator('#status-close').click();
  }
 }
@@ -67,22 +68,22 @@ export async function verifyLayoutReset(browser){
   const modified=structuredClone(state);modified.tabs[0].positions={Request:[20,40],Archive:[30,280],Review:[20,160]};modified.tabs[0].viewInset=[16,12];modified.tabs[0].canvasOrigin=[32,24];
   await seed(page,modified);await page.locator('#layout-lock').click();
   for(const id of ['Request','Review']){
-   const box=await page.locator('.node').evaluateAll((nodes,id)=>{const r=nodes.find(n=>n.dataset.node===id).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},id);
-   const x=Math.round(box.x+100),y=Math.round(box.y+30);await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+20,y+18,{steps:3});await page.mouse.up();
+   const box=await page.locator('.node').evaluateAll((nodes,id)=>{const n=nodes.find(n=>n.dataset.node===id),r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},id);
+   const x=Math.round(box.x+box.width/2),y=Math.round(box.y+box.height/2);await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+20,y+18,{steps:3});await page.mouse.up();
   }
-  await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');const before=await page.evaluate(readSessionInPage);
+  await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');const before=await page.evaluate(readSessionInPage),rawBefore=await page.evaluate(readConcurrencyRecord,{database:'alder-web-viewer',raw:true});
   assert.notDeepEqual(before.tabs[0].positions.Request,modified.tabs[0].positions.Request);assert.notDeepEqual(before.tabs[0].positions.Review,modified.tabs[0].positions.Review);
   await page.locator('#out').click();await page.locator('#viewport').evaluate(v=>{v.scrollLeft=400;v.scrollTop=300;});
   await page.locator('#display-settings-toggle').click();await assertToolbarLayout(page,{open:true});
   const button=page.getByRole('button',{name:'レイアウトを初期値に戻す',exact:true});await button.focus();await page.keyboard.press('Enter');
   const saved=await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1,viewInset:[40,0]});
   assert.equal(saved.tabs[0].canvasOrigin,undefined,'reset clears the prior camera origin');
-  assert.deepEqual(nonLayout(saved.tabs[0]),nonLayout(before.tabs[0]));assert.deepEqual(saved.tabs[1],before.tabs[1]);assert.deepEqual({...saved,tabs:[]},{...before,tabs:[]});
+  assert.deepEqual(nonLayout(saved.tabs[0]),nonLayout(before.tabs[0]));assert.deepEqual((await page.evaluate(readConcurrencyRecord,{database:'alder-web-viewer',raw:true})).current.recovery,rawBefore.current.recovery,'reset leaves every original recovery entry unchanged');assert.deepEqual({...saved,tabs:[]},{...before,tabs:[]});
   assert.deepEqual(await geometry(page),original,'nodes, routes, labels and camera match fresh initial rendering');
   assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'false');assert.equal(await page.evaluate(()=>document.activeElement.id),'reset-layout');
   if(width<800)await button.tap();
   await page.keyboard.press('Space');await page.keyboard.press('Enter');await page.keyboard.press('Escape');assert.equal(await page.locator('#display-options').isVisible(),false);assert.equal(await page.evaluate(()=>document.activeElement.id),'display-settings-toggle');
-  await page.locator('.tab').nth(1).locator('button').first().click();await page.locator('.tab').nth(0).locator('button').first().click();await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1});
+  await page.locator('#document-recovery summary').click();await page.locator('[data-document-key="other"] button').last().click();await page.locator('[data-document-key="reset"] button').last().click();await page.locator('#document-recovery summary').click();await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1});
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await geometry(page),original);
   await waitForExactRead(()=>page.evaluate(readSessionInPage),plain(saved),{project:plain});assert.deepEqual(errors,[]);
   return {width,checks:['two native drags','native Enter/Space reset, mobile tap and Escape focus','visible unclipped reset action','fresh node/path/label/camera equivalence','draft/source/filters/selection/other tab preserved','tab switch and reload'],pageErrors:errors};

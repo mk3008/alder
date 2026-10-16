@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -14,7 +15,7 @@ export const emptyStateMatrix=[1280,393,320].flatMap(width=>[.25,1,2.5].map(zoom
 export const emptyStateLimits={caseMs:8000,suiteMs:100000,cleanupMs:2000};
 export const emptyLayoutFields=['positions','selected','scroll','zoom','hiddenNodes','showExceptions','selectedEdgesOnly','viewInset','canvasOrigin'];
 export const emptyStateSelectors=['#open','#open-sample','#empty','#viewport','#canvas','#nodes','#edges','.toolbar','#zoom','#drawer','#formattedMarkdownDrawer','#node-list-toggle','#node-list-drawer','#open-text','#source-text','#source-submit'];
-const raw=readFileSync(new URL('../../business-design/alder/README.md',import.meta.url),'utf8');
+const raw=readFileSync(new URL('./authorities/ungrouped-alder.md',import.meta.url),'utf8');
 const design=parseDesign(raw);
 export function emptyStateFixture(zoom){
  const tab=reconcile({key:'fixture',name:'Alder',design,positions:{},scroll:[7000,6000],zoom,source:{kind:'sample'}},design),ids=Object.keys(tab.positions);
@@ -30,7 +31,7 @@ export function seedEmptyStateSession({layout,drawer=true,nodeDrawer=true}){retu
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+   get.onsuccess=()=>{const session=get.result;if(session?.format>=2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
     if(!tab||tab.source?.kind!=='sample'){failure=Error('Empty-state fixture needs an active saved public sample');tx.abort();return;}
     Object.assign(tab,layout);session.drawer=drawer;session.nodeDrawer=nodeDrawer;store.put(session,'current');
    };
@@ -66,7 +67,7 @@ async function ready(page,count){await page.waitForFunction(count=>!document.que
 async function openPublicSample(page){
  await page.goto(origin);await ready(page,0);
  assert.equal(await page.locator('#drawer').isDisabled(),true,'never click a drawer while the app is empty');
- await page.locator('#open-sample').click();await ready(page,1);
+ await page.locator('#open-sample').click();await ready(page,1);await useUngroupedSample(page);
  assert.equal(await page.locator('.node').count(),design.graph.nodes.length);
  await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.length===1&&s.tabs[0].source?.kind==='sample'});
  // Valid order: open sample first, then close its unrelated overlays.
@@ -113,36 +114,19 @@ async function disturbEmpty(page,touch,frame){
  assert.ok(events.some(e=>e.type==='pointermove'),'pinch movement must be observed');
 }
 async function verifyOneEmpty({page,touch,options}){
+ await page.goto(origin);await ready(page,0);const empty=await inspectEmpty(page);await disturbEmpty(page,touch,empty);
  const expected=emptyStateFixture(options.zoom);await seedAndRestore(page,expected);
  const before=await assertGraph(page,expected);assert.ok(before.extent[0]>options.width&&before.extent[1]>options.height);assert.ok(before.scroll.every(n=>n>1000));
- const closed=await closeLast(page,expected);await disturbEmpty(page,touch,closed.empty);
- assert.deepEqual(emptyLayoutProjection((await page.evaluate(readSessionInPage)).sampleLayout),expected,'empty gestures cannot change the saved sample');
- const location=page.url(),history=await page.evaluate(()=>history.length);
- await page.locator('#open-sample').click();await ready(page,1);await assertGraph(page,expected);
- assert.equal(page.url(),location);assert.equal(await page.evaluate(()=>history.length),history);
- await closeLast(page,expected);
- // Closed-session reload must remain empty and keep the same sample camera.
- await page.reload();await ready(page,0);await inspectEmpty(page);
- await page.locator('#open-sample').focus();await page.keyboard.press('Enter');await ready(page,1);await assertGraph(page,expected);
- assert.equal(page.url(),location);assert.equal(await page.evaluate(()=>history.length),history);
- return {...options,empty:closed.empty,restoredFields:emptyLayoutFields,activation:['pointer click','keyboard Enter after closed reload'],gestures:['wheel','mouse pan','observed two-contact pinch']};
+ assert.equal(await page.locator('.tab.active .close').isVisible(),false,'overview cannot be closed');
+ await page.evaluate(()=>document.querySelector('.tab.active .close').click());await assertGraph(page,expected);
+ await page.reload();await ready(page,1);await assertGraph(page,expected);
+ return {...options,empty,restoredFields:emptyLayoutFields,activation:['pointer and keyboard sample in initial empty viewport'],gestures:['wheel','mouse pan','observed two-contact pinch'],permanentOverview:true};
 }
 async function verifyRemainingTab({page}){
- const expected=emptyStateFixture(1),sampleKey=await seedAndRestore(page,expected);
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
- const both=await waitForExactRead(()=>page.evaluate(readSessionInPage),2,{project:s=>s?.tabs?.length}),other=both.actual.tabs.find(t=>t.key!==sampleKey),otherKey=other.key;
- const activeView=()=>page.evaluate(()=>({active:document.querySelector('.tab.active')?.dataset.key,positions:Object.fromEntries([...document.querySelectorAll('.node')].map(n=>[n.dataset.node,[n.style.left,n.style.top]])),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],transform:document.querySelector('#nodes').style.transform}));
- const before=await activeView();
- await page.locator(`.tab[data-key="${sampleKey}"] .close`).click();await ready(page,1);
- assert.deepEqual(await activeView(),before,'closing an inactive sample preserves the active remaining tab');
- let saved=await page.evaluate(readSessionInPage);assert.equal(saved.active,otherKey);assert.deepEqual(saved.tabs[0],other);assert.equal(await page.locator('#empty').isVisible(),false);assert.equal(await page.locator('.toolbar').isVisible(),true);
- // Create another public document via the real source dialog. Closing the
- // active one selects the unchanged remaining tab, without an empty reset.
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,2);
- await waitForExactRead(()=>page.evaluate(readSessionInPage),2,{project:s=>s?.tabs?.length});
- await page.locator('.tab.active .close').click();await ready(page,1);assert.deepEqual(await activeView(),before);
- saved=await page.evaluate(readSessionInPage);assert.equal(saved.active,otherKey);assert.deepEqual(saved.tabs[0],other);assert.equal(await page.locator('#empty').isVisible(),false);
- return {inactiveClose:true,activeClose:true,remainingTabExact:true};
+ const expected=emptyStateFixture(1);await seedAndRestore(page,expected);
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,1);
+ assert.equal(await page.locator('#document-recovery').isVisible(),true);await page.locator('#document-recovery summary').click();await page.locator('#recovery-documents button').last().click();await ready(page,1);await assertGraph(page,expected);
+ return {replacementRetainsOriginal:true,recoveryRestoresExactCamera:true};
 }
 async function isolated(browser,options,run){
  let context,timer,result,expired=false;const errors=[],failures=[];
@@ -169,7 +153,7 @@ export async function verifyEmptyState(browser){
 }
 
 export async function preflightEmptyStateBrowser(){
- const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
+ const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('./legacy-viewer-fixture.mjs');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);assert.equal(emptyStateMatrix.length,9);assert.equal(new Set(emptyStateMatrix.map(c=>`${c.width}/${c.zoom}`)).size,9);
  // Harness-only failures: no browser, DOM geometry or native input is involved.
  const primary=Error('controlled case failure'),cleanup=Error('controlled cleanup failure');
@@ -190,10 +174,10 @@ export async function preflightEmptyStateBrowser(){
   const expected=emptyStateFixture(2.5);await seedEmptyStateSession({layout:expected});const restored=await boot(),r=restored.document;
   assert.deepEqual(Object.fromEntries([...r.querySelectorAll('.node')].map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])),expected.positions);assert.equal(r.querySelector('#zoom').textContent,'250%');assert.deepEqual([r.querySelector('#viewport').scrollLeft,r.querySelector('#viewport').scrollTop],expected.scroll);
   assert.equal(r.querySelector('#formattedMarkdownDrawer').hidden,false);assert.equal(r.querySelector('#node-list-drawer').hidden,false);
-  await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelector('#empty').hidden,false);assert.equal(r.querySelector('#canvas').hidden,true);assert.equal(r.querySelector('.toolbar').hidden,true);assert.deepEqual(emptyLayoutProjection((await readSessionInPage()).sampleLayout),expected);
+  assert.equal(r.querySelector('.tab.active .close').hidden,true);await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelector('#empty').hidden,true);assert.equal(r.querySelector('#canvas').hidden,false);assert.equal(r.querySelector('.toolbar').hidden,false);assert.deepEqual(emptyLayoutProjection((await readSessionInPage()).tabs[0]),expected);
   r.querySelector('#open-sample').click();assert.equal(r.querySelectorAll('.node').length,25);assert.equal(r.querySelector('#drawer').disabled,false);
   // Actual parser + source-dialog ordering used by the multi-tab browser case.
-  r.querySelector('#open-text').click();r.querySelector('#source-text').value=raw;await r.querySelector('#source-submit').onclick();assert.equal(r.querySelectorAll('.tab').length,2);assert.equal(r.querySelector('#source-dialog').hidden,true);
+  r.querySelector('#open-text').click();r.querySelector('#source-text').value=raw;await r.querySelector('#source-submit').onclick();assert.equal(r.querySelectorAll('.tab').length,1);assert.equal(r.querySelector('#source-dialog').hidden,true);
   await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelectorAll('.tab').length,1);assert.equal(r.querySelector('#empty').hidden,true);
   const result={emptyStateBrowserPreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,matrixCases:9,browserCases:10,selectors:emptyStateSelectors.length,committedSeeds:10,harnessFailureCases:3,overlayOrder:'open sample → nodes present → close overlays',limits:emptyStateLimits,budgetCalibrated:false,browserExecuted:false,limit:'Parser/DOM/fake-IDB and controlled harness failures only. Real rectangles, elementFromPoint, native wheel/pan/pinch and Chromium restoration have not been run. The 8-second case budget is uncalibrated for this new suite.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());delete globalThis.indexedDB;}

@@ -1,3 +1,5 @@
+import {groupSession} from './group-session-fixture.mjs';
+import {joinedSession} from './session-test-view.mjs';
 // Unchanged production bundles in independent JSDOM windows. Transactions are
 // real fake-indexeddb transactions, held/aborted through the shared import-safe
 // browser fixture. This does not claim native-dialog or layout evidence.
@@ -45,7 +47,7 @@ async function env({db=new IDBFactory(),holdWrites=false,failReads=false,wait=tr
  w.eval('('+installSaveStateControls.toString()+')('+JSON.stringify({holdWrites,failReads})+');');
  w.eval('('+observeRestoreTransactions.toString()+')();');
  w.eval('globalThis.__saveStateSnapshot=('+saveStateSnapshot.toString()+');');
- const e={w,db,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab')),probe:w.__saveStateControl,read:async()=>structuredClone(await w.__readRecord()),network:()=>requests,downloads,objectURLs,revoked,failDownload:value=>{downloadFailure=value;}};
+ const e={w,db,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab')),probe:w.__saveStateControl,read:async()=>{const record=structuredClone(await w.__readRecord());return {...record,current:joinedSession(record.current)};},network:()=>requests,downloads,objectURLs,revoked,failDownload:value=>{downloadFailure=value;}};
  w.eval(code);if(wait)await ready(e);return e;
 }
 async function ready(e){await until(()=>e.$('open-text')?.disabled,value=>value===false,'restore completes');}
@@ -117,7 +119,7 @@ await caseOf('old completion cannot clean a newer unsubmitted text or URL draft'
 for(const kind of ['node drag','drawer resize'])await caseOf('old save completion cannot clean an unfinished '+kind,async()=>{
  const e=await env({holdWrites:true});await document(e);flush(e);await held(e,1);let finish;
  if(kind==='node drag'){
-  e.$('layout-lock').click();const node=e.w.document.querySelector('.node');node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>node.onpointerup({pointerId:1});
+  e.$('layout-lock').click();const node=e.w.document.querySelector('.node.object');node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>node.onpointerup({pointerId:1});
  }else{e.$('resize').onpointerdown({pointerId:1});e.$('resize').onpointermove({clientX:e.w.innerWidth-470});finish=()=>e.$('resize').onpointerup({pointerId:1});}
  e.probe.states=[];await release(e,1);await until(()=>state(e),value=>value!=='saving','old save has settled');guard(e,true,['dirty']);assert.ok(!e.probe.states.includes('saved'),'an in-progress mutation is newer than completed transaction');finish();flush(e);await held(e,2);await release(e,2);const value=await saved(e);if(kind==='drawer resize')assert.equal(value.current.width,470);
 });
@@ -128,18 +130,18 @@ for(const fault of ['transaction creation error','transaction abort','snapshot c
  flush(e);if(fault==='transaction abort'){await held(e,1);e.probe.writes[0].abort();}
  await stateIs(e,'error');guard(e,true,['error']);assert.equal((await e.read()).current,undefined);e.w.structuredClone=clone;const next=e.probe.writes.length+1;recovery(e,['save-retry','save-download']);e.$('save-retry').click();await held(e,next);assert.equal(e.$('save-retry').disabled,true,'retry cannot queue duplicate writes while saving');guard(e,true,['error','saving']);await release(e,next);await saved(e);
 });
-await caseOf('close pending keeps the tab and guard; latest committed close removes both',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);guard(e,true,['saving']);assert.equal(e.tabs().length,1);assert.equal(e.tabs()[0].querySelector('.close').disabled,true);await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,0);assert.equal((await e.read()).current.tabs.length,0);
+await caseOf('Group close pending retains view and guard; commit keeps original and other views',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);guard(e,true,['saving']);assert.equal(e.tabs().length,3);assert.equal(e.tabs()[2].querySelector('.close').disabled,true);await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,2);assert.equal((await e.read()).current.tabs.length,2);
 });
-await caseOf('failed close keeps tab, exact content and guard until successful close retry',async()=>{
- const e=await env({holdWrites:true});await document(e);const before=e.$('detail').textContent,closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);e.probe.writes[0].abort();await closing;guard(e,true,['error']);assert.equal(e.tabs().length,1);assert.equal(e.$('detail').textContent,before);assert.equal(e.tabs()[0].querySelector('.close').disabled,false);
- const retry=e.tabs()[0].querySelector('.close').onclick();await held(e,2);guard(e,true,['error','saving']);await release(e,2);await retry;await saved(e);assert.equal(e.tabs().length,0);
+await caseOf('failed Group close keeps exact content and guard until successful retry',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),before=e.$('detail').textContent,closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);e.probe.writes[0].abort();await closing;guard(e,true,['error']);assert.equal(e.tabs().length,3);assert.equal(e.$('detail').textContent,before);assert.equal(e.tabs()[2].querySelector('.close').disabled,false);
+ const retry=e.tabs()[2].querySelector('.close').onclick();await held(e,2);guard(e,true,['error','saving']);await release(e,2);await retry;await saved(e);assert.equal(e.tabs().length,2);
 });
-await caseOf('close completion preserves warning for newer settings until their queued save completes',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);e.$('theme').click();e.probe.states=[];await release(e,1);await closing;await held(e,2);assert.equal(e.tabs().length,0);guard(e,true,['saving','dirty']);assert.ok(!e.probe.states.includes('saved'));await release(e,2);assert.equal((await saved(e)).current.dark,true);
+await caseOf('Group close completion keeps warning for newer settings until queued save completes',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);e.$('theme').click();e.probe.states=[];await release(e,1);await closing;await held(e,2);assert.equal(e.tabs().length,2);guard(e,true,['saving','dirty']);assert.ok(!e.probe.states.includes('saved'));await release(e,2);assert.equal((await saved(e)).current.dark,true);
 });
-await caseOf('close completion preserves an editor draft warning',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);draft(e,'Synthetic draft during close');await release(e,1);await closing;guard(e,true,['draft']);assert.equal(e.tabs().length,0);assert.equal(e.$('source-dialog').hidden,false);e.$('source-cancel').click();guard(e,false,['saved']);
+await caseOf('Group close guards document input while preserving an existing editor draft',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()});await e.$('edit-markdown').onclick();input(e,'source-text','Synthetic shared draft');const closing=e.tabs()[1].querySelector('.close').onclick();await held(e,1);e.$('open-text').click();assert.equal(e.$('source-dialog').dataset.mode,'edit');await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,2);assert.equal(e.$('source-dialog').hidden,false);assert.equal(e.$('source-text').value,'Synthetic shared draft');assert.equal((await e.read()).current.tabs[0].draft,'Synthetic shared draft');guard(e,false,['saved']);
 });
 for(const failure of ['invalid session','read error'])await caseOf(failure+' protects storage but only warns after local work',async()=>{
  const initial={tabs:[],dark:false,drawer:true,width:380},value=failure==='invalid session'?{...initial,tabs:'invalid synthetic shape'}:initial;
@@ -176,7 +178,7 @@ await caseOf('successful save clears a queued storage error beneath an operation
 });
 await caseOf('document rescue downloads the complete exact Markdown, not the selected detail or a backup',async()=>{
  const body=concurrencyBodies.shared+'\nLiteral rescue bytes: <script>globalThis.__rescueExecuted=true</script> 日本語 🪵\n';const e=await failedDocument({body});
- const node=e.w.document.querySelector('.node');e.probe.failWrites=1;mouseTap(e,node);flush(e);await until(()=>e.probe.failWrites,value=>value===0,'selection save failure');await stateIs(e,'error');recovery(e,['save-retry','save-download']);const download=await assertRescue(e,'save-download',body);assert.equal(e.w.__rescueExecuted,undefined);assert.equal(e.w.document.querySelector('#detail script,#status script'),null);await until(()=>e.revoked.includes(download.url),Boolean,'download URL is eventually released');assert.equal(e.$('source-dialog').hidden,true);guard(e,true,['error']);assert.equal(e.network(),0);
+ const node=e.w.document.querySelector('.node.object');e.probe.failWrites=1;mouseTap(e,node);flush(e);await until(()=>e.probe.failWrites,value=>value===0,'selection save failure');await stateIs(e,'error');recovery(e,['save-retry','save-download']);const download=await assertRescue(e,'save-download',body);assert.equal(e.w.__rescueExecuted,undefined);assert.equal(e.w.document.querySelector('#detail script,#status script'),null);await until(()=>e.revoked.includes(download.url),Boolean,'download URL is eventually released');assert.equal(e.$('source-dialog').hidden,true);guard(e,true,['error']);assert.equal(e.network(),0);
 });
 await caseOf('invalid unsubmitted text remains exact through operation error, draft rescue and current-document rescue',async()=>{
  const e=await failedDocument(),raw='  invalid <img src=x onerror="globalThis.__rescueExecuted=true">\n日本語 🪵\n\n';draft(e,raw);await e.$('source-submit').onclick();assert.equal(e.$('source-dialog').hidden,false);assert.equal(e.$('source-text').value,raw);assert.equal(e.$('status').dataset.key,'operation');assert.equal(e.$('save-actions').hidden,true,'generic parse error does not expose unrelated storage actions');
@@ -220,10 +222,10 @@ for(const empty of [true,false])await caseOf('no-op background pointer click on 
  const e=empty?await env():await cleanDocument();return noOp(e,()=>mouseTap(e));
 });
 await caseOf('no-op already-selected locked-node pointer click stays clean',async()=>{
- const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node'));flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>mouseTap(e,e.w.document.querySelector('.node.selected')));
+ const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node.object'));flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>mouseTap(e,e.w.document.querySelector('.node.selected')));
 });
 for(const end of ['onpointerup','onpointercancel','onlostpointercapture'])await caseOf('no-op selected unlocked-node '+end+' without movement stays clean',async()=>{
- const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node'));flush(e);const baseline=await saved(e);assert.equal(baseline.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);e.$('layout-lock').click();
+ const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node.object'));flush(e);const baseline=await saved(e);assert.equal(baseline.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);e.$('layout-lock').click();
  return noOp(e,()=>{const node=e.w.document.querySelector('.node.selected');node.onpointerdown({button:0,pointerId:94,clientX:100,clientY:100,stopPropagation(){}});node[end]({pointerId:94});});
 });
 for(const end of ['onpointerup','onpointercancel'])await caseOf('no-op drawer resize '+end+' without movement stays clean',async()=>{
@@ -236,7 +238,7 @@ await caseOf('no-op touch movement with identical coordinates stays clean',async
  const e=await cleanDocument();return noOp(e,()=>{touchEvent(e,'pointerdown');touchEvent(e,'pointermove');touchEvent(e,'pointerup');});
 });
 await caseOf('no-op already-selected locked-node touch tap stays clean',async()=>{
- const e=await cleanDocument();touchEvent(e,'pointerdown',e.w.document.querySelector('.node'));touchEvent(e,'pointerup');flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>{touchEvent(e,'pointerdown',e.w.document.querySelector('.node.selected'));touchEvent(e,'pointerup');});
+ const e=await cleanDocument();touchEvent(e,'pointerdown',e.w.document.querySelector('.node.object'));touchEvent(e,'pointerup');flush(e);const selected=await saved(e);assert.equal(selected.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);return noOp(e,()=>{touchEvent(e,'pointerdown',e.w.document.querySelector('.node.selected'));touchEvent(e,'pointerup');});
 });
 await caseOf('no-op current active-tab click stays clean',async()=>{const e=await cleanDocument();return noOp(e,()=>e.tabs()[0].querySelector('button').click());});
 await caseOf('no-op tab drop at its existing index stays clean',async()=>{

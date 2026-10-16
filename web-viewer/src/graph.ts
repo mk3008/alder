@@ -110,5 +110,5 @@ export function parseDesign(markdown: string): Design {
   validateGraph(graph); graph.nodes.sort((a,b)=>codepointCompare(a.id,b.id)); graph.relations.sort((a,b)=>{for(const k of ['kind','from','to','label'] as const){const d=codepointCompare(a[k],b[k]);if(d)return d;}return 0;});
   const names=new Set(graph.nodes.map(n=>n.id));
   for(const finding of findings) finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
-  return {graph,sections:sourceSections,markdown,activityOrder,findings};
+  const design={graph,sections:sourceSections,markdown,activityOrder,findings};return design;
 }

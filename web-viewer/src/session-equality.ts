@@ -1,10 +1,11 @@
+import type {WorkspaceSnapshot} from './workspace';
 import type {Session} from './session';
 
 // Compare only the plain data stored by the Viewer. File handles are opaque:
 // looking at their enumerable properties would mistake different files for
 // equal values, so those sessions keep the conservative generation check.
-export function sameSession(a:Session|undefined,b:Session):boolean{
-  if(!a||!Array.isArray(a.tabs)||!Array.isArray(b.tabs)||[...a.tabs,...b.tabs].some(tab=>tab.handle!==undefined))return false;
+export function sameSession(a:Session|WorkspaceSnapshot|undefined,b:Session|WorkspaceSnapshot):boolean{
+  if(!a)return false;const handles=(s:Session|WorkspaceSnapshot)=>'format' in s?!!s.document?.handle||s.recovery.some(t=>t.handle!==undefined):s.tabs.some(t=>t.handle!==undefined);if(handles(a)||handles(b))return false;
   const seen=new Set<object>();
   function same(left:unknown,right:unknown):boolean{
     if(Object.is(left,right))return true;
