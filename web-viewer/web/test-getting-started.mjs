@@ -13,7 +13,7 @@ try{
  w.eval(outputFiles[0].text);const d=w.document,$=id=>d.getElementById(id);
  for(let i=0;i<200&&$('open').disabled;i++)await new Promise(r=>setTimeout(r,10));
  const github=$('github-link'),guide=$('authoring-guide'),readme=guide.querySelector('a');
- assert.equal(github.previousElementSibling.id,'theme');assert.equal(github.nextElementSibling.id,'drawer');
+ assert.equal(github.previousElementSibling.id,'help-menu-toggle');assert.equal(github.nextElementSibling.id,'drawer');
  assert.equal(github.href,'https://github.com/mk3008/alder');
  assert.equal(github.getAttribute('aria-label'),'GitHubを開く');assert.equal(github.title,'GitHubを開く');assert.equal(github.tabIndex,0);
  assert.equal(github.querySelector('svg').getAttribute('aria-hidden'),'true');

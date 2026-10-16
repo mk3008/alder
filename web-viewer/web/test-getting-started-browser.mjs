@@ -23,7 +23,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);
    const github=page.locator('#github-link'),guide=page.locator('#authoring-guide');
    assert.equal(await github.getAttribute('aria-label'),'GitHubを開く');assert.equal(await github.getAttribute('title'),'GitHubを開く');
-   assert.deepEqual(await github.evaluate(e=>[e.previousElementSibling.id,e.nextElementSibling.id]),['theme','drawer']);
+   assert.deepEqual(await github.evaluate(e=>[e.previousElementSibling.id,e.nextElementSibling.id]),['help-menu-toggle','drawer']);
    assert.equal(await github.isVisible(),true);assert.equal(await guide.isVisible(),true);
    const frame=await page.locator('#empty').evaluate(e=>{
     const r=e.getBoundingClientRect(),v=e.parentElement.getBoundingClientRect();
@@ -41,7 +41,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
     assert.ok(reached,'repository link is in keyboard traversal');
     assert.equal(await github.evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
    }
-   for(const id of ['node-list-toggle','github-link','open-menu-toggle','theme','drawer']){
+   for(const id of ['node-list-toggle','github-link','open-menu-toggle','theme','help-menu-toggle','drawer']){
     const control=page.locator('#'+id);assert.equal(await control.isVisible(),true,id+' always visible');
     const r=await control.boundingBox();assert.ok(r.x>=-.5&&r.x+r.width<=width+.5,id+' remains reachable');
    }

@@ -24,10 +24,12 @@ try{
   assert.equal(c.flexShrink,'0');assert.equal(c.display,'none','hidden action has no rendered target');
   assert.equal(n.closest('.toolbar'),null);assert.equal(n.parentElement,d.querySelector('#document-actions'));
  }
- const ids=['node-list-toggle','open-menu-toggle','theme','drawer'];
+ const helpLinks=[...d.querySelectorAll('#help-menu a')];assert.deepEqual(helpLinks.map(n=>n.textContent),['Viewerの使い方','業務設計書・チェック項目を作る','Markdownの書き方']);for(const a of helpLinks){assert.equal(a.target,'_blank');assert.equal(a.rel,'noopener noreferrer');assert.equal(a.getAttribute('role'),'menuitem');const path=new URL(a.href).pathname.split('/blob/main/')[1];assert.ok(path);assert.ok(readFileSync('../'+path,'utf8').length);}
+ d.querySelector('#help-menu-toggle').focus();d.querySelector('#help-menu-toggle').click();assert.equal(d.querySelector('#help-menu').hidden,false);assert.equal(d.activeElement,helpLinks[0]);helpLinks[0].dispatchEvent(new w.KeyboardEvent('keydown',{key:'End',bubbles:true}));assert.equal(d.activeElement,helpLinks.at(-1));d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(d.querySelector('#help-menu').hidden,true);
+ const ids=['node-list-toggle','open-menu-toggle','theme','help-menu-toggle','drawer'];
  assert.equal(d.querySelectorAll('header>button').length,ids.length);assert.deepEqual([...d.querySelectorAll('header>button')].map(n=>n.id),ids);
- for(const id of ids){const n=d.getElementById(id),c=w.getComputedStyle(n);assert.ok(n.getAttribute('aria-label'));assert.equal(n.querySelectorAll('svg').length,1);assert.equal(c.height,'40px',id);assert.equal(c.minHeight,'40px',id);if(['node-list-toggle','theme','drawer'].includes(id)){assert.equal(c.width,'var(--header-control-width)',id+' shared width');assert.equal(c.minWidth,'var(--header-control-width)');assert.equal(c.padding,'7px');}assert.equal(c.alignItems,'center');assert.equal(c.justifyContent,'center');}
- const headerActionIDs=['node-list-toggle','open-menu-toggle','theme','github-link','drawer'];
+ for(const id of ids){const n=d.getElementById(id),c=w.getComputedStyle(n);assert.ok(n.getAttribute('aria-label'));assert.equal(n.querySelectorAll('svg').length,1);assert.equal(c.height,'40px',id);assert.equal(c.minHeight,'40px',id);if(['node-list-toggle','theme','help-menu-toggle','drawer'].includes(id)){assert.equal(c.width,'var(--header-control-width)',id+' shared width');assert.equal(c.minWidth,'var(--header-control-width)');assert.equal(c.padding,'7px');}assert.equal(c.alignItems,'center');assert.equal(c.justifyContent,'center');}
+ const headerActionIDs=['node-list-toggle','open-menu-toggle','theme','help-menu-toggle','github-link','drawer'];
  assert.deepEqual([...d.querySelectorAll('header>button,header>a')].map(n=>n.id),headerActionIDs);
  for(const id of headerActionIDs){
   const icon=d.getElementById(id).querySelector('svg');
@@ -49,11 +51,11 @@ try{
    return {width:actionWidth};
   };
  }
- const assertMode=(width,full=332,captioned=232)=>{
+ const assertMode=(width,full=376,captioned=276)=>{
   assert.equal(title.classList.contains('header-title-hidden'),width<full,'title fit at '+width);
   assert.equal(header.classList.contains('header-icons-only'),width<captioned,'caption fit at '+width);
  };
- // 5 actions + 5 gaps + padding = 232 CSS px; title + one gap adds 100.
+ // 6 actions + 6 gaps + padding = 276 CSS px; title + one gap adds 100.
  // Sweep every pixel through both thresholds, then visit widths out of order.
  const widths=Array.from({length:201},(_,i)=>280+i);
  for(const width of [...widths.toReversed(),...widths,280,1280,319,420,320,419,768,280,1280]){
@@ -67,9 +69,9 @@ try{
  }
  // Font completion must remeasure without requiring a viewport resize. Cover
  // both title growth and action-caption growth while already icons-only.
- available=420;titleWidth=120;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(420,356);
+ available=420;titleWidth=120;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(420,400);
  titleWidth=96;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(420);
- available=320;actionWidth=41;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(320,337,237);
+ available=320;actionWidth=41;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(320,382,282);
  actionWidth=40;fontEvents.dispatchEvent(new w.Event('loadingdone'));assertMode(320);
  header.removeAttribute('style');
  // Inspect every media branch, including inactive ones: no individual header
@@ -82,5 +84,5 @@ try{
  assert.equal(d.getElementById('refresh').closest('header'),null,'document refresh is outside header measurements');
  assert.equal(d.getElementById('refresh').querySelector('.source-caption'),null,'document refresh stays icon-only');
  assert.deepEqual([...d.querySelectorAll('#document-actions > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),['save-image','copy-image','share-source','open-checks','edit-markdown'],'disabled sample refresh is skipped while PNG exports and sharing retain natural order');
- console.log(JSON.stringify({tabStripDocumentActions:'passed',headerControls:'passed',controls:headerActionIDs.length,monotonicThresholds:[232,332],mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
+ console.log(JSON.stringify({tabStripDocumentActions:'passed',headerControls:'passed',controls:headerActionIDs.length,monotonicThresholds:[276,376],mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
 }finally{w.close();}
