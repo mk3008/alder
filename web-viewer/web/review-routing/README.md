@@ -7,8 +7,13 @@ product screenshot**, and does not change the product router or initial layout.
 
 ## Inputs and comparisons
 
-- Only the canonical public `business-design/alder/README.md` is parsed. Its
-  expected SHA-256 is checked before rendering.
+- `sample-business-design.md` is a byte-for-byte frozen copy of the public
+  `business-design/alder/README.md` at commit
+  `18c6299028548e769843385ed92ea3d99820e08d`. Its original SHA-256
+  `64701618618bd565fb540647cf15c06e20d3f3f6fc45dc8b64244c01e3910aa5`
+  is checked before rendering. The current Business Design can evolve without
+  rewriting this historical comparison; current product behavior remains covered
+  by the product regression suites.
 - `positions-current.json` is the frozen 360-unit current-layout specimen.
 - `positions-staircase.json` is the frozen staircase specimen.
 - `baseline-routing.ts` is the unchanged `338f8765…` router snapshot.
