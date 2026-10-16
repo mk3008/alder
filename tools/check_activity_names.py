@@ -30,8 +30,23 @@ def compare(design, checks):
     target = list(visible_lines(checks))
     declared = [m.group(1) for line in source
                 if (m := re.fullmatch(r'# Activity (.+)', line))]
+    objects = [m.group(1) for line in source
+               if (m := re.fullmatch(r'# Object (.+)', line))]
+
+    def non_activity_heading(name):
+        # Recognize navigation and source-named Object views only. Never filter
+        # by declared Activity membership: that would conceal misspelled names.
+        if name in declared:
+            return False
+        if name in {'業務一覧', '使い方'}:
+            return True
+        return any(re.fullmatch(r'(?:Object )?' + re.escape(obj) +
+                                r'(?:\s+.*|[:：・].*)?', name)
+                   for obj in objects)
+
     headings = [m.group(1) for line in target
-                if (m := re.fullmatch(r'## (.+)', line))]
+                if (m := re.fullmatch(r'## (.+)', line))
+                and not non_activity_heading(m.group(1))]
     labels = []
     for line in target:
         cells = line.split('|')

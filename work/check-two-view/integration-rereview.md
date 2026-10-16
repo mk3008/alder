@@ -1,0 +1,15 @@
+# Alder diagnostic source re-review
+
+## Full assigned prompt and scope
+
+> 指摘を原典に照合しsource-named Objectのprefix無し/ASCII colon/説明suffixもActivityとは分離する最小修正をsource e19214c698c2d99952c8bcd42b59be95d980553aで公開しました。現在stack-source/tools/check_activity_names.pyとtools/test_check_two_view.pyの実物・入力ソースをread-onlyで再確認し、誤Activity/未知Object/declared name衝突の回帰も確認。bundleは同sourceへexport処理中なので完了前はsourceのみ評価し、実効runtimeやbundle commit未確認を隠さない。integration-rereview.mdへfull prompt/hash/scope結果を保存。さらにsynthetic-reviewed-output.mdを、stack-source/work/check-two-view/synthetic-reviewed-input.mdとwhole purchase BDへ照合し、表示のみ更新として既存全ID/保証/状態/根拠・架空Test/assertion・mapped/実行結果未収集の保持をread-onlyレビュー。テスト専用の設定を実在Testや新しい人間承認と扱わず、修正/承認しない。synthetic-reviewed-review.mdへ記録。他作者報告は読まない。
+
+Read-only source scope: working-tree `tools/check_activity_names.py` at source HEAD `e19214c698c2d99952c8bcd42b59be95d980553a`, its current bundled script bytes, working-tree `tools/test_check_two_view.py` (locally modified after that source commit), whole purchase Business Design and current traceability guidance. I did not read other authors' reports or edit the source. Effective runtime settings were not independently verified. The bundle export was pending; no published bundle commit/content claim is made.
+
+## Result
+
+The earlier bounded false mismatch is corrected in current source. The filter now matches the declared Object name with optional `Object ` prefix and allows an unadorned source name, ASCII colon, Japanese colon/middle dot, or whitespace-led explanation. It checks exact declared Activity membership first, so an Activity whose name itself resembles an Object heading remains an Activity. The current bundled diagnostic bytes equal source (`8f829265556d457e192777aad02f24e2062ffd8ca72fb3a9bd684c63a018bc41`); this is a working-tree byte comparison, not validation of a published bundle commit. The modified regression test's SHA-256 is `d0043241f8b738c2357f0c69d96c0dd39bd5b60d8c5b55c455f5aa0b2ac1f37a`.
+
+A direct `compare()` matrix with `# Object O`, `# Activity A` and `# Activity O — Action` accepted `## O`, `## Object O: handoff` and `## O — handoff` as Object additions while retaining both declared Activity headings. `## Object X` produced `mismatch`; replacing the declared `## O — Action` with `## O — Wrong` produced `mismatch`; adding a second `## O — Action` produced `mismatch`, showing the exact declared-name collision was not discarded. The working-tree regression test covers source-named, ASCII-colon and explanation variants, a misspelled Activity, an unknown Object, and a declared navigation-name collision. `python3 -m unittest tools.test_check_two_view tools.test_workflow_skills` passed 65 tests.
+
+The diagnostic remains deliberately narrow: a heading beginning with a source Object name plus arbitrary whitespace-led text is classified as an Object view; it does not validate that explanation's business meaning, links, guarantees or review states. The Skill's distinct source-led Consistency review must still inspect those. I found no supported regression in the requested source change. No business meaning or human state was approved.
