@@ -35,7 +35,7 @@ async function seedSavedView(page,zoom,position=at,viewInset=[0,0]){
   try{
    const current=await new Promise((resolve,reject)=>{const tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');get.onsuccess=()=>resolve(get.result);get.onerror=()=>reject(get.error);});
    if(!current?.active)throw Error('Fixture session not saved');
-   const tab=current.tabs.find(t=>t.key===current.active);
+   const tab=(current.format===2?current.views:current.tabs).find(t=>t.key===current.active);
    if(!tab)throw Error('Fixture tab not saved');
    tab.positions[id]=position;tab.zoom=zoom;tab.scroll=[0,0];
    tab.viewInset=viewInset;tab.canvasOrigin=[0,0];

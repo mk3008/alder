@@ -99,17 +99,17 @@ const cases=[
   assert.equal(await sample.locator('#status').isVisible(),false);await clean(sample);assert.deepEqual(sampleRequests,[]);
   await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
   assert.ok(sampleRequests.every(url=>url.startsWith('http://127.0.0.1:4173/')));
-  await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});assert.equal(await sample.locator('#empty').isVisible(),true);await sample.locator('#open-sample').click();if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);
+  assert.equal(await sample.locator('.close').isVisible(),false);assert.equal(await sample.locator('#empty').isVisible(),false);await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);
   assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);
   const sampleLayout=()=>sample.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.style.left,n.style.top]));
   await sample.locator('#out').click();await sample.locator('#viewport').evaluate(e=>{e.scrollLeft=100;e.scrollTop=40;});await sample.waitForTimeout(250);
   const retainedSampleLayout=await sampleLayout(),retainedSampleView=await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleZoom=await sample.locator('#zoom').textContent();
   assert.ok(retainedSampleView[0]>0);
-  await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await sample.locator('.tab').count(),0);assert.equal(await sample.locator('#empty').isVisible(),true);
-  await sample.locator('#open-sample').click();if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
-  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);await sample.locator('.close').click();await sample.locator('.tab').waitFor({state:'detached'});await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await sample.locator('.tab').count(),0);await sample.locator('#open-sample').click();if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
+  assert.equal(await sample.locator('.close').isVisible(),false);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await sample.locator('.tab').count(),1);assert.equal(await sample.locator('#empty').isVisible(),false);
+  await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
+  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);assert.equal(await sample.locator('.close').isVisible(),false);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await sample.locator('.tab').count(),1);await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
   assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, disabled refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
   await page.goto('http://127.0.0.1:4173/');
   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
@@ -150,9 +150,9 @@ const cases=[
   const source='https://raw.githubusercontent.com/mk3008/alder/aa950a7c29366e33c281803b086c3e00c9769933/business-design/alder/README.md';
   await openSourceAction(page,'open-url');await page.locator('#source-url').fill(source);await page.locator('#source-submit').click();
   await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden,{},{timeout:45000});
-  assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[source]);
+  assert.equal(await page.locator('.tab').count(),1);assert.deepEqual(external,[source]);
   await clean(page);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(external,[]);
+  assert.equal(await page.locator('.tab').count(),1);assert.deepEqual(external,[]);
   checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
   // The existing public source is also read from only the copied link in fresh storage.
   // Capture clipboard boundary only; real OS clipboard permission is not asserted.

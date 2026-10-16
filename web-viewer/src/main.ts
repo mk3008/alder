@@ -149,7 +149,7 @@ async function exportGraphImage(copy:boolean){
   exportingImage=true;imageExportChrome();
   try{
     const image=snapshotGraph($('nodes'),$('edges') as unknown as SVGSVGElement,getComputedStyle(document.documentElement).getPropertyValue('--bg').trim());
-    if(copy){await copyGraphPng(image);status('グラフ全体のPNGをコピーしました。');}else await saveGraphPng(image,t.name);
+    if(copy){await copyGraphPng(image);status('グラフ全体のPNGをコピーしました。');}else await saveGraphPng(image,(documentForView(t)?.name??t.name)+(viewGroup(t)?' - '+viewGroup(t):''));
   }catch(error){status((copy?'画像をコピーできません: ':'画像を保存できません: ')+(error as Error).message,'error');}
   finally{exportingImage=false;imageExportChrome();}
 }

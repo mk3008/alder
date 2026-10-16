@@ -38,4 +38,7 @@ export function groupDesign(design:Design,group?:string):Design{
  const result={...design,graph:{...design.graph,nodes,relations},activityOrder:nodes.filter(n=>n.type==='business').map(n=>n.id)};cached.set(group,result);return result;
 }
 /** Boundary notes name the original endpoints without expanding other Activities. */
-export function boundaryRelations(design:Design,group:string){const ids=new Set(parseGroups(design.markdown,design).find(g=>g.name===group)?.activities);const objects=new Set(design.graph.relations.filter(r=>ids.has(r.from)||ids.has(r.to)).flatMap(r=>[r.from,r.to]).filter(id=>design.graph.nodes.some(n=>n.id===id&&n.type==='object')));return design.graph.relations.filter(r=>(objects.has(r.from)&&!ids.has(r.to))||(objects.has(r.to)&&!ids.has(r.from)));}
+export function boundaryRelations(design:Design,group:string){
+ const shown=new Set(groupDesign(design,group).graph.nodes.map(n=>n.id));
+ return design.graph.relations.filter(r=>shown.has(r.from)!==shown.has(r.to));
+}

@@ -1,3 +1,4 @@
+import {withTestGroups} from './document-test-view.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -68,7 +69,7 @@ export function seedEdgeDragSession({positions,zoom,scroll,viewInset,moving='per
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
+   get.onsuccess=()=>{const session=get.result,tab=(session?.format===2?session.views:session?.tabs)?.find(t=>t.key===session.active);
     if(!tab){failure=Error('Edge-drag fixture has no active saved tab');tx.abort();return;}
     Object.assign(tab,{positions,zoom,scroll,viewInset,selected:moving,hiddenNodes:[],showExceptions:true,selectedEdgesOnly:false});delete tab.canvasOrigin;
     session.drawer=false;session.nodeDrawer=false;session.preferWrite=false;store.put(session,'current');
@@ -143,7 +144,7 @@ async function pointerDriver(page,context,input){
 }
 async function openFixture(page,zoom,atExtent,moving=edgeDragMoving){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(withTestGroups(raw,[['Detail',['read','approve']]]));await page.locator('#source-submit').click();await page.locator('.node[data-group]').press('Enter');
  await page.waitForFunction(()=>document.querySelectorAll('.node').length===4||!!document.querySelector('#status[data-kind=error]:not([hidden])'));
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
  await waitSavedViewer(page,{positions:(await frame(page)).positions});
@@ -251,10 +252,10 @@ async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return ru
  else if(stop==='lock'){await page.locator('#layout-lock').focus();await page.keyboard.press('Space');assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');}
  else if(stop==='blur')await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
  else if(stop==='tab-close'){
-  await page.locator('.tab .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab,.node').length===0);
-  await driver.up();await paintedFrames(page,8);assert.equal(await page.locator('.node').count(),0);
-  await waitForExactRead(()=>page.evaluate(readSessionInPage),[],{project:s=>s?.tabs});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab,.node').count(),0);
-  return {stop,input,zoom,closedSavedTabs:0};
+  await page.locator('.tab.active .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
+  await driver.up();const baseline=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));await paintedFrames(page,8);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline,'detached Group drag cannot change the overview');
+  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
+  return {stop,input,zoom,closedGroupViews:1,retainedOriginal:true};
  }
  else throw Error('Unknown stop '+stop);
  // Capture-loss is asynchronously delivered by Chromium, not dispatchEvent.
