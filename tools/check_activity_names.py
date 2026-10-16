@@ -40,8 +40,8 @@ def compare(design, checks):
             return False
         if name in {'業務一覧', '使い方'}:
             return True
-        return any(re.fullmatch(r'Object ' + re.escape(obj) +
-                                r'(?:[：・].*| — .*)?', name)
+        return any(re.fullmatch(r'(?:Object )?' + re.escape(obj) +
+                                r'(?:\s+.*|[:：・].*)?', name)
                    for obj in objects)
 
     headings = [m.group(1) for line in target
