@@ -41,7 +41,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
     assert.ok(reached,'repository link is in keyboard traversal');
     assert.equal(await github.evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
    }
-   for(const id of ['node-list-toggle','github-link','open-menu-toggle','theme','drawer']){
+   for(const id of ['node-list-toggle','github-link','open-menu-toggle','theme','help-menu-toggle','drawer']){
     const control=page.locator('#'+id);assert.equal(await control.isVisible(),true,id+' always visible');
     const r=await control.boundingBox();assert.ok(r.x>=-.5&&r.x+r.width<=width+.5,id+' remains reachable');
    }
