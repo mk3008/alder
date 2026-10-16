@@ -28,10 +28,12 @@ try{
  assert.equal(active,0);assert.equal(max,2);assert.equal(new Set(observed.map(e=>e.pid)).size,3,'each file has its own process');
  writeFileSync(events,'');writeFileSync(files[1],source(1)+"assert.fail('controlled assertion failure');\n");
  const failed=invoke(files);assert.equal(failed.signal,null);assert.notEqual(failed.status,0);assert.ok(readFileSync(events,'utf8').includes('"id":2,"kind":"end"'),'later independent file must finish after failure');
+ const nonzero=join(dir,'nonzero.mjs');writeFileSync(nonzero,"process.exitCode=7;\n");
+ const exited=invoke([nonzero]);assert.equal(exited.error,undefined);assert.equal(exited.signal,null);assert.ok(Number.isInteger(exited.status)&&exited.status!==0,'nonzero exitCode cannot pass');
  const signalled=join(dir,'signal.mjs');writeFileSync(signalled,"process.kill(process.pid,'SIGTERM');\n");
  const signal=invoke([signalled]);assert.equal(signal.signal,null);assert.notEqual(signal.status,0,'a signalled test child cannot pass');
  const late=join(dir,'late.mjs');writeFileSync(late,"setTimeout(()=>{throw Error('controlled late async failure');},20);\n");
  const asynchronous=invoke([late]);assert.equal(asynchronous.signal,null);assert.notEqual(asynchronous.status,0,'late async failure cannot be hidden');
- const missing=invoke([join(dir,'missing.mjs')]);assert.notEqual(missing.status,0,'missing test files cannot pass');
+ const missing=invoke([join(dir,'missing.mjs')]);assert.equal(missing.error,undefined);assert.equal(missing.signal,null);assert.ok(Number.isInteger(missing.status));assert.notEqual(missing.status,0,'missing test files cannot pass');
  console.log(JSON.stringify({nodeExecution:{separateProcesses:true,maxActiveFiles:max,assertionFailure:'nonzero',signalFailure:'nonzero',independentContinuation:true,node:process.version,availableParallelism:availableParallelism(),totalMemoryBytes:totalmem()}}));
 }finally{rmSync(dir,{recursive:true,force:true});}
