@@ -46,8 +46,8 @@ async function select(e,key){const tab=tabs(e).find(tab=>tab.dataset.key===key);
 function drag(e,id,dx,dy){
  if(e.$('layout-lock').getAttribute('aria-pressed')==='true')e.$('layout-lock').click();
  const node=Array.from(e.w.document.querySelectorAll('.node')).find(node=>node.dataset.node===id);assert.ok(node);
- (node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});
- (node.querySelector('.node-drag-handle')??node).onpointermove({clientX:dx,clientY:dy,pointerId:1});(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
+ node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});
+ node.onpointermove({clientX:dx,clientY:dy,pointerId:1});node.onpointerup({pointerId:1});
 }
 function lifecycle(e,event){
  if(event==='hidden'){Object.defineProperty(e.w.document,'hidden',{configurable:true,value:true});e.w.document.dispatchEvent(new e.w.Event('visibilitychange'));}
@@ -138,7 +138,7 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  drag(a,nodeID,70,45);assert.deepEqual(coords(a)[nodeID],moved);
  const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
  await a.$('edit-markdown').onclick();a.$('source-text').value=addedSource;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();
- await select(a,'original');a.w.document.querySelector('.node[data-activity="Synthetic added activity"]').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
+ await select(a,'original');a.w.document.querySelector('.node[data-activity="Synthetic added activity"]'+' .activity-open').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
  a.$('theme').click();await tabs(a).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  const committedA=await until(()=>a.read(),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, coordinates and Group close');
  assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);

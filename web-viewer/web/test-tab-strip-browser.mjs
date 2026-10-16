@@ -74,7 +74,7 @@ export async function verifyTabStrip(browser){
   assert.ok(single.scroll[0]<=single.client[0],'one short tab needs no horizontal scroll');
   const names=parseDesign(sample).activityOrder.slice(0,8).map((id,i)=>['Long Group '+i+' synthetic title for horizontal scrolling',[id]]);
   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(activityTabFixture(names.map(([name])=>name)));await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});
-  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-activity] .activity-open').filter({hasText:name}).press('Enter');}
+  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-activity='+JSON.stringify(name)+'] .activity-open').press('Enter');}
   assert.equal(await page.locator('.tab').count(),9);await keyboardOrder(['save-image','copy-image','share-source','open-checks','edit-markdown']);
   const results=[];
   for(const theme of ['light','dark']){

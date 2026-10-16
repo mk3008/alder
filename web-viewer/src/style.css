@@ -268,9 +268,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 .tab .close[hidden]{display:none}
 
-/* Activity navigation and layout movement have separate, keyboard reachable targets. */
-.node.business{padding:9px 12px}.node.business .node-text{max-width:156px}
-.node-drag-handle{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;font-size:25px;cursor:grab;border-radius:4px;touch-action:none}
-.node-drag-handle:active{cursor:grabbing}.node-drag-handle[aria-disabled=true]{cursor:default;opacity:.4}.node-drag-handle:hover{background:var(--select)}
-
-.node.business{padding:9px 12px}.activity-open{position:absolute;inset:0;display:flex;align-items:center;gap:9px;width:100%;height:100%;padding:9px 42px 9px 12px;text-align:left;font-size:inherit;border-radius:inherit}.activity-open:focus-visible{outline-offset:-4px}
+/* Only this icon opens Activity details; the card retains selection/drag. */
+.node.business .node-text{padding-right:36px}
+.activity-open{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
+.activity-open svg{width:20px;height:20px}.activity-open:hover{background:var(--select)}.activity-open:focus-visible{outline-offset:-4px}

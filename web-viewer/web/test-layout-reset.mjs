@@ -42,7 +42,7 @@ async function boot({db=new IDBFactory(),seed,width=1280}={}){
 }
 async function saved(e){globalThis.indexedDB=e.db;return json(await loadSession());}
 async function flush(e){e.w.dispatchEvent(new e.w.Event('blur'));await until(()=>['saved','error','conflict','unchanged'].includes(e.$('app').dataset.saveState));return saved(e);}
-const fire=(e,node,type,x,y,id=1)=>{const event=new e.w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{button:0,pointerId:id,pointerType:'mouse',clientX:x,clientY:y});(node.querySelector?.('.node-drag-handle')??node).dispatchEvent(event);};
+const fire=(e,node,type,x,y,id=1)=>{const event=new e.w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{button:0,pointerId:id,pointerType:'mouse',clientX:x,clientY:y});node.dispatchEvent(event);};
 const geometry=e=>[...e.d.querySelectorAll('.edge,.edge-label')].map(n=>[n.dataset.relation,n.getAttribute('d'),n.getAttribute('x'),n.getAttribute('y')]);
 const checks=[];
 try{

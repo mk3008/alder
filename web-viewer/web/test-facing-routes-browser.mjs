@@ -37,7 +37,7 @@ export async function verifyFacingRoutes(browser){
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===3);
   assert.deepEqual(await positions(),fixturePositions,'saved obstacle geometry restores without migration');
   assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
-  const target=page.locator('.node[data-node="C target"]');await page.locator('#layout-lock').click();const box=await target.locator('.node-drag-handle').boundingBox();
+  const target=page.locator('.node[data-node="C target"]');await page.locator('#layout-lock').click();const box=await target.boundingBox();
   await page.mouse.move(box.x+20,box.y+22);await page.mouse.down();await page.mouse.move(box.x+700,box.y+22,{steps:8});await page.mouse.up();
   const inspect=()=>page.evaluate(()=>{
    const node=id=>{const n=document.querySelector(`.node[data-node="${id}"]`);return {x:parseFloat(n.style.left),y:parseFloat(n.style.top),w:260,h:68};};

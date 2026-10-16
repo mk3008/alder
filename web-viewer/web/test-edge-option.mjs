@@ -18,7 +18,7 @@ const design=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8
 assert.ok(hidden.size>0);const all=design.graph.relations.map((_,i)=>String(i));
 const visible=()=>[...d.querySelectorAll('.edge')].map(n=>n.dataset.relation).sort((a,b)=>+a-+b);
 assert.deepEqual(visible(),all);
-const selected=d.querySelector('.node.business');(selected.querySelector('.node-drag-handle')??selected).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});(selected.querySelector('.node-drag-handle')??selected).onpointerup({pointerId:1});const selectedID=selected.dataset.node;
+const selected=d.querySelector('.node.business');selected.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});selected.onpointerup({pointerId:1});const selectedID=selected.dataset.node;
 const positions=()=>[...d.querySelectorAll('.node')].map(n=>[n.dataset.node,n.style.left,n.style.top]);const initialPositions=positions();
 openDisplaySettingsDOM(d);$('prefer-write').click();const expected=all.filter(i=>!hidden.has(+i));assert.deepEqual(visible(),expected);
 assert.equal(d.querySelector('.node.selected').dataset.node,selectedID);

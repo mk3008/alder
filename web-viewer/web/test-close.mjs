@@ -22,7 +22,7 @@ const positions=e=>Array.from(e.w.document.querySelectorAll('.node'),n=>[n.datas
 const coordinates=e=>Object.fromEntries(positions(e).map(([id,x,y])=>[id,[parseFloat(x),parseFloat(y)]]));
 const translated=(e,dx,dy)=>{const all=coordinates(e),id=e.w.document.querySelector('.node').dataset.node;all[id]=[all[id][0]+dx,all[id][1]+dy];return all;};
 const savedCoordinates=value=>Object.fromEntries(Object.entries(value).map(([id,p])=>[id,Array.from(p)]));
-function drag(e,dx,dy){const n=e.w.document.querySelector('.node');(n.querySelector('.node-drag-handle')??n).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});(n.querySelector('.node-drag-handle')??n).onpointermove({clientX:dx,clientY:dy});(n.querySelector('.node-drag-handle')??n).onpointerup({pointerId:1});}
+function drag(e,dx,dy){const n=e.w.document.querySelector('.node');n.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});n.onpointermove({clientX:dx,clientY:dy});n.onpointerup({pointerId:1});}
 async function text(e){e.$('open-text').click();e.$('source-text').value=raw;await e.$('source-submit').onclick();}
 try{
  const e=await env();open(e);const expectedMove=translated(e,70,45);drag(e,70,45);assert.deepEqual(coordinates(e),expectedMove);const expected=positions(e),done=close(e);assert.equal(e.tabs().length,3);assert.ok(e.tabs()[2].querySelector('.close').disabled);await until(()=>e.writes.length===1);assert.equal(e.writes[0].value.views.length,2);assert.equal(e.writes[0].value.document.design.markdown,groupSession().document.design.markdown);

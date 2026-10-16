@@ -3,9 +3,9 @@ import type {createNodeDrag} from './node-drag';
 
 export const clampZoom=(zoom:number)=>Math.max(.25,Math.min(2.5,zoom));
 type View={key:string;zoom:number;scroll:Point;locked?:boolean};
-type Change={zoom?:number;scroll?:Point;node?:{id:string;position:Point};selected?:string;activate?:boolean};
+type Change={zoom?:number;scroll?:Point;node?:{id:string;position:Point};selected?:string};
 type Host={read:()=>View|undefined;position:(id:string)=>Point|undefined;change:(value:Change)=>void;finish:()=>void;nodeDrag?:ReturnType<typeof createNodeDrag>};
-type Single={kind:'single';view:View;start:Point;node?:{id:string;position:Point;draggable:boolean;handle:boolean};moved:boolean};
+type Single={kind:'single';view:View;start:Point;node?:{id:string;position:Point};moved:boolean};
 type Pinch={kind:'pinch';view:View;distance:number;anchor:Point};
 const middle=(a:Point,b:Point):Point=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
 const distance=(a:Point,b:Point)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
@@ -20,18 +20,18 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
   const cancel=()=>{host.nodeDrag?.cancel();gesture=undefined;blocked=points.size>0;};
   const consume=(e:PointerEvent)=>{e.preventDefault();e.stopImmediatePropagation();};
   viewport.addEventListener('pointerdown',e=>{
-    if(e.pointerType!=='touch'||((e.target as Element).closest('a,button,input')&&!(e.target as Element).closest('.node-drag-handle,.activity-open')))return;
+    if(e.pointerType!=='touch'||(e.target as Element).closest('a,button,input'))return;
     const view=host.read();if(!view)return;
     consume(e);points.set(e.pointerId,[e.clientX,e.clientY]);viewport.setPointerCapture(e.pointerId);
     if(blocked)return;
     if(points.size===1){
       const id=(e.target as Element).closest<HTMLElement>('.node')?.dataset.node,position=id?host.position(id):undefined;
-      gesture={kind:'single',view,start:[e.clientX,e.clientY],node:id&&position?{id,position:[...position],draggable:!(e.target as Element).closest('.node.business')||!!(e.target as Element).closest('.node-drag-handle'),handle:!!(e.target as Element).closest('.node-drag-handle')}:undefined,moved:false};
-      if(id&&position&&!view.locked&&gesture.node?.draggable)host.nodeDrag?.begin(id,[e.clientX,e.clientY]);
+      gesture={kind:'single',view,start:[e.clientX,e.clientY],node:id&&position?{id,position:[...position]}:undefined,moved:false};
+      if(id&&position&&!view.locked)host.nodeDrag?.begin(id,[e.clientX,e.clientY]);
     }else if(points.size===2){
       // A first finger may have started a drag while the second was landing.
       // Undo that tentative node movement before starting the two-finger gesture.
-      if(gesture?.kind==='single'&&gesture.node&&gesture.node.draggable&&!gesture.view.locked){if(host.nodeDrag)host.nodeDrag.cancel(true);else host.change({node:gesture.node});}
+      if(gesture?.kind==='single'&&gesture.node&&!gesture.view.locked){if(host.nodeDrag)host.nodeDrag.cancel(true);else host.change({node:gesture.node});}
       else host.nodeDrag?.cancel();
       const [a,b]=[...points.values()],mid=local(middle(a,b)),now=host.read();
       if(!now){cancel();return;}
@@ -47,7 +47,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
       host.change({zoom,scroll:[Math.max(0,g.anchor[0]*zoom-mid[0]),Math.max(0,g.anchor[1]*zoom-mid[1])]});
     }else{
       const dx=e.clientX-g.start[0],dy=e.clientY-g.start[1];if(Math.hypot(dx,dy)>3)g.moved=true;
-      if(g.node&&g.node.draggable&&!g.view.locked){if(host.nodeDrag)host.nodeDrag.move([e.clientX,e.clientY]);else if(g.moved)host.change({node:{id:g.node.id,position:[g.node.position[0]+dx/g.view.zoom,g.node.position[1]+dy/g.view.zoom]}});}
+      if(g.node&&!g.view.locked){if(host.nodeDrag)host.nodeDrag.move([e.clientX,e.clientY]);else if(g.moved)host.change({node:{id:g.node.id,position:[g.node.position[0]+dx/g.view.zoom,g.node.position[1]+dy/g.view.zoom]}});}
       else host.change({scroll:[Math.max(0,g.view.scroll[0]-dx),Math.max(0,g.view.scroll[1]-dy)]});
     }
   },true);
@@ -56,7 +56,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
     // Only loss of the viewport's own capture terminates our gesture.
     if(e.type==='lostpointercapture'&&e.target!==viewport)return;
     if(!points.has(e.pointerId))return;consume(e);
-    if(e.type==='pointerup'&&!blocked&&valid()&&gesture?.kind==='single'&&!gesture.moved&&gesture.node)host.change({selected:gesture.node.id,activate:!gesture.node.handle});
+    if(e.type==='pointerup'&&!blocked&&valid()&&gesture?.kind==='single'&&!gesture.moved&&gesture.node)host.change({selected:gesture.node.id});
     points.delete(e.pointerId);
     // After a pinch/cancel, the remaining finger cannot accidentally drag/select.
     cancel();if(!points.size)blocked=false;

@@ -68,7 +68,7 @@ export function snapshotGraph(nodes:HTMLElement,edges:SVGSVGElement,background:s
   for(const child of edgeCopies)lines.append(child);root.append(lines);
   const foreign=doc.createElementNS(SVG,'foreignObject');foreign.setAttribute('width',String(size.bounds.width));foreign.setAttribute('height',String(size.bounds.height));
   const content=doc.createElementNS(HTML,'div');content.style.cssText=`position:relative;width:${size.bounds.width}px;height:${size.bounds.height}px;`;
-  for(const card of cards){const clone=styledClone(card);clone.querySelector('.node-drag-handle')?.remove();const button=clone.querySelector('.activity-open');if(button){const body=doc.createElementNS(HTML,'div');for(const attribute of Array.from(button.attributes))if(attribute.name!=='type')body.setAttribute(attribute.name,attribute.value);body.append(...Array.from(button.childNodes));button.replaceWith(body);}clone.style.left=(parseFloat(card.style.left)-size.bounds.x)+'px';clone.style.top=(parseFloat(card.style.top)-size.bounds.y)+'px';content.append(clone);}
+  for(const card of cards){const clone=styledClone(card);clone.querySelector('.activity-open')?.remove();clone.style.left=(parseFloat(card.style.left)-size.bounds.x)+'px';clone.style.top=(parseFloat(card.style.top)-size.bounds.y)+'px';content.append(clone);}
   foreign.append(content);root.append(foreign);
   const svg=new XMLSerializer().serializeToString(root);
   if(new TextEncoder().encode(svg).length>MAX_SVG_BYTES)throw Error(sizeError);

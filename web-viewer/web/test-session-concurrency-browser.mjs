@@ -232,8 +232,8 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
     if(document.getElementById('layout-lock').getAttribute('aria-pressed')==='true')document.getElementById('layout-lock').click();
     const node=[...document.querySelectorAll('.node')].find(node=>node.dataset.node===nodeID);
     const noop=()=>{};node.setPointerCapture=noop;node.releasePointerCapture=noop;
-    (node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation:noop});
-    (node.querySelector('.node-drag-handle')??node).onpointermove({clientX:70,clientY:45,pointerId:1});(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
+    node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation:noop});
+    node.onpointermove({clientX:70,clientY:45,pointerId:1});node.onpointerup({pointerId:1});
     const after=[...document.querySelectorAll('.node')].find(node=>node.dataset.node===nodeID);
     return [parseFloat(after.style.left),parseFloat(after.style.top)];
    },{nodeID});

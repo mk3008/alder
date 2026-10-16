@@ -16,19 +16,21 @@ export async function verifyActivityWorkspace(browser){
    await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);
    assert.deepEqual(await ids(),activityDesign(design).graph.nodes.map(n=>n.id).sort());
    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-   // A separate grip is the only Activity layout target; native keys and
-   // mouse/CDP touch exercise the shipped controls without synthetic DOM edits.
+   // Body selection/drag matches Objects; only the right-hand icon navigates.
    await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
-   const position=()=>page.locator('.node[data-activity="業務設計"]').evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]),grip=page.locator('.node[data-activity="業務設計"] .node-drag-handle');
-   const locked=await position();await grip.press('ArrowRight');assert.deepEqual(await position(),locked);assert.equal(await page.locator('.tab').count(),1);
-   await page.locator('#layout-lock').click();await grip.press('ArrowRight');await grip.press('Shift+ArrowDown');assert.deepEqual(await position(),[locked[0]+10,locked[1]+1]);
-   const rectangle=await grip.boundingBox(),start=[rectangle.x+rectangle.width/2,rectangle.y+rectangle.height/2],beforeDrag=await position();
+   const body=page.locator('.node[data-activity="業務設計"]'),position=()=>body.evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]),locked=await position();
+   assert.equal(await page.locator('.node-drag-handle').count(),0);assert.equal(await body.locator('.activity-open').getAttribute('aria-label'),'業務設計の詳細タブを開く');
+   if(width===1280)await body.click({position:{x:60,y:30}});else await body.tap({position:{x:60,y:30}});
+   assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'業務設計');assert.equal(await page.locator('.tab').count(),1,'body only selects');assert.deepEqual(await position(),locked);
+   await body.locator('.activity-open').focus();await page.keyboard.press('ArrowRight');assert.deepEqual(await position(),locked,'icon is not a movement handle');assert.equal(await page.locator('.tab').count(),1);
+   await page.locator('#layout-lock').click();
+   const rectangle=await body.boundingBox(),start=[rectangle.x+130,rectangle.y+34],beforeDrag=await position();
    if(width===1280){await page.mouse.move(...start);await page.mouse.down();await page.mouse.move(start[0]-30,start[1]-20,{steps:4});await page.mouse.up();}
    else{const cdp=await context.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start[0],y:start[1],id:1}]});for(let i=1;i<=4;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start[0]-30*i/4,y:start[1]-20*i/4,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}
-   const dragged=await position();assert.notDeepEqual(dragged,beforeDrag);assert.equal(await page.locator('.tab').count(),1,'grip drag never opens details');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await position(),dragged);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');
+   const dragged=await position();assert.deepEqual(dragged,[beforeDrag[0]-30,beforeDrag[1]-20]);assert.equal(await page.locator('.tab').count(),1,'body drag never opens details');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await position(),dragged);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');
    const card=page.locator('.node[data-activity="業務設計"] .activity-open').first();await card.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.tab').count(),2);assert.deepEqual(await ids(),activityDesign(design,activities[0].id).graph.nodes.map(n=>n.id).sort());
    await page.locator('#in').click();const zoom=await page.locator('#zoom').textContent();await page.locator('.tab').first().locator('button').first().click();assert.equal(await page.locator('#zoom').textContent(),'100%');
-   if(width===1280)await card.click();else await card.tap();assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);
+   await card.press('Space');assert.equal(await page.locator('.tab').count(),2);await page.locator('.tab').first().locator('button').first().click();if(width===1280)await card.click();else await card.tap();assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#zoom').textContent(),zoom);
    await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('.tab').count(),1);
    await scope();const hidden=await ids();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await ids(),hidden,'scope visibility survives aggregate restore');await scope();assert.ok((await ids()).includes('画面設計'));
    await ensureDocumentActions(page);await page.locator('#open-checks').click();await page.locator('#check-open-sample').click();await saved();
@@ -49,7 +51,7 @@ export async function verifyActivityWorkspace(browser){
     await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('#refresh').isDisabled(),true);finishRefresh();await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);await saved();
     const raw=await page.evaluate(()=>new Promise(resolve=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result.document.design.markdown);};};}));assert.equal(raw,source+'\nRefreshed original');
    }
-   await page.screenshot({path:`web/evidence/activity-workspace/${width}.png`});assert.deepEqual(errors,[]);results.push({width,keyboard:true,singleTap:true,duplicateSafe:true,independentZoom:true,scopeReload:true,sharedChecks:true,canonicalDocument:true,handleKeys:true,handleDrag:true,noDragOpen:true,dragReload:true});
+   await page.screenshot({path:`web/evidence/activity-workspace/${width}.png`});assert.deepEqual(errors,[]);results.push({width,keyboard:true,singleTap:true,duplicateSafe:true,independentZoom:true,scopeReload:true,sharedChecks:true,canonicalDocument:true,iconOnly:true,bodySelection:true,bodyDrag:true,noDragOpen:true,dragReload:true});
   }finally{await context.close();}
  }
  return results;

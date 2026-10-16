@@ -155,7 +155,7 @@ try{
  // Group view closure uses the durable-save path; the document overview stays available.
  const grouped=markdown;
  const groupDesign=parseDesign(grouped),groupTab={...structuredClone(initial),design:groupDesign};
- const closing=await boot({seed:session(groupTab)});closing.d.querySelector('.node[data-activity]').click();toggle(closing);await flush(closing);
+ const closing=await boot({seed:session(groupTab)});closing.d.querySelector('.node[data-activity]'+' .activity-open').click();toggle(closing);await flush(closing);
  closing.w.__holdNextSave=true;closing.w.__failNextSave=true;
  const closePromise=closing.d.querySelector('.tab.active .close').onclick();
  await until(()=>typeof closing.w.__releaseSave==='function');assert.equal(closing.$('display-settings-toggle').disabled,true);

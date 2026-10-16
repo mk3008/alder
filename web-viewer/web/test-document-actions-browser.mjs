@@ -29,7 +29,7 @@ export async function verifyDocumentActions(browser){
   assert.equal(await mode(),'inline');await geometry();
   const names=parseDesign(sample).activityOrder.slice(0,4).map((id,i)=>['A very long Group title '+i+' for responsive tab navigation',[id]]);
   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(activityTabFixture(names.map(([name])=>name)));await page.locator('#source-submit').click();await page.locator('#source-dialog').waitFor({state:'hidden'});
-  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-activity] .activity-open').filter({hasText:name}).press('Enter');}
+  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-activity='+JSON.stringify(name)+'] .activity-open').press('Enter');}
   const results=[];
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();

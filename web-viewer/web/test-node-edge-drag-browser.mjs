@@ -173,7 +173,6 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);assert.equal(await page.locator('#node-list-drawer').isVisible(),false);
  assert.equal(Object.keys(initial.routes).length,relationsFor(initial).length);
  const box=initial.rects[moving],start=[Math.round(box[0]+130*zoom),Math.round(box[1]+34*zoom)];
- if(design.graph.nodes.find(n=>n.id===moving).type==='business'){const r=await page.locator('.node[data-node="'+moving+'"] .node-drag-handle').boundingBox();start[0]=Math.round(r.x+r.width/2);start[1]=Math.round(r.y+r.height/2);}
  // A near-leading-edge grip exhausts the 24-world-pixel negative reserve in
  // a bounded frame window without a long arbitrary hold. Still inside the card.
  if(atExtent==='left')start[0]=Math.ceil(box[0])+8;

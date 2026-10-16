@@ -45,7 +45,7 @@ const verify=()=>{
  for(const node of d.querySelectorAll('.node')){
   if(node.classList.contains('object')){assert.equal(node.querySelectorAll('.who-badge').length,0);continue;}
   const badges=node.querySelectorAll('.who-badge');assert.equal(badges.length,1);const b=badges[0];
-  assert.equal(node.querySelector('.activity-open').firstElementChild,b);assert.equal(b.getAttribute('aria-hidden'),'true');
+  assert.equal(node.firstElementChild,b);assert.equal(b.getAttribute('aria-hidden'),'true');
   const who=node.querySelector('small').textContent;let hash=0;for(const c of who)hash=(hash*31+c.codePointAt(0))>>>0;
   assert.equal(b.style.getPropertyValue('--role-color'),palette[hash%5]);
   const person=b.querySelector('svg');assert.equal(person.getAttribute('stroke'),'currentColor');assert.equal(person.getAttribute('fill'),'none');

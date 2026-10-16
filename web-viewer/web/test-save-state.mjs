@@ -119,7 +119,7 @@ await caseOf('old completion cannot clean a newer unsubmitted text or URL draft'
 for(const kind of ['node drag','drawer resize'])await caseOf('old save completion cannot clean an unfinished '+kind,async()=>{
  const e=await env({holdWrites:true});await document(e);flush(e);await held(e,1);let finish;
  if(kind==='node drag'){
-  e.$('layout-lock').click();const node=e.w.document.querySelector('.node.object');(node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});(node.querySelector('.node-drag-handle')??node).onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>(node.querySelector('.node-drag-handle')??node).onpointerup({pointerId:1});
+  e.$('layout-lock').click();const node=e.w.document.querySelector('.node.object');node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:41,clientY:29,pointerId:1});finish=()=>node.onpointerup({pointerId:1});
  }else{e.$('resize').onpointerdown({pointerId:1});e.$('resize').onpointermove({clientX:e.w.innerWidth-470});finish=()=>e.$('resize').onpointerup({pointerId:1});}
  e.probe.states=[];await release(e,1);await until(()=>state(e),value=>value!=='saving','old save has settled');guard(e,true,['dirty']);assert.ok(!e.probe.states.includes('saved'),'an in-progress mutation is newer than completed transaction');finish();flush(e);await held(e,2);await release(e,2);const value=await saved(e);if(kind==='drawer resize')assert.equal(value.current.width,470);
 });
@@ -226,7 +226,7 @@ await caseOf('no-op already-selected locked-node pointer click stays clean',asyn
 });
 for(const end of ['onpointerup','onpointercancel','onlostpointercapture'])await caseOf('no-op selected unlocked-node '+end+' without movement stays clean',async()=>{
  const e=await cleanDocument();mouseTap(e,e.w.document.querySelector('.node.object'));flush(e);const baseline=await saved(e);assert.equal(baseline.current.tabs[0].selected,e.w.document.querySelector('.node.selected').dataset.node);e.$('layout-lock').click();
- return noOp(e,()=>{const node=e.w.document.querySelector('.node.selected');(node.querySelector('.node-drag-handle')??node).onpointerdown({button:0,pointerId:94,clientX:100,clientY:100,stopPropagation(){}});(node.querySelector('.node-drag-handle')??node)[end]({pointerId:94});});
+ return noOp(e,()=>{const node=e.w.document.querySelector('.node.selected');node.onpointerdown({button:0,pointerId:94,clientX:100,clientY:100,stopPropagation(){}});node[end]({pointerId:94});});
 });
 for(const end of ['onpointerup','onpointercancel'])await caseOf('no-op drawer resize '+end+' without movement stays clean',async()=>{
  const e=await cleanDocument();return noOp(e,()=>{e.$('resize').onpointerdown({pointerId:93});e.$('resize')[end]({pointerId:93});});

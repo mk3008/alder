@@ -24,7 +24,7 @@ export async function verifyLabelLayout(browser) {
         const rows=await page.locator('.node').evaluateAll(nodes=>nodes.map(n=>{
           const r=n.getBoundingClientRect(),scale=r.width/260;
           const relative=el=>{const b=el.getBoundingClientRect();return {x:(b.x-r.x)/scale,y:(b.y-r.y)/scale,w:b.width/scale,h:b.height/scale};};
-          const name=n.querySelector('.node-name'),role=n.querySelector('small'),icon=(n.querySelector('.activity-open')??n).firstElementChild;
+          const name=n.querySelector('.node-name'),role=n.querySelector('small'),icon=n.firstElementChild;
           return {id:n.dataset.node,type:n.classList.contains('business')?'Activity':'Object',outside:n.classList.contains('outside'),kind:relative(n.querySelector('.review-kind')),name:relative(name),role:role&&relative(role),icon:relative(icon),width:r.width/scale,height:r.height/scale,ellipsis:getComputedStyle(name).textOverflow,nowrap:getComputedStyle(name).whiteSpace,bg:getComputedStyle(n).backgroundColor,border:getComputedStyle(n).borderColor,who:role?getComputedStyle(icon).backgroundColor:null,stroke:role?getComputedStyle(icon.querySelector('svg')).color:null};
         }));
         assert.ok(rows.some(n=>n.type==='Activity')&&rows.some(n=>n.type==='Object'));

@@ -203,7 +203,7 @@ async function verifyDragAndPan(browser){
   // provides scroll room without moving the fixture or weakening its oracle.
   await page.locator('#viewport').evaluate(v=>{v.scrollTop=740;v.scrollLeft=0;});
   await settle(page);
-  const before=await page.locator('#viewport').evaluate(v=>v.scrollHeight),box=await page.locator('.node-drag-handle').boundingBox();
+  const before=await page.locator('#viewport').evaluate(v=>v.scrollHeight),box=await page.locator('.node').boundingBox();
   const x=box.x+box.width/2,y=box.y+box.height/2;
   const bounds=await page.evaluate(()=>{const v=document.querySelector('#viewport'),r=v.getBoundingClientRect(),bar=document.querySelector('.toolbar').getBoundingClientRect();return {left:r.left+v.clientLeft,right:r.left+v.clientLeft+v.clientWidth,top:r.top+v.clientTop,bottom:Math.min(r.top+v.clientTop+v.clientHeight,bar.top-12)};});
   assert.ok(x>bounds.left+48&&x<bounds.right-48&&y>bounds.top+48&&y+100<bounds.bottom-48,'ordinary drag must stay outside every measured 48px edge-pan band');
