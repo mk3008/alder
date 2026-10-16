@@ -13,7 +13,7 @@ export async function verifyEdgeOption(browser){
     await page.locator('#open-sample').click();await useUngroupedSample(page);await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);await page.locator('#drawer').click();
     const relations=parseDesign(readFileSync('../business-design/alder/README.md','utf8')).graph.relations;
     const hidden=hiddenReadIndexes(relations,true),expected=relations.map((_,i)=>i).filter(i=>!hidden.has(i));
-    const selected=page.locator('.node.business').first(),id=await selected.getAttribute('data-node');await selected.click();
+    const selected=page.locator('.node.object').first(),id=await selected.getAttribute('data-node');await selected.click();
     const positions=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));
     await openDisplaySettings(page);await page.locator('#prefer-write').check();
     const assertEdges=async()=>{

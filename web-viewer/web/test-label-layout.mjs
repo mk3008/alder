@@ -24,14 +24,14 @@ export async function verifyLabelLayout(browser) {
         const rows=await page.locator('.node').evaluateAll(nodes=>nodes.map(n=>{
           const r=n.getBoundingClientRect(),scale=r.width/260;
           const relative=el=>{const b=el.getBoundingClientRect();return {x:(b.x-r.x)/scale,y:(b.y-r.y)/scale,w:b.width/scale,h:b.height/scale};};
-          const name=n.querySelector('.node-name'),role=n.querySelector('small'),icon=n.firstElementChild;
+          const name=n.querySelector('.node-name'),role=n.querySelector('small'),icon=(n.querySelector('.activity-open')??n).firstElementChild;
           return {id:n.dataset.node,type:n.classList.contains('business')?'Activity':'Object',outside:n.classList.contains('outside'),kind:relative(n.querySelector('.review-kind')),name:relative(name),role:role&&relative(role),icon:relative(icon),width:r.width/scale,height:r.height/scale,ellipsis:getComputedStyle(name).textOverflow,nowrap:getComputedStyle(name).whiteSpace,bg:getComputedStyle(n).backgroundColor,border:getComputedStyle(n).borderColor,who:role?getComputedStyle(icon).backgroundColor:null,stroke:role?getComputedStyle(icon.querySelector('svg')).color:null};
         }));
         assert.ok(rows.some(n=>n.type==='Activity')&&rows.some(n=>n.type==='Object'));
         for(const type of ['Activity','Object'])for(const outside of [false,true])assert.ok(rows.some(n=>n.type===type&&n.outside===outside),`${type} Scope ${outside?'outside':'inside'} fixture`);
         const baseline=rows.find(n=>n.type==='Activity');
         for(const n of rows) {
-          for(const label of ['kind','name'])for(const axis of ['x','y'])assert.ok(Math.abs(n[label][axis]-baseline[label][axis])<0.02,`${n.id} ${label}.${axis}`);
+          for(const label of ['kind','name'])for(const axis of ['x','y'])assert.ok(Math.abs(n[label][axis]-baseline[label][axis])<0.02,`${n.id} ${label}.${axis}: ${n[label][axis]} versus ${baseline[label][axis]}`);
           assert.ok(Math.abs(n.height-68)<0.02);assert.ok(Math.abs(n.width-260)<0.02);
           const colors=theme==='light'?(n.outside?(n.type==='Object'?['rgb(233, 238, 235)','rgb(168, 184, 176)']:['rgb(233, 237, 242)','rgb(166, 178, 193)']):(n.type==='Object'?['rgb(228, 244, 235)','rgb(121, 188, 161)']:['rgb(231, 240, 255)','rgb(117, 163, 229)'])):(n.outside?(n.type==='Object'?['rgb(48, 60, 54)','rgb(116, 135, 123)']:['rgb(48, 57, 65)','rgb(113, 128, 141)']):(n.type==='Object'?['rgb(29, 65, 55)','rgb(83, 143, 120)']:['rgb(32, 59, 88)','rgb(86, 132, 183)']));
           assert.deepEqual([n.bg,n.border],colors);
