@@ -116,6 +116,7 @@ async function seed(page,layout,global){
 async function openFixture(page,name='日本語の業務図.md',raw=fixture.raw){
  await page.locator('#fallback').setInputFiles({name,mimeType:'text/markdown',buffer:Buffer.from(raw)});
  await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);
+ await page.locator('#check-followup-later').click();
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
  await saved(page);
