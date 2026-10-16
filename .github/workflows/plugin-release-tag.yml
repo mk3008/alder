@@ -44,7 +44,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Fetch pinned historical Check fixtures
-        run: git fetch --no-tags origin c0020d3f88fa7ce70b17c197464978bb548f9100 d453b61be8520907bf7326ffbe429ca55feea9d8
+        run: git fetch --no-tags origin c0020d3f88fa7ce70b17c197464978bb548f9100 d453b61be8520907bf7326ffbe429ca55feea9d8 2cdcb59eda5e992a77faa1aaa496c349d4b1dfe0
       - run: python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_check_two_view tools.test_plugin_release_workflow tools.test_export_plugin_references tools.test_plugin_references
       - run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
       - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
