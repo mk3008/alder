@@ -44,6 +44,12 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 名前は完全一致です。未知名、空の指定、未知の引数は失敗します。選択した群の中の検証やassertは省略しません。失敗しても後続の独立した群を実行し、最後は非ゼロで終了します。
 
+## Node／DOMテストの実行方式
+
+`npm test` は、実行方式を確認する回帰の後、通常の54ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全39群の実行方式は変更しません。
+
+CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
+
 ## 全体検証へ進む
 
 限定検証の成功は、選んだ範囲だけの結果です。人間へ操作確認版を返す前とmerge前には、同じ候補の全体CI成功を確認します。限定検証で変更範囲を説明できない場合や、選択外の不具合が見つかった場合は、対象を広げます。
