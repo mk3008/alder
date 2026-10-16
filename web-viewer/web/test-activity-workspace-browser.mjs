@@ -23,8 +23,13 @@ export async function verifyActivityWorkspace(browser){
    if(width===1280)await body.click({position:{x:60,y:30}});else await body.tap({position:{x:60,y:30}});
    assert.equal(await page.locator('.node.selected').getAttribute('data-node'),'業務設計');assert.equal(await page.locator('.tab').count(),1,'body only selects');assert.deepEqual(await position(),locked);
    await body.locator('.activity-open').focus();await page.keyboard.press('ArrowRight');assert.deepEqual(await position(),locked,'icon is not a movement handle');assert.equal(await page.locator('.tab').count(),1);
+   // ArrowRight can animate native viewport scrolling. Observe its completion,
+   // then use the normal list to center the card outside every edge-pan band.
+   await page.waitForFunction(()=>{const v=document.querySelector('#viewport'),key=v.scrollLeft+','+v.scrollTop,now=performance.now(),p=globalThis.__activityCamera;if(!p||p.key!==key){globalThis.__activityCamera={key,time:now};return false;}return now-p.time>=200;});
+   await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
    await page.locator('#layout-lock').click();
    const rectangle=await body.boundingBox(),start=[rectangle.x+130,rectangle.y+34],beforeDrag=await position();
+   const viewportBox=await page.locator('#viewport').boundingBox();assert.ok(start[0]-30>viewportBox.x+48&&start[0]<viewportBox.x+viewportBox.width-48,'ordinary body drag stays outside horizontal edge-pan bands');
    if(width===1280){await page.mouse.move(...start);await page.mouse.down();await page.mouse.move(start[0]-30,start[1]-20,{steps:4});await page.mouse.up();}
    else{const cdp=await context.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start[0],y:start[1],id:1}]});for(let i=1;i<=4;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start[0]-30*i/4,y:start[1]-20*i/4,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}
    const dragged=await position();assert.deepEqual(dragged,[beforeDrag[0]-30,beforeDrag[1]-20]);assert.equal(await page.locator('.tab').count(),1,'body drag never opens details');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await position(),dragged);assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'true');

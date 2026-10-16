@@ -204,8 +204,8 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
    const source=combine(concurrencyBodies.shared,concurrencyBodies.closed);
    await input(seed,source);const overall=(await keys(seed))[0];
-   await seed.locator('.node[data-activity="Synthetic closed activity"]').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
-   await select(seed,overall);await seed.locator('.node[data-activity="Synthetic shared activity"]').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
+   await seed.locator('.node[data-activity="Synthetic closed activity"] .activity-open').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
+   await select(seed,overall);await seed.locator('.node[data-activity="Synthetic shared activity"] .activity-open').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
    const read=page=>page.evaluate(readConcurrencyRecord,database);
    await until(()=>read(seed),v=>v.current?.tabs.length===3,'seed views did not commit');
    const seedRecord=await seed.evaluate(readConcurrencyRecord,{database,raw:true});
@@ -240,7 +240,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    assert.deepEqual(moved,[before[0]+70,before[1]+45]);
    const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
    await a.evaluate(async text=>{await document.querySelector('#edit-markdown').onclick();const t=document.querySelector('#source-text');t.value=text;t.dispatchEvent(new Event('input',{bubbles:true}));await document.querySelector('#source-submit').onclick();},addedSource);
-   await select(a,overall);await a.locator('.node[data-activity="Synthetic added activity"]').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
+   await select(a,overall);await a.locator('.node[data-activity="Synthetic added activity"] .activity-open').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
    await a.evaluate(async closed=>{document.getElementById('theme').click();await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();},closed);
    const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and Group close');
    assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
