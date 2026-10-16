@@ -1,6 +1,6 @@
 # 関連検証
 
-2026-10-16。最初の公開bundle revision `8853a63101bb5968751986b0260bb8bc036505e2`（81件）と、最終診断source `0986ae5c67efeed0797f3f78083f81ac12dbe047` を公式exportした作業木（84件） のgit worktreeで実行。既存テスト本体は変更していない。
+2026-10-16。最初の公開bundle revision `8853a63101bb5968751986b0260bb8bc036505e2`（81件）と、初回診断source `0986ae5c67efeed0797f3f78083f81ac12dbe047` を公式exportした作業木（84件） のgit worktreeで実行。既存テスト本体は変更していない。
 
 | 実行 | 結果 |
 | --- | --- |
@@ -21,3 +21,5 @@
 公式exporterの `--check` も4 Skill/17 filesで成功。canonicalとbundled script/guidance/provenanceの再現を検査した。
 
 source517e6ddaの順序修正を公式exportした作業木でも84 testsが成功。source宣言と別順の正当なnavigationを通し、索引とH2が互いに別順なら検出する検査を追加した。先行のprefix検出・対応外・repositoryなし実行も保持。新しい業務順制約を作らないための修正であり、既存製品テストを弱めていない。
+
+順序修正と19項目の公開入力 `0127880239bb88063b1ebaf4d83d76e2bc5efb0c` の [Plugin package](https://github.com/mk3008/alder/actions/runs/38893554329) / [Alder release validation](https://github.com/mk3008/alder/actions/runs/38893554339) も成功。最終差分はこの後の評価記録・説明だけである。

@@ -1,7 +1,6 @@
 {
   "baseline": "525a39db6ec43c196c5b927dbc1b9c3cf32f08c6",
   "first_workflow_bundle": "8853a63101bb5968751986b0260bb8bc036505e2",
-  "final_bundle": "be8d23aa331d61ffe10934f86190172726a5db78",
   "final_authority": "0986ae5c67efeed0797f3f78083f81ac12dbe047",
   "input_sha256": {
     "business-design/purchase-request/README.md": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
@@ -25,6 +24,7 @@
     "original-rereview.md": "ee287de22bbb45e3ebdbdad7243d84f548ebc9ffff4c50342b92748205f1893d",
     "initial-final.md": "b1c03ad0d6a50b72a9323e6e9d692419d0915fdb0a0f230f8cf2992ebc885217",
     "original-repaired.md": "1ddd10efc68ee36ed7663e372dac55b2cb65518a02b8400b95afb667f4806806",
+    "final-reassessment.md": "457b73698a9957aef03d1c57c060fadfe26b7dfa97c66a33e5a44fc90887b7c7",
     "initial-report.md": "7fb6aaa5aba00ff1bdac6510e3d2517d13c4bb9a58230b0ac6284550821fc9e1",
     "initial-granular.md": "543432be828274f13c15c6d9417f108d524681bcbdb9ecb65a0ecf3a5261f532",
     "original-final-review.md": "4868634e29d8ab621865a0454acd1e228ac3cd7cbc92b3b00076393c37318c49",
@@ -39,5 +39,7 @@
     "regression-report.md": "e54ddf5162cd85d0e5de03aac837874c785a9af5325731f4e65438b88d787814",
     "review-c-source-led.md": "891bc40107cabdbd1f7ed2baca9c9501e060d426a3567956cb89f2e56fc3c385"
   },
-  "latest_diagnostic_source": "517e6dda0cb9043b63aba8bdd116190c201b1d37"
+  "latest_diagnostic_source": "517e6dda0cb9043b63aba8bdd116190c201b1d37",
+  "intermediate_diagnostic_bundle": "be8d23aa331d61ffe10934f86190172726a5db78",
+  "latest_review_bundle": "0127880239bb88063b1ebaf4d83d76e2bc5efb0c"
 }
