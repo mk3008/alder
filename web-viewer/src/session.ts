@@ -1,3 +1,4 @@
+import type {WorkspaceSnapshot} from './workspace';
 import type {RelatedChecks} from './check-items';
 import {initialPositions} from './layout.ts';
 import {deploymentContext} from './deployment.ts';
@@ -30,7 +31,7 @@ function db():Promise<IDBDatabase>{return new Promise((resolve,reject)=>{const r
 export class SessionConflictError extends Error{constructor(){super('Session was saved by another window');this.name='SessionConflictError';}}
 let generation:number|undefined;
 function savedGeneration(value:unknown):number{if(value===undefined)return 0;if(typeof value!=='number'||!Number.isSafeInteger(value)||value<0)throw Error('Invalid session generation');return value;}
-export async function saveSession(value:Session):Promise<void>{
+export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{
   // Loading establishes which committed snapshot this window is editing.
   const expected=generation;if(expected===undefined)throw Error('Session has not been loaded');
   const d=await db();try{await new Promise<void>((resolve,reject)=>{
