@@ -29,7 +29,7 @@ export function union(boxes,padding=0){
 export const contains=(outer,inner,epsilon=0.001)=>inner.x>=outer.x-epsilon&&inner.y>=outer.y-epsilon&&inner.x+inner.width<=outer.x+outer.width+epsilon&&inner.y+inner.height<=outer.y+outer.height+epsilon;
 
 export function loadReviewModel(){
-  const raw={sample:read('../../../business-design/alder/README.md'),baseline:read('./baseline-routing.ts'),candidate:read('./candidate-routing.ts'),currentPositions:read('./positions-current.json'),staircasePositions:read('./positions-staircase.json')};
+  const raw={sample:read('./sample-business-design.md'),baseline:read('./baseline-routing.ts'),candidate:read('./candidate-routing.ts'),currentPositions:read('./positions-current.json'),staircasePositions:read('./positions-staircase.json')};
   for(const [key,value] of Object.entries(raw))assert.equal(sha256(value),SOURCE_HASHES[key],`Public review fixture changed: ${key}`);
   // Historical review specimens remain frozen as the product routing evolves.
   // Product geometry is checked by the current routing/layout regression suites.
