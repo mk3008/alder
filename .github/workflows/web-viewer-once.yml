@@ -5,6 +5,9 @@ on:
     paths:
       - 'web-viewer/**'
       - '.github/workflows/web-viewer-once.yml'
+concurrency:
+  group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
