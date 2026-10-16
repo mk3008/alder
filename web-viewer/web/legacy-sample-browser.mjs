@@ -8,4 +8,6 @@ export async function useUngroupedSample(page){
  if(await page.locator('#source-text').inputValue()===markdown){await page.locator('#source-cancel').click();return;}
  await page.locator('#source-text').fill(markdown);await page.locator('#source-submit').click();
  await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden&&document.querySelector('#app').dataset.saveState==='saved');
+ await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();
+ await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
 }

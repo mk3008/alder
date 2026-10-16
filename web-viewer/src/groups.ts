@@ -35,7 +35,9 @@ export function groupDesign(design:Design,group?:string):Design{
   nodes=[...design.graph.nodes.filter(n=>!membership.has(n.id)),...groups.map(g=>({id:groupID(design,g.name),name:g.name,type:'business' as const,scope:g.activities.some(a=>design.graph.nodes.find(n=>n.id===a)!.scope),who:'Group',group:g.name}))];
   const seen=new Set<string>();relations=design.graph.relations.map(r=>({...r,from:membership.get(r.from)??r.from,to:membership.get(r.to)??r.to})).filter(r=>{const k=JSON.stringify(r);if(seen.has(k))return false;seen.add(k);return true;});
  }
- const result={...design,graph:{...design.graph,nodes,relations},activityOrder:nodes.filter(n=>n.type==='business').map(n=>n.id)};cached.set(group,result);return result;
+ const visible=new Set(nodes.map(n=>n.id)),order=design.activityOrder??design.graph.nodes.filter(n=>n.type==='business').map(n=>n.id);
+ const activityOrder=[...new Set(order.map(id=>{const owner=group===undefined?groups.find(g=>g.activities.includes(id)):undefined;return owner?groupID(design,owner.name):id;}))].filter(id=>visible.has(id));
+ const result={...design,graph:{...design.graph,nodes,relations},activityOrder};cached.set(group,result);return result;
 }
 /** Boundary notes name the original endpoints without expanding other Activities. */
 export function boundaryRelations(design:Design,group:string){

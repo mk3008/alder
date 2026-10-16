@@ -135,7 +135,7 @@ async function ready(page){await page.waitForFunction(()=>!document.querySelecto
 async function verifyZoom(page,zoom){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
  assert.equal(await page.locator('#drawer').isDisabled(),true,'empty overlay must not be clicked');
- await page.locator('#open-sample').click();await ready(page);assert.equal(await page.locator('.node').count(),25);
+ await page.locator('#open-sample').click();await ready(page);await useUngroupedSample(page);assert.equal(await page.locator('.node').count(),25);
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
  await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.length===1&&s.tabs[0].source?.kind==='sample'&&s.drawer===false&&!s.nodeDrawer});

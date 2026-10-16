@@ -142,9 +142,9 @@ async function pointerDriver(page,context,input){
  }
  return {down:async p=>{await page.mouse.move(...p);await page.mouse.down();},move:p=>page.mouse.move(...p),up:()=>page.mouse.up()};
 }
-async function openFixture(page,zoom,atExtent,moving=edgeDragMoving){
+async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,groupView=false){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(withTestGroups(raw,[['Detail',['read','approve']]]));await page.locator('#source-submit').click();await page.locator('.node[data-group]').press('Enter');
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(groupView?withTestGroups(raw,[['Detail',['read','approve']]]):raw);await page.locator('#source-submit').click();if(groupView)await page.locator('.node[data-group]').press('Enter');
  await page.waitForFunction(()=>document.querySelectorAll('.node').length===4||!!document.querySelector('#status[data-kind=error]:not([hidden])'));
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
  await waitSavedViewer(page,{positions:(await frame(page)).positions});
@@ -232,7 +232,7 @@ async function runIsolated(browser,options,body){
  const context=await browser.newContext({viewport:{width:options.width,height:960},hasTouch:options.input==='touch'}),page=await context.newPage(),errors=[];
  page.setDefaultTimeout(4000);page.setDefaultNavigationTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
  let timer;try{
-  return await Promise.race([(async()=>{await installTrace(page);const driver=await pointerDriver(page,context,options.input),fixture=await openFixture(page,options.zoom,options.atExtent,options.moving),env={...options,...fixture,page,context,driver};
+  return await Promise.race([(async()=>{await installTrace(page);const driver=await pointerDriver(page,context,options.input),fixture=await openFixture(page,options.zoom,options.atExtent,options.moving,options.groupView),env={...options,...fixture,page,context,driver};
    const result=await body(env);assert.deepEqual(errors,[],'browser page errors');return result;
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`Independent edge-drag case exceeded ${caseTimeoutMs}ms`)),caseTimeoutMs);})]);
  }catch(error){
@@ -245,7 +245,7 @@ async function verifyEdge(browser,options){return runIsolated(browser,options,as
  await assertStopped(env.page,released);const saved=await committedReload(env,expected);
  return {...options,moving:env.moving,paintedHoldFrames:hold.samples,screenGripTolerance:1,...saved};
 });}
-async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return runIsolated(browser,{width:393,zoom,input},async env=>{
+async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return runIsolated(browser,{width:393,zoom,input,groupView:stop==='tab-close'},async env=>{
  const {page,driver}=env;await unlock(page);const hold=await beginHold(env,'right');
  if(stop==='cancel')await driver.cancel();
  else if(stop==='capture-loss')await page.locator('.node[data-node="person"]').evaluate(node=>{const event=[...window.edgeDragTrace].reverse().find(e=>e.type==='pointerdown'&&e.kind==='mouse');if(!event||!node.hasPointerCapture(event.id))throw Error('Expected native pointer capture');node.releasePointerCapture(event.id);});

@@ -24,7 +24,7 @@ export async function verifyFacingRoutes(browser){
    request.onsuccess=()=>{
     const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');let failure;
     get.onsuccess=()=>{
-     const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+     const session=get.result,tab=(session?.format===2?session.views:session?.tabs)?.find(t=>t.key===session.active);
      if(!tab){failure=Error('Routing fixture session not saved');tx.abort();return;}
      tab.positions=positions;tab.zoom=1;tab.scroll=[0,0];tab.viewInset=[0,0];tab.canvasOrigin=[0,0];
      session.drawer=false;store.put(session,'current');
