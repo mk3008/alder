@@ -24,7 +24,7 @@ import {verifyHeaderControls} from './test-header-controls-browser.mjs';
 import {verifyBottomClearance} from './test-bottom-clearance-browser.mjs';
 import {diagnoseScopeGeometry} from './diagnose-scope-geometry.mjs';
 import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
-import {runBrowserCases} from './browser-cases.mjs';
+import {parseBrowserCaseArgs,selectBrowserCases,runBrowserCases} from './browser-cases.mjs';
 import {verifyNodeDrawer,verifyDrawerOpeningFocus} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
 import {setScope} from './scope-control.mjs';
@@ -40,16 +40,10 @@ import {verifyLabelLayout} from './test-label-layout.mjs';
 import {verifyPreviewIsolation} from './test-preview-browser.mjs';
 import {verifyScopeOption} from './test-scope-browser.mjs';
 import {verifyEdgeOption} from './test-edge-browser.mjs';
-const require=createRequire(import.meta.url);
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/usr/bin/google-chrome',headless:true});
-const page=await browser.newPage({viewport:{width:1280,height:960}});
-const errors=[],external=[];
-page.on('pageerror',error=>errors.push(error.message));
-page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
-const checks=[];
-try {
-  await runBrowserCases([
+const options=parseBrowserCaseArgs(process.argv.slice(2));
+let browser,page;
+const errors=[],external=[],checks=[];
+const cases=[
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},
    {name:'documentActions',run:()=>verifyDocumentActions(browser)},
@@ -177,5 +171,18 @@ try {
   assert.deepEqual(errors,[]);
   return {browser:browser.version(),checks,passed:checks.length,pageErrors:errors,limits:['OS picker grants/revocation and process restart not tested','touch uses Chrome CDP emulation; physical Android and mobile browser chrome not tested']};
    }}
-  ]);
-} finally {await browser.close();}
+  ];
+const selected=selectBrowserCases(cases,options.names);
+if(options.list){
+ console.log(JSON.stringify({browserPlan:{scope:selected.length===cases.length?'full':'targeted',available:cases.length,selected:selected.map(c=>c.name)}}));
+}else{
+ const require=createRequire(import.meta.url);
+ const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+ browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/usr/bin/google-chrome',headless:true});
+ try{
+  page=await browser.newPage({viewport:{width:1280,height:960}});
+  page.on('pageerror',error=>errors.push(error.message));
+  page.on('request',request=>{if(!request.url().startsWith('http://127.0.0.1:4173/'))external.push(request.url());});
+  await runBrowserCases(selected,console.log,{available:cases.length});
+ }finally{await browser.close();}
+}

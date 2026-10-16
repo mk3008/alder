@@ -57,3 +57,7 @@ For adopted research that affects user behavior, apply [the evidence, user-facin
 ## Returning Alder work results
 
 For the actual AI-result exchange in this repository, follow [its Business Design](business-design/ai-result-review/README.md) and [the result-return guidance](docs/result-review.ja.md). Summarize purpose/condition correspondence, evidence references, unfinished work and genuine human decisions concisely; do not require a fixed report artifact. This is separate from the Alder design-use workflow. Keep business judgment with the requester and distinguish adoption, implementation and observed benefit.
+
+## Web Viewer validation
+
+For Web Viewer changes, follow [the staged validation procedure](web-viewer/validation.ja.md). Select affected browser cases during iteration, record the reason and untested scope, and retain full CI on the final candidate. Never report targeted success as full coverage.
