@@ -124,7 +124,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
    // chain leaves the actual minimum canvas height850; viewport height controls
    // whether a real vertical pan range exists.
    const fixture='# Pan fixture\n\n'+['Pan A','Pan B'].map(id=>'# Object '+id+'\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Synthetic pan test\n\n').join('')+'# Activity Pan activity\n\n## Scope\n\ntrue\n\n## Why\n\nTest\n\n## When\n\nTest\n\n## Who\n\nTester\n\n## Where\n\nTest\n\n## How\n\n### Input\n\n- Pan A — Test\n\n### Procedure\n\nTest\n\n### Output\n\n- Pan B — Test\n\n## Result\n\nTest\n';
-   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();assert.equal(await page.locator('.node').count(),3);
+   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(fixture);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden&&!document.querySelector('#open').disabled&&document.querySelector('#app').dataset.saveState==='saved');assert.equal(await page.locator('.node').count(),3);
    await page.setViewportSize({width:1280,height:panCase==='fixture-two-axes'?600:1100});
   }
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=100;n.scrollTop=100;});
