@@ -18,6 +18,25 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_shared_expression_example_guidance_is_bundled_and_routed(self):
+        # Distribution contract only; actual generation is evaluated separately.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        section = guide.split('### Conditions, expressions and examples\n', 1)[1].split('Recommended review states:', 1)[0]
+        for meaning in ['necessary-condition expression', 'guarantee expression',
+                        'do not infer `¬P ⇒ ¬Q`', 'result and explanatory notes separate',
+                        'required” does not decide the error message', '未決・要確認',
+                        'without HTML anchors, folding or separate human/AI copies',
+                        'Do not silently expand an expectation',
+                        'do not require matching classes, tables, columns, APIs',
+                        'No fixed row count or exhaustive enumeration is required']:
+            with self.subTest(meaning=meaning):
+                self.assertIn(meaning, section)
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('references/check-item-traceability.md#conditions-expressions-and-examples', skill)
+        self.assertIn('Apply that guidance during the return-time quality check.', skill)
+        for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
+            self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
+
     def test_requester_language_reaches_canonical_guidance_and_check_skill(self):
         # These are authored guidance checks, not a language detector or proof
         # that an agent follows the guidance or a person comprehends its output.
