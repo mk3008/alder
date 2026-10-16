@@ -1,3 +1,4 @@
+import {withTestGroups} from './document-test-view.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Import-safe browser gate. The caller owns the local server and browser.
@@ -180,13 +181,13 @@ export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={})
   assert.equal((await page.evaluate(readConcurrencyRecord,database)).current,undefined);await recovery(page,['save-retry','save-download']);await page.locator('#save-retry').focus();await page.locator('#save-retry').press('Enter');await held(page,2);assert.equal(await page.locator('#save-retry').isDisabled(),true);await guard(page,true,['error','saving']);await page.evaluate(()=>__saveStateControl.holdWrites=false);await release(page,2);await stateIs(page,'saved');await guard(page,false,['saved']);return {abortRolledBack:true,retrySaved:true};
  },{controls:{holdWrites:true}});
  add('save state: close remains pending through failure and clears only on latest retry commit',async({page})=>{
-  await openText(page,concurrencyBodies.shared);await submit(page);await stateIs(page,'saved');await page.evaluate(()=>__saveStateControl.holdWrites=true);const base=await page.evaluate(()=>__saveStateControl.writes.length);
-  await page.locator('.tab .close').click();await held(page,base+1);await guard(page,true,['saving']);assert.equal(await page.locator('.tab').count(),1);
-  await page.evaluate(n=>__saveStateControl.writes[n].abort(),base);await stateIs(page,'error');await guard(page,true,['error']);assert.equal(await page.locator('.tab').count(),1);
+  await openText(page,withTestGroups(concurrencyBodies.shared,[['Shared',['Synthetic shared activity']]]));await submit(page);await page.locator('.node[data-group]').press('Enter');await stateIs(page,'saved');await page.evaluate(()=>__saveStateControl.holdWrites=true);const base=await page.evaluate(()=>__saveStateControl.writes.length);
+  await page.locator('.tab.active .close').click();await held(page,base+1);await guard(page,true,['saving']);assert.equal(await page.locator('.tab').count(),2);
+  await page.evaluate(n=>__saveStateControl.writes[n].abort(),base);await stateIs(page,'error');await guard(page,true,['error']);assert.equal(await page.locator('.tab').count(),2);
   // Retry may already have been queued by recovery; release every real pending
   // transaction, then wait for the semantic saved state rather than a delay.
   await page.evaluate(()=>{__saveStateControl.holdWrites=false;for(const w of __saveStateControl.writes)w.release();});await flush(page);await stateIs(page,'saved');await guard(page,false,['saved']);
-  await page.locator('.tab .close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===0);await stateIs(page,'saved');await guard(page,false,['saved']);return {failedCloseRetained:true,retryCloses:true};
+  await page.locator('.tab.active .close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);await stateIs(page,'saved');await guard(page,false,['saved']);return {failedCloseRetained:true,retryCloses:true};
  });
  add('save state: invalid restoration protects storage; local change enables warning',async({page,database,dialogs})=>{
   const invalid={tabs:'invalid synthetic session',dark:false,drawer:true,width:380};await page.evaluate(seedLegacyRecord,{value:invalid,database});await page.reload();await ready(page);await guard(page,false,['protected']);

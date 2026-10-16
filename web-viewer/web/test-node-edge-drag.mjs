@@ -1,15 +1,18 @@
+import {joinedSession} from './session-test-view.mjs';
+const loadSession=async()=>joinedSession(await loadStoredSession());
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // Deterministic RAF and DOM/IndexedDB model, not native browser input evidence.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
-import {reconcile,saveSession,loadSession} from '../src/session.ts';
+import {reconcile,saveSession,loadSession as loadStoredSession} from '../src/session.ts';
 import {routeEdge} from '../src/routing.ts';
 import {createNodeDrag,edgeVelocity} from '../src/node-drag.ts';
 
-const markdown=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(markdown);
+const markdown=readFileSync('web/authorities/ungrouped-alder.md','utf8'),design=parseDesign(markdown);
 const initial=reconcile({key:'edge-drag',name:'Alder',design,positions:{},scroll:[0,0],zoom:1,source:{kind:'sample'}},design);
 const firstID=design.graph.nodes[0].id;
 assert.deepEqual(edgeVelocity([500,300],{left:100,top:100,right:900,bottom:628}),[0,0]);
@@ -116,7 +119,7 @@ try{
   for(const [id,p] of Object.entries(baseline))if(id!==firstID)assert.deepEqual(positions()[id],p);
   // Restore/reopen tests below use the signed positions, offset, zoom and camera.
   const snapshot=positions(),scroll=[v.scrollLeft,v.scrollTop],offset=[$('nodes').style.left,$('nodes').style.top],zoomText=$('zoom').textContent;
-  await d.querySelector('.close').onclick();w.close();
+  assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();w.close();
   const reopened=await boot(e.db);reopened.$('open-sample').click();
   assert.deepEqual(reopened.positions(),snapshot);assert.deepEqual([reopened.v.scrollLeft,reopened.v.scrollTop],scroll);
   assert.deepEqual([reopened.$('nodes').style.left,reopened.$('nodes').style.top],offset);assert.equal(reopened.$('zoom').textContent,zoomText);
@@ -141,6 +144,6 @@ try{
  card=node(firstID);const at=positions()[firstID];fire('mouse','pointerdown',23,500,300,card);fire('mouse','pointermove',23,500-at[0]-200,300-at[1]-200,card);fire('mouse','pointerup',23,0,0,card);assert.deepEqual(positions()[firstID],[-200,-200]);
  $('node-list-toggle').click();$('node-category-'+(design.graph.nodes[0].type==='business'?'activity':'object')).click();const beforeNavigation=positions();d.querySelector(`[data-list-node="${firstID}"] .node-navigate`).click();assert.deepEqual(positions(),beforeNavigation);assert.deepEqual(e.screen(firstID),[325-130,300-34]);
  // Closing a tab cancels an in-flight edge drag before persisting the final layout.
- card=node(firstID);fire('mouse','pointerdown',22,500,300,card);fire('mouse','pointermove',22,740,300,card);step();await d.querySelector('.close').onclick();step();assert.equal(d.querySelectorAll('.tab').length,0);assert.equal(d.querySelectorAll('.node').length,0);
+ card=node(firstID);fire('mouse','pointerdown',22,500,300,card);fire('mouse','pointermove',22,740,300,card);step();assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();step();assert.equal(d.querySelectorAll('.tab').length,1);const stationary=positions();step();assert.deepEqual(positions(),stationary,'blur cancels drag; overview remains');
  console.log(JSON.stringify({model:'pure controller + measured DOM/rounded-scroll/IndexedDB',passed:12,checks:['bounded stationary RAF at 25/100/250%','shared mouse/pen/touch equation','zero-boundary signed routes','right/top/left expansion','camera-only origin compensation','incident-only paths/labels exact','second finger rollback and pinch','pointer/cancel/capture/lock/redraw/blur/disconnect stop','measured toolbar and drawer edges','unrelated world coordinates unchanged','signed sample close/reload/reopen exact','signed drawer navigation and close during drag']},null,2));
 }finally{windows.forEach(w=>w.close());}

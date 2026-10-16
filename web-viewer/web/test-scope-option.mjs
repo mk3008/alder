@@ -1,23 +1,26 @@
+import {joinedSession} from './session-test-view.mjs';
+import {documentControls} from './document-test-view.mjs';
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // Application DOM/IndexedDB model; rendered opacity is checked in browser QA.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const db=new IDBFactory(),windows=[],sleep=()=>new Promise(r=>setTimeout(r,300));
 async function open(){const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(outputFiles[0].text);for(let i=0;i<120&&w.document.getElementById('open').disabled;i++)await new Promise(r=>setTimeout(r,25));return w.document;}
-async function session(edit){return new Promise((resolve,reject)=>{const r=db.open('alder-web-viewer',1);r.onerror=()=>reject(r.error);r.onsuccess=()=>{const d=r.result,t=d.transaction('session',edit?'readwrite':'readonly'),s=t.objectStore('session'),g=s.get('current');let saved;g.onsuccess=()=>{saved=g.result;if(edit){edit(saved);s.put(saved,'current');}};t.oncomplete=()=>{d.close();resolve(saved);};t.onerror=()=>reject(t.error);};});}
+async function session(edit){return new Promise((resolve,reject)=>{const r=db.open('alder-web-viewer',1);r.onerror=()=>reject(r.error);r.onsuccess=()=>{const d=r.result,t=d.transaction('session',edit?'readwrite':'readonly'),s=t.objectStore('session'),g=s.get('current');let saved;g.onsuccess=()=>{saved=joinedSession(g.result);if(edit){edit(saved);s.put(saved,'current');}};t.oncomplete=()=>{d.close();resolve(saved);};t.onerror=()=>reject(t.error);};});}
 const pointer={button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}};
 const select=n=>{n.onpointerdown(pointer);n.onpointerup(pointer);};
 const layout=d=>[...d.querySelectorAll('.node')].map(n=>[n.dataset.node,n.style.left,n.style.top]);
 const setMode=(d,value)=>{const el=d.getElementById('scope-outside');const desired=value==='show'?'true':'false';if(el.getAttribute('aria-pressed')!==desired){el.click();if(el.getAttribute('aria-pressed')!==desired)el.click();}};
 try{
  const d=await open(),$=id=>d.getElementById(id);assert.equal($('scope-outside').getAttribute('aria-pressed'),'true');assert.equal($('dim-outside'),null);assert.equal($('scope-outside').tagName,'BUTTON');assert.equal($('prefer-write').parentElement.textContent,'Writeを優先表示する');assert.match($('prefer-write').parentElement.title,/Read単独/);for(const [id,label] of [['open','ファイルを開く'],['open-url','URLを開く'],['open-text','テキストを入力']]){assert.equal($(id).getAttribute('aria-label'),label);assert.equal($(id).title,label);assert.ok($(id).querySelector('svg'));assert.equal($(id).querySelector('.source-caption').textContent,label);}$('open-sample').click();$('layout-lock').click();
- const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8')),ids=new Set(design.graph.nodes.filter(n=>!n.scope).map(n=>n.id)),all=design.graph.relations,initial=layout(d);
+ const design=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),ids=new Set(design.graph.nodes.filter(n=>!n.scope).map(n=>n.id)),all=design.graph.relations,initial=layout(d);
  const outside=d.querySelector('.node.outside'),outsideID=outside.dataset.node;select(outside);const selectedDetail=$('detail').textContent;setMode(d,'show');
  assert.equal(d.querySelectorAll('.node').length,25);assert.equal(d.querySelectorAll('.node.scope-dim').length,0);assert.equal(d.querySelector('.selected').dataset.node,outsideID);assert.equal($('detail').textContent,selectedDetail);
  const verify=(prefer,mode)=>{const hidden=hiddenReadIndexes(all,prefer),expected=all.map((r,i)=>({r,i})).filter(({r,i})=>!hidden.has(i)&&(mode!=='hide'||(!ids.has(r.from)&&!ids.has(r.to)))).map(({i})=>i);for(const css of ['.edge','.edge-label']){assert.deepEqual([...d.querySelectorAll(css)].map(n=>+n.dataset.relation).sort((a,b)=>a-b),expected);for(const el of d.querySelectorAll(css)){const r=all[+el.dataset.relation];assert.equal(el.classList.contains('scope-dim'),false);}}return expected.length;};

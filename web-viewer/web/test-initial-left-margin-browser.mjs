@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -10,7 +11,7 @@ import {svgViewportTransform,assertSvgMatrix,assertSvgLogicalExtent,preflightSvg
 // Import and --preflight never launch Chromium or make network requests. The
 // browser runner supplies its own browser and serves the built product.
 const origin='http://127.0.0.1:4173/';
-const raw=readFileSync(new URL('../../business-design/alder/README.md',import.meta.url),'utf8');
+const raw=readFileSync(new URL('./authorities/ungrouped-alder.md',import.meta.url),'utf8');
 const design=parseDesign(raw);
 export const initialLeftMarginWidths=[1280,393,320];
 export const initialLeftMarginZooms=[.25,.36,1];
@@ -28,7 +29,7 @@ export function seedInitialLeftMarginSession({layout,closed=false,omitInset=fals
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active),target=closed?session?.sampleLayout:tab;
+   get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);if(closed&&session.tabs.length){session.sampleLayout={...tab};session.tabs=[];delete session.active;}const target=closed?session?.sampleLayout:tab;
     if(!target||(!closed&&tab.source?.kind!=='sample')||(closed&&session.tabs.length!==0)){failure=Error('Margin fixture needs the committed public sample or its closed layout');tx.abort();return;}
     Object.assign(target,layout);if(omitInset)delete target.viewInset;
     session.drawer=false;session.nodeDrawer=false;store.put(session,'current');
@@ -92,7 +93,7 @@ async function painted(page){await page.evaluate(()=>new Promise(resolve=>reques
 async function ready(page,count){await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.tab').length===count,count);}
 async function openFreshSample(page){
  await page.goto(origin);await ready(page,0);assert.equal(await page.locator('#drawer').isDisabled(),true,'do not click an empty drawer');
- await page.locator('#open-sample').click();await ready(page,1);assert.equal(await page.locator('.node').count(),25);
+ await page.locator('#open-sample').click();await ready(page,1);await useUngroupedSample(page);assert.equal(await page.locator('.node').count(),25);
  // Open the document before dismissing overlays, including the mobile drawer.
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
@@ -127,11 +128,10 @@ async function inspectEmpty(page){
  for(const axis of [0,1])assert.ok(frame.extent[axis]<=frame.client[axis]+1,'closed graph does not leave a scroll extent');return frame;
 }
 async function closeAndReopen(page,layout,world){
- await page.locator('.tab.active .close').click();await ready(page,0);
- await waitForExactRead(()=>page.evaluate(readSessionInPage),{tabs:0,layout},{project:s=>({tabs:s?.tabs?.length,layout:layoutOf(s?.sampleLayout)})});
- await inspectEmpty(page);await page.reload();await ready(page,0);const empty=await inspectEmpty(page);
- await page.locator('#open-sample').focus();await page.keyboard.press('Enter');await ready(page,1);
- await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'closed-session reload and reopen preserve every coordinate and route');return empty;
+ assert.equal(await page.locator('.tab.active .close').isVisible(),false);
+ await page.evaluate(()=>document.querySelector('.tab.active .close').click());await ready(page,1);
+ await waitSavedViewer(page,layout);await page.reload();await ready(page,1);
+ await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'permanent overview reload preserves every coordinate and route');return {hit:true,scroll:layout.scroll};
 }
 // Coordinates and path geometry are exact semantic data. Native glyph boxes
 // are measured layout results; compare only those in the existing CSS-pixel
@@ -184,11 +184,7 @@ async function verifyLegacy(page){
  const fresh=await openFreshSample(page),layout=manualLegacyLayout(fresh.layout);await seedAndRestore(page,layout,{omitInset:true});await assertCamera(page,layout);
  const world=await page.evaluate(readInitialMarginWorldInPage);assert.deepEqual(world.positions,layout.positions);
  await page.reload();await ready(page,1);await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'legacy active-tab reload has no layout migration');
- await page.locator('.tab.active .close').click();await ready(page,0);await inspectEmpty(page);
- await waitForExactRead(()=>page.evaluate(readSessionInPage),layout,{project:s=>layoutOf(s?.sampleLayout)});
- await seedAndRestore(page,layout,{omitInset:true,closed:true});await inspectEmpty(page);
- await page.locator('#open-sample').click();await ready(page,1);await assertCamera(page,layout);
- assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'legacy sampleLayout with missing inset never inherits the new default');
+ await closeAndReopen(page,layout,world);
  await closeAndReopen(page,layout,world);
  return {activeLegacyMissingInset:true,closedLegacyMissingInset:true,manualPositions:25,zoom:.36,scroll:layout.scroll,viewInset:'absent remains zero',routes:'exact after reload and close/reopen'};
 }
@@ -230,7 +226,7 @@ function preflightInitialMarginGeometryAssertions(){
 
 export async function preflightInitialLeftMargin(){
  const insetWorldGeometry=preflightInsetWorldGeometry(),svgViewportOracle=preflightSvgViewportOracle(),geometryAssertionControls=preflightInitialMarginGeometryAssertions();
- const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
+ const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('./legacy-viewer-fixture.mjs');
  const source=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),mainSha256=createHash('sha256').update(source).digest('hex');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
  const primary=Error('controlled margin case failure'),cleanup=Error('controlled margin cleanup failure'),pageError=Error('controlled margin page error');
@@ -254,17 +250,17 @@ export async function preflightInitialLeftMargin(){
   const saved=await waitSavedViewer(page,{zoom:1,scroll:[0,0],viewInset:[40,0],canvasOrigin:undefined}),fresh=layoutOf(activeOf(saved)),world=await page.evaluate(readInitialMarginWorldInPage);
   assert.deepEqual(activeOf(saved).design.graph,design.graph);assert.deepEqual(world.positions,fresh.positions);assert.equal(Math.min(...Object.values(fresh.positions).map(p=>p[0])),40);assert.equal(Object.keys(world.routes).length,63);
   // Exercise the actual source-dialog/parser ordering, then return to sample.
-  $('open-text').click();assert.equal($('source-dialog').hidden,false);$('source-text').value=raw;await $('source-submit').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.querySelectorAll('.tab').length,2);
-  await waitForExactRead(()=>page.evaluate(readSessionInPage),{tabs:2,source:'text'},{project:s=>({tabs:s?.tabs?.length,source:activeOf(s)?.source?.kind})});
+  $('open-text').click();assert.equal($('source-dialog').hidden,false);$('source-text').value=raw;await $('source-submit').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.querySelectorAll('.tab').length,1);
+  await waitForExactRead(()=>page.evaluate(readSessionInPage),{tabs:1,source:'text'},{project:s=>({tabs:s?.tabs?.length,source:activeOf(s)?.source?.kind})});
   const text=await waitSavedViewer(page,{viewInset:[40,0],zoom:1,scroll:[0,0]});assert.equal(activeOf(text).source.kind,'text');assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world);
-  await d.querySelector('.tab.active .close').onclick();await assertModel(w,fresh,world);w.close();
+  await $('open-sample').onclick({preventDefault(){}});await assertModel(w,fresh,world);w.close();
   const storage=makeWindow(false),storagePage=adapter(storage);
   for(const zoom of initialLeftMarginZooms){
    const layout={...fresh,zoom};assert.equal(await storagePage.evaluate(seedInitialLeftMarginSession,{layout}),true);await waitSavedViewer(storagePage,layout);
    const restored=await boot();await assertModel(restored,layout,world);await restored.document.querySelector('.tab.active .close').onclick();
-   assert.equal(restored.document.querySelector('#empty').hidden,false);assert.equal(restored.document.querySelector('#canvas').hidden,true);assert.equal(restored.document.querySelector('.toolbar').hidden,true);
-   assert.deepEqual(layoutOf((await storagePage.evaluate(readSessionInPage)).sampleLayout),layout);restored.close();
-   const closed=await boot();assert.equal(closed.document.querySelectorAll('.tab').length,0);assert.equal(closed.document.querySelector('#drawer').disabled,true);closed.document.querySelector('#open-sample').click();await assertModel(closed,layout,world);closed.close();
+   assert.equal(restored.document.querySelector('#empty').hidden,true);assert.equal(restored.document.querySelector('#canvas').hidden,false);assert.equal(restored.document.querySelector('.toolbar').hidden,false);
+   assert.deepEqual(layoutOf((await storagePage.evaluate(readSessionInPage)).tabs[0]),layout);restored.close();
+   const closed=await boot();assert.equal(closed.document.querySelectorAll('.tab').length,1);assert.equal(closed.document.querySelector('#drawer').disabled,false);closed.document.querySelector('#open-sample').click();await assertModel(closed,layout,world);closed.close();
   }
   const zero={...fresh,zoom:.36,viewInset:undefined};await storagePage.evaluate(seedInitialLeftMarginSession,{layout:zero,omitInset:true});assert.equal(Object.hasOwn(activeOf(await storagePage.evaluate(readSessionInPage)),'viewInset'),false);
   const noInset=await boot();await assertModel(noInset,zero,world);noInset.close();

@@ -1,11 +1,12 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
-const raw=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(raw),outside=design.graph.nodes.filter(n=>!n.scope);
+const raw=readFileSync('web/authorities/ungrouped-alder.md','utf8'),design=parseDesign(raw),outside=design.graph.nodes.filter(n=>!n.scope);
 assert.ok(outside.length>1);
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:[{name:'route-counter',setup(b){b.onLoad({filter:/\/routing\.ts$/},a=>({contents:readFileSync(a.path,'utf8').replace('const source=nodes.find','globalThis.__routes=(globalThis.__routes??0)+1; const source=nodes.find'),loader:'ts'}));}}]});
 const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window,d=w.document,$=id=>d.getElementById(id);w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};

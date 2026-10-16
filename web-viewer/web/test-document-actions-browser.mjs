@@ -1,3 +1,5 @@
+import {withTestGroups} from './document-test-view.mjs';
+import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
@@ -25,7 +27,9 @@ export async function verifyDocumentActions(browser){
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   await page.evaluate(ids=>{window.__documentActionNodes=ids.map(id=>document.getElementById(id));},ids);
   assert.equal(await mode(),'inline');await geometry();
-  for(let i=0;i<4;i++){await openSourceAction(page,'open-text');await page.locator('#source-text').fill(sample.replace(/^# .+/,`# A very long document title ${i} for responsive tab navigation`));await page.locator('#source-submit').click();}
+  const names=parseDesign(sample).activityOrder.slice(0,4).map((id,i)=>['A very long Group title '+i+' for responsive tab navigation',[id]]);
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(withTestGroups(sample,names));await page.locator('#source-submit').click();
+  for(const [name] of names){await page.locator('.tab').first().locator('button').first().click();await page.locator('.node[data-group]').filter({hasText:name}).press('Enter');}
   const results=[];
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
@@ -51,11 +55,11 @@ export async function verifyDocumentActions(browser){
   await open();await page.locator('#theme').click();assert.equal(await page.locator('#document-actions-toggle').getAttribute('aria-expanded'),'false','outside pointer dismisses');
   await open();await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-dialog').isVisible(),true,'editor reachable');await page.locator('#source-cancel').click();
   let reads=0;await context.route('https://actions.test/design.md',route=>{reads++;return route.fulfill({contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://actions.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===6);
-  await open();assert.equal(await page.locator('#refresh').isDisabled(),false);const read=page.waitForRequest('https://actions.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(reads,2,'selected URL refresh uses original handler');assert.equal(await page.locator('.tab').count(),6);
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://actions.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
+  await open();assert.equal(await page.locator('#refresh').isDisabled(),false);const read=page.waitForRequest('https://actions.test/design.md');await page.locator('#refresh').click();await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(reads,2,'selected URL refresh uses original handler');assert.equal(await page.locator('.tab').count(),1);
   await open();const downloaded=page.waitForEvent('download');await page.locator('#save-image').click();const download=await downloaded;assert.match(download.suggestedFilename(),/\.png$/,'PNG export reachable');assert.equal(await download.failure(),null);
-  await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===5);await open();assert.equal(await page.locator('#refresh').isDisabled(),true,'closing URL restores text eligibility');
-  await page.keyboard.press('Escape');await page.locator('.tab').first().locator('button').first().click();await open();assert.equal(await page.locator('#refresh').isDisabled(),true,'sample refresh disabled');
+  if(await mode()==='menu')await page.keyboard.press('Escape');await page.locator('#document-recovery summary').click();await page.locator('#recovery-documents button').last().click();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await open();assert.equal(await page.locator('#refresh').isDisabled(),true,'recovering text restores its eligibility');
+  if(await mode()==='menu')await page.keyboard.press('Escape');await openSourceAction(page,'open-sample-menu');await open();assert.equal(await page.locator('#refresh').isDisabled(),true,'sample refresh disabled');
   assert.equal(await page.evaluate(ids=>ids.every((id,i)=>document.getElementById(id)===window.__documentActionNodes[i]),ids),true,'original action nodes retained across source/mode changes');
   mkdirSync('web/evidence/header-controls',{recursive:true});await page.screenshot({path:'web/evidence/header-controls/document-actions-mobile-menu.png'});
   assert.deepEqual(errors,[]);return {checks:'Measured all-inline/all-menu layout, phone/intermediate/desktop, themes, no document overflow, long tabs/close, boundary stability, touch/native keys, focus and outside dismissal, source eligibility/refresh, editor and PNG export',boundary:{menu:low,inline:high},results,pageErrors:errors};

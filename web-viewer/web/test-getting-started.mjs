@@ -1,9 +1,10 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // DOM contract only; real layout and keyboard traversal are covered in the browser gate.
 import assert from 'node:assert/strict';
 import {gettingStartedFile} from './test-getting-started-browser.mjs';
 assert.ok(gettingStartedFile.length>0);
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
@@ -33,7 +34,7 @@ try{
  for(const text of ['Alderプラグイン','ヒアリングメモ・議事録・発言内容','このヒアリング結果をAlder業務設計書にして','草案','合意する前にレビュー','このViewerで開くと、図で確認'])assert.ok(guide.textContent.includes(text),text);
  const readmeText=readFileSync('../README.ja.md','utf8');assert.match(readmeText,/## 導入する/);assert.match(readmeText,/## まず使ってみる/);
  $('open-sample').click();assert.equal(d.querySelectorAll('.tab').length,1);assert.equal(guide.closest('#empty').hidden,true);assert.equal($('refresh').hidden,false);assert.equal($('refresh').disabled,true);
- await d.querySelector('.close').onclick();assert.equal(d.querySelectorAll('.tab').length,0);assert.equal($('refresh').hidden,true);assert.equal($('refresh').disabled,true);assert.equal(guide.closest('#empty').hidden,false);
+ assert.equal(d.querySelector('.close').hidden,true);await d.querySelector('.close').onclick();assert.equal(d.querySelectorAll('.tab').length,1);assert.equal($('refresh').hidden,false);assert.equal($('refresh').disabled,true);assert.equal(guide.closest('#empty').hidden,true);
  assert.equal($('open').disabled,false);assert.equal($('open-sample').getAttribute('aria-disabled'),'false');
  console.log('Getting-started DOM contract passed: links, names, focus, Japanese guidance, sample open/close and zero-tab visibility.');
 }finally{w.close();}

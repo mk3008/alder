@@ -1,16 +1,19 @@
+import {joinedSession} from './session-test-view.mjs';
+const loadSession=async()=>joinedSession(await loadStoredSession());
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // Real app DOM + fake IndexedDB. Native keyboard/touch/layout is a browser gate.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {RotateCcw} from 'lucide';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
 import {initialPositions} from '../src/layout.ts';
 import {resetLayout} from '../src/layout-reset.ts';
-import {loadSession,saveSession} from '../src/session.ts';
+import {loadSession as loadStoredSession,saveSession} from '../src/session.ts';
 
-const markdown=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(markdown);
+const markdown=readFileSync('web/authorities/ungrouped-alder.md','utf8'),design=parseDesign(markdown);
 const initial=()=>({key:'a',name:'Alder',design,positions:initialPositions(design.graph,design.activityOrder),scroll:[0,0],zoom:1,viewInset:[40,0],source:{kind:'sample'}});
 const modified=()=>{const t=initial(),ids=Object.keys(t.positions);const selected=design.graph.nodes.find(n=>n.type==='business'&&n.scope).id;t.positions[selected]=[-600,1200];t.positions[ids[1]]=[2200,3500];return {...t,canvasOrigin:[900,100],viewInset:[100,200],scroll:[650,700],zoom:.5,selected,hiddenNodes:[ids[3]],showExceptions:false,selectedEdgesOnly:true,draft:markdown+'\nUnapplied draft',edited:true};};
 const session=tab=>({tabs:[tab,{...modified(),key:'b',name:'Other',source:{kind:'url',url:'https://example.org/design.md'}}],active:tab.key,dark:true,drawer:false,nodeDrawer:true,width:430,preferWrite:true});
@@ -21,8 +24,8 @@ const tick=()=>new Promise(r=>setTimeout(r,10));
 async function until(fn){for(let i=0;i<200&&!await fn();i++)await tick();assert.ok(await fn());}
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:[{name:'reset-test-state',setup(b){b.onLoad({filter:/\/src\/(main|session)\.ts$/},args=>{
  let text=readFileSync(args.path,'utf8');
- if(args.path.endsWith('/main.ts'))text+='\nglobalThis.__resetState=()=>structuredClone(state);globalThis.__resetRevision=()=>revision;';
- else text=text.replace('export async function saveSession(value:Session):Promise<void>{','export async function saveSession(value:Session):Promise<void>{ if(globalThis.__failSave)throw Error("controlled save failure");');
+ if(args.path.endsWith('/main.ts'))text+='\nglobalThis.__resetState=()=>structuredClone(snapshotWorkspace(state));globalThis.__resetRevision=()=>revision;globalThis.__resetRecovery=()=>structuredClone(state.recovery);';
+ else text=text.replace('export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{','export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{ if(globalThis.__failSave)throw Error("controlled save failure");');
  return {contents:text,loader:'ts'};
 });}}]});
 const windows=[];
@@ -35,7 +38,7 @@ async function boot({db=new IDBFactory(),seed,width=1280}={}){
  Object.defineProperties(v,{clientWidth:{value:width},clientHeight:{value:600}});
  v.getBoundingClientRect=()=>({left:0,top:108,right:width,bottom:708,width,height:600});
  await until(()=>!$('open').disabled);
- return {w,d,$,v,db,state:()=>json(w.__resetState())};
+ return {w,d,$,v,db,state:()=>joinedSession(json(w.__resetState()))};
 }
 async function saved(e){globalThis.indexedDB=e.db;return json(await loadSession());}
 async function flush(e){e.w.dispatchEvent(new e.w.Event('blur'));await until(()=>['saved','error','conflict','unchanged'].includes(e.$('app').dataset.saveState));return saved(e);}
@@ -47,19 +50,19 @@ try{
  assert.deepEqual(json(t),json(before));assert.deepEqual(reset.positions,initial().positions);assert.deepEqual(fields(reset),fields(t));assert.equal(reset.design,t.design);assert.equal(resetLayout(reset),reset,'no-op keeps identity');
  assert.deepEqual(layout(reset),layout(initial()));checks.push('pure current-Graph layout reset preserves all non-layout fields and avoids no-op writes');
 
- const e=await boot({seed:session(modified())});await flush(e);const baseline=e.state(),oldGeometry=geometry(e),button=e.$('reset-layout');
+ const e=await boot({seed:session(modified())});await flush(e);const baseline=e.state(),oldRecovery=json(e.w.__resetRecovery()),oldGeometry=geometry(e),button=e.$('reset-layout');
  assert.equal(button.type,'button');assert.equal(button.textContent,'レイアウトを初期値に戻す');assert.equal(button.closest('#display-options').hidden,true);
  assert.equal(button.parentElement.className,'graph-actions');assert.ok(button.classList.contains('graph-action'));
  assert.equal(button.querySelector('svg').getAttribute('aria-hidden'),'true','decorative reset icon does not change the accessible name');assert.deepEqual([...button.querySelector('svg').children].map(n=>[n.tagName,n.getAttribute('d')]),RotateCcw.map(([tag,attrs])=>[tag,attrs.d]));assert.equal(button.querySelector('span').textContent,'レイアウトを初期値に戻す');
  e.$('display-settings-toggle').click();button.focus();button.click();
  const after=e.state();assert.deepEqual(after.tabs[0].positions,json(initial().positions));assert.deepEqual(layout(after.tabs[0]),json(layout(initial())));
- assert.deepEqual(fields(after.tabs[0]),fields(baseline.tabs[0]));assert.deepEqual(after.tabs[1],baseline.tabs[1]);assert.deepEqual({...after,tabs:[]},{...baseline,tabs:[]});
+ assert.deepEqual(fields(after.tabs[0]),fields(baseline.tabs[0]));assert.deepEqual(json(e.w.__resetRecovery()),oldRecovery);assert.deepEqual({...after,tabs:[]},{...baseline,tabs:[]});
  assert.equal(e.$('layout-lock').getAttribute('aria-pressed'),'true');assert.equal(e.d.activeElement,button);assert.notDeepEqual(geometry(e),oldGeometry);
  assert.deepEqual([e.v.scrollLeft,e.v.scrollTop],[0,0]);assert.equal(e.$('zoom').textContent,'100%');
  const stable=e.w.__resetRevision();button.click();button.click();assert.equal(e.w.__resetRevision(),stable);
  const stored=await flush(e);assert.deepEqual(stored,after);
  const reloaded=await boot({db:e.db});assert.deepEqual(reloaded.state(),after);reloaded.w.close();
- await e.d.querySelectorAll('.tab')[1].querySelector('button').onclick();await e.d.querySelectorAll('.tab')[0].querySelector('button').onclick();assert.deepEqual(e.state().tabs,after.tabs);
+ await e.d.querySelector('[data-document-key="b"] button').onclick();await [...e.d.querySelectorAll('[data-document-key="a"] button')].at(-1).onclick();assert.deepEqual(e.state().tabs,after.tabs);
  checks.push('active tab only; draft/source/filters/selection/theme/drawers/lock unchanged; paths/labels update; repeated no-op; tab switch and IDB reload');
 
  // A pending editor draft is left intact while displayed Graph, not draft, wins.
@@ -86,8 +89,8 @@ try{
  fail.w.__failSave=false;fail.$('save-retry').click();await flush(fail);assert.deepEqual((await saved(fail)).tabs[0].positions,json(initial().positions));fail.w.close();
  checks.push('storage failure is visible, reset stays in memory, stored document unchanged, explicit retry persists');
 
- const conflict=await boot({seed:session(modified())});await flush(conflict);globalThis.indexedDB=conflict.db;const newer=await loadSession();newer.tabs[1].name='Newer other window';await saveSession(newer);
- conflict.$('reset-layout').click();await flush(conflict);assert.equal(conflict.$('app').dataset.saveState,'conflict');assert.equal(conflict.$('reset-layout').disabled,true);assert.deepEqual(await saved(conflict),json(newer));assert.deepEqual(conflict.state().tabs[0].positions,json(initial().positions));
+ const conflict=await boot({seed:session(modified())});await flush(conflict);globalThis.indexedDB=conflict.db;const newer=await loadStoredSession();(newer.format===2?newer.recovery.find(x=>x.key==='b'):newer.tabs[1]).name='Newer other window';await saveSession(newer);
+ conflict.$('reset-layout').click();await flush(conflict);assert.equal(conflict.$('app').dataset.saveState,'conflict');assert.equal(conflict.$('reset-layout').disabled,true);assert.deepEqual(json(await loadStoredSession()),json(newer));assert.deepEqual(conflict.state().tabs[0].positions,json(initial().positions));
  const memory=conflict.state();conflict.$('reset-layout').onclick();assert.deepEqual(conflict.state(),memory);assert.equal(conflict.$('save-retry').hidden,true);conflict.w.close();
  checks.push('CAS conflict never overwrites newer storage, retains local document/reset and blocks further reset');
  // Returning cards by hand can leave nonincident cached routes from the trip.

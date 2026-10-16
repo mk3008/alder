@@ -1,3 +1,4 @@
+import {withTestGroups} from './document-test-view.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // Isolated same-origin pages, synthetic input, and native IndexedDB only.
@@ -18,7 +19,8 @@ export const emptySession=()=>({tabs:[],dark:false,drawer:true,width:380});
 
 // Read both committed keys in one readonly transaction, independently of the
 // product module's cached generation. This function also runs in browser pages.
-export function readConcurrencyRecord(database='alder-web-viewer'){
+export function readConcurrencyRecord(database='alder-web-viewer',raw=false){
+ if(typeof database==='object')({database,raw}=database);
  return new Promise((resolve,reject)=>{
   const request=indexedDB.open(database,1);
   request.onupgradeneeded=()=>request.result.createObjectStore('session');
@@ -26,7 +28,7 @@ export function readConcurrencyRecord(database='alder-web-viewer'){
   request.onsuccess=()=>{
    const db=request.result,tx=db.transaction('session'),store=tx.objectStore('session');
    const current=store.get('current'),generation=store.get('generation');
-   tx.oncomplete=()=>{db.close();resolve({current:current.result,generation:generation.result});};
+   tx.oncomplete=()=>{db.close();let value=current.result;if(!raw&&value?.format===2){const {format,document,views,recovery,...settings}=value;value={...settings,tabs:views.map(v=>({...document,...v}))};}resolve({current:value,generation:generation.result});};
    tx.onerror=tx.onabort=()=>{db.close();reject(tx.error??Error('Read aborted'));};
   };
  });
@@ -200,10 +202,14 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
   context.on('page',page=>{page.setDefaultTimeout(7000);page.on('pageerror',error=>errors.push(error.message));});
   try{
    const seed=await context.newPage();await seed.goto(url);await ready(seed);
-   await input(seed,concurrencyBodies.shared);const shared=(await keys(seed))[0];
-   await input(seed,concurrencyBodies.closed);const closed=(await keys(seed)).find(key=>key!==shared);
+   const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
+   const source=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']]]);
+   await input(seed,source);const overall=(await keys(seed))[0];
+   await seed.locator('.node[data-group="Closed"]').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
+   await select(seed,overall);await seed.locator('.node[data-group="Shared"]').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
    const read=page=>page.evaluate(readConcurrencyRecord,database);
-   const seedRecord=await until(()=>read(seed),v=>v.current?.tabs.length===2,'seed snapshot did not commit');
+   await until(()=>read(seed),v=>v.current?.tabs.length===3,'seed views did not commit');
+   const seedRecord=await seed.evaluate(readConcurrencyRecord,{database,raw:true});
    await seed.close();
    // Re-seed this disposable context from an inert page. A late lifecycle save
    // from the closed seed has expected generation >=1 and cannot overwrite the
@@ -233,11 +239,13 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
     return [parseFloat(after.style.left),parseFloat(after.style.top)];
    },{nodeID});
    assert.deepEqual(moved,[before[0]+70,before[1]+45]);
-   await input(a,concurrencyBodies.added);const added=(await keys(a)).find(key=>![shared,closed].includes(key));assert.ok(added);
+   const addedSource=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']],['Added',['Synthetic added activity']]]);
+   await a.evaluate(async text=>{await document.querySelector('#edit-markdown').onclick();const t=document.querySelector('#source-text');t.value=text;t.dispatchEvent(new Event('input',{bubbles:true}));await document.querySelector('#source-submit').onclick();},addedSource);
+   await select(a,overall);await a.locator('.node[data-group="Added"]').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
    await a.evaluate(async closed=>{document.getElementById('theme').click();await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();},closed);
-   const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and close');
+   const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and Group close');
    assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
-   assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
+   assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,addedSource);
    // One browser task prepares per-tab and new-input drafts, then invokes the chosen
    // first stale write. The debounce case lets the normal 180ms timer fire.
    await b.evaluate(async ({shared,closed,changed,draft,trigger})=>{
@@ -271,7 +279,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    assert.deepEqual(await b.locator('.node').evaluateAll((nodes,id)=>{
     const n=nodes.find(node=>node.dataset.node===id);return [parseFloat(n.style.left),parseFloat(n.style.top)];
    },nodeID),moved);
-   assert.equal(await b.locator('#status').isVisible(),false,'conflict clears only in a fresh page');
+   assert.notEqual(await b.locator('#app').getAttribute('data-save-state'),'conflict','conflict clears only in a fresh page');
    await b.evaluate(()=>document.getElementById('theme').click());
    const writable=await until(()=>read(b),v=>v.generation>committedA.generation&&v.current.dark===false,'fresh reload is not writable');
    await b.evaluate(()=>document.getElementById('theme').click());
@@ -279,7 +287,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    assert.deepEqual(consecutive.current.tabs.map(t=>t.key),committedA.current.tabs.map(t=>t.key));
    assert.deepEqual(consecutive.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
    assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
-   results.push({name:'same-origin stale app write rejected',trigger,warning,retained:['A added document','A exact coordinates','A tab deletion','B local edit','B unsubmitted draft'],reloadWritable:true,consecutiveSaves:true});
+   results.push({name:'same-origin stale app write rejected',trigger,warning,retained:['A added Activity and Group','A exact coordinates','A Group deletion','B local edit','B unsubmitted draft'],reloadWritable:true,consecutiveSaves:true});
   }finally{await context.close();}
  }
  const result={browser:browser.version(),model:'fresh same-origin browser pages and native IndexedDB; synthetic fixtures and dispatched lifecycle/DOM pointer handlers',limitations:'No OS/process-kill durability, native focus transition, background timer throttling, or native pointer geometry claim.',results,passed:results.length};

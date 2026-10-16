@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -9,7 +10,7 @@ import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-v
 // Test-only public sample regression. Import and --preflight never launch a
 // browser. The main browser runner owns Chromium and the built-app server.
 const origin='http://127.0.0.1:4173/';
-const raw=readFileSync(new URL('../../business-design/alder/README.md',import.meta.url),'utf8');
+const raw=readFileSync(new URL('./authorities/ungrouped-alder.md',import.meta.url),'utf8');
 const design=parseDesign(raw),relationIndex=41;
 export const returnRouteLimits={caseMs:30000,cleanupMs:3000};
 export const returnRouteWidths=[1280,393,320];
@@ -41,7 +42,7 @@ export function seedReturnRouteSession({positions,zoom}){return new Promise((res
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   try{const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-   get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+   get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
     if(!tab||tab.source?.kind!=='sample'){failure=Error('Return-route fixture needs the saved public sample');tx.abort();return;}
     Object.assign(tab,{positions,zoom,scroll:[0,0],hiddenNodes:[],showExceptions:false,selectedEdgesOnly:false});
     delete tab.selected;delete tab.viewInset;delete tab.canvasOrigin;
@@ -184,7 +185,7 @@ export async function verifyReturnRoutes(browser){
 
 export async function preflightReturnRoutes(){
  const {openDisplaySettingsDOM}=await import('./toolbar-settings-control.mjs');
- const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('esbuild');
+ const {JSDOM}=await import('jsdom'),{IDBFactory}=await import('fake-indexeddb'),{build}=await import('./legacy-viewer-fixture.mjs');
  assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
  assert.deepEqual(Object.keys(returnRoutePositions).sort(),design.graph.nodes.map(n=>n.id).sort());
  assert.equal(design.graph.relations[relationIndex].from,'業務設計書');assert.equal(design.graph.relations[relationIndex].to,'業務設計');assert.equal(design.graph.relations[relationIndex].kind,'input');
@@ -203,8 +204,8 @@ export async function preflightReturnRoutes(){
   assert.equal($('drawer').disabled,false);if(!$('formattedMarkdownDrawer').hidden)$('drawer').click();if(!$('node-list-drawer').hidden)$('node-list-toggle').click();
   assert.equal($('formattedMarkdownDrawer').hidden,true);assert.equal($('node-list-drawer').hidden,true);
   // Check actual parser inputs/dialog, then return to the public sample tab.
-  $('open-text').click();$('source-text').value=raw;await $('source-submit').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.querySelectorAll('.tab').length,2);
-  await d.querySelector('.tab.active .close').onclick();assert.equal(d.querySelectorAll('.tab').length,1);
+  $('open-text').click();$('source-text').value=raw;await $('source-submit').onclick();assert.equal($('source-dialog').hidden,true);assert.equal(d.querySelectorAll('.tab').length,1);
+  await $('open-sample').onclick({preventDefault(){}});assert.equal(d.querySelectorAll('.tab').length,1);
   await waitForExactRead(()=>adapter(w).evaluate(readSessionInPage),true,{project:s=>s?.tabs?.[0]?.source?.kind==='sample'&&!s.drawer&&!s.nodeDrawer});
   w.close();const storage=makeWindow(false),storePage=adapter(storage);
   for(const zoom of [.25,1]){

@@ -7,10 +7,12 @@ assert.ok(parseDesign(gettingStartedFile).graph.nodes.length,'file fixture must 
 import {waitForExactRead} from './wait-saved-viewer.mjs';
 function readSession(database){return new Promise((resolve,reject)=>{
  const request=indexedDB.open(database,1);request.onupgradeneeded=()=>request.transaction.abort();request.onerror=()=>reject(request.error);
- request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let value;get.onsuccess=()=>{value=get.result;};tx.oncomplete=()=>{db.close();resolve(value);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};
+ request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readonly'),get=tx.objectStore('session').get('current');let value;get.onsuccess=()=>{value=get.result;};tx.oncomplete=()=>{db.close();resolve(value?.format===2?{...value,tabs:value.views.map(v=>({...value.document,...v}))}:value);};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};
 });}
 export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173/'){
  const context=await browser.newContext(),page=await context.newPage(),results=[];
+ const fresh=async(url)=>{await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));await page.goto(new URL('LICENSE.txt',url).href);await page.evaluate(()=>Promise.all(['alder-web-viewer','alder-web-viewer:preview:pr-204:always-visible'].map(name=>new Promise((resolve,reject)=>{const r=indexedDB.deleteDatabase(name);r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error);})))) ;await page.goto(url);await page.waitForFunction(()=>!document.querySelector('#open').disabled);};
+
  // Exercise the supported input-file fallback with a real browser file chooser.
  await context.addInitScript(()=>{window.showOpenFilePicker=undefined;});
  mkdirSync('web/evidence/header-controls',{recursive:true});
@@ -70,8 +72,8 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    }
    await page.locator('#status-close').click();
    await page.locator('#guide-open-url').click();await page.locator('#source-url').fill('https://viewer-guide.test/design.md');await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
-   const refetch=page.waitForRequest('https://viewer-guide.test/design.md');await ensureDocumentActions(page);await page.locator('#refresh').click();await refetch;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').count(),1,'native refresh rereads the existing URL document');await page.locator('.close').click();
-   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isDisabled(),true);await page.locator('.close').click();
+   const refetch=page.waitForRequest('https://viewer-guide.test/design.md');await ensureDocumentActions(page);await page.locator('#refresh').click();await refetch;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').count(),1,'native refresh rereads the existing URL document');assert.equal(await page.locator('.close').isVisible(),false);await fresh(page.url());
+   await page.locator('#guide-open-text').click();await page.locator('#source-text').fill(gettingStartedFile);await page.locator('#source-submit').click();await page.waitForSelector('.tab');assert.equal(await opening.isVisible(),false);await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isDisabled(),true);assert.equal(await page.locator('.close').isVisible(),false);await fresh(page.url());
    for(const id of ['guide-open','guide-open-url','guide-open-text','open-sample']){const action=page.locator('#'+id);await action.scrollIntoViewIfNeeded();const r=await action.boundingBox();assert.ok(r.height>=44&&r.x>=0&&r.x+r.width<=width,'guide action target '+id);}
    const readme=guide.locator('a');await readme.scrollIntoViewIfNeeded();await readme.focus();
    assert.equal(await readme.evaluate(e=>document.activeElement===e),true);
@@ -81,7 +83,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    if([1440,393,320].includes(width)){if(await page.locator('#status').isVisible())await page.locator('#status-close').click();await readme.scrollIntoViewIfNeeded();await page.screenshot({path:`web/evidence/header-controls/guide-end-${width}-${preview?'preview':'production'}.png`});}
    await page.locator('#open-sample').click();await page.waitForSelector('.node');await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isDisabled(),true);
    assert.equal(await guide.isVisible(),false);
-   await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
+   assert.equal(await page.locator('.close').isVisible(),false);await fresh(page.url());await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);
    const chooserPromise=page.waitForEvent('filechooser');await page.locator('#guide-open').click();const chooser=await chooserPromise;await chooser.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});
    await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
@@ -92,7 +94,7 @@ export async function verifyGettingStarted(browser,origin='http://127.0.0.1:4173
    const reselectPromise=page.waitForEvent('filechooser');await page.locator('#refresh').press('Enter');const reselect=await reselectPromise.catch(async error=>{console.error(JSON.stringify({fileRefreshFailure:{width,preview,...await page.evaluate(()=>({active:document.activeElement?.id,refreshDisabled:document.querySelector('#refresh').disabled,openDisabled:document.querySelector('#open').disabled,status:document.querySelector('#status-text').textContent,fileInputs:[...document.querySelectorAll('input[type=file]')].map(input=>({id:input.id,hidden:input.hidden,value:input.value}))}))}}));throw error;});await reselect.setFiles({name:'getting-started.md',mimeType:'text/markdown',buffer:Buffer.from(gettingStartedFile)});await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(await page.locator('.tab').getAttribute('data-key'),fileKey,'native file refresh keeps the same document tab');
    await waitForExactRead(()=>page.evaluate(readSession,preview?'alder-web-viewer:preview:pr-204:always-visible':'alder-web-viewer'),true,{project:s=>s?.tabs?.some(t=>t.name==='getting-started.md')});
    await page.reload();await page.waitForSelector('.tab');assert.equal(await guide.isVisible(),false);await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true);assert.equal(await page.locator('#refresh').isEnabled(),true);
-   await page.locator('.close').click();await page.waitForFunction(()=>!document.querySelector('.tab'));
+   assert.equal(await page.locator('.close').isVisible(),false);await fresh(page.url());await page.waitForFunction(()=>!document.querySelector('.tab'));
    assert.equal(await guide.isVisible(),true);assert.equal(await page.locator('#refresh').isVisible(),false);
    results.push({width,preview,repositoryVisible:true,guide:'no horizontal overflow; sample/file/reload/close passed'});
   }

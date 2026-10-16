@@ -1,3 +1,7 @@
+import {parseDesign} from '../src/graph.ts';
+import {createWorkspace,openGroup,snapshotWorkspace} from '../src/workspace.ts';
+import {withTestGroups} from './document-test-view.mjs';
+import {joinedSession} from './session-test-view.mjs';
 // Independent unchanged bundles in JSDOM share fresh fake IndexedDB. This is
 // model evidence only; native IndexedDB tests are in the paired browser module.
 // --source-root PATH --app-only provides a pre-fix negative control without
@@ -32,14 +36,14 @@ function realm(indexedDB){
  return {w,db:indexedDB,$:id=>w.document.getElementById(id),read:async()=>structuredClone(await w.readRecord()),networkCalls:()=>networkCalls};
 }
 async function boot(indexedDB){
- const e=realm(indexedDB);e.w.eval(appCode);await until(()=>e.$('open-text').disabled,v=>v===false,'app did not finish restoration');return e;
+ const e=realm(indexedDB);const rawRead=e.read;e.read=async()=>{const r=await rawRead();return {...r,current:joinedSession(r.current)};};e.w.eval(appCode);await until(()=>e.$('open-text').disabled,v=>v===false,'app did not finish restoration');return e;
 }
 function moduleRealm(indexedDB){const e=realm(indexedDB);e.w.eval(storageCode+'\nglobalThis.__concurrencySession=concurrencySession;');e.api=e.w.__concurrencySession;return e;}
 const tabs=e=>Array.from(e.w.document.querySelectorAll('.tab'));
 const keys=e=>tabs(e).map(tab=>tab.dataset.key);
 const coords=e=>Object.fromEntries(Array.from(e.w.document.querySelectorAll('.node'),node=>[node.dataset.node,[parseFloat(node.style.left),parseFloat(node.style.top)]]));
 async function input(e,body){e.$('open-text').click();e.$('source-text').value=body;await e.$('source-submit').onclick();assert.equal(e.$('source-dialog').hidden,true,'synthetic document parses');}
-function select(e,key){const tab=tabs(e).find(tab=>tab.dataset.key===key);assert.ok(tab);tab.querySelector('button').click();}
+async function select(e,key){const tab=tabs(e).find(tab=>tab.dataset.key===key);assert.ok(tab);await tab.querySelector('button').onclick();}
 function drag(e,id,dx,dy){
  if(e.$('layout-lock').getAttribute('aria-pressed')==='true')e.$('layout-lock').click();
  const node=Array.from(e.w.document.querySelectorAll('.node')).find(node=>node.dataset.node===id);assert.ok(node);
@@ -121,22 +125,27 @@ if(!values['app-only'])await caseOf('same-page queued lifecycle saves use the la
  assert.equal(next.current.tabs[0].design.markdown,concurrencyBodies.shared);assert.equal(saved.generation,2);
 });
 for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' preserves winner and local work',async()=>{
- const db=new IDBFactory(),seed=await boot(db);
- await input(seed,concurrencyBodies.shared);const shared=keys(seed)[0];
- await input(seed,concurrencyBodies.closed);const closed=keys(seed).find(key=>key!==shared);
- const initial=await until(()=>seed.read(),v=>v.current?.tabs.length===2,'seed did not commit');seed.w.close();
+ const db=new IDBFactory();
+ const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
+ const source=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']]]);
+ const d=parseDesign(source),ws=createWorkspace({...emptySession(),tabs:[{key:'original',name:'race.md',design:d,positions:{},scroll:[0,0],zoom:1}]});
+ const closed=openGroup(ws,'Closed').key,shared=openGroup(ws,'Shared').key;
+ const seedRealm=realm(db);seedRealm.w.__seed=snapshotWorkspace(ws);await seedRealm.w.eval('('+seedLegacyRecord.toString()+')({value:globalThis.__seed})');seedRealm.w.close();
+ const seed=await boot(db),initial=await seed.read();seed.w.close();
  const a=await boot(db),b=await boot(db),initialKeys=initial.current.tabs.map(t=>t.key);
  assert.notEqual(a.w,b.w);assert.notEqual(a.w.document,b.w.document);
  assert.deepEqual(keys(a),initialKeys);assert.deepEqual(keys(b),initialKeys);assert.deepEqual(await a.read(),initial,'both windows read the same untouched committed generation');
- select(a,shared);const nodeID='Synthetic shared activity',before=initial.current.tabs.find(t=>t.key===shared).positions[nodeID],moved=[before[0]+70,before[1]+45];
+ await select(a,shared);const nodeID='Synthetic shared activity',before=initial.current.tabs.find(t=>t.key===shared).positions[nodeID],moved=[before[0]+70,before[1]+45];
  drag(a,nodeID,70,45);assert.deepEqual(coords(a)[nodeID],moved);
- await input(a,concurrencyBodies.added);const added=keys(a).find(key=>![shared,closed].includes(key));assert.ok(added);
+ const addedSource=withTestGroups(combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added),[['Shared',['Synthetic shared activity']],['Closed',['Synthetic closed activity']],['Added',['Synthetic added activity']]]);
+ await a.$('edit-markdown').onclick();a.$('source-text').value=addedSource;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();
+ await select(a,'original');a.w.document.querySelector('.node[data-group="Added"]').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
  a.$('theme').click();await tabs(a).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
- const committedA=await until(()=>a.read(),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, coordinates and close');
+ const committedA=await until(()=>a.read(),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, coordinates and Group close');
  assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
- assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
+ assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,addedSource);
  assert.deepEqual(keys(b),initialKeys);
- select(b,shared);await b.$('edit-markdown').onclick();b.$('source-text').value=changedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
+ await select(b,shared);await b.$('edit-markdown').onclick();b.$('source-text').value=changedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
  b.$('open-text').click();b.$('source-text').value=unsubmittedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
  if(trigger==='close')await tabs(b).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  else if(trigger!=='debounce')lifecycle(b,trigger);
@@ -150,15 +159,15 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  }
  await pause(260);assert.deepEqual(await a.read(),committedA,'previously queued debounce cannot overwrite');
  b.w.close();const fresh=await boot(db);
- assert.deepEqual(keys(fresh),committedA.current.tabs.map(t=>t.key));select(fresh,shared);assert.deepEqual(coords(fresh)[nodeID],moved);
- assert.equal(fresh.$('status').hidden,true,'reload has no conflict warning');fresh.$('theme').click();
+ assert.deepEqual(keys(fresh),committedA.current.tabs.map(t=>t.key));await select(fresh,shared);assert.deepEqual(coords(fresh)[nodeID],moved);
+ assert.notEqual(fresh.$('app').dataset.saveState,'conflict','reload has no conflict warning');fresh.$('theme').click();
  const writable=await until(()=>fresh.read(),v=>v.generation>committedA.generation&&v.current.dark===false,'fresh reload is not writable');
  fresh.$('theme').click();const consecutive=await until(()=>fresh.read(),v=>v.generation>writable.generation&&v.current.dark===true,'normal consecutive save failed');
  assert.deepEqual(consecutive.current.tabs.map(t=>t.key),committedA.current.tabs.map(t=>t.key));
  assert.deepEqual(consecutive.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
- assert.equal(consecutive.current.tabs.find(t=>t.key===added).design.markdown,concurrencyBodies.added);
+ assert.equal(consecutive.current.tabs.find(t=>t.key===added).design.markdown,addedSource);
  for(const e of [seed,a,b,fresh])assert.equal(e.networkCalls(),0);
- return {trigger,warning,retained:['A added document','A exact coordinates','A tab deletion','B unapplied per-tab draft','B separate unsubmitted input'],reloadWritable:true,consecutiveSaves:true};
+ return {trigger,warning,retained:['A added Activity and Group','A exact coordinates','A Group view deletion','B unapplied per-tab draft','B separate unsubmitted input'],reloadWritable:true,consecutiveSaves:true};
 });
 await pause();process.off('unhandledRejection',onRejection);windows.forEach(w=>w.close());
 console.log(JSON.stringify({model:'Independent unchanged bundled modules and apps in JSDOM + fresh fake IndexedDB; no network or user browser data',limitations:'Dispatched lifecycle events and modeled pointer calls; native browser/process/origin/lifecycle durability requires separate evidence',sourceRoot,appOnly:values['app-only'],results,unhandledRejections:unhandled,passed:results.filter(r=>r.passed).length,failed:results.filter(r=>!r.passed).length},null,2));

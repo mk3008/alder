@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
@@ -9,7 +10,7 @@ export async function verifyLabelLayout(browser) {
   try {
     await page.goto('http://127.0.0.1:4173/');
     await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-    await page.locator('#open-sample').click();
+    await page.locator('#open-sample').click();await useUngroupedSample(page);
     await page.waitForFunction(()=>document.querySelectorAll('.node').length>0);
     await page.locator('#drawer').click();
     const graph=await page.locator('.edge').evaluateAll(nodes=>nodes.map(n=>[n.dataset.relation,n.getAttribute('d')]));

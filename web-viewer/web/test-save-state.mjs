@@ -1,3 +1,5 @@
+import {groupSession} from './group-session-fixture.mjs';
+import {joinedSession} from './session-test-view.mjs';
 // Unchanged production bundles in independent JSDOM windows. Transactions are
 // real fake-indexeddb transactions, held/aborted through the shared import-safe
 // browser fixture. This does not claim native-dialog or layout evidence.
@@ -45,7 +47,7 @@ async function env({db=new IDBFactory(),holdWrites=false,failReads=false,wait=tr
  w.eval('('+installSaveStateControls.toString()+')('+JSON.stringify({holdWrites,failReads})+');');
  w.eval('('+observeRestoreTransactions.toString()+')();');
  w.eval('globalThis.__saveStateSnapshot=('+saveStateSnapshot.toString()+');');
- const e={w,db,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab')),probe:w.__saveStateControl,read:async()=>structuredClone(await w.__readRecord()),network:()=>requests,downloads,objectURLs,revoked,failDownload:value=>{downloadFailure=value;}};
+ const e={w,db,$:id=>w.document.getElementById(id),tabs:()=>Array.from(w.document.querySelectorAll('.tab')),probe:w.__saveStateControl,read:async()=>{const record=structuredClone(await w.__readRecord());return {...record,current:joinedSession(record.current)};},network:()=>requests,downloads,objectURLs,revoked,failDownload:value=>{downloadFailure=value;}};
  w.eval(code);if(wait)await ready(e);return e;
 }
 async function ready(e){await until(()=>e.$('open-text')?.disabled,value=>value===false,'restore completes');}
@@ -128,18 +130,18 @@ for(const fault of ['transaction creation error','transaction abort','snapshot c
  flush(e);if(fault==='transaction abort'){await held(e,1);e.probe.writes[0].abort();}
  await stateIs(e,'error');guard(e,true,['error']);assert.equal((await e.read()).current,undefined);e.w.structuredClone=clone;const next=e.probe.writes.length+1;recovery(e,['save-retry','save-download']);e.$('save-retry').click();await held(e,next);assert.equal(e.$('save-retry').disabled,true,'retry cannot queue duplicate writes while saving');guard(e,true,['error','saving']);await release(e,next);await saved(e);
 });
-await caseOf('close pending keeps the tab and guard; latest committed close removes both',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);guard(e,true,['saving']);assert.equal(e.tabs().length,1);assert.equal(e.tabs()[0].querySelector('.close').disabled,true);await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,0);assert.equal((await e.read()).current.tabs.length,0);
+await caseOf('Group close pending retains view and guard; commit keeps original and other views',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);guard(e,true,['saving']);assert.equal(e.tabs().length,3);assert.equal(e.tabs()[2].querySelector('.close').disabled,true);await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,2);assert.equal((await e.read()).current.tabs.length,2);
 });
-await caseOf('failed close keeps tab, exact content and guard until successful close retry',async()=>{
- const e=await env({holdWrites:true});await document(e);const before=e.$('detail').textContent,closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);e.probe.writes[0].abort();await closing;guard(e,true,['error']);assert.equal(e.tabs().length,1);assert.equal(e.$('detail').textContent,before);assert.equal(e.tabs()[0].querySelector('.close').disabled,false);
- const retry=e.tabs()[0].querySelector('.close').onclick();await held(e,2);guard(e,true,['error','saving']);await release(e,2);await retry;await saved(e);assert.equal(e.tabs().length,0);
+await caseOf('failed Group close keeps exact content and guard until successful retry',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),before=e.$('detail').textContent,closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);e.probe.writes[0].abort();await closing;guard(e,true,['error']);assert.equal(e.tabs().length,3);assert.equal(e.$('detail').textContent,before);assert.equal(e.tabs()[2].querySelector('.close').disabled,false);
+ const retry=e.tabs()[2].querySelector('.close').onclick();await held(e,2);guard(e,true,['error','saving']);await release(e,2);await retry;await saved(e);assert.equal(e.tabs().length,2);
 });
-await caseOf('close completion preserves warning for newer settings until their queued save completes',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);e.$('theme').click();e.probe.states=[];await release(e,1);await closing;await held(e,2);assert.equal(e.tabs().length,0);guard(e,true,['saving','dirty']);assert.ok(!e.probe.states.includes('saved'));await release(e,2);assert.equal((await saved(e)).current.dark,true);
+await caseOf('Group close completion keeps warning for newer settings until queued save completes',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()}),closing=e.tabs()[2].querySelector('.close').onclick();await held(e,1);e.$('theme').click();e.probe.states=[];await release(e,1);await closing;await held(e,2);assert.equal(e.tabs().length,2);guard(e,true,['saving','dirty']);assert.ok(!e.probe.states.includes('saved'));await release(e,2);assert.equal((await saved(e)).current.dark,true);
 });
-await caseOf('close completion preserves an editor draft warning',async()=>{
- const e=await env({holdWrites:true});await document(e);const closing=e.tabs()[0].querySelector('.close').onclick();await held(e,1);draft(e,'Synthetic draft during close');await release(e,1);await closing;guard(e,true,['draft']);assert.equal(e.tabs().length,0);assert.equal(e.$('source-dialog').hidden,false);e.$('source-cancel').click();guard(e,false,['saved']);
+await caseOf('Group close guards document input while preserving an existing editor draft',async()=>{
+ const e=await env({holdWrites:true,seed:groupSession()});await e.$('edit-markdown').onclick();input(e,'source-text','Synthetic shared draft');const closing=e.tabs()[1].querySelector('.close').onclick();await held(e,1);e.$('open-text').click();assert.equal(e.$('source-dialog').dataset.mode,'edit');await release(e,1);await closing;await saved(e);assert.equal(e.tabs().length,2);assert.equal(e.$('source-dialog').hidden,false);assert.equal(e.$('source-text').value,'Synthetic shared draft');assert.equal((await e.read()).current.tabs[0].draft,'Synthetic shared draft');guard(e,false,['saved']);
 });
 for(const failure of ['invalid session','read error'])await caseOf(failure+' protects storage but only warns after local work',async()=>{
  const initial={tabs:[],dark:false,drawer:true,width:380},value=failure==='invalid session'?{...initial,tabs:'invalid synthetic shape'}:initial;

@@ -267,3 +267,5 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 #recovery-documents button,#recovery-export{padding:6px 10px}
 .node[data-group]{cursor:pointer;border-style:double;border-width:3px}
 .node[data-group]:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+
+.tab .close[hidden]{display:none}

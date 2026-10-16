@@ -29,3 +29,13 @@
 5. 全体CI成功後に受入れ用のcommit固定確認版を再作成し、本人GUIレビューへ渡す。現状のパッケージは途中版の探索用で、採用/merge許可を求める完成版ではない。
 
 PR #228は変更していません。既存のGroup宣言とBusiness Designの意味も変更していません。
+
+## 再開後のCheckpoint
+
+- #234 / #238 は別作業でmainへマージ済み。`62233de1` を取り込み、並列Node runnerと追加Group検証を両方保持。#228は変更しない。
+- 原本の履歴復旧と共有URL再訪でdraft/Check/取得元を保持する経路を修正。Group close保存中の図操作をガードし、原文編集の対象を残る全体図へ引き継ぐ。
+- 集約GroupのScope設定が再読込で消える問題を修正し、原Activity IDによる非表示状態を維持。全体図のcloseボタンに実ブラウザー用のhidden CSSを追加。旧sampleLayoutの座標・倍率・余白の復元も維持。
+- 既存の複数原本テストは、文書履歴の復旧、Group表示だけのclose、旧形式を明示したfixtureへ移行。固定の配線・座標oracleはGroupなしの旧文書fixtureで保持し、新Group原本の検証と区別する。
+- Node runnerの75検証が成功（54ファイルの独立実行を含む）。3つのpreflightも個別に成功。最終候補でnpm testとCIを改めて確認する。
+- Chromium 153で新Group操作を1280/393/320pxで成功。キーボード、単一tap、重複防止、独立zoom、Scope再読込、共有Check、canonical IndexedDBを確認。ブラウザーregistryは既存39群を残してGroup群を加えた40群。
+- **全体ブラウザー回帰を移行・実行中。最終head CIと正式な固定確認版はまだ未完了。** Draftを維持し、公開/merge/release/本番反映しない。

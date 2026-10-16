@@ -1,3 +1,4 @@
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
@@ -16,7 +17,7 @@ export async function verifyScopeOption(browser){
 
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'true');
-  await page.locator('#open-sample').click();await page.locator('#drawer').click();const initial=await positions();
+  await page.locator('#open-sample').click();await useUngroupedSample(page);await page.locator('#drawer').click();const initial=await positions();
   const appearance=()=>page.locator('.node').evaluateAll(ns=>ns.map(n=>({id:n.dataset.node,bg:getComputedStyle(n).backgroundColor,role:n.querySelector('.who-badge')?.style.getPropertyValue('--role-color')})));
   const before=await appearance();assert.equal(await page.locator('#scope-outside').evaluate(n=>n.tagName),'BUTTON');assert.equal(await page.locator('.node').count(),25);assert.equal(await page.locator('.node.scope-dim').count(),0);assert.deepEqual(await appearance(),before);
   for(const n of await page.locator('.node').evaluateAll(ns=>ns.map(n=>({outside:n.classList.contains('outside'),opacity:getComputedStyle(n).opacity}))))assert.equal(n.opacity,'1');

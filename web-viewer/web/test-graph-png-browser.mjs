@@ -95,7 +95,7 @@ function seedPngSession({layout,global={}}){return new Promise((resolve,reject)=
  const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);
  request.onsuccess=()=>{const db=request.result;let failure;
   const tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');
-  get.onsuccess=()=>{const session=get.result,tab=session?.tabs?.find(t=>t.key===session.active);
+  get.onsuccess=()=>{const session=get.result;if(session?.format===2){const {format,document,views,recovery,...rest}=session;Object.keys(session).forEach(k=>delete session[k]);Object.assign(session,rest,{tabs:views.map(view=>({...document,...view}))});}const tab=session?.tabs?.find(t=>t.key===session.active);
    if(!tab){failure=Error('PNG fixture needs a saved active tab');tx.abort();return;}
    Object.assign(tab,layout);Object.assign(session,{drawer:false,nodeDrawer:false},global);store.put(session,'current');
   };

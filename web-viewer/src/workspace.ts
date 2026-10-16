@@ -19,10 +19,17 @@ export function bindView(doc:DocumentState,view:ViewState):Tab{
 }
 export function viewGroup(tab:Tab){return (tab as Tab&{group?:string}).group;}
 export function viewDesign(tab:Tab){return groupDesign(tab.design,viewGroup(tab));}
+function reconcileView(tab:Tab){
+ const design=viewDesign(tab),result=reconcile({...tab},design);
+ // Overview visibility is stored in source Activity IDs so aggregate Groups
+ // follow their members. Reconciliation must not drop those hidden members.
+ if(tab.hiddenNodes!==undefined){const valid=new Set([...tab.design.graph.nodes,...design.graph.nodes].map(n=>n.id));result.hiddenNodes=tab.hiddenNodes.filter(id=>valid.has(id));}
+ return result;
+}
 export function createWorkspace(base:Session,recovery:Tab[]=[],doc?:DocumentState,views?:ViewState[]):Workspace{
  const document=doc??(base.tabs[0]?documentOf(base.tabs[0]):undefined);
  const tabs=document?(views??[base.tabs[0]?viewOf(base.tabs[0]):{key:document.key,positions:{},scroll:[0,0],zoom:1}]).map(v=>{
-  const tab=bindView(document,v);Object.assign(v,viewOf(reconcile({...tab},viewDesign(tab))));return tab;
+  const tab=bindView(document,v);Object.assign(v,viewOf(reconcileView(tab)));return tab;
  }):[];
  const {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout}=base;return {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout,document,tabs,recovery,active:tabs.some(t=>t.key===base.active)?base.active:tabs[0]?.key};
 }
@@ -52,11 +59,11 @@ export function updateWorkspace(state:Workspace,design:Tab['design'],handle=stat
 export function openGroup(state:Workspace,name:string):Tab{
  const existing=state.tabs.find(t=>viewGroup(t)===name);if(existing){state.active=existing.key;return existing;}
  if(!state.document||!parseGroups(state.document.design.markdown,state.document.design).some(g=>g.name===name))throw Error('Unknown Group');
- const tab=bindView(state.document,{key:crypto.randomUUID(),group:name,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]});Object.assign(tab,viewOf(reconcile({...tab},viewDesign(tab))));state.tabs.push(tab);state.active=tab.key;return tab;
+ const tab=bindView(state.document,{key:crypto.randomUUID(),group:name,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]});Object.assign(tab,viewOf(reconcileView(tab)));state.tabs.push(tab);state.active=tab.key;return tab;
 }
 
 /** A durable document update must not roll back UI edits made during its write. */
 export function mergeLiveWorkspace(next:Workspace,live:Workspace):Workspace{
- const views=next.tabs.map(tab=>{const previous=live.tabs.find(t=>t.key===tab.key);return previous?viewOf(reconcile({...tab,...viewOf(previous)},viewDesign(tab))):viewOf(tab);});
+ const views=next.tabs.map(tab=>{const previous=live.tabs.find(t=>t.key===tab.key);return previous?viewOf(reconcileView(bindView(next.document!,{...viewOf(tab),...viewOf(previous)}))):viewOf(tab);});
  return createWorkspace({...next,dark:live.dark,drawer:live.drawer,nodeDrawer:live.nodeDrawer,width:live.width,preferWrite:live.preferWrite,active:next.tabs.some(t=>t.key===live.active)?live.active:next.active},next.recovery,next.document,views);
 }

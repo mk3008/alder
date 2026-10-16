@@ -1,16 +1,20 @@
+import {withTestGroups} from './document-test-view.mjs';
+import {joinedSession} from './session-test-view.mjs';
+const loadSession=async()=>joinedSession(await loadStoredSession());
+// Legacy no-Group input regression; the current Group sample is tested separately.
 // Real app DOM + fake IndexedDB with explicit viewport/toolbar measurements.
 // Native Tab/Enter, text wrapping, clipping, touch hit targets and actual browser
 // scroll/ResizeObserver timing remain separate browser gates.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
-import {reconcile,saveSession,loadSession} from '../src/session.ts';
+import {reconcile,saveSession,loadSession as loadStoredSession} from '../src/session.ts';
 
 const css=readFileSync('src/style.css','utf8'),source=readFileSync('src/main.ts','utf8');
-const markdown=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(markdown);
+const markdown=readFileSync('web/authorities/ungrouped-alder.md','utf8'),design=parseDesign(markdown);
 const initial=reconcile({key:'toolbar',name:'Alder',source:{kind:'sample'},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]},design);
 const count=name=>`globalThis.__calls.${name}++;`;
 function replaceOnce(text,before,after){assert.equal(text.split(before).length,2,before+' instrumentation stays attached');return text.replace(before,after);}
@@ -19,11 +23,11 @@ const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:f
   let text=readFileSync(args.path,'utf8');
   if(args.path.endsWith('/main.ts')){
    for(const [needle,name] of [['function graph(){','graph'],['function render(){','render'],['function persist(delay=180,changed=true){','persist'],['const drawEdges=()=>{','drawEdges']])text=replaceOnce(text,needle,needle+count(name));
-   text+='\nglobalThis.__toolbarState=()=>structuredClone(state);';
+   text+='\nglobalThis.__toolbarState=()=>structuredClone(snapshotWorkspace(state));';
   }else if(args.path.endsWith('/routing.ts'))text=replaceOnce(text,'const source=nodes.find',count('routes')+'const source=nodes.find');
   else{
    text=replaceOnce(text,'export function reconcile(tab:Tab,design:Design):Tab{','export function reconcile(tab:Tab,design:Design):Tab{'+count('reconcile'));
-   text=replaceOnce(text,'export async function saveSession(value:Session):Promise<void>{','export async function saveSession(value:Session):Promise<void>{'+count('save')+'if(globalThis.__holdNextSave){globalThis.__holdNextSave=false;await new Promise(resolve=>globalThis.__releaseSave=resolve);}if(globalThis.__failNextSave){globalThis.__failNextSave=false;throw Error("controlled storage failure");}');
+   text=replaceOnce(text,'export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{','export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>{'+count('save')+'if(globalThis.__holdNextSave){globalThis.__holdNextSave=false;await new Promise(resolve=>globalThis.__releaseSave=resolve);}if(globalThis.__failNextSave){globalThis.__failNextSave=false;throw Error("controlled storage failure");}');
   }
   return {contents:text,loader:'ts'};
  });
@@ -71,7 +75,7 @@ const scroll=e=>[e.v.scrollLeft,e.v.scrollTop];
 const camera=e=>[e.v.scrollLeft-parseFloat(e.$('nodes').style.left),e.v.scrollTop-parseFloat(e.$('nodes').style.top)];
 const identities=e=>[...e.d.querySelectorAll('.node,#edges *,#node-list *,#detail *')];
 const geometry=e=>[...e.d.querySelectorAll('.node,.edge,.edge-label')].map(n=>[n.tagName,n.className.baseVal??n.className,n.dataset.node??n.dataset.relation,n.style.left,n.style.top,n.getAttribute('d'),n.getAttribute('x'),n.getAttribute('y'),n.textContent]);
-const state=e=>json(e.w.__toolbarState());
+const state=e=>joinedSession(json(e.w.__toolbarState()));
 const calls=e=>({...e.w.__calls});
 const toggle=e=>e.$('display-settings-toggle').click();
 const escape=(e,target=e.$('display-settings-toggle'))=>{const event=new e.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true});target.dispatchEvent(event);return event;};
@@ -127,11 +131,12 @@ try{
  const stored=await flush(e);assert.ok(!JSON.stringify(stored).includes('displaySettings'),'expansion is not stored');
  const reloaded=await boot({db:e.db});assertOpen(reloaded,false);assert.deepEqual(state(reloaded),state(e));assert.deepEqual(inputIDs.map(id=>reloaded.$(id).checked),[false,true,false,true]);
  reloaded.w.close();
- await e.d.querySelector('.tab.active .close').onclick();assertOpen(e,false);assert.equal(e.bar.hidden,true);assert.equal(e.w.getComputedStyle(e.bar).display,'none');assert.equal(e.$('display-settings-toggle').disabled,true);
- const closed=await saved(e);assert.deepEqual(closed.sampleLayout.positions,stored.tabs[0].positions);assert.equal(closed.preferWrite,true);assert.equal(closed.sampleLayout.showExceptions,false);assert.equal(closed.sampleLayout.selectedEdgesOnly,true);
- e.$('open-sample').click();assertOpen(e,false);assert.equal(e.bar.hidden,false);assert.deepEqual(inputIDs.map(id=>e.$(id).checked),[false,true,false,true]);
+ assert.equal(e.d.querySelector('.tab.active .close').hidden,true);
+ await e.d.querySelector('.tab.active .close').onclick();assertOpen(e,true);assert.equal(e.bar.hidden,false);
+ assert.deepEqual(await saved(e),stored);stable(e,()=>toggle(e));assertOpen(e,false);
+ await e.$('open-sample').onclick({preventDefault(){}});assertOpen(e,false);assert.deepEqual(inputIDs.map(id=>e.$(id).checked),[false,true,false,true]);
  assert.deepEqual(state(e).tabs[0].positions,stored.tabs[0].positions);
- checks.push('all four unchanged handlers persist settings; open panel reloads collapsed; last-tab close hides/resets toolbar; sample reopen preserves settings');
+ checks.push('all four handlers persist; reload collapses settings; permanent overview close is inert; sample reselect preserves settings');
  e.w.close();
 
  // Selected, signed and far-away nodes exercise camera origins/insets while
@@ -148,15 +153,18 @@ try{
  }
  checks.push('desktop/393/320 width models, 25/36/100/250% zoom, dark/light, signed nodes, selection, inset/origin, max-scroll preservation and origin nonaccumulation');
 
- const closing=await boot({seed:session(structuredClone(initial))});toggle(closing);await flush(closing);
+ // Group view closure uses the durable-save path; the document overview stays available.
+ const grouped=withTestGroups(markdown,[['First',[design.graph.nodes.find(n=>n.type==='business').id]]]);
+ const groupDesign=parseDesign(grouped),groupTab={...structuredClone(initial),design:groupDesign};
+ const closing=await boot({seed:session(groupTab)});closing.d.querySelector('.node[data-group]').click();toggle(closing);await flush(closing);
  closing.w.__holdNextSave=true;closing.w.__failNextSave=true;
  const closePromise=closing.d.querySelector('.tab.active .close').onclick();
  await until(()=>typeof closing.w.__releaseSave==='function');assert.equal(closing.$('display-settings-toggle').disabled,true);
  stable(closing,()=>{closing.$('display-settings-toggle').onclick();escape(closing);});assertOpen(closing,true);
- closing.w.__releaseSave();await closePromise;assertOpen(closing,true);assert.equal(closing.$('display-settings-toggle').disabled,false);assert.equal(closing.d.querySelectorAll('.tab').length,1);
- assert.match(closing.$('status-text').textContent,/タブを閉じませんでした/);
- await closing.d.querySelector('.tab.active .close').onclick();assertOpen(closing,false);assert.equal(closing.bar.hidden,true);closing.w.close();
- checks.push('pending tab-close save disables/guards gear; failed save keeps open panel usable; successful close resets collapsed');
+ closing.w.__releaseSave();await closePromise;assertOpen(closing,true);assert.equal(closing.$('display-settings-toggle').disabled,false);assert.equal(closing.d.querySelectorAll('.tab').length,2);
+ assert.match(closing.$('status-text').textContent,/保存/);
+ await closing.d.querySelector('.tab.active .close').onclick();assert.equal(closing.bar.hidden,false);assert.equal(closing.d.querySelectorAll('.tab').length,1);closing.w.close();
+ checks.push('pending Group close guards gear; failed save preserves panel/view; successful close retains overview toolbar');
 
  const gesture=await boot({seed:session(structuredClone(initial))});gesture.$('layout-lock').click();await flush(gesture);
  const fire=(kind,type,id,x,y,target=gesture.v)=>{const event=new gesture.w.Event(type,{bubbles:true,cancelable:true});Object.assign(event,{pointerType:kind,pointerId:id,button:0,clientX:x,clientY:y});target.dispatchEvent(event);};

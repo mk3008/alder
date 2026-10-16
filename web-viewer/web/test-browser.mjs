@@ -1,3 +1,4 @@
+import {verifyGroupWorkspace} from './test-group-workspace-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
@@ -44,6 +45,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'groupWorkspace',run:()=>verifyGroupWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},
    {name:'documentActions',run:()=>verifyDocumentActions(browser)},

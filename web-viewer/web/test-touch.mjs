@@ -1,10 +1,11 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 const toggleScope=el=>el.click();
 // DOM/IndexedDB model. Browser touch routing is verified separately in Chrome.
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {readFileSync} from 'node:fs';
 const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const db=new IDBFactory(),checks=[];
@@ -39,7 +40,7 @@ $('viewport').scrollLeft=300;$('viewport').scrollTop=200;fire('pointerdown',1,40
 toggleScope($('scope-outside'));openDisplaySettingsDOM(d);$('prefer-write').click();const visible=positions();assert.equal(Object.keys(visible).length,12);
 fire('pointerdown',1,100,100);fire('pointerdown',2,200,100);fire('pointermove',2,300,100);fire('pointerup',1,100,100);fire('pointerup',2,300,100);assert.equal($('zoom').textContent,'100%');assert.deepEqual(positions(),visible);
 fire('pointerdown',1,100,100);fire('pointerdown',2,200,100);$('drawer').click();fire('pointermove',2,400,100);assert.equal($('zoom').textContent,'100%');fire('pointerup',1,100,100);fire('pointerup',2,400,100);
-const scroll=[$('viewport').scrollLeft,$('viewport').scrollTop];await d.querySelector('.close').onclick();assert.equal(d.querySelectorAll('.tab').length,0);dom.window.close();
+const scroll=[$('viewport').scrollLeft,$('viewport').scrollTop];assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();assert.equal(d.querySelectorAll('.tab').length,1);dom.window.close();
 ({dom,w,d,$,fire}=await boot());$('open-sample').click();assert.equal($('zoom').textContent,'100%');assert.deepEqual(positions(),visible);assert.deepEqual([$('viewport').scrollLeft,$('viewport').scrollTop],scroll);assert.equal($('scope-outside').getAttribute('aria-pressed'),'false');assert.equal($('prefer-write').checked,true);toggleScope($('scope-outside'));assert.deepEqual(positions(),before);checks.push('Scope/Write, interrupted toolbar gesture and save→close→reboot→reopen retain full layout');
 const css=readFileSync('src/style.css','utf8');assert.ok(css.includes('touch-action:none'));assert.ok(!readFileSync('index.html','utf8').match(/user-scalable\s*=\s*no|maximum-scale/));checks.push('no page-wide browser zoom prohibition');
 dom.window.close();console.log(JSON.stringify({model:'synthetic DOM/IndexedDB',checks,passed:checks.length},null,2));

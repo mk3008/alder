@@ -1,9 +1,10 @@
+// Legacy no-Group input regression; the current Group sample is tested separately.
 const toggleScope=el=>el.click();
 import assert from 'node:assert/strict';
 import {openDisplaySettingsDOM} from './toolbar-settings-control.mjs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-viewer-fixture.mjs';
 import {deploymentContext} from '../src/deployment.ts';
 import {normalizeRootRestoredSession} from './test-preview-browser.mjs';
 const original={tabs:[{key:'synthetic',hiddenNodes:undefined,design:{markdown:'Synthetic input'},positions:{node:[40,40]}}],dark:false};
