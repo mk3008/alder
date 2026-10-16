@@ -2196,9 +2196,13 @@ class LiteralActivityNameDiagnosticTest(unittest.TestCase):
         wrong = checks.replace('## 次を扱う', '## Activity 次を扱う')
         result = compare(design, wrong)
         self.assertEqual(result['status'], 'mismatch')
-        self.assertEqual(result['mismatches'], ['headings'])
+        self.assertIn('headings', result['mismatches'])
         wrong_index = checks.replace('[次を扱う]', '[略称]')
-        self.assertEqual(compare(design, wrong_index)['mismatches'], ['index'])
+        self.assertIn('index', compare(design, wrong_index)['mismatches'])
+        reordered = '| [次を扱う](#b) | x | y | z |\n| [Activity を扱う](#a) | x | y | z |\n## 次を扱う\n## Activity を扱う\n'
+        self.assertEqual(compare(design, reordered)['status'], 'match')
+        wrong_order = reordered.replace('## 次を扱う\n## Activity を扱う', '## Activity を扱う\n## 次を扱う')
+        self.assertEqual(compare(design, wrong_order)['mismatches'], ['index-heading-order'])
 
     def test_unsupported_profile_is_not_a_pass_and_fenced_examples_are_ignored(self):
         from tools.check_activity_names import compare
