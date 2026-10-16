@@ -146,6 +146,8 @@ function displaySettingsChrome(){
 }
 function setDisplaySettings(open:boolean,focus=false){
   const t=current();if(restoring||!t||closing===t||open===displaySettingsOpen)return;
+  // Yield the temporary onboarding space when graph settings are requested.
+  if(open){checkFollowups.delete(t);followupChrome();}
   touch.cancel();pan=undefined;capture();displaySettingsOpen=open;displaySettingsChrome();layoutCanvas(t);
   if(!open&&(focus||$('display-options').contains(document.activeElement)))$('display-settings-toggle').focus({preventScroll:true});
 }
