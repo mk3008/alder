@@ -52,7 +52,7 @@ class GroupPocTests(unittest.TestCase):
         raw = DESIGN.read_text(encoding='utf-8')
         with_extra = raw.replace('\n# Scope\n', '\n### Group ダミー\n\n- Activity 実装\n\n# Scope\n', 1)
         with self.assertRaises(DesignError):
-            read_groups(with_extra)  # An extra Group not under the Groups section is invalid as source.
+            read_groups(with_extra)  # The same Activity cannot belong to two Groups.
         self.assertEqual(parse_design(raw)['version'], 1)
         self.assertEqual({node['type'] for node in parse_design(raw)['nodes']}, {'business', 'object'})
 
