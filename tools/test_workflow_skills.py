@@ -18,6 +18,25 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_shared_expression_example_guidance_is_bundled_and_routed(self):
+        # Distribution contract only; actual generation is evaluated separately.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        section = guide.split('### Conditions, expressions and examples\n', 1)[1].split('Recommended review states:', 1)[0]
+        for meaning in ['necessary-condition expression', 'guarantee expression',
+                        'do not infer `¬P ⇒ ¬Q`', 'result and explanatory notes separate',
+                        'required” does not decide the error message', '未決・要確認',
+                        'without HTML anchors, folding or separate human/AI copies',
+                        'Do not silently expand an expectation',
+                        'do not require matching classes, tables, columns, APIs',
+                        'No fixed row count or exhaustive enumeration is required']:
+            with self.subTest(meaning=meaning):
+                self.assertIn(meaning, section)
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('references/check-item-traceability.md#conditions-expressions-and-examples', skill)
+        self.assertIn('Apply that guidance during the return-time quality check.', skill)
+        for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
+            self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
+
     def test_requester_language_reaches_canonical_guidance_and_check_skill(self):
         # These are authored guidance checks, not a language detector or proof
         # that an agent follows the guidance or a person comprehends its output.
@@ -2166,6 +2185,45 @@ class CurrentJapaneseSourceAlignmentTest(unittest.TestCase):
                          '\n原典見出しとの対応：業務1 — 備品購入を申請する\n']:
             with self.subTest(addition=addition), self.assertRaises(AssertionError):
                 self.assert_current_contract(text + addition)
+
+
+class LiteralActivityNameDiagnosticTest(unittest.TestCase):
+    def test_display_prefix_is_not_normalized_and_source_constants_are_preserved(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        checks = '| [Activity を扱う](#a) | x | y | z |\n| [次を扱う](#b) | x | y | z |\n## Activity を扱う\n## 次を扱う\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+        wrong = checks.replace('## 次を扱う', '## Activity 次を扱う')
+        result = compare(design, wrong)
+        self.assertEqual(result['status'], 'mismatch')
+        self.assertIn('headings', result['mismatches'])
+        wrong_index = checks.replace('[次を扱う]', '[略称]')
+        self.assertIn('index', compare(design, wrong_index)['mismatches'])
+        reordered = '| [次を扱う](#b) | x | y | z |\n| [Activity を扱う](#a) | x | y | z |\n## 次を扱う\n## Activity を扱う\n'
+        self.assertEqual(compare(design, reordered)['status'], 'match')
+        wrong_order = reordered.replace('## 次を扱う\n## Activity を扱う', '## Activity を扱う\n## 次を扱う')
+        self.assertEqual(compare(design, wrong_order)['mismatches'], ['index-heading-order'])
+
+    def test_unsupported_profile_is_not_a_pass_and_fenced_examples_are_ignored(self):
+        from tools.check_activity_names import compare
+        self.assertEqual(compare('自然文', '自然文')['status'], 'not-verified')
+        design = '```md\n# Activity 偽\n```\n# Activity 本名\n'
+        checks = '| [本名](#x) | x | y | z |\n## 本名\n~~~\n## 偽\n~~~\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+
+    def test_installed_diagnostic_runs_without_repository(self):
+        import subprocess
+        import tempfile
+        import shutil
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            script = base / 'check_activity_names.py'
+            shutil.copyfile(ROOT / 'plugins/alder/skills/alder-draft-check-items/scripts/check_activity_names.py', script)
+            (base / 'design.md').write_text('# Activity 本名\n')
+            (base / 'checks.md').write_text('| [本名](#x) | x | y | z |\n## Activity 本名\n')
+            result = subprocess.run(['python3', str(script), '--design', str(base / 'design.md'), '--checks', str(base / 'checks.md')], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('Activity 本名', result.stdout)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,98 @@
+{
+  "generation-baseline": {
+    "public_revision": "9e6ee9dd2ff65330aa5395cd40ed9d5b99b24d59",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "business-design/purchase-request/README.md": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+      "docs/examples/purchase-check-review.ja.md": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "7eb37ef393f97b029900ae33058b7ca2b4cd19f5ea9e7e08a808ca90790f5ab2",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "c2d6c77d5ec28c5a20411a234c67bea8f43336c465c2507470b515160546d542",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "cb137ab51953ffd7721f287ea56caeca74dd3e48f8a0c6c1ab81d5b1a497c9f9",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "76949fb1a2cb430029de99122fb02a9429106015a2ae6718bdb8d457e0e45ed7"
+    }
+  },
+  "generation-candidate": {
+    "public_revision": "744998715701320dbce7030f33401114e3e7d47b",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "business-design/purchase-request/README.md": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+      "docs/examples/purchase-check-review.ja.md": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "5168355202084a432c17568ab0b02b27428884bc9c24728528f7a3d9ef4e5592",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "7c7cb0b561c096477d6a97be5f4039aaa2f1ffb2b5e4ffcafdfe15d75c6047f3",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "c50299bd903673fee3c51ce9a0a27321189d90aac0cda67a2ac2ded2ebe3892c",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "76943c05e148279ab8db1da9ab9efa06668c8076f91aa9b5a5067f44c02c3d6f"
+    }
+  },
+  "generation-regression": {
+    "public_revision": "744998715701320dbce7030f33401114e3e7d47b",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "5168355202084a432c17568ab0b02b27428884bc9c24728528f7a3d9ef4e5592",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "7c7cb0b561c096477d6a97be5f4039aaa2f1ffb2b5e4ffcafdfe15d75c6047f3",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "c50299bd903673fee3c51ce9a0a27321189d90aac0cda67a2ac2ded2ebe3892c",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "76943c05e148279ab8db1da9ab9efa06668c8076f91aa9b5a5067f44c02c3d6f",
+      "product/README.md": "e00c06ef469c015120add5dc92249b53eabd496750ff9aeb1b7f9a84ab469cd0",
+      "product/checks.md": "f554ea5fb9a9e2652d692db24c40a6febdbdfe6e6dce15a06729a4109778b4c9"
+    }
+  },
+  "generation-candidate-v2": {
+    "public_revision": "667d92cf0f361dc6dbaf4597661a173b06e4ef6d",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "business-design/purchase-request/README.md": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+      "docs/examples/purchase-check-review.ja.md": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "77f0dce648e083fd08ea4e0a6b0430010f28cc2a815764b56dd2ede90656db8a",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "7c7cb0b561c096477d6a97be5f4039aaa2f1ffb2b5e4ffcafdfe15d75c6047f3",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "5e114e2ebf705a116c4d35929601e5cdc08630da2d50edad819787f73f2b4ee5",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "eb0daa07287de0c6c8c1c0715272ace1607728dad767ee1fd968fb90a0c2f625"
+    }
+  },
+  "generation-regression-v2": {
+    "public_revision": "667d92cf0f361dc6dbaf4597661a173b06e4ef6d",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "77f0dce648e083fd08ea4e0a6b0430010f28cc2a815764b56dd2ede90656db8a",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "7c7cb0b561c096477d6a97be5f4039aaa2f1ffb2b5e4ffcafdfe15d75c6047f3",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "5e114e2ebf705a116c4d35929601e5cdc08630da2d50edad819787f73f2b4ee5",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "eb0daa07287de0c6c8c1c0715272ace1607728dad767ee1fd968fb90a0c2f625",
+      "product/README.md": "e00c06ef469c015120add5dc92249b53eabd496750ff9aeb1b7f9a84ab469cd0",
+      "product/checks.md": "f554ea5fb9a9e2652d692db24c40a6febdbdfe6e6dce15a06729a4109778b4c9"
+    }
+  },
+  "generation-candidate-v3": {
+    "public_revision": "b7de3bf013e9133d72384ec5ffb26f66d4fdbfe9",
+    "sha256": {
+      "AGENTS.md": "29b2c0fe7b5da19414f3a274eb8f4780fd2b4b2e89627a8a1bd8e66a3611bf7f",
+      "business-design/purchase-request/README.md": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+      "docs/examples/purchase-check-review.ja.md": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+      "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+      "plugins/alder/skills/alder-draft-check-items/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "plugins/alder/skills/alder-draft-check-items/SKILL.md": "ef361722bb16cade6bfdd795fc7cd79d9ef577ec6e79cd05dba84e4db496a5b0",
+      "plugins/alder/skills/alder-draft-check-items/references/adoption.md": "7c7cb0b561c096477d6a97be5f4039aaa2f1ffb2b5e4ffcafdfe15d75c6047f3",
+      "plugins/alder/skills/alder-draft-check-items/references/candidate-c3.md": "a5c3874601d70edf87e1fc79b5501be80c35aa4f98d3870a545b79f4867f8446",
+      "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md": "1652272738f55d9c3ffc2dd9f1da73ba1a30626b15226e71be151b0f478e298a",
+      "plugins/alder/skills/alder-draft-check-items/references/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e",
+      "plugins/alder/skills/alder-draft-check-items/references/provenance.json": "ab9bad61cd2c6e954d12b4862787895741a8a7413a16bd91714e1ec655673888"
+    }
+  }
+}

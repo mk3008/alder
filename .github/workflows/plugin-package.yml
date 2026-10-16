@@ -15,6 +15,7 @@ on:
       - 'tools/test_export_plugin_references.py'
       - 'docs/business-design-structure.ja.md'
       - 'tools/test_workflow_skills.py'
+      - 'tools/check_activity_names.py'
       - 'tools/fixtures/plugin-draft-review-loop/**'
       - 'tools/test_plugin_release_workflow.py'
       - 'tools/validate_release.py'
@@ -43,6 +44,7 @@ on:
       - 'tools/test_export_plugin_references.py'
       - 'docs/business-design-structure.ja.md'
       - 'tools/test_workflow_skills.py'
+      - 'tools/check_activity_names.py'
       - 'tools/fixtures/plugin-draft-review-loop/**'
       - 'tools/test_plugin_release_workflow.py'
       - 'tools/validate_release.py'
@@ -65,4 +67,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Fetch pinned historical Check fixtures
+        run: git fetch --no-tags origin c0020d3f88fa7ce70b17c197464978bb548f9100 d453b61be8520907bf7326ffbe429ca55feea9d8
       - run: python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py tools/test_plugin_release_workflow.py tools/test_export_plugin_references.py tools/test_plugin_references.py

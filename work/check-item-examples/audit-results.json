@@ -1,0 +1,13 @@
+{
+  "candidate-v2-update": {
+    "pass": true,
+    "checks": 53,
+    "ids": 6,
+    "scope": "exact retained fields, shared body and local heading targets only"
+  },
+  "candidate-v3-update": {
+    "pass": false,
+    "diagnostic": "JA-EX-05: changed or missing 期待結果",
+    "limit": "Exact field comparison is not semantic evaluation."
+  }
+}
