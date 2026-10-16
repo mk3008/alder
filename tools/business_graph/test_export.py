@@ -616,6 +616,8 @@ class ExportTests(unittest.TestCase):
                     if '業務改善レビュー' in (r['from'], r['to'])}
         self.assertEqual(ordinary, {
             ('input', '業務設計書', '業務改善レビュー', '現在の業務上の意味 / Problem / Pain'),
+            ('input', '改善検討メモ', '業務改善レビュー',
+             '前回の候補 / 比較根拠 / 残る確認事項（再検討時）'),
             ('input', '依頼者', '業務改善レビュー',
              '改善検討の依頼 / 記録済みProblemの補足 / 既存候補の再検討依頼'),
             ('input', 'Alder: 業務ナレッジ', '業務改善レビュー',
@@ -649,6 +651,7 @@ class ExportTests(unittest.TestCase):
                       design_source)
         self.assertIn('未決の業務仕様とは区別', design_source)
         self.assertIn('候補がない場合はその理由を記録する', review_source)
+        self.assertIn('再検討時は改善検討メモに記録した前回の候補', review_source)
         self.assertIn('業務設計書は変更しない', review_source)
         self.assertIn('候補が0件なら', confirmation_source)
         self.assertIn('採用が確定した候補のみ業務設計へ渡し', confirmation_source)
@@ -679,7 +682,7 @@ class ExportTests(unittest.TestCase):
                          {'システム設計', '実装', '画面設計', 'Alder実装レビュー',
                           '製品検証', '検証結果の統合'})
         self.assertEqual(len(nodes), 27)
-        self.assertEqual(len(graph['relations']), 69)
+        self.assertEqual(len(graph['relations']), 70)
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'object' and n['scope']}, {
             '業務設計書', '検査項目', '判断記録', '改善検討メモ', '同期照合情報', '同期漏れの候補',
