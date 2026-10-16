@@ -88,7 +88,7 @@ function readFrame(){
  const left=r.left+v.clientLeft,top=r.top+v.clientTop;
  const scroll=[v.scrollLeft,v.scrollTop],offset=[parseFloat(nodes.style.left)||0,parseFloat(nodes.style.top)||0],plan=window.edgeDragOracle;let oracle;
  if(plan){const {position,start,end,zoom,before}=plan,expected=position.map((value,axis)=>value+(end[axis]-start[axis])/zoom+((scroll[axis]/zoom-offset[axis]/zoom)-(before.scroll[axis]/zoom-before.offset[axis]/zoom))),style=document.createElement('div').style;style.left=expected[0]+'px';style.top=expected[1]+'px';oracle={id:plan.id,position:expected,style:[style.left,style.top]};}
- return {positions,styles,rects,routes,scroll,offset,oracle,transform:nodes.style.transform,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
+ return {activity:document.querySelector('.tab.active')?.dataset.activity,positions,styles,rects,routes,scroll,offset,oracle,transform:nodes.style.transform,zoom:parseFloat(nodes.style.transform.slice(6)),bounds:{left,top,right:left+v.clientWidth,bottom:Math.min(top+v.clientHeight,bar.top-12)},client:[v.clientWidth,v.clientHeight],extent:[v.scrollWidth,v.scrollHeight],events:window.edgeDragTrace?.length??0};
 }
 const frame=page=>page.evaluate(readFrame);
 async function paintedFrames(page,count=4){
@@ -100,7 +100,7 @@ async function paintedFrames(page,count=4){
   return samples;
  },{source:readFrame.toString(),count}),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Edge-drag painted-frame deadline exceeded')),4000);})]);}finally{clearTimeout(timer);}
 }
-function relationsFor(view){if(Object.keys(view.positions).length===design.graph.nodes.length)return design.graph.relations;const activity=Object.keys(view.positions).find(id=>design.graph.nodes.find(n=>n.id===id)?.type==='business');return design.graph.relations.filter(r=>(r.kind==='input'&&r.to===activity)||(r.kind==='output'&&r.from===activity));}
+function relationsFor(view){const activity=view.activity;if(!activity)return design.graph.relations;return design.graph.relations.filter(r=>(r.kind==='input'&&r.to===activity)||(r.kind==='output'&&r.from===activity)||(r.kind==='business-exception'&&(r.from===activity||r.to===activity)));}
 function assertUnchangedOthers(current,initial){
  const moving=current.oracle?.id??edgeDragMoving,unrelated=relationsFor(initial).flatMap((r,i)=>r.from!==moving&&r.to!==moving?[String(i)]:[]);
  for(const [id,p] of Object.entries(initial.positions))if(id!==moving)assert.deepEqual(current.positions[id],p,`other world position ${id}`);
@@ -145,8 +145,9 @@ async function pointerDriver(page,context,input){
 async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView=false){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();if(activityView)await page.locator('.node[data-activity] .activity-open').first().press('Enter');
- await page.waitForFunction(count=>document.querySelectorAll('.node').length===count||!!document.querySelector('#status[data-kind=error]:not([hidden])'),activityView?3:4);
+ await page.waitForFunction(count=>document.querySelectorAll('.node').length===count||!!document.querySelector('#status[data-kind=error]:not([hidden])'),4);
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
+ if(activityView)assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node).sort()),['approve','person','read','record'],'detail adds the directly adjacent exception Activity');
  await waitSavedViewer(page,{positions:(await frame(page)).positions});
  // Explicitly close both overlays before measuring the visible viewport.
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
@@ -164,7 +165,7 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  await page.evaluate(seedEdgeDragSession,{positions,zoom,scroll,viewInset,moving});
  const saved=await waitSavedViewer(page,{positions,zoom,scroll,viewInset,selected:moving});
  assert.equal(saved.drawer,false);assert.equal(saved.nodeDrawer,false);
- await page.goto(origin);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,activityView?3:4);
+ await page.goto(origin);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);
  if(atExtent)await page.locator('#viewport').evaluate((v,edge)=>{if(edge==='right')v.scrollLeft=v.scrollWidth;else if(edge==='bottom')v.scrollTop=v.scrollHeight;else if(edge==='left')v.scrollLeft=0;else v.scrollTop=0;},atExtent);
  await paintedFrames(page,2);const initial=await frame(page);
  assert.deepEqual(initial.positions,positions);assert.equal(initial.zoom,zoom);

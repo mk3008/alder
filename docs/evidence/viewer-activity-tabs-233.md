@@ -4,11 +4,11 @@ Control: [root #122](https://github.com/mk3008/root/issues/122) / Execution: [Al
 
 ## 方針と実装
 
-2026-10-16の本人判断でGroupによる階層化を取りやめた。全体図の簡略化は目的にせず、原本の全Activity・Object・相関を表示する。各Activityの詳細だけを直接Input/Outputの1段に絞る。ObjectのPrivate/Public属性、Scope、Graph v1、業務上の意味は変更しない。
+2026-10-16の本人判断でGroupによる階層化を取りやめた。全体図の簡略化は目的にせず、原本の全Activity・Object・相関を表示する。各Activityの詳細は直接Input/OutputのObjectと、入出両方向の例外遷移で直接隣接するActivityの1段に絞る（2026-10-17追加指示）。ObjectのPrivate/Public属性、Scope、Graph v1、業務上の意味は変更しない。
 
-- `activities.ts`：全体図は元のDesignそのもの。詳細は指定Activity、直接I/Oを持つObject、そのI/O線のみ。例外や他Activityからの再帰展開は行わない。ObjectとRelationは元定義の同一性を保つ。
+- `activities.ts`：全体図は元のDesignそのもの。詳細は指定Activity、直接I/Oを持つObject、例外遷移で直接接続するActivityとその線。隣接ActivityのI/Oや例外、その先のObjectへ再帰展開しない。ObjectとRelationは元定義の同一性を保つ。
 - `workspace.ts`：原本のMarkdown・取得元・draft・関連Checkと表示タブを分離。保存形式3は原本1件＋原文を含まないActivity views＋復旧文書。全体図は常設、同じActivityは1タブ、座標・倍率・選択は独立。
-- 2026-10-17本人GUIレビューにより移動ハンドルと本体の詳細Openを廃止。右端の詳細タブアイコンだけがclick／tap／Enter／Spaceで詳細を開く。本体はObject同様に選択・本文表示と、配置ロック解除後のdragを行う。mouse・pen・touchの既存座標・端スクロール、ロック・倍率・保存／復元を維持し、移動後の誤Openを防ぐ。
+- 2026-10-17本人GUIレビューにより移動ハンドルと本体の詳細Openを廃止。右端の詳細タブアイコンだけがclick／tap／Enter／Spaceで詳細を開く。対象Activity自身の開くアイコンは詳細に表示せず、隣接Activityのアイコンはその詳細を開く。本体はObject同様に選択・本文表示と、配置ロック解除後のdragを行う。mouse・pen・touchの既存座標・端スクロール、ロック・倍率・保存／復元を維持し、移動後の誤Openを防ぐ。
 - Object本体の選択・移動、右Drawer、関連Check、原文編集と取得元更新を維持。詳細から開いても文書全体を扱い、開始元の詳細を閉じた後の非同期更新／Check読込も同じ原本へ継続する。
 - 旧複数文書Sessionは全原本・draft・Checkを復旧欄へ保持。旧Group形式2は全体図から再開し、旧viewsとactiveを`legacyViews`へそのまま退避する。読取だけでは元レコードを書き換えず、全保存JSONから旧表示も退避できる。保存失敗・競合では原文・旧表示を保護する。
 
