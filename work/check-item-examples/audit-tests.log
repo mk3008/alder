@@ -1,0 +1,9 @@
+test_duplicate_body_and_broken_link_are_detected (test_audit_update.PreservationTest.test_duplicate_body_and_broken_link_are_detected) ... ok
+test_retained_update_and_each_field_loss (test_audit_update.PreservationTest.test_retained_update_and_each_field_loss) ... ok
+test_same_bound_target_wording_preserves_outcome_but_another_target_does_not (test_audit_update.PreservationTest.test_same_bound_target_wording_preserves_outcome_but_another_target_does_not) ... ok
+test_unnecessary_source_revision_change_is_detected (test_audit_update.PreservationTest.test_unnecessary_source_revision_change_is_detected) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.052s
+
+OK
