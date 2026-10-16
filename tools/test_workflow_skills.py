@@ -2187,5 +2187,40 @@ class CurrentJapaneseSourceAlignmentTest(unittest.TestCase):
                 self.assert_current_contract(text + addition)
 
 
+class LiteralActivityNameDiagnosticTest(unittest.TestCase):
+    def test_display_prefix_is_not_normalized_and_source_constants_are_preserved(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        checks = '| [Activity を扱う](#a) | x | y | z |\n| [次を扱う](#b) | x | y | z |\n## Activity を扱う\n## 次を扱う\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+        wrong = checks.replace('## 次を扱う', '## Activity 次を扱う')
+        result = compare(design, wrong)
+        self.assertEqual(result['status'], 'mismatch')
+        self.assertEqual(result['mismatches'], ['headings'])
+        wrong_index = checks.replace('[次を扱う]', '[略称]')
+        self.assertEqual(compare(design, wrong_index)['mismatches'], ['index'])
+
+    def test_unsupported_profile_is_not_a_pass_and_fenced_examples_are_ignored(self):
+        from tools.check_activity_names import compare
+        self.assertEqual(compare('自然文', '自然文')['status'], 'not-verified')
+        design = '```md\n# Activity 偽\n```\n# Activity 本名\n'
+        checks = '| [本名](#x) | x | y | z |\n## 本名\n~~~\n## 偽\n~~~\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+
+    def test_installed_diagnostic_runs_without_repository(self):
+        import subprocess
+        import tempfile
+        import shutil
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            script = base / 'check_activity_names.py'
+            shutil.copyfile(ROOT / 'plugins/alder/skills/alder-draft-check-items/scripts/check_activity_names.py', script)
+            (base / 'design.md').write_text('# Activity 本名\n')
+            (base / 'checks.md').write_text('| [本名](#x) | x | y | z |\n## Activity 本名\n')
+            result = subprocess.run(['python3', str(script), '--design', str(base / 'design.md'), '--checks', str(base / 'checks.md')], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('Activity 本名', result.stdout)
+
+
 if __name__ == '__main__':
     unittest.main()

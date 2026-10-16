@@ -38,6 +38,14 @@ If feedback changes business meaning, conditions or guarantees, or exposes a gen
 
 ## Before returning Check Items
 
+For the GitHub Markdown layout with explicit `# Activity ActivityName` source declarations, run the bundled read-only literal-name diagnostic before returning, including in Consistency review-only mode:
+
+```sh
+python3 scripts/check_activity_names.py --design <business-design.md> --checks <saved-checks.md>
+```
+
+Resolve the script relative to this Skill directory. Inspect its raw declared names, headings and index labels; do not strip words from displayed headings to turn a mismatch into a match. Exit 1 reports a literal mismatch, not a business-policy decision. Exit 2 means the narrow profile was not verified. If execution is unavailable or a declared alias/human-confirmed correspondence requires manual comparison, disclose that limit and compare the raw strings explicitly. This diagnostic does not check guarantees, shared links, source evidence or human states; continue the full Consistency review. It reads files only and requires no new product artifact/schema.
+
 After author checks, execute this Skill's Consistency review-only operation as a [distinct read-only review and repair phase](references/check-item-traceability.md#distinct-consistency-review-and-repair), using a separate reader agent or fresh context when supported. Give the reader the saved candidate, whole Business Design and applicable guidance/revisions (plus the previous list and actual feedback for updates), without a completed answer specimen or expected findings. Require the two source-led passes: declared names and required shared references; general source guarantees versus primary conditions/results and separate examples. The author validates findings against the source, repairs supported defects and requests an actual re-review of the saved revision. Report unsupported findings, undecided meaning, failed/unavailable review or non-improving repetition without claiming a pass. If separate review is unavailable, use a distinct same-context phase and disclose its lack of independence. A Consistency review-only request never edits, repairs or recursively reviews. No new report artifact or human approval is implied.
 
 Reconcile source-explicit unresolved conditions affecting the selected Activities with the saved draft, not just with newly discovered missing-input cases. Retain those pending meanings visibly and limit overlapping normal expectations; do not silently drop them or force every out-of-scope policy into a Check. For presentation updates, preserve established source URLs/revisions when the Business Design content is unchanged: the supplied checkout revision identifies the run, not a reason to repin evidence links. Bind each example's result-relevant inputs and judgments explicitly, and state the expected result of the action without adding “if registration/approval succeeds” as a new premise.
