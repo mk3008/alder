@@ -150,7 +150,7 @@ assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-
 assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouched');
 for(const kind of ['input','output','business-exception','object-exception']){
  const r=routeEdge({...opts,from:'t',to:'s',kind});
- assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);
+ if(kind==='input'){assert.deepEqual(r.points[0],[488,434]);assert.deepEqual(r.points.at(-1),[360,134]);assert.ok(r.points[1][0]>488);}else{assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);}
  assert.equal(r.collisions,0);assert.ok(r.points.at(-1)[1]<r.points[0][1]);
  endpointNormals(r,staircase[1],staircase[0]);orthogonalCorners(r);
 }

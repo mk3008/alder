@@ -83,22 +83,22 @@ function enters(s,r){
 }
 export function assertLocalReturnPath(path){
  const {first,last,segments}=pathSegments(path),r=design.graph.relations[relationIndex],source=returnRoutePositions[r.from],target=returnRoutePositions[r.to];
- assert.deepEqual(first,[source[0]+260/8,source[1]+68],'icon-side bottom source perimeter');
- assert.deepEqual(last,[target[0],target[1]+34],'left target perimeter');
+ assert.deepEqual(first,[source[0]+260,source[1]+34],'right source perimeter');
+ assert.deepEqual(last,[target[0]+260,target[1]+34],'right target perimeter');
  const initial=segments[0],final=segments.at(-1);
- assert.equal(initial.kind,'L');assert.equal(initial.end[0],first[0]);assert.ok(initial.end[1]>first[1],'outward vertical departure');
- assert.equal(final.kind,'L');assert.equal(final.start[1],last[1]);assert.ok(final.start[0]<last[0],'inward horizontal arrival from the left');
+ assert.equal(initial.kind,'L');assert.equal(initial.end[1],first[1]);assert.ok(initial.end[0]>first[0],'outward horizontal departure');
+ assert.equal(final.kind,'L');assert.equal(final.start[1],last[1]);assert.ok(final.start[0]>last[0],'inward horizontal arrival from the right');
  const extrema=segments.flatMap(s=>{const ts=[0,1];if(s.kind==='Q')for(const axis of [0,1]){const denominator=s.start[axis]-2*s.control[axis]+s.end[axis];if(denominator){const t=(s.start[axis]-s.control[axis])/denominator;if(t>0&&t<1)ts.push(t);}}return ts.map(t=>at(s,t));});
  const bounds=[Math.min(...extrema.map(p=>p[0])),Math.min(...extrema.map(p=>p[1])),Math.max(...extrema.map(p=>p[0])),Math.max(...extrema.map(p=>p[1]))];
- const left=target[0]-14-8-(relationIndex%4)*10,bottom=source[1]+68+2;
- assert.deepEqual(bounds,[left,target[1]+34,source[0]+260/8,bottom],'local return stays within its endpoint corridor, including exact curve extrema');
- assert.equal(segments.filter(s=>s.kind==='Q').length,3,'rounded three-corner return');
+ const right=Math.max(source[0]+260,target[0]+260)+14+8+(relationIndex%4)*10;
+ assert.deepEqual(bounds,[target[0]+260,target[1]+34,right,source[1]+34],'local return stays within its endpoint corridor, including exact curve extrema');
+ assert.equal(segments.filter(s=>s.kind==='Q').length,2,'rounded two-corner return');
  for(const s of segments)if(s.kind==='L')assert.ok(s.start[0]===s.end[0]||s.start[1]===s.end[1],'straight legs are orthogonal');
  for(const [id,[x,y]] of Object.entries(returnRoutePositions)){
   const padding=id===r.from||id===r.to?0:14,rectangle=[x-padding,y-padding,x+260+padding,y+68+padding];
   assert.ok(!segments.some(s=>enters(s,rectangle)),`rendered curve cannot enter ${id}${padding?' or its clearance':''}`);
  }
- const maxLength=(first[0]-left)+(last[0]-left)+Math.abs(first[1]-last[1])+2*(bottom-first[1]);
+ const maxLength=(right-first[0])+(right-last[0])+Math.abs(first[1]-last[1]);
  return {start:first,end:last,bounds,maxLength,minLength:maxLength-8};
 }
 function assertVisible(routes,baseline,options){
@@ -115,8 +115,8 @@ async function assertNativeRoute(page,zoom){
  assert.ok(measured.scale.every((value,i)=>Math.abs(value-[zoom,0,0,zoom][i])<1e-6),'actual SVG transform uses requested zoom');
  for(const axis of [0,1])assert.ok(Math.abs(measured.screenSize[axis]-(oracle.bounds[axis+2]-oracle.bounds[axis])*zoom)<.05,'actual rendered SVG size uses requested zoom');
  assert.deepEqual(measured.start,oracle.start);assert.deepEqual(measured.end,oracle.end);assert.deepEqual(measured.bounds,oracle.bounds);
- assert.ok(measured.after[1]>measured.start[1]&&Math.abs(measured.after[0]-measured.start[0])<1e-6);
- assert.ok(measured.before[0]<measured.end[0]&&measured.before[1]===measured.end[1]);
+ assert.ok(measured.after[0]>measured.start[0]&&measured.after[1]===measured.start[1]);
+ assert.ok(measured.before[0]>measured.end[0]&&measured.before[1]===measured.end[1]);
  assert.ok(measured.length>oracle.minLength&&measured.length<oracle.maxLength,'native SVG length remains within independent rounded-corridor bounds');
  return measured;
 }
@@ -223,12 +223,12 @@ export async function preflightReturnRoutes(){
    await waitSavedViewer(coldPage,fields(zoom,hiddenNodes));openDisplaySettingsDOM(cold.document);cold.document.querySelector('#show-outside').click();assert.deepEqual(await coldPage.evaluate(readPositionsInPage),returnRoutePositions);cold.close();
   }
   // Exercise oracle sensitivity without invoking product routing as an oracle.
-  const good='M328.5,588 L328.5,589 Q328.5,590 327.5,590 L144,590 Q136,590 136,582 L136,370 Q136,362 144,362 L168,362';
-  assertLocalReturnPath(good);assert.throws(()=>assertLocalReturnPath(good.replaceAll('136','36').replaceAll('144','44')),/endpoint corridor/);
-  assert.throws(()=>assertLocalReturnPath(good.replace('M328.5,588','M329.5,588')),/source perimeter/);
+  const good='M556,554 L580,554 Q588,554 588,546 L588,370 Q588,362 580,362 L428,362';
+  assertLocalReturnPath(good);assert.throws(()=>assertLocalReturnPath(good.replaceAll('588','1890').replaceAll('580','1882')),/endpoint corridor/);
+  assert.throws(()=>assertLocalReturnPath(good.replace('M556,554','M555,554')),/source perimeter/);
   assert.ok(enters({kind:'L',start:[0,1],end:[10,1]},[4,.9,4.01,1.1]),'analytical collision catches a narrow interval between sample points');
   assert.ok(enters({kind:'Q',start:[0,0],control:[10,0],end:[10,10]},[7.49,2.49,7.51,2.51]),'quadratic collision catches a narrow interior interval');
-  const result={returnRoutePreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,relation:relationIndex,localLeft:136,scopeOff:16,writePreferred:13,zoomCases:2,widths:returnRouteWidths,selectors:selectors.length,limits:returnRouteLimits,browserExecuted:false,limit:'Real parser, DOM controls, analytic M/L/Q geometry and committed fake-IDB restore only. Native SVG metrics and Chromium viewport/persistence cases are prepared but not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
+  const result={returnRoutePreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,relation:relationIndex,localRight:588,scopeOff:16,writePreferred:13,zoomCases:2,widths:returnRouteWidths,selectors:selectors.length,limits:returnRouteLimits,browserExecuted:false,limit:'Real parser, DOM controls, analytic M/L/Q geometry and committed fake-IDB restore only. Native SVG metrics and Chromium viewport/persistence cases are prepared but not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());}
 }
 if(process.argv.includes('--preflight'))await preflightReturnRoutes();

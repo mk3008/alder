@@ -102,9 +102,9 @@ for(const [name,savedPositions] of [['publicInitial',positions],['legacySaved',l
 // target port. Assert its source relation and the actual initial coordinates.
 assert.equal(edges[41].kind,'input');assert.equal(edges[41].from,'業務設計書');assert.equal(edges[41].to,'業務設計');
 const affected=sampleRoutes[41];
-assert.deepEqual(affected.points[0],[328.5,588]);assert.deepEqual(affected.points.at(-1),[168,362]);
-assert.equal(affected.bounds.right,328.5);assert.equal(affected.bounds.bottom,590);assert.ok(length(affected)<460);
-assert.equal((affected.path.match(/ Q/g)??[]).length,3);
+assert.deepEqual(affected.points[0],[556,554]);assert.deepEqual(affected.points.at(-1),[428,362]);
+assert.equal(affected.bounds.right,588);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<390);
+assert.equal((affected.path.match(/ Q/g)??[]).length,2);
 assert.ok(samples.publicInitial.screenshot16.candidate.relationIndexes.includes(41));
 assert.ok(!samples.publicInitial.scopeWritePreferred13.candidate.relationIndexes.includes(41));
 const affectedBefore=baseline?.({...edges[41],nodes:sampleNodes,index:41,labelWidth:width(edges[41]),labelHeight:18});

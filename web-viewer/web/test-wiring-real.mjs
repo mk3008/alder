@@ -25,8 +25,18 @@ for(const [activity,staircase] of Object.entries(expected)){
  let forward=0,exceptions=0;
  for(const [i,relation] of projected.graph.relations.entries()){
   const route=routes[i],source=boxes.find(n=>n.id===relation.from),target=boxes.find(n=>n.id===relation.to);
-  assert.deepEqual(route.points[0],[source.x+source.width*.125,source.y+source.height],'same icon-side bottom outlet for EVERY kind');
-  assert.equal(route.points[1][0],route.points[0][0]);assert.ok(route.points[1][1]>route.points[0][1]);
+  const returnInput=relation.kind==='input'&&source.y>=target.y+target.height;
+  if(returnInput){
+   assert.deepEqual(route.points[0],[source.x+source.width,source.y+source.height/2],'feedback Input leaves Output-side Object on the right');
+   assert.ok(route.points[1][0]>route.points[0][0]);assert.equal(route.points[1][1],route.points[0][1]);
+   assert.deepEqual(route.points.at(-1),[target.x+target.width,target.y+target.height/2],'feedback Input enters Activity on the right');
+   assert.ok(route.points.at(-2)[0]>route.points.at(-1)[0]);
+   assert.ok(route.points.some(p=>p[1]<route.points[0][1]),'return corridor climbs upstream');
+   assert.ok(route.bounds.right<=Math.max(source.x+source.width,target.x+target.width)+80,'local return does not span unrelated graph width');
+  }else{
+   assert.deepEqual(route.points[0],[source.x+source.width/8,source.y+source.height],'ordinary/exception common icon-side bottom outlet');
+   assert.equal(route.points[1][0],route.points[0][0]);assert.ok(route.points[1][1]>route.points[0][1]);
+  }
   assert.equal(route.collisions,0);assert.equal(route.fallback,false);
   for(const n of boxes)assert.equal(overlaps(labels[i],n),false,'complete label clears every shape');
   for(const other of labels.slice(i+1))assert.equal(overlaps(labels[i],other),false,'complete labels do not overlap');
