@@ -38,7 +38,7 @@ const urlHistoryList=document.createElement('div');urlHistoryList.id='url-histor
 function urlHistoryChrome(){
  urlHistoryList.replaceChildren();if(!state.urlHistory?.length)return;
  const title=document.createElement('strong');title.textContent='URL閲覧履歴';urlHistoryList.append(title);
- for(const visit of state.urlHistory){const button=document.createElement('button');button.type='button';button.setAttribute('role','menuitem');button.textContent=visit.name;button.title=visit.url;button.disabled=restoring||opening||documentSaving;button.onclick=()=>void openHistoryURL(visit.url);urlHistoryList.append(button);}
+ for(const visit of state.urlHistory){const button=document.createElement('button');button.type='button';button.setAttribute('role','menuitem');button.textContent=visit.name;const address=document.createElement('small');address.textContent=visit.url;button.append(address);button.title=visit.url;button.disabled=restoring||opening||documentSaving;button.onclick=()=>void openHistoryURL(visit.url);urlHistoryList.append(button);}
 }
 async function openHistoryURL(url:string){
  if(restoring||opening||documentSaving)return;
