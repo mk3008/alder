@@ -1,0 +1,16 @@
+{
+  "source": "d5031133fa452e2b673e54cee490126804d10668",
+  "tree": "60343b9b15b6a648640095915113e969ff18fc0a",
+  "ci": "https://github.com/mk3008/alder/actions/runs/39036280017",
+  "ciStatusAtPublication": "in_progress",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "index.html": "1d1bbc29d451223c6dc47fcb32b7e5f163ccb58f9f137b2eb78cc2e1363da57c",
+    "assets/index-CAyeYgyB.js": "079dc6d1e61531b6234351a40ae16759cf465ef358b49d44732859b0e3ccf9ad",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9"
+  },
+  "review": "review/",
+  "limits": "本人GUI採否待ち。保存済み配置は保持。新規または明示的再配置で新初期配置を適用。",
+  "scope": "isolated preview only"
+}
