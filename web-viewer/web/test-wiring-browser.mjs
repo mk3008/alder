@@ -1,3 +1,5 @@
+import {matrixPlan} from '../src/matrix-layout.ts';
+import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
 const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
@@ -73,11 +75,11 @@ export async function verifyRealWiring(browser){
    const wires=[...document.querySelectorAll('.edge')].map(path=>{
     const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
     const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
-    return {source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
+    return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
-  const assertDeparture=(r,fixed=false)=>{
-   const returning=!r.exception&&r.source.object&&(r.target.y+68<=r.source.y||(r.target.x<r.source.x&&r.target.y<=r.source.y));
+  const assertDeparture=(r,fixed=false,matrixReturn)=>{
+   const returning=matrixReturn??(!r.exception&&r.source.object&&(r.target.y+68<=r.source.y||(r.target.x<r.source.x&&r.target.y<=r.source.y)));
    if(returning||r.exception){
     assert.deepEqual(r.points[0],[r.source.x+260,r.source.y+34]);assert.ok(r.points[1][0]>r.points[0][0]);
     if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282)<.01,'aligned return corridor uses constant card clearance');
@@ -101,7 +103,7 @@ export async function verifyRealWiring(browser){
    await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();assert.deepEqual(await positions(),overview,'explicit overview reset applies common 64-unit layout');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),overview,'new overview reset survives reload');
    for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(let i=0;i<7;i++)await page.locator('#out').click();await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});await page.screenshot({path:`web/evidence/wiring/real-overview-${width}-${theme}.png`});for(let i=0;i<7;i++)await page.locator('#in').click();}
 
-   const overviewRoutes=await inspect();for(const r of overviewRoutes.wires){assertDeparture(r);if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
+   const overviewRoutes=await inspect();const matrixDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),matrix=matrixPlan(matrixDesign.graph,matrixDesign.activityOrder);for(const r of overviewRoutes.wires){assertDeparture(r,false,matrix.wires[r.index].returning);assert.equal(r.collisions,0,'all approved initial L/return paths clear every card');if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
    for(const spec of specs){
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();

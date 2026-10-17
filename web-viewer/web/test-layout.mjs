@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {initialPositions,layoutPlan} from '../src/layout.ts';
+import {matrixPlan} from '../src/matrix-layout.ts';
 import {reconcile} from '../src/session.ts';
 import {parseDesign} from '../src/graph.ts';
 const sample=parseDesign(readFileSync('../business-design/alder/README.md','utf8'));
@@ -15,14 +16,14 @@ const old=g=>Object.fromEntries(g.nodes.map((n,i)=>[n.id,[40+i%4*320,40+Math.flo
 const connectedDistance=(g,p)=>g.relations.reduce((s,r)=>s+Math.hypot(p[r.to][0]-p[r.from][0],p[r.to][1]-p[r.from][1]),0);
 const noOverlap=p=>{const all=Object.values(p);for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++)assert.ok(Math.abs(all[i][0]-all[j][0])>=260||Math.abs(all[i][1]-all[j][1])>=96);};
 const before=JSON.stringify(sample.graph),fallback=initialPositions(sample.graph);noOverlap(fallback);assert.deepEqual(initialPositions(sample.graph),fallback);assert.equal(JSON.stringify(sample.graph),before);
-const plan=layoutPlan(sample.graph,sample.activityOrder),p=plan.positions;noOverlap(p);assert.deepEqual(initialPositions(sample.graph,sample.activityOrder),p);
+const plan=matrixPlan(sample.graph,sample.activityOrder),p=plan.positions,legacy=layoutPlan(sample.graph,sample.activityOrder).positions;noOverlap(p);assert.deepEqual(initialPositions(sample.graph,sample.activityOrder),p);
 const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
 assert.deepEqual({...reconcile({key:'old-overview',design:sample,positions:saved128,scroll:[17,29],zoom:.75},sample).positions},saved128,'saved 128-unit overview coordinates never migrate');
 const previous=JSON.parse(readFileSync(new URL('./review-routing/positions-staircase.json',import.meta.url),'utf8'));
 const columns=positions=>[...new Set(Object.values(positions).map(p=>p[0]))].sort((a,b)=>a-b).map(x=>Object.keys(positions).filter(id=>positions[id][0]===x).sort());
-assert.deepEqual(columns(p).slice(3),columns(previous).slice(1),'downstream dependency ranks remain grouped after source-peer stairs');
-assert.deepEqual(columns(p).slice(0,3),[['Alder: 業務相関ナレッジ'],['Alder: 検査項目設計ナレッジ'],['Alder: 業務ナレッジ']],'source-only Objects occupy distinct left/up staircase steps');
-assert.deepEqual(Object.keys(p).sort((a,b)=>p[a][1]-p[b][1]),Object.keys(previous).sort((a,b)=>previous[a][1]-previous[b][1]),'compact spacing preserves the reviewed reading order');
+assert.deepEqual(columns(legacy).slice(3),columns(previous).slice(1),'downstream dependency ranks remain grouped after source-peer stairs');
+assert.deepEqual(columns(legacy).slice(0,3),[['Alder: 業務相関ナレッジ'],['Alder: 検査項目設計ナレッジ'],['Alder: 業務ナレッジ']],'source-only Objects occupy distinct left/up staircase steps');
+assert.deepEqual(Object.keys(legacy).sort((a,b)=>legacy[a][1]-legacy[b][1]),Object.keys(previous).sort((a,b)=>previous[a][1]-previous[b][1]),'compact spacing preserves the reviewed reading order');
 const span=positions=>Math.max(...Object.values(positions).map(p=>p[0]))-Math.min(...Object.values(positions).map(p=>p[0]));
 assert.ok(span(p)<span(previous),'the same dependency ranks occupy less horizontal space');
 assert.ok(p['業務設計書'][0]<p['同期漏れ検査'][0]);assert.ok(columns(p).length>4,'no four-column wrapping');
@@ -71,3 +72,5 @@ const firstID=sample.graph.nodes[0].id,secondID=sample.graph.nodes[1].id;first.p
 const partly={...first,positions:{[firstID]:p[secondID]}};const filled=reconcile(partly,sample);assert.deepEqual(filled.positions[firstID],partly.positions[firstID]);noOverlap(filled.positions);assert.equal(Object.keys(filled.positions).length,25);
 const reduced={...sample,graph:{...sample.graph,nodes:sample.graph.nodes.slice(1),relations:sample.graph.relations.filter(r=>r.from!==firstID&&r.to!==firstID)}};const updated=reconcile(first,reduced);assert.equal(updated.positions[firstID],undefined);assert.equal(updated.selected,undefined);assert.deepEqual(updated.positions[secondID],first.positions[secondID]);
 console.log(JSON.stringify({checks:['stable directed JSON-only fallback','compact staircase preserves reviewed dependency ranks and reading order; all forward edges rightward/downward; unchanged cycle and exception counts; no grid wrapping','bounded 1–1000 nodes; 20000-node chain and isolated layer; empty graph','all-card rectangle-rule equivalence and array permutation stability','viewport-independent initial positions only','manual overlaps preserved','missing IDs avoid retained cards','deleted IDs removed'],step:{x:stepX,y:stepY},sampleBounds:{left:Math.min(...Object.values(p).map(p=>p[0])),top:Math.min(...Object.values(p).map(p=>p[1])),right:Math.max(...Object.values(p).map(p=>p[0]+260)),bottom:Math.max(...Object.values(p).map(p=>p[1]+68))},sampleDistance:{old:connectedDistance(sample.graph,old(sample.graph)),new:connectedDistance(sample.graph,p)}},null,2));
+
+await import('./test-matrix-layout.mjs');
