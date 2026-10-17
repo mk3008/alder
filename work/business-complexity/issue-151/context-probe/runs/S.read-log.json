@@ -1,0 +1,24 @@
+{
+  "condition": "S",
+  "packet_revision": "70fee9a59b619d56475330472b78aa6c1bf27390",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "alder_plugin_version": "0.4.3",
+  "bundled_authority_source_revision": "9d67d886de8317ad4d884ba8e06c356b44370c9a",
+  "bundled_authority_sha256": "76f9dd4fd58629e689fadc8edbbdbeda5b975197758b410c44e953795b0c657f",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "requested_fork_turns": "none",
+  "effective_runtime_settings_verified": false,
+  "read_relative_paths": [
+    "work/business-complexity/issue-151/context-probe/prompts/S.txt",
+    "AGENTS.md",
+    "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "work/business-complexity/issue-151/context-probe/inputs/common.md",
+    "work/business-complexity/issue-151/context-probe/inputs/S.md"
+  ],
+  "output_relative_path": "work/business-complexity/issue-151/context-probe/runs/S.raw.md",
+  "source_files_modified": false,
+  "external_search_used": false
+}

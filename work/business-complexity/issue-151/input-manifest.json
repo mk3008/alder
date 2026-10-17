@@ -1,0 +1,23 @@
+{
+  "frozen_skill_commit": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_model": "gpt-6-sol",
+  "reasoning_effort": "medium",
+  "fork_turns": "none",
+  "heldout_sha256": "6d476dd69be7373ee55e568c780685061f3377f12aa262a3b23dafea36614a8b",
+  "input_sha256": {
+    "inputs/A-context.md": "990cf51fe32455b739af6b1a616b6e10c59e703c48cab5792e0295f57cc61854",
+    "inputs/A-minimal.md": "07d7118d95e9b6f3d0c6b36c1439ce4fb12126fc9581fc6c4daa403381d5befa",
+    "inputs/A-workflow.md": "a2f7c7100d6f9bc3726c97143d25a2d86734e25c5eff59da54d3b9abb7ba225e",
+    "inputs/B-context.md": "bb6da5910f49d397b519c6d94ef77281b7b3cadb81e7fc0d42af0cf5a5af5cc6",
+    "inputs/B-minimal.md": "8bd52cb2f16bb040da29cd33b4c07e2338877cf0deb12671f3d4c9953fcf4663",
+    "inputs/B-workflow.md": "a18c5cc930bca6752a0813760603ea63d7dc3f846e39f1d076c9fea16b2d2fe6"
+  },
+  "prompt_sha256": {
+    "prompts/A-context.txt": "e5a9e6c27fb4e776feda952181d2ff28c3616b4b9360117d542c7b3e7cbd8b64",
+    "prompts/A-discovery.txt": "211742752af0273050fda12325cd2dad1748e040bf828b8371e984a4850acd6e",
+    "prompts/A-minimal.txt": "c93c123fa90d67a432e31592cc40840c5b94dc561c9a7e3f2dda66d28853d233",
+    "prompts/B-context.txt": "9eb5d21fa1ab3bcbd35b64a7d963a55f18714297cec81ed704ed3f768a3c2347",
+    "prompts/B-discovery.txt": "2d05f04a4bcb3d15e22481400e611a9e1c0af9c31d54c5d84e62ed3055be3fac",
+    "prompts/B-minimal.txt": "514ad23f5112d45c36d897c62898245c3b58afe9bbfccf08ed71d57dea8c4118"
+  }
+}

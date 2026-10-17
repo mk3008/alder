@@ -1,0 +1,21 @@
+{
+  "condition": "A-context",
+  "public_packet_revision": "beea72b8eb9954ad37a2c7c5b4c89946700705e7",
+  "frozen_skill_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_model_from_repository_agents": "gpt-6-sol",
+  "requested_reasoning_effort_from_repository_agents": "medium",
+  "requested_fork_turns_from_repository_agents": "none",
+  "effective_runtime_settings_independently_verified": false,
+  "prompt_path": "work/business-complexity/issue-151/prompts/A-context.txt",
+  "read_relative_paths": [
+    "work/business-complexity/issue-151/prompts/A-context.txt",
+    "AGENTS.md",
+    "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "work/business-complexity/issue-151/inputs/A-workflow.md",
+    "work/business-complexity/issue-151/inputs/A-context.md"
+  ],
+  "output_path": "work/business-complexity/issue-151/runs/A-context.raw.md",
+  "full_prompt": "Alderでこの業務のProblemについて改善案を検討してください。\n読み取り専用の研究レビューです。業務変更を実行・採用しません。\n\nRepository root: /workspace/scratch/ff98173bedea/alder-simplification-151\n凍結Skill revision: a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168 (Plugin 0.4.3)。入力packet revisionは起動時に別途指定します。\n最初にrootのAGENTS.mdを読み、plugins/alder/skills/alder-optimize-business/SKILL.md、その同梱authorityとprovenanceに従ってください。\n業務入力: work/business-complexity/issue-151/inputs/A-workflow.md\n追加入力: work/business-complexity/issue-151/inputs/A-context.md\n\nこれは公開された改善前業務を、資料にある関係だけで再構成した研究用の記述です。現場の合意済みBDと同一視せず、不足を創作せず、必要なら確認質問として返してください。記述済みの関係はこの研究入力の事実として扱います。\n許可したファイル以外の資料、Issue、source記事、研究記録、他の条件、過去出力、評価鍵、rawは読まないでください。外部検索はしません。許可ファイル以外への探索やファイル変更も行いません。\n結果全文、採否・確認待ち、読んだ相対パス、残る未知を返してください。事例を以前から知っている可能性に気付いた場合はその旨を記してください。実効モデル設定を独立確認したとは主張しないでください。\n"
+}
