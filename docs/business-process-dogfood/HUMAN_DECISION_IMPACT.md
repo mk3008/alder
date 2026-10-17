@@ -1,0 +1,20 @@
+# Human Decision impact record
+
+| decision | first observable stage | affected activities | rules created/changed | data / DDL impact | acceptance impact | newly testable property | removed scope / reason |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HD-001 | 1 | quotation creation, search | BR-004 | `quotation.expires_at`; no amendment | future creation and readable business-expired quotation | statement-time expiry behavior | none |
+| HD-002 | 1 | quotation creation | BR-005 | `quotation_line`; no amendment | reject empty lines, accept duplicates | minimum line cardinality | none |
+| HD-003 | 1 | quotation creation/search | identifier constraints | existing text identifiers | reject blank customer/product | opaque nonblank identifier handling | master-data/auth/audit behavior not in scope |
+| HD-004 | 1 | quotation search | search contract | existing quotation/line data | exact deterministic search | smallest search result contract | paging/fuzzy/transport shape not in scope |
+| HD-005 | 2 | quotation-to-order conversion | BR-006 | existing quotation/order data | eligibility rejection | no expired/ordered/associated conversion | none |
+| HD-006 | 2 | conversion | BR-001, BR-006 | canonical `customer_order.quotation_id`; prior DDL amendment | conversion state/association test | atomic ordered association | no additional DDL merely for invariant |
+| HD-007 | 2 | quotation revision | BR-007 | existing quotation/order data | eligibility and read-only test | coherent eligible revision | post-conversion normal-operation revision removed |
+| HD-008 | 2 | direct/sourced order creation | BR-008 | `order_line`; no amendment | reject empty order lines | order cardinality | none |
+| HD-009 | 2 | conversion | BR-002, BR-009 | `customer_order`, `order_line`; no amendment | snapshot test | copied total and lines | copying source expiry/status excluded |
+| HD-010 | 3 | direct/sourced order creation, approval, confirmation | BR-010, BR-011 | `customer_order.created_by`; DDL Amendment 002 | actor, separation-of-duties, and confirmation tests | creator cannot decide own approval-required Order | confirmer identity/audit not required |
+| HD-011 | 3 | direct/sourced Order creation, approval search/decision, Sales confirmation | BR-012; HD-009 initial-state portion superseded | `customer_order.total_amount`, `customer_order.status`, `order_approval`; no DDL change | automatic approval-waiting state tests | high-value Order enters pending approval | separate submit-for-approval Activity not tested because not part of this process |
+| HD-012 | 3 | direct/sourced Order creation, approval | BR-013 | `customer_order.total_amount`; DDL Amendment 003 | exact decimal, rounding, threshold, and large-total tests | valid total beyond former numeric precision | no business maximum introduced |
+| HD-013 | 4 | Sales Order revision, manager approval/rejection, Sales confirmation | BR-014 | customer_order status/total, order_line, order_approval; no DDL | invalidation and threshold re-evaluation tests | prior approval is invalid after content change | approval persists after content change; approval history is not required |
+| HD-014 | 5 | Sales confirmation, reservation request, asynchronous inventory result | BR-015..018 | customer_order status, inventory_reservation order_id/status/requested_at; no DDL | confirmation/request and result-transition tests | confirmed plus requested; reserved/failed retain confirmation | retry, recovery, release, and future interactions intentionally undefined |
+| HD-015 | 6 | Sales cancellation | BR-019 | customer_order status/shipment_at; no DDL | confirmed-unshipped eligibility and immediate cancellation tests | cancellation is commercial and shipment-gated | shipping process, cancellation audit, and reopen remain out of scope |
+| HD-016 | 6 | cancellation, reservation result, release completion | BR-020..022 | inventory_reservation status/order_id; no DDL | held-inventory fake and ordered release tests | cancelled Order retains an explicit cleanup obligation until authority completes it | transport/retry/failure policy and unconditional external progress remain out of scope |
