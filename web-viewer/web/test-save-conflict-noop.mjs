@@ -81,7 +81,7 @@ await run('real UI round-trip setting before debounce does not invalidate a peer
 for(const kind of ['theme','body'])await run('true '+kind+' divergence protects newer data; clean stale viewing stays quiet',async()=>{
  const db=new IDBFactory(),seed=await boot(db);await input(seed,concurrencyBodies.shared);flush(seed);await saved(seed);seed.w.close();
  const a=await boot(db),b=await boot(db);
- if(kind==='theme'){a.$('theme').click();flush(a);await saved(a);}else{a.$('edit-markdown').click();a.$('source-text').value=changedMarkdown;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();await saved(a);}
+ if(kind==='theme'){a.$('theme').click();flush(a);await saved(a);}else{a.$('open-text').click();a.$('source-text').value=changedMarkdown;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();await saved(a);}
  const newer=await a.read();for(let i=0;i<3;i++){flush(b);b.w.dispatchEvent(new b.w.Event('pagehide'));b.w.document.querySelector('.tab > button').click();}
  await pause(230);assert.equal(b.$('status').hidden,true,'no unsaved change means no warning');assert.deepEqual(await b.read(),newer);
  b.$('in').click();flush(b);await until(()=>b.$('app').dataset.saveState,x=>x==='conflict','conflict after real local camera change');

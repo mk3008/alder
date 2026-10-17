@@ -4,7 +4,7 @@ export async function fetchMarkdown(value:string,signal?:AbortSignal):Promise<st
   const controller=new AbortController(),abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
   const timer=setTimeout(abort,30000);
   try{
-    const response=await fetch(url.href,{method:'GET',mode:'cors',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',signal:controller.signal,headers:{Accept:'text/markdown, text/plain;q=0.9'}});
+    const response=await fetch(url.href,{method:'GET',cache:'no-store',mode:'cors',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',signal:controller.signal,headers:{Accept:'text/markdown, text/plain;q=0.9'}});
     if(!response.ok)throw Error('URL取得に失敗しました（HTTP '+response.status+'）。');
     const type=response.headers.get('content-type')?.toLowerCase()??'';
     if(type.includes('html')||type.includes('json')||type.includes('xml'))throw Error('HTML等の表示ページではなくMarkdown本文URLを指定してください。');

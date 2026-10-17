@@ -16,7 +16,7 @@ try{
  assert.equal(d.querySelector('#open').disabled,false);
  const strip=w.getComputedStyle(d.querySelector('.tab-strip'));assert.equal(strip.height,'auto');assert.equal(strip.minHeight,'44px');assert.equal(strip.flexShrink,'0');assert.equal(w.getComputedStyle(d.querySelector('#tabs')).overflowX,'auto');
  const exportIDs=['save-image','copy-image'],actionIDs=['refresh',...exportIDs],stripIDs=['tabs','document-actions-toggle','document-actions'];
- assert.deepEqual([...d.querySelector('.tab-strip').children].map(n=>n.id),stripIDs,'tab navigation and disclosure precede original action group');assert.deepEqual([...d.querySelector('#document-actions').children].map(n=>n.id),[...actionIDs,'share-source','open-checks','edit-markdown'],'document refresh precedes PNG exports and source sharing in natural order');
+ assert.deepEqual([...d.querySelector('.tab-strip').children].map(n=>n.id),stripIDs,'tab navigation and disclosure precede original action group');assert.deepEqual([...d.querySelector('#document-actions').children].map(n=>n.id),[...actionIDs,'share-source','open-checks','view-markdown'],'document refresh precedes PNG exports and source sharing in natural order');
  for(const [id,label] of [['refresh','現在の文書を取得元から読み直す'],['save-image','グラフ全体をPNGで保存'],['copy-image','グラフ全体をPNGでコピー']]){
   const n=d.getElementById(id),c=w.getComputedStyle(n);assert.equal(n.hidden,true,'no active document hides '+id);assert.equal(n.disabled,true);assert.equal(n.tabIndex,0);assert.equal(n.type,'button');
   assert.equal(n.getAttribute('aria-label'),label);assert.equal(n.title,label);assert.equal(n.querySelector('.document-action-label').textContent,label);assert.equal(w.getComputedStyle(n.querySelector('.document-action-label')).display,'none','inline action remains icon-only');assert.equal(n.querySelectorAll('svg').length,1);assert.equal(n.querySelector('svg').getAttribute('aria-hidden'),'true');
@@ -83,6 +83,6 @@ try{
  assert.equal(w.getComputedStyle(d.getElementById('refresh')).opacity,'0.4','sample refresh remains visibly disabled');
  assert.equal(d.getElementById('refresh').closest('header'),null,'document refresh is outside header measurements');
  assert.equal(d.getElementById('refresh').querySelector('.source-caption'),null,'document refresh stays icon-only');
- assert.deepEqual([...d.querySelectorAll('#document-actions > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),['save-image','copy-image','share-source','open-checks','edit-markdown'],'disabled sample refresh is skipped while PNG exports and sharing retain natural order');
+ assert.deepEqual([...d.querySelectorAll('#document-actions > button')].filter(n=>!n.hidden&&!n.disabled).map(n=>n.id),['save-image','copy-image','share-source','open-checks','view-markdown'],'disabled sample refresh is skipped while PNG exports and sharing retain natural order');
  console.log(JSON.stringify({tabStripDocumentActions:'passed',headerControls:'passed',controls:headerActionIDs.length,monotonicThresholds:[276,376],mediaBranches:branches,limit:'DOM selectors and CSS declarations only; actual rectangles, SVG centers and badge wrapping require Chrome'}));
 }finally{w.close();}

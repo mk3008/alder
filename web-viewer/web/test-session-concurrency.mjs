@@ -28,7 +28,7 @@ async function until(read,predicate,label,{timeout=5000}={}){
 }
 function realm(indexedDB){
  const w=new JSDOM('<div id="app"></div>',{url:'https://alder-concurrency-isolated.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
- windows.push(w);w.indexedDB=indexedDB;w.IDBObjectStore=IDBObjectStore;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;
+ windows.push(w);w.indexedDB=indexedDB;w.IDBObjectStore=IDBObjectStore;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.confirm=()=>true;
  w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};
  let networkCalls=0;w.fetch=()=>{networkCalls++;throw Error('Network is forbidden in the concurrency regression');};
  w.eval('globalThis.readRecord=('+readConcurrencyRecord.toString()+');');
@@ -62,7 +62,7 @@ function assertLocalWork(e,expectedKeys){
  assert.deepEqual(keys(e),expectedKeys,'stale local tabs and rejected close target remain');
  assert.equal(e.$('source-dialog').hidden,false,'unsubmitted editor remains open');
  assert.equal(e.$('source-text').value,unsubmittedMarkdown,'unsubmitted input remains exact');
- assert.ok(e.w.document.querySelector('.node[data-node="Synthetic shared activity"]'),'the applied Graph remains unchanged until commit');e.$('edit-markdown').click();assert.equal(e.$('source-text').value,changedMarkdown,'per-tab draft remains exact');e.$('open-text').click();assert.equal(e.$('source-text').value,unsubmittedMarkdown,'separate new-input draft remains exact');
+ assert.ok(e.w.document.querySelector('.node[data-node="Synthetic shared activity"]'),'the applied Graph remains unchanged until commit');e.$('view-markdown').click();assert.equal(e.$('source-text').value,e.w.__expectedSource,'raw source is readonly; legacy draft remains protected');e.$('open-text').click();assert.equal(e.$('source-text').value,unsubmittedMarkdown,'separate new-input draft remains exact');
 }
 async function caseOf(name,test){
  const originalPut=IDBObjectStore.prototype.put;
@@ -127,7 +127,7 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  const db=new IDBFactory();
  const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
  const source=combine(concurrencyBodies.shared,concurrencyBodies.closed);
- const d=parseDesign(source),ws=createWorkspace({...emptySession(),tabs:[{key:'original',name:'race.md',design:d,positions:{},scroll:[0,0],zoom:1}]});
+ const d=parseDesign(source),ws=createWorkspace({...emptySession(),tabs:[{key:'original',name:'race.md',design:d,positions:{},scroll:[0,0],zoom:1,draft:changedMarkdown,source:{kind:'url',url:'https://concurrency.test/design.md'}}]});
  const closed=openActivity(ws,'Synthetic closed activity').key,shared=openActivity(ws,'Synthetic shared activity').key;
  const seedRealm=realm(db);seedRealm.w.__seed=snapshotWorkspace(ws);await seedRealm.w.eval('('+seedLegacyRecord.toString()+')({value:globalThis.__seed})');seedRealm.w.close();
  const seed=await boot(db),initial=await seed.read();seed.w.close();
@@ -137,14 +137,14 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  await select(a,shared);const nodeID='Synthetic shared activity',before=initial.current.tabs.find(t=>t.key===shared).positions[nodeID],moved=[before[0]+70,before[1]+45];
  drag(a,nodeID,70,45);assert.deepEqual(coords(a)[nodeID],moved);
  const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
- await a.$('edit-markdown').onclick();a.$('source-text').value=addedSource;a.$('source-text').dispatchEvent(new a.w.Event('input',{bubbles:true}));await a.$('source-submit').onclick();
+ a.w.fetch=async()=>new Response(addedSource);await a.$('refresh').onclick();
  await select(a,'original');a.w.document.querySelector('.node[data-activity="Synthetic added activity"]'+' .activity-open').click();const added=a.w.document.querySelector('.tab.active').dataset.key;assert.ok(added);
  a.$('theme').click();await tabs(a).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  const committedA=await until(()=>a.read(),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, coordinates and Group close');
  assert.deepEqual(committedA.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
  assert.equal(committedA.current.tabs.find(t=>t.key===added).design.markdown,addedSource);
  assert.deepEqual(keys(b),initialKeys);
- await select(b,shared);await b.$('edit-markdown').onclick();b.$('source-text').value=changedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
+ await select(b,shared);b.w.__expectedSource=source;b.$('theme').click();
  b.$('open-text').click();b.$('source-text').value=unsubmittedMarkdown;b.$('source-text').dispatchEvent(new b.w.Event('input',{bubbles:true}));
  if(trigger==='close')await tabs(b).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
  else if(trigger!=='debounce')lifecycle(b,trigger);
@@ -165,7 +165,7 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
  assert.deepEqual(consecutive.current.tabs.map(t=>t.key),committedA.current.tabs.map(t=>t.key));
  assert.deepEqual(consecutive.current.tabs.find(t=>t.key===shared).positions[nodeID],moved);
  assert.equal(consecutive.current.tabs.find(t=>t.key===added).design.markdown,addedSource);
- for(const e of [seed,a,b,fresh])assert.equal(e.networkCalls(),0);
+ for(const e of [seed,a,b,fresh])assert.equal(e.networkCalls(),1,'URL startup checks fail quietly; no lifecycle refetch');
  return {trigger,warning,retained:['A added Activity and Group','A exact coordinates','A Group view deletion','B unapplied per-tab draft','B separate unsubmitted input'],reloadWritable:true,consecutiveSaves:true};
 });
 await pause();process.off('unhandledRejection',onRejection);windows.forEach(w=>w.close());

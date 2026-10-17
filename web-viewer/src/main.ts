@@ -11,7 +11,7 @@ import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,P
 import {parseDesign,validateGraph,findingsFromSource} from './graph';
 import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
-import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
+import {reconcile,saveSession,loadSession,loadLegacySession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
 import {createNodeDrag} from './node-drag';
 import {resetLayout} from './layout-reset';
@@ -23,7 +23,7 @@ import sampleMarkdown from '../../business-design/alder/README.md?raw';
 import sampleChecksMarkdown from './samples/alder-checks.md?raw';
 import {createSnackbar} from './snackbar';
 const app=document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open-menu-toggle" type="button" aria-label="業務設計書を開く" title="業務設計書を開く"><span class="source-caption">開く</span></button><button id="theme" aria-label="テーマ切替"></button><button id="help-menu-toggle" type="button" aria-label="ヘルプ" title="ヘルプ（リンクは新しいタブで開きます）"></button><a id="github-link" href="https://github.com/mk3008/alder" target="_blank" rel="noopener noreferrer" aria-label="GitHubを開く" title="GitHubを開く"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="図の表示タブ"></nav><button id="document-actions-toggle" type="button" aria-label="文書の操作" title="文書の操作" aria-expanded="false" aria-controls="document-actions" hidden>…</button><div id="document-actions" role="group" aria-label="選択中の文書の操作"><button id="refresh" type="button" aria-label="現在の文書を取得元から読み直す" title="現在の文書を取得元から読み直す" hidden></button><button id="save-image" class="png-action" type="button" aria-label="グラフ全体をPNGで保存" title="グラフ全体をPNGで保存" hidden></button><button id="copy-image" class="png-action" type="button" aria-label="グラフ全体をPNGでコピー" title="グラフ全体をPNGでコピー" hidden></button><button id="share-source" aria-label="取得元の共有リンクをコピー" title="取得元の共有リンクをコピー"></button><button id="open-checks" class="check-action" type="button" aria-label="チェックリストを開く" title="チェックリストを開く" hidden></button><button id="edit-markdown" aria-label="原文を見る／編集する" title="原文を見る／編集する"></button></div></div><section id="status" class="info-bar" hidden><div class="info-content"><span id="status-text" role="status" aria-live="polite"></span><div id="save-actions" hidden><div class="save-buttons"><button id="save-retry">保存を再試行</button><button id="save-download">表示中の本文をファイルに保存</button><button id="save-draft-download">入力中の本文をファイルに保存</button><button id="save-reload">未保存の変更を破棄して読み直す</button></div><p id="save-help">保存するのはMarkdown本文だけです。図の配置や開いたタブは含みません。「ファイルを開く」で読み込めますが、入力途中の本文は修正が必要な場合があります。以前の文書は「保存文書の復旧」から選び直して保存できます。</p><p id="save-draft-note" hidden>入力中のURLは、入力欄からコピーして控えてください。</p><p id="save-reload-warning" hidden>読み直すと、この画面の未保存の本文・入力・図の配置は失われます。必要な本文を先にファイルへ保存してください。</p><p id="save-download-error" role="alert" hidden></p><label id="save-rescue-label" for="save-rescue-text" hidden>コピーする本文</label><textarea id="save-rescue-text" readonly hidden></textarea></div></div><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="drawer-modes" role="tablist" aria-label="一覧の表示"></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label><div class="graph-actions"><button id="reset-layout" class="graph-action" type="button"><span>レイアウトを初期値に戻す</span></button></div></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><section id="opening-guide" class="empty-guide" aria-labelledby="opening-title"><h2 id="opening-title">業務設計書を開くには</h2><p>業務設計書（Business Design、Markdown形式）を開くと、業務のつながりを図で確認できます。ファイル、URL、テキスト入力から開き方を選べます。</p><div class="empty-actions"><button id="guide-open" type="button">ファイルを開く</button><button id="guide-open-url" type="button">URLを開く</button><button id="guide-open-text" type="button">テキストで入力する</button></div><p>業務設計書が手元にない場合は、まず表示を試してみてください。<br><a id="open-sample" href="#alder-sample">サンプルを開く</a></p></section><section id="authoring-guide" class="empty-guide" aria-labelledby="authoring-title"><h2 id="authoring-title">業務設計書を作るには</h2><p>Alderプラグインにヒアリングメモ・議事録・発言内容を渡し、「このヒアリング結果をAlder業務設計書にして」と依頼すると、Markdownの草案を作れます。</p><p>草案は依頼者と合意する前にレビューしてください。作成した業務設計書をこのViewerで開くと、図で確認できます。</p><a href="https://github.com/mk3008/alder/blob/main/README.ja.md" target="_blank" rel="noopener noreferrer">導入・作成手順を読む（日本語・新しいタブ）</a></section></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><dialog id="source-close-dialog" aria-labelledby="source-close-message"><p id="source-close-message">グラフには反映されません。編集内容は保持されます。閉じますか？</p><div class="source-close-actions"><button id="source-close-confirm">閉じる</button><button id="source-close-continue" autofocus>編集を続ける</button></div></dialog><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" hidden>`;
+app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open-menu-toggle" type="button" aria-label="業務設計書を開く" title="業務設計書を開く"><span class="source-caption">開く</span></button><button id="theme" aria-label="テーマ切替"></button><button id="help-menu-toggle" type="button" aria-label="ヘルプ" title="ヘルプ（リンクは新しいタブで開きます）"></button><a id="github-link" href="https://github.com/mk3008/alder" target="_blank" rel="noopener noreferrer" aria-label="GitHubを開く" title="GitHubを開く"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="図の表示タブ"></nav><button id="document-actions-toggle" type="button" aria-label="文書の操作" title="文書の操作" aria-expanded="false" aria-controls="document-actions" hidden>…</button><div id="document-actions" role="group" aria-label="選択中の文書の操作"><button id="refresh" type="button" aria-label="現在の文書を取得元から読み直す" title="現在の文書を取得元から読み直す" hidden></button><button id="save-image" class="png-action" type="button" aria-label="グラフ全体をPNGで保存" title="グラフ全体をPNGで保存" hidden></button><button id="copy-image" class="png-action" type="button" aria-label="グラフ全体をPNGでコピー" title="グラフ全体をPNGでコピー" hidden></button><button id="share-source" aria-label="取得元の共有リンクをコピー" title="取得元の共有リンクをコピー"></button><button id="open-checks" class="check-action" type="button" aria-label="チェックリストを開く" title="チェックリストを開く" hidden></button><button id="view-markdown" aria-label="原文を見る" title="原文を見る"></button></div></div><section id="status" class="info-bar" hidden><div class="info-content"><span id="status-text" role="status" aria-live="polite"></span><div id="save-actions" hidden><div class="save-buttons"><button id="save-retry">保存を再試行</button><button id="save-download">表示中の本文をファイルに保存</button><button id="save-draft-download">入力中の本文をファイルに保存</button><button id="save-reload">未保存の変更を破棄して読み直す</button></div><p id="save-help">保存するのはMarkdown本文だけです。図の配置や開いたタブは含みません。「ファイルを開く」で読み込めますが、入力途中の本文は修正が必要な場合があります。</p><p id="save-draft-note" hidden>入力中のURLは、入力欄からコピーして控えてください。</p><p id="save-reload-warning" hidden>読み直すと、この画面の未保存の本文・入力・図の配置は失われます。必要な本文を先にファイルへ保存してください。</p><p id="save-download-error" role="alert" hidden></p><label id="save-rescue-label" for="save-rescue-text" hidden>コピーする本文</label><textarea id="save-rescue-text" readonly hidden></textarea></div></div><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="drawer-modes" role="tablist" aria-label="一覧の表示"></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label><div class="graph-actions"><button id="reset-layout" class="graph-action" type="button"><span>レイアウトを初期値に戻す</span></button></div></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><section id="opening-guide" class="empty-guide" aria-labelledby="opening-title"><h2 id="opening-title">業務設計書を開くには</h2><p>業務設計書（Business Design、Markdown形式）を開くと、業務のつながりを図で確認できます。ファイル、URL、テキスト入力から開き方を選べます。</p><div class="empty-actions"><button id="guide-open" type="button">ファイルを開く</button><button id="guide-open-url" type="button">URLを開く</button><button id="guide-open-text" type="button">テキストで入力する</button></div><p>業務設計書が手元にない場合は、まず表示を試してみてください。<br><a id="open-sample" href="#alder-sample">サンプルを開く</a></p></section><section id="authoring-guide" class="empty-guide" aria-labelledby="authoring-title"><h2 id="authoring-title">業務設計書を作るには</h2><p>Alderプラグインにヒアリングメモ・議事録・発言内容を渡し、「このヒアリング結果をAlder業務設計書にして」と依頼すると、Markdownの草案を作れます。</p><p>草案は依頼者と合意する前にレビューしてください。作成した業務設計書をこのViewerで開くと、図で確認できます。</p><a href="https://github.com/mk3008/alder/blob/main/README.ja.md" target="_blank" rel="noopener noreferrer">導入・作成手順を読む（日本語・新しいタブ）</a></section></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" hidden>`;
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
@@ -34,10 +34,21 @@ const followupMenu=document.createElement('div');followupMenu.id='check-followup
 const checkInput=document.createElement('input');checkInput.type='file';checkInput.id='check-file';checkInput.accept='.md,.markdown,text/markdown,text/plain';checkInput.hidden=true;app.append(checkInput);
 const checkURLDialog=document.createElement('section');checkURLDialog.id='check-url-dialog';checkURLDialog.hidden=true;checkURLDialog.setAttribute('role','dialog');checkURLDialog.setAttribute('aria-labelledby','check-url-title');checkURLDialog.innerHTML='<h2 id="check-url-title">チェックリストをURLから開く</h2><form id="check-url-form"><label for="check-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="check-url" type="url" required placeholder="https://…/checks.md"><div class="source-actions"><button id="check-url-submit" type="submit">開く</button><button id="check-url-cancel" type="button">キャンセル</button></div></form>';app.append(checkURLDialog);
 const helpMenu=document.createElement('div');helpMenu.id='help-menu';helpMenu.innerHTML=`<a href="https://github.com/mk3008/alder/blob/${deployment.version??'main'}/web-viewer/usage.ja.md" target="_blank" rel="noopener noreferrer">Viewerの使い方</a><a href="https://github.com/mk3008/alder/blob/${deployment.version??'main'}/README.ja.md" target="_blank" rel="noopener noreferrer">業務設計書・チェック項目を作る</a><a href="https://github.com/mk3008/alder/blob/${deployment.version??'main'}/docs/business-design-structure.ja.md" target="_blank" rel="noopener noreferrer">Markdownの書き方</a>`;app.append(helpMenu);installDropdown($<HTMLButtonElement>('help-menu-toggle'),helpMenu);
+const urlHistoryList=document.createElement('div');urlHistoryList.id='url-history';sourceMenu.append(urlHistoryList);
+function urlHistoryChrome(){
+ urlHistoryList.replaceChildren();if(!state.urlHistory?.length)return;
+ const title=document.createElement('strong');title.textContent='URL閲覧履歴';urlHistoryList.append(title);
+ for(const visit of state.urlHistory){const button=document.createElement('button');button.type='button';button.setAttribute('role','menuitem');button.textContent=visit.name;button.title=visit.url;button.disabled=restoring||opening||documentSaving;button.onclick=()=>void openHistoryURL(visit.url);urlHistoryList.append(button);}
+}
+async function openHistoryURL(url:string){
+ if(restoring||opening||documentSaving)return;
+ if(state.document?.source?.kind==='url'&&state.document.source.url===url){capture();state.active=state.tabs[0].key;render();void checkSourceUpdate();return;}
+ opening=true;render();try{const design=parseDesign(await fetchMarkdown(url));const tab=reconcile({key:crypto.randomUUID(),name:new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:{kind:'url',url},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]},design);await openDocument(tab);}catch(e){if(!(e instanceof DocumentSaveError))status('履歴のURLを開けません。現在の表示は保持しています: '+(e as Error).message,'error');}finally{opening=false;render();}
+}
 const sourceDropdown=installDropdown($<HTMLButtonElement>('open-menu-toggle'),sourceMenu);
 const checksDropdown=installDropdown($<HTMLButtonElement>('open-checks'),checksMenu,()=>{const t=current();$('check-open-sample').hidden=!t||!isSample(t);$<HTMLButtonElement>('check-close').disabled=!t?.checks;});
 const followupDropdown=installDropdown($<HTMLButtonElement>('check-followup-open'),followupMenu,()=>{$('check-followup-sample').hidden=!current()||!isSample(current()!);});
-for(const [id,value] of [['open-menu-toggle',FolderOpen],['open',FolderOpen],['open-url',FolderSymlink],['open-text',Text],['edit-markdown',FileText],['open-checks',ListChecks],['share-source',Share2],['refresh',RefreshCw],['help-menu-toggle',CircleQuestionMark],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['reset-layout',RotateCcw],['save-image',ImageDown],['copy-image',ClipboardCopy],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
+for(const [id,value] of [['open-menu-toggle',FolderOpen],['open',FolderOpen],['open-url',FolderSymlink],['open-text',Text],['view-markdown',FileText],['open-checks',ListChecks],['share-source',Share2],['refresh',RefreshCw],['help-menu-toggle',CircleQuestionMark],['drawer',PanelRight],['node-list-toggle',PanelLeft],['node-list-close',X],['display-settings-toggle',Settings],['reset-layout',RotateCcw],['save-image',ImageDown],['copy-image',ClipboardCopy],['out',Minus],['in',Plus]] as const)$(id).prepend(icon(value));
 installHeaderTitleFit(document.querySelector('header')!);
 const documentActions=installDocumentActions(document.querySelector('.tab-strip')!);
 let state:Workspace={tabs:[],recovery:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0,documentSaving=false;
@@ -94,10 +105,10 @@ function downloadMarkdown(raw:string,name:string){
   catch{const error=$('save-download-error');error.textContent='本文ファイルを作れませんでした。下の本文を選択してコピーし、別のテキストファイルに保存してください。';error.hidden=false;$('save-rescue-label').hidden=false;const field=$<HTMLTextAreaElement>('save-rescue-text');field.value=raw;field.hidden=false;field.focus();field.select();}
   finally{link?.remove();if(url){const value=url;window.setTimeout(()=>URL.revokeObjectURL(value),1500);}}
 }
-$('save-retry').onclick=()=>{if(!saveFailed||restoreFailed||saveConflict||pendingWrites||documentSaving||closing)return;rememberEditorInput();capture();persist(0,false);};
+$('save-retry').onclick=()=>{if(!saveFailed||restoreFailed||saveConflict||pendingWrites||documentSaving||closing)return;capture();persist(0,false);};
 $('save-download').onclick=()=>{const tab=current();if(tab)downloadMarkdown(tab.design.markdown,state.document?.name??tab.name);};
-function rescueDraft(){if(!$('source-dialog').hidden&&sourceMode==='text')return sourceText().value||undefined;if(!$('source-dialog').hidden&&sourceMode==='edit')return sourceText().value;return current()?.draft;}
-$('save-draft-download').onclick=()=>{const raw=rescueDraft();if(raw!==undefined)downloadMarkdown(raw,((sourceMode==='edit'&&!$('source-dialog').hidden?editingTab():current())?.name??'input')+'-draft');};
+function rescueDraft(){if(!$('source-dialog').hidden&&sourceMode==='text')return sourceText().value||undefined;return current()?.draft;}
+$('save-draft-download').onclick=()=>{const raw=rescueDraft();if(raw!==undefined)downloadMarkdown(raw,(state.document?.name??'input')+'-draft');};
 $('save-reload').onclick=()=>{if(restoreFailed||saveConflict)location.reload();};
 
 function ensureWritable(){if(restoreFailed)throw Error('前回の保存内容を保護しています。本文を退避してから読み直してください。');if(saveConflict)throw new SessionConflictError();}
@@ -122,7 +133,7 @@ function persist(delay=180,changed=true){
 }
 async function closeTab(t:Tab){
  if(restoring||closing||documentSaving||viewActivity(t)===undefined||!state.tabs.includes(t))return;
- rememberEditorInput();touch.cancel();capture();
+ touch.cancel();capture();
  const next={...state,tabs:state.tabs.filter(x=>x!==t),active:state.active===t.key?state.tabs[0]?.key:state.active};
  try{await saveDocument(()=>next,()=>{state=next;});}catch{saveStateChrome();}
 }
@@ -195,7 +206,7 @@ function isSample(t:Tab){return t.source?.kind==='sample'&&!t.edited&&t.design.m
 function checkState(t:Tab){const key=documentForView(t)?.key??t.key;let v=checkViews.get(key);if(!v){v={mode:'business'};checkViews.set(key,v);}return v;}
 async function saveChecks(t:Tab,checks:RelatedChecks|undefined){
   if(!isCurrentDocument(t))throw Error('原本文書が切り替わりました。');
-  rememberEditorInput();
+
   const next=createWorkspace(state,state.recovery,{...state.document!,checks},snapshotWorkspace(state).views);await saveDocument(()=>next,()=>{state=next;if(checks)checkFollowups.delete(documentForView(t)?.key??t.key);});
 }
 async function readChecks(t:Tab,read:()=>Promise<RelatedChecks>){
@@ -327,20 +338,20 @@ function buildGraph(){displaySettingsChrome();nodeDrag.cancel();redrawEdges=()=>
     const cancel=(e:PointerEvent)=>{if(pointer===undefined||pointer!==e.pointerId)return;pointer=undefined;if(!b.isConnected)return;nodeDrag.cancel();capture();persist(180,false);};
     dragTarget.onpointercancel=cancel;dragTarget.onlostpointercapture=cancel;$('nodes').append(b);});$('zoom').textContent=Math.round(t.zoom*100)+'%';detail();renderNodeList();
 }
-function activateActivity(name:string){if(restoring||documentSaving||closing)return;rememberEditorInput();capture();openActivity(state,name);render();persist();$('viewport').focus({preventScroll:true});}
-function render(){recoveryDocuments();document.title=state.document?state.document.name+' · Alder Viewer':'Alder Viewer';touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(documentKey(t)));$('refresh').hidden=!t;$('edit-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(documentKey(t)));$('edit-markdown').hidden=!t;$('open-checks').hidden=!t;$('open-checks').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||!!(t&&checkState(t).busy));for(const id of ['open-menu-toggle','open-sample-menu','open','open-url','open-text','guide-open','guide-open-url','guide-open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();followupChrome();}
+function activateActivity(name:string){if(restoring||documentSaving||closing)return;capture();openActivity(state,name);render();persist();$('viewport').focus({preventScroll:true});}
+function render(){document.title=state.document?state.document.name+' · Alder Viewer':'Alder Viewer';touch.cancel();pan=undefined;chrome();renderTabs();graph();const t=current();if(t){$('viewport').scrollLeft=t.scroll[0];$('viewport').scrollTop=t.scroll[1];}$('refresh').toggleAttribute('disabled',restoring||documentSaving||!!closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(documentKey(t)));$('refresh').hidden=!t;$('view-markdown').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||updating.has(documentKey(t)));$('view-markdown').hidden=!t;$('open-checks').hidden=!t;$('open-checks').toggleAttribute('disabled',restoring||opening||documentSaving||!!closing||!t||!!(t&&checkState(t).busy));for(const id of ['open-menu-toggle','open-sample-menu','open','open-url','open-text','guide-open','guide-open-url','guide-open-text'])$(id).toggleAttribute('disabled',restoring||opening||documentSaving);$('open-sample').setAttribute('aria-disabled',String(restoring||opening||documentSaving));$('open-sample').tabIndex=restoring||opening||documentSaving?-1:0;$('theme').toggleAttribute('disabled',restoring);sourceChrome();followupChrome();urlHistoryChrome();updateNoticeChrome();}
 // New documents start with extra camera padding on the left. Reconcile and
 // restored tabs keep their existing camera, including an absent legacy inset.
 type PickerWindow=Window & {showOpenFilePicker?: (options:unknown)=>Promise<FileSystemFileHandle[]>};
-async function openDocument(tab:Tab,recovered?:number){
- rememberEditorInput();const previous=state.document;
- const next=replaceWorkspace(recovered===undefined?state:{...state,recovery:state.recovery.filter((_,i)=>i!==recovered)},tab);if(!previous){capture();state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);render();persist();return true;}await saveDocument(()=>next,()=>{state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);});return true;
+async function openDocument(tab:Tab){
+ const previous=state.document;
+ const next=replaceWorkspace(state,tab);if(!previous){capture();state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);render();persist();return true;}await saveDocument(()=>next,()=>{state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);});return true;
 }
 async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=parseDesign(await file.text());const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}
 $('empty').onpointerdown=e=>e.stopPropagation();
 for(const id of ['open','open-url','open-text'])$('guide-'+id).onclick=()=>$(id).click();
 $('open-sample').onpointerdown=e=>e.stopPropagation();
-$('open-sample').onclick=async e=>{e.preventDefault();if(restoring||opening||documentSaving)return;try{if(state.document?.source?.kind==='sample'){capture();state.active=state.tabs[0].key;render();$('viewport').focus({preventScroll:true});return;}const archived=state.recovery.map(d=>d.source?.kind==='sample').lastIndexOf(true);if(archived>=0){if(await openDocument(state.recovery[archived],archived))$('viewport').focus({preventScroll:true});return;}const design=parseDesign(sampleMarkdown);const cached=state.sampleLayout?Object.fromEntries(['positions','selected','hiddenNodes','showExceptions','selectedEdgesOnly','scroll','zoom','canvasOrigin','viewInset'].map(k=>[k,state.sampleLayout![k as keyof NonNullable<typeof state.sampleLayout>]])):{};const tab=reconcile({key:crypto.randomUUID(),name:'Alderを使った設計業務',source:{kind:'sample'},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],...cached},design);if(await openDocument(tab))$('viewport').focus({preventScroll:true});}catch(e){status('サンプルを開けません: '+(e as Error).message,'error');}};
+$('open-sample').onclick=async e=>{e.preventDefault();if(restoring||opening||documentSaving)return;try{if(state.document?.source?.kind==='sample'){capture();state.active=state.tabs[0].key;render();$('viewport').focus({preventScroll:true});return;}const design=parseDesign(sampleMarkdown);const cached=state.sampleLayout?Object.fromEntries(['positions','selected','hiddenNodes','showExceptions','selectedEdgesOnly','scroll','zoom','canvasOrigin','viewInset'].map(k=>[k,state.sampleLayout![k as keyof NonNullable<typeof state.sampleLayout>]])):{};const tab=reconcile({key:crypto.randomUUID(),name:'Alderを使った設計業務',source:{kind:'sample'},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],...cached},design);if(await openDocument(tab))$('viewport').focus({preventScroll:true});}catch(e){status('サンプルを開けません: '+(e as Error).message,'error');}};
 $('open').onclick=async()=>{if(restoring||opening||documentSaving)return;opening=true;render();try{const picker=(window as PickerWindow).showOpenFilePicker;if(picker){const handles=await picker({multiple:false,types:[{description:'Business Design Markdown',accept:{'text/markdown':['.md','.markdown']}}]});for(const h of handles)await addFile(await h.getFile(),h);}else $('fallback').click();}catch(e){if((e as Error).name!=='AbortError')status('開けません: '+(e as Error).message,'error');}finally{opening=false;render();}};
 ($('fallback') as HTMLInputElement).onchange=async()=>{const input=$('fallback') as HTMLInputElement;if(restoring||opening||documentSaving)return;opening=true;render();try{for(const f of Array.from(input.files??[]))await addFile(f);}catch(e){status('開けません: '+(e as Error).message,'error');}input.value='';opening=false;render();};
 // Save a replacement before changing the displayed Graph. A failed transaction
@@ -351,14 +362,14 @@ async function saveDocument(project:()=>Workspace,commit:()=>void){
   try{ensureWritable();}catch(error){throw new DocumentSaveError(error);}capture();clearTimeout(timer);timer=undefined;documentSaving=true;revision++;const version=revision;render();saveStateChrome();let saved=false;
   try{
     const snapshot=structuredClone(snapshotWorkspace(project()));await queueSnapshot(snapshot,version);
-    const live=state;commit();if(state!==live)state=mergeLiveWorkspace(state,live);if(sourceMode==='edit'&&sourceTarget&&!state.tabs.some(t=>t.key===sourceTarget))sourceTarget=state.tabs[0]?.key;acknowledgeDrafts(snapshot);saved=true;
+    const live=state;commit();if(state!==live)state=mergeLiveWorkspace(state,live);if(sourceMode==='view'&&sourceTarget&&!state.tabs.some(t=>t.key===sourceTarget))sourceTarget=state.tabs[0]?.key;acknowledgeDrafts(snapshot);saved=true;
   }catch(error){saveFailure(error);throw new DocumentSaveError(error);}
   finally{documentSaving=false;render();saveStateChrome();if(saved&&revision!==version)persist(0,false);}
 }
 async function replace(t:Tab,d:ReturnType<typeof parseDesign>,handle=t.handle,edited=false){
  if(!isCurrentDocument(t)||t.design!==state.document?.design)return false;
  const next=updateWorkspace(state,d,handle,edited);
- await saveDocument(()=>next,()=>{state=next;});status('');return true;
+ await saveDocument(()=>next,()=>{state=next;});updateCandidate=undefined;updateNoticeChrome();status('');return true;
 }
 async function reselect(t:Tab){
   if(!isCurrentDocument(t))return;
@@ -373,8 +384,8 @@ async function reselect(t:Tab){
 type PermissionHandle=FileSystemFileHandle & {queryPermission:(o:{mode:'read'})=>Promise<PermissionState>};
 $('refresh').onclick=async()=>{
   const t=current();if(restoring||documentSaving||closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(documentKey(t)))return;
-  rememberEditorInput();
-  if((t.edited||t.draft!==undefined)&&!window.confirm('ブラウザー内の編集を破棄し、取得元のMarkdownで更新しますか？取得や保存に失敗した場合は編集を保持します。'))return;
+
+  if((t.edited||t.draft!==undefined)&&!window.confirm('取得元のMarkdownで表示を更新しますか？以前の編集は保護され、移行通知から書き出せます。取得や保存に失敗した場合は現在の表示を保持します。'))return;
   if(sourceTarget===t.key)hideSource();const updatingDocument=documentKey(t);updating.add(updatingDocument);render();
   try{
     if(t.source?.kind==='url'){const d=parseDesign(await fetchMarkdown(t.source.url));await replace(t,d);return;}
@@ -383,38 +394,30 @@ $('refresh').onclick=async()=>{
     if(!isCurrentDocument(t))return;
     if(permission!=='granted'){status('読取権限がありません。同じMarkdownを再選択してください。','warning');await reselect(t);return;}
     await replace(t,parseDesign(await (await t.handle.getFile()).text()));
-  }catch(e){if(isCurrentDocument(t)&&(e as Error).name!=='AbortError'&&!(e instanceof DocumentSaveError))status('更新失敗。編集と旧表示を保持しています: '+(e as Error).message,'error');}
+  }catch(e){if(isCurrentDocument(t)&&(e as Error).name!=='AbortError'&&!(e instanceof DocumentSaveError))status('更新失敗。旧表示を保持しています: '+(e as Error).message,'error');}
   finally{updating.delete(updatingDocument);render();}
 };
-type SourceMode='url'|'text'|'edit';
+type SourceMode='url'|'text'|'view';
 let sourceMode:SourceMode='text',sourceTarget:string|undefined,sourceBusy=false,sourceToken=0,sourceAbort:AbortController|undefined,sourceOpener:HTMLElement|null=null;
 const sourceText=()=>($('source-text') as HTMLTextAreaElement),sourceURL=()=>($('source-url') as HTMLInputElement);
-function updateSourceDirty(){draftDirty=!$('source-dialog').hidden&&sourceMode!=='edit'&&(sourceMode==='text'?sourceText().value:sourceURL().value)!=='';saveStateChrome();}
+function updateSourceDirty(){draftDirty=!$('source-dialog').hidden&&sourceMode!=='view'&&(sourceMode==='text'?sourceText().value:sourceURL().value)!=='';saveStateChrome();}
 sourceURL().addEventListener('input',updateSourceDirty);
-const editingTab=()=>state.tabs.find(t=>t.key===sourceTarget);
-function rememberEditorInput(){
-  const t=editingTab();if(sourceMode!=='edit'||$('source-dialog').hidden||!t||documentSaving||closing)return;
-  const value=sourceText().value,draft=value===t.design.markdown.replace(/\r\n?/g,'\n')?undefined:value;
-  if(t.draft!==draft){t.draft=draft;unsavedDrafts.add(state.document!.key);persist();}sourceChrome();
-}
-// Textareas normalize line endings; opening CRLF source alone is not an edit.
-function editorChanged(){const t=editingTab();return !!t&&sourceText().value!==t.design.markdown.replace(/\r\n?/g,'\n');}
 function sourceChrome(){
   sharingChrome();
-  const edit=sourceMode==='edit',busy=sourceBusy||documentSaving||(edit&&!!closing);sourceText().disabled=busy;
+  const view=sourceMode==='view',busy=sourceBusy||documentSaving;sourceText().disabled=busy;sourceText().readOnly=view;
   $('source-dialog').dataset.mode=sourceMode;
-  $('source-submit').textContent=edit?'反映する':'表示';
-  $<HTMLButtonElement>('source-submit').disabled=busy||(edit&&!editorChanged());$<HTMLButtonElement>('source-cancel').disabled=edit&&busy;
-  $('source-cancel').textContent=edit?'閉じる':'キャンセル';
+  $('source-submit').hidden=view;$('source-submit').textContent='表示';
+  $<HTMLButtonElement>('source-submit').disabled=busy||view;$<HTMLButtonElement>('source-cancel').disabled=busy;
+  $('source-cancel').textContent=view?'閉じる':'キャンセル';
   updateSourceDirty();queueMicrotask(drainSharedSource);
 }
 function showSource(mode:SourceMode,target?:Tab){
   if(restoring||opening||documentSaving||(target&&(updating.has(documentKey(target))||!!closing)))return;
-  rememberEditorInput();sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target?.key;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;
+  sourceAbort?.abort();sourceToken++;sourceMode=mode;sourceTarget=target?.key;sourceBusy=false;sourceOpener=document.activeElement as HTMLElement;
   $('source-dialog').hidden=false;$('source-title').textContent=target?`Markdown原文 · ${state.document?.name??target.name}`:mode==='url'?'URLを開く':'テキストを入力';
   for(const id of ['url-label','source-url'])$(id).hidden=mode!=='url';for(const id of ['text-label','source-text'])$(id).hidden=mode==='url';
-  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。復元時には自動取得しません。':mode==='edit'?'元ファイルやURLは書き換えません。':'入力本文はこのブラウザーに保存します。作成後は「原文を見る／編集する」から編集できます。外部送信しません。';
-  if(target)sourceText().value=target.draft??target.design.markdown;
+  $('source-help').textContent=mode==='url'?'匿名・CORS許可のHTTPS本文だけ取得します。認証やHTML表示URLは使えません。':mode==='view'?'元ファイルやURLは書き換えません。':'閲覧する本文を入力してください。開いた後は読み取り専用です。外部送信しません。';
+  if(target)sourceText().value=target.design.markdown;
   else if(mode==='text')sourceText().value=newTextDraft;
   sourceChrome();(mode==='url'?sourceURL():sourceText()).focus();
 }
@@ -423,11 +426,11 @@ let headerRevealFrame:number|undefined;
 function restoreSourceOpener(){
   if(sourceOpener?.isConnected)sourceOpener.focus({preventScroll:true});
   if(headerRevealFrame!==undefined)cancelAnimationFrame(headerRevealFrame);
-  if(sourceMode!=='edit')return;
+  if(sourceMode!=='view')return;
   const token=sourceToken;
   headerRevealFrame=requestAnimationFrame(()=>{
     headerRevealFrame=undefined;
-    if(token!==sourceToken||!$('source-dialog').hidden||$<HTMLDialogElement>('source-close-dialog').open)return;
+    if(token!==sourceToken||!$('source-dialog').hidden)return;
     const viewport=window.visualViewport,header=app.querySelector('header')!,rect=header.getBoundingClientRect();
     // A pinched page can remain panned below the header after the modal closes.
     // Reveal only a fully hidden header; leave browser scale and graph camera alone.
@@ -437,59 +440,11 @@ function restoreSourceOpener(){
 }
 function hideSource(){sourceToken++;sourceAbort?.abort();sourceBusy=false;sourceTarget=undefined;$('source-dialog').hidden=true;sourceChrome();restoreSourceOpener();}
 async function closeSource(){
-  if(documentSaving)return false;
-  rememberEditorInput();const t=editingTab();
-  if(sourceMode==='edit'&&t&&(t.draft!==undefined||unsavedDrafts.has(state.document!.key))){
-    sourceBusy=true;sourceChrome();
-    try{await saveDocument(()=>state,()=>{});}
-    catch{saveStateChrome();return false;}
-    finally{sourceBusy=false;sourceChrome();}
-  }
-  if(sourceMode==='text')newTextDraft=sourceText().value;hideSource();return true;
+ if(documentSaving)return false;
+ if(sourceMode==='text')newTextDraft=sourceText().value;hideSource();return true;
 }
-// Fit only an off-screen confirmation once when it opens. Do not chase user pan.
-function placeSourceClosePrompt(dialog:HTMLDialogElement){
-  const viewport=window.visualViewport;
-  if(!viewport||viewport.width<=0||viewport.height<=0)return;
-  const rect=dialog.getBoundingClientRect(),left=viewport.offsetLeft,top=viewport.offsetTop;
-  if(rect.width<=0||rect.height<=0||rect.left>=left&&rect.right<=left+viewport.width&&rect.top>=top&&rect.bottom<=top+viewport.height)return;
-  const gap=Math.min(8,viewport.width/4,viewport.height/4);
-  dialog.style.margin='0';dialog.style.inset='auto';
-  dialog.style.width=Math.min(rect.width,viewport.width-gap*2)+'px';
-  dialog.style.maxHeight=(viewport.height-gap*2)+'px';
-  const fitted=dialog.getBoundingClientRect();
-  dialog.style.left=(left+Math.max(gap,(viewport.width-fitted.width)/2))+'px';
-  dialog.style.top=(top+Math.max(gap,(viewport.height-fitted.height)/2))+'px';
-}
-function clearSourceClosePlacement(dialog:HTMLDialogElement){
-  for(const property of ['margin','margin-top','margin-right','margin-bottom','margin-left','inset','right','bottom','width','max-height','left','top'])dialog.style.removeProperty(property);
-}
-// Explicit Close/Escape asks before hiding changed text; switching tabs still saves quietly.
-let sourceClosePrompt:Promise<boolean>|undefined;
-function requestCloseSource():Promise<boolean>{
-  if(sourceClosePrompt)return sourceClosePrompt;
-  if(documentSaving||(sourceMode==='edit'&&sourceBusy))return Promise.resolve(false);
-  if(sourceMode!=='edit'||$('source-dialog').hidden||!editorChanged())return closeSource();
-  rememberEditorInput();
-  const dialog=$<HTMLDialogElement>('source-close-dialog'),confirm=$<HTMLButtonElement>('source-close-confirm'),keep=$<HTMLButtonElement>('source-close-continue');
-  const target=sourceTarget,text=sourceText(),selection=[text.selectionStart,text.selectionEnd,text.selectionDirection] as const;
-  sourceClosePrompt=new Promise(resolve=>{
-    let settling=false;
-    const finish=async(accepted:boolean)=>{
-      if(settling)return;settling=true;confirm.disabled=keep.disabled=true;
-      const closed=accepted&&sourceMode==='edit'&&sourceTarget===target?await closeSource():false;
-      dialog.close();clearSourceClosePlacement(dialog);sourceClosePrompt=undefined;confirm.disabled=keep.disabled=false;
-      if(closed){restoreSourceOpener();}
-      else if(!$('source-dialog').hidden){text.focus({preventScroll:true});text.setSelectionRange(...selection);}
-      resolve(closed);
-    };
-    confirm.onclick=()=>finish(true);keep.onclick=()=>finish(false);
-    dialog.oncancel=e=>{e.preventDefault();void finish(false);};
-    dialog.showModal();placeSourceClosePrompt(dialog);keep.focus({preventScroll:true});
-  });
-  return sourceClosePrompt;
-}
-sourceText().oninput=()=>{if(sourceMode==='edit')rememberEditorInput();else if(sourceMode==='text'){newTextDraft=sourceText().value;updateSourceDirty();}};
+function requestCloseSource(){return closeSource();}
+sourceText().oninput=()=>{if(sourceMode==='text'){newTextDraft=sourceText().value;updateSourceDirty();}};
 let copyingSource=false;
 function sharingReason(){
   if(restoring||opening||sourceBusy||documentSaving||closing)return '読込・保存が終わってから共有してください。';
@@ -502,7 +457,7 @@ function sharingChrome(){
 }
 $('share-source').onclick=async()=>{
   if(copyingSource)return;
-  rememberEditorInput();const reason=sharingReason();if(reason){status(reason,'warning');return;}
+  const reason=sharingReason();if(reason){status(reason,'warning');return;}
   const tab=current()!;if(tab.source?.kind!=='url')return;
   const source=tab.source.url,link=createSourceShareLink(location.href,source);copyingSource=true;sharingChrome();
   try{if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(link);status('共有リンクをコピーしました。取得元URLは相手に見えます。元URLの更新で内容も変わります: '+source);}
@@ -523,18 +478,17 @@ async function openSharedSource(requestedHash=location.hash){
   const token=++sharedSourceToken;sharedSourceAbort?.abort();
   try{
     const url=readSharedSource(hash)!;
-    ensureWritable();rememberEditorInput();
-    const live=state.tabs.find(t=>t.source?.kind==='url'&&t.source.url===url),archived=[...state.recovery].reverse().find(t=>t.source?.kind==='url'&&t.source.url===url),existing=live??archived;
+    ensureWritable();
+    const live=state.tabs.find(t=>t.source?.kind==='url'&&t.source.url===url),existing=live;
     if(existing){
       // Revisit selects the saved document, including local edits and its view.
       // Only explicit Refresh may replace it with the source's current content.
-      if(sourceTarget&&sourceTarget!==existing.key&&!(await (sourceClosePrompt??closeSource())))return;
+      if(sourceTarget&&sourceTarget!==existing.key&&!(await closeSource()))return;
       if(token!==sharedSourceToken||navigation!==sharedSourceNavigation)return;
-      if(!live){const next=replaceWorkspace({...state,recovery:state.recovery.filter(t=>t!==archived)},existing);await saveDocument(()=>next,()=>{state=next;});status('保存文書を復旧しました。編集と関連Checkを保持しています。');return;}
       const changed=capture()||state.active!==existing.key;
       state.active=existing.key;render();persist(180,changed);
-      status('開いている共有元のタブを選択しました。保存内容と編集は保持しています。');
-      return;
+      status('開いている共有元のタブを選択しました。表示内容は保持しています。');
+      void checkSourceUpdate();return;
     }
     sharedSourceAbort=new AbortController();opening=true;render();
     const design=parseDesign(await fetchMarkdown(url,sharedSourceAbort.signal));
@@ -545,7 +499,7 @@ async function openSharedSource(requestedHash=location.hash){
   }catch(error){if(token===sharedSourceToken&&!(error instanceof DocumentSaveError))status('共有リンクを開けません。既存の表示は保持しています: '+(error as Error).message,'error');}
   finally{if(token===sharedSourceToken){sharedSourceAbort=undefined;opening=false;render();drainSharedSource();}}
 }
-window.addEventListener('hashchange',()=>{void openSharedSource();});
+window.addEventListener('hashchange',()=>{void openSharedSource().then(()=>{if(state.document?.key===restoredDocumentKey)void checkSourceUpdate();});});
 function revealChecks(t:Tab){checkState(t).mode='checks';state.drawer=true;chrome();detail();}
 async function closeChecks(t:Tab){const v=checkState(t);if(v.busy||documentSaving||restoring||closing===t)return;v.busy=true;try{await saveChecks(t,undefined);v.candidate=undefined;v.error=undefined;v.url=undefined;}catch(e){v.error=(e as Error).message;}finally{v.busy=false;detail();}}
 let checkFileTarget:Tab|undefined;
@@ -560,23 +514,20 @@ $<HTMLFormElement>('check-url-form').onsubmit=e=>{e.preventDefault();const t=che
 $('check-open-sample').onclick=()=>{const t=current();if(!t||!isSample(t))return;revealChecks(t);void confirmChecks(t,{name:'チェックリストのサンプル',markdown:sampleChecksMarkdown});};
 $('check-close').onclick=()=>{const t=current();if(t)void closeChecks(t);};
 $('open-sample-menu').onclick=()=>{$('open-sample').click();};
-$('edit-markdown').onclick=()=>{const t=current();if(t)showSource('edit',t);};
+$('view-markdown').onclick=()=>{const t=current();if(t)showSource('view',t);};
 $('open-url').onclick=()=>showSource('url');$('open-text').onclick=()=>showSource('text');$('source-cancel').onclick=()=>requestCloseSource();
 $('source-dialog').onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();void requestCloseSource();}};
 $('source-submit').onclick=async()=>{
-  if(sourceBusy||documentSaving||(sourceMode==='edit'&&closing)||$('source-dialog').hidden||(sourceMode==='edit'&&!editorChanged()))return;
-  rememberEditorInput();sourceBusy=true;sourceChrome();const token=++sourceToken,target=editingTab(),mode=sourceMode;sourceAbort=new AbortController();
+  if(sourceBusy||documentSaving||(sourceMode==='view'&&closing)||$('source-dialog').hidden||sourceMode==='view')return;
+  sourceBusy=true;sourceChrome();const token=++sourceToken,mode=sourceMode;sourceAbort=new AbortController();
   try{
-    const url=sourceURL().value.trim(),raw=mode==='url'?await fetchMarkdown(url,sourceAbort.signal):sourceText().value;
+    const url=sourceMode==='url'?new URL(sourceURL().value.trim()).href:sourceURL().value.trim();
+    if(mode==='url'&&state.document?.source?.kind==='url'&&state.document.source.url===url){state.active=state.tabs[0].key;hideSource();render();void checkSourceUpdate();return;}
+    const raw=mode==='url'?await fetchMarkdown(url,sourceAbort.signal):sourceText().value;
     if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');
     const design=parseDesign(raw);if(token!==sourceToken)return;
-    if(mode==='edit'){
-      if(!target||!state.tabs.includes(target)||closing===target){status('編集対象のタブは閉じる操作中か、閉じられました。入力は保持しています。','warning');return;}
-      await replace(target,design,target.handle,target.edited===true||raw!==target.design.markdown);
-    }else{
-      const tab=reconcile({key:crypto.randomUUID(),name:mode==='text'?'入力したMarkdown':new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:mode==='text'?{kind:'text'}:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);
-      if(!await openDocument(tab))return;status('');if(mode==='text')newTextDraft=raw;
-    }
+    const tab=reconcile({key:crypto.randomUUID(),name:mode==='text'?'入力したMarkdown':new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:mode==='text'?{kind:'text'}:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);
+    if(!await openDocument(tab))return;status('');if(mode==='text')newTextDraft=raw;
     hideSource();
   }catch(e){if(token===sourceToken&&!(e instanceof DocumentSaveError))status('表示できません。入力と旧表示を保持しています: '+(e as Error).message,'error');}
   finally{if(token===sourceToken){sourceBusy=false;sourceChrome();}}
@@ -663,13 +614,30 @@ function validateRestoredTab(t:Tab){
   if(!t.design.graph.nodes.every(n=>Object.hasOwn(t.design.sections,n.id)&&typeof t.design.sections[n.id]==='string')||(t.design.activityOrder!==undefined&&(!Array.isArray(t.design.activityOrder)||!t.design.activityOrder.every(id=>typeof id==='string'))))throw Error('Invalid saved sections');
   if(t.source!==undefined&&(!t.source||!['text','sample','url'].includes(t.source.kind)||(t.source.kind==='url'&&typeof t.source.url!=='string')))throw Error('Invalid saved source');
 }
-const recoveryPanel=document.createElement('details');recoveryPanel.id='document-recovery';recoveryPanel.innerHTML='<summary>保存文書の復旧</summary><p>以前の文書・未反映の編集・関連Checkを保持しています。選択すると現在の文書もここへ退避します。</p><div id="recovery-documents"></div><button id="recovery-export" type="button">全保存内容をJSONで退避</button>';document.querySelector('.workspace')!.before(recoveryPanel);
-function recoveryDocuments(){
- if(!document.getElementById('document-recovery'))return;recoveryPanel.hidden=!state.recovery.length&&!state.legacyViews;recoveryPanel.querySelector('p')!.textContent=state.legacyViews&&!state.recovery.length?'旧確認版の表示状態を退避データに保持しています。「全保存内容をJSONで退避」から保存できます。':'以前の文書・未反映の編集・関連Checkを保持しています。選択すると現在の文書もここへ退避します。';const root=$('recovery-documents');root.replaceChildren();
- state.recovery.forEach((doc,index)=>{const entry=document.createElement('div');entry.dataset.documentKey=doc.key;const button=document.createElement('button');button.type='button';button.textContent=doc.name+(doc.draft!==undefined?'（未反映の編集あり）':'');button.disabled=restoring||documentSaving||opening;button.onclick=async()=>{try{if(sourceTarget&&!await (sourceClosePrompt??closeSource()))return;const next=replaceWorkspace({...state,recovery:state.recovery.filter((_,i)=>i!==index)},doc);await saveDocument(()=>next,()=>{state=next;});}catch(e){status('復旧できません。現在と以前の文書は保持しています: '+(e as Error).message,'error');}};entry.append(button);root.append(entry);});
+// A conditional migration notice, never a normal document recovery browser.
+const legacyNotice=document.createElement('section');legacyNotice.id='legacy-notice';legacyNotice.className='info-bar';legacyNotice.hidden=true;
+legacyNotice.innerHTML='<div>以前の編集・保存文書を保護しています。必要な内容をファイルへ保存できます。<button id="legacy-export" type="button">以前の保存内容を書き出す</button><textarea id="legacy-copy" aria-label="以前の保存内容をコピー" readonly hidden></textarea></div><button id="legacy-close" aria-label="移行の通知を閉じる">×</button>';
+document.querySelector('.workspace')!.before(legacyNotice);
+let legacyContent:unknown;
+$('legacy-close').onclick=()=>{legacyNotice.hidden=true;};
+$('legacy-export').onclick=()=>{const content=JSON.stringify(legacyContent,(_key,value)=>value,2);try{const url=URL.createObjectURL(new Blob([content],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='alder-legacy-session.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch{const field=$<HTMLTextAreaElement>('legacy-copy');field.value=content;field.hidden=false;field.focus();field.select();}};
+void loadLegacySession().then(value=>{legacyContent=value;legacyNotice.hidden=value===undefined;}).catch(()=>status('以前の保存内容を確認できません。保存データは削除していません。','warning'));
+const updateNotice=document.createElement('section');updateNotice.id='source-update-notice';updateNotice.className='info-bar';updateNotice.hidden=true;
+updateNotice.innerHTML='<span role="status">取得元に新しい内容があります。更新ボタンで読み直せます。</span><button id="source-update-refresh" type="button">更新</button><button id="source-update-close" aria-label="更新通知を閉じる">×</button>';document.querySelector('.workspace')!.before(updateNotice);
+let updateCandidate:{key:string;url:string;baseline:string}|undefined;
+const dismissedUpdates=new Set<string>();let updateCheckToken=0,restoredDocumentKey:string|undefined,updateCheckPending:string|undefined;
+function updateNoticeChrome(){const t=state.document;updateNotice.hidden=!updateCandidate||updateCandidate.key!==t?.key||updateCandidate.baseline!==t.design.markdown||dismissedUpdates.has(t.key);$<HTMLButtonElement>('source-update-refresh').disabled=restoring||opening||documentSaving||!!(t&&updating.has(t.key));}
+$('source-update-close').onclick=()=>{if(updateCandidate)dismissedUpdates.add(updateCandidate.key);updateNoticeChrome();};
+$('source-update-refresh').onclick=()=>{$('refresh').click();};
+async function checkSourceUpdate(){
+ const doc=state.document;if(doc?.source?.kind!=='url')return;const checkKey=doc.key+'\0'+doc.design.markdown;if(updateCheckPending===checkKey)return;updateCheckPending=checkKey;const token=++updateCheckToken,key=doc.key,url=doc.source.url,baseline=doc.design.markdown;
+ try{const raw=await fetchMarkdown(url);if(token!==updateCheckToken||state.document?.key!==key||state.document.design.markdown!==baseline||state.document.source?.kind!=='url'||state.document.source.url!==url)return;
+  // Compare actual bodies, normalizing only Markdown line endings. Invalid responses never become update claims.
+  parseDesign(raw);updateCandidate=raw.replace(/\r\n?/g,'\n')!==baseline.replace(/\r\n?/g,'\n')?{key,url,baseline}:undefined;updateNoticeChrome();
+ }catch{/* Unknown is not a confirmed update. The cached graph stays available. */}
+ finally{if(token===updateCheckToken)updateCheckPending=undefined;}
 }
-$('recovery-export').onclick=()=>{try{const content=JSON.stringify(snapshotWorkspace(state),(_key,value)=>value,2);const url=URL.createObjectURL(new Blob([content],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='alder-session-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){status('退避できません: '+(e as Error).message,'error');}};
 const initialState=state;
 render();saveStateChrome();loadSession().then(value=>{if(value===undefined)return;const raw=value as Session|WorkspaceSnapshot;if('format' in raw){for(const t of raw.recovery??[])validateRestoredTab(t);if(raw.document)validateRestoredTab({...raw.document,positions:{},scroll:[0,0],zoom:1});}else{if(!Array.isArray(raw.tabs))throw Error('Invalid session');for(const t of raw.tabs)validateRestoredTab(t);}const workspace=restoreWorkspace(raw);const saved={...value,legacyViews:workspace.legacyViews,tabs:workspace.tabs.map(t=>({...t,name:workspace.document!.name,design:t.design,checks:t.checks,source:t.source,draft:t.draft,edited:t.edited,handle:t.handle}))};if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateRestoredTab(t);if(new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length||(saved.active!==undefined&&typeof saved.active!=='string'))throw Error('Invalid saved tab keys');if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if(!t||!t.positions||typeof t.positions!=='object'||Array.isArray(t.positions)||(t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||t.scroll.length!==2||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
 const {dimOutside:_dimOutside,hideOutside:_hideOutside,scopeOutside:_scopeOutside,...restored}=saved;
-const migrate=(t:Tab)=>({...t,hiddenNodes:t.hiddenNodes??(saved.scopeOutside==='hide'?t.design.graph.nodes.filter(n=>!n.scope).map(n=>n.id):[])});state=createWorkspace({...restored,tabs:saved.tabs.map(migrate)},workspace.recovery,workspace.document,saved.tabs.map(t=>{const {design:_design,checks:_checks,source:_source,draft:_draft,edited:_edited,handle:_handle,name:_name,...v}=migrate(t);return v;}));if(saved.sampleLayout&&saved.sampleLayout.hiddenNodes===undefined&&saved.scopeOutside==='hide')state.sampleLayout={...saved.sampleLayout,hiddenNodes:parseDesign(sampleMarkdown).graph.nodes.filter(n=>!n.scope).map(n=>n.id)};if(!state.tabs.some(t=>t.key===state.active))state.active=state.tabs[0]?.key;if(current()?.selected)revealListNode(current()!.selected!);render();if(!('format' in raw)&&state.recovery.length)status('保存文書の復旧に'+state.recovery.length+'件の文書を保持しています。','warning');if(state.tabs.some(t=>t.source?.kind!=='text'&&t.source?.kind!=='sample'))status('保存時の内容です。最新の取得元は「更新」で確認できます。','warning');savedOnce=true;}).catch(()=>{state=initialState;restoreFailed=true;protectedStorage();}).finally(()=>{restoring=false;render();saveStateChrome();void openSharedSource();});
+const migrate=(t:Tab)=>({...t,hiddenNodes:t.hiddenNodes??(saved.scopeOutside==='hide'?t.design.graph.nodes.filter(n=>!n.scope).map(n=>n.id):[])});state=createWorkspace({...restored,tabs:saved.tabs.map(migrate)},workspace.recovery,workspace.document,saved.tabs.map(t=>{const {design:_design,checks:_checks,source:_source,draft:_draft,edited:_edited,handle:_handle,name:_name,...v}=migrate(t);return v;}));if(saved.sampleLayout&&saved.sampleLayout.hiddenNodes===undefined&&saved.scopeOutside==='hide')state.sampleLayout={...saved.sampleLayout,hiddenNodes:parseDesign(sampleMarkdown).graph.nodes.filter(n=>!n.scope).map(n=>n.id)};if(!state.tabs.some(t=>t.key===state.active))state.active=state.tabs[0]?.key;if(current()?.selected)revealListNode(current()!.selected!);restoredDocumentKey=state.document?.key;render();savedOnce=true;}).catch(()=>{state=initialState;restoreFailed=true;protectedStorage();}).finally(()=>{restoring=false;render();saveStateChrome();void openSharedSource().then(()=>{if(state.document?.key===restoredDocumentKey)void checkSourceUpdate();});});
