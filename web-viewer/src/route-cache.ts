@@ -1,3 +1,4 @@
+import type {MatrixWire} from './matrix-layout';
 import {routeEdge, type EdgeRoute, type RouteNode, type RouteOptions} from './routing.ts';
 import type {Relation} from './graph';
 
@@ -21,10 +22,10 @@ export class RouteCache {
   /** Explicit whole-layout changes need a fresh route pass for this tab only. */
   invalidate(tab: object): void { this.tabs.delete(tab); }
 
-  update(tab: object, design: object, nodes: readonly RouteNode[], relations: readonly Relation[]): readonly (EdgeRoute | undefined)[] {
+  update(tab: object, design: object, nodes: readonly RouteNode[], relations: readonly Relation[], matrix?:readonly MatrixWire[]): readonly (EdgeRoute | undefined)[] {
     const structure = JSON.stringify([
       nodes.map(n => [n.id, n.width, n.height]),
-      relations.map(r => [r.kind, r.from, r.to, r.label])
+      relations.map(r => [r.kind, r.from, r.to, r.label]),matrix
     ]);
     const previous = this.tabs.get(tab);
     const full = !previous || previous.design !== design || previous.structure !== structure;
@@ -38,7 +39,7 @@ export class RouteCache {
       if (!full && !moved.has(r.from) && !moved.has(r.to)) return;
       // Incomplete transient graphs must not retain or attempt a stale endpoint.
       routes[index] = ids.has(r.from) && ids.has(r.to) ? this.router({
-        from: r.from, to: r.to, index, nodes, kind: r.kind,
+        from: r.from, to: r.to, index, nodes, kind: r.kind, matrix:matrix?.[index],
         // Reserve Output captions above their receiving cards before earlier
         // exceptions/Inputs choose a label. Reservations never affect paths.
         labels: [...(r.kind==='output'?[]:relations.flatMap((other,i)=>{

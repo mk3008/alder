@@ -1,3 +1,4 @@
+import {matrixPlan} from './matrix-layout';
 import type {Graph} from './graph';
 import type {Point} from './session';
 const STEP_X=64, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
@@ -110,7 +111,8 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[],stairSou
  * Stable source order comes from the same dependency/cycle plan as overview.
  */
 export function initialPositions(graph:Graph,activityOrder?:readonly string[],activity?:string):Record<string,Point>{
-  const plan=layoutPlan(graph,activityOrder,activity===undefined);
+  if(activity===undefined)return matrixPlan(graph,activityOrder).positions;
+  const plan=layoutPlan(graph,activityOrder,false);
   if(activity===undefined||!graph.nodes.some(n=>n.id===activity&&n.type==='business'))return plan.positions;
   const downstream=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
   const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));

@@ -7,6 +7,7 @@ export interface RouteOptions {
   /** Full rendered label dimensions in unscaled graph coordinates. */
   labelWidth?: number; labelHeight?: number;
   kind?: string;
+  matrix?: {returning:boolean;captionLane:number};
   /** Existing label rectangles; labels never become path obstacles. */
   labels?: readonly RouteNode[];
   /** Other routed lines, used only to place captions. */
@@ -183,9 +184,27 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[]}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
+  if(matrix){
+    const a=port(source,matrix.returning?'right':'bottom'),b=port(target,matrix.returning?'right':'left');
+    // Matrix contracts determine sides. Coordinates never reclassify an edge.
+    // The return lane is outside every card in its vertical interval.
+    const corridor=nodes.filter(n=>n.y+n.height>=Math.min(a[1],b[1])&&n.y<=Math.max(a[1],b[1]));
+    const lane=Math.max(source.x+source.width,target.x+target.width,...corridor.map(n=>n.x+n.width))+22;
+    const vertices:Point[]=matrix.returning?[a,[lane,a[1]],[lane,b[1]],b]:[a,[a[0],b[1]],b];
+    const geometry=rounded(vertices);
+    if(geometry){
+      const label:Point=matrix.returning?[a[0]+8+labelWidth/2,a[1]-15+matrix.captionLane*22]:kind==='output'?[a[0]+8+labelWidth/2,target.y-14-matrix.captionLane*22]:[a[0]+8+labelWidth/2,a[1]+14+matrix.captionLane*22];
+      const collisions=routeCollisionCount(geometry.points,nodes.filter(n=>n.id!==from&&n.id!==to),.1);
+      return {path:geometry.path,label,points:geometry.points,bounds:geometry.bounds,collisions,rerouted:false,fallback:collisions>0};
+    }
+    // A user can place coincident nodes after initial layout. Keep that
+    // malformed manual case finite; it does not alter the direction contract.
+    const points:Point[]=[a,b];return {path:`M ${a[0]} ${a[1]} L ${b[0]} ${b[1]}`,label:[a[0]+8+labelWidth/2,a[1]-15],points,bounds:{right:Math.max(a[0],b[0]),bottom:Math.max(a[1],b[1])},collisions:1,rerouted:false,fallback:true};
+  }
+
   // A positive world has a fixed zero boundary. A signed axis has no fixed zero
   // boundary: the camera expands to contain its finite route and label bounds.
   const minimum:Point=[nodes.some(n=>n.x<0)?-Infinity:0,nodes.some(n=>n.y<0)?-Infinity:0];
