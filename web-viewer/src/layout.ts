@@ -108,8 +108,9 @@ export function initialPositions(graph:Graph,activityOrder?:readonly string[],ac
   const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
   const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)),after=ordered.filter(id=>downstream.has(id));
   const positions:Record<string,Point>=Object.create(null);
-  upstream.forEach((id,i)=>positions[id]=[MARGIN+i*STEP_X,MARGIN+i*STEP_Y]);
-  const step=upstream.length;positions[activity]=[MARGIN+step*STEP_X,MARGIN+step*STEP_Y];
-  after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*STEP_X,MARGIN+(step+i+1)*STEP_Y]);
+  const detailStepX=STEP_X/2;
+  upstream.forEach((id,i)=>positions[id]=[MARGIN+i*detailStepX,MARGIN+i*STEP_Y]);
+  const step=upstream.length;positions[activity]=[MARGIN+step*detailStepX,MARGIN+step*STEP_Y];
+  after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*detailStepX,MARGIN+(step+i+1)*STEP_Y]);
   return positions;
 }

@@ -75,10 +75,11 @@ export async function verifyRealWiring(browser){
     return {source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
-  const assertDeparture=r=>{
+  const assertDeparture=(r,fixed=false)=>{
    const returning=!r.exception&&r.source.object&&(r.target.y+68<=r.source.y||(r.target.x<r.source.x&&r.target.y<=r.source.y));
    if(returning){
     assert.deepEqual(r.points[0],[r.source.x+260,r.source.y+34]);assert.ok(r.points[1][0]>r.points[0][0]);
+    if(fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282)<.01,'aligned return corridor uses constant card clearance');
     assert.deepEqual(r.points.at(-1),[r.target.x+260,r.target.y+34]);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
     assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y===r.source.y,'return Input uses right/up/right corridor');
    }else{
@@ -94,13 +95,13 @@ export async function verifyRealWiring(browser){
    for(const spec of specs){
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*128,40+i*96],'actual DOM staircase including exception neighbours'));
+    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'actual DOM staircase including exception neighbours'));
     for(const theme of ['light','dark']){
      if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
      const measured=await inspect(),overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
      assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
      for(const [i,r]of measured.wires.entries()){
-      assert.equal(r.collisions,0);assertDeparture(r);assert.equal(r.anchor,'start');
+      assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
       if(!r.exception&&r.source.id===spec.activity){assert.ok(Math.abs(r.label[0]-r.points[0][0]-8)<.01,'Output text starts beside vertical line');assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
       if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1]);}}

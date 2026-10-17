@@ -16,7 +16,7 @@ const state=createWorkspace({tabs:[{key:'source',name:'sample',design,positions:
 const overview=structuredClone(state.tabs[0].positions);
 for(const [activity,staircase] of Object.entries(expected)){
  const projected=activityDesign(design,activity),positions=initialPositions(projected.graph,projected.activityOrder,activity);
- for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*128,40+i*96],'all upstream Object and exception Activity peers advance right and down');
+ for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*96],'all upstream Object and exception Activity peers advance right and down');
  assert.deepEqual(initialPositions({...projected.graph,nodes:[...projected.graph.nodes].reverse(),relations:[...projected.graph.relations].reverse()},projected.activityOrder,activity),positions,'deterministic detail ordering');
  const boxes=projected.graph.nodes.map(n=>({id:n.id,x:positions[n.id][0],y:positions[n.id][1],width:260,height:68}));
  const routes=new RouteCache().update({},projected,boxes,projected.graph.relations);
@@ -32,7 +32,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    assert.deepEqual(route.points.at(-1),[target.x+target.width,target.y+target.height/2],'feedback Input enters Activity on the right');
    assert.ok(route.points.at(-2)[0]>route.points.at(-1)[0]);
    assert.ok(route.points.some(p=>p[1]<route.points[0][1]),'return corridor climbs upstream');
-   assert.ok(route.bounds.right<=Math.max(source.x+source.width,target.x+target.width)+80,'local return does not span unrelated graph width');
+   assert.equal(route.bounds.right,source.x+source.width+22,'aligned Objects share the fixed 22-unit return corridor');
   }else{
    assert.deepEqual(route.points[0],[source.x+source.width/8,source.y+source.height],'ordinary/exception common icon-side bottom outlet');
    assert.equal(route.points[1][0],route.points[0][0]);assert.ok(route.points[1][1]>route.points[0][1]);
@@ -64,7 +64,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    if(relation.from!==dataID&&relation.to!==dataID){assert.equal(updated[i],original[i]);continue;}
    for(const route of [updated[i],fresh[i]]){
     const left=route.label[0]-Math.max(30,relation.label.length*12)/2;
-    if(relation.kind==='output'){assert.equal(left,route.points[0][0]+8,'dragged Output text starts beside line');assert.ok(route.label[1]>=object.y-30&&route.label[1]<=object.y-14);}
+    if(relation.kind==='output'){const leg=route.points.slice(1).map((b,j)=>({a:route.points[j],b})).reverse().find(({a,b})=>a[0]===b[0]&&Math.min(a[1],b[1])<=route.label[1]&&Math.max(a[1],b[1])>=route.label[1]);assert.ok(leg,'caption has an adjacent vertical line');assert.equal(left,leg.a[0]+8,'dragged Output text starts beside its actual incoming line');assert.ok(route.label[1]>=object.y-30&&route.label[1]<=object.y-14);}
     else if(relation.kind==='input'){assert.equal(left,object.x+268);assert.equal(route.label[1],object.y+19);}
    }
   }

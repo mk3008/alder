@@ -64,7 +64,7 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], target:RouteNode, output:boolean, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, target:RouteNode, output:boolean, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
@@ -94,6 +94,11 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
         for(const side of [1,-1])consider([a[0]+side*(width/2+8),y]);
       }
     }
+    // Tight detail stairs can leave the departure gap occupied by an Output
+    // caption. Keep a readable near-source alternative just above the card.
+    priority=1;
+    consider([source.x+8+width/2,source.y-height/2-5]);
+    priority=0;
     // A returning Input is read immediately after its right-hand outlet.
     // Its left edge follows the source even when that Object is dragged.
     if(a[1]===b[1]){
@@ -189,7 +194,9 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
   const returnInput=kind==='input'&&returning;
   const preferred:[Side,Side]=returnInput?['right','right']:returning?['bottom','right']:['bottom','left'];
-  const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
+  // Clear feedback corridors share a fixed card clearance, independent of
+  // relation order. Aligned source cards therefore share their vertical run.
+  const spread=returnInput?0:(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
   const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
   let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity],rerouted=false;
@@ -248,6 +255,6 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     chosen=rounded([a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,target,kind==='output',wires);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,target,kind==='output',wires);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

@@ -103,7 +103,7 @@ for(const [name,savedPositions] of [['publicInitial',positions],['legacySaved',l
 assert.equal(edges[41].kind,'input');assert.equal(edges[41].from,'業務設計書');assert.equal(edges[41].to,'業務設計');
 const affected=sampleRoutes[41];
 assert.deepEqual(affected.points[0],[556,554]);assert.deepEqual(affected.points.at(-1),[428,362]);
-assert.equal(affected.bounds.right,588);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<390);
+assert.equal(affected.bounds.right,578);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<370);
 assert.equal((affected.path.match(/ Q/g)??[]).length,2);
 assert.ok(samples.publicInitial.screenshot16.candidate.relationIndexes.includes(41));
 assert.ok(!samples.publicInitial.scopeWritePreferred13.candidate.relationIndexes.includes(41));
@@ -125,6 +125,13 @@ for(const index of [0,1,2,3]){
   fixtures[`clearReturnIndex${index}`]=routeSummary(r);
 }
 assert.equal(new Set(Object.values(fixtures).map(r=>r.path)).size,4,'original relation indexes retain separated lanes');
+// Input returns use a fixed card clearance, not relation-index lane spreading.
+const feedbacks=[0,1,2,3,41].map(index=>routeEdge({from:'source',to:'target',kind:'input',nodes:near,index,labelWidth:180,labelHeight:18}));
+for(const r of feedbacks){assert.equal(r.bounds.right,578);assert.equal(r.collisions,0);assert.equal(r.fallback,false);assert.equal(r.path,feedbacks[0].path);}
+const blockedFeedbackNodes=[...near,rect('right-blocker',570,400,30,50)];
+const blockedFeedbackOptions={from:'source',to:'target',kind:'input',nodes:blockedFeedbackNodes,index:41,labelWidth:180,labelHeight:18},blockedFeedback=routeEdge(blockedFeedbackOptions);
+validate(blockedFeedbackOptions,blockedFeedback);assert.equal(blockedFeedback.collisions,0);assert.equal(blockedFeedback.fallback,false);assert.ok(blockedFeedback.bounds.right>578,'blocked shared corridor still detours around actual obstacles');
+assert.deepEqual(blockedFeedback.points[0],[556,554]);assert.deepEqual(blockedFeedback.points.at(-1),[428,362]);
 const blocked=[rect('source',400,600),rect('target',200,200),rect('blocker',690,340,100,100)];
 const blockedOptions={from:'source',to:'target',nodes:blocked},blockedRoute=routeEdge(blockedOptions);
 assert.ok(routeCollisionCount([[704,634],[704,234]],[blocked[2]],14)>0,'local right lane is genuinely blocked');

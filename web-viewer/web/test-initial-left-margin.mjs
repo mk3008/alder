@@ -48,8 +48,9 @@ function geometry(e,inset=40,zoom=1){
  // Pin the new snapshot only after the directional/caption and native tests;
  // inset/zoom/reload must still preserve these exact SVG coordinates.
  assert.equal(hash(positions(e)),'2a781f2fef2b245f51b054cc42410cf38e4967ecee0b1ac617918b52642c92f4','all node coordinates retain the reviewed layout');
- // Caption review: left-aligned glyph origins; Output starts next to its line above the target.
- assert.equal(hash(routes(e)),'588abd780a6845dbc8364ff7e855404b1d60ddad723f7910b78b1422fd7a6d02','all SVG paths and endpoint-relative left-aligned captions remain exact');
+ // Compact detail review: fixed-clearance feedback paths and near-source label fallback.
+ // Overview node coordinates and camera-only margins remain pinned independently.
+ assert.equal(hash(routes(e)),'83d5a739a435025425206ef4f15180ec586755712d903fedb248468769f2e56b','all SVG paths and endpoint-relative left-aligned captions remain exact');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
  assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2122 2564');
