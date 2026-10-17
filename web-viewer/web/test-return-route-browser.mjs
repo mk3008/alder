@@ -114,7 +114,10 @@ async function assertNativeRoute(page,zoom){
  });
  assert.ok(measured.scale.every((value,i)=>Math.abs(value-[zoom,0,0,zoom][i])<1e-6),'actual SVG transform uses requested zoom');
  for(const axis of [0,1])assert.ok(Math.abs(measured.screenSize[axis]-(oracle.bounds[axis+2]-oracle.bounds[axis])*zoom)<.05,'actual rendered SVG size uses requested zoom');
- assert.deepEqual(measured.start,oracle.start);assert.deepEqual(measured.end,oracle.end);assert.deepEqual(measured.bounds,oracle.bounds);
+ // Native SVGPoint/getBBox coordinates are float32; the analytic path oracle
+ // stays double precision. Compare the exact native representation, including
+ // fractional role ports, rather than accepting a loose geometric tolerance.
+ assert.deepEqual(measured.start,oracle.start.map(Math.fround));assert.deepEqual(measured.end,oracle.end.map(Math.fround));assert.deepEqual(measured.bounds,oracle.bounds.map(Math.fround));
  assert.ok(measured.after[0]>measured.start[0]&&measured.after[1]===measured.start[1]);
  assert.ok(measured.before[0]>measured.end[0]&&measured.before[1]===measured.end[1]);
  assert.ok(measured.length>oracle.minLength&&measured.length<oracle.maxLength,'native SVG length remains within independent rounded-corridor bounds');
