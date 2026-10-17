@@ -1,0 +1,10 @@
+[
+  {"id":"method-version","path":"docs/adoption.md","text":"The current release is **Alder v0.6**, containing **research review knowledge v0.3**."},
+  {"id":"required-checks","path":"docs/adoption.md","text":"After humans have completed Business Design and its business-correlation review, Alder requires Check Item design and human review before test implementation."},
+  {"id":"stable-plugin","path":"docs/plugin-adoption.md","text":"The previous stable tag `plugin-v0.1.0` still provides only read-only review; version 0.2.7 is available from this change's commit/branch until separately released."},
+  {"id":"plugin-limit","path":"docs/plugin-adoption.md","text":"Plugin 0.2.7 packages design authoring and implementation review; design-quality/correlation/omission review, Optimization Review, Check Item drafting, graph export and follow-up are not packaged skills."},
+  {"id":"structure","path":"docs/adoption.md","text":"The current research recommends **5W1H, with How written as Input → Procedure → Output and an optional Exception section**, to make relationships between activities traceable."},
+  {"id":"result","path":"docs/adoption.md","text":"The business state established when Procedure finishes normally and the subsequent business it enables. Keep it separate from Output's transferred information and Why's purpose."},
+  {"id":"no-detail-gate","path":"docs/philosophy.md","text":"Alder does not require a separate detailed-design gate before implementation."},
+  {"id":"trace-boundary","path":"docs/check-item-traceability.md","text":"Do not maintain a permanent Check Item ↔ Code, file, symbol, SQL-entry-point, or line mapping."}
+]

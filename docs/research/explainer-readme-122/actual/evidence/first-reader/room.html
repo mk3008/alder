@@ -1,0 +1,476 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>First read: Alderを試すなら、人間は何を決め、AIへ何を渡すのか？</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style data-own>
+:root {
+  --canvas:#fafafa; --card:#ffffff; --well:#f2f2f2; --line:#ebebeb;
+  --ink:#171717; --prose:#262626; --body:#4d4d4d; --mute:#626262; --faint:#6e6e6e;
+  --ink-soft:#626262;
+  --link:#0070f3; --mem-bg:#d3e5ff;
+  --n2:#0070f3; --n1:#79a8f5; --n0:#d4d4d4; --n0-ink:#171717; --nm1:#f5a623; --nm2:#ee0000;
+  --on-n2:#ffffff; --on-n1:#171717; --on-nm1:#171717; --on-nm2:#ffffff;
+  --nm1-ink:#8a5200; --nm2-ink:#c40000;
+  --header-bg:rgba(250,250,250,.86); --mesh-o:.5;
+  --shadow-float:0 2px 2px rgba(0,0,0,.04), 0 8px 16px -4px rgba(0,0,0,.10);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --canvas:#0a0a0a; --card:#111111; --well:#161616; --line:#262626;
+  --ink:#ededed; --prose:#d6d6d6; --body:#a1a1a1; --mute:#9a9a9a; --faint:#8a8a8a;
+  --link:#52a8ff; --mem-bg:#102a4c;
+  --n2:#3291ff; --n1:#2f6fce; --n0:#3a3a3a; --n0-ink:#ededed; --nm1:#d9921f; --nm2:#ff4d4d;
+  --on-n2:#0a0a0a; --on-n1:#ffffff; --on-nm1:#171717; --on-nm2:#171717;
+  --nm1-ink:#f0a83a; --nm2-ink:#ff6b6b;
+  --header-bg:rgba(10,10,10,.82); --mesh-o:.3;
+  --shadow-float:0 2px 2px rgba(0,0,0,.3), 0 8px 16px -4px rgba(0,0,0,.5);
+} }
+:root[data-theme="dark"] {
+  --canvas:#0a0a0a; --card:#111111; --well:#161616; --line:#262626;
+  --ink:#ededed; --prose:#d6d6d6; --body:#a1a1a1; --mute:#9a9a9a; --faint:#8a8a8a;
+  --link:#52a8ff; --mem-bg:#102a4c;
+  --n2:#3291ff; --n1:#2f6fce; --n0:#3a3a3a; --n0-ink:#ededed; --nm1:#d9921f; --nm2:#ff4d4d;
+  --on-n2:#0a0a0a; --on-n1:#ffffff; --on-nm1:#171717; --on-nm2:#171717;
+  --nm1-ink:#f0a83a; --nm2-ink:#ff6b6b;
+  --header-bg:rgba(10,10,10,.82); --mesh-o:.3;
+  --shadow-float:0 2px 2px rgba(0,0,0,.3), 0 8px 16px -4px rgba(0,0,0,.5);
+}
+* { box-sizing:border-box }
+html { scroll-behavior:smooth; background:var(--canvas); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto } }
+body { background:var(--canvas); color:var(--ink); margin:0;
+  font-family:Geist, Inter, Arial, sans-serif; line-height:1.6;
+  -webkit-font-smoothing:antialiased; }
+
+/* ---------- top bar ---------- */
+header { position:sticky; top:0; z-index:9; background:var(--header-bg);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  padding:10px 28px 12px; overflow:hidden; }
+.brief { border-bottom:1px solid var(--line); padding:16px 28px 20px; }
+header::before { content:""; position:absolute; top:-140px; right:-60px;
+  width:520px; height:340px; pointer-events:none; opacity:var(--mesh-o);
+  background:
+    radial-gradient(200px 160px at 20% 60%, rgba(80,227,194,.35), transparent 70%),
+    radial-gradient(240px 180px at 55% 30%, rgba(0,112,243,.30), transparent 70%),
+    radial-gradient(220px 170px at 80% 65%, rgba(121,40,202,.28), transparent 70%),
+    radial-gradient(180px 150px at 95% 30%, rgba(255,0,128,.22), transparent 70%),
+    radial-gradient(160px 140px at 40% 85%, rgba(249,203,40,.20), transparent 70%); }
+.hrow { max-width:1080px; margin:0 auto; position:relative; }
+.topline { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+h1.room { font-size:20px; font-weight:600; letter-spacing:-0.4px; margin:0; color:var(--ink); }
+.chips { display:flex; gap:6px; flex-wrap:wrap; }
+.statchip { font-family:"Geist Mono", "IBM Plex Mono", monospace; font-size:11px;
+  color:var(--body); background:var(--card); border:1px solid var(--line);
+  border-radius:6px; padding:3px 8px; white-space:nowrap; }
+.statchip b { color:var(--ink); font-weight:500; }
+.verdict { font-size:14px; color:var(--body); margin:10px 0 0; max-width:74ch; line-height:1.55; }
+.verdict b { color:var(--ink); font-weight:600; }
+.prev { font-size:13px; color:var(--body); margin:8px 0 0; max-width:74ch; line-height:1.55;
+  border-left:2px solid var(--n2); padding-left:10px; }
+.prev b { color:var(--ink); font-weight:500; }
+
+/* ---------- skim verdict, how to consult ---------- */
+.verdict:first-child { margin-top:0 }
+.flabel { font-family:"Geist Mono", monospace; font-size:11px; font-weight:500;
+  letter-spacing:.04em; text-transform:uppercase; color:var(--mute); margin-bottom:2px; }
+.skim { margin:14px 0 0; max-width:74ch; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); padding:10px 14px; }
+.skim p { margin:4px 0 0; font-size:14px; color:var(--body); line-height:1.55; }
+.askhint { margin:12px 0 0; max-width:74ch; font-size:13px; color:var(--body); line-height:1.55; }
+
+/* ---------- buttons ---------- */
+.btn { border:1px solid var(--line); background:var(--card); color:var(--ink);
+  padding:4px 10px; border-radius:6px; cursor:pointer; font:inherit;
+  font-size:13px; font-weight:500; line-height:20px;
+  transition:border-color .12s, background .12s; }
+.btn:hover { border-color:var(--faint); }
+.btn[aria-pressed="true"] { background:var(--ink); color:var(--canvas); border-color:var(--ink); }
+.btn:focus-visible { outline:2px solid var(--link); outline-offset:2px; }
+
+/* ---------- scrubber ---------- */
+.scrub { display:flex; gap:4px; margin:10px 0 2px; max-width:1080px; }
+.cell { flex:1; height:30px; position:relative; border:1px solid var(--line);
+  background:var(--card); border-radius:6px; cursor:pointer; padding:0;
+  display:flex; flex-direction:column; justify-content:center; gap:3px;
+  align-items:stretch; transition:border-color .12s; }
+.cell:hover { border-color:var(--faint); }
+.cell:focus-visible { outline:2px solid var(--link); }
+.tr { height:4px; border-radius:2px; margin:0 18%; }
+.v2 { background:var(--n2) } .v1 { background:var(--n1) } .v0 { background:var(--n0) }
+.v-1 { background:var(--nm1) } .v-2 { background:var(--nm2) } .vx { background:var(--line) }
+.fmark { position:absolute; top:-4px; left:50%; width:6px; height:6px; border-radius:50%;
+  background:var(--link); transform:translateX(-50%); }
+
+.scrublabel { font-family:"Geist Mono", monospace; font-size:10px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin:10px 0 -6px; }
+.scrub.prev { opacity:.55 }
+.scrub.prev .cell { height:22px; cursor:default }
+.views { margin-top:12px; }
+.skey { display:flex; gap:14px; align-items:center; margin-top:8px;
+  font-family:"Geist Mono", monospace; font-size:10px; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--faint); }
+.skey i { display:inline-block; width:14px; height:4px; border-radius:2px; margin-right:5px; vertical-align:middle; }
+
+
+.made { font-family:"Geist Mono", monospace; font-size:10px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--faint); margin-top:28px; }
+.views summary { list-style:none; cursor:pointer; color:var(--mute);
+  font-family:"Geist Mono", monospace; font-size:11px; font-weight:500;
+  letter-spacing:.04em; text-transform:uppercase; display:inline-block; }
+.views summary::-webkit-details-marker { display:none }
+.views summary:hover { color:var(--body); }
+.controls { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:10px; }
+.grp { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.grp label { color:var(--mute); font-family:"Geist Mono", monospace;
+  letter-spacing:.04em; text-transform:uppercase; font-size:10px; margin-right:4px; }
+
+/* ---------- manuscript ---------- */
+main { max-width:1080px; margin:0 auto; padding:40px 28px 140px; }
+.legend { border:1px solid var(--line); border-radius:8px; background:var(--card);
+  padding:12px 16px; margin:0 0 24px; font-size:13px; color:var(--body);
+  display:flex; flex-direction:column; gap:8px; max-width:74ch; }
+.legend .lrow { display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center; line-height:1.5; }
+.legend .flabel { margin:0; flex:none; }
+.litem { display:inline-flex; align-items:center; gap:6px; }
+.litem .who, .litem .chip, .litem .skimtag { flex:none }
+.chunk { display:grid; grid-template-columns:minmax(0,64ch) 1fr; gap:44px;
+  padding:28px 0 16px; border-bottom:1px solid var(--line); }
+.fold { font-family:"Geist Mono", monospace; color:var(--nm2-ink);
+  border-top:1px dashed var(--nm2); padding:12px 0 4px; font-size:13px; }
+.cnum { font-family:"Geist Mono", monospace; font-size:10px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin-bottom:12px;
+  display:flex; align-items:center; gap:12px; }
+
+.flag { font-family:"Geist Mono", monospace; color:var(--link); font-size:11px;
+  font-weight:500; letter-spacing:.04em; text-transform:uppercase; margin-bottom:4px; }
+.prose { color:var(--prose); }
+.prose p, .prose li { font-size:15px; line-height:1.65; }
+.prose h2,.prose h3,.prose h4 { font-weight:600; line-height:1.25;
+  text-wrap:balance; color:var(--ink); }
+.prose h2 { font-size:28px; line-height:1.2; letter-spacing:-1.1px; }
+.prose h3 { font-size:20px; letter-spacing:-0.4px; }
+.prose h4 { font-size:16px; letter-spacing:-0.2px; }
+.prose a { color:var(--link); text-decoration:none; }
+.prose a:hover { text-decoration:underline; }
+.code { background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:14px 16px; overflow-x:auto; font-family:"Geist Mono", monospace;
+  font-size:12.5px; line-height:1.55; color:var(--body); }
+p code, li code { font-family:"Geist Mono", monospace; font-size:.85em;
+  background:var(--well); border:1px solid var(--line); padding:1px 5px; border-radius:4px; }
+mark.mem { background:transparent; color:inherit; }
+
+/* ---------- edits applied after the read ---------- */
+
+/* ---------- margin notes ---------- */
+.notes { display:flex; flex-direction:column; gap:8px; padding-top:36px; }
+.note { font-family:"Geist Mono", monospace; font-size:11.5px; line-height:1.55;
+  color:var(--body); padding:9px 11px; background:var(--card); border-radius:8px;
+  border:1px solid var(--line); }
+.note.final { border-color:var(--faint); }
+.who { display:inline-block; width:15px; height:15px; border-radius:50%; text-align:center;
+  line-height:15px; font-size:9px; font-weight:500; margin-right:6px;
+  font-family:Geist, sans-serif; }
+.wr0 { background:var(--n1); color:var(--on-n1) }
+.wr1 { background:var(--ink-soft); color:#fff }
+.chip { display:inline-block; font-size:10px; padding:0 5px; border-radius:4px;
+  color:#fff; margin-right:6px; font-weight:500; font-family:Geist, sans-serif; }
+.chip.n2 { background:var(--n2); color:var(--on-n2) } .chip.n1 { background:var(--n1); color:var(--on-n1) }
+.chip.n0 { background:var(--n0); color:var(--n0-ink) }
+.chip.nm1 { background:var(--nm1); color:var(--on-nm1) } .chip.nm2 { background:var(--nm2); color:var(--on-nm2) }
+.skimtag { font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--nm1-ink); margin-right:6px; }
+.skimtag.stop { color:var(--nm2-ink) }
+
+/* ---------- envelope / footer ---------- */
+.envelope { margin-top:40px; border:1px solid var(--line); border-radius:8px;
+  padding:16px 20px; background:var(--card); max-width:64ch; }
+.envelope summary { cursor:pointer; font-size:15px; font-weight:500; color:var(--ink); }
+.envelope li { font-size:14px; color:var(--body); }
+.howto { max-width:64ch; margin:32px 0 0; font-size:13px; color:var(--body); }
+.howto summary { list-style:none; cursor:pointer; font-family:"Geist Mono", monospace;
+  font-size:11px; font-weight:500; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--mute); }
+.howto summary::-webkit-details-marker { display:none }
+.howto summary:hover { color:var(--body) }
+.howto p { margin:.6em 0; line-height:1.6; }
+
+/* ---------- persona / lens states ---------- */
+body.sel-r0 .note:not(.note-r0) { display:none }
+body.sel-r0 .chunk[data-skim-r0="1"] .prose { opacity:.38 }
+body.sel-r0 .chunk[data-unseen-r0="1"] .prose { opacity:.12 }
+body.sel-r0 .tr:not(.tr0) { opacity:.15 }
+body.sel-r1 .note:not(.note-r1) { display:none }
+body.sel-r1 .chunk[data-skim-r1="1"] .prose { opacity:.38 }
+body.sel-r1 .chunk[data-unseen-r1="1"] .prose { opacity:.12 }
+body.sel-r1 .tr:not(.tr1) { opacity:.15 }
+body.lens-scan .prose p, body.lens-scan .prose li { color:var(--faint); opacity:.4 }
+body.lens-scan .prose .fs, body.lens-scan .prose h2, body.lens-scan .prose h3,
+body.lens-scan .prose h4, body.lens-scan .prose strong,
+body.lens-scan .prose .num { color:var(--ink); opacity:1 }
+body.lens-scan .code { opacity:.3 } body.lens-scan .code .num { opacity:1; color:var(--ink) }
+body.lens-scan .notes { opacity:.25 }
+body.lens-mem .prose :is(p,li,h2,h3,h4,.code) { color:var(--faint); opacity:.3 }
+body.lens-mem .prose mark.mem { background:var(--mem-bg); color:var(--ink); opacity:1;
+  padding:0 3px; border-radius:3px; }
+body.lens-mem .prose :is(p,li,h2,h3,h4):has(mark.mem) { opacity:.8 }
+body.lens-mem .notes { opacity:.25 }
+body.lens-trust .prose .num, body.lens-trust .prose .ent {
+  border-bottom:2px solid var(--link); font-weight:600; }
+body.lens-trust .prose .portable { opacity:.4; text-decoration:line-through;
+  text-decoration-color:var(--nm1); text-decoration-thickness:1px; }
+body.replay .chunk.future { opacity:.1 }
+body.replay .chunk.now { opacity:1 }
+@media (max-width:880px) { .chunk { grid-template-columns:minmax(0,1fr); gap:12px } .notes { padding-top:6px }
+  header { position:static } }
+</style>
+<header>
+ <div class="hrow">
+  <div class="topline">
+   <h1 class="room">First read: Alderを試すなら、人間は何を決め、AIへ何を渡すのか？</h1>
+   <div class="chips"><span class="statchip"><b>2</b> readers</span><span class="statchip"><b>2</b> finished</span><span class="statchip"><b>26</b> passages</span></div>
+  </div>
+  
+  <div class="scrub" role="group" title="each block is one stretch of the piece; blue means readers leaned in, amber and red mean they drifted; a dot marks a moment worth clicking" aria-label="how each reader felt, stretch by stretch"><button class="cell" onclick="jump(1)" aria-label="passage 1: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(2)" aria-label="passage 2: K -1, S 0"><i class="tr tr0 v-1"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(3)" aria-label="passage 3: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(4)" aria-label="passage 4: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(5)" aria-label="passage 5: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(6)" aria-label="passage 6: K -1, S 0"><i class="tr tr0 v-1"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(7)" aria-label="passage 7: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(8)" aria-label="passage 8: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(9)" aria-label="passage 9: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(10)" aria-label="passage 10: K -1, S 0 (K: 厳密だが少し冗長、手順を急いで読みたい)"><i class="tr tr0 v-1"></i><i class="tr tr1 v0"></i><i class="fmark" title="K: 厳密だが少し冗長、手順を急いで読みたい"></i></button><button class="cell" onclick="jump(11)" aria-label="passage 11: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(12)" aria-label="passage 12: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(13)" aria-label="passage 13: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(14)" aria-label="passage 14: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(15)" aria-label="passage 15: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(16)" aria-label="passage 16: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(17)" aria-label="passage 17: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(18)" aria-label="passage 18: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(19)" aria-label="passage 19: K 0, S 0 (開始コマンド・置き場・依頼文が揃った)"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i><i class="fmark" title="開始コマンド・置き場・依頼文が揃った"></i></button><button class="cell" onclick="jump(20)" aria-label="passage 20: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(21)" aria-label="passage 21: K 0, S 0 (K: 復習なので流し読み)"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i><i class="fmark" title="K: 復習なので流し読み"></i></button><button class="cell" onclick="jump(22)" aria-label="passage 22: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(23)" aria-label="passage 23: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(24)" aria-label="passage 24: K 0, S 0 (K: 再現付録は流し読み)"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i><i class="fmark" title="K: 再現付録は流し読み"></i></button><button class="cell" onclick="jump(25)" aria-label="passage 25: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button><button class="cell" onclick="jump(26)" aria-label="passage 26: K 0, S 0"><i class="tr tr0 v0"></i><i class="tr tr1 v0"></i></button></div>
+  <div class="skey"><span><i class="v2"></i>leaning in</span><span><i class="v-1"></i>drifting</span><span><i class="v-2"></i>gone</span><span>· click a block to jump there</span></div>
+ </div>
+</header>
+<section class="brief" aria-label="Verdict and findings">
+ <div class="hrow">
+  <p class="verdict">AI代理読者2名が完読。責任と版別の入口を保持した。 Kには検証説明が冗長に届き、復習・再現付録を流し読みした。recallはログのみからの再構成。人間実測、効果比較、HTMLの視覚QAではない。</p>
+  
+  <div class="skim"><div class="flabel">the skimmer opened it</div><p>(1) Alderを試すか判断するための導入ガイドだと思います。実装を合意済みの業務設計と照合し、未決の業務判断は人間が決める、という進め方と、版ごとの開始手順を説明する文書でしょう。
+(2) 全文を読みます。設計と検査項目のレビューにかかる負担、安定Pluginで試せる範囲を確かめたいからです。
+(3) 冒頭の「一枚で」の表が決め手です。特に「この未リリース版では、業務設計と検査項目の人間レビューが必須」と明示されており、知りたい追加負担に直結しました。</p></div>
+  <div class="askhint">These are people you can consult. In chat: "ask K ..." or "ask S ...", "ask the skimmer what would have made them open it", or "ask everyone ...". Revise in your own editor, then "again" for a fresh read.</div>
+  <details class="views"><summary>see it: as a skimmer · what stuck · replay the read ▾</summary>
+   <div class="controls">
+    <div class="grp"><label>readers</label><button class="btn" id="selall" aria-pressed="true" onclick="sel('all')">both</button><button class="btn" id="selr0" aria-pressed="false" onclick="sel('r0')">試したいK</button><button class="btn" id="selr1" aria-pressed="false" onclick="sel('r1')">慎重なS</button></div>
+    <div class="grp"><label>lens</label><button class="btn" id="lensRead" aria-pressed="true" onclick="lens('read')">reading</button><button class="btn" id="lensScan" aria-pressed="false" onclick="lens('scan')">what a skimmer sees</button><button class="btn" id="lensMem" aria-pressed="false" onclick="lens('mem')">what stuck</button></div>
+    <div class="grp"><button class="btn" id="playBtn" aria-pressed="false" onclick="replay()">replay the read</button></div>
+   </div>
+  </details>
+ </div>
+</section>
+<main>
+<div class="legend"><div class="lrow"><span class="flabel">about the margin notes</span> Two readers met this piece one passage at a time, no peeking ahead, and wrote down each reaction as it happened. Those raw notes sit beside each passage.</div><div class="lrow"><span class="litem"><span class="who wr0">K</span>小さな業務で人間とAIの分担を知りたいAI代理読者</span><span class="litem"><span class="who wr1">S</span>追加負担と開始手順を判断したいAI代理読者</span></div><div class="lrow"><span class="flabel">each note starts with how it felt</span><span class="litem"><span class="chip n2">+2</span>leaning in</span><span class="litem"><span class="chip n0">0</span>neutral</span><span class="litem"><span class="chip nm2">-2</span>wanted out</span></div></div>
+
+  <section class="chunk" id="c1" data-i="1">
+    <div class="prose"><div class="cnum">passage 01 of 26</div><h2>Alderを試すなら、人間は何を決め、AIへ何を渡すのか？</h2>
+<p><span class="fs">&gt; 想定読者：AIコーディングと一般的な開発工程を知り、Alderを初めて検討する人。比較用の仮読者を使い、実在人物の経歴は仮定していません。 &gt; 省いたもの：一般的な開発工程の説明、研究Issueの履歴、Business Graphの仕様、設計論の網羅比較。 &gt; 所要時間：<span class="num">本文約10分を想定</span>。要求分析の経験、AIへ任せる範囲、読む時間は未確認です。 &gt; 検証方法：固定した一次資料の引用抽出と架空fixtureの表示を実行済み。意味の妥当性、HTML、verify-doc、読者への伝達は未検証です。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 1"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:小さく試す手順と判断分担 got:タイトルは目的に合うが、冒頭は検証状況や対象読者の注記が先で、まだ行動の像が見えない。次を読む。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:ツール比較と必要入力 got:対象読者と検証限界の宣言。私向けらしいが導入判断の材料はまだなく、本文をもう少し見る。</span></div></div>
+  </section>
+  <section class="chunk" id="c2" data-i="2">
+    <div class="prose"><div class="cnum">passage 02 of 26</div><p><span class="fs">読み終えたら、<span class="num">次の3つを判定できることを目指します</span>。</span></p>
+<ul><li><span class="fs">実装で具体化した業務判断を、合意した要求へ戻して確認する必要が自分の開発にもあるか？</span></li><li><span class="fs">人間が先に合意する業務上の意味と、AIへ任せて後でレビューする技術判断を区別できるか？</span></li><li><span class="fs">公開安定版と未リリースの手順を区別して、小さく試す入口を選べるか？</span></li></ul>
+<h3>0. 一枚で</h3></div>
+    <div class="notes" role="group" aria-label="notes on passage 2"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip nm1">-1</span><span class="ntext">needle=-1 expect:人間とAIの境界をすぐ見たい got:三つの判定目標で読む目的は明確になった。特に業務上の意味を先に合意し技術判断をレビューする区別を確認したい。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:導入負担と開始条件 got:判断したい三点が提示され、特に公開安定版と未リリースを分ける点はREADME比較に直結する。先を読む。</span></div></div>
+  </section>
+  <section class="chunk" id="c3" data-i="3">
+    <div class="prose"><div class="cnum">passage 03 of 26</div><p><span class="fs">| 判断したいこと | Alderでの扱い | 試すときの行動 | | --- | --- | --- | | 何を確かめる手法か | 実装・DDL・テストが選んだ業務上の意味を、合意した<mark class="mem">Business Design</mark>へ照合する | 「この振る舞いを誰が、どこで決めたか」を確認する | | 人間が何を先に決めるか | 業務上の意図の正本は<mark class="mem">Business Design</mark>。 未決をコードやテストで承認しない | 依頼者の言語で草案を読み、結果・責任・引き渡しを合意する | | 何を実装へ渡すか | この未リリース版では、業務設計と検査項目の人間レビューが必須 | 同じ版の設計と確認済み<mark class="mem">Check Item</mark>のIDを渡す | | 技術詳細はどこまで決めるか | 独立した詳細設計の必須ゲートはない。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 3"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:小さな試行で渡す成果物がわかること got:Business Designを正本にし、確認済みCheck ItemのIDも渡すという具体像が出た。表が途中で切れて技術詳細の境界は保留。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:追加工程の実態 got:業務意味は人間が合意、技術詳細は必須の別ゲートなしと分かった。ただし未リリース版でCheck Itemのレビュー必須という負担は気になる。</span></div></div>
+  </section>
+  <section class="chunk" id="c4" data-i="4">
+    <div class="prose"><div class="cnum">passage 04 of 26</div><p><span class="fs">高コストの変更や既存制約は先に扱う | 現在の技術条件はSystem Designへ、可逆な細部は実装・レビューへ | | Pluginだけで始められるか | 安定Plugin <span class="num">0.1.0は実装後レビューのみ</span>。 <span class="num">未リリース0.2.7は設計草案も支援</span> | 利用する版と対象の設計・実装を固定し、対応している工程だけを依頼する |</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 4"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:手元の版で可能な試し方 got:安定版は実装後レビューだけとわかった。草案支援は未リリース版なので、今すぐの導入判断ではどの経路が使えるかを読みたい。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:Plugin単体の開始法 got:安定0.1.0は実装後レビュー専用で、草案支援は未リリース0.2.7だと分かった。使う版により入口が違うので具体手順を確認したい。</span></div></div>
+  </section>
+  <section class="chunk" id="c5" data-i="5">
+    <div class="prose"><div class="cnum">passage 05 of 26</div><h3>1. 実装を、要求を確かめる材料にする</h3>
+<p><span class="fs">Alderは、AIが実装し、別のエージェントまたは新しいコンテキストが、その実装を<mark class="mem">Business Design</mark>（業務設計書）へ照合する開発の進め方です。合意済み要求との不一致、未決の業務判断、技術的な改善、十分に成立する振る舞いを区別して返します。</span></p>
+<p><span class="fs">たとえば、会議室の重複予約をコードが一律に拒否していたら、「拒否する方針は業務設計で合意されているか」を確認します。設計が未決なら、拒否が正しいとも不具合だとも決めず、責任者へ具体的な問いを戻します。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 5"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:Alder固有の効用 got:重複予約の例で、実装が勝手に選んだ業務方針を未決として戻す流れがわかった。通常の実装レビューとの差を具体的に捉えられた。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:未決仕様のレビュー方法 got:重複予約の例で、コードの方針を勝手に正誤判定せず責任者への問いに戻すと理解した。通常レビューとの差が見え始めた。</span></div></div>
+  </section>
+  <section class="chunk" id="c6" data-i="6">
+    <div class="prose"><div class="cnum">passage 06 of 26</div><p><span class="fs"><strong>実装は要求を確認する観察材料であり、業務上の意図の正本にはなりません。</strong> テストの成功やDecision Record（判断と理由の記録）も、業務上の承認にはなりません。</span></p>
+<p><span class="fs">このループは通常のコード・DBレビューを置き換えず、特定のアーキテクチャも要求しません。実装前と後のレビューをどう配分するのが最善かは、まだ検証されていません。</span></p>
+<p><span class="fs">根拠：実装から要求を確認する理由、実装後レビューの入口と範囲。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 6"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip nm1">-1</span><span class="ntext">needle=-1 expect:誰が合意するかの具体性 got:テスト成功もDecision Recordも承認ではない点は重要。実装前後の配分は未検証と明示され、次に小規模試行の具体的な順序を知りたい。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:レビュー負担の効果 got:テストやDecision Recordを業務承認にしない点は腑に落ちる。一方、前後のレビュー配分に実証がないので費用対効果は試して判断する必要がある。</span></div></div>
+  </section>
+  <section class="chunk" id="c7" data-i="7">
+    <div class="prose"><div class="cnum">passage 07 of 26</div><h3>2. <mark class="mem">Business Design</mark>は、業務のつながりを読める自然言語で書く</h3>
+<p><span class="fs"><mark class="mem">Business Design</mark>は、人間が単独でも読み書き・保守でき、依頼者自身が理解して合意する文書です。AIは草案や更新を支援しますが、本文は依頼者が実際に使う言語で書きます。</span></p>
+<p><span class="fs"><strong>自由作文に任せず、<span class="num">5W1H</span> + Input / Procedure / <mark class="mem">Output</mark> / <mark class="mem">Result</mark>の構造を推奨します。</strong> 必須の入力仕様ではありませんが、任意の仕様形式でも同じレビューができることは確立されていません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 7"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:設計書の最低限の形 got:依頼者が使う言語と5W1H、入出力・結果の構造が示された。必須形式ではないが、この形から試す理由は理解できる。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:設計書の必要形式 got:自然言語で依頼者合意、5W1Hと入出力等は推奨で必須ではない。ただ別形式の同等レビューは未確立なら、実際には型に寄せる負担がありそう。</span></div></div>
+  </section>
+  <section class="chunk" id="c8" data-i="8">
+    <div class="prose"><div class="cnum">passage 08 of 26</div><p><span class="fs">| 欄 | 書く内容 | | --- | --- | | What / Why | Activity見出しで業務名、その目的は短い句で | | When / Who / Where | 通常の開始契機、安定した役割名、業務に影響する環境やチャネル | | Input / Procedure / <mark class="mem">Output</mark> | どのObjectから何を受け取り、誰が何を行い、どこへ何を渡すか | | Exception / Exception When | 中断や差し戻し、その再開条件。通常の成功手順と区別する | | <mark class="mem">Result</mark> | 正常終了で成立する業務状態と、次に可能になる仕事 |</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 8"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:業務の言葉で書ける粒度 got:開始契機、役割、受け渡し、例外、正常終了の状態を埋める欄がわかった。既存要求文書から何を追加すべきか想像できる。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:記入粒度 got:業務の契機、役割、引き渡し、例外と完了状態まで書くと理解。既存の要求書から転記できるか、穴を洗い出す作業になりそう。</span></div></div>
+  </section>
+  <section class="chunk" id="c9" data-i="9">
+    <div class="prose"><div class="cnum">passage 09 of 26</div><p><span class="fs">例として、架空ヒアリングを「利用者の希望を受け、空きがあれば登録して結果を伝える。重複時の扱いはまだ決めていない」と置きました。次は、この草案fixtureを読み取った実際の出力です。</span></p>
+<p><span class="fs">&lt;!-- output: meeting-room --&gt;</span></p>
+<pre class="code" tabindex="0">架空fixture: 未合意の草案（製品の実装・テストではない）
+構造: Activity / Why / When / Who / Where / Input / Procedure / Exception / <mark class="mem">Output</mark> / <mark class="mem">Result</mark>
+業務名: 会議室の予約
+<mark class="mem">Output</mark>: 登録した予約
+<mark class="mem">Result</mark>: 空きがある場合の予約が登録され、利用者が利用予定を把握できる。
+未決 <span class="num">Q1:</span> 重複する予約希望は拒否するか、調整するか。 <mark class="mem">decision=null</mark>
+<span class="num">ROOM-01:</span> 未レビュー / Test根拠=未作成
+<span class="num">ROOM-02:</span> 要確認 / Test根拠=未作成
+System Design: DB=未選定
+Code永続mapping: false</pre></div>
+    <div class="notes" role="group" aria-label="notes on passage 9"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:設計草案と未決の扱いの例 got:予約のfixtureは未決をdecision=nullと残し、テスト根拠も未作成と区別している。実装済み成果と混同しない表示はわかるがIDの使い方はまだ不明。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:草案で未決をどう残すか got:重複の問いをdecision=nullと表示し、テスト根拠やDB選定とも分離している。草案fixtureと明記されるため製品の保証と誤認しない。</span></div></div>
+  </section>
+  <section class="chunk" id="c10" data-i="10">
+    <div class="prose"><div class="flag">K: 厳密だが少し冗長、手順を急いで読みたい</div><div class="cnum">passage 10 of 26</div><p><span class="fs"><mark class="mem">Output</mark>は受け渡す情報、<mark class="mem">Result</mark>は終了後に成立する状態です。<code><mark class="mem">decision=null</mark></code>は未決を保持しており、重複を拒否する規則をこの例は追加していません。</span></p>
+<p><span class="fs">fixtureの未決箇所は、次のデータに対応します。</span></p>
+<p><span class="fs">&lt;!-- source: examples/meeting-room.json --&gt;</span></p>
+<pre class="code" tabindex="0">  "open": [{"id":"<span class="num">Q1</span>","question":"重複する予約希望は拒否するか、調整するか。","decision":null}],</pre>
+<p><span class="fs">この実行は、説明用データの表示です。予約機能の実装、業務設計の合意、業務上の正しさの検証ではありません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 10"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip nm1">-1</span><span class="ntext">needle=-1 expect:人間が決める未決の処理 got:OutputとResultの違いは有用。JSONの抜粋とfixtureの限界説明は厳密だが、試行の判断には少し冗長に感じ、手順を急いで読みたい。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:未決項目の昇格条件 got:OutputとResultの違い、未決を規則に化かさないことは明快。JSONは説明用で導入時の実際の正本形式かはまだ分からない。</span></div></div>
+  </section>
+  <section class="chunk" id="c11" data-i="11">
+    <div class="prose"><div class="cnum">passage 11 of 26</div><p><span class="fs">根拠：形式と各欄の意味、人間とAIの共同保守、Alderを使う設計業務の一次記述。</span></p>
+<h3>3. 未決を解消したら、期待結果を人間がレビューして引き渡す</h3>
+<p><span class="fs">この資料が対象にする未リリース版では、業務設計と業務相関を確認した後、AIが<mark class="mem">Check Item</mark>（独立にレビューできる観察可能な期待結果）を草案・更新し、人間が期待結果をレビューします。業務設計と検査項目の合意が、実装への引き渡し条件です。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 11"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:実装へ渡す条件の具体化 got:未決解消後にAIが観察可能な期待結果を草案し、人間がレビューする流れと引き渡し条件が明確になった。未リリース版限定という点も保持する。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:実装前ゲート got:未リリース版は業務設計と相関の確認後、AI起案の観察可能なCheck Itemも人間がレビューし、そこが引き渡し条件。追加負担の核心が見えた。</span></div></div>
+  </section>
+  <section class="chunk" id="c12" data-i="12">
+    <div class="prose"><div class="cnum">passage 12 of 26</div><p><span class="fs">会議室fixtureの<code><span class="num">ROOM-01</span></code>は草案なので「未レビュー」、重複時の<code><span class="num">ROOM-02</span></code>は「要確認」です。AIの確信が高くても、人間の確認なしに「確認済み」へ進める理由にはなりません。</span></p>
+<p><span class="fs"><strong>期待結果の人間レビューと、テストによる根拠は別です。</strong> 引き渡し時点に新規Testはまだ存在せず、Testとの対応が全部そろうことを設計完了の条件にはしません。</span></p>
+<p><span class="fs">実装後はTest実行に続く別のAlderレビューとフォローアップで、テストの期待値を確認済みCheckへ照合し、同じCheck IDの詳細に代表的なTest/assertionとの対応と根拠不足を保守します。独立したレビュー自体は読み取り専用で、その後の更新作業と分けます。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 12"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:Checkとテストの関係 got:人間が期待結果を承認する時点ではテスト未作成でよく、実装後にassertionとの根拠を保守する区別が理解できた。業務意味のレビューとして筋が通る。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:CheckとTestの関係 got:引き渡し前にテスト対応表を完成させる必要はなく、実装後に同じIDへ証拠を保守する。未決ROOM-02は要確認のままという線引きは実務的。</span></div></div>
+  </section>
+  <section class="chunk" id="c13" data-i="13">
+    <div class="prose"><div class="cnum">passage 13 of 26</div><p><span class="fs">| 成果物 | 権限と追跡の境界 | | --- | --- | | <mark class="mem">Business Design</mark> | 業務上の意味の正本 | | <mark class="mem">Check Item</mark> | 設計を参照し、期待結果・レビュー状態・後続のTest根拠を同じIDに保持 | | Automated Test | Checkへ前後に追跡し、実行によってCodeを検証 | | Code | 調査時に読む実装。Checkとの永続的なファイル・行・symbol mappingは作らない |</span></p>
+<p><span class="fs">Checkレビューで業務上の意味が変わるなら、先に<mark class="mem">Business Design</mark>へ戻し、人間が合意してからCheck・テスト・コードへ反映します。Functional Interfaceによる責任の索引と同期漏れの診断は、必要な場合の任意の補助です。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 13"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:成果物の優先順位 got:Business DesignからCheck、Test、Codeへ流れる境界が整理された。コード行への固定マッピング不要は小規模試行の維持費を抑えられそう。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:維持すべき追跡量 got:Check IDとTest根拠は保守するがコード行への永続対応は不要と分かった。設計が変われば正本に戻すので差分運用は一定の手間がある。</span></div></div>
+  </section>
+  <section class="chunk" id="c14" data-i="14">
+    <div class="prose"><div class="cnum">passage 14 of 26</div><p><span class="fs">根拠：必須の検査項目作成・人間レビュー、追跡関係と根拠不足の扱い。</span></p>
+<h3>4. 技術条件と、先に固定する価値のある判断を渡す</h3>
+<p><span class="fs">System Design（システム設計）は、業務上の意図を実現する現在の技術条件を整理する隣接業務です。Alderはその技術検討の方法を規定せず、独立した詳細設計工程を実装前の必須条件にもしていません。</span></p>
+<p><span class="fs">たとえば「既存予約DBとの互換性が必要」なら先に渡し、DB製品や接続条件は技術条件としてまとめます。会議室fixtureではDBは未選定、内部関数の分割は実装時に検討する状態で残しています。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 14"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:技術判断を先に決める基準 got:既存DB互換のような制約を先に渡し、関数分割は実装時とする例で境界が見える。ここからは自分の小業務で必要な制約を洗い出せそう。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:詳細設計が必須か got:System Designは技術条件を整理する隣接業務で、細かな実装設計を前置する必須ゲートではない。既存DB制約は先に渡すという判断は自然。</span></div></div>
+  </section>
+  <section class="chunk" id="c15" data-i="15">
+    <div class="prose"><div class="cnum">passage 15 of 26</div><p><span class="fs">| 先に明示する価値 | 例 | | --- | --- | | 高い | 既存schemaとの互換性、公開API、移行条件、外部契約、法令・セキュリティ上の制約 | | 理由があれば明示する | 保守体制・既存資産・希望による言語やDB製品の選択 | | 通常は実装で具体化してレビューできる | 関数・クラスの分割、内部構成、命名など可逆な細部 |</span></p>
+<p><span class="fs"><strong>先に決める基準は、変更コストと実際の制約です。</strong> AIでコードを直しやすくなっても、永続データや外部契約まで可逆になるわけではありません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 15"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:境界の判断基準 got:変更コストと実際の制約という基準は納得できる。公開APIや移行条件は先に決め、内部構成は後でレビュー可能と判断できる。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:技術判断の線引き got:変更コストで事前指定を選ぶ点は納得。公開APIや移行条件は先、クラス分割は後という整理なら従来の設計負担を増やしすぎない。</span></div></div>
+  </section>
+  <section class="chunk" id="c16" data-i="16">
+    <div class="prose"><div class="cnum">passage 16 of 26</div><p><span class="fs">独自の詳細設計を置くことは可能です。アーキテクチャの名前だけを要求にするより、守りたい性質や具体的なリスクを実装者へ渡します。</span></p>
+<p><span class="fs">根拠：詳細設計をどこに置くか、System Designの責任境界。</span></p>
+<h3>5. 小さく試す入口は、採用する版で選ぶ</h3>
+<p><span class="fs">Alderの手法、レビュー知識、Pluginの版は別です。<span class="num">この根拠revisionでは手法のリリースはv0.6</span>、<span class="num">レビュー知識はv0.3で</span>、<span class="num">v0.6で任意だった</span><mark class="mem">Check Item</mark>の作成・追跡を遡って必須にしたとは説明していません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 16"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:今使える導入経路 got:方法・レビュー知識・Pluginの版が別で、古いv0.6には新しいCheck必須条件を遡及しないとわかった。版の説明が増えたので実行入口を探す。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:開始版の差分 got:手法とレビュー知識とPluginの版が別だと明示された。v0.6の任意Checkと未リリースの必須Checkを混同しないことが導入判断に重要。</span></div></div>
+  </section>
+  <section class="chunk" id="c17" data-i="17">
+    <div class="prose"><div class="cnum">passage 17 of 26</div><p><span class="fs">| 選ぶ入口 | できることと注意 | | --- | --- | | 安定Plugin <code><span class="num">plugin-v0.1.0</span></code> | 完了した実装を読み取り専用でレビューする。設計草案のskillは含まない | | 未リリースPlugin <span class="num">0.2.7のcommit</span>/branch | ヒアリングから<mark class="mem">Business Design</mark>の草案・改訂と、実装後レビューを支援する。移動するbranchなら解決したcommitを記録する | | 未リリースの手法を手動/referenceで試す | 合意した<mark class="mem">Business Design</mark>、必須の<mark class="mem">Check Item</mark>人間レビュー、実装後レビューとフォローアップを行う。Pluginに未収録の工程もある |</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 17"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:小さく試す選択肢 got:安定Pluginなら完成実装のレビューから、未リリース版なら草案やCheckの人間レビューを含む試行と分かった。手元で試すならまず前者を選びそう。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:選択肢の実際 got:安定Pluginは既存実装レビュー、未リリースPluginは草案も支援、全工程は手動併用と読める。PluginだけではCheck作成工程を丸ごと代行しない点に注意したい。</span></div></div>
+  </section>
+  <section class="chunk" id="c18" data-i="18">
+    <div class="prose"><div class="cnum">passage 18 of 26</div><p><span class="fs">すでに実装があるなら、狭い変更と対応する<mark class="mem">Business Design</mark>を選び、安定Pluginでレビューを試せます。新しい設計から始めるなら、未リリース版の工程を使うことを明示し、読める設計ファイルを用意してください。</span></p>
+<p><span class="fs">安定版の導入では、利用者が次のコマンドを実行し、対応クライアントでPluginを有効にします。これは資料作成中に実行したコマンドではありません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 18"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:実行可能な最初の一歩 got:既存の狭い変更と対応設計を選んで安定Pluginレビュー、という自分向けの経路が見えた。導入コマンドとレビュー入力を確認したい。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:小さな試行の段取り got:既存の狭い変更と対応設計を選べば安定版で試せる。新規設計は未リリースと宣言してファイルを用意する。具体コマンドを確認する。</span></div></div>
+  </section>
+  <section class="chunk" id="c19" data-i="19">
+    <div class="prose"><div class="flag">開始コマンド・置き場・依頼文が揃った</div><div class="cnum">passage 19 of 26</div><pre class="code" tabindex="0">codex plugin marketplace add <span class="num">mk3008</span>/alder --ref <span class="num">plugin-v0.1.0</span>
+codex plugin marketplace list</pre>
+<p><span class="fs">標準の設計置き場は<code>docs/business-design/</code>で、別の場所ならプロジェクトの<code>AGENTS.md</code>にそのパスを書きます。対象を読める状態にして、実装後には「実装が終わったのでAlderレビューして」と依頼します。</span></p>
+<p><span class="fs">未リリースの設計草案skillを使う場合は、読み取れるヒアリングを渡して「このヒアリング結果をAlder業務設計書にして」と依頼します。このskillは未決を保って草案を作り、<mark class="mem">Check Item</mark>や製品の実装までは生成しません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 19"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:導入と入力の最小手順 got:安定版の追加コマンド、設計置き場、レビュー依頼文が揃った。未リリース草案skillがCheckや実装を作らない範囲も理解した。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:実行できる開始手順 got:安定版の追加・確認コマンド、設計置き場、レビュー依頼文まで示された。草案skillは未決を保持するがCheckや実装は別という範囲も明確。</span></div></div>
+  </section>
+  <section class="chunk" id="c20" data-i="20">
+    <div class="prose"><div class="cnum">passage 20 of 26</div><p><span class="fs"><strong>Pluginは全工程を自動実行しません。</strong> <span class="num">0.2.7でも設計品質</span>・業務相関・漏れのレビュー、Optimization Review、<mark class="mem">Check Item</mark>草案、Graph export、フォローアップはskillとして収録されていません。</span></p>
+<p><span class="fs">根拠：手法の版とアクセス、Plugin導入と提供範囲。導入や新しい草案skillのクライアント動作は、本資料では未実行・未検証です。</span></p>
+<h3>6. 試す前のチェックリスト</h3>
+<ul><li><span class="fs">業務判断の責任者が<mark class="mem">Business Design</mark>を理解し、誤りを指摘できる言語で書いたか。</span></li><li><span class="fs">開始条件、入出力、成立する結果が次の業務につながり、未決と合意済みを区別したか。</span></li><li><span class="fs">選んだ手法の版で必要な<mark class="mem">Check Item</mark>レビューを行い、設計の版とCheck IDを渡すか。</span></li><li><span class="fs">既存制約と変更コストの高い判断を渡し、未決の業務方針をAIへ決めさせないか。</span></li><li><span class="fs">実装後に別の文脈でレビューし、必要な人間判断と記録更新をフォローアップするか。</span></li></ul></div>
+    <div class="notes" role="group" aria-label="notes on passage 20"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:試行前に見落としを防ぐ確認 got:チェックリストは業務責任者の理解、未決、制約、別文脈レビューまで一通り押さえる。Plugin未収録工程が多いので手動部分の見積もりは必要。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:自動化範囲と試行条件 got:Plugin未収録工程が明記され、安定版で既存実装の狭いレビューから始めるのが私には妥当。チェックリストで責任者の合意と未決を確認できる。</span></div></div>
+  </section>
+  <section class="chunk" id="c21" data-i="21">
+    <div class="prose"><div class="flag">K: 復習なので流し読み</div><div class="cnum">passage 21 of 26</div><h3>7. 理解度チェック</h3>
+<ul><li><span class="fs">重複予約を拒否するテストが通った。未決だった拒否方針も承認できるか？</span></li></ul>
+<p><span class="fs">&lt;details&gt; &lt;summary&gt;答え&lt;/summary&gt;</span></p>
+<p><span class="fs">承認できません。<span class="num">2節のfixtureではQ1が未決で</span>、テストは選んだ振る舞いの材料にすぎないため、責任者へ拒否か調整かを確認し<mark class="mem">Business Design</mark>へ反映します。</span></p>
+<p><span class="fs">&lt;/details&gt;</span></p>
+<ul><li><span class="fs">「登録した予約」を<mark class="mem">Output</mark>にも<mark class="mem">Result</mark>にもそのまま書けば足りるか？</span></li></ul>
+<p><span class="fs">&lt;details&gt; &lt;summary&gt;答え&lt;/summary&gt;</span></p>
+<p><span class="fs">足りません。2節の出力のように<mark class="mem">Output</mark>は移動する情報、<mark class="mem">Result</mark>は登録後に成立する業務状態と次に可能な仕事を書き分けます。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 21"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:最後に判断を確認 got:テストは業務方針の承認にならず、OutputとResultは異なるという二問は答えられた。ここは復習なので流し読みして残りを確認する。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:理解確認 got:テスト成功で未決の拒否を承認しない点とOutputとResultの区別は答えられる。理解度チェックは導入判断より復習として機能する。</span></div></div>
+  </section>
+  <section class="chunk" id="c22" data-i="22">
+    <div class="prose"><div class="cnum">passage 22 of 26</div><p><span class="fs">&lt;/details&gt;</span></p>
+<ul><li><span class="fs">人間が確認済みにしたCheckに新規Testがないと、設計は引き渡せないか？</span></li></ul>
+<p><span class="fs">&lt;details&gt; &lt;summary&gt;答え&lt;/summary&gt;</span></p>
+<p><span class="fs">新規Testの完全な根拠を一律の引き渡しゲートにはしません。3節のように期待結果の人間確認とTest根拠は別で、実装後のレビュー・フォローアップでCheckとTest/assertionを照合して根拠不足を保守します。</span></p>
+<p><span class="fs">&lt;/details&gt;</span></p>
+<ul><li><span class="fs">詳細設計が任意なら、既存DBとの互換性もAIが自由に変更してよいか？</span></li></ul></div>
+    <div class="notes" role="group" aria-label="notes on passage 22"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:設計引き渡しと技術制約の確認 got:Checkの人間承認と後続Test根拠を分ける答えは予想通り。DB互換性は先に渡すべき制約と理解しているので読み進める。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:引き渡しの誤解確認 got:Checkの人間確認とテスト証拠が別だと再確認できた。既存DB互換は当然先に固定すべきで、詳細設計任意と制約自由化を混同しない。</span></div></div>
+  </section>
+  <section class="chunk" id="c23" data-i="23">
+    <div class="prose"><div class="cnum">passage 23 of 26</div><p><span class="fs">&lt;details&gt; &lt;summary&gt;答え&lt;/summary&gt;</span></p>
+<p><span class="fs">よくありません。4節の区分では互換性は先に渡す実際の制約であり、変更コストが高い判断は必要な範囲で先に設計します。</span></p>
+<p><span class="fs">&lt;/details&gt;</span></p>
+<ul><li><span class="fs">安定Plugin <span class="num">0.1.0を入れれば</span>、設計草案と必須Checkレビューまで自動で終わるか？</span></li></ul>
+<p><span class="fs">&lt;details&gt; &lt;summary&gt;答え&lt;/summary&gt;</span></p>
+<p><span class="fs">終わりません。<span class="num">5節の版表では0.1.0は実装後の読み取り専用レビューのみで</span>、<span class="num">未リリース0.2.7でも</span><mark class="mem">Check Item</mark>草案やフォローアップは収録されていません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 23"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:Pluginに任せられる範囲の確認 got:安定版はレビュー専用であることを再確認した。設計草案やCheckレビューまで自動化を期待しない判断はできる。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:Plugin期待値の確認 got:0.1.0で設計草案やCheckを期待しないことが明瞭。未リリースでも手動の人間レビューとフォローアップが要るため、PoC工数を見積もりやすい。</span></div></div>
+  </section>
+  <section class="chunk" id="c24" data-i="24">
+    <div class="prose"><div class="flag">K: 再現付録は流し読み</div><div class="cnum">passage 24 of 26</div><p><span class="fs">&lt;/details&gt;</span></p>
+<h3>付録：再現</h3>
+<p><span class="fs">以下はこの資料ディレクトリを作業ディレクトリとするコマンドです。3行目は親工程での実行予定であり、本資料の著者は実行していません。</span></p>
+<pre class="code" tabindex="0"><span class="num">python3</span> examples/extract-evidence.py
+<span class="num">python3</span> examples/inspect-meeting-room.py
+node &lt;explainer-skill&gt;/scripts/verify-doc.mjs .</pre>
+<p><span class="fs">| ファイル | 用途 | | --- | --- | | <code>examples/source-evidence.json</code> / <code>extract-evidence.py</code> | 許可された一次資料から文字列を抽出。不一致なら終了する | | <code>examples/meeting-room.json</code> / <code>inspect-meeting-room.py</code> | 架空の未合意草案と、その表示 | | <code>checks.json</code> | 上記の再実行コマンドと期待行 | | <code>authoring-record.md</code> | 入力条件、工程、一次資料の対応、未適用点 |</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 24"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:読者向けの追加手順 got:付録は著者向け再現コマンドとfixtureファイル一覧。自分が小さく試す際の手順とは別なので、ここは流し読みする。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:再現性の範囲 got:資料の引用抽出と架空表示は再実行できるが、文書検証は予定段階と明記。導入時のクライアント動作まで保証していないと受け止める。</span></div></div>
+  </section>
+  <section class="chunk" id="c25" data-i="25">
+    <div class="prose"><div class="cnum">passage 25 of 26</div><p><span class="fs">&lt;details&gt; &lt;summary&gt;一次資料から抽出した出力&lt;/summary&gt;</span></p>
+<p><span class="fs">&lt;!-- output: source-evidence --&gt;</span></p>
+<pre class="code" tabindex="0">method-version: The current release is **Alder <span class="num">v0.6</span>**, containing **research review knowledge <span class="num">v0.3</span>**.
+required-checks: After humans have completed <mark class="mem">Business Design</mark> and its business-correlation review, Alder requires <mark class="mem">Check Item</mark> design and human review before test implementation.
+stable-plugin: The previous stable tag `<span class="num">plugin-v0.1.0</span>` still provides only read-only review; version <span class="num">0.2.7</span> is available from this change's commit/branch until separately released.
+plugin-limit: Plugin <span class="num">0.2.7</span> packages design authoring and implementation review; design-quality/correlation/omission review, Optimization Review, <mark class="mem">Check Item</mark> drafting, graph export and follow-up are not packaged skills.
+structure: The current research recommends **<span class="num">5W1H,</span> with How written as Input → Procedure → <mark class="mem">Output</mark> and an optional Exception section**, to make relationships between activities traceable.
+result: The business state established when Procedure finishes normally and the subsequent business it enables. Keep it separate from <mark class="mem">Output</mark>'s transferred information and Why's purpose.
+no-detail-gate: Alder does not require a separate detailed-design gate before implementation.
+trace-boundary: Do not maintain a permanent <mark class="mem">Check Item</mark> ↔ Code, file, symbol, SQL-entry-point, or line mapping.</pre></div>
+    <div class="notes" role="group" aria-label="notes on passage 25"><div class="note note-r0"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:再現の根拠資料 got:英語の抽出結果は本文の版、構造、Check、詳細設計の主張を裏づける内容。初見の試行判断には十分な情報を本文ですでに得ている。</span></div><div class="note note-r1"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:一次資料の確認 got:重要な版差分、必須Check、Plugin未収録工程、詳細設計と追跡境界を抽出結果で再確認できた。長いが誤解しやすい点を固める役には立つ。</span></div></div>
+  </section>
+  <section class="chunk" id="c26" data-i="26">
+    <div class="prose"><div class="cnum">passage 26 of 26</div><p><span class="fs">&lt;/details&gt;</span></p>
+<p><span class="fs">抽出は引用文字列の存在、fixture表示は格納データとの一致を確かめます。自作スクリプトは解説の意味や業務の正しさを保証せず、HTML・verify-doc・first-readerの結果もこの実行からは得られません。</span></p></div>
+    <div class="notes" role="group" aria-label="notes on passage 26"><div class="note note-r0 final"><span class="who wr0" title="小さな業務で人間とAIの分担を知りたいAI代理読者">K</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:検証の限界の締め got:抽出とfixture表示は意味の正しさまで保証しないと明記された。本文で人間の判断とAIへの受け渡しを判断できたので、既存実装の狭い範囲で試せる。</span></div><div class="note note-r1 final"><span class="who wr1" title="追加負担と開始手順を判断したいAI代理読者">S</span><span class="chip n0">0</span><span class="ntext">needle=0 expect:検証結果の限界 got:引用の存在とfixture整合までで意味の妥当性は保証しないと明示。小さな既存変更で安定Pluginの読み取りレビューを試す判断には十分な入口を得た。</span></div></div>
+  </section>
+
+<details class="howto"><summary>how this page was made ▾</summary>
+ <p>AI readers with different lives got this piece the way a person would: one passage at a time, no peeking ahead, free to quit whenever. A passage is a paragraph-sized cut, roughly 85 words; this piece became 26 of them, and a script refused to show each reader the next passage until they wrote down what just happened in them.</p>
+ <p>The readers: <span class="who wr0">K</span>小さな業務で人間とAIの分担を知りたいAI代理読者. <span class="who wr1">S</span>追加負担と開始手順を判断したいAI代理読者. Their real notes sit beside each passage with the needle they logged: +2 leaning in, -2 done. A dashed line means a reader stopped and never saw the rest. Afterward, a separate agent was quizzed with the piece taken away, holding only the reading notes; the "what stuck" lens shows what survived. None of this is a score. It's what happened to the readers, written down as it happened.</p>
+</details>
+<div class="made">first-reader 1.0.0 · readers before you publish</div>
+</main>
+<script data-own>
+if(!document.documentElement.lang)document.documentElement.lang='en';
+function sel(k){
+ document.body.className=document.body.className.replace(/\bsel-\S+/g,'').trim();
+ if(k!=='all')document.body.classList.add('sel-'+k);
+ document.querySelectorAll('[id^="sel"]').forEach(b=>b.setAttribute('aria-pressed',
+   String(b.id==='sel'+k||(k==='all'&&b.id==='selall'))));
+}
+function lens(m){
+ document.body.classList.remove('lens-scan','lens-mem','lens-trust');
+ if(m!=='read')document.body.classList.add('lens-'+m);
+ const map={read:'lensRead',scan:'lensScan',mem:'lensMem',trust:'lensTrust'};
+ Object.entries(map).forEach(([kk,id])=>{const b=document.getElementById(id);
+  if(b)b.setAttribute('aria-pressed',String(kk===m));});
+}
+function jump(i){document.getElementById('c'+i).scrollIntoView({block:'start'});}
+let timer=null;
+function replay(){
+ const btn=document.getElementById('playBtn');
+ if(timer){clearInterval(timer);timer=null;document.body.classList.remove('replay');
+  document.querySelectorAll('.chunk').forEach(c=>c.classList.remove('now','future'));
+  btn.setAttribute('aria-pressed','false');btn.textContent='replay the read';return;}
+ document.body.classList.add('replay');btn.setAttribute('aria-pressed','true');btn.textContent='stop replay';
+ const cs=[...document.querySelectorAll('.chunk')];cs.forEach(c=>c.classList.add('future'));
+ let i=0;
+ const step=()=>{if(i>0)cs[i-1].classList.remove('now');
+  if(i>=cs.length){clearInterval(timer);timer=null;document.body.classList.remove('replay');
+   cs.forEach(c=>c.classList.remove('future','now'));
+   btn.setAttribute('aria-pressed','false');btn.textContent='replay the read';return;}
+  cs[i].classList.remove('future');cs[i].classList.add('now');
+  cs[i].scrollIntoView({block:'center'});i++;};
+ step();timer=setInterval(step,2600);}
+</script>

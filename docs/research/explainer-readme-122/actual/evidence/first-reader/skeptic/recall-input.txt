@@ -1,0 +1,44 @@
+You are answering for a reader who read a piece once, earlier today, and no longer has it. Below is the moment-by-moment log they kept while reading. You have nothing else. Answer only from this log; if the log does not support an answer, say 'nothing survived'.
+
+persona: S: AI実装を利用するエンジニア。Alderは初見。候補READMEを比較し導入に必要なものと未決仕様の扱いを探す。冒頭約2段落で目的に結びつかなければ離脱。 | finished the piece
+------------------------------------------------------------
+[chunk 1] needle=0 expect:ツール比較と必要入力 got:対象読者と検証限界の宣言。私向けらしいが導入判断の材料はまだなく、本文をもう少し見る。
+[chunk 2] needle=0 expect:導入負担と開始条件 got:判断したい三点が提示され、特に公開安定版と未リリースを分ける点はREADME比較に直結する。先を読む。
+[chunk 3] needle=0 expect:追加工程の実態 got:業務意味は人間が合意、技術詳細は必須の別ゲートなしと分かった。ただし未リリース版でCheck Itemのレビュー必須という負担は気になる。
+[chunk 4] needle=0 expect:Plugin単体の開始法 got:安定0.1.0は実装後レビュー専用で、草案支援は未リリース0.2.7だと分かった。使う版により入口が違うので具体手順を確認したい。
+[chunk 5] needle=0 expect:未決仕様のレビュー方法 got:重複予約の例で、コードの方針を勝手に正誤判定せず責任者への問いに戻すと理解した。通常レビューとの差が見え始めた。
+[chunk 6] needle=0 expect:レビュー負担の効果 got:テストやDecision Recordを業務承認にしない点は腑に落ちる。一方、前後のレビュー配分に実証がないので費用対効果は試して判断する必要がある。
+[chunk 7] needle=0 expect:設計書の必要形式 got:自然言語で依頼者合意、5W1Hと入出力等は推奨で必須ではない。ただ別形式の同等レビューは未確立なら、実際には型に寄せる負担がありそう。
+[chunk 8] needle=0 expect:記入粒度 got:業務の契機、役割、引き渡し、例外と完了状態まで書くと理解。既存の要求書から転記できるか、穴を洗い出す作業になりそう。
+[chunk 9] needle=0 expect:草案で未決をどう残すか got:重複の問いをdecision=nullと表示し、テスト根拠やDB選定とも分離している。草案fixtureと明記されるため製品の保証と誤認しない。
+[chunk 10] needle=0 expect:未決項目の昇格条件 got:OutputとResultの違い、未決を規則に化かさないことは明快。JSONは説明用で導入時の実際の正本形式かはまだ分からない。
+[chunk 11] needle=0 expect:実装前ゲート got:未リリース版は業務設計と相関の確認後、AI起案の観察可能なCheck Itemも人間がレビューし、そこが引き渡し条件。追加負担の核心が見えた。
+[chunk 12] needle=0 expect:CheckとTestの関係 got:引き渡し前にテスト対応表を完成させる必要はなく、実装後に同じIDへ証拠を保守する。未決ROOM-02は要確認のままという線引きは実務的。
+[chunk 13] needle=0 expect:維持すべき追跡量 got:Check IDとTest根拠は保守するがコード行への永続対応は不要と分かった。設計が変われば正本に戻すので差分運用は一定の手間がある。
+[chunk 14] needle=0 expect:詳細設計が必須か got:System Designは技術条件を整理する隣接業務で、細かな実装設計を前置する必須ゲートではない。既存DB制約は先に渡すという判断は自然。
+[chunk 15] needle=0 expect:技術判断の線引き got:変更コストで事前指定を選ぶ点は納得。公開APIや移行条件は先、クラス分割は後という整理なら従来の設計負担を増やしすぎない。
+[chunk 16] needle=0 expect:開始版の差分 got:手法とレビュー知識とPluginの版が別だと明示された。v0.6の任意Checkと未リリースの必須Checkを混同しないことが導入判断に重要。
+[chunk 17] needle=0 expect:選択肢の実際 got:安定Pluginは既存実装レビュー、未リリースPluginは草案も支援、全工程は手動併用と読める。PluginだけではCheck作成工程を丸ごと代行しない点に注意したい。
+[chunk 18] needle=0 expect:小さな試行の段取り got:既存の狭い変更と対応設計を選べば安定版で試せる。新規設計は未リリースと宣言してファイルを用意する。具体コマンドを確認する。
+[chunk 19] needle=0 expect:実行できる開始手順 got:安定版の追加・確認コマンド、設計置き場、レビュー依頼文まで示された。草案skillは未決を保持するがCheckや実装は別という範囲も明確。
+[chunk 20] needle=0 expect:自動化範囲と試行条件 got:Plugin未収録工程が明記され、安定版で既存実装の狭いレビューから始めるのが私には妥当。チェックリストで責任者の合意と未決を確認できる。
+[chunk 21] needle=0 expect:理解確認 got:テスト成功で未決の拒否を承認しない点とOutputとResultの区別は答えられる。理解度チェックは導入判断より復習として機能する。
+[chunk 22] needle=0 expect:引き渡しの誤解確認 got:Checkの人間確認とテスト証拠が別だと再確認できた。既存DB互換は当然先に固定すべきで、詳細設計任意と制約自由化を混同しない。
+[chunk 23] needle=0 expect:Plugin期待値の確認 got:0.1.0で設計草案やCheckを期待しないことが明瞭。未リリースでも手動の人間レビューとフォローアップが要るため、PoC工数を見積もりやすい。
+[chunk 24] needle=0 expect:再現性の範囲 got:資料の引用抽出と架空表示は再実行できるが、文書検証は予定段階と明記。導入時のクライアント動作まで保証していないと受け止める。
+[chunk 25] needle=0 expect:一次資料の確認 got:重要な版差分、必須Check、Plugin未収録工程、詳細設計と追跡境界を抽出結果で再確認できた。長いが誤解しやすい点を固める役には立つ。
+[chunk 26] needle=0 expect:検証結果の限界 got:引用の存在とfixture整合までで意味の妥当性は保証しないと明示。小さな既存変更で安定Pluginの読み取りレビューを試す判断には十分な入口を得た。
+[chunk 26] final: 既存実装と対応する業務設計を狭く選び、安定Pluginの読み取りレビューから試す手順を判断できた。新規設計の未決処理とCheckの人間レビュー負担も把握した。
+------------------------------------------------------------
+QUIZ (answer from the log alone):
+1. SAYBACK: retell the piece in one sentence, as you'd describe it to a
+   colleague. If you can't, say so; that is a finding, not a failure.
+2. POINTING: quote any exact words or phrases that stuck. Only what the
+   log actually preserved counts.
+3. PEAK: the single strongest moment of the read, and why.
+4. ENDING: how it ended and how that felt. 'I don't remember the ending'
+   is a valid and important answer.
+5. CENTER OF GRAVITY: where did the piece feel most alive? Is that the
+   same thing the piece claimed to be about?
+6. ONE ACTION: is there anything you would now do, check, or tell someone
+   because you read this?

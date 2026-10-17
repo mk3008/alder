@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@mizchi/vlmkit": "0.22.0",
+    "@mizchi/vlmkit-anim": "0.22.0",
+    "marked": "18.0.14",
+    "playwright": "1.63.0"
+  }
+}
