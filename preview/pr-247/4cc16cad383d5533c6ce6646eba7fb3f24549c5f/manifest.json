@@ -1,0 +1,21 @@
+{
+  "source": "4cc16cad383d5533c6ce6646eba7fb3f24549c5f",
+  "sourceTree": "04ecb02b87762d3f1ce483cee7a50b45a9571ea2",
+  "path": "preview/pr-247/4cc16cad383d5533c6ce6646eba7fb3f24549c5f",
+  "files": {
+    "index.html": "4b7e2b513f2a2ade86e03c8b273324a76909dd2f10ccd7908cfe318273184bfa",
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "three-roles.md": "0a260388c808bfb328846aad6de9df1f6e617da76d41cc027db8236fd040e96d",
+    "standard-review.md": "64701618618bd565fb540647cf15c06e20d3f3f6fc45dc8b64244c01e3910aa5",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9",
+    "assets/index-Dk4kNnAC.js": "3dacc355f1a0b43981a544b39c58e9725ee23cb5adbb6189157a9b4adf6853ff",
+    "review/index.html": "1af2f51a4def1e4c33a6c6d13183660792713da9ec82bd38de0379cf95457202",
+    "review/real-check-1280-dark.png": "f48e7979344ae342ef1a7a2f7b13b411da7243c5dadd94832ae32a8f99570823",
+    "review/real-check-393-dark.png": "8519e8775b3f1c6b739cc0f9db9e78eaec1b3a9bbcce0d74cdc6183ccbbacc58",
+    "review/real-three-roles-320-detail.png": "ca9d26d58ea7610662b996cd774b350a626ad10fec6d3441bdaa738f9c24aedf",
+    "review/real-three-roles-1280-detail.png": "837329216f81fe351be00cb93fa2dfe54e4c5737a2038ab6d672df2d45d815eb",
+    "review/real-business-393-dark.png": "19548738cfdb8f3c70c05057b406b3f35fe0a8ece6da633b930730ec38542832",
+    "review/real-business-1280-dark.png": "34398b202c98064b9d01ceb5567d626d610470cb3ce8cbd487677e984fa3add4"
+  }
+}
