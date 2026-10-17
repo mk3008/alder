@@ -64,7 +64,7 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], target:RouteNode, output:boolean, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
@@ -94,14 +94,19 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
         for(const side of [1,-1])consider([a[0]+side*(width/2+8),y]);
       }
     }
-    // A side departure still needs an Object-side caption, not a midpoint
-    // caption near the receiving Activity. Full card bounds avoid its body.
+    // A returning Input is read immediately after its right-hand outlet.
+    // Its left edge follows the source even when that Object is dragged.
     if(a[1]===b[1]){
-      priority=1;
-      for(const y of [source.y+source.height+height/2+5,source.y-height/2-5]){
-        for(const x of [source.x+source.width/2,a[0]+width/2+8,a[0]-width/2-8])consider([x,y]);
-      }
+      for(const gap of [8,24])for(const dy of [-height/2-6,height/2+6])
+        consider([a[0]+gap+width/2,a[1]+dy]);
     }
+    priority=2;
+  }
+  // Output captions follow the receiving Object, above its top edge rather
+  // than halfway down a trunk whose length changes during a drag.
+  if(output){
+    priority=0;
+    for(const gap of [5,13,21])consider([target.x+width/2,target.y-height/2-gap]);
     priority=2;
   }
   for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
@@ -238,6 +243,6 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     chosen=rounded([a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,wires);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,target,kind==='output',wires);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

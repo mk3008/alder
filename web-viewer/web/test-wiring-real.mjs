@@ -41,9 +41,10 @@ for(const [activity,staircase] of Object.entries(expected)){
   for(const n of boxes)assert.equal(overlaps(labels[i],n),false,'complete label clears every shape');
   for(const other of labels.slice(i+1))assert.equal(overlaps(labels[i],other),false,'complete labels do not overlap');
   if(relation.kind==='input'){
-   assert.ok(route.label[1]>=source.y+68&&route.label[1]<=source.y+96,'caption beside source departure, including return Inputs');
+   if(returnInput){assert.equal(labels[i].x,source.x+260+8);assert.equal(route.label[1],source.y+34-15);}else assert.ok(route.label[1]>=source.y+68&&route.label[1]<=source.y+96,'forward caption beside source departure');
    if(source.y<target.y){forward++;assert.ok(route.points.slice(1).every((p,j)=>p[0]>=route.points[j][0]&&p[1]>=route.points[j][1]));assert.deepEqual(route.points.at(-1),[target.x,target.y+34],'normal arrow enters from left');}
   }
+  if(relation.kind==='output'){assert.equal(labels[i].x,target.x,'Output left edge follows target');assert.ok(route.label[1]>=target.y-30&&route.label[1]<=target.y-14,'Output caption directly above target');}
   if(relation.kind.endsWith('exception')){
    exceptions++;assert.ok(projected.graph.nodes.some(n=>n.id===relation.from&&n.type==='business'));assert.ok(projected.graph.nodes.some(n=>n.id===relation.to&&n.type==='business'));
    // Preserve actual directed hand-back, not the old side-departing coordinates.
@@ -52,6 +53,22 @@ for(const [activity,staircase] of Object.entries(expected)){
   }
  }
  assert.equal(forward,2);assert.equal(exceptions,activity==='業務設計'?2:1);
+ // Move the downstream data Object as in the marked review. Recompute only
+ // incident edges; caption anchors must remain endpoint-relative after reload.
+ const dataID=activity==='業務設計'?'業務設計書':'検査項目',cache=new RouteCache(),key={};
+ const original=cache.update(key,projected,boxes,projected.graph.relations);
+ for(const delta of [[25,180],[-80,340],[170,600]]){
+  const moved=boxes.map(n=>n.id===dataID?{...n,x:n.x+delta[0],y:n.y+delta[1]}:n);
+  const updated=cache.update(key,projected,moved,projected.graph.relations),fresh=new RouteCache().update({},projected,moved,projected.graph.relations),object=moved.find(n=>n.id===dataID);
+  for(const [i,relation]of projected.graph.relations.entries()){
+   if(relation.from!==dataID&&relation.to!==dataID){assert.equal(updated[i],original[i]);continue;}
+   for(const route of [updated[i],fresh[i]]){
+    const left=route.label[0]-Math.max(30,relation.label.length*12)/2;
+    if(relation.kind==='output'){assert.equal(left,object.x);assert.ok(route.label[1]>=object.y-30&&route.label[1]<=object.y-14);}
+    else if(relation.kind==='input'){assert.equal(left,object.x+268);assert.equal(route.label[1],object.y+19);}
+   }
+  }
+ }
  const tab=openActivity(state,activity);assert.deepEqual(tab.positions,positions,'new detail uses the same plan');
  // Simulate the previously saved vertical stack, including deliberate overlap.
  const old={...tab,positions:Object.fromEntries(Object.keys(positions).map((id,i)=>[id,[40,40+i*96]])),scroll:[17,29],zoom:.75};

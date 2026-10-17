@@ -48,11 +48,12 @@ function geometry(e,inset=40,zoom=1){
  // Pin the new snapshot only after the directional/caption and native tests;
  // inset/zoom/reload must still preserve these exact SVG coordinates.
  assert.equal(hash(positions(e)),'2a781f2fef2b245f51b054cc42410cf38e4967ecee0b1ac617918b52642c92f4','all node coordinates retain the reviewed layout');
- assert.equal(hash(routes(e)),'79659645c92545e8cd32906481f31689743b6c24d7d5a4eacd9d95742bbef91b','all SVG path/label coordinates retain the reviewed routes');
+ // Caption review: left-aligned glyph origins and endpoint-relative data labels.
+ assert.equal(hash(routes(e)),'108c8c1f3097b4b4cdc7a27a2f7204b41b2f39fc0ca861dabab0ce917ec327a5','all SVG paths and endpoint-relative left-aligned captions remain exact');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2102 2564');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2102+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2212 2564');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2212+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

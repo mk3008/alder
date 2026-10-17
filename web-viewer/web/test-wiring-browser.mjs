@@ -34,7 +34,7 @@ export async function verifyWiring(browser){
      assert.ok(state.layers.every((n,i)=>!i||state.layers[i-1]<=n),'selected wires/labels are above all unrelated wires/labels');
      assert.ok(state.points.slice(1).every((p,i)=>p[0]>=state.points[i][0]-.01&&p[1]>=state.points[i][1]-.01),'normal route reads down/right');
      assert.ok(state.label[1]>state.source[1]+68&&state.label[1]<=state.source[1]+96,'Input caption is near source');
-     assert.ok(Math.abs(state.label[0]-state.start[0])>=30,'Input caption is beside vertical leg');
+     assert.ok(state.labels[0].x>=state.start[0]+8||state.labels[0].x+state.labels[0].width<=state.start[0]-8,'complete left-aligned Input glyph clears vertical leg');
      for(let i=0;i<state.labels.length;i++)for(let j=i+1;j<state.labels.length;j++){
       const a=state.labels[i],b=state.labels[j];assert.ok(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y,'rendered captions do not overlap');
      }
@@ -72,7 +72,7 @@ export async function verifyRealWiring(browser){
    const wires=[...document.querySelectorAll('.edge')].map(path=>{
     const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
     const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
-    return {source,target,title,labelText:label.textContent,label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
+    return {source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
   const assertDeparture=r=>{
@@ -100,11 +100,12 @@ export async function verifyRealWiring(browser){
      const measured=await inspect(),overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
      assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
      for(const [i,r]of measured.wires.entries()){
-      assert.equal(r.collisions,0);assertDeparture(r);
+      assert.equal(r.collisions,0);assertDeparture(r);assert.equal(r.anchor,'start');
+      if(!r.exception&&r.source.id===spec.activity){assert.equal(r.label[0],r.target.x);assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
       if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
-       inputs++;assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'all Input captions stay at Object departure');
+       inputs++;if(r.source.y>=r.target.y+68){assert.equal(r.label[0],r.source.x+268);assert.equal(r.label[1],r.source.y+19);}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
       }
       for(const n of measured.cards)assert.equal(overlap(r.glyph,n),false,'native Japanese glyph does not cover shapes');
@@ -116,6 +117,26 @@ export async function verifyRealWiring(browser){
      await page.screenshot({path:`web/evidence/wiring/real-${spec.slug}-${width}-${theme}.png`});
      for(let i=0;i<outs;i++)await page.locator('#in').click();
     }
+    // Reproduce the review: drag the downstream data Object far below its
+    // initial row. Both captions must follow their own endpoint, at real zoom.
+    await page.locator('#layout-lock').click();
+    const dataID=spec.slug==='business'?'業務設計書':'検査項目';
+    const data=page.locator(`.node[data-node="${dataID}"]`);await data.scrollIntoViewIfNeeded();
+    const dataBox=await data.boundingBox();
+    await page.mouse.move(dataBox.x+80,dataBox.y+30);await page.mouse.down();await page.mouse.move(dataBox.x+105,dataBox.y+210,{steps:8});await page.mouse.up();
+    const dragged=await positions();assert.ok(dragged[dataID][1]>detail[dataID][1]+150);
+    const checkCaptions=async()=>{
+     const measured=await inspect(),incoming=measured.wires.find(r=>!r.exception&&r.target.id===dataID&&r.source.id===spec.activity),returning=measured.wires.find(r=>!r.exception&&r.source.id===dataID&&r.target.id===spec.activity);
+     assert.equal(incoming.anchor,'start');assert.equal(returning.anchor,'start');
+     assert.equal(incoming.label[0],incoming.target.x);assert.ok(incoming.label[1]>=incoming.target.y-30&&incoming.label[1]<=incoming.target.y-14,'red caption follows dragged Object top');
+     assert.equal(returning.label[0],returning.source.x+268);assert.equal(returning.label[1],returning.source.y+19,'yellow caption follows right outlet immediately');
+     for(const r of [incoming,returning])for(const n of measured.cards)assert.ok(!(r.glyph.x<n.x+n.width&&r.glyph.x+r.glyph.width>n.x&&r.glyph.y<n.y+n.height&&r.glyph.y+r.glyph.height>n.y),'dragged captions clear shapes');
+    };
+    await checkCaptions();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),dragged);await checkCaptions();
+    for(let i=0;i<5;i++)await page.locator('#out').click();await checkCaptions();
+    await page.screenshot({path:`web/evidence/wiring/dragged-${spec.slug}-${width}.png`});
+    for(let i=0;i<5;i++)await page.locator('#in').click();
+    await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();assert.deepEqual(await positions(),detail);
     // Move a node through the actual drag UI, persist/reload, then explicitly reset.
     await page.locator('#layout-lock').click();const first=page.locator(`.node[data-node="${spec.stair[0]}"]`);await first.scrollIntoViewIfNeeded();const box=await first.boundingBox();
     await page.mouse.move(box.x+50,box.y+30);await page.mouse.down();await page.mouse.move(box.x+80,box.y+60,{steps:4});await page.mouse.up();
