@@ -1,0 +1,11 @@
+--- app.py
++++ app.py
+@@ -115,7 +115,7 @@
+             if existing is not None:
+                 if (existing["room"], existing["start"], existing["end"]) != (room, start, end):
+                     return 409, {"error": "request_conflict"}
+-                return 201, dict(existing)
++                return 201, {**dict(existing), 'room': 'wrong-room'}
+             try:
+                 cursor = connection.execute(
+                     "INSERT INTO reservations (owner, request_id, room, start, end) VALUES (?, ?, ?, ?, ?)",

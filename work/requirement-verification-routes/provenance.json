@@ -1,0 +1,111 @@
+{
+  "verified_revision": "0dbbf642368419625c0bd45c0002e71fe68950b9",
+  "method": "GitHub contents API at immutable ref; recomputed local Git blob SHA-1 equality plus local SHA-256",
+  "files": {
+    "protocol.ja.md": {
+      "git_blob_sha1": "6e97fa80618397acf5e66effc5a4bcb24a030d51",
+      "sha256": "697bbe3c327b4e6400345907248a8fa8c795fca3aa91e0939662e94cfab48c39",
+      "remote_git_blob_sha1": "6e97fa80618397acf5e66effc5a4bcb24a030d51",
+      "matched": true
+    },
+    "fixtures.json": {
+      "git_blob_sha1": "3e9fa8016c377db087c3d51281c9e2da9bd9a1d4",
+      "sha256": "a3182ab60d108f71b77d254faf60500a1201483629bf84ff416d02e66e298a2d",
+      "remote_git_blob_sha1": "3e9fa8016c377db087c3d51281c9e2da9bd9a1d4",
+      "matched": true
+    },
+    "oracle.json": {
+      "git_blob_sha1": "2f7cf4ac5c2f53954431512c163039896bda7aba",
+      "sha256": "bb88dfd435b572a5f1a47d60a6361bc02094ec6457d3cf8cfbeb788db19b4540",
+      "remote_git_blob_sha1": "2f7cf4ac5c2f53954431512c163039896bda7aba",
+      "matched": true
+    },
+    "interface-addendum.ja.md": {
+      "git_blob_sha1": "af6c94a581c9804282933be5469145016917177a",
+      "sha256": "edab9ca4509e9fadded695cf9f6711d179f7840809355a97fd386a1477f2efe0",
+      "remote_git_blob_sha1": "af6c94a581c9804282933be5469145016917177a",
+      "matched": true
+    },
+    "app.py": {
+      "git_blob_sha1": "45734c231f634f188a62b7fe09da57b546bb0c55",
+      "sha256": "54ad57cd91f67f183e680cb5dd1b8c81a0fc21cb2d9efce13bacd30978c2e125",
+      "remote_git_blob_sha1": "45734c231f634f188a62b7fe09da57b546bb0c55",
+      "matched": true
+    },
+    "maintenance.py": {
+      "git_blob_sha1": "6d62cabbcdd9770ce1b77ef4be437d18911b8d7b",
+      "sha256": "500349d6d7f95bc4c669ccbe5cc72e048309a5e1f44de6a112c6bb9ab5fc8046",
+      "remote_git_blob_sha1": "6d62cabbcdd9770ce1b77ef4be437d18911b8d7b",
+      "matched": true
+    },
+    "test_routes.py": {
+      "git_blob_sha1": "a6c336e75b60a38b70c32e243c92ad523a66cb02",
+      "sha256": "1685401a48a6a2c93a8d1948ea905d2fb2fae2721414f835cdc153d27874d285",
+      "remote_git_blob_sha1": "a6c336e75b60a38b70c32e243c92ad523a66cb02",
+      "matched": true
+    },
+    "run_experiment.py": {
+      "git_blob_sha1": "75094a3188cc2357f7d1bbb81f204f8b98a0743f",
+      "sha256": "1ccd3ac2632271dd0b738cd4841f70642781e57a84e534765aa2f958c9066876",
+      "remote_git_blob_sha1": "75094a3188cc2357f7d1bbb81f204f8b98a0743f",
+      "matched": true
+    },
+    "assertion-addendum.ja.md": {
+      "git_blob_sha1": "2070378fe0607d717a79fe428278d849fa125dde",
+      "sha256": "5c8f5a32c1fc427ed72b4b1c847c0b018cb1b4ea8391371ee7a72afaeb30ccd2",
+      "remote_git_blob_sha1": "2070378fe0607d717a79fe428278d849fa125dde",
+      "matched": true
+    }
+  },
+  "initial_source_comparison": [
+    {
+      "path": "protocol.ja.md",
+      "remote": "6e97fa80618397acf5e66effc5a4bcb24a030d51",
+      "local": "6e97fa80618397acf5e66effc5a4bcb24a030d51",
+      "match": true
+    },
+    {
+      "path": "fixtures.json",
+      "remote": "3e9fa8016c377db087c3d51281c9e2da9bd9a1d4",
+      "local": "3e9fa8016c377db087c3d51281c9e2da9bd9a1d4",
+      "match": true
+    },
+    {
+      "path": "oracle.json",
+      "remote": "2f7cf4ac5c2f53954431512c163039896bda7aba",
+      "local": "2f7cf4ac5c2f53954431512c163039896bda7aba",
+      "match": true
+    },
+    {
+      "path": "interface-addendum.ja.md",
+      "remote": "af6c94a581c9804282933be5469145016917177a",
+      "local": "af6c94a581c9804282933be5469145016917177a",
+      "match": true
+    },
+    {
+      "path": "run_experiment.py",
+      "remote": "408e8b982cac8aa75142c12289b84bbcf3066614",
+      "local": "408e8b982cac8aa75142c12289b84bbcf3066614",
+      "match": true
+    },
+    {
+      "path": "maintenance.py",
+      "remote": "6d62cabbcdd9770ce1b77ef4be437d18911b8d7b",
+      "local": "6d62cabbcdd9770ce1b77ef4be437d18911b8d7b",
+      "match": true
+    },
+    {
+      "path": "test_routes.py",
+      "remote": "4b2b37968be6741c5613788b51bdfcf4ac192584",
+      "local": "4b2b37968be6741c5613788b51bdfcf4ac192584",
+      "match": true
+    },
+    {
+      "path": "app.py",
+      "remote": "45734c231f634f188a62b7fe09da57b546bb0c55",
+      "local": "45734c231f634f188a62b7fe09da57b546bb0c55",
+      "match": true
+    }
+  ],
+  "limits": "Connector retrieval verifies repository content, not cryptographic runtime identity. Supplementary assertions were added after implementation was known; original oracle unchanged."
+}

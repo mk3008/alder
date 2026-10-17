@@ -1,0 +1,25 @@
+test_SYS1_after_commit_cut_then_same_receipt (test_routes.SystemTests.test_SYS1_after_commit_cut_then_same_receipt) ... FAIL
+test_SYS1_before_commit_cut_then_retry (test_routes.SystemTests.test_SYS1_before_commit_cut_then_retry) ... ok
+test_SYS1_changed_payload_is_not_replayed (test_routes.SystemTests.test_SYS1_changed_payload_is_not_replayed) ... ok
+test_SYS1_request_id_is_owner_scoped (test_routes.SystemTests.test_SYS1_request_id_is_owner_scoped) ... ok
+
+======================================================================
+FAIL: test_SYS1_after_commit_cut_then_same_receipt (test_routes.SystemTests.test_SYS1_after_commit_cut_then_same_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 57, in test_SYS1_after_commit_cut_then_same_receipt
+    self.assertEqual(receipt, expected_receipt)
+AssertionError: {'id'[46 chars]'room': 'wrong-room', 'start': 540, 'end': 600, 'cancelled': 0} != {'id'[46 chars]'room': 'A', 'start': 540, 'end': 600, 'cancelled': 0}
+  {'cancelled': 0,
+   'end': 600,
+   'id': 1,
+   'owner': 'alice',
+   'request_id': 'req-1',
+-  'room': 'wrong-room',
++  'room': 'A',
+   'start': 540}
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.005s
+
+FAILED (failures=1)

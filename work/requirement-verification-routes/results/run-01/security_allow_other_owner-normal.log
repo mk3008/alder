@@ -1,0 +1,10 @@
+test_SEC1_body_owner_spoof (test_routes.SecurityTests.test_SEC1_body_owner_spoof) ... ok
+test_SEC1_other_owner_direct_cancel (test_routes.SecurityTests.test_SEC1_other_owner_direct_cancel) ... ok
+test_SEC1_other_owner_direct_read (test_routes.SecurityTests.test_SEC1_other_owner_direct_read) ... ok
+test_SEC1_owner_can_read_and_cancel (test_routes.SecurityTests.test_SEC1_owner_can_read_and_cancel) ... ok
+test_SEC1_unknown_or_anonymous (test_routes.SecurityTests.test_SEC1_unknown_or_anonymous) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+OK

@@ -40,6 +40,7 @@ Alder organizes established software engineering practices into a small AI-assis
 | Candidate / question | Current disposition | Detail |
 | --- | --- | --- |
 | Provided System Requirements handoff | Minimal clarification adopted; completeness remains product-owned | [System Requirements handoff](#system-requirements-handoff) |
+| システム・セキュリティ・保守要求の実行検証 | 有限ケースで経路成立を観測、製品化は保留 | [追加領域の自動検証](#追加領域の自動検証) |
 | Security requirement intake | Adopted with limited scope; existing handoff clarification | [Security requirement intake](#security-requirement-intake) |
 | Item-level Business Design / Check / Test freshness | Optional bounded pilot; universal tooling deferred | [Traceability drift](#item-level-traceability-drift) |
 | Scope-First as a new architecture or repository contract | Existing concepts sufficient; candidate contract not adopted | [Scope and placement](#scope-and-placement) |
@@ -256,6 +257,14 @@ Reason and evidence: [#168](https://github.com/mk3008/alder/issues/168) / [froze
 
 Reason and evidence: [#180](https://github.com/mk3008/alder/issues/180) / [fixed pre-adoption results](https://github.com/mk3008/alder/blob/ecb7186fe3447e8d6d41ec39afd4a3221c66671e/work/security-intake-180/results.ja.md). One independent context per arm retained all eight synthetic boundaries in both installed baseline and candidate. This supports explicit handoff wording, not a new detection capability or measured improvement. The underlying principle is [requirements validation and decision rationale](sources.md#requirements-validation-and-operational-scenarios); this particular intake is an Alder-specific bounded clarification. No vulnerability-reduction, completeness, real-client routing or user-effort benefit is established. Reconsider if actual handoffs still hide missing conditions or if the wording blocks unrelated work. The frozen research record retains its original candidate status; this entry records the later adoption, not a reinterpretation of its findings.
 
+## 追加領域の自動検証
+
+**研究上の限定的な成立確認。製品化・標準工程化は保留。** [#187](https://github.com/mk3008/alder/issues/187)の[実測報告](../work/requirement-verification-routes/report.ja.md)では、一つの架空予約アプリで、システム要求をSQLite障害注入、BD由来の認可要求を直接API否定試験、保守要求を固定advisory・成功履歴・watchdog・実アプリ回帰へ接続した。実行前に要求/oracleを固定し、初回5変異を検出。独立監査で見つかったreceipt/通知のassertion不足を補い、補完では6変異の正常pass→違反fail→復元passを観測した。初回証拠と補完を区別して保存している。
+
+Disposition: 領域ごとの通常のテスト・監視・回帰へ接続する経路を候補として残し、実製品がない現時点ではPoC拡大を見送る。Reflection: 研究記録のみ。Business Design → Check Item → Test、Skill、製品実装、正式guidanceは不変。統一Check体系、新Skill、共通framework、製品統合は採用しない。
+
+Limits: 1アプリ・16テスト・指定mutantの有限実験で、AIやツールの比較優位ではない。架空tokenとin-process API、局所SQLite、固定時計と模擬脆弱性を使い、実認証/HTTP、長期scheduler、通知配信、実CVE、全攻撃、本番更新、残余リスク承認は未検証。Reconsider: 具体的な製品・責任者・実運用の問題が定まった場合だけ、その領域を限定して検討する。
+
 ## Research operation
 
 **Reuse the three benchmarks, rerun locally — adopted.** The [dated evaluation policy](evaluation-plan.md#review-knowledge-benchmark-operation-2026-09-11) prioritizes the fixed facilities, purchase and meeting-room cases. Local changes rerun affected cases; new benchmarks need a property the existing cases cannot evaluate. Reason: evaluate targeted behavior and excessive demands rather than maximize benchmark count or require every past finding. Reflection: evaluation policy and validation links. Limit: fixed-set evidence does not establish generalization. Reconsider when a clearly identified property cannot be assessed in that set.
@@ -263,3 +272,4 @@ Reason and evidence: [#180](https://github.com/mk3008/alder/issues/180) / [fixed
 For new research decisions, follow [the index maintenance policy](evaluation-plan.md#research-decision-index-maintenance). Current validation summarizes demonstrated scope and open questions; this index maps candidate-level decisions, including rejected and historical work. Neither replaces the original evidence.
 
 For adopted decisions that affect user behavior, also provide a [user-facing explanation and navigation](research-publication.md) when warranted; the index and original research remain the evidence, not a substitute for that explanation.
+

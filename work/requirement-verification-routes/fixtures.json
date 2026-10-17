@@ -1,0 +1,14 @@
+{
+  "principals": {"alice-token": "alice", "bob-token": "bob"},
+  "reservation": {"request_id": "req-1", "room": "A", "start": "09:00", "end": "10:00"},
+  "now": 200000,
+  "interval_seconds": 86400,
+  "grace_seconds": 3600,
+  "current_dependency": {"name": "fake-time", "version": "1.0"},
+  "advisories": {
+    "clean": [],
+    "fixable": [{"id": "SYN-001", "package": "fake-time", "affected": "1.0", "fixed": "1.1"}],
+    "no_fix": [{"id": "SYN-002", "package": "fake-time", "affected": "1.0", "fixed": null}],
+    "breaking": [{"id": "SYN-003", "package": "fake-time", "affected": "1.0", "fixed": "2.0"}]
+  }
+}

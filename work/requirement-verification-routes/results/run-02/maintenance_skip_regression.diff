@@ -1,0 +1,11 @@
+--- maintenance.py
++++ maintenance.py
+@@ -73,7 +73,7 @@
+         "version": version, "advisory_id": advisory["id"], "regression": probe,
+     }
+     # Mutation anchor: candidate regression gate.
+-    if probe["passed"]:
++    if True:
+         result["status"] = "candidate_ready"
+     else:
+         result["status"] = "candidate_blocked"

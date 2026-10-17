@@ -1,0 +1,40 @@
+test_SEC1_body_owner_spoof (test_routes.SecurityTests.test_SEC1_body_owner_spoof) ... FAIL
+test_SEC1_other_owner_direct_cancel (test_routes.SecurityTests.test_SEC1_other_owner_direct_cancel) ... FAIL
+test_SEC1_other_owner_direct_read (test_routes.SecurityTests.test_SEC1_other_owner_direct_read) ... FAIL
+test_SEC1_owner_can_read_and_cancel (test_routes.SecurityTests.test_SEC1_owner_can_read_and_cancel) ... ok
+test_SEC1_unknown_or_anonymous (test_routes.SecurityTests.test_SEC1_unknown_or_anonymous) ... ok
+
+======================================================================
+FAIL: test_SEC1_body_owner_spoof (test_routes.SecurityTests.test_SEC1_body_owner_spoof)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 98, in test_SEC1_body_owner_spoof
+    self.denied('POST', self.path + '/cancel', 'bob-token', {'owner': 'alice'}, ORACLE['SEC1']['body_spoof_cancel'])
+  File "<scenario>/test_routes.py", line 85, in denied
+    self.assertEqual(status, expected)
+AssertionError: 200 != 403
+
+======================================================================
+FAIL: test_SEC1_other_owner_direct_cancel (test_routes.SecurityTests.test_SEC1_other_owner_direct_cancel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 95, in test_SEC1_other_owner_direct_cancel
+    self.denied('POST', self.path + '/cancel', 'bob-token', {}, ORACLE['SEC1']['other_cancel'])
+  File "<scenario>/test_routes.py", line 85, in denied
+    self.assertEqual(status, expected)
+AssertionError: 200 != 403
+
+======================================================================
+FAIL: test_SEC1_other_owner_direct_read (test_routes.SecurityTests.test_SEC1_other_owner_direct_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<scenario>/test_routes.py", line 92, in test_SEC1_other_owner_direct_read
+    self.denied('GET', self.path, 'bob-token', None, ORACLE['SEC1']['other_get'])
+  File "<scenario>/test_routes.py", line 85, in denied
+    self.assertEqual(status, expected)
+AssertionError: 200 != 403
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+FAILED (failures=3)

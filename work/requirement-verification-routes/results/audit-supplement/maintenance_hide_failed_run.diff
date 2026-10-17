@@ -1,0 +1,11 @@
+--- maintenance.py
++++ maintenance.py
+@@ -43,7 +43,7 @@
+         result["status"] = "scan_failed"
+         result["history"].append({"status": "failed", "at": now})
+         # Mutation anchor: failed-scan notification.
+-        result["events"].append({"type": "scan_failed", "at": now})
++        pass
+         return result
+ 
+     result["history"].append({"status": "success", "at": now})

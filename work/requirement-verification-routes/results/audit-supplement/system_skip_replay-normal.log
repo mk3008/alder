@@ -1,0 +1,9 @@
+test_SYS1_after_commit_cut_then_same_receipt (test_routes.SystemTests.test_SYS1_after_commit_cut_then_same_receipt) ... ok
+test_SYS1_before_commit_cut_then_retry (test_routes.SystemTests.test_SYS1_before_commit_cut_then_retry) ... ok
+test_SYS1_changed_payload_is_not_replayed (test_routes.SystemTests.test_SYS1_changed_payload_is_not_replayed) ... ok
+test_SYS1_request_id_is_owner_scoped (test_routes.SystemTests.test_SYS1_request_id_is_owner_scoped) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK
