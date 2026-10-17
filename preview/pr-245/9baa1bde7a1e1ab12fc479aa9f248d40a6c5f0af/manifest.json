@@ -1,0 +1,17 @@
+{
+  "source": "9baa1bde7a1e1ab12fc479aa9f248d40a6c5f0af",
+  "sourceTree": "1f43e771b68b1d67b39fb488946c7b1f75053d82",
+  "urlPath": "/preview/pr-245/9baa1bde7a1e1ab12fc479aa9f248d40a6c5f0af/",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "index.html": "b4e6bb46c4c2657347534702f41bacca1b27f19995c12380ec591e698b305fe4",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9",
+    "assets/index-BxmiwVnE.js": "8fa4298ad5d627e9d8067e7173d9933454b58412a41db34b226c55245a509901"
+  },
+  "reviewSource": {
+    "path": "standard-review.md",
+    "sourcePath": "business-design/alder/README.md",
+    "blob": "2fcba0ce348b4bea24768fe8c7aaf74d33fd5752"
+  }
+}
