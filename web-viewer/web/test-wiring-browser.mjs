@@ -78,11 +78,11 @@ export async function verifyRealWiring(browser){
   });
   const assertDeparture=(r,fixed=false)=>{
    const returning=!r.exception&&r.source.object&&(r.target.y+68<=r.source.y||(r.target.x<r.source.x&&r.target.y<=r.source.y));
-   if(returning){
+   if(returning||r.exception){
     assert.deepEqual(r.points[0],[r.source.x+260,r.source.y+34]);assert.ok(r.points[1][0]>r.points[0][0]);
-    if(fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282)<.01,'aligned return corridor uses constant card clearance');
+    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282)<.01,'aligned return corridor uses constant card clearance');
     assert.deepEqual(r.points.at(-1),[r.target.x+260,r.target.y+34]);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
-    assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y===r.source.y,'return Input uses right/up/right corridor');
+    assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y>=r.source.y,'right return preserves directed arrival');
    }else{
     assert.ok(Math.abs(r.points[0][0]-(r.source.x+32.5))<.01);assert.equal(r.points[0][1],r.source.y+68);
     assert.ok(Math.abs(r.points[0][0]-r.source.iconX)<=6,'ordinary/exception departure follows rendered icon column');assert.ok(r.points[1][1]>r.points[0][1]);
@@ -101,7 +101,7 @@ export async function verifyRealWiring(browser){
    await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();assert.deepEqual(await positions(),overview,'explicit overview reset applies common 64-unit layout');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),overview,'new overview reset survives reload');
    for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(let i=0;i<7;i++)await page.locator('#out').click();await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});await page.screenshot({path:`web/evidence/wiring/real-overview-${width}-${theme}.png`});for(let i=0;i<7;i++)await page.locator('#in').click();}
 
-   const overviewRoutes=await inspect();for(const r of overviewRoutes.wires)assertDeparture(r);
+   const overviewRoutes=await inspect();for(const r of overviewRoutes.wires){assertDeparture(r);if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
    for(const spec of specs){
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();

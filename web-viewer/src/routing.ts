@@ -175,10 +175,10 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
 }
 /**
  * Bounded orthogonal templates with a shared bottom departure, except for
- * feedback Inputs that prefer right/right return corridors. Arrival
+ * feedback Inputs and exceptions that prefer right/right return corridors. Arrival
  * sides and nearby obstacle boundaries provide local escape lanes, including
  * short stubs in retained card gaps. Normal down/right paths are preferred;
- * returns may fold back after leaving below the same icon-side outlet.
+ * feedback and exception returns fold back outside the right side.
  * The runtime cache can therefore reroute only incident edges after a drag.
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
@@ -192,11 +192,11 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   const offCanvas=(points:Point[])=>points.some(p=>p[0]<minimum[0]+1||p[1]<minimum[1]+1)?1:0;
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
-  const returnInput=kind==='input'&&returning;
-  const preferred:[Side,Side]=returnInput?['right','right']:returning?['bottom','right']:['bottom','left'];
+  const returnInput=kind==='input'&&returning,exception=kind?.endsWith('exception')===true,rightReturn=returnInput||exception;
+  const preferred:[Side,Side]=rightReturn?['right','right']:returning?['bottom','right']:['bottom','left'];
   // Clear feedback corridors share a fixed card clearance, independent of
   // relation order. Aligned source cards therefore share their vertical run.
-  const spread=returnInput?0:(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
+  const spread=rightReturn?0:(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
   const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
   let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity],rerouted=false;
@@ -230,12 +230,13 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
   };
   // Feedback Inputs from Output-side Objects may use a short right/up/right
-  // return corridor. Keep ordinary/exception departures below the icon.
-  if(returnInput)tryPorts(['right','right']);
+  // return corridor. Exceptions share this right/right convention; ordinary
+  // forward relations retain the icon-side bottom outlet.
+  if(rightReturn)tryPorts(['right','right']);
   // Ordinary relations leave below the icon. Obstructed saved positions may
   // require a short initial turn, but never silently change the source port.
   const a=port(source,'bottom');
-  if(!returnInput||bestScore[0]>0||bestScore[1]>0)for(const side of ['left','right','top','bottom'] as Side[]){
+  if(!rightReturn||bestScore[0]>0||bestScore[1]>0)for(const side of ['left','right','top','bottom'] as Side[]){
     const b=port(target,side),entry=add(b,normals[side],reach),pair:[Side,Side]=['bottom',side];
     tryPorts(pair);
     // Local obstacle boundaries provide escape lanes without global detours.

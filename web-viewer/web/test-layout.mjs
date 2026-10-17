@@ -20,7 +20,8 @@ const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layou
 assert.deepEqual({...reconcile({key:'old-overview',design:sample,positions:saved128,scroll:[17,29],zoom:.75},sample).positions},saved128,'saved 128-unit overview coordinates never migrate');
 const previous=JSON.parse(readFileSync(new URL('./review-routing/positions-staircase.json',import.meta.url),'utf8'));
 const columns=positions=>[...new Set(Object.values(positions).map(p=>p[0]))].sort((a,b)=>a-b).map(x=>Object.keys(positions).filter(id=>positions[id][0]===x).sort());
-assert.deepEqual(columns(p),columns(previous),'compact spacing preserves the reviewed dependency ranks');
+assert.deepEqual(columns(p).slice(3),columns(previous).slice(1),'downstream dependency ranks remain grouped after source-peer stairs');
+assert.deepEqual(columns(p).slice(0,3),[['Alder: 業務相関ナレッジ'],['Alder: 検査項目設計ナレッジ'],['Alder: 業務ナレッジ']],'source-only Objects occupy distinct left/up staircase steps');
 assert.deepEqual(Object.keys(p).sort((a,b)=>p[a][1]-p[b][1]),Object.keys(previous).sort((a,b)=>previous[a][1]-previous[b][1]),'compact spacing preserves the reviewed reading order');
 const span=positions=>Math.max(...Object.values(positions).map(p=>p[0]))-Math.min(...Object.values(positions).map(p=>p[0]));
 assert.ok(span(p)<span(previous),'the same dependency ranks occupy less horizontal space');

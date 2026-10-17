@@ -26,7 +26,8 @@ export function assertCompactStaircase(positions,design){
  const rank=new Map(ids.map(id=>[id,0]));let changed=true,passes=0;
  while(changed){assert.ok(passes++<=ids.length,'forward constraints must be acyclic');changed=false;for(const r of forward){const next=rank.get(r.from)+1;if(rank.get(r.to)<next){rank.set(r.to,next);changed=true;}}}
  assert.deepEqual(Object.keys(positions).sort(),ids.slice().sort());
- for(const id of ids){const [x,y]=positions[id];assert.equal(x,40+64*rank.get(id),'compact dependency rank for '+id);assert.ok(Number.isFinite(y)&&y>=40&&(y-40)%96===0,'96-unit row grid for '+id);}
+ for(const id of ids){const [x,y]=positions[id];if(rank.get(id)===0){assert.ok([40,104,168].includes(x),'source peer has its own compact step');}else assert.equal(x,40+64*(rank.get(id)+2),'compact dependency rank after source-peer steps for '+id);assert.ok(Number.isFinite(y)&&y>=40&&(y-40)%96===0,'96-unit row grid for '+id);}
+ const roots=nodes.filter(n=>n.type==='object'&&rank.get(n.id)===0&&!normal.some(r=>r.to===n.id)).map(n=>n.id).sort((a,b)=>positions[a][1]-positions[b][1]);assert.deepEqual(roots.map(id=>positions[id][0]),[40,104,168],'upstream source peers advance right and down');
  for(const r of forward)assert.ok(positions[r.to][1]>=positions[r.from][1]+96,'forward dependency steps down: '+r.from+' → '+r.to);
  for(let i=0;i<ids.length;i++)for(let j=0;j<i;j++){const [ax,ay]=positions[ids[i]],[bx,by]=positions[ids[j]];assert.ok(ax+260<=bx||bx+260<=ax||ay+68<=by||by+68<=ay,'compact cards do not overlap: '+ids[i]+' / '+ids[j]);}
  return {forward:forward.length,feedback:normal.length-forward.length};
@@ -38,7 +39,7 @@ export async function verifyDocumentOrder(browser){
  const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await useUngroupedSample(page);await page.locator('#drawer').click();
-  const initial=await positions();assert.ok(initial['業務設計書'][0]<initial['同期漏れ検査'][0]);const constraints=assertCompactStaircase(initial,parseDesign(raw));assert.deepEqual(constraints,{forward:49,feedback:12});assert.equal(Math.max(...Object.values(initial).map(p=>p[0])),808,'compact public fixture ends at dependency rank 12');
+  const initial=await positions();assert.ok(initial['業務設計書'][0]<initial['同期漏れ検査'][0]);const constraints=assertCompactStaircase(initial,parseDesign(raw));assert.deepEqual(constraints,{forward:49,feedback:12});assert.equal(Math.max(...Object.values(initial).map(p=>p[0])),936,'compact public fixture ends at dependency rank 12 plus two source-peer steps');
   for(const width of [320,393,1280]){await page.setViewportSize({width,height:960});assert.deepEqual(await positions(),initial,'viewport does not change initial layout');}
   const boxes=await page.locator('.node').evaluateAll(ns=>ns.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
   for(let i=0;i<boxes.length;i++)for(let j=0;j<i;j++){const a=boxes[i],b=boxes[j];assert.ok(a.x+a.w<=b.x||b.x+b.w<=a.x||a.y+a.h<=b.y||b.y+b.h<=a.y);}

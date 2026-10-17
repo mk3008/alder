@@ -39,16 +39,16 @@ async function boot({db=new IDBFactory(),seed,width=1280,height=800}={}){
  return {w,d,$,v,db};
 }
 function geometry(e,inset=40,zoom=1){
- // The requested overview layout now shares the detail's 64-unit step.
+ // Overview shares the detail's 64-unit step and separates source-only peers.
  // Pin its new coordinates and extents exactly; older saved geometry has a
  // separate frozen-128 restore/reset regression in layout and native wiring.
- assert.equal(hash(positions(e)),'00204dde833969c5aefe0bca31e63b259646f5a2eb5243a4d8318a4e2393f6e4','all new overview coordinates use the shared 64-unit layout');
+ assert.equal(hash(positions(e)),'82cd731107a594358f8037d78c7e481e9e6e9f3e6000fb7959afaee4c7f69118','all new overview coordinates use the shared 64-unit layout');
  // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'dd89d294a215f5975a44169308a6d0402666cb03ac64bb8d649eef0cf882c040','all SVG paths and endpoint-relative left-aligned captions remain exact');
+ assert.equal(hash(routes(e)),'66a312d91258d8984259deea887f0d914f6437e454e7fb8f935979517c6eeeee','all SVG paths and endpoint-relative left-aligned captions remain exact');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 1553 2564');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(1553+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 1681 2564');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(1681+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

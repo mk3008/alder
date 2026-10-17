@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 import {activityDesign} from '../src/activities.ts';
 import {initialPositions} from '../src/layout.ts';
+import {routeEdge} from '../src/routing.ts';
 import {RouteCache} from '../src/route-cache.ts';
 import {reconcile} from '../src/session.ts';
 import {resetLayout} from '../src/layout-reset.ts';
@@ -26,15 +27,15 @@ for(const [activity,staircase] of Object.entries(expected)){
  for(const [i,relation] of projected.graph.relations.entries()){
   const route=routes[i],source=boxes.find(n=>n.id===relation.from),target=boxes.find(n=>n.id===relation.to);
   const returnInput=relation.kind==='input'&&source.y>=target.y+target.height;
-  if(returnInput){
+  if(returnInput||relation.kind.endsWith('exception')){
    assert.deepEqual(route.points[0],[source.x+source.width,source.y+source.height/2],'feedback Input leaves Output-side Object on the right');
    assert.ok(route.points[1][0]>route.points[0][0]);assert.equal(route.points[1][1],route.points[0][1]);
    assert.deepEqual(route.points.at(-1),[target.x+target.width,target.y+target.height/2],'feedback Input enters Activity on the right');
    assert.ok(route.points.at(-2)[0]>route.points.at(-1)[0]);
-   assert.ok(route.points.some(p=>p[1]<route.points[0][1]),'return corridor climbs upstream');
-   assert.equal(route.bounds.right,source.x+source.width+22,'aligned Objects share the fixed 22-unit return corridor');
+   assert.ok(route.points.some(p=>target.y<source.y?p[1]<route.points[0][1]:p[1]>route.points[0][1]),'right corridor follows the directed target height');
+   if(returnInput)assert.equal(route.bounds.right,source.x+source.width+22,'aligned Objects share the fixed 22-unit return corridor');
   }else{
-   assert.deepEqual(route.points[0],[source.x+source.width/8,source.y+source.height],'ordinary/exception common icon-side bottom outlet');
+   assert.deepEqual(route.points[0],[source.x+source.width/8,source.y+source.height],'ordinary icon-side bottom outlet');
    assert.equal(route.points[1][0],route.points[0][0]);assert.ok(route.points[1][1]>route.points[0][1]);
   }
   assert.equal(route.collisions,0);assert.equal(route.fallback,false);
@@ -80,4 +81,20 @@ for(const [activity,staircase] of Object.entries(expected)){
  Object.assign(tab,{positions});
 }
 assert.equal(JSON.stringify(design),before,'source Graph and document remain exact');
-console.log('Both real Activity details: staircase peers, common bottom outlets, semantic exceptions, 4 source captions each, no label/card overlaps, old saved stack unchanged, explicit reset and per-tab restore.');
+console.log('Both real Activity details: staircase peers, ordinary bottom outlets, right/right semantic exceptions, 4 source captions each, no label/card overlaps, old saved stack unchanged, explicit reset and per-tab restore.');
+
+const overviewNodes=design.graph.nodes.map(n=>({id:n.id,x:overview[n.id][0],y:overview[n.id][1],width:260,height:68}));
+for(const [index,relation] of design.graph.relations.entries()){
+ const source=overviewNodes.find(n=>n.id===relation.from),target=overviewNodes.find(n=>n.id===relation.to);
+ if(relation.kind==='input'&&relation.from.startsWith('Alder: ')){
+  assert.ok(source.x+32.5<target.x,'source icon column is left of normal Input target');
+  const route=routeEdge({...relation,nodes:overviewNodes,index,labelWidth:Math.max(30,relation.label.length*12),labelHeight:18});
+  assert.deepEqual(route.points[0],[source.x+32.5,source.y+68]);assert.deepEqual(route.points.at(-1),[target.x,target.y+34]);
+  assert.ok(route.points[1][1]>route.points[0][1]);assert.equal(route.collisions,0);assert.equal(route.fallback,false);
+ }
+ if(relation.kind.endsWith('exception')){
+  const route=routeEdge({...relation,nodes:overviewNodes,index,labelWidth:Math.max(30,relation.label.length*12),labelHeight:18});
+  assert.deepEqual(route.points[0],[source.x+260,source.y+34]);assert.deepEqual(route.points.at(-1),[target.x+260,target.y+34]);
+  assert.ok(route.points[1][0]>route.points[0][0]);assert.ok(route.points.at(-2)[0]>route.points.at(-1)[0]);assert.equal(route.collisions,0);
+ }
+}

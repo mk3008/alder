@@ -130,13 +130,14 @@ for(let run=0;run<2000;run++){
 console.log(JSON.stringify({passed:19,checks:['reference left-biased staircase','orthogonal legs','short rounded corners','tangent continuity','endpoint normals and arrow meaning','seven-card obstacle avoidance','full-label clearance','purity','determinism','live target drag','outside-right returns','parallel detour spacing','ID independence','segment intersection','dense finite fallback','four-direction fixtures','covered-port alternate','bounded routing','2000 seeded drag/overlap cases with dense curve verification'],sampleRoutingMs:Math.round(performance.now()-began)},null,2));
 await import('./test-directional-ports.mjs');
 
-// Mandatory icon-side outlet, independent of relation kind, with obstacle escape.
+// Ordinary icon-side outlet and explicit right/right exceptions with obstacle escape.
 const staircase=[rect('s',100,100),rect('t',228,400),{id:'block',x:140,y:230,width:70,height:68}];
 const opts={from:'s',to:'t',nodes:staircase,labelWidth:60,labelHeight:18};
 const monotone=r=>r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]&&p[1]>=r.points[i][1]);
 const snapshot=JSON.stringify(staircase);
 for(const kind of ['input','output','business-exception','object-exception']){
- const r=routeEdge({...opts,kind});assert.deepEqual(r.points[0],[132.5,168]);
+ const r=routeEdge({...opts,kind});assert.deepEqual(r.points[0],kind.endsWith('exception')?[360,134]:[132.5,168]);
+ if(kind.endsWith('exception'))assert.deepEqual(r.points.at(-1),[488,434]);
  assert.equal(r.collisions,0);endpointNormals(r,staircase[0],staircase[1]);orthogonalCorners(r);
  if(kind==='input'||kind==='output')assert.equal(monotone(r),true);
 }
@@ -150,7 +151,7 @@ assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-
 assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouched');
 for(const kind of ['input','output','business-exception','object-exception']){
  const r=routeEdge({...opts,from:'t',to:'s',kind});
- if(kind==='input'){assert.deepEqual(r.points[0],[488,434]);assert.deepEqual(r.points.at(-1),[360,134]);assert.ok(r.points[1][0]>488);}else{assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);}
+ if(kind==='input'||kind.endsWith('exception')){assert.deepEqual(r.points[0],[488,434]);assert.deepEqual(r.points.at(-1),[360,134]);assert.ok(r.points[1][0]>488);}else{assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);}
  assert.equal(r.collisions,0);assert.ok(r.points.at(-1)[1]<r.points[0][1]);
  endpointNormals(r,staircase[1],staircase[0]);orthogonalCorners(r);
 }
