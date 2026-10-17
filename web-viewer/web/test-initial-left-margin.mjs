@@ -39,14 +39,16 @@ async function boot({db=new IDBFactory(),seed,width=1280,height=800}={}){
  return {w,d,$,v,db};
 }
 function geometry(e,inset=40,zoom=1){
- // These hashes and extents were measured before this camera-only change from
- // the canonical 090622ab source. Do not regenerate them from the new output.
- assert.equal(hash(positions(e)),'2a781f2fef2b245f51b054cc42410cf38e4967ecee0b1ac617918b52642c92f4','all node coordinates retain the reviewed layout');
- assert.equal(hash(routes(e)),'85d0e22a3745672f890b5f576e7f63478ad9346fdec3dfeaa3f1b5c22f3e2e1e','all SVG path/label coordinates retain the reviewed routes');
+ // Overview shares the detail's 64-unit step and separates source-only peers.
+ // Pin its new coordinates and extents exactly; older saved geometry has a
+ // separate frozen-128 restore/reset regression in layout and native wiring.
+ assert.equal(hash(positions(e)),'e3290e87fca6d9fa00072fc32778971b602523445b19fa397d64bf7dd93f4424','all new overview coordinates use the shared 64-unit layout');
+ // Keep the new overview paths/captions exact across camera and reload changes.
+ assert.equal(hash(routes(e)),'e5d38510751ca9c33d8fac0daaa48b2a691f2dd1bd791c127bac627bf8a4c96b','all SVG paths and endpoint-relative left-aligned captions remain exact');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 1916 2564');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(1916+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2096 3428');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2096+inset*2)*zoom+'px',3428*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }
@@ -87,6 +89,8 @@ try{
  for(const zoom of [.25,.36,1,2.5])for(const inset of [0,40]){
   const tab={...structuredClone(legacy),zoom};if(inset)tab.viewInset=[inset,0];
   const e=await boot({width:320,height:568,seed:state(tab)});geometry(e,inset,zoom);
+  // The historical world point x=8 remains inside the padded camera, even
+  // though corrected Input routes no longer use that exterior left lane.
   const nodeLeft=(40+inset)*zoom,lineLeft=(8+inset)*zoom;
   assert.ok(nodeLeft>lineLeft);assert.ok((1+inset)*zoom>0,'the leftmost estimated label box stays inside the canvas');e.w.close();
  }

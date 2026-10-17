@@ -1,3 +1,4 @@
+import {verifyWiring} from './test-wiring-browser.mjs';
 import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {openDisplaySettings,closeDisplaySettings} from './toolbar-settings-control.mjs';
@@ -67,6 +68,7 @@ export async function verifyLabelLayout(browser) {
     await page.locator('#open-menu-toggle').click();
     for(const id of ['open','open-url','open-text']){assert.equal(await page.locator('#'+id+' svg').isVisible(),true);assert.equal(await page.locator('#'+id+' .source-caption').isVisible(),true);}
     assert.deepEqual(errors,[]);
+    results.push({wiring:await verifyWiring(browser)});
     return results;
   } finally {await page.close();}
 }

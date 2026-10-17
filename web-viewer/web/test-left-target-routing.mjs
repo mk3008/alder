@@ -114,17 +114,17 @@ for(const [name,nodes] of cases){
   validate(o,r);assert.deepEqual(routeEdge(o),r);assert.equal(JSON.stringify(o),snapshot);
   const renamed=nodes.map((n,i)=>({...n,id:`renamed-${i}`}));assert.deepEqual(routeEdge({...o,from:'renamed-0',to:'renamed-1',nodes:renamed}),r,'no node-name special cases');
   if(['screenshotProportions','topLeftBeforeBottomRight','sideLeftBeforeSideRight','downLeft','negativeCoordinates'].includes(name)){assert.equal(side(r.points.at(-1),t),'left');assert.equal(r.collisions,0);assert.equal(r.fallback,false);}
-  if(name==='topLeftBeforeBottomRight'){assert.equal(side(r.points[0],s),'top');if(old)assert.equal(side(old.points.at(-1),t),'right');}
-  if(name==='sideLeftBeforeSideRight'){assert.equal(side(r.points[0],s),'left');if(old)assert.equal(side(old.points.at(-1),t),'right');}
+  assert.deepEqual(r.points[0],[s.x+s.width/8,s.y+s.height],'mandatory outlet replaces old top/side departure preferences');
+  if(name==='sideLeftBeforeSideRight')assert.ok(r.points[1][1]>r.points[0][1],'tight saved gap still starts downward');
   if(name==='screenshotProportions'){assert.equal(side(r.points[0],s),'bottom');assert.equal((r.path.match(/ Q/g)??[]).length,1);assert.ok(r.bounds.right<=t.x);}
   if(name==='coveredLeftArrival'){assert.notEqual(side(r.points.at(-1),t),'left');assert.equal(r.collisions,0);}
-  if(name==='trueUpstream'||name==='sameRowReturn'){assert.equal(side(r.points.at(-1),t),'right');if(old)assert.deepEqual(r,old);}
+  if(name==='trueUpstream'||name==='sameRowReturn'){assert.equal(side(r.points.at(-1),t),'left');assert.ok(r.points[1][1]>r.points[0][1]);}
   if(name==='impossibleOverlap'){assert.ok(r.collisions>0);assert.equal(r.fallback,true);}
   fixtures[name]={nodes,candidate:r,...(old?{baseline:old}:{}),candidateLength:+length(r).toFixed(2),...(old?{baselineLength:+length(old).toFixed(2)}:{})};
 }
 const parallel=Array.from({length:4},(_,index)=>routeEdge({from:'source',to:'target',nodes:priority,index}));
 assert.equal(new Set(parallel.map(r=>r.path)).size,4,'detours retain original index lane spacing');
-const selfOptions={from:'source',to:'source',nodes:[proportional[0]]},self=routeEdge(selfOptions);assert.equal(self.collisions,0);validate(selfOptions,self);if(baseline)assert.deepEqual(self,baseline(selfOptions));
+const selfOptions={from:'source',to:'source',nodes:[proportional[0]]},self=routeEdge(selfOptions);assert.equal(self.collisions,0);validate(selfOptions,self);assert.deepEqual(self.points[0],[proportional[0].x+32.5,proportional[0].y+68]);
 
 // Verify the cache boundary directly: display-only filtering has no routing
 // calls, and moving one node only recomputes that node's incident union.

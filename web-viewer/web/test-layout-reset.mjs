@@ -99,7 +99,10 @@ try{
  const routes=await boot({seed:{tabs:[{key:'routes',name:'Routes',design:routeDesign,positions:routePositions,scroll:[0,0],zoom:1,viewInset:[40,0]}],active:'routes',dark:false,drawer:false,width:380}});
  const originalRoutes=geometry(routes);routes.$('layout-lock').click();
  const move=(id,dx,dy)=>{const n=[...routes.d.querySelectorAll('.node')].find(n=>n.dataset.node===id);fire(routes,n,'pointerdown',400,300);fire(routes,n,'pointermove',400+dx,300+dy);fire(routes,n,'pointerup',400+dx,300+dy);};
- move('person',152,-88);move('read',0,10);move('read',0,-10);move('person',-152,88);
+ // Put this nonincident obstacle beyond the old right corridor without
+ // covering either endpoint. Returning the endpoint first retains that wider
+ // cached corridor until reset explicitly recomputes the whole tab.
+ move('person',500,50);move('read',0,10);move('read',0,-10);move('person',-500,-50);
  assert.deepEqual(routes.state().tabs[0].positions,json(routePositions));assert.notDeepEqual(geometry(routes),originalRoutes);
  const routeRevision=routes.w.__resetRevision();routes.$('reset-layout').click();
  assert.deepEqual(geometry(routes),originalRoutes);assert.equal(routes.w.__resetRevision(),routeRevision,'route-only reset adds no saved revision');routes.w.close();

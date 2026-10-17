@@ -47,10 +47,10 @@ assert.deepEqual(routeEdge(input),route,'deterministic geometry and labels');
 for(const n of nodes)assert.ok(route.label[0]+64<n.x||route.label[0]-64>n.x+n.width||route.label[1]+14<n.y||route.label[1]-14>n.y+n.height,'whole label clears each card');
 const drag=routeEdge({...input,nodes:nodes.map(n=>n.id==='finish'?{...n,x:870,y:210}:n)});
 assert.notEqual(drag.path,route.path);assert.notDeepEqual(drag.points.at(-1),route.points.at(-1));
-const reverse=routeEdge({...input,from:'finish',to:'start'});
+const reverse=routeEdge({...input,from:'finish',to:'start',labels:[{id:'first',x:route.label[0]-60,y:route.label[1]-10,width:120,height:20}]});
 assert.equal(reverse.collisions,0);assert.ok(reverse.points[0][0]>reverse.points.at(-1)[0]);
-assert.equal(reverse.points[0][0],nodes[2].x+nodes[2].width);assert.equal(reverse.points.at(-1)[0],nodes[0].x+nodes[0].width);
-assert.ok(reverse.bounds.right>Math.max(...nodes.map(n=>n.x+n.width)),'return uses the outside right lane');
+assert.deepEqual(reverse.points[0],[nodes[2].x+nodes[2].width*.125,nodes[2].y+nodes[2].height]);
+assert.ok(reverse.points.some(p=>p[1]>reverse.points[0][1]),'return leaves downward before folding back');
 assert.notDeepEqual(route.points,[...reverse.points].reverse());
 assert.ok(Math.abs(route.label[0]-reverse.label[0])>120||Math.abs(route.label[1]-reverse.label[1])>20,'reciprocal fixture labels do not overlap');
 assert.notEqual(routeEdge({...input,index:1}).path,route.path,'parallel detours have index-based spacing');
@@ -63,7 +63,7 @@ assert.throws(()=>routeEdge({...input,to:'missing'}),/endpoint/);
 // The reference's small staircase: long vertical + horizontal legs, one short Q.
 const stairs=[rect('source',40,40),rect('target',168,136)];
 const step=routeEdge({from:'source',to:'target',nodes:stairs});
-assert.deepEqual(step.points[0],[97.2,108]);assert.deepEqual(step.points.at(-1),[168,170]);
+assert.deepEqual(step.points[0],[72.5,108]);assert.deepEqual(step.points.at(-1),[168,170]);
 assert.equal(commands(step.path).filter(c=>c.op==='Q').length,1);assert.equal(step.collisions,0);assert.equal(step.fallback,false);
 assert.ok(step.bounds.right<=stairs[1].x,'ordinary dependency never loops behind target');
 
@@ -87,10 +87,10 @@ for(let x=320;x<=1000;x+=40){
   const fixture=nodes.map(n=>n.id==='finish'?{...n,x,y:180}:n),r=routeEdge({...input,nodes:fixture});
   orthogonalCorners(r);endpointNormals(r,fixture[0],fixture[2]);assert.deepEqual(routeEdge({...input,nodes:fixture}),r);
 }
-// This cover spans the new left-biased vertical ports, forcing side departure.
-const blockedPort=[rect('a',120,320),rect('b',1100,320),{id:'port-cover',x:160,y:290,width:40,height:130}];
+// A covered mandatory outlet stays on the same icon-side bottom; report the obstruction.
+const blockedPort=[rect('a',120,320),rect('b',1100,320),{id:'port-cover',x:150,y:290,width:40,height:130}];
 const alternate=routeEdge({from:'a',to:'b',nodes:blockedPort});
-assert.equal(alternate.collisions,0);assert.ok([120,380].includes(alternate.points[0][0]));
+assert.ok(alternate.collisions>0);assert.equal(alternate.fallback,true);assert.deepEqual(alternate.points[0],[152.5,388]);
 for(const r of [route,drag,reverse,step,alternate])orthogonalCorners(r);
 
 // Cost is capped at 193 small templates, independent of the number of cards.
@@ -129,3 +129,35 @@ for(let run=0;run<2000;run++){
 }
 console.log(JSON.stringify({passed:19,checks:['reference left-biased staircase','orthogonal legs','short rounded corners','tangent continuity','endpoint normals and arrow meaning','seven-card obstacle avoidance','full-label clearance','purity','determinism','live target drag','outside-right returns','parallel detour spacing','ID independence','segment intersection','dense finite fallback','four-direction fixtures','covered-port alternate','bounded routing','2000 seeded drag/overlap cases with dense curve verification'],sampleRoutingMs:Math.round(performance.now()-began)},null,2));
 await import('./test-directional-ports.mjs');
+
+// Ordinary icon-side outlet and explicit right/right exceptions with obstacle escape.
+const staircase=[rect('s',100,100),rect('t',228,400),{id:'block',x:140,y:230,width:70,height:68}];
+const opts={from:'s',to:'t',nodes:staircase,labelWidth:60,labelHeight:18};
+const monotone=r=>r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]&&p[1]>=r.points[i][1]);
+const snapshot=JSON.stringify(staircase);
+for(const kind of ['input','output','business-exception','object-exception']){
+ const r=routeEdge({...opts,kind});assert.deepEqual(r.points[0],kind.endsWith('exception')?[360,134]:[132.5,168]);
+ if(kind.endsWith('exception'))assert.deepEqual(r.points.at(-1),[488,434]);
+ assert.equal(r.collisions,0);endpointNormals(r,staircase[0],staircase[1]);orthogonalCorners(r);
+ if(kind==='input'||kind==='output')assert.equal(monotone(r),true);
+}
+const caption=routeEdge({...opts,kind:'input'});
+assert.ok(caption.label[1]>168&&caption.label[1]<210);
+equal(Math.abs(caption.label[0]-caption.points[0][0]),38);
+const labelBox={id:'caption',x:caption.label[0]-30,y:caption.label[1]-9,width:60,height:18};
+const other=routeEdge({...opts,kind:'input',labels:[labelBox]});
+assert.equal(other.path,caption.path);
+assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-caption.label[1])>22);
+assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouched');
+for(const kind of ['input','output','business-exception','object-exception']){
+ const r=routeEdge({...opts,from:'t',to:'s',kind});
+ if(kind==='input'||kind.endsWith('exception')){assert.deepEqual(r.points[0],[488,434]);assert.deepEqual(r.points.at(-1),[360,134]);assert.ok(r.points[1][0]>488);}else{assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);}
+ assert.equal(r.collisions,0);assert.ok(r.points.at(-1)[1]<r.points[0][1]);
+ endpointNormals(r,staircase[1],staircase[0]);orthogonalCorners(r);
+}
+// A saved card immediately beneath the outlet blocks every legal departure.
+// It must be reported honestly, never escaped by silently using a side port.
+const covered={...opts,nodes:[rect('s',100,100),rect('t',500,400),{id:'floor',x:80,y:168,width:300,height:70}]};
+const blocked=routeEdge({...covered,kind:'input'});
+assert.deepEqual(blocked.points[0],[132.5,168]);assert.ok(blocked.collisions>0);assert.equal(blocked.fallback,true);
+await import('./test-wiring-real.mjs');
