@@ -1,0 +1,8 @@
+{
+  "source": "c407b3c6c2547bf3ba62117b287e192a91d6fde6",
+  "tree": "17f429d3e64d22ba2fcf6d24c1f6c54ffbd25f4b",
+  "stage": "matrix-first visual prototype",
+  "verified": "build, 25 nodes / 63 routes, zero initial route/card collisions, native glyph zero initial pairs, basic save/reload",
+  "deferred": "fine regression tests and existing geometry oracle updates",
+  "scope": "new isolated preview prefix only"
+}
