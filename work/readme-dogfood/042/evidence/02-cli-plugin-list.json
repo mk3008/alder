@@ -1,0 +1,23 @@
+{
+  "installed": [
+    {
+      "pluginId": "alder@alder-development",
+      "name": "alder",
+      "marketplaceName": "alder-development",
+      "version": "0.4.2",
+      "installed": true,
+      "enabled": true,
+      "source": {
+        "source": "local",
+        "path": "<dogfood>/codex-home/.tmp/marketplaces/alder-development/plugins/alder"
+      },
+      "marketplaceSource": {
+        "sourceType": "git",
+        "source": "https://github.com/mk3008/alder.git"
+      },
+      "installPolicy": "AVAILABLE",
+      "authPolicy": "ON_INSTALL"
+    }
+  ],
+  "available": []
+}

@@ -1,0 +1,773 @@
+{
+  "scope": "Completed evidence through stage 15 bounded Check-to-Test maintenance, initial 20-test and final 21-test snapshots, and public-layout reproduction.",
+  "originals": "Original files retained unchanged outside public staging. Original paths are logical relative paths; no private locator is published.",
+  "entries": [
+    {
+      "source": "evidence/01-marketplace.exit",
+      "published": "evidence/01-marketplace.exit",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/01-marketplace.log",
+      "published": "evidence/01-marketplace.log",
+      "original_sha256": "6cb09649fbf532b3292d9612c9a347de275bf676a093ab77477efd1c330f3010",
+      "published_sha256": "40a3cffc1683d1ce70dd3799cb8be3c89c58d7d95977ff2c30664fdd7c90841a",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/02-cli-plugin-add.err",
+      "published": "evidence/02-cli-plugin-add.err",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/02-cli-plugin-add.exit",
+      "published": "evidence/02-cli-plugin-add.exit",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/02-cli-plugin-add.json",
+      "published": "evidence/02-cli-plugin-add.json",
+      "original_sha256": "d5ffb0d53bff1d6b0ece62ab4846fcb2312d70fde84b6afa387db103a32a3f23",
+      "published_sha256": "03c09225de4f02b725f4a63a4b84e045cf555da1fc690c6dcefc8f6eadeccab4",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/02-cli-plugin-list.json",
+      "published": "evidence/02-cli-plugin-list.json",
+      "original_sha256": "17d381c4ac4a26498dad5b96153484900a1e01069b7c0c5b6ad138097c5d7bc2",
+      "published_sha256": "bc4979ba7c64397b79caa84b5f5608af24fea8e9ca8674a1d9a64559972699fe",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/03-auth-probe.err",
+      "published": "evidence/03-auth-probe.err",
+      "original_sha256": "eae080369e91b8869ecdd955b8e2a9840b501bc2c8dfb0889bae645cc549d4b5",
+      "published_sha256": "eae080369e91b8869ecdd955b8e2a9840b501bc2c8dfb0889bae645cc549d4b5",
+      "transformations": []
+    },
+    {
+      "source": "evidence/03-auth-probe.exit",
+      "published": "evidence/03-auth-probe.exit",
+      "original_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "published_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "transformations": []
+    },
+    {
+      "source": "evidence/03-auth-probe.jsonl",
+      "published": "evidence/03-auth-probe.jsonl",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/04-draft-observation.md",
+      "published": "evidence/04-draft-observation.md",
+      "original_sha256": "b17f7f8392f6916782b2028008c3029c3b1bbe5aae560dcbafe0a83f1b5b1cf4",
+      "published_sha256": "8e56d78cdecda65a35e0090e4e50c72a1c490282ea8a5ff50e9897af3f76bb4c",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <scratch-root>",
+        "local path prefix replaced with <scratch-parent>",
+        "local path prefix replaced with <workspace-root>"
+      ]
+    },
+    {
+      "source": "evidence/05-package-tests.exit",
+      "published": "evidence/05-package-tests.exit",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/05-package-tests.log",
+      "published": "evidence/05-package-tests.log",
+      "original_sha256": "627aa7bebc2c3360a617b24afeeb67842513e5defb0fd3dd0598f1963d7c0c0d",
+      "published_sha256": "627aa7bebc2c3360a617b24afeeb67842513e5defb0fd3dd0598f1963d7c0c0d",
+      "transformations": []
+    },
+    {
+      "source": "evidence/06-bd-review.md",
+      "published": "evidence/06-bd-review.md",
+      "original_sha256": "cc95698bd98aac9e50d6edd962d8d005362c2aa981595445d5118bd598f26207",
+      "published_sha256": "cc95698bd98aac9e50d6edd962d8d005362c2aa981595445d5118bd598f26207",
+      "transformations": []
+    },
+    {
+      "source": "evidence/07-bd-revision.md",
+      "published": "evidence/07-bd-revision.md",
+      "original_sha256": "c843d01aa3cf205d3e8faa792b3421f50427ebb648089a845bd1176549522493",
+      "published_sha256": "730a402c9ef20b8e284f4948c8d799d8434b200820ecba280949b4ad8e2b9740",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/08-auth-probe-redirected.err",
+      "published": "evidence/08-auth-probe-redirected.err",
+      "original_sha256": "eae080369e91b8869ecdd955b8e2a9840b501bc2c8dfb0889bae645cc549d4b5",
+      "published_sha256": "eae080369e91b8869ecdd955b8e2a9840b501bc2c8dfb0889bae645cc549d4b5",
+      "transformations": []
+    },
+    {
+      "source": "evidence/08-auth-probe-redirected.exit",
+      "published": "evidence/08-auth-probe-redirected.exit",
+      "original_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "published_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "transformations": []
+    },
+    {
+      "source": "evidence/08-auth-probe-redirected.jsonl",
+      "published": "evidence/08-auth-probe-redirected.jsonl",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/10-check-review.md",
+      "published": "evidence/10-check-review.md",
+      "original_sha256": "b8fbab2ae2a6e0f6a135608c1a82682be88b8143a10cd1d89c4b77e60b8aa650",
+      "published_sha256": "d67af40e6f5a0a249ceada6bd65f1ab8d8e695801faf74719a36bb35c2e5925c",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/11-check-update.md",
+      "published": "evidence/11-check-update.md",
+      "original_sha256": "b4420b121fe307593041b8760872b490461c1f199a664d8ecf8f3bc90db219c5",
+      "published_sha256": "529fe37781be1624ee1534c9bc7cc159cfd22b31b2c220cec7098b9a16332269",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/12-artifacts.sha256",
+      "published": "evidence/12-artifacts.sha256",
+      "original_sha256": "16e03312be63442e8f76f22cebbe0c06d5951ded4537bbbe0b202c2b57e5d3e9",
+      "published_sha256": "16e03312be63442e8f76f22cebbe0c06d5951ded4537bbbe0b202c2b57e5d3e9",
+      "transformations": []
+    },
+    {
+      "source": "evidence/12-implementation.md",
+      "published": "evidence/12-implementation.md",
+      "original_sha256": "cf47da6793f2c9b9861b6bbcb2774f40634f544062332bc518380c2266945810",
+      "published_sha256": "acd8054339b93b6bcde589d706892102b98139394465516136a9a8ce2370e32e",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <workspace-root>"
+      ]
+    },
+    {
+      "source": "evidence/12-unittest-discovery.stderr.log",
+      "published": "evidence/12-unittest-discovery.stderr.log",
+      "original_sha256": "9deef4ef8a3b5288b979a4c01a71685686ffd1447700202e0f88dfcfa0acf2ac",
+      "published_sha256": "9deef4ef8a3b5288b979a4c01a71685686ffd1447700202e0f88dfcfa0acf2ac",
+      "transformations": []
+    },
+    {
+      "source": "evidence/12-unittest-discovery.stdout.log",
+      "published": "evidence/12-unittest-discovery.stdout.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/12-unittest.stdout.log",
+      "published": "evidence/12-unittest.stdout.log",
+      "original_sha256": "9deef4ef8a3b5288b979a4c01a71685686ffd1447700202e0f88dfcfa0acf2ac",
+      "published_sha256": "9deef4ef8a3b5288b979a4c01a71685686ffd1447700202e0f88dfcfa0acf2ac",
+      "transformations": []
+    },
+    {
+      "source": "evidence/README.accepted.ja.md",
+      "published": "evidence/README.accepted.ja.md",
+      "original_sha256": "ad8668751a3c091b798a8d3bb09c7bc86643982369293c3a9973fc1ccafd64ce",
+      "published_sha256": "ad8668751a3c091b798a8d3bb09c7bc86643982369293c3a9973fc1ccafd64ce",
+      "transformations": []
+    },
+    {
+      "source": "evidence/available-skills.txt",
+      "published": "evidence/available-skills.txt",
+      "original_sha256": "e4b66c8464ecb8f5ed65ca99185140f6335b1753bddb482eccd866bc6cb41436",
+      "published_sha256": "bfe1ef3240719ced163550444d6bcf6bcc755998c6d07aa19cb0a9b7026f6671",
+      "transformations": [
+        "local path prefix replaced with <dogfood>"
+      ]
+    },
+    {
+      "source": "evidence/check-update-invariants.json",
+      "published": "evidence/check-update-invariants.json",
+      "original_sha256": "8056972aaebd57d25f641dc1beb89aa84425fbfba35938f6883c1903669cb6f5",
+      "published_sha256": "8056972aaebd57d25f641dc1beb89aa84425fbfba35938f6883c1903669cb6f5",
+      "transformations": []
+    },
+    {
+      "source": "evidence/checks.confirmed.md",
+      "published": "evidence/checks.confirmed.md",
+      "original_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "published_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "transformations": []
+    },
+    {
+      "source": "evidence/checks.initial.md",
+      "published": "evidence/checks.initial.md",
+      "original_sha256": "a366d2a44ff1fbc75384b829e695c49a4f40e138b8a09ef1f82fdfa4510f9e47",
+      "published_sha256": "a366d2a44ff1fbc75384b829e695c49a4f40e138b8a09ef1f82fdfa4510f9e47",
+      "transformations": []
+    },
+    {
+      "source": "evidence/draft.initial.md",
+      "published": "evidence/draft.initial.md",
+      "original_sha256": "1f0c8863902786ce529b9918948be441e0609de210774a071a170d75844c4c87",
+      "published_sha256": "1f0c8863902786ce529b9918948be441e0609de210774a071a170d75844c4c87",
+      "transformations": []
+    },
+    {
+      "source": "evidence/draft.revised.md",
+      "published": "evidence/draft.revised.md",
+      "original_sha256": "687f04cc6848d9b3daeef36bbe03c45eff5bd985c91abc4db169fcb1bc3124f4",
+      "published_sha256": "687f04cc6848d9b3daeef36bbe03c45eff5bd985c91abc4db169fcb1bc3124f4",
+      "transformations": []
+    },
+    {
+      "source": "evidence/draft.simulated-agreed.md",
+      "published": "evidence/draft.simulated-agreed.md",
+      "original_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "published_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "transformations": []
+    },
+    {
+      "source": "evidence/package-hashes.json",
+      "published": "evidence/package-hashes.json",
+      "original_sha256": "a2118f3893bbb8ee382311cbe24c3d352b9216f3764bc2e7c52886e362c02e98",
+      "published_sha256": "a2118f3893bbb8ee382311cbe24c3d352b9216f3764bc2e7c52886e362c02e98",
+      "transformations": []
+    },
+    {
+      "source": "evidence/pre-implementation-hashes.json",
+      "published": "evidence/pre-implementation-hashes.json",
+      "original_sha256": "3f8411f80041b755b659eec3ea7e0a3b3b9fdb93af54792930068c91fda37006",
+      "published_sha256": "3f8411f80041b755b659eec3ea7e0a3b3b9fdb93af54792930068c91fda37006",
+      "transformations": []
+    },
+    {
+      "source": "evidence/run-metadata.json",
+      "published": "evidence/run-metadata.json",
+      "original_sha256": "fc210146bb93cb1c9133d8675644de0c59f5d5e44e4fc50dfe8e746327f555c4",
+      "published_sha256": "fc210146bb93cb1c9133d8675644de0c59f5d5e44e4fc50dfe8e746327f555c4",
+      "transformations": []
+    },
+    {
+      "source": "evidence/simulated-feedback.md",
+      "published": "evidence/simulated-feedback.md",
+      "original_sha256": "d22a536ff015811d28a1566fb162d0381b305e2dedf8113fc702ad1d8aac5a94",
+      "published_sha256": "d22a536ff015811d28a1566fb162d0381b305e2dedf8113fc702ad1d8aac5a94",
+      "transformations": []
+    },
+    {
+      "source": "evidence/simulated-final-review.md",
+      "published": "evidence/simulated-final-review.md",
+      "original_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "published_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "transformations": []
+    },
+    {
+      "source": "evidence/system-requirements.md",
+      "published": "evidence/system-requirements.md",
+      "original_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "published_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-00.txt",
+      "published": "evidence/prompt-00.txt",
+      "original_sha256": "6392eb8675954b10e4ae81fee2627ab6e77ff68aa62b6d5926fef335f6b3e123",
+      "published_sha256": "6392eb8675954b10e4ae81fee2627ab6e77ff68aa62b6d5926fef335f6b3e123",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-01.txt",
+      "published": "evidence/prompt-01.txt",
+      "original_sha256": "45fcc8c53249f5a3adbc09c6241ad6a22541b04ecc5515c2d4549ba908c10017",
+      "published_sha256": "45fcc8c53249f5a3adbc09c6241ad6a22541b04ecc5515c2d4549ba908c10017",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-02.txt",
+      "published": "evidence/prompt-02.txt",
+      "original_sha256": "7a7ecfd29607623240c12b91bbd1ff417c4f737d84016abe7d4a83c1bcda9987",
+      "published_sha256": "7a7ecfd29607623240c12b91bbd1ff417c4f737d84016abe7d4a83c1bcda9987",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-03.txt",
+      "published": "evidence/prompt-03.txt",
+      "original_sha256": "c4f63b6b38867f60f0172918fe5d0ec688bb7749905b9425aeb229f774845404",
+      "published_sha256": "c4f63b6b38867f60f0172918fe5d0ec688bb7749905b9425aeb229f774845404",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-04.txt",
+      "published": "evidence/prompt-04.txt",
+      "original_sha256": "678f3c9b076b95978640edcc105a5a9ed060a2a6fa3af71d63599c485b72dcd0",
+      "published_sha256": "678f3c9b076b95978640edcc105a5a9ed060a2a6fa3af71d63599c485b72dcd0",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-05.txt",
+      "published": "evidence/prompt-05.txt",
+      "original_sha256": "c4d940e5280e0638f120f3383a79afa31a1735395baf7b1302f1c7031529236c",
+      "published_sha256": "c4d940e5280e0638f120f3383a79afa31a1735395baf7b1302f1c7031529236c",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-06.txt",
+      "published": "evidence/prompt-06.txt",
+      "original_sha256": "ad2986a7a848db0fae2b5ec64c22519893a8608afdf3ecc10ba5263ffda72fab",
+      "published_sha256": "ad2986a7a848db0fae2b5ec64c22519893a8608afdf3ecc10ba5263ffda72fab",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-07.txt",
+      "published": "evidence/prompt-07.txt",
+      "original_sha256": "bcb7f6ecad15f7bbbd3844acfc1398f3073395fd16f972ab0f373cd6d66e26c9",
+      "published_sha256": "bcb7f6ecad15f7bbbd3844acfc1398f3073395fd16f972ab0f373cd6d66e26c9",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-08.txt",
+      "published": "evidence/prompt-08.txt",
+      "original_sha256": "3bd356ec11508fc8403cd91754211c5e71c7b4ff6623b74a2deae22c1721699e",
+      "published_sha256": "3bd356ec11508fc8403cd91754211c5e71c7b4ff6623b74a2deae22c1721699e",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-09.txt",
+      "published": "evidence/prompt-09.txt",
+      "original_sha256": "55d74f1862780824f7b8b529cb57281832aab3b732c0d96eb5e8a420a87cd89b",
+      "published_sha256": "55d74f1862780824f7b8b529cb57281832aab3b732c0d96eb5e8a420a87cd89b",
+      "transformations": []
+    },
+    {
+      "source": "evidence/prompt-10.txt",
+      "published": "evidence/prompt-10.txt",
+      "original_sha256": "afd0931891fcc4edfc2bfbd306b484c95e6d50f002c0e46f6cca0efe6eec3bf3",
+      "published_sha256": "afd0931891fcc4edfc2bfbd306b484c95e6d50f002c0e46f6cca0efe6eec3bf3",
+      "transformations": []
+    },
+    {
+      "source": "evidence/draft.simulated-agreed.md",
+      "published": "implementation/docs/business-design/tool-return.md",
+      "original_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "published_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "transformations": []
+    },
+    {
+      "source": "evidence/checks.confirmed.md",
+      "published": "implementation/docs/checks/tool-return.md",
+      "original_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "published_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "transformations": []
+    },
+    {
+      "source": "evidence/system-requirements.md",
+      "published": "implementation/docs/system-requirements.md",
+      "original_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "published_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "transformations": []
+    },
+    {
+      "source": "evidence/simulated-final-review.md",
+      "published": "implementation/docs/decisions.md",
+      "original_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "published_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "transformations": []
+    },
+    {
+      "source": "workspace/tool_return.py",
+      "published": "implementation/tool_return.py",
+      "original_sha256": "0980f2f430f217f22b7494958c61c474817c440e23166cdc6d40c4586df0b7a1",
+      "published_sha256": "0980f2f430f217f22b7494958c61c474817c440e23166cdc6d40c4586df0b7a1",
+      "transformations": []
+    },
+    {
+      "source": "workspace/tests/test_tool_return.py",
+      "published": "implementation/tests/test_tool_return.py",
+      "original_sha256": "4dfd53ba191ef48b6af4d7c891171905b104239fe5385208ad2845bc2a963d1d",
+      "published_sha256": "4dfd53ba191ef48b6af4d7c891171905b104239fe5385208ad2845bc2a963d1d",
+      "transformations": []
+    },
+    {
+      "source": "workspace/run_tests.py",
+      "published": "implementation/run_tests.py",
+      "original_sha256": "7778146810d410f9758d49f8310f023fe68d204b990c8dd92894a7c3e451a0f1",
+      "published_sha256": "7778146810d410f9758d49f8310f023fe68d204b990c8dd92894a7c3e451a0f1",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/implementation-notes.md",
+      "published": "implementation/docs/implementation-notes.md",
+      "original_sha256": "dbd27ac8e9650e4a4bfabca14c409a09a633a9a117eed99c12880d1110bd0fa1",
+      "published_sha256": "dbd27ac8e9650e4a4bfabca14c409a09a633a9a117eed99c12880d1110bd0fa1",
+      "transformations": []
+    },
+    {
+      "source": "evidence/13-implementation-review.md",
+      "published": "evidence/13-implementation-review.md",
+      "original_sha256": "5ebc1901f2b3c64780e3213c994c7a4e7eb4fe079eccd9ea6b468b61084c8baf",
+      "published_sha256": "5ebc1901f2b3c64780e3213c994c7a4e7eb4fe079eccd9ea6b468b61084c8baf",
+      "transformations": []
+    },
+    {
+      "source": "evidence/09-check-draft.md",
+      "published": "evidence/09-check-draft.md",
+      "original_sha256": "fc8f6978eff59ed890fe76bd2aac75b33deaa220851849aadf9fb955a3ade1d9",
+      "published_sha256": "c580a45be38a66096e94721f4ec8fcd1c692a62f12cb200e15c4fbec4daf67e3",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <workspace-root>",
+        "administrative coordination tail omitted; prompt is safe abstraction"
+      ]
+    },
+    {
+      "source": "evidence/14-after-hashes.json",
+      "published": "evidence/14-after-hashes.json",
+      "original_sha256": "be1489bb8be72290fd5367ebbb51e85155171d7f6282d0418a9de6bdc1c322a4",
+      "published_sha256": "be1489bb8be72290fd5367ebbb51e85155171d7f6282d0418a9de6bdc1c322a4",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-before-hashes.json",
+      "published": "evidence/14-before-hashes.json",
+      "original_sha256": "7c028c4b49861d50d0feca79326a4eb90da1eb03a8b7eea91b6d6c5c27cebbab",
+      "published_sha256": "7c028c4b49861d50d0feca79326a4eb90da1eb03a8b7eea91b6d6c5c27cebbab",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-full-tests.exit.txt",
+      "published": "evidence/14-full-tests.exit.txt",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-full-tests.stderr.txt",
+      "published": "evidence/14-full-tests.stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-full-tests.stdout.txt",
+      "published": "evidence/14-full-tests.stdout.txt",
+      "original_sha256": "8220feaee76cef05b02cf0d590938b1e153d6973b70b7df7ae38f5fb88d102c4",
+      "published_sha256": "8220feaee76cef05b02cf0d590938b1e153d6973b70b7df7ae38f5fb88d102c4",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-original.exit.txt",
+      "published": "evidence/14-mutation-original.exit.txt",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-original.stderr.txt",
+      "published": "evidence/14-mutation-original.stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-original.stdout.txt",
+      "published": "evidence/14-mutation-original.stdout.txt",
+      "original_sha256": "faddd774e96f21e06fe0465b921c5246f9c4e7367de7ce34aaf59d41a91975d0",
+      "published_sha256": "faddd774e96f21e06fe0465b921c5246f9c4e7367de7ce34aaf59d41a91975d0",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-probe.py",
+      "published": "evidence/14-mutation-probe.py",
+      "original_sha256": "33fcfe930b355af1fed6b427b042b08ac1951b99a5a84380ed216ebd136584ef",
+      "published_sha256": "33fcfe930b355af1fed6b427b042b08ac1951b99a5a84380ed216ebd136584ef",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-strengthened.exit.txt",
+      "published": "evidence/14-mutation-strengthened.exit.txt",
+      "original_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "published_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-strengthened.stderr.txt",
+      "published": "evidence/14-mutation-strengthened.stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-mutation-strengthened.stdout.txt",
+      "published": "evidence/14-mutation-strengthened.stdout.txt",
+      "original_sha256": "11952ef18dcc76fcbd68ee1cce1c6c751b710d22cbf6161ea0ecbe4885fe80a5",
+      "published_sha256": "049dc4600f992f18f2088595f48fbc4e9929197414ff9dfe9156b8205d6b024f",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <workspace-root>"
+      ]
+    },
+    {
+      "source": "evidence/14-regression-strengthening.md",
+      "published": "evidence/14-regression-strengthening.md",
+      "original_sha256": "5d45169ed810c29d1cddbedfc3fea4fefbe3e071b3a112275c7dc39ed53eca14",
+      "published_sha256": "3a2477784a5b19ea259a757d9dedd9d0b65ce6d39c50d92915ea16373dad3f61",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <workspace-root>",
+        "prompt publication description updated for explicit safe abstraction"
+      ]
+    },
+    {
+      "source": "evidence/14-task-prompt.txt",
+      "published": "evidence/14-task-prompt.txt",
+      "original_sha256": "46c87c88ff5b34c64e60a71b00090d7d517dde770b7590c914bfa07de73c0a72",
+      "published_sha256": "32cc3da8b5438b06622f28999a37dcb7c9260a090af5a543f2ed756ed68a75e9",
+      "transformations": [
+        "local path prefix replaced with <dogfood>",
+        "local path prefix replaced with <workspace-root>",
+        "administrative coordination tail omitted; prompt is safe abstraction"
+      ]
+    },
+    {
+      "source": "evidence/14-tests.before.py",
+      "published": "evidence/14-tests.before.py",
+      "original_sha256": "4dfd53ba191ef48b6af4d7c891171905b104239fe5385208ad2845bc2a963d1d",
+      "published_sha256": "4dfd53ba191ef48b6af4d7c891171905b104239fe5385208ad2845bc2a963d1d",
+      "transformations": []
+    },
+    {
+      "source": "evidence/14-tests.diff",
+      "published": "evidence/14-tests.diff",
+      "original_sha256": "3f18045214aa177e3035544b48ae039a14e3e41c588764181fc89041582b9e38",
+      "published_sha256": "3f18045214aa177e3035544b48ae039a14e3e41c588764181fc89041582b9e38",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/business-design/tool-return.md",
+      "published": "implementation-revised/docs/business-design/tool-return.md",
+      "original_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "published_sha256": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/checks/tool-return.md",
+      "published": "implementation-revised/docs/checks/tool-return.md",
+      "original_sha256": "95b1e0c5cdd8b23d87455801e300fb21705892c24601e7dccc94aa4b0198e0b6",
+      "published_sha256": "95b1e0c5cdd8b23d87455801e300fb21705892c24601e7dccc94aa4b0198e0b6",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/decisions.md",
+      "published": "implementation-revised/docs/decisions.md",
+      "original_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "published_sha256": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/implementation-notes.md",
+      "published": "implementation-revised/docs/implementation-notes.md",
+      "original_sha256": "dbd27ac8e9650e4a4bfabca14c409a09a633a9a117eed99c12880d1110bd0fa1",
+      "published_sha256": "dbd27ac8e9650e4a4bfabca14c409a09a633a9a117eed99c12880d1110bd0fa1",
+      "transformations": []
+    },
+    {
+      "source": "workspace/docs/system-requirements.md",
+      "published": "implementation-revised/docs/system-requirements.md",
+      "original_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "published_sha256": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f",
+      "transformations": []
+    },
+    {
+      "source": "workspace/run_tests.py",
+      "published": "implementation-revised/run_tests.py",
+      "original_sha256": "7778146810d410f9758d49f8310f023fe68d204b990c8dd92894a7c3e451a0f1",
+      "published_sha256": "7778146810d410f9758d49f8310f023fe68d204b990c8dd92894a7c3e451a0f1",
+      "transformations": []
+    },
+    {
+      "source": "workspace/tests/test_tool_return.py",
+      "published": "implementation-revised/tests/test_tool_return.py",
+      "original_sha256": "0ff16b58155d6d0c6f30a9261bdd5c35519b800880612db41764a40a773ce5c7",
+      "published_sha256": "0ff16b58155d6d0c6f30a9261bdd5c35519b800880612db41764a40a773ce5c7",
+      "transformations": []
+    },
+    {
+      "source": "workspace/tool_return.py",
+      "published": "implementation-revised/tool_return.py",
+      "original_sha256": "0980f2f430f217f22b7494958c61c474817c440e23166cdc6d40c4586df0b7a1",
+      "published_sha256": "0980f2f430f217f22b7494958c61c474817c440e23166cdc6d40c4586df0b7a1",
+      "transformations": []
+    },
+    {
+      "source": "publication-time reproduction stdout/stderr (generated)",
+      "published": "PUBLIC-REPRODUCTION.log",
+      "original_sha256": "7a32195f6adb49bd4ac9d5c546e1e07a8d00289a71fa22e63534dcb5847babb4",
+      "published_sha256": "d353f3237bca9fadaaaebf821ef60120aba67ecdc35bad1e317d14740b727db5",
+      "transformations": [
+        "ephemeral reproduction path replaced with <reproduction-root>; raw stream hash retained, no raw private-path copy published"
+      ]
+    },
+    {
+      "source": "evidence/15-after-hashes.json",
+      "published": "evidence/15-after-hashes.json",
+      "original_sha256": "ba38095f3d085eaaa096f214e0c3c1d361398e686358eb51fe5fe4b3583dc7ee",
+      "published_sha256": "ba38095f3d085eaaa096f214e0c3c1d361398e686358eb51fe5fe4b3583dc7ee",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-before-hashes.json",
+      "published": "evidence/15-before-hashes.json",
+      "original_sha256": "a49faac04ef269d6a9bb974801b18b6bb92312b0996fd16f5a6e681a6d7104f9",
+      "published_sha256": "a49faac04ef269d6a9bb974801b18b6bb92312b0996fd16f5a6e681a6d7104f9",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-checks.after.md",
+      "published": "evidence/15-checks.after.md",
+      "original_sha256": "95b1e0c5cdd8b23d87455801e300fb21705892c24601e7dccc94aa4b0198e0b6",
+      "published_sha256": "95b1e0c5cdd8b23d87455801e300fb21705892c24601e7dccc94aa4b0198e0b6",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-checks.before.md",
+      "published": "evidence/15-checks.before.md",
+      "original_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "published_sha256": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-checks.diff",
+      "published": "evidence/15-checks.diff",
+      "original_sha256": "93042ed6e113ce05a445389d1e2baa0691e219e3c9a562857f6e207b213df6e1",
+      "published_sha256": "93042ed6e113ce05a445389d1e2baa0691e219e3c9a562857f6e207b213df6e1",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-commands.json",
+      "published": "evidence/15-commands.json",
+      "original_sha256": "1ef8a6590957500cf4571a58db6f511adfaa2e3d2f3f332f3e63211d71c1218c",
+      "published_sha256": "54c4754137ab617ee23fe06101d4445fb9ab8846ea82ed2a40ac14638e338179",
+      "transformations": [
+        "environment-specific path replaced with <dogfood>",
+        "environment-specific path replaced with <workspace-root>",
+        "environment-specific path replaced with <python-executable>"
+      ]
+    },
+    {
+      "source": "evidence/15-discovery.exit.txt",
+      "published": "evidence/15-discovery.exit.txt",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-discovery.stderr.txt",
+      "published": "evidence/15-discovery.stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-discovery.stdout.txt",
+      "published": "evidence/15-discovery.stdout.txt",
+      "original_sha256": "79fad3bddae49978e0676552897cc1145825937b98c16039175c60b882ee832e",
+      "published_sha256": "79fad3bddae49978e0676552897cc1145825937b98c16039175c60b882ee832e",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-evidence-hashes.json",
+      "published": "evidence/15-evidence-hashes.json",
+      "original_sha256": "02c2a18d1222be3fdb8b4b8539c1e3c7b5eea8f96bb002955c6ac3b92ecdd2eb",
+      "published_sha256": "02c2a18d1222be3fdb8b4b8539c1e3c7b5eea8f96bb002955c6ac3b92ecdd2eb",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-final-tests.exit.txt",
+      "published": "evidence/15-final-tests.exit.txt",
+      "original_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-final-tests.stderr.txt",
+      "published": "evidence/15-final-tests.stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-final-tests.stdout.txt",
+      "published": "evidence/15-final-tests.stdout.txt",
+      "original_sha256": "19b29e0d5c79f9f7e0c56bf7803885aeb3fd38331f517643208f06293dec81b2",
+      "published_sha256": "19b29e0d5c79f9f7e0c56bf7803885aeb3fd38331f517643208f06293dec81b2",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-follow-up-review.md",
+      "published": "evidence/15-follow-up-review.md",
+      "original_sha256": "154d8528359dd8790616c289bd8fad39dc21d9a894b3b20e79390d03c624933e",
+      "published_sha256": "7ddb9ed4d52cf5864dcfcaaadc35d62766f9743c21e6660c3ba60bcb9b6eaf3c",
+      "transformations": [
+        "environment-specific path replaced with <dogfood>",
+        "environment-specific path replaced with <workspace-root>"
+      ]
+    },
+    {
+      "source": "evidence/15-invariants.json",
+      "published": "evidence/15-invariants.json",
+      "original_sha256": "e0473efc50410b61046fc9f43d79b367291f296543c3f61af347567ae2ad6c5c",
+      "published_sha256": "d946b1267df13011565c0a071efa958cb3bb6408025703c7aadd753379e964e4",
+      "transformations": [
+        "environment-specific path replaced with <dogfood>",
+        "environment-specific path replaced with <workspace-root>",
+        "environment-specific path replaced with <python-executable>"
+      ]
+    },
+    {
+      "source": "evidence/15-test-ids.json",
+      "published": "evidence/15-test-ids.json",
+      "original_sha256": "79fad3bddae49978e0676552897cc1145825937b98c16039175c60b882ee832e",
+      "published_sha256": "79fad3bddae49978e0676552897cc1145825937b98c16039175c60b882ee832e",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-verify-and-update.py",
+      "published": "evidence/15-verify-and-update.py",
+      "original_sha256": "868d31916ea8d45264d78215c1a4a4a4d04708e012c6c29465942ab994b0deef",
+      "published_sha256": "868d31916ea8d45264d78215c1a4a4a4d04708e012c6c29465942ab994b0deef",
+      "transformations": []
+    },
+    {
+      "source": "evidence/15-write-report.py",
+      "published": "evidence/15-write-report.py",
+      "original_sha256": "d541b94181c6b922b0d8f23665052c51ad03d1f8509a6a09689b460b0f5dd1b1",
+      "published_sha256": "224d5aaff2d8d4994f7922c759126afec43745574c87edf0472c15dbcdaf5624",
+      "transformations": [
+        "environment-specific path replaced with <dogfood>",
+        "environment-specific path replaced with <workspace-root>"
+      ]
+    }
+  ]
+}

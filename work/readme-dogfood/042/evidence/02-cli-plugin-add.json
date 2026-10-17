@@ -1,0 +1,8 @@
+{
+  "pluginId": "alder@alder-development",
+  "name": "alder",
+  "marketplaceName": "alder-development",
+  "version": "0.4.2",
+  "installedPath": "<dogfood>/codex-home/plugins/cache/alder-development/alder/0.4.2",
+  "authPolicy": "ON_INSTALL"
+}

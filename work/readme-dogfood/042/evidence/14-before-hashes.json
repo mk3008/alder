@@ -1,0 +1,10 @@
+{
+  "tool_return.py": "0980f2f430f217f22b7494958c61c474817c440e23166cdc6d40c4586df0b7a1",
+  "tests/test_tool_return.py": "4dfd53ba191ef48b6af4d7c891171905b104239fe5385208ad2845bc2a963d1d",
+  "run_tests.py": "7778146810d410f9758d49f8310f023fe68d204b990c8dd92894a7c3e451a0f1",
+  "docs/business-design/tool-return.md": "ef86b2225a1479e64cb8f138fd073e4c789559b7e13e16add8bf8dd2d2f4cdd2",
+  "docs/checks/tool-return.md": "f5003361c073f3a17dfa3389ed6ef89ec3103c1185d0d6ae51e29aa1ceb08351",
+  "docs/decisions.md": "402a106decdd3581cf3f949755ac52ae3b5e0627dbf38f5acbc65a636df91806",
+  "docs/implementation-notes.md": "dbd27ac8e9650e4a4bfabca14c409a09a633a9a117eed99c12880d1110bd0fa1",
+  "docs/system-requirements.md": "5d1cf55b25b136efd74d52eb4403220e2671c7b128f55fb3a29428f5dc6cf63f"
+}

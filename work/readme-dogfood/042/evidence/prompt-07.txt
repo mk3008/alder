@@ -1,0 +1,2 @@
+docs/business-design/meeting-room.md、docs/checks/meeting-room.md、
+プロダクトのシステム要件を読み、今回合意した範囲を実装・テストして。

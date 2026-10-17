@@ -1,0 +1,92 @@
+test_empty_issued_list_is_not_given_new_business_meaning (test_tool_return.ExampleBoundaryTests.test_empty_issued_list_is_not_given_new_business_meaning) ... ok
+test_extras_and_substitutions_have_no_business_outcome (test_tool_return.ExampleBoundaryTests.test_extras_and_substitutions_have_no_business_outcome) ... ok
+test_other_loan_accessories_are_not_used_as_fallback (test_tool_return.ExampleBoundaryTests.test_other_loan_accessories_are_not_used_as_fallback) ... ok
+test_repeated_accessory_labels_do_not_define_quantity_policy (test_tool_return.ExampleBoundaryTests.test_repeated_accessory_labels_do_not_define_quantity_policy) ... ok
+test_unknown_loan_is_outside_the_fixture (test_tool_return.ExampleBoundaryTests.test_unknown_loan_is_outside_the_fixture) ... ok
+test_failed_reception_does_not_confirm_receipt (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_confirm_receipt) ... ok
+test_failed_reception_does_not_record_return_time (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_record_return_time) ... ok
+test_failed_reception_does_not_set_inspection_pending (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_set_inspection_pending) ... ok
+test_failed_reception_returns_needs_review_to_counter (test_tool_return.ReturnReceptionTests.test_failed_reception_returns_needs_review_to_counter) ... ok
+test_first_receipt_records_time_on_selected_loan (test_tool_return.ReturnReceptionTests.test_first_receipt_records_time_on_selected_loan) ... ok
+test_matching_reprocessing_preserves_first_return_time (test_tool_return.ReturnReceptionTests.test_matching_reprocessing_preserves_first_return_time) ... ok
+test_matching_return_clears_artificial_available_sentinel (test_tool_return.ReturnReceptionTests.test_matching_return_clears_artificial_available_sentinel)
+Technical regression probe, not a legitimate real-world loan state. ... ok
+test_matching_return_is_confirmed (test_tool_return.ReturnReceptionTests.test_matching_return_is_confirmed) ... ok
+test_mismatching_reprocessing_keeps_existing_time_and_state (test_tool_return.ReturnReceptionTests.test_mismatching_reprocessing_keeps_existing_time_and_state) ... ok
+test_naive_time_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_naive_time_is_rejected_before_mutation) ... ok
+test_non_datetime_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_non_datetime_is_rejected_before_mutation) ... ok
+test_received_group_is_not_available_for_loan (test_tool_return.ReturnReceptionTests.test_received_group_is_not_available_for_loan) ... ok
+test_received_group_waits_for_inspection (test_tool_return.ReturnReceptionTests.test_received_group_waits_for_inspection) ... ok
+test_selected_loan_is_the_comparison_source (test_tool_return.ReturnReceptionTests.test_selected_loan_is_the_comparison_source) ... ok
+test_time_is_normalized_to_utc (test_tool_return.ReturnReceptionTests.test_time_is_normalized_to_utc) ... ok
+test_timezone_without_offset_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_timezone_without_offset_is_rejected_before_mutation) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.002s
+
+OK
+Mutation: remove exact success-path assignment in memory; suite=original.
+test_empty_issued_list_is_not_given_new_business_meaning (test_tool_return.ExampleBoundaryTests.test_empty_issued_list_is_not_given_new_business_meaning) ... ok
+test_extras_and_substitutions_have_no_business_outcome (test_tool_return.ExampleBoundaryTests.test_extras_and_substitutions_have_no_business_outcome) ... ok
+test_other_loan_accessories_are_not_used_as_fallback (test_tool_return.ExampleBoundaryTests.test_other_loan_accessories_are_not_used_as_fallback) ... ok
+test_repeated_accessory_labels_do_not_define_quantity_policy (test_tool_return.ExampleBoundaryTests.test_repeated_accessory_labels_do_not_define_quantity_policy) ... ok
+test_unknown_loan_is_outside_the_fixture (test_tool_return.ExampleBoundaryTests.test_unknown_loan_is_outside_the_fixture) ... ok
+test_failed_reception_does_not_confirm_receipt (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_confirm_receipt) ... ok
+test_failed_reception_does_not_record_return_time (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_record_return_time) ... ok
+test_failed_reception_does_not_set_inspection_pending (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_set_inspection_pending) ... ok
+test_failed_reception_returns_needs_review_to_counter (test_tool_return.ReturnReceptionTests.test_failed_reception_returns_needs_review_to_counter) ... ok
+test_first_receipt_records_time_on_selected_loan (test_tool_return.ReturnReceptionTests.test_first_receipt_records_time_on_selected_loan) ... ok
+test_matching_reprocessing_preserves_first_return_time (test_tool_return.ReturnReceptionTests.test_matching_reprocessing_preserves_first_return_time) ... ok
+test_matching_return_is_confirmed (test_tool_return.ReturnReceptionTests.test_matching_return_is_confirmed) ... ok
+test_mismatching_reprocessing_keeps_existing_time_and_state (test_tool_return.ReturnReceptionTests.test_mismatching_reprocessing_keeps_existing_time_and_state) ... ok
+test_naive_time_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_naive_time_is_rejected_before_mutation) ... ok
+test_non_datetime_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_non_datetime_is_rejected_before_mutation) ... ok
+test_received_group_is_not_available_for_loan (test_tool_return.ReturnReceptionTests.test_received_group_is_not_available_for_loan) ... ok
+test_received_group_waits_for_inspection (test_tool_return.ReturnReceptionTests.test_received_group_waits_for_inspection) ... ok
+test_selected_loan_is_the_comparison_source (test_tool_return.ReturnReceptionTests.test_selected_loan_is_the_comparison_source) ... ok
+test_time_is_normalized_to_utc (test_tool_return.ReturnReceptionTests.test_time_is_normalized_to_utc) ... ok
+test_timezone_without_offset_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_timezone_without_offset_is_rejected_before_mutation) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.001s
+
+OK
+Mutation: remove exact success-path assignment in memory; suite=strengthened.
+test_empty_issued_list_is_not_given_new_business_meaning (test_tool_return.ExampleBoundaryTests.test_empty_issued_list_is_not_given_new_business_meaning) ... ok
+test_extras_and_substitutions_have_no_business_outcome (test_tool_return.ExampleBoundaryTests.test_extras_and_substitutions_have_no_business_outcome) ... ok
+test_other_loan_accessories_are_not_used_as_fallback (test_tool_return.ExampleBoundaryTests.test_other_loan_accessories_are_not_used_as_fallback) ... ok
+test_repeated_accessory_labels_do_not_define_quantity_policy (test_tool_return.ExampleBoundaryTests.test_repeated_accessory_labels_do_not_define_quantity_policy) ... ok
+test_unknown_loan_is_outside_the_fixture (test_tool_return.ExampleBoundaryTests.test_unknown_loan_is_outside_the_fixture) ... ok
+test_failed_reception_does_not_confirm_receipt (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_confirm_receipt) ... ok
+test_failed_reception_does_not_record_return_time (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_record_return_time) ... ok
+test_failed_reception_does_not_set_inspection_pending (test_tool_return.ReturnReceptionTests.test_failed_reception_does_not_set_inspection_pending) ... ok
+test_failed_reception_returns_needs_review_to_counter (test_tool_return.ReturnReceptionTests.test_failed_reception_returns_needs_review_to_counter) ... ok
+test_first_receipt_records_time_on_selected_loan (test_tool_return.ReturnReceptionTests.test_first_receipt_records_time_on_selected_loan) ... ok
+test_matching_reprocessing_preserves_first_return_time (test_tool_return.ReturnReceptionTests.test_matching_reprocessing_preserves_first_return_time) ... ok
+test_matching_return_clears_artificial_available_sentinel (test_tool_return.ReturnReceptionTests.test_matching_return_clears_artificial_available_sentinel)
+Technical regression probe, not a legitimate real-world loan state. ... FAIL
+test_matching_return_is_confirmed (test_tool_return.ReturnReceptionTests.test_matching_return_is_confirmed) ... ok
+test_mismatching_reprocessing_keeps_existing_time_and_state (test_tool_return.ReturnReceptionTests.test_mismatching_reprocessing_keeps_existing_time_and_state) ... ok
+test_naive_time_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_naive_time_is_rejected_before_mutation) ... ok
+test_non_datetime_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_non_datetime_is_rejected_before_mutation) ... ok
+test_received_group_is_not_available_for_loan (test_tool_return.ReturnReceptionTests.test_received_group_is_not_available_for_loan) ... ok
+test_received_group_waits_for_inspection (test_tool_return.ReturnReceptionTests.test_received_group_waits_for_inspection) ... ok
+test_selected_loan_is_the_comparison_source (test_tool_return.ReturnReceptionTests.test_selected_loan_is_the_comparison_source) ... ok
+test_time_is_normalized_to_utc (test_tool_return.ReturnReceptionTests.test_time_is_normalized_to_utc) ... ok
+test_timezone_without_offset_is_rejected_before_mutation (test_tool_return.ReturnReceptionTests.test_timezone_without_offset_is_rejected_before_mutation) ... ok
+
+======================================================================
+FAIL: test_matching_return_clears_artificial_available_sentinel (test_tool_return.ReturnReceptionTests.test_matching_return_clears_artificial_available_sentinel)
+Technical regression probe, not a legitimate real-world loan state.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<reproduction-root>/workspace/tests/test_tool_return.py", line 71, in test_matching_return_clears_artificial_available_sentinel
+    self.assertIs(self.records["loan-A"].available_for_loan, False)
+AssertionError: True is not False
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.002s
+
+FAILED (failures=1)
+
+Normal suite passed; original suite missed the mutant; strengthened suite rejected it (expected exit 1).
