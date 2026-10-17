@@ -127,10 +127,10 @@ header{flex-shrink:0}
 
 /* Give desktop Markdown editing the available viewport, keeping actions in view. */
 @media(min-width:801px){
-  #source-dialog:not([hidden]):is([data-mode=edit],[data-mode=text]){top:124px;width:min(1120px,calc(100vw - 64px));height:calc(100dvh - 148px);max-height:calc(100dvh - 148px);display:flex;flex-direction:column}
-  #source-dialog:is([data-mode=edit],[data-mode=text])> :not(textarea){flex-shrink:0}
-  #source-dialog:is([data-mode=edit],[data-mode=text]) textarea{flex:1;min-height:120px;resize:none}
-  body:has(.info-bar:not([hidden])) #source-dialog:is([data-mode=edit],[data-mode=text]){top:112px;height:calc(100dvh - 316px);max-height:calc(100dvh - 316px)}
+  #source-dialog:not([hidden]):is([data-mode=view],[data-mode=text]){top:124px;width:min(1120px,calc(100vw - 64px));height:calc(100dvh - 148px);max-height:calc(100dvh - 148px);display:flex;flex-direction:column}
+  #source-dialog:is([data-mode=view],[data-mode=text])> :not(textarea){flex-shrink:0}
+  #source-dialog:is([data-mode=view],[data-mode=text]) textarea{flex:1;min-height:120px;resize:none}
+  body:has(.info-bar:not([hidden])) #source-dialog:is([data-mode=view],[data-mode=text]){top:112px;height:calc(100dvh - 316px);max-height:calc(100dvh - 316px)}
 }
 
 /* Recovery is exceptional, non-modal, and never reserves normal work space.
@@ -147,7 +147,6 @@ body:has(.info-bar.has-save-actions:not([hidden])) #source-dialog{top:min(112px,
 #save-actions p{margin:8px 0 0}#save-rescue-text{display:block;width:100%;min-height:100px;margin-top:6px;resize:vertical;font:12px/1.5 monospace}
 
 /* A two-choice modal protects dismissal without discarding the stored draft. */
-#source-close-dialog{width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:20px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 48px #0005}#source-close-dialog::backdrop{background:#0006}#source-close-message{margin:0 0 20px;line-height:1.6;overflow-wrap:anywhere}#source-close-dialog .source-close-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}#source-close-dialog button{min-height:44px;border:1px solid var(--line);border-radius:4px;padding:8px 18px}#source-close-continue{background:#1d73b7;color:#fff}
 
 #share-source{display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;width:40px;height:40px;margin:2px;border-radius:5px}
 #share-source[aria-disabled="true"]{opacity:.5}
@@ -260,11 +259,6 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 .toolbar-menu a{text-decoration:none}#help-menu-toggle{width:var(--header-control-width);min-width:var(--header-control-width)}
 /* Document recovery stays discoverable without covering the graph. */
-#document-recovery{padding:6px 14px;border-bottom:1px solid var(--border);font-size:13px;max-height:30vh;overflow:auto}
-#document-recovery summary{cursor:pointer;font-weight:600}
-#document-recovery p{margin:6px 0}
-#recovery-documents{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
-#recovery-documents button,#recovery-export{padding:6px 10px}
 
 .tab .close[hidden]{display:none}
 
@@ -279,3 +273,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 #legacy-notice textarea {display:block;width:100%;max-height:160px;}
 #legacy-notice textarea[hidden] {display:none;}
 #source-update-notice {gap:12px;align-items:center;}
+
+#source-update-notice,#legacy-notice{position:static;flex-shrink:0;width:auto;max-width:none;max-height:30vh;overflow:auto;margin:0;border-radius:0;box-shadow:none;background:var(--panel);color:var(--fg);border:0;border-bottom:1px solid var(--subtle);padding:8px 16px}
+#source-update-notice>span,#legacy-notice>div{flex:1;min-width:0;overflow-wrap:anywhere}
+#source-update-notice button,#legacy-notice button{min-height:36px;flex-shrink:0;border:1px solid var(--subtle);border-radius:4px;padding:4px 10px}
