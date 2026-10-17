@@ -1,0 +1,216 @@
+{
+  "evaluated_at_utc": "2026-10-07T00:04:34+00:00",
+  "public_input_commit": "68836f6899ac263dcd68d038daaa72f3e54d08ce",
+  "evaluator_requested_settings": {
+    "model": "gpt-6-sol",
+    "reasoning": "medium",
+    "fork_turns": "none"
+  },
+  "evaluator_effective_settings": {
+    "model": "unknown",
+    "reasoning": "unknown",
+    "fork_turns": "unknown"
+  },
+  "settings_note": "指定値は委託指示と固定protocolの自己申告。実効model/reasoning/fork状態の独立計測証拠はない。",
+  "read_files": [
+    {
+      "path": "protocol.md",
+      "range": "1-40",
+      "method": "direct text read",
+      "sha256": "c3b1b52a01af45162139225863f6b839ce740598e5a44804cc44afef9cdbf4e5"
+    },
+    {
+      "path": "provenance/input-freeze.json",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "79afa37c12ab93bc43ef8f701cb7800bb0eb1c0277196aca45759c16259c0e53"
+    },
+    {
+      "path": "raw/output-freeze.json",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "288c4d5a2e84ec3ab6d9d1db73216cd7b36b823cee2ca6807246846c56782d9e"
+    },
+    {
+      "path": "inputs/transcript.txt",
+      "range": "1-82",
+      "method": "direct text read",
+      "sha256": "9279efa5d3f0bac163006885cfd71b8f2279d735200495d6269918cdc9006b8e"
+    },
+    {
+      "path": "preparation/requirement-oracle.json",
+      "range": "full",
+      "method": "JSON parsing and selected text read",
+      "sha256": "d9688c0573051f3b4e4419d409d265360d82082152a4954fd17694b7977c9a64"
+    },
+    {
+      "path": "preparation/expected-business-design.md",
+      "range": "1-189",
+      "method": "direct text read",
+      "sha256": "43fcebaeb7340540027f9f8e0858b1349bf18018acba33813619b9adb2aeeae5"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/SKILL.md",
+      "range": "1-17",
+      "method": "direct text read",
+      "sha256": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/adoption.md",
+      "range": "1-176",
+      "method": "direct text read",
+      "sha256": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "range": "1-193",
+      "method": "direct text read",
+      "sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0"
+    },
+    {
+      "path": "provenance/current-adoption-evaluator-only.md",
+      "range": "1-115",
+      "method": "direct text read; auxiliary boundary check only",
+      "sha256": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8"
+    },
+    {
+      "path": "raw/draft.md",
+      "range": "1-861",
+      "method": "direct text read",
+      "sha256": "08b12768856ba59855b4c28d18adeb27877d81ef612d3d6d977a2729fecf445c"
+    },
+    {
+      "path": "raw/author-final-reply.txt",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "6355b15ab3de48b54ab940e41da2d5c371b33925c4e7ceb1ecc7011969e6c2c2"
+    },
+    {
+      "path": "raw/author-progress-messages.txt",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "049ff1fc11fdd521c355868758cb87837a8a99cf078d7acef715b9205dc24759"
+    },
+    {
+      "path": "raw/reads.jsonl",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "59e46e831888969b9d4c8ea58e468ead5d46322dd44ba7f6142a607aed3fa428"
+    },
+    {
+      "path": "raw/access-report.json",
+      "range": "full",
+      "method": "direct text read",
+      "sha256": "76287b9ca89edee0da33b76dd976929d47ddea80fbcf9ab009145a994c897b9f"
+    },
+    {
+      "path": "verify_evidence.py",
+      "range": "1-39",
+      "method": "direct text read and execution",
+      "sha256": "87944719deec50dab108e9a6fa45a896e0a6dd3faa1174df6a44b34ccc89f9fe"
+    },
+    {
+      "path": "provenance/package-manifest.json",
+      "range": "full",
+      "method": "machine JSON read by verify_evidence.py; content not manually interpreted",
+      "sha256": "22273466211006d4cb2781b0e62c4ca4edbf0f8fcf2ab25629671a108dd3fca3"
+    },
+    {
+      "path": "inputs/package/LICENSE",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/plugin.json",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "b6d4e02e3382e50d939b1f2947b49cbe71176042fe45545de597289ed4907a68"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/LICENSE",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/business-graph.md",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/provenance.json",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "89ef696d829d4b3e33647fb8a4e34593da32346fbc7c06c531fcaddb000b2451"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/provenance.json",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc"
+    },
+    {
+      "path": "preparation/build_oracle.py",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "da70ab10ce2fce79a930707829260121839a94c55abcdbb74b9a3b867758fee0"
+    },
+    {
+      "path": "preparation/change-provenance.md",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "85dd94e02b4182c17036cd0110222d02f0aa478c89c62ad28595bac870abd5ad"
+    },
+    {
+      "path": "preparation/realism-review.md",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "37c7b30eafd92270380c6ba768734ae720d8e1039c6d9b07701d25b683b7e261"
+    },
+    {
+      "path": "preparation/scenario.md",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "b7cfe222de3e07980a32d79a17a0e65118e4f082c33d0a7ae01e067bace63f91"
+    },
+    {
+      "path": "preparation/transcript-before-coordinator-review.txt",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "a1706e8264a3f210f91d5bcd87b843e60410504ca4645c397d7ea9bf56114e5a"
+    },
+    {
+      "path": "provenance/author-dispatch.txt",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "a4187c6de8d0506f35a6fcd624a2382f47db1850cf7e28f318e0057b599e2cfa"
+    },
+    {
+      "path": "provenance/coordinator-input-review.md",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "91cc3440c02c7f9912e3e4774fa114987ab3c72ad2bd33e00263a74bdb21233b"
+    },
+    {
+      "path": "provenance/current-boundary-source.json",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "1b1f930846fae2bce491f35bc9b82c1d3e213944bb28f226a891063384cefac4"
+    },
+    {
+      "path": "provenance/open.py",
+      "range": "bytes for SHA-256 only",
+      "method": "hash validation by verify_evidence.py; content not manually interpreted",
+      "sha256": "3536c0408532f5873b3d80a77b551f68e5494d6e1cff30a594540933465d50a6"
+    }
+  ],
+  "verification": {
+    "command": "python verify_evidence.py",
+    "result": "all_passed=true at final verification after mapping and report",
+    "limits": "hashとAuthor側helper read logは、全情報経路や実効runtime設定を証明しない。"
+  },
+  "source_precedence": "inputs/transcript.txtの明示事実・後の訂正・採否を最優先。oracle/expected BDは補助。公開0.4.4のadoption第1節とstructureを基準とし、現行境界文書は補助確認のみ。",
+  "material_exclusions": "過去研究raw・評価、GitHub Issue・会話履歴、外部資料、他evaluationは参照していない。"
+}

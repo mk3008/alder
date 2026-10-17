@@ -1,0 +1,32 @@
+{
+  "frozen_at_utc": "2026-10-06T23:59:47Z",
+  "time_source": "clock.curr_time",
+  "author_agent": "/root/draft_document",
+  "first_run_only": true,
+  "questions_answered": false,
+  "feedback_provided": false,
+  "evaluator_started": false,
+  "raw_copied_without_edits": true,
+  "files": [
+    {
+      "path": "raw/access-report.json",
+      "sha256": "76287b9ca89edee0da33b76dd976929d47ddea80fbcf9ab009145a994c897b9f"
+    },
+    {
+      "path": "raw/author-final-reply.txt",
+      "sha256": "6355b15ab3de48b54ab940e41da2d5c371b33925c4e7ceb1ecc7011969e6c2c2"
+    },
+    {
+      "path": "raw/author-progress-messages.txt",
+      "sha256": "049ff1fc11fdd521c355868758cb87837a8a99cf078d7acef715b9205dc24759"
+    },
+    {
+      "path": "raw/draft.md",
+      "sha256": "08b12768856ba59855b4c28d18adeb27877d81ef612d3d6d977a2729fecf445c"
+    },
+    {
+      "path": "raw/reads.jsonl",
+      "sha256": "59e46e831888969b9d4c8ea58e468ead5d46322dd44ba7f6142a607aed3fa428"
+    }
+  ]
+}

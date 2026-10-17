@@ -1,0 +1,108 @@
+{
+  "frozen_at_utc": "2026-10-06T23:53:32Z",
+  "time_source": "clock.curr_time",
+  "author_started": false,
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "effective_model": "unknown",
+  "effective_reasoning": "unknown",
+  "files": [
+    {
+      "path": "inputs/package/LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/plugin.json",
+      "sha256": "b6d4e02e3382e50d939b1f2947b49cbe71176042fe45545de597289ed4907a68"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/LICENSE",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/SKILL.md",
+      "sha256": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/adoption.md",
+      "sha256": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/business-graph.md",
+      "sha256": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e"
+    },
+    {
+      "path": "inputs/package/skills/alder-draft-business-design/references/provenance.json",
+      "sha256": "89ef696d829d4b3e33647fb8a4e34593da32346fbc7c06c531fcaddb000b2451"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha256": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0"
+    },
+    {
+      "path": "inputs/package/skills/alder-review-business-design/references/provenance.json",
+      "sha256": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc"
+    },
+    {
+      "path": "inputs/transcript.txt",
+      "sha256": "9279efa5d3f0bac163006885cfd71b8f2279d735200495d6269918cdc9006b8e"
+    },
+    {
+      "path": "preparation/build_oracle.py",
+      "sha256": "da70ab10ce2fce79a930707829260121839a94c55abcdbb74b9a3b867758fee0"
+    },
+    {
+      "path": "preparation/change-provenance.md",
+      "sha256": "85dd94e02b4182c17036cd0110222d02f0aa478c89c62ad28595bac870abd5ad"
+    },
+    {
+      "path": "preparation/expected-business-design.md",
+      "sha256": "43fcebaeb7340540027f9f8e0858b1349bf18018acba33813619b9adb2aeeae5"
+    },
+    {
+      "path": "preparation/realism-review.md",
+      "sha256": "37c7b30eafd92270380c6ba768734ae720d8e1039c6d9b07701d25b683b7e261"
+    },
+    {
+      "path": "preparation/requirement-oracle.json",
+      "sha256": "d9688c0573051f3b4e4419d409d265360d82082152a4954fd17694b7977c9a64"
+    },
+    {
+      "path": "preparation/scenario.md",
+      "sha256": "b7cfe222de3e07980a32d79a17a0e65118e4f082c33d0a7ae01e067bace63f91"
+    },
+    {
+      "path": "preparation/transcript-before-coordinator-review.txt",
+      "sha256": "a1706e8264a3f210f91d5bcd87b843e60410504ca4645c397d7ea9bf56114e5a"
+    },
+    {
+      "path": "protocol.md",
+      "sha256": "c3b1b52a01af45162139225863f6b839ce740598e5a44804cc44afef9cdbf4e5"
+    },
+    {
+      "path": "provenance/author-dispatch.txt",
+      "sha256": "a4187c6de8d0506f35a6fcd624a2382f47db1850cf7e28f318e0057b599e2cfa"
+    },
+    {
+      "path": "provenance/coordinator-input-review.md",
+      "sha256": "91cc3440c02c7f9912e3e4774fa114987ab3c72ad2bd33e00263a74bdb21233b"
+    },
+    {
+      "path": "provenance/current-adoption-evaluator-only.md",
+      "sha256": "0201726fa84d84a8db6a799d1ec506e07b0d0fd491719f77fafd479d1ef424c8"
+    },
+    {
+      "path": "provenance/current-boundary-source.json",
+      "sha256": "1b1f930846fae2bce491f35bc9b82c1d3e213944bb28f226a891063384cefac4"
+    },
+    {
+      "path": "provenance/open.py",
+      "sha256": "3536c0408532f5873b3d80a77b551f68e5494d6e1cff30a594540933465d50a6"
+    },
+    {
+      "path": "provenance/package-manifest.json",
+      "sha256": "22273466211006d4cb2781b0e62c4ca4edbf0f8fcf2ab25629671a108dd3fca3"
+    }
+  ]
+}

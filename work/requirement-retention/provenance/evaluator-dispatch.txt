@@ -1,0 +1,22 @@
+Alderの発言録から初回Business Design草案を作った一件を、要求保持の観点から独立に評価してください。業務合意・Skill改修・再草案化はしません。
+
+資料のrootは /workspace/scratch/ff98173bedea/alder-requirement-retention-49/work/requirement-retention/ です。参照を許すのはこのディレクトリ内のprotocol.md、inputs/、preparation/、provenance/、raw/、verify_evidence.pyです。過去研究のraw・評価、GitHub Issue・会話履歴、外部資料、他のevaluation/を読まないでください。Authorや入力作成者に質問しないでください。
+
+事前入力の公開commitは68836f6899ac263dcd68d038daaa72f3e54d08ceです。raw/output-freeze.jsonに評価前のraw digestがあります。
+
+先にprotocol.md、provenance/input-freeze.json、raw/output-freeze.jsonを読み、資料の固定と限界を理解してください。入力を直接読み、preparation/requirement-oracle.jsonとexpected-business-design.mdを解釈基準として使います。ただし入力の明示事実・訂正・採否が最優先です。期待BDの構造上の補助説明を未発言の必須手順へ昇格させないでください。公開0.4.4同梱のadoption第1節とstructureを基準とし、provenance/current-adoption-evaluator-only.mdの現行境界は補助確認だけに使います。未releaseの実装レビュー側の新指示をAuthorの義務へ追加しません。
+
+raw/draft.md、author-final-reply.txt、author-progress-messages.txt、reads.jsonl、access-report.jsonを読んでください。全66要求IDについて、各発言根拠と出力行を対応付け、具体的な数値・主体・期間・条件・採否の保持、配置、意味変更を別に判定します。部分的に残った要求を完全なロストとせず、元発言録への一般リンクだけを具体的保持の代わりにもしません。草案本文だけでなく具体的な返答に残った条件も保持として認め、どこに残ったかを区別してください。
+
+評価の主要な区別は、BDに保持、BD外の前提/引継ぎ条件等に保持、確認事項として保持、部分保持、ロスト、意味の誤変更、未採用技術案の要件への昇格です。妥当な別配置・別Activity分割・曖昧な分類を許容してください。新しいSR文書の生成、唯一のカテゴリ名や見出しは合格条件ではありません。未採用技術案・拒否された元案の引用省略は合意済み要求ロストと別扱いです。主に誤昇格がないか確認し、引用省略だけならnot_applicable等で理由を記載します。未発言の隠れた事実の質問を要求しません。明示未決を直ちに聞き直さなかったことを失敗にしません。
+
+軽量なBD sanityとして、予約の台数約束→実機準備→受渡し→返却受領→機材ごとの検収→料金計算→顧客確認→経理引渡し、対象外責任、業務品質条件の接続を確認してください。118項目等の追加網羅監査へ広げず、oracle外に重大な創作が見つかれば別の根拠付き所見にします。重複する台帳行が同じ不備を示すときは一つの欠陥として集計してください。
+
+保存先はevaluation/内だけです。
+1. mapping.json: {"requirements":[...]}。各行にid、retention（retained/partial/lost/not_applicable）、placement（bd/extra_bd/unconfirmed/mixed/absent）、source_turns、evidence（file、start_line、end_line、短いquoteの配列）、notes、meaning_change（noneまたは具体内容）を含める。全66IDを一度ずつ含める。
+2. report.md: 日本語。結論、重要な保持・欠落・誤昇格、境界の読み方、BD sanity、未決・質問、限界。集計は台帳行数と重複統合した欠陥数を区別。原文の改善版は書かない。
+3. provenance.json: 読んだ全ファイルと範囲、指定model gpt-6-sol/reasoning medium/fork none、実効値が独立確認できなければunknown、評価実行時点。自己申告と実測証拠を区別。
+
+入力・oracle・rawは変更しません。oracleに誤りがあれば原本を保ち、report内に原判定と訂正理由を分けます。公開可能な合成資料のみですが、私的な情報や秘密が偶発的に含まれていれば親へ報告し、公開せず停止してください。
+
+Report useful results right away, before scratch notes. If work remains, use collaboration.send_message; otherwise return the result. Keep your status report short; complete the research and deliverable at the depth the task requires. If authorization is missing, or the reviewer denies an action for that reason, pause and report the exact action, target, and blocker to me. If I send <transcript_evidence> that authorizes that action and target, proceed; if already denied, retry the same tool call once. Don’t add the evidence to tool arguments. If the evidence is insufficient or the retry is denied, stop and report back. If you delegate that action, forward the block unchanged.

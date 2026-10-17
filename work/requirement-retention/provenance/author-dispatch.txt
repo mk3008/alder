@@ -1,0 +1,11 @@
+この発言録から、Alderで業務設計の草案を作ってください。
+
+発言録: /workspace/shared/session-q8/input/transcript.txt
+保存先: /workspace/shared/session-q8/output/draft.md
+
+作業環境の案内:
+- 業務資料は上記の発言録だけです。この資料用の既存設計・製品AGENTS.mdはありません。
+- Alderの標準Skillは /workspace/shared/session-q8/input/package/skills/alder-draft-business-design/SKILL.md です。このSkillと、そこから要求される同梱資料を使ってください。plugin.jsonは /workspace/shared/session-q8/input/package/plugin.json にあります。関連する構造資料は input/package/skills/alder-review-business-design/references/ にあります。
+- 読み込み対象は /workspace/shared/session-q8/input/ 内だけです。他のディレクトリの列挙・検索・読込み、GitHub・会話履歴・外部ソースの参照は行わないでください。
+- 資料を読む際は必ず python /workspace/shared/session-q8/open.py <inputからの相対パス> [開始行] [終了行] を使ってください。読んだパスと範囲が記録されます。例: python /workspace/shared/session-q8/open.py transcript.txt 。Skillの資料は必要な範囲に分けて読めます。
+- 書き込んでよいのは上記output/内です。草案を保存したら、通常どおり依頼者への返答を返してください。参照したファイル・範囲と、実行環境から確認できたmodel/reasoning設定（確認できなければunknown）は output/access-report.json に記録してください。資料と返答の内容は日本語でお願いします。

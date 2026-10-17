@@ -1,0 +1,14 @@
+{
+  "agent": "/root/draft_document",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "fork_turns": "none",
+  "launch_at_utc": "2026-10-06T23:55:00Z",
+  "launch_time_precision": "minute",
+  "dispatch_sha256": "a4187c6de8d0506f35a6fcd624a2382f47db1850cf7e28f318e0057b599e2cfa",
+  "dispatch_verified_by_parent": "exact prompt only, no additions",
+  "tool_accepted": true,
+  "effective_model": "unknown",
+  "effective_reasoning": "unknown",
+  "public_input_commit": "68836f6899ac263dcd68d038daaa72f3e54d08ce"
+}

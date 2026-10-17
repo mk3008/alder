@@ -1,0 +1,18 @@
+{
+  "frozen_at_utc": "2026-10-07T00:04:42Z",
+  "files": [
+    {
+      "path": "evaluation/original/mapping.json",
+      "sha256": "8f410bb19a22cf16c6f3fa7884767924b799608a9ad19a6134c27d98e11bb5b0"
+    },
+    {
+      "path": "evaluation/original/report.md",
+      "sha256": "6431e8acf487e1ac60b8b922783dec6319bd173fc0a32569152e466dbd2c3155"
+    },
+    {
+      "path": "evaluation/original/provenance.json",
+      "sha256": "55609c4ff324e042318a70f31772a15dcb3acd9b8fe141163e69a4fb54eb899c"
+    }
+  ],
+  "stage": "initial independent evaluation before coordinator review"
+}

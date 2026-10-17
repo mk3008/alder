@@ -1,0 +1,1 @@
+草案を /workspace/shared/session-q8/output/draft.md に保存しました。参照範囲とmodel/reasoning=unknownを output/access-report.json に記録済みです。Alder 0.4.4、authoring source 02093f4d4e957ae851f7812e958aab3827190f31。未決事項は草案冒頭にまとめています。特に新規予約と貸出延長が、互いの将来の確約を最初の判断時点で予約表から実際に照合するか、受付・倉庫・計算担当に確認が必要です。発言録は T001–T082 のみ使用しました。

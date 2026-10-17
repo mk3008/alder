@@ -1,0 +1,74 @@
+{
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "82 unique sequential turns",
+      "passed": true
+    },
+    {
+      "check": "oracle input digest",
+      "passed": true
+    },
+    {
+      "check": "66 unique requirement ids",
+      "passed": true
+    },
+    {
+      "check": "all exact oracle quotes exist in cited turn",
+      "passed": true
+    },
+    {
+      "check": "requirements have alternatives and must-retain details",
+      "passed": true
+    },
+    {
+      "check": "all pinned package digests",
+      "passed": true
+    },
+    {
+      "check": "provenance/input-freeze.json file hashes",
+      "passed": true
+    },
+    {
+      "check": "raw/output-freeze.json file hashes",
+      "passed": true
+    },
+    {
+      "check": "all helper reads match allowed frozen input",
+      "passed": true
+    },
+    {
+      "check": "transcript and required guidance were read",
+      "passed": true
+    },
+    {
+      "check": "evaluation covers exactly every oracle id",
+      "passed": true
+    },
+    {
+      "check": "initial-evaluation-freeze.json hashes",
+      "passed": true
+    },
+    {
+      "check": "result-freeze.json hashes",
+      "passed": true
+    },
+    {
+      "check": "mapping.json 277 exact evidence quotes and ranges",
+      "passed": true
+    },
+    {
+      "check": "original/mapping.json 231 exact evidence quotes and ranges",
+      "passed": true
+    },
+    {
+      "check": "all five expected raw files",
+      "passed": true
+    },
+    {
+      "check": "neutral transcript unchanged",
+      "passed": true
+    }
+  ],
+  "scope": "Evidence integrity and exact source/line references; no product implementation or general capability validation."
+}

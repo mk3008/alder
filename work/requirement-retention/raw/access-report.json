@@ -1,0 +1,57 @@
+{
+  "references": [
+    {
+      "path": "transcript.txt",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "package/plugin.json",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/SKILL.md",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/provenance.json",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/adoption.md",
+      "ranges": [
+        "full",
+        "1-180",
+        "120-250"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/business-graph.md",
+      "ranges": [
+        "full",
+        "1-165"
+      ]
+    },
+    {
+      "path": "package/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "ranges": [
+        "full"
+      ]
+    },
+    {
+      "path": "package/skills/alder-review-business-design/references/provenance.json",
+      "ranges": [
+        "full"
+      ]
+    }
+  ],
+  "model": "unknown",
+  "reasoning": "unknown"
+}
