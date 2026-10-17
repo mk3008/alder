@@ -1,6 +1,6 @@
 import type {Graph} from './graph';
 import type {Point} from './session';
-const STEP_X=128, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
+const STEP_X=64, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
 export type LayoutPlan={positions:Record<string,Point>;forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
 
@@ -12,7 +12,7 @@ const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
  * and each Object's earliest-listed output Activity choose a display ordering.
  * This breaks layout cycles; it neither defines execution order nor edits edges.
  * Ranks and crossing-reduced row order form a downward staircase. A forward
- * parent is at least one 96-unit step above its child. Compact 128-unit columns
+ * parent is at least one 96-unit step above its child. Compact 64-unit columns
  * overlap the 260-unit card width, so every horizontally overlapping column
  * participates in placement with a 28-unit vertical gap between cards.
  * Graph walks and occupied-slot lookup are iterative, including long chains.
@@ -108,7 +108,7 @@ export function initialPositions(graph:Graph,activityOrder?:readonly string[],ac
   const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
   const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)),after=ordered.filter(id=>downstream.has(id));
   const positions:Record<string,Point>=Object.create(null);
-  const detailStepX=STEP_X/2;
+  const detailStepX=STEP_X;
   upstream.forEach((id,i)=>positions[id]=[MARGIN+i*detailStepX,MARGIN+i*STEP_Y]);
   const step=upstream.length;positions[activity]=[MARGIN+step*detailStepX,MARGIN+step*STEP_Y];
   after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*detailStepX,MARGIN+(step+i+1)*STEP_Y]);

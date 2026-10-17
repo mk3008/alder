@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {mkdirSync} from 'node:fs';
+import {mkdirSync,readFileSync} from 'node:fs';
+const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
 import {openSourceAction} from './source-menu-browser.mjs';
 const object=id=>`# Object ${id}\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Record\n\n`;
 const activity=(id,label,output='(none)')=>`# Activity ${id}\n\n## Scope\n\ntrue\n\n## Why\n\nReview\n\n## When\n\nRequested\n\n## Who\n\nReviewer\n\n## Where\n\nOffice\n\n## How\n\n### Input\n\n- Record — ${label}\n\n### Procedure\n\nReview record\n\n### Output\n\n${output}\n\n## Result\n\nReviewed\n\n`;
@@ -91,6 +92,15 @@ export async function verifyRealWiring(browser){
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await closeDrawers();
    const overview=await positions();
+   const columns=[...new Set(Object.values(overview).map(p=>p[0]))].sort((a,b)=>a-b);for(let i=1;i<columns.length;i++)assert.equal(columns[i]-columns[i-1],64,'overview uses the same compact step as detail');
+   // Freeze a real older overview in IndexedDB while the app is disposed.
+   // Restore must preserve it; only the user's reset operation applies 64.
+   await saved();await page.route('**/__overview-layout-seed__',route=>route.fulfill({contentType:'text/html',body:'<p>layout fixture</p>'}));await page.goto('http://127.0.0.1:4173/__overview-layout-seed__');
+   await page.evaluate(positions=>new Promise((resolve,reject)=>{const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session'),get=store.get('current');get.onsuccess=()=>{const state=get.result,view=(state.views??state.tabs).find(v=>v.key===state.active);view.positions=positions;store.put(state,'current');};tx.oncomplete=()=>{db.close();resolve();};tx.onerror=tx.onabort=()=>{db.close();reject(tx.error);};};}),saved128);
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),saved128,'old overview survives native restore without migration');await closeDrawers();
+   await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();assert.deepEqual(await positions(),overview,'explicit overview reset applies common 64-unit layout');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),overview,'new overview reset survives reload');
+   for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(let i=0;i<7;i++)await page.locator('#out').click();await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});await page.screenshot({path:`web/evidence/wiring/real-overview-${width}-${theme}.png`});for(let i=0;i<7;i++)await page.locator('#in').click();}
+
    const overviewRoutes=await inspect();for(const r of overviewRoutes.wires)assertDeparture(r);
    for(const spec of specs){
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();

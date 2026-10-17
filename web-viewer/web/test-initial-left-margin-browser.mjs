@@ -85,7 +85,7 @@ export function assertInitialMarginGeometry(measured,{zoom,inset=40,width,report
  }
  const minimum=items=>Math.min(...items.map(item=>item.left));
  const result={zoom,inset,nodeLeft:minimum(measured.nodes),edgeLeft:minimum(measured.edges),labelGlyphLeft:minimum(measured.labels),nativeLabelWorldLeft:Math.min(...measured.labels.map(item=>item.world[0])),glyphBoxesLeftOfViewport:measured.labels.filter(item=>item.left<0).map(item=>item.id),metric:'Native getBBox/getBoundingClientRect; no stroke/marker expansion, clipping or overlap claim'};
- near(result.nodeLeft,(40+inset)*zoom,'sample leftmost node');near(result.edgeLeft,(72.5+inset)*zoom,'sample exact SVG path minimum after forward Input correction');
+ near(result.nodeLeft,(40+inset)*zoom,'sample leftmost node');near(result.edgeLeft,(72+inset)*zoom,'sample exact SVG path minimum in compact overview');
  if(inset===40)assert.ok(result.edgeLeft>0);
  return result;
 }
@@ -209,7 +209,7 @@ function preflightInitialMarginGeometryAssertions(){
  const zoom=.36,viewBox=[0,0,1916,2564],logs=[];
  function fixture(rect){
   const matrix=svgViewportTransform({rect,viewBox}),shape=(id,world)=>({id,world,left:matrix[0]*world[0]+matrix[4],transformedLeft:matrix[0]*world[0]+matrix[4],screen:[world[2]*matrix[0],world[3]*matrix[3]],transformedSize:[world[2]*matrix[0],world[3]*matrix[3]],matrix:[...matrix]});
-  return {viewportLeft:0,viewportOrigin:[0,108],viewportSize:[1280,852],scroll:[0,0],svg:{usedRect:rect,viewBoxAttribute:'0 0 1916 2564',viewBox,preserveAspectRatio:{attribute:null,align:6,meetOrSlice:1},inlineCss:{left:'14.4px',top:'0px',width:'689.76px',height:'923.04px'},computedCss:{width:rect[2]+'px',height:rect[3]+'px',transform:'none',border:[0,0,0,0],padding:[0,0,0,0]},matrix},nodes:Array.from({length:25},(_,i)=>({id:'node-'+i,world:[40,40+i*96],left:80*zoom,width:260*zoom})),edges:Array.from({length:63},(_,i)=>shape('edge-'+i,[72.5,40+i*10,100,40])),labels:Array.from({length:63},(_,i)=>shape('label-'+i,[1,40+i*10,20,10]))};
+  return {viewportLeft:0,viewportOrigin:[0,108],viewportSize:[1280,852],scroll:[0,0],svg:{usedRect:rect,viewBoxAttribute:'0 0 1916 2564',viewBox,preserveAspectRatio:{attribute:null,align:6,meetOrSlice:1},inlineCss:{left:'14.4px',top:'0px',width:'689.76px',height:'923.04px'},computedCss:{width:rect[2]+'px',height:rect[3]+'px',transform:'none',border:[0,0,0,0],padding:[0,0,0,0]},matrix},nodes:Array.from({length:25},(_,i)=>({id:'node-'+i,world:[40,40+i*96],left:80*zoom,width:260*zoom})),edges:Array.from({length:63},(_,i)=>shape('edge-'+i,[72,40+i*10,100,40])),labels:Array.from({length:63},(_,i)=>shape('label-'+i,[1,40+i*10,20,10]))};
  }
  const options={zoom,width:1280,report:line=>logs.push(JSON.parse(line.slice(line.indexOf(' ')+1)))};
  for(const rect of [[14.4,108,689.76,923.04],[14.390625,108,689.75,923.03125]]){

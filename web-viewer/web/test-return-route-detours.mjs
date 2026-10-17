@@ -77,8 +77,9 @@ function measure(nodes,edges,routes,mode){
 const sampleText=readFileSync(new URL('../../business-design/alder/README.md',import.meta.url),'utf8');
 const design=parseDesign(sampleText),positions=initialPositions(design.graph,design.activityOrder),edges=design.graph.relations;
 const legacy=JSON.parse(readFileSync(new URL('./evidence/document-order-20261012/sample-layout.json',import.meta.url),'utf8'));
+const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
 const samples={};let sampleNodes,sampleRoutes;
-for(const [name,savedPositions] of [['publicInitial',positions],['legacySaved',legacy]]){
+for(const [name,savedPositions] of [['publicInitial',positions],['saved128',saved128],['legacySaved',legacy]]){
   const nodes=design.graph.nodes.map(n=>({...rect(n.id,...savedPositions[n.id]),scope:n.scope})),snapshot=JSON.stringify({nodes,savedPositions,design});
   const options=edges.map((edge,index)=>({...edge,nodes,index,labelWidth:width(edge),labelHeight:18}));
   const routes=options.map(o=>routeEdge(o)),previous=baseline&&options.map(o=>baseline(o));
@@ -96,10 +97,11 @@ for(const [name,savedPositions] of [['publicInitial',positions],['legacySaved',l
   const saved={key:name,name,design,positions:savedPositions,scroll:[31,72],zoom:.25};
   assert.deepEqual({...reconcile(saved,design).positions},{...savedPositions},'saved positions survive unchanged');
   assert.equal(JSON.stringify({nodes,savedPositions,design}),snapshot,'routing does not mutate graph, coordinates, or order');
-  if(name==='publicInitial'){sampleNodes=nodes;sampleRoutes=routes;}
+  if(name==='saved128'){sampleNodes=nodes;sampleRoutes=routes;}
+  if(name==='publicInitial'){const r=routes[41],source=nodes.find(n=>n.id===edges[41].from),target=nodes.find(n=>n.id===edges[41].to);assert.deepEqual(r.points[0],[source.x+260,source.y+34]);assert.deepEqual(r.points.at(-1),[target.x+260,target.y+34]);assert.equal(r.bounds.right,source.x+282);}
 }
 // The reported line is a real return Read, not a forward route with the wrong
-// target port. Assert its source relation and the actual initial coordinates.
+// target port. Assert its source relation on the frozen saved 128-unit overview as well as the new initial layout above.
 assert.equal(edges[41].kind,'input');assert.equal(edges[41].from,'業務設計書');assert.equal(edges[41].to,'業務設計');
 const affected=sampleRoutes[41];
 assert.deepEqual(affected.points[0],[556,554]);assert.deepEqual(affected.points.at(-1),[428,362]);
