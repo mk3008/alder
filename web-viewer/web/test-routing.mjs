@@ -157,3 +157,9 @@ assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouche
 const upstream={...opts,from:'t',to:'s'};
 assert.equal(routeEdge({...upstream,kind:'input'}).path,routeEdge(upstream).path,'manual upstream normal edges do not force a giant forward loop');
 console.log('Wiring regression: monotone obstacle alternative, adaptive bottom anchor, source-side Input captions, label avoidance, unchanged exceptions/Output and coordinates.');
+
+const blockedBottom={...opts,nodes:[rect('s',100,100),rect('t',500,400),{id:'floor',x:80,y:182,width:300,height:70}]};
+assert.equal(monotone(routeEdge(blockedBottom)),false);
+const sideForward=routeEdge({...blockedBottom,kind:'input'});
+assert.equal(monotone(sideForward),true,'try a forward side departure before accepting a clear upstream route');
+assert.equal(sideForward.collisions,0);assert.equal(sideForward.points[0][0],360);

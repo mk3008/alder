@@ -212,17 +212,18 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
       evaluate([a,[x,b[1]],b],['bottom','left'],true);
     }
   }
+  const needsRoute=()=>bestScore[0]>0||bestScore[1]>0||(forward&&bestScore[2]>0);
   tryPorts(preferred);
-  if(!returning&&(bestScore[0]||bestScore[1])){
+  if(!returning&&needsRoute()){
     // Keep the reading direction at the target before relaxing the source
     // departure. An obstructed bottom/left pair must not choose bottom/right
     // while a clear top/left or side/left pair is still available.
-    for(const a of ['top','right','left'] as Side[]){tryPorts([a,'left']);if(!bestScore[0]&&!bestScore[1])break;}
+    for(const a of ['top','right','left'] as Side[]){tryPorts([a,'left']);if(!needsRoute())break;}
   }
-  if(bestScore[0]||bestScore[1]){
+  if(needsRoute()){
     // Keep vertical departure / horizontal arrival before trying side departures.
-    vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break vertical;}
-    if(bestScore[0]||bestScore[1])other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break other;}
+    vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!needsRoute())break vertical;}
+    if(needsRoute())other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!needsRoute())break other;}
   }
   // Coincident/covered ports can invalidate every direction. A short exterior
   // loop always exists geometrically; collision reporting remains honest.
