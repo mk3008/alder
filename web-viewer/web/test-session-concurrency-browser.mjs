@@ -84,7 +84,7 @@ async function select(page,key){await page.evaluate(key=>document.querySelector(
 async function assertConflict(page){
  await page.waitForFunction(()=>!document.getElementById('status').hidden&&document.getElementById('status-text').textContent.includes('別の画面'));
  const warning=await page.locator('#status-text').textContent();
- assert.match(warning,/保存していません/);assert.match(warning,/コピー/);assert.match(warning,/再読み込み/);
+ assert.match(warning,/別の画面/);assert.match(warning,/引き続き閲覧/);assert.doesNotMatch(warning,/保護|保存|退避|書き出/);assert.match(warning,/再読み込み/);
  assert.equal(await page.locator('#status-text').getAttribute('role'),'alert');return warning;
 }
 async function assertLocalWork(page,expectedKeys){
@@ -266,7 +266,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
      else if(retry==='debounce')document.getElementById('theme').click();
      else window.dispatchEvent(new Event(retry));
     },{retry,closed});
-    await assertConflict(b);await assertLocalWork(b,initialKeys);assert.deepEqual(await read(a),committedA);
+    assert.equal(await b.locator('#app').getAttribute('data-save-state'),'conflict');assert.equal(await b.locator('#save-actions').count(),0);await assertLocalWork(b,initialKeys);assert.deepEqual(await read(a),committedA);
    }
    await b.waitForTimeout(260);assert.deepEqual(await read(a),committedA,'queued timers cannot overwrite the winner');
    // Deliberately discard this stale page only after checking all local work.

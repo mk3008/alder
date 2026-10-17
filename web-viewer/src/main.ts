@@ -11,7 +11,7 @@ import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,P
 import {parseDesign,validateGraph,findingsFromSource} from './graph';
 import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
-import {reconcile,saveSession,loadSession,loadLegacySession,SessionConflictError,type Session,type Tab,type Point} from './session';
+import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
 import {createNodeDrag} from './node-drag';
 import {resetLayout} from './layout-reset';
@@ -23,7 +23,7 @@ import sampleMarkdown from '../../business-design/alder/README.md?raw';
 import sampleChecksMarkdown from './samples/alder-checks.md?raw';
 import {createSnackbar} from './snackbar';
 const app=document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open-menu-toggle" type="button" aria-label="業務設計書を開く" title="業務設計書を開く"><span class="source-caption">開く</span></button><button id="theme" aria-label="テーマ切替"></button><button id="help-menu-toggle" type="button" aria-label="ヘルプ" title="ヘルプ（リンクは新しいタブで開きます）"></button><a id="github-link" href="https://github.com/mk3008/alder" target="_blank" rel="noopener noreferrer" aria-label="GitHubを開く" title="GitHubを開く"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="図の表示タブ"></nav><button id="document-actions-toggle" type="button" aria-label="文書の操作" title="文書の操作" aria-expanded="false" aria-controls="document-actions" hidden>…</button><div id="document-actions" role="group" aria-label="選択中の文書の操作"><button id="refresh" type="button" aria-label="現在の文書を取得元から読み直す" title="現在の文書を取得元から読み直す" hidden></button><button id="save-image" class="png-action" type="button" aria-label="グラフ全体をPNGで保存" title="グラフ全体をPNGで保存" hidden></button><button id="copy-image" class="png-action" type="button" aria-label="グラフ全体をPNGでコピー" title="グラフ全体をPNGでコピー" hidden></button><button id="share-source" aria-label="取得元の共有リンクをコピー" title="取得元の共有リンクをコピー"></button><button id="open-checks" class="check-action" type="button" aria-label="チェックリストを開く" title="チェックリストを開く" hidden></button><button id="view-markdown" aria-label="原文を見る" title="原文を見る"></button></div></div><section id="status" class="info-bar" hidden><div class="info-content"><span id="status-text" role="status" aria-live="polite"></span><div id="save-actions" hidden><div class="save-buttons"><button id="save-retry">保存を再試行</button><button id="save-download">表示中の本文をファイルに保存</button><button id="save-draft-download">入力中の本文をファイルに保存</button><button id="save-reload">未保存の変更を破棄して読み直す</button></div><p id="save-help">保存するのはMarkdown本文だけです。図の配置や開いたタブは含みません。「ファイルを開く」で読み込めますが、入力途中の本文は修正が必要な場合があります。</p><p id="save-draft-note" hidden>入力中のURLは、入力欄からコピーして控えてください。</p><p id="save-reload-warning" hidden>読み直すと、この画面の未保存の本文・入力・図の配置は失われます。必要な本文を先にファイルへ保存してください。</p><p id="save-download-error" role="alert" hidden></p><label id="save-rescue-label" for="save-rescue-text" hidden>コピーする本文</label><textarea id="save-rescue-text" readonly hidden></textarea></div></div><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="drawer-modes" role="tablist" aria-label="一覧の表示"></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label><div class="graph-actions"><button id="reset-layout" class="graph-action" type="button"><span>レイアウトを初期値に戻す</span></button></div></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><section id="opening-guide" class="empty-guide" aria-labelledby="opening-title"><h2 id="opening-title">業務設計書を開くには</h2><p>業務設計書（Business Design、Markdown形式）を開くと、業務のつながりを図で確認できます。ファイル、URL、テキスト入力から開き方を選べます。</p><div class="empty-actions"><button id="guide-open" type="button">ファイルを開く</button><button id="guide-open-url" type="button">URLを開く</button><button id="guide-open-text" type="button">テキストで入力する</button></div><p>業務設計書が手元にない場合は、まず表示を試してみてください。<br><a id="open-sample" href="#alder-sample">サンプルを開く</a></p></section><section id="authoring-guide" class="empty-guide" aria-labelledby="authoring-title"><h2 id="authoring-title">業務設計書を作るには</h2><p>Alderプラグインにヒアリングメモ・議事録・発言内容を渡し、「このヒアリング結果をAlder業務設計書にして」と依頼すると、Markdownの草案を作れます。</p><p>草案は依頼者と合意する前にレビューしてください。作成した業務設計書をこのViewerで開くと、図で確認できます。</p><a href="https://github.com/mk3008/alder/blob/main/README.ja.md" target="_blank" rel="noopener noreferrer">導入・作成手順を読む（日本語・新しいタブ）</a></section></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" hidden>`;
+app.innerHTML=`<header><button id="node-list-toggle" aria-label="一覧を開閉" aria-controls="node-list-drawer" aria-expanded="false"></button><strong>Alder Viewer</strong><span id="preview-badge" hidden></span><span class="spacer"></span><button id="open-menu-toggle" type="button" aria-label="業務設計書を開く" title="業務設計書を開く"><span class="source-caption">開く</span></button><button id="theme" aria-label="テーマ切替"></button><button id="help-menu-toggle" type="button" aria-label="ヘルプ" title="ヘルプ（リンクは新しいタブで開きます）"></button><a id="github-link" href="https://github.com/mk3008/alder" target="_blank" rel="noopener noreferrer" aria-label="GitHubを開く" title="GitHubを開く"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a><button id="drawer" aria-label="Markdown開閉"></button></header><div class="tab-strip"><nav id="tabs" aria-label="図の表示タブ"></nav><button id="document-actions-toggle" type="button" aria-label="文書の操作" title="文書の操作" aria-expanded="false" aria-controls="document-actions" hidden>…</button><div id="document-actions" role="group" aria-label="選択中の文書の操作"><button id="refresh" type="button" aria-label="現在の文書を取得元から読み直す" title="現在の文書を取得元から読み直す" hidden></button><button id="save-image" class="png-action" type="button" aria-label="グラフ全体をPNGで保存" title="グラフ全体をPNGで保存" hidden></button><button id="copy-image" class="png-action" type="button" aria-label="グラフ全体をPNGでコピー" title="グラフ全体をPNGでコピー" hidden></button><button id="share-source" aria-label="取得元の共有リンクをコピー" title="取得元の共有リンクをコピー"></button><button id="open-checks" class="check-action" type="button" aria-label="チェックリストを開く" title="チェックリストを開く" hidden></button><button id="view-markdown" aria-label="原文を見る" title="原文を見る"></button></div></div><section id="status" class="info-bar" hidden><div class="info-content"><span id="status-text" role="status" aria-live="polite"></span></div><button id="status-close" aria-label="通知を閉じる">×</button></section><div class="workspace"><aside id="node-list-drawer" aria-label="項目一覧" hidden><div class="node-list-heading"><strong>一覧</strong><button id="node-list-close" aria-label="一覧を閉じる"></button></div><div id="drawer-modes" role="tablist" aria-label="一覧の表示"></div><div id="node-categories" role="tablist" aria-label="項目の種類"></div><label class="node-search-label" for="node-list-search">名前で検索</label><input id="node-list-search" type="search" placeholder="名前で検索" autocomplete="off"><div class="scope-bulk"><button id="scope-outside" aria-label="スコープ外を非表示" aria-pressed="true"></button><span>スコープ外</span><small id="scope-count"></small></div><div id="node-list" role="tabpanel" aria-label="Activity一覧"></div></aside><main><div class="toolbar" aria-label="図の表示設定" data-settings-open="false"><button id="display-settings-toggle" type="button" aria-label="表示設定を開く" aria-controls="display-options" aria-expanded="false" title="表示設定を開く"></button><div id="display-options" class="display-options" hidden><label class="edge-option"><input id="show-outside" type="checkbox" checked>スコープ外を表示</label><label class="edge-option" title="同じActivityとObjectの間にReadとWriteがあるとき、Readだけを非表示にします。Read単独は残します。"><input id="prefer-write" type="checkbox">Writeを優先表示する</label><label class="edge-option" title="Activity間とObject間の例外線とラベルを表示します。"><input id="show-exceptions" type="checkbox" checked>例外線を表示</label><label class="edge-option" title="項目を選択すると、その項目に直接つながる線とラベルだけを表示します。未選択時はすべて表示します。"><input id="selected-edges-only" type="checkbox">選択した項目の結線だけ表示</label><div class="graph-actions"><button id="reset-layout" class="graph-action" type="button"><span>レイアウトを初期値に戻す</span></button></div></div><button id="layout-lock" aria-label="配置ロック" aria-pressed="true" title="配置をロック中。項目の上から図をスクロールできます。"></button><button id="out" aria-label="縮小"></button><span id="zoom"></span><button id="in" aria-label="拡大"></button></div><div id="viewport" tabindex="0" aria-label="業務図"><div id="canvas"><svg id="edges"></svg><div id="nodes"></div></div><div id="empty"><section id="opening-guide" class="empty-guide" aria-labelledby="opening-title"><h2 id="opening-title">業務設計書を開くには</h2><p>業務設計書（Business Design、Markdown形式）を開くと、業務のつながりを図で確認できます。ファイル、URL、テキスト入力から開き方を選べます。</p><div class="empty-actions"><button id="guide-open" type="button">ファイルを開く</button><button id="guide-open-url" type="button">URLを開く</button><button id="guide-open-text" type="button">テキストで入力する</button></div><p>業務設計書が手元にない場合は、まず表示を試してみてください。<br><a id="open-sample" href="#alder-sample">サンプルを開く</a></p></section><section id="authoring-guide" class="empty-guide" aria-labelledby="authoring-title"><h2 id="authoring-title">業務設計書を作るには</h2><p>Alderプラグインにヒアリングメモ・議事録・発言内容を渡し、「このヒアリング結果をAlder業務設計書にして」と依頼すると、Markdownの草案を作れます。</p><p>草案は依頼者と合意する前にレビューしてください。作成した業務設計書をこのViewerで開くと、図で確認できます。</p><a href="https://github.com/mk3008/alder/blob/main/README.ja.md" target="_blank" rel="noopener noreferrer">導入・作成手順を読む（日本語・新しいタブ）</a></section></div></div></main><aside id="formattedMarkdownDrawer" aria-label="選択項目のMarkdown"><div id="resize" role="separator" aria-label="Markdown幅" aria-orientation="vertical" tabindex="0"></div><div id="detail"></div></aside></div><section id="source-dialog" role="dialog" aria-modal="false" aria-labelledby="source-title" hidden><h2 id="source-title"></h2><label id="url-label" for="source-url">匿名取得できるHTTPSのMarkdown本文URL</label><input id="source-url" type="url" autocomplete="off" spellcheck="false"><label id="text-label" for="source-text">Business Design Markdown</label><textarea id="source-text" rows="12" spellcheck="false"></textarea><p id="source-help"></p><div class="source-actions"><button id="source-submit">表示</button><button id="source-cancel">キャンセル</button></div></section><input id="fallback" type="file" accept=".md,.markdown,text/markdown,text/plain" hidden>`;
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const deployment=deploymentContext(location.pathname);if(deployment.version){$('preview-badge').hidden=false;$('preview-badge').textContent=`確認用 · ${deployment.version}`;$('preview-badge').title=`PR #${deployment.pr} の確認版。本番とは別に、このブラウザーへ表示状態を保存します。`;}
 const icon=(v:Parameters<typeof createElement>[0])=>createElement(v,{'stroke-width':1.8,'aria-hidden':'true'});
@@ -53,7 +53,7 @@ installHeaderTitleFit(document.querySelector('header')!);
 const documentActions=installDocumentActions(document.querySelector('.tab-strip')!);
 let state:Workspace={tabs:[],recovery:[],dark:false,drawer:true,width:380,preferWrite:false,nodeDrawer:false},layoutLocked=true,displaySettingsOpen=false,restoring=true,restoreFailed=false,saveConflict=false,opening=false,saving=Promise.resolve(),timer:number|undefined,closing:Tab|undefined,revision=0,documentSaving=false;
 let exportingImage=false;
-let savedRevision=0,pendingWrites=0,saveFailed=false,savedOnce=false,draftDirty=false,leaveWarning=false,quotaFailed=false,closeFailed=false;
+let savedRevision=0,pendingWrites=0,saveFailed=false,savedOnce=false,draftDirty=false,leaveWarning=false;
 // Repeated lifecycle/no-op events must not commit the same revision twice.
 const queuedRevisions=new Set<number>();
 const updating=new Set<string>(),unsavedDrafts=new Set<string>();
@@ -65,11 +65,11 @@ const current=()=>state.tabs.find(t=>t.key===state.active);
 const documentKey=(t:Tab)=>documentForView(t)?.key??t.key;
 const isCurrentDocument=(t:Tab)=>state.document?.key===documentKey(t);
 let storageMessage='';
-const notify=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('status-close'),$('viewport'),()=>$('status').dataset.key!=='storage',recoveryChrome);
+const notify=createSnackbar($('status'),$('status-text'),$<HTMLButtonElement>('status-close'),$('viewport'));
 // Recomputing save chrome must not move an unchanged storage error ahead of a newer input error.
-function status(message:string,kind:'success'|'warning'|'error'='success',key:'operation'|'storage'='operation'){if(key==='storage'){if(storageMessage===message){recoveryChrome();return;}storageMessage=message;}notify(message,kind,key);recoveryChrome();}
-function protectedStorage(){status('前回の表示を復元できません。元の保存内容を保護するため、この画面の変更は保存しません。新しく入力した本文を退避してから、再読み込みで復元を再試行できます。','error','storage');}
-function conflictedStorage(){status('別の画面（ブラウザーのタブやウィンドウ）で、本文または表示設定が先に保存されました。上書きを防ぐため、この画面の変更は保存していません。本文・入力途中の編集・図の配置は、この画面を閉じるまで残っています。必要な本文をファイルに保存するかコピーしてから、再読み込みしてください。','error','storage');}
+function status(message:string,kind:'success'|'warning'|'error'='success',key:'operation'|'storage'='operation'){if(key==='storage'){if(storageMessage===message)return;storageMessage=message;}notify(message,kind,key);}
+function protectedStorage(){status('前回の表示を復元できません。再読み込みして、もう一度お試しください。','error','storage');}
+function conflictedStorage(){status('別の画面で表示が変更されました。この画面では引き続き閲覧できます。最新の表示に切り替えるには再読み込みしてください。','error','storage');}
 function markChanged(){if(!restoring){revision++;saveStateChrome();}}
 function beforeUnsavedLeave(event:BeforeUnloadEvent){event.preventDefault();event.returnValue=true;}
 function saveStateChrome(){
@@ -80,44 +80,19 @@ function saveStateChrome(){
   if(app.dataset.saveState!==mode)app.dataset.saveState=mode;
   if(restoreFailed)protectedStorage();
   else if(saveConflict)conflictedStorage();
-  else if(saveFailed)status((closeFailed?'保存できないため、タブを閉じませんでした。':'')+(quotaFailed?'保存容量が足りず保存できません。本文を退避してから、保存容量やブラウザーの設定を確認してください。':'表示状態を保存できません。本文と図の配置はこの画面に残っています。保存を再試行するか、本文をファイルに退避してください。'),'error','storage');
+  else if(saveFailed)status('表示を次回に引き継げません。この画面では引き続き閲覧できます。','error','storage');
   else status('','success','storage');
   displaySettingsChrome();
 }
-function recoveryChrome(){
-  const visible=!$('status').hidden&&$('status').dataset.key==='storage';
-  $('save-actions').hidden=!visible;$('status').classList.toggle('has-save-actions',visible);$('status-close').hidden=visible;
-  if(!visible){for(const id of ['save-download-error','save-rescue-label','save-rescue-text'])$(id).hidden=true;return;}
-  const retry=$<HTMLButtonElement>('save-retry');retry.hidden=restoreFailed||saveConflict;retry.disabled=pendingWrites>0||documentSaving||!!closing;
-  const retryLabel=retry.disabled?'保存を再試行中…':'保存を再試行';if(retry.textContent!==retryLabel)retry.textContent=retryLabel;
-  $('save-download').hidden=!current();
-  const dialogOpen=!$('source-dialog').hidden;
-  const draftDownload=$('save-draft-download');draftDownload.hidden=rescueDraft()===undefined;
-  const draftLabel=dialogOpen&&sourceMode==='text'?'入力中の本文をファイルに保存':'図に未反映の本文をファイルに保存';if(draftDownload.textContent!==draftLabel)draftDownload.textContent=draftLabel;
-  $('save-draft-note').hidden=!dialogOpen||sourceMode!=='url'||!sourceURL().value;
-  $('save-reload').hidden=!restoreFailed&&!saveConflict;$('save-reload-warning').hidden=$('save-reload').hidden;
-}
-function saveFailure(error:unknown){saveFailed=true;quotaFailed=(error as {name?:unknown}|null)?.name==='QuotaExceededError';closeFailed=!!closing;}
-function rescueName(name:string){const clean=Array.from(name.normalize('NFKC').replace(/\.(?:md|markdown)$/i,'').replace(/[\\/:*?"<>|\x00-\x1f\x7f]/g,'_').replace(/^\.+|[.\s]+$/g,'')).slice(0,80).join('');return 'alder-'+(clean||'document')+'.md';}
-function downloadMarkdown(raw:string,name:string){
-  let url:string|undefined,link:HTMLAnchorElement|undefined;
-  try{url=URL.createObjectURL(new Blob([raw],{type:'text/markdown;charset=utf-8'}));link=document.createElement('a');link.href=url;link.download=rescueName(name);link.hidden=true;document.body.append(link);link.click();for(const id of ['save-download-error','save-rescue-label','save-rescue-text'])$(id).hidden=true;}
-  catch{const error=$('save-download-error');error.textContent='本文ファイルを作れませんでした。下の本文を選択してコピーし、別のテキストファイルに保存してください。';error.hidden=false;$('save-rescue-label').hidden=false;const field=$<HTMLTextAreaElement>('save-rescue-text');field.value=raw;field.hidden=false;field.focus();field.select();}
-  finally{link?.remove();if(url){const value=url;window.setTimeout(()=>URL.revokeObjectURL(value),1500);}}
-}
-$('save-retry').onclick=()=>{if(!saveFailed||restoreFailed||saveConflict||pendingWrites||documentSaving||closing)return;capture();persist(0,false);};
-$('save-download').onclick=()=>{const tab=current();if(tab)downloadMarkdown(tab.design.markdown,state.document?.name??tab.name);};
-function rescueDraft(){if(!$('source-dialog').hidden&&sourceMode==='text')return sourceText().value||undefined;return current()?.draft;}
-$('save-draft-download').onclick=()=>{const raw=rescueDraft();if(raw!==undefined)downloadMarkdown(raw,(state.document?.name??'input')+'-draft');};
-$('save-reload').onclick=()=>{if(restoreFailed||saveConflict)location.reload();};
+function saveFailure(_error:unknown){saveFailed=true;storageMessage="";}
 
-function ensureWritable(){if(restoreFailed)throw Error('前回の保存内容を保護しています。本文を退避してから読み直してください。');if(saveConflict)throw new SessionConflictError();}
+function ensureWritable(){if(restoreFailed)throw Error('前回の表示を復元できません。再読み込みして、もう一度お試しください。');if(saveConflict)throw new SessionConflictError();}
 async function writeSnapshot(snapshot:Session|WorkspaceSnapshot){ensureWritable();try{await saveSession(snapshot);}catch(error){if(error instanceof SessionConflictError){saveConflict=true;clearTimeout(timer);timer=undefined;conflictedStorage();}throw error;}}
 function queueSnapshot(snapshot:Session|WorkspaceSnapshot,version:number){
   pendingWrites++;queuedRevisions.add(version);saveStateChrome();
   const write=saving.catch(()=>{}).then(()=>writeSnapshot(snapshot)).then(()=>{
     savedRevision=Math.max(savedRevision,version);savedOnce=true;acknowledgeDrafts(snapshot);
-    if(savedRevision===revision){saveFailed=false;quotaFailed=false;closeFailed=false;}
+    if(savedRevision===revision){saveFailed=false;}
   },error=>{saveFailure(error);throw error;}).finally(()=>{pendingWrites--;queuedRevisions.delete(version);saveStateChrome();});
   saving=write.catch(()=>{});return write;
 }
@@ -227,7 +202,7 @@ async function confirmChecks(t:Tab,candidate:RelatedChecks){
   if(!isCurrentDocument(t))return;const match=checkCompatibility(parseChecks(candidate.markdown),state.tabs[0]);if(match.state==='mismatch'){v.error=match.reason;detail();return;}
   v.busy=true;v.error=undefined;
   try{await saveChecks(t,{...candidate,confirmedFor:confirmationKey(state.tabs[0])});v.candidate=undefined;v.mode='checks';}
-  catch(e){v.error='関連Checkを保存できません: '+(e as Error).message;}
+  catch(e){v.error='関連Checkを開けません: '+(e as Error).message;}
   finally{v.busy=false;detail();}
 }
 function detail(){
@@ -356,9 +331,9 @@ $('open').onclick=async()=>{if(restoring||opening||documentSaving)return;opening
 ($('fallback') as HTMLInputElement).onchange=async()=>{const input=$('fallback') as HTMLInputElement;if(restoring||opening||documentSaving)return;opening=true;render();try{for(const f of Array.from(input.files??[]))await addFile(f);}catch(e){status('開けません: '+(e as Error).message,'error');}input.value='';opening=false;render();};
 // Save a replacement before changing the displayed Graph. A failed transaction
 // leaves the old design and the per-tab draft available for an explicit retry.
-class DocumentSaveError extends Error{constructor(error:unknown){super(error instanceof Error?error.message:'表示状態を保存できません。');this.name='DocumentSaveError';}}
+class DocumentSaveError extends Error{constructor(error:unknown){super(error instanceof Error?error.message:'表示を切り替えられません。');this.name='DocumentSaveError';}}
 async function saveDocument(project:()=>Workspace,commit:()=>void){
-  if(documentSaving||closing)throw Error('表示状態を保存しています。完了後に再試行してください。');
+  if(documentSaving||closing)throw Error('表示を切り替えています。完了後に再試行してください。');
   try{ensureWritable();}catch(error){throw new DocumentSaveError(error);}capture();clearTimeout(timer);timer=undefined;documentSaving=true;revision++;const version=revision;render();saveStateChrome();let saved=false;
   try{
     const snapshot=structuredClone(snapshotWorkspace(project()));await queueSnapshot(snapshot,version);
@@ -385,7 +360,6 @@ type PermissionHandle=FileSystemFileHandle & {queryPermission:(o:{mode:'read'})=
 $('refresh').onclick=async()=>{
   const t=current();if(restoring||documentSaving||closing||!t||t.source?.kind==='text'||t.source?.kind==='sample'||updating.has(documentKey(t)))return;
 
-  if((t.edited||t.draft!==undefined)&&!window.confirm('取得元のMarkdownで表示を更新しますか？以前の編集は保護され、移行通知から書き出せます。取得や保存に失敗した場合は現在の表示を保持します。'))return;
   if(sourceTarget===t.key)hideSource();const updatingDocument=documentKey(t);updating.add(updatingDocument);render();
   try{
     if(t.source?.kind==='url'){const d=parseDesign(await fetchMarkdown(t.source.url));await replace(t,d);return;}
@@ -447,7 +421,7 @@ function requestCloseSource(){return closeSource();}
 sourceText().oninput=()=>{if(sourceMode==='text'){newTextDraft=sourceText().value;updateSourceDirty();}};
 let copyingSource=false;
 function sharingReason(){
-  if(restoring||opening||sourceBusy||documentSaving||closing)return '読込・保存が終わってから共有してください。';
+  if(restoring||opening||sourceBusy||documentSaving||closing)return '読込が終わってから共有してください。';
   return sourceSharingReason(current());
 }
 function sharingChrome(){
@@ -474,7 +448,7 @@ async function openSharedSource(requestedHash=location.hash){
   if(!/^#source(?:=|$)/.test(hash)){pendingSharedHash=undefined;if(sharedSourceAbort&&!documentSaving){sharedSourceAbort.abort();sharedSourceAbort=undefined;sharedSourceToken++;opening=false;render();}return;}
   if(location.hash===hash)history.replaceState(history.state,'',location.pathname+location.search);
   if(documentSaving){pendingSharedHash=hash;return;}
-  if(closing||sourceBusy||(opening&&!sharedSourceAbort)){status('読込・保存が終わってから共有リンクを開き直してください。','warning');return;}
+  if(closing||sourceBusy||(opening&&!sharedSourceAbort)){status('読込が終わってから共有リンクを開き直してください。','warning');return;}
   const token=++sharedSourceToken;sharedSourceAbort?.abort();
   try{
     const url=readSharedSource(hash)!;
@@ -614,16 +588,8 @@ function validateRestoredTab(t:Tab){
   if(!t.design.graph.nodes.every(n=>Object.hasOwn(t.design.sections,n.id)&&typeof t.design.sections[n.id]==='string')||(t.design.activityOrder!==undefined&&(!Array.isArray(t.design.activityOrder)||!t.design.activityOrder.every(id=>typeof id==='string'))))throw Error('Invalid saved sections');
   if(t.source!==undefined&&(!t.source||!['text','sample','url'].includes(t.source.kind)||(t.source.kind==='url'&&typeof t.source.url!=='string')))throw Error('Invalid saved source');
 }
-// A conditional migration notice, never a normal document recovery browser.
-const legacyNotice=document.createElement('section');legacyNotice.id='legacy-notice';legacyNotice.className='info-bar';legacyNotice.hidden=true;
-legacyNotice.innerHTML='<div>以前の編集・保存文書を保護しています。必要な内容をファイルへ保存できます。<button id="legacy-export" type="button">以前の保存内容を書き出す</button><textarea id="legacy-copy" aria-label="以前の保存内容をコピー" readonly hidden></textarea></div><button id="legacy-close" aria-label="移行の通知を閉じる">×</button>';
-document.querySelector('.workspace')!.before(legacyNotice);
-let legacyContent:unknown;
-$('legacy-close').onclick=()=>{legacyNotice.hidden=true;};
-$('legacy-export').onclick=()=>{const content=JSON.stringify(legacyContent,(_key,value)=>value,2);try{const url=URL.createObjectURL(new Blob([content],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='alder-legacy-session.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch{const field=$<HTMLTextAreaElement>('legacy-copy');field.value=content;field.hidden=false;field.focus();field.select();}};
-void loadLegacySession().then(value=>{legacyContent=value;legacyNotice.hidden=value===undefined;}).catch(()=>status('以前の保存内容を確認できません。保存データは削除していません。','warning'));
 const updateNotice=document.createElement('section');updateNotice.id='source-update-notice';updateNotice.className='info-bar';updateNotice.hidden=true;
-updateNotice.innerHTML='<span role="status">取得元に新しい内容があります。更新ボタンで読み直せます。</span><button id="source-update-refresh" type="button">更新</button><button id="source-update-close" aria-label="更新通知を閉じる">×</button>';document.querySelector('.workspace')!.before(updateNotice);
+updateNotice.innerHTML='<span role="status">開いている文書は古いバージョンです。取得元に新しい内容があります。</span><button id="source-update-refresh" type="button">更新する</button><button id="source-update-close" type="button">このまま読む</button>';document.querySelector('.workspace')!.before(updateNotice);
 let updateCandidate:{key:string;url:string;baseline:string}|undefined;
 const dismissedUpdates=new Set<string>();let updateCheckToken=0,restoredDocumentKey:string|undefined,updateCheckPending:string|undefined;
 function updateNoticeChrome(){const t=state.document;updateNotice.hidden=!updateCandidate||updateCandidate.key!==t?.key||updateCandidate.baseline!==t.design.markdown||dismissedUpdates.has(t.key);$<HTMLButtonElement>('source-update-refresh').disabled=restoring||opening||documentSaving||!!(t&&updating.has(t.key));}

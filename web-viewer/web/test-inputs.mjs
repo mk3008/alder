@@ -169,13 +169,13 @@ try {
   const cloneFailure=await ready();
   cloneFailure.w.structuredClone=()=>{throw new DOMException('Cannot clone modeled handle','DataCloneError');};
   await openText(cloneFailure);const cloneGraph=graph(cloneFailure);await flush();
-  assertError(cloneFailure,/保存できません/);assert.equal(graph(cloneFailure),cloneGraph);assert.equal(tabs(cloneFailure).length,1);
+  assertError(cloneFailure,/引き継げません/);assert.equal(graph(cloneFailure),cloneGraph);assert.equal(tabs(cloneFailure).length,1);
   checks.push('structuredClone persistence failure is an error alert and preserves current graph');
 
   const writeFailure=await ready();let saveAttempts=0;
   writeFailure.w.indexedDB={open(){saveAttempts++;throw new DOMException('Modeled storage unavailable','UnknownError');}};
   await openText(writeFailure);const writeGraph=graph(writeFailure);await flush();
-  assert.equal(saveAttempts,1);assertError(writeFailure,/保存できません/);assert.equal(graph(writeFailure),writeGraph);assert.equal(tabs(writeFailure).length,1);
+  assert.equal(saveAttempts,1);assertError(writeFailure,/引き継げません/);assert.equal(graph(writeFailure),writeGraph);assert.equal(tabs(writeFailure).length,1);
   checks.push('saveSession rejection is an error alert and preserves current graph');
 
   const corruptDB=new IDBFactory();const seed=await ready({indexedDB:corruptDB});seed.w.close();
