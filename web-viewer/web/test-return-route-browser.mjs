@@ -84,14 +84,14 @@ function enters(s,r){
 export function assertLocalReturnPath(path){
  const {first,last,segments}=pathSegments(path),r=design.graph.relations[relationIndex],source=returnRoutePositions[r.from],target=returnRoutePositions[r.to];
  assert.deepEqual(first,[source[0]+260,source[1]+34],'right source perimeter');
- assert.deepEqual(last,[target[0]+260,target[1]+34],'right target perimeter');
+ assert.deepEqual(last,[target[0]+260,target[1]+68/3],'data return uses the upper of two Activity arrival roles');
  const initial=segments[0],final=segments.at(-1);
  assert.equal(initial.kind,'L');assert.equal(initial.end[1],first[1]);assert.ok(initial.end[0]>first[0],'outward horizontal departure');
  assert.equal(final.kind,'L');assert.equal(final.start[1],last[1]);assert.ok(final.start[0]>last[0],'inward horizontal arrival from the right');
  const extrema=segments.flatMap(s=>{const ts=[0,1];if(s.kind==='Q')for(const axis of [0,1]){const denominator=s.start[axis]-2*s.control[axis]+s.end[axis];if(denominator){const t=(s.start[axis]-s.control[axis])/denominator;if(t>0&&t<1)ts.push(t);}}return ts.map(t=>at(s,t));});
  const bounds=[Math.min(...extrema.map(p=>p[0])),Math.min(...extrema.map(p=>p[1])),Math.max(...extrema.map(p=>p[0])),Math.max(...extrema.map(p=>p[1]))];
  const right=Math.max(source[0]+260,target[0]+260)+14+8;
- assert.deepEqual(bounds,[target[0]+260,target[1]+34,right,source[1]+34],'local return stays within its endpoint corridor, including exact curve extrema');
+ assert.deepEqual(bounds,[target[0]+260,target[1]+68/3,right,source[1]+34],'local return stays within its endpoint corridor, including exact curve extrema');
  assert.equal(segments.filter(s=>s.kind==='Q').length,2,'rounded two-corner return');
  for(const s of segments)if(s.kind==='L')assert.ok(s.start[0]===s.end[0]||s.start[1]===s.end[1],'straight legs are orthogonal');
  for(const [id,[x,y]] of Object.entries(returnRoutePositions)){
@@ -223,7 +223,7 @@ export async function preflightReturnRoutes(){
    await waitSavedViewer(coldPage,fields(zoom,hiddenNodes));openDisplaySettingsDOM(cold.document);cold.document.querySelector('#show-outside').click();assert.deepEqual(await coldPage.evaluate(readPositionsInPage),returnRoutePositions);cold.close();
   }
   // Exercise oracle sensitivity without invoking product routing as an oracle.
-  const good='M556,554 L570,554 Q578,554 578,546 L578,370 Q578,362 570,362 L428,362';
+  const y=328+68/3,good=`M556,554 L570,554 Q578,554 578,546 L578,${y+8} Q578,${y} 570,${y} L428,${y}`;
   assertLocalReturnPath(good);assert.throws(()=>assertLocalReturnPath(good.replaceAll('578','1890').replaceAll('570','1882')),/endpoint corridor/);
   assert.throws(()=>assertLocalReturnPath(good.replace('M556,554','M555,554')),/source perimeter/);
   assert.ok(enters({kind:'L',start:[0,1],end:[10,1]},[4,.9,4.01,1.1]),'analytical collision catches a narrow interval between sample points');

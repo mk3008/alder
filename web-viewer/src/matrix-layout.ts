@@ -1,7 +1,7 @@
 import type {Graph,Relation} from './graph';
 import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
-export type MatrixWire={returning:boolean;captionLane:number};
+export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number;detail?:boolean};
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
  const types=new Map(graph.nodes.map(n=>[n.id,n.type]));
@@ -49,10 +49,27 @@ export function matrixPlan(graph:Graph,hint?:readonly string[]):MatrixPlan{
  }
  const nodes=stable.slice().sort((a,b)=>phase.get(a.id)!-phase.get(b.id)!||(degree.get(b.id)??0)-(degree.get(a.id)??0)||a.id.localeCompare(b.id,'en'));
  const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>();
- const wires=graph.relations.map((r,i)=>{
+ const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
   const back=returning.has(i),key=(back?'return:':r.kind+':')+(r.kind==='output'&&!back?r.to:r.from),captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
+ });
+ // Allocate roles before any display filter or coordinate-based routing.
+ // Activity right edge: data return arrival, exception arrival, exception exit.
+ const activities=new Set(graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
+ const roles=new Map<string,Set<number>>();
+ const addRole=(id:string,role:number)=>{if(activities.has(id)){const set=roles.get(id)??new Set<number>();set.add(role);roles.set(id,set);}};
+ graph.relations.forEach((r,i)=>{
+  if(r.kind==='business-exception'){addRole(r.to,1);addRole(r.from,2);}
+  else if(r.kind==='input'&&wires[i].returning)addRole(r.to,0);
+ });
+ const fraction=(id:string,role:number)=>{const ordered=[...(roles.get(id)??[])].sort();return ordered.includes(role)?(ordered.indexOf(role)+1)/(ordered.length+1):undefined;};
+ graph.relations.forEach((r,i)=>{
+  const wire=wires[i];
+  if(r.kind==='business-exception'){wire.fromPort=fraction(r.from,2);wire.toPort=fraction(r.to,1);}
+  else if(r.kind==='input'&&wire.returning)wire.toPort=fraction(r.to,0);
+  // Different arrival roles use separate vertical runs as well as ports.
+  if(wire.toPort!==undefined&&roles.get(r.to)!.size>1)wire.returnLane=r.kind==='business-exception'?1:0;
  });
  const below=new Map<string,number>(),above=new Map<string,number>(),lastTarget=new Map<string,number>();
  for(const {relation:r,index:i}of unique.values())if(!wires[i].returning){

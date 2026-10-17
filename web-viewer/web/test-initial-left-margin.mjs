@@ -44,7 +44,7 @@ function geometry(e,inset=40,zoom=1){
  // separate frozen-128 restore/reset regression in layout and native wiring.
  assert.equal(hash(positions(e)),'e3290e87fca6d9fa00072fc32778971b602523445b19fa397d64bf7dd93f4424','all new overview coordinates use the shared 64-unit layout');
  // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'e5d38510751ca9c33d8fac0daaa48b2a691f2dd1bd791c127bac627bf8a4c96b','all SVG paths and endpoint-relative left-aligned captions remain exact');
+ assert.equal(hash(routes(e)),'87a89cc802887c0fa1474c94ed545612f23ad97afb5e396cf00778cb09a4114e','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
  assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2096 3428');

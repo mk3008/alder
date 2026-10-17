@@ -19,8 +19,8 @@ function verify(graph,hint){
   assert.equal(wire.returning,r.kind.endsWith('exception')||p.feedbackRelations.includes(i));
   if(wire.returning&&!r.kind.endsWith('exception'))assert.ok(reach(r.to).has(r.from),'only a genuine cycle may return');
   const route=routeEdge({...r,nodes:boxes,index:i,matrix:wire,labelWidth:Math.max(30,(r.label??'').length*12),labelHeight:18});
-  assert.deepEqual(route.points[0],wire.returning?[a.x+260,a.y+34]:[a.x+32.5,a.y+68]);
-  assert.deepEqual(route.points.at(-1),wire.returning?[b.x+260,b.y+34]:[b.x,b.y+34]);
+  assert.deepEqual(route.points[0],wire.returning?[a.x+260,a.y+68*(wire.fromPort??.5)]:[a.x+32.5,a.y+68]);
+  assert.deepEqual(route.points.at(-1),wire.returning?[b.x+260,b.y+68*(wire.toPort??.5)]:[b.x,b.y+34]);
   assert.equal(route.collisions,0);assert.equal(route.fallback,false);assert.doesNotMatch(route.path,/NaN|Infinity/);
   if(!wire.returning){
    assert.ok(a.x+32.5<b.x&&a.y+68<b.y+34);
@@ -59,8 +59,8 @@ for(const [i,r]of design.graph.relations.entries()){
  if(r.from!==movedID&&r.to!==movedID){assert.equal(updated[i],original[i]);continue;}
  assert.deepEqual(updated[i],reloaded[i]);
  const a=moved.find(n=>n.id===r.from),b=moved.find(n=>n.id===r.to);
- assert.deepEqual(updated[i].points[0],plan.wires[i].returning?[a.x+260,a.y+34]:[a.x+32.5,a.y+68]);
- assert.deepEqual(updated[i].points.at(-1),plan.wires[i].returning?[b.x+260,b.y+34]:[b.x,b.y+34]);
+ assert.deepEqual(updated[i].points[0],plan.wires[i].returning?[a.x+260,a.y+68*(plan.wires[i].fromPort??.5)]:[a.x+32.5,a.y+68]);
+ assert.deepEqual(updated[i].points.at(-1),plan.wires[i].returning?[b.x+260,b.y+68*(plan.wires[i].toPort??.5)]:[b.x,b.y+34]);
 }
 const A=id=>({id,type:'business'}),O=id=>({id,type:'object'}),out=(a,b)=>({kind:'output',from:a,to:b,label:'written'}),input=(a,b)=>({kind:'input',from:a,to:b,label:'read'});
 const chain={version:1,nodes:[A('A'),A('B'),O('O')],relations:[out('A','O'),input('O','B')]};
@@ -78,3 +78,35 @@ for(const mode of ['chain','fanout']){
  const p=matrixPlan({version:1,nodes:[...activities,...objects],relations},activities.map(n=>n.id));assert.equal(Object.keys(p.cells).length,20000);assert.ok(Object.values(p.cells).flat().every(Number.isFinite));assert.ok(p.wires.every(w=>!w.returning));
 }
 console.log('matrix: approved 25 coordinates exact; reverse-order DAG/multiple writers; genuine cycles only; independent L/card oracle; seeded graphs; 20000-node valid chains and fanout');
+
+// Independent role oracle: every nonempty subset of the three Activity roles.
+for(let mask=1;mask<8;mask++){
+ const roles=[0,1,2].filter(bit=>mask&(1<<bit));
+ const g={version:1,nodes:[A('Focus'),A('Before'),A('After'),O('Data')],relations:[
+  ...(mask&1?[out('Focus','Data'),input('Data','Focus'),{...input('Data','Focus'),label:'second data'}]:[]),
+  ...(mask&2?[{kind:'business-exception',from:'Before',to:'Focus',label:'redo'}]:[]),
+  ...(mask&4?[{kind:'business-exception',from:'Focus',to:'After',label:'hand back'}]:[])
+ ]};
+ const p=matrixPlan(g,['Focus','Before','After']);
+ const expectRole=role=>(roles.indexOf(role)+1)/(roles.length+1);
+ for(const [i,r]of g.relations.entries()){
+  if(r.kind==='input')assert.equal(p.wires[i].toPort,expectRole(0));
+  if(r.kind==='business-exception'&&r.to==='Focus')assert.equal(p.wires[i].toPort,expectRole(1));
+  if(r.kind==='business-exception'&&r.from==='Focus')assert.equal(p.wires[i].fromPort,expectRole(2));
+ }
+ const reversed={...g,nodes:[...g.nodes].reverse(),relations:[...g.relations].reverse()},rp=matrixPlan(reversed,['Focus','Before','After']);
+ for(const [i,r]of g.relations.entries()){const j=reversed.relations.findIndex(e=>e===r);assert.equal(p.wires[i].fromPort,rp.wires[j].fromPort);assert.equal(p.wires[i].toPort,rp.wires[j].toPort);}
+ const boxes=g.nodes.map(n=>({id:n.id,x:p.positions[n.id][0],y:p.positions[n.id][1],width:260,height:68}));
+ const k={},cache=new RouteCache(),first=cache.update(k,g,boxes,g.relations,p.wires);
+ // Resize and drag the Activity. Both outgoing/incoming ports must follow it.
+ const changed=boxes.map(n=>n.id==='Focus'?{...n,x:n.x+23,y:n.y+31,height:120}:n),focus=changed.find(n=>n.id==='Focus');
+ const moved=cache.update(k,g,changed,g.relations,p.wires),reload=new RouteCache().update({},g,changed,g.relations,p.wires);
+ for(const [i,r]of g.relations.entries()){
+  assert.deepEqual(moved[i],reload[i]);
+  if(r.kind==='input')assert.deepEqual(moved[i].points.at(-1),[focus.x+260,focus.y+120*expectRole(0)]);
+  if(r.kind==='business-exception'&&r.to==='Focus')assert.deepEqual(moved[i].points.at(-1),[focus.x+260,focus.y+120*expectRole(1)]);
+  if(r.kind==='business-exception'&&r.from==='Focus')assert.deepEqual(moved[i].points[0],[focus.x+260,focus.y+120*expectRole(2)]);
+ }
+ if((mask&3)===3){const data=first[g.relations.findIndex(r=>r.kind==='input')],process=first[g.relations.findIndex(r=>r.kind==='business-exception'&&r.to==='Focus')];assert.notEqual(Math.max(...data.points.map(p=>p[0])),Math.max(...process.points.map(p=>p[0])),'data and process arrivals do not share their vertical run');}
+}
+console.log('Activity ports: all 7 role subsets; duplicate data wires share role; relation-order independent; resize/drag/reload; separate return runs');

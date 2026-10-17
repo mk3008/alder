@@ -10,8 +10,8 @@ import {resetLayout} from '../src/layout-reset.ts';
 import {createWorkspace,openActivity,snapshotWorkspace,restoreWorkspace,viewDesign} from '../src/workspace.ts';
 const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8')),before=JSON.stringify(design);
 const expected={
- '業務設計':['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','実装','検査項目の設計','業務設計'],
- '検査項目の設計':['Alder: 検査項目設計ナレッジ','業務設計書','業務設計','検査項目の設計']
+ '業務設計':['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','業務設計'],
+ '検査項目の設計':['Alder: 検査項目設計ナレッジ','業務設計書','検査項目の設計']
 };
 const state=createWorkspace({tabs:[{key:'source',name:'sample',design,positions:{},scroll:[0,0],zoom:1}],dark:false,drawer:false,width:400});
 const overview=structuredClone(state.tabs[0].positions);
@@ -19,6 +19,8 @@ for(const [activity,staircase] of Object.entries(expected)){
  const projected=activityDesign(design,activity),positions=initialPositions(projected.graph,projected.activityOrder,activity);
  for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*96],'all upstream Object and exception Activity peers advance right and down');
  assert.deepEqual(initialPositions({...projected.graph,nodes:[...projected.graph.nodes].reverse(),relations:[...projected.graph.relations].reverse()},projected.activityOrder,activity),positions,'deterministic detail ordering');
+ const focusY=positions[activity][1],outputs=projected.graph.relations.filter(r=>r.kind==='output').map(r=>r.to);
+ for(const n of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==activity)){assert.ok(positions[n.id][1]>focusY);for(const id of outputs)assert.ok(positions[n.id][1]>positions[id][1],'exception peers follow every normal Output');}
  const boxes=projected.graph.nodes.map(n=>({id:n.id,x:positions[n.id][0],y:positions[n.id][1],width:260,height:68}));
  const routes=new RouteCache().update({},projected,boxes,projected.graph.relations);
  const labels=routes.map((r,i)=>({id:String(i),x:r.label[0]-Math.max(30,projected.graph.relations[i].label.length*12)/2,y:r.label[1]-9,width:Math.max(30,projected.graph.relations[i].label.length*12),height:18}));
@@ -49,7 +51,7 @@ for(const [activity,staircase] of Object.entries(expected)){
   if(relation.kind.endsWith('exception')){
    exceptions++;assert.ok(projected.graph.nodes.some(n=>n.id===relation.from&&n.type==='business'));assert.ok(projected.graph.nodes.some(n=>n.id===relation.to&&n.type==='business'));
    // Preserve actual directed hand-back, not the old side-departing coordinates.
-   if(activity==='検査項目の設計')assert.ok(route.points.at(-1)[1]<route.points[0][1],'hand-back still reaches the upstream Activity');
+   if(activity==='検査項目の設計')assert.ok(route.points.at(-1)[1]>route.points[0][1],'exception target follows normal Outputs without reversing the arrow');
    assert.equal(relation.label,design.graph.relations.find(r=>r.kind===relation.kind&&r.from===relation.from&&r.to===relation.to).label);
   }
  }
@@ -58,7 +60,7 @@ for(const [activity,staircase] of Object.entries(expected)){
  // incident edges; caption anchors must remain endpoint-relative after reload.
  const dataID=activity==='業務設計'?'業務設計書':'検査項目',cache=new RouteCache(),key={};
  const original=cache.update(key,projected,boxes,projected.graph.relations);
- for(const delta of [[25,180],[-80,340],[170,600]]){
+ for(const delta of [[25,500],[-80,700],[170,900]]){
   const moved=boxes.map(n=>n.id===dataID?{...n,x:n.x+delta[0],y:n.y+delta[1]}:n);
   const updated=cache.update(key,projected,moved,projected.graph.relations),fresh=new RouteCache().update({},projected,moved,projected.graph.relations),object=moved.find(n=>n.id===dataID);
   for(const [i,relation]of projected.graph.relations.entries()){
