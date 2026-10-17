@@ -6,6 +6,9 @@ export interface RouteOptions {
   from: string; to: string; nodes: readonly RouteNode[]; index?: number;
   /** Full rendered label dimensions in unscaled graph coordinates. */
   labelWidth?: number; labelHeight?: number;
+  kind?: string;
+  /** Existing label rectangles; labels never become path obstacles. */
+  labels?: readonly RouteNode[];
 }
 export interface EdgeRoute {
   path: string; label: Point; points: Point[]; bounds: {right:number;bottom:number}; collisions: number; rerouted: boolean;
@@ -59,19 +62,35 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input=false, labels:readonly RouteNode[]=[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
   // width; a long label next to a vertical leg must not sit over the next card.
   const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
-  let best=mid,bestScore=[Infinity,Infinity];
+  let best=mid,bestScore=[Infinity,Infinity,Infinity,Infinity];
+  let preferred=false;
   const consider=(p:Point)=>{
     let collisions=p[0]<minimum[0]+width/2||p[1]<minimum[1]+height/2?1:0;
     for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
-    const score=[collisions,distance(p,mid)];
+    const labelCollisions=labels.filter(r=>p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height).length;
+    const score=[collisions,labelCollisions,preferred?0:1,distance(p,preferred?points[0]:mid)];
     if(better(score,bestScore)){best=p;bestScore=score;}
   };
+  // Input captions belong to the Object departure, beside its first straight
+  // vertical leg. Try both sides and staggered heights before midpoint fallback.
+  if(input){
+    preferred=true;
+    const a=points[0],b=points[1];
+    if(a[0]===b[0]&&a[1]!==b[1]){
+      const sign=Math.sign(b[1]-a[1]),near=a[1]+sign*(height/2+5);
+      for(const y of [near,near+sign*(height+8),(a[1]+b[1])/2,b[1]-sign*(height/2+4)]){
+        if(sign*(y-a[1])<height/2+4||sign*(b[1]-y)<0)continue;
+        for(const side of [1,-1])consider([a[0]+side*(width/2+8),y]);
+      }
+    }
+    preferred=false;
+  }
   for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
     const anchor=pointAlong(points,lengths,total,fraction);
     for(const offset of offsets)consider(add(anchor,offset));
@@ -79,14 +98,14 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
   // A 28-unit staircase gap has room for an 18-unit label, but only a narrow
   // interval of legal centers. Snap to nearby card boundaries rather than
   // hoping a sampled fraction happens to land in that interval.
-  if(bestScore[0])for(const r of nodes){
+  if(bestScore[0]||bestScore[1])for(const r of nodes){
     for(const y of [r.y-height/2-5,r.y+r.height+height/2+5])if(Math.abs(y-mid[1])<=64)consider([mid[0],y]);
     for(const x of [r.x-width/2-5,r.x+r.width+width/2+5])if(Math.abs(x-mid[0])<=width/2+24)consider([x,mid[1]]);
   }
   // A left-hand lane can leave a clear label anchor partly beyond the fixed
   // canvas boundary. Try bringing that label inside before reporting fallback.
-  if(bestScore[0])consider([Math.max(minimum[0]+width/2+1,best[0]),Math.max(minimum[1]+height/2+1,best[1])]);
-  return {point:best,blocked:bestScore[0]>0};
+  if(bestScore[0]||bestScore[1])consider([Math.max(minimum[0]+width/2+1,best[0]),Math.max(minimum[1]+height/2+1,best[1])]);
+  return {point:best,blocked:bestScore[0]>0||bestScore[1]>0};
 }
 type Geometry={vertices:Point[];points:Point[];error:number;length:number;path:string;bounds:{right:number;bottom:number}};
 /** Keep long legs exactly straight; only 90-degree corners get a short Q.
@@ -128,7 +147,7 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
 }
 /**
  * Bounded orthogonal templates: at most 16 port pairs x 12 candidates
- * (192 total). Clear
+ * (192 total), plus at most 3 + 2 per obstacle adaptive forward anchors. Clear
  * preferred bottom/left routes finish after one pair. Forward routes exhaust
  * left-target pairs (vertical departures first) before changing the arrival
  * side. Returns prefer right/right ports and the shortest clear lane, retaining
@@ -138,7 +157,7 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[]}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
   // Preserve positive-world routing exactly. A signed axis has no fixed zero
@@ -150,14 +169,16 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
   const preferred:[Side,Side]=returning?['right','right']:['bottom','left'];
   const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
-  let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity],rerouted=false;
+  const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
+  let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity],rerouted=false;
   const evaluate=(waypoints:Point[],pair:[Side,Side],primary:boolean)=>{
     const geometry=rounded(waypoints);if(!geometry)return;
     const v=geometry.vertices,a=v[0],next=v[1],b=v.at(-1)!,previous=v.at(-2)!;
     if((next[0]-a[0])*normals[pair[0]][0]+(next[1]-a[1])*normals[pair[0]][1]<=0||(previous[0]-b[0])*normals[pair[1]][0]+(previous[1]-b[1])*normals[pair[1]][1]<=0)return;
     const collisions=routeCollisionCount(geometry.points,obstacles,CLEARANCE+geometry.error)+routeCollisionCount(geometry.points,endpoints,-.1);
     const outside=offCanvas(geometry.points);
-    const score=[collisions,outside,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
+    const backwards=forward?geometry.points.slice(1).reduce((sum,p,i)=>sum+Math.max(0,geometry.points[i][0]-p[0])+Math.max(0,geometry.points[i][1]-p[1]),0):0;
+    const score=[collisions,outside,backwards,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
     if(better(score,bestScore)){chosen=geometry;bestScore=score;rerouted=!primary;}
   };
   const tried=new Set<string>();
@@ -179,6 +200,18 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     for(const x of [localRight,localLeft,bounds.right,bounds.left])evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
     for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
   };
+  if(forward){
+    // Use endpoint-relative anchors and nearby obstacle boundaries before
+    // resorting to an upstream detour. This never moves a saved card.
+    const inset=Math.min(source.width*.08,CLEARANCE+RADIUS);
+    const xs=[port(source,'bottom')[0],source.x+inset,target.x-CLEARANCE-RADIUS,
+      ...obstacles.flatMap(n=>[n.x-CLEARANCE-RADIUS,n.x+n.width+CLEARANCE+RADIUS])];
+    for(const x of xs){
+      if(x<source.x+inset||x>source.x+source.width-inset||x>target.x)continue;
+      const a:Point=[x,source.y+source.height],b=port(target,'left');
+      evaluate([a,[x,b[1]],b],['bottom','left'],true);
+    }
+  }
   tryPorts(preferred);
   if(!returning&&(bestScore[0]||bestScore[1])){
     // Keep the reading direction at the target before relaxing the source
@@ -198,6 +231,6 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input',kind==='input'?labels:[]);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

@@ -15,6 +15,7 @@ const tab={},design={};
 const nodes=[['a',100,100],['b',700,500],['c',1100,100],['d',1500,500]].map(([id,x,y])=>({id,x,y,width:260,height:68}));
 const relations=[{kind:'output',from:'a',to:'b',label:'Write'},{kind:'input',from:'c',to:'d',label:'Read'},{kind:'output',from:'d',to:'c',label:'Write'}];
 const first=cache.update(tab,design,nodes,relations);
+assert.deepEqual(calls.map(c=>c.kind),relations.map(r=>r.kind));
 assert.equal(calls.length,3);assert.ok(calls.every(c=>c.nodes===nodes),'one shared full obstacle array');
 calls=[];assert.deepEqual(cache.update(tab,design,nodes,relations),first);assert.equal(calls.length,0);
 // Move a card across an unrelated route. It remains byte-for-byte fixed.
@@ -58,6 +59,12 @@ for(let i=0;i<120&&$('open').disabled;i++)await new Promise(r=>setTimeout(r,25))
 $('open-sample').click();
 const sample=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8'));
 assert.equal(w.__routeCalls,sample.graph.relations.length);
+const assertLayerOrder=()=>{
+ const children=[...d.querySelector('#edges').children].filter(e=>e.matches('.edge,.edge-label'));
+ const layer=e=>e.classList.contains('review-related')?(e.classList.contains('edge-label')?3:2):(e.classList.contains('edge-label')?1:0);
+ assert.ok(children.every((e,i)=>!i||layer(children[i-1])<=layer(e)),'related wires and captions cover unrelated captions');
+ assert.ok(d.querySelector('#edges').compareDocumentPosition(d.querySelector('#nodes'))&w.Node.DOCUMENT_POSITION_FOLLOWING,'all cards remain above every wire');
+};
 const paths=()=>new Map([...d.querySelectorAll('.edge')].map(e=>[e.dataset.relation,e.getAttribute('d')]));
 openDisplaySettingsDOM(d);const initial=paths(),viewBox=$('edges').getAttribute('viewBox');
 w.__routeCalls=0;$('layout-lock').click();
@@ -65,6 +72,7 @@ let card=d.querySelector('.node');const id=card.dataset.node;
 card.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});card.onpointerup({pointerId:1});
 $('out').click();$('in').click();$('drawer').click();$('drawer').click();$('node-list-toggle').click();$('node-list-close').click();
 openDisplaySettingsDOM(d);$('prefer-write').click();$('scope-outside').click();$('scope-outside').click();openDisplaySettingsDOM(d);$('prefer-write').click();
+assertLayerOrder();
 assert.equal(w.__routeCalls,0,'selection, zoom, drawers, lock, Scope and Write do not route');
 assert.deepEqual(paths(),initial,'filters restore original geometry');
 assert.equal($('edges').getAttribute('viewBox'),viewBox,'filter changes retain all extents');

@@ -129,3 +129,31 @@ for(let run=0;run<2000;run++){
 }
 console.log(JSON.stringify({passed:19,checks:['reference left-biased staircase','orthogonal legs','short rounded corners','tangent continuity','endpoint normals and arrow meaning','seven-card obstacle avoidance','full-label clearance','purity','determinism','live target drag','outside-right returns','parallel detour spacing','ID independence','segment intersection','dense finite fallback','four-direction fixtures','covered-port alternate','bounded routing','2000 seeded drag/overlap cases with dense curve verification'],sampleRoutingMs:Math.round(performance.now()-began)},null,2));
 await import('./test-directional-ports.mjs');
+
+// Normal staircase: a blocked default port has a short forward alternative.
+// Exception paths keep the historical geometry, even in the same positions.
+const staircase=[rect('s',100,100),rect('t',228,400),{id:'block',x:140,y:230,width:70,height:68}];
+const opts={from:'s',to:'t',nodes:staircase,labelWidth:60,labelHeight:18};
+const monotone=r=>r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]&&p[1]>=r.points[i][1]);
+const snapshot=JSON.stringify(staircase),legacyRoute=routeEdge(opts);
+assert.equal(monotone(legacyRoute),false,'fixture exposes the previous upstream detour');
+for(const kind of ['input','output']){
+ const r=routeEdge({...opts,kind});assert.equal(monotone(r),true);assert.equal(r.collisions,0);assert.equal(r.fallback,false);
+ assert.ok(r.bounds.right<=staircase[1].x);assert.equal(r.points[0][1],168);
+ assert.ok(r.points[0][0]<230,'departure stays in the left half of the card');
+ endpointNormals(r,staircase[0],staircase[1]);orthogonalCorners(r);
+}
+assert.deepEqual(routeEdge({...opts,kind:'business-exception'}),legacyRoute);
+assert.deepEqual(routeEdge({...opts,kind:'object-exception'}),legacyRoute);
+const caption=routeEdge({...opts,kind:'input'});
+assert.ok(caption.label[1]>168&&caption.label[1]<210,'Input caption stays near the Object departure');
+equal(Math.abs(caption.label[0]-caption.points[0][0]),38);
+const labelBox={id:'caption',x:caption.label[0]-30,y:caption.label[1]-9,width:60,height:18};
+const other=routeEdge({...opts,kind:'input',labels:[labelBox]});
+assert.equal(other.path,caption.path,'caption avoidance never reroutes a wire');
+assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-caption.label[1])>22,'adjacent Input captions avoid one another');
+assert.deepEqual(routeEdge({...opts,kind:'output',labels:[labelBox]}),routeEdge({...opts,kind:'output'}),'Output placement does not inherit Input preferences');
+assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouched');
+const upstream={...opts,from:'t',to:'s'};
+assert.equal(routeEdge({...upstream,kind:'input'}).path,routeEdge(upstream).path,'manual upstream normal edges do not force a giant forward loop');
+console.log('Wiring regression: monotone obstacle alternative, adaptive bottom anchor, source-side Input captions, label avoidance, unchanged exceptions/Output and coordinates.');

@@ -38,7 +38,11 @@ export class RouteCache {
       if (!full && !moved.has(r.from) && !moved.has(r.to)) return;
       // Incomplete transient graphs must not retain or attempt a stale endpoint.
       routes[index] = ids.has(r.from) && ids.has(r.to) ? this.router({
-        from: r.from, to: r.to, index, nodes,
+        from: r.from, to: r.to, index, nodes, kind: r.kind,
+        labels: routes.flatMap((route,i)=>route&&i!==index?[{
+          id:String(i),x:route.label[0]-Math.max(30,relations[i].label.length*12)/2,
+          y:route.label[1]-9,width:Math.max(30,relations[i].label.length*12),height:18
+        }]:[]),
         labelWidth: Math.max(30, r.label.length * 12), labelHeight: 18
       }) : undefined;
     });
