@@ -1,0 +1,26 @@
+Validation 2026-10-06
+
+Frozen input-hashes.json: 11/11 unchanged.
+
+Existing plugin regression suite (unchanged production code):
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 0.839s
+
+OK
+
+Synthetic existing business tests:
+test_accept (test_business.BusinessTests.test_accept) ... ok
+test_migration_forward (test_business.BusinessTests.test_migration_forward) ... ok
+test_read_foreign (test_business.BusinessTests.test_read_foreign) ... ok
+test_read_own (test_business.BusinessTests.test_read_own) ... ok
+test_subject (test_business.BusinessTests.test_subject) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+
+Coordinator observation harness: all characterization assertions passed; observed five nonconformities, not five compliant implementations. See observations.json.
+
+git diff --check passed. Publication scan found no private conversation URLs or root backlinks. Raw inputs and review outputs manually checked: synthetic fixtures only, no credentials or private user data.

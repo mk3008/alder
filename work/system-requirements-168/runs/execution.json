@@ -1,0 +1,16 @@
+{
+  "input_revision": "d9653eee429bf341840af5e7ea56cd2195a3dd12",
+  "alder_revision": "f716c1a1ea8fa8b3adebb9001d9762eee89eadb0",
+  "public_input_verified_before_dispatch": true,
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime_attestation": false,
+  "agents": {
+    "A": "/root/research_system_requirements_review/review_bd_only_baseline",
+    "B": "/root/research_system_requirements_review/review_available_sr_baseline",
+    "C": "/root/research_system_requirements_review/review_pinned_sr_candidate"
+  },
+  "independence": "Separate spawned contexts, no history fork. Shared filesystem; allowlists are instruction-based, not OS-enforced.",
+  "dispatch_started_utc": "2026-10-06T11:39:20Z"
+}

@@ -1,0 +1,13 @@
+{
+  "candidate.md": "e48cac3bf92ed8c0a8ebc2fac0d9dabc52165c6ab13773891eba3c7db4f37dda",
+  "fixtures/common/business-design.md": "d3b7f335439c4dc6c51a4c212bad56a10b4c15e79d9b7260034118c2f669db5a",
+  "fixtures/common/change-scope.md": "d4aa8222472d4c246c18f5fb44d5d46762338b426725a4ed412e941e22c9aef3",
+  "fixtures/common/checks.md": "c66544cd70a91a8f6710ccd4b6d383ae9edbfe0b0ef709b2e96b4e1667e7e1b1",
+  "fixtures/common/decisions.md": "e188faf52b91db0d7a944dc8d14d2e01798304216ccc35c1290daf346f9adab4",
+  "fixtures/common/implementation.py": "c12b08a75b14c8d4e40bad08c6b307c4c9920e3824bb43af17695a7eeff9b698",
+  "fixtures/common/test_business.py": "5984082d5be1af50b7ec3ecb9b8ee34d96a42c5b0fadd6fbaedaa8d9218222f1",
+  "fixtures/with-sr/AGENTS.md": "f7cfb517833dfa7577ef643b4c0e86e1aaf05d6160b2f90741585c7adfccd26f",
+  "fixtures/with-sr/system-requirements.md": "5dd52da0b9b8d5df99e712402553935164f240613c812d5df87eca24ba7b92d8",
+  "fixtures/without-sr/AGENTS.md": "fd9cfd764ffcb4c920709baf844886f5263c754c7a52bdf2f8f2b3cc032727a5",
+  "protocol.md": "ffc4c40f060c3c314ed6b5892df6aa4d7e5b7c9c4b85f962bc07583739499321"
+}
