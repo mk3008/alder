@@ -35,6 +35,17 @@ function verify(graph,hint){
  return p;
 }
 verify(design.graph,design.activityOrder);
+// Saved/manual coordinates can put the target on the source's row with a card
+// between them. Keep the structural bottom/left ports and avoid that card.
+const manualBoxes=[{id:'source',x:40,y:40,width:260,height:68},{id:'obstacle',x:760,y:40,width:260,height:68},{id:'target',x:1080,y:40,width:260,height:68}];
+const manual=routeEdge({from:'source',to:'target',kind:'input',nodes:manualBoxes,matrix:{returning:false,captionLane:0}});
+assert.deepEqual(manual.points[0],[72.5,108]);assert.ok(manual.points[1][1]>108,'manual departure points out of the bottom');
+assert.deepEqual(manual.points.at(-1),[1080,74]);assert.ok(manual.points.at(-2)[0]<1080,'manual arrival approaches the left port from outside');
+assert.equal(manual.collisions,0);assert.equal(manual.fallback,false);
+const self=routeEdge({from:'source',to:'source',kind:'business-exception',nodes:[manualBoxes[0]],matrix:{returning:true,captionLane:0}});
+assert.deepEqual(self.points[0],[300,74]);assert.deepEqual(self.points.at(-1),[300,74]);
+assert.ok(self.points[1][0]>300&&self.points.at(-2)[0]>300,'self exception keeps right/right outward stubs');
+assert.equal(self.collisions,0);assert.doesNotMatch(self.path,/NaN|Infinity/);
 // The coordinate-free contracts survive manual movement. A drag recomputes
 // incident edges only, while reload recomputes the same endpoint geometry.
 const plan=matrixPlan(design.graph,design.activityOrder),tab={},cache=new RouteCache();
