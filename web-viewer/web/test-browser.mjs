@@ -151,9 +151,9 @@ const cases=[
   await openSourceAction(page,'open-url');await page.locator('#source-url').fill(source);await page.locator('#source-submit').click();
   await page.waitForFunction(()=>document.querySelector('#source-dialog').hidden,{},{timeout:45000});
   assert.equal(await page.locator('.tab').count(),1);assert.deepEqual(external,[source]);
-  await clean(page);external.length=0;await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-  assert.equal(await page.locator('.tab').count(),1);assert.deepEqual(external,[]);
-  checks.push('real public HTTPS/CORS read succeeds; restore does not refetch');
+  await clean(page);external.length=0;const startupRead=page.waitForRequest(r=>r.url()===source);await page.reload();await startupRead;await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await page.locator('.tab').count(),1);assert.deepEqual(external,[source]);
+  checks.push('real public HTTPS/CORS read succeeds; restore checks the source without replacing it');
   // The existing public source is also read from only the copied link in fresh storage.
   // Capture clipboard boundary only; real OS clipboard permission is not asserted.
   await page.evaluate(()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async value=>{globalThis.__publicSourceShare=value;}}});});
@@ -166,8 +166,8 @@ const cases=[
    await recipient.goto(shared);await recipient.waitForFunction(()=>document.querySelectorAll('.tab').length===1,{},{timeout:45000});await clean(recipient);
    assert.deepEqual(await recipient.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.textContent])),expectedNodes);
    assert.equal(new URL(recipient.url()).hash,'');assert.equal(recipientReads.length,1);assert.equal(recipientReads[0].method,'GET');assert.equal(recipientReads[0].headers.cookie??'','');assert.equal(recipientReads[0].headers.referer??'','');
-   await recipient.reload();await recipient.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await recipient.locator('.tab').count(),1);assert.equal(recipientReads.length,1);assert.deepEqual(recipientErrors,[]);
-   checks.push('copied source-only link loads matching Graph via real public HTTPS/CORS in independent context; consumed-link reload never re-fetches');
+   const startupRead=recipient.waitForRequest(r=>r.url()===source);await recipient.reload();await startupRead;await recipient.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await recipient.locator('.tab').count(),1);assert.equal(recipientReads.length,2);assert.deepEqual(recipientErrors,[]);
+   checks.push('copied source-only link loads matching Graph via real public HTTPS/CORS in independent context; consumed-link reload performs one startup update check');
   }finally{await recipientContext.close();}
 
   assert.deepEqual(errors,[]);
