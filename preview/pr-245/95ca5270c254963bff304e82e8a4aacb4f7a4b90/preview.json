@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "95ca5270c254963bff304e82e8a4aacb4f7a4b90",
+  "sourceTree": "1b691f6220871e68004a60ce258b9701c30cbf53",
+  "pullRequest": 245,
+  "ci": "https://github.com/mk3008/alder/actions/runs/39023765357",
+  "build": "Node 24 / npm ci / npm run build",
+  "review": "本人GUI再レビュー待ち・未採用",
+  "tests": {
+    "node": 75,
+    "targetedBrowser": 8
+  },
+  "originalReferenceImagesPublished": false
+}
