@@ -125,8 +125,8 @@ async function verifyOneEmpty({page,touch,options}){
 async function verifyRemainingTab({page}){
  const expected=emptyStateFixture(1);await seedAndRestore(page,expected);
  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await ready(page,1);
- assert.equal(await page.locator('#document-recovery').isVisible(),true);await page.locator('#document-recovery summary').click();await page.locator('#recovery-documents button').last().click();await ready(page,1);await assertGraph(page,expected);
- return {replacementRetainsOriginal:true,recoveryRestoresExactCamera:true};
+ assert.equal(await page.locator('#document-recovery').count(),0);assert.equal(await page.locator('.tab').count(),1);const before=await page.locator('#nodes').innerHTML();await page.reload();await ready(page,1);assert.equal(await page.locator('#nodes').innerHTML(),before);
+ return {replacementHasOneCurrentBody:true,newCurrentSurvivesReload:true};
 }
 async function isolated(browser,options,run){
  let context,timer,result,expired=false;const errors=[],failures=[];

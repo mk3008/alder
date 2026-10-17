@@ -62,12 +62,12 @@ try{
  const stable=e.w.__resetRevision();button.click();button.click();assert.equal(e.w.__resetRevision(),stable);
  const stored=await flush(e);assert.deepEqual(stored,after);
  const reloaded=await boot({db:e.db});assert.deepEqual(reloaded.state(),after);reloaded.w.close();
- await e.d.querySelector('[data-document-key="b"] button').onclick();await [...e.d.querySelectorAll('[data-document-key="a"] button')].at(-1).onclick();assert.deepEqual(e.state().tabs,after.tabs);
+ assert.deepEqual(json(e.w.__resetRecovery()),oldRecovery,'legacy documents remain immutable through reset');
  checks.push('active tab only; draft/source/filters/selection/theme/drawers/lock unchanged; paths/labels update; repeated no-op; tab switch and IDB reload');
 
  // A pending editor draft is left intact while displayed Graph, not draft, wins.
- e.$('edit-markdown').click();const input=e.$('source-text');input.value=markdown+'\nAnother unapplied draft';input.dispatchEvent(new e.w.Event('input'));
- e.$('in').click();button.click();assert.equal(input.value,markdown+'\nAnother unapplied draft');assert.equal(e.$('source-dialog').hidden,false);assert.deepEqual(e.state().tabs[0].positions,json(initial().positions));
+ e.$('view-markdown').click();const input=e.$('source-text');assert.equal(input.readOnly,true);
+ e.$('in').click();button.click();assert.equal(input.value,markdown);assert.equal(e.$('source-dialog').hidden,false);assert.deepEqual(e.state().tabs[0].positions,json(initial().positions));
  checks.push('open editor and unapplied draft retained');e.w.close();
 
  const changed=parseDesign(markdown.replace('# Activity ', '# Activity Updated ')),edited=modified();edited.design=changed;

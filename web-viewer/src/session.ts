@@ -9,7 +9,7 @@ export type Point=[number,number];
 export type Tab={checks?:RelatedChecks;draft?:string;edited?:boolean;key:string;name:string;design:Design;positions:Record<string,Point>;selected?:string;hiddenNodes?:string[];showExceptions?:boolean;selectedEdgesOnly?:boolean;viewInset?:Point;canvasOrigin?:Point;scroll:Point;zoom:number;source?:{kind:'url';url:string}|{kind:'text'}|{kind:'sample'};handle?:FileSystemFileHandle};
 export type SampleLayout=Pick<Tab,'positions'|'selected'|'scroll'|'zoom'|'hiddenNodes'|'showExceptions'|'selectedEdgesOnly'|'viewInset'|'canvasOrigin'>;
 export type ScopeOutside='show'|'hide';
-export type Session={sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;nodeDrawer?:boolean;width:number;preferWrite?:boolean};
+export type Session={urlHistory?:{url:string;name:string}[];sampleLayout?:SampleLayout;tabs:Tab[];active?:string;dark:boolean;drawer:boolean;nodeDrawer?:boolean;width:number;preferWrite?:boolean};
 export function reconcile(tab:Tab,design:Design):Tab{
   const ids=new Set(design.graph.nodes.map(n=>n.id)),positions:Record<string,Point>=Object.create(null);
   for(const [id,p] of Object.entries(tab.positions))if(ids.has(id))positions[id]=[...p];
@@ -35,9 +35,9 @@ export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>
   // Loading establishes which committed snapshot this window is editing.
   const expected=generation;if(expected===undefined)throw Error('Session has not been loaded');
   const d=await db();try{await new Promise<void>((resolve,reject)=>{
-    const t=d.transaction('session','readwrite'),store=t.objectStore('session'),read=store.get('generation'),current=store.get('current');
+    const t=d.transaction('session','readwrite'),store=t.objectStore('session'),read=store.get('generation'),current=store.get('current'),legacy=store.get('readonly-legacy');
     let failure:unknown,next:number;
-    current.onsuccess=()=>{try{
+    legacy.onsuccess=()=>{try{
       const actual=savedGeneration(read.result);
       // Equal content needs no overwrite, even if another page committed it.
       // Equality, generation comparison and writes stay in one transaction.
@@ -45,6 +45,9 @@ export async function saveSession(value:Session|WorkspaceSnapshot):Promise<void>
       if(actual!==expected)throw new SessionConflictError();
       next=expected+1;if(!Number.isSafeInteger(next))throw Error('Session generation exhausted');
       // The comparison and both writes share one serialized readwrite transaction.
+      // Preserve the pre-migration record in the SAME atomic transaction.
+      // Never overwrite this one-time backup or add new document generations.
+      if(legacy.result===undefined&&hasLegacyContent(current.result))store.put(current.result,'readonly-legacy');
       store.put(value,'current');store.put(next,'generation');
     }catch(error){failure=error;t.abort();}};
     t.oncomplete=()=>{generation=next;resolve();};
@@ -62,4 +65,14 @@ export async function loadSession():Promise<StoredSession|undefined>{
     t.oncomplete=()=>{try{generation=savedGeneration(version.result);resolve(read.result);}catch(error){reject(error);}};
     t.onerror=()=>reject(t.error);t.onabort=()=>reject(t.error??Error('Session load aborted'));
   });}finally{d.close();}
+}
+
+/** Old edits/recovery data are retained even when the current document changes. */
+export function hasLegacyContent(value:Session|WorkspaceSnapshot|undefined):boolean{
+ if(!value)return false;
+ if('format' in value)return !!value.recovery?.length||!!value.legacyViews||!!value.document?.edited||value.document?.draft!==undefined;
+ return value.tabs.length>1||value.tabs.some(t=>t.edited||t.draft!==undefined);
+}
+export async function loadLegacySession():Promise<unknown>{
+ const d=await db();try{return await new Promise((resolve,reject)=>{const t=d.transaction('session'),store=t.objectStore('session'),backup=store.get('readonly-legacy'),current=store.get('current');t.oncomplete=()=>resolve(backup.result??(hasLegacyContent(current.result)?current.result:undefined));t.onerror=t.onabort=()=>reject(t.error??Error('Legacy read failed'));});}finally{d.close();}
 }

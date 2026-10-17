@@ -2,10 +2,11 @@ import {reconcile,type Tab,type Session} from './session.ts';
 import {activityDesign} from './activities.ts';
 export type DocumentState=Pick<Tab,'key'|'name'|'design'|'checks'|'source'|'draft'|'edited'|'handle'>;
 export type ViewState=Omit<Tab,keyof DocumentState>&{key:string;activity?:string};
-export type WorkspaceSnapshot=Omit<Session,'tabs'>&{format:3;document?:DocumentState;views:ViewState[];recovery:Tab[];legacyViews?:{documentKey?:string;views:unknown[];active?:string}};
+export type URLVisit={url:string;name:string};
+export type WorkspaceSnapshot=Omit<Session,'tabs'>&{urlHistory?:URLVisit[];format:3;document?:DocumentState;views:ViewState[];recovery:Tab[];legacyViews?:{documentKey?:string;views:unknown[];active?:string}};
 /** Live tabs expose the current document through non-enumerable accessors.
  * The stored format contains one document and document-free views only. */
-export type Workspace=Session&{document?:DocumentState;recovery:Tab[];legacyViews?:{documentKey?:string;views:unknown[];active?:string}};
+export type Workspace=Session&{urlHistory?:URLVisit[];document?:DocumentState;recovery:Tab[];legacyViews?:{documentKey?:string;views:unknown[];active?:string}};
 const documents=new WeakMap<Tab,DocumentState>();
 export function documentForView(tab:Tab){return documents.get(tab);}
 const documentFields=['design','checks','source','draft','edited','handle'] as const;
@@ -30,7 +31,7 @@ export function createWorkspace(base:Session,recovery:Tab[]=[],doc?:DocumentStat
  const tabs=document?(views??[base.tabs[0]?viewOf(base.tabs[0]):{key:document.key,positions:{},scroll:[0,0],zoom:1}]).map(v=>{
   const tab=bindView(document,v);Object.assign(v,viewOf(reconcileView(tab)));return tab;
  }):[];
- const {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout}=base;return {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout,document,tabs,recovery,legacyViews:(base as Workspace).legacyViews,active:tabs.some(t=>t.key===base.active)?base.active:tabs[0]?.key};
+ const {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout}=base;return {dark,drawer,width,preferWrite,nodeDrawer,sampleLayout,document,tabs,recovery,urlHistory:(base as Workspace).urlHistory??[...(document?.source?.kind==='url'?[{url:document.source.url,name:document.name}]:[]),...recovery.filter(t=>t.source?.kind==='url').map(t=>({url:(t.source as {kind:'url';url:string}).url,name:t.name}))].filter((v,i,all)=>all.findIndex(x=>x.url===v.url)===i),legacyViews:(base as Workspace).legacyViews,active:tabs.some(t=>t.key===base.active)?base.active:tabs[0]?.key};
 }
 export function snapshotWorkspace(state:Workspace):WorkspaceSnapshot{const {document,recovery,tabs,...rest}=state;return {...rest,format:3,document,views:tabs.map(viewOf),recovery};}
 function validateView(view:ViewState){
@@ -38,6 +39,8 @@ function validateView(view:ViewState){
  if(!view||typeof view.key!=='string'||!view.key||!view.positions||typeof view.positions!=='object'||Array.isArray(view.positions)||!Object.values(view.positions).every(p=>point(p))||!point(view.scroll)||!Number.isFinite(view.zoom)||view.zoom<.25||view.zoom>2.5||(view.selected!==undefined&&typeof view.selected!=='string')||(view.activity!==undefined&&typeof view.activity!=='string')||(view.hiddenNodes!==undefined&&(!Array.isArray(view.hiddenNodes)||!view.hiddenNodes.every(id=>typeof id==='string')))||(view.showExceptions!==undefined&&typeof view.showExceptions!=='boolean')||(view.selectedEdgesOnly!==undefined&&typeof view.selectedEdgesOnly!=='boolean')||(view.viewInset!==undefined&&!point(view.viewInset,true))||(view.canvasOrigin!==undefined&&!point(view.canvasOrigin,true)))throw Error('Invalid saved view');
 }
 export function restoreWorkspace(saved:Session|WorkspaceSnapshot):Workspace{
+ const visits=(saved as Workspace).urlHistory;
+ if(visits!==undefined&&(!Array.isArray(visits)||visits.some(v=>!v||typeof v.name!=='string'||typeof v.url!=='string'||!validVisitURL(v.url))||new Set(visits.map(v=>v.url)).size!==visits.length))throw Error('Invalid URL history');
  if('format' in saved){
   const raw=saved as unknown as {format:number;views:(ViewState&{group?:string})[];document?:DocumentState;recovery:Tab[];active?:string};
   if(![2,3].includes(raw.format)||!Array.isArray(raw.views)||!Array.isArray(raw.recovery))throw Error('Invalid workspace');
@@ -60,9 +63,10 @@ export function restoreWorkspace(saved:Session|WorkspaceSnapshot):Workspace{
  return createWorkspace({...saved,tabs:selected?[selected]:[]},saved.tabs.length>1?[...saved.tabs]:[]);
 }
 export function replaceWorkspace(state:Workspace,tab:Tab):Workspace{
- const previous=state.document;
- const recovery=previous?[...state.recovery,{...state.tabs.find(t=>viewActivity(t)===undefined)!,...previous}]:state.recovery;
- return createWorkspace({...state,tabs:[tab],active:tab.key},recovery);
+ const url=tab.source?.kind==='url'?tab.source.url:undefined;
+ const urlHistory=url?[{url,name:tab.name},...(state.urlHistory??[]).filter(v=>v.url!==url)]:state.urlHistory;
+ // Legacy documents remain protected; new visits never create body generations.
+ return createWorkspace({...state,urlHistory,tabs:[tab],active:tab.key},state.recovery);
 }
 export function updateWorkspace(state:Workspace,design:Tab['design'],handle=state.document?.handle,edited=false):Workspace{
  if(!state.document)return state;
@@ -81,3 +85,5 @@ export function mergeLiveWorkspace(next:Workspace,live:Workspace):Workspace{
  const views=next.tabs.map(tab=>{const previous=live.tabs.find(t=>t.key===tab.key);return previous?viewOf(reconcileView(bindView(next.document!,{...viewOf(tab),...viewOf(previous)}))):viewOf(tab);});
  return createWorkspace({...next,dark:live.dark,drawer:live.drawer,nodeDrawer:live.nodeDrawer,width:live.width,preferWrite:live.preferWrite,active:next.tabs.some(t=>t.key===live.active)?live.active:next.active},next.recovery,next.document,views);
 }
+
+function validVisitURL(value:string){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password;}catch{return false;}}

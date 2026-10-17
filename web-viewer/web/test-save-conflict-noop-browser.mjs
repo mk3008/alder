@@ -57,7 +57,7 @@ export async function verifySaveConflictNoop(browser,{url='http://127.0.0.1:4173
    const b=await context.newPage();b.on('pageerror',e=>errors.push(e.message));await ready(b,url);
    for(let i=0;i<3;i++){await a.bringToFront();await b.bringToFront();await b.locator('.tab > button').first().click();}
    await pause(230);assert.deepEqual(await record(b),initial);assert.notEqual(await b.locator('#app').getAttribute('data-save-state'),'conflict');
-   if(kind==='theme'){await a.locator('#theme').click();await saved(a);}else{await ensureDocumentActions(a);await a.locator('#edit-markdown').click();await a.locator('#source-text').fill(changedMarkdown);await a.locator('#source-submit').click();await saved(a);}
+   if(kind==='theme'){await a.locator('#theme').click();await saved(a);}else{await openSourceAction(a,'open-text');await a.locator('#source-text').fill(changedMarkdown);await a.locator('#source-submit').click();await saved(a);}
    const newer=await record(a);
    await b.bringToFront();await b.locator('.tab > button').first().click();await b.evaluate(()=>{dispatchEvent(new Event('blur'));dispatchEvent(new Event('pagehide'));document.dispatchEvent(new Event('visibilitychange'));});
    await pause(230);assert.deepEqual(await record(b),newer);assert.notEqual(await b.locator('#app').getAttribute('data-save-state'),'conflict','clean stale page stays silent');

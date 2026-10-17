@@ -341,10 +341,6 @@ async function withPage(browser,{width=1280,height=960,touch=false}={},run){
  if(failures.length>1)throw new AggregateError(failures,'PNG case and cleanup failed');if(failures.length)throw failures[0];return result;
 }
 
-async function recover(page,key){
- if(!await page.locator('#recovery-documents').isVisible())await page.locator('#document-recovery summary').click();
- await page.locator(`[data-document-key="${key}"] button`).last().click();await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-}
 export async function verifyGraphPng(browser){
  const cases=[],add=(name,run,options)=>cases.push({name:'graph PNG: '+name,run:()=>withPage(browser,options,run)});
  add('whole signed/offscreen graph, long Japanese names/labels, light/dark, exact camera invariance',async f=>{
@@ -373,11 +369,8 @@ export async function verifyGraphPng(browser){
   // An open editor and unsent draft are retained as data even though neither
 // is part of the graph export. Keep the click path reachable by closing its
 // modal surface before exporting; the draft is preserved by the real dialog.
-  const draftText=fixture.raw.replace('Determine the next action.','Synthetic unsent draft.');assert.notEqual(draftText,fixture.raw,'draft fixture must change the original Markdown');
-  await ensureDocumentActions(page);await page.locator('#edit-markdown').click();await page.locator('#source-text').fill(draftText);
-  await page.locator('#source-cancel').click();if(await page.locator('#source-close-dialog').isVisible())await page.locator('#source-close-confirm').click();await page.locator('#source-dialog').waitFor({state:'hidden'});await saved(page);
-  const draft=await record(page);assert.equal(draft.current.tabs.find(t=>t.key===draft.current.active).draft,draftText,'read the exact committed editor draft, not merely a save-state label');
-  const retained=await exportPng(f);assert.equal(retained.png.sha256,result.png.sha256,'saved editor draft is excluded from graph raster');
+  await ensureDocumentActions(page);await page.locator('#view-markdown').click();assert.equal(await page.locator('#source-text').getAttribute('readonly'),'');assert.equal(await page.locator('#source-text').inputValue(),fixture.raw);await page.locator('#source-cancel').click();await saved(page);
+  const retained=await exportPng(f);assert.equal(retained.png.sha256,result.png.sha256,'readonly raw view does not affect graph raster');
   return {visibleNodes:3,visibleEdges:visible.length,selectedStroke:true,drawersAndDraftPreserved:true};
  });
  add('isolated visible Activity exports with no routes, labels or Object icon',async f=>{
@@ -411,15 +404,14 @@ export async function verifyGraphPng(browser){
   const retry=await exportPng(f);assert.equal(downloads.length,1);return {failure,recovered:true,png:retry.png};
  });
  add('repeat native clicks and tab change during encoding keep the original snapshot/name',async f=>{
-  const {page,downloads}=f;await openFixture(page,'first-original.md');await openFixture(page,'second-current.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
-  const docs=(await page.evaluate(readDocumentRecord)).current.documents,keys=docs.map(d=>d.key);await recover(page,keys[0]);await saved(page);
+  const {page,downloads}=f;await openFixture(page,'first-original.md');
   const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#save-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const box=await page.locator('#save-image').boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
   const copyBox=await page.locator('#copy-image').boundingBox();await page.mouse.click(copyBox.x+copyBox.width/2,copyBox.y+copyBox.height/2);
   assert.equal(await page.evaluate(()=>__graphPng.writes.length),0,'save in flight blocks clipboard copy');
   assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(await page.evaluate(()=>__graphPng.svgs.length),1);assert.equal(downloads.length,0);
-  await recover(page,keys[1]);await saved(page);await assertExportBusy(page,true);
+  await openFixture(page,'second-current.md',fixture.raw.replaceAll('確認担当者','別の担当者'));await assertExportBusy(page,true);
   const before=await record(page),state=await page.evaluate(stateInPage),requestCount=f.requests.length;
   const [download]=await Promise.all([page.waitForEvent('download'),page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());})]);
   const buffer=await bytesOf(download),png=inspectPng(buffer),svg=await page.evaluate(inspectSvgInPage,await page.evaluate(()=>__graphPng.svgs[0]));
@@ -462,15 +454,14 @@ export async function verifyGraphPng(browser){
   return {deniedWrite:true,noAutomaticDownload:true,explicitSaveWorks:true,png:fallback.png};
  });
  add('delayed clipboard encoding writes immediately and blocks both actions across tab switching',async f=>{
-  const {page,downloads}=f;await openFixture(page,'first-copy.md');await openFixture(page,'second-copy.md',fixture.raw.replaceAll('確認担当者','別の担当者'));
-  const docs=(await page.evaluate(readDocumentRecord)).current.documents,keys=docs.map(d=>d.key);await recover(page,keys[0]);await saved(page);
+  const {page,downloads}=f;await openFixture(page,'first-copy.md');
   const first=await page.evaluate(sceneInPage);await page.evaluate(()=>{__graphPng.holdBlob=true;});await ensureDocumentActions(page);await page.locator('#copy-image').click();
   await page.waitForFunction(()=>__graphPng.pending.length===1);await assertExportBusy(page,true);
   const observation=await page.evaluate(()=>({item:__graphPng.clipboardItems[0],write:__graphPng.writes[0]}));
   assert.deepEqual(observation.item,{types:['image/png'],promise:true,activation:true});assert.deepEqual(observation.write,{types:[['image/png']],blobCalls:0,pending:0,activation:true,completed:false,error:null},'write receives a promise before generation completes');
   for(const id of ['copy-image','copy-image','save-image']){const box=await page.locator('#'+id).boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height/2);}
   assert.equal(await page.evaluate(()=>__graphPng.writes.length),1);assert.equal(await page.evaluate(()=>__graphPng.blobCalls),1);assert.equal(downloads.length,0);
-  await recover(page,keys[1]);await saved(page);await assertExportBusy(page,true);
+  await openFixture(page,'second-copy.md',fixture.raw.replaceAll('確認担当者','別の担当者'));await assertExportBusy(page,true);
   const before=await record(page),state=await page.evaluate(stateInPage),requests=f.requests.length;
   await page.evaluate(()=>{__graphPng.holdBlob=false;__graphPng.pending.splice(0).forEach(release=>release());});
   await page.waitForFunction(()=>__graphPng.writes[0].completed);await idleExports(page);await saved(page);

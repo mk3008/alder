@@ -91,7 +91,7 @@ async function assertLocalWork(page,expectedKeys){
  assert.deepEqual(await keys(page),expectedKeys,'stale local tabs, including the close target, are retained');
  assert.equal(await page.locator('#source-dialog').isVisible(),true,'unsubmitted editor remains open');
  assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'unsubmitted input is retained exactly');
- assert.equal(await page.locator('.node[data-node="Synthetic shared activity"]').count(),1,'prior Graph remains displayed until Apply commits');await ensureDocumentActions(page);await page.locator('#edit-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),changedMarkdown,'per-tab draft remains exact');await openSourceAction(page,'open-text');assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
+ assert.equal(await page.locator('.node[data-node="Synthetic shared activity"]').count(),1,'prior Graph remains displayed until Apply commits');await ensureDocumentActions(page);await page.locator('#view-markdown').click();assert.equal(await page.locator('#source-text').inputValue(),await page.evaluate(()=>globalThis.__expectedSource),'raw source stays readonly');await openSourceAction(page,'open-text');assert.equal(await page.locator('#source-text').inputValue(),unsubmittedMarkdown,'new-input draft remains exact');
 }
 // Observe the first generation read without replacing requests, transactions,
 // values, or save behavior. It proves each app really loaded the same version.
@@ -203,7 +203,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    const seed=await context.newPage();await seed.goto(url);await ready(seed);
    const combine=(...parts)=>parts[0]+parts.slice(1).map(p=>p.slice(p.indexOf('\n# ',p.indexOf('\n')))).join('');
    const source=combine(concurrencyBodies.shared,concurrencyBodies.closed);
-   await input(seed,source);const overall=(await keys(seed))[0];
+   await context.route('https://concurrency.test/design.md',route=>route.fulfill({contentType:'text/plain',body:source}));await openSourceAction(seed,'open-url');await seed.locator('#source-url').fill('https://concurrency.test/design.md');await seed.locator('#source-submit').click();await seed.waitForFunction(()=>document.querySelector('#source-dialog').hidden);const overall=(await keys(seed))[0];
    await seed.locator('.node[data-activity="Synthetic closed activity"] .activity-open').evaluate(n=>n.click());const closed=await seed.locator('.tab.active').getAttribute('data-key');
    await select(seed,overall);await seed.locator('.node[data-activity="Synthetic shared activity"] .activity-open').evaluate(n=>n.click());const shared=await seed.locator('.tab.active').getAttribute('data-key');
    const read=page=>page.evaluate(readConcurrencyRecord,database);
@@ -239,7 +239,7 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    },{nodeID});
    assert.deepEqual(moved,[before[0]+70,before[1]+45]);
    const addedSource=combine(concurrencyBodies.shared,concurrencyBodies.closed,concurrencyBodies.added);
-   await a.evaluate(async text=>{await document.querySelector('#edit-markdown').onclick();const t=document.querySelector('#source-text');t.value=text;t.dispatchEvent(new Event('input',{bubbles:true}));await document.querySelector('#source-submit').onclick();},addedSource);
+   await context.route('https://concurrency.test/design.md',route=>route.fulfill({contentType:'text/plain',body:addedSource}));await a.evaluate(async()=>document.querySelector('#refresh').onclick());
    await select(a,overall);await a.locator('.node[data-activity="Synthetic added activity"] .activity-open').evaluate(n=>n.click());const added=await a.locator('.tab.active').getAttribute('data-key');
    await a.evaluate(async closed=>{document.getElementById('theme').click();await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();},closed);
    const committedA=await until(()=>read(a),v=>v.current?.tabs.some(t=>t.key===added)&&!v.current.tabs.some(t=>t.key===closed)&&v.current.dark===true,'A did not commit its addition, move and Group close');
@@ -249,13 +249,13 @@ export async function verifySessionConcurrency(browser,{url='http://127.0.0.1:41
    // first stale write. The debounce case lets the normal 180ms timer fire.
    await b.evaluate(async ({shared,closed,changed,draft,trigger})=>{
     document.querySelector(`.tab[data-key="${shared}"] > button`).click();
-    await document.getElementById('edit-markdown').onclick();document.getElementById('source-text').value=changed;document.getElementById('source-text').dispatchEvent(new Event('input',{bubbles:true}));
+    globalThis.__expectedSource=changed;document.getElementById('theme').click();
     document.getElementById('open-text').click();document.getElementById('source-text').value=draft;document.getElementById('source-text').dispatchEvent(new Event('input',{bubbles:true}));
     if(trigger==='close')await document.querySelector(`.tab[data-key="${closed}"] .close`).onclick();
     else if(trigger==='hidden'){
      Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));
     }else if(trigger!=='debounce')window.dispatchEvent(new Event(trigger));
-   },{shared,closed,changed:changedMarkdown,draft:unsubmittedMarkdown,trigger});
+   },{shared,closed,changed:source,draft:unsubmittedMarkdown,trigger});
    const warning=await assertConflict(b);await assertLocalWork(b,initialKeys);
    assert.deepEqual(await read(a),committedA,'stale first write cannot replace A snapshot or advance generation');
    for(const retry of concurrencyTriggers){

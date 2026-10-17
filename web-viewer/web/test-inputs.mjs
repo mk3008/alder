@@ -37,7 +37,7 @@ const tabs=env=>Array.from(env.w.document.querySelectorAll('.tab'));
 const graph=env=>env.$('nodes').innerHTML;
 const dialogOpen=env=>!env.$('source-dialog').hidden;
 const status=env=>env.$('status-text').textContent;
-async function invoke(env,id){const button=env.$(id);assert.ok(button,`Missing #${id}`);if(typeof button.onclick==='function'){const pending=button.onclick(new env.w.MouseEvent('click',{cancelable:true}));if(id==='source-cancel'&&env.$('source-close-dialog').open)await env.$('source-close-confirm').onclick();await pending;}else button.click();}
+async function invoke(env,id){const button=env.$(id);assert.ok(button,`Missing #${id}`);if(typeof button.onclick==='function'){const pending=button.onclick(new env.w.MouseEvent('click',{cancelable:true}));if(id==='source-cancel'&&env.$('source-close-dialog')?.open)await env.$('source-close-confirm').onclick();await pending;}else button.click();}
 async function submit(env){
   const button=env.$('source-submit');
   if(typeof button.onclick==='function')await button.onclick(new env.w.MouseEvent('click',{cancelable:true}));
@@ -76,26 +76,16 @@ try {
   await openText(text,multibyte);assert.equal(tabs(text).length,1);assert.equal(graph(text),initial);assert.ok(dialogOpen(text));assert.match(status(text),/2MiB/);assert.equal(text.$('source-text').value,multibyte);await invoke(text,'source-cancel');
   checks.push('text size limit counts UTF-8 bytes, retaining oversized multibyte input');
 
-  assert.equal(text.$('refresh').hidden,false);assert.equal(text.$('refresh').disabled,true);await invoke(text,'refresh');assert.equal(graph(text),initial,'direct refresh cannot change a text document');assert.equal(text.calls.length,0);await invoke(text,'edit-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
-  text.$('source-text').value='# invalid edit';await submit(text);
-  assert.equal(graph(text),initial);assert.equal(tabs(text)[0].dataset.key,key);assert.equal(text.$('source-text').value,'# invalid edit');assert.ok(dialogOpen(text));
-  text.$('source-text').value=markdown+'\n';await submit(text);assert.equal(dialogOpen(text),false);assert.equal(tabs(text).length,1);assert.equal(tabs(text)[0].dataset.key,key);
-  await invoke(text,'edit-markdown');assert.equal(text.$('source-text').value,markdown+'\n');text.$('source-text').value='unsaved cancellation';await invoke(text,'source-cancel');
-  await invoke(text,'edit-markdown');assert.equal(text.$('source-text').value,'unsaved cancellation');await invoke(text,'source-cancel');
-  checks.push('text editing swaps only after parse success and closing preserves a tab-local draft');
+  assert.equal(text.$('refresh').hidden,false);assert.equal(text.$('refresh').disabled,true);await invoke(text,'refresh');assert.equal(graph(text),initial,'direct refresh cannot change a text document');assert.equal(text.calls.length,0);await invoke(text,'view-markdown');assert.ok(dialogOpen(text));assert.equal(text.$('source-text').value,markdown);
+  assert.equal(text.$('source-text').readOnly,true);assert.equal(text.$('source-submit').hidden,true);await invoke(text,'source-submit');assert.equal(graph(text),initial);await invoke(text,'source-cancel');await invoke(text,'view-markdown');assert.equal(text.$('source-text').value,markdown);await invoke(text,'source-cancel');
+  checks.push('raw Markdown view is readonly and direct submit cannot mutate the source');
 
   await invoke(text,'open-text');text.$('source-text').value='retained Escape input';
   text.$('source-dialog').dispatchEvent(new text.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
   assert.equal(dialogOpen(text),false);assert.equal(text.$('source-text').value,'retained Escape input');assert.equal(tabs(text).length,1);
   checks.push('Escape closes text entry while retaining draft input and existing graph');
 
-  const closedEdit=await ready();await openText(closedEdit);await invoke(closedEdit,'edit-markdown');
-  closedEdit.$('source-text').value=markdown+'\n';closedEdit.w.confirm=()=>false;await tabs(closedEdit)[0].querySelector('.close').onclick();
-  assert.equal(tabs(closedEdit).length,1);assert.ok(dialogOpen(closedEdit));assert.equal(closedEdit.$('source-text').value,markdown+'\n');
-  closedEdit.w.confirm=()=>true;await tabs(closedEdit)[0].querySelector('.close').onclick();await submit(closedEdit);
-  assert.equal(tabs(closedEdit).length,1);assert.equal(tabs(closedEdit)[0].querySelector('.close').hidden,true);assert.equal(dialogOpen(closedEdit),false);assert.equal((await saved(closedEdit.w.indexedDB)).document.design.markdown,markdown+'\n');
-  checks.push('tab close protects unreflected drafts; explicit discard cannot resurrect the tab');
-
+  await invoke(text,'status-close');
   // Successful editing stays silent; graph selection is independent from dismissing a real input error.
   assert.equal(status(text),'');assert.equal(text.$('status').hidden,true);await openText(text,'invalid');await invoke(text,'source-cancel');
   const beforeDismiss=graph(text);assert.ok(status(text).trim());await invoke(text,'status-close');assert.equal(status(text),'');assert.equal(text.$('status').hidden,true);assert.equal(graph(text),beforeDismiss);
@@ -165,14 +155,13 @@ try {
   const db=new IDBFactory();const one=await ready({indexedDB:db,fetch:async()=>response()});
   Object.defineProperty(one.$('fallback'),'files',{value:[file('local.md')]});await one.$('fallback').onchange();await openURL(one);await openText(one,markdown+'\n');
   await invoke(one,'theme');await invoke(one,'drawer');await flush();const snapshot=await saved(db);
-  assert.equal(snapshot.recovery.find(t=>t.name==='local.md').source,undefined,'file origin is retained');assert.equal(snapshot.recovery.length,2);assert.equal(snapshot.recovery.filter(t=>t.source?.kind==='url').length,1);assert.equal(snapshot.document.source.kind,'text');
-  assert.equal(snapshot.document.design.markdown,markdown+'\n');assert.equal(snapshot.recovery.find(t=>t.source?.kind==='url').source.url,'https://raw.example.test/design.md');
+  assert.equal(snapshot.recovery.length,0);assert.deepEqual(snapshot.urlHistory,[{url:'https://raw.example.test/design.md',name:'design.md'}]);assert.equal(snapshot.document.source.kind,'text');assert.equal(snapshot.document.design.markdown,markdown+'\n');
   const keys=documentControls(one.w).map(t=>t.dataset.key);one.w.close();
   const restored=await ready({indexedDB:db});assert.deepEqual(documentControls(restored.w).map(t=>t.dataset.key),keys);assert.equal(tabs(restored).length,1);assert.equal(restored.calls.length,0);assert.equal(restored.w.document.documentElement.dataset.theme,'dark');assert.equal(restored.$('formattedMarkdownDrawer').hidden,true);
-  await invoke(restored,'edit-markdown');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
+  await invoke(restored,'view-markdown');assert.ok(dialogOpen(restored));assert.equal(restored.$('source-text').value,markdown+'\n');await invoke(restored,'source-cancel');
   assert.equal(restored.$('refresh').hidden,false,'restored text source keeps disabled refresh visible');
   for(const key of keys){const control=documentControls(restored.w).find(t=>t.dataset.key===key);await control.querySelector('button').onclick();assert.equal(restored.$('refresh').hidden,false);const current=(await saved(db)).document;assert.equal(restored.$('refresh').disabled,current.source?.kind==='text');assert.equal(tabs(restored).length,1);}assert.equal(restored.calls.length,0,'restoring saved originals never fetches');
-  await tabs(restored)[0].querySelector('.close').onclick();assert.equal(tabs(restored).length,1,'overall cannot close its original');assert.equal(documentControls(restored.w).length,3,'all three originals remain recoverable');
+  await tabs(restored)[0].querySelector('.close').onclick();assert.equal(tabs(restored).length,1,'overall cannot close its original');assert.equal(documentControls(restored.w).length,1,'current body only; previous URL remains in identity history');
   checks.push('file/URL/text originals and source bodies restore from IndexedDB without automatic network access');
 
   // Persistence failures must be announced as errors, not success notices.

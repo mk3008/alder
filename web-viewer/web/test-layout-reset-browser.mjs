@@ -83,7 +83,7 @@ export async function verifyLayoutReset(browser){
   assert.equal(await page.locator('#layout-lock').getAttribute('aria-pressed'),'false');assert.equal(await page.evaluate(()=>document.activeElement.id),'reset-layout');
   if(width<800)await button.tap();
   await page.keyboard.press('Space');await page.keyboard.press('Enter');await page.keyboard.press('Escape');assert.equal(await page.locator('#display-options').isVisible(),false);assert.equal(await page.evaluate(()=>document.activeElement.id),'display-settings-toggle');
-  await page.locator('#document-recovery summary').click();await page.locator('[data-document-key="other"] button').last().click();await page.locator('[data-document-key="reset"] button').last().click();await page.locator('#document-recovery summary').click();await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1});
+  assert.equal(await page.locator('#document-recovery').count(),0);await waitSavedViewer(page,{positions:plain(positions),scroll:[0,0],zoom:1});
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await geometry(page),original);
   await waitForExactRead(()=>page.evaluate(readSessionInPage),plain(saved),{project:plain});assert.deepEqual(errors,[]);
   return {width,checks:['two native drags','native Enter/Space reset, mobile tap and Escape focus','visible unclipped reset action','fresh node/path/label/camera equivalence','draft/source/filters/selection/other tab preserved','tab switch and reload'],pageErrors:errors};
