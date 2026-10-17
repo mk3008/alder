@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "170a65d05d7132874ebfce129658845a987709a2",
+  "sourceTree": "69ef388abcf042045e3b5f18743c98a062e125e0",
+  "pullRequest": 245,
+  "ci": "https://github.com/mk3008/alder/actions/runs/39024892644",
+  "review": "本人GUI再レビュー待ち・未採用",
+  "tests": {
+    "node": 75,
+    "targetedBrowser": 3
+  },
+  "feedbackInputs": "right-side departure / upward return / right-side arrival",
+  "originalReferenceImagesPublished": false
+}
