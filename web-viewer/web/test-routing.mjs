@@ -47,10 +47,10 @@ assert.deepEqual(routeEdge(input),route,'deterministic geometry and labels');
 for(const n of nodes)assert.ok(route.label[0]+64<n.x||route.label[0]-64>n.x+n.width||route.label[1]+14<n.y||route.label[1]-14>n.y+n.height,'whole label clears each card');
 const drag=routeEdge({...input,nodes:nodes.map(n=>n.id==='finish'?{...n,x:870,y:210}:n)});
 assert.notEqual(drag.path,route.path);assert.notDeepEqual(drag.points.at(-1),route.points.at(-1));
-const reverse=routeEdge({...input,from:'finish',to:'start'});
+const reverse=routeEdge({...input,from:'finish',to:'start',labels:[{id:'first',x:route.label[0]-60,y:route.label[1]-10,width:120,height:20}]});
 assert.equal(reverse.collisions,0);assert.ok(reverse.points[0][0]>reverse.points.at(-1)[0]);
-assert.equal(reverse.points[0][0],nodes[2].x+nodes[2].width);assert.equal(reverse.points.at(-1)[0],nodes[0].x+nodes[0].width);
-assert.ok(reverse.bounds.right>Math.max(...nodes.map(n=>n.x+n.width)),'return uses the outside right lane');
+assert.deepEqual(reverse.points[0],[nodes[2].x+nodes[2].width*.125,nodes[2].y+nodes[2].height]);
+assert.ok(reverse.points.some(p=>p[1]>reverse.points[0][1]),'return leaves downward before folding back');
 assert.notDeepEqual(route.points,[...reverse.points].reverse());
 assert.ok(Math.abs(route.label[0]-reverse.label[0])>120||Math.abs(route.label[1]-reverse.label[1])>20,'reciprocal fixture labels do not overlap');
 assert.notEqual(routeEdge({...input,index:1}).path,route.path,'parallel detours have index-based spacing');
@@ -63,7 +63,7 @@ assert.throws(()=>routeEdge({...input,to:'missing'}),/endpoint/);
 // The reference's small staircase: long vertical + horizontal legs, one short Q.
 const stairs=[rect('source',40,40),rect('target',168,136)];
 const step=routeEdge({from:'source',to:'target',nodes:stairs});
-assert.deepEqual(step.points[0],[97.2,108]);assert.deepEqual(step.points.at(-1),[168,170]);
+assert.deepEqual(step.points[0],[72.5,108]);assert.deepEqual(step.points.at(-1),[168,170]);
 assert.equal(commands(step.path).filter(c=>c.op==='Q').length,1);assert.equal(step.collisions,0);assert.equal(step.fallback,false);
 assert.ok(step.bounds.right<=stairs[1].x,'ordinary dependency never loops behind target');
 
@@ -87,10 +87,10 @@ for(let x=320;x<=1000;x+=40){
   const fixture=nodes.map(n=>n.id==='finish'?{...n,x,y:180}:n),r=routeEdge({...input,nodes:fixture});
   orthogonalCorners(r);endpointNormals(r,fixture[0],fixture[2]);assert.deepEqual(routeEdge({...input,nodes:fixture}),r);
 }
-// This cover spans the new left-biased vertical ports, forcing side departure.
-const blockedPort=[rect('a',120,320),rect('b',1100,320),{id:'port-cover',x:160,y:290,width:40,height:130}];
+// A covered mandatory outlet stays on the same icon-side bottom; report the obstruction.
+const blockedPort=[rect('a',120,320),rect('b',1100,320),{id:'port-cover',x:150,y:290,width:40,height:130}];
 const alternate=routeEdge({from:'a',to:'b',nodes:blockedPort});
-assert.equal(alternate.collisions,0);assert.ok([120,380].includes(alternate.points[0][0]));
+assert.ok(alternate.collisions>0);assert.equal(alternate.fallback,true);assert.deepEqual(alternate.points[0],[152.5,388]);
 for(const r of [route,drag,reverse,step,alternate])orthogonalCorners(r);
 
 // Cost is capped at 193 small templates, independent of the number of cards.
@@ -130,77 +130,33 @@ for(let run=0;run<2000;run++){
 console.log(JSON.stringify({passed:19,checks:['reference left-biased staircase','orthogonal legs','short rounded corners','tangent continuity','endpoint normals and arrow meaning','seven-card obstacle avoidance','full-label clearance','purity','determinism','live target drag','outside-right returns','parallel detour spacing','ID independence','segment intersection','dense finite fallback','four-direction fixtures','covered-port alternate','bounded routing','2000 seeded drag/overlap cases with dense curve verification'],sampleRoutingMs:Math.round(performance.now()-began)},null,2));
 await import('./test-directional-ports.mjs');
 
-// Normal staircase: a blocked default port has a short forward alternative.
-// Exception paths keep the historical geometry, even in the same positions.
+// Mandatory icon-side outlet, independent of relation kind, with obstacle escape.
 const staircase=[rect('s',100,100),rect('t',228,400),{id:'block',x:140,y:230,width:70,height:68}];
 const opts={from:'s',to:'t',nodes:staircase,labelWidth:60,labelHeight:18};
 const monotone=r=>r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]&&p[1]>=r.points[i][1]);
-const snapshot=JSON.stringify(staircase),legacyRoute=routeEdge(opts);
-assert.equal(monotone(legacyRoute),false,'fixture exposes the previous upstream detour');
-for(const kind of ['input','output']){
- const r=routeEdge({...opts,kind});assert.equal(monotone(r),true);assert.equal(r.collisions,0);assert.equal(r.fallback,false);
- assert.ok(r.bounds.right<=staircase[1].x);assert.equal(r.points[0][1],168);
- assert.ok(r.points[0][0]<230,'departure stays in the left half of the card');
- endpointNormals(r,staircase[0],staircase[1]);orthogonalCorners(r);
+const snapshot=JSON.stringify(staircase);
+for(const kind of ['input','output','business-exception','object-exception']){
+ const r=routeEdge({...opts,kind});assert.deepEqual(r.points[0],[132.5,168]);
+ assert.equal(r.collisions,0);endpointNormals(r,staircase[0],staircase[1]);orthogonalCorners(r);
+ if(kind==='input'||kind==='output')assert.equal(monotone(r),true);
 }
-assert.deepEqual(routeEdge({...opts,kind:'business-exception'}),legacyRoute);
-assert.deepEqual(routeEdge({...opts,kind:'object-exception'}),legacyRoute);
 const caption=routeEdge({...opts,kind:'input'});
-assert.ok(caption.label[1]>168&&caption.label[1]<210,'Input caption stays near the Object departure');
+assert.ok(caption.label[1]>168&&caption.label[1]<210);
 equal(Math.abs(caption.label[0]-caption.points[0][0]),38);
 const labelBox={id:'caption',x:caption.label[0]-30,y:caption.label[1]-9,width:60,height:18};
 const other=routeEdge({...opts,kind:'input',labels:[labelBox]});
-assert.equal(other.path,caption.path,'caption avoidance never reroutes a wire');
-assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-caption.label[1])>22,'adjacent Input captions avoid one another');
-assert.deepEqual(routeEdge({...opts,kind:'output',labels:[labelBox]}),routeEdge({...opts,kind:'output'}),'Output placement does not inherit Input preferences');
+assert.equal(other.path,caption.path);
+assert.ok(Math.abs(other.label[0]-caption.label[0])>64||Math.abs(other.label[1]-caption.label[1])>22);
 assert.equal(JSON.stringify(staircase),snapshot,'saved positions remain untouched');
-const upstream={...opts,from:'t',to:'s'};
-assert.equal(routeEdge({...upstream,kind:'input'}).path,routeEdge(upstream).path,'manual upstream normal edges do not force a giant forward loop');
-console.log('Wiring regression: monotone obstacle alternative, adaptive bottom anchor, source-side Input captions, label avoidance, unchanged exceptions/Output and coordinates.');
-
-const blockedBottom={...opts,nodes:[rect('s',100,100),rect('t',500,400),{id:'floor',x:80,y:182,width:300,height:70}]};
-assert.equal(monotone(routeEdge(blockedBottom)),false);
-const sideForward=routeEdge({...blockedBottom,kind:'input'});
-assert.equal(monotone(sideForward),true,'try a forward side departure before accepting a clear upstream route');
-assert.equal(sideForward.collisions,0);assert.equal(sideForward.points[0][0],360);
-
-// The actual standard-sample detail reported by the reviewer. Intervening
-// Object/exception cards must not force its two forward Inputs into leftward
-// arrows or put their captions halfway down an exterior right-hand lane.
-const {readFileSync}=await import('node:fs');
-const {parseDesign}=await import('../src/graph.ts');
-const {activityDesign}=await import('../src/activities.ts');
-const {initialPositions}=await import('../src/layout.ts');
-const {RouteCache}=await import('../src/route-cache.ts');
-const realDesign=activityDesign(parseDesign(readFileSync('../business-design/alder/README.md','utf8')),'業務設計');
-const realPositions=initialPositions(realDesign.graph,realDesign.activityOrder);
-const realNodes=realDesign.graph.nodes.map(n=>rect(n.id,...realPositions[n.id]));
-assert.deepEqual(JSON.parse(JSON.stringify(realPositions)),{
- 'Alder: 業務ナレッジ':[40,40],'Alder: 業務相関ナレッジ':[40,136],
- '実装':[40,232],'検査項目の設計':[40,328],'業務設計':[168,424],
- '依頼者':[296,520],'判断記録':[296,616],'業務設計書':[296,712]
-},'reported initial coordinates are unchanged; only routing/captions change');
-const realSnapshot=JSON.stringify({realPositions,graph:realDesign.graph});
-const realRoutes=new RouteCache().update({},realDesign,realNodes,realDesign.graph.relations);
-assert.equal(realNodes.length,8,'use the actual reported graph including exception neighbours');
-const target=realNodes.find(n=>n.id==='業務設計');
-let forwardInputs=0,horizontalInputs=0;
-for(const [i,r] of realDesign.graph.relations.entries()){
- const route=realRoutes[i],source=realNodes.find(n=>n.id===r.from);
- assert.equal(route.collisions,0);endpointNormals(route,source,realNodes.find(n=>n.id===r.to));
- if(r.kind==='input'){
-  assert.ok(Math.abs(route.label[1]-(source.y+source.height))<=28,'every real Input caption stays beside its source Object, including side departures');
-  assert.ok(route.label[0]+r.label.length*6>=source.x&&route.label[0]-r.label.length*6<=source.x+source.width);
-  if(source.y<target.y){
-   forwardInputs++;assert.equal(monotone(route),true);
-   assert.equal(route.points[0][1],source.y+source.height,'depart from Object bottom');
-   assert.equal(route.points.at(-1)[1],target.y,'enter Activity from above');
-   assert.ok(route.bounds.right<=target.x+target.width,'no external right detour');
-   assert.ok(route.label[0]-Math.max(30,r.label.length*12)/2>route.points[0][0],'caption beside initial vertical departure');
-  }else horizontalInputs++;
- }
- if(r.kind.endsWith('exception'))assert.deepEqual(route,routeEdge({from:r.from,to:r.to,nodes:realNodes,index:i,labelWidth:Math.max(30,r.label.length*12),labelHeight:18}),'exception geometry and label stay on the unchanged routing branch');
+for(const kind of ['input','output','business-exception','object-exception']){
+ const r=routeEdge({...opts,from:'t',to:'s',kind});
+ assert.deepEqual(r.points[0],[260.5,468]);assert.ok(r.points[1][1]>468);
+ assert.equal(r.collisions,0);assert.ok(r.points.at(-1)[1]<r.points[0][1]);
+ endpointNormals(r,staircase[1],staircase[0]);orthogonalCorners(r);
 }
-assert.equal(forwardInputs,2);assert.equal(horizontalInputs,2);
-assert.equal(JSON.stringify({realPositions,graph:realDesign.graph}),realSnapshot);
-console.log('Real standard-sample Activity detail: 8 cards, 2 down/right Inputs, 2 source-side return captions, unchanged exception branch and coordinates.');
+// A saved card immediately beneath the outlet blocks every legal departure.
+// It must be reported honestly, never escaped by silently using a side port.
+const covered={...opts,nodes:[rect('s',100,100),rect('t',500,400),{id:'floor',x:80,y:168,width:300,height:70}]};
+const blocked=routeEdge({...covered,kind:'input'});
+assert.deepEqual(blocked.points[0],[132.5,168]);assert.ok(blocked.collisions>0);assert.equal(blocked.fallback,true);
+await import('./test-wiring-real.mjs');

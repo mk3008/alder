@@ -97,4 +97,19 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
   }
   return {positions,forwardRelations,feedbackRelations,exceptionRelations};
 }
-export function initialPositions(graph:Graph,activityOrder?:readonly string[]):Record<string,Point>{return layoutPlan(graph,activityOrder).positions;}
+/** One-hop Activity views put upstream peers on successive staircase steps.
+ * This is an initial/reset plan, never a migration of retained coordinates.
+ * Stable source order comes from the same dependency/cycle plan as overview.
+ */
+export function initialPositions(graph:Graph,activityOrder?:readonly string[],activity?:string):Record<string,Point>{
+  const plan=layoutPlan(graph,activityOrder);
+  if(activity===undefined||!graph.nodes.some(n=>n.id===activity&&n.type==='business'))return plan.positions;
+  const downstream=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
+  const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
+  const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)),after=ordered.filter(id=>downstream.has(id));
+  const positions:Record<string,Point>=Object.create(null);
+  upstream.forEach((id,i)=>positions[id]=[MARGIN+i*STEP_X,MARGIN+i*STEP_Y]);
+  const step=upstream.length;positions[activity]=[MARGIN+step*STEP_X,MARGIN+step*STEP_Y];
+  after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*STEP_X,MARGIN+(step+i+1)*STEP_Y]);
+  return positions;
+}

@@ -57,58 +57,63 @@ export async function verifyWiring(browser){
 
 // Acceptance uses the shipped standard sample, not just an easy synthetic star.
 export async function verifyRealWiring(browser){
- const results=[];
+ const results=[],specs=[
+  {activity:'業務設計',slug:'business',stair:['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','実装','検査項目の設計','業務設計'],count:8,exceptions:2},
+  {activity:'検査項目の設計',slug:'check',stair:['Alder: 検査項目設計ナレッジ','業務設計書','業務設計','検査項目の設計'],count:6,exceptions:1}
+ ];
  for(const width of [1280,393,320]){
-  const context=await browser.newContext({viewport:{width,height:900},hasTouch:width!==1280}),page=await context.newPage(),errors=[];
+  const context=await browser.newContext({viewport:{width,height:1000},hasTouch:width!==1280}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(5000);
   const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
   const saved=()=>page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));
+  const closeDrawers=async()=>{if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();};
+  const inspect=()=>page.evaluate(()=>{
+   const cards=[...document.querySelectorAll('.node')].map(n=>{const b=n.getBoundingClientRect(),icon=n.firstElementChild.getBoundingClientRect();return {id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:260,height:68,iconX:parseFloat(n.style.left)+(icon.x+icon.width/2-b.x)*260/b.width};});
+   const wires=[...document.querySelectorAll('.edge')].map(path=>{
+    const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
+    const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
+    return {source,target,title,labelText:label.textContent,label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
+   });return {cards,wires};
+  });
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
-   if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
-   const overview=await positions();await page.locator('.node[data-activity="業務設計"] .activity-open').press('Enter');
-   assert.equal(await page.locator('.node').count(),8);const detail=await positions();
-   if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-   const inspect=()=>page.evaluate(()=>{
-    const card=id=>{const n=[...document.querySelectorAll('.node')].find(n=>n.dataset.node===id);return {x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:260,height:68};};
-    const target=card('業務設計'),inputs=[];
-    for(const label of document.querySelectorAll('.edge-label')){
-     const r=label.dataset.relation,path=document.querySelector(`.edge[data-relation="${r}"]`),title=path.querySelector('title').textContent;
-     const sourceID=['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','依頼者','業務設計書'].find(id=>title.startsWith(id+' → 業務設計: '));if(!sourceID)continue;
-     const length=path.getTotalLength(),points=Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),glyph=label.getBBox();
-     inputs.push({sourceID,source:card(sourceID),points,label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:glyph.x,y:glyph.y,width:glyph.width,height:glyph.height},collisions:+path.dataset.collisions});
+   if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await closeDrawers();
+   const overview=await positions();
+   const overviewRoutes=await inspect();for(const r of overviewRoutes.wires){assert.ok(Math.abs(r.points[0][0]-(r.source.x+32.5))<.01);assert.equal(r.points[0][1],r.source.y+68);assert.ok(Math.abs(r.points[0][0]-r.source.iconX)<=6,'departure follows the rendered icon column');assert.ok(r.points[1][1]>r.points[0][1]);}
+   for(const spec of specs){
+    await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
+    assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
+    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*128,40+i*96],'actual DOM staircase including exception neighbours'));
+    for(const theme of ['light','dark']){
+     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+     const measured=await inspect(),overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+     assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
+     for(const [i,r]of measured.wires.entries()){
+      assert.equal(r.collisions,0);assert.ok(Math.abs(r.points[0][0]-(r.source.x+32.5))<.01);assert.equal(r.points[0][1],r.source.y+68);assert.ok(Math.abs(r.points[0][0]-r.source.iconX)<=6,'departure follows the rendered icon column');
+      assert.ok(r.points[1][1]>r.points[0][1]);assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
+      if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1]);}}
+      if(!r.exception&&r.target.id===spec.activity){
+       inputs++;assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'all Input captions stay at Object departure');
+       if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
+      }
+      for(const n of measured.cards)assert.equal(overlap(r.glyph,n),false,'native Japanese glyph does not cover shapes');
+      for(const other of measured.wires.slice(i+1))assert.equal(overlap(r.glyph,other.glyph),false,'native captions do not overlap');
+     }assert.equal(inputs,4);
+     // Product zoom and ordinary scrolling only; screenshots show all nodes.
+     const outs=width===1280?0:5;for(let i=0;i<outs;i++)await page.locator('#out').click();
+     await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});
+     await page.screenshot({path:`web/evidence/wiring/real-${spec.slug}-${width}-${theme}.png`});
+     for(let i=0;i<outs;i++)await page.locator('#in').click();
     }
-    return {target,inputs,cards:[...document.querySelectorAll('.node')].map(n=>card(n.dataset.node)),exceptions:[...document.querySelectorAll('.edge.exception')].map(n=>[n.dataset.relation,n.getAttribute('d')])};
-   });
-   const initial=await inspect();assert.equal(initial.inputs.length,4);assert.equal(initial.exceptions.length,2);
-   for(const theme of ['light','dark']){
-    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
-    const measured=await inspect();
-    for(const r of measured.inputs){
-     assert.equal(r.collisions,0);assert.ok(r.label[1]>=r.source.y+r.source.height&&r.label[1]<=r.source.y+r.source.height+28,'all four captions follow their Object, including horizontal return departures');
-     for(const n of measured.cards)assert.ok(r.glyph.x+r.glyph.width<=n.x||n.x+n.width<=r.glyph.x||r.glyph.y+r.glyph.height<=n.y||n.y+n.height<=r.glyph.y,'native Input glyph never covers a card');
-     if(r.source.y<measured.target.y){
-      assert.equal(r.points[0][1],r.source.y+r.source.height);
-      assert.equal(r.points.at(-1)[1],measured.target.y,'normal Input arrives at Activity top, not its right side');
-      assert.ok(r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]-.01&&p[1]>=r.points[i][1]-.01),'real sample Input reads down/right');
-      assert.ok(Math.max(...r.points.map(p=>p[0]))<=measured.target.x+measured.target.width,'no exterior right detour');
-     }
-    }
-    assert.deepEqual(measured.exceptions,initial.exceptions);
-    await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="Alder: 業務ナレッジ"] .node-navigate').click();await page.locator('#node-list-close').click();
-    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-    // Fit the reported detail into a mobile review image using product zoom.
-    for(let i=0;i<3;i++)await page.locator('#out').click();
-    await page.locator('#viewport').evaluate(view=>{
-     const first=document.querySelector('.node[data-node="Alder: 業務ナレッジ"]').getBoundingClientRect(),v=view.getBoundingClientRect();
-     view.scrollLeft+=first.left-v.left-24;view.scrollTop+=first.top-v.top-24;
-    });
-    await page.screenshot({path:`web/evidence/wiring/real-${width}-${theme}.png`});
-    for(let i=0;i<3;i++)await page.locator('#in').click();
+    // Move a node through the actual drag UI, persist/reload, then explicitly reset.
+    await page.locator('#layout-lock').click();const first=page.locator(`.node[data-node="${spec.stair[0]}"]`);await first.scrollIntoViewIfNeeded();const box=await first.boundingBox();
+    await page.mouse.move(box.x+50,box.y+30);await page.mouse.down();await page.mouse.move(box.x+80,box.y+60,{steps:4});await page.mouse.up();
+    const moved=await positions();assert.notDeepEqual(moved[spec.stair[0]],detail[spec.stair[0]]);await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),moved,'manual saved coordinates survive native reload');
+    await page.locator('#display-settings-toggle').click();await page.locator('#reset-layout').click();await page.locator('#display-settings-toggle').click();assert.deepEqual(await positions(),detail,'explicit reset uses new staircase');await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),detail,'new reset survives reload');
+    await page.locator('.tab').first().locator('button').first().click();assert.deepEqual(await positions(),overview,'other view remains exact');
+    results.push({width,activity:spec.activity,nodes:spec.count,sourceCaptions:4,commonOutlets:true,exceptionMeaning:true,nativeGlyphOverlaps:0,manualSaveReload:true,resetReload:true});
    }
-   await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),detail,'existing detail positions survive reload');
-   await page.locator('.tab').first().locator('button').first().click();assert.deepEqual(await positions(),overview,'other view positions remain exact');
-   assert.deepEqual(errors,[]);results.push({width,nodes:8,forwardInputs:2,sideDepartureCaptions:2,exceptions:2,lightDark:true,nativeGlyphCardCollisions:0,savedPositionsExact:true});
+   assert.deepEqual(errors,[]);
   }finally{await context.close();}
  }
  return results;

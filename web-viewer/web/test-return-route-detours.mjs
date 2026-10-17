@@ -102,9 +102,9 @@ for(const [name,savedPositions] of [['publicInitial',positions],['legacySaved',l
 // target port. Assert its source relation and the actual initial coordinates.
 assert.equal(edges[41].kind,'input');assert.equal(edges[41].from,'業務設計書');assert.equal(edges[41].to,'業務設計');
 const affected=sampleRoutes[41];
-assert.deepEqual(affected.points[0],[556,554]);assert.deepEqual(affected.points.at(-1),[428,362]);
-assert.equal(affected.bounds.right,588);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<390);
-assert.equal((affected.path.match(/ Q/g)??[]).length,2);
+assert.deepEqual(affected.points[0],[328.5,588]);assert.deepEqual(affected.points.at(-1),[168,362]);
+assert.equal(affected.bounds.right,328.5);assert.equal(affected.bounds.bottom,590);assert.ok(length(affected)<460);
+assert.equal((affected.path.match(/ Q/g)??[]).length,3);
 assert.ok(samples.publicInitial.screenshot16.candidate.relationIndexes.includes(41));
 assert.ok(!samples.publicInitial.scopeWritePreferred13.candidate.relationIndexes.includes(41));
 const affectedBefore=baseline?.({...edges[41],nodes:sampleNodes,index:41,labelWidth:width(edges[41]),labelHeight:18});
@@ -128,7 +128,7 @@ assert.equal(new Set(Object.values(fixtures).map(r=>r.path)).size,4,'original re
 const blocked=[rect('source',400,600),rect('target',200,200),rect('blocker',690,340,100,100)];
 const blockedOptions={from:'source',to:'target',nodes:blocked},blockedRoute=routeEdge(blockedOptions);
 assert.ok(routeCollisionCount([[704,634],[704,234]],[blocked[2]],14)>0,'local right lane is genuinely blocked');
-assert.equal(blockedRoute.bounds.right,834,'graph-wide lane remains available when the local lane is blocked');
+assert.equal(blockedRoute.bounds.right,432.5,'mandatory bottom outlet finds a short left corridor instead of a graph-wide right lane');
 assert.equal(blockedRoute.collisions,0);assert.equal(blockedRoute.fallback,false);validate(blockedOptions,blockedRoute);
 fixtures.blockedLocalUsesGlobal=routeSummary(blockedRoute);
 for(const [name,nodes,from,to] of [
@@ -139,8 +139,8 @@ for(const [name,nodes,from,to] of [
 ]){
   const options={from,to,nodes,index:1,labelWidth:180,labelHeight:18},r=routeEdge(options);validate(options,r);assert.deepEqual(routeEdge(options),r);
   if(name==='coveredPorts'){assert.ok(r.collisions>0);assert.equal(r.fallback,true);}else {assert.equal(r.collisions,0);assert.equal(r.fallback,false);}
-  if(name==='sameRowReturn')assert.equal(side(r.points.at(-1),nodes[1]),'right');
-  if(baseline&&['sameRowReturn','selfLoop'].includes(name))assert.deepEqual(r,baseline(options));
+  if(name==='sameRowReturn')assert.equal(side(r.points.at(-1),nodes[1]),'left');
+  assert.deepEqual(r.points[0],[nodes[0].x+nodes[0].width/8,nodes[0].y+nodes[0].height]);
   fixtures[name]=routeSummary(r);
 }
 

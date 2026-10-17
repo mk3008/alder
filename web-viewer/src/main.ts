@@ -282,7 +282,7 @@ function layoutCanvas(t:Tab){
   const origin:Point=[previous[0]+growth[0]/t.zoom,previous[1]+growth[1]/t.zoom],shifted=growth.some(Boolean);
   // Integer screen-pixel additions avoid native scroll rounding causing a jump.
   if(shifted){t.canvasOrigin=origin;t.scroll=[t.scroll[0]+growth[0],t.scroll[1]+growth[1]];markChanged();persist(180,false);}
-  const width=Math.max(1400,edgeExtent[0],(cameraViewportWidth()+t.scroll[0])/t.zoom-inset[0]*2-origin[0],...positions.map(p=>p[0]+340));
+  const width=Math.ceil(Math.max(1400,edgeExtent[0],(cameraViewportWidth()+t.scroll[0])/t.zoom-inset[0]*2-origin[0],...positions.map(p=>p[0]+340)));
   const height=Math.max(850,edgeExtent[1],Math.max(edgeExtent[1],...positions.map(p=>p[1]+68))+bottomCameraReserve()/t.zoom-inset[1],($('viewport').clientHeight+t.scroll[1])/t.zoom-inset[1]*2-origin[1],...positions.map(p=>p[1]+220));
   $('canvas').style.width=(width+origin[0]+inset[0]*2)*t.zoom+'px';$('canvas').style.height=(height+origin[1]+inset[1]*2)*t.zoom+'px';
   $('nodes').style.left=(origin[0]+inset[0])*t.zoom+'px';$('nodes').style.top=(origin[1]+inset[1])*t.zoom+'px';

@@ -39,19 +39,20 @@ async function boot({db=new IDBFactory(),seed,width=1280,height=800}={}){
  return {w,d,$,v,db};
 }
 function geometry(e,inset=40,zoom=1){
- // Node hash and camera extents remain the reviewed 090622ab contract.
+ // Overview node coordinates remain exact; the new captions determine a new
+ // explicitly pinned canvas extent. Camera transforms and reload remain exact.
  // Execution #244 intentionally changes wire anchors and Input captions; the
  // old route digest was 85d0e22a3745672f890b5f576e7f63478ad9346fdec3dfeaa3f1b5c22f3e2e1e.
  // First candidate digest: 9ad8406d19186647c5bdda71296572297e146b99cc50ed5b859821fbb0a83e90.
- // The corrected snapshot includes source captions for side departures.
+ // The snapshot pins common bottom outlets and source-side captions.
  // Pin the new snapshot only after the directional/caption and native tests;
  // inset/zoom/reload must still preserve these exact SVG coordinates.
  assert.equal(hash(positions(e)),'2a781f2fef2b245f51b054cc42410cf38e4967ecee0b1ac617918b52642c92f4','all node coordinates retain the reviewed layout');
- assert.equal(hash(routes(e)),'83640cad042bdc4baeaa886ac0f57c9ab8e5254b25c69e608cc59aaf899861b8','all SVG path/label coordinates retain the reviewed routes');
+ assert.equal(hash(routes(e)),'fdb1a1193c951f30fb74a47e92dad228beb4cad1c0fcbb47ee01c16cb9a36dd0','all SVG path/label coordinates retain the reviewed routes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 1916 2564');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(1916+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2102 2564');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2102+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

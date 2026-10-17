@@ -9,6 +9,8 @@ export interface RouteOptions {
   kind?: string;
   /** Existing label rectangles; labels never become path obstacles. */
   labels?: readonly RouteNode[];
+  /** Other routed lines, used only to place captions. */
+  wires?: readonly (readonly Point[])[];
 }
 export interface EdgeRoute {
   path: string; label: Point; points: Point[]; bounds: {right:number;bottom:number}; collisions: number; rerouted: boolean;
@@ -22,9 +24,9 @@ type Side = 'left' | 'right' | 'top' | 'bottom';
 const normals: Record<Side, Point> = {left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
 const add = (a:Point,b:Point,k=1):Point => [a[0]+b[0]*k,a[1]+b[1]*k];
 function port(r:RouteNode,side:Side):Point {
-  // Left-biased vertical ports leave room for the next small staircase step.
+  // A shared one-eighth-width outlet follows the left-hand icon column.
   // Ports depend only on the endpoint, never on obstacle/detour coordinates.
-  return side==='top'||side==='bottom'?[r.x+r.width*.22,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height/2];
+  return side==='top'||side==='bottom'?[r.x+r.width*.125,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height/2];
 }
 /** Segment/slab intersection also catches a tiny obstacle between vertices. */
 function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean {
@@ -62,19 +64,22 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
   // width; a long label next to a vertical leg must not sit over the next card.
   const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
-  let best=mid,bestScore=[Infinity,Infinity,Infinity,Infinity];
+  const right=Math.max(...nodes.map(n=>n.x+n.width));
+  let best=mid,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity,Infinity];
   let priority=2;
   const consider=(p:Point)=>{
     let collisions=p[0]<minimum[0]+width/2||p[1]<minimum[1]+height/2?1:0;
     for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
     const labelCollisions=labels.filter(r=>p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height).length;
-    const score=[collisions,labelCollisions,priority,distance(p,priority<2?points[0]:mid)];
+    const box={id:'label',x:p[0]-width/2,y:p[1]-height/2,width,height};
+    const crossings=wires.filter(w=>w.slice(1).some((b,i)=>intersects(w[i],b,box,3))).length;
+    const score=[collisions,labelCollisions,priority,Math.max(0,p[0]+width/2-right),crossings,distance(p,priority<2?points[0]:mid)];
     if(better(score,bestScore)){best=p;bestScore=score;}
   };
   // Input captions belong to the Object departure, beside its first straight
@@ -154,27 +159,24 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
   return {vertices,points,error,length,path,bounds:{right:Math.max(...points.map(p=>p[0])),bottom:Math.max(...points.map(p=>p[1]))}};
 }
 /**
- * Bounded orthogonal templates: at most 16 port pairs x 12 candidates
- * (192 total), plus at most 3 + 2 per obstacle adaptive forward anchors. Clear
- * preferred bottom/left routes finish after one pair. Forward routes exhaust
- * left-target pairs (vertical departures first) before changing the arrival
- * side. Returns prefer right/right ports and the shortest clear lane, retaining
- * graph-wide lanes as obstacle fallbacks. No search graph, large curve
- * sampling, or input mutation.
+ * Bounded orthogonal templates with one mandatory bottom departure. Arrival
+ * sides and nearby obstacle boundaries provide local escape lanes, including
+ * short stubs in retained card gaps. Normal down/right paths are preferred;
+ * returns may fold back after leaving below the same icon-side outlet.
  * The runtime cache can therefore reroute only incident edges after a drag.
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[]}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[]}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
-  // Preserve positive-world routing exactly. A signed axis has no fixed zero
+  // A positive world has a fixed zero boundary. A signed axis has no fixed zero
   // boundary: the camera expands to contain its finite route and label bounds.
   const minimum:Point=[nodes.some(n=>n.x<0)?-Infinity:0,nodes.some(n=>n.y<0)?-Infinity:0];
   const offCanvas=(points:Point[])=>points.some(p=>p[0]<minimum[0]+1||p[1]<minimum[1]+1)?1:0;
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
-  const preferred:[Side,Side]=returning?['right','right']:['bottom','left'];
+  const preferred:[Side,Side]=returning?['bottom','right']:['bottom','left'];
   const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
   const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
@@ -208,59 +210,29 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     for(const x of [localRight,localLeft,bounds.right,bounds.left])evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
     for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
   };
-  if(forward){
-    // Use endpoint-relative anchors and nearby obstacle boundaries before
-    // resorting to an upstream detour. This never moves a saved card.
-    const inset=Math.min(source.width*.08,CLEARANCE+RADIUS);
-    const xs=[port(source,'bottom')[0],source.x+inset,target.x-CLEARANCE-RADIUS,
-      ...obstacles.flatMap(n=>[n.x-CLEARANCE-RADIUS,n.x+n.width+CLEARANCE+RADIUS])];
-    for(const x of xs){
-      if(x<source.x+inset||x>source.x+source.width-inset||x>target.x)continue;
-      const a:Point=[x,source.y+source.height],b=port(target,'left');
-      evaluate([a,[x,b[1]],b],['bottom','left'],true);
+  // Every relation leaves below the icon. Obstructed saved positions may
+  // require a short initial turn, but never silently change the source port.
+  const a=port(source,'bottom');
+  for(const side of ['left','right','top','bottom'] as Side[]){
+    const b=port(target,side),entry=add(b,normals[side],reach),pair:[Side,Side]=['bottom',side];
+    tryPorts(pair);
+    // Local obstacle boundaries provide escape lanes without global detours.
+    // Short stubs fit a retained 28-unit gap; all candidates share one outlet.
+    const xs=[bounds.left,bounds.right,...obstacles.flatMap(n=>[n.x-CLEARANCE-RADIUS-spread,n.x+n.width+CLEARANCE+RADIUS+spread])];
+    for(const stub of [reach,RADIUS/2,RADIUS/4]){
+      const exit:Point=[a[0],a[1]+stub];
+      evaluate([a,exit,[entry[0],exit[1]],entry,b],pair,false);
+      for(const x of xs)evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
     }
-  }
-  const needsRoute=()=>bestScore[0]>0||bestScore[1]>0||(forward&&bestScore[2]>0);
-  tryPorts(preferred);
-  if(!returning&&needsRoute()){
-    // Keep the reading direction at the target before relaxing the source
-    // departure. An obstructed bottom/left pair must not choose bottom/right
-    // while a clear top/left or side/left pair is still available.
-    for(const a of ['top','right','left'] as Side[]){tryPorts([a,'left']);if(!needsRoute())break;}
-  }
-  if(needsRoute()){
-    // Keep vertical departure / horizontal arrival before trying side departures.
-    vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!needsRoute())break vertical;}
-    if(needsRoute())other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!needsRoute())break other;}
-  }
-  if(forward&&kind==='input'&&needsRoute()){
-    // Stacked inputs and exception neighbours can block every left arrival.
-    // Enter the target from above through an endpoint-relative clear corridor;
-    // a short departure stub can turn inside the existing 28-unit card gap.
-    // At most two source anchors x (4 + obstacle count) arrivals x two stubs.
-    const inset=Math.min(target.width*.08,CLEARANCE+RADIUS);
-    const arrivals=[port(target,'top')[0],target.x+target.width*.78,target.x+inset,target.x+target.width-inset,
-      ...obstacles.map(n=>n.x+n.width+CLEARANCE+RADIUS+spread)];
-    for(const x of new Set(arrivals)){
-      if(x<target.x+inset||x>target.x+target.width-inset)continue;
-      const b:Point=[x,target.y];
-      for(const sx of [port(source,'bottom')[0],source.x+Math.min(source.width*.08,CLEARANCE+RADIUS)]){
-        if(sx>x)continue;
-        const a:Point=[sx,source.y+source.height];
-        for(const y of [a[1]+reach,a[1]+RADIUS/2]){
-          if(y>=b[1])continue;
-          evaluate([a,[a[0],y],[b[0],y],b],['bottom','top'],false);
-        }
-      }
-    }
+    if(bestScore[0]===0&&bestScore[1]===0&&(!forward||bestScore[2]===0))break;
   }
   // Coincident/covered ports can invalidate every direction. A short exterior
   // loop always exists geometrically; collision reporting remains honest.
   if(!chosen){
-    const a=port(source,'right'),b=port(target,'top'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=Math.min(source.y,target.y)-reach;
-    chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
+    const a=port(source,'bottom'),b=port(target,'right'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=source.y+source.height+reach;
+    chosen=rounded([a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input',kind==='input'?labels:[],source);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,wires);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }
