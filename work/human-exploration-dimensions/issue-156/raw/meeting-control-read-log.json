@@ -1,0 +1,10 @@
+{
+  "files_read": [
+    "AGENTS.md",
+    "plugins/alder/skills/alder-optimize-business/SKILL.md",
+    "plugins/alder/skills/alder-optimize-business/references/optimization-review.md",
+    "plugins/alder/skills/alder-optimize-business/references/provenance.json",
+    "work/human-exploration-dimensions/issue-156/inputs/meeting.md",
+    "work/human-exploration-dimensions/issue-156/prompts/meeting-control.txt"
+  ]
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "run": "purchase-control",
+    "agent_id": "/root/validate_human_exploration_dimensions/review_purchase_control",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime": "not independently attested",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "input_revision": "7eb9d311d3d08f6dd79ed28d2f8181680f48a477",
+    "review_prompt": "prompts/purchase-control.txt",
+    "launch_contract": "Read only fixed AGENTS, assigned Business Design and review prompt, Skill, bundled authority and provenance. No other runs, prior research, evaluation, Issue/PR discussions or web. Write final response once and an exact read log. No product changes.",
+    "transport_note": "Host coordination wording is omitted. The full substantive review prompt and permitted/prohibited input contract are preserved."
+  },
+  {
+    "run": "purchase-treatment",
+    "agent_id": "/root/validate_human_exploration_dimensions/review_purchase_treatment",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime": "not independently attested",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "input_revision": "7eb9d311d3d08f6dd79ed28d2f8181680f48a477",
+    "review_prompt": "prompts/purchase-treatment.txt",
+    "launch_contract": "Read only fixed AGENTS, assigned Business Design and review prompt, Skill, bundled authority and provenance. No other runs, prior research, evaluation, Issue/PR discussions or web. Write final response once and an exact read log. No product changes.",
+    "transport_note": "Host coordination wording is omitted. The full substantive review prompt and permitted/prohibited input contract are preserved."
+  },
+  {
+    "run": "meeting-control",
+    "agent_id": "/root/validate_human_exploration_dimensions/review_meeting_control",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime": "not independently attested",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "input_revision": "7eb9d311d3d08f6dd79ed28d2f8181680f48a477",
+    "review_prompt": "prompts/meeting-control.txt",
+    "launch_contract": "Read only fixed AGENTS, assigned Business Design and review prompt, Skill, bundled authority and provenance. No other runs, prior research, evaluation, Issue/PR discussions or web. Write final response once and an exact read log. No product changes.",
+    "transport_note": "Host coordination wording is omitted. The full substantive review prompt and permitted/prohibited input contract are preserved."
+  },
+  {
+    "run": "meeting-treatment",
+    "agent_id": "/root/validate_human_exploration_dimensions/review_meeting_treatment",
+    "requested_model": "gpt-6-sol",
+    "requested_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "effective_runtime": "not independently attested",
+    "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+    "input_revision": "7eb9d311d3d08f6dd79ed28d2f8181680f48a477",
+    "review_prompt": "prompts/meeting-treatment.txt",
+    "launch_contract": "Read only fixed AGENTS, assigned Business Design and review prompt, Skill, bundled authority and provenance. No other runs, prior research, evaluation, Issue/PR discussions or web. Write final response once and an exact read log. No product changes.",
+    "transport_note": "Host coordination wording is omitted. The full substantive review prompt and permitted/prohibited input contract are preserved."
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "source_revision": "a58c970f3a78ac9a0ba91be3c6bfb05e4e2b1168",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "fork_turns": "none",
+  "effective_runtime": "not independently attested",
+  "sha256": {
+    "work/human-exploration-dimensions/issue-156/protocol.md": "f9a12722de04b5e34e35dc33a7a5744047fde891ae1e390dd2173304481ddff7",
+    "work/human-exploration-dimensions/issue-156/prompts/meeting-treatment.txt": "91cf1fc57a50387fab350b79502d07d8f874cfa84502ed2999d48c93b5a1293b",
+    "work/human-exploration-dimensions/issue-156/prompts/purchase-treatment.txt": "6ff651b4d3326f3b573f7f800e9c687282ed6d1805d3241840191ba67118b141",
+    "work/human-exploration-dimensions/issue-156/prompts/purchase-control.txt": "51fabf4a1c11602f7ac708e8501df64183847ee38ab036d8eed524f355d44154",
+    "work/human-exploration-dimensions/issue-156/prompts/meeting-control.txt": "4e4f4a3e491dcbc7c0e8e48cfb5cf70591601b2282df9a087479d4dcc4599bfb",
+    "work/human-exploration-dimensions/issue-156/inputs/meeting.md": "31fe2371c81f5ecf560ad5312194865ef8c8ec00b9c33bc2d5b1b199d4b166c9",
+    "work/human-exploration-dimensions/issue-156/inputs/purchase.md": "2692b564fd44eb64005f6d595008afdf3ec62660ba81bfa99f6c90165c518fdc"
+  }
+}

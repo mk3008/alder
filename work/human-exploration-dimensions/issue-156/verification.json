@@ -1,0 +1,22 @@
+{
+  "preregistered_input_hashes_match": true,
+  "purchase_existing_fixture_unchanged": true,
+  "purchase_only_dimension_paragraph_differs": true,
+  "meeting_existing_fixture_unchanged": true,
+  "meeting_only_dimension_paragraph_differs": true,
+  "product_diff_empty": true,
+  "package_checks": {
+    "command": "python3 -m unittest tools.test_plugin_package tools.test_workflow_skills tools.test_plugin_release_workflow tools.test_export_plugin_references tools.test_plugin_references",
+    "tests": 25,
+    "result": "pass"
+  },
+  "read_logs_confined_to_allowed_inputs": true,
+  "raw_sha256": {
+    "purchase-treatment.md": "c7751a08b9474a4d93322616a8ba34e14a5847ab65c6bcbc10d20302b2bb5a70",
+    "meeting-treatment.md": "54944e1d86e5006029ed72c7781a5a7d07e3e7eb8398f83f611d85ab6036b36c",
+    "purchase-control.md": "0e378802b562c71d79cdb514b2463a3bb35301d599ed99c4cafc501a0b1b9ee3",
+    "meeting-control.md": "19bce1b020b6ca07148361f47e43e93036793d6ea7f192b3a21822711a644e2e"
+  },
+  "raw_count": 4,
+  "safe_publication_review": "Public synthetic Business Designs and experiment-only Problems; no private control links, customer information, credentials or personal data in published records."
+}
