@@ -1,0 +1,12 @@
+{
+  "source": "1c2356b230f237732a0e8488aeffd12db9dc446f",
+  "checkout": "42ea63c23b4dd2d20f82361b6524eeeb6273a31a",
+  "urlPath": "/preview/pr-245/1c2356b230f237732a0e8488aeffd12db9dc446f/",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "index.html": "8d9c9e295489e8277492fe7487c2a7d4e7d61dcd49e6cf54e16dcfb421322ecf",
+    "assets/index-BZPWVp3k.js": "2c56b4a2ff1b28d9dddfcd104e52e4d295c702ff9a3370d2204959550e3cc317",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9"
+  }
+}
