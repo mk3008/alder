@@ -1,0 +1,13 @@
+{
+  "source": "dc3043a2d197ba0578df97aa7bc713b98dcc612a",
+  "sourceTree": "71d3c14599dda4c17c76c584e9f944bd063f52ad",
+  "urlPath": "/preview/pr-243/dc3043a2d197ba0578df97aa7bc713b98dcc612a-choice/",
+  "files": {
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "index.html": "aae636b70aa37a5136c969995f22a389f3f4a2198e10ed125dd9af7b6d9fe22f",
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9",
+    "assets/index-BOspvRE_.js": "061eb199710b785bb96ee2154351ea85e869ea5b2d45f176a25dc903080f3a5a"
+  },
+  "fixture": "架空の旧版文書と旧編集記録。初回のみ専用Preview DBへ設定し、既存の内容は置き換えない。appの5配布ファイルは通常の固定Previewと同一。"
+}
