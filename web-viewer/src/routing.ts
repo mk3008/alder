@@ -62,34 +62,42 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input=false, labels:readonly RouteNode[]=[]): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
   // width; a long label next to a vertical leg must not sit over the next card.
   const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
   let best=mid,bestScore=[Infinity,Infinity,Infinity,Infinity];
-  let preferred=false;
+  let priority=2;
   const consider=(p:Point)=>{
     let collisions=p[0]<minimum[0]+width/2||p[1]<minimum[1]+height/2?1:0;
     for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
     const labelCollisions=labels.filter(r=>p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height).length;
-    const score=[collisions,labelCollisions,preferred?0:1,distance(p,preferred?points[0]:mid)];
+    const score=[collisions,labelCollisions,priority,distance(p,priority<2?points[0]:mid)];
     if(better(score,bestScore)){best=p;bestScore=score;}
   };
   // Input captions belong to the Object departure, beside its first straight
   // vertical leg. Try both sides and staggered heights before midpoint fallback.
   if(input){
-    preferred=true;
+    priority=0;
     const a=points[0],b=points[1];
     if(a[0]===b[0]&&a[1]!==b[1]){
       const sign=Math.sign(b[1]-a[1]),near=a[1]+sign*(height/2+5);
       for(const y of [near,near+sign*(height+8),(a[1]+b[1])/2,b[1]-sign*(height/2+4)]){
-        if(sign*(y-a[1])<height/2+4||sign*(b[1]-y)<0)continue;
+        if(sign*(y-a[1])<height/2+4)continue;
         for(const side of [1,-1])consider([a[0]+side*(width/2+8),y]);
       }
     }
-    preferred=false;
+    // A side departure still needs an Object-side caption, not a midpoint
+    // caption near the receiving Activity. Full card bounds avoid its body.
+    if(a[1]===b[1]){
+      priority=1;
+      for(const y of [source.y+source.height+height/2+5,source.y-height/2-5]){
+        for(const x of [source.x+source.width/2,a[0]+width/2+8,a[0]-width/2-8])consider([x,y]);
+      }
+    }
+    priority=2;
   }
   for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
     const anchor=pointAlong(points,lengths,total,fraction);
@@ -225,6 +233,27 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!needsRoute())break vertical;}
     if(needsRoute())other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!needsRoute())break other;}
   }
+  if(forward&&kind==='input'&&needsRoute()){
+    // Stacked inputs and exception neighbours can block every left arrival.
+    // Enter the target from above through an endpoint-relative clear corridor;
+    // a short departure stub can turn inside the existing 28-unit card gap.
+    // At most two source anchors x (4 + obstacle count) arrivals x two stubs.
+    const inset=Math.min(target.width*.08,CLEARANCE+RADIUS);
+    const arrivals=[port(target,'top')[0],target.x+target.width*.78,target.x+inset,target.x+target.width-inset,
+      ...obstacles.map(n=>n.x+n.width+CLEARANCE+RADIUS+spread)];
+    for(const x of new Set(arrivals)){
+      if(x<target.x+inset||x>target.x+target.width-inset)continue;
+      const b:Point=[x,target.y];
+      for(const sx of [port(source,'bottom')[0],source.x+Math.min(source.width*.08,CLEARANCE+RADIUS)]){
+        if(sx>x)continue;
+        const a:Point=[sx,source.y+source.height];
+        for(const y of [a[1]+reach,a[1]+RADIUS/2]){
+          if(y>=b[1])continue;
+          evaluate([a,[a[0],y],[b[0],y],b],['bottom','top'],false);
+        }
+      }
+    }
+  }
   // Coincident/covered ports can invalidate every direction. A short exterior
   // loop always exists geometrically; collision reporting remains honest.
   if(!chosen){
@@ -232,6 +261,6 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input',kind==='input'?labels:[]);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input',kind==='input'?labels:[],source);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

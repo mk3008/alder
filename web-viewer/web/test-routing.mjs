@@ -163,3 +163,44 @@ assert.equal(monotone(routeEdge(blockedBottom)),false);
 const sideForward=routeEdge({...blockedBottom,kind:'input'});
 assert.equal(monotone(sideForward),true,'try a forward side departure before accepting a clear upstream route');
 assert.equal(sideForward.collisions,0);assert.equal(sideForward.points[0][0],360);
+
+// The actual standard-sample detail reported by the reviewer. Intervening
+// Object/exception cards must not force its two forward Inputs into leftward
+// arrows or put their captions halfway down an exterior right-hand lane.
+const {readFileSync}=await import('node:fs');
+const {parseDesign}=await import('../src/graph.ts');
+const {activityDesign}=await import('../src/activities.ts');
+const {initialPositions}=await import('../src/layout.ts');
+const {RouteCache}=await import('../src/route-cache.ts');
+const realDesign=activityDesign(parseDesign(readFileSync('../business-design/alder/README.md','utf8')),'業務設計');
+const realPositions=initialPositions(realDesign.graph,realDesign.activityOrder);
+const realNodes=realDesign.graph.nodes.map(n=>rect(n.id,...realPositions[n.id]));
+assert.deepEqual(JSON.parse(JSON.stringify(realPositions)),{
+ 'Alder: 業務ナレッジ':[40,40],'Alder: 業務相関ナレッジ':[40,136],
+ '実装':[40,232],'検査項目の設計':[40,328],'業務設計':[168,424],
+ '依頼者':[296,520],'判断記録':[296,616],'業務設計書':[296,712]
+},'reported initial coordinates are unchanged; only routing/captions change');
+const realSnapshot=JSON.stringify({realPositions,graph:realDesign.graph});
+const realRoutes=new RouteCache().update({},realDesign,realNodes,realDesign.graph.relations);
+assert.equal(realNodes.length,8,'use the actual reported graph including exception neighbours');
+const target=realNodes.find(n=>n.id==='業務設計');
+let forwardInputs=0,horizontalInputs=0;
+for(const [i,r] of realDesign.graph.relations.entries()){
+ const route=realRoutes[i],source=realNodes.find(n=>n.id===r.from);
+ assert.equal(route.collisions,0);endpointNormals(route,source,realNodes.find(n=>n.id===r.to));
+ if(r.kind==='input'){
+  assert.ok(Math.abs(route.label[1]-(source.y+source.height))<=28,'every real Input caption stays beside its source Object, including side departures');
+  assert.ok(route.label[0]+r.label.length*6>=source.x&&route.label[0]-r.label.length*6<=source.x+source.width);
+  if(source.y<target.y){
+   forwardInputs++;assert.equal(monotone(route),true);
+   assert.equal(route.points[0][1],source.y+source.height,'depart from Object bottom');
+   assert.equal(route.points.at(-1)[1],target.y,'enter Activity from above');
+   assert.ok(route.bounds.right<=target.x+target.width,'no external right detour');
+   assert.ok(route.label[0]-Math.max(30,r.label.length*12)/2>route.points[0][0],'caption beside initial vertical departure');
+  }else horizontalInputs++;
+ }
+ if(r.kind.endsWith('exception'))assert.deepEqual(route,routeEdge({from:r.from,to:r.to,nodes:realNodes,index:i,labelWidth:Math.max(30,r.label.length*12),labelHeight:18}),'exception geometry and label stay on the unchanged routing branch');
+}
+assert.equal(forwardInputs,2);assert.equal(horizontalInputs,2);
+assert.equal(JSON.stringify({realPositions,graph:realDesign.graph}),realSnapshot);
+console.log('Real standard-sample Activity detail: 8 cards, 2 down/right Inputs, 2 source-side return captions, unchanged exception branch and coordinates.');

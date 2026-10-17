@@ -51,5 +51,65 @@ export async function verifyWiring(browser){
    assert.deepEqual(errors,[]);results.push({width,overview:true,detail:true,lightDark:true,sourceCaption:true,captionCollision:false,layerOrder:true,coordinatesUnchanged:true});
   }finally{await context.close();}
  }
+ results.push({realSample:await verifyRealWiring(browser)});
+ return results;
+}
+
+// Acceptance uses the shipped standard sample, not just an easy synthetic star.
+export async function verifyRealWiring(browser){
+ const results=[];
+ for(const width of [1280,393,320]){
+  const context=await browser.newContext({viewport:{width,height:900},hasTouch:width!==1280}),page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(5000);
+  const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
+  const saved=()=>page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));
+  try{
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
+   if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
+   const overview=await positions();await page.locator('.node[data-activity="業務設計"] .activity-open').press('Enter');
+   assert.equal(await page.locator('.node').count(),8);const detail=await positions();
+   if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+   const inspect=()=>page.evaluate(()=>{
+    const card=id=>{const n=[...document.querySelectorAll('.node')].find(n=>n.dataset.node===id);return {x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:260,height:68};};
+    const target=card('業務設計'),inputs=[];
+    for(const label of document.querySelectorAll('.edge-label')){
+     const r=label.dataset.relation,path=document.querySelector(`.edge[data-relation="${r}"]`),title=path.querySelector('title').textContent;
+     const sourceID=['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','依頼者','業務設計書'].find(id=>title.startsWith(id+' → 業務設計: '));if(!sourceID)continue;
+     const length=path.getTotalLength(),points=Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),glyph=label.getBBox();
+     inputs.push({sourceID,source:card(sourceID),points,label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:glyph.x,y:glyph.y,width:glyph.width,height:glyph.height},collisions:+path.dataset.collisions});
+    }
+    return {target,inputs,cards:[...document.querySelectorAll('.node')].map(n=>card(n.dataset.node)),exceptions:[...document.querySelectorAll('.edge.exception')].map(n=>[n.dataset.relation,n.getAttribute('d')])};
+   });
+   const initial=await inspect();assert.equal(initial.inputs.length,4);assert.equal(initial.exceptions.length,2);
+   for(const theme of ['light','dark']){
+    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+    const measured=await inspect();
+    for(const r of measured.inputs){
+     assert.equal(r.collisions,0);assert.ok(r.label[1]>=r.source.y+r.source.height&&r.label[1]<=r.source.y+r.source.height+28,'all four captions follow their Object, including horizontal return departures');
+     for(const n of measured.cards)assert.ok(r.glyph.x+r.glyph.width<=n.x||n.x+n.width<=r.glyph.x||r.glyph.y+r.glyph.height<=n.y||n.y+n.height<=r.glyph.y,'native Input glyph never covers a card');
+     if(r.source.y<measured.target.y){
+      assert.equal(r.points[0][1],r.source.y+r.source.height);
+      assert.equal(r.points.at(-1)[1],measured.target.y,'normal Input arrives at Activity top, not its right side');
+      assert.ok(r.points.slice(1).every((p,i)=>p[0]>=r.points[i][0]-.01&&p[1]>=r.points[i][1]-.01),'real sample Input reads down/right');
+      assert.ok(Math.max(...r.points.map(p=>p[0]))<=measured.target.x+measured.target.width,'no exterior right detour');
+     }
+    }
+    assert.deepEqual(measured.exceptions,initial.exceptions);
+    await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="Alder: 業務ナレッジ"] .node-navigate').click();await page.locator('#node-list-close').click();
+    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+    // Fit the reported detail into a mobile review image using product zoom.
+    for(let i=0;i<3;i++)await page.locator('#out').click();
+    await page.locator('#viewport').evaluate(view=>{
+     const first=document.querySelector('.node[data-node="Alder: 業務ナレッジ"]').getBoundingClientRect(),v=view.getBoundingClientRect();
+     view.scrollLeft+=first.left-v.left-24;view.scrollTop+=first.top-v.top-24;
+    });
+    await page.screenshot({path:`web/evidence/wiring/real-${width}-${theme}.png`});
+    for(let i=0;i<3;i++)await page.locator('#in').click();
+   }
+   await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),detail,'existing detail positions survive reload');
+   await page.locator('.tab').first().locator('button').first().click();assert.deepEqual(await positions(),overview,'other view positions remain exact');
+   assert.deepEqual(errors,[]);results.push({width,nodes:8,forwardInputs:2,sideDepartureCaptions:2,exceptions:2,lightDark:true,nativeGlyphCardCollisions:0,savedPositionsExact:true});
+  }finally{await context.close();}
+ }
  return results;
 }

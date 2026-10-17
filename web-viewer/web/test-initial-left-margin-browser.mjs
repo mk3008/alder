@@ -85,7 +85,7 @@ export function assertInitialMarginGeometry(measured,{zoom,inset=40,width,report
  }
  const minimum=items=>Math.min(...items.map(item=>item.left));
  const result={zoom,inset,nodeLeft:minimum(measured.nodes),edgeLeft:minimum(measured.edges),labelGlyphLeft:minimum(measured.labels),nativeLabelWorldLeft:Math.min(...measured.labels.map(item=>item.world[0])),glyphBoxesLeftOfViewport:measured.labels.filter(item=>item.left<0).map(item=>item.id),metric:'Native getBBox/getBoundingClientRect; no stroke/marker expansion, clipping or overlap claim'};
- near(result.nodeLeft,(40+inset)*zoom,'sample leftmost node');near(result.edgeLeft,(8+inset)*zoom,'sample exact SVG path minimum');
+ near(result.nodeLeft,(40+inset)*zoom,'sample leftmost node');near(result.edgeLeft,(97.2+inset)*zoom,'sample exact SVG path minimum after forward Input correction');
  if(inset===40)assert.ok(result.edgeLeft>0);
  return result;
 }

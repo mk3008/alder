@@ -42,10 +42,12 @@ function geometry(e,inset=40,zoom=1){
  // Node hash and camera extents remain the reviewed 090622ab contract.
  // Execution #244 intentionally changes wire anchors and Input captions; the
  // old route digest was 85d0e22a3745672f890b5f576e7f63478ad9346fdec3dfeaa3f1b5c22f3e2e1e.
+ // First candidate digest: 9ad8406d19186647c5bdda71296572297e146b99cc50ed5b859821fbb0a83e90.
+ // The corrected snapshot includes source captions for side departures.
  // Pin the new snapshot only after the directional/caption and native tests;
  // inset/zoom/reload must still preserve these exact SVG coordinates.
  assert.equal(hash(positions(e)),'2a781f2fef2b245f51b054cc42410cf38e4967ecee0b1ac617918b52642c92f4','all node coordinates retain the reviewed layout');
- assert.equal(hash(routes(e)),'9ad8406d19186647c5bdda71296572297e146b99cc50ed5b859821fbb0a83e90','all SVG path/label coordinates retain the reviewed routes');
+ assert.equal(hash(routes(e)),'83640cad042bdc4baeaa886ac0f57c9ab8e5254b25c69e608cc59aaf899861b8','all SVG path/label coordinates retain the reviewed routes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
  assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 1916 2564');
@@ -90,6 +92,8 @@ try{
  for(const zoom of [.25,.36,1,2.5])for(const inset of [0,40]){
   const tab={...structuredClone(legacy),zoom};if(inset)tab.viewInset=[inset,0];
   const e=await boot({width:320,height:568,seed:state(tab)});geometry(e,inset,zoom);
+  // The historical world point x=8 remains inside the padded camera, even
+  // though corrected Input routes no longer use that exterior left lane.
   const nodeLeft=(40+inset)*zoom,lineLeft=(8+inset)*zoom;
   assert.ok(nodeLeft>lineLeft);assert.ok((1+inset)*zoom>0,'the leftmost estimated label box stays inside the canvas');e.w.close();
  }
