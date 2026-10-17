@@ -1,0 +1,952 @@
+schema_name=stage3_2223f6348c3b46c29b928e814f49495c
+runner_started_utc=2026-09-05T11:23:24.4233337Z
+CREATE SCHEMA
+SET
+  observation   | database_name | database_user | backend_pid |               schema_name               
+----------------+---------------+---------------+-------------+-----------------------------------------
+ runner_session | dogfood       | dogfood       |        1707 | stage3_2223f6348c3b46c29b928e814f49495c
+(1 row)
+
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE TABLE
+INSERT 0 2
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TABLE
+INSERT 0 1
+CREATE FUNCTION
+SET
+Output format is unaligned.
+Null display is "NULL".
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-01|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+observation|request_count
+S1-01 setup|0
+(1 row)
+accepted_request_id
+req-stage1-01
+(1 row)
+call_outcome
+S1-01 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-01 row|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+observation|request_count
+S1-01 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-02|reporter|req-stage1-02|eq-stage1-unknown|reporter-stage1|2030-01-15T10:31:00Z|556e6b6e6f776e2061737365742070726f6265
+(1 row)
+observation|request_count
+S1-02 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-02 rejected
+(1 row)
+observation|unknown_equipment_request_count
+S1-02 unknown_equipment|0
+(1 row)
+observation|attempted_id_count
+S1-02 attempted_id|0
+(1 row)
+observation|request_count
+S1-02 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-03|reporter|req-stage1-03|eq-stage1-known|reporter-stage1|2030-01-15T10:32:00Z|
+(1 row)
+observation|request_count
+S1-03 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-03 rejected
+(1 row)
+observation|attempted_id_count
+S1-03 attempted_id|0
+(1 row)
+observation|request_count
+S1-03 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-05|reporter|req-stage1-05|eq-stage1-known|reporter-stage1|2030-01-15T10:35:00Z|202020
+(1 row)
+observation|request_count
+S1-05 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-05 rejected
+(1 row)
+observation|attempted_id_count
+S1-05 attempted_id|0
+(1 row)
+observation|request_count
+S1-05 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-06|reporter|req-stage1-06|eq-stage1-known|reporter-stage1|2030-01-15T10:36:00Z|09
+(1 row)
+observation|request_count
+S1-06 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-06 rejected
+(1 row)
+observation|attempted_id_count
+S1-06 attempted_id|0
+(1 row)
+observation|request_count
+S1-06 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-07|reporter|req-stage1-07|eq-stage1-known|reporter-stage1|2030-01-15T10:37:00Z|0a
+(1 row)
+observation|request_count
+S1-07 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-07 rejected
+(1 row)
+observation|attempted_id_count
+S1-07 attempted_id|0
+(1 row)
+observation|request_count
+S1-07 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-08|reporter|req-stage1-08|eq-stage1-known|reporter-stage1|2030-01-15T10:38:00Z|e38080
+(1 row)
+observation|request_count
+S1-08 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-08 rejected
+(1 row)
+observation|attempted_id_count
+S1-08 attempted_id|0
+(1 row)
+observation|request_count
+S1-08 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-09|reporter|req-stage1-09|eq-stage1-known|reporter-stage1|2030-01-15T10:39:00Z|20090ae38080
+(1 row)
+observation|request_count
+S1-09 setup|0
+(1 row)
+stage1_rejected
+
+(1 row)
+call_outcome
+S1-09 rejected
+(1 row)
+observation|attempted_id_count
+S1-09 attempted_id|0
+(1 row)
+observation|request_count
+S1-09 total|0
+(1 row)
+DO
+stage1_setup
+
+(1 row)
+observation|request_count
+S1-04 setup|0
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-04 first|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+first_accepted_request_id
+req-stage1-01
+(1 row)
+call_outcome
+S1-04 first accepted
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-04|reporter|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+(1 row)
+accepted_request_id
+req-stage1-04
+(1 row)
+call_outcome
+S1-04 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-04 rows|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+S1-04 rows|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+(2 rows)
+observation|request_count
+S1-04 total|2
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-10|reporter|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|42656172696e672074656d70657261747572652061626f7665206e6f726d616c
+(1 row)
+observation|request_count
+S1-10 setup|0
+(1 row)
+accepted_request_id
+req-stage1-10
+(1 row)
+call_outcome
+S1-10 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-10 row|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|Bearing temperature above normal|open|NULL|NULL
+(1 row)
+observation|request_count
+S1-10 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+stage1_setup
+
+(1 row)
+case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+S1-11|reporter|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|202042656172696e672074656d70657261747572652061626f7665206e6f726d616c2020
+(1 row)
+observation|request_count
+S1-11 setup|0
+(1 row)
+accepted_request_id
+req-stage1-11
+(1 row)
+call_outcome
+S1-11 accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S1-11 row|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|  Bearing temperature above normal  |open|NULL|NULL
+(1 row)
+observation|request_count
+S1-11 total|1
+(1 row)
+stage1_accepted
+
+(1 row)
+result|database_name|schema_name
+STAGE1_ACCEPTANCE_V3_PASS|dogfood|stage3_2223f6348c3b46c29b928e814f49495c
+(1 row)
+SET
+Output format is unaligned.
+Null display is "NULL".
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+observation|actor_evidence|role_name
+authorization_fixture|stage2-coordinator-fixture|maintenance_coordinator
+authorization_fixture|stage2-technician-fixture|technician
+(2 rows)
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-01 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.686144+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+outcome
+S2-01 report accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-01 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.686144+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-01 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-07 11:23:24.691496+00
+(1 row)
+schedule_maintenance
+req-stage2-base
+(1 row)
+observation|db_before|db_after
+S2-01 accepted clock|2026-09-05 11:23:24.691496+00|2026-09-05 11:23:24.695021+00
+(1 row)
+s201_future_gate
+1
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-01 row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.686144+00|Hydraulic pressure warning observed|scheduled|2026-09-07 11:23:24.691496+00|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-02 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.703992+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+outcome
+S2-02 report accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-02 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.703992+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-02 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-07 11:23:24.709318+00
+(1 row)
+schedule_maintenance
+req-stage2-base
+(1 row)
+s202_schedule_gate
+1
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-02 pre-completion row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.703992+00|Hydraulic pressure warning observed|scheduled|2026-09-07 11:23:24.709318+00|NULL
+(1 row)
+observation|actor|authorization|request_id
+S2-02 complete input|stage2-technician-fixture|technician|req-stage2-base
+(1 row)
+complete_maintenance
+req-stage2-base
+(1 row)
+observation|db_before|db_after
+S2-02 accepted clock|2026-09-05 11:23:24.714317+00|2026-09-05 11:23:24.716772+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-02 row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.703992+00|Hydraulic pressure warning observed|completed|2026-09-07 11:23:24.709318+00|2026-09-05 11:23:24.715591+00
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+s2_clock
+
+(1 row)
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-03 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.725254+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+outcome
+S2-03 report accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-03 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.725254+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+BEGIN
+SELECT 1
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-03 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.725254+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+observation|actor|authorization|request_id
+S2-03 complete input|stage2-technician-fixture|technician|req-stage2-base
+(1 row)
+s2_reject_complete
+
+(1 row)
+observation|db_before|db_after
+S2-03 rejected clock|2026-09-05 11:23:24.733529+00|2026-09-05 11:23:24.735609+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-03 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.725254+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-04 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.745917+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+outcome
+S2-04 report accepted
+(1 row)
+s2_state
+
+(1 row)
+schedule_maintenance
+req-stage2-base
+(1 row)
+s204_schedule_gate
+1
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-04 pre-completion row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.745917+00|Hydraulic pressure warning observed|scheduled|2026-09-07 11:23:24.750209+00|NULL
+(1 row)
+observation|actor|authorization|request_id
+S2-04 complete input|stage2-technician-fixture|technician|req-stage2-base
+(1 row)
+complete_maintenance
+req-stage2-base
+(1 row)
+s2_clock
+
+(1 row)
+BEGIN
+SELECT 1
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-04 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.745917+00|Hydraulic pressure warning observed|completed|2026-09-07 11:23:24.750209+00|2026-09-05 11:23:24.756105+00
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-04 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-08 11:23:24.76163+00
+(1 row)
+s2_reject_schedule
+
+(1 row)
+observation|db_before|db_after
+S2-04 rejected clock|2026-09-05 11:23:24.76163+00|2026-09-05 11:23:24.764194+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-04 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.745917+00|Hydraulic pressure warning observed|completed|2026-09-07 11:23:24.750209+00|2026-09-05 11:23:24.756105+00
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-05 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.773486+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+s2_state
+
+(1 row)
+BEGIN
+SELECT 1
+observation|actor|authorization|request_id|scheduled_for
+S2-05 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-03 11:23:24.778871+00
+(1 row)
+s2_reject_schedule
+
+(1 row)
+observation|db_before|db_after
+S2-05 rejected clock|2026-09-05 11:23:24.778871+00|2026-09-05 11:23:24.781347+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-05 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.773486+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-06 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.791261+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+s2_state
+
+(1 row)
+BEGIN
+SELECT 1
+observation|actor|authorization|request_id|scheduled_for
+S2-06 schedule input|reporter-stage1|no stage2 authorization mapping|req-stage2-base|2026-09-07 11:23:24.796745+00
+(1 row)
+s2_reject_schedule
+
+(1 row)
+observation|db_before|db_after
+S2-06 rejected clock|2026-09-05 11:23:24.796745+00|2026-09-05 11:23:24.799103+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-06 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.791261+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-07 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.80883+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+s2_state
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-07 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-07 11:23:24.81217+00
+(1 row)
+schedule_maintenance
+req-stage2-base
+(1 row)
+s207_schedule_gate
+1
+(1 row)
+BEGIN
+SELECT 1
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-07 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.80883+00|Hydraulic pressure warning observed|scheduled|2026-09-07 11:23:24.81217+00|NULL
+(1 row)
+observation|actor|authorization|request_id
+S2-07 complete input|reporter-stage1|no stage2 authorization mapping|req-stage2-base
+(1 row)
+s2_reject_complete
+
+(1 row)
+observation|db_before|db_after
+S2-07 rejected clock|2026-09-05 11:23:24.818828+00|2026-09-05 11:23:24.820655+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-07 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.80883+00|Hydraulic pressure warning observed|scheduled|2026-09-07 11:23:24.81217+00|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+s2_setup
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-08 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-missing|2026-09-07 11:23:24.830352+00
+(1 row)
+s2_reject_schedule
+
+(1 row)
+observation|db_before|db_after
+S2-08 rejected clock|2026-09-05 11:23:24.830352+00|2026-09-05 11:23:24.832952+00
+(1 row)
+observation|total|attempted_id
+S2-08 counts|0|0
+(1 row)
+DO
+s2_setup
+
+(1 row)
+observation|actor|authorization|request_id
+S2-09 complete input|stage2-technician-fixture|technician|req-stage2-missing
+(1 row)
+s2_reject_complete
+
+(1 row)
+observation|db_before|db_after
+S2-09 rejected clock|2026-09-05 11:23:24.840165+00|2026-09-05 11:23:24.842125+00
+(1 row)
+observation|total|attempted_id
+S2-09 counts|0|0
+(1 row)
+DO
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-10 report input|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.849485+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+outcome
+S2-10 report accepted
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-10 open row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.849485+00|Hydraulic pressure warning observed|open|NULL|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-10 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-early|2026-09-06 11:23:24.85468+00
+(1 row)
+schedule_maintenance
+req-stage2-early
+(1 row)
+s210_schedule_gate
+1
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-10 scheduled row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.849485+00|Hydraulic pressure warning observed|scheduled|2026-09-06 11:23:24.85468+00|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-10 pre-completion row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.849485+00|Hydraulic pressure warning observed|scheduled|2026-09-06 11:23:24.85468+00|NULL
+(1 row)
+s210_before_schedule_gate
+1
+(1 row)
+observation|actor|authorization|request_id
+S2-10 complete input|stage2-technician-fixture|technician|req-stage2-early
+(1 row)
+complete_maintenance
+req-stage2-early
+(1 row)
+observation|db_before|db_after
+S2-10 accepted clock|2026-09-05 11:23:24.861346+00|2026-09-05 11:23:24.864575+00
+(1 row)
+s210_after_schedule_gate
+1
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-10 row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-05 11:23:24.849485+00|Hydraulic pressure warning observed|completed|2026-09-06 11:23:24.85468+00|2026-09-05 11:23:24.863347+00
+(1 row)
+request_count
+1
+(1 row)
+s2_state
+
+(1 row)
+s2_clock
+
+(1 row)
+DO
+s2_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S2-11 report input|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-06 11:23:24.876132+00|Hydraulic pressure warning observed
+(1 row)
+s2_report
+
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S2-11 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-11|2026-09-08 11:23:24.876132+00
+(1 row)
+schedule_maintenance
+req-stage2-11
+(1 row)
+s211_schedule_gate
+1
+(1 row)
+BEGIN
+SELECT 1
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-11 pre|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-06 11:23:24.876132+00|Hydraulic pressure warning observed|scheduled|2026-09-08 11:23:24.876132+00|NULL
+(1 row)
+s211_before_reported_gate
+1
+(1 row)
+observation|actor|authorization|request_id
+S2-11 complete input|stage2-technician-fixture|technician|req-stage2-11
+(1 row)
+s2_reject_complete
+
+(1 row)
+observation|db_before|db_after
+S2-11 rejected clock|2026-09-05 11:23:24.887063+00|2026-09-05 11:23:24.88947+00
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+S2-11 after|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-06 11:23:24.876132+00|Hydraulic pressure warning observed|scheduled|2026-09-08 11:23:24.876132+00|NULL
+(1 row)
+request_count
+1
+(1 row)
+s2_same
+
+(1 row)
+COMMIT
+result|database_name|schema_name
+STAGE2_CUMULATIVE_ACCEPTANCE_V4_PASS|dogfood|stage3_2223f6348c3b46c29b928e814f49495c
+(1 row)
+SET
+Output format is unaligned.
+Null display is "NULL".
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+observation|actor_evidence|role_name
+stage3_authorization_fixture|stage3-safety-inspector-fixture|safety_inspector
+(1 row)
+s3_setup
+
+(1 row)
+observation|actor|authorization|equipment_id
+S3-01 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+(1 row)
+record_safety_closure
+eq-stage3-known
+(1 row)
+outcome
+S3-01 accepted
+(1 row)
+equipment_id|status
+eq-stage3-known|safety_closed
+(1 row)
+equipment_count
+1
+(1 row)
+request_count
+0
+(1 row)
+DO
+s3_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S3-02 report input|req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-05 11:23:24.91602+00|Stage 3 open request
+(1 row)
+report_equipment_fault
+req-stage3-open
+(1 row)
+outcome
+S3-02 report accepted
+(1 row)
+s302_report_gate
+1
+(1 row)
+observation|actor|authorization|equipment_id
+S3-02 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+(1 row)
+record_safety_closure
+eq-stage3-known
+(1 row)
+outcome
+S3-02 closure accepted
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S3-02 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage3-open|2026-09-07 11:23:24.922895+00
+(1 row)
+s3_reject_schedule
+
+(1 row)
+outcome
+S3-02 rejected
+(1 row)
+request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-05 11:23:24.91602+00|Stage 3 open request|open|NULL|NULL
+(1 row)
+equipment_id|status
+eq-stage3-known|safety_closed
+(1 row)
+request_count
+1
+(1 row)
+s302_gate
+1
+(1 row)
+s3_setup
+
+(1 row)
+observation|request_id|equipment_id|reported_by|reported_at|description
+S3-03 report input|req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-05 11:23:24.935042+00|Stage 3 completed request
+(1 row)
+report_equipment_fault
+req-stage3-completed
+(1 row)
+outcome
+S3-03 report accepted
+(1 row)
+observation|actor|authorization|request_id|scheduled_for
+S3-03 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage3-completed|2026-09-07 11:23:24.938396+00
+(1 row)
+schedule_maintenance
+req-stage3-completed
+(1 row)
+s303_schedule_future_gate
+1
+(1 row)
+observation|actor|authorization|request_id
+S3-03 complete input|stage2-technician-fixture|technician|req-stage3-completed
+(1 row)
+complete_maintenance
+req-stage3-completed
+(1 row)
+observation|db_before|db_after
+S3-03 completion clock|2026-09-05 11:23:24.942828+00|2026-09-05 11:23:24.945318+00
+(1 row)
+request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-05 11:23:24.935042+00|Stage 3 completed request|completed|2026-09-07 11:23:24.938396+00|2026-09-05 11:23:24.944087+00
+(1 row)
+s303_completion_gate
+1
+(1 row)
+observation|actor|authorization|equipment_id
+S3-03 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+(1 row)
+record_safety_closure
+eq-stage3-known
+(1 row)
+outcome
+S3-03 closure accepted
+(1 row)
+request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-05 11:23:24.935042+00|Stage 3 completed request|completed|2026-09-07 11:23:24.938396+00|2026-09-05 11:23:24.944087+00
+(1 row)
+equipment_id|status
+eq-stage3-known|safety_closed
+(1 row)
+request_count
+1
+(1 row)
+s303_gate
+1
+(1 row)
+s3_setup
+
+(1 row)
+observation|actor|authorization|equipment_id
+S3-authority-negative closure input|stage2-coordinator-fixture|not safety_inspector|eq-stage3-known
+(1 row)
+s3_reject_closure
+
+(1 row)
+outcome
+S3-authority-negative rejected
+(1 row)
+equipment_id|status
+eq-stage3-known|available
+(1 row)
+request_count
+0
+(1 row)
+DO
+result|database_name|schema_name
+STAGE3_CUMULATIVE_ACCEPTANCE_PASS|dogfood|stage3_2223f6348c3b46c29b928e814f49495c
+(1 row)
+NOTICE:  drop cascades to 22 other objects
+DETAIL:  drop cascades to table stage3_2223f6348c3b46c29b928e814f49495c.equipment
+drop cascades to table stage3_2223f6348c3b46c29b928e814f49495c.maintenance_request
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.report_equipment_fault(text,text,text,timestamp with time zone,text)
+drop cascades to table stage3_2223f6348c3b46c29b928e814f49495c.stage2_authorization_fixture
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.schedule_maintenance(text,text,timestamp with time zone)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.complete_maintenance(text,text)
+drop cascades to table stage3_2223f6348c3b46c29b928e814f49495c.stage3_authorization_fixture
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.record_safety_closure(text,text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.stage1_input(text,text,text,text,timestamp with time zone,text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.stage1_rejected(text,text,text,text,timestamp with time zone,text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.stage1_setup(text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.stage1_accepted(text,text,timestamp with time zone,text,bigint)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_setup(text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_report(text,timestamp with time zone)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_reject_schedule(text,text,timestamp with time zone)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_reject_complete(text,text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_state(text,text,text,timestamp with time zone,timestamp with time zone,boolean)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_same(text,text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s2_clock(text,text,timestamp with time zone,timestamp with time zone)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s3_setup(text)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s3_reject_schedule(text,text,timestamp with time zone)
+drop cascades to function stage3_2223f6348c3b46c29b928e814f49495c.s3_reject_closure(text,text)
+DROP SCHEMA
+       observation        | schema_count 
+--------------------------+--------------
+ cleanup_schema_remaining |            0
+(1 row)
+

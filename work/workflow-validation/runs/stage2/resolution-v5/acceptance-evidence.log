@@ -1,0 +1,4 @@
+schema_name=stage2_fb78f26f5271479591568bea60d376c6
+runner_started_utc=2026-09-05T08:58:26.8886326Z
+psql: error: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "dogfood"
+psql: error: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "dogfood"

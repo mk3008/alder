@@ -1,0 +1,2404 @@
+2026-09-10T09:49:52.8034856Z head=fd61d9c30761c1703e90af391c984d4e10e693a4
+2026-09-10T09:49:52.8035505Z schema=alder_7ab3d9e55d334d50a28dea2d8b285e11
+2026-09-10T09:49:52.8036275Z snapshot=work/workflow-validation/runs/stage4/implementation-v1
+2026-09-10T09:49:52.8037898Z 7183953f7455cb7f9d2d4249bcf80639551d459aa59631e520509ada595a0bc7  work/workflow-validation/frozen/ddl.sql
+2026-09-10T09:49:52.8039740Z d85ba068c03f70b2b521182265078378653449b4c48ab687fa73c051795727a3  work/workflow-validation/runs/stage4/implementation-v1/report_equipment_fault.sql
+2026-09-10T09:49:52.8042029Z e9c74f2f19b8b9a46275ba5b581402740604ee4c889116759df75be05761b397  work/workflow-validation/runs/stage4/implementation-v1/maintenance_lifecycle.sql
+2026-09-10T09:49:52.8044259Z 015073e1d964f65bdcbc2328d8339bc81fd7eb5fd4e98492a7a36c4042dcb980  work/workflow-validation/runs/stage4/implementation-v1/equipment_safety.sql
+2026-09-10T09:49:52.8046611Z 394e1c63a395f3d2114a0f966e5fca8777d5c0eedf1a331508a17af62510e1c6  work/workflow-validation/runs/stage4/implementation-v1/stage1-acceptance.sql
+2026-09-10T09:49:52.8048829Z eeed6fd510683be0061ed335384dcec61dd845ab1a7b5c50e600f204d6d64c5c  work/workflow-validation/runs/stage4/implementation-v1/stage2-acceptance.sql
+2026-09-10T09:49:52.8050760Z 4b7ae4bdf1d113c32e5a5df468aa9a3a2973e73de5a376528da8209e256fec05  work/workflow-validation/runs/stage4/implementation-v1/stage3-acceptance.sql
+2026-09-10T09:49:52.8052615Z aa4730760629055cd9784b3badee2283a012f9289f5cb0199ff6b8251976079e  work/workflow-validation/runs/stage4/implementation-v1/stage4-acceptance.sql
+2026-09-10T09:49:52.8054245Z 7f3d4045deaad52d0570acabb4ab8ec96041eaf4130c386e053d29fa7f6c6391  work/workflow-validation/run-acceptance.py
+2026-09-10T09:49:52.8055687Z 8f457f11ff8aeb462c518af8d07e72e4126695312351a93b3419a824da723b38  docs/workflow-validation/pilot/DECISIONS.md
+2026-09-10T09:49:52.8057522Z 495a33d0dfd48fc5649014a41f18e338af614368957217753b6e1558b506dfc9  work/workflow-validation/frozen/stage1-packet.md
+2026-09-10T09:49:52.8058963Z caedb7a2f76966d30a9fc5e1ba180b601ca124b3c63142dac8468d1fc92e8241  work/workflow-validation/frozen/stage1-acceptance-v3.md
+2026-09-10T09:49:52.8060452Z 4dc03d2565ababd6c46b4d54aac3aaaa719b07af25715307598f492dd8d2f687  work/workflow-validation/frozen/stage2-packet.md
+2026-09-10T09:49:52.8062032Z 10feafad2e7221ee38f6e503f77a6275aca1fcae61cf960043f88c7095dd9671  work/workflow-validation/frozen/stage2-acceptance-v2.md
+2026-09-10T09:49:52.8063564Z 45a12e9312d80819363929d3603a5e5f0fa2c77dd67523e9a091d64c44f198a1  work/workflow-validation/frozen/stage2-acceptance-v3.md
+2026-09-10T09:49:52.8065109Z 247a868c3ccb6e772450e4e79eb8e9b3c7de0c74cfd5eaa0d8819e01e8419dbb  work/workflow-validation/frozen/stage2-acceptance-v4.md
+2026-09-10T09:49:52.8066654Z 57d42bc611cfefbed2d82127a8402060e58e8b4e97c55b62137a51d35e4189ae  work/workflow-validation/frozen/stage3-packet.md
+2026-09-10T09:49:52.8068377Z 23732a28a3469fa9bca9f2d3649ede53a4e700a0424a72253db7c6b54b9be643  work/workflow-validation/frozen/stage3-acceptance.md
+2026-09-10T09:49:52.8069949Z 12244628bbce79a2df2118fdcf2de904ba1d97febc0e3a266a3f15a724d8cb64  work/workflow-validation/frozen/stage3-acceptance-v2.md
+2026-09-10T09:49:52.8071665Z 08c3fc4a6a691a031d62e30b7af9d351f0222b2cf2e72b7f672d2bbdcb0ae01f  work/workflow-validation/frozen/stage4-packet.md
+2026-09-10T09:49:52.8073294Z c85a89ff14243a91c7115b8ae188ec6aae2b6f4328c9deb88b2aca316dc35495  work/workflow-validation/frozen/stage4-acceptance.md
+2026-09-10T09:49:52.8074232Z 721e9ad794095f71a37b0b6eb20b75fa4843dd8b6fd03b600dd07ffb65d3768e  work/workflow-validation/frozen/final-instrument-amendment.md
+2026-09-10T09:49:52.8074898Z CREATE SCHEMA "alder_7ab3d9e55d334d50a28dea2d8b285e11";
+2026-09-10T09:49:52.8075212Z CREATE SCHEMA
+2026-09-10T09:49:52.8076168Z SET search_path TO "alder_7ab3d9e55d334d50a28dea2d8b285e11";
+2026-09-10T09:49:52.8076638Z SET
+2026-09-10T09:49:52.8077423Z SELECT version(), current_database(), current_user, pg_backend_pid(), current_schema(), clock_timestamp();
+2026-09-10T09:49:52.8078302Z                                                       version                                                       | current_database | current_user | pg_backend_pid |             current_schema             |        clock_timestamp        
+2026-09-10T09:49:52.8079401Z --------------------------------------------------------------------------------------------------------------------+------------------+--------------+----------------+----------------------------------------+-------------------------------
+2026-09-10T09:49:52.8080713Z  PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit | postgres         | postgres     |             91 | alder_7ab3d9e55d334d50a28dea2d8b285e11 | 2026-09-10 09:49:52.612213+00
+2026-09-10T09:49:52.8081531Z (1 row)
+2026-09-10T09:49:52.8081634Z 
+2026-09-10T09:49:52.8081887Z SELECT datname, datcollate, datctype FROM pg_database WHERE datname=current_database();
+2026-09-10T09:49:52.8082323Z  datname  | datcollate | datctype 
+2026-09-10T09:49:52.8082575Z ----------+------------+----------
+2026-09-10T09:49:52.8082824Z  postgres | C.UTF-8    | C.UTF-8
+2026-09-10T09:49:52.8083051Z (1 row)
+2026-09-10T09:49:52.8083160Z 
+2026-09-10T09:49:52.8083251Z CREATE TABLE equipment (
+2026-09-10T09:49:52.8083485Z   equipment_id TEXT PRIMARY KEY,
+2026-09-10T09:49:52.8083824Z   status TEXT NOT NULL CHECK (status IN ('available', 'safety_closed'))
+2026-09-10T09:49:52.8084180Z );
+2026-09-10T09:49:52.8084346Z CREATE TABLE
+2026-09-10T09:49:52.8084551Z CREATE TABLE maintenance_request (
+2026-09-10T09:49:52.8084804Z   request_id TEXT PRIMARY KEY,
+2026-09-10T09:49:52.8085127Z   equipment_id TEXT NOT NULL REFERENCES equipment(equipment_id),
+2026-09-10T09:49:52.8085476Z   reported_by TEXT NOT NULL,
+2026-09-10T09:49:52.8085721Z   reported_at TIMESTAMPTZ NOT NULL,
+2026-09-10T09:49:52.8085977Z   description TEXT NOT NULL,
+2026-09-10T09:49:52.8086321Z   status TEXT NOT NULL CHECK (status IN ('open', 'scheduled', 'completed')),
+2026-09-10T09:49:52.8086717Z   scheduled_for TIMESTAMPTZ NULL,
+2026-09-10T09:49:52.8087205Z   completed_at TIMESTAMPTZ NULL
+2026-09-10T09:49:52.8087436Z );
+2026-09-10T09:49:52.8087603Z CREATE TABLE
+2026-09-10T09:49:52.8087941Z -- Stage 1 business operation. Validation uses PostgreSQL POSIX [[:space:]]
+2026-09-10T09:49:52.8088437Z -- under the database collation/locale; it does not normalize stored text.
+2026-09-10T09:49:52.8088841Z CREATE FUNCTION report_equipment_fault(
+2026-09-10T09:49:52.8089117Z   p_request_id TEXT,
+2026-09-10T09:49:52.8089330Z   p_equipment_id TEXT,
+2026-09-10T09:49:52.8089544Z   p_reported_by TEXT,
+2026-09-10T09:49:52.8089759Z   p_reported_at TIMESTAMPTZ,
+2026-09-10T09:49:52.8089996Z   p_description TEXT
+2026-09-10T09:49:52.8090193Z ) RETURNS TEXT
+2026-09-10T09:49:52.8090394Z LANGUAGE plpgsql
+2026-09-10T09:49:52.8090594Z AS $$
+2026-09-10T09:49:52.8090763Z BEGIN
+2026-09-10T09:49:52.8090970Z   IF p_description ~ '^[[:space:]]*$' THEN
+2026-09-10T09:49:52.8091284Z     RAISE EXCEPTION 'description must be nonblank'
+2026-09-10T09:49:52.8091584Z       USING ERRCODE = '22023';
+2026-09-10T09:49:52.8091803Z   END IF;
+2026-09-10T09:49:52.8091898Z 
+2026-09-10T09:49:52.8092112Z   IF NOT EXISTS (SELECT 1 FROM equipment WHERE equipment_id = p_equipment_id) THEN
+2026-09-10T09:49:52.8092712Z     RAISE EXCEPTION 'equipment does not exist'
+2026-09-10T09:49:52.8092987Z       USING ERRCODE = '23503';
+2026-09-10T09:49:52.8093203Z   END IF;
+2026-09-10T09:49:52.8093464Z 
+2026-09-10T09:49:52.8093562Z   INSERT INTO maintenance_request (
+2026-09-10T09:49:52.8093937Z     request_id, equipment_id, reported_by, reported_at, description, status,
+2026-09-10T09:49:52.8094324Z     scheduled_for, completed_at
+2026-09-10T09:49:52.8094550Z   ) VALUES (
+2026-09-10T09:49:52.8094847Z     p_request_id, p_equipment_id, p_reported_by, p_reported_at, p_description,
+2026-09-10T09:49:52.8095224Z     'open', NULL, NULL
+2026-09-10T09:49:52.8095419Z   );
+2026-09-10T09:49:52.8095519Z 
+2026-09-10T09:49:52.8095600Z   RETURN p_request_id;
+2026-09-10T09:49:52.8095797Z END;
+2026-09-10T09:49:52.8095957Z $$;
+2026-09-10T09:49:52.8096127Z CREATE FUNCTION
+2026-09-10T09:49:52.8096453Z -- Stage 2 business operations.  The authorization rows are an acceptance-only
+2026-09-10T09:49:52.8097206Z -- fixture: they demonstrate the two explicitly authorized actors without
+2026-09-10T09:49:52.8097650Z -- defining a broader identity or role-management policy.
+2026-09-10T09:49:52.8097996Z CREATE TABLE stage2_authorization_fixture (
+2026-09-10T09:49:52.8098287Z   actor_evidence TEXT PRIMARY KEY,
+2026-09-10T09:49:52.8098680Z   role_name TEXT NOT NULL CHECK (role_name IN ('maintenance_coordinator', 'technician'))
+2026-09-10T09:49:52.8099072Z );
+2026-09-10T09:49:52.8099239Z CREATE TABLE
+2026-09-10T09:49:52.8099542Z INSERT INTO stage2_authorization_fixture (actor_evidence, role_name) VALUES
+2026-09-10T09:49:52.8099996Z   ('stage2-coordinator-fixture', 'maintenance_coordinator'),
+2026-09-10T09:49:52.8100503Z   ('stage2-technician-fixture', 'technician');
+2026-09-10T09:49:52.8100932Z INSERT 0 2
+2026-09-10T09:49:52.8101272Z CREATE FUNCTION schedule_maintenance(
+2026-09-10T09:49:52.8101722Z   p_actor_evidence TEXT,
+2026-09-10T09:49:52.8102092Z   p_request_id TEXT,
+2026-09-10T09:49:52.8102469Z   p_scheduled_for TIMESTAMPTZ
+2026-09-10T09:49:52.8102817Z ) RETURNS TEXT
+2026-09-10T09:49:52.8103008Z LANGUAGE plpgsql
+2026-09-10T09:49:52.8103192Z AS $$
+2026-09-10T09:49:52.8103355Z BEGIN
+2026-09-10T09:49:52.8103522Z   IF NOT EXISTS (
+2026-09-10T09:49:52.8103748Z     SELECT 1 FROM stage2_authorization_fixture
+2026-09-10T09:49:52.8104038Z     WHERE actor_evidence = p_actor_evidence
+2026-09-10T09:49:52.8104331Z       AND role_name = 'maintenance_coordinator'
+2026-09-10T09:49:52.8104594Z   ) THEN
+2026-09-10T09:49:52.8104870Z     RAISE EXCEPTION 'actor is not an authorized maintenance coordinator'
+2026-09-10T09:49:52.8105234Z       USING ERRCODE = '42501';
+2026-09-10T09:49:52.8105448Z   END IF;
+2026-09-10T09:49:52.8105548Z 
+2026-09-10T09:49:52.8105656Z   IF p_scheduled_for <= clock_timestamp() THEN
+2026-09-10T09:49:52.8105965Z     RAISE EXCEPTION 'scheduled time must be future'
+2026-09-10T09:49:52.8106252Z       USING ERRCODE = '22023';
+2026-09-10T09:49:52.8106467Z   END IF;
+2026-09-10T09:49:52.8106570Z 
+2026-09-10T09:49:52.8106663Z   UPDATE maintenance_request
+2026-09-10T09:49:52.8107168Z      SET status = 'scheduled', scheduled_for = p_scheduled_for
+2026-09-10T09:49:52.8107496Z    WHERE request_id = p_request_id
+2026-09-10T09:49:52.8107742Z      AND status = 'open'
+2026-09-10T09:49:52.8107949Z      AND EXISTS (
+2026-09-10T09:49:52.8108217Z        SELECT 1
+2026-09-10T09:49:52.8108549Z        FROM equipment
+2026-09-10T09:49:52.8109068Z        WHERE equipment.equipment_id = maintenance_request.equipment_id
+2026-09-10T09:49:52.8109738Z          AND equipment.status <> 'safety_closed'
+2026-09-10T09:49:52.8110232Z      );
+2026-09-10T09:49:52.8110418Z 
+2026-09-10T09:49:52.8110574Z   IF NOT FOUND THEN
+2026-09-10T09:49:52.8110883Z     RAISE EXCEPTION 'request is not an open request'
+2026-09-10T09:49:52.8111340Z       USING ERRCODE = '22023';
+2026-09-10T09:49:52.8111567Z   END IF;
+2026-09-10T09:49:52.8111667Z 
+2026-09-10T09:49:52.8111755Z   RETURN p_request_id;
+2026-09-10T09:49:52.8111954Z END;
+2026-09-10T09:49:52.8112428Z $$;
+2026-09-10T09:49:52.8112633Z CREATE FUNCTION
+2026-09-10T09:49:52.8112853Z CREATE FUNCTION complete_maintenance(
+2026-09-10T09:49:52.8113213Z   p_actor_evidence TEXT,
+2026-09-10T09:49:52.8113493Z   p_request_id TEXT
+2026-09-10T09:49:52.8114023Z ) RETURNS TEXT
+2026-09-10T09:49:52.8114238Z LANGUAGE plpgsql
+2026-09-10T09:49:52.8114429Z AS $$
+2026-09-10T09:49:52.8114602Z DECLARE
+2026-09-10T09:49:52.8114943Z   v_completed_at TIMESTAMPTZ;
+2026-09-10T09:49:52.8115181Z BEGIN
+2026-09-10T09:49:52.8115354Z   IF NOT EXISTS (
+2026-09-10T09:49:52.8115580Z     SELECT 1 FROM stage2_authorization_fixture
+2026-09-10T09:49:52.8115929Z     WHERE actor_evidence = p_actor_evidence
+2026-09-10T09:49:52.8116299Z       AND role_name = 'technician'
+2026-09-10T09:49:52.8116536Z   ) THEN
+2026-09-10T09:49:52.8116778Z     RAISE EXCEPTION 'actor is not an authorized technician'
+2026-09-10T09:49:52.8117413Z       USING ERRCODE = '42501';
+2026-09-10T09:49:52.8117647Z   END IF;
+2026-09-10T09:49:52.8117749Z 
+2026-09-10T09:49:52.8117962Z   -- Capture once: this is both the chronology decision and the stored fact
+2026-09-10T09:49:52.8118583Z   -- for this completion operation. A schedule is intentionally not a lower
+2026-09-10T09:49:52.8119065Z   -- bound; only the decided report/completion chronology is enforced.
+2026-09-10T09:49:52.8119440Z   v_completed_at := clock_timestamp();
+2026-09-10T09:49:52.8119748Z 
+2026-09-10T09:49:52.8119846Z   UPDATE maintenance_request
+2026-09-10T09:49:52.8120135Z      SET status = 'completed', completed_at = v_completed_at
+2026-09-10T09:49:52.8120463Z    WHERE request_id = p_request_id
+2026-09-10T09:49:52.8120797Z      AND status = 'scheduled'
+2026-09-10T09:49:52.8121116Z      AND reported_at <= v_completed_at;
+2026-09-10T09:49:52.8121294Z 
+2026-09-10T09:49:52.8121377Z   IF NOT FOUND THEN
+2026-09-10T09:49:52.8121669Z     RAISE EXCEPTION 'request is not a completable scheduled request'
+2026-09-10T09:49:52.8122143Z       USING ERRCODE = '22023';
+2026-09-10T09:49:52.8122366Z   END IF;
+2026-09-10T09:49:52.8122477Z 
+2026-09-10T09:49:52.8122556Z   RETURN p_request_id;
+2026-09-10T09:49:52.8122752Z END;
+2026-09-10T09:49:52.8122914Z $$;
+2026-09-10T09:49:52.8123166Z CREATE FUNCTION
+2026-09-10T09:49:52.8123551Z -- Stage 3 business operation. This acceptance-only fixture demonstrates the
+2026-09-10T09:49:52.8124078Z -- explicitly required safety-inspector authority; it is not an identity model.
+2026-09-10T09:49:52.8124636Z CREATE TABLE stage3_authorization_fixture (
+2026-09-10T09:49:52.8124924Z   actor_evidence TEXT PRIMARY KEY,
+2026-09-10T09:49:52.8125249Z   role_name TEXT NOT NULL CHECK (role_name = 'safety_inspector')
+2026-09-10T09:49:52.8125698Z );
+2026-09-10T09:49:52.8125866Z CREATE TABLE
+2026-09-10T09:49:52.8126172Z INSERT INTO stage3_authorization_fixture (actor_evidence, role_name) VALUES
+2026-09-10T09:49:52.8126710Z   ('stage3-safety-inspector-fixture', 'safety_inspector');
+2026-09-10T09:49:52.8127238Z INSERT 0 1
+2026-09-10T09:49:52.8127447Z CREATE FUNCTION record_safety_closure(
+2026-09-10T09:49:52.8127803Z   p_actor_evidence TEXT,
+2026-09-10T09:49:52.8128119Z   p_equipment_id TEXT
+2026-09-10T09:49:52.8128323Z ) RETURNS TEXT
+2026-09-10T09:49:52.8128511Z LANGUAGE plpgsql
+2026-09-10T09:49:52.8128695Z AS $$
+2026-09-10T09:49:52.8128861Z BEGIN
+2026-09-10T09:49:52.8129169Z   IF NOT EXISTS (
+2026-09-10T09:49:52.8129408Z     SELECT 1 FROM stage3_authorization_fixture
+2026-09-10T09:49:52.8129701Z     WHERE actor_evidence = p_actor_evidence
+2026-09-10T09:49:52.8129975Z       AND role_name = 'safety_inspector'
+2026-09-10T09:49:52.8130357Z   ) THEN
+2026-09-10T09:49:52.8130627Z     RAISE EXCEPTION 'actor is not an authorized safety inspector'
+2026-09-10T09:49:52.8130979Z       USING ERRCODE = '42501';
+2026-09-10T09:49:52.8131200Z   END IF;
+2026-09-10T09:49:52.8131366Z 
+2026-09-10T09:49:52.8131517Z   UPDATE equipment
+2026-09-10T09:49:52.8131742Z      SET status = 'safety_closed'
+2026-09-10T09:49:52.8131997Z    WHERE equipment_id = p_equipment_id;
+2026-09-10T09:49:52.8132174Z 
+2026-09-10T09:49:52.8132264Z   RETURN p_equipment_id;
+2026-09-10T09:49:52.8132778Z END;
+2026-09-10T09:49:52.8132944Z $$;
+2026-09-10T09:49:52.8133109Z CREATE FUNCTION
+2026-09-10T09:49:52.8133425Z -- Stage 4: the same equipment-safety owner and existing inspector authority.
+2026-09-10T09:49:52.8134201Z CREATE FUNCTION clear_safety_closure(p_actor_evidence TEXT, p_equipment_id TEXT)
+2026-09-10T09:49:52.8134617Z RETURNS TEXT LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8134923Z BEGIN
+2026-09-10T09:49:52.8135173Z   IF NOT EXISTS (
+2026-09-10T09:49:52.8135459Z     SELECT 1 FROM stage3_authorization_fixture
+2026-09-10T09:49:52.8135889Z     WHERE actor_evidence=p_actor_evidence AND role_name='safety_inspector'
+2026-09-10T09:49:52.8136480Z   ) THEN
+2026-09-10T09:49:52.8136937Z     RAISE EXCEPTION 'actor is not an authorized safety inspector' USING ERRCODE='42501';
+2026-09-10T09:49:52.8137534Z   END IF;
+2026-09-10T09:49:52.8137739Z   UPDATE equipment SET status='available'
+2026-09-10T09:49:52.8138086Z   WHERE equipment_id=p_equipment_id AND status='safety_closed';
+2026-09-10T09:49:52.8138495Z   RETURN p_equipment_id;
+2026-09-10T09:49:52.8138780Z END;
+2026-09-10T09:49:52.8138946Z $$;
+2026-09-10T09:49:52.8139120Z CREATE FUNCTION
+2026-09-10T09:49:52.8139424Z -- Executable observations and gates for frozen Stage 1 acceptance v3.
+2026-09-10T09:49:52.8139934Z \set ON_ERROR_STOP on
+2026-09-10T09:49:52.8140144Z SET TIME ZONE 'UTC';
+2026-09-10T09:49:52.8140487Z SET
+2026-09-10T09:49:52.8140679Z \pset format unaligned
+2026-09-10T09:49:52.8141038Z Output format is unaligned.
+2026-09-10T09:49:52.8141276Z \pset null 'NULL'
+2026-09-10T09:49:52.8141472Z Null display is "NULL".
+2026-09-10T09:49:52.8143289Z CREATE OR REPLACE FUNCTION stage1_input(c text,rid text,eid text,reporter text,at_time timestamptz,d text) RETURNS TABLE(case_id text,actor_evidence text,request_id text,equipment_id text,reported_by text,reported_at text,description_utf8_hex text) LANGUAGE sql AS $$ SELECT c,'reporter',rid,eid,reporter,to_char(at_time AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),encode(convert_to(d,'UTF8'),'hex') $$;
+2026-09-10T09:49:52.8144955Z CREATE FUNCTION
+2026-09-10T09:49:52.8145344Z -- Rejection encoding is intentionally not asserted; the post-call count gates prove no write.
+2026-09-10T09:49:52.8147318Z CREATE OR REPLACE FUNCTION stage1_rejected(c text,rid text,eid text,reporter text,at_time timestamptz,d text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN PERFORM report_equipment_fault(rid,eid,reporter,at_time,d); RAISE EXCEPTION '% unexpectedly accepted',c; EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE '%'||c||' unexpectedly accepted' THEN RAISE; END IF; END $$;
+2026-09-10T09:49:52.8148808Z CREATE FUNCTION
+2026-09-10T09:49:52.8150472Z CREATE OR REPLACE FUNCTION stage1_setup(c text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN TRUNCATE maintenance_request; INSERT INTO equipment(equipment_id,status) VALUES ('eq-stage1-known','available'),('eq-stage1-other','available') ON CONFLICT(equipment_id) DO UPDATE SET status=EXCLUDED.status; IF (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION '% setup failed',c; END IF; END $$;
+2026-09-10T09:49:52.8152167Z CREATE FUNCTION
+2026-09-10T09:49:52.8152595Z -- Accepted-row observation and exact all-field/count assertion.
+2026-09-10T09:49:52.8155020Z CREATE OR REPLACE FUNCTION stage1_accepted(c text,rid text,at_time timestamptz,d text,expected_total bigint) RETURNS void LANGUAGE plpgsql AS $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id=rid AND equipment_id='eq-stage1-known' AND reported_by='reporter-stage1' AND reported_at=at_time AND description=d AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)<>1 OR (SELECT count(*) FROM maintenance_request)<>expected_total THEN RAISE EXCEPTION '% failed',c; END IF; END $$;
+2026-09-10T09:49:52.8157399Z CREATE FUNCTION
+2026-09-10T09:49:52.8157663Z -- S1-01
+2026-09-10T09:49:52.8161587Z SELECT stage1_setup('S1-01'); SELECT * FROM stage1_input('S1-01','req-stage1-01','eq-stage1-known','reporter-stage1','2030-01-15T10:30:00Z','Hydraulic pressure warning observed'); SELECT 'S1-01 setup' observation,count(*) request_count FROM maintenance_request; SELECT report_equipment_fault('req-stage1-01','eq-stage1-known','reporter-stage1','2030-01-15T10:30:00Z','Hydraulic pressure warning observed') accepted_request_id; SELECT 'S1-01 accepted' call_outcome; SELECT 'S1-01 row' observation,request_id,equipment_id,reported_by,to_char(reported_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"') reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage1-01'; SELECT 'S1-01 total' observation,count(*) request_count FROM maintenance_request; SELECT stage1_accepted('S1-01','req-stage1-01','2030-01-15T10:30:00Z','Hydraulic pressure warning observed',1);
+2026-09-10T09:49:52.8166422Z stage1_setup
+2026-09-10T09:49:52.8166629Z 
+2026-09-10T09:49:52.8166757Z (1 row)
+2026-09-10T09:49:52.8168988Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8170035Z S1-01|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+2026-09-10T09:49:52.8170762Z (1 row)
+2026-09-10T09:49:52.8181602Z observation|request_count
+2026-09-10T09:49:52.8182088Z S1-01 setup|0
+2026-09-10T09:49:52.8182330Z (1 row)
+2026-09-10T09:49:52.8182739Z accepted_request_id
+2026-09-10T09:49:52.8182975Z req-stage1-01
+2026-09-10T09:49:52.8183179Z (1 row)
+2026-09-10T09:49:52.8183370Z call_outcome
+2026-09-10T09:49:52.8183675Z S1-01 accepted
+2026-09-10T09:49:52.8183868Z (1 row)
+2026-09-10T09:49:52.8184562Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8185700Z S1-01 row|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8186290Z (1 row)
+2026-09-10T09:49:52.8186628Z observation|request_count
+2026-09-10T09:49:52.8187313Z S1-01 total|1
+2026-09-10T09:49:52.8187645Z (1 row)
+2026-09-10T09:49:52.8187964Z stage1_accepted
+2026-09-10T09:49:52.8188201Z 
+2026-09-10T09:49:52.8188333Z (1 row)
+2026-09-10T09:49:52.8188526Z -- S1-02
+2026-09-10T09:49:52.8192903Z SELECT stage1_setup('S1-02'); SELECT * FROM stage1_input('S1-02','req-stage1-02','eq-stage1-unknown','reporter-stage1','2030-01-15T10:31:00Z','Unknown asset probe'); SELECT 'S1-02 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-02','req-stage1-02','eq-stage1-unknown','reporter-stage1','2030-01-15T10:31:00Z','Unknown asset probe'); SELECT 'S1-02 rejected' call_outcome; SELECT 'S1-02 unknown_equipment' observation,count(*) unknown_equipment_request_count FROM maintenance_request WHERE equipment_id='eq-stage1-unknown'; SELECT 'S1-02 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-02'; SELECT 'S1-02 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage1-unknown')<>0 OR (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-02')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-02 failed'; END IF; END $$;
+2026-09-10T09:49:52.8199846Z stage1_setup
+2026-09-10T09:49:52.8200060Z 
+2026-09-10T09:49:52.8200228Z (1 row)
+2026-09-10T09:49:52.8200867Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8202211Z S1-02|reporter|req-stage1-02|eq-stage1-unknown|reporter-stage1|2030-01-15T10:31:00Z|556e6b6e6f776e2061737365742070726f6265
+2026-09-10T09:49:52.8203183Z (1 row)
+2026-09-10T09:49:52.8203398Z observation|request_count
+2026-09-10T09:49:52.8203629Z S1-02 setup|0
+2026-09-10T09:49:52.8203825Z (1 row)
+2026-09-10T09:49:52.8204004Z stage1_rejected
+2026-09-10T09:49:52.8204124Z 
+2026-09-10T09:49:52.8204205Z (1 row)
+2026-09-10T09:49:52.8204374Z call_outcome
+2026-09-10T09:49:52.8204561Z S1-02 rejected
+2026-09-10T09:49:52.8204748Z (1 row)
+2026-09-10T09:49:52.8204951Z observation|unknown_equipment_request_count
+2026-09-10T09:49:52.8205808Z S1-02 unknown_equipment|0
+2026-09-10T09:49:52.8206208Z (1 row)
+2026-09-10T09:49:52.8206559Z observation|attempted_id_count
+2026-09-10T09:49:52.8207276Z S1-02 attempted_id|0
+2026-09-10T09:49:52.8207797Z (1 row)
+2026-09-10T09:49:52.8208032Z observation|request_count
+2026-09-10T09:49:52.8208259Z S1-02 total|0
+2026-09-10T09:49:52.8208443Z (1 row)
+2026-09-10T09:49:52.8208614Z DO
+2026-09-10T09:49:52.8208892Z -- S1-03 / S1-05..S1-09; each is reset and independently asserted.
+2026-09-10T09:49:52.8213912Z SELECT stage1_setup('S1-03'); SELECT * FROM stage1_input('S1-03','req-stage1-03','eq-stage1-known','reporter-stage1','2030-01-15T10:32:00Z',''); SELECT 'S1-03 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-03','req-stage1-03','eq-stage1-known','reporter-stage1','2030-01-15T10:32:00Z',''); SELECT 'S1-03 rejected' call_outcome; SELECT 'S1-03 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-03'; SELECT 'S1-03 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-03')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-03 failed'; END IF; END $$;
+2026-09-10T09:49:52.8217191Z stage1_setup
+2026-09-10T09:49:52.8217421Z 
+2026-09-10T09:49:52.8217571Z (1 row)
+2026-09-10T09:49:52.8218073Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8218694Z S1-03|reporter|req-stage1-03|eq-stage1-known|reporter-stage1|2030-01-15T10:32:00Z|
+2026-09-10T09:49:52.8219235Z (1 row)
+2026-09-10T09:49:52.8219569Z observation|request_count
+2026-09-10T09:49:52.8219949Z S1-03 setup|0
+2026-09-10T09:49:52.8220270Z (1 row)
+2026-09-10T09:49:52.8220576Z stage1_rejected
+2026-09-10T09:49:52.8220796Z 
+2026-09-10T09:49:52.8220941Z (1 row)
+2026-09-10T09:49:52.8221258Z call_outcome
+2026-09-10T09:49:52.8221577Z S1-03 rejected
+2026-09-10T09:49:52.8221900Z (1 row)
+2026-09-10T09:49:52.8222244Z observation|attempted_id_count
+2026-09-10T09:49:52.8222688Z S1-03 attempted_id|0
+2026-09-10T09:49:52.8223177Z (1 row)
+2026-09-10T09:49:52.8223467Z observation|request_count
+2026-09-10T09:49:52.8223836Z S1-03 total|0
+2026-09-10T09:49:52.8224028Z (1 row)
+2026-09-10T09:49:52.8224338Z DO
+2026-09-10T09:49:52.8228780Z SELECT stage1_setup('S1-05'); SELECT * FROM stage1_input('S1-05','req-stage1-05','eq-stage1-known','reporter-stage1','2030-01-15T10:35:00Z','   '); SELECT 'S1-05 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-05','req-stage1-05','eq-stage1-known','reporter-stage1','2030-01-15T10:35:00Z','   '); SELECT 'S1-05 rejected' call_outcome; SELECT 'S1-05 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-05'; SELECT 'S1-05 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-05')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-05 failed'; END IF; END $$;
+2026-09-10T09:49:52.8233206Z stage1_setup
+2026-09-10T09:49:52.8233347Z 
+2026-09-10T09:49:52.8233423Z (1 row)
+2026-09-10T09:49:52.8233981Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8235068Z S1-05|reporter|req-stage1-05|eq-stage1-known|reporter-stage1|2030-01-15T10:35:00Z|202020
+2026-09-10T09:49:52.8235788Z (1 row)
+2026-09-10T09:49:52.8236107Z observation|request_count
+2026-09-10T09:49:52.8236607Z S1-05 setup|0
+2026-09-10T09:49:52.8237144Z (1 row)
+2026-09-10T09:49:52.8237460Z stage1_rejected
+2026-09-10T09:49:52.8237659Z 
+2026-09-10T09:49:52.8237781Z (1 row)
+2026-09-10T09:49:52.8238070Z call_outcome
+2026-09-10T09:49:52.8238374Z S1-05 rejected
+2026-09-10T09:49:52.8238687Z (1 row)
+2026-09-10T09:49:52.8239004Z observation|attempted_id_count
+2026-09-10T09:49:52.8239424Z S1-05 attempted_id|0
+2026-09-10T09:49:52.8240047Z (1 row)
+2026-09-10T09:49:52.8240248Z observation|request_count
+2026-09-10T09:49:52.8240485Z S1-05 total|0
+2026-09-10T09:49:52.8240666Z (1 row)
+2026-09-10T09:49:52.8240842Z DO
+2026-09-10T09:49:52.8244034Z SELECT stage1_setup('S1-06'); SELECT * FROM stage1_input('S1-06','req-stage1-06','eq-stage1-known','reporter-stage1','2030-01-15T10:36:00Z',E'\t'); SELECT 'S1-06 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-06','req-stage1-06','eq-stage1-known','reporter-stage1','2030-01-15T10:36:00Z',E'\t'); SELECT 'S1-06 rejected' call_outcome; SELECT 'S1-06 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-06'; SELECT 'S1-06 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-06')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-06 failed'; END IF; END $$;
+2026-09-10T09:49:52.8247096Z stage1_setup
+2026-09-10T09:49:52.8247302Z 
+2026-09-10T09:49:52.8247447Z (1 row)
+2026-09-10T09:49:52.8247840Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8248480Z S1-06|reporter|req-stage1-06|eq-stage1-known|reporter-stage1|2030-01-15T10:36:00Z|09
+2026-09-10T09:49:52.8248982Z (1 row)
+2026-09-10T09:49:52.8249171Z observation|request_count
+2026-09-10T09:49:52.8249389Z S1-06 setup|0
+2026-09-10T09:49:52.8249566Z (1 row)
+2026-09-10T09:49:52.8249875Z stage1_rejected
+2026-09-10T09:49:52.8250006Z 
+2026-09-10T09:49:52.8250078Z (1 row)
+2026-09-10T09:49:52.8250245Z call_outcome
+2026-09-10T09:49:52.8250422Z S1-06 rejected
+2026-09-10T09:49:52.8250602Z (1 row)
+2026-09-10T09:49:52.8250788Z observation|attempted_id_count
+2026-09-10T09:49:52.8251166Z S1-06 attempted_id|0
+2026-09-10T09:49:52.8251364Z (1 row)
+2026-09-10T09:49:52.8251541Z observation|request_count
+2026-09-10T09:49:52.8251754Z S1-06 total|0
+2026-09-10T09:49:52.8251927Z (1 row)
+2026-09-10T09:49:52.8252240Z DO
+2026-09-10T09:49:52.8255066Z SELECT stage1_setup('S1-07'); SELECT * FROM stage1_input('S1-07','req-stage1-07','eq-stage1-known','reporter-stage1','2030-01-15T10:37:00Z',E'\n'); SELECT 'S1-07 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-07','req-stage1-07','eq-stage1-known','reporter-stage1','2030-01-15T10:37:00Z',E'\n'); SELECT 'S1-07 rejected' call_outcome; SELECT 'S1-07 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-07'; SELECT 'S1-07 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-07')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-07 failed'; END IF; END $$;
+2026-09-10T09:49:52.8258296Z stage1_setup
+2026-09-10T09:49:52.8258418Z 
+2026-09-10T09:49:52.8258495Z (1 row)
+2026-09-10T09:49:52.8258853Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8259614Z S1-07|reporter|req-stage1-07|eq-stage1-known|reporter-stage1|2030-01-15T10:37:00Z|0a
+2026-09-10T09:49:52.8260010Z (1 row)
+2026-09-10T09:49:52.8260311Z observation|request_count
+2026-09-10T09:49:52.8260577Z S1-07 setup|0
+2026-09-10T09:49:52.8260763Z (1 row)
+2026-09-10T09:49:52.8260940Z stage1_rejected
+2026-09-10T09:49:52.8261053Z 
+2026-09-10T09:49:52.8261130Z (1 row)
+2026-09-10T09:49:52.8261344Z call_outcome
+2026-09-10T09:49:52.8261625Z S1-07 rejected
+2026-09-10T09:49:52.8261809Z (1 row)
+2026-09-10T09:49:52.8261994Z observation|attempted_id_count
+2026-09-10T09:49:52.8262233Z S1-07 attempted_id|0
+2026-09-10T09:49:52.8262436Z (1 row)
+2026-09-10T09:49:52.8262766Z observation|request_count
+2026-09-10T09:49:52.8262989Z S1-07 total|0
+2026-09-10T09:49:52.8263160Z (1 row)
+2026-09-10T09:49:52.8263334Z DO
+2026-09-10T09:49:52.8268611Z SELECT stage1_setup('S1-08'); SELECT * FROM stage1_input('S1-08','req-stage1-08','eq-stage1-known','reporter-stage1','2030-01-15T10:38:00Z','　'); SELECT 'S1-08 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-08','req-stage1-08','eq-stage1-known','reporter-stage1','2030-01-15T10:38:00Z','　'); SELECT 'S1-08 rejected' call_outcome; SELECT 'S1-08 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-08'; SELECT 'S1-08 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-08')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-08 failed'; END IF; END $$;
+2026-09-10T09:49:52.8272158Z stage1_setup
+2026-09-10T09:49:52.8272299Z 
+2026-09-10T09:49:52.8272376Z (1 row)
+2026-09-10T09:49:52.8272743Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8273540Z S1-08|reporter|req-stage1-08|eq-stage1-known|reporter-stage1|2030-01-15T10:38:00Z|e38080
+2026-09-10T09:49:52.8273979Z (1 row)
+2026-09-10T09:49:52.8274171Z observation|request_count
+2026-09-10T09:49:52.8274572Z S1-08 setup|0
+2026-09-10T09:49:52.8274758Z (1 row)
+2026-09-10T09:49:52.8274928Z stage1_rejected
+2026-09-10T09:49:52.8275046Z 
+2026-09-10T09:49:52.8275124Z (1 row)
+2026-09-10T09:49:52.8275290Z call_outcome
+2026-09-10T09:49:52.8305005Z S1-08 rejected
+2026-09-10T09:49:52.8305415Z (1 row)
+2026-09-10T09:49:52.8305822Z observation|attempted_id_count
+2026-09-10T09:49:52.8306296Z S1-08 attempted_id|0
+2026-09-10T09:49:52.8306709Z (1 row)
+2026-09-10T09:49:52.8307246Z observation|request_count
+2026-09-10T09:49:52.8307677Z S1-08 total|0
+2026-09-10T09:49:52.8308039Z (1 row)
+2026-09-10T09:49:52.8308366Z DO
+2026-09-10T09:49:52.8313043Z SELECT stage1_setup('S1-09'); SELECT * FROM stage1_input('S1-09','req-stage1-09','eq-stage1-known','reporter-stage1','2030-01-15T10:39:00Z',E' \t\n　'); SELECT 'S1-09 setup' observation,count(*) request_count FROM maintenance_request; SELECT stage1_rejected('S1-09','req-stage1-09','eq-stage1-known','reporter-stage1','2030-01-15T10:39:00Z',E' \t\n　'); SELECT 'S1-09 rejected' call_outcome; SELECT 'S1-09 attempted_id' observation,count(*) attempted_id_count FROM maintenance_request WHERE request_id='req-stage1-09'; SELECT 'S1-09 total' observation,count(*) request_count FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage1-09')<>0 OR (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION 'S1-09 failed'; END IF; END $$;
+2026-09-10T09:49:52.8317364Z stage1_setup
+2026-09-10T09:49:52.8317585Z 
+2026-09-10T09:49:52.8317722Z (1 row)
+2026-09-10T09:49:52.8318180Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8318897Z S1-09|reporter|req-stage1-09|eq-stage1-known|reporter-stage1|2030-01-15T10:39:00Z|20090ae38080
+2026-09-10T09:49:52.8319440Z (1 row)
+2026-09-10T09:49:52.8319630Z observation|request_count
+2026-09-10T09:49:52.8319857Z S1-09 setup|0
+2026-09-10T09:49:52.8320099Z (1 row)
+2026-09-10T09:49:52.8320378Z stage1_rejected
+2026-09-10T09:49:52.8320510Z 
+2026-09-10T09:49:52.8320608Z (1 row)
+2026-09-10T09:49:52.8320789Z call_outcome
+2026-09-10T09:49:52.8320980Z S1-09 rejected
+2026-09-10T09:49:52.8321169Z (1 row)
+2026-09-10T09:49:52.8321543Z observation|attempted_id_count
+2026-09-10T09:49:52.8321804Z S1-09 attempted_id|0
+2026-09-10T09:49:52.8322004Z (1 row)
+2026-09-10T09:49:52.8322193Z observation|request_count
+2026-09-10T09:49:52.8322425Z S1-09 total|0
+2026-09-10T09:49:52.8322742Z (1 row)
+2026-09-10T09:49:52.8322916Z DO
+2026-09-10T09:49:52.8323171Z -- S1-04 retains its first accepted call within the same fixture.
+2026-09-10T09:49:52.8330850Z SELECT stage1_setup('S1-04'); SELECT 'S1-04 setup' observation,count(*) request_count FROM maintenance_request; SELECT * FROM stage1_input('S1-04 first','req-stage1-01','eq-stage1-known','reporter-stage1','2030-01-15T10:30:00Z','Hydraulic pressure warning observed'); SELECT report_equipment_fault('req-stage1-01','eq-stage1-known','reporter-stage1','2030-01-15T10:30:00Z','Hydraulic pressure warning observed') first_accepted_request_id; SELECT 'S1-04 first accepted' call_outcome; SELECT * FROM stage1_input('S1-04','req-stage1-04','eq-stage1-known','reporter-stage1','2030-01-15T10:33:00Z','Hydraulic pressure warning observed'); SELECT report_equipment_fault('req-stage1-04','eq-stage1-known','reporter-stage1','2030-01-15T10:33:00Z','Hydraulic pressure warning observed') accepted_request_id; SELECT 'S1-04 accepted' call_outcome; SELECT 'S1-04 rows' observation,request_id,equipment_id,reported_by,to_char(reported_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"') reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id IN ('req-stage1-01','req-stage1-04') ORDER BY request_id; SELECT 'S1-04 total' observation,count(*) request_count FROM maintenance_request; SELECT stage1_accepted('S1-04 first','req-stage1-01','2030-01-15T10:30:00Z','Hydraulic pressure warning observed',2); SELECT stage1_accepted('S1-04','req-stage1-04','2030-01-15T10:33:00Z','Hydraulic pressure warning observed',2);
+2026-09-10T09:49:52.8337532Z stage1_setup
+2026-09-10T09:49:52.8337724Z 
+2026-09-10T09:49:52.8337802Z (1 row)
+2026-09-10T09:49:52.8338016Z observation|request_count
+2026-09-10T09:49:52.8338275Z S1-04 setup|0
+2026-09-10T09:49:52.8338457Z (1 row)
+2026-09-10T09:49:52.8339001Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8340023Z S1-04 first|reporter|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+2026-09-10T09:49:52.8340710Z (1 row)
+2026-09-10T09:49:52.8340899Z first_accepted_request_id
+2026-09-10T09:49:52.8341287Z req-stage1-01
+2026-09-10T09:49:52.8341510Z (1 row)
+2026-09-10T09:49:52.8341679Z call_outcome
+2026-09-10T09:49:52.8341867Z S1-04 first accepted
+2026-09-10T09:49:52.8342069Z (1 row)
+2026-09-10T09:49:52.8342605Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8343492Z S1-04|reporter|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|4879647261756c6963207072657373757265207761726e696e67206f62736572766564
+2026-09-10T09:49:52.8344224Z (1 row)
+2026-09-10T09:49:52.8344440Z accepted_request_id
+2026-09-10T09:49:52.8344729Z req-stage1-04
+2026-09-10T09:49:52.8345033Z (1 row)
+2026-09-10T09:49:52.8345204Z call_outcome
+2026-09-10T09:49:52.8345383Z S1-04 accepted
+2026-09-10T09:49:52.8345564Z (1 row)
+2026-09-10T09:49:52.8346132Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8347181Z S1-04 rows|req-stage1-01|eq-stage1-known|reporter-stage1|2030-01-15T10:30:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8348307Z S1-04 rows|req-stage1-04|eq-stage1-known|reporter-stage1|2030-01-15T10:33:00Z|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8349049Z (2 rows)
+2026-09-10T09:49:52.8349250Z observation|request_count
+2026-09-10T09:49:52.8349481Z S1-04 total|2
+2026-09-10T09:49:52.8349758Z (1 row)
+2026-09-10T09:49:52.8350025Z stage1_accepted
+2026-09-10T09:49:52.8350149Z 
+2026-09-10T09:49:52.8350221Z (1 row)
+2026-09-10T09:49:52.8350397Z stage1_accepted
+2026-09-10T09:49:52.8350510Z 
+2026-09-10T09:49:52.8350580Z (1 row)
+2026-09-10T09:49:52.8350748Z -- S1-10 / S1-11
+2026-09-10T09:49:52.8354540Z SELECT stage1_setup('S1-10'); SELECT * FROM stage1_input('S1-10','req-stage1-10','eq-stage1-known','reporter-stage1','2030-01-15T10:40:00Z','Bearing temperature above normal'); SELECT 'S1-10 setup' observation,count(*) request_count FROM maintenance_request; SELECT report_equipment_fault('req-stage1-10','eq-stage1-known','reporter-stage1','2030-01-15T10:40:00Z','Bearing temperature above normal') accepted_request_id; SELECT 'S1-10 accepted' call_outcome; SELECT 'S1-10 row' observation,request_id,equipment_id,reported_by,to_char(reported_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"') reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage1-10'; SELECT 'S1-10 total' observation,count(*) request_count FROM maintenance_request; SELECT stage1_accepted('S1-10','req-stage1-10','2030-01-15T10:40:00Z','Bearing temperature above normal',1);
+2026-09-10T09:49:52.8358491Z stage1_setup
+2026-09-10T09:49:52.8358619Z 
+2026-09-10T09:49:52.8358694Z (1 row)
+2026-09-10T09:49:52.8359046Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8360019Z S1-10|reporter|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|42656172696e672074656d70657261747572652061626f7665206e6f726d616c
+2026-09-10T09:49:52.8360798Z (1 row)
+2026-09-10T09:49:52.8361015Z observation|request_count
+2026-09-10T09:49:52.8361240Z S1-10 setup|0
+2026-09-10T09:49:52.8361429Z (1 row)
+2026-09-10T09:49:52.8361605Z accepted_request_id
+2026-09-10T09:49:52.8361925Z req-stage1-10
+2026-09-10T09:49:52.8362171Z (1 row)
+2026-09-10T09:49:52.8362342Z call_outcome
+2026-09-10T09:49:52.8362535Z S1-10 accepted
+2026-09-10T09:49:52.8362716Z (1 row)
+2026-09-10T09:49:52.8363297Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8364091Z S1-10 row|req-stage1-10|eq-stage1-known|reporter-stage1|2030-01-15T10:40:00Z|Bearing temperature above normal|open|NULL|NULL
+2026-09-10T09:49:52.8364819Z (1 row)
+2026-09-10T09:49:52.8365004Z observation|request_count
+2026-09-10T09:49:52.8365222Z S1-10 total|1
+2026-09-10T09:49:52.8365524Z (1 row)
+2026-09-10T09:49:52.8365757Z stage1_accepted
+2026-09-10T09:49:52.8365884Z 
+2026-09-10T09:49:52.8365956Z (1 row)
+2026-09-10T09:49:52.8369735Z SELECT stage1_setup('S1-11'); SELECT * FROM stage1_input('S1-11','req-stage1-11','eq-stage1-known','reporter-stage1','2030-01-15T10:41:00Z','  Bearing temperature above normal  '); SELECT 'S1-11 setup' observation,count(*) request_count FROM maintenance_request; SELECT report_equipment_fault('req-stage1-11','eq-stage1-known','reporter-stage1','2030-01-15T10:41:00Z','  Bearing temperature above normal  ') accepted_request_id; SELECT 'S1-11 accepted' call_outcome; SELECT 'S1-11 row' observation,request_id,equipment_id,reported_by,to_char(reported_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"') reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage1-11'; SELECT 'S1-11 total' observation,count(*) request_count FROM maintenance_request; SELECT stage1_accepted('S1-11','req-stage1-11','2030-01-15T10:41:00Z','  Bearing temperature above normal  ',1);
+2026-09-10T09:49:52.8373398Z stage1_setup
+2026-09-10T09:49:52.8373519Z 
+2026-09-10T09:49:52.8373590Z (1 row)
+2026-09-10T09:49:52.8374074Z case_id|actor_evidence|request_id|equipment_id|reported_by|reported_at|description_utf8_hex
+2026-09-10T09:49:52.8374963Z S1-11|reporter|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|202042656172696e672074656d70657261747572652061626f7665206e6f726d616c2020
+2026-09-10T09:49:52.8375800Z (1 row)
+2026-09-10T09:49:52.8375990Z observation|request_count
+2026-09-10T09:49:52.8376201Z S1-11 setup|0
+2026-09-10T09:49:52.8376485Z (1 row)
+2026-09-10T09:49:52.8376759Z accepted_request_id
+2026-09-10T09:49:52.8377220Z req-stage1-11
+2026-09-10T09:49:52.8377415Z (1 row)
+2026-09-10T09:49:52.8377588Z call_outcome
+2026-09-10T09:49:52.8377907Z S1-11 accepted
+2026-09-10T09:49:52.8378145Z (1 row)
+2026-09-10T09:49:52.8378551Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8379522Z S1-11 row|req-stage1-11|eq-stage1-known|reporter-stage1|2030-01-15T10:41:00Z|  Bearing temperature above normal  |open|NULL|NULL
+2026-09-10T09:49:52.8380064Z (1 row)
+2026-09-10T09:49:52.8380429Z observation|request_count
+2026-09-10T09:49:52.8380692Z S1-11 total|1
+2026-09-10T09:49:52.8380866Z (1 row)
+2026-09-10T09:49:52.8381037Z stage1_accepted
+2026-09-10T09:49:52.8381193Z 
+2026-09-10T09:49:52.8381264Z (1 row)
+2026-09-10T09:49:52.8381861Z SELECT 'STAGE1_ACCEPTANCE_V3_PASS' result,current_database() database_name,current_schema() schema_name;
+2026-09-10T09:49:52.8382600Z result|database_name|schema_name
+2026-09-10T09:49:52.8383077Z STAGE1_ACCEPTANCE_V3_PASS|postgres|alder_7ab3d9e55d334d50a28dea2d8b285e11
+2026-09-10T09:49:52.8383571Z (1 row)
+2026-09-10T09:49:52.8384015Z -- Cumulative Stage 1 + Stage 2 v4 acceptance; one psql session throughout.
+2026-09-10T09:49:52.8384428Z \set ON_ERROR_STOP on
+2026-09-10T09:49:52.8384635Z SET TIME ZONE 'UTC';
+2026-09-10T09:49:52.8384827Z SET
+2026-09-10T09:49:52.8385090Z \pset format unaligned
+2026-09-10T09:49:52.8385377Z Output format is unaligned.
+2026-09-10T09:49:52.8385600Z \pset null 'NULL'
+2026-09-10T09:49:52.8385798Z Null display is "NULL".
+2026-09-10T09:49:52.8386211Z CREATE OR REPLACE FUNCTION s2_setup(c text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN
+2026-09-10T09:49:52.8387585Z  TRUNCATE maintenance_request; INSERT INTO equipment(equipment_id,status) VALUES ('eq-stage1-known','available'),('eq-stage1-other','available') ON CONFLICT(equipment_id) DO UPDATE SET status=EXCLUDED.status;
+2026-09-10T09:49:52.8388797Z  IF (SELECT count(*) FROM maintenance_request)<>0 THEN RAISE EXCEPTION '% setup failed',c; END IF; END $$;
+2026-09-10T09:49:52.8389303Z CREATE FUNCTION
+2026-09-10T09:49:52.8390179Z CREATE OR REPLACE FUNCTION s2_report(r text,t timestamptz) RETURNS void LANGUAGE plpgsql AS $$ BEGIN PERFORM report_equipment_fault(r,'eq-stage1-known','reporter-stage1',t,'Hydraulic pressure warning observed'); END $$;
+2026-09-10T09:49:52.8391125Z CREATE FUNCTION
+2026-09-10T09:49:52.8392179Z CREATE OR REPLACE FUNCTION s2_reject_schedule(a text,r text,s timestamptz) RETURNS void LANGUAGE plpgsql AS $$ BEGIN PERFORM schedule_maintenance(a,r,s); RAISE EXCEPTION 'unexpected schedule acceptance'; EXCEPTION WHEN OTHERS THEN IF SQLERRM='unexpected schedule acceptance' THEN RAISE; END IF; END $$;
+2026-09-10T09:49:52.8393468Z CREATE FUNCTION
+2026-09-10T09:49:52.8394479Z CREATE OR REPLACE FUNCTION s2_reject_complete(a text,r text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN PERFORM complete_maintenance(a,r); RAISE EXCEPTION 'unexpected completion acceptance'; EXCEPTION WHEN OTHERS THEN IF SQLERRM='unexpected completion acceptance' THEN RAISE; END IF; END $$;
+2026-09-10T09:49:52.8395548Z CREATE FUNCTION
+2026-09-10T09:49:52.8397861Z CREATE OR REPLACE FUNCTION s2_state(c text,r text,st text,s timestamptz,rep timestamptz,done boolean) RETURNS void LANGUAGE plpgsql AS $$ BEGIN IF (SELECT count(*) FROM maintenance_request WHERE request_id=r AND equipment_id='eq-stage1-known' AND reported_by='reporter-stage1' AND reported_at=rep AND description='Hydraulic pressure warning observed' AND status=st AND scheduled_for IS NOT DISTINCT FROM s AND CASE WHEN done THEN completed_at IS NOT NULL ELSE completed_at IS NULL END)<>1 OR (SELECT count(*) FROM maintenance_request)<>1 THEN RAISE EXCEPTION '% row/count gate failed',c; END IF; END $$;
+2026-09-10T09:49:52.8399913Z CREATE FUNCTION
+2026-09-10T09:49:52.8402438Z CREATE OR REPLACE FUNCTION s2_same(c text,r text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN IF (SELECT count(*) FROM s2_pre_call)<>1 OR (SELECT count(*) FROM maintenance_request)<>1 OR (SELECT count(*) FROM maintenance_request m JOIN s2_pre_call p ON m.request_id IS NOT DISTINCT FROM p.request_id AND m.equipment_id IS NOT DISTINCT FROM p.equipment_id AND m.reported_by IS NOT DISTINCT FROM p.reported_by AND m.reported_at IS NOT DISTINCT FROM p.reported_at AND m.description IS NOT DISTINCT FROM p.description AND m.status IS NOT DISTINCT FROM p.status AND m.scheduled_for IS NOT DISTINCT FROM p.scheduled_for AND m.completed_at IS NOT DISTINCT FROM p.completed_at WHERE m.request_id=r)<>1 THEN RAISE EXCEPTION '% rejected call mutated request',c; END IF; END $$;
+2026-09-10T09:49:52.8405130Z CREATE FUNCTION
+2026-09-10T09:49:52.8406245Z CREATE OR REPLACE FUNCTION s2_clock(c text,r text,b timestamptz,a timestamptz) RETURNS void LANGUAGE plpgsql AS $$ BEGIN IF (SELECT completed_at BETWEEN b AND a AND completed_at>=reported_at FROM maintenance_request WHERE request_id=r) IS NOT TRUE THEN RAISE EXCEPTION '% completion clock gate failed',c; END IF; END $$;
+2026-09-10T09:49:52.8407703Z CREATE FUNCTION
+2026-09-10T09:49:52.8408290Z SELECT 'authorization_fixture' observation,actor_evidence,role_name FROM stage2_authorization_fixture ORDER BY role_name;
+2026-09-10T09:49:52.8408850Z observation|actor_evidence|role_name
+2026-09-10T09:49:52.8409223Z authorization_fixture|stage2-coordinator-fixture|maintenance_coordinator
+2026-09-10T09:49:52.8409685Z authorization_fixture|stage2-technician-fixture|technician
+2026-09-10T09:49:52.8410004Z (2 rows)
+2026-09-10T09:49:52.8410270Z -- Each S2-01..S2-07 prerequisite is time-aligned as required by v3.
+2026-09-10T09:49:52.8410613Z -- S2-01
+2026-09-10T09:49:52.8411212Z SELECT s2_setup('S2-01'); SELECT 'S2-01 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s201_
+2026-09-10T09:49:52.8411875Z s2_setup
+2026-09-10T09:49:52.8411970Z 
+2026-09-10T09:49:52.8412047Z (1 row)
+2026-09-10T09:49:52.8412236Z observation|request_count
+2026-09-10T09:49:52.8412448Z S2-01 setup|0
+2026-09-10T09:49:52.8412628Z (1 row)
+2026-09-10T09:49:52.8419239Z SELECT 'S2-01 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s201_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s201_lifecycle_report_db_before'::timestamptz); SELECT 'S2-01 report accepted' outcome; SELECT 'S2-01 open row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-01 prerequisite','req-stage2-base','open',NULL,:'s201_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8421867Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8422569Z S2-01 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.663982+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8423131Z (1 row)
+2026-09-10T09:49:52.8423302Z s2_report
+2026-09-10T09:49:52.8423407Z 
+2026-09-10T09:49:52.8423479Z (1 row)
+2026-09-10T09:49:52.8423643Z outcome
+2026-09-10T09:49:52.8423816Z S2-01 report accepted
+2026-09-10T09:49:52.8424016Z (1 row)
+2026-09-10T09:49:52.8424424Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8425239Z S2-01 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.663982+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8425816Z (1 row)
+2026-09-10T09:49:52.8425983Z request_count
+2026-09-10T09:49:52.8426162Z 1
+2026-09-10T09:49:52.8426321Z (1 row)
+2026-09-10T09:49:52.8426483Z s2_state
+2026-09-10T09:49:52.8426583Z 
+2026-09-10T09:49:52.8426651Z (1 row)
+2026-09-10T09:49:52.8427039Z SELECT clock_timestamp() db_before \gset s201_
+2026-09-10T09:49:52.8427544Z SELECT (:'s201_db_before'::timestamptz+interval '48 hours') scheduled \gset s201_
+2026-09-10T09:49:52.8428962Z SELECT 'S2-01 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s201_scheduled' scheduled_for; SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-base',:'s201_scheduled'::timestamptz); SELECT clock_timestamp() db_after \gset s201_
+2026-09-10T09:49:52.8430284Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8430867Z S2-01 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-12 09:49:52.665596+00
+2026-09-10T09:49:52.8431379Z (1 row)
+2026-09-10T09:49:52.8431555Z schedule_maintenance
+2026-09-10T09:49:52.8431761Z req-stage2-base
+2026-09-10T09:49:52.8431946Z (1 row)
+2026-09-10T09:49:52.8432141Z SELECT 'S2-01 schedule accepted' outcome;
+2026-09-10T09:49:52.8432405Z outcome
+2026-09-10T09:49:52.8432578Z S2-01 schedule accepted
+2026-09-10T09:49:52.8432778Z (1 row)
+2026-09-10T09:49:52.8434532Z SELECT 'S2-01 accepted clock' observation,:'s201_db_before' db_before,:'s201_db_after' db_after; SELECT 1/CASE WHEN :'s201_scheduled'::timestamptz>:'s201_db_after'::timestamptz THEN 1 ELSE 0 END s201_future_gate; SELECT 'S2-01 row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-01','req-stage2-base','scheduled',:'s201_scheduled'::timestamptz,:'s201_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8436282Z observation|db_before|db_after
+2026-09-10T09:49:52.8436629Z S2-01 accepted clock|2026-09-10 09:49:52.665596+00|2026-09-10 09:49:52.666683+00
+2026-09-10T09:49:52.8437139Z (1 row)
+2026-09-10T09:49:52.8437312Z s201_future_gate
+2026-09-10T09:49:52.8437505Z 1
+2026-09-10T09:49:52.8437663Z (1 row)
+2026-09-10T09:49:52.8438061Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8438955Z S2-01 row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.663982+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.665596+00|NULL
+2026-09-10T09:49:52.8439785Z (1 row)
+2026-09-10T09:49:52.8439961Z request_count
+2026-09-10T09:49:52.8440139Z 1
+2026-09-10T09:49:52.8440294Z (1 row)
+2026-09-10T09:49:52.8440454Z s2_state
+2026-09-10T09:49:52.8440555Z 
+2026-09-10T09:49:52.8440629Z (1 row)
+2026-09-10T09:49:52.8440799Z -- S2-02
+2026-09-10T09:49:52.8441412Z SELECT s2_setup('S2-02'); SELECT 'S2-02 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s202_
+2026-09-10T09:49:52.8442088Z s2_setup
+2026-09-10T09:49:52.8442181Z 
+2026-09-10T09:49:52.8442254Z (1 row)
+2026-09-10T09:49:52.8442429Z observation|request_count
+2026-09-10T09:49:52.8442645Z S2-02 setup|0
+2026-09-10T09:49:52.8442818Z (1 row)
+2026-09-10T09:49:52.8445204Z SELECT 'S2-02 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s202_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s202_lifecycle_report_db_before'::timestamptz); SELECT 'S2-02 report accepted' outcome; SELECT 'S2-02 open row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-02 prerequisite','req-stage2-base','open',NULL,:'s202_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8447533Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8448202Z S2-02 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.669226+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8448748Z (1 row)
+2026-09-10T09:49:52.8448912Z s2_report
+2026-09-10T09:49:52.8449018Z 
+2026-09-10T09:49:52.8449089Z (1 row)
+2026-09-10T09:49:52.8449251Z outcome
+2026-09-10T09:49:52.8449421Z S2-02 report accepted
+2026-09-10T09:49:52.8449623Z (1 row)
+2026-09-10T09:49:52.8450020Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8450836Z S2-02 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.669226+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8451408Z (1 row)
+2026-09-10T09:49:52.8451578Z request_count
+2026-09-10T09:49:52.8451758Z 1
+2026-09-10T09:49:52.8451919Z (1 row)
+2026-09-10T09:49:52.8452085Z s2_state
+2026-09-10T09:49:52.8452187Z 
+2026-09-10T09:49:52.8452257Z (1 row)
+2026-09-10T09:49:52.8452487Z SELECT clock_timestamp() schedule_db_before \gset s202_
+2026-09-10T09:49:52.8452958Z SELECT (:'s202_schedule_db_before'::timestamptz+interval '48 hours') scheduled \gset s202_
+2026-09-10T09:49:52.8454418Z SELECT 'S2-02 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s202_scheduled' scheduled_for; SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-base',:'s202_scheduled'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s202_
+2026-09-10T09:49:52.8455956Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8456534Z S2-02 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-12 09:49:52.670544+00
+2026-09-10T09:49:52.8457290Z (1 row)
+2026-09-10T09:49:52.8457470Z schedule_maintenance
+2026-09-10T09:49:52.8457674Z req-stage2-base
+2026-09-10T09:49:52.8457857Z (1 row)
+2026-09-10T09:49:52.8458047Z SELECT 'S2-02 schedule accepted' outcome;
+2026-09-10T09:49:52.8458307Z outcome
+2026-09-10T09:49:52.8458478Z S2-02 schedule accepted
+2026-09-10T09:49:52.8458677Z (1 row)
+2026-09-10T09:49:52.8459091Z SELECT 'S2-02 schedule clock' observation,:'s202_schedule_db_before' db_before,:'s202_schedule_db_after' db_after;
+2026-09-10T09:49:52.8459589Z observation|db_before|db_after
+2026-09-10T09:49:52.8459922Z S2-02 schedule clock|2026-09-10 09:49:52.670544+00|2026-09-10 09:49:52.67142+00
+2026-09-10T09:49:52.8460267Z (1 row)
+2026-09-10T09:49:52.8460726Z SELECT 'S2-02 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8461498Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8462443Z S2-02 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.669226+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.670544+00|NULL
+2026-09-10T09:49:52.8463134Z (1 row)
+2026-09-10T09:49:52.8463300Z request_count
+2026-09-10T09:49:52.8463478Z 1
+2026-09-10T09:49:52.8463638Z (1 row)
+2026-09-10T09:49:52.8464224Z SELECT s2_state('S2-02 scheduled prerequisite','req-stage2-base','scheduled',:'s202_scheduled'::timestamptz,:'s202_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8464901Z s2_state
+2026-09-10T09:49:52.8465005Z 
+2026-09-10T09:49:52.8465074Z (1 row)
+2026-09-10T09:49:52.8465528Z SELECT 1/CASE WHEN :'s202_scheduled'::timestamptz>:'s202_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s202_schedule_gate;
+2026-09-10T09:49:52.8466065Z s202_schedule_gate
+2026-09-10T09:49:52.8466248Z 1
+2026-09-10T09:49:52.8466406Z (1 row)
+2026-09-10T09:49:52.8467099Z SELECT 'S2-02 pre-completion row' observation,* FROM maintenance_request; SELECT clock_timestamp() db_before \gset s202_
+2026-09-10T09:49:52.8467864Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8468814Z S2-02 pre-completion row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.669226+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.670544+00|NULL
+2026-09-10T09:49:52.8469522Z (1 row)
+2026-09-10T09:49:52.8470446Z SELECT 'S2-02 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-base' request_id; SELECT complete_maintenance('stage2-technician-fixture','req-stage2-base'); SELECT clock_timestamp() db_after \gset s202_
+2026-09-10T09:49:52.8471472Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8471866Z S2-02 complete input|stage2-technician-fixture|technician|req-stage2-base
+2026-09-10T09:49:52.8472231Z (1 row)
+2026-09-10T09:49:52.8472409Z complete_maintenance
+2026-09-10T09:49:52.8472613Z req-stage2-base
+2026-09-10T09:49:52.8472799Z (1 row)
+2026-09-10T09:49:52.8473009Z SELECT 'S2-02 completion accepted' outcome;
+2026-09-10T09:49:52.8473273Z outcome
+2026-09-10T09:49:52.8473454Z S2-02 completion accepted
+2026-09-10T09:49:52.8473667Z (1 row)
+2026-09-10T09:49:52.8475195Z SELECT 'S2-02 accepted clock' observation,:'s202_db_before' db_before,:'s202_db_after' db_after; SELECT 'S2-02 row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-02','req-stage2-base','completed',:'s202_scheduled'::timestamptz,:'s202_lifecycle_report_db_before'::timestamptz,true); SELECT s2_clock('S2-02','req-stage2-base',:'s202_db_before'::timestamptz,:'s202_db_after'::timestamptz);
+2026-09-10T09:49:52.8476768Z observation|db_before|db_after
+2026-09-10T09:49:52.8477244Z S2-02 accepted clock|2026-09-10 09:49:52.672628+00|2026-09-10 09:49:52.673422+00
+2026-09-10T09:49:52.8477750Z (1 row)
+2026-09-10T09:49:52.8478265Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8479233Z S2-02 row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.669226+00|Hydraulic pressure warning observed|completed|2026-09-12 09:49:52.670544+00|2026-09-10 09:49:52.673045+00
+2026-09-10T09:49:52.8479960Z (1 row)
+2026-09-10T09:49:52.8480125Z request_count
+2026-09-10T09:49:52.8480300Z 1
+2026-09-10T09:49:52.8480458Z (1 row)
+2026-09-10T09:49:52.8480620Z s2_state
+2026-09-10T09:49:52.8480715Z 
+2026-09-10T09:49:52.8480791Z (1 row)
+2026-09-10T09:49:52.8480986Z s2_clock
+2026-09-10T09:49:52.8481087Z 
+2026-09-10T09:49:52.8481156Z (1 row)
+2026-09-10T09:49:52.8481379Z -- S2-03 (open completion is rejected without mutation)
+2026-09-10T09:49:52.8482114Z SELECT s2_setup('S2-03'); SELECT 'S2-03 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s203_
+2026-09-10T09:49:52.8482790Z s2_setup
+2026-09-10T09:49:52.8482885Z 
+2026-09-10T09:49:52.8482958Z (1 row)
+2026-09-10T09:49:52.8483140Z observation|request_count
+2026-09-10T09:49:52.8483352Z S2-03 setup|0
+2026-09-10T09:49:52.8483530Z (1 row)
+2026-09-10T09:49:52.8485573Z SELECT 'S2-03 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s203_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s203_lifecycle_report_db_before'::timestamptz); SELECT 'S2-03 report accepted' outcome; SELECT 'S2-03 open row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-03 prerequisite','req-stage2-base','open',NULL,:'s203_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8488353Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8489214Z S2-03 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.676251+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8489778Z (1 row)
+2026-09-10T09:49:52.8490129Z s2_report
+2026-09-10T09:49:52.8490240Z 
+2026-09-10T09:49:52.8490319Z (1 row)
+2026-09-10T09:49:52.8490484Z outcome
+2026-09-10T09:49:52.8490656Z S2-03 report accepted
+2026-09-10T09:49:52.8490854Z (1 row)
+2026-09-10T09:49:52.8491420Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8492240Z S2-03 open row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.676251+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8492996Z (1 row)
+2026-09-10T09:49:52.8493169Z request_count
+2026-09-10T09:49:52.8493349Z 1
+2026-09-10T09:49:52.8493598Z (1 row)
+2026-09-10T09:49:52.8493845Z s2_state
+2026-09-10T09:49:52.8493944Z 
+2026-09-10T09:49:52.8494022Z (1 row)
+2026-09-10T09:49:52.8495299Z BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-base'; SELECT 'S2-03 pre' observation,* FROM s2_pre_call; SELECT clock_timestamp() db_before \gset s203c_
+2026-09-10T09:49:52.8496623Z BEGIN
+2026-09-10T09:49:52.8496792Z SELECT 1
+2026-09-10T09:49:52.8497596Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8498499Z S2-03 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.676251+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8499117Z (1 row)
+2026-09-10T09:49:52.8500200Z SELECT 'S2-03 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-base' request_id; SELECT s2_reject_complete('stage2-technician-fixture','req-stage2-base'); SELECT clock_timestamp() db_after \gset s203c_
+2026-09-10T09:49:52.8501867Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8502265Z S2-03 complete input|stage2-technician-fixture|technician|req-stage2-base
+2026-09-10T09:49:52.8502629Z (1 row)
+2026-09-10T09:49:52.8503109Z s2_reject_complete
+2026-09-10T09:49:52.8503323Z 
+2026-09-10T09:49:52.8503465Z (1 row)
+2026-09-10T09:49:52.8503770Z SELECT 'S2-03 completion rejected' outcome;
+2026-09-10T09:49:52.8504210Z outcome
+2026-09-10T09:49:52.8504400Z S2-03 completion rejected
+2026-09-10T09:49:52.8504613Z (1 row)
+2026-09-10T09:49:52.8505813Z SELECT 'S2-03 rejected clock' observation,:'s203c_db_before' db_before,:'s203c_db_after' db_after; SELECT 'S2-03 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-03','req-stage2-base'); COMMIT;
+2026-09-10T09:49:52.8507684Z observation|db_before|db_after
+2026-09-10T09:49:52.8508053Z S2-03 rejected clock|2026-09-10 09:49:52.678746+00|2026-09-10 09:49:52.679399+00
+2026-09-10T09:49:52.8508427Z (1 row)
+2026-09-10T09:49:52.8508827Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8509653Z S2-03 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.676251+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8510256Z (1 row)
+2026-09-10T09:49:52.8510427Z request_count
+2026-09-10T09:49:52.8510609Z 1
+2026-09-10T09:49:52.8510772Z (1 row)
+2026-09-10T09:49:52.8510934Z s2_same
+2026-09-10T09:49:52.8511036Z 
+2026-09-10T09:49:52.8511105Z (1 row)
+2026-09-10T09:49:52.8511264Z COMMIT
+2026-09-10T09:49:52.8511459Z -- S2-04
+2026-09-10T09:49:52.8512075Z SELECT s2_setup('S2-04'); SELECT 'S2-04 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s204_
+2026-09-10T09:49:52.8512748Z s2_setup
+2026-09-10T09:49:52.8512843Z 
+2026-09-10T09:49:52.8512965Z (1 row)
+2026-09-10T09:49:52.8513333Z observation|request_count
+2026-09-10T09:49:52.8513738Z S2-04 setup|0
+2026-09-10T09:49:52.8513929Z (1 row)
+2026-09-10T09:49:52.8515270Z SELECT 'S2-04 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s204_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s204_lifecycle_report_db_before'::timestamptz);
+2026-09-10T09:49:52.8516746Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8517782Z S2-04 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8518782Z (1 row)
+2026-09-10T09:49:52.8519081Z s2_report
+2026-09-10T09:49:52.8519254Z 
+2026-09-10T09:49:52.8519386Z (1 row)
+2026-09-10T09:49:52.8520238Z SELECT 'S2-04 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8521610Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8523117Z S2-04 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8524193Z (1 row)
+2026-09-10T09:49:52.8524523Z request_count
+2026-09-10T09:49:52.8524847Z 1
+2026-09-10T09:49:52.8525130Z (1 row)
+2026-09-10T09:49:52.8526412Z  SELECT 'S2-04 report accepted' outcome; SELECT s2_state('S2-04 prerequisite','req-stage2-base','open',NULL,:'s204_lifecycle_report_db_before'::timestamptz,false); SELECT clock_timestamp() schedule_db_before \gset s204_
+2026-09-10T09:49:52.8528156Z outcome
+2026-09-10T09:49:52.8528501Z S2-04 report accepted
+2026-09-10T09:49:52.8528857Z (1 row)
+2026-09-10T09:49:52.8529157Z s2_state
+2026-09-10T09:49:52.8529413Z 
+2026-09-10T09:49:52.8529550Z (1 row)
+2026-09-10T09:49:52.8530180Z SELECT (:'s204_schedule_db_before'::timestamptz+interval '48 hours') scheduled \gset s204_
+2026-09-10T09:49:52.8531976Z SELECT 'S2-04 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s204_scheduled' scheduled_for;
+2026-09-10T09:49:52.8533593Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8534669Z S2-04 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-12 09:49:52.684619+00
+2026-09-10T09:49:52.8535631Z (1 row)
+2026-09-10T09:49:52.8536728Z SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-base',:'s204_scheduled'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s204_
+2026-09-10T09:49:52.8538261Z schedule_maintenance
+2026-09-10T09:49:52.8538657Z req-stage2-base
+2026-09-10T09:49:52.8539016Z (1 row)
+2026-09-10T09:49:52.8539369Z SELECT 'S2-04 schedule accepted' outcome;
+2026-09-10T09:49:52.8539851Z outcome
+2026-09-10T09:49:52.8540173Z S2-04 schedule accepted
+2026-09-10T09:49:52.8540582Z (1 row)
+2026-09-10T09:49:52.8541383Z SELECT 'S2-04 schedule clock' observation,:'s204_schedule_db_before' db_before,:'s204_schedule_db_after' db_after;
+2026-09-10T09:49:52.8542320Z observation|db_before|db_after
+2026-09-10T09:49:52.8542952Z S2-04 schedule clock|2026-09-10 09:49:52.684619+00|2026-09-10 09:49:52.685769+00
+2026-09-10T09:49:52.8543363Z (1 row)
+2026-09-10T09:49:52.8544031Z SELECT 'S2-04 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8544839Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8545800Z S2-04 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.684619+00|NULL
+2026-09-10T09:49:52.8546509Z (1 row)
+2026-09-10T09:49:52.8546681Z request_count
+2026-09-10T09:49:52.8547137Z 1
+2026-09-10T09:49:52.8547351Z (1 row)
+2026-09-10T09:49:52.8547971Z SELECT s2_state('S2-04 scheduled prerequisite','req-stage2-base','scheduled',:'s204_scheduled'::timestamptz,:'s204_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8548653Z s2_state
+2026-09-10T09:49:52.8548763Z 
+2026-09-10T09:49:52.8548842Z (1 row)
+2026-09-10T09:49:52.8549715Z SELECT 1/CASE WHEN :'s204_scheduled'::timestamptz>:'s204_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s204_schedule_gate; SELECT 'S2-04 pre-completion row' observation,* FROM maintenance_request; SELECT clock_timestamp() db_before \gset s204c_
+2026-09-10T09:49:52.8550657Z s204_schedule_gate
+2026-09-10T09:49:52.8550849Z 1
+2026-09-10T09:49:52.8551012Z (1 row)
+2026-09-10T09:49:52.8551411Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8552356Z S2-04 pre-completion row|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.684619+00|NULL
+2026-09-10T09:49:52.8553074Z (1 row)
+2026-09-10T09:49:52.8554012Z SELECT 'S2-04 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-base' request_id; SELECT complete_maintenance('stage2-technician-fixture','req-stage2-base'); SELECT clock_timestamp() db_after \gset s204c_
+2026-09-10T09:49:52.8555039Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8555430Z S2-04 complete input|stage2-technician-fixture|technician|req-stage2-base
+2026-09-10T09:49:52.8555793Z (1 row)
+2026-09-10T09:49:52.8555974Z complete_maintenance
+2026-09-10T09:49:52.8556183Z req-stage2-base
+2026-09-10T09:49:52.8556363Z (1 row)
+2026-09-10T09:49:52.8556559Z SELECT 'S2-04 completion accepted' outcome;
+2026-09-10T09:49:52.8557014Z outcome
+2026-09-10T09:49:52.8557326Z S2-04 completion accepted
+2026-09-10T09:49:52.8557583Z (1 row)
+2026-09-10T09:49:52.8557965Z SELECT 'S2-04 completion clock' observation,:'s204c_db_before' db_before,:'s204c_db_after' db_after;
+2026-09-10T09:49:52.8558429Z observation|db_before|db_after
+2026-09-10T09:49:52.8558968Z S2-04 completion clock|2026-09-10 09:49:52.68687+00|2026-09-10 09:49:52.687517+00
+2026-09-10T09:49:52.8559327Z (1 row)
+2026-09-10T09:49:52.8559897Z SELECT 'S2-04 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8560663Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8561714Z S2-04 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|completed|2026-09-12 09:49:52.684619+00|2026-09-10 09:49:52.687201+00
+2026-09-10T09:49:52.8562489Z (1 row)
+2026-09-10T09:49:52.8562662Z request_count
+2026-09-10T09:49:52.8562845Z 1
+2026-09-10T09:49:52.8563005Z (1 row)
+2026-09-10T09:49:52.8563590Z SELECT s2_state('S2-04 completed prerequisite','req-stage2-base','completed',:'s204_scheduled'::timestamptz,:'s204_lifecycle_report_db_before'::timestamptz,true);
+2026-09-10T09:49:52.8564245Z s2_state
+2026-09-10T09:49:52.8564348Z 
+2026-09-10T09:49:52.8564417Z (1 row)
+2026-09-10T09:49:52.8564831Z SELECT s2_clock('S2-04 completion','req-stage2-base',:'s204c_db_before'::timestamptz,:'s204c_db_after'::timestamptz);
+2026-09-10T09:49:52.8565331Z s2_clock
+2026-09-10T09:49:52.8565433Z 
+2026-09-10T09:49:52.8565509Z (1 row)
+2026-09-10T09:49:52.8566596Z BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-base'; SELECT 'S2-04 pre' observation,* FROM s2_pre_call; SELECT clock_timestamp() db_before \gset s204r_
+2026-09-10T09:49:52.8568109Z BEGIN
+2026-09-10T09:49:52.8568291Z SELECT 1
+2026-09-10T09:49:52.8568696Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8569659Z S2-04 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|completed|2026-09-12 09:49:52.684619+00|2026-09-10 09:49:52.687201+00
+2026-09-10T09:49:52.8570388Z (1 row)
+2026-09-10T09:49:52.8570695Z SELECT (:'s204r_db_before'::timestamptz+interval '72 hours') retry \gset s204r_
+2026-09-10T09:49:52.8572068Z SELECT 'S2-04 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s204r_retry' scheduled_for; SELECT s2_reject_schedule('stage2-coordinator-fixture','req-stage2-base',:'s204r_retry'::timestamptz); SELECT clock_timestamp() db_after \gset s204r_
+2026-09-10T09:49:52.8573343Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8573917Z S2-04 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-13 09:49:52.689651+00
+2026-09-10T09:49:52.8574423Z (1 row)
+2026-09-10T09:49:52.8574598Z s2_reject_schedule
+2026-09-10T09:49:52.8574720Z 
+2026-09-10T09:49:52.8574790Z (1 row)
+2026-09-10T09:49:52.8574980Z SELECT 'S2-04 schedule rejected' outcome;
+2026-09-10T09:49:52.8575243Z outcome
+2026-09-10T09:49:52.8575416Z S2-04 schedule rejected
+2026-09-10T09:49:52.8575614Z (1 row)
+2026-09-10T09:49:52.8576025Z SELECT 1/CASE WHEN :'s204r_retry'::timestamptz>:'s204r_db_after'::timestamptz THEN 1 ELSE 0 END s204r_future_gate;
+2026-09-10T09:49:52.8576505Z s204r_future_gate
+2026-09-10T09:49:52.8576689Z 1
+2026-09-10T09:49:52.8577048Z (1 row)
+2026-09-10T09:49:52.8577956Z SELECT 'S2-04 rejected clock' observation,:'s204r_db_before' db_before,:'s204r_db_after' db_after; SELECT 'S2-04 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-04','req-stage2-base'); COMMIT;
+2026-09-10T09:49:52.8578937Z observation|db_before|db_after
+2026-09-10T09:49:52.8579284Z S2-04 rejected clock|2026-09-10 09:49:52.689651+00|2026-09-10 09:49:52.690394+00
+2026-09-10T09:49:52.8579632Z (1 row)
+2026-09-10T09:49:52.8580028Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8581279Z S2-04 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.683002+00|Hydraulic pressure warning observed|completed|2026-09-12 09:49:52.684619+00|2026-09-10 09:49:52.687201+00
+2026-09-10T09:49:52.8582012Z (1 row)
+2026-09-10T09:49:52.8582180Z request_count
+2026-09-10T09:49:52.8582358Z 1
+2026-09-10T09:49:52.8582516Z (1 row)
+2026-09-10T09:49:52.8582677Z s2_same
+2026-09-10T09:49:52.8582773Z 
+2026-09-10T09:49:52.8582841Z (1 row)
+2026-09-10T09:49:52.8583006Z COMMIT
+2026-09-10T09:49:52.8583301Z -- S2-05 through S2-07 retain the same v3 prerequisite and full equality gate.
+2026-09-10T09:49:52.8584110Z SELECT s2_setup('S2-05'); SELECT 'S2-05 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s205_
+2026-09-10T09:49:52.8584779Z s2_setup
+2026-09-10T09:49:52.8584885Z 
+2026-09-10T09:49:52.8584954Z (1 row)
+2026-09-10T09:49:52.8585131Z observation|request_count
+2026-09-10T09:49:52.8585352Z S2-05 setup|0
+2026-09-10T09:49:52.8585536Z (1 row)
+2026-09-10T09:49:52.8586632Z SELECT 'S2-05 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s205_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s205_lifecycle_report_db_before'::timestamptz);
+2026-09-10T09:49:52.8588256Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8588928Z S2-05 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.693771+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8589471Z (1 row)
+2026-09-10T09:49:52.8589637Z s2_report
+2026-09-10T09:49:52.8589741Z 
+2026-09-10T09:49:52.8589809Z (1 row)
+2026-09-10T09:49:52.8589994Z SELECT 'S2-05 report accepted' outcome;
+2026-09-10T09:49:52.8590238Z outcome
+2026-09-10T09:49:52.8590413Z S2-05 report accepted
+2026-09-10T09:49:52.8590617Z (1 row)
+2026-09-10T09:49:52.8591089Z SELECT 'S2-05 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8591854Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8592686Z S2-05 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.693771+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8593284Z (1 row)
+2026-09-10T09:49:52.8593454Z request_count
+2026-09-10T09:49:52.8593632Z 1
+2026-09-10T09:49:52.8593790Z (1 row)
+2026-09-10T09:49:52.8595403Z  SELECT s2_state('S2-05 prerequisite','req-stage2-base','open',NULL,:'s205_lifecycle_report_db_before'::timestamptz,false); BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-base'; SELECT 'S2-05 exact pre-rejection' observation,* FROM s2_pre_call; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8597291Z s2_state
+2026-09-10T09:49:52.8597393Z 
+2026-09-10T09:49:52.8597469Z (1 row)
+2026-09-10T09:49:52.8597628Z BEGIN
+2026-09-10T09:49:52.8597799Z SELECT 1
+2026-09-10T09:49:52.8598193Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8599041Z S2-05 exact pre-rejection|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.693771+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8599667Z (1 row)
+2026-09-10T09:49:52.8599835Z request_count
+2026-09-10T09:49:52.8600016Z 1
+2026-09-10T09:49:52.8600173Z (1 row)
+2026-09-10T09:49:52.8600379Z SELECT clock_timestamp() db_before \gset s205_
+2026-09-10T09:49:52.8600779Z SELECT (:'s205_db_before'::timestamptz-interval '48 hours') past \gset s205_
+2026-09-10T09:49:52.8602105Z SELECT 'S2-05 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s205_past' scheduled_for; SELECT s2_reject_schedule('stage2-coordinator-fixture','req-stage2-base',:'s205_past'::timestamptz); SELECT clock_timestamp() db_after \gset s205_
+2026-09-10T09:49:52.8603623Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8604207Z S2-05 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-08 09:49:52.698668+00
+2026-09-10T09:49:52.8604720Z (1 row)
+2026-09-10T09:49:52.8604887Z s2_reject_schedule
+2026-09-10T09:49:52.8605004Z 
+2026-09-10T09:49:52.8605077Z (1 row)
+2026-09-10T09:49:52.8605267Z SELECT 'S2-05 schedule rejected' outcome;
+2026-09-10T09:49:52.8605528Z outcome
+2026-09-10T09:49:52.8605700Z S2-05 schedule rejected
+2026-09-10T09:49:52.8605901Z (1 row)
+2026-09-10T09:49:52.8606796Z SELECT 'S2-05 rejected clock' observation,:'s205_db_before' db_before,:'s205_db_after' db_after; SELECT 'S2-05 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-05','req-stage2-base'); COMMIT;
+2026-09-10T09:49:52.8608127Z observation|db_before|db_after
+2026-09-10T09:49:52.8608480Z S2-05 rejected clock|2026-09-10 09:49:52.698668+00|2026-09-10 09:49:52.699337+00
+2026-09-10T09:49:52.8608835Z (1 row)
+2026-09-10T09:49:52.8609236Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8610035Z S2-05 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.693771+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8610613Z (1 row)
+2026-09-10T09:49:52.8610783Z request_count
+2026-09-10T09:49:52.8610963Z 1
+2026-09-10T09:49:52.8611125Z (1 row)
+2026-09-10T09:49:52.8611288Z s2_same
+2026-09-10T09:49:52.8611384Z 
+2026-09-10T09:49:52.8611458Z (1 row)
+2026-09-10T09:49:52.8611617Z COMMIT
+2026-09-10T09:49:52.8612216Z SELECT s2_setup('S2-06'); SELECT 'S2-06 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s206_
+2026-09-10T09:49:52.8612903Z s2_setup
+2026-09-10T09:49:52.8613002Z 
+2026-09-10T09:49:52.8613075Z (1 row)
+2026-09-10T09:49:52.8613250Z observation|request_count
+2026-09-10T09:49:52.8613473Z S2-06 setup|0
+2026-09-10T09:49:52.8613649Z (1 row)
+2026-09-10T09:49:52.8614746Z SELECT 'S2-06 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s206_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s206_lifecycle_report_db_before'::timestamptz);
+2026-09-10T09:49:52.8616014Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8616674Z S2-06 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.702423+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8617440Z (1 row)
+2026-09-10T09:49:52.8617608Z s2_report
+2026-09-10T09:49:52.8617713Z 
+2026-09-10T09:49:52.8617787Z (1 row)
+2026-09-10T09:49:52.8617970Z SELECT 'S2-06 report accepted' outcome;
+2026-09-10T09:49:52.8618216Z outcome
+2026-09-10T09:49:52.8618389Z S2-06 report accepted
+2026-09-10T09:49:52.8618585Z (1 row)
+2026-09-10T09:49:52.8619059Z SELECT 'S2-06 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8619818Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8620648Z S2-06 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.702423+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8621250Z (1 row)
+2026-09-10T09:49:52.8621416Z request_count
+2026-09-10T09:49:52.8621594Z 1
+2026-09-10T09:49:52.8621753Z (1 row)
+2026-09-10T09:49:52.8623495Z  SELECT s2_state('S2-06 prerequisite','req-stage2-base','open',NULL,:'s206_lifecycle_report_db_before'::timestamptz,false); BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-base'; SELECT 'S2-06 exact pre-rejection' observation,* FROM s2_pre_call; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8625277Z s2_state
+2026-09-10T09:49:52.8625375Z 
+2026-09-10T09:49:52.8625450Z (1 row)
+2026-09-10T09:49:52.8625611Z BEGIN
+2026-09-10T09:49:52.8625775Z SELECT 1
+2026-09-10T09:49:52.8626171Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8627261Z S2-06 exact pre-rejection|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.702423+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8627893Z (1 row)
+2026-09-10T09:49:52.8628065Z request_count
+2026-09-10T09:49:52.8628240Z 1
+2026-09-10T09:49:52.8628401Z (1 row)
+2026-09-10T09:49:52.8628603Z SELECT clock_timestamp() db_before \gset s206_
+2026-09-10T09:49:52.8629024Z SELECT (:'s206_db_before'::timestamptz+interval '48 hours') scheduled \gset s206_
+2026-09-10T09:49:52.8630345Z SELECT 'S2-06 schedule input' observation,'reporter-stage1' actor,'no stage2 authorization mapping' authorization,'req-stage2-base' request_id,:'s206_scheduled' scheduled_for; SELECT s2_reject_schedule('reporter-stage1','req-stage2-base',:'s206_scheduled'::timestamptz); SELECT clock_timestamp() db_after \gset s206_
+2026-09-10T09:49:52.8631579Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8632140Z S2-06 schedule input|reporter-stage1|no stage2 authorization mapping|req-stage2-base|2026-09-12 09:49:52.705147+00
+2026-09-10T09:49:52.8632637Z (1 row)
+2026-09-10T09:49:52.8632808Z s2_reject_schedule
+2026-09-10T09:49:52.8632931Z 
+2026-09-10T09:49:52.8633003Z (1 row)
+2026-09-10T09:49:52.8633187Z SELECT 'S2-06 schedule rejected' outcome;
+2026-09-10T09:49:52.8633439Z outcome
+2026-09-10T09:49:52.8633614Z S2-06 schedule rejected
+2026-09-10T09:49:52.8633816Z (1 row)
+2026-09-10T09:49:52.8634231Z SELECT 1/CASE WHEN :'s206_scheduled'::timestamptz>:'s206_db_after'::timestamptz THEN 1 ELSE 0 END s206_future_gate;
+2026-09-10T09:49:52.8634725Z s206_future_gate
+2026-09-10T09:49:52.8634906Z 1
+2026-09-10T09:49:52.8635069Z (1 row)
+2026-09-10T09:49:52.8635966Z SELECT 'S2-06 rejected clock' observation,:'s206_db_before' db_before,:'s206_db_after' db_after; SELECT 'S2-06 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-06','req-stage2-base'); COMMIT;
+2026-09-10T09:49:52.8637212Z observation|db_before|db_after
+2026-09-10T09:49:52.8637596Z S2-06 rejected clock|2026-09-10 09:49:52.705147+00|2026-09-10 09:49:52.705759+00
+2026-09-10T09:49:52.8637949Z (1 row)
+2026-09-10T09:49:52.8638347Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8639156Z S2-06 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.702423+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8639732Z (1 row)
+2026-09-10T09:49:52.8639897Z request_count
+2026-09-10T09:49:52.8640078Z 1
+2026-09-10T09:49:52.8640235Z (1 row)
+2026-09-10T09:49:52.8640396Z s2_same
+2026-09-10T09:49:52.8640537Z 
+2026-09-10T09:49:52.8640611Z (1 row)
+2026-09-10T09:49:52.8640770Z COMMIT
+2026-09-10T09:49:52.8641370Z SELECT s2_setup('S2-07'); SELECT 'S2-07 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() lifecycle_report_db_before \gset s207_
+2026-09-10T09:49:52.8642045Z s2_setup
+2026-09-10T09:49:52.8642147Z 
+2026-09-10T09:49:52.8642216Z (1 row)
+2026-09-10T09:49:52.8642399Z observation|request_count
+2026-09-10T09:49:52.8642617Z S2-07 setup|0
+2026-09-10T09:49:52.8642796Z (1 row)
+2026-09-10T09:49:52.8643891Z SELECT 'S2-07 report input' observation,'req-stage2-base' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s207_lifecycle_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-base',:'s207_lifecycle_report_db_before'::timestamptz);
+2026-09-10T09:49:52.8645352Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8646127Z S2-07 report input|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.708881+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8646678Z (1 row)
+2026-09-10T09:49:52.8647059Z s2_report
+2026-09-10T09:49:52.8647208Z 
+2026-09-10T09:49:52.8647283Z (1 row)
+2026-09-10T09:49:52.8647470Z SELECT 'S2-07 report accepted' outcome;
+2026-09-10T09:49:52.8647731Z outcome
+2026-09-10T09:49:52.8647903Z S2-07 report accepted
+2026-09-10T09:49:52.8648101Z (1 row)
+2026-09-10T09:49:52.8648558Z SELECT 'S2-07 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8649316Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8650160Z S2-07 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.708881+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8650766Z (1 row)
+2026-09-10T09:49:52.8650931Z request_count
+2026-09-10T09:49:52.8651113Z 1
+2026-09-10T09:49:52.8651276Z (1 row)
+2026-09-10T09:49:52.8651906Z  SELECT s2_state('S2-07 prerequisite','req-stage2-base','open',NULL,:'s207_lifecycle_report_db_before'::timestamptz,false); SELECT clock_timestamp() schedule_db_before \gset s207_
+2026-09-10T09:49:52.8652605Z s2_state
+2026-09-10T09:49:52.8652702Z 
+2026-09-10T09:49:52.8652778Z (1 row)
+2026-09-10T09:49:52.8653113Z SELECT (:'s207_schedule_db_before'::timestamptz+interval '48 hours') scheduled \gset s207_
+2026-09-10T09:49:52.8654580Z SELECT 'S2-07 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-base' request_id,:'s207_scheduled' scheduled_for; SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-base',:'s207_scheduled'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s207_
+2026-09-10T09:49:52.8655927Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8656519Z S2-07 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-base|2026-09-12 09:49:52.710413+00
+2026-09-10T09:49:52.8657323Z (1 row)
+2026-09-10T09:49:52.8657502Z schedule_maintenance
+2026-09-10T09:49:52.8657708Z req-stage2-base
+2026-09-10T09:49:52.8657892Z (1 row)
+2026-09-10T09:49:52.8658085Z SELECT 'S2-07 schedule accepted' outcome;
+2026-09-10T09:49:52.8658340Z outcome
+2026-09-10T09:49:52.8658514Z S2-07 schedule accepted
+2026-09-10T09:49:52.8658717Z (1 row)
+2026-09-10T09:49:52.8659128Z SELECT 'S2-07 schedule clock' observation,:'s207_schedule_db_before' db_before,:'s207_schedule_db_after' db_after;
+2026-09-10T09:49:52.8659642Z observation|db_before|db_after
+2026-09-10T09:49:52.8659982Z S2-07 schedule clock|2026-09-10 09:49:52.710413+00|2026-09-10 09:49:52.711248+00
+2026-09-10T09:49:52.8660345Z (1 row)
+2026-09-10T09:49:52.8660805Z SELECT 'S2-07 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8661576Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8662515Z S2-07 observed request|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.708881+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.710413+00|NULL
+2026-09-10T09:49:52.8663217Z (1 row)
+2026-09-10T09:49:52.8663391Z request_count
+2026-09-10T09:49:52.8663726Z 1
+2026-09-10T09:49:52.8663981Z (1 row)
+2026-09-10T09:49:52.8664748Z SELECT s2_state('S2-07 scheduled prerequisite','req-stage2-base','scheduled',:'s207_scheduled'::timestamptz,:'s207_lifecycle_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8665500Z s2_state
+2026-09-10T09:49:52.8665705Z 
+2026-09-10T09:49:52.8665877Z (1 row)
+2026-09-10T09:49:52.8667948Z SELECT 1/CASE WHEN :'s207_scheduled'::timestamptz>:'s207_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s207_schedule_gate; BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-base'; SELECT 'S2-07 pre' observation,* FROM s2_pre_call; SELECT clock_timestamp() db_before \gset s207c_
+2026-09-10T09:49:52.8669750Z s207_schedule_gate
+2026-09-10T09:49:52.8670106Z 1
+2026-09-10T09:49:52.8670396Z (1 row)
+2026-09-10T09:49:52.8670638Z BEGIN
+2026-09-10T09:49:52.8670965Z SELECT 1
+2026-09-10T09:49:52.8671465Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8672537Z S2-07 pre|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.708881+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.710413+00|NULL
+2026-09-10T09:49:52.8673320Z (1 row)
+2026-09-10T09:49:52.8674309Z SELECT 'S2-07 complete input' observation,'reporter-stage1' actor,'no stage2 authorization mapping' authorization,'req-stage2-base' request_id; SELECT s2_reject_complete('reporter-stage1','req-stage2-base'); SELECT clock_timestamp() db_after \gset s207c_
+2026-09-10T09:49:52.8674570Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8674840Z S2-07 complete input|reporter-stage1|no stage2 authorization mapping|req-stage2-base
+2026-09-10T09:49:52.8674981Z (1 row)
+2026-09-10T09:49:52.8675095Z s2_reject_complete
+2026-09-10T09:49:52.8675101Z 
+2026-09-10T09:49:52.8675225Z (1 row)
+2026-09-10T09:49:52.8675407Z SELECT 'S2-07 completion rejected' outcome;
+2026-09-10T09:49:52.8675565Z outcome
+2026-09-10T09:49:52.8675750Z S2-07 completion rejected
+2026-09-10T09:49:52.8675853Z (1 row)
+2026-09-10T09:49:52.8676715Z SELECT 'S2-07 rejected clock' observation,:'s207c_db_before' db_before,:'s207c_db_after' db_after; SELECT 'S2-07 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-07','req-stage2-base'); COMMIT;
+2026-09-10T09:49:52.8677154Z observation|db_before|db_after
+2026-09-10T09:49:52.8677514Z S2-07 rejected clock|2026-09-10 09:49:52.7132+00|2026-09-10 09:49:52.713655+00
+2026-09-10T09:49:52.8677666Z (1 row)
+2026-09-10T09:49:52.8678021Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8678579Z S2-07 after|req-stage2-base|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.708881+00|Hydraulic pressure warning observed|scheduled|2026-09-12 09:49:52.710413+00|NULL
+2026-09-10T09:49:52.8678751Z (1 row)
+2026-09-10T09:49:52.8678949Z request_count
+2026-09-10T09:49:52.8679050Z 1
+2026-09-10T09:49:52.8679187Z (1 row)
+2026-09-10T09:49:52.8688678Z s2_same
+2026-09-10T09:49:52.8688698Z 
+2026-09-10T09:49:52.8688805Z (1 row)
+2026-09-10T09:49:52.8688889Z COMMIT
+2026-09-10T09:49:52.8689079Z -- S2-08 / S2-09: no request exists or is created implicitly.
+2026-09-10T09:49:52.8689568Z SELECT s2_setup('S2-08'); SELECT 'S2-08 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() db_before \gset s208_
+2026-09-10T09:49:52.8689665Z s2_setup
+2026-09-10T09:49:52.8689670Z 
+2026-09-10T09:49:52.8689743Z (1 row)
+2026-09-10T09:49:52.8689853Z observation|request_count
+2026-09-10T09:49:52.8689933Z S2-08 setup|0
+2026-09-10T09:49:52.8690011Z (1 row)
+2026-09-10T09:49:52.8690245Z SELECT (:'s208_db_before'::timestamptz+interval '48 hours') scheduled \gset s208_
+2026-09-10T09:49:52.8691367Z SELECT 'S2-08 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-missing' request_id,:'s208_scheduled' scheduled_for; SELECT s2_reject_schedule('stage2-coordinator-fixture','req-stage2-missing',:'s208_scheduled'::timestamptz); SELECT clock_timestamp() db_after \gset s208_
+2026-09-10T09:49:52.8691524Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8691892Z S2-08 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-missing|2026-09-12 09:49:52.716874+00
+2026-09-10T09:49:52.8692159Z (1 row)
+2026-09-10T09:49:52.8692244Z s2_reject_schedule
+2026-09-10T09:49:52.8692250Z 
+2026-09-10T09:49:52.8692327Z (1 row)
+2026-09-10T09:49:52.8692541Z SELECT 'S2-08 schedule rejected' outcome;
+2026-09-10T09:49:52.8692618Z outcome
+2026-09-10T09:49:52.8692707Z S2-08 schedule rejected
+2026-09-10T09:49:52.8692779Z (1 row)
+2026-09-10T09:49:52.8693109Z SELECT 1/CASE WHEN :'s208_scheduled'::timestamptz>:'s208_db_after'::timestamptz THEN 1 ELSE 0 END s208_future_gate;
+2026-09-10T09:49:52.8693186Z s208_future_gate
+2026-09-10T09:49:52.8693265Z 1
+2026-09-10T09:49:52.8693342Z (1 row)
+2026-09-10T09:49:52.8694705Z SELECT 'S2-08 rejected clock' observation,:'s208_db_before' db_before,:'s208_db_after' db_after; SELECT 'S2-08 counts' observation,count(*) total,count(*) FILTER (WHERE request_id='req-stage2-missing') attempted_id FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request)<>0 OR (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage2-missing')<>0 THEN RAISE EXCEPTION 'S2-08 failed'; END IF; END $$;
+2026-09-10T09:49:52.8694814Z observation|db_before|db_after
+2026-09-10T09:49:52.8695007Z S2-08 rejected clock|2026-09-10 09:49:52.716874+00|2026-09-10 09:49:52.717592+00
+2026-09-10T09:49:52.8695085Z (1 row)
+2026-09-10T09:49:52.8695178Z observation|total|attempted_id
+2026-09-10T09:49:52.8695261Z S2-08 counts|0|0
+2026-09-10T09:49:52.8695343Z (1 row)
+2026-09-10T09:49:52.8695412Z DO
+2026-09-10T09:49:52.8695872Z SELECT s2_setup('S2-09'); SELECT 'S2-09 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() db_before \gset s209_
+2026-09-10T09:49:52.8695949Z s2_setup
+2026-09-10T09:49:52.8695954Z 
+2026-09-10T09:49:52.8696033Z (1 row)
+2026-09-10T09:49:52.8696124Z observation|request_count
+2026-09-10T09:49:52.8696207Z S2-09 setup|0
+2026-09-10T09:49:52.8696285Z (1 row)
+2026-09-10T09:49:52.8697303Z SELECT 'S2-09 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-missing' request_id; SELECT s2_reject_complete('stage2-technician-fixture','req-stage2-missing'); SELECT clock_timestamp() db_after \gset s209_
+2026-09-10T09:49:52.8697435Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8697652Z S2-09 complete input|stage2-technician-fixture|technician|req-stage2-missing
+2026-09-10T09:49:52.8697733Z (1 row)
+2026-09-10T09:49:52.8697814Z s2_reject_complete
+2026-09-10T09:49:52.8697819Z 
+2026-09-10T09:49:52.8697898Z (1 row)
+2026-09-10T09:49:52.8698013Z SELECT 'S2-09 completion rejected' outcome;
+2026-09-10T09:49:52.8698085Z outcome
+2026-09-10T09:49:52.8698176Z S2-09 completion rejected
+2026-09-10T09:49:52.8698247Z (1 row)
+2026-09-10T09:49:52.8699623Z SELECT 'S2-09 rejected clock' observation,:'s209_db_before' db_before,:'s209_db_after' db_after; SELECT 'S2-09 counts' observation,count(*) total,count(*) FILTER (WHERE request_id='req-stage2-missing') attempted_id FROM maintenance_request; DO $$ BEGIN IF (SELECT count(*) FROM maintenance_request)<>0 OR (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage2-missing')<>0 THEN RAISE EXCEPTION 'S2-09 failed'; END IF; END $$;
+2026-09-10T09:49:52.8699730Z observation|db_before|db_after
+2026-09-10T09:49:52.8699926Z S2-09 rejected clock|2026-09-10 09:49:52.719989+00|2026-09-10 09:49:52.720536+00
+2026-09-10T09:49:52.8700005Z (1 row)
+2026-09-10T09:49:52.8700101Z observation|total|attempted_id
+2026-09-10T09:49:52.8700186Z S2-09 counts|0|0
+2026-09-10T09:49:52.8700257Z (1 row)
+2026-09-10T09:49:52.8700333Z DO
+2026-09-10T09:49:52.8700580Z -- S2-10: report at a retained DB instant, then accept completion before its future plan.
+2026-09-10T09:49:52.8701095Z SELECT s2_setup('S2-10'); SELECT 'S2-10 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() early_report_db_before \gset s210_
+2026-09-10T09:49:52.8701177Z s2_setup
+2026-09-10T09:49:52.8701182Z 
+2026-09-10T09:49:52.8701252Z (1 row)
+2026-09-10T09:49:52.8701348Z observation|request_count
+2026-09-10T09:49:52.8701587Z S2-10 setup|0
+2026-09-10T09:49:52.8701668Z (1 row)
+2026-09-10T09:49:52.8703663Z SELECT 'S2-10 report input' observation,'req-stage2-early' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s210_early_report_db_before' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-early',:'s210_early_report_db_before'::timestamptz); SELECT 'S2-10 report accepted' outcome; SELECT 'S2-10 open row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-10 report','req-stage2-early','open',NULL,:'s210_early_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8703868Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8704273Z S2-10 report input|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.722788+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8704346Z (1 row)
+2026-09-10T09:49:52.8704430Z s2_report
+2026-09-10T09:49:52.8704440Z 
+2026-09-10T09:49:52.8704519Z (1 row)
+2026-09-10T09:49:52.8704592Z outcome
+2026-09-10T09:49:52.8704686Z S2-10 report accepted
+2026-09-10T09:49:52.8704759Z (1 row)
+2026-09-10T09:49:52.8705081Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8705500Z S2-10 open row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.722788+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8705580Z (1 row)
+2026-09-10T09:49:52.8705664Z request_count
+2026-09-10T09:49:52.8705736Z 1
+2026-09-10T09:49:52.8705814Z (1 row)
+2026-09-10T09:49:52.8705886Z s2_state
+2026-09-10T09:49:52.8705890Z 
+2026-09-10T09:49:52.8705968Z (1 row)
+2026-09-10T09:49:52.8706110Z SELECT clock_timestamp() schedule_db_before \gset s210_
+2026-09-10T09:49:52.8706365Z SELECT (:'s210_schedule_db_before'::timestamptz+interval '24 hours') scheduled \gset s210_
+2026-09-10T09:49:52.8707809Z SELECT 'S2-10 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-early' request_id,:'s210_scheduled' scheduled_for; SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-early',:'s210_scheduled'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s210_
+2026-09-10T09:49:52.8707978Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8708333Z S2-10 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-early|2026-09-11 09:49:52.72421+00
+2026-09-10T09:49:52.8708406Z (1 row)
+2026-09-10T09:49:52.8708494Z schedule_maintenance
+2026-09-10T09:49:52.8708582Z req-stage2-early
+2026-09-10T09:49:52.8708654Z (1 row)
+2026-09-10T09:49:52.8708764Z SELECT 'S2-10 schedule accepted' outcome;
+2026-09-10T09:49:52.8708838Z outcome
+2026-09-10T09:49:52.8708936Z S2-10 schedule accepted
+2026-09-10T09:49:52.8709009Z (1 row)
+2026-09-10T09:49:52.8709334Z SELECT 'S2-10 schedule clock' observation,:'s210_schedule_db_before' db_before,:'s210_schedule_db_after' db_after;
+2026-09-10T09:49:52.8709429Z observation|db_before|db_after
+2026-09-10T09:49:52.8709622Z S2-10 schedule clock|2026-09-10 09:49:52.72421+00|2026-09-10 09:49:52.725044+00
+2026-09-10T09:49:52.8709701Z (1 row)
+2026-09-10T09:49:52.8710955Z SELECT 1/CASE WHEN :'s210_scheduled'::timestamptz>:'s210_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s210_schedule_gate; SELECT 'S2-10 scheduled row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-10 schedule','req-stage2-early','scheduled',:'s210_scheduled'::timestamptz,:'s210_early_report_db_before'::timestamptz,false);
+2026-09-10T09:49:52.8711040Z s210_schedule_gate
+2026-09-10T09:49:52.8711109Z 1
+2026-09-10T09:49:52.8711187Z (1 row)
+2026-09-10T09:49:52.8711497Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8712025Z S2-10 scheduled row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.722788+00|Hydraulic pressure warning observed|scheduled|2026-09-11 09:49:52.72421+00|NULL
+2026-09-10T09:49:52.8712247Z (1 row)
+2026-09-10T09:49:52.8712329Z request_count
+2026-09-10T09:49:52.8712405Z 1
+2026-09-10T09:49:52.8712476Z (1 row)
+2026-09-10T09:49:52.8712661Z s2_state
+2026-09-10T09:49:52.8712667Z 
+2026-09-10T09:49:52.8712744Z (1 row)
+2026-09-10T09:49:52.8713107Z SELECT 'S2-10 pre-completion row' observation,* FROM maintenance_request; SELECT clock_timestamp() db_before \gset s210c_
+2026-09-10T09:49:52.8713411Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8713955Z S2-10 pre-completion row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.722788+00|Hydraulic pressure warning observed|scheduled|2026-09-11 09:49:52.72421+00|NULL
+2026-09-10T09:49:52.8714034Z (1 row)
+2026-09-10T09:49:52.8715333Z SELECT 1/CASE WHEN :'s210c_db_before'::timestamptz<:'s210_scheduled'::timestamptz THEN 1 ELSE 0 END s210_before_schedule_gate; SELECT 'S2-10 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-early' request_id; SELECT complete_maintenance('stage2-technician-fixture','req-stage2-early'); SELECT clock_timestamp() db_after \gset s210c_
+2026-09-10T09:49:52.8715429Z s210_before_schedule_gate
+2026-09-10T09:49:52.8715504Z 1
+2026-09-10T09:49:52.8715574Z (1 row)
+2026-09-10T09:49:52.8715685Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8715899Z S2-10 complete input|stage2-technician-fixture|technician|req-stage2-early
+2026-09-10T09:49:52.8715977Z (1 row)
+2026-09-10T09:49:52.8716061Z complete_maintenance
+2026-09-10T09:49:52.8716146Z req-stage2-early
+2026-09-10T09:49:52.8716218Z (1 row)
+2026-09-10T09:49:52.8716330Z SELECT 'S2-10 completion accepted' outcome;
+2026-09-10T09:49:52.8716401Z outcome
+2026-09-10T09:49:52.8716491Z S2-10 completion accepted
+2026-09-10T09:49:52.8716567Z (1 row)
+2026-09-10T09:49:52.8719607Z SELECT 'S2-10 accepted clock' observation,:'s210c_db_before' db_before,:'s210c_db_after' db_after; SELECT 1/CASE WHEN :'s210c_db_after'::timestamptz<:'s210_scheduled'::timestamptz THEN 1 ELSE 0 END s210_after_schedule_gate; SELECT 'S2-10 row' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_state('S2-10 completion','req-stage2-early','completed',:'s210_scheduled'::timestamptz,:'s210_early_report_db_before'::timestamptz,true); SELECT s2_clock('S2-10','req-stage2-early',:'s210c_db_before'::timestamptz,:'s210c_db_after'::timestamptz); DO $$ BEGIN IF (SELECT completed_at < scheduled_for AND completed_at >= reported_at FROM maintenance_request WHERE request_id='req-stage2-early') IS NOT TRUE THEN RAISE EXCEPTION 'S2-10 early-completion gate failed'; END IF; END $$;
+2026-09-10T09:49:52.8719727Z observation|db_before|db_after
+2026-09-10T09:49:52.8719928Z S2-10 accepted clock|2026-09-10 09:49:52.726144+00|2026-09-10 09:49:52.726914+00
+2026-09-10T09:49:52.8720002Z (1 row)
+2026-09-10T09:49:52.8720093Z s210_after_schedule_gate
+2026-09-10T09:49:52.8720170Z 1
+2026-09-10T09:49:52.8720247Z (1 row)
+2026-09-10T09:49:52.8720559Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8721145Z S2-10 row|req-stage2-early|eq-stage1-known|reporter-stage1|2026-09-10 09:49:52.722788+00|Hydraulic pressure warning observed|completed|2026-09-11 09:49:52.72421+00|2026-09-10 09:49:52.72658+00
+2026-09-10T09:49:52.8721221Z (1 row)
+2026-09-10T09:49:52.8721298Z request_count
+2026-09-10T09:49:52.8721370Z 1
+2026-09-10T09:49:52.8721439Z (1 row)
+2026-09-10T09:49:52.8721518Z s2_state
+2026-09-10T09:49:52.8721524Z 
+2026-09-10T09:49:52.8721594Z (1 row)
+2026-09-10T09:49:52.8721672Z s2_clock
+2026-09-10T09:49:52.8721676Z 
+2026-09-10T09:49:52.8721746Z (1 row)
+2026-09-10T09:49:52.8721821Z DO
+2026-09-10T09:49:52.8722009Z -- S2-11: before-reported-at completion must reject without mutation.
+2026-09-10T09:49:52.8722497Z SELECT s2_setup('S2-11'); SELECT 'S2-11 setup' observation,count(*) request_count FROM maintenance_request; SELECT clock_timestamp() report_clock_before \gset s211_
+2026-09-10T09:49:52.8722728Z s2_setup
+2026-09-10T09:49:52.8722732Z 
+2026-09-10T09:49:52.8722803Z (1 row)
+2026-09-10T09:49:52.8723000Z observation|request_count
+2026-09-10T09:49:52.8723078Z S2-11 setup|0
+2026-09-10T09:49:52.8723154Z (1 row)
+2026-09-10T09:49:52.8723394Z SELECT 'S2-11 report clock' observation,:'s211_report_clock_before' report_clock_before;
+2026-09-10T09:49:52.8723490Z observation|report_clock_before
+2026-09-10T09:49:52.8723606Z S2-11 report clock|2026-09-10 09:49:52.72985+00
+2026-09-10T09:49:52.8723678Z (1 row)
+2026-09-10T09:49:52.8723933Z SELECT (:'s211_report_clock_before'::timestamptz+interval '24 hours') reported \gset s211_
+2026-09-10T09:49:52.8724806Z SELECT 'S2-11 report input' observation,'req-stage2-11' request_id,'eq-stage1-known' equipment_id,'reporter-stage1' reported_by,:'s211_reported' reported_at,'Hydraulic pressure warning observed' description; SELECT s2_report('req-stage2-11',:'s211_reported'::timestamptz);
+2026-09-10T09:49:52.8725004Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8725390Z S2-11 report input|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-11 09:49:52.72985+00|Hydraulic pressure warning observed
+2026-09-10T09:49:52.8725462Z (1 row)
+2026-09-10T09:49:52.8725541Z s2_report
+2026-09-10T09:49:52.8725546Z 
+2026-09-10T09:49:52.8725615Z (1 row)
+2026-09-10T09:49:52.8725719Z SELECT 'S2-11 report accepted' outcome;
+2026-09-10T09:49:52.8725799Z outcome
+2026-09-10T09:49:52.8725880Z S2-11 report accepted
+2026-09-10T09:49:52.8725959Z (1 row)
+2026-09-10T09:49:52.8726328Z SELECT 'S2-11 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8726636Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8727344Z S2-11 observed request|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-11 09:49:52.72985+00|Hydraulic pressure warning observed|open|NULL|NULL
+2026-09-10T09:49:52.8727442Z (1 row)
+2026-09-10T09:49:52.8727526Z request_count
+2026-09-10T09:49:52.8727596Z 1
+2026-09-10T09:49:52.8727673Z (1 row)
+2026-09-10T09:49:52.8727941Z SELECT s2_state('S2-11 report','req-stage2-11','open',NULL,:'s211_reported'::timestamptz,false);
+2026-09-10T09:49:52.8728018Z s2_state
+2026-09-10T09:49:52.8728023Z 
+2026-09-10T09:49:52.8728096Z (1 row)
+2026-09-10T09:49:52.8728245Z  SELECT clock_timestamp() schedule_db_before \gset s211_
+2026-09-10T09:49:52.8728616Z SELECT (GREATEST(:'s211_reported'::timestamptz,:'s211_schedule_db_before'::timestamptz)+interval '48 hours') scheduled \gset s211_
+2026-09-10T09:49:52.8729714Z SELECT 'S2-11 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage2-11' request_id,:'s211_scheduled' scheduled_for; SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage2-11',:'s211_scheduled'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s211_
+2026-09-10T09:49:52.8729867Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8730203Z S2-11 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage2-11|2026-09-13 09:49:52.72985+00
+2026-09-10T09:49:52.8730282Z (1 row)
+2026-09-10T09:49:52.8730368Z schedule_maintenance
+2026-09-10T09:49:52.8730442Z req-stage2-11
+2026-09-10T09:49:52.8730517Z (1 row)
+2026-09-10T09:49:52.8730619Z SELECT 'S2-11 schedule accepted' outcome;
+2026-09-10T09:49:52.8730694Z outcome
+2026-09-10T09:49:52.8730777Z S2-11 schedule accepted
+2026-09-10T09:49:52.8730865Z (1 row)
+2026-09-10T09:49:52.8731175Z SELECT 'S2-11 schedule clock' observation,:'s211_schedule_db_before' db_before,:'s211_schedule_db_after' db_after;
+2026-09-10T09:49:52.8731274Z observation|db_before|db_after
+2026-09-10T09:49:52.8731461Z S2-11 schedule clock|2026-09-10 09:49:52.731561+00|2026-09-10 09:49:52.732503+00
+2026-09-10T09:49:52.8731534Z (1 row)
+2026-09-10T09:49:52.8731900Z SELECT 'S2-11 observed request' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8732438Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8732968Z S2-11 observed request|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-11 09:49:52.72985+00|Hydraulic pressure warning observed|scheduled|2026-09-13 09:49:52.72985+00|NULL
+2026-09-10T09:49:52.8733044Z (1 row)
+2026-09-10T09:49:52.8733118Z request_count
+2026-09-10T09:49:52.8733193Z 1
+2026-09-10T09:49:52.8733261Z (1 row)
+2026-09-10T09:49:52.8733687Z SELECT s2_state('S2-11 scheduled prerequisite','req-stage2-11','scheduled',:'s211_scheduled'::timestamptz,:'s211_reported'::timestamptz,false);
+2026-09-10T09:49:52.8733758Z s2_state
+2026-09-10T09:49:52.8733762Z 
+2026-09-10T09:49:52.8733836Z (1 row)
+2026-09-10T09:49:52.8735254Z SELECT 1/CASE WHEN :'s211_scheduled'::timestamptz>:'s211_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s211_schedule_gate; BEGIN; CREATE TEMP TABLE s2_pre_call ON COMMIT DROP AS SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage2-11'; SELECT 'S2-11 pre' observation,* FROM s2_pre_call; SELECT clock_timestamp() db_before \gset s211c_
+2026-09-10T09:49:52.8735343Z s211_schedule_gate
+2026-09-10T09:49:52.8735418Z 1
+2026-09-10T09:49:52.8735488Z (1 row)
+2026-09-10T09:49:52.8735562Z BEGIN
+2026-09-10T09:49:52.8735633Z SELECT 1
+2026-09-10T09:49:52.8735947Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8736440Z S2-11 pre|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-11 09:49:52.72985+00|Hydraulic pressure warning observed|scheduled|2026-09-13 09:49:52.72985+00|NULL
+2026-09-10T09:49:52.8736513Z (1 row)
+2026-09-10T09:49:52.8737891Z SELECT 1/CASE WHEN :'s211c_db_before'::timestamptz<:'s211_reported'::timestamptz THEN 1 ELSE 0 END s211_before_reported_gate; SELECT 'S2-11 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage2-11' request_id; SELECT s2_reject_complete('stage2-technician-fixture','req-stage2-11'); SELECT clock_timestamp() db_after \gset s211c_
+2026-09-10T09:49:52.8737997Z s211_before_reported_gate
+2026-09-10T09:49:52.8738066Z 1
+2026-09-10T09:49:52.8738145Z (1 row)
+2026-09-10T09:49:52.8738254Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8738455Z S2-11 complete input|stage2-technician-fixture|technician|req-stage2-11
+2026-09-10T09:49:52.8738526Z (1 row)
+2026-09-10T09:49:52.8738611Z s2_reject_complete
+2026-09-10T09:49:52.8738616Z 
+2026-09-10T09:49:52.8738686Z (1 row)
+2026-09-10T09:49:52.8738800Z SELECT 'S2-11 completion rejected' outcome;
+2026-09-10T09:49:52.8738876Z outcome
+2026-09-10T09:49:52.8738960Z S2-11 completion rejected
+2026-09-10T09:49:52.8739035Z (1 row)
+2026-09-10T09:49:52.8739836Z SELECT 'S2-11 rejected clock' observation,:'s211c_db_before' db_before,:'s211c_db_after' db_after; SELECT 'S2-11 after' observation,* FROM maintenance_request; SELECT count(*) request_count FROM maintenance_request; SELECT s2_same('S2-11','req-stage2-11'); COMMIT;
+2026-09-10T09:49:52.8739938Z observation|db_before|db_after
+2026-09-10T09:49:52.8740126Z S2-11 rejected clock|2026-09-10 09:49:52.734598+00|2026-09-10 09:49:52.735181+00
+2026-09-10T09:49:52.8740202Z (1 row)
+2026-09-10T09:49:52.8740508Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8740987Z S2-11 after|req-stage2-11|eq-stage1-known|reporter-stage1|2026-09-11 09:49:52.72985+00|Hydraulic pressure warning observed|scheduled|2026-09-13 09:49:52.72985+00|NULL
+2026-09-10T09:49:52.8741065Z (1 row)
+2026-09-10T09:49:52.8741140Z request_count
+2026-09-10T09:49:52.8741214Z 1
+2026-09-10T09:49:52.8741284Z (1 row)
+2026-09-10T09:49:52.8741361Z s2_same
+2026-09-10T09:49:52.8741365Z 
+2026-09-10T09:49:52.8741440Z (1 row)
+2026-09-10T09:49:52.8741508Z COMMIT
+2026-09-10T09:49:52.8741972Z SELECT 'STAGE2_CUMULATIVE_ACCEPTANCE_V4_PASS' result,current_database() database_name,current_schema() schema_name;
+2026-09-10T09:49:52.8742066Z result|database_name|schema_name
+2026-09-10T09:49:52.8742436Z STAGE2_CUMULATIVE_ACCEPTANCE_V4_PASS|postgres|alder_7ab3d9e55d334d50a28dea2d8b285e11
+2026-09-10T09:49:52.8742511Z (1 row)
+2026-09-10T09:49:52.8742728Z -- Cumulative Stage 1--3 addition. Stage 1 v3 and Stage 2 v4 run unchanged first.
+2026-09-10T09:49:52.8742817Z \set ON_ERROR_STOP on
+2026-09-10T09:49:52.8742896Z SET TIME ZONE 'UTC';
+2026-09-10T09:49:52.8742968Z SET
+2026-09-10T09:49:52.8743052Z \pset format unaligned
+2026-09-10T09:49:52.8743145Z Output format is unaligned.
+2026-09-10T09:49:52.8743225Z \pset null 'NULL'
+2026-09-10T09:49:52.8743313Z Null display is "NULL".
+2026-09-10T09:49:52.8743524Z CREATE OR REPLACE FUNCTION s3_setup(c text) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8743601Z BEGIN
+2026-09-10T09:49:52.8743698Z   TRUNCATE maintenance_request;
+2026-09-10T09:49:52.8743928Z   INSERT INTO equipment(equipment_id,status) VALUES ('eq-stage3-known','available')
+2026-09-10T09:49:52.8744101Z     ON CONFLICT(equipment_id) DO UPDATE SET status=EXCLUDED.status;
+2026-09-10T09:49:52.8744234Z   IF (SELECT count(*) FROM maintenance_request) <> 0
+2026-09-10T09:49:52.8744538Z      OR (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='available') <> 1 THEN
+2026-09-10T09:49:52.8744645Z     RAISE EXCEPTION '% setup failed', c;
+2026-09-10T09:49:52.8744718Z   END IF;
+2026-09-10T09:49:52.8744793Z END $$;
+2026-09-10T09:49:52.8744870Z CREATE FUNCTION
+2026-09-10T09:49:52.8745185Z CREATE OR REPLACE FUNCTION s3_reject_schedule(a text,r text,s timestamptz) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8745255Z BEGIN
+2026-09-10T09:49:52.8745497Z   PERFORM schedule_maintenance(a,r,s); RAISE EXCEPTION 'unexpected schedule acceptance';
+2026-09-10T09:49:52.8745741Z EXCEPTION WHEN OTHERS THEN IF SQLERRM='unexpected schedule acceptance' THEN RAISE; END IF;
+2026-09-10T09:49:52.8745821Z END $$;
+2026-09-10T09:49:52.8745901Z CREATE FUNCTION
+2026-09-10T09:49:52.8746167Z CREATE OR REPLACE FUNCTION s3_reject_closure(a text,e text) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8746239Z BEGIN
+2026-09-10T09:49:52.8746467Z   PERFORM record_safety_closure(a,e); RAISE EXCEPTION 'unexpected closure acceptance';
+2026-09-10T09:49:52.8746704Z EXCEPTION WHEN OTHERS THEN IF SQLERRM='unexpected closure acceptance' THEN RAISE; END IF;
+2026-09-10T09:49:52.8746777Z END $$;
+2026-09-10T09:49:52.8747090Z CREATE FUNCTION
+2026-09-10T09:49:52.8747459Z SELECT 'stage3_authorization_fixture' observation,actor_evidence,role_name FROM stage3_authorization_fixture;
+2026-09-10T09:49:52.8747558Z observation|actor_evidence|role_name
+2026-09-10T09:49:52.8747784Z stage3_authorization_fixture|stage3-safety-inspector-fixture|safety_inspector
+2026-09-10T09:49:52.8747860Z (1 row)
+2026-09-10T09:49:52.8747934Z -- S3-01
+2026-09-10T09:49:52.8748025Z SELECT s3_setup('S3-01');
+2026-09-10T09:49:52.8748104Z s3_setup
+2026-09-10T09:49:52.8748110Z 
+2026-09-10T09:49:52.8748186Z (1 row)
+2026-09-10T09:49:52.8748642Z SELECT 'S3-01 closure input' observation,'stage3-safety-inspector-fixture' actor,'safety_inspector' authorization,'eq-stage3-known' equipment_id;
+2026-09-10T09:49:52.8748766Z observation|actor|authorization|equipment_id
+2026-09-10T09:49:52.8749005Z S3-01 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+2026-09-10T09:49:52.8749082Z (1 row)
+2026-09-10T09:49:52.8749325Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage3-known');
+2026-09-10T09:49:52.8749408Z record_safety_closure
+2026-09-10T09:49:52.8749491Z eq-stage3-known
+2026-09-10T09:49:52.8749561Z (1 row)
+2026-09-10T09:49:52.8749656Z SELECT 'S3-01 accepted' outcome;
+2026-09-10T09:49:52.8749726Z outcome
+2026-09-10T09:49:52.8749806Z S3-01 accepted
+2026-09-10T09:49:52.8749878Z (1 row)
+2026-09-10T09:49:52.8750096Z SELECT equipment_id,status FROM equipment WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8750316Z equipment_id|status
+2026-09-10T09:49:52.8750409Z eq-stage3-known|safety_closed
+2026-09-10T09:49:52.8750485Z (1 row)
+2026-09-10T09:49:52.8750813Z SELECT count(*) AS equipment_count FROM equipment WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8750898Z equipment_count
+2026-09-10T09:49:52.8750969Z 1
+2026-09-10T09:49:52.8751047Z (1 row)
+2026-09-10T09:49:52.8751309Z SELECT count(*) AS request_count FROM maintenance_request WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8751384Z request_count
+2026-09-10T09:49:52.8751458Z 0
+2026-09-10T09:49:52.8751528Z (1 row)
+2026-09-10T09:49:52.8751604Z DO $$ BEGIN
+2026-09-10T09:49:52.8751895Z   IF (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='safety_closed') <> 1
+2026-09-10T09:49:52.8752101Z      OR (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known') <> 1
+2026-09-10T09:49:52.8752485Z      OR (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known') <> 0 THEN RAISE EXCEPTION 'S3-01 failed'; END IF;
+2026-09-10T09:49:52.8752561Z END $$;
+2026-09-10T09:49:52.8752633Z DO
+2026-09-10T09:49:52.8752819Z -- S3-02: HD-WV-003; retain the request at closure and reject scheduling.
+2026-09-10T09:49:52.8752891Z BEGIN;
+2026-09-10T09:49:52.8752967Z BEGIN
+2026-09-10T09:49:52.8753167Z SELECT s3_setup('S3-02'); SELECT clock_timestamp() report_db_clock \gset s302_
+2026-09-10T09:49:52.8753240Z s3_setup
+2026-09-10T09:49:52.8753255Z 
+2026-09-10T09:49:52.8753324Z (1 row)
+2026-09-10T09:49:52.8753948Z SELECT 'S3-02 report input' observation,'req-stage3-open' request_id,'eq-stage3-known' equipment_id,'reporter-stage3' reported_by,:'s302_report_db_clock' reported_at,'Stage 3 open request' description;
+2026-09-10T09:49:52.8754144Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8754486Z S3-02 report input|req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.744919+00|Stage 3 open request
+2026-09-10T09:49:52.8754556Z (1 row)
+2026-09-10T09:49:52.8755006Z SELECT report_equipment_fault('req-stage3-open','eq-stage3-known','reporter-stage3',:'s302_report_db_clock'::timestamptz,'Stage 3 open request');
+2026-09-10T09:49:52.8755096Z report_equipment_fault
+2026-09-10T09:49:52.8755181Z req-stage3-open
+2026-09-10T09:49:52.8755257Z (1 row)
+2026-09-10T09:49:52.8755354Z SELECT 'S3-02 report accepted' outcome;
+2026-09-10T09:49:52.8755428Z outcome
+2026-09-10T09:49:52.8755508Z S3-02 report accepted
+2026-09-10T09:49:52.8755582Z (1 row)
+2026-09-10T09:49:52.8757494Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-open' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s302_report_db_clock'::timestamptz AND description='Stage 3 open request' AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)=1 AND (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')=1 AND (SELECT count(*) FROM maintenance_request)=1 THEN 1 ELSE 0 END s302_report_gate;
+2026-09-10T09:49:52.8757593Z s302_report_gate
+2026-09-10T09:49:52.8757667Z 1
+2026-09-10T09:49:52.8757738Z (1 row)
+2026-09-10T09:49:52.8757906Z SELECT * FROM equipment WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8757990Z equipment_id|status
+2026-09-10T09:49:52.8758092Z eq-stage3-known|available
+2026-09-10T09:49:52.8758168Z (1 row)
+2026-09-10T09:49:52.8758304Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8758383Z request_count
+2026-09-10T09:49:52.8758451Z 1
+2026-09-10T09:49:52.8758524Z (1 row)
+2026-09-10T09:49:52.8758867Z CREATE TEMP TABLE s302_pre_closure ON COMMIT DROP AS SELECT * FROM maintenance_request WHERE request_id='req-stage3-open';
+2026-09-10T09:49:52.8758945Z SELECT 1
+2026-09-10T09:49:52.8759112Z SELECT 'S3-02 pre-closure' observation,* FROM s302_pre_closure;
+2026-09-10T09:49:52.8759415Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8759809Z S3-02 pre-closure|req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.744919+00|Stage 3 open request|open|NULL|NULL
+2026-09-10T09:49:52.8760020Z (1 row)
+2026-09-10T09:49:52.8760575Z SELECT 'S3-02 closure input' observation,'stage3-safety-inspector-fixture' actor,'safety_inspector' authorization,'eq-stage3-known' equipment_id;
+2026-09-10T09:49:52.8760693Z observation|actor|authorization|equipment_id
+2026-09-10T09:49:52.8760940Z S3-02 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+2026-09-10T09:49:52.8761017Z (1 row)
+2026-09-10T09:49:52.8761389Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage3-known'); SELECT 'S3-02 closure accepted' outcome;
+2026-09-10T09:49:52.8761478Z record_safety_closure
+2026-09-10T09:49:52.8761556Z eq-stage3-known
+2026-09-10T09:49:52.8761629Z (1 row)
+2026-09-10T09:49:52.8761698Z outcome
+2026-09-10T09:49:52.8761788Z S3-02 closure accepted
+2026-09-10T09:49:52.8761861Z (1 row)
+2026-09-10T09:49:52.8762035Z SELECT 'S3-02 current request' observation,* FROM maintenance_request;
+2026-09-10T09:49:52.8762339Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8762727Z S3-02 current request|req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.744919+00|Stage 3 open request|open|NULL|NULL
+2026-09-10T09:49:52.8762803Z (1 row)
+2026-09-10T09:49:52.8763077Z SELECT 'S3-02 current equipment' observation,* FROM equipment WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8763177Z observation|equipment_id|status
+2026-09-10T09:49:52.8763312Z S3-02 current equipment|eq-stage3-known|safety_closed
+2026-09-10T09:49:52.8763384Z (1 row)
+2026-09-10T09:49:52.8763533Z SELECT count(*) AS request_count FROM maintenance_request;
+2026-09-10T09:49:52.8763609Z request_count
+2026-09-10T09:49:52.8763682Z 1
+2026-09-10T09:49:52.8763752Z (1 row)
+2026-09-10T09:49:52.8763830Z DO $$ BEGIN
+2026-09-10T09:49:52.8763938Z  IF (SELECT count(*) FROM s302_pre_closure)<>1
+2026-09-10T09:49:52.8764064Z     OR (SELECT count(*) FROM maintenance_request)<>1
+2026-09-10T09:49:52.8764360Z     OR (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='safety_closed')<>1
+2026-09-10T09:49:52.8764578Z     OR EXISTS (SELECT * FROM s302_pre_closure EXCEPT SELECT * FROM maintenance_request)
+2026-09-10T09:49:52.8764791Z     OR EXISTS (SELECT * FROM maintenance_request EXCEPT SELECT * FROM s302_pre_closure)
+2026-09-10T09:49:52.8764938Z  THEN RAISE EXCEPTION 'S3-02 changed open request'; END IF;
+2026-09-10T09:49:52.8765014Z END $$;
+2026-09-10T09:49:52.8765088Z DO
+2026-09-10T09:49:52.8765236Z SELECT clock_timestamp() schedule_db_before \gset s302_
+2026-09-10T09:49:52.8765511Z SELECT (:'s302_schedule_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s302_
+2026-09-10T09:49:52.8766086Z SELECT 'S3-02 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage3-open' request_id,:'s302_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8766238Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8766591Z S3-02 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage3-open|2026-09-12 09:49:52.749816+00
+2026-09-10T09:49:52.8766669Z (1 row)
+2026-09-10T09:49:52.8767302Z SELECT s3_reject_schedule('stage2-coordinator-fixture','req-stage3-open',:'s302_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8767395Z s3_reject_schedule
+2026-09-10T09:49:52.8767401Z 
+2026-09-10T09:49:52.8767478Z (1 row)
+2026-09-10T09:49:52.8767691Z -- Prepared instrument fragment, not a frozen S3-02 policy or standalone case.
+2026-09-10T09:49:52.8767900Z -- Insert immediately after the future S3-02 schedule attempt, before printing
+2026-09-10T09:49:52.8768101Z -- its outcome. Its request lifecycle expectation still requires HB-WV-S3-01.
+2026-09-10T09:49:52.8768242Z SELECT clock_timestamp() schedule_db_after \gset s302_
+2026-09-10T09:49:52.8768351Z SELECT 'S3-02 schedule clock' observation,
+2026-09-10T09:49:52.8768540Z        :'s302_schedule_db_before' db_before, :'s302_schedule_db_after' db_after;
+2026-09-10T09:49:52.8768778Z observation|db_before|db_after
+2026-09-10T09:49:52.8768961Z S3-02 schedule clock|2026-09-10 09:49:52.749816+00|2026-09-10 09:49:52.750549+00
+2026-09-10T09:49:52.8769139Z (1 row)
+2026-09-10T09:49:52.8769224Z SELECT 1 / CASE WHEN
+2026-09-10T09:49:52.8769429Z   :'s302_scheduled_for'::timestamptz > :'s302_schedule_db_after'::timestamptz
+2026-09-10T09:49:52.8769543Z THEN 1 ELSE 0 END s302_schedule_future_gate;
+2026-09-10T09:49:52.8769629Z s302_schedule_future_gate
+2026-09-10T09:49:52.8769707Z 1
+2026-09-10T09:49:52.8769777Z (1 row)
+2026-09-10T09:49:52.8769875Z SELECT 'S3-02 rejected' outcome;
+2026-09-10T09:49:52.8769946Z outcome
+2026-09-10T09:49:52.8770024Z S3-02 rejected
+2026-09-10T09:49:52.8770097Z (1 row)
+2026-09-10T09:49:52.8770279Z SELECT 'S3-02 current request' observation,* FROM maintenance_request;
+2026-09-10T09:49:52.8770585Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8770991Z S3-02 current request|req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.744919+00|Stage 3 open request|open|NULL|NULL
+2026-09-10T09:49:52.8771066Z (1 row)
+2026-09-10T09:49:52.8771346Z SELECT 'S3-02 current equipment' observation,* FROM equipment WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8771445Z observation|equipment_id|status
+2026-09-10T09:49:52.8771580Z S3-02 current equipment|eq-stage3-known|safety_closed
+2026-09-10T09:49:52.8771651Z (1 row)
+2026-09-10T09:49:52.8771798Z SELECT count(*) AS request_count FROM maintenance_request;
+2026-09-10T09:49:52.8771874Z request_count
+2026-09-10T09:49:52.8771950Z 1
+2026-09-10T09:49:52.8772022Z (1 row)
+2026-09-10T09:49:52.8772101Z DO $$ BEGIN
+2026-09-10T09:49:52.8772211Z  IF (SELECT count(*) FROM s302_pre_closure)<>1
+2026-09-10T09:49:52.8772338Z     OR (SELECT count(*) FROM maintenance_request)<>1
+2026-09-10T09:49:52.8772627Z     OR (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='safety_closed')<>1
+2026-09-10T09:49:52.8772845Z     OR EXISTS (SELECT * FROM s302_pre_closure EXCEPT SELECT * FROM maintenance_request)
+2026-09-10T09:49:52.8773066Z     OR EXISTS (SELECT * FROM maintenance_request EXCEPT SELECT * FROM s302_pre_closure)
+2026-09-10T09:49:52.8773215Z  THEN RAISE EXCEPTION 'S3-02 changed open request'; END IF;
+2026-09-10T09:49:52.8773296Z END $$;
+2026-09-10T09:49:52.8773365Z DO
+2026-09-10T09:49:52.8773876Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-open';
+2026-09-10T09:49:52.8774137Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8774460Z req-stage3-open|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.744919+00|Stage 3 open request|open|NULL|NULL
+2026-09-10T09:49:52.8774537Z (1 row)
+2026-09-10T09:49:52.8775070Z SELECT equipment_id,status FROM equipment WHERE equipment_id='eq-stage3-known'; SELECT count(*) AS request_count FROM maintenance_request WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8775160Z equipment_id|status
+2026-09-10T09:49:52.8775256Z eq-stage3-known|safety_closed
+2026-09-10T09:49:52.8775328Z (1 row)
+2026-09-10T09:49:52.8775411Z request_count
+2026-09-10T09:49:52.8775479Z 1
+2026-09-10T09:49:52.8775553Z (1 row)
+2026-09-10T09:49:52.8777425Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-open' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s302_report_db_clock'::timestamptz AND description='Stage 3 open request' AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)=1 AND (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='safety_closed')=1 AND (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')=1 THEN 1 ELSE 0 END s302_gate;
+2026-09-10T09:49:52.8777507Z s302_gate
+2026-09-10T09:49:52.8777583Z 1
+2026-09-10T09:49:52.8777654Z (1 row)
+2026-09-10T09:49:52.8777860Z COMMIT;
+2026-09-10T09:49:52.8777930Z COMMIT
+2026-09-10T09:49:52.8778148Z -- Integrated replacement S3-03 case; not a cumulative Stage 3 acceptance run.
+2026-09-10T09:49:52.8778444Z -- Requires the original s3_setup helper, frozen DDL, and business operations
+2026-09-10T09:49:52.8778660Z -- in a disposable schema. See README.md before integrating into a new snapshot.
+2026-09-10T09:49:52.8778749Z \set ON_ERROR_STOP on
+2026-09-10T09:49:52.8778819Z BEGIN;
+2026-09-10T09:49:52.8778891Z BEGIN
+2026-09-10T09:49:52.8778964Z -- S3-03
+2026-09-10T09:49:52.8779261Z SELECT s3_setup('S3-03'); SELECT clock_timestamp() report_db_clock \gset s303_
+2026-09-10T09:49:52.8779382Z s3_setup
+2026-09-10T09:49:52.8779391Z 
+2026-09-10T09:49:52.8779519Z (1 row)
+2026-09-10T09:49:52.8780649Z SELECT 'S3-03 report input' observation,'req-stage3-completed' request_id,'eq-stage3-known' equipment_id,'reporter-stage3' reported_by,:'s303_report_db_clock' reported_at,'Stage 3 completed request' description;
+2026-09-10T09:49:52.8780977Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8781582Z S3-03 report input|req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request
+2026-09-10T09:49:52.8781701Z (1 row)
+2026-09-10T09:49:52.8782674Z SELECT report_equipment_fault('req-stage3-completed','eq-stage3-known','reporter-stage3',:'s303_report_db_clock'::timestamptz,'Stage 3 completed request'); SELECT 'S3-03 report accepted' outcome;
+2026-09-10T09:49:52.8782817Z report_equipment_fault
+2026-09-10T09:49:52.8782954Z req-stage3-completed
+2026-09-10T09:49:52.8783070Z (1 row)
+2026-09-10T09:49:52.8783184Z outcome
+2026-09-10T09:49:52.8783318Z S3-03 report accepted
+2026-09-10T09:49:52.8783431Z (1 row)
+2026-09-10T09:49:52.8784350Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-completed';
+2026-09-10T09:49:52.8784778Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8785149Z req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request|open|NULL|NULL
+2026-09-10T09:49:52.8785233Z (1 row)
+2026-09-10T09:49:52.8785379Z SELECT count(*) AS request_count FROM maintenance_request;
+2026-09-10T09:49:52.8785459Z request_count
+2026-09-10T09:49:52.8785530Z 1
+2026-09-10T09:49:52.8785604Z (1 row)
+2026-09-10T09:49:52.8787207Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-completed' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s303_report_db_clock'::timestamptz AND description='Stage 3 completed request' AND status='open' AND scheduled_for IS NULL AND completed_at IS NULL)=1 AND (SELECT count(*) FROM maintenance_request)=1 THEN 1 ELSE 0 END s303_report_gate;
+2026-09-10T09:49:52.8787296Z s303_report_gate
+2026-09-10T09:49:52.8787376Z 1
+2026-09-10T09:49:52.8787446Z (1 row)
+2026-09-10T09:49:52.8787598Z SELECT clock_timestamp() schedule_db_before \gset s303_
+2026-09-10T09:49:52.8787857Z SELECT (:'s303_schedule_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s303_
+2026-09-10T09:49:52.8788482Z SELECT 'S3-03 schedule input' observation,'stage2-coordinator-fixture' actor,'maintenance_coordinator' authorization,'req-stage3-completed' request_id,:'s303_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8788644Z observation|actor|authorization|request_id|scheduled_for
+2026-09-10T09:49:52.8789015Z S3-03 schedule input|stage2-coordinator-fixture|maintenance_coordinator|req-stage3-completed|2026-09-12 09:49:52.75604+00
+2026-09-10T09:49:52.8789094Z (1 row)
+2026-09-10T09:49:52.8789632Z SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage3-completed',:'s303_scheduled_for'::timestamptz); SELECT clock_timestamp() schedule_db_after \gset s303_
+2026-09-10T09:49:52.8789718Z schedule_maintenance
+2026-09-10T09:49:52.8789807Z req-stage3-completed
+2026-09-10T09:49:52.8790047Z (1 row)
+2026-09-10T09:49:52.8790450Z SELECT 1/CASE WHEN :'s303_scheduled_for'::timestamptz > :'s303_schedule_db_after'::timestamptz THEN 1 ELSE 0 END s303_schedule_future_gate;
+2026-09-10T09:49:52.8790537Z s303_schedule_future_gate
+2026-09-10T09:49:52.8790713Z 1
+2026-09-10T09:49:52.8790787Z (1 row)
+2026-09-10T09:49:52.8791108Z SELECT 'S3-03 schedule clock' observation,:'s303_schedule_db_before' db_before,:'s303_schedule_db_after' db_after;
+2026-09-10T09:49:52.8791205Z observation|db_before|db_after
+2026-09-10T09:49:52.8791389Z S3-03 schedule clock|2026-09-10 09:49:52.75604+00|2026-09-10 09:49:52.756664+00
+2026-09-10T09:49:52.8791460Z (1 row)
+2026-09-10T09:49:52.8791982Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-completed';
+2026-09-10T09:49:52.8792245Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8792689Z req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request|scheduled|2026-09-12 09:49:52.75604+00|NULL
+2026-09-10T09:49:52.8792774Z (1 row)
+2026-09-10T09:49:52.8792930Z SELECT count(*) AS request_count FROM maintenance_request;
+2026-09-10T09:49:52.8793007Z request_count
+2026-09-10T09:49:52.8793082Z 1
+2026-09-10T09:49:52.8793153Z (1 row)
+2026-09-10T09:49:52.8794612Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-completed' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s303_report_db_clock'::timestamptz AND description='Stage 3 completed request' AND status='scheduled' AND scheduled_for=:'s303_scheduled_for'::timestamptz AND completed_at IS NULL)=1 AND (SELECT count(*) FROM maintenance_request)=1 THEN 1 ELSE 0 END s303_scheduled_gate;
+2026-09-10T09:49:52.8794698Z s303_scheduled_gate
+2026-09-10T09:49:52.8794769Z 1
+2026-09-10T09:49:52.8794845Z (1 row)
+2026-09-10T09:49:52.8794989Z SELECT clock_timestamp() completion_db_before \gset s303_
+2026-09-10T09:49:52.8795397Z SELECT 1/CASE WHEN :'s303_completion_db_before'::timestamptz < :'s303_scheduled_for'::timestamptz THEN 1 ELSE 0 END s303_early_before_gate;
+2026-09-10T09:49:52.8795481Z s303_early_before_gate
+2026-09-10T09:49:52.8795555Z 1
+2026-09-10T09:49:52.8795629Z (1 row)
+2026-09-10T09:49:52.8796044Z SELECT 'S3-03 complete input' observation,'stage2-technician-fixture' actor,'technician' authorization,'req-stage3-completed' request_id;
+2026-09-10T09:49:52.8796160Z observation|actor|authorization|request_id
+2026-09-10T09:49:52.8796378Z S3-03 complete input|stage2-technician-fixture|technician|req-stage3-completed
+2026-09-10T09:49:52.8796453Z (1 row)
+2026-09-10T09:49:52.8797120Z SELECT complete_maintenance('stage2-technician-fixture','req-stage3-completed'); SELECT clock_timestamp() completion_db_after \gset s303_
+2026-09-10T09:49:52.8797280Z complete_maintenance
+2026-09-10T09:49:52.8797375Z req-stage3-completed
+2026-09-10T09:49:52.8797447Z (1 row)
+2026-09-10T09:49:52.8797844Z SELECT 1/CASE WHEN :'s303_completion_db_after'::timestamptz < :'s303_scheduled_for'::timestamptz THEN 1 ELSE 0 END s303_early_after_gate;
+2026-09-10T09:49:52.8797924Z s303_early_after_gate
+2026-09-10T09:49:52.8797998Z 1
+2026-09-10T09:49:52.8798074Z (1 row)
+2026-09-10T09:49:52.8798423Z SELECT 'S3-03 completion clock' observation,:'s303_completion_db_before' db_before,:'s303_completion_db_after' db_after;
+2026-09-10T09:49:52.8798523Z observation|db_before|db_after
+2026-09-10T09:49:52.8798719Z S3-03 completion clock|2026-09-10 09:49:52.757599+00|2026-09-10 09:49:52.758318+00
+2026-09-10T09:49:52.8798798Z (1 row)
+2026-09-10T09:49:52.8799325Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-completed';
+2026-09-10T09:49:52.8799591Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8800105Z req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request|completed|2026-09-12 09:49:52.75604+00|2026-09-10 09:49:52.758087+00
+2026-09-10T09:49:52.8800374Z (1 row)
+2026-09-10T09:49:52.8802821Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-completed' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s303_report_db_clock'::timestamptz AND description='Stage 3 completed request' AND status='completed' AND scheduled_for=:'s303_scheduled_for'::timestamptz AND completed_at BETWEEN :'s303_completion_db_before'::timestamptz AND :'s303_completion_db_after'::timestamptz AND completed_at>=reported_at AND completed_at<scheduled_for)=1 AND (SELECT count(*) FROM maintenance_request)=1 THEN 1 ELSE 0 END s303_completion_gate;
+2026-09-10T09:49:52.8802991Z s303_completion_gate
+2026-09-10T09:49:52.8803131Z 1
+2026-09-10T09:49:52.8803276Z (1 row)
+2026-09-10T09:49:52.8803534Z SELECT count(*) AS request_count FROM maintenance_request;
+2026-09-10T09:49:52.8803676Z request_count
+2026-09-10T09:49:52.8803805Z 1
+2026-09-10T09:49:52.8803938Z (1 row)
+2026-09-10T09:49:52.8804159Z CREATE TEMP TABLE s303_pre_closure ON COMMIT DROP AS
+2026-09-10T09:49:52.8805012Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-completed';
+2026-09-10T09:49:52.8805102Z SELECT 1
+2026-09-10T09:49:52.8805299Z SELECT 'S3-03 exact pre-closure row' observation,* FROM s303_pre_closure;
+2026-09-10T09:49:52.8805759Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8806432Z S3-03 exact pre-closure row|req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request|completed|2026-09-12 09:49:52.75604+00|2026-09-10 09:49:52.758087+00
+2026-09-10T09:49:52.8806512Z (1 row)
+2026-09-10T09:49:52.8807223Z SELECT 'S3-03 closure input' observation,'stage3-safety-inspector-fixture' actor,'safety_inspector' authorization,'eq-stage3-known' equipment_id;
+2026-09-10T09:49:52.8807364Z observation|actor|authorization|equipment_id
+2026-09-10T09:49:52.8807619Z S3-03 closure input|stage3-safety-inspector-fixture|safety_inspector|eq-stage3-known
+2026-09-10T09:49:52.8807693Z (1 row)
+2026-09-10T09:49:52.8808072Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage3-known'); SELECT 'S3-03 closure accepted' outcome;
+2026-09-10T09:49:52.8808156Z record_safety_closure
+2026-09-10T09:49:52.8808241Z eq-stage3-known
+2026-09-10T09:49:52.8808312Z (1 row)
+2026-09-10T09:49:52.8808388Z outcome
+2026-09-10T09:49:52.8808475Z S3-03 closure accepted
+2026-09-10T09:49:52.8808544Z (1 row)
+2026-09-10T09:49:52.8809074Z SELECT request_id,equipment_id,reported_by,reported_at,description,status,scheduled_for,completed_at FROM maintenance_request WHERE request_id='req-stage3-completed';
+2026-09-10T09:49:52.8809331Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8809855Z req-stage3-completed|eq-stage3-known|reporter-stage3|2026-09-10 09:49:52.754821+00|Stage 3 completed request|completed|2026-09-12 09:49:52.75604+00|2026-09-10 09:49:52.758087+00
+2026-09-10T09:49:52.8809934Z (1 row)
+2026-09-10T09:49:52.8810498Z SELECT equipment_id,status FROM equipment WHERE equipment_id='eq-stage3-known'; SELECT count(*) AS request_count FROM maintenance_request WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8810587Z equipment_id|status
+2026-09-10T09:49:52.8810680Z eq-stage3-known|safety_closed
+2026-09-10T09:49:52.8810756Z (1 row)
+2026-09-10T09:49:52.8810832Z request_count
+2026-09-10T09:49:52.8810910Z 1
+2026-09-10T09:49:52.8810980Z (1 row)
+2026-09-10T09:49:52.8813428Z SELECT 1/CASE WHEN (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage3-completed' AND equipment_id='eq-stage3-known' AND reported_by='reporter-stage3' AND reported_at=:'s303_report_db_clock'::timestamptz AND description='Stage 3 completed request' AND status='completed' AND scheduled_for=:'s303_scheduled_for'::timestamptz AND completed_at BETWEEN :'s303_completion_db_before'::timestamptz AND :'s303_completion_db_after'::timestamptz AND completed_at>=reported_at)=1 AND (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='safety_closed')=1 AND (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')=1 THEN 1 ELSE 0 END s303_gate;
+2026-09-10T09:49:52.8813619Z s303_gate
+2026-09-10T09:49:52.8813689Z 1
+2026-09-10T09:49:52.8813765Z (1 row)
+2026-09-10T09:49:52.8813998Z -- Preserve every field, including the exact completion instant, not only its bracket.
+2026-09-10T09:49:52.8814074Z DO $$ BEGIN
+2026-09-10T09:49:52.8814194Z   IF (SELECT count(*) FROM s303_pre_closure) <> 1
+2026-09-10T09:49:52.8814323Z      OR (SELECT count(*) FROM maintenance_request) <> 1
+2026-09-10T09:49:52.8814544Z      OR EXISTS (SELECT * FROM s303_pre_closure EXCEPT SELECT * FROM maintenance_request)
+2026-09-10T09:49:52.8814754Z      OR EXISTS (SELECT * FROM maintenance_request EXCEPT SELECT * FROM s303_pre_closure)
+2026-09-10T09:49:52.8815126Z   THEN RAISE EXCEPTION 'S3-03 closure changed completed request'; END IF;
+2026-09-10T09:49:52.8815271Z END $$;
+2026-09-10T09:49:52.8815393Z DO
+2026-09-10T09:49:52.8815545Z COMMIT;
+2026-09-10T09:49:52.8815676Z COMMIT
+2026-09-10T09:49:52.8815852Z -- Authority-negative coverage
+2026-09-10T09:49:52.8816054Z SELECT s3_setup('S3-authority-negative');
+2026-09-10T09:49:52.8816203Z s3_setup
+2026-09-10T09:49:52.8816214Z 
+2026-09-10T09:49:52.8816354Z (1 row)
+2026-09-10T09:49:52.8817374Z SELECT 'S3-authority-negative closure input' observation,'stage2-coordinator-fixture' actor,'not safety_inspector' authorization,'eq-stage3-known' equipment_id;
+2026-09-10T09:49:52.8817529Z observation|actor|authorization|equipment_id
+2026-09-10T09:49:52.8817853Z S3-authority-negative closure input|stage2-coordinator-fixture|not safety_inspector|eq-stage3-known
+2026-09-10T09:49:52.8817936Z (1 row)
+2026-09-10T09:49:52.8818496Z SELECT s3_reject_closure('stage2-coordinator-fixture','eq-stage3-known'); SELECT 'S3-authority-negative rejected' outcome;
+2026-09-10T09:49:52.8818611Z s3_reject_closure
+2026-09-10T09:49:52.8818618Z 
+2026-09-10T09:49:52.8818703Z (1 row)
+2026-09-10T09:49:52.8818783Z outcome
+2026-09-10T09:49:52.8818889Z S3-authority-negative rejected
+2026-09-10T09:49:52.8818971Z (1 row)
+2026-09-10T09:49:52.8819529Z SELECT equipment_id,status FROM equipment WHERE equipment_id='eq-stage3-known'; SELECT count(*) AS request_count FROM maintenance_request WHERE equipment_id='eq-stage3-known';
+2026-09-10T09:49:52.8819615Z equipment_id|status
+2026-09-10T09:49:52.8819713Z eq-stage3-known|available
+2026-09-10T09:49:52.8819790Z (1 row)
+2026-09-10T09:49:52.8819870Z request_count
+2026-09-10T09:49:52.8819948Z 0
+2026-09-10T09:49:52.8820019Z (1 row)
+2026-09-10T09:49:52.8820835Z DO $$ BEGIN IF (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage3-known' AND status='available')<>1 OR (SELECT count(*) FROM maintenance_request WHERE equipment_id='eq-stage3-known')<>0 THEN RAISE EXCEPTION 'S3 authority-negative failed'; END IF; END $$;
+2026-09-10T09:49:52.8820914Z DO
+2026-09-10T09:49:52.8821266Z SELECT 'STAGE3_CUMULATIVE_ACCEPTANCE_V2_PASS' result,current_database() database_name,current_schema() schema_name;
+2026-09-10T09:49:52.8821368Z result|database_name|schema_name
+2026-09-10T09:49:52.8821602Z STAGE3_CUMULATIVE_ACCEPTANCE_V2_PASS|postgres|alder_7ab3d9e55d334d50a28dea2d8b285e11
+2026-09-10T09:49:52.8821679Z (1 row)
+2026-09-10T09:49:52.8821893Z -- Cumulative addition; Stage 1 v3, Stage 2 v4 and Stage 3 v2 ran unchanged first.
+2026-09-10T09:49:52.8821984Z \set ON_ERROR_STOP on
+2026-09-10T09:49:52.8822067Z SET TIME ZONE 'UTC';
+2026-09-10T09:49:52.8822143Z SET
+2026-09-10T09:49:52.8822229Z \pset format unaligned
+2026-09-10T09:49:52.8822324Z Output format is unaligned.
+2026-09-10T09:49:52.8822411Z \pset null 'NULL'
+2026-09-10T09:49:52.8822492Z Null display is "NULL".
+2026-09-10T09:49:52.8822732Z SELECT 'Stage 4 inspector authority' observation,* FROM stage3_authorization_fixture;
+2026-09-10T09:49:52.8823040Z observation|actor_evidence|role_name
+2026-09-10T09:49:52.8823265Z Stage 4 inspector authority|stage3-safety-inspector-fixture|safety_inspector
+2026-09-10T09:49:52.8823337Z (1 row)
+2026-09-10T09:49:52.8823685Z SELECT 'Stage 4 maintenance authority' observation,* FROM stage2_authorization_fixture;
+2026-09-10T09:49:52.8823796Z observation|actor_evidence|role_name
+2026-09-10T09:49:52.8824019Z Stage 4 maintenance authority|stage2-coordinator-fixture|maintenance_coordinator
+2026-09-10T09:49:52.8824202Z Stage 4 maintenance authority|stage2-technician-fixture|technician
+2026-09-10T09:49:52.8824275Z (2 rows)
+2026-09-10T09:49:52.8824467Z CREATE FUNCTION s4_setup(c text) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8824539Z BEGIN
+2026-09-10T09:49:52.8824637Z   TRUNCATE maintenance_request;
+2026-09-10T09:49:52.8824803Z   INSERT INTO equipment VALUES ('eq-stage4-known','available')
+2026-09-10T09:49:52.8824963Z   ON CONFLICT(equipment_id) DO UPDATE SET status='available';
+2026-09-10T09:49:52.8825063Z   RAISE NOTICE 'case %',c;
+2026-09-10T09:49:52.8825136Z END $$;
+2026-09-10T09:49:52.8825220Z CREATE FUNCTION
+2026-09-10T09:49:52.8825477Z CREATE FUNCTION s4_equipment(expected text,n integer) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8825555Z BEGIN
+2026-09-10T09:49:52.8825823Z   IF (SELECT count(*) FROM equipment WHERE equipment_id='eq-stage4-known' AND status=expected)<>1
+2026-09-10T09:49:52.8825952Z      OR (SELECT count(*) FROM maintenance_request)<>n
+2026-09-10T09:49:52.8826118Z   THEN RAISE EXCEPTION 'S4 equipment/count gate failed'; END IF;
+2026-09-10T09:49:52.8826191Z END $$;
+2026-09-10T09:49:52.8826275Z CREATE FUNCTION
+2026-09-10T09:49:52.8826507Z CREATE FUNCTION s4_state(expected text,reported timestamptz,scheduled timestamptz)
+2026-09-10T09:49:52.8826615Z RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8826686Z BEGIN
+2026-09-10T09:49:52.8827136Z   IF (SELECT count(*) FROM maintenance_request WHERE request_id='req-stage4-open'
+2026-09-10T09:49:52.8827361Z       AND equipment_id='eq-stage4-known' AND reported_by='reporter-stage4'
+2026-09-10T09:49:52.8827544Z       AND reported_at=reported AND description='Stage 4 reported fault'
+2026-09-10T09:49:52.8827738Z       AND status=expected AND scheduled_for IS NOT DISTINCT FROM scheduled
+2026-09-10T09:49:52.8827940Z       AND completed_at IS NULL)<>1 OR (SELECT count(*) FROM maintenance_request)<>1
+2026-09-10T09:49:52.8828098Z   THEN RAISE EXCEPTION 'S4 complete row gate failed'; END IF;
+2026-09-10T09:49:52.8828177Z END $$;
+2026-09-10T09:49:52.8828256Z CREATE FUNCTION
+2026-09-10T09:49:52.8828414Z CREATE FUNCTION s4_same() RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8828485Z BEGIN
+2026-09-10T09:49:52.8828718Z   IF (SELECT count(*) FROM s4_pre_call)<>1 OR (SELECT count(*) FROM maintenance_request)<>1
+2026-09-10T09:49:52.8828955Z      OR EXISTS (SELECT * FROM s4_pre_call EXCEPT SELECT * FROM maintenance_request)
+2026-09-10T09:49:52.8829166Z      OR EXISTS (SELECT * FROM maintenance_request EXCEPT SELECT * FROM s4_pre_call)
+2026-09-10T09:49:52.8829343Z   THEN RAISE EXCEPTION 'S4 request changed unexpectedly'; END IF;
+2026-09-10T09:49:52.8829416Z END $$;
+2026-09-10T09:49:52.8829498Z CREATE FUNCTION
+2026-09-10T09:49:52.8829718Z CREATE FUNCTION s4_reject_clear(actor text) RETURNS void LANGUAGE plpgsql AS $$
+2026-09-10T09:49:52.8829796Z BEGIN
+2026-09-10T09:49:52.8829940Z   PERFORM clear_safety_closure(actor,'eq-stage4-known');
+2026-09-10T09:49:52.8830070Z   RAISE EXCEPTION 'unexpected clear acceptance';
+2026-09-10T09:49:52.8830305Z EXCEPTION WHEN OTHERS THEN IF SQLERRM='unexpected clear acceptance' THEN RAISE; END IF;
+2026-09-10T09:49:52.8830383Z END $$;
+2026-09-10T09:49:52.8830466Z CREATE FUNCTION
+2026-09-10T09:49:52.8830539Z -- S4-01
+2026-09-10T09:49:52.8830615Z BEGIN;
+2026-09-10T09:49:52.8830686Z BEGIN
+2026-09-10T09:49:52.8830782Z SELECT s4_setup('S4-01');
+2026-09-10T09:49:52.8830864Z NOTICE:  case S4-01
+2026-09-10T09:49:52.8830953Z s4_setup
+2026-09-10T09:49:52.8830958Z 
+2026-09-10T09:49:52.8831169Z (1 row)
+2026-09-10T09:49:52.8831332Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8831419Z equipment_id|status
+2026-09-10T09:49:52.8831507Z eq-stage4-known|available
+2026-09-10T09:49:52.8831587Z (1 row)
+2026-09-10T09:49:52.8831824Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8831911Z request_count
+2026-09-10T09:49:52.8831991Z 0
+2026-09-10T09:49:52.8832070Z (1 row)
+2026-09-10T09:49:52.8832167Z SELECT s4_equipment('available',0);
+2026-09-10T09:49:52.8832248Z s4_equipment
+2026-09-10T09:49:52.8832253Z 
+2026-09-10T09:49:52.8832328Z (1 row)
+2026-09-10T09:49:52.8832662Z SELECT 'S4-01 close input' observation,'stage3-safety-inspector-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8832763Z observation|actor|equipment_id
+2026-09-10T09:49:52.8832938Z S4-01 close input|stage3-safety-inspector-fixture|eq-stage4-known
+2026-09-10T09:49:52.8833015Z (1 row)
+2026-09-10T09:49:52.8833246Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage4-known');
+2026-09-10T09:49:52.8833340Z record_safety_closure
+2026-09-10T09:49:52.8833422Z eq-stage4-known
+2026-09-10T09:49:52.8833492Z (1 row)
+2026-09-10T09:49:52.8833593Z SELECT 'S4-01 close accepted' outcome;
+2026-09-10T09:49:52.8833672Z outcome
+2026-09-10T09:49:52.8833758Z S4-01 close accepted
+2026-09-10T09:49:52.8833830Z (1 row)
+2026-09-10T09:49:52.8833987Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8834075Z equipment_id|status
+2026-09-10T09:49:52.8834167Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8834243Z (1 row)
+2026-09-10T09:49:52.8834342Z SELECT s4_equipment('safety_closed',0);
+2026-09-10T09:49:52.8834426Z s4_equipment
+2026-09-10T09:49:52.8834430Z 
+2026-09-10T09:49:52.8834500Z (1 row)
+2026-09-10T09:49:52.8834828Z SELECT 'S4-01 clear input' observation,'stage3-safety-inspector-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8834921Z observation|actor|equipment_id
+2026-09-10T09:49:52.8835415Z S4-01 clear input|stage3-safety-inspector-fixture|eq-stage4-known
+2026-09-10T09:49:52.8835502Z (1 row)
+2026-09-10T09:49:52.8835726Z SELECT clear_safety_closure('stage3-safety-inspector-fixture','eq-stage4-known');
+2026-09-10T09:49:52.8835811Z clear_safety_closure
+2026-09-10T09:49:52.8835894Z eq-stage4-known
+2026-09-10T09:49:52.8835969Z (1 row)
+2026-09-10T09:49:52.8836064Z SELECT 'S4-01 clear accepted' outcome;
+2026-09-10T09:49:52.8836140Z outcome
+2026-09-10T09:49:52.8836228Z S4-01 clear accepted
+2026-09-10T09:49:52.8836297Z (1 row)
+2026-09-10T09:49:52.8836458Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8836538Z equipment_id|status
+2026-09-10T09:49:52.8836629Z eq-stage4-known|available
+2026-09-10T09:49:52.8836700Z (1 row)
+2026-09-10T09:49:52.8837066Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8837218Z request_count
+2026-09-10T09:49:52.8837336Z 0
+2026-09-10T09:49:52.8837416Z (1 row)
+2026-09-10T09:49:52.8837513Z SELECT s4_equipment('available',0);
+2026-09-10T09:49:52.8837602Z s4_equipment
+2026-09-10T09:49:52.8837607Z 
+2026-09-10T09:49:52.8837676Z (1 row)
+2026-09-10T09:49:52.8837751Z COMMIT;
+2026-09-10T09:49:52.8837820Z COMMIT
+2026-09-10T09:49:52.8837896Z -- S4-02
+2026-09-10T09:49:52.8837965Z BEGIN;
+2026-09-10T09:49:52.8838046Z BEGIN
+2026-09-10T09:49:52.8838139Z SELECT s4_setup('S4-02');
+2026-09-10T09:49:52.8838211Z s4_setup
+2026-09-10T09:49:52.8838216Z 
+2026-09-10T09:49:52.8838291Z (1 row)
+2026-09-10T09:49:52.8838384Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8838469Z NOTICE:  case S4-02
+2026-09-10T09:49:52.8838730Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8838808Z (0 rows)
+2026-09-10T09:49:52.8838962Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8839048Z equipment_id|status
+2026-09-10T09:49:52.8839143Z eq-stage4-known|available
+2026-09-10T09:49:52.8839216Z (1 row)
+2026-09-10T09:49:52.8839357Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8839581Z request_count
+2026-09-10T09:49:52.8839658Z 0
+2026-09-10T09:49:52.8839729Z (1 row)
+2026-09-10T09:49:52.8839829Z SELECT s4_equipment('available',0);
+2026-09-10T09:49:52.8839904Z s4_equipment
+2026-09-10T09:49:52.8840019Z 
+2026-09-10T09:49:52.8840100Z (1 row)
+2026-09-10T09:49:52.8840211Z SELECT clock_timestamp() reported \gset s4_
+2026-09-10T09:49:52.8840810Z SELECT 'S4-02 report input' observation,'req-stage4-open' request_id,'eq-stage4-known' equipment_id,'reporter-stage4' reported_by,:'s4_reported' reported_at,'Stage 4 reported fault' description;
+2026-09-10T09:49:52.8841013Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8841360Z S4-02 report input|req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault
+2026-09-10T09:49:52.8841438Z (1 row)
+2026-09-10T09:49:52.8841868Z SELECT report_equipment_fault('req-stage4-open','eq-stage4-known','reporter-stage4',:'s4_reported'::timestamptz,'Stage 4 reported fault');
+2026-09-10T09:49:52.8841962Z report_equipment_fault
+2026-09-10T09:49:52.8842050Z req-stage4-open
+2026-09-10T09:49:52.8842123Z (1 row)
+2026-09-10T09:49:52.8842226Z SELECT 'S4-02 report accepted' outcome;
+2026-09-10T09:49:52.8842303Z outcome
+2026-09-10T09:49:52.8842392Z S4-02 report accepted
+2026-09-10T09:49:52.8842463Z (1 row)
+2026-09-10T09:49:52.8842565Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8842829Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8843161Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8843238Z (1 row)
+2026-09-10T09:49:52.8843392Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8843479Z equipment_id|status
+2026-09-10T09:49:52.8843567Z eq-stage4-known|available
+2026-09-10T09:49:52.8843643Z (1 row)
+2026-09-10T09:49:52.8843784Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8843864Z request_count
+2026-09-10T09:49:52.8843939Z 1
+2026-09-10T09:49:52.8844009Z (1 row)
+2026-09-10T09:49:52.8844161Z SELECT s4_state('open',:'s4_reported'::timestamptz,NULL);
+2026-09-10T09:49:52.8844232Z s4_state
+2026-09-10T09:49:52.8844242Z 
+2026-09-10T09:49:52.8844317Z (1 row)
+2026-09-10T09:49:52.8844537Z CREATE TEMP TABLE s4_pre_call ON COMMIT DROP AS SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8844611Z SELECT 1
+2026-09-10T09:49:52.8844777Z SELECT 'S4-02 exact pre-closure' observation,* FROM s4_pre_call;
+2026-09-10T09:49:52.8845081Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8845620Z S4-02 exact pre-closure|req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8845754Z (1 row)
+2026-09-10T09:49:52.8846357Z SELECT 'S4-02 close input' observation,'stage3-safety-inspector-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8846561Z observation|actor|equipment_id
+2026-09-10T09:49:52.8847119Z S4-02 close input|stage3-safety-inspector-fixture|eq-stage4-known
+2026-09-10T09:49:52.8847286Z (1 row)
+2026-09-10T09:49:52.8847716Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage4-known');
+2026-09-10T09:49:52.8847818Z record_safety_closure
+2026-09-10T09:49:52.8847902Z eq-stage4-known
+2026-09-10T09:49:52.8847980Z (1 row)
+2026-09-10T09:49:52.8848087Z SELECT 'S4-02 close accepted' outcome;
+2026-09-10T09:49:52.8848160Z outcome
+2026-09-10T09:49:52.8848246Z S4-02 close accepted
+2026-09-10T09:49:52.8848325Z (1 row)
+2026-09-10T09:49:52.8848425Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8848691Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8849036Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8849109Z (1 row)
+2026-09-10T09:49:52.8849479Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8849575Z equipment_id|status
+2026-09-10T09:49:52.8849671Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8849747Z (1 row)
+2026-09-10T09:49:52.8849994Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8850079Z request_count
+2026-09-10T09:49:52.8850150Z 1
+2026-09-10T09:49:52.8850225Z (1 row)
+2026-09-10T09:49:52.8850327Z SELECT s4_equipment('safety_closed',1);
+2026-09-10T09:49:52.8850407Z s4_equipment
+2026-09-10T09:49:52.8850413Z 
+2026-09-10T09:49:52.8850488Z (1 row)
+2026-09-10T09:49:52.8850574Z SELECT s4_same();
+2026-09-10T09:49:52.8850654Z s4_same
+2026-09-10T09:49:52.8850658Z 
+2026-09-10T09:49:52.8850729Z (1 row)
+2026-09-10T09:49:52.8850831Z SELECT 'pre schedule' observation;
+2026-09-10T09:49:52.8850907Z observation
+2026-09-10T09:49:52.8850990Z pre schedule
+2026-09-10T09:49:52.8851068Z (1 row)
+2026-09-10T09:49:52.8851157Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8851430Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8851769Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8851852Z (1 row)
+2026-09-10T09:49:52.8852008Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8852096Z equipment_id|status
+2026-09-10T09:49:52.8852195Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8852269Z (1 row)
+2026-09-10T09:49:52.8852410Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8852487Z request_count
+2026-09-10T09:49:52.8852563Z 1
+2026-09-10T09:49:52.8852633Z (1 row)
+2026-09-10T09:49:52.8852750Z SELECT clock_timestamp() db_before \gset s4_
+2026-09-10T09:49:52.8852972Z SELECT (:'s4_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s4_
+2026-09-10T09:49:52.8853406Z SELECT 'S4-02 schedule input' observation,'stage2-coordinator-fixture' actor,'req-stage4-open' request_id,:'s4_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8853526Z observation|actor|request_id|scheduled_for
+2026-09-10T09:49:52.8853786Z S4-02 schedule input|stage2-coordinator-fixture|req-stage4-open|2026-09-12 09:49:52.778351+00
+2026-09-10T09:49:52.8853868Z (1 row)
+2026-09-10T09:49:52.8854191Z SELECT s3_reject_schedule('stage2-coordinator-fixture','req-stage4-open',:'s4_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8854281Z s3_reject_schedule
+2026-09-10T09:49:52.8854285Z 
+2026-09-10T09:49:52.8854361Z (1 row)
+2026-09-10T09:49:52.8854468Z SELECT clock_timestamp() db_after \gset s4_
+2026-09-10T09:49:52.8854573Z SELECT 'S4-02 schedule rejected' outcome;
+2026-09-10T09:49:52.8854645Z outcome
+2026-09-10T09:49:52.8854731Z S4-02 schedule rejected
+2026-09-10T09:49:52.8854801Z (1 row)
+2026-09-10T09:49:52.8855047Z SELECT 'S4-02 schedule clock' observation,:'s4_db_before' db_before,:'s4_db_after' db_after;
+2026-09-10T09:49:52.8855140Z observation|db_before|db_after
+2026-09-10T09:49:52.8855332Z S4-02 schedule clock|2026-09-10 09:49:52.778351+00|2026-09-10 09:49:52.779048+00
+2026-09-10T09:49:52.8855417Z (1 row)
+2026-09-10T09:49:52.8855733Z SELECT 1/CASE WHEN :'s4_scheduled_for'::timestamptz > :'s4_db_after'::timestamptz THEN 1 ELSE 0 END s4_future_gate;
+2026-09-10T09:49:52.8855906Z s4_future_gate
+2026-09-10T09:49:52.8856039Z 1
+2026-09-10T09:49:52.8856179Z (1 row)
+2026-09-10T09:49:52.8856351Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8856829Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8857671Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8857802Z (1 row)
+2026-09-10T09:49:52.8857986Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8858070Z equipment_id|status
+2026-09-10T09:49:52.8858174Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8858246Z (1 row)
+2026-09-10T09:49:52.8858545Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8858873Z request_count
+2026-09-10T09:49:52.8858955Z 1
+2026-09-10T09:49:52.8859035Z (1 row)
+2026-09-10T09:49:52.8859144Z SELECT s4_equipment('safety_closed',1);
+2026-09-10T09:49:52.8859225Z s4_equipment
+2026-09-10T09:49:52.8859338Z 
+2026-09-10T09:49:52.8859415Z (1 row)
+2026-09-10T09:49:52.8859499Z SELECT s4_same();
+2026-09-10T09:49:52.8859569Z s4_same
+2026-09-10T09:49:52.8859573Z 
+2026-09-10T09:49:52.8859648Z (1 row)
+2026-09-10T09:49:52.8859999Z SELECT 'S4-02 clear input' observation,'stage3-safety-inspector-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8860096Z observation|actor|equipment_id
+2026-09-10T09:49:52.8860283Z S4-02 clear input|stage3-safety-inspector-fixture|eq-stage4-known
+2026-09-10T09:49:52.8860354Z (1 row)
+2026-09-10T09:49:52.8860590Z SELECT clear_safety_closure('stage3-safety-inspector-fixture','eq-stage4-known');
+2026-09-10T09:49:52.8860672Z clear_safety_closure
+2026-09-10T09:49:52.8860758Z eq-stage4-known
+2026-09-10T09:49:52.8860838Z (1 row)
+2026-09-10T09:49:52.8860948Z SELECT 'S4-02 clear accepted' outcome;
+2026-09-10T09:49:52.8861124Z outcome
+2026-09-10T09:49:52.8861273Z S4-02 clear accepted
+2026-09-10T09:49:52.8861405Z (1 row)
+2026-09-10T09:49:52.8861579Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8862035Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8862610Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8862758Z (1 row)
+2026-09-10T09:49:52.8863029Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8863165Z equipment_id|status
+2026-09-10T09:49:52.8863314Z eq-stage4-known|available
+2026-09-10T09:49:52.8863433Z (1 row)
+2026-09-10T09:49:52.8863691Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8863825Z request_count
+2026-09-10T09:49:52.8863960Z 1
+2026-09-10T09:49:52.8864086Z (1 row)
+2026-09-10T09:49:52.8864272Z SELECT s4_equipment('available',1);
+2026-09-10T09:49:52.8864405Z s4_equipment
+2026-09-10T09:49:52.8864415Z 
+2026-09-10T09:49:52.8864528Z (1 row)
+2026-09-10T09:49:52.8864661Z SELECT s4_same();
+2026-09-10T09:49:52.8864781Z s4_same
+2026-09-10T09:49:52.8864796Z 
+2026-09-10T09:49:52.8864924Z (1 row)
+2026-09-10T09:49:52.8865106Z SELECT 'pre schedule' observation;
+2026-09-10T09:49:52.8865250Z observation
+2026-09-10T09:49:52.8865382Z pre schedule
+2026-09-10T09:49:52.8865511Z (1 row)
+2026-09-10T09:49:52.8865679Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8866137Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8866717Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8867052Z (1 row)
+2026-09-10T09:49:52.8867335Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8867482Z equipment_id|status
+2026-09-10T09:49:52.8867625Z eq-stage4-known|available
+2026-09-10T09:49:52.8867762Z (1 row)
+2026-09-10T09:49:52.8867971Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8868098Z request_count
+2026-09-10T09:49:52.8868220Z 1
+2026-09-10T09:49:52.8868348Z (1 row)
+2026-09-10T09:49:52.8868535Z SELECT clock_timestamp() db_before \gset s4_
+2026-09-10T09:49:52.8868892Z SELECT (:'s4_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s4_
+2026-09-10T09:49:52.8869540Z SELECT 'S4-02 schedule input' observation,'reporter-stage4' actor,'req-stage4-open' request_id,:'s4_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8869741Z observation|actor|request_id|scheduled_for
+2026-09-10T09:49:52.8870084Z S4-02 schedule input|reporter-stage4|req-stage4-open|2026-09-12 09:49:52.782265+00
+2026-09-10T09:49:52.8870202Z (1 row)
+2026-09-10T09:49:52.8870674Z SELECT s3_reject_schedule('reporter-stage4','req-stage4-open',:'s4_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8870824Z s3_reject_schedule
+2026-09-10T09:49:52.8871076Z 
+2026-09-10T09:49:52.8871228Z (1 row)
+2026-09-10T09:49:52.8871428Z SELECT clock_timestamp() db_after \gset s4_
+2026-09-10T09:49:52.8871610Z SELECT 'S4-02 schedule rejected' outcome;
+2026-09-10T09:49:52.8871755Z outcome
+2026-09-10T09:49:52.8872112Z S4-02 schedule rejected
+2026-09-10T09:49:52.8872270Z (1 row)
+2026-09-10T09:49:52.8872732Z SELECT 'S4-02 schedule clock' observation,:'s4_db_before' db_before,:'s4_db_after' db_after;
+2026-09-10T09:49:52.8872920Z observation|db_before|db_after
+2026-09-10T09:49:52.8873244Z S4-02 schedule clock|2026-09-10 09:49:52.782265+00|2026-09-10 09:49:52.782756+00
+2026-09-10T09:49:52.8873363Z (1 row)
+2026-09-10T09:49:52.8873873Z SELECT 1/CASE WHEN :'s4_scheduled_for'::timestamptz > :'s4_db_after'::timestamptz THEN 1 ELSE 0 END s4_future_gate;
+2026-09-10T09:49:52.8874021Z s4_future_gate
+2026-09-10T09:49:52.8874155Z 1
+2026-09-10T09:49:52.8874276Z (1 row)
+2026-09-10T09:49:52.8874447Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8874883Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8875399Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8875533Z (1 row)
+2026-09-10T09:49:52.8875823Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8875969Z equipment_id|status
+2026-09-10T09:49:52.8876131Z eq-stage4-known|available
+2026-09-10T09:49:52.8876262Z (1 row)
+2026-09-10T09:49:52.8876489Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8876635Z request_count
+2026-09-10T09:49:52.8876782Z 1
+2026-09-10T09:49:52.8877265Z (1 row)
+2026-09-10T09:49:52.8877453Z SELECT s4_equipment('available',1);
+2026-09-10T09:49:52.8877591Z s4_equipment
+2026-09-10T09:49:52.8877602Z 
+2026-09-10T09:49:52.8877745Z (1 row)
+2026-09-10T09:49:52.8877873Z SELECT s4_same();
+2026-09-10T09:49:52.8877999Z s4_same
+2026-09-10T09:49:52.8878009Z 
+2026-09-10T09:49:52.8878142Z (1 row)
+2026-09-10T09:49:52.8878329Z SELECT 'pre schedule' observation;
+2026-09-10T09:49:52.8878472Z observation
+2026-09-10T09:49:52.8878772Z pre schedule
+2026-09-10T09:49:52.8878928Z (1 row)
+2026-09-10T09:49:52.8879087Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8879515Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8880057Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8880211Z (1 row)
+2026-09-10T09:49:52.8880577Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8880709Z equipment_id|status
+2026-09-10T09:49:52.8880865Z eq-stage4-known|available
+2026-09-10T09:49:52.8880991Z (1 row)
+2026-09-10T09:49:52.8882237Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8882397Z request_count
+2026-09-10T09:49:52.8884250Z 1
+2026-09-10T09:49:52.8884421Z (1 row)
+2026-09-10T09:49:52.8884645Z SELECT clock_timestamp() db_before \gset s4_
+2026-09-10T09:49:52.8885059Z SELECT (:'s4_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s4_
+2026-09-10T09:49:52.8892169Z SELECT 'S4-02 schedule input' observation,'stage2-coordinator-fixture' actor,'req-stage4-open' request_id,:'s4_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8892391Z observation|actor|request_id|scheduled_for
+2026-09-10T09:49:52.8892825Z S4-02 schedule input|stage2-coordinator-fixture|req-stage4-open|2026-09-12 09:49:52.784629+00
+2026-09-10T09:49:52.8892956Z (1 row)
+2026-09-10T09:49:52.8893530Z SELECT schedule_maintenance('stage2-coordinator-fixture','req-stage4-open',:'s4_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8893671Z schedule_maintenance
+2026-09-10T09:49:52.8893818Z req-stage4-open
+2026-09-10T09:49:52.8893947Z (1 row)
+2026-09-10T09:49:52.8894121Z SELECT clock_timestamp() db_after \gset s4_
+2026-09-10T09:49:52.8894281Z SELECT 'S4-02 schedule accepted' outcome;
+2026-09-10T09:49:52.8894409Z outcome
+2026-09-10T09:49:52.8894547Z S4-02 schedule accepted
+2026-09-10T09:49:52.8894937Z (1 row)
+2026-09-10T09:49:52.8895372Z SELECT 'S4-02 schedule clock' observation,:'s4_db_before' db_before,:'s4_db_after' db_after;
+2026-09-10T09:49:52.8895537Z observation|db_before|db_after
+2026-09-10T09:49:52.8896023Z S4-02 schedule clock|2026-09-10 09:49:52.784629+00|2026-09-10 09:49:52.785224+00
+2026-09-10T09:49:52.8896153Z (1 row)
+2026-09-10T09:49:52.8896708Z SELECT 1/CASE WHEN :'s4_scheduled_for'::timestamptz > :'s4_db_after'::timestamptz THEN 1 ELSE 0 END s4_future_gate;
+2026-09-10T09:49:52.8897044Z s4_future_gate
+2026-09-10T09:49:52.8897222Z 1
+2026-09-10T09:49:52.8897356Z (1 row)
+2026-09-10T09:49:52.8897519Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8897973Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8898682Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.773754+00|Stage 4 reported fault|scheduled|2026-09-12 09:49:52.784629+00|NULL
+2026-09-10T09:49:52.8898828Z (1 row)
+2026-09-10T09:49:52.8899036Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8899135Z equipment_id|status
+2026-09-10T09:49:52.8899238Z eq-stage4-known|available
+2026-09-10T09:49:52.8899309Z (1 row)
+2026-09-10T09:49:52.8899467Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8899544Z request_count
+2026-09-10T09:49:52.8899619Z 1
+2026-09-10T09:49:52.8899690Z (1 row)
+2026-09-10T09:49:52.8899792Z SELECT s4_equipment('available',1);
+2026-09-10T09:49:52.8899867Z s4_equipment
+2026-09-10T09:49:52.8899873Z 
+2026-09-10T09:49:52.8899955Z (1 row)
+2026-09-10T09:49:52.8900215Z SELECT s4_state('scheduled',:'s4_reported'::timestamptz,:'s4_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8900289Z s4_state
+2026-09-10T09:49:52.8900294Z 
+2026-09-10T09:49:52.8900369Z (1 row)
+2026-09-10T09:49:52.8900440Z COMMIT;
+2026-09-10T09:49:52.8900514Z COMMIT
+2026-09-10T09:49:52.8900585Z -- S4-03
+2026-09-10T09:49:52.8900657Z BEGIN;
+2026-09-10T09:49:52.8900723Z BEGIN
+2026-09-10T09:49:52.8900823Z SELECT s4_setup('S4-03');
+2026-09-10T09:49:52.8900905Z NOTICE:  case S4-03
+2026-09-10T09:49:52.8900978Z s4_setup
+2026-09-10T09:49:52.8900983Z 
+2026-09-10T09:49:52.8901056Z (1 row)
+2026-09-10T09:49:52.8901154Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8901424Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8901495Z (0 rows)
+2026-09-10T09:49:52.8901704Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8901810Z equipment_id|status
+2026-09-10T09:49:52.8901901Z eq-stage4-known|available
+2026-09-10T09:49:52.8901975Z (1 row)
+2026-09-10T09:49:52.8902115Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8902196Z request_count
+2026-09-10T09:49:52.8902266Z 0
+2026-09-10T09:49:52.8902340Z (1 row)
+2026-09-10T09:49:52.8902436Z SELECT s4_equipment('available',0);
+2026-09-10T09:49:52.8902517Z s4_equipment
+2026-09-10T09:49:52.8902522Z 
+2026-09-10T09:49:52.8902594Z (1 row)
+2026-09-10T09:49:52.8902801Z SELECT clock_timestamp() reported \gset s4_
+2026-09-10T09:49:52.8903840Z SELECT 'S4-03 report input' observation,'req-stage4-open' request_id,'eq-stage4-known' equipment_id,'reporter-stage4' reported_by,:'s4_reported' reported_at,'Stage 4 reported fault' description;
+2026-09-10T09:49:52.8904177Z observation|request_id|equipment_id|reported_by|reported_at|description
+2026-09-10T09:49:52.8904655Z S4-03 report input|req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault
+2026-09-10T09:49:52.8904731Z (1 row)
+2026-09-10T09:49:52.8905176Z SELECT report_equipment_fault('req-stage4-open','eq-stage4-known','reporter-stage4',:'s4_reported'::timestamptz,'Stage 4 reported fault');
+2026-09-10T09:49:52.8905270Z report_equipment_fault
+2026-09-10T09:49:52.8905351Z req-stage4-open
+2026-09-10T09:49:52.8905426Z (1 row)
+2026-09-10T09:49:52.8905528Z SELECT 'S4-03 report accepted' outcome;
+2026-09-10T09:49:52.8905603Z outcome
+2026-09-10T09:49:52.8905685Z S4-03 report accepted
+2026-09-10T09:49:52.8905937Z (1 row)
+2026-09-10T09:49:52.8906043Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8906306Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8906775Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8907096Z (1 row)
+2026-09-10T09:49:52.8907325Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8907416Z equipment_id|status
+2026-09-10T09:49:52.8907512Z eq-stage4-known|available
+2026-09-10T09:49:52.8907589Z (1 row)
+2026-09-10T09:49:52.8907728Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8907813Z request_count
+2026-09-10T09:49:52.8907883Z 1
+2026-09-10T09:49:52.8907969Z (1 row)
+2026-09-10T09:49:52.8908122Z SELECT s4_state('open',:'s4_reported'::timestamptz,NULL);
+2026-09-10T09:49:52.8908201Z s4_state
+2026-09-10T09:49:52.8908206Z 
+2026-09-10T09:49:52.8908293Z (1 row)
+2026-09-10T09:49:52.8908516Z CREATE TEMP TABLE s4_pre_call ON COMMIT DROP AS SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8908593Z SELECT 1
+2026-09-10T09:49:52.8908763Z SELECT 'S4-03 exact pre-closure' observation,* FROM s4_pre_call;
+2026-09-10T09:49:52.8909076Z observation|request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8909484Z S4-03 exact pre-closure|req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8909561Z (1 row)
+2026-09-10T09:49:52.8909894Z SELECT 'S4-03 close input' observation,'stage3-safety-inspector-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8909997Z observation|actor|equipment_id
+2026-09-10T09:49:52.8910176Z S4-03 close input|stage3-safety-inspector-fixture|eq-stage4-known
+2026-09-10T09:49:52.8910245Z (1 row)
+2026-09-10T09:49:52.8910477Z SELECT record_safety_closure('stage3-safety-inspector-fixture','eq-stage4-known');
+2026-09-10T09:49:52.8910562Z record_safety_closure
+2026-09-10T09:49:52.8910677Z eq-stage4-known
+2026-09-10T09:49:52.8910753Z (1 row)
+2026-09-10T09:49:52.8910856Z SELECT 'S4-03 close accepted' outcome;
+2026-09-10T09:49:52.8910938Z outcome
+2026-09-10T09:49:52.8911018Z S4-03 close accepted
+2026-09-10T09:49:52.8911093Z (1 row)
+2026-09-10T09:49:52.8911187Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8911451Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8911770Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8911848Z (1 row)
+2026-09-10T09:49:52.8912011Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8912095Z equipment_id|status
+2026-09-10T09:49:52.8912197Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8912268Z (1 row)
+2026-09-10T09:49:52.8912408Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8912488Z request_count
+2026-09-10T09:49:52.8912564Z 1
+2026-09-10T09:49:52.8912635Z (1 row)
+2026-09-10T09:49:52.8912739Z SELECT s4_equipment('safety_closed',1);
+2026-09-10T09:49:52.8912822Z s4_equipment
+2026-09-10T09:49:52.8912832Z 
+2026-09-10T09:49:52.8912901Z (1 row)
+2026-09-10T09:49:52.8912981Z SELECT s4_same();
+2026-09-10T09:49:52.8913050Z s4_same
+2026-09-10T09:49:52.8913054Z 
+2026-09-10T09:49:52.8913126Z (1 row)
+2026-09-10T09:49:52.8913429Z SELECT 'S4-03 clear input' observation,'stage2-coordinator-fixture' actor,'eq-stage4-known' equipment_id;
+2026-09-10T09:49:52.8913528Z observation|actor|equipment_id
+2026-09-10T09:49:52.8913685Z S4-03 clear input|stage2-coordinator-fixture|eq-stage4-known
+2026-09-10T09:49:52.8913754Z (1 row)
+2026-09-10T09:49:52.8913888Z SELECT s4_reject_clear('stage2-coordinator-fixture');
+2026-09-10T09:49:52.8913962Z s4_reject_clear
+2026-09-10T09:49:52.8913967Z 
+2026-09-10T09:49:52.8914039Z (1 row)
+2026-09-10T09:49:52.8914133Z SELECT 'S4-03 clear rejected' outcome;
+2026-09-10T09:49:52.8914390Z outcome
+2026-09-10T09:49:52.8914468Z S4-03 clear rejected
+2026-09-10T09:49:52.8914542Z (1 row)
+2026-09-10T09:49:52.8914640Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8914997Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8915325Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8915395Z (1 row)
+2026-09-10T09:49:52.8915553Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8915633Z equipment_id|status
+2026-09-10T09:49:52.8915728Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8915805Z (1 row)
+2026-09-10T09:49:52.8915935Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8916013Z request_count
+2026-09-10T09:49:52.8916081Z 1
+2026-09-10T09:49:52.8916154Z (1 row)
+2026-09-10T09:49:52.8916249Z SELECT s4_equipment('safety_closed',1);
+2026-09-10T09:49:52.8916334Z s4_equipment
+2026-09-10T09:49:52.8916339Z 
+2026-09-10T09:49:52.8916407Z (1 row)
+2026-09-10T09:49:52.8916486Z SELECT s4_same();
+2026-09-10T09:49:52.8916562Z s4_same
+2026-09-10T09:49:52.8916566Z 
+2026-09-10T09:49:52.8916634Z (1 row)
+2026-09-10T09:49:52.8916741Z SELECT 'pre schedule' observation;
+2026-09-10T09:49:52.8916815Z observation
+2026-09-10T09:49:52.8917144Z pre schedule
+2026-09-10T09:49:52.8917262Z (1 row)
+2026-09-10T09:49:52.8917402Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8917668Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8918000Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8918076Z (1 row)
+2026-09-10T09:49:52.8918224Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8918309Z equipment_id|status
+2026-09-10T09:49:52.8918396Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8918471Z (1 row)
+2026-09-10T09:49:52.8918604Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8918686Z request_count
+2026-09-10T09:49:52.8918760Z 1
+2026-09-10T09:49:52.8918828Z (1 row)
+2026-09-10T09:49:52.8918947Z SELECT clock_timestamp() db_before \gset s4_
+2026-09-10T09:49:52.8919162Z SELECT (:'s4_db_before'::timestamptz + interval '48 hours') scheduled_for \gset s4_
+2026-09-10T09:49:52.8919593Z SELECT 'S4-03 schedule input' observation,'stage2-coordinator-fixture' actor,'req-stage4-open' request_id,:'s4_scheduled_for' scheduled_for;
+2026-09-10T09:49:52.8919698Z observation|actor|request_id|scheduled_for
+2026-09-10T09:49:52.8919958Z S4-03 schedule input|stage2-coordinator-fixture|req-stage4-open|2026-09-12 09:49:52.794892+00
+2026-09-10T09:49:52.8920035Z (1 row)
+2026-09-10T09:49:52.8920358Z SELECT s3_reject_schedule('stage2-coordinator-fixture','req-stage4-open',:'s4_scheduled_for'::timestamptz);
+2026-09-10T09:49:52.8920443Z s3_reject_schedule
+2026-09-10T09:49:52.8920448Z 
+2026-09-10T09:49:52.8920523Z (1 row)
+2026-09-10T09:49:52.8920633Z SELECT clock_timestamp() db_after \gset s4_
+2026-09-10T09:49:52.8920732Z SELECT 'S4-03 schedule rejected' outcome;
+2026-09-10T09:49:52.8920806Z outcome
+2026-09-10T09:49:52.8920897Z S4-03 schedule rejected
+2026-09-10T09:49:52.8920969Z (1 row)
+2026-09-10T09:49:52.8921214Z SELECT 'S4-03 schedule clock' observation,:'s4_db_before' db_before,:'s4_db_after' db_after;
+2026-09-10T09:49:52.8921304Z observation|db_before|db_after
+2026-09-10T09:49:52.8921494Z S4-03 schedule clock|2026-09-10 09:49:52.794892+00|2026-09-10 09:49:52.795528+00
+2026-09-10T09:49:52.8921564Z (1 row)
+2026-09-10T09:49:52.8921882Z SELECT 1/CASE WHEN :'s4_scheduled_for'::timestamptz > :'s4_db_after'::timestamptz THEN 1 ELSE 0 END s4_future_gate;
+2026-09-10T09:49:52.8921962Z s4_future_gate
+2026-09-10T09:49:52.8922030Z 1
+2026-09-10T09:49:52.8922106Z (1 row)
+2026-09-10T09:49:52.8922196Z SELECT * FROM maintenance_request;
+2026-09-10T09:49:52.8922450Z request_id|equipment_id|reported_by|reported_at|description|status|scheduled_for|completed_at
+2026-09-10T09:49:52.8922902Z req-stage4-open|eq-stage4-known|reporter-stage4|2026-09-10 09:49:52.789332+00|Stage 4 reported fault|open|NULL|NULL
+2026-09-10T09:49:52.8922978Z (1 row)
+2026-09-10T09:49:52.8923231Z SELECT * FROM equipment WHERE equipment_id='eq-stage4-known';
+2026-09-10T09:49:52.8923312Z equipment_id|status
+2026-09-10T09:49:52.8923407Z eq-stage4-known|safety_closed
+2026-09-10T09:49:52.8923477Z (1 row)
+2026-09-10T09:49:52.8923610Z SELECT count(*) request_count FROM maintenance_request;
+2026-09-10T09:49:52.8923685Z request_count
+2026-09-10T09:49:52.8923761Z 1
+2026-09-10T09:49:52.8923829Z (1 row)
+2026-09-10T09:49:52.8923935Z SELECT s4_equipment('safety_closed',1);
+2026-09-10T09:49:52.8924013Z s4_equipment
+2026-09-10T09:49:52.8924018Z 
+2026-09-10T09:49:52.8924087Z (1 row)
+2026-09-10T09:49:52.8924167Z SELECT s4_same();
+2026-09-10T09:49:52.8924234Z s4_same
+2026-09-10T09:49:52.8924239Z 
+2026-09-10T09:49:52.8924316Z (1 row)
+2026-09-10T09:49:52.8924384Z COMMIT;
+2026-09-10T09:49:52.8924463Z COMMIT
+2026-09-10T09:49:52.8924789Z SELECT 'STAGE4_CUMULATIVE_ACCEPTANCE_PASS' result,current_database() database_name,current_schema() schema_name;
+2026-09-10T09:49:52.8924879Z result|database_name|schema_name
+2026-09-10T09:49:52.8925110Z STAGE4_CUMULATIVE_ACCEPTANCE_PASS|postgres|alder_7ab3d9e55d334d50a28dea2d8b285e11
+2026-09-10T09:49:52.8925180Z (1 row)
+2026-09-10T09:49:52.8925220Z 
+2026-09-10T09:49:52.8925413Z DROP SCHEMA IF EXISTS "alder_7ab3d9e55d334d50a28dea2d8b285e11" CASCADE;
+2026-09-10T09:49:52.8925522Z NOTICE:  drop cascades to 28 other objects
+2026-09-10T09:49:52.8925724Z DETAIL:  drop cascades to table alder_7ab3d9e55d334d50a28dea2d8b285e11.equipment
+2026-09-10T09:49:52.8925934Z drop cascades to table alder_7ab3d9e55d334d50a28dea2d8b285e11.maintenance_request
+2026-09-10T09:49:52.8926340Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.report_equipment_fault(text,text,text,timestamp with time zone,text)
+2026-09-10T09:49:52.8926593Z drop cascades to table alder_7ab3d9e55d334d50a28dea2d8b285e11.stage2_authorization_fixture
+2026-09-10T09:49:52.8927199Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.schedule_maintenance(text,text,timestamp with time zone)
+2026-09-10T09:49:52.8927479Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.complete_maintenance(text,text)
+2026-09-10T09:49:52.8927725Z drop cascades to table alder_7ab3d9e55d334d50a28dea2d8b285e11.stage3_authorization_fixture
+2026-09-10T09:49:52.8927990Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.record_safety_closure(text,text)
+2026-09-10T09:49:52.8928249Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.clear_safety_closure(text,text)
+2026-09-10T09:49:52.8928637Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.stage1_input(text,text,text,text,timestamp with time zone,text)
+2026-09-10T09:49:52.8929036Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.stage1_rejected(text,text,text,text,timestamp with time zone,text)
+2026-09-10T09:49:52.8929266Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.stage1_setup(text)
+2026-09-10T09:49:52.8929645Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.stage1_accepted(text,text,timestamp with time zone,text,bigint)
+2026-09-10T09:49:52.8929855Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_setup(text)
+2026-09-10T09:49:52.8930151Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_report(text,timestamp with time zone)
+2026-09-10T09:49:52.8930498Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_reject_schedule(text,text,timestamp with time zone)
+2026-09-10T09:49:52.8930754Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_reject_complete(text,text)
+2026-09-10T09:49:52.8931196Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_state(text,text,text,timestamp with time zone,timestamp with time zone,boolean)
+2026-09-10T09:49:52.8931412Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_same(text,text)
+2026-09-10T09:49:52.8931938Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s2_clock(text,text,timestamp with time zone,timestamp with time zone)
+2026-09-10T09:49:52.8932251Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s3_setup(text)
+2026-09-10T09:49:52.8932595Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s3_reject_schedule(text,text,timestamp with time zone)
+2026-09-10T09:49:52.8932839Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s3_reject_closure(text,text)
+2026-09-10T09:49:52.8933040Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s4_setup(text)
+2026-09-10T09:49:52.8933281Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s4_equipment(text,integer)
+2026-09-10T09:49:52.8933662Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s4_state(text,timestamp with time zone,timestamp with time zone)
+2026-09-10T09:49:52.8933856Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s4_same()
+2026-09-10T09:49:52.8934073Z drop cascades to function alder_7ab3d9e55d334d50a28dea2d8b285e11.s4_reject_clear(text)
+2026-09-10T09:49:52.8934154Z DROP SCHEMA
+2026-09-10T09:49:52.8934559Z SELECT 'cleanup_schema_remaining', count(*) FROM information_schema.schemata WHERE schema_name='alder_7ab3d9e55d334d50a28dea2d8b285e11';
+2026-09-10T09:49:52.8934659Z cleanup_schema_remaining|0
+2026-09-10T09:49:52.8934663Z
