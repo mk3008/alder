@@ -1,0 +1,23 @@
+{
+  "frozen_at_utc": "2026-10-06T22:33:14.635510+00:00",
+  "before_evaluation": true,
+  "input_commit": "3f4895a9a672ab74c887ae2841506b29a2b3bf53",
+  "author_agent": "/root/draft_notes",
+  "requested": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_model": "unknown",
+  "effective_reasoning_effort": "unknown",
+  "dispatch_utc": "2026-10-06T22:29:00Z (minute precision)",
+  "return_utc": "2026-10-06T22:32:00Z (minute precision)",
+  "followup_answers_feedback_or_retries": false,
+  "files": {
+    "raw/access-report.json": "7706e06eb96ded780cd19d73149c1aac2253b7fd1de7f7c0b9e8f518114ff351",
+    "raw/author-final-reply.txt": "9eff13ffa6a7de186c262434c647b9221786a52aafeda3e2be0766fff817b67a",
+    "raw/author-progress-messages.txt": "c543adc560c9a3dff816e439cf0eaf747f3e372f5743210711404a44ea128eda",
+    "raw/draft.md": "e3d0b2c6da602b33ca67a24b9787f8ddc70bbc1b4c1711f15186c8c0a1c2d0fa",
+    "raw/reads.jsonl": "3097a1f7e26424ba8bff9a609a89074fc1734e7b9db0b25dbd57a8d14489f1c1"
+  }
+}

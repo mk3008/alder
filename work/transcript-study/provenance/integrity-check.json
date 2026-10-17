@@ -1,0 +1,28 @@
+{
+  "checks": {
+    "all_prerun_file_hashes_match": true,
+    "sequential_turn_ids": true,
+    "input_equals_preparation": true,
+    "unique_oracle_ids": true,
+    "oracle_sources_exist": true,
+    "ledger_source_hash_matches": true,
+    "package_release_comparison_passed": true,
+    "all_first_output_hashes_match": true,
+    "raw_frozen_after_input": true,
+    "logged_reads_match_permitted_inputs": true,
+    "no_logged_read_path_escape": true,
+    "transcript_read_logged": true,
+    "skill_read_logged": true,
+    "adoption_required_section_logged": true,
+    "structure_read_logged": true,
+    "graph_profile_read_logged": true,
+    "all_oracle_ids_evaluated": true
+  },
+  "all_passed": true,
+  "turn_count": 72,
+  "oracle_elements": 118,
+  "limits": [
+    "Hash/read-log checks do not establish semantic correctness or absence of unlogged reads.",
+    "Effective model/reasoning and complete runtime context are not independently attested."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "参照": [
+    {
+      "path": "transcript.txt",
+      "ranges": [
+        "全体（T001–T072）"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/SKILL.md",
+      "ranges": [
+        "全体"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/adoption.md",
+      "ranges": [
+        "全体",
+        "1–210",
+        "211–280",
+        "175–260",
+        "145–175",
+        "130–145"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/business-graph.md",
+      "ranges": [
+        "全体",
+        "1–160",
+        "1–105"
+      ]
+    },
+    {
+      "path": "package/skills/alder-draft-business-design/references/provenance.json",
+      "ranges": [
+        "全体",
+        "1–30"
+      ]
+    },
+    {
+      "path": "package/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "ranges": [
+        "全体",
+        "1–170",
+        "170–230"
+      ]
+    },
+    {
+      "path": "package/skills/alder-review-business-design/references/provenance.json",
+      "ranges": [
+        "全体"
+      ]
+    },
+    {
+      "path": "package/plugin.json",
+      "ranges": [
+        "全体"
+      ]
+    }
+  ],
+  "実行環境から確認できた設定": {
+    "model": "unknown",
+    "reasoning": "unknown"
+  },
+  "Alder": {
+    "version": "0.4.4",
+    "authoring_source_revision": "02093f4d4e957ae851f7812e958aab3827190f31",
+    "structure_source_revision": "9cf192c5bced1eeb872795eec8ced21b7bcbf492"
+  }
+}

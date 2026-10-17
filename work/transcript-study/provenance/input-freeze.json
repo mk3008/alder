@@ -1,0 +1,40 @@
+{
+  "frozen_at_utc": "2026-10-06T22:26:50.457189+00:00",
+  "stage": "before_first_authoring_dispatch",
+  "execution_issue": "https://github.com/mk3008/alder/issues/172",
+  "author_requested": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "effective_model": "unknown",
+  "effective_reasoning_effort": "unknown",
+  "isolation": "native fresh context with instruction-scoped reads; not OS enforced",
+  "files": {
+    "inputs/package/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "inputs/package/plugin.json": "b6d4e02e3382e50d939b1f2947b49cbe71176042fe45545de597289ed4907a68",
+    "inputs/package/skills/alder-draft-business-design/LICENSE": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "inputs/package/skills/alder-draft-business-design/SKILL.md": "eadcd528d1dac5b4b5c0bba96ae1bb8c49aee2ec522596499bea9aed8e595072",
+    "inputs/package/skills/alder-draft-business-design/references/adoption.md": "98574515bf1bed4ee51858d278d773792aadca51dad0310ff1082a87d5aee1e9",
+    "inputs/package/skills/alder-draft-business-design/references/business-graph.md": "d33593bd76e0f1c5ae4fcd3dcfd41646f145b2a922052f9f20a055391a27257e",
+    "inputs/package/skills/alder-draft-business-design/references/provenance.json": "89ef696d829d4b3e33647fb8a4e34593da32346fbc7c06c531fcaddb000b2451",
+    "inputs/package/skills/alder-review-business-design/references/business-design-structure.ja.md": "10cb8a6a1f32553f6dee0cb62afe6785c8397575b4b6594da7dd7a1ecf8088b0",
+    "inputs/package/skills/alder-review-business-design/references/provenance.json": "939db5a3a0cfe3d637a9a175135bcfbbe0ff10004153903f943d98714def32bc",
+    "inputs/transcript.txt": "1d4924023499670253c23c436a649aff3955832c3877a807e98e063746901ffd",
+    "preparation/build_oracle.py": "e5e899078523e501bdcfb01dde5c695124c3e1f15da37b26a013ca7f6e2b82cc",
+    "preparation/drafts/transcript.v1.txt": "1d4924023499670253c23c436a649aff3955832c3877a807e98e063746901ffd",
+    "preparation/expected-business-design.md": "3ee23ff13a9eccb4a9760dfe4f7faaeb5d33fa75cede45ba1ed1879034b1b6a9",
+    "preparation/observability.json": "c1381afaac6df62beac078483cf546aaf690ee935b904a12eaecf6493b623ce7",
+    "preparation/realism-review.md": "1b37d3dcf0dc6a7b6d4c99bd6e8a1c7348c3db1aca68ea2c97349ebb70ccc8c6",
+    "preparation/scenario.md": "fb7e1307881da1cf28d6c6d4d8738bdd425e716c3a319713441578794d6b0974",
+    "preparation/transcript.txt": "1d4924023499670253c23c436a649aff3955832c3877a807e98e063746901ffd",
+    "preparation/validation-results.json": "8ef20aded0050720fb46913a7a21f99317db1ac01117b840941121db55e4652f",
+    "protocol.md": "b85a4a91987a2d5ec4bb358420ea96950bda655cc783e705810b234dfd4dd7f2",
+    "provenance/author-dispatch.txt": "e4a24a439199044faf5d89b4ff7767d75772c6ffab223ea778caa552f29c6d09",
+    "provenance/cli-isolated-preflight.txt": "7cb84ac3be048ad86d841617d929f28cd5e890c4dc10d5e9fcfc875ca6c7cd87",
+    "provenance/cli-preflight.txt": "eae080369e91b8869ecdd955b8e2a9840b501bc2c8dfb0889bae645cc549d4b5",
+    "provenance/coordinator-input-review.md": "b2077bf22508b354bdba67c1ffa8ae1cf643310dabf16afb4bde286ae339b474",
+    "provenance/open.py": "3536c0408532f5873b3d80a77b551f68e5494d6e1cff30a594540933465d50a6",
+    "provenance/package-manifest.json": "5a8e7e4dcf01ca26bb297d7027b35d3fdafc70a91e054ed0fcb75e90e12dbb16"
+  }
+}
