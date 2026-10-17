@@ -68,6 +68,14 @@ jobs:
           path: web-viewer/web/evidence/design-findings-96/*.png
           if-no-files-found: ignore
           retention-days: 7
+      - name: Retain wiring review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wiring-review-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/wiring/real-*.png
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Package isolated review Preview
         if: success()
         env:

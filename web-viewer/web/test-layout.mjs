@@ -8,7 +8,7 @@ const chainNodes=Array.from({length:7},(_,i)=>({id:'step-'+i,type:i%2?'business'
 const stepGraph={version:1,nodes:chainNodes,relations:chainNodes.slice(1).map((n,i)=>({kind:i%2?'output':'input',from:chainNodes[i].id,to:n.id}))};
 const stepPositions=initialPositions(stepGraph),origin=stepPositions[chainNodes[0].id];
 const stepX=stepPositions[chainNodes[1].id][0]-origin[0],stepY=stepPositions[chainNodes[1].id][1]-origin[1];
-assert.ok(stepX>0&&stepX<260/2,'compact dependency steps overlap more than one prior card column');
+assert.equal(stepX,64,'overview shares the accepted detail staircase horizontal step');
 assert.equal(stepY,96,'cards retain the 28-unit vertical gap');
 for(const [i,n] of chainNodes.entries())assert.deepEqual(stepPositions[n.id],[origin[0]+i*stepX,origin[1]+i*stepY]);
 const old=g=>Object.fromEntries(g.nodes.map((n,i)=>[n.id,[40+i%4*320,40+Math.floor(i/4)*140]]));
@@ -16,9 +16,12 @@ const connectedDistance=(g,p)=>g.relations.reduce((s,r)=>s+Math.hypot(p[r.to][0]
 const noOverlap=p=>{const all=Object.values(p);for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++)assert.ok(Math.abs(all[i][0]-all[j][0])>=260||Math.abs(all[i][1]-all[j][1])>=96);};
 const before=JSON.stringify(sample.graph),fallback=initialPositions(sample.graph);noOverlap(fallback);assert.deepEqual(initialPositions(sample.graph),fallback);assert.equal(JSON.stringify(sample.graph),before);
 const plan=layoutPlan(sample.graph,sample.activityOrder),p=plan.positions;noOverlap(p);assert.deepEqual(initialPositions(sample.graph,sample.activityOrder),p);
+const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
+assert.deepEqual({...reconcile({key:'old-overview',design:sample,positions:saved128,scroll:[17,29],zoom:.75},sample).positions},saved128,'saved 128-unit overview coordinates never migrate');
 const previous=JSON.parse(readFileSync(new URL('./review-routing/positions-staircase.json',import.meta.url),'utf8'));
 const columns=positions=>[...new Set(Object.values(positions).map(p=>p[0]))].sort((a,b)=>a-b).map(x=>Object.keys(positions).filter(id=>positions[id][0]===x).sort());
-assert.deepEqual(columns(p),columns(previous),'compact spacing preserves the reviewed dependency ranks');
+assert.deepEqual(columns(p).slice(3),columns(previous).slice(1),'downstream dependency ranks remain grouped after source-peer stairs');
+assert.deepEqual(columns(p).slice(0,3),[['Alder: 業務相関ナレッジ'],['Alder: 検査項目設計ナレッジ'],['Alder: 業務ナレッジ']],'source-only Objects occupy distinct left/up staircase steps');
 assert.deepEqual(Object.keys(p).sort((a,b)=>p[a][1]-p[b][1]),Object.keys(previous).sort((a,b)=>previous[a][1]-previous[b][1]),'compact spacing preserves the reviewed reading order');
 const span=positions=>Math.max(...Object.values(positions).map(p=>p[0]))-Math.min(...Object.values(positions).map(p=>p[0]));
 assert.ok(span(p)<span(previous),'the same dependency ranks occupy less horizontal space');

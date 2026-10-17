@@ -53,7 +53,8 @@ const negative=positive.map(n=>({...n,x:n.x-10000,y:n.y-10000}));
 const signed=routeEdge({from:relation.from,to:relation.to,nodes:negative,labelWidth:Math.max(30,relation.label.length*12),labelHeight:18});
 assert.equal(signed.fallback,route.fallback);
 assert.deepEqual(signed.points.map(p=>p.map(v=>v+10000)),route.points);
-assert.deepEqual(signed.label.map(v=>v+10000),route.label);
+// Fractional arclength captions incur IEEE-754 translation rounding (<1e-12).
+assert.deepEqual(signed.label.map(v=>+(v+10000).toFixed(9)),route.label.map(v=>+v.toFixed(9)));
 
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:[{name:'count-routes',setup(b){b.onLoad({filter:/\/routing\.ts$/},args=>({contents:readFileSync(args.path,'utf8').replace('const source=nodes.find','globalThis.__routeCalls=(globalThis.__routeCalls??0)+1;const source=nodes.find'),loader:'ts'}));}}]});
 const windows=[];
@@ -120,9 +121,14 @@ try{
   // Restore/reopen tests below use the signed positions, offset, zoom and camera.
   const snapshot=positions(),scroll=[v.scrollLeft,v.scrollTop],offset=[$('nodes').style.left,$('nodes').style.top],zoomText=$('zoom').textContent;
   assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();w.close();
-  const reopened=await boot(e.db);reopened.$('open-sample').click();
-  assert.deepEqual(reopened.positions(),snapshot);assert.deepEqual([reopened.v.scrollLeft,reopened.v.scrollTop],scroll);
-  assert.deepEqual([reopened.$('nodes').style.left,reopened.$('nodes').style.top],offset);assert.equal(reopened.$('zoom').textContent,zoomText);
+  const reopened=await boot(e.db,zoom);reopened.$('open-sample').click();
+  assert.deepEqual(reopened.positions(),snapshot);
+  // A full route pass may grow the signed-world reserve; its scroll compensation
+  // must preserve the exact screen position of EVERY stored coordinate.
+  const newOffset=[reopened.$('nodes').style.left,reopened.$('nodes').style.top],newScroll=[reopened.v.scrollLeft,reopened.v.scrollTop];
+  for(const axis of [0,1])assert.equal(parseFloat(newOffset[axis])-newScroll[axis],parseFloat(offset[axis])-scroll[axis],'reload reserve growth cannot jump the camera');
+  for(const [id,p]of Object.entries(snapshot))assert.deepEqual(reopened.screen(id),p.map((v,axis)=>v*zoom-(scroll[axis]-parseFloat(offset[axis]))));
+  assert.equal(reopened.$('zoom').textContent,zoomText);
   reopened.w.close();
  }
  // Active-input stop paths and occluded viewport edges use one measured fixture.

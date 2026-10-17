@@ -13,7 +13,7 @@ const intersects=(a,b,c,d)=>{
 };
 const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 const width=edge=>Math.max(30,(edge.label??'').length*12);
-const preferred=(route,source,target)=>route.points[0][0]===source.x+source.width*.22&&[source.y,source.y+source.height].includes(route.points[0][1])&&route.points.at(-1)[1]===target.y+target.height/2&&[target.x,target.x+target.width].includes(route.points.at(-1)[0]);
+const preferred=(route,source,target)=>route.points[0][0]===source.x+source.width*.125&&[source.y,source.y+source.height].includes(route.points[0][1])&&route.points.at(-1)[1]===target.y+target.height/2&&[target.x,target.x+target.width].includes(route.points.at(-1)[0]);
 
 // Optional comparison uses a separately preserved routing.ts from the pinned
 // baseline revision. Both implementations receive these exact same coordinates.
@@ -95,7 +95,7 @@ const fixtures=[
   ['cycle',[rect('a',120,320),rect('b',500,440),rect('c',880,320)],[['a','b'],['b','c'],['c','a']]],
   ['read-write',[rect('activity',120,320),rect('object',500,320)],[['activity','object'],['object','activity']]],
   ['drag-far-right',[rect('a',120,320),rect('blocker',600,290),rect('b',1800,320)],[['a','b']]],
-  ['covered-vertical-ports',[rect('a',120,320),rect('b',1100,320),{id:'cover',x:160,y:290,width:40,height:130}],[['a','b']]],
+  ['covered-vertical-ports',[rect('a',120,320),rect('b',1100,320),{id:'cover',x:150,y:290,width:40,height:130}],[['a','b']]],
   ['top-boundary-return',[rect('a',120,40),rect('b',1100,40)],[['b','a']]],
 ];
 const syntheticResults={};
@@ -104,13 +104,14 @@ for(const [name,nodes,links] of fixtures){
   for(const [index,edge] of edges.entries()){
     const input={...edge,nodes,index},route=routeEdge(input),source=nodes.find(n=>n.id===edge.from),target=nodes.find(n=>n.id===edge.to);
     assert.doesNotMatch(route.path,/[CHV]|NaN|Infinity/);
-    assert.equal(route.collisions,0);assert.equal(routeCollisionCount(route.points,[source,target],-.1),0);
+    if(name==='covered-vertical-ports'){assert.ok(route.collisions>0);assert.equal(route.fallback,true);}else assert.equal(route.collisions,0,name);
+    assert.equal(routeCollisionCount(route.points,[source,target],-.1),0);
     assert.ok(route.points.length<=22);assert.ok(route.points.every(p=>p[0]>=1&&p[1]>=1));
     assert.ok(route.bounds.right<=Math.max(...nodes.map(n=>n.x+n.width))+200);
     assert.ok(route.bounds.bottom<=Math.max(...nodes.map(n=>n.y+n.height))+200);
     assert.deepEqual(routeEdge(input),route,'routing is deterministic');
     if(name==='drag-far-right'){assert.equal(route.points.at(-1)[0],target.x);assert.ok(route.bounds.right<=target.x);}
-    if(name==='covered-vertical-ports')assert.equal(route.points[0][0],source.x+source.width,'covered preferred ports allow a horizontal departure');
+    assert.deepEqual(route.points[0],[source.x+source.width*.125,source.y+source.height],'every case keeps the mandatory bottom outlet, including covered saved ports');
     assert.ok([source.x,source.x+source.width].includes(route.points[0][0])||[source.y,source.y+source.height].includes(route.points[0][1]),'source boundary port');
     assert.ok([target.x,target.x+target.width].includes(route.points.at(-1)[0])||[target.y,target.y+target.height].includes(route.points.at(-1)[1]),'target boundary port');
     if(baseline)assert.ok(route.collisions<=baseline(input).collisions);

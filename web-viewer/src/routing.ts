@@ -6,6 +6,12 @@ export interface RouteOptions {
   from: string; to: string; nodes: readonly RouteNode[]; index?: number;
   /** Full rendered label dimensions in unscaled graph coordinates. */
   labelWidth?: number; labelHeight?: number;
+  kind?: string;
+  matrix?: {returning:boolean;captionLane:number};
+  /** Existing label rectangles; labels never become path obstacles. */
+  labels?: readonly RouteNode[];
+  /** Other routed lines, used only to place captions. */
+  wires?: readonly (readonly Point[])[];
 }
 export interface EdgeRoute {
   path: string; label: Point; points: Point[]; bounds: {right:number;bottom:number}; collisions: number; rerouted: boolean;
@@ -19,9 +25,9 @@ type Side = 'left' | 'right' | 'top' | 'bottom';
 const normals: Record<Side, Point> = {left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
 const add = (a:Point,b:Point,k=1):Point => [a[0]+b[0]*k,a[1]+b[1]*k];
 function port(r:RouteNode,side:Side):Point {
-  // Left-biased vertical ports leave room for the next small staircase step.
+  // A shared one-eighth-width outlet follows the left-hand icon column.
   // Ports depend only on the endpoint, never on obstacle/detour coordinates.
-  return side==='top'||side==='bottom'?[r.x+r.width*.22,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height/2];
+  return side==='top'||side==='bottom'?[r.x+r.width*.125,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height/2];
 }
 /** Segment/slab intersection also catches a tiny obstacle between vertices. */
 function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean {
@@ -59,19 +65,61 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
   }
   return points.at(-1)!;
 }
-function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point): { point: Point; blocked: boolean } {
+function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, target:RouteNode, output:boolean, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
   const mid=pointAlong(points,lengths,total,.5);
   // 63 bounded candidates. Horizontal displacement accounts for the full label
   // width; a long label next to a vertical leg must not sit over the next card.
   const offsets:Point[]=[[0,0],[0,-height/2-6],[0,height/2+6],[-width/2-8,0],[width/2+8,0],[0,-height-16],[0,height+16],[-width/2-24,0],[width/2+24,0]];
-  let best=mid,bestScore=[Infinity,Infinity];
+  const right=Math.max(...nodes.map(n=>n.x+n.width));
+  let best=mid,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity,Infinity];
+  let priority=2;
   const consider=(p:Point)=>{
     let collisions=p[0]<minimum[0]+width/2||p[1]<minimum[1]+height/2?1:0;
     for(const r of nodes)if(p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height)collisions++;
-    const score=[collisions,distance(p,mid)];
+    const labelCollisions=labels.filter(r=>p[0]+width/2+4>=r.x&&p[0]-width/2-4<=r.x+r.width&&p[1]+height/2+4>=r.y&&p[1]-height/2-4<=r.y+r.height).length;
+    const box={id:'label',x:p[0]-width/2,y:p[1]-height/2,width,height};
+    const crossings=wires.filter(w=>w.slice(1).some((b,i)=>intersects(w[i],b,box,3))).length;
+    const score=[collisions,labelCollisions,priority,Math.max(0,p[0]+width/2-right),crossings,distance(p,priority<2?points[0]:mid)];
     if(better(score,bestScore)){best=p;bestScore=score;}
   };
+  // Input captions belong to the Object departure, beside its first straight
+  // vertical leg. Try both sides and staggered heights before midpoint fallback.
+  if(input){
+    priority=0;
+    const a=points[0],b=points[1];
+    if(a[0]===b[0]&&a[1]!==b[1]){
+      const sign=Math.sign(b[1]-a[1]),near=a[1]+sign*(height/2+5);
+      for(const y of [near,near+sign*(height+8),(a[1]+b[1])/2,b[1]-sign*(height/2+4)]){
+        if(sign*(y-a[1])<height/2+4)continue;
+        for(const side of [1,-1])consider([a[0]+side*(width/2+8),y]);
+      }
+    }
+    // Tight detail stairs can leave the departure gap occupied by an Output
+    // caption. Keep a readable near-source alternative just above the card.
+    priority=1;
+    consider([source.x+8+width/2,source.y-height/2-5]);
+    priority=0;
+    // A returning Input is read immediately after its right-hand outlet.
+    // Its left edge follows the source even when that Object is dragged.
+    if(a[1]===b[1]){
+      for(const gap of [8,24])for(const dy of [-height/2-6,height/2+6])
+        consider([a[0]+gap+width/2,a[1]+dy]);
+    }
+    priority=2;
+  }
+  // Output captions follow the receiving Object, above its top edge rather
+  // than halfway down a trunk whose length changes during a drag. Its left
+  // edge sits next to the incoming vertical line, not the card's left edge.
+  if(output){
+    priority=0;
+    for(const gap of [5,13,21]){
+      const y=target.y-height/2-gap;
+      const leg=points.slice(1).map((b,i)=>({a:points[i],b})).reverse().find(({a,b})=>a[0]===b[0]&&Math.min(a[1],b[1])<=y&&Math.max(a[1],b[1])>=y);
+      consider([(leg?.a[0]??points[0][0])+8+width/2,y]);
+    }
+    priority=2;
+  }
   for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
     const anchor=pointAlong(points,lengths,total,fraction);
     for(const offset of offsets)consider(add(anchor,offset));
@@ -79,14 +127,14 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
   // A 28-unit staircase gap has room for an 18-unit label, but only a narrow
   // interval of legal centers. Snap to nearby card boundaries rather than
   // hoping a sampled fraction happens to land in that interval.
-  if(bestScore[0])for(const r of nodes){
+  if(bestScore[0]||bestScore[1])for(const r of nodes){
     for(const y of [r.y-height/2-5,r.y+r.height+height/2+5])if(Math.abs(y-mid[1])<=64)consider([mid[0],y]);
     for(const x of [r.x-width/2-5,r.x+r.width+width/2+5])if(Math.abs(x-mid[0])<=width/2+24)consider([x,mid[1]]);
   }
   // A left-hand lane can leave a clear label anchor partly beyond the fixed
   // canvas boundary. Try bringing that label inside before reporting fallback.
-  if(bestScore[0])consider([Math.max(minimum[0]+width/2+1,best[0]),Math.max(minimum[1]+height/2+1,best[1])]);
-  return {point:best,blocked:bestScore[0]>0};
+  if(bestScore[0]||bestScore[1])consider([Math.max(minimum[0]+width/2+1,best[0]),Math.max(minimum[1]+height/2+1,best[1])]);
+  return {point:best,blocked:bestScore[0]>0||bestScore[1]>0};
 }
 type Geometry={vertices:Point[];points:Point[];error:number;length:number;path:string;bounds:{right:number;bottom:number}};
 /** Keep long legs exactly straight; only 90-degree corners get a short Q.
@@ -127,37 +175,58 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
   return {vertices,points,error,length,path,bounds:{right:Math.max(...points.map(p=>p[0])),bottom:Math.max(...points.map(p=>p[1]))}};
 }
 /**
- * Bounded orthogonal templates: at most 16 port pairs x 12 candidates
- * (192 total). Clear
- * preferred bottom/left routes finish after one pair. Forward routes exhaust
- * left-target pairs (vertical departures first) before changing the arrival
- * side. Returns prefer right/right ports and the shortest clear lane, retaining
- * graph-wide lanes as obstacle fallbacks. No search graph, large curve
- * sampling, or input mutation.
+ * Bounded orthogonal templates with a shared bottom departure, except for
+ * feedback Inputs and exceptions that prefer right/right return corridors. Arrival
+ * sides and nearby obstacle boundaries provide local escape lanes, including
+ * short stubs in retained card gaps. Normal down/right paths are preferred;
+ * feedback and exception returns fold back outside the right side.
  * The runtime cache can therefore reroute only incident edges after a drag.
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
-  // Preserve positive-world routing exactly. A signed axis has no fixed zero
+  if(matrix){
+    const a=port(source,matrix.returning?'right':'bottom'),b=port(target,matrix.returning?'right':'left');
+    // Matrix contracts determine sides. Coordinates never reclassify an edge.
+    // The return lane is outside every card in its vertical interval.
+    const corridor=nodes.filter(n=>n.y+n.height>=Math.min(a[1],b[1])&&n.y<=Math.max(a[1],b[1]));
+    const lane=Math.max(source.x+source.width,target.x+target.width,...corridor.map(n=>n.x+n.width))+22;
+    const vertices:Point[]=matrix.returning?[a,[lane,a[1]],[lane,b[1]],b]:[a,[a[0],b[1]],b];
+    const geometry=rounded(vertices);
+    if(geometry){
+      const label:Point=matrix.returning?[a[0]+8+labelWidth/2,a[1]-15+matrix.captionLane*22]:kind==='output'?[a[0]+8+labelWidth/2,target.y-14-matrix.captionLane*22]:[a[0]+8+labelWidth/2,a[1]+14+matrix.captionLane*22];
+      const collisions=routeCollisionCount(geometry.points,nodes.filter(n=>n.id!==from&&n.id!==to),.1);
+      return {path:geometry.path,label,points:geometry.points,bounds:geometry.bounds,collisions,rerouted:false,fallback:collisions>0};
+    }
+    // A user can place coincident nodes after initial layout. Keep that
+    // malformed manual case finite; it does not alter the direction contract.
+    const points:Point[]=[a,b];return {path:`M ${a[0]} ${a[1]} L ${b[0]} ${b[1]}`,label:[a[0]+8+labelWidth/2,a[1]-15],points,bounds:{right:Math.max(a[0],b[0]),bottom:Math.max(a[1],b[1])},collisions:1,rerouted:false,fallback:true};
+  }
+
+  // A positive world has a fixed zero boundary. A signed axis has no fixed zero
   // boundary: the camera expands to contain its finite route and label bounds.
   const minimum:Point=[nodes.some(n=>n.x<0)?-Infinity:0,nodes.some(n=>n.y<0)?-Infinity:0];
   const offCanvas=(points:Point[])=>points.some(p=>p[0]<minimum[0]+1||p[1]<minimum[1]+1)?1:0;
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target;
-  const preferred:[Side,Side]=returning?['right','right']:['bottom','left'];
-  const spread=(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
+  const returnInput=kind==='input'&&returning,exception=kind?.endsWith('exception')===true,rightReturn=returnInput||exception;
+  const preferred:[Side,Side]=rightReturn?['right','right']:returning?['bottom','right']:['bottom','left'];
+  // Clear feedback corridors share a fixed card clearance, independent of
+  // relation order. Aligned source cards therefore share their vertical run.
+  const spread=rightReturn?0:(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread;
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
-  let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity],rerouted=false;
+  const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
+  let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity],rerouted=false;
   const evaluate=(waypoints:Point[],pair:[Side,Side],primary:boolean)=>{
     const geometry=rounded(waypoints);if(!geometry)return;
     const v=geometry.vertices,a=v[0],next=v[1],b=v.at(-1)!,previous=v.at(-2)!;
     if((next[0]-a[0])*normals[pair[0]][0]+(next[1]-a[1])*normals[pair[0]][1]<=0||(previous[0]-b[0])*normals[pair[1]][0]+(previous[1]-b[1])*normals[pair[1]][1]<=0)return;
     const collisions=routeCollisionCount(geometry.points,obstacles,CLEARANCE+geometry.error)+routeCollisionCount(geometry.points,endpoints,-.1);
     const outside=offCanvas(geometry.points);
-    const score=[collisions,outside,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
+    const backwards=forward?geometry.points.slice(1).reduce((sum,p,i)=>sum+Math.max(0,geometry.points[i][0]-p[0])+Math.max(0,geometry.points[i][1]-p[1]),0):0;
+    const score=[collisions,outside,backwards,geometry.length+12*(geometry.vertices.length-2),geometry.vertices.length];
     if(better(score,bestScore)){chosen=geometry;bestScore=score;rerouted=!primary;}
   };
   const tried=new Set<string>();
@@ -179,25 +248,33 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20}:
     for(const x of [localRight,localLeft,bounds.right,bounds.left])evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
     for(const y of [localBottom,localTop,bounds.bottom,bounds.top])evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
   };
-  tryPorts(preferred);
-  if(!returning&&(bestScore[0]||bestScore[1])){
-    // Keep the reading direction at the target before relaxing the source
-    // departure. An obstructed bottom/left pair must not choose bottom/right
-    // while a clear top/left or side/left pair is still available.
-    for(const a of ['top','right','left'] as Side[]){tryPorts([a,'left']);if(!bestScore[0]&&!bestScore[1])break;}
-  }
-  if(bestScore[0]||bestScore[1]){
-    // Keep vertical departure / horizontal arrival before trying side departures.
-    vertical: for(const a of ['bottom','top'] as Side[])for(const b of ['left','right'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break vertical;}
-    if(bestScore[0]||bestScore[1])other: for(const a of ['right','left','bottom','top'] as Side[])for(const b of ['right','left','top','bottom'] as Side[]){tryPorts([a,b]);if(!bestScore[0]&&!bestScore[1])break other;}
+  // Feedback Inputs from Output-side Objects may use a short right/up/right
+  // return corridor. Exceptions share this right/right convention; ordinary
+  // forward relations retain the icon-side bottom outlet.
+  if(rightReturn)tryPorts(['right','right']);
+  // Ordinary relations leave below the icon. Obstructed saved positions may
+  // require a short initial turn, but never silently change the source port.
+  const a=port(source,'bottom');
+  if(!rightReturn||bestScore[0]>0||bestScore[1]>0)for(const side of ['left','right','top','bottom'] as Side[]){
+    const b=port(target,side),entry=add(b,normals[side],reach),pair:[Side,Side]=['bottom',side];
+    tryPorts(pair);
+    // Local obstacle boundaries provide escape lanes without global detours.
+    // Short stubs fit a retained 28-unit gap; all candidates share one outlet.
+    const xs=[bounds.left,bounds.right,...obstacles.flatMap(n=>[n.x-CLEARANCE-RADIUS-spread,n.x+n.width+CLEARANCE+RADIUS+spread])];
+    for(const stub of [reach,RADIUS/2,RADIUS/4]){
+      const exit:Point=[a[0],a[1]+stub];
+      evaluate([a,exit,[entry[0],exit[1]],entry,b],pair,false);
+      for(const x of xs)evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
+    }
+    if(bestScore[0]===0&&bestScore[1]===0&&(!forward||bestScore[2]===0))break;
   }
   // Coincident/covered ports can invalidate every direction. A short exterior
   // loop always exists geometrically; collision reporting remains honest.
   if(!chosen){
-    const a=port(source,'right'),b=port(target,'top'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=Math.min(source.y,target.y)-reach;
-    chosen=rounded([a,[x,a[1]],[x,y],[b[0],y],b])!;
+    const a=port(source,'bottom'),b=port(target,'right'),x=Math.max(source.x+source.width,target.x+target.width)+reach,y=source.y+source.height+reach;
+    chosen=rounded([a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum);
+  const label=labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,target,kind==='output',wires);
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

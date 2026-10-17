@@ -1,6 +1,7 @@
+import {matrixPlan} from './matrix-layout';
 import type {Graph} from './graph';
 import type {Point} from './session';
-const STEP_X=128, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
+const STEP_X=64, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
 export type LayoutPlan={positions:Record<string,Point>;forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
 
@@ -12,12 +13,12 @@ const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
  * and each Object's earliest-listed output Activity choose a display ordering.
  * This breaks layout cycles; it neither defines execution order nor edits edges.
  * Ranks and crossing-reduced row order form a downward staircase. A forward
- * parent is at least one 96-unit step above its child. Compact 128-unit columns
+ * parent is at least one 96-unit step above its child. Compact 64-unit columns
  * overlap the 260-unit card width, so every horizontally overlapping column
  * participates in placement with a 28-unit vertical gap between cards.
  * Graph walks and occupied-slot lookup are iterative, including long chains.
  */
-export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutPlan{
+export function layoutPlan(graph:Graph,activityOrder?:readonly string[],stairSources=true):LayoutPlan{
   const nodes=[...graph.nodes].sort((a,b)=>compare(a.id,b.id)),count=nodes.length;
   const index=new Map(nodes.map((n,i)=>[n.id,i])),out=nodes.map(()=>new Set<number>()),incoming=nodes.map(()=>new Set<number>());
   const edges=graph.relations.map((r,i)=>({i,r,a:index.get(r.from),b:index.get(r.to)}));
@@ -68,6 +69,14 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
       layer.sort((a,b)=>barycenter.get(a)!-barycenter.get(b)!||a-b);update(layer);
     }
   }
+  // Source-only Object peers need distinct left/up steps: a vertical outlet
+  // from one must not run through the next peer's card. Expand only this
+  // root cohort; later dependency columns and output peers keep their ranks.
+  const sources=layers[0].filter(n=>nodes[n].type==='object'&&previous[n].length===0&&children[n].length>0);
+  if(stairSources&&sources.length>1){
+    const sourceSet=new Set(sources),others=layers[0].filter(n=>!sourceSet.has(n));
+    layers.splice(0,1,...sources.map((n,i)=>i===0?[...others,n]:[n]));
+  }
   const positions:Record<string,Point>=Object.create(null);
   const slot=nodes.map(()=>0),recentSlots:number[][]=[];
   const overlappingColumns=Math.ceil(CARD_WIDTH/STEP_X)-1;
@@ -97,4 +106,21 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[]):LayoutP
   }
   return {positions,forwardRelations,feedbackRelations,exceptionRelations};
 }
-export function initialPositions(graph:Graph,activityOrder?:readonly string[]):Record<string,Point>{return layoutPlan(graph,activityOrder).positions;}
+/** One-hop Activity views put upstream peers on successive staircase steps.
+ * This is an initial/reset plan, never a migration of retained coordinates.
+ * Stable source order comes from the same dependency/cycle plan as overview.
+ */
+export function initialPositions(graph:Graph,activityOrder?:readonly string[],activity?:string):Record<string,Point>{
+  if(activity===undefined)return matrixPlan(graph,activityOrder).positions;
+  const plan=layoutPlan(graph,activityOrder,false);
+  if(activity===undefined||!graph.nodes.some(n=>n.id===activity&&n.type==='business'))return plan.positions;
+  const downstream=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
+  const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
+  const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)),after=ordered.filter(id=>downstream.has(id));
+  const positions:Record<string,Point>=Object.create(null);
+  const detailStepX=STEP_X;
+  upstream.forEach((id,i)=>positions[id]=[MARGIN+i*detailStepX,MARGIN+i*STEP_Y]);
+  const step=upstream.length;positions[activity]=[MARGIN+step*detailStepX,MARGIN+step*STEP_Y];
+  after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*detailStepX,MARGIN+(step+i+1)*STEP_Y]);
+  return positions;
+}
