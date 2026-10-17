@@ -44,7 +44,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    if(returnInput){assert.equal(labels[i].x,source.x+260+8);assert.equal(route.label[1],source.y+34-15);}else assert.ok(route.label[1]>=source.y+68&&route.label[1]<=source.y+96,'forward caption beside source departure');
    if(source.y<target.y){forward++;assert.ok(route.points.slice(1).every((p,j)=>p[0]>=route.points[j][0]&&p[1]>=route.points[j][1]));assert.deepEqual(route.points.at(-1),[target.x,target.y+34],'normal arrow enters from left');}
   }
-  if(relation.kind==='output'){assert.equal(labels[i].x,target.x,'Output left edge follows target');assert.ok(route.label[1]>=target.y-30&&route.label[1]<=target.y-14,'Output caption directly above target');}
+  if(relation.kind==='output'){assert.equal(labels[i].x,route.points[0][0]+8,'Output text starts beside its incoming trunk');assert.ok(route.label[1]>=target.y-30&&route.label[1]<=target.y-14,'Output caption directly above target');}
   if(relation.kind.endsWith('exception')){
    exceptions++;assert.ok(projected.graph.nodes.some(n=>n.id===relation.from&&n.type==='business'));assert.ok(projected.graph.nodes.some(n=>n.id===relation.to&&n.type==='business'));
    // Preserve actual directed hand-back, not the old side-departing coordinates.
@@ -64,7 +64,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    if(relation.from!==dataID&&relation.to!==dataID){assert.equal(updated[i],original[i]);continue;}
    for(const route of [updated[i],fresh[i]]){
     const left=route.label[0]-Math.max(30,relation.label.length*12)/2;
-    if(relation.kind==='output'){assert.equal(left,object.x);assert.ok(route.label[1]>=object.y-30&&route.label[1]<=object.y-14);}
+    if(relation.kind==='output'){assert.equal(left,route.points[0][0]+8,'dragged Output text starts beside line');assert.ok(route.label[1]>=object.y-30&&route.label[1]<=object.y-14);}
     else if(relation.kind==='input'){assert.equal(left,object.x+268);assert.equal(route.label[1],object.y+19);}
    }
   }

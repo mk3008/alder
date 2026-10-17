@@ -101,7 +101,7 @@ export async function verifyRealWiring(browser){
      assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
      for(const [i,r]of measured.wires.entries()){
       assert.equal(r.collisions,0);assertDeparture(r);assert.equal(r.anchor,'start');
-      if(!r.exception&&r.source.id===spec.activity){assert.equal(r.label[0],r.target.x);assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
+      if(!r.exception&&r.source.id===spec.activity){assert.ok(Math.abs(r.label[0]-r.points[0][0]-8)<.01,'Output text starts beside vertical line');assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
       if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
@@ -128,7 +128,7 @@ export async function verifyRealWiring(browser){
     const checkCaptions=async()=>{
      const measured=await inspect(),incoming=measured.wires.find(r=>!r.exception&&r.target.id===dataID&&r.source.id===spec.activity),returning=measured.wires.find(r=>!r.exception&&r.source.id===dataID&&r.target.id===spec.activity);
      assert.equal(incoming.anchor,'start');assert.equal(returning.anchor,'start');
-     assert.equal(incoming.label[0],incoming.target.x);assert.ok(incoming.label[1]>=incoming.target.y-30&&incoming.label[1]<=incoming.target.y-14,'red caption follows dragged Object top');
+     assert.ok(Math.abs(incoming.label[0]-incoming.points[0][0]-8)<.01,'dragged Output text starts beside line');assert.ok(incoming.label[1]>=incoming.target.y-30&&incoming.label[1]<=incoming.target.y-14,'red caption follows dragged Object top');
      assert.equal(returning.label[0],returning.source.x+268);assert.equal(returning.label[1],returning.source.y+19,'yellow caption follows right outlet immediately');
      for(const r of [incoming,returning])for(const n of measured.cards)assert.ok(!(r.glyph.x<n.x+n.width&&r.glyph.x+r.glyph.width>n.x&&r.glyph.y<n.y+n.height&&r.glyph.y+r.glyph.height>n.y),'dragged captions clear shapes');
     };

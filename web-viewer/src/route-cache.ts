@@ -42,8 +42,8 @@ export class RouteCache {
         // Reserve Output captions above their receiving cards before earlier
         // exceptions/Inputs choose a label. Reservations never affect paths.
         labels: [...(r.kind==='output'?[]:relations.flatMap((other,i)=>{
-          const target=nodes.find(n=>n.id===other.to);
-          return other.kind==='output'&&target?[{id:`output-${i}`,x:target.x,y:target.y-23,width:Math.max(30,other.label.length*12),height:18}]:[];
+          const target=nodes.find(n=>n.id===other.to),source=nodes.find(n=>n.id===other.from);
+          return other.kind==='output'&&target&&source?[{id:`output-${i}`,x:source.x+source.width*.125+8,y:target.y-23,width:Math.max(30,other.label.length*12),height:18}]:[];
         })),...routes.flatMap((route,i)=>route&&i<index?[{
           id:String(i),x:route.label[0]-Math.max(30,relations[i].label.length*12)/2,
           y:route.label[1]-9,width:Math.max(30,relations[i].label.length*12),height:18

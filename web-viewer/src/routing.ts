@@ -103,10 +103,15 @@ function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, he
     priority=2;
   }
   // Output captions follow the receiving Object, above its top edge rather
-  // than halfway down a trunk whose length changes during a drag.
+  // than halfway down a trunk whose length changes during a drag. Its left
+  // edge sits next to the incoming vertical line, not the card's left edge.
   if(output){
     priority=0;
-    for(const gap of [5,13,21])consider([target.x+width/2,target.y-height/2-gap]);
+    for(const gap of [5,13,21]){
+      const y=target.y-height/2-gap;
+      const leg=points.slice(1).map((b,i)=>({a:points[i],b})).reverse().find(({a,b})=>a[0]===b[0]&&Math.min(a[1],b[1])<=y&&Math.max(a[1],b[1])>=y);
+      consider([(leg?.a[0]??points[0][0])+8+width/2,y]);
+    }
     priority=2;
   }
   for(const fraction of [.5,.4,.6,.3,.7,.2,.8]){
