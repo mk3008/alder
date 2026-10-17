@@ -63,7 +63,7 @@ export async function verifySaveConflictNoop(browser,{url='http://127.0.0.1:4173
    await pause(230);assert.deepEqual(await record(b),newer);assert.notEqual(await b.locator('#app').getAttribute('data-save-state'),'conflict','clean stale page stays silent');
    await b.locator('#in').click();await b.waitForFunction(()=>document.getElementById('app').dataset.saveState==='conflict');
    assert.deepEqual(await record(b),newer,'camera-only edit cannot replace other page content or settings');
-   const text=await b.locator('#status-text').textContent();assert.match(text,/ブラウザーのタブやウィンドウ/);assert.match(text,/本文または表示設定/);assert.match(text,/この画面を閉じるまで/);
+   const text=await b.locator('#status-text').textContent();assert.match(text,/別の画面/);assert.match(text,/引き続き閲覧/);assert.doesNotMatch(text,/保護|保存|退避|書き出/);
    await b.evaluate(()=>{globalThis.repeatAnnouncements=0;globalThis.noticeObserver=new MutationObserver(records=>{globalThis.repeatAnnouncements+=records.length;});noticeObserver.observe(document.getElementById('status-text'),{childList:true,characterData:true,subtree:true});});
    for(let i=0;i<3;i++){await b.evaluate(()=>{dispatchEvent(new Event('blur'));dispatchEvent(new Event('pagehide'));});await b.locator('#display-settings-toggle').click();}
    await pause(230);assert.equal(await b.evaluate(()=>repeatAnnouncements),0);assert.deepEqual(await record(b),newer);
@@ -74,14 +74,9 @@ export async function verifySaveConflictNoop(browser,{url='http://127.0.0.1:4173
    assert.equal(geometry.overflow,false,'warning has no horizontal overflow at mobile width');
    assert.ok(geometry.textBounds.left>=0&&geometry.textBounds.right<=390);
    for(const button of geometry.buttons){assert.ok(button.bounds.width>0&&button.bounds.left>=0&&button.bounds.right<=390,'mobile recovery button is readable horizontally');}
-   // Export the exact applied body through the actual download control; this
-   // must not alter stored session or clear the conflict/departure protection.
-   const downloadEvent=b.waitForEvent('download');await b.locator('#save-download').click();const download=await downloadEvent;
-   const stream=await download.createReadStream();let bytes='';for await(const chunk of stream)bytes+=chunk.toString('utf8');
-   assert.equal(bytes,concurrencyBodies.shared);assert.deepEqual(await record(b),newer);
-   assert.equal(await b.locator('#app').getAttribute('data-save-state'),'conflict');
+   assert.equal(await b.locator('#save-actions,#save-download,#save-reload').count(),0);assert.deepEqual(await record(b),newer);assert.equal(await b.locator('#app').getAttribute('data-save-state'),'conflict');
    await mkdir('web/evidence/save-conflict-212',{recursive:true});await b.screenshot({path:`web/evidence/save-conflict-212/mobile-${kind}.png`,fullPage:true});
-   b.on('dialog',dialog=>dialog.accept());await b.locator('#save-reload').click();await b.waitForLoadState('load');await b.waitForFunction(()=>!document.getElementById('open-text').disabled);
+   b.on('dialog',dialog=>dialog.accept());await b.reload();await b.waitForLoadState('load');await b.waitForFunction(()=>!document.getElementById('open-text').disabled);
    assert.notEqual(await b.locator('#app').getAttribute('data-save-state'),'conflict');
    await b.locator('#theme').click();await saved(b);assert.ok((await record(b)).generation>newer.generation,'reload makes next real edit writable');
    assert.deepEqual(errors,[]);assert.deepEqual(external,[]);results.push({name:'native mobile '+kind+' divergence / silent clean stale page / persistent single notice / body rescue / reload',passed:true,repeatAnnouncements:0,geometry});

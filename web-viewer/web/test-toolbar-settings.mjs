@@ -161,7 +161,7 @@ try{
  await until(()=>typeof closing.w.__releaseSave==='function');assert.equal(closing.$('display-settings-toggle').disabled,true);
  stable(closing,()=>{closing.$('display-settings-toggle').onclick();escape(closing);});assertOpen(closing,true);
  closing.w.__releaseSave();await closePromise;assertOpen(closing,true);assert.equal(closing.$('display-settings-toggle').disabled,false);assert.equal(closing.d.querySelectorAll('.tab').length,2);
- assert.match(closing.$('status-text').textContent,/保存/);
+ assert.match(closing.$('status-text').textContent,/引き継げません/);
  await closing.d.querySelector('.tab.active .close').onclick();assert.equal(closing.bar.hidden,false);assert.equal(closing.d.querySelectorAll('.tab').length,1);closing.w.close();
  checks.push('pending Group close guards gear; failed save preserves panel/view; successful close retains overview toolbar');
 

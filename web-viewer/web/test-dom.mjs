@@ -63,7 +63,7 @@ await $('refresh').onclick();assert.equal(w.document.querySelectorAll('.tab').le
 // transactional refresh retains the exact Graph and exposes storage recovery.
 const cloneFailureGraph=$('nodes').innerHTML;
 $('status-close').click();permission='granted';await $('refresh').onclick();
-assert.doesNotMatch($('status-text').textContent,/更新しました/);assert.equal($('status').dataset.key,'storage');assert.match($('status-text').textContent,/保存できません/);assert.equal($('save-actions').hidden,false);assert.equal($('nodes').innerHTML,cloneFailureGraph);checks.push('noncloneable mock handle cannot commit a refresh or mask storage recovery');
+assert.doesNotMatch($('status-text').textContent,/更新しました/);assert.equal($('status').dataset.key,'storage');assert.match($('status-text').textContent,/引き継げません/);assert.equal($('save-actions'),null);assert.equal($('nodes').innerHTML,cloneFailureGraph);checks.push('noncloneable mock handle cannot commit a refresh or mask storage recovery');
 const permissionWait=deferred();h.queryPermission=()=>permissionWait.promise;
 const latePermission=$('refresh').onclick();let pickerCalls=0;w.showOpenFilePicker=async()=>{pickerCalls++;return [h];};
 await w.document.querySelector('.close').onclick();permissionWait.resolve('denied');await latePermission;assert.equal(pickerCalls,1);

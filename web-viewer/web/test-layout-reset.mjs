@@ -85,13 +85,13 @@ try{
  checks.push('two real app pointer drags, unlocked reset, sample close/reopen, stale drag cannot overwrite reset');
 
  const fail=await boot({seed:session(modified())});await flush(fail);const oldStored=await saved(fail);fail.w.__failSave=true;fail.$('reset-layout').click();await flush(fail);
- assert.equal(fail.$('app').dataset.saveState,'error');assert.match(fail.$('status-text').textContent,/本文と図の配置はこの画面に残っています/);assert.deepEqual(await saved(fail),oldStored);assert.deepEqual(fail.state().tabs[0].positions,json(initial().positions));assert.deepEqual(fields(fail.state().tabs[0]),fields(oldStored.tabs[0]));
- fail.w.__failSave=false;fail.$('save-retry').click();await flush(fail);assert.deepEqual((await saved(fail)).tabs[0].positions,json(initial().positions));fail.w.close();
+ assert.equal(fail.$('app').dataset.saveState,'error');assert.match(fail.$('status-text').textContent,/引き続き閲覧できます/);assert.deepEqual(await saved(fail),oldStored);assert.deepEqual(fail.state().tabs[0].positions,json(initial().positions));assert.deepEqual(fields(fail.state().tabs[0]),fields(oldStored.tabs[0]));
+ fail.w.__failSave=false;await flush(fail);assert.deepEqual((await saved(fail)).tabs[0].positions,json(initial().positions));fail.w.close();
  checks.push('storage failure is visible, reset stays in memory, stored document unchanged, explicit retry persists');
 
  const conflict=await boot({seed:session(modified())});await flush(conflict);globalThis.indexedDB=conflict.db;const newer=await loadStoredSession();(newer.format>=2?newer.recovery.find(x=>x.key==='b'):newer.tabs[1]).name='Newer other window';await saveSession(newer);
  conflict.$('reset-layout').click();await flush(conflict);assert.equal(conflict.$('app').dataset.saveState,'conflict');assert.equal(conflict.$('reset-layout').disabled,true);assert.deepEqual(json(await loadStoredSession()),json(newer));assert.deepEqual(conflict.state().tabs[0].positions,json(initial().positions));
- const memory=conflict.state();conflict.$('reset-layout').onclick();assert.deepEqual(conflict.state(),memory);assert.equal(conflict.$('save-retry').hidden,true);conflict.w.close();
+ const memory=conflict.state();conflict.$('reset-layout').onclick();assert.deepEqual(conflict.state(),memory);assert.equal(conflict.$('save-retry'),null);conflict.w.close();
  checks.push('CAS conflict never overwrites newer storage, retains local document/reset and blocks further reset');
  // Returning cards by hand can leave nonincident cached routes from the trip.
  const raw=JSON.parse(readFileSync('web/authorities/contract-cases.json','utf8')).find(c=>c.name==='test_explicit_exception_kinds').input;

@@ -55,7 +55,7 @@ function lifecycle(e,event){
 }
 async function assertConflict(e){
  await until(()=>({hidden:e.$('status').hidden,text:e.$('status-text').textContent}),v=>!v.hidden&&v.text.includes('別の画面'),'stale window must explicitly report a save conflict');
- const text=e.$('status-text').textContent;assert.match(text,/保存していません/);assert.match(text,/コピー/);assert.match(text,/再読み込み/);
+ const text=e.$('status-text').textContent;assert.match(text,/別の画面/);assert.match(text,/引き続き閲覧/);assert.doesNotMatch(text,/保護|保存|退避|書き出/);assert.match(text,/再読み込み/);
  assert.equal(e.$('status-text').getAttribute('role'),'alert');return text;
 }
 function assertLocalWork(e,expectedKeys){
@@ -154,7 +154,7 @@ for(const trigger of concurrencyTriggers)await caseOf('stale app '+trigger+' pre
   b.$('status-close').click();
   if(retry==='close')await tabs(b).find(tab=>tab.dataset.key===closed).querySelector('.close').onclick();
   else if(retry==='debounce')b.$('theme').click();else lifecycle(b,retry);
-  await assertConflict(b);assertLocalWork(b,initialKeys);assert.deepEqual(await a.read(),committedA,'further '+retry+' cannot overwrite the winner');
+  assert.equal(b.$('app').dataset.saveState,'conflict');assert.equal(b.$('save-actions'),null);assertLocalWork(b,initialKeys);assert.deepEqual(await a.read(),committedA,'further '+retry+' cannot overwrite the winner');
  }
  await pause(260);assert.deepEqual(await a.read(),committedA,'previously queued debounce cannot overwrite');
  b.w.close();const fresh=await boot(db);

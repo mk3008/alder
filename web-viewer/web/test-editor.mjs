@@ -20,6 +20,6 @@ try{
  // A late startup response cannot notify about a document the user already replaced.
  let release;const late=await make({db:h.db,fetch:()=>new Promise(resolve=>release=resolve)});await until(()=>!!release);await text(late);release(new Response(changed));await pause(50);assert.equal(late.$('source-update-notice').hidden,true);assert.equal((await record(late.db)).document.source.kind,'text');
  // No URL traffic is introduced for samples, files or pasted text.
- const nonurl=await make();await text(nonurl);const restored=await make({db:nonurl.db});await pause(30);assert.equal(restored.requests.length,0);assert.equal(restored.$('legacy-notice').hidden,true);
+ const nonurl=await make();await text(nonurl);const restored=await make({db:nonurl.db});await pause(30);assert.equal(restored.requests.length,0);assert.equal(restored.$('legacy-notice'),null);
  console.log('readonly raw view; startup same/changed/offline/invalid/HTML; dismissal/restart; explicit refresh; URL-only deduplicated history; failure and late-result protection passed');
 }finally{windows.forEach(e=>e.close());}

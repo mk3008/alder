@@ -85,7 +85,7 @@ for(const kind of ['theme','body'])await run('true '+kind+' divergence protects 
  const newer=await a.read();for(let i=0;i<3;i++){flush(b);b.w.dispatchEvent(new b.w.Event('pagehide'));b.w.document.querySelector('.tab > button').click();}
  await pause(230);assert.equal(b.$('status').hidden,true,'no unsaved change means no warning');assert.deepEqual(await b.read(),newer);
  b.$('in').click();flush(b);await until(()=>b.$('app').dataset.saveState,x=>x==='conflict','conflict after real local camera change');
- assert.deepEqual(await b.read(),newer);assert.match(b.$('status-text').textContent,/ブラウザーのタブやウィンドウ/);assert.match(b.$('status-text').textContent,/本文または表示設定/);
+ assert.deepEqual(await b.read(),newer);assert.match(b.$('status-text').textContent,/別の画面/);assert.match(b.$('status-text').textContent,/引き続き閲覧/);assert.doesNotMatch(b.$('status-text').textContent,/保護|保存|退避|書き出/);
  let announcements=0;const observer=new b.w.MutationObserver(records=>{announcements+=records.length;});observer.observe(b.$('status-text'),{childList:true,characterData:true,subtree:true});
  const warning=b.$('status-text').textContent;for(let i=0;i<3;i++){flush(b);b.$('in').click();b.$('display-settings-toggle').click();}
  await pause(250);observer.disconnect();assert.equal(announcements,0,'existing conflict is retained, not re-announced');assert.equal(b.$('status-text').textContent,warning);assert.deepEqual(await b.read(),newer);
