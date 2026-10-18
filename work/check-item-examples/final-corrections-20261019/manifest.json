@@ -1,0 +1,26 @@
+{
+  "design_revision": "e8d808902641d4571bbc5656b4b23d9e959f7636",
+  "skill_bundle_revision": "ee99fd399a520abf7ba52f113f17d3c7dc090846",
+  "selected": {
+    "initial": "initial-candidate-02.md",
+    "update": "update-candidate-01.md"
+  },
+  "files": {
+    "README.md": "2496f6783b7f0d48d720786e48f1512b66dbec9ec5e6a0c487396524fe13c944",
+    "author-check.md": "47de39e0b0e8b8b9c15bccf30c7e49eeec232b94fe940a2e23ba824a2244aa5d",
+    "author-execution.md": "d4cc8f58070611a536afab349636bed96db8fa4a21a095beb303ff5a5444c10b",
+    "check-reader.md": "df526d1e2cdaf554ea86d9e9a2a0df7aec6b4573a7700db792eb5b06884c9071",
+    "check-regression.json": "f45d0efa0c67bfe0d0409994fa1a0d4a9b9d4c334a5016493785109d4f0ec543",
+    "current-parser-check.mjs": "77b9894ded7846c12503295aecb63f580bc1f9d9f0e512b3e6e55435d4ab9aab",
+    "execution-version.json": "3f0e03af8f7d11a8464b96f2ba5869a0c6fe2f528e6f48b9f420c28a1d757c93",
+    "final-check-reader.md": "2c3c19a78eb4450be5b09232d83e283f0a190320642ce968aec58adf8913f061",
+    "graph.generated.json": "4d0f01c7da3b28d067cef05789801ac132f6c844a6b7aecebf4986a36d5359eb",
+    "initial-candidate-01.md": "817babf252168c927b1153bef6aa8362a77340788c770088f8bf4fe93fe28fd8",
+    "initial-candidate-02.md": "6f23acee887e35724fb589e17b76f4372efc08906137dea9887ffafdebcfe6f4",
+    "migration-checks.json": "69d14cbfcf6bd0e727a1e297849a0f858d843c48598c253917e8e2359538e7b7",
+    "migration-reader.md": "f73e2dc332f18ca21ba6989b4719245697e1468a47fbf83180fdcc37b4f538e7",
+    "update-candidate-01.md": "14217b081248021af68b4d7f6a00d40bfab002ed0ae7bf6341926c6ad3daa403",
+    "viewer-guidance.jpg": "599816d9a4e5186f57d038319ef2c0633078ad24ef6e555a87e2b0747b3c9cc0",
+    "viewer-overview.jpg": "46e159bc2fe34b2608d88baba76e7e0f47c618fce610241c6a592ffd5927c5be"
+  }
+}

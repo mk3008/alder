@@ -1,0 +1,65 @@
+{
+  "old_revision": "5768e0fa1582a40d6d1dab92b9931fb5b4ab2aa7",
+  "new_design_revision": "e8d808902641d4571bbc5656b4b23d9e959f7636",
+  "old_sha256": "e00c06ef469c015120add5dc92249b53eabd496750ff9aeb1b7f9a84ab469cd0",
+  "new_sha256": "cfb4a60b2f1f2dade893237cbdc38b9cda1bc4c8d89e9491d77affe13dd39c91",
+  "preserved_exact": [
+    "preamble including rules and unresolved decisions",
+    "both Activity names",
+    "Why/When/Who/Result for both Activities",
+    "guidance How prose as Procedure"
+  ],
+  "old_profile_error": "相談を受付する: required fields are ## Scope, ## Why, ## When, ## Who, ## Where, ## How, ### Input, ### Procedure, ### Output, ## Result",
+  "new_graph_nodes": [
+    [
+      "依頼者",
+      "object",
+      false
+    ],
+    [
+      "次の連絡方法を説明する",
+      "business",
+      true
+    ],
+    [
+      "相談",
+      "object",
+      true
+    ],
+    [
+      "相談を受付する",
+      "business",
+      true
+    ]
+  ],
+  "new_relations": [
+    {
+      "kind": "input",
+      "from": "依頼者",
+      "to": "相談を受付する",
+      "label": "利用者 / 申請者の資格 / 申請日 / 希望日 / 相談内容"
+    },
+    {
+      "kind": "input",
+      "from": "相談",
+      "to": "次の連絡方法を説明する",
+      "label": "受付済みの相談 / その相談の依頼者"
+    },
+    {
+      "kind": "output",
+      "from": "次の連絡方法を説明する",
+      "to": "依頼者",
+      "label": "その相談の担当窓口 / 次の連絡方法"
+    },
+    {
+      "kind": "output",
+      "from": "相談を受付する",
+      "to": "相談",
+      "label": "依頼者 / 利用者 / 申請者の資格 / 申請日 / 希望日 / 相談内容 / 受付済みの状態"
+    }
+  ],
+  "interpretation_limits": [
+    "explicit Object classification and I/O add representation of existing work; semantic reviewer assesses responsibility choices",
+    "graph does not project preamble rules or Procedure; read whole Business Design"
+  ]
+}

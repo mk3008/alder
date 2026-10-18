@@ -1,0 +1,17 @@
+# Root intervention and author re-evaluation
+
+The parent/root agent inspected the saved candidate 02 and the Business Design without editing artifacts and intervened before finalization. Message, verbatim:
+
+> Root read saved candidate02/source (no artifact edits). Before reporting all reader findings as supported, explicitly validate two potential overflags: an operation '受付する' is an action, not necessarily an assumed successful state (Skill separates action/result and prohibits success PRECONDITIONS; source How includes reception). If you adopt input-receipt/condition-check wording as clarity, distinguish optional clarification from proven NG. Also C-03 prior Test evidence says '説明内容を判定する自動方式は未決'; changing this to only '自動理解判定は規定しない' may narrow the retained Test-method gap. Preserve the prior Test evidence meaning separately from source's no fixed script/understanding rule. Record root intervention and supported/rejected dispositions; don't invent policy, don't read other outputs/oracle, don't exceed two repair rounds just for style. Continue actual review of saved revisions; report residuals honestly.
+
+Author disposition against allowed sources:
+
+- C-01's former `受付する` can denote performing the action, not an already-successful state. The reviewer overstated definite NG. Candidate 02/03's more explicit input receipt and condition check is supported by README How and clarifies action/result, but is an optional clarity repair rather than evidence that original wording violated the rule. Likewise the sample wording change is clarity, not a policy correction. The confirmed condition/result was not changed.
+- C-04 condition `その相談の依頼者に案内するとき` circularly predicated its recipient expectation, so removing recipient from the condition is a supported description repair. The same existing `要修正` and feedback are retained; no adoption or human re-confirmation.
+- C-03's prior Test-evidence supplement `説明内容を判定する自動方式は未決` is an existing evidence/method gap. The source says a fixed script and automatic *understanding* judgment are not specified. These are different claims; replacing the former with only the latter in candidate 02/03 lost supporting text. The reader's source-grounding concern is valid only if the Test-method note is falsely attributed to the Business Design. Restore the prior note as a Test-method gap, and state the source's limit separately without treating either as a Test result.
+
+Second root message, verbatim:
+
+> Proceed with exactly one additional bounded correction/re-review round, authorized here for the concrete prior Test-evidence retention defect (not a style retry). Preserve candidate03 and all reports. Restore C-03's prior '説明内容を判定する自動方式は未決' Test-method gap, keeping source's automatic-understanding rule distinct if useful. Save candidate04; ask same read-only reader for actual review of this restoration plus whole four-ID preservation (diagnostic too). Do not apply further optional style suggestions. Record the explicit exception to original two-round bound, root finding/overflag disposition/full follow-up prompt, source-validated author repair and actual final review. Stop after this round with any true residual, no unreviewed pass/no more source/guidance changes.
+
+The parent explicitly authorized one additional repair/re-review for this specific retention defect, an exception to the initial two-round cap. Candidate 03 and all earlier records remain intact. Candidate 04 changes only C-03's Test evidence line. No source Business Design or previous list is modified.

@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-10-18T15:29:18.900438+00:00",
+  "attempts": {
+    "update": {
+      "snapshot": "update-candidate-03.snapshot.md",
+      "sha256": "9f6b8f0238448e4eee34a9d9d16a79dd135a48b932915517a33790c59c133564",
+      "status": "not adopted; interruption/stop requested; completion not confirmed at snapshot"
+    },
+    "purchase": {
+      "snapshot": "purchase-candidate-03.snapshot.md",
+      "sha256": "ae06845f6c05d272bfc4a31c045eeb081924804f8173313d7534bba39b52229c",
+      "status": "not adopted; interruption/stop requested; completion not confirmed at snapshot"
+    }
+  }
+}

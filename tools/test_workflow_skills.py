@@ -18,6 +18,80 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_unique_guarantee_and_observable_example_review_are_distributed(self):
+        # Instruction/distribution regression only; actual agent detection and
+        # generation need independent raw runs, not these phrase assertions.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertNotIn('and H4 sections for **条件と期待する結果**', guide)
+        self.assertNotIn('H4 条件と期待する結果 /', skill)
+        for phrase in ['Do not replace the general rule with a finite list of examples',
+                       'Formula, action and individual condition/result sections are not mandatory fields',
+                       'identify each Check\'s independent guarantee',
+                       'A restatement of the expectation alone is not an explanatory example',
+                       'Check short prose as well as tables',
+                       'Report tautological examples, missing distinctions and duplicate or missing general definitions',
+                       'without inferring whole-Check satisfaction from a component alone']:
+            self.assertIn(phrase, guide)
+        self.assertIn('concrete observation/difference correspondence', skill)
+        for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
+            self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
+
+    def test_required_input_distinction_does_not_require_a_formula(self):
+        # Static contract, not evidence that generated business meaning is correct.
+        for path in ['docs/check-item-traceability.md',
+                     'plugins/alder/skills/alder-draft-check-items/SKILL.md']:
+            source = (ROOT / path).read_text()
+            with self.subTest(path=path):
+                self.assertIn('distinguish the necessary conditions, the direct expected result and the unresolved sufficient conditions in meaning', source)
+                self.assertIn('Readable natural language is sufficient; use an expression only when it helps prevent misreading', source)
+                self.assertNotIn('write the necessary-condition expression and the direct expected result separately', source)
+                self.assertNotIn('use a necessary-condition expression plus the direct expected result', source)
+
+    def test_comparison_summary_contract_reaches_check_skill_and_review(self):
+        # Distribution/routing only. Generation and rendered usability need
+        # their own observed evidence; these assertions do not measure them.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        presentation = guide.split('### Conditions, expressions and examples\n', 1)[1].split('Recommended review states:', 1)[0]
+        for term in ['above the individual Checks',
+                     'condition-satisfied and condition-unsatisfied cases',
+                     'Link each row to its applicable Check ID(s)',
+                     'not duplicate primary fields or a new approval unit',
+                     'link back to the summary',
+                     'retain short scenarios where tabulation adds no value',
+                     'independent comparison axes their own columns',
+                     'common values and the common business action',
+                     'An unmet condition is not itself a decided rejection',
+                     'text assertions alone do not establish readability']:
+            with self.subTest(term=term):
+                self.assertIn(term, presentation)
+        review = guide.split('### Before returning a draft or update', 1)[-1]
+        self.assertIn('every row-to-Check link', review)
+        self.assertIn('known judgments and undecided outcomes remain distinct', review)
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('summary above their individual Checks', skill)
+        self.assertIn('Keep short scenarios where a table adds no value', skill)
+        self.assertIn('during the return-time review', skill)
+
+    def test_shared_expression_example_guidance_is_bundled_and_routed(self):
+        # Distribution contract only; actual generation is evaluated separately.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        section = guide.split('### Conditions, expressions and examples\n', 1)[1].split('Recommended review states:', 1)[0]
+        for meaning in ['necessary-condition expression', 'guarantee expression',
+                        'do not infer `¬P ⇒ ¬Q`', 'result and explanatory notes separate',
+                        'required” does not decide the error message', '未決・要確認',
+                        'without HTML anchors, folding or separate human/AI copies',
+                        'Do not silently expand an expectation',
+                        'do not require matching classes, tables, columns, APIs',
+                        'No fixed row count or exhaustive enumeration is required']:
+            with self.subTest(meaning=meaning):
+                self.assertIn(meaning, section)
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('references/check-item-traceability.md#conditions-expressions-and-examples', skill)
+        self.assertIn('Apply that guidance during the return-time quality check.', skill)
+        for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
+            self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
+
     def test_requester_language_reaches_canonical_guidance_and_check_skill(self):
         # These are authored guidance checks, not a language detector or proof
         # that an agent follows the guidance or a person comprehends its output.
@@ -75,7 +149,8 @@ class WorkflowSkillsTest(unittest.TestCase):
                      'Keep authoring-scope investigations and quality explanations in the work record, not as relocated reader-facing prose',
                      'Preserve unapproved status and information needed for decisions within each Check',
                      'An explicit request to simplify the opening may remove redundant authoring notices while preserving source/version links and name correspondences',
-                     "Keep an individual Check's kind, decision, condition and expectation with that ID",
+                     "Keep an individual Check's kind and decision with that ID",
+                     "its condition and expectation uniquely reachable through an explicit guarantee reference",
                      'Useful introductory or navigation prose is allowed',
                      'This does not prohibit all prose between headings',
                      'Titles, purpose sentences, evidence explanations and other business prose need not match a fixed wording template',
@@ -2166,6 +2241,105 @@ class CurrentJapaneseSourceAlignmentTest(unittest.TestCase):
                          '\n原典見出しとの対応：業務1 — 備品購入を申請する\n']:
             with self.subTest(addition=addition), self.assertRaises(AssertionError):
                 self.assert_current_contract(text + addition)
+
+
+class LiteralActivityNameDiagnosticTest(unittest.TestCase):
+    @staticmethod
+    def document(names=('Activity を扱う', '次を扱う'), targets=None):
+        from tools.check_activity_names import INDEX_HEADERS
+        targets = targets or [name.lower().replace(' ', '-') for name in names]
+        header = '| ' + ' | '.join(INDEX_HEADERS[0]) + ' |\n| --- | --- | --- | --- |\n'
+        rows = ''.join(f'| [{name}](#{target}) | x | y | z |\n' for name, target in zip(names, targets))
+        return header + rows + '\n' + ''.join(f'## {name}\n' for name in names)
+
+    def test_display_prefix_is_not_normalized_and_source_constants_are_preserved(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        checks = self.document()
+        self.assertEqual(compare(design, checks)['status'], 'match')
+        wrong = checks.replace('## 次を扱う', '## Activity 次を扱う')
+        result = compare(design, wrong)
+        self.assertEqual(result['status'], 'mismatch')
+        self.assertIn('headings', result['mismatches'])
+        self.assertIn('index', compare(design, checks.replace('[次を扱う]', '[略称]'))['mismatches'])
+
+    def test_navigation_may_differ_from_source_order_but_matches_sections(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        reordered = self.document(('次を扱う', 'Activity を扱う'))
+        self.assertEqual(compare(design, reordered)['status'], 'match')
+        wrong_order = reordered.replace('## 次を扱う\n## Activity を扱う', '## Activity を扱う\n## 次を扱う')
+        self.assertIn('index-heading-order', compare(design, wrong_order)['mismatches'])
+
+    def test_main_purchase_example_and_arbitrary_explanatory_headings(self):
+        from tools.check_activity_names import compare
+        design = (ROOT / 'business-design/purchase-request/README.md').read_text()
+        checks = (ROOT / 'docs/examples/purchase-check-review.ja.md').read_text()
+        result = compare(design, checks)
+        self.assertEqual(result['status'], 'match')
+        self.assertEqual(len(result['headings']), 4)
+        # No explanation-heading allow-list: these must remain non-Activity.
+        for heading in ['式の読み方', '任意の説明', 'Other guidance']:
+            with self.subTest(heading=heading):
+                self.assertEqual(compare(design, '## ' + heading + '\n\n説明。\n\n' + checks)['status'], 'match')
+
+    def test_natural_fragments_with_explanations_and_percent_encoding(self):
+        from tools.check_activity_names import compare
+        design = '# Activity 本名\n'
+        checks = self.document(('本名',), ('%E6%9C%AC%E5%90%8D',))
+        checks = '## 任意の前置き\n\n' + checks + '\n## 任意の後書き\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+
+    def test_missing_duplicate_and_wrong_names_remain_errors(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        cases = [self.document(('Activity を扱う',)),
+                 self.document(('Activity を扱う', 'Activity を扱う')),
+                 self.document(('Activity を扱う', '別名')),
+                 self.document() + '\n## 次を扱う\n',
+                 self.document().replace('## 次を扱う', '## 誤った本文名')]
+        for checks in cases:
+            with self.subTest(checks=checks):
+                self.assertEqual(compare(design, checks)['status'], 'mismatch')
+
+    def test_broken_reused_wrong_level_and_ambiguous_targets(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        checks = self.document()
+        cases = [checks.replace('](#次を扱う)', '](#存在しない)'),
+                 checks.replace('](#次を扱う)', '](#activity-を扱う)'),
+                 checks.replace('## 次を扱う', '### 次を扱う'),
+                 self.document(targets=('same', 'same')).replace('## ', '<a id="same"></a>\n\n## ')]
+        for value in cases:
+            with self.subTest(checks=value):
+                result = compare(design, value)
+                self.assertEqual(result['status'], 'mismatch')
+                self.assertIn('targets', result['mismatches'])
+
+    def test_unsupported_profile_is_not_a_pass_and_fenced_examples_are_ignored(self):
+        from tools.check_activity_names import compare
+        for design, checks in [('', ''), ('# Activity 本名', '自然文'),
+                               ('# Activity 本名', self.document(('本名',)).replace('](#本名)', '](other.md#本名)')),
+                               ('# Activity 本名', self.document(('本名',)) * 2)]:
+            self.assertEqual(compare(design, checks)['status'], 'not-verified')
+        design = '```md\n# Activity 偽\n```\n# Activity 本名\n'
+        checks = self.document(('本名',)) + '~~~\n## 偽\n~~~\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+
+    def test_installed_diagnostic_runs_without_repository(self):
+        import subprocess
+        import tempfile
+        import shutil
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            script = base / 'check_activity_names.py'
+            shutil.copyfile(ROOT / 'plugins/alder/skills/alder-draft-check-items/scripts/check_activity_names.py', script)
+            (base / 'design.md').write_text('# Activity 本名\n')
+            checks = self.document(('本名',)).replace('## 本名', '## Activity 本名')
+            (base / 'checks.md').write_text(checks)
+            result = subprocess.run(['python3', str(script), '--design', str(base / 'design.md'), '--checks', str(base / 'checks.md')], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('Activity 本名', result.stdout)
 
 
 if __name__ == '__main__':
