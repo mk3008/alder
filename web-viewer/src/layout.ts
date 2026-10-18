@@ -81,11 +81,13 @@ export function initialPositions(graph:Graph,activityOrder?:readonly string[],ac
   if(activity===undefined||!graph.nodes.some(n=>n.id===activity&&n.type==='business'))return plan.positions;
   const downstream=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
   const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
-  const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)),after=ordered.filter(id=>downstream.has(id));
+  const exceptions=new Set(graph.nodes.filter(n=>n.type==='business'&&n.id!==activity).map(n=>n.id));
+  const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)&&!exceptions.has(id)),after=ordered.filter(id=>downstream.has(id)),exceptionPeers=ordered.filter(id=>exceptions.has(id));
   const positions:Record<string,Point>=Object.create(null);
   const detailStepX=STEP_X;
   upstream.forEach((id,i)=>positions[id]=[MARGIN+i*detailStepX,MARGIN+i*STEP_Y]);
   const step=upstream.length;positions[activity]=[MARGIN+step*detailStepX,MARGIN+step*STEP_Y];
   after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*detailStepX,MARGIN+(step+i+1)*STEP_Y]);
+  exceptionPeers.forEach((id,i)=>positions[id]=[MARGIN+(step+2+i)*detailStepX,MARGIN+(step+after.length+1+i)*STEP_Y]);
   return positions;
 }

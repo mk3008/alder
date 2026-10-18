@@ -1,7 +1,7 @@
 import type {Graph,Relation} from './graph';
 import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
-export type MatrixWire={returning:boolean;captionLane:number};
+export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number;detail?:boolean};
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
  const types=new Map(graph.nodes.map(n=>[n.id,n.type]));
@@ -49,7 +49,7 @@ export function matrixPlan(graph:Graph,hint?:readonly string[]):MatrixPlan{
  }
  const nodes=stable.slice().sort((a,b)=>phase.get(a.id)!-phase.get(b.id)!||(degree.get(b.id)??0)-(degree.get(a.id)??0)||a.id.localeCompare(b.id,'en'));
  const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>();
- const wires=graph.relations.map((r,i)=>{
+ const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
   const back=returning.has(i),key=(back?'return:':r.kind+':')+(r.kind==='output'&&!back?r.to:r.from),captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
@@ -72,5 +72,25 @@ export function matrixPlan(graph:Graph,hint?:readonly string[]):MatrixPlan{
   if(lastTarget.has(n.id))corridors.push({column:column+1,until:lastTarget.get(n.id)!});
  }
  for(const [id,[column,line]]of Object.entries(cells))positions[id]=[40+64*column,40+96*line];
- return {positions,cells,wires,forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
+ return {positions,cells,wires:directionalReturnWires(graph,wires,positions),forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
+}
+
+/** Order occupied roles by the side of their peers in the canonical layout.
+ * Keep a role shared, even when it has peers on both sides. Use each distinct
+ * peer once; ties retain semantic role order. Manual drags/filters never reorder.
+ */
+export function directionalReturnWires(graph:Graph,wires:readonly MatrixWire[],positions:Record<string,Point>):MatrixWire[]{
+ const peers=new Map<string,Map<number,Set<string>>>();
+ const endpointRoles=graph.relations.map((r,i)=>!wires[i].returning?undefined:r.kind.endsWith('exception')?{from:2,to:1}:{from:3,to:0});
+ const add=(id:string,role:number,other:string)=>{const roles=peers.get(id)??new Map<number,Set<string>>(),ids=roles.get(role)??new Set<string>();ids.add(other);roles.set(role,ids);peers.set(id,roles);};
+ graph.relations.forEach((r,i)=>{const role=endpointRoles[i];if(role){add(r.from,role.from,r.to);add(r.to,role.to,r.from);}});
+ const direction=(id:string,ids:Set<string>)=>[...ids].reduce((sum,other)=>sum+Math.sign(positions[other][1]-positions[id][1]),0)/ids.size;
+ const ordered=new Map([...peers].map(([id,roles])=>[id,[...roles].sort(([a,as],[b,bs])=>direction(id,as)-direction(id,bs)||a-b).map(([role])=>role)]));
+ const slot=(id:string,role:number)=>ordered.get(id)!.indexOf(role);
+ const fraction=(id:string,role:number)=>(slot(id,role)+1)/(ordered.get(id)!.length+1);
+ // At an upper-facing endpoint, upper ports use the inner corridor; at a
+ // lower-facing endpoint the order reverses. Combine both ends without moving
+ // a corridor inside any card. This is a bounded local crossing heuristic.
+ const lane=(id:string,role:number,other:string)=>positions[other][1]<positions[id][1]?slot(id,role):ordered.get(id)!.length-1-slot(id,role);
+ return wires.map((wire,i)=>{const role=endpointRoles[i];if(!role)return {...wire};const r=graph.relations[i];return {...wire,fromPort:fraction(r.from,role.from),toPort:fraction(r.to,role.to),returnLane:Math.max(lane(r.from,role.from,r.to),lane(r.to,role.to,r.from))};});
 }

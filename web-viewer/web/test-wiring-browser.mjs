@@ -1,4 +1,7 @@
-import {matrixPlan} from '../src/matrix-layout.ts';
+import {verifyRolePorts} from './test-role-ports-browser.mjs';
+import {activityDesign} from '../src/activities.ts';
+import {matrixPlan,directionalReturnWires} from '../src/matrix-layout.ts';
+import {initialPositions} from '../src/layout.ts';
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
@@ -55,14 +58,15 @@ export async function verifyWiring(browser){
   }finally{await context.close();}
  }
  results.push({realSample:await verifyRealWiring(browser)});
+ results.push({rolePorts:await verifyRolePorts(browser)});
  return results;
 }
 
 // Acceptance uses the shipped standard sample, not just an easy synthetic star.
 export async function verifyRealWiring(browser){
  const results=[],specs=[
-  {activity:'業務設計',slug:'business',stair:['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','実装','検査項目の設計','業務設計'],count:8,exceptions:2},
-  {activity:'検査項目の設計',slug:'check',stair:['Alder: 検査項目設計ナレッジ','業務設計書','業務設計','検査項目の設計'],count:6,exceptions:1}
+  {activity:'業務設計',slug:'business',stair:['Alder: 業務ナレッジ','Alder: 業務相関ナレッジ','業務設計'],count:8,exceptions:2},
+  {activity:'検査項目の設計',slug:'check',stair:['Alder: 検査項目設計ナレッジ','業務設計書','検査項目の設計'],count:6,exceptions:1}
  ];
  for(const width of [1280,393,320]){
   const context=await browser.newContext({viewport:{width,height:1000},hasTouch:width!==1280}),page=await context.newPage(),errors=[];
@@ -78,12 +82,14 @@ export async function verifyRealWiring(browser){
     return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
+  const sourceDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8'));let routeDesign=sourceDesign,sourcePlan=matrixPlan(sourceDesign.graph,sourceDesign.activityOrder);
   const assertDeparture=(r,fixed=false,matrixReturn)=>{
-   const returning=matrixReturn??(!r.exception&&r.source.object&&(r.target.y+68<=r.source.y||(r.target.x<r.source.x&&r.target.y<=r.source.y)));
+   const ri=routeDesign.graph.relations.findIndex(e=>e.from===r.source.id&&e.to===r.target.id&&e.label===r.labelText),wire=sourcePlan.wires[ri];
+   const returning=matrixReturn??wire.returning;
    if(returning||r.exception){
-    assert.deepEqual(r.points[0],[r.source.x+260,r.source.y+34]);assert.ok(r.points[1][0]>r.points[0][0]);
-    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282)<.01,'aligned return corridor uses constant card clearance');
-    assert.deepEqual(r.points.at(-1),[r.target.x+260,r.target.y+34]);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
+    assert.ok(Math.abs(r.points[0][0]-r.source.x-260)<.01);assert.ok(Math.abs(r.points[0][1]-r.source.y-68*(wire.fromPort??.5))<.01);assert.ok(r.points[1][0]>r.points[0][0]);
+    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282-16*(wire.returnLane??0))<.01,'aligned return corridor uses constant card clearance');
+    assert.ok(Math.abs(r.points.at(-1)[0]-r.target.x-260)<.01);assert.ok(Math.abs(r.points.at(-1)[1]-r.target.y-68*(wire.toPort??.5))<.01);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
     assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y>=r.source.y,'right return preserves directed arrival');
    }else{
     assert.ok(Math.abs(r.points[0][0]-(r.source.x+32.5))<.01);assert.equal(r.points[0][1],r.source.y+68);
@@ -105,9 +111,12 @@ export async function verifyRealWiring(browser){
 
    const overviewRoutes=await inspect();const matrixDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),matrix=matrixPlan(matrixDesign.graph,matrixDesign.activityOrder);for(const r of overviewRoutes.wires){assertDeparture(r,false,matrix.wires[r.index].returning);assert.equal(r.collisions,0,'all approved initial L/return paths clear every card');if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
    for(const spec of specs){
+    routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder);sourcePlan={...sourcePlan,wires:directionalReturnWires(routeDesign.graph,sourcePlan.wires,initialPositions(routeDesign.graph,routeDesign.activityOrder,spec.activity))};
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'actual DOM staircase including exception neighbours'));
+    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'ordinary Input then focus staircase'));
+    const outputIDs=sourceDesign.graph.relations.filter(r=>r.kind==='output'&&r.from===spec.activity).map(r=>r.to);
+    for(const n of sourceDesign.graph.nodes.filter(n=>n.type==='business'&&n.id!==spec.activity&&detail[n.id]))for(const id of outputIDs)assert.ok(detail[n.id][1]>detail[id][1],'exception peers follow every ordinary Output');
     for(const theme of ['light','dark']){
      if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
      const measured=await inspect(),overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
@@ -116,9 +125,9 @@ export async function verifyRealWiring(browser){
       assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
       if(!r.exception&&r.source.id===spec.activity){assert.ok(Math.abs(r.label[0]-r.points[0][0]-8)<.01,'Output text starts beside vertical line');assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
-      if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1]);}}
+      if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
-       inputs++;if(r.source.y>=r.target.y+68){assert.equal(r.label[0],r.source.x+268);assert.equal(r.label[1],r.source.y+19);}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
+       inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
       }
       for(const n of measured.cards)assert.equal(overlap(r.glyph,n),false,'native Japanese glyph does not cover shapes');
@@ -136,13 +145,13 @@ export async function verifyRealWiring(browser){
     const dataID=spec.slug==='business'?'業務設計書':'検査項目';
     const data=page.locator(`.node[data-node="${dataID}"]`);await data.scrollIntoViewIfNeeded();
     const dataBox=await data.boundingBox();
-    await page.mouse.move(dataBox.x+80,dataBox.y+30);await page.mouse.down();await page.mouse.move(dataBox.x+105,dataBox.y+210,{steps:8});await page.mouse.up();
-    const dragged=await positions();assert.ok(dragged[dataID][1]>detail[dataID][1]+150);
+    await page.mouse.move(dataBox.x+80,dataBox.y+30);await page.mouse.down();await page.mouse.move(dataBox.x+105,dataBox.y+480,{steps:8});await page.mouse.up();
+    const dragged=await positions();assert.ok(dragged[dataID][1]>detail[dataID][1]+400);
     const checkCaptions=async()=>{
      const measured=await inspect(),incoming=measured.wires.find(r=>!r.exception&&r.target.id===dataID&&r.source.id===spec.activity),returning=measured.wires.find(r=>!r.exception&&r.source.id===dataID&&r.target.id===spec.activity);
      assert.equal(incoming.anchor,'start');assert.equal(returning.anchor,'start');
      assert.ok(Math.abs(incoming.label[0]-incoming.points[0][0]-8)<.01,'dragged Output text starts beside line');assert.ok(incoming.label[1]>=incoming.target.y-30&&incoming.label[1]<=incoming.target.y-14,'red caption follows dragged Object top');
-     assert.equal(returning.label[0],returning.source.x+268);assert.equal(returning.label[1],returning.source.y+19,'yellow caption follows right outlet immediately');
+     assert.ok(returning.label[0]>=Math.max(...returning.points.map(p=>p[0]))+8-.01,'return caption follows the dragged bend');assert.ok(Math.abs(returning.label[1]-returning.points[0][1])<.001,'return caption shares the dragged bend height');
      for(const r of [incoming,returning])for(const n of measured.cards)assert.ok(!(r.glyph.x<n.x+n.width&&r.glyph.x+r.glyph.width>n.x&&r.glyph.y<n.y+n.height&&r.glyph.y+r.glyph.height>n.y),'dragged captions clear shapes');
     };
     await checkCaptions();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await positions(),dragged);await checkCaptions();
