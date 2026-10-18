@@ -52,7 +52,7 @@ Briefly tell the reader what they are about to try, what sample/input to use, wh
 
 ## User-facing release notes
 
-When drafting or reviewing Alder plugin release notes, follow the [release note review gate](docs/versioning.md#release-note-review-gate). Compare the last published plugin tag with the approved candidate and describe **only plugin-user-visible added, changed, fixed, removed or migration-relevant behavior**, omitting empty sections and internal fixtures, CI/evaluation narratives or unrelated Viewer work. Do not infer user impact or a SemVer bump solely from commit labels. Preview the GitHub Release name and rendered body separately so its H1 is not repeated.
+When drafting or reviewing Alder plugin release notes, follow the [release note review gate](docs/versioning.md#release-note-review-gate). Compare the last published plugin tag with the approved candidate, audit all major plugin-visible changes against PRs, and describe **only plugin-user-visible added, changed, fixed, removed or migration-relevant behavior**. Lead with the most important new capability as an independent item instead of burying it in generic improvement prose; omit empty sections and internal fixtures, CI/evaluation narratives or unrelated Viewer work. Do not infer user impact or a SemVer bump solely from commit labels. Preview the GitHub Release name and rendered body separately so its H1 is not repeated.
 
 ## Publishing research decisions
 
