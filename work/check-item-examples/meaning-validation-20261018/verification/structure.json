@@ -1,0 +1,88 @@
+{
+  "initial": {
+    "sha256": "5f0ed04d946d9df17aa7fad2fbdf22dc7d87b43d5d9892bc3a131cff9ff1f68d",
+    "bytes": 16669,
+    "lines": 109,
+    "ids": [
+      "CI-01",
+      "CI-02",
+      "CI-03",
+      "CI-04",
+      "CI-05",
+      "CI-07",
+      "CI-08",
+      "CI-06"
+    ],
+    "human_states": [
+      "未レビュー",
+      "未レビュー",
+      "未レビュー",
+      "未レビュー",
+      "未レビュー",
+      "要確認",
+      "要確認",
+      "未レビュー"
+    ],
+    "fragment_links": 49,
+    "unresolved_fragments": []
+  },
+  "update": {
+    "sha256": "9f6b8f0238448e4eee34a9d9d16a79dd135a48b932915517a33790c59c133564",
+    "bytes": 9221,
+    "lines": 90,
+    "ids": [
+      "C-01",
+      "C-02",
+      "C-03",
+      "C-04"
+    ],
+    "human_states": [
+      "確認済み",
+      "要確認",
+      "未レビュー",
+      "要修正"
+    ],
+    "fragment_links": 29,
+    "unresolved_fragments": []
+  },
+  "purchase": {
+    "sha256": "fd4f0893d7ece46229b90476cf3f7d049689057357defa83e60569a4b6bbf9e2",
+    "bytes": 16411,
+    "lines": 130,
+    "ids": [
+      "JA-EX-01",
+      "JA-EX-02",
+      "JA-EX-Q01",
+      "JA-EX-03",
+      "JA-EX-04",
+      "JA-EX-05"
+    ],
+    "human_states": [
+      "未レビュー",
+      "未レビュー",
+      "要確認",
+      "未レビュー",
+      "未レビュー",
+      "未レビュー"
+    ],
+    "fragment_links": 42,
+    "unresolved_fragments": []
+  },
+  "short": {
+    "sha256": "3fdf9a8143cbb151c0920d9407564c6c29d6811e13bdff6545c296cf5ca58cd0",
+    "bytes": 5959,
+    "lines": 51,
+    "ids": [
+      "C-01",
+      "C-02",
+      "C-03"
+    ],
+    "human_states": [
+      "未レビュー",
+      "要確認",
+      "要確認"
+    ],
+    "fragment_links": 16,
+    "unresolved_fragments": []
+  }
+}

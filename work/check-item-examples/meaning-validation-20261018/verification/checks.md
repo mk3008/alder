@@ -1,0 +1,24 @@
+# 検証の範囲
+
+- 公開実行版：75fb043568ade8b442853421a0bc78ef999b23e1。canonical guidance/Skillはb3113b7、bundleはa8ae2af。4ケースのpacketで実際に読まれたSkill/guidance/provenanceは配布版と同一hash。4 packetの元ファイルは実行後もinput-hashes.jsonと一致した。
+- 購買BDの旧根拠c2852531ad62691c375e87818d8c3a49fd19803f、相談BDの旧根拠d7f84fcca636e88015b15b9da993b200abd62999をGitHub connectorで取得し、packetのBD本文とbyte相当のUTF-8本文一致を確認。表示更新で根拠版を意味なく置換していない。
+- 関連suite：`python3 -m unittest tools/test_workflow_skills.py tools/test_export_plugin_references.py tools/test_plugin_package.py tools/test_plugin_release_workflow.py tools/test_plugin_references.py`、91 tests成功（最終source版75fb043のcleanなtracked code上）。前回90件に配布/規約回帰1件を追加。
+- `quick_validate.py plugins/alder/skills/alder-draft-check-items` 成功。公式exporter --checkで3 Skill/13ファイルの再現成功。AGENTSの既定Freshモデルは全員gpt-6-sol/medium/fork noneで要求し、修復/再読取は同agentへのfollow-up。実効runtime設定の独立attestationなし。
+- 既存の旧「kind/decision/condition/expectationをIDに保持」文字列assertは、採用した参照中心表示に合わせ「kind/decision保持」「condition/expectationへの一意な明示参照」の両assertへ変更した。assert削除ではなく保証保持と到達性の二つへ置換し、独立Skill差分reviewも弱化でないと確認。名称診断の正例/反例を含む既存suiteは維持。
+- 構造点検は保存した最終ファイルのGFM→HTML見出し・内部リンクとID/状態を確認するもので、実装Testを実行した証拠ではない。既存Check↔Testの記述を保持したことと、そのTest本体の真偽は区別。
+
+## 中間失敗を含む履歴
+
+公開source b3113b7はbundle未同期/旧assert、同期直後a8ae2afは旧assertとの不整合が残り、両CIが失敗した。75fb043で採用した参照契約へassertを置換し、Plugin package 39138301344 / release validation 39138301318は成功。release jobは未実行（pull_requestではskipped）。中間失敗を最終成功として扱わない。
+
+ローカルでは存在しない独立モジュール `tools/test_check_activity_names.py` を誤指定した実行、およびrepo外cwdでsuite名を実行した誤操作もあった。これらはImportErrorであり、製品テストの意味的な失敗や成功に算入しない。正しいsuite/cwdで91件を再実行した。生成物の手編集やテストの弱化で成功扱いにはしていない。
+
+## 制約
+
+Viewerの機能/互換性調査・改修、二視点実装、他Issueの実装は行わない。GitHub Markdownの表示と参照で確認し、Viewer互換性を主張しない。比較の所見はホストの画面観察であり、人間の理解時間・誤読率・一般的な再現性は未測定。正解非提示はpacketと指示による制限で、OSレベルの情報遮断のattestationではない。
+
+## 表示修復の引継ぎ上の制約
+
+ホストはGitHub実画面を閲覧したが、CUAの共有保存先から主コンテナへのスクリーンショット同期は確認できなかった。未着ファイルを添付済みとは扱わず、作者へ同じ公開候補の直接閲覧を依頼した。その工程で作者の進捗応答が回収できなかったため、継続呼出しを中断し、同じ作者・同じSkill版のまま、確認済み原典とホストの具体的な観察に基づく表示修復へ限定して再開した。最終実表示はホストが確認する。作者による画面閲覧の有無は各executionの実際の申告を参照し、ホストの観察と混同しない。接続失敗の内部原因や、画像の共有成功は断定しない。
+
+その後も進捗を回収できず、該当する作者2件の表示引継ぎ実行は中断/停止を要求した。既存のcandidate-03は未検証として採用しない。別の履歴なし作者contextに、同じ公開Skill、原典と旧list、独立読取済みcandidate-02、ホストの表示観察だけを渡し、browser/ネットワークを使用しないファイル修復へ限定した。成功するまで同じ接続を再試行する方法は採っていない。出力先をcandidate-03bへ分け、元の実行の遅延書込みと混ぜない。内部停滞の原因は未特定であり、モデルの一般的能力の結論にはしない。停止要求と停止確認は区別する。
