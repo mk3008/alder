@@ -2188,27 +2188,86 @@ class CurrentJapaneseSourceAlignmentTest(unittest.TestCase):
 
 
 class LiteralActivityNameDiagnosticTest(unittest.TestCase):
+    @staticmethod
+    def document(names=('Activity を扱う', '次を扱う'), targets=None):
+        from tools.check_activity_names import INDEX_HEADERS
+        targets = targets or [name.lower().replace(' ', '-') for name in names]
+        header = '| ' + ' | '.join(INDEX_HEADERS[0]) + ' |\n| --- | --- | --- | --- |\n'
+        rows = ''.join(f'| [{name}](#{target}) | x | y | z |\n' for name, target in zip(names, targets))
+        return header + rows + '\n' + ''.join(f'## {name}\n' for name in names)
+
     def test_display_prefix_is_not_normalized_and_source_constants_are_preserved(self):
         from tools.check_activity_names import compare
         design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
-        checks = '| [Activity を扱う](#a) | x | y | z |\n| [次を扱う](#b) | x | y | z |\n## Activity を扱う\n## 次を扱う\n'
+        checks = self.document()
         self.assertEqual(compare(design, checks)['status'], 'match')
         wrong = checks.replace('## 次を扱う', '## Activity 次を扱う')
         result = compare(design, wrong)
         self.assertEqual(result['status'], 'mismatch')
         self.assertIn('headings', result['mismatches'])
-        wrong_index = checks.replace('[次を扱う]', '[略称]')
-        self.assertIn('index', compare(design, wrong_index)['mismatches'])
-        reordered = '| [次を扱う](#b) | x | y | z |\n| [Activity を扱う](#a) | x | y | z |\n## 次を扱う\n## Activity を扱う\n'
+        self.assertIn('index', compare(design, checks.replace('[次を扱う]', '[略称]'))['mismatches'])
+
+    def test_navigation_may_differ_from_source_order_but_matches_sections(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        reordered = self.document(('次を扱う', 'Activity を扱う'))
         self.assertEqual(compare(design, reordered)['status'], 'match')
         wrong_order = reordered.replace('## 次を扱う\n## Activity を扱う', '## Activity を扱う\n## 次を扱う')
-        self.assertEqual(compare(design, wrong_order)['mismatches'], ['index-heading-order'])
+        self.assertIn('index-heading-order', compare(design, wrong_order)['mismatches'])
+
+    def test_main_purchase_example_and_arbitrary_explanatory_headings(self):
+        from tools.check_activity_names import compare
+        design = (ROOT / 'business-design/purchase-request/README.md').read_text()
+        checks = (ROOT / 'docs/examples/purchase-check-review.ja.md').read_text()
+        result = compare(design, checks)
+        self.assertEqual(result['status'], 'match')
+        self.assertEqual(len(result['headings']), 4)
+        # No explanation-heading allow-list: these must remain non-Activity.
+        for heading in ['式の読み方', '任意の説明', 'Other guidance']:
+            with self.subTest(heading=heading):
+                self.assertEqual(compare(design, '## ' + heading + '\n\n説明。\n\n' + checks)['status'], 'match')
+
+    def test_natural_fragments_with_explanations_and_percent_encoding(self):
+        from tools.check_activity_names import compare
+        design = '# Activity 本名\n'
+        checks = self.document(('本名',), ('%E6%9C%AC%E5%90%8D',))
+        checks = '## 任意の前置き\n\n' + checks + '\n## 任意の後書き\n'
+        self.assertEqual(compare(design, checks)['status'], 'match')
+
+    def test_missing_duplicate_and_wrong_names_remain_errors(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        cases = [self.document(('Activity を扱う',)),
+                 self.document(('Activity を扱う', 'Activity を扱う')),
+                 self.document(('Activity を扱う', '別名')),
+                 self.document() + '\n## 次を扱う\n',
+                 self.document().replace('## 次を扱う', '## 誤った本文名')]
+        for checks in cases:
+            with self.subTest(checks=checks):
+                self.assertEqual(compare(design, checks)['status'], 'mismatch')
+
+    def test_broken_reused_wrong_level_and_ambiguous_targets(self):
+        from tools.check_activity_names import compare
+        design = '# Activity Activity を扱う\n# Activity 次を扱う\n'
+        checks = self.document()
+        cases = [checks.replace('](#次を扱う)', '](#存在しない)'),
+                 checks.replace('](#次を扱う)', '](#activity-を扱う)'),
+                 checks.replace('## 次を扱う', '### 次を扱う'),
+                 self.document(targets=('same', 'same')).replace('## ', '<a id="same"></a>\n\n## ')]
+        for value in cases:
+            with self.subTest(checks=value):
+                result = compare(design, value)
+                self.assertEqual(result['status'], 'mismatch')
+                self.assertIn('targets', result['mismatches'])
 
     def test_unsupported_profile_is_not_a_pass_and_fenced_examples_are_ignored(self):
         from tools.check_activity_names import compare
-        self.assertEqual(compare('自然文', '自然文')['status'], 'not-verified')
+        for design, checks in [('', ''), ('# Activity 本名', '自然文'),
+                               ('# Activity 本名', self.document(('本名',)).replace('](#本名)', '](other.md#本名)')),
+                               ('# Activity 本名', self.document(('本名',)) * 2)]:
+            self.assertEqual(compare(design, checks)['status'], 'not-verified')
         design = '```md\n# Activity 偽\n```\n# Activity 本名\n'
-        checks = '| [本名](#x) | x | y | z |\n## 本名\n~~~\n## 偽\n~~~\n'
+        checks = self.document(('本名',)) + '~~~\n## 偽\n~~~\n'
         self.assertEqual(compare(design, checks)['status'], 'match')
 
     def test_installed_diagnostic_runs_without_repository(self):
@@ -2220,7 +2279,8 @@ class LiteralActivityNameDiagnosticTest(unittest.TestCase):
             script = base / 'check_activity_names.py'
             shutil.copyfile(ROOT / 'plugins/alder/skills/alder-draft-check-items/scripts/check_activity_names.py', script)
             (base / 'design.md').write_text('# Activity 本名\n')
-            (base / 'checks.md').write_text('| [本名](#x) | x | y | z |\n## Activity 本名\n')
+            checks = self.document(('本名',)).replace('## 本名', '## Activity 本名')
+            (base / 'checks.md').write_text(checks)
             result = subprocess.run(['python3', str(script), '--design', str(base / 'design.md'), '--checks', str(base / 'checks.md')], capture_output=True, text=True)
             self.assertEqual(result.returncode, 1)
             self.assertIn('Activity 本名', result.stdout)
