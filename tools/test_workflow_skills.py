@@ -18,6 +18,31 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_comparison_summary_contract_reaches_check_skill_and_review(self):
+        # Distribution/routing only. Generation and rendered usability need
+        # their own observed evidence; these assertions do not measure them.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        presentation = guide.split('### Conditions, expressions and examples\n', 1)[1].split('Recommended review states:', 1)[0]
+        for term in ['above the individual Checks',
+                     'condition-satisfied and condition-unsatisfied cases',
+                     'Link each row to its applicable Check ID(s)',
+                     'not duplicate primary fields or a new approval unit',
+                     'link back to the summary',
+                     'retain short scenarios where tabulation adds no value',
+                     'independent comparison axes their own columns',
+                     'common values and the common business action',
+                     'An unmet condition is not itself a decided rejection',
+                     'text assertions alone do not establish readability']:
+            with self.subTest(term=term):
+                self.assertIn(term, presentation)
+        review = guide.split('### Before returning a draft or update', 1)[-1]
+        self.assertIn('every row-to-Check link', review)
+        self.assertIn('known judgments and undecided outcomes remain distinct', review)
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('summary above their individual Checks', skill)
+        self.assertIn('Keep short scenarios where a table adds no value', skill)
+        self.assertIn('during the return-time review', skill)
+
     def test_shared_expression_example_guidance_is_bundled_and_routed(self):
         # Distribution contract only; actual generation is evaluated separately.
         guide = (ROOT / 'docs/check-item-traceability.md').read_text()
