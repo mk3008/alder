@@ -17,3 +17,16 @@
 - `check_activity_names.py --design .../README.md --checks .../candidate-01.md`：終了0、`status: match`、宣言名・H2・indexとも「相談を受付する」「次の連絡方法を説明する」。付属診断の対象外である保証・参照・状態は作者点検で照合した。
 - 内部fragmentの計算上の未解決リンクは0、原典相対リンクのローカルファイル存在を確認。GitHub上のレンダリング、表の折返し、外部URL、Test実行結果、人間の読解・承認は確認していない。完成見本、他packet、実装、テスト本文、ネットワークは参照していない。
 - 独立Consistency reviewはホスト待ち。作者点検の表示NGは次の修復段階に保留し、この段階では書き換えない。公開先への書込みや人間レビュー状態の承認代行は行っていない。
+
+## 修復依頼と実行 02
+
+### 受領した修復依頼全文
+
+> 独立reader-report-01.mdが同出力ディレクトリに保存されました。原典に照らして採否を判断し、作者点検の所見も含め支持できる欠陥を修復してください。統括の実表示点検も追加します：公開raw b06b2ee6641d4f0d07c14e43cf3044cc49848552 の候補をGitHubで表示し、幅983pxに10列が収まりましたが、申請日/希望日が途中で改行、停止中と判定の短い語まで複数行となり、共通日付や同じ未決の長文を繰返しています。原画像は /workspace/scratch/0261bb5be107/private-library-review/matrix-before.png です。必ずこの画像をview_imageで閲覧してから、Skill指針に沿って共通値/行為の外出しや列の整理・意味単位の分割を検討し、比較表の可読性を修復してください。完成見本は渡しません。統括はGitHubの原典リンクも確認：候補冒頭のローカルpacket相対リンクは公開配置 work/check-item-examples/comparison-summary-20261018/update/ からは存在しないため、公表時にも同じBDへ辿れる参照を保持してください（公開BDの内容は同じbundleのfixtures/README.md）。過去原文は上書きせずcandidate-02.mdとdisposition-01.mdを保存し、実行記録へこの依頼全文と画像閲覧の事実、根拠/採否と変更を追記。修復後の診断と内部参照を確認してください。独立再レビューはホストが実際に起動します。当初の上限は修復/再読取2巡、それでも残れば限界を返します。状態や一般保証・旧補足・Test証拠・未決を保持し、人間承認を代行しないでください。
+
+### 入力、変更、検証
+
+- 追加で読んだもの：`matrix-runs/update/reader-report-01.md`（独立読取レビュー）、指定の`private-library-review/matrix-before.png`。画像は`view_image`で原寸表示して閲覧した。幅983pxのGitHub Preview上で10列が折り返し、申請日・希望日のハイフン後、停止中の「いいえ」、判定の「不成立」、繰返しの未決説明が行高を増やすことを確認した。原典・旧Checkは初回に読んだ同じ版に照合した。
+- `candidate-01.md`を保持して`candidate-02.md`を作成。式の差の方向、条件・操作の分離、8列の比較表と共通値・操作の外出し、公開配置でも辿れる原典リンクを修復。個別判断は`disposition-01.md`。
+- 付属`check_activity_names.py`：終了0、`match`、二つの宣言名・H2・索引一致、mismatchesとtarget_issues空。内部fragmentの見出しslug照合は未解決0。C-01～C-04の見出しと人間状態を保存版で照合。
+- `candidate-02.md` SHA-256 `89afe83812a7b0d7cc9c8a47d2e876d2263df0df8e97d7977dcf773eee508222`。公開URLの実到達性、改稿のGitHub実表示と人間可読性、Test実体・実行結果、人間承認は未検証。独立再レビューはホストが実施する。実効モデル設定の独立attestationなし。
