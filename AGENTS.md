@@ -50,6 +50,10 @@ In Getting Started / Quick Start, do not jump directly from the heading to a com
 
 Briefly tell the reader what they are about to try, what sample/input to use, what action to take, what result to expect, and where that experience leads next. This is not extra exposition; it is the minimum context needed to keep the first action from feeling abrupt.
 
+## User-facing release notes
+
+When drafting or reviewing Alder plugin release notes, follow the [release note review gate](docs/versioning.md#release-note-review-gate). Compare the last published plugin tag with the approved candidate and describe **only plugin-user-visible added, changed, fixed, removed or migration-relevant behavior**, omitting empty sections and internal fixtures, CI/evaluation narratives or unrelated Viewer work. Do not infer user impact or a SemVer bump solely from commit labels. Preview the GitHub Release name and rendered body separately so its H1 is not repeated.
+
 ## Publishing research decisions
 
 For adopted research that affects user behavior, apply [the evidence, user-facing explanation, and navigation policy](docs/research-publication.md) alongside [Research Decision Index maintenance](docs/evaluation-plan.md#research-decision-index-maintenance). Agent evidence must follow its public-revision and sensitive-output rules. Historical runs are not retroactively recategorized without checking their evidence.

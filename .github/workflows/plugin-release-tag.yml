@@ -98,7 +98,8 @@ jobs:
             const body = fs.readFileSync(`docs/release-notes-v${version}.md`, 'utf8');
             const title = body.split(/\r?\n/, 1)[0];
             if (title !== `# Alder ${version}` && !title.startsWith(`# Alder ${version} — `)) throw new Error('Invalid release notes.');
-            if (!body.slice(title.length).trim()) throw new Error('Empty release notes.');
+            const releaseBody = body.slice(title.length).trim();
+            if (!releaseBody || releaseBody.startsWith('#')) throw new Error('Release notes must start with a prose summary, not another heading.');
             const tag = `plugin-v${version}`;
             const getOptional = async (request) => {
               try { return (await request()).data; }
@@ -125,7 +126,7 @@ jobs:
             // One API action creates a missing tag and release at this checked revision.
             const { data } = await github.rest.repos.createRelease({
               ...repo, tag_name: tag, target_commitish: context.sha,
-              name: title.slice(2), body, draft: false, prerelease: false,
+              name: `Alder ${version}`, body: releaseBody, draft: false, prerelease: false,
               make_latest: 'true',
             });
             core.info(data.html_url);

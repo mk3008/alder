@@ -19,8 +19,11 @@ def validate(root, version, revision, requested_version, requested_revision):
     lines = body.splitlines()
     if not lines or not re.fullmatch(r'# Alder ' + re.escape(version) + r'(?: — .+)?', lines[0]):
         raise ValueError('Release notes must identify the exact Alder product version')
-    if not '\n'.join(lines[1:]).strip():
+    description = '\n'.join(lines[1:]).strip()
+    if not description:
         raise ValueError('Release notes need substantive content')
+    if description.startswith('#'):
+        raise ValueError('Release notes must start with a plain-language summary paragraph')
     market = json.loads((root / '.agents/plugins/marketplace.json').read_text())
     entry, = market['plugins']
     if Path(entry['source']['path']) != Path('plugins/alder'):
