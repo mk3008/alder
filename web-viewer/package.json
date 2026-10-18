@@ -11,7 +11,8 @@
     "test:browser": "node web/test-browser.mjs",
     "test:browser-runner": "node web/test-browser-selection.mjs",
     "test:dom": "node --experimental-strip-types web/test-dom.mjs",
-    "test:activities": "node --experimental-strip-types web/test-activities.mjs && node --experimental-strip-types web/test-activity-workspace-dom.mjs"
+    "test:activities": "node --experimental-strip-types web/test-activities.mjs && node --experimental-strip-types web/test-activity-workspace-dom.mjs",
+    "test:layout": "node --experimental-strip-types web/test-shared-layout.mjs && node --experimental-strip-types web/test-matrix-layout.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

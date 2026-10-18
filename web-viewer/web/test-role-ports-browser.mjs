@@ -1,3 +1,4 @@
+import {verifyDashPaint} from './test-dash-paint-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -64,6 +65,14 @@ export async function verifyRolePorts(browser){
     await page.locator('#node-list-toggle').click();if(id==='依頼者')await page.locator('#node-category-object').click();else await page.locator('#node-category-activity').click();await page.locator(`[data-list-node="${id}"] .node-navigate`).click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
     await page.screenshot({path:`web/evidence/wiring/real-${id==='依頼者'?'requester':'caption-bend'}-${width}.png`});
    }
+   await page.locator('.node[data-node="業務設計"] .activity-open').press('Enter');
+   for(const theme of ['light','dark']){
+    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+    results.push({width,theme,dashPaint:await verifyDashPaint(page)});
+   }
+   if(width===320)for(let i=0;i<3;i++)await page.locator('#out').click();
+   await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});
+   await page.screenshot({path:`web/evidence/wiring/real-dash-detail-${width}.png`});
    results.push({requester,width,captionBends:true,captionAtOwnBend:true,cardSideCrossings:0});
    results.push({width,roles:3,ports:[17,34,51],overview:true,detail:true,filterStable:true});
   }finally{await context.close();}

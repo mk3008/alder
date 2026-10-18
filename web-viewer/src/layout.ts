@@ -4,7 +4,6 @@ import type {Graph} from './graph';
 import type {Point} from './session';
 const STEP_X=64, STEP_Y=96, CARD_WIDTH=260, MARGIN=40, ORDER_PASSES=4;
 export type LayoutPlan={positions:Record<string,Point>;forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
-const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
 
 /**
  * Initial layout only: directed layers extend right without wrapping or fitting
@@ -71,23 +70,10 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[],stairSou
   }
   return {positions,forwardRelations,feedbackRelations,exceptionRelations};
 }
-/** One-hop Activity views put upstream peers on successive staircase steps.
- * This is an initial/reset plan, never a migration of retained coordinates.
- * Stable source order comes from the same dependency/cycle plan as overview.
+/** Alder overview and one-hop detail use the same matrix planner.
+ * The generic DAG fallback remains for non-Alder/imported graphs only.
+ * Retained/manual coordinates are never migrated by this initial/reset plan.
  */
 export function initialPositions(graph:Graph,activityOrder?:readonly string[],activity?:string):Record<string,Point>{
-  if(activity===undefined&&isMatrixGraph(graph))return matrixPlan(graph,activityOrder).positions;
-  const plan=layoutPlan(graph,activityOrder,activity===undefined);
-  if(activity===undefined||!graph.nodes.some(n=>n.id===activity&&n.type==='business'))return plan.positions;
-  const downstream=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
-  const ordered=Object.keys(plan.positions).sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]||compare(a,b));
-  const exceptions=new Set(graph.nodes.filter(n=>n.type==='business'&&n.id!==activity).map(n=>n.id));
-  const upstream=ordered.filter(id=>id!==activity&&!downstream.has(id)&&!exceptions.has(id)),after=ordered.filter(id=>downstream.has(id)),exceptionPeers=ordered.filter(id=>exceptions.has(id));
-  const positions:Record<string,Point>=Object.create(null);
-  const detailStepX=STEP_X;
-  upstream.forEach((id,i)=>positions[id]=[MARGIN+i*detailStepX,MARGIN+i*STEP_Y]);
-  const step=upstream.length;positions[activity]=[MARGIN+step*detailStepX,MARGIN+step*STEP_Y];
-  after.forEach((id,i)=>positions[id]=[MARGIN+(step+1)*detailStepX,MARGIN+(step+i+1)*STEP_Y]);
-  exceptionPeers.forEach((id,i)=>positions[id]=[MARGIN+(step+2+i)*detailStepX,MARGIN+(step+after.length+1+i)*STEP_Y]);
-  return positions;
+  return isMatrixGraph(graph)?matrixPlan(graph,activityOrder,activity).positions:layoutPlan(graph,activityOrder).positions;
 }

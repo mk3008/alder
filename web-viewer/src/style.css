@@ -267,3 +267,8 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 #url-history small{font-size:11px;line-height:1.4;opacity:.8;overflow-wrap:anywhere}
 
 @media(max-width:480px){#source-update-notice{flex-wrap:wrap}#source-update-notice>span{flex-basis:100%}#source-update-notice button{min-height:44px}}
+
+/* Exception paint uses coordinate-phased runs, with original edge metadata. */
+.edge-paint{fill:none;stroke:var(--line);stroke-width:1.5}
+.edge-paint.review-related{stroke:var(--review-link);stroke-width:3.2}
+.edge-paint.muted{opacity:1}

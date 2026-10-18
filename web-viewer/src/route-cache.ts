@@ -44,14 +44,14 @@ export class RouteCache {
         from: r.from, to: r.to, index, nodes, kind: r.kind, matrix:matrix?.[index],
         // Reserve Output captions above their receiving cards before earlier
         // exceptions/Inputs choose a label. Reservations never affect paths.
-        labels: matrix?.[index]&&!matrix[index].detail?[]:[...(r.kind==='output'?[]:relations.flatMap((other,i)=>{
+        labels: matrix?.[index]?[]:[...(r.kind==='output'?[]:relations.flatMap((other,i)=>{
           const target=nodes.find(n=>n.id===other.to),source=nodes.find(n=>n.id===other.from);
           return other.kind==='output'&&target&&source?[{id:`output-${i}`,x:source.x+source.width*.125+8,y:target.y-23,width:Math.max(30,other.label.length*12),height:18}]:[];
         })),...routes.flatMap((route,i)=>route&&i<index?[{
           id:String(i),x:route.label[0]-Math.max(30,relations[i].label.length*12)/2,
           y:route.label[1]-9,width:Math.max(30,relations[i].label.length*12),height:18
         }]:[])],
-        wires: matrix?.[index]&&!matrix[index].detail?[]:routes.flatMap((route,i)=>route&&i<index?[route.points]:[]),
+        wires: matrix?.[index]?[]:routes.flatMap((route,i)=>route&&i<index?[route.points]:[]),
         labelWidth: Math.max(30, r.label.length * 12), labelHeight: 18
       }) : undefined;
     });
