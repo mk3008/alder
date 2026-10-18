@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "517e6dda0cb9043b63aba8bdd116190c201b1d37",
+  "alder_source_revision": "0a050bc442788cee8310256bee20f1e776614f63",
   "sources": {
     "docs/adoption.md": "2992bd2dc95f215d0869c8eac7c2fac13d8696d97264f5a483ce34645ccba0d3",
     "docs/check-item-traceability.md": "413d5db2d02ac3390427c2f58370d2ae532f827489fff89180037fa5fa484721",
@@ -7,6 +7,6 @@
     "docs/functional-interface/prompt.md": "1eeec4ee73aacdde1e43f4b43e08875de85647a53fc3cf07c6a669173195364e"
   },
   "scripts": {
-    "tools/check_activity_names.py": "16dad86fda98c4cabeab2c19b7874643a2d66a1c2242a36623cc6ca5e0378ec4"
+    "tools/check_activity_names.py": "8bf2213bae05c0a4a4059b294229a67399460f36cfbb5ae23b4fd9a81b432cdf"
   }
 }
