@@ -22,7 +22,7 @@ async function serve(root,port){
 }
 try{
  try{execFileSync('git',['cat-file','-e',base],{stdio:'pipe'});}catch{execFileSync('git',['fetch','--depth=1','origin',base],{stdio:'pipe'});}
- const archive=execFileSync('git',['archive',base,'web-viewer','business-design/alder','LICENSE'],{maxBuffer:100*1024*1024});
+ const archive=execFileSync('git',['archive',base,'web-viewer','business-design/alder','LICENSE'],{cwd:resolve('..'),maxBuffer:100*1024*1024});
  execFileSync('tar',['-x','-C',scratch],{input:archive});
  symlinkSync(resolve('node_modules'),join(scratch,'web-viewer/node_modules'),'dir');
  execFileSync('npm',['run','build'],{cwd:join(scratch,'web-viewer'),stdio:'pipe'});
