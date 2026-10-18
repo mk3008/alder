@@ -67,20 +67,19 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
  const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>();
  const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
-  const back=returning.has(i),key=(back?'return:':r.kind+':')+(r.kind==='output'&&!back?r.to:r.from),captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
+  const back=returning.has(i),key=(back?'return:':'departure:')+r.from,captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
  });
- const below=new Map<string,number>(),above=new Map<string,number>(),lastTarget=new Map<string,number>();
+ const lastTarget=new Map<string,number>();
  for(const {relation:r,index:i}of unique.values())if(!wires[i].returning){
   lastTarget.set(r.from,Math.max(lastTarget.get(r.from)??-1,rowIndex.get(r.to)!));
-  if(r.kind==='input')below.set(r.from,(below.get(r.from)??0)+1);
-  if(r.kind==='output')above.set(r.to,(above.get(r.to)??0)+1);
  }
  const cells:Record<string,Point>=Object.create(null),positions:Record<string,Point>=Object.create(null);
  const corridors=new Heap<{column:number;until:number}>((a,b)=>a.column>b.column);
  let previousActivityColumn=-1,row=0;
  for(const [i,n]of nodes.entries()){
-  const previous=nodes[i-1];if(previous)row+=Math.max(1,Math.ceil((68+4+22*((below.get(previous.id)??0)+(above.get(n.id)??0)))/96));
+  // Captions share the departure row and escape horizontally, never add blank rows.
+  if(i)row++;
   let column=n.type==='business'?previousActivityColumn+1:owner.has(n.id)?cells[owner.get(n.id)!][0]+1:0;
   if(focused)column=detailColumns.get(n.id)!;
   while(corridors.peek()&&corridors.peek().until<i)corridors.pop();

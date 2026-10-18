@@ -52,7 +52,7 @@ export async function verifyRolePorts(browser){
     const card=document.querySelector('.node[data-node="検査項目の設計"]');return {card:{right:parseFloat(card.style.left)+260,top:parseFloat(card.style.top)},all:wires,focus:wires.filter(r=>r.title.startsWith('検査項目の設計 → ')&&r.points[1][0]>r.a[0]&&r.points[1][1]===r.a[1])};
    });
    assert.equal(captions.focus.length,2);
-   for(const r of captions.focus){assert.ok(Math.abs(r.label[1]-r.a[1])<.001,'caption at actual bend row');assert.ok(Math.abs(r.box.x-(Math.max(...r.points.map(p=>p[0]))+8))<.1,'native caption immediately follows its bend');}
+   for(const r of captions.focus){assert.ok(Math.abs(r.label[1]-r.a[1])<.001,'caption at actual bend row');assert.ok(r.box.x>=Math.max(...r.points.map(p=>p[0]))+8-.1,'native caption follows its bend or escapes a collision horizontally');}
 
    for(const r of captions.focus)assert.ok(Math.abs(r.a[1]-captions.card.top-(r.exception?17:34))<.001,'upper-facing process/data exits use upper/middle ports');
    const arrival=captions.all.filter(r=>r.title.includes(' → 検査項目の設計:')&&Math.abs(r.points.at(-1)[0]-captions.card.right)<.01);assert.equal(arrival.length,1);assert.ok(Math.abs(arrival[0].points.at(-1)[1]-captions.card.top-51)<.001,'lower data peer arrives at lower port');

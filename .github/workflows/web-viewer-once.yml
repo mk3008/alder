@@ -45,6 +45,11 @@ jobs:
           done
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs
 
+      - name: Capture purchase caption comparison
+        env:
+          REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/capture-source-captions.mjs
+
       - name: Preserve header review screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -73,7 +78,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wiring-review-${{ github.event.pull_request.head.sha }}
-          path: web-viewer/web/evidence/wiring/real-*.png
+          path: |
+            web-viewer/web/evidence/wiring/real-*.png
+            web-viewer/web/evidence/wiring/source-captions-255.json
           if-no-files-found: ignore
           retention-days: 14
       - name: Package isolated review Preview
