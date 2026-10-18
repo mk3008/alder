@@ -1,4 +1,4 @@
-# Alder 0.4.8 — 業務設計とCheck Itemの改善
+# Alder 0.4.8 — 業務設計レビューとCheck Itemの改善
 
 0.4.6からの主な変更点です。
 
