@@ -1,0 +1,21 @@
+{
+  "source": "0f04e0c5ed59da01cdd99bdd1d4b64e5045a3577",
+  "sourceTree": "52ec6ad4f130bdd86e401b45200999f95f1741b5",
+  "path": "preview/pr-247/0f04e0c5ed59da01cdd99bdd1d4b64e5045a3577",
+  "files": {
+    "index.html": "db6da377a676460164ebb33d23625900e36b26bc43490a0ebfc49c406a209a2f",
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "three-roles.md": "0a260388c808bfb328846aad6de9df1f6e617da76d41cc027db8236fd040e96d",
+    "standard-review.md": "64701618618bd565fb540647cf15c06e20d3f3f6fc45dc8b64244c01e3910aa5",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/index-BfyxHqZa.js": "4810297cacc85539c40106e17be5d1049e057022f36d9bde311b69edb7e55f4e",
+    "assets/index-M4UsAIcu.css": "4d2586d7cc170b7540245b425bb114be4e84e01d4f106960beb6cc8dc796cba9",
+    "review/real-requester-1280.png": "36b7d8daebc6b23558180b88a5fc36efd3f9e23e179261ab2a5e0591e380d706",
+    "review/index.html": "af8484d87f5185975012bc8e70757954f07a4c560c7b9ba51924f7b5f7882210",
+    "review/real-caption-bend-1280.png": "98fbd9fc13d2fb2491e307ecdad640b52ca5d85600712aff273d6ddd6aa80906",
+    "review/real-caption-bend-320.png": "aaa1f4f3d4da8cb672311cbc90ce1073666e20569eedb88cd398ddadf998e6e1",
+    "review/real-three-roles-320-detail.png": "bb9736d9800b933381f4f833aa55c8d23fa3b2c1ade9dd061cea0aa1757cd8cc",
+    "review/real-business-393-dark.png": "713dbe79aa83ba384454047231b90c144a955c768019034396ef0e58b5d1c5f1",
+    "review/real-requester-320.png": "ff019823e182b1cfcbfc680bf60ef7b396681989ea883860df119c11d6bb87d9"
+  }
+}
