@@ -1,0 +1,26 @@
+{
+  "source": "52fec258920ce4728ddd6c6d127b099ca4335ff6",
+  "tree": "a70d72c931bec1c1413bbb99d1ef8d35b1f93074",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "ed36f69a606b8437bbed0367243cba8d79c18550fbd2ff0147a59d16827d5bc5"
+    },
+    {
+      "path": "LICENSE.txt",
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815"
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES.txt",
+      "sha256": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40"
+    },
+    {
+      "path": "assets/index-DgfJWiQJ.js",
+      "sha256": "28d7fc0221d6c4f95033f63ac0b6cc723fcdfb03777feac829a903d0b20fbe18"
+    },
+    {
+      "path": "assets/index-B7G9n9Bt.css",
+      "sha256": "216c010587508ea21c9605027f239413b5f8520a18d829ffab030f94bc5bff1d"
+    }
+  ]
+}
