@@ -26,6 +26,7 @@ class PluginReleaseTest(unittest.TestCase):
         self.assertIn('tools.test_export_plugin_references tools.test_plugin_references', validate)
         self.assertEqual(source.count('persist-credentials: false'), 2)
         self.assertIn('group: alder-product-release', release)
+        self.assertIn('name: `Alder ${version}`, body: releaseBody', release)
         self.assertIn('cancel-in-progress: false', release)
         self.assertNotIn('  push:', source)
         self.assertFalse((ROOT / '.github/workflows/release.yml').exists())
@@ -51,6 +52,8 @@ class PluginReleaseTest(unittest.TestCase):
             ('00.4.4', '# Alder 00.4.4', '00.4.4', sha, False),
             ('not-a-version', None, 'not-a-version', sha, False),
             ('0.4.4', None, '0.4.4', sha, False),
+            ('0.4.4', '# Alder 0.4.4\n\n## Changed\nDetails', '0.4.4', sha, False),
+            ('0.4.4', '# Alder 0.4.4\n\n# Alder 0.4.4\nDuplicate', '0.4.4', sha, False),
         ]
         for version, title, approved, revision, succeeds in cases:
             with self.subTest(version=version, title=title, approved=approved, revision=revision), tempfile.TemporaryDirectory() as tmp:
@@ -127,7 +130,7 @@ async function scenario(opts={}) {
 }
 (async()=>{
  let r=await scenario();assert.equal(r.error,null);assert.equal(r.calls.length,1);
- assert.deepEqual(r.calls[0],{owner:'o',repo:'r',target_commitish:r.sha,tag_name:'plugin-v0.4.4',name:'Alder 0.4.4 — Test',body:'# Alder 0.4.4 — Test\nSafe notes.',draft:false,prerelease:false,make_latest:'true'});
+ assert.deepEqual(r.calls[0],{owner:'o',repo:'r',target_commitish:r.sha,tag_name:'plugin-v0.4.4',name:'Alder 0.4.4',body:'Safe notes.',draft:false,prerelease:false,make_latest:'true'});
  r=await scenario({context:{eventName:'push'}});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({released:true,ref:{type:'commit',sha:'a'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,0);
  r=await scenario({released:true,ref:{type:'tag',sha:'c'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,0);
@@ -143,6 +146,8 @@ async function scenario(opts={}) {
    {notes:'# Alder 0.4.40'},
    {notes:'# Alder 0.4.3'},
    {notes:'# Alder 0.4.4'},
+   {notes:'# Alder 0.4.4\n\n## Changed\nDetails'},
+   {notes:'# Alder 0.4.4\n\n# Alder 0.4.4\nDuplicate'},
    {inputs:{version:'0.4.3'}},
    {inputs:{revision:'b'.repeat(40)}},
    {inputs:{revision:'main'}},
