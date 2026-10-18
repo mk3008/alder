@@ -44,11 +44,11 @@ function geometry(e,inset=40,zoom=1){
  // separate frozen-128 restore/reset regression in layout and native wiring.
  assert.equal(hash(positions(e)),'e3290e87fca6d9fa00072fc32778971b602523445b19fa397d64bf7dd93f4424','all new overview coordinates use the shared 64-unit layout');
  // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'87a89cc802887c0fa1474c94ed545612f23ad97afb5e396cf00778cb09a4114e','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
+ assert.equal(hash(routes(e)),'77577375e69bab37a38a8df5f5faf3f220ba9b0454e2485a7c0f6f97aacff763','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2096 3428');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2096+inset*2)*zoom+'px',3428*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2118 3428');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2118+inset*2)*zoom+'px',3428*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

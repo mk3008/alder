@@ -110,3 +110,21 @@ for(let mask=1;mask<8;mask++){
  if((mask&3)===3){const data=first[g.relations.findIndex(r=>r.kind==='input')],process=first[g.relations.findIndex(r=>r.kind==='business-exception'&&r.to==='Focus')];assert.notEqual(Math.max(...data.points.map(p=>p[0])),Math.max(...process.points.map(p=>p[0])),'data and process arrivals do not share their vertical run');}
 }
 console.log('Activity ports: all 7 role subsets; duplicate data wires share role; relation-order independent; resize/drag/reload; separate return runs');
+
+// Reviewer regression: the shared Requester Object has TWO right-edge roles,
+// even though every wire carries data: returning Output arrival and Input exit.
+const requesterPlan=matrixPlan(design.graph,design.activityOrder),requesterPos=requesterPlan.positions['依頼者'];
+const requesterBoxes=design.graph.nodes.map(n=>({id:n.id,x:requesterPlan.positions[n.id][0],y:requesterPlan.positions[n.id][1],width:260,height:68}));
+const requesterRoutes=new RouteCache().update({},design,requesterBoxes,design.graph.relations,requesterPlan.wires);
+let arrivals=0,departures=0;
+for(const [i,r]of design.graph.relations.entries()){
+ const wire=requesterPlan.wires[i],route=requesterRoutes[i];if(!wire.returning)continue;
+ if(r.to==='依頼者'){arrivals++;assert.equal(wire.toPort,1/3);assert.deepEqual(route.points.at(-1),[requesterPos[0]+260,requesterPos[1]+68/3]);}
+ if(r.from==='依頼者'){departures++;assert.equal(wire.fromPort,2/3);assert.deepEqual(route.points[0],[requesterPos[0]+260,requesterPos[1]+68*2/3]);}
+ const left=route.label[0]-Math.max(30,r.label.length*12)/2,y=route.label[1];
+ assert.equal(y,route.points[0][1],'caption shares departure bend height');
+ assert.ok(left>route.points[0][0],'caption follows the right-hand bend');
+ assert.equal(left,Math.max(...route.points.map(p=>p[0]))+8,'caption starts immediately after its return bend');
+}
+assert.equal(arrivals,4);assert.equal(departures,1);
+console.log('Requester Object: four return arrivals share 1/3, return exit uses 2/3; captions immediately follow their return bend');

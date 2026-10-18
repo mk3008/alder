@@ -54,22 +54,20 @@ export function matrixPlan(graph:Graph,hint?:readonly string[]):MatrixPlan{
   const back=returning.has(i),key=(back?'return:':r.kind+':')+(r.kind==='output'&&!back?r.to:r.from),captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
  });
- // Allocate roles before any display filter or coordinate-based routing.
- // Activity right edge: data return arrival, exception arrival, exception exit.
- const activities=new Set(graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
+ // Count every actual right-edge role, for both Activity and Object cards.
+ // Existing Activity order stays data-in / process-in / process-out, followed
+ // by data-out (feedback Outputs can also leave an Activity on the right).
  const roles=new Map<string,Set<number>>();
- const addRole=(id:string,role:number)=>{if(activities.has(id)){const set=roles.get(id)??new Set<number>();set.add(role);roles.set(id,set);}};
+ const endpointRoles=graph.relations.map((r,i)=>!wires[i].returning?undefined:r.kind.endsWith('exception')?{from:2,to:1}:{from:3,to:0});
+ const addRole=(id:string,role:number)=>{const set=roles.get(id)??new Set<number>();set.add(role);roles.set(id,set);};
+ graph.relations.forEach((r,i)=>{const role=endpointRoles[i];if(role){addRole(r.from,role.from);addRole(r.to,role.to);}});
+ const orderedRoles=new Map([...roles].map(([id,set])=>[id,[...set].sort()]));
+ const fraction=(id:string,role:number)=>{const ordered=orderedRoles.get(id)!;return (ordered.indexOf(role)+1)/(ordered.length+1);};
  graph.relations.forEach((r,i)=>{
-  if(r.kind==='business-exception'){addRole(r.to,1);addRole(r.from,2);}
-  else if(r.kind==='input'&&wires[i].returning)addRole(r.to,0);
- });
- const fraction=(id:string,role:number)=>{const ordered=[...(roles.get(id)??[])].sort();return ordered.includes(role)?(ordered.indexOf(role)+1)/(ordered.length+1):undefined;};
- graph.relations.forEach((r,i)=>{
-  const wire=wires[i];
-  if(r.kind==='business-exception'){wire.fromPort=fraction(r.from,2);wire.toPort=fraction(r.to,1);}
-  else if(r.kind==='input'&&wire.returning)wire.toPort=fraction(r.to,0);
+  const role=endpointRoles[i];if(!role)return;
+  const wire=wires[i];wire.fromPort=fraction(r.from,role.from);wire.toPort=fraction(r.to,role.to);
   // Different arrival roles use separate vertical runs as well as ports.
-  if(wire.toPort!==undefined&&roles.get(r.to)!.size>1)wire.returnLane=r.kind==='business-exception'?1:0;
+  if(roles.get(r.to)!.size>1)wire.returnLane=role.to===1?1:0;
  });
  const below=new Map<string,number>(),above=new Map<string,number>(),lastTarget=new Map<string,number>();
  for(const {relation:r,index:i}of unique.values())if(!wires[i].returning){
