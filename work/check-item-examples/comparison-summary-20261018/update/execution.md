@@ -30,3 +30,16 @@
 - `candidate-01.md`を保持して`candidate-02.md`を作成。式の差の方向、条件・操作の分離、8列の比較表と共通値・操作の外出し、公開配置でも辿れる原典リンクを修復。個別判断は`disposition-01.md`。
 - 付属`check_activity_names.py`：終了0、`match`、二つの宣言名・H2・索引一致、mismatchesとtarget_issues空。内部fragmentの見出しslug照合は未解決0。C-01～C-04の見出しと人間状態を保存版で照合。
 - `candidate-02.md` SHA-256 `89afe83812a7b0d7cc9c8a47d2e876d2263df0df8e97d7977dcf773eee508222`。公開URLの実到達性、改稿のGitHub実表示と人間可読性、Test実体・実行結果、人間承認は未検証。独立再レビューはホストが実施する。実効モデル設定の独立attestationなし。
+
+## 2巡目の修復依頼と実行 03
+
+### 受領した依頼全文
+
+> reader-report-02.mdは意味・参照の対象範囲に確定NGなしでした。統括の実表示再点検は /workspace/scratch/0261bb5be107/private-library-review/matrix-after02.png です。画像を実際に閲覧してください。改稿は8列で日付は途中改行が減りましたが、まだ「いいえ」や「相談A」が二段に折れています。依頼目的は統合表だけで説明できることなので、既存guidanceの共通値/行為外出しと1セル1軸を保ちつつ、列見出しや結果列の繰返し語、Checkリンクの配置等を整理し、実表示上の比較をもう一度改善してください。意味が変わる省略、未決/登録状態の隠蔽、成立と不成立の別表への再分断は避けてください。支持できる変更のみcandidate-03.mdとdisposition-02.mdへ保存し、executionへ依頼全文/画像閲覧/変更根拠を追記。今回が予定上限内の2巡目の修復です。独立再読取はホストが行います。完成見本は渡しません。公開リンク、4ID/人間状態/補足/Test証拠/一般保証/未決を保持し、rootの手編集による成功扱いはしません。
+
+### 閲覧と診断
+
+- 追加で読んだもの：`matrix-runs/update/reader-report-02.md`、指定の`private-library-review/matrix-after02.png`。後者を`view_image`で原寸表示して閲覧し、8列表で相談A・「いいえ」が二段になる状態を確認した。
+- `candidate-02.md`を保持し、`candidate-03.md`へ7列の統合表を作成。登録・停止の値と日付の年を表の直前に定義し、各行の結果セルに直接Checkリンクを移した。意味と保持事項は`disposition-02.md`。
+- 付属Activity名診断は終了0、`match`、二つの宣言名・H2・索引の一致、mismatches/target_issues空。見出しslug照合で内部fragment未解決0。比較表の見出し・区切り・A～H行はいずれも7セル。保存版のIDと状態はC-01確認済み、C-02要確認、C-03未レビュー、C-04要修正。
+- `candidate-03.md` SHA-256 `5381e599a4a3e184aaf669670017e9976e46683a6597307baf894ea103c788df`。改稿のGitHub実表示・実URL到達・Test実体と結果・人間承認は未検証。独立再読取はホスト待ち。実効モデル設定の独立attestationはない。
