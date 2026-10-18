@@ -1,4 +1,5 @@
-import {matrixPlan,isMatrixGraph,type MatrixPlan,type MatrixWire} from './matrix-layout.ts';
+import {initialPositions} from './layout.ts';
+import {matrixPlan,isMatrixGraph,directionalReturnWires,type MatrixPlan,type MatrixWire} from './matrix-layout.ts';
 import {createWorkspace,documentForView,mergeLiveWorkspace,snapshotWorkspace,restoreWorkspace,replaceWorkspace,updateWorkspace,openActivity,viewDesign,viewActivity,type Workspace,type WorkspaceSnapshot} from './workspace';
 import {installDropdown} from './dropdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
@@ -273,7 +274,7 @@ const detailWires=new WeakMap<object,MatrixWire[]>();
 function viewMatrix(t:Tab,projected:Tab['design']):MatrixWire[]|undefined{
  if(!isMatrixGraph(projected.graph))return;
  const plan=overviewMatrix(projected);if(viewActivity(t)===undefined)return plan.wires;
- let wires=detailWires.get(projected);if(!wires){wires=plan.wires.map(w=>({...w,detail:true}));detailWires.set(projected,wires);}return wires;
+ let wires=detailWires.get(projected);if(!wires){wires=directionalReturnWires(projected.graph,plan.wires,initialPositions(projected.graph,projected.activityOrder,viewActivity(t))).map(w=>({...w,detail:true}));detailWires.set(projected,wires);}return wires;
 }
 let redrawEdges=()=>{},edgeExtent:Point=[0,0],edgeMinimum:Point=[0,0];
 // Reserve the desktop list's occupied width so a redraw while it is open

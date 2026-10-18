@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {matrixPlan} from '../src/matrix-layout.ts';
+import {matrixPlan,directionalReturnWires} from '../src/matrix-layout.ts';
 import {routeEdge} from '../src/routing.ts';
 import {parseDesign} from '../src/graph.ts';
 import {RouteCache} from '../src/route-cache.ts';
@@ -119,12 +119,35 @@ const requesterRoutes=new RouteCache().update({},design,requesterBoxes,design.gr
 let arrivals=0,departures=0;
 for(const [i,r]of design.graph.relations.entries()){
  const wire=requesterPlan.wires[i],route=requesterRoutes[i];if(!wire.returning)continue;
- if(r.to==='依頼者'){arrivals++;assert.equal(wire.toPort,1/3);assert.deepEqual(route.points.at(-1),[requesterPos[0]+260,requesterPos[1]+68/3]);}
- if(r.from==='依頼者'){departures++;assert.equal(wire.fromPort,2/3);assert.deepEqual(route.points[0],[requesterPos[0]+260,requesterPos[1]+68*2/3]);}
+ if(r.to==='依頼者'){arrivals++;assert.equal(wire.toPort,2/3);assert.deepEqual(route.points.at(-1),[requesterPos[0]+260,requesterPos[1]+68*2/3]);}
+ if(r.from==='依頼者'){departures++;assert.equal(wire.fromPort,1/3);assert.deepEqual(route.points[0],[requesterPos[0]+260,requesterPos[1]+68/3]);}
  const left=route.label[0]-Math.max(30,r.label.length*12)/2,y=route.label[1];
  assert.equal(y,route.points[0][1],'caption shares departure bend height');
  assert.ok(left>route.points[0][0],'caption follows the right-hand bend');
  assert.equal(left,Math.max(...route.points.map(p=>p[0]))+8,'caption starts immediately after its return bend');
 }
 assert.equal(arrivals,4);assert.equal(departures,1);
-console.log('Requester Object: four return arrivals share 1/3, return exit uses 2/3; captions immediately follow their return bend');
+console.log('Requester Object: four return arrivals share lower 2/3, upward return exit uses upper 1/3; captions immediately follow their return bend');
+
+{
+// Yellow-circle regression: upper peers use upper ports; the lower data peer
+// arrives below them. Compare actual right-side crossings against fixed roles.
+const focus='検査項目の設計',right=requesterPlan.positions[focus][0]+260,top=requesterPlan.positions[focus][1];
+const incidentIndices=design.graph.relations.flatMap((r,i)=>requesterPlan.wires[i].returning&&(r.from===focus||r.to===focus)?[i]:[]);
+assert.equal(incidentIndices.length,3);
+for(const i of incidentIndices){const r=design.graph.relations[i],w=requesterPlan.wires[i];if(r.to===focus)assert.equal(w.toPort,3/4);else if(r.kind.endsWith('exception'))assert.equal(w.fromPort,1/4);else assert.equal(w.fromPort,1/2);}
+const role=(r,end)=>r.kind.endsWith('exception')?(end==='from'?2:1):(end==='from'?3:0),occupied=new Map();
+for(const [i,r]of design.graph.relations.entries())if(requesterPlan.wires[i].returning)for(const end of ['from','to']){const id=r[end],set=occupied.get(id)??new Set();set.add(role(r,end));occupied.set(id,set);}
+const oldPort=(id,k)=>{const list=[...occupied.get(id)].sort();return (list.indexOf(k)+1)/(list.length+1);};
+const oldWires=requesterPlan.wires.map((w,i)=>{const r=design.graph.relations[i];return w.returning?{...w,fromPort:oldPort(r.from,role(r,'from')),toPort:oldPort(r.to,role(r,'to')),returnLane:occupied.get(r.to).size>1&&r.kind.endsWith('exception')?1:0}:w;});
+const oldRoutes=new RouteCache().update({},design,requesterBoxes,design.graph.relations,oldWires);
+function nearCardCrossings(routes){const hits=new Set();for(let a=0;a<incidentIndices.length;a++)for(let b=a+1;b<incidentIndices.length;b++){const p=routes[incidentIndices[a]].points,q=routes[incidentIndices[b]].points;for(let i=1;i<p.length;i++)for(let j=1;j<q.length;j++){let h=[p[i-1],p[i]],v=[q[j-1],q[j]];if(h[0][0]===h[1][0]&&v[0][1]===v[1][1])[h,v]=[v,h];if(h[0][1]!==h[1][1]||v[0][0]!==v[1][0])continue;const x=v[0][0],y=h[0][1];if(x>Math.min(h[0][0],h[1][0])+1e-5&&x<Math.max(h[0][0],h[1][0])-1e-5&&y>Math.min(v[0][1],v[1][1])+1e-5&&y<Math.max(v[0][1],v[1][1])-1e-5&&x>right&&x<right+120&&y>top&&y<top+68)hits.add([a,b,x,y].join(':'));}}return hits.size;}
+assert.ok(nearCardCrossings(oldRoutes)>0,'fixed semantic role order reproduces marked crossings');assert.equal(nearCardCrossings(requesterRoutes),0,'directional ports and corridors remove marked card-side crossings');
+// A role shared by peers above AND below remains one role. Distinct peer IDs
+// (not repeated copies of a wire) determine the stable directional preference.
+const mixed={version:1,nodes:[A('F'),A('Up'),A('Down'),O('D')],relations:[{kind:'business-exception',from:'Up',to:'F',label:'u'},{kind:'business-exception',from:'Down',to:'F',label:'d'},input('D','F')]};
+const mp={F:[0,200],Up:[0,0],Down:[0,400],D:[0,500]},mw=mixed.relations.map(()=>({returning:true,captionLane:0})),mixedWires=directionalReturnWires(mixed,mw,mp);
+assert.equal(mixedWires[0].toPort,mixedWires[1].toPort);assert.equal(mixedWires[0].toPort,1/3);assert.equal(mixedWires[2].toPort,2/3);
+const duplicated={...mixed,relations:[...mixed.relations,...Array(10).fill(mixed.relations[1])]},dw=directionalReturnWires(duplicated,duplicated.relations.map(()=>({returning:true,captionLane:0})),mp);assert.deepEqual(dw.slice(0,3),mixedWires);
+console.log('Directional role order: marked card-side crossings '+nearCardCrossings(oldRoutes)+' -> 0; mixed-side shared roles and duplicate-peer stability');
+}

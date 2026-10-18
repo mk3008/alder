@@ -1,6 +1,7 @@
 import {verifyRolePorts} from './test-role-ports-browser.mjs';
 import {activityDesign} from '../src/activities.ts';
-import {matrixPlan} from '../src/matrix-layout.ts';
+import {matrixPlan,directionalReturnWires} from '../src/matrix-layout.ts';
+import {initialPositions} from '../src/layout.ts';
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
@@ -110,7 +111,7 @@ export async function verifyRealWiring(browser){
 
    const overviewRoutes=await inspect();const matrixDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),matrix=matrixPlan(matrixDesign.graph,matrixDesign.activityOrder);for(const r of overviewRoutes.wires){assertDeparture(r,false,matrix.wires[r.index].returning);assert.equal(r.collisions,0,'all approved initial L/return paths clear every card');if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
    for(const spec of specs){
-    routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder);
+    routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder);sourcePlan={...sourcePlan,wires:directionalReturnWires(routeDesign.graph,sourcePlan.wires,initialPositions(routeDesign.graph,routeDesign.activityOrder,spec.activity))};
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
     spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'ordinary Input then focus staircase'));
