@@ -50,6 +50,18 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
 
+## 配置・破線をブラウザーなしで反復する
+
+配置、接続点、戻り線の交差、破線の位相は、次のコマンドでHTTPサーバー・Chrome・Playwright・外部取得なしに確認できます。
+
+```sh
+npm run test:layout
+```
+
+全体図とActivity詳細は `matrixPlan` を共用します。対象Activityは同じ計画器の投影条件として指定し、通常のOutput Objectを例外Activityより先に配置します。非Alderグラフ用の汎用DAG配置はfallbackとして残します。
+
+この検証は公開サンプルの座標、役割別ポート、独立した経路／交差の判定、長いグラフ、両軸・両方向・負座標での破線位相を検査します。通常の `npm test` にも同じ回帰を含めます。実SVGの線分描画、文字寸法、操作、PNG・クリップボードは別の境界なので、最終候補の実ブラウザー検証を維持します。`labelLayout` 群は、実データの共有区間をSVGとして描画し、重なっても透明な隙間が残ることをピクセルで確認します。
+
 ## 全体検証へ進む
 
 限定検証の成功は、選んだ範囲だけの結果です。人間へ操作確認版を返す前とmerge前には、同じ候補の全体CI成功を確認します。限定検証で変更範囲を説明できない場合や、選択外の不具合が見つかった場合は、対象を広げます。

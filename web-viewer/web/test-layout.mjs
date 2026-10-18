@@ -74,3 +74,5 @@ const reduced={...sample,graph:{...sample.graph,nodes:sample.graph.nodes.slice(1
 console.log(JSON.stringify({checks:['stable directed JSON-only fallback','compact staircase preserves reviewed dependency ranks and reading order; all forward edges rightward/downward; unchanged cycle and exception counts; no grid wrapping','bounded 1–1000 nodes; 20000-node chain and isolated layer; empty graph','all-card rectangle-rule equivalence and array permutation stability','viewport-independent initial positions only','manual overlaps preserved','missing IDs avoid retained cards','deleted IDs removed'],step:{x:stepX,y:stepY},sampleBounds:{left:Math.min(...Object.values(p).map(p=>p[0])),top:Math.min(...Object.values(p).map(p=>p[1])),right:Math.max(...Object.values(p).map(p=>p[0]+260)),bottom:Math.max(...Object.values(p).map(p=>p[1]+68))},sampleDistance:{old:connectedDistance(sample.graph,old(sample.graph)),new:connectedDistance(sample.graph,p)}},null,2));
 
 await import('./test-matrix-layout.mjs');
+
+await import('./test-shared-layout.mjs');

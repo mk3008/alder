@@ -203,8 +203,7 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
       const first=geometry.vertices[1],last=geometry.vertices.at(-2)!;
       const outward=matrix.returning?first[0]>a[0]&&last[0]>b[0]:first[1]>a[1]&&last[0]<b[0];
       if(outward&&collisions===0){
-        const detailLabel=matrix.detail&&!matrix.returning?labelAt(geometry.points,nodes,labelWidth,labelHeight,[nodes.some(n=>n.x<0)?-Infinity:0,nodes.some(n=>n.y<0)?-Infinity:0],kind==='input'||kind?.endsWith('exception')===true,labels,source,target,kind==='output',wires):undefined;
-        return {path:geometry.path,label:detailLabel?.point??label,points:geometry.points,bounds:geometry.bounds,collisions,rerouted:false,fallback:detailLabel?.blocked??false};
+        return {path:geometry.path,label,points:geometry.points,bounds:geometry.bounds,collisions,rerouted:false,fallback:false};
       }
     }
     // Retained/manual coordinates can invalidate the reserved L corridor.

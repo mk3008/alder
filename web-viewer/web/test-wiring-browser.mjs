@@ -1,6 +1,6 @@
 import {verifyRolePorts} from './test-role-ports-browser.mjs';
 import {activityDesign} from '../src/activities.ts';
-import {matrixPlan,directionalReturnWires} from '../src/matrix-layout.ts';
+import {matrixPlan} from '../src/matrix-layout.ts';
 import {initialPositions} from '../src/layout.ts';
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';
@@ -79,7 +79,7 @@ export async function verifyRealWiring(browser){
    const wires=[...document.querySelectorAll('.edge')].map(path=>{
     const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
     const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
-    return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
+    return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),paintRuns:document.querySelectorAll(`.edge-paint[data-relation="${path.dataset.relation}"]`).length,dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
   const sourceDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8'));let routeDesign=sourceDesign,sourcePlan=matrixPlan(sourceDesign.graph,sourceDesign.activityOrder);
@@ -111,7 +111,7 @@ export async function verifyRealWiring(browser){
 
    const overviewRoutes=await inspect();const matrixDesign=parseDesign(readFileSync('web/authorities/ungrouped-alder.md','utf8')),matrix=matrixPlan(matrixDesign.graph,matrixDesign.activityOrder);for(const r of overviewRoutes.wires){assertDeparture(r,false,matrix.wires[r.index].returning);assert.equal(r.collisions,0,'all approved initial L/return paths clear every card');if(r.source.id.startsWith('Alder: ')&&!r.exception){assert.deepEqual(r.points.at(-1),[r.target.x,r.target.y+34],'upstream Knowledge Input enters Activity on the left');assert.equal(r.collisions,0);}}
    for(const spec of specs){
-    routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder);sourcePlan={...sourcePlan,wires:directionalReturnWires(routeDesign.graph,sourcePlan.wires,initialPositions(routeDesign.graph,routeDesign.activityOrder,spec.activity))};
+    routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder,spec.activity);
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
     spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'ordinary Input then focus staircase'));
@@ -125,7 +125,7 @@ export async function verifyRealWiring(browser){
       assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
       if(!r.exception&&r.source.id===spec.activity){assert.ok(Math.abs(r.label[0]-r.points[0][0]-8)<.01,'Output text starts beside vertical line');assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
-      if(r.exception){assert.notEqual(r.dash,'none');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
+      if(r.exception){assert.notEqual(r.dash,'none');assert.ok(r.paintRuns>0,'exception has visible coordinate-phased paint runs');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
        inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
