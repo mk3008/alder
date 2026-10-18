@@ -18,6 +18,25 @@ CHECK_FIXTURES = ROOT / 'tools/fixtures/check-presentation'
 
 
 class WorkflowSkillsTest(unittest.TestCase):
+    def test_unique_guarantee_and_observable_example_review_are_distributed(self):
+        # Instruction/distribution regression only; actual agent detection and
+        # generation need independent raw runs, not these phrase assertions.
+        guide = (ROOT / 'docs/check-item-traceability.md').read_text()
+        skill = (SKILLS / 'alder-draft-check-items/SKILL.md').read_text()
+        self.assertNotIn('and H4 sections for **条件と期待する結果**', guide)
+        self.assertNotIn('H4 条件と期待する結果 /', skill)
+        for phrase in ['Do not replace the general rule with a finite list of examples',
+                       'Formula, action and individual condition/result sections are not mandatory fields',
+                       'identify each Check\'s independent guarantee',
+                       'A restatement of the expectation alone is not an explanatory example',
+                       'Check short prose as well as tables',
+                       'Report tautological examples, missing distinctions and duplicate or missing general definitions',
+                       'without inferring whole-Check satisfaction from a component alone']:
+            self.assertIn(phrase, guide)
+        self.assertIn('concrete observation/difference correspondence', skill)
+        for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
+            self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
+
     def test_comparison_summary_contract_reaches_check_skill_and_review(self):
         # Distribution/routing only. Generation and rendered usability need
         # their own observed evidence; these assertions do not measure them.
