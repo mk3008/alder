@@ -1,0 +1,16 @@
+{
+  "public_bundle": "ee99fd399a520abf7ba52f113f17d3c7dc090846",
+  "all_working_bytes_match_published": [
+    "docs/check-item-traceability.md",
+    "plugins/alder/skills/alder-draft-check-items/SKILL.md",
+    "work/check-item-examples/fixtures/README.md",
+    "tools/test_workflow_skills.py",
+    "tools/business_graph/test_consultation_fixture.py",
+    "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md",
+    "plugins/alder/skills/alder-draft-check-items/references/provenance.json",
+    "plugins/alder/skills/alder-explore-functional-conditions/references/check-item-traceability.md",
+    "plugins/alder/skills/alder-explore-functional-conditions/references/provenance.json",
+    "plugins/alder/skills/alder-follow-up-review/references/check-item-traceability.md",
+    "plugins/alder/skills/alder-follow-up-review/references/provenance.json"
+  ]
+}
