@@ -14,6 +14,12 @@
 
 [作者点検・差分](author-check.md)と[作者実行・入力hash・依頼全文](author-execution.md)を参照。統括は生成物を手編集せず、今回の指定を受けた限定修正として扱う。新しい初稿生成の成功や完全な自律検出の実証ではない。旧Checkからの差分は、初稿のCI-02文・CI-06の前提句とBD版リンク、更新のBD版リンクだけと[機械照合](check-regression.json)した。旧ID/人間状態・表の行・根拠ラベル・Test記述を保持し、ローカル参照は初稿50件、更新33件が解決した。
 
+## 読取・作者修復の記録
+
+[最初のreader所見と修復後の再読取](check-reader.md) → [作者の採否・修復](author-check.md) → [最終保存版への独立読取](final-check-reader.md)。最終readerは両候補を全限定スコープで読み、根拠付きNGなしと報告した。BD自体の未決と任意改善を合格判定に混ぜていない。最終readerとBD差分readerにはrootから `gpt-6-sol / medium / fork none` を明示要求した。作者が呼んだ最初の子readerはfork noneでモデル/effort overrideなしのため、明示設定を確認した最終readerとは区別する。いずれも実効runtimeの独立attestationはない。
+
+ホストは公開68af49dの初稿候補02をGitHub Previewで読み、CI-02の表外対照の明記と一般則へのリンク、CI-06の前提/結果の表現を確認した。表示点検を新しい業務意味への人間承認とは扱わない。
+
 ## 旧BDと新BDの意味対応
 
 | 旧記述 | 移行後 | 保持・明示したこと |
@@ -27,7 +33,7 @@
 
 Objectの責務分類は書式移行に伴う明示である。利用者の登録・停止管理までこの業務の責務と解釈せず、別の管理Objectや独立Activityを推測追加しなかった。依頼者から受け取った情報と同一相談の対応を、既存の受付→案内の受け渡しとして表す。新しい通知・拒否・回復・本人認証方式や承認方針は決めない。[原典比較の記録](migration-checks.json)と[別読者の移行レビュー](migration-reader.md)を参照。構文成功を業務合意や完全性の証明とは扱わない。
 
-旧固定URL `d7f84fcca636e88015b15b9da993b200abd62999` と過去のsnapshot/入力/評価/hashは不変。過去Checkの根拠を一括repinせず、今回作った2つの候補だけを新BDへ追従させた。`## 業務上の規則`、両ActivityのアンカーとWhen/How/Resultは存続し、古い行番号を新しい版へ持ち越していない。
+旧固定URL `d7f84fcca636e88015b15b9da993b200abd62999` はGitHubから再取得し、旧入力本文と一致した。新固定rawの取得本文も作業版と一致。過去のsnapshot/入力/評価/hashは不変。過去Checkの根拠を一括repinせず、今回作った2つの候補だけを新BDへ追従させた。`## 業務上の規則`、両ActivityのアンカーとWhen/How/Resultは存続し、古い行番号を新しい版へ持ち越していない。
 
 ## 検証と表示
 

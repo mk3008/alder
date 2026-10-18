@@ -1,4 +1,4 @@
-// Read-only check; pass a current Viewer graph.ts and two independently exported graphs.
+// Read-only check; pass a current Viewer graph.ts, Business Design and an exported graph.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
