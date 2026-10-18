@@ -60,9 +60,14 @@ export async function verifyRouteCache(browser){
   let changedIncident=0;
   for(const [index,r] of relations.entries()){
    if(r.from===moving||r.to===moving){if(during[index].path!==initial[index].path)changedIncident++;}
-   else assert.deepEqual(during[index],initial[index],'unrelated path and label stay fixed during drag');
+   else {assert.equal(during[index].path,initial[index].path,'unrelated path stays cached during drag');assert.equal(during[index].label[1],initial[index].label[1],'unrelated caption stays on its departure row');}
   }
   assert.ok(changedIncident>0,'incident geometry follows the moved card');
+  const captionHits=await page.evaluate(()=>{
+   const cards=[...document.querySelectorAll('.node')].map(n=>({x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight}));
+   return [...document.querySelectorAll('.edge-label')].flatMap(n=>{const b=n.getBBox();return cards.filter(c=>b.x<c.x+c.width&&b.x+b.width>c.x&&b.y<c.y+c.height&&b.y+b.height>c.y).map(c=>n.dataset.relation);});
+  });
+  assert.deepEqual(captionHits,[],'native captions escape moved cards while nonincident paths remain cached');
   // A moved endpoint must be on the moved card perimeter, not just a new path.
   const endpoint=await page.locator(`.edge[data-relation="${relations.findIndex(r=>r.from===moving)}"]`).evaluate(path=>{const p=path.getPointAtLength(0);return [p.x,p.y];});
   assert.ok(endpoint[0]>=p[0]-.01&&endpoint[0]<=p[0]+260.01&&endpoint[1]>=p[1]-.01&&endpoint[1]<=p[1]+68.01);
@@ -84,6 +89,6 @@ export async function verifyRouteCache(browser){
   // is deliberately not an invariant; report changes rather than require them.
   const coldChanged=relations.map((_,i)=>i).filter(i=>cold[i].path!==during[i].path||JSON.stringify(cold[i].label)!==JSON.stringify(during[i].label));
   assert.deepEqual(errors,[]);
-  return {checks:'real pointer crossing unrelated cached path; exact path/label retention; incident endpoint follows; pointerup and selection preserve geometry; selected-only/exception/Write/Scope roundtrips; per-tab history; bounded IDB commit; cold reload coordinates',expectedPositions:drag.expected,observedPositions:moved,restoredPositions:restored,unrelatedRelation:unrelated,changedIncident,coldChangedRelations:coldChanged,pageErrors:errors,limit:'Runtime route history is intentionally not persisted; cold reload may change paths and labels.'};
+  return {checks:'real pointer crossing unrelated cached path; exact path/departure-row retention, horizontal caption/card separation; incident endpoint follows; pointerup and selection preserve geometry; selected-only/exception/Write/Scope roundtrips; per-tab history; bounded IDB commit; cold reload coordinates',expectedPositions:drag.expected,observedPositions:moved,restoredPositions:restored,unrelatedRelation:unrelated,changedIncident,coldChangedRelations:coldChanged,pageErrors:errors,limit:'Runtime route history is intentionally not persisted; cold reload may change paths and labels.'};
  }finally{await context.close();}
 }

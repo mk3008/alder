@@ -56,3 +56,11 @@ for(const kind of ['input','output']){
  assert.equal(r.label[1],122);assert.ok(r.label[0]-240>=528);assert.equal(r.fallback,false);
 }
 console.log('purchase captions: 4 Activities/4 Objects/11 relations; 5 views; 96-unit rows; full label/card separation; long and multiple captions; drag/cold reload; saved coordinates and reset; fallback source row');
+
+// An unrelated card moves over a cached caption: reroute no unrelated wire,
+// but move text sideways. Cold and warm captions agree for the same geometry.
+{
+ const nodes=[{id:'s',x:40,y:40,width:260,height:68},{id:'t',x:360,y:232,width:260,height:68},{id:'block',x:800,y:40,width:260,height:68}],relations=[{kind:'input',from:'s',to:'t',label:'data'}],matrix=[{returning:false,captionLane:0}],d={},key={},cache=new RouteCache();
+ const first=cache.update(key,d,nodes,relations,matrix),moved=nodes.map(n=>n.id==='block'?{...n,x:80,y:115}:n),next=cache.update(key,d,moved,relations,matrix),cold=new RouteCache().update({},d,moved,relations,matrix);
+ assert.equal(next[0].points,first[0].points);assert.equal(next[0].path,first[0].path);assert.equal(next[0].label[1],first[0].label[1]);assert.ok(next[0].label[0]>first[0].label[0]);assert.deepEqual(next[0].label,cold[0].label);
+}
