@@ -177,6 +177,9 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  // A near-leading-edge grip exhausts the 24-world-pixel negative reserve in
  // a bounded frame window without a long arbitrary hold. Still inside the card.
  if(atExtent==='left')start[0]=Math.ceil(box[0])+8;
+ // Return captions can extend the canvas beyond the card's center. At the
+ // actual right scroll limit, grip the visible trailing edge of that card.
+ if(atExtent==='right'&&start[0]<=initial.bounds.left)start[0]=Math.floor(box[0]+260*zoom)-8;
  if(atExtent==='top')start[1]=Math.ceil(box[1])+8;
  const margin=atExtent?0:48;assert.ok(start[0]>initial.bounds.left+margin&&start[0]<initial.bounds.right-margin&&start[1]>initial.bounds.top+margin&&start[1]<initial.bounds.bottom-margin,'selected node must begin visibly inside the usable viewport');
  assert.equal(await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.closest('.node')?.dataset.node,start),moving,'actual hit test must reach the selected node');
