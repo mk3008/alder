@@ -1,0 +1,66 @@
+{
+  "bundle": "be7fffb67e7e9052b5718d1d7f0a86ccdad2b453",
+  "canonical_source": "0a050bc442788cee8310256bee20f1e776614f63",
+  "cases": [
+    {
+      "case": "public-main",
+      "input_sha256": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+      "before_status": "mismatch",
+      "before_h2_count": 6,
+      "bundled_cli_exit": 0,
+      "bundled_cli_stdout": {
+        "status": "match",
+        "declared": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "headings": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "index": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "mismatches": [],
+        "target_issues": []
+      }
+    },
+    {
+      "case": "approved-private-specimen",
+      "input_sha256": "06ed28580299d119d824f725929080c4d1e4bf224f8f989afa984c116f4b1e72",
+      "before_status": "mismatch",
+      "before_h2_count": 7,
+      "bundled_cli_exit": 0,
+      "bundled_cli_stdout": {
+        "status": "match",
+        "declared": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "headings": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "index": [
+          "備品購入を申請する",
+          "購入申請を承認する",
+          "購入申請を却下する",
+          "承認済み備品を購入する"
+        ],
+        "mismatches": [],
+        "target_issues": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "baseline": "7ff236179b408d5005761ba017825e2892dd1d3c",
+  "canonical_source": "0a050bc442788cee8310256bee20f1e776614f63",
+  "fixed_bundle": "be7fffb67e7e9052b5718d1d7f0a86ccdad2b453",
+  "public_positive_main_revision": "fb13c2fbc0f1bf0d702a4b4bccd3de303c80d7f2",
+  "input_sha256": {
+    "work/check-item-examples/fixtures/README.md": "e00c06ef469c015120add5dc92249b53eabd496750ff9aeb1b7f9a84ab469cd0",
+    "work/check-item-examples/fixtures/checks.md": "f554ea5fb9a9e2652d692db24c40a6febdbdfe6e6dce15a06729a4109778b4c9",
+    "docs/examples/purchase-check-review.ja.md": "d2ad07f06cdef93537f6b8b5cca32a5f0f9ebad49ea4ba3f3ffcb1b407cfff55",
+    "plugins/alder/skills/alder-draft-check-items/SKILL.md": "7983ca3253b6886bca61961bd9f21d354d13c12717009468a63d789f35d7af9c",
+    "plugins/alder/skills/alder-draft-check-items/scripts/check_activity_names.py": "8bf2213bae05c0a4a4059b294229a67399460f36cfbb5ae23b4fd9a81b432cdf"
+  },
+  "output_sha256": {
+    "run/author-check-01.md": "1ecca3ec0feae8e1aba717ebaf7876befdeb8ba846cba1699f24c9dbc7c9199b",
+    "run/checks-candidate-01.md": "34834fd420377a8525c758f6fe4bfefd7f8454ad0f3824f13fea7e952542dc00",
+    "run/checks-candidate-02.md": "2fb935c356300bf49c48c6c4ceb4bbf8cceb8e29520ffaf0d6e5546a5a85cfa5",
+    "run/checks-candidate-03.md": "c4529adc07b8607439a67717c3ab4c9d116ee146036434c8b485a2a5c920f539",
+    "run/checks-candidate-04.md": "13dc01ab9a705afa788a8633e815e2d3546c3e2e449375ab6bd56b11e85c27d6",
+    "run/checks-final.md": "13dc01ab9a705afa788a8633e815e2d3546c3e2e449375ab6bd56b11e85c27d6",
+    "run/disposition-01.md": "b4bcecb2c1a8bf3bf7e9279f24b630c7637e6968c097fb2ef548275f1b72611d",
+    "run/disposition-02.md": "dd1caa5e4d1fd8e13ffc382801d130a19b74bc9cf8f00e6c6847b101589775c4",
+    "run/execution-record.md": "ffea2d3bfcab1bd13b38a8fa93561bc925b3853915d64f4290601a50d5f52b8e",
+    "run/reader-prompt-01.txt": "3669a4ba9b16967796a0ea1ee4ea58488f242977bc75bb064e98bca08599540e",
+    "run/reader-prompt-02.txt": "22f533d691dffc4c810a2678e02b3a205a11dbfbc3d98b9f0135971970465ea0",
+    "run/reader-prompt-03.txt": "1db057dca1b6c7cc0085d0edc2500b0b8e82fd54ea40e346dbd4453def91efad",
+    "run/reader-prompt-04.txt": "14ff5633ca6e99f267c3ca0985f5077594bf798c51103f201c62014edd751e7d",
+    "run/reader-report-01.md": "2403847ff413741bc9234e9f2df85876a6d8fa2aba5e5557d51ac1bff708951c",
+    "run/reader-report-02.md": "c919d760dcf6fcfed76defb60b378d56468448b8a7c69da5fb4d4c5797b47d26",
+    "run/reader-report-03.md": "2ea8436e78682cba06dd413d7ec4d856afac4bcb7803348c355c12e0d718a923",
+    "run/reader-report-04-corrected.md": "7c265cfb0e35778fcafb5b7f8ed5b3a5f971fa5d8e1aca7cf306ec685c2b6e30",
+    "run/reader-report-04.md": "ebc2efcb91b20cf8708194a01cbf18c69dc6f38f52dff1b4136563f998e3c9a6",
+    "run/root-intervention-and-disposition.md": "2f8123d7bc28205fe19fad1771e2dab12eaabb58855d3f6ed926d879f6456714"
+  },
+  "final": "run/checks-final.md",
+  "private_positive": "Original was tested locally; not copied here. Public CI covers the same additional-H2 structure."
+}
