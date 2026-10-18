@@ -27,9 +27,9 @@
     "unresolved_fragments": []
   },
   "update": {
-    "sha256": "9f6b8f0238448e4eee34a9d9d16a79dd135a48b932915517a33790c59c133564",
-    "bytes": 9221,
-    "lines": 90,
+    "sha256": "9796b282318df8191d0804187bd9965105bf0d4662228b7e1e08644ecbfebce9",
+    "bytes": 9556,
+    "lines": 100,
     "ids": [
       "C-01",
       "C-02",
@@ -42,13 +42,13 @@
       "未レビュー",
       "要修正"
     ],
-    "fragment_links": 29,
+    "fragment_links": 33,
     "unresolved_fragments": []
   },
   "purchase": {
-    "sha256": "fd4f0893d7ece46229b90476cf3f7d049689057357defa83e60569a4b6bbf9e2",
-    "bytes": 16411,
-    "lines": 130,
+    "sha256": "95ffb946d3d6c485a8e245cb17e2a4c43746244c7e491ebe768cfb0f7fbb2f6f",
+    "bytes": 16589,
+    "lines": 133,
     "ids": [
       "JA-EX-01",
       "JA-EX-02",
@@ -65,7 +65,7 @@
       "未レビュー",
       "未レビュー"
     ],
-    "fragment_links": 42,
+    "fragment_links": 43,
     "unresolved_fragments": []
   },
   "short": {
