@@ -37,6 +37,17 @@ class WorkflowSkillsTest(unittest.TestCase):
         for name in ['alder-draft-check-items', 'alder-explore-functional-conditions', 'alder-follow-up-review']:
             self.assertEqual((SKILLS / name / 'references/check-item-traceability.md').read_text(), guide)
 
+    def test_required_input_distinction_does_not_require_a_formula(self):
+        # Static contract, not evidence that generated business meaning is correct.
+        for path in ['docs/check-item-traceability.md',
+                     'plugins/alder/skills/alder-draft-check-items/SKILL.md']:
+            source = (ROOT / path).read_text()
+            with self.subTest(path=path):
+                self.assertIn('distinguish the necessary conditions, the direct expected result and the unresolved sufficient conditions in meaning', source)
+                self.assertIn('Readable natural language is sufficient; use an expression only when it helps prevent misreading', source)
+                self.assertNotIn('write the necessary-condition expression and the direct expected result separately', source)
+                self.assertNotIn('use a necessary-condition expression plus the direct expected result', source)
+
     def test_comparison_summary_contract_reaches_check_skill_and_review(self):
         # Distribution/routing only. Generation and rendered usability need
         # their own observed evidence; these assertions do not measure them.
