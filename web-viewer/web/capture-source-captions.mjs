@@ -46,11 +46,13 @@ try{
     await page.locator('#viewport').evaluate(v=>{v.scrollLeft=0;v.scrollTop=0;});
     await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
     const measured=await page.evaluate(()=>{
-     const cards=[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight}));
+     const cards=[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight,who:n.querySelector('small')?.textContent,roleColor:n.querySelector('.who-badge')?getComputedStyle(n.querySelector('.who-badge')).backgroundColor:undefined}));
      const labels=[...document.querySelectorAll('.edge-label')].map(n=>{const b=n.getBBox();return {index:+n.dataset.relation,text:n.textContent,y:+n.getAttribute('y'),x:b.x,top:b.y,width:b.width,height:b.height};});
      return {cards,labels,zoom:document.querySelector('#zoom').textContent};
     });
     if(version==='after'){
+     const expected={'申請者':'rgb(139, 92, 246)','承認者':'rgb(194, 65, 12)','購買担当者':'rgb(0, 133, 118)'};
+     for(const n of measured.cards.filter(n=>n.who))assert.equal(n.roleColor,expected[n.who],'shared role colors in real overview/detail');
      assert.deepEqual(measured.cards.map(n=>n.y).sort((a,b)=>a-b),Array.from({length:measured.cards.length},(_,i)=>40+96*i));
      const overlaps=(a,b)=>a.x<b.x+b.width&&b.x<a.x+a.width&&a.top<b.top+b.height&&b.top<a.top+a.height;
      for(const [i,l]of measured.labels.entries()){
