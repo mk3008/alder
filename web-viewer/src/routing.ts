@@ -1,5 +1,5 @@
 import type { Point } from './session';
-import type {MatrixWire} from './matrix-layout.ts';
+import {CAPTION_LINE_STEP,type MatrixWire} from './matrix-layout.ts';
 
 /** Axis-aligned card bounds. Rounded cards use their conservative outer rectangle. */
 export interface RouteNode { id: string; x: number; y: number; width: number; height: number }
@@ -70,12 +70,12 @@ function pointAlong(points: readonly Point[], lengths: readonly number[], total:
  * Horizontal escape remains finite even for overlapping saved/manual cards. */
 export function captionOnRow(point:Point,width:number,height:number,nodes:readonly RouteNode[],labels:readonly RouteNode[]=[]):Point {
   let left=point[0]-width/2;
-  const blockers=[...nodes,...labels].filter(n=>point[1]+height/2+4>=n.y&&point[1]-height/2-4<=n.y+n.height).sort((a,b)=>a.x-b.x);
+  const blockers=[...nodes,...labels].filter(n=>point[1]+height/2+4>n.y&&point[1]-height/2-4<n.y+n.height).sort((a,b)=>a.x-b.x);
   for(const n of blockers)if(left+width+4>=n.x&&left-4<=n.x+n.width)left=n.x+n.width+8;
   return [left+width/2,point[1]];
 }
-function departureCaption(source:RouteNode,width:number,height:number,nodes:readonly RouteNode[],labels:readonly RouteNode[]):Point {
-  return captionOnRow([source.x+source.width*.125+8+width/2,source.y+source.height+height/2+5],width,height,nodes,labels);
+function departureCaption(source:RouteNode,width:number,height:number,nodes:readonly RouteNode[],labels:readonly RouteNode[],line=0):Point {
+  return captionOnRow([source.x+source.width*.125+8+width/2,source.y+source.height+height/2+5+line*CAPTION_LINE_STEP],width,height,nodes,labels);
 }
 function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);
@@ -197,7 +197,7 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     const vertices:Point[]=matrix.returning?[a,[lane,a[1]],[lane,b[1]],b]:[a,[a[0],b[1]],b];
     const geometry=rounded(vertices);
     if(geometry){
-      const label:Point=matrix.returning?[lane+8+labelWidth/2,a[1]]:departureCaption(source,labelWidth,labelHeight,nodes,labels);
+      const label:Point=matrix.returning?[lane+8+labelWidth/2,a[1]]:departureCaption(source,labelWidth,labelHeight,nodes,labels,matrix?.captionLane??0);
       const collisions=routeCollisionCount(geometry.points,nodes.filter(n=>n.id!==from&&n.id!==to),.1)+routeCollisionCount(geometry.points,[source,target],-.1);
       const first=geometry.vertices[1],last=geometry.vertices.at(-2)!;
       const outward=matrix.returning?first[0]>a[0]&&last[0]>b[0]:first[1]>a[1]&&last[0]<b[0];
@@ -280,6 +280,6 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     chosen=rounded(matrix?.returning?[a,[x,a[1]],[x,y],[x+reach,y],[x+reach,b[1]],b]:matrix?[a,[a[0],y],[target.x-reach,y],[target.x-reach,b[1]],b]:[a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
   }
-  const label=matrix?.returning?{point:[chosen.vertices[1][0]+8+labelWidth/2,chosen.vertices[0][1]] as Point,blocked:false}:((kind==='input'||kind==='output')&&chosen.points[0][1]===source.y+source.height?{point:departureCaption(source,labelWidth,labelHeight,nodes,labels),blocked:false}:labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,wires));
+  const label=matrix?.returning?{point:[chosen.vertices[1][0]+8+labelWidth/2,chosen.vertices[0][1]] as Point,blocked:false}:((kind==='input'||kind==='output')&&chosen.points[0][1]===source.y+source.height?{point:departureCaption(source,labelWidth,labelHeight,nodes,labels,matrix?.captionLane??0),blocked:false}:labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,wires));
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};
 }

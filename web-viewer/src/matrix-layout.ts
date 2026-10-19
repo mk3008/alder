@@ -3,6 +3,7 @@ import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
 // 68px card + 44px for its caption, the following badge and visible clearance.
 const ROW_STEP=112;
+export const CAPTION_LINE_STEP=22;
 export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number};
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
@@ -80,7 +81,7 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
  const corridors=new Heap<{column:number;until:number}>((a,b)=>a.column>b.column);
  let previousActivityColumn=-1,row=0;
  for(const [i,n]of nodes.entries()){
-  // Captions share the departure row and escape horizontally, never add blank rows.
+  // One logical row per card; extra caption lines expand only its pixel gap.
   if(i)row++;
   let column=n.type==='business'?previousActivityColumn+1:owner.has(n.id)?cells[owner.get(n.id)!][0]+1:0;
   if(focused)column=detailColumns.get(n.id)!;
@@ -89,7 +90,11 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   cells[n.id]=[column,row];if(n.type==='business')previousActivityColumn=column;
   if(lastTarget.has(n.id))corridors.push({column:column+1,until:lastTarget.get(n.id)!});
  }
- for(const [id,[column,line]]of Object.entries(cells))positions[id]=[40+64*column,40+ROW_STEP*line];
+ let y=40;
+ for(const n of nodes){
+  positions[n.id]=[40+64*cells[n.id][0],y];
+  y+=ROW_STEP+CAPTION_LINE_STEP*Math.max(0,(lanes.get('departure:'+n.id)??0)-1);
+ }
  return {positions,cells,wires:directionalReturnWires(graph,wires,positions),forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
 }
 

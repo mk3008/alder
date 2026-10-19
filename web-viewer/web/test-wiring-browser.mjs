@@ -123,11 +123,11 @@ export async function verifyRealWiring(browser){
      assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
      for(const [i,r]of measured.wires.entries()){
       assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
-      if(!r.exception&&r.source.id===spec.activity){assert.ok(r.label[0]>=r.points[0][0]+8-.01,'Output text starts at or to the right of its departure');assert.equal(r.label[1],r.source.y+82,'Output caption follows source');}
+      if(!r.exception&&r.source.id===spec.activity){assert.ok(r.label[0]>=r.points[0][0]+8-.01,'Output text starts at or to the right of its departure');assert.equal(r.label[1],r.source.y+82+sourcePlan.wires[r.index].captionLane*22,'Output caption follows source stack');}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
       if(r.exception){assert.notEqual(r.dash,'none');assert.ok(r.paintRuns>0,'exception has visible coordinate-phased paint runs');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
-       inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
+       inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.equal(r.label[1],r.source.y+82+sourcePlan.wires[r.index].captionLane*22,'forward Input stays in its source stack');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
       }
       for(const n of measured.cards)assert.equal(overlap(r.glyph,n),false,'native Japanese glyph does not cover shapes');
@@ -150,7 +150,7 @@ export async function verifyRealWiring(browser){
     const checkCaptions=async()=>{
      const measured=await inspect(),incoming=measured.wires.find(r=>!r.exception&&r.target.id===dataID&&r.source.id===spec.activity),returning=measured.wires.find(r=>!r.exception&&r.source.id===dataID&&r.target.id===spec.activity);
      assert.equal(incoming.anchor,'start');assert.equal(returning.anchor,'start');
-     assert.ok(incoming.label[0]>=incoming.points[0][0]+8-.01,'Output text clears its departure');assert.equal(incoming.label[1],incoming.source.y+82,'dragging target never moves caption away from source');
+     assert.ok(incoming.label[0]>=incoming.points[0][0]+8-.01,'Output text clears its departure');assert.equal(incoming.label[1],incoming.source.y+82+sourcePlan.wires[incoming.index].captionLane*22,'dragging target never moves caption away from source stack');
      assert.ok(returning.label[0]>=Math.max(...returning.points.map(p=>p[0]))+8-.01,'return caption follows the dragged bend');assert.ok(Math.abs(returning.label[1]-returning.points[0][1])<.001,'return caption shares the dragged bend height');
      for(const r of [incoming,returning])for(const n of measured.cards)assert.ok(!(r.glyph.x<n.x+n.width&&r.glyph.x+r.glyph.width>n.x&&r.glyph.y<n.y+n.height&&r.glyph.y+r.glyph.height>n.y),'dragged captions clear shapes');
     };
