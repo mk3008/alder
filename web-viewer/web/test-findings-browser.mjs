@@ -63,6 +63,7 @@ export async function verifyFindings(browser){
     await panel.locator('[data-finding-key="finding:F01"]').focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
     assert.equal(await page.locator('#node-list [data-finding-target]').count(),2);await copyFinding(page,'F01');
+    const order=await panel.locator('.finding-card').evaluate(e=>Array.from(e.children).slice(0,3).map(x=>x.className));assert.deepEqual(order,['finding-heading','finding-related','finding-summary']);assert.equal(await panel.locator('.finding-target').count(),0);assert.equal(await panel.locator('.finding-related li > button').count(),2);assert.doesNotMatch(await panel.textContent(),/関連項目へ移動|対象：/);assert.equal(await panel.locator('.finding-target-link').first().evaluate(e=>getComputedStyle(e).textDecorationLine),'underline');
     assert.equal(await page.locator('#node-list img,#node-list script').count(),0);
     assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
     await page.locator('#node-list [data-finding-target="受付情報"]').focus();await page.keyboard.press('Enter');
