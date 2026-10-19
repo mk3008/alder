@@ -46,7 +46,7 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 ## Node／DOMテストの実行方式
 
-`npm test` は、実行方式を確認する回帰の後、通常の56ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全41群の実行方式は変更しません。
+`npm test` は、実行方式を確認する回帰の後、通常の56ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全43群の実行方式は変更しません。
 
 CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
 
@@ -62,6 +62,10 @@ npm run test:layout
 
 この検証は公開サンプルの座標、役割別ポート、独立した経路／交差の判定、長いグラフ、両軸・両方向・負座標での破線位相を検査します。通常の `npm test` にも同じ回帰を含めます。実SVGの線分描画、文字寸法、操作、PNG・クリップボードは別の境界なので、最終候補の実ブラウザー検証を維持します。`labelLayout` 群は、実データの共有区間をSVGとして描画し、重なっても透明な隙間が残ることをピクセルで確認します。
 
+共有キャプションは `sharedCaptions` 群で、320/393/1280pxの通常接続の保持、同一出発元・同一本文の表示統合と縦余白、異なるキャプションの非重複、Activity詳細、PNGを確認します。同じ文字でも異なる出発元や戻り線・例外線は統合しません。保存済み座標は移行せず、新規表示または明示的なレイアウト初期化で短縮された余白を適用します。
+
+戻り線の矢印手前は `arrowArrivals` 群で、320/393/1280px・明暗テーマ・選択強調・全体図/詳細を確認します。最終の角丸後に最低24単位の直線が残り、選択時のアローヘッド全体が収まることを、SVG命令とネイティブ経路の両方で測定します。手動配置の迂回・狭い間隔はNode回帰でも検査します。
+
 Objectの媒体欄は `objectMedium` 群で、320/393/1280pxの表示、媒体なしとの座標比較、Activity詳細、PNG、再読込を確認します。
 
 ## 全体検証へ進む
@@ -76,7 +80,7 @@ npm run build
 npm run test:browser
 ```
 
-`--cases` を省略すると既存の全41群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
+`--cases` を省略すると既存の全43群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
 
 ## テストを減らす判断
 

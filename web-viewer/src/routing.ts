@@ -20,6 +20,10 @@ export interface EdgeRoute {
   fallback: boolean;
 }
 const CLEARANCE = 14, RADIUS = 8, CORNER_STEPS = 4, LANE_GAP = 30;
+// A selected 7-unit SVG marker at 3.2 stroke width needs 22.4 world units.
+// Keep at least 24 straight units after the final rounded bend, matching the
+// normal 64-unit staircase's 23.5-unit arrival leg.
+const RETURN_ARROW_RUN = 24, RETURN_REACH = RETURN_ARROW_RUN + RADIUS;
 const center = (r: RouteNode): Point => [r.x + r.width / 2, r.y + r.height / 2];
 const distance = (a: Point, b: Point) => Math.hypot(b[0] - a[0], b[1] - a[1]);
 type Side = 'left' | 'right' | 'top' | 'bottom';
@@ -193,7 +197,7 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
     // Matrix contracts determine sides. Coordinates never reclassify an edge.
     // The return lane is outside every card in its vertical interval.
     const corridor=nodes.filter(n=>n.y+n.height>=Math.min(a[1],b[1])&&n.y<=Math.max(a[1],b[1]));
-    const lane=Math.max(source.x+source.width,target.x+target.width,...corridor.map(n=>n.x+n.width))+22+16*(matrix.returnLane??0);
+    const lane=Math.max(source.x+source.width,target.x+target.width,...corridor.map(n=>n.x+n.width))+RETURN_REACH+16*(matrix.returnLane??0);
     const vertices:Point[]=matrix.returning?[a,[lane,a[1]],[lane,b[1]],b]:[a,[a[0],b[1]],b];
     const geometry=rounded(vertices);
     if(geometry){
@@ -219,12 +223,13 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   const preferred:[Side,Side]=matrix?(matrix.returning?['right','right']:['bottom','left']):rightReturn?['right','right']:returning?['bottom','right']:['bottom','left'];
   // Clear feedback corridors share a fixed card clearance, independent of
   // relation order. Aligned source cards therefore share their vertical run.
-  const spread=rightReturn?0:(Math.abs(Math.trunc(index))%4)*10,reach=CLEARANCE+RADIUS+spread+16*(matrix?.returnLane??0);
+  const spread=rightReturn?0:(Math.abs(Math.trunc(index))%4)*10,reach=(rightReturn?RETURN_REACH:CLEARANCE+RADIUS)+spread+16*(matrix?.returnLane??0);
   const bounds={left:Math.min(...nodes.map(n=>n.x))-CLEARANCE-LANE_GAP-spread,right:Math.max(...nodes.map(n=>n.x+n.width))+CLEARANCE+LANE_GAP+spread,top:Math.min(...nodes.map(n=>n.y))-CLEARANCE-LANE_GAP-spread,bottom:Math.max(...nodes.map(n=>n.y+n.height))+CLEARANCE+LANE_GAP+spread};
   const forward=(kind==='input'||kind==='output')&&!returning&&target.x>=source.x&&target.y>=source.y+source.height;
   let chosen:Geometry|undefined,bestScore=[Infinity,Infinity,Infinity,Infinity,Infinity],rerouted=false;
   const evaluate=(waypoints:Point[],pair:[Side,Side],primary:boolean)=>{
     const geometry=rounded(waypoints);if(!geometry)return;
+    if(rightReturn&&distance(geometry.points.at(-2)!,geometry.points.at(-1)!)<RETURN_ARROW_RUN-1e-7)return;
     const v=geometry.vertices,a=v[0],next=v[1],b=v.at(-1)!,previous=v.at(-2)!;
     if((next[0]-a[0])*normals[pair[0]][0]+(next[1]-a[1])*normals[pair[0]][1]<=0||(previous[0]-b[0])*normals[pair[1]][0]+(previous[1]-b[1])*normals[pair[1]][1]<=0)return;
     const collisions=routeCollisionCount(geometry.points,obstacles,CLEARANCE+geometry.error)+routeCollisionCount(geometry.points,endpoints,-.1);

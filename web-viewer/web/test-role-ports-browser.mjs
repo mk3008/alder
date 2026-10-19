@@ -48,7 +48,7 @@ export async function verifyRolePorts(browser){
    // Captions follow their own bend on its row; the existing text halo
    // keeps unrelated wire crossings readable.
    const captions=await page.evaluate(()=>{
-    const wires=[...document.querySelectorAll('.edge')].map(e=>{const length=e.getTotalLength(),a=e.getPointAtLength(0),label=document.querySelector(`.edge-label[data-relation="${e.dataset.relation}"]`),b=label.getBBox();return {title:e.querySelector('title').textContent,exception:e.classList.contains('exception'),a:[a.x,a.y],label:[+label.getAttribute('x'),+label.getAttribute('y')],box:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=e.getPointAtLength(length*i/256);return [p.x,p.y];})};});
+    const wires=[...document.querySelectorAll('.edge')].map(e=>{const length=e.getTotalLength(),a=e.getPointAtLength(0),label=document.querySelector(`.edge-label[data-relations~="${e.dataset.relation}"]`),b=label.getBBox();return {title:e.querySelector('title').textContent,exception:e.classList.contains('exception'),a:[a.x,a.y],label:[+label.getAttribute('x'),+label.getAttribute('y')],box:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=e.getPointAtLength(length*i/256);return [p.x,p.y];})};});
     const card=document.querySelector('.node[data-node="検査項目の設計"]');return {card:{right:parseFloat(card.style.left)+260,top:parseFloat(card.style.top)},all:wires,focus:wires.filter(r=>r.title.startsWith('検査項目の設計 → ')&&r.points[1][0]>r.a[0]&&r.points[1][1]===r.a[1])};
    });
    assert.equal(captions.focus.length,2);
