@@ -170,6 +170,10 @@ server
 
 データベース
 
+## SR Dependencies
+
+- 従業員の識別情報・役職・役職別決裁上限額を参照する契約
+
 ## Information
 
 - 従業員の識別情報
@@ -204,6 +208,10 @@ false
 ## Icon
 
 shield-check
+
+## SR Dependencies
+
+- 認証済み作業者の識別情報を取得する契約
 
 ## Information
 
