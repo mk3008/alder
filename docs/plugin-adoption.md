@@ -49,6 +49,8 @@ Review Business Design itself with:
 
 This review checks description quality, connections between business activities, and material omissions while remaining read-only. It separates wording/structure findings from matters requiring requester/designer judgment and does not decide unresolved business rules.
 
+The development candidate distinguishes uniquely repairable errors, clear problems with undecided answers, and optional proposals. During requested authoring, only evidence-determined repairs are applied and re-reviewed; material unknowns remain in the draft and the response. Optional proposals stay in the result until adopted, and may be absent. A standalone review reports all three classes without writing. Applying human decisions afterwards requires a separate explicit editing request; unconfirmed matters are not automatically Findings.
+
 Review completed scoped implementation separately with:
 
 ```text

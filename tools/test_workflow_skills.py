@@ -315,6 +315,45 @@ class WorkflowSkillsTest(unittest.TestCase):
             with self.subTest(term=term):
                 self.assertIn(term, gate)
 
+    def test_business_design_finding_routes_preserve_write_boundaries(self):
+        # Instruction/distribution contracts only, not model behavior or accuracy.
+        draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
+        review = (SKILLS / 'alder-review-business-design/SKILL.md').read_text()
+        guide = (ROOT / 'docs/adoption.md').read_text()
+        loop = guide.split('### Review and revise a draft before returning it', 1)[1].split('### Record operational Problems', 1)[0]
+        for term in ['Detecting an error does not establish the correct repair',
+                     'Uniquely repairable error', 'Clear problem, undecided answer',
+                     'Optional proposal or hypothesis', 'several plausible targets',
+                     'zero proposals is valid', 'its unconfirmed questions, Findings, Scope or Decision Records',
+                     'not automatically `# Findings`', 'separate explicit editing request',
+                     'Decisions alone and silence do not authorize edits']:
+            self.assertIn(term, loop)
+        for term in ['repair is uniquely determined', 'unconfirmed preamble and the response',
+                     'conversational/console result', 'allowing zero',
+                     'a decision alone does not authorize a write',
+                     'Do not register all unconfirmed matters as Findings']:
+            self.assertIn(term, draft)
+        for term in ['All three classes remain read-only',
+                     'Detecting an error does not establish the correct repair',
+                     'Do not automatically register every unconfirmed matter as Findings',
+                     'does not itself authorize editing', 'separate explicit revision request',
+                     'Do not edit the Business Design']:
+            self.assertIn(term, review)
+
+    def test_finding_routes_reach_canonical_and_bundled_quality_guidance(self):
+        canonical = (ROOT / 'docs/business-design-quality-check.ja.md').read_bytes()
+        bundled = (SKILLS / 'alder-review-business-design/references/business-design-quality-check.ja.md').read_bytes()
+        self.assertEqual(canonical, bundled)
+        text = canonical.decode()
+        for term in ['一意に修正可能なエラー', '問題は明確だが正解が未確定', '提案・仮説',
+                     '草案の未確認事項と返答', '候補0件', '採否の回答だけを編集許可とみなしません',
+                     '未確認事項を無条件に`# Findings`へ登録せず']:
+            self.assertIn(term, text)
+        # Existing shared adoption copies stay byte-identical; no Check rules change.
+        for name in ['alder-draft-business-design', 'alder-draft-check-items', 'alder-follow-up-review']:
+            self.assertEqual((ROOT / 'docs/adoption.md').read_bytes(),
+                             (SKILLS / name / 'references/adoption.md').read_bytes())
+
     def test_draft_review_loop_routes_to_actual_read_only_reviewer(self):
         # Distribution/instruction contract only: this does not run an agent.
         draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
