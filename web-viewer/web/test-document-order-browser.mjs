@@ -26,7 +26,7 @@ export function assertCompactStaircase(positions,design){
  const rank=new Map(ids.map(id=>[id,0]));let changed=true,passes=0;
  while(changed){assert.ok(passes++<=ids.length,'forward constraints must be acyclic');changed=false;for(const r of forward){const next=rank.get(r.from)+1;if(rank.get(r.to)<next){rank.set(r.to,next);changed=true;}}}
  assert.deepEqual(Object.keys(positions).sort(),ids.slice().sort());
- for(const id of ids){const [x,y]=positions[id];assert.ok(Number.isInteger((x-40)/64)&&x>=40,'logical column projects exactly to the 64-unit grid');assert.ok(Number.isInteger((y-40)/96)&&y>=40,'logical row projects exactly to the 96-unit grid');}
+ for(const id of ids){const [x,y]=positions[id];assert.ok(Number.isInteger((x-40)/64)&&x>=40,'logical column projects exactly to the 64-unit grid');assert.ok(Number.isInteger((y-40)/112)&&y>=40,'logical row projects exactly to the 112-unit grid');}
  for(const r of forward){
   const a=positions[r.from],b=positions[r.to];assert.ok(a[0]+32.5<b[0]&&a[1]+68<b[1],'forward L has a lower-right target: '+r.from+' → '+r.to);
   for(const id of ids.filter(id=>id!==r.from&&id!==r.to)){const n=positions[id],x=a[0]+32.5;assert.ok(!(x>n[0]&&x<n[0]+260&&n[1]<b[1]+34&&n[1]+68>a[1]+68),'vertical L corridor clears '+id);}
