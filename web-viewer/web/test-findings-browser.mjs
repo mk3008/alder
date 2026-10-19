@@ -7,6 +7,17 @@ import {assertToolbarLayout} from './test-toolbar-layout.mjs';
 
 const markdown=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');
 export async function verifyFindings(browser){
+  const copyFinding=async(page,id)=>{
+    await page.context().grantPermissions(['clipboard-read','clipboard-write']);
+    const button=page.getByRole('button',{name:`指摘ID ${id}をコピー`,exact:true});
+    const before=await page.evaluate(()=>({tabs:document.querySelector('#tabs').innerHTML,selected:document.querySelector('.node.selected')?.dataset.node,nodes:document.querySelector('#nodes').innerHTML,edges:document.querySelector('#edges').innerHTML,canvas:document.querySelector('#canvas').getAttribute('style'),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],drawers:[document.querySelector('#formattedMarkdownDrawer').hidden,document.querySelector('#node-list-drawer').hidden]}));
+    const box=await button.boundingBox();assert.ok(box.width>=44&&box.height>=44);assert.ok(box.x>=0&&box.x+box.width<=page.viewportSize().width+.5);
+    await button.focus();await page.keyboard.press('Enter');await page.waitForFunction(id=>document.querySelector('#status-text').textContent===`指摘ID ${id}をコピーしました。`,id);
+    assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),id);
+    const after=await page.evaluate(()=>({tabs:document.querySelector('#tabs').innerHTML,selected:document.querySelector('.node.selected')?.dataset.node,nodes:document.querySelector('#nodes').innerHTML,edges:document.querySelector('#edges').innerHTML,canvas:document.querySelector('#canvas').getAttribute('style'),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],drawers:[document.querySelector('#formattedMarkdownDrawer').hidden,document.querySelector('#node-list-drawer').hidden]}));
+    assert.deepEqual(after,before,'ID copy preserves tabs, selection, graph and camera');
+    await page.locator('#status-close').click();
+  };
   const results=[];mkdirSync('web/evidence/design-findings-96',{recursive:true});
   for(const width of [320,393,1280])results.push(await withToolbarPage(browser,{width,height:800},async(page,errors)=>{
     await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open-text').disabled);
@@ -39,7 +50,7 @@ export async function verifyFindings(browser){
     const panel=page.locator('#node-list');
     assert.equal(await panel.locator('[data-finding-key="finding:F01"]').count(),1);
     assert.match(await panel.textContent(),/関連先未設定/);assert.match(await panel.textContent(),/参照先不一致/);
-    assert.match(await panel.textContent(),/困りごと/);const problem=panel.locator('[data-finding-key^="problem:"]').first();await problem.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#node-list-drawer').isVisible(),true);await page.locator('.finding-back').click();assert.match(await panel.textContent(),/要確認/);assert.match(await panel.textContent(),/要修正/);
+    assert.match(await panel.textContent(),/困りごと/);const problem=panel.locator('[data-finding-key^="problem:"]').first();await problem.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#node-list-drawer').isVisible(),true);assert.equal(await page.locator('.finding-copy').count(),0);await page.locator('.finding-back').click();assert.match(await panel.textContent(),/要確認/);assert.match(await panel.textContent(),/要修正/);
     assert.equal(await panel.locator('[data-finding-key="finding:F04"]').count(),0);
     await panel.locator('input[type=checkbox]').check();assert.equal(await panel.locator('[data-finding-key="finding:F04"]').count(),1);
     assert.equal(await panel.locator('img,script').count(),0);
@@ -47,11 +58,11 @@ export async function verifyFindings(browser){
     assert.ok(await panel.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
     await page.screenshot({path:`web/evidence/design-findings-96/list-${width}.png`});
     assert.match(await panel.textContent(),/文書全体/);
-    await panel.locator('[data-finding-key="finding:F04"]').click();assert.match(await page.locator('#node-list').textContent(),/解消済み/);await page.locator('.finding-back').click();
-    await panel.locator('[data-finding-key="finding:F02"]').click();assert.equal(await page.locator('#node-list [data-finding-target]').isDisabled(),true);assert.equal(await page.locator('#node-list img').count(),0);await page.locator('.finding-back').click();
+    await panel.locator('[data-finding-key="finding:F04"]').click();assert.match(await page.locator('#node-list').textContent(),/解消済み/);await copyFinding(page,'F04');await page.locator('.finding-back').click();
+    await panel.locator('[data-finding-key="finding:F02"]').click();await copyFinding(page,'F02');assert.equal(await page.locator('#node-list [data-finding-target]').isDisabled(),true);assert.equal(await page.locator('#node-list img').count(),0);await page.locator('.finding-back').click();
     await panel.locator('[data-finding-key="finding:F01"]').focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
-    assert.equal(await page.locator('#node-list [data-finding-target]').count(),2);
+    assert.equal(await page.locator('#node-list [data-finding-target]').count(),2);await copyFinding(page,'F01');
     assert.equal(await page.locator('#node-list img,#node-list script').count(),0);
     assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
     await page.locator('#node-list [data-finding-target="受付情報"]').focus();await page.keyboard.press('Enter');
@@ -66,7 +77,7 @@ export async function verifyFindings(browser){
     assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);
     await page.locator('.finding-back').click();
     await panel.locator('[data-finding-key="finding:F03"]').click();
-    assert.match(await page.locator('#node-list').textContent(),/関連先：未設定/);
+    assert.match(await page.locator('#node-list').textContent(),/関連先：未設定/);await copyFinding(page,'F03');
     assert.equal(await page.locator('#node-list [data-finding-target]').count(),0);
     await page.locator('.finding-back').click();
     await page.locator('#drawer-mode-items').click();
