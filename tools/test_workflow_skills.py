@@ -354,6 +354,37 @@ class WorkflowSkillsTest(unittest.TestCase):
             self.assertEqual((ROOT / 'docs/adoption.md').read_bytes(),
                              (SKILLS / name / 'references/adoption.md').read_bytes())
 
+    def test_archived_finding_routing_example_keeps_its_evidence(self):
+        # Audit of one frozen agent run; does not rerun an LLM or prove accuracy.
+        fixture = ROOT / 'tools/fixtures/plugin-draft-review-loop/routing'
+        observed = fixture / 'observations'
+        evidence = json.loads((observed / 'manifest.json').read_text())
+        inputs = {name: hashlib.sha256((fixture / name).read_bytes()).hexdigest()
+                  for name in ['draft.md', 'notes.md']}
+        self.assertEqual(evidence['input_sha256'], inputs)
+        for recorded in evidence['after_read_only_and_decision_response_sha256'].values():
+            self.assertEqual(recorded, inputs)
+        for name, digest in evidence['output_sha256'].items():
+            self.assertEqual(hashlib.sha256((observed / name).read_bytes()).hexdigest(), digest)
+        self.assertFalse(evidence['effective_runtime_settings_independently_verified'])
+        candidate = (observed / 'candidate-draft.md').read_text()
+        after = (observed / 'after-decision-draft.md').read_text()
+        baseline = (observed / 'baseline-draft.md').read_text()
+        self.assertIn('## Whne', (fixture / 'draft.md').read_text())
+        for document in [candidate, after]:
+            self.assertNotIn('## Whne', document)
+            self.assertIn('返却控え', document)
+            self.assertNotIn('部長', document)
+            self.assertNotIn('QR', document)
+            self.assertNotIn('# Findings', document)
+        self.assertIn('部長の追加承認とQR読取機能', baseline)
+        who = lambda text: text.split('# Activity 返却品を点検する', 1)[1].split('## Who', 1)[1].split('## Where', 1)[0]
+        self.assertIn('未確定', who(candidate))
+        self.assertIn('設備管理担当', who(after))
+        self.assertIn('判断材料・基準とその受け取り方は未確認', after)
+        self.assertIn('別途明示的な改稿依頼が必要',
+                      (observed / 'decision-only-response.md').read_text())
+
     def test_draft_review_loop_routes_to_actual_read_only_reviewer(self):
         # Distribution/instruction contract only: this does not run an agent.
         draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
