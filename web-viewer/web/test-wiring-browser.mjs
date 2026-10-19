@@ -88,7 +88,7 @@ export async function verifyRealWiring(browser){
    const returning=matrixReturn??wire.returning;
    if(returning||r.exception){
     assert.ok(Math.abs(r.points[0][0]-r.source.x-260)<.01);assert.ok(Math.abs(r.points[0][1]-r.source.y-68*(wire.fromPort??.5))<.01);assert.ok(r.points[1][0]>r.points[0][0]);
-    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282-16*(wire.returnLane??0))<.01,'aligned return corridor uses constant card clearance');
+    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-292-16*(wire.returnLane??0))<.01,'aligned return corridor uses constant card clearance');
     assert.ok(Math.abs(r.points.at(-1)[0]-r.target.x-260)<.01);assert.ok(Math.abs(r.points.at(-1)[1]-r.target.y-68*(wire.toPort??.5))<.01);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
     assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y>=r.source.y,'right return preserves directed arrival');
    }else{

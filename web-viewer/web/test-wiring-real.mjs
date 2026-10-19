@@ -35,7 +35,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    assert.deepEqual(route.points.at(-1),[target.x+target.width,target.y+target.height/2],'feedback Input enters Activity on the right');
    assert.ok(route.points.at(-2)[0]>route.points.at(-1)[0]);
    assert.ok(route.points.some(p=>target.y<source.y?p[1]<route.points[0][1]:p[1]>route.points[0][1]),'right corridor follows the directed target height');
-   if(returnInput)assert.equal(route.bounds.right,source.x+source.width+22,'aligned Objects share the fixed 22-unit return corridor');
+   if(returnInput)assert.equal(route.bounds.right,source.x+source.width+32,'aligned Objects share the fixed 32-unit return corridor');
   }else{
    assert.deepEqual(route.points[0],[source.x+source.width/8,source.y+source.height],'ordinary icon-side bottom outlet');
    assert.equal(route.points[1][0],route.points[0][0]);assert.ok(route.points[1][1]>route.points[0][1]);
