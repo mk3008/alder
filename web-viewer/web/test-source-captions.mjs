@@ -30,7 +30,7 @@ function check(d,focus){
   }
   assert.equal(route.fallback,false);assert.equal(route.collisions,0);
   for(const n of boxes)assert.equal(overlap(labels[i],n),false,'label never covers a card');
-  for(const l of labels.slice(i+1))assert.equal(overlap(labels[i],l),false,'complete captions never overlap');
+  for(const [j,l] of labels.entries())if(j>i){const other=g.relations[j],same=!p.wires[i].returning&&!p.wires[j].returning&&r.kind===other.kind&&r.from===other.from&&r.label===other.label;if(same)assert.deepEqual(labels[i],{...l,id:labels[i].id},'identical departure captions share one rectangle');else assert.equal(overlap(labels[i],l),false,'distinct captions never overlap');}
  }
  // Moving only a target keeps the Output caption's source row. Reopening from
  // persisted geometry is deterministic; a layout reset alone adopts new cells.

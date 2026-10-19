@@ -1,3 +1,4 @@
+import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
 import {verifyObjectMedium} from './test-object-medium-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -46,6 +47,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'objectMedium',run:()=>verifyObjectMedium(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},

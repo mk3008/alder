@@ -54,7 +54,7 @@ export function seedReturnRouteSession({positions,zoom}){return new Promise((res
 });}
 export function readReturnRoutesInPage(){
  return Object.fromEntries([...document.querySelectorAll('.edge')].map(edge=>{
-  const label=document.querySelector(`.edge-label[data-relation="${edge.dataset.relation}"]`);
+  const label=document.querySelector(`.edge-label[data-relations~="${edge.dataset.relation}"]`);
   return [edge.dataset.relation,{path:edge.getAttribute('d'),label:label?[label.getAttribute('x'),label.getAttribute('y')]:null,collisions:edge.dataset.collisions}];
  }));
 }

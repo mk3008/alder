@@ -5,6 +5,11 @@ import {dependencyOrder} from './layout-order.ts';
 const ROW_STEP=112;
 export const CAPTION_LINE_STEP=22;
 export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number};
+/** Only normal departures share captions; return/exception bends stay independent. */
+export function captionKey(relation:Relation,index:number,wire?:MatrixWire):string{
+ return wire&&!wire.returning&&(relation.kind==='input'||relation.kind==='output')
+  ?JSON.stringify([relation.kind,relation.from,relation.label]):JSON.stringify(['relation',index]);
+}
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
  const types=new Map(graph.nodes.map(n=>[n.id,n.type]));
@@ -67,10 +72,11 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   after.forEach(n=>detailColumns.set(n.id,upstream.length+1));
   exceptions.forEach((n,i)=>detailColumns.set(n.id,upstream.length+2+i));
  }
- const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>();
+ const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>(),captionLanes=new Map<string,number>();
  const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
-  const back=returning.has(i),key=(back?'return:':'departure:')+r.from,captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
+  const back=returning.has(i),key=(back?'return:':'departure:')+r.from,group=captionKey(r,i,{returning:back,captionLane:0});
+  let captionLane=captionLanes.get(group);if(captionLane===undefined){captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);captionLanes.set(group,captionLane);}
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
  });
  const lastTarget=new Map<string,number>();

@@ -45,11 +45,11 @@ function geometry(e,inset=40,zoom=1){
  // separate frozen-128 restore/reset regression in layout and native wiring.
  const oldCells=JSON.parse(readFileSync('web/authorities/overview-matrix-c407.json','utf8'));for(const [id,[x]] of Object.entries(oldCells))assert.equal(positions(e)[id][0],x);assert.deepEqual(Object.keys(positions(e)).sort((a,b)=>positions(e)[a][1]-positions(e)[b][1]),Object.keys(oldCells).sort((a,b)=>oldCells[a][1]-oldCells[b][1]));assertCompactStaircase(positions(e),design);
  // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'ce9ee5eb8ac79824a4da9dfb2064b01a324fc8408ae537da0da7e4098bf90e8d','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
+ assert.equal(hash(routes(e)),'98a613416de7e250748a41067c9a424e2addac8b4cd289acc6cfa87227a3ccd2','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2118 3586');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2118+inset*2)*zoom+'px',3586*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2118 3564');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2118+inset*2)*zoom+'px',3564*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

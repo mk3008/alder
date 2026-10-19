@@ -78,7 +78,7 @@ export async function verifyRealWiring(browser){
    const cards=[...document.querySelectorAll('.node')].map(n=>{const b=n.getBoundingClientRect(),icon=n.firstElementChild.getBoundingClientRect();return {id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:260,height:68,object:n.classList.contains('object'),iconX:parseFloat(n.style.left)+(icon.x+icon.width/2-b.x)*260/b.width};});
    const wires=[...document.querySelectorAll('.edge')].map(path=>{
     const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
-    const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
+    const label=document.querySelector(`.edge-label[data-relations~="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
     return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),paintRuns:document.querySelectorAll(`.edge-paint[data-relation="${path.dataset.relation}"]`).length,dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });

@@ -28,7 +28,7 @@ export async function verifyRouteCache(browser){
  const unrelated=relations.findIndex(r=>r.from==='record'&&r.to==='read');
  assert.ok(unrelated>=0);assert.ok(relations.some(r=>r.from===moving||r.to===moving));
  const positions=()=>page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
- const routes=()=>page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('.edge')].map(n=>{const label=document.querySelector(`.edge-label[data-relation="${n.dataset.relation}"]`);return [n.dataset.relation,{path:n.getAttribute('d'),label:[label.getAttribute('x'),label.getAttribute('y')]}];})));
+ const routes=()=>page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('.edge')].map(n=>{const label=document.querySelector(`.edge-label[data-relations~="${n.dataset.relation}"]`);return [n.dataset.relation,{path:n.getAttribute('d'),label:[label.getAttribute('x'),label.getAttribute('y')]}];})));
  const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);
  try{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
