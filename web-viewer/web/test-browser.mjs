@@ -1,3 +1,4 @@
+import {verifySRDependencies} from './test-sr-dependencies-browser.mjs';
 import {verifyArrowArrivals} from './test-arrow-arrivals-browser.mjs';
 import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
 import {verifyObjectMedium} from './test-object-medium-browser.mjs';
@@ -48,6 +49,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'srDependencies',run:()=>verifySRDependencies(browser)},
    {name:'arrowArrivals',run:()=>verifyArrowArrivals(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'objectMedium',run:()=>verifyObjectMedium(browser)},
