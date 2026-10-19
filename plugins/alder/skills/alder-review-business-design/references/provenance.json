@@ -1,9 +1,9 @@
 {
-  "alder_source_revision": "8d34c05d3cc6b982df209b46c3747b208c43c4ae",
+  "alder_source_revision": "b0e0a633c5729ba495e1a9d5ac09fa64aa3abdc2",
   "sources": {
     "docs/business-design-quality-check.ja.md": "d1a3021da91de3f47ddc7a5fc18efbded598beebe1af5c089616f368886f803e",
     "docs/business-design-correlation-check.ja.md": "b02d76cb9c9a2d3f7882fa80c67cd6a806c69866ecf84ce0dbdc32052cdd4988",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
-    "docs/business-design-structure.ja.md": "dc01068e392c58d406780e8a01ade7d5b199e1551f9867b10fb29789aabf9647"
+    "docs/business-design-structure.ja.md": "baf652e3dfd71d83739021d4f05c842426f3611f50d1443c87b3d1fb053dd8d3"
   }
 }

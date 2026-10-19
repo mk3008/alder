@@ -169,6 +169,7 @@ def parse_document(text):
     graph = {'version': 1, 'nodes': [], 'relations': []}
     findings = []
     object_media = {}
+    object_sr_dependencies = {}
     special = set()
     for i, (start, heading) in enumerate(roots[1:], 1):
         end = roots[i + 1][0] if i + 1 < len(roots) else len(lines)
@@ -203,15 +204,25 @@ def parse_document(text):
             object_headings = ['## Scope', '## Icon']
             if any(h == '## Medium' for _, h in headings(body)):
                 object_headings.append('## Medium')
+            if any(h == '## SR Dependencies' for _, h in headings(body)):
+                object_headings.append('## SR Dependencies')
             if any(h == '## Information' for _, h in headings(body)):
                 object_headings.append('## Information')
             values = sections(body, tuple(object_headings), node_id)
             require([h for _, h in headings(body)] == object_headings,
-                    f'{node_id}: Object fields must follow Scope/Icon/[Medium]/[Information] order')
+                    f'{node_id}: Object fields must follow Scope/Icon/[Medium]/[SR Dependencies]/[Information] order')
             require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
             if '## Medium' in values:
                 require(len(values['## Medium'].splitlines()) == 1, f'{node_id}: Medium must be one line')
                 object_media[node_id] = values['## Medium']
+            if '## SR Dependencies' in values:
+                dependencies = []
+                for line in values['## SR Dependencies'].splitlines():
+                    if line.strip():
+                        require(line.startswith('- ') and visible_name(line[2:]), f'{node_id}: invalid SR dependency')
+                        dependencies.append(line[2:])
+                require(dependencies and len(set(dependencies)) == len(dependencies), f'{node_id}: empty/duplicate SR dependencies')
+                object_sr_dependencies[node_id] = dependencies
             icon = 'box' if values['## Icon'] == '(generic icon)' else values['## Icon']
             if '## Information' in values:
                 for line in values['## Information'].splitlines():
@@ -276,6 +287,8 @@ def parse_document(text):
     document = {'graph': graph, 'findings': findings}
     if object_media:
         document['objectMedia'] = object_media
+    if object_sr_dependencies:
+        document['objectSRDependencies'] = object_sr_dependencies
     return document
 
 
@@ -302,6 +315,8 @@ def main(argv=None):
                 require(not args.design.samefile(args.output), 'output must not overwrite Business Design')
         document = parse_document(args.design.read_text(encoding='utf-8'))
         result = render(document['graph'])
+        if document.get('objectSRDependencies'):
+            print('business-graph: warning: Object SR Dependencies omitted from Graph v1; retain the source Markdown or use parse_document.', file=sys.stderr)
         if document.get('objectMedia'):
             print('business-graph: warning: Object Medium omitted from Graph v1; retain the source Markdown or use parse_document.', file=sys.stderr)
         if document['findings']:
