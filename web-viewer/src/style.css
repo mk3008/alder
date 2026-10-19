@@ -272,3 +272,11 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .edge-paint{fill:none;stroke:var(--line);stroke-width:1.5}
 .edge-paint.review-related{stroke:var(--review-link);stroke-width:3.2}
 .edge-paint.muted{opacity:1}
+
+#node-list .finding-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.finding-heading>span{min-width:0;overflow-wrap:anywhere}
+#node-list .finding-copy{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;min-height:44px;padding:10px}
+.finding-copy svg{width:18px;height:18px}
+
+.finding-related ul{padding-left:20px}
+#node-list .finding-related .finding-target-link:not(:disabled){text-decoration:underline;text-underline-offset:3px}

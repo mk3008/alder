@@ -1,4 +1,4 @@
-import type {MatrixWire} from './matrix-layout.ts';
+import {CAPTION_LINE_STEP,type MatrixWire} from './matrix-layout.ts';
 import {captionOnRow, routeEdge, type EdgeRoute, type RouteNode, type RouteOptions} from './routing.ts';
 import type {Relation} from './graph';
 
@@ -53,13 +53,16 @@ export class RouteCache {
     });
     // Geometry remains incident-only. Matrix caption reservations are a separate
     // deterministic pass: a moved card may cover a nonincident caption, so its
-    // horizontal slot must be reconsidered without rerouting that wire.
+    // caption slot must be reconsidered without rerouting that wire.
     if(matrix){
       const placed:RouteNode[]=[];
-      for(const [i,route]of routes.entries()){
+      // Reserve the normal departure stack before return captions escape it.
+      const order=routes.map((_,i)=>i).sort((a,b)=>Number(matrix[a].returning)-Number(matrix[b].returning));
+      for(const i of order){
+        const route=routes[i];
         if(!route)continue;
         const source=nodes.find(n=>n.id===relations[i].from)!,width=Math.max(30,relations[i].label.length*12);
-        const anchor: [number,number]=matrix[i].returning?[Math.max(...route.points.map(p=>p[0]))+8+width/2,route.points[0][1]]:[source.x+source.width*.125+8+width/2,source.y+source.height+14];
+        const anchor: [number,number]=matrix[i].returning?[Math.max(...route.points.map(p=>p[0]))+8+width/2,route.points[0][1]]:[source.x+source.width*.125+8+width/2,source.y+source.height+14+matrix[i].captionLane*CAPTION_LINE_STEP];
         const label=captionOnRow(anchor,width,18,nodes,placed);
         if(label[0]!==route.label[0]||label[1]!==route.label[1])routes[i]={...route,label};
         placed.push({id:String(i),x:label[0]-width/2,y:label[1]-9,width,height:18});

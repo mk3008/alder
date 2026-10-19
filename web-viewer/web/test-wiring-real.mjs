@@ -17,7 +17,7 @@ const state=createWorkspace({tabs:[{key:'source',name:'sample',design,positions:
 const overview=structuredClone(state.tabs[0].positions);
 for(const [activity,staircase] of Object.entries(expected)){
  const projected=activityDesign(design,activity),positions=initialPositions(projected.graph,projected.activityOrder,activity);
- for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*96],'all upstream Object and exception Activity peers advance right and down');
+ for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*112],'all upstream Object and exception Activity peers advance right and down');
  assert.deepEqual(initialPositions({...projected.graph,nodes:[...projected.graph.nodes].reverse(),relations:[...projected.graph.relations].reverse()},projected.activityOrder,activity),positions,'deterministic detail ordering');
  const focusY=positions[activity][1],outputs=projected.graph.relations.filter(r=>r.kind==='output').map(r=>r.to);
  for(const n of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==activity)){assert.ok(positions[n.id][1]>focusY);for(const id of outputs)assert.ok(positions[n.id][1]>positions[id][1],'exception peers follow every normal Output');}

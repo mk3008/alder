@@ -53,6 +53,8 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   const waitZoom=expected=>page.waitForFunction(value=>Math.abs(parseFloat(document.querySelector('#nodes').style.transform.slice(6))-value)<1e-8,expected);
   const pinch=async(cx,cy,from,to,end='touchEnd')=>{
    const expected=Math.max(.25,Math.min(2.5,(await view()).zoom*to/from));
+   const starts=[[cx-from/2,cy],[cx+from/2,cy]],hits=await page.evaluate(points=>points.map(([x,y])=>{const n=document.elementFromPoint(x,y);return {x,y,inGraph:!!n&&document.querySelector('#viewport').contains(n),control:!!n?.closest('button,input,label,a,select,textarea')};}),starts);
+   assert.ok(hits.every(h=>h.inGraph&&!h.control),'pinch must start on the graph, outside excluded controls: '+JSON.stringify(hits));
    await send('touchStart',[[1,cx-from/2,cy],[2,cx+from/2,cy]]);
    for(let i=1;i<=5;i++){const gap=from+(to-from)*i/5;await send('touchMove',[[1,cx-gap/2,cy],[2,cx+gap/2,cy]]);}
    await waitZoom(expected);await send(end,[]);
@@ -107,7 +109,8 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await pinch(500,400,200,300);assert.deepEqual(await positions(),initial);await page.locator('#layout-lock').click();await page.locator('.node.object').first().scrollIntoViewIfNeeded();const move=await page.locator('.node.object').first().boundingBox();await send('touchStart',[[1,move.x+100,move.y+30]]);await send('touchMove',[[1,move.x+120,move.y+40]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
  },{blocked:!basic});
  await run('product: midpoint, zoom limits, cancel and consecutive gestures',async({page,positions,view,pinch})=>{
-  const initial=await positions(),cx=500,cy=400;await pinch(cx,cy,200,300);assert.equal((await view()).zoom,1.5);
+  // Keep the anchor away from the source card's detail button after the first zoom.
+  const initial=await positions(),cx=1000,cy=400;await pinch(cx,cy,200,300);assert.equal((await view()).zoom,1.5);
   await page.locator('#viewport').evaluate(n=>{n.scrollLeft=300;n.scrollTop=200;});const before=await view();
   const anchor=[(before.scroll[0]+cx-before.rect.x)/before.zoom,(before.scroll[1]+cy-before.rect.y)/before.zoom];
   await pinch(cx,cy,200,300);const after=await view();assert.equal(after.zoom,2.25);
