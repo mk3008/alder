@@ -121,5 +121,7 @@ export function objectMediaFromSource(markdown: string, names: Set<string>): Rec
   if(!headings(markdown).some(([,h])=>h==='## Medium'))return undefined;
   const media=parseDesign(markdown).objectMedia;
   if(!media)return undefined;
-  return Object.fromEntries(Object.entries(media).filter(([id])=>names.has(id)));
+  const restored: Record<string,string> = Object.create(null);
+  for(const [id,value] of Object.entries(media))if(names.has(id))restored[id]=value;
+  return restored;
 }

@@ -9,7 +9,7 @@ const d=parseDesign(raw),old=parseDesign(raw.replace(/## Medium\n\n[^\n]+\n/g,''
 assert.deepEqual(d.graph,old.graph);assert.equal(old.objectMedia,undefined);
 assert.deepEqual({...d.objectMedia},{受付情報:'PDF',外部台帳:'データベース / shared.employee_roles_authority_limits_2026'});
 assert.equal(activityDesign(d,'依頼を受け付ける').objectMedia,d.objectMedia);
-assert.deepEqual(objectMediaFromSource(raw,new Set(['受付情報'])),{受付情報:'PDF'});
+assert.deepEqual({...objectMediaFromSource(raw,new Set(['受付情報']))},{受付情報:'PDF'});
 assert.equal(objectMediaFromSource('legacy text\n```',new Set()),undefined);
 assert.equal(objectMediaFromSource('```\n## Medium\n```',new Set()),undefined);
 const py=spawnSync('python3',['-c',"import json,sys;sys.path.insert(0,sys.argv[1]);from export import parse_document;print(json.dumps(parse_document(sys.stdin.read()),ensure_ascii=False))",fileURLToPath(new URL('../../tools/business_graph',import.meta.url))],{input:raw,encoding:'utf8'});
@@ -18,3 +18,7 @@ for(const value of ['','PDF\nCSV','PDF\n\n## Medium\n\nCSV'])assert.throws(()=>p
 assert.throws(()=>parseDesign(raw.replace('## Who\n','## Medium\n\nCSV\n\n## Who\n')));
 assert.throws(()=>validateGraph({...d.graph,nodes:d.graph.nodes.map(n=>({...n,medium:'PDF'}))}));
 console.log('Object Medium Python/TS parity, strict Graph and activity projection passed');
+
+const special=raw.replaceAll('媒体未指定','toString').replaceAll('受付情報','__proto__');
+const restored=objectMediaFromSource(special,new Set(['toString','__proto__']));
+assert.equal(restored.toString,undefined);assert.equal(restored.__proto__,'PDF');assert.equal(Object.getPrototypeOf(restored),null);
