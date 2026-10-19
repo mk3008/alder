@@ -1,3 +1,4 @@
+import {verifyObjectMedium} from './test-object-medium-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
@@ -45,6 +46,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'objectMedium',run:()=>verifyObjectMedium(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},

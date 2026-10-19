@@ -168,6 +168,7 @@ def parse_document(text):
     require(not ENTITY.fullmatch(roots[0][1]) and roots[0][1] not in ('# Scope', '# Graph exceptions', '# Findings'), 'first H1 must be a document title')
     graph = {'version': 1, 'nodes': [], 'relations': []}
     findings = []
+    object_media = {}
     special = set()
     for i, (start, heading) in enumerate(roots[1:], 1):
         end = roots[i + 1][0] if i + 1 < len(roots) else len(lines)
@@ -200,12 +201,17 @@ def parse_document(text):
         if category == 'Object':
             information = []
             object_headings = ['## Scope', '## Icon']
+            if any(h == '## Medium' for _, h in headings(body)):
+                object_headings.append('## Medium')
             if any(h == '## Information' for _, h in headings(body)):
                 object_headings.append('## Information')
             values = sections(body, tuple(object_headings), node_id)
             require([h for _, h in headings(body)] == object_headings,
-                    f'{node_id}: Object fields must follow Scope/Icon/[Information] order')
+                    f'{node_id}: Object fields must follow Scope/Icon/[Medium]/[Information] order')
             require(values['## Scope'] in ('true', 'false'), f'{node_id}: Scope must be true or false')
+            if '## Medium' in values:
+                require(len(values['## Medium'].splitlines()) == 1, f'{node_id}: Medium must be one line')
+                object_media[node_id] = values['## Medium']
             icon = 'box' if values['## Icon'] == '(generic icon)' else values['## Icon']
             if '## Information' in values:
                 for line in values['## Information'].splitlines():
@@ -267,7 +273,10 @@ def parse_document(text):
     names = {node['id'] for node in graph['nodes']}
     for finding in findings:
         finding['unresolvedTargets'] = [target for target in finding['targets'] if target not in names]
-    return {'graph': graph, 'findings': findings}
+    document = {'graph': graph, 'findings': findings}
+    if object_media:
+        document['objectMedia'] = object_media
+    return document
 
 
 def parse_design(text):
@@ -293,6 +302,8 @@ def main(argv=None):
                 require(not args.design.samefile(args.output), 'output must not overwrite Business Design')
         document = parse_document(args.design.read_text(encoding='utf-8'))
         result = render(document['graph'])
+        if document.get('objectMedia'):
+            print('business-graph: warning: Object Medium omitted from Graph v1; retain the source Markdown or use parse_document.', file=sys.stderr)
         if document['findings']:
             print(f'business-graph: warning: {len(document["findings"])} findings omitted from Graph v1; retain the source Markdown or use parse_document.', file=sys.stderr)
         if args.output:

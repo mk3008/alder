@@ -2,7 +2,7 @@ export type GraphNode = { id: string; type: 'business' | 'object'; name: string;
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
 export type Finding = { id: string; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };
-export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
+export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; findings?: Finding[]; objectMedia?: Record<string,string>; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
 const fail = (ok: unknown, message: string): void => { if (!ok) throw new Error(message); };
 const text = (v: unknown): v is string => typeof v === 'string' && !!v.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '');
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -83,6 +83,7 @@ export function parseDesign(markdown: string): Design {
   const entity = /^# (Activity|Object) (\S.*)$/;
   fail(roots.length && !entity.test(roots[0][1]) && !['# Scope','# Graph exceptions','# Findings'].includes(roots[0][1]), 'Document title required');
   let findings: Finding[] = [];
+  const objectMedia: Record<string,string> = Object.create(null);
   const graph: Graph = {version:1,nodes:[],relations:[]}, sourceSections: Record<string,string> = Object.create(null), special = new Set<string>();
   roots.slice(1).forEach(([start,h], index) => {
     const end = roots[index+2]?.[0] ?? ls.length, body = ls.slice(start+1,end).join('\n').replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, ''); fail(body, 'Empty section ' + h);
@@ -94,7 +95,8 @@ export function parseDesign(markdown: string): Design {
     const m = entity.exec(h); fail(m, 'Unsupported heading ' + h); const category = m![1], name = m![2].replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, ''); sourceSections[name] = ls.slice(start,end).join('\n');
     const has = (h:string) => headings(body).some(m=>m[1]===h);
     if(category === 'Object') {
-      const keys=['## Scope','## Icon']; if(has('## Information')) keys.push('## Information'); const v=sections(body,keys,name); fail(['true','false'].includes(v['## Scope']), 'Invalid Scope');
+      const keys=['## Scope','## Icon']; if(has('## Medium')) keys.push('## Medium'); if(has('## Information')) keys.push('## Information'); const v=sections(body,keys,name); fail(['true','false'].includes(v['## Scope']), 'Invalid Scope');
+      if('## Medium' in v){fail(lines(v['## Medium']).length===1,'Medium must be one line');objectMedia[name]=v['## Medium'];}
       const info=lines(v['## Information'] ?? '').filter(l=>l.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '')).map(l=>{fail(/^- \S.*$/.test(l),'Invalid Information'); return l.slice(2);});
       graph.nodes.push({id:name,type:'object',name,scope:v['## Scope']==='true',icon:v['## Icon']==='(generic icon)'?'box':v['## Icon'],information:info}); return;
     }
@@ -110,5 +112,14 @@ export function parseDesign(markdown: string): Design {
   validateGraph(graph); graph.nodes.sort((a,b)=>codepointCompare(a.id,b.id)); graph.relations.sort((a,b)=>{for(const k of ['kind','from','to','label'] as const){const d=codepointCompare(a[k],b[k]);if(d)return d;}return 0;});
   const names=new Set(graph.nodes.map(n=>n.id));
   for(const finding of findings) finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
-  const design={graph,sections:sourceSections,markdown,activityOrder,findings};return design;
+  const design: Design={graph,sections:sourceSections,markdown,activityOrder,findings};if(Object.keys(objectMedia).length)design.objectMedia=objectMedia;return design;
+}
+
+/** Recover explicit media from source; historical sources without Medium need no reparse. */
+export function objectMediaFromSource(markdown: string, names: Set<string>): Record<string,string> | undefined {
+  if(!lines(markdown).some(l=>l==='## Medium'))return undefined;
+  if(!headings(markdown).some(([,h])=>h==='## Medium'))return undefined;
+  const media=parseDesign(markdown).objectMedia;
+  if(!media)return undefined;
+  return Object.fromEntries(Object.entries(media).filter(([id])=>names.has(id)));
 }
