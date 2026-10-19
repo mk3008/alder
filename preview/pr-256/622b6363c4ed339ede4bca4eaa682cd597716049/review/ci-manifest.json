@@ -1,0 +1,12 @@
+{
+  "source": "622b6363c4ed339ede4bca4eaa682cd597716049",
+  "checkout": "ad79102961b9d072b74d39ecfb4b19c61582b257",
+  "urlPath": "/preview/pr-256/622b6363c4ed339ede4bca4eaa682cd597716049/",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "index.html": "a4df9046b79ec870da29671ed1d0ca5d673e207f4eee5a2b2864bc213b172849",
+    "assets/index-B7G9n9Bt.css": "216c010587508ea21c9605027f239413b5f8520a18d829ffab030f94bc5bff1d",
+    "assets/index-Ce7uI19i.js": "f7d685cbe790bb016bcc009fdcddc27086f7807a1196e072f507a1cd67a7bb09"
+  }
+}
