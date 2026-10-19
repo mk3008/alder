@@ -50,6 +50,14 @@ jobs:
           REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
         run: PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/capture-source-captions.mjs
 
+      - name: Retain Object media comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: object-medium-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/object-medium/*.png
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Preserve header review screenshots
         if: always()
         uses: actions/upload-artifact@v4
