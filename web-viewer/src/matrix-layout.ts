@@ -1,6 +1,8 @@
 import type {Graph,Relation} from './graph';
 import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
+// 68px card + 44px for its caption, the following badge and visible clearance.
+const ROW_STEP=112;
 export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number};
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
@@ -87,7 +89,7 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   cells[n.id]=[column,row];if(n.type==='business')previousActivityColumn=column;
   if(lastTarget.has(n.id))corridors.push({column:column+1,until:lastTarget.get(n.id)!});
  }
- for(const [id,[column,line]]of Object.entries(cells))positions[id]=[40+64*column,40+96*line];
+ for(const [id,[column,line]]of Object.entries(cells))positions[id]=[40+64*column,40+ROW_STEP*line];
  return {positions,cells,wires:directionalReturnWires(graph,wires,positions),forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
 }
 

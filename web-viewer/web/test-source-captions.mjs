@@ -15,10 +15,13 @@ const labelBox=(r,i,g)=>({id:String(i),x:r.label[0]-Math.max(30,g.relations[i].l
 function check(d,focus){
  const g=d.graph,p=matrixPlan(g,d.activityOrder,focus);
  const ys=Object.values(p.positions).map(p=>p[1]).sort((a,b)=>a-b);
- assert.deepEqual(ys,Array.from({length:g.nodes.length},(_,i)=>40+96*i),'caption count never adds empty rows');
+ assert.deepEqual(ys,Array.from({length:g.nodes.length},(_,i)=>40+112*i),'caption count never adds empty rows');
  const boxes=g.nodes.map(n=>({id:n.id,x:p.positions[n.id][0],y:p.positions[n.id][1],width:260,height:68}));
  const cache=new RouteCache(),key={},routes=cache.update(key,d,boxes,g.relations,p.wires);
  const labels=routes.map((r,i)=>labelBox(r,i,g));
+ // Every following card may carry a badge extending 9px upward. Keep the
+ // complete 18px caption at least 12px clear of that badge reservation.
+ for(const label of labels)for(const n of boxes)if(n.y>label.y)assert.ok(n.y-9-(label.y+label.height)>=12,'caption clears the following badge reservation');
  for(const [i,r]of g.relations.entries()){
   const s=boxes.find(n=>n.id===r.from),route=routes[i];
   if(!p.wires[i].returning){
@@ -55,7 +58,7 @@ for(const kind of ['input','output']){
  const r=routeEdge({from:'s',to:'t',kind,nodes,matrix:{returning:false,captionLane:9},labelWidth:480,labelHeight:18});
  assert.equal(r.label[1],122);assert.ok(r.label[0]-240>=528);assert.equal(r.fallback,false);
 }
-console.log('purchase captions: 4 Activities/4 Objects/11 relations; 5 views; 96-unit rows; full label/card separation; long and multiple captions; drag/cold reload; saved coordinates and reset; fallback source row');
+console.log('purchase captions: 4 Activities/4 Objects/11 relations; 5 views; 112-unit rows; full label/card separation; long and multiple captions; drag/cold reload; saved coordinates and reset; fallback source row');
 
 // An unrelated card moves over a cached caption: reroute no unrelated wire,
 // but move text sideways. Cold and warm captions agree for the same geometry.

@@ -114,7 +114,7 @@ export async function verifyRealWiring(browser){
     routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder,spec.activity);
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'ordinary Input then focus staircase'));
+    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*112],'ordinary Input then focus staircase'));
     const outputIDs=sourceDesign.graph.relations.filter(r=>r.kind==='output'&&r.from===spec.activity).map(r=>r.to);
     for(const n of sourceDesign.graph.nodes.filter(n=>n.type==='business'&&n.id!==spec.activity&&detail[n.id]))for(const id of outputIDs)assert.ok(detail[n.id][1]>detail[id][1],'exception peers follow every ordinary Output');
     for(const theme of ['light','dark']){

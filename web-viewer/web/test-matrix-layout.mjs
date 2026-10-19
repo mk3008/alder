@@ -8,14 +8,14 @@ const design=parseDesign(readFileSync('../business-design/alder/README.md','utf8
 const accepted=JSON.parse(readFileSync(new URL('./authorities/overview-matrix-c407.json',import.meta.url),'utf8'));
 const compact=matrixPlan(design.graph,design.activityOrder).positions;
 for(const [id,[x]] of Object.entries(accepted))assert.equal(compact[id][0],x,'approved horizontal corridors remain exact');
-assert.deepEqual(Object.values(compact).map(p=>p[1]).sort((a,b)=>a-b),Array.from({length:25},(_,i)=>40+96*i),'one row per card, regardless of caption count');
+assert.deepEqual(Object.values(compact).map(p=>p[1]).sort((a,b)=>a-b),Array.from({length:25},(_,i)=>40+112*i),'one row per card, regardless of caption count');
 const rectHit=(a,b,n)=>a[0]===b[0]?a[0]>n.x&&a[0]<n.x+260&&Math.max(a[1],b[1])>n.y&&Math.min(a[1],b[1])<n.y+68:a[1]>n.y&&a[1]<n.y+68&&Math.max(a[0],b[0])>n.x&&Math.min(a[0],b[0])<n.x+260;
 function verify(graph,hint){
  const before=JSON.stringify(graph),p=matrixPlan(graph,hint),normal=graph.relations.filter(r=>r.kind==='input'||r.kind==='output');
  const reach=id=>{const seen=new Set([id]),q=[id];for(let i=0;i<q.length;i++)for(const r of normal)if(r.from===q[i]&&!seen.has(r.to)){seen.add(r.to);q.push(r.to);}return seen;};
  const boxes=graph.nodes.map(n=>({id:n.id,x:p.positions[n.id][0],y:p.positions[n.id][1],width:260,height:68}));
  assert.equal(Object.keys(p.cells).length,graph.nodes.length);
- for(const [id,[column,row]]of Object.entries(p.cells)){assert.ok(Number.isInteger(column)&&column>=0&&Number.isInteger(row)&&row>=0);assert.deepEqual(p.positions[id],[40+64*column,40+96*row]);}
+ for(const [id,[column,row]]of Object.entries(p.cells)){assert.ok(Number.isInteger(column)&&column>=0&&Number.isInteger(row)&&row>=0);assert.deepEqual(p.positions[id],[40+64*column,40+112*row]);}
  for(const [i,r]of graph.relations.entries()){
   const a=boxes.find(n=>n.id===r.from),b=boxes.find(n=>n.id===r.to),wire=p.wires[i];
   assert.equal(wire.returning,r.kind.endsWith('exception')||p.feedbackRelations.includes(i));

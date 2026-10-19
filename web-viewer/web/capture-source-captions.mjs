@@ -9,9 +9,11 @@ import {resolve,join,extname} from 'node:path';
 import {createServer} from 'node:http';
 import {openSourceAction} from './source-menu-browser.mjs';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const base='f9a9708e4b9b2992f5572ab4c34cf00c24a7953e',scratch=mkdtempSync(join(tmpdir(),'alder-caption-255-'));
+const base='6b94480d7bad717cc3dd32b4b843d7b226490da1',scratch=mkdtempSync(join(tmpdir(),'alder-caption-255-'));
 const destination='web/evidence/wiring';mkdirSync(destination,{recursive:true});
-const source=readFileSync('../business-design/purchase-request/README.md','utf8'),servers=[];
+const sourceRevision='db332a57848df5368e09fe1cf50aa7c7faf5fb5c';
+try{execFileSync('git',['cat-file','-e',sourceRevision],{stdio:'pipe'});}catch{execFileSync('git',['fetch','--depth=1','origin',sourceRevision],{stdio:'pipe'});}
+const source=execFileSync('git',['show',sourceRevision+':business-design/purchase-request/README.md'],{encoding:'utf8'}),servers=[];
 let browser;
 async function serve(root,port){
  const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname),file=resolve(root,'.'+pathname+(pathname.endsWith('/')?'index.html':''));
@@ -48,13 +50,16 @@ try{
     const measured=await page.evaluate(()=>{
      const cards=[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.offsetWidth,height:n.offsetHeight,who:n.querySelector('small')?.textContent,roleColor:n.querySelector('.who-badge')?getComputedStyle(n.querySelector('.who-badge')).backgroundColor:undefined}));
      const labels=[...document.querySelectorAll('.edge-label')].map(n=>{const b=n.getBBox();return {index:+n.dataset.relation,text:n.textContent,y:+n.getAttribute('y'),x:b.x,top:b.y,width:b.width,height:b.height};});
-     return {cards,labels,zoom:document.querySelector('#zoom').textContent};
+     const badges=[...document.querySelectorAll('.finding-badges')].map(n=>{const b=n.getBoundingClientRect();return {x:b.x,top:b.y,width:b.width,height:b.height};});
+     const glyphs=[...document.querySelectorAll('.edge-label')].map(n=>{const b=n.getBoundingClientRect();return {x:b.x,top:b.y,width:b.width,height:b.height};});
+     return {cards,labels,badges,glyphs,zoom:document.querySelector('#zoom').textContent};
     });
     if(version==='after'){
      const expected={'申請者':'rgb(139, 92, 246)','承認者':'rgb(194, 65, 12)','購買担当者':'rgb(0, 133, 118)'};
      for(const n of measured.cards.filter(n=>n.who))assert.equal(n.roleColor,expected[n.who],'shared role colors in real overview/detail');
-     assert.deepEqual(measured.cards.map(n=>n.y).sort((a,b)=>a-b),Array.from({length:measured.cards.length},(_,i)=>40+96*i));
+     assert.deepEqual(measured.cards.map(n=>n.y).sort((a,b)=>a-b),Array.from({length:measured.cards.length},(_,i)=>40+112*i));
      const overlaps=(a,b)=>a.x<b.x+b.width&&b.x<a.x+a.width&&a.top<b.top+b.height&&b.top<a.top+a.height;
+     assert.ok(measured.badges.length>0,'approved Findings visible');for(const l of measured.glyphs)for(const b of measured.badges)assert.equal(overlaps(l,b),false,'native captions do not overlap badges');
      for(const [i,l]of measured.labels.entries()){
       for(const n of measured.cards)assert.equal(overlaps(l,{...n,top:n.y}),false,'native glyph/card separation');
       for(const other of measured.labels.slice(i+1))assert.equal(overlaps(l,other),false,'native glyph separation');
@@ -65,6 +70,6 @@ try{
    }
   }finally{await context.close();}
  }
- writeFileSync(`${destination}/source-captions-255.json`,JSON.stringify({base,source:process.env.REVIEW_HEAD||execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),evidence},null,2));
+ writeFileSync(`${destination}/source-captions-255.json`,JSON.stringify({base,sourceRevision,source:process.env.REVIEW_HEAD||execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),evidence},null,2));
  console.log(JSON.stringify({purchaseCaptionComparison:{base,captures:evidence.map(({version,width,view,path,zoom})=>({version,width,view,path,zoom}))}}));
 }finally{await browser?.close();for(const s of servers)await new Promise(r=>s.close(r));rmSync(scratch,{recursive:true,force:true});}

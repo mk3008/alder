@@ -13,7 +13,7 @@ for(const focus of [undefined,...design.activityOrder]){
  assert.deepEqual(initialPositions(projected.graph,projected.activityOrder,focus),plan.positions,'both views use the matrix plan directly');
  if(focus){
   for(const [id,[x]]of Object.entries(accepted[focus]))assert.equal(plan.positions[id][0],x,'existing detail columns remain exact');
-  assert.deepEqual(Object.values(plan.positions).map(p=>p[1]).sort((a,b)=>a-b),Array.from({length:projected.graph.nodes.length},(_,i)=>40+96*i),'details use the same compact single-row policy');
+  assert.deepEqual(Object.values(plan.positions).map(p=>p[1]).sort((a,b)=>a-b),Array.from({length:projected.graph.nodes.length},(_,i)=>40+112*i),'details use the same compact single-row policy');
   const outputs=projected.graph.relations.filter(r=>r.kind==='output'&&r.from===focus).map(r=>plan.positions[r.to][1]);
   for(const node of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==focus))assert.ok(plan.positions[node.id][1]>Math.max(plan.positions[focus][1],...outputs),'exception peers follow all normal outputs');
  }
