@@ -165,6 +165,10 @@ false
 
 server
 
+## Medium
+
+データベース
+
 ## Information
 
 - 従業員の識別情報
