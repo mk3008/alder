@@ -102,7 +102,7 @@ function drawModel(){
   svg.append(g);
  }
 }
-const resizeObserver=new ResizeObserver(()=>drawModel());resizeObserver.observe($('model-diagram'));
+const resizeObserver=new ResizeObserver(()=>drawModel());
 
 let placement=new URLSearchParams(location.search).get('placement')==='separate'?'separate':'inline',tab=placement==='separate'?'model':'elements';
 const $=id=>document.getElementById(id);
@@ -114,5 +114,5 @@ $('elements-tab').onclick=()=>{tab='elements';render();};$('model-tab').onclick=
 document.querySelectorAll('.entity').forEach(g=>{g.onclick=()=>select(g.dataset.entity);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(g.dataset.entity);}};});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.entity').forEach(g=>{g.classList.remove('selected','neighbor');g.setAttribute('aria-pressed','false');});document.querySelectorAll('.wire').forEach(g=>g.classList.remove('related'));document.querySelectorAll('[data-field]').forEach(b=>b.setAttribute('aria-pressed','false'));$('selection').innerHTML='<strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。';}});
 function quantity(){const [r,c]=$('case').value.split(',').map(Number),w=10-r-c;$('quantity').textContent='入庫 '+r+' ／ 購入しない '+c+' ／ 待ち '+w+' → '+(w<0?'不成立：依頼数量を超過':w>0?'作業中':r===10?'終結：全数入庫':r===0?'終結：全数購入なし':'終結：一部入庫・残り購入なし');}
-$('case').onchange=quantity;quantity();render();drawModel();
+$('case').onchange=quantity;quantity();render();drawModel();resizeObserver.observe($('model-diagram'));
 </script></html>
