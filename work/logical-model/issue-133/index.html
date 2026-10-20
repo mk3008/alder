@@ -41,7 +41,7 @@ function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for
 function endpointLabel(svg,wire,atStart,count,table){
  const length=wire.getTotalLength(),distance=Math.min(24,length/3),at=atStart?distance:length-distance,p=wire.getPointAtLength(at),before=wire.getPointAtLength(Math.max(0,at-1)),after=wire.getPointAtLength(Math.min(length,at+1)),horizontal=Math.abs(after.x-before.x)>=Math.abs(after.y-before.y);
  const x=p.x+(horizontal?0:10),y=p.y+(horizontal?-10:4),width=measure(count,13)+10,left=horizontal?x-width/2:x-5;
- const group=svgNode('g',{'pointer-events':'none','data-end':atStart?'start':'end','data-table':table});group.append(svgNode('rect',{x:left,y:y-13,width,height:18,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x,y,'text-anchor':horizontal?'middle':'start'},count));svg.append(group);
+ const group=svgNode('g',{'pointer-events':'none','data-end':atStart?'start':'end','data-end-table':table});group.append(svgNode('rect',{x:left,y:y-13,width,height:18,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x,y,'text-anchor':horizontal?'middle':'start'},count));svg.append(group);
 }
 const states=[];
 function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
