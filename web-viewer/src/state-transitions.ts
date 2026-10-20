@@ -102,7 +102,6 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  const declaration=design.objectStateTransitions?.[id];if(!declaration||!design.graph.nodes.some(n=>n.id===id&&n.type==='object'))return;
  const root=document.createElement('section');root.className='state-transition-panel';root.setAttribute('aria-label','状態遷移');
  const text=(tag:string,value:string,parent:HTMLElement=root)=>{const e=document.createElement(tag);e.textContent=value;parent.append(e);return e;};
- text('h2','状態遷移図');
  if(declaration.error){text('p','状態遷移を表示できません：'+declaration.error).setAttribute('role','status');return root;}
  const model=declaration.model!;
  // Exact visible Exception names only. Never summarize prose or reuse event aliases.
@@ -111,9 +110,7 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
   const names=[...body.matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);
   if(names.filter(name=>name===row.exception).length!==1){text('p',`状態遷移を表示できません：${row.activity} の例外名「${row.exception}」を一意に参照できません`).setAttribute('role','status');return root;}
  }
- text('p','部分定義：未記載の操作は未決です。終端は未決です。');
  const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram(model));root.append(canvas);
- text('p','実線：通常、破線：例外。角丸の注記は保存状態ではありません。保存不可は確定した処理結果、未決へ至る各経路は設計課題です。図は横にスクロールできます。');
  const label=(value:string)=>({'@new':'記録作成前','@none':'保存不可（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);
