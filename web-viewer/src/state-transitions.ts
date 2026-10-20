@@ -52,12 +52,12 @@ function stateDiagram(model:StateModel):SVGSVGElement{
  // Project the shared staircase onto smaller state boxes; reserve actual
  // multiline captions without changing the shared planner/router contracts.
  const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
- const captionGroups=new Map<string,{from:string;activity:string;rows:Transition[];lines:string[];offset:number}>();
- for(const rs of rows){const first=rs[0],key=JSON.stringify([first.from,first.activity]),g=captionGroups.get(key)??{from:first.from,activity:first.activity,rows:[],lines:[],offset:0};g.rows.push(...rs);captionGroups.set(key,g);}
+ const captionGroups=new Map<string,{from:string;activity:string;rows:Transition[];lines:string[];lineRows:Transition[][];offset:number}>();
+ for(const rs of rows){const first=rs[0],key=JSON.stringify([first.from,first.activity]),g=captionGroups.get(key)??{from:first.from,activity:first.activity,rows:[],lines:[],lineRows:[],offset:0};g.rows.push(...rs);captionGroups.set(key,g);}
  const departures=new Map<string,number>();
  for(const group of captionGroups.values()){
-  group.lines=wrap(group.activity);
-  if(group.rows.length>1||group.rows[0].path==='exception')for(const row of group.rows){const branch=row.path==='normal'?'通常':'例外：'+(row.exception??'例外名未定義');if(!group.lines.includes('・'+branch))group.lines.push('・'+branch);}
+  group.lines=wrap(group.activity);group.lineRows=group.lines.map(()=>group.rows);
+  if(group.rows.length>1||group.rows[0].path==='exception')for(const row of group.rows){const branch=row.path==='normal'?'通常':'例外：'+(row.exception??'例外名未定義');const line='・'+branch,index=group.lines.indexOf(line);if(index<0){group.lines.push(line);group.lineRows.push([row]);}else group.lineRows[index].push(row);}
   group.offset=departures.get(group.from)??0;departures.set(group.from,group.offset+group.lines.length*18+8);
  }
  let shift=0;const projected=new Map<string,number>();
@@ -69,7 +69,7 @@ function stateDiagram(model:StateModel):SVGSVGElement{
  svg.append(graphMarkers('state-transition-'));
  const shapeElements=new Map<string,SVGElement>(),edgeElements:SVGElement[]=[],captionElements:{element:SVGElement;rows:Transition[]}[]=[];
  let selected:string|undefined;
- const select=(id?:string)=>{selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-diagram-edge-label edge-label'+focus.labelClasses(caption.rows));};
+ const select=(id?:string)=>{selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));};
  svg.addEventListener('click',event=>{if(event.target===svg)select();});svg.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();select();}});
  const wirePoints:ReturnType<typeof routeEdge>['points'][]=[];
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
@@ -83,7 +83,7 @@ function stateDiagram(model:StateModel):SVGSVGElement{
  for(const group of captionGroups.values()){
   const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=node.y+node.height+group.offset+18;
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity});
-  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;label.append(span);});svg.append(label);captionElements.push({element:label,rows:group.rows});
+  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
   right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);
  }
  for(const node of nodes){

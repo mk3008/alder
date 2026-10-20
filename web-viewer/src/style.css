@@ -33,8 +33,8 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 .node .node-name{font-size:13px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
 .node .review-kind{font-size:9px;letter-spacing:.03em;font-weight:650;opacity:.9;line-height:1.2;max-height:none}
 .node small{font-size:10px;line-height:1.2;opacity:1;color:inherit;max-width:166px}
-.node .who-badge{width:28px;height:28px;min-width:28px;border-radius:50%;border:2px solid var(--role-color);background:var(--role-color);color:#fff;display:grid;place-items:center;max-height:none;overflow:visible;line-height:1;font-size:11px;font-weight:800;align-self:center}
-.node .who-badge svg{width:16px;height:16px;color:inherit!important;stroke-width:2}
+.node .who-badge,.detail-title .who-badge{width:28px;height:28px;min-width:28px;border-radius:50%;border:2px solid var(--role-color);background:var(--role-color);color:#fff;display:grid;place-items:center;max-height:none;overflow:visible;line-height:1;font-size:11px;font-weight:800;align-self:center}
+.node .who-badge svg,.detail-title .who-badge svg{width:16px;height:16px;color:inherit!important;stroke-width:2}
 .node.muted,.edge.muted,.edge-label.muted{opacity:1}
 .node.review-neighbor{border-width:2px;box-shadow:0 0 0 1px color-mix(in srgb,var(--review-link) 35%,transparent),0 3px 8px #0002}
 .node.selected,.node.demo-selected{outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--review-blue) 50%,transparent),0 0 17px 5px var(--review-shadow);z-index:2}
@@ -42,7 +42,7 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 .edge-label.review-related{fill:var(--review-link);font-weight:800;stroke-width:7px}
 .review-related-arrow{fill:var(--review-link)}
 
-[data-theme=dark] .node .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}
+[data-theme=dark] .node .who-badge,[data-theme=dark] .detail-title .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}
 
 header{overflow-x:auto}header>button,header>strong{flex-shrink:0;white-space:nowrap}
 
@@ -309,3 +309,8 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .state-shape.selected,.state-shape.review-neighbor{color:var(--review-link)}.state-shape.selected .state-diagram-node-label{font-weight:750}
 .state-shape{outline:none}
 @media(max-width:800px){#formattedMarkdownDrawer:has(.object-detail-title){width:100%!important;max-width:100vw}#detail:has(.object-detail-title) .check-modes button{min-width:0;padding-inline:3px}}
+
+.activity-detail-title{display:flex;align-items:center;gap:8px;margin-bottom:4px}.activity-detail-title .who-badge{flex-shrink:0}
+#activity-detail-content{font-size:13px;line-height:1.7}#activity-detail-content h2{font-size:16px}
+.state-diagram .state-caption-line.review-related{fill:var(--review-link);font-weight:800}.state-diagram .state-caption-line.muted{fill:var(--fg);opacity:1;font-weight:400}
+@media(max-width:800px){#formattedMarkdownDrawer:has(.activity-detail-title){width:100%!important;max-width:100vw}#detail:has(.activity-detail-title) .check-modes button{min-width:0;padding-inline:3px}}

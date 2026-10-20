@@ -11,3 +11,14 @@ export function formattedMarkdown(source: string,withoutTitle=false): HTMLElemen
     if(fence){code!.append(document.createTextNode(line+'\n'));continue;}if(!line.trim()){list=undefined;continue;}const h=/^(#{1,6}) (.*)$/.exec(line),li=/^\s*(?:[-*]|\d+\.) (.*)$/.exec(line);if(li){if(!list){list=document.createElement(/^\s*\d/.test(line)?'ol':'ul');root.append(list);}const item=document.createElement('li');inline(item,li[1]);list.append(item);continue;}list=undefined;const e=document.createElement(h?'h'+h[1].length:'p');inline(e,h?h[2]:line);root.append(e);
   }if(withoutTitle)root.querySelector('h1')?.remove();return root;
 }
+
+/** Read explicit section boundaries only; fenced examples never create fields. */
+export function markdownFields(source:string,level=2):Record<string,string>{
+ const ls=source.split(/\r?\n/),marks:{name:string;index:number}[]=[];let fence='';
+ ls.forEach((line,index)=>{
+  const m=/^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
+  if(m){if(!fence)fence=m[1];else if(m[1][0]===fence[0]&&m[1].length>=fence.length&&!m[2].trim())fence='';return;}
+  const h=/^(#{1,6}) (.*)$/.exec(line);if(!fence&&h&&h[1].length===level)marks.push({name:h[2],index});
+ });
+ return Object.fromEntries(marks.map((m,i)=>[m.name,ls.slice(m.index+1,marks[i+1]?.index??ls.length).join('\n').trim()]));
+}

@@ -16,8 +16,8 @@ import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy,ListChecks,CircleQuestionMark} from 'lucide';
 import {parseDesign,validateGraph,objectStateTransitionsFromSource,objectMediaFromSource,objectSRDependenciesFromSource,findingsFromSource} from './graph';
-import {formattedMarkdown,detailHeading} from './markdown';
-import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
+import {formattedMarkdown,detailHeading,markdownFields} from './markdown';
+import {findingsPanel,nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
 import {createNodeDrag} from './node-drag';
@@ -219,10 +219,10 @@ function detail(){
   const focus=root.contains(document.activeElement)?(document.activeElement as HTMLElement)?.id:undefined;
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
-  if(n?.type!=='object'&&view!.mode==='states')view!.mode='business';
+  if((n?.type!=='object'&&view!.mode==='states')||(n?.type==='object'&&view!.mode==='basic'))view!.mode='business';
   if(n?.type==='object'&&view!.mode==='states'&&!t.design.objectStateTransitions?.[n.id])view!.mode='business';
   const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,confirm:candidate=>{void confirmChecks(t,candidate);}});
-  if(n){const heading=detailHeading(n.name);if(n.type==='object'){heading.classList.add('object-detail-title');heading.prepend(graphNodeIcon(n),document.createTextNode(' : '));}root.append(heading);}
+  if(n){const heading=detailHeading(n.name);if(n.type==='object'){heading.classList.add('object-detail-title');heading.prepend(graphNodeIcon(n),document.createTextNode(' : '));}else{heading.classList.add('activity-detail-title');heading.prepend(roleBadge(String(n.who),roleColors(t.design.graph.nodes)),document.createTextNode(' '));}root.append(heading);}
   if(n?.type==='object'){
    const scope=document.createElement('p');scope.className='object-detail-scope';scope.textContent='Scope：'+(n.scope?'True':'False');root.append(scope,panel.controls);
    const content=document.createElement('section');content.id='object-detail-content';content.setAttribute('role','tabpanel');content.setAttribute('aria-labelledby','detail-mode-'+view!.mode);
@@ -235,7 +235,17 @@ function detail(){
     const dependency=dependencyPanel(t.design,n.id,id=>navigateNode(id));if(dependency)content.append(dependency);
    }
    root.append(content);
-  }else{root.append(panel.controls,panel.content??formattedMarkdown(n?t.design.sections[n.id]:'図の業務やObjectを選択してください',!!n));}
+  }else if(n){
+   const scope=document.createElement('p');scope.className='object-detail-scope';scope.textContent='Scope：'+(n.scope?'True':'False');root.append(scope,panel.controls);
+   const content=document.createElement('section');content.id='activity-detail-content';content.setAttribute('role','tabpanel');content.setAttribute('aria-labelledby','detail-mode-'+view!.mode);
+   if(view!.mode==='checks'){
+    content.append(findingsPanel(t.design,n.id));const h=document.createElement('h2');h.textContent='チェック項目';content.append(h);if(panel.content)content.append(panel.content);
+   }else{
+    const fields=markdownFields(t.design.sections[n.id]),names=view!.mode==='basic'?['Why','When','Exception When','Who','Where']:['How','Result'];
+    content.append(formattedMarkdown(names.filter(name=>fields[name]!==undefined).map(name=>'## '+name+'\n\n'+fields[name]).join('\n\n')));
+   }
+   root.append(content);
+  }else{root.append(panel.controls,panel.content??formattedMarkdown('図の業務やObjectを選択してください'));}
   root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
