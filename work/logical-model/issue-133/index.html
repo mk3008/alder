@@ -5,6 +5,7 @@
 :root{font-family:"Segoe UI","Noto Sans JP",sans-serif;color:#253d38;background:#f2f6f8}*{box-sizing:border-box}body{margin:0}header{background:#173c60;color:white;padding:12px 24px;display:flex;align-items:center;gap:24px}header strong{font-size:18px}header span{font-size:13px}main{padding:20px 24px}h1{font-size:23px;margin:0 0 8px}h2{font-size:20px;margin:0}p{font-size:14px;line-height:1.6;margin:8px 0}a{color:#176c92}nav{display:flex;gap:8px;margin:14px 0}nav a,button{font:inherit;color:inherit;border:1px solid #b7cbd0;background:white;border-radius:5px;padding:7px 12px;text-decoration:none;cursor:pointer}nav a:hover,button:hover{background:#e7f2ee}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #347faa;outline-offset:3px}.intro{color:#5b7174}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.swatch{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid #64887e;background:#d9eee4}.swatch.read{background:#edf2f5;border-color:#a0b3be}.stage{background:white;border:1px solid #d4dfe4;border-radius:8px;margin:22px 0;padding:18px;scroll-margin-top:12px}.stage-top{display:flex;align-items:center;justify-content:space-between;gap:20px}.eyebrow{font-size:12px;color:#57716a;margin-bottom:4px}.actions{display:flex;gap:8px;align-items:center;margin:12px 0}.actions button{font-size:12px}.status{font-size:12px;color:#607678}.canvas{overflow:auto;background:#fbfcfd;border:1px solid #dce4e8;border-radius:5px;height:560px;touch-action:pan-x pan-y}.canvas svg{display:block;max-width:none;flex:none}.table{cursor:grab;user-select:none;touch-action:none}.table rect{fill:white;stroke:#6e9e8c;stroke-width:1.5}.table .cap{fill:#d9eee4;stroke:none}.table.read rect{stroke:#a0b3be}.table.read .cap{fill:#edf2f5}.table text{font:14px "Segoe UI","Noto Sans JP",sans-serif;fill:#2c433d}.table .name{font-weight:700;font-size:15px}.table .key{font-size:11px;fill:#396a58;font-weight:700}.table .divider{stroke:#e0e8e4}.table.selected rect{stroke:#187da7;stroke-width:3}.wire{fill:none;stroke:#7f969f;stroke-width:1.5}.wire.reference{stroke-dasharray:5 4}.relation{font:13px sans-serif;fill:#3e5d69}.edge-label{fill:#fbfcfd}.selection{font-size:13px;line-height:1.6;color:#3f6056;margin:10px 0 0}.rule{border-left:3px solid #71a893;padding-left:12px;margin:10px 0}.rule p{margin:3px 0}.muted{font-size:12px;color:#667d80}body.dragging,body.dragging .table{cursor:grabbing}footer{font-size:12px;color:#687d80;padding:8px 0 20px}@media(max-width:700px){main{padding:12px 8px}.stage{padding:12px 8px}.stage-top{align-items:flex-start}.canvas{height:520px}header{padding:12px}.actions{flex-wrap:wrap}}
 .er-legend{margin-top:12px;gap:24px}.er-legend span{display:inline-flex;align-items:center;gap:6px}.er-legend svg{width:46px;height:24px;overflow:visible}.quote-rule{font-size:13px;color:#3a6559}
 .endpoint-count{font:600 13px "Segoe UI",sans-serif;fill:#395d6c}
+.routing-warning{font-size:13px;color:#9c3c31}.routing-warning:empty{display:none}.wire.unresolved{stroke:#b74032;stroke-dasharray:4 3}
 </style>
 <header><strong>Alder · 工程別ER</strong><span>購入申請</span></header>
 <main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">同じテーブルを工程ごとに再掲しています。多重度は保存済みデータの関係です。</p>
@@ -14,6 +15,7 @@
 <div id="stages"></div>
 <footer>論理モデルのレビュー草案。購買準備・結果登録は今回の表示対象外。型・物理DDLは定義していません。</footer></main>
 <script type="module">
+import {routeER} from "./er-routing.js";
 const tables={
  request:{name:'購入申請',fields:[['PK','申請ID'],['','申請者']],note:'申請を通して変わらない識別。各版は同じ申請に属します。'},
  version:{name:'購入申請版',fields:[['PK/FK','申請ID'],['PK','版番号'],['','購入理由'],['FK','見積ID']],note:'初回保存から版を持ちます。確定記録のない版を便宜上下書きと呼びます。見積IDは提出成立時に必須。保存のたびに版番号を増やすかは未決です。'},
@@ -38,10 +40,8 @@ let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}c
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
-function endpointLabel(svg,wire,atStart,count,table){
- const length=wire.getTotalLength(),distance=Math.min(24,length/3),at=atStart?distance:length-distance,p=wire.getPointAtLength(at),before=wire.getPointAtLength(Math.max(0,at-1)),after=wire.getPointAtLength(Math.min(length,at+1)),horizontal=Math.abs(after.x-before.x)>=Math.abs(after.y-before.y);
- const x=p.x+(horizontal?0:10),y=p.y+(horizontal?-10:4),width=measure(count,13)+10,left=horizontal?x-width/2:x-5;
- const group=svgNode('g',{'pointer-events':'none','data-end':atStart?'start':'end','data-end-table':table});group.append(svgNode('rect',{x:left,y:y-13,width,height:18,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x,y,'text-anchor':horizontal?'middle':'start'},count));svg.append(group);
+function endpointLabel(svg,label){
+ const group=svgNode('g',{'pointer-events':'none','data-end-table':label.table});group.append(svgNode('rect',{x:label.left,y:label.top,width:label.w,height:label.h,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x:label.x,y:label.y,'text-anchor':label.anchor},label.count));svg.append(group);
 }
 const states=[];
 function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
@@ -49,16 +49,14 @@ function draw(state){
  const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
  state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(640,...[...boxes.values()].map(b=>b.y+b.h+45));
  state.svg.style.width=width+'px';state.svg.style.height=height+'px';state.svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
- for(const[from,to,fromCardinality,toCardinality,kind]of edges){if(!boxes.has(from)||!boxes.has(to))continue;const a=boxes.get(from),b=boxes.get(to);let d,lx,ly;
-  if(kind==='down'&&!state.positions.has(from)&&!state.positions.has(to)){const x=a.x+20,y=b.y+22;d=`M${x} ${a.y+a.h}V${y}H${b.x}`;lx=(x+b.x)/2;ly=y-9;}
-  else if(kind==='reference'&&!state.positions.has(from)&&!state.positions.has(to)){const y=b.y+b.h+40;d=`M${a.x+20} ${a.y}V${y}H${b.x+b.w-20}V${b.y+b.h}`;lx=(a.x+20+b.x+b.w-20)/2;ly=y-7;}
-  else if(b.x>=a.x+a.w+30){const sy=a.y+22,ty=b.y+22,m=(a.x+a.w+b.x)/2;d=`M${a.x+a.w} ${sy}H${m}V${ty}H${b.x}`;lx=m;ly=(sy+ty)/2-9;}
-  else if(a.x>=b.x+b.w+30){const sy=a.y+22,ty=b.y+22,m=(a.x+b.x+b.w)/2;d=`M${a.x} ${sy}H${m}V${ty}H${b.x+b.w}`;lx=m;ly=(sy+ty)/2-9;}
-  else {const sx=a.x+20,tx=b.x+20,sy=b.y>=a.y?a.y+a.h:a.y,ty=b.y>=a.y?b.y:b.y+b.h,m=(sy+ty)/2;d=`M${sx} ${sy}V${m}H${tx}V${ty}`;lx=(sx+tx)/2+35;ly=m-8;}
-  const reading=tables[from].name+'1件に対して'+tables[to].name+toCardinality+'件／'+tables[to].name+'1件に対して'+tables[from].name+fromCardinality+'件';
-  const wire=svgNode('path',{class:'wire'+(kind==='reference'?' reference':''),'data-from':from,'data-to':to,'data-from-cardinality':fromCardinality,'data-to-cardinality':toCardinality,d,'aria-label':reading,role:'img'});wire.append(svgNode('title',{},reading));state.svg.append(wire);endpointLabel(state.svg,wire,true,fromCardinality,from);endpointLabel(state.svg,wire,false,toCardinality,to);
-
+ const routing=routeER(boxes,edges);state.routing=routing;
+ const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);
+ for(const route of routing.routes){const{from,to,fromCount,toCount,kind,d}=route;const reading=tables[from].name+'1件に対して'+tables[to].name+toCount+'件／'+tables[to].name+'1件に対して'+tables[from].name+fromCount+'件';
+  state.svg.append(svgNode('path',{d,fill:'none',stroke:'#fbfcfd','stroke-width':6,'pointer-events':'none'}));
+  const wire=svgNode('path',{class:'wire'+(kind==='reference'?' reference':'')+(route.unrouted?' unresolved':''),'data-from':from,'data-to':to,'data-from-cardinality':fromCount,'data-to-cardinality':toCount,'data-unrouted':route.unrouted,d,'aria-label':reading,role:'img'});wire.append(svgNode('title',{},reading));state.svg.append(wire);
  }
+ for(const label of routing.labels)endpointLabel(state.svg,label);
+ state.warning.textContent=routing.routes.some(r=>r.unrouted)?'接続線の通り道を確保できません。テーブル間を広げてください。赤い線の間は未接続です。':'';
  for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'table'+(state.stage.write.includes(id)?'':' read')+(state.selected===id?' selected':''),'data-table':id,role:'button',tabindex:0,'aria-label':t.name+'を選択','aria-description':'ドラッグで配置変更。Altと矢印キーで移動。'});g.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));g.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));g.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));g.append(svgNode('path',{class:'divider',d:`M${b.x+68} ${b.y+35}V${b.y+b.h}`}));t.fields.forEach(([k,n],i)=>{const y=b.y+56+i*25;g.append(svgNode('text',{class:'key',x:b.x+10,y},k));g.append(svgNode('text',{class:'column',x:b.x+80,y},n));});
   const select=()=>{state.selected=id;state.selection.textContent=t.name+'：'+t.note;};
   g.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();select();state.drag={id,pointer:e.pointerId,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,bx:b.x,by:b.y,sx:state.host.scrollLeft,sy:state.host.scrollTop,previous:state.positions.get(id),moved:false};state.svg.setPointerCapture(e.pointerId);document.body.classList.add('dragging');draw(state);state.frame=requestAnimationFrame(()=>tick(state));};
@@ -69,8 +67,8 @@ function move(state){const d=state.drag;if(!d)return;const dx=d.cx-d.x+state.hos
 function tick(state){const d=state.drag;if(!d)return;const r=state.host.getBoundingClientRect();if(d.moved)state.host.scrollBy(d.cx<r.left+24?-10:d.cx>r.right-24?10:0,d.cy<r.top+24?-10:d.cy>r.bottom-24?10:0);move(state);state.frame=requestAnimationFrame(()=>tick(state));}
 function stop(state,cancel=false){const d=state.drag;if(!d)return;state.drag=null;cancelAnimationFrame(state.frame);document.body.classList.remove('dragging');if(cancel){if(d.previous)state.positions.set(d.id,d.previous);else state.positions.delete(d.id);draw(state);state.status.textContent='移動を取り消しました。';}else if(d.moved)save(state);if(state.svg.hasPointerCapture(d.pointer))state.svg.releasePointerCapture(d.pointer);}
 for(const[order,stage]of stages.entries()){
- const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p>${stage.ids.includes('quote')?'<p class="quote-rule">提出成立した申請版から見た見積書は必ず1件。見積書から見た申請版は0件以上です。</p>':''}<div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
- document.getElementById('stages').append(section);const state={stage,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),positions:new Map(),selected:null,drag:null};
+ const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p>${stage.ids.includes('quote')?'<p class="quote-rule">提出成立した申請版から見た見積書は必ず1件。見積書から見た申請版は0件以上です。</p>':''}<div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><p class="routing-warning" aria-live="polite"></p><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
+ document.getElementById('stages').append(section);const state={stage,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),warning:section.querySelector('.routing-warning'),positions:new Map(),selected:null,drag:null};
  for(const[id,p]of Object.entries(saved[stage.id]||{}))if(stage.ids.includes(id)&&p&&Number.isFinite(p.x)&&Number.isFinite(p.y))state.positions.set(id,{x:Math.max(24,p.x),y:Math.max(28,p.y)});
  state.svg.onpointermove=e=>{if(state.drag&&e.pointerId===state.drag.pointer){state.drag.cx=e.clientX;state.drag.cy=e.clientY;move(state);}};state.svg.onpointerup=()=>stop(state);state.svg.onpointercancel=()=>stop(state,true);state.svg.onlostpointercapture=()=>{if(state.drag)stop(state,true);};
  section.querySelector('.reset').onclick=()=>{state.positions.clear();state.selected=null;draw(state);save(state);state.status.textContent='自動配置に戻しました。';state.host.scrollTo(0,0);state.selection.textContent='テーブルを選択すると、保存する情報と条件を確認できます。';};
@@ -79,5 +77,6 @@ for(const[order,stage]of stages.entries()){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
+
 
 
