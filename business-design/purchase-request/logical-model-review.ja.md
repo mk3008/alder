@@ -66,4 +66,4 @@ erDiagram
 
 ## 更新方法に関する方針
 
-対面の質問ごとにこの表・Mermaid・BD全体を更新して待たせるのではなく、短い回答メモを蓄積し、中締めでまとめて改稿する。人間が業務上の制約をレビューしてからGUIラフ・正式モデル記法・parser・Check/Skillへ進む。[対面ヒアリングと中締めのナレッジ](https://github.com/mk3008/root/blob/main/knowledge/business-design-interview-cadence.md)を参照。
+対面の質問ごとにこの表・Mermaid・BD全体を更新して待たせるのではなく、短い回答メモを蓄積し、中締めでまとめて改稿する。人間が業務上の制約をレビューしてからGUIラフ・正式モデル記法・parser・Check/Skillへ進む。
