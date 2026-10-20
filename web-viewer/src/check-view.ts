@@ -1,7 +1,7 @@
 import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
-export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
+export type CheckViewState={mode:'business'|'states'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
@@ -31,9 +31,18 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidat
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);notices.append(panel);
   }
-  const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
-  for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
-  if(view.mode==='business')return {controls:root};
+  const selectedNode=tab.design.graph.nodes.find(n=>n.id===tab.selected),object=selectedNode?.type==='object';
+  const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role',object?'tablist':'group');nav.setAttribute('aria-label','右Drawerの表示');
+  const choices:[CheckViewState['mode'],string][]=object?[['business','要素'],['states','状態遷移'],['checks','チェック項目']]:[['business','業務内容'],['checks','チェック項目']];
+  for(const [mode,label] of choices){
+   const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute(object?'aria-selected':'aria-pressed',String(view.mode===mode));
+   if(object){b.setAttribute('role','tab');b.setAttribute('aria-controls','object-detail-content');b.tabIndex=view.mode===mode?0:-1;}
+   if(mode==='states'&&!tab.design.objectStateTransitions?.[selectedNode!.id]){b.disabled=true;b.title='状態遷移の定義がありません';}
+   if(object)b.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const available=choices.filter(([m])=>m!=='states'||tab.design.objectStateTransitions?.[selectedNode!.id]),index=available.findIndex(([m])=>m===view.mode);view.mode=available[e.key==='Home'?0:e.key==='End'?available.length-1:(index+(e.key==='ArrowLeft'?-1:1)+available.length)%available.length][0];actions.redraw();document.getElementById('detail-mode-'+view.mode)?.focus();};
+   nav.append(b);
+  }
+  root.append(nav);
+  if(view.mode!=='checks')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
   if(notices.childNodes.length)content.append(notices);
   if(!doc||!usable){if(!notices.childNodes.length)paragraph(content,'チェックリストが開かれていません。');return {controls:root,content};}

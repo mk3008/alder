@@ -13,14 +13,14 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 
 /* Accepted single-left Who-circle graph appearance. Five-color legacy assignment remains; persistent ten-color mapping is separate. */
 
-:root{--review-blue:#2563eb;--review-green:#16835d;--review-ring:#a55b06;--review-link:#176ba0;--review-shadow:rgba(37,99,235,.3)}
-[data-theme=dark]{--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46)}
+:root{--graph-object-fill:#e4f4eb;--graph-object-border:#79bca1;--graph-object-text:#174b36;--graph-note-fill:#e9edf2;--graph-note-border:#a6b2c1;--graph-note-text:#344457;--review-blue:#2563eb;--review-green:#16835d;--review-ring:#a55b06;--review-link:#176ba0;--review-shadow:rgba(37,99,235,.3)}
+[data-theme=dark]{--graph-object-fill:#1d4137;--graph-object-border:#538f78;--graph-object-text:#dff6eb;--graph-note-fill:#303941;--graph-note-border:#71808d;--graph-note-text:#e0e5ec;--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46)}
 .node,.node.business{border-radius:8px;padding:9px 12px;gap:9px;border:1.5px solid #75a3e5;background:#e7f0ff;box-shadow:0 2px 5px #152d5012;outline:none;color:#19385e}
-.node.object{background:#e4f4eb;border-color:#79bca1;color:#174b36}
+.node.object{background:var(--graph-object-fill);border-color:var(--graph-object-border);color:var(--graph-object-text)}
 .node.outside{border-style:solid;background:#e9edf2;border-color:#a6b2c1;color:#344457}
 .node.object.outside{background:#e9eeeb;border-color:#a8b8b0;color:#3a4c43}
 [data-theme=dark] .node{background:#203b58;border-color:#5684b7;color:#e1edff}
-[data-theme=dark] .node.object{background:#1d4137;border-color:#538f78;color:#dff6eb}
+[data-theme=dark] .node.object{background:var(--graph-object-fill);border-color:var(--graph-object-border);color:var(--graph-object-text)}
 [data-theme=dark] .node.outside{background:#303941;border-color:#71808d;color:#e0e5ec}
 [data-theme=dark] .node.object.outside{background:#303c36;border-color:#74877b;color:#e0e9e3}
 .node:hover{filter:brightness(1.035)}
@@ -299,3 +299,11 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 @media(max-width:800px){#formattedMarkdownDrawer:has(.state-diagram){width:100%!important;max-width:100vw}.state-transition-panel:has(.state-diagram){overflow-x:auto}}
 
 .state-diagram-scroll{width:100%;overflow-x:auto}.state-diagram-event-id{font-size:10px;fill:var(--line)}
+
+/* Object drawer prototype shares graph colors, focus classes and arrow markers. */
+.object-detail-title{display:flex;align-items:center;gap:8px;margin-bottom:4px}.object-detail-title svg{width:28px;height:28px;flex-shrink:0;color:var(--review-green)}.object-detail-scope{font-size:13px;margin:4px 0 12px}
+.check-controls .check-modes [aria-selected=true]{background:var(--select);border-bottom-color:#357aa6;font-weight:650}
+#object-detail-content{font-size:13px;line-height:1.7}#object-detail-content h2{font-size:16px}#object-detail-content ul{padding-left:20px}.check-controls .check-modes button{white-space:nowrap}
+.state-shape{cursor:pointer;color:var(--graph-object-text)}.state-shape .state-diagram-node{fill:var(--graph-object-fill);stroke:var(--graph-object-border)}.state-shape .state-diagram-node-label{fill:currentColor}.state-shape:has(.state-note){color:var(--graph-note-text)}.state-shape .state-note{fill:var(--graph-note-fill);stroke:var(--graph-note-border)}
+.state-shape.review-neighbor .state-diagram-node{stroke:var(--review-link);stroke-width:2.5}.state-shape.selected .state-diagram-node,.state-shape:focus-visible .state-diagram-node{stroke:var(--review-blue);stroke-width:3;filter:drop-shadow(0 0 5px var(--review-shadow))}.state-diagram .muted{opacity:.3}.state-diagram .edge-label{stroke:var(--panel)}.state-diagram .edge-label.review-related{stroke-width:4px}
+.state-shape.selected,.state-shape.review-neighbor{color:var(--review-link)}.state-shape.selected .state-diagram-node-label{font-weight:750}
