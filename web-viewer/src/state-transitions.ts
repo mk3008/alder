@@ -33,19 +33,46 @@ export function parseStateDeclaration(body:string,object:string):StateDeclaratio
   });return {model:{...meta,transitions}};
  }catch(error){return {error:error instanceof Error?error.message:'状態遷移の宣言が不正です'};}
 }
+/** Visual prototype: explicit edges only; no lifecycle or condition inference. */
+function stateDiagram(model:StateModel):SVGSVGElement{
+ const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
+ const height=model.states.length*110+150,svg=make('svg',{viewBox:`0 0 320 ${height}`,role:'img','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
+ const title=make('title');title.textContent=model.object+'：明示された状態遷移。破線の先は保存状態が未決。';svg.append(title);
+ const defs=make('defs'),marker=make('marker',{id:'state-transition-arrow',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'});marker.append(make('path',{d:'M0 0 L10 5 L0 10 Z',fill:'currentColor'}));defs.append(marker);svg.append(defs);
+ const points=new Map<string,[number,number]>();points.set('@new',[125,24]);model.states.forEach((state,i)=>points.set(state,[125,110+i*110]));
+ points.set('@none',[263,110]);points.set('@unknown',[263,height-40]);
+ const labels:Record<string,string>={'@new':'開始候補','@none':'作成不成立','@unknown':'遷移先未決'};
+ const groups=new Map<string,Transition[]>();for(const row of model.transitions){const key=JSON.stringify([row.from,row.to,row.effect,row.activity]);groups.set(key,[...(groups.get(key)??[]),row]);}
+ let index=0;for(const rows of groups.values()){
+  const row=rows[0],[x1,y1]=points.get(row.from)!,[x2,y2]=points.get(row.to)!,start=row.from==='@new'?10:22;
+  let d:string,lx:number,ly:number;
+  if(x1===x2&&y2>y1&&y2-y1<=110){d=`M${x1},${y1+start} V${y2-22}`;lx=x1+8;ly=(y1+y2)/2;}
+  else if(row.to==='@unknown'||row.to==='@none'){const lane=193+(index%3)*4,source=row.from==='@new'?x1+10:x1+60;d=`M${source},${y1} H${lane} V${y2} H${x2-48}`;lx=source+3;ly=y1-8;}
+  else{const lane=12+(index%3)*14;d=`M${x1-(row.from==='@new'?10:60)},${y1} H${lane} V${y2} H${x2-60}`;lx=lane+3;ly=(y1+y2)/2;}
+  const path=make('path',{d,fill:'none',stroke:'currentColor','stroke-width':'1.8','marker-end':'url(#state-transition-arrow)'});if(row.to==='@unknown')path.setAttribute('stroke-dasharray','5 4');
+  const description=make('title');description.textContent=rows.map(r=>`${r.id} ${r.activity}：${r.condition}`).join(' / ');path.append(description);svg.append(path);
+  const caption=make('text',{x:String(lx),y:String(ly),class:'state-diagram-edge-label'});caption.textContent=rows.map(r=>r.id).join('/');svg.append(caption);index++;
+ }
+ for(const [state,[x,y]] of points){
+  if(state==='@new')svg.append(make('circle',{cx:String(x),cy:String(y),r:'8',class:'state-diagram-start'}));
+  else{const special=state.startsWith('@'),w=special?96:120;svg.append(make('rect',{x:String(x-w/2),y:String(y-22),width:String(w),height:'44',rx:special?'4':'12',class:special?'state-diagram-node undecided':'state-diagram-node'}));}
+  const label=make('text',{x:String(x),y:String(state==='@new'?y+29:y+5),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[state]??state;svg.append(label);
+ }
+ return svg;
+}
 export function stateTransitionPanel(design:Design,id:string,navigate:(id:string)=>void):HTMLElement|undefined{
  const declaration=design.objectStateTransitions?.[id];if(!declaration||!design.graph.nodes.some(n=>n.id===id&&n.type==='object'))return;
  const root=document.createElement('section');root.className='state-transition-panel';root.setAttribute('aria-label','状態遷移');
  const text=(tag:string,value:string,parent:HTMLElement=root)=>{const e=document.createElement(tag);e.textContent=value;parent.append(e);return e;};
- text('h2','状態遷移');
+ text('h2','状態遷移図');
  if(declaration.error){text('p','状態遷移を表示できません：'+declaration.error).setAttribute('role','status');return root;}
  const model=declaration.model!;
  text('p','部分定義：未記載の操作は未決です。終端は未決です。');
- text('p','状態：'+model.states.join(' / '));
- text('p','開始候補：記録作成前（保存状態ではありません）。');
+ root.append(stateDiagram(model));
+ text('p','破線：遷移先未決。作成不成立・未決は保存状態ではありません。');
  const label=(value:string)=>({'@new':'記録作成前','@none':'作成不成立','@unknown':'遷移先未決'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
- const list=document.createElement('ol');root.append(list);
+ const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);
  for(const row of model.transitions){
   const li=document.createElement('li');li.dataset.transition=row.id;
   text('h3',`${row.id} · ${label(row.from)} → ${label(row.to)}`,li);
