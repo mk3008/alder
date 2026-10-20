@@ -28,10 +28,12 @@ export function modelLayout(entities,links,measure){
   for(const e of sorted)boxes.get(e[0]).rowBottom=y+rowHeight;
   y+=rowHeight+62;
  }
+ const labelSlots=new Map();
  const routes=links.map(([from,to,n],i)=>{const a=boxes.get(from),b=boxes.get(to),main=primaryPairs.some(([x,y])=>x===from&&y===to);
   if(main&&a.group===b.group)return{from,to,n,main,d:'M'+(a.x+a.w)+' '+(a.y+20)+'H'+b.x,labelX:(a.x+a.w+b.x)/2,labelY:a.y+11};
   const top=Math.min(a.y,b.y),bottom=Math.max(a.rowBottom,b.rowBottom),right=Math.max(...[...boxes.values()].filter(c=>c.y>=top&&c.y<=bottom).map(c=>c.x+c.w))+28+i*10;
-  return{from,to,n,main,d:'M'+(a.x+a.w/2)+' '+(a.y+a.h)+'V'+(a.rowBottom+20)+'H'+right+'V'+(b.y-18)+'H'+(b.x+b.w/2)+'V'+b.y,labelX:right-26,labelY:b.y-25};
+  const labelSlot=labelSlots.get(to)||0;labelSlots.set(to,labelSlot+1);
+  return{from,to,n,main,d:'M'+(a.x+a.w/2)+' '+(a.y+a.h)+'V'+(a.rowBottom+20)+'H'+right+'V'+(b.y-18)+'H'+(b.x+b.w/2)+'V'+b.y,labelX:b.x+90+labelSlot*80,labelY:b.y-25-labelSlot*18};
  });
  return{boxes,routes,width:maxX+230,height:y,common,groups};
 }
