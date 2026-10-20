@@ -72,7 +72,7 @@ body.resizing{cursor:ew-resize;user-select:none}
 <section id="model" role="tabpanel" aria-label="論理モデル">
 <details class="quantity-example"><summary>数量の具体例</summary><p class="sub">依頼10個の入庫・購入なし・待ちを比較する。</p><select id="case" aria-label="数量例"><option value="5,0">5入庫・5待ち</option><option value="10,0">5入庫→残り5入庫</option><option value="8,0">8入庫・2待ち</option><option value="5,5">5入庫・残り5購入なし</option><option value="0,10">全数購入なし</option><option value="8,3">8入庫＋3購入なし（過剰）</option></select><p id="quantity" aria-live="polite"></p></details><div class="model-intro"><h2>論理モデル</h2><span class="badge">レビュー草案</span></div>
 
-<p class="sub" style="margin:4px 0">1→N：右下の段 ／ 1→0..1：横並び。破線は別の所属からの参照。図は縦横にスクロールできます。</p><div class="diagram" id="model-diagram" tabindex="0" aria-label="モデル図。縦横スクロール可能"><svg id="model-svg" role="group" aria-label="購入申請の階段状論理モデル"></svg></div><div id="selection" class="selection" aria-live="polite"><strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。</div>
+<p class="sub" style="margin:4px 0">1→N：右下の段 ／ 1→0..1：横並び。幅を制限せず右へ続きます。破線は別の所属からの参照。</p><div class="diagram" id="model-diagram" tabindex="0" aria-label="モデル図。縦横スクロール可能"><svg id="model-svg" role="group" aria-label="購入申請の階段状論理モデル"></svg></div><div id="selection" class="selection" aria-live="polite"><strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。</div>
 <details class="questions"><summary>未決・未検証</summary><p class="sub">代理操作、破棄後の参照、再申請不成立後の入力、入庫日と実績金額の粒度、理由・合意者の必須保存、出力履歴の保持範囲。正式実装・DDL・人間GUI採否は未実施。</p></details></section>
 <footer>購入申請を題材にした表示比較。業務仕様・論理モデルの確定には使わない。</footer>
 </main></div>
