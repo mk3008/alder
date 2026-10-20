@@ -1,7 +1,7 @@
 import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
 import {routeEdge,type RouteNode} from './routing.ts';
-export type Transition={id:string;from:string;activity:string;event?:string;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
+export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
 const fields=['id','from','activity','condition','to','effect','path','evidence','note'];
@@ -18,7 +18,7 @@ export function parseStateDeclaration(body:string,object:string):StateDeclaratio
   check(Array.isArray(meta.states)&&meta.states.length>0&&meta.states.every((s:unknown)=>isText(s)&&!s.startsWith('@'))&&new Set(meta.states).size===meta.states.length,'状態一覧が不正です');
   check(meta.start==='@new'&&meta.terminal==='@unknown'&&meta.completeness==='partial'&&isText(meta.source),'開始・終端・部分定義の宣言が不正です');
   const ls=match![2].trim().split(/\r?\n/),cells=(line:string)=>{check(line.startsWith('|')&&line.endsWith('|'),'表の行が不正です');return line.slice(1,-1).split('|').map(v=>v.trim());};
-  const columns=cells(ls[0]);check(columns.join('|')===fields.join('|')||columns.join('|')===['id','from','activity','event','condition','to','effect','path','evidence','note'].join('|'),'表の列名が不正です');
+  const columns=cells(ls[0]);check([fields,['id','from','activity','event','condition','to','effect','path','evidence','note'],['id','from','activity','exception','condition','to','effect','path','evidence','note']].some(keys=>columns.join('|')===keys.join('|')),'表の列名が不正です');
   check(cells(ls[1]).length===columns.length&&cells(ls[1]).every(s=>/^-+$/.test(s)),'表の区切りが不正です');
   check(ls.length<=1002,'遷移は1000行以内にしてください');
   const ids=new Set<string>();
@@ -28,6 +28,7 @@ export function parseStateDeclaration(body:string,object:string):StateDeclaratio
    check(/^T[0-9]+$/.test(r.id)&&!ids.has(r.id),'遷移IDが不正または重複しています');ids.add(r.id);
    check([...meta.states,'@new'].includes(r.from)&&[...meta.states,'@unknown','@none'].includes(r.to),'未登録の状態が参照されています');
    check(['change','unchanged','no-create','constraint'].includes(r.effect)&&['normal','exception'].includes(r.path),'効果・経路の指定が不正です');
+   if(columns.includes('exception'))check(r.path==='normal'?r.exception==='-':isText(r.exception)&&r.exception!=='-','通常は例外名なし、例外は名前が必要です');
    check(r.effect!=='unchanged'||r.from===r.to,'状態不変の元と先が一致しません');
    check(r.effect!=='change'||(!r.to.startsWith('@')&&r.from!==r.to),'状態変更の遷移先が不正です');
    check(r.effect!=='no-create'||(r.from==='@new'&&r.to==='@none'),'不成立の元と先が不正です');
@@ -44,32 +45,41 @@ function stateDiagram(model:StateModel):SVGSVGElement{
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
  // shared planner. They do not classify states as BD Activities or change Graph v1.
  // The declaration order is a display hint; it never adds or removes transitions.
- const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(rs=>({kind:'input',from:rs[0].from,to:rs[0].to,label:rs[0].activity+'：'+rs.map(r=>r.condition).join(' / ')}))};
+ const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(rs=>({kind:'input',from:rs[0].from,to:rs[0].to,label:rs[0].activity+'：'+rs.map(r=>r.path==='normal'?'通常':r.exception??'例外名未定義').join(' / ')}))};
  const plan=matrixPlan(layoutGraph,ids);
  // Project the shared staircase onto smaller state boxes; reserve actual
  // multiline captions without changing the shared planner/router contracts.
  const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
- const captions=rows.map(rs=>[...wrap(rs[0].activity),...rs.flatMap(r=>wrap(r.condition))]);
- const captionOffsets:number[]=[],departures=new Map<string,number>();
- rows.forEach((rs,i)=>{const wire=plan.wires[i],key=(wire.returning?'return:':'departure:')+rs[0].from,offset=departures.get(key)??0;captionOffsets[i]=offset;departures.set(key,offset+captions[i].length*18+8);});
+ const captionGroups=new Map<string,{from:string;activity:string;rows:Transition[];lines:string[];offset:number}>();
+ for(const rs of rows){const first=rs[0],key=JSON.stringify([first.from,first.activity]),g=captionGroups.get(key)??{from:first.from,activity:first.activity,rows:[],lines:[],offset:0};g.rows.push(...rs);captionGroups.set(key,g);}
+ const departures=new Map<string,number>();
+ for(const group of captionGroups.values()){
+  group.lines=wrap(group.activity);
+  if(group.rows.length>1||group.rows[0].path==='exception')for(const row of group.rows){const branch=row.path==='normal'?'通常':'例外：'+(row.exception??'例外名未定義');if(!group.lines.includes('・'+branch))group.lines.push('・'+branch);}
+  group.offset=departures.get(group.from)??0;departures.set(group.from,group.offset+group.lines.length*18+8);
+ }
  let shift=0;const projected=new Map<string,number>();
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
- ordered.forEach((id,i)=>{const y=plan.positions[id][1]+shift;projected.set(id,y);const next=ordered[i+1];if(next){const reserved=plan.positions[next][1]-plan.positions[id][1],needed=44+(departures.get('departure:'+id)??0)+16;shift+=Math.max(0,needed-reserved);}});
+ ordered.forEach((id,i)=>{const y=plan.positions[id][1]+shift;projected.set(id,y);const next=ordered[i+1];if(next){const reserved=plan.positions[next][1]-plan.positions[id][1],needed=44+(departures.get(id)??0)+16;shift+=Math.max(0,needed-reserved);}});
  const nodes:RouteNode[]=ids.map(id=>({id,x:plan.positions[id][0],y:projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
  const svg=make('svg',{role:'img','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
  const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。保存不可は処理結果、未決は設計課題。';svg.append(title);
  const defs=make('defs'),marker=make('marker',{id:'state-transition-arrow',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'});marker.append(make('path',{d:'M0 0 L10 5 L0 10 Z',fill:'currentColor'}));defs.append(marker);svg.append(defs);
- const captionBoxes:RouteNode[]=[],wirePoints:ReturnType<typeof routeEdge>['points'][]=[];
+ const wirePoints:ReturnType<typeof routeEdge>['points'][]=[];
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
-  const row=rs[0],lines=captions[index],labelWidth=Math.max(...lines.map(line=>Array.from(line).length*14)),labelHeight=lines.length*18;
-  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:'input',matrix:{...plan.wires[index],captionLane:captionOffsets[index]/22},labelWidth,labelHeight,labels:captionBoxes,wires:wirePoints});
-  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','stroke-width':'1.8','marker-end':'url(#state-transition-arrow)'});if(row.path==='exception')path.setAttribute('stroke-dasharray','5 4');
-  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity}：${r.condition}`).join(' / ');path.append(description);svg.append(path);
-  const [x,y]=route.label,label=make('text',{x:String(x-labelWidth/2),y:String(y-labelHeight/2+14),class:'state-diagram-edge-label'});lines.forEach((line,i)=>{const span=make('tspan',{x:String(x-labelWidth/2),dy:i?'18':'0','font-size':i?'12':'14'});span.textContent=line;label.append(span);});svg.append(label);
-  captionBoxes.push({id:'caption-'+index,x:x-labelWidth/2,y:y-labelHeight/2,width:labelWidth,height:labelHeight});wirePoints.push(route.points);
-  right=Math.max(right,route.bounds.right+40,x+labelWidth/2+24);bottom=Math.max(bottom,route.bounds.bottom+40,y+labelHeight/2+24);
+  const row=rs[0];
+  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:'input',matrix:plan.wires[index],labelWidth:0,labelHeight:0,wires:wirePoints});
+  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','stroke-width':'1.8','marker-end':'url(#state-transition-arrow)','data-transitions':rs.map(r=>r.id).join(' ')});if(row.path==='exception')path.setAttribute('stroke-dasharray','5 4');
+  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);wirePoints.push(route.points);
+  right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
+ for(const group of captionGroups.values()){
+  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=node.y+node.height+group.offset+18;
+  const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity});
+  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;label.append(span);});svg.append(label);
+  right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);
+ }
  for(const node of nodes){
   const special=node.id.startsWith('@');svg.append(make('rect',{x:String(node.x),y:String(node.y),width:String(node.width),height:String(node.height),rx:special?'20':'8',class:'state-diagram-node'}));
   const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+27),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;svg.append(label);if(special){const note=make('text',{x:String(node.x+node.width/2),y:String(node.y-8),'text-anchor':'middle',class:'state-diagram-event-id'});note.textContent=node.id==='@unknown'?'課題：保存状態が未定義':node.id==='@none'?'処理結果：記録を作らない':'記録作成前';svg.append(note);}
@@ -84,6 +94,12 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  text('h2','状態遷移図');
  if(declaration.error){text('p','状態遷移を表示できません：'+declaration.error).setAttribute('role','status');return root;}
  const model=declaration.model!;
+ // Exact visible Exception names only. Never summarize prose or reuse event aliases.
+ for(const row of model.transitions)if(row.path==='exception'&&row.exception){
+  const source=design.sections[row.activity]??'',body=source.split(/^### Exception\s*$/m)[1]?.split(/^#{1,3} /m)[0]??'';
+  const names=[...body.matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);
+  if(names.filter(name=>name===row.exception).length!==1){text('p',`状態遷移を表示できません：${row.activity} の例外名「${row.exception}」を一意に参照できません`).setAttribute('role','status');return root;}
+ }
  text('p','部分定義：未記載の操作は未決です。終端は未決です。');
  const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram(model));root.append(canvas);
  text('p','実線：通常、破線：例外。角丸の注記は保存状態ではありません。保存不可は確定した処理結果、未決へ至る各経路は設計課題です。図は横にスクロールできます。');
@@ -93,6 +109,7 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  for(const row of model.transitions){
   const li=document.createElement('li');li.dataset.transition=row.id;
   text('h3',`${row.id} · ${label(row.from)} → ${label(row.to)}`,li);
+  if(row.path==='exception')text('p','例外名：'+(row.exception??'未定義'),li);
   text('p',`${effects[row.effect]} · ${row.path==='normal'?'正常':'例外'}`,li);
   const activity=design.graph.nodes.find(n=>n.id===row.activity&&n.type==='business');
   if(activity){const b=document.createElement('button');b.type='button';b.textContent=activity.name;b.onclick=()=>navigate(activity.id);li.append(b);}
