@@ -38,32 +38,41 @@ export function parseStateDeclaration(body:string,object:string):StateDeclaratio
 /** Visual prototype: explicit edges only; no lifecycle or condition inference. */
 function stateDiagram(model:StateModel):SVGSVGElement{
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
- const labels:Record<string,string>={'@new':'開始候補','@none':'作成不成立','@unknown':'遷移先未決'};
- const groups=new Map<string,Transition[]>();for(const row of model.transitions){const key=JSON.stringify([row.from,row.to,row.effect,row.activity]);groups.set(key,[...(groups.get(key)??[]),row]);}
+ const labels:Record<string,string>={'@new':'作成前','@none':'保存不可','@unknown':'未決'};
+ const groups=new Map<string,Transition[]>();for(const row of model.transitions){const key=JSON.stringify([row.from,row.to,row.effect,row.activity,row.path]);groups.set(key,[...(groups.get(key)??[]),row]);}
  const rows=[...groups.values()],ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
  // shared planner. They do not classify states as BD Activities or change Graph v1.
  // The declaration order is a display hint; it never adds or removes transitions.
- const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(rs=>({kind:'input',from:rs[0].from,to:rs[0].to,label:rs.map(r=>r.event??r.activity).join(' / ')}))};
+ const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(rs=>({kind:'input',from:rs[0].from,to:rs[0].to,label:rs[0].activity+'：'+rs.map(r=>r.condition).join(' / ')}))};
  const plan=matrixPlan(layoutGraph,ids);
- const nodes:RouteNode[]=ids.map(id=>({id,x:plan.positions[id][0],y:plan.positions[id][1],width:260,height:68}));
+ // Project the shared staircase onto smaller state boxes; reserve actual
+ // multiline captions without changing the shared planner/router contracts.
+ const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
+ const captions=rows.map(rs=>[...wrap(rs[0].activity),...rs.flatMap(r=>wrap(r.condition))]);
+ const captionOffsets:number[]=[],departures=new Map<string,number>();
+ rows.forEach((rs,i)=>{const wire=plan.wires[i],key=(wire.returning?'return:':'departure:')+rs[0].from,offset=departures.get(key)??0;captionOffsets[i]=offset;departures.set(key,offset+captions[i].length*18+8);});
+ let shift=0;const projected=new Map<string,number>();
+ const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
+ ordered.forEach((id,i)=>{const y=plan.positions[id][1]+shift;projected.set(id,y);const next=ordered[i+1];if(next){const reserved=plan.positions[next][1]-plan.positions[id][1],needed=44+(departures.get('departure:'+id)??0)+16;shift+=Math.max(0,needed-reserved);}});
+ const nodes:RouteNode[]=ids.map(id=>({id,x:plan.positions[id][0],y:projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
  const svg=make('svg',{role:'img','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
- const title=make('title');title.textContent=model.object+'：既存グラフの階段状配置・配線を流用したラフ。破線の先は保存状態が未決。';svg.append(title);
+ const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。保存不可は処理結果、未決は設計課題。';svg.append(title);
  const defs=make('defs'),marker=make('marker',{id:'state-transition-arrow',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'});marker.append(make('path',{d:'M0 0 L10 5 L0 10 Z',fill:'currentColor'}));defs.append(marker);svg.append(defs);
  const captionBoxes:RouteNode[]=[],wirePoints:ReturnType<typeof routeEdge>['points'][]=[];
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
-  const row=rs[0],caption=rs.map(r=>`${r.event??r.activity}（${r.id}）`).join(' / '),labelWidth=Array.from(caption).reduce((n,c)=>n+(/[\x00-\x7f]/.test(c)?7:14),0);
-  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:'input',matrix:plan.wires[index],labelWidth,labelHeight:20,labels:captionBoxes,wires:wirePoints});
-  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','stroke-width':'1.8','marker-end':'url(#state-transition-arrow)'});if(row.to==='@unknown')path.setAttribute('stroke-dasharray','5 4');
-  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.event??r.activity}：${r.condition}`).join(' / ');path.append(description);svg.append(path);
-  const [x,y]=route.label,label=make('text',{x:String(x-labelWidth/2),y:String(y+5),class:'state-diagram-edge-label'});label.textContent=caption;svg.append(label);
-  captionBoxes.push({id:'caption-'+index,x:x-labelWidth/2,y:y-10,width:labelWidth,height:20});wirePoints.push(route.points);
-  right=Math.max(right,route.bounds.right+40,x+labelWidth/2+24);bottom=Math.max(bottom,route.bounds.bottom+40,y+30);
+  const row=rs[0],lines=captions[index],labelWidth=Math.max(...lines.map(line=>Array.from(line).length*14)),labelHeight=lines.length*18;
+  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:'input',matrix:{...plan.wires[index],captionLane:captionOffsets[index]/22},labelWidth,labelHeight,labels:captionBoxes,wires:wirePoints});
+  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','stroke-width':'1.8','marker-end':'url(#state-transition-arrow)'});if(row.path==='exception')path.setAttribute('stroke-dasharray','5 4');
+  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity}：${r.condition}`).join(' / ');path.append(description);svg.append(path);
+  const [x,y]=route.label,label=make('text',{x:String(x-labelWidth/2),y:String(y-labelHeight/2+14),class:'state-diagram-edge-label'});lines.forEach((line,i)=>{const span=make('tspan',{x:String(x-labelWidth/2),dy:i?'18':'0','font-size':i?'12':'14'});span.textContent=line;label.append(span);});svg.append(label);
+  captionBoxes.push({id:'caption-'+index,x:x-labelWidth/2,y:y-labelHeight/2,width:labelWidth,height:labelHeight});wirePoints.push(route.points);
+  right=Math.max(right,route.bounds.right+40,x+labelWidth/2+24);bottom=Math.max(bottom,route.bounds.bottom+40,y+labelHeight/2+24);
  });
  for(const node of nodes){
-  const special=node.id.startsWith('@');svg.append(make('rect',{x:String(node.x),y:String(node.y),width:String(node.width),height:String(node.height),rx:special?'4':'12',class:special?'state-diagram-node undecided':'state-diagram-node'}));
-  const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+39),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;svg.append(label);
+  const special=node.id.startsWith('@');svg.append(make('rect',{x:String(node.x),y:String(node.y),width:String(node.width),height:String(node.height),rx:special?'20':'8',class:'state-diagram-node'}));
+  const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+27),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;svg.append(label);if(special){const note=make('text',{x:String(node.x+node.width/2),y:String(node.y-8),'text-anchor':'middle',class:'state-diagram-event-id'});note.textContent=node.id==='@unknown'?'課題：保存状態が未定義':node.id==='@none'?'処理結果：記録を作らない':'記録作成前';svg.append(note);}
  }
  svg.setAttribute('viewBox',`0 0 ${right} ${bottom}`);svg.style.minWidth=`${right}px`;
  return svg;
@@ -77,14 +86,13 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  const model=declaration.model!;
  text('p','部分定義：未記載の操作は未決です。終端は未決です。');
  const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram(model));root.append(canvas);
- text('p','階段状配置のラフです。図は横にスクロールできます。破線：遷移先未決。作成不成立・未決は保存状態ではありません。');
- const label=(value:string)=>({'@new':'記録作成前','@none':'作成不成立','@unknown':'遷移先未決'}[value]??value);
+ text('p','実線：通常、破線：例外。角丸の注記は保存状態ではありません。保存不可は確定した処理結果、未決へ至る各経路は設計課題です。図は横にスクロールできます。');
+ const label=(value:string)=>({'@new':'記録作成前','@none':'保存不可（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);
  for(const row of model.transitions){
   const li=document.createElement('li');li.dataset.transition=row.id;
   text('h3',`${row.id} · ${label(row.from)} → ${label(row.to)}`,li);
-  if(row.event)text('p','イベント：'+row.event,li);
   text('p',`${effects[row.effect]} · ${row.path==='normal'?'正常':'例外'}`,li);
   const activity=design.graph.nodes.find(n=>n.id===row.activity&&n.type==='business');
   if(activity){const b=document.createElement('button');b.type='button';b.textContent=activity.name;b.onclick=()=>navigate(activity.id);li.append(b);}
