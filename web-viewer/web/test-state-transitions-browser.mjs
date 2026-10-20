@@ -9,10 +9,10 @@ export async function verifyStateTransitions(browser){
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open-text').disabled);
   await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForSelector('[data-node="購入申請"]');
   if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
-  const paths=await page.locator('.edge').evaluateAll(es=>es.map(e=>e.getAttribute('d')));
+  const paths=await page.locator('.edge').evaluateAll(es=>es.map(e=>[e.dataset.relation,e.getAttribute('d')]).sort((a,b)=>Number(a[0])-Number(b[0])));
   const choose=async()=>{if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="購入申請"] .node-navigate').click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();};
   await choose();assert.equal(await page.locator('#detail h1').textContent(),'購入申請');assert.equal(await page.locator('[data-transition]').count(),13);assert.match(await page.locator('.state-transition-panel').textContent(),/未記載の操作は未決/);
-  assert.deepEqual(await page.locator('.edge').evaluateAll(es=>es.map(e=>e.getAttribute('d'))),paths);
+  assert.deepEqual(await page.locator('.edge').evaluateAll(es=>es.map(e=>[e.dataset.relation,e.getAttribute('d')]).sort((a,b)=>Number(a[0])-Number(b[0]))),paths);
   const geometry=await page.locator('.state-transition-panel').evaluate(e=>({width:e.clientWidth,content:e.scrollWidth,buttons:[...e.querySelectorAll('button')].map(b=>b.getBoundingClientRect().height)}));assert.ok(geometry.width>=180);assert.ok(geometry.content<=geometry.width+1);assert.ok(geometry.buttons.every(h=>h>=44));
   for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();await page.locator('#detail').evaluate(e=>e.scrollTop=0);await page.screenshot({path:`web/evidence/wiring/real-state-transitions-${width}-${theme}.png`});}
   await page.locator('.state-transition-panel button').first().press('Enter');assert.equal(await page.locator('#detail h1').textContent(),'備品購入を申請する');assert.equal(await page.locator('.state-transition-panel').count(),0);
