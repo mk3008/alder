@@ -2,7 +2,7 @@
 
 購入申請の状態と遷移を明示すれば、自然文の意味推論を使わずに同じ表・図を生成できた。今回の結果は**記法候補のPoC**であり、Alder正式書式、業務判断、Viewer機能の採用ではない。
 
-原典は[購入申請BD 6f0b5d4](https://github.com/mk3008/alder/blob/6f0b5d492f02a8659ca2836afa84aba18606a531/business-design/purchase-request/README.md)。依頼元は[root #133の設計コメント](https://github.com/mk3008/root/issues/133#issuecomment-6279005462)と、その後の「対応してください」。main f9a9708eから分離し、製品コード・正式BD・Check・Skill・Viewer配信は変更していない。
+原典は[購入申請BD 6f0b5d4](https://github.com/mk3008/alder/blob/6f0b5d492f02a8659ca2836afa84aba18606a531/business-design/purchase-request/README.md)。既存の購入申請サンプルを使い、明示宣言からの構文抽出を試す。main f9a9708eから分離し、製品コード・正式BD・Check・Skill・Viewer配信は変更していない。
 
 ## 比較と推奨
 
