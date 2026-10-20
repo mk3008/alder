@@ -1,5 +1,5 @@
-import {graphFocus} from './graph-focus';
-import {graphMarkers} from './graph-visuals';
+import {graphFocus} from './graph-focus.ts';
+import {graphMarkers} from './graph-visuals.ts';
 import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
 import {routeEdge,type RouteNode} from './routing.ts';
@@ -105,7 +105,9 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  if(declaration.error){text('p','状態遷移を表示できません：'+declaration.error).setAttribute('role','status');return root;}
  const model=declaration.model!;
  // Exact visible Exception names only. Never summarize prose or reuse event aliases.
- for(const row of model.transitions)if(row.path==='exception'&&row.exception){
+ for(const row of model.transitions){
+  if(!design.graph.nodes.some(n=>n.id===row.activity&&n.type==='business')){text('p',`状態遷移を表示できません：根拠Activityが見つかりません — ${row.activity}`).setAttribute('role','status');return root;}
+  if(row.path!=='exception'||!row.exception)continue;
   const source=design.sections[row.activity]??'',body=source.split(/^### Exception\s*$/m)[1]?.split(/^#{1,3} /m)[0]??'';
   const names=[...body.matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);
   if(names.filter(name=>name===row.exception).length!==1){text('p',`状態遷移を表示できません：${row.activity} の例外名「${row.exception}」を一意に参照できません`).setAttribute('role','status');return root;}
