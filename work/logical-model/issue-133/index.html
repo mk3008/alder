@@ -39,6 +39,24 @@ footer{font-size:11px;margin-top:10px;padding-top:8px}
 .diagram svg{max-width:none;min-width:0;flex:none}
 .cross-reference{stroke-dasharray:4 3}
 .relation{font-size:12px;fill:#344f5b}
+
+/* Desktop drawer keeps its natural canvas and exposes the same resize affordance. */
+.shell{width:100%;max-width:none;grid-template-columns:minmax(200px,1fr) var(--drawer-width,60vw)}
+.drawer{position:relative;min-width:0;max-width:none}
+.drawer-resize{position:absolute;inset:0 auto 0 -6px;width:12px;cursor:ew-resize;touch-action:none;z-index:5}
+.drawer-resize::after{content:"";position:absolute;top:0;bottom:0;left:5px;width:2px;background:#b7cbd3}
+.drawer-resize:hover::after,.drawer-resize:focus-visible::after{background:#2479a0;width:3px}
+.drawer-resize:focus-visible{outline:2px solid #2479a0;outline-offset:-2px}
+body.resizing{cursor:ew-resize;user-select:none}
+@media(max-width:850px){.shell{display:block;max-width:none}.drawer{width:auto;max-width:none}.drawer-resize{display:none}}
+
+@media(min-width:851px){
+ .drawer{padding:20px 24px}
+ .drawer h1{font-size:21px}.scope{font-size:13px;margin-bottom:12px}
+ .tabs button{font-size:14px;padding:10px 5px;min-height:44px}
+ .comparison{padding:10px 20px}.choices button{font-size:13px;padding:7px 14px;min-height:40px}
+ .diagram{height:calc(100vh - 290px);max-height:none;min-height:320px}
+}
 </style>
 <header><strong>Alder Viewer</strong><span>論理モデル · 見積・分割入庫・終結</span></header>
 <section class="comparison" aria-label="表示方式の比較">
@@ -47,7 +65,7 @@ footer{font-size:11px;margin-top:10px;padding-top:8px}
 </section>
 <div class="shell">
 <aside class="context"><h2>選択中のObject</h2><div class="object-card"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6"/></svg><div><small>Object · 範囲内</small><strong>購入申請</strong></div></div><p>購入要求を承認・購買の対象として扱う、業務上の情報のまとまり。</p><p>一つのObjectの情報を、複数の論理エンティティへ分けて見る配置案。物理テーブルは定義しない。</p></aside>
-<main class="drawer">
+<main class="drawer"><div class="drawer-resize" id="drawer-resize" role="separator" tabindex="0" aria-label="右ドロワーの幅を変更" aria-orientation="vertical" aria-valuemin="320" aria-valuemax="1200" aria-valuenow="600"></div>
 <h1><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6"/></svg> : 購入申請</h1><p class="scope">Scope：True</p>
 <nav class="tabs" role="tablist" aria-label="Objectの表示"><button role="tab" id="elements-tab" aria-selected="true" aria-controls="elements">要素</button><button role="tab" id="model-tab" aria-selected="false" aria-controls="model" hidden>モデル</button><button role="tab" aria-selected="false" disabled title="この比較ラフでは状態遷移は対象外">状態遷移</button><button role="tab" aria-selected="false" disabled title="この比較ラフではチェック項目は対象外">チェック項目</button></nav>
 <section id="elements" role="tabpanel" aria-labelledby="elements-tab"><details><summary>Information一覧</summary><h2>Information</h2><p class="sub">項目を押すと、モデル上の配置候補を確認できる。</p><table class="field-table"><thead><tr><th>情報項目</th><th>配置先候補</th><th>入力・記録の条件</th></tr></thead><tbody id="information"></tbody></table></details></section>
@@ -97,5 +115,20 @@ $('elements-tab').onclick=()=>{tab='elements';render();};$('model-tab').onclick=
 document.querySelectorAll('.entity').forEach(g=>{g.onclick=()=>select(g.dataset.entity);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(g.dataset.entity);}};});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.entity').forEach(g=>{g.classList.remove('selected','neighbor');g.setAttribute('aria-pressed','false');});document.querySelectorAll('.wire').forEach(g=>g.classList.remove('related'));document.querySelectorAll('[data-field]').forEach(b=>b.setAttribute('aria-pressed','false'));$('selection').innerHTML='<strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。';}});
 function quantity(){const [r,c]=$('case').value.split(',').map(Number),w=10-r-c;$('quantity').textContent='入庫 '+r+' ／ 購入しない '+c+' ／ 待ち '+w+' → '+(w<0?'不成立：依頼数量を超過':w>0?'作業中':r===10?'終結：全数入庫':r===0?'終結：全数購入なし':'終結：一部入庫・残り購入なし');}
+
+const divider=$('drawer-resize'),drawer=document.querySelector('.drawer'),shell=document.querySelector('.shell');
+let resizeDrag=null;
+const drawerBounds=()=>({min:320,max:Math.max(320,window.innerWidth-200)});
+function setDrawerWidth(width){const {min,max}=drawerBounds(),next=Math.max(min,Math.min(max,width));shell.style.setProperty('--drawer-width',next+'px');syncDivider();}
+function syncDivider(){const {min,max}=drawerBounds();divider.setAttribute('aria-valuemin',String(min));divider.setAttribute('aria-valuemax',String(max));divider.setAttribute('aria-valuenow',String(Math.round(drawer.getBoundingClientRect().width)));}
+divider.addEventListener('pointerdown',event=>{if(event.button!==0)return;resizeDrag={x:event.clientX,width:drawer.getBoundingClientRect().width,pointer:event.pointerId};divider.setPointerCapture(event.pointerId);document.body.classList.add('resizing');event.preventDefault();});
+divider.addEventListener('pointermove',event=>{if(resizeDrag&&event.pointerId===resizeDrag.pointer)setDrawerWidth(resizeDrag.width+resizeDrag.x-event.clientX);});
+function stopResize(){resizeDrag=null;document.body.classList.remove('resizing');}
+divider.addEventListener('pointerup',stopResize);divider.addEventListener('pointercancel',stopResize);divider.addEventListener('lostpointercapture',stopResize);
+divider.addEventListener('keydown',event=>{const step=event.shiftKey?128:32;if(event.key==='ArrowLeft')setDrawerWidth(drawer.getBoundingClientRect().width+step);else if(event.key==='ArrowRight')setDrawerWidth(drawer.getBoundingClientRect().width-step);else if(event.key==='Home')setDrawerWidth(drawerBounds().min);else if(event.key==='End')setDrawerWidth(drawerBounds().max);else return;event.preventDefault();});
+divider.addEventListener('dblclick',()=>{shell.style.removeProperty('--drawer-width');syncDivider();});
+window.addEventListener('resize',()=>{if(window.innerWidth>850&&shell.style.getPropertyValue('--drawer-width'))setDrawerWidth(drawer.getBoundingClientRect().width);else syncDivider();});
+syncDivider();
+
 $('case').onchange=quantity;quantity();render();drawModel();
 </script></html>
