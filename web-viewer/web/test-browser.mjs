@@ -1,3 +1,4 @@
+import {verifyStateTransitions} from './test-state-transitions-browser.mjs';
 import {verifySRDependencies} from './test-sr-dependencies-browser.mjs';
 import {verifyArrowArrivals} from './test-arrow-arrivals-browser.mjs';
 import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
@@ -49,6 +50,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'stateTransitions',run:()=>verifyStateTransitions(browser)},
    {name:'srDependencies',run:()=>verifySRDependencies(browser)},
    {name:'arrowArrivals',run:()=>verifyArrowArrivals(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},

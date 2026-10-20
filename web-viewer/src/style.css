@@ -291,3 +291,6 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .sr-dependency-badge:focus-visible{outline:2px solid var(--fg);outline-offset:1px}
 .sr-dependency-panel{border:1px solid var(--subtle);border-radius:6px;padding:12px;margin:12px 0;background:var(--panel);color:var(--fg)}
 .sr-dependency-panel h2,.sr-dependency-panel h3{margin:8px 0;font-size:15px}.sr-dependency-panel p{font-size:13px}.sr-dependency-panel .sr-verification{font-weight:650}.sr-dependency-panel li{margin:5px 0}.sr-dependency-panel button{color:var(--fg);text-align:left;text-decoration:underline;min-height:44px}
+
+.state-transition-panel{border:1px solid var(--subtle);border-radius:6px;padding:12px;margin:12px 0;background:var(--panel);color:var(--fg);font-size:13px;line-height:1.65;overflow-wrap:anywhere}
+.state-transition-panel h2{font-size:16px;margin:0 0 10px}.state-transition-panel h3{font-size:14px;margin:0 0 6px}.state-transition-panel p{margin:6px 0}.state-transition-panel ol{list-style:none;padding:0;margin:12px 0}.state-transition-panel li{border-top:1px solid var(--subtle);padding:12px 0}.state-transition-panel button{display:block;min-height:44px;text-align:left;text-decoration:underline;padding:6px 0;max-width:100%;overflow-wrap:anywhere}.state-transition-panel summary{cursor:pointer;min-height:44px;padding:10px 0}

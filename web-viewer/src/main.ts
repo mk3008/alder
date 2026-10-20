@@ -1,3 +1,4 @@
+import {stateTransitionPanel} from './state-transitions';
 import {dependencyDetails,dependencyPanel} from './sr-dependencies';
 import {roleColors} from './role-colors';
 import {exceptionSegments} from './exception-paint.ts';
@@ -12,7 +13,7 @@ import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
 import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy,ListChecks,CircleQuestionMark} from 'lucide';
-import {parseDesign,validateGraph,objectMediaFromSource,objectSRDependenciesFromSource,findingsFromSource} from './graph';
+import {parseDesign,validateGraph,objectStateTransitionsFromSource,objectMediaFromSource,objectSRDependenciesFromSource,findingsFromSource} from './graph';
 import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
@@ -217,7 +218,7 @@ function detail(){
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
   const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,confirm:candidate=>{void confirmChecks(t,candidate);}});
-  if(n)root.append(detailHeading(n.name));root.append(panel.controls);if(n&&!panel.content){const dependency=dependencyPanel(t.design,n.id,id=>navigateNode(id));if(dependency)root.append(dependency);}root.append(panel.content??formattedMarkdown(n?t.design.sections[n.id]:'図の業務やObjectを選択してください',!!n));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  if(n)root.append(detailHeading(n.name));root.append(panel.controls);if(n&&!panel.content){const dependency=dependencyPanel(t.design,n.id,id=>navigateNode(id));if(dependency)root.append(dependency);const transitions=stateTransitionPanel(t.design,n.id,id=>navigateNode(id));if(transitions)root.append(transitions);}root.append(panel.content??formattedMarkdown(n?(t.design.objectStateTransitions?.[n.id]?t.design.sections[n.id].replace(/\n## State Transitions\r?\n[\s\S]*$/,''):t.design.sections[n.id]):'図の業務やObjectを選択してください',!!n));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();
@@ -629,6 +630,7 @@ function validateRestoredTab(t:Tab){
   if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||!t.design||typeof t.design.markdown!=='string'||!t.design.sections||typeof t.design.sections!=='object'||Array.isArray(t.design.sections)||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
   validateGraph(t.design.graph);
   // Recompute annotations from the source, never trust stored derived metadata.
+  t.design.objectStateTransitions=objectStateTransitionsFromSource(t.design.markdown,new Set(t.design.graph.nodes.filter(n=>n.type==='object').map(n=>n.id)));
   t.design.objectMedia=objectMediaFromSource(t.design.markdown,new Set(t.design.graph.nodes.filter(n=>n.type==='object').map(n=>n.id)));
   t.design.objectSRDependencies=objectSRDependenciesFromSource(t.design.markdown,new Set(t.design.graph.nodes.filter(n=>n.type==='object').map(n=>n.id)));
   t.design.findings=findingsFromSource(t.design.markdown,new Set(t.design.graph.nodes.map(n=>n.id)));
