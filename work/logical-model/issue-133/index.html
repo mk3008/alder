@@ -1,173 +1,72 @@
 <!doctype html>
-<html lang="ja">
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>購入申請の論理モデル · Alder</title>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>購入申請 · 工程別ER</title>
 <style>
-:root{font-family:Inter,"Segoe UI","Noto Sans JP",sans-serif;color:#293e3a;background:#eef4f8;--panel:#fff;--fg:#293e3a;--subtle:#dce4e8;--accent:#1675a0;--green:#27846b;--fill:#e6f3ed;--line:#71878c}*{box-sizing:border-box}body{margin:0}button,select{font:inherit;color:inherit}button{cursor:pointer;background:none;border:0;min-height:44px}button:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #397db1;outline-offset:3px}header{padding:14px 22px;background:#163c61;color:#fff;display:flex;gap:14px;align-items:center}header strong{font-size:19px}header span{font-size:12px;opacity:.9}.comparison{background:#fff;border-bottom:1px solid var(--subtle);padding:14px 22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}.choices{display:flex;border:1px solid #94aeba;border-radius:6px;overflow:hidden}.choices button{padding:8px 15px}.choices [aria-pressed=true]{background:#e6f1f8;color:#165f8a;font-weight:700;box-shadow:inset 0 -3px #357aa6}.comparison p{font-size:13px;margin:0;max-width:540px}.shell{display:grid;grid-template-columns:minmax(210px,1fr) minmax(580px,760px);max-width:1240px;margin:0 auto;min-height:calc(100vh - 150px)}.context{padding:38px 24px}.context h2{font-size:14px;font-weight:500;color:#607478}.object-card{padding:18px;border:2px solid #79b6a4;border-radius:8px;background:var(--fill);box-shadow:0 3px 8px #0001;display:flex;gap:12px;align-items:center}.object-card small{display:block;font-size:10px;margin-bottom:5px}.icon{width:28px;height:28px;stroke:var(--green);fill:none;stroke-width:1.8;flex-shrink:0}.context p{font-size:13px;line-height:1.8}.drawer{background:var(--panel);border-left:1px solid #c5d1d8;padding:24px;min-width:0}.drawer h1{font-size:21px;display:flex;align-items:center;gap:9px;margin:0 0 5px}.scope{margin:0 0 15px;font-size:13px}.tabs{display:flex;border-bottom:1px solid var(--subtle);margin-bottom:20px;position:sticky;top:0;background:#fff;z-index:2}.tabs button{flex:1;padding:10px 5px;white-space:nowrap;font-size:14px}.tabs [aria-selected=true]{background:#edf1f4;border-bottom:3px solid #357aa6;font-weight:700}h2{font-size:16px;margin:20px 0 12px}h3{font-size:14px;margin:0}.sub{font-size:12px;color:#5f7379;line-height:1.6}.info{display:flex;gap:7px;flex-wrap:wrap}.info button{background:#f4f7f8;border:1px solid #dce5e8;border-radius:4px;padding:6px 9px;min-height:34px;font-size:12px}.info button[aria-pressed=true]{border-color:#1675a0;background:#e4f1fa;color:#126892;box-shadow:0 0 0 1px #1675a0}.model-intro{display:flex;align-items:center;justify-content:space-between;gap:12px}.badge{display:inline-block;padding:3px 7px;border:1px solid #d6b773;background:#fff8e8;border-radius:4px;font-size:11px;color:#7b6024;white-space:nowrap}.diagram{width:100%;overflow-x:auto;border:1px solid #dbe4e6;border-radius:6px;background:#f9fbfc;margin-top:12px}.diagram svg{display:block;width:100%;min-width:760px;height:auto}.entity{cursor:pointer;outline:none}.entity rect{fill:#fff;stroke:#7aada0;stroke-width:1.5}.entity .cap{fill:#e5f2ec;stroke:none}.entity text{fill:#293e3a;font:13px sans-serif}.entity .title{font-weight:700;font-size:14px}.entity .candidate{font-size:10px;fill:#667d75}.entity .optional{font-size:10px;fill:#577584}.entity .required{font-size:10px;fill:#70746f}.entity .highlight{fill:#e3f0fb;stroke:#307dac;stroke-width:1.5}.entity.selected rect:first-child{stroke:#2571b3;stroke-width:3;filter:drop-shadow(0 0 3px #579ce94d)}.entity.neighbor rect:first-child{stroke:#1675a0;stroke-width:2.3}.wire{fill:none;stroke:#8c9da4;stroke-width:1.5;stroke-dasharray:5 4}.wire.related{stroke:#1675a0;stroke-width:2.8}.multiplicity{fill:#647b82;font:11px sans-serif}.relation{font-size:12px;fill:#586e75}.note-box{fill:#fff8e9;stroke:#d4b87b;stroke-dasharray:4 3}.note-text{font:12px sans-serif;fill:#745e2d}.selection{background:#f4f8fb;border-left:3px solid #357aa6;padding:11px 12px;margin-top:12px;font-size:13px;line-height:1.7;min-height:80px}.selection strong{display:block}.questions{border-top:1px solid var(--subtle);margin-top:20px;padding-top:2px}.questions ul{padding-left:21px;font-size:13px;line-height:1.9}.questions li+li{margin-top:5px}.legend{font-size:11px;line-height:1.7;color:#61767c;margin:10px 0}footer{font-size:12px;color:#687e84;padding-top:15px;border-top:1px solid var(--subtle);margin-top:20px}a{color:#1d709c}[hidden]{display:none!important}@media(max-width:850px){.shell{display:block}.context{display:none}.drawer{border:0;padding:18px 14px}.comparison{padding:12px 14px;gap:8px}.choices{width:100%}.choices button{flex:1;padding-inline:6px;font-size:13px}header{padding:13px 14px}header span{margin-left:auto}.comparison p{font-size:12px}.tabs button{font-size:13px}}
-.entity .activity-name{font-size:13px;fill:#175e8f;font-weight:600}.field-table{border-collapse:collapse;width:100%;font-size:12px}.field-table th,.field-table td{text-align:left;border-bottom:1px solid #dce4e8;padding:7px 6px}.field-table th{background:#edf3f5}.field-table button{font-size:12px;text-align:left;color:#176c91;padding:4px 0}.field-table [aria-pressed=true]{font-weight:700;text-decoration:underline}.field-table td:last-child{color:#607478}
-
-/* Compact presentation of the existing shared layout plan. */
-.shell{grid-template-columns:220px minmax(0,480px);max-width:700px}
-.drawer{padding:14px;min-width:0}
-header{padding:10px 14px}header span{font-size:11px}
-.comparison{padding:6px 12px;gap:6px}.comparison p{display:none}
-.choices button{padding:4px 10px;min-height:34px;font-size:12px}
-.drawer h1{font-size:19px}.scope{margin:0 0 8px;font-size:12px}
-.tabs{margin-bottom:10px}.tabs button{min-height:38px;padding:7px 3px}
-h2{font-size:15px;margin:8px 0}h3{font-size:14px}
-.diagram{border:0;background:transparent;overflow:hidden;margin-top:8px}
-.diagram svg{min-width:0;width:100%;height:auto;display:block}
-.entity text{font-size:13px}.entity .title{font-size:14px}
-.entity .activity-name{font-size:11px}.entity .optional{font-size:11px}
-.wire{stroke-dasharray:none;stroke-width:1.4}
-.relation{font-size:10px;fill:#526e78}
-.selection{min-height:0;font-size:12px;margin-top:8px;padding:8px 10px}
-details{border-top:1px solid var(--subtle);padding:8px 0;margin:8px 0}
-summary{cursor:pointer;font-size:13px;font-weight:600;min-height:28px;line-height:28px}
-.quantity-example{order:2}.quantity-example select{max-width:100%;font-size:13px;min-height:36px}
-#quantity{font-size:13px;line-height:1.6;margin:8px 0}
-#model{display:flex;flex-direction:column}
-#model>.model-intro{order:0}#model>.diagram{order:1}#model>.selection{order:2}
-#model>.quantity-example{order:3}#model>.questions{order:4}
-.field-table{font-size:12px;table-layout:fixed}.field-table td{overflow-wrap:anywhere}
-.field-table th:last-child,.field-table td:last-child{display:none}
-.questions{padding-top:8px;margin-top:8px}
-footer{font-size:11px;margin-top:10px;padding-top:8px}
-@media(max-width:850px){.shell{display:block;max-width:480px}.drawer{padding:10px 8px}.context{display:none}.comparison{padding:4px 8px}.choices{width:auto}.choices button{font-size:11px}.tabs button{font-size:12px}.drawer h1{font-size:18px}}
-
-.diagram{overflow:auto;max-height:72vh;border:1px solid #dbe4e6;background:#f9fbfc;touch-action:pan-x pan-y}
-.diagram svg{max-width:none;min-width:0;flex:none}
-.cross-reference{stroke-dasharray:4 3}
-.relation{font-size:12px;fill:#344f5b}
-
-/* Desktop drawer keeps its natural canvas and exposes the same resize affordance. */
-.shell{width:100%;max-width:none;grid-template-columns:minmax(200px,1fr) var(--drawer-width,60vw)}
-.drawer{position:relative;min-width:0;max-width:none}
-.drawer-resize{position:absolute;inset:0 auto 0 -6px;width:12px;cursor:ew-resize;touch-action:none;z-index:5}
-.drawer-resize::after{content:"";position:absolute;top:0;bottom:0;left:5px;width:2px;background:#b7cbd3}
-.drawer-resize:hover::after,.drawer-resize:focus-visible::after{background:#2479a0;width:3px}
-.drawer-resize:focus-visible{outline:2px solid #2479a0;outline-offset:-2px}
-body.resizing{cursor:ew-resize;user-select:none}
-@media(max-width:850px){.shell{display:block;max-width:none}.drawer{width:auto;max-width:none}.drawer-resize{display:none}}
-
-@media(min-width:851px){
- .drawer{padding:20px 24px}
- .drawer h1{font-size:21px}.scope{font-size:13px;margin-bottom:12px}
- .tabs button{font-size:14px;padding:10px 5px;min-height:44px}
- .comparison{padding:10px 20px}.choices button{font-size:13px;padding:7px 14px;min-height:40px}
- .diagram{height:calc(100vh - 290px);max-height:none;min-height:320px}
-}
-
-.entity{cursor:grab;touch-action:none;user-select:none}.entity.dragging{cursor:grabbing}
-body.moving-table{cursor:grabbing;user-select:none}
-.model-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
-.model-actions button{border:1px solid #b7cbd3;border-radius:4px;padding:4px 9px;min-height:34px;font-size:12px}
-.model-actions span{font-size:12px;color:#5f7379}
+:root{font-family:"Segoe UI","Noto Sans JP",sans-serif;color:#253d38;background:#f2f6f8}*{box-sizing:border-box}body{margin:0}header{background:#173c60;color:white;padding:12px 24px;display:flex;align-items:center;gap:24px}header strong{font-size:18px}header span{font-size:13px}main{padding:20px 24px}h1{font-size:23px;margin:0 0 8px}h2{font-size:20px;margin:0}p{font-size:14px;line-height:1.6;margin:8px 0}a{color:#176c92}nav{display:flex;gap:8px;margin:14px 0}nav a,button{font:inherit;color:inherit;border:1px solid #b7cbd0;background:white;border-radius:5px;padding:7px 12px;text-decoration:none;cursor:pointer}nav a:hover,button:hover{background:#e7f2ee}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #347faa;outline-offset:3px}.intro{color:#5b7174}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.swatch{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid #64887e;background:#d9eee4}.swatch.read{background:#edf2f5;border-color:#a0b3be}.stage{background:white;border:1px solid #d4dfe4;border-radius:8px;margin:22px 0;padding:18px;scroll-margin-top:12px}.stage-top{display:flex;align-items:center;justify-content:space-between;gap:20px}.eyebrow{font-size:12px;color:#57716a;margin-bottom:4px}.actions{display:flex;gap:8px;align-items:center;margin:12px 0}.actions button{font-size:12px}.status{font-size:12px;color:#607678}.canvas{overflow:auto;background:#fbfcfd;border:1px solid #dce4e8;border-radius:5px;height:560px;touch-action:pan-x pan-y}.canvas svg{display:block;max-width:none;flex:none}.table{cursor:grab;user-select:none;touch-action:none}.table rect{fill:white;stroke:#6e9e8c;stroke-width:1.5}.table .cap{fill:#d9eee4;stroke:none}.table.read rect{stroke:#a0b3be}.table.read .cap{fill:#edf2f5}.table text{font:14px "Segoe UI","Noto Sans JP",sans-serif;fill:#2c433d}.table .name{font-weight:700;font-size:15px}.table .key{font-size:11px;fill:#396a58;font-weight:700}.table .divider{stroke:#e0e8e4}.table.selected rect{stroke:#187da7;stroke-width:3}.wire{fill:none;stroke:#7f969f;stroke-width:1.5}.wire.reference{stroke-dasharray:5 4}.relation{font:13px sans-serif;fill:#3e5d69}.edge-label{fill:#fbfcfd}.selection{font-size:13px;line-height:1.6;color:#3f6056;margin:10px 0 0}.rule{border-left:3px solid #71a893;padding-left:12px;margin:10px 0}.rule p{margin:3px 0}.muted{font-size:12px;color:#667d80}body.dragging,body.dragging .table{cursor:grabbing}footer{font-size:12px;color:#687d80;padding:8px 0 20px}@media(max-width:700px){main{padding:12px 8px}.stage{padding:12px 8px}.stage-top{align-items:flex-start}.canvas{height:520px}header{padding:12px}.actions{flex-wrap:wrap}}
 </style>
-<header><strong>Alder Viewer</strong><span>論理モデル · 見積・分割入庫・終結</span></header>
-<div class="shell">
-<aside class="context"><h2>選択中のObject</h2><div class="object-card"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6"/></svg><div><small>Object · 範囲内</small><strong>購入申請</strong></div></div><p>購入要求を承認・購買の対象として扱う、業務上の情報のまとまり。</p><p>一つのObjectの情報を、複数の論理エンティティへ分けて見る配置案。物理テーブルは定義しない。</p></aside>
-<main class="drawer"><div class="drawer-resize" id="drawer-resize" role="separator" tabindex="0" aria-label="右ドロワーの幅を変更" aria-orientation="vertical" aria-valuemin="320" aria-valuemax="1200" aria-valuenow="600"></div>
-<h1><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6"/></svg> : 購入申請</h1><p class="scope">Scope：True</p>
-<nav class="tabs" role="tablist" aria-label="Objectの表示"><button role="tab" id="elements-tab" aria-selected="true" aria-controls="elements">要素</button><button role="tab" aria-selected="false" disabled title="このレビュー草案では状態遷移は対象外">状態遷移</button><button role="tab" aria-selected="false" disabled title="このレビュー草案ではチェック項目は対象外">チェック項目</button></nav>
-<section id="elements" role="tabpanel" aria-labelledby="elements-tab"><details><summary>Information一覧</summary><h2>Information</h2><p class="sub">項目を押すと、モデル上の配置候補を確認できる。</p><table class="field-table"><thead><tr><th>情報項目</th><th>配置先候補</th><th>入力・記録の条件</th></tr></thead><tbody id="information"></tbody></table></details></section>
-<section id="model" role="tabpanel" aria-label="論理モデル">
-<details class="quantity-example"><summary>数量の具体例</summary><p class="sub">依頼10個の入庫・購入なし・待ちを比較する。</p><select id="case" aria-label="数量例"><option value="5,0">5入庫・5待ち</option><option value="10,0">5入庫→残り5入庫</option><option value="8,0">8入庫・2待ち</option><option value="5,5">5入庫・残り5購入なし</option><option value="0,10">全数購入なし</option><option value="8,3">8入庫＋3購入なし（過剰）</option></select><p id="quantity" aria-live="polite"></p></details><div class="model-intro"><h2>論理モデル</h2><span class="badge">レビュー草案</span></div>
-
-<p class="sub" style="margin:4px 0">1→N：右下の段 ／ 1→0..1：横並び。幅を制限せず右へ続きます。破線は別の所属からの参照。</p><div class="model-actions"><button id="reset-positions">自動配置に戻す</button><button id="copy-positions">配置をコピー</button><span id="position-status" aria-live="polite">テーブルをドラッグして移動できます。配置はこのブラウザに保存します。</span></div><div class="diagram" id="model-diagram" tabindex="0" aria-label="モデル図。縦横スクロール可能"><svg id="model-svg" role="group" aria-label="購入申請の階段状論理モデル"></svg></div><div id="selection" class="selection" aria-live="polite"><strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。</div>
-<details class="questions"><summary>未決・未検証</summary><p class="sub">代理操作、破棄後の参照、再申請不成立後の入力、入庫日と実績金額の粒度、理由・合意者の必須保存、出力履歴の保持範囲。正式実装・DDL・人間GUI採否は未実施。</p></details></section>
-<footer>購入申請を題材にした配置レビュー用の草案。業務仕様・論理モデルの確定には使わない。</footer>
-</main></div>
+<header><strong>Alder · 工程別ER</strong><span>購入申請</span></header>
+<main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">同じテーブルを工程ごとに再掲しています。多重度は保存済みデータの関係です。</p>
+<nav aria-label="工程"><a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a></nav>
+<div class="legend"><span><i class="swatch"></i>この工程で保存・更新</span><span><i class="swatch read"></i>参照するテーブル</span><span>テーブルはドラッグで移動できます。Nは複数件。</span></div>
+<div id="stages"></div>
+<footer>論理モデルのレビュー草案。購買準備・結果登録は今回の表示対象外。型・物理DDLは定義していません。</footer></main>
 <script type="module">
-import {modelLayout} from "./model-layout.js";
-// Isolated design specimen; only display positions are saved locally.
-const names={"request":"購入申請","draft":"下書き入力","draftitems":"下書き品目","quote":"見積書","submission":"確定提出版","items":"申請品目","current":"現在提出版","decision":"現在判断","prep":"購入準備","target":"購入準備対象","output":"CSV出力試行","receipt":"入庫実績","lines":"入庫明細","cancel":"購入しない数量","closure":"申請終結"};
-const fields=[["申請ID [PK]","request"],["申請者","request"],["進行状態","request"],["申請ID [PK/FK]","draft"],["入力途中の理由・見積参照","draft"],["申請ID＋行番号 [PK]","draftitems"],["申請ID [FK]","draftitems"],["品名・税抜単価・数量（未入力可）","draftitems"],["見積ID [PK]","quote"],["不変な文書版への参照","quote"],["申請ID＋版番号 [PK/FK]","submission"],["見積ID [FK・必須]","submission"],["購入理由・提出日時","submission"],["権限判定根拠（候補）","submission"],["申請ID＋版番号＋品目番号 [PK]","items"],["申請ID＋版番号 [FK]","items"],["品名・税抜単価・依頼数量","items"],["申請ID [PK/FK]","current"],["申請ID＋版番号 [FK・候補キー]","current"],["申請ID [PK/FK]","decision"],["申請ID＋版番号 [FK → 現在版]","decision"],["承認／差戻し・判断者・判断日時","decision"],["差戻し理由（差戻し時必須）","decision"],["準備番号 [PK]","prep"],["確定日時・実行者","prep"],["申請ID [PK]・準備番号 [FK]","target"],["申請ID＋版番号 [FK・候補キー]","target"],["準備番号＋試行番号 [PK]","output"],["準備番号 [FK]","output"],["試行日時・成否・成功書出日時","output"],["申請ID＋入庫番号 [PK]","receipt"],["申請ID＋版番号 [FK → 準備対象]","receipt"],["登録者・登録日時・再送識別情報","receipt"],["申請ID＋入庫番号＋品目番号 [PK]","lines"],["申請ID＋入庫番号＋版番号 [FK]","lines"],["申請ID＋版番号＋品目番号 [FK]","lines"],["入庫数量","lines"],["申請ID＋品目番号 [PK]","cancel"],["申請ID＋版番号 [FK → 準備対象]","cancel"],["申請ID＋版番号＋品目番号 [FK]","cancel"],["購入しない確定数量","cancel"],["申請ID [PK/FK → 準備対象]","closure"],["終結日時・登録者","closure"]];
-const descriptions={"request":"一件の申請の識別。下書きは提出前でも保持する。","draft":"未入力可。提出版の必須制約を使わない。","draftitems":"0行でも下書きを保存できる。","quote":"依頼全体の根拠。取得は外部の購買担当者。申請間で一意使用にしない。","submission":"変更不能。税抜合計が役職別上限以下で成立。見積根拠も後から差し替えない。","items":"提出版に1..N件。小計は税抜単価×数量、申請額はその合計。","current":"初回提出前は不存在。再申請成功時に旧判断の無効化と同時切替。","decision":"申請に0..1件。承認と差戻しを同時有効にしない。旧承認履歴は必須にしない。","prep":"確定とCSV生成を分ける。対象1..N件。差戻しとの競合を直列化。","target":"申請全体を一つの番号へ所属。現在有効な承認を処理時に検証。以後参照版を凍結。","output":"同番号・同内容で再出力。出力失敗で差戻し可能に戻さない。発注日を持たない。履歴範囲は候補。","receipt":"申請に0..N件。入庫日と登録日時は別。現物の二重入力をキーだけで判定できるとはしない。","lines":"元の確定品目に対応し、別申請・旧版・代替品を混入させない。入庫に1..N明細。","cancel":"元承認者は介入しない。理由・合意者の必須保存は未決。入庫数量と分ける。","closure":"申請に最大1件。入庫ゼロでも終結可能。終結後の訂正は今回扱わない。"};
-
-const entityData=[["request","購入申請",["申請ID [PK]","申請者","進行状態"],"備品購入を申請する","申請者／下書き保存・申請時","一件の申請の識別。下書きは提出前でも保持する。"],["draft","下書き入力",["申請ID [PK/FK]","入力途中の理由・見積参照"],"申請する／再申請・破棄する","申請者／編集中","未入力可。提出版の必須制約を使わない。"],["draftitems","下書き品目",["申請ID＋行番号 [PK]","申請ID [FK]","品名・税抜単価・数量（未入力可）"],"申請する／再申請・破棄する","申請者／編集中","0行でも下書きを保存できる。"],["quote","見積書",["見積ID [PK]","不変な文書版への参照"],"申請する／再申請・破棄する","申請者／外部取得文書の取込み","依頼全体の根拠。取得は外部の購買担当者。申請間で一意使用にしない。"],["submission","確定提出版",["申請ID＋版番号 [PK/FK]","見積ID [FK・必須]","購入理由・提出日時","権限判定根拠（候補）"],"申請する／再申請・破棄する","申請者／提出成立時","変更不能。税抜合計が役職別上限以下で成立。見積根拠も後から差し替えない。"],["items","申請品目",["申請ID＋版番号＋品目番号 [PK]","申請ID＋版番号 [FK]","品名・税抜単価・依頼数量"],"申請する／再申請・破棄する","申請者／提出版と同時確定","提出版に1..N件。小計は税抜単価×数量、申請額はその合計。"],["current","現在提出版",["申請ID [PK/FK]","申請ID＋版番号 [FK・候補キー]"],"申請する／再申請・破棄する","申請者／提出成功時","初回提出前は不存在。再申請成功時に旧判断の無効化と同時切替。"],["decision","現在判断",["申請ID [PK/FK]","申請ID＋版番号 [FK → 現在版]","承認／差戻し・判断者・判断日時","差戻し理由（差戻し時必須）"],"購入申請を承認する","承認者／判断時","申請に0..1件。承認と差戻しを同時有効にしない。旧承認履歴は必須にしない。"],["prep","購入準備",["準備番号 [PK]","確定日時・実行者"],"購入を準備する","購買担当者／対象と同時確定","確定とCSV生成を分ける。対象1..N件。差戻しとの競合を直列化。"],["target","購入準備対象",["申請ID [PK]・準備番号 [FK]","申請ID＋版番号 [FK・候補キー]"],"購入を準備する","購買担当者／準備確定時","申請全体を一つの番号へ所属。現在有効な承認を処理時に検証。以後参照版を凍結。"],["output","CSV出力試行",["準備番号＋試行番号 [PK]","準備番号 [FK]","試行日時・成否・成功書出日時"],"購入を準備する","購買担当者／出力・再出力時","同番号・同内容で再出力。出力失敗で差戻し可能に戻さない。発注日を持たない。履歴範囲は候補。"],["receipt","入庫実績",["申請ID＋入庫番号 [PK]","申請ID＋版番号 [FK → 準備対象]","登録者・登録日時・再送識別情報"],"購入結果を登録する","購買担当者／各回入庫の登録時","申請に0..N件。入庫日と登録日時は別。現物の二重入力をキーだけで判定できるとはしない。"],["lines","入庫明細",["申請ID＋入庫番号＋品目番号 [PK]","申請ID＋入庫番号＋版番号 [FK]","申請ID＋版番号＋品目番号 [FK]","入庫数量"],"購入結果を登録する","購買担当者／実績と同時登録","元の確定品目に対応し、別申請・旧版・代替品を混入させない。入庫に1..N明細。"],["cancel","購入しない数量",["申請ID＋品目番号 [PK]","申請ID＋版番号 [FK → 準備対象]","申請ID＋版番号＋品目番号 [FK]","購入しない確定数量"],"購入結果を登録する","購買担当者／申請者との調整後","元承認者は介入しない。理由・合意者の必須保存は未決。入庫数量と分ける。"],["closure","申請終結",["申請ID [PK/FK → 準備対象]","終結日時・登録者"],"購入結果を登録する","購買担当者／全品目の待ちゼロ時","申請に最大1件。入庫ゼロでも終結可能。終結後の訂正は今回扱わない。"]];
-const links=[["request","draft","1：0..1"],["draft","draftitems","1：0..N"],["request","submission","1：0..N"],["quote","submission","1：0..N"],["submission","items","1：1..N"],["submission","current","1：0..1"],["current","decision","1：0..1"],["request","current","1：0..1"],["submission","target","1：0..1"],["prep","target","1：1..N"],["prep","output","1：0..N"],["target","receipt","1：0..N"],["receipt","lines","1：1..N"],["items","lines","1：0..N"],["items","cancel","1：0..1"],["target","cancel","1：0..N"],["target","closure","1：0..1"]];
-const graph={version:1,nodes:entityData.map(([id,name])=>({id,name,type:'object',scope:true})),relations:links.map(([from,to])=>({kind:'input',from,to,label:''}))};
-
-const ns='http://www.w3.org/2000/svg';
-const measureCanvas=document.createElement('canvas'),ctx=measureCanvas.getContext('2d');
-function measure(text,size=13){ctx.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return ctx.measureText(text).width;}
-function wrap(text,width,size=13){const lines=[];let line='';for(const char of text){if(line&&measure(line+char,size)>width){lines.push(line);line=char;}else line+=char;}if(line)lines.push(line);return lines;}
-function element(tag,attrs={},text){const e=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=text;return e;}
-
-const positionStorageKey='alder-logical-model:purchase-request:positions-v1';
-const manualPositions=new Map();
-try{const saved=JSON.parse(localStorage.getItem(positionStorageKey)||'{}');for(const [id,p]of Object.entries(saved))if(entityData.some(e=>e[0]===id)&&p&&Number.isFinite(p.x)&&Number.isFinite(p.y))manualPositions.set(id,{x:Math.max(24,p.x),y:Math.max(40,p.y)});}catch{}
-let lastPlan=null,selectedEntity=null,selectedField=null,tableDrag=null,dragFrame=0,canvasFloor=null;
-function savePositions(){try{localStorage.setItem(positionStorageKey,JSON.stringify(Object.fromEntries(manualPositions)));$('position-status').textContent='配置をこのブラウザに保存しました。';}catch{$('position-status').textContent='配置は現在の画面のみ保持しています。';}}
-function drawModel(){
- const svg=$('model-svg'),plan=modelLayout(entityData,links,measure,manualPositions);
- lastPlan=plan;if(canvasFloor){plan.width=Math.max(plan.width,canvasFloor.width);plan.height=Math.max(plan.height,canvasFloor.height);}
- svg.replaceChildren();svg.setAttribute('viewBox','0 0 '+plan.width+' '+plan.height);svg.style.width=plan.width+'px';svg.style.height=plan.height+'px';
- const defs=element('defs'),marker=element('marker',{id:'arrow',viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:7,markerHeight:7,orient:'auto'});marker.append(element('path',{d:'M0 0L8 4L0 8Z',fill:'#71878c'}));defs.append(marker);svg.append(defs);
- for(const route of plan.routes){svg.append(element('path',{class:'wire'+(route.main?'':' cross-reference'),'data-from':route.from,'data-to':route.to,d:route.d,'marker-end':'url(#arrow)'}));svg.append(element('rect',{x:route.labelX-30,y:route.labelY-11,width:60,height:16,fill:'#f9fbfc',rx:3}));svg.append(element('text',{class:'relation',x:route.labelX,y:route.labelY,'text-anchor':'middle'},route.n));}
- for(const [id,b] of plan.boxes){const e=entityData.find(e=>e[0]===id),name=e[1],g=element('g',{class:'entity','data-entity':id,role:'button',tabindex:0,'aria-label':name+'を選択','aria-pressed':'false'});
- g.append(element('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:6}));g.append(element('path',{class:'cap',d:'M'+(b.x+1)+' '+(b.y+1)+'h'+(b.w-2)+'v31h-'+(b.w-2)+'Z'}));g.append(element('text',{class:'title',x:b.x+10,y:b.y+22},name));
- b.lines.forEach((line,i)=>g.append(element('text',{x:b.x+10,y:b.y+51+i*19},line)));
- const lineY=b.y+35+b.lines.length*19+6;g.append(element('path',{d:'M'+(b.x+10)+' '+lineY+'h'+(b.w-20),stroke:'#dce4e8'}));b.meta.forEach((line,i)=>g.append(element('text',{class:i===0?'activity-name':'optional',x:b.x+10,y:lineY+17+i*16},line)));
- g.onpointerdown=event=>startTableDrag(event,id);
- g.onkeydown=event=>{if(event.altKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();const step=event.shiftKey?50:10;manualPositions.set(id,{x:Math.max(24,b.x+(event.key==='ArrowLeft'?-step:event.key==='ArrowRight'?step:0)),y:Math.max(40,b.y+(event.key==='ArrowUp'?-step:event.key==='ArrowDown'?step:0))});selectedEntity=id;drawModel();document.querySelector('.entity[data-entity="'+id+'"]').focus();savePositions();}else if(event.key==='Enter'||event.key===' '){event.preventDefault();select(id);}};
- g.setAttribute('aria-description','ドラッグで移動。Altと矢印キーでも移動できます。');svg.append(g);}
- if(selectedEntity)select(selectedEntity,selectedField);
+const tables={
+ request:{name:'購入申請',fields:[['PK','申請ID'],['','申請者']],note:'申請を通して変わらない識別。各版は同じ申請に属します。'},
+ version:{name:'購入申請版',fields:[['PK/FK','申請ID'],['PK','版番号'],['','購入理由'],['FK','見積ID']],note:'初回保存から版を持ちます。確定記録のない版を便宜上下書きと呼びます。見積IDは提出成立時に必須。保存のたびに版番号を増やすかは未決です。'},
+ item:{name:'申請品目',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['PK','品目番号'],['','品名'],['','税抜単価'],['','依頼数量']],note:'版に属する品目。下書きを含め、保存には1品目以上が必要です。未入力を許す属性の範囲は別途確認します。'},
+ confirmed:{name:'購入申請確定',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['','提出日時']],note:'この記録が存在する版は提出成立済み。理由・見積・品目・金額の条件を満たした場合に作成し、その版と品目を変更不能にします。'},
+ quote:{name:'見積書',fields:[['PK','見積ID'],['','不変な文書版への参照']],note:'外部で取得した見積書を参照します。提出時に依頼全体の根拠として必須。同じ見積を一つの申請だけに限定しません。'},
+ decision:{name:'申請判断',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['','承認／差戻し'],['','判断者'],['','判断日時'],['','差戻し理由']],note:'確定済みの版に対する判断を表す候補。承認と差戻しを同時有効にしません。差戻し理由は差戻し時に必須。再申請成功時は旧判断を無効にします。旧判断履歴を必須保存にする意図はありません。'}
+};
+const edges=[
+ ['request','version','1：1..N','down'],['version','item','1：1..N','down'],
+ ['version','confirmed','1：0..1','right'],['quote','version','1：0..N','reference'],
+ ['confirmed','decision','1：0..1','right']
+];
+const stages=[
+ {id:'draft',title:'下書きを保存する',subtitle:'未確定の申請版',ids:['request','version','item'],write:['request','version','item'],rules:['申請・版・1品目以上をまとめて保存する。品目ゼロでは登録できない。','購入申請確定が存在しない版を「下書き」と呼ぶ。下書き専用のテーブルは作らない。'],change:'保存後：申請あり → 版あり → 品目あり。確定記録なし。'},
+ {id:'submit',title:'購入申請を提出する',subtitle:'確定記録を作る',ids:['request','version','item','confirmed','quote'],write:['confirmed'],rules:['購入理由・外部取得済みの見積書・品目を確認する。税抜単価×数量の合計で申請権限を判定する。','条件を満たした場合だけ確定記録を作り、対象の版・品目・見積参照を固定する。不成立なら確定記録を作らない。'],change:'未確定版（確定なし） → 提出成立版（確定あり・判断なし）。'},
+ {id:'approve',title:'購入申請を承認する',subtitle:'承認または差戻しを記録する',ids:['request','version','item','confirmed','quote','decision'],write:['decision'],rules:['確定済みの版・品目・見積を参照し、承認または差戻しを判断する。差戻し時は理由を記録する。','対象の版は書き換えない。次工程前は差戻し可能、購入準備開始後は不可。再申請成功時に旧判断を無効にする。'],change:'提出成立版（判断なし） → 承認／差戻し（判断あり）。'}
+];
+const initial={request:{x:24,y:28},version:{x:104,y:174},item:{x:184,y:416},confirmed:{x:520,y:174},quote:{x:520,y:416},decision:{x:936,y:174}};
+const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:v1';
+let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{}
+const measureContext=document.createElement('canvas').getContext('2d');
+function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
+function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
+const states=[];
+function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
+function draw(state){
+ const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
+ state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(640,...[...boxes.values()].map(b=>b.y+b.h+45));
+ state.svg.style.width=width+'px';state.svg.style.height=height+'px';state.svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
+ const defs=svgNode('defs'),marker=svgNode('marker',{id:'arrow-'+state.stage.id,viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:7,markerHeight:7,orient:'auto'});marker.append(svgNode('path',{d:'M0 0L8 4L0 8Z',fill:'#7f969f'}));defs.append(marker);state.svg.append(defs);
+ for(const[from,to,label,kind]of edges){if(!boxes.has(from)||!boxes.has(to))continue;const a=boxes.get(from),b=boxes.get(to);let d,lx,ly;
+  if(kind==='down'&&!state.positions.has(from)&&!state.positions.has(to)){const x=a.x+20,y=b.y+22;d=`M${x} ${a.y+a.h}V${y}H${b.x}`;lx=(x+b.x)/2;ly=y-9;}
+  else if(kind==='reference'&&!state.positions.has(from)&&!state.positions.has(to)){const y=b.y+b.h+24;d=`M${a.x+20} ${a.y}V${y}H${b.x+b.w-20}V${b.y+b.h}`;lx=(a.x+20+b.x+b.w-20)/2;ly=y-7;}
+  else if(b.x>=a.x+a.w+30){const sy=a.y+22,ty=b.y+22,m=(a.x+a.w+b.x)/2;d=`M${a.x+a.w} ${sy}H${m}V${ty}H${b.x}`;lx=m;ly=(sy+ty)/2-9;}
+  else if(a.x>=b.x+b.w+30){const sy=a.y+22,ty=b.y+22,m=(a.x+b.x+b.w)/2;d=`M${a.x} ${sy}H${m}V${ty}H${b.x+b.w}`;lx=m;ly=(sy+ty)/2-9;}
+  else {const sx=a.x+20,tx=b.x+20,sy=b.y>=a.y?a.y+a.h:a.y,ty=b.y>=a.y?b.y:b.y+b.h,m=(sy+ty)/2;d=`M${sx} ${sy}V${m}H${tx}V${ty}`;lx=(sx+tx)/2+35;ly=m-8;}
+  state.svg.append(svgNode('path',{class:'wire'+(kind==='reference'?' reference':''),'data-from':from,'data-to':to,d,'marker-end':`url(#arrow-${state.stage.id})`}));state.svg.append(svgNode('rect',{class:'edge-label',x:lx-37,y:ly-13,width:74,height:19}));state.svg.append(svgNode('text',{class:'relation',x:lx,y:ly,'text-anchor':'middle'},label));
+ }
+ for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'table'+(state.stage.write.includes(id)?'':' read')+(state.selected===id?' selected':''),'data-table':id,role:'button',tabindex:0,'aria-label':t.name+'を選択','aria-description':'ドラッグで配置変更。Altと矢印キーで移動。'});g.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));g.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));g.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));g.append(svgNode('path',{class:'divider',d:`M${b.x+68} ${b.y+35}V${b.y+b.h}`}));t.fields.forEach(([k,n],i)=>{const y=b.y+56+i*25;g.append(svgNode('text',{class:'key',x:b.x+10,y},k));g.append(svgNode('text',{class:'column',x:b.x+80,y},n));});
+  const select=()=>{state.selected=id;state.selection.textContent=t.name+'：'+t.note;};
+  g.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();select();state.drag={id,pointer:e.pointerId,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,bx:b.x,by:b.y,sx:state.host.scrollLeft,sy:state.host.scrollTop,previous:state.positions.get(id),moved:false};state.svg.setPointerCapture(e.pointerId);document.body.classList.add('dragging');draw(state);state.frame=requestAnimationFrame(()=>tick(state));};
+  g.onkeydown=e=>{if(e.altKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const d=e.shiftKey?50:10;state.positions.set(id,{x:Math.max(24,b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0)),y:Math.max(28,b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0))});select();draw(state);state.svg.querySelector(`[data-table="${id}"]`).focus();save(state);}else if(e.key==='Enter'||e.key===' '){e.preventDefault();select();draw(state);}};state.svg.append(g);
+ }
 }
-
-
-
-const $=id=>document.getElementById(id);
-for(const [field,entity] of fields){const tr=document.createElement('tr'),td=document.createElement('td'),dest=document.createElement('td'),condition=document.createElement('td'),b=document.createElement('button');b.textContent=field;b.dataset.field=field;b.dataset.entity=entity;b.setAttribute('aria-pressed','false');b.onclick=()=>select(entity,field);td.append(b);dest.textContent=names[entity];condition.textContent=descriptions[entity];tr.append(td,dest,condition);$('information').append(tr);}
-function select(entity,field){selectedEntity=entity;selectedField=field;const neighbors=new Set(links.filter(([a,b])=>a===entity||b===entity).flatMap(([a,b])=>[a,b]));document.querySelectorAll('.wire').forEach(e=>{const incident=e.dataset.from===entity||e.dataset.to===entity;e.classList.toggle('related',incident);if(incident){neighbors.add(e.dataset.from);neighbors.add(e.dataset.to);}});document.querySelectorAll('.entity').forEach(g=>{const selected=g.dataset.entity===entity;g.classList.toggle('selected',selected);g.classList.toggle('neighbor',!selected&&neighbors.has(g.dataset.entity));g.setAttribute('aria-pressed',String(selected));});document.querySelectorAll('[data-field]').forEach(b=>b.setAttribute('aria-pressed',String(field?b.dataset.field===field&&b.dataset.entity===entity:b.dataset.entity===entity)));$('selection').replaceChildren();const h=document.createElement('strong');h.textContent=(field?field+' → ':'')+names[entity];$('selection').append(h,document.createTextNode(descriptions[entity]+' 関連：'+links.filter(([a,b])=>a===entity||b===entity).map(([a,b,n])=>names[a]+' → '+names[b]+'（'+n+'）').join(' ／ ')));}
-function render(){$('model').after($('elements'));$('model').setAttribute('aria-labelledby','elements-tab');const url=new URL(location.href);url.searchParams.delete('placement');history.replaceState(null,'',url);}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedEntity=null;selectedField=null;document.querySelectorAll('.entity').forEach(g=>{g.classList.remove('selected','neighbor');g.setAttribute('aria-pressed','false');});document.querySelectorAll('.wire').forEach(g=>g.classList.remove('related'));document.querySelectorAll('[data-field]').forEach(b=>b.setAttribute('aria-pressed','false'));$('selection').innerHTML='<strong>項目またはエンティティを選択</strong>情報項目の配置候補と、任意性・未決事項を確認できる。';}});
-function quantity(){const [r,c]=$('case').value.split(',').map(Number),w=10-r-c;$('quantity').textContent='入庫 '+r+' ／ 購入しない '+c+' ／ 待ち '+w+' → '+(w<0?'不成立：依頼数量を超過':w>0?'作業中':r===10?'終結：全数入庫':r===0?'終結：全数購入なし':'終結：一部入庫・残り購入なし');}
-
-const divider=$('drawer-resize'),drawer=document.querySelector('.drawer'),shell=document.querySelector('.shell');
-let resizeDrag=null;
-const drawerBounds=()=>({min:320,max:Math.max(320,window.innerWidth-200)});
-function setDrawerWidth(width){const {min,max}=drawerBounds(),next=Math.max(min,Math.min(max,width));shell.style.setProperty('--drawer-width',next+'px');syncDivider();}
-function syncDivider(){const {min,max}=drawerBounds();divider.setAttribute('aria-valuemin',String(min));divider.setAttribute('aria-valuemax',String(max));divider.setAttribute('aria-valuenow',String(Math.round(drawer.getBoundingClientRect().width)));}
-divider.addEventListener('pointerdown',event=>{if(event.button!==0)return;resizeDrag={x:event.clientX,width:drawer.getBoundingClientRect().width,pointer:event.pointerId};divider.setPointerCapture(event.pointerId);document.body.classList.add('resizing');event.preventDefault();});
-divider.addEventListener('pointermove',event=>{if(resizeDrag&&event.pointerId===resizeDrag.pointer)setDrawerWidth(resizeDrag.width+resizeDrag.x-event.clientX);});
-function stopResize(){resizeDrag=null;document.body.classList.remove('resizing');}
-divider.addEventListener('pointerup',stopResize);divider.addEventListener('pointercancel',stopResize);divider.addEventListener('lostpointercapture',stopResize);
-divider.addEventListener('keydown',event=>{const step=event.shiftKey?128:32;if(event.key==='ArrowLeft')setDrawerWidth(drawer.getBoundingClientRect().width+step);else if(event.key==='ArrowRight')setDrawerWidth(drawer.getBoundingClientRect().width-step);else if(event.key==='Home')setDrawerWidth(drawerBounds().min);else if(event.key==='End')setDrawerWidth(drawerBounds().max);else return;event.preventDefault();});
-divider.addEventListener('dblclick',()=>{shell.style.removeProperty('--drawer-width');syncDivider();});
-window.addEventListener('resize',()=>{if(window.innerWidth>850&&shell.style.getPropertyValue('--drawer-width'))setDrawerWidth(drawer.getBoundingClientRect().width);else syncDivider();});
-syncDivider();
-
-
-function startTableDrag(event,id){
- if(event.button!==0)return;event.preventDefault();event.stopPropagation();const host=$('model-diagram'),svg=$('model-svg'),b=lastPlan.boxes.get(id);
- tableDrag={id,pointer:event.pointerId,startX:event.clientX,startY:event.clientY,clientX:event.clientX,clientY:event.clientY,scrollX:host.scrollLeft,scrollY:host.scrollTop,x:b.x,y:b.y,previous:manualPositions.get(id),moved:false};
- canvasFloor={width:lastPlan.width,height:lastPlan.height};svg.setPointerCapture(event.pointerId);document.body.classList.add('moving-table');select(id);dragFrame=requestAnimationFrame(dragTick);
+function move(state){const d=state.drag;if(!d)return;const dx=d.cx-d.x+state.host.scrollLeft-d.sx,dy=d.cy-d.y+state.host.scrollTop-d.sy;if(!d.moved&&Math.hypot(dx,dy)<4)return;d.moved=true;state.positions.set(d.id,{x:Math.max(24,Math.round(d.bx+dx)),y:Math.max(28,Math.round(d.by+dy))});draw(state);}
+function tick(state){const d=state.drag;if(!d)return;const r=state.host.getBoundingClientRect();if(d.moved)state.host.scrollBy(d.cx<r.left+24?-10:d.cx>r.right-24?10:0,d.cy<r.top+24?-10:d.cy>r.bottom-24?10:0);move(state);state.frame=requestAnimationFrame(()=>tick(state));}
+function stop(state,cancel=false){const d=state.drag;if(!d)return;state.drag=null;cancelAnimationFrame(state.frame);document.body.classList.remove('dragging');if(cancel){if(d.previous)state.positions.set(d.id,d.previous);else state.positions.delete(d.id);draw(state);state.status.textContent='移動を取り消しました。';}else if(d.moved)save(state);if(state.svg.hasPointerCapture(d.pointer))state.svg.releasePointerCapture(d.pointer);}
+for(const[order,stage]of stages.entries()){
+ const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p><div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
+ document.getElementById('stages').append(section);const state={stage,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),positions:new Map(),selected:null,drag:null};
+ for(const[id,p]of Object.entries(saved[stage.id]||{}))if(stage.ids.includes(id)&&p&&Number.isFinite(p.x)&&Number.isFinite(p.y))state.positions.set(id,{x:Math.max(24,p.x),y:Math.max(28,p.y)});
+ state.svg.onpointermove=e=>{if(state.drag&&e.pointerId===state.drag.pointer){state.drag.cx=e.clientX;state.drag.cy=e.clientY;move(state);}};state.svg.onpointerup=()=>stop(state);state.svg.onpointercancel=()=>stop(state,true);state.svg.onlostpointercapture=()=>{if(state.drag)stop(state,true);};
+ section.querySelector('.reset').onclick=()=>{state.positions.clear();state.selected=null;draw(state);save(state);state.status.textContent='自動配置に戻しました。';state.host.scrollTo(0,0);state.selection.textContent='テーブルを選択すると、保存する情報と条件を確認できます。';};
+ section.querySelector('.copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify({kind:'alder-activity-er-layout',stage:stage.id,positions:Object.fromEntries([...state.boxes].map(([id,b])=>[id,{x:b.x,y:b.y}]))},null,2));state.status.textContent='配置をコピーしました。チャットに貼り付けて共有できます。';}catch{state.status.textContent='コピーできませんでした。';}};
+ states.push(state);draw(state);
 }
-function updateTablePosition(){
- if(!tableDrag)return;const d=tableDrag,host=$('model-diagram'),dx=d.clientX-d.startX+host.scrollLeft-d.scrollX,dy=d.clientY-d.startY+host.scrollTop-d.scrollY;
- if(!d.moved&&Math.hypot(dx,dy)<4)return;d.moved=true;const next={x:Math.max(24,Math.round(d.x+dx)),y:Math.max(40,Math.round(d.y+dy))},old=manualPositions.get(d.id);
- if(!old||old.x!==next.x||old.y!==next.y){manualPositions.set(d.id,next);drawModel();canvasFloor={width:lastPlan.width,height:lastPlan.height};}
-}
-function dragTick(){
- if(!tableDrag)return;const host=$('model-diagram'),r=host.getBoundingClientRect(),d=tableDrag;
- const vx=d.clientX<r.left+24?-12:d.clientX>r.right-24?12:0,vy=d.clientY<r.top+24?-12:d.clientY>r.bottom-24?12:0;
- if(vx||vy)host.scrollBy(vx,vy);updateTablePosition();dragFrame=requestAnimationFrame(dragTick);
-}
-function stopTableDrag(cancel=false){
- if(!tableDrag)return;const d=tableDrag;tableDrag=null;cancelAnimationFrame(dragFrame);document.body.classList.remove('moving-table');
- if(cancel){if(d.previous)manualPositions.set(d.id,d.previous);else manualPositions.delete(d.id);drawModel();$('position-status').textContent='移動を取り消しました。';}
- else if(d.moved)savePositions();
- const svg=$('model-svg');if(svg.hasPointerCapture(d.pointer))svg.releasePointerCapture(d.pointer);
-}
-$('model-svg').addEventListener('pointermove',event=>{if(tableDrag&&event.pointerId===tableDrag.pointer){tableDrag.clientX=event.clientX;tableDrag.clientY=event.clientY;updateTablePosition();}});
-$('model-svg').addEventListener('pointerup',()=>stopTableDrag(false));
-$('model-svg').addEventListener('pointercancel',()=>stopTableDrag(true));
-$('model-svg').addEventListener('lostpointercapture',()=>{if(tableDrag)stopTableDrag(true);});
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&tableDrag){event.preventDefault();stopTableDrag(true);}});
-$('reset-positions').onclick=()=>{manualPositions.clear();canvasFloor=null;selectedEntity=null;selectedField=null;try{localStorage.removeItem(positionStorageKey);}catch{}drawModel();$('model-diagram').scrollTo(0,0);$('position-status').textContent='自動配置に戻しました。';$('selection').textContent='テーブルを選択すると関連を確認できます。';};
-$('copy-positions').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify({kind:'alder-purchase-model-layout',positions:Object.fromEntries([...lastPlan.boxes].map(([id,b])=>[id,{x:b.x,y:b.y}]))},null,2));$('position-status').textContent='配置をコピーしました。チャットに貼り付けて共有できます。';}catch{$('position-status').textContent='コピーできませんでした。ブラウザのクリップボード設定を確認してください。';}};
-
-$('case').onchange=quantity;quantity();render();drawModel();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
