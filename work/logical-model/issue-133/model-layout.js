@@ -6,7 +6,7 @@ export const primaryPairs=[
  ['target','closure'],['target','receipt'],['receipt','lines'],
  ['items','cancel'],['draft','draftitems'],['prep','output']
 ];
-export function modelLayout(entities,links,measure){
+export function modelLayout(entities,links,measure,manualPositions=new Map()){
  const primary=links.filter(([a,b])=>primaryPairs.some(([x,y])=>x===a&&y===b));
  const parent=new Map(entities.map(e=>[e[0],e[0]]));
  const find=id=>{while(parent.get(id)!==id)id=parent.get(id);return id;};
@@ -28,8 +28,17 @@ export function modelLayout(entities,links,measure){
   nextX=x;
   y+=rowHeight+70;
  }
+ for(const [id,position] of manualPositions){const box=boxes.get(id);if(!box)continue;box.x=Math.max(24,position.x);box.y=Math.max(40,position.y);box.rowBottom=box.y+box.h;maxX=Math.max(maxX,box.x+box.w);y=Math.max(y,box.y+box.h+70);}
  const labelSlots=new Map();
  const routes=links.map(([from,to,n],i)=>{const a=boxes.get(from),b=boxes.get(to),main=primaryPairs.some(([x,y])=>x===from&&y===to);
+  if(manualPositions.has(from)||manualPositions.has(to)){
+   let sx,sy,tx,ty,d;
+   if(b.x>=a.x+a.w+30){sx=a.x+a.w;sy=a.y+a.h/2;tx=b.x;ty=b.y+b.h/2;const mid=(sx+tx)/2;d='M'+sx+' '+sy+'H'+mid+'V'+ty+'H'+tx;}
+   else if(a.x>=b.x+b.w+30){sx=a.x;sy=a.y+a.h/2;tx=b.x+b.w;ty=b.y+b.h/2;const mid=(sx+tx)/2;d='M'+sx+' '+sy+'H'+mid+'V'+ty+'H'+tx;}
+   else if(b.y>=a.y+a.h+30){sx=a.x+a.w/2;sy=a.y+a.h;tx=b.x+b.w/2;ty=b.y;const mid=(sy+ty)/2;d='M'+sx+' '+sy+'V'+mid+'H'+tx+'V'+ty;}
+   else {sx=a.x+a.w/2;sy=a.y;tx=b.x+b.w/2;ty=b.y+b.h;const mid=(sy+ty)/2;d='M'+sx+' '+sy+'V'+mid+'H'+tx+'V'+ty;}
+   return{from,to,n,main,d,labelX:(sx+tx)/2,labelY:(sy+ty)/2-7};
+  }
   if(main&&a.group===b.group){const skipped=[...boxes.values()].some(c=>c!==a&&c!==b&&c.group===a.group&&c.x>a.x&&c.x<b.x);return{from,to,n,main,d:skipped?'M'+(a.x+a.w)+' '+(a.y+20)+'H'+(a.x+a.w+18)+'V'+(a.y-20)+'H'+(b.x-18)+'V'+(b.y+20)+'H'+b.x:'M'+(a.x+a.w)+' '+(a.y+20)+'H'+b.x,labelX:(a.x+a.w+b.x)/2,labelY:skipped?a.y-25:a.y+11};}
   if(main)return{from,to,n,main,d:'M'+(a.x+14)+' '+(a.y+a.h)+'V'+(a.rowBottom+22)+'H'+(b.x+14)+'V'+b.y,labelX:b.x+50,labelY:b.y-25};
   const top=Math.min(a.y,b.y),bottom=Math.max(a.rowBottom,b.rowBottom),right=Math.max(...[...boxes.values()].filter(c=>c.y>=top&&c.y<=bottom).map(c=>c.x+c.w))+28+i*10;
