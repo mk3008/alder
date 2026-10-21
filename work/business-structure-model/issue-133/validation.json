@@ -1,0 +1,34 @@
+{
+  "diagrams": [
+    {
+      "diagram": "application",
+      "concepts": 3,
+      "relations": 2,
+      "endpointCounts": 4,
+      "unrouted": 0,
+      "sharedRuns": 0,
+      "countOverlaps": 0
+    },
+    {
+      "diagram": "preparation",
+      "concepts": 2,
+      "relations": 1,
+      "endpointCounts": 2,
+      "unrouted": 0,
+      "sharedRuns": 0,
+      "countOverlaps": 0
+    },
+    {
+      "diagram": "receipt",
+      "concepts": 4,
+      "relations": 3,
+      "endpointCounts": 6,
+      "unrouted": 0,
+      "sharedRuns": 0,
+      "countOverlaps": 0
+    }
+  ],
+  "quantityExamples": 9,
+  "legalIntegerPartitions": 454,
+  "scope": "Documentation model arithmetic and SVG/link checks only; no runtime, DDL, concurrency or idempotency implementation verified."
+}

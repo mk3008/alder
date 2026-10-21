@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="388" height="296" viewBox="0 0 388 296" role="img" aria-labelledby="title"><title id="title">準備番号でまとめる申請</title><rect width="100%" height="100%" fill="#fff"/><g font-family="sans-serif" fill="#263b39">
+<path d="M46 132 L46 190 L104 190" fill="none" stroke="#fff" stroke-width="6"/><path d="M46 132 L46 190 L104 190" fill="none" stroke="#617b78" stroke-width="1.5"/>
+<rect x="24" y="28" width="260" height="104" rx="5" fill="#fff" stroke="#649186"/><path d="M25 29h258v35h-258Z" fill="#e1efe9"/><text x="36" y="53" font-size="17" font-weight="bold">購入準備</text>
+<text x="36" y="87" font-size="15">準備番号・固定された対象群</text>
+<text x="36" y="113" font-size="15">書き出し日時の情報</text>
+<rect x="104" y="168" width="260" height="104" rx="5" fill="#fff" stroke="#649186"/><path d="M105 169h258v35h-258Z" fill="#e1efe9"/><text x="116" y="193" font-size="17" font-weight="bold">購入申請</text>
+<text x="116" y="227" font-size="15">準備所属（準備前はなし）</text>
+<text x="116" y="253" font-size="15">準備対象の確定版</text>
+<rect x="51" y="147" width="42" height="18" fill="#fff"/><text x="56" y="160" text-anchor="start" font-size="14">0..1</text>
+<rect x="59" y="167" width="42" height="18" fill="#fff"/><text x="80" y="180" text-anchor="middle" font-size="14">1..N</text>
+</g></svg>
