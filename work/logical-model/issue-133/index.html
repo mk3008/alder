@@ -45,9 +45,13 @@ const overviewStage={id:'overview',title:'全体ER（申請〜承認）',subtitl
 const stages=[...activityDefinitions.map(activitySlice),overviewStage];
 // Explicit creation provenance, not inferred from display color or all writers.
 const creatorStage={request:'draft',version:'draft',item:'draft',confirmed:'submit',decision:'approve'};
-const localInitial={submit:{version:{x:24,y:28},confirmed:{x:440,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:440,y:28}}};
-const initial={request:{x:24,y:28},version:{x:104,y:174},item:{x:184,y:416},confirmed:{x:520,y:174},quote:{x:520,y:416},decision:{x:936,y:174}};
-const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:local-v2';
+// Two endpoint counts and their independent landing segments need 96px.
+// Sizes are measured first; layout does not depend on the viewport width.
+function compactInitial(sizes){
+ const gap=96,verticalGap=48,request={x:24,y:28},version={x:104,y:request.y+sizes.get('request').h+verticalGap},item={x:184,y:version.y+sizes.get('version').h+verticalGap},confirmed={x:version.x+sizes.get('version').w+gap,y:version.y},quote={x:confirmed.x,y:item.y},decision={x:confirmed.x+sizes.get('confirmed').w+gap,y:confirmed.y};
+ return{draft:{request,version,item},submit:{version:{x:24,y:28},confirmed:{x:24+sizes.get('version').w+gap,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:24+sizes.get('confirmed').w+gap,y:28}},overview:{request,version,item,confirmed,quote,decision}};
+}
+const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:compact-v3';
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{}
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
@@ -83,11 +87,12 @@ window.addEventListener('popstate',()=>applyLocation(true));window.addEventListe
 
 function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
 function draw(state){
- const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||localInitial[state.stage.id]?.[id]||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
- state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(180,...[...boxes.values()].map(b=>b.y+b.h+45));
+ const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86))),h:44+t.fields.length*25}])),initial=compactInitial(sizes)[state.stage.id];
+ const boxes=new Map(state.stage.ids.map(id=>{const size=sizes.get(id),p=state.positions.get(id)||initial[id];return[id,{x:p.x,y:p.y,...size}];}));
+ state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(240,...[...boxes.values()].map(b=>b.x+b.w+24)),height=Math.max(180,...[...boxes.values()].map(b=>b.y+b.h+24));
  state.svg.style.width=width+'px';state.svg.style.height=height+'px';state.svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
  const routing=routeER(boxes,state.stage.edges);state.routing=routing;
- const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);state.host.style.height=Math.min(560,Math.max(260,routedHeight+2))+'px';
+ const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);state.host.style.height=Math.min(560,Math.max(220,routedHeight+2))+'px';
  for(const route of routing.routes){const{from,to,fromCount,toCount,kind,d}=route;const reading=tables[from].name+'1件に対して'+tables[to].name+toCount+'件／'+tables[to].name+'1件に対して'+tables[from].name+fromCount+'件';
   state.svg.append(svgNode('path',{d,fill:'none',stroke:'#fbfcfd','stroke-width':6,'pointer-events':'none'}));
   const wire=svgNode('path',{class:'wire'+(kind==='reference'?' reference':'')+(route.unrouted?' unresolved':''),'data-from':from,'data-to':to,'data-from-cardinality':fromCount,'data-to-cardinality':toCount,'data-unrouted':route.unrouted,d,'aria-label':reading,role:'img'});wire.append(svgNode('title',{},reading));state.svg.append(wire);
@@ -115,6 +120,7 @@ for(const[order,stage]of stages.entries()){
 applyLocation(true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
+
 
 
 
