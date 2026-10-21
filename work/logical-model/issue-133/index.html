@@ -6,6 +6,7 @@
 .er-legend{margin-top:12px;gap:24px}.er-legend span{display:inline-flex;align-items:center;gap:6px}.er-legend svg{width:46px;height:24px;overflow:visible}.quote-rule{font-size:13px;color:#3a6559}
 .endpoint-count{font:600 13px "Segoe UI",sans-serif;fill:#395d6c}
 .routing-warning{font-size:13px;color:#9c3c31}.routing-warning:empty{display:none}.wire.unresolved{stroke:#b74032;stroke-dasharray:4 3}
+.name-link{cursor:pointer}.table .name-link .name{fill:#176f99;text-decoration:underline}.name-link:focus-visible{outline:3px solid #397db1}.section-back{font-size:13px;white-space:nowrap}
 </style>
 <header><strong>Alder · 工程別ER</strong><span>購入申請</span></header>
 <main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">登録・更新・削除するテーブルと、この工程で扱う直接の隣接だけを表示します。灰色のテーブルから先の関係は全体ERで確認できます。</p>
@@ -40,9 +41,10 @@ function activitySlice(stage){
  const scope=new Set(stage.ids),writes=new Set(stage.write),localEdges=edges.filter(([a,b])=>scope.has(a)&&scope.has(b)&&(writes.has(a)||writes.has(b))),visible=new Set(stage.write);
  for(const[a,b]of localEdges){visible.add(a);visible.add(b);}return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:localEdges};
 }
-const overviewMode=new URLSearchParams(location.search).get('view')==='overview';
-const stages=overviewMode?[{id:'overview',title:'全体ER（申請〜承認）',subtitle:'3工程の全体の関係',ids:Object.keys(tables),write:[],edges,rules:['工程別の図で省略した関係を含め、申請から承認までの構造をまとめて確認できます。'],change:'灰色は全体のテーブルです。工程ごとの登録・更新・削除は局所ERで確認してください。'}]:activityDefinitions.map(activitySlice);
-if(overviewMode){document.querySelector('h1').textContent='全体ER（申請〜承認）';document.querySelector('.intro').textContent='下書き・申請・承認の3工程で使う全テーブルと関係です。購買準備・結果登録は含みません。';document.querySelector('nav').innerHTML='<a href="index.html">工程別ERへ戻る</a>';}
+const overviewStage={id:'overview',title:'全体ER（申請〜承認）',subtitle:'3工程の全体の関係',ids:Object.keys(tables),write:[],edges,rules:['工程別の図で省略した関係を含め、申請から承認までの構造をまとめて確認できます。'],change:'灰色は全体のテーブルです。工程ごとの登録・更新・削除は局所ERで確認してください。'};
+const stages=[...activityDefinitions.map(activitySlice),overviewStage];
+// Explicit creation provenance, not inferred from display color or all writers.
+const creatorStage={request:'draft',version:'draft',item:'draft',confirmed:'submit',decision:'approve'};
 const localInitial={submit:{version:{x:24,y:28},confirmed:{x:440,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:440,y:28}}};
 const initial={request:{x:24,y:28},version:{x:104,y:174},item:{x:184,y:416},confirmed:{x:520,y:174},quote:{x:520,y:416},decision:{x:936,y:174}};
 const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:local-v2';
@@ -54,6 +56,31 @@ function endpointLabel(svg,label){
  const group=svgNode('g',{'pointer-events':'none','data-end-table':label.table});group.append(svgNode('rect',{x:label.left,y:label.top,width:label.w,height:label.h,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x:label.x,y:label.y,'text-anchor':label.anchor},label.count));svg.append(group);
 }
 const states=[];
+let appliedUrl='';
+function targetUrl(stage){const url=new URL(location.href);url.searchParams.delete('view');url.hash=stage;return url;}
+function captureViewport(focus){return{windowX:window.scrollX,windowY:window.scrollY,focus,sections:states.map(s=>({id:s.stage.id,x:s.host.scrollLeft,y:s.host.scrollTop,selected:s.selected,text:s.selection.textContent}))};}
+function applyLocation(force=false){
+ if(!force&&appliedUrl===location.href)return;appliedUrl=location.href;
+ const overview=new URLSearchParams(location.search).get('view')==='overview';
+ for(const s of states)s.section.hidden=overview?s.stage.id!=='overview':s.stage.id==='overview';
+ document.querySelector('h1').textContent=overview?'全体ER（申請〜承認）':'工程ごとに、保存する情報を見る';
+ document.querySelector('.intro').textContent=overview?'下書き・申請・承認の3工程で使う全テーブルと関係です。購買準備・結果登録は含みません。':'登録・更新・削除するテーブルと、この工程で扱う直接の隣接だけを表示します。灰色のテーブル名から作成する工程へ移動できます。';
+ document.querySelector('nav').innerHTML=overview?'<a href="index.html">工程別ERへ戻る</a>':'<a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a><a href="?view=overview">全体ER（申請〜承認）</a>';
+ const visit=history.state||{},viewport=visit.erViewport;
+ document.querySelectorAll('.section-back').forEach(b=>{b.hidden=!visit.erFrom;b.textContent=visit.erFrom?'戻る：'+visit.erFrom:'戻る';});
+ if(viewport)for(const p of viewport.sections){const state=states.find(s=>s.stage.id===p.id);if(!state)continue;state.selected=p.selected;state.selection.textContent=p.text;draw(state);state.host.scrollTo(p.x,p.y);}
+ requestAnimationFrame(()=>{if(viewport){window.scrollTo(viewport.windowX,viewport.windowY);const f=viewport.focus,state=f&&states.find(s=>s.stage.id===f.stage);if(state){const node=state.svg.querySelector(f.title?`.name-link[data-table-link="${f.table}"]`:`.table[data-table="${f.table}"]`);node?.focus({preventScroll:true});}}else document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});});
+}
+function navigateCreator(state,id){
+ const owner=creatorStage[id],target=states.find(s=>s.stage.id===owner);if(!target)return;
+ history.replaceState({...history.state,erViewport:captureViewport({stage:state.stage.id,table:id,title:true})},'',location.href);
+ history.pushState({erFrom:state.stage.title,erViewport:null},'',targetUrl(owner));
+ target.selected=id;target.selection.textContent=tables[id].name+'：'+tables[id].note;draw(target);applyLocation(true);
+ requestAnimationFrame(()=>target.svg.querySelector(`.table[data-table="${id}"]`)?.focus({preventScroll:true}));
+}
+function returnSection(){history.replaceState({...history.state,erViewport:captureViewport()},'',location.href);history.back();}
+window.addEventListener('popstate',()=>applyLocation(true));window.addEventListener('hashchange',()=>applyLocation());
+
 function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
 function draw(state){
  const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||localInitial[state.stage.id]?.[id]||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
@@ -67,9 +94,9 @@ function draw(state){
  }
  for(const label of routing.labels)endpointLabel(state.svg,label);
  state.warning.textContent=routing.routes.some(r=>r.unrouted)?'接続線の通り道を確保できません。テーブル間を広げてください。赤い線の間は未接続です。':'';
- for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'table'+(state.stage.write.includes(id)?'':' read')+(state.selected===id?' selected':''),'data-table':id,role:'button',tabindex:0,'aria-label':t.name+'を選択','aria-description':'ドラッグで配置変更。Altと矢印キーで移動。'});g.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));g.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));g.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));g.append(svgNode('path',{class:'divider',d:`M${b.x+68} ${b.y+35}V${b.y+b.h}`}));t.fields.forEach(([k,n],i)=>{const y=b.y+56+i*25;g.append(svgNode('text',{class:'key',x:b.x+10,y},k));g.append(svgNode('text',{class:'column',x:b.x+80,y},n));});
+ for(const[id,b]of boxes){const t=tables[id],owner=creatorStage[id],linked=!state.stage.write.includes(id)&&owner&&owner!==state.stage.id,g=svgNode('g',{class:'table'+(state.stage.write.includes(id)?'':' read')+(state.selected===id?' selected':''),'data-table':id,role:linked?'group':'button',tabindex:0,'aria-label':t.name+'を選択','aria-description':'ドラッグで配置変更。Altと矢印キーで移動。'});g.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));g.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));const title=svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name);if(linked){const link=svgNode('a',{class:'name-link','data-table-link':id,href:targetUrl(owner).href,role:'link',tabindex:0,'aria-label':t.name+'の作成工程へ移動'});link.append(title);link.onpointerdown=e=>e.stopPropagation();link.onclick=e=>{e.preventDefault();e.stopPropagation();navigateCreator(state,id);};link.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();navigateCreator(state,id);}};g.append(link);}else g.append(title);g.append(svgNode('path',{class:'divider',d:`M${b.x+68} ${b.y+35}V${b.y+b.h}`}));t.fields.forEach(([k,n],i)=>{const y=b.y+56+i*25;g.append(svgNode('text',{class:'key',x:b.x+10,y},k));g.append(svgNode('text',{class:'column',x:b.x+80,y},n));});
   const select=()=>{state.selected=id;state.selection.textContent=t.name+'：'+t.note;};
-  g.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();select();state.drag={id,pointer:e.pointerId,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,bx:b.x,by:b.y,sx:state.host.scrollLeft,sy:state.host.scrollTop,previous:state.positions.get(id),moved:false};state.svg.setPointerCapture(e.pointerId);document.body.classList.add('dragging');draw(state);state.frame=requestAnimationFrame(()=>tick(state));};
+  g.onpointerdown=e=>{if(e.button!==0||e.target.closest('.name-link'))return;e.preventDefault();select();state.drag={id,pointer:e.pointerId,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,bx:b.x,by:b.y,sx:state.host.scrollLeft,sy:state.host.scrollTop,previous:state.positions.get(id),moved:false};state.svg.setPointerCapture(e.pointerId);document.body.classList.add('dragging');draw(state);state.frame=requestAnimationFrame(()=>tick(state));};
   g.onkeydown=e=>{if(e.altKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const d=e.shiftKey?50:10;state.positions.set(id,{x:Math.max(24,b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0)),y:Math.max(28,b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0))});select();draw(state);state.svg.querySelector(`[data-table="${id}"]`).focus();save(state);}else if(e.key==='Enter'||e.key===' '){e.preventDefault();select();draw(state);}};state.svg.append(g);
  }
 }
@@ -77,16 +104,18 @@ function move(state){const d=state.drag;if(!d)return;const dx=d.cx-d.x+state.hos
 function tick(state){const d=state.drag;if(!d)return;const r=state.host.getBoundingClientRect();if(d.moved)state.host.scrollBy(d.cx<r.left+24?-10:d.cx>r.right-24?10:0,d.cy<r.top+24?-10:d.cy>r.bottom-24?10:0);move(state);state.frame=requestAnimationFrame(()=>tick(state));}
 function stop(state,cancel=false){const d=state.drag;if(!d)return;state.drag=null;cancelAnimationFrame(state.frame);document.body.classList.remove('dragging');if(cancel){if(d.previous)state.positions.set(d.id,d.previous);else state.positions.delete(d.id);draw(state);state.status.textContent='移動を取り消しました。';}else if(d.moved)save(state);if(state.svg.hasPointerCapture(d.pointer))state.svg.releasePointerCapture(d.pointer);}
 for(const[order,stage]of stages.entries()){
- const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p>${stage.ids.includes('quote')?'<p class="quote-rule">提出成立した申請版から見た見積書は必ず1件。見積書から見た申請版は0件以上です。</p>':''}<div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><p class="routing-warning" aria-live="polite"></p><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
- document.getElementById('stages').append(section);const state={stage,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),warning:section.querySelector('.routing-warning'),positions:new Map(),selected:null,drag:null};
+ const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div><button class="section-back" hidden>戻る</button></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p>${stage.ids.includes('quote')?'<p class="quote-rule">提出成立した申請版から見た見積書は必ず1件。見積書から見た申請版は0件以上です。</p>':''}<div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><p class="routing-warning" aria-live="polite"></p><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
+ document.getElementById('stages').append(section);const state={stage,section,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),warning:section.querySelector('.routing-warning'),positions:new Map(),selected:null,drag:null};
  for(const[id,p]of Object.entries(saved[stage.id]||{}))if(stage.ids.includes(id)&&p&&Number.isFinite(p.x)&&Number.isFinite(p.y))state.positions.set(id,{x:Math.max(24,p.x),y:Math.max(28,p.y)});
  state.svg.onpointermove=e=>{if(state.drag&&e.pointerId===state.drag.pointer){state.drag.cx=e.clientX;state.drag.cy=e.clientY;move(state);}};state.svg.onpointerup=()=>stop(state);state.svg.onpointercancel=()=>stop(state,true);state.svg.onlostpointercapture=()=>{if(state.drag)stop(state,true);};
  section.querySelector('.reset').onclick=()=>{state.positions.clear();state.selected=null;draw(state);save(state);state.status.textContent='自動配置に戻しました。';state.host.scrollTo(0,0);state.selection.textContent='テーブルを選択すると、保存する情報と条件を確認できます。';};
  section.querySelector('.copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify({kind:'alder-activity-er-layout',stage:stage.id,positions:Object.fromEntries([...state.boxes].map(([id,b])=>[id,{x:b.x,y:b.y}]))},null,2));state.status.textContent='配置をコピーしました。チャットに貼り付けて共有できます。';}catch{state.status.textContent='コピーできませんでした。';}};
- states.push(state);draw(state);
+ section.querySelector('.section-back').onclick=returnSection;states.push(state);draw(state);
 }
+applyLocation(true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
+
 
 
 
