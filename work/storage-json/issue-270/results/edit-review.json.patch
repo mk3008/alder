@@ -1,0 +1,13 @@
+diff --git workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.json workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/review.json
+index 12304543..28453ad6 100644
+--- workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.json
++++ workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/review.json
+@@ -1284,7 +1284,7 @@
+           "id": "JA-EX-01",
+           "title": "新しい購入申請が提出済みになる",
+           "sectionId": "d8c9d1ac-bb23-42b2-9ba9-8b4aa547baaf",
+-          "reviewState": "未レビュー",
++          "reviewState": "要確認",
+           "fields": {
+             "guarantee": [
+               {

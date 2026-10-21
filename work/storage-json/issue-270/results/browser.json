@@ -1,0 +1,27 @@
+{
+  "status": "INCONCLUSIVE_BLOCKED",
+  "actualBrowserAppExecuted": false,
+  "harness": "index.html (standalone, no build/runtime dependencies after generation)",
+  "attempts": [
+    {
+      "route": "Playwright CLI with local Chromium",
+      "observed": "Chromium was not installed. Official Playwright download returned a zero-size/truncated archive and install failed.",
+      "result": "No browser process launched"
+    },
+    {
+      "route": "Cloud Chrome -> http://127.0.0.1:8765/",
+      "observed": "net::ERR_CONNECTION_REFUSED; cloud browser cannot reach development container loopback",
+      "result": "PoC not loaded"
+    },
+    {
+      "route": "Cloud Chrome -> synchronized file:///home/oai/share/f69dc469afb3/alder/work/storage-json/issue-270/index.html",
+      "observed": "Browser security policy explicitly rejected file: protocol; only http: and https: allowed. The action was stopped; no policy workaround attempted.",
+      "result": "PoC not loaded"
+    }
+  ],
+  "unmeasured": ["browser File picker read", "browser URL JSON load", "DOM/paint latency", "IndexedDB transaction and restore", "download/reload equality", "browser memory", "browser cancellation and stale-response behavior", "real CORS/HTTPS/Content-Type behavior"],
+  "browserPerformance": null,
+  "humanGUIReview": "not performed",
+  "nodeResultsAreNotSubstitutes": true,
+  "nextReproduction": "Run the standalone harness on an approved local HTTP(S) origin with an installed browser. Use fixtures/purchase.json and generated .generated/activities-1000.json. No production deployment is required."
+}

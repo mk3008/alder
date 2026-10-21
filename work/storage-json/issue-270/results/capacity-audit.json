@@ -1,0 +1,37 @@
+{
+  "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+  "basis": "source inspection plus separately labeled Node tests; no browser observations",
+  "localBDUpload": "No Alder backend upload in the local File.text/parseDesign/openDocument path. Session persistence uses browser IndexedDB.",
+  "routes": [
+    {
+      "path": "web-viewer/src/main.ts",
+      "line": 350,
+      "code": "async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=parseDesign(await file.text());const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}",
+      "meaning": "local BD File.text -> parseDesign -> openDocument; no explicit 2MiB guard in this route"
+    },
+    {
+      "path": "web-viewer/src/main.ts",
+      "line": 526,
+      "code": "    if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');",
+      "meaning": "URL/text post-read 2MiB guard"
+    },
+    {
+      "path": "web-viewer/src/main.ts",
+      "line": 505,
+      "code": "checkInput.onchange=()=>{const f=checkInput.files?.[0],t=checkFileTarget??current();checkFileTarget=undefined;checkInput.value='';if(!f||!t||!isCurrentDocument(t))return;revealChecks(t);void readChecks(t,async()=>{if(f.size>2*1024*1024)throw Error('本文は2MiB以内にしてください。');return {name:f.name,markdown:await f.text()};});};",
+      "meaning": "local Check pre-read 2MiB guard"
+    },
+    {
+      "path": "web-viewer/src/source.ts",
+      "line": 11,
+      "code": "    const limit=2*1024*1024;if(Number(response.headers.get('content-length'))>limit)throw Error('本文は2MiB以内にしてください。');",
+      "meaning": "URL Content-Length and stream-byte 2MiB guard"
+    },
+    {
+      "path": "web-viewer/src/check-items.ts",
+      "line": 21,
+      "code": "  if(new TextEncoder().encode(markdown).byteLength>2*1024*1024)throw Error('Check本文は2MiB以内にしてください。');",
+      "meaning": "Check parser UTF-8 byte 2MiB guard"
+    }
+  ]
+}

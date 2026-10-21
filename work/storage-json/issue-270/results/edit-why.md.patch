@@ -1,0 +1,13 @@
+diff --git workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.md workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/why.md
+index e98fd0e9..01db5380 100644
+--- workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.md
++++ workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/why.md
+@@ -240,7 +240,7 @@ true
+ 
+ ## Why
+ 
+-購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にするため。
++購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にするため。（保存形式PoCの編集例）
+ 
+ ## When
+ 

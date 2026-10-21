@@ -1,0 +1,8 @@
+{
+  "method": "Codex authored apply_patch, 6-file batch",
+  "result": "patch-context rejection before any file changed",
+  "error": "review.json: expected sectionId 6f23da8c-8138-45e9-883b-60b53661ab82 was not found; actual sectionId was not read before authoring this context",
+  "observedChangedFiles": 0,
+  "affectedTasks": ["why.md", "why.json", "rename.md", "rename.json", "review.md", "review.json"],
+  "interpretation": "The batch failed as an editing-tool action. It is not a JSON syntax or reference corruption, and not six successful first attempts. The next patches are explicitly labeled retries after inspecting the real context."
+}

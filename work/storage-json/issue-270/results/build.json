@@ -1,0 +1,7 @@
+{
+  "inlineHTMLScriptSyntax": "passed in Node vm; browser DOM not executed",
+  "htmlBytes": 259280,
+  "htmlSha256": "3ef8ec5a926cf22756614543f45be963342cfbc11cf868b4e432fe489adbbaa6",
+  "nodeMeasuredSourceHashesMatch": true,
+  "browserExecuted": false
+}

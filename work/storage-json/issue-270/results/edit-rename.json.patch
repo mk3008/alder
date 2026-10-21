@@ -1,0 +1,22 @@
+diff --git workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.json workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/rename.json
+index 12304543..84f36b6a 100644
+--- workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.json
++++ workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/rename.json
+@@ -90,7 +90,7 @@
+         },
+         {
+           "id": "95069d0e-974b-42cb-ad9c-c1eb1cc6d72c",
+-          "name": "購入用CSV",
++          "name": "購買CSV",
+           "scope": true,
+           "icon": "file-spreadsheet",
+           "information": [
+@@ -160,7 +160,7 @@
+         },
+         {
+           "id": "86b312da-10ad-4d7e-bd3f-6389a4d8666c",
+-          "name": "購入を準備する",
++          "name": "購買を準備する",
+           "scope": true,
+           "why": "承認済みの購入要求を複数まとめ、後から同一内容を再出力できる購入準備として確定し、システム外の購入作業へ渡すため。",
+           "when": "購入申請が `承認済み` で、まだ購入準備番号を確定していないとき。",

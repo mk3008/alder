@@ -1,0 +1,83 @@
+{
+  "method": "actual Codex authored patches, not deterministic edits; same session, unblinded; see protocol and first-attempt.json",
+  "rows": [
+    {
+      "task": "why",
+      "format": "md",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": "not encoded by source MD",
+      "addedLines": 1,
+      "removedLines": 1,
+      "changedLineBytes": 263
+    },
+    {
+      "task": "why",
+      "format": "json",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": true,
+      "addedLines": 1,
+      "removedLines": 1,
+      "changedLineBytes": 303
+    },
+    {
+      "task": "rename",
+      "format": "md",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": "not encoded by source MD",
+      "addedLines": 4,
+      "removedLines": 4,
+      "changedLineBytes": 378
+    },
+    {
+      "task": "rename",
+      "format": "json",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": true,
+      "addedLines": 2,
+      "removedLines": 2,
+      "changedLineBytes": 151
+    },
+    {
+      "task": "review",
+      "format": "md",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": "not encoded by source MD",
+      "addedLines": 1,
+      "removedLines": 1,
+      "changedLineBytes": 84
+    },
+    {
+      "task": "review",
+      "format": "json",
+      "attempt": "explicit retry after atomic batch context rejection",
+      "syntaxValid": true,
+      "referencesValid": true,
+      "goalMatched": true,
+      "unintendedChanges": 0,
+      "stableIDs": true,
+      "addedLines": 1,
+      "removedLines": 1,
+      "changedLineBytes": 82
+    }
+  ]
+}

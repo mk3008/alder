@@ -1,0 +1,40 @@
+diff --git workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.md workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/rename.md
+index e98fd0e9..88f5084f 100644
+--- workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/before.md
++++ workspace/scratch/f69dc469afb3/alder/work/storage-json/issue-270/edits/rename.md
+@@ -194,7 +194,7 @@ server
+ - 役職
+ - 役職ごとの決裁単位の上限額
+ 
+-# Object 購入用CSV
++# Object 購買CSV
+ 
+ ## Scope
+ 
+@@ -402,7 +402,7 @@ true
+ 
+ - 対象購入申請が権限判定を通った内容で `申請済み` として再申請され、承認者が再び可否を判断できる。
+ 
+-# Activity 購入を準備する
++# Activity 購買を準備する
+ 
+ ## Scope
+ 
+@@ -447,7 +447,7 @@ true
+ ### Output
+ 
+ - 購入申請 — 購入準備番号とその番号に属する対象申請。元の提出内容は変更しない
+-- 購入用CSV — 購入準備番号 / 対象購入申請の識別情報 / 購入準備確定時の申請内容
++- 購買CSV — 購入準備番号 / 対象購入申請の識別情報 / 購入準備確定時の申請内容
+ 
+ ## Result
+ 
+@@ -550,7 +550,7 @@ items
+ 
+ ### Targets
+ 
+-- 購入を準備する
++- 購買を準備する
+ - 購入結果を登録する
+ 
+ ### Summary
