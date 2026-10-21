@@ -48,10 +48,10 @@ const creatorStage={request:'draft',version:'draft',item:'draft',confirmed:'subm
 // Two endpoint counts and their independent landing segments need 96px.
 // Sizes are measured first; layout does not depend on the viewport width.
 function compactInitial(sizes){
- const gap=96,verticalGap=48,request={x:24,y:28},version={x:104,y:request.y+sizes.get('request').h+verticalGap},item={x:184,y:version.y+sizes.get('version').h+verticalGap},confirmed={x:version.x+sizes.get('version').w+gap,y:version.y},quote={x:confirmed.x,y:item.y},decision={x:confirmed.x+sizes.get('confirmed').w+gap,y:confirmed.y};
+ const gap=96,verticalGap=36,request={x:24,y:28},version={x:104,y:request.y+sizes.get('request').h+verticalGap},item={x:184,y:version.y+sizes.get('version').h+verticalGap},confirmed={x:version.x+sizes.get('version').w+gap,y:version.y},quote={x:item.x+sizes.get('item').w+gap,y:item.y},decision={x:confirmed.x+sizes.get('confirmed').w+gap,y:confirmed.y};
  return{draft:{request,version,item},submit:{version:{x:24,y:28},confirmed:{x:24+sizes.get('version').w+gap,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:24+sizes.get('confirmed').w+gap,y:28}},overview:{request,version,item,confirmed,quote,decision}};
 }
-const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:compact-v3';
+const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:compact-v4';
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{}
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
