@@ -1,0 +1,11 @@
+--- before.json
++++ after.json
+@@ -883,7 +883,7 @@
+       "heading": "### JA-EX-01 — 新しい購入申請が提出済みになる",
+       "body": [
+         "\n",
+-        "- 人間レビュー状態：未レビュー\n",
++        "- 人間レビュー状態：要確認\n",
+         "- 条件・期待結果：[申請の条件・保証と例](#申請の条件保証と例)に示す JA-EX-01 の一般保証を参照。[同節の比較例](#申請の条件保証と例)\n",
+         "- 根拠：[「Activity 備品購入を申請する」のWhen・Who・How・Result](https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L123-L168)。Inputの「すべて必須」を適用する。\n",
+         "- 導出分類：明示。AI確度：高。\n",

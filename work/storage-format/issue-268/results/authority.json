@@ -1,0 +1,62 @@
+[
+  {
+    "path": "AGENTS.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "00c79b41b6531752091872f0f3eb4028f25ff44e6a82444bc111b6bd3762d930"
+  },
+  {
+    "path": "docs/business-design-structure.ja.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "40b0855bc48711b6a68eafc4aea0991953cc7778108a5b9946d46890c2497804"
+  },
+  {
+    "path": "docs/business-graph.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "66b859f3156730b0440c90491a19969ca29398a003be4d4e12c4ab7a31ffe777"
+  },
+  {
+    "path": "docs/check-item-traceability.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "dac05f461a36b11c73edc595873aeb51bae66b038ef0cc003f24db63e293fcb6"
+  },
+  {
+    "path": "docs/versioning.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "b42a5e6e8e815c38fe2b82d8b1e0be1584760780f7abb1d822e1bba0bf9c91ec"
+  },
+  {
+    "path": "docs/result-review.ja.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "095c618229090577d65973e2d0515dcbaa903c968aff366bb3c3349cdab25bed"
+  },
+  {
+    "path": "business-design/ai-result-review/README.md",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "7faa4740be47601e9dc48a88090dc91fbe68ac533ef2df60ad10f88ca77c50a5"
+  },
+  {
+    "path": "web-viewer/src/graph.ts",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "a03cc93a38e31363d4590d3b6ccb4972fde89ce430c88a26c8e33d75934f0071"
+  },
+  {
+    "path": "web-viewer/src/check-items.ts",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "01d2e6b9053aed26deac737b6210ae34d9fd423df72086659721ee732ca5a037"
+  },
+  {
+    "path": "web-viewer/src/source.ts",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "c83b46d87870548666fcb353687ac54a7c3de466d6bd02d4096fb8f552ea89bd"
+  },
+  {
+    "path": "tools/business_graph/export.py",
+    "revision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+    "sha256": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5"
+  },
+  {
+    "path": "plugins/alder/skills/alder-draft-check-items/references/check-item-traceability.md",
+    "revision": "9b4a3cbffe835cfa9c6a8ec7d602d9611a1a0285",
+    "sha256": "dac05f461a36b11c73edc595873aeb51bae66b038ef0cc003f24db63e293fcb6"
+  }
+]

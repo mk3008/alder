@@ -1,0 +1,24 @@
+test_check_fragment_missing (test_poc.StorageTests.test_check_fragment_missing) ... ok
+test_check_review_state_missing (test_poc.StorageTests.test_check_review_state_missing) ... ok
+test_check_selection_includes_shared_guarantees (test_poc.StorageTests.test_check_selection_includes_shared_guarantees) ... ok
+test_cycle_is_not_automatically_invalid (test_poc.StorageTests.test_cycle_is_not_automatically_invalid) ... ok
+test_duplicate_id (test_poc.StorageTests.test_duplicate_id) ... ok
+test_duplicate_json_key (test_poc.StorageTests.test_duplicate_json_key) ... ok
+test_graph_projection_and_disagreement_are_explicit (test_poc.StorageTests.test_graph_projection_and_disagreement_are_explicit) ... ok
+test_invalid_kind_heading (test_poc.StorageTests.test_invalid_kind_heading) ... ok
+test_lossless_three_formats (test_poc.StorageTests.test_lossless_three_formats) ... ok
+test_markdown_ambiguity_and_fences_rejected (test_poc.StorageTests.test_markdown_ambiguity_and_fences_rejected) ... ok
+test_missing_record (test_poc.StorageTests.test_missing_record) ... ok
+test_reference_missing_and_wrong_type (test_poc.StorageTests.test_reference_missing_and_wrong_type) ... ok
+test_rename_object_stable_refs (test_poc.StorageTests.test_rename_object_stable_refs) ... ok
+test_reorder_entities_preserves_graph_and_ids (test_poc.StorageTests.test_reorder_entities_preserves_graph_and_ids) ... ok
+test_truncated_and_broken_jsonl (test_poc.StorageTests.test_truncated_and_broken_jsonl) ... ok
+test_truncated_json (test_poc.StorageTests.test_truncated_json) ... ok
+test_unknown_fields (test_poc.StorageTests.test_unknown_fields) ... ok
+test_unknown_kind (test_poc.StorageTests.test_unknown_kind) ... ok
+test_unknown_version (test_poc.StorageTests.test_unknown_version) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.217s
+
+OK

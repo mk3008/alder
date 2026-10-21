@@ -1,0 +1,17 @@
+{
+  "baseRevision": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+  "sources": [
+    {
+      "document": "purchase",
+      "revision": "6e55d98710a1d8757937ea268176929abcf49b2e",
+      "path": "business-design/purchase-request/README.md",
+      "sha256": "106dad5ff49dbd694609aa565f6d995a7205551ff8699aafad015354e5e3ff39"
+    },
+    {
+      "document": "checks",
+      "revision": "9b4a3cbffe835cfa9c6a8ec7d602d9611a1a0285",
+      "path": "work/check-item-examples/meaning-validation-20261018/purchase/final.md",
+      "sha256": "95ffb946d3d6c485a8e245cb17e2a4c43746244c7e491ebe768cfb0f7fbb2f6f"
+    }
+  ]
+}

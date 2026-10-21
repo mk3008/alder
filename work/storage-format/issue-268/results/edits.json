@@ -1,0 +1,182 @@
+[
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "activity-why",
+    "format": "md",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 253,
+    "patchBytes": 325,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "activity-why",
+    "format": "json",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 279,
+    "patchBytes": 433,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "activity-why",
+    "format": "jsonl",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 7837,
+    "patchBytes": 18435,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 2,
+    "gitRemovedLines": 2,
+    "task": "rename-object",
+    "format": "md",
+    "changedRecordIDs": [
+      "purchase-0007"
+    ],
+    "addedLines": 2,
+    "removedLines": 2,
+    "replacedLineBytes": 268,
+    "patchBytes": 550,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "rename-object",
+    "format": "json",
+    "changedRecordIDs": [
+      "purchase-0007"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 83,
+    "patchBytes": 275,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "rename-object",
+    "format": "jsonl",
+    "changedRecordIDs": [
+      "purchase-0007"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 741,
+    "patchBytes": 10232,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 2,
+    "gitRemovedLines": 0,
+    "task": "add-relation",
+    "format": "md",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 2,
+    "removedLines": 0,
+    "replacedLineBytes": 59,
+    "patchBytes": 625,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 5,
+    "gitRemovedLines": 0,
+    "task": "add-relation",
+    "format": "json",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 5,
+    "removedLines": 0,
+    "replacedLineBytes": 132,
+    "patchBytes": 767,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "add-relation",
+    "format": "jsonl",
+    "changedRecordIDs": [
+      "purchase-0009"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 7892,
+    "patchBytes": 18490,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "check-state",
+    "format": "md",
+    "changedRecordIDs": [
+      "JA-EX-01"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 86,
+    "patchBytes": 699,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "check-state",
+    "format": "json",
+    "changedRecordIDs": [
+      "JA-EX-01"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 112,
+    "patchBytes": 816,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  },
+  {
+    "gitAddedLines": 1,
+    "gitRemovedLines": 1,
+    "task": "check-state",
+    "format": "jsonl",
+    "changedRecordIDs": [
+      "JA-EX-01"
+    ],
+    "addedLines": 1,
+    "removedLines": 1,
+    "replacedLineBytes": 1976,
+    "patchBytes": 8650,
+    "unintendedRecordChanges": 0,
+    "editMethod": "deterministic transformation; not an independent AI editing trial"
+  }
+]

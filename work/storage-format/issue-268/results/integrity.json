@@ -1,0 +1,53 @@
+{
+  "sourceAudit": [
+    {
+      "document": "purchase",
+      "fixedSourceByteMatch": true,
+      "bytes": 33882,
+      "sha256": "106dad5ff49dbd694609aa565f6d995a7205551ff8699aafad015354e5e3ff39"
+    },
+    {
+      "document": "checks",
+      "fixedSourceByteMatch": true,
+      "bytes": 16589,
+      "sha256": "95ffb946d3d6c485a8e245cb17e2a4c43746244c7e491ebe768cfb0f7fbb2f6f"
+    }
+  ],
+  "records": 32,
+  "counts": {
+    "activity": 5,
+    "object": 7,
+    "check": 6,
+    "section": 14
+  },
+  "diagnostics": [
+    "GRAPH_PROJECTION_OMITS_DRAFT_FIELDS: 固定原典は現行parserでは未対応。Medium/SR Dependenciesを保持し、Graph投影時だけ除外。",
+    "CHECK_SOURCE_REVISION_MISMATCH: Check原典c2852531は購買固定原典6e55d987とは異なる。対応・業務合意は未確認。"
+  ],
+  "selected": {
+    "activity": {
+      "id": "purchase-0009",
+      "closureIDs": [
+        "purchase-0002",
+        "purchase-0005",
+        "purchase-0006",
+        "purchase-0008",
+        "purchase-0009"
+      ]
+    },
+    "object": {
+      "id": "purchase-0002",
+      "closureIDs": [
+        "purchase-0002"
+      ]
+    },
+    "check": {
+      "id": "JA-EX-01",
+      "closureIDs": [
+        "checks-0003",
+        "JA-EX-01"
+      ]
+    }
+  },
+  "graphProjectionSha256": "5110f296dbd43b16f73e639070e70923cc4dc54e1f923de29ecb59e08a20e7b3"
+}

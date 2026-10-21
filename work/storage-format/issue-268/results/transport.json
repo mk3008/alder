@@ -1,0 +1,116 @@
+[
+  {
+    "format": "md",
+    "bytes": 50512,
+    "sha256": "9b2aee5c4a7f17de122dc112e3f9ec4973c8e5d5e83fb53612fb65c30b577f76",
+    "localRead": {
+      "median_ms": 0.008855,
+      "min_ms": 0.008286,
+      "max_ms": 1.313094,
+      "samples_ms": [
+        0.013301,
+        0.008665,
+        0.008286,
+        0.008381,
+        0.016625,
+        1.313094,
+        0.0366,
+        0.008855,
+        0.008608
+      ],
+      "cpu_median_ms": 0.009132,
+      "cpu_samples_ms": [
+        0.012883,
+        0.008697,
+        0.008572,
+        0.008499,
+        0.017208,
+        1.316452,
+        0.036746,
+        0.009024,
+        0.009132
+      ]
+    },
+    "localhostUrlRoundTrip": "passed",
+    "contentType": "text/markdown",
+    "browserCORS": "unverified",
+    "externalHTTPS": "unverified",
+    "authenticatedURL": "unverified"
+  },
+  {
+    "format": "json",
+    "bytes": 65775,
+    "sha256": "3796758b73b7417bc6e46a5d30f8d2a3a883956cbc20745bb3ffdefe837eba28",
+    "localRead": {
+      "median_ms": 0.011282,
+      "min_ms": 0.010669,
+      "max_ms": 0.210849,
+      "samples_ms": [
+        0.013749,
+        0.210849,
+        0.020297,
+        0.010704,
+        0.011663,
+        0.011275,
+        0.010669,
+        0.011044,
+        0.011282
+      ],
+      "cpu_median_ms": 0.011945,
+      "cpu_samples_ms": [
+        0.01374,
+        0.211913,
+        0.020541,
+        0.010826,
+        0.012028,
+        0.011452,
+        0.010856,
+        0.011295,
+        0.011945
+      ]
+    },
+    "localhostUrlRoundTrip": "passed",
+    "contentType": "application/json",
+    "browserCORS": "unverified",
+    "externalHTTPS": "unverified",
+    "authenticatedURL": "unverified"
+  },
+  {
+    "format": "jsonl",
+    "bytes": 56466,
+    "sha256": "749286266245e01c53517acf63e5ded2d3139693360970407aacd40ef7783f11",
+    "localRead": {
+      "median_ms": 0.008045,
+      "min_ms": 0.007755,
+      "max_ms": 0.021351,
+      "samples_ms": [
+        0.0132,
+        0.008296,
+        0.021351,
+        0.008468,
+        0.008045,
+        0.007755,
+        0.007996,
+        0.007832,
+        0.007818
+      ],
+      "cpu_median_ms": 0.008298,
+      "cpu_samples_ms": [
+        0.011945,
+        0.008413,
+        0.021702,
+        0.008572,
+        0.008298,
+        0.007841,
+        0.008188,
+        0.00795,
+        0.008019
+      ]
+    },
+    "localhostUrlRoundTrip": "passed",
+    "contentType": "application/octet-stream",
+    "browserCORS": "unverified",
+    "externalHTTPS": "unverified",
+    "authenticatedURL": "unverified"
+  }
+]

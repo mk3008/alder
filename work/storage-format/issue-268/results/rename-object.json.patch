@@ -1,0 +1,11 @@
+--- before.json
++++ after.json
+@@ -265,7 +265,7 @@
+       "id": "purchase-0007",
+       "document": "purchase",
+       "kind": "object",
+-      "heading": "# Object 購入用CSV",
++      "heading": "# Object 購買CSV",
+       "body": [
+         "\n",
+         "## Scope\n",

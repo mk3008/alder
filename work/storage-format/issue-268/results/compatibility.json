@@ -1,0 +1,65 @@
+{
+  "node": "v24.19.0",
+  "results": [
+    {
+      "name": "existing legacy purchase BD",
+      "success": true,
+      "expected": true
+    },
+    {
+      "name": "pinned PR254 purchase draft",
+      "success": false,
+      "error": "基幹システム: unsupported/duplicate ## Medium",
+      "expected": true
+    },
+    {
+      "name": "Plugin 0.4.8 shared-guarantee Check sample",
+      "success": false,
+      "error": "JA-EX-01 の条件が見つかりません。",
+      "expected": true
+    },
+    {
+      "name": "legacy Check sample in main",
+      "success": true,
+      "expected": true
+    },
+    {
+      "name": "combined MD fixture directly in current Viewer",
+      "success": false,
+      "error": "基幹システム: unsupported/duplicate ## Medium",
+      "expected": true
+    },
+    {
+      "name": "json storage is not Graph v1",
+      "success": false,
+      "error": "Document title required",
+      "expected": true
+    },
+    {
+      "name": "jsonl storage is not Graph v1",
+      "success": false,
+      "error": "Document title required",
+      "expected": true
+    },
+    {
+      "name": "current URL MIME gate text/markdown",
+      "success": true,
+      "expected": true,
+      "note": "mock fetch; no external network"
+    },
+    {
+      "name": "current URL MIME gate application/json",
+      "success": false,
+      "error": "HTML等の表示ページではなくMarkdown本文URLを指定してください。",
+      "expected": true,
+      "note": "mock fetch; no external network"
+    },
+    {
+      "name": "current URL MIME gate application/x-ndjson",
+      "success": false,
+      "error": "HTML等の表示ページではなくMarkdown本文URLを指定してください。",
+      "expected": true,
+      "note": "mock fetch; no external network"
+    }
+  ]
+}
