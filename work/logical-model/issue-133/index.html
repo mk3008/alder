@@ -8,9 +8,9 @@
 .routing-warning{font-size:13px;color:#9c3c31}.routing-warning:empty{display:none}.wire.unresolved{stroke:#b74032;stroke-dasharray:4 3}
 </style>
 <header><strong>Alder · 工程別ER</strong><span>購入申請</span></header>
-<main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">同じテーブルを工程ごとに再掲しています。多重度は保存済みデータの関係です。</p>
-<nav aria-label="工程"><a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a></nav>
-<div class="legend"><span><i class="swatch"></i>この工程で保存・更新</span><span><i class="swatch read"></i>参照するテーブル</span><span>テーブルはドラッグで移動できます。</span></div>
+<main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">登録・更新・削除するテーブルと、この工程で扱う直接の隣接だけを表示します。灰色のテーブルから先の関係は全体ERで確認できます。</p>
+<nav aria-label="工程"><a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a><a href="?view=overview">全体ER（申請〜承認）</a></nav>
+<div class="legend"><span><i class="swatch"></i>この工程で登録・更新・削除</span><span><i class="swatch read"></i>参照するテーブル</span><span>テーブルはドラッグで移動できます。</span></div>
 <p class="muted">線の両端の数値は、その側のテーブルの件数です。1：必ず1件 ／ 0..1：0または1件 ／ 1..N：1件以上 ／ 0..N：0件以上</p>
 <div id="stages"></div>
 <footer>論理モデルのレビュー草案。購買準備・結果登録は今回の表示対象外。型・物理DDLは定義していません。</footer></main>
@@ -29,13 +29,23 @@ const edges=[
  ['version','confirmed','1','0..1','right'],['quote','version','1','0..N','reference'],
  ['confirmed','decision','1','0..1','right']
 ];
-const stages=[
+const activityDefinitions=[
  {id:'draft',title:'下書きを保存する',subtitle:'未確定の申請版',ids:['request','version','item'],write:['request','version','item'],rules:['申請・版・1品目以上をまとめて保存する。品目ゼロでは登録できない。','購入申請確定が存在しない版を「下書き」と呼ぶ。下書き専用のテーブルは作らない。'],change:'保存後：申請あり → 版あり → 品目あり。確定記録なし。'},
  {id:'submit',title:'購入申請を提出する',subtitle:'確定記録を作る',ids:['request','version','item','confirmed','quote'],write:['confirmed'],rules:['購入理由・外部取得済みの見積書・品目を確認する。税抜単価×数量の合計で申請権限を判定する。','条件を満たした場合だけ確定記録を作り、対象の版・品目・見積参照を固定する。不成立なら確定記録を作らない。'],change:'未確定版（確定なし） → 提出成立版（確定あり・判断なし）。'},
  {id:'approve',title:'購入申請を承認する',subtitle:'承認または差戻しを記録する',ids:['request','version','item','confirmed','quote','decision'],write:['decision'],rules:['確定済みの版・品目・見積を参照し、承認または差戻しを判断する。差戻し時は理由を記録する。','対象の版は書き換えない。次工程前は差戻し可能、購入準備開始後は不可。再申請成功時に旧判断を無効にする。'],change:'提出成立版（判断なし） → 承認／差戻し（判断あり）。'}
 ];
+// Expand once from this Activity's mutation set, within its participating
+// relations. Read-only neighbors never recursively expand the local view.
+function activitySlice(stage){
+ const scope=new Set(stage.ids),writes=new Set(stage.write),localEdges=edges.filter(([a,b])=>scope.has(a)&&scope.has(b)&&(writes.has(a)||writes.has(b))),visible=new Set(stage.write);
+ for(const[a,b]of localEdges){visible.add(a);visible.add(b);}return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:localEdges};
+}
+const overviewMode=new URLSearchParams(location.search).get('view')==='overview';
+const stages=overviewMode?[{id:'overview',title:'全体ER（申請〜承認）',subtitle:'3工程の全体の関係',ids:Object.keys(tables),write:[],edges,rules:['工程別の図で省略した関係を含め、申請から承認までの構造をまとめて確認できます。'],change:'灰色は全体のテーブルです。工程ごとの登録・更新・削除は局所ERで確認してください。'}]:activityDefinitions.map(activitySlice);
+if(overviewMode){document.querySelector('h1').textContent='全体ER（申請〜承認）';document.querySelector('.intro').textContent='下書き・申請・承認の3工程で使う全テーブルと関係です。購買準備・結果登録は含みません。';document.querySelector('nav').innerHTML='<a href="index.html">工程別ERへ戻る</a>';}
+const localInitial={submit:{version:{x:24,y:28},confirmed:{x:440,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:440,y:28}}};
 const initial={request:{x:24,y:28},version:{x:104,y:174},item:{x:184,y:416},confirmed:{x:520,y:174},quote:{x:520,y:416},decision:{x:936,y:174}};
-const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:v1';
+const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:local-v2';
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{}
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
@@ -46,11 +56,11 @@ function endpointLabel(svg,label){
 const states=[];
 function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
 function draw(state){
- const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
- state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(640,...[...boxes.values()].map(b=>b.y+b.h+45));
+ const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||localInitial[state.stage.id]?.[id]||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
+ state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(180,...[...boxes.values()].map(b=>b.y+b.h+45));
  state.svg.style.width=width+'px';state.svg.style.height=height+'px';state.svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
- const routing=routeER(boxes,edges);state.routing=routing;
- const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);
+ const routing=routeER(boxes,state.stage.edges);state.routing=routing;
+ const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);state.host.style.height=Math.min(560,Math.max(260,routedHeight+2))+'px';
  for(const route of routing.routes){const{from,to,fromCount,toCount,kind,d}=route;const reading=tables[from].name+'1件に対して'+tables[to].name+toCount+'件／'+tables[to].name+'1件に対して'+tables[from].name+fromCount+'件';
   state.svg.append(svgNode('path',{d,fill:'none',stroke:'#fbfcfd','stroke-width':6,'pointer-events':'none'}));
   const wire=svgNode('path',{class:'wire'+(kind==='reference'?' reference':'')+(route.unrouted?' unresolved':''),'data-from':from,'data-to':to,'data-from-cardinality':fromCount,'data-to-cardinality':toCount,'data-unrouted':route.unrouted,d,'aria-label':reading,role:'img'});wire.append(svgNode('title',{},reading));state.svg.append(wire);
@@ -77,6 +87,7 @@ for(const[order,stage]of stages.entries()){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
+
 
 
 
