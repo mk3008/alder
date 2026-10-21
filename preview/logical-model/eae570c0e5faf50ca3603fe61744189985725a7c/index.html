@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>購入申請 · 工程別ER</title>
+<style>
+:root{font-family:"Segoe UI","Noto Sans JP",sans-serif;color:#253d38;background:#f2f6f8}*{box-sizing:border-box}body{margin:0}header{background:#173c60;color:white;padding:12px 24px;display:flex;align-items:center;gap:24px}header strong{font-size:18px}header span{font-size:13px}main{padding:20px 24px}h1{font-size:23px;margin:0 0 8px}h2{font-size:20px;margin:0}p{font-size:14px;line-height:1.6;margin:8px 0}a{color:#176c92}nav{display:flex;gap:8px;margin:14px 0}nav a,button{font:inherit;color:inherit;border:1px solid #b7cbd0;background:white;border-radius:5px;padding:7px 12px;text-decoration:none;cursor:pointer}nav a:hover,button:hover{background:#e7f2ee}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #347faa;outline-offset:3px}.intro{color:#5b7174}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.swatch{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid #64887e;background:#d9eee4}.swatch.read{background:#edf2f5;border-color:#a0b3be}.stage{background:white;border:1px solid #d4dfe4;border-radius:8px;margin:22px 0;padding:18px;scroll-margin-top:12px}.stage-top{display:flex;align-items:center;justify-content:space-between;gap:20px}.eyebrow{font-size:12px;color:#57716a;margin-bottom:4px}.actions{display:flex;gap:8px;align-items:center;margin:12px 0}.actions button{font-size:12px}.status{font-size:12px;color:#607678}.canvas{overflow:auto;background:#fbfcfd;border:1px solid #dce4e8;border-radius:5px;height:560px;touch-action:pan-x pan-y}.canvas svg{display:block;max-width:none;flex:none}.table{cursor:grab;user-select:none;touch-action:none}.table rect{fill:white;stroke:#6e9e8c;stroke-width:1.5}.table .cap{fill:#d9eee4;stroke:none}.table.read rect{stroke:#a0b3be}.table.read .cap{fill:#edf2f5}.table text{font:14px "Segoe UI","Noto Sans JP",sans-serif;fill:#2c433d}.table .name{font-weight:700;font-size:15px}.table .key{font-size:11px;fill:#396a58;font-weight:700}.table .divider{stroke:#e0e8e4}.table.selected rect{stroke:#187da7;stroke-width:3}.wire{fill:none;stroke:#7f969f;stroke-width:1.5}.wire.reference{stroke-dasharray:5 4}.relation{font:13px sans-serif;fill:#3e5d69}.edge-label{fill:#fbfcfd}.selection{font-size:13px;line-height:1.6;color:#3f6056;margin:10px 0 0}.rule{border-left:3px solid #71a893;padding-left:12px;margin:10px 0}.rule p{margin:3px 0}.muted{font-size:12px;color:#667d80}body.dragging,body.dragging .table{cursor:grabbing}footer{font-size:12px;color:#687d80;padding:8px 0 20px}@media(max-width:700px){main{padding:12px 8px}.stage{padding:12px 8px}.stage-top{align-items:flex-start}.canvas{height:520px}header{padding:12px}.actions{flex-wrap:wrap}}
+.er-legend{margin-top:12px;gap:24px}.er-legend span{display:inline-flex;align-items:center;gap:6px}.er-legend svg{width:46px;height:24px;overflow:visible}.quote-rule{font-size:13px;color:#3a6559}
+.endpoint-count{font:600 13px "Segoe UI",sans-serif;fill:#395d6c}
+.routing-warning{font-size:13px;color:#9c3c31}.routing-warning:empty{display:none}.wire.unresolved{stroke:#b74032;stroke-dasharray:4 3}
+.name-link{cursor:pointer}.table .name-link .name{fill:#176f99;text-decoration:underline}.name-link:focus-visible{outline:3px solid #397db1}.section-back{font-size:13px;white-space:nowrap}
+</style>
+<header><strong>Alder · 工程別ER</strong><span>購入申請</span></header>
+<main><h1>工程ごとに、保存する情報を見る</h1><p class="intro">登録・更新・削除するテーブルと、この工程で扱う直接の隣接だけを表示します。灰色のテーブルから先の関係は全体ERで確認できます。</p>
+<nav aria-label="工程"><a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a><a href="?view=overview">全体ER（申請〜承認）</a></nav>
+<div class="legend"><span><i class="swatch"></i>この工程で登録・更新・削除</span><span><i class="swatch read"></i>参照するテーブル</span><span>テーブルはドラッグで移動できます。</span></div>
+<p class="muted">線の両端の数値は、その側のテーブルの件数です。1：必ず1件 ／ 0..1：0または1件 ／ 1..N：1件以上 ／ 0..N：0件以上</p>
+<div id="stages"></div>
+<footer>論理モデルのレビュー草案。購買準備・結果登録は今回の表示対象外。型・物理DDLは定義していません。</footer></main>
+<script type="module">
+import {routeER} from "./er-routing.js";
+const tables={
+ request:{name:'購入申請',fields:[['PK','申請ID'],['','申請者']],note:'申請を通して変わらない識別。各版は同じ申請に属します。'},
+ version:{name:'購入申請版',fields:[['PK/FK','申請ID'],['PK','版番号'],['','購入理由'],['FK','見積ID']],note:'初回保存から版を持ちます。確定記録のない版を便宜上下書きと呼びます。見積IDは提出成立時に必須。保存のたびに版番号を増やすかは未決です。'},
+ item:{name:'申請品目',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['PK','品目番号'],['','品名'],['','税抜単価'],['','依頼数量']],note:'版に属する品目。下書きを含め、保存には1品目以上が必要です。未入力を許す属性の範囲は別途確認します。'},
+ confirmed:{name:'購入申請確定',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['','提出日時']],note:'この記録が存在する版は提出成立済み。理由・見積・品目・金額の条件を満たした場合に作成し、その版と品目を変更不能にします。'},
+ quote:{name:'見積書',fields:[['PK','見積ID'],['','不変な文書版への参照']],note:'外部で取得した見積書を参照します。提出時に依頼全体の根拠として必須。提出成立した申請版から見た見積書は必ず1件、見積書から見た申請版は0件以上です。同じ見積を一つの申請だけに限定しません。'},
+ decision:{name:'申請判断',fields:[['PK/FK','申請ID'],['PK/FK','版番号'],['','承認／差戻し'],['','判断者'],['','判断日時'],['','差戻し理由']],note:'確定済みの版に対する判断を表す候補。承認と差戻しを同時有効にしません。差戻し理由は差戻し時に必須。再申請成功時は旧判断を無効にします。旧判断履歴を必須保存にする意図はありません。'}
+};
+const edges=[
+ ['request','version','1','1..N','down'],['version','item','1','1..N','down'],
+ ['version','confirmed','1','0..1','right'],['quote','version','1','0..N','reference'],
+ ['confirmed','decision','1','0..1','right']
+];
+const activityDefinitions=[
+ {id:'draft',title:'下書きを保存する',subtitle:'未確定の申請版',ids:['request','version','item'],write:['request','version','item'],rules:['申請・版・1品目以上をまとめて保存する。品目ゼロでは登録できない。','購入申請確定が存在しない版を「下書き」と呼ぶ。下書き専用のテーブルは作らない。'],change:'保存後：申請あり → 版あり → 品目あり。確定記録なし。'},
+ {id:'submit',title:'購入申請を提出する',subtitle:'確定記録を作る',ids:['request','version','item','confirmed','quote'],write:['confirmed'],rules:['購入理由・外部取得済みの見積書・品目を確認する。税抜単価×数量の合計で申請権限を判定する。','条件を満たした場合だけ確定記録を作り、対象の版・品目・見積参照を固定する。不成立なら確定記録を作らない。'],change:'未確定版（確定なし） → 提出成立版（確定あり・判断なし）。'},
+ {id:'approve',title:'購入申請を承認する',subtitle:'承認または差戻しを記録する',ids:['request','version','item','confirmed','quote','decision'],write:['decision'],rules:['確定済みの版・品目・見積を参照し、承認または差戻しを判断する。差戻し時は理由を記録する。','対象の版は書き換えない。次工程前は差戻し可能、購入準備開始後は不可。再申請成功時に旧判断を無効にする。'],change:'提出成立版（判断なし） → 承認／差戻し（判断あり）。'}
+];
+// Expand once from this Activity's mutation set, within its participating
+// relations. Read-only neighbors never recursively expand the local view.
+function activitySlice(stage){
+ const scope=new Set(stage.ids),writes=new Set(stage.write),localEdges=edges.filter(([a,b])=>scope.has(a)&&scope.has(b)&&(writes.has(a)||writes.has(b))),visible=new Set(stage.write);
+ for(const[a,b]of localEdges){visible.add(a);visible.add(b);}return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:localEdges};
+}
+const overviewStage={id:'overview',title:'全体ER（申請〜承認）',subtitle:'3工程の全体の関係',ids:Object.keys(tables),write:[],edges,rules:['工程別の図で省略した関係を含め、申請から承認までの構造をまとめて確認できます。'],change:'灰色は全体のテーブルです。工程ごとの登録・更新・削除は局所ERで確認してください。'};
+const stages=[...activityDefinitions.map(activitySlice),overviewStage];
+// Explicit creation provenance, not inferred from display color or all writers.
+const creatorStage={request:'draft',version:'draft',item:'draft',confirmed:'submit',decision:'approve'};
+const localInitial={submit:{version:{x:24,y:28},confirmed:{x:440,y:28}},approve:{confirmed:{x:24,y:28},decision:{x:440,y:28}}};
+const initial={request:{x:24,y:28},version:{x:104,y:174},item:{x:184,y:416},confirmed:{x:520,y:174},quote:{x:520,y:416},decision:{x:936,y:174}};
+const NS='http://www.w3.org/2000/svg',storageKey='alder-activity-er:purchase-request:local-v2';
+let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{}
+const measureContext=document.createElement('canvas').getContext('2d');
+function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
+function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
+function endpointLabel(svg,label){
+ const group=svgNode('g',{'pointer-events':'none','data-end-table':label.table});group.append(svgNode('rect',{x:label.left,y:label.top,width:label.w,height:label.h,rx:2,fill:'#fbfcfd'}));group.append(svgNode('text',{class:'endpoint-count',x:label.x,y:label.y,'text-anchor':label.anchor},label.count));svg.append(group);
+}
+const states=[];
+let appliedUrl='';
+function targetUrl(stage){const url=new URL(location.href);url.searchParams.delete('view');url.hash=stage;return url;}
+function captureViewport(focus){return{windowX:window.scrollX,windowY:window.scrollY,focus,sections:states.map(s=>({id:s.stage.id,x:s.host.scrollLeft,y:s.host.scrollTop,selected:s.selected,text:s.selection.textContent}))};}
+function applyLocation(force=false){
+ if(!force&&appliedUrl===location.href)return;appliedUrl=location.href;
+ const overview=new URLSearchParams(location.search).get('view')==='overview';
+ for(const s of states)s.section.hidden=overview?s.stage.id!=='overview':s.stage.id==='overview';
+ document.querySelector('h1').textContent=overview?'全体ER（申請〜承認）':'工程ごとに、保存する情報を見る';
+ document.querySelector('.intro').textContent=overview?'下書き・申請・承認の3工程で使う全テーブルと関係です。購買準備・結果登録は含みません。':'登録・更新・削除するテーブルと、この工程で扱う直接の隣接だけを表示します。灰色のテーブル名から作成する工程へ移動できます。';
+ document.querySelector('nav').innerHTML=overview?'<a href="index.html">工程別ERへ戻る</a>':'<a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a><a href="?view=overview">全体ER（申請〜承認）</a>';
+ const visit=history.state||{},viewport=visit.erViewport;
+ document.querySelectorAll('.section-back').forEach(b=>{b.hidden=!visit.erFrom;b.textContent=visit.erFrom?'戻る：'+visit.erFrom:'戻る';});
+ if(viewport)for(const p of viewport.sections){const state=states.find(s=>s.stage.id===p.id);if(!state)continue;state.selected=p.selected;state.selection.textContent=p.text;draw(state);state.host.scrollTo(p.x,p.y);}
+ requestAnimationFrame(()=>{if(viewport){window.scrollTo(viewport.windowX,viewport.windowY);const f=viewport.focus,state=f&&states.find(s=>s.stage.id===f.stage);if(state){const node=state.svg.querySelector(f.title?`.name-link[data-table-link="${f.table}"]`:`.table[data-table="${f.table}"]`);node?.focus({preventScroll:true});}}else document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});});
+}
+function navigateCreator(state,id){
+ const owner=creatorStage[id],target=states.find(s=>s.stage.id===owner);if(!target)return;
+ history.replaceState({...history.state,erViewport:captureViewport({stage:state.stage.id,table:id,title:true})},'',location.href);
+ history.pushState({erFrom:state.stage.title,erViewport:null},'',targetUrl(owner));
+ target.selected=id;target.selection.textContent=tables[id].name+'：'+tables[id].note;draw(target);applyLocation(true);
+ requestAnimationFrame(()=>target.svg.querySelector(`.table[data-table="${id}"]`)?.focus({preventScroll:true}));
+}
+function returnSection(){history.replaceState({...history.state,erViewport:captureViewport()},'',location.href);history.back();}
+window.addEventListener('popstate',()=>applyLocation(true));window.addEventListener('hashchange',()=>applyLocation());
+
+function save(state){try{saved[state.stage.id]=Object.fromEntries(state.positions);localStorage.setItem(storageKey,JSON.stringify(saved));state.status.textContent='配置を保存しました。';}catch{state.status.textContent='配置はこの画面のみ保持しています。';}}
+function draw(state){
+ const boxes=new Map(state.stage.ids.map(id=>{const t=tables[id],p=state.positions.get(id)||localInitial[state.stage.id]?.[id]||initial[id],w=Math.ceil(Math.max(220,measure(t.name,15)+24,...t.fields.map(([k,n])=>measure(n)+86)));return[id,{x:p.x,y:p.y,w,h:44+t.fields.length*25}];}));
+ state.boxes=boxes;state.svg.replaceChildren();const width=Math.max(700,...[...boxes.values()].map(b=>b.x+b.w+50)),height=Math.max(180,...[...boxes.values()].map(b=>b.y+b.h+45));
+ state.svg.style.width=width+'px';state.svg.style.height=height+'px';state.svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
+ const routing=routeER(boxes,state.stage.edges);state.routing=routing;
+ const routedWidth=Math.max(width,routing.width),routedHeight=Math.max(height,routing.height);state.svg.style.width=routedWidth+'px';state.svg.style.height=routedHeight+'px';state.svg.setAttribute('viewBox',`0 0 ${routedWidth} ${routedHeight}`);state.host.style.height=Math.min(560,Math.max(260,routedHeight+2))+'px';
+ for(const route of routing.routes){const{from,to,fromCount,toCount,kind,d}=route;const reading=tables[from].name+'1件に対して'+tables[to].name+toCount+'件／'+tables[to].name+'1件に対して'+tables[from].name+fromCount+'件';
+  state.svg.append(svgNode('path',{d,fill:'none',stroke:'#fbfcfd','stroke-width':6,'pointer-events':'none'}));
+  const wire=svgNode('path',{class:'wire'+(kind==='reference'?' reference':'')+(route.unrouted?' unresolved':''),'data-from':from,'data-to':to,'data-from-cardinality':fromCount,'data-to-cardinality':toCount,'data-unrouted':route.unrouted,d,'aria-label':reading,role:'img'});wire.append(svgNode('title',{},reading));state.svg.append(wire);
+ }
+ for(const label of routing.labels)endpointLabel(state.svg,label);
+ state.warning.textContent=routing.routes.some(r=>r.unrouted)?'接続線の通り道を確保できません。テーブル間を広げてください。赤い線の間は未接続です。':'';
+ for(const[id,b]of boxes){const t=tables[id],owner=creatorStage[id],linked=!state.stage.write.includes(id)&&owner&&owner!==state.stage.id,g=svgNode('g',{class:'table'+(state.stage.write.includes(id)?'':' read')+(state.selected===id?' selected':''),'data-table':id,role:linked?'group':'button',tabindex:0,'aria-label':t.name+'を選択','aria-description':'ドラッグで配置変更。Altと矢印キーで移動。'});g.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));g.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));const title=svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name);if(linked){const link=svgNode('a',{class:'name-link','data-table-link':id,href:targetUrl(owner).href,role:'link',tabindex:0,'aria-label':t.name+'の作成工程へ移動'});link.append(title);link.onpointerdown=e=>e.stopPropagation();link.onclick=e=>{e.preventDefault();e.stopPropagation();navigateCreator(state,id);};link.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();navigateCreator(state,id);}};g.append(link);}else g.append(title);g.append(svgNode('path',{class:'divider',d:`M${b.x+68} ${b.y+35}V${b.y+b.h}`}));t.fields.forEach(([k,n],i)=>{const y=b.y+56+i*25;g.append(svgNode('text',{class:'key',x:b.x+10,y},k));g.append(svgNode('text',{class:'column',x:b.x+80,y},n));});
+  const select=()=>{state.selected=id;state.selection.textContent=t.name+'：'+t.note;};
+  g.onpointerdown=e=>{if(e.button!==0||e.target.closest('.name-link'))return;e.preventDefault();select();state.drag={id,pointer:e.pointerId,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,bx:b.x,by:b.y,sx:state.host.scrollLeft,sy:state.host.scrollTop,previous:state.positions.get(id),moved:false};state.svg.setPointerCapture(e.pointerId);document.body.classList.add('dragging');draw(state);state.frame=requestAnimationFrame(()=>tick(state));};
+  g.onkeydown=e=>{if(e.altKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const d=e.shiftKey?50:10;state.positions.set(id,{x:Math.max(24,b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0)),y:Math.max(28,b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0))});select();draw(state);state.svg.querySelector(`[data-table="${id}"]`).focus();save(state);}else if(e.key==='Enter'||e.key===' '){e.preventDefault();select();draw(state);}};state.svg.append(g);
+ }
+}
+function move(state){const d=state.drag;if(!d)return;const dx=d.cx-d.x+state.host.scrollLeft-d.sx,dy=d.cy-d.y+state.host.scrollTop-d.sy;if(!d.moved&&Math.hypot(dx,dy)<4)return;d.moved=true;state.positions.set(d.id,{x:Math.max(24,Math.round(d.bx+dx)),y:Math.max(28,Math.round(d.by+dy))});draw(state);}
+function tick(state){const d=state.drag;if(!d)return;const r=state.host.getBoundingClientRect();if(d.moved)state.host.scrollBy(d.cx<r.left+24?-10:d.cx>r.right-24?10:0,d.cy<r.top+24?-10:d.cy>r.bottom-24?10:0);move(state);state.frame=requestAnimationFrame(()=>tick(state));}
+function stop(state,cancel=false){const d=state.drag;if(!d)return;state.drag=null;cancelAnimationFrame(state.frame);document.body.classList.remove('dragging');if(cancel){if(d.previous)state.positions.set(d.id,d.previous);else state.positions.delete(d.id);draw(state);state.status.textContent='移動を取り消しました。';}else if(d.moved)save(state);if(state.svg.hasPointerCapture(d.pointer))state.svg.releasePointerCapture(d.pointer);}
+for(const[order,stage]of stages.entries()){
+ const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><div><div class="eyebrow">${order+1} · ${stage.subtitle}</div><h2>${stage.title}</h2></div><button class="section-back" hidden>戻る</button></div><div class="rule">${stage.rules.map(r=>'<p>'+r+'</p>').join('')}</div><p class="muted">${stage.change}</p>${stage.ids.includes('quote')?'<p class="quote-rule">提出成立した申請版から見た見積書は必ず1件。見積書から見た申請版は0件以上です。</p>':''}<div class="actions"><button class="reset">自動配置に戻す</button><button class="copy">配置をコピー</button><span class="status" aria-live="polite">配置は工程ごとに保存します。</span></div><p class="routing-warning" aria-live="polite"></p><div class="canvas" tabindex="0" aria-label="${stage.title}のER図。縦横スクロール可能"><svg role="group" aria-label="${stage.title}のテーブルと関係"></svg></div><p class="selection" aria-live="polite">テーブルを選択すると、保存する情報と条件を確認できます。</p>`;
+ document.getElementById('stages').append(section);const state={stage,section,svg:section.querySelector('svg'),host:section.querySelector('.canvas'),status:section.querySelector('.status'),selection:section.querySelector('.selection'),warning:section.querySelector('.routing-warning'),positions:new Map(),selected:null,drag:null};
+ for(const[id,p]of Object.entries(saved[stage.id]||{}))if(stage.ids.includes(id)&&p&&Number.isFinite(p.x)&&Number.isFinite(p.y))state.positions.set(id,{x:Math.max(24,p.x),y:Math.max(28,p.y)});
+ state.svg.onpointermove=e=>{if(state.drag&&e.pointerId===state.drag.pointer){state.drag.cx=e.clientX;state.drag.cy=e.clientY;move(state);}};state.svg.onpointerup=()=>stop(state);state.svg.onpointercancel=()=>stop(state,true);state.svg.onlostpointercapture=()=>{if(state.drag)stop(state,true);};
+ section.querySelector('.reset').onclick=()=>{state.positions.clear();state.selected=null;draw(state);save(state);state.status.textContent='自動配置に戻しました。';state.host.scrollTo(0,0);state.selection.textContent='テーブルを選択すると、保存する情報と条件を確認できます。';};
+ section.querySelector('.copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify({kind:'alder-activity-er-layout',stage:stage.id,positions:Object.fromEntries([...state.boxes].map(([id,b])=>[id,{x:b.x,y:b.y}]))},null,2));state.status.textContent='配置をコピーしました。チャットに貼り付けて共有できます。';}catch{state.status.textContent='コピーできませんでした。';}};
+ section.querySelector('.section-back').onclick=returnSection;states.push(state);draw(state);
+}
+applyLocation(true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
+</script></html>
+
+
+
+
+
