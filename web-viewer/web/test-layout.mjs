@@ -10,11 +10,11 @@ const stepGraph={version:1,nodes:chainNodes,relations:chainNodes.slice(1).map((n
 const stepPositions=initialPositions(stepGraph),origin=stepPositions[chainNodes[0].id];
 const stepX=stepPositions[chainNodes[1].id][0]-origin[0],stepY=stepPositions[chainNodes[1].id][1]-origin[1];
 assert.equal(stepX,64,'overview shares the accepted detail staircase horizontal step');
-assert.equal(stepY,96,'cards retain the 28-unit vertical gap');
+assert.equal(stepY,112,'Alder cards reserve at least 44 units for captions, glow and badges');
 for(const [i,n] of chainNodes.entries())assert.deepEqual(stepPositions[n.id],[origin[0]+i*stepX,origin[1]+i*stepY]);
 const old=g=>Object.fromEntries(g.nodes.map((n,i)=>[n.id,[40+i%4*320,40+Math.floor(i/4)*140]]));
 const connectedDistance=(g,p)=>g.relations.reduce((s,r)=>s+Math.hypot(p[r.to][0]-p[r.from][0],p[r.to][1]-p[r.from][1]),0);
-const noOverlap=p=>{const all=Object.values(p);for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++)assert.ok(Math.abs(all[i][0]-all[j][0])>=260||Math.abs(all[i][1]-all[j][1])>=96);};
+const noOverlap=(p,minimumGap=96)=>{const all=Object.values(p);for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++)assert.ok(Math.abs(all[i][0]-all[j][0])>=260||Math.abs(all[i][1]-all[j][1])>=minimumGap);};
 const before=JSON.stringify(sample.graph),fallback=initialPositions(sample.graph);noOverlap(fallback);assert.deepEqual(initialPositions(sample.graph),fallback);assert.equal(JSON.stringify(sample.graph),before);
 const plan=matrixPlan(sample.graph,sample.activityOrder),p=plan.positions,legacy=layoutPlan(sample.graph,sample.activityOrder).positions;noOverlap(p);assert.deepEqual(initialPositions(sample.graph,sample.activityOrder),p);
 const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
@@ -27,7 +27,7 @@ assert.deepEqual(Object.keys(legacy).sort((a,b)=>legacy[a][1]-legacy[b][1]),Obje
 const span=positions=>Math.max(...Object.values(positions).map(p=>p[0]))-Math.min(...Object.values(positions).map(p=>p[0]));
 assert.ok(span(p)<span(previous),'the same dependency ranks occupy less horizontal space');
 assert.ok(p['業務設計書'][0]<p['同期漏れ検査'][0]);assert.ok(columns(p).length>4,'no four-column wrapping');
-for(const i of plan.forwardRelations){const r=sample.graph.relations[i];assert.ok(p[r.from][0]<p[r.to][0],r.from+' -> '+r.to);assert.ok(p[r.to][1]>=p[r.from][1]+96,'forward dependencies descend by at least one step');}
+for(const i of plan.forwardRelations){const r=sample.graph.relations[i];assert.ok(p[r.from][0]<p[r.to][0],r.from+' -> '+r.to);assert.ok(p[r.to][1]>=p[r.from][1]+112,'Alder dependencies retain at least 44px under each 68px card');}
 assert.equal(plan.forwardRelations.length+plan.feedbackRelations.length+plan.exceptionRelations.length,sample.graph.relations.length);
 assert.deepEqual([plan.forwardRelations.length,plan.feedbackRelations.length,plan.exceptionRelations.length],[49,12,2],'spacing does not change cycle or exception classification');
 for(const chain of [['業務設計','業務設計書','システム設計'],['画面設計','画面設計資料','実装'],['実装','コード','製品検証']]){assert.ok(p[chain[0]][0]<p[chain[1]][0]&&p[chain[1]][0]<p[chain[2]][0]);assert.ok(sample.graph.relations.some(r=>r.kind==='output'&&r.from===chain[0]&&r.to===chain[1]));assert.ok(sample.graph.relations.some(r=>r.kind==='input'&&r.from===chain[1]&&r.to===chain[2]));}
@@ -59,7 +59,7 @@ for(let trial=0;trial<24;trial++){
 const longNodes=Array.from({length:20000},(_,i)=>({id:'long-'+String(i).padStart(5,'0'),type:'object'}));
 const longGraph={version:1,nodes:longNodes,relations:longNodes.slice(1).map((n,i)=>({kind:'input',from:longNodes[i].id,to:n.id}))};
 const longPositions=initialPositions(longGraph);
-for(let i=0;i<longNodes.length;i++)assert.deepEqual(longPositions[longNodes[i].id],[origin[0]+i*stepX,origin[1]+i*stepY]);
+for(let i=0;i<longNodes.length;i++)assert.deepEqual(longPositions[longNodes[i].id],[origin[0]+i*stepX,origin[1]+i*96]);
 const widePositions=initialPositions({...longGraph,relations:[]});
 for(let i=0;i<longNodes.length;i++)assert.deepEqual(widePositions[longNodes[i].id],[40,40+i*96]);
 assert.deepEqual({...initialPositions({version:1,nodes:[],relations:[]})},{});
@@ -69,7 +69,7 @@ try{globalThis.innerWidth=320;assert.deepEqual(initialPositions(sample.graph,sam
 finally{if(previousWidth===undefined)delete globalThis.innerWidth;else globalThis.innerWidth=previousWidth;}
 const tab={key:'test',name:'sample',design:sample,positions:{},scroll:[31,47],zoom:1.2},first=reconcile(tab,sample);assert.deepEqual(first.positions,p);assert.deepEqual(first.scroll,[31,47]);assert.equal(first.zoom,1.2);
 const firstID=sample.graph.nodes[0].id,secondID=sample.graph.nodes[1].id;first.positions[firstID]=[987,654];first.positions[secondID]=[987,654];first.selected=firstID;assert.deepEqual(reconcile(first,sample).positions,first.positions,'manual overlaps also remain unchanged');
-const partly={...first,positions:{[firstID]:p[secondID]}};const filled=reconcile(partly,sample);assert.deepEqual(filled.positions[firstID],partly.positions[firstID]);noOverlap(filled.positions);assert.equal(Object.keys(filled.positions).length,25);
+const partly={...first,positions:{[firstID]:p[secondID]}};const filled=reconcile(partly,sample);assert.deepEqual(filled.positions[firstID],partly.positions[firstID]);noOverlap(filled.positions,88);assert.equal(Object.keys(filled.positions).length,25);
 const reduced={...sample,graph:{...sample.graph,nodes:sample.graph.nodes.slice(1),relations:sample.graph.relations.filter(r=>r.from!==firstID&&r.to!==firstID)}};const updated=reconcile(first,reduced);assert.equal(updated.positions[firstID],undefined);assert.equal(updated.selected,undefined);assert.deepEqual(updated.positions[secondID],first.positions[secondID]);
 console.log(JSON.stringify({checks:['stable directed JSON-only fallback','compact staircase preserves reviewed dependency ranks and reading order; all forward edges rightward/downward; unchanged cycle and exception counts; no grid wrapping','bounded 1–1000 nodes; 20000-node chain and isolated layer; empty graph','all-card rectangle-rule equivalence and array permutation stability','viewport-independent initial positions only','manual overlaps preserved','missing IDs avoid retained cards','deleted IDs removed'],step:{x:stepX,y:stepY},sampleBounds:{left:Math.min(...Object.values(p).map(p=>p[0])),top:Math.min(...Object.values(p).map(p=>p[1])),right:Math.max(...Object.values(p).map(p=>p[0]+260)),bottom:Math.max(...Object.values(p).map(p=>p[1]+68))},sampleDistance:{old:connectedDistance(sample.graph,old(sample.graph)),new:connectedDistance(sample.graph,p)}},null,2));
 
