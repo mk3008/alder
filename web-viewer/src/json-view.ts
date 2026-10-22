@@ -1,3 +1,4 @@
+import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
@@ -9,7 +10,7 @@ export function jsonDetail(design:Design,id?:string):HTMLElement{
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
  if(object){field(root,'Scope',String(object.scope));field(root,'Icon',object.icon);root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
  else if(activity){
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,activity[key]===null?null:String(activity[key]));
+  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}

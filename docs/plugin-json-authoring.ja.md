@@ -1,6 +1,6 @@
 # JSON正本の草案・更新
 
-候補保存契約`alder-document-package / 0.1`を使い、ヒアリングから直接JSONを作る。Markdownを中間正本にせず、人間には業務上の文章と判断点を説明する。既存Markdownは明示変換しない限りそのまま扱う。状態遷移・概念モデルの意味やSchemaはここで決めない。
+候補保存契約`alder-document-package / 0.3`（旧0.1/0.2も読込対応）を使い、ヒアリングから直接JSONを作る。Markdownを中間正本にせず、人間には業務上の文章と判断点を説明する。既存Markdownは明示変換しない限りそのまま扱う。状態遷移は明示された部分定義だけを扱い、概念モデルは対象外とする。
 
 ## 読む根拠
 
@@ -81,3 +81,7 @@ node "$SCRIPT_DIR/cli.mjs" convert "/path/to/request.json" "/path/to/new-package
 [部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.2とstateTransition文書に、対象Object・明示状態・操作Activity・条件・例外名・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。状態と操作の既存IDを保持し、BD更新に伴うbasedOnと各文書revisionを明示する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
 
 MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を指定する。明示表だけを変換し、未知のMedium/SR Dependenciesや無宣言の自然文は補正しない。元MDは残す。再変換での状態名改名bindingは未対応のため、改名はJSON正本のIDを維持したcommitで行う。
+
+## ロールの同一性と保存色
+
+[ロール契約](json-roles.ja.md)を読み、候補0.3ではBD schemaVersion 0.2のrolesとActivity.roleIdを直接草案・更新する。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1/0.2の読取りは変更しない。明示移行はprepare-role-upgradeで新しい候補だけを作り、検査後にmigration操作と期待版/hashを伴うcommitを行う。Checkがある場合の新BD版の人間合意を推定しない。

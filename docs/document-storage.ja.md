@@ -1,6 +1,8 @@
-# 型付き文書パッケージの保存契約（候補0.1）
+# 型付き文書パッケージの保存契約（候補0.1〜0.3）
 
 業務設計とCheck Itemを、論理文書を分けた一つの整形JSONに保存する。共通の構造契約は[Schema](../tools/document_storage/schema.json)、文書間制約は[検証器](../tools/document_storage/core.mjs)が定める。正式採用・Plugin配布・Viewer組込は別の判断であり、既存Markdown契約とBusiness Graph v1を変更しない。
+
+現行候補は0.3でRole ID・名称・保存色を扱う。下記0.1の基礎契約は旧版互換として保持し、0.2で追加した[部分定義の状態遷移](json-state-transitions.ja.md)、0.3の[ロールと明示移行](json-roles.ja.md)を併せて確認する。旧JSONの読込みで正本を自動更新しない。
 
 ## 版と境界
 
@@ -14,7 +16,7 @@
 | `externalDocuments[]` | 別保存の旧BDを参照するための最小目録。文書ID・版・Activity ID/表示名のみ。旧版本文ではない |
 | `diagnostics[]` | 文書に残す補足。実際の検証結果は毎回計算する。空欄でも承認済みとは解釈しない |
 
-`documents`は現在`businessDesign`と`checkItems`を受け入れる。将来の`stateTransition`・`conceptModel`は、このkind/payload版の境界で追加する。今回は具体Schema・業務意味・表示を定めない。未対応kind/版・未知フィールドは拒否し、読み飛ばしやダミー文書の必須化はしない。互換性を変える追加は、対応版と消費側の更新をレビューしてから行う。
+0.1の`documents`は`businessDesign`と`checkItems`を受け入れる。0.2はstateTransition/0.1を追加し、0.3ではBD/0.2のrolesを必須とする。Checkと状態文書のpayload版は0.1のまま。conceptModelの具体Schema・業務意味・表示は未定義。未対応kind/版・未知フィールドは拒否し、読み飛ばしやダミー文書の必須化はしない。互換性を変える追加は、対応版と消費側の更新をレビューしてから行う。
 
 候補契約`0.1`は製品の正式v1ではない。研究PR #271の`alder-typed-storage-poc / 0.3-poc`も別形式として拒否する。過去の研究証拠を新契約へ自動書換えしない。
 
@@ -26,7 +28,7 @@ Checkには既存Check ID（`checkId`）、内部の安定ID（`id`）、タイ�
 
 共通保証のproseと比較表のcolumns/rows、見出しリンクの参照先IDを保持する。例だけでは一般保証を代替できない。共有Checkは一本文・一レビュー状態を複数Activityのindexから参照する。未割当Checkは`sections[].activityId: null`として残し、Activityを推測しない。
 
-Whoは現在の短いロール名の文字列を保持する。ロールIDの導入は、役割の同一性判断や既存文章内の役割抽出を追加するため今回は見送った。Activity/Object/Check/Findings/関係のID化を先に適用し、役割の同義語を自動統合しない。
+0.1/0.2のWhoは短いロール名の文字列を保持する。0.3ではWho原文とRole ID参照を区別し、Roleの名称・5色を一元化する。役割の同義語や複合表現を自動統合しない。
 
 構造・参照が通ることは、文章の業務意味・完全性・人間合意を証明しない。自由記述内の旧名称や引用の意味は自動改稿しない。
 

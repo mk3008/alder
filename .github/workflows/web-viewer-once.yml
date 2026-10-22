@@ -59,7 +59,7 @@ jobs:
             if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
             sleep 1
           done
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs --cases jsonStates,jsonLayout,jsonDocuments,jsonBoundaries,jsonOfflinePreview
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs --cases jsonRoles,jsonStates,jsonLayout,jsonDocuments,jsonBoundaries,jsonOfflinePreview
 
       - name: Retain early JSON evidence
         if: always()
@@ -155,5 +155,14 @@ jobs:
         with:
           name: json-states-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-states/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Retain role JSON comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-roles-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-roles/
           if-no-files-found: ignore
           retention-days: 14

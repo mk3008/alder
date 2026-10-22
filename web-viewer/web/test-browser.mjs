@@ -1,3 +1,4 @@
+import {verifyJSONRoles} from './test-json-roles-browser.mjs';
 import {verifyJSONStates} from './test-json-states-browser.mjs';
 import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
@@ -50,6 +51,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'jsonRoles',run:()=>verifyJSONRoles(browser)},
    {name:'jsonStates',run:()=>verifyJSONStates(browser)},
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},

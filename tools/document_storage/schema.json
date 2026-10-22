@@ -268,6 +268,142 @@
         "diagnostics"
       ],
       "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "enum": [
+            "alder-document-package"
+          ]
+        },
+        "formatVersion": {
+          "enum": [
+            "0.3"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/businessDesignRoles"
+              },
+              {
+                "$ref": "#/$defs/checkItems"
+              },
+              {
+                "$ref": "#/$defs/stateTransition"
+              }
+            ]
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "uri": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "sha256",
+              "uri"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "externalDocuments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "kind": {
+                "enum": [
+                  "businessDesign"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "activities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]+$"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "revision",
+              "activities"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "required": [
+        "format",
+        "formatVersion",
+        "revision",
+        "documents",
+        "sources",
+        "externalDocuments",
+        "diagnostics"
+      ],
+      "additionalProperties": false
     }
   ],
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -575,6 +711,357 @@
         "activities",
         "relations",
         "findings"
+      ],
+      "additionalProperties": false
+    },
+    "businessDesignRoles": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "schemaVersion": {
+          "enum": [
+            "0.2"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "businessDesign"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "preface": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "scope": {
+                "type": "boolean"
+              },
+              "icon": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "information": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "scope",
+              "icon",
+              "information"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "scope": {
+                "type": "boolean"
+              },
+              "why": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "when": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "who": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "where": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "procedure": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "exception": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "result": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "problem": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "painLevel": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "Low",
+                      "Medium",
+                      "High"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "roleId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "scope",
+              "why",
+              "when",
+              "who",
+              "where",
+              "procedure",
+              "exception",
+              "result",
+              "problem",
+              "painLevel",
+              "roleId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "kind": {
+                "enum": [
+                  "input",
+                  "output",
+                  "business-exception",
+                  "object-exception"
+                ]
+              },
+              "fromId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "toId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "fromId",
+              "toId",
+              "label"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "kind": {
+                "enum": [
+                  "question",
+                  "correction"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "open",
+                  "resolved"
+                ]
+              },
+              "scope": {
+                "enum": [
+                  "items",
+                  "document",
+                  "unassigned"
+                ]
+              },
+              "targetIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]+$"
+                }
+              },
+              "unresolvedTargets": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "id",
+              "sourceId",
+              "kind",
+              "status",
+              "scope",
+              "targetIds",
+              "unresolvedTargets",
+              "summary",
+              "content"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "color": {
+                "enum": [
+                  "#8b5cf6",
+                  "#2563eb",
+                  "#c2410c",
+                  "#008576",
+                  "#be185d"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "color"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "schemaVersion",
+        "kind",
+        "revision",
+        "title",
+        "preface",
+        "scope",
+        "objects",
+        "activities",
+        "relations",
+        "findings",
+        "roles"
       ],
       "additionalProperties": false
     },
