@@ -4,11 +4,12 @@
   "sha256": {
     "web-viewer/src/layout.ts": "d8d0182c8e1b1e47fece0da728bb0042b24cf9bdd716851b53989529ce217865",
     "web-viewer/src/layout-order.ts": "d119955d3993ab2e7b1f3a6c8e0a40c05c472117fcf054c22186fad50fd43212",
-    "web-viewer/src/matrix-layout.ts": "af5ce619aa5c1ca52ea744a027837f97b1cf032dc1c9f55633810e350edb84c1",
-    "web-viewer/src/routing.ts": "ad312f34c68e41574c8c942b3c7688c83c1ca4f667fa54e52260a775cc16677b",
+    "web-viewer/src/matrix-layout.ts": "bbc7451b484822f6dba0046d5c8b5b304e391b97bd8192884875676a39ed1f74",
+    "web-viewer/src/routing.ts": "43697d31a075d7ff0eee29765e24284282ae1bfb1561727a47c1313a3979842e",
     "web-viewer/src/geometry.ts": "692e7aa50c57befb816c1f90012f60663544c63988e061c31b3e406c387fc617",
     "web-viewer/src/activities.ts": "8fc1865bde5e88325b95bff45175ad7105761c68fee29ac5455d1a73e8e2df4f",
-    "web-viewer/src/route-cache.ts": "f89c445c429e029833b5f15897c64f50b5c1c46ecbae632ccfa7632d4c16c4c1",
+    "web-viewer/src/route-cache.ts": "26fc17f9d3fa420beaf3d874b3622032224dcd9055fc59ef81ad940c19816d41",
     "web-viewer/src/style.css": "714490fea8b9c6d992dbe4948c929354fc790367ca596b27defef179352f2eba"
-  }
+  },
+  "intentionalLayoutChange": "root#144: reuse prior reviewed shared-caption, caption-row and 112px minimum-clearance candidate from alder PRs #256/#262; rebaseline only layout-owned files."
 }
