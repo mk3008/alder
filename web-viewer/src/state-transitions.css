@@ -12,3 +12,7 @@
 .state-shape.selected,.state-shape.review-neighbor{color:var(--review-link)}.state-shape.selected .state-diagram-node-label{font-weight:750}
 .state-shape{outline:none}
 .state-diagram .state-caption-line.review-related{fill:var(--review-link);font-weight:800}.state-diagram .state-caption-line.muted{fill:var(--fg);opacity:1;font-weight:400}
+/* The source stack defined these colors globally; keep them local to state diagrams here. */
+.state-transition-panel{--graph-object-fill:#e4f4eb;--graph-object-border:#79bca1;--graph-object-text:#174b36;--graph-note-fill:#e9edf2;--graph-note-border:#a6b2c1;--graph-note-text:#344457}
+[data-theme=dark] .state-transition-panel{--graph-object-fill:#1d4137;--graph-object-border:#538f78;--graph-object-text:#dff6eb;--graph-note-fill:#303941;--graph-note-border:#71808d;--graph-note-text:#e0e5ec}
+.state-diagram .state-shape.muted,.state-diagram .edge.muted,.state-diagram .edge-label.muted{opacity:1}
