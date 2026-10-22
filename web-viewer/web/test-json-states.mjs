@@ -1,3 +1,4 @@
+import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {build} from 'esbuild';import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/json-document.ts';import {projectStates} from '../src/state-projection.ts';
 const folder='../work/json-state/issue-275/',raw=readFileSync(folder+'purchase.json','utf8'),md=readFileSync(folder+'supported-state.md','utf8'),pkg=JSON.parse(raw),bd=pkg.documents[0],st=pkg.documents[1];
@@ -9,3 +10,9 @@ assert.equal(actual.outerHTML,expected.outerHTML);assert.equal(actual.querySelec
 const state=actual.querySelector('[data-state="申請済み"]');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'true');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'false');
 const renamed=structuredClone(pkg);renamed.documents[0].objects.find(o=>o.id===st.objectId).name='改名された申請';assert.ok(projectStates(parseDocument(JSON.stringify(renamed))).objectStateTransitions['改名された申請']);
 dom.window.close();console.log('Pinned state renderer MD/typed JSON: 13 operation details, all SVG boxes/routes/captions and keyboard exact; identity survives rename');
+
+const ordinary=readFileSync('web/authorities/business-design.md','utf8');
+for(const fence of ['```','~~~~']){
+ const quoted=ordinary.replace('\n','\n\n'+fence+'markdown\n## State Transitions\n# Object example\n'+fence+'\n');
+ assert.deepEqual(parseDocument(quoted),parseDesign(quoted),'quoted example headings are never declarations');
+}

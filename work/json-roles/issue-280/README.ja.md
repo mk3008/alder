@@ -15,3 +15,5 @@
 最終CI・Plugin隔離実行・固定Pages URLの証拠はIssue #280に記録する。新レイアウトや操作導線、JSON手編集UIは追加しない。既存描画器7ファイル・style.cssの固定hashを維持し、Graph v1のshapeや旧MDを変更しない。Graph v1へRole catalogは出力せず従来Who原文を保持する。
 
 未決/制限：同名異役割の識別、複雑なWhoの構造化、人間の状態遷移の業務意味・概念モデル、completeの一般化、購買原典のMedium/SR Dependencies全体変換。新構造は候補であり、正式JSON v1/main merge/Plugin release/本番配信は行わない。
+
+最終候補では、状態宣言のコード例を誤抽出しない境界（バッククォート/チルダのfence、重複metaキー）も補った。これは新たな状態仕様ではなく旧MD互換の防御で、PR #281後の共有parserの修正として本stackに含める。未定/TBD等のWhoもRoleを新設せず原文/未確定へ保持する。

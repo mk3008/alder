@@ -35,3 +35,8 @@ test('unsupported original SR/Medium profile remains rejected; supported explici
  const two=convertMarkdown({...request,previousPackage:one,expectedRevision:'p1'}).package;assert.deepEqual(two,one);
  assert.equal(stateDocument(extractStateDeclarations(raw).declarations[0],bd,{documentId:st.id,revision:st.revision}).transitions.length,13);
 });
+
+test('quoted headings in both fence styles are inert; duplicate state metadata keys reject',()=>{
+ for(const fence of ['```','~~~~']){const text='# Example\n'+fence+'markdown\n# Object fake\n## State Transitions\nthis is a quote\n'+fence;assert.deepEqual(extractStateDeclarations(text).declarations,[]);assert.equal(extractStateDeclarations(text).markdown,text);}
+ assert.throws(()=>extractStateDeclarations(raw.replace('"object": "購入申請",','"object": "購入申請", "object": "購入申請",')),/Duplicate JSON key/);
+});

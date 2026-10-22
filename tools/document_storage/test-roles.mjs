@@ -31,3 +31,7 @@ test('Check migration needs exact human BD confirmation and preserves every revi
  assert.deepEqual(next.documents[1].items,prior.documents[1].items);assert.equal(next.documents[1].basedOn.verification,'unverified');
  guardAuthoring(prior,next,{...operation,bdConfirmations:[{documentId:next.documents[0].id,revision:next.documents[0].revision,evidence:{source:'synthetic-test-only',quote:'この固定版の業務内容を確認する模擬イベント'}}]});
 });
+
+test('undecided Who placeholders are retained without inventing a role',()=>{
+ for(const who of ['未定','未決','TBD','unknown']){const p=structuredClone(legacy);p.documents[0].activities[0].who=who;const n=upgradeRoles(p,revisions);assert.equal(n.documents[0].activities[0].who,who);assert.equal(n.documents[0].activities[0].roleId,null);validate(n);}
+});

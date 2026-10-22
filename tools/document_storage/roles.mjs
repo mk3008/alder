@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {validate,demand} from './core.mjs';
 export const ROLE_PALETTE=['#8b5cf6','#2563eb','#c2410c','#008576','#be185d'];
 export function initialRoleColor(who){let hash=0;for(const c of who)hash=(hash*31+c.codePointAt(0))>>>0;return ROLE_PALETTE[hash%5];}
-export const simpleWho=who=>who===who.trim()&&/^[\p{L}\p{N}_ -]+$/u.test(who)&&!/(?:と|および|及び|または|又は|兼)/u.test(who);
+export const simpleWho=who=>! /^(?:未定|未決|未確認|未記載|不明|要確認|TBD|unknown)$/i.test(who)&&who===who.trim()&&/^[\p{L}\p{N}_ -]+$/u.test(who)&&!/(?:と|および|及び|または|又は|兼)/u.test(who);
 export function withRoles(bd,diagnostics,previous,bindings={}){
  const next=structuredClone(bd);next.schemaVersion='0.2';next.roles=[];
  for(const a of next.activities){

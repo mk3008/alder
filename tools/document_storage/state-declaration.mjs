@@ -34,16 +34,17 @@ export function parseStateDeclaration(body,object){
 }
 
 /** Extract only an Object's explicit State Transitions section; never parse prose. */
+const advanceFence=(line,fence)=>{const m=/^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);if(!m)return fence;if(!fence)return m[1];return m[1][0]===fence[0]&&m[1].length>=fence.length&&!m[2].trim()?'':fence;};
 export function extractStateDeclarations(source){
  const declarations=[];let object=null;const lines=source.split(/\r?\n/),kept=[];let fence='';
  for(let i=0;i<lines.length;i++){
   const line=lines[i];if(!fence&&/^# Object /.test(line))object=line.slice(9);else if(!fence&&/^# /.test(line))object=null;
   if(!fence&&line==='## State Transitions'){
    if(!object)throw Error('State Transitions must belong to an Object');const body=[];let inner='';
-   for(i++;i<lines.length;i++){const l=lines[i],f=/^```/.test(l);if(!inner&&/^#{1,2} /.test(l)){i--;break;}body.push(l);if(f)inner=inner?'':'```';}
+   for(i++;i<lines.length;i++){const l=lines[i];if(!inner&&/^#{1,2} /.test(l)){i--;break;}body.push(l);inner=advanceFence(l,inner);}
    const result=parseStateDeclaration(body.join('\n'),object);if(result.error)throw Error(result.error);declarations.push(result.model);continue;
   }
-  kept.push(line);if(/^```/.test(line))fence=fence?'':'```';
+  kept.push(line);fence=advanceFence(line,fence);
  }
  if(new Set(declarations.map(d=>d.object)).size!==declarations.length)throw Error('Duplicate Object state declaration');
  return {markdown:kept.join('\n'),declarations};

@@ -27,7 +27,7 @@ export async function readDesignFile(file:File):Promise<Design>{
 export function parseDocument(source:string):Design{
  if(!isJSONSource(source)){
   if(!/^## State Transitions$/m.test(source))return parseDesign(source);
-  const extracted=extractStateDeclarations(source),design=parseDesign(extracted.markdown);
+  const extracted=extractStateDeclarations(source);if(!extracted.declarations.length)return parseDesign(source);const design=parseDesign(extracted.markdown);
   return {...design,markdown:source,objectStateTransitions:Object.fromEntries(extracted.declarations.map((model:unknown)=>{const m=model as {object:string};return [m.object,{model}];}))};
  }
  if(new TextEncoder().encode(source).byteLength>MAX_LOCAL_JSON_BYTES)throw Error('ローカルJSONは8MiB以内にしてください。');
