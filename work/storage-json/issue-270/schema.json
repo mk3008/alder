@@ -8,7 +8,7 @@
     },
     "formatVersion": {
       "enum": [
-        "0.2-poc"
+        "0.3-poc"
       ]
     },
     "revision": {
@@ -28,7 +28,7 @@
         ]
       }
     },
-    "archives": {
+    "sources": {
       "type": "array",
       "items": {
         "type": "object",
@@ -44,22 +44,61 @@
           "sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
-          },
-          "mediaType": {
-            "enum": [
-              "text/markdown"
-            ]
-          },
-          "text": {
-            "type": "string"
           }
         },
         "required": [
           "documentId",
           "revision",
-          "sha256",
-          "mediaType",
-          "text"
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "externalDocuments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "kind": {
+            "enum": [
+              "businessDesign"
+            ]
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "activities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]+$"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "revision",
+          "activities"
         ],
         "additionalProperties": false
       }
@@ -77,7 +116,8 @@
     "formatVersion",
     "revision",
     "documents",
-    "archives",
+    "sources",
+    "externalDocuments",
     "diagnostics"
   ],
   "additionalProperties": false,

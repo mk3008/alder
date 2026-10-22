@@ -71,7 +71,7 @@ try{
     await page.locator('#view-select').selectOption('activities');
   });
 
-  await test('4.96 MB local File, no upload, bounded rendering',async()=>{
+  await test('over-2-MiB local File, no upload, bounded rendering',async()=>{
     const nonGetBefore=summary.requests.filter(r=>r.method!=='GET').length;
     const m=await local('.generated/activities-1000.json');
     assert.equal(m.route,'file');
@@ -93,7 +93,7 @@ try{
     assert.equal(await title(),previous);
   });
 
-  await test('4.96 MB URL load without legacy 2 MiB limit',async()=>{
+  await test('over-2-MiB URL load without legacy 2 MiB limit',async()=>{
     await page.locator('#legacy-limit').uncheck();
     const m=await readUrl(base+'.generated/activities-1000.json');
     assert.equal(m.route,'url');
@@ -171,6 +171,11 @@ try{
     assert.deepEqual(exported.documents.map(x=>x.id),source.documents.map(x=>x.id));
     assert.deepEqual(exported.documents[0].activities.map(x=>x.id),source.documents[0].activities.map(x=>x.id));
     assert.equal(exported.documents[0].activities.length,1000);
+    assert.equal(exported.formatVersion,'0.3-poc');
+    assert.ok(!Object.hasOwn(exported,'archives'));
+    assert.equal(exported.documents.length,2);
+    assert.ok(exported.externalDocuments.every(d=>Object.keys(d).sort().join(',')==='activities,id,kind,revision'));
+    assert.deepEqual(exported,source);
   });
 
   await test('bad version, duplicate ID, stale Check and malformed JSON keep drawing',async()=>{

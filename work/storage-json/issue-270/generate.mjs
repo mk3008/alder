@@ -15,9 +15,8 @@ for(const count of [5,100,1000]){
 }
 // Files are regenerated locally, never uploaded by the harness.
 const big=structuredClone(input);big.documents[0].activities[0].why='x'.repeat(17*1024*1024);fs.writeFileSync(dir+'.generated/over-budget.json',stringify(big));
-fs.writeFileSync(dir+'fixtures/legacy.md',markdown(input,input.documents[1].id).text);
+// Legacy MD remains a separate frozen source, outside the JSON package.
+fs.copyFileSync(dir+'inputs/check-source.md',dir+'fixtures/legacy.md');
 fs.writeFileSync(dir+'fixtures/current-export.md',markdown(input,input.documents[0].id).text);
-const trials=structuredClone(input);trials.archives=[];
-fs.writeFileSync(dir+'edits/before.json',stringify(trials));
-fs.writeFileSync(dir+'edits/before.md',input.archives.map(a=>a.text).join('\n\n# --- PoC文書境界 ---\n\n'));
+// Historical Codex trial files are immutable evidence; generation never rewrites them.
 console.log([5,100,1000].map(n=>({activities:n,bytes:fs.statSync(dir+`.generated/activities-${n}.json`).size})));

@@ -1,4 +1,5 @@
 {
+  "validationNote": "Historical 0.2-poc edit bytes are unchanged; reference checks use an in-memory 0.3 projection with frozen source descriptors, not new provenance verification or new Codex trials.",
   "method": "actual Codex authored patches, not deterministic edits; same session, unblinded; see protocol and first-attempt.json",
   "rows": [
     {

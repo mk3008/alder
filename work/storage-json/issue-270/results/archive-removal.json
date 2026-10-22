@@ -1,0 +1,20 @@
+{
+  "previousCommit": "b9c5d7e4a738bfa4b363fa4246129abef76a99b6",
+  "formatVersionBefore": "0.2-poc",
+  "formatVersionAfter": "0.3-poc",
+  "currentBusinessDesignUnchanged": true,
+  "checkPayloadAndBasedOnUnchanged": true,
+  "externalCatalogOnlyIDsAndActivityLabels": true,
+  "provenanceDigestsUnchanged": true,
+  "fixtureBytes": {
+    "before": 153435,
+    "after": 82613,
+    "reduction": 70822,
+    "percent": 46.157656336559455
+  },
+  "historicalCodexTrials": "edits/* unchanged; no new LLM experiment",
+  "limits": [
+    "External catalog checks presence, kind and revision only; does not establish historical business meaning or approval",
+    "Source hash verification requires separately retained input bytes"
+  ]
+}

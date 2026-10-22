@@ -25,6 +25,7 @@ export function inventory(pkg){
  const map=new Map(),owner=new Map(),types=new Map();
  const add=(e,doc,type)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);};
  for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note'}))for(const e of d[key]??[])add(e,d,type);}
+ for(const d of pkg.externalDocuments){add(d,d,'document');for(const a of d.activities)add(a,d,'activity');}
  return {map,owner,types};
 }
 export function validate(pkg){
@@ -48,7 +49,9 @@ export function validate(pkg){
    for(const n of d.notes)rich(n.content,d.id);rich(d.intro,d.id);
   }
  }
- for(const a of pkg.archives)target(a.documentId,'document');return {diagnostics,entities:map.size};
+ const sourceKeys=new Set();for(const s of pkg.sources){target(s.documentId,'document');const key=s.documentId+'@'+s.revision;demand(!sourceKeys.has(key),'Duplicate source descriptor');sourceKeys.add(key);}
+ for(const d of pkg.externalDocuments){demand(pkg.sources.some(s=>s.documentId===d.id&&s.revision===d.revision),'External source revision missing');demand(d.activities.length>0,'External activity catalog required');diagnostics.push('外部原典はID・表示名の参照目録のみ。本文・業務意味・ハッシュの内容照合は未検証: '+d.id);}
+ return {diagnostics,entities:map.size};
 }
 export function graphV1(pkg,documentId){
  const d=pkg.documents.find(d=>d.id===documentId&&d.kind==='businessDesign');demand(d,'BD not found');const names=new Map([...d.objects,...d.activities].map(n=>[n.id,n.name]));
@@ -56,7 +59,7 @@ export function graphV1(pkg,documentId){
  return {version:1,scope:d.scope,nodes,relations:d.relations.map(r=>({kind:r.kind,from:names.get(r.fromId),to:names.get(r.toId),label:r.label}))};
 }
 export function update(pkg,id,changes,expectedRevision,nextRevision){
- const clone=structuredClone(pkg),{map,owner}=inventory(clone);demand(map.has(id),'Unknown ID');const d=clone.documents.find(x=>x.id===owner.get(id));demand(d.revision===expectedRevision,'Revision conflict');demand(!Object.hasOwn(changes,'id'),'ID is immutable');Object.assign(map.get(id),changes);d.revision=nextRevision;clone.revision=nextRevision;validate(clone);return clone;
+ const clone=structuredClone(pkg),{map,owner}=inventory(clone);demand(map.has(id),'Unknown ID');const d=clone.documents.find(x=>x.id===owner.get(id));demand(d,'External reference catalog is read-only');demand(d.revision===expectedRevision,'Revision conflict');demand(!Object.hasOwn(changes,'id'),'ID is immutable');Object.assign(map.get(id),changes);d.revision=nextRevision;clone.revision=nextRevision;validate(clone);return clone;
 }
 export const stringify=pkg=>JSON.stringify(pkg,null,2)+'\n';
 export function select(pkg,id){const i=inventory(pkg);demand(i.map.has(id),'Unknown ID');return i.map.get(id);}

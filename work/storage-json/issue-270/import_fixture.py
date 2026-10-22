@@ -70,7 +70,7 @@ def checkdoc(text,old,oldnames):
     for _,h in marks:
         title=h.split(' ',1)[1]
         anchors[slug(title)]=(title.split(' — ')[0] if re.match(r'^JA-EX-[\w-]+ — ',title) else identity(key+':heading:'+title))
-    # Archive the actual Check claim, without asserting it is the current BD.
+    # Preserve the actual Check claim, without asserting it is the current BD.
     based=dict(documentId=old['id'],revision=old['revision'],sourceClaimRevision='c2852531ad62691c375e87818d8c3a49fd19803f',verification='unverified')
     index=[]
     for i,(start,h) in enumerate(marks):
@@ -120,6 +120,12 @@ def checkdoc(text,old,oldnames):
     return dict(id=docid,kind='checkItems',revision='checks-import-1',title=marks[0][1][2:],basedOn=based,intro=rich(intro,anchors),
                 index=index,sections=sections,guarantees=guarantees,examples=examples,items=items,notes=notes)
 
+def package_for(currentdoc,olddoc,check,texts):
+    return dict(format='alder-typed-storage-poc',formatVersion='0.3-poc',revision='package-import-2',
+        documents=[currentdoc,check],
+        sources=[dict(documentId=d['id'],revision=d['revision'],sha256=digest(t)) for d,t in zip([currentdoc,olddoc,check],texts)],
+        externalDocuments=[dict(id=olddoc['id'],kind='businessDesign',revision=olddoc['revision'],activities=[dict(id=a['id'],name=a['name']) for a in olddoc['activities']])],diagnostics=[])
+
 def main():
     for source in json.loads((HERE/'inputs/manifest.json').read_text()):
         assert hashlib.sha256((HERE/'inputs'/source['path']).read_bytes()).hexdigest()==source['sha256'], 'Frozen source mismatch; no inferred ID reconciliation'
@@ -127,10 +133,10 @@ def main():
     currentdoc,names=bd(current,'bd-current','6e55d98710a1d8757937ea268176929abcf49b2e')
     olddoc,oldnames=bd(old,'bd-check-source','9b4a3cbffe835cfa9c6a8ec7d602d9611a1a0285')
     check=checkdoc(checks,olddoc,oldnames)
-    package=dict(format='alder-typed-storage-poc',formatVersion='0.2-poc',revision='package-import-1',documents=[currentdoc,olddoc,check],
-      archives=[dict(documentId=d['id'],revision=d['revision'],sha256=digest(text),mediaType='text/markdown',text=text) for d,text in [(currentdoc,current),(olddoc,old),(check,checks)]],
+    package=package_for(currentdoc,olddoc,check,[current,old,checks])
+    package.update(
       diagnostics=['Checkの原典主張c2852531と凍結snapshot9b4a3cbの意味対応は未確認。現在の購買草案への適合を示さない。','Medium/SR Dependenciesは草案注記として保持。Graph v1には投影しない。'])
     (HERE/'fixtures/purchase.json').write_text(json.dumps(package,ensure_ascii=False,indent=2)+'\n')
     REGISTRY.write_text(json.dumps(ids,ensure_ascii=False,indent=2)+'\n')
-    (HERE/'results/import.json').write_text(json.dumps(dict(sourcePhase1='a2e841d049fa45a795e99b16ff4a053805474180',counts=[{k:len(d[k]) for k in ('objects','activities','relations','findings','items','guarantees','examples') if k in d} for d in package['documents']],unparsedFields=0,sourceArchives='exact original UTF-8, immutable import evidence; edited display uses typed fields'),ensure_ascii=False,indent=2)+'\n')
+    (HERE/'results/import.json').write_text(json.dumps(dict(sourcePhase1='a2e841d049fa45a795e99b16ff4a053805474180',counts=[{k:len(d[k]) for k in ('objects','activities','relations','findings','items','guarantees','examples') if k in d} for d in package['documents']],unparsedFields=0,sourceStorage='Separate immutable inputs/*.md; package has provenance digests only, no raw MD or old BD payload'),ensure_ascii=False,indent=2)+'\n')
 if __name__=='__main__':main()

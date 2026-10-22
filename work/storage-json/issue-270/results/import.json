@@ -8,17 +8,11 @@
       "findings": 4
     },
     {
-      "objects": 4,
-      "activities": 4,
-      "relations": 11,
-      "findings": 0
-    },
-    {
       "items": 6,
       "guarantees": 4,
       "examples": 4
     }
   ],
   "unparsedFields": 0,
-  "sourceArchives": "exact original UTF-8, immutable import evidence; edited display uses typed fields"
+  "sourceStorage": "Separate immutable inputs/*.md; package has provenance digests only, no raw MD or old BD payload"
 }
