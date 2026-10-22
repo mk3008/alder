@@ -1,0 +1,128 @@
+name: Publish isolated PR 279 JSON beta
+on:
+  push:
+    branches:
+      - beta/pr-279-json-pages
+    paths:
+      - .github/workflows/publish-pr279-json-beta.yml
+permissions:
+  contents: write
+concurrency:
+  group: pr279-json-pages-beta
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'mk3008/alder'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SOURCE_SHA: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+      EXPECTED_JS: 27aade5b04bc61e82fabb509ab747f2d4ba6e840ae03315a4f904a6fb32cd55a
+      EXPECTED_CSS: ae91f8d857ae4a3f3361943b7a3aec240d14349fe97e65ccfe078bd01ce9c7c4
+    steps:
+      - name: Checkout exact reviewed Viewer implementation
+        uses: actions/checkout@v4
+        with:
+          ref: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+          path: source
+          persist-credentials: false
+      - name: Checkout existing Pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages-web-viewer
+          path: pages
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Build approved Gate C source
+        working-directory: source/web-viewer
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Verify unchanged assets and stage beta path only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$(git -C source rev-parse HEAD^{tree})" = df3bede152313f06bee94d209d149f4ed5b5a85f
+          js=(source/web-viewer/dist/assets/*.js)
+          css=(source/web-viewer/dist/assets/*.css)
+          test "${#js[@]}" -eq 1
+          test "${#css[@]}" -eq 1
+          test "$(sha256sum "${js[0]}" | cut -d' ' -f1)" = "$EXPECTED_JS"
+          test "$(sha256sum "${css[0]}" | cut -d' ' -f1)" = "$EXPECTED_CSS"
+          export DEST="pages/preview/pr-279/$SOURCE_SHA"
+          test ! -e "$DEST"
+          mkdir -p "$DEST"
+          cp -a source/web-viewer/dist/. "$DEST/"
+          cp source/work/viewer-json/issue-274/rough/gate-b-example.json "$DEST/gate-b-example.json"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const dest=process.env.DEST,sha=process.env.SOURCE_SHA;
+          const source='https://raw.githubusercontent.com/mk3008/alder/'+sha+'/work/viewer-json/issue-274/rough/gate-b-example.json';
+          const link='./#source='+encodeURIComponent(source);
+          const doc='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alder Viewer JSON Beta</title>'+
+             '<meta http-equiv="refresh" content="0;url='+link+'"><script>location.replace('+JSON.stringify(link)+')</script>'+
+             '<p>検証用JSONをViewerで開きます。<a href="'+link+'">開けない場合はこちら</a></p></html>';
+          fs.writeFileSync(path.join(dest,'open-json.html'),doc);
+          fs.writeFileSync(path.join(dest,'BETA_INFO.txt'),[
+             'Gate C review beta (not a release)',
+             'Viewer source: '+sha,
+             'JSON source: '+source,
+             "Check's confirmed state is synthetic fixture data, not human approval.",
+             ''
+          ].join('\n'));
+          console.log(JSON.stringify({dest,source,link}));
+          JS
+      - name: Smoke test real Chrome JSON deep link
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/viewer-beta-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+          python3 -m http.server 4188 --bind 127.0.0.1 --directory pages > "$RUNNER_TEMP/viewer-beta-http.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 25); do
+            if curl --fail --silent --output /dev/null "http://127.0.0.1:4188/preview/pr-279/$SOURCE_SHA/open-json.html"; then break; fi
+            sleep 1
+          done
+          cat > "$RUNNER_TEMP/check-viewer-beta.mjs" <<'JS'
+          import {createRequire} from 'node:module';
+          import assert from 'node:assert/strict';
+          const chromium=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE).chromium;
+          const expected=process.env.SOURCE_SHA;
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+          const context=await browser.newContext({viewport:{width:1280,height:850}});
+          const page=await context.newPage(),errors=[],rawRequests=[];
+          page.on('pageerror',e=>errors.push(e.message));
+          page.on('request',r=>{if(r.url().includes('raw.githubusercontent.com'))rawRequests.push(r.url());});
+          try{
+            await page.goto('http://127.0.0.1:4188/preview/pr-279/'+expected+'/open-json.html',{waitUntil:'domcontentloaded'});
+            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length>=6,null,{timeout:45000});
+            const n=await page.locator('#nodes > *').count();
+            const title=await page.title();
+            assert.equal(n,6);
+            assert.ok(rawRequests.length>0,'The immutable GitHub raw JSON must be fetched');
+            assert.ok(rawRequests.some(x=>x.includes('/'+expected+'/')),'Loaded source must be commit pinned');
+            assert.deepEqual(errors,[]);
+            console.log(JSON.stringify({passed:true,nodes:n,title,rawRequests,pageErrors:errors,viewerSource:expected}));
+          }finally{
+            await context.close();await browser.close();
+          }
+          JS
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-beta-browser/node_modules/playwright" node "$RUNNER_TEMP/check-viewer-beta.mjs"
+      - name: Publish only beta subdirectory to the existing Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C pages config user.name "github-actions[bot]"
+          git -C pages config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C pages add -- "preview/pr-279/$SOURCE_SHA"
+          git -C pages diff --cached --stat
+          test -n "$(git -C pages diff --cached --name-only)"
+          git -C pages commit -m "Publish isolated PR 279 JSON Viewer beta from $SOURCE_SHA"
+          git -C pages push origin HEAD:gh-pages-web-viewer
+          echo "PAGES_BETA_STAGED_SHA=$(git -C pages rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
