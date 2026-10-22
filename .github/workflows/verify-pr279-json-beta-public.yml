@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     env:
-      PUBLIC_URL: https://mk3008.github.io/alder/preview/pr-279/4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec/open-json.html
-      SOURCE_SHA: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+      PUBLIC_URL: https://mk3008.github.io/alder/preview/pr-279/9ed410b8ec571d25af0cb7f0577dea79b50f43b1/open-json.html
+      SOURCE_SHA: 9ed410b8ec571d25af0cb7f0577dea79b50f43b1
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -47,12 +47,12 @@ jobs:
           page.on('request',r=>requests.push({url:r.url(),method:r.method()}));
           try{
             await page.goto(process.env.PUBLIC_URL,{waitUntil:'domcontentloaded'});
-            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length===6,null,{timeout:45000});
-            assert.equal(await page.locator('#nodes > *').count(),6);
+            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length===25,null,{timeout:45000});
+            assert.equal(await page.locator('#nodes > *').count(),25);
             assert.ok(requests.some(r=>r.url.includes('raw.githubusercontent.com/mk3008/alder/'+process.env.SOURCE_SHA+'/')),'Must fetch fixed JSON from work-branch commit');
             assert.ok(requests.every(r=>r.method==='GET'),'No uploads');
             assert.deepEqual(errors,[]);
-            console.log(JSON.stringify({passed:true,publicUrl:process.env.PUBLIC_URL,title:await page.title(),nodeCount:6,sourceRequests:requests.filter(r=>r.url.includes('raw.githubusercontent.com')),pageErrors:errors}));
+            console.log(JSON.stringify({passed:true,publicUrl:process.env.PUBLIC_URL,title:await page.title(),nodeCount:25,sourceRequests:requests.filter(r=>r.url.includes('raw.githubusercontent.com')),pageErrors:errors}));
           }finally{
             await context.close();
             await browser.close();
