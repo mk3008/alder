@@ -19,6 +19,7 @@ export async function verifyJSONDocuments(browser){
    assert.deepEqual((await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node))).sort(),[...bd.objects,...bd.activities].map(n=>n.id).sort());
    await shot('overview');
    if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
+   await page.locator('#node-category-object').click();await page.locator(`[data-list-node="${bd.objects[0].id}"] .node-navigate`).click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail h1').textContent(),bd.objects[0].name);for(const info of bd.objects[0].information)assert.ok((await page.locator('.json-detail').innerText()).includes(info));await shot('object-detail');await page.locator('#node-list-toggle').click();await page.locator('#node-category-activity').click();
    const activity=bd.activities[0];await page.locator(`[data-list-node="${activity.id}"] .node-navigate`).click();
    await shot('activity-list');if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
@@ -42,5 +43,6 @@ export async function verifyJSONDocuments(browser){
    results.push({width,localFile:true,nodes:6,relations:6,list:true,activityDetail:true,checkStates:checks.items.map(i=>[i.checkId,i.reviewState]),sharedGuaranteeAndExample:true,findings:true,detailTabAndReload:true,nonGETRequests:requests,pageErrors:errors});
   }catch(error){await shot('failure').catch(()=>{});throw error;}finally{await context.close();writeFileSync(`${out}/smoke-results.json`,JSON.stringify({browser:browser.version(),results},null,2));}
  }
- return {browser:browser.version(),results};
+ const mdContext=await browser.newContext({viewport:{width:1280,height:960}}),mdPage=await mdContext.newPage();try{await mdPage.goto('http://127.0.0.1:4173/');await mdPage.waitForFunction(()=>!document.querySelector('#open').disabled);await mdPage.locator('#fallback').setInputFiles({name:'legacy.md',mimeType:'text/markdown',buffer:readFileSync('web/authorities/business-design.md')});await mdPage.locator('.node').first().waitFor();if(await mdPage.locator('#check-followup').isVisible())await mdPage.locator('#check-followup-later').click();await mdPage.locator('#node-list-toggle').click();await mdPage.locator('#node-list .node-navigate').first().click();await mdPage.locator('#node-list-close').click();if(!await mdPage.locator('#formattedMarkdownDrawer').isVisible())await mdPage.locator('#drawer').click();assert.equal(await mdPage.locator('.json-detail').count(),0);assert.ok((await mdPage.locator('#detail').innerText()).includes('Why'));await mdPage.screenshot({path:`${out}/legacy-md-detail-1280.png`});}finally{await mdContext.close();}
+ return {browser:browser.version(),results,legacyMDComparisonScreenshot:true};
 }

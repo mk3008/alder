@@ -1,0 +1,7 @@
+{
+  "baselineSource": "7fb70e4152dc7e1945cb8053bc5210772629982d:web-viewer/src/main.ts",
+  "method": "Run current JSON regression with esbuild main.ts loader overlaid by baseline source; other modules unchanged",
+  "baselineExit": 1,
+  "expected": "baseline must reject assertion that forged display cache is ignored",
+  "stderrTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(!w.document.querySelector('#nodes').textContent.includes('偽の表示名'))\n\n    at file:///workspace/scratch/f69dc469afb3/alder-gate-c/web-viewer/web/json-restore-control.tmp.mjs:47:209\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processTimers (node:internal/timers:568:9) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.19.0\n"
+}

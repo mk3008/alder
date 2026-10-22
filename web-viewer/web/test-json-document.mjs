@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
+import {IDBFactory} from 'fake-indexeddb';
 import {parseDocument,readDesignFile} from '../src/json-document.ts';
 import {parseDesign,validateGraph} from '../src/graph.ts';
 import {reconcile} from '../src/session.ts';
@@ -36,3 +37,10 @@ const open=async label=>{const detail=[...panel.querySelectorAll('details')].fin
 await open('CI-001の一般保証');assert.equal(panel.querySelectorAll('table').length,1);assert.match(panel.textContent,/必須不足/);
 await open('文書メモを読む');await open('循環Bを読む');await open('循環Aを読む');assert.match(panel.textContent,/循環参照/);assert.ok(panel.querySelectorAll('*').length<500);
 dom.window.close();console.log('JSON projection, Graph/MD compatibility, ID/revision reconciliation, strict rejection, unassigned checks, inert content and lazy cyclic references passed');
+
+// Actual app restoration must publish the recomputed design into DocumentState.
+const app=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}}),w=new JSDOM('<div id="app"></div>',{url:'https://json-viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
+w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.scrollIntoView=()=>{};
+const cached=structuredClone(parsed);cached.graph.nodes[0].name='偽の表示名';cached.json.checks[0].items[0].reviewState='AI承認';delete cached.sourceFormat;
+await new Promise((resolve,reject)=>{const request=w.indexedDB.open('alder-web-viewer',1);request.onupgradeneeded=()=>request.result.createObjectStore('session');request.onsuccess=()=>{const db=request.result,tx=db.transaction('session','readwrite'),store=tx.objectStore('session');store.put({format:3,document:{key:'json-restore',name:'JSON',design:cached},views:[{key:'json-restore',selected:bd.activities[0].id,positions:{},scroll:[0,0],zoom:1}],recovery:[],active:'json-restore',dark:false,drawer:true,width:380},'current');store.put(1,'generation');tx.oncomplete=()=>{db.close();resolve();};tx.onabort=()=>reject(tx.error);};});
+try{w.eval(app.outputFiles[0].text);for(let i=0;i<200&&w.document.getElementById('open').disabled;i++)await new Promise(r=>setTimeout(r,10));assert.equal(w.document.querySelectorAll('.node').length,6);assert.ok(!w.document.querySelector('#nodes').textContent.includes('偽の表示名'));assert.ok(w.document.querySelector('.json-detail'));w.document.getElementById('detail-mode-checks').click();assert.ok(!w.document.querySelector('.json-checks').textContent.includes('AI承認'));console.log('JSON native app restoration rejects tampered derived cache and missing format tag');}finally{w.close();}
