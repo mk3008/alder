@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
-      SOURCE_SHA: d38b5aead0e5a9351f97dbaf47d03c99e7a90ace
-      EXPECTED_JS: e24d52181385db89eaf3152e905abbb22edaac8b756b8f0ed4cbe33777b0cf34
+      SOURCE_SHA: b954c9a1cadabd32d5fe5929ad873e19f92efcda
+      EXPECTED_JS: abc81a4d87fbc5fc39040cde4261a78cb5564e851528bbe3fdc56217e403817b
       EXPECTED_CSS: 8c29e73d62dde9a176e79a372fb06a10424e3bdc9da29e5f9d7aa1c286025223
     steps:
       - name: Checkout exact reviewed Viewer implementation
         uses: actions/checkout@v4
         with:
-          ref: d38b5aead0e5a9351f97dbaf47d03c99e7a90ace
+          ref: b954c9a1cadabd32d5fe5929ad873e19f92efcda
           path: source
           persist-credentials: false
       - name: Checkout existing Pages branch
@@ -46,7 +46,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
-          test "$(git -C source rev-parse HEAD^{tree})" = 682ee196ab45535c4e644f45d5ea526cfa6343cb
+          test "$(git -C source rev-parse HEAD^{tree})" = 3509fbb85a42a2d568a4526ae0f97e087ad352c8
           js=(source/web-viewer/dist/assets/*.js)
           css=(source/web-viewer/dist/assets/*.css)
           test "${#js[@]}" -eq 1
