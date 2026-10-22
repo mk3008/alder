@@ -1,0 +1,149 @@
+name: Publish isolated PR 284 Viewer review preview
+on:
+  push:
+    branches:
+      - beta/pr-284-overview-pages
+    paths:
+      - .github/workflows/publish-pr284-overview-preview.yml
+permissions:
+  contents: write
+concurrency:
+  group: pr284-overview-preview
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: github.repository == 'mk3008/alder'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SOURCE_SHA: 1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d
+      SOURCE_CI: "39871472923"
+    steps:
+      - name: Require successful CI for the exact PR 284 head
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 2 --max-time 20 "https://api.github.com/repos/mk3008/alder/actions/runs/$SOURCE_CI" -o "$RUNNER_TEMP/source-run.json"
+          test "$(jq -r .head_sha "$RUNNER_TEMP/source-run.json")" = "$SOURCE_SHA"
+          test "$(jq -r .conclusion "$RUNNER_TEMP/source-run.json")" = "success"
+          test "$(jq -r '.pull_requests[0].number' "$RUNNER_TEMP/source-run.json")" = "284"
+      - name: Checkout reviewed Viewer source only
+        uses: actions/checkout@v4
+        with:
+          ref: 1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d
+          path: source
+          persist-credentials: false
+      - name: Checkout existing public Pages assets
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages-web-viewer
+          path: pages
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Build exactly the reviewed Viewer
+        working-directory: source/web-viewer
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Stage only the new commit-fixed preview directory
+        run: |
+          set -euo pipefail
+          test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
+          DEST="pages/preview/pr-284/$SOURCE_SHA"
+          test ! -e "$DEST"
+          mkdir -p "$DEST"
+          cp -a source/web-viewer/dist/. "$DEST/"
+          cp source/work/json-roles/issue-280/purchase.roles.json "$DEST/purchase.roles.json"
+          cp source/work/json-roles/issue-280/same-business.roles.json "$DEST/same-business.roles.json"
+          cp source/work/json-roles/issue-280/gate-b.roles.json "$DEST/gate-b.roles.json"
+          cp source/work/viewer-json/issue-274/layout-regression/same-business.md "$DEST/same-business.md"
+          export DEST
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          const dest=process.env.DEST,sha=process.env.SOURCE_SHA;
+          const base='https://raw.githubusercontent.com/mk3008/alder/'+sha+'/';
+          const sources={
+            purchase:'work/json-roles/issue-280/purchase.roles.json',
+            states:'work/json-roles/issue-280/purchase.roles.json',
+            json:'work/json-roles/issue-280/same-business.roles.json',
+            md:'work/viewer-json/issue-274/layout-regression/same-business.md',
+            checks:'work/json-roles/issue-280/gate-b.roles.json'
+          };
+          for(const [name,source] of Object.entries(sources)){
+            const link='./#source='+encodeURIComponent(base+source);
+            const html='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alder Viewer review '+name+'</title><meta http-equiv="refresh" content="0;url='+link+'"><script>location.replace('+JSON.stringify(link)+')</script><p><a href="'+link+'">Viewerを開く</a></p></html>';
+            fs.writeFileSync(path.join(dest,'open-'+name+'.html'),html);
+          }
+          const files=['index.html',...fs.readdirSync(path.join(dest,'assets')).map(n=>'assets/'+n)];
+          const sha256=file=>createHash('sha256').update(fs.readFileSync(path.join(dest,file))).digest('hex');
+          fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 284',source:sha,kind:'isolated non-release Viewer preview',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
+          JS
+      - name: Chrome smoke on staged purchase and MD/JSON links
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/pr284-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+          mkdir -p preview-evidence
+          python3 -m http.server 4188 --bind 127.0.0.1 --directory pages > "$RUNNER_TEMP/pr284-preview.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 25); do
+            if curl --fail --silent --output /dev/null "http://127.0.0.1:4188/preview/pr-284/$SOURCE_SHA/index.html"; then break; fi
+            sleep 1
+          done
+          cat > "$RUNNER_TEMP/pr284-smoke.mjs" <<'JS'
+          import assert from 'node:assert/strict';
+          import {createRequire} from 'node:module';
+          const chromium=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE).chromium;
+          const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+          const base='http://127.0.0.1:4188/preview/pr-284/'+process.env.SOURCE_SHA+'/';
+          const cases=[['purchase',393,12,23],['purchase',1280,12,23],['json',393,25,63],['md',393,25,63]];
+          const results=[];
+          try{
+            for(const [kind,width,nodes,edges] of cases){
+              const context=await browser.newContext({viewport:{width,height:960}});
+              const page=await context.newPage(),errors=[],requests=[];
+              page.on('pageerror',e=>errors.push(e.message));
+              page.on('request',r=>requests.push({method:r.method(),url:r.url()}));
+              try{
+                await page.goto(base+'open-'+kind+'.html',{waitUntil:'domcontentloaded'});
+                await page.waitForFunction(count=>document.querySelectorAll('.node').length===count,nodes,{timeout:45000});
+                const count=await page.locator('.edge').count();
+                assert.equal(count,edges,kind+' relation paths');
+                if(kind==='purchase'){
+                  const labels=await page.locator('.edge-label').evaluateAll(ns=>ns.map(n=>({text:n.textContent,members:n.dataset.relations.split(' ').length})));
+                  assert.deepEqual(labels.filter(x=>x.text==='認証済み作業者の識別情報').map(x=>x.members),[5]);
+                  assert.deepEqual(labels.filter(x=>x.text==='従業員の識別情報 / 役職 / 役職ごとの決裁単位の上限額').map(x=>x.members),[2]);
+                }
+                assert.deepEqual(errors,[]);
+                assert.ok(requests.every(x=>x.method==='GET'));
+                assert.ok(requests.some(x=>x.url.includes('/'+process.env.SOURCE_SHA+'/')),'source commit fixed');
+                await page.screenshot({path:'preview-evidence/'+kind+'-'+width+'.png'});
+                results.push({kind,width,nodes,edges,pageErrors:errors,requests:requests.length});
+              }finally{await context.close();}
+            }
+            console.log(JSON.stringify({previewSmoke:'passed',source:process.env.SOURCE_SHA,results}));
+          }finally{await browser.close();}
+          JS
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/pr284-browser/node_modules/playwright" node "$RUNNER_TEMP/pr284-smoke.mjs"
+      - name: Preserve preview smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr284-overview-preview-smoke
+          path: preview-evidence/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Publish only isolated preview path
+        run: |
+          set -euo pipefail
+          git -C pages config user.name "github-actions[bot]"
+          git -C pages config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C pages add -- "preview/pr-284/$SOURCE_SHA"
+          test -n "$(git -C pages diff --cached --name-only)"
+          git -C pages commit -m "Publish isolated PR 284 Viewer review preview from $SOURCE_SHA"
+          git -C pages push origin HEAD:gh-pages-web-viewer
+          echo "Preview: https://mk3008.github.io/alder/preview/pr-284/$SOURCE_SHA/open-purchase.html" >> "$GITHUB_STEP_SUMMARY"
