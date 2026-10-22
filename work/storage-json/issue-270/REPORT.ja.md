@@ -1,5 +1,18 @@
 # 整形済み単一JSON Phase 2
 
+## 追補：実Chromeによるブラウザー検証（2026-10-22）
+
+本人の個別承認を受け、製品Viewerと公開配信を変更せず、PR #271へPoC専用の[`browser-ci.mjs`](browser-ci.mjs)と[`GitHub Actions workflow`](../../../.github/workflows/alder-storage-json-poc-browser.yml)を追加した。承認された別の正式実行経路であり、前回Cloud Chromeで明示拒否された`file:`操作を再試行・迂回していない。
+
+- [実Chromeの成功CI #39698116906](https://github.com/mk3008/alder/actions/runs/39698116906)、検証コードのhead `cab35f4faa825e23e79d50cd2d88dcd9fcdb663f`。Ubuntu 24.04 runner、Chrome `155.0.8059.39`、**ブラウザー13検査すべて成功**。生成・型付き検査46件と既存Graph回帰52件もCIで再確認した。
+- [CIのJSON結果と画面証拠](https://github.com/mk3008/alder/actions/runs/39698116906/artifacts/12391159903)を取得して内容を読戻し確認した。結果は `status: passed`、13/13、`pageErrors: []`。ネットワーク記録19件はいずれもGETで、ローカルFile読込にアップロードを伴わなかった。
+- **4,960,149 bytes（約4.96MB）の単一JSON**を、実ブラウザーのローカルFileとloopback HTTP URLから読込成功。ローカルFileは現行のURL用2MiB条件をONにしても読み込める。2MiB制限を再現したURL/テキストは表示保持のまま拒否できた。PoCの16MiB予算を超える17MiBファイルも旧表示を保持して拒否できた。
+- 別ポートのループバックHTTPで実CORS許可/拒否を確認。IndexedDBへの大容量保存→ブラウザーページ再読込→復元、JSONダウンロード内容のID一致、未知版・ID重複・Check参照版不一致・不正JSONの表示保持、通信中止、旧BD/Check Markdown parserの継続動作を実Chromeで確認。
+- IndexedDBからの4.96MB復元時のブラウザーログの1例：JSON解析約42.8ms、型/参照検査約46.2ms、限定描画後の2回のrequestAnimationFrameまで約156.6ms。これは**このCI runner上のPoC限定値**であり、製品Viewerの全体図表示時間、メモリピーク、低性能実機での速度を意味しない。
+- 実ブラウザーの確認範囲は**100件までの一覧と5要素までの見本SVG**であり、1,000 Activity全体のGraph配置・配線・スクロール性能は未検証。外部HTTPS/CORS、認証付きURL、Android/iOS実機、低メモリ端末、OSネイティブFile pickerの権限/再起動時挙動も未検証。既存製品の2MiB上限は変更していない。
+
+以下の元報告に記載した「ブラウザー未実行」「INCONCLUSIVE/BLOCKED」は、**Phase 2初回Work返却時点の停止記録**としてそのまま保存する。今回は独立した承認済みGitHub Actionsで一部未達を解消したが、Nodeで代用したわけでも、正式JSON採用を承認したわけでもない。
+
 ## 結論と実施範囲
 
 型付き単一JSONで、業務本文を独立フィールドへ分け、永続ID・文書版・Check/Findingsの参照を検査する小規模PoCは成立した。旧MDを読める既存parserとBusiness Graph v1は変更していない。Codexによる固定編集は初回のpatch適用失敗を保存し、明示した再試行後の6件で指定外の変更がないことを確認した。
