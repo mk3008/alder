@@ -43,7 +43,7 @@ Phase 1 PR #269の固定headは`a2e841d049fa45a795e99b16ff4a053805474180`。原�
 - [PoC 54試験](results/tests.txt)成功。既存46試験を新構造へ対応させ、8件の拒否・外部参照検査を追加した。
 - [既存Graph 52試験](results/graph-regression.txt)成功。現在BDの互換MD投影とGraph v1が一致し、別保存した旧MDが未変更の製品parserで読める。
 - [変更前後の照合](results/archive-removal.json)で現在BD・Check本文、basedOn、原典ハッシュの保持を確認した。
-- 修正版のブラウザーCIはPR更新後に実行し、そのrunとartifactをIssue #270へ記録する。旧版の成功を新構造の成功として扱わない。
+- 修正版の[実Chrome CI #39705190399](https://github.com/mk3008/alder/actions/runs/39705190399)（検証head `c764e4bff16e4393db76e0773c0cd9ed0fdf03f4`）で13/13ケース成功。同じCIでPoC 54件・Graph 52件も成功した。[artifact](https://github.com/mk3008/alder/actions/runs/39705190399/artifacts/12394636422)を取得し、SHA-256とJSON内容を読戻し確認した。生の結果は[results/browser-0.3-ci.json](results/browser-0.3-ci.json)へ永続保存した。旧版の成功を新構造の成功として扱っていない。
 
 ### Node測定
 
@@ -65,7 +65,11 @@ Phase 1 PR #269の固定headは`a2e841d049fa45a795e99b16ff4a053805474180`。原�
 
 前回の承認済み[Chrome CI #39698727051](https://github.com/mk3008/alder/actions/runs/39698727051)では旧0.2構造の13/13ケースが成功した。[前回artifact](https://github.com/mk3008/alder/actions/runs/39698727051/artifacts/12392470083)。初回のCloud Chrome file:拒否等は`results/browser.json`に当時の停止証拠として残す。拒否された経路は再試行せず、今回は既に承認された独立GitHub Actions HTTP環境を使う。
 
-修正版でも同じ13ケースを使い、File/URL/2MiB超、現行制限の再現、CORS、IndexedDB保存→reload→復元、download、未知版・破損の表示保持、中止、旧MD/Check parserを検査する。downloadはIDだけでなく元JSON全体の一致、archive不存在、2業務文書と外部目録のみであることも確認する。
+修正版はUbuntu runner / Chrome 155.0.8059.39で同じ13ケースを使い、File/URL/2MiB超、現行制限の再現、CORS、IndexedDB保存→reload→復元、download、未知版・破損の表示保持、中止、旧MD/Check parserを検査した。downloadはIDだけでなく元JSON全体の一致、archive不存在、2業務文書と外部目録のみであることも確認した。JSON結果は`passed`、pageErrorsは0、記録した19件のHTTP通信はすべてGETだった。
+
+4,889,327 bytesのIndexedDB復元で、読込22.4ms・JSON解析31.8ms・検査37.7ms・Graph投影12.4ms、worker開始から限定表示の2フレーム後まで128.9msという一測定を記録した。download準備23.7ms。繰り返し統計や旧版との速度優位を示す値ではない。
+
+画面証拠も取得したが、CI runnerの日本語フォント不足で日本語字形が□表示になった。DOMの日本語値と構造は検査しているが、日本語の視覚的な可読性は確認できていない。artifactは14日保存のため、生JSONをRepositoryにも保存した。
 
 描画は一覧100件・SVG5要素に限定している。本番Viewerの1,000 Activity全体の配置・配線、メモリピーク、実Android/iOS、低メモリ端末、外部HTTPS・認証URL、OSネイティブFile pickerの権限挙動は未検証。
 

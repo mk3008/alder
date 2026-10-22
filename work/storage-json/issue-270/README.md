@@ -2,7 +2,7 @@
 
 Activity・Object・関係・Findings・Checkの保証と比較表を明示フィールドにした独立試案です。IDを保持した改名・並び替え・更新、参照と文書版の検査、旧MD／Graph v1への投影を確認できます。
 
-**旧MD全文と旧BD本文を同梱しない0.3試案です。** 原典MDは別ファイル、JSONは型付き業務情報と参照目録・ハッシュを保持します。旧0.2構造の実Chrome 13ケースは成功済みで、修正版の実行結果はIssue #270に記録します。 Node計測をブラウザー性能と読み替えないでください。形式の正式採用・製品Viewer変更・merge・release・デプロイは行っていません。
+**旧MD全文と旧BD本文を同梱しない0.3試案です。** 原典MDは別ファイル、JSONは型付き業務情報と参照目録・ハッシュを保持します。修正版の実Chrome CIでも13/13ケース、PoC 54件・Graph 52件が成功しました。 Node計測をブラウザー性能と読み替えないでください。形式の正式採用・製品Viewer変更・merge・release・デプロイは行っていません。
 
 - [日本語報告](REPORT.ja.md)
 - [型付きJSON](fixtures/purchase.json) / [JSON Schema試案](schema.json)
@@ -43,6 +43,6 @@ python -m http.server 8765 --bind 127.0.0.1
 3. 許可されたHTTP(S)配信元のJSONをURLから読みます。CORS許可が必要です。製品URL readerはHTTPSのみですが、ハーネスは開発用loopback HTTPも受け付ける設計です。
 4. 「現行の2MiB条件を再現」のON/OFF、未知版等の表示保持検査、中止、予算超過ファイルを試し、「検証記録を保存」で実測を残します。
 
-ローカルFileはブラウザー内で処理し、コードにアップロード処理はありません。URLは匿名GET、保存は専用IndexedDBまたはローカルダウンロードという設計です。修正版もPoC専用GitHub Actions内の実Chromeで同じ13ケースを検査します。結果はIssue #270から参照できます。
+ローカルFileはブラウザー内で処理し、コードにアップロード処理はありません。URLは匿名GET、保存は専用IndexedDBまたはローカルダウンロードという設計です。修正版はPoC専用GitHub Actions内の実Chromeで同じ13ケースを検査済みです。[結果](results/browser-0.3-ci.json)とIssue #270を参照してください。スクリーンショットはrunnerの日本語フォント不足があり、日本語字形の見た目は未確認です。
 
 PoCに置いた16MiB・5,000 Activity/Object・5秒の予算は検査用の仮値です。本番推奨値ではありません。現行Viewerの上限は変更していません。

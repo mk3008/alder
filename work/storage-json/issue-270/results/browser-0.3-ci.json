@@ -1,0 +1,242 @@
+{
+  "status": "passed",
+  "head": "c764e4bff16e4393db76e0773c0cd9ed0fdf03f4",
+  "browser": "155.0.8059.39",
+  "origin": "http://127.0.0.1:8765",
+  "cases": [
+    {
+      "name": "embedded sample and typed BD/Check views",
+      "result": "passed",
+      "durationMs": 151
+    },
+    {
+      "name": "over-2-MiB local File, no upload, bounded rendering",
+      "result": "passed",
+      "durationMs": 210
+    },
+    {
+      "name": "local File remains available with URL 2 MiB simulation enabled",
+      "result": "passed",
+      "durationMs": 212
+    },
+    {
+      "name": "local 17 MiB file exceeds PoC budget; last display survives",
+      "result": "passed",
+      "durationMs": 12
+    },
+    {
+      "name": "over-2-MiB URL load without legacy 2 MiB limit",
+      "result": "passed",
+      "durationMs": 293
+    },
+    {
+      "name": "URL legacy 2 MiB limit refuses and preserves display",
+      "result": "passed",
+      "durationMs": 146
+    },
+    {
+      "name": "real browser cross-origin CORS allow/deny",
+      "result": "passed",
+      "durationMs": 162
+    },
+    {
+      "name": "pasted text above 2 MiB legacy cap is refused",
+      "result": "passed",
+      "durationMs": 417
+    },
+    {
+      "name": "IndexedDB saves large file and restores after reload",
+      "result": "passed",
+      "durationMs": 550
+    },
+    {
+      "name": "download preserves typed ID and document membership",
+      "result": "passed",
+      "durationMs": 150
+    },
+    {
+      "name": "bad version, duplicate ID, stale Check and malformed JSON keep drawing",
+      "result": "passed",
+      "durationMs": 400
+    },
+    {
+      "name": "in-flight URL cancellation retains last display",
+      "result": "passed",
+      "durationMs": 321
+    },
+    {
+      "name": "old BD and Check Markdown parser remain operational",
+      "result": "passed",
+      "durationMs": 117
+    }
+  ],
+  "pageErrors": [],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/work/storage-json/issue-270/index.html"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/733f4592-5be4-4635-9839-a049feb4ce41"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/0639e487-9678-467b-918d-7a87e57e0023"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/6fae2d31-c11a-449f-8893-29ffc1cab1ba"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/work/storage-json/issue-270/.generated/activities-1000.json"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/e7ad4f7e-96d3-4f17-aa0e-f0b41a53e59e"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/work/storage-json/issue-270/.generated/activities-1000.json"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:45509/allowed.json"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/edfd9a4d-4b44-4781-8f56-dab879b52f79"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:45509/denied.json"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/02041ea9-2724-4ba0-b35c-3908abb97f53"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/work/storage-json/issue-270/index.html"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/bed8534a-1b37-4171-bcf9-525f1f9fd0a7"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/8e95da11-6849-4ae4-8d77-552e1d531d25"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/d043ec2a-9bd0-4be3-bf9a-b7f03305b07d"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/1cec4cd6-93d9-46c2-abfc-a4f370afb9e6"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/ef48a26b-5858-4ed6-abd4-7a9467f45bb4"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:45509/slow.json"
+    },
+    {
+      "method": "GET",
+      "url": "blob:http://127.0.0.1:8765/3890cd36-b8b7-41b2-9e33-7b0a6b914c91"
+    }
+  ],
+  "measurements": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "origin": "http://127.0.0.1:8765",
+    "metrics": [
+      {
+        "type": "load",
+        "route": "restore",
+        "bytes": 4889327,
+        "readMs": 22.39999999999418,
+        "parseMs": 31.79999999998836,
+        "validationMs": 37.70000000001164,
+        "projectionMs": 12.39999999999418,
+        "nodes": 1007,
+        "workerRoundtripMs": 101.89999999999418,
+        "renderMs": 0.39999999999417923,
+        "untilPaintMs": 128.89999999999418
+      },
+      {
+        "type": "download",
+        "bytes": 4889327,
+        "prepareMs": 23.699999999982538
+      },
+      {
+        "type": "failure-tests",
+        "cases": [
+          {
+            "name": "unknownVersion",
+            "rejected": true,
+            "displayPreserved": true
+          },
+          {
+            "name": "duplicateID",
+            "rejected": true,
+            "displayPreserved": true
+          },
+          {
+            "name": "staleCheck",
+            "rejected": true,
+            "displayPreserved": true
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "message": "JSON object key required"
+      },
+      {
+        "type": "url-request"
+      },
+      {
+        "type": "cancel"
+      },
+      {
+        "type": "legacy-file",
+        "bytes": 7609,
+        "nodes": 8,
+        "totalMs": 3.6000000000058208
+      },
+      {
+        "type": "load",
+        "route": "text",
+        "bytes": 82613,
+        "readMs": 0,
+        "parseMs": 2.3999999999941792,
+        "validationMs": 3.400000000023283,
+        "projectionMs": 0.6999999999825377,
+        "nodes": 12,
+        "workerRoundtripMs": 21.400000000023283,
+        "renderMs": 0.39999999999417923,
+        "untilPaintMs": 47.10000000000582
+      }
+    ],
+    "traffic": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:45509/slow.json",
+        "bodyBytes": 0,
+        "credentials": "omit"
+      }
+    ]
+  },
+  "limitations": [
+    "Standalone PoC bounds list to 100 and graph to five nodes; not production Viewer performance",
+    "Headless Linux Chrome only; no real Android/iOS or low-memory hardware",
+    "Loopback HTTP/CORS, not external HTTPS or authenticated URLs"
+  ],
+  "heapSnapshot": {
+    "usedJSHeapSize": 73945063,
+    "totalJSHeapSize": 82739787
+  }
+}

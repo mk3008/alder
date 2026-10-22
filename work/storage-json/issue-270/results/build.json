@@ -1,7 +1,10 @@
 {
-  "inlineHTMLScriptSyntax": "passed in Node vm; browser DOM not executed",
-  "htmlBytes": 259280,
-  "htmlSha256": "3ef8ec5a926cf22756614543f45be963342cfbc11cf868b4e432fe489adbbaa6",
+  "formatVersion": "0.3-poc",
+  "inlineHTMLScriptSyntax": "passed in Node vm",
+  "htmlBytes": 190749,
+  "htmlSha256": "9c22dc3b4cea2b507f39e878a3f29b2fe7ab78cab3e87ecaf8de3b72717ac7fe",
   "nodeMeasuredSourceHashesMatch": true,
-  "browserExecuted": false
+  "browserExecuted": true,
+  "browserEvidenceHead": "c764e4bff16e4393db76e0773c0cd9ed0fdf03f4",
+  "browserRun": 39705190399
 }
