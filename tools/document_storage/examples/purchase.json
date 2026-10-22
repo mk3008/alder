@@ -1,0 +1,1261 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.1",
+  "revision": "package-import-1",
+  "documents": [
+    {
+      "id": "purchase-bd",
+      "schemaVersion": "0.1",
+      "kind": "businessDesign",
+      "revision": "c2852531ad62691c375e87818d8c3a49fd19803f",
+      "title": "備品購入申請 — 業務設計",
+      "preface": "社内で使用する備品の購入申請から購入完了までに必要となる業務を記述する。\n\n業務上の意味・前提・入力・手順・結果を記述し、画面部品、API、クラス、モジュール、データアクセス方法などの実装方式は規定しない。\n\n## 業務上のロール\n\n- **申請者** — 業務に必要な備品の購入を申請する。\n- **承認者** — 申請内容を確認し、購入を承認または却下する。\n- **購買担当者** — 承認済みの申請に基づいて購入を行い、購入結果を登録する。\n\nロールは業務上の責任と権限を表す。\n\n## 購入申請の扱い\n\n購入申請は、申請者が業務上必要とする備品の購入要求を、承認および購買の対象として扱うための記録である。\n\n購入申請は、後述のObject 購入申請のInformationに挙げる情報を少なくとも持つ。\n\n購入申請は一意に識別できるものとする。識別子の採番・入力方法はこの業務設計では規定しない。\n\n## 業務相関\n\n現在定義している主な業務相関は次のとおりである。\n\n1. 備品購入を申請すると、`submitted` の購入申請が成立する。\n2. `submitted` の購入申請を承認すると、`approved` になる。\n3. `submitted` の購入申請を却下すると、`rejected` になる。\n4. `approved` の購入申請に基づいて購入すると、`purchased` になる。\n5. `rejected` の購入申請は購買対象にならない。\n\n## 現在の業務設計で未決定の事項\n\n次の事項は現在の業務設計では定めない。\n\n- 申請金額によって承認者や承認段階が変わる場合の扱い\n- 在庫確認、発注、納品、検収、支払に関する業務\n- 購入先の選定方法\n- 購入後の備品管理、資産管理、廃棄\n- 外部システムとの連携\n- 監査履歴や通知に関する業務\n\nこれらは、現在の業務設計を実装するために決定済みであるとはみなさない。",
+      "scope": "社内の備品購入について、申請・承認・却下・購入と購入結果の登録を扱う。購入申請はこの業務で成立・更新する記録である。申請者・承認者・購買担当者のObjectは、各業務で情報を入力・選択する人を表し、人自体を成立・管理する業務は扱わない。前述の未決定事項は今回の対象に含めない。",
+      "objects": [
+        {
+          "id": "4fd54d3d-a2ab-5d4c-8ffe-048529ea6cf8",
+          "name": "申請者",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            "品名",
+            "数量",
+            "希望購入金額",
+            "購入理由"
+          ]
+        },
+        {
+          "id": "bdc69282-236e-51ba-be62-eb24592bd847",
+          "name": "承認者",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            "承認する対象購入申請",
+            "却下する対象購入申請",
+            "却下理由"
+          ]
+        },
+        {
+          "id": "39ae82be-5c21-5587-a446-aed3a373a497",
+          "name": "購買担当者",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            "購入した対象購入申請",
+            "実購入金額"
+          ]
+        },
+        {
+          "id": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "name": "購入申請",
+          "scope": true,
+          "icon": "file-text",
+          "information": [
+            "申請者",
+            "品名",
+            "数量",
+            "希望購入金額",
+            "購入理由",
+            "申請日時",
+            "状態: `submitted` / `approved` / `rejected` / `purchased`",
+            "承認日時",
+            "却下日時",
+            "却下理由",
+            "購入日時",
+            "実購入金額"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "name": "備品購入を申請する",
+          "scope": true,
+          "why": "購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にするため。",
+          "when": "申請者が、業務上必要な備品を購入したいと判断したとき。",
+          "who": "申請者",
+          "where": "規定なし。",
+          "procedure": "業務に必要な備品の購入要求を、購入申請として登録する。\n\n1. 申請者が購入したい備品と購入理由を入力する。\n2. 希望する数量と購入金額を入力する。\n3. 新しい購入申請として登録する。\n4. 登録した申請を `submitted` として扱う。",
+          "exception": null,
+          "result": "- 購入要求が `submitted` の購入申請として記録される。\n- 申請者、品名、数量、希望購入金額、購入理由、申請日時が保持される。\n- 承認者が購入可否を判断できる状態になる。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "name": "購入申請を承認する",
+          "scope": true,
+          "why": "申請内容が妥当であることを確認し、購買担当者が購入を進められる状態にするため。",
+          "when": "`submitted` の購入申請について、承認者が購入してよいと判断したとき。",
+          "who": "承認者",
+          "where": "規定なし。",
+          "procedure": "提出された購入申請について、購入を承認する。\n\n1. 承認者が `submitted` の購入申請を確認する。\n2. 購入してよいと判断した申請を選択する。\n3. 対象の購入申請を `approved` とする。\n4. 承認日時を記録する。",
+          "exception": null,
+          "result": "- 対象購入申請が `approved` になる。\n- 承認日時が記録される。\n- 購買担当者が購入対象として扱える状態になる。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "name": "購入申請を却下する",
+          "scope": true,
+          "why": "購入を認めないと判断した申請について、購買対象から外すため。",
+          "when": "`submitted` の購入申請について、承認者が購入を認めないと判断したとき。",
+          "who": "承認者",
+          "where": "規定なし。",
+          "procedure": "提出された購入申請について、購入しないことを確定する。\n\n1. 承認者が `submitted` の購入申請を確認する。\n2. 購入を認めないと判断した申請を選択する。\n3. 却下理由を記録する。\n4. 対象の購入申請を `rejected` とする。\n5. 却下日時を記録する。",
+          "exception": null,
+          "result": "- 対象購入申請が `rejected` になる。\n- 却下理由と却下日時が記録される。\n- 購買担当者の購入対象にはならない。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "7af7a395-4588-5600-9753-bef78c9258da",
+          "name": "承認済み備品を購入する",
+          "scope": true,
+          "why": "承認された購入要求を実際の購入として完了させ、購入済みであることを記録するため。",
+          "when": "`approved` の購入申請について、購買担当者が対象備品を購入するとき。",
+          "who": "購買担当者",
+          "where": "規定なし。",
+          "procedure": "承認済みの購入申請に基づいて備品を購入し、その結果を登録する。\n\n1. 購買担当者が `approved` の購入申請を確認する。\n2. 対象備品を購入する。\n3. 実購入金額を記録する。\n4. 対象購入申請を `purchased` とする。\n5. 購入日時を記録する。",
+          "exception": null,
+          "result": "- 対象購入申請が `purchased` になる。\n- 実購入金額と購入日時が記録される。\n- 対象申請が購入済みとして扱える状態になる。",
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "0529c177-71e8-5f4b-bf69-766cef0f5f36",
+          "kind": "input",
+          "fromId": "bdc69282-236e-51ba-be62-eb24592bd847",
+          "toId": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "label": "却下する対象購入申請の選択 / 却下理由（すべて必須）"
+        },
+        {
+          "id": "d6f8a1e8-5068-5d31-b525-ce9a90c34f5c",
+          "kind": "input",
+          "fromId": "bdc69282-236e-51ba-be62-eb24592bd847",
+          "toId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "label": "承認する対象購入申請の選択（必須）"
+        },
+        {
+          "id": "917cbcd9-6605-5a7b-bdbf-de1633578576",
+          "kind": "input",
+          "fromId": "4fd54d3d-a2ab-5d4c-8ffe-048529ea6cf8",
+          "toId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "label": "品名 / 数量 / 希望購入金額 / 購入理由（すべて必須）"
+        },
+        {
+          "id": "bae6a896-a783-52a7-8caf-7b407d3fad2c",
+          "kind": "input",
+          "fromId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "toId": "7af7a395-4588-5600-9753-bef78c9258da",
+          "label": "対象購入申請の内容と `approved` の状態"
+        },
+        {
+          "id": "222d1b4b-d016-5ab6-9e88-4e003d6837d1",
+          "kind": "input",
+          "fromId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "toId": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "label": "対象購入申請の内容と `submitted` の状態"
+        },
+        {
+          "id": "0ad11cf2-ee92-50a2-b046-74173910ea9a",
+          "kind": "input",
+          "fromId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "toId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "label": "対象購入申請の内容と `submitted` の状態"
+        },
+        {
+          "id": "fa563b57-3240-57ba-b3ea-a3cd19d10199",
+          "kind": "input",
+          "fromId": "39ae82be-5c21-5587-a446-aed3a373a497",
+          "toId": "7af7a395-4588-5600-9753-bef78c9258da",
+          "label": "購入した対象購入申請の選択 / 実購入金額（すべて必須）"
+        },
+        {
+          "id": "5da1d6a2-ea48-5262-9ad1-b5422235abab",
+          "kind": "output",
+          "fromId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "toId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "label": "申請者 / 品名 / 数量 / 希望購入金額 / 購入理由 / 申請日時 / `submitted` の状態"
+        },
+        {
+          "id": "71ca47a3-7b1d-5363-8fc9-9534edb07aeb",
+          "kind": "output",
+          "fromId": "7af7a395-4588-5600-9753-bef78c9258da",
+          "toId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "label": "`purchased` の状態 / 実購入金額 / 購入日時"
+        },
+        {
+          "id": "17f7a13a-b041-5fe9-a250-4da0c5881d4a",
+          "kind": "output",
+          "fromId": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "toId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "label": "`rejected` の状態 / 却下理由 / 却下日時"
+        },
+        {
+          "id": "17161b57-9eae-531b-ab0d-9a8973ee1238",
+          "kind": "output",
+          "fromId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "toId": "65c10539-528d-5569-a3a1-5fe721ba1970",
+          "label": "`approved` の状態 / 承認日時"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "purchase-checks",
+      "schemaVersion": "0.1",
+      "kind": "checkItems",
+      "revision": "plugin-0_4_8-specimen",
+      "title": "備品購入申請のチェック項目",
+      "basedOn": {
+        "documentId": "purchase-bd",
+        "revision": "c2852531ad62691c375e87818d8c3a49fd19803f",
+        "verification": "unverified"
+      },
+      "intro": [
+        {
+          "kind": "text",
+          "value": "原典は未合意の"
+        },
+        {
+          "kind": "link",
+          "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md",
+          "label": "備品購入申請の業務設計"
+        },
+        {
+          "kind": "text",
+          "value": "です。この項目書も業務設計の確定版や実装への合意済み引継ぎではありません。"
+        },
+        {
+          "kind": "reference",
+          "targetId": "bcfddb5b-46a4-5980-a2cd-45d38450f4ba",
+          "label": "使い方"
+        }
+      ],
+      "index": [
+        {
+          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "purpose": "購入の必要性と希望内容を記録し、承認者が購入可否を判断できる状態にする",
+          "connections": "`submitted` の購入申請を、承認または却下の判断へ渡す",
+          "checkIds": [
+            "2d764f73-d70d-5712-8236-f0b33fecf8bf"
+          ]
+        },
+        {
+          "activityId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "purpose": "申請内容の妥当性を確認し、購買担当者が購入を進められる状態にする",
+          "connections": "`submitted` を `approved` とし、「承認済み備品を購入する」の購入対象にする",
+          "checkIds": [
+            "5f3df16a-6d1b-5df8-8969-67ac9d47636b",
+            "1c9e6544-4de2-5f34-81ed-05dedce03564"
+          ]
+        },
+        {
+          "activityId": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "purpose": "購入を認めない申請を、購買対象から外す",
+          "connections": "`submitted` を `rejected` とし、「承認済み備品を購入する」の購入対象から外す",
+          "checkIds": [
+            "675d83c7-36ce-5cf2-b6af-51f36a54366d",
+            "b69485b3-cf14-512d-a292-dcbf6e9268b1"
+          ]
+        },
+        {
+          "activityId": "7af7a395-4588-5600-9753-bef78c9258da",
+          "purpose": "承認された購入要求を実際の購入として完了させ、購入済みであることを記録する",
+          "connections": "`approved` の申請に基づく購入を `purchased` として記録する。「購入申請を却下する」の却下対象は含めない",
+          "checkIds": [
+            "ae43f66c-328f-5162-8e31-0febb4364d40",
+            "b69485b3-cf14-512d-a292-dcbf6e9268b1"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "9567fba8-4835-52e1-97b0-d9e2c7bbf919",
+          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "title": "備品購入を申請する",
+          "preamble": []
+        },
+        {
+          "id": "67abf846-bd3d-5467-b3a9-45ea4e1e3c2f",
+          "activityId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "title": "購入申請を承認する",
+          "preamble": []
+        },
+        {
+          "id": "58dd444f-01d6-59f7-b7fe-9662cab41d3c",
+          "activityId": "5cb13bee-e240-56a2-b65c-8805c7f5340e",
+          "title": "購入申請を却下する",
+          "preamble": []
+        },
+        {
+          "id": "dd3b9db2-0595-5326-9c06-298c362a2dcf",
+          "activityId": "7af7a395-4588-5600-9753-bef78c9258da",
+          "title": "承認済み備品を購入する",
+          "preamble": [
+            {
+              "kind": "text",
+              "value": "共有する購買対象の除外保証は"
+            },
+            {
+              "kind": "reference",
+              "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+              "label": "JA-EX-04"
+            },
+            {
+              "kind": "text",
+              "value": "の"
+            },
+            {
+              "kind": "reference",
+              "targetId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+              "label": "条件・保証と例"
+            },
+            {
+              "kind": "text",
+              "value": "を参照する。"
+            }
+          ]
+        }
+      ],
+      "guarantees": [
+        {
+          "id": "455ffd4d-7e7c-54f2-979e-e41637697dae",
+          "sectionId": "9567fba8-4835-52e1-97b0-d9e2c7bbf919",
+          "title": "申請の条件・保証と例",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請者が業務上必要な備品を購入したいと判断し、品名・数量・希望購入金額・購入理由を**すべて必須入力**として、新しい購入申請を登録する。入力の存在は必要条件であり、値の妥当性や、それだけで登録できる十分条件は定められていない。"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "2d764f73-d70d-5712-8236-f0b33fecf8bf",
+                  "label": "JA-EX-01"
+                },
+                {
+                  "kind": "text",
+                  "value": " の一般保証は、この登録で購入要求が `submitted` の購入申請として記録されることである。申請しただけで承認・却下が済むわけではない。\n\n次の値は結果の違いを読むための例示であり、数量や金額の許容範囲を定めない。いずれも申請者が新しい購入申請を登録する場面である。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "6987e688-bb7c-5662-9254-23b8ebc91741"
+            }
+          ]
+        },
+        {
+          "id": "57d5bf2e-4332-551c-b5d9-366e674ae45f",
+          "sectionId": "67abf846-bd3d-5467-b3a9-45ea4e1e3c2f",
+          "title": "承認の条件・保証と例",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "承認者が `submitted` の購入申請について購入してよいと判断し、その対象を選択して承認する。"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "5f3df16a-6d1b-5df8-8969-67ac9d47636b",
+                  "label": "JA-EX-02"
+                },
+                {
+                  "kind": "text",
+                  "value": " の一般保証は、**その対象購入申請**が `approved` になることである。承認した時点で購入を済ませたことにはならない。金額による承認者・承認段階の変更は"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "1c9e6544-4de2-5f34-81ed-05dedce03564",
+                  "label": "JA-EX-Q01"
+                },
+                {
+                  "kind": "text",
+                  "value": "に残す。\n\n同じ申請A（品名「机」、数量2、希望購入金額20,000、購入理由「執務席用」）を対象として承認を行う場合を比べる。金額20,000は閾値を意味しない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "5621e3b8-d7a1-5103-a744-efc161c26b20"
+            }
+          ]
+        },
+        {
+          "id": "01519815-3a94-54ab-9e5c-a4414448f7be",
+          "sectionId": "58dd444f-01d6-59f7-b7fe-9662cab41d3c",
+          "title": "却下の条件・保証と例",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "承認者が `submitted` の購入申請について購入を認めないと判断し、却下する対象購入申請と却下理由を**すべて必須入力**として却下する。"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "675d83c7-36ce-5cf2-b6af-51f36a54366d",
+                  "label": "JA-EX-03"
+                },
+                {
+                  "kind": "text",
+                  "value": " の一般保証は、対象購入申請が `rejected` になることである。別の独立した"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+                  "label": "JA-EX-04"
+                },
+                {
+                  "kind": "text",
+                  "value": "の一般保証は、`rejected` である申請が購買担当者の購入対象にならないことであり、「承認済み備品を購入する」にも及ぶ。\n\n対象申請C（品名「椅子」、数量1、希望購入金額15,000、購入理由「破損した椅子の交換」）について、承認者が購入を認めず却下する場面を比べる。数値は許容範囲を示さない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "2310acb9-e159-5d94-85ea-2e87c15fabd6"
+            }
+          ]
+        },
+        {
+          "id": "f2d35a84-fe60-5e80-b446-15baed3cf36d",
+          "sectionId": "dd3b9db2-0595-5326-9c06-298c362a2dcf",
+          "title": "購入の条件・保証と例",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "購買担当者が `approved` の購入申請を確認し、それに基づいて対象備品を購入する。購入した対象購入申請の選択と実購入金額は**すべて必須入力**であり、購入結果を登録する。"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "ae43f66c-328f-5162-8e31-0febb4364d40",
+                  "label": "JA-EX-05"
+                },
+                {
+                  "kind": "text",
+                  "value": "の一般保証は、購入した**その対象申請**が `purchased` になることである。必須入力があるだけで購入・登録が成立する十分条件や、入力を欠くときの失敗応答は定められていない。\n\n購買担当者が対象の備品を購入し、結果を登録する例1・2と、却下済みの申請を購入対象として扱おうとする例3を比べる。申請Dは品名「机」、希望購入金額20,000、申請Cは品名「椅子」である。金額は例示であり、希望額との差額の扱いはここでは決めない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "d5d18680-c2f7-5e00-ba49-0e21e3675d39"
+            },
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "- 例1の希望購入金額20,000と実購入金額19,500は別の情報であり、別申請の状態は保証の対象でない。例2は必須の実購入金額を欠くため、購入後の扱いも決めない。\n- 例3の15,000は対象扱いを試みる場面の仮入力であり、購入実績ではない。値の有無は共有の"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+                  "label": "JA-EX-04"
+                },
+                {
+                  "kind": "text",
+                  "value": "の除外保証を変えず、購入操作の失敗応答や状態遷移は定めない。"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "6987e688-bb7c-5662-9254-23b8ebc91741",
+          "guaranteeId": "455ffd4d-7e7c-54f2-979e-e41637697dae",
+          "columns": [
+            "対象・入力",
+            "必須入力の充足",
+            "観測する結果",
+            "対応"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "新しい申請A：品名「机」、数量2、希望購入金額20,000、購入理由「執務席用」"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "4項目がある"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "登録された申請Aが `submitted` になる。机・2・20,000・理由は申請Aの内容であり、別の申請を承認した結果ではない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "2d764f73-d70d-5712-8236-f0b33fecf8bf",
+                  "label": "JA-EX-01"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "新しい申請B：品名「机」、数量2、希望購入金額20,000、購入理由なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "必須の購入理由がない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "必須条件を満たさない。登録の成否、通知や復帰方法は業務設計では未決定であり、`submitted` にならないという逆向きの保証もここでは定めない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "2d764f73-d70d-5712-8236-f0b33fecf8bf",
+                  "label": "JA-EX-01"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "5621e3b8-d7a1-5103-a744-efc161c26b20",
+          "guaranteeId": "57d5bf2e-4332-551c-b5d9-366e674ae45f",
+          "columns": [
+            "対象の事前状態",
+            "承認者の判断・対象選択",
+            "観測する結果",
+            "対応"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Aは `submitted`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "購入してよいと判断し、申請Aを選択"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "承認後の申請Aが `approved`。別の申請ではなく、選んだ申請の状態が変わる"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "5f3df16a-6d1b-5df8-8969-67ac9d47636b",
+                  "label": "JA-EX-02"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Aは `rejected`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Aを承認対象として選ぶ場面"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "`submitted` という適用条件を満たさない。承認操作の成否・状態の扱いは未決定で、この行から却下・差戻し等は導かない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "5f3df16a-6d1b-5df8-8969-67ac9d47636b",
+                  "label": "JA-EX-02"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "2310acb9-e159-5d94-85ea-2e87c15fabd6",
+          "guaranteeId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+          "columns": [
+            "対象の事前状態",
+            "対象選択",
+            "却下理由",
+            "観測する結果",
+            "対応"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cは `submitted`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請C"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "「購入を見送る」"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "却下後の申請Cが `rejected`。申請Cは購買対象にならない。状態変化と購買対象からの除外は別の保証"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "675d83c7-36ce-5cf2-b6af-51f36a54366d",
+                  "label": "JA-EX-03"
+                },
+                {
+                  "kind": "text",
+                  "value": "、"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+                  "label": "JA-EX-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cは `submitted`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請C"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "理由なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "必須の却下理由を欠く。却下の成否や状態は未決定であり、`rejected` にならないとの逆向きの保証はない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "675d83c7-36ce-5cf2-b6af-51f36a54366d",
+                  "label": "JA-EX-03"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cは `rejected`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "購買担当者が申請Cを購入対象として扱おうとする場面"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "既に却下済みの理由はこの判定の入力ではない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cは購買対象にならない。却下操作を再実行する場合の結果までは決めない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+                  "label": "JA-EX-04"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "d5d18680-c2f7-5e00-ba49-0e21e3675d39",
+          "guaranteeId": "f2d35a84-fe60-5e80-b446-15baed3cf36d",
+          "columns": [
+            "対象",
+            "事前状態",
+            "対象選択",
+            "金額（実額／仮入力）",
+            "観測する結果"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "ae43f66c-328f-5162-8e31-0febb4364d40",
+                  "label": "例1"
+                },
+                {
+                  "kind": "text",
+                  "value": "：申請D"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "`approved`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "購入した申請D"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "19,500（実額）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "登録後、申請Dが `purchased`"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "ae43f66c-328f-5162-8e31-0febb4364d40",
+                  "label": "例2"
+                },
+                {
+                  "kind": "text",
+                  "value": "：申請D"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "`approved`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "購入した申請D"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "登録の成否・申請Dの状態は未決定"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+                  "label": "例3"
+                },
+                {
+                  "kind": "text",
+                  "value": "：申請C"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "`rejected`"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cを対象扱い"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "15,000（仮入力）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "申請Cは購買対象にならない"
+                }
+              ]
+            ]
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "2d764f73-d70d-5712-8236-f0b33fecf8bf",
+          "checkId": "JA-EX-01",
+          "detailSummary": "",
+          "title": "新しい購入申請が提出済みになる",
+          "sectionId": "9567fba8-4835-52e1-97b0-d9e2c7bbf919",
+          "reviewState": "未レビュー",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "455ffd4d-7e7c-54f2-979e-e41637697dae",
+                "label": "申請の条件・保証と例"
+              },
+              {
+                "kind": "text",
+                "value": "に示す JA-EX-01 の一般保証を参照。"
+              },
+              {
+                "kind": "reference",
+                "targetId": "455ffd4d-7e7c-54f2-979e-e41637697dae",
+                "label": "同節の比較例"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L123-L168",
+                "label": "「Activity 備品購入を申請する」のWhen・Who・How・Result"
+              },
+              {
+                "kind": "text",
+                "value": "。Inputの「すべて必須」を適用する。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示。AI確度：高。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "成立した申請を、「購入申請を承認する」または「購入申請を却下する」で扱う。申請だけでは購入可否の判断は済まない。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "5f3df16a-6d1b-5df8-8969-67ac9d47636b",
+          "checkId": "JA-EX-02",
+          "detailSummary": "",
+          "title": "対象の申請が承認済みになる",
+          "sectionId": "67abf846-bd3d-5467-b3a9-45ea4e1e3c2f",
+          "reviewState": "未レビュー",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "57d5bf2e-4332-551c-b5d9-366e674ae45f",
+                "label": "承認の条件・保証と例"
+              },
+              {
+                "kind": "text",
+                "value": "に示す JA-EX-02 の一般保証を参照。"
+              },
+              {
+                "kind": "reference",
+                "targetId": "57d5bf2e-4332-551c-b5d9-366e674ae45f",
+                "label": "同節の比較例"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L170-L216",
+                "label": "「Activity 購入申請を承認する」のWhen・Who・How・Result"
+              },
+              {
+                "kind": "text",
+                "value": "。Procedureの手順3とResultに状態が明記される。金額別の扱いは"
+              },
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L33-L44",
+                "label": "未決定の事項"
+              },
+              {
+                "kind": "text",
+                "value": "である。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示。AI確度：高。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "「備品購入を申請する」で成立した申請を扱い、「承認済み備品を購入する」の購入対象へつなぐ。承認時点で購入は済まない。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "1c9e6544-4de2-5f34-81ed-05dedce03564",
+          "checkId": "JA-EX-Q01",
+          "detailSummary": "",
+          "title": "金額によって承認者や承認段階が変わる場合の扱い",
+          "sectionId": "67abf846-bd3d-5467-b3a9-45ea4e1e3c2f",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "未決事項（候補）。業務設計自体で未決定の事項。"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "text",
+                "value": "申請金額によって承認者や承認段階が変わる場合。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "候補・未承認。どの承認者・承認段階を経て、いつ承認済みとするかは未決定。"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L33-L44",
+                "label": "現在の業務設計で未決定の事項"
+              },
+              {
+                "kind": "text",
+                "value": "の最初の項目。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "考慮候補。AI確度：要精査。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "「購入申請を承認する」。新しい承認段階やActivityは定義しない。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。未決定の結果を、確定したテストの期待結果にしない。"
+              }
+            ],
+            "question": [
+              {
+                "kind": "text",
+                "value": "金額別の承認経路を今回の業務設計で扱う必要が生じた場合、どの金額条件で誰の承認を必要とし、何をもって承認完了とするか。"
+              }
+            ],
+            "alternatives": [
+              {
+                "kind": "text",
+                "value": "保留を続ける場合、この候補を実装上の合否条件に使わない。扱いを決める場合は、業務設計に条件と結果を記載して人間が確認した後、影響するチェック項目を更新する。金額境界や承認者をこの項目だけで決めない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "675d83c7-36ce-5cf2-b6af-51f36a54366d",
+          "checkId": "JA-EX-03",
+          "detailSummary": "",
+          "title": "対象の申請が却下済みになる",
+          "sectionId": "58dd444f-01d6-59f7-b7fe-9662cab41d3c",
+          "reviewState": "未レビュー",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+                "label": "却下の条件・保証と例"
+              },
+              {
+                "kind": "text",
+                "value": "に示す JA-EX-03 の一般保証を参照。"
+              },
+              {
+                "kind": "reference",
+                "targetId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+                "label": "同節の比較例"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L218-L265",
+                "label": "「Activity 購入申請を却下する」のWhen・Who・How・Result"
+              },
+              {
+                "kind": "text",
+                "value": "。対象と理由は必須入力であり、Procedureの手順4とResultに状態が明記される。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示。AI確度：高。根拠から期待結果を読み取れる確かさであり、人間の確認を代行しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "「備品購入を申請する」で成立した申請を扱う。「承認済み備品を購入する」の対象から外す期待結果は JA-EX-04 を参照する。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。この記載はテストの不存在や実装不備を示さない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "b69485b3-cf14-512d-a292-dcbf6e9268b1",
+          "checkId": "JA-EX-04",
+          "detailSummary": "",
+          "title": "却下済みの申請は購買対象にならない",
+          "sectionId": "58dd444f-01d6-59f7-b7fe-9662cab41d3c",
+          "reviewState": "未レビュー",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+                "label": "却下の条件・保証と例"
+              },
+              {
+                "kind": "text",
+                "value": "に示す JA-EX-04 の一般保証を参照。"
+              },
+              {
+                "kind": "reference",
+                "targetId": "01519815-3a94-54ab-9e5c-a4414448f7be",
+                "label": "却下側の比較例"
+              },
+              {
+                "kind": "text",
+                "value": "・"
+              },
+              {
+                "kind": "reference",
+                "targetId": "f2d35a84-fe60-5e80-b446-15baed3cf36d",
+                "label": "購入側の比較例"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L261-L265",
+                "label": "「Activity 購入申請を却下する」のResult"
+              },
+              {
+                "kind": "text",
+                "value": "と"
+              },
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L23-L31",
+                "label": "業務相関5"
+              },
+              {
+                "kind": "text",
+                "value": "に購買対象からの除外が明記される。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示。AI確度：高。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "「購入申請を却下する」と「承認済み備品を購入する」の共有項目。後者もこのIDを参照し、別のIDやレビュー状態を持たない。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。業務上の期待結果と検証証拠の有無は分けて扱う。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ae43f66c-328f-5162-8e31-0febb4364d40",
+          "checkId": "JA-EX-05",
+          "detailSummary": "",
+          "title": "購入した対象の申請が購入済みになる",
+          "sectionId": "dd3b9db2-0595-5326-9c06-298c362a2dcf",
+          "reviewState": "未レビュー",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "f2d35a84-fe60-5e80-b446-15baed3cf36d",
+                "label": "購入の条件・保証と例"
+              },
+              {
+                "kind": "text",
+                "value": "に示す JA-EX-05 の一般保証を参照。"
+              },
+              {
+                "kind": "reference",
+                "targetId": "f2d35a84-fe60-5e80-b446-15baed3cf36d",
+                "label": "同節の比較例"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "link",
+                "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md#L267-L314",
+                "label": "「Activity 承認済み備品を購入する」のWhen・Who・How・Result"
+              },
+              {
+                "kind": "text",
+                "value": "。購入した対象と実購入金額は必須入力であり、Procedureの手順4とResultに状態が明記される。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示。AI確度：高。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "「購入申請を承認する」で承認された申請を扱う。「購入申請を却下する」からの除外条件は JA-EX-04 を参照する。購入後の備品管理などへの接続は定めない。"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "対応する自動テスト・検証内容・実行結果は未収集。"
+              }
+            ]
+          }
+        }
+      ],
+      "notes": [
+        {
+          "id": "bcfddb5b-46a4-5980-a2cd-45d38450f4ba",
+          "title": "使い方",
+          "content": [
+            {
+              "kind": "text",
+              "value": "業務一覧から各IDの項目へ進める。表やIDの並びは業務の実行順を示さない。IDごとに「確認」「修正」「保留」を伝える。IDの `JA-EX-` はこの例の中だけで使い、製品や過去の項目のIDを置き換えない。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "documentId": "purchase-bd",
+      "revision": "c2852531ad62691c375e87818d8c3a49fd19803f",
+      "sha256": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+      "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md"
+    },
+    {
+      "documentId": "purchase-checks",
+      "revision": "plugin-0_4_8-specimen",
+      "sha256": "95ffb946d3d6c485a8e245cb17e2a4c43746244c7e491ebe768cfb0f7fbb2f6f",
+      "uri": ""
+    }
+  ],
+  "externalDocuments": [],
+  "diagnostics": []
+}

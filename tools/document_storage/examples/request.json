@@ -1,0 +1,22 @@
+{
+  "revision": "package-import-1",
+  "sources": [
+    {
+      "path": "../../../business-design/purchase-request/README.md",
+      "documentId": "purchase-bd",
+      "kind": "businessDesign",
+      "revision": "c2852531ad62691c375e87818d8c3a49fd19803f",
+      "uri": "https://github.com/mk3008/alder/blob/c2852531ad62691c375e87818d8c3a49fd19803f/business-design/purchase-request/README.md"
+    },
+    {
+      "path": "../../../work/check-item-examples/meaning-validation-20261018/purchase/final.md",
+      "documentId": "purchase-checks",
+      "kind": "checkItems",
+      "revision": "plugin-0_4_8-specimen",
+      "basedOn": {
+        "documentId": "purchase-bd",
+        "revision": "c2852531ad62691c375e87818d8c3a49fd19803f"
+      }
+    }
+  ]
+}

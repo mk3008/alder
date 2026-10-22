@@ -1,0 +1,42 @@
+{
+  "baseCommit": "f3a045d9f55bb27b1289145fcdc5f6bd2df594a1",
+  "rootAgentsBlob": "e604ed3291d651319313141393e1625c96eb2b90",
+  "alderAgentsBlob": "201e6d6fac636ca99d2c703f0e9f1103d45ac78a",
+  "phase1Head": "a2e841d049fa45a795e99b16ff4a053805474180",
+  "phase2Head": "9dd6fb1ca7c598a0cc3f3d352967481d04521093",
+  "authoritySha256": {
+    "AGENTS.md": "00c79b41b6531752091872f0f3eb4028f25ff44e6a82444bc111b6bd3762d930",
+    "docs/business-design-structure.ja.md": "40b0855bc48711b6a68eafc4aea0991953cc7778108a5b9946d46890c2497804",
+    "docs/check-item-traceability.md": "dac05f461a36b11c73edc595873aeb51bae66b038ef0cc003f24db63e293fcb6",
+    "docs/business-graph.md": "66b859f3156730b0440c90491a19969ca29398a003be4d4e12c4ab7a31ffe777",
+    "docs/versioning.md": "b42a5e6e8e815c38fe2b82d8b1e0be1584760780f7abb1d822e1bba0bf9c91ec",
+    "plugins/alder/plugin.json": "8831bdea6a9fb06aef307f4859f71c1f3699eda32bde3d55a15c936743b1a1e6",
+    "plugins/alder/skills/alder-draft-business-design/SKILL.md": "6a7fdd2b658f75c8ab15e9fa597ab284d45f496df4dd03818c05ed85011d8979",
+    "plugins/alder/skills/alder-draft-check-items/SKILL.md": "c8db0ae221668855cec1ef2e113511708d6ca1fbc15cb59c7ea7817679de0775",
+    "web-viewer/src/graph.ts": "a03cc93a38e31363d4590d3b6ccb4972fde89ce430c88a26c8e33d75934f0071",
+    "web-viewer/src/check-items.ts": "01d2e6b9053aed26deac737b6210ae34d9fd423df72086659721ee732ca5a037",
+    "web-viewer/src/source.ts": "c83b46d87870548666fcb353687ac54a7c3de466d6bd02d4096fb8f552ea89bd",
+    "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5"
+  },
+  "implementationSha256": {
+    "tools/document_storage/test-storage.mjs": "b6600f3834b477dc15604984f8af32638ac667103237cf313f93f0ffa8f59fe1",
+    "tools/document_storage/edit.mjs": "ac2a32ccb10f721f40c6a6ae585b8e3845df782606c26eab7df5993522ca6879",
+    "tools/document_storage/schema.mjs": "2964886e5cbf530feb6fcc2f22d026caf99488419c5e81ed5b9089fa2acf4782",
+    "tools/document_storage/core.mjs": "df57b081fb40ea5108c2c775020a84248a8fab93f817dded7dc6b1780d6b54a2",
+    "tools/document_storage/convert.mjs": "26a582a5887c5056f9e22de0e79ac5a2a088211ec7241f7ef44cd6287626caad",
+    "tools/document_storage/cli.mjs": "b9af93b0d277ed9cbe858a6d31ffb098792500895877f759b09996acb37a439f",
+    "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff"
+  },
+  "pinnedBusinessDesign": {
+    "revision": "c2852531ad62691c375e87818d8c3a49fd19803f",
+    "githubBlob": "49c3659368dbbac71ed0e52001b896983e61a8f6",
+    "sha256": "afa5fbfe4160b9c962b6a3ce9df4f83a42f5138d626c1ed3b7f3bfbea08794f7",
+    "remoteBytesComparedEqual": true
+  },
+  "runtime": {
+    "node": "v24.19.0",
+    "python": "Python 3.12.14",
+    "platform": "Linux"
+  },
+  "review": "author self-review, not independent; no extra LLM calls"
+}
