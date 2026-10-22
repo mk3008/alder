@@ -1,0 +1,91 @@
+name: Verify public PR 284 Viewer preview
+on:
+  push:
+    branches:
+      - beta/pr-284-overview-pages
+    paths:
+      - .github/workflows/verify-pr284-public-preview.yml
+permissions:
+  contents: read
+jobs:
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      SOURCE_SHA: 1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d
+      PUBLIC_BASE: https://mk3008.github.io/alder/preview/pr-284/1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d/
+    steps:
+      - name: Verify public Pages source and assets without modifying them
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 16); do
+            if curl --fail --silent --show-error --max-time 12 -L "${PUBLIC_BASE}manifest.json" -o "$RUNNER_TEMP/manifest.json"; then
+              if jq -e --arg sha "$SOURCE_SHA" '.source == $sha' "$RUNNER_TEMP/manifest.json"; then break; fi
+            fi
+            sleep 4
+          done
+          jq -e --arg sha "$SOURCE_SHA" '.source == $sha' "$RUNNER_TEMP/manifest.json"
+          for file in index.html open-purchase.html open-json.html open-md.html open-states.html open-checks.html; do
+            curl --fail --silent --show-error --max-time 20 -L "${PUBLIC_BASE}$file" -o "$RUNNER_TEMP/$file"
+          done
+          grep -Fq "$SOURCE_SHA" "$RUNNER_TEMP/open-purchase.html"
+      - name: Install fixed Chromium driver
+        run: npm install --prefix "$RUNNER_TEMP/pr284-public-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Ensure Japanese screenshot font
+        run: |
+          set -euo pipefail
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf -o "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            test "$(git hash-object "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf" "$HOME/.local/share/fonts/"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Verify published preview in real Chrome
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          cat > "$RUNNER_TEMP/check-public.mjs" <<'JS'
+          import assert from 'node:assert/strict';
+          import {createRequire} from 'node:module';
+          import fs from 'node:fs';
+          const browser=await createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE).chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+          const cases=[['purchase',393,12,23],['purchase',1280,12,23],['json',393,25,63],['md',393,25,63],['states',393,12,23],['checks',393,6,6]];
+          const results=[];
+          try{
+            for(const [kind,width,nodes,edges] of cases){
+              const context=await browser.newContext({viewport:{width,height:960}});
+              const page=await context.newPage(),errors=[],requests=[];
+              page.on('pageerror',e=>errors.push(e.message));
+              page.on('request',r=>requests.push({method:r.method(),url:r.url()}));
+              try{
+                await page.goto(process.env.PUBLIC_BASE+'open-'+kind+'.html',{waitUntil:'domcontentloaded'});
+                await page.waitForFunction(count=>document.querySelectorAll('.node').length===count,nodes,{timeout:45000});
+                const paths=await page.locator('.edge').count();
+                assert.equal(paths,edges,kind+' relation paths');
+                if(kind==='purchase'){
+                  const labels=await page.locator('.edge-label').evaluateAll(ns=>ns.map(n=>({text:n.textContent,members:n.dataset.relations.split(' ').length})));
+                  assert.deepEqual(labels.filter(x=>x.text==='認証済み作業者の識別情報').map(x=>x.members),[5]);
+                  assert.deepEqual(labels.filter(x=>x.text==='従業員の識別情報 / 役職 / 役職ごとの決裁単位の上限額').map(x=>x.members),[2]);
+                }
+                assert.ok(requests.some(x=>x.url.includes('/'+process.env.SOURCE_SHA+'/')),'pinned source fetched');
+                assert.ok(requests.every(x=>x.method==='GET'),'read only');
+                assert.deepEqual(errors,[]);
+                await page.screenshot({path:'evidence/'+kind+'-'+width+'.png'});
+                results.push({kind,width,nodes,edges,requests:requests.length,pageErrors:errors});
+              }finally{await context.close();}
+            }
+            fs.writeFileSync('evidence/results.json',JSON.stringify({source:process.env.SOURCE_SHA,base:process.env.PUBLIC_BASE,results},null,2));
+            console.log(JSON.stringify({publicPreview:'passed',results}));
+          }finally{await browser.close();}
+          JS
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/pr284-public-browser/node_modules/playwright" node "$RUNNER_TEMP/check-public.mjs"
+      - name: Preserve read-only public preview screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-pr284-overview-preview
+          path: evidence/
+          if-no-files-found: ignore
+          retention-days: 14
