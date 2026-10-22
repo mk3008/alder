@@ -1,0 +1,5 @@
+Alder Viewer JSON beta preview (not a release)
+Viewer commit: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+Publishing scope: preview/pr-279/4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec/ only
+Source JSON: https://raw.githubusercontent.com/mk3008/alder/4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec/work/viewer-json/issue-274/rough/gate-b-example.json
+Browser smoke: https://github.com/mk3008/alder/actions/runs/39761326826
