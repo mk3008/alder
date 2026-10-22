@@ -7,11 +7,11 @@ import {activityDesign} from '../src/activities.ts';
 import {readSessionInPage} from './wait-saved-viewer.mjs';
 const root='../work/viewer-json/issue-274/layout-regression/',md=readFileSync(root+'same-business.md','utf8'),json=readFileSync(root+'same-business.json','utf8');
 const hash=b=>createHash('sha256').update(b).digest('hex');
-export async function verifyJSONLayout(browser,{source=json,evidenceDirectory='web/evidence/json-layout'}={}){
- const out=evidenceDirectory;mkdirSync(out,{recursive:true});writeFileSync(out+'/same-business.md',md);writeFileSync(out+'/same-business.json',source);const results=[],pngs=new Map();
+export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDirectory='web/evidence/json-layout'}={}){
+ const out=evidenceDirectory;mkdirSync(out,{recursive:true});writeFileSync(out+'/same-business.md',md);writeFileSync(out+'/same-business.json',jsonInput);const results=[],pngs=new Map();
  for(const width of [1280,393]){
   const observed={};
-  for(const [format,source] of [['md',md],['json',source]]){
+  for(const [format,source] of [['md',md],['json',jsonInput]]){
    const design=format==='md'?parseDesign(source):parseDocument(source),names=new Map(design.graph.nodes.map(n=>[n.id,n.name]));
    const context=await browser.newContext({viewport:{width,height:960},acceptDownloads:true}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(15000);
    const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled),saved=async()=>{await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));};

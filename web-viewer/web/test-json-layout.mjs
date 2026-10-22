@@ -54,3 +54,9 @@ console.log(JSON.stringify({jsonLayout:{views:md.activityOrder.length+1,uuidVari
 
 const {initialPositions}=await import('../src/layout.ts');
 assert.notDeepEqual(named(json,initialPositions(json.graph,json.activityOrder)),named(md,initialPositions(md.graph,md.activityOrder)),'negative control: bypassing identity adapter reproduces the old UUID layout regression');
+
+// Exercise both parameter modes before real Chrome; catches lexical shadowing in the E2E harness.
+const {verifyJSONLayout}=await import('./test-json-layout-browser.mjs');
+const {mkdtempSync,rmSync}=await import('node:fs'),{tmpdir}=await import('node:os');
+const temp=mkdtempSync(tmpdir()+'/json-layout-dispatch-'),fake={newContext:async()=>{throw Error('native-browser-boundary');}};
+try{for(const options of [{evidenceDirectory:temp},{source:jsonSource,evidenceDirectory:temp}])await assert.rejects(()=>verifyJSONLayout(fake,options),/native-browser-boundary/);}finally{rmSync(temp,{recursive:true,force:true});}
