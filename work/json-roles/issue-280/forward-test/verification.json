@@ -1,0 +1,43 @@
+{
+  "sourceUnchanged": true,
+  "sourceSha256": "0de5ef79710ea3acce3a80ae749938044e789c8f9ea898cb66b6d28a140f5771",
+  "onlyRequestedNamesAndRequiredRevisionsChanged": true,
+  "activitiesUnchanged": true,
+  "relationsUnchanged": true,
+  "statesAndTransitionsUnchanged": true,
+  "sourcesAndFindingsUnchanged": true,
+  "roleIdsColorsAndReferencesUnchanged": true,
+  "independentReader": false,
+  "changes": [
+    {
+      "path": "/revision",
+      "before": "package-1-roles-1",
+      "after": "package-1-roles-2"
+    },
+    {
+      "path": "/documents/0/revision",
+      "before": "bd-1-roles-1",
+      "after": "bd-1-roles-2"
+    },
+    {
+      "path": "/documents/0/objects/3/name",
+      "before": "購入申請",
+      "after": "備品購入申請"
+    },
+    {
+      "path": "/documents/0/roles/0/name",
+      "before": "申請者",
+      "after": "申請担当者"
+    },
+    {
+      "path": "/documents/1/revision",
+      "before": "states-1-roles-1",
+      "after": "states-1-roles-2"
+    },
+    {
+      "path": "/documents/1/basedOn/revision",
+      "before": "bd-1-roles-1",
+      "after": "bd-1-roles-2"
+    }
+  ]
+}
