@@ -1,4 +1,4 @@
-name: Verify public PR 279 JSON Pages beta
+name: Verify public JSON State Role beta
 on:
   push:
     branches:
@@ -9,53 +9,70 @@ permissions:
   contents: read
 jobs:
   public-link:
-    if: github.repository == 'mk3008/alder'
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 10
     env:
-      PUBLIC_URL: https://mk3008.github.io/alder/preview/pr-279/9ed410b8ec571d25af0cb7f0577dea79b50f43b1/open-json.html
-      SOURCE_SHA: 9ed410b8ec571d25af0cb7f0577dea79b50f43b1
+      PUBLIC_BASE: https://mk3008.github.io/alder/preview/pr-282/027f632e3199e8b7666776578d14222a35bfc2b8/
+      SOURCE_SHA: 027f632e3199e8b7666776578d14222a35bfc2b8
     steps:
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
-      - name: Verify public Pages route is served
-        shell: bash
+      - name: Wait for immutable Pages route
         run: |
           set -euo pipefail
-          for attempt in $(seq 1 15); do
-            if curl --fail --silent --show-error --max-time 15 -L "$PUBLIC_URL" -o "$RUNNER_TEMP/beta-public-link.html"; then
-              if grep -Fq "$SOURCE_SHA" "$RUNNER_TEMP/beta-public-link.html"; then break; fi
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent --max-time 15 -L "${PUBLIC_BASE}open-json.html" -o "$RUNNER_TEMP/beta.html"; then
+              if grep -Fq "$SOURCE_SHA" "$RUNNER_TEMP/beta.html"; then break; fi
             fi
             sleep 4
           done
-          grep -Fq "$SOURCE_SHA" "$RUNNER_TEMP/beta-public-link.html"
-          echo "Published direct link contains the fixed JSON source commit."
-      - name: Verify real Chrome URL to work-branch JSON
-        shell: bash
+          grep -Fq "$SOURCE_SHA" "$RUNNER_TEMP/beta.html"
+      - name: Install fixed Chrome driver and Japanese font
         run: |
-          set -euo pipefail
           npm install --prefix "$RUNNER_TEMP/public-beta-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
-          cat > "$RUNNER_TEMP/verify-public-beta.mjs" <<'JS'
+          curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf -o "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+          test "$(git hash-object "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+          mkdir -p "$HOME/.local/share/fonts"
+          install -m 644 "$RUNNER_TEMP/NotoSansCJKjp-Regular.otf" "$HOME/.local/share/fonts/"
+          fc-cache -f "$HOME/.local/share/fonts"
+      - name: Verify all direct JSON routes and actual Drawer in Chrome
+        run: |
+          cat > "$RUNNER_TEMP/public-beta.mjs" <<'JS'
           import assert from 'node:assert/strict';
           import {createRequire} from 'node:module';
-          const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE);
-          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
-          const context=await browser.newContext({viewport:{width:1280,height:860}});
-          const page=await context.newPage(),requests=[],errors=[];
-          page.on('pageerror',e=>errors.push(e.message));
-          page.on('request',r=>requests.push({url:r.url(),method:r.method()}));
-          try{
-            await page.goto(process.env.PUBLIC_URL,{waitUntil:'domcontentloaded'});
-            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length===25,null,{timeout:45000});
-            assert.equal(await page.locator('#nodes > *').count(),25);
-            assert.ok(requests.some(r=>r.url.includes('raw.githubusercontent.com/mk3008/alder/'+process.env.SOURCE_SHA+'/')),'Must fetch fixed JSON from work-branch commit');
-            assert.ok(requests.every(r=>r.method==='GET'),'No uploads');
-            assert.deepEqual(errors,[]);
-            console.log(JSON.stringify({passed:true,publicUrl:process.env.PUBLIC_URL,title:await page.title(),nodeCount:25,sourceRequests:requests.filter(r=>r.url.includes('raw.githubusercontent.com')),pageErrors:errors}));
-          }finally{
-            await context.close();
-            await browser.close();
+          import fs from 'node:fs';
+          const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE),browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+          fs.mkdirSync('evidence',{recursive:true});const results=[];
+          for(const [kind,count]of [['json',25],['states',12],['checks',6]]){
+            const context=await browser.newContext({viewport:{width:1280,height:960}}),page=await context.newPage(),requests=[],errors=[];
+            page.on('request',r=>requests.push({url:r.url(),method:r.method()}));page.on('pageerror',e=>errors.push(e.message));
+            const list=async(category,id)=>{if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('#node-category-'+category).click();await page.locator('[data-list-node="'+id+'"] .node-navigate').click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();};
+            try{
+              await page.goto(process.env.PUBLIC_BASE+'open-'+kind+'.html',{waitUntil:'domcontentloaded'});
+              await page.waitForFunction(n=>document.querySelectorAll('.node').length===n,count,{timeout:45000});
+              await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+              if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
+              await page.locator('#view-markdown').click();const pkg=JSON.parse(await page.locator('#source-text').inputValue());assert.equal(pkg.formatVersion,'0.3');const bd=pkg.documents[0];assert.ok(bd.roles.length);await page.keyboard.press('Escape');
+              if(kind==='json'){
+                await list('object',bd.objects[0].id);assert.deepEqual(await page.locator('.json-detail h3').allTextContents(),['Scope','Icon','Information']);assert.doesNotMatch(await page.locator('.json-detail').innerText(),/文書ID:|要素ID:|JSON 0\\.3|package /);await page.screenshot({path:'evidence/object-drawer.png'});
+                await list('activity',bd.activities[0].id);await page.screenshot({path:'evidence/activity-drawer.png'});
+                if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('#node-category-role').click();const role=bd.roles[0],header=page.locator('[data-role-id="'+role.id+'"]');assert.equal(await header.locator('.who-badge').evaluate(e=>e.style.getPropertyValue('--role-color')),role.color);await page.screenshot({path:'evidence/role-list.png'});
+              }else if(kind==='states'){
+                const st=pkg.documents.find(d=>d.kind==='stateTransition');assert.equal(st.transitions.length,13);assert.equal(st.transitions.find(t=>t.sourceId==='T12').toId,'@unknown');await list('object',st.objectId);await page.locator('#detail-mode-states').click();assert.equal(await page.locator('[data-state]').count(),8);assert.equal(await page.locator('[data-transition]').count(),13);await page.screenshot({path:'evidence/state-diagram.png'});await page.locator('.state-transition-panel > details').first().locator('summary').click();assert.ok((await page.locator('[data-transition="T12"]').innerText()).includes('未決'));await page.screenshot({path:'evidence/state-details.png'});
+              }else{
+                await list('activity',bd.activities[0].id);await page.locator('#detail-mode-checks').click();assert.equal(await page.locator('.check-item').count(),2);assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));await page.screenshot({path:'evidence/checks.png'});
+              }
+              assert.deepEqual(errors,[]);assert.ok(requests.every(r=>r.method==='GET'));assert.ok(requests.some(r=>r.url.includes('raw.githubusercontent.com/mk3008/alder/'+process.env.SOURCE_SHA+'/')));
+              results.push({kind,publicUrl:process.env.PUBLIC_BASE+'open-'+kind+'.html',count,formatVersion:pkg.formatVersion,rawSource:requests.filter(r=>r.url.includes('raw.githubusercontent.com')),pageErrors:errors,nonGET:requests.filter(r=>r.method!=='GET')});
+            }catch(e){await page.screenshot({path:'evidence/failure-'+kind+'.png'}).catch(()=>{});throw e;}finally{await context.close();fs.writeFileSync('evidence/results.json',JSON.stringify({source:process.env.SOURCE_SHA,browser:browser.version(),results},null,2));}
           }
+          await browser.close();console.log(JSON.stringify({passed:true,results}));
           JS
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/public-beta-browser/node_modules/playwright" node "$RUNNER_TEMP/verify-public-beta.mjs"
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/public-beta-browser/node_modules/playwright" node "$RUNNER_TEMP/public-beta.mjs"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-json-state-role-027f632e3199e8b7666776578d14222a35bfc2b8
+          path: evidence/
+          retention-days: 14
