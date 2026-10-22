@@ -8,7 +8,7 @@ import {readSessionInPage} from './wait-saved-viewer.mjs';
 const root='../work/viewer-json/issue-274/layout-regression/',md=readFileSync(root+'same-business.md','utf8'),json=readFileSync(root+'same-business.json','utf8');
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export async function verifyJSONLayout(browser){
- const out='web/evidence/json-layout';mkdirSync(out,{recursive:true});const results=[],pngs=new Map();
+ const out='web/evidence/json-layout';mkdirSync(out,{recursive:true});writeFileSync(out+'/same-business.md',md);writeFileSync(out+'/same-business.json',json);const results=[],pngs=new Map();
  for(const width of [1280,393]){
   const observed={};
   for(const [format,source] of [['md',md],['json',json]]){
@@ -30,6 +30,8 @@ export async function verifyJSONLayout(browser){
     if(width===1280){const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#save-image').click()]);const path=`${out}/${format}-${key}-full.png`;await download.saveAs(path);const bytes=readFileSync(path);pngs.set(`${format}-${key}`,bytes);}
    }
    async function cameraRoundTrip(activity,key){
+    // Use the existing toggle: the mobile Drawer overlays camera controls.
+    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
     const initial=await snapshot(activity);await page.locator('#in').click();await page.evaluate(()=>document.querySelector('#viewport').scrollTo(171,303));
     const moved=await snapshot(activity);assert.deepEqual(moved.positions,initial.positions,'zoom/scroll never change world coordinates');assert.notEqual(moved.zoom,initial.zoom);assert.ok(moved.scroll.some(n=>n>0));
     await page.reload();await ready();const restored=await snapshot(activity);assert.deepEqual(restored,moved,'native save/reload keeps exact geometry and camera');
