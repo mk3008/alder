@@ -1,5 +1,6 @@
 /** Node-only Markdown adapter; core.mjs/schema.mjs remain browser-portable. */
 import {extractStateDeclarations} from './state-declaration.mjs';
+import {withRoles} from './roles.mjs';
 import {stateDocument} from './state-storage.mjs';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -30,7 +31,7 @@ function checkClaim(source,bdSource){
 }
 function remap(value,ids){
  if(Array.isArray(value))return value.map(v=>remap(v,ids));
- if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,(['id','objectId','activityId','fromId','toId','sectionId','guaranteeId','exampleId','targetId'].includes(k)&&typeof v==='string')?(ids.get(v)??v):(['targetIds','checkIds'].includes(k)?v.map(id=>ids.get(id)??id):remap(v,ids))]));
+ if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,(['id','objectId','roleId','activityId','fromId','toId','sectionId','guaranteeId','exampleId','targetId'].includes(k)&&typeof v==='string')?(ids.get(v)??v):(['targetIds','checkIds'].includes(k)?v.map(id=>ids.get(id)??id):remap(v,ids))]));
  return value;
 }
 /** Re-import never matches by position or similarity. Removed/renamed identities require explicit intent. */
@@ -44,13 +45,14 @@ function reconcile(pkg,previous,renames,removedIds){
  const key=(entity,type,ids)=>{
   const id=x=>ids.get(x)??x;
   switch(type){case'document':return entity.id;case'activity':case'object':case'state':return entity.name;case'transition':return entity.sourceId;
+   case'role':return entity.name;
    case'finding':return entity.sourceId;case'check':return entity.checkId;
    case'relation':return JSON.stringify([entity.kind,id(entity.fromId),id(entity.toId),entity.label]);
    case'section':return entity.activityId===null?entity.title:id(entity.activityId);case'guarantee':return JSON.stringify([id(entity.sectionId),entity.title]);
    case'example':return JSON.stringify([id(entity.guaranteeId),entity.columns]);case'note':return entity.title;
    default:throw Error('Unknown identity type');}
  };
- for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note','state','transition']){
+ for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note','state','transition','role']){
   const before=[...old.map].filter(([id])=>old.types.get(id)===type);
   for(const [id,e]of fresh.map){if(fresh.types.get(id)!==type||mapping.has(id))continue;
    const matches=before.filter(([oid,o])=>old.owner.get(oid)===fresh.owner.get(id)&&key(o,type,new Map())===key(e,type,mapping));
@@ -65,9 +67,10 @@ function reconcile(pkg,previous,renames,removedIds){
 }
 export function convertMarkdown(request){
  try{
- const allowed=['sources','revision','previousPackage','expectedRevision','renameBindings','removedIds','externalDocuments','externalSources','stateDocuments'];
+ const allowed=['sources','revision','previousPackage','expectedRevision','renameBindings','removedIds','externalDocuments','externalSources','stateDocuments','roleCatalog'];
  demand(request&&Object.keys(request).every(k=>allowed.includes(k)),'Unknown conversion option');
- const {sources,revision,previousPackage=null,expectedRevision=null,renameBindings={},removedIds=[],externalDocuments=[],externalSources=[],stateDocuments=[]}=request;
+ const {sources,revision,previousPackage=null,expectedRevision=null,renameBindings={},removedIds=[],externalDocuments=[],externalSources=[],stateDocuments=[],roleCatalog=false}=request;
+ demand(typeof roleCatalog==='boolean','roleCatalog must be boolean');
  demand(Array.isArray(sources)&&sources.length>0,'Sources required');demand(typeof revision==='string'&&revision.trim(),'Package revision required');
  const ids=new Set();for(const s of sources){demand(s&&Object.keys(s).every(k=>['text','documentId','kind','revision','uri','basedOn'].includes(k)),'Unknown source option');demand(s&&typeof s.text==='string','Markdown text required');demand(/^[A-Za-z0-9_-]+$/.test(s.documentId),'Stable documentId required');demand(!ids.has(s.documentId),'Duplicate source documentId');ids.add(s.documentId);demand(typeof s.revision==='string'&&s.revision.trim(),'Source revision required');demand(['businessDesign','checkItems'].includes(s.kind),'Unsupported source kind');}
  if(previousPackage){validate(previousPackage);demand(previousPackage.revision===expectedRevision,'Revision conflict');}
@@ -86,7 +89,10 @@ export function convertMarkdown(request){
  }
  documents.push(...stateModels);
  let pkg={format:'alder-document-package',formatVersion:stateModels.length?'0.2':'0.1',revision,documents,sources:[...sources.map(s=>({documentId:s.documentId,revision:s.revision,sha256:hash(s.text),uri:s.uri??''})),...structuredClone(externalSources)],externalDocuments:structuredClone(externalDocuments),diagnostics:[]};
+ if(roleCatalog){pkg.formatVersion='0.3';pkg.documents=pkg.documents.map(d=>d.kind==='businessDesign'?withRoles(d,pkg.diagnostics,previousPackage?.documents.find(p=>p.id===d.id),renameBindings):d);}
  if(previousPackage)pkg=reconcile(pkg,previousPackage,renameBindings,removedIds);
+ if(roleCatalog){pkg.diagnostics=pkg.diagnostics.filter(s=>!s.startsWith('Role未確定: '));for(const d of pkg.documents.filter(d=>d.kind==='businessDesign'))for(const a of d.activities)if(a.roleId===null)pkg.diagnostics.push('Role未確定: '+a.id+' — '+a.who);}
+ if(previousPackage?.formatVersion==='0.3')demand(roleCatalog,'Role catalog must be retained on re-import');
  validate(pkg);
  if(previousPackage){for(const doc of pkg.documents){const prior=previousPackage.documents.find(d=>d.id===doc.id);if(prior&&JSON.stringify(prior)!==JSON.stringify(doc))demand(prior.revision!==doc.revision,'Changed document requires new revision');}
  demand(JSON.stringify(previousPackage)===JSON.stringify(pkg)||previousPackage.revision!==pkg.revision,'Changed package requires new revision');}

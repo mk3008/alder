@@ -21,7 +21,8 @@ function confirmedBD(pkg,check,operation){
 }
 export function guardAuthoring(previous,next,operation={}){
  validate(next);if(previous)validate(previous);
- const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions'];
+ const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration'];
+ demand(!operation.migration||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
  demand(Object.keys(operation).every(k=>allowed.includes(k)),'Unknown authoring operation field');
  const decisions=operation.humanDecisions??[];demand(Array.isArray(decisions),'Human decisions must be an array');
  demand(new Set(decisions.map(d=>d.id)).size===decisions.length,'Duplicate human decision');
@@ -31,7 +32,7 @@ export function guardAuthoring(previous,next,operation={}){
   for(const [id,e]of old.map){demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id),'Identity type/owner changed');const n=fresh.map.get(id);demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
-  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand(d.schemaVersion===p.schemaVersion&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
+  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
  }
  const used=new Set();
  for(const d of next.documents.filter(d=>d.kind==='checkItems')){

@@ -24,7 +24,7 @@ export function validateShape(value,s=schema,path='$'){
 export function inventory(pkg){
  const map=new Map(),owner=new Map(),types=new Map();
  const add=(e,doc,type)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);};
- for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note',states:'state',transitions:'transition'}))for(const e of d[key]??[])add(e,d,type);}
+ for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note',states:'state',transitions:'transition',roles:'role'}))for(const e of d[key]??[])add(e,d,type);}
  for(const d of pkg.externalDocuments){add(d,d,'document');for(const a of d.activities)add(a,d,'activity');}
  return {map,owner,types};
 }
@@ -38,6 +38,10 @@ export function validate(pkg){
   demand(pkg.formatVersion!=='0.1'||d.kind!=='stateTransition','State documents require formatVersion 0.2');
   if(d.kind==='businessDesign'){
    demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!['\n','\r',' — ',' → ','<!--'].some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
+   if(d.schemaVersion==='0.2'){
+    demand(new Set(d.roles.map(r=>r.name)).size===d.roles.length,'Duplicate Role name');demand(d.roles.every(r=>r.name===r.name.trim()&&!/[\r\n]/.test(r.name)),'Invalid Role name');
+    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else demand(diagnostics.some(x=>x.startsWith('Role未確定: '+a.id+' — ')),'Unresolved Who requires a diagnostic');}
+   }
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
    const endpoints={input:['object','activity'],output:['activity','object'],'business-exception':['activity','activity'],'object-exception':['object','object']};const seen=new Set();
    for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}

@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {parseStrict,validate,stringify,demand} from './core.mjs';
+import {upgradeRoles} from './roles.mjs';
 import {guardAuthoring,fingerprint,meaningHash} from './authoring.mjs';
 export function run(args){
  let temp,lock,ownsLock=false;
@@ -13,6 +14,12 @@ export function run(args){
   if(command==='runtime'){
    demand(!rest.length,'runtime takes no arguments');const p=spawnSync(process.env.ALDER_PYTHON||'python3',['-c','import sys,json;print(json.dumps(list(sys.version_info[:3])))'],{encoding:'utf8'});let version=null;try{version=JSON.parse(p.stdout);}catch{}
    console.log(JSON.stringify({node:process.version,directJSON:true,python:version,markdownConversion:!!version&&(version[0]>3||version[0]===3&&version[1]>=12)}));return 0;
+  }
+  if(command==='prepare-role-upgrade'){
+   demand(rest.length===3,'prepare-role-upgrade source.json new-candidate.json revisions.json');const [source,output,request]=rest;
+   demand(path.resolve(source)!==path.resolve(output),'Migration must preserve the source');const previous=parseStrict(fs.readFileSync(source,'utf8')),next=upgradeRoles(previous,parseStrict(fs.readFileSync(request,'utf8'))),text=stringify(next);
+   temp=path.join(path.dirname(path.resolve(output)),'.alder-json-'+randomUUID());const fd=fs.openSync(temp,'wx',0o600);try{fs.writeFileSync(fd,text,'utf8');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}validate(parseStrict(fs.readFileSync(temp,'utf8')));fs.linkSync(temp,output);
+   console.log(JSON.stringify({candidate:output,approval:'not-evaluated',revision:next.revision,diagnostics:validate(next).diagnostics}));return 0;
   }
   if(command==='ids'){const n=Number(rest[0]);demand(rest.length===1&&Number.isInteger(n)&&n>0&&n<=100,'ids expects 1..100');console.log(JSON.stringify(Array.from({length:n},()=>randomUUID())));return 0;}
   if(command==='inspect'){
