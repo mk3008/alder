@@ -35,6 +35,8 @@ Viewer本体がラフheadと同じcommit `5978990fe99f06ec21c86c956089b4b0c095bf
 
 最初の追加CI #39742195521はフォント取得で長時間停滞し、次commitによる自動キャンセルとなった。導入済みのNoto CJKを先に確認し、未導入時の公式apt取得に待ち時間上限を設定。Noto CJK実在検査と全体のassertは維持して再実行した。
 
+後続CI #39747716690ではUbuntuミラーからの61.2MB取得が2回とも時間切れとなり、Chrome検証は未実行。以後は公式Noto配布元の固定commit `f8d157532fbfaeda587e826d4cd5b21a49186f7c` の日本語Regular OTF（16.5MB）を使用し、Git blob SHA `f56224957fb13a81b4c14bac34f2f058a017f9fb` とfontconfigの実在検査を必須とした。取得には接続/全体時間の上限を持たせる。JSON先行3群と全43群を両方実行する最終ジョブの上限は20分とし、assertを減らさない。
+
 過去のCloud Chromeのlocalhost接続失敗/data URL拒否を迂回していない。今回の画面は本人が明示した、既存GitHub Actions runnerの通常HTTP/Chromeで取得したもの。
 
 ## 検証の再現

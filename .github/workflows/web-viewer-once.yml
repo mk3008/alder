@@ -16,7 +16,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
       REVIEW_PR: ${{ github.event.pull_request.number }}
@@ -39,10 +39,14 @@ jobs:
       - name: Install Japanese review-image font
         run: |
           if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
-            if ! timeout 90 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends fonts-noto-cjk; then
-              timeout 120 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update -qq
-              timeout 90 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
-            fi
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
           fi
           fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
       - name: Verify JSON cases in Chrome
