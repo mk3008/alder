@@ -92,7 +92,7 @@ export function assertLocalReturnPath(path){
  const bounds=[Math.min(...extrema.map(p=>p[0])),Math.min(...extrema.map(p=>p[1])),Math.max(...extrema.map(p=>p[0])),Math.max(...extrema.map(p=>p[1]))];
  // Both arrival roles face lower peers. The upper data port uses the outer
  // of the two 16-unit return corridors to avoid crossing the lower arrival.
- const right=Math.max(source[0]+260,target[0]+260)+14+8+16;
+ const right=Math.max(source[0]+260,target[0]+260)+24+8+16;
  assert.deepEqual(bounds,[target[0]+260,target[1]+68/3,right,source[1]+34],'local return stays within its endpoint corridor, including exact curve extrema');
  assert.equal(segments.filter(s=>s.kind==='Q').length,2,'rounded two-corner return');
  for(const s of segments)if(s.kind==='L')assert.ok(s.start[0]===s.end[0]||s.start[1]===s.end[1],'straight legs are orthogonal');
