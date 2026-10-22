@@ -1,0 +1,4 @@
+Gate C review beta (not a release)
+Viewer source: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+JSON source: https://raw.githubusercontent.com/mk3008/alder/4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec/work/viewer-json/issue-274/rough/gate-b-example.json
+Check's confirmed state is synthetic fixture data, not human approval.
