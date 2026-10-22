@@ -3,7 +3,8 @@ import {readFileSync,mkdirSync} from 'node:fs';
 import {withToolbarPage} from './test-toolbar-settings-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
-const raw=readFileSync(new URL('../../tools/fixtures/shared-captions/purchase-request.md',import.meta.url),'utf8');
+// The published fixture has resolved findings; reopen one in-memory so the mobile badge clearance is measured.
+const raw=readFileSync(new URL('../../tools/fixtures/shared-captions/purchase-request.md',import.meta.url),'utf8').replace('### Status\n\nresolved','### Status\n\nopen');
 export async function verifySharedCaptions(browser){
  mkdirSync('web/evidence/wiring',{recursive:true});const results=[];
  for(const width of [320,393,1280])results.push(await withToolbarPage(browser,{width,height:900},async(page,errors)=>{
@@ -19,6 +20,30 @@ export async function verifySharedCaptions(browser){
   const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
   for(let i=0;i<boxes.labels.length;i++){for(const n of boxes.cards)assert.equal(hit(boxes.labels[i],n),false,'caption avoids every card');for(const other of boxes.labels.slice(i+1))assert.equal(hit(boxes.labels[i],other),false,'distinct native captions do not overlap');}
   const auth=boxes.cards.find(n=>n.id==='認証基盤'),next=boxes.cards.filter(n=>n.y>auth.y).sort((a,b)=>a.y-b.y)[0];assert.equal(next.y-auth.y,112,'five identical lines reserve just one line');
+  // A real selected card casts a 17px blur with 5px spread. At each viewport,
+  // adjacent card text and its upward finding badge must clear that glow.
+  await page.locator('.node').first().click({position:{x:45,y:30}});
+  assert.equal(await page.locator('.node.selected').count(),1);
+  const clearance=await page.evaluate(()=>{
+    const selected=document.querySelector('.node.selected'),glow=getComputedStyle(selected).boxShadow;
+    const nodes=[...document.querySelectorAll('.node')].map(node=>({
+      node,x:parseFloat(node.style.left),y:parseFloat(node.style.top),height:node.offsetHeight,width:node.offsetWidth
+    }));
+    let pairs=0,badgePairs=0,minClearance=Infinity;
+    for(const upper of nodes)for(const lower of nodes){
+      if(upper===lower||lower.y<upper.y+upper.height)continue;
+      if(Math.max(upper.x,lower.x)>=Math.min(upper.x+upper.width,lower.x+lower.width))continue;
+      const badge=lower.node.querySelector('.finding-badges');
+      const nodeRect=lower.node.getBoundingClientRect(),scale=nodeRect.width/lower.width;
+      const lowerVisualTop=badge?lower.y+(badge.getBoundingClientRect().top-nodeRect.top)/scale:lower.y;
+      const remaining=lowerVisualTop-(upper.y+upper.height+22);
+      minClearance=Math.min(minClearance,remaining);pairs++;if(badge)badgePairs++;
+    }
+    return {glow,findings:document.querySelectorAll('.finding-badges').length,pairs,badgePairs,minClearance};
+  });
+  assert.match(clearance.glow,/17px/,'selected node uses the actual review glow');
+  assert.ok(clearance.findings>0&&clearance.badgePairs>0,'the regression measures a visible upward finding badge');
+  assert.ok(clearance.pairs>0&&clearance.minClearance>=8,'neighbor text/badges keep at least 8px beyond the 22px selection halo');
   for(let i=0;i<7;i++)await page.locator('#out').click();
   await page.screenshot({path:`web/evidence/wiring/real-shared-captions-${width}.png`});
   await page.locator('[data-node="購入結果を登録する"] .activity-open').click();await page.waitForFunction(()=>document.querySelector('.node.selected')?.dataset.node==='購入結果を登録する');
