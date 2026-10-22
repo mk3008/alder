@@ -31,9 +31,13 @@ jobs:
         run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
       - name: Install Japanese review-image font
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-          fc-match -f '%{family}\n' ':lang=ja'
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            if ! timeout 90 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends fonts-noto-cjk; then
+              timeout 120 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update -qq
+              timeout 90 sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+            fi
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
       - name: Verify built app in Chrome
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &

@@ -22,7 +22,7 @@ export async function verifyJSONDocuments(browser){
    const activity=bd.activities[0];await page.locator(`[data-list-node="${activity.id}"] .node-navigate`).click();
    await shot('activity-list');if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-   assert.equal(await page.locator('#detail h1').textContent(),activity.name);assert.ok((await page.locator('#detail').innerText()).includes(activity.procedure));await shot('activity-detail');
+   assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await shot('activity-detail');
    await page.locator('#detail-mode-checks').click();assert.equal(await page.locator('.check-item').count(),2);
    assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));
    const item=page.locator('[data-check-id="CI-001"]');assert.ok((await item.innerText()).includes('確認済み'));
