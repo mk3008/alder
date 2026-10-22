@@ -48,11 +48,11 @@ export async function verifyRolePorts(browser){
    // Captions follow their own bend on its row; the existing text halo
    // keeps unrelated wire crossings readable.
    const captions=await page.evaluate(()=>{
-    const wires=[...document.querySelectorAll('.edge')].map(e=>{const length=e.getTotalLength(),a=e.getPointAtLength(0),label=document.querySelector(`.edge-label[data-relation="${e.dataset.relation}"]`),b=label.getBBox();return {title:e.querySelector('title').textContent,exception:e.classList.contains('exception'),a:[a.x,a.y],label:[+label.getAttribute('x'),+label.getAttribute('y')],box:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=e.getPointAtLength(length*i/256);return [p.x,p.y];})};});
+    const wires=[...document.querySelectorAll('.edge')].map(e=>{const length=e.getTotalLength(),a=e.getPointAtLength(0),label=document.querySelector(`.edge-label[data-relations~="${e.dataset.relation}"]`),b=label.getBBox();return {title:e.querySelector('title').textContent,exception:e.classList.contains('exception'),a:[a.x,a.y],label:[+label.getAttribute('x'),+label.getAttribute('y')],box:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=e.getPointAtLength(length*i/256);return [p.x,p.y];})};});
     const card=document.querySelector('.node[data-node="検査項目の設計"]');return {card:{right:parseFloat(card.style.left)+260,top:parseFloat(card.style.top)},all:wires,focus:wires.filter(r=>r.title.startsWith('検査項目の設計 → ')&&r.points[1][0]>r.a[0]&&r.points[1][1]===r.a[1])};
    });
    assert.equal(captions.focus.length,2);
-   for(const r of captions.focus){assert.ok(Math.abs(r.label[1]-r.a[1])<.001,'caption at actual bend row');assert.ok(Math.abs(r.box.x-(Math.max(...r.points.map(p=>p[0]))+8))<.1,'native caption immediately follows its bend');}
+   for(const r of captions.focus){assert.ok(Math.abs(r.label[1]-r.a[1])<.001,'caption at actual bend row');assert.ok(r.box.x>=Math.max(...r.points.map(p=>p[0]))+8-.1,'native caption follows its bend or escapes a collision horizontally');}
 
    for(const r of captions.focus)assert.ok(Math.abs(r.a[1]-captions.card.top-(r.exception?17:34))<.001,'upper-facing process/data exits use upper/middle ports');
    const arrival=captions.all.filter(r=>r.title.includes(' → 検査項目の設計:')&&Math.abs(r.points.at(-1)[0]-captions.card.right)<.01);assert.equal(arrival.length,1);assert.ok(Math.abs(arrival[0].points.at(-1)[1]-captions.card.top-51)<.001,'lower data peer arrives at lower port');
