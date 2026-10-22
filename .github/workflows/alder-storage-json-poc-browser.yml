@@ -1,0 +1,61 @@
+name: Alder typed JSON browser PoC
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/alder-storage-json-poc-browser.yml'
+      - 'work/storage-json/issue-270/**'
+permissions:
+  contents: read
+concurrency:
+  group: alder-typed-json-poc-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  browser-poc:
+    if: github.event.pull_request.number == 271
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Generate frozen PoC inputs and standalone HTML
+        run: |
+          node work/storage-json/issue-270/generate.mjs
+          node work/storage-json/issue-270/build.mjs
+          node --experimental-strip-types --test work/storage-json/issue-270/test-core.mjs work/storage-json/issue-270/test-paths.mjs
+          python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
+      - name: Install browser driver (same version as Viewer validation)
+        run: npm install --prefix "$RUNNER_TEMP/storage-json-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Check existing runner Chrome
+        run: |
+          test -x /usr/bin/google-chrome
+          /usr/bin/google-chrome --version
+      - name: Measure local File and URL in real Chrome
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/storage-json-browser/node_modules/playwright
+          CHROME_PATH: /usr/bin/google-chrome
+          REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > "$RUNNER_TEMP/storage-json-http.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/work/storage-json/issue-270/index.html > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent --output /dev/null http://127.0.0.1:8765/work/storage-json/issue-270/index.html
+          node work/storage-json/issue-270/browser-ci.mjs
+      - name: Preserve isolated browser proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: typed-json-browser-${{ github.event.pull_request.head.sha }}
+          path: |
+            work/storage-json/issue-270/.generated/browser-ci-results.json
+            work/storage-json/issue-270/.generated/browser-ci.png
+          if-no-files-found: warn
+          retention-days: 14
