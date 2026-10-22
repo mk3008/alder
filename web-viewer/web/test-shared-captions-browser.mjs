@@ -3,13 +3,22 @@ import {readFileSync,mkdirSync} from 'node:fs';
 import {withToolbarPage} from './test-toolbar-settings-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
+import {parseDesign} from '../src/graph.ts';
 // The published fixture has resolved findings; reopen one in-memory so the mobile badge clearance is measured.
 const raw=readFileSync(new URL('../../tools/fixtures/shared-captions/purchase-request.md',import.meta.url),'utf8').replace('### Status\n\nresolved','### Status\n\nopen');
+
+assert.equal(parseDesign(raw).graph.nodes.length,13,'purchase fixture still parses with its open Finding');
 export async function verifySharedCaptions(browser){
  mkdirSync('web/evidence/wiring',{recursive:true});const results=[];
  for(const width of [320,393,1280])results.push(await withToolbarPage(browser,{width,height:900},async(page,errors)=>{
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open-text').disabled);
-  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.node').length===13);
+  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();
+  try{
+    await page.waitForFunction(()=>document.querySelectorAll('.node').length===13,null,{timeout:12000});
+  }catch(error){
+    const detail=await page.evaluate(()=>({nodes:document.querySelectorAll('.node').length,dialogHidden:document.querySelector('#source-dialog')?.hidden,status:document.querySelector('#status-text')?.textContent,saveState:document.querySelector('#app')?.dataset.saveState}));
+    throw new Error('Purchase fixture failed to open: '+JSON.stringify(detail),{cause:error});
+  }
   if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
   const captions=()=>page.locator('.edge-label').evaluateAll(ns=>ns.map(n=>({text:n.textContent,members:n.dataset.relations.split(' ').map(Number),x:+n.getAttribute('x'),y:+n.getAttribute('y')})));
   const labels=await captions();assert.equal(await page.locator('.edge').count(),24);
