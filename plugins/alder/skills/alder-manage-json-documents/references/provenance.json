@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "b9f9df166b35fb6e972342a89d4084caeccb8e83",
+  "alder_source_revision": "dc4fd5065d686af8d9592c39c7d11a611ac83a86",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "5ffd532a5b28a1bd5ecf4ab68eb39914d93b5764d3f312aad486f721198fc940",
     "docs/adoption.md": "2992bd2dc95f215d0869c8eac7c2fac13d8696d97264f5a483ce34645ccba0d3",
@@ -23,9 +23,9 @@
     "tools/document_storage/authoring.mjs": "74ca488ab652bada3cdcf2f8405f733155744e1e87d0876dbd1e6ac1bdd7b200",
     "tools/document_storage/author-cli.mjs": "a957d9016fa9e86b5a8564dc5c659ad25802aa005e4fd8d7f77c8ebe4531535f",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
-    "tools/document_storage/state-declaration.mjs": "c4b34aa12f0503541f65afef11ba9571fa896b62f53ff22ebc79550e2d13a871",
+    "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
     "tools/document_storage/state-storage.mjs": "f54beb78f895f843379c23f98c755b1d259834fa24b75285feb63ff9e7529853",
-    "tools/document_storage/roles.mjs": "779eabe0bf0f925457a32805be4515c73f4028b10e3bf79406d5d11a0a973c6b"
+    "tools/document_storage/roles.mjs": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1"
   },
   "script_destinations": {
     "tools/document_storage/core.mjs": "document_storage/core.mjs",
