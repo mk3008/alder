@@ -217,7 +217,7 @@ function detail(){
   const focus=root.contains(document.activeElement)?(document.activeElement as HTMLElement)?.id:undefined;
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
-  const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,confirm:candidate=>{void confirmChecks(t,candidate);}});
+  const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,navigate:id=>{t.selected=id;view!.mode='business';render();persist();},confirm:candidate=>{void confirmChecks(t,candidate);}});
   if(n)root.append(detailHeading(n.name));root.append(panel.controls,panel.content??(t.design.sourceFormat==='json'?jsonDetail(t.design,n?.id):formattedMarkdown(n?t.design.sections[n.id]:'図の業務やObjectを選択してください',!!n)));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';

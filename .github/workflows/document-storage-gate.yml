@@ -26,7 +26,7 @@ jobs:
           node --version
           python3 --version
       - name: Validate Gate A schema, converter, ID handling and CLI
-        run: node --test tools/document_storage/test-storage.mjs
+        run: node --test tools/document_storage/test-storage.mjs tools/document_storage/test-states.mjs
       - name: Retain existing Business Graph v1 behavior
         run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
       - name: Validate generated package example

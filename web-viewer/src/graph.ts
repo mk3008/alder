@@ -2,7 +2,7 @@ export type GraphNode = { id: string; type: 'business' | 'object'; name: string;
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
 export type Finding = { id: string; displayId?:string; targetNames?:string[]; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };
-export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; sourceFormat?:'json'; json?:import('./json-document').JSONView; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
+export type Design = { objectStateTransitions?:Record<string,import('./state-transitions').StateDeclaration>; graph: Graph; sections: Record<string, string>; markdown: string; sourceFormat?:'json'; json?:import('./json-document').JSONView; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
 const fail = (ok: unknown, message: string): void => { if (!ok) throw new Error(message); };
 const text = (v: unknown): v is string => typeof v === 'string' && !!v.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '');
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);

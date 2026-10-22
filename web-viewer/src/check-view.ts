@@ -1,8 +1,11 @@
 import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
+import {stateTransitionPanel} from './state-transitions';
+import {projectStates} from './state-projection';
+import './state-transitions.css';
 import {jsonChecks} from './json-view';
-export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
+export type CheckViewState={mode:'business'|'states'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
@@ -12,13 +15,20 @@ function renderBody(root:HTMLElement,body:string){
   for(const m of body.matchAll(pattern)){root.append(formattedMarkdown(body.slice(end,m.index)));end=m.index!+m[0].length;}
   root.append(formattedMarkdown(body.slice(end)));
 }
-export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean}):{controls:HTMLElement;content?:HTMLElement}{
+export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean;navigate?:(id:string)=>void}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
   const notices=document.createElement('section');notices.className='check-notices';
+  const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected),isObject=selected?.type==='object';
+  const stateDesign=tab.design.sourceFormat==='json'?projectStates(tab.design):tab.design;
+  const stateKey=tab.design.sourceFormat==='json'?selected?.name:selected?.id;
+  const declaration=stateKey?stateDesign.objectStateTransitions?.[stateKey]:undefined;
+  if(view.mode==='states'&&!declaration)view.mode='business';
+  const stateTab=(nav:HTMLElement)=>{if(!isObject)return;const b=button('状態遷移',()=>{view.mode='states';actions.redraw();});b.id='detail-mode-states';b.disabled=!declaration;b.setAttribute('aria-pressed',String(view.mode==='states'));nav.insertBefore(b,nav.children[1]??null);};
+  const stateContent=()=>stateKey?stateTransitionPanel(stateDesign,stateKey,id=>{const target=tab.design.graph.nodes.find(n=>n.name===id);if(target)actions.navigate?.(target.id);}):undefined;
   if(tab.design.sourceFormat==='json'){
     const nav=document.createElement('div');nav.className='check-modes';
-    for(const [mode,label]of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
-    return {controls:root,...(view.mode==='checks'?{content:jsonChecks(tab.design,tab.selected)}:{})};
+    for(const [mode,label]of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}stateTab(nav);root.append(nav);
+    return {controls:root,...(view.mode==='states'?{content:stateContent()}:view.mode==='checks'?{content:jsonChecks(tab.design,tab.selected)}:{})};
   }
   if(view.busy)paragraph(notices,'関連Checkを読み込み・保存しています…');
   if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;notices.append(error);}
@@ -38,12 +48,12 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidat
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);notices.append(panel);
   }
   const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
-  for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
+  for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}stateTab(nav);root.append(nav);
+  if(view.mode==='states')return {controls:root,content:stateContent()};
   if(view.mode==='business')return {controls:root};
   const content=document.createElement('section');content.className='check-content';
   if(notices.childNodes.length)content.append(notices);
   if(!doc||!usable){if(!notices.childNodes.length)paragraph(content,'チェックリストが開かれていません。');return {controls:root,content};}
-  const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected);
   if(!selected)paragraph(content,'図の業務やObjectを選択してください');
   else if(selected.type!=='business')paragraph(content,'このObjectに対応するCheckは業務一覧に記載されていません。');
   else{

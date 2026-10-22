@@ -1,135 +1,275 @@
 {
-  "type": "object",
-  "properties": {
-    "format": {
-      "enum": [
-        "alder-document-package"
-      ]
-    },
-    "formatVersion": {
-      "enum": [
-        "0.1"
-      ]
-    },
-    "revision": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "\\S"
-    },
-    "documents": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/businessDesign"
-          },
-          {
-            "$ref": "#/$defs/checkItems"
-          }
-        ]
-      }
-    },
-    "sources": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "documentId": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9_-]+$"
-          },
-          "revision": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "\\S"
-          },
-          "sha256": {
-            "type": "string",
-            "pattern": "^[0-9a-f]{64}$"
-          },
-          "uri": {
-            "type": "string"
-          }
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "enum": [
+            "alder-document-package"
+          ]
         },
-        "required": [
-          "documentId",
-          "revision",
-          "sha256",
-          "uri"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "externalDocuments": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9_-]+$"
-          },
-          "kind": {
-            "enum": [
-              "businessDesign"
-            ]
-          },
-          "revision": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "\\S"
-          },
-          "activities": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "pattern": "^[A-Za-z0-9_-]+$"
-                },
-                "name": {
-                  "type": "string",
-                  "minLength": 1,
-                  "pattern": "\\S"
-                }
+        "formatVersion": {
+          "enum": [
+            "0.1"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/businessDesign"
               },
-              "required": [
-                "id",
-                "name"
-              ],
-              "additionalProperties": false
-            }
+              {
+                "$ref": "#/$defs/checkItems"
+              }
+            ]
           }
         },
-        "required": [
-          "id",
-          "kind",
-          "revision",
-          "activities"
-        ],
-        "additionalProperties": false
-      }
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "uri": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "sha256",
+              "uri"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "externalDocuments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "kind": {
+                "enum": [
+                  "businessDesign"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "activities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]+$"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "revision",
+              "activities"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "required": [
+        "format",
+        "formatVersion",
+        "revision",
+        "documents",
+        "sources",
+        "externalDocuments",
+        "diagnostics"
+      ],
+      "additionalProperties": false
     },
-    "diagnostics": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "pattern": "\\S"
-      }
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "enum": [
+            "alder-document-package"
+          ]
+        },
+        "formatVersion": {
+          "enum": [
+            "0.2"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/businessDesign"
+              },
+              {
+                "$ref": "#/$defs/checkItems"
+              },
+              {
+                "$ref": "#/$defs/stateTransition"
+              }
+            ]
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "uri": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "sha256",
+              "uri"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "externalDocuments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "kind": {
+                "enum": [
+                  "businessDesign"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "activities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]+$"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "revision",
+              "activities"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "required": [
+        "format",
+        "formatVersion",
+        "revision",
+        "documents",
+        "sources",
+        "externalDocuments",
+        "diagnostics"
+      ],
+      "additionalProperties": false
     }
-  },
-  "required": [
-    "format",
-    "formatVersion",
-    "revision",
-    "documents",
-    "sources",
-    "externalDocuments",
-    "diagnostics"
   ],
-  "additionalProperties": false,
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
     "businessDesign": {
@@ -1906,6 +2046,221 @@
         "examples",
         "items",
         "notes"
+      ],
+      "additionalProperties": false
+    },
+    "stateTransition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "schemaVersion": {
+          "enum": [
+            "0.1"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "stateTransition"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "basedOn": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "verification": {
+              "enum": [
+                "unverified"
+              ]
+            }
+          },
+          "required": [
+            "documentId",
+            "revision",
+            "verification"
+          ],
+          "additionalProperties": false
+        },
+        "objectId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "start": {
+          "enum": [
+            "@new"
+          ]
+        },
+        "terminal": {
+          "enum": [
+            "@unknown"
+          ]
+        },
+        "completeness": {
+          "enum": [
+            "partial"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "sourceId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "fromId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "activityId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "event": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exception": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "condition": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "toId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "effect": {
+                "enum": [
+                  "change",
+                  "unchanged",
+                  "no-create",
+                  "constraint"
+                ]
+              },
+              "path": {
+                "enum": [
+                  "normal",
+                  "exception"
+                ]
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "id",
+              "sourceId",
+              "fromId",
+              "activityId",
+              "event",
+              "exception",
+              "condition",
+              "toId",
+              "effect",
+              "path",
+              "evidence",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "schemaVersion",
+        "kind",
+        "revision",
+        "title",
+        "basedOn",
+        "objectId",
+        "states",
+        "start",
+        "terminal",
+        "completeness",
+        "source",
+        "transitions"
       ],
       "additionalProperties": false
     }

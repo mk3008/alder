@@ -75,3 +75,9 @@ node "$SCRIPT_DIR/cli.mjs" convert "/path/to/request.json" "/path/to/new-package
 ## 返却
 
 実際に保存したpackage/document revision、変更要素、保持した人間状態・未決、実行した検証、未達を簡潔に返す。生JSONを人間に手直しさせる運用に戻さない。人間には業務意味と採否を問い、技術修正と再検査はAgentが行う。Viewerでの表示は別Gateであり、実際に未対応のJSONを現行Viewerで閲覧済みとは言わない。
+
+## 明示された状態遷移
+
+[部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.2とstateTransition文書に、対象Object・明示状態・操作Activity・条件・例外名・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。状態と操作の既存IDを保持し、BD更新に伴うbasedOnと各文書revisionを明示する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
+
+MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を指定する。明示表だけを変換し、未知のMedium/SR Dependenciesや無宣言の自然文は補正しない。元MDは残す。再変換での状態名改名bindingは未対応のため、改名はJSON正本のIDを維持したcommitで行う。

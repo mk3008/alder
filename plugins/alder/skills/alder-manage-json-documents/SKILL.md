@@ -1,12 +1,12 @@
 ---
 name: alder-manage-json-documents
-description: Create, update or review an explicitly selected Alder typed JSON Business Design/Check package, or explicitly convert existing Markdown to JSON. Use for 「Alderで業務設計をJSONで草案にして」「このJSONの業務を追加・改名して」「JSON正本からCheckを作って」「AlderのMDをJSONへ変換して」. Preserve human agreement gates and existing Markdown workflows. Not state/concept model specification, Viewer implementation, or business approval.
+description: Create, update or review an explicitly selected Alder typed JSON Business Design/Check/explicit partial State Transition package, or explicitly convert existing Markdown to JSON. Use for 「Alderで業務設計をJSONで草案にして」「このJSONの業務を追加・改名して」「JSON正本からCheckを作って」「AlderのMDをJSONへ変換して」. Preserve human agreement gates and existing Markdown workflows. Not general lifecycle/concept model specification, Viewer implementation, or business approval.
 license: MIT
 ---
 
 # AlderのJSON文書を作成・更新する
 
-[JSON操作ガイド](references/plugin-json-authoring.ja.md)を読み、操作を選ぶ。実際の導入版は`../../plugin.json`、同梱ソースの版/hashは[provenance](references/provenance.json)で確認する。候補契約は`alder-document-package/0.1`。Plugin版やGraph v1と混同しない。
+[JSON操作ガイド](references/plugin-json-authoring.ja.md)を読み、操作を選ぶ。実際の導入版は`../../plugin.json`、同梱ソースの版/hashは[provenance](references/provenance.json)で確認する。候補契約は`alder-document-package/0.1（BD/Check）、0.2（部分定義の状態遷移を同梱）`。Plugin版やGraph v1と混同しない。
 
 1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。JSONの明示指定か、既存正本のformatを確認する。MDが選ばれている場合は元のMD Skillへ戻り、形式を勝手に変更しない。
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。
@@ -18,4 +18,4 @@ license: MIT
 
 明示的なMD変換は[同梱converter](scripts/document_storage/cli.mjs)のconvertを使う。元MDを保持し、旧MD全文の同梱・JSON→MD同期を行わない。購買研究草案の未知見出しやCheck原典版の不一致は診断して止める。
 
-状態遷移・概念モデルの具体Schemaと業務意味、JSONの正式v1採用、Viewer対応、配布/releaseはここで決めない。保存した版・実際に使ったランタイムと検査結果、残る未決と人間判断を短く返す。
+明示された部分定義の状態遷移は[状態文書契約](references/json-state-transitions.ja.md)を読み、既存ID・未決・例外名・根拠を保持して直接草案/更新する。一般の状態遷移や概念モデルの業務意味、JSONの正式v1採用、Viewer対応、配布/releaseはここで決めない。保存した版・実際に使ったランタイムと検査結果、残る未決と人間判断を短く返す。
