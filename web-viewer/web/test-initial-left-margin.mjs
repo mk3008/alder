@@ -42,13 +42,13 @@ function geometry(e,inset=40,zoom=1){
  // Overview shares the detail's 64-unit step and separates source-only peers.
  // Pin its new coordinates and extents exactly; older saved geometry has a
  // separate frozen-128 restore/reset regression in layout and native wiring.
- assert.equal(hash(positions(e)),'e3290e87fca6d9fa00072fc32778971b602523445b19fa397d64bf7dd93f4424','all new overview coordinates use the shared 64-unit layout');
+ const oldCells=JSON.parse(readFileSync('web/authorities/overview-matrix-c407.json','utf8'));const compact=Object.fromEntries(Object.entries(oldCells).sort((a,b)=>a[1][1]-b[1][1]).map(([id,[x]],i)=>[id,[x,40+96*i]]));assert.deepEqual(positions(e),compact,'new overview retains every approved column and uses one 96-unit row per card');
  // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'93813767545d28172f82f59a605cc9d9eb382d75c0895a178729908a4e2288d9','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
+ assert.equal(hash(routes(e)),'46a9e5ac03c38caf0fe27cb878d70ccddffacea7deb18f46c2ab88a03df12d5d','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2118 3428');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2118+inset*2)*zoom+'px',3428*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2385 2564');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2385+inset*2)*zoom+'px',2564*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

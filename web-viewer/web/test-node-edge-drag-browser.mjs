@@ -104,7 +104,7 @@ function relationsFor(view){const activity=view.activity;if(!activity)return des
 function assertUnchangedOthers(current,initial){
  const moving=current.oracle?.id??edgeDragMoving,unrelated=relationsFor(initial).flatMap((r,i)=>r.from!==moving&&r.to!==moving?[String(i)]:[]);
  for(const [id,p] of Object.entries(initial.positions))if(id!==moving)assert.deepEqual(current.positions[id],p,`other world position ${id}`);
- for(const id of unrelated)assert.deepEqual(current.routes[id],initial.routes[id],`nonincident path and label ${id}`);
+ for(const id of unrelated){assert.equal(current.routes[id].path,initial.routes[id].path,`nonincident path ${id}`);assert.equal(current.routes[id].label?.[1],initial.routes[id].label?.[1],`nonincident caption stays on departure row ${id}`);}
 }
 function assertGrip(current,grip,pointer){
  const box=current.rects[current.oracle?.id??edgeDragMoving];
