@@ -6,6 +6,8 @@ license: MIT
 
 # Draft and maintain Alder Check Items
 
+If the requester explicitly selects typed JSON or the selected canonical file has `format: alder-document-package`, use [the JSON document skill](../alder-manage-json-documents/SKILL.md) for this operation. Preserve review-only scope and human agreement gates. Do not generate intermediate Markdown or convert an existing Markdown user without an explicit request. Otherwise keep the Markdown procedure below.
+
 Read the bundled [current Check Item guidance](references/check-item-traceability.md) in full and [adoption](references/adoption.md#draft-and-review-check-items-required) through the optional Functional Interface section. For initial derivation, read [c3](references/candidate-c3.md). Current adoption and traceability take precedence over historical c3/f1 passages: permanent mappings stop at Test/assertion, never Code, file, SQL entry point or line. Do not fetch newer authority or ask the requester to supply Alder's internal documents.
 
 ## Locate the work and choose the requested operation

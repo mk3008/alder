@@ -6,6 +6,8 @@ license: MIT
 
 # Review an implementation with Alder
 
+For a selected typed JSON Business Design or Check package, first read [JSON representation and guarded-save guidance](../alder-manage-json-documents/SKILL.md). Apply the existing implementation-review/follow-up scope below; review-only never saves. Use its JSON commit procedure only for explicitly authorized record maintenance, preserving IDs, human states and exact BD revision. Keep the Markdown route for Markdown inputs.
+
 A single request can cover review and its record follow-up. Select the scope from the user's actual words and existing authorization; do not make the user name internal skills.
 
 ## Choose the requested work

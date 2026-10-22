@@ -1,0 +1,133 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.1",
+  "revision": "package-2",
+  "documents": [
+    {
+      "id": "3fdf95b6-e8e5-48b7-99dd-353672c74d52",
+      "schemaVersion": "0.1",
+      "kind": "businessDesign",
+      "revision": "bd-2",
+      "title": "備品持出し受付の業務設計書",
+      "preface": "架空のヒアリングに基づく未合意の草案。品名・返却予定日が不足する場合の扱いと代理申請の扱いは未決である。",
+      "scope": "備品の持出し申出を受け付け、受付済みの内容を確認して台帳へ記録する業務。",
+      "objects": [
+        {
+          "id": "334c42c4-742e-42b1-9fb2-dd063bb556f6",
+          "name": "申請者",
+          "scope": false,
+          "icon": "user",
+          "information": [
+            "品名",
+            "返却予定日"
+          ]
+        },
+        {
+          "id": "e35285d3-c6f2-41c4-aa6b-369e80ede45b",
+          "name": "持出受付台帳",
+          "scope": true,
+          "icon": "clipboard-list",
+          "information": [
+            "受付番号",
+            "品名",
+            "返却予定日",
+            "受付済みの状態",
+            "確認済みの状態"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "b98f2819-6f07-43f1-b69e-2b28a6c11751",
+          "name": "持出しを受け付ける",
+          "scope": true,
+          "why": "備品の持出し申出を受付番号とともに記録するため。",
+          "when": "申請者から備品の持出し申出があったとき。",
+          "who": "受付担当",
+          "where": "規定なし",
+          "procedure": "申請者が申し出た品名と返却予定日を受け取り、新しい受付番号を付けて、品名と返却予定日を持出受付台帳へ記録する。品名と返却予定日は必須である。",
+          "exception": null,
+          "result": "受付番号を持つ一件の受付が台帳に記録され、確認担当がその受付を確認できる。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "3b6992aa-667a-41b4-956a-c106690943a4",
+          "name": "受付内容を確認する",
+          "scope": true,
+          "why": "受付済みの対象内容を確認済みとして記録するため。",
+          "when": "対象の受付が済んだとき。",
+          "who": "確認担当",
+          "where": "規定なし",
+          "procedure": "持出受付台帳から受付済みの対象内容と受付番号を確認し、同じ受付を確認済みとして台帳へ記録する。対象の受付番号は変えない。",
+          "exception": null,
+          "result": "対象の受付は受付番号を維持したまま確認済みとして台帳に記録される。",
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "c2b67a55-753a-400e-98d7-5568b1860c19",
+          "kind": "input",
+          "fromId": "334c42c4-742e-42b1-9fb2-dd063bb556f6",
+          "toId": "b98f2819-6f07-43f1-b69e-2b28a6c11751",
+          "label": "持出し申出の品名と返却予定日"
+        },
+        {
+          "id": "748e41f8-2edb-4629-9969-1ed60d082513",
+          "kind": "output",
+          "fromId": "b98f2819-6f07-43f1-b69e-2b28a6c11751",
+          "toId": "e35285d3-c6f2-41c4-aa6b-369e80ede45b",
+          "label": "新しい受付番号、品名、返却予定日、受付済みの状態"
+        },
+        {
+          "id": "e825351b-5b3f-490e-a69f-571fc8c9abb2",
+          "kind": "input",
+          "fromId": "e35285d3-c6f2-41c4-aa6b-369e80ede45b",
+          "toId": "3b6992aa-667a-41b4-956a-c106690943a4",
+          "label": "対象の受付番号と受付済みの内容"
+        },
+        {
+          "id": "2c33dbdf-711d-4d20-a3b0-b5ebade3c51b",
+          "kind": "output",
+          "fromId": "3b6992aa-667a-41b4-956a-c106690943a4",
+          "toId": "e35285d3-c6f2-41c4-aa6b-369e80ede45b",
+          "label": "同じ受付番号の確認済みの状態"
+        }
+      ],
+      "findings": [
+        {
+          "id": "8e74323c-0892-4c40-a1f2-0afb5f5dfaa2",
+          "sourceId": "F01",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "b98f2819-6f07-43f1-b69e-2b28a6c11751"
+          ],
+          "unresolvedTargets": [],
+          "summary": "必須項目が不足した場合",
+          "content": "品名または返却予定日が不足した場合、受付担当はどう扱うか。ヒアリングでは必須であることだけが決まり、不足時の扱いは未決。"
+        },
+        {
+          "id": "c7b112aa-c0cd-4296-ac03-ae044bef8bd8",
+          "sourceId": "F02",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "334c42c4-742e-42b1-9fb2-dd063bb556f6",
+            "b98f2819-6f07-43f1-b69e-2b28a6c11751"
+          ],
+          "unresolvedTargets": [],
+          "summary": "代理申請の扱い",
+          "content": "代理申請をどう扱うか。申請者と申出者の関係や受付時の扱いはヒアリングで未決。"
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

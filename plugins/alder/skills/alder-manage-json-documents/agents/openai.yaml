@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alder JSON文書管理"
+  short_description: "JSONの業務設計とCheckを草案・編集・検査する"
+  default_prompt: "$alder-manage-json-documents を使って業務設計書をJSON正本として草案・更新して"
