@@ -54,4 +54,14 @@ class JSONPluginTest(unittest.TestCase):
             # Read-only validation and inspect do not write the canonical file.
             self.assertEqual(run('inspect',target).returncode,0);self.assertEqual(before,target.read_bytes())
 
+    def test_state_authoring_without_python_in_isolated_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda *args:subprocess.run(['node',str(scripts/'author-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            candidate=root/'candidate.json';target=root/'states.json';op=root/'op.json';pkg=json.loads((ROOT/'work/json-state/issue-275/purchase.json').read_text());candidate.write_text(json.dumps(pkg));op.write_text('{}')
+            r=run('create',candidate,target,op);self.assertEqual(r.returncode,0,r.stderr)
+            inspected=json.loads(run('inspect',target).stdout);before=target.read_bytes();state=pkg['documents'][1]['states'][0];state['name']='名前変更後';pkg['documents'][1]['revision']='states-2';pkg['revision']='package-2';candidate.write_text(json.dumps(pkg));op.write_text(json.dumps({'expectedRevision':inspected['revision'],'expectedSha256':inspected['sha256']}))
+            r=run('commit',target,candidate,op);self.assertEqual(r.returncode,0,r.stderr);saved=json.loads(target.read_text());self.assertEqual(saved['documents'][1]['states'][0]['id'],state['id']);self.assertEqual(len(saved['documents'][1]['transitions']),13)
+            before=target.read_bytes();inspected=json.loads(run('inspect',target).stdout);pkg['documents'][1]['transitions'][0]['activityId']='unknown';pkg['revision']='package-3';candidate.write_text(json.dumps(pkg));op.write_text(json.dumps({'expectedRevision':inspected['revision'],'expectedSha256':inspected['sha256']}));self.assertEqual(run('commit',target,candidate,op).returncode,2);self.assertEqual(target.read_bytes(),before)
+
 if __name__=='__main__':unittest.main()

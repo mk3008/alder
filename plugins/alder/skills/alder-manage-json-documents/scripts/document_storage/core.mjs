@@ -24,7 +24,7 @@ export function validateShape(value,s=schema,path='$'){
 export function inventory(pkg){
  const map=new Map(),owner=new Map(),types=new Map();
  const add=(e,doc,type)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);};
- for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note'}))for(const e of d[key]??[])add(e,d,type);}
+ for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note',states:'state',transitions:'transition'}))for(const e of d[key]??[])add(e,d,type);}
  for(const d of pkg.externalDocuments){add(d,d,'document');for(const a of d.activities)add(a,d,'activity');}
  return {map,owner,types};
 }
@@ -35,6 +35,7 @@ export function validate(pkg){
  const hasContent=runs=>runs?.some(r=>r.kind==='text'?r.value.trim().length>0:true);
  const rich=(runs,doc)=>{for(const r of runs){if(r.kind==='reference'){target(r.targetId,null,doc);demand(['document','section','guarantee','example','check','note'].includes(types.get(r.targetId)),'Invalid rich reference target');}if(r.kind==='link'){const u=new URL(r.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe external link');}}};
  for(const d of pkg.documents){
+  demand(pkg.formatVersion!=='0.1'||d.kind!=='stateTransition','State documents require formatVersion 0.2');
   if(d.kind==='businessDesign'){
    demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!['\n','\r',' — ',' → ','<!--'].some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
@@ -42,6 +43,20 @@ export function validate(pkg){
    for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}
    demand(new Set(d.findings.map(f=>f.sourceId)).size===d.findings.length,'Duplicate Finding source ID');
    for(const f of d.findings){demand(f.scope==='items'?f.targetIds.length+f.unresolvedTargets.length>0:!f.targetIds.length&&!f.unresolvedTargets.length,'Finding scope mismatch');demand(new Set(f.targetIds).size===f.targetIds.length,'Duplicate Finding target');for(const t of f.targetIds){target(t,null,d.id);demand(['object','activity'].includes(types.get(t)),'Invalid Finding target');}demand(!f.unresolvedTargets.length,'Unresolved Finding target: '+f.sourceId);}
+  }else if(d.kind==='stateTransition'){
+   const bd=target(d.basedOn.documentId,'document');demand(bd.kind==='businessDesign'&&bd.objects,'State source must be an in-package BD');demand(bd.revision===d.basedOn.revision,'Stale State source revision');target(d.objectId,'object',bd.id);
+   demand(!pkg.documents.some(x=>x!==d&&x.kind==='stateTransition'&&x.objectId===d.objectId),'Duplicate Object state declaration');
+   demand(d.states.length>0&&new Set(d.states.map(s=>s.name)).size===d.states.length,'Duplicate/empty state names');demand(d.states.every(s=>!s.name.startsWith('@')),'Reserved state name');
+   demand(d.transitions.length<=1000,'State transition row budget');demand(new Set(d.transitions.map(t=>t.sourceId)).size===d.transitions.length,'Duplicate transition source ID');
+   for(const r of d.transitions){
+    if(r.fromId!=='@new')target(r.fromId,'state',d.id);if(!['@unknown','@none'].includes(r.toId))target(r.toId,'state',d.id);const a=target(r.activityId,'activity',bd.id);
+    demand(r.path==='normal'?r.exception===null:true,'Normal transition cannot name an exception');
+    if(r.path==='exception'&&r.exception!==null){const names=[...(a.exception??'').matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);demand(names.filter(n=>n===r.exception).length===1,'Unknown or ambiguous State exception name');}
+    demand(r.effect!=='unchanged'||r.fromId===r.toId,'Unchanged state mismatch');
+    demand(r.effect!=='change'||(!r.toId.startsWith('@')&&r.fromId!==r.toId),'Invalid changed state');
+    demand(r.effect!=='no-create'||(r.fromId==='@new'&&r.toId==='@none'),'Invalid no-create transition');
+    demand(r.effect!=='constraint'||r.toId==='@unknown','Constraint must remain undecided');
+   }diagnostics.push('状態遷移は部分定義・業務意味未確認: '+d.id);
   }else{
    const bd=target(d.basedOn.documentId,'document');demand(bd.kind==='businessDesign','Check source is not BD');demand(bd.revision===d.basedOn.revision,'Stale Check source revision');diagnostics.push('Check原典の意味対応は未確認: '+d.id);
    demand(new Set(d.items.map(i=>i.checkId)).size===d.items.length,'Duplicate Check ID');

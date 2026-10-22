@@ -1,4 +1,6 @@
 /** Node-only Markdown adapter; core.mjs/schema.mjs remain browser-portable. */
+import {extractStateDeclarations} from './state-declaration.mjs';
+import {stateDocument} from './state-storage.mjs';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
@@ -28,7 +30,7 @@ function checkClaim(source,bdSource){
 }
 function remap(value,ids){
  if(Array.isArray(value))return value.map(v=>remap(v,ids));
- if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,(['id','activityId','fromId','toId','sectionId','guaranteeId','exampleId','targetId'].includes(k)&&typeof v==='string')?(ids.get(v)??v):(['targetIds','checkIds'].includes(k)?v.map(id=>ids.get(id)??id):remap(v,ids))]));
+ if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,(['id','objectId','activityId','fromId','toId','sectionId','guaranteeId','exampleId','targetId'].includes(k)&&typeof v==='string')?(ids.get(v)??v):(['targetIds','checkIds'].includes(k)?v.map(id=>ids.get(id)??id):remap(v,ids))]));
  return value;
 }
 /** Re-import never matches by position or similarity. Removed/renamed identities require explicit intent. */
@@ -41,14 +43,14 @@ function reconcile(pkg,previous,renames,removedIds){
  }
  const key=(entity,type,ids)=>{
   const id=x=>ids.get(x)??x;
-  switch(type){case'document':return entity.id;case'activity':case'object':return entity.name;
+  switch(type){case'document':return entity.id;case'activity':case'object':case'state':return entity.name;case'transition':return entity.sourceId;
    case'finding':return entity.sourceId;case'check':return entity.checkId;
    case'relation':return JSON.stringify([entity.kind,id(entity.fromId),id(entity.toId),entity.label]);
    case'section':return entity.activityId===null?entity.title:id(entity.activityId);case'guarantee':return JSON.stringify([id(entity.sectionId),entity.title]);
    case'example':return JSON.stringify([id(entity.guaranteeId),entity.columns]);case'note':return entity.title;
    default:throw Error('Unknown identity type');}
  };
- for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note']){
+ for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note','state','transition']){
   const before=[...old.map].filter(([id])=>old.types.get(id)===type);
   for(const [id,e]of fresh.map){if(fresh.types.get(id)!==type||mapping.has(id))continue;
    const matches=before.filter(([oid,o])=>old.owner.get(oid)===fresh.owner.get(id)&&key(o,type,new Map())===key(e,type,mapping));
@@ -63,22 +65,27 @@ function reconcile(pkg,previous,renames,removedIds){
 }
 export function convertMarkdown(request){
  try{
- const allowed=['sources','revision','previousPackage','expectedRevision','renameBindings','removedIds','externalDocuments','externalSources'];
+ const allowed=['sources','revision','previousPackage','expectedRevision','renameBindings','removedIds','externalDocuments','externalSources','stateDocuments'];
  demand(request&&Object.keys(request).every(k=>allowed.includes(k)),'Unknown conversion option');
- const {sources,revision,previousPackage=null,expectedRevision=null,renameBindings={},removedIds=[],externalDocuments=[],externalSources=[]}=request;
+ const {sources,revision,previousPackage=null,expectedRevision=null,renameBindings={},removedIds=[],externalDocuments=[],externalSources=[],stateDocuments=[]}=request;
  demand(Array.isArray(sources)&&sources.length>0,'Sources required');demand(typeof revision==='string'&&revision.trim(),'Package revision required');
  const ids=new Set();for(const s of sources){demand(s&&Object.keys(s).every(k=>['text','documentId','kind','revision','uri','basedOn'].includes(k)),'Unknown source option');demand(s&&typeof s.text==='string','Markdown text required');demand(/^[A-Za-z0-9_-]+$/.test(s.documentId),'Stable documentId required');demand(!ids.has(s.documentId),'Duplicate source documentId');ids.add(s.documentId);demand(typeof s.revision==='string'&&s.revision.trim(),'Source revision required');demand(['businessDesign','checkItems'].includes(s.kind),'Unsupported source kind');}
  if(previousPackage){validate(previousPackage);demand(previousPackage.revision===expectedRevision,'Revision conflict');}
  else demand(!Object.keys(renameBindings).length&&!removedIds.length,'Identity changes require previousPackage');
- const documents=[];
- for(const s of sources.filter(s=>s.kind==='businessDesign'))documents.push(parse(s));
+ const documents=[];const stateModels=[];
+ for(const s of sources.filter(s=>s.kind==='businessDesign')){
+  const extracted=stateDocuments.length?extractStateDeclarations(s.text):{markdown:s.text,declarations:[]};const bd=parse({...s,text:extracted.markdown});documents.push(bd);
+  for(const model of extracted.declarations){const descriptors=stateDocuments.filter(d=>d.businessDesignId===bd.id&&d.objectName===model.object);demand(descriptors.length===1,'Explicit state document ID/revision required');const descriptor=descriptors[0];demand(Object.keys(descriptor).sort().join('|')===['documentId','revision','businessDesignId','objectName'].sort().join('|'),'Unknown state descriptor');stateModels.push(stateDocument(model,bd,descriptor));}
+ }
+ demand(stateModels.length===stateDocuments.length,'Missing/duplicate explicit State declaration');
  for(const s of sources.filter(s=>s.kind==='checkItems')){
   demand(s.basedOn&&s.basedOn.documentId&&s.basedOn.revision,'Check basedOn required');demand(Object.keys(s.basedOn).every(k=>['documentId','revision'].includes(k)),'Unknown basedOn option');
   const bd=[...documents,...externalDocuments].find(d=>d.id===s.basedOn.documentId);
   demand(bd?.kind==='businessDesign','Check source document missing');demand(bd.revision===s.basedOn.revision,'Check source revision mismatch');
   checkClaim(s,[...sources,...externalSources].find(d=>d.documentId===bd.id));documents.push(parse(s,bd));
  }
- let pkg={format:'alder-document-package',formatVersion:'0.1',revision,documents,sources:[...sources.map(s=>({documentId:s.documentId,revision:s.revision,sha256:hash(s.text),uri:s.uri??''})),...structuredClone(externalSources)],externalDocuments:structuredClone(externalDocuments),diagnostics:[]};
+ documents.push(...stateModels);
+ let pkg={format:'alder-document-package',formatVersion:stateModels.length?'0.2':'0.1',revision,documents,sources:[...sources.map(s=>({documentId:s.documentId,revision:s.revision,sha256:hash(s.text),uri:s.uri??''})),...structuredClone(externalSources)],externalDocuments:structuredClone(externalDocuments),diagnostics:[]};
  if(previousPackage)pkg=reconcile(pkg,previousPackage,renameBindings,removedIds);
  validate(pkg);
  if(previousPackage){for(const doc of pkg.documents){const prior=previousPackage.documents.find(d=>d.id===doc.id);if(prior&&JSON.stringify(prior)!==JSON.stringify(doc))demand(prior.revision!==doc.revision,'Changed document requires new revision');}

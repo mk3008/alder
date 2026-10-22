@@ -18,4 +18,10 @@ const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},rev
  examples:array(obj({id,guaranteeId:id,columns:array(text),rows:array(array(rich))})),
  items:array(obj({id,checkId:id,title:text,detailSummary:str,sectionId:id,reviewState:{enum:['未レビュー','要確認','確認済み','要修正']},fields:obj(checkFields,[])})),
  notes:array(obj({id,title:text,content:rich}))});
-export const schema={...obj({format:{enum:['alder-document-package']},formatVersion:{enum:['0.1']},revision:text,documents:array({anyOf:[ref('businessDesign'),ref('checkItems')]}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)}),$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,checkItems:checks}};
+const stateTransition=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['stateTransition']},revision:text,title:text,
+ basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),objectId:id,
+ states:array(obj({id,name:text})),start:{enum:['@new']},terminal:{enum:['@unknown']},completeness:{enum:['partial']},source:text,
+ transitions:array(obj({id,sourceId:text,fromId:text,activityId:id,event:nullable(text),exception:nullable(text),condition:text,toId:text,
+ effect:{enum:['change','unchanged','no-create','constraint']},path:{enum:['normal','exception']},evidence:text,note:text}))});
+const packageShape=(version,kinds)=>obj({format:{enum:['alder-document-package']},formatVersion:{enum:[version]},revision:text,documents:array({anyOf:kinds.map(ref)}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)});
+export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,checkItems:checks,stateTransition}};
