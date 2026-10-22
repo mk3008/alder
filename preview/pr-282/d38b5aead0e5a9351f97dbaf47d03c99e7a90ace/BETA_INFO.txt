@@ -1,0 +1,5 @@
+Gate C review beta (not a release)
+Viewer source: d38b5aead0e5a9351f97dbaf47d03c99e7a90ace
+JSON source: https://raw.githubusercontent.com/mk3008/alder/d38b5aead0e5a9351f97dbaf47d03c99e7a90ace/work/json-roles/issue-280/same-business.roles.json
+Check example source: https://raw.githubusercontent.com/mk3008/alder/d38b5aead0e5a9351f97dbaf47d03c99e7a90ace/work/json-roles/issue-280/gate-b.roles.json
+Check's confirmed state is synthetic fixture data, not human approval.
