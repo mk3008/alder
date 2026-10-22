@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
-      SOURCE_SHA: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
-      EXPECTED_JS: 27aade5b04bc61e82fabb509ab747f2d4ba6e840ae03315a4f904a6fb32cd55a
+      SOURCE_SHA: 9ed410b8ec571d25af0cb7f0577dea79b50f43b1
+      EXPECTED_JS: 0a2f72fe4ae03b983c1bb90b5958d443c3b8475c6decedce1bc79b30bb0e9796
       EXPECTED_CSS: ae91f8d857ae4a3f3361943b7a3aec240d14349fe97e65ccfe078bd01ce9c7c4
     steps:
       - name: Checkout exact reviewed Viewer implementation
         uses: actions/checkout@v4
         with:
-          ref: 4fd7ebabf9d11ee6998f5074ecdf8173b6be87ec
+          ref: 9ed410b8ec571d25af0cb7f0577dea79b50f43b1
           path: source
           persist-credentials: false
       - name: Checkout existing Pages branch
@@ -46,7 +46,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
-          test "$(git -C source rev-parse HEAD^{tree})" = df3bede152313f06bee94d209d149f4ed5b5a85f
+          test "$(git -C source rev-parse HEAD^{tree})" = 068f6059e8fd71ec437b8d10ea4bcc0f7ffd4d6e
           js=(source/web-viewer/dist/assets/*.js)
           css=(source/web-viewer/dist/assets/*.css)
           test "${#js[@]}" -eq 1
@@ -58,20 +58,28 @@ jobs:
           mkdir -p "$DEST"
           cp -a source/web-viewer/dist/. "$DEST/"
           cp source/work/viewer-json/issue-274/rough/gate-b-example.json "$DEST/gate-b-example.json"
+          cp source/work/viewer-json/issue-274/layout-regression/same-business.json "$DEST/same-business.json"
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import path from 'node:path';
           const dest=process.env.DEST,sha=process.env.SOURCE_SHA;
-          const source='https://raw.githubusercontent.com/mk3008/alder/'+sha+'/work/viewer-json/issue-274/rough/gate-b-example.json';
+          const source='https://raw.githubusercontent.com/mk3008/alder/'+sha+'/work/viewer-json/issue-274/layout-regression/same-business.json';
+          const sourceChecks='https://raw.githubusercontent.com/mk3008/alder/'+sha+'/work/viewer-json/issue-274/rough/gate-b-example.json';
           const link='./#source='+encodeURIComponent(source);
           const doc='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alder Viewer JSON Beta</title>'+
              '<meta http-equiv="refresh" content="0;url='+link+'"><script>location.replace('+JSON.stringify(link)+')</script>'+
              '<p>検証用JSONをViewerで開きます。<a href="'+link+'">開けない場合はこちら</a></p></html>';
           fs.writeFileSync(path.join(dest,'open-json.html'),doc);
+          const checksLink='./#source='+encodeURIComponent(sourceChecks);
+          const checksDoc='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alder Viewer Check JSON Beta</title>'+
+            '<meta http-equiv="refresh" content="0;url='+checksLink+'"><script>location.replace('+JSON.stringify(checksLink)+')</script>'+
+            '<p>Check付きJSONをViewerで開きます。<a href="'+checksLink+'">こちら</a></p></html>';
+          fs.writeFileSync(path.join(dest,'open-checks.html'),checksDoc);
           fs.writeFileSync(path.join(dest,'BETA_INFO.txt'),[
              'Gate C review beta (not a release)',
              'Viewer source: '+sha,
              'JSON source: '+source,
+             'Check example source: '+sourceChecks,
              "Check's confirmed state is synthetic fixture data, not human approval.",
              ''
           ].join('\n'));
@@ -101,10 +109,10 @@ jobs:
           page.on('request',r=>{if(r.url().includes('raw.githubusercontent.com'))rawRequests.push(r.url());});
           try{
             await page.goto('http://127.0.0.1:4188/preview/pr-279/'+expected+'/open-json.html',{waitUntil:'domcontentloaded'});
-            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length>=6,null,{timeout:45000});
+            await page.waitForFunction(()=>document.querySelector('#nodes')?.children.length>=25,null,{timeout:45000});
             const n=await page.locator('#nodes > *').count();
             const title=await page.title();
-            assert.equal(n,6);
+            assert.equal(n,25);
             assert.ok(rawRequests.length>0,'The immutable GitHub raw JSON must be fetched');
             assert.ok(rawRequests.some(x=>x.includes('/'+expected+'/')),'Loaded source must be commit pinned');
             assert.deepEqual(errors,[]);
