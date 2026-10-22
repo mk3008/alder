@@ -45,7 +45,7 @@ export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDi
     for(const [index,activity] of design.activityOrder.entries()){
      await page.locator('.tab').first().locator('button').first().click();await page.locator(`.node[data-activity="${activity}"] .activity-open`).press('Enter');await saved();
      const name=names.get(activity);observed[format][name]=await snapshot(activity);
-     if(index===0){await evidence('activity-detail');await cameraRoundTrip(activity,'detailCamera');}
+     await evidence(index===0?'activity-detail':'activity-detail-'+(index+1));if(index===0)await cameraRoundTrip(activity,'detailCamera');
     }
     assert.deepEqual(errors,[]);
    }catch(error){await page.screenshot({path:`${out}/${format}-failure-${width}.png`}).catch(()=>{});throw error;}finally{writeFileSync(`${out}/${format}-geometry-${width}.json`,JSON.stringify(observed[format],null,2));await context.close();}
@@ -53,6 +53,6 @@ export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDi
   assert.deepEqual(observed.json,observed.md,`MD/JSON rendered world, screen, spacing, SVG endpoints/bends/labels, zoom/scroll/reload/reset at ${width}px`);
   results.push({width,views:11,comparison:'exact',worldTolerance:0,screenTolerance:0,zoomScrollResetReload:true});
  }
- for(const key of ['overview','activity-detail']){const a=pngs.get('md-'+key),b=pngs.get('json-'+key);assert.ok(a.equals(b),'native full graph PNG pixels and bytes match: '+key);results.push({nativePNG:key,identical:true,sha256:hash(a),bytes:a.length});}
+ for(const key of ['overview','activity-detail',...Array.from({length:9},(_,i)=>'activity-detail-'+(i+2))]){const a=pngs.get('md-'+key),b=pngs.get('json-'+key);assert.ok(a.equals(b),'native full graph PNG pixels and bytes match: '+key);results.push({nativePNG:key,identical:true,sha256:hash(a),bytes:a.length});}
  const result={browser:browser.version(),results};writeFileSync(`${out}/comparison-results.json`,JSON.stringify(result,null,2));return result;
 }
