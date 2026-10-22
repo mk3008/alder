@@ -1,5 +1,6 @@
 import {exceptionSegments} from './exception-paint.ts';
-import {matrixPlan,isMatrixGraph,type MatrixPlan,type MatrixWire} from './matrix-layout.ts';
+import {isMatrixGraph,type MatrixPlan,type MatrixWire} from './matrix-layout.ts';
+import {matrixPlanForDesign} from './json-layout.ts';
 import {createWorkspace,documentForView,mergeLiveWorkspace,snapshotWorkspace,restoreWorkspace,replaceWorkspace,updateWorkspace,openActivity,viewDesign,viewActivity,type Workspace,type WorkspaceSnapshot} from './workspace';
 import {installDropdown} from './dropdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
@@ -273,7 +274,7 @@ function viewMatrix(t:Tab,projected:Tab['design']):MatrixWire[]|undefined{
  if(!isMatrixGraph(projected.graph))return;
  let views=matrixPlans.get(projected);if(!views){views=new Map();matrixPlans.set(projected,views);}
  const focus=viewActivity(t);let plan=views.get(focus);
- if(!plan){plan=matrixPlan(projected.graph,projected.activityOrder,focus);views.set(focus,plan);}
+ if(!plan){plan=matrixPlanForDesign(projected,focus);views.set(focus,plan);}
  return plan.wires;
 }
 /** Paint short runs directly: no offscreen mask surfaces on long graphs.

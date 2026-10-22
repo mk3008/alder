@@ -46,7 +46,7 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 ## Node／DOMテストの実行方式
 
-`npm test` は、実行方式を確認する回帰の後、通常の56ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全43群の実行方式は変更しません。
+`npm test` は、実行方式を確認する回帰の後、通常の57ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全44群の実行方式は変更しません。
 
 CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
 
@@ -74,7 +74,7 @@ npm run build
 npm run test:browser
 ```
 
-`--cases` を省略すると既存の全43群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
+`--cases` を省略すると既存の全44群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
 
 ## テストを減らす判断
 
@@ -107,3 +107,5 @@ npm run test:browser
 `jsonDocuments,jsonBoundaries,jsonOfflinePreview`は、既存ViewerのJSON File/URL、一覧・詳細・Findings・共有Check、原文読取専用、版/参照異常、容量差、保存/復元・保存失敗と、配布する単体HTMLの隔離保存を実Chromeで検証します。全体CIにも含みます。未知の保存種別や版を表示成功として読み飛ばしません。
 
 スクリーンショットと観測は`json-document-HEAD`、操作確認版は`viewer-preview-pr-PR-HEAD` artifactへ保存します。確認版のmanifestはsource/checkout/treeと各ファイルのdigestを持ち、PR headとビルドtreeの一致を要求します。公開デプロイを行わず、本人操作レビューと自動検証を分けます。
+
+`jsonLayout`は同一業務のMD/JSONの全体図・全Activity詳細について、world座標・矩形・間隔・SVG経路/ラベル・カメラ・保存/復元・リセットを1280/393pxの実Chromeで比較します。既存43群を残した全44群で、数値と画像は`json-layout-HEAD` artifactへ保存します。描画器と共通CSSの固定hashも検査します。

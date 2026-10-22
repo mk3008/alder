@@ -2,6 +2,7 @@
 // @ts-expect-error Gate A supplies JavaScript modules without TypeScript declarations.
 import {parseStrict,validate} from '../../tools/document_storage/core.mjs';
 import {parseDesign,type Design,type GraphNode} from './graph.ts';
+import {canonicalJSONGraph} from './json-layout.ts';
 export type Run={kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
 export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:string[]};
 export type ActivityEntry={id:string;name:string;scope:boolean;why:string;when:string;who:string;where:string;procedure:string;exception:string|null;result:string;problem:string|null;painLevel:string|null};
@@ -32,6 +33,6 @@ export function parseDocument(source:string):Design{
  if(business.length!==1)throw Error('このViewerは、単一JSON内のBusiness Designが1件の場合に対応します。');
  const bd=business[0];const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
  return {sourceFormat:'json',markdown:source,sections:Object.fromEntries(nodes.map(n=>[n.id,''])),activityOrder:bd.activities.map(a=>a.id),
-  graph:{version:1,scope:bd.scope,nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))},
+  graph:canonicalJSONGraph({version:1,scope:bd.scope,nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
   findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:f.targetIds,targetNames:f.targetIds.map(id=>[...bd.objects,...bd.activities].find(n=>n.id===id)!.name)})),json:{formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),diagnostics:result.diagnostics}};
 }

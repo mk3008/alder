@@ -1,3 +1,4 @@
+import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
 import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
@@ -48,6 +49,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
    {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
    {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},

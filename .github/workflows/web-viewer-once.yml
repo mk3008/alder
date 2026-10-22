@@ -5,6 +5,7 @@ on:
     paths:
       - 'web-viewer/**'
       - 'tools/viewer-preview.mjs'
+      - 'work/viewer-json/issue-274/layout-regression/**'
       - 'tools/document_storage/core.mjs'
       - 'tools/document_storage/schema.mjs'
       - '.github/workflows/web-viewer-once.yml'
@@ -58,7 +59,7 @@ jobs:
             if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
             sleep 1
           done
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs --cases jsonDocuments,jsonBoundaries,jsonOfflinePreview
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs --cases jsonLayout,jsonDocuments,jsonBoundaries,jsonOfflinePreview
 
       - name: Retain early JSON evidence
         if: always()
@@ -67,6 +68,14 @@ jobs:
           name: json-stage-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-document/
           if-no-files-found: ignore
+          retention-days: 14
+      - name: Retain MD JSON geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-layout-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-layout/
+          if-no-files-found: error
           retention-days: 14
       - name: Verify built app in Chrome
         run: |

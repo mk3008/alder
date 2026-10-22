@@ -10,7 +10,7 @@ import {graphV1} from '../../tools/document_storage/core.mjs';
 
 const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),pkg=JSON.parse(raw),bd=pkg.documents[0],check=pkg.documents[1];
 const parsed=parseDocument(raw);assert.equal(parsed.sourceFormat,'json');assert.equal(parsed.markdown,raw);assert.equal(parsed.json.revision,'package-7');assert.equal(parsed.json.business.revision,'bd-3');assert.equal(parsed.json.checks[0].basedOn.verification,'unverified');
-assert.deepEqual(parsed.graph.nodes.map(n=>n.id),[...bd.objects,...bd.activities].map(n=>n.id));assert.deepEqual(parsed.findings.map(f=>f.targets),bd.findings.map(f=>f.targetIds));
+assert.deepEqual(parsed.graph.nodes.map(n=>n.id).sort(),[...bd.objects,...bd.activities].map(n=>n.id).sort());assert.deepEqual(parsed.graph.nodes.map(n=>n.name),[...bd.objects,...bd.activities].map(n=>n.name).sort());assert.deepEqual(parsed.findings.map(f=>f.targets),bd.findings.map(f=>f.targetIds));
 // The public Graph v1 contract remains name-based and separate from display IDs.
 validateGraph(graphV1(pkg,bd.id));assert.throws(()=>validateGraph(parsed.graph),/ID must equal/);
 const md=readFileSync('web/authorities/business-design.md','utf8');assert.deepEqual(parseDocument(md),parseDesign(md));
