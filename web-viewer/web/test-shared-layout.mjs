@@ -1,3 +1,4 @@
+import {assertCaptionRows} from './caption-row-oracle.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {performance} from 'node:perf_hooks';
@@ -12,7 +13,8 @@ for(const focus of [undefined,...design.activityOrder]){
  const projected=activityDesign(design,focus),plan=matrixPlan(projected.graph,projected.activityOrder,focus);
  assert.deepEqual(initialPositions(projected.graph,projected.activityOrder,focus),plan.positions,'both views use the matrix plan directly');
  if(focus){
-  assert.deepEqual({...plan.positions},accepted[focus],'all previously released detail coordinates remain exact');
+  for(const [id,[x]]of Object.entries(accepted[focus]))assert.equal(plan.positions[id][0],x,'existing detail columns remain exact');
+  assertCaptionRows(plan.positions,projected.graph.relations.filter((r,i)=>!plan.wires[i].returning));
   const outputs=projected.graph.relations.filter(r=>r.kind==='output'&&r.from===focus).map(r=>plan.positions[r.to][1]);
   for(const node of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==focus))assert.ok(plan.positions[node.id][1]>Math.max(plan.positions[focus][1],...outputs),'exception peers follow all normal outputs');
  }
@@ -34,3 +36,5 @@ for(let x=429.125;x<594;x+=.25)assert.equal(paint(a.offset,x-428),paint(b.offset
 assert.equal(exceptionSegments(paths[0]).filter(s=>s.offset===undefined).length,2,'rounded corners preserved');
 assert.throws(()=>exceptionSegments('M0,0 L10,10'),/orthogonal/);
 console.log(JSON.stringify({sharedViews:design.activityOrder.length+1,dashChecks:'coordinate phase, both directions/axes, signed coordinates, unequal paths, corners',durationMs:performance.now()-start}));
+
+await import('./test-source-captions.mjs');
