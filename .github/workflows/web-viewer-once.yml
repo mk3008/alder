@@ -52,6 +52,14 @@ jobs:
           name: header-controls-${{ github.sha }}
           path: web-viewer/web/evidence/header-controls/*.png
           if-no-files-found: ignore
+      - name: Retain JSON review screenshots and observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-document-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-document/
+          if-no-files-found: error
+          retention-days: 14
       - name: Retain save-conflict review screenshots
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,4 +1,5 @@
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
+import {verifyJSONDocuments} from './test-json-document-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
@@ -45,6 +46,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},
