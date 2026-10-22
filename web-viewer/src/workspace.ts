@@ -14,7 +14,7 @@ export function documentOf(tab:Tab):DocumentState{return {key:tab.key,name:tab.n
 function viewOf(tab:Tab):ViewState{const {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom}=tab;return {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom,...('activity' in tab?{activity:(tab as Tab&{activity?:string}).activity}:{})};}
 export function bindView(doc:DocumentState,view:ViewState):Tab{
  const tab=view as unknown as Tab;documents.set(tab,doc);
- Object.defineProperty(tab,'name',{configurable:true,get:()=>view.activity??'全体図'});
+ Object.defineProperty(tab,'name',{configurable:true,get:()=>view.activity===undefined?'全体図':doc.design.graph.nodes.find(n=>n.id===view.activity)?.name??view.activity});
  for(const field of documentFields)Object.defineProperty(tab,field,{configurable:true,get:()=>doc[field],set:value=>{(doc as Record<string,unknown>)[field]=value;}});
  return tab;
 }

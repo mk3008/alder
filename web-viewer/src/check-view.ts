@@ -1,6 +1,7 @@
 import {formattedMarkdown} from './markdown';
 import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
+import {jsonChecks} from './json-view';
 export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
@@ -14,6 +15,11 @@ function renderBody(root:HTMLElement,body:string){
 export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
   const notices=document.createElement('section');notices.className='check-notices';
+  if(tab.design.sourceFormat==='json'){
+    const nav=document.createElement('div');nav.className='check-modes';
+    for(const [mode,label]of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}root.append(nav);
+    return {controls:root,...(view.mode==='checks'?{content:jsonChecks(tab.design,tab.selected)}:{})};
+  }
   if(view.busy)paragraph(notices,'関連Checkを読み込み・保存しています…');
   if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;notices.append(error);}
   let doc:CheckDocument|undefined,usable=false;

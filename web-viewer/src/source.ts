@@ -1,13 +1,14 @@
-export async function fetchMarkdown(value:string,signal?:AbortSignal):Promise<string>{
+export const fetchMarkdown=(value:string,signal?:AbortSignal)=>fetchDocumentSource(value,signal,false);
+export async function fetchDocumentSource(value:string,signal?:AbortSignal,allowJSON=true):Promise<string>{
   let url:URL;try{url=new URL(value);}catch{throw Error('有効なHTTPS URLを入力してください。');}
   if(url.protocol!=='https:'||url.username||url.password)throw Error('認証情報を含まないHTTPS URLだけ使えます。');
   const controller=new AbortController(),abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
   const timer=setTimeout(abort,30000);
   try{
-    const response=await fetch(url.href,{method:'GET',cache:'no-store',mode:'cors',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',signal:controller.signal,headers:{Accept:'text/markdown, text/plain;q=0.9'}});
+    const response=await fetch(url.href,{method:'GET',cache:'no-store',mode:'cors',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',signal:controller.signal,headers:{Accept:allowJSON?'application/json, text/markdown;q=0.9, text/plain;q=0.8':'text/markdown, text/plain;q=0.9'}});
     if(!response.ok)throw Error('URL取得に失敗しました（HTTP '+response.status+'）。');
     const type=response.headers.get('content-type')?.toLowerCase()??'';
-    if(type.includes('html')||type.includes('json')||type.includes('xml'))throw Error('HTML等の表示ページではなくMarkdown本文URLを指定してください。');
+    if(type.includes('html')||(!allowJSON&&type.includes('json'))||type.includes('xml'))throw Error('HTML等の表示ページではなくMarkdown本文URLを指定してください。');
     const limit=2*1024*1024;if(Number(response.headers.get('content-length'))>limit)throw Error('本文は2MiB以内にしてください。');
     const reader=response.body?.getReader();if(!reader)throw Error('本文を読み取れません。');
     let size=0,text='';const decoder=new TextDecoder();

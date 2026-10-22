@@ -1,0 +1,7 @@
+{
+  "base": "b498ddb6a02de44aca6fc27d535febe4cafd0315",
+  "stage": "rough; build only; not accepted or regression verified",
+  "scriptSha256": "8c2dab11c9190d4426331f14ec46b0634f71a5d66814c4ff1a011fae49965ac8",
+  "styleSha256": "216c010587508ea21c9605027f239413b5f8520a18d829ffab030f94bc5bff1d",
+  "wrapper": "gzip envelope of unchanged built JS/CSS; no data upload or production deployment"
+}
