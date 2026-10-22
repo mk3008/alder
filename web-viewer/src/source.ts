@@ -17,6 +17,7 @@ export async function fetchDocumentSource(value:string,signal?:AbortSignal,allow
       try{void reader.cancel().catch(()=>{});}catch{}
       throw Error('本文は2MiB以内にしてください。');
     }text+=decoder.decode(value,{stream:true});}text+=decoder.decode();}finally{reader.releaseLock();}
+    if(allowJSON&&type.includes('json')&&!/^\s*[\[{]/.test(text))throw Error('JSONのMIMEと本文が一致しません。');
     if(/^\s*(?:<!doctype\s+html|<html|<head|<body)\b/i.test(text))throw Error('HTMLページは読み込めません。');
     return text;
   }catch(e){

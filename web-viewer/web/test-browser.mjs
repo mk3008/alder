@@ -1,5 +1,7 @@
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
+import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
@@ -47,6 +49,8 @@ let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
+   {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},

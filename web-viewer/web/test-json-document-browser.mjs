@@ -28,12 +28,16 @@ export async function verifyJSONDocuments(browser){
    const item=page.locator('[data-check-id="CI-001"]');assert.ok((await item.innerText()).includes('確認済み'));
    await item.locator('summary').filter({hasText:'CI-001の一般保証'}).click();await item.locator('table').waitFor({state:'visible'});assert.ok((await item.innerText()).includes('必須不足'));
    assert.ok((await page.locator('[data-check-id="CI-Q01"]').innerText()).includes('要確認'));await shot('checks-guarantee-example');
+   for(const linked of bd.activities.slice(1)){
+    if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator(`[data-list-node="${linked.id}"] .node-navigate`).click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('#detail-mode-checks').click();const shared=page.locator('.json-checks > .check-item[data-check-id="CI-003"]');assert.equal(await shared.getAttribute('data-element-id'),checks.items.find(i=>i.checkId==='CI-003').id);assert.ok((await shared.innerText()).includes('要確認'));await shared.locator('summary').filter({hasText:'CI-003の一般保証'}).click();assert.ok((await shared.innerText()).includes('受付番号を保持'));await shot('shared-check-'+bd.activities.indexOf(linked));
+   }
+   if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator(`[data-list-node="${activity.id}"] .node-navigate`).click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    await page.locator('#detail-mode-business').click();await page.locator(`.node[data-activity="${activity.id}"] .activity-open`).first().press('Enter');await saved();
    assert.equal(await page.locator('.tab').count(),2);assert.ok((await page.locator('.tab.active').innerText()).includes(activity.name));
    await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#detail h1').textContent(),activity.name);
    await page.locator('.tab').first().locator('button').first().click();
-   await page.locator(`.finding-badges[aria-label="${bd.activities[2].name}の指摘を開く"]`).click();
-   assert.ok((await page.locator('#node-list').innerText()).includes('通知媒体'));await shot('findings');
+   await page.locator(`.finding-badges[aria-label="${bd.activities[2].name}の指摘を開く"]`).press('Enter');
+   assert.ok((await page.locator('#node-list').innerText()).includes('通知媒体'));assert.ok((await page.locator('#node-list').innerText()).includes(bd.activities[2].name));await shot('findings');
    await saved();assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
    results.push({width,localFile:true,nodes:6,relations:6,list:true,activityDetail:true,checkStates:checks.items.map(i=>[i.checkId,i.reviewState]),sharedGuaranteeAndExample:true,findings:true,detailTabAndReload:true,nonGETRequests:requests,pageErrors:errors});
   }catch(error){await shot('failure').catch(()=>{});throw error;}finally{await context.close();writeFileSync(`${out}/smoke-results.json`,JSON.stringify({browser:browser.version(),results},null,2));}

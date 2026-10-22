@@ -1,0 +1,67 @@
+{
+  "browser": "155.0.8059.39",
+  "results": [
+    {
+      "width": 1280,
+      "localFile": true,
+      "nodes": 6,
+      "relations": 6,
+      "list": true,
+      "activityDetail": true,
+      "checkStates": [
+        [
+          "CI-Q01",
+          "要確認"
+        ],
+        [
+          "CI-003",
+          "要確認"
+        ],
+        [
+          "CI-002",
+          "要確認"
+        ],
+        [
+          "CI-001",
+          "確認済み"
+        ]
+      ],
+      "sharedGuaranteeAndExample": true,
+      "findings": true,
+      "detailTabAndReload": true,
+      "nonGETRequests": [],
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "localFile": true,
+      "nodes": 6,
+      "relations": 6,
+      "list": true,
+      "activityDetail": true,
+      "checkStates": [
+        [
+          "CI-Q01",
+          "要確認"
+        ],
+        [
+          "CI-003",
+          "要確認"
+        ],
+        [
+          "CI-002",
+          "要確認"
+        ],
+        [
+          "CI-001",
+          "確認済み"
+        ]
+      ],
+      "sharedGuaranteeAndExample": true,
+      "findings": true,
+      "detailTabAndReload": true,
+      "nonGETRequests": [],
+      "pageErrors": []
+    }
+  ]
+}

@@ -13,10 +13,10 @@ export function nodeFindingLabels(design: Design, node: GraphNode): string[] {
 }
 export function findingCard(finding: Finding): HTMLElement {
   const card=document.createElement('section');card.className='finding-card';card.dataset.findingId=finding.id;
-  const title=document.createElement('h3');title.textContent=`${findingLabel(finding.kind)} · ${finding.id}${finding.status==='resolved'?' · 解消済み':''}`;
+  const title=document.createElement('h3');title.textContent=`${findingLabel(finding.kind)} · ${finding.displayId??finding.id}${finding.status==='resolved'?' · 解消済み':''}`;
   const summary=document.createElement('p');summary.className='finding-summary';summary.textContent=finding.summary;
   const target=document.createElement('p');target.className='finding-target';
-  target.textContent=finding.scope==='document'?'対象：文書全体':finding.scope==='unassigned'?'関連先：未設定':`対象：${finding.targets.join('、')}`;
+  target.textContent=finding.scope==='document'?'対象：文書全体':finding.scope==='unassigned'?'関連先：未設定':`対象：${(finding.targetNames??finding.targets).join('、')}`;
   card.append(title,summary,target);
   if(finding.unresolvedTargets.length){const warning=document.createElement('p');warning.className='finding-reference-warning';warning.textContent=`参照先が見つかりません：${finding.unresolvedTargets.join('、')}`;card.append(warning);}
   card.append(formattedMarkdown(finding.content));return card;
@@ -51,7 +51,7 @@ export function findingsIndex(design:Design,showResolved:boolean,onResolved:(sho
  for(const [scope,caption] of [['items','項目に関連'],['document','文書全体'],['unassigned','関連先未設定'],['broken','参照先不一致']]){
   const found=(design.findings??[]).filter(f=>(!nodeId||f.targets.includes(nodeId))&&(showResolved||f.status==='open')&&(scope==='broken'?f.unresolvedTargets.length>0:f.scope===scope&&!f.unresolvedTargets.length));
   if(!found.length)continue;const h=document.createElement('h3');h.textContent=`${caption}（${found.length}件）`;root.append(h);
-  for(const f of found)root.append(row({type:'finding',id:f.id},`${findingLabel(f.kind)} · ${f.id}${f.status==='resolved'?' · 解消済み':''}`,f.summary));
+  for(const f of found)root.append(row({type:'finding',id:f.id},`${findingLabel(f.kind)} · ${f.displayId??f.id}${f.status==='resolved'?' · 解消済み':''}`,f.summary));
  }
  if(root.childElementCount===1){const p=document.createElement('p');p.textContent='表示する指摘はありません。';root.append(p);}return root;
 }

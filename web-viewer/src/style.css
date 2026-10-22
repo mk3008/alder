@@ -272,3 +272,8 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .edge-paint{fill:none;stroke:var(--line);stroke-width:1.5}
 .edge-paint.review-related{stroke:var(--review-link);stroke-width:3.2}
 .edge-paint.muted{opacity:1}
+
+/* Typed JSON content uses the existing Drawer; wide comparison tables scroll inside it. */
+.json-example{max-width:100%;overflow:auto;margin:8px 0}
+.json-example table{border-collapse:collapse;min-width:420px;width:100%}
+.json-example th,.json-example td{border:1px solid #8886;padding:6px;text-align:left;vertical-align:top}

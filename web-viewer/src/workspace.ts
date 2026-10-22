@@ -70,7 +70,7 @@ export function replaceWorkspace(state:Workspace,tab:Tab):Workspace{
 }
 export function updateWorkspace(state:Workspace,design:Tab['design'],handle=state.document?.handle,edited=false):Workspace{
  if(!state.document)return state;
- const doc={...state.document,design,handle,edited,draft:undefined},activities=new Set(design.graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
+ const doc={...state.document,design,handle,edited,draft:undefined,...(design.sourceFormat==='json'?{checks:undefined}:{})},activities=new Set(design.graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
  const views=state.tabs.filter(t=>viewActivity(t)===undefined||activities.has(viewActivity(t)!)).map(viewOf);
  return createWorkspace(state,state.recovery,doc,views);
 }
