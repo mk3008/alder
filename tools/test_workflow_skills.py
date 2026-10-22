@@ -315,6 +315,76 @@ class WorkflowSkillsTest(unittest.TestCase):
             with self.subTest(term=term):
                 self.assertIn(term, gate)
 
+    def test_business_design_finding_routes_preserve_write_boundaries(self):
+        # Instruction/distribution contracts only, not model behavior or accuracy.
+        draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
+        review = (SKILLS / 'alder-review-business-design/SKILL.md').read_text()
+        guide = (ROOT / 'docs/adoption.md').read_text()
+        loop = guide.split('### Review and revise a draft before returning it', 1)[1].split('### Record operational Problems', 1)[0]
+        for term in ['Detecting an error does not establish the correct repair',
+                     'Uniquely repairable error', 'Clear problem, undecided answer',
+                     'Optional proposal or hypothesis', 'several plausible targets',
+                     'zero proposals is valid', 'its unconfirmed questions, Findings, Scope or Decision Records',
+                     'not automatically `# Findings`', 'separate explicit editing request',
+                     'Decisions alone and silence do not authorize edits']:
+            self.assertIn(term, loop)
+        for term in ['repair is uniquely determined', 'unconfirmed preamble and the response',
+                     'conversational/console result', 'allowing zero',
+                     'a decision alone does not authorize a write',
+                     'Do not register all unconfirmed matters as Findings']:
+            self.assertIn(term, draft)
+        for term in ['All three classes remain read-only',
+                     'Detecting an error does not establish the correct repair',
+                     'Do not automatically register every unconfirmed matter as Findings',
+                     'does not itself authorize editing', 'separate explicit revision request',
+                     'Do not edit the Business Design']:
+            self.assertIn(term, review)
+
+    def test_finding_routes_reach_canonical_and_bundled_quality_guidance(self):
+        canonical = (ROOT / 'docs/business-design-quality-check.ja.md').read_bytes()
+        bundled = (SKILLS / 'alder-review-business-design/references/business-design-quality-check.ja.md').read_bytes()
+        self.assertEqual(canonical, bundled)
+        text = canonical.decode()
+        for term in ['一意に修正可能なエラー', '問題は明確だが正解が未確定', '提案・仮説',
+                     '草案の未確認事項と返答', '候補0件', '採否の回答だけを編集許可とみなしません',
+                     '未確認事項を無条件に`# Findings`へ登録せず']:
+            self.assertIn(term, text)
+        # Existing shared adoption copies stay byte-identical; no Check rules change.
+        for name in ['alder-draft-business-design', 'alder-draft-check-items', 'alder-follow-up-review']:
+            self.assertEqual((ROOT / 'docs/adoption.md').read_bytes(),
+                             (SKILLS / name / 'references/adoption.md').read_bytes())
+
+    def test_archived_finding_routing_example_keeps_its_evidence(self):
+        # Audit of one frozen agent run; does not rerun an LLM or prove accuracy.
+        fixture = ROOT / 'tools/fixtures/plugin-draft-review-loop/routing'
+        observed = fixture / 'observations'
+        evidence = json.loads((observed / 'manifest.json').read_text())
+        inputs = {name: hashlib.sha256((fixture / name).read_bytes()).hexdigest()
+                  for name in ['draft.md', 'notes.md']}
+        self.assertEqual(evidence['input_sha256'], inputs)
+        for recorded in evidence['after_read_only_and_decision_response_sha256'].values():
+            self.assertEqual(recorded, inputs)
+        for name, digest in evidence['output_sha256'].items():
+            self.assertEqual(hashlib.sha256((observed / name).read_bytes()).hexdigest(), digest)
+        self.assertFalse(evidence['effective_runtime_settings_independently_verified'])
+        candidate = (observed / 'candidate-draft.md').read_text()
+        after = (observed / 'after-decision-draft.md').read_text()
+        baseline = (observed / 'baseline-draft.md').read_text()
+        self.assertIn('## Whne', (fixture / 'draft.md').read_text())
+        for document in [candidate, after]:
+            self.assertNotIn('## Whne', document)
+            self.assertIn('返却控え', document)
+            self.assertNotIn('部長', document)
+            self.assertNotIn('QR', document)
+            self.assertNotIn('# Findings', document)
+        self.assertIn('部長の追加承認とQR読取機能', baseline)
+        who = lambda text: text.split('# Activity 返却品を点検する', 1)[1].split('## Who', 1)[1].split('## Where', 1)[0]
+        self.assertIn('未確定', who(candidate))
+        self.assertIn('設備管理担当', who(after))
+        self.assertIn('判断材料・基準とその受け取り方は未確認', after)
+        self.assertIn('別途明示的な改稿依頼が必要',
+                      (observed / 'decision-only-response.md').read_text())
+
     def test_draft_review_loop_routes_to_actual_read_only_reviewer(self):
         # Distribution/instruction contract only: this does not run an agent.
         draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()

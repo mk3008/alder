@@ -1,0 +1,40 @@
+{
+  "baseline_revision": "9b4a3cbffe835cfa9c6a8ec7d602d9611a1a0285",
+  "baseline_tag": "plugin-v0.4.8",
+  "candidate_revision": "9aa60f8e22a850f8b5360c6f12c88dd9a387eddd",
+  "canonical_guidance_revision": "dcecce7e1f65e810df105ffd3801315c0ef2a785",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning_effort": "medium",
+  "history_fork": "none",
+  "effective_runtime_settings_independently_verified": false,
+  "input_sha256": {
+    "draft.md": "6cb90b8ff98772ae239bd2c15ee01a73f7319871d78ddba2071a0c2eb096dbe4",
+    "notes.md": "929cf27f4dd82761c173e6ecc94d358e2d46d8ea907ac25c085f827a74bcf13a"
+  },
+  "after_read_only_and_decision_response_sha256": {
+    "baseline/case": {
+      "draft.md": "6cb90b8ff98772ae239bd2c15ee01a73f7319871d78ddba2071a0c2eb096dbe4",
+      "notes.md": "929cf27f4dd82761c173e6ecc94d358e2d46d8ea907ac25c085f827a74bcf13a"
+    },
+    "candidate/case": {
+      "draft.md": "6cb90b8ff98772ae239bd2c15ee01a73f7319871d78ddba2071a0c2eb096dbe4",
+      "notes.md": "929cf27f4dd82761c173e6ecc94d358e2d46d8ea907ac25c085f827a74bcf13a"
+    },
+    "review-only": {
+      "draft.md": "6cb90b8ff98772ae239bd2c15ee01a73f7319871d78ddba2071a0c2eb096dbe4",
+      "notes.md": "929cf27f4dd82761c173e6ecc94d358e2d46d8ea907ac25c085f827a74bcf13a"
+    }
+  },
+  "output_sha256": {
+    "baseline-draft.md": "ff2d9fb4634bbf6786daac6701efac75df9df954696bcc861960fc4c8bc629bf",
+    "baseline-response.md": "5f240d77990c7d932a6b629863c758c6aefcf200f33467e6f9efbf6c398a856f",
+    "candidate-draft.md": "7cc9eccdbbce51405f36c6f04271db13982f82870c790a8f8182fd4bad408f3b",
+    "candidate-response.md": "c8698fde82b759094d9a0405705e89a18c0a477365067abd19726dd9866ad5e8",
+    "after-decision-draft.md": "335e512378548a07007167a9a5654a687b8ebf0d03ae79394b03bfcbe9e3f828",
+    "after-decision-response.md": "e5c93849256fd31c2eb0f4427cf1e9cc4e7dd971212fb0bd12212f974ac8b8a9",
+    "review-only-response.md": "d9d0b4cefdf5a90037c19fa72d652f3e244347d63236ddd53cad0c5128168e34",
+    "decision-only-response.md": "4a14e047c1b088a408510cc496c8ba9fe3392b4b743496a0124fd4881686d49d"
+  },
+  "coverage": "One synthetic business; one baseline author, one candidate author, one candidate standalone reviewer, one fresh decision-only receiver; no statistical comparison or real-client routing test. Internal review phases are agent-reported same-context phases.",
+  "runtime_limit": "The first standalone reviewer declined a follow-up after finalization. Its declined response changed no file; a fresh decision-only receiver was supplied the saved review and the same answers instead."
+}
