@@ -1,0 +1,509 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.1",
+  "revision": "package-7",
+  "documents": [
+    {
+      "id": "05570d0b-04c8-4888-bfa6-703dd22409f7",
+      "kind": "businessDesign",
+      "schemaVersion": "0.1",
+      "revision": "bd-3",
+      "title": "備品持出し受付",
+      "preface": "AI草案。確認待ち。必須不足時・代理申請の扱いは未決。",
+      "scope": "備品の持出し受付と内容確認。",
+      "objects": [
+        {
+          "id": "16d99a57-098e-4cfb-b058-a5759fb156b4",
+          "name": "依頼内容",
+          "scope": true,
+          "icon": "message-square",
+          "information": [
+            "品名",
+            "返却予定日"
+          ]
+        },
+        {
+          "id": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "name": "持出受付台帳",
+          "scope": true,
+          "icon": "file-text",
+          "information": [
+            "受付番号",
+            "品名",
+            "返却予定日",
+            "受付済み / 確認済み"
+          ]
+        },
+        {
+          "id": "05c7e7e3-5687-4ce1-bfda-9e0ecd249aed",
+          "name": "確認通知",
+          "scope": true,
+          "icon": "bell",
+          "information": [
+            "受付番号",
+            "確認結果"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "name": "持出しを受け付ける",
+          "scope": true,
+          "why": "持出し内容を記録して確認できるようにする。記録した対象を後続で確認する。",
+          "when": "申請者から品名と返却予定日を申し出られたとき。",
+          "who": "受付担当",
+          "where": "規定なし",
+          "procedure": "1. 申し出られた品名と返却予定日を受け取る。\n2. 新しい受付番号を付け、品名と返却予定日を受付台帳へ記録する。必須不足時の処理は未決。",
+          "exception": null,
+          "result": "持出しの対象が受付済みとして記録される。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "name": "受付内容を確認する",
+          "scope": true,
+          "why": "受付内容を確認済みとして扱えるようにする。",
+          "when": "受付済みの対象内容が台帳に記録されたとき。",
+          "who": "確認担当",
+          "where": "規定なし",
+          "procedure": "対象の受付内容を確認し、受付番号を変えずに同じ受付を確認済みとして記録する。",
+          "exception": null,
+          "result": "対象の受付が同じ番号で確認済みになる。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2",
+          "name": "確認結果を通知する",
+          "scope": true,
+          "why": "確認結果を同じ受付に結び付けて知らせる。",
+          "when": "同じ受付の確認済みが記録されたとき。",
+          "who": "確認担当",
+          "where": "規定なし",
+          "procedure": "受付番号と確認結果を確認通知へ渡す。通知媒体は未決。",
+          "exception": null,
+          "result": "同じ受付番号の確認結果が通知される。",
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "3ed0e8d4-f9d7-4f1c-a1b2-124579fad00d",
+          "kind": "input",
+          "fromId": "16d99a57-098e-4cfb-b058-a5759fb156b4",
+          "toId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "label": "品名 / 返却予定日（必須）"
+        },
+        {
+          "id": "baab52a6-bc97-4f20-8452-f6d8f8cccbdb",
+          "kind": "output",
+          "fromId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "toId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "label": "受付番号 / 品名 / 返却予定日 / 受付済み"
+        },
+        {
+          "id": "b1ae5609-fd22-47b4-bbbf-e24822229e93",
+          "kind": "input",
+          "fromId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "toId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "label": "対象の受付内容と受付番号"
+        },
+        {
+          "id": "1c0c769a-b497-4c9d-a202-c2777fd4f7d1",
+          "kind": "output",
+          "fromId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "toId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "label": "同じ受付番号の確認済み状態"
+        },
+        {
+          "id": "dd503a3b-25f9-4d87-8653-28f708a4ac87",
+          "kind": "input",
+          "fromId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "toId": "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2",
+          "label": "確認済みの受付番号と結果"
+        },
+        {
+          "id": "856824a2-8a94-488d-8cf1-111707b38583",
+          "kind": "output",
+          "fromId": "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2",
+          "toId": "05c7e7e3-5687-4ce1-bfda-9e0ecd249aed",
+          "label": "受付番号 / 確認結果"
+        }
+      ],
+      "findings": [
+        {
+          "id": "93827b29-e9f7-497b-bea4-808fde055c51",
+          "sourceId": "F01",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "aa237964-d975-4ced-b3fd-04edae396fd5"
+          ],
+          "unresolvedTargets": [],
+          "summary": "必須不足時の処理",
+          "content": "品名または返却予定日がない場合の処理は未決。拒否・補完を推測しない。"
+        },
+        {
+          "id": "24e0289c-a0e3-4ab7-80a2-d2f764a1f196",
+          "sourceId": "F02",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "aa237964-d975-4ced-b3fd-04edae396fd5"
+          ],
+          "unresolvedTargets": [],
+          "summary": "代理申請の扱い",
+          "content": "代理申請を認めるかは未決。"
+        },
+        {
+          "id": "390a0752-b532-4a77-938a-9286abe7026f",
+          "sourceId": "F03",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2"
+          ],
+          "unresolvedTargets": [],
+          "summary": "通知媒体",
+          "content": "通知の媒体は未決。"
+        }
+      ]
+    },
+    {
+      "id": "6e3f5e75-c797-4d1b-b760-efbaa37a284c",
+      "kind": "checkItems",
+      "schemaVersion": "0.1",
+      "revision": "checks-5",
+      "title": "備品持出し受付のCheck",
+      "basedOn": {
+        "documentId": "05570d0b-04c8-4888-bfa6-703dd22409f7",
+        "revision": "bd-3",
+        "verification": "unverified"
+      },
+      "intro": [
+        {
+          "kind": "text",
+          "value": "固定ヒアリングとbd-2を根拠とするAI草案。実際の人間承認ではない。"
+        }
+      ],
+      "index": [
+        {
+          "activityId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "purpose": "持出し内容を記録する",
+          "connections": "依頼内容から持出受付台帳へ記録",
+          "checkIds": [
+            "01f7c556-80b3-42d9-960b-5a0e090286ab",
+            "5833c919-5b45-4fc6-95f1-7cfce60cfd9c"
+          ]
+        },
+        {
+          "activityId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "purpose": "受付内容を確認する",
+          "connections": "対象の台帳を確認済みへ更新",
+          "checkIds": [
+            "241a2541-3f34-487d-b094-6743421c6113",
+            "512e2e18-4770-4a4f-903b-cab858a11045"
+          ]
+        },
+        {
+          "activityId": "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2",
+          "purpose": "確認結果を伝える",
+          "connections": "確認済み台帳から確認通知へ渡す",
+          "checkIds": [
+            "512e2e18-4770-4a4f-903b-cab858a11045"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "3e563eb7-cca7-47e1-8120-49c562f55ecc",
+          "activityId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "title": "持出しを受け付ける",
+          "preamble": []
+        },
+        {
+          "id": "57782dd8-541d-4125-9602-e6a37c475206",
+          "activityId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "title": "受付内容を確認する",
+          "preamble": []
+        },
+        {
+          "id": "3e408d9d-3f2d-4c32-9252-f886ec7ffca8",
+          "activityId": "3f60de20-ab5d-458a-9d88-8a1bc7c69cd2",
+          "title": "確認結果を通知する",
+          "preamble": [
+            {
+              "kind": "reference",
+              "targetId": "512e2e18-4770-4a4f-903b-cab858a11045",
+              "label": "CI-003は確認と通知の共有項目"
+            }
+          ]
+        }
+      ],
+      "guarantees": [
+        {
+          "id": "f6ab804e-8885-465a-b779-6c9980061671",
+          "sectionId": "3e563eb7-cca7-47e1-8120-49c562f55ecc",
+          "title": "受付記録の保証と例",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "品名と返却予定日は必須。受付担当は新しい受付番号を付け、対象の品名と返却予定日を持出受付台帳に記録する。CI-001はその対象の記録を保証する。必須不足時の成否・復帰は未決。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "7b8c0094-b29c-4cc1-938d-602bf8009712"
+            }
+          ]
+        },
+        {
+          "id": "afcbe169-f0d1-4e0c-a500-175d99b1a540",
+          "sectionId": "57782dd8-541d-4125-9602-e6a37c475206",
+          "title": "対象確認と受付番号保持の保証",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "CI-002：確認担当は、選択した対象の受付内容を確認して同じ受付を確認済みにする。CI-003：確認処理と確認通知はいずれも元の受付番号を保持し、別の受付へ付け替えない。（未承認の表現候補）"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "7b8c0094-b29c-4cc1-938d-602bf8009712",
+          "guaranteeId": "f6ab804e-8885-465a-b779-6c9980061671",
+          "columns": [
+            "入力例",
+            "必須の充足",
+            "観測結果",
+            "対応"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "机 / 2026-11-01"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "品名と返却予定日がある"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "同じ対象の内容が新しい受付番号で記録される"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "01f7c556-80b3-42d9-960b-5a0e090286ab",
+                  "label": "CI-001"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "机 / 返却予定日なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "必須不足"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "処理は未決であり、拒否する保証を追加しない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "5833c919-5b45-4fc6-95f1-7cfce60cfd9c",
+                  "label": "CI-Q01"
+                }
+              ]
+            ]
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "5833c919-5b45-4fc6-95f1-7cfce60cfd9c",
+          "checkId": "CI-Q01",
+          "title": "必須不足時の処理を確認する",
+          "sectionId": "3e563eb7-cca7-47e1-8120-49c562f55ecc",
+          "reviewState": "要確認",
+          "detailSummary": "",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "未決事項（元のヒアリングで未決）"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "text",
+                "value": "品名または返却予定日がないとき。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "未決。拒否や補完をこのCheckで定めない。"
+              }
+            ],
+            "question": [
+              {
+                "kind": "text",
+                "value": "不足時にどの処理と復帰を行うか。"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "bd-2 / F01"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "未合意の期待をテスト合格条件にしない"
+              }
+            ]
+          }
+        },
+        {
+          "id": "512e2e18-4770-4a4f-903b-cab858a11045",
+          "checkId": "CI-003",
+          "title": "確認と通知で受付番号が保持される",
+          "sectionId": "57782dd8-541d-4125-9602-e6a37c475206",
+          "reviewState": "要確認",
+          "detailSummary": "",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "afcbe169-f0d1-4e0c-a500-175d99b1a540",
+                "label": "CI-003の一般保証"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "bd-2 / 確認・通知のProcedure"
+              }
+            ],
+            "related": [
+              {
+                "kind": "reference",
+                "targetId": "3e408d9d-3f2d-4c32-9252-f886ec7ffca8",
+                "label": "確認結果を通知する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "自動テスト証拠は未収集"
+              }
+            ]
+          }
+        },
+        {
+          "id": "241a2541-3f34-487d-b094-6743421c6113",
+          "checkId": "CI-002",
+          "title": "対象の受付が確認済みになる",
+          "sectionId": "57782dd8-541d-4125-9602-e6a37c475206",
+          "reviewState": "要確認",
+          "detailSummary": "",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "afcbe169-f0d1-4e0c-a500-175d99b1a540",
+                "label": "CI-002の一般保証"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "bd-2 / 受付内容を確認する / Procedure・Result"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "自動テスト証拠は未収集"
+              }
+            ]
+          }
+        },
+        {
+          "id": "01f7c556-80b3-42d9-960b-5a0e090286ab",
+          "checkId": "CI-001",
+          "title": "受付内容が対象の台帳へ記録される",
+          "sectionId": "3e563eb7-cca7-47e1-8120-49c562f55ecc",
+          "reviewState": "確認済み",
+          "detailSummary": "",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "f6ab804e-8885-465a-b779-6c9980061671",
+                "label": "CI-001の一般保証"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "bd-2 / 持出しを受け付ける / Procedure・Result"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "自動テスト証拠は未収集"
+              }
+            ]
+          }
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

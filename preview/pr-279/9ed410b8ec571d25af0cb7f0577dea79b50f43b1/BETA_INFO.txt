@@ -1,0 +1,5 @@
+Gate C review beta (not a release)
+Viewer source: 9ed410b8ec571d25af0cb7f0577dea79b50f43b1
+JSON source: https://raw.githubusercontent.com/mk3008/alder/9ed410b8ec571d25af0cb7f0577dea79b50f43b1/work/viewer-json/issue-274/layout-regression/same-business.json
+Check example source: https://raw.githubusercontent.com/mk3008/alder/9ed410b8ec571d25af0cb7f0577dea79b50f43b1/work/viewer-json/issue-274/rough/gate-b-example.json
+Check's confirmed state is synthetic fixture data, not human approval.
