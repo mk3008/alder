@@ -17,13 +17,14 @@ export async function verifyJSONDocuments(browser){
    await page.locator('.node').first().waitFor();if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await saved();
    assert.equal(await page.locator('.node').count(),6);assert.equal(await page.locator('.edge').count(),6);
    assert.deepEqual((await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node))).sort(),[...bd.objects,...bd.activities].map(n=>n.id).sort());
+   const selectedOnly=async()=>{const text=await page.locator('.json-detail').innerText();assert.doesNotMatch(text,/JSON 0\.1|package package-7|文書ID:|要素ID:/);if(bd.preface)assert.ok(!text.includes(bd.preface));};
    await shot('overview');
    if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
-   await page.locator('#node-category-object').click();await page.locator(`[data-list-node="${bd.objects[0].id}"] .node-navigate`).click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail h1').textContent(),bd.objects[0].name);for(const info of bd.objects[0].information)assert.ok((await page.locator('.json-detail').innerText()).includes(info));await shot('object-detail');await page.locator('#node-list-toggle').click();await page.locator('#node-category-activity').click();
+   await page.locator('#node-category-object').click();await page.locator(`[data-list-node="${bd.objects[0].id}"] .node-navigate`).click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail h1').textContent(),bd.objects[0].name);for(const info of bd.objects[0].information)assert.ok((await page.locator('.json-detail').innerText()).includes(info));assert.deepEqual(await page.locator('.json-detail h3').allTextContents(),['Scope','Icon','Information']);await selectedOnly();await shot('object-detail');await page.locator('#node-list-toggle').click();await page.locator('#node-category-activity').click();
    const activity=bd.activities[0];await page.locator(`[data-list-node="${activity.id}"] .node-navigate`).click();
    await shot('activity-list');if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
-   assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await shot('activity-detail');
+   assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await selectedOnly();await shot('activity-detail');
    await page.locator('#detail-mode-checks').click();assert.equal(await page.locator('.check-item').count(),2);
    assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));
    const item=page.locator('[data-check-id="CI-001"]');assert.ok((await item.innerText()).includes('確認済み'));
@@ -36,7 +37,7 @@ export async function verifyJSONDocuments(browser){
    await page.locator('#detail-mode-business').click();await page.locator(`.node[data-activity="${activity.id}"] .activity-open`).first().press('Enter');await saved();
    assert.equal(await page.locator('.tab').count(),2);assert.ok((await page.locator('.tab.active').innerText()).includes(activity.name));
    await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('#detail h1').textContent(),activity.name);
-   await page.locator('.tab').first().locator('button').first().click();
+   await selectedOnly();await page.locator('.tab').first().locator('button').first().click();
    await page.locator(`.finding-badges[aria-label="${bd.activities[2].name}の指摘を開く"]`).press('Enter');
    assert.ok((await page.locator('#node-list').innerText()).includes('通知媒体'));assert.ok((await page.locator('#node-list').innerText()).includes(bd.activities[2].name));await shot('findings');
    await saved();assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);

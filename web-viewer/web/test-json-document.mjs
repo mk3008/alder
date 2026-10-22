@@ -30,6 +30,16 @@ const model=structuredClone(pkg),doc=model.documents[1];doc.sections.push({id:'u
 doc.notes.push({id:'cycle-a',title:'循環A',content:[{kind:'reference',targetId:'cycle-b',label:'循環Bを読む'}]},{id:'cycle-b',title:'循環B',content:[{kind:'reference',targetId:'cycle-a',label:'循環Aを読む'}]});doc.items.find(i=>i.checkId==='CI-001').fields.related=[{kind:'reference',targetId:'cycle-a',label:'文書メモを読む'}];
 doc.items.find(i=>i.checkId==='CI-001').fields.evidence.push({kind:'text',value:'<img src="https://must-not-load.test/image" onerror="alert(1)">'});
 const dom=new JSDOM('<body></body>',{runScripts:'outside-only'}),compiled=await build({entryPoints:['src/json-view.ts'],bundle:true,write:false,format:'iife',globalName:'jsonUI'});dom.window.eval(compiled.outputFiles[0].text+'\nwindow.jsonUI=jsonUI;');
+// Package metadata and preface belong to original source, never selected item details.
+const detailDesign=structuredClone(parsed);detailDesign.json.business.preface='DOCUMENT-PREFACE-ONLY';
+for(const selectedItem of [...bd.objects,...bd.activities]){
+ const detail=dom.window.jsonUI.jsonDetail(detailDesign,selectedItem.id);
+ assert.doesNotMatch(detail.textContent,/DOCUMENT-PREFACE-ONLY|JSON 0\.1|package |文書ID:|要素ID:/);
+ assert.ok(detail.querySelector('h3'));
+ if(bd.objects.includes(selectedItem))assert.deepEqual([...detail.querySelectorAll('h3')].map(n=>n.textContent),['Scope','Icon','Information']);
+}
+assert.equal(dom.window.jsonUI.jsonDetail(detailDesign).textContent,'項目を選択すると業務内容を表示します。');
+assert.equal(detailDesign.markdown,raw,'source remains unchanged');
 const d=parseDocument(JSON.stringify(model)),panel=dom.window.jsonUI.jsonChecks(d,bd.activities[0].id);dom.window.document.body.append(panel);
 assert.match(panel.textContent,/意味対応は未確認/);assert.match(panel.textContent,/CI-DOC/);assert.match(panel.textContent,/人間レビュー状態: 確認済み/);assert.equal(panel.querySelectorAll('img,script,iframe').length,0);
 assert.equal(panel.querySelectorAll('table').length,0,'references must not recursively render while closed');

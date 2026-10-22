@@ -6,15 +6,14 @@ function field(root:HTMLElement,name:string,value:string|null|undefined){if(valu
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
 export function jsonDetail(design:Design,id?:string):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.json!,bd=json.business;
- root.append(element('p',`JSON ${json.formatVersion} · package ${json.revision} · BD ${bd.revision}`));if(bd.preface)root.append(formattedMarkdown(bd.preface));
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
  if(object){field(root,'Scope',String(object.scope));field(root,'Icon',object.icon);root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
  else if(activity){
   for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,activity[key]===null?null:String(activity[key]));
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
- }else{root.append(element('h2',bd.title));field(root,'Scope',bd.scope);}
- root.append(element('small',`文書ID: ${bd.id}${id?' · 要素ID: '+id:''}`));return root;
+ }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
+ return root;
 }
 /** References are expanded on demand. Neither a cycle nor fan-out eagerly builds a tree. */
 class RichReader{
