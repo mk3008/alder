@@ -1,0 +1,131 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.1",
+  "revision": "package-1",
+  "documents": [
+    {
+      "id": "05570d0b-04c8-4888-bfa6-703dd22409f7",
+      "kind": "businessDesign",
+      "schemaVersion": "0.1",
+      "revision": "bd-1",
+      "title": "備品持出し受付",
+      "preface": "AI草案。確認待ち。必須不足時・代理申請の扱いは未決。",
+      "scope": "備品の持出し受付と内容確認。",
+      "objects": [
+        {
+          "id": "16d99a57-098e-4cfb-b058-a5759fb156b4",
+          "name": "依頼内容",
+          "scope": true,
+          "icon": "message-square",
+          "information": [
+            "品名",
+            "返却予定日"
+          ]
+        },
+        {
+          "id": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "name": "受付台帳",
+          "scope": true,
+          "icon": "file-text",
+          "information": [
+            "受付番号",
+            "品名",
+            "返却予定日",
+            "受付済み / 確認済み"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "name": "持出しを受け付ける",
+          "scope": true,
+          "why": "持出し内容を記録して確認できるようにする。",
+          "when": "申請者から品名と返却予定日を申し出られたとき。",
+          "who": "受付担当",
+          "where": "規定なし",
+          "procedure": "1. 申し出られた品名と返却予定日を受け取る。\n2. 新しい受付番号を付け、品名と返却予定日を受付台帳へ記録する。必須不足時の処理は未決。",
+          "exception": null,
+          "result": "持出しの対象が受付済みとして記録される。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "name": "受付内容を確認する",
+          "scope": true,
+          "why": "受付内容を確認済みとして扱えるようにする。",
+          "when": "受付済みの対象内容が台帳に記録されたとき。",
+          "who": "確認担当",
+          "where": "規定なし",
+          "procedure": "対象の受付内容を確認し、受付番号を変えずに同じ受付を確認済みとして記録する。",
+          "exception": null,
+          "result": "対象の受付が同じ番号で確認済みになる。",
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "3ed0e8d4-f9d7-4f1c-a1b2-124579fad00d",
+          "kind": "input",
+          "fromId": "16d99a57-098e-4cfb-b058-a5759fb156b4",
+          "toId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "label": "品名 / 返却予定日（必須）"
+        },
+        {
+          "id": "baab52a6-bc97-4f20-8452-f6d8f8cccbdb",
+          "kind": "output",
+          "fromId": "aa237964-d975-4ced-b3fd-04edae396fd5",
+          "toId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "label": "受付番号 / 品名 / 返却予定日 / 受付済み"
+        },
+        {
+          "id": "b1ae5609-fd22-47b4-bbbf-e24822229e93",
+          "kind": "input",
+          "fromId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "toId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "label": "対象の受付内容と受付番号"
+        },
+        {
+          "id": "1c0c769a-b497-4c9d-a202-c2777fd4f7d1",
+          "kind": "output",
+          "fromId": "4f5a13fb-59dd-4dcb-8ef9-aa8e204a7cc1",
+          "toId": "4446092f-a07e-4511-8b88-26783d517dc6",
+          "label": "同じ受付番号の確認済み状態"
+        }
+      ],
+      "findings": [
+        {
+          "id": "93827b29-e9f7-497b-bea4-808fde055c51",
+          "sourceId": "F01",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "aa237964-d975-4ced-b3fd-04edae396fd5"
+          ],
+          "unresolvedTargets": [],
+          "summary": "必須不足時の処理",
+          "content": "品名または返却予定日がない場合の処理は未決。拒否・補完を推測しない。"
+        },
+        {
+          "id": "24e0289c-a0e3-4ab7-80a2-d2f764a1f196",
+          "sourceId": "F02",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "aa237964-d975-4ced-b3fd-04edae396fd5"
+          ],
+          "unresolvedTargets": [],
+          "summary": "代理申請の扱い",
+          "content": "代理申請を認めるかは未決。"
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

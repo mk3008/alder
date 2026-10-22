@@ -85,6 +85,29 @@ class ExportPluginReferencesTest(unittest.TestCase):
         self.assertEqual(json.loads(result[self.provenance_path])["scripts"]["tools/source.py"],
                          hashlib.sha256(script.read_bytes()).hexdigest())
 
+    def test_nested_script_destinations_preserve_module_layout(self):
+        script = self.root / "tools/parser.py"
+        script.parent.mkdir()
+        script.write_bytes(b"print('nested')\n")
+        self.git("add", "tools/parser.py")
+        self.git("commit", "-qm", "Nested script")
+        revision = self.git("rev-parse", "HEAD").strip()
+        self.provenance["scripts"] = {"tools/parser.py": ""}
+        self.provenance["script_destinations"] = {"tools/parser.py": "business_graph/export.py"}
+        self.save_provenance()
+        result = export_plan(self.root, ["alder-example"], revision)
+        self.assertEqual(result[self.skill / "scripts/business_graph/export.py"], script.read_bytes())
+        self.provenance["script_destinations"]["tools/parser.py"] = "../escape.py"
+        self.save_provenance()
+        with self.assertRaisesRegex(ValueError, "Unsafe script destination"):
+            export_plan(self.root, ["alder-example"], revision)
+
+    def test_destination_mapping_cannot_hide_unknown_sources(self):
+        self.provenance["script_destinations"] = {"missing.py": "nested/file.py"}
+        self.save_provenance()
+        with self.assertRaisesRegex(ValueError, "unknown source"):
+            export_plan(self.root, ["alder-example"])
+
     def test_check_reports_mismatch_without_writing(self):
         before = (self.root / self.provenance_path).read_bytes()
         with patch("tools.export_plugin_references.ROOT", self.root), contextlib.redirect_stdout(io.StringIO()):
