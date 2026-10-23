@@ -13,7 +13,7 @@ MDは旧ファイルの入力互換として扱う。今後の機能追加先は
 
 `Design.model` は閲覧時の唯一の業務モデル。内部version 1を持つが、正式保存JSONの新しい構造版やBusiness Graph v1ではない。旧 `Design.json` と `ViewerDocumentJSON.storage` のJSON専用payload／旧Design往復は廃止した。元の本文は従来のSessionフィールド `markdown` へ保持し、原文dialogで読取専用表示する。`sections` は旧Design型の空の互換枠として残るだけで、表示・復元・状態図は使わない。
 
-MDの名称ID、JSONのUUIDは維持する。既存の名称IDを入力とする配置器には、両形式とも同じ表示用ID adapterから渡し、座標mapを元IDへ戻す。配置器・配線・定数・Graph v1の契約は変更しない。
+MDの名称ID、JSONのUUIDは維持する。既存の名称IDを入力とする配置器には、両形式とも同じ表示用ID adapterから渡し、座標mapを元IDへ戻す。IDアダプターは配置器・配線・Graph v1の契約を変更しない。
 
 ## 旧Checkと状態の境界
 
@@ -54,4 +54,6 @@ node --experimental-strip-types web/test-document-loader.mjs --baseline-model
 
 旧MDとの11図の座標・配線・PNG比較自体は現状維持する。これは共通図への入力・既存配置の回帰であり、旧MD Drawerの整形完全一致を保証するものではない。追加の旧MD専用GUI oracleは作らない。保証移管と誤実装の検出をIssue #274／PR #285へ記録し、影響する速い検証を反復して、最終CIの所要時間を実測する。
 
-別branchの余白ラフ66a0、Plugin／保存Schema、概念モデル具体仕様、正式JSON採否・merge/releaseはこの変更へ混ぜない。
+2026-10-23の本人承認により、余白修正66a0を同じPR #285へ統合した。業務図と状態図は `caption-spacing.ts` の共通計算を使い、要素→captionとcaption→次要素を各24 world pxとする。状態図は表示する行数だけを一度予約し、matrixの余白を重ねない。既存の保存済みノード座標は自動移行せず、新規配置または明示リセットで新しい行間を使う。
+
+この話題の編集先は `refactor/144-unified-document-loader`／PR #285、作業ディレクトリは `alder-loader` に固定する。旧stackと66a0枝は参照用で並行編集しない。Previewは必ず共通化と余白修正の両方を含む同一headから生成する。Plugin／保存Schema、概念モデル具体仕様、正式JSON採否・merge/releaseは対象外。

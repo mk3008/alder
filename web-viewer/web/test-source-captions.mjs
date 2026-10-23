@@ -25,7 +25,7 @@ function check(d,focus){
  for(const [i,r]of g.relations.entries()){
   const s=boxes.find(n=>n.id===r.from),route=routes[i];
   if(!p.wires[i].returning){
-   assert.equal(route.label[1],s.y+82+p.wires[i].captionLane*22,'normal Input AND Output stack below source');
+   assert.equal(route.label[1],s.y+101+p.wires[i].captionLane*22,'normal Input AND Output stack below source');
    assert.equal(labels[i].x,s.x+40.5,'normal captions share the source indent');
   }
   assert.equal(route.fallback,false);assert.equal(route.collisions,0);
@@ -38,7 +38,7 @@ function check(d,focus){
  const moved=boxes.map(n=>n.id===out.to?{...n,x:n.x+17,y:n.y+113}:n);
  const changed=cache.update(key,d,moved,g.relations,p.wires),cold=new RouteCache().update({},d,moved,g.relations,p.wires);
  const i=g.relations.indexOf(out),source=boxes.find(n=>n.id===out.from);
- assert.equal(changed[i].label[1],source.y+82+p.wires[i].captionLane*22);assert.equal(cold[i].label[1],source.y+82+p.wires[i].captionLane*22);
+ assert.equal(changed[i].label[1],source.y+101+p.wires[i].captionLane*22);assert.equal(cold[i].label[1],source.y+101+p.wires[i].captionLane*22);
  const old=Object.fromEntries(boxes.map((n,i)=>[n.id,[n.x,40+i*192]]));
  const tab={key:'purchase',name:'purchase',activity:focus,design:d,positions:old,scroll:[19,31],zoom:.52};
  assert.deepEqual({...reconcile(tab,d).positions},old,'saved coordinates never migrate');
@@ -58,9 +58,9 @@ check(long);
 for(const kind of ['input','output']){
  const nodes=[{id:'s',x:40,y:40,width:260,height:68},{id:'block',x:100,y:313,width:420,height:68},{id:'t',x:900,y:40,width:260,height:68}];
  const r=routeEdge({from:'s',to:'t',kind,nodes,matrix:{returning:false,captionLane:9},labelWidth:480,labelHeight:18});
- assert.equal(r.label[1],320);assert.ok(r.label[0]-240>=528);assert.equal(r.fallback,false);
+ assert.equal(r.label[1],339);assert.ok(r.label[0]-240>=528);assert.equal(r.fallback,false);
 }
-console.log('purchase captions: 4 Activities/4 Objects/11 relations; purchase 5 + Alder 11 views; 44px base gap + 22px per extra line; full label/card separation; long and multiple captions; drag/cold reload; saved coordinates and reset; fallback source row');
+console.log('purchase captions: 4 Activities/4 Objects/11 relations; purchase 5 + Alder 11 views; 24px caption clearances + 22px per extra line; full label/card separation; long and multiple captions; drag/cold reload; saved coordinates and reset; fallback source row');
 
 // An unrelated card moves over a cached caption: reroute no unrelated wire,
 // but move text sideways. Cold and warm captions agree for the same geometry.

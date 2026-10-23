@@ -4,12 +4,17 @@
   "sha256": {
     "web-viewer/src/layout.ts": "d8d0182c8e1b1e47fece0da728bb0042b24cf9bdd716851b53989529ce217865",
     "web-viewer/src/layout-order.ts": "d119955d3993ab2e7b1f3a6c8e0a40c05c472117fcf054c22186fad50fd43212",
-    "web-viewer/src/matrix-layout.ts": "bbc7451b484822f6dba0046d5c8b5b304e391b97bd8192884875676a39ed1f74",
-    "web-viewer/src/routing.ts": "43697d31a075d7ff0eee29765e24284282ae1bfb1561727a47c1313a3979842e",
+    "web-viewer/src/matrix-layout.ts": "d8ef20a6b09cc0ff8ab0dc79bd81f3451777e6d4e1fe18b5412a7a0e959ff0ae",
+    "web-viewer/src/routing.ts": "313806174416aee29d64d3ce98664140d054a72df6fe979bf03d74c4880074f3",
     "web-viewer/src/geometry.ts": "692e7aa50c57befb816c1f90012f60663544c63988e061c31b3e406c387fc617",
     "web-viewer/src/activities.ts": "8fc1865bde5e88325b95bff45175ad7105761c68fee29ac5455d1a73e8e2df4f",
-    "web-viewer/src/route-cache.ts": "26fc17f9d3fa420beaf3d874b3622032224dcd9055fc59ef81ad940c19816d41",
-    "web-viewer/src/style.css": "714490fea8b9c6d992dbe4948c929354fc790367ca596b27defef179352f2eba"
+    "web-viewer/src/route-cache.ts": "cd432c32d12b305aae2e65f100f77a2806f7b35d55ff85cec69b380f8c90d14f",
+    "web-viewer/src/style.css": "714490fea8b9c6d992dbe4948c929354fc790367ca596b27defef179352f2eba",
+    "web-viewer/src/caption-spacing.ts": "f853739a2ce3271a045b042da74baf6e4205dcc22a1b36ac99b21ef8c4ef033e"
   },
-  "intentionalLayoutChange": "root#144: reuse prior reviewed shared-caption, caption-row and 112px minimum-clearance candidate from alder PRs #256/#262; rebaseline only layout-owned files."
+  "intentionalLayoutChange": "root#144: reuse prior reviewed shared-caption, caption-row and 112px minimum-clearance candidate from alder PRs #256/#262; rebaseline only layout-owned files.",
+  "intentionalCaptionSpacingChange": {
+    "source": "66a0d375aa8a72c9cb75ae468abd659674a466a1",
+    "approval": "root#144 / 2026-10-23: integrate the existing spacing fix into PR285; 24 world px before/after captions. Only matrix row heights and caption anchors change; dependency order, horizontal corridors, ports, routing search, Graph v1 and CSS remain unchanged."
+  }
 }

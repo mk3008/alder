@@ -11,7 +11,7 @@ const activity=name=>`# Activity ${name}\n\n## Scope\n\ntrue\n\n## Why\n\n依頼
 const raw='# 共有キャプション\n\n'+object('認証基盤')+object('別の認証基盤')+['業務A','業務B','業務C'].map(activity).join('');
 const d=parseDesign(raw),unchanged=JSON.stringify(d),plan=matrixPlan(d.graph,d.activityOrder);
 const source=plan.positions['認証基盤'],next=Object.values(plan.positions).filter(p=>p[1]>source[1]).sort((a,b)=>a[1]-b[1])[0];
-assert.equal(next[1]-source[1],134,'three equal captions plus one different caption need two lines, not four');
+assert.equal(next[1]-source[1],158,'three equal captions plus one different caption need two lines, not four');
 const boxes=d.graph.nodes.map(n=>({id:n.id,x:plan.positions[n.id][0],y:plan.positions[n.id][1],width:260,height:68}));
 const routes=new RouteCache().update({},d,boxes,d.graph.relations,plan.wires),same=d.graph.relations.map((r,i)=>({r,i})).filter(({r})=>r.from==='認証基盤'&&r.label==='認証済み作業者の識別情報');
 assert.equal(same.length,3);for(const {i}of same)assert.deepEqual(routes[i].label,routes[same[0].i].label);

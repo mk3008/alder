@@ -34,7 +34,8 @@ export async function verifySharedCaptions(browser){
   const boxes=await page.evaluate(()=>({cards:[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,name:n.querySelector('.node-name')?.textContent,x:parseFloat(n.style.left),y:parseFloat(n.style.top),w:n.offsetWidth,h:n.offsetHeight})),labels:[...document.querySelectorAll('.edge-label')].map(n=>{const b=n.getBBox();return {text:n.textContent,x:b.x,y:b.y,w:b.width,h:b.height};})}));
   const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
   for(let i=0;i<boxes.labels.length;i++){for(const n of boxes.cards)assert.equal(hit(boxes.labels[i],n),false,'caption avoids every card');for(const other of boxes.labels.slice(i+1))assert.equal(hit(boxes.labels[i],other),false,'distinct native captions do not overlap');}
-  const auth=boxes.cards.find(n=>n.name==='認証基盤'),next=boxes.cards.filter(n=>n.y>auth.y).sort((a,b)=>a.y-b.y)[0];assert.equal(next.y-auth.y,112,'five identical lines reserve just one line');
+  const auth=boxes.cards.find(n=>n.name==='認証基盤'),next=boxes.cards.filter(n=>n.y>auth.y).sort((a,b)=>a.y-b.y)[0];assert.equal(next.y-auth.y,136,'five identical lines reserve just one line');
+  const captionClearance=boxes.labels.find(l=>l.text==='認証済み作業者の識別情報').y-(auth.y+auth.h);assert.ok(captionClearance>=22,'native caption glyphs clear the 22px source selection halo');
   // A real selected card casts a 17px blur with 5px spread. At each viewport,
   // adjacent card text and its upward finding badge must clear that glow.
   await page.locator('.node').first().click({position:{x:45,y:30}});
@@ -66,6 +67,6 @@ export async function verifySharedCaptions(browser){
   await page.evaluate(()=>{const d=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');Object.defineProperty(HTMLImageElement.prototype,'src',{...d,set(value){if(String(value).startsWith('data:image/svg+xml'))window.sharedExportSvg=decodeURIComponent(String(value).split(',').slice(1).join(','));d.set.call(this,value);}});});
   await ensureDocumentActions(page);const download=page.waitForEvent('download');await page.locator('#save-image').click();await download;
   const png=await page.evaluate(()=>{const d=new DOMParser().parseFromString(window.sharedExportSvg,'image/svg+xml');return {edges:d.querySelectorAll('.edge').length,labels:[...d.querySelectorAll('.edge-label')].map(e=>e.textContent)};});assert.equal(png.edges,4);assert.equal(png.labels.filter(t=>t==='認証済み作業者の識別情報').length,1);
-  assert.deepEqual(errors,[]);return {width,format:'typed JSON v0.3',edges:23,labels:labels.length,authenticationMembers:5,masterMembers:2,compactGap:112,detailEdges:4,badges:clearance.findings,minGlowBadgeClearance:clearance.minClearance,png};
+  assert.deepEqual(errors,[]);return {width,format:'typed JSON v0.3',edges:23,labels:labels.length,authenticationMembers:5,masterMembers:2,compactGap:136,captionClearance,detailEdges:4,badges:clearance.findings,minGlowBadgeClearance:clearance.minClearance,png};
  }));return results;
 }

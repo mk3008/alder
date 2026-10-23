@@ -110,6 +110,6 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 
 スクリーンショットと観測は`json-document-HEAD`、操作確認版は`viewer-preview-pr-PR-HEAD` artifactへ保存します。確認版のmanifestはsource/checkout/treeと各ファイルのdigestを持ち、PR headとビルドtreeの一致を要求します。公開デプロイを行わず、本人操作レビューと自動検証を分けます。
 
-`jsonLayout`は同一業務のMD/JSONの全体図・全Activity詳細について、world座標・矩形・間隔・SVG経路/ラベル・カメラ・保存/復元・リセットを1280/393pxの実Chromeで比較します。既存44群に状態遷移・Role・購入業務の計3群を加えた全47群で、数値と画像は`json-layout-HEAD` artifactへ保存します。描画器と共通CSSの固定hashも検査します。
+`jsonLayout`は同一業務のMD/JSONの全体図・全Activity詳細について、world座標・矩形・間隔・SVG経路/ラベル・カメラ・保存/復元・リセットを1280/393pxの実Chromeで比較します。既存44群に状態遷移・Role・購入業務の計3群を加えた全47群で、数値と画像は`json-layout-HEAD` artifactへ保存します。描画器と共通CSSの固定hashも検査します。2026-10-23に承認された66a0の余白統合については、matrix行高／routing・cacheのcaption anchor／共通caption関数だけを明示的に基準更新し、他の配置順・横位置・接続点・経路探索・CSSは保持します。独立した24pxの余白算術と状態SVGの行数による回帰を追加し、旧数値を単に採り直して合格させません。
 
 `jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の11図のnative座標・配線・PNG回帰は`jsonLayout`へ集約します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。

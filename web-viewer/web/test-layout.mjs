@@ -10,7 +10,7 @@ const stepGraph={version:1,nodes:chainNodes,relations:chainNodes.slice(1).map((n
 const stepPositions=initialPositions(stepGraph),origin=stepPositions[chainNodes[0].id];
 const stepX=stepPositions[chainNodes[1].id][0]-origin[0],stepY=stepPositions[chainNodes[1].id][1]-origin[1];
 assert.equal(stepX,64,'overview shares the accepted detail staircase horizontal step');
-assert.equal(stepY,112,'Alder cards reserve at least 44 units for captions, glow and badges');
+assert.equal(stepY,136,'68px cards reserve 24px on both sides of a 20px caption row');
 for(const [i,n] of chainNodes.entries())assert.deepEqual(stepPositions[n.id],[origin[0]+i*stepX,origin[1]+i*stepY]);
 const old=g=>Object.fromEntries(g.nodes.map((n,i)=>[n.id,[40+i%4*320,40+Math.floor(i/4)*140]]));
 const connectedDistance=(g,p)=>g.relations.reduce((s,r)=>s+Math.hypot(p[r.to][0]-p[r.from][0],p[r.to][1]-p[r.from][1]),0);

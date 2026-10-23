@@ -1,5 +1,7 @@
+import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
 import assert from 'node:assert/strict';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 const dir='../work/json-state/issue-275/',raw=readFileSync(dir+'purchase.json','utf8'),md=readFileSync(dir+'supported-state.md','utf8'),pkg=JSON.parse(raw),st=pkg.documents[1],bd=pkg.documents[0];
+const parseStateRows=()=>st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId}));
 export async function verifyJSONStates(browser){
  const results=[],out='web/evidence/json-states';mkdirSync(out,{recursive:true});
  for(const width of [1280,393]){const snapshots=[];
@@ -12,6 +14,7 @@ export async function verifyJSONStates(browser){
    await select(format==='json'?st.objectId:'購入申請');await page.locator('#detail-mode-states').click();await page.locator('.state-diagram').waitFor();
    assert.equal(await page.locator('[data-transition]').count(),13);assert.equal(await page.locator('[data-state]').count(),8);assert.equal(await page.locator('.state-diagram [stroke-dasharray]').count()>0,true);
    assert.equal(await page.locator('[data-state="申請済み"] rect').evaluate(e=>getComputedStyle(e).fill),'rgb(228, 244, 235)');
+   const spacing=assertStateCaptionRows(await page.locator('.state-diagram').evaluate(stateCaptionSnapshot),parseStateRows());
    const svg=await page.locator('.state-diagram').evaluate(e=>e.outerHTML);snapshots.push(svg);
    await page.screenshot({path:`${out}/${format}-states-${width}.png`});await page.locator('.state-transition-panel > details').first().locator('summary').click();assert.ok((await page.locator('[data-transition="T12"]').innerText()).includes('未決（設計課題）'));assert.ok((await page.locator('[data-transition="T07"]').innerText()).includes('申請内容の破棄'));
    await page.locator('[data-state="申請済み"]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'false');await page.locator('[data-state="申請済み"]').press('Space');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');
@@ -26,7 +29,7 @@ export async function verifyJSONStates(browser){
    await select(format==='json'?st.objectId:'購入申請');await page.locator('#detail-mode-states').click();await page.locator('.state-transition-panel > details').first().locator('summary').click();await page.locator('[data-transition="T12"] button').click();
    assert.equal(await page.locator('.node.selected .node-name').innerText(),'購入を準備する');assert.equal(await page.locator('#detail h1').innerText(),'購入を準備する');
    const other=bd.objects.find(o=>o.id!==st.objectId);await select(format==='json'?other.id:other.name);assert.equal(await page.locator('#detail-mode-states').isDisabled(),true);assert.equal(await page.locator('.state-diagram').count(),0);
-   assert.deepEqual(errors,[]);results.push({width,format,operations:13,states:8,partial:true,T12:'@unknown',keyboard:true,activityNavigation:true,reload:true,unknownObjectDisabled:true,pageErrors:errors});
+   assert.deepEqual(errors,[]);results.push({width,format,operations:13,states:8,partial:true,spacing,T12:'@unknown',keyboard:true,activityNavigation:true,reload:true,unknownObjectDisabled:true,pageErrors:errors});
   }catch(e){await page.screenshot({path:`${out}/failure-${format}-${width}.png`}).catch(()=>{});throw e;}finally{await context.close();}
  }
  assert.equal(snapshots[0],snapshots[1],'MD/JSON SVG coordinates, routes, labels and controls must be identical');

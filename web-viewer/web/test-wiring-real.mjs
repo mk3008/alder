@@ -17,7 +17,7 @@ const state=createWorkspace({tabs:[{key:'source',name:'sample',design,positions:
 const overview=structuredClone(state.tabs[0].positions);
 for(const [activity,staircase] of Object.entries(expected)){
  const projected=activityDesign(design,activity),positions=initialPositions(projected.graph,projected.activityOrder,activity);
- for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*112],'all upstream Object and exception Activity peers advance right and down');
+ for(const [i,id] of staircase.entries())assert.deepEqual(positions[id],[40+i*64,40+i*136],'all upstream Object and exception Activity peers advance right and down');
  assert.deepEqual(initialPositions({...projected.graph,nodes:[...projected.graph.nodes].reverse(),relations:[...projected.graph.relations].reverse()},projected.activityOrder,activity),positions,'deterministic detail ordering');
  const focusY=positions[activity][1],outputs=projected.graph.relations.filter(r=>r.kind==='output').map(r=>r.to);
  for(const n of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==activity)){assert.ok(positions[n.id][1]>focusY);for(const id of outputs)assert.ok(positions[n.id][1]>positions[id][1],'exception peers follow every normal Output');}
@@ -44,10 +44,10 @@ for(const [activity,staircase] of Object.entries(expected)){
   for(const n of boxes)assert.equal(overlaps(labels[i],n),false,'complete label clears every shape');
   for(const other of labels.slice(i+1))assert.equal(overlaps(labels[i],other),false,'complete labels do not overlap');
   if(relation.kind==='input'){
-   if(returnInput){assert.equal(labels[i].x,source.x+260+8);assert.equal(route.label[1],source.y+34-15);}else assert.ok(route.label[1]>=source.y+68&&route.label[1]<=source.y+96,'forward caption beside source departure');
+   if(returnInput){assert.equal(labels[i].x,source.x+260+8);assert.equal(route.label[1],source.y+34-15);}else assert.equal(route.label[1],source.y+101,'forward caption keeps the approved 24px clearance');
    if(source.y<target.y){forward++;assert.ok(route.points.slice(1).every((p,j)=>p[0]>=route.points[j][0]&&p[1]>=route.points[j][1]));assert.deepEqual(route.points.at(-1),[target.x,target.y+34],'normal arrow enters from left');}
   }
-  if(relation.kind==='output'){assert.ok(labels[i].x>=route.points[0][0]+8,'Output text clears its departure');assert.equal(route.label[1],source.y+82,'Output caption directly below source');}
+  if(relation.kind==='output'){assert.ok(labels[i].x>=route.points[0][0]+8,'Output text clears its departure');assert.equal(route.label[1],source.y+101,'Output caption directly below source');}
   if(relation.kind.endsWith('exception')){
    exceptions++;assert.ok(projected.graph.nodes.some(n=>n.id===relation.from&&n.type==='business'));assert.ok(projected.graph.nodes.some(n=>n.id===relation.to&&n.type==='business'));
    // Preserve actual directed hand-back, not the old side-departing coordinates.
@@ -67,7 +67,7 @@ for(const [activity,staircase] of Object.entries(expected)){
    if(relation.from!==dataID&&relation.to!==dataID){assert.equal(updated[i],original[i]);continue;}
    for(const route of [updated[i],fresh[i]]){
     const left=route.label[0]-Math.max(30,relation.label.length*12)/2;
-    if(relation.kind==='output'){const source=moved.find(n=>n.id===relation.from);assert.ok(left>=source.x+40.5);assert.equal(route.label[1],source.y+82,'Output caption stays at source after target drag');}
+    if(relation.kind==='output'){const source=moved.find(n=>n.id===relation.from);assert.ok(left>=source.x+40.5);assert.equal(route.label[1],source.y+101,'Output caption stays at source after target drag');}
     else if(relation.kind==='input'){assert.equal(left,object.x+268);assert.equal(route.label[1],object.y+19);}
    }
   }

@@ -1,9 +1,8 @@
 import type {Graph,Relation} from './graph';
 import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
-// 68px card + 44px for its caption, the following badge and visible clearance.
-const ROW_STEP=112;
-export const CAPTION_LINE_STEP=22;
+import {captionRowStep,CAPTION_LINE_HEIGHT,CAPTION_LINE_STEP} from './caption-spacing.ts';
+export {CAPTION_LINE_STEP} from './caption-spacing.ts';
 export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number};
 /** Only normal departures share captions; return/exception bends stay independent. */
 export function captionKey(relation:Relation,index:number,wire?:MatrixWire):string{
@@ -99,7 +98,8 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
  let y=40;
  for(const n of nodes){
   positions[n.id]=[40+64*cells[n.id][0],y];
-  y+=ROW_STEP+CAPTION_LINE_STEP*Math.max(0,(lanes.get('departure:'+n.id)??0)-1);
+  const lines=lanes.get('departure:'+n.id)??0;
+  y+=captionRowStep(68,lines?CAPTION_LINE_HEIGHT+CAPTION_LINE_STEP*(lines-1):0);
  }
  return {positions,cells,wires:directionalReturnWires(graph,wires,positions),forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
 }

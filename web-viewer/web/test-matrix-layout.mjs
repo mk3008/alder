@@ -31,7 +31,7 @@ function verify(graph,hint){
    for(const n of boxes.filter(n=>n.id!==r.from&&n.id!==r.to)){assert.equal(rectHit(route.points[0],elbow,n),false,'reserved vertical corridor clears every card');assert.equal(rectHit(elbow,route.points.at(-1),n),false,'horizontal arrival clears every card');}
    assert.ok(route.points.slice(1).every((q,j)=>q[0]>=route.points[j][0]&&q[1]>=route.points[j][1]));
    assert.ok(route.label[0]>=a.x+32.5+8+Math.max(30,(r.label??'').length*12)/2);
-   assert.equal(route.label[1],a.y+82+wire.captionLane*22,'both normal kinds stay directly below their source');
+   assert.equal(route.label[1],a.y+101+wire.captionLane*22,'both normal kinds stay directly below their source');
   }
  }
  assert.equal(JSON.stringify(graph),before);assert.deepEqual(matrixPlan({...graph,nodes:[...graph.nodes].reverse(),relations:[...graph.relations].reverse()},hint).positions,p.positions,'array order does not move cells');
