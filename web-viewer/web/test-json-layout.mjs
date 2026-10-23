@@ -10,6 +10,7 @@ const root='../work/viewer-json/issue-274/layout-regression/';
 export const mdSource=readFileSync(root+'same-business.md','utf8'),jsonSource=readFileSync(root+'same-business.json','utf8');
 const md=parseDocument(mdSource),json=parseDocument(jsonSource);
 assert.ok(md.model,'legacy MD must traverse the current DocumentModel entry');
+assert.equal(json.model.business.roles,undefined,'old 0.1 input without a Role catalog must retain legacy display colors, not introduce an empty catalog');
 const named=(design,positions)=>Object.fromEntries(design.graph.nodes.map(n=>[n.name,positions[n.id]]).sort());
 const tab=(design,activity)=>reconcile({key:'layout',name:'layout',design,positions:{},scroll:[0,0],zoom:1,activity},design);
 for(const name of [undefined,...md.activityOrder]){
@@ -39,7 +40,7 @@ before.zoom=1.2;before.scroll=[71,93];before.selected=json.activityOrder[0];
 const renamed=structuredClone(sourcePackage);renamed.documents[0].activities[0].name='改名しても保存座標を保持';renamed.documents[0].activities.reverse();
 const restored=reconcile(JSON.parse(JSON.stringify(before)),parseDocument(JSON.stringify(renamed)));
 assert.deepEqual(restored.positions,before.positions);assert.equal(restored.selected,before.selected);assert.deepEqual(restored.scroll,before.scroll);assert.equal(restored.zoom,before.zoom);
-assert.equal(json.markdown,jsonSource);assert.deepEqual(json.model.business,readLegacyPackage(sourcePackage).documents[0]);
+assert.equal(json.markdown,jsonSource);const expectedLegacy=readLegacyPackage(sourcePackage).documents[0];delete expectedLegacy.roles;expectedLegacy.schemaVersion='0.1';for(const a of expectedLegacy.activities)delete a.roleId;assert.deepEqual(json.model.business,expectedLegacy);
 const astral={version:1,nodes:['😀','\ue000'].map(name=>({id:name+'-uuid',name,type:'object',scope:true})),relations:[]};
 assert.deepEqual(canonicalJSONGraph(astral).nodes.map(n=>n.name),['\ue000','😀']);
 // A late-detail MD adapter fault must fail the fast guard, outside the native MD sample.

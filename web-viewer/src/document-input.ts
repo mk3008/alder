@@ -13,7 +13,16 @@ export function normalizeDocument(source:string):NormalizedDocument{
  if(new TextEncoder().encode(source).byteLength>MAX_LOCAL_JSON_BYTES)throw Error('ローカルJSONは8MiB以内にしてください。');
  const pkg=parseStrict(source.replace(/^\uFEFF/,''));
  validateJSONBudget(pkg);
- if(['0.1','0.2','0.3'].includes(pkg?.formatVersion))return projectJSONPackage(readLegacyPackage(pkg),source);
+ if(['0.1','0.2','0.3'].includes(pkg?.formatVersion)){
+  const normalized=projectJSONPackage(readLegacyPackage(pkg),source);
+  // A derived storage catalog must not turn frozen pre-Role input's name colors into gray.
+  // This is a viewing projection only; do not infer Role identities or rewrite storage JSON.
+  if(['0.1','0.2'].includes(pkg.formatVersion)){
+   const bd=normalized.data.business as typeof normalized.data.business & {schemaVersion:string};
+   bd.schemaVersion='0.1';delete bd.roles;for(const activity of bd.activities)delete activity.roleId;
+  }
+  return normalized;
+ }
  return projectJSONPackage(pkg,source);
 }
 export function parseDocument(source:string):Design{return readViewerDocument(normalizeDocument(source));}

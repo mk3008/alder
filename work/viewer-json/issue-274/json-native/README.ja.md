@@ -52,6 +52,7 @@ flowchart TD
 4. 入力予算の移動で旧JSON経路がサイズ／要素制限を迂回しないよう、互換変換前と共通JSON入口で予算を検査する。
 5. 新形式の表示名に残る旧MD delimiter制約を切り分け、Graph v1の独立したexport境界へ残した。
 6. 例外の改名はID維持、別Activityへの移動は同じIDのまま暗黙変更しない。直接編集APIとauthoring guardを整合させた。
-7. Plugin guide／同梱validator／provenanceを同じ公開済みcanonical sourceへ揃え、隔離コピーでも確認する。BループSkill新設・追加LLM試験は行わない。
+7. 最終Chromeで旧MD／旧JSONの全体PNG不一致を検出した。旧0.1/0.2に由来する空rolesを閲覧モデルへ渡すと、既存rendererが旧色ではなく未確定色を使うのが原因。入力adapterで元の「Role目録なし」を閲覧投影へ保持し、Role IDの推定や描画器変更を避けた。修正前に失敗する高速assertと、実アプリDOMの独立した旧palette期待値を追加し、構造・画像の両方で再検証する。
+8. Plugin guide／同梱validator／provenanceを同じ公開済みcanonical sourceへ揃え、隔離コピーでも確認する。BループSkill新設・追加LLM試験は行わない。
 
 最終CI・Plugin bundle source commit・未検証範囲はAlder #274とroot #144への返却に記録する。本人の実操作採否、形式の正式v1採用、main merge、Plugin release、本番配信は実施しない。
