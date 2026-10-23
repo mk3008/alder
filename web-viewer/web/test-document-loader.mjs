@@ -69,6 +69,7 @@ assert.deepEqual(typed.model.business.activities,[{id:'受付',name:'受付',sco
 assert.deepEqual(typed.model.business.objects,[{id:'申請',name:'申請',scope:true,icon:'file-text',information:['申請番号']}]);
 assert.deepEqual(typed.model.business.relations.map(({kind,fromId,toId,label})=>({kind,fromId,toId,label})),[{kind:'input',fromId:'申請',toId:'受付',label:'申請番号'}]);
 assert.deepEqual(typed.findings[0].unresolvedTargets,['存在しない項目']);assert.equal(typed.findings[0].status,'open');assert.equal(typed.markdown,legacyInput);
+const reservedName=oracleParse(legacyInput.replace('# Object 申請','# Object constructor').replace('- 申請 —','- constructor —'));assert.equal(reservedName.objectStateTransitions.constructor,undefined,'legacy IDs never inherit object properties as state declarations');
 // A JSON-shaped model alone is sufficient; poisoned legacy sections cannot affect detail rendering.
 const detailBundle=await build({entryPoints:['src/document-view.ts'],bundle:true,write:false,format:'iife',globalName:'viewUI'});
 const viewWindow=new JSDOM('<body></body>',{runScripts:'outside-only'}).window;viewWindow.eval(detailBundle.outputFiles[0].text+';window.viewUI=viewUI;');

@@ -7,13 +7,15 @@ const labels:Record<string,string>={'種別':'classification','分類':'classifi
 export function legacyCheckModel(source:string,items:CheckItem[],index:Record<string,string[]>,marks:Mark[]):Check{
  const lines=source.replace(/\r\n?/g,'\n').split('\n'),body=(m:Mark)=>lines.slice(m.line+1,marks.find(h=>h.line>m.line&&h.level<=m.level)?.line??lines.length).join('\n').trim();
  const itemMarks=new Map(marks.filter(m=>m.level===3&&items.some(i=>i.title===m.title)).map(m=>[m.title,m]));
- const anchors=new Map<string,string>();for(const m of marks){const item=items.find(i=>i.title===m.title);anchors.set(slug(m.title),item?'legacy-check:'+item.id:m.level===1?'legacy-check-document':'legacy-heading:'+m.line);if(item)anchors.set(item.id.toLowerCase(),'legacy-check:'+item.id);}
- for(const [i,line]of lines.entries()){const a=/<a\s+id=["']?([^\s"'>]+)["']?\s*><\/a>/.exec(line);if(a){const next=marks.find(m=>m.line>i);if(next)anchors.set(a[1].toLowerCase(),anchors.get(slug(next.title))!);}}
+ const headingID=(m:Mark)=>{const item=items.find(i=>i.title===m.title);return item?'legacy-check:'+item.id:m.level===1?'legacy-check-document':'legacy-heading:'+m.line;};
+ const anchors=new Map<string,string|undefined>(),anchor=(key:string,id:string)=>{if(!anchors.has(key))anchors.set(key,id);else if(anchors.get(key)!==id)anchors.set(key,undefined);};
+ for(const m of marks){const id=headingID(m);anchor(slug(m.title),id);const item=items.find(i=>i.title===m.title);if(item)anchor(item.id.toLowerCase(),id);}
+ for(const [i,line]of lines.entries()){const a=/<a\s+id=["']?([^\s"'>]+)["']?\s*><\/a>/.exec(line);if(a){const next=marks.find(m=>m.line>i);if(next)anchor(a[1].toLowerCase(),headingID(next));}}
  const runs=(text:string):Run[]=>{const out:Run[]=[];let end=0;for(const m of text.matchAll(/\[([^\]\n]+)\]\(([^\s)]+)\)/g)){if(m.index!>end)out.push({kind:'markdown',value:text.slice(end,m.index)});let fragment=m[2].slice(1);try{fragment=decodeURIComponent(fragment);}catch{}const target=m[2].startsWith('#')?anchors.get(fragment.toLowerCase()):undefined;out.push(target?{kind:'reference',targetId:target,label:m[1]}:{kind:'link',uri:m[2],label:m[1]});end=m.index!+m[0].length;}if(end<text.length)out.push({kind:'markdown',value:text.slice(end)});return out;};
  const sections:Check['sections']=[],guarantees:Check['guarantees']=[],notes:Check['notes']=[],sectionIDs=new Map<string,string>();
  for(const m of marks.filter(m=>m.level===2)){
   if(m.title==='業務一覧')continue;
-  const id=anchors.get(slug(m.title))!,next=marks.find(h=>h.line>m.line)?.line??lines.length;
+  const id=headingID(m),next=marks.find(h=>h.line>m.line)?.line??lines.length;
   sections.push({id,activityId:Object.hasOwn(index,m.title)?m.title:null,title:m.title,preamble:runs(lines.slice(m.line+1,next).join('\n').trim())});sectionIDs.set(m.title,id);
  }
  const fallback='legacy-unassigned',sectionFor=(m:Mark)=>{const parent=marks.filter(h=>h.line<m.line&&h.level===2).at(-1);return parent?sectionIDs.get(parent.title):undefined;};
@@ -28,7 +30,7 @@ export function legacyCheckModel(source:string,items:CheckItem[],index:Record<st
   return {id:'legacy-check:'+item.id,checkId:item.id,title:item.title.replace(/^[^\s]+\s+[—–-]\s+/,''),reviewState,sectionId,detailSummary:'',fields};
  });
  if(projected.some(i=>i.sectionId===fallback))sections.push({id:fallback,activityId:null,title:'未割当',preamble:[]});
- for(const m of marks.filter(m=>m.level===3&&!itemMarks.has(m.title))){const sectionId=sectionFor(m);if(sectionId)guarantees.push({id:anchors.get(slug(m.title))!,sectionId,title:m.title,blocks:[{kind:'prose',content:runs(body(m))}]});else notes.push({id:anchors.get(slug(m.title))!,title:m.title,content:runs(body(m))});}
+ for(const m of marks.filter(m=>m.level===3&&!itemMarks.has(m.title))){const sectionId=sectionFor(m);if(sectionId)guarantees.push({id:headingID(m),sectionId,title:m.title,blocks:[{kind:'prose',content:runs(body(m))}]});else notes.push({id:headingID(m),title:m.title,content:runs(body(m))});}
  const first=marks.find(m=>m.level===2)?.line??lines.length;
  return {id:'legacy-check-document',kind:'checkItems',revision:'unversioned',title:marks.find(m=>m.level===1)?.title??'Check Item',basedOn:{documentId:'legacy-business-design',revision:'unversioned',verification:'unverified'},intro:runs(lines.slice(/^# /.test(lines[0])?1:0,first).join('\n')),sections,items:projected,
   index:Object.entries(index).map(([activityId,ids])=>{const row=lines.find(l=>l.startsWith('|')&&l.includes('['+activityId+']'))?.split('|').slice(1,-1)??[];return {activityId,purpose:row[1]?.trim()??'',connections:row[2]?.trim()??'',checkIds:ids.map(id=>'legacy-check:'+id)};}),guarantees,examples:[],notes};

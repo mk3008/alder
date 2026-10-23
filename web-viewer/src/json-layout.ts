@@ -18,7 +18,7 @@ export function canonicalJSONGraph(graph:Graph):Graph{
  */
 function input(design:Design,activity?:string){
  const graph=canonicalJSONGraph(design.graph),names=new Map(graph.nodes.map(n=>[n.id,n.name])),ids=new Map(graph.nodes.map(n=>[n.name,n.id]));
- return {graph:{...graph,nodes:graph.nodes.map(n=>({...n,id:n.name})),relations:graph.relations.map(r=>({...r,from:names.get(r.from)!,to:names.get(r.to)!}))},order:design.activityOrder?.map(id=>names.get(id)!),activity:activity===undefined?undefined:names.get(activity),restore:(p:Record<string,Point>)=>Object.assign(Object.create(null),Object.fromEntries(Object.entries(p).map(([id,point])=>[ids.get(id)!,point])))};
+ return {graph:{...graph,nodes:graph.nodes.map(n=>({...n,id:n.name})),relations:graph.relations.map(r=>({...r,from:names.get(r.from)!,to:names.get(r.to)!}))},order:design.activityOrder?.map(id=>names.get(id)!),activity:activity===undefined?undefined:names.get(activity),restore:(p:Record<string,Point>):Record<string,Point>=>Object.assign(Object.create(null),Object.fromEntries(Object.entries(p).map(([id,point])=>[ids.get(id)!,point])))};
 }
 export function initialPositionsForDesign(design:Design,activity?:string){const i=input(design,activity);return i.restore(initialPositions(i.graph,i.order,i.activity));}
 export function matrixPlanForDesign(design:Design,activity?:string){const i=input(design,activity),plan=matrixPlan(i.graph,i.order,i.activity);return {...plan,positions:i.restore(plan.positions),cells:i.restore(plan.cells)};}

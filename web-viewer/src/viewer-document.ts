@@ -17,12 +17,12 @@ export function readViewerDocument({data,original}:NormalizedDocument):Design{
  if(bd.relations.some(r=>!ids.has(r.fromId)||!ids.has(r.toId)))throw Error('Unknown Viewer relation endpoint');
  const roleName=(a:typeof bd.activities[number])=>bd.roles?.find(r=>r.id===a.roleId)?.name??a.who;
  const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:roleName(a),where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
- const objectStateTransitions=Object.fromEntries(data.states.filter(d=>d.basedOn.documentId===bd.id).map(d=>{
+ const objectStateTransitions=Object.assign(Object.create(null),Object.fromEntries(data.states.filter(d=>d.basedOn.documentId===bd.id).map(d=>{
   const labels=new Map(d.states.map(s=>[s.id,s.name]));
   const model:StateModel={object:all.find(n=>n.id===d.objectId)!.name,states:d.states.map(s=>s.name),start:d.start,terminal:d.terminal,completeness:d.completeness,source:d.source,
    transitions:d.transitions.map(t=>({id:t.sourceId,from:labels.get(t.fromId)??t.fromId,to:labels.get(t.toId)??t.toId,activity:t.activityId,...(t.event?{event:t.event}:{}),...(t.exception&&t.exception!=='-'?{exception:t.exception}:{}),condition:t.condition,effect:t.effect,path:t.path,evidence:t.evidence,note:t.note}))};
   return [d.objectId,{model}];
- }));
+ })));
  return {graph:canonicalJSONGraph({version:1,...(bd.scope?{scope:bd.scope}:{}),nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
   // Kept empty for old Session decoders; never a second business representation.
   sections:Object.fromEntries(nodes.map(n=>[n.id,''])),markdown:original.text,

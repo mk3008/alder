@@ -57,3 +57,5 @@ assert.equal(shared.index[0].checkIds[0],shared.index[1].checkIds[0]);assert.equ
 assert.equal(shared.guarantees[0].title,'一般保証');assert.deepEqual(shared.items[0].fields.condition[0],{kind:'reference',targetId:shared.guarantees[0].id,label:'一般保証'});
 assert.deepEqual(shared.items[0].fields['独自の補足'],[{kind:'markdown',value:'未決の文章を残す'}]);
 assert.equal(shared.basedOn.verification,'unverified');
+
+const ambiguous=parseChecks(markdown.replace('### JA-EX-01','### 同名の保証\n説明1\n\n### JA-EX-01')+'\n### 同名の保証\n説明2\n');assert.equal(new Set(ambiguous.model.guarantees.map(g=>g.id)).size,ambiguous.model.guarantees.length,'repeated legacy titles never create duplicate reference identities');
