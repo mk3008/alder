@@ -4,7 +4,7 @@
 
 Called **Atomic Check** in v0.3; the current term is **Check Item**. The naming change avoids confusion with DB/transaction atomicity and does not change granularity, IDs or review states. v0.5 narrows permanent traceability to Business Design ↔ Check Item ↔ Automated Test; Code is verified by tests rather than maintained as a permanent mapping target.
 
-**Historical v0.5:** Check Item drafting and traceability were optional; v0.5 limited the permanent mapping boundary to Test when that workflow was used. **Current workflow (included in Plugin 0.4.0 and later):** Check Item design and human review are required before the standard design business hands off to implementation. This changes the present method, not the meaning of the v0.5 release. AI creates and updates the list while preserving IDs and existing Business Design / Check / Test mappings; humans review expected results and return corrections and confirmation. Direct human edits are allowed, followed by a mapping consistency check. Business Design remains human-maintainable. Functional Interfaces and the drift pilot remain optional. See the [current workflow](adoption.md#draft-and-review-check-items-required).
+**Historical v0.5:** Check Item drafting and traceability were optional; v0.5 limited the permanent mapping boundary to Test when that workflow was used. **Current workflow (included in Plugin 0.4.0 and later):** Check Item design and human review are required before the standard design business hands off to implementation. This changes the present method, not the meaning of the v0.5 release. AI creates and updates the list while preserving IDs and existing Business Design / Check / Test mappings; humans review expected results and return corrections and confirmation. For the JSON workflow, request updates from the Plugin/Skills and review the same revision in the Viewer. The Plugin maintains IDs, references and revisions; people decide meaning and review states. Existing Markdown edits remain a compatibility workflow, followed by mapping consistency checks. Functional Interfaces and the drift pilot remain optional. See the [current workflow](adoption.md#draft-and-review-check-items-required).
 
 The standard design business is complete at handoff of the agreed Business Design and Check Items, with their revisions and IDs. Newly written Tests and their assertion mappings do not yet exist at that point. The **separate, required post-implementation Alder review and follow-up** checks the Test oracle against confirmed Check expectations after Test execution and maintains the Check ↔ Test/assertion mapping and evidence gaps in the same Check Item. The independent Fresh review is read-only; its follow-up updates these records before accepting the implementation change. This later maintenance does not extend the bounded design business to Test execution or implementation review.
 
@@ -81,6 +81,14 @@ As a default:
 Do not mechanically split an indivisible rule into assertion-sized fragments. Keep a condition and its expected result in one Item when separating them would break the meaning. Split when a human could reasonably accept, reject, or revise one expected result without changing the others.
 
 A product can use direct Business Design → Check → Test traceability where a Functional Interface adds no navigation value.
+
+## JSON references and Viewer review
+
+For new artifacts, Business Design and Checks share the typed JSON package. Source links use the exact BD document ID/revision and Activity IDs; Check IDs and shared guarantee/example references remain stable across rename and reorder. The Viewer displays business names, conditions, expected results, unresolved questions and saved human review states. People need not maintain JSON IDs or use source-code notation to review the work. A name match or a valid reference is not evidence of agreement.
+
+Ask the Plugin to update the same package from actual decisions. Preserve confirmed unchanged expectations, shared guarantees, Test evidence and pending meaning; do not infer human confirmation from viewing, silence or passing tests. New Check drafting requires human agreement on the exact source BD revision. Existing Markdown selected for update remains in its old format unless conversion is explicitly requested.
+
+The human-facing rules below apply to meaning and review in both representations. H2/H3 layout, heading fragments, Markdown tables and literal Activity-name diagnostics are **Markdown compatibility** instructions, not requirements to synthesize Markdown from JSON. JSON uses its typed structures and validator. The restricted drift pilot retains its own supported input contract; JSON adoption does not make that pilot universal.
 
 ## 3. Human-facing view
 

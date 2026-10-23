@@ -10,7 +10,7 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 ## 直接草案
 
-1. 対象ProjectのAGENTSと既存正本、依頼、既知の判断・未決を読む。JSONが明示された場合、または選択済み正本がJSONの場合だけこの経路へ進む。新規で形式指定がなければ既存Markdown経路を維持する。
+1. 対象ProjectのAGENTSと既存正本、依頼、既知の判断・未決を読む。新規で形式指定がなければJSONを既定とし、選択済み正本がJSONの場合もこの経路へ進む。既存MDを指名した更新はMD互換経路を維持し、明示依頼なしに移行しない。新規JSON Checkの原典がMDだけの場合は、原典の一方向変換を明示確認し、正確なBD版への人間合意を得てから作成する。
 2. `author-cli.mjs runtime`を実行する。直接JSONの作成/更新/検査はNode 24以上、MD変換はPython 3.12以上も必要。利用不能なら実際の制約を報告し、ランタイムを無断導入しない。
 3. `ids N`で必要なIDを一度割り当て、Schemaに沿うJSON候補を直接書く。初回はpackageと文書のrevisionを付け、BDをdraftとする前提・未決をpreface/Findingsへ残す。Why/When/Procedure等はヒアリングに根拠を持つ文章とし、回答のない業務規則を補完しない。
 4. 新規直接草案の`sources`は空でよい。原典のないMD digestや架空のURLを作らない。既存JSONのID・原典metadataを再発行・再計算しない。

@@ -8,7 +8,7 @@
 
 ## 用意するもの
 
-対象の業務設計書のパスと版、適用範囲、既に合意した判断を渡します。本文のユーザー言語も明示します。JSONだけではProcedureやExceptionの本文が欠けるため、元のMarkdownを使います。
+対象の業務設計書のパスと版、適用範囲、既に合意した判断を渡します。本文のユーザー言語も明示します。型付き保存JSONにはProcedureや例外の本文を保持します。Pluginはその正本を読み、人間はViewerで内容を確認します。本文を省くBusiness Graph v1の派生JSONだけでは品質レビューできません。既存MDを対象とする場合は元MDを読みます。
 
 ## 確認する観点
 
@@ -52,6 +52,6 @@ Objectの名前と説明、Scope、Activityのまとめ方も確認してくだ�
 
 意味を変えない修正は、前後の説明と合わせて反映します。責任、条件、保証が変わる指摘は、人間が判断してから業務設計書へ反映します。AIの品質評価は、業務上の承認を代行しません。
 
-見出しや参照の構文は[Business Graph exporter](business-graph.md)でも検査できます。構文が通ることと、読み手に意味が伝わることは別です。
+旧MDの見出しや参照の構文は[Business Graph exporter](business-graph.md)でも検査できます。型付きJSONは保存Schema・参照・版をPluginで検査します。構文が通ることと、読み手に意味が伝わることは別です。
 
 詳細な記述観点の根拠は[Business Design記述品質レビュー](business-design-quality-review.md)を参照してください。
