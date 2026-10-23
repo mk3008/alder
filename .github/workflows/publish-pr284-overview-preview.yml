@@ -1,4 +1,4 @@
-name: Publish isolated PR 284 Viewer review preview
+name: Publish isolated PR 284 caption spacing rough
 on:
   push:
     branches:
@@ -16,20 +16,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      SOURCE_SHA: 1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d
-      SOURCE_CI: "39871472923"
+      SOURCE_SHA: a9304436dc4bb443e746bc1f91b38c35861aade7
     steps:
-      - name: Require successful CI for the exact PR 284 head
-        run: |
-          set -euo pipefail
-          curl -fLsS --retry 2 --max-time 20 "https://api.github.com/repos/mk3008/alder/actions/runs/$SOURCE_CI" -o "$RUNNER_TEMP/source-run.json"
-          test "$(jq -r .head_sha "$RUNNER_TEMP/source-run.json")" = "$SOURCE_SHA"
-          test "$(jq -r .conclusion "$RUNNER_TEMP/source-run.json")" = "success"
-          test "$(jq -r '.pull_requests[0].number' "$RUNNER_TEMP/source-run.json")" = "284"
+      # Direction-review rough: type/build and loading only, not a passed regression candidate.
       - name: Checkout reviewed Viewer source only
         uses: actions/checkout@v4
         with:
-          ref: 1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d
+          ref: a9304436dc4bb443e746bc1f91b38c35861aade7
           path: source
           persist-credentials: false
       - name: Checkout existing public Pages assets
@@ -80,7 +73,7 @@ jobs:
           }
           const files=['index.html',...fs.readdirSync(path.join(dest,'assets')).map(n=>'assets/'+n)];
           const sha256=file=>createHash('sha256').update(fs.readFileSync(path.join(dest,file))).digest('hex');
-          fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 284',source:sha,kind:'isolated non-release Viewer preview',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
+          fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 284',source:sha,kind:'direction-review rough; regression tests pending',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
           JS
       - name: Chrome smoke on staged purchase and MD/JSON links
         run: |
@@ -122,6 +115,17 @@ jobs:
                 assert.ok(requests.every(x=>x.method==='GET'));
                 assert.ok(requests.some(x=>x.url.includes('/'+process.env.SOURCE_SHA+'/')),'source commit fixed');
                 await page.screenshot({path:'preview-evidence/'+kind+'-'+width+'.png'});
+                if(kind==='purchase'&&width===1280){
+                  if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
+                  await page.locator('#node-category-object').click();
+                  const object=page.locator('[data-list-node]').filter({hasText:'購入申請'}).first();
+                  await object.locator('.node-navigate').click();
+                  await page.locator('#node-list-close').click();
+                  if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+                  await page.locator('#detail-mode-states').click();
+                  await page.locator('.state-diagram').waitFor();
+                  await page.screenshot({path:'preview-evidence/state-spacing-1280.png'});
+                }
                 results.push({kind,width,nodes,edges,pageErrors:errors,requests:requests.length});
               }finally{await context.close();}
             }
