@@ -1,5 +1,6 @@
 import type { Point } from './session';
 import {CAPTION_LINE_STEP,type MatrixWire} from './matrix-layout.ts';
+import {captionTop} from './caption-spacing.ts';
 
 /** Axis-aligned card bounds. Rounded cards use their conservative outer rectangle. */
 export interface RouteNode { id: string; x: number; y: number; width: number; height: number }
@@ -79,7 +80,7 @@ export function captionOnRow(point:Point,width:number,height:number,nodes:readon
   return [left+width/2,point[1]];
 }
 function departureCaption(source:RouteNode,width:number,height:number,nodes:readonly RouteNode[],labels:readonly RouteNode[],line=0):Point {
-  return captionOnRow([source.x+source.width*.125+8+width/2,source.y+source.height+height/2+5+line*CAPTION_LINE_STEP],width,height,nodes,labels);
+  return captionOnRow([source.x+source.width*.125+8+width/2,captionTop(source.y+source.height,line*CAPTION_LINE_STEP)+height/2],width,height,nodes,labels);
 }
 function labelAt(points: Point[], nodes: readonly RouteNode[], width: number, height: number, minimum:Point, input:boolean, labels:readonly RouteNode[], source:RouteNode, wires:readonly (readonly Point[])[]): { point: Point; blocked: boolean } {
   const lengths=points.slice(1).map((p,i)=>distance(points[i],p)),total=lengths.reduce((a,b)=>a+b,0);

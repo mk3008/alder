@@ -3,6 +3,7 @@ import {graphMarkers} from './graph-visuals.ts';
 import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
 import {routeEdge,type RouteNode} from './routing.ts';
+import {captionRowStep,captionTop} from './caption-spacing.ts';
 export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
@@ -58,11 +59,11 @@ function stateDiagram(model:StateModel):SVGSVGElement{
  for(const group of captionGroups.values()){
   group.lines=wrap(group.activity);group.lineRows=group.lines.map(()=>group.rows);
   if(group.rows.length>1||group.rows[0].path==='exception')for(const row of group.rows){const branch=row.path==='normal'?'通常':'例外：'+(row.exception??'例外名未定義');const line='・'+branch,index=group.lines.indexOf(line);if(index<0){group.lines.push(line);group.lineRows.push([row]);}else group.lineRows[index].push(row);}
-  group.offset=departures.get(group.from)??0;departures.set(group.from,group.offset+group.lines.length*18+8);
+  group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.lines.length*18);
  }
- let shift=0;const projected=new Map<string,number>();
+ let y=40;const projected=new Map<string,number>();
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
- ordered.forEach((id,i)=>{const y=plan.positions[id][1]+shift;projected.set(id,y);const next=ordered[i+1];if(next){const reserved=plan.positions[next][1]-plan.positions[id][1],needed=44+(departures.get(id)??0)+16;shift+=Math.max(0,needed-reserved);}});
+ for(const id of ordered){projected.set(id,y);y+=captionRowStep(44,departures.get(id)??0);}
  const nodes:RouteNode[]=ids.map(id=>({id,x:plan.positions[id][0],y:projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
  const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。保存不可は処理結果、未決は設計課題。';svg.append(title);
@@ -81,7 +82,7 @@ function stateDiagram(model:StateModel):SVGSVGElement{
   right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
  for(const group of captionGroups.values()){
-  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=node.y+node.height+group.offset+18;
+  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=captionTop(node.y+node.height,group.offset)+14;
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity});
   group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
   right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);
