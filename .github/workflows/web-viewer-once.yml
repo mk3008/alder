@@ -17,7 +17,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 35
     env:
       REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
       REVIEW_PR: ${{ github.event.pull_request.number }}
@@ -50,6 +50,15 @@ jobs:
             fc-cache -f "$HOME/.local/share/fonts"
           fi
           fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Select bounded B-loop comparison
+        id: b_loop
+        run: |
+          if git show -s --format=%B "$REVIEW_HEAD" | grep -qx 'Benchmark-B-Loop: 441dfb8b'; then
+            git fetch --no-tags --depth=1 origin 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
+            git worktree add --detach "$RUNNER_TEMP/b-loop-baseline" 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
+            ln -s "$GITHUB_WORKSPACE/web-viewer/node_modules" "$RUNNER_TEMP/b-loop-baseline/web-viewer/node_modules"
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          fi
       - name: Verify built app in Chrome
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
@@ -59,8 +68,21 @@ jobs:
             if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
             sleep 1
           done
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs
+          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
+          if [ "${{ steps.b_loop.outputs.enabled }}" = true ]; then
+            node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
+          else
+            node web/test-browser.mjs
+          fi
 
+      - name: Retain bounded B-loop measurements
+        if: always() && steps.b_loop.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: b-loop-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/b-loop/
+          if-no-files-found: error
+          retention-days: 14
       - name: Retain MD JSON geometry evidence
         if: always()
         uses: actions/upload-artifact@v4

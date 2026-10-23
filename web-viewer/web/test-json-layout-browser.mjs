@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {parseDesign} from '../src/graph.ts';
 import {parseDocument} from '../src/json-document.ts';
 import {activityDesign} from '../src/activities.ts';
+import {assertRenderedGeometry} from './json-layout-contract.mjs';
 import {readSessionInPage} from './wait-saved-viewer.mjs';
 const root='../work/viewer-json/issue-274/layout-regression/',md=readFileSync(root+'same-business.md','utf8'),json=readFileSync(root+'same-business.json','utf8');
 const hash=b=>createHash('sha256').update(b).digest('hex');
@@ -12,13 +12,13 @@ export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDi
  for(const width of [1280,393]){
   const observed={};
   for(const [format,source] of [['md',md],['json',jsonInput]]){
-   const design=format==='md'?parseDesign(source):parseDocument(source),names=new Map(design.graph.nodes.map(n=>[n.id,n.name]));
+   const design=parseDocument(source),names=new Map(design.graph.nodes.map(n=>[n.id,n.name]));
    const context=await browser.newContext({viewport:{width,height:960},acceptDownloads:true}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(15000);
    const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled),saved=async()=>{await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));};
    async function snapshot(activity){
     await saved();await page.evaluate(()=>document.fonts.ready);const projected=activityDesign(design,activity);
     const dom=await page.evaluate(()=>({nodes:[...document.querySelectorAll('.node')].map(n=>({id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height,screen:[n.getBoundingClientRect().left,n.getBoundingClientRect().top]})),edges:[...document.querySelectorAll('.edge')].map(e=>{const l=document.querySelector(`.edge-label[data-relations~="${e.dataset.relation}"]`);return {index:Number(e.dataset.relation),path:e.getAttribute('d'),label:[Number(l.getAttribute('x')),Number(l.getAttribute('y'))],text:l.textContent};}),scroll:[document.querySelector('#viewport').scrollLeft,document.querySelector('#viewport').scrollTop],zoom:document.querySelector('#zoom').textContent,viewBox:document.querySelector('#edges').getAttribute('viewBox'),offset:[document.querySelector('#nodes').style.left,document.querySelector('#nodes').style.top]}));
-    assert.equal(dom.nodes.length,projected.graph.nodes.length);const nodes=dom.nodes.map(n=>({...n,id:names.get(n.id)})).sort((a,b)=>a.id.localeCompare(b.id));
+    assertRenderedGeometry(design,activity,dom);assert.equal(dom.nodes.length,projected.graph.nodes.length);const nodes=dom.nodes.map(n=>({...n,id:names.get(n.id)})).sort((a,b)=>a.id.localeCompare(b.id));
     const edges=dom.edges.map(e=>{const r=projected.graph.relations[e.index];return {...e,index:undefined,kind:r.kind,from:names.get(r.from),to:names.get(r.to),labelText:r.label};}).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
     const stored=await page.evaluate(readSessionInPage),active=stored.tabs.find(t=>t.key===stored.active);
     const positions=Object.fromEntries(Object.entries(active.positions).map(([id,p])=>[names.get(id),p]).sort());
@@ -42,7 +42,9 @@ export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDi
     await page.goto('http://127.0.0.1:4173/');await ready();await page.locator('#fallback').setInputFiles({name:`same-business.${format}`,mimeType:format==='json'?'application/json':'text/markdown',buffer:Buffer.from(source)});await page.waitForFunction(()=>document.querySelectorAll('.node').length===25);
     if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
     observed[format]={overview:await snapshot()};await evidence('overview');await cameraRoundTrip(undefined,'overviewCamera');
-    for(const [index,activity] of design.activityOrder.entries()){
+    // JSON owns the common renderer; MD samples only its input boundary.
+    const activities=format==='md'?design.activityOrder.slice(0,1):design.activityOrder;
+    for(const [index,activity] of activities.entries()){
      await page.locator('.tab').first().locator('button').first().click();await page.locator(`.node[data-activity="${activity}"] .activity-open`).press('Enter');await saved();
      const name=names.get(activity);observed[format][name]=await snapshot(activity);
      await evidence(index===0?'activity-detail':'activity-detail-'+(index+1));if(index===0)await cameraRoundTrip(activity,'detailCamera');
@@ -50,9 +52,10 @@ export async function verifyJSONLayout(browser,{source:jsonInput=json,evidenceDi
     assert.deepEqual(errors,[]);
    }catch(error){await page.screenshot({path:`${out}/${format}-failure-${width}.png`}).catch(()=>{});throw error;}finally{writeFileSync(`${out}/${format}-geometry-${width}.json`,JSON.stringify(observed[format],null,2));await context.close();}
   }
-  assert.deepEqual(observed.json,observed.md,`MD/JSON rendered world, screen, spacing, SVG endpoints/bends/labels, zoom/scroll/reload/reset at ${width}px`);
-  results.push({width,views:11,comparison:'exact',worldTolerance:0,screenTolerance:0,zoomScrollResetReload:true});
+  const sample=Object.fromEntries(Object.keys(observed.md).map(key=>[key,observed.json[key]]));
+  assert.deepEqual(sample,observed.md,`MD/JSON rendered world, screen, spacing, SVG endpoints/bends/labels, zoom/scroll/reload/reset at ${width}px`);
+  results.push({width,jsonViews:11,mdBoundaryViews:2,comparison:'exact',worldTolerance:0,screenTolerance:0,zoomScrollResetReload:true});
  }
- for(const key of ['overview','activity-detail',...Array.from({length:9},(_,i)=>'activity-detail-'+(i+2))]){const a=pngs.get('md-'+key),b=pngs.get('json-'+key);assert.ok(a.equals(b),'native full graph PNG pixels and bytes match: '+key);results.push({nativePNG:key,identical:true,sha256:hash(a),bytes:a.length});}
- const result={browser:browser.version(),results};writeFileSync(`${out}/comparison-results.json`,JSON.stringify(result,null,2));return result;
+ for(const key of ['overview','activity-detail']){const a=pngs.get('md-'+key),b=pngs.get('json-'+key);assert.ok(a.equals(b),'native full graph PNG pixels and bytes match: '+key);results.push({nativePNG:key,identical:true,sha256:hash(a),bytes:a.length});}
+ const result={browser:browser.version(),guarantees:{commonWorldRoutes:'fast: common parseDocument entry × 11 views × UUID variants',nativeJSON:'11 views × 1280/393; SVG model contract on every snapshot',nativeMD:'overview/first detail × 1280/393; exact DOM/camera and 2 PNG pairs',nativePNGs:13},results};writeFileSync(`${out}/comparison-results.json`,JSON.stringify(result,null,2));return result;
 }

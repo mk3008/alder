@@ -1,14 +1,14 @@
 import './json-layout-protection.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {parseDesign} from '../src/graph.ts';
 import {parseDocument} from '../src/json-document.ts';
 import {activityDesign} from '../src/activities.ts';
 import {reconcile} from '../src/session.ts';
 import {resetLayout} from '../src/layout-reset.ts';
 const root='../work/viewer-json/issue-274/layout-regression/';
 export const mdSource=readFileSync(root+'same-business.md','utf8'),jsonSource=readFileSync(root+'same-business.json','utf8');
-const md=parseDesign(mdSource),json=parseDocument(jsonSource);
+const md=parseDocument(mdSource),json=parseDocument(jsonSource);
+assert.ok(md.model,'legacy MD must traverse the current DocumentModel entry');
 const named=(design,positions)=>Object.fromEntries(design.graph.nodes.map(n=>[n.name,positions[n.id]]).sort());
 const tab=(design,activity)=>reconcile({key:'layout',name:'layout',design,positions:{},scroll:[0,0],zoom:1,activity},design);
 for(const name of [undefined,...md.activityOrder]){
@@ -19,18 +19,9 @@ for(const name of [undefined,...md.activityOrder]){
 }
 console.log('JSON/MD identical world coordinates and reset in overview and every Activity detail');
 
-// Same semantic edges are compared after pairing by visible names, never by UUID order.
-const {matrixPlanForDesign,canonicalJSONGraph}=await import('../src/json-layout.ts');
-const {RouteCache}=await import('../src/route-cache.ts');
-const snapshot=(design,activity)=>{
- const d=activityDesign(design,activity),t=tab(d,activity),plan=matrixPlanForDesign(d,activity),names=new Map(d.graph.nodes.map(n=>[n.id,n.name]));
- const boxes=d.graph.nodes.map(n=>({id:n.id,x:t.positions[n.id][0],y:t.positions[n.id][1],width:260,height:68}));
- const routes=new RouteCache().update(t,d,boxes,d.graph.relations,plan.wires);
- const nodes=boxes.map(n=>[names.get(n.id),n.x,n.y,n.width,n.height]).sort();
- const gaps=nodes.flatMap((a,i)=>nodes.slice(i+1).map(b=>[a[0],b[0],b[1]-a[1],b[2]-a[2]]));
- const edges=d.graph.relations.map((r,i)=>({kind:r.kind,from:names.get(r.from),to:names.get(r.to),label:r.label,route:routes[i]})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
- return {nodes,gaps,edges};
-};
+// Pair by visible names, never by UUID order; actual common input entry on both sides.
+import {namedGeometry as snapshot,assertRenderedGeometry,layoutGeometry} from './json-layout-contract.mjs';
+import {canonicalJSONGraph} from '../src/json-layout.ts';
 const sourcePackage=JSON.parse(jsonSource),variant=structuredClone(sourcePackage),bd=variant.documents[0];
 const idMap=new Map([...bd.objects,...bd.activities].map((n,i)=>[n.id,`00000000-0000-4000-8000-${String(999-i).padStart(12,'0')}`]));
 for(const n of [...bd.objects,...bd.activities])n.id=idMap.get(n.id);
@@ -50,6 +41,15 @@ assert.deepEqual(restored.positions,before.positions);assert.equal(restored.sele
 assert.equal(json.markdown,jsonSource);assert.deepEqual(json.model.business,sourcePackage.documents[0]);
 const astral={version:1,nodes:['😀','\ue000'].map(name=>({id:name+'-uuid',name,type:'object',scope:true})),relations:[]};
 assert.deepEqual(canonicalJSONGraph(astral).nodes.map(n=>n.name),['\ue000','😀']);
+// A late-detail MD adapter fault must fail the fast guard, outside the native MD sample.
+const brokenMD=structuredClone(md);
+const lastID=md.activityOrder.at(-1),lastRelation=brokenMD.graph.relations.find(r=>r.to===lastID||r.from===lastID);
+lastRelation.label+=' injected adapter fault';
+assert.throws(()=>assert.deepEqual(snapshot(brokenMD,lastID),snapshot(json,json.graph.nodes.find(n=>n.name===lastID)?.id)),assert.AssertionError);
+// The DOM boundary assertion detects post-model wire/label/edge loss without a second input traversal.
+const expected=layoutGeometry(json),dom={nodes:expected.boxes,edges:expected.routes.map((r,i)=>({index:i,path:r.path,label:[r.label[0]-Math.max(30,expected.design.graph.relations[i].label.length*12)/2,r.label[1]],text:expected.design.graph.relations[i].label}))};
+assertRenderedGeometry(json,undefined,dom);
+for(const corrupt of [d=>d.edges[0].path='M0 0L1 1',d=>d.edges[0].label[1]++,d=>d.edges.pop(),d=>d.nodes[0].x++]){const bad=structuredClone(dom);corrupt(bad);assert.throws(()=>assertRenderedGeometry(json,undefined,bad),assert.AssertionError);}
 console.log(JSON.stringify({jsonLayout:{views:md.activityOrder.length+1,uuidVariants:versions.length,worldTolerance:0,routesAndLabels:'exact',manualCoordinatesAndRename:'retained'}}));
 
 const {initialPositions}=await import('../src/layout.ts');

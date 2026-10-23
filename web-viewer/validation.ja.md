@@ -110,6 +110,10 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 
 スクリーンショットと観測は`json-document-HEAD`、操作確認版は`viewer-preview-pr-PR-HEAD` artifactへ保存します。確認版のmanifestはsource/checkout/treeと各ファイルのdigestを持ち、PR headとビルドtreeの一致を要求します。公開デプロイを行わず、本人操作レビューと自動検証を分けます。
 
-`jsonLayout`は同一業務のMD/JSONの全体図・全Activity詳細について、world座標・矩形・間隔・SVG経路/ラベル・カメラ・保存/復元・リセットを1280/393pxの実Chromeで比較します。既存44群に状態遷移・Role・購入業務の計3群を加えた全47群で、数値と画像は`json-layout-HEAD` artifactへ保存します。描画器と共通CSSの固定hashも検査します。2026-10-23に承認された66a0の余白統合については、matrix行高／routing・cacheのcaption anchor／共通caption関数だけを明示的に基準更新し、他の配置順・横位置・接続点・経路探索・CSSは保持します。独立した24pxの余白算術と状態SVGの行数による回帰を追加し、旧数値を単に採り直して合格させません。
+`jsonLayout` はJSONの全体図・全Activity詳細（全11図）を1280/393pxの実Chromeで表示し、実ノード座標・全SVG経路／ラベルを共通モデル契約と照合します。MDは同一業務の全体図・最初の詳細図を両幅で比較し、2図のnative PNGバイト同値と両入力のzoom／scroll／reset／保存復元を維持します。全11図のMD/JSON座標・矩形・間隔・接続点・折れ点・ラベル・resetおよびUUID入替えは `test-json-layout.mjs` が両形式とも実際の `parseDocument` → `DocumentModel` から比較します。旧MDの手書き独立期待値は `test-document-loader.mjs`、配置の独立した24px余白算術と役割別ポート／状態SVGは既存の配置テストに残します。
 
-`jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の11図のnative座標・配線・PNG回帰は`jsonLayout`へ集約します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。
+全11図のMD/JSON二重PNG比較は廃止し、JSONの11 PNGと代表MDの2 PNGを保存します。MD後半9詳細図だけに発生する、モデル属性では表れないピクセル差は非保証です。共通レンダラーの実SVGとモデルの照合が、片方の入力に共通する描画欠落の見逃しを補います。誤ったMD関係・UUID adapter迂回・DOM座標／SVG経路／caption／edge欠落の負例を高速テストで検出します。全47群の最終CIと描画器／共通CSSの固定hashは維持します。承認済み66a0の余白統合（上下24px、状態SVGは行数を一度予約）は巻き戻しません。
+
+比較測定が必要なときだけ、commit本文に `Benchmark-B-Loop: 441dfb8b` を独立した行として指定すると、最終CI内で固定旧headと候補を同じrunner／Node／Chrome／フォント／製品buildで測定します。関連高速2ファイルと `jsonLayout` は交互順で各3回、全47群は旧→新を各1回実行し、rawログと集計を `b-loop-HEAD` artifactへ保存します。製品ソース・依存・入力fixtureの同一性を検査し、不一致なら比較を拒否します。通常commitには指定せず、通常の最終CIは全47群を一度だけ実行します。全体1組の差はノイズを含むため、他群の変動と対象群の効果を分けて報告します。
+
+`jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の全11図の高速座標／配線回帰とJSONのnative表示、代表MDの入力境界を上記の分担で検証します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。

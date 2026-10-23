@@ -52,7 +52,11 @@ node --experimental-strip-types web/test-document-loader.mjs --baseline-model
 | Role版でも同じ11図のChrome操作・撮影を反復 | `test-json-roles.mjs` が旧／Role版の全11図のGraph・文書順・配置入力を比較。共通描画のnative oracleは `jsonLayout` に集約。Role固有の色／改名／選択／復元はChromeに残す |
 | CI先行JSON6群と全47群で同じ6群を再実行 | 同じ候補の全47群を一度実行し、失敗時もartifactを回収 |
 
-旧MDとの11図の座標・配線・PNG比較自体は現状維持する。これは共通図への入力・既存配置の回帰であり、旧MD Drawerの整形完全一致を保証するものではない。追加の旧MD専用GUI oracleは作らない。保証移管と誤実装の検出をIssue #274／PR #285へ記録し、影響する速い検証を反復して、最終CIの所要時間を実測する。
+MD/JSON全11図の座標・矩形・間隔・全配線（接続点／折れ点／ラベル）・リセット比較は、`test-json-layout.mjs` へ集約する。両入力を実際の `parseDocument` → `DocumentModel` に通し、UUIDの入替えも検査する。独立した手書きMDの情報／参照／人間状態は `test-document-loader.mjs`、配置の独立算術・ポートは既存の共通配置テストが守る。
+
+`jsonLayout` の実ChromeはJSONの全11図を1280/393pxで表示し、実ノード座標・全SVG配線／ラベルをモデル契約と照合する。MDは全体図と最初のActivity詳細を両幅で照合し、ズーム／スクロール／保存復元／リセットと2図のPNGバイト同値を残す。JSONの11 PNGは撮影を維持する。MDだけの後半9図の二重撮影・PNG同値は保証対象から外す。これはMDの全表示完全再現を優先しない互換方針による縮退であり、全11図のPNG同値を維持したとは報告しない。
+
+新しい入力固有の故障が代表例で検出できない場合は、まず高速なadapter契約へ追加する。ブラウザー専用の故障なら、その最小fixtureと必要な画面幅だけを追加する。全JSON機能をMDでも反復する構造へ戻さない。
 
 2026-10-23の本人承認により、余白修正66a0を同じPR #285へ統合した。業務図と状態図は `caption-spacing.ts` の共通計算を使い、要素→captionとcaption→次要素を各24 world pxとする。状態図は表示する行数だけを一度予約し、matrixの余白を重ねない。既存の保存済みノード座標は自動移行せず、新規配置または明示リセットで新しい行間を使う。
 
