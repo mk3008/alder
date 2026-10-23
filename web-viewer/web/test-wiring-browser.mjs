@@ -39,7 +39,7 @@ export async function verifyWiring(browser){
      assert.equal(state.selected,true);assert.equal(state.nodeAbove,true);assert.equal(state.opaque,true);
      assert.ok(state.layers.every((n,i)=>!i||state.layers[i-1]<=n),'selected wires/labels are above all unrelated wires/labels');
      assert.ok(state.points.slice(1).every((p,i)=>p[0]>=state.points[i][0]-.01&&p[1]>=state.points[i][1]-.01),'normal route reads down/right');
-     assert.ok(state.label[1]>state.source[1]+68&&state.label[1]<=state.source[1]+96,'Input caption is near source');
+     assert.equal(state.label[1],state.source[1]+101,'Input caption uses the approved 24px source clearance');
      assert.ok(state.labels[0].x>=state.start[0]+8||state.labels[0].x+state.labels[0].width<=state.start[0]-8,'complete left-aligned Input glyph clears vertical leg');
      for(let i=0;i<state.labels.length;i++)for(let j=i+1;j<state.labels.length;j++){
       const a=state.labels[i],b=state.labels[j];assert.ok(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y,'rendered captions do not overlap');
