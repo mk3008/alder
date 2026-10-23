@@ -1,0 +1,17 @@
+{
+  "review": "Draft PR 285",
+  "source": "a8c5ce82381de406fbaa59affe7996e522d15c2e",
+  "kind": "isolated non-release Viewer preview",
+  "files": {
+    "index.html": "3f4516e4266574b81ea4bd5ef775c1cb63948fdf385696127f23563db802ae73",
+    "assets/index-BGijB1BZ.css": "8c29e73d62dde9a176e79a372fb06a10424e3bdc9da29e5f9d7aa1c286025223",
+    "assets/index-BbiJgRnK.js": "cbdc8ff206b3789390e3065234961ec4115680002795e7a52ece674f371aca68"
+  },
+  "sources": {
+    "purchase": "work/json-roles/issue-280/purchase.roles.json",
+    "states": "work/json-roles/issue-280/purchase.roles.json",
+    "json": "work/json-roles/issue-280/same-business.roles.json",
+    "md": "work/viewer-json/issue-274/layout-regression/same-business.md",
+    "checks": "work/json-roles/issue-280/gate-b.roles.json"
+  }
+}
