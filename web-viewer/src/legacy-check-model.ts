@@ -11,7 +11,7 @@ export function legacyCheckModel(source:string,items:CheckItem[],index:Record<st
  const anchors=new Map<string,string|undefined>(),anchor=(key:string,id:string)=>{if(!anchors.has(key))anchors.set(key,id);else if(anchors.get(key)!==id)anchors.set(key,undefined);};
  for(const m of marks){const id=headingID(m);anchor(slug(m.title),id);const item=items.find(i=>i.title===m.title);if(item)anchor(item.id.toLowerCase(),id);}
  for(const [i,line]of lines.entries()){const a=/<a\s+id=["']?([^\s"'>]+)["']?\s*><\/a>/.exec(line);if(a){const next=marks.find(m=>m.line>i);if(next)anchor(a[1].toLowerCase(),headingID(next));}}
- const runs=(text:string):Run[]=>{const out:Run[]=[];let end=0;for(const m of text.matchAll(/\[([^\]\n]+)\]\(([^\s)]+)\)/g)){if(m.index!>end)out.push({kind:'markdown',value:text.slice(end,m.index)});let fragment=m[2].slice(1);try{fragment=decodeURIComponent(fragment);}catch{}const target=m[2].startsWith('#')?anchors.get(fragment.toLowerCase()):undefined;out.push(target?{kind:'reference',targetId:target,label:m[1]}:{kind:'link',uri:m[2],label:m[1]});end=m.index!+m[0].length;}if(end<text.length)out.push({kind:'markdown',value:text.slice(end)});return out;};
+ const runs=(text:string):Run[]=>{text=text.replace(/<a\s+id=[^>]+><\/a>/g,'');const out:Run[]=[];let end=0;for(const m of text.matchAll(/\[([^\]\n]+)\]\(([^\s)]+)\)/g)){if(m.index!>end)out.push({kind:'markdown',value:text.slice(end,m.index)});let fragment=m[2].slice(1);try{fragment=decodeURIComponent(fragment);}catch{}const target=m[2].startsWith('#')?anchors.get(fragment.toLowerCase()):undefined;out.push(target?{kind:'reference',targetId:target,label:m[1]}:{kind:'link',uri:m[2],label:m[1]});end=m.index!+m[0].length;}if(end<text.length)out.push({kind:'markdown',value:text.slice(end)});return out;};
  const sections:Check['sections']=[],guarantees:Check['guarantees']=[],notes:Check['notes']=[],sectionIDs=new Map<string,string>();
  for(const m of marks.filter(m=>m.level===2)){
   if(m.title==='業務一覧')continue;
@@ -21,13 +21,13 @@ export function legacyCheckModel(source:string,items:CheckItem[],index:Record<st
  const fallback='legacy-unassigned',sectionFor=(m:Mark)=>{const parent=marks.filter(h=>h.line<m.line&&h.level===2).at(-1);return parent?sectionIDs.get(parent.title):undefined;};
  const projected=items.map(item=>{
   const m=itemMarks.get(item.title)!,sectionId=sectionFor(m)??fallback,fields:Record<string,Run[]>=Object.create(null),chunks:{name:string;value:string}[]=[];let current={name:'補足',value:''},fence='';
-  for(const line of item.body.split('\n')){
+  for(const line of item.body.replace(/<\/?details>/g,'').replace(/<summary>[^<]*<\/summary>/g,'').split('\n')){
    const f=/^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);if(f){if(!fence)fence=f[1];else if(f[1][0]===fence[0]&&f[1].length>=fence.length&&!f[2].trim())fence='';}
    const field=!fence?/^[-*] ([^：:]+)[：:]\s*(.*)$/.exec(line):null;
    if(field){if(current.value.trim())chunks.push(current);current={name:field[1],value:field[2]};}else current.value+='\n'+line;
   }if(current.value.trim())chunks.push(current);
   let reviewState='';for(const c of chunks){if(c.name==='人間レビュー状態'){reviewState=c.value.split('\n')[0].trim();const rest=c.value.split('\n').slice(1).join('\n').trim();if(rest)fields['補足']=[...(fields['補足']??[]),...runs(rest)];}else{const key=labels[c.name]??c.name;fields[key]=[...(fields[key]??[]),...runs(c.value.trim())];}}
-  return {id:'legacy-check:'+item.id,checkId:item.id,title:item.title.replace(/^[^\s]+\s+[—–-]\s+/,''),reviewState,sectionId,detailSummary:'',fields};
+  return {id:'legacy-check:'+item.id,checkId:item.id,title:item.title.replace(/^[^\s]+\s+[—–-]\s+/,''),reviewState,sectionId,detailSummary:[...item.body.matchAll(/<summary>([^<]*)<\/summary>/g)].map(m=>m[1]).join('\n'),fields};
  });
  if(projected.some(i=>i.sectionId===fallback))sections.push({id:fallback,activityId:null,title:'未割当',preamble:[]});
  for(const m of marks.filter(m=>m.level===3&&!itemMarks.has(m.title))){const sectionId=sectionFor(m);if(sectionId)guarantees.push({id:headingID(m),sectionId,title:m.title,blocks:[{kind:'prose',content:runs(body(m))}]});else notes.push({id:headingID(m),title:m.title,content:runs(body(m))});}

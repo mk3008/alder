@@ -49,7 +49,7 @@ class RichReader{
 export function renderChecks(design:Design,selected?:string,checks=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks';const json=design.model!,bd=json.business;
  root.append(element('p','原典の意味対応は未確認です。ID・版の一致は、業務合意やCheckの人間承認を表しません。'));
- if(!checks.length){root.append(element('p','このJSONにCheck Itemはありません。'));return root;}
+ if(!checks.length){root.append(element('p','この文書にCheck Itemはありません。'));return root;}
  for(const doc of checks){const reader=new RichReader(doc);
   root.append(element('h3',doc.title),element('p',`Check ${doc.revision} · BD ${doc.basedOn.revision} · ${doc.basedOn.verification}`));reader.runs(root,doc.intro);
   if(doc.basedOn.documentId!==bd.id){root.append(element('p','別の原典BDを参照しているため、この図へ関連付けません。'));continue;}

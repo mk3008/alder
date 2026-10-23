@@ -37,9 +37,7 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidat
   for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}stateTab(nav);root.append(nav);
   if(view.mode==='states')return {controls:root,content:stateContent()};
   if(view.mode==='business')return {controls:root};
-  const content=document.createElement('section');content.className='check-content';
-  if(notices.childNodes.length)content.append(notices);
-  if(doc&&usable)content.append(renderChecks(tab.design,tab.selected,[doc.model]));
-  else if(!tab.checks)content.append(renderChecks(tab.design,tab.selected));
+  const content=doc&&usable?renderChecks(tab.design,tab.selected,[doc.model]):!tab.checks?renderChecks(tab.design,tab.selected):document.createElement('section');
+  content.classList.add('check-content');if(notices.childNodes.length)content.prepend(notices);
   return {controls:root,content};
 }
