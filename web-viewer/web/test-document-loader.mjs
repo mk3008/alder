@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
+import {resolve,extname} from 'node:path';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
@@ -57,10 +58,16 @@ items
 ### Content
 人間に確認する
 `;
+// Resolve pinned modules virtually, including files deleted by this refactor.
+// Reproducers must also work in a clean checkout without obsolete source files.
+function pinnedSources(revision){return {name:'pinned-viewer',setup(b){
+ const root=resolve('src');
+ b.onResolve({filter:/^\./},args=>{const path=resolve(args.resolveDir,args.path),ext=extname(path);if(path.startsWith(root+'/')&&(!ext||ext==='.ts'))return {path:ext?path:path+'.ts',namespace:'pinned-viewer'};});
+ b.onLoad({filter:/\/src\/.*\.ts$/},args=>({contents:execFileSync('git',['show',revision+':web-viewer/'+args.path.slice(args.path.lastIndexOf('/src/')+1)],{encoding:'utf8'}),loader:'ts',resolveDir:args.path.slice(0,args.path.lastIndexOf('/'))}));
+}};}
 let oracleParse=parseDocument;
 if(process.argv.includes('--baseline-model')){
- const pinned='2574d90b0fe765d47b514a5602e29114a1ace4b8';
- const compiled=await build({entryPoints:['src/json-document.ts'],bundle:true,write:false,platform:'node',format:'cjs',plugins:[{name:'pinned-viewer',setup(b){b.onLoad({filter:/\/src\/.*\.ts$/},args=>({contents:execFileSync('git',['show',pinned+':web-viewer/'+args.path.slice(args.path.lastIndexOf('/src/')+1)],{encoding:'utf8'}),loader:'ts',resolveDir:args.path.slice(0,args.path.lastIndexOf('/'))}));}}]});
+ const compiled=await build({entryPoints:['src/json-document.ts'],bundle:true,write:false,platform:'node',format:'cjs',plugins:[pinnedSources('2574d90b0fe765d47b514a5602e29114a1ace4b8')]});
  const module={exports:{}};new Function('module','exports',compiled.outputFiles[0].text)(module,module.exports);oracleParse=module.exports.parseDocument;
 }
 const typed=oracleParse(legacyInput);
@@ -95,7 +102,7 @@ try{
 // The baseline builds the actual old main, rather than simulating a wrong helper.
 const baseline=process.argv.includes('--baseline');
 const main=baseline?execFileSync('git',['show','1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d:web-viewer/src/main.ts'],{encoding:'utf8'}):null;
-const bundle=await build({...main?{stdin:{contents:main,resolveDir:process.cwd()+'/src',loader:'ts'},plugins:[{name:'pinned-history-main',setup(b){b.onLoad({filter:/\/src\/.*\.ts$/},args=>({contents:execFileSync('git',['show','1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d:web-viewer/'+args.path.slice(args.path.lastIndexOf('/src/')+1)],{encoding:'utf8'}),loader:'ts',resolveDir:args.path.slice(0,args.path.lastIndexOf('/'))}));}}]}:{entryPoints:['src/main.ts']},bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
+const bundle=await build({...main?{stdin:{contents:main,resolveDir:process.cwd()+'/src',loader:'ts'},plugins:[pinnedSources('1b82b23ff4fa8537a0b80562d9be88ca37ae0c2d')]}:{entryPoints:['src/main.ts']},bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 for(const [format,source,mime]of [['md',md,'text/markdown'],['json',json,'application/json']]){
  const w=new JSDOM('<div id="app"></div>',{url:'https://loader.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
  w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.AbortController=AbortController;w.HTMLElement.prototype.scrollIntoView=()=>{};
