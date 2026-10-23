@@ -34,3 +34,9 @@ nativeの基本表示は44→26（18回減）、全画像exportは22→13（9回
 5. Before/Afterは同一runner内で測定し、対象群・関連高速・全47群を別に集計する。Role／先行群の旧削減を成果に混ぜない。測定結果と追加修正／未達はIssue #274・PR #285へ追記する。
 
 Skill化は別判断。今回は新SkillもAGENTS追加も行わず、既存の影響範囲・保証移管・元Goal照合を実際に適用する。
+
+## 比較ハーネスの失敗と追加修正
+
+初回CI39923980332ではNode/DOM81とbuild、対象群の旧／新各3回は成功した。旧版の全47群は46/47で、jsonOfflinePreviewだけが候補版REVIEW_HEADと旧checkoutのtree不一致を検出した。旧worktreeにdistも用意しておらず、共通buildのバイト同一性だけを確認してPreviewの版／配置契約を見落とした。これは比較ハーネスの自己レビュー不足であり、製品不具合や環境への責任転嫁はしない。旧版の全体637,215msは失敗群を含むため、有効な全体Before値として採用しない。
+
+追加修正は各実行へ正しいsource headを渡し、旧worktreeから同一のdistを参照させ、両Preview境界を短い事前検証で通してから全体測定する。今回の全体再測定はcommit trailer `Benchmark-B-Loop-Full-Only: ec7796cc808eb8763ea979c381bd0c6f2d7c5f86` により、既に成功した3組を再実行しない。測定対象テスト4ファイルが初回candidateとバイト同一であることをCIで検査する。初回の対象／高速測定と再測定の全体結果は、別runの証拠として区別して返す。

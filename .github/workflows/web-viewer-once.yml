@@ -57,6 +57,7 @@ jobs:
             git fetch --no-tags --depth=1 origin 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
             git worktree add --detach "$RUNNER_TEMP/b-loop-baseline" 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
             ln -s "$GITHUB_WORKSPACE/web-viewer/node_modules" "$RUNNER_TEMP/b-loop-baseline/web-viewer/node_modules"
+            cp -a "$GITHUB_WORKSPACE/web-viewer/dist" "$RUNNER_TEMP/b-loop-baseline/web-viewer/dist"
             echo 'enabled=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Verify built app in Chrome
