@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      SOURCE_SHA: 2574d90b0fe765d47b514a5602e29114a1ace4b8
-      SOURCE_CI: "39895080520"
+      SOURCE_SHA: a8c5ce82381de406fbaa59affe7996e522d15c2e
+      SOURCE_CI: "39905950483"
     steps:
       - name: Require successful CI for the exact PR 285 head
         run: |
@@ -29,7 +29,7 @@ jobs:
       - name: Checkout reviewed Viewer source only
         uses: actions/checkout@v4
         with:
-          ref: 2574d90b0fe765d47b514a5602e29114a1ace4b8
+          ref: a8c5ce82381de406fbaa59affe7996e522d15c2e
           path: source
           persist-credentials: false
       - name: Checkout existing public Pages assets
@@ -82,7 +82,20 @@ jobs:
           const sha256=file=>createHash('sha256').update(fs.readFileSync(path.join(dest,file))).digest('hex');
           fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 285',source:sha,kind:'isolated non-release Viewer preview',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
           JS
-      - name: Chrome smoke on staged purchase and MD/JSON links
+      - name: Install Japanese review-image font
+        run: |
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Chrome smoke on common detail, state and Check links
         run: |
           set -euo pipefail
           npm install --prefix "$RUNNER_TEMP/pr285-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
@@ -97,10 +110,13 @@ jobs:
           cat > "$RUNNER_TEMP/pr285-smoke.mjs" <<'JS'
           import assert from 'node:assert/strict';
           import {createRequire} from 'node:module';
+          import fs from 'node:fs';
+          const sample=name=>JSON.parse(fs.readFileSync('source/work/json-roles/issue-280/'+name+'.roles.json','utf8'));
+          const business=sample('same-business'),purchase=sample('purchase'),checks=sample('gate-b');
           const chromium=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE).chromium;
           const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
           const base='http://127.0.0.1:4188/preview/pr-285/'+process.env.SOURCE_SHA+'/';
-          const cases=[['json',393,25,63],['md',393,25,63]];
+          const cases=[['json',393,25,63],['md',393,25,63],['states',393,12,23],['checks',393,6,6]];
           const results=[];
           try{
             for(const [kind,width,nodes,edges] of cases){
@@ -118,11 +134,25 @@ jobs:
                   assert.deepEqual(labels.filter(x=>x.text==='認証済み作業者の識別情報').map(x=>x.members),[5]);
                   assert.deepEqual(labels.filter(x=>x.text==='従業員の識別情報 / 役職 / 役職ごとの決裁単位の上限額').map(x=>x.members),[2]);
                 }
+                if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
+                const pkg=kind==='states'?purchase:kind==='checks'?checks:business,bd=pkg.documents.find(d=>d.kind==='businessDesign');
+                const object=kind==='states'?bd.objects.find(o=>o.name==='購入申請'):undefined;
+                const activity=kind==='checks'?bd.activities.find(a=>a.id===pkg.documents.find(d=>d.kind==='checkItems').index[0].activityId):bd.activities[0];
+                const selected=object??activity,id=kind==='md'?selected.name:selected.id;
+                if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
+                await page.locator(object?'#node-category-object':'#node-category-activity').click();
+                await page.locator('[data-list-node="'+id+'"] .node-navigate').click();
+                await page.locator('#node-list-close').click();
+                if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+                assert.equal(await page.locator('#detail h1').innerText(),selected.name);
+                if(kind==='states'){await page.locator('#detail-mode-states').click();await page.locator('.state-diagram').waitFor();assert.equal(await page.locator('[data-transition]').count(),13);}
+                else if(kind==='checks'){await page.locator('#detail-mode-checks').click();assert.ok(await page.locator('.check-item').count()>0);assert.ok((await page.locator('#detail').innerText()).includes('未確認'));}
+                else{assert.ok((await page.locator('.json-detail').innerText()).includes('Procedure'));assert.ok((await page.locator('.json-detail').innerText()).includes(activity.procedure.split('\n')[0].replace(/^\d+\.\s*/,'').replace(/\*\*|`/g,'').slice(0,36)));}
                 assert.deepEqual(errors,[]);
                 assert.ok(requests.every(x=>x.method==='GET'));
-                assert.ok(requests.some(x=>x.url.includes('/'+process.env.SOURCE_SHA+'/')),'source commit fixed');
+                assert.ok(requests.some(x=>x.url.startsWith('https://raw.githubusercontent.com/mk3008/alder/'+process.env.SOURCE_SHA+'/')),'source commit fixed');
                 await page.screenshot({path:'preview-evidence/'+kind+'-'+width+'.png'});
-                results.push({kind,width,nodes,edges,pageErrors:errors,requests:requests.length});
+                results.push({kind,width,nodes,edges,selected:selected.name,view:kind==='states'?'states':kind==='checks'?'checks':'common-business-detail',pageErrors:errors,requests:requests.length});
               }finally{await context.close();}
             }
             console.log(JSON.stringify({previewSmoke:'passed',source:process.env.SOURCE_SHA,results}));
