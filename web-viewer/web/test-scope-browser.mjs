@@ -7,7 +7,7 @@ import {waitSavedViewer} from './wait-saved-viewer.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {parseDesign} from '../src/graph.ts';
+import {parseDocument as parseDesign} from '../src/json-document.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 export async function verifyScopeOption(browser){
  const page=await browser.newPage({viewport:{width:1280,height:960}}),errors=[],toolbarLayouts=[];
