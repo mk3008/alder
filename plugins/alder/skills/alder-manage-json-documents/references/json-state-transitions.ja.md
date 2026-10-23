@@ -1,12 +1,12 @@
 # 部分定義の状態遷移をJSONに保存する
 
-候補形式 `alder-document-package/0.2` は、BD・Checkに加え、`documents[]` に `kind: stateTransition` の文書を保持する。正式JSON v1ではない。0.1のBD/Checkを変更せず読み込める。0.1へ状態文書を追加する操作、未知の形式版・文書版・kindは拒否する。概念モデルの具体的な型は未定義である。
+候補形式 `alder-document-package/0.4` は、BD・Checkに加え、`documents[]` に `kind: stateTransition` の文書を保持する。正式JSON v1ではない。0.1のBD/Checkを変更せず読み込める。0.1へ状態文書を追加する操作、未知の形式版・文書版・kindは拒否する。概念モデルの具体的な型は未定義である。
 
-状態文書のpayload版は `schemaVersion: 0.1`。文書・保存状態・操作にはそれぞれ安定IDを付ける。`basedOn` は同じファイル内のBDのIDと正確なrevisionを参照し、verificationはunverifiedとする。対象objectIdと各activityIdは、同じBDのObject/Activityでなければならない。状態名・操作sourceIdの重複、参照の欠落、例外名の不一致を拒否する。構造検証は業務意味の承認ではない。
+状態文書のpayload版は `schemaVersion: 0.2`。文書・保存状態・操作にはそれぞれ安定IDを付ける。`basedOn` は同じファイル内のBDのIDと正確なrevisionを参照し、verificationはunverifiedとする。対象objectIdと各activityIdは、同じBDのObject/Activityでなければならない。状態名・操作sourceIdの重複、参照の欠落、例外IDの欠落・重複・異なるActivityへの参照を拒否する。構造検証は業務意味の承認ではない。
 
 ## 明示された範囲を草案にする
 
-保存状態は `states: [{id, name}]`、操作は `transitions[]` に記録する。各操作はid/sourceId/fromId/toId/activityIdと、condition/effect/path/evidence/note、event/exceptionを持つ。eventは旧宣言の保存用であり、表示名に使わない。正常操作のexceptionはnull。名前付き例外は、ActivityのExceptionにある名前と完全一致させる。名前が未定義の旧宣言はnullを保持し、「例外名未定義」と表示する。
+保存状態は `states: [{id, name}]`、操作は `transitions[]` に記録する。各操作はid/sourceId/fromId/toId/activityIdと、condition/effect/path/evidence/note、event/exceptionIdを持つ。eventは旧宣言の保存用であり、表示名に使わない。正常操作のexceptionIdはnull。名前付き例外はBDのexceptionsにID・activityId・name・descriptionを持ち、exceptionIdから参照する。説明文の書式は参照に影響しない。未定義の旧宣言はnullと明示diagnosticsを保持する。[JSON構造と互換境界](json-native-contract.ja.md)を参照する。
 
 開始 `@new`、終端 `@unknown`、網羅性 `partial` の実験宣言だけを扱う。`@new`（作成前）、`@none`（記録を作らない処理結果）、`@unknown`（未決）は保存状態IDと区別する。効果change/unchanged/no-create/constraintと元・先の関係を検証する。未記載の操作を推定・禁止・状態不変へ補完しない。completeや確定終端の一般化は未対応である。
 

@@ -2,6 +2,8 @@
 
 候補保存契約`alder-document-package / 0.3`（旧0.1/0.2も読込対応）を使い、ヒアリングから直接JSONを作る。Markdownを中間正本にせず、人間には業務上の文章と判断点を説明する。既存Markdownは明示変換しない限りそのまま扱う。状態遷移は明示された部分定義だけを扱い、概念モデルは対象外とする。
 
+新規JSONは[候補0.4の構造契約](json-native-contract.ja.md)を使う。例外はID付き要素として作成し、状態からexceptionIdで参照する。MD形式の例外文を作る必要はない。旧候補の読込・保存移行は明示された互換境界に限定する。
+
 ## 読む根拠
 
 Business Designの業務意味・合意はadoption、欄の役割はbusiness-design-structure、レビューはquality/correlation/omission、Checkはcheck-item-traceabilityを使う。JSONのフィールドと型は同梱schema.json、構造・参照・版はcore.mjsが検査する。Markdownの見出しはJSONの型付き欄へ対応させ、MD書式そのものを新しい業務条件にしない。
