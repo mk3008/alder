@@ -41,12 +41,15 @@ The Plugin saves a JSON draft with unresolved questions and checks its structure
 2. Select an Activity and read its trigger, procedure and result under business details. For an Object with explicit state definitions, inspect its state-transition tab; unrecorded transitions are not inferred.
 3. Tell the Plugin which business detail differs from the notes or needs a decision.
 
+For this example, suppose the draft names the Activity “工具の返却を受領する” (Receive returned tools), and the requester additionally decides to record the name of the person who accepts the return. In your own draft, use the business name shown in the Viewer.
+
 ```text
-Update Receive returned tools: the counter records the return time.
-Keep the other unresolved questions open.
+Update the procedure of “工具の返却を受領する” and the recorded information of “貸出・返却の記録” (Loan/return record).
+In addition to the return time, record the name of the person who accepts the return.
+Keep the other unresolved questions and human review states unchanged.
 ```
 
-Reopen the updated JSON in the Viewer and check the change. Viewing a draft or passing validation does not establish agreement. Agree on the business meaning before [drafting Check Items](#3-draft-checks-and-have-people-confirm-expectations). See [Viewer usage](web-viewer/usage.ja.md) for operations.
+Reopen the updated JSON in the Viewer. In the Activity's business details and the Object's Information, check that the procedure and recorded fields now include the accepting person's name. Viewing a draft or passing validation does not establish agreement. Agree on the business meaning before [drafting Check Items](#3-draft-checks-and-have-people-confirm-expectations). See [Viewer usage](web-viewer/usage.ja.md) for operations.
 
 ## Alder artifacts
 
