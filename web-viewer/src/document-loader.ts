@@ -1,4 +1,4 @@
-import {parseDocument,readDesignFile} from './json-document.ts';
+import {parseDocument,readDesignFile} from './document-input.ts';
 import {fetchDocumentSource} from './source.ts';
 
 /** Acquisition varies; normalization and model loading never do.

@@ -1,7 +1,8 @@
 import './json-layout-protection.mjs';
+import {readLegacyPackage} from '../../tools/document_storage/legacy-json.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {parseDocument} from '../src/json-document.ts';
+import {parseDocument} from '../src/document-input.ts';
 import {activityDesign} from '../src/activities.ts';
 import {reconcile} from '../src/session.ts';
 import {resetLayout} from '../src/layout-reset.ts';
@@ -38,7 +39,7 @@ before.zoom=1.2;before.scroll=[71,93];before.selected=json.activityOrder[0];
 const renamed=structuredClone(sourcePackage);renamed.documents[0].activities[0].name='改名しても保存座標を保持';renamed.documents[0].activities.reverse();
 const restored=reconcile(JSON.parse(JSON.stringify(before)),parseDocument(JSON.stringify(renamed)));
 assert.deepEqual(restored.positions,before.positions);assert.equal(restored.selected,before.selected);assert.deepEqual(restored.scroll,before.scroll);assert.equal(restored.zoom,before.zoom);
-assert.equal(json.markdown,jsonSource);assert.deepEqual(json.model.business,sourcePackage.documents[0]);
+assert.equal(json.markdown,jsonSource);assert.deepEqual(json.model.business,readLegacyPackage(sourcePackage).documents[0]);
 const astral={version:1,nodes:['😀','\ue000'].map(name=>({id:name+'-uuid',name,type:'object',scope:true})),relations:[]};
 assert.deepEqual(canonicalJSONGraph(astral).nodes.map(n=>n.name),['\ue000','😀']);
 // A late-detail MD adapter fault must fail the fast guard, outside the native MD sample.

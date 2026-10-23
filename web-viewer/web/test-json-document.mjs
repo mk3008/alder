@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {parseDocument,readDesignFile} from '../src/json-document.ts';
+import {parseDocument,readDesignFile} from '../src/document-input.ts';
 import {parseDesign,validateGraph} from '../src/graph.ts';
 import {reconcile} from '../src/session.ts';
 import {graphV1} from '../../tools/document_storage/core.mjs';

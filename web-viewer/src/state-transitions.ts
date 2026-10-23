@@ -4,41 +4,9 @@ import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
 import {routeEdge,type RouteNode} from './routing.ts';
 import {captionRowStep,captionTop} from './caption-spacing.ts';
-export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
+export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
-const fields=['id','from','activity','condition','to','effect','path','evidence','note'];
-const check=(ok:unknown,message:string):void=>{if(!ok)throw Error(message);};
-const isText=(v:unknown):v is string=>typeof v==='string'&&!!v.trim();
-/** Experimental table declaration only. No prose extraction or condition evaluation. */
-export function parseStateDeclaration(body:string,object:string):StateDeclaration{
- try{
-  const match=/^```state-meta\r?\n([\s\S]*?)\r?\n```\s*\r?\n([\s\S]*)$/.exec(body.trim());
-  check(match,'state-meta と遷移表が必要です');const meta=JSON.parse(match![1]);
-  check(meta&&typeof meta==='object'&&!Array.isArray(meta),'メタ情報が不正です');
-  check(Object.keys(meta).sort().join('|')===['object','states','start','terminal','completeness','source'].sort().join('|'),'メタ情報の項目が不正です');
-  check(meta.object===object,'対象Objectが一致しません');
-  check(Array.isArray(meta.states)&&meta.states.length>0&&meta.states.every((s:unknown)=>isText(s)&&!s.startsWith('@'))&&new Set(meta.states).size===meta.states.length,'状態一覧が不正です');
-  check(meta.start==='@new'&&meta.terminal==='@unknown'&&meta.completeness==='partial'&&isText(meta.source),'開始・終端・部分定義の宣言が不正です');
-  const ls=match![2].trim().split(/\r?\n/),cells=(line:string)=>{check(line.startsWith('|')&&line.endsWith('|'),'表の行が不正です');return line.slice(1,-1).split('|').map(v=>v.trim());};
-  const columns=cells(ls[0]);check([fields,['id','from','activity','event','condition','to','effect','path','evidence','note'],['id','from','activity','exception','condition','to','effect','path','evidence','note']].some(keys=>columns.join('|')===keys.join('|')),'表の列名が不正です');
-  check(cells(ls[1]).length===columns.length&&cells(ls[1]).every(s=>/^-+$/.test(s)),'表の区切りが不正です');
-  check(ls.length<=1002,'遷移は1000行以内にしてください');
-  const ids=new Set<string>();
-  const transitions=ls.slice(2).map(line=>{
-   const values=cells(line);check(values.length===columns.length&&values.every(isText),'表の列数・空欄が不正です');
-   const r=Object.fromEntries(columns.map((key,i)=>[key,values[i]])) as Transition;
-   check(/^T[0-9]+$/.test(r.id)&&!ids.has(r.id),'遷移IDが不正または重複しています');ids.add(r.id);
-   check([...meta.states,'@new'].includes(r.from)&&[...meta.states,'@unknown','@none'].includes(r.to),'未登録の状態が参照されています');
-   check(['change','unchanged','no-create','constraint'].includes(r.effect)&&['normal','exception'].includes(r.path),'効果・経路の指定が不正です');
-   if(columns.includes('exception'))check(r.path==='normal'?r.exception==='-':isText(r.exception)&&r.exception!=='-','通常は例外名なし、例外は名前が必要です');
-   check(r.effect!=='unchanged'||r.from===r.to,'状態不変の元と先が一致しません');
-   check(r.effect!=='change'||(!r.to.startsWith('@')&&r.from!==r.to),'状態変更の遷移先が不正です');
-   check(r.effect!=='no-create'||(r.from==='@new'&&r.to==='@none'),'不成立の元と先が不正です');
-   check(r.effect!=='constraint'||r.to==='@unknown','未決の制約は遷移先未決としてください');return r;
-  });return {model:{...meta,transitions}};
- }catch(error){return {error:error instanceof Error?error.message:'状態遷移の宣言が不正です'};}
-}
 /** Visual prototype: explicit edges only; no lifecycle or condition inference. */
 function stateDiagram(model:StateModel):SVGSVGElement{
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
@@ -105,13 +73,12 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  const text=(tag:string,value:string,parent:HTMLElement=root)=>{const e=document.createElement(tag);e.textContent=value;parent.append(e);return e;};
  if(declaration.error){text('p','状態遷移を表示できません：'+declaration.error).setAttribute('role','status');return root;}
  const model=declaration.model!;
- // Exact visible Exception names only. Never summarize prose or reuse event aliases.
+ // Identity is structural; description formatting never participates in references.
  for(const row of model.transitions){
-  if(!design.graph.nodes.some(n=>n.id===row.activity&&n.type==='business')){text('p',`状態遷移を表示できません：根拠Activityが見つかりません — ${row.activity}`).setAttribute('role','status');return root;}
-  if(row.path!=='exception'||!row.exception)continue;
-  const body=design.model?.business.activities.find(a=>a.id===row.activity)?.exception??'';
-  const names=[...body.matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);
-  if(names.filter(name=>name===row.exception).length!==1){text('p',`状態遷移を表示できません：${row.activity} の例外名「${row.exception}」を一意に参照できません`).setAttribute('role','status');return root;}
+  if(!design.graph.nodes.some(n=>n.id===row.activity&&n.type==='business')){text('p','状態遷移を表示できません：根拠Activityが見つかりません').setAttribute('role','status');return root;}
+  if(row.exceptionId){const exception=design.model?.business.exceptions?.find(e=>e.id===row.exceptionId);
+   if(!exception||exception.activityId!==row.activity){text('p','状態遷移を表示できません：例外ID参照が不正です').setAttribute('role','status');return root;}
+  }
  }
  const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram({...model,transitions:model.transitions.map(row=>({...row,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))}));root.append(canvas);
  const label=(value:string)=>({'@new':'記録作成前','@none':'保存不可（処理結果）','@unknown':'未決（設計課題）'}[value]??value);

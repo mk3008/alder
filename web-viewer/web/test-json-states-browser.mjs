@@ -34,5 +34,24 @@ export async function verifyJSONStates(browser){
  }
  assert.equal(snapshots[0],snapshots[1],'MD/JSON SVG coordinates, routes, labels and controls must be identical');
  }
+ // Current JSON contract is exercised directly, not only through old-version compatibility.
+ const nativeSource=readFileSync('../work/viewer-json/issue-274/json-native/independent.json','utf8'),native=JSON.parse(nativeSource),nativeSVG=[];
+ for(const decorated of [false,true]){
+  const input=structuredClone(native);if(decorated){input.documents[0].exceptions[0].description='**装飾**\n- **偽の例外名** — 説明';input.documents[0].activities[0].exception='1. 表示用の文章だけ';}
+  const context=await browser.newContext({viewport:{width:393,height:960}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  try{
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+   await page.locator('#fallback').setInputFiles({name:'native.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(input))});await page.waitForFunction(()=>document.querySelectorAll('.node').length===3);
+   if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
+   await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="object-request"] .node-navigate').click();await page.locator('#node-list-close').click();
+   if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('#detail-mode-states').click();await page.locator('.state-diagram').waitFor();
+   assert.equal(await page.locator('[data-transition]').count(),2);const svg=await page.locator('.state-diagram').evaluate(e=>e.outerHTML);nativeSVG.push(svg);
+   await page.screenshot({path:`${out}/native-0.4-${decorated?'decorated':'plain'}-393.png`});
+   await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('.node').first().waitFor();await page.locator('#detail-mode-states').click();await page.locator('.state-diagram').waitFor();assert.equal(await page.locator('.state-diagram').evaluate(e=>e.outerHTML),svg);
+   const bad=structuredClone(input);bad.documents[1].transitions[1].exceptionId='missing';await page.locator('#fallback').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(bad))});await page.locator('#status-text').filter({hasText:'Dangling'}).waitFor();assert.equal(await page.locator('.state-diagram').evaluate(e=>e.outerHTML),svg);
+   assert.deepEqual(errors,[]);results.push({format:'native-0.4',decorated,operations:2,stableExceptionId:'exception-receive',reload:true,invalidReferenceKeepsDisplay:true,pageErrors:errors});
+  }finally{await context.close();}
+ }
+ assert.equal(nativeSVG[0],nativeSVG[1],'description formatting never changes structural state SVG');
  writeFileSync(out+'/results.json',JSON.stringify({browser:browser.version(),results,svgExact:true},null,2));return {results,svgExact:true};
 }

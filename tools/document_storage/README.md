@@ -2,7 +2,7 @@
 
 業務設計とCheck ItemのMarkdownを、一つの整形JSONへ変換できます。元Markdownを残し、変換後のJSONには業務内容・安定ID・参照・版を保存します。旧Markdown全文を埋め込みません。
 
-Node 24とPython 3.12以降が必要です。追加パッケージ、APIキー、通信は不要です。現在は候補契約`0.1`で、製品PluginとViewerへの組み込み前です。
+JSONの作成・検証・編集はNode 24を使います。MD変換だけPython 3.12以降が必要です。追加パッケージ、APIキー、通信は不要です。新規出力は候補契約`0.4`で、例外をIDで参照します。[構造・旧版互換・明示移行](../../docs/json-native-contract.ja.md)を参照してください。正式v1採用・releaseは未実施です。
 
 ## まず試す
 

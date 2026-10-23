@@ -17,7 +17,7 @@ test('unknown roles, duplicate IDs/names, invalid colors, stale references and w
 });
 test('MD conversion is explicit, repeatable and reimport retains renamed catalog identity/color',()=>{
  const md=fs.readFileSync(new URL('../../work/json-state/issue-275/supported-state.md',import.meta.url),'utf8'),request={sources:[{text:md,documentId:bd.id,kind:'businessDesign',revision:bd.revision}],revision:legacy.revision,stateDocuments:[{documentId:state.id,revision:state.revision,businessDesignId:bd.id,objectName:'購入申請'}],roleCatalog:true};
- const pkg=convertMarkdown(request).package;assert.equal(pkg.formatVersion,'0.3');assert.deepEqual(convertMarkdown(request).package,pkg);assert.deepEqual(convertMarkdown({...request,previousPackage:pkg,expectedRevision:pkg.revision}).package,pkg);
+ const pkg=convertMarkdown(request).package;assert.equal(pkg.formatVersion,'0.4');assert.deepEqual(convertMarkdown(request).package,pkg);assert.deepEqual(convertMarkdown({...request,previousPackage:pkg,expectedRevision:pkg.revision}).package,pkg);
  const renamed=structuredClone(pkg);renamed.documents[0].roles[0].name='改名後';renamed.documents[0].roles[0].color=ROLE_PALETTE[(ROLE_PALETTE.indexOf(renamed.documents[0].roles[0].color)+1)%5];
  assert.deepEqual(convertMarkdown({...request,previousPackage:renamed,expectedRevision:pkg.revision}).package.documents[0].roles,renamed.documents[0].roles);
 });

@@ -74,4 +74,19 @@ class JSONPluginTest(unittest.TestCase):
             original=json.loads(run('inspect',source).stdout);op=root/'operation.json';op.write_text(json.dumps({'expectedRevision':original['revision'],'expectedSha256':original['sha256']}));self.assertEqual(run('commit',source,candidate,op).returncode,2);self.assertEqual(source.read_bytes(),before)
             data=json.loads(op.read_text());data['migration']='roles-0.3';op.write_text(json.dumps(data));r=run('commit',source,candidate,op);self.assertEqual(r.returncode,0,r.stderr);role=new['documents'][0]['roles'][0];role['name']='担当ロール改名';new['revision']='roles-2';new['documents'][0]['revision']='bd-role-2';new['documents'][1]['revision']='states-role-2';new['documents'][1]['basedOn']['revision']='bd-role-2';candidate.write_text(json.dumps(new));inspected=json.loads(run('inspect',source).stdout);op.write_text(json.dumps({'expectedRevision':inspected['revision'],'expectedSha256':inspected['sha256']}));r=run('commit',source,candidate,op);self.assertEqual(r.returncode,0,r.stderr);saved=json.loads(source.read_text());self.assertEqual(saved['documents'][0]['roles'][0],role);self.assertEqual(saved['documents'][1]['transitions'],legacy['documents'][1]['transitions'])
 
-if __name__=='__main__':unittest.main()
+
+    def test_native_json_works_when_legacy_modules_are_absent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            for name in ['legacy-json.mjs','convert.mjs','markdown.py','state-declaration.mjs','state-storage.mjs']:
+                (scripts/name).unlink()
+            run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            candidate=root/'candidate.json';target=root/'native.json';op=root/'operation.json'
+            pkg=json.loads((ROOT/'work/viewer-json/issue-274/json-native/independent.json').read_text());candidate.write_text(json.dumps(pkg));op.write_text('{}')
+            r=run('author-cli.mjs','create',candidate,target,op);self.assertEqual(r.returncode,0,r.stderr)
+            info=json.loads(run('author-cli.mjs','inspect',target).stdout);pkg['revision']='p2';pkg['documents'][0]['revision']='b2';pkg['documents'][0]['exceptions'][0]['name']='改名後';pkg['documents'][0]['exceptions'][0]['description']='- **偽の名前** — 説明';pkg['documents'][1]['revision']='s2';pkg['documents'][1]['basedOn']['revision']='b2'
+            candidate.write_text(json.dumps(pkg));op.write_text(json.dumps({'expectedRevision':info['revision'],'expectedSha256':info['sha256']}))
+            r=run('author-cli.mjs','commit',target,candidate,op);self.assertEqual(r.returncode,0,r.stderr)
+            self.assertEqual(json.loads(target.read_text())['documents'][1]['transitions'][1]['exceptionId'],'exception-receive');self.assertEqual(run('cli.mjs','validate',target).returncode,0)
+
+if __name__ == "__main__": unittest.main()

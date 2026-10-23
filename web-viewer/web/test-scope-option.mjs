@@ -9,7 +9,7 @@ import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {build} from './legacy-viewer-fixture.mjs';
-import {parseDocument as parseDesign} from '../src/json-document.ts';
+import {parseDocument as parseDesign} from '../src/document-input.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const db=new IDBFactory(),windows=[],sleep=()=>new Promise(r=>setTimeout(r,300));

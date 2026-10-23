@@ -1,4 +1,5 @@
 /** Node-only Markdown adapter; core.mjs/schema.mjs remain browser-portable. */
+import {readLegacyPackage} from './legacy-json.mjs';
 import {extractStateDeclarations} from './state-declaration.mjs';
 import {withRoles} from './roles.mjs';
 import {stateDocument} from './state-storage.mjs';
@@ -45,14 +46,14 @@ function reconcile(pkg,previous,renames,removedIds){
  const key=(entity,type,ids)=>{
   const id=x=>ids.get(x)??x;
   switch(type){case'document':return entity.id;case'activity':case'object':case'state':return entity.name;case'transition':return entity.sourceId;
-   case'role':return entity.name;
+   case'role':return entity.name;case'exception':return JSON.stringify([id(entity.activityId),entity.name]);
    case'finding':return entity.sourceId;case'check':return entity.checkId;
    case'relation':return JSON.stringify([entity.kind,id(entity.fromId),id(entity.toId),entity.label]);
    case'section':return entity.activityId===null?entity.title:id(entity.activityId);case'guarantee':return JSON.stringify([id(entity.sectionId),entity.title]);
    case'example':return JSON.stringify([id(entity.guaranteeId),entity.columns]);case'note':return entity.title;
    default:throw Error('Unknown identity type');}
  };
- for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note','state','transition','role']){
+ for(const type of ['document','object','activity','finding','check','relation','section','guarantee','example','note','state','role','exception','transition']){
   const before=[...old.map].filter(([id])=>old.types.get(id)===type);
   for(const [id,e]of fresh.map){if(fresh.types.get(id)!==type||mapping.has(id))continue;
    const matches=before.filter(([oid,o])=>old.owner.get(oid)===fresh.owner.get(id)&&key(o,type,new Map())===key(e,type,mapping));
@@ -90,8 +91,9 @@ export function convertMarkdown(request){
  documents.push(...stateModels);
  let pkg={format:'alder-document-package',formatVersion:stateModels.length?'0.2':'0.1',revision,documents,sources:[...sources.map(s=>({documentId:s.documentId,revision:s.revision,sha256:hash(s.text),uri:s.uri??''})),...structuredClone(externalSources)],externalDocuments:structuredClone(externalDocuments),diagnostics:[]};
  if(roleCatalog){pkg.formatVersion='0.3';pkg.documents=pkg.documents.map(d=>d.kind==='businessDesign'?withRoles(d,pkg.diagnostics,previousPackage?.documents.find(p=>p.id===d.id),renameBindings):d);}
+ pkg=readLegacyPackage(pkg);
  if(previousPackage)pkg=reconcile(pkg,previousPackage,renameBindings,removedIds);
- if(roleCatalog){pkg.diagnostics=pkg.diagnostics.filter(s=>!s.startsWith('Role未確定: '));for(const d of pkg.documents.filter(d=>d.kind==='businessDesign'))for(const a of d.activities)if(a.roleId===null)pkg.diagnostics.push('Role未確定: '+a.id+' — '+a.who);}
+ {pkg.diagnostics=pkg.diagnostics.filter(s=>!s.startsWith('Role未確定: '));for(const d of pkg.documents.filter(d=>d.kind==='businessDesign'))for(const a of d.activities)if(a.roleId===null)pkg.diagnostics.push('Role未確定: '+a.id+' — '+a.who);}
  if(previousPackage?.formatVersion==='0.3')demand(roleCatalog,'Role catalog must be retained on re-import');
  validate(pkg);
  if(previousPackage){for(const doc of pkg.documents){const prior=previousPackage.documents.find(d=>d.id===doc.id);if(prior&&JSON.stringify(prior)!==JSON.stringify(doc))demand(prior.revision!==doc.revision,'Changed document requires new revision');}

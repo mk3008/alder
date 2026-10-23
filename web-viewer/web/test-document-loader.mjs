@@ -5,7 +5,7 @@ import {resolve,extname} from 'node:path';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {parseDocument,normalizeDocument} from '../src/json-document.ts';
+import {parseDocument,normalizeDocument} from '../src/document-input.ts';
 import {readViewerDocument} from '../src/viewer-document.ts';
 import {loadDocumentURL,loadDocumentText,loadDocumentFile} from '../src/document-loader.ts';
 const md=readFileSync('web/authorities/business-design.md','utf8'),json=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8');
@@ -95,7 +95,7 @@ try{
   assert.deepEqual(loadDocumentText(source),expected);
   assert.deepEqual(await loadDocumentFile({name:'design.'+format,type:mime,size:Buffer.byteLength(source),text:async()=>source}),expected);
  }
- const invalid=normalizeDocument(md);invalid.data.business.relations[0].toId='missing';assert.throws(()=>readViewerDocument(invalid),/endpoint/);
+ const invalid=normalizeDocument(md);invalid.data.business.relations[0].toId='missing';assert.throws(()=>readViewerDocument(invalid),{message:'Dangling reference: missing'});
  await assert.rejects(()=>loadDocumentFile({name:'wrong.json',type:'application/json',size:md.length,text:async()=>md}),/JSON/);
 }finally{globalThis.fetch=originalFetch;}
 

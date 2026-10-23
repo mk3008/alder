@@ -1,3 +1,4 @@
+import {readLegacyPackage} from './legacy-json.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ test('13 operations, partial and undecided stay exactly as declared',()=>{
  const direct=structuredClone(fixture);direct.sources=[];assert.equal(guardAuthoring(null,direct).valid,true);
 });
 test('version, type, source revision, state IDs and exception names reject invalid candidates',()=>{
- for(const change of [p=>p.formatVersion='0.1',p=>p.formatVersion='999',p=>p.documents[1].schemaVersion='999',p=>p.documents[1].basedOn.revision='old',p=>p.documents[1].objectId=bd.activities[0].id,p=>p.documents[1].transitions[0].activityId='missing',p=>p.documents[1].transitions[0].fromId='missing',p=>p.documents[1].states.push({...st.states[0]}),p=>p.documents[1].transitions[1].exception='不存在',p=>p.documents[1].completeness='complete',p=>p.documents[1].transitions[0].effect='unchanged',p=>p.documents[1].transitions[0].toId='@none',p=>p.documents[1].transitions.push({...st.transitions[0],id:'another'})]){const pkg=structuredClone(fixture);change(pkg);assert.throws(()=>validate(pkg));}
+ for(const change of [p=>p.formatVersion='0.1',p=>p.formatVersion='999',p=>p.documents[1].schemaVersion='999',p=>p.documents[1].basedOn.revision='old',p=>p.documents[1].objectId=bd.activities[0].id,p=>p.documents[1].transitions[0].activityId='missing',p=>p.documents[1].transitions[0].fromId='missing',p=>p.documents[1].states.push({...st.states[0]}),p=>p.documents[1].transitions[1].exception='不存在',p=>p.documents[1].completeness='complete',p=>p.documents[1].transitions[0].effect='unchanged',p=>p.documents[1].transitions[0].toId='@none',p=>p.documents[1].transitions.push({...st.transitions[0],id:'another'})]){const pkg=structuredClone(fixture);change(pkg);assert.throws(()=>validate(readLegacyPackage(pkg)));}
 });
 test('rename, reorder, explicit same-state/cycles, revisions and atomic references',()=>{
  let pkg=structuredClone(fixture);const state=pkg.documents[1].states[0],activity=pkg.documents[0].activities[0],object=pkg.documents[0].objects.find(o=>o.id===st.objectId);

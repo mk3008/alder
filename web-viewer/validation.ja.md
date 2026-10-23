@@ -117,3 +117,10 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 比較測定が必要なときだけ、commit本文に `Benchmark-B-Loop: 441dfb8b` を独立した行として指定すると、最終CI内で固定旧headと候補を同じrunner／Node／Chrome／フォント／製品buildで測定します。両Previewの版／ローカルdist境界を先行確認し、関連高速2ファイルと `jsonLayout` は交互順で各3回、全47群は旧→新を各1回実行し、rawログと集計を `b-loop-HEAD` artifactへ保存します。製品ソース・依存・入力fixtureの同一性を検査し、不一致なら比較を拒否します。通常commitには指定せず、通常の最終CIは全47群を一度だけ実行します。全体1組の差はノイズを含むため、他群の変動と対象群の効果を分けて報告します。
 
 `jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の全11図の高速座標／配線回帰とJSONのnative表示、代表MDの入力境界を上記の分担で検証します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。
+
+
+## JSON正本と互換入力の検証
+
+候補0.4は例外IDを持つJSONを正本とし、旧MD／旧JSONの解釈は入力adapterへ限定します。変更中は `node --experimental-strip-types web/test-json-native.mjs`、保存契約はRepositoryルートの `node --test tools/document_storage/test-native-json.mjs` を先に実行します。MD業務moduleを解決できない条件で作成・検証・編集・状態／Check表示を確認し、共通入力のcounterでMD入力時だけadapterが呼ばれることも検査します。
+
+実Chromeの `jsonStates` 群は旧宣言の13操作を維持し、独立した候補0.4の2操作、説明書式差、保存復元、不正ID時の表示保持を追加します。参照検証は読込／復元へ共通するため、最終候補では既存全47群を実行します。配置器・配線・承認済み余白の基準を変更しません。

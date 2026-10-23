@@ -3,7 +3,7 @@ import {readFileSync,mkdirSync} from 'node:fs';
 import {withToolbarPage} from './test-toolbar-settings-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
-import {parseDocument} from '../src/json-document.ts';
+import {parseDocument} from '../src/document-input.ts';
 // Use the v0.3 package already supported by PR #282, not the unrelated
 // legacy Markdown fixture with an unsupported Medium field. Reopen one
 // finding only in memory to exercise an upward badge's real SVG clearance.

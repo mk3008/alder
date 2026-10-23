@@ -12,7 +12,7 @@ import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
 import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy,ListChecks,CircleQuestionMark} from 'lucide';
-import {parseDocument as parseDesign} from './json-document';
+import {parseDocument as parseDesign} from './document-input';
 import {loadDocumentFile,loadDocumentURL,loadDocumentText} from './document-loader';
 import {businessDetail} from './document-view';
 import {formattedMarkdown,detailHeading} from './markdown';
