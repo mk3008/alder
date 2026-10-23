@@ -54,4 +54,4 @@ Output → Object → Input、ResultとWhen、例外と再開条件、
 
 説明上の不整合と、人間の業務判断が必要な問いを区別します。業務上の意味を変更する場合は、人間の判断を業務設計書へ反映して再合意します。追加機能を作らなくても、既存の外部運用や責任範囲で意味がつながることがあります。
 
-JSONの参照が解決できることは、業務上の相関の正しさを意味しません。JSON化の形式は[Business Graph export](business-graph.md)、実装後の照合を含む手順は[導入ガイド](adoption.md)を参照してください。
+JSONの参照が解決できることは、業務上の相関の正しさを意味しません。型付き正本の参照はJSONの検証器で検査します。旧MDからの派生Graph出力は[Business Graph export](business-graph.md)、実装後の照合を含む手順は[導入ガイド](adoption.md)を参照してください。

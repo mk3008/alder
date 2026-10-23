@@ -1,28 +1,28 @@
-# Alder — Talk with requesters through Business Design
+# Alder — Understand business work together through the Viewer
 
 English | [日本語](README.ja.md)
 
 **Turn business work agreed on with requesters into a working system.**
 
-Alder organizes a requester's requirements into **Business Design**, a shared language that the requester, designer, and implementer can all understand, and uses the content agreed on by the requester and designer as **the source of truth (SSOT) for business intent** to connect it to Check Items, code, and tests.
+Alder Plugin structures interview notes and change requests into Business Design. Requesters, designers and implementers use the Viewer to examine the overall work, details, information exchanges and explicitly defined state transitions. People understand, correct and decide business meaning; agreed expectations connect to Check Items, code and tests.
 
-No framework or runtime package is required.
+A single JSON file is the source of truth for Business Design and Checks. Ask the Plugin/Skills to create and update it and check references and revisions. People do not need to edit JSON. The Viewer reads that source for human review; it is not the source itself.
 
-**Web Viewer:** [Open in your browser](https://mk3008.github.io/alder/) to view Business Design as a graph alongside its Markdown. The viewer works independently of the Alder plugin.
+> These instructions describe candidate 0.4.9. Published [0.4.8](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8) does not include the JSON management Skill. Use the [Viewer review build](web-viewer/json.ja.md#確認版を用意する) for JSON and state transitions. Production Viewer publication and formal JSON v1 adoption are pending.
 
 ## Install / Setup
 
-Prepare an account and environment with the subscription and permissions needed to use ChatGPT / Codex. Set up Codex CLI, verify that Alder 0.4.8 is published on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8), then run the following command to register the Alder marketplace:
+Prepare an account and environment with the subscription and permissions needed for ChatGPT / Codex, and Codex CLI. To try the candidate, register its development branch:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.8
+codex plugin marketplace add mk3008/alder --ref docs/144-json-viewer-workflow
 ```
 
-After running the command, restart the ChatGPT desktop app, open Plugins Directory, select **Alder development**, and install and enable **Alder**. Then start a new chat.
+Restart the ChatGPT desktop app, open Plugins Directory, choose **Alder development**, install and enable **Alder**, then start a new chat. A branch can move: record the resolved source commit used for your review. See [setup and updates](docs/plugin-adoption.md), including the published-version instructions.
 
 ## Getting Started
 
-To turn interview notes into Business Design, try sending the following prompt in the new chat:
+Try turning interview notes into a draft, then inspect how the work connects in the Viewer. Send these notes in the new chat:
 
 ```text
 Turn these interview notes into an Alder Business Design.
@@ -35,62 +35,38 @@ return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
 ```
 
-You receive structured Business Design like this:
+The Plugin saves a JSON draft with unresolved questions and checks its structure and references. Prepare the [Viewer review build](web-viewer/json.ja.md#確認版を用意する), choose Open → File, and select the returned JSON.
 
-```markdown
-# Activity Receive returned tools
+1. Follow the activities and information exchanges in the overview.
+2. Select an Activity and read its trigger, procedure and result under business details. For an Object with explicit state definitions, inspect its state-transition tab; unrecorded transitions are not inferred.
+3. Tell the Plugin which business detail differs from the notes or needs a decision.
 
-## When
-
-When a resident returns borrowed tools.
-
-## Who
-
-Counter
-
-## How
-
-### Input
-
-- Registered local resident — Returned tools and accessories
-- Loan/return record — Loaned tool number, issued accessory list, and handover record
-
-### Procedure
-
-1. The counter compares the loaned number with the returned equipment number and accessories and records the return time. The recording medium is unconfirmed.
-2. Returned sets await maintenance inspection. The specific handoff method is unconfirmed.
-
-### Output
-
-- Loan/return record — Check results and return-time record
-- Organization's tools — Returned sets awaiting inspection
-
-## Result
-
-Receipt is confirmed by the equipment-number/accessory check and return-time record; the sets await maintenance inspection.
+```text
+Update Receive returned tools: the counter records the return time.
+Keep the other unresolved questions open.
 ```
 
-Starting from this Business Design, you can check Business Design description quality, connections between business activities, and omissions, then create Check Items from the agreed work and continue to code and tests. See [Standard workflow](#standard-workflow) for the steps and [document structure](docs/business-design-structure.ja.md) for field meanings and the reasons for the structure.
+Reopen the updated JSON in the Viewer and check the change. Viewing a draft or passing validation does not establish agreement. Agree on the business meaning before [drafting Check Items](#3-draft-checks-and-have-people-confirm-expectations). See [Viewer usage](web-viewer/usage.ja.md) for operations.
 
 ## Alder artifacts
 
 The main artifacts Alder creates and hands over for implementation are Business Design and Check Items.
 
-- **Business Design** describes business procedures, inputs, outputs, and results. It is the authoritative business document that requesters and designers read, revise, and agree on.
+- **Business Design** describes business procedures, inputs, outputs, and results. It is the authoritative business document that requesters and designers review and agree on through the Viewer, with revisions requested from the Plugin.
 - **Check Items** organize the conditions and expected results the system must satisfy, based on the agreed business design. Each item retains references to its business source and, after implementation, the tests that verify it.
 
 Implementation uses these two artifacts to create code, DDL, and tests, with important implementation decisions and their reasons captured in Decision Records. Technical details take shape in the implementation rather than repeating the same business meaning in a separate detailed-design document. This avoids adding documents that must be synchronized and maintained.
 
-Derivable information, such as views and Graph JSON, is generated from the source of truth when needed. Machine-only representations that people cannot review for meaning, and fingerprints, do not replace the business source of truth or human agreement.
+Derivable information, such as views and derived Business Graph v1, is generated from the source of truth when needed. A matching structure or fingerprint does not establish agreement on business meaning. People review the business content displayed in the Viewer.
 
 ### Artifact relationships
 
 Business Design and tests are connected through Check Items. Each item records two kinds of references:
 
-- **Business Design references** identify the source of the item's conditions and expected results. They use the source document and human-readable identifiers such as Activity names, pointing to a Procedure or Result when needed. Activities do not require fixed machine IDs.
+- **Business Design references** identify the source of the item's conditions and expected results. JSON references use document IDs, revisions and stable Activity IDs, while the Viewer displays business names. The Plugin maintains these identifiers; a reference may point to Procedure or Result when needed.
 - **Test references** identify representative tests and assertions that verify those conditions and expected results. The test name and its location identify the test.
 
-<a href="docs/images/traceability-model.en.png"><img src="docs/images/traceability-model.en.png" alt="Conceptual artifact relationships, not a database schema. Business Design, a Check Item list, and tests are connected by many-to-many (N:M) relationships. Each card shows an identifying key, an example, and a summary. Business Design carries the green SSOT badge. Check Item creation and update skills maintain references to the source document and Activity name. During record maintenance after implementation review, AI compares conditions and expected results with test assertions and records the corresponding test names and what they verify. These references support reverse navigation from tests through Check Items to Business Design." width="640"></a>
+Business Design ↔ Check Item ↔ Test references support navigation in both directions.
 
 The links between Business Design and Check Items, and between Check Items and tests, are each many-to-many (N:M). One Check Item can draw on several business activities or be verified by several tests. One activity or test can also relate to several Check Items.
 
@@ -132,7 +108,7 @@ In the target project's chat, provide interview notes or requirements and ask, �
 
 For a proposed feature or approach, Alder asks about missing background before drafting when it could change whether to adopt the proposal. It reuses known context and settled decisions, and drafts what is known while leaving unresolved matters visible.
 
-Business Design is written in natural language with defined fields. **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Read the generated draft and check that it matches the work.
+Business Design is written in natural language with defined fields. **You do not need to memorize the format.** The skill divides the How of 5W1H into Input / Procedure / Output, with Exception as needed and Result for normal completion. A booking notification is Output; the established booking state is Result. Open the generated JSON in the Viewer and check that it matches the work. Request corrections from the Plugin.
 
 ### 2. Review and agree with requesters
 
@@ -150,7 +126,7 @@ People answer questions about responsibility, conditions, exceptions, and guaran
 
 Give AI the agreed Business Design and ask “Draft Check Items with Alder.” The plugin loads its bundled guidance and drafts independently reviewable expectations. Give it human feedback to update the same list. For example, confirm “concurrent requests must not establish overlapping bookings” as a condition/expected-result pair.
 
-The designer and requester review the same list and provide their decisions or corrections. Alder records that feedback as `Needs confirmation / Confirmed / Needs correction` (`要確認 / 確認済み / 要修正`), leaving unreviewed items distinct. Return undecided business conditions to design. **Confirmed items and unconfirmed candidates can be handed over separately.**
+The designer and requester review the same revision in the Viewer and provide their decisions or corrections. Alder records that feedback as `Needs confirmation / Confirmed / Needs correction` (`要確認 / 確認済み / 要修正`), leaving unreviewed items distinct. Return undecided business conditions to design. **Confirmed items and unconfirmed candidates can be handed over separately.**
 
 Alder includes conditions, expected results, source references to Business Design, IDs, and an Unreviewed state in each new draft Check. You do not need to add the source links by hand. When given human feedback, Alder updates the same list while preserving existing IDs and mappings.
 
@@ -176,7 +152,7 @@ If security requirements are missing, have the product team identify the needed 
 Hand over the agreed Business Design, confirmed Checks, System Requirements, and implementation scope. When asking AI, replace the example paths with the actual product locations.
 
 ```text
-Read docs/business-design/meeting-room.md, docs/checks/meeting-room.md,
+Read docs/business-design/meeting-room.json, docs/business-design/meeting-room.json,
 and the product's System Requirements. Implement and test the agreed scope.
 ```
 
@@ -236,9 +212,9 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 
 | Need | Document |
 | --- | --- |
-| Interview and draft examples | [Interview](work/structural-discovery/issue-99/customer-transcript.md) / [Draft](work/structural-discovery/issue-99/design/v4.md) |
-| Business description examples | [Booking](docs/examples/meeting-room-reservation.ja.md) / [Booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) |
-| Field meanings, heading order, reference notation | [Document structure](docs/business-design-structure.ja.md) / [Field guidance](docs/adoption.md#business-design-format) / [Quality field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
+| Legacy MD interview/draft examples (compatibility reference) | [Interview](work/structural-discovery/issue-99/customer-transcript.md) / [Draft](work/structural-discovery/issue-99/design/v4.md) |
+| Legacy MD description examples (compatibility reference) | [Booking](docs/examples/meeting-room-reservation.ja.md) / [Booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) |
+| Field meanings and legacy MD notation | [Document structure](docs/business-design-structure.ja.md) / [Field guidance](docs/adoption.md#business-design-format) / [Quality field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
 | Design-review examples and rationale | [Review case](docs/business-design-review.ja.md) / [Quality rationale](docs/business-design-quality-review.md) / [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
 | Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) / [Versioning](docs/versioning.md) |
@@ -251,6 +227,8 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 | Responsibility boundaries when using Alder | [Alder's own Business Design](business-design/alder/README.md) |
 | User-facing explanations and safe reproducible evidence | [Research publication practice](docs/research-publication.md) |
 | Rationale, adoption decisions, validation scope and limits | [Philosophy](docs/philosophy.md) / [Research decisions](docs/research-decisions.md) / [Validation](docs/validation.md) |
+
+Developers implementing storage can consult the [JSON contract](docs/json-native-contract.ja.md). Normal business review uses the Viewer and does not require reading the Schema.
 
 ### Questions and improvement proposals
 

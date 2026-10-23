@@ -7,6 +7,22 @@ PLUGIN=ROOT/'plugins/alder'
 NAME='alder-manage-json-documents'
 
 class JSONPluginTest(unittest.TestCase):
+    def test_new_artifact_default_and_explicit_legacy_update_instructions(self):
+        # Distribution contract only; actual model routing needs a forward run.
+        for name in ['alder-draft-business-design', 'alder-draft-check-items']:
+            text=(PLUGIN/'skills'/name/'SKILL.md').read_text()
+            self.assertIn('For new artifacts without a selected existing format, default to typed JSON',text)
+            self.assertIn('../alder-manage-json-documents/SKILL.md',text)
+            self.assertIn('existing Markdown artifact for revision',text)
+            self.assertIn('do not migrate it without an explicit request',text)
+            self.assertNotIn('Otherwise keep the Markdown procedure below',text)
+        checks=(PLUGIN/'skills/alder-draft-check-items/SKILL.md').read_text()
+        self.assertIn('obtain an explicit one-way conversion request first',checks)
+        self.assertIn('Review-only and Interface-only',checks)
+        guide=(ROOT/'docs/plugin-json-authoring.ja.md').read_text()
+        self.assertIn('新規で形式指定がなければJSONを既定',guide)
+        self.assertNotIn('新規で形式指定がなければ既存Markdown経路を維持',guide)
+
     def test_published_bundle_matches_source_bytes_and_paths(self):
         for p,data in export_plan(ROOT,[NAME]).items():
             self.assertEqual((ROOT/p).read_bytes(),data,str(p))
