@@ -1,0 +1,21 @@
+{
+  "review": "Draft PR 285",
+  "source": "441dfb8b2fbf36bb4215ec885852dc14fa6a3e59",
+  "requiredSourceAncestors": [
+    "a8c5ce82381de406fbaa59affe7996e522d15c2e",
+    "66a0d375aa8a72c9cb75ae468abd659674a466a1"
+  ],
+  "kind": "isolated non-release Viewer preview",
+  "files": {
+    "index.html": "e950608709b76d5531b5bd389da483fd4788008d8f43de215219d1687447fac0",
+    "assets/index-BGijB1BZ.css": "8c29e73d62dde9a176e79a372fb06a10424e3bdc9da29e5f9d7aa1c286025223",
+    "assets/index-DqmI6MyO.js": "971c4bea28de6815bf99b7fa73a42e1a66cf1020f06895301cf6e116b2b9b280"
+  },
+  "sources": {
+    "purchase": "work/json-roles/issue-280/purchase.roles.json",
+    "states": "work/json-roles/issue-280/purchase.roles.json",
+    "json": "work/json-roles/issue-280/same-business.roles.json",
+    "md": "work/viewer-json/issue-274/layout-regression/same-business.md",
+    "checks": "work/json-roles/issue-280/gate-b.roles.json"
+  }
+}
