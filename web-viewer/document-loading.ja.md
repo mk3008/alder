@@ -1,28 +1,57 @@
-# Viewerの共通読込境界
+# JSON中心のViewer読込
 
-## 経路
+MDは旧ファイルの入力互換として扱う。今後の機能追加先はJSON側の共通モデルと処理とし、MD版を並行開発しない。旧MDの情報・原文・人間レビュー状態と参照は保持するが、旧表示の見出し階層・整形を完全再現することは要求しない。
 
-新規URL・履歴URL・共有URL・明示再取得は `document-loader.ts::loadDocumentURL` を使う。ファイルは `loadDocumentFile`、貼付本文は `loadDocumentText`。取得後はすべて `json-document.ts::parseDocument` → `normalizeDocument` → `viewer-document.ts::readViewerDocument` を通す。
+## 入力と共通処理
 
-- MD：既存MD parserで解釈 → 閲覧用の型付きJSON → 共通読込 → 既存表示モデル。
-- 保存用JSON：既存の厳密parse/Schema・版・参照検査 → 同じ閲覧用JSON → 同じ共通読込。
+新規・履歴・共有URL・再取得は `loadDocumentURL`、Fileは `loadDocumentFile`、貼付本文は `loadDocumentText` から、同じ `parseDocument` を通る。
 
-閲覧用JSONは `ViewerDocumentJSON`（内部version 1）で、Graph・文書順・Findings・明示状態・保存文書のレビュー情報を扱う。これはBusiness Graph v1の新契約でも、保存用 `alder-document-package` の新バージョンでもない。JSON文字列への不要なserialize/parse往復はしない。元の本文・MD詳細表示の断片は `OriginalDocument` として正規化データの外に保持する。原文確認やMDの既存Drawerを維持し、JSON→MDを生成しない。
+- JSONはGate Aのstrict parser／validatorで検査して型付き業務モデルへ渡す。
+- MDは `legacy-document.ts` が既存の文法検査中にActivityのフィールドを受け取り、同じ型付き業務モデルへ投影する。Procedure／Exceptionを後段でMD sectionから再抽出しない。
+- `readViewerDocument` は両形式の同じBusiness Design／Check／状態モデルから、共通の図・Findings・状態panelの入力を作る。
+- `document-view.ts` は形式によらず選択した業務詳細とCheckを表示する。原文の形式やMD sectionを参照しない。
 
-## 互換性と責務
+`Design.model` は閲覧時の唯一の業務モデル。内部version 1を持つが、正式保存JSONの新しい構造版やBusiness Graph v1ではない。旧 `Design.json` と `ViewerDocumentJSON.storage` のJSON専用payload／旧Design往復は廃止した。元の本文は従来のSessionフィールド `markdown` へ保持し、原文dialogで読取専用表示する。`sections` は旧Design型の空の互換枠として残るだけで、表示・復元・状態図は使わない。
 
-Gate Aの保存用MD→JSONコンバーターはNode/Pythonで実行する独立した明示移行。Viewerの自動読込で呼び出したり、旧MDを正式JSONへ保存/置換したりしない。Gate Aの未対応見出し・未解決参照等の契約を緩めず、従来Viewerが受け付けたMDを狭めない。読み取り時の正規化IDは元のMD名称ID、保存用JSONでは永続IDのまま。Graph・配置・配線・保存形式・業務合意状態は変更しない。
+MDの名称ID、JSONのUUIDは維持する。既存の名称IDを入力とする配置器には、両形式とも同じ表示用ID adapterから渡し、座標mapを元IDへ戻す。配置器・配線・定数・Graph v1の契約は変更しない。
 
-URL履歴はURL/nameの参照のみ。新規と履歴で別のMIME/parser方針を持たず、application/jsonも共通の取得器で受け付ける。単独Check Markdownの取得 `fetchMarkdown` はCheck専用として残す。業務文書の履歴からは呼ばない。
+## 旧Checkと状態の境界
 
-URL/テキスト2MiB、ローカルJSON8MiB、タイムアウト/中止/CORS/匿名GET、原文保管、IndexedDBの先行commit・失敗時の旧画面保持は従来境界を維持する。URL更新確認では比較のために原文を取得するが、候補の解釈は共通parseDocumentを使用する。
+外部Check MDのFile/URL読込・原典照合・人間による関連付け確認は旧入力互換として残す。`check-items.ts`／`legacy-check-model.ts` が一度解釈して、JSON側と同じCheck、文章／参照block、保証へ投影する。未知の補足fieldも保持する。原典の一致と項目の人間レビュー状態を混同しない。
 
-## 検証
+取得元recordごとのWeakMapでCheckの投影を再利用する。保存からは派生cacheを信用せず原文から再構成する。業務表示側のMD専用Check本文renderer・形式別タブ生成は廃止した。原典照合・candidate／手動確認の表示は関連付けの責務として残る。
 
-`node --experimental-strip-types web/test-document-loader.mjs` はFile/URL/テキストのMD/JSON、正規化JSONの直列化、共通参照検査と実アプリDOMの新規/履歴・重複除外・不正履歴の旧表示保持を検査する。`--baseline` は固定head1b82b23fの実mainをビルドし、JSON履歴を開けず旧MD18ノードが残る失敗（期待JSON6）を再現する。修正後は成功。
+状態panelは共通モデルのActivity ID／Exceptionを参照する。JSONから仮Designと `### Exception` を合成する処理、panel内のMD見出し再解析は廃止。図の既存アルゴリズムへはActivity表示名を投影し、永続IDや遷移の業務意味を変えない。未記載の遷移は補わない。
 
-既存のjsonDocuments Chrome群へ393pxのMD/JSON新規URL→別文書→履歴→native保存復元・壊れた履歴の表示保持を追加。図形の絶対値を増やさず、読込境界の結果を確認する。JSON document/state/role、共有URL/cleanup、workspace DOMは影響するため手元で選択実行した。反復中の全件E2Eは行わない。最終CIは最新main AGENTS/validationが要求するものを一度実行し、結果はIssue #274とDraft PRに記録する。
+## 保存と制限
 
-## 今回扱わないこと
+新規・URL履歴と同様、旧MD／JSONの保存復元も原文→共通読込とする。派生Graph／section／modelの欠落・改変は原文から再構成し、原文欠落・壊れた構文、保存metadata不正は採用しない。元recordの非破壊保護、世代CAS、保存成功前に画面を切り替えない契約を維持する。JSON内のCheckが旧MDの外部添付を継承することはない。
 
-保存用Schemaへのブラウザー内MD完全変換、Plugin変更、状態/概念モデルの業務仕様、閲覧履歴UIや配置の再設計は対象外。別branchの余白ラフ66a0は本人確認待ちのまま保持し、この読込共通化へ混ぜない。
+Gate AのNode/Python保存コンバーターは独立した明示移行として残す。Viewerは正式保存JSONへの自動移行やMDの上書き、JSON→MD同期を行わない。元MDは保持する。
+
+URL履歴はURL/nameだけで本文を蓄積しない。URL／テキスト2MiB、ローカルJSON8MiB、MIME/CORS・匿名GET・中止、読込失敗時の旧表示保持を維持する。単独Check MDの取得方針はその入力境界だけに残す。
+
+## 回帰と整理した保証
+
+`web-viewer/` で実行する。
+
+```sh
+node --experimental-strip-types web/test-document-loader.mjs
+node --experimental-strip-types web/test-document-loader.mjs --baseline-model
+```
+
+通常は成功する。`--baseline-model` は固定head2574の実parserと依存ソースを使い、手書きの旧MD入力が型付きモデルへ渡らない失敗を再現する。期待値をparser／converterから生成せず、Procedure／Exception／Object／明示関係／未解決Findingを直接指定する。旧MD sectionへのアクセスを禁止して同じ詳細rendererで表示できることも検査する。
+
+履歴不具合の旧head1b82による再現は `--baseline`。現行の新規／履歴・MIME・保存復元は同じ回帰に残す。
+
+| 以前の重複／前提 | 現在の検証先 |
+| --- | --- |
+| MDの旧section表示とJSON詳細の別経路 | 共通詳細rendererの回帰＋旧MD入力の独立期待値 |
+| MDのCheck本文renderer | 共通Check renderer＋旧入力の共有ID・人間状態・保証参照・追加本文の独立期待値。関連付けのDOM／Chrome回帰は維持 |
+| section cache欠落で復元拒否 | 原文から再構成し、元recordと座標を保持する復元回帰。原文・metadata不正は拒否を維持 |
+| Role版でも同じ11図のChrome操作・撮影を反復 | `test-json-roles.mjs` が旧／Role版の全11図のGraph・文書順・配置入力を比較。共通描画のnative oracleは `jsonLayout` に集約。Role固有の色／改名／選択／復元はChromeに残す |
+| CI先行JSON6群と全47群で同じ6群を再実行 | 同じ候補の全47群を一度実行し、失敗時もartifactを回収 |
+
+旧MDとの11図の座標・配線・PNG比較自体は現状維持する。これは共通図への入力・既存配置の回帰であり、旧MD Drawerの整形完全一致を保証するものではない。追加の旧MD専用GUI oracleは作らない。保証移管と誤実装の検出をIssue #274／PR #285へ記録し、影響する速い検証を反復して、最終CIの所要時間を実測する。
+
+別branchの余白ラフ66a0、Plugin／保存Schema、概念モデル具体仕様、正式JSON採否・merge/releaseはこの変更へ混ぜない。

@@ -108,11 +108,11 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
  for(const row of model.transitions){
   if(!design.graph.nodes.some(n=>n.id===row.activity&&n.type==='business')){text('p',`状態遷移を表示できません：根拠Activityが見つかりません — ${row.activity}`).setAttribute('role','status');return root;}
   if(row.path!=='exception'||!row.exception)continue;
-  const source=design.sections[row.activity]??'',body=source.split(/^### Exception\s*$/m)[1]?.split(/^#{1,3} /m)[0]??'';
+  const body=design.model?.business.activities.find(a=>a.id===row.activity)?.exception??'';
   const names=[...body.matchAll(/^- \*\*([^*]+)\*\* — /gm)].map(m=>m[1]);
   if(names.filter(name=>name===row.exception).length!==1){text('p',`状態遷移を表示できません：${row.activity} の例外名「${row.exception}」を一意に参照できません`).setAttribute('role','status');return root;}
  }
- const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram(model));root.append(canvas);
+ const canvas=document.createElement('div');canvas.className='state-diagram-scroll';canvas.append(stateDiagram({...model,transitions:model.transitions.map(row=>({...row,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))}));root.append(canvas);
  const label=(value:string)=>({'@new':'記録作成前','@none':'保存不可（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);

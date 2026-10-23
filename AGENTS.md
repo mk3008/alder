@@ -64,4 +64,4 @@ For the actual AI-result exchange in this repository, follow [its Business Desig
 
 ## Web Viewer validation
 
-For Web Viewer changes, follow [the staged validation procedure](web-viewer/validation.ja.md). Select affected browser cases during iteration, record the reason and untested scope, and retain full CI on the final candidate. Never report targeted success as full coverage.
+For Web Viewer changes, follow [the staged validation procedure](web-viewer/validation.ja.md). Select affected browser cases during iteration, record the reason and untested scope, and retain full CI on the final candidate. Never report targeted success as full coverage. For compatibility or common-path changes, identify the input-adapter boundary, the downstream paths being retired, and where each retained regression guarantee moves. Markdown is legacy input compatibility; add new Viewer features only to the JSON-centered common model and processing, without a parallel Markdown implementation.

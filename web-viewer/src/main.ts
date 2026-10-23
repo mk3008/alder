@@ -4,7 +4,7 @@ import {captionKey,isMatrixGraph,type MatrixPlan,type MatrixWire} from './matrix
 import {matrixPlanForDesign} from './json-layout.ts';
 import {createWorkspace,documentForView,mergeLiveWorkspace,snapshotWorkspace,restoreWorkspace,replaceWorkspace,updateWorkspace,openActivity,viewDesign,viewActivity,type Workspace,type WorkspaceSnapshot} from './workspace';
 import {installDropdown} from './dropdown';
-import {parseChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
+import {readRelatedChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
 import {checkView,type CheckViewState} from './check-view';
 import {installDocumentActions} from './document-actions';
 import {installHeaderTitleFit} from './header-layout';
@@ -12,10 +12,9 @@ import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
 import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy,ListChecks,CircleQuestionMark} from 'lucide';
-import {validateGraph,findingsFromSource} from './graph';
-import {parseDocument as parseDesign,isJSONSource} from './json-document';
+import {parseDocument as parseDesign} from './json-document';
 import {loadDocumentFile,loadDocumentURL,loadDocumentText} from './document-loader';
-import {jsonDetail} from './json-view';
+import {businessDetail} from './document-view';
 import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
@@ -120,7 +119,7 @@ async function closeTab(t:Tab){
  try{await saveDocument(()=>next,()=>{state=next;});}catch{saveStateChrome();}
 }
 // Empty presentation hides graph-only controls without changing drawer preferences.
-function chrome(){const json=current()?.design.sourceFormat==='json';$('drawer').setAttribute('aria-label',json?'業務内容開閉':'Markdown開閉');$('formattedMarkdownDrawer').setAttribute('aria-label',json?'選択項目の業務内容':'選択項目のMarkdown');const hasTab=!!current(),drawerOpen=hasTab&&state.drawer,listOpen=hasTab&&!!state.nodeDrawer;document.querySelector<HTMLElement>('.toolbar')!.hidden=!hasTab;if(!hasTab)displaySettingsOpen=false;displaySettingsChrome();$('layout-lock').replaceChildren(icon(layoutLocked?LockKeyhole:LockKeyholeOpen));$('layout-lock').setAttribute('aria-pressed',String(layoutLocked));$('layout-lock').title=layoutLocked?'配置をロック中。項目の上から図をスクロールできます。':'配置を調整中。項目をドラッグして移動できます。';$('layout-lock').toggleAttribute('disabled',restoring);$('viewport').dataset.layoutLocked=String(layoutLocked);$<HTMLInputElement>('prefer-write').checked=state.preferWrite===true;$<HTMLInputElement>('prefer-write').disabled=restoring;$<HTMLInputElement>('show-exceptions').checked=current()?.showExceptions!==false;$<HTMLInputElement>('show-exceptions').disabled=restoring||documentSaving||!current()||closing===current();$<HTMLInputElement>('selected-edges-only').checked=current()?.selectedEdgesOnly===true;$<HTMLInputElement>('selected-edges-only').disabled=restoring||documentSaving||!current()||closing===current();document.documentElement.dataset.theme=state.dark?'dark':'light';$('theme').replaceChildren(icon(state.dark?Sun:Moon));$('formattedMarkdownDrawer').hidden=!drawerOpen;$('formattedMarkdownDrawer').style.width=Math.max(260,Math.min(state.width,innerWidth*.65))+'px';$('drawer').setAttribute('aria-expanded',String(drawerOpen));$('drawer').toggleAttribute('disabled',restoring||!hasTab);$('node-list-drawer').hidden=!listOpen;$('node-list-toggle').setAttribute('aria-expanded',String(listOpen));$('node-list-toggle').toggleAttribute('disabled',restoring||!hasTab);}
+function chrome(){$('drawer').setAttribute('aria-label','業務内容開閉');$('formattedMarkdownDrawer').setAttribute('aria-label','選択項目の業務内容');const hasTab=!!current(),drawerOpen=hasTab&&state.drawer,listOpen=hasTab&&!!state.nodeDrawer;document.querySelector<HTMLElement>('.toolbar')!.hidden=!hasTab;if(!hasTab)displaySettingsOpen=false;displaySettingsChrome();$('layout-lock').replaceChildren(icon(layoutLocked?LockKeyhole:LockKeyholeOpen));$('layout-lock').setAttribute('aria-pressed',String(layoutLocked));$('layout-lock').title=layoutLocked?'配置をロック中。項目の上から図をスクロールできます。':'配置を調整中。項目をドラッグして移動できます。';$('layout-lock').toggleAttribute('disabled',restoring);$('viewport').dataset.layoutLocked=String(layoutLocked);$<HTMLInputElement>('prefer-write').checked=state.preferWrite===true;$<HTMLInputElement>('prefer-write').disabled=restoring;$<HTMLInputElement>('show-exceptions').checked=current()?.showExceptions!==false;$<HTMLInputElement>('show-exceptions').disabled=restoring||documentSaving||!current()||closing===current();$<HTMLInputElement>('selected-edges-only').checked=current()?.selectedEdgesOnly===true;$<HTMLInputElement>('selected-edges-only').disabled=restoring||documentSaving||!current()||closing===current();document.documentElement.dataset.theme=state.dark?'dark':'light';$('theme').replaceChildren(icon(state.dark?Sun:Moon));$('formattedMarkdownDrawer').hidden=!drawerOpen;$('formattedMarkdownDrawer').style.width=Math.max(260,Math.min(state.width,innerWidth*.65))+'px';$('drawer').setAttribute('aria-expanded',String(drawerOpen));$('drawer').toggleAttribute('disabled',restoring||!hasTab);$('node-list-drawer').hidden=!listOpen;$('node-list-toggle').setAttribute('aria-expanded',String(listOpen));$('node-list-toggle').toggleAttribute('disabled',restoring||!hasTab);}
 // Keep expansion ephemeral: it never changes graph data or stored preferences.
 function imageExportChrome(){for(const id of ['save-image','copy-image']){const button=$<HTMLButtonElement>(id);button.hidden=!current();button.disabled=exportingImage||restoring||!current()||closing===current();button.setAttribute('aria-busy',String(exportingImage));}}
 function displaySettingsChrome(){
@@ -197,7 +196,7 @@ async function readChecks(t:Tab,read:()=>Promise<RelatedChecks>){
   try{
     const checks=await read();if(!isCurrentDocument(t))return;
     if(original!==confirmationKey(state.tabs[0]))throw Error('読込中にBDが更新されました。関連Checkを再指定してください。');
-    const doc=parseChecks(checks.markdown),match=checkCompatibility(doc,state.tabs[0]);
+    const doc=readRelatedChecks(checks),match=checkCompatibility(doc,state.tabs[0]);
     if(match.state==='mismatch')throw Error('この業務設計書に対応するCheck Itemとは確認できません。'+match.reason);
     if(match.state==='unverified'){v.candidate=checks;v.mode='checks';}
     else{await saveChecks(t,checks);v.candidate=undefined;v.mode='checks';}
@@ -206,7 +205,7 @@ async function readChecks(t:Tab,read:()=>Promise<RelatedChecks>){
 }
 async function confirmChecks(t:Tab,candidate:RelatedChecks){
   const v=checkState(t);if(v.busy||documentSaving)return;
-  if(!isCurrentDocument(t))return;const match=checkCompatibility(parseChecks(candidate.markdown),state.tabs[0]);if(match.state==='mismatch'){v.error=match.reason;detail();return;}
+  if(!isCurrentDocument(t))return;const match=checkCompatibility(readRelatedChecks(candidate),state.tabs[0]);if(match.state==='mismatch'){v.error=match.reason;detail();return;}
   v.busy=true;v.error=undefined;
   try{await saveChecks(t,{...candidate,confirmedFor:confirmationKey(state.tabs[0])});v.candidate=undefined;v.mode='checks';}
   catch(e){v.error='関連Checkを開けません: '+(e as Error).message;}
@@ -220,7 +219,7 @@ function detail(){
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
   const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,navigate:id=>{view!.mode='business';navigateNode(id);},confirm:candidate=>{void confirmChecks(t,candidate);}});
-  if(n)root.append(detailHeading(n.name));root.append(panel.controls,panel.content??(t.design.sourceFormat==='json'?jsonDetail(t.design,n?.id):formattedMarkdown(n?t.design.sections[n.id]:'図の業務やObjectを選択してください',!!n)));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  if(n)root.append(detailHeading(n.name));root.append(panel.controls,panel.content??businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();
@@ -236,7 +235,7 @@ function renderFindingDetail(t:Tab,root:HTMLElement):boolean{
  if(finding)root.append(findingCard(finding));else{const h=document.createElement('h2');h.textContent=`困りごと · ${node!.name}（${String(node!.pain_level)}）`;root.append(h,formattedMarkdown(String(node!.problem)));}
  const targets=finding?.targets??[node!.id];if(targets.length){const group=document.createElement('section');const h=document.createElement('h3');h.textContent='関連項目へ移動';group.append(h);for(const id of targets){const button=document.createElement('button');button.className='node-navigate finding-target-link';button.dataset.findingTarget=id;const exists=t.design.graph.nodes.some(n=>n.id===id),hidden=t.hiddenNodes?.includes(id);button.disabled=!exists||!!hidden;button.textContent=(t.design.graph.nodes.find(n=>n.id===id)?.name??id)+(!exists?'（参照先なし）':hidden?'（非表示）':'');button.onclick=()=>navigateNode(id,true);group.append(button);}root.append(group);}return true;
 }
-function roleBadge(who:string,id?:string){let hash=0;for(const c of who)hash=(hash*31+c.codePointAt(0)!)>>>0;const badge=document.createElement('span');badge.className='who-badge';badge.style.setProperty('--role-color',(id&&current()?.design.json?.business.roles?(activityRole(current()!.design,id)?.color??'var(--line)'):undefined)??['#8b5cf6','#2563eb','#c2410c','#008576','#be185d'][hash%5]);badge.setAttribute('aria-hidden','true');badge.append(icon(UserRound));return badge;}
+function roleBadge(who:string,id?:string){let hash=0;for(const c of who)hash=(hash*31+c.codePointAt(0)!)>>>0;const badge=document.createElement('span');badge.className='who-badge';badge.style.setProperty('--role-color',(id&&current()?.design.model?.business.roles?(activityRole(current()!.design,id)?.color??'var(--line)'):undefined)??['#8b5cf6','#2563eb','#c2410c','#008576','#be185d'][hash%5]);badge.setAttribute('aria-hidden','true');badge.append(icon(UserRound));return badge;}
 function setNodeDrawer(open:boolean,focus=true){if(restoring||!current())return;touch.cancel();capture();state.nodeDrawer=open;if(open&&listView().mode==='findings'&&innerWidth<=800)state.drawer=false;chrome();if(open&&current()?.selected)revealListNode(current()!.selected!);renderNodeList();if(focus)(open?$('node-list-close'):$('node-list-toggle')).focus({preventScroll:true});persist();}
 function revealListNode(id:string){const t=current(),n=t?.design.graph.nodes.find(n=>n.id===id);if(!n)return;const view=listView();if(view.category!=='role'||n.type!=='business')view.category=n.type==='business'?'activity':'object';view.collapsed.delete(roleGroupKey(t!.design,n.id,String(n.who)));if(!n.name.toLocaleLowerCase().includes(view.search.toLocaleLowerCase()))view.search='';requestAnimationFrame(()=>{const row=Array.from($('node-list').querySelectorAll<HTMLElement>('[data-list-node]')).find(e=>e.dataset.listNode===id);row?.scrollIntoView?.({block:'nearest',inline:'nearest'});});}
 function changeVisibility(ids:string[],visible:boolean){const t=current();if(!t||restoring||documentSaving||closing===t)return;touch.cancel();pan=undefined;capture();const hidden=new Set(t.hiddenNodes??[]);for(const id of ids)visible?hidden.delete(id):hidden.add(id);t.hiddenNodes=[...hidden];graph();persist();}
@@ -607,16 +606,13 @@ let resizing=false;$('resize').onpointerdown=e=>{if(restoring)return;resizing=tr
 if(typeof ResizeObserver!=='undefined'){const canvasResize=new ResizeObserver(()=>{const t=current();if(t)layoutCanvas(t);});canvasResize.observe($('viewport'));canvasResize.observe(document.querySelector<HTMLElement>('.toolbar')!);}
 // Validate all fields consumed by rendering before adopting a stored tab.
 function validateRestoredTab(t:Tab){
-  if(t?.design&&typeof t.design.markdown==='string'&&(t.design.sourceFormat==='json'||isJSONSource(t.design.markdown))){t.design=parseDesign(t.design.markdown);if(t.design.sourceFormat!=='json')throw Error('Invalid saved JSON source');t.checks=undefined;}
-  if(t?.design?.sourceFormat!==undefined&&t.design.sourceFormat!=='json')throw Error('Unknown saved source format');
-  if(t.checks!==undefined){if(!t.checks||typeof t.checks.markdown!=='string'||typeof t.checks.name!=='string'||(t.checks.url!==undefined&&typeof t.checks.url!=='string')||(t.checks.confirmedFor!==undefined&&typeof t.checks.confirmedFor!=='string'))throw Error('Invalid related Check');parseChecks(t.checks.markdown);}
-
-  if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||!t.design||typeof t.design.markdown!=='string'||!t.design.sections||typeof t.design.sections!=='object'||Array.isArray(t.design.sections)||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
-  if(t.design.sourceFormat!=='json')validateGraph(t.design.graph);
-  // Recompute annotations from the source, never trust stored derived metadata.
-  if(t.design.sourceFormat!=='json')t.design.findings=findingsFromSource(t.design.markdown,new Set(t.design.graph.nodes.map(n=>n.id)));
+  if(!t||typeof t.key!=='string'||!t.key||typeof t.name!=='string'||typeof t.design?.markdown!=='string'||(t.selected!==undefined&&typeof t.selected!=='string'))throw Error('Invalid saved document');
+  if(t.design.sourceFormat!==undefined&&t.design.sourceFormat!=='json')throw Error('Unknown saved source format');
+  // All derived business data, including legacy MD, is rebuilt from original source.
+  t.design=parseDesign(t.design.markdown);
+  if(t.design.sourceFormat==='json')t.checks=undefined; // Embedded Check sources cannot inherit an old MD attachment.
+  if(t.checks!==undefined){if(!t.checks||typeof t.checks.markdown!=='string'||typeof t.checks.name!=='string'||(t.checks.url!==undefined&&typeof t.checks.url!=='string')||(t.checks.confirmedFor!==undefined&&typeof t.checks.confirmedFor!=='string'))throw Error('Invalid related Check');readRelatedChecks(t.checks);}
   if((t.draft!==undefined&&typeof t.draft!=='string')||(t.edited!==undefined&&typeof t.edited!=='boolean'))throw Error('Invalid editor state');
-  if(!t.design.graph.nodes.every(n=>Object.hasOwn(t.design.sections,n.id)&&typeof t.design.sections[n.id]==='string')||(t.design.activityOrder!==undefined&&(!Array.isArray(t.design.activityOrder)||!t.design.activityOrder.every(id=>typeof id==='string'))))throw Error('Invalid saved sections');
   if(t.source!==undefined&&(!t.source||!['text','sample','url'].includes(t.source.kind)||(t.source.kind==='url'&&typeof t.source.url!=='string')))throw Error('Invalid saved source');
 }
 const updateNotice=document.createElement('section');updateNotice.id='source-update-notice';updateNotice.className='info-bar';updateNotice.hidden=true;

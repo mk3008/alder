@@ -1,23 +1,32 @@
-import type {Design,Graph,Finding} from './graph';
-import type {JSONView} from './json-document';
+import type {Design,GraphNode} from './graph';
+import type {DocumentModel} from './json-document';
+import {canonicalJSONGraph} from './json-layout.ts';
+import type {StateModel} from './state-transitions';
 
-/** Transient, typed JSON for viewing. This is not the versioned storage package.
- * Source bytes and Markdown presentation fragments live outside this value. */
-export type ViewerDocumentJSON={version:1;graph:Graph;activityOrder?:string[];findings?:Finding[];states?:Design['objectStateTransitions'];storage?:JSONView};
-export type OriginalDocument={format:'markdown'|'json';text:string;sections:Record<string,string>};
+/** The JSON feature model is also the sole output of the legacy input adapter.
+ * It is a viewing value, not an automatically migrated storage package. */
+export type ViewerDocumentJSON=DocumentModel & {version:1};
+export type OriginalDocument={format:'markdown'|'json';text:string};
 export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocument};
 
-/** Single display-model boundary for both input formats and all entry points. */
+/** Both formats project through this boundary; renderers never re-read MD sections. */
 export function readViewerDocument({data,original}:NormalizedDocument):Design{
  if(data.version!==1)throw Error('Unsupported Viewer document version');
- const ids=new Set(data.graph.nodes.map(n=>n.id));
- if(ids.size!==data.graph.nodes.length)throw Error('Duplicate Viewer node ID');
- if(data.graph.relations.some(r=>!ids.has(r.from)||!ids.has(r.to)))throw Error('Unknown Viewer relation endpoint');
- const activities=new Set(data.graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
- if(data.activityOrder?.some(id=>!activities.has(id)))throw Error('Unknown Viewer Activity');
- return {graph:data.graph,sections:original.sections,markdown:original.text,
-  ...(data.activityOrder===undefined?{}:{activityOrder:data.activityOrder}),
-  ...(data.findings===undefined?{}:{findings:data.findings}),
-  ...(data.states===undefined?{}:{objectStateTransitions:data.states}),
-  ...(data.storage===undefined?{}:{sourceFormat:'json' as const,json:data.storage})};
+ const bd=data.business,all=[...bd.objects,...bd.activities],ids=new Set(all.map(n=>n.id));
+ if(ids.size!==all.length)throw Error('Duplicate Viewer node ID');
+ if(bd.relations.some(r=>!ids.has(r.fromId)||!ids.has(r.toId)))throw Error('Unknown Viewer relation endpoint');
+ const roleName=(a:typeof bd.activities[number])=>bd.roles?.find(r=>r.id===a.roleId)?.name??a.who;
+ const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:roleName(a),where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
+ const objectStateTransitions=Object.fromEntries(data.states.filter(d=>d.basedOn.documentId===bd.id).map(d=>{
+  const labels=new Map(d.states.map(s=>[s.id,s.name]));
+  const model:StateModel={object:all.find(n=>n.id===d.objectId)!.name,states:d.states.map(s=>s.name),start:d.start,terminal:d.terminal,completeness:d.completeness,source:d.source,
+   transitions:d.transitions.map(t=>({id:t.sourceId,from:labels.get(t.fromId)??t.fromId,to:labels.get(t.toId)??t.toId,activity:t.activityId,...(t.event?{event:t.event}:{}),...(t.exception&&t.exception!=='-'?{exception:t.exception}:{}),condition:t.condition,effect:t.effect,path:t.path,evidence:t.evidence,note:t.note}))};
+  return [d.objectId,{model}];
+ }));
+ return {graph:canonicalJSONGraph({version:1,...(bd.scope?{scope:bd.scope}:{}),nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
+  // Kept empty for old Session decoders; never a second business representation.
+  sections:Object.fromEntries(nodes.map(n=>[n.id,''])),markdown:original.text,
+  ...(original.format==='json'?{sourceFormat:'json' as const}:{}),model:data,
+  activityOrder:bd.activities.map(a=>a.id),objectStateTransitions,
+  findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:f.targetIds,targetNames:f.targetIds.map(id=>all.find(n=>n.id===id)?.name??id)}))};
 }

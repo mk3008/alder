@@ -17,7 +17,6 @@ export function canonicalJSONGraph(graph:Graph):Graph{
  * Activity reading hints retain their existing document-order semantics.
  */
 function input(design:Design,activity?:string){
- if(design.sourceFormat!=='json')return {graph:design.graph,order:design.activityOrder,activity,restore:(p:Record<string,Point>)=>p};
  const graph=canonicalJSONGraph(design.graph),names=new Map(graph.nodes.map(n=>[n.id,n.name])),ids=new Map(graph.nodes.map(n=>[n.name,n.id]));
  return {graph:{...graph,nodes:graph.nodes.map(n=>({...n,id:n.name})),relations:graph.relations.map(r=>({...r,from:names.get(r.from)!,to:names.get(r.to)!}))},order:design.activityOrder?.map(id=>names.get(id)!),activity:activity===undefined?undefined:names.get(activity),restore:(p:Record<string,Point>)=>Object.fromEntries(Object.entries(p).map(([id,point])=>[ids.get(id)!,point]))};
 }

@@ -1,18 +1,16 @@
 // The Gate A parser/validator is browser-safe; authoring and conversion are not imported.
 // @ts-expect-error Gate A supplies JavaScript modules without TypeScript declarations.
 import {parseStrict,validate} from '../../tools/document_storage/core.mjs';
-import {parseDesign,type Design,type GraphNode} from './graph.ts';
-// @ts-expect-error Explicit experimental declaration grammar is shared with the converter.
-import {extractStateDeclarations} from '../../tools/document_storage/state-declaration.mjs';
-import type {StateDocument} from './state-projection';
-import {canonicalJSONGraph} from './json-layout.ts';
+import type {Design} from './graph.ts';
+import {normalizeMarkdown} from './legacy-document.ts';
+export type StateDocument={id:string;kind:'stateTransition';revision:string;basedOn:{documentId:string;revision:string;verification:'unverified'};objectId:string;states:{id:string;name:string}[];start:string;terminal:string;completeness:string;source:string;transitions:{id:string;sourceId:string;fromId:string;toId:string;activityId:string;exception:string|null;event:string|null;condition:string;effect:string;path:string;evidence:string;note:string}[]};
 import {readViewerDocument,type NormalizedDocument} from './viewer-document.ts';
-export type Run={kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
+export type Run={kind:'markdown';value:string}|{kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
 export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:string[]};
 export type ActivityEntry={id:string;name:string;scope:boolean;roleId?:string|null;why:string;when:string;who:string;where:string;procedure:string;exception:string|null;result:string;problem:string|null;painLevel:string|null};
 export type BD={id:string;kind:'businessDesign';revision:string;title:string;preface:string;scope:string;roles?:{id:string;name:string;color:string}[];objects:ObjectEntry[];activities:ActivityEntry[];relations:{id:string;kind:'input'|'output'|'business-exception'|'object-exception';fromId:string;toId:string;label:string}[];findings:{id:string;sourceId:string;kind:'question'|'correction';status:'open'|'resolved';scope:'items'|'document'|'unassigned';targetIds:string[];unresolvedTargets:string[];summary:string;content:string}[]};
 export type Check={id:string;kind:'checkItems';revision:string;title:string;basedOn:{documentId:string;revision:string;verification:'unverified'};intro:Run[];index:{activityId:string;purpose:string;connections:string;checkIds:string[]}[];sections:{id:string;activityId:string|null;title:string;preamble:Run[]}[];items:{id:string;checkId:string;title:string;reviewState:string;sectionId:string;detailSummary:string;fields:Record<string,Run[]>}[];guarantees:{id:string;sectionId:string;title:string;blocks:({kind:'prose';content:Run[]}|{kind:'example';exampleId:string})[]}[];examples:{id:string;guaranteeId:string;columns:string[];rows:Run[][][]}[];notes:{id:string;title:string;content:Run[]}[]};
-export type JSONView={formatVersion:string;revision:string;business:BD;checks:Check[];states:StateDocument[];diagnostics:string[]};
+export type DocumentModel={formatVersion:string;revision:string;business:BD;checks:Check[];states:StateDocument[];diagnostics:string[]};
 
 /** Direct projection into the existing display model. No Markdown document is generated.
  * `markdown` is the legacy session field for original source bytes, including JSON.
@@ -30,13 +28,7 @@ export function parseDocument(source:string):Design{
 }
 /** MD -> typed viewing JSON; storage JSON -> the same viewing JSON. */
 export function normalizeDocument(source:string):NormalizedDocument{
- if(!isJSONSource(source)){
-  const extracted=/^## State Transitions$/m.test(source)?extractStateDeclarations(source):{markdown:source,declarations:[]};
-  const design=parseDesign(extracted.declarations.length?extracted.markdown:source);
-  return {data:{version:1,graph:design.graph,activityOrder:design.activityOrder,findings:design.findings,
-   ...(extracted.declarations.length?{states:Object.fromEntries(extracted.declarations.map((model:unknown)=>{const m=model as {object:string};return [m.object,{model}];}))}:{})},
-   original:{format:'markdown',text:source,sections:design.sections}};
- }
+ if(!isJSONSource(source))return normalizeMarkdown(source);
  if(new TextEncoder().encode(source).byteLength>MAX_LOCAL_JSON_BYTES)throw Error('ローカルJSONは8MiB以内にしてください。');
  const pkg=parseStrict(source.replace(/^\uFEFF/,''));
  // Viewer resource budgets are separate from the storage Schema.
@@ -45,8 +37,6 @@ export function normalizeDocument(source:string):NormalizedDocument{
  const result=validate(pkg);
  const business=pkg.documents.filter((d:BD|Check)=>d.kind==='businessDesign') as BD[];
  if(business.length!==1)throw Error('このViewerは、単一JSON内のBusiness Designが1件の場合に対応します。');
- const bd=business[0];const roleName=(a:ActivityEntry)=>bd.roles?.find(r=>r.id===a.roleId)?.name??a.who;const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:roleName(a),where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
- return {original:{format:'json',text:source,sections:Object.fromEntries(nodes.map(n=>[n.id,'']))},data:{version:1,activityOrder:bd.activities.map(a=>a.id),
-  graph:canonicalJSONGraph({version:1,scope:bd.scope,nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
-  findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:f.targetIds,targetNames:f.targetIds.map(id=>[...bd.objects,...bd.activities].find(n=>n.id===id)!.name)})),storage:{formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),diagnostics:result.diagnostics}}};
+ const bd=business[0];
+ return {original:{format:'json',text:source},data:{version:1,formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),diagnostics:result.diagnostics}};
 }
