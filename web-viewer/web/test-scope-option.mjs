@@ -1,3 +1,4 @@
+import {waitForExactRead} from './wait-saved-viewer.mjs';
 import {joinedSession} from './session-test-view.mjs';
 import {documentControls} from './document-test-view.mjs';
 // Legacy no-Group input regression; the current Group sample is tested separately.
@@ -37,6 +38,9 @@ try{
  await session(s=>{s.tabs.forEach(t=>delete t.hiddenNodes);s.scopeOutside='hide';s.dimOutside=true;s.hideOutside=true;s.tabs[0].selected=outsideID;});const precedence=await open();assert.equal(precedence.getElementById('scope-outside').getAttribute('aria-pressed'),'false');assert.equal(precedence.querySelector('.selected'),null);
  await session(s=>{s.tabs.forEach(t=>delete t.hiddenNodes);delete s.scopeOutside;delete s.dimOutside;delete s.hideOutside;delete s.preferWrite;});const noSetting=await open();assert.equal(noSetting.getElementById('scope-outside').getAttribute('aria-pressed'),'true');assert.equal(noSetting.querySelectorAll('.edge').length,63);
  await session(s=>{s.tabs.forEach(t=>delete t.hiddenNodes);s.scopeOutside='hide';s.tabs.forEach(t=>t.design.markdown=t.design.markdown.replace(/(## Scope\s*\n)true\b/g,'$1false'));});const allOutside=await open();assert.equal(allOutside.querySelectorAll('.node,.edge,.edge-label').length,0);assert.equal(allOutside.getElementById('empty').hidden,true);assert.ok(allOutside.getElementById('detail').textContent.length>0);setMode(allOutside,'show');assert.equal(allOutside.querySelectorAll('.node').length,25);
+ // The final show action queues a debounced write. Wait for its transaction
+ // before injecting invalid storage, so it cannot overwrite the invalid fixture.
+ await waitForExactRead(()=>allOutside.getElementById('app').dataset.saveState,'saved',{intervalMs:10});
  for(const invalidField of ['scopeOutside','dimOutside','hideOutside']){await session(s=>{s.tabs.forEach(t=>delete t.hiddenNodes);s.scopeOutside='show';delete s.dimOutside;delete s.hideOutside;s[invalidField]='invalid';});const invalid=await open();assert.equal(invalid.querySelectorAll('.tab').length,0);assert.match(invalid.getElementById('status-text').textContent,/復元できません/);}
  console.log(JSON.stringify({model:'DOM/IndexedDB',allNodes:25,outsideNodes:ids.size,allEdges:63,combinedEdges,checks:['two modes persist','hidden nodes, incident edges and labels removed','full positions/data/extents retained','hidden selection cleared; inside retained','Write combination','legacy boolean migration and precedence','all-outside and invalid settings']},null,2));
 }finally{windows.forEach(w=>w.close());}
