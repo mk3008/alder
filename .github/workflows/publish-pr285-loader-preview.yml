@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      SOURCE_SHA: a8c5ce82381de406fbaa59affe7996e522d15c2e
-      SOURCE_CI: "39905950483"
+      SOURCE_SHA: 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
+      SOURCE_CI: "39916817641"
     steps:
       - name: Require successful CI for the exact PR 285 head
         run: |
@@ -29,8 +29,9 @@ jobs:
       - name: Checkout reviewed Viewer source only
         uses: actions/checkout@v4
         with:
-          ref: a8c5ce82381de406fbaa59affe7996e522d15c2e
+          ref: 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
           path: source
+          fetch-depth: 0
           persist-credentials: false
       - name: Checkout existing public Pages assets
         uses: actions/checkout@v4
@@ -51,6 +52,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
+          git -C source merge-base --is-ancestor a8c5ce82381de406fbaa59affe7996e522d15c2e HEAD
+          git -C source merge-base --is-ancestor 66a0d375aa8a72c9cb75ae468abd659674a466a1 HEAD
           DEST="pages/preview/pr-285/$SOURCE_SHA"
           test ! -e "$DEST"
           mkdir -p "$DEST"
@@ -80,7 +83,7 @@ jobs:
           }
           const files=['index.html',...fs.readdirSync(path.join(dest,'assets')).map(n=>'assets/'+n)];
           const sha256=file=>createHash('sha256').update(fs.readFileSync(path.join(dest,file))).digest('hex');
-          fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 285',source:sha,kind:'isolated non-release Viewer preview',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
+          fs.writeFileSync(path.join(dest,'manifest.json'),JSON.stringify({review:'Draft PR 285',source:sha,requiredSourceAncestors:['a8c5ce82381de406fbaa59affe7996e522d15c2e','66a0d375aa8a72c9cb75ae468abd659674a466a1'],kind:'isolated non-release Viewer preview',files:Object.fromEntries(files.map(f=>[f,sha256(f)])),sources},null,2)+'\n');
           JS
       - name: Install Japanese review-image font
         run: |
@@ -151,7 +154,17 @@ jobs:
                 assert.deepEqual(errors,[]);
                 assert.ok(requests.every(x=>x.method==='GET'));
                 assert.ok(requests.some(x=>x.url.startsWith('https://raw.githubusercontent.com/mk3008/alder/'+process.env.SOURCE_SHA+'/')),'source commit fixed');
+                if(await page.locator('#status-close').isVisible())await page.locator('#status-close').click();
                 await page.screenshot({path:'preview-evidence/'+kind+'-'+width+'.png'});
+                if(kind==='json'){
+                  await page.setViewportSize({width:1280,height:960});
+                  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+                  await page.locator('.node.selected').scrollIntoViewIfNeeded();
+                  await page.evaluate(()=>{const n=document.querySelector('.node.selected').getBoundingClientRect(),v=document.querySelector('#viewport'),b=v.getBoundingClientRect();v.scrollTop+=n.top-b.top-240;});
+                  await page.screenshot({path:'preview-evidence/integrated-business-spacing-1280.png'});
+                }
+                if(kind==='states')await page.locator('.state-diagram').screenshot({path:'preview-evidence/integrated-state-spacing.png'});
+                assert.deepEqual(errors,[]);
                 results.push({kind,width,nodes,edges,selected:selected.name,view:kind==='states'?'states':kind==='checks'?'checks':'common-business-detail',pageErrors:errors,requests:requests.length});
               }finally{await context.close();}
             }
