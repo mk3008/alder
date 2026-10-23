@@ -6,6 +6,7 @@ import {parseDesign,type Design,type GraphNode} from './graph.ts';
 import {extractStateDeclarations} from '../../tools/document_storage/state-declaration.mjs';
 import type {StateDocument} from './state-projection';
 import {canonicalJSONGraph} from './json-layout.ts';
+import {readViewerDocument,type NormalizedDocument} from './viewer-document.ts';
 export type Run={kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
 export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:string[]};
 export type ActivityEntry={id:string;name:string;scope:boolean;roleId?:string|null;why:string;when:string;who:string;where:string;procedure:string;exception:string|null;result:string;problem:string|null;painLevel:string|null};
@@ -25,10 +26,16 @@ export async function readDesignFile(file:File):Promise<Design>{
  const source=await file.text();if(expectedJSON&&!isJSONSource(source))throw Error('JSONファイルの本文を確認してください。');return parseDocument(source);
 }
 export function parseDocument(source:string):Design{
+ return readViewerDocument(normalizeDocument(source));
+}
+/** MD -> typed viewing JSON; storage JSON -> the same viewing JSON. */
+export function normalizeDocument(source:string):NormalizedDocument{
  if(!isJSONSource(source)){
-  if(!/^## State Transitions$/m.test(source))return parseDesign(source);
-  const extracted=extractStateDeclarations(source);if(!extracted.declarations.length)return parseDesign(source);const design=parseDesign(extracted.markdown);
-  return {...design,markdown:source,objectStateTransitions:Object.fromEntries(extracted.declarations.map((model:unknown)=>{const m=model as {object:string};return [m.object,{model}];}))};
+  const extracted=/^## State Transitions$/m.test(source)?extractStateDeclarations(source):{markdown:source,declarations:[]};
+  const design=parseDesign(extracted.declarations.length?extracted.markdown:source);
+  return {data:{version:1,graph:design.graph,activityOrder:design.activityOrder,findings:design.findings,
+   ...(extracted.declarations.length?{states:Object.fromEntries(extracted.declarations.map((model:unknown)=>{const m=model as {object:string};return [m.object,{model}];}))}:{})},
+   original:{format:'markdown',text:source,sections:design.sections}};
  }
  if(new TextEncoder().encode(source).byteLength>MAX_LOCAL_JSON_BYTES)throw Error('ローカルJSONは8MiB以内にしてください。');
  const pkg=parseStrict(source.replace(/^\uFEFF/,''));
@@ -39,7 +46,7 @@ export function parseDocument(source:string):Design{
  const business=pkg.documents.filter((d:BD|Check)=>d.kind==='businessDesign') as BD[];
  if(business.length!==1)throw Error('このViewerは、単一JSON内のBusiness Designが1件の場合に対応します。');
  const bd=business[0];const roleName=(a:ActivityEntry)=>bd.roles?.find(r=>r.id===a.roleId)?.name??a.who;const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:roleName(a),where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
- return {sourceFormat:'json',markdown:source,sections:Object.fromEntries(nodes.map(n=>[n.id,''])),activityOrder:bd.activities.map(a=>a.id),
+ return {original:{format:'json',text:source,sections:Object.fromEntries(nodes.map(n=>[n.id,'']))},data:{version:1,activityOrder:bd.activities.map(a=>a.id),
   graph:canonicalJSONGraph({version:1,scope:bd.scope,nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
-  findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:f.targetIds,targetNames:f.targetIds.map(id=>[...bd.objects,...bd.activities].find(n=>n.id===id)!.name)})),json:{formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),diagnostics:result.diagnostics}};
+  findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:f.targetIds,targetNames:f.targetIds.map(id=>[...bd.objects,...bd.activities].find(n=>n.id===id)!.name)})),storage:{formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),diagnostics:result.diagnostics}}};
 }

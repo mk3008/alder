@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {openSourceAction} from './source-menu-browser.mjs';
+import {verifyDocumentHistory} from './test-document-history-browser.mjs';
 
 const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8');
 const pkg=JSON.parse(raw),bd=pkg.documents[0],checks=pkg.documents[1];
@@ -45,5 +46,5 @@ export async function verifyJSONDocuments(browser){
   }catch(error){await shot('failure').catch(()=>{});throw error;}finally{await context.close();writeFileSync(`${out}/smoke-results.json`,JSON.stringify({browser:browser.version(),results},null,2));}
  }
  const mdContext=await browser.newContext({viewport:{width:1280,height:960}}),mdPage=await mdContext.newPage();try{await mdPage.goto('http://127.0.0.1:4173/');await mdPage.waitForFunction(()=>!document.querySelector('#open').disabled);await mdPage.locator('#fallback').setInputFiles({name:'legacy.md',mimeType:'text/markdown',buffer:readFileSync('web/authorities/business-design.md')});await mdPage.locator('.node').first().waitFor();if(await mdPage.locator('#check-followup').isVisible())await mdPage.locator('#check-followup-later').click();await mdPage.locator('#node-list-toggle').click();await mdPage.locator('#node-list .node-navigate').first().click();await mdPage.locator('#node-list-close').click();if(!await mdPage.locator('#formattedMarkdownDrawer').isVisible())await mdPage.locator('#drawer').click();assert.equal(await mdPage.locator('.json-detail').count(),0);assert.ok((await mdPage.locator('#detail').innerText()).includes('Why'));await mdPage.screenshot({path:`${out}/legacy-md-detail-1280.png`});}finally{await mdContext.close();}
- return {browser:browser.version(),results,legacyMDComparisonScreenshot:true};
+ return {browser:browser.version(),results,legacyMDComparisonScreenshot:true,history:await verifyDocumentHistory(browser)};
 }

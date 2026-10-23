@@ -13,7 +13,8 @@ import {clampZoom,installTouchGestures} from './touch-gestures';
 import {deploymentContext} from './deployment';
 import {createElement,icons,UserRound,FolderOpen,PanelRight,Moon,Sun,RefreshCw,Plus,Minus,X,Box,FileText,FolderSymlink,Text,LockKeyhole,LockKeyholeOpen,PanelLeft,Eye,EyeOff,ChevronDown,ChevronRight,Settings,Share2,RotateCcw,ImageDown,ClipboardCopy,ListChecks,CircleQuestionMark} from 'lucide';
 import {validateGraph,findingsFromSource} from './graph';
-import {parseDocument as parseDesign,readDesignFile,isJSONSource} from './json-document';
+import {parseDocument as parseDesign,isJSONSource} from './json-document';
+import {loadDocumentFile,loadDocumentURL,loadDocumentText} from './document-loader';
 import {jsonDetail} from './json-view';
 import {formattedMarkdown,detailHeading} from './markdown';
 import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
@@ -49,7 +50,7 @@ function urlHistoryChrome(){
 async function openHistoryURL(url:string){
  if(restoring||opening||documentSaving)return;
  if(state.document?.source?.kind==='url'&&state.document.source.url===url){capture();state.active=state.tabs[0].key;render();void checkSourceUpdate();return;}
- opening=true;render();try{const design=parseDesign(await fetchMarkdown(url));const tab=reconcile({key:crypto.randomUUID(),name:new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:{kind:'url',url},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]},design);await openDocument(tab);}catch(e){if(!(e instanceof DocumentSaveError))status('履歴のURLを開けません。現在の表示は保持しています: '+(e as Error).message,'error');}finally{opening=false;render();}
+ opening=true;render();try{const design=await loadDocumentURL(url);const tab=reconcile({key:crypto.randomUUID(),name:new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:{kind:'url',url},design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]},design);await openDocument(tab);}catch(e){if(!(e instanceof DocumentSaveError))status('履歴のURLを開けません。現在の表示は保持しています: '+(e as Error).message,'error');}finally{opening=false;render();}
 }
 const sourceDropdown=installDropdown($<HTMLButtonElement>('open-menu-toggle'),sourceMenu);
 const checksDropdown=installDropdown($<HTMLButtonElement>('open-checks'),checksMenu,()=>{const t=current();$('check-open-sample').hidden=!t||!isSample(t);$<HTMLButtonElement>('check-close').disabled=!t?.checks;});
@@ -351,7 +352,7 @@ async function openDocument(tab:Tab){
  const previous=state.document;
  const next=replaceWorkspace(state,tab);if(!previous){capture();state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);render();persist();return true;}await saveDocument(()=>next,()=>{state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);});return true;
 }
-async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=await readDesignFile(file);const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}
+async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=await loadDocumentFile(file);const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}
 $('empty').onpointerdown=e=>e.stopPropagation();
 for(const id of ['open','open-url','open-text'])$('guide-'+id).onclick=()=>$(id).click();
 $('open-sample').onpointerdown=e=>e.stopPropagation();
@@ -378,11 +379,11 @@ async function replace(t:Tab,d:ReturnType<typeof parseDesign>,handle=t.handle,ed
 async function reselect(t:Tab){
   if(!isCurrentDocument(t))return;
   const picker=(window as PickerWindow).showOpenFilePicker;
-  if(picker){const [h]=await picker({multiple:false});if(h)await replace(t,await readDesignFile(await h.getFile()),h);}
+  if(picker){const [h]=await picker({multiple:false});if(h)await replace(t,await loadDocumentFile(await h.getFile()),h);}
   else await new Promise<void>((resolve,reject)=>{
     const input=document.createElement('input');input.type='file';input.accept='.md,.markdown,.json';input.hidden=true;document.body.append(input);
     const done=()=>{input.remove();resolve();};input.oncancel=done;
-    input.onchange=async()=>{try{const f=input.files?.[0];if(f)await replace(t,await readDesignFile(f));done();}catch(e){input.remove();reject(e);}};input.click();
+    input.onchange=async()=>{try{const f=input.files?.[0];if(f)await replace(t,await loadDocumentFile(f));done();}catch(e){input.remove();reject(e);}};input.click();
   });
 }
 type PermissionHandle=FileSystemFileHandle & {queryPermission:(o:{mode:'read'})=>Promise<PermissionState>};
@@ -391,12 +392,12 @@ $('refresh').onclick=async()=>{
 
   if(sourceTarget===t.key)hideSource();const updatingDocument=documentKey(t);updating.add(updatingDocument);render();
   try{
-    if(t.source?.kind==='url'){const d=parseDesign(await fetchDocumentSource(t.source.url));await replace(t,d);return;}
+    if(t.source?.kind==='url'){const d=await loadDocumentURL(t.source.url);await replace(t,d);return;}
     if(!t.handle){await reselect(t);return;}
     const permission=await (t.handle as PermissionHandle).queryPermission({mode:'read'});
     if(!isCurrentDocument(t))return;
     if(permission!=='granted'){status('読取権限がありません。同じMarkdownを再選択してください。','warning');await reselect(t);return;}
-    await replace(t,await readDesignFile(await t.handle.getFile()));
+    await replace(t,await loadDocumentFile(await t.handle.getFile()));
   }catch(e){if(isCurrentDocument(t)&&(e as Error).name!=='AbortError'&&!(e instanceof DocumentSaveError))status('更新失敗。旧表示を保持しています: '+(e as Error).message,'error');}
   finally{updating.delete(updatingDocument);render();}
 };
@@ -494,7 +495,7 @@ async function openSharedSource(requestedHash=location.hash){
       void checkSourceUpdate();return;
     }
     sharedSourceAbort=new AbortController();opening=true;render();
-    const design=parseDesign(await fetchDocumentSource(url,sharedSourceAbort.signal));
+    const design=await loadDocumentURL(url,sharedSourceAbort.signal);
     if(token!==sharedSourceToken)return;
     const tab=reconcile({key:crypto.randomUUID(),name:new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);
     if(!await openDocument(tab))return;
@@ -526,9 +527,8 @@ $('source-submit').onclick=async()=>{
   try{
     const url=sourceMode==='url'?new URL(sourceURL().value.trim()).href:sourceURL().value.trim();
     if(mode==='url'&&state.document?.source?.kind==='url'&&state.document.source.url===url){state.active=state.tabs[0].key;hideSource();render();void checkSourceUpdate();return;}
-    const raw=mode==='url'?await fetchDocumentSource(url,sourceAbort.signal):sourceText().value;
-    if(new TextEncoder().encode(raw).byteLength>2*1024*1024)throw Error('本文は2MiB以内にしてください。');
-    const design=parseDesign(raw);if(token!==sourceToken)return;
+    const design=mode==='url'?await loadDocumentURL(url,sourceAbort.signal):loadDocumentText(sourceText().value);
+    const raw=design.markdown;if(token!==sourceToken)return;
     const tab=reconcile({key:crypto.randomUUID(),name:mode==='text'?(design.sourceFormat==='json'?'入力したJSON':'入力したMarkdown'):new URL(url).pathname.split('/').pop()||'URLのMarkdown',source:mode==='text'?{kind:'text'}:{kind:'url',url},design,positions:Object.create(null),scroll:[0,0],zoom:1,viewInset:[40,0]},design);
     if(!await openDocument(tab))return;status('');if(mode==='text')newTextDraft=raw;
     hideSource();
