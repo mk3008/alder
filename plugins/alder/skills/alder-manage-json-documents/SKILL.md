@@ -8,7 +8,7 @@ license: MIT
 
 新規草案は[JSON構造契約](references/json-native-contract.ja.md)の候補0.4で作成する。例外をID付き要素として定義し、状態操作はexceptionIdで参照する。説明文の装飾から例外を認定しない。旧JSON／MDは互換入力または明示移行だけに使い、JSONから仮MDを生成しない。
 
-[JSON操作ガイド](references/plugin-json-authoring.ja.md)を読み、操作を選ぶ。実際の導入版は`../../plugin.json`、同梱ソースの版/hashは[provenance](references/provenance.json)で確認する。候補契約は`alder-document-package/0.1（BD/Check）、0.2（部分定義の状態遷移）、0.3（Role ID/名称/保存色）`。Plugin版やGraph v1と混同しない。
+[JSON操作ガイド](references/plugin-json-authoring.ja.md)を読み、操作を選ぶ。実際の導入版は`../../plugin.json`、同梱ソースの版/hashは[provenance](references/provenance.json)で確認する。候補契約は`alder-document-package/0.1（BD/Check）、0.2（部分定義の状態遷移）、0.3（Role ID/名称/保存色）、0.4（構造化した例外とID参照）`。Plugin版やGraph v1と混同しない。
 
 1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。JSONの明示指定か、既存正本のformatを確認する。MDが選ばれている場合は元のMD Skillへ戻り、形式を勝手に変更しない。
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。
