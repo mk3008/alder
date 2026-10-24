@@ -20,6 +20,6 @@
 .concept-card-surface{background:linear-gradient(var(--graph-concept-heading,#edf2f5) 0 34px,var(--graph-object-fill,#e4f4eb) 34px);background-clip:padding-box}
 [data-theme=dark] .concept-card-surface{--graph-object-fill:#1d4137;--graph-object-border:#538f78;--graph-concept-heading:#233440}
 /* The common border color and width must paint on the HTML surface too. */
-.node.review-neighbor,.node.object.review-neighbor,.graph-shape.review-neighbor .graph-card-surface{border-color:var(--review-link);border-width:var(--graph-neighbor-width)}
+:root .node.review-neighbor,:root .node.object.review-neighbor,.graph-shape.review-neighbor .graph-card-surface{border-color:var(--review-link);border-width:var(--graph-neighbor-width)}
 /* Chromium's transient tap rectangle is separate from selection/focus. */
 .node,.graph-shape,.concept-select{-webkit-tap-highlight-color:transparent}
