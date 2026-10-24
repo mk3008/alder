@@ -1,13 +1,16 @@
-# Why Alder uses implementation to validate requirements
+# Why Alder starts with business agreement and delegates implementation
 
 [Back to Alder](../README.md) · [Apply it to a product](adoption.md)
 
+Alder starts with agreement between the requester and designer on **what the business must accomplish and what counts as success**. Business Design expresses the requirements in terms the requester can understand; human-reviewed Check Items make conditions and expected results explicit. These documents are needed for human communication whether or not AI is used. Together with relevant system requirements, existing constraints, and any UI references, they also become inputs for AI coding. The goal is to delegate technical concretization, implementation, testing, and evidence mapping while returning unresolved business decisions to humans.
+
+State-transition views help check business flows and permitted changes of state. Conceptual data models help examine business units, identity, optionality, and multiplicity. Both are ways to expose ambiguity for human agreement, not mandatory independent artifacts or prescriptions for a physical schema. The current workflow still includes human acceptance after implementation; minimizing routine human intervention beyond requirements agreement is a longer-term goal.
 
 ## Business Design must support agreement with the requester
 
 Business Design is the basis for agreement with users/requesters. **Its prose must be written in the language the requester actually uses**, so they can understand the content, identify errors, and agree to its meaning themselves. It is not sufficient for only the implementer or AI to understand it. Headers and section names may remain English; see the [authoring guidance](adoption.md#language-for-agreement).
 
-The Plugin/Skills maintain structured JSON as the source of truth. People use the Viewer to follow the whole work, details, inputs/outputs, explicit state transitions and Check expectations, then request corrections and decide business meaning. They do not need to read or edit JSON or maintain IDs. The Viewer is a review surface, not another source or an approval mechanism. Existing Markdown remains input compatibility; new features use JSON. JSON/state support is candidate functionality and is not yet published with the stable Plugin or production Viewer. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
+The Plugin/Skills maintain structured JSON as the source of truth. People use the Viewer to follow the whole work, details, inputs/outputs, explicit state transitions and Check expectations, then request corrections and decide business meaning. They do not need to read or edit JSON or maintain IDs. The Viewer is a review surface, not another source or an approval mechanism. Existing Markdown remains input compatibility; new features use JSON. JSON/state display requires a compatible Viewer; publishing the Plugin alone does not update the production Viewer. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
 
 
 ## Business quality is business meaning, not a separate NFR bucket
@@ -34,7 +37,7 @@ Implementation makes ambiguity observable: code, DDL, tests, and decision record
 
 Implementation is observation material for requirements validation; it does not become the business source of truth. A documented assumption or passing test does not constitute business approval. The loop follows specification to implementation and implementation back to specification.
 
-A light pre-implementation check can catch obvious contradictions or blockers. Alder's main use here is reviewing choices after implementation has made them concrete. The best division between pre- and post-implementation review remains unverified; design review is not dismissed.
+Before implementation, examine Business Design and Check Items for missing or contradictory business meaning; use state-transition and conceptual views when they help requesters and designers confirm the meaning. After implementation, independent review provides another way to inspect choices made concrete in code, DDL, and tests. The two checks complement each other: review of the implementation does not displace the primary goal of human agreement on requirements. The best allocation of effort between them remains unverified.
 
 ## Where detailed design fits
 
