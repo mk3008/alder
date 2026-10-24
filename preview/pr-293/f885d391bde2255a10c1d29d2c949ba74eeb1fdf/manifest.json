@@ -1,0 +1,11 @@
+{
+  "source_sha": "f885d391bde2255a10c1d29d2c949ba74eeb1fdf",
+  "files": {
+    "index.html": "a4b212c27c31a18f5f5fdeee3a4310e45ea49db1f74a4a4cde69a51a3e687361",
+    "er-routing.js": "f5733cbd5b98c6ac81b62953b62e0a0306ffcf00dc9342034cbe9cb4798a4952",
+    "mobile.html": "adee74ce7309c41d84be28c258d76c0b38c7157a3696b769c41fa1cfdbc13c4e",
+    "canvas-provenance.json": "9994f9815c1c16ab4efb64c4775d7789009f1af47180d60fbd97f7e876980765",
+    "canvas/node-drag.js": "9877f0192e4e5ea03ad1d8ddd3030b88ff28661ab622fb485cdd2268add9ce9a",
+    "canvas/touch-gestures.js": "97639ba928cdbd7c1f4f20f7c9a6e604326b5297dd1bc0f85dcb5f4d722d60b7"
+  }
+}
