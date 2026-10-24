@@ -1,0 +1,23 @@
+{
+  "source": "a3e84478e41f0d28ad9d00403dcf76a403c49513",
+  "files": [
+    "index.html",
+    "LICENSE.txt",
+    "THIRD_PARTY_LICENSES.txt",
+    "assets/index-CB-_0xlF.js",
+    "assets/index-BSx5TsAo.css",
+    "assets/canvas-toolbar-JZS1kHdY.css",
+    "concept-preview/graph-selection.css",
+    "concept-preview/er-routing.js",
+    "concept-preview/index.html",
+    "concept-preview/neighborhood.js",
+    "concept-preview/canvas/touch-gestures.js",
+    "concept-preview/canvas/node-drag.js"
+  ],
+  "validation": {
+    "build": "pass",
+    "targetedDOM": "pass",
+    "browser": "not run",
+    "fullCI": "see source commit workflow; legacy UI preflight migration pending"
+  }
+}
