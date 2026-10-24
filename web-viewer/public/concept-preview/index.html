@@ -83,6 +83,8 @@ function draw(s){
  for(const l of routing.labels){s.svg.append(svgNode('rect',{x:l.left,y:l.top,width:l.w,height:l.h,fill:'#fbfcfd','pointer-events':'none'}));s.svg.append(svgNode('text',{class:'endpoint-count'+(related.has(l.edge)?' review-related':''),'data-edge':l.edge,'data-table':l.table,x:l.x,y:l.y,'text-anchor':l.anchor,'pointer-events':'none'},l.count));}
  s.warning.textContent=routing.routes.some(r=>r.unrouted)?'接続線を確保できない配置です。概念間を広げてください。':'';
  for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'node table'+(s.stage.id==='overview'?' read':'')+(s.selected===id?' selected':neighbors.has(id)?' review-neighbor':''),'data-node':id,'data-table':id,role:'group','aria-label':t.name});
+ // Use the business graph's HTML shadow, including spread, rather than an SVG filter.
+ const glow=svgNode('foreignObject',{class:'concept-selection-glow',x:b.x-32,y:b.y-32,width:b.w+64,height:b.h+64,'aria-hidden':'true','pointer-events':'none'}),surface=document.createElement('div');surface.style.width=b.w+'px';surface.style.height=b.h+'px';glow.append(surface);g.append(glow);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);
  body.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));body.append(svgNode('path',{class:'cap',d:`M${b.x+1} ${b.y+1}h${b.w-2}v33h-${b.w-2}Z`}));body.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));
  t.fields.forEach(([,name],i)=>body.append(svgNode('text',{x:b.x+12,y:b.y+56+i*25},name)));
