@@ -10,7 +10,13 @@ export function sharedRun(a,b,c,d,gap=0.01){
  if(a.y===b.y&&c.y===d.y)return Math.abs(a.y-c.y)<gap&&overlap(a.x,b.x,c.x,d.x);
  return false;
 }
+function intersects(a,b,c,d){
+ const v=a.x===b.x?{a,b}:{a:c,b:d},h=a.x===b.x?{a:c,b:d}:{a,b};
+ return v.a.x===v.b.x&&h.a.y===h.b.y&&v.a.x>=Math.min(h.a.x,h.b.x)&&v.a.x<=Math.max(h.a.x,h.b.x)&&h.a.y>=Math.min(v.a.y,v.b.y)&&h.a.y<=Math.max(v.a.y,v.b.y);
+}
 function sides(a,b,kind){
+ // Reference links run outside the staircase, leaving its left landings free.
+ if(kind==='reference'&&b.y>=a.y+a.h+24)return ['right','right'];
  // Downward staircase edges enter the child's left side. A vertical pair
  // keeps a horizontal landing for its endpoint count instead of a bottom/top Z.
  if(kind.startsWith('down')&&b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
@@ -39,7 +45,7 @@ function orthogonal(start,end,rects,reserved,lanes){
  const pass=(a,b)=>{const key=a<b?a+':'+b:b+':'+a;if(allowed.has(key))return allowed.get(key);const p=point(a),q=point(b),ok=!rects.some(r=>blocked(p,q,r))&&!reserved.some(s=>sharedRun(p,q,s.a,s.b,GAP));allowed.set(key,ok);return ok;};
  cost.set(source*3,0);push(heap,[0,source*3]);let last;
  while(heap.length){const [distance,key]=pop(heap);if(distance!==cost.get(key))continue;const n=Math.floor(key/3),direction=key%3;if(n===target){last=key;break;}const x=n%width,y=Math.floor(n/width),p=point(n);
-  for(const [nx,ny,dir]of [[x-1,y,1],[x+1,y,1],[x,y-1,2],[x,y+1,2]]){if(nx<0||nx>=width||ny<0||ny>=yy.length)continue;const other=node(nx,ny),q=point(other);if((other!==target&&rects.some(r=>inside(q,r)))||!pass(n,other))continue;const next=other*3+dir,value=distance+Math.abs(p.x-q.x)+Math.abs(p.y-q.y)+(direction&&direction!==dir?20:0);if(value>=(cost.get(next)??Infinity))continue;cost.set(next,value);previous.set(next,key);push(heap,[value,next]);}
+  for(const [nx,ny,dir]of [[x-1,y,1],[x+1,y,1],[x,y-1,2],[x,y+1,2]]){if(nx<0||nx>=width||ny<0||ny>=yy.length)continue;const other=node(nx,ny),q=point(other);if((other!==target&&rects.some(r=>inside(q,r)))||!pass(n,other))continue;const next=other*3+dir,value=distance+Math.abs(p.x-q.x)+Math.abs(p.y-q.y)+(direction&&direction!==dir?20:0)+reserved.filter(s=>intersects(p,q,s.a,s.b)).length*10000;if(value>=(cost.get(next)??Infinity))continue;cost.set(next,value);previous.set(next,key);push(heap,[value,next]);}
  }
  if(last===undefined)return null;
  const path=[];for(let k=last;k!==undefined;k=previous.get(k))path.push(point(Math.floor(k/3)));return path.reverse();
@@ -51,7 +57,17 @@ export function routeER(boxes,edges){
  // Allocate independent ports near the safe edge, not across the entire
  // bottom edge: a far-right outlet may point straight into the next card.
  const allocated=[];
- for(const p of [...ports].sort((a,b)=>Number(a.side==='left'||a.side==='right')-Number(b.side==='left'||b.side==='right'))){
+ // Order independent outlets by the opposite endpoint. Long downward links
+ // take the left outlet so they can pass left of the nearer staircase link.
+ // On a side, upper sources land above lower sources instead of crossing them.
+ const opposite=p=>{const e=active[p.edge],b=boxes.get(p.table===e.from?e.to:e.from);return{x:b.x+b.w/2,y:b.y+b.h/2};};
+ const portOrder=(a,b)=>{
+  const av=a.side==='left'||a.side==='right',bv=b.side==='left'||b.side==='right';
+  if(av!==bv)return Number(av)-Number(bv);
+  if(a.table===b.table&&a.side===b.side){const aa=opposite(a),bb=opposite(b);return av?aa.y-bb.y:a.side==='bottom'?bb.y-aa.y:aa.x-bb.x;}
+  return a.table.localeCompare(b.table)||a.side.localeCompare(b.side)||a.edge-b.edge;
+ };
+ for(const p of [...ports].sort(portOrder)){
   const b=boxes.get(p.table),vertical=p.side==='left'||p.side==='right',span=vertical?b.h:b.w;
   const offsets=[];for(let offset=22;offset<=span-22;offset+=36)offsets.push(offset);
   const candidates=offsets.map(offset=>{
@@ -66,7 +82,7 @@ export function routeER(boxes,edges){
  const rects=[...[...boxes.values()].map(b=>({x:b.x-8,y:b.y-8,w:b.w+16,h:b.h+16})),...ports.map(p=>({x:p.label.left-3,y:p.label.top-3,w:p.label.w+6,h:p.label.h+6}))];
  const leads=ports.map(p=>({...segment(p.p,p.q),edge:p.edge})),routed=[],lanes=ports.map(p=>p.q);let width=0,height=0;
  const length=e=>Math.abs(e.ports[0].q.x-e.ports[1].q.x)+Math.abs(e.ports[0].q.y-e.ports[1].q.y);
- for(const e of [...active].sort((a,b)=>length(a)-length(b)||a.id-b.id)){const [a,b]=e.ports,reserved=[...leads,...routed.flatMap(r=>r.segments)];const middle=a.portConflict||b.portConflict?null:orthogonal(a.q,b.q,rects,reserved,lanes);
+ for(const e of [...active].sort((a,b)=>length(a)-length(b)||a.id-b.id)){const [a,b]=e.ports,reserved=[...leads.filter(p=>p.edge!==e.id),...routed.flatMap(r=>r.segments)];const middle=a.portConflict||b.portConflict?null:orthogonal(a.q,b.q,rects,reserved,lanes);
   // Never silently reuse a connector when tables leave no route. Keep each
   // endpoint and its count visible and flag the unresolved connection.
   const points=middle?simplify([a.p,...middle,b.p]):null,segments=points?points.slice(1).map((p,i)=>segment(points[i],p)):[];

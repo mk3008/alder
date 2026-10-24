@@ -4,8 +4,18 @@ const code=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').split
 const {tables,edges,compactInitial}=vm.runInNewContext('const tables='+code+';({tables,edges,compactInitial})');
 const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.max(220,...t.fields.map(([,n])=>n.length*14+24)),h:44+t.fields.length*25}]));
 const initial=compactInitial(sizes).overview,results=[];
+const staircase=routeER(new Map(Object.entries(initial).map(([id,p])=>[id,{...p,...sizes.get(id)}])),edges);
+const branches=staircase.routes.filter(e=>e.from==='request');
+assert(branches.find(e=>e.to==='receipt').ports[0].p.x<branches.find(e=>e.to==='version').ports[0].p.x,'long link must leave left of the nearer link');
+const incoming=staircase.routes.filter(e=>e.to==='line');
+assert.equal(incoming.find(e=>e.from==='item').ports[1].side,'right','reference uses the outside of the staircase');
+assert.equal(incoming.find(e=>e.from==='receipt').ports[1].side,'left');
+function crosses(a,b){const v=a.a.x===a.b.x?a:b,h=v===a?b:a;return v.a.x===v.b.x&&h.a.y===h.b.y&&v.a.x>=Math.min(h.a.x,h.b.x)&&v.a.x<=Math.max(h.a.x,h.b.x)&&h.a.y>=Math.min(v.a.y,v.b.y)&&h.a.y<=Math.max(v.a.y,v.b.y);}
+let crossings=0;for(let i=0;i<staircase.routes.length;i++)for(let j=i+1;j<staircase.routes.length;j++)for(const a of staircase.routes[i].segments)for(const b of staircase.routes[j].segments)if(crosses(a,b))crossings++;
+assert.equal(crossings,0,'initial staircase must have no relation crossings');
+assert(staircase.routes.every(e=>!e.unrouted));
 for(const [dx,y] of [[0,388],[30,388],[60,388],[0,730],[0,850],[-100,850],[120,850]]){
- const positions={...initial,receipt:{x:initial.receipt.x+dx,y},line:{x:initial.receipt.x+dx+80,y:y+sizes.get('receipt').h+36}};
+ const positions={...initial,receipt:{x:500+dx,y},line:{x:500+dx+80,y:y+sizes.get('receipt').h+36}};
  const boxes=new Map(Object.entries(positions).map(([id,p])=>[id,{...p,...sizes.get(id)}])),r=routeER(boxes,edges);
  assert.equal(r.routes.length,6);assert.equal(r.labels.length,12);assert(r.routes.every(e=>!e.unrouted),'missing route '+dx+','+y);
  const branches=r.routes.filter(e=>e.from==='request');assert.equal(branches.length,2);assert(branches.every(e=>e.ports[0].side==='bottom'));assert.notDeepEqual(branches[0].ports[0].p,branches[1].ports[0].p,'outlets must not merge');

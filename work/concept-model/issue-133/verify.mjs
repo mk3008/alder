@@ -12,7 +12,7 @@ assert.deepEqual(Array.from(stages.find(s=>s.id==='approve').ids),['request']);
 const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.max(220,...t.fields.map(([,n])=>n.length*14+24)),h:44+t.fields.length*25}]));
 const initial=compactInitial(sizes),summary=[];
 const whole=initial.overview;
-for(const [parent,child] of [['request','receipt'],['receipt','line']]){
+for(const [parent,child] of [['preparation','request'],['request','version'],['version','item'],['item','receipt'],['receipt','line']]){
  assert(whole[child].x>whole[parent].x,'receipt branch must advance right');
  assert(whole[child].y>=whole[parent].y+sizes.get(parent).h+36,'receipt branch must step below actual card height');
 }
