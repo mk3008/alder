@@ -35,3 +35,14 @@
 例の自己点検では、停止の決定力、停止なしの下での緊急優先、100の境界と通知未決、保留の独立した処理差を表と説明から追えることを確認した。同一Agentの机上点検であり、独立Freshレビュー、実際の人間による理解・誤読率・所要時間改善、実クライアントのSkill選択・生成結果、GitHub実描画は未検証。人間にはこの区別と不問の根拠が追えるかをレビューいただく。
 
 正式採用・merge/releaseは行わない。#109全体の代表例必要十分性や実際の理解効果は本検証で完了扱いにしない。
+
+## 検証実行（2026-10-24 UTC）
+
+- 有限同値性と4変異：5 tests成功。
+- Package/workflow/release-validation/export/reference/JSON Plugin：101 tests成功。
+- JSON storage/native/authoring/states/roles：Node v24.19.0、76 tests成功。
+- Business Graph：Python 3.12、52 tests成功。
+- 4 Skillの配布参照39ファイル：exporter `--check`成功。原典は公開確認済み `17ab2f046d6b25c5001dba158c4a82a1f38132ae`。この原典の更新を4つの既存provenanceから再生成し、その他の原典・runtimeのbytesは維持。
+- `git diff --check`成功。最初のPackage試行は未取得のhistorical fixtureと未再生成bundleで失敗。CIと同じ固定fixtureをfetchし、公開原典から再export後に再実行。残った既存説明句の回帰1件は原則に従う説明へ修復し、101件で再確認した。テスト期待値の削除・緩和なし。
+
+方針変更なし。返却前に#288のDone 1/2/4（共通正本・両経路・同値/誤圧縮検出・配布整合）を照合。Done 3は具体例の机上自己点検を提示し実際の人間理解は未検証、Done 5はDraft PRで返却し人間の正式判断を維持する。既存サンプル/Check原典を変更せず、独立ID/レビュー状態/根拠/共有参照/Test証拠の移動・削除なし。最終commit CIはPR checksを参照する。
