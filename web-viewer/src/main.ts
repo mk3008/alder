@@ -1,4 +1,4 @@
-import {cameraZoom,ZOOM_FACTOR} from './graph-camera';
+import {cameraZoom,ZOOM_FACTOR,cameraOrigin} from './graph-camera';
 import {graphFocus} from './graph-focus';
 import {graphMarkers,paintGraphException} from './graph-visuals';
 import {installViewerShell} from './viewer-shell';
@@ -301,8 +301,7 @@ function layoutCanvas(t:Tab){
   const minimum:Point=[nodeMinimum[0]<0||previous[0]>0?Math.min(nodeMinimum[0],edgeMinimum[0]):0,nodeMinimum[1]<0||previous[1]>0?Math.min(nodeMinimum[1],edgeMinimum[1]):0];
   // Grow only the camera's negative reserve. Compensating scroll keeps every
   // untouched card/path at the same screen position when the origin expands.
-  const growth:Point=[Math.ceil(Math.max(0,(minimum[0]<0?24-minimum[0]:0)-previous[0])*t.zoom),Math.ceil(Math.max(0,(minimum[1]<0?24-minimum[1]:0)-previous[1])*t.zoom)];
-  const origin:Point=[previous[0]+growth[0]/t.zoom,previous[1]+growth[1]/t.zoom],shifted=growth.some(Boolean);
+  const {growth,origin}=cameraOrigin(previous,minimum,t.zoom),shifted=growth.some(Boolean);
   // Integer screen-pixel additions avoid native scroll rounding causing a jump.
   if(shifted){t.canvasOrigin=origin;t.scroll=[t.scroll[0]+growth[0],t.scroll[1]+growth[1]];markChanged();persist(180,false);}
   const width=Math.ceil(Math.max(1400,edgeExtent[0],(cameraViewportWidth()+t.scroll[0])/t.zoom-inset[0]*2-origin[0],...positions.map(p=>p[0]+340)));

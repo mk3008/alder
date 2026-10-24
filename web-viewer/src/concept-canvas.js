@@ -3,7 +3,7 @@ import {routeER} from './concept-routing.js';
 import {matrixPlan} from './matrix-layout.ts';
 import {graphFocus} from './graph-focus.ts';
 import {cardSurface} from './diagram-canvas.ts';
-import {cameraZoom,initialCamera,ZOOM_FACTOR} from './graph-camera.ts';
+import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin} from './graph-camera.ts';
 import './graph-presentation.css';
 import './canvas-toolbar.css';
 import {conceptNeighborhood} from '../public/concept-preview/neighborhood.js';
@@ -40,9 +40,10 @@ const initial=compactInitial(sizes),states=[];
 function save(s){if(s.stage.id!=='overview')return;try{localStorage.setItem(storageKey,JSON.stringify({positions:Object.fromEntries(s.positions),zoom:s.zoom,locked:s.locked}));}catch{}}
 function layoutCanvas(s){
  const zoom=s.stage.id==='overview'?s.zoom:1;
- s.svg.style.width=s.width+'px';s.svg.style.height=s.height+'px';s.svg.style.transform=`scale(${zoom})`;s.svg.style.transformOrigin='0 0';
- s.world.style.width=Math.ceil(Math.max(s.width*zoom,s.host.clientWidth+160))+'px';
- s.world.style.height=Math.ceil(Math.max(s.height*zoom,s.host.clientHeight)+160)+'px';
+ const minimum=[Math.min(0,...[...s.boxes.values()].map(b=>b.x)),Math.min(0,...[...s.boxes.values()].map(b=>b.y))],{origin,growth}=cameraOrigin(s.origin??[0,0],minimum,zoom);s.origin=origin;
+ s.svg.setAttribute('viewBox',`${-origin[0]} ${-origin[1]} ${s.width+origin[0]} ${s.height+origin[1]}`);s.svg.style.width=(s.width+origin[0])+'px';s.svg.style.height=(s.height+origin[1])+'px';s.svg.style.transform=`scale(${zoom})`;s.svg.style.transformOrigin='0 0';
+ s.world.style.width=Math.ceil(Math.max((s.width+origin[0])*zoom,s.host.clientWidth+160))+'px';s.world.style.height=Math.ceil(Math.max((s.height+origin[1])*zoom,s.host.clientHeight)+160)+'px';
+ if(growth.some(Boolean))s.host.scrollTo(s.host.scrollLeft+growth[0],s.host.scrollTop+growth[1]);
  if(s.stage.id!=='overview'){s.world.style.width=s.width+'px';s.world.style.height=s.height+'px';s.host.style.height=s.height+2+'px';}
  s.zoomLabel.textContent=Math.round(zoom*100)+'%';s.lockButton.setAttribute('aria-label','配置ロック');s.lockButton.title=s.locked?'配置をロック中。項目の上から図をスクロールできます。':'配置ロックを解除中。項目をドラッグして配置を変更できます。';s.lockButton.setAttribute('aria-pressed',String(s.locked));
  s.host.dataset.layoutLocked=String(s.locked);
@@ -65,7 +66,7 @@ function draw(s){
  }
  layoutCanvas(s);parent.postMessage({type:'alder-concept-rendered'},location.origin);
 }
-function changeNode(s,id,p){s.positions.set(id,{x:Math.max(24,p[0]),y:Math.max(28,p[1])});draw(s);}
+function changeNode(s,id,p){s.positions.set(id,{x:p[0],y:p[1]});draw(s);}
 function activeStage(){const u=new URL(location.href);if(u.searchParams.get('view')!=='activities')return'overview';const match=location.hash.match(/^#concept-([a-z]+)-/);const id=u.searchParams.get('activity')||match?.[1]||location.hash.slice(1);return activityDefinitions.some(a=>a.id===id)?id:'apply';}
 function capture(focus){return{page:[scrollX,scrollY],focus,views:states.map(s=>({id:s.stage.id,scroll:[s.host.scrollLeft,s.host.scrollTop],zoom:s.zoom,locked:s.locked,selected:s.selected}))};}
 function applyLocation(){
@@ -84,7 +85,7 @@ function navigateDetail(s,id){s.selected=id;draw(s);save(s);parent.postMessage({
 function zoomBy(s,factor){s.touch?.cancel();s.drag?.cancel();const next=cameraZoom({zoom:s.zoom,scroll:[s.host.scrollLeft,s.host.scrollTop]},factor);s.zoom=next.zoom;layoutCanvas(s);s.host.scrollTo(...next.scroll);save(s);}
 function installCanvas(s){
  const host=s.host;let pointer,pan;
- s.drag=createNodeDrag({read:()=>!s.locked?{key:s.stage.id,zoom:s.zoom,scroll:[host.scrollLeft,host.scrollTop],offset:[0,0]}:undefined,position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},connected:id=>!!s.svg.querySelector(`[data-node="${id}"]`),bounds:()=>{const r=host.getBoundingClientRect();return{left:r.left+host.clientLeft,top:r.top+host.clientTop,right:r.left+host.clientLeft+host.clientWidth,bottom:r.top+host.clientTop+host.clientHeight};},change:(id,p)=>changeNode(s,id,p),pan:d=>{host.scrollLeft+=d[0];host.scrollTop+=d[1];},requestFrame:cb=>requestAnimationFrame(cb),cancelFrame:id=>cancelAnimationFrame(id)});
+ s.drag=createNodeDrag({read:()=>!s.locked?{key:s.stage.id,zoom:s.zoom,scroll:[host.scrollLeft,host.scrollTop],offset:s.origin??[0,0]}:undefined,position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},connected:id=>!!s.svg.querySelector(`[data-node="${id}"]`),bounds:()=>{const r=host.getBoundingClientRect();return{left:r.left+host.clientLeft,top:r.top+host.clientTop,right:r.left+host.clientLeft+host.clientWidth,bottom:r.top+host.clientTop+host.clientHeight};},change:(id,p)=>changeNode(s,id,p),pan:d=>{host.scrollLeft+=d[0];host.scrollTop+=d[1];},requestFrame:cb=>requestAnimationFrame(cb),cancelFrame:id=>cancelAnimationFrame(id)});
  s.touch=installTouchGestures(host,{nodeDrag:s.drag,read:()=>({key:s.stage.id,zoom:s.zoom,locked:s.locked,scroll:[host.scrollLeft,host.scrollTop]}),position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},change:v=>{if(v.node)changeNode(s,v.node.id,v.node.position);if(v.zoom!==undefined){s.zoom=v.zoom;layoutCanvas(s);}if(v.scroll)host.scrollTo(...v.scroll);if(v.selected)navigateDetail(s,v.selected);},finish:()=>save(s)});
  host.onpointerdown=e=>{if(e.pointerType==='touch'||e.button!==0||e.target.closest('button'))return;const r=host.getBoundingClientRect();if(e.clientX>=r.left+host.clientLeft+host.clientWidth||e.clientY>=r.top+host.clientTop+host.clientHeight)return;
  const id=e.target.closest('.node')?.dataset.node;e.preventDefault();pointer=e.pointerId;host.setPointerCapture(pointer);if(id&&!s.locked){s.drag.begin(id,[e.clientX,e.clientY]);pan=undefined;}else pan={x:e.clientX,y:e.clientY,scroll:[host.scrollLeft,host.scrollTop],id,moved:false};};
@@ -93,7 +94,7 @@ function installCanvas(s){
  host.onpointercancel=()=>{pointer=undefined;pan=undefined;s.drag.cancel();};host.addEventListener('lostpointercapture',e=>{if(e.target===host){pointer=undefined;pan=undefined;s.drag.cancel();}});
  const bar=s.section.querySelector('.graph-toolbar'),gear=bar.querySelector('.graph-settings-toggle'),panel=bar.querySelector('.concept-display-options');
  const settings=open=>{panel.hidden=!open;bar.dataset.settingsOpen=String(open);gear.setAttribute('aria-expanded',String(open));gear.setAttribute('aria-label',open?'表示設定を閉じる':'表示設定を開く');};gear.onclick=()=>settings(panel.hidden);
- bar.querySelector('.reset-layout').onclick=()=>{s.touch.cancel();s.drag.cancel();s.positions.clear();s.zoom=initialCamera().zoom;draw(s);host.scrollTo(...initialCamera().scroll);save(s);settings(false);gear.focus();};
+ bar.querySelector('.reset-layout').onclick=()=>{s.touch.cancel();s.drag.cancel();s.positions.clear();s.origin=[0,0];s.zoom=initialCamera().zoom;draw(s);host.scrollTo(...initialCamera().scroll);save(s);settings(false);gear.focus();};
  document.addEventListener('pointerdown',e=>{if(!bar.contains(e.target))settings(false);});bar.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();settings(false);gear.focus();}});
  s.lockButton.onclick=()=>{s.touch.cancel();s.drag.cancel();s.locked=!s.locked;layoutCanvas(s);save(s);};
  s.section.querySelector('.zoom-in').onclick=()=>zoomBy(s,ZOOM_FACTOR);s.section.querySelector('.zoom-out').onclick=()=>zoomBy(s,1/ZOOM_FACTOR);
