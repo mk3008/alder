@@ -1,0 +1,14 @@
+:root{--review-blue:#2563eb;--review-green:#16835d;--review-ring:#a55b06;--review-link:#176ba0;--review-shadow:rgba(37,99,235,.3)}
+[data-theme=dark]{--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46)}
+/* Both canvases render selection with the same HTML box-shadow.
+   The concept SVG reserves a transparent foreignObject behind each shape. */
+.node.review-neighbor,.table.review-neighbor>.concept-selection-glow>div{box-shadow:0 0 0 1px color-mix(in srgb,var(--review-link) 35%,transparent),0 3px 8px #0002}
+.node.review-neighbor{border-width:2px}
+.node.selected,.node.demo-selected,.table.selected>.concept-selection-glow>div,.table:has(>.concept-select:focus-visible)>.concept-selection-glow>div{outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--review-blue) 50%,transparent),0 0 17px 5px var(--review-shadow);z-index:2}
+.table.review-neighbor .concept-select>rect{stroke:var(--review-link);stroke-width:2}
+.table .concept-select:focus-visible{outline:none}
+.concept-selection-glow{pointer-events:none}
+.concept-selection-glow>div{margin:32px;border-radius:5px}
+.wire.review-related{stroke:var(--review-link);stroke-width:3.2}
+.endpoint-count.review-related{fill:var(--review-link);font-weight:800}
+.concept-port.review-related{fill:var(--review-link)}
