@@ -36,6 +36,8 @@ body:has(.info-bar:not([hidden])) #source-dialog{top:clamp(112px,calc(100dvh - 5
 .node .who-badge{width:28px;height:28px;min-width:28px;border-radius:50%;border:2px solid var(--role-color);background:var(--role-color);color:#fff;display:grid;place-items:center;max-height:none;overflow:visible;line-height:1;font-size:11px;font-weight:800;align-self:center}
 .node .who-badge svg{width:16px;height:16px;color:inherit!important;stroke-width:2}
 .node.muted,.edge.muted,.edge-label.muted{opacity:1}
+.node.review-neighbor{border-width:2px}
+.node.selected,.node.demo-selected{outline:none;z-index:2}
 
 
 .edge.review-related{stroke:var(--review-link);stroke-width:3.2}
