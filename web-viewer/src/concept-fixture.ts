@@ -1,0 +1,50 @@
+// @ts-nocheck
+// Explicit, unapproved purchase fixture from PR #293 f885d391; not a JSON converter.
+const tables={
+ request:{name:'購入申請',fields:[['','申請者・進行状態'],['','現在の判断対象版'],['','現在判断（承認／差戻し）'],['','準備所属・対象版'],['','終結結果']],note:'差戻し・再申請でも同じ購入要求を追う。現在判断は対象版・判断日時を含み、差戻し時は理由が必須。準備所属と対象版は準備確定で存在し以後不変。終結は全品目の待ち数量が0のとき一度だけ。判断履歴を別概念として必須にしない。'},
+ version:{name:'購入申請版',fields:[['','未確定／確定'],['','購入理由'],['','見積根拠（依頼全体）'],['','提出日時']],note:'初回保存から版あり。見積・理由・品目入力値は未確定なら未入力可、提出成立時に必須。確定内容は直接変更しない。差戻し後は別版で再提出。保存のたびに新しい版を作るか、編集中版の最大件数は未決。'},
+ item:{name:'申請品目',fields:[['','版内の品目の識別'],['','品名・税抜希望単価'],['','依頼数量 Q'],['','購入しない確定数量 C']],note:'保存時1品目以上。品目が存在することと値が全入力済みであることは別。準備後は入庫累計Rと購入しない数量Cを区別し、待ちW＝Q−R−C。R・C・Wは非負。Cを増やす場合は申請者との調整済み。準備前の結果数量は未適用。'},
+ preparation:{name:'購入準備',fields:[['','準備番号'],['','固定した対象申請・対象版'],['','書き出し日時の情報']],note:'1件以上の申請を束ねる。現在有効な承認と同じ版を確定し、申請を品目別に分割しない。番号・対象申請・対象版は不変。CSVの失敗・紛失でも同じ番号・内容を再出力。日時履歴を初回／最終／全履歴のどれで保持するかは未決。'},
+ receipt:{name:'入庫回',fields:[['','回を区別する識別'],['','対象申請'],['','各回の内訳']],note:'準備済み申請に対する各回の入庫登録。分割入庫を残す。購入しない数量だけの調整で空の入庫回を作らない。一申請単位に置く設計仮説であり、跨申請の共通伝票管理は未決。'},
+ line:{name:'入庫内訳',fields:[['','回内の識別'],['','準備対象版の元品目'],['','今回入庫数量']],note:'1入庫回に1件以上。別申請・旧版・代替品を混入させない。同じ品目は別の回でも入庫できる。同じ登録の再送で入庫を増やさない。終結後の新規訂正は今回の業務では扱わない。'}
+};
+const edges=[
+ ['request','version','1','1..N','down'],['version','item','1','1..N','down'],
+ ['preparation','request','0..1','1..N','down'],['request','receipt','1','0..N','down'],
+ ['receipt','line','1','1..N','down'],['item','line','1','0..N','reference']
+];
+const activityDefinitions=[
+ {id:'apply',title:'備品購入を申請する',subtitle:'下書き保存・提出',ids:['request','version','item'],write:['request','version','item'],rules:['下書き保存は申請・未確定版・1品目以上。理由・見積・各値の未入力は許す。','提出時は理由・依頼全体の見積・全品目情報が必須。税抜合計が役職上限内で判定可能なときだけ確定し、現在の判断対象版を設定する。'],change:'下書きと提出は同じActivity内の場面。独立した確定記録・見積書概念を前提にしない。'},
+ {id:'approve',title:'購入申請を承認する',subtitle:'承認・差戻し',ids:['request','version','item','preparation'],write:['request'],rules:['現在提出版・品目・見積根拠を参照し、申請の現在判断を更新する。確定版の内容は変更しない。','申請済み、または未準備の承認済み申請を差し戻せる。理由必須。準備確定と差戻しは同時成功しない。'],change:'図は現在判断を更新する購入申請だけ。版・品目・見積根拠・準備の有無を参照する確認義務は維持する。'},
+ {id:'revise',title:'購入申請を再申請・破棄する',subtitle:'別版で再提出・対象から除外',ids:['request','version','item'],write:['request','version','item'],rules:['過去の確定内容を変えず、差戻し後は別の版・品目で再提出。成功時だけ現在対象版を切り替え、旧判断を無効にする。','下書き・差戻しは破棄可能。以後の承認・購入対象から除外する。破棄後の保存方法・保持期間、再提出失敗時の編集内容保存は未決。'],change:'破棄を終結と同じ結果にしない。保存方式や削除方式はこの図で選ばない。'},
+ {id:'prepare',title:'購入を準備する',subtitle:'対象を固定・CSV出力／再出力',ids:['preparation','request','version','item'],write:['preparation','request'],rules:['現在有効な承認を持つ未準備申請を1件以上まとめ、準備番号・対象申請・各対象版を固定する。','CSV失敗でも準備を残す。再出力は同じ番号・内容。CSV成功を入庫・購入完了と同一視しない。'],change:'図は登録する購入準備と所属を更新する購入申請だけ。対象版・品目・見積根拠の参照と固定条件は維持する。'},
+ {id:'result',title:'購入結果を登録する',subtitle:'分割入庫・購入しない数量・終結',ids:['preparation','request','version','item','receipt','line'],write:['request','item','receipt','line'],rules:['準備対象版の元品目に各回の入庫内訳を登録する。別申請・旧版・代替品は不可。同じ再送で増やさない。','品目ごとに依頼Q＝入庫累計R＋購入しないC＋待ちW。購入しない数量は申請者と調整済み。全品目W＝0で申請全体を一度だけ終結。全数購入なしも可能。'],change:'入庫がなければ空の入庫回を作らない。終結後の新規訂正は対象外。日付・実績金額・合意記録の粒度は未決。'}
+];
+function activitySlice(stage){
+ // Mutation-only local view. Read concepts do not expand the diagram.
+ const visible=new Set(stage.write);
+ return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:edges.filter(([a,b])=>visible.has(a)&&visible.has(b))};
+}
+const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理テーブル・正式JSON Schemaは定義していません。'};
+const stages=[...activityDefinitions.map(activitySlice),overviewStage];
+// Multiple creating activities are explicit. Never silently pick one.
+const creatorStages={request:['apply'],version:['apply','revise'],item:['apply','revise'],preparation:['prepare'],receipt:['result'],line:['result']};
+const creatorStage=Object.fromEntries(Object.entries(creatorStages).filter(([,v])=>v.length===1).map(([k,v])=>[k,v[0]]));
+// Two endpoint counts and their independent landing segments need 96px.
+// Sizes are measured first; layout does not depend on the viewport width.
+function compactInitial(sizes){
+ const result={};
+ for(const stage of stages){
+  const p={},ids=['preparation','request','version','item','receipt','line'].filter(id=>stage.ids.includes(id));
+  // Reserve one horizontal count lane for each additional independent
+  // outlet or landing. Counts remain per relation, including repeated "1".
+  const step=(from,to)=>80+36*(Math.max(0,stage.edges.filter(([a])=>a===from).length-1)+Math.max(0,stage.edges.filter(([,b])=>b===to).length-1));
+  let y=28;for(const[id,index]of ids.map((id,i)=>[id,i])){
+   p[id]={x:index?p[ids[index-1]].x+step(ids[index-1],id):24,y};
+   y+=sizes.get(id).h+36;
+  }
+  result[stage.id]=p;
+ }return result;
+}
+
+export {tables,activityDefinitions,creatorStages};
