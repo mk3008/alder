@@ -39,7 +39,7 @@ export async function verifyWiring(browser){
      assert.equal(state.selected,true);assert.equal(state.nodeAbove,true);assert.equal(state.opaque,true);
      assert.ok(state.layers.every((n,i)=>!i||state.layers[i-1]<=n),'selected wires/labels are above all unrelated wires/labels');
      assert.ok(state.points.slice(1).every((p,i)=>p[0]>=state.points[i][0]-.01&&p[1]>=state.points[i][1]-.01),'normal route reads down/right');
-     assert.ok(state.label[1]>state.source[1]+68&&state.label[1]<=state.source[1]+96,'Input caption is near source');
+     assert.equal(state.label[1],state.source[1]+101,'Input caption uses the approved 24px source clearance');
      assert.ok(state.labels[0].x>=state.start[0]+8||state.labels[0].x+state.labels[0].width<=state.start[0]-8,'complete left-aligned Input glyph clears vertical leg');
      for(let i=0;i<state.labels.length;i++)for(let j=i+1;j<state.labels.length;j++){
       const a=state.labels[i],b=state.labels[j];assert.ok(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y,'rendered captions do not overlap');
@@ -78,7 +78,7 @@ export async function verifyRealWiring(browser){
    const cards=[...document.querySelectorAll('.node')].map(n=>{const b=n.getBoundingClientRect(),icon=n.firstElementChild.getBoundingClientRect();return {id:n.dataset.node,x:parseFloat(n.style.left),y:parseFloat(n.style.top),width:260,height:68,object:n.classList.contains('object'),iconX:parseFloat(n.style.left)+(icon.x+icon.width/2-b.x)*260/b.width};});
    const wires=[...document.querySelectorAll('.edge')].map(path=>{
     const title=path.querySelector('title').textContent,source=cards.find(n=>title.startsWith(n.id+' → ')),target=cards.find(n=>title.startsWith(source.id+' → '+n.id+': '));
-    const label=document.querySelector(`.edge-label[data-relation="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
+    const label=document.querySelector(`.edge-label[data-relations~="${path.dataset.relation}"]`),b=label.getBBox(),length=path.getTotalLength();
     return {index:+path.dataset.relation,source,target,title,labelText:label.textContent,anchor:label.getAttribute('text-anchor'),label:[+label.getAttribute('x'),+label.getAttribute('y')],glyph:{x:b.x,y:b.y,width:b.width,height:b.height},points:Array.from({length:257},(_,i)=>{const p=path.getPointAtLength(length*i/256);return [p.x,p.y];}),exception:path.classList.contains('exception'),paintRuns:document.querySelectorAll(`.edge-paint[data-relation="${path.dataset.relation}"]`).length,dash:getComputedStyle(path).strokeDasharray,marker:path.getAttribute('marker-end'),collisions:+path.dataset.collisions};
    });return {cards,wires};
   });
@@ -88,7 +88,7 @@ export async function verifyRealWiring(browser){
    const returning=matrixReturn??wire.returning;
    if(returning||r.exception){
     assert.ok(Math.abs(r.points[0][0]-r.source.x-260)<.01);assert.ok(Math.abs(r.points[0][1]-r.source.y-68*(wire.fromPort??.5))<.01);assert.ok(r.points[1][0]>r.points[0][0]);
-    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-282-16*(wire.returnLane??0))<.01,'aligned return corridor uses constant card clearance');
+    if(returning&&fixed&&r.source.x>=r.target.x)assert.ok(Math.abs(Math.max(...r.points.map(p=>p[0]))-r.source.x-292-16*(wire.returnLane??0))<.01,'aligned return corridor uses constant card clearance');
     assert.ok(Math.abs(r.points.at(-1)[0]-r.target.x-260)<.01);assert.ok(Math.abs(r.points.at(-1)[1]-r.target.y-68*(wire.toPort??.5))<.01);assert.ok(r.points.at(-2)[0]>r.points.at(-1)[0]);
     assert.ok(r.points.some(p=>p[1]<r.points[0][1])||r.target.y>=r.source.y,'right return preserves directed arrival');
    }else{
@@ -114,7 +114,7 @@ export async function verifyRealWiring(browser){
     routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder,spec.activity);
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*96],'ordinary Input then focus staircase'));
+    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*136],'ordinary Input then focus staircase'));
     const outputIDs=sourceDesign.graph.relations.filter(r=>r.kind==='output'&&r.from===spec.activity).map(r=>r.to);
     for(const n of sourceDesign.graph.nodes.filter(n=>n.type==='business'&&n.id!==spec.activity&&detail[n.id]))for(const id of outputIDs)assert.ok(detail[n.id][1]>detail[id][1],'exception peers follow every ordinary Output');
     for(const theme of ['light','dark']){
@@ -123,11 +123,11 @@ export async function verifyRealWiring(browser){
      assert.equal(measured.wires.filter(r=>r.exception).length,spec.exceptions);let inputs=0;
      for(const [i,r]of measured.wires.entries()){
       assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
-      if(!r.exception&&r.source.id===spec.activity){assert.ok(Math.abs(r.label[0]-r.points[0][0]-8)<.01,'Output text starts beside vertical line');assert.ok(r.label[1]>=r.target.y-30&&r.label[1]<=r.target.y-14);}
+      if(!r.exception&&r.source.id===spec.activity){assert.ok(r.label[0]>=r.points[0][0]+8-.01,'Output text starts at or to the right of its departure');assert.equal(r.label[1],r.source.y+101+sourcePlan.wires[r.index].captionLane*22,'Output caption follows source stack');}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
       if(r.exception){assert.notEqual(r.dash,'none');assert.ok(r.paintRuns>0,'exception has visible coordinate-phased paint runs');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
       if(!r.exception&&r.target.id===spec.activity){
-       inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.ok(r.label[1]>=r.source.y+68&&r.label[1]<=r.source.y+96,'forward Input stays at Object departure');
+       inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.equal(r.label[1],r.source.y+101+sourcePlan.wires[r.index].captionLane*22,'forward Input stays in its source stack');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}
       }
       for(const n of measured.cards)assert.equal(overlap(r.glyph,n),false,'native Japanese glyph does not cover shapes');
@@ -150,7 +150,7 @@ export async function verifyRealWiring(browser){
     const checkCaptions=async()=>{
      const measured=await inspect(),incoming=measured.wires.find(r=>!r.exception&&r.target.id===dataID&&r.source.id===spec.activity),returning=measured.wires.find(r=>!r.exception&&r.source.id===dataID&&r.target.id===spec.activity);
      assert.equal(incoming.anchor,'start');assert.equal(returning.anchor,'start');
-     assert.ok(Math.abs(incoming.label[0]-incoming.points[0][0]-8)<.01,'dragged Output text starts beside line');assert.ok(incoming.label[1]>=incoming.target.y-30&&incoming.label[1]<=incoming.target.y-14,'red caption follows dragged Object top');
+     assert.ok(incoming.label[0]>=incoming.points[0][0]+8-.01,'Output text clears its departure');assert.equal(incoming.label[1],incoming.source.y+101+sourcePlan.wires[incoming.index].captionLane*22,'dragging target never moves caption away from source stack');
      assert.ok(returning.label[0]>=Math.max(...returning.points.map(p=>p[0]))+8-.01,'return caption follows the dragged bend');assert.ok(Math.abs(returning.label[1]-returning.points[0][1])<.001,'return caption shares the dragged bend height');
      for(const r of [incoming,returning])for(const n of measured.cards)assert.ok(!(r.glyph.x<n.x+n.width&&r.glyph.x+r.glyph.width>n.x&&r.glyph.y<n.y+n.height&&r.glyph.y+r.glyph.height>n.y),'dragged captions clear shapes');
     };

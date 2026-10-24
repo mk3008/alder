@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFileSync,mkdirSync} from 'node:fs';
+import {pathToFileURL} from 'node:url';
+import {resolve} from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {packageViewerPreview} from '../../tools/viewer-preview.mjs';
+export async function verifyJSONOfflinePreview(browser){
+ const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),pkg=JSON.parse(raw),head=process.env.REVIEW_HEAD??execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),pr=process.env.REVIEW_PR??'279';
+ const {offline,manifest}=packageViewerPreview({dist:resolve('dist'),output:resolve('review-package'),head,pr,fixture:resolve('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json')});
+ const context=await browser.newContext({viewport:{width:393,height:960}}),page=await context.newPage(),requests=[],errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try{
+  await page.goto(pathToFileURL(offline).href);await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.ok((await page.locator('#preview-badge').innerText()).includes(head));
+  await page.locator('#fallback').setInputFiles({name:'gate-b.json',mimeType:'application/json',buffer:Buffer.from(raw)});await page.locator('.node').first().waitFor();await page.waitForFunction(()=>document.querySelector('#app')?.dataset.saveState==='saved');assert.equal(await page.locator('.node').count(),6);
+  await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.node').count(),6);
+  const databases=await page.evaluate(()=>indexedDB.databases());assert.ok(databases.some(d=>d.name===`alder-web-viewer:preview:pr-${pr}:${head}`));assert.ok(!databases.some(d=>d.name==='alder-web-viewer'));
+  if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator(`[data-list-node="${pkg.documents[0].activities[0].id}"] .node-navigate`).click();await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('#detail-mode-checks').click();assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));
+  mkdirSync('web/evidence/json-document',{recursive:true});await page.screenshot({path:'web/evidence/json-document/offline-preview-393.png'});assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
+  return {browser:browser.version(),source:head,offlinePath:manifest.offlinePath,fileProtocol:true,reload:true,previewOnlyIndexedDB:true,networkRequests:requests,pageErrors:errors,limits:['Physical smartphone/file manager and OS picker permissions are not emulated','HTTPS reads from file origin require Origin:null CORS permission']};
+ }finally{await context.close();}
+}

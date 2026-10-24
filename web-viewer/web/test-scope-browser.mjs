@@ -7,7 +7,7 @@ import {waitSavedViewer} from './wait-saved-viewer.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {parseDesign} from '../src/graph.ts';
+import {parseDocument as parseDesign} from '../src/document-input.ts';
 import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 export async function verifyScopeOption(browser){
  const page=await browser.newPage({viewport:{width:1280,height:960}}),errors=[],toolbarLayouts=[];
@@ -21,7 +21,7 @@ export async function verifyScopeOption(browser){
   const appearance=()=>page.locator('.node').evaluateAll(ns=>ns.map(n=>({id:n.dataset.node,bg:getComputedStyle(n).backgroundColor,role:n.querySelector('.who-badge')?.style.getPropertyValue('--role-color')})));
   const before=await appearance();assert.equal(await page.locator('#scope-outside').evaluate(n=>n.tagName),'BUTTON');assert.equal(await page.locator('.node').count(),25);assert.equal(await page.locator('.node.scope-dim').count(),0);assert.deepEqual(await appearance(),before);
   for(const n of await page.locator('.node').evaluateAll(ns=>ns.map(n=>({outside:n.classList.contains('outside'),opacity:getComputedStyle(n).opacity}))))assert.equal(n.opacity,'1');
-  const verify=async prefer=>{const hidden=hiddenReadIndexes(design.graph.relations,prefer),expected=design.graph.relations.map((_,i)=>i).filter(i=>!hidden.has(i));for(const css of ['.edge','.edge-label'])assert.deepEqual(await page.locator(css).evaluateAll(ns=>ns.map(n=>+n.dataset.relation).sort((a,b)=>a-b)),expected);return expected.length;};
+  const verify=async prefer=>{const hidden=hiddenReadIndexes(design.graph.relations,prefer),expected=design.graph.relations.map((_,i)=>i).filter(i=>!hidden.has(i));for(const css of ['.edge','.edge-label'])assert.deepEqual(await page.locator(css).evaluateAll(ns=>ns.flatMap(n=>(n.dataset.relations??n.dataset.relation).split(" ").map(Number)).sort((a,b)=>a-b)),expected);return expected.length;};
   await verify(false);await openDisplaySettings(page);await page.locator('#prefer-write').check();const combinedEdges=await verify(true);assert.deepEqual(await positions(),initial);
   const outside=page.locator('.node.object.outside').first(),id=await outside.getAttribute('data-node');await outside.click();assert.equal(await page.locator('.selected').getAttribute('data-node'),id);assert.equal(await page.locator('.selected').evaluate(n=>getComputedStyle(n).opacity),'1');
   const detail=await page.locator('#detail').textContent();await page.locator('#drawer').click();assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),true);assert.equal(await page.locator('#detail').textContent(),detail);await page.locator('#drawer').click();

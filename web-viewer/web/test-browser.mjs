@@ -1,4 +1,11 @@
+import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
+import {verifyJSONRoles} from './test-json-roles-browser.mjs';
+import {verifyJSONStates} from './test-json-states-browser.mjs';
+import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
+import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
+import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
 import {verifyRelatedChecks} from './test-check-items-browser.mjs';
 import {verifyFindings} from './test-findings-browser.mjs';
@@ -45,6 +52,13 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'jsonRoles',run:()=>verifyJSONRoles(browser)},
+   {name:'jsonStates',run:()=>verifyJSONStates(browser)},
+   {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
+   {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
+   {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
+   {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
    {name:'relatedChecks',run:()=>verifyRelatedChecks(browser)},
    {name:'findings',run:()=>verifyFindings(browser)},

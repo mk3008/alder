@@ -84,7 +84,7 @@ function readFrame(){
  const v=document.querySelector('#viewport'),nodes=document.querySelector('#nodes'),bar=document.querySelector('.toolbar').getBoundingClientRect(),r=v.getBoundingClientRect();
  const positions={},styles={},rects={},routes={};
  for(const node of document.querySelectorAll('.node')){const b=node.getBoundingClientRect();positions[node.dataset.node]=[parseFloat(node.style.left),parseFloat(node.style.top)];styles[node.dataset.node]=[node.style.left,node.style.top];rects[node.dataset.node]=[b.left,b.top,b.width,b.height];}
- for(const edge of document.querySelectorAll('.edge')){const label=document.querySelector(`.edge-label[data-relation="${edge.dataset.relation}"]`);routes[edge.dataset.relation]={path:edge.getAttribute('d'),label:label?[label.getAttribute('x'),label.getAttribute('y')]:null};}
+ for(const edge of document.querySelectorAll('.edge')){const label=document.querySelector(`.edge-label[data-relations~="${edge.dataset.relation}"]`);routes[edge.dataset.relation]={path:edge.getAttribute('d'),label:label?[label.getAttribute('x'),label.getAttribute('y')]:null};}
  const left=r.left+v.clientLeft,top=r.top+v.clientTop;
  const scroll=[v.scrollLeft,v.scrollTop],offset=[parseFloat(nodes.style.left)||0,parseFloat(nodes.style.top)||0],plan=window.edgeDragOracle;let oracle;
  if(plan){const {position,start,end,zoom,before}=plan,expected=position.map((value,axis)=>value+(end[axis]-start[axis])/zoom+((scroll[axis]/zoom-offset[axis]/zoom)-(before.scroll[axis]/zoom-before.offset[axis]/zoom))),style=document.createElement('div').style;style.left=expected[0]+'px';style.top=expected[1]+'px';oracle={id:plan.id,position:expected,style:[style.left,style.top]};}
@@ -104,7 +104,7 @@ function relationsFor(view){const activity=view.activity;if(!activity)return des
 function assertUnchangedOthers(current,initial){
  const moving=current.oracle?.id??edgeDragMoving,unrelated=relationsFor(initial).flatMap((r,i)=>r.from!==moving&&r.to!==moving?[String(i)]:[]);
  for(const [id,p] of Object.entries(initial.positions))if(id!==moving)assert.deepEqual(current.positions[id],p,`other world position ${id}`);
- for(const id of unrelated)assert.deepEqual(current.routes[id],initial.routes[id],`nonincident path and label ${id}`);
+ for(const id of unrelated){assert.equal(current.routes[id].path,initial.routes[id].path,`nonincident path ${id}`);assert.equal(current.routes[id].label?.[1],initial.routes[id].label?.[1],`nonincident caption stays on departure row ${id}`);}
 }
 function assertGrip(current,grip,pointer){
  const box=current.rects[current.oracle?.id??edgeDragMoving];

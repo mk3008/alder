@@ -1,3 +1,4 @@
+import {assertCompactStaircase} from './test-document-order-browser.mjs';
 import {joinedSession} from './session-test-view.mjs';
 const loadSession=async()=>joinedSession(await loadStoredSession());
 // Legacy no-Group input regression; the current Group sample is tested separately.
@@ -42,13 +43,15 @@ function geometry(e,inset=40,zoom=1){
  // Overview shares the detail's 64-unit step and separates source-only peers.
  // Pin its new coordinates and extents exactly; older saved geometry has a
  // separate frozen-128 restore/reset regression in layout and native wiring.
- assert.equal(hash(positions(e)),'e3290e87fca6d9fa00072fc32778971b602523445b19fa397d64bf7dd93f4424','all new overview coordinates use the shared 64-unit layout');
- // Keep the new overview paths/captions exact across camera and reload changes.
- assert.equal(hash(routes(e)),'93813767545d28172f82f59a605cc9d9eb382d75c0895a178729908a4e2288d9','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
+ const oldCells=JSON.parse(readFileSync('web/authorities/overview-matrix-c407.json','utf8'));for(const [id,[x]] of Object.entries(oldCells))assert.equal(positions(e)[id][0],x);assert.deepEqual(Object.keys(positions(e)).sort((a,b)=>positions(e)[a][1]-positions(e)[b][1]),Object.keys(oldCells).sort((a,b)=>oldCells[a][1]-oldCells[b][1]));assertCompactStaircase(positions(e),design);
+ // Intentional 66a0 spacing integration: only caption clearance / row heights change.
+ // The independent row oracle above and routing tests pin the approved geometry;
+ // this digest additionally prevents camera / reload from changing that geometry.
+ assert.equal(hash(routes(e)),'9c7fdd1dc75e8812efe7cbc23773534075a7cca419ed6f46fe99ad7ae5f78810','role-separated SVG paths and endpoint-relative captions remain exact across camera changes');
  assert.deepEqual([e.$('nodes').style.left,e.$('nodes').style.top],[inset*zoom+'px','0px']);
  assert.deepEqual([e.$('edges').style.left,e.$('edges').style.top],[inset*zoom+'px','0px']);
- assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2118 3428');
- assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2118+inset*2)*zoom+'px',3428*zoom+'px'],'only the existing horizontal camera reserve grows');
+ assert.equal(e.$('edges').getAttribute('viewBox'),'0 0 2128 4044');
+ assert.deepEqual([e.$('canvas').style.width,e.$('canvas').style.height],[(2128+inset*2)*zoom+'px',4044*zoom+'px'],'only the existing horizontal camera reserve grows');
  assert.equal(Math.min(...Object.values(positions(e)).map(p=>p[0]))*zoom+parseFloat(e.$('nodes').style.left),(40+inset)*zoom);
  assert.equal(e.$('zoom').textContent,Math.round(zoom*100)+'%');
 }

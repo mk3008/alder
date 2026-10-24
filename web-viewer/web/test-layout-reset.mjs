@@ -84,8 +84,8 @@ try{
  fire(sample,old,'pointermove',500,500);fire(sample,old,'pointerup',500,500);assert.deepEqual(sample.state().tabs[0].positions,json(initial().positions));sample.w.close();
  checks.push('two real app pointer drags, unlocked reset, sample close/reopen, stale drag cannot overwrite reset');
 
- const fail=await boot({seed:session(modified())});await flush(fail);const oldStored=await saved(fail);fail.w.__failSave=true;fail.$('reset-layout').click();await flush(fail);
- assert.equal(fail.$('app').dataset.saveState,'error');assert.match(fail.$('status-text').textContent,/引き続き閲覧できます/);assert.deepEqual(await saved(fail),oldStored);assert.deepEqual(fail.state().tabs[0].positions,json(initial().positions));assert.deepEqual(fields(fail.state().tabs[0]),fields(oldStored.tabs[0]));
+ const fail=await boot({seed:session(modified())});await flush(fail);const oldStored=await saved(fail),beforeResetFields=fields(fail.state().tabs[0]);fail.w.__failSave=true;fail.$('reset-layout').click();await flush(fail);
+ assert.equal(fail.$('app').dataset.saveState,'error');assert.match(fail.$('status-text').textContent,/引き続き閲覧できます/);assert.deepEqual(await saved(fail),oldStored);assert.deepEqual(fail.state().tabs[0].positions,json(initial().positions));assert.deepEqual(fields(fail.state().tabs[0]),beforeResetFields);
  fail.w.__failSave=false;await flush(fail);assert.deepEqual((await saved(fail)).tabs[0].positions,json(initial().positions));fail.w.close();
  checks.push('storage failure is visible, reset stays in memory, stored document unchanged, explicit retry persists');
 

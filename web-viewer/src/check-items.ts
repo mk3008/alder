@@ -1,6 +1,8 @@
+import {legacyCheckModel} from './legacy-check-model.ts';
+import type {Check} from './json-document';
 import type {Tab} from './session';
 export type CheckItem={id:string;title:string;body:string;activities:string[]};
-export type CheckDocument={markdown:string;intro:string;items:CheckItem[];index:Record<string,string[]>};
+export type CheckDocument={markdown:string;intro:string;items:CheckItem[];index:Record<string,string[]>;model:Check};
 export type RelatedChecks={markdown:string;name:string;url?:string;confirmedFor?:string};
 /** Identity and revision are separate: a pinned historical link is not a different document. */
 export function githubDocument(value:string){
@@ -44,7 +46,7 @@ export function parseChecks(markdown:string):CheckDocument{
   }
   if(!Object.keys(index).length)throw Error('業務一覧のActivityとCheck IDの対応を確認できません。');
   const firstH2=marks.find(m=>m.level===2)?.line??starts[0].line;
-  return {markdown,intro:lines.slice(0,firstH2).join('\n'),items,index};
+  return {markdown,intro:lines.slice(0,firstH2).join('\n'),items,index,model:legacyCheckModel(markdown,items,index,marks)};
 }
 export function confirmationKey(tab:Tab){return JSON.stringify([tab.design.markdown,tab.source?.kind==='url'?tab.source.url:null,tab.edited===true]);}
 export function checkCompatibility(doc:CheckDocument,tab:Tab):{state:'matched'|'unverified'|'mismatch';reason:string;unknown:string[]}{
@@ -62,3 +64,7 @@ export function checkCompatibility(doc:CheckDocument,tab:Tab):{state:'matched'|'
   if(tab.edited||references.some(r=>r.ref!==current.ref)||!/^[a-f0-9]{40}$/i.test(current.ref))return result('unverified','原典の文書パスは一致しますが、版の一致は未確認です。参照版・本文・業務名を確認してください。');
   return result('matched','原典の文書パス・commit・Activity名が一致しています。業務意味やCheckの承認を表すものではありません。');
 }
+
+// Source records are immutable; cached projections are never read from IndexedDB.
+const relatedDocuments=new WeakMap<RelatedChecks,CheckDocument>();
+export function readRelatedChecks(source:RelatedChecks){let doc=relatedDocuments.get(source);if(!doc){doc=parseChecks(source.markdown);relatedDocuments.set(source,doc);}return doc;}

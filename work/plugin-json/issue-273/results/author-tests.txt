@@ -1,0 +1,20 @@
+✔ direct BD create needs no Markdown or Python (3.442908ms)
+✔ add Activity/Object, rename and pending Findings retain existing IDs (3.875116ms)
+✔ Check drafting requires human BD confirmation for exact revision (7.120468ms)
+✔ generic permission or invented confirmed state does not approve a new draft (2.434715ms)
+✔ human review binds exact expectation and does not touch other states (14.799013ms)
+✔ changed shared guarantee forces all affected expectations back to review (3.836188ms)
+✔ missing Test evidence alone preserves confirmed state (3.492301ms)
+✔ pending correction cannot silently become confirmed after text repair (5.047546ms)
+✔ reorder is a content change, preserves IDs and does not approve Checks (3.468296ms)
+✔ stale reference or missing new document revision is refused (1.970798ms)
+✔ ID replacement, provenance loss, and fake decisions are refused (1.285429ms)
+✔ CLI protects last package, CAS, alias targets, lock and runtime without Python (837.558141ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 994.713027

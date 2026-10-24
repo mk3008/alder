@@ -1,0 +1,57 @@
+{
+  "requestedModel": "gpt-6-sol",
+  "requestedEffort": "medium",
+  "historyFork": "none",
+  "effectiveRuntimeSettingsIndependentlyVerified": false,
+  "pluginSourceRevision": "57bd8235bcff6e0f95cb27f0411ceb3bd0f065cb",
+  "gateABase": "98b95f69838cadde9db388da0875b8d588a09faa",
+  "candidatePluginVersion": "0.4.9",
+  "testType": "one bounded fresh agent forward execution; not business approval or benchmark success rate",
+  "outcomes": [
+    {
+      "command": "cli.mjs validate candidate.json",
+      "exitCode": 2,
+      "diagnostics": {
+        "diagnostics": [
+          {
+            "code": "CLI_ERROR",
+            "severity": "error",
+            "message": "Invalid icon"
+          }
+        ]
+      }
+    },
+    {
+      "command": "cli.mjs validate candidate.json (after icon correction)",
+      "exitCode": 0,
+      "entities": 11
+    },
+    {
+      "command": "author-cli.mjs create candidate.json business-design.json create-operation.json",
+      "exitCode": 0,
+      "sha256": "d471d72f5a33304f250ea08e29bff793d3ad03bfc1068de8f9076104b60cbccc"
+    },
+    {
+      "command": "cli.mjs validate rename-candidate.json",
+      "exitCode": 0,
+      "entities": 11
+    },
+    {
+      "command": "author-cli.mjs commit business-design.json rename-candidate.json commit-operation.json",
+      "exitCode": 0,
+      "sha256": "2e7cca311c2325864184713daf2cbd5fbb7f6a710ae86c2ebe0ecd1d4e2babd9"
+    },
+    {
+      "command": "cli.mjs validate business-design.json",
+      "exitCode": 0,
+      "entities": 11
+    }
+  ],
+  "openMatters": [
+    "必須項目不足時の対応",
+    "代理申請の扱い"
+  ],
+  "checkDrafted": false,
+  "blockedBy": "No human agreement for exact BD revision; interview explicitly is not approval",
+  "retainedArtifacts": "Final canonical JSON and interview/prompt retained. First invalid candidate, intermediate files and standalone terminal log were not retained; outcomes transcribed from agent tool trace, confirmed by follow-up without rerun."
+}

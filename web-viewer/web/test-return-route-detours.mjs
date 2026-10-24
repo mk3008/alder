@@ -98,14 +98,14 @@ for(const [name,savedPositions] of [['publicInitial',positions],['saved128',save
   assert.deepEqual({...reconcile(saved,design).positions},{...savedPositions},'saved positions survive unchanged');
   assert.equal(JSON.stringify({nodes,savedPositions,design}),snapshot,'routing does not mutate graph, coordinates, or order');
   if(name==='saved128'){sampleNodes=nodes;sampleRoutes=routes;}
-  if(name==='publicInitial'){const r=routes[41],source=nodes.find(n=>n.id===edges[41].from),target=nodes.find(n=>n.id===edges[41].to);assert.deepEqual(r.points[0],[source.x+260,source.y+34]);assert.deepEqual(r.points.at(-1),[target.x+260,target.y+34]);assert.equal(r.bounds.right,source.x+282);}
+  if(name==='publicInitial'){const r=routes[41],source=nodes.find(n=>n.id===edges[41].from),target=nodes.find(n=>n.id===edges[41].to);assert.deepEqual(r.points[0],[source.x+260,source.y+34]);assert.deepEqual(r.points.at(-1),[target.x+260,target.y+34]);assert.equal(r.bounds.right,source.x+292);}
 }
 // The reported line is a real return Read, not a forward route with the wrong
 // target port. Assert its source relation on the frozen saved 128-unit overview as well as the new initial layout above.
 assert.equal(edges[41].kind,'input');assert.equal(edges[41].from,'業務設計書');assert.equal(edges[41].to,'業務設計');
 const affected=sampleRoutes[41];
 assert.deepEqual(affected.points[0],[556,554]);assert.deepEqual(affected.points.at(-1),[428,362]);
-assert.equal(affected.bounds.right,578);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<370);
+assert.equal(affected.bounds.right,588);assert.equal(affected.bounds.bottom,554);assert.ok(length(affected)<390);
 assert.equal((affected.path.match(/ Q/g)??[]).length,2);
 assert.ok(samples.publicInitial.screenshot16.candidate.relationIndexes.includes(41));
 assert.ok(!samples.publicInitial.scopeWritePreferred13.candidate.relationIndexes.includes(41));
@@ -129,10 +129,10 @@ for(const index of [0,1,2,3]){
 assert.equal(new Set(Object.values(fixtures).map(r=>r.path)).size,4,'original relation indexes retain separated lanes');
 // Input returns use a fixed card clearance, not relation-index lane spreading.
 const feedbacks=[0,1,2,3,41].map(index=>routeEdge({from:'source',to:'target',kind:'input',nodes:near,index,labelWidth:180,labelHeight:18}));
-for(const r of feedbacks){assert.equal(r.bounds.right,578);assert.equal(r.collisions,0);assert.equal(r.fallback,false);assert.equal(r.path,feedbacks[0].path);}
+for(const r of feedbacks){assert.equal(r.bounds.right,588);assert.equal(r.collisions,0);assert.equal(r.fallback,false);assert.equal(r.path,feedbacks[0].path);}
 const blockedFeedbackNodes=[...near,rect('right-blocker',570,400,30,50)];
 const blockedFeedbackOptions={from:'source',to:'target',kind:'input',nodes:blockedFeedbackNodes,index:41,labelWidth:180,labelHeight:18},blockedFeedback=routeEdge(blockedFeedbackOptions);
-validate(blockedFeedbackOptions,blockedFeedback);assert.equal(blockedFeedback.collisions,0);assert.equal(blockedFeedback.fallback,false);assert.ok(blockedFeedback.bounds.right>578,'blocked shared corridor still detours around actual obstacles');
+validate(blockedFeedbackOptions,blockedFeedback);assert.equal(blockedFeedback.collisions,0);assert.equal(blockedFeedback.fallback,false);assert.ok(blockedFeedback.bounds.right>588,'blocked shared corridor still detours around actual obstacles');
 assert.deepEqual(blockedFeedback.points[0],[556,554]);assert.deepEqual(blockedFeedback.points.at(-1),[428,362]);
 const blocked=[rect('source',400,600),rect('target',200,200),rect('blocker',690,340,100,100)];
 const blockedOptions={from:'source',to:'target',nodes:blocked},blockedRoute=routeEdge(blockedOptions);

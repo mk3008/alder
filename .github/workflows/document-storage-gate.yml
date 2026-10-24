@@ -1,0 +1,34 @@
+name: Alder document storage Gate A
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'tools/document_storage/**'
+      - 'work/viewer-json/issue-274/json-native/**'
+      - '.github/workflows/document-storage-gate.yml'
+permissions:
+  contents: read
+concurrency:
+  group: alder-document-storage-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Check runtime versions
+        run: |
+          node --version
+          python3 --version
+      - name: Validate Gate A schema, converter, ID handling and CLI
+        run: node --test tools/document_storage/test-native-json.mjs tools/document_storage/test-storage.mjs tools/document_storage/test-states.mjs tools/document_storage/test-roles.mjs
+      - name: Retain existing Business Graph v1 behavior
+        run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
+      - name: Validate generated package example
+        run: node tools/document_storage/cli.mjs validate tools/document_storage/examples/purchase.json

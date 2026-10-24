@@ -10,7 +10,7 @@ State-transition views help check business flows and permitted changes of state.
 
 Business Design is the basis for agreement with users/requesters. **Its prose must be written in the language the requester actually uses**, so they can understand the content, identify errors, and agree to its meaning themselves. It is not sufficient for only the implementer or AI to understand it. Headers and section names may remain English; see the [authoring guidance](adoption.md#language-for-agreement).
 
-Business Design must also be maintainable by a person alone and jointly editable with AI through the same visible information. Machine-readable export must adapt to that human-readable structure, without making people maintain hidden IDs or machine-only annotations. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
+The Plugin/Skills maintain structured JSON as the source of truth. People use the Viewer to follow the whole work, details, inputs/outputs, explicit state transitions and Check expectations, then request corrections and decide business meaning. They do not need to read or edit JSON or maintain IDs. The Viewer is a review surface, not another source or an approval mechanism. Existing Markdown remains input compatibility; new features use JSON. JSON/state display requires a compatible Viewer; publishing the Plugin alone does not update the production Viewer. See [human and AI co-maintenance](adoption.md#human-and-ai-co-maintenance).
 
 
 ## Business quality is business meaning, not a separate NFR bucket

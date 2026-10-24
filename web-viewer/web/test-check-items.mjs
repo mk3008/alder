@@ -30,3 +30,32 @@ const confirmed={...tab,checks:{name:'check',markdown,confirmedFor:confirmationK
 const changed=reconcile(confirmed,{...design,markdown:design.markdown+'\n'});
 assert.notEqual(confirmationKey(changed),confirmed.checks.confirmedFor);assert.equal(changed.draft,'unsaved draft');assert.equal(changed.checks,confirmed.checks);
 console.log('related Check parser, shared/unresolved IDs, identity/revision and boundary checks passed');
+
+// Independent legacy adapter oracle: one shared identity, review state and guarantee reference.
+const shared=parseChecks(`# Check
+
+## 業務一覧
+| 業務 | 目的 | 接続 | Check |
+| [受付](#受付) | 受付の目的 | 明示接続 | [C01](#c01) |
+| [確認](#確認) | 確認の目的 | 明示接続 | [C01](#c01) |
+
+## 受付
+
+### 一般保証
+
+合意していない保証の本文。
+
+### C01 — 番号を確認する
+
+- 条件：[一般保証](#一般保証)を参照
+- 期待結果：番号を表示する
+- 人間レビュー状態：要確認
+- 独自の補足：未決の文章を残す
+`).model;
+assert.equal(shared.items.length,1);assert.equal(shared.items[0].reviewState,'要確認');assert.equal(shared.items[0].checkId,'C01');
+assert.equal(shared.index[0].checkIds[0],shared.index[1].checkIds[0]);assert.equal(shared.index[0].purpose,'受付の目的');
+assert.equal(shared.guarantees[0].title,'一般保証');assert.deepEqual(shared.items[0].fields.condition[0],{kind:'reference',targetId:shared.guarantees[0].id,label:'一般保証'});
+assert.deepEqual(shared.items[0].fields['独自の補足'],[{kind:'markdown',value:'未決の文章を残す'}]);
+assert.equal(shared.basedOn.verification,'unverified');
+
+const ambiguous=parseChecks(markdown.replace('### JA-EX-01','### 同名の保証\n説明1\n\n### JA-EX-01')+'\n### 同名の保証\n説明2\n');assert.equal(new Set(ambiguous.model.guarantees.map(g=>g.id)).size,ambiguous.model.guarantees.length,'repeated legacy titles never create duplicate reference identities');

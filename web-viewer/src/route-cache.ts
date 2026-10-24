@@ -1,6 +1,7 @@
-import type {MatrixWire} from './matrix-layout.ts';
-import {routeEdge, type EdgeRoute, type RouteNode, type RouteOptions} from './routing.ts';
+import {captionKey,CAPTION_LINE_STEP,type MatrixWire} from './matrix-layout.ts';
+import {captionOnRow, routeEdge, type EdgeRoute, type RouteNode, type RouteOptions} from './routing.ts';
 import type {Relation} from './graph';
+import {captionTop} from './caption-spacing.ts';
 
 type Snapshot = {
   design: object;
@@ -42,12 +43,8 @@ export class RouteCache {
       // Incomplete transient graphs must not retain or attempt a stale endpoint.
       routes[index] = ids.has(r.from) && ids.has(r.to) ? this.router({
         from: r.from, to: r.to, index, nodes, kind: r.kind, matrix:matrix?.[index],
-        // Reserve Output captions above their receiving cards before earlier
-        // exceptions/Inputs choose a label. Reservations never affect paths.
-        labels: matrix?.[index]?[]:[...(r.kind==='output'?[]:relations.flatMap((other,i)=>{
-          const target=nodes.find(n=>n.id===other.to),source=nodes.find(n=>n.id===other.from);
-          return other.kind==='output'&&target&&source?[{id:`output-${i}`,x:source.x+source.width*.125+8,y:target.y-23,width:Math.max(30,other.label.length*12),height:18}]:[];
-        })),...routes.flatMap((route,i)=>route&&i<index?[{
+        // Generic fallback also reserves earlier captions on their departure rows.
+        labels: matrix?.[index]?[]:[...routes.flatMap((route,i)=>route&&i<index?[{
           id:String(i),x:route.label[0]-Math.max(30,relations[i].label.length*12)/2,
           y:route.label[1]-9,width:Math.max(30,relations[i].label.length*12),height:18
         }]:[])],
@@ -55,20 +52,22 @@ export class RouteCache {
         labelWidth: Math.max(30, r.label.length * 12), labelHeight: 18
       }) : undefined;
     });
-    // Keep captions sharing a return port in horizontal slots on the bend row.
-    // The text halo masks unrelated crossing wires without moving captions
-    // away from the bend they describe. Unchanged cached routes stay exact.
-    const pending=new Set(recomputed);
-    const placed=routes.flatMap((route,i)=>route&&matrix?.[i]?.returning&&!pending.has(i)?[{left:route.label[0]-Math.max(30,relations[i].label.length*12)/2,right:route.label[0]+Math.max(30,relations[i].label.length*12)/2,y:route.label[1]}]:[]);
-    for(const i of recomputed){
-      const route=routes[i];if(!route||!matrix?.[i]?.returning)continue;
-      const width=Math.max(30,relations[i].label.length*12),y=route.label[1];let left=route.label[0]-width/2;
-      // Wires sharing one role keep one port; their captions occupy separate
-      // horizontal text slots on that same bend row.
-      const blockers=placed.filter(c=>Math.abs(c.y-y)<1e-6).map(c=>({left:c.left-8,right:c.right+8,gap:8})).sort((a,b)=>a.left-b.left);
-      for(const blocker of blockers)if(blocker.right>=left&&blocker.left<=left+width)left=blocker.right+blocker.gap;
-      placed.push({left,right:left+width,y});
-      if(left!==route.label[0]-width/2)routes[i]={...route,label:[left+width/2,y]};
+    // Geometry remains incident-only. Matrix caption reservations are a separate
+    // deterministic pass: a moved card may cover a nonincident caption, so its
+    // caption slot must be reconsidered without rerouting that wire.
+    if(matrix){
+      const placed:RouteNode[]=[],shared=new Map<string,[number,number]>();
+      // Reserve the normal departure stack before return captions escape it.
+      const order=routes.map((_,i)=>i).sort((a,b)=>Number(matrix[a].returning)-Number(matrix[b].returning));
+      for(const i of order){
+        const route=routes[i];
+        if(!route)continue;
+        const source=nodes.find(n=>n.id===relations[i].from)!,width=Math.max(30,relations[i].label.length*12);
+        const anchor: [number,number]=matrix[i].returning?[Math.max(...route.points.map(p=>p[0]))+8+width/2,route.points[0][1]]:[source.x+source.width*.125+8+width/2,captionTop(source.y+source.height,matrix[i].captionLane*CAPTION_LINE_STEP)+9];
+        const key=captionKey(relations[i],i,matrix[i]),label=shared.get(key)??captionOnRow(anchor,width,18,nodes,placed);
+        if(label[0]!==route.label[0]||label[1]!==route.label[1])routes[i]={...route,label};
+        if(!shared.has(key)){shared.set(key,label);placed.push({id:String(i),x:label[0]-width/2,y:label[1]-9,width,height:18});}
+      }
     }
     this.tabs.set(tab, {design, structure, nodes: new Map(nodes.map(n => [n.id, {...n}])), routes});
     return routes;

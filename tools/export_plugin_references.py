@@ -39,12 +39,18 @@ def export_plan(root, skill_names, source_revision=None):
         if resolved != revision:
             raise ValueError("Source revision must identify a commit directly")
         provenance["alder_source_revision"] = revision
+        if not set(provenance.get("script_destinations", {})) <= set(provenance.get("scripts", {})):
+            raise ValueError("Script destination map contains an unknown source")
         for group, directory in (("sources", "references"), ("scripts", "scripts")):
             for source in provenance.get(group, {}):
                 path = PurePosixPath(source)
                 if path.is_absolute() or ".." in path.parts or str(path) != source:
                     raise ValueError(f"Unsafe source path: {source}")
-                destination = skill / directory / path.name
+                relative = provenance.get("script_destinations", {}).get(source, path.name) if group == "scripts" else path.name
+                target = PurePosixPath(relative)
+                if target.is_absolute() or ".." in target.parts or str(target) != relative:
+                    raise ValueError(f"Unsafe script destination: {relative}")
+                destination = skill / directory / target
                 if destination in planned or destination == provenance_path:
                     raise ValueError(f"Flattened destination collision: {destination}")
                 content = git_bytes(root, "show", f"{revision}:{source}")

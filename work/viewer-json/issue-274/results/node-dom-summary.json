@@ -1,0 +1,14 @@
+{
+  "command": "npm test (web-viewer)",
+  "node": "v24.19.0",
+  "exitCode": 0,
+  "testRunner": {
+    "tests": 77,
+    "pass": 77,
+    "fail": 0
+  },
+  "durationMs": 95413.869957,
+  "stdoutSha256": "3a8ab14349bb6b7e032a12468266f262eb69fbf0a19bbb83fbe2a3ab3e71466b",
+  "stdoutBytes": 169452,
+  "scope": "Node/DOM regressions plus activity/preflight scripts; not native Chrome"
+}

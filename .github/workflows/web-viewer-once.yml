@@ -4,6 +4,13 @@ on:
     types: [opened, synchronize]
     paths:
       - 'web-viewer/**'
+      - 'tools/viewer-preview.mjs'
+      - 'work/viewer-json/issue-274/layout-regression/**'
+      - 'tools/document_storage/core.mjs'
+      - 'tools/document_storage/schema.mjs'
+      - 'tools/document_storage/legacy-json.mjs'
+      - 'tools/document_storage/state-declaration.mjs'
+      - 'work/viewer-json/issue-274/json-native/**'
       - '.github/workflows/web-viewer-once.yml'
 concurrency:
   group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
@@ -13,7 +20,10 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
+    env:
+      REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+      REVIEW_PR: ${{ github.event.pull_request.number }}
     defaults:
       run:
         working-directory: web-viewer
@@ -21,6 +31,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
@@ -31,9 +42,27 @@ jobs:
         run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
       - name: Install Japanese review-image font
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-          fc-match -f '%{family}\n' ':lang=ja'
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Select bounded B-loop comparison
+        id: b_loop
+        run: |
+          if git show -s --format=%B "$REVIEW_HEAD" | grep -qx 'Benchmark-B-Loop: 441dfb8b'; then
+            git fetch --no-tags --depth=1 origin 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
+            git worktree add --detach "$RUNNER_TEMP/b-loop-baseline" 441dfb8b2fbf36bb4215ec885852dc14fa6a3e59
+            ln -s "$GITHUB_WORKSPACE/web-viewer/node_modules" "$RUNNER_TEMP/b-loop-baseline/web-viewer/node_modules"
+            cp -a "$GITHUB_WORKSPACE/web-viewer/dist" "$RUNNER_TEMP/b-loop-baseline/web-viewer/dist"
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          fi
       - name: Verify built app in Chrome
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
@@ -43,7 +72,29 @@ jobs:
             if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
             sleep 1
           done
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright" node web/test-browser.mjs
+          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
+          if [ "${{ steps.b_loop.outputs.enabled }}" = true ]; then
+            node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
+          else
+            node web/test-browser.mjs
+          fi
+
+      - name: Retain bounded B-loop measurements
+        if: always() && steps.b_loop.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: b-loop-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/b-loop/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain MD JSON geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-layout-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-layout/
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Preserve header review screenshots
         if: always()
@@ -52,6 +103,14 @@ jobs:
           name: header-controls-${{ github.sha }}
           path: web-viewer/web/evidence/header-controls/*.png
           if-no-files-found: ignore
+      - name: Retain JSON review screenshots and observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-document-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-document/
+          if-no-files-found: error
+          retention-days: 14
       - name: Retain save-conflict review screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -81,19 +140,7 @@ jobs:
         env:
           REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
           REVIEW_PR: ${{ github.event.pull_request.number }}
-        run: |
-          node --input-type=module <<'JS'
-          import {mkdirSync,cpSync,writeFileSync,readdirSync,readFileSync} from 'node:fs';
-          import {createHash} from 'node:crypto';
-          import {execFileSync} from 'node:child_process';
-          const head=process.env.REVIEW_HEAD,pr=process.env.REVIEW_PR;
-          const path=`review-package/preview/pr-${pr}/${head}/`;
-          mkdirSync(path,{recursive:true});cpSync('dist',path,{recursive:true});
-          const files=readdirSync('dist',{recursive:true}).filter(f=>/\.(?:html|js|css|txt)$/.test(f));
-          const manifest={source:head,checkout:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),urlPath:`/preview/pr-${pr}/${head}/`,files:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(`dist/${f}`)).digest('hex')]))};
-          writeFileSync('review-package/manifest.json',JSON.stringify(manifest,null,2));
-          writeFileSync('review-package/README.txt',`本番とは分離した操作確認用ビルドです。\nsource: ${head}\n展開先で python3 -m http.server 4173 を実行し、http://localhost:4173/preview/pr-${pr}/${head}/ を開きます。\n一般公開や本番配備は行いません。\n`);
-          JS
+        run: node ../tools/viewer-preview.mjs
       - name: Retain isolated review Preview
         if: success()
         uses: actions/upload-artifact@v4
@@ -107,5 +154,23 @@ jobs:
         with:
           name: related-checks-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/related-checks/*.png
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Retain state JSON comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-states-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-states/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Retain role JSON comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-roles-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/json-roles/
           if-no-files-found: ignore
           retention-days: 14

@@ -1,0 +1,260 @@
+{
+  "status": "passed",
+  "kind": "deterministic replay of Codex direct-JSON artifacts",
+  "businessApproval": "all positive human receipts are synthetic fixtures",
+  "node": "v24.19.0",
+  "scriptDir": "/tmp/alder-json-client-273/installed-alder/skills/alder-manage-json-documents/scripts/document_storage",
+  "commands": [
+    {
+      "args": [
+        "runtime"
+      ],
+      "status": 0,
+      "stdout": "{\"node\":\"v24.19.0\",\"directJSON\":true,\"python\":[3,12,14],\"markdownConversion\":true}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "create",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"0e234a60b56693713a903848565b13316d47c9744abd13f67d803c42f67c4294\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"0e234a60b56693713a903848565b13316d47c9744abd13f67d803c42f67c4294\",\"revision\":\"package-1\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-1\"}],\"checks\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"d61bdf4cf48baba5051ffe6e6906a74e5dda411a2fade71ef91821ed1aea5d6d\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"d61bdf4cf48baba5051ffe6e6906a74e5dda411a2fade71ef91821ed1aea5d6d\",\"revision\":\"package-2\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"}],\"checks\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Human Business Design confirmation for this exact revision is required\"}]}\n"
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"d61bdf4cf48baba5051ffe6e6906a74e5dda411a2fade71ef91821ed1aea5d6d\",\"revision\":\"package-2\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"}],\"checks\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"2a8a6375c7304064e8beefdeaf376dc78bf3fcece60ef89b0a23c155aa13782d\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"2a8a6375c7304064e8beefdeaf376dc78bf3fcece60ef89b0a23c155aa13782d\",\"revision\":\"package-3\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-1\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Human Business Design confirmation for this exact revision is required\"}]}\n"
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"2a8a6375c7304064e8beefdeaf376dc78bf3fcece60ef89b0a23c155aa13782d\",\"revision\":\"package-3\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-1\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"ea503d417a13138a28d2e60dc41b8a13f0d12dd51b835e51475267520dabb06d\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"ea503d417a13138a28d2e60dc41b8a13f0d12dd51b835e51475267520dabb06d\",\"revision\":\"package-4\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-2\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Human Business Design confirmation for this exact revision is required\"}]}\n"
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"ea503d417a13138a28d2e60dc41b8a13f0d12dd51b835e51475267520dabb06d\",\"revision\":\"package-4\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-2\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-2\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"f5b67c25004fb2080a0909f3240f4a8a015d5913d32430ac1184bd44f6ef4a3b\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"f5b67c25004fb2080a0909f3240f4a8a015d5913d32430ac1184bd44f6ef4a3b\",\"revision\":\"package-5\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-3\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-3\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Stale Check source revision\"}]}\n"
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"f5b67c25004fb2080a0909f3240f4a8a015d5913d32430ac1184bd44f6ef4a3b\",\"revision\":\"package-5\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-3\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-3\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Changed expectation needs renewed human review; do not carry confirmation\"}]}\n"
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"f5b67c25004fb2080a0909f3240f4a8a015d5913d32430ac1184bd44f6ef4a3b\",\"revision\":\"package-5\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-3\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-3\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"634f159fd2a2806cd8012847bc3bc643e8f710371c60125b84234e284670b206\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"未レビュー\",\"meaningSha256\":\"c0ee51586d8db2139cc34a8cbd5fc1c002ff3b2397fa99e2fa2e5a053f3799d9\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"ffe33bc498fddd427cc5a9e2bef98e94df5971e416e4ea7e89035bf858ac8044\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "/tmp/alder-json-client-273/output/design.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"ffe33bc498fddd427cc5a9e2bef98e94df5971e416e4ea7e89035bf858ac8044\",\"revision\":\"package-6\",\"documents\":[{\"id\":\"05570d0b-04c8-4888-bfa6-703dd22409f7\",\"kind\":\"businessDesign\",\"revision\":\"bd-3\"},{\"id\":\"6e3f5e75-c797-4d1b-b760-efbaa37a284c\",\"kind\":\"checkItems\",\"revision\":\"checks-4\"}],\"checks\":[{\"id\":\"01f7c556-80b3-42d9-960b-5a0e090286ab\",\"checkId\":\"CI-001\",\"reviewState\":\"確認済み\",\"meaningSha256\":\"3d542f1dbadd2c3c65ea16bdb3a19f7ad7e96237336b5de2efe283014b4add06\"},{\"id\":\"241a2541-3f34-487d-b094-6743421c6113\",\"checkId\":\"CI-002\",\"reviewState\":\"要確認\",\"meaningSha256\":\"a81f8ba226f5857f18281ca8c521e230890e62555baf7c65305ce4c9e7210660\"},{\"id\":\"512e2e18-4770-4a4f-903b-cab858a11045\",\"checkId\":\"CI-003\",\"reviewState\":\"要確認\",\"meaningSha256\":\"5716ee64b4c43a49a1c4bfdd272311adb218a0a714000faf8c8e50103a57117c\"},{\"id\":\"5833c919-5b45-4fc6-95f1-7cfce60cfd9c\",\"checkId\":\"CI-Q01\",\"reviewState\":\"要確認\",\"meaningSha256\":\"72ea1122596e70f1edff1635cb4d09d318e03a60b4644c4f9a0a6acfee6236a0\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "commit",
+        "/tmp/alder-json-client-273/output/design.json",
+        "/tmp/alder-json-client-273/output/candidate.json",
+        "/tmp/alder-json-client-273/output/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-json-client-273/output/design.json\",\"sha256\":\"69f624fd5e10858ed10b8e491c2262d8fd45dfb5603728d950a07afa90841fc5\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": ""
+    }
+  ],
+  "finalValidation": {
+    "valid": true,
+    "diagnostics": [
+      "Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c"
+    ],
+    "entities": 27
+  },
+  "limitations": [
+    "No marketplace registration or automatic skill selection proven",
+    "No real requester approval or semantic correctness inferred",
+    "No Viewer runtime integration"
+  ]
+}

@@ -2,7 +2,15 @@
 
 [READMEへ戻る](../README.ja.md) · [複数業務の記述例](examples/meeting-room-lifecycle.ja.md)
 
-このページは、業務設計書の見出し、各欄に書く内容、複数の業務の記述方法を説明します。本文はユーザーが普段使う言語で書きます。見出しと参照の形式は、[Business GraphのMarkdown形式](business-graph.md#opt-in-markdown-profile-v1)に対応しています。
+業務設計書は、Activityの目的・開始条件・担当・手順・入出力・結果と、Objectが持つ情報を記述します。内容は依頼者が普段使う言語で表し、Viewerで業務がつながるかを確認します。
+
+新規の保存正本はJSONです。Plugin／Skillが草案・更新と安定ID・参照・版を管理し、人間はViewerで修正点と合意を伝えます。WhatはActivity名、HowはInput／Procedure／Outputと明示された例外に分けるという業務上の意味は、保存形式によって変わりません。
+
+開発者が保存形式を扱う場合は[JSON構造契約](https://github.com/mk3008/alder/blob/bd8ff1e2b55765a9e5cac10e85d6dee3ca85ebec/docs/json-native-contract.ja.md)を参照してください。JSONの直接編集は通常の利用手順ではありません。
+
+## 旧Markdownの記法（互換Reference）
+
+以下は既存MDの読込・更新・明示的な一方向変換を行う際の記法です。新規JSONを作るために、この見出しを中間MDへ出力する必要はありません。旧ファイルをJSONへ変換するときは元MDを保持します。[Business GraphのMarkdown形式](business-graph.md#opt-in-markdown-profile-v1)は従来の独立した出力契約です。
 
 ## 1. 見出しの構造
 
@@ -82,7 +90,7 @@
 | --- | --- | --- |
 | 文書タイトル | 対象業務が分かる名前 | 必須 |
 | タイトルの直後 | 目的、前提、文書全体の未決事項。現行業務と変更後の業務のどちらを記述しているか | 必要に応じて記載 |
-| `# Scope` | 今回扱う業務と対象外の業務の範囲 | 推奨。JSON形式上は省略可能 |
+| `# Scope` | 今回扱う業務と対象外の業務の範囲 | 推奨。旧MDでは省略可能 |
 
 ### Object
 
@@ -188,7 +196,7 @@ Why・Output・Resultの違いは、予約業務なら次のようになりま�
 
 発生元のExceptionには起きた例外と戻り先の動作を、受け側のException Whenには開始・再開条件を書きます。通常の情報の受け渡しとは別の関係です。
 
-JSON化は一つの文書を単位とし、参照先のObject・Activityもその文書内に定義します。名前には区切り文字の` — `と` → `を含めません。JSONの形式や追加の例外関係の記法は[Business Graph export](business-graph.md)を参照してください。
+旧MDからのBusiness Graph v1出力は一つの文書を単位とし、参照先のObject・Activityもその文書内に定義します。この旧MD／Graph v1表記では名前に区切り文字の` — `と` → `を含めません。型付きJSONの識別は安定IDによるため、この区切り文字を識別根拠にしません。JSONの形式や追加の例外関係の記法は[Business Graph export](business-graph.md)を参照してください。
 
 ## 関連ガイド
 
@@ -198,4 +206,4 @@ JSON化は一つの文書を単位とし、参照先のObject・Activityもそ�
 | 未記載の機能条件や未決事項の候補を探す | [漏れのチェック](business-design-omission-check.ja.md) |
 | 前後の業務、入出力、状態、例外のつながりを確かめる | [相関チェック](business-design-correlation-check.ja.md) |
 | 記録した困りごとから改善候補を考える | [改善提案](business-design-improvement.ja.md) |
-| JSON出力の手順・形式を調べる | [Business Graph export](business-graph.md) |
+| 旧MDからの派生Graph出力を調べる | [Business Graph export](business-graph.md) |

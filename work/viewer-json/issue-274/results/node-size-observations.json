@@ -1,0 +1,21 @@
+{
+  "node": "v24.19.0",
+  "scope": "single warm-process observation; Node parsing/validation only, not Chrome rendering or heap; not a benchmark score",
+  "results": [
+    {
+      "bytes": 2218906,
+      "parseMs": 35.801075999999995,
+      "validateMs": 2.101323999999991
+    },
+    {
+      "bytes": 4211200,
+      "parseMs": 49.13521800000001,
+      "validateMs": 0.716148000000004
+    },
+    {
+      "bytes": 8405503,
+      "parseMs": 15.77919,
+      "validateMs": 0.7008350000000121
+    }
+  ]
+}

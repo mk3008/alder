@@ -41,7 +41,7 @@ export function seedInitialLeftMarginSession({layout,closed=false,omitInset=fals
 export function readInitialMarginWorldInPage(){return {
  positions:Object.fromEntries([...document.querySelectorAll('.node')].map(node=>[node.dataset.node,[parseFloat(node.style.left),parseFloat(node.style.top)]])),
  routes:Object.fromEntries([...document.querySelectorAll('.edge')].map(edge=>{
-  const label=document.querySelector(`.edge-label[data-relation="${edge.dataset.relation}"]`);
+  const label=document.querySelector(`.edge-label[data-relations~="${edge.dataset.relation}"]`);
   return [edge.dataset.relation,{path:edge.getAttribute('d'),label:[label.getAttribute('x'),label.getAttribute('y'),label.textContent],collisions:edge.dataset.collisions,rerouted:edge.dataset.rerouted,fallback:edge.dataset.fallback}];
  }))
 };}
@@ -69,7 +69,7 @@ export function assertInitialMarginGeometry(measured,{zoom,inset=40,width,report
  // six coefficients and the independent expected matrix even on a failed run.
  report('INITIAL_LEFT_MARGIN_NATIVE_INPUT '+JSON.stringify({width,viewportSize:measured.viewportSize,viewportOrigin:measured.viewportOrigin,scroll:measured.scroll,logicalZoom:zoom,inset,intendedCssDimensions,svg,expectedMatrix,oracleError,logicalMatrix,viewBoxBounds,worldBounds,matrixTolerance:svgMatrixTolerance,screenTolerancePx:svgScreenTolerance,ctmCount:matrices.length,ctmSamples:[matrices[0],matrices.find(item=>item.kind==='edges'),matrices.find(item=>item.kind==='labels')],mismatchingCtmCount:mismatches.length,mismatchingCtms:mismatches.slice(0,4),largestFullExtentDeviations:fullExtentDeviations.slice(0,2)}));
  assert.equal(oracleError,undefined,'independent SVG viewport oracle inputs');
- assert.deepEqual(measured.scroll,[0,0]);assert.equal(measured.nodes.length,25);assert.equal(measured.edges.length,63);assert.equal(measured.labels.length,63);
+ assert.deepEqual(measured.scroll,[0,0]);assert.equal(measured.nodes.length,25);assert.equal(measured.edges.length,63);assert.equal(measured.labels.length,62);
  assert.deepEqual(svg.computedCss.border,[0,0,0,0],'SVG measured border box is its viewport');assert.deepEqual(svg.computedCss.padding,[0,0,0,0],'SVG viewport has no CSS padding');assert.equal(svg.computedCss.transform,'none','root SVG has no additional CSS transform');
  assert.deepEqual(svg.preserveAspectRatio,{attribute:null,align:6,meetOrSlice:1},'product retains SVG default xMidYMid meet');
  assertSvgMatrix(svg.matrix,expectedMatrix,'native SVG root matrix');
@@ -209,17 +209,17 @@ function preflightInitialMarginGeometryAssertions(){
  const zoom=.36,viewBox=[0,0,1916,2564],logs=[];
  function fixture(rect){
   const matrix=svgViewportTransform({rect,viewBox}),shape=(id,world)=>({id,world,left:matrix[0]*world[0]+matrix[4],transformedLeft:matrix[0]*world[0]+matrix[4],screen:[world[2]*matrix[0],world[3]*matrix[3]],transformedSize:[world[2]*matrix[0],world[3]*matrix[3]],matrix:[...matrix]});
-  return {viewportLeft:0,viewportOrigin:[0,108],viewportSize:[1280,852],scroll:[0,0],svg:{usedRect:rect,viewBoxAttribute:'0 0 1916 2564',viewBox,preserveAspectRatio:{attribute:null,align:6,meetOrSlice:1},inlineCss:{left:'14.4px',top:'0px',width:'689.76px',height:'923.04px'},computedCss:{width:rect[2]+'px',height:rect[3]+'px',transform:'none',border:[0,0,0,0],padding:[0,0,0,0]},matrix},nodes:Array.from({length:25},(_,i)=>({id:'node-'+i,world:[40,40+i*96],left:80*zoom,width:260*zoom})),edges:Array.from({length:63},(_,i)=>shape('edge-'+i,[72.5,40+i*10,100,40])),labels:Array.from({length:63},(_,i)=>shape('label-'+i,[1,40+i*10,20,10]))};
+  return {viewportLeft:0,viewportOrigin:[0,108],viewportSize:[1280,852],scroll:[0,0],svg:{usedRect:rect,viewBoxAttribute:'0 0 1916 2564',viewBox,preserveAspectRatio:{attribute:null,align:6,meetOrSlice:1},inlineCss:{left:'14.4px',top:'0px',width:'689.76px',height:'923.04px'},computedCss:{width:rect[2]+'px',height:rect[3]+'px',transform:'none',border:[0,0,0,0],padding:[0,0,0,0]},matrix},nodes:Array.from({length:25},(_,i)=>({id:'node-'+i,world:[40,40+i*96],left:80*zoom,width:260*zoom})),edges:Array.from({length:63},(_,i)=>shape('edge-'+i,[72.5,40+i*10,100,40])),labels:Array.from({length:62},(_,i)=>shape('label-'+i,[1,40+i*10,20,10]))};
  }
  const options={zoom,width:1280,report:line=>logs.push(JSON.parse(line.slice(line.indexOf(' ')+1)))};
  for(const rect of [[14.4,108,689.76,923.04],[14.390625,108,689.75,923.03125]]){
-  assertInitialMarginGeometry(fixture(rect),options);const log=logs.at(-1);assert.equal(log.ctmCount,127);assert.equal(log.expectedMatrix.length,6);assert.equal(log.svg.matrix.length,6);assert.equal(log.mismatchingCtmCount,0);
+  assertInitialMarginGeometry(fixture(rect),options);const log=logs.at(-1);assert.equal(log.ctmCount,126);assert.equal(log.expectedMatrix.length,6);assert.equal(log.svg.matrix.length,6);assert.equal(log.mismatchingCtmCount,0);
  }
  const corrupted=fixture([14.4,108,689.76,923.04]);corrupted.labels.at(-1).matrix[4]+=2e-6;
- const before=logs.length;assert.throws(()=>assertInitialMarginGeometry(corrupted,options),/native SVG matrix labels label-62.e/);assert.equal(logs.length,before+1,'diagnostic is emitted before failure');assert.equal(logs.at(-1).mismatchingCtms[0].id,'label-62');
+ const before=logs.length;assert.throws(()=>assertInitialMarginGeometry(corrupted,options),/native SVG matrix labels label-61.e/);assert.equal(logs.length,before+1,'diagnostic is emitted before failure');assert.equal(logs.at(-1).mismatchingCtms[0].id,'label-61');
  assert.throws(()=>assertInitialMarginGeometry(fixture([14.5,108,689.76,923.04]),options),/root full extent at intended zoom/);
  const far=fixture([14.4,108,689.76,923.04]);far.labels.at(-1).world[2]=1e6;far.labels.at(-1).matrix[0]+=5e-7;
- assert.throws(()=>assertInitialMarginGeometry(far,options),/label-62 full extent at intended zoom/);assert.equal(logs.at(-1).largestFullExtentDeviations[0].id,'label-62');
+ assert.throws(()=>assertInitialMarginGeometry(far,options),/label-61 full extent at intended zoom/);assert.equal(logs.at(-1).largestFullExtentDeviations[0].id,'label-61');
  for(const log of logs){assert.ok(log.mismatchingCtms.length<=4);assert.ok(log.largestFullExtentDeviations.length<=2);assert.ok(JSON.stringify(log).length<6000,'bounded synthetic diagnostic size');}
  return {syntheticPositiveCases:2,syntheticRejections:3,diagnosticBeforeFailure:true,nativeBrowserExecuted:false};
 }

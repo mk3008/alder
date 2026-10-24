@@ -1,8 +1,8 @@
 export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean; [key: string]: unknown };
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
-export type Finding = { id: string; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };
-export type Design = { graph: Graph; sections: Record<string, string>; markdown: string; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
+export type Finding = { id: string; displayId?:string; targetNames?:string[]; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };
+export type Design = { objectStateTransitions?:Record<string,import('./state-transitions').StateDeclaration>; graph: Graph; sections: Record<string, string>; markdown: string; sourceFormat?:'json'; model?:import('./json-document').DocumentModel; findings?: Finding[]; /** Viewer-only reading hint, never part of Graph JSON. */ activityOrder?: string[] };
 const fail = (ok: unknown, message: string): void => { if (!ok) throw new Error(message); };
 const text = (v: unknown): v is string => typeof v === 'string' && !!v.replace(/^[\s\u001c-\u001f]+|[\s\u001c-\u001f]+$/g, '');
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -78,10 +78,11 @@ export function findingsFromSource(markdown: string, names: Set<string>): Findin
   for(const finding of result)finding.unresolvedTargets=finding.targets.filter(t=>!names.has(t));
   return result;
 }
-export function parseDesign(markdown: string): Design {
+export function parseDesign(markdown: string, capture?: {activity?:(name:string,fields:Record<string,string>)=>void;document?:(title:string,preface:string)=>void}): Design {
   fail(!markdown.includes('<!--'), 'HTML comments are unsupported'); const ls = lines(markdown), roots = headings(markdown).filter(m=>m[1].startsWith('# '));
   const entity = /^# (Activity|Object) (\S.*)$/;
   fail(roots.length && !entity.test(roots[0][1]) && !['# Scope','# Graph exceptions','# Findings'].includes(roots[0][1]), 'Document title required');
+  capture?.document?.(roots[0][1].slice(2),ls.slice(roots[0][0]+1,roots[1]?.[0]??ls.length).join('\n').trim());
   let findings: Finding[] = [];
   const graph: Graph = {version:1,nodes:[],relations:[]}, sourceSections: Record<string,string> = Object.create(null), special = new Set<string>();
   roots.slice(1).forEach(([start,h], index) => {
@@ -100,6 +101,7 @@ export function parseDesign(markdown: string): Design {
     }
     const keys=['## Scope','## Why','## When']; if(has('## Exception When')) keys.push('## Exception When'); keys.push('## Who','## Where','## How','### Input','### Procedure'); if(has('### Exception')) keys.push('### Exception'); keys.push('### Output','## Result'); if(has('## Problem') || has('## Pain level')) keys.push('## Problem','## Pain level');
     const v=sections(body,keys,name,['## How']); fail(!v['## How'],'How must only contain fields'); fail(['true','false'].includes(v['## Scope']),'Invalid Scope');
+    capture?.activity?.(name,v);
     const node: GraphNode={id:name,type:'business',name,scope:v['## Scope']==='true',why:v['## Why'],when:v['## When'],who:v['## Who'],where:v['## Where'],result:v['## Result']}; if('## Problem' in v) {node.problem=v['## Problem'];node.pain_level=v['## Pain level'];} graph.nodes.push(node);
     for(const [field,kind] of [['## Exception When','business-exception'],['### Input','input'],['### Output','output']] as const) {
       if(!(field in v) || (kind!=='business-exception' && v[field]==='(none)')) continue;

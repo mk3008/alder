@@ -54,7 +54,7 @@ export function seedReturnRouteSession({positions,zoom}){return new Promise((res
 });}
 export function readReturnRoutesInPage(){
  return Object.fromEntries([...document.querySelectorAll('.edge')].map(edge=>{
-  const label=document.querySelector(`.edge-label[data-relation="${edge.dataset.relation}"]`);
+  const label=document.querySelector(`.edge-label[data-relations~="${edge.dataset.relation}"]`);
   return [edge.dataset.relation,{path:edge.getAttribute('d'),label:label?[label.getAttribute('x'),label.getAttribute('y')]:null,collisions:edge.dataset.collisions}];
  }));
 }
@@ -92,7 +92,7 @@ export function assertLocalReturnPath(path){
  const bounds=[Math.min(...extrema.map(p=>p[0])),Math.min(...extrema.map(p=>p[1])),Math.max(...extrema.map(p=>p[0])),Math.max(...extrema.map(p=>p[1]))];
  // Both arrival roles face lower peers. The upper data port uses the outer
  // of the two 16-unit return corridors to avoid crossing the lower arrival.
- const right=Math.max(source[0]+260,target[0]+260)+14+8+16;
+ const right=Math.max(source[0]+260,target[0]+260)+24+8+16;
  assert.deepEqual(bounds,[target[0]+260,target[1]+68/3,right,source[1]+34],'local return stays within its endpoint corridor, including exact curve extrema');
  assert.equal(segments.filter(s=>s.kind==='Q').length,2,'rounded two-corner return');
  for(const s of segments)if(s.kind==='L')assert.ok(s.start[0]===s.end[0]||s.start[1]===s.end[1],'straight legs are orthogonal');
@@ -228,12 +228,12 @@ export async function preflightReturnRoutes(){
    await waitSavedViewer(coldPage,fields(zoom,hiddenNodes));openDisplaySettingsDOM(cold.document);cold.document.querySelector('#show-outside').click();assert.deepEqual(await coldPage.evaluate(readPositionsInPage),returnRoutePositions);cold.close();
   }
   // Exercise oracle sensitivity without invoking product routing as an oracle.
-  const y=328+68/3,good=`M556,554 L586,554 Q594,554 594,546 L594,${y+8} Q594,${y} 586,${y} L428,${y}`;
-  assertLocalReturnPath(good);assert.throws(()=>assertLocalReturnPath(good.replaceAll('594','1890').replaceAll('586','1882')),/endpoint corridor/);
+  const y=328+68/3,good=`M556,554 L596,554 Q604,554 604,546 L604,${y+8} Q604,${y} 596,${y} L428,${y}`;
+  assertLocalReturnPath(good);assert.throws(()=>assertLocalReturnPath(good.replaceAll('604','1890').replaceAll('596','1882')),/endpoint corridor/);
   assert.throws(()=>assertLocalReturnPath(good.replace('M556,554','M555,554')),/source perimeter/);
   assert.ok(enters({kind:'L',start:[0,1],end:[10,1]},[4,.9,4.01,1.1]),'analytical collision catches a narrow interval between sample points');
   assert.ok(enters({kind:'Q',start:[0,0],control:[10,0],end:[10,10]},[7.49,2.49,7.51,2.51]),'quadratic collision catches a narrow interior interval');
-  const result={returnRoutePreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,relation:relationIndex,localRight:594,scopeOff:16,writePreferred:13,zoomCases:2,widths:returnRouteWidths,selectors:selectors.length,limits:returnRouteLimits,browserExecuted:false,limit:'Real parser, DOM controls, analytic M/L/Q geometry and committed fake-IDB restore only. Native SVG metrics and Chromium viewport/persistence cases are prepared but not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
+  const result={returnRoutePreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,relation:relationIndex,localRight:604,scopeOff:16,writePreferred:13,zoomCases:2,widths:returnRouteWidths,selectors:selectors.length,limits:returnRouteLimits,browserExecuted:false,limit:'Real parser, DOM controls, analytic M/L/Q geometry and committed fake-IDB restore only. Native SVG metrics and Chromium viewport/persistence cases are prepared but not executed; case budgets are uncalibrated.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());}
 }
 if(process.argv.includes('--preflight'))await preflightReturnRoutes();

@@ -107,13 +107,34 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   await pinch(500,400,200,300);assert.deepEqual(await positions(),initial);await page.locator('#layout-lock').click();await page.locator('.node.object').first().scrollIntoViewIfNeeded();const move=await page.locator('.node.object').first().boundingBox();await send('touchStart',[[1,move.x+100,move.y+30]]);await send('touchMove',[[1,move.x+120,move.y+40]]);await send('touchEnd',[]);assert.notDeepEqual(await positions(),initial);
  },{blocked:!basic});
  await run('product: midpoint, zoom limits, cancel and consecutive gestures',async({page,positions,view,pinch})=>{
-  const initial=await positions(),cx=500,cy=400;await pinch(cx,cy,200,300);assert.equal((await view()).zoom,1.5);
-  await page.locator('#viewport').evaluate(n=>{n.scrollLeft=300;n.scrollTop=200;});const before=await view();
+  // Layout and zoom change which card lies at any fixed screen point.
+  // Keep both touch starts off child buttons; these controls intentionally
+  // own pointerdown and are not part of the viewport pinch gesture.
+  const safeCenter=async gap=>{
+   const point=await page.evaluate(gap=>{
+    const v=document.querySelector('#viewport'),r=v.getBoundingClientRect();
+    const candidates=[[500,400],[750,400],[600,560],[400,560],[850,560],[600,720],[350,720],[900,350],[350,350],[900,700]];
+    return candidates.find(([cx,cy])=>cy>=r.top+16&&cy<=r.bottom-16&&
+      [cx-gap/2,cx+gap/2].every(x=>{
+       if(x<r.left+16||x>r.right-16)return false;
+       const hit=document.elementFromPoint(x,cy);
+       return hit&&v.contains(hit)&&!hit.closest('button,a,input,textarea,select');
+      }))??null;
+   },gap);
+   assert.ok(point,'both pinch contacts must start inside the graph away from child controls');
+   return point;
+  };
+  const safePinch=async(from,to,end)=>{const [x,y]=await safeCenter(from);await pinch(x,y,from,to,end);};
+  const initial=await positions();await safePinch(200,300);assert.equal((await view()).zoom,1.5);
+  await page.locator('#viewport').evaluate(n=>{n.scrollLeft=300;n.scrollTop=200;});
+  const before=await view(),[cx,cy]=await safeCenter(200);
   const anchor=[(before.scroll[0]+cx-before.rect.x)/before.zoom,(before.scroll[1]+cy-before.rect.y)/before.zoom];
   await pinch(cx,cy,200,300);const after=await view();assert.equal(after.zoom,2.25);
   for(let i=0;i<2;i++){const local=[cx-before.rect.x,cy-before.rect.y][i];assert.ok(Math.abs((after.scroll[i]+local)/after.zoom-anchor[i])<1,'midpoint anchor');}
   assert.equal(after.scale,1);assert.deepEqual(await positions(),initial);
-  await pinch(cx,cy,200,300);assert.equal((await view()).zoom,2.5);await pinch(cx,cy,300,20,'touchCancel');assert.equal((await view()).zoom,.25);await pinch(cx,cy,100,200);assert.equal((await view()).zoom,.5);assert.deepEqual(await positions(),initial);
+  await safePinch(200,300);assert.equal((await view()).zoom,2.5);
+  await safePinch(300,20,'touchCancel');assert.equal((await view()).zoom,.25);
+  await safePinch(100,200);assert.equal((await view()).zoom,.5);assert.deepEqual(await positions(),initial);
  },{blocked:!basic});
  for(const panCase of ['sample-clamp','fixture-zero-y','fixture-two-axes'])await run('product: one-finger node drag and background pan '+panCase,async({page,driver,send,positions,view,pinch})=>{
   await page.locator('#layout-lock').click();const initial=await positions();await pinch(500,400,200,300);await pinch(500,400,300,200);assert.equal((await view()).zoom,1);assert.deepEqual(await positions(),initial);

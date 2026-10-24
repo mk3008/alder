@@ -1,19 +1,21 @@
 # Alder Plugin
 
-Alder Plugin packages the current design and review workflows with their versioned guidance. Business Design drafting/revision, Check Item drafting/maintenance and scoped review follow-up can write their requested artifacts; reviews and discovery remain read-only. Optional graph export and a restricted traceability-drift pilot use bundled Python scripts. No MCP server or product-side Alder checkout is needed.
+Alder Plugin creates and updates Business Design and Check Items from notes and human feedback. New artifacts use a single JSON package; people review business meaning in the Viewer and request revisions from the Plugin. Existing Markdown selected for update keeps its compatibility route unless a one-way conversion is explicitly requested. Reviews and discovery remain read-only.
 
-Alder uses one product version, shared with `plugins/alder/plugin.json`. A published `plugin-vX.Y.Z` tag fixes the documentation, source and plugin together; the `plugin-` prefix is retained for installation compatibility. Review knowledge v0.3 is an internal knowledge identifier, not another product release. See [Versioning and releases](versioning.md). New routing and packaged-script execution in a real client remain unverified. Python 3.12+ and local script execution are required for the two tool-backed workflows; a client without them cannot execute those tools. The earlier 0.2.8 package retains its three workflows with bounded client-validation evidence. The stable tag `plugin-v0.1.0` provides implementation review only.
+These instructions apply to **Alder 0.4.9**. Confirm that [plugin-v0.4.9](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9) has been published before installing it; a development branch or manifest version is not proof of release. JSON and explicit partial state-transition viewing require a compatible Viewer published separately from the Plugin. If it is not yet deployed, use the [Viewer review build](../web-viewer/json.ja.md#確認版を用意する). Formal JSON v1 and concept modeling are not included in this release.
+
+JSON creation, validation and guarded saving require Node 24+ and local script execution in the host. Explicit MD conversion also requires Python 3.12+. Optional Graph export and the restricted drift pilot use their bundled Python scripts. No product-side Alder runtime package or MCP server is needed. Installed-copy CLI checks do not prove automatic Skill selection or execution in a real ChatGPT host; check the host's actual tool/runtime availability before relying on those operations.
 
 ## Install once
 
-After verifying its publication on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8), pin the Plugin release tag:
+After verifying the published release tag, register the versioned Plugin:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref plugin-v0.4.8
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.9
 codex plugin marketplace list
 ```
 
-The repository is public, so a supported client can install this GitHub-distributed plugin without a separate package registry. For development or unreleased testing, a reviewed commit or branch may be used instead of the stable tag. A branch can move, so record the resolved plugin source commit with the review.
+The versioned tag fixes the source and bundled guidance. Existing installations are snapshots and must be refreshed/reinstalled to pick up a new version. For earlier Markdown-only usage, the [0.4.8 installation guide](https://github.com/mk3008/alder/blob/plugin-v0.4.8/docs/plugin-adoption.md) remains available.
 
 Then restart the ChatGPT desktop app, open the Plugins Directory, choose the **Alder development** marketplace, install **Alder**, and start a **new chat** before testing the skill. The repository marketplace at `.agents/plugins/marketplace.json` points to `plugins/alder`; installing once does not copy Alder files into each product repository. Refresh/reinstall after updating the package.
 
@@ -29,7 +31,7 @@ Keep the Business Design in the product repository. If the conventional `docs/bu
 Business Design: docs/operations/
 ```
 
-The project may also specify Check Items and Decision Records paths if they differ from its existing conventions. Business Design is the source of truth for business meaning. The installed skills hold Alder guidance; do not copy it into the product or put their internal paths or SHAs in AGENTS.md.
+The project may also specify the canonical JSON package and Decision Records paths. BD and Check may share one JSON file; separate legacy Check MD paths remain valid for existing projects. Business Design is the source of truth for business meaning. The installed skills hold Alder guidance; do not copy it into the product or put their internal paths or SHAs in AGENTS.md.
 
 For interview notes, request a draft with ordinary language, for example:
 
@@ -37,9 +39,9 @@ For interview notes, request a draft with ordinary language, for example:
 このヒアリング結果をAlder業務設計書にして
 ```
 
-Provide the notes in the request or as a readable file. The skill writes the Business Design draft under the project's declared path, or `docs/business-design/` by convention. It keeps source facts separate from unresolved business outcomes, responsibilities and handoffs. When an answer would change business meaning, correlations or responsibility, it asks a few concrete questions in its response; give it the answers to revise the same design. Details that do not affect current meaning may remain open. If the responsible person has not decided, the draft retains that decision for human review rather than inventing it or continuing questions indefinitely. It does not generate Check Items or implement the product. This workflow is included in the current package. Start a new chat after installing or updating the package.
+Provide the notes in the request or as a readable file. The skill writes a JSON Business Design draft under the project's declared path, or `docs/business-design/` by convention. Use the returned file in the Viewer, inspect the whole work and selected details, then send corrections to the Plugin and reopen the same updated JSON. New creation without a specified format defaults to JSON; selecting an existing MD file for revision does not authorize migration. It keeps source facts separate from unresolved business outcomes, responsibilities and handoffs. When an answer would change business meaning, correlations or responsibility, it asks a few concrete questions in its response; give it the answers to revise the same design. Details that do not affect current meaning may remain open. If the responsible person has not decided, the draft retains that decision for human review rather than inventing it or continuing questions indefinitely. It does not generate Check Items or implement the product. This JSON default is included in Alder 0.4.9. Start a new chat after installing or updating the package.
 
-In Alder 0.4.8, authoring then runs the existing read-only Business Design review as a distinct phase, using a separate agent or fresh context when available and useful, repairs source-supported findings and re-reviews the revision before returning it. Missing facts remain concrete questions, and ambiguous interpretations remain unapproved candidates. Repeated findings without improvement or unavailable/failed review stop the loop with the unresolved scope reported; an unreviewed draft is never presented as passing. A host without a separate reviewer can apply the complete review skill in the same agent, clearly reporting that the review was not independent. If the review itself cannot run, the draft is returned with review pending. These instructions do not establish real-client execution or general semantic-review accuracy.
+Business Design authoring also runs the existing read-only review as a distinct phase, using a separate agent or fresh context when available and useful, repairs source-supported findings and re-reviews the revision before returning it. Missing facts remain concrete questions, and ambiguous interpretations remain unapproved candidates. Repeated findings without improvement or unavailable/failed review stop the loop with the unresolved scope reported; an unreviewed draft is never presented as passing. A host without a separate reviewer can apply the complete review skill in the same agent, clearly reporting that the review was not independent. If the review itself cannot run, the draft is returned with review pending. These instructions do not establish real-client execution or general semantic-review accuracy.
 
 Review Business Design itself with:
 
@@ -76,6 +78,8 @@ After the Business Design is agreed, ask:
 ```text
 Alderでチェック項目を作って
 ```
+
+For a JSON source, the draft adds Checks to the same package, retaining the exact BD ID/revision. If the only source is an agreed MD document, obtain an explicit one-way conversion request before creating new JSON Checks; do not silently convert it or infer agreement from a format choice. An existing MD Check selected for update stays on its compatibility route.
 
 The draft keeps one independently reviewable observable expectation per item. People review its expected results; AI confidence and passing tests never set human confirmation. Give feedback with “Alderのチェック項目を更新して”. Existing IDs, guarantees and mappings are preserved. If feedback changes business meaning, the work returns to Business Design revision and human confirmation first. Missing evidence from newly written Tests is not a prerequisite for the earlier design handoff.
 

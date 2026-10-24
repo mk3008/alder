@@ -120,7 +120,8 @@ class PluginPackageTest(unittest.TestCase):
             {SKILL.name, AUTHOR.name, DESIGN_REVIEW.name, OPTIMIZE.name,
              "alder-draft-check-items", "alder-explore-functional-conditions",
              "alder-discover-business-questions", "alder-follow-up-review",
-             "alder-export-business-graph", "alder-check-traceability-drift"},
+             "alder-export-business-graph", "alder-check-traceability-drift",
+             "alder-manage-json-documents"},
         )
 
     def test_review_entry_package_references_resolve(self):

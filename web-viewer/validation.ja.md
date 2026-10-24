@@ -1,6 +1,6 @@
 # Viewerの変更を検証する
 
-修正中は、変更した機能と隣接する操作を先に検証します。そこで失敗を直してから、一まとまりの候補をpushします。PRのCIは全体検証を行います。同じPRへ新しいcommitをpushすると、古いCIはキャンセルされます。
+修正中は、変更した機能と隣接する操作を先に検証します。そこで失敗を直してから、一まとまりの候補をpushします。PRのCIは全体検証を一度行い、先行JSON群を全体でも重複実行する構成にはしません。同じPRへ新しいcommitをpushすると、古いCIはキャンセルされます。
 
 ## 変更から検証範囲を選ぶ
 
@@ -46,7 +46,7 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 ## Node／DOMテストの実行方式
 
-`npm test` は、実行方式を確認する回帰の後、通常の54ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全40群の実行方式は変更しません。
+`npm test` は、実行方式を確認する回帰の後、通常の59ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全47群の実行方式は変更しません。
 
 CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
 
@@ -74,9 +74,11 @@ npm run build
 npm run test:browser
 ```
 
-`--cases` を省略すると既存の全40群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
+`--cases` を省略すると既存の全47群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
 
 ## テストを減らす判断
+
+MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理だけへ行います。共通化では入力adapterと後段の境界、廃止する経路・保証と残すassertの移管先を確認します。[現在の読込構造と保証の移管](document-loading.ja.md)を参照してください。旧MD表示の完全再現だけを目的とする保証の廃止は、必要保証の同等検出力による統合とは区別して理由を記録します。
 
 遅いという理由だけでテストを削除したり、assertを弱めたりしません。削除・統合する場合は、同じ不具合を検出できる別のテスト、固有の境界・異常系がないこと、統合後にも意図した誤実装を検出できることを確認します。Node／DOMのモデルと実ブラウザーの検証は、同じ画面に関係していても同等とは限りません。
 
@@ -101,3 +103,24 @@ npm run test:browser
 更新通知は「更新する」「このまま読む」の2択です。旧draft／編集済み本文／旧文書がある状態でも、移行・保護・本文保存・JSON書出しのUIや、更新前の追加確認を表示しません。通知の選択だけで本文を保持／更新し、次回起動時に再確認します。
 
 廃止した本文download／copy救出UIの専用テストは、保存管理UIが存在しないこと、エラーを閉じても現在の図と入力が変わらないこと、通常の再読込で競合先の表示を開くことへ置き換えます。失敗・quota・transaction中断・世代CAS・stale window・旧Sessionの非破壊復元・未commitの図を表示しない検証は維持します。native error通知は320/393/1280px・light/darkで本文と閉じるボタンが切れず、入力画面と重ならないことを確認します。
+
+## 型付きJSONの回帰
+
+`jsonDocuments,jsonBoundaries,jsonOfflinePreview`は、既存ViewerのJSON File/URL、一覧・詳細・Findings・共有Check、原文読取専用、版/参照異常、容量差、保存/復元・保存失敗と、配布する単体HTMLの隔離保存を実Chromeで検証します。全体CIにも含みます。未知の保存種別や版を表示成功として読み飛ばしません。
+
+スクリーンショットと観測は`json-document-HEAD`、操作確認版は`viewer-preview-pr-PR-HEAD` artifactへ保存します。確認版のmanifestはsource/checkout/treeと各ファイルのdigestを持ち、PR headとビルドtreeの一致を要求します。公開デプロイを行わず、本人操作レビューと自動検証を分けます。
+
+`jsonLayout` はJSONの全体図・全Activity詳細（全11図）を1280/393pxの実Chromeで表示し、実ノード座標・全SVG経路／ラベルを共通モデル契約と照合します。MDは同一業務の全体図・最初の詳細図を両幅で比較し、2図のnative PNGバイト同値と両入力のzoom／scroll／reset／保存復元を維持します。全11図のMD/JSON座標・矩形・間隔・接続点・折れ点・ラベル・resetおよびUUID入替えは `test-json-layout.mjs` が両形式とも実際の `parseDocument` → `DocumentModel` から比較します。旧MDの手書き独立期待値は `test-document-loader.mjs`、配置の独立した24px余白算術と役割別ポート／状態SVGは既存の配置テストに残します。
+
+全11図のMD/JSON二重PNG比較は廃止し、JSONの11 PNGと代表MDの2 PNGを保存します。MD後半9詳細図だけに発生する、モデル属性では表れないピクセル差は非保証です。共通レンダラーの実SVGとモデルの照合が、片方の入力に共通する描画欠落の見逃しを補います。誤ったMD関係・UUID adapter迂回・DOM座標／SVG経路／caption／edge欠落の負例を高速テストで検出します。全47群の最終CIと描画器／共通CSSの固定hashは維持します。承認済み66a0の余白統合（上下24px、状態SVGは行数を一度予約）は巻き戻しません。
+
+比較測定が必要なときだけ、commit本文に `Benchmark-B-Loop: 441dfb8b` を独立した行として指定すると、最終CI内で固定旧headと候補を同じrunner／Node／Chrome／フォント／製品buildで測定します。両Previewの版／ローカルdist境界を先行確認し、関連高速2ファイルと `jsonLayout` は交互順で各3回、全47群は旧→新を各1回実行し、rawログと集計を `b-loop-HEAD` artifactへ保存します。製品ソース・依存・入力fixtureの同一性を検査し、不一致なら比較を拒否します。通常commitには指定せず、通常の最終CIは全47群を一度だけ実行します。全体1組の差はノイズを含むため、他群の変動と対象群の効果を分けて報告します。
+
+`jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の全11図の高速座標／配線回帰とJSONのnative表示、代表MDの入力境界を上記の分担で検証します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。
+
+
+## JSON正本と互換入力の検証
+
+候補0.4は例外IDを持つJSONを正本とし、旧MD／旧JSONの解釈は入力adapterへ限定します。変更中は `node --experimental-strip-types web/test-json-native.mjs`、保存契約はRepositoryルートの `node --test tools/document_storage/test-native-json.mjs` を先に実行します。MD業務moduleを解決できない条件で作成・検証・編集・状態／Check表示を確認し、共通入力のcounterでMD入力時だけadapterが呼ばれることも検査します。
+
+実Chromeの `jsonStates` 群は旧宣言の13操作を維持し、独立した候補0.4の2操作、説明書式差、保存復元、不正ID時の表示保持を追加します。参照検証は読込／復元へ共通するため、最終候補では既存全47群を実行します。配置器・配線・承認済み余白の基準を変更しません。

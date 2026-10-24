@@ -1,0 +1,31 @@
+{
+  "model": "jsdom + fake-indexeddb; direct handler calls, modeled source dialog and mocked fetch, accelerated timeout; no real network or geometry",
+  "checks": [
+    "restore blocks all three input entry points",
+    "text success, empty/invalid rejection and cancel preserve current graph",
+    "text size limit counts UTF-8 bytes, retaining oversized multibyte input",
+    "raw Markdown view is readonly and direct submit cannot mutate the source",
+    "Escape closes text entry while retaining draft input and existing graph",
+    "InfoBar dismissal preserves graph; Drawer toggle updates visibility and aria state",
+    "HTTPS URL import and update use anonymous no-referrer CORS requests",
+    "empty/non-HTTPS/credential-bearing URLs are rejected before network",
+    "URL HTML content type preserves existing graph and permits retry",
+    "URL HTML disguised as plain text preserves existing graph and permits retry",
+    "URL invalid Markdown preserves existing graph and permits retry",
+    "URL HTTP failure preserves existing graph and permits retry",
+    "URL network/CORS failure preserves existing graph and permits retry",
+    "URL oversized Content-Length preserves existing graph and permits retry",
+    "URL oversized streamed body preserves existing graph and permits retry",
+    "URL failed update retains old graph and subsequent retry succeeds",
+    "duplicate URL submission is blocked and cancel discards a late response",
+    "switching URL entry to text discards stale URL completion",
+    "duplicate URL refresh is blocked and closing its tab discards late result",
+    "30-second URL timeout aborts request and leaves input retryable (accelerated timer model)",
+    "file/URL/text originals and source bodies restore from IndexedDB without automatic network access",
+    "structuredClone persistence failure is an error alert and preserves current graph",
+    "saveSession rejection is an error alert and preserves current graph",
+    "invalid persisted session restores no graph, announces error and leaves inputs usable",
+    "text and URL Markdown keep script/image/link payloads inert"
+  ],
+  "passed": 25
+}

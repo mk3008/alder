@@ -1,7 +1,14 @@
 import type {Graph,Relation} from './graph';
 import type {Point} from './session';
 import {dependencyOrder} from './layout-order.ts';
+import {captionRowStep,CAPTION_LINE_HEIGHT,CAPTION_LINE_STEP} from './caption-spacing.ts';
+export {CAPTION_LINE_STEP} from './caption-spacing.ts';
 export type MatrixWire={returning:boolean;captionLane:number;fromPort?:number;toPort?:number;returnLane?:number};
+/** Only normal departures share captions; return/exception bends stay independent. */
+export function captionKey(relation:Relation,index:number,wire?:MatrixWire):string{
+ return wire&&!wire.returning&&(relation.kind==='input'||relation.kind==='output')
+  ?JSON.stringify([relation.kind,relation.from,relation.label]):JSON.stringify(['relation',index]);
+}
 export type MatrixPlan={positions:Record<string,Point>;cells:Record<string,Point>;wires:MatrixWire[];forwardRelations:number[];feedbackRelations:number[];exceptionRelations:number[]};
 export function isMatrixGraph(graph:Graph):boolean{
  const types=new Map(graph.nodes.map(n=>[n.id,n.type]));
@@ -64,23 +71,23 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   after.forEach(n=>detailColumns.set(n.id,upstream.length+1));
   exceptions.forEach((n,i)=>detailColumns.set(n.id,upstream.length+2+i));
  }
- const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>();
+ const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>(),captionLanes=new Map<string,number>();
  const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
-  const back=returning.has(i),key=(back?'return:':r.kind+':')+(r.kind==='output'&&!back?r.to:r.from),captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);
+  const back=returning.has(i),key=(back?'return:':'departure:')+r.from,group=captionKey(r,i,{returning:back,captionLane:0});
+  let captionLane=captionLanes.get(group);if(captionLane===undefined){captionLane=lanes.get(key)??0;lanes.set(key,captionLane+1);captionLanes.set(group,captionLane);}
   const wire={returning:back,captionLane};wireKeys.set(identity,wire);return wire;
  });
- const below=new Map<string,number>(),above=new Map<string,number>(),lastTarget=new Map<string,number>();
+ const lastTarget=new Map<string,number>();
  for(const {relation:r,index:i}of unique.values())if(!wires[i].returning){
   lastTarget.set(r.from,Math.max(lastTarget.get(r.from)??-1,rowIndex.get(r.to)!));
-  if(r.kind==='input')below.set(r.from,(below.get(r.from)??0)+1);
-  if(r.kind==='output')above.set(r.to,(above.get(r.to)??0)+1);
  }
  const cells:Record<string,Point>=Object.create(null),positions:Record<string,Point>=Object.create(null);
  const corridors=new Heap<{column:number;until:number}>((a,b)=>a.column>b.column);
  let previousActivityColumn=-1,row=0;
  for(const [i,n]of nodes.entries()){
-  const previous=nodes[i-1];if(previous)row+=Math.max(1,Math.ceil((68+4+22*((below.get(previous.id)??0)+(above.get(n.id)??0)))/96));
+  // One logical row per card; extra caption lines expand only its pixel gap.
+  if(i)row++;
   let column=n.type==='business'?previousActivityColumn+1:owner.has(n.id)?cells[owner.get(n.id)!][0]+1:0;
   if(focused)column=detailColumns.get(n.id)!;
   while(corridors.peek()&&corridors.peek().until<i)corridors.pop();
@@ -88,7 +95,12 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   cells[n.id]=[column,row];if(n.type==='business')previousActivityColumn=column;
   if(lastTarget.has(n.id))corridors.push({column:column+1,until:lastTarget.get(n.id)!});
  }
- for(const [id,[column,line]]of Object.entries(cells))positions[id]=[40+64*column,40+96*line];
+ let y=40;
+ for(const n of nodes){
+  positions[n.id]=[40+64*cells[n.id][0],y];
+  const lines=lanes.get('departure:'+n.id)??0;
+  y+=captionRowStep(68,lines?CAPTION_LINE_HEIGHT+CAPTION_LINE_STEP*(lines-1):0);
+ }
  return {positions,cells,wires:directionalReturnWires(graph,wires,positions),forwardRelations:analysis.forwardRelations,feedbackRelations:analysis.feedbackRelations,exceptionRelations:analysis.exceptionRelations};
 }
 

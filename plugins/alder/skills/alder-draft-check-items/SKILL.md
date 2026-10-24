@@ -6,6 +6,8 @@ license: MIT
 
 # Draft and maintain Alder Check Items
 
+For new artifacts without a selected existing format, default to typed JSON through [the JSON document skill](../alder-manage-json-documents/SKILL.md). Use that skill for an existing JSON canonical package as well. Preserve the source-grounded business review/revision loop and human agreement gates; do not create intermediate Markdown. If the requester selects an existing Markdown artifact for revision, keep that compatibility workflow below and do not migrate it without an explicit request. When creating new JSON Checks from an agreed Markdown-only BD, obtain an explicit one-way conversion request first; do not silently migrate the source or treat the format default as BD agreement. Review-only and Interface-only operations retain their existing read-only/write boundaries.
+
 Read the bundled [current Check Item guidance](references/check-item-traceability.md) in full and [adoption](references/adoption.md#draft-and-review-check-items-required) through the optional Functional Interface section. For initial derivation, read [c3](references/candidate-c3.md). Current adoption and traceability take precedence over historical c3/f1 passages: permanent mappings stop at Test/assertion, never Code, file, SQL entry point or line. Do not fetch newer authority or ask the requester to supply Alder's internal documents.
 
 ## Locate the work and choose the requested operation

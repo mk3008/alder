@@ -1,0 +1,22 @@
+[
+  {
+    "object": "基幹システム",
+    "field": "Medium",
+    "body": "データベース"
+  },
+  {
+    "object": "基幹システム",
+    "field": "SR Dependencies",
+    "body": "- 従業員の識別情報・役職・役職別決裁上限額を参照する契約"
+  },
+  {
+    "object": "購入用CSV",
+    "field": "Medium",
+    "body": "CSV"
+  },
+  {
+    "object": "認証基盤",
+    "field": "SR Dependencies",
+    "body": "- 認証済み作業者の識別情報を取得する契約"
+  }
+]
