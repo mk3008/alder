@@ -40,7 +40,7 @@ const creatorStage=Object.fromEntries(Object.entries(creatorStages).filter(([,v]
 // Sizes are measured first; layout does not depend on the viewport width.
 function compactInitial(sizes){
  const result={};
- for(const stage of stages){
+ for(const stage of stages.filter(s=>s.id==='overview')){
   const p={},ids=['preparation','request','version','item','receipt','line'].filter(id=>stage.ids.includes(id));
   // Reserve one horizontal count lane for each additional independent
   // outlet or landing. Counts remain per relation, including repeated "1".
@@ -114,7 +114,7 @@ function installCanvas(s){
  s.section.querySelector('.zoom-in').onclick=()=>zoomBy(s,1.2);s.section.querySelector('.zoom-out').onclick=()=>zoomBy(s,1/1.2);
  host.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();zoomBy(s,e.deltaY<0?1.1:1/1.1);},{passive:false});
 }
-for(const stage of stages){
+for(const stage of stages.filter(s=>s.id==='overview')){
  const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><h2>${stage.title}</h2><button class="section-back" hidden>図へ戻る</button></div><div class="graph-toolbar" ${stage.id==='overview'?'':'hidden'}><button class="layout-lock" aria-pressed="false">配置ロック：OFF</button><button class="zoom-out" aria-label="縮小">−</button><span class="zoom-value">100%</span><button class="zoom-in" aria-label="拡大">＋</button></div><p class="routing-warning" role="status"></p><div class="canvas ${stage.id==='overview'?'overview-canvas':'local-canvas'}" tabindex="0" aria-label="${stage.title}の概念図"><div class="world"><svg role="group" aria-label="${stage.title}の概念と関係"></svg></div></div><div class="concept-details"></div><section class="activity-rules"><h3>この図の条件・未決</h3>${stage.rules.map(r=>'<p>'+r+'</p>').join('')}<p>${stage.change}</p></section>`;
  document.getElementById('stages').append(section);const s={stage,section,host:section.querySelector('.canvas'),world:section.querySelector('.world'),svg:section.querySelector('svg'),warning:section.querySelector('.routing-warning'),zoomLabel:section.querySelector('.zoom-value'),lockButton:section.querySelector('.layout-lock'),positions:new Map(),zoom:1,locked:false,selected:null};
  if(stage.id==='overview'){for(const[id,p]of Object.entries(saved.positions||{}))if(stage.ids.includes(id)&&Number.isFinite(p?.x)&&Number.isFinite(p?.y))s.positions.set(id,p);s.zoom=clampZoom(Number.isFinite(saved.zoom)?saved.zoom:1);s.locked=saved.locked===true;}

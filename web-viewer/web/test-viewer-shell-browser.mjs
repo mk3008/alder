@@ -6,7 +6,7 @@ export async function verifyViewerShell(browser){
  try{
   await page.goto('http://127.0.0.1:4173/?view=concept&conceptFixture=purchase');
   await page.locator('.concept-frame').waitFor();
-  const frame=page.frameLocator('.concept-frame');await frame.locator('.table').first().waitFor();
+  const frame=page.frameLocator('.concept-frame');await frame.locator('#overview .table').first().waitFor();
   await frame.getByRole('button',{name:'縮小',exact:true}).click();const zoom=await frame.locator('.zoom-value').textContent();
   await frame.getByRole('button',{name:'購入申請版の説明へ移動',exact:true}).click();await page.locator('.concept-detail-page h1').waitFor();
   await page.locator('#concept-tab-overview').click();assert.equal(await frame.locator('.zoom-value').textContent(),zoom,'canvas zoom survives detail navigation');

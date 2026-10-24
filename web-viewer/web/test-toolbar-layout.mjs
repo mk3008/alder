@@ -19,7 +19,7 @@ export async function assertToolbarLayout(page,{open}={}){
    return {naturalWidth,icon:icon&&{...box(icon),hidden:icon.getAttribute('aria-hidden')},id:checkbox?.id||e.id,name:e.textContent||e.getAttribute('aria-label'),kind:e.classList.contains('edge-option')?'option':e.id==='zoom'?'zoom-value':'button',...rect,hit:e===hit||e.contains(hit),textRects,checkbox:checkbox&&box(checkbox),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight};
   });
   const actionRow=panel.querySelector('.graph-actions');
-  return {actionRow:actionRow&&{...box(actionRow),display:getComputedStyle(actionRow).display,wrap:getComputedStyle(actionRow).flexWrap},window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},controls:toggle.getAttribute('aria-controls')};
+  return {actionRow:actionRow&&{...box(actionRow),display:getComputedStyle(actionRow).display,wrap:getComputedStyle(actionRow).flexWrap},window:{width:innerWidth,height:innerHeight},viewport:box(viewport),toolbar:box(toolbar),items,allOptions,expanded:toggle.getAttribute('aria-expanded'),toolbarState:toolbar.dataset.settingsOpen,panel:{...box(panel),hidden:panel.hidden,position:getComputedStyle(panel).position,display:getComputedStyle(panel).display},compactReset:getComputedStyle(panel).gridTemplateColumns.split(' ').length===3,controls:toggle.getAttribute('aria-controls')};
  });
  const epsilon=.75,contains=(outer,inner)=>inner.left>=outer.left-epsilon&&inner.right<=outer.right+epsilon&&inner.top>=outer.top-epsilon&&inner.bottom<=outer.bottom+epsilon,near=(a,b)=>Math.abs(a-b)<=epsilon;
  const {toolbar,viewport,items}=measured,options=items.filter(i=>i.kind==='option'),actions=items.filter(i=>i.id==='reset-layout'),controls=items.filter(i=>i.kind!=='option'&&i.id!=='reset-layout'),buttons=controls.filter(i=>i.kind==='button');
@@ -65,12 +65,12 @@ export async function assertToolbarLayout(page,{open}={}){
   assert.ok(near(options[0].bottom,options[2].top),message('exactly two adjoining option rows'));
   assert.ok(options.every(i=>i.bottom<=buttonRow.top+epsilon),message('settings expand above control row'));
   assert.ok(measured.panel.bottom<=buttonRow.top+epsilon,message('panel ends above always-visible controls'));
-  assert.ok(actions[0].top>=options[3].bottom&&actions[0].bottom<=buttonRow.top,message('reset action follows filters above controls'));
+  if(measured.compactReset){assert.ok(actions[0].left>=options[1].right&&actions[0].bottom<=buttonRow.top,message('compact reset is beside the filters above controls'));}else assert.ok(actions[0].top>=options[3].bottom&&actions[0].bottom<=buttonRow.top,message('reset action follows filters above controls'));
   assert.equal(measured.actionRow.display,'flex',message('actions share a horizontal flow'));assert.equal(measured.actionRow.wrap,'wrap',message('future actions may wrap at narrow widths'));
   assert.ok(near(actions[0].left,measured.actionRow.left)&&near(measured.actionRow.left,measured.panel.left+6),message('reset action is left aligned'));
-  assert.ok(near(actions[0].width,actions[0].naturalWidth)&&actions[0].width<measured.actionRow.width-8,message('reset width fits icon and text without stretching across the row'));
+  if(measured.compactReset)assert.ok(near(actions[0].width,measured.actionRow.width),message('compact reset fits its separate column'));else assert.ok(near(actions[0].width,actions[0].naturalWidth)&&actions[0].width<measured.actionRow.width-8,message('reset width fits icon and text without stretching across the row'));
   assert.ok(actions[0].icon?.hidden==='true'&&contains(actions[0],actions[0].icon),message('decorative reset icon is visible inside the button'));
-  rowsHeight+=options[0].height+options[2].height+measured.actionRow.height+4;
+  if(measured.compactReset){assert.ok(measured.panel.height<=Math.max(options[3].bottom,measured.actionRow.bottom)-measured.panel.top+4,message('compact panel has no unexplained blank height'));rowsHeight+=measured.panel.height;}else rowsHeight+=options[0].height+options[2].height+measured.actionRow.height+4;
  }else{
   assert.equal(measured.panel.display,'none',message('collapsed panel has no rendered display'));
   assert.ok(measured.allOptions.every(i=>i.rects===0&&i.width===0&&i.height===0),message('collapsed options have no rendered hit targets'));
