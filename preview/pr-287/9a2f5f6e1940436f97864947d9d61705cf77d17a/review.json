@@ -1,0 +1,19 @@
+{
+  "source": "9a2f5f6e1940436f97864947d9d61705cf77d17a",
+  "artifact": 12541583021,
+  "ci": 40045829114,
+  "visibility": "public existing repository samples only",
+  "productionRoot": "unchanged",
+  "samples": {
+    "json": "work/json-roles/issue-280/same-business.roles.json",
+    "native": "work/viewer-json/issue-274/json-native/independent.json",
+    "checks": "work/json-roles/issue-280/gate-b.roles.json",
+    "states": "work/json-roles/issue-280/purchase.roles.json",
+    "md": "web-viewer/web/authorities/business-design.md"
+  },
+  "limits": [
+    "human GUI review pending",
+    "real ChatGPT Plugin host auto invocation unverified"
+  ],
+  "buildManifest": "build-manifest.json"
+}
