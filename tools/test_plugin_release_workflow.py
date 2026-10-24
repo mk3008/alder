@@ -15,8 +15,11 @@ WORKFLOW = ROOT / '.github/workflows/plugin-release-tag.yml'
 class PluginReleaseTest(unittest.TestCase):
     def test_release_is_validated_and_explicit_main_only(self):
         source = WORKFLOW.read_text()
-        self.assertIn("if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'", source)
-        self.assertIn('needs: validate', source)
+        self.assertIn("if: needs.resolve.outputs.publish == 'true' && github.ref == 'refs/heads/main'", source)
+        self.assertIn('needs: [resolve, validate]', source)
+        self.assertIn("paths: ['.github/alder-release-request.json']", source)
+        self.assertIn('needs: resolve', source)
+        self.assertEqual(source.count('ref: ${{ needs.resolve.outputs.revision }}'), 2)
         self.assertIn('contents: read', source.split('jobs:')[0])
         validate, release = source.split('  release:\n', 1)
         self.assertNotIn('contents: write', validate)
@@ -24,11 +27,11 @@ class PluginReleaseTest(unittest.TestCase):
         self.assertIn('contents: write', release)
         self.assertIn('fetch-depth: 0', validate)
         self.assertIn('tools.test_export_plugin_references tools.test_plugin_references', validate)
-        self.assertEqual(source.count('persist-credentials: false'), 2)
+        self.assertEqual(source.count('persist-credentials: false'), 3)
         self.assertIn('group: alder-product-release', release)
         self.assertIn('name: `Alder ${version}`, body: releaseBody', release)
         self.assertIn('cancel-in-progress: false', release)
-        self.assertNotIn('  push:', source)
+        self.assertIn('  push:\n    branches: [main]', source)
         self.assertFalse((ROOT / '.github/workflows/release.yml').exists())
         self.assertIn('--approved-version "$APPROVED_VERSION" --approved-revision "$APPROVED_REVISION"', source)
         self.assertNotIn('${{ inputs.', source.split('run: python3 tools/validate_release.py')[1].split('\n', 1)[0])
@@ -100,7 +103,7 @@ class PluginReleaseTest(unittest.TestCase):
         harness = r'''
 const assert = require('node:assert/strict');
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-const run = new AsyncFunction('require', 'context', 'github', 'core', SCRIPT);
+const run = new AsyncFunction('require', 'context', 'github', 'core', 'process', SCRIPT);
 const missing = () => {const e = new Error('missing'); e.status=404; throw e;};
 let states = 0;
 async function scenario(opts={}) {
@@ -112,7 +115,7 @@ async function scenario(opts={}) {
       assert.equal(path, `docs/release-notes-v${opts.version || '0.4.4'}.md`);
       return opts.notes || '# Alder 0.4.4 — Test\nSafe notes.';
     }
-  } : require(name);
+  } : name==='node:child_process' ? {execFileSync:()=>opts.checkedRevision || sha} : require(name);
   const github={rest:{repos:{
     getReleaseByTag:async (args) => {
       reads.push(args); assert.equal(args.tag, 'plugin-v0.4.4');
@@ -125,13 +128,14 @@ async function scenario(opts={}) {
     getTag:async (args)=> {reads.push(args);return {data:{object:opts.tagObject || {type:'commit',sha}}};}
   }}};
   const context={repo:{owner:'o',repo:'r'},sha,eventName:'workflow_dispatch',ref:'refs/heads/main',payload:{inputs:{version:'0.4.4',revision:sha,...opts.inputs}},...opts.context};
-  let error=null;try{await run(req,context,github,{info:()=>{}});}catch(e){error=e;}
+  let error=null;try{await run(req,context,github,{info:()=>{}},{env:{APPROVED_VERSION:'0.4.4',APPROVED_REVISION:sha,...Object.fromEntries(Object.entries(opts.inputs || {}).map(([key,value])=>[key==='version'?'APPROVED_VERSION':'APPROVED_REVISION',value]))}});}catch(e){error=e;}
   return {calls,reads,error,sha};
 }
 (async()=>{
  let r=await scenario();assert.equal(r.error,null);assert.equal(r.calls.length,1);
  assert.deepEqual(r.calls[0],{owner:'o',repo:'r',target_commitish:r.sha,tag_name:'plugin-v0.4.4',name:'Alder 0.4.4',body:'Safe notes.',draft:false,prerelease:false,make_latest:'true'});
- r=await scenario({context:{eventName:'push'}});assert(r.error);assert.equal(r.calls.length,0);
+ r=await scenario({context:{eventName:'push',sha:'b'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls[0].target_commitish,'a'.repeat(40));
+ r=await scenario({checkedRevision:'b'.repeat(40)});assert(r.error);assert.equal(r.calls.length,0);
  r=await scenario({released:true,ref:{type:'commit',sha:'a'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,0);
  r=await scenario({released:true,ref:{type:'tag',sha:'c'.repeat(40)}});assert.equal(r.error,null);assert.equal(r.calls.length,0);
  for (const opts of [
