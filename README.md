@@ -4,7 +4,11 @@ English | [日本語](README.ja.md)
 
 **Turn business work agreed on with requesters into a working system.**
 
-Alder Plugin structures interview notes and change requests into Business Design. Requesters, designers and implementers use the Viewer to examine the overall work, details, information exchanges and explicitly defined state transitions. People understand, correct and decide business meaning; agreed expectations connect to Check Items, code and tests.
+Alder helps requesters and designers agree on **what the system must accomplish and what counts as success** by supporting the creation and review of **Business Design** and **Check Items**. Business Design is written in language the requester understands and remains the **source of truth (SSOT) for agreed business meaning**.
+
+These documents can also be supplied to AI coding agents with relevant system requirements for implementation, testing, and verification. Technical concretization belongs to the implementation side; unresolved business decisions are returned to requesters for confirmation.
+
+Alder Plugin structures interview notes and requested changes into the design. Requesters, designers and implementers use the Viewer to examine the overall work, details, information exchanges and explicitly defined state transitions, then confirm or correct the business meaning.
 
 A single JSON file is the source of truth for Business Design and Checks. Ask the Plugin/Skills to create and update it and check references and revisions. People do not need to edit JSON. The Viewer reads that source for human review; it is not the source itself.
 
