@@ -8,17 +8,17 @@ Alder Plugin structures interview notes and change requests into Business Design
 
 A single JSON file is the source of truth for Business Design and Checks. Ask the Plugin/Skills to create and update it and check references and revisions. People do not need to edit JSON. The Viewer reads that source for human review; it is not the source itself.
 
-> These instructions describe candidate 0.4.9. Published [0.4.8](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8) does not include the JSON management Skill. Use the [Viewer review build](web-viewer/json.ja.md#確認版を用意する) for JSON and state transitions. Production Viewer publication and formal JSON v1 adoption are pending.
+> These instructions cover Alder 0.4.9. Before installation, check that the tag is available on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9). JSON and state-transition viewing depend on the Viewer being published separately from the Plugin; if that Viewer is not yet available, use the [review build](web-viewer/json.ja.md#確認版を用意する). Concept models and formal JSON v1 are outside this release.
 
 ## Install / Setup
 
-Prepare an account and environment with the subscription and permissions needed for ChatGPT / Codex, and Codex CLI. To try the candidate, register its development branch:
+Prepare an account and environment with the subscription and permissions needed for ChatGPT / Codex, and Codex CLI. After verifying the Alder 0.4.9 release, register its versioned marketplace source:
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref docs/144-json-viewer-workflow
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.9
 ```
 
-Restart the ChatGPT desktop app, open Plugins Directory, choose **Alder development**, install and enable **Alder**, then start a new chat. A branch can move: record the resolved source commit used for your review. See [setup and updates](docs/plugin-adoption.md), including the published-version instructions.
+Restart the ChatGPT desktop app, open Plugins Directory, choose **Alder development**, install and enable **Alder**, then start a new chat. Existing installations do not update automatically, so reinstall when updating the Plugin. See [setup and updates](docs/plugin-adoption.md).
 
 ## Getting Started
 
