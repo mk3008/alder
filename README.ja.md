@@ -8,17 +8,17 @@ Alder Pluginがヒアリングや変更指示から業務設計書を構造化�
 
 業務設計書とCheckは単一JSONを正本として保持します。JSONの作成・更新と参照・版の検査はPlugin／Skillへ依頼し、人間がJSONを直接編集する必要はありません。Viewerは正本を読み、レビューするためのツールです。
 
-> この手順は開発候補0.4.9に対応します。公開版[0.4.8](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.8)にはJSON管理Skillがありません。JSONと状態遷移の確認には[Viewer確認版](web-viewer/json.ja.md#確認版を用意する)を使います。公開Viewerへの反映と正式JSON v1の採用は未完了です。
+> この手順はAlder 0.4.9向けです。インストール前に[GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9)で公開済みか確認してください。JSONと状態遷移の表示はPluginとは別に公開されるViewerの対応状況に依存します。未公開の場合は[Viewer確認版](web-viewer/json.ja.md#確認版を用意する)を使ってください。概念モデルと正式JSON v1はこの版では扱いません。
 
 ## 導入する
 
-ChatGPT / Codexを利用できる契約・権限とCodex CLIを用意してください。候補版を試すには、次の開発ブランチを登録します。
+ChatGPT / Codexを利用できる契約・権限とCodex CLIを用意してください。Alder 0.4.9の公開を確認してから、次のコマンドで配布元を登録します。
 
 ```sh
-codex plugin marketplace add mk3008/alder --ref docs/144-json-viewer-workflow
+codex plugin marketplace add mk3008/alder --ref plugin-v0.4.9
 ```
 
-ChatGPTデスクトップアプリを再起動し、Plugins Directoryの **Alder development** から **Alder** をインストールして有効にした後、新しいチャットを開きます。ブランチは更新されるため、確認に使ったcommitを記録してください。[導入・更新の詳細](docs/plugin-adoption.md)から公開版の手順も確認できます。
+ChatGPTデスクトップアプリを再起動し、Plugins Directoryの **Alder development** から **Alder** をインストールして有効にした後、新しいチャットを開きます。既存インストールは自動更新されないため、更新時は再インストールしてください。詳しくは[導入・更新の手順](docs/plugin-adoption.md)を参照してください。
 
 ## まず使ってみる
 
