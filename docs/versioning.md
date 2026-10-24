@@ -31,8 +31,23 @@ The source Markdown retains a first `# Alder X.Y.Z` heading (optional subtitle) 
 1. Change the canonical sources, then publish and verify the working-branch source commit before [refreshing bundled guidance](plugin-bundling.md). Released package contents remain immutable. Change the product version when changing distributed workflow or guidance, rather than relabeling a published package.
 2. Add `docs/release-notes-vX.Y.Z.md`, headed `# Alder X.Y.Z` (an optional ` — subtitle` is allowed), and apply the [release note review gate](#release-note-review-gate). The H1 is source metadata: published release body starts **after** the H1 with a reader-facing summary paragraph. A version bump alone is not a reason to release.
 3. Before selecting the publication commit, align the installation commands in both READMEs and the plugin adoption guide with the candidate version. Keep wording conditional on successful publication; do not call an untagged version released. Remove transient current-release/candidate statements that would become false inside the published tag. Verify package, graph, drift and documentation checks, then obtain the required merge and release authorization for the final exact commit. Merging this preparation does not publish it.
-4. After the authorized commit is on `main`, manually dispatch **Alder release** with the manifest version and full approved commit SHA. The workflow rejects mismatched version/revision or installation references, a non-main invocation and legacy version numbers. Candidate PR validation permits last-verified installation references; dispatch does not. It does not run publication on push or PR events.
+4. After the authorized commit is on `main`, submit a release-request PR that changes only `.github/alder-release-request.json` to the approved version and full commit SHA (see below). Merging that request to `main` starts **Alder release** at the pinned target, even when the request merge is a later commit. A manual dispatch remains available and requires the exact triggering main SHA. Both paths reject mismatched version/revision or installation references, non-main publication and legacy versions. Candidate PR validation never publishes. Ordinary pushes that do not change the request never publish.
 5. The workflow creates only the missing `plugin-vX.Y.Z` tag and release at that exact commit. It uses `Alder X.Y.Z` as the GitHub Release title and excludes the file H1 from the published body. It refuses to move an existing tag or rewrite an existing release. New stable product releases set GitHub **Latest** explicitly, so the historical method `v0.6` does not remain the default entry point. Existing releases are never relabeled by this workflow.
 6. Verify the remote tag, release, commit and package before announcing the version as available. The tagged documentation already describes that version; do not rely on post-release edits to repair it or rewrite historical release notes.
 
 When comparing historical entries, select the explicit `plugin-vX.Y.Z` tag rather than inferring the product version from the largest-looking number or from an older method release marked Latest.
+
+## Release requests from Work
+
+After receiving explicit authorization for the exact version, source commit and publication, Work can create and merge a dedicated release-request PR through the GitHub connector. No personal access token or local GitHub CLI credentials are required. Creating or merging a request is not a substitute for human release authorization; link that authorization in the PR description. Review the source changes first, then submit a request-only PR against `main`:
+
+```json
+{
+  "version": "X.Y.Z",
+  "revision": "<approved full 40-character commit SHA already on main>"
+}
+```
+
+The request file is `.github/alder-release-request.json`. PR CI checks its syntax, target ancestry and manifest version without publishing. Its main-branch change triggers publication only after the common package, release-note and installation checks succeed. The tag targets the requested source commit, not the request merge commit. The requested source must already belong to main history before that push. Release-job write permission is limited to `contents: write`; validation jobs remain read-only. Existing tags and releases are not moved or overwritten. A failed run can be retried through Actions, or by an explicitly authorized request-only PR that changes the request file again while keeping the same target; the existing tag checks still apply.
+
+After merging, Work checks the actual workflow run, tag resolution, GitHub Release body and Latest version before recording completion. A merged request alone is not proof of publication. Viewer publication remains a separate operation. If the connector cannot edit workflow files or merge the infrastructure PR, report that capability boundary without claiming the release ran.

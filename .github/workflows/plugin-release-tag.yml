@@ -11,9 +11,15 @@ on:
         description: 'Approved full main commit SHA'
         required: true
         type: string
+  push:
+    branches: [main]
+    paths: ['.github/alder-release-request.json']
   pull_request:
     paths:
       - '.github/workflows/plugin-release-tag.yml'
+      - '.github/alder-release-request.json'
+      - 'tools/resolve_release_request.py'
+      - 'tools/test_release_request.py'
       - 'docs/release-notes-v*.md'
       - 'docs/versioning.md'
       - 'tools/validate_release.py'
@@ -32,13 +38,42 @@ permissions:
   contents: read
 
 jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      version: ${{ steps.request.outputs.version }}
+      revision: ${{ steps.request.outputs.revision }}
+      publish: ${{ steps.request.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest tools.test_release_request
+      - name: Resolve pinned release target
+        id: request
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_REF: ${{ github.ref }}
+          EVENT_REVISION: ${{ github.sha }}
+        run: >-
+          python3 tools/resolve_release_request.py --event-name "$EVENT_NAME"
+          --event-path "$GITHUB_EVENT_PATH" --ref "$EVENT_REF"
+          --revision "$EVENT_REVISION" --output "$GITHUB_OUTPUT"
+
   validate:
+    needs: resolve
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
           fetch-depth: 0
       - uses: actions/setup-python@v5
@@ -51,21 +86,21 @@ jobs:
       - run: python3 -m unittest discover -s work/traceability-drift -p 'test_*.py'
       - run: python3 work/traceability-drift/evaluate.py --output /tmp/drift-observations.json
       - name: Validate candidate inputs
-        if: github.event_name == 'pull_request'
+        if: needs.resolve.outputs.publish == 'false'
         env:
-          REVISION: ${{ github.sha }}
+          REVISION: ${{ needs.resolve.outputs.revision }}
         run: python3 tools/validate_release.py --revision "$REVISION"
       - name: Validate approved release inputs
-        if: github.event_name == 'workflow_dispatch'
+        if: needs.resolve.outputs.publish == 'true'
         env:
-          REVISION: ${{ github.sha }}
-          APPROVED_VERSION: ${{ inputs.version }}
-          APPROVED_REVISION: ${{ inputs.revision }}
+          REVISION: ${{ needs.resolve.outputs.revision }}
+          APPROVED_VERSION: ${{ needs.resolve.outputs.version }}
+          APPROVED_REVISION: ${{ needs.resolve.outputs.revision }}
         run: python3 tools/validate_release.py --revision "$REVISION" --approved-version "$APPROVED_VERSION" --approved-revision "$APPROVED_REVISION"
 
   release:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
-    needs: validate
+    if: needs.resolve.outputs.publish == 'true' && github.ref == 'refs/heads/main'
+    needs: [resolve, validate]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -76,23 +111,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
       - name: Publish approved Alder version without moving existing tags
         uses: actions/github-script@v7
+        env:
+          APPROVED_VERSION: ${{ needs.resolve.outputs.version }}
+          APPROVED_REVISION: ${{ needs.resolve.outputs.revision }}
         with:
           script: |
-            if (context.eventName !== 'workflow_dispatch' || context.ref !== 'refs/heads/main') {
-              throw new Error('Alder publication requires an explicit main-branch dispatch.');
+            if (!['workflow_dispatch', 'push'].includes(context.eventName) || context.ref !== 'refs/heads/main') {
+              throw new Error('Alder publication requires a resolved main-branch release request or dispatch.');
             }
             const fs = require('node:fs');
             const repo = context.repo;
             const version = JSON.parse(fs.readFileSync('plugins/alder/plugin.json', 'utf8')).version;
-            const inputs = context.payload.inputs || {};
+            const inputs = {version: process.env.APPROVED_VERSION, revision: process.env.APPROVED_REVISION};
+            const targetRevision = inputs.revision;
+            const checkedRevision = require('node:child_process').execFileSync('git', ['rev-parse', 'HEAD'], {encoding: 'utf8'}).trim();
             if (!/^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) throw new Error('Invalid stable product version.');
             const [major, minor, patch] = version.split('.').map(Number);
             if (major === 0 && (minor < 4 || (minor === 4 && patch < 4))) throw new Error('Historical releases are immutable.');
-            if (inputs.version !== version || !/^[0-9a-f]{40}$/.test(inputs.revision || '') || inputs.revision !== context.sha) {
+            if (inputs.version !== version || !/^[0-9a-f]{40}$/.test(inputs.revision || '') || targetRevision !== checkedRevision) {
               throw new Error('Approved version and revision must match the checked workflow commit.');
             }
             const body = fs.readFileSync(`docs/release-notes-v${version}.md`, 'utf8');
@@ -112,7 +152,7 @@ jobs:
               while (object.type === 'tag') {
                 object = (await github.rest.git.getTag({ ...repo, tag_sha: object.sha })).data.object;
               }
-              if (object.type !== 'commit' || object.sha !== context.sha) {
+              if (object.type !== 'commit' || object.sha !== targetRevision) {
                 throw new Error(`Existing ${tag} targets another revision; refusing to move or release it.`);
               }
             }
@@ -120,12 +160,12 @@ jobs:
               if (!ref || released.draft || released.prerelease || released.tag_name !== tag) {
                 throw new Error('Existing release is not a stable non-draft release at its expected fixed tag.');
               }
-              core.info(`Verified existing release at ${context.sha}: ${released.html_url}`);
+              core.info(`Verified existing release at ${targetRevision}: ${released.html_url}`);
               return;
             }
             // One API action creates a missing tag and release at this checked revision.
             const { data } = await github.rest.repos.createRelease({
-              ...repo, tag_name: tag, target_commitish: context.sha,
+              ...repo, tag_name: tag, target_commitish: targetRevision,
               name: `Alder ${version}`, body: releaseBody, draft: false, prerelease: false,
               make_latest: 'true',
             });
