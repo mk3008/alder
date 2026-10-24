@@ -1,12 +1,12 @@
-                                     
-                                                
+
+
 
 export const clampZoom=(zoom       )=>Math.max(.25,Math.min(2.5,zoom));
-                                                                
-                                                                                           
-                                                                                                                                                                  
-                                                                                                 
-                                                                 
+
+
+
+
+
 const middle=(a      ,b      )      =>[(a[0]+b[0])/2,(a[1]+b[1])/2];
 const distance=(a      ,b      )=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 

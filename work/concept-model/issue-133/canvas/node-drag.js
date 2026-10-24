@@ -1,17 +1,17 @@
-                                     
 
-                                                                        
-                                                                           
-           
-                              
-                                        
-                                 
-                        
-                                          
-                          
-                                                       
-                                
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
 const camera=(view         )      =>[view.scroll[0]/view.zoom-view.offset[0],view.scroll[1]/view.zoom-view.offset[1]];
 /** Edge speed is in screen pixels/second, independent of graph zoom. */
 export function edgeVelocity(point      ,bounds           )       {
