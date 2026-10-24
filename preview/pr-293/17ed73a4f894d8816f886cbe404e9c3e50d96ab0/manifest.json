@@ -1,0 +1,12 @@
+{
+  "kind": "unapproved concept UI rough",
+  "source": "17ed73a4f894d8816f886cbe404e9c3e50d96ab0",
+  "pr": 293,
+  "files": {
+    "index.html": "787ceca5466fb4728f1da84618a6b0c1246fdd2889fc0acc4856007c91083fe3",
+    "er-routing.js": "f9f3892bf791220eaa54376cc45cde00876371fe3e85d0bfb439cb51de3bbb08",
+    "mobile.html": "adee74ce7309c41d84be28c258d76c0b38c7157a3696b769c41fa1cfdbc13c4e"
+  },
+  "fixture": "cbb3073b42b86323e152b20ac899589f1686d61c",
+  "uxReference": "6e55d98710a1d8757937ea268176929abcf49b2e"
+}
