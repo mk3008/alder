@@ -13,7 +13,7 @@ export function sharedRun(a,b,c,d,gap=0.01){
 function sides(a,b,kind){
  // Downward staircase edges enter the child's left side. A vertical pair
  // keeps a horizontal landing for its endpoint count instead of a bottom/top Z.
- if(kind==='down'&&b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
+ if(kind.startsWith('down')&&b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
  const horizontalOverlap=a.x<b.x+b.w&&a.x+a.w>b.x;
  if(horizontalOverlap&&b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
  if(horizontalOverlap&&a.y>=b.y+b.h+24)return [a.x>=60?'left':'right','bottom'];
@@ -21,9 +21,10 @@ function sides(a,b,kind){
  if(a.x>=b.x+b.w+36)return ['left','right'];
  return b.y+b.h/2>=a.y+a.h/2?['bottom',b.x>=60?'left':'right']:[a.x>=60?'left':'right','bottom'];
 }
+function rectOverlap(a,b){return a.left<b.left+b.w&&a.left+a.w>b.left&&a.top<b.top+b.h&&a.top+a.h>b.top;}
 function label(port,count){
  const [vx,vy]=vectors[port.side],horizontal=vx!==0,x=port.p.x+vx*24+(horizontal?0:10),y=port.p.y+vy*24+(horizontal?-10:4),w=count.length*8+10;
- return{x,y,w,h:18,left:horizontal?x-w/2:x-5,top:y-13,anchor:horizontal?'middle':'start',count,table:port.table};
+ return{x,y,w,h:18,left:horizontal?x-w/2:x-5,top:y-13,anchor:horizontal?'middle':'start',count,table:port.table,edge:port.edge};
 }
 function push(heap,v){heap.push(v);let i=heap.length-1;while(i){const p=(i-1)>>1;if(heap[p][0]<=v[0])break;heap[i]=heap[p];i=p;}heap[i]=v;}
 function pop(heap){const root=heap[0],v=heap.pop();if(heap.length){let i=0;while(i*2+1<heap.length){let c=i*2+1;if(c+1<heap.length&&heap[c+1][0]<heap[c][0])c++;if(heap[c][0]>=v[0])break;heap[i]=heap[c];i=c;}heap[i]=v;}return root;}
@@ -47,17 +48,30 @@ function simplify(points){const out=[];for(const p of points){if(out.length&&out
 export function routeER(boxes,edges){
  const active=edges.filter(([a,b])=>boxes.has(a)&&boxes.has(b)).map(([from,to,fromCount,toCount,kind],id)=>({id,from,to,fromCount,toCount,kind})),ports=[];
  for(const e of active){const ss=sides(boxes.get(e.from),boxes.get(e.to),e.kind);e.ports=[{edge:e.id,table:e.from,side:ss[0],count:e.fromCount},{edge:e.id,table:e.to,side:ss[1],count:e.toCount}];ports.push(...e.ports);}
- for(const p of ports){const peers=ports.filter(q=>q.table===p.table&&q.side===p.side),i=peers.indexOf(p),b=boxes.get(p.table),vertical=p.side==='left'||p.side==='right',span=vertical?b.h:b.w,offset=peers.length===1?22:22+(span-44)*i/(peers.length-1);
-  p.p={x:p.side==='left'?b.x:p.side==='right'?b.x+b.w:b.x+offset,y:p.side==='top'?b.y:p.side==='bottom'?b.y+b.h:b.y+offset};const [vx,vy]=vectors[p.side];p.q={x:p.p.x+vx*LEAD,y:p.p.y+vy*LEAD};p.label=label(p,p.count);
+ // Allocate independent ports near the safe edge, not across the entire
+ // bottom edge: a far-right outlet may point straight into the next card.
+ const allocated=[];
+ for(const p of [...ports].sort((a,b)=>Number(a.side==='left'||a.side==='right')-Number(b.side==='left'||b.side==='right'))){
+  const b=boxes.get(p.table),vertical=p.side==='left'||p.side==='right',span=vertical?b.h:b.w;
+  const offsets=[];for(let offset=22;offset<=span-22;offset+=36)offsets.push(offset);
+  const candidates=offsets.map(offset=>{
+   const point={x:p.side==='left'?b.x:p.side==='right'?b.x+b.w:b.x+offset,y:p.side==='top'?b.y:p.side==='bottom'?b.y+b.h:b.y+offset};
+   const [vx,vy]=vectors[p.side],q={x:point.x+vx*LEAD,y:point.y+vy*LEAD},candidate={...p,p:point,q};candidate.label=label(candidate,p.count);return candidate;
+  });
+  const safe=c=>![...boxes].some(([id,r])=>id!==p.table&&(blocked(c.p,c.q,{x:r.x-8,y:r.y-8,w:r.w+16,h:r.h+16})||inside(c.q,{x:r.x-8,y:r.y-8,w:r.w+16,h:r.h+16})||rectOverlap(c.label,{left:r.x,top:r.y,w:r.w,h:r.h})))&&!allocated.some(a=>(a.table===p.table&&a.side===p.side&&Math.abs((vertical?a.p.y:a.p.x)-(vertical?c.p.y:c.p.x))<32)||rectOverlap(a.label,c.label)||blocked(c.p,c.q,{x:a.label.left-3,y:a.label.top-3,w:a.label.w+6,h:a.label.h+6})||blocked(a.p,a.q,{x:c.label.left-3,y:c.label.top-3,w:c.label.w+6,h:c.label.h+6})||sharedRun(a.p,a.q,c.p,c.q));
+  let c=candidates.find(safe);
+  if(!c){const peers=allocated.filter(a=>a.table===p.table&&a.side===p.side),offset=22+peers.length*36,point={x:p.side==='left'?b.x:p.side==='right'?b.x+b.w:b.x+offset,y:p.side==='top'?b.y:p.side==='bottom'?b.y+b.h:b.y+offset},[vx,vy]=vectors[p.side];c={...p,p:point,q:{x:point.x+vx*LEAD,y:point.y+vy*LEAD},portConflict:true};c.label=label(c,p.count);}
+  Object.assign(p,c);allocated.push(p);
  }
  const rects=[...[...boxes.values()].map(b=>({x:b.x-8,y:b.y-8,w:b.w+16,h:b.h+16})),...ports.map(p=>({x:p.label.left-3,y:p.label.top-3,w:p.label.w+6,h:p.label.h+6}))];
  const leads=ports.map(p=>({...segment(p.p,p.q),edge:p.edge})),routed=[],lanes=ports.map(p=>p.q);let width=0,height=0;
- for(const e of active){const [a,b]=e.ports,reserved=[...leads,...routed.flatMap(r=>r.segments)];const middle=orthogonal(a.q,b.q,rects,reserved,lanes);
+ const length=e=>Math.abs(e.ports[0].q.x-e.ports[1].q.x)+Math.abs(e.ports[0].q.y-e.ports[1].q.y);
+ for(const e of [...active].sort((a,b)=>length(a)-length(b)||a.id-b.id)){const [a,b]=e.ports,reserved=[...leads,...routed.flatMap(r=>r.segments)];const middle=a.portConflict||b.portConflict?null:orthogonal(a.q,b.q,rects,reserved,lanes);
   // Never silently reuse a connector when tables leave no route. Keep each
   // endpoint and its count visible and flag the unresolved connection.
   const points=middle?simplify([a.p,...middle,b.p]):null,segments=points?points.slice(1).map((p,i)=>segment(points[i],p)):[];
   for(const p of points||[a.p,a.q,b.p,b.q]){width=Math.max(width,p.x+35);height=Math.max(height,p.y+35);}
   routed.push({...e,points,segments,unrouted:!middle,d:points?points.map((p,i)=>(i?'L':'M')+p.x+' '+p.y).join(' '):`M${a.p.x} ${a.p.y}L${a.q.x} ${a.q.y}M${b.q.x} ${b.q.y}L${b.p.x} ${b.p.y}`});
  }
- return {routes:routed,labels:ports.map(p=>p.label),width,height};
+ return {routes:routed.sort((a,b)=>a.id-b.id),labels:ports.map(p=>p.label),width,height};
 }
