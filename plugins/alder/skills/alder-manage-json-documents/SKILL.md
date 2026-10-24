@@ -15,7 +15,7 @@ license: MIT
 3. [同梱runtime](scripts/document_storage/author-cli.mjs)のruntimeを実行する。直接JSONはNode24以上、MD変換はPython3.12以上も必要。利用不能なら報告してその操作を止める。repo clone・外部API・ランタイムの無断導入を要求しない。
 4. 作成はIDを割り当ててJSON候補を直接書き、validate→create→保存後inspect/validateを行う。更新は既存IDを維持し、文書/package版とファイルhashを照合するcommitを使う。参照・版ずれ、既存lock、競合、未対応欄を修正したふりで通さない。
 5. BDレビューでは[品質](references/business-design-quality-check.ja.md)、[相関](references/business-design-correlation-check.ja.md)、[漏れ](references/business-design-omission-check.ja.md)、[Findings](references/design-findings.ja.md)を適用する。review-onlyは読取り・検査・指摘だけにし、保存・状態変更しない。
-6. Check操作では[Check契約](references/check-item-traceability.md)を読み、**正確なBD版に対する人間合意を先に確認**する。なければCheck草案/更新を止め、必要な業務判断を求める。共有保証・例・根拠・Test証拠・既存ID/人間状態を保持する。確認済みへの変更は該当期待への実際の人間発言と候補hashを明示し、テストや無回答から推定しない。basedOn.verificationはunverifiedのままにする。
+6. Check操作では[Check契約](references/check-item-traceability.md)を読み、**正確なBD版に対する人間合意を先に確認**する。なければCheck草案/更新を止め、必要な業務判断を求める。[共通の意味保持圧縮指針](references/check-item-traceability.md#meaning-preserving-condition-compression)を条件組合せの検討・草案・更新・Consistency reviewに適用する。共有保証・例・根拠・Test証拠・既存ID/人間状態を保持する。確認済みへの変更は該当期待への実際の人間発言と候補hashを明示し、テストや無回答から推定しない。basedOn.verificationはunverifiedのままにする。
 7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONの移行は候補作成と明示migration commitに分け、原本・人間Checkゲートを保持する。
 8. 返却前に全体Schema/参照/版と要求・業務意味の対応を別々に点検する。Checkは保存候補とBD全体を使って、原典→保証/例・全index/共有参照を確認するread-onlyのConsistency reviewを別工程で行う。独立readerがない場合は同じ文脈で行ったと開示する。根拠のある範囲だけ修正し、再検査する。人間にJSONの手修正を委ねない。
 
