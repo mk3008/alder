@@ -10,6 +10,7 @@ export interface RouteOptions {
   labelWidth?: number; labelHeight?: number;
   kind?: string;
   matrix?: MatrixWire;
+  ports?:{from:number;to:number};
   /** Existing label rectangles; labels never become path obstacles. */
   labels?: readonly RouteNode[];
   /** Other routed lines, used only to place captions. */
@@ -30,10 +31,10 @@ const distance = (a: Point, b: Point) => Math.hypot(b[0] - a[0], b[1] - a[1]);
 type Side = 'left' | 'right' | 'top' | 'bottom';
 const normals: Record<Side, Point> = {left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
 const add = (a:Point,b:Point,k=1):Point => [a[0]+b[0]*k,a[1]+b[1]*k];
-function port(r:RouteNode,side:Side,fraction=.5):Point {
+function port(r:RouteNode,side:Side,fraction?:number):Point {
   // A shared one-eighth-width outlet follows the left-hand icon column.
   // Ports depend only on the endpoint, never on obstacle/detour coordinates.
-  return side==='top'||side==='bottom'?[r.x+r.width*.125,r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height*fraction];
+  return side==='top'||side==='bottom'?[r.x+r.width*(fraction??.125),r.y+(side==='bottom'?r.height:0)]:[r.x+(side==='right'?r.width:0),r.y+r.height*(fraction??.5)];
 }
 /** Segment/slab intersection also catches a tiny obstacle between vertices. */
 function intersects(a: Point, b: Point, r: RouteNode, padding: number): boolean {
@@ -189,10 +190,10 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix,ports}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
-  const endpointPort=(node:RouteNode,side:Side,end:'from'|'to'):Point=>port(node,side,side==='right'?(end==='from'?matrix?.fromPort:matrix?.toPort):undefined);
+  const endpointPort=(node:RouteNode,side:Side,end:'from'|'to'):Point=>port(node,side,ports?.[end]??(side==='right'?(end==='from'?matrix?.fromPort:matrix?.toPort):undefined));
   if(matrix){
     const a=endpointPort(source,matrix.returning?'right':'bottom','from'),b=endpointPort(target,matrix.returning?'right':'left','to');
     // Matrix contracts determine sides. Coordinates never reclassify an edge.
