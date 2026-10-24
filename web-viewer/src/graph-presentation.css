@@ -17,7 +17,7 @@
 
 /* Paint heading and body in the same rounded box. An SVG heading covered
    the top border and squared the corners, especially at fractional zoom. */
-.concept-card-surface{background:linear-gradient(var(--graph-concept-heading,#edf2f5) 0 34px,var(--graph-object-fill,#e4f4eb) 34px);background-clip:padding-box}
+.concept-selection-glow>.concept-card-surface{background:linear-gradient(var(--graph-concept-heading,#edf2f5) 0 34px,var(--graph-object-fill,#e4f4eb) 34px);background-clip:padding-box}
 [data-theme=dark] .concept-card-surface{--graph-object-fill:#1d4137;--graph-object-border:#538f78;--graph-concept-heading:#233440}
 /* The common border color and width must paint on the HTML surface too. */
 :root .node.review-neighbor,:root .node.object.review-neighbor,.graph-shape.review-neighbor .graph-card-surface{border-color:var(--review-link);border-width:var(--graph-neighbor-width)}
