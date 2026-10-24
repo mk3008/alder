@@ -7,9 +7,16 @@ const code=html.split('const tables=')[1].split("const NS=")[0];
 const {tables,edges,stages,compactInitial,creatorStage}=vm.runInNewContext('const tables='+code+';({tables,edges,stages,compactInitial,creatorStage})');
 assert.equal(Object.keys(tables).length,6);assert.equal(edges.length,6);assert.equal(stages.length,6);
 assert.equal(creatorStage.version,undefined);assert.equal(creatorStage.item,undefined);
-assert.deepEqual(Array.from(stages.find(s=>s.id==='approve').ids),['request','version','preparation']);
+for(const s of stages.filter(s=>s.id!=='overview')){assert.deepEqual(Array.from(s.ids).sort(),Array.from(s.write).sort());assert(s.edges.every(([a,b])=>s.write.includes(a)&&s.write.includes(b)));}
+assert.deepEqual(Array.from(stages.find(s=>s.id==='approve').ids),['request']);
 const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.max(220,...t.fields.map(([,n])=>n.length*14+24)),h:44+t.fields.length*25}]));
 const initial=compactInitial(sizes),summary=[];
+const whole=initial.overview;
+for(const [parent,child] of [['request','receipt'],['receipt','line']]){
+ assert(whole[child].x>whole[parent].x,'receipt branch must advance right');
+ assert(whole[child].y>=whole[parent].y+sizes.get(parent).h+36,'receipt branch must step below actual card height');
+}
+
 for(const stage of stages){
  const boxes=new Map(stage.ids.map(id=>[id,{...initial[stage.id][id],...sizes.get(id)}]));
  const result=routeER(boxes,stage.edges);
