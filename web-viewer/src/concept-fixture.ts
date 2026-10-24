@@ -47,4 +47,4 @@ function compactInitial(sizes){
  }return result;
 }
 
-export {tables,activityDefinitions,creatorStages};
+export {tables,edges,activityDefinitions,creatorStages};
