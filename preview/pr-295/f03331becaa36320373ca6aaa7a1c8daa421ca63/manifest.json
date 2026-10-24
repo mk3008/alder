@@ -1,0 +1,17 @@
+{
+  "source": "f03331becaa36320373ca6aaa7a1c8daa421ca63",
+  "sourceTree": "34f0529749deb5ba7fae749b1ba73e4d622f8058",
+  "stage": "explorer-layout-prototype",
+  "files": {
+    "index.html": "937a8c27ac07a2e1e317c77e56d8d7b717582d95014a6e86c5ba041de146b6b4",
+    "assets/index-Dheq-jRy.js": "46b82e0342ee7cc4bf54277734dd9ac7bdbbdba6d05bbd6d3284761d88454023",
+    "assets/index-QhOLMEdR.css": "81d019a8bd8466ce9d4f819997b952548b08fe8a0cb99d08c2851e9812250191",
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "concept-preview/index.html": "48424323271889e4aed6e2b7800643b88a5fda76200938a98cfa8afbc0d68709",
+    "concept-preview/er-routing.js": "f5733cbd5b98c6ac81b62953b62e0a0306ffcf00dc9342034cbe9cb4798a4952",
+    "concept-preview/canvas/node-drag.js": "9877f0192e4e5ea03ad1d8ddd3030b88ff28661ab622fb485cdd2268add9ce9a",
+    "concept-preview/canvas/touch-gestures.js": "97639ba928cdbd7c1f4f20f7c9a6e604326b5297dd1bc0f85dcb5f4d722d60b7",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9"
+  }
+}
