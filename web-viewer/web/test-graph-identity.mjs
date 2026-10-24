@@ -16,3 +16,19 @@ const input={zoom:1,scroll:[120,340]};assert.deepEqual(cameraZoom(input,ZOOM_FAC
 const model={version:1,nodes:['a','b','c'].map(id=>({id,name:id,type:'business',scope:true})),relations:[{kind:'input',from:'a',to:'b',label:''},{kind:'business-exception',from:'b',to:'c',label:''}]};const plan=matrixPlan(model);assert.equal(plan.wires[0].returning,false);assert.equal(plan.wires[1].returning,true,'forward exceptions retain explicit exception route');
 const focus=graphFocus(model.relations,'a');assert.equal(focus.nodeClasses('b'),' review-neighbor');assert.equal(focus.nodeClasses('c'),' muted');assert.equal(focus.related(model.relations[1]),false,'no recursive highlighting');
 console.log('PASS graph identity: business ports, explicit independent ports/cardinalities, forward exceptions, shared zoom/reset and one-hop focus');
+
+// A locked-card tap is captured by the viewport; it must still select the card.
+const {JSDOM}=await import('jsdom'),{build}=await import('esbuild');
+const dom=new JSDOM('<body></body>',{runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window;
+w.CSS={escape:v=>v};w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.hasPointerCapture=()=>false;
+const bundle=(await build({entryPoints:['src/state-transitions.ts'],bundle:true,write:false,format:'iife',globalName:'StateUI'})).outputFiles[0].text;
+w.eval(bundle+';window.StateUI=StateUI;');
+const design={graph:{nodes:[{id:'object',type:'object'},{id:'apply',type:'business',name:'申請する'}]},objectStateTransitions:{object:{model:{object:'object',states:['申請済み'],start:'@new',terminal:'申請済み',completeness:'',source:'',transitions:[{id:'T1',from:'@new',to:'申請済み',activity:'apply',effect:'change',path:'normal',condition:'',evidence:'',note:''}]}}}};
+try{
+ const panel=w.StateUI.stateTransitionPanel(design,'object',()=>{});w.document.body.append(panel);
+ const card=panel.querySelector('[data-state="@new"]');
+ for(const type of ['pointerdown','pointerup']){const event=new w.MouseEvent(type,{bubbles:true,button:0,clientX:50,clientY:50});Object.defineProperties(event,{pointerId:{value:1},pointerType:{value:'mouse'}});card.dispatchEvent(event);}
+ assert.equal(card.getAttribute('aria-pressed'),'true');assert(card.classList.contains('selected'));assert(panel.querySelector('[data-state="申請済み"]').classList.contains('review-neighbor'));
+ assert(panel.querySelector('.canvas-controls .zoom-in'));assert.equal(panel.querySelectorAll('[data-transition]').length,1);
+ console.log('PASS state canvas: locked viewport pointer capture still selects a tapped state and its direct neighbor');
+}finally{w.close();}
