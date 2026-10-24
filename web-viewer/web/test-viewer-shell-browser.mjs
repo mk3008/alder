@@ -7,6 +7,9 @@ export async function verifyViewerShell(browser){
   await page.goto('http://127.0.0.1:4173/?view=concept&conceptFixture=purchase');
   await page.locator('.concept-frame').waitFor();
   const frame=page.frameLocator('.concept-frame');await frame.locator('.table').first().waitFor();
+  await frame.getByRole('button',{name:'縮小',exact:true}).click();const zoom=await frame.locator('.zoom-value').textContent();
+  await frame.getByRole('button',{name:'購入申請版の説明へ移動',exact:true}).click();await page.locator('.concept-detail-page h1').waitFor();
+  await page.locator('#concept-tab-overview').click();assert.equal(await frame.locator('.zoom-value').textContent(),zoom,'canvas zoom survives detail navigation');
   assert.equal(await page.locator('.workspace-tabs [role=tab]').count(),2);
   assert.equal(await page.locator('.workspace-tabs .close').count(),0);
   await page.getByRole('button',{name:'購入申請版',exact:true}).click();
@@ -31,6 +34,11 @@ export async function verifyViewerShell(browser){
   await page.locator('#node-list-toggle').click();assert.equal(await page.locator('.concept-list').isVisible(),false);
   await page.locator('#node-list-toggle').click();await page.locator('.concept-search input').focus();await page.keyboard.press('Escape');
   assert.equal(await page.locator('.concept-list').isVisible(),false);assert.equal(await page.locator('#node-list-toggle').evaluate(el=>el===document.activeElement),true);
+  await page.locator('#area-business').click();await page.locator('#open-sample').click();
+  await page.locator('#check-followup-later').click();await page.locator('#node-list-toggle').click();
+  const spacing=await page.locator('#node-list-drawer').evaluate(el=>{const box=s=>el.querySelector(s).getBoundingClientRect();return {heading:box('.node-list-heading').bottom,modesTop:box('#drawer-modes').top,modesBottom:box('#drawer-modes').bottom,categoriesTop:box('#node-categories').top,categoriesBottom:box('#node-categories').bottom,searchTop:box('#node-list-search').top};});
+  assert.ok(Math.abs(spacing.heading-spacing.modesTop)<1);assert.ok(Math.abs(spacing.modesBottom-spacing.categoriesTop)<1);assert.ok(Math.abs(spacing.searchTop-spacing.categoriesBottom-8)<1,'search follows tabs at 8px');
+  await page.screenshot({path:'web/evidence/shell/business-drawer-393-dark.png'});
   assert.deepEqual(errors,[]);
   return {checks:'two levels, nonclosable upper tabs, concept detail in main, area restore, Back, close, drawer Escape/focus, light/dark 1280/393 geometry',pageErrors:errors};
  }finally{await context.close();}
