@@ -26,3 +26,9 @@ Control: https://github.com/mk3008/root/issues/133
 Torrone `581c77f7d8d3ce3d3bcc3139c94e057f7b4888c0` のreferences/README.md、docs/application-interaction.mdを確認。現行approved一覧にタブ専用Referenceがなかったため、旧profileを正本へ昇格せず、本人が採用した添付タブ画像を優先した。Torrone自体の変更はしない。
 
 画像の原本SHA256は shell-reference.png = d3e554744b320eb3f5f52be4b712c11ba59e251840b5e29824b2ba443e1d4410。原画像2枚と生成画像のRepositoryへの掲載は上記本人指示で許可された。実装・ブラウザー検証の成功を、デザイン全体の人間採用や本番反映承認の代わりにしない。
+
+## キャンバスの操作バー
+
+2026-10-24の追加指定で、概念モデルも業務グラフと同じ右下のフローティングバーへ統一する。[業務側の基準](business-toolbar-target.jpg)、[概念側の修正前](concept-toolbar-before.jpg)、[変更見本](toolbar-reference-v2.png)。変更見本は選択画像をimagegenで編集した外観参考であり、図のラベルやデータ構造の正本ではない。
+
+設定、配置ロック、縮小、倍率、拡大の順。アイコンは同じLucide定義、外観は共通CSSを使う。概念の設定には、その図のレイアウト初期化だけを置き、Activity用の線フィルターは出さない。倍率は25〜250%、ボタン操作は1.2倍／逆数。上端の文字ボタン列は廃止し、図に上端44pxの予約領域を残さない。

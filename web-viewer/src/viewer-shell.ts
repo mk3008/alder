@@ -1,3 +1,4 @@
+import {styleConceptToolbar} from './canvas-toolbar';
 import {tables as fixtureTables,activityDefinitions,creatorStages as fixtureCreators} from './concept-fixture';
 const tables:Record<string,{name:string;note:string;fields:string[][]}>=fixtureTables;
 const creatorStages:Record<string,string[]>=fixtureCreators;
@@ -5,7 +6,7 @@ type Context={key?:string;activities:{id:string;name:string}[]};
 type Area='business'|'concept';
 export function installViewerShell(app:HTMLElement,options:{capture:()=>void;business:()=>Context;openActivity:(id:string)=>void;refresh:()=>void}){
  const business=app.querySelector<HTMLElement>('.workspace')!,main=business.querySelector('main')!,strip=app.querySelector<HTMLElement>('.tab-strip')!;
- main.prepend(strip);business.id='business-workspace';business.setAttribute('role','tabpanel');business.setAttribute('aria-labelledby','area-business');
+ main.prepend(strip);business.querySelector('.toolbar')?.classList.add('canvas-controls');business.querySelector('#zoom')?.classList.add('canvas-zoom');business.querySelector('#layout-lock')?.classList.add('canvas-lock');business.id='business-workspace';business.setAttribute('role','tabpanel');business.setAttribute('aria-labelledby','area-business');
  const upper=document.createElement('nav');upper.className='workspace-tabs';upper.setAttribute('role','tablist');upper.setAttribute('aria-label','表示の観点');business.before(upper);
  const concept=document.createElement('section');concept.id='concept-workspace';concept.setAttribute('role','tabpanel');concept.setAttribute('aria-labelledby','area-concept');concept.hidden=true;
  concept.innerHTML=`<aside class="concept-list shell-drawer" id="concept-list-panel" aria-label="概念一覧"><div class="shell-heading"><strong>概念一覧</strong><button aria-label="概念一覧を閉じる">×</button></div><label class="concept-search"><span>名前で検索</span><input type="search" placeholder="名前で検索" aria-label="概念名で検索"></label><nav aria-label="概念の一覧"></nav></aside><main class="concept-main"><div class="concept-strip"><nav class="concept-tabs" role="tablist" aria-label="概念の表示タブ"></nav></div><div class="concept-notice">試作：購買の概念モデル。現在の文書から自動生成した図ではありません。</div><div class="concept-empty"><h2>概念モデル</h2><p>この文書の概念モデルは未定義です。</p><button>購買の表示例を開く</button></div><iframe class="concept-frame" title="購買概念モデルの全体図" hidden></iframe><article class="concept-detail-page" tabindex="-1" hidden></article></main><aside class="concept-related shell-drawer" id="concept-related-panel" aria-label="概念の関連情報" hidden><div class="shell-heading"><strong>関連情報</strong><button aria-label="概念の関連情報を閉じる">×</button></div><div class="concept-related-content"></div></aside>`;business.after(concept);
@@ -43,7 +44,7 @@ export function installViewerShell(app:HTMLElement,options:{capture:()=>void;bus
  get<HTMLButtonElement>('.concept-empty button').onclick=()=>{fixture=true;select('overview');};
  window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='alder-concept-select'||!ids.includes(e.data.id))return;select(e.data.id);article.focus({preventScroll:true});});
  function restore(){const q=new URL(location.href).searchParams,id=q.get('concept'),nextFixture=q.get('conceptFixture')==='purchase';if(fixture!==nextFixture){fixture=nextFixture;if(!fixture){open=['overview'];active='overview';scrolls.clear();frame.removeAttribute('src');}}if(fixture)select(id&&ids.includes(id)?id:'overview',false);setArea(q.get('view')==='concept'?'concept':'business',false);if((business.hidden&&business.contains(document.activeElement))||(concept.hidden&&concept.contains(document.activeElement)))buttons.get(area)?.focus({preventScroll:true});}window.addEventListener('popstate',restore);restore();
- function theme(){if(frame.contentDocument?.documentElement)frame.contentDocument.documentElement.dataset.theme=document.documentElement.dataset.theme??'light';}
- frame.onload=theme;
+ function theme(){const root=frame.contentDocument?.documentElement;if(root){root.dataset.theme=document.documentElement.dataset.theme??'light';const css=getComputedStyle(document.documentElement);for(const name of ['--bg','--panel','--fg','--line','--subtle','--select'])root.style.setProperty(name,css.getPropertyValue(name));}}
+ frame.onload=()=>{theme();if(frame.contentDocument)styleConceptToolbar(frame.contentDocument);};
  return {syncChrome(){if(area==='concept')drawers();theme();},syncDocument(){const key=options.business().key;if(documentKey&&key!==documentKey){fixture=false;open=['overview'];active='overview';scrolls.clear();frame.removeAttribute('src');main.querySelector('.shell-return')?.remove();if(area==='concept')renderConcept();route(false);}documentKey=key;if(area==='concept')drawers();}};
 }

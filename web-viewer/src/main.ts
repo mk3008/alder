@@ -26,6 +26,7 @@ import {hiddenReadIndexes} from './edge-visibility';
 import {fetchDocumentSource,fetchMarkdown} from './source';
 import {sourceSharingReason,createSourceShareLink,readSharedSource} from './sharing';
 import './style.css';
+import './canvas-toolbar.css';
 import './viewer-shell.css';
 import sampleMarkdown from '../../business-design/alder/README.md?raw';
 import sampleChecksMarkdown from './samples/alder-checks.md?raw';
