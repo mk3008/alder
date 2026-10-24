@@ -1,0 +1,13 @@
+{
+  "kind": "concept canvas reuse rough",
+  "source": "22d53fa691ba7e7cbba52c054ce92f22256b70c1",
+  "pr": 293,
+  "files": {
+    "index.html": "7991db6410ed8f1b51db334d4a627a5bfb2d112d1dbf069a175c588e396b03d1",
+    "mobile.html": "adee74ce7309c41d84be28c258d76c0b38c7157a3696b769c41fa1cfdbc13c4e",
+    "er-routing.js": "f9f3892bf791220eaa54376cc45cde00876371fe3e85d0bfb439cb51de3bbb08",
+    "canvas-provenance.json": "9994f9815c1c16ab4efb64c4775d7789009f1af47180d60fbd97f7e876980765",
+    "canvas/node-drag.js": "9877f0192e4e5ea03ad1d8ddd3030b88ff28661ab622fb485cdd2268add9ce9a",
+    "canvas/touch-gestures.js": "97639ba928cdbd7c1f4f20f7c9a6e604326b5297dd1bc0f85dcb5f4d722d60b7"
+  }
+}
