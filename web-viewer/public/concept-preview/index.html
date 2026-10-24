@@ -64,7 +64,7 @@ function layoutCanvas(s){
  const zoom=s.stage.id==='overview'?s.zoom:1;
  s.svg.style.width=s.width+'px';s.svg.style.height=s.height+'px';s.svg.style.transform=`scale(${zoom})`;s.svg.style.transformOrigin='0 0';
  s.world.style.width=Math.ceil(Math.max(s.width*zoom,s.host.clientWidth+160))+'px';
- s.world.style.height=Math.ceil(Math.max(s.height*zoom,s.host.clientHeight+160))+'px';
+ s.world.style.height=Math.ceil(Math.max(s.height*zoom,s.host.clientHeight)+160)+'px';
  if(s.stage.id!=='overview'){s.world.style.width=s.width+'px';s.world.style.height=s.height+'px';s.host.style.height=s.height+2+'px';}
  s.zoomLabel.textContent=Math.round(zoom*100)+'%';s.lockButton.setAttribute('aria-label','配置ロック');s.lockButton.title=s.locked?'配置をロック中。項目の上から図をスクロールできます。':'配置ロックを解除中。項目をドラッグして配置を変更できます。';s.lockButton.setAttribute('aria-pressed',String(s.locked));
  s.host.dataset.layoutLocked=String(s.locked);

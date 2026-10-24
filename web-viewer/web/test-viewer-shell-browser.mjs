@@ -10,6 +10,7 @@ export async function verifyViewerShell(browser){
   const lock=frame.locator('.layout-lock'),locked=await lock.getAttribute('aria-pressed');await lock.click();assert.notEqual(await lock.getAttribute('aria-pressed'),locked);await lock.click();
   await frame.locator('.graph-settings-toggle').click();await frame.getByRole('button',{name:'レイアウトを初期値に戻す',exact:true}).waitFor();await frame.locator('.graph-settings-toggle').press('Escape');assert.equal(await frame.locator('.graph-settings-toggle').getAttribute('aria-expanded'),'false');
   await frame.getByRole('button',{name:'縮小',exact:true}).click();const zoom=await frame.locator('.zoom-value').textContent();
+  const clearance=await frame.locator('.canvas').evaluate(host=>{const saved=[host.scrollLeft,host.scrollTop];host.scrollTop=host.scrollHeight;const bottom=host.querySelector('.node[data-table=\"line\"]').getBoundingClientRect().bottom,toolbarTop=host.parentElement.querySelector('.canvas-controls').getBoundingClientRect().top;host.scrollTo(...saved);return {bottom,toolbarTop};});assert.ok(clearance.bottom<clearance.toolbarTop,'last concept remains above the floating toolbar at the bottom of scroll');
   await frame.getByRole('button',{name:'購入申請版の説明へ移動',exact:true}).click();await page.locator('.concept-detail-page h1').waitFor();
   await page.locator('#concept-tab-overview').click();assert.equal(await frame.locator('.zoom-value').textContent(),zoom,'canvas zoom survives detail navigation');
   assert.equal(await page.locator('.workspace-tabs [role=tab]').count(),2);
