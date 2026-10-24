@@ -11,7 +11,7 @@
 <header><strong>Alder · 概念モデル · 確認用</strong><span>購入申請 · 未採用草案の操作試作</span></header>
 <main><p class="muted">確認用 · <span id="revision"></span> · 公開可能な架空の業務データ</p><h1>工程ごとに、保存する情報を見る</h1><p class="intro">登録・更新・削除する概念と、この工程で扱う直接の隣接だけを表示します。灰色の概念から先の関係は全体ERで確認できます。</p>
 <nav aria-label="工程"><a href="#draft">下書き</a><a href="#submit">申請</a><a href="#approve">承認</a><a href="?view=overview">概念モデルの全体図</a></nav>
-<div class="legend"><span><i class="swatch"></i>この工程で登録・更新・削除</span><span><i class="swatch read"></i>参照する概念</span><span>概念はドラッグで移動できます。</span></div>
+<div class="legend"><span><i class="swatch"></i>このActivityで登録・更新・対象外にする</span><span><i class="swatch read"></i>参照する概念</span><span>概念はドラッグで移動できます。</span></div>
 <p class="muted">線の両端の数値は、その側の概念の件数です。1：必ず1件 ／ 0..1：0または1件 ／ 1..N：1件以上 ／ 0..N：0件以上</p>
 <div id="stages"></div>
 <footer>表示・操作の試作／モデル未採用。日付・実績金額、合意記録、破棄後保存、CSV日時履歴、跨申請の入庫伝票管理は未決。実業務処理は実装していません。</footer></main>
@@ -41,7 +41,7 @@ function activitySlice(stage){
  const scope=new Set(stage.ids),writes=new Set(stage.write),localEdges=edges.filter(([a,b])=>scope.has(a)&&scope.has(b)&&(writes.has(a)||writes.has(b))),visible=new Set(stage.write);
  for(const[a,b]of localEdges){visible.add(a);visible.add(b);}return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:localEdges};
 }
-const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理概念・正式JSON Schemaは定義していません。'};
+const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理テーブル・正式JSON Schemaは定義していません。'};
 const stages=[...activityDefinitions.map(activitySlice),overviewStage];
 // Multiple creating activities are explicit. Never silently pick one.
 const creatorStages={request:['apply'],version:['apply','revise'],item:['apply','revise'],preparation:['prepare'],receipt:['result'],line:['result']};
@@ -133,9 +133,3 @@ document.getElementById('revision').textContent=location.pathname.split('/').fil
 applyLocation(true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const state of states)if(state.drag){e.preventDefault();stop(state,true);}});
 </script></html>
-
-
-
-
-
-
