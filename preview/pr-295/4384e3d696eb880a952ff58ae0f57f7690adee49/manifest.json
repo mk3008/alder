@@ -1,0 +1,22 @@
+{
+  "source": "4384e3d696eb880a952ff58ae0f57f7690adee49",
+  "build": "npm run build",
+  "files": [
+    "index.html",
+    "assets/index-CZ4ocm3-.js",
+    "assets/index-obTEmUma.css",
+    "concept-preview/graph-selection.css",
+    "concept-preview/er-routing.js",
+    "concept-preview/index.html",
+    "concept-preview/neighborhood.js",
+    "concept-preview/canvas/touch-gestures.js",
+    "concept-preview/canvas/node-drag.js",
+    "assets/canvas-toolbar-JZS1kHdY.css"
+  ],
+  "validation": {
+    "build": "pass",
+    "targetedDOM": "pass",
+    "browser": "not run; browser unavailable",
+    "fullCI": "failure; old UI migration remains"
+  }
+}
