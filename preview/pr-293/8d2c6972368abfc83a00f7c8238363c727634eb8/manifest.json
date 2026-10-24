@@ -1,0 +1,12 @@
+{
+  "kind": "unapproved concept UI rough - mutation-only locals",
+  "source": "8d2c6972368abfc83a00f7c8238363c727634eb8",
+  "pr": 293,
+  "files": {
+    "index.html": "de8a8e7017a55023b73f83f3ffc3618c9020c502af2061c5604fae7eeebc565c",
+    "er-routing.js": "f9f3892bf791220eaa54376cc45cde00876371fe3e85d0bfb439cb51de3bbb08",
+    "mobile.html": "adee74ce7309c41d84be28c258d76c0b38c7157a3696b769c41fa1cfdbc13c4e"
+  },
+  "fixture": "cbb3073b42b86323e152b20ac899589f1686d61c",
+  "uxReference": "6e55d98710a1d8757937ea268176929abcf49b2e"
+}
