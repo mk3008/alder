@@ -1,0 +1,19 @@
+{
+  "source": "610a00f76dd33cfaa3430524ca52a0a4e247a191",
+  "files": [
+    "index.html",
+    "LICENSE.txt",
+    "THIRD_PARTY_LICENSES.txt",
+    "assets/index-Dhg9D4T8.js",
+    "assets/index-CgBcN54V.css",
+    "assets/canvas-toolbar-JZS1kHdY.css",
+    "concept-preview/graph-selection.css",
+    "concept-preview/er-routing.js",
+    "concept-preview/index.html",
+    "concept-preview/neighborhood.js",
+    "concept-preview/canvas/touch-gestures.js",
+    "concept-preview/canvas/node-drag.js"
+  ],
+  "build": "pass",
+  "targetedDOM": "pass"
+}
