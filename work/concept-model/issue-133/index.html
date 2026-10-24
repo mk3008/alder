@@ -40,16 +40,17 @@ function compactInitial(sizes){
  const result={};
  for(const stage of stages){
   const p={},ids=['preparation','request','version','item','receipt','line'].filter(id=>stage.ids.includes(id));
-  if(stage.id==='overview'){
-   p.preparation={x:24,y:28};p.request={x:104,y:p.preparation.y+sizes.get('preparation').h+36};
-   p.version={x:184,y:p.request.y+sizes.get('request').h+36};p.item={x:264,y:p.version.y+sizes.get('version').h+36};
-   p.receipt={x:p.item.x+80,y:p.item.y+sizes.get('item').h+36};
-   p.line={x:p.receipt.x+80,y:p.receipt.y+sizes.get('receipt').h+36};
-  }else{let y=28;for(const[id,index]of ids.map((id,i)=>[id,i])){p[id]={x:24+index*80,y};y+=sizes.get(id).h+36;}}
+  // Reserve one horizontal count lane for each additional independent
+  // outlet or landing. Counts remain per relation, including repeated "1".
+  const step=(from,to)=>80+36*(Math.max(0,stage.edges.filter(([a])=>a===from).length-1)+Math.max(0,stage.edges.filter(([,b])=>b===to).length-1));
+  let y=28;for(const[id,index]of ids.map((id,i)=>[id,i])){
+   p[id]={x:index?p[ids[index-1]].x+step(ids[index-1],id):24,y};
+   y+=sizes.get(id).h+36;
+  }
   result[stage.id]=p;
  }return result;
 }
-const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v5:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default');
+const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v6:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default');
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}

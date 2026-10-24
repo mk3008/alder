@@ -15,8 +15,9 @@ function intersects(a,b,c,d){
  return v.a.x===v.b.x&&h.a.y===h.b.y&&v.a.x>=Math.min(h.a.x,h.b.x)&&v.a.x<=Math.max(h.a.x,h.b.x)&&h.a.y>=Math.min(v.a.y,v.b.y)&&h.a.y<=Math.max(v.a.y,v.b.y);
 }
 function sides(a,b,kind){
- // Reference links run outside the staircase, leaving its left landings free.
- if(kind==='reference'&&b.y>=a.y+a.h+24)return ['right','right'];
+ // All downward relations, including references, leave the bottom and
+ // enter the left: down first, then right (the reviewer's water route).
+ if(b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
  // Downward staircase edges enter the child's left side. A vertical pair
  // keeps a horizontal landing for its endpoint count instead of a bottom/top Z.
  if(kind.startsWith('down')&&b.y>=a.y+a.h+24)return ['bottom',b.x>=60?'left':'right'];
@@ -59,12 +60,13 @@ export function routeER(boxes,edges){
  const allocated=[];
  // Order independent outlets by the opposite endpoint. Long downward links
  // take the left outlet so they can pass left of the nearer staircase link.
- // On a side, upper sources land above lower sources instead of crossing them.
+ // Left landings put nearer/lower sources first, with long downward links
+ // below them so their horizontal segments do not cross the nearer drop.
  const opposite=p=>{const e=active[p.edge],b=boxes.get(p.table===e.from?e.to:e.from);return{x:b.x+b.w/2,y:b.y+b.h/2};};
  const portOrder=(a,b)=>{
   const av=a.side==='left'||a.side==='right',bv=b.side==='left'||b.side==='right';
   if(av!==bv)return Number(av)-Number(bv);
-  if(a.table===b.table&&a.side===b.side){const aa=opposite(a),bb=opposite(b);return av?aa.y-bb.y:a.side==='bottom'?bb.y-aa.y:aa.x-bb.x;}
+  if(a.table===b.table&&a.side===b.side){const aa=opposite(a),bb=opposite(b);return av?(a.side==='left'?bb.y-aa.y:aa.y-bb.y):a.side==='bottom'?bb.y-aa.y:aa.x-bb.x;}
   return a.table.localeCompare(b.table)||a.side.localeCompare(b.side)||a.edge-b.edge;
  };
  for(const p of [...ports].sort(portOrder)){
@@ -82,7 +84,12 @@ export function routeER(boxes,edges){
  const rects=[...[...boxes.values()].map(b=>({x:b.x-8,y:b.y-8,w:b.w+16,h:b.h+16})),...ports.map(p=>({x:p.label.left-3,y:p.label.top-3,w:p.label.w+6,h:p.label.h+6}))];
  const leads=ports.map(p=>({...segment(p.p,p.q),edge:p.edge})),routed=[],lanes=ports.map(p=>p.q);let width=0,height=0;
  const length=e=>Math.abs(e.ports[0].q.x-e.ports[1].q.x)+Math.abs(e.ports[0].q.y-e.ports[1].q.y);
- for(const e of [...active].sort((a,b)=>length(a)-length(b)||a.id-b.id)){const [a,b]=e.ports,reserved=[...leads.filter(p=>p.edge!==e.id),...routed.flatMap(r=>r.segments)];const middle=a.portConflict||b.portConflict?null:orthogonal(a.q,b.q,rects,reserved,lanes);
+ for(const e of [...active].sort((a,b)=>length(a)-length(b)||a.id-b.id)){const [a,b]=e.ports,reserved=[...leads.filter(p=>p.edge!==e.id),...routed.flatMap(r=>r.segments)];const bend={x:a.p.x,y:b.p.y};
+  const landing=segment(bend,b.q),drop=segment(a.q,bend);
+  const direct=a.side==='bottom'&&b.side==='left'&&b.q.x>a.q.x&&b.p.y>a.q.y&&
+   !rects.some(r=>blocked(drop.a,drop.b,r)||blocked(landing.a,landing.b,r))&&
+   !reserved.some(s=>sharedRun(drop.a,drop.b,s.a,s.b,GAP)||sharedRun(landing.a,landing.b,s.a,s.b,GAP));
+  const middle=a.portConflict||b.portConflict?null:direct?[a.q,bend,b.q]:orthogonal(a.q,b.q,rects,reserved,lanes);
   // Never silently reuse a connector when tables leave no route. Keep each
   // endpoint and its count visible and flag the unresolved connection.
   const points=middle?simplify([a.p,...middle,b.p]):null,segments=points?points.slice(1).map((p,i)=>segment(points[i],p)):[];
