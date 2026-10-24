@@ -16,6 +16,20 @@ for(const [focus,visible]of [['overview',Object.keys(tables)],...Object.entries(
  canvas.HTMLCanvasElement.prototype.getContext=()=>({font:'',measureText:value=>({width:value.length*14})});canvas.scrollTo=()=>{};canvas.HTMLElement.prototype.scrollTo=function(x,y){this.scrollLeft=x;this.scrollTop=y;};canvas.SVGElement.prototype.focus=()=>{};canvas.postMessage=data=>messages.push(data);
  try{canvas.eval(fixtureCode);const root=canvas.document,drawn=()=>Array.from(root.querySelectorAll('.node'),n=>n.dataset.node);assert.deepEqual(drawn(),Object.keys(tables).filter(id=>visible.includes(id)),'actual rendered graph '+focus);assert.equal(root.querySelectorAll('.concept-open-action').length,visible.length);
  const target=focus==='overview'?'version':focus;root.querySelector(`[data-node="${target}"] .concept-select`).dispatchEvent(new canvas.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));assert.equal(messages.at(-1).type,'alder-concept-select');assert.equal(messages.at(-1).id,target);assert.equal(root.querySelector('.selected').dataset.node,target);
+
+ // Selection changes emphasize only incident relations and one-hop neighbors.
+ for(const selected of visible){
+  root.querySelector(`[data-node="${selected}"] .concept-select`).dispatchEvent(new canvas.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+  const incident=edges.filter(([a,b])=>visible.includes(a)&&visible.includes(b)&&(a===selected||b===selected));
+  const neighbors=[...new Set(incident.flatMap(([a,b])=>[a,b]))].filter(id=>id!==selected).sort();
+  assert.deepEqual(Array.from(root.querySelectorAll('.review-neighbor'),n=>n.dataset.node).sort(),neighbors,'only direct neighbors of '+selected+' in '+focus);
+  assert.equal(root.querySelectorAll('.node.selected').length,1);assert.equal(root.querySelector('.selected').dataset.node,selected);
+  for(const wire of root.querySelectorAll('.wire')){
+   const active=wire.dataset.from===selected||wire.dataset.to===selected;
+   assert.equal(wire.classList.contains('review-related'),active,'incident wire emphasis');
+   for(const endpoint of root.querySelectorAll(`[data-edge="${wire.dataset.edge}"].endpoint-count,[data-edge="${wire.dataset.edge}"].concept-port`))assert.equal(endpoint.classList.contains('review-related'),active,'counts and independent ports follow their relation');
+  }
+ }
  root.querySelector(`[data-concept-open="${target}"]`).click();assert.equal(messages.at(-1).type,'alder-concept-open');assert.equal(messages.at(-1).id,target);assert.deepEqual(drawn(),Object.keys(tables).filter(id=>visible.includes(id)),'opening never changes the source graph');
  }finally{canvas.close();}
 }

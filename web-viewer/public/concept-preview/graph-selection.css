@@ -1,0 +1,10 @@
+:root{--review-blue:#2563eb;--review-green:#16835d;--review-ring:#a55b06;--review-link:#176ba0;--review-shadow:rgba(37,99,235,.3)}
+[data-theme=dark]{--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46)}
+/* Business graph selection palette; SVG shapes use the same emphasis levels. */
+.table.review-neighbor .concept-select>rect{stroke:var(--review-link);stroke-width:2;filter:drop-shadow(0 0 1px color-mix(in srgb,var(--review-link) 35%,transparent))}
+.table.selected .concept-select>rect{stroke:var(--review-blue);stroke-width:3;filter:drop-shadow(0 0 2px color-mix(in srgb,var(--review-blue) 50%,transparent)) drop-shadow(0 0 8.5px var(--review-shadow))}
+.table.selected .cap{fill:color-mix(in srgb,var(--review-blue) 15%,white)}
+[data-theme=dark] .table.selected .cap{fill:color-mix(in srgb,var(--review-blue) 25%,#17232d)}
+.wire.review-related{stroke:var(--review-link);stroke-width:3.2}
+.endpoint-count.review-related{fill:var(--review-link);font-weight:800}
+.concept-port.review-related{fill:var(--review-link)}
