@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
+import {readFileSync} from 'node:fs';
+import {IDBFactory} from 'fake-indexeddb';
 const {outputFiles}=await build({entryPoints:['src/viewer-shell.ts'],bundle:true,write:false,format:'iife',globalName:'Shell',loader:{'.css':'empty'}});
 const dom=new JSDOM('<div id="app"><header><button id="node-list-toggle">Left</button><button id="drawer">Right</button></header><div class="tab-strip"><nav id="tabs"></nav><div id="document-actions"></div></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main><div id="viewport"></div></main><aside id="formattedMarkdownDrawer"></aside></div></div>',{url:'https://viewer.test/?view=concept&conceptFixture=purchase',runScripts:'outside-only'});
 const w=dom.window,d=w.document,$=s=>d.querySelector(s);w.eval(outputFiles[0].text+';globalThis.Shell=Shell;');
@@ -21,3 +23,20 @@ const frame=$('iframe');w.dispatchEvent(new w.MessageEvent('message',{origin:'ht
 choose('concept','購入申請版');choose('concept','全体図');w.history.back();await new Promise(r=>setTimeout(r,30));assert.equal($('#concept-tab-version').getAttribute('aria-current'),'true');w.history.forward();await new Promise(r=>setTimeout(r,30));assert.equal($('#concept-tab-overview').getAttribute('aria-current'),'true');
 key='other';shell.syncDocument();assert.equal(d.querySelectorAll('.concept-tabs .tab').length,0);assert.equal(frame.hasAttribute('src'),false);assert.equal(d.querySelectorAll('.state-tabs .tab').length,0);choose('concept','全体図');assert.equal($('.concept-empty').hidden,false);
 dom.window.close();console.log('PASS explorer: global ownership, groups, cross-category filtering, expansion restore, one tab row, declared states, deduplication, Back/Forward, guarded messages and document boundary');
+
+// Real app integration: the explorer reads the common JSON model, not a fixture-only list.
+const code=(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}})).outputFiles[0].text;
+const live=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/integration/',runScripts:'outside-only',pretendToBeVisual:true}).window;
+live.indexedDB=new IDBFactory();live.structuredClone=structuredClone;live.TextEncoder=TextEncoder;live.HTMLElement.prototype.scrollIntoView=()=>{};live.HTMLElement.prototype.setPointerCapture=()=>{};live.HTMLElement.prototype.releasePointerCapture=()=>{};
+const el=id=>live.document.getElementById(id);
+async function until(fn){for(let i=0;i<500;i++){if(fn())return;await new Promise(r=>setTimeout(r,10));}throw Error('Timed out '+fn);}
+try{
+ live.eval(code);await until(()=>!el('open').disabled);
+ el('open-text').click();el('source-text').value=readFileSync('../work/viewer-json/issue-274/json-native/independent.json','utf8');await el('source-submit').onclick();
+ const nav=live.document.querySelector('[data-explorer-key="business:activity-receive"]');assert(nav,'native JSON activity is listed by ID');nav.click();assert.equal(el('tabs').children.length,2);assert.equal(live.document.querySelector('.node.selected').dataset.node,'activity-receive');
+ live.document.querySelector('[data-explorer-key="states:object-request"]').click();assert.equal(el('states-workspace').hidden,false);assert.equal(live.document.querySelectorAll('.state-detail-page [data-transition]').length,2);
+ live.document.querySelector('.state-detail-page summary').click();live.document.querySelector('.state-detail-page [data-transition] button').click();assert.equal(el('business-workspace').hidden,false);assert.equal(live.document.querySelector('.node.selected').dataset.node,'activity-receive');
+ const before=el('nodes').innerHTML;el('node-list-toggle').click();const input=live.document.querySelector('.explorer-search input');input.value='not-found';input.dispatchEvent(new live.Event('input'));assert.equal(el('nodes').innerHTML,before,'explorer search does not hide graph nodes');assert.equal(live.document.querySelectorAll('.node-eye').length,0);
+ await until(()=>['saved','unchanged'].includes(el('app').dataset.saveState));
+ console.log('PASS real app: native JSON explorer, Activity detail/selection, declared state SVG, state-to-business navigation, no graph filtering or individual eye controls');
+}finally{live.close();}
