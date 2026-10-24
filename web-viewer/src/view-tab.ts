@@ -1,4 +1,4 @@
-import {createElement,Workflow,GitBranch,Network,X} from 'lucide';
+import {createElement,Workflow,GitBranch,Network,X,ChevronDown,ChevronRight} from 'lucide';
 
 export type ViewKind='business'|'states'|'concept';
 const kinds={business:{name:'業務',full:'業務設計',icon:Workflow},states:{name:'状態',full:'状態遷移',icon:GitBranch},concept:{name:'概念',full:'概念モデル',icon:Network}};
@@ -14,9 +14,8 @@ export function viewTabClose(label:string){
  button.append(createElement(X,{'aria-hidden':'true','stroke-width':1.8}));return button;
 }
 
-// MENU-001's line chevrons, including their asymmetry in the two appearances.
+// MENU-001 placement with the application's shared Lucide icon set.
 export function menuChevron(open:boolean){
- const svg=document.createElementNS('http://www.w3.org/2000/svg','svg'),path=document.createElementNS(svg.namespaceURI,'path');
- svg.setAttribute('viewBox','0 0 16 16');svg.setAttribute('aria-hidden','true');svg.classList.add('explorer-chevron');
- path.setAttribute('d',open?'m4 6 4 4 4-4':'m6 3 4 5-4 5');path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.5');svg.append(path);return svg;
+ const svg=createElement(open?ChevronDown:ChevronRight,{'aria-hidden':'true','stroke-width':1.5});
+ svg.classList.add('explorer-chevron');svg.dataset.icon=open?'chevron-down':'chevron-right';return svg;
 }

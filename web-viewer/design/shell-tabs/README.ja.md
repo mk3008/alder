@@ -4,7 +4,7 @@
 
 ## 左のナビゲーション
 
-[Torrone MENU-001](https://github.com/mk3008/torrone/blob/main/catalog/menus/one-level/README.md)の親開閉矢印、子の字下げ、選択行の背景・先頭アクセントを採用する。確認したカタログ文書のblobは `eec672a678ae4bcaf396aa9630fbfc5083508edc`。親ラベルは通常の太さで左に置き、右端に1.5pxの線画chevronを置く。開閉で右向き／下向きを切り替え、左側の文字記号は使わない。parent-closed.svg blob `6f73c660614eb72d3e405a8b203e1a804375db38`、parent-open.svg blob `9b0596493fae796b9c68a219e7a0ec521dad703d`と両PNGを確認。配色はViewerを維持する。カタログの静止画像は検索やルーティングの仕様ではない。
+[Torrone MENU-001](https://github.com/mk3008/torrone/blob/main/catalog/menus/one-level/README.md)の親開閉矢印、子の字下げ、選択行の背景・先頭アクセントを採用する。確認したカタログ文書のblobは `eec672a678ae4bcaf396aa9630fbfc5083508edc`。親ラベルは通常の太さで左に置き、右端にLucideのChevronRight／ChevronDown（線幅1.5px）を置く。開閉で右向き／下向きを切り替え、左側の文字記号は使わない。アイコン形状は自作せず、カタログの配置・向き・線幅に合わせる。参照したparent-closed.svg blob `6f73c660614eb72d3e405a8b203e1a804375db38`、parent-open.svg blob `9b0596493fae796b9c68a219e7a0ec521dad703d`と両PNGを確認。配色はViewerを維持する。カタログの静止画像は検索やルーティングの仕様ではない。
 
 「業務設計」は全体図とActivity、「状態遷移」は宣言済みの対象、「概念モデル」は全体図と明示済みの概念を並べる。まず分類と子の二段とし、架空の業務領域階層を増やさない。複数分類を同時展開できる。横断検索は一致する子と親を残し、一時展開する。解除時は元の展開状態に戻り、図と開いているタブは変えない。左の開閉・検索・展開はタブ間で共通。
 
