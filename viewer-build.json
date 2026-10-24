@@ -1,0 +1,10 @@
+{
+  "productManifestVersion": "0.4.9",
+  "source": "2885d51f8b5776077d13daddfc0be5edf38597c1",
+  "approvedCandidate": "9a2f5f6e1940436f97864947d9d61705cf77d17a",
+  "tree": "a1f9cefb733583140499472fd46556426b30a65a",
+  "buildRun": 40045829114,
+  "buildArtifact": 12541583021,
+  "scriptSha256": "c70aa1e0ab326a0d9633acd029b42f4e023e6f7c281ab48648bb5f029f48772f",
+  "styleSha256": "8c29e73d62dde9a176e79a372fb06a10424e3bdc9da29e5f9d7aa1c286025223"
+}
