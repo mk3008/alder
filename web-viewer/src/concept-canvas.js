@@ -9,17 +9,22 @@ import './canvas-toolbar.css';
 import {conceptNeighborhood} from '../public/concept-preview/neighborhood.js';
 import {createNodeDrag} from './node-drag.ts';
 import {clampZoom,installTouchGestures} from './touch-gestures.ts';
-import {tables,edges,activityDefinitions,creatorStages} from './concept-fixture.ts';
+import {tables as fixtureTables,edges,activityDefinitions,creatorStages} from './concept-fixture.ts';
+import {findReviewGroup,reviewGraph} from './concept-review-fixture.ts';
+const reviewGroup=findReviewGroup(new URL(location.href).searchParams.get('group'));
+const selectedGraph=reviewGroup?reviewGraph(reviewGroup.id):undefined;
+const tables=selectedGraph?.tables??fixtureTables;
 function activitySlice(stage){
  // Mutation-only local view. Read concepts do not expand the diagram.
  const visible=new Set(stage.write);
  return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:edges.filter(([a,b])=>visible.has(a)&&visible.has(b))};
 }
 const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理テーブル・正式JSON Schemaは定義していません。'};
+if(selectedGraph){overviewStage.ids=selectedGraph.ids;overviewStage.edges=selectedGraph.edges;overviewStage.title=reviewGroup.name;}
 const focusId=new URL(location.href).searchParams.get('focus');
 if(focusId&&Object.hasOwn(tables,focusId)){Object.assign(overviewStage,conceptNeighborhood(Object.keys(tables),edges,focusId));overviewStage.title=tables[focusId].name+'と隣接する概念';}
 const stages=[...activityDefinitions.map(activitySlice),overviewStage];
-const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v8:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'');
+const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v8:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'')+(reviewGroup?':group:'+reviewGroup.id:'');
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}

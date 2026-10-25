@@ -1,0 +1,12 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md",
+  "scope": "4分類の草案をレビューするデモ。正式BD/JSON契約や物理構成は変更しない。既存描画/navigation正本は保持。",
+  "checks": [
+    {"id":"CONCEPT-REVIEW-001","condition":"購買の概念モデルを最初に開く。","guarantee":"購買業務の全体像に4分類とその情報の受け渡しを表示する。6概念の詳細図を全体像と呼ばない。","reason":"全概念を一度に読まず、レビュー範囲から内部構造へ進むため。","verification":"web/test-concept-review.mjs"},
+    {"id":"CONCEPT-REVIEW-002","condition":"いずれかの分類を開く。","guarantee":"各分類に単一のレビュー責任ロール候補、主Activity、確認先、後続への保証を表示する。候補の役割名を合意済みの決定権として扱わない。","reason":"誰が何を確認するかを曖昧にせず、操作担当と決定権を混同しないため。","verification":"web/test-concept-review.mjs"},
+    {"id":"CONCEPT-REVIEW-003","condition":"購入要求・申請内容の概念モデルを開く。","guarantee":"購入申請・購入申請版・申請品目だけを表示し、承認判断・準備所属・終結・購入しない数量を内部情報に含めない。既存の申請→版→品目の件数関係を保つ。","reason":"生成するActivityを主軸に情報の責任範囲を分け、後続の責任を申請内容へ混ぜないため。","verification":"web/test-concept-review.mjs"},
+    {"id":"CONCEPT-REVIEW-004","condition":"分類内の図を表示、選択し、概念の隣接図を別タブで開く。","guarantee":"表示対象・情報の絞り込みの後は既存conceptDiagram、配線、カメラ、選択処理を使用する。右ドロワーは手動開閉を保持し、選択カードの分類内情報を表示する。外部リンクは既存の隣接図を開き、元の分類を保持する。","reason":"分類追加で描画の同一性を失わず、他分類の情報への移動を明示するため。","verification":"web/test-concept-review.mjs"},
+    {"id":"CONCEPT-REVIEW-005","condition":"分類間移動、タブの閉鎖・再表示、URL直開き、戻る/進む、文書切替を行う。","guarantee":"対象分類を一意に復元し、同じ分類のタブを重複しない。分類はエクスプローラーから開ける。非購買文書では草案を自動適用しない。","reason":"分類の現在地と文書境界を保つため。","verification":"web/test-concept-review.mjs"}
+  ]
+}
