@@ -1,0 +1,11 @@
+{
+  "format":"viewer-verification/1",
+  "requirement":"../../../work/concept-review/issue-133/README.ja.md#場面別データ例",
+  "scope":"業務データ構造の表示を理解するための架空データ例。業務用Check Itemや正式データを変更しない。",
+  "checks":[
+    {"id":"DATA-EXAMPLE-001","condition":"いずれかの4分類を開く。","guarantee":"構造図とデータ例を同じ分類で切り替えられ、各例の表は構造図のカードに対応する。データ例は右ドロワーではなくメインで表示し、場面と具体値を同時に読める。構造図へ戻っても既存iframe/カメラは維持する。","reason":"抽象的な項目名と具体的に入る値を対応付けて理解するため。","verification":"web/test-data-examples.mjs"},
+    {"id":"DATA-EXAMPLE-002","condition":"場面別の例を選択する。","guarantee":"架空データで各場面が独立した例であることを明示する。申請は下書き/提出、判断は承認/差戻し後の再提出、引渡しは複数申請/同じ対象の再出力、結果は分割入庫/未購入を含む終結/購入なしを含める。未入力・未発生・未決を区別し、未決の日時履歴・保存方式や上限/権限を確定しない。","reason":"具体例を新たな業務規則として誤認させないため。","verification":"web/test-data-examples.mjs"},
+    {"id":"DATA-EXAMPLE-003","condition":"品目・数量・対象版を含む例を表示する。","guarantee":"品名・数量・単価、申請と版の対応を維持する。引渡しの対象版と有効承認版が一致し、再出力は準備番号/申請/版/品目/数量/単価が同じ。再提出へ旧版の判断を流用しない。結果は品目ごとにQ=R+C+Wと非負を満たし、全品目W=0のときだけ終結する。入庫なしの例に空の入庫回を作らない。","reason":"誤った例が構造要件への誤解を生まないようにするため。","verification":"web/test-data-examples.mjs"},
+    {"id":"DATA-EXAMPLE-004","condition":"例の切替、分類/タブ移動、Back/Forward、URL直開きと再読込を行う。","guarantee":"現在の分類と場面を復元できる。別分類に不適合な場面を適用せず、構造図の選択/配置・既存のドロワー開閉記憶を保持する。文書切替では例の適用を解除する。","reason":"どの状態のデータを見ているかを失わないため。","verification":"web/test-data-examples.mjs"}
+  ]
+}

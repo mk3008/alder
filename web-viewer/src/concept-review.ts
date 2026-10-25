@@ -3,7 +3,7 @@ import {reviewGroups,reviewBoundaries,reviewActivityNames,type ReviewGroup} from
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
 function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
 export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void){
- root.replaceChildren();add(root,'h1','購買業務の全体像');add(root,'p','申請から終結までを、各業務で使う情報と生成する情報を、4つのレビュー範囲で確認します。');
+ root.replaceChildren();add(root,'h1','購買業務の全体像');add(root,'p','申請から終結まで、各業務で使う情報と生成する情報を4つのレビュー範囲で確認します。');
  const cards=document.createElement('div');cards.className='review-group-grid';root.append(cards);
  for(const [index,group]of reviewGroups.entries()){const card=document.createElement('article');card.className='review-group-card';card.dataset.reviewGroup=group.id;add(card,'span',String(index+1).padStart(2,'0')).className='review-group-number';add(card,'h2',group.name);add(card,'p',group.purpose);add(card,'p','レビュー責任ロール候補：'+group.reviewer).className='review-owner';add(card,'p','主業務：'+reviewActivityNames(group).join('／')).className='review-activities';command(card,'データ構造を開く',()=>open(group.id)).setAttribute('aria-label',group.name+'のデータ構造を開く');cards.append(card);}
  add(root,'h2','まとまりの間で受け渡す情報');
