@@ -1,0 +1,44 @@
+{
+  "format": "viewer-verification/1",
+  "title": "Viewerの現在対象と詳細ナビゲーション",
+  "requirement": "../graph-rendering.ja.md#navigation",
+  "authority": "画面操作の検証正本。Alderの業務用CheckItemとは別形式。期待する保証を実装・テストコードから独立して保持する。",
+  "checks": [
+    {
+      "id": "VIEW-NAV-001",
+      "condition": "個別図で、現在開いている詳細対象自身のカードを表示する。選択中のカードは問わない。",
+      "guarantee": "自身の詳細を開くリンクを表示しない。",
+      "reason": "既に開いている詳細がリンク先であり、移動先として意味がない。カレントと選択中は別の情報である。",
+      "domains": ["business", "concept"],
+      "context": "detail",
+      "target": "current",
+      "selections": ["current", "neighbor"],
+      "expected": {"detailLink": false},
+      "verification": "web/review-navigation-contract.mjs"
+    },
+    {
+      "id": "VIEW-NAV-002",
+      "condition": "個別図で、現在開いている対象以外の隣接カードを表示する。選択中のカードは問わない。",
+      "guarantee": "その隣接対象の詳細を開くリンクを表示し、リンクは当該対象を指す。",
+      "reason": "表示中の詳細とは異なる対象へ移動できる必要がある。隣接カードを選択しただけで移動手段を消さない。",
+      "domains": ["business", "concept"],
+      "context": "detail",
+      "target": "neighbor",
+      "selections": ["current", "neighbor"],
+      "expected": {"detailLink": true},
+      "verification": "web/review-navigation-contract.mjs"
+    },
+    {
+      "id": "VIEW-NAV-003",
+      "condition": "全体図でカードを表示する。対象カードを選択していても、特定の詳細を開いている状態ではない。",
+      "guarantee": "対象カードの詳細を開くリンクを表示し、リンクは当該対象を指す。",
+      "reason": "全体図での選択はカレント詳細の指定ではない。全体図から個別詳細への導線を維持する。",
+      "domains": ["business", "concept"],
+      "context": "overview",
+      "target": "current",
+      "selections": ["current", "neighbor"],
+      "expected": {"detailLink": true},
+      "verification": "web/review-navigation-contract.mjs"
+    }
+  ]
+}

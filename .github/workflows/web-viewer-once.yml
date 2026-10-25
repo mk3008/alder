@@ -36,6 +36,8 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify UI verification authority
+        run: npm run verify:contract
       - run: npm test
       - run: npm run build
       - name: Install browser driver

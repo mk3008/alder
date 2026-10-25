@@ -124,3 +124,10 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 候補0.4は例外IDを持つJSONを正本とし、旧MD／旧JSONの解釈は入力adapterへ限定します。変更中は `node --experimental-strip-types web/test-json-native.mjs`、保存契約はRepositoryルートの `node --test tools/document_storage/test-native-json.mjs` を先に実行します。MD業務moduleを解決できない条件で作成・検証・編集・状態／Check表示を確認し、共通入力のcounterでMD入力時だけadapterが呼ばれることも検査します。
 
 実Chromeの `jsonStates` 群は旧宣言の13操作を維持し、独立した候補0.4の2操作、説明書式差、保存復元、不正ID時の表示保持を追加します。参照検証は読込／復元へ共通するため、最終候補では既存全48群を実行します。配置器・配線・承認済み余白の基準を変更しません。
+
+
+## 画面操作の検証正本との照合
+
+`verification/check-items.json` は現在対象と詳細ナビゲーションの検証正本であり、テストコードから期待を逆算しない。`graph-rendering.ja.md` のUI要件と条件・保証・理由を照合し、修正後に別工程で `npm run verify:contract` を実行する。結果は正本のSHA256・保証ID・候補commit/実行bundleのSHA256と結び付く。全体CIでも通常テストの前に同じ照合を実行する。これは画面要件の意味レビューや本人GUIレビューを自動的に代替しない。
+
+不合格は正本を保持して修正へ戻す。正本未取得・未知の検証先・未実施・失敗を合格としない。正本の意味を変える必要がある場合は、実装修正から分離し、上位の要求変更と理由を確認する。既存の全体テストを省略したり弱めたりしない。

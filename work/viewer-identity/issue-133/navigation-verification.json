@@ -1,0 +1,202 @@
+{
+  "scope": "Current-detail navigation only; not full Viewer CI or general Skill effectiveness.",
+  "review": "Same agent, separate read-only verification phase; not independent Fresh review.",
+  "semanticReview": [
+    {
+      "id": "VIEW-NAV-001",
+      "result": "conditions, guarantee and reason correspond to the requester requirement; current identity is distinct from selection"
+    },
+    {
+      "id": "VIEW-NAV-002",
+      "result": "conditions, guarantee and reason correspond to the requester requirement; current identity is distinct from selection"
+    },
+    {
+      "id": "VIEW-NAV-003",
+      "result": "conditions, guarantee and reason correspond to the requester requirement; current identity is distinct from selection"
+    }
+  ],
+  "beforeRepair": {
+    "authority": {
+      "path": "verification/check-items.json",
+      "sha256": "ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1"
+    },
+    "candidate": {
+      "commit": "f984b13f9c8138af30e20fa3291e135a76d86812",
+      "businessBundle": "9b24d3ab623c48e732ca75ce10174b6abe2cc9160e01749d694973f411f04d37",
+      "conceptBundle": "162d8a2f1ddc6ca1366f7da4020421e7262d5c3f5e97631a4b4ec612f5db70e4",
+      "sourceState": "Product sources unchanged at the recorded commit; authority and verifier newly added before this read-only check."
+    },
+    "results": [
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "current",
+        "status": "fail",
+        "message": "VIEW-NAV-001 既に開いている詳細がリンク先であり、移動先として意味がない。カレントと選択中は別の情報である。\n+ actual - expected\n\n  {\n+   detailLink: true\n-   detailLink: false\n  }\n"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "fail",
+        "message": "VIEW-NAV-001 既に開いている詳細がリンク先であり、移動先として意味がない。カレントと選択中は別の情報である。\n+ actual - expected\n\n  {\n+   detailLink: true\n-   detailLink: false\n  }\n"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "current",
+        "status": "fail",
+        "message": "VIEW-NAV-001 既に開いている詳細がリンク先であり、移動先として意味がない。カレントと選択中は別の情報である。\n+ actual - expected\n\n  {\n+   detailLink: true\n-   detailLink: false\n  }\n"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "fail",
+        "message": "VIEW-NAV-001 既に開いている詳細がリンク先であり、移動先として意味がない。カレントと選択中は別の情報である。\n+ actual - expected\n\n  {\n+   detailLink: true\n-   detailLink: false\n  }\n"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      }
+    ],
+    "passed": 8,
+    "failed": 4
+  },
+  "afterRepair": {
+    "authority": {
+      "path": "verification/check-items.json",
+      "sha256": "ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1"
+    },
+    "candidate": {
+      "commit": "f984b13f9c8138af30e20fa3291e135a76d86812",
+      "workingTreeChanges": [
+        "M web-viewer/src/concept-canvas.js",
+        " M web-viewer/src/main.ts",
+        "?? web-viewer/src/detail-navigation.ts"
+      ],
+      "businessBundle": "7435eaab3d439c63ba833ebc9cffb7dfaa4e2b28ce7a944e17c0223d4c414daa",
+      "conceptBundle": "6d401063964ff65674c1b7d806fa7613482eba7ac4b3e4e4ff5b48cf468de144"
+    },
+    "results": [
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      }
+    ],
+    "passed": 12,
+    "failed": 0
+  }
+}

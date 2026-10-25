@@ -1,3 +1,4 @@
+import {canOpenDetail} from './detail-navigation.ts';
 
 import {conceptDiagram} from './concept-layout.js';
 import {graphFocus} from './graph-focus.ts';
@@ -50,7 +51,7 @@ function draw(s){
  body.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));body.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));
  t.fields.forEach(([,name],i)=>body.append(svgNode('text',{x:b.x+12,y:b.y+56+i*25},name)));
  g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigateDetail(s,id);}else if(s.stage.id==='overview'&&!s.locked&&e.altKey&&e.key.startsWith('Arrow')){e.preventDefault();const d=e.shiftKey?50:10;changeNode(s,id,[b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0),b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0)]);s.svg.querySelector(`[data-node="${id}"] .concept-select`)?.focus();save(s);}};
- const command=svgNode('foreignObject',{x:b.x+b.w-35,y:b.y+1,width:34,height:34});const button=document.createElement('button');button.type='button';button.className='concept-open-action';button.dataset.conceptOpen=id;button.setAttribute('aria-label',t.name+'と隣接する概念を別タブで開く');button.title='隣接する概念を別タブで開く';button.onclick=e=>{e.stopPropagation();parent.postMessage({type:'alder-concept-open',id},location.origin);};button.onkeydown=e=>e.stopPropagation();command.append(button);g.append(command);s.svg.append(g);
+ if(canOpenDetail(id,focusId)){const command=svgNode('foreignObject',{x:b.x+b.w-35,y:b.y+1,width:34,height:34});const button=document.createElement('button');button.type='button';button.className='concept-open-action';button.dataset.conceptOpen=id;button.setAttribute('aria-label',t.name+'と隣接する概念を別タブで開く');button.title='隣接する概念を別タブで開く';button.onclick=e=>{e.stopPropagation();parent.postMessage({type:'alder-concept-open',id},location.origin);};button.onkeydown=e=>e.stopPropagation();command.append(button);g.append(command);}s.svg.append(g);
  }
  layoutCanvas(s);parent.postMessage({type:'alder-concept-rendered'},location.origin);
 }
