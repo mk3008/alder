@@ -1,0 +1,19 @@
+{
+  "source": "d05b3b3a3943fc0b1d94860e5dbbc1e1c0b92216",
+  "tree": "8ee811169af349b161b212a997710b89d7e9b614",
+  "validation": "Business data requirements: complete consumed information, fixed-target provenance and membership, missing quantity and wrong-version negative checks; shell; graph identity; concept initial; frozen 7 negatives/12 cases; typecheck/build. Full CI acceptance separate.",
+  "files": {
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-D8rLVw-5.js": "6117c01b6c62c5f950dc0a9b518e1cda2b6abb1aab8cb42ad6d953673316526c",
+    "assets/concept-DHIvPhg1.css": "2e47dda6858bc9aa6cbfe61de142630d607025dcab0553cb328f79fe086ade90",
+    "assets/concept-review-fixture-BjwM6EFQ.js": "e1102c55f5943252a82e784d2cb71c56b4fc8038df91c523e143107eceb095e8",
+    "assets/main-DaJPgosJ.css": "00e031ddd099826c1ac6b188b3d4873251353b2100665171d86252000a10d470",
+    "assets/main-Dk2AzC6I.js": "3f17ebe6c6f30974d1c04aecd53eb8b8a8874c70b203286e661e5fb6eab0cfba",
+    "concept.html": "16b560e75c673812b75adc1de098f57580cbc5696fa4727cdefffc161ca6933c",
+    "index.html": "f72494233e498ffea17e3ff9f1e6f8cd99b0178ef2deb564b20c26d9bed7a83a",
+    "review-business.html": "657b1ceb19f2173f1742552fdc6c470bc6d2c18c286c6054932159a5de35f027",
+    "review-concept.html": "227cd441eadc193f78c6c303487b7032e7f7f541b63e06786dd0ebad35e87c11",
+    "review-states.html": "9770d3afa5390d12e3467f9863086e441c6361d59bf80613cccff056f7235db6"
+  }
+}
