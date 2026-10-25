@@ -23,6 +23,31 @@ class JSONPluginTest(unittest.TestCase):
         self.assertIn('新規で形式指定がなければJSONを既定',guide)
         self.assertNotIn('新規で形式指定がなければ既存Markdown経路を維持',guide)
 
+    def test_json_authoring_reaches_semantic_review_and_repair_before_return(self):
+        # Packaged instruction reachability, not an observation of model behavior.
+        skill=(PLUGIN/'skills'/NAME/'SKILL.md').read_text()
+        route='references/plugin-json-authoring.ja.md#返却前の意味レビューと修正反復'
+        self.assertIn(route,skill)
+        guide=(PLUGIN/'skills'/NAME/route.split('#')[0]).read_text()
+        section=guide.split('## 返却前の意味レビューと修正反復',1)[1].split('## Checkの合意ゲート',1)[0]
+        for target in [
+            'adoption.md#review-and-revise-a-draft-before-returning-it',
+            'check-item-traceability.md#before-returning-a-draft-or-update',
+            'check-item-traceability.md#distinct-consistency-review-and-repair',
+        ]:
+            self.assertIn(target,section)
+            filename,anchor=target.split('#')
+            text=(PLUGIN/'skills'/NAME/'references'/filename).read_text()
+            headings=[re.sub(r'[^a-z0-9 -]','',line.lstrip('# ').lower()).strip().replace(' ','-')
+                      for line in text.splitlines() if line.startswith('#')]
+            self.assertIn(anchor,headings,target)
+        for boundary in ['構造検査', 'InputとProcedureとOutput', '判断条件を発明せず',
+                         '修正した候補を再レビュー', '依頼範囲全体', '非独立と開示',
+                         '改善や新証拠なし', '最後に実レビューした版', '未実行を合格扱いしない',
+                         '人間合意と混同しない', '再帰的なレビューを行わない',
+                         '変換だけの依頼にも業務意味の修正を追加しない']:
+            self.assertIn(boundary,section)
+
     def test_published_bundle_matches_source_bytes_and_paths(self):
         for p,data in export_plan(ROOT,[NAME]).items():
             self.assertEqual((ROOT/p).read_bytes(),data,str(p))

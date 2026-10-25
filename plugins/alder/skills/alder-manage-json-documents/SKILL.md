@@ -17,7 +17,7 @@ license: MIT
 5. BDレビューでは[品質](references/business-design-quality-check.ja.md)、[相関](references/business-design-correlation-check.ja.md)、[漏れ](references/business-design-omission-check.ja.md)、[Findings](references/design-findings.ja.md)を適用する。review-onlyは読取り・検査・指摘だけにし、保存・状態変更しない。
 6. Check操作では[Check契約](references/check-item-traceability.md)を読み、**正確なBD版に対する人間合意を先に確認**する。なければCheck草案/更新を止め、必要な業務判断を求める。[共通の意味保持圧縮指針](references/check-item-traceability.md#meaning-preserving-condition-compression)を条件組合せの検討・草案・更新・Consistency reviewに適用する。共有保証・例・根拠・Test証拠・既存ID/人間状態を保持する。確認済みへの変更は該当期待への実際の人間発言と候補hashを明示し、テストや無回答から推定しない。basedOn.verificationはunverifiedのままにする。
 7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONの移行は候補作成と明示migration commitに分け、原本・人間Checkゲートを保持する。
-8. 返却前に全体Schema/参照/版と要求・業務意味の対応を別々に点検する。Checkは保存候補とBD全体を使って、原典→保証/例・全index/共有参照を確認するread-onlyのConsistency reviewを別工程で行う。独立readerがない場合は同じ文脈で行ったと開示する。根拠のある範囲だけ修正し、再検査する。人間にJSONの手修正を委ねない。
+8. BD・Checkの草案作成と更新は、通常の依頼の中で[返却前の意味レビューと修正反復](references/plugin-json-authoring.ja.md#返却前の意味レビューと修正反復)を必ず実行する。全体Schema/参照/版の構造検査に加え、品質・相関・重要な漏れ、手順の具体性や要求・業務意味の対応を点検する。read-onlyの実レビュー→作者の根拠付き修正→修正版の再レビューを行い、影響箇所と依頼範囲全体を確認する。Checkは保存候補とBD全体の一般保証・具体例・共有参照を照合する。別readerがない場合は同じ文脈で工程を分け、非独立と開示する。未決の規則を創作せず、同じ指摘の非改善・レビュー失敗や利用不能では停止して最後のレビュー版と残件を返す。review-onlyでは修正・保存・再帰レビューを行わない。人間に別の品質チェック依頼やJSONの手修正を求めない。
 
 明示的なMD変換は[同梱converter](scripts/document_storage/cli.mjs)のconvertを使う。元MDを保持し、旧MD全文の同梱・JSON→MD同期を行わない。購買研究草案の未知見出しやCheck原典版の不一致は診断して止める。
 
