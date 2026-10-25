@@ -1,0 +1,21 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394157135",
+  "scope": "新規UI要求。既存Bで固定した描画契約・navigation Check Itemは変更しない。",
+  "checks": [
+    {
+      "id": "VIEW-TAB-001",
+      "condition": "業務・状態遷移・概念のタブを表示する。",
+      "guarantee": "種別の可視表示はLucideアイコンだけとし、対象名を保持する。種別と対象の正式名はaria-labelとtitleから確認できる。閉じる操作と選択表示・既存の種別色は保持する。",
+      "reason": "英語化時に共通の種別接頭詞が横幅を消費し、対象の識別を妨げないようにする。",
+      "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-DRAWER-001",
+      "condition": "概念図のシェイプを選択する。",
+      "guarantee": "右ドロワーの現在の開閉状態を保持する。閉じていれば閉じたまま、開いていれば開いたまま選択対象の情報を更新する。閉じた後の選択でも再び開かない。タブごとの既存開閉状態を保持し、手動の開閉は利用可能とする。",
+      "reason": "選択とドロワー開閉を独立させ、業務フローの選択時の挙動と同一にする。",
+      "verification": "web/test-viewer-shell.mjs"
+    }
+  ]
+}
