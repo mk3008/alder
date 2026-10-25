@@ -25,6 +25,21 @@ assert(reviewGroups.find(g=>g.id==='group-handoff').concepts.request.fields.some
 const badPreparation=batch.cloneNode(true);badPreparation.querySelector('[data-example-card=request] tbody tr').firstElementChild.textContent='P-999';assert.throws(()=>verifyBusinessData(badPreparation,'group-handoff'),/target belongs to the displayed preparation/);
 const missingPreparation=batch.cloneNode(true);missingPreparation.querySelector('[data-example-card=request] thead tr').firstElementChild.remove();assert.throws(()=>verifyBusinessData(missingPreparation,'group-handoff'),/explicitly names preparation number/);
 const badVersion=batch.cloneNode(true);badVersion.querySelector('[data-example-card=request] tbody tr').children[6].textContent='V2';assert.throws(()=>verifyBusinessData(badVersion,'group-handoff'),/version must match/);
+// SAMPLE-KEY-COLOR-001: verify the actual rendered cells, including non-key exclusion.
+const keyColors=new Map();
+const domains={'準備番号':'preparation','申請':'request','対象申請':'request','入庫回':'receipt'};
+for(const root of rendered.values())for(const table of root.querySelectorAll('table')){
+ const headers=[...table.querySelectorAll('th')].map(th=>th.textContent);
+ for(const row of table.querySelectorAll('tbody tr'))for(const [index,cell] of [...row.children].entries()){
+  const domain=domains[headers[index]];
+  if(!domain){assert(!cell.hasAttribute('data-key-tone'),'non-key cells are uncolored');continue;}
+  const key=domain+':'+cell.textContent;assert.equal(cell.dataset.sampleKey,key);assert(cell.classList.contains('data-example-key'));
+  assert(cell.dataset.keyTone,'identifier cell is colored');if(keyColors.has(key))assert.equal(cell.dataset.keyTone,keyColors.get(key),'same key has the same color across tables/scenes');keyColors.set(key,cell.dataset.keyTone);
+ }
+}
+assert.equal(keyColors.size,5);assert.equal(new Set(keyColors.values()).size,5,'distinct IDs use distinct colors');
+assert.equal(keyColors.get('preparation:P-001'),'yellow');assert.equal(keyColors.get('request:R-101'),'cyan');assert.equal(keyColors.get('request:R-102'),'green');
+const keyAuthority=JSON.parse(readFileSync('verification/sample-key-colors.check-items.json','utf8'));assert.deepEqual(keyAuthority.checks.map(c=>c.id),['SAMPLE-KEY-COLOR-001']);
 assert.equal(findDataExample('group-request','result-none'),undefined);
 const shellCode=await bundle('src/viewer-shell.ts','Shell');
 function harness(query='',group='group-handoff'){

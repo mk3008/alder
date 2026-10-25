@@ -1,12 +1,16 @@
 import {type ReviewGroup} from './concept-review-fixture';
-export type SampleBlock={card:string;columns:string[];rows:(string|number)[][];empty?:string};
+type SampleKeyDomain='preparation'|'request'|'receipt';
+export type SampleBlock={card:string;columns:string[];rows:(string|number)[][];empty?:string;keyColumns:Record<number,SampleKeyDomain>};
 export type DataExample={id:string;group:string;name:string;when:string;meaning:string;blocks:SampleBlock[];note?:string};
 const itemColumns=['申請','対象版','品名','依頼数量 Q','税抜希望単価'];
 const itemsA=[['R-101','V1','ボールペン',10,'100円'],['R-101','V1','ファイル',2,'500円']];
 const itemsB=[['R-102','V1','コピー用紙',3,'400円']];
 const requests=[['R-101','申請者A','V1','見積Q-101','承認済み','V1'],['R-102','申請者B','V1','見積Q-102','承認済み','V1']];
 const targetColumns=['申請','申請者','対象版','見積根拠','有効な承認','承認対象版'];
-const block=(card:string,columns:string[],rows:(string|number)[][],empty?:string):SampleBlock=>({card,columns,rows,empty});
+// Only these explicit identifier columns link rows; version labels are scoped, not global IDs.
+const keyDomains:Record<string,SampleKeyDomain>={'準備番号':'preparation','申請':'request','対象申請':'request','入庫回':'receipt'};
+const keyTones:Record<string,string>={'preparation:P-001':'yellow','request:R-101':'cyan','request:R-102':'green','receipt:RC-001':'purple','receipt:RC-002':'orange'};
+const block=(card:string,columns:string[],rows:(string|number)[][],empty?:string):SampleBlock=>({card,columns,rows,empty,keyColumns:Object.fromEntries(columns.flatMap((name,index)=>keyDomains[name]?[[index,keyDomains[name]]]:[]))});
 const handoff=(time:string)=>[
  block('preparation',['準備番号','今回の書き出し日時'],[['P-001',time]]),
  block('request',['準備番号',...targetColumns],requests.map(row=>['P-001',...row])),block('item',itemColumns,[...itemsA,...itemsB])
@@ -55,6 +59,6 @@ export function renderDataExample(root:HTMLElement,group:ReviewGroup,id:string,c
  add(root,'p','架空のデータ例です。各場面は独立した例で、同じ申請番号でも同時に成立する状態ではありません。').className='data-example-caption';
  const label=document.createElement('label');label.className='data-example-picker';add(label,'span','場面');const select=document.createElement('select');select.setAttribute('aria-label','データ例の場面');for(const candidate of examplesFor(group.id)){const option=document.createElement('option');option.value=candidate.id;option.textContent=candidate.name;select.append(option);}select.value=id;select.onchange=()=>change(select.value);label.append(select);root.append(label);
  add(root,'h2',example.name);add(root,'p',example.when).className='data-example-when';add(root,'p',example.meaning).className='data-example-meaning';
- for(const block of example.blocks){const section=document.createElement('section');section.className='data-example-block';section.dataset.exampleCard=block.card;add(section,'h3',group.concepts[block.card].name);const wrap=document.createElement('div');wrap.className='data-example-table';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label',group.concepts[block.card].name+'のデータ表');const table=document.createElement('table');table.setAttribute('aria-label',group.concepts[block.card].name+'のデータ例');const caption=document.createElement('caption');caption.textContent=group.concepts[block.card].name+'に入る情報';table.append(caption);const head=document.createElement('thead'),tr=document.createElement('tr');for(const column of block.columns){const th=add(tr,'th',column);th.setAttribute('scope','col');}head.append(tr);table.append(head);const body=document.createElement('tbody');for(const row of block.rows){const tr=document.createElement('tr');for(const cell of row)add(tr,'td',String(cell));body.append(tr);}table.append(body);wrap.append(table);section.append(wrap);if(!block.rows.length)add(section,'p',block.empty??'データはありません。');root.append(section);}
+ for(const block of example.blocks){const section=document.createElement('section');section.className='data-example-block';section.dataset.exampleCard=block.card;add(section,'h3',group.concepts[block.card].name);const wrap=document.createElement('div');wrap.className='data-example-table';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label',group.concepts[block.card].name+'のデータ表');const table=document.createElement('table');table.setAttribute('aria-label',group.concepts[block.card].name+'のデータ例');const caption=document.createElement('caption');caption.textContent=group.concepts[block.card].name+'に入る情報';table.append(caption);const head=document.createElement('thead'),tr=document.createElement('tr');for(const column of block.columns){const th=add(tr,'th',column);th.setAttribute('scope','col');}head.append(tr);table.append(head);const body=document.createElement('tbody');for(const row of block.rows){const tr=document.createElement('tr');for(const [index,cell] of row.entries()){const td=add(tr,'td',String(cell));const domain=block.keyColumns[index],key=domain?domain+':'+cell:undefined,tone=key&&keyTones[key];if(tone){td.dataset.sampleKey=key;td.dataset.keyTone=tone;td.className='data-example-key';td.title=block.columns[index]+'：'+cell;}}body.append(tr);}table.append(body);wrap.append(table);section.append(wrap);if(!block.rows.length)add(section,'p',block.empty??'データはありません。');root.append(section);}
  if(example.note)add(root,'p',example.note).className='data-example-note';
 }
