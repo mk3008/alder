@@ -36,6 +36,8 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Fetch frozen pre-B verification authority
+        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
       - name: Verify UI verification authority
         run: npm run verify:contract
       - run: npm test
