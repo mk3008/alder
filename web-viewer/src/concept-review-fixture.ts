@@ -7,12 +7,12 @@ export type ReviewGroup={id:string;name:string;purpose:string;reviewer:string;co
 const concept=(id:string,fields:string[],note:string):Concept=>({name:tables[id].name,fields:fields.map(name=>['',name]),note});
 export const reviewGroups:ReviewGroup[]=[
  {id:'group-request',name:'購入要求・申請内容',purpose:'何を、なぜ、どの条件で購入したいかを表す。',reviewer:'申請業務責任者',consult:['申請者','承認者'],activities:['apply','revise'],inputs:'入力中の購入希望、見積根拠、差戻し理由、基幹の役職・役職別上限。',guarantee:'提出内容を版として特定し、理由・見積・品目を揃えて判断へ渡す。確定内容は直接変更しない。',question:'購入したい内容を過不足なく表せるか。再申請でも同じ要求を追い、過去に判断された内容を区別できるか。',concepts:{
- request:concept('request',['申請者'],'差戻し・再申請でも同じ購入要求を追うためのまとまり。提出する内容は版で区別する。承認判断、購入準備への所属、終結結果は、それぞれを生成する業務の分類で説明する。'),
+ request:concept('request',['申請者','現在の提出版'],'差戻し・再申請でも同じ購入要求を追うためのまとまり。提出する内容は版で区別する。承認判断、購入準備への所属、終結結果は、それぞれを生成する業務の分類で説明する。'),
  version:concept('version',['未確定／確定','購入理由','見積根拠（依頼全体）','提出日時'],tables.version.note),
  item:concept('item',['版内の品目の識別','品名・税抜希望単価','依頼数量 Q'],'何を、いくつ購入したいかを、提出する版に結び付ける。保存時1品目以上で、未確定なら入力値の不足を許す。提出時は全品目情報が必要。確定後の品目は直接変更せず、再申請は別版の品目を使う。購入しない数量・入庫実績は後続の結果登録で扱う。')
  }},
  {id:'group-decision',name:'購入可否の判断',purpose:'どの提出内容に対して、購入を認めたか、差し戻したかを表す。',reviewer:'承認業務責任者',consult:['申請者','購買担当者'],activities:['approve'],inputs:'現在提出版の購入理由・見積根拠・品目、現在判断、準備の有無。',guarantee:'現在有効な承認とその対象版を特定する。別版への再申請に旧判断を流用しない。',question:'何を判断したか明確か。差戻しと購入準備の確定が同時に成立しないか。',concepts:{
- request:concept('request',['現在の判断対象版','現在判断（承認／差戻し）','判断日時・差戻し理由'],'判断は特定の提出版に対して成立する。再申請で対象版を切り替えると旧判断は現在の根拠から外れる。差戻し理由は必須。購入準備確定後は差戻しできない。独立した判断概念や判断履歴を必須にせず、現在の草案では購入申請に含まれる情報として表示する。')
+ request:concept('request',['提出版（参照）','現在判断（対象版・承認／差戻し）','判断日時・差戻し理由'],'判断は特定の提出版に対して成立する。再申請で対象版を切り替えると旧判断は現在の根拠から外れる。差戻し理由は必須。購入準備確定後は差戻しできない。独立した判断概念や判断履歴を必須にせず、現在の草案では購入申請に含まれる情報として表示する。')
  }},
  {id:'group-handoff',name:'購入対象の確定・引渡し',purpose:'承認された内容のうち、何をまとめて購入に回したかを表す。',reviewer:'購買業務責任者',consult:['承認者','引渡し先'],activities:['prepare'],inputs:'有効な承認、承認と同じ対象版・品目・見積根拠、未準備の申請。',guarantee:'準備番号・対象申請・対象版を固定し、CSV失敗後も同番号・同内容で再出力する。',question:'承認どおりの対象を取り違えず渡せるか。重複した準備や、再出力による内容変更がないか。',concepts:{
  preparation:tables.preparation,
