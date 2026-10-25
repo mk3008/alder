@@ -13,7 +13,7 @@ export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void){
  const note=document.createElement('details');add(note,'summary','範囲と確認事項');add(note,'p','分類はレビューする情報のまとまりです。サブシステムやテーブルの分割を指定しません。レビュアーは業務設計書に定義された作業者のロールです。外部の見積取得・発注管理・基幹マスタの内部構造は対象外です。');root.append(note);command(root,'全データ（参考関連図）を開く',()=>open('overview'));
 }
 export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){
- root.replaceChildren();command(root,'購買業務の全体像',overview,true);add(root,'h1',group.name);
+ root.replaceChildren();command(root,'購買業務の全体像',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
 }
 export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
  const content=contentFor(group.id);root.replaceChildren();if(!content)return;
