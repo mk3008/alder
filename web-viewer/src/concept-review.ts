@@ -12,6 +12,9 @@ export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void){
  const note=document.createElement('details');add(note,'summary','範囲と確認事項');add(note,'p','分類はレビューする情報のまとまりです。サブシステムやテーブルの分割を指定しません。責任ロール名は候補で、実際の決定権は未確定です。外部の見積取得・発注管理・基幹マスタの内部構造は対象外です。');root.append(note);command(root,'全データ（参考関連図）を開く',()=>open('overview'));
 }
 export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){
- root.replaceChildren();command(root,'購買業務の全体像',overview,true);add(root,'h1',group.name);add(root,'p',group.purpose);add(root,'p','業務で必要な情報のまとまり・件数・成立条件を確認します。').className='review-structure-purpose';add(root,'p','レビュー責任ロール候補：'+group.reviewer).className='review-owner';
- const details=document.createElement('details');add(details,'summary','レビュー範囲・受け渡しを確認');const dl=document.createElement('dl');for(const [label,value]of [['主となる業務',reviewActivityNames(group).join('／')],['確認先',group.consult.join('／')],['受け取る情報',group.inputs],['後続への保証',group.guarantee],['確認したいこと',group.question]]){add(dl,'dt',label);add(dl,'dd',value);}details.append(dl);add(details,'p','責任ロール名は候補です。カード右端の別タブ操作は、分類を越えた隣接概念を開きます。');root.append(details);
+ root.replaceChildren();command(root,'購買業務の全体像',overview,true);add(root,'h1',group.name);
+}
+export function renderReviewOverview(root:HTMLElement,group:ReviewGroup){
+ root.replaceChildren();add(root,'h2','概要');add(root,'p',group.purpose);add(root,'p','業務で必要な情報のまとまり・件数・成立条件を確認します。').className='review-structure-purpose';add(root,'p','レビュー責任ロール候補：'+group.reviewer).className='review-owner';
+ add(root,'h3','レビュー範囲・受け渡し');const dl=document.createElement('dl');for(const [label,value]of [['主となる業務',reviewActivityNames(group).join('／')],['確認先',group.consult.join('／')],['受け取る情報',group.inputs],['後続への保証',group.guarantee],['確認したいこと',group.question]]){add(dl,'dt',label);add(dl,'dd',value);}root.append(dl);add(root,'p','責任ロール名は候補です。カード右端の別タブ操作は、分類を越えた隣接概念を開きます。');
 }

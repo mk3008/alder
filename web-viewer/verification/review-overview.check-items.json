@@ -1,0 +1,8 @@
+{
+ "format":"viewer-verification/1",
+ "requirement":"../../../work/concept-review/issue-133/README.ja.md#概要タブ",
+ "checks":[
+  {"id":"REVIEW-OVERVIEW-001","condition":"4分類のいずれかを表示する。","guarantee":"全体像へ戻る入口と分類名の下に、概要/構造図/データ例を同列で表示する。目的・構造要件の説明・単一レビュー責任ロール・レビュー範囲/受け渡しは概要の本文へ移す。構造図/データ例の上にこれらを重複表示せず、内容自体は欠落させない。","reason":"画像で指定された説明領域をタブへ移し、主内容の縦領域を確保するため。","verification":"web/test-data-examples.mjs"},
+  {"id":"REVIEW-OVERVIEW-002","condition":"概要/構造図/データ例を切り替え、履歴移動・URL直開き・再読込・分類/文書切替を行う。","guarantee":"現在のモードを復元し、最後のデータ例と構造iframe/カメラ/ドロワー記憶を保持する。既存の初期構造図とデータ例直リンクは維持する。概要では選択図のドロワーを隠し、文書切替でモードを解除する。","reason":"見せ方の変更で構造やデータ例のレビュー操作を失わないため。","verification":"web/test-data-examples.mjs"}
+ ]
+}
