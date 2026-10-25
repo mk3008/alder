@@ -60,3 +60,5 @@
 [data-theme=dark] .data-example-key[data-key-tone=green]{--sample-key-bg:#344c20;--sample-key-fg:#d8edb1}
 [data-theme=dark] .data-example-key[data-key-tone=purple]{--sample-key-bg:#4b3563;--sample-key-fg:#e7d9fa}
 [data-theme=dark] .data-example-key[data-key-tone=orange]{--sample-key-bg:#603d20;--sample-key-fg:#ffdfbe}
+
+.data-review-overview h4{font-size:14px;margin:12px 0 4px}.review-capability{margin:8px 0 16px}.review-sample-link{display:block;min-height:44px;padding:6px 0;color:#26749b;text-align:left;text-decoration:underline;text-underline-offset:3px}[data-theme=dark] .review-sample-link{color:#8fc8ef}.data-review-overview dl{display:block}.data-review-overview dt{margin:12px 0 4px}.data-review-overview dd{margin:0 0 8px}.data-examples-panel .data-example-scene{font-size:16px;margin:12px 0 4px}.data-example-capability{font-size:14px;margin:4px 0 12px}
