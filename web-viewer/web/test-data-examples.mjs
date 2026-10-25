@@ -54,24 +54,24 @@ try{
  choose('データ例');assert.equal($('.data-examples-panel').dataset.dataExample,'handoff-retry','returning from structure preserves the selected scene');const sampleURL=w.location.href;const direct=harness('&dataExample=handoff-batch&review=concept&reviewState=request');try{direct.shell.applyReview();assert.equal(direct.d.querySelector('.data-examples-panel').hidden,false);assert.equal(direct.d.querySelector('.data-examples-panel').dataset.dataExample,'handoff-batch');}finally{direct.w.close();}assert.match(sampleURL,/dataExample=/);
  $('[data-explorer-key="concept:group-result"]').click();assert.equal($('.data-examples-panel').hidden,true);choose('データ例');assert.equal($('.data-examples-panel').dataset.dataExample,'result-partial');$('[data-explorer-key="concept:group-handoff"]').click();assert.equal($('.data-examples-panel').dataset.dataExample,'handoff-retry','each classification retains its own scene');
  assert.deepEqual([...d.querySelectorAll('.data-example-modes button')].map(b=>b.textContent),['概要','構造図','データ例']);
- choose('概要');assert.equal($('.data-review-overview').hidden,false);assert.equal($('.data-examples-panel').hidden,true);assert.equal(frame.hidden,true);assert($('#drawer').disabled);assert.equal(new URL(w.location.href).searchParams.get('dataView'),'overview');assert.equal(new URL(w.location.href).searchParams.get('dataExample'),null);assert.equal($('.concept-review-heading .review-owner'),null);assert.equal($('.concept-review-heading p'),null);assert.equal($('.concept-review-heading details'),null);assert.match($('.data-review-overview').textContent,/レビュー責任ロール候補購買業務責任者です。/);for(const label of ['主となる業務','確認先','受け取る情報','後続への保証','確認したいこと'])assert.match($('.data-review-overview').textContent,new RegExp(label));
+ choose('概要');assert.equal($('.data-review-overview').hidden,false);assert.equal($('.data-examples-panel').hidden,true);assert.equal(frame.hidden,true);assert($('#drawer').disabled);assert.equal(new URL(w.location.href).searchParams.get('dataView'),'overview');assert.equal(new URL(w.location.href).searchParams.get('dataExample'),null);assert.equal($('.concept-review-heading .review-owner'),null);assert.equal($('.concept-review-heading p'),null);assert.equal($('.concept-review-heading details'),null);assert.match($('.data-review-overview').textContent,/レビュアー購買担当者/);for(const label of ['確認先','主となる業務','レビュー責任ロール候補','レビュー範囲・受け渡し','受け取る情報','後続への保証','確認が必要なこと'])assert(!$('.data-review-overview').textContent.includes(label));
  choose('構造図');assert.equal($('[data-concept-view=group-handoff]'),frame);assert.equal(frame.hidden,false);assert.equal($('.concept-related').hidden,false);w.history.back();await new Promise(r=>setTimeout(r,30));assert.equal($('.data-review-overview').hidden,false);w.history.forward();await new Promise(r=>setTimeout(r,30));assert.equal($('.data-review-overview').hidden,true);choose('概要');choose('データ例');assert.equal($('.data-examples-panel').dataset.dataExample,'handoff-retry','overview preserves the last scene');
  const saved=JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/'));assert.equal(saved.examples['group-handoff'],'handoff-retry');other();assert.equal($('.data-examples-panel').hidden,true);$('[data-explorer-key="concept:landscape"]').click();assert.equal($('.concept-empty').hidden,false);assert.deepEqual(JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/')).examples,{});
 }finally{w.close();}
 const invalid=harness('&dataExample=result-none');try{assert.equal(invalid.d.querySelector('.data-examples-panel').hidden,true,'wrong classification scene is not applied');}finally{invalid.w.close();}
-for(const group of reviewGroups){const direct=harness('&dataView=overview&review=concept&reviewState=request',group.id);try{direct.shell.applyReview();assert.equal(direct.d.querySelector('.data-review-overview').hidden,false);assert.equal(direct.d.querySelector('.data-examples-panel').hidden,true);assert.match(direct.d.querySelector('.data-review-overview').textContent,new RegExp(group.reviewer));assert.equal(direct.d.querySelector('.concept-review-heading p'),null);assert.equal(direct.d.querySelector('[data-example-mode=overview]').getAttribute('aria-pressed'),'true');}finally{direct.w.close();}}
+for(const group of reviewGroups){const direct=harness('&dataView=overview&review=concept&reviewState=request',group.id);try{direct.shell.applyReview();assert.equal(direct.d.querySelector('.data-review-overview').hidden,false);assert.equal(direct.d.querySelector('.data-examples-panel').hidden,true);assert.match(direct.d.querySelector('.data-review-overview').textContent,new RegExp(data.Samples.contentFor(group.id).reviewer.role));assert.equal(direct.d.querySelector('.concept-review-heading p'),null);assert.equal(direct.d.querySelector('[data-example-mode=overview]').getAttribute('aria-pressed'),'true');}finally{direct.w.close();}}
 // CAPABILITY-SAMPLE-001/002: JSON ownership and actual overview-to-scene navigation.
 const reviewJSON=JSON.parse(readFileSync('src/business-review-content.json','utf8'));
-assert.equal(reviewJSON.format,'alder-review-demo/1');assert.match(reviewJSON.source,/cbb3073/);
+assert.equal(reviewJSON.format,'alder-review-demo/2');assert.match(reviewJSON.meta.source,/cbb3073/);
 const nestedIDs=[];const capabilityIDs=new Set();
 for(const group of reviewJSON.groups){
  const h=harness('&dataView=overview',group.id);
  try{
   assert.equal(h.d.querySelectorAll('.review-capability').length,group.capabilities.length);
-  const owner=h.d.querySelector('.data-review-overview .review-owner');assert.equal(owner.tagName,'DD');assert.equal(owner.previousElementSibling.textContent,'レビュー責任ロール候補');
+  const owner=h.d.querySelector('.data-review-overview .review-owner');assert.equal(owner.tagName,'P');assert.equal(owner.previousElementSibling.textContent,'レビュアー');assert.equal(owner.textContent,group.reviewer.role);
   for(const capability of group.capabilities){
-   assert(!capabilityIDs.has(capability.id));capabilityIDs.add(capability.id);assert(capability.description&&capability.evidence.length&&capability.samples.length);
-   for(const evidence of capability.evidence){assert(['apply','approve','revise','prepare','result'].includes(evidence.activity));assert(evidence.scene&&evidence.basis);}
+   assert(!capabilityIDs.has(capability.id));capabilityIDs.add(capability.id);assert(capability.description&&capability.meta.evidence.length&&capability.samples.length);
+   for(const evidence of capability.meta.evidence){assert(['apply','approve','revise','prepare','result'].includes(evidence.activity));assert(evidence.scene&&evidence.basis);}
    for(const sample of capability.samples){
     nestedIDs.push(sample.id);assert.equal(sample.group,undefined,'group is owned by the parent JSON');
     h.d.querySelector('[data-sample="'+sample.id+'"]').click();
@@ -81,11 +81,29 @@ for(const group of reviewJSON.groups){
     h.w.history.back();await new Promise(r=>setTimeout(r,25));assert.equal(h.d.querySelector('.data-review-overview').hidden,false,'sample Back returns to overview');
    }
   }
-  assert(group.limitations.every(item=>item.evidence.length&&item.description));
+  assert(group.limitations.every(item=>item.meta.evidence.length&&item.description));
  }finally{h.w.close();}
 }
 assert.deepEqual(nestedIDs,expectedIDs);assert.equal(new Set(nestedIDs).size,9);
-assert.match(reviewJSON.groups.find(g=>g.id==='group-handoff').questions.join(''),/検索.*未確定/);
+assert.match(reviewJSON.groups.find(g=>g.id==='group-handoff').meta.questions.join(''),/検索.*未確定/);
+// STRUCTURED-OVERVIEW-001/002: resolve reviewer and activity identities against the actual BD.
+const nativeBD=JSON.parse(readFileSync('../work/json-state/issue-275/purchase.json','utf8')).documents.find(d=>d.activities);
+data.eval(await bundle('src/concept-review.ts','Overview')+';globalThis.Overview=Overview;');
+for(const content of reviewJSON.groups){
+ const group=reviewGroups.find(g=>g.id===content.id),root=data.document.createElement('article'),opened=[];
+ assert(content.title&&content.description&&content.reviewer.role);assert(nativeBD.activities.some(a=>a.who===content.reviewer.role));
+ for(const a of content.relatedActivities)assert(nativeBD.activities.some(b=>b.id===a.id&&b.name===a.name));
+ data.Overview.renderReviewOverview(root,group,()=>{},id=>opened.push(id),nativeBD.activities);
+ assert.equal(root.querySelector('.review-description').textContent,content.description);
+ const buttons=[...root.querySelectorAll('.review-related-activities button')];assert.equal(buttons.length,content.relatedActivities.length);
+ for(const [i,b] of buttons.entries()){assert(!b.disabled);assert(b.querySelector('[data-icon="square-arrow-out-up-right"]'));assert.equal(b.textContent,content.relatedActivities[i].name);b.click();assert.equal(opened.at(-1),content.relatedActivities[i].id);}
+ assert.equal(root.querySelectorAll('.review-limitation').length,content.limitations.length);
+ for(const [i,section]of [...root.querySelectorAll('.review-limitation')].entries()){const item=content.limitations[i];assert.equal(section.querySelector('h4').textContent,item.title);assert(section.textContent.includes(item.description));assert(section.textContent.includes(item.reason));}
+ for(const hidden of [content.id,...content.meta.questions,...content.capabilities.flatMap(c=>c.meta.evidence.map(e=>e.basis))])assert(!root.textContent.includes(hidden),'metadata is not shown: '+hidden);
+ data.Overview.renderReviewOverview(root,group,()=>{},()=>assert.fail('must not open an unrelated document'),nativeBD.activities.map(a=>({...a,id:'other-'+a.id})));
+ for(const b of root.querySelectorAll('.review-related-activities button')){assert(b.disabled);b.click();}
+}
+const structuredAuthority=JSON.parse(readFileSync('verification/structured-overview.check-items.json','utf8'));assert.deepEqual(structuredAuthority.checks.map(c=>c.id),['STRUCTURED-OVERVIEW-001','STRUCTURED-OVERVIEW-002']);
 const capabilityAuthority=JSON.parse(readFileSync('verification/capability-samples.check-items.json','utf8'));assert.deepEqual(capabilityAuthority.checks.map(c=>c.id),['CAPABILITY-SAMPLE-001','CAPABILITY-SAMPLE-002']);
 const overviewAuthority=JSON.parse(readFileSync('verification/review-overview.check-items.json','utf8'));assert.deepEqual(overviewAuthority.checks.map(c=>c.id),['REVIEW-OVERVIEW-001','REVIEW-OVERVIEW-002']);
-const authority=JSON.parse(readFileSync('verification/data-examples.check-items.json','utf8'));assert.deepEqual(authority.checks.map(c=>c.id),['DATA-EXAMPLE-001','DATA-EXAMPLE-002','DATA-EXAMPLE-003','DATA-EXAMPLE-004']);for(const c of authority.checks)for(const key of ['condition','guarantee','reason','verification'])assert(c[key]);data.close();console.log('PASS DATA-EXAMPLE-001..004 / REVIEW-OVERVIEW-001..002: CAPABILITY-SAMPLE-001/002, SAMPLE-KEY-COLOR-001, PURCHASE-TARGET-PREPARATION-001, nine rendered scenes, preparation membership and missing/mismatched number negative cases, card correspondence, arithmetic and fixed-version negative cases, modes, drawer/canvas preservation, history, direct entry and document boundary');
+const authority=JSON.parse(readFileSync('verification/data-examples.check-items.json','utf8'));assert.deepEqual(authority.checks.map(c=>c.id),['DATA-EXAMPLE-001','DATA-EXAMPLE-002','DATA-EXAMPLE-003','DATA-EXAMPLE-004']);for(const c of authority.checks)for(const key of ['condition','guarantee','reason','verification'])assert(c[key]);data.close();console.log('PASS DATA-EXAMPLE-001..004 / REVIEW-OVERVIEW-001..002: STRUCTURED-OVERVIEW-001/002, CAPABILITY-SAMPLE-001/002, SAMPLE-KEY-COLOR-001, PURCHASE-TARGET-PREPARATION-001, nine rendered scenes, preparation membership and missing/mismatched number negative cases, card correspondence, arithmetic and fixed-version negative cases, modes, drawer/canvas preservation, history, direct entry and document boundary');

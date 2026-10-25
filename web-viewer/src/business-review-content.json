@@ -1,7 +1,5 @@
 {
-  "format": "alder-review-demo/1",
-  "status": "AIによる推論草案。人間の業務承認前。",
-  "source": "https://github.com/mk3008/alder/blob/cbb3073b42b86323e152b20ac899589f1686d61c/work/business-structure-model/issue-133/activities.ja.md",
+  "format": "alder-review-demo/2",
   "groups": [
     {
       "id": "group-request",
@@ -10,13 +8,6 @@
           "id": "save-draft",
           "title": "入力途中の内容を保存する",
           "description": "1品目以上あれば、理由・見積・数量・単価が未入力でも下書きとして保存できます。",
-          "evidence": [
-            {
-              "activity": "apply",
-              "scene": "下書き保存",
-              "basis": "C1により品目ゼロ保存は不可。各値・理由・見積の未入力可。"
-            }
-          ],
           "samples": [
             {
               "id": "request-draft",
@@ -82,19 +73,21 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "apply",
+                "scene": "下書き保存",
+                "basis": "C1により品目ゼロ保存は不可。各値・理由・見積の未入力可。"
+              }
+            ]
+          }
         },
         {
           "id": "submit-request",
           "title": "必要な情報を揃えて提出する",
           "description": "理由・見積・全品目情報を揃え、税抜合計が役職上限内と判定できる場合に、提出内容を確定できます。",
-          "evidence": [
-            {
-              "activity": "apply",
-              "scene": "提出",
-              "basis": "見積・理由・全品目情報必須。税抜小計合計≦役職上限と判定可能。"
-            }
-          ],
           "samples": [
             {
               "id": "request-submitted",
@@ -172,36 +165,72 @@
               ],
               "note": "税抜希望額は2,000円。金額などの提出条件を満たす前提の例で、役職別上限額の値は定めていません。"
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "apply",
+                "scene": "提出",
+                "basis": "見積・理由・全品目情報必須。税抜小計合計≦役職上限と判定可能。"
+              }
+            ]
+          }
         }
       ],
       "limitations": [
         {
           "id": "no-empty-draft",
-          "description": "品目が0件の下書きは保存できません。",
-          "evidence": [
-            {
-              "activity": "apply",
-              "scene": "下書き保存",
-              "basis": "C1により品目ゼロ保存は不可。"
-            }
-          ]
+          "description": "購入を依頼する品目を1件以上含めます。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "apply",
+                "scene": "下書き保存",
+                "basis": "C1により品目ゼロ保存は不可。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "品目がない下書きは保存できない",
+          "reason": "何を購入したい申請かを、少なくとも1品目で表すためです。"
         },
         {
           "id": "no-incomplete-submit",
-          "description": "必要情報や金額条件を満たさない内容は、提出済みにできません。",
-          "evidence": [
-            {
-              "activity": "apply",
-              "scene": "提出",
-              "basis": "不成立で申請済みを作らない。"
-            }
-          ]
+          "description": "必要情報と役職別の金額条件を満たした内容だけを提出します。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "apply",
+                "scene": "提出",
+                "basis": "不成立で申請済みを作らない。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "条件を満たさない内容は提出できない",
+          "reason": "判断に必要な情報と申請できる金額条件を揃えるためです。"
         }
       ],
-      "questions": [
-        "編集途中の内容をいつ・どのように保存するかは未確定です。"
-      ]
+      "title": "購入要求・申請内容",
+      "description": "一緒に購入を依頼し、判断してもらう品目を1件の購入申請として扱います。差し戻されて再提出しても同じ申請として追い、前に提出した内容と修正後の内容を区別します。",
+      "reviewer": {
+        "role": "申請者"
+      },
+      "relatedActivities": [
+        {
+          "id": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "name": "備品購入を申請する"
+        },
+        {
+          "id": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+          "name": "購入申請を再申請・破棄する"
+        }
+      ],
+      "meta": {
+        "questions": [
+          "編集途中の内容をいつ・どのように保存するかは未確定です。"
+        ]
+      }
     },
     {
       "id": "group-decision",
@@ -210,13 +239,6 @@
           "id": "approve-current-version",
           "title": "提出された内容を承認する",
           "description": "現在の提出版の品目・見積・理由を確認し、その版に対する承認を記録できます。",
-          "evidence": [
-            {
-              "activity": "approve",
-              "scene": "承認",
-              "basis": "対象は現在提出版。版の内容を変更しない。"
-            }
-          ],
           "samples": [
             {
               "id": "decision-approved",
@@ -281,19 +303,21 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "approve",
+                "scene": "承認",
+                "basis": "対象は現在提出版。版の内容を変更しない。"
+              }
+            ]
+          }
         },
         {
           "id": "review-resubmitted-version",
           "title": "再提出された内容を改めて判断する",
           "description": "差戻し後の新しい提出版を、旧版の判断と区別して確認できます。新しい版には改めて判断が必要です。",
-          "evidence": [
-            {
-              "activity": "revise",
-              "scene": "編集・再提出",
-              "basis": "提出成功時の確定・現在対象版切替・旧判断の無効化。過去の確定版は直接変更しない。"
-            }
-          ],
           "samples": [
             {
               "id": "decision-resubmitted",
@@ -355,36 +379,68 @@
               ],
               "note": "この場面は他の例とは独立しています。過去の確定V1の品目は直接書き換えません。"
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "revise",
+                "scene": "編集・再提出",
+                "basis": "提出成功時の確定・現在対象版切替・旧判断の無効化。過去の確定版は直接変更しない。"
+              }
+            ]
+          }
         }
       ],
       "limitations": [
         {
           "id": "no-edit-submitted-version",
-          "description": "判断時に、確定済みの提出内容を直接変更することはできません。",
-          "evidence": [
-            {
-              "activity": "approve",
-              "scene": "承認",
-              "basis": "版の内容を変更しない。"
-            }
-          ]
+          "description": "直す場合は、再提出する内容として区別します。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "approve",
+                "scene": "承認",
+                "basis": "版の内容を変更しない。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "提出済みの内容を直接変更できない",
+          "reason": "何を見て判断したのか分からなくなることを防ぐためです。"
         },
         {
           "id": "no-return-prepared",
-          "description": "購入準備が確定した申請は差し戻せません。",
-          "evidence": [
-            {
-              "activity": "approve",
-              "scene": "差戻し／承認後差戻し",
-              "basis": "申請済み、または準備未確定の承認済みに限る。"
-            }
-          ]
+          "description": "差戻しできるのは、購入準備が確定する前までです。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "approve",
+                "scene": "差戻し／承認後差戻し",
+                "basis": "申請済み、または準備未確定の承認済みに限る。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "購入準備が確定した申請は差し戻せない",
+          "reason": "購入へ渡した内容と、その根拠となる承認の食い違いを防ぐためです。"
         }
       ],
-      "questions": [
-        "承認者の選び方と承認段階は未確定です。"
-      ]
+      "title": "購入可否の判断",
+      "description": "判断する申請内容と、その内容に対する承認・差戻しを一緒に確認します。再提出された内容を、以前に判断した内容と取り違えないようにします。",
+      "reviewer": {
+        "role": "承認者"
+      },
+      "relatedActivities": [
+        {
+          "id": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "name": "購入申請を承認する"
+        }
+      ],
+      "meta": {
+        "questions": [
+          "承認者の選び方と承認段階は未確定です。"
+        ]
+      }
     },
     {
       "id": "group-handoff",
@@ -393,13 +449,6 @@
           "id": "prepare-approved-requests",
           "title": "承認済みの申請をまとめて購入対象にする",
           "description": "現在有効な承認があり、まだ購入準備に含まれていない申請を、1件以上まとめて購入対象に確定できます。",
-          "evidence": [
-            {
-              "activity": "prepare",
-              "scene": "確定",
-              "basis": "現在版・現在承認、未準備であることを参照。対象1..N申請をまとめて確定。"
-            }
-          ],
           "samples": [
             {
               "id": "handoff-batch",
@@ -497,19 +546,21 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "prepare",
+                "scene": "確定",
+                "basis": "現在版・現在承認、未準備であることを参照。対象1..N申請をまとめて確定。"
+              }
+            ]
+          }
         },
         {
           "id": "reexport-fixed-preparation",
           "title": "同じ購入対象を再出力する",
           "description": "CSV出力に失敗しても、同じ準備番号・対象申請・対象版の内容で再出力できます。",
-          "evidence": [
-            {
-              "activity": "prepare",
-              "scene": "CSV出力／再出力",
-              "basis": "失敗でも準備は残る。同番号・同内容を再出力。"
-            }
-          ],
           "samples": [
             {
               "id": "handoff-retry",
@@ -608,37 +659,69 @@
               ],
               "note": "各時点の今回の書き出し日時を例示しています。初回・最終・全履歴のどれを保存するかは未決です。"
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "prepare",
+                "scene": "CSV出力／再出力",
+                "basis": "失敗でも準備は残る。同番号・同内容を再出力。"
+              }
+            ]
+          }
         }
       ],
       "limitations": [
         {
           "id": "no-item-split",
-          "description": "申請の一部の品目だけを選んで、購入対象にすることはできません。",
-          "evidence": [
-            {
-              "activity": "prepare",
-              "scene": "確定",
-              "basis": "申請を品目で分割しない。"
-            }
-          ]
+          "description": "購入準備に含める対象は、品目単位ではなく申請単位で選びます。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "prepare",
+                "scene": "確定",
+                "basis": "申請を品目で分割しない。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "申請の一部の品目だけを購入対象にできない",
+          "reason": "申請を品目で分割しないという業務規則に従います。"
         },
         {
           "id": "no-unapproved-or-assigned",
-          "description": "未承認の申請や、すでに別の購入準備に含まれる申請は追加できません。",
-          "evidence": [
-            {
-              "activity": "prepare",
-              "scene": "確定",
-              "basis": "現在承認と未準備であることを参照。直前の差戻し・別準備所属なら不成立。"
-            }
-          ]
+          "description": "現在有効な承認があり、まだ購入準備に含まれていない申請を対象にします。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "prepare",
+                "scene": "確定",
+                "basis": "現在承認と未準備であることを参照。直前の差戻し・別準備所属なら不成立。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "未承認・別の購入準備に含まれる申請は追加できない",
+          "reason": "承認された対象を取り違えたり、同じ申請を重複して購入へ回したりしないためです。"
         }
       ],
-      "questions": [
-        "過去の購入準備を検索する方法・条件は、原典では未確定です。",
-        "書き出し日時の履歴をどこまで保持するかは未確定です。"
-      ]
+      "title": "購入対象の確定・引渡し",
+      "description": "承認済みの申請を1件以上まとめ、購入準備として扱います。どの申請のどの内容を購入へ回すかを固定し、再出力でも同じ対象を確認します。",
+      "reviewer": {
+        "role": "購買担当者"
+      },
+      "relatedActivities": [
+        {
+          "id": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
+          "name": "購入を準備する"
+        }
+      ],
+      "meta": {
+        "questions": [
+          "過去の購入準備を検索する方法・条件は、原典では未確定です。",
+          "書き出し日時の履歴をどこまで保持するかは未確定です。"
+        ]
+      }
     },
     {
       "id": "group-result",
@@ -647,13 +730,6 @@
           "id": "record-partial-receipts",
           "title": "届いた数量を分けて登録する",
           "description": "購入対象の品目に対して、各回の入庫を分けて記録できます。待ち数量が残る間は未終結のままです。",
-          "evidence": [
-            {
-              "activity": "result",
-              "scene": "各回の入庫",
-              "basis": "2回目以降の合法な入庫は許す。一品目でもW＞0なら作業中。"
-            }
-          ],
           "samples": [
             {
               "id": "result-partial",
@@ -756,19 +832,21 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "result",
+                "scene": "各回の入庫",
+                "basis": "2回目以降の合法な入庫は許す。一品目でもW＞0なら作業中。"
+              }
+            ]
+          }
         },
         {
           "id": "close-with-unpurchased",
           "title": "未購入の数量を確定して終結する",
           "description": "申請者と調整して購入しない数量を確定し、全品目の待ち数量が0になれば申請を終結できます。",
-          "evidence": [
-            {
-              "activity": "result",
-              "scene": "購入しない数量の確定",
-              "basis": "申請者と調整済み。対象品目のC、W、全品目W＝0なら終結結果。"
-            }
-          ],
           "samples": [
             {
               "id": "result-closed",
@@ -885,19 +963,21 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "result",
+                "scene": "購入しない数量の確定",
+                "basis": "申請者と調整済み。対象品目のC、W、全品目W＝0なら終結結果。"
+              }
+            ]
+          }
         },
         {
           "id": "close-without-receipt",
           "title": "入庫がなくても購入なしで終結する",
           "description": "全数を購入しないと確定した場合は、入庫を作らずに購入なしとして終結できます。",
-          "evidence": [
-            {
-              "activity": "result",
-              "scene": "購入しない数量の確定",
-              "basis": "入庫がなければ入庫回は作らない。全品目W＝0なら終結結果。"
-            }
-          ],
           "samples": [
             {
               "id": "result-none",
@@ -984,36 +1064,73 @@
                 }
               ]
             }
-          ]
+          ],
+          "meta": {
+            "evidence": [
+              {
+                "activity": "result",
+                "scene": "購入しない数量の確定",
+                "basis": "入庫がなければ入庫回は作らない。全品目W＝0なら終結結果。"
+              }
+            ]
+          }
         }
       ],
       "limitations": [
         {
           "id": "no-excess-receipt",
-          "description": "入庫累計と購入しない数量の合計を、元の依頼数量より多くすることはできません。",
-          "evidence": [
-            {
-              "activity": "result",
-              "scene": "各回の入庫",
-              "basis": "品目ごとのR＋C≦Qを維持。"
-            }
-          ]
+          "description": "入庫累計と購入しない数量の合計は、元の依頼数量以下にします。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "result",
+                "scene": "各回の入庫",
+                "basis": "品目ごとのR＋C≦Qを維持。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "依頼数量を超える数量は登録できない",
+          "reason": "元の依頼数量と結果の数量を一致させ、待ち数量が負になることを防ぐためです。"
         },
         {
           "id": "no-waiting-close",
-          "description": "待ち数量が残る品目がある申請は終結できません。",
-          "evidence": [
-            {
-              "activity": "result",
-              "scene": "各回の入庫",
-              "basis": "全品目W＝0なら申請の終結結果。"
-            }
-          ]
+          "description": "すべての品目の待ち数量が0になってから終結します。",
+          "meta": {
+            "evidence": [
+              {
+                "activity": "result",
+                "scene": "各回の入庫",
+                "basis": "全品目W＝0なら申請の終結結果。"
+              }
+            ],
+            "reasonStatus": "業務規則からの説明草案"
+          },
+          "title": "待ち数量が残る申請は終結できない",
+          "reason": "まだ届くのを待っている品目を、完了として扱わないためです。"
         }
       ],
-      "questions": [
-        "終結後の訂正業務は今回の対象外です。必要性は別途確認します。"
-      ]
+      "title": "入庫・未購入・終結",
+      "description": "購入対象の元の品目・数量と、届いた数量・購入しない数量・待っている数量を一緒に確認します。分割入庫があっても残数を見失わず、申請全体の終わりを判断します。",
+      "reviewer": {
+        "role": "購買担当者"
+      },
+      "relatedActivities": [
+        {
+          "id": "218937bd-4b6c-527e-b9e6-14075084b842",
+          "name": "購入結果を登録する"
+        }
+      ],
+      "meta": {
+        "questions": [
+          "終結後の訂正業務は今回の対象外です。必要性は別途確認します。"
+        ]
+      }
     }
-  ]
+  ],
+  "meta": {
+    "status": "AIによる推論草案。人間の業務承認前。",
+    "source": "https://github.com/mk3008/alder/blob/cbb3073b42b86323e152b20ac899589f1686d61c/work/business-structure-model/issue-133/activities.ja.md",
+    "businessSource": "work/json-state/issue-275/purchase.json"
+  }
 }
