@@ -128,9 +128,9 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 
 ## 画面操作の検証正本との照合
 
-`verification/check-items.json` は現在対象と詳細ナビゲーションの検証正本であり、テストコードから期待を逆算しない。今回のB開始前に確定した版は commit `55d69577d0cf2faf54f5ab49c1e2495a7d43698e`、SHA256 `ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1`。B内では変更しない。`web/navigation-authority-gate.mjs` はそのGitオブジェクトを読み、候補の正本と開始・終了時にバイト比較する。CIも固定commitを取得する。取得不能・削除・書換えはfail/停止とし、現在の候補から基準を再生成しない。要求変更が必要ならBを停止し、B外の要求決定工程へ戻す。
+`verification/check-items.json` は現在対象と詳細ナビゲーションの検証正本であり、テストコードから期待を逆算しない。今回のB開始前に確定した版は commit `55d69577d0cf2faf54f5ab49c1e2495a7d43698e`、SHA256 `ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1`。B内では変更しない。`web/navigation-authority-gate.mjs` はそのGitオブジェクトを読み、候補の正本と開始・終了時にバイト比較する。固定Check Itemのrequirement参照から取得する上位描画契約 `graph-rendering.ja.md` も、同じ開始前commitのファイル全体を固定してバイト比較する。参照ファイルの存在だけでは合格としない。CIも固定commitを取得する。取得不能・削除・書換えはfail/停止とし、現在の候補から基準を再生成しない。要求変更が必要ならBを停止し、B外の要求決定工程へ戻す。
 
-修正後は別工程で `npm run verify:contract` を実行する。固定した正本から全保証ID・全domain・全selectionを展開し、実行結果の欠落・重複・未実施を照合する。正本ID削除・domain削除・ファイル削除・結果1件脱落・重複の負例も連動実行する。期待値はテスト側へコピーしない。
+修正後は別工程で `npm run verify:contract` を実行する。固定した正本から全保証ID・全domain・全selectionを展開し、実行結果の欠落・重複・未実施を照合する。正本ID削除・domain削除・ファイル削除・結果1件脱落・重複に加え、Check Itemを変えず上位要件だけを反転・削除した負例も連動実行する。期待値はテスト側へコピーしない。
 
 `web/review-navigation-contract.mjs` が3保証×業務/概念×選択2種類の12ケースを担当する。概念は実際の子canvasのリンク押下を、origin/sourceを維持したDOMメッセージ配送で実際の親アプリへつなぎ、親の対象タブのアクティブ化・対象iframe表示・focus URLまで照合する。単なる送信メッセージ検査ではない。これはJSDOM上の結合検証であり、ブラウザー固有のiframe配送・実描画・本人GUIレビューを代替しない。
 

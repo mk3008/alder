@@ -8,9 +8,9 @@ import {resolve,dirname} from 'node:path';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
 import {IDBFactory} from 'fake-indexeddb';
-import {baselineCommit,authorityPath,baselineBytes,assertAuthority,assertCoverage} from './navigation-authority-gate.mjs';
-const frozen=baselineBytes(),raw=readFileSync(authorityPath),authority=JSON.parse(raw),sha=s=>createHash('sha256').update(s).digest('hex');
-assertAuthority(raw,frozen);
+import {baselineCommit,authorityPath,frozenAuthorities,assertAuthorities,assertCoverage} from './navigation-authority-gate.mjs';
+const frozenFiles=frozenAuthorities(),frozen=frozenFiles.get(authorityPath),raw=readFileSync(authorityPath),authority=JSON.parse(raw),sha=s=>createHash('sha256').update(s).digest('hex');
+assertAuthorities(frozenFiles,readFileSync);
 assert.equal(authority.format,'viewer-verification/1');assert(authority.checks.length);assert(existsSync(resolve(dirname(authorityPath),authority.requirement.split('#')[0])));
 const ids=new Set();for(const c of authority.checks){assert(c.id&&!ids.has(c.id));ids.add(c.id);for(const k of ['condition','guarantee','reason'])assert(c[k]?.trim());assert.equal(c.verification,'web/review-navigation-contract.mjs');assert(['detail','overview'].includes(c.context));assert(['current','neighbor'].includes(c.target));assert.equal(typeof c.expected.detailLink,'boolean');assert(c.domains.length&&c.selections.length);}
 const bundle=async entry=>(await build({entryPoints:[entry],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}})).outputFiles[0].text;
@@ -44,7 +44,7 @@ const results=[];
 for(const c of authority.checks)for(const domain of c.domains)for(const selection of c.selections){
  const result={id:c.id,domain,selection};try{assert(['business','concept'].includes(domain));assert(['current','neighbor'].includes(selection));const actual=await observe(domain,c,selection);assert.deepEqual(actual,c.expected,c.id+' '+c.reason);results.push({...result,status:'pass'});}catch(e){results.push({...result,status:'fail',message:e.message});}
 }
-assertAuthority(readFileSync(authorityPath),frozen);
+assertAuthorities(frozenFiles,readFileSync);
 assertCoverage(results,frozen);
-const report={authority:{path:authorityPath,baselineCommit,sha256:sha(raw),unchanged:true,coverageComplete:true},candidate:{commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),workingTreeChanges:execFileSync('git',['status','--porcelain','--','src','web/review-navigation-contract.mjs','web/navigation-authority-gate.mjs','web/test-navigation-authority-gate.mjs','verification'],{encoding:'utf8'}).trim().split('\n').filter(Boolean),businessBundle:sha(businessCode),conceptBundle:sha(conceptCode)},results,passed:results.filter(r=>r.status==='pass').length,failed:results.filter(r=>r.status==='fail').length};
+const report={authority:{path:authorityPath,baselineCommit,sha256:sha(raw),files:[...frozenFiles].map(([path,bytes])=>({path,sha256:sha(bytes)})),unchanged:true,coverageComplete:true},candidate:{commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),workingTreeChanges:execFileSync('git',['status','--porcelain','--','src','web/review-navigation-contract.mjs','web/navigation-authority-gate.mjs','web/test-navigation-authority-gate.mjs','verification','graph-rendering.ja.md'],{encoding:'utf8'}).trim().split('\n').filter(Boolean),businessBundle:sha(businessCode),conceptBundle:sha(conceptCode)},results,passed:results.filter(r=>r.status==='pass').length,failed:results.filter(r=>r.status==='fail').length};
 console.log(JSON.stringify(report,null,2));if(report.failed)process.exitCode=1;
