@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "2df97f66f705fb79e4228e5e249cbbcacc9e3bfa",
+  "alder_source_revision": "93d240e7e0752d85a2771fc45abceff4e972aa51",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "987b9bc5bdd6691ff10842e760cbd75f3ee17a06ce890912e87226a5c4173c3b",
+    "docs/plugin-json-authoring.ja.md": "8230d9bfd76359665558e746e3bce3d54ed7b0a491a1fc45683a401b4cd3c171",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
     "docs/check-item-traceability.md": "e248d561cba693871638108f664006c811509357f9b2b0b9e72a37565f724258",
