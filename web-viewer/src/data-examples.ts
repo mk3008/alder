@@ -9,7 +9,7 @@ const targetColumns=['申請','申請者','対象版','見積根拠','有効な�
 const block=(card:string,columns:string[],rows:(string|number)[][],empty?:string):SampleBlock=>({card,columns,rows,empty});
 const handoff=(time:string)=>[
  block('preparation',['準備番号','今回の書き出し日時'],[['P-001',time]]),
- block('request',targetColumns,requests),block('item',itemColumns,[...itemsA,...itemsB])
+ block('request',['準備番号',...targetColumns],requests.map(row=>['P-001',...row])),block('item',itemColumns,[...itemsA,...itemsB])
 ];
 const balanceColumns=['品名（V1）','税抜希望単価','依頼数量 Q','入庫累計 R','購入しない C','待ち W'];
 const balances=(penR:number,penC:number,fileR:number,fileC:number)=>([
@@ -36,7 +36,7 @@ export const dataExamples:DataExample[]=[
  block('request',['申請','現在の判断対象版','購入理由','見積根拠','現在判断'],[['R-101','V2','事務用品の補充','見積Q-101-V2','まだない（判断待ち）']]),
  block('item',itemColumns,[['R-101','V2','ボールペン',12,'100円'],['R-101','V2','ファイル',2,'500円']])
  ],note:'この場面は他の例とは独立しています。過去の確定V1の品目は直接書き換えません。'},
- {id:'handoff-batch',group:'group-handoff',name:'2申請をまとめて購入へ',when:'R-101のV1とR-102のV1に有効な承認があり、同じ購入準備P-001へ確定した。',meaning:'1つの準備に2申請、対象品目は合計3行。各品目がどの申請・版のものか追えます。',blocks:handoff('2026-10-25 10:00')},
+ {id:'handoff-batch',group:'group-handoff',name:'2申請をまとめて購入へ',when:'R-101のV1とR-102のV1に有効な承認があり、同じ購入準備P-001へ確定した。',meaning:'1つの準備に2申請、対象品目は合計3行。各購入対象の準備番号で購入準備との対応を確認でき、各品目がどの申請・版のものか追えます。',blocks:handoff('2026-10-25 10:00')},
  {id:'handoff-retry',group:'group-handoff',name:'CSV失敗後も同じ内容を再出力',when:'10:00のCSV出力に失敗したが、購入準備P-001は残った。10:05に同じ対象を再出力する。',meaning:'準備番号・対象申請・対象版・品目・数量・単価を変えずに再出力します。新しい準備を作る例ではありません。',blocks:handoff('2026-10-25 10:05'),note:'各時点の今回の書き出し日時を例示しています。初回・最終・全履歴のどれを保存するかは未決です。'},
  {id:'result-partial',group:'group-result',name:'1回目の入庫で、まだ待ちがある',when:'ボールペン4本とファイル1冊が届いた。残りは引き続き待っている。',meaning:'品目ごとに待ち数量が残るため、申請はまだ終結しません。',blocks:result('作業中（未終結）',balances(4,0,1,0),[['RC-001','R-101']],[['RC-001','ボールペン',4],['RC-001','ファイル',1]])},
  {id:'result-closed',group:'group-result',name:'2回の入庫と未購入の確定で終結',when:'2回目にボールペン3本とファイル1冊が届いた。残りのボールペン3本は、申請者と調整して購入しないと確定した。',meaning:'ボールペンは10＝7＋3＋0、ファイルは2＝2＋0＋0。全品目の待ちが0なので、一部購入として終結します。',blocks:result('一部購入で終結',balances(7,3,2,0),[['RC-001','R-101'],['RC-002','R-101']],[['RC-001','ボールペン',4],['RC-001','ファイル',1],['RC-002','ボールペン',3],['RC-002','ファイル',1]])},
