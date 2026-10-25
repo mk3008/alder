@@ -3,14 +3,15 @@ import {createElement,SquareArrowOutUpRight,ArrowLeft} from 'lucide';
 import {reviewGroups,type ReviewGroup} from './concept-review-fixture';
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
 function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
-export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void){
- root.replaceChildren();add(root,'h1','購買業務の全体像');add(root,'p','申請から終結まで、各業務で使う情報と生成する情報を4つのレビュー範囲で確認します。');
- const cards=document.createElement('div');cards.className='review-group-grid';root.append(cards);
+export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void,graph=false,changeMode:(graph:boolean)=>void=()=>{}){
+ root.replaceChildren();add(root,'h1','データ構造全体像');add(root,'p','申請から終結まで、各業務で使う情報と生成する情報を4つのレビュー範囲で確認します。');
+ const modes=document.createElement('div');modes.className='data-example-modes landscape-modes';modes.setAttribute('aria-label','全体像の表示切替');for(const [label,mode]of [['概要',false],['グラフ',true]] as const){const b=add(modes,'button',label) as HTMLButtonElement;b.type='button';b.setAttribute('aria-pressed',String(graph===mode));b.onclick=()=>changeMode(mode);}root.append(modes);root.dataset.mode=graph?'graph':'overview';const content=document.createElement('div');content.className='landscape-overview';content.hidden=graph;root.append(content);
+ const cards=document.createElement('div');cards.className='review-group-grid';content.append(cards);
  for(const [index,group]of reviewGroups.entries()){const card=document.createElement('article');card.className='review-group-card';card.dataset.reviewGroup=group.id;add(card,'span',String(index+1).padStart(2,'0')).className='review-group-number';const content=contentFor(group.id)!;add(card,'h2',content.title);add(card,'p',content.description);add(card,'strong','レビュアー');add(card,'p',content.reviewer.role).className='review-owner';command(card,'データ構造を開く',()=>open(group.id)).setAttribute('aria-label',group.name+'のデータ構造を開く');cards.append(card);}
- const note=document.createElement('details');add(note,'summary','範囲と確認事項');add(note,'p','分類はレビューする情報のまとまりです。サブシステムやテーブルの分割を指定しません。レビュアーは業務設計書に定義された作業者のロールです。外部の見積取得・発注管理・基幹マスタの内部構造は対象外です。');root.append(note);command(root,'全データ（参考関連図）を開く',()=>open('overview'));
+
 }
 export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){
- root.replaceChildren();command(root,'購買業務の全体像',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
+ root.replaceChildren();command(root,'データ構造全体像',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
 }
 export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
  const content=contentFor(group.id);root.replaceChildren();if(!content)return;
