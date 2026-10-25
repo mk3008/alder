@@ -21,6 +21,31 @@ function label(port,count){
  const [vx,vy]=vectors[port.side],horizontal=vx!==0,x=port.p.x+vx*24+(horizontal?0:10),y=port.p.y+vy*24+(horizontal?-10:4),w=count.length*8+10;
  return{x,y,w,h:18,left:horizontal?x-w/2:x-5,top:y-13,anchor:horizontal?'middle':'start',count,table:port.table,edge:port.edge};
 }
+// Check the completed rounded route, not just the 44px port lead. A narrow
+// saved/local layout can extend the vertical leg behind the arrival count.
+function crossesLabel({a,b},r){
+ let low=0,high=1;
+ for(const axis of ['x','y']){
+  const min=(axis==='x'?r.left:r.top)-3,max=min+(axis==='x'?r.w:r.h)+6,delta=b[axis]-a[axis];
+  if(!delta){if(a[axis]<min||a[axis]>max)return false;}
+  else{const t1=(min-a[axis])/delta,t2=(max-a[axis])/delta;low=Math.max(low,Math.min(t1,t2));high=Math.min(high,Math.max(t1,t2));if(low>high)return false;}
+ }return true;
+}
+function placeLabels(labels,boxes,routes){
+ const placed=[],segments=routes.flatMap(r=>r.segments),cards=[...boxes.values()].map(b=>({left:b.x,top:b.y,w:b.w,h:b.h}));
+ for(const label of labels){
+  let next;
+  for(const dy of [0,-22,22,-44,44]){
+   for(const dx of [0,8,-8,16,-16,24,-24,48,-48,80,-80]){
+    const c={...label,x:label.x+dx,y:label.y+dy,left:label.left+dx,top:label.top+dy};
+    if(c.left<0||c.top<0||cards.some(b=>rectOverlap(c,b))||placed.some(b=>rectOverlap(c,b))||segments.some(segment=>crossesLabel(segment,c)))continue;
+    next=c;break;
+   }if(next)break;
+  }
+  // Never hide an unresolved collision with an opaque label background.
+  placed.push(next||{...label,conflict:true});
+ }return placed;
+}
 export function routeER(boxes,edges){
  const active=edges.filter(([a,b])=>boxes.has(a)&&boxes.has(b)).map(([from,to,fromCount,toCount,kind],id)=>({id,from,to,fromCount,toCount,kind})),ports=[];
  for(const e of active){const ss=sides(boxes.get(e.from),boxes.get(e.to),e.kind);e.ports=[{edge:e.id,table:e.from,side:ss[0],count:e.fromCount},{edge:e.id,table:e.to,side:ss[1],count:e.toCount}];ports.push(...e.ports);}
@@ -57,5 +82,5 @@ export function routeER(boxes,edges){
   width=Math.max(width,route.bounds.right+35);height=Math.max(height,route.bounds.bottom+35);
   routed.push({...e,points,segments,unrouted:route.fallback,d:route.path});
  }
- return {routes:routed.sort((a,b)=>a.id-b.id),labels:ports.map(p=>p.label),width,height};
+ return {routes:routed.sort((a,b)=>a.id-b.id),labels:placeLabels(ports.map(p=>p.label),boxes,routed),width,height};
 }

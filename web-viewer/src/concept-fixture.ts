@@ -20,31 +20,5 @@ const activityDefinitions=[
  {id:'prepare',title:'購入を準備する',subtitle:'対象を固定・CSV出力／再出力',ids:['preparation','request','version','item'],write:['preparation','request'],rules:['現在有効な承認を持つ未準備申請を1件以上まとめ、準備番号・対象申請・各対象版を固定する。','CSV失敗でも準備を残す。再出力は同じ番号・内容。CSV成功を入庫・購入完了と同一視しない。'],change:'図は登録する購入準備と所属を更新する購入申請だけ。対象版・品目・見積根拠の参照と固定条件は維持する。'},
  {id:'result',title:'購入結果を登録する',subtitle:'分割入庫・購入しない数量・終結',ids:['preparation','request','version','item','receipt','line'],write:['request','item','receipt','line'],rules:['準備対象版の元品目に各回の入庫内訳を登録する。別申請・旧版・代替品は不可。同じ再送で増やさない。','品目ごとに依頼Q＝入庫累計R＋購入しないC＋待ちW。購入しない数量は申請者と調整済み。全品目W＝0で申請全体を一度だけ終結。全数購入なしも可能。'],change:'入庫がなければ空の入庫回を作らない。終結後の新規訂正は対象外。日付・実績金額・合意記録の粒度は未決。'}
 ];
-function activitySlice(stage){
- // Mutation-only local view. Read concepts do not expand the diagram.
- const visible=new Set(stage.write);
- return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:edges.filter(([a,b])=>visible.has(a)&&visible.has(b))};
-}
-const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理テーブル・正式JSON Schemaは定義していません。'};
-const stages=[...activityDefinitions.map(activitySlice),overviewStage];
-// Multiple creating activities are explicit. Never silently pick one.
 const creatorStages={request:['apply'],version:['apply','revise'],item:['apply','revise'],preparation:['prepare'],receipt:['result'],line:['result']};
-const creatorStage=Object.fromEntries(Object.entries(creatorStages).filter(([,v])=>v.length===1).map(([k,v])=>[k,v[0]]));
-// Two endpoint counts and their independent landing segments need 96px.
-// Sizes are measured first; layout does not depend on the viewport width.
-function compactInitial(sizes){
- const result={};
- for(const stage of stages){
-  const p={},ids=['preparation','request','version','item','receipt','line'].filter(id=>stage.ids.includes(id));
-  // Reserve one horizontal count lane for each additional independent
-  // outlet or landing. Counts remain per relation, including repeated "1".
-  const step=(from,to)=>80+36*(Math.max(0,stage.edges.filter(([a])=>a===from).length-1)+Math.max(0,stage.edges.filter(([,b])=>b===to).length-1));
-  let y=28;for(const[id,index]of ids.map((id,i)=>[id,i])){
-   p[id]={x:index?p[ids[index-1]].x+step(ids[index-1],id):24,y};
-   y+=sizes.get(id).h+36;
-  }
-  result[stage.id]=p;
- }return result;
-}
-
 export {tables,edges,activityDefinitions,creatorStages};

@@ -1,3 +1,4 @@
+import {verifyConceptInitial} from './test-concept-initial-browser.mjs';
 import {verifyViewerShell} from './test-viewer-shell-browser.mjs';
 import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
 import {verifyJSONRoles} from './test-json-roles-browser.mjs';
@@ -53,6 +54,7 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'conceptInitial',run:()=>verifyConceptInitial(browser)},
    {name:'viewerShell',run:()=>verifyViewerShell(browser)},
    {name:'jsonRoles',run:()=>verifyJSONRoles(browser)},
    {name:'jsonStates',run:()=>verifyJSONStates(browser)},

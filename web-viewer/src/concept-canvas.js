@@ -1,6 +1,5 @@
 
-import {routeER} from './concept-routing.js';
-import {matrixPlan} from './matrix-layout.ts';
+import {conceptDiagram} from './concept-layout.js';
 import {graphFocus} from './graph-focus.ts';
 import {cardSurface} from './diagram-canvas.ts';
 import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin} from './graph-camera.ts';
@@ -19,24 +18,13 @@ const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:
 const focusId=new URL(location.href).searchParams.get('focus');
 if(focusId&&Object.hasOwn(tables,focusId)){Object.assign(overviewStage,conceptNeighborhood(Object.keys(tables),edges,focusId));overviewStage.title=tables[focusId].name+'と隣接する概念';}
 const stages=[...activityDefinitions.map(activitySlice),overviewStage];
-// Multiple creating activities are explicit. Never silently pick one.
-// Two endpoint counts and their independent landing segments need 96px.
-// Sizes are measured first; layout does not depend on the viewport width.
-function compactInitial(sizes){
- const graph={version:1,nodes:overviewStage.ids.map(id=>({id,type:'business',name:tables[id].name,scope:true})),relations:overviewStage.edges.map(([from,to])=>({kind:'input',from,to,label:''}))};
- const plan=matrixPlan(graph,overviewStage.ids),result={},ordered=overviewStage.ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
- let y=40;const positions={};
- const ports=Math.max(1,...overviewStage.ids.map(id=>overviewStage.edges.filter(([a,b])=>a===id||b===id).length));
- for(const id of ordered){positions[id]={x:40+(64+36*Math.max(0,ports-1))*plan.cells[id][0],y};y+=sizes.get(id).h+44;}
- result.overview=positions;return result;
-}
-const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v6:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'');
+const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v7:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'');
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}');}catch{}
 const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.ceil(Math.max(220,measure(t.name,15)+64,...t.fields.map(([,n])=>measure(n)+24))),h:44+t.fields.length*25}]));
-const initial=compactInitial(sizes),states=[];
+const states=[];
 function save(s){if(s.stage.id!=='overview')return;try{localStorage.setItem(storageKey,JSON.stringify({positions:Object.fromEntries(s.positions),zoom:s.zoom,locked:s.locked}));}catch{}}
 function layoutCanvas(s){
  const zoom=s.stage.id==='overview'?s.zoom:1;
@@ -49,13 +37,13 @@ function layoutCanvas(s){
  s.host.dataset.layoutLocked=String(s.locked);
 }
 function draw(s){
- const boxes=new Map(s.stage.ids.map(id=>[id,{...(s.positions.get(id)||initial[s.stage.id][id]),...sizes.get(id)}]));s.boxes=boxes;s.svg.replaceChildren();
- const routing=routeER(boxes,s.stage.edges);
+ const {boxes,routing,offset}=conceptDiagram(Object.keys(tables),edges,sizes,s.stage.ids,s.positions);s.boxes=boxes;s.svg.replaceChildren();
+ const wires=svgNode('g',{class:'concept-relations',transform:`translate(${offset[0]} ${offset[1]})`});s.svg.append(wires);
  const focus=graphFocus(routing.routes,s.selected),related=new Set(routing.routes.filter(focus.related).map(r=>r.id));
  s.width=Math.max(260,routing.width,...[...boxes.values()].map(b=>b.x+b.w+24));s.height=Math.max(180,routing.height,...[...boxes.values()].map(b=>b.y+b.h+24));s.svg.setAttribute('viewBox',`0 0 ${s.width} ${s.height}`);
- for(const r of routing.routes){const p=svgNode('path',{class:'wire'+(related.has(r.id)?' review-related':'')+(r.unrouted?' unresolved':''),d:r.d,'data-from':r.from,'data-to':r.to,'data-edge':r.id,'data-from-cardinality':r.fromCount,'data-to-cardinality':r.toCount,'data-unrouted':r.unrouted,role:'img','aria-label':tables[r.from].name+'1件に対して'+tables[r.to].name+r.toCount+'件／'+tables[r.to].name+'1件に対して'+tables[r.from].name+r.fromCount+'件'});s.svg.append(p);for(const port of r.ports)s.svg.append(svgNode('circle',{class:'concept-port'+(related.has(r.id)?' review-related':''),cx:port.p.x,cy:port.p.y,r:2.5,fill:'#7f969f','data-edge':r.id,'data-port-table':port.table,'pointer-events':'none'}));}
- for(const l of routing.labels){s.svg.append(svgNode('rect',{x:l.left,y:l.top,width:l.w,height:l.h,fill:'#fbfcfd','pointer-events':'none'}));s.svg.append(svgNode('text',{class:'endpoint-count'+(related.has(l.edge)?' review-related':''),'data-edge':l.edge,'data-table':l.table,x:l.x,y:l.y,'text-anchor':l.anchor,'pointer-events':'none'},l.count));}
- s.warning.textContent=routing.routes.some(r=>r.unrouted)?'接続線を確保できない配置です。概念間を広げてください。':'';
+ for(const r of routing.routes){const p=svgNode('path',{class:'wire'+(related.has(r.id)?' review-related':'')+(r.unrouted?' unresolved':''),d:r.d,'data-from':r.from,'data-to':r.to,'data-edge':r.id,'data-from-cardinality':r.fromCount,'data-to-cardinality':r.toCount,'data-unrouted':r.unrouted,role:'img','aria-label':tables[r.from].name+'1件に対して'+tables[r.to].name+r.toCount+'件／'+tables[r.to].name+'1件に対して'+tables[r.from].name+r.fromCount+'件'});wires.append(p);for(const port of r.ports)wires.append(svgNode('circle',{class:'concept-port'+(related.has(r.id)?' review-related':''),cx:port.p.x,cy:port.p.y,r:2.5,fill:'#7f969f','data-edge':r.id,'data-port-table':port.table,'pointer-events':'none'}));}
+ for(const l of routing.labels){wires.append(svgNode('text',{class:'endpoint-count'+(related.has(l.edge)?' review-related':''),'data-edge':l.edge,'data-table':l.table,x:l.x,y:l.y,'text-anchor':l.anchor,'pointer-events':'none'},l.count));}
+ s.warning.textContent=routing.routes.some(r=>r.unrouted)||routing.labels.some(l=>l.conflict)?'接続線または件数表示を確保できない配置です。概念間を広げてください。':'';
  for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'node graph-shape table'+(s.stage.id==='overview'?' read':'')+focus.nodeClasses(id),'data-node':id,'data-table':id,role:'group','aria-label':t.name});
  const surface=cardSurface(s.svg.ownerDocument,b);surface.firstElementChild.classList.add('concept-card-surface');g.append(surface);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);
