@@ -33,3 +33,8 @@
 @media(max-width:800px){.shell-open-tabs .tab{max-width:220px}.shell-open-tabs .tab>button:first-child{max-width:188px}}
 .explorer-item{padding-left:29px;font-size:14px}.explorer-empty{padding-left:29px}
 .shell-open-tabs .tab[hidden],#empty-workspace[hidden]{display:none!important}#empty-workspace{flex:1;min-height:0;padding:24px;background:var(--bg);color:var(--line)}.concept-related-content h2{font-size:18px;margin:4px 0 12px}.concept-related-content ul{padding-left:20px}
+/* Type colors identify the diagram; the common blue underline identifies selection. */
+.shell-open-tabs .tab[data-view-kind]{background:color-mix(in srgb,var(--tab-kind-color) 12%,var(--panel));border-top:2px solid var(--tab-kind-color);border-radius:0}
+.shell-open-tabs .tab[data-view-kind]:hover{background:color-mix(in srgb,var(--tab-kind-color) 18%,var(--panel))}
+.shell-open-tabs .tab[data-view-kind].active{background:color-mix(in srgb,var(--tab-kind-color) 24%,var(--panel));box-shadow:inset 0 -3px #357aa6}
+.shell-open-tabs .tab.active .view-tab-name{font-weight:650}

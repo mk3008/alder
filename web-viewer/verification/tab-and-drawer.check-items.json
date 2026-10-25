@@ -16,6 +16,14 @@
       "guarantee": "右ドロワーの現在の開閉状態を保持する。閉じていれば閉じたまま、開いていれば開いたまま選択対象の情報を更新する。閉じた後の選択でも再び開かない。タブごとの既存開閉状態を保持し、手動の開閉は利用可能とする。",
       "reason": "選択とドロワー開閉を独立させ、業務フローの選択時の挙動と同一にする。",
       "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-TAB-002",
+      "condition": "Visual Studio風の色分け試作で業務・状態遷移・概念のタブを表示する。light/darkの両テーマを対象とする。",
+      "guarantee": "種別の既存色（業務=青・状態=緑・概念=紫）をタブ背景と上端帯に用いる。選択中は全種別共通の青い下線と文字強調で示す。アイコン、対象名、閉じるボタンと既存の高さ/最大幅を保持する。",
+      "reason": "長い種別名を表示せず、色によるグループ識別と選択状態を両立させる。配色は試用段階とする。",
+      "verification": "公開Previewのlight/dark実画面とcomputed styleの確認",
+      "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394231081"
     }
   ]
 }
