@@ -18,7 +18,7 @@ const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:
 const focusId=new URL(location.href).searchParams.get('focus');
 if(focusId&&Object.hasOwn(tables,focusId)){Object.assign(overviewStage,conceptNeighborhood(Object.keys(tables),edges,focusId));overviewStage.title=tables[focusId].name+'と隣接する概念';}
 const stages=[...activityDefinitions.map(activitySlice),overviewStage];
-const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v7:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'');
+const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v8:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'');
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
@@ -37,8 +37,8 @@ function layoutCanvas(s){
  s.host.dataset.layoutLocked=String(s.locked);
 }
 function draw(s){
- const {boxes,routing,offset}=conceptDiagram(Object.keys(tables),edges,sizes,s.stage.ids,s.positions);s.boxes=boxes;s.svg.replaceChildren();
- const wires=svgNode('g',{class:'concept-relations',transform:`translate(${offset[0]} ${offset[1]})`});s.svg.append(wires);
+ const {boxes,routing}=conceptDiagram(s.stage.ids,s.stage.edges,sizes,s.positions);s.boxes=boxes;s.svg.replaceChildren();
+ const wires=svgNode('g',{class:'concept-relations'});s.svg.append(wires);
  const focus=graphFocus(routing.routes,s.selected),related=new Set(routing.routes.filter(focus.related).map(r=>r.id));
  s.width=Math.max(260,routing.width,...[...boxes.values()].map(b=>b.x+b.w+24));s.height=Math.max(180,routing.height,...[...boxes.values()].map(b=>b.y+b.h+24));s.svg.setAttribute('viewBox',`0 0 ${s.width} ${s.height}`);
  for(const r of routing.routes){const p=svgNode('path',{class:'wire'+(related.has(r.id)?' review-related':'')+(r.unrouted?' unresolved':''),d:r.d,'data-from':r.from,'data-to':r.to,'data-edge':r.id,'data-from-cardinality':r.fromCount,'data-to-cardinality':r.toCount,'data-unrouted':r.unrouted,role:'img','aria-label':tables[r.from].name+'1件に対して'+tables[r.to].name+r.toCount+'件／'+tables[r.to].name+'1件に対して'+tables[r.from].name+r.fromCount+'件'});wires.append(p);for(const port of r.ports)wires.append(svgNode('circle',{class:'concept-port'+(related.has(r.id)?' review-related':''),cx:port.p.x,cy:port.p.y,r:2.5,fill:'#7f969f','data-edge':r.id,'data-port-table':port.table,'pointer-events':'none'}));}

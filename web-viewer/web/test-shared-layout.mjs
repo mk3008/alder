@@ -6,17 +6,29 @@ import {parseDesign} from '../src/graph.ts';
 import {activityDesign} from '../src/activities.ts';
 import {initialPositions} from '../src/layout.ts';
 import {matrixPlan} from '../src/matrix-layout.ts';
+import {reconcile} from '../src/session.ts';
+import {resetLayout} from '../src/layout-reset.ts';
+import {RouteCache} from '../src/route-cache.ts';
 import {exceptionSegments} from '../src/exception-paint.ts';
 const start=performance.now(),design=parseDesign(readFileSync('../business-design/alder/README.md','utf8'));
-const accepted=JSON.parse(readFileSync(new URL('./authorities/detail-matrix-0df6146.json',import.meta.url),'utf8'));
 for(const focus of [undefined,...design.activityOrder]){
- const projected=activityDesign(design,focus),plan=matrixPlan(projected.graph,projected.activityOrder,focus);
- assert.deepEqual(initialPositions(projected.graph,projected.activityOrder,focus),plan.positions,'both views use the matrix plan directly');
- if(focus){
-  for(const [id,[x]]of Object.entries(accepted[focus]))assert.equal(plan.positions[id][0],x,'existing detail columns remain exact');
-  assertCaptionRows(plan.positions,projected.graph.relations.filter((r,i)=>!plan.wires[i].returning));
-  const outputs=projected.graph.relations.filter(r=>r.kind==='output'&&r.from===focus).map(r=>plan.positions[r.to][1]);
-  for(const node of projected.graph.nodes.filter(n=>n.type==='business'&&n.id!==focus))assert.ok(plan.positions[node.id][1]>Math.max(plan.positions[focus][1],...outputs),'exception peers follow all normal outputs');
+ const projected=activityDesign(design,focus),plan=matrixPlan(projected.graph,projected.activityOrder);
+ assert.deepEqual(initialPositions(projected.graph,projected.activityOrder),plan.positions,'both views use the matrix plan directly');
+ // A-selected graph must render as an ordinary overview of that graph.
+ // This fails the former focus-only column replacement, even though it lived
+ // inside the same matrixPlan function.
+ const base={key:'view',name:'selected graph',design:projected,positions:{},zoom:1,scroll:[0,0]};
+ const detail=reconcile({...base,activity:focus},projected),overview=reconcile({...base},structuredClone(projected));
+ assert.deepEqual(detail.positions,overview.positions,'B ignores overview/detail origin');
+ assert.deepEqual(resetLayout(detail).positions,resetLayout(overview).positions,'reset obeys the same B contract');
+ assertCaptionRows(plan.positions,projected.graph.relations.filter((r,i)=>!plan.wires[i].returning));
+ const boxes=projected.graph.nodes.map(n=>({id:n.id,x:plan.positions[n.id][0],y:plan.positions[n.id][1],width:260,height:68}));
+ const routes=new RouteCache().update({},projected,boxes,projected.graph.relations,plan.wires);
+ for(const [i,route]of routes.entries()){
+  assert.equal(route.fallback,false,'initial selected graph routes without fallback');assert.equal(route.collisions,0,'every initial wire clears every selected card');
+  const r=projected.graph.relations[i],source=boxes.find(n=>n.id===r.from),target=boxes.find(n=>n.id===r.to),wire=plan.wires[i];
+  assert.deepEqual(route.points[0],wire.returning?[source.x+260,source.y+68*(wire.fromPort??.5)]:[source.x+32.5,source.y+68]);
+  assert.deepEqual(route.points.at(-1),wire.returning?[target.x+260,target.y+68*(wire.toPort??.5)]:[target.x,target.y+34]);
  }
  for(const wire of plan.wires)assert.ok(!('detail'in wire),'routing has no detail-only branch');
 }

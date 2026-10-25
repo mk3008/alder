@@ -10,21 +10,19 @@ function crosses(a,b,r,padding=3){
  return true;
 }
 const ids=Object.keys(tables),sizes=new Map(ids.map(id=>[id,{w:Math.max(220,...tables[id].fields.map(([,name])=>name.length*14+24)),h:44+tables[id].fields.length*25}]));
-const whole=conceptDiagram(ids,edges,sizes);
 for(const focus of [null,...ids]){
  const view=focus?conceptNeighborhood(ids,edges,focus):{ids,edges};
- const {boxes,routing,offset}=conceptDiagram(ids,edges,sizes,view.ids);
- for(const route of routing.routes){
-  const original=whole.routing.routes.find(r=>r.id===route.id);
-  assert.deepEqual(route,original,'same full route, connectors and cardinalities for '+focus);
- }
- for(const label of routing.labels)assert.deepEqual(label,whole.routing.labels.find(l=>l.edge===label.edge&&l.table===label.table),'same endpoint label for '+focus);
- for(const [id,box]of boxes){const b=whole.boxes.get(id);assert.equal(box.x-offset[0],b.x);assert.equal(box.y-offset[1],b.y);}
+ // A selects the graph. B has no access to the original graph or focus.
+ const selectedSizes=new Map(view.ids.map(id=>[id,sizes.get(id)]));
+ const {boxes,routing}=conceptDiagram(view.ids,view.edges,selectedSizes);
+ const standalone=conceptDiagram([...view.ids],structuredClone(view.edges),selectedSizes);
+ assert.deepEqual({boxes,routing},standalone,'the same selected graph renders identically as a standalone overview');
+ assert.deepEqual([...boxes.keys()],view.ids,'B contains only A-selected cards');
  assert.equal(routing.routes.length,view.edges.length);
- for(const route of routing.routes){assert(!route.unrouted,focus+' routes without fallback');assert.equal(route.points[0].y+offset[1],boxes.get(route.from).y+boxes.get(route.from).h);assert.equal(route.points.at(-1).x+offset[0],boxes.get(route.to).x);}
+ for(const route of routing.routes){assert(!route.unrouted,focus+' routes without fallback');assert.equal(route.points[0].y,boxes.get(route.from).y+boxes.get(route.from).h);assert.equal(route.points.at(-1).x,boxes.get(route.to).x);}
  for(const label of routing.labels){
   for(const route of routing.routes)assert(!route.segments.some(({a,b})=>crosses(a,b,label)),`${focus||'overview'}: ${label.table} ${label.count} must not cover ${route.from}->${route.to}`);
-  for(const box of whole.boxes.values())assert(!(label.left<box.x+box.w&&label.left+label.w>box.x&&label.top<box.y+box.h&&label.top+label.h>box.y),focus+' count outside cards');
+  for(const box of boxes.values())assert(!(label.left<box.x+box.w&&label.left+label.w>box.x&&label.top<box.y+box.h&&label.top+label.h>box.y),focus+' count outside cards');
  }
 }
 console.log('PASS concept initial layout: overview and all six one-hop views, complete bottom/left wires and counts clear of every routed segment/card');

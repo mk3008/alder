@@ -14,7 +14,7 @@ assert.equal(design.graph.nodes.length,8);assert.equal(design.graph.relations.le
 const overlap=(a,b)=>a.x<b.x+b.width&&b.x<a.x+a.width&&a.y<b.y+b.height&&b.y<a.y+a.height;
 const labelBox=(r,i,g)=>({id:String(i),x:r.label[0]-Math.max(30,g.relations[i].label.length*12)/2,y:r.label[1]-9,width:Math.max(30,g.relations[i].label.length*12),height:18});
 function check(d,focus){
- const g=d.graph,p=matrixPlan(g,d.activityOrder,focus);
+ const g=d.graph,p=matrixPlan(g,d.activityOrder);
  assertCaptionRows(p.positions,g.relations.filter((r,i)=>!p.wires[i].returning));
  const boxes=g.nodes.map(n=>({id:n.id,x:p.positions[n.id][0],y:p.positions[n.id][1],width:260,height:68}));
  const cache=new RouteCache(),key={},routes=cache.update(key,d,boxes,g.relations,p.wires);
@@ -42,7 +42,7 @@ function check(d,focus){
  const old=Object.fromEntries(boxes.map((n,i)=>[n.id,[n.x,40+i*192]]));
  const tab={key:'purchase',name:'purchase',activity:focus,design:d,positions:old,scroll:[19,31],zoom:.52};
  assert.deepEqual({...reconcile(tab,d).positions},old,'saved coordinates never migrate');
- assert.deepEqual(resetLayout(tab).positions,matrixPlan(g,d.activityOrder,focus).positions,'explicit reset uses common compact planner');
+ assert.deepEqual(resetLayout(tab).positions,matrixPlan(g,d.activityOrder).positions,'explicit reset uses common compact planner');
  return {p,boxes};
 }
 for(const focus of [undefined,...design.activityOrder])check(activityDesign(design,focus),focus);
