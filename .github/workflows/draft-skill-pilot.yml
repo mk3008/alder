@@ -1,0 +1,35 @@
+name: Draft Skill pilot (offline)
+on:
+  pull_request:
+    paths:
+      - 'tools/draft_skill_pilot.py'
+      - 'tools/test_draft_skill_pilot.py'
+      - 'tools/fixtures/draft-skill-pilot/**'
+      - 'work/draft-skill-pilot/**'
+      - '.github/workflows/draft-skill-pilot.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/draft_skill_pilot.py'
+      - 'tools/test_draft_skill_pilot.py'
+      - 'tools/fixtures/draft-skill-pilot/**'
+      - 'work/draft-skill-pilot/**'
+      - '.github/workflows/draft-skill-pilot.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch existing historical test inputs
+        run: git fetch --no-tags origin c0020d3f88fa7ce70b17c197464978bb548f9100 d453b61be8520907bf7326ffbe429ca55feea9d8
+      - name: Validate frozen pilot and retained static workflow contracts
+        run: python3 -m unittest tools/test_draft_skill_pilot.py tools/test_workflow_skills.py

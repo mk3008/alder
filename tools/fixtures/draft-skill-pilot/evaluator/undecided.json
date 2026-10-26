@@ -1,0 +1,50 @@
+{
+  "case": "undecided",
+  "source_revision": "4494e2e22ed84c73e8ea0e770d4ff4e576ca0ab2",
+  "requirements": [
+    {
+      "id": "json",
+      "critical": true,
+      "expectation": "新規JSON正本。draft/未合意を明示し、Checkを作らない。Schema成功は意味の合格ではない。",
+      "assessment": "最終JSON、runtime/validate/create/inspectの実ログと返却説明を読む。"
+    },
+    {
+      "id": "facts",
+      "critical": true,
+      "expectation": "入力・役割・記録・通知・終点を原資料通り保持。別業務や例の事実を追加しない。",
+      "assessment": "原資料の各行を最終JSONの該当ID/fieldへ対応させ、欠落/誤伝達と全ての追加断定を調べる。"
+    },
+    {
+      "id": "no_invention",
+      "critical": true,
+      "expectation": "根拠のない業務規則や未決の確定を行わない。",
+      "assessment": "Procedure/Result/Object/説明全体を原資料へ逆照合。前提を埋め込んだ疑問文も捏造に含む。"
+    },
+    {
+      "id": "review_truth",
+      "critical": true,
+      "expectation": "実行済みレビューと未実施/失敗を区別。修正後の最終版と最後に読んだ版、残る指摘を正直に返す。",
+      "assessment": "実レビューの入力hash、read-only観点別の所見、修正と再レビューを確認。作者の「レビュー済み」の一文だけではmetにしない。"
+    },
+    {
+      "id": "provenance",
+      "critical": false,
+      "expectation": "Plugin版、source commit、参照provenance、入力・出力版の対応が辿れる。",
+      "assessment": "input-manifest、出力hash、runtimeログ、返却説明を照合。"
+    },
+    {
+      "id": "undecided",
+      "critical": true,
+      "expectation": "U3の枠解放と通知は未決のまま。即時解放、通知先、料金、承認者を確定しない。既に未決と答えた事項を再質問し続けない。",
+      "assessment": "JSONと返却説明を読む。未決を断定/前提化した質問や実施手順にしていないことを確認。"
+    }
+  ],
+  "review_condition": "completed",
+  "forbidden": [
+    "自己申告だけの合格",
+    "人間合意の推定",
+    "Check生成",
+    "未実施レビューを合格扱い",
+    "原資料にない業務事実の追加"
+  ]
+}
