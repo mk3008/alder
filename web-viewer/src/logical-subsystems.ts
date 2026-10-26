@@ -53,13 +53,13 @@ export function createLogicalSubsystemPanel(doc:Document,selected:()=>void){
    const caption=buttonInSvg(doc,route.label[0]-95,route.label[1]-14,190,connection.label,()=>choose({kind:'connection',id:connection.id}));caption.setAttribute('data-logical-caption',connection.id);svg.append(caption);
    right=Math.max(right,route.bounds.right+40,route.label[0]+105);bottom=Math.max(bottom,route.bounds.bottom+40,route.label[1]+30);
   }
-  for(const node of nodes){const group=draft.subsystems.find(item=>item.id===node.id)!;const shape=svgElement(doc,'g',{role:'button',tabindex:0,'aria-label':group.name+'を選択','aria-pressed':'false',class:'node graph-shape state-shape','data-node':node.id,'data-logical-group':node.id});shape.append(cardSurface(doc,node));shape.append(svgElement(doc,'rect',{x:node.x,y:node.y,width:node.width,height:node.height,rx:8,class:'state-diagram-node','data-canvas-boundary':''}));const label=svgElement(doc,'text',{x:node.x+16,y:node.y+27,class:'state-diagram-node-label logical-card-title'});label.textContent=group.name+'（案）';shape.append(label);
+  for(const node of nodes){const group=draft.subsystems.find(item=>item.id===node.id)!;const shape=svgElement(doc,'g',{role:'button',tabindex:0,'aria-label':group.name+'を選択','aria-pressed':'false',class:'node graph-shape state-shape','data-node':node.id,'data-logical-group':node.id});shape.append(cardSurface(doc,node));shape.append(svgElement(doc,'rect',{x:node.x,y:node.y,width:node.width,height:node.height,rx:8,class:'state-diagram-node','data-canvas-boundary':''}));const label=svgElement(doc,'text',{x:node.x+16,y:node.y+27,class:'state-diagram-node-label logical-card-title'});label.textContent=group.name;shape.append(label);
    group.information.forEach((item,index)=>{const line=svgElement(doc,'text',{x:node.x+16,y:node.y+54+index*22,class:'state-diagram-node-label logical-card-information'});line.textContent=item;shape.append(line);});
    shape.addEventListener('click',()=>choose({kind:'group',id:node.id}));shape.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose({kind:'group',id:node.id});}});svg.append(shape);right=Math.max(right,node.x+node.width+40);bottom=Math.max(bottom,node.y+node.height+40);
   }
   svg.setAttribute('viewBox',`0 0 ${right} ${bottom}`);paint(svg);return svg;
  };
- text(root,'h2','論理サブシステムの相関');text(root,'p','稟議と入荷予実の分割案').className='logical-draft-label';
+ text(root,'h2','論理サブシステムの相関');
  canvas=diagramCanvas(doc,render,view);canvas.classList.add('logical-subsystems-canvas');root.append(canvas);
  canvas.addEventListener('click',save);canvas.addEventListener('pointerup',()=>queueMicrotask(save));canvas.querySelector('.diagram-viewport')?.addEventListener('scroll',save);
  for(const [heading,items]of [['メリット',draft.benefits],['デメリット・必要な管理',draft.considerations],['レビューポイント',draft.reviewPoints]] as const){const section=doc.createElement('section');section.className='logical-review-section';text(section,'h2',heading);const list=doc.createElement('ul');for(const item of items)text(list,'li',item);section.append(list);root.append(section);}
