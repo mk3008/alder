@@ -6,7 +6,7 @@ function command(root:HTMLElement,label:string,action:()=>void,back=false){const
 export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void,graph=false,changeMode:(graph:boolean)=>void=()=>{}){
  root.replaceChildren();add(root,'h1','データ構造全体像');
  const modes=document.createElement('div');modes.className='data-example-modes landscape-modes';modes.setAttribute('aria-label','全体像の表示切替');for(const [label,mode]of [['概要',false],['グラフ',true]] as const){const b=add(modes,'button',label) as HTMLButtonElement;b.type='button';b.setAttribute('aria-pressed',String(graph===mode));b.onclick=()=>changeMode(mode);}root.append(modes);root.dataset.mode=graph?'graph':'overview';const content=document.createElement('div');content.className='landscape-overview';content.hidden=graph;root.append(content);
- const cards=document.createElement('div');cards.className='review-group-grid';content.append(cards);
+ add(content,'h2','論理サブシステム');const cards=document.createElement('div');cards.className='review-group-grid';cards.setAttribute('aria-label','論理サブシステム');content.append(cards);
  for(const [index,group]of reviewGroups.entries()){const card=document.createElement('article');card.className='review-group-card';card.dataset.reviewGroup=group.id;add(card,'span',String(index+1).padStart(2,'0')).className='review-group-number';const content=contentFor(group.id)!;add(card,'h2',content.title);add(card,'p',content.description);add(card,'strong','レビュアー');add(card,'p',content.reviewer.role).className='review-owner';command(card,'詳細を開く',()=>open(group.id)).setAttribute('aria-label',group.name+'の詳細を開く');cards.append(card);}
 
 }
