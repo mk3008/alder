@@ -13,12 +13,15 @@
     "test:dom": "node --experimental-strip-types web/test-dom.mjs",
     "test:activities": "node --experimental-strip-types web/test-activities.mjs && node --experimental-strip-types web/test-activity-workspace-dom.mjs",
     "test:layout": "node --experimental-strip-types web/test-shared-layout.mjs && node --experimental-strip-types web/test-matrix-layout.mjs && node --experimental-strip-types web/test-source-captions.mjs && node --experimental-strip-types web/test-shared-captions.mjs",
-    "verify:contract": "node web/test-navigation-authority-gate.mjs && node --experimental-strip-types web/review-navigation-contract.mjs"
+    "verify:contract": "node web/test-navigation-authority-gate.mjs && node --experimental-strip-types web/review-navigation-contract.mjs",
+    "lint": "oxlint --max-warnings=100 src web vite.config.ts",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^30.1.2",
+    "oxlint": "1.89.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.7"
   },
