@@ -1,0 +1,37 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#論理サブシステムのレビュー2026-10-27",
+  "supersedes": [
+    "LOGICAL-SUBSYSTEM-001 の4分類表示名のみ"
+  ],
+  "checks": [
+    {
+      "id": "LOGICAL-REVIEW-001",
+      "condition": "購買JSONを読み込みデータ構造全体像を開き、概要・グラフ・論理サブシステムを切り替え、URL・履歴・再読込を操作する。",
+      "guarantee": "概要が初期表示で同一の全体像タブ内に3モードがある。概要の4分類は論理サブシステムと表示せず、各カードは従来の概要を開く。既存グラフiframe・カメラと個別画面を維持し、同名タブを増やさない。明示URL・履歴はモードを復元する。",
+      "reason": "依頼者向け4分類と設計者向け境界を混同せず、既存導線と状態を保つため。",
+      "verification": "web/test-concept-review.mjs、web/test-data-examples.mjs、公開Chrome"
+    },
+    {
+      "id": "LOGICAL-REVIEW-002",
+      "condition": "論理サブシステムを選び、購買の分割案と図を確認する。",
+      "guarantee": "未採用の稟議と入荷予実を別の論理境界として、申請・版・品目/承認・差戻し/稟議の進捗と、購入準備/入荷・未購入をそれぞれ表示する。内部関係と両境界間の承認済み版・品目、入荷・未購入の結果を方向付きで表示する。物理的な分割や確定仕様とは扱わない。",
+      "reason": "所有と受渡し、分割単位の妥当性を一枚でレビューするため。",
+      "verification": "web/test-logical-subsystems.mjs、公開Chrome"
+    },
+    {
+      "id": "LOGICAL-REVIEW-003",
+      "condition": "図の下の利点・必要な管理・レビューポイントを読む。",
+      "guarantee": "受領した版の保全と変更の局所化、必要に応じた逆引き相関を業務情報と区別して管理する意図、複数依頼元の識別、確定版の変更制約、差戻しと準備確定の条件を明示する。競合を分割固有の欠点としない。テーブル・DB・トランザクション・IF実装を決めない。",
+      "reason": "利点と境界で守る条件を具体的に確認でき、論理設計から物理設計を決めつけないため。",
+      "verification": "web/test-logical-subsystems.mjs、公開Chrome"
+    },
+    {
+      "id": "LOGICAL-REVIEW-004",
+      "condition": "論理図でカード・境界・線を選び、キャンバスとドロワーを操作する。",
+      "guarantee": "共通の拡大縮小/レイアウト初期化/ロック/ドラッグ・選択グロー/隣接強調・実線の矢印を使う。選択の詳細を右ドロワーで確認でき、選択でドロワーを自動展開しない。モード切替で図の状態を保持する。",
+      "reason": "既存図との意図した操作同一性を保ち、設計者が境界と受渡しの説明を確認するため。",
+      "verification": "web/test-logical-subsystems.mjs、web/test-concept-review.mjs、公開Chrome"
+    }
+  ]
+}

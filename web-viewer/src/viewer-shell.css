@@ -68,3 +68,12 @@
 .concept-review-landscape[data-mode=graph]{flex:none;overflow:visible;padding-bottom:0}.landscape-modes{margin:8px 0 12px}.landscape-overview[hidden]{display:none}.landscape-modes button{min-width:72px}
 
 .explorer-subheading{padding:10px 12px 4px 24px;font-size:12px;color:var(--line);font-weight:650}
+/* Logical boundary review shares the graph camera and card presentation. */
+.concept-review-landscape[data-mode=subsystems]{flex:none;overflow:visible;padding-bottom:0}
+.logical-subsystems-panel{flex:1;min-height:0;overflow:auto;padding:12px 20px 24px;background:var(--bg);color:var(--fg)}
+.logical-subsystems-panel[hidden]{display:none}
+.logical-subsystems-panel>h2{font-size:16px;margin:0 0 4px}.logical-draft-label{font-size:13px;color:var(--line);margin:0 0 10px}
+.logical-subsystems-canvas{border:1px solid var(--subtle);border-radius:5px}.logical-boundary>rect{fill:var(--panel);stroke:var(--subtle);stroke-width:1.5}.logical-boundary.selected>rect{stroke:var(--review-blue);stroke-width:2}
+.logical-boundary-button,.logical-edge-button{font:inherit;text-align:left;cursor:pointer;color:var(--fg);background:var(--panel);border:0;padding:4px 6px;white-space:nowrap}.logical-boundary-button{font-weight:650}.logical-edge-button{font-size:13px;color:var(--line)}.logical-edge-button:hover,.logical-boundary-button:hover{color:var(--review-link)}.logical-edge-button:focus-visible,.logical-boundary-button:focus-visible{outline:2px solid var(--review-blue)}.logical-diagram [data-logical-caption].review-related button{color:var(--review-link);font-weight:700}
+.logical-review-section{max-width:1100px;margin:20px 0}.logical-review-section h2{font-size:16px;margin:0 0 6px}.logical-review-section ul{margin:0;padding-left:22px}.logical-review-section li{font-size:13px;line-height:1.65;margin:4px 0}
+@media(max-width:800px){.logical-subsystems-panel{padding:12px}.logical-subsystems-canvas{height:50dvh;min-height:320px}}

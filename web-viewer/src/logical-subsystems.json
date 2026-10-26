@@ -1,0 +1,179 @@
+{
+  "format": "alder-logical-subsystem-demo/1",
+  "status": "検討案",
+  "subsystems": [
+    {
+      "id": "approval",
+      "name": "稟議",
+      "purpose": "購入要求と申請内容を受け付け、承認・差戻しと申請側から見た進捗を管理する。",
+      "information": [
+        "申請・提出版・品目",
+        "承認・差戻し",
+        "稟議から見た進捗"
+      ],
+      "reason": "申請と、その内容の判断・進捗を同じ業務のまとまりとして確認する。",
+      "activities": [
+        "apply",
+        "approve",
+        "revise"
+      ]
+    },
+    {
+      "id": "receiving",
+      "name": "入荷予実",
+      "purpose": "承認された内容を購入対象として確定し、入荷と未購入の状況を管理する。",
+      "information": [
+        "購入準備・受領した購入対象",
+        "入荷・未購入の結果"
+      ],
+      "reason": "受領した内容を基に、購入準備と数量の行方を確認する。",
+      "activities": [
+        "prepare",
+        "result"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "request",
+      "group": "approval",
+      "label": "申請・版・品目",
+      "detail": "申請者が依頼した品目・数量などと、提出した内容の版を扱う。",
+      "activities": [
+        "apply",
+        "revise"
+      ]
+    },
+    {
+      "id": "decision",
+      "group": "approval",
+      "label": "承認・差戻し",
+      "detail": "提出された版に対する判断と差戻しを扱う。",
+      "activities": [
+        "approve"
+      ]
+    },
+    {
+      "id": "preparation",
+      "group": "receiving",
+      "label": "購入準備",
+      "detail": "有効な承認と同じ版の申請内容を購入対象として受け取り、固定する。",
+      "activities": [
+        "prepare"
+      ]
+    },
+    {
+      "id": "result",
+      "group": "receiving",
+      "label": "入荷・未購入",
+      "detail": "対象品目ごとの入荷と、購入しない数量を扱う。",
+      "activities": [
+        "result"
+      ]
+    },
+    {
+      "id": "progress",
+      "group": "approval",
+      "label": "稟議から見た進捗",
+      "detail": "受け取った結果から、稟議の対象がどこまで満たされたかを確認する。",
+      "activities": [
+        "apply",
+        "result"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "request-decision",
+      "from": "request",
+      "to": "decision",
+      "label": "提出内容",
+      "detail": "提出した内容の版を判断対象にする。",
+      "activities": [
+        "apply",
+        "approve"
+      ]
+    },
+    {
+      "id": "decision-preparation",
+      "from": "decision",
+      "to": "preparation",
+      "label": "承認済みの版・品目",
+      "detail": "有効な承認に対応する確定版と品目を購入準備へ渡す。",
+      "activities": [
+        "approve",
+        "prepare"
+      ]
+    },
+    {
+      "id": "preparation-result",
+      "from": "preparation",
+      "to": "result",
+      "label": "購入対象",
+      "detail": "購入対象として確定した品目に対して入荷・未購入を確認する。",
+      "activities": [
+        "prepare",
+        "result"
+      ]
+    },
+    {
+      "id": "result-progress",
+      "from": "result",
+      "to": "progress",
+      "label": "入荷・未購入の結果",
+      "detail": "入荷予実で確認した結果を、稟議側の進捗へ反映する。",
+      "activities": [
+        "result",
+        "apply"
+      ]
+    }
+  ],
+  "benefits": [
+    "受領した版・品目を保持し、依頼元の内部構造の変更を直接波及させにくくする。",
+    "必要な情報を受領後は、依頼元の内部構造を都度参照せずに購入・入荷の内容を確認できる。",
+    "情報の生成・変更の責任と、領域間で渡す内容を明確にできる。"
+  ],
+  "considerations": [
+    "逆引きが必要な場合、依頼元の種類・識別子・版と、受領側の識別子との相関を業務情報と区別して管理する。",
+    "依頼元の追加、再送、取消などに応じて、相関と受け渡しの条件を定める。"
+  ],
+  "reviewPoints": [
+    "申請・判断と購入準備・入荷を、この責任のまとまりで分けるのは妥当か。",
+    "確定した版の内容を誰が生成・変更し、受領後に変更してよい条件は何か。",
+    "複数の依頼元が同じ識別子を使う場合でも、元の依頼を区別して逆引きできるか。",
+    "購入準備が確定する前の差戻しと、準備の確定が競合するとき、業務の条件を守れるか。",
+    "稟議から見た進捗は稟議の内部情報として扱うことが適切か。"
+  ],
+  "meta": {
+    "status": "未採用の論理境界案。Viewerが業務設計書から推論した結果ではない。",
+    "source": "https://github.com/mk3008/root/blob/main/knowledge/alder-logical-subsystems.md",
+    "businessSource": "work/json-state/issue-275/purchase.json"
+  },
+  "activities": [
+    {
+      "key": "apply",
+      "id": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+      "name": "備品購入を申請する"
+    },
+    {
+      "key": "approve",
+      "id": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+      "name": "購入申請を承認する"
+    },
+    {
+      "key": "revise",
+      "id": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+      "name": "購入申請を再申請・破棄する"
+    },
+    {
+      "key": "prepare",
+      "id": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
+      "name": "購入を準備する"
+    },
+    {
+      "key": "result",
+      "id": "218937bd-4b6c-527e-b9e6-14075084b842",
+      "name": "購入結果を登録する"
+    }
+  ]
+}
