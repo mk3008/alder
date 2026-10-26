@@ -139,6 +139,23 @@ class DraftSkillPilotTest(unittest.TestCase):
         self.record['reason'] = 'No independent executor available'
         self.assertEqual(self.score(), 'NOT_RUN')
 
+    def test_retained_run_evidence_and_unexecuted_boundaries(self):
+        saved = ROOT / 'work/draft-skill-pilot/issue-299'
+        if not (saved / 'normal-evaluation.json').exists():
+            self.skipTest('pre-execution frozen revision')
+        for case in ('normal', 'undecided', 'review_unavailable'):
+            oracle = json.loads((FIXTURE / 'evaluator' / (case + '.json')).read_text())
+            record = json.loads((saved / (case + '-evaluation.json')).read_text())
+            result = validate_and_score(oracle, record, saved)
+            if case == 'normal':
+                self.assertEqual(result, json.loads((saved / 'normal-score.json').read_text()))
+                self.assertEqual(result['outcome'], 'INCONCLUSIVE')
+            else:
+                self.assertEqual(result['outcome'], 'NOT_RUN')
+        ledger = json.loads((saved / 'run-ledger.json').read_text())
+        self.assertEqual(ledger['fresh_launch_count'], len(ledger['runs']))
+        self.assertLessEqual(ledger['fresh_launch_count'], ledger['max_total'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,0 +1,51 @@
+{
+  "fresh_launch_count": 1,
+  "max_total": 3,
+  "runs": [
+    {
+      "case": "normal",
+      "executor_id": "/root/fresh_299_normal",
+      "status": "RUN",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning_effort": "medium",
+      "fork_turns": "none",
+      "effective_settings": "unknown; host tool acknowledged task name only, no independent runtime attestation",
+      "source_revision": "4494e2e22ed84c73e8ea0e770d4ff4e576ca0ab2",
+      "fixture_commit": "3645a06ae1fe011ed07f3ae0c487f981f4a391a6",
+      "prompt": "normal/prompt.txt",
+      "input_manifest": "normal/input-manifest.json",
+      "input_boundary": "task.md, AGENTS.md, input-manifest.json, plugins/ only; writes output/ only; prompt restriction, not OS isolation",
+      "host_tool_history": "unavailable to evaluator; executor-created commands/trace only",
+      "prohibited_inputs": "oracle, tests, Issues/PR bodies, repository outside bundle, previous outputs",
+      "steps": "unknown",
+      "seconds": "unknown",
+      "retries": "unknown",
+      "cost": "unknown",
+      "executor_uncertainty": "連絡手段は未決。response.md参照。",
+      "outputs": [
+        "candidate.json",
+        "commands.log.gz",
+        "design.json",
+        "evaluator-validation.txt",
+        "input-manifest.json",
+        "operation.json",
+        "prompt.txt",
+        "response.md",
+        "trace.md"
+      ]
+    }
+  ],
+  "not_run": [
+    {
+      "case": "undecided",
+      "status": "NOT_RUN",
+      "reason": "有限パイロットを通常1件に限定。実行不能を確認したという意味ではない。追加起動なし。"
+    },
+    {
+      "case": "review_unavailable",
+      "status": "NOT_RUN",
+      "reason": "有限パイロットを通常1件に限定。実行不能を確認したという意味ではない。追加起動なし。"
+    }
+  ],
+  "parent_handoff": "追加実行時はこの1件を含め合計3以内。既存runを再実行として二重計上しない。"
+}

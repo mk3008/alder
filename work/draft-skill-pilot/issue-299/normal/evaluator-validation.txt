@@ -1,0 +1,2 @@
+{"valid":true,"diagnostics":[],"entities":8}
+exit_code=0

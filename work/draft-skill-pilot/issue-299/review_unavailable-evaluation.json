@@ -1,0 +1,12 @@
+{
+  "case": "review_unavailable",
+  "source_revision": "4494e2e22ed84c73e8ea0e770d4ff4e576ca0ab2",
+  "executor_id": "none",
+  "evaluator": {
+    "id": "/root (pilot coordinator, distinct from Fresh executor)",
+    "independent_of_executor": true
+  },
+  "execution_status": "NOT_RUN",
+  "input_integrity": "unknown",
+  "reason": "今回の有限パイロットは通常1件に限定。追加Agent起動なし。境界の実挙動は未検証。"
+}

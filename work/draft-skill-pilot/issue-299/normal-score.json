@@ -1,0 +1,12 @@
+{
+  "outcome": "INCONCLUSIVE",
+  "critical_unmet": [],
+  "requirements": {
+    "json": "met",
+    "facts": "met",
+    "no_invention": "met",
+    "review_truth": "unknown",
+    "provenance": "met",
+    "normal_handoff": "met"
+  }
+}

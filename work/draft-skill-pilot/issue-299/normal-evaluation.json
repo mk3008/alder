@@ -1,0 +1,124 @@
+{
+  "case": "normal",
+  "source_revision": "4494e2e22ed84c73e8ea0e770d4ff4e576ca0ab2",
+  "executor_id": "/root/fresh_299_normal",
+  "evaluator": {
+    "id": "/root (pilot coordinator, distinct from Fresh executor)",
+    "independent_of_executor": true
+  },
+  "execution_status": "RUN",
+  "input_integrity": "unknown",
+  "output_evidence": "design",
+  "evidence": {
+    "design": {
+      "path": "normal/design.json",
+      "sha256": "de0b9b956b06004d4b05b2467319eea694b1b397fa0b3b7880b536193b1cb90c"
+    },
+    "response": {
+      "path": "normal/response.md",
+      "sha256": "04b4a8891f78d3b1c8ec037646054f0ca9c87fa52b84f7db47cbfc97b257ff1c"
+    },
+    "trace": {
+      "path": "normal/trace.md",
+      "sha256": "46cb1d0863baea9a75452df03193d640b7fec1d354e3693422f35199aef98f9e"
+    },
+    "manifest": {
+      "path": "normal/input-manifest.json",
+      "sha256": "6c67a630a790263d04c1cd26f4a40b7d16406e661beb2085a901bdc49654e28a"
+    },
+    "validation": {
+      "path": "normal/evaluator-validation.txt",
+      "sha256": "143224bb3819193b4e1c7df2c2760103997483147a4088b601d4a4c5579b093f"
+    },
+    "commands": {
+      "path": "normal/commands.log.gz",
+      "sha256": "609dac94767aa0ea33aa82d73966353832a5a9a4799377d2658851a982328027"
+    },
+    "prompt": {
+      "path": "normal/prompt.txt",
+      "sha256": "eb0ea8d8b0e4942ccafe1693a3f136e3a06a7266e4c6af137af934aea9ac8fb8"
+    }
+  },
+  "requirements": [
+    {
+      "id": "json",
+      "status": "met",
+      "evidence": [
+        "design",
+        "validation",
+        "response"
+      ],
+      "rationale": "formatVersion 0.4 / package-2 / draft-2、draft/未合意はpreface、Checkなし。評価者が同梱CLIを実行してvalid=trueを確認。保存手順の実施自体は実行者logのみ。"
+    },
+    {
+      "id": "facts",
+      "status": "met",
+      "evidence": [
+        "design"
+      ],
+      "rationale": "N1/N2はActivity when/procedureと申込者input、N3は台帳Object/output、N4は記録後の通知/output/result、N5/N6はscope/preface。受領3項目と通知2項目を区別し、欠落/誤伝達は確認されない。"
+    },
+    {
+      "id": "no_invention",
+      "status": "met",
+      "evidence": [
+        "design",
+        "response"
+      ],
+      "rationale": "Procedure/Result/Object informationと返却説明をN1〜N6へ逆照合。連絡手段を未決とし、承認/料金/参加枠は追加していない。構造上のID/色は業務規則ではない。"
+    },
+    {
+      "id": "review_truth",
+      "status": "unknown",
+      "evidence": [
+        "trace",
+        "commands",
+        "response"
+      ],
+      "rationale": "同一Agentのread-onlyレビュー2回と修正の自己記録があり、最終hashは一致。しかしホスト側のtool履歴を独立取得できず、初回レビュー版も保存されていない。自己申告だけで実施をmetにしない。"
+    },
+    {
+      "id": "provenance",
+      "status": "met",
+      "evidence": [
+        "manifest",
+        "design",
+        "trace",
+        "response"
+      ],
+      "rationale": "Plugin 0.4.9、source 4494e2e、guidance 17a38e6、package凍結3645a06aと入力manifestを保存。最終draft-2と実ファイルhashは一致。途中版のレビューはreview_truthでunknown。"
+    },
+    {
+      "id": "normal_handoff",
+      "status": "met",
+      "evidence": [
+        "design"
+      ],
+      "rationale": "N2→N3→N4をprocedureに保持し、台帳には3情報、申込者へ氏名/希望日の2情報を記録後に通知。枠確保/承認なし。"
+    }
+  ],
+  "review": {
+    "status": "unknown",
+    "independence": "same_agent",
+    "evidence": "trace",
+    "reviewed_output_sha256": "de0b9b956b06004d4b05b2467319eea694b1b397fa0b3b7880b536193b1cb90c"
+  },
+  "observations": {
+    "steps": "unknown",
+    "seconds": "unknown",
+    "retries": "unknown",
+    "cost": "unknown"
+  },
+  "findings": [
+    {
+      "issue": "実レビュー完了と実際の読取り境界を独立に裏付けられない。Skill欠陥の確認ではなく評価証拠の限界。",
+      "evidence": [
+        "trace",
+        "commands",
+        "prompt"
+      ],
+      "cause_hypothesis": "ホスト履歴が評価者へ公開されず、ログは実行者が作成しているため。",
+      "general_fix_rule": "次回は許可済みhostの実tool履歴と各レビュー対象snapshotを保存できる場合だけ実施を確認済みにする。既存指示の「自己申告を正本にしない」を維持し、Skillへ類似注意書きを追加しない。"
+    }
+  ]
+}

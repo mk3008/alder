@@ -1,0 +1,93 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.4",
+  "revision": "package-2",
+  "documents": [
+    {
+      "id": "787ffbe9-182a-4220-9eb3-377a55ffc6ad",
+      "schemaVersion": "0.3",
+      "kind": "businessDesign",
+      "revision": "draft-2",
+      "title": "社内説明会の申込受付",
+      "preface": "ヒアリング N1〜N6 に基づく草案。人間の業務合意は未了。未確認事項: 申込者への連絡手段は未決（申込内容を知らせる業務の実施方法に影響）。",
+      "scope": "社内説明会の申込を受け付け、受付内容を申込者が知るところまでを対象とする。承認、参加枠の確保、料金の徴収、説明会の開催、当日の参加確認は対象外。",
+      "objects": [
+        {
+          "id": "ef921747-bca8-409d-84ca-081c4488b9a4",
+          "name": "申込者",
+          "scope": false,
+          "icon": "user",
+          "information": [
+            "氏名",
+            "希望日",
+            "連絡先",
+            "受付担当から知らされる氏名と希望日"
+          ]
+        },
+        {
+          "id": "cdda784a-ea0d-417f-97ca-61ae3fee0719",
+          "name": "申込台帳",
+          "scope": true,
+          "icon": "book-open",
+          "information": [
+            "氏名",
+            "希望日",
+            "連絡先"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "b2ee1c26-dd87-4163-9260-1a5cbd8202d8",
+          "name": "社内説明会の申込を受け付ける",
+          "scope": true,
+          "why": "申込内容を記録し、申込者が自分の受付内容を知るため。",
+          "when": "申込者が社内説明会の申込として氏名、希望日、連絡先を受付担当へ伝えるとき。",
+          "who": "受付担当",
+          "where": "規定なし（連絡手段は未決）。",
+          "procedure": "受付担当は申込者から氏名、希望日、連絡先を受け取る。受け取った氏名、希望日、連絡先を申込台帳に記録する。記録後、申込者へ氏名と希望日を知らせる。",
+          "exception": null,
+          "result": "申込台帳に氏名、希望日、連絡先が記録され、申込者が自分の受付内容である氏名と希望日を知る。",
+          "problem": null,
+          "painLevel": null,
+          "roleId": "02b8c3d4-ba96-4d90-ac72-66d72adc23e6"
+        }
+      ],
+      "relations": [
+        {
+          "id": "f463b3c2-7023-4dd0-91fe-c629d1782d6b",
+          "kind": "input",
+          "fromId": "ef921747-bca8-409d-84ca-081c4488b9a4",
+          "toId": "b2ee1c26-dd87-4163-9260-1a5cbd8202d8",
+          "label": "氏名、希望日、連絡先"
+        },
+        {
+          "id": "8bfb9c03-444d-4de2-b33f-4746bcea72a7",
+          "kind": "output",
+          "fromId": "b2ee1c26-dd87-4163-9260-1a5cbd8202d8",
+          "toId": "cdda784a-ea0d-417f-97ca-61ae3fee0719",
+          "label": "氏名、希望日、連絡先の記録"
+        },
+        {
+          "id": "54344200-fbff-47d4-b5b8-eabfb97a37cf",
+          "kind": "output",
+          "fromId": "b2ee1c26-dd87-4163-9260-1a5cbd8202d8",
+          "toId": "ef921747-bca8-409d-84ca-081c4488b9a4",
+          "label": "記録後に知らせる氏名と希望日"
+        }
+      ],
+      "findings": [],
+      "roles": [
+        {
+          "id": "02b8c3d4-ba96-4d90-ac72-66d72adc23e6",
+          "name": "受付担当",
+          "color": "#8b5cf6"
+        }
+      ],
+      "exceptions": []
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}
