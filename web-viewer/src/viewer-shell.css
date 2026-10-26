@@ -77,3 +77,5 @@
 .logical-boundary-button,.logical-edge-button{font:inherit;text-align:left;cursor:pointer;color:var(--fg);background:var(--panel);border:0;padding:4px 6px;white-space:nowrap}.logical-boundary-button{font-weight:650}.logical-edge-button{font-size:13px;color:var(--line)}.logical-edge-button:hover,.logical-boundary-button:hover{color:var(--review-link)}.logical-edge-button:focus-visible,.logical-boundary-button:focus-visible{outline:2px solid var(--review-blue)}.logical-diagram [data-logical-caption].review-related button{color:var(--review-link);font-weight:700}
 .logical-review-section{max-width:1100px;margin:20px 0}.logical-review-section h2{font-size:16px;margin:0 0 6px}.logical-review-section ul{margin:0;padding-left:22px}.logical-review-section li{font-size:13px;line-height:1.65;margin:4px 0}
 @media(max-width:800px){.logical-subsystems-panel{padding:12px}.logical-subsystems-canvas{height:50dvh;min-height:320px}}
+
+.logical-card-title{font-weight:650!important}.logical-card-information{font-size:13px!important}

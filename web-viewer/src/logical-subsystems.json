@@ -33,99 +33,30 @@
       ]
     }
   ],
-  "nodes": [
-    {
-      "id": "request",
-      "group": "approval",
-      "label": "申請・版・品目",
-      "detail": "申請者が依頼した品目・数量などと、提出した内容の版を扱う。",
-      "activities": [
-        "apply",
-        "revise"
-      ]
-    },
-    {
-      "id": "decision",
-      "group": "approval",
-      "label": "承認・差戻し",
-      "detail": "提出された版に対する判断と差戻しを扱う。",
-      "activities": [
-        "approve"
-      ]
-    },
-    {
-      "id": "preparation",
-      "group": "receiving",
-      "label": "購入準備",
-      "detail": "有効な承認と同じ版の申請内容を購入対象として受け取り、固定する。",
-      "activities": [
-        "prepare"
-      ]
-    },
-    {
-      "id": "result",
-      "group": "receiving",
-      "label": "入荷・未購入",
-      "detail": "対象品目ごとの入荷と、購入しない数量を扱う。",
-      "activities": [
-        "result"
-      ]
-    },
-    {
-      "id": "progress",
-      "group": "approval",
-      "label": "稟議から見た進捗",
-      "detail": "受け取った結果から、稟議の対象がどこまで満たされたかを確認する。",
-      "activities": [
-        "apply",
-        "result"
-      ]
-    }
-  ],
   "connections": [
     {
-      "id": "request-decision",
-      "from": "request",
-      "to": "decision",
-      "label": "提出内容",
-      "detail": "提出した内容の版を判断対象にする。",
-      "activities": [
-        "apply",
-        "approve"
-      ]
-    },
-    {
       "id": "decision-preparation",
-      "from": "decision",
-      "to": "preparation",
+      "from": "approval",
+      "to": "receiving",
       "label": "承認済みの版・品目",
       "detail": "有効な承認に対応する確定版と品目を購入準備へ渡す。",
       "activities": [
         "approve",
         "prepare"
-      ]
-    },
-    {
-      "id": "preparation-result",
-      "from": "preparation",
-      "to": "result",
-      "label": "購入対象",
-      "detail": "購入対象として確定した品目に対して入荷・未購入を確認する。",
-      "activities": [
-        "prepare",
-        "result"
-      ]
+      ],
+      "returning": false
     },
     {
       "id": "result-progress",
-      "from": "result",
-      "to": "progress",
+      "from": "receiving",
+      "to": "approval",
       "label": "入荷・未購入の結果",
       "detail": "入荷予実で確認した結果を、稟議側の進捗へ反映する。",
       "activities": [
         "result",
         "apply"
-      ]
+      ],
+      "returning": true
     }
   ],
   "benefits": [

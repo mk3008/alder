@@ -1,0 +1,38 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#論理サブシステム間の受け渡し",
+  "supersedes": [
+    "LOGICAL-REVIEW-002 の内部関係の図示、および内部情報を別図形として描く表現",
+    "LOGICAL-REVIEW-004 の内部情報図形の選択と、すべてを実線とする表現"
+  ],
+  "checks": [
+    {
+      "id": "LOGICAL-FLOW-001",
+      "condition": "購買の論理サブシステム相関を開き、まとまりと線を確認する。",
+      "guarantee": "未採用の稟議と入荷予実をそれぞれ一つの図形で示す。各まとまりの扱う情報は確認可能とし、内部情報間の線を描かない。境界を越える線に限り、そのすべてに受け渡す情報と方向を表示する。",
+      "reason": "論理サブシステムは情報の生成・変更に責任を持つまとまりであり、境界をまたぐ契約をレビューする図だから。",
+      "verification": "web/test-logical-subsystems.mjs、公開Chrome"
+    },
+    {
+      "id": "LOGICAL-FLOW-002",
+      "condition": "稟議から入荷予実への線と、入荷予実から稟議への線を確認する。",
+      "guarantee": "稟議を上流左上、入荷予実を下流右下とし、承認済みの版・品目を下から左へ実線で、入荷・未購入の結果を右から右へ破線で方向付きに表示する。線とキャプションが初期表示で欠けない。",
+      "reason": "上流への戻りを通常の前進方向と区別して読みやすくするため。戻るという配置上の表現は業務エラーを意味しない。",
+      "verification": "web/test-logical-subsystems.mjs、公開Chrome"
+    },
+    {
+      "id": "LOGICAL-FLOW-003",
+      "condition": "境界と受け渡しの説明、およびレビュー項目を確認する。",
+      "guarantee": "入荷結果の所有者と稟議側への結果反映を区別し、案を採用済みやViewerの自動推論結果と扱わない。逆引き相関と複数依頼元の観点を維持し、物理設計を指定しない。",
+      "reason": "業務の意味、相関の責任および論理設計と物理設計の境界を保持するため。",
+      "verification": "web/test-logical-subsystems.mjs、要求と原典の読み取り専用照合"
+    },
+    {
+      "id": "LOGICAL-FLOW-004",
+      "condition": "図形と両方のキャプションを選び、共通キャンバス、右ドロワーとモード・履歴を操作する。",
+      "guarantee": "選択グロー・隣接図形と接続線の強調、選択詳細、ドロワーの手動開閉、拡大縮小・配置ロック・初期化と状態保持を維持する。概要・グラフと同一タブ内で切替え、URLと履歴で復元できる。",
+      "reason": "図示の単位を変えても共通操作と既存の導線を損なわないため。",
+      "verification": "web/test-logical-subsystems.mjs、web/test-concept-review.mjs、公開Chrome"
+    }
+  ]
+}
