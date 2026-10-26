@@ -8,7 +8,7 @@ export type LogicalSelection={kind:'group'|'node'|'connection';id:string};
 type Subsystem=(typeof draft.subsystems)[number];
 type LogicalNode=(typeof draft.nodes)[number];
 type LogicalConnection=(typeof draft.connections)[number];
-const positions:Record<string,[number,number]>={request:[65,90],decision:[155,220],preparation:[585,365],result:[675,500],progress:[270,635]};
+const positions:Record<string,[number,number]>={request:[55,80],decision:[120,180],preparation:[445,300],result:[510,400],progress:[195,500]};
 const ns='http://www.w3.org/2000/svg';
 const sourceKey='alder-logical-subsystems-v1:'+location.pathname;
 const find=(s:LogicalSelection)=>s.kind==='group'?draft.subsystems.find(x=>x.id===s.id):s.kind==='node'?draft.nodes.find(x=>x.id===s.id):draft.connections.find(x=>x.id===s.id);
@@ -42,7 +42,7 @@ export function createLogicalSubsystemPanel(doc:Document,selected:()=>void){
   for(const connection of draft.connections){const active=focus.related(connection)||edge?.id===connection.id||(groupNodes.size>0&&(groupNodes.has(connection.from)||groupNodes.has(connection.to)));const path=svg.querySelector(`[data-logical-edge="${connection.id}"]`);path?.setAttribute('class','edge'+(active?' review-related':''));path?.setAttribute('marker-end',`url(#logical-${active?'related-arrow':'arrow'})`);svg.querySelector(`[data-logical-caption="${connection.id}"]`)?.classList.toggle('review-related',!!active);}
  };
  const render=(current:DiagramView)=>{
-  const nodes:RouteNode[]=draft.nodes.map(item=>{const point=current.positions.get(item.id)??positions[item.id];return{id:item.id,x:point[0],y:point[1],width:220,height:55};});
+  const nodes:RouteNode[]=draft.nodes.map(item=>{const point=current.positions.get(item.id)??positions[item.id];return{id:item.id,x:point[0],y:point[1],width:190,height:48};});
   const svg=svgElement(doc,'svg',{class:'state-diagram logical-diagram',role:'group','aria-label':'論理サブシステムの相関図'}) as SVGSVGElement;
   svg.append(graphMarkers('logical-'));
   let right=0,bottom=0;
@@ -56,7 +56,7 @@ export function createLogicalSubsystemPanel(doc:Document,selected:()=>void){
    if(cross){const caption=buttonInSvg(doc,route.label[0]-89,route.label[1]-14,178,connection.label,()=>choose({kind:'connection',id:connection.id}),'logical-edge-button');caption.setAttribute('data-logical-caption',connection.id);svg.append(caption);right=Math.max(right,route.label[0]+100);bottom=Math.max(bottom,route.label[1]+30);}
    right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
   }
-  for(const node of nodes){const data=draft.nodes.find(n=>n.id===node.id)!;const shape=svgElement(doc,'g',{role:'button',tabindex:0,'aria-label':data.label+'を選択','aria-pressed':'false',class:'node graph-shape state-shape','data-node':node.id,'data-logical-node':node.id});shape.append(cardSurface(doc,node));shape.append(svgElement(doc,'rect',{x:node.x,y:node.y,width:node.width,height:node.height,rx:8,class:'state-diagram-node'}));const label=svgElement(doc,'text',{x:node.x+node.width/2,y:node.y+32,'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=data.label;shape.append(label);shape.addEventListener('click',()=>choose({kind:'node',id:node.id}));shape.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose({kind:'node',id:node.id});}});svg.append(shape);}
+  for(const node of nodes){const data=draft.nodes.find(n=>n.id===node.id)!;const shape=svgElement(doc,'g',{role:'button',tabindex:0,'aria-label':data.label+'を選択','aria-pressed':'false',class:'node graph-shape state-shape','data-node':node.id,'data-logical-node':node.id});shape.append(cardSurface(doc,node));shape.append(svgElement(doc,'rect',{x:node.x,y:node.y,width:node.width,height:node.height,rx:8,class:'state-diagram-node'}));const label=svgElement(doc,'text',{x:node.x+node.width/2,y:node.y+29,'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=data.label;shape.append(label);shape.addEventListener('click',()=>choose({kind:'node',id:node.id}));shape.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose({kind:'node',id:node.id});}});svg.append(shape);}
   svg.setAttribute('viewBox',`0 0 ${right} ${bottom}`);paint(svg);return svg;
  };
  text(root,'h2','論理サブシステムの相関');text(root,'p','稟議と入荷予実の分割案').className='logical-draft-label';
