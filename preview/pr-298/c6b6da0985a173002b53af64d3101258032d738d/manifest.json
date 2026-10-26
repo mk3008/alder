@@ -1,0 +1,21 @@
+{
+  "source": "c6b6da0985a173002b53af64d3101258032d738d",
+  "tree": "37e333da0ae82e7bfcd494337e26f8bfe5195120",
+  "validation": "User requested removal of the landscape introductory sentence. Existing concept-review/landscape modes tests and typecheck/build passed. Full CI acceptance separate.",
+  "files": {
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-CExLqrXx.js": "4187470beb3713088a03b29d5d414d0ec52145f3c6ba2c9c36f4faa001c2c344",
+    "assets/concept-DHIvPhg1.css": "2e47dda6858bc9aa6cbfe61de142630d607025dcab0553cb328f79fe086ade90",
+    "assets/concept-review-fixture-tMmaoGCX.js": "cb120c8dac48baf7197e23ee1d566b063000fffa113a84eee5f1e31660b2f6c1",
+    "assets/main-CBRNqCJM.css": "3c33c4679a354608c60c4107c9f378acdd1a85b50fd3b25d0e7232caade6f577",
+    "assets/main-DOyxYEdt.js": "43ad516471e25224a14668ccc2dbabe221796dfdffce68be53219ca032272f04",
+    "concept.html": "99b9fc24880b51e99af1d26f0f08e057ed067e3d69298bc5236eae03b277e2be",
+    "index.html": "069d5c06935a7628de6a171c59bf1731a9a391d460f0e176747622b79667f018",
+    "review-business.html": "657b1ceb19f2173f1742552fdc6c470bc6d2c18c286c6054932159a5de35f027",
+    "review-capabilities.html": "190a635aefa86877305e5023a4fa1894163d546082a2de9b326e58b7e4ed6da4",
+    "review-concept.html": "dd19d454aa31b1e4ec9b11bac748290ea18e163d0e286b2d7e60a99daedd62b6",
+    "review-data-examples.html": "67641673c6fcbe47ce8ab95c40b2c466d48cf7110be514e4311d535d6829fea0",
+    "review-states.html": "9770d3afa5390d12e3467f9863086e441c6361d59bf80613cccff056f7235db6"
+  }
+}
