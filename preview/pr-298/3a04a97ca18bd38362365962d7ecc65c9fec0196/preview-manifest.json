@@ -1,0 +1,110 @@
+{
+  "sourceCommit": "3a04a97ca18bd38362365962d7ecc65c9fec0196",
+  "sourceTree": "3987de52b6418b190e7dbd2a451e849d007818cf",
+  "sourceFixture": "f03331becaa36320373ca6aaa7a1c8daa421ca63/work/json-state/issue-275/purchase.json",
+  "verification": "Targeted DOM, graph identity, navigation contract, lint, build passed; full CI failed in pre-existing activity workspace test.",
+  "files": [
+    {
+      "path": "LICENSE.txt",
+      "bytes": 1063,
+      "sha256": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+      "gitBlob": "1192f464c8af99ecb23e765ff4ecefcf6f8287e1"
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES.txt",
+      "bytes": 3345,
+      "sha256": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+      "gitBlob": "0a8009cc005867af5559ee4ab023d120f4add3fb"
+    },
+    {
+      "path": "assets/canvas-toolbar-JZS1kHdY.css",
+      "bytes": 1870,
+      "sha256": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+      "gitBlob": "5c81c9a3a657740ba0fe5f2bb82a40a71ce90f8b"
+    },
+    {
+      "path": "assets/concept-BdJEKGbZ.js",
+      "bytes": 19410,
+      "sha256": "df77869a171e0e84e402e8e75b96140082adf4b548d72c7b34273fcc13df12b6",
+      "gitBlob": "57e3bfde97271d0a293fb50935b83f5a0a2a5b95"
+    },
+    {
+      "path": "assets/concept-DHIvPhg1.css",
+      "bytes": 2785,
+      "sha256": "2e47dda6858bc9aa6cbfe61de142630d607025dcab0553cb328f79fe086ade90",
+      "gitBlob": "6c3f9bfb7bd9fd6dfe3499ffb4edc615c5d066bd"
+    },
+    {
+      "path": "assets/concept-review-fixture-DAgjNBBf.js",
+      "bytes": 39776,
+      "sha256": "f0455ee67f2ffdcdeac7fac6551ceaa5faec436010e7af38c19bdabd30a92fe3",
+      "gitBlob": "46068784c02179bee4b0abc98b652c44ad1d2664"
+    },
+    {
+      "path": "assets/main-CeLJLP_6.css",
+      "bytes": 57138,
+      "sha256": "4de5cbde56e26bf9ef5fd228c2f2e7020a776fb86547184afa9b1b859fac6409",
+      "gitBlob": "c969df563192604be216b11a568a02baba20e33b"
+    },
+    {
+      "path": "assets/main-ChlyZSqD.js",
+      "bytes": 666458,
+      "sha256": "866b58f3b6ebfee60745157e13022620bfb88c75b7f68f4754d5425ac44cafb6",
+      "gitBlob": "7fd8aaf42fc4855e30f685b88c724ea3f560822a"
+    },
+    {
+      "path": "concept-preview/neighborhood.js",
+      "bytes": 487,
+      "sha256": "3db53cbe1f21f9cd2098b63cee57ffaeffe4084a0ed53d4809ba50dbc940b32a",
+      "gitBlob": "3cd72a2bd672d5bd270fe1e4fa80b5c2d146ce0e"
+    },
+    {
+      "path": "concept.html",
+      "bytes": 4877,
+      "sha256": "e58d526cc123fd148bd25ac11b13a426e7e40701c7f178aeede337ffda2b0962",
+      "gitBlob": "4badaa0888731be66632444da297ce735e624c12"
+    },
+    {
+      "path": "index.html",
+      "bytes": 586,
+      "sha256": "64b0fb8abc5fc709152c8a84c36f92d6264c8e30b8dee219ca6ae3f335cfe9a5",
+      "gitBlob": "5987e2eead8c6451e17d22b6486a695daabbf060"
+    },
+    {
+      "path": "review-business.html",
+      "bytes": 686,
+      "sha256": "657b1ceb19f2173f1742552fdc6c470bc6d2c18c286c6054932159a5de35f027",
+      "gitBlob": "00c46eaffe89484f9e603f671c6e4987d601c38a"
+    },
+    {
+      "path": "review-capabilities.html",
+      "bytes": 670,
+      "sha256": "190a635aefa86877305e5023a4fa1894163d546082a2de9b326e58b7e4ed6da4",
+      "gitBlob": "df1d91acda0b2175c719f507d43cc3dcd25544c1"
+    },
+    {
+      "path": "review-concept.html",
+      "bytes": 696,
+      "sha256": "dd19d454aa31b1e4ec9b11bac748290ea18e163d0e286b2d7e60a99daedd62b6",
+      "gitBlob": "04b227e113fb0a2eb6a38914246f8f6380040a20"
+    },
+    {
+      "path": "review-data-examples.html",
+      "bytes": 656,
+      "sha256": "67641673c6fcbe47ce8ab95c40b2c466d48cf7110be514e4311d535d6829fea0",
+      "gitBlob": "7a2bdbc281da92e0fad7cc793674a917b4d29b06"
+    },
+    {
+      "path": "review-logical-subsystems.html",
+      "bytes": 826,
+      "sha256": "e23ae988f3a83188c5bb5fe6968ae52d7f9e29bdd27e26b396767bd64039e147",
+      "gitBlob": "de630d42c1c74f1212740b2673843755f925391b"
+    },
+    {
+      "path": "review-states.html",
+      "bytes": 682,
+      "sha256": "9770d3afa5390d12e3467f9863086e441c6361d59bf80613cccff056f7235db6",
+      "gitBlob": "bb4da16aa64225db7b77fccecfb2be26e53ba2a3"
+    }
+  ]
+}
