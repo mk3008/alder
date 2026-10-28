@@ -188,7 +188,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
   const dragged=await positions();
   await setScope(page,'hide');await openDisplaySettings(page);await page.locator('#prefer-write').check();assert.equal(await page.locator('.node').count(),12);assert.equal(await page.locator('.node.outside').count(),0);await pinch(500,400,200,300);
   const savedView=await view(),visible=await positions();assert.equal(savedView.zoom,1.5);assert.equal(await page.locator('#zoom').textContent(),'150%');
-  assert.equal(await page.locator('.close').isVisible(),false);await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');await page.reload();await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);await openSourceAction(page,'open-sample-menu');
+  assert.equal(await page.locator('.close').isVisible(),true);await page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');await page.reload();await page.waitForFunction(()=>document.querySelector('#open')&&!document.querySelector('#open').disabled);await openSourceAction(page,'open-sample-menu');
   assert.equal((await view()).zoom,savedView.zoom);assert.deepEqual((await view()).scroll,savedView.scroll);assert.deepEqual(await positions(),visible);
   assert.equal(await page.locator('#scope-outside').getAttribute('aria-pressed'),'false');assert.equal(await page.locator('#prefer-write').isChecked(),true);await setScope(page,'show');assert.deepEqual(await positions(),dragged);
  },{blocked:!basic});

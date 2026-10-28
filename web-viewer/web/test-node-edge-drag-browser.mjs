@@ -258,7 +258,7 @@ async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return ru
  else if(stop==='tab-close'){
   await page.locator('.tab.active .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
   await driver.up();const baseline=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));await paintedFrames(page,8);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline,'detached Group drag cannot change the overview');
-  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
+  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
   return {stop,input,zoom,closedGroupViews:1,retainedOriginal:true};
  }
  else throw Error('Unknown stop '+stop);

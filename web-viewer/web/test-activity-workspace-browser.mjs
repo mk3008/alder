@@ -13,7 +13,7 @@ export async function verifyActivityWorkspace(browser){
   const scope=async()=>{if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('#scope-outside').click();await page.locator('#node-list-close').click();};
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-   await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);
+   await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);
    assert.deepEqual(await ids(),activityDesign(design).graph.nodes.map(n=>n.id).sort());
    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    // Body selection/drag matches Objects; only the right-hand icon navigates.

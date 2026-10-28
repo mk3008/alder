@@ -2,6 +2,7 @@ import {activityTabFixture} from './document-test-view.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import {readFileSync,mkdirSync} from 'node:fs';
 // Open the native disclosure only when responsive layout collapsed the actions.
 export async function ensureDocumentActions(page){
@@ -80,7 +81,7 @@ export async function verifyTabStrip(browser){
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
    for(const width of [1280,1000,600,480,393,360,320])for(const zoom of [1,1.25]){
-    await page.setViewportSize({width,height:960});await page.evaluate(z=>{document.body.style.zoom=String(z);},zoom);
+    await page.setViewportSize({width,height:960});await closeCanvasOverlays(page);await page.evaluate(z=>{document.body.style.zoom=String(z);},zoom);
     const m=await checkVertical();await assertTabStripActions(page,{refreshDisabled:true});
     await page.locator('.tab').first().locator('button').first().click();await assertTabStripActions(page,{refreshDisabled:true});
     if(zoom===1&&[1280,393,320].includes(width))await page.screenshot({path:`web/evidence/header-controls/document-refresh-${width}-${theme}.png`});

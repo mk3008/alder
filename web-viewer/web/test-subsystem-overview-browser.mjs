@@ -16,13 +16,13 @@ export async function verifySubsystemOverview(browser){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
    await page.locator('#tabs .tab button:first-child').first().click();
    const business=await page.evaluate(()=>{const tab=document.querySelector('.tab-strip').getBoundingClientRect(),view=document.querySelector('#viewport').getBoundingClientRect(),bar=document.querySelector('#business-workspace .canvas-controls').getBoundingClientRect();return{color:getComputedStyle(document.documentElement).backgroundColor,top:view.top-tab.bottom,right:view.right-bar.right,bottom:view.bottom-bar.bottom};});
-   await page.locator('#concept-tab-landscape button:first-child').click();
+   await page.locator('#concept-tab-landscape').click();
    const index=await page.evaluate(()=>{const tab=document.querySelector('.tab-strip').getBoundingClientRect(),v=document.querySelector('.subsystem-overview-canvas .diagram-viewport'),view=v.getBoundingClientRect(),bar=document.querySelector('.subsystem-overview-canvas .canvas-controls').getBoundingClientRect();return{color:getComputedStyle(v).backgroundColor,top:view.top-tab.bottom,right:view.right-bar.right,bottom:view.bottom-bar.bottom};});
    assert.deepEqual(index,business,'the index shares canvas color and placement with the business overview');
    await page.locator('[data-explorer-key="concept:overview"]').click();await page.waitForFunction(()=>document.querySelector('iframe[data-concept-view="overview"]')?.contentDocument?.querySelector('.stage .canvas'));
    const graph=await page.evaluate(()=>{const tab=document.querySelector('.tab-strip').getBoundingClientRect(),frame=document.querySelector('iframe[data-concept-view="overview"]'),outer=frame.getBoundingClientRect(),d=frame.contentDocument,v=d.querySelector('.canvas'),view=v.getBoundingClientRect(),bar=d.querySelector('.canvas-controls').getBoundingClientRect();let color=getComputedStyle(v).backgroundColor;if(color==='rgba(0, 0, 0, 0)')color=getComputedStyle(d.querySelector('.stage')).backgroundColor;return{color,top:outer.top+view.top-tab.bottom,right:view.right-bar.right,bottom:view.bottom-bar.bottom};});
    assert.deepEqual(graph,business,'the concept graph shares canvas color and placement with the business overview');assert.equal(await page.locator('.concept-review-landscape h1').count(),0);
-   await page.locator('#concept-tab-landscape button:first-child').click();
+   await page.locator('#concept-tab-landscape').click();
   }
   mkdirSync('web/evidence/shell',{recursive:true});const observations=[];
   for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(const width of [1280,393]){

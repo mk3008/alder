@@ -14,7 +14,7 @@ export async function verifyDocumentActions(browser){
  const geometry=async()=>{
   const m=await page.evaluate(()=>{
    const r=e=>{const b=e.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom,width:b.width,height:b.height};};
-   const strip=document.querySelector('.tab-strip'),group=document.querySelector('#document-actions'),tabs=document.querySelector('#tabs');
+   const strip=document.querySelector('.tab-strip'),group=document.querySelector('#document-actions'),tabs=document.querySelector('.shell-open-tabs');
    return {mode:strip.dataset.actionsMode,viewport:innerWidth,document:document.documentElement.scrollWidth,tabs:r(tabs),strip:r(strip),group:r(group),actions:[...group.querySelectorAll('button')].map(b=>({id:b.id,...r(b),hit:(()=>{const p=r(b),e=document.elementFromPoint((p.left+p.right)/2,(p.top+p.bottom)/2);return e===b||b.contains(e);})()}))};
   });
   assert.ok(m.document<=m.viewport+1,'no global horizontal overflow');assert.ok(m.tabs.width>=44,'tab navigation retains usable width');
@@ -38,7 +38,7 @@ export async function verifyDocumentActions(browser){
     if(width<=393)assert.equal(await mode(),'menu','long title uses disclosure on phone');
     assert.equal(await page.locator('#refresh').isDisabled(),true,'text refresh disabled');
     if(await mode()==='menu')await page.keyboard.press('Escape');
-    await page.locator('.tab').last().locator('.close').scrollIntoViewIfNeeded();const close=await page.locator('.tab').last().locator('.close').boundingBox(),tabs=await page.locator('#tabs').boundingBox();assert.ok(close.x>=tabs.x-.5&&close.x+close.width<=tabs.x+tabs.width+.5,'tab close reachable');
+    await page.locator('.tab').last().locator('.close').scrollIntoViewIfNeeded();const close=await page.locator('.tab').last().locator('.close').boundingBox(),tabs=await page.locator('.shell-open-tabs').boundingBox();assert.ok(close.x>=tabs.x-.5&&close.x+close.width<=tabs.x+tabs.width+.5,'tab close reachable');
    }
   }
   // Find the actual measured breakpoint and revisit both sides without relying
