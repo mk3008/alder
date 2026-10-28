@@ -13,7 +13,7 @@ export async function verifyJSONStates(browser){
    await page.goto('http://127.0.0.1:4173/');await ready();await page.locator('#fallback').setInputFiles({name:'states.'+format,mimeType:format==='json'?'application/json':'text/markdown',buffer:Buffer.from(source)});await page.locator('.node').first().waitFor();if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await saved();
    await select(format==='json'?st.objectId:'購入申請');await page.locator('.state-diagram').waitFor();
    assert.equal(await page.locator('[data-transition]').count(),13);assert.equal(await page.locator('[data-state]').count(),8);assert.equal(await page.locator('.state-diagram [stroke-dasharray]').count()>0,true);
-   assert.equal(await page.locator('[data-state="申請済み"] rect').evaluate(e=>getComputedStyle(e).fill),'rgb(228, 244, 235)');
+   assert.equal(await page.locator('[data-state="申請済み"] .graph-card-surface').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(228, 244, 235)');
    const spacing=assertStateCaptionRows(await page.locator('.state-diagram').evaluate(stateCaptionSnapshot),parseStateRows());
    const svg=await page.locator('.state-diagram').evaluate(e=>e.outerHTML);snapshots.push(svg);
    await page.screenshot({path:`${out}/${format}-states-${width}.png`});await page.locator('.state-transition-panel > details').first().locator('summary').click();assert.ok((await page.locator('[data-transition="T12"]').innerText()).includes('未決（設計課題）'));assert.ok((await page.locator('[data-transition="T07"]').innerText()).includes('申請内容の破棄'));
