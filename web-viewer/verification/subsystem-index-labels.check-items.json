@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "supersedes": ["SUBSYSTEM-INDEX-002 のメニュー・タブ名「概念モデル相関図」のみ。独立したページとナビゲーションの保証は維持する。"],
+  "checks": [
+    {
+      "id": "SUBSYSTEM-INDEX-LABEL-001",
+      "condition": "データ構造のエクスプローラー、全体図、概念間の図を表示する。",
+      "guarantee": "目次の名前は「全体図」、概念間の図は「概念相関図」とし、メニュー・見出し・タブで同じ簡潔な名前を使う。タブの種別アイコンは保つ。",
+      "reason": "タブ幅の消費を抑えながら、目次と概念の相関図を区別するため。",
+      "verification": "独立したメニュー・タブ・見出しのDOM検証と実画面確認。"
+    }
+  ]
+}
