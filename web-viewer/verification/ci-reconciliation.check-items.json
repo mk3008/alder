@@ -1,0 +1,47 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "現在の Viewer の全体 CI で、採用済み UI と旧形式のテストが食い違う箇所を照合する。既存の検証正本は変更しない。",
+  "checks": [
+    {
+      "id": "CI-RECONCILE-001",
+      "condition": "業務図の一覧・選択・検索・指摘・スコープ設定を操作し、表示を復元する。",
+      "guarantee": "採用済みのエクスプローラーからページを開け、選択対象と詳細、検索・開閉・キーボード操作を確認できる。個別の目隠し UI を復活させず、既存の保存された表示状態の読取りとスコープ全体の表示切替を維持する。指摘から関連対象へ移動しても右ドロワーの開閉状態を維持する。",
+      "reason": "廃止した一覧部品への依存を外しても、利用者が現在使える導線と保存互換性を失わない。",
+      "source": "EXPLORER-TREE-001/002、OBJECT-DETAIL-002、VIEW-DRAWER-001、および本人の目隠し廃止指示。",
+      "verification": "web/test-viewer-shell.mjs、web/test-findings-dom.mjs、web/test-node-drawer.mjs、web/test-scope-shortcut.mjs 等の現在の操作経路と異常系。"
+    },
+    {
+      "id": "CI-RECONCILE-002",
+      "condition": "文書とタブを開閉、切替、更新、保存、再読込する。",
+      "guarantee": "全体図を閉じて一覧から再度開け、個別タブと文書の状態・選択・表示位置・設定・未反映の旧データを保護する。保存形式の観測は現在の文書とビューの分離形式を通し、旧形式の復元と保存失敗も検証する。",
+      "reason": "現在の画面と保存形式へテストの入口を移しても、作業内容を失わない保証は残す。",
+      "source": "OBJECT-DETAIL-003、VIEW-NAV-001〜003、web-viewer/validation.ja.md の読み取り専用の保存・URL回帰。",
+      "verification": "web/test-close.mjs、web/test-session-recovery.mjs、web/test-save-state.mjs、web/test-node-edge-drag-fixture.mjs 等。"
+    },
+    {
+      "id": "CI-RECONCILE-003",
+      "condition": "同じ対象グラフを全体と個別表示で配置し、配線・選択・ドラッグ・拡大縮小する。",
+      "guarantee": "対象選択の後は同じレイアウト・描画処理を使う。通常と例外の配線方向、ラベルとカードの分離、接続先、選択強調、初期配置、ドラッグ時の接続、カメラと保存の保証を維持する。対象個別の専用配置を再導入しない。",
+      "reason": "過去の個別図専用の座標期待が、採用済みの全体・個別の同一性と矛盾しているため。",
+      "source": "web-viewer/graph-rendering.ja.md、verification/check-items.json、validation.ja.md の配置・破線と画面操作の検証。",
+      "verification": "web/test-shared-layout.mjs、web/test-json-layout.mjs、web/test-routing.mjs、web/test-node-edge-drag.mjs と関連ブラウザー検証。"
+    },
+    {
+      "id": "CI-RECONCILE-004",
+      "condition": "状態遷移の操作から根拠 Activity を開き、図の検証用 HTML を生成する。",
+      "guarantee": "操作の詳細の対象ボタンが正しい Activity を指す。描画用 CSS は、許可した同梱ファイルを内包して外部取得を起こさない。参照切れや追加の外部 import / URL は検出する。",
+      "reason": "ツールバー追加や共通 CSS の分離後も、移動先と隔離された検証画像の安全性を保持する。",
+      "source": "web-viewer/validation.ja.md の型付き JSON と図の検証。",
+      "verification": "web/test-json-native.mjs、web/test-json-states.mjs、web/review-routing/preflight.mjs の肯定・負例。"
+    },
+    {
+      "id": "CI-RECONCILE-005",
+      "condition": "最終候補について全体 CI と独立した検証正本を照合する。",
+      "guarantee": "既存の検証正本と正規化データを保ち、失敗するテストを単に無効化したり CI から外したりしない。仕様変更で実行できなくなった操作は根拠と代替検証を記録し、残すべき異常系・破壊防止・ブラウザー検証を維持する。",
+      "reason": "CI の成功だけを目的に検出力や正本を損なわない。",
+      "source": "web-viewer/validation.ja.md、verification/check-items.json、本人の CheckItem に関する指示。",
+      "verification": "npm test、npm run verify:contract、npm run build、最終候補の全体 CI と差分レビュー。"
+    }
+  ]
+}
