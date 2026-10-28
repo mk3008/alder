@@ -1,0 +1,10 @@
+✔ external BD catalog supports historic Check without its full payload (6.280106ms)
+✔ converter supports explicit external catalog and digest without old BD payload (44.722219ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 243.009082

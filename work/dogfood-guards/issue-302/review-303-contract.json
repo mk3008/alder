@@ -1,0 +1,20 @@
+{
+  "id": "G4",
+  "source": "https://github.com/mk3008/alder/pull/303#issuecomment-6481883434",
+  "baseline": "b850df15875f53e994504d590226c07a6a0b1005",
+  "condition": "Role未確定: diagnostics in package formats 0.3 and 0.4",
+  "guarantee": "Every reserved Role diagnostic corresponds exactly once to an existing in-package Business Design Activity whose roleId is null and quotes its current raw who. Every such Activity has its diagnostic. Unrelated diagnostics and input bytes are not changed by validation.",
+  "cases": [
+    "current diagnostic only accepted",
+    "stale diagnostic only refused",
+    "current plus stale refused in either order",
+    "duplicate current diagnostic refused",
+    "unknown Activity ID refused",
+    "Object ID used as Activity ID refused",
+    "diagnostic remaining after Role resolution refused",
+    "unrelated diagnostics retained",
+    "mixed invalid create refused without creating output",
+    "mixed invalid commit refused with saved bytes unchanged"
+  ],
+  "scope": "Refine the existing Role correspondence check only; no Schema, approval, business meaning, dependency or unrelated diagnostic policy changes. Historical oracles and evidence remain frozen."
+}

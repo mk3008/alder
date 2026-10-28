@@ -1,0 +1,57 @@
+{
+  "id": "G4",
+  "contractSha256": "e8b8931c0797228ddc66e4ae97b8e6a82b3bb6808e77fa8796c8f7b23290b627",
+  "cases": [
+    {
+      "case": "current diagnostic only accepted",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "stale diagnostic only refused",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "current plus stale refused in either order",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "duplicate current diagnostic refused",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "unknown Activity ID refused",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "Object ID used as Activity ID refused",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "diagnostic remaining after Role resolution refused",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "unrelated diagnostics retained",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "mixed invalid create refused without creating output",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    },
+    {
+      "case": "mixed invalid commit refused with saved bytes unchanged",
+      "result": "pass",
+      "evidence": "results.json; test-roles-final.tap; test-external-final.tap; after.log"
+    }
+  ],
+  "missingResultNegativeDetected": true
+}

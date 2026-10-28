@@ -1,5 +1,7 @@
 # root #173 / Alder #302 実施結果
 
+以下は初回提出head `b850df15875f53e994504d590226c07a6a0b1005` の記録。PR #303の追加指摘と修正・再検証は[Role診断の残存対応](REVIEW-303.ja.md)に記録する。初回の固定oracleと生の証拠は保持する。
+
 独自JSONのfollow-up保存経路と、未確定Role診断の原文不一致の2件を再現し、コミット前に改善を確認した最小修正だけを提出する。意味レビュー精度の一般的改善、全127 Checkの保証、正式導入への反映は実証していない。root #170の研究は再試行せず、凍結成果・先行Draft・main・公開版を変更していない。
 
 Control: [root #173](https://github.com/mk3008/root/issues/173)。Execution: [Alder #302](https://github.com/mk3008/alder/issues/302)。作業branch: `work/302-dogfood-guards`。
