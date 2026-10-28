@@ -21,6 +21,12 @@ const sourceKey='alder-logical-subsystems-v1:'+location.pathname;
 const find=(s:LogicalSelection)=>s.kind==='group'?draft.subsystems.find(x=>x.id===s.id):draft.connections.find(x=>x.id===s.id);
 function svgElement(doc:Document,tag:string,attributes:Record<string,string|number>={}){const element=doc.createElementNS(ns,tag);for(const [key,value] of Object.entries(attributes))element.setAttribute(key,String(value));return element;}
 function text(root:HTMLElement,tag:string,value:string){const element=root.ownerDocument.createElement(tag);element.textContent=value;root.append(element);return element;}
+export const logicalReviewSections=[['メリット',draft.benefits],['デメリット・必要な管理',draft.considerations],['レビューポイント',draft.reviewPoints]] as const;
+export function logicalActivities(entry:LogicalSelection){const data=find(entry);return data?data.activities.map(key=>draft.activities.find(activity=>activity.key===key)!).filter(Boolean):[];}
+export function describeLogicalSelection(target:HTMLElement,entry:LogicalSelection){
+ target.replaceChildren();const data=find(entry);if(!data)return '';if(entry.kind==='group'){const group=data as Subsystem;text(target,'p',group.purpose);text(target,'h3','扱う情報');const list=target.ownerDocument.createElement('ul');for(const value of group.information)text(list,'li',value);target.append(list);text(target,'h3','まとまりの理由');text(target,'p',group.reason);return group.name;}
+ const connection=data as LogicalConnection;text(target,'p',connection.detail);text(target,'h3','出元と受取先');const from=draft.subsystems.find(group=>group.id===connection.from)!,to=draft.subsystems.find(group=>group.id===connection.to)!;text(target,'p',`${from.name} → ${to.name}`);return connection.label;
+}
 function buttonInSvg(doc:Document,x:number,y:number,width:number,label:string,action:()=>void){
  const foreign=svgElement(doc,'foreignObject',{x,y,width,height:36});const button=doc.createElement('button');button.type='button';button.className='logical-edge-button';button.textContent=label;button.onclick=action;foreign.append(button);return foreign;
 }
@@ -69,9 +75,6 @@ export function createLogicalSubsystemPanel(doc:Document,selected:()=>void){
  text(root,'h2','論理サブシステムの相関');
  canvas=diagramCanvas(doc,render,view);canvas.classList.add('logical-subsystems-canvas');root.append(canvas);
  canvas.addEventListener('click',save);canvas.addEventListener('pointerup',()=>queueMicrotask(save));canvas.querySelector('.diagram-viewport')?.addEventListener('scroll',save);
- for(const [heading,items]of [['メリット',draft.benefits],['デメリット・必要な管理',draft.considerations],['レビューポイント',draft.reviewPoints]] as const){const section=doc.createElement('section');section.className='logical-review-section';text(section,'h2',heading);const list=doc.createElement('ul');for(const item of items)text(list,'li',item);section.append(list);root.append(section);}
- return {root,selection:()=>selection,activities:(entry:LogicalSelection)=>{const data=find(entry);return data?data.activities.map(key=>draft.activities.find(activity=>activity.key===key)!).filter(Boolean):[];},describe(target:HTMLElement,entry:LogicalSelection){
-  target.replaceChildren();const data=find(entry);if(!data)return '';if(entry.kind==='group'){const group=data as Subsystem;text(target,'p',group.purpose);text(target,'h3','扱う情報');const list=doc.createElement('ul');for(const value of group.information)text(list,'li',value);target.append(list);text(target,'h3','まとまりの理由');text(target,'p',group.reason);return group.name;}
-  const connection=data as LogicalConnection;text(target,'p',connection.detail);text(target,'h3','出元と受取先');const from=draft.subsystems.find(group=>group.id===connection.from)!,to=draft.subsystems.find(group=>group.id===connection.to)!;text(target,'p',`${from.name} → ${to.name}`);return connection.label;
- }};
+ for(const [heading,items]of logicalReviewSections){const section=doc.createElement('section');section.className='logical-review-section';text(section,'h2',heading);const list=doc.createElement('ul');for(const item of items)text(list,'li',item);section.append(list);root.append(section);}
+ return {root,selection:()=>selection,activities:logicalActivities,describe:describeLogicalSelection};
 }

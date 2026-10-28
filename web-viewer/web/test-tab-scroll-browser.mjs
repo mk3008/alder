@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
+import {loadPurchaseReview} from './purchase-review-browser.mjs';
 
 // Real wheel input and the mixed-kind row, not synthetic DOM geometry.
 export async function verifyTabScroll(browser){
  const context=await browser.newContext({viewport:{width:1000,height:850}}),page=await context.newPage(),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  try{
-  await page.goto('http://127.0.0.1:4173/review-concept.html');
-  await page.locator('#explorer-business-activity .explorer-item').first().waitFor();
+  await loadPurchaseReview(page);
   const keys=await page.locator('#explorer-business-activity .explorer-item').evaluateAll(items=>items.slice(0,3).map(item=>item.dataset.explorerKey));
   keys.push(...await page.locator('#explorer-concept-model .explorer-item').evaluateAll(items=>items.map(item=>item.dataset.explorerKey)));
   keys.push(await page.locator('#explorer-states .explorer-item').first().getAttribute('data-explorer-key'));

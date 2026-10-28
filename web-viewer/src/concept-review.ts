@@ -3,11 +3,10 @@ import {createElement,SquareArrowOutUpRight,ArrowLeft} from 'lucide';
 import {type ReviewGroup} from './concept-review-fixture';
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
 function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
-export type LandscapeMode='overview'|'graph'|'subsystems';
-export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement,mode:LandscapeMode='overview',changeMode:(mode:LandscapeMode)=>void=()=>{}){
- root.replaceChildren();add(root,'h1','全体図');
- const modes=document.createElement('div');modes.className='data-example-modes landscape-modes';modes.setAttribute('aria-label','全体像の表示切替');for(const [label,value]of [['概要','overview'],['グラフ','graph'],['論理サブシステム','subsystems']] as const){const b=add(modes,'button',label) as HTMLButtonElement;b.type='button';b.setAttribute('aria-pressed',String(mode===value));b.onclick=()=>changeMode(value);}root.append(modes);root.dataset.mode=mode;const content=document.createElement('div');content.className='landscape-overview';content.hidden=mode!=='overview';root.append(content);
- content.append(canvas);
+export type LandscapeMode='overview'|'graph';
+export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement|undefined,mode:LandscapeMode='overview'){
+ root.replaceChildren();add(root,'h1',mode==='overview'?'全体図':'概念相関図');root.dataset.mode=mode;
+ if(mode==='overview'&&canvas){const content=document.createElement('div');content.className='landscape-overview';content.append(canvas);root.append(content);}
 
 }
 export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){

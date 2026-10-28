@@ -4475,7 +4475,6 @@
     },
     "landscapeRelationships": [
       {"from": "group-request", "to": "group-decision"},
-      {"from": "group-decision", "to": "group-handoff"},
       {"from": "group-handoff", "to": "group-result"}
     ],
     "reviewBoundaries": [
