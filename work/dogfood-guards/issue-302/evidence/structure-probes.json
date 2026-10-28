@@ -1,0 +1,220 @@
+{
+  "pluginSource": "cf0a041c045b5c2e80a865c75a8e0e06aaa3626d",
+  "runtime": "v24.22.1",
+  "records": [
+    {
+      "id": "valid-native-validate",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "cli.mjs",
+        "validate",
+        "$TEMP/candidate.json"
+      ],
+      "status": 0,
+      "stdout": "{\"valid\":true,\"diagnostics\":[\"状態遷移は部分定義・業務意味未確認: state-document\"],\"entities\":12}\n",
+      "stderr": ""
+    },
+    {
+      "id": "valid-native-create",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "create",
+        "$TEMP/candidate.json",
+        "$TEMP/saved.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-probes-G3rfhc/saved.json\",\"sha256\":\"e3e9878d639575c0de380bba1e48031c8f3ab938bdf656597660cc213dc99744\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"状態遷移は部分定義・業務意味未確認: state-document\"]}\n",
+      "stderr": ""
+    },
+    {
+      "id": "valid-native-inspect",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "inspect",
+        "$TEMP/saved.json"
+      ],
+      "status": 0,
+      "stdout": "{\"sha256\":\"e3e9878d639575c0de380bba1e48031c8f3ab938bdf656597660cc213dc99744\",\"revision\":\"package-r1\",\"documents\":[{\"id\":\"bd-native\",\"kind\":\"businessDesign\",\"revision\":\"bd-r1\"},{\"id\":\"state-document\",\"kind\":\"stateTransition\",\"revision\":\"st-r1\"}],\"checks\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "id": "invalid-format",
+      "inputSha256": "03b3a5233c08002e127fa738e75149c393aee3dfd22eed21b1aaee1440bcc926",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"No schema variant at $: Invalid enum at $.format; Invalid enum at $.format; Invalid enum at $.format; Invalid enum at $.format\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "duplicate-id",
+      "inputSha256": "907147632918fd6a85f84a27847b326c04bf8ff04a75f0cabd022775e40d81b6",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Duplicate ID: object-request\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "missing-reference",
+      "inputSha256": "83a380553fabb875c929b4c4c6719040424a04ab24f1a671ab59045eccb8db64",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Dangling reference: missing\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "wrong-reference-type",
+      "inputSha256": "6776e7db8a7df435fb0774a4c4c845ba004d864ffc8c3420b1d6786615f02cc5",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Reference type mismatch: object-request\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "stale-reference-version",
+      "inputSha256": "85b9afa9b78226f4cfbeef5d80b4b1d43adfd936ec4c4b95f9f0bd16e4b81c96",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Stale State source revision\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "stale-file-hash",
+      "inputSha256": "9a7d151522dee4272e9224fff42077b61ac4bde267ec1288a565d6c8388e7f4e",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"File content conflict\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "valid-native-commit",
+      "inputSha256": "9a7d151522dee4272e9224fff42077b61ac4bde267ec1288a565d6c8388e7f4e",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "commit",
+        "$TEMP/saved.json",
+        "$TEMP/candidate.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-probes-G3rfhc/saved.json\",\"sha256\":\"0d46cf1f4ae0b3de514f12beea590945d96704b98e3f0d72628305e6ef7dd53a\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"状態遷移は部分定義・業務意味未確認: state-document\"]}\n",
+      "stderr": "",
+      "targetUnchanged": false
+    },
+    {
+      "id": "missing-human-BD-agreement",
+      "inputSha256": "59631cdcbdc5562325c83f2d771ffb7aa5dc17560b0a80e9ab9e5a2e4656fbc4",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "create",
+        "$TEMP/candidate.json",
+        "$TEMP/missing-human-BD-agreement.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Human Business Design confirmation for this exact revision is required\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "synthetic-unreviewed-check",
+      "inputSha256": "59631cdcbdc5562325c83f2d771ffb7aa5dc17560b0a80e9ab9e5a2e4656fbc4",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "create",
+        "$TEMP/candidate.json",
+        "$TEMP/synthetic-unreviewed-check.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-probes-G3rfhc/synthetic-unreviewed-check.json\",\"sha256\":\"2a8a6375c7304064e8beefdeaf376dc78bf3fcece60ef89b0a23c155aa13782d\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Check原典の意味対応は未確認: 6e3f5e75-c797-4d1b-b760-efbaa37a284c\"]}\n",
+      "stderr": "",
+      "targetUnchanged": true
+    },
+    {
+      "id": "unauthorized-human-promotion",
+      "inputSha256": "024a19dbe566354d8086f80d5bf25564f611f5b9ffed3cba601d6430a77f64e8",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "create",
+        "$TEMP/candidate.json",
+        "$TEMP/unauthorized-human-promotion.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"New Check must be unreviewed or undecided\"}]}\n",
+      "targetUnchanged": true
+    },
+    {
+      "id": "actual-research-custom-format",
+      "inputSha256": "77d91cfbc335353ad2ccb83dd46f9bde7c8aef913ac3d3f1a423014923818cb1",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "author-cli.mjs",
+        "create",
+        "$TEMP/candidate.json",
+        "$TEMP/actual-research-custom-format.json",
+        "$TEMP/operation.json"
+      ],
+      "status": 2,
+      "stdout": "",
+      "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Legacy JSON version required\"}]}\n",
+      "targetUnchanged": true
+    }
+  ]
+}

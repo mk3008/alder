@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "format": "0.1",
+      "legacyLoad": "fail",
+      "error": "Unresolved Who requires a diagnostic matching a current unresolved Activity"
+    },
+    {
+      "format": "0.2",
+      "legacyLoad": "fail",
+      "error": "Unresolved Who requires a diagnostic matching a current unresolved Activity"
+    },
+    {
+      "format": "0.3",
+      "currentRoleInput": "pass",
+      "mixedStaleRejected": true
+    },
+    {
+      "format": "0.4",
+      "currentRoleInput": "pass",
+      "mixedStaleRejected": true
+    }
+  ]
+}

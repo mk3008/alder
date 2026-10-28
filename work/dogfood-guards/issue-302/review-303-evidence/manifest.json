@@ -1,0 +1,18 @@
+{
+  "contractSha256": "e8b8931c0797228ddc66e4ae97b8e6a82b3bb6808e77fa8796c8f7b23290b627",
+  "priorEvidenceFilesUnchanged": 33,
+  "canonicalSource": "11848cae45a171a1a49ac6e0542b2bd7cac89b16",
+  "files": {
+    "verify.mjs": "79384bd93d44443b5a0034d06bfad0c06739794fdd98ed26cfefabd9a1734f17",
+    "prompts.md": "208f720030a8a1c0bed6775e90c52dbeaf9007564f5b777abf834af12f8a4fed",
+    "before.log": "cd5e459a6cd1cf90f2b3ddc2f5b7df33f72fa30fe8f9628f8276a504afb140a5",
+    "test-roles-final.tap": "e9efdf5293baa74059cdeac47171138cc2c03808c475b574abf743750aff6b31",
+    "results.json": "63524935a5120b35e26f3a4c384d0cefc2db5c33f550304cc30a6e135a58599b",
+    "intermediate-failure.log": "977ef128be5aeff63632a4a8faafe9ad006c81419620bf89a1039560de83a6e9",
+    "outcomes.json": "8cb7234e7c88429d58b11c34b0928b15f9206413487d38c223d64c49bc655eb3",
+    "plugin.log": "1a80edfccd3c14cad8d00fb7ec65ab1347c3215b8f3bd91700fe91588cb5ca93",
+    "after.log": "8d5fdc2a054202f8a492ce9b8e0ee597ec13bb6a0b8ac2b6892791990728d321",
+    "independent-review.md": "a9a59289a05567aa37f6933033800757254a573d0d5bb1368c4448548d6591b9",
+    "test-external-final.tap": "1dde8366c5f28d19bf58912c553dfedb68f99b6c96602f5abb25f4a70971b1a7"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "source": "fixed pre-run oracle plus fixed existing Role contract before edit",
+  "results": [
+    {
+      "id": "L1",
+      "status": "PARTIAL",
+      "evidence": "typed JSON BD observed; typed State document not generated"
+    },
+    {
+      "id": "L2",
+      "status": "OBSERVED",
+      "evidence": "independent final-artifact review of availability branches"
+    },
+    {
+      "id": "L3",
+      "status": "OBSERVED",
+      "evidence": "independent Result/When and I/O review"
+    },
+    {
+      "id": "L4",
+      "status": "PARTIAL",
+      "evidence": "three states retained in prose; typed state references not measured"
+    },
+    {
+      "id": "L5",
+      "status": "OBSERVED",
+      "evidence": "unknown damage judgment retained; excluded operations absent"
+    },
+    {
+      "id": "L6",
+      "status": "OBSERVED",
+      "evidence": "both author contexts stopped Check drafting without real human agreement"
+    },
+    {
+      "id": "M08",
+      "status": "OBSERVED",
+      "evidence": "representative assertions plus execution supported"
+    },
+    {
+      "id": "M41",
+      "status": "OBSERVED",
+      "evidence": "partial assertion and observation coverage explicitly limited"
+    },
+    {
+      "id": "M63",
+      "status": "OBSERVED",
+      "evidence": "actual priority Core assertion distinguished from unrelated CLITest"
+    },
+    {
+      "id": "M71",
+      "status": "OBSERVED",
+      "evidence": "CLI observation distinguished from automatic regression and physical work"
+    },
+    {
+      "id": "G1",
+      "status": "OBSERVED",
+      "evidence": "14 structural operations; unknown JSON before/after follow-up; independent review"
+    },
+    {
+      "id": "G2",
+      "status": "LOCAL_PASS",
+      "evidence": "26-file exporter reproduction and 7 installed-package tests; final CI recorded on PR"
+    },
+    {
+      "id": "G3",
+      "status": "OBSERVED",
+      "evidence": "same fixed Role input refused after fix; 0.3/0.4 tests and independent CLI reverify"
+    }
+  ]
+}

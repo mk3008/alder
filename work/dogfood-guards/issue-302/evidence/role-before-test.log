@@ -1,0 +1,36 @@
+✔ 0.1/0.2 remain accepted; explicit 0.3 migration preserves IDs, raw Who, provenance and partial states (12.520869ms)
+✔ stored palette values equal legacy hash initially; rename/reorder preserve role ID and color (5.407299ms)
+✔ unknown roles, duplicate IDs/names, invalid colors, stale references and wrong package/schema versions reject (5.931138ms)
+✔ MD conversion is explicit, repeatable and reimport retains renamed catalog identity/color (200.4647ms)
+✔ compound Who is retained verbatim and unresolved; more than five explicit roles can reuse colors (3.655369ms)
+✔ Check migration needs exact human BD confirmation and preserves every review state/meaning (14.917677ms)
+✔ undecided Who placeholders are retained without inventing a role (9.144531ms)
+✖ unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4 (1.722326ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 357.696149
+
+✖ failing tests:
+
+test at tools/document_storage/test-roles.mjs:39:1
+✖ unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4 (1.722326ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/84e40d7c56da/alder/tools/document_storage/test-roles.mjs:46:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /Unresolved Who requires a diagnostic/,
+    operator: 'throws',
+    diff: 'simple'
+  }

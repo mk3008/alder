@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "format": "0.1",
+      "legacyLoad": "pass",
+      "nodes": 6,
+      "originalAndUnrelatedDiagnosticPreserved": true
+    },
+    {
+      "format": "0.2",
+      "legacyLoad": "pass",
+      "nodes": 12,
+      "originalAndUnrelatedDiagnosticPreserved": true
+    },
+    {
+      "format": "0.3",
+      "currentRoleInput": "pass",
+      "mixedStaleRejected": true
+    },
+    {
+      "format": "0.4",
+      "currentRoleInput": "pass",
+      "mixedStaleRejected": true
+    }
+  ]
+}

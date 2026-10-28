@@ -1,0 +1,62 @@
+{
+  "source": "mk3008/root@88fe0e62a0ded4b9a0f02e8fdf8275a59668f4f1:research/170-molkky-one-shot-run/design/check-items-draft.json",
+  "inputSha256": "584aa36748f4465dc2f9a8e1826750e116b8457923c7850e3e733fe2d339b808",
+  "outputSha256": "b61c0cd0ce921cb88bccef4d5beccb7253b443cf263134dbc7d4ec0ed19031d9",
+  "serialization": "UTF-8 json.dumps ensure_ascii=False indent=2 plus newline",
+  "allDifferences": [
+    {
+      "path": [
+        "items",
+        7,
+        "test_evidence"
+      ],
+      "before": "実装前・未作成",
+      "after": "対応（代表条件）。BD bd-draft-0.48 → CI-08 → CoreTests.test_scoring_zero_reset_and_single_count（test_molkky.py SHA-256 75dafae37373d9ee0c8fef74b07f67a6ac1d2f317092908d2df2062d9d5630ba）。[8] の得点を events[1]==8、[4] を events[6]==4 と主張し、有効な1本の番号が点数になる条件に対応する。保存済み tests-final.txt と再実行 retest.txt は同テストを含む21件成功。probes.txt の A の8番→8点は追加CLI観測であり自動回帰assertionとは別。実在人間の期待結果確認は未取得（未レビュー）。"
+    },
+    {
+      "path": [
+        "items",
+        40,
+        "test_evidence"
+      ],
+      "before": "実装前・未作成",
+      "after": "一部対応・自動テスト証拠不足。BD bd-draft-0.48 → CI-41 → CoreTests.test_dates_and_layouts（同日同参加者2試合の daily_number==(1,2)、未投球の last_actual_date is None、年越し実投日を主張）および CLITests.test_multi_process_persistence_and_invalid_input（list出力に開始日2025-12-31と最終実投日2026-01-02を含み、未投球表示を含まないと主張）。後者は1試合だけを扱い、一覧行の参加者・同日順・状態・勝者・未投球を直接assertしない。probes.txt は同日同参加者2試合の一覧行、未投球、年越し最終実投日の表示と試合IDを観測したが、終了時勝者の一覧行は未実行。既存自動回帰証拠では期待結果全体の対応は未確立。test_molkky.py SHA-256 75dafae37373d9ee0c8fef74b07f67a6ac1d2f317092908d2df2062d9d5630ba、tests-final.txt と retest.txt は該当テストを含む21件成功。実在人間の確認は未取得（未レビュー）。"
+    },
+    {
+      "path": [
+        "items",
+        62,
+        "test_evidence"
+      ],
+      "before": "実装前・未作成",
+      "after": "対応（提示された複数優先の代表場面）。BD bd-draft-0.48 → CI-63 → CoreTests.test_two_priorities_formed_by_recorded_corrections（実際の訂正からA・Cの優先を形成し、Cの優先0点を数え、再訂正後に次がA優先、write_db/read_db後もA優先、続けてAが投げた後はB通常とassert）。CoreTests.test_two_priorities_and_recorrection_after_zeroも保存・再読込後のA優先をassertするが、前半は履歴・incidentを直接構成するfixture。CLITests.test_multi_process_persistence_and_invalid_input は優先途中を作らないためCI-63の優先引継ぎの直接証拠ではない。test_molkky.py SHA-256 75dafae37373d9ee0c8fef74b07f67a6ac1d2f317092908d2df2062d9d5630ba、tests-final.txt と retest.txt は該当テストを含む21件成功。優先途中で実CLIを別プロセスから再開する経路は未実行。実在人間の条件・期待結果確認は未取得（要確認を維持）。"
+    },
+    {
+      "path": [
+        "items",
+        70,
+        "test_evidence"
+      ],
+      "before": "実装前・未作成",
+      "after": "一部対応・直接の自動回帰assertionなし。BD bd-draft-0.48 → CI-71。関連する CoreTests.test_dates_and_layouts は写真・メモを付けた配置記録の保存・再読込をassertするが、配置記録0件で中断・再開できることはassertしない。probes.txt では配置記録0件の試合を閉じ、別CLIプロセスのshowと次の投球を成功させた（道具側の実行観測）。物理的な立て直し・配置復元はCLIで検証できない。test_molkky.py SHA-256 75dafae37373d9ee0c8fef74b07f67a6ac1d2f317092908d2df2062d9d5630ba、tests-final.txt と retest.txt は関連テストを含む21件成功だが、この期待の直接検証とは扱わない。実在人間の確認は未取得（未レビュー）。"
+    },
+    {
+      "path": [
+        "revision"
+      ],
+      "before": "check-draft-0.37",
+      "after": "check-draft-0.38"
+    },
+    {
+      "path": [
+        "revision_history",
+        36
+      ],
+      "added": {
+        "revision": "check-draft-0.37",
+        "sha256": "584aa36748f4465dc2f9a8e1826750e116b8457923c7850e3e733fe2d339b808",
+        "disposition": "独立レビューのフォローアップでCI-08・41・63・71のCheck→Test assertion、実行証拠と不足を更新。期待結果と実在人間のレビュー状態は不変更。"
+      }
+    }
+  ]
+}

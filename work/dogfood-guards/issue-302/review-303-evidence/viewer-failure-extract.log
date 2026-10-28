@@ -1,0 +1,20 @@
+2026-10-28T22:48:42.4411642Z Error: Unresolved Who requires a diagnostic matching a current unresolved Activity
+2026-10-28T22:48:42.4625862Z ✖ web/test-document-loader.mjs (753.198409ms)
+2026-10-28T22:49:06.2180643Z Error: Unresolved Who requires a diagnostic matching a current unresolved Activity
+2026-10-28T22:49:06.2188034Z ✖ web/test-json-document.mjs (523.86259ms)
+2026-10-28T22:49:06.2191962Z Error: Unresolved Who requires a diagnostic matching a current unresolved Activity
+2026-10-28T22:49:06.2198461Z ✖ web/test-json-layout.mjs (163.716775ms)
+2026-10-28T22:49:06.2202547Z Error: Unresolved Who requires a diagnostic matching a current unresolved Activity
+2026-10-28T22:49:06.2206780Z ✖ web/test-json-roles.mjs (144.951846ms)
+2026-10-28T22:49:06.2209908Z Error: Unresolved Who requires a diagnostic matching a current unresolved Activity
+2026-10-28T22:49:06.2214413Z ✖ web/test-json-states.mjs (489.154236ms)
+2026-10-28T22:49:52.3402556Z test at web/test-document-loader.mjs:1:1
+2026-10-28T22:49:52.3403118Z ✖ web/test-document-loader.mjs (753.198409ms)
+2026-10-28T22:49:52.3420288Z test at web/test-json-document.mjs:1:1
+2026-10-28T22:49:52.3420859Z ✖ web/test-json-document.mjs (523.86259ms)
+2026-10-28T22:49:52.3421724Z test at web/test-json-layout.mjs:1:1
+2026-10-28T22:49:52.3422035Z ✖ web/test-json-layout.mjs (163.716775ms)
+2026-10-28T22:49:52.3422486Z test at web/test-json-roles.mjs:1:1
+2026-10-28T22:49:52.3422775Z ✖ web/test-json-roles.mjs (144.951846ms)
+2026-10-28T22:49:52.3423361Z test at web/test-json-states.mjs:1:1
+2026-10-28T22:49:52.3423664Z ✖ web/test-json-states.mjs (489.154236ms)

@@ -1,0 +1,18 @@
+✔ 0.1/0.2 remain accepted; explicit 0.3 migration preserves IDs, raw Who, provenance and partial states (15.211075ms)
+✔ stored palette values equal legacy hash initially; rename/reorder preserve role ID and color (6.856939ms)
+✔ unknown roles, duplicate IDs/names, invalid colors, stale references and wrong package/schema versions reject (8.089878ms)
+✔ MD conversion is explicit, repeatable and reimport retains renamed catalog identity/color (193.73634ms)
+✔ compound Who is retained verbatim and unresolved; more than five explicit roles can reuse colors (3.842384ms)
+✔ Check migration needs exact human BD confirmation and preserves every review state/meaning (17.591754ms)
+✔ undecided Who placeholders are retained without inventing a role (11.240048ms)
+✔ unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4 (10.303776ms)
+✔ every Role diagnostic belongs once to a current unresolved Activity in 0.3 and 0.4 (12.160315ms)
+✔ mixed Role diagnostics cannot create or commit JSON; failed saves preserve bytes (922.095211ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1313.271215

@@ -56,7 +56,16 @@ test('unsafe links/source URI refuse credentials and non-HTTPS',()=>{bad(p=>p.so
 test('atomic JSON rename advances BD and Check dependency only with explicit edits',()=>{const doc=b(sample),checks=c(sample),a=doc.activities[0],before=stringify(sample);const q=applyEdits(sample,{expectedRevision:'pkg-1',revision:'pkg-2',documentRevisions:{[doc.id]:{expected:doc.revision,next:'bd-2'},[checks.id]:{expected:checks.revision,next:'checks-2'}},changes:[{id:a.id,values:{name:'新しい業務名'}},{id:checks.id,values:{basedOn:{...checks.basedOn,revision:'bd-2'}}}]});assert.equal(b(q).activities[0].id,a.id);assert.equal(c(q).basedOn.verification,'unverified');assert.equal(stringify(sample),before);assert.deepEqual(b(q).relations,doc.relations);});
 test('single-document edit refuses stale Check; original untouched',()=>assert.throws(()=>applyEdits(sample,{expectedRevision:'pkg-1',revision:'pkg-2',documentRevisions:{[b(sample).id]:{expected:revision,next:'bd-2'}},changes:[{id:b(sample).activities[0].id,values:{name:'x'}}]}),/Stale Check/));
 test('atomic edit requires package/doc versions and immutable identity',()=>{assert.throws(()=>applyEdits(sample,{expectedRevision:'old',revision:'new'}),/conflict/);assert.throws(()=>applyEdits(sample,{expectedRevision:'pkg-1',revision:'p2',documentRevisions:{[b(sample).id]:{expected:revision,next:'bd2'}},changes:[{id:b(sample).activities[0].id,values:{id:'x'}}]}),/immutable/);});
-test('external BD catalog supports historic Check without its full payload',()=>{const p=clone(),old=b(p);p.documents=p.documents.filter(d=>d!==old);p.externalDocuments=[{id:old.id,kind:old.kind,revision:old.revision,activities:old.activities.map(({id,name})=>({id,name}))}];validate(p);assert.ok(!('objects' in p.externalDocuments[0]));p.externalDocuments[0].revision='wrong';assert.throws(()=>validate(p),/Stale Check/);});
+test('external BD catalog supports historic Check without its full payload',()=>{
+ const p=clone(),old=b(p);p.diagnostics.push('unrelated diagnostic');
+ p.documents=p.documents.filter(d=>d!==old);p.externalDocuments=[{id:old.id,kind:old.kind,revision:old.revision,activities:old.activities.map(({id,name})=>({id,name}))}];
+ // A catalog has no current Who/roleId: diagnostics owned by the removed BD are no longer current Role declarations.
+ assert.ok(p.diagnostics.some(d=>d.startsWith('Role未確定:')));
+ assert.throws(()=>validate(p),/Unresolved Who requires a diagnostic/);
+ p.diagnostics=p.diagnostics.filter(d=>!d.startsWith('Role未確定:'));
+ const before=JSON.stringify(p);validate(p);assert.equal(JSON.stringify(p),before);assert.ok(p.diagnostics.includes('unrelated diagnostic'));
+ assert.ok(!('objects' in p.externalDocuments[0]));p.externalDocuments[0].revision='wrong';assert.throws(()=>validate(p),/Stale Check/);
+});
 test('converter supports explicit external catalog and digest without old BD payload',()=>{const old=b(sample);const p=convert({sources:[check()],revision:'pkg',externalDocuments:[{id:old.id,kind:old.kind,revision:old.revision,activities:old.activities.map(({id,name})=>({id,name}))}],externalSources:[sample.sources[0]]});assert.equal(p.documents.length,1);validate(p);});
 
 test('CLI new-only atomic output, protected input/existing/symlink/hardlink and no output on error',()=>{

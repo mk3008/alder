@@ -1,0 +1,217 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.4",
+  "revision": "package-1",
+  "documents": [
+    {
+      "id": "e0d3e36f-e37a-45cc-94c8-8b7a426b8502",
+      "schemaVersion": "0.3",
+      "kind": "businessDesign",
+      "revision": "bd-1",
+      "title": "備品貸出の業務設計（草案）",
+      "preface": "新規の業務設計案。人間による合意は未了。破損時の判断主体と判断方法は未決。記録済み・貸出中・返却済みは今回明示された台帳の状態であり、全状態の仕様を定めるものではない。",
+      "scope": "利用者からの備品名・利用日の申出に対する貸出状況確認と台帳記録、利用日の引渡し、返却の受領と台帳更新を対象とする。自動承認、督促、支払いは対象外。",
+      "objects": [
+        {
+          "id": "22704216-1933-44a6-b6c4-aecb021aa3a6",
+          "name": "利用者",
+          "scope": false,
+          "icon": "user",
+          "information": [
+            "借りたい備品名",
+            "利用日",
+            "申込者",
+            "貸出不可の連絡",
+            "受け取る備品",
+            "返却する備品"
+          ]
+        },
+        {
+          "id": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "name": "貸出台帳",
+          "scope": true,
+          "icon": "clipboard-list",
+          "information": [
+            "利用日の貸出状況",
+            "申込者",
+            "備品名",
+            "利用日",
+            "記録済み",
+            "貸出中",
+            "返却済み"
+          ]
+        },
+        {
+          "id": "8bb4a91f-b710-4582-9b87-f67efebd677c",
+          "name": "備品",
+          "scope": true,
+          "icon": "package",
+          "information": [
+            "備品名",
+            "引渡し・返却の対象となる備品"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "name": "貸出を記録する",
+          "scope": true,
+          "why": "利用日に備品を貸し出すため",
+          "when": "利用者が借りたい備品名と利用日を貸出担当者へ伝えたとき",
+          "who": "貸出担当者",
+          "where": "規定なし",
+          "procedure": "貸出担当者は貸出台帳でその利用日の貸出状況を確認する。空いていれば、申込者・備品名・利用日を貸出台帳に記録する。",
+          "exception": "利用日が埋まっていれば記録を追加せず、利用者へ貸出できないと伝えて終了する。",
+          "result": "空いていた場合、貸出台帳に申込みが記録済みとなり、利用日に記録された利用者へ備品を渡す業務につながる。",
+          "problem": null,
+          "painLevel": null,
+          "roleId": "bdface2c-f0d6-4a49-977b-1f352ed351e0"
+        },
+        {
+          "id": "e442173d-2a55-489f-8585-0af23ba804d1",
+          "name": "備品を貸し出す",
+          "scope": true,
+          "why": "記録された利用者に備品を渡すため",
+          "when": "貸出台帳に記録された利用日になったとき",
+          "who": "貸出担当者",
+          "where": "規定なし",
+          "procedure": "貸出担当者は貸出台帳に記録された利用者へ備品を渡し、貸出台帳を貸出中にする。",
+          "exception": null,
+          "result": "記録された利用者への引渡しが済み、貸出台帳が貸出中となる。",
+          "problem": null,
+          "painLevel": null,
+          "roleId": "bdface2c-f0d6-4a49-977b-1f352ed351e0"
+        },
+        {
+          "id": "bef3f936-b1a9-4177-a41f-08d45646a22a",
+          "name": "備品の返却を受ける",
+          "scope": true,
+          "why": "貸し出した備品の返却を反映するため",
+          "when": "利用者が備品を返却したとき",
+          "who": "貸出担当者",
+          "where": "規定なし",
+          "procedure": "貸出担当者は利用者から備品を受け取り、貸出台帳を返却済みにする。",
+          "exception": null,
+          "result": "備品の返却を受け取り、貸出台帳が返却済みとなる。",
+          "problem": null,
+          "painLevel": null,
+          "roleId": "bdface2c-f0d6-4a49-977b-1f352ed351e0"
+        }
+      ],
+      "relations": [
+        {
+          "id": "08aed25b-7de7-4346-82d5-0be3d44e38cb",
+          "kind": "input",
+          "fromId": "22704216-1933-44a6-b6c4-aecb021aa3a6",
+          "toId": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "label": "借りたい備品名と利用日、申込者"
+        },
+        {
+          "id": "fd7e7a45-9fa1-4ece-bca0-4ed395d6cfa5",
+          "kind": "input",
+          "fromId": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "toId": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "label": "利用日の貸出状況"
+        },
+        {
+          "id": "0d71913b-8995-4d37-85b2-3691f171925b",
+          "kind": "output",
+          "fromId": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "toId": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "label": "空いている場合の申込者・備品名・利用日の記録（記録済み）"
+        },
+        {
+          "id": "65974cd5-74b4-4fc3-b6d9-b5989c67cd9c",
+          "kind": "output",
+          "fromId": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "toId": "22704216-1933-44a6-b6c4-aecb021aa3a6",
+          "label": "埋まっている場合の貸出不可の連絡"
+        },
+        {
+          "id": "ad577e56-0c15-4622-bd97-80a2be25769d",
+          "kind": "input",
+          "fromId": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "toId": "e442173d-2a55-489f-8585-0af23ba804d1",
+          "label": "利用日、記録された利用者・備品名、記録済みの状態"
+        },
+        {
+          "id": "d7b0f15e-450a-46c8-8ffc-48c9f9c4bf31",
+          "kind": "input",
+          "fromId": "8bb4a91f-b710-4582-9b87-f67efebd677c",
+          "toId": "e442173d-2a55-489f-8585-0af23ba804d1",
+          "label": "記録された備品"
+        },
+        {
+          "id": "249325c2-df59-4b8a-8009-3c01b8182cce",
+          "kind": "output",
+          "fromId": "e442173d-2a55-489f-8585-0af23ba804d1",
+          "toId": "22704216-1933-44a6-b6c4-aecb021aa3a6",
+          "label": "記録された利用者への備品の引渡し"
+        },
+        {
+          "id": "de369a4c-c102-4a0a-bcc4-6ca3d97361b7",
+          "kind": "output",
+          "fromId": "e442173d-2a55-489f-8585-0af23ba804d1",
+          "toId": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "label": "貸出中の状態"
+        },
+        {
+          "id": "539918ef-b8c3-4e75-a41f-0d166ad83822",
+          "kind": "input",
+          "fromId": "22704216-1933-44a6-b6c4-aecb021aa3a6",
+          "toId": "bef3f936-b1a9-4177-a41f-08d45646a22a",
+          "label": "利用者から返却された備品"
+        },
+        {
+          "id": "b5eff918-7793-451d-b18a-cab7442a469f",
+          "kind": "output",
+          "fromId": "bef3f936-b1a9-4177-a41f-08d45646a22a",
+          "toId": "8bb4a91f-b710-4582-9b87-f67efebd677c",
+          "label": "受け取った備品"
+        },
+        {
+          "id": "4255da6b-1218-49b5-b685-55fbd2270c5b",
+          "kind": "output",
+          "fromId": "bef3f936-b1a9-4177-a41f-08d45646a22a",
+          "toId": "55df8e26-0cf3-4b7b-bad4-ee3deb7e10eb",
+          "label": "返却済みの状態"
+        }
+      ],
+      "findings": [
+        {
+          "id": "05f0cc08-38c3-4da9-b227-2c3fbd168fec",
+          "sourceId": "e0d3e36f-e37a-45cc-94c8-8b7a426b8502",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "bef3f936-b1a9-4177-a41f-08d45646a22a",
+            "8bb4a91f-b710-4582-9b87-f67efebd677c"
+          ],
+          "unresolvedTargets": [],
+          "summary": "破損時の判断は未決",
+          "content": "返却を受ける際に備品の破損が分かった場合、誰がどのように判断し、その結果で受領と台帳の返却済みへの更新がどう変わるか未決。"
+        }
+      ],
+      "roles": [
+        {
+          "id": "bdface2c-f0d6-4a49-977b-1f352ed351e0",
+          "name": "貸出担当者",
+          "color": "#8b5cf6"
+        }
+      ],
+      "exceptions": [
+        {
+          "id": "f2c9d221-d770-4b09-b36b-4b9b44cb7416",
+          "activityId": "2bd7da17-422c-43a5-b1e3-90119e44924d",
+          "name": "利用日の貸出不可",
+          "description": "利用日が埋まっている場合、記録を追加せず、利用者へ貸出できないと伝える。"
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

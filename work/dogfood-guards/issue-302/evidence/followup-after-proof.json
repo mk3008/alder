@@ -1,0 +1,7 @@
+{
+  "source": "same fixed public source as followup-before.diff.json",
+  "sha256": "584aa36748f4465dc2f9a8e1826750e116b8457923c7850e3e733fe2d339b808",
+  "bytesUnchanged": true,
+  "validatorStatus": 2,
+  "validatorMessage": "Legacy JSON version required"
+}
