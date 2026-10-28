@@ -42,7 +42,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(pkg.formatVersion==='0.4'?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
    if(['0.2','0.3'].includes(d.schemaVersion)){
     demand(new Set(d.roles.map(r=>r.name)).size===d.roles.length,'Duplicate Role name');demand(d.roles.every(r=>r.name===r.name.trim()&&!/[\r\n]/.test(r.name)),'Invalid Role name');
-    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else demand(diagnostics.some(x=>x.startsWith('Role未確定: '+a.id+' — ')),'Unresolved Who requires a diagnostic');}
+    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else demand(diagnostics.includes('Role未確定: '+a.id+' — '+a.who),'Unresolved Who requires a diagnostic');}
    }
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
    for(const e of d.exceptions??[])target(e.activityId,'activity',d.id);

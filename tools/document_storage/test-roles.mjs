@@ -35,3 +35,19 @@ test('Check migration needs exact human BD confirmation and preserves every revi
 test('undecided Who placeholders are retained without inventing a role',()=>{
  for(const who of ['未定','未決','TBD','unknown']){const p=structuredClone(legacy);p.documents[0].activities[0].who=who;const n=upgradeRoles(p,revisions);assert.equal(n.documents[0].activities[0].who,who);assert.equal(n.documents[0].activities[0].roleId,null);validate(n);}
 });
+
+test('unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4',()=>{
+ const native=JSON.parse(fs.readFileSync(new URL('../../work/viewer-json/issue-274/json-native/independent.json',import.meta.url)));
+ for(const fixture of [upgraded,native]){
+  const p=structuredClone(fixture),a=p.documents[0].activities[0];
+  a.who='申請者と承認者';a.roleId=null;
+  for(const raw of ['旧原文','申請者','申請者と承認者（推測した補足）']){
+   p.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+raw];
+   assert.throws(()=>validate(p),/Unresolved Who requires a diagnostic/);
+  }
+  for(const who of ['申請者と承認者',' 未決の担当者 ','担当者\nと代理人']){
+   a.who=who;p.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+who];
+   validate(p);assert.equal(a.who,who);assert.equal(p.diagnostics[0],'unrelated diagnostic');
+  }
+ }
+});
