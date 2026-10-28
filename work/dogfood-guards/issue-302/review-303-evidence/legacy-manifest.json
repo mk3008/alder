@@ -1,0 +1,15 @@
+{
+  "baseline": "526a1d7a17d874ed1f8f710b25371447f2b8f0d0",
+  "fixedContractSha256": "d438efb3409565af58187fc446c0f2b494acbce273f3893b4b571964416e9d68",
+  "priorEvidenceUnchanged": true,
+  "files": {
+    "legacy-before.json": "1e37b1861745c94f1d4a899b00656674a39f7f560a910ec7c4c18683a4811bd7",
+    "legacy-after.json": "6061d8da9a7493f4564bf62bf829b5da9332a9777f746dbce2f03057e1bd5206",
+    "legacy-probe.mjs": "b37afbd1a599d799a13f9ef4c74df18cf66e82562596d6740a22eb4c072dda94",
+    "legacy-viewer-roles.log": "b39d3b8868b3737fab7a32de7c8b1fa370c213b41fb5bc03bee01523cf591ec0",
+    "legacy-independent-review.md": "5067fe74dc9501f1a751c573d122ffb8efd27d1c569b20836b64cf0ffa15d1ff",
+    "legacy-extra.json": "ad4982723d512a9abf59124c8d5a96e6a6687a771cb55774d1453fb29efda593",
+    "viewer-failure-extract.log": "199bc79d0f9c95a29bf3ef136fc68b9d6524c950ccf15c2f12a19b76876273cd",
+    "legacy-prompts.md": "b01eb12aef4114b3e812d8b1358f374619cff4fa667cf49a5f18febe4a975ef6"
+  }
+}

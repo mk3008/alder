@@ -39,3 +39,16 @@ baselineは `b850df15875f53e994504d590226c07a6a0b1005`。新しい要求は[固�
 全79件成功と別Agentの確認後、canonical sourceを `11848cae45a171a1a49ac6e0542b2bd7cac89b16` として作業branchへ公開した。その公開Git objectのSHAを確認して、既存exporterで同梱runtime/provenanceを再生成した。手動コピーや虚偽のsource pinではない。
 
 最終候補のCIリンクと結果はPRコメントに追記する。共通参照検証の変更なので、既存JSON Gate A/B・配布検証・Viewer全体を維持する。#173全体の未実証範囲や#297等の採否は今回変更しない。Draft・Issue Openを維持し、再レビューへ返す。
+
+## Viewer互換投影の回帰対応
+
+head `526a1d7a17d874ed1f8f710b25371447f2b8f0d0` は保存器・JSON・配布・release候補のCIに成功したが、[Viewer CI](https://github.com/mk3008/alder/actions/runs/40782734269)で5ユニットファイルが失敗した。Chrome群には到達していない。
+
+既存のpre-Role JSON（0.1/0.2）互換adapterは、upgradeで一時的に派生したRole catalog/roleIdを閲覧モデルから外す一方、その派生Role診断を残していた。現在のRoleとの全件照合で、この残存が検出された。`document-input.ts`の同じ互換branchで、派生Role診断だけを併せてretireする1行を追加した。保存器を緩めず、Roleを正式に持つ0.3/0.4の経路には適用しない。
+
+元JSONは投影前に`readLegacyPackage`と`projectJSONPackage`の検査を通る。元JSONに実際に含まれる不正診断は、この除去より前に拒否する。原文bytes・Who・他診断・0.3/0.4の保存Role ID/色は保持される。固定条件は[legacy契約](review-303-legacy-contract.json)、SHA-256 `d438efb3409565af58187fc446c0f2b494acbce273f3893b4b571964416e9d68`。
+
+- 実際のnormalize/parse境界で、修正前は0.1/0.2が拒否、修正後は読込成功。0.3/0.4正例は両方で読込成功し、古い＋正しい診断の実入力は両方で拒否。[before](review-303-evidence/legacy-before.json) / [after](review-303-evidence/legacy-after.json)
+- 既存`web/test-json-roles.mjs`へ境界回帰を追加。ローカルで同ファイルを実行し成功。既存11図のレイアウト・Role色/ID・再順序・カメラ・原文保持と、描画ソースの固定hash検査も省略していない。
+- 別Agentが実際の不正な旧JSON診断の投影前拒否、原文Who保持、0.3/0.4のID/保存色を追加確認。[追補](review-303-evidence/legacy-independent-review.md) / [追加結果](review-303-evidence/legacy-extra.json)
+- Viewer全ユニット/ビルド/Chromeの最終結果はCIで確認する。ローカルでViewer全体を実行済みとはしない。Schema/保存runtimeの再変更や新依存の追加はない。

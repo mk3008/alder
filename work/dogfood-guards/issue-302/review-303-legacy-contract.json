@@ -1,0 +1,13 @@
+{
+  "id": "G4-legacy",
+  "baseline": "526a1d7a17d874ed1f8f710b25371447f2b8f0d0",
+  "source": "web-viewer/src/document-input.ts existing pre-Role viewing projection and PR #303 current-Role correspondence",
+  "cases": [
+    "0.1 and 0.2 JSON load through the existing pre-Role view without inferred Role identities",
+    "retire only the Role diagnostics derived by the compatibility upgrade when retiring its Role catalog",
+    "original JSON text and unrelated diagnostics are preserved",
+    "0.3 and 0.4 current Role metadata stays visible and validates",
+    "actual stale/current Role mixtures in 0.3 and 0.4 still reject before projection"
+  ],
+  "scope": "Repair the compatibility adapter only; do not weaken storage validation, rewrite source files, change role colors, or migrate formats."
+}
