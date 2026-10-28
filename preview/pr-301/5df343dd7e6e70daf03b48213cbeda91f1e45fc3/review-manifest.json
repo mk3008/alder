@@ -1,0 +1,33 @@
+{
+  "pr": 301,
+  "source_commit": "5df343dd7e6e70daf03b48213cbeda91f1e45fc3",
+  "source_tree": "8c9dca9f5f26e46e1733d6b847c41d4b60256689",
+  "fixture_versions": [
+    "bd-v2-beta-5",
+    "states-v2-beta-5",
+    "concepts-v2-beta-6"
+  ],
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-BwzFBmKM.css": "dffe63a424b37a6a8db7772579c72a2222d972af44cb2d62f70ad010851571d5",
+    "assets/concept-Dk3HZb0d.js": "2b212caeef52fc17e56e04e7a6961a33081c81c55f264094092c42aab32f2e0e",
+    "assets/concept-review-fixture-CMFMV1SQ.js": "fda59410888929b201c2b2a46831d4090a97f1761a5fd057f824a0e87bef5354",
+    "assets/main-BZSo9hkP.css": "392c52425f37a38a63b90b1d1fa101fa9fa5ad14e6e294d2553eb75bc2ffdcb5",
+    "assets/main-BfeYuInK.css": "dd98fccad8c2682bc4761c5b7d0902a13014a879092869c8d784aea09ee240d6",
+    "assets/main-DjUfyBPC.js": "f7d6241f351bfdc4fa98743146907df2ddffe9a6df72c586292373d060c336ce",
+    "assets/main-Dp29WR6z.js": "f7d6241f351bfdc4fa98743146907df2ddffe9a6df72c586292373d060c336ce",
+    "concept-preview/neighborhood.js": "3db53cbe1f21f9cd2098b63cee57ffaeffe4084a0ed53d4809ba50dbc940b32a",
+    "concept.html": "c6ce7f9df1ea6027f6ff6f6ce37087d459f3da515fc805cde3cce2b70f8632a3",
+    "index.html": "7d1338ead0205956d9dc748a9363d0840c395999f0a5bc9de273e00180fa5908",
+    "purchase-v2-beta.json": "eeeae52e79f416818e9f27810764ab8ba37b0cd568b21dbce6ce31b8953ecdd2",
+    "review-business.html": "1e4c49a6d509c3e64fdd52361174c00820e59b2d0766a49e3fe595ce120d3cc8",
+    "review-capabilities.html": "2bedd57794372348b39b7467ba9ef3ca3468cfc96591e85bdc1a81157dac0ee5",
+    "review-concept.html": "085b4f1dde5c592cbb1d519e71ddfb98a675571f569a806b6879b30a8b12b449",
+    "review-data-examples.html": "984e3942213ea7dc6ea264e3c6d3ebdd09a19f75507132be79522570dbd4a85d",
+    "review-entry.js": "e88137a51c3336e9788ad956a600980651bebf0bdba5ffde4c67859859c0a80c",
+    "review-logical-subsystems.html": "7b40b0b9d2aed5dae56ad2e063a3f201ef896a702baf6cd56c8e84a672cae5ee",
+    "review-states.html": "c325b768337813f9e8cd89cd08f4519324e1a9599bea742978b3d16d8969d731"
+  }
+}
