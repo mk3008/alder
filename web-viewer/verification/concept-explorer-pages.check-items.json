@@ -1,0 +1,31 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-28 本人画像と指示に基づく、業務データ構造のエクスプローラー。",
+  "checks": [
+    {
+      "id": "CONCEPT-MENU-001",
+      "condition": "購買データのエクスプローラーを開く。",
+      "guarantee": "データ構造全体像、4分類、および独立した個別概念ページへの入口を表示する。全体像ページ内のグラフと論理サブシステム、分類ページ内の構造図とデータ例は、メニューに別々の項目を作らずページ内のタブで選ぶ。",
+      "reason": "同じページ内のタブをメニューにも列挙すると入口が重複し、メニューが飽和するため。",
+      "source": "2026-10-28 本人画像と指示。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、および公開Viewerの実画面。"
+    },
+    {
+      "id": "CONCEPT-MENU-002",
+      "condition": "全体像と各分類でページ内タブを切り替える。",
+      "guarantee": "エクスプローラーは選択中のページを示し続ける。ページの各タブ、URL直開き、ブラウザの戻る・進む、図の選択・配置・ドロワー状態を保持する。",
+      "reason": "メニューの重複を除いても、現在地と既存の閲覧手段を失わないため。",
+      "source": "LANDSCAPE-TABS-001/002、REVIEW-OVERVIEW-001/002。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、web/test-data-examples.mjs、および公開Viewerの操作。"
+    },
+    {
+      "id": "CONCEPT-MENU-003",
+      "condition": "エクスプローラーを検索、開閉、文書切替する。",
+      "guarantee": "検索は表示対象のページ単位で行い、業務と状態遷移の項目を維持する。対象外の文書に購買のメニューを自動適用しない。",
+      "reason": "ページ単位のナビゲーションと文書の境界を保つため。",
+      "source": "CONCEPT-REVIEW-005。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、および公開Viewerの操作。"
+    }
+  ]
+}
