@@ -20,14 +20,14 @@ export async function verifyJSONStates(browser){
    await page.locator('[data-state="申請済み"]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'false');await page.locator('[data-state="申請済み"]').press('Space');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');
    for(const item of await page.locator('.state-diagram .muted').all())assert.equal(await item.evaluate(e=>getComputedStyle(e).opacity),'1');
    await page.screenshot({path:`${out}/${format}-selected-${width}.png`});
-   await page.locator('[data-transition="T12"] button').click();assert.equal(await page.locator('.node.selected').getAttribute('data-node'),format==='json'?bd.activities.find(a=>a.name==='購入を準備する').id:'購入を準備する');
+   await page.locator('[data-transition="T12"] button').click();assert.equal(await page.locator('#nodes .node.selected').getAttribute('data-node'),format==='json'?bd.activities.find(a=>a.name==='購入を準備する').id:'購入を準備する');
    await select(format==='json'?st.objectId:'購入申請');await saved();await page.reload();await ready();await page.locator('.state-diagram').waitFor();assert.equal(await page.locator('.state-diagram').evaluate(e=>e.outerHTML),svg);
    // A state operation outside an Activity detail must use existing navigation back to overview.
    await page.locator('#tabs .tab button:first-child').first().click();if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    const firstActivity=format==='json'?bd.activities[0].id:bd.activities[0].name;
    await page.locator(`.node[data-activity="${firstActivity}"] .activity-open`).first().press('Enter');
    await select(format==='json'?st.objectId:'購入申請');await page.locator('.state-transition-panel > details').first().locator('summary').click();await page.locator('[data-transition="T12"] button').click();
-   assert.equal(await page.locator('.node.selected .node-name').innerText(),'購入を準備する');assert.equal(await page.locator('#detail h1').innerText(),'購入を準備する');
+   assert.equal(await page.locator('#nodes .node.selected .node-name').innerText(),'購入を準備する');assert.equal(await page.locator('#detail h1').innerText(),'購入を準備する');
    const other=bd.objects.find(o=>o.id!==st.objectId);if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();assert.equal(await page.locator(`[data-explorer-key="states:${format==='json'?other.id:other.name}"]`).count(),0,'an Object without a declaration has no state page');
    assert.deepEqual(errors,[]);results.push({width,format,operations:13,states:8,partial:true,spacing,T12:'@unknown',keyboard:true,activityNavigation:true,reload:true,unknownObjectDisabled:true,pageErrors:errors});
   }catch(e){await page.screenshot({path:`${out}/failure-${format}-${width}.png`}).catch(()=>{});throw e;}finally{await context.close();}
