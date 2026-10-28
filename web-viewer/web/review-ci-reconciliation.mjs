@@ -26,7 +26,17 @@ for(const file of new Set(Object.values(evidence).flat())){
 }
 const planRun=spawnSync(process.execPath,['web/test-browser.mjs','--list'],{encoding:'utf8'});assert.equal(planRun.status,0,planRun.stderr);
 const selected=new Set(JSON.parse(planRun.stdout).browserPlan.selected);
+const mappingPath='verification/ci-reconciliation-paths.json';
+const mapping=JSON.parse(readFileSync(mappingPath,'utf8'));
+assert.equal(mapping.format,'viewer-verification-evidence/1');assert.equal(mapping.authority,path);
+for(const entry of mapping.changes){
+ assert.ok(evidence[entry.checkId],`unknown Check Item ${entry.checkId}`);
+ for(const field of ['previous','replacement','reason'])assert.ok(entry[field]?.trim(),`${entry.checkId} lacks ${field}`);
+ assert.ok(entry.browserCases?.length&&entry.evidence?.length,`${entry.checkId} lacks traceable verification`);
+ for(const name of entry.browserCases)assert.ok(selected.has(name),`${name} is no longer a browser case`);
+ for(const file of entry.evidence)assert.ok(existsSync(file),`${file} is missing`);
+}
 const previous='conceptInitial viewerShell jsonRoles jsonStates jsonLayout sharedCaptions jsonDocuments jsonBoundaries jsonOfflinePreview activityWorkspace relatedChecks findings documentActions graphPng saveState sessionConcurrency saveConflictNoop lifecycleSave markdownEditor editorViewport sourceSharing headerControls gettingStarted toolbarSettings layoutReset drawerOpeningFocus savedStatePreflight emptyState returnRoutes initialLeftMargin nodeEdgeDrag bottomClearance touchZoom routeCache previewIsolation layoutLock documentOrder facingRoutes nodeDrawer tabStrip scopeOption labelLayout edgeOption exceptionOption scopeShortcut scopeGeometry:fixed-drawer scopeGeometry:drawer-only scopeGeometry:combined legacySmoke'.split(' ');
 for(const name of previous)assert.ok(selected.has(name),`original browser case ${name} was removed`);
 assert.ok(selected.has('tabScroll'),'new real-browser tab scrolling case missing');assert.equal(hash(),expected,'authority changed during verification');
-console.log(JSON.stringify({authority:path,sha256:expected,results:authority.checks.map(item=>({id:item.id,evidence:evidence[item.id],status:item.id==='CI-RECONCILE-005'?'partial: full CI and browser result still required':'pass'})),browserCases:selected.size},null,2));
+console.log(JSON.stringify({authority:path,sha256:expected,mapping:mappingPath,results:authority.checks.map(item=>({id:item.id,evidence:evidence[item.id],status:item.id==='CI-RECONCILE-005'?'partial: full CI and browser result still required':'pass'})),browserCases:selected.size},null,2));
