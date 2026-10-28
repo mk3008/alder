@@ -60,7 +60,7 @@ try{
  const fresh=await boot();fresh.$('open-sample').click();geometry(fresh);
  fresh.$('open-sample').click();assert.equal(fresh.d.querySelectorAll('.tab').length,1);geometry(fresh);
  const freshTab=(await flush(fresh)).tabs[0];assert.deepEqual(freshTab.viewInset,[40,0]);assert.deepEqual(freshTab.scroll,[0,0]);
- assert.equal(fresh.d.querySelector('.close').hidden,true);await close(fresh);assert.equal(fresh.$('canvas').hidden,false);assert.deepEqual([fresh.v.scrollLeft,fresh.v.scrollTop],[0,0]);
+ assert.equal(fresh.d.querySelector('.close').hidden,false);await close(fresh);assert.equal(fresh.$('empty-workspace').hidden,false);fresh.d.querySelector('[data-explorer-key="business:overview"]').click();assert.equal(fresh.$('business-workspace').hidden,false);assert.deepEqual([fresh.v.scrollLeft,fresh.v.scrollTop],[0,0]);
  assert.deepEqual(layout((await saved(fresh)).tabs[0]),layout(freshTab));
  const db=fresh.db;fresh.w.close();const reopened=await boot({db});assert.equal(reopened.$('canvas').hidden,false);reopened.$('open-sample').click();geometry(reopened);
  assert.equal(reopened.$('refresh').disabled,true);await reopened.$('refresh').onclick();geometry(reopened);assert.deepEqual(layout((await flush(reopened)).tabs[0]),layout(freshTab));
@@ -84,7 +84,7 @@ try{
   e=await boot({db});e.$('open-sample').click();assert.deepEqual(positions(e),tab.positions);assert.deepEqual(layout((await flush(e)).tabs[0]),layout(tab));e.w.close();
   const urlTab={...structuredClone(tab),source:{kind:'url',url:'https://source.example.test/design.md'}};const url=await boot({seed:state(urlTab)});assert.equal(url.$('refresh').disabled,false);await url.$('refresh').onclick();assert.deepEqual(positions(url),tab.positions);assert.deepEqual(layout((await flush(url)).tabs[0]),layout(tab),'eligible URL refresh preserves the same historical camera and geometry');url.w.close();
  }
- const old=await boot({seed:state(structuredClone(legacy))});geometry(old,0);await close(old);old.$('open-sample').click();geometry(old,0);old.w.close();
+ const old=await boot({seed:state(structuredClone(legacy))});geometry(old,0);await close(old);old.d.querySelector('[data-explorer-key="business:overview"]').click();geometry(old,0);old.w.close();
  checks.push('legacy tab and saved sample preserve absent/zero/custom inset, manual signed coordinates, origin, zoom and scroll across disabled sample refresh/reload/reopen and eligible URL refresh');
 
  // A narrow host keeps the canonical extent even at 25% zoom, so these exact
@@ -104,10 +104,10 @@ try{
  node.onpointerdown({button:0,clientX:400,clientY:400,pointerId:1,stopPropagation(){}});node.onpointermove({clientX:430,clientY:425,pointerId:1});node.onpointerup({pointerId:1});
  assert.deepEqual(positions(e)[id],[start[0]+30,start[1]+25]);for(const [other,p] of Object.entries(initial))if(other!==id)assert.deepEqual(positions(e)[other],p);
  const moved=positions(e);assert.notDeepEqual(routes(e),beforeRoutes);assert.deepEqual((await flush(e)).tabs[0].viewInset,[40,0]);
- e.$('node-list-toggle').click();const row=e.d.querySelector('[data-list-node]');row.querySelector('.node-navigate').click();
- const navigated=(await flush(e)).tabs[0];assert.deepEqual(navigated.viewInset,[450,350],'list navigation replaces the initial camera inset instead of accumulating it');assert.deepEqual(positions(e),moved);
- const p=navigated.positions[row.dataset.listNode];assert.equal(p[0]+130+parseFloat(e.$('nodes').style.left)-e.v.scrollLeft,450);assert.equal(p[1]+34+parseFloat(e.$('nodes').style.top)-e.v.scrollTop,350);
- await close(e);e.$('open-sample').click();assert.deepEqual(layout((await flush(e)).tabs[0]),layout(navigated));e.w.close();
- checks.push('drag retains world-coordinate deltas; list navigation replaces padding, centers correctly, and persists its chosen camera');
+ const target=design.graph.nodes.find(n=>n.type==='business').id;e.d.querySelector(`[data-explorer-key="business:${target}"]`).click();
+ const storedAfterNavigation=await flush(e),navigated=storedAfterNavigation.tabs.find(t=>t.key===storedAfterNavigation.active);assert.deepEqual(navigated.viewInset,[450,350],'explorer navigation replaces the initial camera inset instead of accumulating it');assert.deepEqual(storedAfterNavigation.tabs[0].positions,moved,'overview retains the drag while another view opens');
+ const p=navigated.positions[target];assert.equal(p[0]+130+parseFloat(e.$('nodes').style.left)-e.v.scrollLeft,450);assert.equal(p[1]+34+parseFloat(e.$('nodes').style.top)-e.v.scrollTop,350);
+ await close(e);assert.deepEqual((await flush(e)).tabs[0].positions,moved);e.w.close();
+ checks.push('drag retains overview world-coordinate deltas; explorer navigation centers its detail and preserves the overview');
  console.log(JSON.stringify({model:'JSDOM + fake IndexedDB; no native browser pixel or text-bound claims',checks,passed:checks.length},null,2));
 }finally{windows.forEach(w=>w.close());delete globalThis.indexedDB;}

@@ -23,7 +23,7 @@ reports=[];await assert.rejects(runBrowserCases(selectBrowserCases(cases,['secon
 const runner=fileURLToPath(new URL('./test-browser.mjs',import.meta.url));
 const invoke=args=>spawnSync(process.execPath,[runner,...args],{encoding:'utf8',env:{...process.env,PLAYWRIGHT_MODULE:'/missing-browser-driver'}});
 const full=invoke(['--list']);assert.equal(full.status,0,full.stderr);
-const plan=JSON.parse(full.stdout).browserPlan;assert.equal(plan.scope,'full');assert.equal(plan.available,49);assert.equal(new Set(plan.selected).size,49);assert.ok(plan.selected.includes('sharedCaptions'));assert.ok(plan.selected.includes('viewerShell'));assert.ok(plan.selected.includes('conceptInitial'));
+const plan=JSON.parse(full.stdout).browserPlan;assert.equal(plan.scope,'full');assert.equal(plan.available,50);assert.equal(new Set(plan.selected).size,50);assert.ok(plan.selected.includes('tabScroll'));assert.ok(plan.selected.includes('sharedCaptions'));assert.ok(plan.selected.includes('viewerShell'));assert.ok(plan.selected.includes('conceptInitial'));
 const targeted=invoke(['--list','--cases','headerControls,relatedChecks']);assert.equal(targeted.status,0,targeted.stderr);assert.deepEqual(JSON.parse(targeted.stdout).browserPlan.selected,['relatedChecks','headerControls']);
 for(const args of [['--cases','typo'],['--cases','headerControls,typo'],['--cases',''],['--unknown']]){const result=invoke(args);assert.notEqual(result.status,0);assert.doesNotMatch(result.stderr,/Cannot find module/);}
-console.log('Browser selection: strict CLI, actual 49-case registry, targeted/full evidence, timings and retained failure/continuation passed.');
+console.log('Browser selection: strict CLI, actual 50-case registry, targeted/full evidence, timings and retained failure/continuation passed.');
