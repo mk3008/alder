@@ -70,7 +70,13 @@ for(const state of states.states){
  assert(save,'each represented state permits the proposed save behavior: '+state.name);
  assert.equal(save.effect,'unchanged');assert.equal(save.exceptionId,draft.id);assert.match(save.note,/仮説/);
 }
-for(const name of ['購入準備済み','作業中','終結'])assert(states.states.some(s=>s.name===name));
+for(const name of ['購入準備済み','作業中','終結','破棄'])assert(states.states.some(s=>s.name===name));
+const discard=states.states.find(state=>state.name==='破棄');
+assert.equal(bd.findings.find(f=>f.sourceId==='F06').status,'open');
+for(const sourceId of ['T07','T10']){const t=states.transitions.find(x=>x.sourceId===sourceId);assert.equal(t.toId,discard.id);assert.equal(t.effect,'change');assert.match(t.note,/仮説/);}
+for(const sourceId of ['T08','T11']){const t=states.transitions.find(x=>x.sourceId===sourceId);assert.equal(t.fromId,t.toId);assert.equal(t.effect,'unchanged');assert.match(t.note,/仮説/);}
+const failedNew=states.transitions.find(t=>t.sourceId==='T03');assert.equal(failedNew.effect,'no-create');assert.equal(failedNew.toId,'@none');
+assert(states.transitions.every(t=>t.toId!=='@unknown'),'review uses an explicit proposed result');
 pass('PURCHASE-V2-002','states');
 const apply=bd.activities.find(a=>a.name==='備品購入を申請する');
 assert(apply&&draft.activityId===apply.id);
@@ -78,10 +84,19 @@ assert(model.reviewGroups.every(group=>bd.roles.some(role=>role.id===group.revie
 assert.equal(model.reviewGroups.length,4);
 pass('PURCHASE-V2-004','four-groups');
 pass('PURCHASE-V2-004','roles');
+const informationIds=new Set(model.concepts.flatMap(concept=>concept.information.map(info=>info.id)));
 for(const group of model.reviewGroups){
  assert(group.structureStatements.length,'each group describes its information structure');
  const samples=group.capabilities.flatMap(capability=>capability.samples);
- for(const item of group.structureStatements)assert(item.sampleIds.every(id=>samples.some(sample=>sample.id===id)));
+ for(const item of group.structureStatements){
+  assert(item.sampleIds.every(id=>samples.some(sample=>sample.id===id)));
+  assert(item.sourceRefs.length);
+  for(const ref of item.sourceRefs){assert.equal(ref.documentId,bd.id);assert.equal(ref.revision,bd.revision);assert(bd.activities.some(a=>a.id===ref.targetId&&typeof a[ref.section]==='string'));}
+ }
+ for(const sample of samples)for(const block of sample.blocks){
+  for(const column of block.columns)assert(informationIds.has(column.informationId),sample.id+' / '+column.name);
+  for(const row of block.rows)assert.deepEqual(row.cells.map(cell=>cell.columnId).sort(),block.columns.map(column=>column.id).sort(),sample.id+' cell references');
+ }
  for(const id of group.relatedActivityIds)assert(bd.activities.some(a=>a.id===id));
 }
 pass('PURCHASE-V2-004','examples');
@@ -194,6 +209,7 @@ window.eval(built.outputFiles[0].text+';window.StateUI=StateUI;');
 const panel=window.StateUI.stateTransitionPanel(design,states.objectId,()=>{});
 assert.equal(panel.querySelectorAll('[data-transition]').length,states.transitions.length);
 const svg=panel.querySelector('.state-diagram');assert(svg);
+assert.match(svg.textContent,/作成なし/);assert(!svg.textContent.includes('保存不可'));assert(![...svg.querySelectorAll('[data-state]')].some(n=>n.getAttribute('data-state')==='@unknown'));
 for(const path of svg.querySelectorAll('path[d]'))assert(!/NaN|Infinity/.test(path.getAttribute('d')));
 assertStateCaptionRows(stateCaptionSnapshot(svg),stateModel.transitions);
 window.close();

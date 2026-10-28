@@ -2,17 +2,17 @@
   "format": "alder-concept-model-draft",
   "formatVersion": "0.1",
   "id": "purchase-concepts",
-  "revision": "concepts-v2-beta-3",
+  "revision": "concepts-v2-beta-4",
   "kind": "conceptModelDraft",
   "basedOn": {
     "documentId": "purchase-bd",
-    "revision": "bd-v2-beta-3",
+    "revision": "bd-v2-beta-4",
     "verification": "unverified"
   },
   "relatedStates": [
     {
       "documentId": "purchase-states",
-      "revision": "states-v2-beta-3",
+      "revision": "states-v2-beta-4",
       "verification": "unverified"
     }
   ],
@@ -121,42 +121,42 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -230,42 +230,42 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -349,42 +349,42 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -439,28 +439,28 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -502,14 +502,14 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -551,14 +551,14 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "object",
           "targetId": "65c10539-528d-5569-a3a1-5fe721ba1970",
           "section": "information"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -579,14 +579,14 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
           "section": "procedure"
@@ -607,21 +607,21 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "procedure"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "section": "exception"
         },
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
           "section": "procedure"
@@ -642,7 +642,7 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
           "section": "procedure"
@@ -663,7 +663,7 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -684,7 +684,7 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -705,7 +705,7 @@
       "sourceRefs": [
         {
           "documentId": "purchase-bd",
-          "revision": "bd-v2-beta-3",
+          "revision": "bd-v2-beta-4",
           "targetType": "activity",
           "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "section": "procedure"
@@ -1792,7 +1792,7 @@
             "sourceRefs": [
               {
                 "documentId": "purchase-bd",
-                "revision": "bd-v2-beta-3",
+                "revision": "bd-v2-beta-4",
                 "targetType": "activity",
                 "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
                 "section": "exception"
@@ -1900,6 +1900,15 @@
           "description": "品目ごとに品名・数量・単価を区別できます。",
           "sampleIds": [
             "request-submitted"
+          ],
+          "sourceRefs": [
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+              "section": "procedure"
+            }
           ]
         },
         {
@@ -1908,6 +1917,22 @@
           "description": "提出時の内容と、編集中の内容をそれぞれ確認できます。",
           "sampleIds": [
             "request-draft-approved"
+          ],
+          "sourceRefs": [
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+              "section": "exception"
+            },
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+              "section": "procedure"
+            }
           ]
         }
       ]
@@ -2405,6 +2430,22 @@
           "sampleIds": [
             "decision-approved",
             "decision-resubmitted"
+          ],
+          "sourceRefs": [
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "27f9ed6d-c78f-580b-913b-1fab6b20d365",
+              "section": "procedure"
+            },
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+              "section": "procedure"
+            }
           ]
         }
       ]
@@ -3116,6 +3157,15 @@
           "description": "準備番号から対象の申請と品目を確認できます。",
           "sampleIds": [
             "handoff-batch"
+          ],
+          "sourceRefs": [
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
+              "section": "procedure"
+            }
           ]
         }
       ]
@@ -4266,6 +4316,15 @@
           "sampleIds": [
             "result-partial",
             "result-closed"
+          ],
+          "sourceRefs": [
+            {
+              "documentId": "purchase-bd",
+              "revision": "bd-v2-beta-4",
+              "targetType": "activity",
+              "targetId": "218937bd-4b6c-527e-b9e6-14075084b842",
+              "section": "procedure"
+            }
           ]
         }
       ]

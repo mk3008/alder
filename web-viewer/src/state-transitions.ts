@@ -11,7 +11,7 @@ export type StateDeclaration={model:StateModel;error?:never}|{error:string;model
 /** Visual prototype: explicit edges only; no lifecycle or condition inference. */
 function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVGElement{
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
- const labels:Record<string,string>={'@new':'作成前','@none':'保存不可','@unknown':'未決'};
+ const labels:Record<string,string>={'@new':'作成前','@none':'作成なし','@unknown':'未決'};
  const groups=new Map<string,Transition[]>();for(const row of model.transitions){const key=JSON.stringify([row.from,row.to,row.effect,row.activity,row.path]);groups.set(key,[...(groups.get(key)??[]),row]);}
  const rows=[...groups.values()],ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
@@ -35,7 +35,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  for(const id of ordered){projected.set(id,y);y+=captionRowStep(44,departures.get(id)??0);}
  const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
- const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。保存不可は処理結果、未決は設計課題。';svg.append(title);
+ const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。'+(ids.includes('@none')?'作成なしはこの操作の処理結果。':'')+(ids.includes('@unknown')?'未決は設計課題。':'');svg.append(title);
  svg.append(graphMarkers('state-transition-'));
  const shapeElements=new Map<string,SVGElement>(),edgeElements:SVGElement[]=[],captionElements:{element:SVGElement;rows:Transition[]}[]=[];
  let selected:string|undefined=view.selected;
@@ -84,7 +84,7 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
   }
  }
  const views=savedViews.get(design)??new Map<string,DiagramView>();savedViews.set(design,views);const view=views.get(id)??newDiagramView();views.set(id,view);const projectedModel={...model,transitions:model.transitions.map(row=>({...row,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))};root.append(diagramCanvas(document,v=>stateDiagram(projectedModel,v),view));
- const label=(value:string)=>({'@new':'記録作成前','@none':'保存不可（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
+ const label=(value:string)=>({'@new':'記録作成前','@none':'この操作では作成しない（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);
  for(const row of model.transitions){
