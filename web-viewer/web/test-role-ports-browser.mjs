@@ -2,6 +2,7 @@ import {verifyDashPaint} from './test-dash-paint-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {openSourceAction} from './source-menu-browser.mjs';
+import {selectGraphNode} from './graph-selection-browser.mjs';
 export async function verifyRolePorts(browser){
  const results=[];
  for(const width of [1280,320]){
@@ -62,7 +63,7 @@ export async function verifyRolePorts(browser){
    }
    assert.equal(crossings,0,'native paths have no marked card-side crossings');
    for(const id of ['依頼者','検査項目の設計']){
-    await page.locator('#node-list-toggle').click();if(id==='依頼者')await page.locator('#node-category-object').click();else await page.locator('#node-category-activity').click();await page.locator(`[data-list-node="${id}"] .node-navigate`).click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+    await selectGraphNode(page,id);if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
     await page.screenshot({path:`web/evidence/wiring/real-${id==='依頼者'?'requester':'caption-bend'}-${width}.png`});
    }
    await page.locator('.node[data-node="業務設計"] .activity-open').press('Enter');
