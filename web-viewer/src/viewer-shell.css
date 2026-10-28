@@ -96,6 +96,7 @@
 .subsystem-overview-region-title{font:600 14px Inter,"Segoe UI","Noto Sans JP",sans-serif;color:var(--fg);height:32px;padding:4px 6px;text-align:left}
 .subsystem-overview-group.selected .subsystem-overview-region{stroke:var(--review-blue);stroke-width:2}.subsystem-overview-group.review-neighbor .subsystem-overview-region{stroke:var(--review-link);stroke-width:2}
 .subsystem-overview-graph .edge-label{stroke:var(--bg);cursor:pointer}
+.subsystem-overview-graph .edge-label.review-related{stroke-width:7px}
 .subsystem-overview-card-surface{--graph-object-fill:#e7f0ff;--graph-object-border:#75a3e5}
 [data-theme=dark] .subsystem-overview-card-surface{--graph-object-fill:#213b58;--graph-object-border:#6594c5}
 .subsystem-overview-card{width:100%;height:100%;display:grid;grid-template-columns:28px minmax(0,1fr) 40px;align-items:center;gap:9px;padding:9px 0 9px 12px;color:#19385e;cursor:pointer}
