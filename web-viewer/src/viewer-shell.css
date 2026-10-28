@@ -51,11 +51,13 @@
 /* Corresponding identifiers share a tone across sample tables and scenes. */
 .data-example-table td.data-example-key{font-weight:650;background:var(--sample-key-bg);color:var(--sample-key-fg)}
 .data-example-key[data-key-tone=yellow]{--sample-key-bg:#fff0ad;--sample-key-fg:#594500}
+.data-example-key[data-key-tone=blue]{--sample-key-bg:#d6e9ff;--sample-key-fg:#16416d}
 .data-example-key[data-key-tone=cyan]{--sample-key-bg:#bceee9;--sample-key-fg:#134e4a}
 .data-example-key[data-key-tone=green]{--sample-key-bg:#d8edb1;--sample-key-fg:#354d16}
 .data-example-key[data-key-tone=purple]{--sample-key-bg:#e7d9fa;--sample-key-fg:#503477}
 .data-example-key[data-key-tone=orange]{--sample-key-bg:#ffdfbe;--sample-key-fg:#703b11}
 [data-theme=dark] .data-example-key[data-key-tone=yellow]{--sample-key-bg:#594b1d;--sample-key-fg:#fff0ad}
+[data-theme=dark] .data-example-key[data-key-tone=blue]{--sample-key-bg:#173f68;--sample-key-fg:#d6e9ff}
 [data-theme=dark] .data-example-key[data-key-tone=cyan]{--sample-key-bg:#164e4a;--sample-key-fg:#bceee9}
 [data-theme=dark] .data-example-key[data-key-tone=green]{--sample-key-bg:#344c20;--sample-key-fg:#d8edb1}
 [data-theme=dark] .data-example-key[data-key-tone=purple]{--sample-key-bg:#4b3563;--sample-key-fg:#e7d9fa}

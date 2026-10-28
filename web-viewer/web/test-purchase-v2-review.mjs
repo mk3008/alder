@@ -1,0 +1,204 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {runInNewContext} from 'node:vm';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import {parseDocument} from '../src/document-input.ts';
+import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
+
+const authorityBytes=readFileSync('verification/purchase-v2-review.check-items.json');
+const authorityHash='8c20bf4f3c4f2924c67f8b1720268555db99f2123e7d3a9ef1dba02adda0663c';
+const sha=value=>createHash('sha256').update(value).digest('hex');
+const expectedIds=Array.from({length:7},(_,i)=>'PURCHASE-V2-00'+(i+1));
+function verifyAuthority(bytes){
+ assert.equal(sha(bytes),authorityHash,'verification authority must remain unchanged');
+ const parsed=JSON.parse(bytes);assert.deepEqual(parsed.checks.map(check=>check.id),expectedIds);
+ for(const check of parsed.checks)for(const field of ['condition','guarantee','reason','source','verification'])assert(check[field],check.id+' '+field);
+ return parsed;
+}
+const authority=verifyAuthority(authorityBytes);
+const badAuthority=structuredClone(authority);badAuthority.checks.pop();
+assert.throws(()=>verifyAuthority(Buffer.from(JSON.stringify(badAuthority))),/authority must remain unchanged/);
+const coverage={
+ 'PURCHASE-V2-001':['business','model','empty-example'],
+ 'PURCHASE-V2-002':['finding','approved-example','prepared-example','states'],
+ 'PURCHASE-V2-003':['business','model','graph'],
+ 'PURCHASE-V2-004':['four-groups','roles','examples'],
+ 'PURCHASE-V2-005':['revisions','archive','source-boundary'],
+ 'PURCHASE-V2-006':['sample-values','navigation-contract'],
+ 'PURCHASE-V2-007':['standalone-columns','keys']
+};
+function verifyCoverage(expected,results){
+ const wanted=Object.entries(expected).flatMap(([id,cases])=>cases.map(testCase=>id+':'+testCase)).sort();
+ const actual=results.map(result=>result.id+':'+result.case).sort();
+ assert.deepEqual(actual,wanted,'all authority cases must be covered exactly once');
+ assert(results.every(result=>result.status==='pass'));
+}
+const expectedResults=Object.entries(coverage).flatMap(([id,cases])=>cases.map(testCase=>({id,case:testCase,status:'pass'})));
+const missingCase=structuredClone(coverage);missingCase['PURCHASE-V2-001'].pop();
+assert.throws(()=>verifyCoverage(missingCase,expectedResults),/all authority cases/);
+assert.throws(()=>verifyCoverage(coverage,expectedResults.slice(1)),/all authority cases/);
+const results=[];
+const pass=(id,testCase)=>results.push({id,case:testCase,status:'pass'});
+
+const base='../work/concept-review/issue-133/versions/';
+const raw=readFileSync(base+'purchase-v2-beta.json','utf8'),pkg=JSON.parse(raw);
+const model=JSON.parse(readFileSync(base+'purchase-concepts-v2-beta.json','utf8'));
+const bd=pkg.documents.find(x=>x.kind==='businessDesign'),states=pkg.documents.find(x=>x.kind==='stateTransition');
+const original=readFileSync(base+'purchase-v1.json');
+assert.equal(sha(original),'ed5e26675c97ab4376c781cc7a47f72806c8e53d38d428540931c61f0e8b024e');
+pass('PURCHASE-V2-005','archive');
+assert.equal(model.basedOn.documentId,bd.id);assert.equal(model.basedOn.revision,bd.revision);
+assert.equal(states.basedOn.revision,bd.revision);assert.equal(model.relatedStates[0].revision,states.revision);
+assert.equal(model.basedOn.verification,'unverified');
+pass('PURCHASE-V2-005','revisions');
+const draft=bd.exceptions.find(e=>e.name==='下書き保存'),finding=bd.findings.find(f=>f.sourceId==='F05');
+assert.match(draft.description,/前提条件を設けず/);assert.match(draft.description,/品目が0件/);
+const draftOutput=bd.relations.find(relation=>relation.kind==='output'&&relation.fromId===draft.activityId&&relation.label.includes('下書き'));
+assert(draftOutput);assert.match(draftOutput.label,/元の状態・承認・購入準備を保つ案/);
+assert(!draftOutput.label.includes('保存後の状態は未決'));
+pass('PURCHASE-V2-001','business');
+assert.match(draft.description,/元の申請状態・提出内容・承認・購入準備を変更しない/);
+assert.match(draft.description,/仮説/);assert.equal(finding.status,'open');assert.match(finding.content,/採否/);
+assert.match(finding.content,/再提出/);
+pass('PURCHASE-V2-002','finding');
+assert.equal(states.completeness,'partial');
+for(const state of states.states){
+ const save=states.transitions.find(t=>t.fromId===state.id&&t.toId===state.id&&t.condition==='下書きを保存する');
+ assert(save,'each represented state permits the proposed save behavior: '+state.name);
+ assert.equal(save.effect,'unchanged');assert.equal(save.exceptionId,draft.id);assert.match(save.note,/仮説/);
+}
+for(const name of ['購入準備済み','作業中','終結'])assert(states.states.some(s=>s.name===name));
+pass('PURCHASE-V2-002','states');
+const apply=bd.activities.find(a=>a.name==='備品購入を申請する');
+assert(apply&&draft.activityId===apply.id);
+assert(model.reviewGroups.every(group=>bd.roles.some(role=>role.id===group.reviewer.roleId)));
+assert.equal(model.reviewGroups.length,4);
+pass('PURCHASE-V2-004','four-groups');
+pass('PURCHASE-V2-004','roles');
+for(const group of model.reviewGroups){
+ assert(group.structureStatements.length,'each group describes its information structure');
+ const samples=group.capabilities.flatMap(capability=>capability.samples);
+ for(const item of group.structureStatements)assert(item.sampleIds.every(id=>samples.some(sample=>sample.id===id)));
+ for(const id of group.relatedActivityIds)assert(bd.activities.some(a=>a.id===id));
+}
+pass('PURCHASE-V2-004','examples');
+const groups=Object.fromEntries(model.reviewGroups.map(g=>[g.id,g]));
+const request=groups['group-request'],handoff=groups['group-handoff'];
+assert(!handoff.description.includes('1件以上'));
+assert(!handoff.capabilities[0].description.includes('1件以上'));
+pass('PURCHASE-V2-003','model');
+assert.equal(handoff.graph.edges.find(e=>e.id==='prepared-requests-view').toLabel,'複数');
+pass('PURCHASE-V2-003','graph');
+const prepare=bd.activities.find(a=>a.name==='購入を準備する');
+assert.match(prepare.procedure,/一つの申請の品目を別々の準備へ分割しない/);
+assert.match(prepare.procedure,/選択した申請を同じ番号に紐づける/);
+pass('PURCHASE-V2-003','business');
+const save=request.capabilities.find(c=>c.id==='save-draft');
+assert.match(save.description,/入力内容・品目数・申請の状態を問わず/);
+pass('PURCHASE-V2-001','model');
+const sample=id=>save.samples.find(s=>s.id===id);
+assert.equal(sample('request-draft-empty').blocks.find(b=>b.card==='item').rows.length,0);
+pass('PURCHASE-V2-001','empty-example');
+for(const [id,status] of [['request-draft-approved','承認済み'],['request-draft-prepared','購入準備済み']]){
+ const example=sample(id);assert(example);
+ const read=card=>{const block=example.blocks.find(b=>b.card===card);return block.rows.map(row=>Object.fromEntries(block.columns.map(column=>[column.name,row.cells.find(cell=>cell.columnId===column.id)?.value])));};
+ const [header]=read('request'),versions=read('version'),items=read('item');
+ assert.equal(header['保存前の状態'],status);assert.equal(header['保存後の状態'],status);assert.equal(header['承認対象版'],'V1');
+ assert.deepEqual(versions.map(row=>[row['版'],row['状態'],row['承認']]),[['V1','提出済み','承認済み'],['D1','下書き','未提出']]);
+ assert.deepEqual(items.map(row=>[row['版'],row['品名'],row['依頼数量 Q']]),[['V1','ボールペン',10],['D1','ボールペン',12]]);
+ if(status==='購入準備済み')assert.equal(header['準備番号'],'P-001');
+ pass('PURCHASE-V2-002',status==='承認済み'?'approved-example':'prepared-example');
+}
+assert(request.limitations.some(item=>item.id==='no-overwrite-by-draft'));
+assert.equal(request.meta.hypotheses[0].status,'未合意');
+for(const example of [sample('request-draft-approved'),sample('request-draft-prepared')]){
+ const columns=example.blocks.find(b=>b.card==='request').columns.map(c=>c.name);
+ for(const name of ['申請','保存前の状態','保存後の状態','承認対象版'])assert(columns.includes(name));
+}
+pass('PURCHASE-V2-007','standalone-columns');
+const adapter=readFileSync('src/purchase-review.ts','utf8');
+assert.match(adapter,/purchase-v2-beta\.json/);assert.match(adapter,/purchase-concepts-v2-beta\.json/);
+for(const file of ['src/data-examples.ts','src/concept-fixture.ts','src/logical-subsystems.ts'])
+ assert.match(readFileSync(file,'utf8'),/purchase-review/);
+assert.match(readFileSync('vite.config.ts','utf8'),/versions\/purchase-v2-beta\.json/);
+const entryScript=readFileSync('public/review-entry.js','utf8');
+for(const mode of ['business','states','concept','request','examples','subsystems']){
+ let destination;
+ const location={href:'https://example.test/preview/pr-301/commit/review.html',replace(value){destination=value;}};
+ runInNewContext(entryScript,{URL,location,document:{body:{dataset:{review:mode}}}});
+ const url=new URL(destination);
+ assert.equal(decodeURIComponent(url.hash.slice('#source='.length)),'https://example.test/preview/pr-301/commit/purchase-v2-beta.json');
+ assert.equal(url.searchParams.get('review'),mode==='business'?'business':mode==='states'?'states':'concept');
+}
+async function bundleWithModel(candidate){
+ const compiled=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Candidate',
+  plugins:[{name:'replace-model-for-test',setup(builder){builder.onLoad({filter:/purchase-concepts-v2-beta\.json$/},
+   ()=>({contents:JSON.stringify(candidate),loader:'json'}));}}]});
+ return compiled.outputFiles[0].text;
+}
+const changedModel=structuredClone(model);changedModel.reviewGroups[0].capabilities[0].description='表示される更新内容';
+const projectionWindow=new JSDOM('',{runScripts:'outside-only'}).window;
+projectionWindow.eval(await bundleWithModel(changedModel)+';window.Candidate=Candidate;');
+assert.equal(projectionWindow.Candidate.reviewContents[0].capabilities[0].description,'表示される更新内容');
+projectionWindow.close();
+const staleModel=structuredClone(model);staleModel.basedOn.revision='obsolete';
+const mismatchWindow=new JSDOM('',{runScripts:'outside-only'}).window;
+const staleBundle=await bundleWithModel(staleModel);
+assert.throws(()=>mismatchWindow.eval(staleBundle),/Business Design revisions differ/);
+mismatchWindow.close();
+pass('PURCHASE-V2-005','source-boundary');
+
+// The nine older scenes keep their existing cells, while independent status and key columns may be added.
+const legacy=JSON.parse(readFileSync('src/business-review-content.json','utf8'));
+const currentSamples=model.reviewGroups.flatMap(group=>group.capabilities.flatMap(cap=>cap.samples));
+const normalize=name=>({'品名（V1）':'品名','元の品名（V1）':'元の品名'}[name]??name);
+let previousCount=0;
+for(const group of legacy.groups)for(const capability of group.capabilities)for(const old of capability.samples){
+ const next=currentSamples.find(item=>item.id===old.id);assert(next,old.id);previousCount++;
+ for(const block of old.blocks){
+  const updated=next.blocks.find(item=>item.card===block.card);assert(updated);
+  assert.equal(updated.rows.length,block.rows.length,old.id+' row count');
+  for(const [rowIndex,row] of block.rows.entries())for(const [index,value] of row.entries()){
+   const column=updated.columns.find(item=>item.name===normalize(block.columns[index]));assert(column,old.id+' '+block.columns[index]);
+   const cell=updated.rows[rowIndex].cells.find(item=>item.columnId===column.id);assert.equal(cell?.value,value,old.id+' cell value');
+  }
+ }
+}
+assert.equal(previousCount,9);
+pass('PURCHASE-V2-006','sample-values');
+execFileSync(process.execPath,['web/test-navigation-authority-gate.mjs'],{stdio:'pipe'});
+execFileSync(process.execPath,['--experimental-strip-types','web/review-navigation-contract.mjs'],{stdio:'pipe'});
+pass('PURCHASE-V2-006','navigation-contract');
+
+const sampleBundle=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Samples'});
+const groupsBundle=await build({entryPoints:['src/concept-review-fixture.ts'],bundle:true,write:false,format:'iife',globalName:'Groups'});
+const sampleWindow=new JSDOM('<body></body>',{runScripts:'outside-only'}).window;
+sampleWindow.eval(sampleBundle.outputFiles[0].text+';window.Samples=Samples;');
+sampleWindow.eval(groupsBundle.outputFiles[0].text+';window.Groups=Groups;');
+const card=sampleWindow.document.createElement('article');
+sampleWindow.Samples.renderDataExample(card,sampleWindow.Groups.findReviewGroup('group-request'),'request-draft-approved',()=>{});
+const requestCells=[...card.querySelectorAll('[data-sample-key="request:R-101"]')];
+assert(requestCells.length>=4);assert(requestCells.every(cell=>cell.dataset.keyTone==='cyan'));
+for(const cell of card.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone);
+sampleWindow.close();
+pass('PURCHASE-V2-007','keys');
+
+// Exercise the actual renderer, including the expanded state graph, from the same V2 JSON.
+const design=parseDocument(raw),stateModel=design.objectStateTransitions[states.objectId].model;
+const built=await build({entryPoints:['src/state-transitions.ts'],bundle:true,write:false,format:'iife',globalName:'StateUI'});
+const window=new JSDOM('<body></body>',{runScripts:'outside-only'}).window;
+window.eval(built.outputFiles[0].text+';window.StateUI=StateUI;');
+const panel=window.StateUI.stateTransitionPanel(design,states.objectId,()=>{});
+assert.equal(panel.querySelectorAll('[data-transition]').length,states.transitions.length);
+const svg=panel.querySelector('.state-diagram');assert(svg);
+for(const path of svg.querySelectorAll('path[d]'))assert(!/NaN|Infinity/.test(path.getAttribute('d')));
+assertStateCaptionRows(stateCaptionSnapshot(svg),stateModel.transitions);
+window.close();
+verifyCoverage(coverage,results);
+console.log(JSON.stringify({authority:{sha256:authorityHash,ids:expectedIds},cases:results.length,
+ businessRevision:bd.revision,stateRevision:states.revision,modelRevision:model.revision,
+ checks:'source/role/revision, 0-item draft, approved and prepared drafts, state SVG, original nine scenes; three authority/coverage negative cases',
+ limitation:'same-author read-only verification; business hypothesis is not approved'},null,2));

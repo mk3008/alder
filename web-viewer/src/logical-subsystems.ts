@@ -1,9 +1,16 @@
-import draft from './logical-subsystems.json';
+import {purchaseModel,business} from './purchase-review';
 import {cardSurface,diagramCanvas,newDiagramView,type DiagramView} from './diagram-canvas';
 import {graphFocus} from './graph-focus';
 import {graphMarkers,paintGraphException} from './graph-visuals';
 import {routeEdge,type RouteNode} from './routing';
 
+const draft={
+ subsystems:purchaseModel.subsystems.map(item=>({...item,activities:item.activityIds})),
+ connections:purchaseModel.handoffs.map(item=>({id:item.id,from:item.fromSubsystemId,to:item.toSubsystemId,
+  label:item.information,detail:item.description,activities:item.activityIds,returning:item.flowDirection==='return'})),
+ activities:business.activities.map(activity=>({key:activity.id,id:activity.id,name:activity.name})),
+ benefits:purchaseModel.benefits,considerations:purchaseModel.considerations,reviewPoints:purchaseModel.reviewPoints
+};
 export type LogicalSelection={kind:'group'|'connection';id:string};
 type Subsystem=(typeof draft.subsystems)[number];
 type LogicalConnection=(typeof draft.connections)[number];
