@@ -78,6 +78,12 @@ for(const sourceId of ['T08','T11']){const t=states.transitions.find(x=>x.source
 const failedNew=states.transitions.find(t=>t.sourceId==='T03');assert.equal(failedNew.effect,'no-create');assert.equal(failedNew.toId,'@none');
 assert(states.transitions.every(t=>t.toId!=='@unknown'),'review uses an explicit proposed result');
 pass('PURCHASE-V2-002','states');
+assert(bd.relations.every(r=>!r.label.includes('未決')),'graph labels contain business information, not internal tracking');
+assert(bd.objects.every(o=>o.information.every(i=>!i.includes('未決'))),'object labels contain business information, not internal tracking');
+const application=bd.objects.find(o=>o.name==='購入申請');
+const stateInfo=application.information.find(i=>i.startsWith('状態（'));
+for(const state of states.states)assert(stateInfo.includes(state.name),'state referenced by Object: '+state.name);
+assert(pkg.diagnostics.some(d=>d.includes('合意の記録')),'internal unresolved details remain in diagnostics');
 const apply=bd.activities.find(a=>a.name==='備品購入を申請する');
 assert(apply&&draft.activityId===apply.id);
 assert(model.reviewGroups.every(group=>bd.roles.some(role=>role.id===group.reviewer.roleId)));
