@@ -49,12 +49,14 @@ assert.notEqual(tone(batch,'request:R-101'),tone(batch,'request:R-102'),'differe
 // New link IDs must be colored even when they were not part of the purchase fixture.
 const sample=dataExamples.find(e=>e.id==='handoff-batch'),requestBlock=sample.blocks.find(b=>b.card==='request');
 const requestIndex=requestBlock.columns.indexOf('申請'),originalRows=requestBlock.rows.length;
+let extendedKeyColors;
 assert(requestIndex>=0);
 try{
  for(let n=0;n<8;n++){const row=[...requestBlock.rows[0]],keys=row.map(()=>undefined);row[requestIndex]='R-NEW-'+n;keys[requestIndex]='request:R-NEW-'+n;requestBlock.rows.push(row);requestBlock.keyIds.push(keys);}
  const root=data.document.createElement('article');renderDataExample(root,reviewGroups.find(g=>g.id===sample.group),sample.id,()=>{});
  const cells=[...root.querySelectorAll('[data-sample-key]')],colorsByKey=new Map();
  for(const cell of cells){const key=cell.dataset.sampleKey,value=cell.dataset.keyTone;if(colorsByKey.has(key))assert.equal(colorsByKey.get(key),value);colorsByKey.set(key,value);}
+ extendedKeyColors=colorsByKey;
  assert.equal(new Set(colorsByKey.values()).size,colorsByKey.size,'palette overflow does not reuse a tone within a scene');
  assert.equal(colorsByKey.size,11);
  const extras=cells.filter(c=>c.dataset.keyTone.startsWith('extra-'));
@@ -64,17 +66,24 @@ const keyAuthority=JSON.parse(readFileSync('verification/sample-key-colors.check
 const mutedAuthorityBytes=readFileSync('verification/sample-key-muted.check-items.json');
 assert.equal(createHash('sha256').update(mutedAuthorityBytes).digest('hex'),'3cde2e859420ddade4ec52fac5b17cb766f7c47066b0b08d5b86434ce7a75991');
 assert.deepEqual(JSON.parse(mutedAuthorityBytes).checks.map(c=>c.id),['SAMPLE-KEY-MUTED-001','SAMPLE-KEY-MUTED-002']);
-// SAMPLE-KEY-MUTED-001: the actual light and dark CSS must retain readable, muted colors.
+const pastelAuthorityBytes=readFileSync('verification/sample-key-pastel.check-items.json');
+assert.equal(createHash('sha256').update(pastelAuthorityBytes).digest('hex'),'12057964b486d623f5ec89720acae392dc353389574433aee681d22eae923dca');
+const pastelAuthority=JSON.parse(pastelAuthorityBytes);assert.deepEqual(pastelAuthority.checks.map(c=>c.id),['SAMPLE-KEY-PASTEL-001','SAMPLE-KEY-PASTEL-002']);
+// SAMPLE-KEY-PASTEL-001/002: use the chosen colors and keep both themes readable.
 const css=readFileSync('src/viewer-shell.css','utf8'),rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255);
 const luminance=hex=>rgb(hex).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((sum,x,i)=>sum+x*[.2126,.7152,.0722][i],0);
 const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+const lightBackgrounds=new Map();
 for(const name of ['yellow','cyan','green','blue','purple','orange'])for(const dark of [false,true]){
  const selector=(dark?'[data-theme=dark] ':'')+`.data-example-key[data-key-tone=${name}]`;
  const line=css.split('\n').find(line=>line.startsWith(selector+'{'));assert(line,selector);
  const colors=line.match(/--sample-key-bg:(#[0-9a-f]{6});--sample-key-fg:(#[0-9a-f]{6})/i);assert(colors,selector);
  assert(contrast(colors[1],colors[2])>=4.5,selector+' text contrast');
- if(!dark){const values=rgb(colors[1]),max=Math.max(...values),min=Math.min(...values);assert((max-min)/(1-Math.abs(max+min-1))<=.45,selector+' saturation');}
+ if(!dark)lightBackgrounds.set(name,colors[1].toLowerCase());
 }
+assert.deepEqual([...extendedKeyColors.values()].slice(0,5).map(name=>lightBackgrounds.get(name)),pastelAuthority.palette,'first five distinct keys use the selected palette in order');
+assert.deepEqual(['preparation:P-001','request:R-101','request:R-102'].map(key=>lightBackgrounds.get(tone(batch,key))),pastelAuthority.palette.slice(0,3),'published handoff scene matches the chosen preview');
+assert.equal(new Set(lightBackgrounds.values()).size,lightBackgrounds.size,'the retained sixth tone stays distinct');
 assert.equal(findDataExample('group-request','result-none'),undefined);
 const shellCode=await bundle('src/viewer-shell.ts','Shell');
 function harness(query='',group='group-handoff'){
