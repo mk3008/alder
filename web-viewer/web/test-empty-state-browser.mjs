@@ -45,7 +45,7 @@ export function readEmptyFrameInPage(){
  const visible=e=>!e.hidden&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).visibility!=='hidden';
  const v=document.querySelector('#viewport'),hint=document.querySelector('#empty'),link=document.querySelector('#open-sample'),canvas=document.querySelector('#canvas'),toolbar=document.querySelector('.toolbar');
  const linkBox=box(link),hit=document.elementFromPoint(linkBox.left+linkBox.width/2,linkBox.top+linkBox.height/2);
- return {tabs:document.querySelectorAll('.tab').length,window:{width:innerWidth,height:innerHeight},viewport:box(v),hint:{...box(hint),visible:visible(hint),text:hint.textContent},link:{...linkBox,visible:visible(link),hit:hit===link||link.contains(hit),tabIndex:link.tabIndex,disabled:link.getAttribute('aria-disabled')},scroll:[v.scrollLeft,v.scrollTop],extent:[v.scrollWidth,v.scrollHeight],client:[v.clientWidth,v.clientHeight],canvasVisible:visible(canvas),toolbarVisible:visible(toolbar),drawers:['formattedMarkdownDrawer','node-list-drawer'].map(id=>({id,visible:visible(document.getElementById(id))})),toggles:['drawer','node-list-toggle'].map(id=>({id,disabled:document.getElementById(id).disabled,expanded:document.getElementById(id).getAttribute('aria-expanded')}))};
+ return {tabs:document.querySelectorAll('.tab').length,window:{width:innerWidth,height:innerHeight},viewport:box(v),hint:{...box(hint),visible:visible(hint),text:hint.textContent},link:{...linkBox,visible:visible(link),hit:hit===link||link.contains(hit),tabIndex:link.tabIndex,disabled:link.getAttribute('aria-disabled')},scroll:[v.scrollLeft,v.scrollTop],extent:[v.scrollWidth,v.scrollHeight],client:[v.clientWidth,v.clientHeight],canvasVisible:visible(canvas),toolbarVisible:visible(toolbar),explorerVisible:visible(document.getElementById('design-explorer')),drawers:['formattedMarkdownDrawer','node-list-drawer'].map(id=>({id,visible:visible(document.getElementById(id))})),toggles:['drawer','node-list-toggle'].map(id=>({id,disabled:document.getElementById(id).disabled,expanded:document.getElementById(id).getAttribute('aria-expanded')}))};
 }
 export function assertEmptyFrame(frame){
  const contains=(outer,inner)=>inner.left>=outer.left-.75&&inner.top>=outer.top-.75&&inner.right<=outer.right+.75&&inner.bottom<=outer.bottom+.75;
@@ -57,7 +57,7 @@ export function assertEmptyFrame(frame){
  assert.equal(frame.link.hit,true,'real elementFromPoint must reach the sample link');assert.equal(frame.link.tabIndex,0);assert.equal(frame.link.disabled,'false');
  assert.deepEqual(frame.scroll,[0,0]);assert.equal(frame.canvasVisible,false);assert.equal(frame.toolbarVisible,false);
  for(const drawer of frame.drawers)assert.equal(drawer.visible,false,drawer.id+' cannot obscure empty help');
- for(const toggle of frame.toggles){assert.equal(toggle.disabled,toggle.id==='drawer');assert.equal(toggle.expanded,'false');}
+ for(const toggle of frame.toggles){assert.equal(toggle.disabled,toggle.id==='drawer');assert.equal(toggle.expanded,toggle.id==='drawer'?'false':String(frame.explorerVisible));}
  for(let axis=0;axis<2;axis++)assert.ok(frame.extent[axis]<=frame.client[axis]+1,'old world extent cannot remain in the empty scroll area');
  return frame;
 }

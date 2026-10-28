@@ -21,9 +21,10 @@ export async function verifyTabScroll(browser){
   const forward=await row.evaluate(el=>el.scrollLeft);assert.equal(page.url(),url);assert.equal(await row.locator('.tab.active button:first-child').getAttribute('id'),selected);
   await page.mouse.wheel(-100,0);await page.waitForFunction(previous=>document.querySelector('.shell-open-tabs').scrollLeft<previous,forward);
   await row.evaluate(el=>{el.dataset.ctrlWheel='waiting';el.addEventListener('wheel',event=>{if(event.ctrlKey)el.dataset.ctrlWheel=String(event.defaultPrevented);},{once:true});});
-  await page.keyboard.down('Control');await page.mouse.wheel(0,50);await page.keyboard.up('Control');
-  await page.waitForFunction(()=>document.querySelector('.shell-open-tabs').dataset.ctrlWheel!=='waiting');assert.equal(await row.getAttribute('data-ctrl-wheel'),'false','browser zoom wheel is not intercepted');
+  await page.keyboard.down('Control');try{await page.mouse.wheel(0,50);await page.waitForFunction(()=>document.querySelector('.shell-open-tabs').dataset.ctrlWheel!=='waiting');}finally{await page.keyboard.up('Control');}
+  assert.equal(await row.getAttribute('data-ctrl-wheel'),'false','browser zoom wheel is not intercepted');
   // Select without Playwright auto-scrolling; the shell itself must reveal the tab.
+  await row.locator('.concept-tabs .tab button:first-child').first().click();
   await row.evaluate(el=>{el.scrollLeft=0;const button=el.querySelector('.state-tabs .tab button:first-child');button.focus({preventScroll:true});button.click();});
   const visible=await row.evaluate(el=>{const a=el.getBoundingClientRect(),b=el.querySelector('.tab.active').getBoundingClientRect();return b.left>=a.left-1&&b.right<=a.right+1;});assert.equal(visible,true,'the newly selected tab is revealed');
   await row.locator('.tab.active .close').focus();assert.equal(await row.locator('.tab.active .close').evaluate(el=>document.activeElement===el),true,'close remains keyboard focusable');
