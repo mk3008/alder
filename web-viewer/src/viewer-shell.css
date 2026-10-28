@@ -71,7 +71,7 @@
 
 .review-related-activities{list-style:none;margin:0;padding:0}.review-related-activities .review-open{gap:6px}.review-related-activities .review-open:disabled{color:var(--fg);opacity:.65;cursor:default}.data-review-overview h3{margin:16px 0 6px}.data-review-overview .review-owner{font-weight:400}.review-limitation{margin:10px 0 16px}.review-limitation h5{font-size:13px;margin:6px 0 0}.review-limitation p{margin:4px 0}.review-description{margin-top:0!important}
 
-.concept-review-landscape[data-mode=graph]{flex:none;overflow:visible;padding-bottom:0}.landscape-modes{margin:8px 0 12px}.landscape-overview[hidden]{display:none}.landscape-modes button{min-width:72px}
+.concept-review-landscape[data-mode=graph]{flex:none;overflow:visible;padding:0}.landscape-modes{margin:8px 0 12px}.landscape-overview[hidden]{display:none}.landscape-modes button{min-width:72px}
 
 .explorer-subheading{padding:10px 12px 4px 24px;font-size:12px;color:var(--line);font-weight:650}
 /* Logical boundary review shares the graph camera and card presentation. */
@@ -87,7 +87,7 @@
 .logical-card-title{font-weight:650!important}.logical-card-information{font-size:13px!important}
 
 /* The overview uses the common graph canvas; the region contains model cards. */
-.concept-review-landscape[data-mode=overview]{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.concept-review-landscape[data-mode=overview]{display:flex;flex-direction:column;overflow:hidden;padding:0}
 .concept-review-landscape[hidden]{display:none!important}
 .landscape-overview{display:flex;flex:1;min-height:0}
 .landscape-overview .subsystem-overview-canvas{flex:1;height:auto;min-height:0}

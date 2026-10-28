@@ -5,7 +5,7 @@ function add(root:HTMLElement,tag:string,value:string){const el=document.createE
 function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
 export type LandscapeMode='overview'|'graph';
 export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement|undefined,mode:LandscapeMode='overview'){
- root.replaceChildren();add(root,'h1',mode==='overview'?'全体図':'概念相関図');root.dataset.mode=mode;
+ root.replaceChildren();root.dataset.mode=mode;
  if(mode==='overview'&&canvas){const content=document.createElement('div');content.className='landscape-overview';content.append(canvas);root.append(content);}
 
 }
