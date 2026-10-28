@@ -15,10 +15,9 @@
 
 .graph-card-surface{box-shadow:0 2px 5px #152d5012}.diagram-canvas{position:relative;height:70dvh;min-height:360px;overflow:hidden}.diagram-viewport{height:100%;overflow:auto;touch-action:none;background:var(--bg)}.diagram-world{position:relative}.diagram-world>svg{display:block;max-width:none}.state-diagram .state-caption-line.review-related{font-weight:800}
 
-/* Paint heading and body in the same rounded box. An SVG heading covered
-   the top border and squared the corners, especially at fractional zoom. */
-.concept-selection-glow>.concept-card-surface{background:linear-gradient(var(--graph-concept-heading,#edf2f5) 0 34px,var(--graph-object-fill,#e4f4eb) 34px);background-clip:padding-box}
-[data-theme=dark] .concept-card-surface{--graph-object-fill:#1d4137;--graph-object-border:#538f78;--graph-concept-heading:#233440}
+/* Keep the rounded border intact while using one surface for the whole card. */
+.concept-selection-glow>.concept-card-surface{background:var(--graph-object-fill,#e4f4eb);background-clip:padding-box}
+[data-theme=dark] .concept-card-surface{--graph-object-fill:#1d4137;--graph-object-border:#538f78}
 /* The common border color and width must paint on the HTML surface too. */
 :root .node.review-neighbor,:root .node.object.review-neighbor,.graph-shape.review-neighbor .graph-card-surface{border-color:var(--review-link)!important;border-width:var(--graph-neighbor-width)}
 /* Chromium's transient tap rectangle is separate from selection/focus. */
