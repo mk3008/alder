@@ -31,7 +31,7 @@ export function inventory(pkg){
 export function validate(pkg){validateShape(pkg);return validateReferences(pkg);}
 /** Shared structural references for storage JSON and the normalized Viewer model. No source grammar. */
 export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
- demand(pkg.documents.length>0,'Document required');const {map,owner,types}=inventory(pkg),diagnostics=[...pkg.diagnostics];
+ demand(pkg.documents.length>0,'Document required');const {map,owner,types}=inventory(pkg),diagnostics=[...pkg.diagnostics],unresolvedRoles=new Set();
  for(const s of pkg.sources)if(s.uri){const u=new URL(s.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe source URI');}
  const target=(id,type,doc)=>{demand(map.has(id),'Dangling reference: '+id);if(type)demand(types.get(id)===type,'Reference type mismatch: '+id);if(doc)demand(owner.get(id)===doc,'Cross-document mismatch: '+id);return map.get(id);};
  const hasContent=runs=>runs?.some(r=>r.kind==='text'?r.value.trim().length>0:true);
@@ -42,7 +42,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(pkg.formatVersion==='0.4'?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
    if(['0.2','0.3'].includes(d.schemaVersion)){
     demand(new Set(d.roles.map(r=>r.name)).size===d.roles.length,'Duplicate Role name');demand(d.roles.every(r=>r.name===r.name.trim()&&!/[\r\n]/.test(r.name)),'Invalid Role name');
-    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else demand(diagnostics.includes('Role未確定: '+a.id+' — '+a.who),'Unresolved Who requires a diagnostic');}
+    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else unresolvedRoles.add('Role未確定: '+a.id+' — '+a.who);}
    }
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
    for(const e of d.exceptions??[])target(e.activityId,'activity',d.id);
@@ -82,6 +82,10 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    for(const n of d.notes)rich(n.content,d.id);rich(d.intro,d.id);
   }
  }
+ const roleDiagnostics=pkg.diagnostics.filter(d=>d.startsWith('Role未確定:'));
+ demand(new Set(roleDiagnostics).size===roleDiagnostics.length,'Duplicate unresolved Role diagnostic');
+ for(const diagnostic of roleDiagnostics)demand(unresolvedRoles.delete(diagnostic),'Unresolved Who requires a diagnostic matching a current unresolved Activity');
+ demand(unresolvedRoles.size===0,'Unresolved Who requires a diagnostic');
  const sourceKeys=new Set();for(const s of pkg.sources){target(s.documentId,'document');const key=s.documentId+'@'+s.revision;demand(!sourceKeys.has(key),'Duplicate source descriptor');sourceKeys.add(key);}
  for(const d of pkg.externalDocuments){demand(pkg.sources.some(s=>s.documentId===d.id&&s.revision===d.revision),'External source revision missing');demand(d.activities.length>0,'External activity catalog required');diagnostics.push('外部原典はID・表示名の参照目録のみ。本文・業務意味・ハッシュの内容照合は未検証: '+d.id);}
  return {diagnostics,entities:map.size};
