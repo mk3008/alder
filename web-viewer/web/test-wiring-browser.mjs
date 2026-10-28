@@ -114,7 +114,7 @@ export async function verifyRealWiring(browser){
     routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder,spec.activity);
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    assert.deepEqual(detail,initialPositions(routeDesign.graph,routeDesign.activityOrder),'detail uses the same initial layout as the projected overview graph');
+    assert.deepEqual(detail,Object.fromEntries(Object.entries(initialPositions(routeDesign.graph,routeDesign.activityOrder))),'detail uses the same initial layout as the projected overview graph');
     for(let i=1;i<spec.stair.length;i++)assert.ok(detail[spec.stair[i]][0]>detail[spec.stair[i-1]][0]&&detail[spec.stair[i]][1]>detail[spec.stair[i-1]][1],'ordinary inputs and focus form a down-right staircase');
     for(const theme of ['light','dark']){
      if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
