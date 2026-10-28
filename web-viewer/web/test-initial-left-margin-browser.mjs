@@ -7,6 +7,7 @@ import {parseDesign} from '../src/graph.ts';
 import {runBrowserCases} from './browser-cases.mjs';
 import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
 import {svgViewportTransform,assertSvgMatrix,assertSvgLogicalExtent,preflightSvgViewportOracle,svgMatrixTolerance,svgScreenTolerance} from './test-svg-viewport-oracle.mjs';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 
 // Import and --preflight never launch Chromium or make network requests. The
 // browser runner supplies its own browser and serves the built product.
@@ -128,6 +129,7 @@ async function inspectEmpty(page){
  for(const axis of [0,1])assert.ok(frame.extent[axis]<=frame.client[axis]+1,'closed graph does not leave a scroll extent');return frame;
 }
 async function closeAndReopen(page,layout,world){
+ await closeCanvasOverlays(page);
  assert.equal(await page.locator('.tab.active .close').isVisible(),true);
  await page.locator('.tab.active .close').click();assert.equal(await page.locator('#empty-workspace').isVisible(),true);
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="business:overview"]').click();await ready(page,1);
