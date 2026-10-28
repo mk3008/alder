@@ -39,6 +39,7 @@ for(const [focus,visible]of [['overview',Object.keys(tables)],...Object.entries(
  const expectedDiagram=conceptDiagram(selectedIDs,selectedEdges,sizes);
  for(const card of root.querySelectorAll('.node')){const rect=card.querySelector('.concept-select>rect'),b=expectedDiagram.boxes.get(card.dataset.node);assert.equal(Number(rect.getAttribute('x')),b.x);assert.equal(Number(rect.getAttribute('y')),b.y,'actual view uses B after selection');}
  for(const wire of root.querySelectorAll('.wire'))assert.equal(wire.getAttribute('d'),expectedDiagram.routing.routes.find(r=>r.id===Number(wire.dataset.edge)).d,'actual view routes only A-selected input');
+ for(const count of root.querySelectorAll('.endpoint-count'))assert.match(count.textContent,/^(?:1|0\.\.1|N|0\.\.N|1\.\.N)$/,'whole and each individual graph use numeric notation');
 
  const target=focus==='overview'?'version':focus;root.querySelector(`[data-node="${target}"] .concept-select`).dispatchEvent(new canvas.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));assert.equal(messages.at(-1).type,'alder-concept-select');assert.equal(messages.at(-1).id,target);assert.equal(root.querySelector('.selected').dataset.node,target);
 

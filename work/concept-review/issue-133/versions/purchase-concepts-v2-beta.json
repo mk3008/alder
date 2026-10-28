@@ -2,7 +2,7 @@
   "format": "alder-concept-model-draft",
   "formatVersion": "0.1",
   "id": "purchase-concepts",
-  "revision": "concepts-v2-beta-5",
+  "revision": "concepts-v2-beta-6",
   "kind": "conceptModelDraft",
   "basedOn": {
     "documentId": "purchase-bd",
@@ -637,7 +637,7 @@
       "toConceptId": "request",
       "fromPerTarget": "単一または未準備",
       "toPerSource": "複数",
-      "condition": "確定時点の申請の所属を示す。申請単位で選び、品目別に分割しない。取消・再準備の履歴は含めない。",
+      "condition": "未準備は準備0件、現在確定した申請の所属は1件。申請単位で選び、品目別に分割しない。取消・再準備の履歴は含めない。",
       "reviewState": "未レビュー",
       "sourceRefs": [
         {
@@ -648,8 +648,8 @@
           "section": "procedure"
         }
       ],
-      "fromLabel": "確定時1",
-      "toLabel": "複数",
+      "fromLabel": "0..1",
+      "toLabel": "N",
       "kind": "down"
     },
     {
@@ -3072,7 +3072,7 @@
             ],
             "scope": "購入準備に含まれる申請",
             "fromLabel": "1",
-            "toLabel": "複数",
+            "toLabel": "N",
             "kind": "down"
           },
           {
@@ -4358,7 +4358,13 @@
       "申請・品目に表示する結果情報の生成・変更責任と各サブシステムの所有境界。",
       "書き出し日時の履歴の保持範囲。",
       "複数申請をまたぐ共通入庫伝票の扱い。"
-    ]
+    ],
+    "cardinalityNotation": {
+      "N": "複数を扱える。最小件数が0か1かは定めない。",
+      "0..1": "0件または1件。",
+      "0..N": "0件以上。",
+      "1..N": "1件以上。"
+    }
   },
   "presentation": {
     "activityViews": [

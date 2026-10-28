@@ -18,6 +18,10 @@ function verifyAuthority(bytes){
  for(const check of parsed.checks)for(const field of ['condition','guarantee','reason','source','verification'])assert(check[field],check.id+' '+field);
  return parsed;
 }
+const cardinalityAuthorityBytes=readFileSync('verification/concept-cardinality-display.check-items.json');
+const cardinalityAuthorityHash='cda04609972882145a8b4ad616e2d96489136add7da87f6cbf862978454e2fb9';
+function verifyCardinalityAuthority(bytes){assert.equal(sha(bytes),cardinalityAuthorityHash,'cardinality authority must stay unchanged');const a=JSON.parse(bytes);assert.deepEqual(a.checks.map(c=>c.id),['CARDINALITY-DISPLAY-001','CARDINALITY-DISPLAY-002','CARDINALITY-DISPLAY-003']);for(const c of a.checks)for(const field of ['condition','guarantee','reason','source','verification'])assert(c[field]);return a;}
+const cardinalityAuthority=verifyCardinalityAuthority(cardinalityAuthorityBytes);const deletedCardinality=structuredClone(cardinalityAuthority);deletedCardinality.checks.pop();assert.throws(()=>verifyCardinalityAuthority(Buffer.from(JSON.stringify(deletedCardinality))),/authority must stay unchanged/);
 const authority=verifyAuthority(authorityBytes);
 const badAuthority=structuredClone(authority);badAuthority.checks.pop();
 assert.throws(()=>verifyAuthority(Buffer.from(JSON.stringify(badAuthority))),/authority must remain unchanged/);
@@ -111,7 +115,13 @@ const request=groups['group-request'],handoff=groups['group-handoff'];
 assert(!handoff.description.includes('1件以上'));
 assert(!handoff.capabilities[0].description.includes('1件以上'));
 pass('PURCHASE-V2-003','model');
-assert.equal(handoff.graph.edges.find(e=>e.id==='prepared-requests-view').toLabel,'複数');
+assert.equal(handoff.graph.edges.find(e=>e.id==='prepared-requests-view').toLabel,'N');
+const globalPreparation=model.relations.find(r=>r.id==='preparation-request');
+assert.deepEqual([globalPreparation.fromLabel,globalPreparation.toLabel],['0..1','N']);
+assert.equal(globalPreparation.fromPerTarget,'単一または未準備');assert.equal(globalPreparation.toPerSource,'複数');
+assert.match(model.meta.cardinalityNotation.N,/最小件数/);
+for(const edge of [...model.relations,...model.reviewGroups.flatMap(g=>g.graph.edges)])for(const label of [edge.fromLabel,edge.toLabel])assert.match(label,/^(?:1|0\.\.1|N|0\.\.N|1\.\.N)$/,'all model endpoints use numeric notation: '+edge.id);
+
 pass('PURCHASE-V2-003','graph');
 const prepare=bd.activities.find(a=>a.name==='購入を準備する');
 assert.match(prepare.procedure,/一つの申請の品目を別々の準備へ分割しない/);
