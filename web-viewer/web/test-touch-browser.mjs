@@ -1,6 +1,6 @@
 import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
-import {openDisplaySettings} from './toolbar-settings-control.mjs';
+import {openDisplaySettings,closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {touchDriver} from './touch-driver.mjs';
@@ -201,7 +201,7 @@ export async function verifyTouchZoom(browser,{nativeScrollDiagnostics=true}={})
  });
  }else{for(const name of ['diagnostic: native scroll in isolated overflow element','product: Drawer native touch scroll is independent of graph'])results.push({name,status:'not-run',reason:'Known CDP native-scroll input limitation: both isolated control and Drawer failed in run14. Not repeated for the graph-controls change; physical Android is not claimed.'});}
  await run('product: 393px viewport pinch and unchanged browser scale',async({page,view,pinch})=>{
-  await page.setViewportSize({width:393,height:852});await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});const before=await view();
+  await page.setViewportSize({width:393,height:852});await closeCanvasOverlays(page);await page.locator('#viewport').evaluate(n=>{n.scrollLeft=0;n.scrollTop=0;});const before=await view();
   await pinch(before.rect.x+before.rect.width/2,before.rect.y+200,80,120);assert.equal((await view()).zoom,1.5);assert.equal((await view()).scale,1);
  },{blocked:!basic});
  return {input:'Chrome CDP touch emulation, not physical Android',ok:results.every(r=>r.status==='passed'||(!nativeScrollDiagnostics&&r.status==='not-run')),nativeScrollDiagnostics,results};

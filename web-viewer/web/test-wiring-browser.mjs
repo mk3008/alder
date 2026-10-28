@@ -7,6 +7,8 @@ import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
 const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
 import {openSourceAction} from './source-menu-browser.mjs';
+import {selectGraphNode} from './graph-selection-browser.mjs';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 const object=id=>`# Object ${id}\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Record\n\n`;
 const activity=(id,label,output='(none)')=>`# Activity ${id}\n\n## Scope\n\ntrue\n\n## Why\n\nReview\n\n## When\n\nRequested\n\n## Who\n\nReviewer\n\n## Where\n\nOffice\n\n## How\n\n### Input\n\n- Record — ${label}\n\n### Procedure\n\nReview record\n\n### Output\n\n${output}\n\n## Result\n\nReviewed\n\n`;
 const source='# Wiring\n\n'+object('Record')+object('Result')+activity('Review A','data A')+activity('Review B','data B','- Result — written');
@@ -26,8 +28,7 @@ export async function verifyWiring(browser){
     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
     for(const detail of [false,true]){
      if(detail)await page.locator('.node[data-node="Review A"] .activity-open').press('Enter');
-     await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="Record"] .node-navigate').click();
-     if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+     await selectGraphNode(page,'Record');
      if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
      const state=await page.evaluate(()=>{
       const s=document.querySelector('.node[data-node="Record"]'),p=document.querySelector('.edge[data-relation="0"]'),label=document.querySelector('.edge-label[data-relation="0"]'),children=[...document.querySelector('#edges').children].filter(e=>e.matches('.edge,.edge-label'));
@@ -45,11 +46,10 @@ export async function verifyWiring(browser){
       const a=state.labels[i],b=state.labels[j];assert.ok(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y,'rendered captions do not overlap');
      }
      await page.screenshot({path:`web/evidence/wiring/${width}-${theme}-${detail?'detail':'overview'}.png`});
-     // Existing hide/show clears selection without changing saved coordinates.
-     await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();
-     const eye=page.locator('[data-list-node="Record"] .node-eye');await eye.click();await eye.click();
-     await page.locator('#node-list-close').click();assert.equal(await page.locator('.node.selected').count(),0);
-     assert.equal(await page.locator('.edge.review-related,.edge-label.review-related').count(),0);
+     // Switching selection updates the highlighted wiring without moving cards.
+     await selectGraphNode(page,detail?'Review A':'Result');
+     assert.equal(await page.locator('.node.selected').getAttribute('data-node'),detail?'Review A':'Result');
+     if(!detail)assert.equal(await page.locator('.edge[data-relation="0"]').evaluate(e=>e.classList.contains('review-related')),false);
      if(detail)await page.locator('.tab').first().locator('button').first().click();
     }
    }
@@ -97,7 +97,7 @@ export async function verifyRealWiring(browser){
    }
   };
   try{
-   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await closeCanvasOverlays(page);await page.locator('#open-sample').click();
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await closeDrawers();
    const overview=await positions();
    const columns=[...new Set(Object.values(overview).map(p=>p[0]))].sort((a,b)=>a-b);for(let i=1;i<columns.length;i++)assert.equal(columns[i]-columns[i-1],64,'overview uses the same compact step as detail');

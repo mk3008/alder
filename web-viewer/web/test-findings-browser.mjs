@@ -4,6 +4,7 @@ import {readFileSync,mkdirSync} from 'node:fs';
 import {withToolbarPage} from './test-toolbar-settings-browser.mjs';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import {assertToolbarLayout} from './test-toolbar-layout.mjs';
+import {positionGraphNode,selectGraphNode} from './graph-selection-browser.mjs';
 
 const markdown=readFileSync(new URL('../../tools/fixtures/design-findings/example.md',import.meta.url),'utf8');
 export async function verifyFindings(browser){
@@ -31,9 +32,10 @@ export async function verifyFindings(browser){
     await page.locator('#display-settings-toggle').click();await assertToolbarLayout(page,{open:true});
     await page.screenshot({path:`web/evidence/design-findings-96/graph-${width}.png`});
     await page.locator('#display-settings-toggle').click();
-    await page.locator('#node-list-toggle').click();
-    await page.locator('#node-list-search').fill('依頼');
-    await page.locator('#drawer-mode-items').focus();await page.keyboard.press('ArrowRight');
+    // Findings are opened from a graph badge in the current explorer.
+    await positionGraphNode(page,'受付情報');
+    await page.locator('.node[data-node="受付情報"] .finding-badges').press('Enter');
+    await page.locator('.finding-back').click();await page.locator('.finding-all').click();
     assert.equal(await page.locator('#drawer-mode-findings').getAttribute('aria-selected'),'true');
     assert.match(await page.locator('#drawer-mode-findings').textContent(),/4/);
     const panel=page.locator('#node-list');
@@ -69,17 +71,15 @@ export async function verifyFindings(browser){
     assert.match(await page.locator('#node-list').textContent(),/関連先：未設定/);
     assert.equal(await page.locator('#node-list [data-finding-target]').count(),0);
     await page.locator('.finding-back').click();
-    await page.locator('#drawer-mode-items').click();
-    // The existing accessible item list remains the keyboard selection route.
-    await page.locator('#node-category-activity').click();await page.locator('#node-list-search').fill('依頼');
-    const row=page.locator('#node-list button').filter({hasText:'依頼を受け付ける'}).first();
-    await row.focus();await page.keyboard.press('Enter');
+    await page.locator('#node-list-close').click();
+    // The graph is the current route for selecting an item without opening a tab.
+    await selectGraphNode(page,'依頼を受け付ける');
     await page.locator('#drawer').evaluate(e=>{if(e.getAttribute('aria-expanded')!=='true')e.click();});
     assert.match(await page.locator('#detail').textContent(),/依頼を受け付ける/);assert.equal(await page.locator('#detail .finding-card').count(),0);
     if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
     if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
     // Badge selection enters the left index without replacing the right source.
-    const badge=page.locator('.node[data-node="受付情報"] .finding-badges');await badge.focus();await page.keyboard.press('Enter');
+    await positionGraphNode(page,'受付情報');const badge=page.locator('.node[data-node="受付情報"] .finding-badges');await badge.focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#node-list-drawer').isVisible(),true);assert.equal(await page.locator('#node-list [data-finding-id="F01"]').count(),1);assert.equal(await page.locator('#detail .finding-card').count(),0);
     const leftDetail=await page.locator('#node-list').boundingBox();assert.ok(leftDetail.x>=0&&leftDetail.x+leftDetail.width<=width+.5);assert.ok(await page.locator('#node-list').evaluate(e=>e.scrollWidth<=e.clientWidth+1));
     const flat=await page.locator('#node-list').evaluate(root=>{
