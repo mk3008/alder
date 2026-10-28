@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "a064344119160309cc2438ecc29f87f8c70d10f0",
+  "sourceTree": "803273a1e8a80c055ee05f50479c977cd56cd0c6",
+  "businessRevision": "bd-v2-beta-3",
+  "modelRevision": "concepts-v2-beta-3",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-DHIvPhg1.css": "2e47dda6858bc9aa6cbfe61de142630d607025dcab0553cb328f79fe086ade90",
+    "assets/concept-DI5Yn1Eb.js": "58d2dcaa8f12f81721b010b671c6f557dca67a6f7c12ab214c5dcf6e98153ae8",
+    "assets/concept-review-fixture-B91lao83.js": "7729f7979b24e6fb8b3543228c127024b297840970639870c811d0e3100e7c8c",
+    "assets/main-C8_mK2pv.js": "1777d310aa266648c93cfbdc568f0fe76bc6ac3fec58ff090a08bf5fab536857",
+    "assets/main-qmF9y3ld.css": "9de24460143125b32207c10fb5d5007d6be4a229a90efa9c1ca4aa2ec6a4bb17",
+    "concept-preview/neighborhood.js": "3db53cbe1f21f9cd2098b63cee57ffaeffe4084a0ed53d4809ba50dbc940b32a",
+    "concept.html": "9a8fdc9136d4a657311752be131bbfae645ba6765c4e5a43db01e5618a80ed2d",
+    "index.html": "7a3dec248c7ee43c0582a488cc0bd3665b7388f698ff19224155240c7ba18175",
+    "purchase-v2-beta.json": "94fbd488afd4786802df825466465b96e0363701faa9dfb56f62016e1eec64eb",
+    "review-business.html": "1e4c49a6d509c3e64fdd52361174c00820e59b2d0766a49e3fe595ce120d3cc8",
+    "review-capabilities.html": "2bedd57794372348b39b7467ba9ef3ca3468cfc96591e85bdc1a81157dac0ee5",
+    "review-concept.html": "a442156615137e2338b177f41b86a880d430a5acfeb15877b7786adaa3b8c74b",
+    "review-data-examples.html": "984e3942213ea7dc6ea264e3c6d3ebdd09a19f75507132be79522570dbd4a85d",
+    "review-entry.js": "e88137a51c3336e9788ad956a600980651bebf0bdba5ffde4c67859859c0a80c",
+    "review-logical-subsystems.html": "7b40b0b9d2aed5dae56ad2e063a3f201ef896a702baf6cd56c8e84a672cae5ee",
+    "review-states.html": "c325b768337813f9e8cd89cd08f4519324e1a9599bea742978b3d16d8969d731"
+  }
+}
