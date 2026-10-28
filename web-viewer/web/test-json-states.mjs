@@ -2,6 +2,8 @@ import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {build} from 'esbuild';import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
+import {createHash} from 'node:crypto';
+const presentation=readFileSync('verification/state-page-presentation.check-items.json');assert.equal(createHash('sha256').update(presentation).digest('hex'),'ff7038b392d927be5e75812564c59d0547964fa35428701f1a626b34c377e892');assert.deepEqual(JSON.parse(presentation).checks.map(item=>item.id),['STATE-PAGE-001','STATE-PAGE-002']);
 const folder='../work/json-state/issue-275/',raw=readFileSync(folder+'purchase.json','utf8'),md=readFileSync(folder+'supported-state.md','utf8'),pkg=JSON.parse(raw),bd=pkg.documents[0],st=pkg.documents[1];
 const json=parseDocument(raw),legacy=parseDocument(md),projected=json,object=bd.objects.find(o=>o.id===st.objectId);
 const normalized=structuredClone(legacy.objectStateTransitions[object.name]);for(const row of normalized.model.transitions)row.activity=bd.activities.find(a=>a.name===row.activity).id;for(const row of normalized.model.transitions){delete row.exceptionId;if(row.exception==='-')delete row.exception;}
