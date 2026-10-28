@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 const bundle=async(path,globalName)=>(await build({entryPoints:[path],bundle:true,write:false,format:'iife',globalName,loader:{'.css':'empty'}})).outputFiles[0].text;
 const data=new JSDOM('',{runScripts:'outside-only'}).window;
 data.eval(await bundle('src/data-examples.ts','Samples')+';globalThis.Samples=Samples;');data.eval(await bundle('src/concept-review-fixture.ts','Review')+';globalThis.Review=Review;');
@@ -27,21 +28,53 @@ assert(reviewGroups.find(g=>g.id==='group-handoff').concepts.request.fields.some
 const badPreparation=batch.cloneNode(true);badPreparation.querySelector('[data-example-card=request] tbody tr').firstElementChild.textContent='P-999';assert.throws(()=>verifyBusinessData(badPreparation,'group-handoff'),/target belongs to the displayed preparation/);
 const missingPreparation=batch.cloneNode(true);missingPreparation.querySelector('[data-example-card=request] thead tr').firstElementChild.remove();assert.throws(()=>verifyBusinessData(missingPreparation,'group-handoff'),/explicitly names preparation number/);
 const badVersion=batch.cloneNode(true);badVersion.querySelector('[data-example-card=request] tbody tr').children[6].textContent='V2';assert.throws(()=>verifyBusinessData(badVersion,'group-handoff'),/version must match/);
-// SAMPLE-KEY-COLOR-001: verify the actual rendered cells, including non-key exclusion.
-const keyColors=new Map();
+// SAMPLE-KEY-MUTED-002: distinguish keys within each rendered scene, not across scenes.
 const domains={'準備番号':'preparation','申請':'request','対象申請':'request','入庫回':'receipt'};
-for(const root of rendered.values())for(const table of root.querySelectorAll('table')){
- const headers=[...table.querySelectorAll('th')].map(th=>th.textContent);
- for(const row of table.querySelectorAll('tbody tr'))for(const [index,cell] of [...row.children].entries()){
-  const domain=domains[headers[index]];
-  if(!domain){assert(!cell.hasAttribute('data-key-tone'),'non-key cells are uncolored');continue;}
-  const key=domain+':'+cell.textContent;assert.equal(cell.dataset.sampleKey,key);assert(cell.classList.contains('data-example-key'));
-  assert(cell.dataset.keyTone,'identifier cell is colored');if(keyColors.has(key))assert.equal(cell.dataset.keyTone,keyColors.get(key),'same key has the same color across tables/scenes');keyColors.set(key,cell.dataset.keyTone);
+for(const [scene,root] of rendered){
+ const keyColors=new Map();
+ for(const table of root.querySelectorAll('table')){
+  const headers=[...table.querySelectorAll('th')].map(th=>th.textContent);
+  for(const row of table.querySelectorAll('tbody tr'))for(const [index,cell] of [...row.children].entries()){
+   const domain=domains[headers[index]];
+   if(!domain){assert(!cell.hasAttribute('data-key-tone'),'non-key cells are uncolored');continue;}
+   const key=domain+':'+cell.textContent;assert.equal(cell.dataset.sampleKey,key);assert(cell.classList.contains('data-example-key'));
+   assert(cell.dataset.keyTone,'identifier cell is colored');if(keyColors.has(key))assert.equal(cell.dataset.keyTone,keyColors.get(key),'same key has the same color across tables');keyColors.set(key,cell.dataset.keyTone);
+  }
  }
+ assert.equal(new Set(keyColors.values()).size,keyColors.size,'different keys use different colors within '+scene);
 }
-assert.equal(keyColors.size,6);assert.equal(new Set(keyColors.values()).size,6,'distinct IDs use distinct colors');
-assert.equal(keyColors.get('preparation:P-001'),'yellow');assert.equal(keyColors.get('request:R-101'),'cyan');assert.equal(keyColors.get('request:R-102'),'green');
+const tone=(root,key)=>root.querySelector(`[data-sample-key="${key}"]`).dataset.keyTone;
+assert.equal(tone(batch,'preparation:P-001'),tone(rendered.get('request-submitted'),'request:R-101'),'different pages can reuse a color');
+assert.notEqual(tone(batch,'request:R-101'),tone(batch,'request:R-102'),'different requests in the same scene remain distinguishable');
+// New link IDs must be colored even when they were not part of the purchase fixture.
+const sample=dataExamples.find(e=>e.id==='handoff-batch'),requestBlock=sample.blocks.find(b=>b.card==='request');
+const requestIndex=requestBlock.columns.indexOf('申請'),originalRows=requestBlock.rows.length;
+assert(requestIndex>=0);
+try{
+ for(let n=0;n<8;n++){const row=[...requestBlock.rows[0]],keys=row.map(()=>undefined);row[requestIndex]='R-NEW-'+n;keys[requestIndex]='request:R-NEW-'+n;requestBlock.rows.push(row);requestBlock.keyIds.push(keys);}
+ const root=data.document.createElement('article');renderDataExample(root,reviewGroups.find(g=>g.id===sample.group),sample.id,()=>{});
+ const cells=[...root.querySelectorAll('[data-sample-key]')],colorsByKey=new Map();
+ for(const cell of cells){const key=cell.dataset.sampleKey,value=cell.dataset.keyTone;if(colorsByKey.has(key))assert.equal(colorsByKey.get(key),value);colorsByKey.set(key,value);}
+ assert.equal(new Set(colorsByKey.values()).size,colorsByKey.size,'palette overflow does not reuse a tone within a scene');
+ assert.equal(colorsByKey.size,11);
+ const extras=cells.filter(c=>c.dataset.keyTone.startsWith('extra-'));
+ for(const theme of ['light','dark']){const backgrounds=extras.map(c=>c.style.getPropertyValue('--sample-key-extra-'+theme));assert(backgrounds.every(Boolean));assert.equal(new Set(backgrounds).size,extras.length,'extra keys use different '+theme+' backgrounds');}
+}finally{requestBlock.rows.length=originalRows;requestBlock.keyIds.length=originalRows;}
 const keyAuthority=JSON.parse(readFileSync('verification/sample-key-colors.check-items.json','utf8'));assert.deepEqual(keyAuthority.checks.map(c=>c.id),['SAMPLE-KEY-COLOR-001']);
+const mutedAuthorityBytes=readFileSync('verification/sample-key-muted.check-items.json');
+assert.equal(createHash('sha256').update(mutedAuthorityBytes).digest('hex'),'3cde2e859420ddade4ec52fac5b17cb766f7c47066b0b08d5b86434ce7a75991');
+assert.deepEqual(JSON.parse(mutedAuthorityBytes).checks.map(c=>c.id),['SAMPLE-KEY-MUTED-001','SAMPLE-KEY-MUTED-002']);
+// SAMPLE-KEY-MUTED-001: the actual light and dark CSS must retain readable, muted colors.
+const css=readFileSync('src/viewer-shell.css','utf8'),rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255);
+const luminance=hex=>rgb(hex).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((sum,x,i)=>sum+x*[.2126,.7152,.0722][i],0);
+const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+for(const name of ['yellow','cyan','green','blue','purple','orange'])for(const dark of [false,true]){
+ const selector=(dark?'[data-theme=dark] ':'')+`.data-example-key[data-key-tone=${name}]`;
+ const line=css.split('\n').find(line=>line.startsWith(selector+'{'));assert(line,selector);
+ const colors=line.match(/--sample-key-bg:(#[0-9a-f]{6});--sample-key-fg:(#[0-9a-f]{6})/i);assert(colors,selector);
+ assert(contrast(colors[1],colors[2])>=4.5,selector+' text contrast');
+ if(!dark){const values=rgb(colors[1]),max=Math.max(...values),min=Math.min(...values);assert((max-min)/(1-Math.abs(max+min-1))<=.45,selector+' saturation');}
+}
 assert.equal(findDataExample('group-request','result-none'),undefined);
 const shellCode=await bundle('src/viewer-shell.ts','Shell');
 function harness(query='',group='group-handoff'){

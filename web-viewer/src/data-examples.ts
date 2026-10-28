@@ -30,7 +30,17 @@ export const contentFor=(group:string)=>reviewContents.find(content=>content.id=
 export const capabilityFor=(group:string,sample:string)=>contentFor(group)?.capabilities.find(capability=>capability.samples.some(example=>example.id===sample));
 // A flat adapter preserves scene IDs/URLs; nested capability JSON is the sole content source.
 export const dataExamples:DataExample[]=reviewContents.flatMap(group=>group.capabilities.flatMap(capability=>capability.samples.map(sample=>({...sample,group:group.id}))));
-const keyTones:Record<string,string>={'preparation:P-001':'yellow','request:R-100':'blue','request:R-101':'cyan','request:R-102':'green','receipt:RC-001':'purple','receipt:RC-002':'orange'};
+const keyPalette=['yellow','cyan','green','blue','purple','orange'];
+function colorKeyCell(cell:HTMLElement,key:string,colors:Map<string,string>){
+ let tone=colors.get(key);
+ if(!tone){tone=keyPalette[colors.size]??`extra-${colors.size}`;colors.set(key,tone);}
+ cell.dataset.sampleKey=key;cell.dataset.keyTone=tone;cell.className='data-example-key';
+ if(tone.startsWith('extra-')){
+  const hue=(Number(tone.slice(6))*137.508%360).toFixed(2);
+  cell.style.setProperty('--sample-key-extra-light',`hsl(${hue} 26% 78%)`);
+  cell.style.setProperty('--sample-key-extra-dark',`hsl(${hue} 24% 25%)`);
+ }
+}
 export const examplesFor=(group:string)=>dataExamples.filter(example=>example.group===group);
 export const findDataExample=(group:string,id:string|undefined|null)=>examplesFor(group).find(example=>example.id===id);
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
@@ -41,9 +51,10 @@ export function renderExampleControls(root:HTMLElement,group:ReviewGroup,current
 }
 export function renderDataExample(root:HTMLElement,group:ReviewGroup,id:string,change:(id:string)=>void){
  const example=findDataExample(group.id,id);if(!example)throw Error('Unknown data example: '+id);root.replaceChildren();root.dataset.dataExample=id;
+ const keyColors=new Map<string,string>();
  add(root,'p','架空のデータ例です。各場面は独立した例で、同じ申請番号でも同時に成立する状態ではありません。').className='data-example-caption';
  const label=document.createElement('label');label.className='data-example-picker';add(label,'span','場面');const select=document.createElement('select');select.setAttribute('aria-label','データ例の場面');for(const capability of contentFor(group.id)?.capabilities??[]){const options=document.createElement('optgroup');options.label=capability.title;for(const candidate of capability.samples){const option=document.createElement('option');option.value=candidate.id;option.textContent=candidate.name;options.append(option);}select.append(options);}select.value=id;select.onchange=()=>change(select.value);label.append(select);root.append(label);
  const capability=capabilityFor(group.id,id)!;root.dataset.capability=capability.id;add(root,'h2',capability.title);add(root,'p',capability.description).className='data-example-capability';add(root,'h3',example.name).className='data-example-scene';add(root,'p',example.when).className='data-example-when';add(root,'p',example.meaning).className='data-example-meaning';
- for(const block of example.blocks){const section=document.createElement('section');section.className='data-example-block';section.dataset.exampleCard=block.card;add(section,'h3',group.concepts[block.card].name);const wrap=document.createElement('div');wrap.className='data-example-table';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label',group.concepts[block.card].name+'のデータ表');const table=document.createElement('table');table.setAttribute('aria-label',group.concepts[block.card].name+'のデータ例');const caption=document.createElement('caption');caption.textContent=group.concepts[block.card].name+'に入る情報';table.append(caption);const head=document.createElement('thead'),tr=document.createElement('tr');for(const column of block.columns){const th=add(tr,'th',column);th.setAttribute('scope','col');}head.append(tr);table.append(head);const body=document.createElement('tbody');for(const [rowIndex,row] of block.rows.entries()){const tr=document.createElement('tr');for(const [index,cell] of row.entries()){const td=add(tr,'td',String(cell));const key=block.keyIds[rowIndex][index],tone=key&&keyTones[key];if(tone){td.dataset.sampleKey=key;td.dataset.keyTone=tone;td.className='data-example-key';td.title=block.columns[index]+'：'+cell;}}body.append(tr);}table.append(body);wrap.append(table);section.append(wrap);if(!block.rows.length)add(section,'p',block.empty??'データはありません。');root.append(section);}
+ for(const block of example.blocks){const section=document.createElement('section');section.className='data-example-block';section.dataset.exampleCard=block.card;add(section,'h3',group.concepts[block.card].name);const wrap=document.createElement('div');wrap.className='data-example-table';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label',group.concepts[block.card].name+'のデータ表');const table=document.createElement('table');table.setAttribute('aria-label',group.concepts[block.card].name+'のデータ例');const caption=document.createElement('caption');caption.textContent=group.concepts[block.card].name+'に入る情報';table.append(caption);const head=document.createElement('thead'),tr=document.createElement('tr');for(const column of block.columns){const th=add(tr,'th',column);th.setAttribute('scope','col');}head.append(tr);table.append(head);const body=document.createElement('tbody');for(const [rowIndex,row] of block.rows.entries()){const tr=document.createElement('tr');for(const [index,cell] of row.entries()){const td=add(tr,'td',String(cell));const key=block.keyIds[rowIndex][index];if(key){colorKeyCell(td,key,keyColors);td.title=block.columns[index]+'：'+cell;}}body.append(tr);}table.append(body);wrap.append(table);section.append(wrap);if(!block.rows.length)add(section,'p',block.empty??'データはありません。');root.append(section);}
  if(example.note)add(root,'p',example.note).className='data-example-note';
 }

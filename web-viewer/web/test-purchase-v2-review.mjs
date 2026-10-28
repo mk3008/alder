@@ -212,7 +212,7 @@ sampleWindow.eval(groupsBundle.outputFiles[0].text+';window.Groups=Groups;');
 const card=sampleWindow.document.createElement('article');
 sampleWindow.Samples.renderDataExample(card,sampleWindow.Groups.findReviewGroup('group-request'),'request-draft-approved',()=>{});
 const requestCells=[...card.querySelectorAll('[data-sample-key="request:R-101"]')];
-assert(requestCells.length>=4);assert(requestCells.every(cell=>cell.dataset.keyTone==='cyan'));
+assert(requestCells.length>=4);assert(requestCells[0].dataset.keyTone);assert(requestCells.every(cell=>cell.dataset.keyTone===requestCells[0].dataset.keyTone));
 for(const cell of card.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone);
 sampleWindow.close();
 pass('PURCHASE-V2-007','keys');
