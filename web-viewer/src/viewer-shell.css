@@ -28,7 +28,7 @@
 .tab-strip #document-actions[hidden],.tab-strip:has(#document-actions[hidden]) #document-actions-toggle{display:none!important}
 /* MENU-001: a regular-weight parent label at the left and a line chevron at the right. */
 .explorer-parent{justify-content:space-between;padding:6px 13px;font-size:14px;font-weight:400;line-height:1.5}.explorer-parent>.explorer-parent-label{width:auto;text-align:left;flex:1;min-width:0}.explorer-parent>.explorer-chevron{width:16px;height:16px;flex:0 0 16px;margin-left:12px}
-.explorer-subparent{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:40px;gap:8px;padding:6px 13px 6px 29px;text-align:left;color:var(--fg);border-radius:0;font-size:13px;line-height:1.5}.explorer-subparent:hover{background:var(--select)}.explorer-subparent>.explorer-parent-label{flex:1;min-width:0}.explorer-subparent>.explorer-chevron{width:16px;height:16px;flex:0 0 16px;margin-left:12px}.explorer-item.explorer-item-nested{padding-left:45px}.explorer-empty.explorer-empty-nested{padding-left:45px}@media(pointer:coarse){.explorer-subparent{min-height:44px}}
+.explorer-subparent{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:40px;gap:8px;padding:6px 13px 6px 29px;text-align:left;color:var(--fg);border-radius:0;font-size:14px;line-height:1.5}.explorer-subparent:hover{background:var(--select)}.explorer-subparent>.explorer-parent-label{flex:1;min-width:0}.explorer-subparent>.explorer-chevron{width:16px;height:16px;flex:0 0 16px;margin-left:12px}.explorer-item.explorer-item-nested{padding-left:45px}.explorer-empty.explorer-empty-nested{padding-left:45px}@media(pointer:coarse){.explorer-subparent{min-height:44px}}
 /* Every view uses the same label, ellipsis and centered close-icon geometry. */
 .shell-open-tabs .tab{max-width:250px;align-items:center}.shell-open-tabs .tab>button:first-child{display:flex;align-items:center;max-width:218px;min-width:0;height:44px;padding:0 10px;flex:1;line-height:1.3}.view-tab-label{display:flex;align-items:center;gap:7px;min-width:0;max-width:100%;width:100%}.view-tab-kind{display:inline-flex;align-items:center;gap:3px;flex-shrink:0;font-size:11px;font-weight:600;color:var(--tab-kind-color)}.view-tab-kind svg{width:14px!important;height:14px!important}.view-tab-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.shell-open-tabs .tab>.close{display:inline-flex;align-items:center;justify-content:center;flex:0 0 32px;width:32px;height:44px;min-height:44px;margin:0;padding:0;line-height:1}.shell-open-tabs .tab>.close svg{display:block;width:14px;height:14px;flex:none}.shell-open-tabs .tab>.close:hover{background:var(--select)}.shell-open-tabs .tab>.close[hidden]{display:none!important}
 .tab[data-view-kind=business]{--tab-kind-color:#357aa6}.tab[data-view-kind=states]{--tab-kind-color:#008576}.tab[data-view-kind=concept]{--tab-kind-color:#7b4abd}[data-theme=dark] .tab[data-view-kind=business]{--tab-kind-color:#8fc8ef}[data-theme=dark] .tab[data-view-kind=states]{--tab-kind-color:#8dd4c5}[data-theme=dark] .tab[data-view-kind=concept]{--tab-kind-color:#c9b2ff}
@@ -85,6 +85,26 @@
 @media(max-width:800px){.logical-subsystems-panel{padding:12px}.logical-subsystems-canvas{height:50dvh;min-height:320px}}
 
 .logical-card-title{font-weight:650!important}.logical-card-information{font-size:13px!important}
+
+/* The overview uses the common graph canvas; the region contains model cards. */
+.concept-review-landscape[data-mode=overview]{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.concept-review-landscape[hidden]{display:none!important}
+.landscape-overview{display:flex;flex:1;min-height:0}
+.landscape-overview .subsystem-overview-canvas{flex:1;height:auto;min-height:0}
+.subsystem-overview-region{fill:var(--panel);stroke:var(--subtle);stroke-width:1.5;pointer-events:none}
+.subsystem-overview-region-title{font:600 14px Inter,"Segoe UI","Noto Sans JP",sans-serif;fill:var(--fg);pointer-events:none}
+.subsystem-overview-card-surface{--graph-object-fill:#e7f0ff;--graph-object-border:#75a3e5}
+[data-theme=dark] .subsystem-overview-card-surface{--graph-object-fill:#213b58;--graph-object-border:#6594c5}
+.subsystem-overview-card{width:100%;height:100%;display:grid;grid-template-columns:28px minmax(0,1fr) 40px;align-items:center;gap:9px;padding:9px 0 9px 12px;color:#19385e;cursor:pointer}
+[data-theme=dark] .subsystem-overview-card{color:#dbeaff}
+.subsystem-overview-card .subsystem-overview-role-icon{display:grid;place-items:center;width:28px;height:28px;max-height:none;border-radius:50%;background:var(--role-color);color:white}
+.subsystem-overview-role-icon svg{width:16px;height:16px}
+.subsystem-overview-card .subsystem-overview-labels{display:flex;flex-direction:column;min-width:0;max-height:none;gap:2px;line-height:1.2}
+.subsystem-overview-card .subsystem-overview-kind{font-size:10px;font-weight:650;max-height:none}
+.subsystem-overview-name{font-size:14px;font-weight:650;overflow-wrap:anywhere}
+.subsystem-overview-role{font-size:11px;color:inherit;opacity:.85}
+.subsystem-overview-open{width:40px;height:44px;display:grid;place-items:center;border-radius:4px;touch-action:manipulation}
+.subsystem-overview-open svg{width:20px;height:20px}.subsystem-overview-open:hover{background:var(--select)}
 
 /* Object details use the existing Activity detail-icon geometry. */
 .node.object .node-text{padding-right:36px}

@@ -4,7 +4,7 @@ import purchaseModel from '../../work/concept-review/issue-133/versions/purchase
 // This is the explicit purchase review fixture. It never extracts rules from prose.
 const document = purchaseDocument.documents.find(item => item.kind === 'businessDesign');
 if (!document || !document.roles || !document.activities) throw Error('Purchase Business Design is unavailable');
-const business = document as {id:string;revision:string;roles:{id:string;name:string}[];
+const business = document as {id:string;revision:string;roles:{id:string;name:string;color:string}[];
  activities:{id:string;name:string;procedure:string;exception:string|null;result:string}[]};
 if (purchaseModel.basedOn.documentId !== business.id || purchaseModel.basedOn.revision !== business.revision) {
  throw Error('Purchase model and Business Design revisions differ');

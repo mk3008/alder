@@ -1,18 +1,17 @@
 import {contentFor} from './data-examples';
 import {createElement,SquareArrowOutUpRight,ArrowLeft} from 'lucide';
-import {reviewGroups,type ReviewGroup} from './concept-review-fixture';
+import {type ReviewGroup} from './concept-review-fixture';
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
 function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
 export type LandscapeMode='overview'|'graph'|'subsystems';
-export function renderReviewLandscape(root:HTMLElement,open:(id:string)=>void,mode:LandscapeMode='overview',changeMode:(mode:LandscapeMode)=>void=()=>{}){
- root.replaceChildren();add(root,'h1','データ構造全体像');
+export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement,mode:LandscapeMode='overview',changeMode:(mode:LandscapeMode)=>void=()=>{}){
+ root.replaceChildren();add(root,'h1','全体図');
  const modes=document.createElement('div');modes.className='data-example-modes landscape-modes';modes.setAttribute('aria-label','全体像の表示切替');for(const [label,value]of [['概要','overview'],['グラフ','graph'],['論理サブシステム','subsystems']] as const){const b=add(modes,'button',label) as HTMLButtonElement;b.type='button';b.setAttribute('aria-pressed',String(mode===value));b.onclick=()=>changeMode(value);}root.append(modes);root.dataset.mode=mode;const content=document.createElement('div');content.className='landscape-overview';content.hidden=mode!=='overview';root.append(content);
- const cards=document.createElement('div');cards.className='review-group-grid';cards.setAttribute('aria-label','業務データ構造');content.append(cards);
- for(const [index,group]of reviewGroups.entries()){const card=document.createElement('article');card.className='review-group-card';card.dataset.reviewGroup=group.id;add(card,'span',String(index+1).padStart(2,'0')).className='review-group-number';const content=contentFor(group.id)!;add(card,'h2',content.title);add(card,'p',content.description);add(card,'strong','レビュアー');add(card,'p',content.reviewer.role).className='review-owner';command(card,'詳細を開く',()=>open(group.id)).setAttribute('aria-label',group.name+'の詳細を開く');cards.append(card);}
+ content.append(canvas);
 
 }
 export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){
- root.replaceChildren();command(root,'データ構造全体像',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
+ root.replaceChildren();command(root,'全体図',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
 }
 export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
  const content=contentFor(group.id);root.replaceChildren();if(!content)return;

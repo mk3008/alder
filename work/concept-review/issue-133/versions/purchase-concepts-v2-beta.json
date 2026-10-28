@@ -747,6 +747,7 @@
   "reviewGroups": [
     {
       "id": "group-request",
+      "subsystemId": "approval",
       "capabilities": [
         {
           "id": "save-draft",
@@ -1939,6 +1940,7 @@
     },
     {
       "id": "group-decision",
+      "subsystemId": "approval",
       "capabilities": [
         {
           "id": "approve-current-version",
@@ -2452,6 +2454,7 @@
     },
     {
       "id": "group-handoff",
+      "subsystemId": "receiving",
       "capabilities": [
         {
           "id": "prepare-approved-requests",
@@ -3172,6 +3175,7 @@
     },
     {
       "id": "group-result",
+      "subsystemId": "receiving",
       "capabilities": [
         {
           "id": "record-partial-receipts",
@@ -4469,6 +4473,11 @@
         "218937bd-4b6c-527e-b9e6-14075084b842"
       ]
     },
+    "landscapeRelationships": [
+      {"from": "group-request", "to": "group-decision"},
+      {"from": "group-decision", "to": "group-handoff"},
+      {"from": "group-handoff", "to": "group-result"}
+    ],
     "reviewBoundaries": [
       {
         "from": "group-request",

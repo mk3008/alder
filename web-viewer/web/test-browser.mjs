@@ -38,6 +38,7 @@ import {parseBrowserCaseArgs,selectBrowserCases,runBrowserCases} from './browser
 import {verifyNodeDrawer,verifyDrawerOpeningFocus} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
 import {verifyTabScroll} from './test-tab-scroll-browser.mjs';
+import {verifySubsystemOverview} from './test-subsystem-overview-browser.mjs';
 import {setScope} from './scope-control.mjs';
 // Real Chromium smoke checks against the built app. Synthetic/public input only.
 import assert from 'node:assert/strict';
@@ -58,6 +59,7 @@ const cases=[
    {name:'conceptInitial',run:()=>verifyConceptInitial(browser)},
    {name:'viewerShell',run:()=>verifyViewerShell(browser)},
    {name:'tabScroll',run:()=>verifyTabScroll(browser)},
+   {name:'subsystemOverview',run:()=>verifySubsystemOverview(browser)},
    {name:'jsonRoles',run:()=>verifyJSONRoles(browser)},
    {name:'jsonStates',run:()=>verifyJSONStates(browser)},
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
