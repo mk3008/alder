@@ -61,7 +61,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   group.append(cardSurface(document,node,special));
   group.append(make('rect',{x:String(node.x),y:String(node.y),width:String(node.width),height:String(node.height),rx:special?'20':'8',class:special?'state-diagram-node state-note':'state-diagram-node'}));
   const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+27),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;group.append(label);
-  if(special){const note=make('text',{x:String(node.x+node.width/2),y:String(node.y-8),'text-anchor':'middle',class:'state-diagram-event-id'});note.textContent=node.id==='@unknown'?'課題：保存状態が未定義':node.id==='@none'?'処理結果：記録を作らない':'記録作成前';group.append(note);}
+  if(special&&node.id!=='@new'){const note=make('text',{x:String(node.x+node.width/2),y:String(node.y-8),'text-anchor':'middle',class:'state-diagram-event-id'});note.textContent=node.id==='@unknown'?'課題：保存状態が未定義':'処理結果：記録を作らない';group.append(note);}
   group.addEventListener('click',()=>select(node.id));group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(node.id);}});
   shapeElements.set(node.id,group);svg.append(group);
  }
