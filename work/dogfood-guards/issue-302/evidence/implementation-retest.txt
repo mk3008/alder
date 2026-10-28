@@ -1,0 +1,26 @@
+test_interrupted_terminal_input_remains_pending (test_molkky.CLITests.test_interrupted_terminal_input_remains_pending) ... ok
+test_multi_process_persistence_and_invalid_input (test_molkky.CLITests.test_multi_process_persistence_and_invalid_input) ... ok
+test_terminal_error_can_be_edited_without_restarting (test_molkky.CLITests.test_terminal_error_can_be_edited_without_restarting) ... ok
+test_terminal_restores_editable_input (test_molkky.CLITests.test_terminal_restores_editable_input) ... ok
+test_correction_earlier_victory_and_reopening (test_molkky.CoreTests.test_correction_earlier_victory_and_reopening) ... ok
+test_correction_replays_and_reactivates_throws (test_molkky.CoreTests.test_correction_replays_and_reactivates_throws) ... ok
+test_correction_with_priority_ends_game (test_molkky.CoreTests.test_correction_with_priority_ends_game) ... ok
+test_dates_and_layouts (test_molkky.CoreTests.test_dates_and_layouts) ... ok
+test_exact_fifty_and_overflow (test_molkky.CoreTests.test_exact_fifty_and_overflow) ... ok
+test_invalid_correction_preserves_all_states_and_history (test_molkky.CoreTests.test_invalid_correction_preserves_all_states_and_history) ... ok
+test_invalid_throw_preserves_state_and_draft (test_molkky.CoreTests.test_invalid_throw_preserves_state_and_draft) ... ok
+test_last_actual_date_includes_later_uncounted_throw (test_molkky.CoreTests.test_last_actual_date_includes_later_uncounted_throw) ... ok
+test_later_counted_own_throw_completes_same_incident (test_molkky.CoreTests.test_later_counted_own_throw_completes_same_incident) ... ok
+test_new_and_validation (test_molkky.CoreTests.test_new_and_validation) ... ok
+test_noncounted_throw_does_not_skip_turn (test_molkky.CoreTests.test_noncounted_throw_does_not_skip_turn) ... ok
+test_priorities_documented_examples (test_molkky.CoreTests.test_priorities_documented_examples) ... ok
+test_scoring_zero_reset_and_single_count (test_molkky.CoreTests.test_scoring_zero_reset_and_single_count) ... ok
+test_three_zeros_elimination_and_last_player_score (test_molkky.CoreTests.test_three_zeros_elimination_and_last_player_score) ... ok
+test_two_priorities_and_recorrection_after_zero (test_molkky.CoreTests.test_two_priorities_and_recorrection_after_zero) ... ok
+test_two_priorities_formed_by_recorded_corrections (test_molkky.CoreTests.test_two_priorities_formed_by_recorded_corrections) ... ok
+test_victory_during_priority (test_molkky.CoreTests.test_victory_during_priority) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.835s
+
+OK

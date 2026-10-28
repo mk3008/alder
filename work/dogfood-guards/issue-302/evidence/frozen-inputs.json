@@ -1,0 +1,13 @@
+{
+  "evaluation-private/oracle.json": "e2d937c63e271c4d17e34fbfaaa98c138f8b891feee34c0f3ec74d84876d1062",
+  "verification/role-contract.json": "302ec2e4457fed151ee8fdb4bb654aad2d90c5a863f0272ab3f9e09cb27b8dbf",
+  "eval-inputs/lending/notes.ja.md": "79a0fdd23dce13973a0b8d5d3e3dc498cd6a5f3f0157b45dc5aa92ddedb91b13",
+  "eval-inputs/molkky/tests-final.txt": "3d13c94252bca7dd06192f478d186d16386e5c473cc479bf4d0811df7667d009",
+  "eval-inputs/molkky/CHECK_COVERAGE.md": "75e4e9a935e8eb53023986bb424e9bbe8d5c726e467e43232fc8413191469f82",
+  "eval-inputs/molkky/check-items-draft.json": "584aa36748f4465dc2f9a8e1826750e116b8457923c7850e3e733fe2d339b808",
+  "eval-inputs/molkky/business-design.json": "aa79deb25abab01d825d7f03abd93ec9d13d9d7f682fb818fbb802204dd63fff",
+  "eval-inputs/molkky/cli/molkky.py": "43b4eedef4fcc9d57732d3e4679240be1f9d2a74f4d0f021b68d27d9944fa272",
+  "eval-inputs/molkky/cli/tests/test_molkky.py": "75dafae37373d9ee0c8fef74b07f67a6ac1d2f317092908d2df2062d9d5630ba",
+  "alder/docs/json-native-contract.ja.md": "fe84c51262cfa346e0f8c7656f712ec618e06d9b2cec5103ca282b0895a6d093",
+  "alder/plugins/alder/skills/alder-manage-json-documents/references/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d"
+}

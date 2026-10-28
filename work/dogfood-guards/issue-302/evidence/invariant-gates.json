@@ -1,0 +1,9 @@
+{
+  "fixedFiles": 11,
+  "currentBytesMatchFixed": true,
+  "all13GuaranteeIDsHaveResults": true,
+  "negativeDeletedGuaranteeRejected": true,
+  "negativeDeletedApplicableCaseRejected": true,
+  "negativeMissingResultRejected": true,
+  "note": "A staged duplicate json-native contract acquired a different terminal newline during source hydration; restored exact frozen bytes before final invariant check. Published authority and required expectations were not revised. Memory mutation probes test the evidence gate, not product semantics."
+}
