@@ -38,6 +38,7 @@ export async function verifyFindings(browser){
     await page.locator('.finding-back').click();await page.locator('.finding-all').click();
     assert.equal(await page.locator('#drawer-mode-findings').getAttribute('aria-selected'),'true');
     assert.match(await page.locator('#drawer-mode-findings').textContent(),/4/);
+    for(const key of ['ArrowLeft','ArrowRight','Home','End']){await page.locator('#drawer-mode-findings').press(key);assert.equal(await page.locator('#drawer-mode-findings').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#drawer-mode-findings').evaluate(e=>document.activeElement===e),true);}
     const panel=page.locator('#node-list');
     assert.equal(await panel.locator('[data-finding-key="finding:F01"]').count(),1);
     assert.match(await panel.textContent(),/関連先未設定/);assert.match(await panel.textContent(),/参照先不一致/);
