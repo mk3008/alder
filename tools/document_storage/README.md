@@ -42,8 +42,10 @@ const nextJSON = stringify(next);
 
 ## 詳しく調べる
 
+- [構造化Business Design 0.5の契約候補・明示移行](../../docs/business-design-json-0.5.ja.md)（配布Plugin/通常Viewerの対応は別途必要）
 - [保存契約・対応Markdown・API](../../docs/document-storage.ja.md)
 - [JSON Schema](schema.json) / [再現可能な変換見本](examples/purchase.json)
 - 検証：`node --test tools/document_storage/test-storage.mjs`
 
 CLIは既存ファイルを上書きしません。失敗時はJSONを確定せず、stderrへ診断を出しexit 2で終了します。Markdownの全方言や曖昧な名前対応は対象外です。JSON→Markdown逆変換は提供しません。
+

@@ -1,4 +1,5 @@
 import {schema} from './schema.mjs';
+import {validateStructure} from './structured.mjs';
 export const demand=(ok,message)=>{if(!ok)throw Error(message);};
 // JSON.parse itself discards duplicate keys. This preflight rejects them before parsing.
 export function parseStrict(text){
@@ -19,19 +20,24 @@ export function validateShape(value,s=schema,path='$'){
  if(s.minLength)demand(value.trim().length>=s.minLength,'Empty field at '+path);
  if(s.pattern)demand(new RegExp(s.pattern).test(value),'Invalid pattern at '+path);
  if(s.type==='object'){for(const k of s.required??[])demand(Object.hasOwn(value,k),'Missing '+path+'.'+k);for(const k of Object.keys(value)){demand(Object.hasOwn(s.properties,k),'Unknown field '+path+'.'+k);validateShape(value[k],s.properties[k],path+'.'+k);}}
- if(s.type==='array')value.forEach((v,i)=>validateShape(v,s.items,path+'['+i+']'));
+ if(s.type==='array'){if(s.minItems!==undefined)demand(value.length>=s.minItems,'Too few items at '+path);value.forEach((v,i)=>validateShape(v,s.items,path+'['+i+']'));}
 }
 export function inventory(pkg){
- const map=new Map(),owner=new Map(),types=new Map();
- const add=(e,doc,type)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);};
+ const map=new Map(),owner=new Map(),types=new Map(),parent=new Map();
+ const add=(e,doc,type,parentId=doc.id)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);parent.set(e.id,parentId);};
  for(const d of pkg.documents){add(d,d,'document');for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note',states:'state',transitions:'transition',roles:'role',exceptions:'exception'}))for(const e of d[key]??[])add(e,d,type);}
  for(const d of pkg.externalDocuments){add(d,d,'document');for(const a of d.activities)add(a,d,'activity');}
- return {map,owner,types};
+ for(const d of pkg.documents.filter(d=>d.kind==='businessDesign'&&d.schemaVersion==='0.4')){
+  for(const o of d.objects)for(const i of o.information)add(i,d,'information',o.id);
+  for(const a of d.activities){for(const s of a.procedure.steps)add(s,d,'step',a.id);for(const r of a.results)add(r,d,'result',a.id);}
+  for(const data of d.data)add(data,d,'data');
+ }
+ return {map,owner,types,parent};
 }
 export function validate(pkg){validateShape(pkg);return validateReferences(pkg);}
 /** Shared structural references for storage JSON and the normalized Viewer model. No source grammar. */
 export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
- demand(pkg.documents.length>0,'Document required');const {map,owner,types}=inventory(pkg),diagnostics=[...pkg.diagnostics],unresolvedRoles=new Set();
+ demand(pkg.documents.length>0,'Document required');const inv=inventory(pkg),{map,owner,types}=inv,diagnostics=[...pkg.diagnostics],unresolvedRoles=new Set();
  for(const s of pkg.sources)if(s.uri){const u=new URL(s.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe source URI');}
  const target=(id,type,doc)=>{demand(map.has(id),'Dangling reference: '+id);if(type)demand(types.get(id)===type,'Reference type mismatch: '+id);if(doc)demand(owner.get(id)===doc,'Cross-document mismatch: '+id);return map.get(id);};
  const hasContent=runs=>runs?.some(r=>r.kind==='text'?r.value.trim().length>0:true);
@@ -39,15 +45,16 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  for(const d of pkg.documents){
   demand(pkg.formatVersion!=='0.1'||d.kind!=='stateTransition','State documents require formatVersion 0.2');
   if(d.kind==='businessDesign'){
-   demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(pkg.formatVersion==='0.4'?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
-   if(['0.2','0.3'].includes(d.schemaVersion)){
+   demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(['0.4','0.5'].includes(pkg.formatVersion)?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
+   if(['0.2','0.3','0.4'].includes(d.schemaVersion)){
     demand(new Set(d.roles.map(r=>r.name)).size===d.roles.length,'Duplicate Role name');demand(d.roles.every(r=>r.name===r.name.trim()&&!/[\r\n]/.test(r.name)),'Invalid Role name');
-    for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else unresolvedRoles.add('Role未確定: '+a.id+' — '+a.who);}
+    if(d.schemaVersion!=='0.4')for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else unresolvedRoles.add('Role未確定: '+a.id+' — '+a.who);}
    }
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
    for(const e of d.exceptions??[])target(e.activityId,'activity',d.id);
    const endpoints={input:['object','activity'],output:['activity','object'],'business-exception':['activity','activity'],'object-exception':['object','object']};const seen=new Set();
-   for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}
+   if(d.schemaVersion==='0.4')validateStructure(d,inv,target);
+   for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,r.dataId??r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}
    demand(new Set(d.findings.map(f=>f.sourceId)).size===d.findings.length,'Duplicate Finding source ID');
    for(const f of d.findings){demand(f.scope==='items'?f.targetIds.length+f.unresolvedTargets.length>0:!f.targetIds.length&&!f.unresolvedTargets.length,'Finding scope mismatch');demand(new Set(f.targetIds).size===f.targetIds.length,'Duplicate Finding target');for(const t of f.targetIds){target(t,null,d.id);demand(['object','activity'].includes(types.get(t)),'Invalid Finding target');}if(f.unresolvedTargets.length){demand(allowUnresolvedFindings,'Unresolved Finding target: '+f.sourceId);diagnostics.push('Finding参照未決: '+f.sourceId);}}
   }else if(d.kind==='stateTransition'){
@@ -57,7 +64,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    demand(d.transitions.length<=1000,'State transition row budget');demand(new Set(d.transitions.map(t=>t.sourceId)).size===d.transitions.length,'Duplicate transition source ID');
    for(const r of d.transitions){
     if(r.fromId!=='@new')target(r.fromId,'state',d.id);if(!['@unknown','@none'].includes(r.toId))target(r.toId,'state',d.id);const a=target(r.activityId,'activity',bd.id);
-    if(pkg.formatVersion==='0.4'){
+    if(['0.4','0.5'].includes(pkg.formatVersion)){
      demand(r.path!=='normal'||r.exceptionId===null,'Normal transition cannot reference an exception');
      if(r.exceptionId!==null){const exception=target(r.exceptionId,'exception',bd.id);demand(exception.activityId===a.id,'Exception Activity mismatch');}
      else if(r.path==='exception')demand(diagnostics.includes('例外参照未決: '+r.id),'Unresolved exception requires a diagnostic');
@@ -91,7 +98,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  return {diagnostics,entities:map.size};
 }
 export function graphV1(pkg,documentId){
- const d=pkg.documents.find(d=>d.id===documentId&&d.kind==='businessDesign');demand(d,'BD not found');demand([...d.objects,...d.activities].every(n=>!['\n','\r',' — ',' → ','<!--'].some(token=>n.name.includes(token))),'Graph v1 cannot represent this display name');const names=new Map([...d.objects,...d.activities].map(n=>[n.id,n.name]));
+ const d=pkg.documents.find(d=>d.id===documentId&&d.kind==='businessDesign');demand(d,'BD not found');demand(d.schemaVersion!=='0.4','Graph v1 cannot project structured Business Design (package 0.5)');demand([...d.objects,...d.activities].every(n=>!['\n','\r',' — ',' → ','<!--'].some(token=>n.name.includes(token))),'Graph v1 cannot represent this display name');const names=new Map([...d.objects,...d.activities].map(n=>[n.id,n.name]));
  const nodes=[...d.objects.map(o=>({id:o.name,type:'object',name:o.name,scope:o.scope,icon:o.icon,information:o.information})),...d.activities.map(a=>({id:a.name,type:'business',name:a.name,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
  return {version:1,...(d.scope?{scope:d.scope}:{}),nodes,relations:d.relations.map(r=>({kind:r.kind,from:names.get(r.fromId),to:names.get(r.toId),label:r.label}))};
 }
