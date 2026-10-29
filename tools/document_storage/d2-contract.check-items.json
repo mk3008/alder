@@ -1,0 +1,108 @@
+{
+  "version": 2,
+  "source": "mk3008/root#177 / Chat review 6495604537 / D2.2 3d4c810938cdf2d61c307d0073e28adfc84fa605 / corrective review 6496584155",
+  "items": [
+    {
+      "id": "D2A-01",
+      "condition": "版",
+      "guarantee": "新0.5/BD0.4と旧契約を区別し、混在・未知形式・研究wrapperを拒否",
+      "reason": "暗黙の版変更と誤保存を防ぐ",
+      "testId": "versions"
+    },
+    {
+      "id": "D2A-02",
+      "condition": "主体",
+      "guarantee": "Activity主体Object/複数Role参照、兼任・Roleなし自動主体・未決Findingを検査",
+      "reason": "Who等の重複正本と担当創作を防ぐ",
+      "testId": "performers"
+    },
+    {
+      "id": "D2A-03",
+      "condition": "手順",
+      "guarantee": "Step 1..N、義務/適用条件、担当subset・未決、本文型を検査",
+      "reason": "表示順と義務と担当を独立保持",
+      "testId": "steps"
+    },
+    {
+      "id": "D2A-04",
+      "condition": "局所順序",
+      "guarantee": "同一Procedureのみ、先後/標準順整合・循環・重複・入替矛盾を拒否",
+      "reason": "Activity順序DSLを追加しない",
+      "testId": "orders"
+    },
+    {
+      "id": "D2A-05",
+      "condition": "結果",
+      "guarantee": "Result 1..NのID/textを保持し、専用conditionはPhase A候補へ入れない",
+      "reason": "条件の意味は自然文で保持し、保留を必須化しない",
+      "testId": "results"
+    },
+    {
+      "id": "D2A-06",
+      "condition": "共通Data",
+      "guarantee": "Data名一意・項目1..N/重複/参照/受渡Object所有者・I/O方向を検査",
+      "reason": "同名DataのActivity別意味変更を防ぐ",
+      "testId": "data"
+    },
+    {
+      "id": "D2A-07",
+      "condition": "同一性",
+      "guarantee": "nested IDを全域登録し、更新時にStep/Result/Informationの親変更・削除を拒否",
+      "reason": "安定IDと所有者を守る",
+      "testId": "identity"
+    },
+    {
+      "id": "D2A-08",
+      "condition": "Check/State",
+      "guarantee": "既存参照版/例外ID/確認状態を維持し、staleや人間状態昇格を拒否",
+      "reason": "構造採用は業務合意ではない",
+      "testId": "references"
+    },
+    {
+      "id": "D2A-09",
+      "condition": "明示移行",
+      "guarantee": "旧BD+Check/Stateを元packageへ保全し、新BDだけを別packageへ明示作成する。未確認のrebaseと旧packageへの0.5上書きを拒否",
+      "reason": "原文を推測分割せず旧版/承認を保持",
+      "testId": "migration"
+    },
+    {
+      "id": "D2A-10",
+      "condition": "保存CLI",
+      "guarantee": "新形式create/inspect/commit/readback、CAS/lock/不正入力で非書込み",
+      "reason": "既存原子保存ガードを再利用",
+      "testId": "storage"
+    },
+    {
+      "id": "D2A-11",
+      "condition": "互換",
+      "guarantee": "旧0.4/旧JSON/MDの既存回帰を維持し、新形式Graph未対応は明示拒否",
+      "reason": "黙って旧形へ投影して情報を落とさない",
+      "testId": "compatibility"
+    },
+    {
+      "id": "D2A-12",
+      "condition": "実行境界",
+      "guarantee": "Plugin/Viewer/凍結原本/main不変更、既存依存のみ",
+      "reason": "Phase A外の製品化をしない",
+      "testId": "scope"
+    },
+    {
+      "id": "D2A-13",
+      "condition": "採用例と例外正本",
+      "guarantee": "採用D2.2の5固定例にないActivity.exceptionを新契約で受理せず、旧非null本文と既存exceptions catalogを明示移行で欠落・推測変換しない",
+      "reason": "旧自由文とcatalogを二重正本にせず意味を保全する",
+      "testId": "exceptions"
+    }
+  ],
+  "supersedes": {
+    "version": 1,
+    "commit": "9979a35b14a45c95530387e05d6f9fe1df51e57b",
+    "changedItemIds": [
+      "D2A-09"
+    ],
+    "addedItemIds": [
+      "D2A-13"
+    ],
+    "reason": "Chatレビューで元の保存時migration保証の誤りと例外欄の不整合が判明。実装修正前に採用判断へ訂正。"
+  }
+}
