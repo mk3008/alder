@@ -1,0 +1,256 @@
+{
+  "task": "Repository-backed validation: create draft only; local writes under output/create.",
+  "versions": {
+    "installedProductVersion": "0.4.9",
+    "candidateSourceRevisionReportedByRequester": "f496c76dfd7504a3a031bcaaa506a1d0012cf860",
+    "authoringGuidanceProvenance": "17a38e66841814de9182735bdb17671834270522",
+    "jsonAndReviewGuidanceProvenance": "3d88a905f145cf359921459625ef62d5f4a13a1f",
+    "formatVersion": "0.5",
+    "bdSchemaVersion": "0.4",
+    "packageRevision": "package-2",
+    "bdRevision": "bd-2"
+  },
+  "boundaries": {
+    "businessSourceOnly": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/intake.ja.md",
+    "otherSources": "Installed Plugin required references/schema/runtime only. Runtime environment skill also read as a system prerequisite; environment_status tool was not exposed.",
+    "notRead": [
+      "owning repository",
+      "prior outputs",
+      "update.ja.md",
+      "gates.ja.md"
+    ],
+    "externalWrites": false,
+    "productCodeImplemented": false,
+    "installedPluginChanged": false,
+    "delegation": false,
+    "businessApproval": "Not granted; runtime approval=not-evaluated; no Check or stateTransition document created."
+  },
+  "readPaths": [
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/intake.ja.md",
+      "sha256": "fa561b97301b763be9a535775f044e66f3b4f89250e30442aa825527c663b506",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/plugin.json",
+      "sha256": "6dc3f4e6868f6ccb69e659c7ad86d9132e54241adfc78bcb73a1abdcc55a4c69",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-draft-business-design/SKILL.md",
+      "sha256": "aaa373bee8a8706ec54ab929ce2a7b5b391f23e977cae127721331860ab8afd5",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+      "sha256": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+      "sha256": "25b3dc88991a1271ba6e38c714abb0b98eda860ecd675570d5eb602ae602a819",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/SKILL.md",
+      "sha256": "4706b04a054ba97873ee313c7a77de089a3ba3312e1dd168ac67b0480df1d53f",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/references/plugin-json-authoring.ja.md",
+      "sha256": "b1c9bd4566755741c6dcd1dcb0074dabac6b93d8cfaf2812c01f28fc5c525085",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/references/business-design-json-0.5.ja.md",
+      "sha256": "0966bde8860be7b7f7c76307d47b750997c2748af2c70fdd68c6d46023d0fdb6",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/references/json-roles.ja.md",
+      "sha256": "f3f45ddcbc7ab326a4e9b60d026e67bfe9fc1ab62de9d4d7ea1e142aac8ecf4a",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/references/design-findings.ja.md",
+      "sha256": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/references/provenance.json",
+      "sha256": "6d39fd02caf7e701ddbdfcab3d8767647af2101cb2394eb69688cf2edde57577",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/schema.json",
+      "sha256": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/core.mjs",
+      "sha256": "6c44b6045052001fcf7aec9fc4f0d9f7b654273bfa48b9dd3bcc015eb1eb13cf",
+      "extent": "pattern search for Invalid icon"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/SKILL.md",
+      "sha256": "cffff501634b592fb3985d756d5ba5936aac8b465ffd843be25a557f8f9e9449",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha256": "82d77669107f2a22e58819c0aee4baad824129520c0cb2c8a9ebb3f1c8b87a3d",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/references/business-design-quality-check.ja.md",
+      "sha256": "31de5ed1e52fe9e863f14022e0fad2ff533abb0b3684aa0a56c42ebe873fb5ae",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/references/business-design-correlation-check.ja.md",
+      "sha256": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/references/business-design-omission-check.ja.md",
+      "sha256": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
+      "extent": "full or relevant required section"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-review-business-design/references/provenance.json",
+      "sha256": "2aaccad26ddde43afa9c2fcb83f4bfb0fd06988ad6ba3fe190f05be7e3524f1c",
+      "extent": "full or relevant required section"
+    }
+  ],
+  "readEvidenceNotes": [
+    "adoption section 1 through section 2 heading was read, including authoring/correlation and review loop; some initial long tool results were truncated and the required sections were read in smaller chunks.",
+    "schema: applicable businessDesignD2 definition read fully; other schema definitions were inspected only to locate the applicable contract.",
+    "The runtime CLI loads its own bundled modules; these are not separately asserted to have been manually read."
+  ],
+  "commands": [
+    {
+      "command": [
+        "node",
+        "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+        "runtime"
+      ],
+      "exitCode": 0,
+      "outputSummary": "node v24.22.1, directJSON true, Python 3.12.14, markdownConversion true (initial call repeated in operations.json)."
+    },
+    {
+      "command": [
+        "node",
+        "/workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+        "ids",
+        "40"
+      ],
+      "exitCode": 0,
+      "outputSummary": "40 UUIDs returned. First 32 used; allocation is retained in author-local.py and revise-local.py. No IDs reallocated on revision."
+    },
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/author-local.py"
+      ],
+      "exitCode": 2,
+      "outputSummary": "Runtime passed; initial candidate validation failed: Invalid icon. No create ran on that attempt."
+    },
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/author-local.py"
+      ],
+      "exitCode": 0,
+      "outputSummary": "After display-icon correction: validate -> create -> inspect -> validate all exited 0."
+    },
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/revise-local.py"
+      ],
+      "exitCode": 0,
+      "outputSummary": "After source-grounded review corrections: validate -> commit with expected hash/revision -> inspect -> validate all exited 0."
+    }
+  ],
+  "operationDetails": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/operations.json",
+  "operationInputs": {
+    "newCreate": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/operation.json",
+    "revision": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/revision-operation.json",
+    "candidate": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/candidate.json"
+  },
+  "selfReview": {
+    "independence": "Distinct read-only same-agent review; not independent. Parent will arrange independent review.",
+    "reviewedInitialRevision": "package-1 / bd-1; sha256 35c6a6dd0236f32cbab2b92c1afb5147d601896ac0b22ca46c3385816dccf1d4",
+    "findingsAndGroundedRepairs": [
+      {
+        "location": "Step 1",
+        "evidence": "Intake assigns registering desired date/contact to reception staff; it states visit date equals desired date and normal ledger result, without assigning a separate visit-date write actor/time.",
+        "repair": "Removed additional staff action and timing for visit-date recording from Step 1. Retained source-established equality in Object.Information and the normal Result."
+      },
+      {
+        "location": "Ledger Data / Step 3",
+        "evidence": "Notification uses visit date/contact; only Step 1 before Step 3 is decided, not Step 2 before Step 3.",
+        "repair": "Limited readback to visit date/contact; those ledger input/output edges use the same shared Data. Kept desired date/conditional details as a separate output-only ledger Data so readback does not implicitly depend on Step 2. This is structural grouping, not an added business sequence."
+      }
+    ],
+    "lastReviewedRevision": "package-2 / bd-2",
+    "lastReviewedSha256": "35f8a538f13832a3ecacecd4903c6ba96ca626fcf33acfb2ef5deedeaf7f38c1",
+    "coverage": [
+      "Entire saved BD and original intake reread; Japanese prose and field allocation including document Scope and Activity name.",
+      "Single staff Object with two Role IDs; system Object with no Role; user excluded as performer.",
+      "Three required Steps, conditional applicability for Step 2, only before(1,3), no interchangeability or cross-Activity order.",
+      "Two normal Results; notification failure unresolved in Activity-targeted Finding and exception catalog; no Result.condition.",
+      "User and ledger each own four separate Information IDs; I/O Data references the corresponding owner; matching ledger read/write share one Data.",
+      "Normal flow walked as reception staff, system and recipient; boundary excludes arrival-day work."
+    ],
+    "outcome": "No further source-supported correction identified in same-agent re-review. Not a claim of business correctness or human agreement.",
+    "unreviewedBusinessChanges": [],
+    "stopReason": "No further supported correction; notification-failure policy explicitly left undecided; independent review and Viewer interaction outside this subtask."
+  },
+  "unresolvedQuestions": [
+    {
+      "activityId": "79289579-0a13-491c-9b9f-c80116a7d821",
+      "findingId": "64a0a44b-8a01-4ba7-9887-6dafab7e1f7a",
+      "status": "explicitly undecided",
+      "text": "通知失敗時の扱い。継続・終了、担当、再通知の要否や台帳に残す状態について、今回は答えを推定しない。",
+      "responseHandling": "Explicitly undecided in intake, so do not ask the same question again now. Report pending decision as a statement."
+    }
+  ],
+  "limitations": [
+    "No Viewer display or actual person interaction tested; installed guidance says ordinary Viewer support for package 0.5 is a separate gate.",
+    "No independent review in this agent.",
+    "Candidate source revision is requester-provided; no repository/network lookup was performed, as instructed.",
+    "Documentation generic-icon placeholder was rejected by JSON runtime; valid Lucide names were used as presentation metadata.",
+    "Runtime/schema validation establishes structural acceptance, not business approval."
+  ],
+  "outputs": [
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/business-design.json",
+      "sha256": "35f8a538f13832a3ecacecd4903c6ba96ca626fcf33acfb2ef5deedeaf7f38c1"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/candidate.json",
+      "sha256": "35f8a538f13832a3ecacecd4903c6ba96ca626fcf33acfb2ef5deedeaf7f38c1"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/operation.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/revision-operation.json",
+      "sha256": "c81ca8d7e686c494eec7770d803919335ef68bb77d84ed51293f5e8040423576"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/operations.json",
+      "sha256": "c70e3a03b3685195029f845b912338731b4115903b209a863aec54c3ef816730"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/author-local.py",
+      "sha256": "49c7809388799fe1ee36c696da8185a96b16eb7b7db31970c6d04322e62d2eda"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/create/revise-local.py",
+      "sha256": "ee3575b4f23110cc4207b5c5c2435cc3d93fe4526ecaee023aee85e632daa4cc"
+    }
+  ]
+}
