@@ -69,11 +69,9 @@ assert.match(draft.description,/仮説/);assert.equal(finding.status,'open');ass
 assert.match(finding.content,/再提出/);
 pass('PURCHASE-V2-002','finding');
 assert.equal(states.completeness,'partial');
-for(const state of states.states){
- const save=states.transitions.find(t=>t.fromId===state.id&&t.toId===state.id&&t.condition==='下書きを保存する');
- assert(save,'each represented state permits the proposed save behavior: '+state.name);
- assert.equal(save.effect,'unchanged');assert.equal(save.exceptionId,draft.id);assert.match(save.note,/仮説/);
-}
+const draftSave=states.transitions.find(t=>t.sourceId==='T19');
+assert(draftSave);assert.equal(draftSave.fromId,draftSave.toId);assert.equal(draftSave.condition,'下書きを保存する');
+assert.equal(draftSave.effect,'unchanged');assert.equal(draftSave.exceptionId,draft.id);assert.match(draftSave.note,/仮説/);
 for(const name of ['購入準備済み','作業中','終結','破棄'])assert(states.states.some(s=>s.name===name));
 const discard=states.states.find(state=>state.name==='破棄');
 assert.equal(bd.findings.find(f=>f.sourceId==='F06').status,'open');

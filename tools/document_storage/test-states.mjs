@@ -41,3 +41,30 @@ test('quoted headings in both fence styles are inert; duplicate state metadata k
  for(const fence of ['```','~~~~']){const text='# Example\n'+fence+'markdown\n# Object fake\n## State Transitions\nthis is a quote\n'+fence;assert.deepEqual(extractStateDeclarations(text).declarations,[]);assert.equal(extractStateDeclarations(text).markdown,text);}
  assert.throws(()=>extractStateDeclarations(raw.replace('"object": "購入申請",','"object": "購入申請", "object": "購入申請",')),/Duplicate JSON key/);
 });
+
+test('PURCHASE-STATE-005: only explicitly recorded transition removals are accepted',()=>{
+ const previous=structuredClone(fixture);
+ const next=structuredClone(previous),doc=next.documents.find(d=>d.kind==='stateTransition'),original=doc.transitions[0];
+ doc.transitions=doc.transitions.filter(t=>t.id!==original.id);doc.revision+='-corrected';next.revision+='-corrected';
+ const item={id:original.id,reason:'同値戻りを根拠なく推定していたため',source:'https://github.com/mk3008/root/issues/133'};
+ const op={expectedRevision:previous.revision,removedTransitions:[item]};
+ assert.equal(guardAuthoring(previous,next,op).valid,true);
+ assert.throws(()=>guardAuthoring(previous,next,{expectedRevision:previous.revision}),/ID was removed/);
+ for(const bad of [
+  {...op,expectedRevision:'stale'},
+  {...op,removedTransitions:[{...item,reason:''}]},
+  {...op,removedTransitions:[{...item,source:''}]},
+  {...op,removedTransitions:[item,item]},
+  {...op,removedTransitions:[{...item,id:'unknown'}]},
+  {...op,removedTransitions:[{...item,id:previous.documents[0].objects[0].id}]},
+  {...op,removedTransitions:[{...item,id:doc.transitions[0].id}]},
+ ])assert.throws(()=>guardAuthoring(previous,next,bad));
+ const replaced=structuredClone(next);replaced.documents.find(d=>d.kind==='stateTransition').transitions.push({...original,id:'new-identity'});
+ assert.throws(()=>guardAuthoring(previous,replaced,op),/source ID was replaced/);
+ const alsoRemoved=structuredClone(next);alsoRemoved.documents.find(d=>d.kind==='stateTransition').transitions.pop();
+ assert.throws(()=>guardAuthoring(previous,alsoRemoved,op),/ID was removed/);
+ const staleDoc=structuredClone(next);staleDoc.documents.find(d=>d.kind==='stateTransition').revision=previous.documents.find(d=>d.kind==='stateTransition').revision;
+ assert.throws(()=>guardAuthoring(previous,staleDoc,op),/revision must track/);
+ const dangling=structuredClone(next);dangling.documents.find(d=>d.kind==='stateTransition').transitions[0].toId='missing-state';
+ assert.throws(()=>guardAuthoring(previous,dangling,op),/Dangling reference/);
+});

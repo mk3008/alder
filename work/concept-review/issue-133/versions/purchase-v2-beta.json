@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v2-beta-5",
+  "revision": "purchase-v2-beta-6",
   "documents": [
     {
       "id": "purchase-bd",
@@ -536,7 +536,7 @@
       "id": "purchase-states",
       "schemaVersion": "0.2",
       "kind": "stateTransition",
-      "revision": "states-v2-beta-5",
+      "revision": "states-v2-beta-6",
       "title": "購入申請の状態遷移",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -833,104 +833,6 @@
           "path": "exception",
           "evidence": "備品購入を申請する／下書き保存",
           "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "71fa45f7-2a3c-4048-8117-56e8bd940c06",
-          "sourceId": "T20",
-          "fromId": "st-c87dcc150e446c0a5ef2c5cb01a1a0d9",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "st-c87dcc150e446c0a5ef2c5cb01a1a0d9",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "220fdc27-7d9a-45da-b7de-02faa8b678eb",
-          "sourceId": "T21",
-          "fromId": "st-5a9a152ee56f19aa2ad0adb5544508a7",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "st-5a9a152ee56f19aa2ad0adb5544508a7",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "7a8337dc-ccf8-4c2d-8278-f7a9b4e263fd",
-          "sourceId": "T22",
-          "fromId": "st-95a69e10a8ef8c980702cc903669f050",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "st-95a69e10a8ef8c980702cc903669f050",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "0e0cf578-4d0e-4344-a72d-45a687b32e34",
-          "sourceId": "T23",
-          "fromId": "49304012-e26a-42ca-884f-abc48d752a28",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "49304012-e26a-42ca-884f-abc48d752a28",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "bd0aeb67-4cf2-49dc-b74f-d7ff756b958f",
-          "sourceId": "T24",
-          "fromId": "a757ea63-d836-4c24-90e7-5872b3160cad",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "a757ea63-d836-4c24-90e7-5872b3160cad",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "373cd40f-3617-46dc-8f9e-a1c0af3e5456",
-          "sourceId": "T25",
-          "fromId": "271f3bdd-31cf-446a-82f2-e414e35d1ba9",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "271f3bdd-31cf-446a-82f2-e414e35d1ba9",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "元の申請状態を変えず下書き内容を別に保持することはレビュー対象の仮説。",
-          "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
-        },
-        {
-          "id": "458da3a4-969d-4b83-b567-c66802886cda",
-          "sourceId": "T26",
-          "fromId": "2d3d413f-5dbb-4b71-a7a0-8503ae3ac8d5",
-          "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "event": null,
-          "condition": "下書きを保存する",
-          "toId": "2d3d413f-5dbb-4b71-a7a0-8503ae3ac8d5",
-          "effect": "unchanged",
-          "path": "exception",
-          "evidence": "備品購入を申請する／下書き保存",
-          "note": "破棄の状態でも下書きは保存できる。保存だけで元の破棄状態を変えない扱いはレビュー対象の仮説。",
           "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a"
         }
       ]
