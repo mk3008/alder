@@ -1,0 +1,48 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "購買データ構造の全体図で、サブシステム領域の背景を選択できるようにする。",
+  "relatedAuthorities": ["SUBSYSTEM-OVERVIEW-001", "SUBSYSTEM-OVERVIEW-003", "SUBSYSTEM-HANDOFF-001", "SUBSYSTEM-HANDOFF-004"],
+  "checks": [
+    {
+      "id": "SUBSYSTEM-REGION-001",
+      "condition": "全体図のサブシステム領域の空いている背景または見出しをクリック・タップする。",
+      "guarantee": "該当するサブシステムが選択され、既存の見出し選択と同じ強調と情報になる。選択だけで右ドロワーを自動的に開かず、既に開いている場合は内容を更新する。",
+      "reason": "領域全体をクリック対象として理解・操作できるようにするため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "両領域の背景・見出し、開閉状態と右ドロワーをDOMと実ブラウザーで照合"
+    },
+    {
+      "id": "SUBSYSTEM-REGION-002",
+      "condition": "サブシステム領域内の概念モデル、別タブアイコン、受け渡しラベルを操作する。",
+      "guarantee": "各要素は従来どおり個別に選択または遷移し、背景の選択がそれらの操作を奪わない。",
+      "reason": "背景を対象に追加しても、内側と境界の独立した操作を維持するため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "選択・別タブ・受け渡しを実ブラウザーと既存正本で照合"
+    },
+    {
+      "id": "SUBSYSTEM-REGION-003",
+      "condition": "領域の背景から図をマウスでドラッグ、タッチでパンまたはピンチする。",
+      "guarantee": "従来のキャンバス移動・拡大縮小を維持し、移動やピンチの終了をクリックとして誤選択しない。配置ロックの状態にかかわらず背景のパンを維持する。",
+      "reason": "全体図の領域を選択可能にしても、図を操作するためのキャンバスを失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "実ブラウザーの位置・選択状態・タッチ操作と既存キャンバス検証を照合"
+    },
+    {
+      "id": "SUBSYSTEM-REGION-004",
+      "condition": "キーボードでサブシステムを選択し、全体図を再表示する。",
+      "guarantee": "既存の見出しボタンの Enter・Space で同じ領域を選択でき、選択状態の保存・復元とフォーカス操作を維持する。",
+      "reason": "ポインター以外でも選択でき、表示を行き来しても現在位置を保つため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "キーボード操作・選択状態の保存復元と関連DOMを照合"
+    },
+    {
+      "id": "SUBSYSTEM-REGION-005",
+      "condition": "業務・状態・概念の既存キャンバスとサブシステム全体図を操作する。",
+      "guarantee": "領域選択対象を明示していない図の選択・パン・ズーム・配置を変えず、共通の操作を保持する。",
+      "reason": "今回追加する領域選択と、共通キャンバスの既存操作を分けて維持するため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "影響する共通キャンバス・タッチ検証と全体CIを照合"
+    }
+  ]
+}

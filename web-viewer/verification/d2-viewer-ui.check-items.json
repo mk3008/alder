@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "basis": "Human review https://github.com/mk3008/alder/pull/307#issuecomment-6489174687",
+  "items": [
+    {"id":"D2-UI-01","condition":"D2を開いて0.4と比較する","guarantee":"既存main/Viewer shell/カード/配線/Drawerを同じ経路で描画し、別画面CSSやSVGを持たない","reason":"構造改善の評価へUIの再学習を混ぜない"},
+    {"id":"D2-UI-02","condition":"D2候補の要素・関係を表示する","guarantee":"Graphはcandidateから直接導出し、beforeのGraphを流用しない","reason":"D2の実データをViewerでレビューする"},
+    {"id":"D2-UI-03","condition":"選択・タブ・横断Step・拡大縮小・Drawer開閉を操作する","guarantee":"既存の操作経路を使い、横断参照は所属Activityの既存タブとStepへ移動する","reason":"外枠や動線を変更せず意味を訂正できる"},
+    {"id":"D2-UI-04","condition":"Previewを閲覧し切り替える","guarantee":"D2を正式JSONとして保存せず、通常ViewerのIndexedDBを読み書きしない","reason":"未採用構造の投影と正式契約を分ける"}
+  ]
+}
