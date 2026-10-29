@@ -11,4 +11,7 @@ export async function loadPurchaseReview(page){
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
  await page.locator('[data-explorer-key="concept:landscape"]').click();await page.locator('.concept-empty button').click();
  await page.locator('.subsystem-overview-graph').waitFor();
+ // Selection tests start with the application drawer explicitly closed.
+ if(await page.locator('#drawer').getAttribute('aria-expanded')==='true')await page.locator('#drawer').click();
+ await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
 }

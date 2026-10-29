@@ -126,3 +126,6 @@
 @media(max-width:800px){.concept-related{max-width:calc(100% - 16px)}.concept-drawer-body{padding:0 10px 12px}}
 
 .tab[data-view-kind=subsystems]{--tab-kind-color:#7b4abd}[data-theme=dark] .tab[data-view-kind=subsystems]{--tab-kind-color:#c9b2ff}
+/* Right details are application rails, alongside the explorer and outside the tab strip. */
+.shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:relative;top:auto;bottom:auto;right:auto;min-height:0;flex-shrink:0;align-self:stretch}
+@media(max-width:800px){.shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:absolute;right:0;top:0;bottom:0;z-index:6}}

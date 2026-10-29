@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
+import {verifyGlobalRightDrawer} from './test-global-right-drawer-browser.mjs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
 
 // Current shell: one global explorer and one shared row for all document tabs.
@@ -26,6 +27,7 @@ export async function verifyViewerShell(browser){
   }}
   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('.explorer-search input').focus();await page.keyboard.press('Escape');assert.equal(await page.locator('#design-explorer').isVisible(),false);assert.equal(await page.locator('#node-list-toggle').evaluate(el=>el===document.activeElement),true);
   await page.locator('#tabs .tab button:first-child').first().click();await page.locator('#node-list-toggle').click();const hierarchy=await page.locator('#design-explorer').evaluate(el=>{const parent=el.querySelector('.explorer-parent'),sub=el.querySelector('.explorer-subparent'),item=el.querySelector('.explorer-item-nested');return {parentSize:getComputedStyle(parent).fontSize,subSize:getComputedStyle(sub).fontSize,subPadding:parseFloat(getComputedStyle(sub).paddingLeft),itemPadding:parseFloat(getComputedStyle(item).paddingLeft)};});assert.equal(hierarchy.parentSize,hierarchy.subSize);assert.ok(hierarchy.itemPadding>hierarchy.subPadding,'child entries remain visibly nested');await page.screenshot({path:'web/evidence/shell/business-drawer-393-dark.png'});
-  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors};
+  const globalDrawer=await verifyGlobalRightDrawer(page);
+  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors,globalDrawer};
  }finally{await context.close();}
 }
