@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "4420551672f73f8013a6773aa9544e510ae2b8ce",
+  "baseCommit": "650632167c1a61bb0b8614431d08f8d1ecbfb690",
+  "entry": "d2.html",
+  "mode": "experimental read-only D2; formal adoption pending",
+  "files": {
+    "d2.html": "50e732e3b0030348f1d5dbd1161f105e8fde4e78b5a39d0b4bf909f2a6e3d4ef",
+    "assets/d2-DKC-kPC0.css": "99855cd99955cf4f2aa1ad35d7f66bdeab51dc473b2df15e917e9f77f649faf3",
+    "assets/style-RUqEP5kM.css": "d31caeccf8453efefa5edebfb892d2bfad45f4f8c40698609534d066b0c3e440",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/style-D612aRuL.js": "fff726e69d4ff50a7f8bec6f0b8e5079e0146fab5d69bd03cda79199d74d1a81",
+    "assets/canvas-toolbar-C0cKKpYJ.js": "bcc5fc3732fb912df6911f91220c9e3aeb377741a706ebd4d4bccd7a580164c7",
+    "assets/d2-Be4cUpYG.js": "850368428dd1fe3645f5916852088522f4799eeae61008a3fb8d5c652468a0eb",
+    "d2-examples.json": "b21cad6ca54714e87845a15a73d6fa88a00c05d4bf3a809f36dfedadefa2b909"
+  }
+}
