@@ -9,7 +9,10 @@ import {readPreview,validateD2,actorsForStep} from './d2-preview-model.mjs';
 type Step={id:string;text:string;obligation:'required'|'optional';appliesWhen:string|null;performerObjectIds:string[]|null};
 type Activity=Omit<ActivityEntry,'who'|'roleId'|'procedure'|'result'|'exception'>&{performers:{objectId:string;roleIds:string[]}[]|null;procedure:{steps:Step[];orderRules:({kind:'before';beforeId:string;afterId:string}|{kind:'interchangeable';stepIds:string[]})[]};results:{id:string;text:string;condition:string|null}[]};
 type Endpoint={activityId:string;stepId:string};
-type Business=Omit<BD,'objects'|'activities'|'relations'>&{objects:{id:string;name:string;scope:boolean;icon:string;information:{id:string;name:string;description:string}[]}[];activities:Activity[];relations:(BD['relations'][number]&{items?:{informationId:string;condition:string|null}[]})[];crossActivityOrderRules:({id:string;label:string;context:string;kind:'interchangeable';standardSteps:Endpoint[]}|{id:string;label:string;context:string;kind:'before';before:Endpoint;after:Endpoint})[]};
+type DataDefinition={id:string;name:string;items:{informationId:string;condition:string|null}[]};
+type IORelation={id:string;kind:'input'|'output';fromId:string;toId:string;dataId:string};
+type ExceptionRelation={id:string;kind:'business-exception'|'object-exception';fromId:string;toId:string;label:string};
+type Business=Omit<BD,'objects'|'activities'|'relations'>&{objects:{id:string;name:string;scope:boolean;icon:string;information:{id:string;name:string;description:string}[]}[];activities:Activity[];data:DataDefinition[];relations:(IORelation|ExceptionRelation)[];crossActivityOrderRules:({id:string;label:string;context:string;kind:'interchangeable';standardSteps:Endpoint[]}|{id:string;label:string;context:string;kind:'before';before:Endpoint;after:Endpoint})[]};
 type PreviewCase={id:string;title:string;before:unknown;candidate:{business:Business}};
 type Preview={cases:PreviewCase[]};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
@@ -38,9 +41,9 @@ export function candidateDetail(b:Business,id:string|undefined,navigate:(activit
  const results=el('ul');for(const r of a.results){const li=el('li',r.text);li.dataset.resultId=r.id;if(r.condition)li.append(el('p','成立条件：'+r.condition));results.append(li);}root.append(results);
  if(a.problem!==null){title(root,'Problem');root.append(el('p',a.problem));}if(a.painLevel!==null){title(root,'Pain level');root.append(el('p',a.painLevel));}
  const names=new Map([...b.objects,...b.activities].map(n=>[n.id,n.name]));
- const io=b.relations.filter(r=>(r.kind==='input'||r.kind==='output')&&(r.fromId===a.id||r.toId===a.id));
- for(const [kind,label]of [['input','Input'],['output','Output']]as const){const rs=io.filter(r=>r.kind===kind);title(root,label);if(!rs.length){root.append(el('p','記載なし'));continue;}for(const r of rs){const p=el('p',kind==='input'?names.get(r.fromId)+' → '+r.label:r.label+' → '+names.get(r.toId));root.append(p);}}
- if(io.length){title(root,'Data');for(const r of io){const name=el('p');name.append(el('strong',r.label));root.append(name);const o=b.objects.find(o=>o.id===(r.kind==='input'?r.fromId:r.toId))!;const ul=el('ul');ul.dataset.relationId=r.id;for(const item of r.items!){const i=o.information.find(i=>i.id===item.informationId)!;const li=el('li',i.name);li.dataset.informationId=i.id;if(i.description)li.append(el('p',i.description));if(item.condition)li.append(el('p','受渡し条件：'+item.condition));ul.append(li);}root.append(ul);}}
+ const io=b.relations.filter((r):r is IORelation=>'dataId' in r&&(r.fromId===a.id||r.toId===a.id)),data=new Map(b.data.map(d=>[d.id,d]));
+ for(const [kind,label]of [['input','Input'],['output','Output']]as const){const rs=io.filter(r=>r.kind===kind);title(root,label);if(!rs.length){root.append(el('p','記載なし'));continue;}for(const r of rs){const name=data.get(r.dataId)!.name;root.append(el('p',kind==='input'?names.get(r.fromId)+' → '+name:name+' → '+names.get(r.toId)));}}
+ if(io.length){title(root,'Data');const information=new Map(b.objects.flatMap(o=>o.information).map(i=>[i.id,i]));for(const id of new Set(io.map(r=>r.dataId))){const d=data.get(id)!,name=el('p');name.append(el('strong',d.name));root.append(name);const ul=el('ul');ul.dataset.dataId=d.id;for(const item of d.items){const i=information.get(item.informationId)!;const li=el('li',i.name);li.dataset.informationId=i.id;if(i.description)li.append(el('p',i.description));if(item.condition)li.append(el('p','受渡し条件：'+item.condition));ul.append(li);}root.append(ul);}}
  return root;
 }
 
@@ -49,10 +52,11 @@ export function projectD2(candidate:{business:Business}):Design{
  validateD2(candidate);const b=candidate.business;
  const objects=b.objects.map(o=>({...o,information:o.information.map(i=>i.name+(i.description?' — '+i.description:''))}));
  const activities=b.activities.map(a=>{const roleIds=[...new Set(a.performers?.flatMap(p=>p.roleIds)??[])];return {...a,who:actorName(b,a),roleId:roleIds.length===1?roleIds[0]:null,procedure:a.procedure.steps.map(s=>s.text).join('\n'),result:a.results.map(r=>r.text+(r.condition?'（成立条件：'+r.condition+'）':'')).join('\n'),exception:null};});
- const business:BD={...b,objects,activities};
- const graph=canonicalJSONGraph({version:1,scope:b.scope,nodes:[...objects.map(o=>({...o,type:'object' as const})),...activities.map(a=>({id:a.id,name:a.name,type:'business' as const,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))],relations:b.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))});
+ const data=new Map(b.data.map(d=>[d.id,d.name])),relations=b.relations.map(r=>({id:r.id,kind:r.kind,fromId:r.fromId,toId:r.toId,label:'dataId' in r?data.get(r.dataId)!:r.label}));
+ const business:BD={...b,objects,activities,relations};
+ const graph=canonicalJSONGraph({version:1,scope:b.scope,nodes:[...objects.map(o=>({...o,type:'object' as const})),...activities.map(a=>({id:a.id,name:a.name,type:'business' as const,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))],relations:relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))});
  const names=new Map([...b.objects,...b.activities].map(n=>[n.id,n.name]));
- return {graph,sections:Object.fromEntries(graph.nodes.map(n=>[n.id,''])),markdown:JSON.stringify(candidate,null,2),sourceFormat:'json',model:{formatVersion:'D2-preview',revision:b.revision,business,checks:[],states:[],diagnostics:[]},activityOrder:b.activities.map(a=>a.id),findings:b.findings.map(f=>({...f,displayId:f.sourceId,targets:[...f.targetIds,...f.unresolvedTargets],targetNames:[...f.targetIds,...f.unresolvedTargets].map(id=>names.get(id)??id)}))};
+ return {graph,sections:Object.fromEntries(graph.nodes.map(n=>[n.id,''])),markdown:JSON.stringify(candidate,null,2),sourceFormat:'json',model:{formatVersion:'D2.1-preview',revision:b.revision,business,checks:[],states:[],diagnostics:[]},activityOrder:b.activities.map(a=>a.id),findings:b.findings.map(f=>({...f,displayId:f.sourceId,targets:[...f.targetIds,...f.unresolvedTargets],targetNames:[...f.targetIds,...f.unresolvedTargets].map(id=>names.get(id)??id)}))};
 }
 export function createD2Preview():ViewerPreview{
  let collection:Preview,current:PreviewCase,mode='d2',actions:PreviewActions,busy=false;

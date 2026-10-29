@@ -8,7 +8,7 @@
     },
     "proposalVersion": {
       "enum": [
-        "D2"
+        "D2.1"
       ]
     },
     "proposedPackageVersion": {
@@ -408,40 +408,9 @@
                     "type": "string",
                     "pattern": "^[A-Za-z0-9_-]+$"
                   },
-                  "label": {
+                  "dataId": {
                     "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "informationId": {
-                          "type": "string",
-                          "pattern": "^[A-Za-z0-9_-]+$"
-                        },
-                        "condition": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "minLength": 1,
-                              "pattern": "\\S"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "informationId",
-                        "condition"
-                      ],
-                      "additionalProperties": false
-                    },
-                    "minItems": 1
+                    "pattern": "^[A-Za-z0-9_-]+$"
                   }
                 },
                 "required": [
@@ -449,8 +418,7 @@
                   "kind",
                   "fromId",
                   "toId",
-                  "label",
-                  "items"
+                  "dataId"
                 ],
                 "additionalProperties": false
               },
@@ -758,6 +726,60 @@
             ]
           },
           "minItems": 0
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "informationId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]+$"
+                    },
+                    "condition": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "informationId",
+                    "condition"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
         }
       },
       "required": [
@@ -774,7 +796,8 @@
         "findings",
         "roles",
         "exceptions",
-        "crossActivityOrderRules"
+        "crossActivityOrderRules",
+        "data"
       ],
       "additionalProperties": false
     }
