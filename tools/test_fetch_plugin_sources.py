@@ -59,9 +59,9 @@ class FetchPluginSourcesTest(unittest.TestCase):
             with self.assertRaises(subprocess.CalledProcessError):
                 fetch_sources(checkout)
 
-    def test_both_validation_workflows_fetch_before_tests(self):
+    def test_all_validation_workflows_fetch_before_tests(self):
         root = Path(__file__).resolve().parents[1]
-        for name in ['plugin-package.yml', 'plugin-release-tag.yml']:
+        for name in ['plugin-package.yml', 'plugin-release-tag.yml', 'document-storage-plugin.yml']:
             source = (root / '.github/workflows' / name).read_text()
             if name == 'plugin-release-tag.yml':
                 source = source.split('  validate:\n', 1)[1].split('  release:\n', 1)[0]

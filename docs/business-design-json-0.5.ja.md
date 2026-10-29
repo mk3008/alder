@@ -1,6 +1,6 @@
 # 業務設計JSON 0.5
 
-未リリースの契約実装候補です。現行配布Pluginと通常Viewerの対応形式は0.4までです。0.5の保存・検証はこのソース版のNode API/CLIで行い、配布Pluginや通常Viewerへの対応は別途必要です。
+未リリースの契約実装候補です。配布Pluginと通常Viewerの対応形式は0.4までです。このソース版のPlugin Skill・同梱Node runtimeは0.5に対応します。配布版の更新と通常Viewerへの対応は別途必要です。
 
 packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`です。Checkは`0.1`、状態遷移は`0.2`を維持します。これらは文書の`revision`やPlugin製品バージョンとは異なります。Schemaは[JSON](../tools/document_storage/schema.json)と[生成元](../tools/document_storage/schema.mjs)、参照検査は[core.mjs](../tools/document_storage/core.mjs)が正本です。
 

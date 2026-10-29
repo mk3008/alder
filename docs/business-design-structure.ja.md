@@ -8,6 +8,14 @@
 
 開発者が保存形式を扱う場合は[JSON構造契約](https://github.com/mk3008/alder/blob/bd8ff1e2b55765a9e5cac10e85d6dee3ca85ebec/docs/json-native-contract.ja.md)を参照してください。JSONの直接編集は通常の利用手順ではありません。
 
+## JSON 0.5の業務欄
+
+package 0.5 / BD schema 0.4では、主体はActivity.performers、手順はprocedure.stepsとorderRules、正常結果はresults 1..Nとして記録します。Object.Informationに項目名と説明を一元化し、名前付き共通Dataから参照し、I/OはdataIdで受け渡します。例外はBD.exceptionsに定義します。旧MDのWho/Procedure/Result/Exceptionという欄の役割は、これらの型付き要素へ対応させます。
+
+主体はObject参照とRole参照の組で、兼任とシステム主体を表せます。Stepごとの担当・必須/任意・適用条件・同一Procedure内の順序は独立した情報です。順序制約がないことから順不同を推定しません。Activity間の依存はWhen・Result・Object経由のI/Oで表し、Activity横断順序は追加しません。Resultの専用conditionは保留で、根拠のある条件はtextに保持します。未決事項は対象を示したFindingとして残します。
+
+型・多重度・ID・参照・所有者・明示移行・保存の詳細はJSON管理Skillの同梱0.5契約とSchemaに従います。通常Viewerの0.5表示対応は別工程であり、旧版Viewerで新形式のレビューができたとは扱いません。
+
 ## 旧Markdownの記法（互換Reference）
 
 以下は既存MDの読込・更新・明示的な一方向変換を行う際の記法です。新規JSONを作るために、この見出しを中間MDへ出力する必要はありません。旧ファイルをJSONへ変換するときは元MDを保持します。[Business GraphのMarkdown形式](business-graph.md#opt-in-markdown-profile-v1)は従来の独立した出力契約です。
