@@ -8,7 +8,7 @@
     },
     "proposalVersion": {
       "enum": [
-        "D2.1"
+        "D2.2"
       ]
     },
     "proposedPackageVersion": {
@@ -596,137 +596,6 @@
             "additionalProperties": false
           }
         },
-        "crossActivityOrderRules": {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "pattern": "^[A-Za-z0-9_-]+$"
-                  },
-                  "label": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  "context": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  "kind": {
-                    "enum": [
-                      "interchangeable"
-                    ]
-                  },
-                  "standardSteps": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "activityId": {
-                          "type": "string",
-                          "pattern": "^[A-Za-z0-9_-]+$"
-                        },
-                        "stepId": {
-                          "type": "string",
-                          "pattern": "^[A-Za-z0-9_-]+$"
-                        }
-                      },
-                      "required": [
-                        "activityId",
-                        "stepId"
-                      ],
-                      "additionalProperties": false
-                    },
-                    "minItems": 2
-                  }
-                },
-                "required": [
-                  "id",
-                  "label",
-                  "context",
-                  "kind",
-                  "standardSteps"
-                ],
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "pattern": "^[A-Za-z0-9_-]+$"
-                  },
-                  "label": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  "context": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  "kind": {
-                    "enum": [
-                      "before"
-                    ]
-                  },
-                  "before": {
-                    "type": "object",
-                    "properties": {
-                      "activityId": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9_-]+$"
-                      },
-                      "stepId": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9_-]+$"
-                      }
-                    },
-                    "required": [
-                      "activityId",
-                      "stepId"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "after": {
-                    "type": "object",
-                    "properties": {
-                      "activityId": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9_-]+$"
-                      },
-                      "stepId": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9_-]+$"
-                      }
-                    },
-                    "required": [
-                      "activityId",
-                      "stepId"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "required": [
-                  "id",
-                  "label",
-                  "context",
-                  "kind",
-                  "before",
-                  "after"
-                ],
-                "additionalProperties": false
-              }
-            ]
-          },
-          "minItems": 0
-        },
         "data": {
           "type": "array",
           "items": {
@@ -796,7 +665,6 @@
         "findings",
         "roles",
         "exceptions",
-        "crossActivityOrderRules",
         "data"
       ],
       "additionalProperties": false

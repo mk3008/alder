@@ -1,12 +1,49 @@
 {
-  "version": 1,
-  "basis": "Execution #306: read-only D2 comparison Preview, provisional design only",
+  "version": 2,
+  "basis": "root #174、2026-10-29の本人指示：Activity横断の順不同構造とViewer表示を撤去する。",
   "items": [
-    {"id":"D2-01","condition":"0.4表現とD2を切り替える","guarantee":"同じActivity/Object IDとI/O接続を保持し、D2を正式packageとして保存しない","reason":"表示差と業務意味の変更を混同しない"},
-    {"id":"D2-02","condition":"同じ実投の記録と立直しを見る","guarantee":"既存2 Activityに属するStepだけの標準提示順と入替可を示し、所属Stepへ移動できる","reason":"Activity全体や反復回を交換可能にしない"},
-    {"id":"D2-03","condition":"複数主体または担当未決のStepを見る","guarantee":"Stepごとの人/システムを区別し、未決と外部境界を可視化する","reason":"担当集合の表示だけで分担が決まったとしない"},
-    {"id":"D2-04","condition":"任意の写真保存や試合開始の正常結果を見る","guarantee":"義務/適用条件/Result成立条件を分け、自然文条件を自動評価しない","reason":"定義Resultの存在を現在の成立結果としない"},
-    {"id":"D2-05","condition":"独立した情報を複数後続が利用する","guarantee":"Object情報を参照して表示し、Output1本とInput2本で同じ件数を渡す","reason":"項目数/Result数/線数を同一視しない"},
-    {"id":"D2-06","condition":"不正な候補ID/所有者/順序/形式を読む","guarantee":"Preview入力境界で拒否し、既存正式入口の契約を広げない","reason":"型・参照の検証と業務承認を分離する"}
-  ]
+    {
+      "id": "D2-01",
+      "condition": "0.4表現とD2を切り替える",
+      "guarantee": "同じActivity/Object IDとI/O接続を保持し、D2を正式packageとして保存しない",
+      "reason": "表示差と業務意味の変更を混同しない"
+    },
+    {
+      "id": "D2-02",
+      "condition": "ActivityとProcedureの順序情報を見る",
+      "guarantee": "Activity横断の順序構造を受理・表示せず、同一Procedure内に明示された入替対象だけへ注記を付ける",
+      "reason": "Activity間の依存はWhen/Result/Objectで表し、Procedure内の標準順と混同しない"
+    },
+    {
+      "id": "D2-03",
+      "condition": "複数主体または担当未決のStepを見る",
+      "guarantee": "Stepごとの人/システムを区別し、未決と外部境界を可視化する",
+      "reason": "担当集合の表示だけで分担が決まったとしない"
+    },
+    {
+      "id": "D2-04",
+      "condition": "任意の写真保存や試合開始の正常結果を見る",
+      "guarantee": "義務/適用条件/Result成立条件を分け、自然文条件を自動評価しない",
+      "reason": "定義Resultの存在を現在の成立結果としない"
+    },
+    {
+      "id": "D2-05",
+      "condition": "独立した情報を複数後続が利用する",
+      "guarantee": "Object情報を参照して表示し、Output1本とInput2本で同じ件数を渡す",
+      "reason": "項目数/Result数/線数を同一視しない"
+    },
+    {
+      "id": "D2-06",
+      "condition": "不正な候補ID/所有者/順序/形式を読む",
+      "guarantee": "Preview入力境界で拒否し、既存正式入口の契約を広げない",
+      "reason": "型・参照の検証と業務承認を分離する"
+    }
+  ],
+  "supersedes": {
+    "commit": "f81c05cabca97c92a608aa06c073bd88409bef5a",
+    "version": 1,
+    "changedItemIds": [
+      "D2-02"
+    ]
+  }
 }

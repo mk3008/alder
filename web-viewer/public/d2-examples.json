@@ -1,6 +1,6 @@
 {
   "format": "alder-structure-preview",
-  "version": 2,
+  "version": 3,
   "cases": [
     {
       "id": "molkkyCross",
@@ -8,13 +8,13 @@
       "before": {
         "format": "alder-document-package",
         "formatVersion": "0.4",
-        "revision": "comparison-0.4-input-restored",
+        "revision": "comparison-0.4-input-restored-no-cross-order",
         "documents": [
           {
             "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
             "kind": "businessDesign",
             "schemaVersion": "0.3",
-            "revision": "comparison-0.4-input-restored",
+            "revision": "comparison-0.4-input-restored-no-cross-order",
             "title": "投球後",
             "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
             "scope": "scopeは外側のexample.scopeを参照",
@@ -71,7 +71,7 @@
                 "why": "投げた結果を正しく確かめ、遊びを進めるため",
                 "when": "その人の順番であり、直前に倒れたものがあれば立て直されているとき。誤入力で記録が未確定なら、確定を待った後。",
                 "where": "規定なし",
-                "procedure": "必須／担当未確認：順番の人が投げ棒を1回投げる。 [手順ID: m-throw]\n\n必須／担当未確認：完全に倒れた番号を目で確認する。もたれて完全に倒れていないものは数えない。 [手順ID: m-observe]\n\n必須（倒れたものがある場合）／担当未確認：倒れたものをその場所に立て直す。試合が終わる投球の後も立て直す。 [手順ID: m-reset]\n\n厳守: m-throw → m-observe\n\n厳守: m-observe → m-reset\n\n番号の記録と立直し。適用範囲: 同じ一回の実投について、正しい番号を記録し、倒れたものがあれば立て直す場面。標準提示順: 倒れた番号を記録する / m-record-save → 投げて結果を確認し立て直す / m-reset。このStepだけが入替可能。Activity全体や次の投球への許可ではない。",
+                "procedure": "必須／担当未確認：順番の人が投げ棒を1回投げる。 [手順ID: m-throw]\n\n必須／担当未確認：完全に倒れた番号を目で確認する。もたれて完全に倒れていないものは数えない。 [手順ID: m-observe]\n\n必須（倒れたものがある場合）／担当未確認：倒れたものをその場所に立て直す。試合が終わる投球の後も立て直す。 [手順ID: m-reset]\n\n厳守: m-throw → m-observe\n\n厳守: m-observe → m-reset",
                 "problem": null,
                 "painLevel": null,
                 "who": "担当未確認",
@@ -86,7 +86,7 @@
                 "why": "投げた回の結果を得点と試合の進行に反映するため",
                 "when": "投球後に完全に倒れた番号を目で確認した時点。立て直しの完了は開始条件ではない。",
                 "where": "CLI",
-                "procedure": "必須／担当未確認：目視した番号を、その試合・実際に投げた人・投球順に対応させて道具へ伝える。対応付け方は未確認。 [手順ID: m-record-enter]\n\n必須（誤入力がある場合）／担当未確認：誤入力は一部だけ採用せず全体を確定しない。入力内容と誤りを残し、同じ投球の番号を直す。次の人は記録が確定するまで待つ。 [手順ID: m-record-correct]\n\n必須（番号が正しい場合）／担当未確認：正しい番号をその試合・実投に結び付けて記録し、得点と次の人の見直しへ渡す。0本も記録できる。 [手順ID: m-record-save]\n\n厳守: m-record-enter → m-record-save\n\n番号の記録と立直し。適用範囲: 同じ一回の実投について、正しい番号を記録し、倒れたものがあれば立て直す場面。標準提示順: 倒れた番号を記録する / m-record-save → 投げて結果を確認し立て直す / m-reset。このStepだけが入替可能。Activity全体や次の投球への許可ではない。",
+                "procedure": "必須／担当未確認：目視した番号を、その試合・実際に投げた人・投球順に対応させて道具へ伝える。対応付け方は未確認。 [手順ID: m-record-enter]\n\n必須（誤入力がある場合）／担当未確認：誤入力は一部だけ採用せず全体を確定しない。入力内容と誤りを残し、同じ投球の番号を直す。次の人は記録が確定するまで待つ。 [手順ID: m-record-correct]\n\n必須（番号が正しい場合）／担当未確認：正しい番号をその試合・実投に結び付けて記録し、得点と次の人の見直しへ渡す。0本も記録できる。 [手順ID: m-record-save]\n\n厳守: m-record-enter → m-record-save",
                 "problem": null,
                 "painLevel": null,
                 "who": "担当未確認",
@@ -165,14 +165,14 @@
       },
       "candidate": {
         "format": "alder-structure-design-example",
-        "proposalVersion": "D2.1",
+        "proposalVersion": "D2.2",
         "proposedPackageVersion": "0.5",
         "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
         "business": {
           "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2-input-restored-D2.1-shared-data",
+          "revision": "design-D2-input-restored-D2.1-shared-data-D2.2-no-cross-order",
           "title": "投球後",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -432,24 +432,6 @@
             }
           ],
           "exceptions": [],
-          "crossActivityOrderRules": [
-            {
-              "id": "order-record-reset",
-              "kind": "interchangeable",
-              "label": "番号の記録と立直し",
-              "context": "同じ一回の実投について、正しい番号を記録し、倒れたものがあれば立て直す場面",
-              "standardSteps": [
-                {
-                  "activityId": "48e418d1-5660-438e-b9fb-6663fd7b509a",
-                  "stepId": "m-record-save"
-                },
-                {
-                  "activityId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
-                  "stepId": "m-reset"
-                }
-              ]
-            }
-          ],
           "data": [
             {
               "id": "data-d3b61766-78d6-4088-abe2-993f8cb743a1",
@@ -600,14 +582,14 @@
       },
       "candidate": {
         "format": "alder-structure-design-example",
-        "proposalVersion": "D2.1",
+        "proposalVersion": "D2.2",
         "proposedPackageVersion": "0.5",
         "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
         "business": {
           "id": "c-bd",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data",
+          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
           "title": "受付",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -731,7 +713,6 @@
           ],
           "findings": [],
           "exceptions": [],
-          "crossActivityOrderRules": [],
           "data": [
             {
               "id": "data-c-output",
@@ -818,14 +799,14 @@
       },
       "candidate": {
         "format": "alder-structure-design-example",
-        "proposalVersion": "D2.1",
+        "proposalVersion": "D2.2",
         "proposedPackageVersion": "0.5",
         "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
         "business": {
           "id": "photo-bd",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data",
+          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
           "title": "写真",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -893,7 +874,6 @@
           "relations": [],
           "findings": [],
           "exceptions": [],
-          "crossActivityOrderRules": [],
           "data": []
         }
       }
@@ -1025,14 +1005,14 @@
       },
       "candidate": {
         "format": "alder-structure-design-example",
-        "proposalVersion": "D2.1",
+        "proposalVersion": "D2.2",
         "proposedPackageVersion": "0.5",
         "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
         "business": {
           "id": "s-bd",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data",
+          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
           "title": "集計",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -1208,7 +1188,6 @@
           ],
           "findings": [],
           "exceptions": [],
-          "crossActivityOrderRules": [],
           "data": [
             {
               "id": "data-s-output",
@@ -1361,14 +1340,14 @@
       },
       "candidate": {
         "format": "alder-structure-design-example",
-        "proposalVersion": "D2.1",
+        "proposalVersion": "D2.2",
         "proposedPackageVersion": "0.5",
         "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
         "business": {
           "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data",
+          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
           "title": "試合開始",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -1538,7 +1517,6 @@
             }
           ],
           "exceptions": [],
-          "crossActivityOrderRules": [],
           "data": [
             {
               "id": "data-f92e3d72-c9cc-46e7-b116-6460ae44787b",
