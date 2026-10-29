@@ -7,6 +7,74 @@ PLUGIN=ROOT/'plugins/alder'
 NAME='alder-manage-json-documents'
 
 class JSONPluginTest(unittest.TestCase):
+    def structured_sample(self):
+        cases=json.loads((ROOT/'tools/document_storage/examples/d2-cases.json').read_text())
+        bd=next(c['candidate']['business'] for c in cases if c['caseId']=='mixed')
+        for activity in bd['activities']:
+            activity['results']=[{'id':r['id'],'text':(r['condition']+'、' if r['condition'] else '')+r['text']} for r in activity['results']]
+        return {'format':'alder-document-package','formatVersion':'0.5','revision':'p1','documents':[bd],'sources':[],'externalDocuments':[],'diagnostics':[]}
+
+    def test_structured_runtime_and_non_destructive_failures_in_isolated_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed)
+            scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            candidate=root/'candidate.json';target=root/'design.json';op=root/'op.json'
+            pkg=self.structured_sample();candidate.write_text(json.dumps(pkg));op.write_text('{}')
+            self.assertEqual(run('author-cli.mjs','create',candidate,target,op).returncode,0)
+            self.assertEqual(run('cli.mjs','validate',target).returncode,0)
+            before=target.read_bytes();info=json.loads(run('author-cli.mjs','inspect',target).stdout)
+            self.assertEqual(info['sha256'],hashlib.sha256(before).hexdigest())
+            self.assertEqual(run('author-cli.mjs','create',candidate,target,op).returncode,2)
+            self.assertEqual(target.read_bytes(),before)
+            pkg['revision']='p2';pkg['documents'][0]['revision']+='-2';pkg['documents'][0]['activities'][0]['why']='連絡先を案内するため。'
+            candidate.write_text(json.dumps(pkg));op.write_text(json.dumps({'expectedRevision':info['revision'],'expectedSha256':info['sha256']}))
+            lock=Path(str(target)+'.alder-lock');lock.write_text('external lock')
+            self.assertEqual(run('author-cli.mjs','commit',target,candidate,op).returncode,2)
+            self.assertEqual(lock.read_text(),'external lock');self.assertEqual(target.read_bytes(),before);lock.unlink()
+            self.assertEqual(run('author-cli.mjs','commit',target,candidate,op).returncode,0)
+            before=target.read_bytes();info=json.loads(run('author-cli.mjs','inspect',target).stdout)
+            self.assertEqual(run('author-cli.mjs','commit',target,candidate,op).returncode,2) # stale CAS
+            self.assertEqual(target.read_bytes(),before)
+            for bad in ['unknown-field','invalid-reference','removed-id','malformed']:
+                next_pkg=json.loads(before);next_pkg['revision']='p3';next_pkg['documents'][0]['revision']+='-3'
+                activity=next_pkg['documents'][0]['activities'][0]
+                if bad=='unknown-field':activity['results'][0]['condition']='unapproved field'
+                if bad=='invalid-reference':activity['performers'][0]['objectId']='missing'
+                if bad=='removed-id':activity['results'].pop()
+                candidate.write_text('{bad' if bad=='malformed' else json.dumps(next_pkg))
+                op.write_text(json.dumps({'expectedRevision':info['revision'],'expectedSha256':info['sha256']}))
+                r=run('author-cli.mjs','commit',target,candidate,op)
+                self.assertEqual(r.returncode,2,(bad,r.stderr));self.assertEqual(target.read_bytes(),before)
+                self.assertFalse(lock.exists());self.assertEqual(list(root.glob('.alder-json-*')),[])
+
+    def test_structured_check_gate_and_state_rebase_guard_in_isolated_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed)
+            scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda *args:subprocess.run(['node',str(scripts/'author-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True)
+            candidate=root/'candidate.json';target=root/'design.json';op=root/'op.json'
+            pkg=self.structured_sample();candidate.write_text(json.dumps(pkg));op.write_text('{}')
+            self.assertEqual(run('create',candidate,target,op).returncode,0)
+            before=target.read_bytes();info=json.loads(run('inspect',target).stdout);bd=pkg['documents'][0];a=bd['activities'][0];based={'documentId':bd['id'],'revision':bd['revision'],'verification':'unverified'}
+            pkg['documents'].append({'id':'check-doc','kind':'checkItems','schemaVersion':'0.1','revision':'c1','title':'合成Check','basedOn':based.copy(),'intro':[],'index':[{'activityId':a['id'],'purpose':'','connections':'','checkIds':['check-one']}],'sections':[{'id':'check-section','activityId':a['id'],'title':'案内','preamble':[]}],'guarantees':[],'examples':[],'items':[{'id':'check-one','checkId':'CI-001','title':'案内が記録される','detailSummary':'','sectionId':'check-section','reviewState':'未レビュー','fields':{'guarantee':[{'kind':'text','value':'案内が記録される'}]}}],'notes':[]})
+            pkg['documents'].append({'id':'state-doc','kind':'stateTransition','schemaVersion':'0.2','revision':'s1','title':'合成状態','basedOn':based.copy(),'objectId':bd['objects'][0]['id'],'states':[{'id':'guided','name':'案内済み'}],'start':'@new','terminal':'@unknown','completeness':'partial','source':'synthetic fixture, not business agreement','transitions':[{'id':'transition-one','sourceId':'T1','fromId':'@new','toId':'guided','activityId':a['id'],'event':None,'exceptionId':None,'condition':'案内を記録','effect':'change','path':'normal','evidence':'合成入力','note':'部分定義'}]})
+            pkg['revision']='p2';candidate.write_text(json.dumps(pkg));operation={'expectedRevision':info['revision'],'expectedSha256':info['sha256']};op.write_text(json.dumps(operation))
+            r=run('commit',target,candidate,op);self.assertEqual(r.returncode,2,r.stderr);self.assertIn('Human Business Design',r.stderr);self.assertEqual(target.read_bytes(),before)
+            operation['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':{'source':'synthetic fixture only','quote':'模擬合意。実運用承認ではない'}}];op.write_text(json.dumps(operation));self.assertEqual(run('commit',target,candidate,op).returncode,0)
+            before=target.read_bytes();info=json.loads(run('inspect',target).stdout)
+            for kind in ['checkItems','stateTransition','both']:
+                altered=json.loads(before);altered['revision']='p3';new_bd=json.loads(json.dumps(altered['documents'][0]));new_bd['id']='new-bd';new_bd['revision']+='-new'
+                # Rebase both to a changed BD revision; for single cases omit the other document from the seed.
+                seed=json.loads(before)
+                if kind!='both':seed['documents']=[d for d in seed['documents'] if d['kind'] in ['businessDesign',kind]]
+                target.write_text(json.dumps(seed));seed_bytes=target.read_bytes();seed_info=json.loads(run('inspect',target).stdout)
+                altered=json.loads(seed_bytes);altered['revision']='p3';altered['documents'][0]['revision']+='-new';altered['documents'][0]['activities'][0]['why']+='改訂。'
+                for d in altered['documents'][1:]:d['revision']+='-new';d['basedOn']['revision']=altered['documents'][0]['revision']
+                candidate.write_text(json.dumps(altered));op.write_text(json.dumps({'expectedRevision':seed_info['revision'],'expectedSha256':seed_info['sha256'],'bdConfirmations':[{'documentId':bd['id'],'revision':altered['documents'][0]['revision'],'evidence':{'source':'synthetic only','quote':'模擬BD合意'}}]}))
+                r=run('commit',target,candidate,op);self.assertEqual(r.returncode,2,r.stderr);self.assertIn('source cannot be rebased',r.stderr);self.assertEqual(target.read_bytes(),seed_bytes)
+                self.assertFalse(Path(str(target)+'.alder-lock').exists());self.assertEqual(list(root.glob('.alder-json-*')),[])
+
     def test_new_artifact_default_and_explicit_legacy_update_instructions(self):
         # Distribution contract only; actual model routing needs a forward run.
         for name in ['alder-draft-business-design', 'alder-draft-check-items']:

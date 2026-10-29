@@ -1,33 +1,35 @@
 {
-  "alder_source_revision": "11848cae45a171a1a49ac6e0542b2bd7cac89b16",
+  "alder_source_revision": "3d88a905f145cf359921459625ef62d5f4a13a1f",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "987b9bc5bdd6691ff10842e760cbd75f3ee17a06ce890912e87226a5c4173c3b",
+    "docs/plugin-json-authoring.ja.md": "b1c9bd4566755741c6dcd1dcb0074dabac6b93d8cfaf2812c01f28fc5c525085",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
-    "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
+    "docs/business-design-structure.ja.md": "82d77669107f2a22e58819c0aee4baad824129520c0cb2c8a9ebb3f1c8b87a3d",
     "docs/check-item-traceability.md": "e248d561cba693871638108f664006c811509357f9b2b0b9e72a37565f724258",
     "docs/business-design-quality-check.ja.md": "31de5ed1e52fe9e863f14022e0fad2ff533abb0b3684aa0a56c42ebe873fb5ae",
     "docs/business-design-correlation-check.ja.md": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
-    "docs/json-state-transitions.ja.md": "d379d9ba55e2bb495474d4bb09ba993e86a53f29b3f27251073b14b4971f4a67",
-    "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "50316bb6135cec1d50378a6b49256d4a935bdcc5000a173952bdc9b1bcdaf9a3"
+    "docs/json-state-transitions.ja.md": "cabd43ee0843bb4c184fd3db3e7a54a12110c7dd71cefaadb05b7c024dbaf66d",
+    "docs/json-roles.ja.md": "f3f45ddcbc7ab326a4e9b60d026e67bfe9fc1ab62de9d4d7ea1e142aac8ecf4a",
+    "docs/json-native-contract.ja.md": "745ec9824eb12675dfb7701c612271602e950eb04c4854c8eb8cfce22c9c21c7",
+    "docs/business-design-json-0.5.ja.md": "0966bde8860be7b7f7c76307d47b750997c2748af2c70fdd68c6d46023d0fdb6"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "a04222dfb6b9a291828a18d18296dccc61f1a17bbe2938c98b3b1c16162a0d3c",
-    "tools/document_storage/schema.mjs": "3e92d02d74019c7f490942fba83a4868e0b421aa6dd0bfb4a56b17d731b37bf8",
-    "tools/document_storage/schema.json": "0d58b0ddfb41cbe3bec6db554e834442622a441b200256f1318205070e6deafe",
-    "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
+    "tools/document_storage/core.mjs": "6c44b6045052001fcf7aec9fc4f0d9f7b654273bfa48b9dd3bcc015eb1eb13cf",
+    "tools/document_storage/schema.mjs": "5c4bd2b089960b7b247e50541e1f7883f5204ce35fd545f5ab05ee3ab3353bac",
+    "tools/document_storage/schema.json": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
+    "tools/document_storage/edit.mjs": "dcb29113253f8d91ee37df35214fd3fea56a6f9518d0a1989e54f2cb6c913a7a",
     "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
-    "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
+    "tools/document_storage/cli.mjs": "8d15efffafc7beafcb39e854819d9c4a088366ad167f570ffb65a80abd03fcc0",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "0e238bb09790b4504b0d2c7506895a5ecfaae072eeb4ef90307e3a8948a802c3",
-    "tools/document_storage/author-cli.mjs": "ccde8b2a8844964d68c40c4ab0dc1314d1f02d276a1712918e05a96b6cdc13f5",
+    "tools/document_storage/authoring.mjs": "14224f763c362979083f3ab6175d9186b32e2d5b0c11ed00692596f02543d145",
+    "tools/document_storage/author-cli.mjs": "dda74876d5a8cf9f7a5101982c74444505cc7ff7698a3635b942a0861c7fdb2c",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
     "tools/document_storage/state-storage.mjs": "f54beb78f895f843379c23f98c755b1d259834fa24b75285feb63ff9e7529853",
     "tools/document_storage/roles.mjs": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1",
-    "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb"
+    "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
+    "tools/document_storage/structured.mjs": "c99643307947118041d78d354f886642c100ed8ff9726b717dd476b6ea53729d"
   },
   "script_destinations": {
     "tools/document_storage/core.mjs": "document_storage/core.mjs",
@@ -43,6 +45,7 @@
     "tools/document_storage/state-declaration.mjs": "document_storage/state-declaration.mjs",
     "tools/document_storage/state-storage.mjs": "document_storage/state-storage.mjs",
     "tools/document_storage/roles.mjs": "document_storage/roles.mjs",
-    "tools/document_storage/legacy-json.mjs": "document_storage/legacy-json.mjs"
+    "tools/document_storage/legacy-json.mjs": "document_storage/legacy-json.mjs",
+    "tools/document_storage/structured.mjs": "document_storage/structured.mjs"
   }
 }

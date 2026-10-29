@@ -10,7 +10,7 @@ export async function run(args){
  try{
   if(!((args[0]==='convert'&&args.length===3)||(args[0]==='validate'&&args.length===2)))throw Error('Usage: node cli.mjs convert request.json output.json | validate package.json');
   const [command,input,output]=args;
-  if(command==='validate'){const pkg=parseStrict(fs.readFileSync(input,'utf8'));const r=validate(pkg.formatVersion==='0.4'?pkg:(await import('./legacy-json.mjs')).readLegacyPackage(pkg));process.stdout.write(JSON.stringify({valid:true,...r})+'\n');return 0;}
+  if(command==='validate'){const pkg=parseStrict(fs.readFileSync(input,'utf8'));const r=validate(['0.4','0.5'].includes(pkg.formatVersion)?pkg:(await import('./legacy-json.mjs')).readLegacyPackage(pkg));process.stdout.write(JSON.stringify({valid:true,...r})+'\n');return 0;}
   const request=parseStrict(fs.readFileSync(input,'utf8')),base=path.dirname(path.resolve(input));
   if(!Array.isArray(request.sources))throw Error('Sources required');
   request.sources=request.sources.map(s=>{if(typeof s.path!=='string'||Object.hasOwn(s,'text'))throw Error('Source path required; inline text belongs to API');const {path:p,...meta}=s;return {...meta,text:fs.readFileSync(path.resolve(base,p),'utf8')};});
