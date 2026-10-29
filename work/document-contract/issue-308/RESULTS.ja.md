@@ -1,8 +1,28 @@
 # D2.2 Phase Aの修正と検証
 
-対象は正式JSON契約・Validator・互換入力・保存境界。base mainは `1f05aeeb5e5c3acbd8722420a3ab9aacd7e29dd0`、採用D2.2は `3d4c810938cdf2d61c307d0073e28adfc84fa605`。今回の修正は[Chatレビューの2件](https://github.com/mk3008/alder/pull/309#issuecomment-6496584155)に限定した。package 0.5/BD schema 0.4はPlugin製品版とは別であり未リリース。
+対象は正式JSON契約・Validator・互換入力・保存境界。base mainは `1f05aeeb5e5c3acbd8722420a3ab9aacd7e29dd0`、採用D2.2は `3d4c810938cdf2d61c307d0073e28adfc84fa605`。[前回2件](https://github.com/mk3008/alder/pull/309#issuecomment-6496584155)を修正した `c1aabf96012d9fdabf9aa6cf86d5370e9e19ae59` に、[Chat再レビューの0.5同士のrebase指摘](https://github.com/mk3008/alder/pull/309#issuecomment-6497903158)だけを追加修正した。package 0.5/BD schema 0.4はPlugin製品版とは別であり未リリース。
 
-## 修正前後
+## 0.5通常改訂の追加修正
+
+既存正本v2のD2A-08（参照版・確認状態保持）とD2A-10（保存非破壊）を適用する。保証や採用fixtureは変更していない。
+
+修正前head `c1aabf96` の実Node/CLIで、Check単独、State単独、両方の3ケースを実行した。入力は固定mixed BDに既存の合成Check/Stateを付け、旧Checkを確認済みの保存済みsnapshotとしてseedしたもの。fixtureの初期状態は実運用の承認ではない。
+
+各候補ではBDのwhyへ「改訂後の案内も行う。」を追記し、BD revisionを `design-D2-D2.1-shared-data-D2.2-no-cross-order` から同値＋`-next`へ変更。package/従属文書revisionと各basedOn.revisionも更新し、Check本文・状態は不変とした。operationは正しいexpectedRevision/expectedSha256と新BDへの模擬bdConfirmationsだけで、humanDecisionsは渡さない。`author-cli.mjs commit target candidate operation`を実行する。
+
+| 同じ入力と期待（3ケースすべて保存拒否） | 修正前の実測 | 修正後の実測 |
+| --- | --- | --- |
+| Check単独 | exit 0、元ファイル変更、確認済み保持 | exit 2、source cannot be rebased、元ファイルのバイト不変 |
+| State単独 | exit 0、元ファイル変更、basedOn付替え | exit 2、同診断、元ファイルのバイト不変 |
+| Check＋State | exit 0、両方を新版へ付替え、確認済み保持 | exit 2、同診断、元ファイルのバイト不変 |
+
+原因は、0.4→0.5専用の保存拒否では通常0.5更新を守れず、CheckのmeaningHashがBD版を含まないことと、Stateに参照版変更の保存ガードがなかったこと。構造的な参照整合性は満たしていても意味の再照合にはならない。
+
+修正はauthoringの0.5通常更新で、既存Check/State文書のbasedOnを元値と比較して変更を拒否する最小ガード。BD合意やCheck本文hashに対するhumanDecisionsを追加しても、再照合フローの代わりにしない。同じBD版のCheck本文訂正→要確認、Test証拠追記→確認済み保持、既存人間レビュー、State編集、新規Check/State追加、BD-only更新は正例で継続成功。拒否時のtarget/candidateバイト不変とlock/temp残留なし、拒否後の同版通常commit/readbackも実CLIで確認する。
+
+Schema/Validatorの構造検査やmeaningHashの定義は変更しない。旧版保存契約、新承認機構、Plugin/Viewerは追加・変更しない。新版Check/Stateの意味再照合フローは未実装のままであり、今回の拒否をその実装完了と扱わない。
+
+## 前回2件の修正前後
 
 修正前headは `9979a35b14a45c95530387e05d6f9fe1df51e57b`。旧Node91/旧Graph52・Viewer回帰は成功していたが、以下の契約不整合を検出できていなかった。旧テストの成功を正式受入と読み替えない。
 
