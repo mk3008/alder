@@ -92,7 +92,7 @@
 .concept-review-landscape[hidden]{display:none!important}
 .landscape-overview{display:flex;flex:1;min-height:0}
 .landscape-overview .subsystem-overview-canvas{flex:1;height:auto;min-height:0}
-.subsystem-overview-region{fill:var(--panel);stroke:var(--subtle);stroke-width:1.5;pointer-events:none}
+.subsystem-overview-region{fill:var(--panel);stroke:var(--subtle);stroke-width:1.5;cursor:pointer}
 .subsystem-overview-region-title{font:600 14px Inter,"Segoe UI","Noto Sans JP",sans-serif;color:var(--fg);height:32px;padding:4px 6px;text-align:left}
 .subsystem-overview-group.selected .subsystem-overview-region{stroke:var(--review-blue);stroke-width:2}.subsystem-overview-group.review-neighbor .subsystem-overview-region{stroke:var(--review-link);stroke-width:2}
 .subsystem-overview-graph .edge-label{stroke:var(--bg);cursor:pointer}
