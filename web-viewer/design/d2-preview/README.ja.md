@@ -24,6 +24,6 @@ Resultは成立条件付きの定義を表示します。Viewerは自然文条�
 
 `npm run test:d2`で`verification/d2-preview.check-items.json`の6項目をDOM/参照検査へ対応付けます。候補例の変更に合わせて期待を弱めず、旧版とD2の要素・接続、Step移動、担当、条件、情報参照を照合します。`npm run build`と既存の最終CIも維持します。
 
-既存のChrome全体検証後に`web/test-d2-preview-browser.mjs`がこの確認版を操作し、Before/After・担当・条件・配色・393pxの画像を既存の`json-document-HEAD`artifactへ保存します。自動検証は人間の可読性・訂正容易性の採否を代替しません。
+既存のChrome全体検証と同じCIで`web/test-d2-preview-browser.mjs`がこの確認版を操作し、Before/After・担当・条件・配色・393pxの画像を既存の`json-document-HEAD`artifactへ保存します。自動検証は人間の可読性・訂正容易性の採否を代替しません。
 
 この差分はPR #301の固定head `650632167c1a61bb0b8614431d08f8d1ecbfb690` からの独立Previewです。#301の既存branchや、本番トップページ/配布Plugin/正式Schemaは変更せず、公開確認版は既存のものと別の固定パスに置きます。mainへ単独で先行統合しません。
