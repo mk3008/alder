@@ -9,12 +9,13 @@ export async function verifyTabScroll(browser){
   await loadPurchaseReview(page);
   const keys=await page.locator('#explorer-business-activity .explorer-item').evaluateAll(items=>items.slice(0,3).map(item=>item.dataset.explorerKey));
   keys.push(...await page.locator('#explorer-subsystems .explorer-item-nested').evaluateAll(items=>items.map(item=>item.dataset.explorerKey)));
+  keys.push('concept:overview');
   keys.push(await page.locator('#explorer-states .explorer-item').first().getAttribute('data-explorer-key'));
   for(const key of keys)await page.locator(`[data-explorer-key=${JSON.stringify(key)}]`).click();
   const row=page.locator('.shell-open-tabs');
   const initial=await row.evaluate(el=>({width:el.clientWidth,extent:el.scrollWidth,scrollbar:getComputedStyle(el).scrollbarWidth,webkit:getComputedStyle(el,'::-webkit-scrollbar').display,kinds:[...new Set([...el.querySelectorAll('.tab:not([hidden])')].map(tab=>tab.dataset.viewKind))]}));
   assert.ok(initial.extent>initial.width,'mixed tabs overflow the common row');assert.equal(initial.scrollbar,'none');assert.equal(initial.webkit,'none');
-  for(const kind of ['business','concept','states'])assert.ok(initial.kinds.includes(kind),`mixed row contains ${kind}`);
+  for(const kind of ['business','concept','subsystems','states'])assert.ok(initial.kinds.includes(kind),`mixed row contains ${kind}`);
   const selected=await row.locator('.tab.active button:first-child').getAttribute('id'),url=page.url();
   await row.evaluate(el=>{el.scrollLeft=0;});const box=await row.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
   await page.mouse.wheel(0,180);await page.waitForFunction(()=>document.querySelector('.shell-open-tabs').scrollLeft>0);

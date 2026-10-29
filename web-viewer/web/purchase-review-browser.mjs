@@ -6,6 +6,7 @@ export async function loadPurchaseReview(page){
  await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
  await page.locator('#fallback').setInputFiles({name:'purchase-v2-beta.json',mimeType:'application/json',buffer:source});
  await page.waitForFunction(()=>document.querySelectorAll('#explorer-business-activity .explorer-item').length>0);
+ await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
  if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
  await page.locator('[data-explorer-key="concept:landscape"]').click();await page.locator('.concept-empty button').click();
