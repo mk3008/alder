@@ -42,6 +42,8 @@ jobs:
         run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
       - name: Verify UI verification authority
         run: npm run verify:contract
+      - name: Verify experimental D2 Preview boundary and DOM
+        run: npm run test:d2
       - run: npm test
       - run: npm run build
       - name: Install browser driver
@@ -83,6 +85,7 @@ jobs:
             node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
           else
             node web/test-browser.mjs
+            node web/test-d2-preview-browser.mjs
           fi
 
       - name: Retain bounded B-loop measurements

@@ -15,5 +15,5 @@ export default defineConfig({
   });},
   buildStart(){if(building)this.emitFile({type:'asset',fileName:'purchase-v2-beta.json',source:readFileSync(purchaseFixture)});}
  }],
- build:{rollupOptions:{input:{main:'index.html',concept:'concept.html'}}}
+ build:{rollupOptions:{input:{main:'index.html',concept:'concept.html',d2:'d2.html'}}}
 });

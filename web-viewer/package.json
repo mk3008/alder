@@ -15,7 +15,8 @@
     "test:layout": "node --experimental-strip-types web/test-shared-layout.mjs && node --experimental-strip-types web/test-matrix-layout.mjs && node --experimental-strip-types web/test-source-captions.mjs && node --experimental-strip-types web/test-shared-captions.mjs",
     "verify:contract": "node web/test-navigation-authority-gate.mjs && node --experimental-strip-types web/review-navigation-contract.mjs && node web/review-explorer-contract.mjs && node --experimental-strip-types web/test-tab-scroll.mjs && node web/review-ci-reconciliation.mjs && node --experimental-strip-types web/test-subsystem-overview.mjs && node --experimental-strip-types web/test-subsystem-index.mjs && node --experimental-strip-types web/test-camera-reload.mjs && node web/test-offline-preview.mjs",
     "lint": "oxlint --max-warnings=100 src web vite.config.ts",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "test:d2": "node --experimental-strip-types web/test-d2-preview.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
