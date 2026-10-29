@@ -1,0 +1,48 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "購買V2βの下書き保存と購入申請の状態遷移を区別する。業務上の未合意は未合意のままにする。",
+  "relatedAuthorities": ["PURCHASE-V2-001", "PURCHASE-V2-002", "PURCHASE-V2-005", "PURCHASE-V2-006"],
+  "checks": [
+    {
+      "id": "PURCHASE-STATE-001",
+      "condition": "入力内容・品目数・現在の申請状態を問わず、下書き保存の仕様を確認する。",
+      "guarantee": "下書き保存に前提条件を設けない。既存申請の状態や提出・承認済みの内容を保存によって変えない扱いは仮説として維持し、再申請の条件とは区別する。",
+      "reason": "保存可能という要件と、既存申請の状態・再申請についての採否未確認の意味を混同しないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "V2βの業務設計、下書き例と未合意の記録を照合"
+    },
+    {
+      "id": "PURCHASE-STATE-002",
+      "condition": "購入申請の状態遷移をレビューする。",
+      "guarantee": "下書き保存が無条件で可能というだけでは、各状態に同値戻りを追加しない。終結・破棄を含め、下書き保存を理由として自動補完したT20〜T26を状態遷移の事実として表示しない。",
+      "reason": "別に保存する仮説を、元の申請を操作して同じ状態に戻す遷移と誤認させないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "状態遷移JSONと実際のViewer表示を照合"
+    },
+    {
+      "id": "PURCHASE-STATE-003",
+      "condition": "明示的に定義された同値戻りを含む状態図を表示する。",
+      "guarantee": "表示器は明示された遷移をそのまま描画する。再申請不成立のT08・T11、下書きの再保存のT19、および一部入庫・未購入の登録後も待ちが残るT17を残し、業務上の仮説を確定事項としない。",
+      "reason": "特定の誤った候補の訂正で、意味のある同値戻りの描画機能を失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "V2βの残存遷移・仮説注記と汎用状態図の描画を照合"
+    },
+    {
+      "id": "PURCHASE-STATE-004",
+      "condition": "購買V2βの状態遷移を訂正して保存する。",
+      "guarantee": "削除した各遷移のIDと理由を操作記録に残し、他のID・業務設計・V1・既存検証正本を保持する。状態文書とパッケージの版を更新し、概念草案の参照版を明示的に追従させる。",
+      "reason": "候補の訂正を意図しないID消失や旧版への上書きと区別できるようにするため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "更新前後のJSON差分・操作記録・文書版・固定ハッシュを照合"
+    },
+    {
+      "id": "PURCHASE-STATE-005",
+      "condition": "既存JSONの状態遷移を明示的に削除する操作を検査する。",
+      "guarantee": "削除対象の遷移IDと理由が明示され、実際の削除と完全に一致する場合のみ受け付ける。未申告の削除、存在しないID、遷移以外のID、残っているID、重複および参照不整合を拒否する。期待版と内容ハッシュによる競合検知を維持する。",
+      "reason": "正当な訂正と意図しないIDの消失を区別し、他の正本要素の保護を維持するため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "authoring操作と実保存で正常系・拒否系を照合"
+    }
+  ]
+}
