@@ -4,8 +4,10 @@ import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
 import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import {readFileSync,mkdirSync} from 'node:fs';
-// Open the native disclosure only when responsive layout collapsed the actions.
+// Narrow-screen rails cover the tab row too. Dismiss them through their native
+// controls before operating the document disclosure or its inline actions.
 export async function ensureDocumentActions(page){
+ await closeCanvasOverlays(page);
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const toggle=page.locator('#document-actions-toggle');
  if(await toggle.isVisible()&&await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();

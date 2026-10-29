@@ -1,6 +1,7 @@
 import {activityTabFixture} from './document-test-view.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
+import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 const ids=['refresh','save-image','copy-image','share-source','open-checks','view-markdown'];
@@ -9,7 +10,7 @@ export async function verifyDocumentActions(browser){
  page.on('pageerror',e=>errors.push(e.message));
  const sample=readFileSync('../business-design/alder/README.md','utf8');
  const mode=()=>page.locator('.tab-strip').getAttribute('data-actions-mode');
- const open=async()=>{if(await mode()==='menu'&&await page.locator('#document-actions-toggle').getAttribute('aria-expanded')!=='true')await page.locator('#document-actions-toggle').click();};
+ const open=()=>ensureDocumentActions(page);
  const focus=()=>page.evaluate(()=>document.activeElement?.id);
  const geometry=async()=>{
   const m=await page.evaluate(()=>{
