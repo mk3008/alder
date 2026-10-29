@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "7b3f731ed923948380c4dc264863664da22975c9",
+  "viewerBase": "11054d443883f17f808a07befb6869558ad17855",
+  "build": "local Vite build; CI validation is separate",
+  "entry": "d2.html",
+  "files": {
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-BwzFBmKM.css": "dffe63a424b37a6a8db7772579c72a2222d972af44cb2d62f70ad010851571d5",
+    "assets/concept-D6qKY5lH.js": "32cae0df979e30f06821357b50807ea4f87a137f9c14df24a6d732674f58ccfa",
+    "assets/concept-review-fixture-CFRnG4RA.js": "52a7660fa5630497ad7235e137ee2d50a3de3deeea3218af8973db837d8f0261",
+    "assets/d2-CBWAltS4.js": "ef70d396b8c9b7177244ab20f1cbb9595cc4e795bc4cb89c74c76ece84faac85",
+    "assets/document-input-U14zfIPM.js": "046c255110c0fb841eeac5e5a62bd57b95d17356636e221e9dd1c99040987fc5",
+    "assets/main-DLM-Yag5.js": "b01aaab2600b3fc6fec60dbe47297f4216a216fabea9b1b7f241d54f42d5e246",
+    "assets/main-DSiJ2S8i.css": "a8d8a619ac6509fe6da1734d421c5e6a5a5bbeacf9f18912205a659b0c532612",
+    "assets/matrix-layout-B8YebFND.js": "498028f3f8910de6843abb828e928582fc3e4f04125fc055ff01bd8eb0d2f7c6",
+    "concept-preview/neighborhood.js": "3db53cbe1f21f9cd2098b63cee57ffaeffe4084a0ed53d4809ba50dbc940b32a",
+    "concept.html": "9162776a4bfdae18df3bddde15e025a56ae369280f9161af29db7044693e5b85",
+    "d2-examples.json": "23efadc547989355b672ff5b255d143a2478b8c70610b569d1aa3890b4af0ba4",
+    "d2.html": "daea51cd5ae4436074271c1dda4ca5ac437abeb4f36ee2c03daedeff3e8f9d64",
+    "index.html": "16a8eff14f60363346d4c29a0e8206bddfd622828c33edf15e50757bd7f44996",
+    "purchase-v2-beta.json": "9142f580465941fa0114156996f87de59ee54a970890fb363bfa89a76bcedceb"
+  }
+}
