@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {conceptDiagram} from '../src/concept-layout.js';
 const bundle=async(path,globalName)=>(await build({entryPoints:[path],bundle:true,write:false,format:'iife',globalName,loader:{'.css':'empty'}})).outputFiles[0].text;
 const dataWindow=new JSDOM('',{runScripts:'outside-only'}).window;dataWindow.eval(await bundle('src/concept-review-fixture.ts','Review')+';globalThis.Review=Review;');
@@ -28,9 +29,9 @@ for(const id of ids){
 }
 assert.equal(reviewBoundaries.length,6);for(const group of reviewGroups){for(const card of Object.values(group.concepts)){assert(card.sources?.length,'every assembled card must expose its origin');assert(card.sourceActivities?.length,'every assembled card must link to its actual generating business');}assert(group.activities.length);}
 const shellCode=await bundle('src/viewer-shell.ts','Shell');
-function harness(query){
+function harness(query,saved){
  const w=new JSDOM('<div id="app"><header><button id="node-list-toggle">Left</button><button id="drawer">Right</button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept&conceptFixture=purchase'+query,runScripts:'outside-only',pretendToBeVisual:true}).window;
- w.eval(shellCode+';globalThis.Shell=Shell;');let key='purchase';const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{capture(){},business:()=>({key,viewKey:'overview',activities:[],states:[{id:'request',name:'購入申請'}],views:[{key:'overview',name:'業務全体図'}]}),openActivity(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();return{w,d:w.document,shell,other(){key='other';shell.syncDocument();}};
+ if(saved)w.sessionStorage.setItem('alder-explorer-v1:/',JSON.stringify(saved));w.eval(shellCode+';globalThis.Shell=Shell;');let key='purchase';const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{capture(){},business:()=>({key,viewKey:'overview',activities:[],states:[{id:'request',name:'購入申請'}],views:[{key:'overview',name:'業務全体図'}]}),openActivity(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();return{w,d:w.document,shell,other(){key='other';shell.syncDocument();}};
 }
 const {w,d,other}=harness('');
 try{
@@ -60,5 +61,29 @@ const whole=harness('');try{
 }finally{whole.w.close();}
 const landTabsAuthority=JSON.parse(readFileSync('verification/landscape-tabs.check-items.json','utf8'));assert.deepEqual(landTabsAuthority.checks.map(c=>c.id),['LANDSCAPE-TABS-001','LANDSCAPE-TABS-002']);console.log('LANDSCAPE-TABS-001/002: nested whole-model tabs superseded by SUBSYSTEM-INDEX; iframe/history and reader-first entry retained');
 
-for(const id of ['request','version','item','preparation','receipt','line']){const direct=harness('&concept='+id);try{const frame=direct.d.querySelector('[data-concept-view="'+id+'"]');assert(frame&&!frame.hidden,'direct individual URL stays reachable: '+id);assert.equal(new URL(frame.src).searchParams.get('focus'),id);assert(direct.d.querySelector('#concept-tab-'+id));assert.equal(direct.d.querySelector('[data-explorer-key="concept:'+id+'"]'),null);}finally{direct.w.close();}}
+for(const id of ['request','version','item','preparation','receipt','line']){const direct=harness('&concept='+id);try{const frame=direct.d.querySelector('[data-concept-view="'+id+'"]');assert(frame&&!frame.hidden,'direct individual URL stays reachable: '+id);assert.equal(new URL(frame.src).searchParams.get('focus'),id);assert(direct.d.querySelector('#concept-tab-'+id));assert.equal(direct.d.querySelector('[data-explorer-key="concept:'+id+'"]').getAttribute('aria-current'),'page');}finally{direct.w.close();}}
 const subsystemAuthority=JSON.parse(readFileSync('verification/logical-subsystems.check-items.json','utf8'));assert.equal(subsystemAuthority.checks[0].id,'LOGICAL-SUBSYSTEM-001');console.log('LOGICAL-SUBSYSTEM-001: historical name superseded by LOGICAL-REVIEW-001; card navigation remains verified');
+
+// CONCEPT-ENTRY: independent authority, menu reachability and search retention.
+const entryBytes=readFileSync('verification/concept-explorer-complete.check-items.json');
+const verifyEntry=bytes=>assert.equal(createHash('sha256').update(bytes).digest('hex'),'bc21009577b62c5770b5171bb8f347e26918dc2303633c3a57fb7afbf3553994');
+verifyEntry(entryBytes);assert.throws(()=>verifyEntry(Buffer.from('{}')));
+const entryAuthority=JSON.parse(entryBytes),coverage=[];
+for(const id of ['request','version','item','preparation','receipt','line']){
+ const h=harness('');try{
+  const d=h.d,entry=()=>d.querySelector('[data-explorer-key="concept:'+id+'"]');
+  entry().click();entry().click();assert.equal(d.querySelectorAll('#concept-tab-'+id).length,1);assert.equal(entry().getAttribute('aria-current'),'page');assert.equal(new URL(d.querySelector('[data-concept-view="'+id+'"]').src).searchParams.get('focus'),id);
+  d.querySelector('#concept-tab-'+id).parentElement.querySelector('.close').click();entry().click();assert(d.querySelector('#concept-tab-'+id));
+  coverage.push('CONCEPT-ENTRY-001:'+id,'CONCEPT-ENTRY-002:'+id);
+ }finally{h.w.close();}
+}
+const searchHarness=harness('');try{
+ const {d,w}=searchHarness,heading=()=>d.querySelector('[data-explorer-key="group:concept-relations"]');heading().click();assert(d.querySelector('#explorer-concept-relations').hidden);
+ const input=d.querySelector('.explorer-search input');input.value='購入申請';input.dispatchEvent(new w.Event('input'));assert(!d.querySelector('#explorer-concept-relations').hidden);assert(d.querySelector('[data-explorer-key="concept:request"]'));input.value='';input.dispatchEvent(new w.Event('input'));assert(d.querySelector('#explorer-concept-relations').hidden);
+ const saved=JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/'));assert.equal(saved.expandedVersion,3);assert(!saved.expanded.includes('concept-relations'));coverage.push('CONCEPT-ENTRY-003:search');
+ assert.equal(d.querySelectorAll('#explorer-concept-relations .explorer-item').length,7);assert.equal(d.querySelectorAll('#explorer-concept-model .explorer-item').length,4);assert(!d.querySelector('[data-explorer-key="concept:subsystems"]'));coverage.push('CONCEPT-ENTRY-001:inner-tabs');
+}finally{searchHarness.w.close();}
+const verifyCoverage=rows=>{for(const c of entryAuthority.checks)assert(rows.some(r=>r.startsWith(c.id+':')));assert.equal(new Set(rows).size,rows.length);assert.equal(rows.length,14);};verifyCoverage(coverage);assert.throws(()=>verifyCoverage(coverage.slice(1)));assert.throws(()=>verifyCoverage([...coverage,coverage[0]]));verifyEntry(readFileSync('verification/concept-explorer-complete.check-items.json'));
+console.log('CONCEPT-ENTRY-001..003: all six menu pages, current page, close/reopen, deduplication, search and saved folding; historical authorities retained');
+
+const oldMenu=harness('',{expandedVersion:2,expanded:['business','concept']});try{assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:concept-relations"]').getAttribute('aria-expanded'),'true');assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:concept-model"]').getAttribute('aria-expanded'),'false');assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:business-activity"]').getAttribute('aria-expanded'),'false');}finally{oldMenu.w.close();}
