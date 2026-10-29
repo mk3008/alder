@@ -18,7 +18,9 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 ## 更新とレビュー
 
-既存正本をvalidate/inspectし、byte hashとpackage revisionを取得する。全体を読んでから依頼された要素だけを候補で変更する。Activity/Object追加には新IDを割り当て、既存の改名・並べ替え・内容更新ではIDを維持する。変更文書とpackageのrevisionだけ更新する。既存IDの削除/置換、原典目録の書換え、外部目録の改変は保存器が拒否する。保存前後で未決、Findings、文章内の引用、関係と共有Checkを比較する。
+既存正本をvalidate/inspectし、byte hashとpackage revisionを取得する。全体を読んでから依頼された要素だけを候補で変更する。Activity/Object追加には新IDを割り当て、既存の改名・並べ替え・内容更新ではIDを維持する。変更文書とpackageのrevisionだけ更新する。既存IDの無申告の削除/置換、原典目録の書換え、外部目録の改変は保存器が拒否する。保存前後で未決、Findings、文章内の引用、関係と共有Checkを比較する。
+
+状態遷移の訂正で不要な遷移を除く場合に限り、commit操作の`removedTransitions`に対象ID、理由、依頼や根拠の出所を明記する。候補で実際に削除した遷移と操作の申告は一致させ、操作記録を保存する。同じsourceIdの新IDへの置換はできない。他の種類の要素の削除には対応しない。削除による業務の意味を保存器が判定したり、削除したIDの将来の再利用を検知したりするわけではない。
 
 JSONレビューはread-only。authoring/commitや人間状態の変更を行わない。必要なレビュー観点をBusiness Designへ適用し、観測箇所の文書ID/revisionと要素IDを示す。会話では業務名と意味を説明する。Schema成功を意味レビュー成功として扱わない。
 
