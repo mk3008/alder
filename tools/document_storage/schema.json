@@ -1844,18 +1844,6 @@
                 "minLength": 1,
                 "pattern": "\\S"
               },
-              "exception": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
               "problem": {
                 "anyOf": [
                   {
@@ -2068,7 +2056,6 @@
               "why",
               "when",
               "where",
-              "exception",
               "problem",
               "painLevel",
               "performers",

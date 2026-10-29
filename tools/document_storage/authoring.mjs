@@ -22,9 +22,9 @@ function confirmedBD(pkg,check,operation){
 export function guardAuthoring(previous,next,operation={}){
  validate(next);if(previous)validate(previous);
  const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration'];
+ demand(!(previous?.formatVersion==='0.4'&&next.formatVersion==='0.5'),'Structure migration must create a separate BD-only package; old Check/State cannot be rebased');
  const structuredUpgrade=operation.migration==='exceptions-0.4'&&previous&&['0.1','0.2','0.3'].includes(previous.formatVersion)&&next.formatVersion==='0.4';
- const d2Upgrade=operation.migration==='structure-0.5'&&previous?.formatVersion==='0.4'&&next.formatVersion==='0.5';
- demand(!operation.migration||structuredUpgrade||d2Upgrade||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
+ demand(!operation.migration||structuredUpgrade||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
  if(previous)demand(previous.formatVersion===next.formatVersion||!!operation.migration,'Package contract changed: version change requires explicit migration');
  demand(Object.keys(operation).every(k=>allowed.includes(k)),'Unknown authoring operation field');
  const decisions=operation.humanDecisions??[];demand(Array.isArray(decisions),'Human decisions must be an array');
@@ -35,7 +35,7 @@ export function guardAuthoring(previous,next,operation={}){
   for(const [id,e]of old.map){demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id)&&fresh.parent.get(id)===old.parent.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
-  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||d2Upgrade&&d.kind==='businessDesign'&&p.schemaVersion==='0.3'&&d.schemaVersion==='0.4'||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
+  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
  }
  const used=new Set();
  for(const d of next.documents.filter(d=>d.kind==='checkItems')){

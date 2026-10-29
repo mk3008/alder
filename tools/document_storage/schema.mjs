@@ -18,7 +18,7 @@ const information=obj({id,name:text,description:str});
 const performer=obj({objectId:id,roleIds:array(id)});
 const step=obj({id,text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),performerObjectIds:nullable(nonempty(id))});
 const orderRule={anyOf:[obj({kind:{enum:['before']},beforeId:id,afterId:id}),obj({kind:{enum:['interchangeable']},stepIds:{...array(id),minItems:2}})]};
-const activityProperties=Object.fromEntries(Object.entries(structuredBD.properties.activities.items.properties).filter(([key])=>!['who','roleId','procedure','result'].includes(key)));
+const activityProperties=Object.fromEntries(Object.entries(structuredBD.properties.activities.items.properties).filter(([key])=>!['who','roleId','procedure','result','exception'].includes(key)));
 const d2BD=obj({...structuredBD.properties,schemaVersion:{enum:['0.4']},
  objects:array(obj({...entity,icon:text,information:array(information)})),
  activities:nonempty(obj({...activityProperties,performers:nullable(nonempty(performer)),procedure:obj({steps:nonempty(step),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),

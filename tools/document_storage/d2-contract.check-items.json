@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "source": "mk3008/root#177 / Chat review 6495604537 / D2.2 3d4c810938cdf2d61c307d0073e28adfc84fa605",
+  "version": 2,
+  "source": "mk3008/root#177 / Chat review 6495604537 / D2.2 3d4c810938cdf2d61c307d0073e28adfc84fa605 / corrective review 6496584155",
   "items": [
     {
       "id": "D2A-01",
@@ -61,7 +61,7 @@
     {
       "id": "D2A-09",
       "condition": "明示移行",
-      "guarantee": "0.4から要求revision/明示BD候補で別出力へ移行し、保存時にmigrationと必要なBD合意を要求",
+      "guarantee": "旧BD+Check/Stateを元packageへ保全し、新BDだけを別packageへ明示作成する。未確認のrebaseと旧packageへの0.5上書きを拒否",
       "reason": "原文を推測分割せず旧版/承認を保持",
       "testId": "migration"
     },
@@ -85,7 +85,24 @@
       "guarantee": "Plugin/Viewer/凍結原本/main不変更、既存依存のみ",
       "reason": "Phase A外の製品化をしない",
       "testId": "scope"
+    },
+    {
+      "id": "D2A-13",
+      "condition": "採用例と例外正本",
+      "guarantee": "採用D2.2の5固定例にないActivity.exceptionを新契約で受理せず、旧非null本文と既存exceptions catalogを明示移行で欠落・推測変換しない",
+      "reason": "旧自由文とcatalogを二重正本にせず意味を保全する",
+      "testId": "exceptions"
     }
-  ]
+  ],
+  "supersedes": {
+    "version": 1,
+    "commit": "9979a35b14a45c95530387e05d6f9fe1df51e57b",
+    "changedItemIds": [
+      "D2A-09"
+    ],
+    "addedItemIds": [
+      "D2A-13"
+    ],
+    "reason": "Chatレビューで元の保存時migration保証の誤りと例外欄の不整合が判明。実装修正前に採用判断へ訂正。"
+  }
 }
-

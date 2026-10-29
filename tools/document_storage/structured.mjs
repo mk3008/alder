@@ -42,17 +42,19 @@ export function upgradeStructure(previous,request){
  demand(expectedRevision===previous.revision&&typeof revision==='string'&&revision.trim()&&revision!==expectedRevision,'Migration package revision conflict');
  demand(Array.isArray(businessDesigns)&&businessDesigns.length>0,'Explicit structured Business Designs required');
  const oldBD=previous.documents.filter(d=>d.kind==='businessDesign');unique(businessDesigns.map(d=>d.id),'Duplicate migration BD');demand(businessDesigns.length===oldBD.length&&businessDesigns.every(d=>oldBD.some(p=>p.id===d.id)),'Migration must cover exactly the existing Business Designs');
- const next=structuredClone(previous);next.formatVersion='0.5';next.revision=revision;
- const changed=new Set(oldBD.map(d=>d.id));for(const d of previous.documents)if(d.basedOn&&changed.has(d.basedOn.documentId))changed.add(d.id);
- demand(documentRevisions&&Object.keys(documentRevisions).length===changed.size,'Migration revisions must cover changed documents');
- next.documents=next.documents.map(d=>{
-  if(!changed.has(d.id))return d;
+ const ids=new Set(oldBD.map(d=>d.id));
+ demand(documentRevisions&&Object.keys(documentRevisions).length===ids.size&&Object.keys(documentRevisions).every(id=>ids.has(id)),'BD-only migration revisions required; dependent Check/State stay in the original package');
+ const documents=oldBD.map(d=>{
   const r=documentRevisions[d.id];demand(r&&r.expected===d.revision&&typeof r.next==='string'&&r.next.trim()&&r.next!==r.expected,'Migration document revision conflict: '+d.id);
-  if(d.kind==='businessDesign'){const replacement=structuredClone(businessDesigns.find(b=>b.id===d.id));demand(replacement.revision===r.next,'Structured BD revision mismatch');return replacement;}
-  d.revision=r.next;d.basedOn.revision=documentRevisions[d.basedOn.documentId].next;return d;
+  const replacement=structuredClone(businessDesigns.find(b=>b.id===d.id));demand(replacement.revision===r.next,'Structured BD revision mismatch');return replacement;
  });
- next.diagnostics=next.diagnostics.map(s=>s.startsWith('Role未確定:')?'旧0.4診断（構造移行前）: '+s:s);
+ // A separate BD-only candidate cannot claim the old dependent documents fit a new revision.
+ const next={...structuredClone(previous),formatVersion:'0.5',revision,documents,
+  sources:structuredClone(previous.sources.filter(s=>ids.has(s.documentId))),externalDocuments:[],diagnostics:[]};
  validate(next);const old=inventory(previous),fresh=inventory(next);
- for(const [id,e]of old.map){const n=fresh.map.get(id);demand(n&&old.types.get(id)===fresh.types.get(id)&&old.owner.get(id)===fresh.owner.get(id)&&old.parent.get(id)===fresh.parent.get(id),'Migration identity/type/owner changed: '+id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Migration Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Migration source identity changed');}
+ for(const [id,e]of old.map){if(!ids.has(old.owner.get(id)))continue;const n=fresh.map.get(id);demand(n&&old.types.get(id)===fresh.types.get(id)&&old.owner.get(id)===fresh.owner.get(id)&&old.parent.get(id)===fresh.parent.get(id),'Migration identity/type/owner changed: '+id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId&&e.name===n.name&&e.description===n.description,'Existing Exception definition must be preserved during structure migration: '+id);demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Migration source identity changed');}
+ for(const d of oldBD){const replacement=documents.find(b=>b.id===d.id);for(const a of d.activities)if(a.exception!==null){
+  demand(replacement.exceptions.some(e=>e.activityId===a.id&&e.description===a.exception),'Legacy exception text must be explicitly preserved in the same Activity exception catalog: '+a.id);
+ }}
  return next;
 }

@@ -13,6 +13,7 @@ packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`で
 | Activity.performers | 1..Nまたは未決null | Object参照とRole参照0..N。Who/roleIdは重ねて保存しない |
 | Procedure.steps | Activityに1..N | id/text/obligation/appliesWhen/performerObjectIds |
 | Procedure.orderRules | 同じProcedureに0..N | before、または確認済みinterchangeable |
+| exceptions | BDに0..N | id/activityId/name/description。Activityの例外定義はこのcatalogを正本とし、旧exception自由文は持たない |
 | Activity.results | Activityに1..N | id/text。独立した成立状態。後続Activity数とは無関係 |
 | Data | BDに0..N | id/name/items。各Dataに情報項目参照1..N |
 | input/output関係 | BDに0..N | 既存id/kind/fromId/toIdを保ち、dataIdで一つの共通Dataを参照 |
@@ -57,11 +58,21 @@ Resultは`{id,text}`です。正常系の条件は「倒れたものがあれば
 
 0.5の新規作成・更新・検査には既存の`author-cli.mjs create/commit/inspect`と`cli.mjs validate`を使います。期待hash/版、排他lock、失敗時非書込み、既存IDと所有者、人間のCheck判断に対するガードを維持します。
 
-0.4からの移行は`author-cli.mjs prepare-structure-upgrade old.json candidate.json request.json`で別ファイルを作ります。requestにはexpectedRevision、新しいpackage revision、変更するBDと従属Check/StateのdocumentRevisions（expected/next）、構造化済みBD全文のbusinessDesignsを渡します。既存BDすべてを明示し、同じIDを保ちます。Procedureの句点分割、WhoからObjectの自動発明、情報項目の推測抽出は行いません。
+0.4からの移行は`author-cli.mjs prepare-structure-upgrade old.json candidate.json request.json`で、**新BDだけを持つ別package**を作ります。旧BDとCheck/Stateの組は旧packageに保全し、`basedOn.revision`を付け替えません。requestにはexpectedRevision、新しいpackage revision、BDだけのdocumentRevisions（expected/next）、構造化済みBD全文のbusinessDesignsを渡します。従属Check/Stateの移行要求は拒否します。
 
-候補生成は保存承認ではありません。元ファイルへのcommitには期待hash/版と`migration: "structure-0.5"`が必要です。Checkを新しいBD版へ結び直す場合は、その版に対する既存の人間合意ゲートも通します。Checkの本文・ID・確認状態、Stateの遷移・例外参照・partial/unverifiedは維持します。構造移行だけで確認状態を昇格しません。
+既存BDとその要素のIDを保ち、Procedureの句点分割、WhoからObjectの自動発明、情報項目の推測抽出は行いません。候補の保存には`author-cli.mjs create candidate.json new-bd.json operation.json`を使います。元の0.4 packageへ0.5をcommitする操作は、BD合意があっても拒否します。`migration: "structure-0.5"`による上書き許可はありません。
 
-旧Whoに対応するRole未確定診断は移行前の診断として文言を保持し、現在の担当未決は新しい主体参照とFindingで検査します。移行前後の文章の意味が同じかは、明示された候補と原本の意味レビューで確認します。
+旧Checkの「確認済み」は旧BD版との組にだけ残ります。新BDに対応するCheck/Stateは、意味対応を別途確認して明示的に作成・レビューします。BDへの合意をCheckの適合確認に読み替えません。新規Checkには従来のBD合意ゲートと未レビュー状態を要求します。新版への意味再照合の自動化や新しい承認台帳は設けていません。
+
+候補には旧BDに関するsource descriptorだけを残し、旧Check/State・外部参照目録・旧診断をコピーしません。これらは元packageにそのまま残り、新BDの未決は候補のFindingで検査します。新旧の業務意味が同じかは、原本と明示候補の意味レビューで確認します。
+
+### 旧例外本文を保全する
+
+0.5のActivityには`exception`欄がなく、例外定義は`exceptions[]`に一元化します。構造移行では既存catalogのID・Activity・名前・説明を保ちます。
+
+旧Activityの非null例外本文がある場合、呼び出し側がその全文を**同じActivityのcatalogのdescriptionに明示的に保持**した候補を渡します。既に同じ本文がcatalogにある場合はその定義を使えます。全文の欠落、別Activityへの付替え、暗黙の要約・分割を伴う移行は拒否し、元packageを変更しません。変換器が例外名や対応先を推定して新しい業務条件を作ることもありません。
+
+全文の一致は欠落防止の検査であり、例外の粒度や名称の意味を承認するものではありません。複数定義への意味分割・要約が必要なら、この処理で済ませず、候補の意味レビューへ戻します。
 
 ## 旧版との境界
 

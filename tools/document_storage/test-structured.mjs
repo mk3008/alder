@@ -9,13 +9,17 @@ import {validate,inventory,graphV1,stringify} from './core.mjs';
 import {guardAuthoring,fingerprint} from './authoring.mjs';
 import {applyEdits} from './edit.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL(p,import.meta.url),'utf8'));
-const cases=read('./examples/d2-cases.json'),sample=()=>structuredClone(cases.find(c=>c.caseId==='mixed').package);
+const adopted=read('./examples/d2-cases.json');
+const cases=adopted.map(c=>{const business=structuredClone(c.candidate.business);for(const a of business.activities)a.results=a.results.map(r=>({id:r.id,text:r.condition?r.condition+'、'+r.text:r.text}));return {caseId:c.caseId,package:{format:'alder-document-package',formatVersion:'0.5',revision:'d2-contract-fixture-2',documents:[business],sources:[],externalDocuments:[],diagnostics:[]}};});
+const sample=()=>structuredClone(cases.find(c=>c.caseId==='mixed').package);
 const bd=p=>p.documents.find(d=>d.kind==='businessDesign'),activity=p=>bd(p).activities[0];
 const bad=fn=>{const p=sample();fn(p);assert.throws(()=>validate(p));};
 const authority=read('./d2-contract.check-items.json');
-const names=['versions','performers','steps','orders','results','data','identity','references','migration','storage','compatibility','scope'];
+const names=['versions','performers','steps','orders','results','data','identity','references','migration','storage','compatibility','scope','exceptions'];
 assert.deepEqual(authority.items.map(i=>i.testId),names);
-assert.equal(createHash('sha256').update(fs.readFileSync(new URL('./d2-contract.check-items.json',import.meta.url))).digest('hex'),'5f8d16908a16602ee97a24da5e0d73430bff223eaf33cbb591be3631c788d86f');
+assert.equal(createHash('sha256').update(fs.readFileSync(new URL('./d2-contract.check-items.json',import.meta.url))).digest('hex'),'c3652dbe667e43ea5e573867d297e49959ee60ed4739ed8bf9eb72543d8d43fb');
+assert.equal(createHash('sha256').update(fs.readFileSync(new URL('./examples/d2-cases.json',import.meta.url))).digest('hex'),'2dc69d02541be6e092c3cfa36cffd1b0392684dc92aaa7b0b016ed1972ca687c');
+assert.deepEqual(adopted.map(c=>c.caseId),['molkkyCross','mixed','photo','synthetic','molkky']);
 const check=(name,fn)=>test(authority.items.find(i=>i.testId===name).id+' '+name,fn);
 check('versions',()=>{
  for(const c of cases){const before=stringify(c.package);validate(c.package);assert.equal(stringify(c.package),before);}
@@ -71,27 +75,39 @@ function legacyWithChecks(){
 }
 function migrationRequest(p){
  const d=structuredClone(bd(p));d.schemaVersion='0.4';d.data=[{id:'request-data',name:'依頼内容',items:[{informationId:'request-number',condition:null}]}];d.objects[0].information=[{id:'request-number',name:'受付番号',description:''}];
- for(const a of d.activities){a.performers=[{objectId:'object-request',roleIds:[a.roleId]}];a.procedure={steps:[{id:a.id+'-step',text:a.procedure,obligation:'required',appliesWhen:null,performerObjectIds:null}],orderRules:[]};a.results=[{id:a.id+'-result',text:a.result}];delete a.who;delete a.roleId;delete a.result;}
+ for(const a of d.activities){a.performers=[{objectId:'object-request',roleIds:[a.roleId]}];a.procedure={steps:[{id:a.id+'-step',text:a.procedure,obligation:'required',appliesWhen:null,performerObjectIds:null}],orderRules:[]};a.results=[{id:a.id+'-result',text:a.result}];delete a.who;delete a.roleId;delete a.result;delete a.exception;}
  for(const r of d.relations){r.dataId='request-data';delete r.label;}
- const documentRevisions=Object.fromEntries(p.documents.map(x=>[x.id,{expected:x.revision,next:x.revision+'-d2'}]));d.revision=documentRevisions[d.id].next;
+ const documentRevisions=Object.fromEntries(p.documents.filter(x=>x.kind==='businessDesign').map(x=>[x.id,{expected:x.revision,next:x.revision+'-d2'}]));d.revision=documentRevisions[d.id].next;
  return {expectedRevision:p.revision,revision:'pkg-d2',documentRevisions,businessDesigns:[d]};
 }
 const confirmation=p=>({bdConfirmations:[{documentId:bd(p).id,revision:bd(p).revision,evidence:{source:'synthetic test only',quote:'模擬合意。実運用の承認ではない'}}]});
+function legacyRebaseRequest(p){
+ const r=migrationRequest(p);r.documentRevisions=Object.fromEntries(p.documents.map(d=>[d.id,{expected:d.revision,next:d.revision+'-d2'}]));for(const a of r.businessDesigns[0].activities)a.exception=bd(p).activities.find(old=>old.id===a.id).exception;return r;
+}
+function unsafeRebase(p){
+ const r=migrationRequest(p),q=structuredClone(p);q.formatVersion='0.5';q.revision=r.revision;q.documents[0]=r.businessDesigns[0];for(const d of q.documents.slice(1)){d.revision+='-d2';d.basedOn.revision=bd(q).revision;}validate(q);return q;
+}
+function nativeReferenceFixture(){
+ const p=sample(),d=bd(p),basedOn={documentId:d.id,revision:d.revision,verification:'unverified'};
+ d.exceptions.push({id:'guide-exception',activityId:'c-guidance',name:'案内不能',description:'参照検査用の合成例外'});
+ p.documents.push({id:'new-state-doc',schemaVersion:'0.2',kind:'stateTransition',revision:'new-state-1',title:'合成の部分状態',basedOn:structuredClone(basedOn),objectId:'c-requester',states:[{id:'new-state',name:'案内済み'}],start:'@new',terminal:'@unknown',completeness:'partial',source:'新規参照検証用fixture。移行や業務承認ではない。',transitions:[{id:'new-transition',sourceId:'N1',fromId:'@new',toId:'new-state',activityId:'c-guidance',exceptionId:null,event:null,condition:'案内を記録',effect:'change',path:'normal',evidence:'合成入力',note:'部分定義'}]});
+ p.documents.push({id:'new-check-doc',schemaVersion:'0.1',kind:'checkItems',revision:'new-check-1',title:'新規合成Check',basedOn:structuredClone(basedOn),intro:[],index:[{activityId:'c-guidance',purpose:'',connections:'',checkIds:['new-check']}],sections:[{id:'new-section',activityId:'c-guidance',title:'案内',preamble:[]}],guarantees:[],examples:[],items:[{id:'new-check',checkId:'NEW-1',title:'案内を記録',detailSummary:'',sectionId:'new-section',reviewState:'未レビュー',fields:{guarantee:[{kind:'text',value:'案内が記録される'}]}}],notes:[]});return p;
+}
 check('references',async()=>{
- const {upgradeStructure}=await import('./structured.mjs'),old=legacyWithChecks(),q=upgradeStructure(old,migrationRequest(old));validate(q);
- assert.deepEqual(q.documents[2].items,old.documents[2].items);assert.equal(q.documents[1].basedOn.verification,'unverified');assert.equal(q.documents[1].transitions[1].exceptionId,'exception-receive');
- for(const fn of [p=>p.documents[2].basedOn.revision='old',p=>p.documents[1].basedOn.revision='old',p=>p.documents[1].transitions[1].exceptionId='exception-review',p=>p.documents[2].basedOn.verification='confirmed']){const b=structuredClone(q);fn(b);assert.throws(()=>validate(b));}
- const changed=structuredClone(q);changed.revision+='-next';changed.documents[2].revision+='-next';changed.documents[2].items[0].reviewState='要修正';assert.throws(()=>guardAuthoring(q,changed,{expectedRevision:q.revision,...confirmation(changed)}),/Human review state/);
+ const {upgradeStructure}=await import('./structured.mjs'),old=legacyWithChecks(),bytes=stringify(old),q=upgradeStructure(old,migrationRequest(old));
+ assert.equal(stringify(old),bytes);assert.deepEqual(q.documents.map(d=>d.kind),['businessDesign']);assert.equal(old.documents[2].items[0].reviewState,'確認済み');assert.equal(old.documents[2].basedOn.revision,'bd-r1');assert.equal(old.documents[1].basedOn.revision,'bd-r1');
+ const fresh=nativeReferenceFixture();validate(fresh);guardAuthoring(null,fresh,confirmation(fresh));
+ for(const fn of [p=>p.documents[2].basedOn.revision='old',p=>p.documents[1].basedOn.revision='old',p=>p.documents[1].transitions[0].exceptionId='missing',p=>p.documents[2].basedOn.verification='confirmed']){const b=structuredClone(fresh);fn(b);assert.throws(()=>validate(b));}
+ const changed=structuredClone(fresh);changed.revision+='-next';changed.documents[2].revision+='-next';changed.documents[2].items[0].reviewState='確認済み';assert.throws(()=>guardAuthoring(fresh,changed,{expectedRevision:fresh.revision,...confirmation(changed)}),/Human review state/);
 });
 check('migration',async()=>{
- const {upgradeStructure}=await import('./structured.mjs'),old=legacyWithChecks(),before=stringify(old),q=upgradeStructure(old,migrationRequest(old));assert.equal(stringify(old),before);assert.deepEqual(q.sources,old.sources);
- assert.throws(()=>guardAuthoring(old,q,{expectedRevision:old.revision}),/migration|contract|version/i);
- assert.throws(()=>guardAuthoring(old,q,{expectedRevision:old.revision,migration:'structure-0.5'}),/Human Business Design/);
- guardAuthoring(old,q,{expectedRevision:old.revision,migration:'structure-0.5',...confirmation(q)});
- for(const fn of [r=>r.expectedRevision='wrong',r=>delete r.documentRevisions['state-document'],r=>r.businessDesigns[0].objects[0].id='new-object',r=>r.businessDesigns[0].activities[0].procedure.steps=[],r=>r.unknown=true]){const r=migrationRequest(old);fn(r);assert.throws(()=>upgradeStructure(old,r));}
- const down=structuredClone(old);down.revision+='-2';assert.throws(()=>guardAuthoring(q,down,{expectedRevision:q.revision,migration:'structure-0.5'}));
+ const {upgradeStructure}=await import('./structured.mjs'),old=legacyWithChecks(),before=stringify(old),q=upgradeStructure(old,migrationRequest(old));assert.equal(stringify(old),before);assert.deepEqual(q.sources,old.sources.filter(s=>s.documentId===bd(old).id));assert.deepEqual(q.documents.map(d=>d.kind),['businessDesign']);
+ assert.throws(()=>upgradeStructure(old,legacyRebaseRequest(old)),/BD-only/);
+ const rebased=unsafeRebase(old);assert.throws(()=>guardAuthoring(old,rebased,{expectedRevision:old.revision,migration:'structure-0.5',...confirmation(rebased)}),/separate BD-only/);assert.throws(()=>guardAuthoring(null,rebased,confirmation(rebased)),/New Check/);
+ assert.throws(()=>guardAuthoring(old,q,{expectedRevision:old.revision}),/migration|contract|version/i);assert.throws(()=>guardAuthoring(old,q,{expectedRevision:old.revision,migration:'structure-0.5',...confirmation(q)}),/separate BD-only/);guardAuthoring(null,q);
+ for(const fn of [r=>r.expectedRevision='wrong',r=>r.documentRevisions['state-document']={expected:'st-r1',next:'st-r2'},r=>r.businessDesigns[0].objects[0].id='new-object',r=>r.businessDesigns[0].activities[0].procedure.steps=[],r=>r.unknown=true]){const r=migrationRequest(old);fn(r);assert.throws(()=>upgradeStructure(old,r));}
  const pending=legacyWithChecks();activity(pending).roleId=null;activity(pending).who='担当未確認';pending.diagnostics.push('Role未確定: '+activity(pending).id+' — '+activity(pending).who);validate(pending);
- const request=migrationRequest(pending);request.businessDesigns[0].activities[0].performers=null;request.businessDesigns[0].findings.push({id:'pending-actor',sourceId:'ACTOR-1',kind:'question',status:'open',scope:'items',targetIds:[activity(pending).id],unresolvedTargets:[],summary:'実行主体未決',content:'移行で担当を創作しない。'});const migrated=upgradeStructure(pending,request);assert.equal(activity(migrated).performers,null);assert.ok(migrated.diagnostics.some(s=>s.startsWith('旧0.4診断（構造移行前）: Role未確定:')));
+ const request=migrationRequest(pending);request.businessDesigns[0].activities[0].performers=null;request.businessDesigns[0].findings.push({id:'pending-actor',sourceId:'ACTOR-1',kind:'question',status:'open',scope:'items',targetIds:[activity(pending).id],unresolvedTargets:[],summary:'実行主体未決',content:'移行で担当を創作しない。'});const migrated=upgradeStructure(pending,request);assert.equal(activity(migrated).performers,null);assert.deepEqual(migrated.diagnostics,[]);assert.ok(pending.diagnostics.some(s=>s.startsWith('Role未確定:')));
 });
 check('storage',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-d2-')),cli=new URL('./author-cli.mjs',import.meta.url).pathname,validateCLI=new URL('./cli.mjs',import.meta.url).pathname;
@@ -100,7 +116,11 @@ check('storage',()=>{
  const q=structuredClone(p);q.revision+='-2';bd(q).revision+='-2';activity(q).results[0].text+='確認済みの内容を通知する。';fs.writeFileSync(candidate,stringify(q));let operation={expectedRevision:p.revision,expectedSha256:'wrong'};fs.writeFileSync(op,JSON.stringify(operation));assert.equal(run('commit',target,candidate,op).status,2);assert.equal(fs.readFileSync(target,'utf8'),initial);
  operation.expectedSha256=info.sha256;fs.writeFileSync(op,JSON.stringify(operation));fs.writeFileSync(target+'.alder-lock','foreign');assert.equal(run('commit',target,candidate,op).status,2);assert.equal(fs.readFileSync(target+'.alder-lock','utf8'),'foreign');fs.unlinkSync(target+'.alder-lock');r=run('commit',target,candidate,op);assert.equal(r.status,0,r.stderr);const saved=fs.readFileSync(target,'utf8');assert.deepEqual(JSON.parse(saved),q);
  q.documents[0].data[0].items=[];fs.writeFileSync(candidate,stringify(q));assert.equal(run('commit',target,candidate,op).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);assert.equal(spawnSync(process.execPath,[validateCLI,'validate',target],{encoding:'utf8'}).status,0);
- const old=legacyWithChecks(),source=path.join(dir,'old.json'),prepared=path.join(dir,'prepared.json'),request=path.join(dir,'request.json');fs.writeFileSync(source,stringify(old));fs.writeFileSync(request,JSON.stringify(migrationRequest(old)));r=run('prepare-structure-upgrade',source,prepared,request);assert.equal(r.status,0,r.stderr);assert.equal(fs.readFileSync(source,'utf8'),stringify(old));const next=JSON.parse(fs.readFileSync(prepared));fs.writeFileSync(op,JSON.stringify({expectedRevision:old.revision,expectedSha256:fingerprint(stringify(old)),migration:'structure-0.5'}));assert.equal(run('commit',source,prepared,op).status,2);assert.equal(fs.readFileSync(source,'utf8'),stringify(old));fs.writeFileSync(op,JSON.stringify({expectedRevision:old.revision,expectedSha256:fingerprint(stringify(old)),migration:'structure-0.5',...confirmation(next)}));r=run('commit',source,prepared,op);assert.equal(r.status,0,r.stderr);assert.equal(JSON.parse(fs.readFileSync(source)).documents[2].items[0].reviewState,'確認済み');assert.equal(run('prepare-structure-upgrade',source,source,request).status,2);
+ const old=legacyWithChecks(),source=path.join(dir,'old.json'),prepared=path.join(dir,'prepared.json'),request=path.join(dir,'request.json'),newBD=path.join(dir,'new-bd.json');const original=stringify(old);fs.writeFileSync(source,original);fs.writeFileSync(request,JSON.stringify(migrationRequest(old)));r=run('prepare-structure-upgrade',source,prepared,request);assert.equal(r.status,0,r.stderr);assert.equal(fs.readFileSync(source,'utf8'),original);const next=JSON.parse(fs.readFileSync(prepared));assert.deepEqual(next.documents.map(d=>d.kind),['businessDesign']);
+ fs.writeFileSync(op,JSON.stringify({expectedRevision:old.revision,expectedSha256:fingerprint(original),migration:'structure-0.5',...confirmation(next)}));assert.equal(run('commit',source,prepared,op).status,2);assert.equal(fs.readFileSync(source,'utf8'),original);
+ const forced=path.join(dir,'forced.json');fs.writeFileSync(forced,stringify(unsafeRebase(old)));assert.equal(run('commit',source,forced,op).status,2);assert.equal(fs.readFileSync(source,'utf8'),original);fs.writeFileSync(op,JSON.stringify(confirmation(unsafeRebase(old))));const denied=run('create',forced,path.join(dir,'invalid-rebased.json'),op);assert.equal(denied.status,2);assert.match(denied.stderr,/New Check/);assert.ok(!fs.existsSync(path.join(dir,'invalid-rebased.json')));
+ fs.writeFileSync(op,'{}');r=run('create',prepared,newBD,op);assert.equal(r.status,0,r.stderr);assert.deepEqual(JSON.parse(fs.readFileSync(newBD)),next);assert.equal(fs.readFileSync(source,'utf8'),original);assert.equal(JSON.parse(fs.readFileSync(source)).documents[2].items[0].reviewState,'確認済み');assert.equal(run('prepare-structure-upgrade',source,source,request).status,2);
+ const failed=path.join(dir,'failed-candidate.json');fs.writeFileSync(request,JSON.stringify(legacyRebaseRequest(old)));assert.equal(run('prepare-structure-upgrade',source,failed,request).status,2);assert.ok(!fs.existsSync(failed));assert.equal(fs.readFileSync(source,'utf8'),original);
  assert.ok(!fs.readdirSync(dir).some(f=>f.endsWith('.alder-lock')||f.startsWith('.alder-json-')));
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
@@ -109,4 +129,12 @@ check('compatibility',()=>{
 });
 check('scope',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-d2-native-'));try{const candidate=path.join(dir,'candidate.json'),target=path.join(dir,'target.json'),op=path.join(dir,'op.json'),block=path.join(dir,'block.mjs');fs.writeFileSync(candidate,stringify(sample()));fs.writeFileSync(op,'{}');fs.writeFileSync(block,"import {registerHooks} from 'node:module';registerHooks({resolve(s,c,next){if(/(?:legacy-json|convert|markdown|state-declaration|state-storage)\\.(?:mjs|py)$/.test(s))throw Error('Legacy module blocked');return next(s,c);}});");const r=spawnSync(process.execPath,['--import',block,new URL('./author-cli.mjs',import.meta.url).pathname,'create',candidate,target,op],{encoding:'utf8',env:{...process.env,ALDER_PYTHON:'/no-python'}});assert.equal(r.status,0,r.stderr);assert.deepEqual(JSON.parse(fs.readFileSync(target)),sample());}finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+
+check('exceptions',async()=>{
+ const {upgradeStructure}=await import('./structured.mjs');
+ for(const c of adopted){assert.ok(c.candidate.business.activities.every(a=>!Object.hasOwn(a,'exception')));const q=structuredClone(cases.find(x=>x.caseId===c.caseId).package);validate(q);q.documents[0].activities[0].exception=null;assert.throws(()=>validate(q),/Unknown field/);}
+ const old=legacyWithChecks();activity(old).exception='必要項目がない場合、受付を中止して依頼者へ連絡する。';validate(old);const bytes=stringify(old),r=migrationRequest(old);assert.throws(()=>upgradeStructure(old,r),/Legacy exception text/);assert.equal(stringify(old),bytes);
+ r.businessDesigns[0].exceptions.push({id:'explicit-legacy-body',activityId:activity(old).id,name:'受付できない場合の対応',description:activity(old).exception});const q=upgradeStructure(old,r);assert.equal(stringify(old),bytes);assert.equal(bd(q).exceptions.find(e=>e.id==='explicit-legacy-body').description,activity(old).exception);assert.ok(bd(q).activities.every(a=>!Object.hasOwn(a,'exception')));
+ for(const mutate of [d=>d.exceptions.at(-1).description='要約して一部を落とす',d=>d.exceptions.at(-1).activityId='activity-review',d=>d.exceptions[0].description='既存定義を変える',d=>d.exceptions.splice(0,1)]){const bad=structuredClone(r);mutate(bad.businessDesigns[0]);assert.throws(()=>upgradeStructure(old,bad));}
 });

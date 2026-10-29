@@ -1,803 +1,1017 @@
 [
   {
     "caseId": "molkkyCross",
-    "package": {
-      "format": "alder-document-package",
-      "formatVersion": "0.5",
-      "revision": "d2-contract-fixture-1",
-      "documents": [
-        {
-          "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
-          "kind": "businessDesign",
-          "schemaVersion": "0.4",
-          "revision": "design-D2-input-restored-D2.1-shared-data-D2.2-no-cross-order",
-          "title": "投球後",
-          "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
-          "scope": "scopeは外側のexample.scopeを参照",
-          "objects": [
-            {
-              "id": "978d11b3-def5-4149-971c-c7118065139b",
-              "name": "遊ぶ人と記録する人",
-              "scope": false,
-              "icon": "users",
-              "information": [
-                {
-                  "id": "mf-person",
-                  "name": "実際に投げた人",
-                  "description": ""
-                },
-                {
-                  "id": "mf-turn",
-                  "name": "実際の投球順",
-                  "description": ""
-                },
-                {
-                  "id": "mf-numbers",
-                  "name": "目視で確認した完全に倒れた番号",
-                  "description": ""
-                },
-                {
-                  "id": "mf-next-person",
-                  "name": "通常または優先で示された投げる人",
-                  "description": ""
-                },
-                {
-                  "id": "mf-next-turn",
-                  "name": "通常または優先で示された投げる順番",
-                  "description": ""
-                }
-              ]
-            },
-            {
-              "id": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
-              "name": "試合の記録",
-              "scope": true,
-              "icon": "clipboard-list",
-              "information": [
-                {
-                  "id": "mf-rec-person",
-                  "name": "実際に投げた人",
-                  "description": ""
-                },
-                {
-                  "id": "mf-rec-turn",
-                  "name": "実際の投球順",
-                  "description": ""
-                },
-                {
-                  "id": "mf-rec-numbers",
-                  "name": "完全に倒れた番号",
-                  "description": ""
-                },
-                {
-                  "id": "mf-priority",
-                  "name": "優先として投げた回",
-                  "description": ""
-                },
-                {
-                  "id": "mf-date",
-                  "name": "最後に実際に投げた日",
-                  "description": ""
-                }
-              ]
-            }
-          ],
-          "roles": [
-            {
-              "id": "efa1c9f1-9f0c-456c-811c-cf4962492596",
-              "name": "参加者",
-              "color": "#2563eb"
-            },
-            {
-              "id": "168c052e-2574-4159-9a95-6c06932e5a74",
-              "name": "記録する人",
-              "color": "#008576"
-            },
-            {
-              "id": "4555cbf3-a0cd-4b5c-b0fe-c8cf4b6ceaea",
-              "name": "道具",
-              "color": "#c2410c"
-            }
-          ],
-          "activities": [
-            {
-              "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
-              "name": "投げて結果を確認し立て直す",
-              "scope": false,
-              "why": "投げた結果を正しく確かめ、遊びを進めるため",
-              "when": "その人の順番であり、直前に倒れたものがあれば立て直されているとき。誤入力で記録が未確定なら、確定を待った後。",
-              "where": "規定なし",
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "m-throw",
-                    "text": "順番の人が投げ棒を1回投げる。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  },
-                  {
-                    "id": "m-observe",
-                    "text": "完全に倒れた番号を目で確認する。もたれて完全に倒れていないものは数えない。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  },
-                  {
-                    "id": "m-reset",
-                    "text": "倒れたものをその場所に立て直す。試合が終わる投球の後も立て直す。",
-                    "obligation": "required",
-                    "appliesWhen": "倒れたものがある場合",
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": [
-                  {
-                    "kind": "before",
-                    "beforeId": "m-throw",
-                    "afterId": "m-observe"
-                  },
-                  {
-                    "kind": "before",
-                    "beforeId": "m-observe",
-                    "afterId": "m-reset"
-                  }
-                ]
+    "candidate": {
+      "format": "alder-structure-design-example",
+      "proposalVersion": "D2.2",
+      "proposedPackageVersion": "0.5",
+      "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "business": {
+        "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
+        "kind": "businessDesign",
+        "schemaVersion": "0.4",
+        "revision": "design-D2-input-restored-D2.1-shared-data-D2.2-no-cross-order",
+        "title": "投球後",
+        "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+        "scope": "scopeは外側のexample.scopeを参照",
+        "objects": [
+          {
+            "id": "978d11b3-def5-4149-971c-c7118065139b",
+            "name": "遊ぶ人と記録する人",
+            "scope": false,
+            "icon": "users",
+            "information": [
+              {
+                "id": "mf-person",
+                "name": "実際に投げた人",
+                "description": ""
               },
-              "problem": null,
-              "painLevel": null,
-              "performers": null,
-              "results": [
-                {
-                  "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2-d2-r0",
-                  "text": "完全に倒れた番号が確認される。"
-                },
-                {
-                  "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2-d2-r1",
-                  "text": "倒れたものがある場合、倒れたものがその場所に立て直される。"
-                }
-              ],
-              "exception": null
-            },
-            {
-              "id": "48e418d1-5660-438e-b9fb-6663fd7b509a",
-              "name": "倒れた番号を記録する",
-              "scope": true,
-              "why": "投げた回の結果を得点と試合の進行に反映するため",
-              "when": "投球後に完全に倒れた番号を目で確認した時点。立て直しの完了は開始条件ではない。",
-              "where": "CLI",
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "m-record-enter",
-                    "text": "目視した番号を、その試合・実際に投げた人・投球順に対応させて道具へ伝える。対応付け方は未確認。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  },
-                  {
-                    "id": "m-record-correct",
-                    "text": "誤入力は一部だけ採用せず全体を確定しない。入力内容と誤りを残し、同じ投球の番号を直す。次の人は記録が確定するまで待つ。",
-                    "obligation": "required",
-                    "appliesWhen": "誤入力がある場合",
-                    "performerObjectIds": null
-                  },
-                  {
-                    "id": "m-record-save",
-                    "text": "正しい番号をその試合・実投に結び付けて記録し、得点と次の人の見直しへ渡す。0本も記録できる。",
-                    "obligation": "required",
-                    "appliesWhen": "番号が正しい場合",
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": [
-                  {
-                    "kind": "before",
-                    "beforeId": "m-record-enter",
-                    "afterId": "m-record-save"
-                  }
-                ]
+              {
+                "id": "mf-turn",
+                "name": "実際の投球順",
+                "description": ""
               },
-              "problem": null,
-              "painLevel": null,
-              "performers": null,
-              "results": [
+              {
+                "id": "mf-numbers",
+                "name": "目視で確認した完全に倒れた番号",
+                "description": ""
+              },
+              {
+                "id": "mf-next-person",
+                "name": "通常または優先で示された投げる人",
+                "description": ""
+              },
+              {
+                "id": "mf-next-turn",
+                "name": "通常または優先で示された投げる順番",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+            "name": "試合の記録",
+            "scope": true,
+            "icon": "clipboard-list",
+            "information": [
+              {
+                "id": "mf-rec-person",
+                "name": "実際に投げた人",
+                "description": ""
+              },
+              {
+                "id": "mf-rec-turn",
+                "name": "実際の投球順",
+                "description": ""
+              },
+              {
+                "id": "mf-rec-numbers",
+                "name": "完全に倒れた番号",
+                "description": ""
+              },
+              {
+                "id": "mf-priority",
+                "name": "優先として投げた回",
+                "description": ""
+              },
+              {
+                "id": "mf-date",
+                "name": "最後に実際に投げた日",
+                "description": ""
+              }
+            ]
+          }
+        ],
+        "roles": [
+          {
+            "id": "efa1c9f1-9f0c-456c-811c-cf4962492596",
+            "name": "参加者",
+            "color": "#2563eb"
+          },
+          {
+            "id": "168c052e-2574-4159-9a95-6c06932e5a74",
+            "name": "記録する人",
+            "color": "#008576"
+          },
+          {
+            "id": "4555cbf3-a0cd-4b5c-b0fe-c8cf4b6ceaea",
+            "name": "道具",
+            "color": "#c2410c"
+          }
+        ],
+        "activities": [
+          {
+            "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
+            "name": "投げて結果を確認し立て直す",
+            "scope": false,
+            "why": "投げた結果を正しく確かめ、遊びを進めるため",
+            "when": "その人の順番であり、直前に倒れたものがあれば立て直されているとき。誤入力で記録が未確定なら、確定を待った後。",
+            "where": "規定なし",
+            "procedure": {
+              "steps": [
                 {
-                  "id": "48e418d1-5660-438e-b9fb-6663fd7b509a-d2-r0",
-                  "text": "番号が正しい場合、正しい番号がその試合・実投と結び付き、得点と進行を見直せる。"
-                }
-              ],
-              "exception": null
-            }
-          ],
-          "relations": [
-            {
-              "id": "d3b61766-78d6-4088-abe2-993f8cb743a1",
-              "kind": "input",
-              "fromId": "978d11b3-def5-4149-971c-c7118065139b",
-              "toId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
-              "dataId": "data-d3b61766-78d6-4088-abe2-993f8cb743a1"
-            },
-            {
-              "id": "e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
-              "kind": "output",
-              "fromId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
-              "toId": "978d11b3-def5-4149-971c-c7118065139b",
-              "dataId": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3"
-            },
-            {
-              "id": "283a5eda-3efe-4fea-a387-2c346089c807",
-              "kind": "input",
-              "fromId": "978d11b3-def5-4149-971c-c7118065139b",
-              "toId": "48e418d1-5660-438e-b9fb-6663fd7b509a",
-              "dataId": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3"
-            },
-            {
-              "id": "f323a839-1dc5-4a8b-b165-dc88d5d7739f",
-              "kind": "output",
-              "fromId": "48e418d1-5660-438e-b9fb-6663fd7b509a",
-              "toId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
-              "dataId": "data-f323a839-1dc5-4a8b-b165-dc88d5d7739f"
-            }
-          ],
-          "findings": [
-            {
-              "id": "focus-throw-actor",
-              "sourceId": "focus-throw-actor",
-              "kind": "question",
-              "status": "open",
-              "scope": "items",
-              "targetIds": [
-                "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2"
-              ],
-              "unresolvedTargets": [],
-              "summary": "担当の未決",
-              "content": "投げる/目視/立直しの担当分担は未確認。"
-            },
-            {
-              "id": "focus-record-actor",
-              "sourceId": "focus-record-actor",
-              "kind": "question",
-              "status": "open",
-              "scope": "items",
-              "targetIds": [
-                "48e418d1-5660-438e-b9fb-6663fd7b509a"
-              ],
-              "unresolvedTargets": [],
-              "summary": "担当の未決",
-              "content": "記録する人と道具の実行分担、および対応する主体Objectの同一性を確定しない。"
-            }
-          ],
-          "exceptions": [],
-          "data": [
-            {
-              "id": "data-d3b61766-78d6-4088-abe2-993f8cb743a1",
-              "name": "投げる人と順番",
-              "items": [
-                {
-                  "informationId": "mf-next-person",
-                  "condition": null
+                  "id": "m-throw",
+                  "text": "順番の人が投げ棒を1回投げる。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
                 },
                 {
-                  "informationId": "mf-next-turn",
-                  "condition": null
+                  "id": "m-observe",
+                  "text": "完全に倒れた番号を目で確認する。もたれて完全に倒れていないものは数えない。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
+                },
+                {
+                  "id": "m-reset",
+                  "text": "倒れたものをその場所に立て直す。試合が終わる投球の後も立て直す。",
+                  "obligation": "required",
+                  "appliesWhen": "倒れたものがある場合",
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": [
+                {
+                  "kind": "before",
+                  "beforeId": "m-throw",
+                  "afterId": "m-observe"
+                },
+                {
+                  "kind": "before",
+                  "beforeId": "m-observe",
+                  "afterId": "m-reset"
                 }
               ]
             },
-            {
-              "id": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
-              "name": "投球結果",
-              "items": [
+            "problem": null,
+            "painLevel": null,
+            "performers": null,
+            "results": [
+              {
+                "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2-d2-r0",
+                "text": "完全に倒れた番号が確認される。",
+                "condition": null
+              },
+              {
+                "id": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2-d2-r1",
+                "text": "倒れたものがその場所に立て直される。",
+                "condition": "倒れたものがある場合"
+              }
+            ]
+          },
+          {
+            "id": "48e418d1-5660-438e-b9fb-6663fd7b509a",
+            "name": "倒れた番号を記録する",
+            "scope": true,
+            "why": "投げた回の結果を得点と試合の進行に反映するため",
+            "when": "投球後に完全に倒れた番号を目で確認した時点。立て直しの完了は開始条件ではない。",
+            "where": "CLI",
+            "procedure": {
+              "steps": [
                 {
-                  "informationId": "mf-person",
-                  "condition": null
+                  "id": "m-record-enter",
+                  "text": "目視した番号を、その試合・実際に投げた人・投球順に対応させて道具へ伝える。対応付け方は未確認。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
                 },
                 {
-                  "informationId": "mf-turn",
-                  "condition": null
+                  "id": "m-record-correct",
+                  "text": "誤入力は一部だけ採用せず全体を確定しない。入力内容と誤りを残し、同じ投球の番号を直す。次の人は記録が確定するまで待つ。",
+                  "obligation": "required",
+                  "appliesWhen": "誤入力がある場合",
+                  "performerObjectIds": null
                 },
                 {
-                  "informationId": "mf-numbers",
-                  "condition": null
+                  "id": "m-record-save",
+                  "text": "正しい番号をその試合・実投に結び付けて記録し、得点と次の人の見直しへ渡す。0本も記録できる。",
+                  "obligation": "required",
+                  "appliesWhen": "番号が正しい場合",
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": [
+                {
+                  "kind": "before",
+                  "beforeId": "m-record-enter",
+                  "afterId": "m-record-save"
                 }
               ]
             },
-            {
-              "id": "data-f323a839-1dc5-4a8b-b165-dc88d5d7739f",
-              "name": "投球記録",
-              "items": [
-                {
-                  "informationId": "mf-rec-person",
-                  "condition": null
-                },
-                {
-                  "informationId": "mf-rec-turn",
-                  "condition": null
-                },
-                {
-                  "informationId": "mf-rec-numbers",
-                  "condition": null
-                },
-                {
-                  "informationId": "mf-priority",
-                  "condition": null
-                },
-                {
-                  "informationId": "mf-date",
-                  "condition": null
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "sources": [],
-      "externalDocuments": [],
-      "diagnostics": []
+            "problem": null,
+            "painLevel": null,
+            "performers": null,
+            "results": [
+              {
+                "id": "48e418d1-5660-438e-b9fb-6663fd7b509a-d2-r0",
+                "text": "正しい番号がその試合・実投と結び付き、得点と進行を見直せる。",
+                "condition": "番号が正しい場合"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "id": "d3b61766-78d6-4088-abe2-993f8cb743a1",
+            "kind": "input",
+            "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+            "toId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
+            "dataId": "data-d3b61766-78d6-4088-abe2-993f8cb743a1"
+          },
+          {
+            "id": "e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
+            "kind": "output",
+            "fromId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
+            "toId": "978d11b3-def5-4149-971c-c7118065139b",
+            "dataId": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3"
+          },
+          {
+            "id": "283a5eda-3efe-4fea-a387-2c346089c807",
+            "kind": "input",
+            "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+            "toId": "48e418d1-5660-438e-b9fb-6663fd7b509a",
+            "dataId": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3"
+          },
+          {
+            "id": "f323a839-1dc5-4a8b-b165-dc88d5d7739f",
+            "kind": "output",
+            "fromId": "48e418d1-5660-438e-b9fb-6663fd7b509a",
+            "toId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+            "dataId": "data-f323a839-1dc5-4a8b-b165-dc88d5d7739f"
+          }
+        ],
+        "findings": [
+          {
+            "id": "focus-throw-actor",
+            "sourceId": "focus-throw-actor",
+            "kind": "question",
+            "status": "open",
+            "scope": "items",
+            "targetIds": [
+              "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2"
+            ],
+            "unresolvedTargets": [],
+            "summary": "担当の未決",
+            "content": "投げる/目視/立直しの担当分担は未確認。"
+          },
+          {
+            "id": "focus-record-actor",
+            "sourceId": "focus-record-actor",
+            "kind": "question",
+            "status": "open",
+            "scope": "items",
+            "targetIds": [
+              "48e418d1-5660-438e-b9fb-6663fd7b509a"
+            ],
+            "unresolvedTargets": [],
+            "summary": "担当の未決",
+            "content": "記録する人と道具の実行分担、および対応する主体Objectの同一性を確定しない。"
+          }
+        ],
+        "exceptions": [],
+        "data": [
+          {
+            "id": "data-d3b61766-78d6-4088-abe2-993f8cb743a1",
+            "name": "投げる人と順番",
+            "items": [
+              {
+                "informationId": "mf-next-person",
+                "condition": null
+              },
+              {
+                "informationId": "mf-next-turn",
+                "condition": null
+              }
+            ]
+          },
+          {
+            "id": "data-e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
+            "name": "投球結果",
+            "items": [
+              {
+                "informationId": "mf-person",
+                "condition": null
+              },
+              {
+                "informationId": "mf-turn",
+                "condition": null
+              },
+              {
+                "informationId": "mf-numbers",
+                "condition": null
+              }
+            ]
+          },
+          {
+            "id": "data-f323a839-1dc5-4a8b-b165-dc88d5d7739f",
+            "name": "投球記録",
+            "items": [
+              {
+                "informationId": "mf-rec-person",
+                "condition": null
+              },
+              {
+                "informationId": "mf-rec-turn",
+                "condition": null
+              },
+              {
+                "informationId": "mf-rec-numbers",
+                "condition": null
+              },
+              {
+                "informationId": "mf-priority",
+                "condition": null
+              },
+              {
+                "informationId": "mf-date",
+                "condition": null
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   {
     "caseId": "mixed",
-    "package": {
-      "format": "alder-document-package",
-      "formatVersion": "0.5",
-      "revision": "d2-contract-fixture-1",
-      "documents": [
-        {
-          "id": "c-bd",
-          "kind": "businessDesign",
-          "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
-          "title": "受付",
-          "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
-          "scope": "scopeは外側のexample.scopeを参照",
-          "objects": [
-            {
-              "id": "c-requester",
-              "name": "依頼者",
-              "scope": false,
-              "icon": "users",
-              "information": [
+    "candidate": {
+      "format": "alder-structure-design-example",
+      "proposalVersion": "D2.2",
+      "proposedPackageVersion": "0.5",
+      "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "business": {
+        "id": "c-bd",
+        "kind": "businessDesign",
+        "schemaVersion": "0.4",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "title": "受付",
+        "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+        "scope": "scopeは外側のexample.scopeを参照",
+        "objects": [
+          {
+            "id": "c-requester",
+            "name": "依頼者",
+            "scope": false,
+            "icon": "users",
+            "information": [
+              {
+                "id": "c-desk",
+                "name": "その相談の担当窓口",
+                "description": ""
+              },
+              {
+                "id": "c-contact",
+                "name": "次の連絡方法",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "staff-object",
+            "name": "受付担当",
+            "scope": false,
+            "icon": "file-text",
+            "information": []
+          },
+          {
+            "id": "system-object",
+            "name": "受付システム",
+            "scope": false,
+            "icon": "file-text",
+            "information": []
+          }
+        ],
+        "roles": [
+          {
+            "id": "c-staff",
+            "name": "担当者",
+            "color": "#2563eb"
+          }
+        ],
+        "activities": [
+          {
+            "id": "c-guidance",
+            "name": "次の連絡方法を説明する",
+            "scope": true,
+            "why": "依頼者が相談後の連絡先を理解できるようにする。",
+            "when": "相談の受付後、依頼者に次の案内をするとき。",
+            "where": "規定なし",
+            "performers": [
+              {
+                "objectId": "staff-object",
+                "roleIds": [
+                  "c-staff"
+                ]
+              },
+              {
+                "objectId": "system-object",
+                "roleIds": []
+              }
+            ],
+            "procedure": {
+              "steps": [
                 {
-                  "id": "c-desk",
-                  "name": "その相談の担当窓口",
-                  "description": ""
-                },
-                {
-                  "id": "c-contact",
-                  "name": "次の連絡方法",
-                  "description": ""
-                }
-              ]
-            },
-            {
-              "id": "staff-object",
-              "name": "受付担当",
-              "scope": false,
-              "icon": "file-text",
-              "information": []
-            },
-            {
-              "id": "system-object",
-              "name": "受付システム",
-              "scope": false,
-              "icon": "file-text",
-              "information": []
-            }
-          ],
-          "roles": [
-            {
-              "id": "c-staff",
-              "name": "担当者",
-              "color": "#2563eb"
-            }
-          ],
-          "activities": [
-            {
-              "id": "c-guidance",
-              "name": "次の連絡方法を説明する",
-              "scope": true,
-              "why": "依頼者が相談後の連絡先を理解できるようにする。",
-              "when": "相談の受付後、依頼者に次の案内をするとき。",
-              "where": "規定なし",
-              "performers": [
-                {
-                  "objectId": "staff-object",
-                  "roleIds": [
-                    "c-staff"
+                  "id": "mix-input",
+                  "text": "相談申込を入力する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": [
+                    "staff-object"
                   ]
                 },
                 {
-                  "objectId": "system-object",
-                  "roleIds": []
+                  "id": "mix-check",
+                  "text": "入力された申込を確認する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": [
+                    "system-object"
+                  ]
+                },
+                {
+                  "id": "mix-guide",
+                  "text": "次の連絡方法を案内する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": [
+                    "staff-object"
+                  ]
                 }
               ],
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "mix-input",
-                    "text": "相談申込を入力する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": [
-                      "staff-object"
-                    ]
-                  },
-                  {
-                    "id": "mix-check",
-                    "text": "入力された申込を確認する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": [
-                      "system-object"
-                    ]
-                  },
-                  {
-                    "id": "mix-guide",
-                    "text": "次の連絡方法を案内する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": [
-                      "staff-object"
-                    ]
-                  }
-                ],
-                "orderRules": []
+              "orderRules": []
+            },
+            "results": [
+              {
+                "id": "c-guidance-r1",
+                "text": "依頼者へ担当窓口が説明される。",
+                "condition": null
               },
-              "results": [
-                {
-                  "id": "c-guidance-r1",
-                  "text": "依頼者へ担当窓口が説明される。"
-                },
-                {
-                  "id": "c-guidance-r2",
-                  "text": "依頼者へ次の連絡方法が説明される。"
-                }
-              ],
-              "problem": null,
-              "painLevel": null,
-              "exception": null
-            }
-          ],
-          "relations": [
-            {
-              "id": "c-output",
-              "kind": "output",
-              "fromId": "c-guidance",
-              "toId": "c-requester",
-              "dataId": "data-c-output"
-            }
-          ],
-          "findings": [],
-          "exceptions": [],
-          "data": [
-            {
-              "id": "data-c-output",
-              "name": "連絡案内",
-              "items": [
-                {
-                  "informationId": "c-desk",
-                  "condition": null
-                },
-                {
-                  "informationId": "c-contact",
-                  "condition": null
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "sources": [],
-      "externalDocuments": [],
-      "diagnostics": []
+              {
+                "id": "c-guidance-r2",
+                "text": "依頼者へ次の連絡方法が説明される。",
+                "condition": null
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          }
+        ],
+        "relations": [
+          {
+            "id": "c-output",
+            "kind": "output",
+            "fromId": "c-guidance",
+            "toId": "c-requester",
+            "dataId": "data-c-output"
+          }
+        ],
+        "findings": [],
+        "exceptions": [],
+        "data": [
+          {
+            "id": "data-c-output",
+            "name": "連絡案内",
+            "items": [
+              {
+                "informationId": "c-desk",
+                "condition": null
+              },
+              {
+                "informationId": "c-contact",
+                "condition": null
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   {
     "caseId": "photo",
-    "package": {
-      "format": "alder-document-package",
-      "formatVersion": "0.5",
-      "revision": "d2-contract-fixture-1",
-      "documents": [
-        {
-          "id": "photo-bd",
-          "kind": "businessDesign",
-          "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
-          "title": "写真",
-          "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
-          "scope": "scopeは外側のexample.scopeを参照",
-          "objects": [
-            {
-              "id": "fx-person",
-              "name": "人",
-              "scope": false,
-              "icon": "users",
-              "information": []
-            }
-          ],
-          "roles": [
-            {
-              "id": "fx-player",
-              "name": "参加者",
-              "color": "#2563eb"
+    "candidate": {
+      "format": "alder-structure-design-example",
+      "proposalVersion": "D2.2",
+      "proposedPackageVersion": "0.5",
+      "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "business": {
+        "id": "photo-bd",
+        "kind": "businessDesign",
+        "schemaVersion": "0.4",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "title": "写真",
+        "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+        "scope": "scopeは外側のexample.scopeを参照",
+        "objects": [
+          {
+            "id": "fx-person",
+            "name": "人",
+            "scope": false,
+            "icon": "users",
+            "information": []
+          }
+        ],
+        "roles": [
+          {
+            "id": "fx-player",
+            "name": "参加者",
+            "color": "#2563eb"
+          },
+          {
+            "id": "fx-recorder",
+            "name": "記録担当",
+            "color": "#2563eb"
+          }
+        ],
+        "activities": [
+          {
+            "id": "photo-activity",
+            "name": "写真を残す",
+            "scope": true,
+            "why": "必要なときに選んだ写真を見返せるようにする。",
+            "when": "写真を残すことを検討するとき。",
+            "where": "規定なし",
+            "performers": [
+              {
+                "objectId": "fx-person",
+                "roleIds": [
+                  "fx-player",
+                  "fx-recorder"
+                ]
+              }
+            ],
+            "procedure": {
+              "steps": [
+                {
+                  "id": "photo-step",
+                  "text": "その写真を残す。",
+                  "obligation": "optional",
+                  "appliesWhen": "写真がある場合",
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": []
             },
-            {
-              "id": "fx-recorder",
-              "name": "記録担当",
-              "color": "#2563eb"
-            }
-          ],
-          "activities": [
-            {
-              "id": "photo-activity",
-              "name": "写真を残す",
-              "scope": true,
-              "why": "必要なときに選んだ写真を見返せるようにする。",
-              "when": "写真を残すことを検討するとき。",
-              "where": "規定なし",
-              "performers": [
-                {
-                  "objectId": "fx-person",
-                  "roleIds": [
-                    "fx-player",
-                    "fx-recorder"
-                  ]
-                }
-              ],
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "photo-step",
-                    "text": "その写真を残す。",
-                    "obligation": "optional",
-                    "appliesWhen": "写真がある場合",
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": []
-              },
-              "results": [
-                {
-                  "id": "photo-result",
-                  "text": "写真があり、残すことを選んだ場合、選んだ写真が残される。"
-                }
-              ],
-              "problem": null,
-              "painLevel": null,
-              "exception": null
-            }
-          ],
-          "relations": [],
-          "findings": [],
-          "exceptions": [],
-          "data": []
-        }
-      ],
-      "sources": [],
-      "externalDocuments": [],
-      "diagnostics": []
+            "results": [
+              {
+                "id": "photo-result",
+                "text": "選んだ写真が残される。",
+                "condition": "写真があり、残すことを選んだ場合"
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          }
+        ],
+        "relations": [],
+        "findings": [],
+        "exceptions": [],
+        "data": []
+      }
     }
   },
   {
     "caseId": "synthetic",
-    "package": {
-      "format": "alder-document-package",
-      "formatVersion": "0.5",
-      "revision": "d2-contract-fixture-1",
-      "documents": [
-        {
-          "id": "s-bd",
-          "kind": "businessDesign",
-          "schemaVersion": "0.4",
-          "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
-          "title": "集計",
-          "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
-          "scope": "scopeは外側のexample.scopeを参照",
-          "objects": [
-            {
-              "id": "s-scheduler",
-              "name": "スケジューラー",
-              "scope": false,
-              "icon": "users",
-              "information": []
-            },
-            {
-              "id": "s-system",
-              "name": "表示システム",
-              "scope": false,
-              "icon": "users",
-              "information": []
-            },
-            {
-              "id": "s-record",
-              "name": "受付件数の記録",
-              "scope": false,
-              "icon": "file-text",
-              "information": [
+    "candidate": {
+      "format": "alder-structure-design-example",
+      "proposalVersion": "D2.2",
+      "proposedPackageVersion": "0.5",
+      "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "business": {
+        "id": "s-bd",
+        "kind": "businessDesign",
+        "schemaVersion": "0.4",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "title": "集計",
+        "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+        "scope": "scopeは外側のexample.scopeを参照",
+        "objects": [
+          {
+            "id": "s-scheduler",
+            "name": "スケジューラー",
+            "scope": false,
+            "icon": "users",
+            "information": []
+          },
+          {
+            "id": "s-system",
+            "name": "表示システム",
+            "scope": false,
+            "icon": "users",
+            "information": []
+          },
+          {
+            "id": "s-record",
+            "name": "受付件数の記録",
+            "scope": false,
+            "icon": "file-text",
+            "information": [
+              {
+                "id": "s-count",
+                "name": "対象日の受付件数",
+                "description": ""
+              },
+              {
+                "id": "s-at",
+                "name": "集計実施日時",
+                "description": ""
+              }
+            ]
+          }
+        ],
+        "roles": [],
+        "activities": [
+          {
+            "id": "s-auto",
+            "name": "受付件数を集計する",
+            "scope": true,
+            "why": "一日の受付状況を件数で確かめるため。",
+            "when": "対象日の定時になったとき。",
+            "where": "規定なし",
+            "performers": [
+              {
+                "objectId": "s-scheduler",
+                "roleIds": []
+              }
+            ],
+            "procedure": {
+              "steps": [
                 {
-                  "id": "s-count",
-                  "name": "対象日の受付件数",
-                  "description": ""
+                  "id": "s-sum",
+                  "text": "定時に受付件数を集計する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": []
+            },
+            "results": [
+              {
+                "id": "s-auto-r1",
+                "text": "対象日の受付件数が確定する。",
+                "condition": null
+              },
+              {
+                "id": "s-auto-r2",
+                "text": "集計実施日時が残る。",
+                "condition": null
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          },
+          {
+            "id": "s-use1",
+            "name": "件数を見る",
+            "scope": true,
+            "why": "確定した受付件数を確認するため。",
+            "when": "受付件数確定後に、その結果を見るとき。",
+            "where": "規定なし",
+            "performers": [
+              {
+                "objectId": "s-system",
+                "roleIds": []
+              }
+            ],
+            "procedure": {
+              "steps": [
+                {
+                  "id": "s-show",
+                  "text": "確定した件数を表示する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": []
+            },
+            "results": [
+              {
+                "id": "s-use1-r1",
+                "text": "件数が表示される。",
+                "condition": null
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          },
+          {
+            "id": "s-use2",
+            "name": "件数の推移を見る",
+            "scope": true,
+            "why": "受付件数の変化を確認するため。",
+            "when": "受付件数確定後に、その結果を見るとき。",
+            "where": "規定なし",
+            "performers": [
+              {
+                "objectId": "s-system",
+                "roleIds": []
+              }
+            ],
+            "procedure": {
+              "steps": [
+                {
+                  "id": "s-trend",
+                  "text": "確定した件数を推移表示に利用する。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
+                }
+              ],
+              "orderRules": []
+            },
+            "results": [
+              {
+                "id": "s-use2-r1",
+                "text": "件数の推移が表示される。",
+                "condition": null
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          }
+        ],
+        "relations": [
+          {
+            "id": "s-output",
+            "kind": "output",
+            "fromId": "s-auto",
+            "toId": "s-record",
+            "dataId": "data-s-output"
+          },
+          {
+            "id": "s-input1",
+            "kind": "input",
+            "fromId": "s-record",
+            "toId": "s-use1",
+            "dataId": "data-s-input1"
+          },
+          {
+            "id": "s-input2",
+            "kind": "input",
+            "fromId": "s-record",
+            "toId": "s-use2",
+            "dataId": "data-s-input1"
+          }
+        ],
+        "findings": [],
+        "exceptions": [],
+        "data": [
+          {
+            "id": "data-s-output",
+            "name": "集計結果",
+            "items": [
+              {
+                "informationId": "s-count",
+                "condition": null
+              },
+              {
+                "informationId": "s-at",
+                "condition": null
+              }
+            ]
+          },
+          {
+            "id": "data-s-input1",
+            "name": "受付件数",
+            "items": [
+              {
+                "informationId": "s-count",
+                "condition": null
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "caseId": "molkky",
+    "candidate": {
+      "format": "alder-structure-design-example",
+      "proposalVersion": "D2.2",
+      "proposedPackageVersion": "0.5",
+      "scope": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "business": {
+        "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
+        "kind": "businessDesign",
+        "schemaVersion": "0.4",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "title": "試合開始",
+        "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+        "scope": "scopeは外側のexample.scopeを参照",
+        "objects": [
+          {
+            "id": "978d11b3-def5-4149-971c-c7118065139b",
+            "name": "遊ぶ人と記録する人",
+            "scope": false,
+            "icon": "users",
+            "information": [
+              {
+                "id": "m-participants",
+                "name": "参加者名",
+                "description": ""
+              },
+              {
+                "id": "m-order",
+                "name": "元の順番",
+                "description": ""
+              },
+              {
+                "id": "m-start-status",
+                "name": "参加者条件に合う試合の開始可否",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+            "name": "試合の記録",
+            "scope": true,
+            "icon": "file-text",
+            "information": [
+              {
+                "id": "m-record-participants",
+                "name": "参加者名",
+                "description": ""
+              },
+              {
+                "id": "m-record-order",
+                "name": "元の順番",
+                "description": ""
+              },
+              {
+                "id": "m-initial",
+                "name": "各自の初期0点",
+                "description": ""
+              }
+            ]
+          }
+        ],
+        "roles": [
+          {
+            "id": "efa1c9f1-9f0c-456c-811c-cf4962492596",
+            "name": "参加者",
+            "color": "#2563eb"
+          },
+          {
+            "id": "168c052e-2574-4159-9a95-6c06932e5a74",
+            "name": "記録する人",
+            "color": "#008576"
+          },
+          {
+            "id": "4555cbf3-a0cd-4b5c-b0fe-c8cf4b6ceaea",
+            "name": "道具",
+            "color": "#c2410c"
+          }
+        ],
+        "activities": [
+          {
+            "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+            "name": "試合の開始を記録する",
+            "scope": true,
+            "why": "参加者と順番をその試合に結び付け、条件に合う試合を始めるため",
+            "when": "人が決めた参加者の名前と順番を道具に伝え、新しい試合を始めようとするとき",
+            "where": "CLI",
+            "performers": null,
+            "procedure": {
+              "steps": [
+                {
+                  "id": "m-receive",
+                  "text": "人が決めた参加者名と元の順番を受け取る。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
                 },
                 {
-                  "id": "s-at",
-                  "name": "集計実施日時",
-                  "description": ""
-                }
-              ]
-            }
-          ],
-          "roles": [],
-          "activities": [
-            {
-              "id": "s-auto",
-              "name": "受付件数を集計する",
-              "scope": true,
-              "why": "一日の受付状況を件数で確かめるため。",
-              "when": "対象日の定時になったとき。",
-              "where": "規定なし",
-              "performers": [
-                {
-                  "objectId": "s-scheduler",
-                  "roleIds": []
-                }
-              ],
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "s-sum",
-                    "text": "定時に受付件数を集計する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": []
-              },
-              "results": [
-                {
-                  "id": "s-auto-r1",
-                  "text": "対象日の受付件数が確定する。"
+                  "id": "m-check",
+                  "text": "0人・1人または同名なら試合を始めない。2人以上で重複名がなければ記録へ進む。",
+                  "obligation": "required",
+                  "appliesWhen": null,
+                  "performerObjectIds": null
                 },
                 {
-                  "id": "s-auto-r2",
-                  "text": "集計実施日時が残る。"
+                  "id": "m-write",
+                  "text": "対象試合に参加者名・元の順番・全員の初期0点を記録し、得点と順番の見直しへ渡す。",
+                  "obligation": "required",
+                  "appliesWhen": "参加者が2人以上で名前が重複しない",
+                  "performerObjectIds": null
                 }
               ],
-              "problem": null,
-              "painLevel": null,
-              "exception": null
-            },
-            {
-              "id": "s-use1",
-              "name": "件数を見る",
-              "scope": true,
-              "why": "確定した受付件数を確認するため。",
-              "when": "受付件数確定後に、その結果を見るとき。",
-              "where": "規定なし",
-              "performers": [
+              "orderRules": [
                 {
-                  "objectId": "s-system",
-                  "roleIds": []
-                }
-              ],
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "s-show",
-                    "text": "確定した件数を表示する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": []
-              },
-              "results": [
-                {
-                  "id": "s-use1-r1",
-                  "text": "件数が表示される。"
-                }
-              ],
-              "problem": null,
-              "painLevel": null,
-              "exception": null
-            },
-            {
-              "id": "s-use2",
-              "name": "件数の推移を見る",
-              "scope": true,
-              "why": "受付件数の変化を確認するため。",
-              "when": "受付件数確定後に、その結果を見るとき。",
-              "where": "規定なし",
-              "performers": [
-                {
-                  "objectId": "s-system",
-                  "roleIds": []
-                }
-              ],
-              "procedure": {
-                "steps": [
-                  {
-                    "id": "s-trend",
-                    "text": "確定した件数を推移表示に利用する。",
-                    "obligation": "required",
-                    "appliesWhen": null,
-                    "performerObjectIds": null
-                  }
-                ],
-                "orderRules": []
-              },
-              "results": [
-                {
-                  "id": "s-use2-r1",
-                  "text": "件数の推移が表示される。"
-                }
-              ],
-              "problem": null,
-              "painLevel": null,
-              "exception": null
-            }
-          ],
-          "relations": [
-            {
-              "id": "s-output",
-              "kind": "output",
-              "fromId": "s-auto",
-              "toId": "s-record",
-              "dataId": "data-s-output"
-            },
-            {
-              "id": "s-input1",
-              "kind": "input",
-              "fromId": "s-record",
-              "toId": "s-use1",
-              "dataId": "data-s-input1"
-            },
-            {
-              "id": "s-input2",
-              "kind": "input",
-              "fromId": "s-record",
-              "toId": "s-use2",
-              "dataId": "data-s-input1"
-            }
-          ],
-          "findings": [],
-          "exceptions": [],
-          "data": [
-            {
-              "id": "data-s-output",
-              "name": "集計結果",
-              "items": [
-                {
-                  "informationId": "s-count",
-                  "condition": null
+                  "kind": "before",
+                  "beforeId": "m-receive",
+                  "afterId": "m-check"
                 },
                 {
-                  "informationId": "s-at",
-                  "condition": null
+                  "kind": "before",
+                  "beforeId": "m-check",
+                  "afterId": "m-write"
                 }
               ]
             },
-            {
-              "id": "data-s-input1",
-              "name": "受付件数",
-              "items": [
-                {
-                  "informationId": "s-count",
-                  "condition": null
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "sources": [],
-      "externalDocuments": [],
-      "diagnostics": []
+            "results": [
+              {
+                "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e-r1",
+                "text": "条件に合う対象試合に参加者名と元の順番が結び付く。",
+                "condition": "参加者が2人以上で名前が重複しない場合"
+              },
+              {
+                "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e-r2",
+                "text": "条件に合う対象試合の各自の初期0点が記録される。",
+                "condition": "参加者が2人以上で名前が重複しない場合"
+              }
+            ],
+            "problem": null,
+            "painLevel": null
+          }
+        ],
+        "relations": [
+          {
+            "id": "f92e3d72-c9cc-46e7-b116-6460ae44787b",
+            "kind": "output",
+            "fromId": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+            "toId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+            "dataId": "data-f92e3d72-c9cc-46e7-b116-6460ae44787b"
+          },
+          {
+            "id": "a11a030e-0574-493f-976c-bdc56b3e041e",
+            "kind": "input",
+            "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+            "toId": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+            "dataId": "data-a11a030e-0574-493f-976c-bdc56b3e041e"
+          },
+          {
+            "id": "c1022cfd-1a81-4343-86ba-215a9369769a",
+            "kind": "output",
+            "fromId": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+            "toId": "978d11b3-def5-4149-971c-c7118065139b",
+            "dataId": "data-c1022cfd-1a81-4343-86ba-215a9369769a"
+          }
+        ],
+        "findings": [
+          {
+            "id": "m-actor-question",
+            "sourceId": "m-actor-question",
+            "kind": "question",
+            "status": "open",
+            "scope": "items",
+            "targetIds": [
+              "d38e0b2b-db26-4cce-92fd-5643a064d51e"
+            ],
+            "unresolvedTargets": [],
+            "summary": "実行主体Object未確定",
+            "content": "Who=道具に対応するObjectの同一性・実行分担を確認する。記録Objectと同一と推定しない。"
+          }
+        ],
+        "exceptions": [],
+        "data": [
+          {
+            "id": "data-f92e3d72-c9cc-46e7-b116-6460ae44787b",
+            "name": "開始した試合",
+            "items": [
+              {
+                "informationId": "m-record-participants",
+                "condition": null
+              },
+              {
+                "informationId": "m-record-order",
+                "condition": null
+              },
+              {
+                "informationId": "m-initial",
+                "condition": null
+              }
+            ]
+          },
+          {
+            "id": "data-a11a030e-0574-493f-976c-bdc56b3e041e",
+            "name": "参加者と順番",
+            "items": [
+              {
+                "informationId": "m-participants",
+                "condition": null
+              },
+              {
+                "informationId": "m-order",
+                "condition": null
+              }
+            ]
+          },
+          {
+            "id": "data-c1022cfd-1a81-4343-86ba-215a9369769a",
+            "name": "開始可否",
+            "items": [
+              {
+                "informationId": "m-start-status",
+                "condition": null
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 ]
-
