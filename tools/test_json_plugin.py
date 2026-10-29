@@ -64,8 +64,7 @@ class JSONPluginTest(unittest.TestCase):
             operation['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':{'source':'synthetic fixture only','quote':'模擬合意。実運用承認ではない'}}];op.write_text(json.dumps(operation));self.assertEqual(run('commit',target,candidate,op).returncode,0)
             before=target.read_bytes();info=json.loads(run('inspect',target).stdout)
             for kind in ['checkItems','stateTransition','both']:
-                altered=json.loads(before);altered['revision']='p3';new_bd=json.loads(json.dumps(altered['documents'][0]));new_bd['id']='new-bd';new_bd['revision']+='-new'
-                # Rebase both to a changed BD revision; for single cases omit the other document from the seed.
+                # For single cases omit the other dependent document from the synthetic seed.
                 seed=json.loads(before)
                 if kind!='both':seed['documents']=[d for d in seed['documents'] if d['kind'] in ['businessDesign',kind]]
                 target.write_text(json.dumps(seed));seed_bytes=target.read_bytes();seed_info=json.loads(run('inspect',target).stdout)
