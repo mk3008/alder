@@ -17,7 +17,7 @@ type PreviewCase={id:string;title:string;before:unknown;candidate:{business:Busi
 type Preview={cases:PreviewCase[]};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 function title(root:HTMLElement,name:string){root.append(el('h3',name));}
-function note(root:HTMLElement,text:string){const p=el('p',text);p.className='d2-note';root.append(p);}
+function resultText(r:Activity['results'][number]){return (r.condition?r.condition+'、':'')+r.text;}
 function actorName(b:Business,a:Activity,s?:Step){
  const ids:string[]|null=s?actorsForStep(a,s):a.performers?.map(p=>p.objectId)??null;
  if(!ids)return '担当未確認';
@@ -31,14 +31,13 @@ export function candidateDetail(b:Business,id:string|undefined,navigate:(activit
  title(root,'Scope');root.append(el('p',String(a.scope)));
  title(root,'Why');root.append(el('p',a.why));title(root,'When');root.append(el('p',a.when));title(root,'Who');root.append(el('p',actorName(b,a)));title(root,'Where');root.append(el('p',a.where));
  title(root,'Procedure');const ol=el('ol');
- for(const s of a.procedure.steps){const li=el('li');li.className='d2-step';li.id='step-'+s.id;li.dataset.stepId=s.id;li.append(el('p',s.text));const labels:string[]=[];if(s.obligation==='optional')labels.push('任意');if(a.performers&&a.performers.length>1&&s.performerObjectIds&&s.performerObjectIds.length<a.performers.length)labels.push('担当：'+actorName(b,a,s));if(labels.length){const meta=el('div');meta.className='d2-step-meta';meta.append(el('small',labels.join(' · ')));li.append(meta);}if(s.appliesWhen)li.append(el('p','適用：'+s.appliesWhen));ol.append(li);}root.append(ol);
- for(const rule of b.crossActivityOrderRules){const refs=rule.kind==='interchangeable'?rule.standardSteps:[rule.before,rule.after];if(!refs.some(e=>e.activityId===a.id))continue;
-  const panel=el('details');panel.className='d2-cross';panel.dataset.orderId=rule.id;panel.append(el('summary','※'+rule.label+(rule.kind==='interchangeable'?'は順不同。':'は記載順。')),el('p',rule.context));
-  for(const [index,e]of refs.entries()){const owner=b.activities.find(a=>a.id===e.activityId)!,s=owner.procedure.steps.find(s=>s.id===e.stepId)!;const button=el('button',owner.name+'の手順'+(owner.procedure.steps.indexOf(s)+1));button.type='button';button.className='node-navigate d2-ref';button.dataset.stepRef=s.id;button.onclick=()=>navigate(owner.id,s.id);panel.append(el('br'),button);if(rule.kind==='before'&&index<refs.length-1)panel.append(el('span',' → '));}root.append(panel);
- }
+ const swaps=[...b.activities.flatMap(owner=>owner.procedure.orderRules.filter(r=>r.kind==='interchangeable').map(r=>({id:'',refs:r.stepIds.map(stepId=>({activityId:owner.id,stepId}))}))),...b.crossActivityOrderRules.filter(r=>r.kind==='interchangeable').map(r=>({id:r.id,refs:r.standardSteps}))].map((g,index)=>({...g,number:index+1})).filter(g=>g.refs.some(e=>e.activityId===a.id));
+ for(const s of a.procedure.steps){const li=el('li');li.className='d2-step';li.id='step-'+s.id;li.dataset.stepId=s.id;const p=el('p',s.text),labels:string[]=[];if(s.appliesWhen)labels.push(s.appliesWhen);if(s.obligation==='optional')labels.push('任意');if(a.performers&&a.performers.length>1&&s.performerObjectIds&&s.performerObjectIds.length<a.performers.length)labels.push('担当：'+actorName(b,a,s));if(labels.length)p.append('（'+labels.join('・')+'）');
+  for(const g of swaps){const index=g.refs.findIndex(e=>e.activityId===a.id&&e.stepId===s.id);if(index<0)continue;p.append('（');if(g.id){const next=g.refs[(index+1)%g.refs.length],owner=b.activities.find(a=>a.id===next.activityId)!,step=owner.procedure.steps.findIndex(s=>s.id===next.stepId),button=el('button','※'+g.number);button.type='button';button.className='node-navigate d2-ref';button.dataset.orderId=g.id;button.dataset.stepRef=next.stepId;button.setAttribute('aria-label',owner.name+'の手順'+(step+1));button.onclick=()=>navigate(owner.id,next.stepId);p.append(button);}else p.append(el('span','※'+g.number));p.append('）');}li.append(p);ol.append(li);}root.append(ol);
+ for(const g of swaps){const p=el('p',swaps.length===1?'※が付いているものは順不同。':'※'+g.number+'の手順は順不同。');p.className='d2-order-note';root.append(p);}
  for(const e of (b.exceptions??[]).filter(e=>e.activityId===a.id)){title(root,'Exception · '+e.name);root.append(el('p',e.description));}
  title(root,'Result');
- const results=el('ul');for(const r of a.results){const li=el('li',r.text);li.dataset.resultId=r.id;if(r.condition)li.append(el('p','成立条件：'+r.condition));results.append(li);}root.append(results);
+ const results=el('ul');for(const r of a.results){const li=el('li',resultText(r));li.dataset.resultId=r.id;results.append(li);}root.append(results);
  if(a.problem!==null){title(root,'Problem');root.append(el('p',a.problem));}if(a.painLevel!==null){title(root,'Pain level');root.append(el('p',a.painLevel));}
  const names=new Map([...b.objects,...b.activities].map(n=>[n.id,n.name]));
  const io=b.relations.filter((r):r is IORelation=>'dataId' in r&&(r.fromId===a.id||r.toId===a.id)),data=new Map(b.data.map(d=>[d.id,d]));
@@ -51,7 +50,7 @@ export function candidateDetail(b:Business,id:string|undefined,navigate:(activit
 export function projectD2(candidate:{business:Business}):Design{
  validateD2(candidate);const b=candidate.business;
  const objects=b.objects.map(o=>({...o,information:o.information.map(i=>i.name+(i.description?' — '+i.description:''))}));
- const activities=b.activities.map(a=>{const roleIds=[...new Set(a.performers?.flatMap(p=>p.roleIds)??[])];return {...a,who:actorName(b,a),roleId:roleIds.length===1?roleIds[0]:null,procedure:a.procedure.steps.map(s=>s.text).join('\n'),result:a.results.map(r=>r.text+(r.condition?'（成立条件：'+r.condition+'）':'')).join('\n'),exception:null};});
+ const activities=b.activities.map(a=>{const roleIds=[...new Set(a.performers?.flatMap(p=>p.roleIds)??[])];return {...a,who:actorName(b,a),roleId:roleIds.length===1?roleIds[0]:null,procedure:a.procedure.steps.map(s=>s.text).join('\n'),result:a.results.map(resultText).join('\n'),exception:null};});
  const data=new Map(b.data.map(d=>[d.id,d.name])),relations=b.relations.map(r=>({id:r.id,kind:r.kind,fromId:r.fromId,toId:r.toId,label:'dataId' in r?data.get(r.dataId)!:r.label}));
  const business:BD={...b,objects,activities,relations};
  const graph=canonicalJSONGraph({version:1,scope:b.scope,nodes:[...objects.map(o=>({...o,type:'object' as const})),...activities.map(a=>({id:a.id,name:a.name,type:'business' as const,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))],relations:relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))});
