@@ -8,7 +8,7 @@ export async function verifyTabScroll(browser){
  try{
   await loadPurchaseReview(page);
   const keys=await page.locator('#explorer-business-activity .explorer-item').evaluateAll(items=>items.slice(0,3).map(item=>item.dataset.explorerKey));
-  keys.push(...await page.locator('#explorer-concept-model .explorer-item').evaluateAll(items=>items.map(item=>item.dataset.explorerKey)));
+  keys.push(...await page.locator('#explorer-subsystems .explorer-item-nested').evaluateAll(items=>items.map(item=>item.dataset.explorerKey)));
   keys.push(await page.locator('#explorer-states .explorer-item').first().getAttribute('data-explorer-key'));
   for(const key of keys)await page.locator(`[data-explorer-key=${JSON.stringify(key)}]`).click();
   const row=page.locator('.shell-open-tabs');

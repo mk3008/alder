@@ -115,3 +115,14 @@
 .node.object .node-text{padding-right:36px}
 .object-open{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
 .object-open svg{width:20px;height:20px}.object-open:hover{background:var(--select)}.object-open:focus-visible{outline-offset:-4px}
+/* Graph-first pages share one supplementary drawer; examples remain page-level evidence. */
+.concept-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible}
+.concept-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 12px 16px}
+.concept-page-title{font-size:17px;margin:12px 0}.concept-page-details>details{border-bottom:1px solid var(--subtle);padding:6px 0}.concept-page-details>details>summary{cursor:pointer;font-size:14px;font-weight:650;min-height:36px;align-content:center}
+.concept-drawer-body .data-review-overview,.concept-drawer-body .data-examples-panel{padding:8px 0;overflow:visible;min-width:0;background:var(--panel)}
+.concept-drawer-body .data-example-picker{align-items:stretch;flex-direction:column;gap:4px}.concept-drawer-body .data-example-picker select{width:100%}
+.concept-selection>h2{font-size:14px;margin:16px 0 0}.concept-drawer-body .concept-related-content{padding:8px 0}
+.concept-drawer-resize{position:absolute;left:-5px;top:0;bottom:0;width:10px;cursor:col-resize;touch-action:none;z-index:8}.concept-drawer-resize:focus-visible,.concept-drawer-resize.resizing{outline:2px solid var(--accent,#357aa6);outline-offset:-4px}
+@media(max-width:800px){.concept-related{max-width:calc(100% - 16px)}.concept-drawer-body{padding:0 10px 12px}}
+
+.tab[data-view-kind=subsystems]{--tab-kind-color:#7b4abd}[data-theme=dark] .tab[data-view-kind=subsystems]{--tab-kind-color:#c9b2ff}

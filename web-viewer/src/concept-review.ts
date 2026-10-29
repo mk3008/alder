@@ -1,16 +1,13 @@
 import {contentFor} from './data-examples';
-import {createElement,SquareArrowOutUpRight,ArrowLeft} from 'lucide';
+import {createElement,SquareArrowOutUpRight} from 'lucide';
 import {type ReviewGroup} from './concept-review-fixture';
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
-function command(root:HTMLElement,label:string,action:()=>void,back=false){const b=document.createElement('button');b.type='button';b.className=back?'review-back':'review-open';b.append(createElement(back?ArrowLeft:SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
+function command(root:HTMLElement,label:string,action:()=>void){const b=document.createElement('button');b.type='button';b.className='review-open';b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
 export type LandscapeMode='overview'|'graph';
 export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement|undefined,mode:LandscapeMode='overview'){
  root.replaceChildren();root.dataset.mode=mode;
  if(mode==='overview'&&canvas){const content=document.createElement('div');content.className='landscape-overview';content.append(canvas);root.append(content);}
 
-}
-export function renderReviewHeading(root:HTMLElement,group:ReviewGroup,overview:()=>void){
- root.replaceChildren();command(root,'全体図',overview,true);add(root,'h1',contentFor(group.id)?.title??group.name);
 }
 export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
  const content=contentFor(group.id);root.replaceChildren();if(!content)return;

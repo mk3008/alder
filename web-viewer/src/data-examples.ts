@@ -44,11 +44,6 @@ function colorKeyCell(cell:HTMLElement,key:string,colors:Map<string,string>){
 export const examplesFor=(group:string)=>dataExamples.filter(example=>example.group===group);
 export const findDataExample=(group:string,id:string|undefined|null)=>examplesFor(group).find(example=>example.id===id);
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
-export function renderExampleControls(root:HTMLElement,group:ReviewGroup,current:string|undefined,change:(id?:string)=>void,last?:string,overview=false,showOverview:()=>void=()=>{}){
- const bar=document.createElement('div');bar.className='data-example-modes';bar.setAttribute('aria-label','概要・構造図・データ例の切替');
- const modes=[{label:'概要',key:'overview',selected:overview,action:showOverview},{label:'構造図',key:'structure',selected:!overview&&!current,action:()=>change()},{label:'データ例',key:'examples',selected:!overview&&!!current,action:()=>change(current??last??examplesFor(group.id)[0].id)}];
- for(const mode of modes){const b=document.createElement('button');b.type='button';b.textContent=mode.label;b.dataset.exampleMode=mode.key;b.setAttribute('aria-pressed',String(mode.selected));b.onclick=mode.action;bar.append(b);}root.append(bar);
-}
 export function renderDataExample(root:HTMLElement,group:ReviewGroup,id:string,change:(id:string)=>void){
  const example=findDataExample(group.id,id);if(!example)throw Error('Unknown data example: '+id);root.replaceChildren();root.dataset.dataExample=id;
  const keyColors=new Map<string,string>();

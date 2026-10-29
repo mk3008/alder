@@ -1,7 +1,7 @@
-import {createElement,Workflow,GitBranch,Database,X,ChevronDown,ChevronRight} from 'lucide';
+import {createElement,Workflow,GitBranch,Database,PanelsTopLeft,X,ChevronDown,ChevronRight} from 'lucide';
 
-export type ViewKind='business'|'states'|'concept';
-const kinds={business:{full:'業務設計',icon:Workflow},states:{full:'状態遷移',icon:GitBranch},concept:{full:'データ構造',icon:Database}};
+export type ViewKind='business'|'states'|'concept'|'subsystems';
+const kinds={subsystems:{full:'サブシステム',icon:PanelsTopLeft},business:{full:'業務設計',icon:Workflow},states:{full:'状態遷移',icon:GitBranch},concept:{full:'データ構造',icon:Database}};
 export function viewTabLabel(button:HTMLButtonElement,kind:ViewKind,name:string){
  const type=kinds[kind],label=document.createElement('span'),badge=document.createElement('span'),title=document.createElement('span');
  label.className='view-tab-label';badge.className='view-tab-kind';badge.setAttribute('aria-hidden','true');
