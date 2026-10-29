@@ -8,13 +8,13 @@
       "before": {
         "format": "alder-document-package",
         "formatVersion": "0.4",
-        "revision": "comparison-0.4",
+        "revision": "comparison-0.4-input-restored",
         "documents": [
           {
             "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
             "kind": "businessDesign",
             "schemaVersion": "0.3",
-            "revision": "comparison-0.4",
+            "revision": "comparison-0.4-input-restored",
             "title": "投球後",
             "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
             "scope": "scopeは外側のexample.scopeを参照",
@@ -27,7 +27,9 @@
                 "information": [
                   "実際に投げた人",
                   "実際の投球順",
-                  "目視で確認した完全に倒れた番号"
+                  "目視で確認した完全に倒れた番号",
+                  "通常または優先で示された投げる人",
+                  "通常または優先で示された投げる順番"
                 ]
               },
               {
@@ -94,6 +96,13 @@
               }
             ],
             "relations": [
+              {
+                "id": "d3b61766-78d6-4088-abe2-993f8cb743a1",
+                "kind": "input",
+                "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+                "toId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
+                "label": "通常または優先で示された投げる人と順番"
+              },
               {
                 "id": "e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
                 "kind": "output",
@@ -163,7 +172,7 @@
           "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
           "kind": "businessDesign",
           "schemaVersion": "0.4",
-          "revision": "design-D2",
+          "revision": "design-D2-input-restored",
           "title": "投球後",
           "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
           "scope": "scopeは外側のexample.scopeを参照",
@@ -187,6 +196,16 @@
                 {
                   "id": "mf-numbers",
                   "name": "目視で確認した完全に倒れた番号",
+                  "description": ""
+                },
+                {
+                  "id": "mf-next-person",
+                  "name": "通常または優先で示された投げる人",
+                  "description": ""
+                },
+                {
+                  "id": "mf-next-turn",
+                  "name": "通常または優先で示された投げる順番",
                   "description": ""
                 }
               ]
@@ -355,6 +374,23 @@
             }
           ],
           "relations": [
+            {
+              "id": "d3b61766-78d6-4088-abe2-993f8cb743a1",
+              "kind": "input",
+              "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+              "toId": "ed89d34a-021b-4b33-aaaf-2c4d0b237ba2",
+              "label": "投げる人と順番",
+              "items": [
+                {
+                  "informationId": "mf-next-person",
+                  "condition": null
+                },
+                {
+                  "informationId": "mf-next-turn",
+                  "condition": null
+                }
+              ]
+            },
             {
               "id": "e39bbe45-1581-41ef-b5fc-91f2e9ae9ad3",
               "kind": "output",

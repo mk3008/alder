@@ -26,24 +26,19 @@ export function candidateDetail(b:Business,id:string|undefined,navigate:(activit
  if(object){title(root,'Scope');root.append(el('p',String(object.scope)));title(root,'Icon');root.append(el('p',object.icon));title(root,'Information');const ul=el('ul');for(const i of object.information){const li=el('li',i.name);if(i.description)li.append(el('p',i.description));ul.append(li);}root.append(ul);return root;}
  if(!a){root.append(el('p','項目を選択すると業務内容を表示します。'));return root;}
  title(root,'Scope');root.append(el('p',String(a.scope)));
- if(a.performers===null)note(root,'実行主体と分担は未確認です。外部業務の担当を内部の担当として補完しません。');
  title(root,'Why');root.append(el('p',a.why));title(root,'When');root.append(el('p',a.when));title(root,'Who');root.append(el('p',actorName(b,a)));title(root,'Where');root.append(el('p',a.where));
  title(root,'Procedure');const ol=el('ol');
- for(const s of a.procedure.steps){const li=el('li');li.className='d2-step';li.id='step-'+s.id;li.dataset.stepId=s.id;li.append(el('p',s.text));const meta=el('div');meta.className='d2-step-meta';const actor=actorName(b,a,s);meta.append(el('small',(s.obligation==='required'?'必須':'任意')+' · '+actor));li.append(meta);if(s.appliesWhen)li.append(el('p','適用：'+s.appliesWhen));const code=el('span',s.id);code.className='d2-source-id';li.append(code);ol.append(li);}root.append(ol);
- const stepLabel=(id:string)=>String(a.procedure.steps.findIndex(s=>s.id===id)+1);
- for(const r of a.procedure.orderRules)root.append(el('p',r.kind==='before'?'厳守：手順'+stepLabel(r.beforeId)+' → '+stepLabel(r.afterId):'入替可能：手順'+r.stepIds.map(stepLabel).join('・')));
- root.append(el('p','番号は標準提示順です。規則のない先後は未確認であり、自由な入替えを意味しません。'));
+ for(const s of a.procedure.steps){const li=el('li');li.className='d2-step';li.id='step-'+s.id;li.dataset.stepId=s.id;li.append(el('p',s.text));const meta=el('div');meta.className='d2-step-meta';const actor=actorName(b,a,s);meta.append(el('small',(s.obligation==='required'?'必須':'任意')+' · '+actor));li.append(meta);if(s.appliesWhen)li.append(el('p','適用：'+s.appliesWhen));ol.append(li);}root.append(ol);
  for(const rule of b.crossActivityOrderRules){const refs=rule.kind==='interchangeable'?rule.standardSteps:[rule.before,rule.after];if(!refs.some(e=>e.activityId===a.id))continue;
-  const panel=el('section');panel.className='d2-cross';panel.dataset.orderId=rule.id;panel.append(el('strong',rule.label),el('p',rule.context),el('p',rule.kind==='interchangeable'?'標準提示順 — このStep同士は入替可能':'このStep間の厳守先後'));
-  const list=el('ol');for(const e of refs){const owner=b.activities.find(a=>a.id===e.activityId)!,s=owner.procedure.steps.find(s=>s.id===e.stepId)!;const li=el('li'),button=el('button',owner.name+' / '+s.id);button.type='button';button.className='node-navigate d2-ref';button.onclick=()=>navigate(owner.id,s.id);li.append(button,el('p',s.text));list.append(li);}panel.append(list,el('p','同じ場面の対象Stepだけの関係です。Activity全体の交換・並列実行・次の投球への許可を表しません。'));root.append(panel);
+  const panel=el('p');panel.className='d2-cross';panel.dataset.orderId=rule.id;panel.append(el('span',rule.context+'では、'+(rule.kind==='interchangeable'?'次の手順はどちらを先に行ってもかまいません。':'次の順に実施します。')));
+  for(const [index,e]of refs.entries()){const owner=b.activities.find(a=>a.id===e.activityId)!,s=owner.procedure.steps.find(s=>s.id===e.stepId)!;const button=el('button',owner.name+'の手順'+(owner.procedure.steps.indexOf(s)+1));button.type='button';button.className='node-navigate d2-ref';button.dataset.stepRef=s.id;button.onclick=()=>navigate(owner.id,s.id);panel.append(el('br'),button);if(rule.kind==='before'&&index<refs.length-1)panel.append(el('span',' → '));}root.append(panel);
  }
  for(const e of (b.exceptions??[]).filter(e=>e.activityId===a.id)){title(root,'Exception · '+e.name);root.append(el('p',e.description));}
- title(root,'Result');note(root,'次は結果の定義です。成立条件に合わない項目は、その場面の成立結果には数えません。条件の判定は表示から確認してください。');
+ title(root,'Result');
  const results=el('ul');for(const r of a.results){const li=el('li',r.text);li.dataset.resultId=r.id;if(r.condition)li.append(el('p','成立条件：'+r.condition));results.append(li);}root.append(results);
  if(a.problem!==null){title(root,'Problem');root.append(el('p',a.problem));}if(a.painLevel!==null){title(root,'Pain level');root.append(el('p',a.painLevel));}
  const names=new Map([...b.objects,...b.activities].map(n=>[n.id,n.name]));
- for(const [kind,label]of [['input','Input'],['output','Output']]as const){const rs=b.relations.filter(r=>r.kind===kind&&(r.fromId===a.id||r.toId===a.id));if(!rs.length)continue;title(root,label);for(const r of rs){root.append(el('p',names.get(r.fromId)+' → '+names.get(r.toId)+' — '+r.label));const o=b.objects.find(o=>o.id===(kind==='input'?r.fromId:r.toId))!;const ul=el('ul');ul.dataset.relationId=r.id;for(const item of r.items!){const i=o.information.find(i=>i.id===item.informationId)!;const li=el('li',i.name);li.dataset.informationId=i.id;if(i.description)li.append(el('p',i.description));if(item.condition)li.append(el('p','受渡し条件：'+item.condition));ul.append(li);}root.append(ul);}}
- const findings=b.findings.filter(f=>f.status==='open'&&f.targetIds.includes(a.id));if(findings.length){title(root,'未確認');for(const f of findings)note(root,f.content);}
+ for(const [kind,label]of [['input','Input'],['output','Output']]as const){const rs=b.relations.filter(r=>r.kind===kind&&(r.fromId===a.id||r.toId===a.id));title(root,label);if(!rs.length){root.append(el('p','記載なし'));continue;}for(const r of rs){const transfer=el('p');transfer.append(el('strong',r.label),el('br'),el('span',(kind==='input'?'受取元：':'渡す相手：')+names.get(kind==='input'?r.fromId:r.toId)));root.append(transfer);const o=b.objects.find(o=>o.id===(kind==='input'?r.fromId:r.toId))!;const ul=el('ul');ul.dataset.relationId=r.id;for(const item of r.items!){const i=o.information.find(i=>i.id===item.informationId)!;const li=el('li',i.name);li.dataset.informationId=i.id;if(i.description)li.append(el('p',i.description));if(item.condition)li.append(el('p','受渡し条件：'+item.condition));ul.append(li);}root.append(ul);}}
  return root;
 }
 
@@ -69,3 +64,4 @@ export function createD2Preview():ViewerPreview{
   detail(design,id,navigate){const b=candidates.get(design.markdown);return b?candidateDetail(b,id,navigate):undefined;}
  };
 }
+
