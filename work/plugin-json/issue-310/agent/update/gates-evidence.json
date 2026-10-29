@@ -1,0 +1,30 @@
+{
+  "request": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/gates.ja.md",
+  "inputSha256": "8d0b66f69e7537e64e92ff29b420e82278c12f5dce2085dba46f9607c3ee5193",
+  "reviewedBD": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/business-design.json",
+  "reviewedBDSha256": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78",
+  "checkRequest": {
+    "outcome": "Agent stopped before drafting/saving",
+    "checkCreated": false,
+    "confirmedStateWritten": false,
+    "runtimeAttempted": false,
+    "runtimeRejectionObserved": false,
+    "reason": "No human agreement on exact BD ID/revision and no actual human Check feedback; explicit request says not to treat task/silence as agreement."
+  },
+  "stateRequest": {
+    "outcome": "Unadopted candidate retained only in this request/evidence record",
+    "stateDocumentCreated": false,
+    "candidate": "案内台帳: 登録済み -> 通知済み",
+    "meaningAdopted": false,
+    "reason": "State definitions and business meaning explicitly remain undecided; no promotion to established state definition."
+  },
+  "pending": [
+    "BD bd-3 remains a draft without human agreement.",
+    "Check meaning/review needs actual human decisions after BD agreement.",
+    "Notification-failure Finding remains open and identical.",
+    "Whether to adopt candidate state meaning remains undecided; no repeated question asked."
+  ],
+  "skill": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/SKILL.md",
+  "quote": "なければCheck草案/更新を止め、必要な業務判断を求める。",
+  "noCanonicalChanges": true
+}

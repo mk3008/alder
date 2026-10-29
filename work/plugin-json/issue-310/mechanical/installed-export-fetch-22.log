@@ -1,0 +1,7 @@
+....................fatal: remote error: upload-pack: not our ref aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+fatal: git upload-pack: not our ref aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+..
+----------------------------------------------------------------------
+Ran 22 tests in 29.342s
+
+OK

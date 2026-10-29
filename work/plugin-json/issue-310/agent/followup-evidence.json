@@ -1,0 +1,287 @@
+{
+  "versions": {
+    "manifestProduct": "0.4.9",
+    "finalSourceRevisionReported": "47a458cef88bc17c242da23f74d79789566e563a",
+    "initialCreationSourceRevisionReported": "f496c76dfd7504a3a031bcaaa506a1d0012cf860",
+    "authoringGuidanceRevision": "17a38e66841814de9182735bdb17671834270522",
+    "jsonAndReviewGuidanceRevision": "f2716613a1fb65236ac1c30ec1eab221ef576392"
+  },
+  "readPaths": [
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/plugin.json",
+      "sha256": "6dc3f4e6868f6ccb69e659c7ad86d9132e54241adfc78bcb73a1abdcc55a4c69",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-draft-business-design/SKILL.md",
+      "sha256": "8ddc8151cf444a84f572892cfd5011360e87df5668ff6d75b221ee28277fb276",
+      "reuseFromInitialRead": false
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-draft-business-design/references/adoption.md",
+      "sha256": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-draft-business-design/references/provenance.json",
+      "sha256": "25b3dc88991a1271ba6e38c714abb0b98eda860ecd675570d5eb602ae602a819",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/SKILL.md",
+      "sha256": "4706b04a054ba97873ee313c7a77de089a3ba3312e1dd168ac67b0480df1d53f",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/plugin-json-authoring.ja.md",
+      "sha256": "b1c9bd4566755741c6dcd1dcb0074dabac6b93d8cfaf2812c01f28fc5c525085",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/business-design-json-0.5.ja.md",
+      "sha256": "98e90df7a1984ef540fc97683e66cd067e01cd00595f0bb006abdcee41c7b8f6",
+      "reuseFromInitialRead": false
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/json-roles.ja.md",
+      "sha256": "f3f45ddcbc7ab326a4e9b60d026e67bfe9fc1ab62de9d4d7ea1e142aac8ecf4a",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/design-findings.ja.md",
+      "sha256": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/provenance.json",
+      "sha256": "e91eef3d6c864bace6cf30da596e223335c84b3433e6b5744295ddca3f059f73",
+      "reuseFromInitialRead": false
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/schema.json",
+      "sha256": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/core.mjs",
+      "sha256": "6c44b6045052001fcf7aec9fc4f0d9f7b654273bfa48b9dd3bcc015eb1eb13cf",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/SKILL.md",
+      "sha256": "cffff501634b592fb3985d756d5ba5936aac8b465ffd843be25a557f8f9e9449",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/references/business-design-structure.ja.md",
+      "sha256": "82d77669107f2a22e58819c0aee4baad824129520c0cb2c8a9ebb3f1c8b87a3d",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/references/business-design-quality-check.ja.md",
+      "sha256": "31de5ed1e52fe9e863f14022e0fad2ff533abb0b3684aa0a56c42ebe873fb5ae",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/references/business-design-correlation-check.ja.md",
+      "sha256": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/references/business-design-omission-check.ja.md",
+      "sha256": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
+      "reuseFromInitialRead": true
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/references/provenance.json",
+      "sha256": "25409ff9ba287ed76a060079394b4e788164306fdf7d5ef752db0d5838a40b9c",
+      "reuseFromInitialRead": false
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/json-state-transitions.ja.md",
+      "sha256": "cabd43ee0843bb4c184fd3db3e7a54a12110c7dd71cefaadb05b7c024dbaf66d",
+      "extent": "relevant gate/CLI sections; State and CLI read fully"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/references/check-item-traceability.md",
+      "sha256": "e248d561cba693871638108f664006c811509357f9b2b0b9e72a37565f724258",
+      "extent": "relevant gate/CLI sections; State and CLI read fully"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/authoring.mjs",
+      "sha256": "14224f763c362979083f3ab6175d9186b32e2d5b0c11ed00692596f02543d145",
+      "extent": "relevant gate/CLI sections; State and CLI read fully"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+      "sha256": "dda74876d5a8cf9f7a5101982c74444505cc7ff7698a3635b942a0861c7fdb2c",
+      "extent": "relevant gate/CLI sections; State and CLI read fully"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/edit.mjs",
+      "sha256": "dcb29113253f8d91ee37df35214fd3fea56a6f9518d0a1989e54f2cb6c913a7a",
+      "extent": "relevant gate/CLI sections; State and CLI read fully"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/update.ja.md",
+      "sha256": "5f3cbbe42fd1a80b1eeccb027e9c31d4df8c50172f68d4d74465f85914630bb6",
+      "extent": "full"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/gates.ja.md",
+      "sha256": "8d0b66f69e7537e64e92ff29b420e82278c12f5dce2085dba46f9607c3ee5193",
+      "extent": "full"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/reviewed-seed.json",
+      "sha256": "c187376c4d49f3e6da9756bc8cfc167c30f6ee68c22a865e05d124a8c1293181",
+      "extent": "full"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/business-design.json",
+      "sha256": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78",
+      "extent": "full"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/bd-only-draft.json",
+      "sha256": "7cfdc219216a33fdeb316fac22751e958f99c5fd44d3eb5238633ff4cb897a72",
+      "extent": "full"
+    }
+  ],
+  "bundledRuntimeComparison": [
+    {
+      "relativePath": "author-cli.mjs",
+      "sha256": "dda74876d5a8cf9f7a5101982c74444505cc7ff7698a3635b942a0861c7fdb2c",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "authoring.mjs",
+      "sha256": "14224f763c362979083f3ab6175d9186b32e2d5b0c11ed00692596f02543d145",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "cli.mjs",
+      "sha256": "8d15efffafc7beafcb39e854819d9c4a088366ad167f570ffb65a80abd03fcc0",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "convert.mjs",
+      "sha256": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "core.mjs",
+      "sha256": "6c44b6045052001fcf7aec9fc4f0d9f7b654273bfa48b9dd3bcc015eb1eb13cf",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "edit.mjs",
+      "sha256": "dcb29113253f8d91ee37df35214fd3fea56a6f9518d0a1989e54f2cb6c913a7a",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "legacy-json.mjs",
+      "sha256": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "markdown.py",
+      "sha256": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "roles.mjs",
+      "sha256": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "schema.json",
+      "sha256": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "schema.mjs",
+      "sha256": "5c4bd2b089960b7b247e50541e1f7883f5204ce35fd545f5ab05ee3ab3353bac",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "state-declaration.mjs",
+      "sha256": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "state-storage.mjs",
+      "sha256": "f54beb78f895f843379c23f98c755b1d259834fa24b75285feb63ff9e7529853",
+      "identicalToInitial": true
+    },
+    {
+      "relativePath": "structured.mjs",
+      "sha256": "c99643307947118041d78d354f886642c100ed8ff9726b717dd476b6ea53729d",
+      "identicalToInitial": true
+    }
+  ],
+  "allRuntimeFilesIdenticalToInitial": true,
+  "commands": "Actual CLI command arrays, stdout, stderr, exit codes and operation inputs are retained separately in the linked operation/evidence files. Read commands (cat, sed, rg, Python hash comparisons) exited 0.",
+  "artifacts": [
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/business-design.json",
+      "sha256": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/evidence.json",
+      "sha256": "18fb499a3545b3c865bf560935dc14903d76ba7eb903d6ed38ec9b1411c41604"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/gates-evidence.json",
+      "sha256": "f08ca2eb0e9978c19c556d1a27f9821f4b79a25b24346bb9112550e392606a8e"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/operations.json",
+      "sha256": "f1e8e7786fcde37375636746d69845cd59e6f4801ee48e0bbb96773e2cfeed47"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/seed-copy.json",
+      "sha256": "c187376c4d49f3e6da9756bc8cfc167c30f6ee68c22a865e05d124a8c1293181"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/bd-only-draft.json",
+      "sha256": "7cfdc219216a33fdeb316fac22751e958f99c5fd44d3eb5238633ff4cb897a72"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/evidence.json",
+      "sha256": "506790b3a335fbe27a15e0f335dfe79f5a22b3d0a6efac61859e04c4a7d204df"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/operations.json",
+      "sha256": "d5bbb0f4eebdbfa1a92f7076dcc16eaa163e6756690181a23e0eb3cea76fdaf1"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/evidence.json",
+      "sha256": "e79e8664a56973e892a000b4041d19d23dd12d9efb093fff9ec54c3da8a6428e"
+    },
+    {
+      "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/operations.json",
+      "sha256": "ad76e39354fb05337b89e219ed4bf35fbdcc2ff9368dfb2b4cf98b3eabd6eede"
+    }
+  ],
+  "reviewCoverage": {
+    "update": "Distinct same-agent read-only whole-BD review after save; actual saved JSON was reread. Rename and revision metadata only. No new source-supported repair identified.",
+    "rebase": "Distinct same-agent read-only review of full fixture seed and saved BD-only draft; appended request remains unapproved. The seed fixture contains intentional limited-scope prose; no claim of general business-design completeness.",
+    "independentReview": false,
+    "Viewer": "Not exercised."
+  },
+  "outcomes": {
+    "rename": "Saved using commit/inspect/validate. Role ID/color/references and Finding preserved.",
+    "gates": "Agent refusal before Check creation/confirmed-state write; unadopted State proposal not saved as State definition. No runtime rejection claim.",
+    "requestedRebase": "Agent refusal before prohibited save; no rebase candidate or commit prepared. Allowed BD-only draft saved separately via create/inspect/validate. Old Check confirmed state remains paired only with old BD revision.",
+    "failureProbes": "Four actual runtime rejections exit 2: malformed candidate JSON, external lock, stale expected hash, create to existing target. Targets/candidates unchanged; pre-existing test lock unchanged; no residual temp/owned lock."
+  },
+  "limitations": [
+    "No human agreement or Check feedback given; no Check creation/confirmation performed.",
+    "Existing Check/State rebase is not supplied by normal 0.5 commit even if later agreement arrives.",
+    "Explicitly undecided notification and state-definition meaning retained; no repeated question.",
+    "Agent refusal is not evidence of a runtime rebase rejection; the four separate CLI failure cases are actual observed runtime failures.",
+    "No external writes; inputs, installed Plugin and prior creation evidence preserved.",
+    "No independent review or Viewer compatibility claim."
+  ]
+}
