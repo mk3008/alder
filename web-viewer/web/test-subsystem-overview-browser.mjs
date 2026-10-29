@@ -36,9 +36,9 @@ export async function verifySubsystemOverview(browser){
   point=await backgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
   assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');
   point=await headingBackgroundPoint(page,'approval');await page.mouse.click(point.x,point.y);
-  assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');
+  assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');await page.locator('#drawer').click();
   point=await headingBackgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
-  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');await page.locator('#drawer').click();
+  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');await page.locator('#drawer').click();
   const title=page.locator('[data-subsystem="approval"] button');await title.focus();await page.keyboard.press('Enter');assert.equal(await title.getAttribute('aria-pressed'),'true');await page.keyboard.press('Space');assert.equal(await title.getAttribute('aria-pressed'),'true');
   const viewport=page.locator('.subsystem-overview-canvas .diagram-viewport');
   for(let i=0;i<8;i++){const size=await viewport.evaluate(v=>({x:v.scrollWidth-v.clientWidth,y:v.scrollHeight-v.clientHeight}));if(size.x>100&&size.y>100)break;await page.locator('.subsystem-overview-canvas .zoom-in').click();}
