@@ -479,7 +479,7 @@
     },
     {
       "id": "mixed",
-      "title": "受付",
+      "title": "受付（架空例）",
       "before": {
         "format": "alder-document-package",
         "formatVersion": "0.4",
@@ -711,7 +711,7 @@
     },
     {
       "id": "photo",
-      "title": "写真",
+      "title": "写真（架空例）",
       "before": {
         "format": "alder-document-package",
         "formatVersion": "0.4",
@@ -751,8 +751,8 @@
                 "id": "photo-activity",
                 "name": "写真を残す",
                 "scope": true,
-                "why": "表現試験で指定した範囲を成立させる",
-                "when": "入力に指定した場面",
+                "why": "必要なときに選んだ写真を見返せるようにする。",
+                "when": "写真を残すことを検討するとき。",
                 "where": "規定なし",
                 "procedure": "任意（写真がある場合）／人（参加者・記録担当）：その写真を残す。 [手順ID: photo-step]",
                 "problem": null,
@@ -813,8 +813,8 @@
               "id": "photo-activity",
               "name": "写真を残す",
               "scope": true,
-              "why": "表現試験で指定した範囲を成立させる",
-              "when": "入力に指定した場面",
+              "why": "必要なときに選んだ写真を見返せるようにする。",
+              "when": "写真を残すことを検討するとき。",
               "where": "規定なし",
               "performers": [
                 {
@@ -857,7 +857,7 @@
     },
     {
       "id": "synthetic",
-      "title": "集計",
+      "title": "集計（架空例）",
       "before": {
         "format": "alder-document-package",
         "formatVersion": "0.4",
@@ -903,8 +903,8 @@
                 "id": "s-auto",
                 "name": "受付件数を集計する",
                 "scope": true,
-                "why": "表現試験で指定した範囲を成立させる",
-                "when": "入力に指定した場面",
+                "why": "一日の受付状況を件数で確かめるため。",
+                "when": "対象日の定時になったとき。",
                 "where": "規定なし",
                 "procedure": "必須／スケジューラー：定時に受付件数を集計する。 [手順ID: s-sum]",
                 "problem": null,
@@ -918,7 +918,7 @@
                 "id": "s-use1",
                 "name": "件数を見る",
                 "scope": true,
-                "why": "表現試験で指定した範囲を成立させる",
+                "why": "確定した受付件数を確認するため。",
                 "when": "受付件数確定後に、その結果を見るとき。",
                 "where": "規定なし",
                 "procedure": "必須／表示システム：確定した件数を表示する。 [手順ID: s-show]",
@@ -933,7 +933,7 @@
                 "id": "s-use2",
                 "name": "件数の推移を見る",
                 "scope": true,
-                "why": "表現試験で指定した範囲を成立させる",
+                "why": "受付件数の変化を確認するため。",
                 "when": "受付件数確定後に、その結果を見るとき。",
                 "where": "規定なし",
                 "procedure": "必須／表示システム：確定した件数を推移表示に利用する。 [手順ID: s-trend]",
@@ -1033,8 +1033,8 @@
               "id": "s-auto",
               "name": "受付件数を集計する",
               "scope": true,
-              "why": "表現試験で指定した範囲を成立させる",
-              "when": "入力に指定した場面",
+              "why": "一日の受付状況を件数で確かめるため。",
+              "when": "対象日の定時になったとき。",
               "where": "規定なし",
               "performers": [
                 {
@@ -1073,7 +1073,7 @@
               "id": "s-use1",
               "name": "件数を見る",
               "scope": true,
-              "why": "表現試験で指定した範囲を成立させる",
+              "why": "確定した受付件数を確認するため。",
               "when": "受付件数確定後に、その結果を見るとき。",
               "where": "規定なし",
               "performers": [
@@ -1108,7 +1108,7 @@
               "id": "s-use2",
               "name": "件数の推移を見る",
               "scope": true,
-              "why": "表現試験で指定した範囲を成立させる",
+              "why": "受付件数の変化を確認するため。",
               "when": "受付件数確定後に、その結果を見るとき。",
               "where": "規定なし",
               "performers": [
