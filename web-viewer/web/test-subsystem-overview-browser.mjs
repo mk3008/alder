@@ -13,6 +13,15 @@ async function backgroundPoint(page,id){
  assert(point,'visible uncovered background is required for '+id);return point;
 }
 
+async function headingBackgroundPoint(page,id){
+ const point=await page.evaluate(subsystem=>{
+  const region=document.querySelector(`[data-subsystem="${subsystem}"]`),rect=region.querySelector('.subsystem-overview-region'),heading=region.querySelector('foreignObject').getBoundingClientRect(),title=region.querySelector('button').getBoundingClientRect();
+  const x=(title.right+heading.right)/2,y=(heading.top+heading.bottom)/2;
+  if(x>title.right+3&&document.elementFromPoint(x,y)===rect)return{x,y};
+ },id);
+ assert(point,'the empty part of the heading row must reach the region background for '+id);return point;
+}
+
 export async function verifySubsystemOverview(browser){
  const context=await browser.newContext({viewport:{width:1280,height:960},hasTouch:true}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
  const cdp=await context.newCDPSession(page),touch=touchDriver(page,cdp);await touch.install();
@@ -25,6 +34,10 @@ export async function verifySubsystemOverview(browser){
   assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);
   await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');
   point=await backgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
+  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');
+  point=await headingBackgroundPoint(page,'approval');await page.mouse.click(point.x,point.y);
+  assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');
+  point=await headingBackgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
   assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');await page.locator('#drawer').click();
   const title=page.locator('[data-subsystem="approval"] button');await title.focus();await page.keyboard.press('Enter');assert.equal(await title.getAttribute('aria-pressed'),'true');await page.keyboard.press('Space');assert.equal(await title.getAttribute('aria-pressed'),'true');
   const viewport=page.locator('.subsystem-overview-canvas .diagram-viewport');
