@@ -118,7 +118,11 @@ async function verifyOneEmpty({page,touch,options}){
  const expected=emptyStateFixture(options.zoom);await seedAndRestore(page,expected);
  const before=await assertGraph(page,expected);assert.ok(before.extent[0]>options.width&&before.extent[1]>options.height);assert.ok(before.scroll.every(n=>n>1000));
  assert.equal(await page.locator('.tab.active .close').isVisible(),true,'overview can be closed');
- await page.locator('.tab.active .close').click();
+ // Keep the seeded app-wide drawer preference true. At phone width the rail
+ // covers the tab row; use the close button's native keyboard activation.
+ // Pointer dismissal of the rail would intentionally change that preference.
+ if(options.width<=800)await page.locator('.tab.active .close').press('Enter');
+ else await page.locator('.tab.active .close').click();
  assert.equal(await page.locator('#empty-workspace').isVisible(),true,'closing the last workspace shows the empty workspace');
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
  await page.locator('[data-explorer-key="business:overview"]').click();
