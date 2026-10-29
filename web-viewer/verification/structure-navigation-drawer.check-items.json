@@ -1,0 +1,51 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-29本人承認：サブシステムとデータ構造を分離、主領域は図、概要とデータ例は右ドロワー。",
+  "supersedes": [
+    "CONCEPT-ENTRY-001 の配置名のみ。全ページ入口・自己リンク・検索・履歴保証は維持。",
+    "SUBSYSTEM-INDEX-004 / CONCEPT-REVIEW / LANDSCAPE-TABS / DATA-REVIEW の分類初期表示・コンテンツ内タブ・右ドロワー無効条件のみ。概要・構造・例の内容、業務根拠、対象範囲は維持。"
+  ],
+  "checks": [
+    {
+      "id": "STRUCTURE-SHELL-001",
+      "condition": "購買のメニューを表示・検索・折りたたみ・再読込する。",
+      "guarantee": "サブシステムは全体図と稟議・入荷予実の分類配下に4概念モデルを配置。データ構造は全体図と概念配下に全6個別図を配置する。各ページの入口は一つで、現在地・検索・開閉復元を維持する。",
+      "reason": "図の目的と階層を分け、独立したページを一覧から発見できるようにする。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "DOMとChromeで全入口、分類、検索、旧保存状態、再読込を照合"
+    },
+    {
+      "id": "STRUCTURE-SHELL-002",
+      "condition": "4概念モデルを一覧・全体図・直接URLから開く。",
+      "guarantee": "主領域には既存の分類別構造図を常時表示し、概要・構造図・データ例のコンテンツ内タブや重複見出しを表示しない。右ドロワーで概要とデータ例を参照できる。概要の情報・できることからのサンプルリンク・全サンプル・関連業務へのリンクを保持する。",
+      "reason": "図を主資料とし説明と具体例を補足に揃え、情報自体は失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "全4分類と旧概要・データ例URLをDOM/Chromeで照合"
+    },
+    {
+      "id": "STRUCTURE-SHELL-003",
+      "condition": "構造図で別のカードを選択し、ドロワーを開閉して概要・データ例を操作する。",
+      "guarantee": "選択はドロワーを自動展開しない。選択情報とページの概要・データ例を分離し、選択変更でもページ情報とサンプルを保持。データ例表示中も図の選択・拡大縮小・別ページを開く機能を利用できる。",
+      "reason": "選択したカードと現在のページは異なる文脈であり、どちらも失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "メッセージ境界のDOMと実SVGのChrome操作を照合"
+    },
+    {
+      "id": "STRUCTURE-SHELL-004",
+      "condition": "広い画面・狭い画面で補足情報を開き、幅を変更する。",
+      "guarantee": "ドロワーはポインタとキーボードで幅を調整可能。画面内に収め、表だけ横スクロールさせる。図を表示し続け、ドロワーの閉鎖、テーマ、ページ別開閉・サンプル・履歴を維持する。",
+      "reason": "幅広いデータ表を窮屈にせず、図との対応を確認可能にするため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "Chromeで幅変更、表スクロール、393/1280幅、ライト/ダーク、戻る進むと復元を照合"
+    },
+    {
+      "id": "STRUCTURE-SHELL-005",
+      "condition": "全体・個別・分類の図を行き来し、文書を切り替える。",
+      "guarantee": "既存の描画範囲、直接隣接のみの個別図、カレント自身の外部リンク抑止、タブ重複防止・閉鎖再表示、共有図操作と別文書境界は維持する。Viewerで業務意味を推論せず、購買JSON・歴史的検証正本を変更しない。",
+      "reason": "配置変更によって意図した仕様差や業務上の意味を消さないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "既存の図・ナビゲーション回帰とCheckItem不変を照合"
+    }
+  ]
+}
