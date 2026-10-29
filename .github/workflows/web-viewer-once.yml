@@ -85,8 +85,10 @@ jobs:
           if [ "${{ steps.b_loop.outputs.enabled }}" = true ]; then
             node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
           else
-            node web/test-d2-preview-browser.mjs
+            D2_STATUS=0
+            node web/test-d2-preview-browser.mjs || D2_STATUS=$?
             node web/test-browser.mjs
+            test "$D2_STATUS" -eq 0
           fi
 
       - name: Retain bounded B-loop measurements
