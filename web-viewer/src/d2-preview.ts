@@ -37,7 +37,7 @@ export function candidateDetail(b:Business,id:string|undefined,navigate:(activit
   const panel=el('section');panel.className='d2-cross';panel.dataset.orderId=rule.id;panel.append(el('strong',rule.label),el('p',rule.context),el('p',rule.kind==='interchangeable'?'標準提示順 — このStep同士は入替可能':'このStep間の厳守先後'));
   const list=el('ol');for(const e of refs){const owner=b.activities.find(a=>a.id===e.activityId)!,s=owner.procedure.steps.find(s=>s.id===e.stepId)!;const li=el('li'),button=el('button',owner.name+' / '+s.id);button.type='button';button.className='node-navigate d2-ref';button.onclick=()=>navigate(owner.id,s.id);li.append(button,el('p',s.text));list.append(li);}panel.append(list,el('p','同じ場面の対象Stepだけの関係です。Activity全体の交換・並列実行・次の投球への許可を表しません。'));root.append(panel);
  }
- for(const e of b.exceptions.filter(e=>e.activityId===a.id)){title(root,'Exception · '+e.name);root.append(el('p',e.description));}
+ for(const e of (b.exceptions??[]).filter(e=>e.activityId===a.id)){title(root,'Exception · '+e.name);root.append(el('p',e.description));}
  title(root,'Result');note(root,'次は結果の定義です。成立条件に合わない項目は、その場面の成立結果には数えません。条件の判定は表示から確認してください。');
  const results=el('ul');for(const r of a.results){const li=el('li',r.text);li.dataset.resultId=r.id;if(r.condition)li.append(el('p','成立条件：'+r.condition));results.append(li);}root.append(results);
  if(a.problem!==null){title(root,'Problem');root.append(el('p',a.problem));}if(a.painLevel!==null){title(root,'Pain level');root.append(el('p',a.painLevel));}
