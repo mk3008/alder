@@ -9,7 +9,7 @@ import {RouteCache} from '../src/route-cache.ts';
 import {stateCaptionGeometry,assertStateCaptionPlacement} from './caption-placement-oracle.mjs';
 
 const authority=readFileSync('verification/state-caption-placement.check-items.json');
-const digest='5d2b641709a086592317f7debbacc684999d04d207bf41e374030d402c0294e3';
+const digest='7ffbb694bf26b9c7934e3963d24612e0af5225f97e611b186df7e3fea3c09694';
 const validateAuthority=raw=>{assert.equal(createHash('sha256').update(raw).digest('hex'),digest);const checks=JSON.parse(raw).checks;assert.deepEqual(checks.map(c=>c.id),['STATE-CAPTION-001','STATE-CAPTION-002','STATE-CAPTION-003']);return checks;};
 const checks=validateAuthority(authority);const altered=JSON.parse(authority);altered.checks.pop();assert.throws(()=>validateAuthority(Buffer.from(JSON.stringify(altered))));
 assert.throws(()=>validateAuthority(Buffer.from('')));
@@ -39,13 +39,13 @@ try{
   const center=routes[i].label[1]+(plan.wires[i].returning?0:sizes[i].height/2-9);
   assert.equal(label.y,center-sizes[i].height/2+14,'shared business caption row: '+r.id);
  }
- const long=structuredClone(pkg);long.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId==='T02').condition='長い条件を確認する'.repeat(30);
+ const long=structuredClone(pkg),longException=long.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId==='T02').exceptionId;long.documents.find(d=>d.kind==='businessDesign').exceptions.find(e=>e.id===longException).name='長い例外名'.repeat(30);
  const longDesign=parseDocument(JSON.stringify(long)),longSVG=window.StateUI.stateTransitionPanel(longDesign,state.objectId,()=>{}).querySelector('.state-diagram'),longGeometry=stateCaptionGeometry(longSVG);
  assertStateCaptionPlacement(longGeometry,longDesign.objectStateTransitions[state.objectId].model.transitions);
  assert.ok(longGeometry.captions.find(c=>c.id==='T02').y-14>=16,'long initial return caption remains inside the canvas');
  assert.equal(longSVG.querySelectorAll('[data-canvas-boundary]').length,rows.length,'camera includes every caption boundary');
  results.push('STATE-CAPTION-001');
- for(const id of ['T12','T14']){const t=row(id),caption=svg.querySelector(`[data-transition-id="${id}"]`),path=svg.querySelector(`path[data-transitions="${id}"]`);assert.ok(caption.textContent.includes(t.condition));assert.ok(caption.textContent.includes(name(t.toId)));assert.equal(path.classList.contains('exception'),id==='T14');}
+ for(const id of ['T12','T14']){const t=row(id),caption=svg.querySelector(`[data-transition-id="${id}"]`),path=svg.querySelector(`path[data-transitions="${id}"]`),detail=panel.querySelector(`[data-transition="${id}"]`);assert.ok(caption.textContent.includes(id==='T12'?'購入を準備する':'承認後差戻し'));assert.ok(detail.textContent.includes(t.condition));assert.ok(detail.textContent.includes(name(t.toId)));assert.equal(path.classList.contains('exception'),id==='T14');}
  results.push('STATE-CAPTION-002');
  svg.querySelector('[data-state="購入準備済み"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  for(const [id,related]of [['T12',true],['T14',false]])assert.equal([...svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>t.classList.contains('review-related')),related);

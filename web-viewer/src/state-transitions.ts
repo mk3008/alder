@@ -6,7 +6,7 @@ import {matrixPlan} from './matrix-layout.ts';
 import {captionOnRow,type RouteNode} from './routing.ts';
 import {RouteCache} from './route-cache.ts';
 import {captionRowStep,CAPTION_LINE_STEP} from './caption-spacing.ts';
-export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
+export type Transition={id:string;from:string;activity:string;activityId?:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;conditionLabel?:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
 /** Visual prototype: explicit edges only; no lifecycle or condition inference. */
@@ -21,13 +21,17 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  const plan=matrixPlan(layoutGraph,ids);
  // Project the shared staircase onto smaller state boxes; reserve actual
  // multiline captions without changing the shared planner/router contracts.
- const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
+ const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/28)},(_,i)=>chars.slice(i*28,(i+1)*28).join(''));};
  const captionGroups=rows.map(([row])=>({from:row.from,activity:row.activity,rows:[row],lines:[] as string[],lineRows:[] as Transition[][],offset:0,width:0,height:0}));
  const departures=new Map<string,number>();
  for(const [index,group] of captionGroups.entries()){
-  const row=group.rows[0];group.lines=wrap(group.activity);
-  if(row.path==='exception')group.lines.push(...wrap('例外：'+(row.exception??'例外名未定義')));
-  group.lines.push(...wrap(row.condition+' → '+(labels[row.to]??row.to)));group.lineRows=group.lines.map(()=>group.rows);
+  const row=group.rows[0];
+  const siblings=model.transitions.filter(other=>other.from===row.from&&(other.activityId??other.activity)===(row.activityId??row.activity)&&other.path===row.path&&(row.path!=='exception'||(other.exception??'例外名未定義')===(row.exception??'例外名未定義')));
+  const shortConditions=siblings.map(other=>(other.conditionLabel??other.condition).trim().replace(/\s+/g,' '));
+  const condition=new Set(shortConditions).size===siblings.length?(row.conditionLabel??row.condition):row.condition;
+  const exception=row.path==='exception'?'例外：'+(row.exception??'例外名未定義'):'';
+  const detail=[exception,...(siblings.length>1?[condition]:[])].filter(Boolean).join('：');
+  group.lines=wrap(group.activity+(detail?'（'+detail+'）':''));group.lineRows=group.lines.map(()=>group.rows);
   group.width=Math.max(...group.lines.map(line=>Array.from(line).length*14));group.height=group.lines.length*18;
   if(!plan.wires[index].returning){group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.height);}
  }
@@ -69,7 +73,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   const position=labelPositions[index]!,x=position[0]-group.width/2,y=position[1]-group.height/2+14;
   svg.append(make('rect',{x:String(x),y:String(y-14),width:String(group.width),height:String(group.height),fill:'none','pointer-events':'none','data-canvas-boundary':''}));
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity,'data-transition-id':group.rows[0].id,'aria-label':group.lines.join('')});
-  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
+  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':'14','font-weight':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
   right=Math.max(right,x+group.width+24);bottom=Math.max(bottom,y+group.height+24);
  }
  for(const node of nodes){
@@ -99,7 +103,7 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
    if(!exception||exception.activityId!==row.activity){text('p','状態遷移を表示できません：例外ID参照が不正です').setAttribute('role','status');return root;}
   }
  }
- const views=savedViews.get(design)??new Map<string,DiagramView>();savedViews.set(design,views);const view=views.get(id)??newDiagramView();views.set(id,view);const projectedModel={...model,transitions:model.transitions.map(row=>({...row,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))};root.append(diagramCanvas(document,v=>stateDiagram(projectedModel,v),view));
+ const views=savedViews.get(design)??new Map<string,DiagramView>();savedViews.set(design,views);const view=views.get(id)??newDiagramView();views.set(id,view);const projectedModel={...model,transitions:model.transitions.map(row=>({...row,activityId:row.activity,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))};root.append(diagramCanvas(document,v=>stateDiagram(projectedModel,v),view));
  const label=(value:string)=>({'@new':'記録作成前','@none':'この操作では作成しない（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);

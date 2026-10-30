@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "b00cb6628ec1c5b8ba117fce117e96e5a245ad10",
+  "alder_source_revision": "32807e888c698918d6dade4da9cf0bb8e8032bc3",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "a2deaaf532a4928615356a2456d2be6db9ac6e37996f6c705e83fe37a5463da2",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -9,14 +9,14 @@
     "docs/business-design-correlation-check.ja.md": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
-    "docs/json-state-transitions.ja.md": "1f17323945448ec8472dcb35b30fc8d9795ce1de46d0875eeee66a085c035bd6",
+    "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
     "docs/json-native-contract.ja.md": "50316bb6135cec1d50378a6b49256d4a935bdcc5000a173952bdc9b1bcdaf9a3"
   },
   "scripts": {
     "tools/document_storage/core.mjs": "941b94c0878229f50e443c0478a7cafc720b0bb56352fe1d4265668705ad04af",
-    "tools/document_storage/schema.mjs": "3e92d02d74019c7f490942fba83a4868e0b421aa6dd0bfb4a56b17d731b37bf8",
-    "tools/document_storage/schema.json": "0d58b0ddfb41cbe3bec6db554e834442622a441b200256f1318205070e6deafe",
+    "tools/document_storage/schema.mjs": "a84e1cb551d7e664d8a741e2862d04b4a0fc60f231b5159e5bcdbdd6333fc652",
+    "tools/document_storage/schema.json": "a32b5c5faf91ffdcc50cb539548bb1ba0fa098b74b19e9e7eb9efb15a35fa5a3",
     "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
     "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",

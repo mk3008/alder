@@ -2,7 +2,7 @@
 // @ts-expect-error Gate A supplies JavaScript modules without TypeScript declarations.
 import {parseStrict,validate} from '../../tools/document_storage/core.mjs';
 import type {Design} from './graph.ts';
-export type StateDocument={id:string;kind:'stateTransition';revision:string;basedOn:{documentId:string;revision:string;verification:'unverified'};objectId:string;states:{id:string;name:string}[];start:string;terminal:string;completeness:string;source:string;transitions:{id:string;sourceId:string;fromId:string;toId:string;activityId:string;exceptionId:string|null;event:string|null;condition:string;effect:string;path:string;evidence:string;note:string}[]};
+export type StateDocument={id:string;kind:'stateTransition';revision:string;basedOn:{documentId:string;revision:string;verification:'unverified'};objectId:string;states:{id:string;name:string}[];start:string;terminal:string;completeness:string;source:string;transitions:{id:string;sourceId:string;fromId:string;toId:string;activityId:string;exceptionId:string|null;event:string|null;condition:string;conditionLabel?:string;effect:string;path:string;evidence:string;note:string}[]};
 import {readViewerDocument,type NormalizedDocument} from './viewer-document.ts';
 export type Run={kind:'markdown';value:string}|{kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
 export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:string[]};

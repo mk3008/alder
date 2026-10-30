@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v2-beta-7",
+  "revision": "purchase-v2-beta-8",
   "documents": [
     {
       "id": "purchase-bd",
@@ -536,7 +536,7 @@
       "id": "purchase-states",
       "schemaVersion": "0.2",
       "kind": "stateTransition",
-      "revision": "states-v2-beta-7",
+      "revision": "states-v2-beta-8",
       "title": "購入申請の状態遷移",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -777,7 +777,8 @@
           "path": "normal",
           "evidence": "購入結果を登録する／Procedure・Result",
           "note": "状態名と遷移は業務設計を具体化したレビュー対象の仮説。",
-          "exceptionId": null
+          "exceptionId": null,
+          "conditionLabel": "待ち数量が残る"
         },
         {
           "id": "4c7392cd-f0fe-4300-8eb8-69bfdac4bbb8",
@@ -791,7 +792,8 @@
           "path": "normal",
           "evidence": "購入結果を登録する／Procedure・Result",
           "note": "状態名と遷移は業務設計を具体化したレビュー対象の仮説。",
-          "exceptionId": null
+          "exceptionId": null,
+          "conditionLabel": "全品目の待ち数量が0"
         },
         {
           "id": "6f4c9e96-31ab-4d35-9454-4fe7f8a9c257",
@@ -805,7 +807,8 @@
           "path": "normal",
           "evidence": "購入結果を登録する／Procedure・Result",
           "note": "状態名と遷移は業務設計を具体化したレビュー対象の仮説。",
-          "exceptionId": null
+          "exceptionId": null,
+          "conditionLabel": "待ち数量が残る"
         },
         {
           "id": "f49cedfb-7643-440e-8c49-6091f562ce81",
@@ -819,7 +822,8 @@
           "path": "normal",
           "evidence": "購入結果を登録する／Procedure・Result",
           "note": "状態名と遷移は業務設計を具体化したレビュー対象の仮説。",
-          "exceptionId": null
+          "exceptionId": null,
+          "conditionLabel": "全品目の待ち数量が0"
         },
         {
           "id": "d694bbd6-9567-4b1f-a35a-5222c3b0f648",

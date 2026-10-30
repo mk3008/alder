@@ -12,7 +12,7 @@ import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const bytes=readFileSync('verification/state-transition-identity.check-items.json');
-const frozen='3988b606a782cb7519df361d7e821f247bef74c92403971ec728d48b166b3295';
+const frozen='9e4e340940d214878b471fc70101e8fabb2087c6369f1281b567e2ff7276be90';
 const ids=Array.from({length:6},(_,i)=>'STATE-IDENTITY-00'+(i+1));
 function authority(b){assert.equal(hash(b),frozen);const a=JSON.parse(b);assert.deepEqual(a.checks.map(c=>c.id),ids);return a;}
 const checks=authority(bytes),results=[];
@@ -48,7 +48,15 @@ const design=parseDocument(raw),panel=window.StateUI.stateTransitionPanel(design
 const svg=panel.querySelector('.state-diagram'),model=design.objectStateTransitions[st.objectId].model;
 assert.equal(svg.querySelectorAll('path.edge[data-transitions]').length,st.transitions.length);
 assert.equal(svg.querySelectorAll('[data-transition-id]').length,st.transitions.length);
-for(const t of st.transitions){const label=svg.querySelector('[data-transition-id="'+t.sourceId+'"]');assert(label.textContent.includes(t.condition));assert(label.textContent.includes(' → '+state(t.toId)));assert(!label.textContent.includes('通常'));assert([...label.querySelectorAll('tspan')].every(e=>e.dataset.transitions===t.sourceId));}
+for(const t of st.transitions){const label=svg.querySelector('[data-transition-id="'+t.sourceId+'"]'),detail=panel.querySelector('[data-transition="'+t.sourceId+'"]'),to=t.toId==='@none'?'この操作では作成しない':state(t.toId);assert(label.textContent.includes(bd.activities.find(a=>a.id===t.activityId).name));assert(detail.textContent.includes(t.condition));assert(detail.textContent.includes(to));assert(!label.textContent.includes('通常'));assert([...label.querySelectorAll('tspan')].every(e=>e.dataset.transitions===t.sourceId));}
+assert.equal(svg.querySelector('[data-transition-id="T12"]').textContent,'購入を準備する');
+assert.equal(svg.querySelector('[data-transition-id="T14"]').textContent,'購入申請を承認する（例外：承認後差戻し）');
+for(const id of ['T15','T16','T17','T18'])assert.equal(svg.querySelector('[data-transition-id="'+id+'"]').textContent,'購入結果を登録する（'+row(id).conditionLabel+'）');
+const withoutLabels=structuredClone(pkg);for(const t of withoutLabels.documents.find(d=>d.kind==='stateTransition').transitions)delete t.conditionLabel;
+const oldPanel=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(withoutLabels)),st.objectId,()=>{});for(const id of ['T15','T16'])assert(oldPanel.querySelector('[data-transition-id="'+id+'"]').textContent.includes(row(id).condition));
+const duplicateLabels=structuredClone(pkg);for(const id of ['T15','T16'])duplicateLabels.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId===id).conditionLabel='同じ表示';
+const dupPanel=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(duplicateLabels)),st.objectId,()=>{});for(const id of ['T15','T16'])assert(dupPanel.querySelector('[data-transition-id="'+id+'"]').textContent.includes(row(id).condition));
+const emptyLabel=structuredClone(pkg);emptyLabel.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId==='T15').conditionLabel=' ';assert.throws(()=>validate(emptyLabel));
 const sameTarget=structuredClone(pkg),extra={...row('T15'),id:'same-target',sourceId:'T98',condition:'別の明示条件'};sameTarget.documents.find(d=>d.kind==='stateTransition').transitions.push(extra);
 const extraPanel=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(sameTarget)),st.objectId,()=>{});assert(extraPanel.querySelector('path[data-transitions="T98"]'));assert(extraPanel.querySelector('[data-transition-id="T98"]'));
 pass(ids[2]);
@@ -63,7 +71,7 @@ try{
 pass(ids[3]);
 
 const op=JSON.parse(readFileSync(base+'purchase-state-identity.operation.json')),concept=JSON.parse(readFileSync(base+'purchase-concepts-v2-beta.json'));
-assert.equal(op.expectedRevision,'purchase-v2-beta-6');assert.equal(pkg.revision,'purchase-v2-beta-7');assert.equal(st.revision,'states-v2-beta-7');assert.equal(concept.relatedStates[0].revision,st.revision);assert.equal(bd.revision,'bd-v2-beta-5');
+assert.equal(op.expectedRevision,'purchase-v2-beta-6');assert.equal(pkg.revision,'purchase-v2-beta-8');assert.equal(st.revision,'states-v2-beta-8');assert.equal(concept.relatedStates[0].revision,st.revision);assert.equal(bd.revision,'bd-v2-beta-5');
 assert.equal(hash(JSON.stringify(bd)),'b12890c25d8ad39cfd2b37dc2e10029d29a5ff4584c7d7710a8aa846aa1f24fe');
 assert.equal(hash(readFileSync(base+'purchase-v1.json')),'ed5e26675c97ab4376c781cc7a47f72806c8e53d38d428540931c61f0e8b024e');
 for(const id of ['T08','T11','T17','T19']){assert.equal(row(id).fromId,row(id).toId);assert.match(row(id).note,/仮説/);}
