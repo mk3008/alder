@@ -2,9 +2,12 @@ import {activityTabFixture} from './document-test-view.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
 import assert from 'node:assert/strict';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import {readFileSync,mkdirSync} from 'node:fs';
-// Open the native disclosure only when responsive layout collapsed the actions.
+// Narrow-screen rails cover the tab row too. Dismiss them through their native
+// controls before operating the document disclosure or its inline actions.
 export async function ensureDocumentActions(page){
+ await closeCanvasOverlays(page);
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const toggle=page.locator('#document-actions-toggle');
  if(await toggle.isVisible()&&await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
@@ -15,13 +18,13 @@ export async function assertTabStripActions(page,{refreshDisabled=false}={}){
  await ensureDocumentActions(page);
  const measured=await page.locator('.tab-strip').evaluate(strip=>{
   const box=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-  return {mode:strip.dataset.actionsMode,group:box(strip.querySelector('#document-actions')),toggle:box(strip.querySelector('#document-actions-toggle')),strip:box(strip),window:{width:innerWidth,height:innerHeight},order:[...strip.children].map(el=>el.id),actionOrder:[...strip.querySelector('#document-actions').children].map(el=>el.id),tabs:box(document.querySelector('#tabs')),actions:[...strip.querySelectorAll('#document-actions > button')].map(button=>{
+  return {mode:strip.dataset.actionsMode,group:box(strip.querySelector('#document-actions')),toggle:box(strip.querySelector('#document-actions-toggle')),strip:box(strip),window:{width:innerWidth,height:innerHeight},order:[...strip.children].map(el=>el.id||el.className),actionOrder:[...strip.querySelector('#document-actions').children].map(el=>el.id),tabs:box(document.querySelector('.shell-open-tabs')),actions:[...strip.querySelectorAll('#document-actions > button')].map(button=>{
    const r=box(button),hit=document.elementFromPoint((r.left+r.right)/2,(r.top+r.bottom)/2),icon=button.querySelector('svg');
    return {id:button.id,...r,hidden:button.hidden,disabled:button.disabled,hit:hit===button||button.contains(hit),label:button.getAttribute('aria-label'),title:button.title,text:button.innerText.trim(),tabIndex:button.tabIndex,icon:icon&&{...box(icon),hidden:icon.getAttribute('aria-hidden')},opacity:getComputedStyle(button).opacity,css:{width:getComputedStyle(button).width,height:getComputedStyle(button).height}};
   })};
  });
  const tolerance=.75,contains=(outer,inner)=>inner.left>=outer.left-tolerance&&inner.right<=outer.right+tolerance&&inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
- assert.deepEqual(measured.order,['tabs','document-actions-toggle','document-actions'],'tabs precede the document-action disclosure');
+ assert.deepEqual(measured.order,['shell-open-tabs','document-actions-toggle','document-actions'],'tabs precede the document-action disclosure');
  assert.deepEqual(measured.actionOrder,['refresh','save-image','copy-image','share-source','open-checks','view-markdown'],'natural document-action order places refresh before PNG actions and sharing');
  const menu=measured.mode==='menu',windowBox={left:0,top:0,right:measured.window.width,bottom:measured.window.height};
  assert.ok(['menu','inline'].includes(measured.mode),'document actions have an explicit responsive mode');
@@ -47,14 +50,14 @@ export async function assertTabStripActions(page,{refreshDisabled=false}={}){
 
 export async function verifyTabStrip(browser){
  const context=await browser.newContext({viewport:{width:1280,height:960}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- const sample=readFileSync('../business-design/alder/README.md','utf8'),measure=()=>page.locator('#tabs').evaluate(n=>{const r=n.getBoundingClientRect();return {client:[n.clientWidth,n.clientHeight],scroll:[n.scrollWidth,n.scrollHeight],rect:{x:r.x,y:r.y,width:r.width,height:r.height},overflowX:getComputedStyle(n).overflowX,overflowY:getComputedStyle(n).overflowY,tabs:[...n.querySelectorAll('.tab')].map(t=>{const b=t.getBoundingClientRect(),c=t.querySelector('.close').getBoundingClientRect();return {hidden:t.querySelector('.close').hidden,top:b.top,bottom:b.bottom,closeTop:c.top,closeBottom:c.bottom};})};});
+ const sample=readFileSync('../business-design/alder/README.md','utf8'),measure=()=>page.locator('.shell-open-tabs').evaluate(n=>{const r=n.getBoundingClientRect();return {client:[n.clientWidth,n.clientHeight],scroll:[n.scrollWidth,n.scrollHeight],rect:{x:r.x,y:r.y,width:r.width,height:r.height},overflowX:getComputedStyle(n).overflowX,overflowY:getComputedStyle(n).overflowY,tabs:[...n.querySelectorAll('.tab:not([hidden])')].map(t=>{const b=t.getBoundingClientRect(),c=t.querySelector('.close').getBoundingClientRect();return {hidden:t.querySelector('.close').hidden,top:b.top,bottom:b.bottom,closeTop:c.top,closeBottom:c.bottom};})};});
  const checkVertical=async()=>{const m=await measure();assert.ok(m.scroll[1]<=m.client[1],'tab strip has no vertical overflow');for(const t of m.tabs){assert.ok(t.top>=m.rect.y&&t.bottom<=m.rect.y+m.rect.height,'whole tab visible vertically');if(!t.hidden)assert.ok(t.closeTop>=m.rect.y&&t.closeBottom<=m.rect.y+m.rect.height,'close button not clipped');}return m;};
  try{
   mkdirSync('web/evidence/header-controls',{recursive:true});
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
   // Force an explicit scrollbar size in this browser fixture. This does not
   // claim Windows OS execution, but catches classic-gutter sizing mistakes.
-  await page.addStyleTag({content:'#tabs::-webkit-scrollbar{width:17px;height:17px}'});
+  await page.addStyleTag({content:'.shell-open-tabs::-webkit-scrollbar{width:17px;height:17px}'});
   const single=await checkVertical();await assertTabStripActions(page,{refreshDisabled:true});
   const keyboardOrder=async(ids)=>{
    const start=await page.locator('.tab').last().locator('.close').isVisible()?page.locator('.tab').last().locator('.close'):page.locator('.tab').last().locator('button').first();await start.focus();
@@ -66,7 +69,7 @@ export async function verifyTabStrip(browser){
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
   let sourceReads=0;
   await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);await assertTabStripActions(page);
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);await assertTabStripActions(page);
   await keyboardOrder(['refresh','save-image','copy-image','share-source','open-checks','view-markdown']);
   assert.equal(sourceReads,1);
   for(const key of ['Enter','Space']){const before=sourceReads;await page.locator('#refresh').focus();assert.equal(await page.locator('#refresh').evaluate(el=>document.activeElement===el),true);const read=page.waitForRequest('https://tab-strip.test/design.md');await page.keyboard.press(key);await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,before+1,'native keyboard refresh rereads the URL');assert.equal(await page.locator('.tab').count(),1,'URL keyboard refresh keeps the same tab');}
@@ -80,12 +83,12 @@ export async function verifyTabStrip(browser){
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
    for(const width of [1280,1000,600,480,393,360,320])for(const zoom of [1,1.25]){
-    await page.setViewportSize({width,height:960});await page.evaluate(z=>{document.body.style.zoom=String(z);},zoom);
+    await page.setViewportSize({width,height:960});await closeCanvasOverlays(page);await page.evaluate(z=>{document.body.style.zoom=String(z);},zoom);
     const m=await checkVertical();await assertTabStripActions(page,{refreshDisabled:true});
     await page.locator('.tab').first().locator('button').first().click();await assertTabStripActions(page,{refreshDisabled:true});
     if(zoom===1&&[1280,393,320].includes(width))await page.screenshot({path:`web/evidence/header-controls/document-refresh-${width}-${theme}.png`});
     await page.locator('.tab').last().locator('button').first().click();await assertTabStripActions(page,{refreshDisabled:true});assert.ok(m.scroll[0]>m.client[0],'many tabs retain horizontal scroll');assert.ok(['auto','scroll'].includes(m.overflowX));
-    await page.locator('.tab').last().locator('button').first().click();await page.locator('.tab').last().locator('.close').scrollIntoViewIfNeeded();const last=await page.locator('.tab').last().locator('.close').boundingBox(),nav=await page.locator('#tabs').boundingBox();assert.ok(last.x>=nav.x&&last.x+last.width<=nav.x+nav.width+1,'last close button reachable horizontally');results.push({theme,width,cssZoom:zoom,client:m.client,extent:m.scroll});
+    await page.locator('.tab').last().locator('button').first().click();await page.locator('.tab').last().locator('.close').scrollIntoViewIfNeeded();const last=await page.locator('.tab').last().locator('.close').boundingBox(),nav=await page.locator('.shell-open-tabs').boundingBox();assert.ok(last.x>=nav.x&&last.x+last.width<=nav.x+nav.width+1,'last close button reachable horizontally');results.push({theme,width,cssZoom:zoom,client:m.client,extent:m.scroll});
    }
   }
   await page.evaluate(()=>{document.body.style.zoom='1';});await page.setViewportSize({width:1280,height:960});const before=await page.locator('.tab').count();await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(n=>document.querySelectorAll('.tab').length===n,before-1,{timeout:5000});assert.equal(await page.locator('.tab').count(),before-1);await checkVertical();assert.deepEqual(errors,[]);

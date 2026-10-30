@@ -1,0 +1,31 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-28 の本人画像と指示に基づく、概念グラフのカード背景と購入準備の関係ラベル。",
+  "checks": [
+    {
+      "id": "CONCEPT-SURFACE-001",
+      "condition": "全体図・分類の構造図・個別図を、ライトおよびダークテーマで表示する。",
+      "guarantee": "概念カードは見出しも本文も同じ緑系の面とし、見出しだけ別の灰色にしない。カードの丸い枠・内容・別タブ操作を保持する。",
+      "reason": "同一の情報カードを不要な背景色で分割しないため。",
+      "source": "2026-10-28 本人画像と指示。https://github.com/mk3008/root/issues/133",
+      "verification": "公開Viewerでライト・ダーク表示を確認し、全体・分類・個別の共通描画、既存のカード・ナビゲーション契約を照合する。"
+    },
+    {
+      "id": "CONCEPT-SURFACE-002",
+      "condition": "概念カードを選択し、その隣接カードと配線を確認する。",
+      "guarantee": "選択カードのグロー、隣接カードと配線の強調、カレント自身の外部リンク抑止を維持する。背景色の変更を業務図・状態遷移図へ波及させない。",
+      "reason": "各図に意図した選択表現と、同一の概念描画の条件付き差を残すため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "既存VIEW-NAV-001〜003、グラフ同一性検証と公開画面での選択操作。"
+    },
+    {
+      "id": "CONCEPT-SURFACE-003",
+      "condition": "購入準備と購入申請の関係を全体図と引渡し分類で確認する。",
+      "guarantee": "確定前の申請と確定時の所属の違いを保持し、購入準備は複数申請を扱えるが未確定の最小件数を決定済みとして表示しない。個別の引渡し分類が確定済みの対象を示す違いも保持する。",
+      "reason": "見た目の統一によって、業務設計で決まっていない件数や時点を追加しないため。",
+      "source": "PURCHASE-V2-003、概念草案の preparation-request / prepared-requests-view。https://github.com/mk3008/root/pull/168",
+      "verification": "概念草案・全体と分類のラベル、PURCHASE-V2-003 と既存テストを照合する。"
+    }
+  ]
+}

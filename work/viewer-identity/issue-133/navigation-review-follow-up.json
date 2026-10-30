@@ -1,0 +1,106 @@
+{
+  "scope": "JSDOM contract and frozen-authority gates; not full CI/browser acceptance",
+  "negativeCases": [
+    "authority ID removal",
+    "authority domain removal",
+    "authority deletion",
+    "one missing observation",
+    "duplicate observation"
+  ],
+  "negativeCasesPassed": true,
+  "report": {
+    "authority": {
+      "path": "verification/check-items.json",
+      "baselineCommit": "55d69577d0cf2faf54f5ab49c1e2495a7d43698e",
+      "sha256": "ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1",
+      "unchanged": true,
+      "coverageComplete": true
+    },
+    "candidate": {
+      "commit": "55d69577d0cf2faf54f5ab49c1e2495a7d43698e",
+      "workingTreeChanges": [
+        "M web-viewer/web/review-navigation-contract.mjs",
+        "?? web-viewer/web/navigation-authority-gate.mjs",
+        "?? web-viewer/web/test-navigation-authority-gate.mjs"
+      ],
+      "businessBundle": "7435eaab3d439c63ba833ebc9cffb7dfaa4e2b28ce7a944e17c0223d4c414daa",
+      "conceptBundle": "6d401063964ff65674c1b7d806fa7613482eba7ac4b3e4e4ff5b48cf468de144"
+    },
+    "results": [
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-001",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-002",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "business",
+        "selection": "neighbor",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "current",
+        "status": "pass"
+      },
+      {
+        "id": "VIEW-NAV-003",
+        "domain": "concept",
+        "selection": "neighbor",
+        "status": "pass"
+      }
+    ],
+    "passed": 12,
+    "failed": 0
+  }
+}

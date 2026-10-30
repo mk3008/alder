@@ -56,7 +56,7 @@ node --experimental-strip-types web/test-node-edge-drag.mjs --logic-only
 
 ## Node／DOMテストの実行方式
 
-`npm test` は、実行方式を確認する回帰の後、通常の59ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全47群の実行方式は変更しません。
+`npm test` は、実行方式を確認する回帰の後、通常の59ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全48群の実行方式は変更しません。
 
 CIのjob数・runner・依存関係を増やさず、並列数は2に固定します。Linuxでの比較の再現は [benchmark.py](../docs/evidence/viewer-node-runtime-121/benchmark.py) を使い、`--baseline` に変更前のcommit、`--output` に結果JSONの出力先を指定します。[計測結果と判断](https://github.com/mk3008/alder/issues/232)はExecution Issueに記録します。
 
@@ -84,7 +84,7 @@ npm run build
 npm run test:browser
 ```
 
-`--cases` を省略すると既存の全47群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
+`--cases` を省略すると既存の全48群を実行します。結果の `browserSummary` に `scope`（`targeted` / `full`）、全群数 `available`、実行名 `selected`、成功・失敗数、所要時間 `durationMs` を出力します。各 `browserCase` にも所要時間を出力します。報告には候補commit、変更箇所、選んだ群とその理由、未実行範囲を残し、限定成功を全体成功と書かないでください。
 
 ## テストを減らす判断
 
@@ -122,9 +122,9 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 
 `jsonLayout` はJSONの全体図・全Activity詳細（全11図）を1280/393pxの実Chromeで表示し、実ノード座標・全SVG経路／ラベルを共通モデル契約と照合します。MDは同一業務の全体図・最初の詳細図を両幅で比較し、2図のnative PNGバイト同値と両入力のzoom／scroll／reset／保存復元を維持します。全11図のMD/JSON座標・矩形・間隔・接続点・折れ点・ラベル・resetおよびUUID入替えは `test-json-layout.mjs` が両形式とも実際の `parseDocument` → `DocumentModel` から比較します。旧MDの手書き独立期待値は `test-document-loader.mjs`、配置の独立した24px余白算術と役割別ポート／状態SVGは既存の配置テストに残します。
 
-全11図のMD/JSON二重PNG比較は廃止し、JSONの11 PNGと代表MDの2 PNGを保存します。MD後半9詳細図だけに発生する、モデル属性では表れないピクセル差は非保証です。共通レンダラーの実SVGとモデルの照合が、片方の入力に共通する描画欠落の見逃しを補います。誤ったMD関係・UUID adapter迂回・DOM座標／SVG経路／caption／edge欠落の負例を高速テストで検出します。全47群の最終CIと描画器／共通CSSの固定hashは維持します。承認済み66a0の余白統合（上下24px、状態SVGは行数を一度予約）は巻き戻しません。
+全11図のMD/JSON二重PNG比較は廃止し、JSONの11 PNGと代表MDの2 PNGを保存します。MD後半9詳細図だけに発生する、モデル属性では表れないピクセル差は非保証です。共通レンダラーの実SVGとモデルの照合が、片方の入力に共通する描画欠落の見逃しを補います。誤ったMD関係・UUID adapter迂回・DOM座標／SVG経路／caption／edge欠落の負例を高速テストで検出します。全48群の最終CIと描画器／共通CSSの固定hashは維持します。承認済み66a0の余白統合（上下24px、状態SVGは行数を一度予約）は巻き戻しません。
 
-比較測定が必要なときだけ、commit本文に `Benchmark-B-Loop: 441dfb8b` を独立した行として指定すると、最終CI内で固定旧headと候補を同じrunner／Node／Chrome／フォント／製品buildで測定します。両Previewの版／ローカルdist境界を先行確認し、関連高速2ファイルと `jsonLayout` は交互順で各3回、全47群は旧→新を各1回実行し、rawログと集計を `b-loop-HEAD` artifactへ保存します。製品ソース・依存・入力fixtureの同一性を検査し、不一致なら比較を拒否します。通常commitには指定せず、通常の最終CIは全47群を一度だけ実行します。全体1組の差はノイズを含むため、他群の変動と対象群の効果を分けて報告します。
+比較測定が必要なときだけ、commit本文に `Benchmark-B-Loop: 441dfb8b` を独立した行として指定すると、最終CI内で固定旧headと候補を同じrunner／Node／Chrome／フォント／製品buildで測定します。両Previewの版／ローカルdist境界を先行確認し、関連高速2ファイルと `jsonLayout` は交互順で各3回、全48群は旧→新を各1回実行し、rawログと集計を `b-loop-HEAD` artifactへ保存します。製品ソース・依存・入力fixtureの同一性を検査し、不一致なら比較を拒否します。通常commitには指定せず、通常の最終CIは全48群を一度だけ実行します。全体1組の差はノイズを含むため、他群の変動と対象群の効果を分けて報告します。
 
 `jsonStates` は旧明示MDと型付き状態文書の13操作・SVG・キーボード/Activity移動・復元を照合します。`jsonRoles` は保存色/Role ID・改名/再順序・復元/不正色を実Chromeで検査します。形式0.1/0.3の全11図のGraph・文書順・配置入力は速い`test-json-roles.mjs`で同値を確認し、共通の全11図の高速座標／配線回帰とJSONのnative表示、代表MDの入力境界を上記の分担で検証します。基本の旧44群はすべて維持します。明示許可された固定Pagesベータは別workflowで新パスに追加し、既存Previewと本番トップを上書きしません。
 
@@ -133,4 +133,15 @@ MDは旧入力互換とし、機能追加はJSON側の共通モデル／処理�
 
 候補0.4は例外IDを持つJSONを正本とし、旧MD／旧JSONの解釈は入力adapterへ限定します。変更中は `node --experimental-strip-types web/test-json-native.mjs`、保存契約はRepositoryルートの `node --test tools/document_storage/test-native-json.mjs` を先に実行します。MD業務moduleを解決できない条件で作成・検証・編集・状態／Check表示を確認し、共通入力のcounterでMD入力時だけadapterが呼ばれることも検査します。
 
-実Chromeの `jsonStates` 群は旧宣言の13操作を維持し、独立した候補0.4の2操作、説明書式差、保存復元、不正ID時の表示保持を追加します。参照検証は読込／復元へ共通するため、最終候補では既存全47群を実行します。配置器・配線・承認済み余白の基準を変更しません。
+実Chromeの `jsonStates` 群は旧宣言の13操作を維持し、独立した候補0.4の2操作、説明書式差、保存復元、不正ID時の表示保持を追加します。参照検証は読込／復元へ共通するため、最終候補では既存全48群を実行します。配置器・配線・承認済み余白の基準を変更しません。
+
+
+## 画面操作の検証正本との照合
+
+`verification/check-items.json` は現在対象と詳細ナビゲーションの検証正本であり、テストコードから期待を逆算しない。今回のB開始前に確定した版は commit `55d69577d0cf2faf54f5ab49c1e2495a7d43698e`、SHA256 `ec33503c2527f02e7ca81ba961ece2e4c7c9a2dd4d9c426fe3baaddda97c65b1`。B内では変更しない。`web/navigation-authority-gate.mjs` はそのGitオブジェクトを読み、候補の正本と開始・終了時にバイト比較する。固定Check Itemのrequirement参照から取得する上位描画契約 `graph-rendering.ja.md` も、同じ開始前commitのファイル全体を固定してバイト比較する。参照ファイルの存在だけでは合格としない。CIも固定commitを取得する。取得不能・削除・書換えはfail/停止とし、現在の候補から基準を再生成しない。要求変更が必要ならBを停止し、B外の要求決定工程へ戻す。
+
+修正後は別工程で `npm run verify:contract` を実行する。固定した正本から全保証ID・全domain・全selectionを展開し、実行結果の欠落・重複・未実施を照合する。正本ID削除・domain削除・ファイル削除・結果1件脱落・重複に加え、Check Itemを変えず上位要件だけを反転・削除した負例も連動実行する。期待値はテスト側へコピーしない。
+
+`web/review-navigation-contract.mjs` が3保証×業務/概念×選択2種類の12ケースを担当する。概念は実際の子canvasのリンク押下を、origin/sourceを維持したDOMメッセージ配送で実際の親アプリへつなぎ、親の対象タブのアクティブ化・対象iframe表示・focus URLまで照合する。単なる送信メッセージ検査ではない。これはJSDOM上の結合検証であり、ブラウザー固有のiframe配送・実描画・本人GUIレビューを代替しない。
+
+結果は正本の固定commit/SHA256・全保証ID/適用ケース・候補commit/実行bundleのSHA256と結び付く。全体CIでも通常テストの前に同じ照合を実行する。不合格は正本を保持して修正へ戻す。正本との意味レビューも別工程で実施し、未取得・未知の検証先・未実施・失敗を合格としない。既存の全体テストを省略したり弱めたりしない。

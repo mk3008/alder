@@ -1,0 +1,21 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#できることとサンプルの対応",
+  "scope": "4分類の概要説明と9場面のデモ用JSON。正式な業務設計JSON契約は変更しない。",
+  "checks": [
+    {
+      "id": "CAPABILITY-SAMPLE-001",
+      "condition": "4分類の説明とデータ例を読む。",
+      "guarantee": "できることごとに安定ID・説明・原典の根拠・サンプルデータをJSONで入れ子に持つ。サンプルは一箇所だけ管理し、既存9場面のID・値・意味・キー色を維持する。できないことと未確定の確認事項は区別する。検索機能を根拠なく断定しない。",
+      "reason": "説明の修正とサンプルの修正の取り違えを避け、何を説明する具体例かを確認できるようにするため。",
+      "verification": "web/test-data-examples.mjs and source/content semantic review"
+    },
+    {
+      "id": "CAPABILITY-SAMPLE-002",
+      "condition": "概要のサンプル導線とデータ例の場面選択を操作する。",
+      "guarantee": "概要の各できることから対応するサンプルへ移動し、データ例で親のできることと説明を表示する。場面選択はできることごとにまとまる。URL/Back/Forward/再読込/最後の場面/図とドロワー記憶は維持する。レビュー責任ロールを含む概要の各項目は見出しと別行の値で表示する。",
+      "reason": "説明と具体値を往復して理解し、親の説明を見失わないため。",
+      "verification": "web/test-data-examples.mjs and public browser"
+    }
+  ]
+}

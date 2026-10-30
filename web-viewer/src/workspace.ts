@@ -1,7 +1,8 @@
 import {reconcile,type Tab,type Session} from './session.ts';
 import {activityDesign} from './activities.ts';
+import {objectDesign} from './object-projection.ts';
 export type DocumentState=Pick<Tab,'key'|'name'|'design'|'checks'|'source'|'draft'|'edited'|'handle'>;
-export type ViewState=Omit<Tab,keyof DocumentState>&{key:string;activity?:string};
+export type ViewState=Omit<Tab,keyof DocumentState>&{key:string;activity?:string;object?:string};
 export type URLVisit={url:string;name:string};
 export type WorkspaceSnapshot=Omit<Session,'tabs'>&{urlHistory?:URLVisit[];format:3;document?:DocumentState;views:ViewState[];recovery:Tab[];legacyViews?:{documentKey?:string;views:unknown[];active?:string}};
 /** Live tabs expose the current document through non-enumerable accessors.
@@ -11,15 +12,17 @@ const documents=new WeakMap<Tab,DocumentState>();
 export function documentForView(tab:Tab){return documents.get(tab);}
 const documentFields=['design','checks','source','draft','edited','handle'] as const;
 export function documentOf(tab:Tab):DocumentState{return {key:tab.key,name:tab.name,...Object.fromEntries(documentFields.map(k=>[k,tab[k]]))} as DocumentState;}
-function viewOf(tab:Tab):ViewState{const {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom}=tab;return {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom,...('activity' in tab?{activity:(tab as Tab&{activity?:string}).activity}:{})};}
+function viewOf(tab:Tab):ViewState{const {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom}=tab;return {key,positions,selected,hiddenNodes,showExceptions,selectedEdgesOnly,viewInset,canvasOrigin,scroll,zoom,...('activity' in tab?{activity:tab.activity}:{}),...('object' in tab?{object:tab.object}:{})};}
 export function bindView(doc:DocumentState,view:ViewState):Tab{
  const tab=view as unknown as Tab;documents.set(tab,doc);
- Object.defineProperty(tab,'name',{configurable:true,get:()=>view.activity===undefined?'全体図':doc.design.graph.nodes.find(n=>n.id===view.activity)?.name??view.activity});
+ Object.defineProperty(tab,'name',{configurable:true,get:()=>{const target=view.activity??view.object;return target===undefined?'全体図':doc.design.graph.nodes.find(n=>n.id===target)?.name??target;}});
  for(const field of documentFields)Object.defineProperty(tab,field,{configurable:true,get:()=>doc[field],set:value=>{(doc as Record<string,unknown>)[field]=value;}});
  return tab;
 }
-export function viewActivity(tab:Tab){return (tab as Tab&{activity?:string}).activity;}
-export function viewDesign(tab:Tab){return activityDesign(tab.design,viewActivity(tab));}
+export function viewActivity(tab:Tab){return tab.activity;}
+export function viewObject(tab:Tab){return tab.object;}
+export function viewTarget(tab:Tab){return tab.activity??tab.object;}
+export function viewDesign(tab:Tab){return tab.object===undefined?activityDesign(tab.design,tab.activity):objectDesign(tab.design,tab.object);}
 function reconcileView(tab:Tab){
  const design=viewDesign(tab),result=reconcile({...tab},design);
  // Keep source visibility IDs when reconciling a projected detail.
@@ -36,7 +39,7 @@ export function createWorkspace(base:Session,recovery:Tab[]=[],doc?:DocumentStat
 export function snapshotWorkspace(state:Workspace):WorkspaceSnapshot{const {document,recovery,tabs,...rest}=state;return {...rest,format:3,document,views:tabs.map(viewOf),recovery};}
 function validateView(view:ViewState){
  const point=(p:unknown,nonnegative=false)=>Array.isArray(p)&&p.length===2&&p.every(v=>typeof v==='number'&&Number.isFinite(v)&&(!nonnegative||v>=0));
- if(!view||typeof view.key!=='string'||!view.key||!view.positions||typeof view.positions!=='object'||Array.isArray(view.positions)||!Object.values(view.positions).every(p=>point(p))||!point(view.scroll)||!Number.isFinite(view.zoom)||view.zoom<.25||view.zoom>2.5||(view.selected!==undefined&&typeof view.selected!=='string')||(view.activity!==undefined&&typeof view.activity!=='string')||(view.hiddenNodes!==undefined&&(!Array.isArray(view.hiddenNodes)||!view.hiddenNodes.every(id=>typeof id==='string')))||(view.showExceptions!==undefined&&typeof view.showExceptions!=='boolean')||(view.selectedEdgesOnly!==undefined&&typeof view.selectedEdgesOnly!=='boolean')||(view.viewInset!==undefined&&!point(view.viewInset,true))||(view.canvasOrigin!==undefined&&!point(view.canvasOrigin,true)))throw Error('Invalid saved view');
+ if(!view||typeof view.key!=='string'||!view.key||!view.positions||typeof view.positions!=='object'||Array.isArray(view.positions)||!Object.values(view.positions).every(p=>point(p))||!point(view.scroll)||!Number.isFinite(view.zoom)||view.zoom<.25||view.zoom>2.5||(view.selected!==undefined&&typeof view.selected!=='string')||(view.activity!==undefined&&typeof view.activity!=='string')||(view.object!==undefined&&typeof view.object!=='string')||(view.activity!==undefined&&view.object!==undefined)||(view.hiddenNodes!==undefined&&(!Array.isArray(view.hiddenNodes)||!view.hiddenNodes.every(id=>typeof id==='string')))||(view.showExceptions!==undefined&&typeof view.showExceptions!=='boolean')||(view.selectedEdgesOnly!==undefined&&typeof view.selectedEdgesOnly!=='boolean')||(view.viewInset!==undefined&&!point(view.viewInset,true))||(view.canvasOrigin!==undefined&&!point(view.canvasOrigin,true)))throw Error('Invalid saved view');
 }
 export function restoreWorkspace(saved:Session|WorkspaceSnapshot):Workspace{
  const visits=(saved as Workspace).urlHistory;
@@ -53,8 +56,9 @@ export function restoreWorkspace(saved:Session|WorkspaceSnapshot):Workspace{
    const overview=raw.views[0];const clean=overview?{...overview}:undefined;if(clean)delete clean.group;
    return createWorkspace({...rest,tabs:[],active:clean?.key,recovery,legacyViews:{documentKey:document?.key,views:structuredClone(raw.views),active:raw.active}} as Workspace,recovery,document,clean?[clean]:[]);
   }
-  if(views.length&&(views[0].activity!==undefined||views.filter(v=>v.activity===undefined).length!==1)||new Set(views.filter(v=>v.activity!==undefined).map(v=>v.activity)).size!==views.filter(v=>v.activity!==undefined).length)throw Error('Invalid workspace views');
+  if(views.length&&(views[0].activity!==undefined||views[0].object!==undefined||views.filter(v=>v.activity===undefined&&v.object===undefined).length!==1)||new Set(views.filter(v=>v.activity!==undefined).map(v=>v.activity)).size!==views.filter(v=>v.activity!==undefined).length||new Set(views.filter(v=>v.object!==undefined).map(v=>v.object)).size!==views.filter(v=>v.object!==undefined).length)throw Error('Invalid workspace views');
   if(document&&views.some(v=>v.activity!==undefined&&!document.design.graph.nodes.some(n=>n.type==='business'&&n.id===v.activity)))throw Error('Unknown saved Activity');
+  if(document&&views.some(v=>v.object!==undefined&&!document.design.graph.nodes.some(n=>n.type==='object'&&n.id===v.object)))throw Error('Unknown saved Object');
   return createWorkspace({...rest,tabs:[]},recovery,document,views);
  }
  if(!Array.isArray(saved.tabs)||new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length)throw Error('Invalid legacy session');for(const t of saved.tabs)validateView(t);
@@ -70,14 +74,19 @@ export function replaceWorkspace(state:Workspace,tab:Tab):Workspace{
 }
 export function updateWorkspace(state:Workspace,design:Tab['design'],handle=state.document?.handle,edited=false):Workspace{
  if(!state.document)return state;
- const doc={...state.document,design,handle,edited,draft:undefined,...(design.sourceFormat==='json'?{checks:undefined}:{})},activities=new Set(design.graph.nodes.filter(n=>n.type==='business').map(n=>n.id));
- const views=state.tabs.filter(t=>viewActivity(t)===undefined||activities.has(viewActivity(t)!)).map(viewOf);
+ const doc={...state.document,design,handle,edited,draft:undefined,...(design.sourceFormat==='json'?{checks:undefined}:{})},activities=new Set(design.graph.nodes.filter(n=>n.type==='business').map(n=>n.id)),objects=new Set(design.graph.nodes.filter(n=>n.type==='object').map(n=>n.id));
+ const views=state.tabs.filter(t=>(t.activity===undefined||activities.has(t.activity))&&(t.object===undefined||objects.has(t.object))).map(viewOf);
  return createWorkspace(state,state.recovery,doc,views);
 }
 export function openActivity(state:Workspace,id:string):Tab{
  const existing=state.tabs.find(t=>viewActivity(t)===id);if(existing){state.active=existing.key;return existing;}
  if(!state.document||!state.document.design.graph.nodes.some(n=>n.type==='business'&&n.id===id))throw Error('Unknown Activity');
  const tab=bindView(state.document,{key:crypto.randomUUID(),activity:id,selected:id,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]});Object.assign(tab,viewOf(reconcileView(tab)));state.tabs.push(tab);state.active=tab.key;return tab;
+}
+export function openObject(state:Workspace,id:string):Tab{
+ const existing=state.tabs.find(t=>viewObject(t)===id);if(existing){state.active=existing.key;return existing;}
+ if(!state.document||!state.document.design.graph.nodes.some(n=>n.type==='object'&&n.id===id))throw Error('Unknown Object');
+ const tab=bindView(state.document,{key:crypto.randomUUID(),object:id,selected:id,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0]});Object.assign(tab,viewOf(reconcileView(tab)));state.tabs.push(tab);state.active=tab.key;return tab;
 }
 
 /** A durable document update must not roll back UI edits made during its write. */

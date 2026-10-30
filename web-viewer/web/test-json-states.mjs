@@ -2,6 +2,8 @@ import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {build} from 'esbuild';import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
+import {createHash} from 'node:crypto';
+const presentation=readFileSync('verification/state-page-presentation.check-items.json');assert.equal(createHash('sha256').update(presentation).digest('hex'),'ff7038b392d927be5e75812564c59d0547964fa35428701f1a626b34c377e892');assert.deepEqual(JSON.parse(presentation).checks.map(item=>item.id),['STATE-PAGE-001','STATE-PAGE-002']);
 const folder='../work/json-state/issue-275/',raw=readFileSync(folder+'purchase.json','utf8'),md=readFileSync(folder+'supported-state.md','utf8'),pkg=JSON.parse(raw),bd=pkg.documents[0],st=pkg.documents[1];
 const json=parseDocument(raw),legacy=parseDocument(md),projected=json,object=bd.objects.find(o=>o.id===st.objectId);
 const normalized=structuredClone(legacy.objectStateTransitions[object.name]);for(const row of normalized.model.transitions)row.activity=bd.activities.find(a=>a.name===row.activity).id;for(const row of normalized.model.transitions){delete row.exceptionId;if(row.exception==='-')delete row.exception;}
@@ -9,6 +11,7 @@ const nativeComparable=structuredClone(projected.objectStateTransitions[object.i
 const dom=new JSDOM('<body></body>',{runScripts:'outside-only'}),compiled=await build({entryPoints:['src/state-transitions.ts'],bundle:true,write:false,format:'iife',globalName:'stateUI'});dom.window.eval(compiled.outputFiles[0].text+'\nwindow.stateUI=stateUI;');
 const ui=dom.window.stateUI;const expected=ui.stateTransitionPanel(legacy,object.name,()=>{}),actual=ui.stateTransitionPanel(projected,object.id,()=>{});
 assert.equal(actual.outerHTML,expected.outerHTML);assert.equal(actual.querySelectorAll('[data-transition]').length,13);assert.equal(actual.querySelectorAll('[data-state]').length,8);assert.ok(actual.querySelector('[stroke-dasharray]'));
+assert(actual.querySelector('[data-state="@new"]'),'creation node remains present');assert.equal(actual.querySelector('[data-state="@new"] .state-diagram-event-id'),null,'creation node has no redundant caption');
 assertStateCaptionRows(stateCaptionSnapshot(actual.querySelector('.state-diagram')),legacy.objectStateTransitions[object.name].model.transitions);
 const state=actual.querySelector('[data-state="申請済み"]');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'true');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'false');
 const renamed=structuredClone(pkg);renamed.documents[0].objects.find(o=>o.id===st.objectId).name='改名された申請';assert.ok(parseDocument(JSON.stringify(renamed)).objectStateTransitions[object.id]);

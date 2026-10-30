@@ -1,0 +1,32 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-28 本人画像で示された、左メニューの概念単位の一覧と、分類ページの構造図の導線。",
+  "supersedes": ["CONCEPT-MENU-001 の『独立した個別概念ページへのメニュー入口を表示する』という条件のみ。個別図とその内容は維持する。"],
+  "checks": [
+    {
+      "id": "REVIEW-UNIT-MENU-001",
+      "condition": "購買データを開き、エクスプローラーとその検索結果を見る。",
+      "guarantee": "業務データ構造には全体像と4分類を表示する。『構造図』見出しと、その下の購入申請・購入申請版・申請品目・購入準備・入庫回・入庫内訳への概念別入口は表示しない。業務設計と状態遷移、各ページ内のタブとエクスプローラーの検索・開閉は保持する。",
+      "reason": "概念単位の入口はページ内の図からたどれ、一覧がレビュー単位と重複して飽和するため。",
+      "source": "2026-10-28 本人画像と発言。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、公開Viewerのメニューと検索。"
+    },
+    {
+      "id": "REVIEW-UNIT-MENU-002",
+      "condition": "全体図または分類の構造図からカード右上のアイコンを開く。",
+      "guarantee": "対象概念と直接隣接する概念の個別図を別タブで開き、全体図・分類図の内容を変更しない。個別図は現在対象への自己リンクを出さず、隣接概念へのリンクを出す。既存の直URL、戻る・進む、選択・配置・ドロワー状態を保持する。",
+      "reason": "左メニューを整理しても、個別概念への到達性と意図した表示範囲を失わないため。",
+      "source": "VIEW-NAV-001〜003、LANDSCAPE-TABS-002。https://github.com/mk3008/root/issues/133",
+      "verification": "web/review-navigation-contract.mjs、web/test-viewer-shell.mjs、web/test-concept-review.mjs、公開Viewerの操作。"
+    },
+    {
+      "id": "REVIEW-UNIT-MENU-003",
+      "condition": "分類図と、その中の購入申請から開いた個別図を比較する。",
+      "guarantee": "分類図は購入申請・購入申請版・申請品目を示す。個別図は購入申請と隣接する購入申請版・購入準備・入庫回を示す。両者の表示範囲の差を保持し、入口が重複することを図の同一性と取り違えない。",
+      "reason": "分類のレビュー範囲と、単一概念からの直接の相関は異なるため。",
+      "source": "CONCEPT-REVIEW-003、概念草案 request-version / preparation-request / request-receipt。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、および公開Viewerの図。"
+    }
+  ]
+}

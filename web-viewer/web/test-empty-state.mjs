@@ -45,11 +45,7 @@ function empty(e){
  assert.match($('empty').textContent,/業務設計書を開くには/);
  assert.deepEqual(scroll(e),[0,0],'empty presentation has no historical camera scroll');
  assert.equal($('canvas').hidden,true,'huge canvas and transformed children cannot contribute empty scroll overflow');
- for(const [drawer,toggle] of [['node-list-drawer','node-list-toggle'],['formattedMarkdownDrawer','drawer']]){
-  assert.equal($(drawer).hidden,true,drawer+' cannot obscure the empty hint');
-  assert.equal($(toggle).getAttribute('aria-expanded'),'false');
-  assert.equal($(toggle).disabled,true,'empty drawer toggle is disabled');
- }
+ assert.equal($('node-list-drawer').hidden,true);assert.equal($('formattedMarkdownDrawer').hidden,true,'drawers cannot obscure the empty hint');assert.equal($('drawer').getAttribute('aria-expanded'),'false');assert.equal($('drawer').disabled,true);assert.equal($('node-list-toggle').disabled,false,'global explorer remains available without a document');
  const link=$('open-sample');assert.equal(link.tabIndex,0);assert.equal(link.getAttribute('aria-disabled'),'false');
  assert.equal(w.getComputedStyle($('canvas')).display,'none');
  assert.equal(w.getComputedStyle($('empty')).position,'absolute');
@@ -61,35 +57,35 @@ function empty(e){
  const bar=d.querySelector('.toolbar');assert.equal(bar.hidden,true,'graph controls cannot obscure the empty hint');assert.equal(w.getComputedStyle(bar).display,'none','explicit hidden rule overrides toolbar flex display');
  assert.equal(v.clientWidth,e.width,'empty drawers release the full modeled viewport width');
 }
-function restored(e,expected,{drawer=true,nodeDrawer=true}={}){
+function restored(e,expected,{drawer=true}={}){
  const {$}=e;assert.equal(e.d.querySelectorAll('.tab').length,1);assert.equal($('empty').hidden,true);assert.equal($('canvas').hidden,false);
  assert.deepEqual(positions(e),expected.positions);assert.deepEqual(scroll(e),expected.scroll);assert.equal($('zoom').textContent,Math.round(expected.zoom*100)+'%');
  assert.equal($('nodes').style.left,(expected.canvasOrigin[0]+expected.viewInset[0])*expected.zoom+'px');
  assert.equal($('nodes').style.top,(expected.canvasOrigin[1]+expected.viewInset[1])*expected.zoom+'px');
- assert.equal($('formattedMarkdownDrawer').hidden,!drawer);assert.equal($('node-list-drawer').hidden,!nodeDrawer);
- assert.equal($('drawer').getAttribute('aria-expanded'),String(drawer));assert.equal($('node-list-toggle').getAttribute('aria-expanded'),String(nodeDrawer));
+ assert.equal($('formattedMarkdownDrawer').hidden,!drawer);assert.equal($('node-list-drawer').hidden,true,'retired item drawer is not shown');
+ assert.equal($('drawer').getAttribute('aria-expanded'),String(drawer));assert.equal($('node-list-toggle').getAttribute('aria-expanded'),String(!$('design-explorer').hidden));
  assert.equal($('drawer').disabled,false);assert.equal($('node-list-toggle').disabled,false);
  assert.equal(e.d.querySelector('.toolbar').hidden,false);assert.equal(e.w.getComputedStyle(e.d.querySelector('.toolbar')).display,'flex');
 }
+function reopen(e){if(e.$('design-explorer').hidden)e.$('node-list-toggle').click();e.d.querySelector('[data-explorer-key="business:overview"]').click();assert.equal(e.$('business-workspace').hidden,false);}
 try{
  for(const [width,height,zoom,dark] of [[320,568,.25,false],[393,852,2.5,true],[1440,900,1,false]]){
   const tab=structuredClone(initial),ids=Object.keys(tab.positions);tab.positions[ids[0]]=[-640,-420];tab.positions[ids[1]]=[22000,17000];tab.zoom=zoom;tab.scroll=[16000,12000];tab.canvasOrigin=[12000,10000];tab.viewInset=[320,240];tab.selected=ids[0];tab.hiddenNodes=[];tab.showExceptions=false;tab.selectedEdgesOnly=true;
   const seed={tabs:[tab],active:tab.key,dark,drawer:true,nodeDrawer:true,width:380};
   let e=await boot({width,height,seed});
   assert.ok(parseFloat(e.$('canvas').style.width)>10000);assert.ok(parseFloat(e.$('canvas').style.height)>10000);
-  // The overview is permanent. Hidden close handlers must leave huge/signed
-  // coordinates and the actual camera intact, including after restoration.
+  // Closing and reopening the overview must retain huge/signed coordinates and camera.
   e.v.scrollLeft+=217;e.v.scrollTop+=391;e.v.onscroll();const expected={...layout(tab),scroll:scroll(e)};
   for(let round=0;round<2;round++){
-   assert.equal(e.d.querySelector('.close').hidden,true);await e.d.querySelector('.close').onclick();restored(e,expected);
+   assert.equal(e.d.querySelector('.close').hidden,false);await e.d.querySelector('.close').onclick();assert.equal(e.$('empty-workspace').hidden,false);reopen(e);restored(e,expected);
    e.w.dispatchEvent(new e.w.Event('resize'));restored(e,expected);
    await e.$('open-sample').onclick({preventDefault(){}});restored(e,expected);
   }
   e.w.dispatchEvent(new e.w.Event('blur'));await until(async()=>Boolean((await saved(e))?.tabs.length));await new Promise(r=>setTimeout(r,240));
   assert.deepEqual(layout((await saved(e)).tabs[0]),expected);const db=e.db;e.w.close();e=await boot({db,width,height});restored(e,expected);e.w.close();
-  checks.push(`${width}×${height}, zoom ${zoom}: permanent overview preserves huge/signed layout, actual camera and both drawer preferences across repeated close attempts/reselection/reload`);
+  checks.push(`${width}×${height}, zoom ${zoom}: overview close/reopen preserves huge/signed layout, actual camera and drawer preference across reselection/reload`);
  }
  const fresh=await boot({width:320,height:568});empty(fresh);fresh.$('open-sample').click();assert.equal(fresh.d.querySelectorAll('.tab').length,1);fresh.w.close();checks.push('fresh no-tab state has visible explanation contract and keyboard/pointer-safe sample action');
- const e=await boot();e.$('open-sample').click();e.$('drawer').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);await e.d.querySelector('.close').onclick();assert.equal(e.d.querySelectorAll('.tab').length,1);e.$('open-sample').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);assert.equal(e.$('node-list-drawer').hidden,true);e.w.close();checks.push('closed drawer preferences stay closed after sample reopening');
+ const e=await boot();e.$('open-sample').click();e.$('drawer').click();assert.equal(e.$('formattedMarkdownDrawer').hidden,true);await e.d.querySelector('.close').onclick();assert.equal(e.$('empty-workspace').hidden,false);assert.equal(e.d.querySelectorAll('.tab').length,1);reopen(e);assert.equal(e.$('formattedMarkdownDrawer').hidden,true);assert.equal(e.$('node-list-drawer').hidden,true);e.w.close();checks.push('closed drawer preferences stay closed after overview reopening');
  console.log(JSON.stringify({model:'JSDOM + fake IndexedDB + explicit viewport dimensions; no browser pixel/hit-test evidence',checks,passed:checks.length},null,2));
 }finally{windows.forEach(w=>w.close());delete globalThis.indexedDB;}

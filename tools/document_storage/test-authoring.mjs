@@ -37,3 +37,19 @@ test('CLI protects last package, CAS, alias targets, lock and runtime without Py
  for(const [name,link]of [['alias',fs.symlinkSync],['hard',fs.linkSync]]){const alias=path.join(dir,name);link(target,alias);fs.writeFileSync(candidate,JSON.stringify(p2));assert.equal(run(['commit',alias,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);}
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
+
+test('PURCHASE-STATE-005: transition removal retains CLI byte conflict protection',()=>{
+ const previous=JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url),'utf8'));
+ const next=structuredClone(previous),state=next.documents.find(d=>d.kind==='stateTransition'),removed=state.transitions.pop();
+ next.revision+='-next';state.revision+='-next';
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-state-removal-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),opfile=path.join(dir,'operation.json');
+  const original=JSON.stringify(previous);fs.writeFileSync(target,original);fs.writeFileSync(candidate,JSON.stringify(next));
+  const operation={expectedRevision:previous.revision,expectedSha256:'wrong',removedTransitions:[{id:removed.id,reason:'試験用の訂正',source:'fixture:test'}]};
+  const run=()=>spawnSync(process.execPath,[new URL('./author-cli.mjs',import.meta.url).pathname,'commit',target,candidate,opfile],{encoding:'utf8'});
+  fs.writeFileSync(opfile,JSON.stringify(operation));assert.equal(run().status,2);assert.equal(fs.readFileSync(target,'utf8'),original);
+  operation.expectedSha256=fingerprint(original);fs.writeFileSync(opfile,JSON.stringify(operation));
+  assert.equal(run().status,0);assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),next);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});

@@ -1,0 +1,6 @@
+{
+  "expectedSha256": "38166aa5c618dfea084322c4dfcc4bb6d103126a9443161403e77a70d3f29c96",
+  "expectedRevision": "purchase-v2-beta-7",
+  "reason": "図の分岐を短く表示するため、元の条件を保持して表示名を明示する。",
+  "source": "https://github.com/mk3008/root/issues/133"
+}

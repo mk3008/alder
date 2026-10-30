@@ -121,7 +121,7 @@ try{
   for(const [id,p] of Object.entries(baseline))if(id!==firstID)assert.deepEqual(positions()[id],p);
   // Restore/reopen tests below use the signed positions, offset, zoom and camera.
   const snapshot=positions(),scroll=[v.scrollLeft,v.scrollTop],offset=[$('nodes').style.left,$('nodes').style.top],zoomText=$('zoom').textContent;
-  assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();w.close();
+  assert.equal(d.querySelector('.close').hidden,false);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();assert.equal($('empty-workspace').hidden,false);w.close();
   const reopened=await boot(e.db,zoom);reopened.$('open-sample').click();
   assert.deepEqual(reopened.positions(),snapshot);
   // A full route pass may grow the signed-world reserve; its scroll compensation
@@ -149,9 +149,10 @@ try{
  card=node(firstID);fire('mouse','pointerdown',21,500,300,card);fire('mouse','pointermove',21,740,300,card);const overlay=positions()[firstID];step();assert.ok(positions()[firstID][0]>overlay[0],'visible right boundary excludes Markdown overlay');fire('mouse','pointerup',21,740,300,card);
  // The drawer can navigate signed nodes without altering any world coordinates.
  card=node(firstID);const at=positions()[firstID];fire('mouse','pointerdown',23,500,300,card);fire('mouse','pointermove',23,500-at[0]-200,300-at[1]-200,card);fire('mouse','pointerup',23,0,0,card);assert.deepEqual(positions()[firstID],[-200,-200]);
- $('node-list-toggle').click();$('node-category-'+(design.graph.nodes[0].type==='business'?'activity':'object')).click();const beforeNavigation=positions();d.querySelector(`[data-list-node="${firstID}"] .node-navigate`).click();assert.deepEqual(positions(),beforeNavigation);assert.deepEqual(e.screen(firstID),[325-130,300-34]);
+ if($('design-explorer').hidden)$('node-list-toggle').click();const objectEntry=d.querySelector(`[data-explorer-key="object:${firstID}"]`);assert.ok(objectEntry);objectEntry.click();assert.equal(d.querySelector('.tab.active').dataset.object,firstID);
+ card=node(firstID);const detailAt=positions()[firstID];fire('mouse','pointerdown',24,500,300,card);fire('mouse','pointermove',24,500-detailAt[0]-200,300-detailAt[1]-200,card);fire('mouse','pointerup',24,0,0,card);assert.deepEqual(positions()[firstID],[-200,-200]);const beforeNavigation=positions();d.querySelector(`[data-explorer-key="object:${firstID}"]`).click();assert.deepEqual(positions(),beforeNavigation);assert.deepEqual(e.screen(firstID),[325-130,300-34]);
  // Closing a tab cancels an in-flight edge drag before persisting the final layout.
- card=node(firstID);fire('mouse','pointerdown',22,500,300,card);fire('mouse','pointermove',22,740,300,card);step();assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();step();assert.equal(d.querySelectorAll('.tab').length,1);const stationary=positions();step();assert.deepEqual(positions(),stationary,'blur cancels drag; overview remains');
+ card=node(firstID);fire('mouse','pointerdown',22,500,300,card);fire('mouse','pointermove',22,740,300,card);step();assert.equal(d.querySelector('.tab.active .close').hidden,false);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.tab.active .close').onclick();step();assert.equal(d.querySelectorAll('.tab').length,1);const stationary=positions();step();assert.deepEqual(positions(),stationary,'blur cancels drag; overview remains');
  console.log(JSON.stringify({model:'pure controller + measured DOM/rounded-scroll/IndexedDB',passed:12,checks:['bounded stationary RAF at 25/100/250%','shared mouse/pen/touch equation','zero-boundary signed routes','right/top/left expansion','camera-only origin compensation','incident-only paths/labels exact','second finger rollback and pinch','pointer/cancel/capture/lock/redraw/blur/disconnect stop','measured toolbar and drawer edges','unrelated world coordinates unchanged','signed sample close/reload/reopen exact','signed drawer navigation and close during drag']},null,2));
 }finally{windows.forEach(w=>w.close());}
 }

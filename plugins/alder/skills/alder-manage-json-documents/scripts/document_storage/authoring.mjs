@@ -21,16 +21,29 @@ function confirmedBD(pkg,check,operation){
 }
 export function guardAuthoring(previous,next,operation={}){
  validate(next);if(previous)validate(previous);
- const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration'];
+ const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration','removedTransitions'];
  const structuredUpgrade=operation.migration==='exceptions-0.4'&&previous&&['0.1','0.2','0.3'].includes(previous.formatVersion)&&next.formatVersion==='0.4';
  demand(!operation.migration||structuredUpgrade||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
  demand(Object.keys(operation).every(k=>allowed.includes(k)),'Unknown authoring operation field');
  const decisions=operation.humanDecisions??[];demand(Array.isArray(decisions),'Human decisions must be an array');
  demand(new Set(decisions.map(d=>d.id)).size===decisions.length,'Duplicate human decision');
  const old=previous?inventory(previous):null,fresh=inventory(next),changedDocs=new Set();
+ const removed=operation.removedTransitions??[];
+ demand(Array.isArray(removed),'Removed transitions must be an array');
+ demand(!removed.length||previous,'Transition removal requires a previous package');
+ demand(removed.every(r=>r&&Object.keys(r).every(k=>['id','reason','source'].includes(k))&&typeof r.id==='string'&&typeof r.reason==='string'&&r.reason.trim()&&typeof r.source==='string'&&r.source.trim()),'Each transition removal requires an ID, reason and source');
+ demand(new Set(removed.map(r=>r.id)).size===removed.length,'Duplicate transition removal');
  if(previous){
   demand(operation.expectedRevision===previous.revision,'Package revision conflict');demand(previous.revision!==next.revision,'New package revision required');
-  for(const [id,e]of old.map){demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
+  for(const r of removed){
+   demand(old.types.get(r.id)==='transition','Removal target must be an existing state transition: '+r.id);
+   demand(!fresh.map.has(r.id),'Declared removed transition still exists: '+r.id);
+   const owner=old.owner.get(r.id),doc=next.documents.find(d=>d.id===owner),prior=old.map.get(r.id);
+   demand(doc?.kind==='stateTransition','Removing a state document is not supported');
+   demand(!doc.transitions.some(t=>t.sourceId===prior.sourceId),'Removed transition source ID was replaced: '+r.id);
+  }
+  const removedIds=new Set(removed.map(r=>r.id));
+  for(const [id,e]of old.map){if(removedIds.has(id))continue;demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
   for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
