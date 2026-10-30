@@ -38,7 +38,7 @@ export async function verifyUnifiedConcept(browser){
   await page.frameLocator('iframe[data-concept-view="group-request"]').locator('[data-node="request"]').waitFor();
   if(await page.locator('#drawer').getAttribute('aria-expanded')!=='true')await page.locator('#drawer').click();
   assert.ok((await page.locator('.data-review-overview').textContent()).includes('別業務の例'));
-  await file('invalid.json',invalid);await page.locator('#status-text').filter({hasText:'表示できません'}).waitFor();
+  await file('invalid.json',invalid);await page.locator('#status-text').filter({hasText:'開けません'}).waitFor();
   assert.ok((await page.locator('.data-review-overview').textContent()).includes('別業務の例'),'invalid input preserves the previous document');
   await file('without-concept.json',absent);await page.waitForFunction(()=>!document.querySelector('[data-explorer-key="concept:group-request"]'));
   assert.equal(await page.getByRole('button',{name:'別業務のまとまり',exact:true}).count(),0);
