@@ -26,6 +26,8 @@ export async function verifyJSON05(browser){
    const detail=await page.locator('.json-detail').innerText();
    for(const s of ['受付担当','受付システム','相談申込を入力する','次の連絡方法を案内する','依頼者へ担当窓口が説明される','連絡案内','その相談の担当窓口'])assert.ok(detail.includes(s),s);
    assert.doesNotMatch(detail,/\[object Object\]|c-guidance|data-c-output/);
+   const outputRows=await page.locator('.json-detail').evaluate(el=>{let inOutput=false;const rows=[];for(const child of el.children){if(child.tagName==='H3')inOutput=child.textContent==='Output';else if(inOutput&&child.tagName==='P')rows.push(child.textContent);}return rows;});
+   assert.deepEqual(outputRows,['依頼者 — 連絡案内']);
    await page.screenshot({path:`${out}/json-05-detail-${width}.png`});
    await page.locator('#detail-mode-checks').click();const checks=await page.locator('.json-checks').innerText();assert.match(checks,/意味対応は未確認/);assert.match(checks,/SYN-1/);assert.match(checks,/確認済み/);
    let stored=await record();assert.equal(stored.document.design.model.checks[0].basedOn.verification,'unverified');assert.equal(stored.document.design.model.checks[0].items[0].reviewState,check.items[0].reviewState);
