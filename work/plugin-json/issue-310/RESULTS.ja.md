@@ -7,7 +7,7 @@ Phase B実装候補を[Draft PR #311](https://github.com/mk3008/alder/pull/311)�
 - 新規JSONはpackage 0.5 / BD schema 0.4。JSON管理・草案・レビューSkillとcanonicalガイドを整合し、共通Data・Information所有者、主体/Role兼任、Step担当/義務/適用条件/局所順序、Result 1..Nを扱う。同梱`structured.mjs`を追加し、既存Node Validator/保存ガードをbyte-identicalで配布候補へ取り込んだ。新依存・第二Validatorなし。
 - 旧0.4は旧形式のまま、旧0.1〜0.3/MDは既存互換境界。0.4→0.5は構造化BD全文を明示してBD-onlyの別packageへ作成し、旧BD＋Check/Stateは元packageに保持する。0.5通常更新でも既存basedOn変更を禁止する。旧例外全文の保全とexceptions[]正本、既存ID/所有者/参照を維持する。Result.condition保留、Activity横断順序なし。
 - Phase AのSchema/Validator/構造/保存ガード・固定候補・検証正本の9ファイルを受入headとbyte比較し不変を確認した。[機械検証記録](mechanical/evidence.json)。通常Viewerの変更なし。
-- canonical sourceを先にGitHub branchへ公開・取得確認し、そのcommitから既存exporterでbundleを生成した。最終同梱sourceは`f2716613a1fb65236ac1c30ec1eab221ef576392`。`--check`は2 Skill・33ファイルを厳密照合。manifestの製品版は未リリースの候補でも0.4.9のままであり、実行版はsource commitで別途識別する。公開Release/アカウント登録版/ロード版の更新は含まない。
+- canonical sourceを先にGitHub branchへ公開・取得確認し、そのcommitから既存exporterでbundleを生成した。最終同梱sourceは`d202b67979527fa4e6f5b5a1463379b69120663d`。`--check`は2 Skill・33ファイルを厳密照合。manifestの製品版は未リリースの候補でも0.4.9のままであり、実行版はsource commitで別途識別する。公開Release/アカウント登録版/ロード版の更新は含まない。
 
 ## Gate Bの原因と復旧
 
@@ -66,3 +66,11 @@ replayは作成・改名・レビュー修正の3版を同じhashで保存/読�
 - 今回は実際にValidatorと意味レビューで失敗/修正を観測できた。新たな一般ルールを追加せず、既存のreview/revision loop・保存guard・source照合を使用した。
 
 Phase Bの実装・限定検証候補をChatレビューへ返す。採用・マージ・公開の承認とは別である。
+
+## 2026-10-30 Chatレビュー指摘への修正
+
+[Chatレビュー](https://github.com/mk3008/alder/pull/311#issuecomment-6507406558)で、0.5ガイドのcore.mjs相対リンクが配布階層では存在しない場所へ解決されることを指摘された。canonicalの1リンクを受入済みPhase Aの固定source URLへ訂正し、公開・取得確認したsource commit `d202b67979527fa4e6f5b5a1463379b69120663d`からJSON管理Skillだけを正式exporterで再生成した。
+
+`test_structured_contract_core_link_reaches_the_bundled_source`を追加。canonicalと隔離した配布Pluginの両ガイドで固定リンクを検査し、参照先Git blobの存在、canonical core.mjsおよび実際の同梱core.mjsとのbyte一致を確認する。修正前は1 testの2箇所で失敗、修正後は両方成功。リンク先の公開ファイルもGitHubから取得確認した。既存のSkill入口だけの検査が本文内リンクを対象にしていなかった見落としを、当該Referenceの小さな検査で補い、汎用解析基盤は追加していない。
+
+ローカルでは厳密export 28 files/1 SkillとJSON Plugin/export/fetchの23 testsが成功。source/copy/provenanceの整合検査は緩和していない。runtime・Schema/Validator/保存器・通常Viewer・既存Agent入力/出力/プロンプトは不変であり、実Agent検証は前回の固定証拠を維持する。新headのCI結果は同PR/Executionの返却コメントへ固定する。正式B受入はChatの再判定へ返す。source SHAの長期到達性は、指示どおりPhase Dの統合/タグ時に別途確認する。
