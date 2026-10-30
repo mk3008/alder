@@ -15,7 +15,7 @@ export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocumen
 /** Both formats project through this boundary; renderers never re-read MD sections. */
 export function readViewerDocument({data,original}:NormalizedDocument):Design{
  if(data.version!==1)throw Error('Unsupported Viewer document version');
- const validation:{diagnostics:string[]}=validateReferences({formatVersion:data.formatVersion==='0.5'?'0.5':'0.4',documents:[data.business,...data.checks,...data.states],sources:[],externalDocuments:[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
+ const validation:{diagnostics:string[]}=validateReferences({formatVersion:data.formatVersion==='0.5'?'0.5':'0.4',documents:[data.business,...data.checks,...data.states],sources:data.sources??[],externalDocuments:data.externalDocuments??[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
  data={...data,diagnostics:[...new Set(validation.diagnostics)]};
  const bd=data.business,all=[...bd.objects,...bd.activities];
  const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,information:o.information.map(i=>typeof i==='string'?i:i.name),type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:activityWho(bd,a),where:a.where,result:'results' in a?a.results.map(r=>r.text).join('\n'):a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];

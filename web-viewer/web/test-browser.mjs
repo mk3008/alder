@@ -6,6 +6,7 @@ import {verifyJSONStates} from './test-json-states-browser.mjs';
 import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyJSON05} from './test-json-05-browser.mjs';
 import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
 import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -65,6 +66,7 @@ const cases=[
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'json05',run:()=>verifyJSON05(browser)},
    {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
    {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},

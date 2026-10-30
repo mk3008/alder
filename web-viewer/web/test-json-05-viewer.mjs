@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument,readDesignFile} from '../src/document-input.ts';
+import {validate} from '../../tools/document_storage/core.mjs';
 
 // Requirements were committed before the implementation. Missing checks,
 // cases, or results must fail instead of silently shrinking verification.
@@ -40,6 +41,24 @@ try{
 for(const mutate of [p=>p.formatVersion='0.6',p=>p.documents[0].activities[0].results=[],p=>p.documents[0].relations[0].dataId='missing',p=>p.documents[0].activities[0].performers[0].roleIds=['missing'],p=>p.documents[0].activities[0].results[0].condition=null]){const bad=structuredClone(pkg);mutate(bad);assert.throws(()=>parseDocument(JSON.stringify(bad)));assert.equal(design.markdown,raw);}
 assert.throws(()=>parseDocument('{"format":"x","format":"y"}'),/Duplicate JSON key/);
 const old=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),md=readFileSync('web/authorities/business-design.md','utf8');assert.equal(parseDocument(old).markdown,old);assert.equal(parseDocument(md).markdown,md);
+
+// A validated external BD catalog can be the source of a Check alongside the
+// locally displayed BD. The Viewer must retain the catalog for shared
+// reference validation, but must not associate that Check with the local BD.
+const seed=JSON.parse(readFileSync('../work/plugin-json/issue-310/reviewed-seed.json','utf8'));
+const external=structuredClone(seed),check=external.documents.find(d=>d.kind==='checkItems');
+check.basedOn={documentId:'external-bd',revision:'external-r1',verification:'unverified'};
+check.index[0].activityId='external-activity';check.sections[0].activityId='external-activity';
+external.externalDocuments=[{id:'external-bd',kind:'businessDesign',revision:'external-r1',activities:[{id:'external-activity',name:'別原典の業務'}]}];
+external.sources=[{documentId:'external-bd',revision:'external-r1',sha256:'0'.repeat(64),uri:'https://example.test/external.json'}];
+validate(external);const externalRaw=JSON.stringify(external),externalView=parseDocument(externalRaw);
+assert.equal(externalView.markdown,externalRaw);assert.equal(externalView.model.checks[0].basedOn.documentId,'external-bd');assert.equal(externalView.model.checks[0].items[0].reviewState,'確認済み');
+const externalDOM=new JSDOM('<body></body>',{runScripts:'outside-only'});externalDOM.window.eval(compiled.outputFiles[0].text+'\nwindow.view=view;');
+try{const text=externalDOM.window.view.renderChecks(externalView,'c-guidance').textContent;assert.match(text,/別の原典BDを参照/);assert.doesNotMatch(text,/人間レビュー状態: 確認済み/);}finally{externalDOM.window.close();}
+const brokenExternal=structuredClone(external);brokenExternal.externalDocuments[0].revision='stale';assert.throws(()=>parseDocument(JSON.stringify(brokenExternal)),/Stale Check/);
+const oldExternal=JSON.parse(readFileSync('../work/viewer-json/issue-274/json-native/independent.json','utf8'));oldExternal.documents.push(structuredClone(check));oldExternal.sources=structuredClone(external.sources);oldExternal.externalDocuments=structuredClone(external.externalDocuments);validate(oldExternal);const oldExternalRaw=JSON.stringify(oldExternal),oldExternalView=parseDocument(oldExternalRaw);assert.equal(oldExternalView.markdown,oldExternalRaw);assert.equal(oldExternalView.model.checks[0].basedOn.documentId,'external-bd');
+// Current candidate follows #301's rule; the compatibility decision is open.
+const duplicate=structuredClone(seed),transitions=duplicate.documents.find(d=>d.kind==='stateTransition').transitions;transitions.push({...transitions[0],id:'duplicate-transition-probe',sourceId:'T99'});assert.throws(()=>parseDocument(JSON.stringify(duplicate)),/Duplicate state transition condition/);
 // This early test covers parts of each requirement, not final acceptance.
 const partial=Object.fromEntries(ids.map(id=>[id,'partial']));
 const checkStage=(required,observed)=>{assert.deepEqual(Object.keys(observed),required);for(const id of required)assert.equal(observed[id],'partial');};
