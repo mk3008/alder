@@ -9,7 +9,6 @@ type Snapshot = {
   nodes: Map<string, RouteNode>;
   routes: (EdgeRoute | undefined)[];
 };
-type CaptionSize = {width:number;height:number};
 
 /** Runtime-only geometry, isolated by tab. Reload/reopen intentionally routes afresh.
  * Every initial/structural pass considers ALL cards and relations, before filters.
@@ -24,12 +23,11 @@ export class RouteCache {
   /** Explicit whole-layout changes need a fresh route pass for this tab only. */
   invalidate(tab: object): void { this.tabs.delete(tab); }
 
-  update(tab: object, design: object, nodes: readonly RouteNode[], relations: readonly Relation[], matrix?:readonly MatrixWire[], captionSizes?:readonly CaptionSize[]): readonly (EdgeRoute | undefined)[] {
+  update(tab: object, design: object, nodes: readonly RouteNode[], relations: readonly Relation[], matrix?:readonly MatrixWire[]): readonly (EdgeRoute | undefined)[] {
     const structure = JSON.stringify([
       nodes.map(n => [n.id, n.width, n.height]),
-      relations.map(r => [r.kind, r.from, r.to, r.label]),matrix,captionSizes
+      relations.map(r => [r.kind, r.from, r.to, r.label]),matrix
     ]);
-    const size=(i:number):CaptionSize=>captionSizes?.[i]??{width:Math.max(30,relations[i].label.length*12),height:18};
     const previous = this.tabs.get(tab);
     const full = !previous || previous.design !== design || previous.structure !== structure;
     const moved = new Set(nodes.filter(n => {
@@ -47,11 +45,11 @@ export class RouteCache {
         from: r.from, to: r.to, index, nodes, kind: r.kind, matrix:matrix?.[index],
         // Generic fallback also reserves earlier captions on their departure rows.
         labels: matrix?.[index]?[]:[...routes.flatMap((route,i)=>route&&i<index?[{
-          id:String(i),x:route.label[0]-size(i).width/2,
-          y:route.label[1]-size(i).height/2,...size(i)
+          id:String(i),x:route.label[0]-Math.max(30,relations[i].label.length*12)/2,
+          y:route.label[1]-9,width:Math.max(30,relations[i].label.length*12),height:18
         }]:[])],
         wires: matrix?.[index]?[]:routes.flatMap((route,i)=>route&&i<index?[route.points]:[]),
-        labelWidth:size(index).width,labelHeight:size(index).height
+        labelWidth: Math.max(30, r.label.length * 12), labelHeight: 18
       }) : undefined;
     });
     // Geometry remains incident-only. Matrix caption reservations are a separate
@@ -64,11 +62,11 @@ export class RouteCache {
       for(const i of order){
         const route=routes[i];
         if(!route)continue;
-        const source=nodes.find(n=>n.id===relations[i].from)!,{width,height}=size(i);
-        const anchor: [number,number]=matrix[i].returning?[Math.max(...route.points.map(p=>p[0]))+8+width/2,route.points[0][1]]:[source.x+source.width*.125+8+width/2,captionTop(source.y+source.height,matrix[i].captionLane*CAPTION_LINE_STEP)+height/2];
-        const key=captionKey(relations[i],i,matrix[i]),label=shared.get(key)??captionOnRow(anchor,width,height,nodes,placed);
+        const source=nodes.find(n=>n.id===relations[i].from)!,width=Math.max(30,relations[i].label.length*12);
+        const anchor: [number,number]=matrix[i].returning?[Math.max(...route.points.map(p=>p[0]))+8+width/2,route.points[0][1]]:[source.x+source.width*.125+8+width/2,captionTop(source.y+source.height,matrix[i].captionLane*CAPTION_LINE_STEP)+9];
+        const key=captionKey(relations[i],i,matrix[i]),label=shared.get(key)??captionOnRow(anchor,width,18,nodes,placed);
         if(label[0]!==route.label[0]||label[1]!==route.label[1])routes[i]={...route,label};
-        if(!shared.has(key)){shared.set(key,label);placed.push({id:String(i),x:label[0]-width/2,y:label[1]-height/2,width,height});}
+        if(!shared.has(key)){shared.set(key,label);placed.push({id:String(i),x:label[0]-width/2,y:label[1]-9,width,height:18});}
       }
     }
     this.tabs.set(tab, {design, structure, nodes: new Map(nodes.map(n => [n.id, {...n}])), routes});

@@ -3,7 +3,7 @@ import {graphFocus} from './graph-focus.ts';
 import {graphMarkers,paintGraphException} from './graph-visuals.ts';
 import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
-import type {RouteNode} from './routing.ts';
+import {captionOnRow,type RouteNode} from './routing.ts';
 import {RouteCache} from './route-cache.ts';
 import {captionRowStep,CAPTION_LINE_STEP} from './caption-spacing.ts';
 export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
@@ -45,7 +45,18 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  const select=(id?:string)=>{selected=id;view.selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','node graph-shape state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+(rows[i][0].path==='exception'?' exception':'')+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));svg.querySelectorAll('[data-exception-paint]').forEach(e=>e.remove());for(const path of edgeElements)if(path.classList.contains('exception'))paintGraphException(svg,path,{path:path.getAttribute('d')!},{'data-transitions':path.getAttribute('data-transitions')!});};
  svg.addEventListener('click',event=>{if(event.target===svg)select();});svg.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();select();}});
  const wires=plan.wires.map((wire,i)=>({...wire,captionLane:captionGroups[i].offset/CAPTION_LINE_STEP}));
- const routes=new RouteCache().update({},model,nodes,layoutGraph.relations,wires,captionGroups.map(({width,height})=>({width,height})));
+ // The shared business router measures single-line labels. Supply equivalent
+ // widths, then use its same collision escape for the full multiline boxes.
+ const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
+ const routes=new RouteCache().update({},model,nodes,captionRelations,wires);
+ const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
+ const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
+ for(const i of captionOrder){
+  const route=routes[i]!,group=captionGroups[i],singleWidth=Math.max(30,captionRelations[i].label.length*12);
+  const anchor:[number,number]=[route.label[0]-singleWidth/2+group.width/2,route.label[1]+(wires[i].returning?0:group.height/2-9)];
+  const label=captionOnRow(anchor,group.width,group.height,nodes,placed);labelPositions[i]=label;
+  placed.push({id:String(i),x:label[0]-group.width/2,y:label[1]-group.height/2,width:group.width,height:group.height});
+ }
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
   const row=rs[0];
@@ -55,7 +66,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
  for(const [index,group] of captionGroups.entries()){
-  const route=routes[index]!,x=route.label[0]-group.width/2,y=route.label[1]-group.height/2+14;
+  const position=labelPositions[index]!,x=position[0]-group.width/2,y=position[1]-group.height/2+14;
   svg.append(make('rect',{x:String(x),y:String(y-14),width:String(group.width),height:String(group.height),fill:'none','pointer-events':'none','data-canvas-boundary':''}));
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity,'data-transition-id':group.rows[0].id,'aria-label':group.lines.join('')});
   group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
