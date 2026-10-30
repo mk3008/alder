@@ -9,10 +9,15 @@ import './canvas-toolbar.css';
 import {conceptNeighborhood} from './concept-neighborhood.js';
 import {createNodeDrag} from './node-drag.ts';
 import {clampZoom,installTouchGestures} from './touch-gestures.ts';
-const messageOrigin=location.origin==='null'?'*':location.origin;
+// srcdoc inherits the embedding document's security origin, although its URL
+// can report an opaque origin. Trust only our actual parent and its origin.
+const parentLocation=()=>{try{return parent.location;}catch{return null;}};
+const parentOrigin=()=>parentLocation()?.origin;
+const fromParent=event=>event.source===parent&&!!parentLocation()&&(event.origin===parentOrigin()||(parentLocation().protocol==='file:'&&event.origin==='null'));
+const messageOrigin=parentLocation()?.protocol==='file:'||!parentOrigin()||parentOrigin()==='null'?'*':parentOrigin();
 let initialized=false;
 window.addEventListener('message',event=>{
- if(event.origin!==location.origin||event.source!==parent||event.data?.type!=='alder-concept-data'||initialized)return;
+ if(!fromParent(event)||event.data?.type!=='alder-concept-data'||initialized)return;
  initialized=true;mountConceptCanvas(event.data);
 });
 function mountConceptCanvas({graph,focus,documentKey,viewKey}){
@@ -98,7 +103,7 @@ for(const stage of stages.filter(s=>s.id==='overview')){
  s.section.querySelector('.section-back').onclick=()=>history.back();states.push(s);draw(s);if(stage.id==='overview')installCanvas(s);else{s.svg.onclick=e=>{const id=e.target.closest('.node')?.dataset.node;if(id)navigateDetail(s,id);};}
 }
 
-window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='alder-concept-highlight')return;const id=e.data.id;if(!Object.hasOwn(tables,id))return;for(const s of states)if(s.stage.ids.includes(id)&&s.selected!==id){s.selected=id;draw(s);}});
+window.addEventListener('message',e=>{if(!fromParent(e)||e.data?.type!=='alder-concept-highlight')return;const id=e.data.id;if(!Object.hasOwn(tables,id))return;for(const s of states)if(s.stage.ids.includes(id)&&s.selected!==id){s.selected=id;draw(s);}});
 window.addEventListener('popstate',applyLocation);window.addEventListener('resize',()=>states.forEach(layoutCanvas));
 window.addEventListener('blur',()=>states.forEach(s=>{s.touch?.cancel();s.drag?.cancel();save(s);}));
 applyLocation();

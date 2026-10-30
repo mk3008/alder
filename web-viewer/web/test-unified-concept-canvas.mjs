@@ -13,15 +13,17 @@ async function until(test){for(let i=0;i<500;i++){if(test())return;await new Pro
 await until(()=>!p.document.querySelector('#open').disabled);p.document.querySelector('#open-text').click();p.document.querySelector('#source-text').value=JSON.stringify(pkg);await p.document.querySelector('#source-submit').onclick();
 p.document.querySelector('[data-explorer-key="concept:overview"]').click();
 let frame=p.document.querySelector('iframe[data-concept-view="overview"]');assert(frame&&!frame.hidden);
-function connect(frame){
- const c=new JSDOM(readFileSync('concept.html','utf8'),{url:'https://viewer.test/app/concept.html',runScripts:'outside-only',pretendToBeVisual:true}).window;
+function connect(frame,url='https://viewer.test/app/concept.html'){
+ const c=new JSDOM(readFileSync('concept.html','utf8'),{url,runScripts:'outside-only',pretendToBeVisual:true}).window;
  c.scrollTo=()=>{};c.HTMLElement.prototype.scrollTo=function(x,y){this.scrollLeft=x;this.scrollTop=y;};c.HTMLElement.prototype.scrollIntoView=()=>{};c.HTMLElement.prototype.setPointerCapture=()=>{};c.HTMLElement.prototype.hasPointerCapture=()=>false;c.SVGElement.prototype.focus=()=>{};
  c.HTMLCanvasElement.prototype.getContext=()=>({measureText:value=>({width:value.length*14})});
- const parent={postMessage:(data,origin)=>p.dispatchEvent(new p.MessageEvent('message',{data,origin,source:frame.contentWindow}))};Object.defineProperty(c,'parent',{value:parent});
+ const parent={location:{origin:'https://viewer.test',protocol:'https:'},postMessage:(data,origin)=>p.dispatchEvent(new p.MessageEvent('message',{data,origin,source:frame.contentWindow}))};Object.defineProperty(c,'parent',{value:parent});
+ Object.defineProperty(frame,'contentDocument',{value:c.document,configurable:true});
  Object.defineProperty(frame.contentWindow,'postMessage',{value:(data,origin)=>c.dispatchEvent(new c.MessageEvent('message',{data,origin,source:parent})),configurable:true});
- c.eval(canvas);frame.onload();return c;
+ c.eval(canvas);c.dispatchEvent(new c.MessageEvent('message',{data:{type:'alder-concept-data'},origin:'https://attacker.test',source:parent}));assert.equal(c.document.querySelectorAll('[data-node]').length,0,'wrong origin must not initialize the canvas');frame.onload();return c;
 }
-let c=connect(frame);assert.equal(c.document.querySelectorAll('[data-node]').length,6);
+let c=connect(frame,'about:srcdoc');assert.equal(c.document.querySelectorAll('[data-node]').length,6);
+assert(c.document.querySelector('.graph-settings-toggle svg'),'toolbar icons are added after the asynchronous canvas renders');
 assert(c.document.querySelector('[data-node="request"] .concept-open-action'),'overview has detail link');
 c.document.querySelector('[data-node="preparation"] .concept-open-action').click();
 frame=p.document.querySelector('iframe[data-concept-view="preparation"]');assert(frame&&!frame.hidden);c.close();c=connect(frame);

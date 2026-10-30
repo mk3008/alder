@@ -26,5 +26,8 @@ export async function verifyJSONOfflinePreview(browser){
   await page.waitForFunction(()=>!document.querySelector('#open').disabled);await detail.locator('[data-node="request"]').waitFor();
   assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
   return {browser:browser.version(),source:head,offlinePath:manifest.offlinePath,fileProtocol:true,reload:true,unifiedConcept:true,previewOnlyIndexedDB:true,networkRequests:requests,pageErrors:errors,limits:['Physical smartphone/file manager and OS picker permissions are not emulated','HTTPS reads from file origin require Origin:null CORS permission']};
+ }catch(error){
+  const frame=await page.locator('iframe[data-concept-view="overview"]').evaluate(el=>{try{return {srcdoc:el.getAttribute('srcdoc')?.length??0,origin:el.contentWindow.location.origin,parentOrigin:el.ownerDocument.location.origin,body:el.contentDocument?.body?.textContent?.slice(0,200)};}catch(e){return {error:String(e)};}}).catch(()=>null);
+  console.log('OFFLINE_CONCEPT_DIAGNOSTIC '+JSON.stringify({frame,pageErrors:errors,requests}));throw error;
  }finally{await context.close();}
 }
