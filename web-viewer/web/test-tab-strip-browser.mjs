@@ -67,9 +67,12 @@ export async function verifyTabStrip(browser){
   };
   await keyboardOrder(['save-image','copy-image','share-source','open-checks','view-markdown']);
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
-  let sourceReads=0;
-  await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
-  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);await assertTabStripActions(page);
+  let sourceReads=0,markRequested,releaseFirst;
+  const firstRequested=new Promise(resolve=>{markRequested=resolve;}),firstResponse=new Promise(resolve=>{releaseFirst=resolve;});
+  await context.route('https://tab-strip.test/design.md',async route=>{sourceReads++;if(sourceReads===1){markRequested();await firstResponse;}return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
+  await openSourceAction(page,'open-url');await page.locator('#source-url').fill('https://tab-strip.test/design.md');await page.locator('#source-submit').click();await firstRequested;
+  assert.equal(await page.locator('.tab').count(),1,'the old sample still has one tab while URL loading is pending');assert.equal(await page.locator('#refresh').isDisabled(),true,'the old sample cannot refresh while the URL response is pending');releaseFirst();
+  await page.locator('#source-dialog').waitFor({state:'hidden'});await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);await assertTabStripActions(page);
   await keyboardOrder(['refresh','save-image','copy-image','share-source','open-checks','view-markdown']);
   assert.equal(sourceReads,1);
   for(const key of ['Enter','Space']){const before=sourceReads;await page.locator('#refresh').focus();assert.equal(await page.locator('#refresh').evaluate(el=>document.activeElement===el),true);const read=page.waitForRequest('https://tab-strip.test/design.md');await page.keyboard.press(key);await read;await page.waitForFunction(()=>!document.querySelector('#refresh').disabled);assert.equal(sourceReads,before+1,'native keyboard refresh rereads the URL');assert.equal(await page.locator('.tab').count(),1,'URL keyboard refresh keeps the same tab');}
