@@ -53,6 +53,8 @@ try{
  for(const [id,related]of [['T12',false],['T14',true]])assert.equal([...svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>t.classList.contains('review-related')),related);
  const order=[...svg.children],labels=[...svg.querySelectorAll('.state-diagram-edge-label')],paints=[...svg.querySelectorAll('[data-exception-paint]')];
  assert.ok(paints.length);assert.ok(paints.every(p=>labels.every(label=>order.indexOf(p)<order.indexOf(label))),'selected dashed paint remains behind every caption');
+ const focused=svg.querySelector('[data-state="申請済み"]');window.document.body.append(panel);focused.focus();focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+ assert.equal(window.document.activeElement,focused,'selection keeps keyboard focus');focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(focused.getAttribute('aria-pressed'),'false','Escape clears the selected state');
  results.push('STATE-CAPTION-003');validateAuthority(readFileSync('verification/state-caption-placement.check-items.json'));coverage(results);
  console.log(JSON.stringify({domChecks:results,transitions:rows.length,browser:'separate'}));
 }finally{window.close();}
