@@ -34,6 +34,7 @@ export async function verifyStateTransitionIdentity(browser){
     for(const [id,related]of [['T12',true],['T14',false]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
     await page.locator('#states-workspace [data-state="差戻し"]').press('Enter');
     for(const [id,related]of [['T12',false],['T14',true]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
+    assert(await page.locator('#states-workspace .state-diagram').evaluate(svg=>{const order=[...svg.children],labels=[...svg.querySelectorAll('.state-diagram-edge-label')],paints=[...svg.querySelectorAll('[data-exception-paint]')];return paints.length>0&&paints.every(p=>labels.every(label=>order.indexOf(p)<order.indexOf(label)));}),'selected dashed paint is behind captions');
     await page.locator('#states-workspace [data-transition-id="T14"]').scrollIntoViewIfNeeded();
     await page.screenshot({path:`web/evidence/json-states/caption-placement-${width}-${theme}.png`});
     await page.locator('#states-workspace [data-state="終結"]').press('Enter');

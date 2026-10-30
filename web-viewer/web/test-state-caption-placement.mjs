@@ -51,6 +51,8 @@ try{
  for(const [id,related]of [['T12',true],['T14',false]])assert.equal([...svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>t.classList.contains('review-related')),related);
  svg.querySelector('[data-state="差戻し"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  for(const [id,related]of [['T12',false],['T14',true]])assert.equal([...svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>t.classList.contains('review-related')),related);
+ const order=[...svg.children],labels=[...svg.querySelectorAll('.state-diagram-edge-label')],paints=[...svg.querySelectorAll('[data-exception-paint]')];
+ assert.ok(paints.length);assert.ok(paints.every(p=>labels.every(label=>order.indexOf(p)<order.indexOf(label))),'selected dashed paint remains behind every caption');
  results.push('STATE-CAPTION-003');validateAuthority(readFileSync('verification/state-caption-placement.check-items.json'));coverage(results);
  console.log(JSON.stringify({domChecks:results,transitions:rows.length,browser:'separate'}));
 }finally{window.close();}
