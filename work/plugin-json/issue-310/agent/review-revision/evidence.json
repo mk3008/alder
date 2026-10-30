@@ -1,0 +1,51 @@
+{
+  "source": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/update/business-design.json",
+    "sha256": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78",
+    "revision": "package-3 / bd-3"
+  },
+  "independentReviewInput": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/review-output/business-design-review.ja.md",
+    "sha256": "b4491b801b9d4736e874c3b01afb85189dcc95f7dd0884450da374338f40f7fc"
+  },
+  "saved": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/review-revision/business-design.json",
+    "sha256": "b520831a2869c2bb045bb370b82dd26fb94ec4cbac6f2b29e4e4d4050ac12cfe",
+    "revision": "package-4 / bd-4"
+  },
+  "findingDisposition": {
+    "finding": "来訪日の台帳記録が手順に現れない。",
+    "acceptedExtent": "Source-established value correspondence was not visible in the registration Step; make that correspondence explicit beside the already sourced desired-date registration.",
+    "sourceEvidence": [
+      "Intake normal Step 1: 受付スタッフが希望日と連絡先を案内台帳に登録する。",
+      "Intake: 来訪日はこの業務では希望日と同じ日を案内する。",
+      "Intake normal Result: 案内台帳に来訪日と連絡先が記録されている。"
+    ],
+    "minimalCorrection": "受付スタッフが利用者から受け取った希望日（この業務で案内する来訪日として、同じ日を用いる）と連絡先を案内台帳に登録する。",
+    "notInferred": [
+      "No separate visit-date write operation, additional responsible actor, separate write timing, technical field mapping, new order rule, or human approval."
+    ],
+    "rationale": "The source supplies both staff registration of the desired day and the business identity of that day as the visit day. The parenthesized clause makes this existing value mapping explicit in the registration operation; it does not prescribe separate physical fields or a second registration action.",
+    "pending": "Independent re-review of bd-4 requested by parent; do not claim the independent finding closed until that review returns."
+  },
+  "preservation": {
+    "onlyStep1TextAndRevisionMetadataChanged": true,
+    "idsRolesColorsReferencesFindingsUnchanged": true,
+    "previousEvidenceAllUnchanged": true
+  },
+  "operationInputs": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/review-revision/operation.json",
+  "commands": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/review-revision/operations.json",
+  "humanAgreement": false,
+  "selfReview": {
+    "independent": false,
+    "phase": "Read-only readback and source-focused text/structure comparison after commit",
+    "coverage": "Whole saved JSON; Step 1-to-3 relationship, two Results, shared ledger Data, exactly one before rule, same source date meaning. No change to notification unknowns.",
+    "independentReReview": "Pending"
+  },
+  "limits": [
+    "No Viewer verification",
+    "No human agreement",
+    "No Check/State derivation or rebase",
+    "Independent re-review not yet performed on bd-4"
+  ]
+}

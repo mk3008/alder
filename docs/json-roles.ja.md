@@ -1,5 +1,9 @@
 # ロールのID・名称・色を保持する
 
+新規package 0.5 / BD schema 0.4ではrolesのid/name/colorを一元化し、Activity.performersのobjectIdとroleIdsから参照する。人・システム・スケジューラー等のObjectを主体にでき、Role兼任を許す。who/roleIdを重複正本にしない。未決主体とStep担当の扱いは[0.5契約](business-design-json-0.5.ja.md)に従う。
+
+## 旧0.3・0.4の互換契約
+
 候補形式 `alder-document-package/0.3` のBusiness Design（schemaVersion 0.2）は `roles: [{id, name, color}]` を一箇所に持ち、各Activityの `roleId` から参照する。Checkと部分定義のstateTransitionはpayload 0.1を維持する。外側の構造版・文書payload版・内容revision・Plugin版・Graph v1は独立である。正式JSON v1ではない。
 
 基本パレットは `#8b5cf6`、`#2563eb`、`#c2410c`、`#008576`、`#be185d`。5を超えるロールも異なるIDで保持し、色の再利用を許す。色に業務意味や権限を割り当てない。未知色、ID/名称の重複、別BDや存在しないRoleへの参照は拒否する。

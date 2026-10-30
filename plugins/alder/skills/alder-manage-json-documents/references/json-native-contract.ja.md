@@ -1,6 +1,12 @@
 # JSONの構造と例外参照
 
-新規のJSON草案は候補 `formatVersion: "0.4"` を使う。Business Designは `schemaVersion: "0.3"`、状態文書は `schemaVersion: "0.2"`、Check Itemは従来の `0.1`。正式JSON v1の採用・Plugin releaseは別判断である。
+新規草案は[package 0.5 / BD schema 0.4](business-design-json-0.5.ja.md)を使う。例外定義はexceptions[]に一元化し、Activity.exceptionは持たない。0.5の既存Check/StateのbasedOnは通常更新で変更できず、旧packageを保全してBD-onlyの別packageへ明示移行する。
+
+以下は旧0.4までの互換契約である。旧ファイルを読んだだけで0.5へ移行しない。
+
+## 旧0.4の構造
+
+旧0.4のJSON草案は候補 `formatVersion: "0.4"` を使う。Business Designは `schemaVersion: "0.3"`、状態文書は `schemaVersion: "0.2"`、Check Itemは従来の `0.1`。正式JSON v1の採用・Plugin releaseは別判断である。
 
 ## 例外をIDで参照する
 

@@ -6,7 +6,7 @@ license: MIT
 
 # Alder Business Design review
 
-If the requester explicitly selects typed JSON or the selected canonical file has `format: alder-document-package`, use [the JSON document skill](../alder-manage-json-documents/SKILL.md) for this operation. Preserve review-only scope and human agreement gates. Do not generate intermediate Markdown or convert an existing Markdown user without an explicit request. Otherwise keep the Markdown procedure below.
+If the requester explicitly selects typed JSON or the selected canonical file has `format: alder-document-package`, use [the JSON document skill](../alder-manage-json-documents/SKILL.md) for this operation. Preserve review-only scope and human agreement gates. For package 0.5 / BD schema 0.4, read the JSON skill’s bundled structure contract and check all performers, Steps and local order, Results, shared Data and Information ownership against the sources. Do not add Result.condition or cross-Activity ordering. Do not generate intermediate Markdown or convert an existing Markdown user without an explicit request. Otherwise keep the Markdown procedure below.
 
 Use this installed plugin's bundled Business Design guidance as the authority. Read [document structure](references/business-design-structure.ja.md), [description quality](references/business-design-quality-check.ja.md), [business correlation](references/business-design-correlation-check.ja.md), and [omission review](references/business-design-omission-check.ja.md) before reviewing. These are byte-identical copies from one pinned Alder revision recorded in [provenance.json](references/provenance.json). Do not ask the project to copy Alder review documents or substitute implementation behavior for unresolved business meaning.
 

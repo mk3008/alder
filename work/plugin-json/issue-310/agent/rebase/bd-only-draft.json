@@ -1,0 +1,153 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.5",
+  "revision": "p2-bd-only-draft",
+  "documents": [
+    {
+      "id": "c-bd",
+      "kind": "businessDesign",
+      "schemaVersion": "0.4",
+      "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order-draft2",
+      "title": "受付",
+      "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。 草案・人間レビュー待ち。",
+      "scope": "scopeは外側のexample.scopeを参照",
+      "objects": [
+        {
+          "id": "c-requester",
+          "name": "依頼者",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            {
+              "id": "c-desk",
+              "name": "その相談の担当窓口",
+              "description": ""
+            },
+            {
+              "id": "c-contact",
+              "name": "次の連絡方法",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "staff-object",
+          "name": "受付担当",
+          "scope": false,
+          "icon": "file-text",
+          "information": []
+        },
+        {
+          "id": "system-object",
+          "name": "受付システム",
+          "scope": false,
+          "icon": "file-text",
+          "information": []
+        }
+      ],
+      "roles": [
+        {
+          "id": "c-staff",
+          "name": "担当者",
+          "color": "#2563eb"
+        }
+      ],
+      "activities": [
+        {
+          "id": "c-guidance",
+          "name": "次の連絡方法を説明する",
+          "scope": true,
+          "why": "依頼者が相談後の連絡先を理解できるようにする。改訂後の案内も行う。",
+          "when": "相談の受付後、依頼者に次の案内をするとき。",
+          "where": "規定なし",
+          "performers": [
+            {
+              "objectId": "staff-object",
+              "roleIds": [
+                "c-staff"
+              ]
+            },
+            {
+              "objectId": "system-object",
+              "roleIds": []
+            }
+          ],
+          "procedure": {
+            "steps": [
+              {
+                "id": "mix-input",
+                "text": "相談申込を入力する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "staff-object"
+                ]
+              },
+              {
+                "id": "mix-check",
+                "text": "入力された申込を確認する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "system-object"
+                ]
+              },
+              {
+                "id": "mix-guide",
+                "text": "次の連絡方法を案内する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "staff-object"
+                ]
+              }
+            ],
+            "orderRules": []
+          },
+          "results": [
+            {
+              "id": "c-guidance-r1",
+              "text": "依頼者へ担当窓口が説明される。"
+            },
+            {
+              "id": "c-guidance-r2",
+              "text": "依頼者へ次の連絡方法が説明される。"
+            }
+          ],
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "c-output",
+          "kind": "output",
+          "fromId": "c-guidance",
+          "toId": "c-requester",
+          "dataId": "data-c-output"
+        }
+      ],
+      "findings": [],
+      "exceptions": [],
+      "data": [
+        {
+          "id": "data-c-output",
+          "name": "連絡案内",
+          "items": [
+            {
+              "informationId": "c-desk",
+              "condition": null
+            },
+            {
+              "informationId": "c-contact",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

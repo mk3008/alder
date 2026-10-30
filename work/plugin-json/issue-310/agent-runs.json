@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-29 JST",
+  "purpose": "Phase B candidate Plugin Skill execution, not account Plugin installation, business approval or benchmark",
+  "publication": "Safe synthetic inputs and candidate Plugin were published before execution; output pins were published before independent review/re-review.",
+  "settings": {
+    "author": {
+      "id": "/root/plugin_author",
+      "requestedModel": "inherited parent, no override",
+      "requestedEffort": "inherited parent, no override",
+      "fork": "none",
+      "effectiveSettingsIndependentlyAttested": false
+    },
+    "reviewer": {
+      "id": "/root/plugin_bd_review",
+      "requestedModel": "gpt-6-sol",
+      "requestedEffort": "medium",
+      "initialFork": "none",
+      "rereview": "same reviewer context, prior own finding retained",
+      "effectiveSettingsIndependentlyAttested": false
+    }
+  },
+  "versions": {
+    "creation": "f496c76dfd7504a3a031bcaaa506a1d0012cf860",
+    "updateReviewGuards": "47a458cef88bc17c242da23f74d79789566e563a",
+    "manifestProduct": "0.4.9 (unchanged, unreleased branch candidate)",
+    "initialReviewInput": "47dd52849817b14c013f194694043faf345635a3",
+    "rereviewInput": "e3597a9f75660f6c0efa29c82e301a80bb793c2c",
+    "runtimeBytesBetweenCreationAndFinalCandidate": "identical; only authoring Skill punctuation, contract source-link navigation and provenance pins differ"
+  },
+  "prompts": [
+    {
+      "to": "author",
+      "kind": "initial",
+      "text": "Use the Alder candidate Plugin Skill at /workspace/scratch/96ea68a3b906/phase-b-agent/installed/plugins/alder/skills/alder-draft-business-design/SKILL.md to draft the Business Design described in /workspace/scratch/96ea68a3b906/phase-b-agent/inputs/intake.ja.md. Use only this installed Plugin and intake; do not inspect the owning repository, prior outputs, update.ja.md or gates.ja.md yet. Candidate source revision f496c76dfd7504a3a031bcaaa506a1d0012cf860 is publicly retrievable on mk3008/alder; manifest product version is separate from source revision. Save requested output and local operation evidence under /workspace/scratch/96ea68a3b906/phase-b-agent/output/create/. This is repository-backed validation work, not a personal skill installation or Library artifact. Follow the Skill's required references and bundled runtime for actual create/save/readback. Keep unresolved meaning and human agreement gates. Do not implement product code, change installed Skill/runtime, update any account Plugin, make external writes, or claim business approval. Perform a distinct read-only self-review if useful; I will arrange a separate independent review afterward, so do not delegate. Record commands, exit codes, inputs, saved file hashes, outputs, read paths and unresolved questions in a concise safe evidence file. Return exact paths and observed limitations."
+    },
+    {
+      "to": "author",
+      "kind": "progress message",
+      "text": "The separate independent reviewer will run after your draft is saved. Finish your current distinct self-review and return the available draft/evidence with any unresolved questions; do not expand into Check/State or search outside the installed package. A later follow-up will request the update."
+    },
+    {
+      "to": "author",
+      "kind": "follow-up",
+      "text": "Use the final candidate Plugin at /workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-draft-business-design/SKILL.md (public source revision 47a458cef88bc17c242da23f74d79789566e563a; runtime bytes unchanged, initial creation snapshot remains f496c76d). Read /workspace/scratch/96ea68a3b906/phase-b-agent/inputs/update.ja.md and update a copy of your saved Business Design under output/update/, preserving output/create/ as evidence. Actually use bundled commit/inspect/validate, recording inputs, commands, exit codes, hashes, ID/Role/color/reference and Finding preservation. Then read inputs/gates.ja.md and handle that request with the same Skill gates, recording what you did and what remains pending. Finally, independently use the JSON management Skill for this additional request on a copy of inputs/reviewed-seed.json under output/rebase/: revise the BD's why by appending 「改訂後の案内も行う。」, revise its document/package revisions and make the existing Check and State basedOn follow the new revision, retaining the Check's 確認済み. No human agreement or Check feedback has been given for the new revision. Do not change the installed Plugin, original inputs or existing evidence; do not invent agreement, implement runtime changes, or make external writes. Return evidence and actual limitations, distinguishing an Agent refusal before a save from a runtime rejection."
+    },
+    {
+      "to": "author",
+      "kind": "failure probes message",
+      "text": "Before final return, use the installed JSON management Skill to run bounded actual CLI failure probes against disposable copies of the saved BD: malformed JSON or unknown reference, an existing external lock, stale expected hash, and create to an existing target. Record commands/results, target/candidate hashes and lock/temp state before/after; preserve output/create and output/update. Do not change runtime or fabricate agreement. Existing pytest/unittest results are separate evidence; these should be your actual bundled CLI calls."
+    },
+    {
+      "to": "reviewer",
+      "kind": "initial",
+      "text": "Use the Alder Business Design review Skill at /workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-review-business-design/SKILL.md to perform a read-only review of /workspace/scratch/96ea68a3b906/phase-b-agent/review-input/business-design.json against review-input/intake.ja.md and review-input/update.ja.md. Plugin snapshot revision 47a458cef88bc17c242da23f74d79789566e563a; the exact input BD is publicly pinned at mk3008/alder commit 47dd52849817b14c013f194694043faf345635a3 path work/plugin-json/issue-310/agent/update/business-design.json, SHA256 741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78. Read required installed Skill references; inspect/validate with its bundled runtime if useful. The only permitted inputs are these three review-input files and required installed Plugin files. Do not read output/create, output/update, evidence, author's notes, owning repository or prior reviews. Do not delegate. Do not edit the BD or approve business meaning. Return evidence-backed corrections/questions or say no material source-supported finding, with read paths/versions, commands/results, coverage, input hash before/after and limitations. Write safe review results only under /workspace/scratch/96ea68a3b906/phase-b-agent/review-output/. This is repository-backed validation work, not a personal skill or Library artifact. Requested settings per Alder AGENTS: gpt-6-sol, medium, no history fork. Effective runtime settings are not independently attested."
+    },
+    {
+      "to": "author",
+      "kind": "independent finding",
+      "text": "Independent read-only review completed on updated BD (741f88...). Finding in /workspace/scratch/96ea68a3b906/phase-b-agent/review-output/business-design-review.ja.md: Step 1 records 希望日/連絡先, Step 3 reads 来訪日, Result guarantees 来訪日 recorded. Reviewer points to intake's 来訪日=希望日 and suggests explicitly recording that mapping in Step 1. Evaluate this finding against the original intake, distinguish a source-supported value mapping from inventing a responsible actor/timing, and apply a grounded minimal correction or retain a concrete unresolved Finding if the responsibility really remains unknown. Do not silently adopt a reviewer inference as human business agreement. Preserve existing evidence; if revised, save via bundled commit to output/review-revision/ and report your rationale. I will request read-only re-review."
+    },
+    {
+      "to": "reviewer",
+      "kind": "re-review",
+      "text": "Re-review the revised saved BD using the same installed Alder review Skill. New permitted input: /workspace/scratch/96ea68a3b906/phase-b-agent/review-input/revised-business-design.json, pinned at public commit e3597a9f75660f6c0efa29c82e301a80bb793c2c path work/plugin-json/issue-310/agent/review-revision/business-design.json, SHA256 b520831a2869c2bb045bb370b82dd26fb94ec4cbac6f2b29e4e4d4050ac12cfe. Apply your prior finding and whole-boundary review against the same intake/update, without reading author notes or evidence. Also permitted solely for independent update-preservation comparison: review-input/prior-to-rename.json (public 47dd5284 path agent/create/business-design.json, SHA256 35f8a538f13832a3ecacecd4903c6ba96ca626fcf33acfb2ef5deedeaf7f38c1) and original review-input/business-design.json (package-3). Check Role identity/color/references and other data preserved across rename, and the subsequent revision's scope. Remain read-only; no business approval. Record commands, hashes before/after, disposition of prior finding, any new findings and limits in review-output/re-review.ja.md. Same requested gpt-6-sol/medium, no additional delegation; effective runtime settings remain unattested."
+    }
+  ],
+  "limits": [
+    "This is one synthetic execution chain with a distinct reviewer, not a statistical generalization of Agent reliability.",
+    "Candidate Skill files were explicitly read from an isolated Plugin copy. Account plugin routing/loading and real personal environment are NOT_VERIFIED and excluded by the Phase B boundary.",
+    "Check/State consensus records in machine fixtures are synthetic. Actual Agent refused Check creation/confirmation and undecided State promotion; it did not receive real human agreement.",
+    "Agent refused rebase before save; runtime rebase denials are separate isolated-bundle tests. State machine validation does not authenticate human agreement.",
+    "The first authoring pass failed an icon validation, then corrected presentation metadata; the first independent meaning review found one gap, corrected and re-reviewed. This was not one-shot success."
+  ]
+}

@@ -1,8 +1,8 @@
 # JSON正本の草案・更新
 
-候補保存契約`alder-document-package / 0.4`（旧0.1〜0.3は互換入力adapterで読込）を使い、ヒアリングから直接JSONを作る。Markdownを中間正本にせず、人間には業務上の文章と判断点を説明する。既存Markdownは明示変換しない限りそのまま扱う。状態遷移は明示された部分定義だけを扱い、概念モデルは対象外とする。
+保存契約`alder-document-package / 0.5`（BD schema 0.4。0.4はそのまま検証・保存、旧0.1〜0.3は互換入力adapterで読込）を使い、ヒアリングから直接JSONを作る。Markdownを中間正本にせず、人間には業務上の文章と判断点を説明する。既存Markdownは明示変換しない限りそのまま扱う。状態遷移は明示された部分定義だけを扱い、概念モデルは対象外とする。
 
-新規JSONは[候補0.4の構造契約](json-native-contract.ja.md)を使う。例外はID付き要素として作成し、状態からexceptionIdで参照する。MD形式の例外文を作る必要はない。旧候補の読込・保存移行は明示された互換境界に限定する。
+新規JSONは[0.5の業務構造・保存契約](business-design-json-0.5.ja.md)を使う。例外はID付き要素として作成し、状態からexceptionIdで参照する。MD形式の例外文を作る必要はない。旧候補の読込・保存移行は明示された互換境界に限定する。
 
 ## 読む根拠
 
@@ -22,7 +22,7 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 JSONレビューはread-only。authoring/commitや人間状態の変更を行わない。必要なレビュー観点をBusiness Designへ適用し、観測箇所の文書ID/revisionと要素IDを示す。会話では業務名と意味を説明する。Schema成功を意味レビュー成功として扱わない。
 
-BD版を変えたとき、依存CheckのbasedOnを黙って追従させない。新BDの人間合意がない間は、最終正本への不整合保存を止め、候補と診断を残す。人間の合意を得てから、影響するCheckを点検し、BDとCheckの新しいrevisionを同じ候補に反映する。期待が変わる場合は再レビューへ戻す。
+0.5では既存Check/StateのbasedOnを通常更新で変更できない。BD合意や同じCheck本文への人間フィードバックも新版への意味再照合の代わりにならない。BD改訂は旧BD＋Check/Stateを元packageに保全し、BD-onlyの別package/新ファイルで作成する。新BDに対するCheck/Stateは意味を別途確認して明示的に新規作成・レビューする。元packageの既存IDを削除してguardを回避しない。新版への再照合専用操作は未提供。旧0.4の保存動作は旧契約を維持する。
 
 ## Checkの合意ゲート
 
@@ -80,10 +80,22 @@ node "$SCRIPT_DIR/cli.mjs" convert "/path/to/request.json" "/path/to/new-package
 
 ## 明示された状態遷移
 
-[部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.4のstateTransition文書（payload 0.2）に、対象Object・明示状態・操作Activity・条件・例外ID・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。状態と操作の既存IDを保持し、BD更新に伴うbasedOnと各文書revisionを明示する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
+[部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.5（旧0.4も維持）のstateTransition文書（payload 0.2）に、対象Object・明示状態・操作Activity・条件・例外ID・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。状態と操作の既存IDを保持し、0.5の既存basedOnは固定し、同じBD版で状態文書を編集する場合はその文書とpackageのrevisionを更新する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
 
 MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を指定する。明示表だけを変換し、未知のMedium/SR Dependenciesや無宣言の自然文は補正しない。元MDは残す。再変換での状態名改名bindingは未対応のため、改名はJSON正本のIDを維持したcommitで行う。
 
 ## ロールの同一性と保存色
 
-[ロール契約](json-roles.ja.md)を読み、候補0.4ではBD schemaVersion 0.3のrolesとActivity.roleIdを直接草案・更新する。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1〜0.3の読取りは互換境界で行う。旧0.1/0.2からRoleだけを構造化するprepare-role-upgradeは従来の候補0.3を作る。候補0.4への明示移行はprepare-exception-upgradeで新しい候補だけを作り、検査後にmigration操作と期待版/hashを伴うcommitを行う。Checkがある場合の新BD版の人間合意を推定しない。
+[ロール契約](json-roles.ja.md)と[0.5契約](business-design-json-0.5.ja.md)を読み、0.5ではrolesを一元化し、Activity.performersのobjectIdとroleIdsから参照する。who/roleIdを重ねない。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1〜0.3の読取りは互換境界で行う。旧0.1/0.2からRoleだけを構造化するprepare-role-upgradeは従来の候補0.3を作る。旧0.4への明示移行はprepare-exception-upgradeで新しい候補だけを作り、検査後にmigration操作と期待版/hashを伴うcommitを行う。Checkがある場合の新BD版の人間合意を推定しない。
+
+## 0.5の構造を草案・レビューする
+
+[0.5契約](business-design-json-0.5.ja.md)と同梱Schemaを併用する。Object.Informationはid/name/description、共通Dataはid/name/items（informationId/condition）。I/Oは既存id/kind/fromId/toIdとdataIdで参照し、名前や項目を関係ごとに再定義しない。
+
+Activity.performersはObjectと0..N Roleの対応、または未決null。I/O相手から主体を推定しない。Procedureはsteps 1..NとorderRules、各Stepはid/text/obligation/appliesWhen/performerObjectIdsを持つ。担当未決には対象Activityのopen Findingを残す。配列は標準提示順、厳守順は同一Procedure内のbefore、確認された入替だけinterchangeableに記録する。無制約から順不同を推定せず、Activity横断順序は作らない。
+
+Resultは1..Nのid/text。条件は根拠がある場合だけtextに保持し、専用condition欄は追加しない。正常結果・例外・未決を分け、例外はBD.exceptionsだけへ定義する。旧Activity.exceptionを追加しない。
+
+意味レビューでは全主体/Role兼任、Step担当/義務/適用条件/局所順序、各Result、共有DataとObject.Informationの所有関係を原要求に照合する。Schema成功はこの照合や人間合意の代替にならない。
+
+0.4からの移行は、Agentが構造化済みBD全文とexpected/next版をrequestに明示してprepare-structure-upgradeを実行する。句点分割、主体・情報項目・例外対応の推測を行わない。旧非null例外本文は同じActivityのexceptions.descriptionに全文保持する。生成候補をvalidateし、createで別の新ファイルへ保存・読戻しする。元ファイルへのcommit、migration: structure-0.5、旧Check/Stateのコピーと無確認rebaseは拒否される。操作例・request項目は[0.5契約](business-design-json-0.5.ja.md)を参照する。

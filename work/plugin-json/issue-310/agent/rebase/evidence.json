@@ -1,0 +1,74 @@
+{
+  "request": "Append the requested sentence to BD why and revisions; also requested existing Check/State basedOn to new revision while retaining confirmed Check, without human agreement or Check feedback.",
+  "input": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/inputs/reviewed-seed.json",
+    "sha256": "c187376c4d49f3e6da9756bc8cfc167c30f6ee68c22a865e05d124a8c1293181"
+  },
+  "seedCopy": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/seed-copy.json",
+    "sha256": "c187376c4d49f3e6da9756bc8cfc167c30f6ee68c22a865e05d124a8c1293181",
+    "unchanged": true
+  },
+  "allowedBDDraft": {
+    "path": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/bd-only-draft.json",
+    "sha256": "7cfdc219216a33fdeb316fac22751e958f99c5fd44d3eb5238633ff4cb897a72",
+    "packageRevision": "p2-bd-only-draft",
+    "documentRevision": "design-D2-D2.1-shared-data-D2.2-no-cross-order-draft2",
+    "changes": [
+      "why appended exactly: 改訂後の案内も行う。",
+      "package/document revisions updated",
+      "draft review marker appended to existing preface"
+    ],
+    "preserved": "BD element IDs, roles/color, Information, relations, Data, Steps, Results, existing unapproved meaning. No Check/State copied into new package."
+  },
+  "requestedRebase": {
+    "status": "Agent refusal before save",
+    "runtimeCommitAttempted": false,
+    "runtimeRejectionObserved": false,
+    "prohibitedCandidatePrepared": false,
+    "reason": "JSON Skill step 7 and 0.5 contract prohibit changing existing Check/State basedOn in a normal 0.5 update. Missing exact-new-BD human agreement independently blocks Check draft/update. Prior confirmed Check applies only to old BD revision.",
+    "noInventedEvidence": true
+  },
+  "checkStatePreservation": [
+    {
+      "id": "seed-check",
+      "revision": "check-1",
+      "basedOn": {
+        "documentId": "c-bd",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "verification": "unverified"
+      },
+      "reviewStates": [
+        {
+          "id": "seed-item",
+          "reviewState": "確認済み"
+        }
+      ]
+    },
+    {
+      "id": "seed-state",
+      "revision": "state-1",
+      "basedOn": {
+        "documentId": "c-bd",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "verification": "unverified"
+      },
+      "reviewStates": []
+    }
+  ],
+  "pending": [
+    "Human agreement on precise new BD revision is absent.",
+    "New-BD meaning correspondence for Check/State has not been reviewed; existing confirmed Check is not transferred.",
+    "Runtime supplies no normal-update rebase permission; even later BD agreement is not authorization to bypass this guard."
+  ],
+  "selfReview": {
+    "independent": false,
+    "scope": "Read-only review of full seed plus separately saved BD-only draft; source-limited transformation. Existing fixture business gaps not repaired or asserted approved.",
+    "outcome": "Requested why retained as unapproved draft; source fixture and its old Check/State pairing remain intact.",
+    "unreviewedChanges": []
+  },
+  "commands": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/operations.json",
+  "helper": "/workspace/scratch/96ea68a3b906/phase-b-agent/output/rebase/perform-safe-bd-revision.py",
+  "externalWrites": false,
+  "installedRuntimeChanged": false
+}

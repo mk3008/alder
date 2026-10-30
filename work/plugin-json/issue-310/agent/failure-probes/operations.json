@@ -1,0 +1,152 @@
+[
+  {
+    "case": "malformed-json",
+    "command": [
+      "node",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+      "commit",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/malformed-json/target.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/malformed-json/candidate.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/malformed-json/operation.json"
+    ],
+    "exitCode": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"JSON value required\"}]}\n",
+    "before": {
+      "files": {
+        "candidate.json": "2769b6f3b48fde1b5f871c6a5a3941bac6db12077373de200b86b86a26ed8b4d",
+        "operation.json": "b4b558f415d3d625a1066dce455497d68fc91e6d9cbbae587292acaf657070fd",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "after": {
+      "files": {
+        "candidate.json": "2769b6f3b48fde1b5f871c6a5a3941bac6db12077373de200b86b86a26ed8b4d",
+        "operation.json": "b4b558f415d3d625a1066dce455497d68fc91e6d9cbbae587292acaf657070fd",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "targetUnchanged": true,
+    "candidateUnchanged": true,
+    "externalLockPreserved": true,
+    "noResidualTemp": true
+  },
+  {
+    "case": "external-lock",
+    "command": [
+      "node",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+      "commit",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/external-lock/target.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/external-lock/candidate.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/external-lock/operation.json"
+    ],
+    "exitCode": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"EEXIST: file already exists, open '/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/external-lock/target.json.alder-lock'\"}]}\n",
+    "before": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "b4b558f415d3d625a1066dce455497d68fc91e6d9cbbae587292acaf657070fd",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78",
+        "target.json.alder-lock": "09ea473a7fc670bf82faa96fb26b37acbde981b28476eb9629114890fa64e7cb"
+      },
+      "locks": [
+        "target.json.alder-lock"
+      ],
+      "temps": []
+    },
+    "after": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "b4b558f415d3d625a1066dce455497d68fc91e6d9cbbae587292acaf657070fd",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78",
+        "target.json.alder-lock": "09ea473a7fc670bf82faa96fb26b37acbde981b28476eb9629114890fa64e7cb"
+      },
+      "locks": [
+        "target.json.alder-lock"
+      ],
+      "temps": []
+    },
+    "targetUnchanged": true,
+    "candidateUnchanged": true,
+    "externalLockPreserved": true,
+    "noResidualTemp": true
+  },
+  {
+    "case": "stale-hash",
+    "command": [
+      "node",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+      "commit",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/stale-hash/target.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/stale-hash/candidate.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/stale-hash/operation.json"
+    ],
+    "exitCode": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"File content conflict\"}]}\n",
+    "before": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "94241ef4d805f6cd8a5b02d0ec8653c532bc11e3714fe63f51040fc01946f132",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "after": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "94241ef4d805f6cd8a5b02d0ec8653c532bc11e3714fe63f51040fc01946f132",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "targetUnchanged": true,
+    "candidateUnchanged": true,
+    "externalLockPreserved": true,
+    "noResidualTemp": true
+  },
+  {
+    "case": "existing-create-target",
+    "command": [
+      "node",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/final-installed/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs",
+      "create",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/existing-create-target/candidate.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/existing-create-target/target.json",
+      "/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/existing-create-target/operation.json"
+    ],
+    "exitCode": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"EEXIST: file already exists, link '/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/existing-create-target/.alder-json-c31dfd4d-69c1-4199-b687-0444326e38d5' -> '/workspace/scratch/96ea68a3b906/phase-b-agent/output/failure-probes/existing-create-target/target.json'\"}]}\n",
+    "before": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "after": {
+      "files": {
+        "candidate.json": "cd32208f40fe13677ba41c40b8494a4cfb4c10b8d73489073ce7b80cbe5a3e46",
+        "operation.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+        "target.json": "741f88eb8ce891451c63c39d4e02b8800b094033314b466aee3a402c0895fc78"
+      },
+      "locks": [],
+      "temps": []
+    },
+    "targetUnchanged": true,
+    "candidateUnchanged": true,
+    "externalLockPreserved": true,
+    "noResidualTemp": true
+  }
+]

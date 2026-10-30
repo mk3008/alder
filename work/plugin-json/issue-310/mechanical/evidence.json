@@ -1,0 +1,84 @@
+{
+  "acceptedPhaseA": "85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8",
+  "pluginCandidate": "47a458cef88bc17c242da23f74d79789566e563a",
+  "node": "v24.22.1",
+  "python": "3.12.14",
+  "canonicalPreservation": [
+    {
+      "path": "tools/document_storage/core.mjs",
+      "sha256": "6c44b6045052001fcf7aec9fc4f0d9f7b654273bfa48b9dd3bcc015eb1eb13cf",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/schema.mjs",
+      "sha256": "5c4bd2b089960b7b247e50541e1f7883f5204ce35fd545f5ab05ee3ab3353bac",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/schema.json",
+      "sha256": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/structured.mjs",
+      "sha256": "c99643307947118041d78d354f886642c100ed8ff9726b717dd476b6ea53729d",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/authoring.mjs",
+      "sha256": "14224f763c362979083f3ab6175d9186b32e2d5b0c11ed00692596f02543d145",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/author-cli.mjs",
+      "sha256": "dda74876d5a8cf9f7a5101982c74444505cc7ff7698a3635b942a0861c7fdb2c",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/test-structured.mjs",
+      "sha256": "846481ba25d205af7abb1ff6b36e1d6c84049545af5f7c86f51bfc22095b41bf",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/d2-contract.check-items.json",
+      "sha256": "c3652dbe667e43ea5e573867d297e49959ee60ed4739ed8bf9eb72543d8d43fb",
+      "equalsAcceptedPhaseA": true
+    },
+    {
+      "path": "tools/document_storage/examples/d2-cases.json",
+      "sha256": "2dc69d02541be6e092c3cfa36cffd1b0392684dc92aaa7b0b016ed1972ca687c",
+      "equalsAcceptedPhaseA": true
+    }
+  ],
+  "commands": [
+    {
+      "command": "node --test tools/document_storage/test-native-json.mjs tools/document_storage/test-storage.mjs tools/document_storage/test-states.mjs tools/document_storage/test-roles.mjs tools/document_storage/test-authoring.mjs tools/document_storage/test-structured.mjs",
+      "result": "92 pass / 0 fail / 0 skipped",
+      "log": "node-92.log"
+    },
+    {
+      "command": "python3 -m unittest tools/test_json_plugin.py tools/test_export_plugin_references.py tools/test_fetch_plugin_sources.py",
+      "result": "22 tests OK",
+      "log": "installed-export-fetch-22.log"
+    },
+    {
+      "command": "python3 -m unittest tools/test_plugin_package.py tools/test_workflow_skills.py tools/test_plugin_release_workflow.py tools/test_plugin_references.py",
+      "result": "84 tests OK after fetching the two existing historical Check fixture commits, as the existing CI already does",
+      "log": "plugin-package-84.log"
+    },
+    {
+      "command": "python3 -m unittest discover -s tools/business_graph -p 'test_*.py'",
+      "result": "52 tests OK",
+      "log": "graph-52.log"
+    },
+    {
+      "command": "python3 tools/export_plugin_references.py --check --skill alder-manage-json-documents --skill alder-review-business-design",
+      "result": "33 files verified; strict source bytes, paths and provenance, no writes"
+    }
+  ],
+  "limits": [
+    "Unittest fixtures and synthetic confirmation records are not actual Agent behavior or real human approval.",
+    "Test groups overlap; their counts are not a combined unique-test total.",
+    "Ordinary Viewer 0.5 integration and live/account Plugin update are excluded."
+  ]
+}

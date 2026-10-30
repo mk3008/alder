@@ -1,0 +1,19 @@
+import json,pathlib,hashlib,subprocess,copy,shutil
+b=pathlib.Path('/workspace/scratch/96ea68a3b906/phase-b-agent');o=b/'output/update';p=b/'final-installed/plugins/alder';r=p/'skills/alder-manage-json-documents/scripts/document_storage';src=b/'output/create/business-design.json';target=o/'business-design.json'
+def sha(x):return hashlib.sha256(x.read_bytes()).hexdigest()
+createHashes={str(x):sha(x) for x in (b/'output/create').iterdir() if x.is_file()}
+shutil.copyfile(src,target);before=json.loads(target.read_text());log=[]
+def run(args):
+ q=subprocess.run(args,text=True,capture_output=True);v=dict(command=args,exitCode=q.returncode,stdout=q.stdout,stderr=q.stderr);log.append(v);(o/'operations.json').write_text(json.dumps(log,ensure_ascii=False,indent=2)+'\n');print(json.dumps(v,ensure_ascii=False));
+ if q.returncode:raise SystemExit(q.returncode)
+ return q
+run(['node',str(r/'author-cli.mjs'),'runtime']);run(['node',str(r/'cli.mjs'),'validate',str(target)]);old=json.loads(run(['node',str(r/'author-cli.mjs'),'inspect',str(target)]).stdout)
+x=copy.deepcopy(before);x['revision']='package-3';d=x['documents'][0];d['revision']='bd-3'
+role=next(z for z in d['roles'] if z['name']=='連絡担当');role['name']='案内担当'
+(o/'candidate.json').write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n');(o/'operation.json').write_text(json.dumps(dict(expectedSha256=old['sha256'],expectedRevision=old['revision']),indent=2)+'\n')
+run(['node',str(r/'cli.mjs'),'validate',str(o/'candidate.json')]);run(['node',str(r/'author-cli.mjs'),'commit',str(target),str(o/'candidate.json'),str(o/'operation.json')]);run(['node',str(r/'author-cli.mjs'),'inspect',str(target)]);run(['node',str(r/'cli.mjs'),'validate',str(target)])
+after=json.loads(target.read_text());normalized=copy.deepcopy(after);normalized['revision']=before['revision'];normalized['documents'][0]['revision']=before['documents'][0]['revision'];next(z for z in normalized['documents'][0]['roles'] if z['id']==role['id'])['name']='連絡担当'
+assert normalized==before
+preservation={'allOtherValuesIdentical':normalized==before,'roleID':role['id'],'roleColor':role['color'],'performersIdentical':before['documents'][0]['activities'][0]['performers']==after['documents'][0]['activities'][0]['performers'],'findingsIdentical':before['documents'][0]['findings']==after['documents'][0]['findings'],'createEvidenceAllFilesUnchanged':all(sha(pathlib.Path(f))==h for f,h in createHashes.items())}
+e={'input':{'path':str(b/'inputs/update.ja.md'),'sha256':sha(b/'inputs/update.ja.md')},'source':{'path':str(src),'sha256':sha(src)},'target':{'path':str(target),'sha256':sha(target),'revision':'package-3 / bd-3'},'versions':{'product':'0.4.9','finalCandidateSourceRevision':'47a458cef88bc17c242da23f74d79789566e563a','creationSnapshotSourceRevision':'f496c76dfd7504a3a031bcaaa506a1d0012cf860','authoringProvenance':'17a38e66841814de9182735bdb17671834270522','jsonReviewProvenance':'f2716613a1fb65236ac1c30ec1eab221ef576392'},'preservation':preservation,'selfReview':{'independent':False,'phase':'Distinct read-only saved-document review after authoring/commit, not a separate agent.','coverage':'Whole saved Business Design, original intake, update instruction, role identity/color/references, Findings, procedural ordering and fields. All business content other than requested Role name remains identical. No source-supported further repair.','reviewedSha256':sha(target),'humanAgreement':'Not given; rename instruction explicitly excludes agreement.','pending':'Notification-failure policy remains the same open Activity-targeted Finding; no repeated question.'},'commands':str(o/'operations.json'),'helper':str(o/'perform-update.py'),'createFilesBeforeAndAfter':createHashes,'externalWrites':False,'pluginChanges':False}
+(o/'evidence.json').write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'savedSha256':sha(target),'preservation':preservation},ensure_ascii=False))
