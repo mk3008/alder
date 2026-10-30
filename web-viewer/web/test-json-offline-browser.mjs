@@ -20,6 +20,7 @@ export async function verifyJSONOfflinePreview(browser){
   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
   await page.locator('[data-explorer-key="concept:overview"]').click();
   const frame=page.frameLocator('iframe[data-concept-view="overview"]');await frame.locator('[data-node="request"]').waitFor();
+  if(await page.locator('#drawer').getAttribute('aria-expanded')==='true')await page.locator('#drawer').click();
   await frame.locator('[data-concept-open="request"]').click();const detail=page.frameLocator('iframe[data-concept-view="request"]');
   await detail.locator('[data-node="request"]').waitFor();assert.equal(await detail.locator('[data-node="request"] [data-concept-open="request"]').count(),0);
   await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));await page.reload();
