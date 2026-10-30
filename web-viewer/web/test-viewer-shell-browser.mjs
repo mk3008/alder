@@ -3,6 +3,7 @@ import {mkdirSync} from 'node:fs';
 import {verifyGlobalRightDrawer} from './test-global-right-drawer-browser.mjs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
 import {verifyUnifiedConcept} from './test-unified-concept-browser.mjs';
+import {verifyRightDrawerUnification} from './test-right-drawer-unification-browser.mjs';
 
 // Current shell: one global explorer and one shared row for all document tabs.
 export async function verifyViewerShell(browser){
@@ -30,6 +31,7 @@ export async function verifyViewerShell(browser){
   await page.locator('#tabs .tab button:first-child').first().click();await page.locator('#node-list-toggle').click();const hierarchy=await page.locator('#design-explorer').evaluate(el=>{const parent=el.querySelector('.explorer-parent'),sub=el.querySelector('.explorer-subparent'),item=el.querySelector('.explorer-item-nested');return {parentSize:getComputedStyle(parent).fontSize,subSize:getComputedStyle(sub).fontSize,subPadding:parseFloat(getComputedStyle(sub).paddingLeft),itemPadding:parseFloat(getComputedStyle(item).paddingLeft)};});assert.equal(hierarchy.parentSize,hierarchy.subSize);assert.ok(hierarchy.itemPadding>hierarchy.subPadding,'child entries remain visibly nested');await page.screenshot({path:'web/evidence/shell/business-drawer-393-dark.png'});
   const globalDrawer=await verifyGlobalRightDrawer(page);
   const unifiedConcept=await verifyUnifiedConcept(browser);
-  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors,globalDrawer,unifiedConcept};
+  const rightDrawer=await verifyRightDrawerUnification(browser);
+  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors,globalDrawer,unifiedConcept,rightDrawer};
  }finally{await context.close();}
 }

@@ -5,6 +5,7 @@ import {graphMarkers,paintGraphException} from './graph-visuals';
 import {installViewerShell} from './viewer-shell';
 import {viewTabLabel,viewTabClose} from './view-tab';
 import {stateTransitionPanel} from './state-transitions';
+import './state-transitions.css';
 import {activityRole,roleGroupKey} from './roles';
 import {captionKey,isMatrixGraph,type MatrixPlan,type MatrixWire} from './matrix-layout.ts';
 import {matrixPlanForDesign} from './json-layout.ts';
@@ -228,8 +229,9 @@ function detail(){
   const focus=root.contains(document.activeElement)?(document.activeElement as HTMLElement)?.id:undefined;
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
-  const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,navigate:id=>{view!.mode='business';navigateNode(id);},confirm:candidate=>{void confirmChecks(t,candidate);}});
-  if(n)root.append(detailHeading(n.name));root.append(panel.controls,panel.content??businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,confirm:candidate=>{void confirmChecks(t,candidate);}});
+  const heading=document.createElement('div');heading.className='right-drawer-heading';heading.append(detailHeading(n?.name??'業務設計'));const close=document.createElement('button');close.type='button';close.id='business-drawer-close';close.setAttribute('aria-label','右ドロワーを閉じる');close.textContent='×';close.onclick=()=>{$('drawer').click();$('drawer').focus({preventScroll:true});};heading.append(close);
+  root.append(heading,panel.controls,panel.content??businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();

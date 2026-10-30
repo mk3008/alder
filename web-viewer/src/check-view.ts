@@ -1,21 +1,14 @@
 import {readRelatedChecks,checkCompatibility,confirmationKey,type RelatedChecks,type CheckDocument} from './check-items';
 import type {Tab} from './session';
-import {stateTransitionPanel} from './state-transitions';
-import './state-transitions.css';
+import {drawerTabs} from './drawer-tabs';
 import {renderChecks} from './document-view';
-export type CheckViewState={mode:'business'|'states'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
+export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
-export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean;navigate?:(id:string)=>void}):{controls:HTMLElement;content?:HTMLElement}{
+export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
   const notices=document.createElement('section');notices.className='check-notices';
-  const selected=tab.design.graph.nodes.find(n=>n.id===tab.selected),isObject=selected?.type==='object';
-  const stateDesign=tab.design,stateKey=selected?.id;
-  const declaration=stateKey?stateDesign.objectStateTransitions?.[stateKey]:undefined;
-  if(view.mode==='states'&&!declaration)view.mode='business';
-  const stateTab=(nav:HTMLElement)=>{if(!isObject)return;const b=button('状態遷移',()=>{view.mode='states';actions.redraw();});b.id='detail-mode-states';b.disabled=!declaration;b.setAttribute('aria-pressed',String(view.mode==='states'));nav.insertBefore(b,nav.children[1]??null);};
-  const stateContent=()=>stateKey?stateTransitionPanel(stateDesign,stateKey,id=>actions.navigate?.(id)):undefined;
   if(view.busy)paragraph(notices,'関連Checkを読み込み・保存しています…');
   if(view.error){const error=document.createElement('p');error.className='check-warning';error.setAttribute('role','alert');error.textContent=view.error;notices.append(error);}
   let doc:CheckDocument|undefined,usable=false;
@@ -33,9 +26,7 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidat
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);notices.append(panel);
   }
-  const nav=document.createElement('div');nav.className='check-modes';nav.setAttribute('role','group');nav.setAttribute('aria-label','右Drawerの表示');
-  for(const [mode,label] of [['business','業務内容'],['checks','チェック項目']] as const){const b=button(label,()=>{view.mode=mode;actions.redraw();});b.id='detail-mode-'+mode;b.setAttribute('aria-pressed',String(view.mode===mode));nav.append(b);}stateTab(nav);root.append(nav);
-  if(view.mode==='states')return {controls:root,content:stateContent()};
+  const nav=drawerTabs('右ドロワーの表示',(['business','checks'] as const).map(mode=>({id:'detail-mode-'+mode,label:mode==='business'?'業務内容':'チェック項目',selected:view.mode===mode,select:()=>{view.mode=mode;actions.redraw();}})));nav.classList.add('check-modes');root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=doc&&usable?renderChecks(tab.design,tab.selected,[doc.model]):!tab.checks?renderChecks(tab.design,tab.selected):document.createElement('section');
   content.classList.add('check-content');if(notices.childNodes.length)content.prepend(notices);
