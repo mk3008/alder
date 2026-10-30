@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "6cb80f294956e47e844d22e6b2103b11179579e6",
+  "alder_source_revision": "002f67d61beab54bea8fc3ac54d30a8d935ab34c",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "b1c9bd4566755741c6dcd1dcb0074dabac6b93d8cfaf2812c01f28fc5c525085",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -9,13 +9,13 @@
     "docs/business-design-correlation-check.ja.md": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
-    "docs/json-state-transitions.ja.md": "75d05a865746a981046b284e6341f91c163430aefdf9125de97825a2773cb821",
+    "docs/json-state-transitions.ja.md": "6b62a559f14bbb25de2c1b1b930f04c1c447358c2722db76b6c198394c1ae3e2",
     "docs/json-roles.ja.md": "f3f45ddcbc7ab326a4e9b60d026e67bfe9fc1ab62de9d4d7ea1e142aac8ecf4a",
     "docs/json-native-contract.ja.md": "745ec9824eb12675dfb7701c612271602e950eb04c4854c8eb8cfce22c9c21c7",
-    "docs/business-design-json-0.5.ja.md": "f7dfd0586e532a92499977b3e3f424e414ba5bb7cb3e69069dc2e961ccd8487a"
+    "docs/business-design-json-0.5.ja.md": "b2c84f099dff06bbc78b0c3dfcc7b9597667d3d099e9f539f09e5a66ac0d03c4"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "76c17014c953d20fbaa6d81dc833703fd6343e487362ca14643143be2fe226a1",
+    "tools/document_storage/core.mjs": "476a6e7f262a9b8f721fe090017e09cd67f18b153e0de07bd47ac38273f54797",
     "tools/document_storage/schema.mjs": "5c4bd2b089960b7b247e50541e1f7883f5204ce35fd545f5ab05ee3ab3353bac",
     "tools/document_storage/schema.json": "a19a5fb49319f7c481b9cac0e8c65df483ec469ea0e49c1cfa6f9c8f07450ee2",
     "tools/document_storage/edit.mjs": "dcb29113253f8d91ee37df35214fd3fea56a6f9518d0a1989e54f2cb6c913a7a",

@@ -13,6 +13,12 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
  const labels:Record<string,string>={'@new':'作成前','@none':'作成なし','@unknown':'未決'};
  const rows=model.transitions.map(row=>[row]),ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
+ // The 0.5 contract may contain distinct transitions with the same condition
+ // and endpoints. Give coincident routes separate ports without changing the
+ // business graph router or merging the underlying transition identities.
+ const coincident=new Map<string,number[]>(),ports=new Map<number,{from:number;to:number}>(),departurePorts=new Map<string,number>();
+ rows.forEach(([row],i)=>{const key=JSON.stringify([row.from,row.to,row.activity,row.condition.trim().replace(/\s+/gu,' '),row.path]);const group=coincident.get(key)??[];group.push(i);coincident.set(key,group);});
+ for(const group of coincident.values())if(group.length>1)group.forEach((index,i)=>{const fraction=i/(group.length-1),fromPort=.125+.65*fraction;ports.set(index,{from:fromPort,to:.2+.6*fraction});const from=rows[index][0].from;departurePorts.set(from,Math.max(departurePorts.get(from)??.125,fromPort));});
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
  // shared planner. They do not classify states as BD Activities or change Graph v1.
  // The declaration order is a display hint; it never adds or removes transitions.
@@ -44,13 +50,14 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
   const row=rs[0];
-  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:row.path==='exception'?'business-exception':'input',matrix:plan.wires[index],labelWidth:0,labelHeight:0,wires:wirePoints});
+  const separatePorts=ports.get(index);
+  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:row.path==='exception'?'business-exception':'input',matrix:plan.wires[index],...(separatePorts?{ports:separatePorts}:{}),labelWidth:0,labelHeight:0,wires:wirePoints});
   const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','marker-end':'url(#state-transition-arrow)','data-transitions':rs.map(r=>r.id).join(' ')});if(row.path==='exception'){path.classList.add('exception');path.setAttribute('stroke-dasharray','6 5');}
   const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);edgeElements.push(path);wirePoints.push(route.points);
   right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
  for(const group of captionGroups.values()){
-  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=captionTop(node.y+node.height,group.offset)+14;
+  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*(departurePorts.get(group.from)??.125)+8,y=captionTop(node.y+node.height,group.offset)+14;
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity,'data-transition-id':group.rows[0].id,'aria-label':group.lines.join('')});
   group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
   right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);

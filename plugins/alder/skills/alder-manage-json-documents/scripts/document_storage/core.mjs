@@ -65,8 +65,10 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    const actions=new Map();
    for(const r of d.transitions){
     if(r.fromId!=='@new')target(r.fromId,'state',d.id);if(!['@unknown','@none'].includes(r.toId))target(r.toId,'state',d.id);const a=target(r.activityId,'activity',bd.id);
-    const action=JSON.stringify([r.fromId,r.activityId,r.condition.trim().replace(/\s+/gu,' ')]);
-    demand(!actions.has(action),'Duplicate state transition condition: '+actions.get(action)+' / '+r.sourceId);actions.set(action,r.sourceId);
+    if(pkg.formatVersion!=='0.5'){
+     const action=JSON.stringify([r.fromId,r.activityId,r.condition.trim().replace(/\s+/gu,' ')]);
+     demand(!actions.has(action),'Duplicate state transition condition: '+actions.get(action)+' / '+r.sourceId);actions.set(action,r.sourceId);
+    }
     if(['0.4','0.5'].includes(pkg.formatVersion)){
      demand(r.path!=='normal'||r.exceptionId===null,'Normal transition cannot reference an exception');
      if(r.exceptionId!==null){const exception=target(r.exceptionId,'exception',bd.id);demand(exception.activityId===a.id,'Exception Activity mismatch');}

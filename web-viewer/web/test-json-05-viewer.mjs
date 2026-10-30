@@ -61,8 +61,8 @@ const externalDOM=new JSDOM('<body></body>',{runScripts:'outside-only'});externa
 try{const text=externalDOM.window.view.renderChecks(externalView,'c-guidance').textContent;assert.match(text,/別の原典BDを参照/);assert.doesNotMatch(text,/人間レビュー状態: 確認済み/);}finally{externalDOM.window.close();}
 const brokenExternal=structuredClone(external);brokenExternal.externalDocuments[0].revision='stale';assert.throws(()=>parseDocument(JSON.stringify(brokenExternal)),/Stale Check/);
 const oldExternal=JSON.parse(readFileSync('../work/viewer-json/issue-274/json-native/independent.json','utf8'));oldExternal.documents.push(structuredClone(check));oldExternal.sources=structuredClone(external.sources);oldExternal.externalDocuments=structuredClone(external.externalDocuments);validate(oldExternal);const oldExternalRaw=JSON.stringify(oldExternal),oldExternalView=parseDocument(oldExternalRaw);assert.equal(oldExternalView.markdown,oldExternalRaw);assert.equal(oldExternalView.model.checks[0].basedOn.documentId,'external-bd');
-// Current candidate follows #301's rule; the compatibility decision is open.
-const duplicate=structuredClone(seed),transitions=duplicate.documents.find(d=>d.kind==='stateTransition').transitions;transitions.push({...transitions[0],id:'duplicate-transition-probe',sourceId:'T99'});assert.throws(()=>parseDocument(JSON.stringify(duplicate)),/Duplicate state transition condition/);
+// Phase B's 0.5 contract allows distinct transitions with the same condition.
+const duplicate=structuredClone(seed),transitions=duplicate.documents.find(d=>d.kind==='stateTransition').transitions;transitions.push({...transitions[0],id:'duplicate-transition-probe',sourceId:'T99'});const duplicateView=parseDocument(JSON.stringify(duplicate));assert.deepEqual(duplicateView.model.states[0].transitions,transitions);
 // This early test covers parts of each requirement, not final acceptance.
 const partial=Object.fromEntries(ids.map(id=>[id,'partial']));
 const checkStage=(required,observed)=>{assert.deepEqual(Object.keys(observed),required);for(const id of required)assert.equal(observed[id],'partial');};
