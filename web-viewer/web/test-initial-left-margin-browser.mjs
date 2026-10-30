@@ -7,6 +7,7 @@ import {parseDesign} from '../src/graph.ts';
 import {runBrowserCases} from './browser-cases.mjs';
 import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
 import {svgViewportTransform,assertSvgMatrix,assertSvgLogicalExtent,preflightSvgViewportOracle,svgMatrixTolerance,svgScreenTolerance} from './test-svg-viewport-oracle.mjs';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 
 // Import and --preflight never launch Chromium or make network requests. The
 // browser runner supplies its own browser and serves the built product.
@@ -124,14 +125,16 @@ async function inspectEmpty(page){
  });
  const contains=(outer,inner)=>inner[0]>=outer[0]-.75&&inner[1]>=outer[1]-.75&&inner[2]<=outer[2]+.75&&inner[3]<=outer[3]+.75;
  assert.equal(frame.tabs,0);assert.equal(frame.visible,true);assert.ok(frame.size.every(n=>n>0));assert.equal(frame.hit,true,'sample link is actually hit-testable');
- assert.ok(contains(frame.viewport,frame.hint)&&contains(frame.viewport,frame.link)&&contains(frame.window,frame.link));assert.deepEqual(frame.scroll,[0,0]);assert.equal(frame.canvas,false);assert.equal(frame.toolbar,false);assert.deepEqual(frame.drawers,[false,false]);assert.deepEqual(frame.disabled,[true,true]);
+ assert.ok(contains(frame.viewport,frame.hint)&&contains(frame.viewport,frame.link)&&contains(frame.window,frame.link));assert.deepEqual(frame.scroll,[0,0]);assert.equal(frame.canvas,false);assert.equal(frame.toolbar,false);assert.deepEqual(frame.drawers,[false,false]);assert.deepEqual(frame.disabled,[true,false]);
  for(const axis of [0,1])assert.ok(frame.extent[axis]<=frame.client[axis]+1,'closed graph does not leave a scroll extent');return frame;
 }
 async function closeAndReopen(page,layout,world){
- assert.equal(await page.locator('.tab.active .close').isVisible(),false);
- await page.evaluate(()=>document.querySelector('.tab.active .close').click());await ready(page,1);
+ await closeCanvasOverlays(page);
+ assert.equal(await page.locator('.tab.active .close').isVisible(),true);
+ await page.locator('.tab.active .close').click();assert.equal(await page.locator('#empty-workspace').isVisible(),true);
+ if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="business:overview"]').click();await ready(page,1);
  await waitSavedViewer(page,layout);await page.reload();await ready(page,1);
- await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'permanent overview reload preserves every coordinate and route');return {hit:true,scroll:layout.scroll};
+ await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'reopened overview reload preserves every coordinate and route');return {hit:true,scroll:layout.scroll};
 }
 // Coordinates and path geometry are exact semantic data. Native glyph boxes
 // are measured layout results; compare only those in the existing CSS-pixel

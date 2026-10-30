@@ -4,6 +4,23 @@ import {join,relative,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+
+const require=createRequire(new URL('../web-viewer/package.json',import.meta.url));
+const {buildSync}=require('esbuild');
+export function inlineOfflineHTML(html,dist){
+ const scriptTags=[...html.matchAll(/<script\b(?=[^>]*\btype=["']module["'])[^>]*\bsrc=["']([^"']+)["'][^>]*><\/script>/g)];
+ if(scriptTags.length!==1)throw Error('Expected one module entrypoint');
+ const asset=path=>{if(!/^\.\/[A-Za-z0-9_./-]+$/.test(path)||path.split('/').includes('..'))throw Error('Unexpected build asset path');return join(dist,path.slice(2));};
+ const script=buildSync({entryPoints:[asset(scriptTags[0][1])],bundle:true,write:false,format:'esm',platform:'browser',target:'es2022',minify:true}).outputFiles[0].text;
+ if(/<\/script/i.test(script))throw Error('Unsafe inline script delimiter');
+ const styles=[];
+ let standalone=html.replace(scriptTags[0][0],()=>'<script type="module">'+script+'</script>');
+ standalone=standalone.replace(/<link\b(?=[^>]*\brel=["']modulepreload["'])[^>]*>/g,'');
+ standalone=standalone.replace(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/g,tag=>{const match=tag.match(/\bhref=["']([^"']+)["']/);if(!match)throw Error('Stylesheet has no href');const style=readFileSync(asset(match[1]),'utf8');if(/<\/style/i.test(style))throw Error('Unsafe inline style delimiter');styles.push(style);return '<style>'+style+'</style>';});
+ if(!styles.length)throw Error('Expected at least one stylesheet');
+ return {standalone,script,style:styles.join('\n')};
+}
 
 export function packageViewerPreview({dist,output,head,pr,fixture}){
  if(!/^[0-9a-f]{40}$/.test(head)||!/^\d+$/.test(String(pr)))throw Error('Pinned review head and PR required');
@@ -12,11 +29,7 @@ export function packageViewerPreview({dist,output,head,pr,fixture}){
  execFileSync('git',['diff','--quiet','HEAD','--','src','../tools/viewer-preview.mjs']);
  const sub=`preview/pr-${pr}/${head}`,web=join(output,sub),offline=join(output,'offline',sub);
  mkdirSync(web,{recursive:true});cpSync(dist,web,{recursive:true});mkdirSync(offline,{recursive:true});
- const html=readFileSync(join(dist,'index.html'),'utf8'),js=/src="\.\/([^\"]+\.js)"/.exec(html)?.[1],css=/href="\.\/([^\"]+\.css)"/.exec(html)?.[1];
- if(!js||!css)throw Error('Unexpected Vite entrypoints');
- const script=readFileSync(join(dist,js),'utf8'),style=readFileSync(join(dist,css),'utf8');
- if(/<\/script/i.test(script)||/<\/style/i.test(style))throw Error('Unsafe inline delimiter in build');
- const standalone=html.replace(/<script type="module"[^>]*src="[^\"]+"><\/script>/,()=>'<script type="module">'+script+'</script>').replace(/<link rel="stylesheet"[^>]*href="[^\"]+">/,()=>'<style>'+style+'</style>');
+ const html=readFileSync(join(dist,'index.html'),'utf8'),{standalone,script,style}=inlineOfflineHTML(html,dist);
  writeFileSync(join(offline,'index.html'),standalone);cpSync(fixture,join(output,'gate-b-example.json'));
  const files=readdirSync(output,{recursive:true}).filter(f=>/\.(?:html|js|css|txt|json)$/.test(f)&&!['manifest.json','README.txt'].includes(f));
  const manifest={source:head,checkout,tree,sourceTree,urlPath:`/${sub}/`,offlinePath:`offline/${sub}/index.html`,scriptSha256:createHash('sha256').update(script).digest('hex'),styleSha256:createHash('sha256').update(style).digest('hex'),files:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(join(output,f))).digest('hex')]))};

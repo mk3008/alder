@@ -1,0 +1,46 @@
+{
+  "format": "viewer-verification-evidence/1",
+  "authority": "verification/ci-reconciliation.check-items.json",
+  "changes": [
+    {
+      "checkId": "CI-RECONCILE-001",
+      "previous": "旧項目一覧の Activity / Object 切替と行から対象を選択する。",
+      "replacement": "現在のグラフ上のカード選択と、エクスプローラーからの個別ページ表示を使う。指摘はカードのバッジから開く。",
+      "reason": "旧一覧はページ単位のエクスプローラーに置き換えられた。",
+      "browserCases": ["activityWorkspace", "relatedChecks", "jsonDocuments", "jsonBoundaries", "findings"],
+      "evidence": ["web/graph-selection-browser.mjs", "web/test-viewer-shell.mjs", "web/test-findings-browser.mjs"]
+    },
+    {
+      "checkId": "CI-RECONCILE-004",
+      "previous": "Object の右ドロワー内で状態遷移タブを開く。",
+      "replacement": "エクスプローラーから状態遷移ページを開き、MD / JSON の図、操作先、再読込と参照エラーを検証する。",
+      "reason": "状態遷移は独立したページとタブになった。",
+      "browserCases": ["jsonStates"],
+      "evidence": ["web/test-json-states-browser.mjs"]
+    },
+    {
+      "checkId": "CI-RECONCILE-001",
+      "previous": "旧一覧のロール別グループを開閉して色と名前を確認する。",
+      "replacement": "グラフのロールバッジについて、安定 ID・色・名前、変更と並べ替え、再読込、不正値からの保護を確認する。",
+      "reason": "旧一覧のロールグループは廃止された。",
+      "browserCases": ["jsonRoles"],
+      "evidence": ["web/test-json-roles-browser.mjs"]
+    },
+    {
+      "checkId": "CI-RECONCILE-001",
+      "previous": "旧一覧の個別の目隠しでカードの選択を解除する。",
+      "replacement": "カード選択の切替と結線の強調を検証し、スコープ全体の切替と保存済みの部分表示の互換性を別途検証する。",
+      "reason": "個別の目隠しは本人の指示で廃止された。",
+      "browserCases": ["labelLayout", "scopeShortcut", "scopeGeometry:fixed-drawer", "scopeGeometry:drawer-only", "scopeGeometry:combined"],
+      "evidence": ["web/test-wiring-browser.mjs", "web/test-scope-shortcut-browser.mjs", "web/diagnose-scope-geometry.mjs"]
+    },
+    {
+      "checkId": "CI-RECONCILE-003",
+      "previous": "狭い画面でも開いたドロワーの背後にあるキャンバスやタブを操作する。",
+      "replacement": "ドロワーを閉じて実際にカードやタブがヒットすることを確認し、ドラッグ・拡大縮小・座標と復元を検証する。",
+      "reason": "狭い画面のエクスプローラーはキャンバスに重なる。",
+      "browserCases": ["touchZoom", "nodeEdgeDrag", "initialLeftMargin", "headerControls"],
+      "evidence": ["web/toolbar-settings-control.mjs", "web/test-touch-browser.mjs", "web/test-node-edge-drag-browser.mjs", "web/test-initial-left-margin-browser.mjs", "web/test-header-controls-browser.mjs"]
+    }
+  ]
+}

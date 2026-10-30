@@ -1,5 +1,12 @@
 import assert from 'node:assert/strict';
 
+// On narrow screens the user must dismiss overlay drawers before using the canvas.
+export async function closeCanvasOverlays(page){
+ if(await page.evaluate(()=>innerWidth>800))return;
+ if(await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();
+ if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+}
+
 // Always use the accessible control. In particular, never force a hidden
 // checkbox click or invoke a browser DOM click to bypass pointer hit testing.
 export async function setDisplaySettings(page,open){

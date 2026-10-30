@@ -6,7 +6,7 @@ import {matrixPlanForDesign} from '../src/json-layout.ts';
 import {RouteCache} from '../src/route-cache.ts';
 export function layoutGeometry(design,activity){
  const d=activityDesign(design,activity),t=reconcile({key:'layout',name:'layout',design:d,positions:{},scroll:[0,0],zoom:1,activity},d);
- const plan=matrixPlanForDesign(d,activity),names=new Map(d.graph.nodes.map(n=>[n.id,n.name]));
+ const plan=matrixPlanForDesign(d),names=new Map(d.graph.nodes.map(n=>[n.id,n.name]));
  const boxes=d.graph.nodes.map(n=>({id:n.id,x:t.positions[n.id][0],y:t.positions[n.id][1],width:260,height:68}));
  const routes=new RouteCache().update(t,d,boxes,d.graph.relations,plan.wires);
  const nodes=boxes.map(n=>[names.get(n.id),n.x,n.y,n.width,n.height]).sort();

@@ -1,0 +1,21 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#全体像の概要とグラフ",
+  "scope": "新しい名称/導線/表示モード要求。旧初期構造図の条件のみ置換し、描画B/カレント/選択/状態保持は不変。",
+  "checks": [
+    {
+      "id": "LANDSCAPE-TABS-001",
+      "condition": "データ構造全体像を開く。",
+      "guarantee": "名称をデータ構造全体像へ統一し、見出し/説明の下に概要とグラフを同列配置する。二つのモードは同じ全体像のタブ枠で切り替え、概要が初期表示。既存全データグラフは同じiframe/描画器でグラフから表示し、同名タブを重複しない。",
+      "reason": "人間向け概要を入口にし、設計者向けグラフは明示的に切り替えて確認するため。",
+      "verification": "web/test-concept-review.mjs / web/test-viewer-shell.mjs / public Chrome"
+    },
+    {
+      "id": "LANDSCAPE-TABS-002",
+      "condition": "各まとまりのリンクとURL/履歴/再読込/モード切替を操作する。",
+      "guarantee": "全体像カードは各データ構造の概要を開く。個別の新規表示も概要を既定とし、明示した構造図URLとサンプルURLを保持する。Back/Forward/再読込で現在モードを復元し、iframe/カメラ/選択/drawerを保持する。グラフ構造の説明文や参考関連図への誘導文を概要へ出さない。",
+      "reason": "依頼者をモデル構造の読み解きへ誘導せず、業務上の説明へ案内するため。",
+      "verification": "web/test-concept-review.mjs / web/test-data-examples.mjs / public Chrome"
+    }
+  ]
+}

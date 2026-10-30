@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#購入対象の所属表示",
+  "scope": "引渡し分類の構造要件ビューと場面別データ例。物理保存設計を指定しない。",
+  "checks": [
+    {
+      "id": "PURCHASE-TARGET-PREPARATION-001",
+      "condition": "購入対象の確定・引渡しの構造図、複数申請の例と再出力の例を表示する。",
+      "guarantee": "購入対象（申請単位）に準備番号を明示する。データ表の各申請行に、購入準備表の準備番号と一致する値を表示し、再出力でも保持する。他分類の表や既存の対象版・承認対応を変更しない。",
+      "reason": "購入対象がどの購入準備に属するか、線の接続や表示順から推測せず確認できるようにするため。",
+      "verification": "web/test-data-examples.mjs"
+    }
+  ]
+}

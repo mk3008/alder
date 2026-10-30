@@ -1,0 +1,54 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394157135",
+  "scope": "新規UI要求。既存Bで固定した描画契約・navigation Check Itemは変更しない。",
+  "checks": [
+    {
+      "id": "VIEW-TAB-001",
+      "condition": "業務・状態遷移・概念のタブを表示する。",
+      "guarantee": "種別の可視表示はLucideアイコンだけとし、対象名を保持する。種別と対象の正式名はaria-labelとtitleから確認できる。閉じる操作と選択表示・既存の種別色は保持する。",
+      "reason": "英語化時に共通の種別接頭詞が横幅を消費し、対象の識別を妨げないようにする。",
+      "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-DRAWER-001",
+      "condition": "概念図のシェイプを選択する。",
+      "guarantee": "右ドロワーの現在の開閉状態を保持する。閉じていれば閉じたまま、開いていれば開いたまま選択対象の情報を更新する。閉じた後の選択でも再び開かない。タブごとの既存開閉状態を保持し、手動の開閉は利用可能とする。",
+      "reason": "選択とドロワー開閉を独立させ、業務フローの選択時の挙動と同一にする。",
+      "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-TAB-002",
+      "condition": "Visual Studio風の採用した色分けで業務・状態遷移・概念のタブを表示する。light/darkの両テーマを対象とする。",
+      "guarantee": "種別の既存色（業務=青・状態=緑・概念=紫）をタブ背景と上端帯に用いる。選択中は全種別共通の青い下線と文字強調で示す。アイコン、対象名、閉じるボタンと既存の高さ/最大幅を保持する。",
+      "reason": "長い種別名を表示せず、色によるグループ識別と選択状態を両立させる。配色は2026-10-25の本人レビューで採用済み。",
+      "verification": "公開Previewのlight/dark実画面とcomputed styleの確認",
+      "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394231081",
+      "adoption": "https://github.com/mk3008/root/issues/133#issuecomment-6394343569"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-001",
+      "condition": "概念モデルと右ドロワーを表示する。",
+      "guarantee": "上部の試作案内と末尾の草案・規約未確定の説明を表示しない。概念そのものの説明・情報は保持する。",
+      "reason": "betaであることを理解済みの本人が完成見本をレビューする際のノイズを除く。",
+      "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394343569",
+      "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-002",
+      "condition": "全体図または個別図で概念カードを選択し、右ドロワーを表示する。",
+      "guarantee": "見出しは選択中のカード名とする。個別図のカレント対象ではなく選択を参照し、選択変更に追随する。本文の同名見出しは重複させない。ドロワー開閉状態は変更しない。",
+      "reason": "選択した情報の対象を見出しで識別する。",
+      "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394343569",
+      "verification": "web/test-viewer-shell.mjs"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-003",
+      "condition": "右ドロワーに「作成する業務」のリンクを表示する。",
+      "guarantee": "文字矢印に代えてLucideの別タブで開くアイコンを表示し、リンク先の業務タブをViewer内で開く。アクセシブル名にも開く対象を含める。",
+      "reason": "操作の意味を概念カードの別タブ操作と同じ表現で伝える。",
+      "requirement": "https://github.com/mk3008/root/issues/133#issuecomment-6394343569",
+      "verification": "web/test-viewer-shell.mjs"
+    }
+  ]
+}

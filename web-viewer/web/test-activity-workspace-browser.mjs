@@ -1,3 +1,5 @@
+import {positionGraphNode,selectGraphNode} from './graph-selection-browser.mjs';
+import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -10,14 +12,14 @@ export async function verifyActivityWorkspace(browser){
   const context=await browser.newContext({viewport:{width,height:900},hasTouch:width!==1280}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(5000);
   const saved=()=>page.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
   const ids=()=>page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node).sort());
-  const scope=async()=>{if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('#scope-outside').click();await page.locator('#node-list-close').click();};
+  const scope=async()=>setScope(page,await page.locator('#show-outside').isChecked()?'hide':'show');
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-   await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);
+   await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);
    assert.deepEqual(await ids(),activityDesign(design).graph.nodes.map(n=>n.id).sort());
    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    // Body selection/drag matches Objects; only the right-hand icon navigates.
-   await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+   await positionGraphNode(page,'業務設計');
    const body=page.locator('.node[data-activity="業務設計"]'),position=()=>body.evaluate(n=>[parseFloat(n.style.left),parseFloat(n.style.top)]),locked=await position();
    assert.equal(await page.locator('.node-drag-handle').count(),0);assert.equal(await body.locator('.activity-open').getAttribute('aria-label'),'業務設計の詳細タブを開く');
    if(width===1280)await body.click({position:{x:60,y:30}});else await body.tap({position:{x:60,y:30}});
@@ -26,7 +28,7 @@ export async function verifyActivityWorkspace(browser){
    // ArrowRight can animate native viewport scrolling. Observe its completion,
    // then use the normal list to center the card outside every edge-pan band.
    await page.waitForFunction(()=>{const v=document.querySelector('#viewport'),key=v.scrollLeft+','+v.scrollTop,now=performance.now(),p=globalThis.__activityCamera;if(!p||p.key!==key){globalThis.__activityCamera={key,time:now};return false;}return now-p.time>=200;});
-   await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+   await positionGraphNode(page,'業務設計');
    await page.locator('#layout-lock').click();
    const rectangle=await body.boundingBox(),start=[rectangle.x+130,rectangle.y+34],beforeDrag=await position();
    const viewportBox=await page.locator('#viewport').boundingBox();assert.ok(start[0]-30>viewportBox.x+48&&start[0]<viewportBox.x+viewportBox.width-48,'ordinary body drag stays outside horizontal edge-pan bands');
@@ -40,7 +42,7 @@ export async function verifyActivityWorkspace(browser){
    await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('.tab').count(),1);
    await scope();const hidden=await ids();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await ids(),hidden,'scope visibility survives aggregate restore');await scope();assert.ok((await ids()).includes('画面設計'));
    await ensureDocumentActions(page);await page.locator('#open-checks').click();await page.locator('#check-open-sample').click();await saved();
-   await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await page.locator('#node-list-toggle').click();await page.locator('[data-list-node="業務設計"] .node-navigate').click();if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('[data-check-id="SAMPLE-01"]').waitFor();
+   await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await selectGraphNode(page,'業務設計');if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('[data-check-id="SAMPLE-01"]').waitFor();
    await saved();const record=await page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result);};};r.onerror=()=>reject(r.error);}));assert.equal(record.format,3);assert.equal(record.document.design.markdown,source);assert.ok(record.document.checks);assert.ok(record.views.every(v=>!('design' in v)&&!('draft' in v)&&!('checks' in v)));
    if(width===1280){
     // Close the initiating view while a real intercepted Check request waits.

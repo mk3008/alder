@@ -20,7 +20,6 @@ export function normalizeDocument(source:string):NormalizedDocument{
   if(['0.1','0.2'].includes(pkg.formatVersion)){
    const bd=normalized.data.business as typeof normalized.data.business & {schemaVersion:string};
    bd.schemaVersion='0.1';delete bd.roles;for(const activity of bd.activities)delete activity.roleId;
-   normalized.data.diagnostics=normalized.data.diagnostics.filter(d=>!d.startsWith('Role未確定:'));
   }
   return normalized;
  }

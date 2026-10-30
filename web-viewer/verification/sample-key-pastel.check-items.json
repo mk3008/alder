@@ -1,0 +1,25 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#データ例のキー色候補aを採用2026-10-28",
+  "scope": "購買V2βの場面別データ例における識別キーの色。",
+  "supersedes": ["SAMPLE-KEY-MUTED-001の、候補Aに反する以前の彩度・明度の強さの条件のみ。文字の可読性、色の用途、SAMPLE-KEY-MUTED-002は維持する。"],
+  "palette": ["#fed9a6", "#b3cde3", "#ccebc5", "#decbe4", "#fbb4ae"],
+  "checks": [
+    {
+      "id": "SAMPLE-KEY-PASTEL-001",
+      "condition": "ライトテーマでデータ例の識別キーを表示する。",
+      "guarantee": "場面内の新しい識別キーに、本人が選んだ候補Aの5色を上記の順で割り当てる。色は表間のキーの対応を示し、状態・業務ロールの意味を持たない。5色を超える場合の既存の追加色割り当ては保持する。",
+      "reason": "本人が比較画像を確認して選んだColorBrewer Pastel1の配色を忠実に反映するため。",
+      "source": "2026-10-28 本人の『Aにしましょう』。https://github.com/mk3008/root/issues/133 および https://github.com/axismaps/colorbrewer/blob/master/colorbrewer_schemes.js",
+      "verification": "選択された順序と5色の実CSS、P-001・R-101・R-102の表間対応を照合し、公開Viewerを目視する。"
+    },
+    {
+      "id": "SAMPLE-KEY-PASTEL-002",
+      "condition": "ライトとダークでデータ例を表示し、場面を切り替える。",
+      "guarantee": "ダークは5色と対応する色相で読みやすくし、両テーマで文字と背景のコントラストを4.5:1以上とする。同じ場面の同じキーは表をまたいで同色、別キーは別色とする。キー以外のセル・サンプル内容・ロール色・場面選択・URL・履歴は変更しない。",
+      "reason": "場面内のつながりを追いやすくし、既存の表示と操作を保つため。",
+      "source": "SAMPLE-KEY-MUTED-001/002、2026-10-28 本人の候補A選択。https://github.com/mk3008/root/issues/133",
+      "verification": "全12場面の描画DOM・文字コントラストと既存操作を照合し、公開Viewerの両テーマを目視する。"
+    }
+  ]
+}

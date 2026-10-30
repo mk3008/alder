@@ -1,0 +1,41 @@
+{
+  "expectedSha256": "eeeae52e79f416818e9f27810764ab8ba37b0cd568b21dbce6ce31b8953ecdd2",
+  "expectedRevision": "purchase-v2-beta-5",
+  "removedTransitions": [
+    {
+      "id": "71fa45f7-2a3c-4048-8117-56e8bd940c06",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "220fdc27-7d9a-45da-b7de-02faa8b678eb",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "7a8337dc-ccf8-4c2d-8278-f7a9b4e263fd",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "0e0cf578-4d0e-4344-a72d-45a687b32e34",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "bd0aeb67-4cf2-49dc-b74f-d7ff756b958f",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "373cd40f-3617-46dc-8f9e-a1c0af3e5456",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    },
+    {
+      "id": "458da3a4-969d-4b83-b567-c66802886cda",
+      "reason": "下書き保存が無条件に可能という要件だけから、既存申請への同値戻りを推定したため。保存後に元の申請が変わらない扱いは別途、未合意の仮説として保持する。",
+      "source": "https://github.com/mk3008/root/issues/133"
+    }
+  ]
+}

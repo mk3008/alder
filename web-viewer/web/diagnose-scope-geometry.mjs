@@ -1,5 +1,6 @@
 import {useUngroupedSample} from './legacy-sample-browser.mjs';
 import {openDisplaySettings} from './toolbar-settings-control.mjs';
+import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
@@ -8,7 +9,7 @@ import {hiddenReadIndexes} from '../src/edge-visibility.ts';
 import {readSessionInPage,waitSavedViewer} from './wait-saved-viewer.mjs';
 export async function recordScopeGeometry(page,label,design){
  const saved=await page.evaluate(readSessionInPage),tab=saved?.tabs?.find(t=>t.key===saved.active);
- const dom=await page.evaluate(()=>{const v=document.querySelector('#viewport'),c=document.querySelector('#canvas'),n=document.querySelector('#nodes'),r=v.getBoundingClientRect(),zoom=Number(n.style.transform.match(/scale\(([^)]+)\)/)?.[1]??1),inset=[parseFloat(n.style.left||'0')/zoom,parseFloat(n.style.top||'0')/zoom];const nodes=[...document.querySelectorAll('.node')].map(n=>{const b=n.getBoundingClientRect();return {id:n.dataset.node,position:[parseFloat(n.style.left),parseFloat(n.style.top)],screen:[b.x,b.y,b.width,b.height],relative:[b.x-r.x-v.clientLeft,b.y-r.y-v.clientTop]};});return {client:[v.clientWidth,v.clientHeight],scroll:[v.scrollLeft,v.scrollTop],scrollExtent:[v.scrollWidth,v.scrollHeight],canvas:[parseFloat(c.style.width),parseFloat(c.style.height)],viewport:[r.x,r.y,r.width,r.height],zoom,inset,worldVisible:[v.scrollLeft/zoom-inset[0],v.scrollTop/zoom-inset[1],(v.scrollLeft+v.clientWidth)/zoom-inset[0],(v.scrollTop+v.clientHeight)/zoom-inset[1]],drawerOpen:!document.querySelector('#node-list-drawer').hidden,scope:document.querySelector('#scope-outside').getAttribute('aria-pressed'),preferWrite:document.querySelector('#prefer-write').checked,nodes};});
+ const dom=await page.evaluate(()=>{const v=document.querySelector('#viewport'),c=document.querySelector('#canvas'),n=document.querySelector('#nodes'),r=v.getBoundingClientRect(),zoom=Number(n.style.transform.match(/scale\(([^)]+)\)/)?.[1]??1),inset=[parseFloat(n.style.left||'0')/zoom,parseFloat(n.style.top||'0')/zoom];const nodes=[...document.querySelectorAll('.node')].map(n=>{const b=n.getBoundingClientRect();return {id:n.dataset.node,position:[parseFloat(n.style.left),parseFloat(n.style.top)],screen:[b.x,b.y,b.width,b.height],relative:[b.x-r.x-v.clientLeft,b.y-r.y-v.clientTop]};});return {client:[v.clientWidth,v.clientHeight],scroll:[v.scrollLeft,v.scrollTop],scrollExtent:[v.scrollWidth,v.scrollHeight],canvas:[parseFloat(c.style.width),parseFloat(c.style.height)],viewport:[r.x,r.y,r.width,r.height],zoom,inset,worldVisible:[v.scrollLeft/zoom-inset[0],v.scrollTop/zoom-inset[1],(v.scrollLeft+v.clientWidth)/zoom-inset[0],(v.scrollTop+v.clientHeight)/zoom-inset[1]],drawerOpen:!document.querySelector('#design-explorer').hidden,scope:document.querySelector('#scope-outside').getAttribute('aria-pressed'),preferWrite:document.querySelector('#prefer-write').checked,nodes};});
  assert.ok(tab&&Object.keys(tab.positions).length===design.graph.nodes.length,'diagnostic has all saved node positions');
  const positions=tab.positions,boxes=design.graph.nodes.map(n=>({id:n.id,x:positions[n.id][0],y:positions[n.id][1],width:260,height:68})),hiddenReads=hiddenReadIndexes(design.graph.relations,dom.preferWrite);let edgeRight=0,edgeBottom=0;const routeBounds=[];
  for(const [index,r] of design.graph.relations.entries()){if(hiddenReads.has(index))continue;const labelWidth=Math.max(30,r.label.length*12),route=routeEdge({from:r.from,to:r.to,index,nodes:boxes,labelWidth,labelHeight:18});edgeRight=Math.max(edgeRight,route.bounds.right+20,route.label[0]+labelWidth/2+12);edgeBottom=Math.max(edgeBottom,route.bounds.bottom+20,route.label[1]+22);routeBounds.push(route.bounds);}
@@ -22,15 +23,15 @@ export async function diagnoseScopeGeometry(browser,mode){
   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();await useUngroupedSample(page);await page.locator('#drawer').click();await openDisplaySettings(page);await page.locator('#prefer-write').check();await page.locator('#out').click();const positions=await page.locator('.node').evaluateAll(ns=>Object.fromEntries(ns.map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])));
   await page.locator('#viewport').evaluate(v=>{v.scrollLeft=v.scrollWidth-v.clientWidth;v.scrollTop=v.scrollHeight-v.clientHeight;});const initialScroll=await page.locator('#viewport').evaluate(v=>[v.scrollLeft,v.scrollTop]);await waitSavedViewer(page,{positions,hiddenNodes:[],scroll:initialScroll,zoom:1/1.2,preferWrite:true});
   const record=async label=>{const r=await recordScopeGeometry(page,mode+':'+label,design);records.push(r);return r;};
-  if(mode==='fixed-drawer')await page.locator('#node-list-toggle').click();
+  const setExplorer=async open=>{if(await page.locator('#design-explorer').isVisible()!==open)await page.locator('#node-list-toggle').click();};await setExplorer(mode==='fixed-drawer');
   const before=await record('before');
-  if(mode==='drawer-only'){await page.locator('#node-list-toggle').click();await record('open');await page.locator('#node-list-close').click();await record('closed');}
+  if(mode==='drawer-only'){await setExplorer(true);await record('open');await setExplorer(false);await record('closed');}
   else{
-   if(mode==='combined'){await page.locator('#node-list-toggle').click();await record('open');}
-   await page.locator('#scope-outside').click();await record('hidden-immediate');await waitSavedViewer(page,{positions,hiddenNodes:design.graph.nodes.filter(n=>!n.scope).map(n=>n.id),zoom:1/1.2,preferWrite:true});await record('hidden-committed');
-   if(mode==='combined'){await page.locator('#node-list-close').click();await record('hidden-closed');await page.locator('#node-list-toggle').click();}
-   await page.locator('#scope-outside').click();await waitSavedViewer(page,{positions,hiddenNodes:[],zoom:1/1.2,preferWrite:true});await record('shown');
-   if(mode==='combined'){await page.locator('#node-list-close').click();await record('shown-closed');}
+   if(mode==='combined'){await setExplorer(true);await record('open');}
+   await setScope(page,'hide');await record('hidden-immediate');await waitSavedViewer(page,{positions,hiddenNodes:design.graph.nodes.filter(n=>!n.scope).map(n=>n.id),zoom:1/1.2,preferWrite:true});await record('hidden-committed');
+   if(mode==='combined'){await setExplorer(false);await record('hidden-closed');await setExplorer(true);}
+   await setScope(page,'show');await waitSavedViewer(page,{positions,hiddenNodes:[],zoom:1/1.2,preferWrite:true});await record('shown');
+   if(mode==='combined'){await setExplorer(false);await record('shown-closed');}
   }
   // Do not relax the existing Scope case's strict canvas equality assertion.
   // These separate diagnostics establish content/position facts and report
