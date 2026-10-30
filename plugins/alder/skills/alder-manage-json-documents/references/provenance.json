@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "bbd2b060e077fef6692e1e753c4493d29fe5a4fa",
+  "alder_source_revision": "12975cfdede74d7655a87b9a0fd18caec9dfafc7",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "a2deaaf532a4928615356a2456d2be6db9ac6e37996f6c705e83fe37a5463da2",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -11,17 +11,17 @@
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "50316bb6135cec1d50378a6b49256d4a935bdcc5000a173952bdc9b1bcdaf9a3"
+    "docs/json-native-contract.ja.md": "997142ddba009e105d10c8ae4432bc31cc94c9bf9565f0440f734d67b46c542b"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "b4658908de1607ff5ea8ab45b1e04ff655d501d7333cf9b49119abdd1c9f0e5a",
-    "tools/document_storage/schema.mjs": "a84e1cb551d7e664d8a741e2862d04b4a0fc60f231b5159e5bcdbdd6333fc652",
-    "tools/document_storage/schema.json": "a32b5c5faf91ffdcc50cb539548bb1ba0fa098b74b19e9e7eb9efb15a35fa5a3",
+    "tools/document_storage/core.mjs": "7f989770e4f040bbb64daf12ffa5919522fc36da9d9cd63d03685082118a2d92",
+    "tools/document_storage/schema.mjs": "cd9e767f3f86f9bf57148070c225e0f95322f43d1b6a3a26cda7ea5958236656",
+    "tools/document_storage/schema.json": "ce186066dc2f142520c2a02f1db7480dcdb40bcb37998fd5ac65482657cb9a91",
     "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
     "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "f83da2c4411e8df0ae750c2797e2f6c14c16f92f5ca2b42ca2a5e71f0fa5bf7f",
+    "tools/document_storage/authoring.mjs": "4dccf0c9ba40d1cac2cc8bc7e98c7f62b9e78608d422448ce2ea858c74f980a5",
     "tools/document_storage/author-cli.mjs": "ccde8b2a8844964d68c40c4ab0dc1314d1f02d276a1712918e05a96b6cdc13f5",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
