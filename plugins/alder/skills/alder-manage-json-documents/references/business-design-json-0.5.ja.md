@@ -1,8 +1,8 @@
 # 業務設計JSON 0.5
 
-未リリースの契約実装候補です。配布Pluginと通常Viewerの対応形式は0.4までです。このソース版のPlugin Skill・同梱Node runtimeは0.5に対応します。配布版の更新と通常Viewerへの対応は別途必要です。
+未リリースの契約実装候補です。配布Pluginと通常Viewerの対応形式は0.4までです。このソース版のPlugin Skill・同梱Node runtimeは0.5に対応し、通常Viewerへの対応はレビュー中です。配布版の更新は別途必要です。
 
-packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`です。Checkは`0.1`、状態遷移は`0.2`を維持します。これらは文書の`revision`やPlugin製品バージョンとは異なります。Schemaは[JSON](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.json)と[生成元](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.mjs)、参照検査は[core.mjs](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/core.mjs)が正本です。
+packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`です。Checkは`0.1`、状態遷移は`0.2`を維持します。これらは文書の`revision`やPlugin製品バージョンとは異なります。Schemaは[JSON](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.json)と[生成元](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.mjs)、参照検査は[core.mjs](https://github.com/mk3008/alder/blob/9b2941209db8071e994702493f93a0b0d9604627/tools/document_storage/core.mjs)が正本です。
 
 ## 構造と所有者
 
@@ -80,6 +80,6 @@ Resultは`{id,text}`です。正常系の条件は「倒れたものがあれば
 
 0.4の読込み・検証・保存は0.4のままです。旧JSON 0.1〜0.3の入力adapterと、旧Markdownから0.4への明示convertを維持します。読込みから0.5へ自動移行しません。既存文書や凍結研究原本を書き換えません。
 
-通常Viewerの入力契約と表示実装はここでは変更していません。Graph v1は0.5の主体・手順・複数結果等を表せないため、0.5からの旧Graph出力は拒否します。情報を捨てた旧形への自動投影は行いません。通常Viewer対応とその本人操作レビューは別途必要です。
+通常Viewerへの0.5対応はレビュー中です。Graph v1は0.5の主体・手順・複数結果等を表せないため、0.5からの旧Graph出力は拒否します。情報を捨てた旧形への自動投影は行いません。通常Viewerの本人操作レビューは別途必要です。
 
 Schema/Validatorが保証するのは型、多重度、ID、参照、所有者、明示制約の整合性です。実際の担当・順序・結果・情報項目が業務に合うか、Whenの待ち合わせ条件が十分かは、AIの意味レビューと依頼者の判断に残ります。機械validは合意や推論品質の保証ではありません。
