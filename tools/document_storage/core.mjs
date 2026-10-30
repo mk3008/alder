@@ -73,6 +73,39 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     demand(r.effect!=='no-create'||(r.fromId==='@new'&&r.toId==='@none'),'Invalid no-create transition');
     demand(r.effect!=='constraint'||r.toId==='@unknown','Constraint must remain undecided');
    }diagnostics.push('状態遷移は部分定義・業務意味未確認: '+d.id);
+  }else if(d.kind==='conceptModel'){
+   const bd=target(d.basedOn.documentId,'document');
+   demand(bd.kind==='businessDesign'&&bd.revision===d.basedOn.revision,'Concept source must be the matching in-package BD revision');
+   demand(!pkg.documents.some(x=>x!==d&&x.kind==='conceptModel'&&x.basedOn.documentId===bd.id),'Duplicate Concept model for Business Design');
+   const unique=(items,label)=>{const map=new Map();for(const item of items){demand(!map.has(item.id),'Duplicate '+label+' ID: '+item.id);map.set(item.id,item);}return map;};
+   const subsystems=unique(d.subsystems,'subsystem'),concepts=unique(d.concepts,'concept'),relations=unique(d.relations,'concept relation'),groups=unique(d.reviewGroups,'review group');
+   unique(d.handoffs,'handoff');const information=unique(d.concepts.flatMap(c=>c.information),'concept information');
+   const has=(items,id,label)=>{demand(items.has(id),'Unknown '+label+': '+id);return items.get(id);};
+   const activity=id=>target(id,'activity',bd.id);
+   const sourceRef=ref=>{const doc=target(ref.documentId,'document');demand(doc.revision===ref.revision,'Stale Concept source revision');
+    const inBusiness=doc.id===bd.id,declaredState=doc.kind==='stateTransition'&&doc.basedOn.documentId===bd.id&&d.relatedStates.some(state=>state.documentId===doc.id&&state.revision===doc.revision);
+    demand(inBusiness||declaredState,'Concept source must refer to its Business Design or a declared State');target(ref.targetId,ref.targetType,doc.id);};
+   for(const ref of d.relatedStates){const state=target(ref.documentId,'document');demand(state.kind==='stateTransition'&&state.revision===ref.revision&&state.basedOn.documentId===bd.id,'Invalid Concept state reference');}
+   for(const s of d.subsystems)for(const id of s.activityIds)activity(id);
+   for(const c of d.concepts){has(subsystems,c.subsystemId,'subsystem');for(const i of c.information)if(i.responsibleSubsystemId)has(subsystems,i.responsibleSubsystemId,'responsible subsystem');for(const id of c.businessObjectIds)target(id,'object',bd.id);for(const a of c.activityLinks)activity(a.activityId);for(const ref of c.sourceRefs)sourceRef(ref);}
+   for(const r of d.relations){has(concepts,r.fromConceptId,'concept');has(concepts,r.toConceptId,'concept');for(const ref of r.sourceRefs)sourceRef(ref);}
+   for(const h of d.handoffs){has(subsystems,h.fromSubsystemId,'subsystem');has(subsystems,h.toSubsystemId,'subsystem');demand(h.fromSubsystemId!==h.toSubsystemId,'Handoff must cross subsystem boundary');for(const id of h.activityIds)activity(id);}
+   for(const g of d.reviewGroups){
+    has(subsystems,g.subsystemId,'subsystem');target(g.reviewer.roleId,'role',bd.id);for(const id of g.relatedActivityIds)activity(id);
+    const nodes=unique(g.graph.nodes.map(n=>({...n,id:n.conceptId})),'view concept');
+    demand(new Set(g.graph.conceptIds).size===g.graph.conceptIds.length&&g.graph.conceptIds.length===nodes.size&&g.graph.conceptIds.every(id=>nodes.has(id)),'View concepts and nodes differ');
+    for(const n of g.graph.nodes){has(concepts,n.conceptId,'concept');for(const id of n.sourceActivityIds)activity(id);}
+    unique(g.graph.edges,'view edge');for(const e of g.graph.edges){has(nodes,e.fromConceptId,'view concept');has(nodes,e.toConceptId,'view concept');for(const id of e.relationIds)has(relations,id,'concept relation');}
+    const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
+    for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
+    for(const cap of capabilities.values())for(const sample of cap.samples)for(const block of sample.blocks){
+     has(nodes,block.card,'view concept');const columns=unique(block.columns,'sample column');for(const column of block.columns)has(information,column.informationId,'concept information');unique(block.rows,'sample row');
+     for(const row of block.rows){const cells=new Set();for(const cell of row.cells){has(columns,cell.columnId,'sample column');demand(!cells.has(cell.columnId),'Duplicate sample cell: '+cell.columnId);cells.add(cell.columnId);}demand(cells.size===columns.size,'Sample row does not match columns');}
+    }
+   }
+   for(const edge of d.presentation.landscapeRelationships){const from=has(groups,edge.from,'review group'),to=has(groups,edge.to,'review group');demand(from.subsystemId===to.subsystemId,'Internal relationship crosses subsystem boundary');}
+   for(const edge of d.presentation.reviewBoundaries){has(groups,edge.from,'review group');has(groups,edge.to,'review group');}
+   diagnostics.push('概念モデルの業務意味は未確認: '+d.id);
   }else{
    const bd=target(d.basedOn.documentId,'document');demand(bd.kind==='businessDesign','Check source is not BD');demand(bd.revision===d.basedOn.revision,'Stale Check source revision');diagnostics.push('Check原典の意味対応は未確認: '+d.id);
    demand(new Set(d.items.map(i=>i.checkId)).size===d.items.length,'Duplicate Check ID');

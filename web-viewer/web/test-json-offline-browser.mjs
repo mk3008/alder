@@ -14,7 +14,17 @@ export async function verifyJSONOfflinePreview(browser){
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.node').count(),6);
   const databases=await page.evaluate(()=>indexedDB.databases());assert.ok(databases.some(d=>d.name===`alder-web-viewer:preview:pr-${pr}:${head}`));assert.ok(!databases.some(d=>d.name==='alder-web-viewer'));
   if(await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();await page.locator(`.node[data-node="${pkg.documents[0].activities[0].id}"]`).click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('#detail-mode-checks').click();assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));
-  mkdirSync('web/evidence/json-document',{recursive:true});await page.screenshot({path:'web/evidence/json-document/offline-preview-393.png'});assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
-  return {browser:browser.version(),source:head,offlinePath:manifest.offlinePath,fileProtocol:true,reload:true,previewOnlyIndexedDB:true,networkRequests:requests,pageErrors:errors,limits:['Physical smartphone/file manager and OS picker permissions are not emulated','HTTPS reads from file origin require Origin:null CORS permission']};
+  mkdirSync('web/evidence/json-document',{recursive:true});await page.screenshot({path:'web/evidence/json-document/offline-preview-393.png'});
+  const unified=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json');
+  await page.locator('#fallback').setInputFiles({name:'unified.json',mimeType:'application/json',buffer:unified});
+  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+  await page.locator('[data-explorer-key="concept:overview"]').click();
+  const frame=page.frameLocator('iframe[data-concept-view="overview"]');await frame.locator('[data-node="request"]').waitFor();
+  await frame.locator('[data-concept-open="request"]').click();const detail=page.frameLocator('iframe[data-concept-view="request"]');
+  await detail.locator('[data-node="request"]').waitFor();assert.equal(await detail.locator('[data-node="request"] [data-concept-open="request"]').count(),0);
+  await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));await page.reload();
+  await page.waitForFunction(()=>!document.querySelector('#open').disabled);await detail.locator('[data-node="request"]').waitFor();
+  assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
+  return {browser:browser.version(),source:head,offlinePath:manifest.offlinePath,fileProtocol:true,reload:true,unifiedConcept:true,previewOnlyIndexedDB:true,networkRequests:requests,pageErrors:errors,limits:['Physical smartphone/file manager and OS picker permissions are not emulated','HTTPS reads from file origin require Origin:null CORS permission']};
  }finally{await context.close();}
 }

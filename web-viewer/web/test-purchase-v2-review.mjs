@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {runInNewContext} from 'node:vm';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
+import {createDataExamples} from '../src/data-examples.ts';
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
 
 const authorityBytes=readFileSync('verification/purchase-v2-review.check-items.json');
@@ -148,36 +148,20 @@ for(const example of [sample('request-draft-approved'),sample('request-draft-pre
  for(const name of ['申請','保存前の状態','保存後の状態','承認対象版'])assert(columns.includes(name));
 }
 pass('PURCHASE-V2-007','standalone-columns');
-const adapter=readFileSync('src/purchase-review.ts','utf8');
-assert.match(adapter,/purchase-v2-beta\.json/);assert.match(adapter,/purchase-concepts-v2-beta\.json/);
-for(const file of ['src/data-examples.ts','src/concept-fixture.ts','src/logical-subsystems.ts'])
- assert.match(readFileSync(file,'utf8'),/purchase-review/);
-assert.match(readFileSync('vite.config.ts','utf8'),/versions\/purchase-v2-beta\.json/);
-const entryScript=readFileSync('public/review-entry.js','utf8');
-for(const mode of ['business','states','concept','request','examples','subsystems']){
- let destination;
- const location={href:'https://example.test/preview/pr-301/commit/review.html',replace(value){destination=value;}};
- runInNewContext(entryScript,{URL,location,document:{body:{dataset:{review:mode}}}});
- const url=new URL(destination);
- assert.equal(decodeURIComponent(url.hash.slice('#source='.length)),'https://example.test/preview/pr-301/commit/purchase-v2-beta.json');
- assert.equal(url.searchParams.get('review'),mode==='business'?'business':mode==='states'?'states':'concept');
-}
-async function bundleWithModel(candidate){
- const compiled=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Candidate',
-  plugins:[{name:'replace-model-for-test',setup(builder){builder.onLoad({filter:/purchase-concepts-v2-beta\.json$/},
-   ()=>({contents:JSON.stringify(candidate),loader:'json'}));}}]});
- return compiled.outputFiles[0].text;
-}
-const changedModel=structuredClone(model);changedModel.reviewGroups[0].capabilities[0].description='表示される更新内容';
-const projectionWindow=new JSDOM('',{runScripts:'outside-only'}).window;
-projectionWindow.eval(await bundleWithModel(changedModel)+';window.Candidate=Candidate;');
-assert.equal(projectionWindow.Candidate.reviewContents[0].capabilities[0].description,'表示される更新内容');
-projectionWindow.close();
-const staleModel=structuredClone(model);staleModel.basedOn.revision='obsolete';
-const mismatchWindow=new JSDOM('',{runScripts:'outside-only'}).window;
-const staleBundle=await bundleWithModel(staleModel);
-assert.throws(()=>mismatchWindow.eval(staleBundle),/Business Design revisions differ/);
-mismatchWindow.close();
+// The frozen old sample remains intact; its explicit data is now read from one package.
+const unified=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json','utf8'));
+const unifiedModel=unified.documents.find(item=>item.kind==='conceptModel');
+assert.deepEqual(unified.documents.find(item=>item.kind==='businessDesign'),bd);
+assert.deepEqual(unified.documents.find(item=>item.kind==='stateTransition'),states);
+const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;delete preserved.presentation.sampleCaption;
+preserved.kind=model.kind;preserved.revision=model.revision;preserved.format=model.format;preserved.formatVersion=model.formatVersion;
+assert.deepEqual(preserved,model,'the explicit model and all review content survive one-file integration');
+const changed=structuredClone(unified);changed.documents.find(item=>item.kind==='conceptModel').reviewGroups[0].capabilities[0].description='表示される更新内容';
+const loaded=parseDocument(JSON.stringify(changed));
+assert.equal(createDataExamples({business:loaded.model.business,model:loaded.model.concepts[0]}).reviewContents[0].capabilities[0].description,'表示される更新内容');
+const stale=structuredClone(unified);stale.documents.find(item=>item.kind==='conceptModel').basedOn.revision='obsolete';
+assert.throws(()=>parseDocument(JSON.stringify(stale)),/matching in-package BD revision/);
+for(const file of ['src/data-examples.ts','src/concept-views.ts','src/logical-subsystems.ts','src/viewer-shell.ts'])assert(!readFileSync(file,'utf8').includes('purchase-review'),'product must not depend on the purchase fixture');
 pass('PURCHASE-V2-005','source-boundary');
 
 // The nine older scenes keep their existing cells, while independent status and key columns may be added.
@@ -202,8 +186,8 @@ execFileSync(process.execPath,['web/test-navigation-authority-gate.mjs'],{stdio:
 execFileSync(process.execPath,['--experimental-strip-types','web/review-navigation-contract.mjs'],{stdio:'pipe'});
 pass('PURCHASE-V2-006','navigation-contract');
 
-const sampleBundle=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Samples'});
-const groupsBundle=await build({entryPoints:['src/concept-review-fixture.ts'],bundle:true,write:false,format:'iife',globalName:'Groups'});
+const sampleBundle=await build({entryPoints:['web/fixtures/concept-sample.ts'],bundle:true,write:false,format:'iife',globalName:'Samples'});
+const groupsBundle=await build({entryPoints:['web/fixtures/concept-sample.ts'],bundle:true,write:false,format:'iife',globalName:'Groups'});
 const sampleWindow=new JSDOM('<body></body>',{runScripts:'outside-only'}).window;
 sampleWindow.eval(sampleBundle.outputFiles[0].text+';window.Samples=Samples;');
 sampleWindow.eval(groupsBundle.outputFiles[0].text+';window.Groups=Groups;');

@@ -1,3 +1,4 @@
+import {context} from './fixtures/concept-sample.ts';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -11,9 +12,9 @@ const authority=JSON.parse(frozen),coverage=new Set();
 const code=(await build({entryPoints:['src/viewer-shell.ts'],bundle:true,write:false,format:'iife',globalName:'Shell',loader:{'.css':'empty'}})).outputFiles[0].text;
 const pkg=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v2-beta.json')),bd=pkg.documents.find(d=>d.kind==='businessDesign');
 function boot(query='&concept=group-request',saved){
- const w=new JSDOM('<div id="app"><header><button id="node-list-toggle">Left</button><button id="drawer">Right</button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept&conceptFixture=purchase'+query,runScripts:'outside-only',pretendToBeVisual:true}).window;
+ const w=new JSDOM('<div id="app"><header><button id="node-list-toggle">Left</button><button id="drawer">Right</button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept'+query,runScripts:'outside-only',pretendToBeVisual:true}).window;
  if(saved)w.sessionStorage.setItem('alder-explorer-v1:/',JSON.stringify(saved));w.eval(code+';globalThis.Shell=Shell;');let key='purchase',opened;
- const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{capture(){},business:()=>({key,viewKey:'overview',activities:bd.activities,states:[],views:[{key:'overview',name:'全体図'}]}),openActivity(id){opened=id;},openObject(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();return {w,d:w.document,shell,opened:()=>opened,other(){key='other';shell.syncDocument();}};
+ const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{capture(){},business:()=>({concept:key==='purchase'?context:undefined,key,viewKey:'overview',activities:bd.activities,states:[],views:[{key:'overview',name:'全体図'}]}),openActivity(id){opened=id;},openObject(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();return {w,d:w.document,shell,opened:()=>opened,other(){key='other';shell.syncDocument();}};
 }
 const t=boot();try{
  const {d,w}=t,keys=selector=>[...d.querySelectorAll(selector)].map(b=>b.dataset.explorerKey);

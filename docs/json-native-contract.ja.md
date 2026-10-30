@@ -2,6 +2,12 @@
 
 新規のJSON草案は候補 `formatVersion: "0.4"` を使う。Business Designは `schemaVersion: "0.3"`、状態文書は `schemaVersion: "0.2"`、Check Itemは従来の `0.1`。正式JSON v1の採用・Plugin releaseは別判断である。
 
+## 概念モデルを同じJSONに含める候補
+
+候補0.4は、同じ `documents` 内に `kind: "conceptModel"`、`schemaVersion: "0.1"` を持てる。業務設計のID・revision、必要な状態文書、サブシステム、概念、関連、レビュー範囲とデータ例を明示する。Viewerはこの情報を表示し、別ファイルや購買専用の切替を使わない。業務意味や人間の合意は構造検証から推定しない。従来の概念なし0.4はそのまま読める。
+
+この追加を知らない旧0.4検証器は、概念文書を含む新しいJSONを受理できない。並行作業中の0.5への統合と配布前のSchema・保存器・Plugin・Viewerの整合は別途必要である。概念文書を更新するときも既存の要素IDと所属を保持し、未申告の削除・置換・移動は保存器が拒否する。概念の削除を申告する専用操作はまだない。正式版や別文書間の自動更新を意味しない。
+
 ## 例外をIDで参照する
 
 Business Designは `exceptions: [{id, activityId, name, description}]` を持つ。idは名称や説明文を変更しても維持し、activityIdは同じBDのActivityを参照する。同名の例外を異なるActivityに置ける。識別と整合性の根拠はIDであり、Markdownの装飾・改行・箇条書きから例外を認定しない。

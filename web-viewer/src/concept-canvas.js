@@ -6,25 +6,21 @@ import {cardSurface} from './diagram-canvas.ts';
 import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin} from './graph-camera.ts';
 import './graph-presentation.css';
 import './canvas-toolbar.css';
-import {conceptNeighborhood} from '../public/concept-preview/neighborhood.js';
+import {conceptNeighborhood} from './concept-neighborhood.js';
 import {createNodeDrag} from './node-drag.ts';
 import {clampZoom,installTouchGestures} from './touch-gestures.ts';
-import {tables as fixtureTables,edges,activityDefinitions,creatorStages} from './concept-fixture.ts';
-import {findReviewGroup,reviewGraph} from './concept-review-fixture.ts';
-const reviewGroup=findReviewGroup(new URL(location.href).searchParams.get('group'));
-const selectedGraph=reviewGroup?reviewGraph(reviewGroup.id):undefined;
-const tables=selectedGraph?.tables??fixtureTables;
-function activitySlice(stage){
- // Mutation-only local view. Read concepts do not expand the diagram.
- const visible=new Set(stage.write);
- return {...stage,ids:stage.ids.filter(id=>visible.has(id)),edges:edges.filter(([a,b])=>visible.has(a)&&visible.has(b))};
-}
-const overviewStage={id:'overview',title:'概念モデルの全体図',subtitle:'申請から終結まで',ids:Object.keys(tables),write:[],edges,rules:['申請・版・品目・準備・入庫回・入庫内訳の6概念と、その件数関係。概念を選ぶと存在条件・未決を確認できます。'],change:'6概念は未採用の設計仮説です。PK/FK・物理テーブル・正式JSON Schemaは定義していません。'};
-if(selectedGraph){overviewStage.ids=selectedGraph.ids;overviewStage.edges=selectedGraph.edges;overviewStage.title=reviewGroup.name;}
-const focusId=new URL(location.href).searchParams.get('focus');
-if(focusId&&Object.hasOwn(tables,focusId)){Object.assign(overviewStage,conceptNeighborhood(Object.keys(tables),edges,focusId));overviewStage.title=tables[focusId].name+'と隣接する概念';}
-const stages=[...activityDefinitions.map(activitySlice),overviewStage];
-const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v8:'+location.pathname+':'+(new URLSearchParams(location.search).get('example')||'default')+(focusId?':focus:'+focusId:'')+(reviewGroup?':group:'+reviewGroup.id:'');
+const messageOrigin=location.origin==='null'?'*':location.origin;
+let initialized=false;
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||event.source!==parent||event.data?.type!=='alder-concept-data'||initialized)return;
+ initialized=true;mountConceptCanvas(event.data);
+});
+function mountConceptCanvas({graph,focus,documentKey,viewKey}){
+const tables=graph.tables,edges=graph.edges,focusId=focus;
+const overviewStage={id:'overview',title:'データ構造',ids:graph.ids,edges,rules:[],change:''};
+if(focusId&&Object.hasOwn(tables,focusId))Object.assign(overviewStage,conceptNeighborhood(graph.ids,edges,focusId));
+const stages=[overviewStage];
+const NS='http://www.w3.org/2000/svg',storageKey='alder-concept-canvas-v9:'+location.pathname+':'+encodeURIComponent(documentKey)+':'+encodeURIComponent(viewKey??'overview');
 const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
@@ -56,12 +52,12 @@ function draw(s){
  body.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));body.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));
  t.fields.forEach(([,name],i)=>body.append(svgNode('text',{x:b.x+12,y:b.y+56+i*25},name)));
  g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigateDetail(s,id);}else if(s.stage.id==='overview'&&!s.locked&&e.altKey&&e.key.startsWith('Arrow')){e.preventDefault();const d=e.shiftKey?50:10;changeNode(s,id,[b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0),b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0)]);s.svg.querySelector(`[data-node="${id}"] .concept-select`)?.focus();save(s);}};
- if(canOpenDetail(id,focusId)){const command=svgNode('foreignObject',{x:b.x+b.w-35,y:b.y+1,width:34,height:34});const button=document.createElement('button');button.type='button';button.className='concept-open-action';button.dataset.conceptOpen=id;button.setAttribute('aria-label',t.name+'と隣接する概念を別タブで開く');button.title='隣接する概念を別タブで開く';button.onclick=e=>{e.stopPropagation();parent.postMessage({type:'alder-concept-open',id},location.origin);};button.onkeydown=e=>e.stopPropagation();command.append(button);g.append(command);}s.svg.append(g);
+ if(canOpenDetail(id,focusId)){const command=svgNode('foreignObject',{x:b.x+b.w-35,y:b.y+1,width:34,height:34});const button=document.createElement('button');button.type='button';button.className='concept-open-action';button.dataset.conceptOpen=id;button.setAttribute('aria-label',t.name+'と隣接する概念を別タブで開く');button.title='隣接する概念を別タブで開く';button.onclick=e=>{e.stopPropagation();parent.postMessage({type:'alder-concept-open',id},messageOrigin);};button.onkeydown=e=>e.stopPropagation();command.append(button);g.append(command);}s.svg.append(g);
  }
- layoutCanvas(s);parent.postMessage({type:'alder-concept-rendered'},location.origin);
+ layoutCanvas(s);parent.postMessage({type:'alder-concept-rendered'},messageOrigin);
 }
 function changeNode(s,id,p){s.positions.set(id,{x:p[0],y:p[1]});draw(s);}
-function activeStage(){const u=new URL(location.href);if(u.searchParams.get('view')!=='activities')return'overview';const match=location.hash.match(/^#concept-([a-z]+)-/);const id=u.searchParams.get('activity')||match?.[1]||location.hash.slice(1);return activityDefinitions.some(a=>a.id===id)?id:'apply';}
+function activeStage(){return 'overview';}
 function capture(focus){return{page:[scrollX,scrollY],focus,views:states.map(s=>({id:s.stage.id,scroll:[s.host.scrollLeft,s.host.scrollTop],zoom:s.zoom,locked:s.locked,selected:s.selected}))};}
 function applyLocation(){
  const active=activeStage();for(const s of states)s.section.hidden=s.stage.id!==active;
@@ -74,7 +70,7 @@ function applyLocation(){
  document.querySelectorAll('nav a').forEach(a=>{a.removeAttribute('aria-current');const u=new URL(a.href);if((u.searchParams.get('activity')||'overview')===active)a.setAttribute('aria-current','page');});
  document.querySelectorAll('.section-back').forEach(b=>b.hidden=!history.state?.conceptFrom);
 }
-function navigateDetail(s,id){s.selected=id;draw(s);save(s);parent.postMessage({type:'alder-concept-select',id},location.origin);s.svg.querySelector(`[data-node="${id}"] .concept-select`)?.focus({preventScroll:true});}
+function navigateDetail(s,id){s.selected=id;draw(s);save(s);parent.postMessage({type:'alder-concept-select',id},messageOrigin);s.svg.querySelector(`[data-node="${id}"] .concept-select`)?.focus({preventScroll:true});}
 
 function zoomBy(s,factor){s.touch?.cancel();s.drag?.cancel();const next=cameraZoom({zoom:s.zoom,scroll:[s.host.scrollLeft,s.host.scrollTop]},factor);s.zoom=next.zoom;layoutCanvas(s);s.host.scrollTo(...next.scroll);save(s);}
 function installCanvas(s){
@@ -98,12 +94,14 @@ for(const stage of stages.filter(s=>s.id==='overview')){
  const section=document.createElement('section');section.className='stage';section.id=stage.id;section.innerHTML=`<div class="stage-top"><h2>${stage.title}</h2><button class="section-back" hidden>図へ戻る</button></div><div class="graph-toolbar canvas-controls" data-settings-open="false" ${stage.id==='overview'?'':'hidden'}><button class="graph-settings-toggle" aria-label="表示設定を開く" title="表示設定を開く" aria-controls="concept-display-options" aria-expanded="false"></button><div class="concept-display-options" id="concept-display-options" hidden><button class="reset-layout">レイアウトを初期値に戻す</button></div><button class="layout-lock canvas-lock" aria-label="配置ロック" aria-pressed="false"></button><button class="zoom-out" aria-label="縮小" title="縮小"></button><span class="zoom-value canvas-zoom">100%</span><button class="zoom-in" aria-label="拡大" title="拡大"></button></div><p class="routing-warning" role="status"></p><div class="canvas ${stage.id==='overview'?'overview-canvas':'local-canvas'}" tabindex="0" aria-label="${stage.title}のデータ構造図"><div class="world"><svg role="group" aria-label="${stage.title}のデータと関係"></svg></div></div><div class="concept-details"></div><section class="activity-rules"><h3>この図の条件・未決</h3>${stage.rules.map(r=>'<p>'+r+'</p>').join('')}<p>${stage.change}</p></section>`;
  document.getElementById('stages').append(section);const s={stage,section,host:section.querySelector('.canvas'),world:section.querySelector('.world'),svg:section.querySelector('svg'),warning:section.querySelector('.routing-warning'),zoomLabel:section.querySelector('.zoom-value'),lockButton:section.querySelector('.layout-lock'),positions:new Map(),zoom:1,locked:false,selected:focusId||null};
  if(stage.id==='overview'){for(const[id,p]of Object.entries(saved.positions||{}))if(stage.ids.includes(id)&&Number.isFinite(p?.x)&&Number.isFinite(p?.y))s.positions.set(id,p);s.zoom=clampZoom(Number.isFinite(saved.zoom)?saved.zoom:1);s.locked=saved.locked!==false;}
- for(const id of stage.ids){const t=tables[id],detail=document.createElement('section');detail.id='concept-'+stage.id+'-'+id;detail.className='concept-detail';detail.tabIndex=-1;const h=document.createElement('h3');h.textContent=t.name;detail.append(h);const note=document.createElement('p');note.textContent=t.note;detail.append(note);const creators=document.createElement('p');creators.append('作成するActivity：');for(const [i,key]of creatorStages[id].entries()){if(i)creators.append(' ／ ');const a=document.createElement('a');a.href='?view=activities&activity='+key+'#'+key;a.textContent=activityDefinitions.find(a=>a.id===key).title;creators.append(a);}detail.append(creators);section.querySelector('.concept-details').append(detail);}
+
  s.section.querySelector('.section-back').onclick=()=>history.back();states.push(s);draw(s);if(stage.id==='overview')installCanvas(s);else{s.svg.onclick=e=>{const id=e.target.closest('.node')?.dataset.node;if(id)navigateDetail(s,id);};}
 }
-const nav=document.querySelector('nav');nav.innerHTML='<a href="?view=overview">全体図</a>'+activityDefinitions.map(a=>`<a href="?view=activities&activity=${a.id}#${a.id}">${a.title}</a>`).join('');
+
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='alder-concept-highlight')return;const id=e.data.id;if(!Object.hasOwn(tables,id))return;for(const s of states)if(s.stage.ids.includes(id)&&s.selected!==id){s.selected=id;draw(s);}});
 window.addEventListener('popstate',applyLocation);window.addEventListener('resize',()=>states.forEach(layoutCanvas));
 window.addEventListener('blur',()=>states.forEach(s=>{s.touch?.cancel();s.drag?.cancel();save(s);}));
-document.getElementById('revision').textContent=location.pathname.split('/').filter(Boolean).at(-2)||'local';applyLocation();
+applyLocation();
 
+
+}

@@ -1,0 +1,21 @@
+import type {ConceptContext} from './concept-model';
+
+export type ConceptCard={name:string;note:string;fields:string[][];sources?:string[];sourceActivities?:string[]};
+export type ReviewGroup={id:string;name:string;purpose:string;activities:string[];concepts:Record<string,ConceptCard>;relations:string[][]};
+
+/** Projects only fields explicitly provided by the currently opened JSON. */
+export function createConceptViews({model}:ConceptContext){
+ const tables:Record<string,ConceptCard>=Object.fromEntries(model.concepts.map(concept=>[concept.id,{
+  name:concept.name,note:concept.description,fields:concept.information.map(item=>['',item.name])
+ }]));
+ const edges=model.relations.map(relation=>[relation.fromConceptId,relation.toConceptId,relation.fromLabel,relation.toLabel,relation.kind]);
+ const groups:ReviewGroup[]=model.reviewGroups.map(group=>({id:group.id,name:group.title,purpose:group.description,activities:group.relatedActivityIds,
+  concepts:Object.fromEntries(group.graph.nodes.map(node=>[node.conceptId,{name:node.name,note:node.description,
+   fields:node.fields.map(field=>['',field]),sources:node.sources,sourceActivities:node.sourceActivityIds}])),
+  relations:group.graph.edges.map(edge=>[edge.fromConceptId,edge.toConceptId,edge.fromLabel,edge.toLabel,edge.kind])}));
+ const findGroup=(id:string|undefined|null)=>groups.find(group=>group.id===id);
+ const graph=(id:string)=>{const group=findGroup(id);if(!group)throw Error('Unknown review group: '+id);
+  const ids=Object.keys(tables).filter(key=>Object.hasOwn(group.concepts,key));
+  return {ids,tables:group.concepts,edges:group.relations.filter(([from,to])=>ids.includes(from)&&ids.includes(to))};};
+ return {tables,edges,groups,findGroup,graph};
+}
