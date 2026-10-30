@@ -4,6 +4,7 @@ import {spawn,spawnSync,execFileSync} from 'node:child_process';
 import {openSync,closeSync,writeFileSync,readFileSync,mkdirSync,symlinkSync,copyFileSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {performance} from 'node:perf_hooks';
+import {createHash} from 'node:crypto';
 
 const baseline='1f05aeeb5e5c3acbd8722420a3ab9aacd7e29dd0';
 const repo=resolve('..'), current=process.cwd(), tmp=join(process.env.RUNNER_TEMP,'edge-314');
@@ -49,19 +50,35 @@ for(let i=1;i<=3;i++)run(`pure-after-${i}`,[...node,'--logic-only'],dirs.pure);
 replaceOnce(join(dirs.capture,'src/main.ts'),'dragTarget.setPointerCapture(e.pointerId);','');
 run('capture-node-dom',node,dirs.capture);
 
+// The surrounding workflow owns 4173. Run each isolated build on 4174 and
+// change only the copied fixture's origin; strictPort forbids silent fallback.
+for(const name of ['base','pure','capture'])replaceOnce(join(dirs[name],'web/test-node-edge-drag-browser.mjs'),
+ "const origin='http://127.0.0.1:4173/';",
+ "const origin='http://127.0.0.1:4174/';");
+
 // Limit only the fault runs to one named existing native case. Test body and
 // assertions are unchanged, and the ordinary full case runs use untouched code.
 for(const name of ['pure','capture'])replaceOnce(join(dirs[name],'web/test-node-edge-drag-browser.mjs'),
  ' for(const test of cases){',
  " const chosen=cases.filter(test=>test.name===process.env.EDGE314_CASE);if(chosen.length!==1)throw Error('Expected one named native case');\n for(const test of chosen){");
+const buildHashes={};
 async function preview(name,body){
  const cwd=dirs[name];const build=run(`build-${name}`,['npm','run','build'],cwd,{},180000);if(build.exit!==0)throw Error(`Build failed: ${name}`);
- const fd=openSync(join(evidence,`preview-${name}.log`),'w');const start=performance.now();
- const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4173'],{cwd,stdio:['ignore',fd,fd]});
+ const log=join(evidence,`preview-${name}.log`),fd=openSync(log,'w'),start=performance.now();
+ const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4174','--strictPort'],{cwd,stdio:['ignore',fd,fd]});
  try{
-  let ready=false;for(let i=0;i<120;i++){try{const response=await fetch('http://127.0.0.1:4173/');if(response.ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
-  if(!ready)throw Error(`Preview did not start: ${name}`);
-  const item={label:`preview-setup-${name}`,seconds:+((performance.now()-start)/1000).toFixed(3)};measurements.push(item);console.log('EDGE314_MEASUREMENT '+JSON.stringify(item));
+  let index;for(let i=0;i<120;i++){
+   if(server.exitCode!==null||server.signalCode!==null)throw Error(`Preview exited: ${name}`);
+   if(readFileSync(log,'utf8').includes(':4174/'))try{const response=await fetch('http://127.0.0.1:4174/');if(response.ok){index=Buffer.from(await response.arrayBuffer());break;}}catch{}
+   await new Promise(r=>setTimeout(r,250));
+  }
+  if(!index)throw Error(`Preview did not start on strict port: ${name}`);
+  const expectedIndex=readFileSync(join(cwd,'dist/index.html'));if(!index.equals(expectedIndex))throw Error(`Wrong HTML served: ${name}`);
+  const script=index.toString().match(/<script[^>]+src="([^"]+\.js)"/);if(!script)throw Error(`No built JS in index: ${name}`);
+  const expectedJS=readFileSync(resolve(cwd,'dist',script[1])),response=await fetch(new URL(script[1],'http://127.0.0.1:4174/'));
+  if(!response.ok||!Buffer.from(await response.arrayBuffer()).equals(expectedJS))throw Error(`Wrong JS served: ${name}`);
+  const hash=createHash('sha256').update(expectedJS).digest('hex');if(name!=='base'&&hash===buildHashes.base)throw Error(`Fault build matches baseline JS: ${name}`);buildHashes[name]=hash;
+  const item={label:`preview-setup-${name}`,seconds:+((performance.now()-start)/1000).toFixed(3),jsSha256:hash};measurements.push(item);console.log('EDGE314_MEASUREMENT '+JSON.stringify(item));
   await body(cwd);
  }finally{if(server.exitCode===null&&server.signalCode===null){server.kill('SIGTERM');await new Promise(r=>server.once('close',r));}closeSync(fd);}
 }
