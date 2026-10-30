@@ -1,4 +1,5 @@
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
+import {stateCaptionGeometry,assertStateCaptionPlacement} from './caption-placement-oracle.mjs';
 import {verifyStateTransitionIdentity} from './test-state-transition-identity-browser.mjs';
 import assert from 'node:assert/strict';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 const dir='../work/json-state/issue-275/',raw=readFileSync(dir+'purchase.json','utf8'),md=readFileSync(dir+'supported-state.md','utf8'),pkg=JSON.parse(raw),st=pkg.documents[1],bd=pkg.documents[0];
@@ -16,6 +17,7 @@ export async function verifyJSONStates(browser){
    assert.equal(await page.locator('[data-transition]').count(),13);assert.equal(await page.locator('[data-state]').count(),8);assert.equal(await page.locator('.state-diagram [stroke-dasharray]').count()>0,true);
    assert.equal(await page.locator('[data-state="申請済み"] .graph-card-surface').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(228, 244, 235)');
    const spacing=assertStateCaptionRows(await page.locator('.state-diagram').evaluate(stateCaptionSnapshot),parseStateRows());
+   assertStateCaptionPlacement(await page.locator('.state-diagram').evaluate(stateCaptionGeometry),parseStateRows());
    const svg=await page.locator('.state-diagram').evaluate(e=>e.outerHTML);snapshots.push(svg);
    await page.screenshot({path:`${out}/${format}-states-${width}.png`});await page.locator('.state-transition-panel > details').first().locator('summary').click();assert.ok((await page.locator('[data-transition="T12"]').innerText()).includes('未決（設計課題）'));assert.ok((await page.locator('[data-transition="T07"]').innerText()).includes('申請内容の破棄'));
    await page.locator('[data-state="申請済み"]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'false');await page.locator('[data-state="申請済み"]').press('Space');assert.equal(await page.locator('[data-state="申請済み"]').getAttribute('aria-pressed'),'true');

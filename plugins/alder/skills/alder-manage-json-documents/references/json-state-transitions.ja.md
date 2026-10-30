@@ -12,6 +12,10 @@ Activityは業務の単位であり、一つのActivityが実行結果によっ�
 
 保存状態は `states: [{id, name}]`、操作は `transitions[]` に記録する。各操作はid/sourceId/fromId/toId/activityIdと、condition/effect/path/evidence/note、event/exceptionIdを持つ。eventは旧宣言の保存用であり、表示名に使わない。正常操作のexceptionIdはnull。名前付き例外はBDのexceptionsにID・activityId・name・descriptionを持ち、exceptionIdから参照する。説明文の書式は参照に影響しない。未定義の旧宣言はnullと明示diagnosticsを保持する。[JSON構造と互換境界](json-native-contract.ja.md)を参照する。
 
+State payload 0.2（package 0.4・0.5）の各遷移には、任意で非空の `conditionLabel` を指定できる。これは図上の短い表示名であり、業務条件の正本は常に `condition` である。明示された表示名だけを記録し、表示名から条件を推論しない。分岐の表示名が未指定または兄弟間で重複する場合は元の `condition` を表示し、操作の詳細には常に元の条件を残す。通常の単独遷移はActivity名、例外はActivity名と例外名を表示する。表示名は一意性検査、参照、ID、保存ガードに影響しない。
+
+`conditionLabel` のない既存0.5は変更せずに読める。表示名を含む0.5は、この項目を知らない旧Validator・Plugin・Viewerでは読めないため、Schema・保存器・Plugin同梱runtime・Viewerを対応版に揃えてから利用する。package版およびState payload版は変更しない。
+
 開始 `@new`、終端 `@unknown`、網羅性 `partial` の実験宣言だけを扱う。`@new`（作成前）、`@none`（記録を作らない処理結果）、`@unknown`（未決）は保存状態IDと区別する。効果change/unchanged/no-create/constraintと元・先の関係を検証する。未記載の操作を推定・禁止・状態不変へ補完しない。completeや確定終端の一般化は未対応である。
 
 Pluginでは既存のJSON管理Skillとauthor-cliのcreate/commitを使う。原典の明示情報からJSONを直接草案作成し、validate→create/commit→inspect/validateで保存を確認する。0.5では既存状態文書のbasedOnを通常更新で変更しない。同じBD版での状態編集はIDを保持して状態文書/packageのrevisionを更新する。BD改訂時は元BD＋Check/Stateを保全し、BD-onlyの別packageへ作成する。新BDに対する状態定義は意味を別途確認して明示作成する。旧0.4までの版追従は旧契約に限る。操作・状態の改名はIDを変えず行う。既存IDの削除・差替えやsourceIdの変更はcommitで拒否する。Checkの人間合意・レビューゲートは従来どおりで、状態図の表示成功から承認を推定しない。

@@ -32,8 +32,21 @@
 - `cd web-viewer && node web/test-browser.mjs --cases jsonStates,jsonDocuments,json05`：Chromium 141、1280/393pxで通常File・URL・再読込、各sourceIdの線・キャプション・詳細、未決と元JSONの保持を確認。合成例では同一出発・到着の線の出発点と到着点が別であり、線がキャプション文字を横切らないことも検査。旧形式の状態図・JSON・Markdown関連回帰を併せて確認した。OSファイル選択ダイアログ・物理端末・本人操作は対象外。
 - 正本の参照Validator・状態説明を先に公開したsource commit `002f67d61beab54bea8fc3ac54d30a8d935ab34c` から既存exporterで同梱28ファイルを再生成し、厳密なsource bytes比較を維持する。source内のcore固定リンクは同じbytesの `bfc851cc02c3237f09bb78045687a27e7406a977` を指す。
 
-## 並行Viewerと残作業
+## 先行する並行Viewerの確認
 
 #301では状態キャプションの位置・表示が継続して変更されている。本人のGUI判断と採用版の確定後に、取り込む表示と検証を選び、Cとの整合を再検証する。この段階の0.5互換性確認は、#301の最終表示との一致やPhase Cの最終受入を示さない。最終候補では同一headの全CIと本人による固定Preview操作が必要。
 
 確認時の#301 head `ed224bf373fab87a545578ec7d4eed572de7c8f4` は、表示変更に加えState schema 0.2へ任意 `conditionLabel` を追加し、購買0.4 fixtureのT15〜T18に指定する候補を含む。Cの現行Validatorでその固定fixtureを検査すると `Unknown field $.documents[1].transitions[13].conditionLabel` と拒否する。#301の表示・Schemaは本人GUI判断とCIが未確定であり、Cへ取り込んでいない。採用後は旧0.4/0.5の契約境界・表示と同梱runtimeの整合をChatで確認し、無断で0.5 Schemaを変更しない。
+
+## conditionLabelと採用済み状態図の統合
+
+[Chat判断](https://github.com/mk3008/alder/pull/313#issuecomment-6519259849)により、State payload 0.2の任意・非空 `conditionLabel` を0.4/0.5共通で受理する。packageとpayloadの版は据え置き、`condition` は業務条件の正本である。表示名の欠落または兄弟内の表示条件の衝突では元の条件を使う。単独の通常はActivity名、例外はActivity名と例外名、分岐は表示条件を使い、操作詳細には元の条件と到着先を残す。後方互換な入力追加は、旧Validatorが新フィールドを読めることを意味しない。
+
+#317 `4b3b6a0d98ec114649a8a387696fd08edc7452e3` は本人確認を経てmainへマージ済み。CはそのPRを丸ごと取り込まず、状態キャプション位置・選択時の描画順とフォーカス、購買0.4のラベル付きfixtureを取り込む。T08/T19は同じ自己戻り先を持つ別IDで、#317固定版ではSVG pathの座標が重なっていた。Cでは同じ出発・到着の行にそれぞれ接続点を与え、同条件でも異なる条件でも統合しない。T02/T12/T14と例外のキャプション配置、およびtabStripの既存待機回帰は保持する。
+
+- 新検証正本 `web-viewer/verification/state-condition-label.check-items.json` は実装前commit `0b1bae76ebe426de12d93fc65f8199f1a5928f69`、SHA-256 `14316d199b56bf6dfbb3bc7046d1a7c22dca753017b6b55ebc0ac850d7decf12`、STATE-LABEL-001〜006。#317の固定 `STATE-CAPTION-001〜003` は同commitで取得し、SHA-256 `7ffbb694bf26b9c7934e3963d24612e0af5225f97e611b186df7e3fea3c09694`。旧COMPAT・STATE-IDENTITY・JSON05-VIEWERの正本は不変。STATE-IDENTITYの旧「図上に条件と到着先を併記」という範囲は上記Chat判断で置き換えられ、原文条件と到着先は操作詳細で照合する。
+- `cd web-viewer && node --experimental-strip-types web/test-state-condition-label.mjs`：購買0.4とB合成0.5の省略・明示・空・非文字列・未知field、ラベルの衝突、0.4一意性と0.5同条件の差、canonical/同梱通常CLIの保存・読戻し・異常保存時bytesを検証する。`test-state-caption-placement.mjs` は購買T02/T12/T14の位置・線と詳細、T08/T19の別線、選択・破線順・フォーカスと全保証IDをDOMで照合する。旧互換・無確認rebaseは既存の `test-json-05-state-compat.mjs` でも検査する。
+- `state-label-05.json` はB合成seedから再現した確認用fixtureで、同条件・同到着先のS1/S2と到着先未決のS3、明示ラベルとCheckの合成確認状態を含む。業務上の同時成立・人間承認を表さない。
+- 同一作業者の別工程でB受入 `5a1a4f47` の `core/schema/structured.mjs` を取得し、同じ合成0.5 seedはラベルなしで受理、ラベル付きで未知field拒否を確認した。新canonical source `bbef80433b885203f2c769dab2e75bdffd8738d2` は公開後に既存exporterで同梱28ファイルを再生成し、byte単位の照合を維持する。
+- CIの `jsonStates` は購買0.4のPC/狭幅・両テーマ、各キャプション、元条件、T12/T14の選択、破線描画順、読込失敗時の保持・復元を確認する。`json05` は従来の0.5同条件3遷移のFile/URL/復元に加え、ラベル明示・衝突時の表示を確認する。`tabStrip` は遅延したURL読込時の待機と既存操作を維持する。
+- ローカルChromeは実行環境でUnixソケット作成が `Operation not permitted` となり起動できなかった。実ブラウザーの成否は最終headのGitHub CIを別途確認する。393pxはviewportであり、物理モバイルやOSのファイル選択、本人による最終GUI操作ではない。

@@ -12,7 +12,7 @@
   "relatedStates": [
     {
       "documentId": "purchase-states",
-      "revision": "states-v2-beta-7",
+      "revision": "states-v2-beta-8",
       "verification": "unverified"
     }
   ],
@@ -4474,8 +4474,14 @@
       ]
     },
     "landscapeRelationships": [
-      {"from": "group-request", "to": "group-decision"},
-      {"from": "group-handoff", "to": "group-result"}
+      {
+        "from": "group-request",
+        "to": "group-decision"
+      },
+      {
+        "from": "group-handoff",
+        "to": "group-result"
+      }
     ],
     "reviewBoundaries": [
       {

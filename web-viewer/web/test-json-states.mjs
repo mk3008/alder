@@ -1,4 +1,5 @@
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
+import {stateCaptionGeometry,assertStateCaptionPlacement} from './caption-placement-oracle.mjs';
 import {parseDesign} from '../src/graph.ts';
 import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {build} from 'esbuild';import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
@@ -13,6 +14,7 @@ const ui=dom.window.stateUI;const expected=ui.stateTransitionPanel(legacy,object
 assert.equal(actual.outerHTML,expected.outerHTML);assert.equal(actual.querySelectorAll('[data-transition]').length,13);assert.equal(actual.querySelectorAll('[data-state]').length,8);assert.ok(actual.querySelector('[stroke-dasharray]'));
 assert(actual.querySelector('[data-state="@new"]'),'creation node remains present');assert.equal(actual.querySelector('[data-state="@new"] .state-diagram-event-id'),null,'creation node has no redundant caption');
 assertStateCaptionRows(stateCaptionSnapshot(actual.querySelector('.state-diagram')),legacy.objectStateTransitions[object.name].model.transitions);
+assertStateCaptionPlacement(stateCaptionGeometry(actual.querySelector('.state-diagram')),legacy.objectStateTransitions[object.name].model.transitions);
 const state=actual.querySelector('[data-state="申請済み"]');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'true');state.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(state.getAttribute('aria-pressed'),'false');
 const renamed=structuredClone(pkg);renamed.documents[0].objects.find(o=>o.id===st.objectId).name='改名された申請';assert.ok(parseDocument(JSON.stringify(renamed)).objectStateTransitions[object.id]);
 dom.window.close();console.log('Pinned state renderer MD/typed JSON: 13 operation details, all SVG boxes/routes/captions and keyboard exact; identity survives rename');

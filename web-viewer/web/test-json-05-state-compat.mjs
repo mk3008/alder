@@ -51,13 +51,13 @@ try{
  assert.deepEqual(paths.map(p=>p.dataset.transitions),['S1','S2','S3']);
  assert.equal(new Set(paths.map(p=>p.getAttribute('d'))).size,3,'the two same-endpoint paths must be visibly distinct');
  assert.deepEqual(labels.map(p=>p.dataset.transitionId),['S1','S2','S3']);
- for(const row of expected){const label=labels.find(e=>e.dataset.transitionId===row.sourceId),detail=panel.querySelector(`[data-transition="${row.sourceId}"]`);assert(label.textContent.includes(row.condition));assert(label.textContent.includes(row.toId==='@unknown'?'未決':'案内済み'));assert([...label.querySelectorAll('tspan')].every(e=>e.dataset.transitions===row.sourceId));assert(detail.textContent.includes(row.note));}
+ for(const row of expected){const label=labels.find(e=>e.dataset.transitionId===row.sourceId),detail=panel.querySelector(`[data-transition="${row.sourceId}"]`);assert(label.textContent.includes(row.condition));assert([...label.querySelectorAll('tspan')].every(e=>e.dataset.transitions===row.sourceId));assert(detail.textContent.includes(row.condition));assert(detail.textContent.includes(row.toId==='@unknown'?'未決':'案内済み'));assert(detail.textContent.includes(row.note));}
  assert.match(panel.textContent,/操作の詳細（3）/);assert.match(panel.textContent,/到着先は未決/);
  // Three equivalent conditions and self-return rows exercise the same
  // identity guarantee without assuming a particular destination or route.
- for(const mode of ['three-forward','self-return']){
+ for(const mode of ['three-forward','self-return','different-condition']){
   const variant=structuredClone(previous),doc=state(variant);
-  doc.transitions=doc.transitions.map((row,i)=>({...row,condition:i===2?'  案内を記録\n':'案内を記録',fromId:mode==='self-return'?'seed-done':'@new',toId:'seed-done',effect:mode==='self-return'?'unchanged':'change'}));
+  doc.transitions=doc.transitions.map((row,i)=>({...row,condition:mode==='different-condition'?`異なる条件${i}`:i===2?'  案内を記録\n':'案内を記録',fromId:mode==='self-return'?'seed-done':'@new',toId:'seed-done',effect:mode==='self-return'?'unchanged':'change'}));
   validate(variant);const other=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(variant)),doc.objectId,()=>{}),wires=[...other.querySelectorAll('path.edge[data-transitions]')];
   assert.deepEqual(wires.map(e=>e.dataset.transitions),['S1','S2','S3']);assert.equal(new Set(wires.map(e=>e.getAttribute('d'))).size,3,mode);
   assert.equal(other.querySelectorAll('[data-transition-id]').length,3);

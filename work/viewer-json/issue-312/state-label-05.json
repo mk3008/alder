@@ -1,0 +1,275 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.5",
+  "revision": "p1",
+  "documents": [
+    {
+      "id": "c-bd",
+      "kind": "businessDesign",
+      "schemaVersion": "0.4",
+      "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+      "title": "受付",
+      "preface": "構造比較のための限定fixture。実業務の承認済み正本ではない。",
+      "scope": "scopeは外側のexample.scopeを参照",
+      "objects": [
+        {
+          "id": "c-requester",
+          "name": "依頼者",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            {
+              "id": "c-desk",
+              "name": "その相談の担当窓口",
+              "description": ""
+            },
+            {
+              "id": "c-contact",
+              "name": "次の連絡方法",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "staff-object",
+          "name": "受付担当",
+          "scope": false,
+          "icon": "file-text",
+          "information": []
+        },
+        {
+          "id": "system-object",
+          "name": "受付システム",
+          "scope": false,
+          "icon": "file-text",
+          "information": []
+        }
+      ],
+      "roles": [
+        {
+          "id": "c-staff",
+          "name": "担当者",
+          "color": "#2563eb"
+        }
+      ],
+      "activities": [
+        {
+          "id": "c-guidance",
+          "name": "次の連絡方法を説明する",
+          "scope": true,
+          "why": "依頼者が相談後の連絡先を理解できるようにする。",
+          "when": "相談の受付後、依頼者に次の案内をするとき。",
+          "where": "規定なし",
+          "performers": [
+            {
+              "objectId": "staff-object",
+              "roleIds": [
+                "c-staff"
+              ]
+            },
+            {
+              "objectId": "system-object",
+              "roleIds": []
+            }
+          ],
+          "procedure": {
+            "steps": [
+              {
+                "id": "mix-input",
+                "text": "相談申込を入力する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "staff-object"
+                ]
+              },
+              {
+                "id": "mix-check",
+                "text": "入力された申込を確認する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "system-object"
+                ]
+              },
+              {
+                "id": "mix-guide",
+                "text": "次の連絡方法を案内する。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "performerObjectIds": [
+                  "staff-object"
+                ]
+              }
+            ],
+            "orderRules": []
+          },
+          "results": [
+            {
+              "id": "c-guidance-r1",
+              "text": "依頼者へ担当窓口が説明される。"
+            },
+            {
+              "id": "c-guidance-r2",
+              "text": "依頼者へ次の連絡方法が説明される。"
+            }
+          ],
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "c-output",
+          "kind": "output",
+          "fromId": "c-guidance",
+          "toId": "c-requester",
+          "dataId": "data-c-output"
+        }
+      ],
+      "findings": [],
+      "exceptions": [],
+      "data": [
+        {
+          "id": "data-c-output",
+          "name": "連絡案内",
+          "items": [
+            {
+              "informationId": "c-desk",
+              "condition": null
+            },
+            {
+              "informationId": "c-contact",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seed-check",
+      "kind": "checkItems",
+      "schemaVersion": "0.1",
+      "revision": "check-1",
+      "title": "合成の既確認Check。実運用の承認ではない",
+      "basedOn": {
+        "documentId": "c-bd",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "verification": "unverified"
+      },
+      "intro": [],
+      "index": [
+        {
+          "activityId": "c-guidance",
+          "purpose": "",
+          "connections": "",
+          "checkIds": [
+            "seed-item"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "seed-section",
+          "activityId": "c-guidance",
+          "title": "案内",
+          "preamble": []
+        }
+      ],
+      "guarantees": [],
+      "examples": [],
+      "items": [
+        {
+          "id": "seed-item",
+          "checkId": "SYN-1",
+          "title": "案内が記録される",
+          "detailSummary": "",
+          "sectionId": "seed-section",
+          "reviewState": "確認済み",
+          "fields": {
+            "guarantee": [
+              {
+                "kind": "text",
+                "value": "案内が記録される"
+              }
+            ]
+          }
+        }
+      ],
+      "notes": []
+    },
+    {
+      "id": "seed-state",
+      "kind": "stateTransition",
+      "schemaVersion": "0.2",
+      "revision": "state-1",
+      "title": "合成の部分状態",
+      "basedOn": {
+        "documentId": "c-bd",
+        "revision": "design-D2-D2.1-shared-data-D2.2-no-cross-order",
+        "verification": "unverified"
+      },
+      "objectId": "c-requester",
+      "states": [
+        {
+          "id": "seed-done",
+          "name": "案内済み"
+        }
+      ],
+      "start": "@new",
+      "terminal": "@unknown",
+      "completeness": "partial",
+      "source": "合成入力。実運用の合意を表さない。",
+      "transitions": [
+        {
+          "id": "seed-transition",
+          "sourceId": "S1",
+          "fromId": "@new",
+          "toId": "seed-done",
+          "activityId": "c-guidance",
+          "event": null,
+          "exceptionId": null,
+          "condition": "案内を記録",
+          "effect": "change",
+          "path": "normal",
+          "evidence": "合成入力",
+          "note": "部分定義",
+          "conditionLabel": "明示された表示名"
+        },
+        {
+          "id": "label-same-target",
+          "sourceId": "S2",
+          "fromId": "@new",
+          "toId": "seed-done",
+          "activityId": "c-guidance",
+          "event": null,
+          "exceptionId": null,
+          "condition": "案内を記録",
+          "effect": "change",
+          "path": "normal",
+          "evidence": "合成入力",
+          "note": "部分定義",
+          "conditionLabel": "別の表示名"
+        },
+        {
+          "id": "label-undecided",
+          "sourceId": "S3",
+          "fromId": "@new",
+          "toId": "@unknown",
+          "activityId": "c-guidance",
+          "event": null,
+          "exceptionId": null,
+          "condition": "案内を記録",
+          "effect": "constraint",
+          "path": "normal",
+          "evidence": "合成入力",
+          "note": "到着先は未決",
+          "conditionLabel": "未決の表示名"
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}

@@ -3,9 +3,10 @@ import {graphFocus} from './graph-focus.ts';
 import {graphMarkers,paintGraphException} from './graph-visuals.ts';
 import type {Design,Graph} from './graph';
 import {matrixPlan} from './matrix-layout.ts';
-import {routeEdge,type RouteNode} from './routing.ts';
-import {captionRowStep,captionTop} from './caption-spacing.ts';
-export type Transition={id:string;from:string;activity:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;to:string;effect:string;path:string;evidence:string;note:string};
+import {captionOnRow,routeEdge,type RouteNode} from './routing.ts';
+import {RouteCache} from './route-cache.ts';
+import {captionRowStep,CAPTION_LINE_STEP} from './caption-spacing.ts';
+export type Transition={id:string;from:string;activity:string;activityId?:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;conditionLabel?:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
 /** Visual prototype: explicit edges only; no lifecycle or condition inference. */
@@ -13,30 +14,40 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
  const labels:Record<string,string>={'@new':'作成前','@none':'作成なし','@unknown':'未決'};
  const rows=model.transitions.map(row=>[row]),ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
- // The 0.5 contract may contain distinct transitions with the same condition
- // and endpoints. Give coincident routes separate ports without changing the
- // business graph router or merging the underlying transition identities.
- const coincident=new Map<string,number[]>(),ports=new Map<number,{from:number;to:number}>(),departurePorts=new Map<string,number>();
- rows.forEach(([row],i)=>{const key=JSON.stringify([row.from,row.to,row.activity,row.condition.trim().replace(/\s+/gu,' '),row.path]);const group=coincident.get(key)??[];group.push(i);coincident.set(key,group);});
- for(const group of coincident.values())if(group.length>1)group.forEach((index,i)=>{const fraction=i/(group.length-1),fromPort=.125+.65*fraction;ports.set(index,{from:fromPort,to:.2+.6*fraction});const from=rows[index][0].from;departurePorts.set(from,Math.max(departurePorts.get(from)??.125,fromPort));});
+ // Separate transitions can share endpoints even when their conditions differ. Keep
+ // their route ports distinct while still using the shared router and cache.
+ const coincident=new Map<string,number[]>(),ports=new Map<number,{from:number;to:number}>();
+ rows.forEach(([row],i)=>{const key=JSON.stringify([row.from,row.to]);const group=coincident.get(key)??[];group.push(i);coincident.set(key,group);});
+ for(const group of coincident.values())if(group.length>1)group.forEach((index,i)=>{const fraction=i/(group.length-1);ports.set(index,{from:.125+.65*fraction,to:.2+.6*fraction});});
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
  // shared planner. They do not classify states as BD Activities or change Graph v1.
  // The declaration order is a display hint; it never adds or removes transitions.
- const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(([row])=>({kind:row.path==='exception'?'business-exception':'input',from:row.from,to:row.to,label:row.activity+'：'+row.condition}))};
+ const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(([row])=>({kind:row.path==='exception'?'business-exception':'input',from:row.from,to:row.to,label:row.id+'：'+row.activity+'：'+row.condition}))};
  const plan=matrixPlan(layoutGraph,ids);
+ // A forward caption must start beyond every distinct departure port from the
+ // same state; otherwise the vertical branches can run through its text.
+ const departurePorts=new Map<string,number>();
+ for(const [index,port] of ports)if(!plan.wires[index].returning){const from=rows[index][0].from;departurePorts.set(from,Math.max(departurePorts.get(from)??.125,port.from));}
  // Project the shared staircase onto smaller state boxes; reserve actual
  // multiline captions without changing the shared planner/router contracts.
- const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
- const captionGroups=rows.map(([row])=>({from:row.from,activity:row.activity,rows:[row],lines:[] as string[],lineRows:[] as Transition[][],offset:0}));
+ const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/28)},(_,i)=>chars.slice(i*28,(i+1)*28).join(''));};
+ const captionGroups=rows.map(([row])=>({from:row.from,activity:row.activity,rows:[row],lines:[] as string[],lineRows:[] as Transition[][],offset:0,width:0,height:0}));
  const departures=new Map<string,number>();
- for(const group of captionGroups.values()){
-  const row=group.rows[0];group.lines=wrap(group.activity);
-  if(row.path==='exception')group.lines.push(...wrap('例外：'+(row.exception??'例外名未定義')));
-  group.lines.push(...wrap(row.condition+' → '+(labels[row.to]??row.to)));group.lineRows=group.lines.map(()=>group.rows);
-  group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.lines.length*18);
+ for(const [index,group] of captionGroups.entries()){
+  const row=group.rows[0];
+  const siblings=model.transitions.filter(other=>other.from===row.from&&(other.activityId??other.activity)===(row.activityId??row.activity)&&other.path===row.path&&(row.path!=='exception'||(other.exception??'例外名未定義')===(row.exception??'例外名未定義')));
+  const shortConditions=siblings.map(other=>(other.conditionLabel??other.condition).trim().replace(/\s+/g,' '));
+  const condition=new Set(shortConditions).size===siblings.length?(row.conditionLabel??row.condition):row.condition;
+  const exception=row.path==='exception'?'例外：'+(row.exception??'例外名未定義'):'';
+  const detail=[exception,...(siblings.length>1?[condition]:[])].filter(Boolean).join('：');
+  group.lines=wrap(group.activity+(detail?'（'+detail+'）':''));group.lineRows=group.lines.map(()=>group.rows);
+  group.width=Math.max(...group.lines.map(line=>Array.from(line).length*14));group.height=group.lines.length*18;
+  if(!plan.wires[index].returning){group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.height);}
  }
- let y=40;const projected=new Map<string,number>();
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
+ // A multiline return caption can extend above the first state. Reserve only
+ // the extra initial top space needed so the initial view does not clip it.
+ let y=Math.max(40,...captionGroups.map((group,i)=>plan.wires[i].returning&&group.from===ordered[0]?16+group.height/2-44*(plan.wires[i].fromPort??.5):40));const projected=new Map<string,number>();
  for(const id of ordered){projected.set(id,y);y+=captionRowStep(44,departures.get(id)??0);}
  const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
@@ -44,23 +55,38 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  svg.append(graphMarkers('state-transition-'));
  const shapeElements=new Map<string,SVGElement>(),edgeElements:SVGElement[]=[],captionElements:{element:SVGElement;rows:Transition[]}[]=[];
  let selected:string|undefined=view.selected;
- const select=(id?:string)=>{selected=id;view.selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','node graph-shape state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+(rows[i][0].path==='exception'?' exception':'')+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));svg.querySelectorAll('[data-exception-paint]').forEach(e=>e.remove());for(const path of edgeElements)if(path.classList.contains('exception'))paintGraphException(svg,path,{path:path.getAttribute('d')!},{'data-transitions':path.getAttribute('data-transitions')!});};
+ const select=(id?:string)=>{selected=id;view.selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','node graph-shape state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+(rows[i][0].path==='exception'?' exception':'')+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));svg.querySelectorAll('[data-exception-paint]').forEach(e=>e.remove());for(const path of edgeElements)if(path.classList.contains('exception'))paintGraphException(svg,path,{path:path.getAttribute('d')!},{'data-transitions':path.getAttribute('data-transitions')!});svg.querySelectorAll('.state-diagram-edge-label').forEach(label=>svg.append(label));};
  svg.addEventListener('click',event=>{if(event.target===svg)select();});svg.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();select();}});
- const wirePoints:ReturnType<typeof routeEdge>['points'][]=[];
+ const wires=plan.wires.map((wire,i)=>({...wire,captionLane:captionGroups[i].offset/CAPTION_LINE_STEP}));
+ // The shared business router measures single-line labels. Supply equivalent
+ // widths, then use its same collision escape for the full multiline boxes.
+ const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
+ const routes=new RouteCache(options=>routeEdge({...options,...(ports.has(options.index??0)?{ports:ports.get(options.index??0)}:{})})).update({},model,nodes,captionRelations,wires);
+ const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
+ const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
+ for(const i of captionOrder){
+  const route=routes[i]!,group=captionGroups[i],singleWidth=Math.max(30,captionRelations[i].label.length*12);
+  const source=nodes.find(node=>node.id===group.from)!,departurePort=departurePorts.get(group.from);
+  const left=route.label[0]-singleWidth/2;
+  const clearLeft=!wires[i].returning&&departurePort!==undefined?Math.max(left,source.x+source.width*departurePort+8):left;
+  const anchor:[number,number]=[clearLeft+group.width/2,route.label[1]+(wires[i].returning?0:group.height/2-9)];
+  const label=captionOnRow(anchor,group.width,group.height,nodes,placed);labelPositions[i]=label;
+  placed.push({id:String(i),x:label[0]-group.width/2,y:label[1]-group.height/2,width:group.width,height:group.height});
+ }
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
   const row=rs[0];
-  const separatePorts=ports.get(index);
-  const route=routeEdge({from:row.from,to:row.to,nodes,index,kind:row.path==='exception'?'business-exception':'input',matrix:plan.wires[index],...(separatePorts?{ports:separatePorts}:{}),labelWidth:0,labelHeight:0,wires:wirePoints});
+  const route=routes[index]!;
   const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','marker-end':'url(#state-transition-arrow)','data-transitions':rs.map(r=>r.id).join(' ')});if(row.path==='exception'){path.classList.add('exception');path.setAttribute('stroke-dasharray','6 5');}
-  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);edgeElements.push(path);wirePoints.push(route.points);
+  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);edgeElements.push(path);
   right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
- for(const group of captionGroups.values()){
-  const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*(departurePorts.get(group.from)??.125)+8,y=captionTop(node.y+node.height,group.offset)+14;
+ for(const [index,group] of captionGroups.entries()){
+  const position=labelPositions[index]!,x=position[0]-group.width/2,y=position[1]-group.height/2+14;
+  svg.append(make('rect',{x:String(x),y:String(y-14),width:String(group.width),height:String(group.height),fill:'none','pointer-events':'none','data-canvas-boundary':''}));
   const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity,'data-transition-id':group.rows[0].id,'aria-label':group.lines.join('')});
-  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
-  right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);
+  group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':'14','font-weight':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
+  right=Math.max(right,x+group.width+24);bottom=Math.max(bottom,y+group.height+24);
  }
  for(const node of nodes){
   const special=node.id.startsWith('@'),group=make('g',{role:'button',tabindex:'0','aria-label':labels[node.id]??node.id,'aria-pressed':'false',class:'node graph-shape state-shape','data-state':node.id,'data-node':node.id});
@@ -89,7 +115,7 @@ export function stateTransitionPanel(design:Design,id:string,navigate:(id:string
    if(!exception||exception.activityId!==row.activity){text('p','状態遷移を表示できません：例外ID参照が不正です').setAttribute('role','status');return root;}
   }
  }
- const views=savedViews.get(design)??new Map<string,DiagramView>();savedViews.set(design,views);const view=views.get(id)??newDiagramView();views.set(id,view);const projectedModel={...model,transitions:model.transitions.map(row=>({...row,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))};root.append(diagramCanvas(document,v=>stateDiagram(projectedModel,v),view));
+ const views=savedViews.get(design)??new Map<string,DiagramView>();savedViews.set(design,views);const view=views.get(id)??newDiagramView();views.set(id,view);const projectedModel={...model,transitions:model.transitions.map(row=>({...row,activityId:row.activity,activity:design.graph.nodes.find(n=>n.id===row.activity)?.name??row.activity}))};root.append(diagramCanvas(document,v=>stateDiagram(projectedModel,v),view));
  const label=(value:string)=>({'@new':'記録作成前','@none':'この操作では作成しない（処理結果）','@unknown':'未決（設計課題）'}[value]??value);
  const effects:Record<string,string>={change:'状態変更',unchanged:'状態不変','no-create':'作成しない',constraint:'結果の制約・遷移先未決'};
  const details=document.createElement('details');text('summary',`操作の詳細（${model.transitions.length}）`,details);const list=document.createElement('ol');details.append(list);root.append(details);
