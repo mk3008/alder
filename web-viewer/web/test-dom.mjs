@@ -89,5 +89,5 @@ assert.equal(two.w.document.querySelector('.tab').dataset.key,key);assert.equal(
 // Script/link/image text must remain inert.
 const unsafe=markdown+'\n<script>window.pwned=true</script>\n<img src="https://invalid.test" onerror="window.pwned=true">';
 const three=createWindow();await restored(three.$);Object.defineProperty(three.$('fallback'),'files',{value:[file('safe.md',unsafe)]});await three.$('fallback').onchange();
-three.$('scope-outside').click();three.$('node-category-activity').click();three.w.document.querySelector('[data-list-node="同期漏れ検査"] .node-navigate').click();assert.match(three.$('detail').textContent,/<script>/);assert.equal(three.w.pwned,undefined);assert.equal(three.$('detail').querySelectorAll('script,img,a').length,0);three.w.close();checks.push('Markdown remains inert text');
+three.w.document.querySelector('[data-explorer-key="business:同期漏れ検査"]').click();assert.match(three.$('detail').textContent,/<script>/);assert.equal(three.w.pwned,undefined);assert.equal(three.$('detail').querySelectorAll('script,img,a').length,0);three.w.close();checks.push('Markdown remains inert text');
 console.log(JSON.stringify({model:'jsdom + fake-indexeddb; mocked file handles/pointer capture',checks,passed:checks.length},null,2));

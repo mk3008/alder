@@ -22,7 +22,7 @@ export function readViewerDocument({data,original}:NormalizedDocument):Design{
  const objectStateTransitions=Object.assign(Object.create(null),Object.fromEntries(data.states.filter(d=>d.basedOn.documentId===bd.id).map(d=>{
   const labels=new Map(d.states.map(s=>[s.id,s.name]));
   const model:StateModel={object:all.find(n=>n.id===d.objectId)!.name,states:d.states.map(s=>s.name),start:d.start,terminal:d.terminal,completeness:d.completeness,source:d.source,
-   transitions:d.transitions.map(t=>({id:t.sourceId,from:labels.get(t.fromId)??t.fromId,to:labels.get(t.toId)??t.toId,activity:t.activityId,...(t.event?{event:t.event}:{}),...(t.exceptionId?{exceptionId:t.exceptionId,exception:bd.exceptions?.find(e=>e.id===t.exceptionId)?.name}:{}),condition:t.condition,effect:t.effect,path:t.path,evidence:t.evidence,note:t.note}))};
+   transitions:d.transitions.map(t=>({id:t.sourceId,from:labels.get(t.fromId)??t.fromId,to:labels.get(t.toId)??t.toId,activity:t.activityId,...(t.event?{event:t.event}:{}),...(t.exceptionId?{exceptionId:t.exceptionId,exception:bd.exceptions?.find(e=>e.id===t.exceptionId)?.name}:{}),condition:t.condition,...(t.conditionLabel?{conditionLabel:t.conditionLabel}:{}),effect:t.effect,path:t.path,evidence:t.evidence,note:t.note}))};
   return [d.objectId,{model}];
  })));
  return {graph:canonicalJSONGraph({version:1,...(bd.scope?{scope:bd.scope}:{}),nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),

@@ -1,0 +1,32 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-28 本人画像と指示に基づく、業務データ構造の全体図・分類図・個別図の件数表示。",
+  "supersedes": ["従来の『確定時1』『複数』という表示文字列のみ。件数の業務的意味、時点、最小件数未確定は保持する。"],
+  "checks": [
+    {
+      "id": "CARDINALITY-DISPLAY-001",
+      "condition": "購買の全体図、全4分類の構造図、および6概念の個別図の件数を表示する。",
+      "guarantee": "接続元・先の件数ラベルは 1、0..1、N、0..N、1..N の数値・記号表記とし、『複数』『確定時1』のような日本語を混ぜない。件数の位置、線の接続点・配線、対象範囲、選択効果を保持する。",
+      "reason": "関係ごとの件数を同じ書き方で読めるようにするため。",
+      "source": "2026-10-28 本人画像と指示。https://github.com/mk3008/root/issues/133",
+      "verification": "概念草案の全関係、全分類・全個別の描画、既存の配線・操作検証と公開Viewerで照合する。"
+    },
+    {
+      "id": "CARDINALITY-DISPLAY-002",
+      "condition": "購入準備と購入申請の関係を全体図と引渡し分類で比較する。",
+      "guarantee": "全体図では、申請から見た現在の準備への所属を 0..1、準備から見た申請の件数を N とする。引渡し分類は確定済みの対象であるため、申請から見た準備を 1、準備から見た申請を N とする。N は複数を扱えるが最小件数を確定しない記号であり、0件の許可や1件以上の必須を追加しない。",
+      "reason": "未準備と確定済みの範囲を区別し、原典にない最小件数を決めないため。",
+      "source": "PURCHASE-V2-003、CONCEPT-SURFACE-003、概念草案 preparation-request / prepared-requests-view。https://github.com/mk3008/root/pull/168",
+      "verification": "草案の意味・ラベル、全体・分類・個別のSVGと既存PURCHASE-V2-003を照合する。"
+    },
+    {
+      "id": "CARDINALITY-DISPLAY-003",
+      "condition": "同じ関係を全体図、分類図、隣接概念の個別図で確認する。",
+      "guarantee": "全体と個別は同じ原典ラベルを用い、分類の対象範囲に必要な差は維持する。Viewerは表示時に件数の業務意味を推論せず、各画面の描画処理・詳細へのリンク・カレント自己リンク抑止を維持する。",
+      "reason": "表示対象を絞ることと、描画の同一性・根拠のある意味の差を混同しないため。",
+      "source": "VIEW-NAV-001〜003、CONCEPT-REVIEW-004。https://github.com/mk3008/root/issues/133",
+      "verification": "web/test-viewer-shell.mjs、web/test-concept-review.mjs、web/test-purchase-v2-review.mjs、ナビゲーション正本と公開Viewerで照合する。"
+    }
+  ]
+}

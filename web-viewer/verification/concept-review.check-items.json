@@ -1,0 +1,100 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md",
+  "scope": "ユーザー要件としての業務データ構造を4分類でレビューするデモ。物理構成・SQL VIEWや複製を要求しない。",
+  "checks": [
+    {
+      "id": "CONCEPT-REVIEW-001",
+      "condition": "購買の概念モデルを最初に開く。",
+      "guarantee": "画面の分類名を「業務データ構造」とし、購買業務の全体像に4分類と情報の受け渡しを表示する。全データの参考関連図を全体像と混同しない。",
+      "reason": "全概念を一度に読まず、レビュー範囲から内部構造へ進むため。",
+      "verification": "web/test-concept-review.mjs"
+    },
+    {
+      "id": "CONCEPT-REVIEW-002",
+      "condition": "いずれかの分類を開く。",
+      "guarantee": "各分類に単一のレビュー責任ロール候補、主Activity、確認先、後続への保証を表示する。候補の役割名を合意済みの決定権として扱わない。",
+      "reason": "誰が何を確認するかを曖昧にせず、操作担当と決定権を混同しないため。",
+      "verification": "web/test-concept-review.mjs"
+    },
+    {
+      "id": "CONCEPT-REVIEW-003",
+      "condition": "購入要求・申請内容の概念モデルを開く。",
+      "guarantee": "購入要求・申請内容は購入申請・購入申請版・申請品目を表示し、依頼する品名・数量・単価と対象版を確認できる。申請→版→品目の件数関係を保つ。生成責任を理由に後続ビューで必要な情報を隠さない。",
+      "reason": "生成するActivityを主軸に情報の責任範囲を分け、後続の責任を申請内容へ混ぜないため。",
+      "verification": "web/test-concept-review.mjs"
+    },
+    {
+      "id": "CONCEPT-REVIEW-004",
+      "condition": "分類内の図を表示、選択し、概念の隣接図を別タブで開く。",
+      "guarantee": "業務ごとに使う情報を組み立て、明示した関係を共通conceptDiagram/配線/カメラ/選択へ渡す。分類内の選択名・説明・持つ情報・出所を右ドロワーへ表示し、手動開閉・隣接図の既存操作を保持する。",
+      "reason": "分類追加で描画の同一性を失わず、他分類の情報への移動を明示するため。",
+      "verification": "web/test-concept-review.mjs"
+    },
+    {
+      "id": "CONCEPT-REVIEW-005",
+      "condition": "分類間移動、タブの閉鎖・再表示、URL直開き、戻る/進む、文書切替を行う。",
+      "guarantee": "対象分類を一意に復元し、同じ分類のタブを重複しない。分類はエクスプローラーから開ける。非購買文書では草案を自動適用しない。",
+      "reason": "分類の現在地と文書境界を保つため。",
+      "verification": "web/test-concept-review.mjs"
+    },
+    {
+      "id": "DATA-STRUCTURE-001",
+      "condition": "各分類の業務データ構造ビューを表示する。",
+      "guarantee": "生成した情報だけでなく利用する情報を同じ図に展開する。引渡しは準備・対象申請・対象品目を示し、品名・依頼数量・単価・見積根拠・有効な承認・対象版をその場で確認できる。判断でも対象品目を確認でき、結果は品名とQ/R/C/Wの意味を表示する。出所と対象時点を追え、別のデータを新規保存する要求としない。",
+      "reason": "依頼者が別図を頭の中で結合せず、必要情報の過不足と業務の成立を判断するため。",
+      "verification": "web/test-concept-review.mjs",
+      "requiredViews": {
+        "group-request": {
+          "item": [
+            "品名",
+            "税抜希望単価",
+            "依頼数量 Q"
+          ]
+        },
+        "group-decision": {
+          "request": [
+            "購入理由（対象版）",
+            "見積根拠（対象版）"
+          ],
+          "item": [
+            "品名",
+            "依頼数量 Q",
+            "税抜希望単価"
+          ]
+        },
+        "group-handoff": {
+          "preparation": [
+            "準備番号"
+          ],
+          "request": [
+            "対象の確定提出版",
+            "見積根拠（対象版）",
+            "有効な承認（対象版）"
+          ],
+          "item": [
+            "品名",
+            "依頼数量 Q",
+            "税抜希望単価"
+          ]
+        },
+        "group-result": {
+          "item": [
+            "品名（対象版）",
+            "依頼数量 Q",
+            "入庫累計 R",
+            "購入しない確定数量 C",
+            "待ち数量 W＝Q−R−C"
+          ],
+          "line": [
+            "今回入庫数量"
+          ]
+        }
+      }
+    }
+  ],
+  "supersedes": {
+    "revision": "f256c01059e07514534c112968f3cb293a3957df",
+    "reason": "2026-10-25本人指定。生成責任の範囲とレビューの表示範囲を分離し、利用する情報まで展開する。既存Bの固定正本は変更しない。"
+  }
+}

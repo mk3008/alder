@@ -1,4 +1,5 @@
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
@@ -191,7 +192,7 @@ export async function verifyHeaderControls(browser){
   assert.equal(await page.locator('header #refresh').count(),0,'document refresh is outside responsive header measurements');
   assert.equal(await page.locator('#refresh .source-caption').count(),0,'document refresh remains icon-only');
   assert.equal(await page.locator('#refresh').isVisible(),false,'no active document hides refresh');
-  await page.locator('#open-sample').click();await page.locator('.node').first().waitFor();await settle(page);
+  await closeCanvasOverlays(page);await page.locator('#open-sample').click();await page.locator('.node').first().waitFor();await settle(page);
   const withSample=await readHeader(page);assertHeader(withSample,'sample open');assert.deepEqual(withSample.canonical,canonical,'sample document does not change canonical header measurements');
   await ensureDocumentActions(page);assert.equal(await page.locator('#refresh').isVisible(),true,'selected sample keeps refresh reachable');assert.equal(await page.locator('#refresh').isDisabled(),true,'sample has no reloadable external source');assert.equal(await page.locator('#refresh').evaluate(button=>getComputedStyle(button).opacity),'0.4','sample refresh remains gray');
   assert.deepEqual(pageErrors,[],'header resize/font tests have no page errors, including ResizeObserver loops');

@@ -130,12 +130,12 @@ try{
  const stored=await flush(e);assert.ok(!JSON.stringify(stored).includes('displaySettings'),'expansion is not stored');
  const reloaded=await boot({db:e.db});assertOpen(reloaded,false);assert.deepEqual(state(reloaded),state(e));assert.deepEqual(inputIDs.map(id=>reloaded.$(id).checked),[false,true,false,true]);
  reloaded.w.close();
- assert.equal(e.d.querySelector('.tab.active .close').hidden,true);
- await e.d.querySelector('.tab.active .close').onclick();assertOpen(e,true);assert.equal(e.bar.hidden,false);
- assert.deepEqual(await saved(e),stored);stable(e,()=>toggle(e));assertOpen(e,false);
- await e.$('open-sample').onclick({preventDefault(){}});assertOpen(e,false);assert.deepEqual(inputIDs.map(id=>e.$(id).checked),[false,true,false,true]);
+ assert.equal(e.d.querySelector('.tab.active .close').hidden,false);stable(e,()=>toggle(e));assertOpen(e,false);
+ await e.d.querySelector('.tab.active .close').onclick();assert.equal(e.$('empty-workspace').hidden,false);
+ assert.deepEqual(await saved(e),stored);
+ e.d.querySelector('[data-explorer-key="business:overview"]').click();assert.equal(e.$('business-workspace').hidden,false);assertOpen(e,false);assert.deepEqual(inputIDs.map(id=>e.$(id).checked),[false,true,false,true]);
  assert.deepEqual(state(e).tabs[0].positions,stored.tabs[0].positions);
- checks.push('all four handlers persist; reload collapses settings; permanent overview close is inert; sample reselect preserves settings');
+ checks.push('all four handlers persist; reload collapses settings; overview close and sample reselect preserve settings');
  e.w.close();
 
  // Selected, signed and far-away nodes exercise camera origins/insets while

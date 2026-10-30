@@ -1,5 +1,5 @@
 import {useUngroupedSample} from './legacy-sample-browser.mjs';
-import {openDisplaySettings} from './toolbar-settings-control.mjs';
+import {openDisplaySettings,closeCanvasOverlays} from './toolbar-settings-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
@@ -151,7 +151,7 @@ async function verifyZoom(page,zoom){
  assert.equal(await page.locator('#zoom').textContent(),`${zoom*100}%`);
  const baseline=await page.evaluate(readReturnRoutesInPage);assertVisible(baseline,baseline,{});const measurements=[],labelMetrics=[];
  for(const width of returnRouteWidths){
-  await page.setViewportSize({width,height:960});assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions,'all 25 coordinates stay fixed at '+width);
+  await page.setViewportSize({width,height:960});await closeCanvasOverlays(page);assert.deepEqual(await page.evaluate(readPositionsInPage),returnRoutePositions,'all 25 coordinates stay fixed at '+width);
   assertVisible(await page.evaluate(readReturnRoutesInPage),baseline,{});
   await openDisplaySettings(page);await page.locator('#show-outside').uncheck();assert.equal(await page.locator('.node').count(),12);
   assert.equal(await page.locator('#prefer-write').isChecked(),false);assert.equal(await page.locator('#show-exceptions').isChecked(),false);

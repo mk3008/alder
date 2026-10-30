@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {openSourceAction} from './source-menu-browser.mjs';
+import {selectGraphNode} from './graph-selection-browser.mjs';
 const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),pkg=JSON.parse(raw),bd=pkg.documents[0];
 const actualURL='https://raw.githubusercontent.com/mk3008/alder/b498ddb6a02de44aca6fc27d535febe4cafd0315/work/plugin-json/issue-273/snapshots/04-final-after-replay.json';
 export async function verifyJSONBoundaries(browser){
@@ -40,7 +41,7 @@ export async function verifyJSONBoundaries(browser){
   // Stable-ID update through the real URL refresh path preserves selection/layout.
   const a=bd.activities[0],renamed=structuredClone(pkg);renamed.revision='package-renamed';renamed.documents[0].revision='bd-renamed';renamed.documents[1].revision='checks-renamed';renamed.documents[1].basedOn.revision='bd-renamed';renamed.documents[0].activities[0].name='持出しを新しい名前で受け付ける';renamed.documents[0].objects.reverse();renamed.documents[0].activities.reverse();let version=raw;
   await context.route('https://json-fixture.test/refresh.json',route=>route.fulfill({headers,body:version}));await inputURL('https://json-fixture.test/refresh.json');await page.locator('#source-dialog').waitFor({state:'hidden'});
-  if(!await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();await page.locator(`[data-list-node="${a.id}"] .node-navigate`).click();await page.locator('#node-list-close').click();await saved();const layout=(await record()).views[0];
+  await selectGraphNode(page,a.id);await saved();const layout=(await record()).views[0];
   version=JSON.stringify(renamed,null,2);await page.locator('#refresh').click();await page.waitForFunction(name=>document.querySelector('.node.selected .node-name')?.textContent===name,renamed.documents[0].activities.find(n=>n.id===a.id).name);await saved();const updated=await record();assert.equal(updated.views[0].selected,a.id);assert.deepEqual(updated.views[0].positions,layout.positions);assert.equal(updated.document.design.model.business.revision,'bd-renamed');
   version='{broken';await page.locator('#refresh').click();await page.locator('#status-text').filter({hasText:'旧表示を保持'}).waitFor();assert.equal((await record()).document.design.markdown,JSON.stringify(renamed,null,2));await dismiss();version=JSON.stringify(renamed,null,2);
   await page.reload();await ready();assert.equal(await page.locator('.node.selected').getAttribute('data-node'),a.id);assert.equal((await record()).document.design.markdown,version);await page.screenshot({path:`${out}/renamed-restored.png`});results.push({case:'native IndexedDB / URL refresh',renameAndReorder:true,stableSelection:true,stablePositions:true,revisions:true,invalidRefreshPreserved:true,reload:true});

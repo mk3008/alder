@@ -1,3 +1,4 @@
+import {exceptionSegments} from './exception-paint.ts';
 import {createElement,icons,Box,UserRound} from 'lucide';
 import type {GraphNode} from './graph';
 /** Same Lucide image resolver for graph cards and Object drawer headings. */
@@ -14,4 +15,15 @@ export function graphMarkers(prefix=''){
   const arrow=document.createElementNS(ns,'path');arrow.setAttribute('d','M0 0L10 5L0 10Z');arrow.classList.add('arrow');if(selected)arrow.classList.add('review-related-arrow');marker.append(arrow);defs.append(marker);
  }
  return defs;
+}
+
+/** Coordinate-phased exception paint shared by business and state diagrams. */
+export function paintGraphException(root:Element,path:SVGElement,route:{path:string},attrs:Record<string,string>={}){
+ path.style.strokeOpacity='0';
+ for(const segment of exceptionSegments(route.path)){
+  const paint=root.ownerDocument.createElementNS('http://www.w3.org/2000/svg','path');paint.setAttribute('d',segment.path);paint.setAttribute('data-exception-paint','');
+  for(const[k,v]of Object.entries(attrs))paint.setAttribute(k,v);
+  paint.setAttribute('class','edge-paint'+(path.classList.contains('review-related')?' review-related':'')+(path.classList.contains('muted')?' muted':''));
+  paint.setAttribute('stroke-dasharray',segment.offset===undefined?'none':'6 5');if(segment.offset!==undefined)paint.setAttribute('stroke-dashoffset',String(segment.offset));root.append(paint);
+ }
 }

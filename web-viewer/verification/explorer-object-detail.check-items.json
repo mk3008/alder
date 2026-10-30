@@ -1,0 +1,42 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-28 のエクスプローラー階層化と業務設計の Object 個別表示。既存の検証正本は変更しない。",
+  "checks": [
+    {
+      "id": "EXPLORER-TREE-001",
+      "condition": "購買の業務設計書とデータ構造の表示例を開いてエクスプローラーを見る。",
+      "guarantee": "業務設計には全体図、折りたためる Activity と Object の一覧を置き、状態遷移と業務データ構造を独立した最上位項目として保つ。業務データ構造には全体像と、折りたためる概念モデルのレビュー範囲一覧を置く。分類図の中の概念単位の入口を一覧に再追加しない。",
+      "reason": "ページの種類と全体・個別の関係を示し、重複する入口でメニューが飽和することを防ぐ。",
+      "verification": "web/test-viewer-shell.mjs と公開 Viewer の画面操作。"
+    },
+    {
+      "id": "EXPLORER-TREE-002",
+      "condition": "各階層を開閉し、名前で検索してから検索を消す。",
+      "guarantee": "階層は個別に開閉でき、該当する項目とその親が検索中に見える。検索を消すと検索前の開閉状態へ戻り、選択状態とキーボード操作を維持する。",
+      "reason": "一覧が増えても目的のページへ到達でき、検索によって利用者の開閉設定を失わない。",
+      "verification": "web/test-viewer-shell.mjs と公開 Viewer の画面操作。"
+    },
+    {
+      "id": "OBJECT-DETAIL-001",
+      "condition": "業務設計書の Object を一覧またはグラフの詳細アイコンから開く。",
+      "guarantee": "対象 Object と直接つながる Activity または Object と、その相関だけを表示する独立した業務タブを開く。同じ Object を再度開いたときは既存タブを再利用する。対象の絞り込み後は業務全体図と同じグラフの描画・配置・操作処理を使う。",
+      "reason": "全体と個別の差は対象範囲に限り、関連先をたどりながら同一の操作体験を維持する。",
+      "verification": "web/test-activities.mjs、web/test-viewer-shell.mjs と公開 Viewer の画面操作。"
+    },
+    {
+      "id": "OBJECT-DETAIL-002",
+      "condition": "全体図と Activity または Object の個別図で、カードを選択して詳細リンクを見る。",
+      "guarantee": "全体図では Activity と Object の詳細リンクを表示する。個別図では選択中のカードに関係なく現在の対象自身へのリンクだけを出さず、隣接対象へのリンクを表示する。選択しただけでは右ドロワーを開かず、画像出力には操作用リンクを含めない。",
+      "reason": "現在開いている対象と選択中の対象は異なり、自身へのリンクは無意味だが隣接先への移動は必要なため。",
+      "verification": "既存の VIEW-NAV-001〜003、web/review-navigation-contract.mjs、web/test-viewer-shell.mjs、web/test-graph-png.mjs。"
+    },
+    {
+      "id": "OBJECT-DETAIL-003",
+      "condition": "Object の個別タブを開いた後、戻る・進む、再読み込み、文書更新またはタブを閉じる操作をする。",
+      "guarantee": "Object の種類と ID を保持して対象のビューを復元し、古い保存形式の業務ビューも復元する。文書更新で対象が消えた場合だけその個別タブを除き、他のタブと未保存データを保持する。",
+      "reason": "別タブの識別と既存の作業内容を維持し、Activity や全体図と混同しない。",
+      "verification": "web/test-activities.mjs、web/test-viewer-shell.mjs と公開 Viewer の画面操作。"
+    }
+  ]
+}

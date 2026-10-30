@@ -25,7 +25,7 @@ class Heap<T>{
 }
 /** Activity skeleton -> Object insertion -> cell reservations -> projection.
  * SCCs determine direction before any cells or pixel coordinates exist. */
-export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string):MatrixPlan{
+export function matrixPlan(graph:Graph,hint?:readonly string[]):MatrixPlan{
  const analysis=dependencyOrder(graph,hint),{nodes:stable,children,parents,activityRank}=analysis;
  const indegree=parents.map(p=>p.length);
  const ready=new Heap<number>((a,b)=>{
@@ -55,22 +55,8 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   else phase.set(n.id,rs.length?2*rs.reduce((min,id)=>Math.min(min,rank.get(id)!),Infinity)-1:2*order.length+1);
  }
  const nodes=stable.slice().sort((a,b)=>phase.get(a.id)!-phase.get(b.id)!||(degree.get(b.id)??0)-(degree.get(a.id)??0)||a.id.localeCompare(b.id,'en'));
- // Focus is a projection policy, not a second DAG/layout implementation.
- // Normal Object outputs precede exception Activities in either view.
- const focused=activity!==undefined&&stable.some(n=>n.id===activity&&n.type==='business');
- const detailColumns=new Map<string,number>();
- if(focused){
-  const outputs=new Set(graph.relations.filter(r=>r.from===activity&&r.kind==='output').map(r=>r.to));
-  const upstream=stable.filter(n=>n.id!==activity&&n.type!=='business'&&!outputs.has(n.id));
-  const after=stable.filter(n=>outputs.has(n.id));
-  const exceptions=stable.filter(n=>n.type==='business'&&n.id!==activity);
-  const focus=stable.find(n=>n.id===activity)!;
-  nodes.splice(0,nodes.length,...upstream,focus,...after,...exceptions);
-  upstream.forEach((n,i)=>detailColumns.set(n.id,i));
-  detailColumns.set(activity!,upstream.length);
-  after.forEach(n=>detailColumns.set(n.id,upstream.length+1));
-  exceptions.forEach((n,i)=>detailColumns.set(n.id,upstream.length+2+i));
- }
+ // View selection is upstream. This planner receives only the selected graph
+ // and must not know whether it came from an overview or an Activity detail.
  const rowIndex=new Map(nodes.map((n,i)=>[n.id,i])),lanes=new Map<string,number>(),wireKeys=new Map<string,MatrixWire>(),captionLanes=new Map<string,number>();
  const wires:MatrixWire[]=graph.relations.map((r,i)=>{
   const identity=JSON.stringify([r.kind,r.from,r.to,r.label]);if(wireKeys.has(identity))return wireKeys.get(identity)!;
@@ -89,9 +75,8 @@ export function matrixPlan(graph:Graph,hint?:readonly string[],activity?:string)
   // One logical row per card; extra caption lines expand only its pixel gap.
   if(i)row++;
   let column=n.type==='business'?previousActivityColumn+1:owner.has(n.id)?cells[owner.get(n.id)!][0]+1:0;
-  if(focused)column=detailColumns.get(n.id)!;
   while(corridors.peek()&&corridors.peek().until<i)corridors.pop();
-  if(!focused&&corridors.peek())column=Math.max(column,corridors.peek().column);
+  if(corridors.peek())column=Math.max(column,corridors.peek().column);
   cells[n.id]=[column,row];if(n.type==='business')previousActivityColumn=column;
   if(lastTarget.has(n.id))corridors.push({column:column+1,until:lastTarget.get(n.id)!});
  }

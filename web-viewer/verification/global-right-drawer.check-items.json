@@ -1,0 +1,43 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-10-29本人指示：右ドロワーの開閉はアプリ共通、位置は左ドロワー同様タブ列の外まで伸ばす。",
+  "supersedes": [
+    "VIEW-DRAWER-001 および STRUCTURE-SHELL-004 等のタブ別開閉保持条件と、概要・例URLでドロワーを強制展開する条件のみ。選択で自動展開しない、ページ別内容・カメラ・自己リンク抑止などは維持。"
+  ],
+  "checks": [
+    {
+      "id": "GLOBAL-DRAWER-001",
+      "condition": "業務・サブシステム・概念・状態遷移・空画面を切り替え、開閉する。",
+      "guarantee": "右ドロワーの開閉はアプリ全体で一つ。どのタブで操作しても他のタブへ反映し、タブ切替・閉鎖再表示・ブラウザ履歴・URLの概要/例指定で開閉を上書きしない。",
+      "reason": "開閉はページの情報ではなく、アプリの表示設定だから。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "DOM統合とChromeで種別を跨ぐ双方向の切替・履歴・閉鎖再表示を照合"
+    },
+    {
+      "id": "GLOBAL-DRAWER-002",
+      "condition": "PCと狭幅で右ドロワーを開く。",
+      "guarantee": "右の各表示面を左エクスプローラーと同じworkbench直下に配置。上端はタブ列の上端と一致し、PCではタブ列と図を左右ドロワーの間へ配置する。狭幅の重なり表示もタブ列の高さまで伸ばす。",
+      "reason": "ページ内の図ではなく、アプリ全体に属する補足領域であることを位置でも示すため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "DOM所属とChromeの393/1280幅・両テーマ・実矩形を照合"
+    },
+    {
+      "id": "GLOBAL-DRAWER-003",
+      "condition": "図の選択、概要とデータ例、情報のないページを表示する。",
+      "guarantee": "表示内容は現在のページ・選択に従い、ページの概要・サンプルと選択情報を分離して保持。選択だけで閉じたドロワーを開かない。右ドロワーが未対応の画面では表示領域を隠すが、共有の開閉設定は変更しない。",
+      "reason": "開閉状態の共有と内容の共有は別であり、別ページの情報を混入しないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "DOMとChromeで選択・サンプル・状態遷移・空画面を照合"
+    },
+    {
+      "id": "GLOBAL-DRAWER-004",
+      "condition": "開閉して再読込し、文書を切り替え、既存の幅調整と図を操作する。",
+      "guarantee": "通常アプリは既存Workspaceのdrawer設定一つを保存・復元。旧概念タブ別マップを再び正本にしない。幅調整、表のスクロール、図のカメラと自己リンク抑止、左メニュー、購買JSONと既存検証正本を維持する。",
+      "reason": "状態の二重管理とタブ復元による意図しない再開閉を避けるため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "保存・復元のDOM/Chromeと既存図・表の回帰、旧正本不変を照合"
+    }
+  ],
+  "preparationNote": "実装前に範囲を限定。状態遷移・空画面の新しい補足パネルは追加せず、既存の非表示と設定保持を維持する。"
+}

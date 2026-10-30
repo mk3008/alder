@@ -1,0 +1,21 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#構造化した概要",
+  "scope": "本人の新要求による概要表示の置換。旧REVIEW-OVERVIEW-001/CAPABILITY-SAMPLE-002の責任ロール・受け渡し表示だけを改定し、ナビゲーション/図/サンプル保証は保持。",
+  "checks": [
+    {
+      "id": "STRUCTURED-OVERVIEW-001",
+      "condition": "4つのデータ構造の概要と全体像を開く。",
+      "guarantee": "データ構造ID/タイトル/説明、レビュアーの既存ロール、関連Activity、できることのヘッダ/説明/サンプル、できないことのヘッダ/説明/理由を構造化JSONで保持する。レビュアーは原典のwhoに実在し、勝手な責任者ロールを増やさない。ID/根拠/未確定/内部の受け渡しメタは表示せず、確認先/主となる業務/責任ロール候補/レビュー範囲の定型文を出さない。",
+      "reason": "作業者が情報のまとまりで仕事を成立させられるか、構造と行動の制約を判断するため。",
+      "verification": "web/test-data-examples.mjs / web/test-concept-review.mjs / public Chrome"
+    },
+    {
+      "id": "STRUCTURED-OVERVIEW-002",
+      "condition": "概要の関連業務とサンプルを開く。",
+      "guarantee": "関連業務は原典のActivity名とLucideの別タブアイコンを表示し、対応する業務詳細タブを開く。原典と対応しない文書では誤った業務を開かない。9場面の値/ID/色、サンプル導線と親説明/履歴/保存/iframe/drawer保持は継続する。",
+      "reason": "業務設計書への対応を失わず、具体例と構造の確認を継続できるため。",
+      "verification": "web/test-data-examples.mjs / web/test-viewer-shell.mjs / public Chrome"
+    }
+  ]
+}

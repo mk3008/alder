@@ -28,6 +28,16 @@ export function union(boxes,padding=0){
 }
 export const contains=(outer,inner,epsilon=0.001)=>inner.x>=outer.x-epsilon&&inner.y>=outer.y-epsilon&&inner.x+inner.width<=outer.x+outer.width+epsilon&&inner.y+inner.height<=outer.y+outer.height+epsilon;
 
+/** Inline only the known local graph stylesheet; reject any other resource. */
+export function inlineReviewStyles(productCSS,graphCSS){
+  assert.doesNotMatch(graphCSS,/@import|url\(/i,'Graph stylesheet must not request other resources');
+  const localImport='@import "./graph-presentation.css";';
+  assert.ok(productCSS.startsWith(localImport),'Expected the local graph stylesheet');
+  const result=graphCSS+productCSS.slice(localImport.length);
+  assert.doesNotMatch(result,/@import|url\(/i,'Review stylesheet must be self-contained');
+  return result;
+}
+
 export function loadReviewModel(){
   const raw={sample:read('./sample-business-design.md'),baseline:read('./baseline-routing.ts'),candidate:read('./candidate-routing.ts'),currentPositions:read('./positions-current.json'),staircasePositions:read('./positions-staircase.json')};
   for(const [key,value] of Object.entries(raw))assert.equal(sha256(value),SOURCE_HASHES[key],`Public review fixture changed: ${key}`);
@@ -63,9 +73,8 @@ export function loadReviewModel(){
   assert.equal(known.to,target.id);assert.equal(known.route.fallback,true);assert.ok(overlap(known.labelBounds,target));
   // Estimated routing boxes are deliberately not substituted for browser glyphs.
   const estimatedOverlap={relation:59,target:target.id,width:Math.min(known.labelBounds.x+known.labelBounds.width,target.x+260)-Math.max(known.labelBounds.x,target.x),height:Math.min(known.labelBounds.y+18,target.y+68)-Math.max(known.labelBounds.y,target.y)};
-  const productCSS=read('../../src/style.css');
-  assert.doesNotMatch(productCSS,/@import|url\(/i,'Review stylesheet must be self-contained');
-  return {graph,scenes,kinds,visibleIndexes:EXPECTED_VISIBLE,hiddenIndexes:EXPECTED_HIDDEN,sourceHashes:{...SOURCE_HASHES,productCSS:sha256(productCSS)},productCSS,estimatedOverlap};
+  const sourceCSS=read('../../src/style.css'),graphCSS=read('../../src/graph-presentation.css'),productCSS=inlineReviewStyles(sourceCSS,graphCSS);
+  return {graph,scenes,kinds,visibleIndexes:EXPECTED_VISIBLE,hiddenIndexes:EXPECTED_HIDDEN,sourceHashes:{...SOURCE_HASHES,productCSS:sha256(sourceCSS),graphCSS:sha256(graphCSS),inlinedCSS:sha256(productCSS)},productCSS,estimatedOverlap};
 }
 
 export function buildReviewPlans(model){

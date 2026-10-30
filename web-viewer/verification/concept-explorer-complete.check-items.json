@@ -1,0 +1,34 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "本人の2026-10-29指示：独立した上位タブで開く概念相関図をメニューからも開く。",
+  "supersedes": [
+    "REVIEW-UNIT-MENU-001 の個別概念へのメニュー入口を表示しない条件のみ。REVIEW-UNIT-MENU-002/003 の表示範囲・自己リンク・履歴の保証は維持。"
+  ],
+  "checks": [
+    {
+      "id": "CONCEPT-ENTRY-001",
+      "condition": "購買のデータ構造メニューを開く。",
+      "guarantee": "概念相関図の配下に全体と全6概念の個別ページを置く。4分類は概念モデル配下に維持し、概要・構造図・データ例をメニューに増やさない。",
+      "reason": "独立したページとページ内タブを区別し、図を経由せずページを発見できるようにする。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "メニューの全項目・全6ページへの移動・個別と分類の範囲をDOMとChromeで照合"
+    },
+    {
+      "id": "CONCEPT-ENTRY-002",
+      "condition": "相関図を閉じてメニューから再表示し、図から開く、タブ切替、戻る進むを行う。",
+      "guarantee": "同じページを重複タブにせず、メニューの現在地を開いているページに一致させる。自己リンク抑止と直接隣接だけの個別図は維持する。",
+      "reason": "どの導線でも同じページへ戻れ、現在地を見失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "全6概念・既存ナビゲーション契約・Chromeの再表示と履歴を照合"
+    },
+    {
+      "id": "CONCEPT-ENTRY-003",
+      "condition": "相関図の親を折りたたみ、名前で検索し、検索を解除して再読込する。",
+      "guarantee": "非表示の個別ページも検索し、一致する親を検索中に展開する。検索前の開閉状態と旧保存状態を維持し、対象外文書へ購買用メニューを出さない。",
+      "reason": "メニューの量を折りたたみで管理しても、発見可能性を失わないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "検索・解除・保存復元・別文書のDOMとChromeを照合"
+    }
+  ]
+}

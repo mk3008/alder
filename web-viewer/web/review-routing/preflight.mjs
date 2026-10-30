@@ -3,9 +3,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {loadReviewModel,buildReviewPlans,checkPayloadBudget,REVIEW_LIMITS,EXPECTED_VISIBLE} from './model.mjs';
+import {loadReviewModel,buildReviewPlans,checkPayloadBudget,inlineReviewStyles,REVIEW_LIMITS,EXPECTED_VISIBLE} from './model.mjs';
 import {renderReviewHTML} from './render.mjs';
 const model=loadReviewModel(),plans=buildReviewPlans(model),reports=[];
+const graphCSS=readFileSync(new URL('../../src/graph-presentation.css',import.meta.url),'utf8'),productCSS=readFileSync(new URL('../../src/style.css',import.meta.url),'utf8');assert.ok(model.productCSS.includes(graphCSS),'actual shared graph rules are inlined');
+for(const [product,shared] of [[productCSS+'\n@import "external.css";',graphCSS],[productCSS+'\n.x{background:url(https://invalid.test/a)}',graphCSS],[productCSS,graphCSS+'\n@import "other.css";'],[productCSS.replace('./graph-presentation.css','./other.css'),graphCSS]])assert.throws(()=>inlineReviewStyles(product,shared),'external, duplicate and unexpected imports are rejected');
 for(const plan of plans){
   const html=renderReviewHTML(model,plan),dom=new JSDOM(html),doc=dom.window.document;
   assert.equal(doc.querySelector('.review-sheet').dataset.reviewOnly,'true');
