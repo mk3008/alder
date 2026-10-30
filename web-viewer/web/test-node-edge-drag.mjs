@@ -4,9 +4,6 @@ const loadSession=async()=>joinedSession(await loadStoredSession());
 // Deterministic RAF and DOM/IndexedDB model, not native browser input evidence.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {build} from './legacy-viewer-fixture.mjs';
-import {JSDOM} from 'jsdom';
-import {IDBFactory} from 'fake-indexeddb';
 import {parseDesign} from '../src/graph.ts';
 import {reconcile,saveSession,loadSession as loadStoredSession} from '../src/session.ts';
 import {routeEdge} from '../src/routing.ts';
@@ -56,6 +53,10 @@ assert.deepEqual(signed.points.map(p=>p.map(v=>v+10000)),route.points);
 // Fractional arclength captions incur IEEE-754 translation rounding (<1e-12).
 assert.deepEqual(signed.label.map(v=>+(v+10000).toFixed(9)),route.label.map(v=>+v.toFixed(9)));
 
+if(process.argv.length===3&&process.argv[2]==='--logic-only'){
+ console.log('node edge drag: controller and signed route logic passed; DOM and native browser not run');
+}else{
+ const [{build},{JSDOM},{IDBFactory}]=await Promise.all([import('./legacy-viewer-fixture.mjs'),import('jsdom'),import('fake-indexeddb')]);
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:[{name:'count-routes',setup(b){b.onLoad({filter:/\/routing\.ts$/},args=>({contents:readFileSync(args.path,'utf8').replace('const source=nodes.find','globalThis.__routeCalls=(globalThis.__routeCalls??0)+1;const source=nodes.find'),loader:'ts'}));}}]});
 const windows=[];
 async function boot(db=new IDBFactory(),zoom=1){
@@ -153,3 +154,4 @@ try{
  card=node(firstID);fire('mouse','pointerdown',22,500,300,card);fire('mouse','pointermove',22,740,300,card);step();assert.equal(d.querySelector('.close').hidden,true);w.dispatchEvent(new w.Event('blur'));await new Promise(r=>setTimeout(r,250));await d.querySelector('.close').onclick();step();assert.equal(d.querySelectorAll('.tab').length,1);const stationary=positions();step();assert.deepEqual(positions(),stationary,'blur cancels drag; overview remains');
  console.log(JSON.stringify({model:'pure controller + measured DOM/rounded-scroll/IndexedDB',passed:12,checks:['bounded stationary RAF at 25/100/250%','shared mouse/pen/touch equation','zero-boundary signed routes','right/top/left expansion','camera-only origin compensation','incident-only paths/labels exact','second finger rollback and pinch','pointer/cancel/capture/lock/redraw/blur/disconnect stop','measured toolbar and drawer edges','unrelated world coordinates unchanged','signed sample close/reload/reopen exact','signed drawer navigation and close during drag']},null,2));
 }finally{windows.forEach(w=>w.close());}
+}
