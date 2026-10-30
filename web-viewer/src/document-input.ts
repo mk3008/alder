@@ -19,7 +19,10 @@ export function normalizeDocument(source:string):NormalizedDocument{
   // This is a viewing projection only; do not infer Role identities or rewrite storage JSON.
   if(['0.1','0.2'].includes(pkg.formatVersion)){
    const bd=normalized.data.business as typeof normalized.data.business & {schemaVersion:string};
-   bd.schemaVersion='0.1';delete bd.roles;for(const activity of bd.activities)delete activity.roleId;
+   bd.schemaVersion='0.1';delete bd.roles;for(const activity of bd.activities)if('roleId' in activity)delete activity.roleId;
+   // The adapter's derived Role catalog was removed for pre-Role input. Its
+   // synthetic Role diagnostics must not be revalidated as source claims.
+   normalized.data.diagnostics=normalized.data.diagnostics.filter(d=>!d.startsWith('Role未確定:'));
   }
   return normalized;
  }

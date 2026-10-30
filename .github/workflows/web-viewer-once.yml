@@ -11,6 +11,7 @@ on:
       - 'tools/document_storage/legacy-json.mjs'
       - 'tools/document_storage/state-declaration.mjs'
       - 'work/viewer-json/issue-274/json-native/**'
+      - 'work/viewer-json/issue-312/**'
       - '.github/workflows/web-viewer-once.yml'
 concurrency:
   group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
