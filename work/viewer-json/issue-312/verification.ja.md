@@ -19,7 +19,7 @@
 - `cd web-viewer && node web/test-browser.mjs --cases json05`：既存Playwright/Chrome harnessと127.0.0.1のbuild previewを用いる。Phase B合成seedについて、File入力、Activity詳細、Checkの状態とbasedOn、State表示、再読込、4種の不正File、URLと不正更新時の保持、外部原典Checkを確認する。1280pxと393pxのviewportで実行し、書込みリクエスト・page errorの不在も確認する。
 - ローカルの限定実行ではChromium 141.0.7390.37で上記2幅が成功した。393pxはエミュレートしたviewportであり、物理モバイル、OSのファイル選択ダイアログ、本人の操作を代替しない。
 - 外部原典の参照目録を共通モデルから落とす旧候補では、正式Validatorが受理する0.5外部Check付き文書が `Dangling reference: external-bd` で読込失敗した。目録とsource descriptorを保持し、同じ共通参照Validatorへ渡す修正後に0.5・0.4の正例と不正な参照版の拒否が通った。外部Checkを表示中のBDに結び付けないことも確認する。
-- head `d5ddf4414612b2a00295b6a388588b9ea82f21d8` のViewer CIは、既存 `tabStrip` のURL切替直後に更新ボタンを検査し失敗した。旧テストは元のサンプルもURL読込後もタブ数が1件で、タブ数だけの待機が読込完了を保証していなかった。URL応答を600ms遅らせる限定再現で同じ失敗を確認。修正後は応答を明示的に保留して旧サンプルの無効状態を検査し、応答後はダイアログが閉じて更新ボタンが有効になるのを待ってから、既存の配置・操作・状態の検査をそのまま行う。Chromium 141の `--cases tabStrip,json05` は両方成功した。
+- head `d5ddf4414612b2a00295b6a388588b9ea82f21d8` のViewer CIは、既存 `tabStrip` のURL切替直後に更新ボタンを検査し失敗した。旧テストは元のサンプルもURL読込後もタブ数が1件で、タブ数だけの待機が読込完了を保証していなかった。URL応答を600ms遅らせる限定再現で同じ失敗を確認。修正後は応答を明示的に保留して旧サンプルの無効状態を検査し、応答後はダイアログが閉じて更新ボタンが有効になるのを待ってから、既存の配置・操作・状態の検査をそのまま行う。URL要求の待機は10秒に制限し、失敗時も応答の保留を解放する。Chromium 141の `--cases tabStrip,json05` は両方成功した。
 - 同head CIと本人GUI確認の成否はPR/Execution/Controlに記録する。0.5専用項目は個別の機械検証と人間レビューを分け、既存ブラウザー回帰だけで網羅成功とはしない。
 
 ## 未決の互換性
