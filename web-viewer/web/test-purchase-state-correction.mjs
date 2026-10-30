@@ -59,7 +59,7 @@ for(const id of ['T08','T11','T17','T19'])assert(actual.has(id),id+' rendered');
 for(let n=20;n<=26;n++)assert(!actual.has('T'+n));
 const explicit=structuredClone(pkg),state=explicit.documents.find(d=>d.kind==='stateTransition');
 const draft=state.transitions.find(t=>t.sourceId==='T19');
-state.transitions.push({...draft,id:'explicit-loop-test',sourceId:'SYNTHETIC'});
+state.transitions.push({...draft,id:'explicit-loop-test',sourceId:'SYNTHETIC',condition:'追加の明示的な下書き保存条件'});
 assert(painted(explicit).has('SYNTHETIC'),'explicit self-loop remains supported');
 window.close();
 console.log('PURCHASE-STATE-001..005: source, revisions, explicit loops and renderer verified; business hypotheses remain unapproved');

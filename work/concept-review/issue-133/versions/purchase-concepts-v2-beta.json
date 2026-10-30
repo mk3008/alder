@@ -2,7 +2,7 @@
   "format": "alder-concept-model-draft",
   "formatVersion": "0.1",
   "id": "purchase-concepts",
-  "revision": "concepts-v2-beta-7",
+  "revision": "concepts-v2-beta-8",
   "kind": "conceptModelDraft",
   "basedOn": {
     "documentId": "purchase-bd",
@@ -12,7 +12,7 @@
   "relatedStates": [
     {
       "documentId": "purchase-states",
-      "revision": "states-v2-beta-6",
+      "revision": "states-v2-beta-7",
       "verification": "unverified"
     }
   ],

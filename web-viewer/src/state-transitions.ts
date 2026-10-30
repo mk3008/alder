@@ -12,22 +12,21 @@ export type StateDeclaration={model:StateModel;error?:never}|{error:string;model
 function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVGElement{
  const ns='http://www.w3.org/2000/svg',make=(name:string,attrs:Record<string,string>={})=>{const e=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
  const labels:Record<string,string>={'@new':'作成前','@none':'作成なし','@unknown':'未決'};
- const groups=new Map<string,Transition[]>();for(const row of model.transitions){const key=JSON.stringify([row.from,row.to,row.effect,row.activity,row.path]);groups.set(key,[...(groups.get(key)??[]),row]);}
- const rows=[...groups.values()],ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
+ const rows=model.transitions.map(row=>[row]),ids=[...new Set(['@new',...model.states,...rows.map(rs=>rs[0].to)])];
  // Rendering adapter only: business/input mean ordered boxes/dependencies to the
  // shared planner. They do not classify states as BD Activities or change Graph v1.
  // The declaration order is a display hint; it never adds or removes transitions.
- const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(rs=>({kind:rs[0].path==='exception'?'business-exception':'input',from:rs[0].from,to:rs[0].to,label:rs[0].activity+'：'+rs.map(r=>r.path==='normal'?'通常':r.exception??'例外名未定義').join(' / ')}))};
+ const layoutGraph:Graph={version:1,nodes:ids.map(id=>({id,type:'business',name:labels[id]??id,scope:true})),relations:rows.map(([row])=>({kind:row.path==='exception'?'business-exception':'input',from:row.from,to:row.to,label:row.activity+'：'+row.condition}))};
  const plan=matrixPlan(layoutGraph,ids);
  // Project the shared staircase onto smaller state boxes; reserve actual
  // multiline captions without changing the shared planner/router contracts.
  const wrap=(value:string)=>{const chars=Array.from(value);return Array.from({length:Math.ceil(chars.length/18)},(_,i)=>chars.slice(i*18,(i+1)*18).join(''));};
- const captionGroups=new Map<string,{from:string;activity:string;rows:Transition[];lines:string[];lineRows:Transition[][];offset:number}>();
- for(const rs of rows){const first=rs[0],key=JSON.stringify([first.from,first.activity]),g=captionGroups.get(key)??{from:first.from,activity:first.activity,rows:[],lines:[],lineRows:[],offset:0};g.rows.push(...rs);captionGroups.set(key,g);}
+ const captionGroups=rows.map(([row])=>({from:row.from,activity:row.activity,rows:[row],lines:[] as string[],lineRows:[] as Transition[][],offset:0}));
  const departures=new Map<string,number>();
  for(const group of captionGroups.values()){
-  group.lines=wrap(group.activity);group.lineRows=group.lines.map(()=>group.rows);
-  if(group.rows.length>1||group.rows[0].path==='exception')for(const row of group.rows){const branch=row.path==='normal'?'通常':'例外：'+(row.exception??'例外名未定義');const line='・'+branch,index=group.lines.indexOf(line);if(index<0){group.lines.push(line);group.lineRows.push([row]);}else group.lineRows[index].push(row);}
+  const row=group.rows[0];group.lines=wrap(group.activity);
+  if(row.path==='exception')group.lines.push(...wrap('例外：'+(row.exception??'例外名未定義')));
+  group.lines.push(...wrap(row.condition+' → '+(labels[row.to]??row.to)));group.lineRows=group.lines.map(()=>group.rows);
   group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.lines.length*18);
  }
  let y=40;const projected=new Map<string,number>();
@@ -52,7 +51,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  });
  for(const group of captionGroups.values()){
   const node=nodes.find(n=>n.id===group.from)!,x=node.x+node.width*.125+8,y=captionTop(node.y+node.height,group.offset)+14;
-  const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity});
+  const label=make('text',{x:String(x),y:String(y),class:'state-diagram-edge-label','data-activity':group.activity,'data-transition-id':group.rows[0].id,'aria-label':group.lines.join('')});
   group.lines.forEach((line,i)=>{const span=make('tspan',{x:String(x),dy:i?'18':'0','font-size':i?'12':'14','font-weight':i?'400':'600'});span.textContent=line;span.setAttribute('data-transitions',group.lineRows[i].map(r=>r.id).join(' '));captionElements.push({element:span,rows:group.lineRows[i]});label.append(span);});svg.append(label);
   right=Math.max(right,x+Math.max(...group.lines.map(line=>Array.from(line).length*14))+24);bottom=Math.max(bottom,y+group.lines.length*18+24);
  }

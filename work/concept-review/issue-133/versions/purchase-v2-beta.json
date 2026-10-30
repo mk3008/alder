@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v2-beta-6",
+  "revision": "purchase-v2-beta-7",
   "documents": [
     {
       "id": "purchase-bd",
@@ -536,7 +536,7 @@
       "id": "purchase-states",
       "schemaVersion": "0.2",
       "kind": "stateTransition",
-      "revision": "states-v2-beta-6",
+      "revision": "states-v2-beta-7",
       "title": "購入申請の状態遷移",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -771,7 +771,7 @@
           "fromId": "49304012-e26a-42ca-884f-abc48d752a28",
           "activityId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "event": null,
-          "condition": "入庫または購入しない数量を登録し、待ち数量が残る",
+          "condition": "入庫または購入しない数量の登録後、待ち数量が残る",
           "toId": "a757ea63-d836-4c24-90e7-5872b3160cad",
           "effect": "change",
           "path": "normal",
@@ -785,7 +785,7 @@
           "fromId": "49304012-e26a-42ca-884f-abc48d752a28",
           "activityId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "event": null,
-          "condition": "全品目の待ち数量が0になり、申請を終結する",
+          "condition": "入庫または購入しない数量の登録後、全品目の待ち数量が0になる",
           "toId": "271f3bdd-31cf-446a-82f2-e414e35d1ba9",
           "effect": "change",
           "path": "normal",
@@ -799,7 +799,7 @@
           "fromId": "a757ea63-d836-4c24-90e7-5872b3160cad",
           "activityId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "event": null,
-          "condition": "入庫または購入しない数量を登録し、待ち数量が残る",
+          "condition": "入庫または購入しない数量の登録後、待ち数量が残る",
           "toId": "a757ea63-d836-4c24-90e7-5872b3160cad",
           "effect": "unchanged",
           "path": "normal",
@@ -813,7 +813,7 @@
           "fromId": "a757ea63-d836-4c24-90e7-5872b3160cad",
           "activityId": "218937bd-4b6c-527e-b9e6-14075084b842",
           "event": null,
-          "condition": "全品目の待ち数量が0になり、申請を終結する",
+          "condition": "入庫または購入しない数量の登録後、全品目の待ち数量が0になる",
           "toId": "271f3bdd-31cf-446a-82f2-e414e35d1ba9",
           "effect": "change",
           "path": "normal",

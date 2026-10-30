@@ -1,4 +1,5 @@
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
+import {verifyStateTransitionIdentity} from './test-state-transition-identity-browser.mjs';
 import assert from 'node:assert/strict';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 const dir='../work/json-state/issue-275/',raw=readFileSync(dir+'purchase.json','utf8'),md=readFileSync(dir+'supported-state.md','utf8'),pkg=JSON.parse(raw),st=pkg.documents[1],bd=pkg.documents[0];
 const parseStateRows=()=>st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId}));
@@ -52,5 +53,6 @@ export async function verifyJSONStates(browser){
   }finally{await context.close();}
  }
  assert.equal(nativeSVG[0],nativeSVG[1],'description formatting never changes structural state SVG');
- writeFileSync(out+'/results.json',JSON.stringify({browser:browser.version(),results,svgExact:true},null,2));return {results,svgExact:true};
+ const identity=await verifyStateTransitionIdentity(browser);
+ writeFileSync(out+'/results.json',JSON.stringify({browser:browser.version(),results,svgExact:true,identity},null,2));return {results,svgExact:true,identity};
 }

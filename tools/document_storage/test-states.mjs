@@ -23,9 +23,18 @@ test('rename, reorder, explicit same-state/cycles, revisions and atomic referenc
  let pkg=structuredClone(fixture);const state=pkg.documents[1].states[0],activity=pkg.documents[0].activities[0],object=pkg.documents[0].objects.find(o=>o.id===st.objectId);
  const next=applyEdits(pkg,{expectedRevision:pkg.revision,revision:'p2',documentRevisions:{'purchase-bd':{expected:'bd-1',next:'bd-2'},'purchase-states':{expected:'states-1',next:'states-2'}},changes:[{id:object.id,values:{name:'改名後'}},{id:activity.id,values:{name:'業務改名'}},{id:state.id,values:{name:'状態改名'}},{id:st.id,values:{basedOn:{...st.basedOn,revision:'bd-2'},transitions:[...st.transitions].reverse()}}]});
  assert.equal(next.documents[1].objectId,object.id);assert.equal(next.documents[1].states[0].id,state.id);assert.equal(next.documents[1].transitions.length,13);guardAuthoring(pkg,next,{expectedRevision:pkg.revision});
- const loop=structuredClone(fixture);loop.documents[1].transitions.push({...st.transitions[3],id:'explicit-loop',sourceId:'T14',effect:'unchanged',toId:st.transitions[3].fromId});validate(loop);assert.equal(loop.documents[1].transitions.length,14);
+ const loop=structuredClone(fixture);loop.documents[1].transitions.push({...st.transitions[3],id:'explicit-loop',sourceId:'T14',condition:'承認前に確認結果を保存する',effect:'unchanged',toId:st.transitions[3].fromId});validate(loop);assert.equal(loop.documents[1].transitions.length,14);
  const dropped=structuredClone(next);dropped.documents[1].transitions.pop();assert.throws(()=>guardAuthoring(next,dropped,{expectedRevision:next.revision}));
  assert.ok(inventory(next).types.has(state.id));
+});
+test('STATE-IDENTITY-002: a state/Activity/condition identifies one operation, not one target list',()=>{
+ const pkg=readLegacyPackage(fixture),d=pkg.documents[1],first=d.transitions[0];
+ for(const to of [first.toId,d.states.find(s=>s.id!==first.toId).id]){
+  const p=structuredClone(pkg),rows=p.documents[1].transitions;rows.push({...first,id:'duplicate-condition',sourceId:'T99',toId:to});
+  assert.throws(()=>validate(p),/Duplicate state transition condition/);
+ }
+ const distinct=structuredClone(pkg);distinct.documents[1].transitions.push({...first,id:'different-condition',sourceId:'T99',condition:'別の明示条件'});validate(distinct);
+ const same=structuredClone(pkg),rows=same.documents[1].transitions;rows[0].condition='条件 A';rows.push({...first,id:'whitespace-condition',sourceId:'T99',condition:' 条件\n\tA '});assert.throws(()=>validate(same),/Duplicate state transition condition/);
 });
 test('unsupported original SR/Medium profile remains rejected; supported explicit import is repeatable',()=>{
  const request={sources:[{text:raw,documentId:bd.id,kind:'businessDesign',revision:'bd-1'}],revision:'p1',stateDocuments:[{documentId:st.id,revision:'states-1',businessDesignId:bd.id,objectName:'購入申請'}]};assert.throws(()=>convertMarkdown(request),/unsupported heading|Unknown BD field/);
