@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "32807e888c698918d6dade4da9cf0bb8e8032bc3",
+  "alder_source_revision": "bbd2b060e077fef6692e1e753c4493d29fe5a4fa",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "a2deaaf532a4928615356a2456d2be6db9ac6e37996f6c705e83fe37a5463da2",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -14,7 +14,7 @@
     "docs/json-native-contract.ja.md": "50316bb6135cec1d50378a6b49256d4a935bdcc5000a173952bdc9b1bcdaf9a3"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "941b94c0878229f50e443c0478a7cafc720b0bb56352fe1d4265668705ad04af",
+    "tools/document_storage/core.mjs": "b4658908de1607ff5ea8ab45b1e04ff655d501d7333cf9b49119abdd1c9f0e5a",
     "tools/document_storage/schema.mjs": "a84e1cb551d7e664d8a741e2862d04b4a0fc60f231b5159e5bcdbdd6333fc652",
     "tools/document_storage/schema.json": "a32b5c5faf91ffdcc50cb539548bb1ba0fa098b74b19e9e7eb9efb15a35fa5a3",
     "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
