@@ -5,6 +5,7 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument,readDesignFile} from '../src/document-input.ts';
 import {validate} from '../../tools/document_storage/core.mjs';
+import {activityRole} from '../src/roles.ts';
 
 // Requirements were committed before the implementation. Missing checks,
 // cases, or results must fail instead of silently shrinking verification.
@@ -36,6 +37,9 @@ try{
  assert.ok(dom.window.view.businessDetail(design,'c-requester').textContent.includes('相談に応じて案内する窓口'));
  const unresolved=packages.find(c=>c.caseId==='molkkyCross'),unknown=parseDocument(JSON.stringify(unresolved.package));assert.match(dom.window.view.businessDetail(unknown,unknown.model.business.activities[0].id).textContent,/未決/);
  const photo=packages.find(c=>c.caseId==='photo'),one=structuredClone(photo.package),step=one.documents[0].activities[0].procedure.steps[0];step.performerObjectIds=null;const oneDesign=parseDocument(JSON.stringify(one)),oneDetail=dom.window.view.businessDetail(oneDesign,one.documents[0].activities[0].id).textContent;assert.match(oneDetail,/参加者/);assert.match(oneDetail,/記録/);assert.doesNotMatch(oneDetail,/担当：未決/);
+ const single=structuredClone(one);single.documents[0].activities[0].performers[0].roleIds.pop();const singleDesign=parseDocument(JSON.stringify(single)),role=single.documents[0].roles.find(r=>r.id===single.documents[0].activities[0].performers[0].roleIds[0]);assert.equal(activityRole(singleDesign,single.documents[0].activities[0].id).color,role.color);assert.equal(activityRole(design,activity.id),undefined,'multiple performers must not acquire one invented Role color');
+ const noRules=parseDocument(JSON.stringify(packages.find(c=>c.caseId==='mixed').package));assert.doesNotMatch(dom.window.view.businessDetail(noRules,'c-guidance').textContent,/手順の順序制約/);
+ const exception=structuredClone(pkg);exception.documents[0].exceptions.push({id:'synthetic-exception',activityId:activity.id,name:'入力不備',description:'相談内容を確認できない。'});const exceptionView=parseDocument(JSON.stringify(exception)),exceptionDetail=dom.window.view.businessDetail(exceptionView,activity.id);assert.equal([...exceptionDetail.querySelectorAll('h3')].filter(h=>h.textContent==='Exception · 入力不備').length,1);assert.match(exceptionDetail.textContent,/相談内容を確認できない/);assert.match(exceptionDetail.textContent,/依頼者へ担当窓口が説明される/);
  const multi=structuredClone(pkg);multi.documents[0].activities[0].procedure.steps[0].performerObjectIds=null;multi.documents[0].findings.push({id:'unknown-owner',sourceId:'OWNER-1',kind:'question',status:'open',scope:'items',targetIds:[activity.id],unresolvedTargets:[],summary:'手順担当未決',content:'担当は確認する。'});const multiDesign=parseDocument(JSON.stringify(multi));assert.match(dom.window.view.businessDetail(multiDesign,activity.id).textContent,/担当：未決/);
 }finally{dom.window.close();}
 for(const mutate of [p=>p.formatVersion='0.6',p=>p.documents[0].activities[0].results=[],p=>p.documents[0].relations[0].dataId='missing',p=>p.documents[0].activities[0].performers[0].roleIds=['missing'],p=>p.documents[0].activities[0].results[0].condition=null]){const bad=structuredClone(pkg);mutate(bad);assert.throws(()=>parseDocument(JSON.stringify(bad)));assert.equal(design.markdown,raw);}
