@@ -1,0 +1,9 @@
+{
+  "id": "G3",
+  "source": "mk3008/alder@4494e2e22ed84c73e8ea0e770d4ff4e576ca0ab2:docs/json-roles.ja.md, 草案と変更",
+  "condition": "Business Design schemaVersion 0.2 or 0.3; activity.roleId is null",
+  "guarantee": "diagnostics contains Role未確定: ACTIVITY_ID — 原文 with this Activity's current raw who text",
+  "reason": "The declared unresolved Role must preserve the original Who; a diagnostic quoting a different Who does not fulfill the existing contract",
+  "cases": ["0.3 exact Who accepted", "0.3 different or truncated Who refused", "0.4 exact Who accepted", "0.4 different or truncated Who refused", "unrelated diagnostic retained", "invalid commit preserves saved bytes"],
+  "scope": "String correspondence only. Do not infer the role, revise Who, change approval policy, or reject resolved roles based on descriptive wording."
+}

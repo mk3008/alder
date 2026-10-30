@@ -1,0 +1,59 @@
+✔ 0.1/0.2 remain accepted; explicit 0.3 migration preserves IDs, raw Who, provenance and partial states (16.890845ms)
+✔ stored palette values equal legacy hash initially; rename/reorder preserve role ID and color (8.11841ms)
+✔ unknown roles, duplicate IDs/names, invalid colors, stale references and wrong package/schema versions reject (11.355757ms)
+✔ MD conversion is explicit, repeatable and reimport retains renamed catalog identity/color (230.214137ms)
+✔ compound Who is retained verbatim and unresolved; more than five explicit roles can reuse colors (3.780846ms)
+✔ Check migration needs exact human BD confirmation and preserves every review state/meaning (13.680749ms)
+✔ undecided Who placeholders are retained without inventing a role (14.195736ms)
+✔ unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4 (9.095673ms)
+✖ every Role diagnostic belongs once to a current unresolved Activity in 0.3 and 0.4 (4.886662ms)
+✖ mixed Role diagnostics cannot create or commit JSON; failed saves preserve bytes (304.377598ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 767.090338
+
+✖ failing tests:
+
+test at tools/document_storage/test-roles.mjs:56:1
+✖ every Role diagnostic belongs once to a current unresolved Activity in 0.3 and 0.4 (4.886662ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: ["Role未確定: ecde191f-09c5-519f-88a3-843ae6a9c3c4 — 申請者と承認者","Role未確定: ecde191f-09c5-519f-88a3-843ae6a9c3c4 — 旧原文"]
+      at TestContext.<anonymous> (file:///workspace/scratch/84e40d7c56da/alder/tools/document_storage/test-roles.mjs:66:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /diagnostic/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tools/document_storage/test-roles.mjs:74:1
+✖ mixed Role diagnostics cannot create or commit JSON; failed saves preserve bytes (304.377598ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/84e40d7c56da/alder/tools/document_storage/test-roles.mjs:89:53)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

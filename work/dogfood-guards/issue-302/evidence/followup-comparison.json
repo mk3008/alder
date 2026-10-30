@@ -1,0 +1,12 @@
+{
+  "beforeChangedChecks": [
+    "CI-08",
+    "CI-41",
+    "CI-63",
+    "CI-71"
+  ],
+  "beforeFormat": "molkky-research-check-items",
+  "afterBytesUnchanged": true,
+  "beforeSha256": "b61c0cd0ce921cb88bccef4d5beccb7253b443cf263134dbc7d4ec0ed19031d9",
+  "afterSha256": "584aa36748f4465dc2f9a8e1826750e116b8457923c7850e3e733fe2d339b808"
+}

@@ -1,0 +1,37 @@
+{
+  "inputSha256": "6b3be79ec99f9a1e22b685029c1889f937e869e5b3f7b248288316783225b7de",
+  "runtime": "/workspace/scratch/84e40d7c56da/candidate-alder/plugins/alder/skills/alder-manage-json-documents/scripts/document_storage",
+  "rows": [
+    {
+      "label": "stale-validate",
+      "status": 0,
+      "stdout": "{\"valid\":true,\"diagnostics\":[\"Role未確定: activity-receive — 旧原文\",\"状態遷移は部分定義・業務意味未確認: state-document\"],\"entities\":12}\n",
+      "stderr": ""
+    },
+    {
+      "label": "stale-create",
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-role-hBjXIy/invalid.json\",\"sha256\":\"fc6a3cce8615d3ba7158445bdc44ddd3980d5002c313d3e4fac8406c781b6296\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Role未確定: activity-receive — 旧原文\",\"状態遷移は部分定義・業務意味未確認: state-document\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "exact-create",
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-role-hBjXIy/saved.json\",\"sha256\":\"70cae80997507f4786d7bdadc1a5c60993f52f38c307065a60233afe181f3a4b\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: activity-receive — 申請者と承認者\",\"状態遷移は部分定義・業務意味未確認: state-document\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "exact-inspect",
+      "status": 0,
+      "stdout": "{\"sha256\":\"70cae80997507f4786d7bdadc1a5c60993f52f38c307065a60233afe181f3a4b\",\"revision\":\"package-r1\",\"documents\":[{\"id\":\"bd-native\",\"kind\":\"businessDesign\",\"revision\":\"bd-r1\"},{\"id\":\"state-document\",\"kind\":\"stateTransition\",\"revision\":\"st-r1\"}],\"checks\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "stale-commit",
+      "status": 0,
+      "stdout": "{\"target\":\"/tmp/alder-302-role-hBjXIy/saved.json\",\"sha256\":\"ded54e9600b6a27889c8ecee3088e56de5d5132556afa0803dfcfa96bbbb1cfd\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"Role未確定: activity-receive — 旧原文\",\"状態遷移は部分定義・業務意味未確認: state-document\"]}\n",
+      "stderr": ""
+    }
+  ],
+  "preserved": false
+}

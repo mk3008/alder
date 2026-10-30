@@ -1,0 +1,26 @@
+[
+  {
+    "version": "0.1",
+    "rawRoleDiagnosticRejected": true,
+    "sourcePreserved": true,
+    "roleCatalogRetired": true,
+    "rawWhoPreserved": true
+  },
+  {
+    "version": "0.2",
+    "rawRoleDiagnosticRejected": true,
+    "sourcePreserved": true,
+    "roleCatalogRetired": true,
+    "rawWhoPreserved": true
+  },
+  {
+    "version": "0.3",
+    "roleColorsPreserved": true,
+    "roleIdPreserved": true
+  },
+  {
+    "version": "0.4",
+    "roleColorsPreserved": true,
+    "roleIdPreserved": true
+  }
+]

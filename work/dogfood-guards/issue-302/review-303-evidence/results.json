@@ -1,0 +1,80 @@
+{
+  "0.3": {
+    "current": {
+      "status": 0,
+      "message": "{\"valid\":true,\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: ecde191f-09c5-519f-88a3-843ae6a9c3c4 — 申請者と承認者\",\"旧JSON 0.3 の互換入力由来。業務意味・承認は未評価\",\"状態遷移は部分定義・業務意味未確認: purchase-states\"],\"entities\":67}"
+    },
+    "stale": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "currentThenStale": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "staleThenCurrent": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "duplicate": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Duplicate unresolved Role diagnostic\"}]}"
+    },
+    "unknown": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "object": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "resolvedStale": 2,
+    "resolvedClean": 0,
+    "createValid": 0,
+    "inspectValid": 0,
+    "createMixed": 2,
+    "invalidOutputExists": false,
+    "commitMixed": 2,
+    "savedBytesUnchanged": true,
+    "unrelatedRetained": true
+  },
+  "0.4": {
+    "current": {
+      "status": 0,
+      "message": "{\"valid\":true,\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: activity-receive — 申請者と承認者\",\"状態遷移は部分定義・業務意味未確認: state-document\"],\"entities\":12}"
+    },
+    "stale": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "currentThenStale": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "staleThenCurrent": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "duplicate": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Duplicate unresolved Role diagnostic\"}]}"
+    },
+    "unknown": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "object": {
+      "status": 2,
+      "message": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic matching a current unresolved Activity\"}]}"
+    },
+    "resolvedStale": 2,
+    "resolvedClean": 0,
+    "createValid": 0,
+    "inspectValid": 0,
+    "createMixed": 2,
+    "invalidOutputExists": false,
+    "commitMixed": 2,
+    "savedBytesUnchanged": true,
+    "unrelatedRetained": true
+  }
+}

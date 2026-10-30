@@ -1,4 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import os from 'node:os';import path from 'node:path';import {spawnSync} from 'node:child_process';
 import {validate,graphV1} from './core.mjs';import {ROLE_PALETTE,initialRoleColor,upgradeRoles} from './roles.mjs';import {convertMarkdown} from './convert.mjs';import {guardAuthoring} from './authoring.mjs';import {applyEdits} from './edit.mjs';
 const legacy=JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url))),bd=legacy.documents[0],state=legacy.documents[1];
 const revisions={expectedRevision:legacy.revision,revision:'package-roles-1',documentRevisions:{[bd.id]:{expected:bd.revision,next:'bd-role-1'},[state.id]:{expected:state.revision,next:'state-role-1'}}};
@@ -34,4 +35,63 @@ test('Check migration needs exact human BD confirmation and preserves every revi
 
 test('undecided Who placeholders are retained without inventing a role',()=>{
  for(const who of ['未定','未決','TBD','unknown']){const p=structuredClone(legacy);p.documents[0].activities[0].who=who;const n=upgradeRoles(p,revisions);assert.equal(n.documents[0].activities[0].who,who);assert.equal(n.documents[0].activities[0].roleId,null);validate(n);}
+});
+
+test('unresolved Role diagnostic must retain the current raw Who in 0.3 and 0.4',()=>{
+ const native=JSON.parse(fs.readFileSync(new URL('../../work/viewer-json/issue-274/json-native/independent.json',import.meta.url)));
+ for(const fixture of [upgraded,native]){
+  const p=structuredClone(fixture),a=p.documents[0].activities[0];
+  a.who='申請者と承認者';a.roleId=null;
+  for(const raw of ['旧原文','申請者','申請者と承認者（推測した補足）']){
+   p.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+raw];
+   assert.throws(()=>validate(p),/Unresolved Who requires a diagnostic/);
+  }
+  for(const who of ['申請者と承認者',' 未決の担当者 ','担当者\nと代理人']){
+   a.who=who;p.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+who];
+   validate(p);assert.equal(a.who,who);assert.equal(p.diagnostics[0],'unrelated diagnostic');
+  }
+ }
+});
+
+test('every Role diagnostic belongs once to a current unresolved Activity in 0.3 and 0.4',()=>{
+ const native=JSON.parse(fs.readFileSync(new URL('../../work/viewer-json/issue-274/json-native/independent.json',import.meta.url)));
+ for(const fixture of [upgraded,native]){
+  const p=structuredClone(fixture),a=p.documents[0].activities[0];a.who='申請者と承認者';a.roleId=null;
+  const current='Role未確定: '+a.id+' — '+a.who,stale='Role未確定: '+a.id+' — 旧原文';
+  p.diagnostics=['unrelated diagnostic',current];const before=JSON.stringify(p);validate(p);assert.equal(JSON.stringify(p),before);
+  const multiple=structuredClone(p),other=multiple.documents[0].activities[1];other.roleId=null;
+  multiple.diagnostics.push('Role未確定: '+other.id+' — '+other.who);const multipleBefore=JSON.stringify(multiple);
+  validate(multiple);assert.equal(JSON.stringify(multiple),multipleBefore);
+  for(const diagnostics of [[stale],[current,stale],[stale,current],[current,current],
+   [current,'Role未確定: unknown-activity — '+a.who],
+   [current,'Role未確定: '+p.documents[0].objects[0].id+' — '+a.who]]){
+   const q=structuredClone(p);q.diagnostics=['unrelated diagnostic',...diagnostics];
+   assert.throws(()=>validate(q),/diagnostic/,JSON.stringify(diagnostics));
+  }
+  const resolved=structuredClone(p);resolved.documents[0].activities[0].roleId=resolved.documents[0].roles[0].id;
+  assert.throws(()=>validate(resolved),/diagnostic/);
+  resolved.diagnostics=['unrelated diagnostic'];validate(resolved);
+ }
+});
+
+test('mixed Role diagnostics cannot create or commit JSON; failed saves preserve bytes',()=>{
+ const native=JSON.parse(fs.readFileSync(new URL('../../work/viewer-json/issue-274/json-native/independent.json',import.meta.url)));
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-role-diagnostics-'));
+ const cli=new URL('./author-cli.mjs',import.meta.url).pathname;
+ const run=(...args)=>spawnSync(process.execPath,[cli,...args],{encoding:'utf8'});
+ try{for(const fixture of [upgraded,native]){
+  const good=structuredClone(fixture),bd=good.documents[0],a=bd.activities[0];a.who='申請者と承認者';a.roleId=null;
+  good.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+a.who];
+  const target=path.join(dir,'saved-'+good.formatVersion+'.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json');
+  fs.writeFileSync(candidate,JSON.stringify(good));fs.writeFileSync(op,'{}');let r=run('create',candidate,target,op);assert.equal(r.status,0,r.stderr);
+  const before=fs.readFileSync(target),inspected=run('inspect',target);assert.equal(inspected.status,0,inspected.stderr);const pin=JSON.parse(inspected.stdout);
+  const bad=structuredClone(good);bad.revision+='-next';bad.documents[0].revision+='-next';bad.documents[0].activities[0].who+='（変更）';
+  for(const d of bad.documents.filter(d=>d.basedOn?.documentId===bd.id)){d.revision+='-next';d.basedOn.revision=bad.documents[0].revision;}
+  bad.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+bad.documents[0].activities[0].who,'Role未確定: '+a.id+' — '+a.who];
+  fs.writeFileSync(candidate,JSON.stringify(bad));const invalidTarget=path.join(dir,'invalid-'+good.formatVersion+'.json');
+  r=run('create',candidate,invalidTarget,op);assert.equal(r.status,2,r.stderr);assert.equal(fs.existsSync(invalidTarget),false);
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:pin.revision,expectedSha256:pin.sha256}));
+  r=run('commit',target,candidate,op);assert.equal(r.status,2,r.stderr);assert.deepEqual(fs.readFileSync(target),before);
+  r=run('inspect',target);assert.equal(r.status,0,r.stderr);assert.equal(JSON.parse(r.stdout).sha256,pin.sha256);
+ }}finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

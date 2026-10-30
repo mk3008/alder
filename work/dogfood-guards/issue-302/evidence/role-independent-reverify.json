@@ -1,0 +1,63 @@
+{
+  "baseline04StaleValidate": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "baseline04StaleCreate": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "valid04Validate": {
+    "exit": 0,
+    "stdout": "{\"valid\":true,\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: activity-receive — 申請者と承認者\",\"状態遷移は部分定義・業務意味未確認: state-document\"],\"entities\":12}",
+    "stderr": ""
+  },
+  "valid04Create": {
+    "exit": 0,
+    "stdout": "{\"target\":\"/workspace/scratch/84e40d7c56da/agent-output/storage-audit/reverify-saved-04.json\",\"sha256\":\"70cae80997507f4786d7bdadc1a5c60993f52f38c307065a60233afe181f3a4b\",\"valid\":true,\"approval\":\"not-evaluated\",\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: activity-receive — 申請者と承認者\",\"状態遷移は部分定義・業務意味未確認: state-document\"]}",
+    "stderr": ""
+  },
+  "valid04Inspect": {
+    "exit": 0,
+    "stdout": "{\"sha256\":\"70cae80997507f4786d7bdadc1a5c60993f52f38c307065a60233afe181f3a4b\",\"revision\":\"package-r1\",\"documents\":[{\"id\":\"bd-native\",\"kind\":\"businessDesign\",\"revision\":\"bd-r1\"},{\"id\":\"state-document\",\"kind\":\"stateTransition\",\"revision\":\"st-r1\"}],\"checks\":[]}",
+    "stderr": ""
+  },
+  "invalid04Validate": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "invalid04Commit": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"JSON_OPERATION\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "savedBytesUnchanged": true,
+  "valid04PostFailedInspect": {
+    "exit": 0,
+    "stdout": "{\"sha256\":\"70cae80997507f4786d7bdadc1a5c60993f52f38c307065a60233afe181f3a4b\",\"revision\":\"package-r1\",\"documents\":[{\"id\":\"bd-native\",\"kind\":\"businessDesign\",\"revision\":\"bd-r1\"},{\"id\":\"state-document\",\"kind\":\"stateTransition\",\"revision\":\"st-r1\"}],\"checks\":[]}",
+    "stderr": ""
+  },
+  "valid03Validate": {
+    "exit": 0,
+    "stdout": "{\"valid\":true,\"diagnostics\":[\"unrelated diagnostic\",\"Role未確定: ecde191f-09c5-519f-88a3-843ae6a9c3c4 — 申請者と承認者\",\"旧JSON 0.3 の互換入力由来。業務意味・承認は未評価\",\"状態遷移は部分定義・業務意味未確認: purchase-states\"],\"entities\":67}",
+    "stderr": ""
+  },
+  "invalid03differentValidate": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "invalid03truncatedValidate": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"diagnostics\":[{\"code\":\"CLI_ERROR\",\"severity\":\"error\",\"message\":\"Unresolved Who requires a diagnostic\"}]}"
+  },
+  "resolvedRoleWithUnrelatedDiagnostic": {
+    "exit": 0,
+    "stdout": "{\"valid\":true,\"diagnostics\":[\"unrelated diagnostic\",\"状態遷移は部分定義・業務意味未確認: state-document\"],\"entities\":12}",
+    "stderr": ""
+  }
+}

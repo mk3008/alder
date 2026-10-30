@@ -6,7 +6,7 @@ license: MIT
 
 # Follow up an Alder review
 
-For a selected typed JSON Business Design or Check package, first read [JSON representation and guarded-save guidance](../alder-manage-json-documents/SKILL.md). Apply the existing implementation-review/follow-up scope below; review-only never saves. Use its JSON commit procedure only for explicitly authorized record maintenance, preserving IDs, human states and exact BD revision. Keep the Markdown route for Markdown inputs.
+For any selected JSON Business Design or Check input, first read [JSON representation and guarded-save guidance](../alder-manage-json-documents/SKILL.md) and run its official validator before updating records. An unknown or custom JSON format is unsupported: preserve the input, report the failed validation, and return only read-only evidence preparation. Do not update that JSON as an Alder Check package or silently use the Markdown route. Apply the existing implementation-review/follow-up scope below; review-only never saves. Use its JSON commit procedure only for explicitly authorized record maintenance, preserving IDs, human states and exact BD revision. Keep the Markdown route for Markdown inputs.
 
 Read [current traceability guidance](references/check-item-traceability.md) in full and [adoption](references/adoption.md#4-run-a-separate-alder-review-after-implementation) section 4 plus its Check Item section. For optional drift reconciliation, additionally read [the pilot reconfirmation workflow](references/study.md#reconfirmation-workflow-for-an-opt-in-pilot). These pinned bundled authorities supply the workflow; no user-side Alder knowledge checkout is needed.
 
