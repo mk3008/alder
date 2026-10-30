@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
+import {stateCaptionGeometry,assertStateCaptionPlacement} from './caption-placement-oracle.mjs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
 
 export async function verifyStateTransitionIdentity(browser){
@@ -21,6 +22,20 @@ export async function verifyStateTransitionIdentity(browser){
     for(const row of st.transitions){const l=labels.find(l=>l.id===row.sourceId),to=st.states.find(s=>s.id===row.toId)?.name??({'@none':'作成なし','@unknown':'未決'}[row.toId]??row.toId);assert(l.text.includes(row.condition));assert(l.text.includes(' → '+to));assert(!l.text.includes('通常'));assert(l.members.every(id=>id===row.sourceId));}
     const modelRows=st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId}));
     assertStateCaptionRows(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionSnapshot),modelRows);
+    assertStateCaptionPlacement(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionGeometry),modelRows);
+    const native=await page.locator('#states-workspace .state-diagram').evaluate(svg=>{
+     const boxes=[...svg.querySelectorAll('.state-diagram-edge-label')].map(e=>{const b=e.getBBox();return{id:e.dataset.transitionId,x:b.x,y:b.y,width:b.width,height:b.height};});
+     const nodes=[...svg.querySelectorAll('[data-state] rect.state-diagram-node')].map(e=>{const b=e.getBBox();return{x:b.x,y:b.y,width:b.width,height:b.height};});
+     const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+     return{labelPairs:boxes.flatMap((b,i)=>boxes.slice(i+1).filter(c=>overlap(b,c)).map(c=>[b.id,c.id])),cardPairs:boxes.filter(b=>nodes.some(n=>overlap(b,n))).map(b=>b.id)};
+    });
+    assert.deepEqual(native.labelPairs,[],'native caption glyphs do not overlap');assert.deepEqual(native.cardPairs,[],'native caption glyphs do not cover states');
+    await page.locator('#states-workspace [data-state="購入準備済み"]').press('Enter');
+    for(const [id,related]of [['T12',true],['T14',false]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
+    await page.locator('#states-workspace [data-state="差戻し"]').press('Enter');
+    for(const [id,related]of [['T12',false],['T14',true]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
+    await page.locator('#states-workspace [data-transition-id="T14"]').scrollIntoViewIfNeeded();
+    await page.screenshot({path:`web/evidence/json-states/caption-placement-${width}-${theme}.png`});
     await page.locator('#states-workspace [data-state="終結"]').press('Enter');
     for(const id of ['T15','T16','T17','T18']){const expected=['T16','T18'].includes(id),classes=await page.locator('#states-workspace [data-transition-id="'+id+'"] tspan').evaluateAll(es=>es.map(e=>e.classList.contains('review-related')));assert(classes.every(x=>x===expected));}
     await page.locator('#states-workspace [data-transition-id="T15"]').scrollIntoViewIfNeeded();
