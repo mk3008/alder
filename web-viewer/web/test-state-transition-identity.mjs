@@ -57,7 +57,7 @@ const scratch=mkdtempSync(join(tmpdir(),'state-identity-'));
 try{
  const target=join(scratch,'design.json'),candidate=join(scratch,'candidate.json'),operation=join(scratch,'operation.json');writeFileSync(target,raw);
  const p=duplicate();p.revision+='-invalid';p.documents.find(d=>d.kind==='stateTransition').revision+='-invalid';writeFileSync(candidate,JSON.stringify(p));writeFileSync(operation,JSON.stringify({expectedSha256:hash(raw),expectedRevision:pkg.revision}));
- const run=spawnSync(process.execPath,[resolve('../tools/document_storage/author-cli.mjs'),'commit',target,candidate,operation],{encoding:'utf8'});assert.equal(run.status,2);assert.match(run.stderr,/Duplicate state transition condition/);assert.equal(readFileSync(target,'utf8'),raw);
+ for(const script of ['../tools/document_storage/author-cli.mjs','../plugins/alder/skills/alder-manage-json-documents/scripts/document_storage/author-cli.mjs']){const run=spawnSync(process.execPath,[resolve(script),'commit',target,candidate,operation],{encoding:'utf8'});assert.equal(run.status,2);assert.match(run.stderr,/Duplicate state transition condition/);assert.equal(readFileSync(target,'utf8'),raw);}
  const md=readFileSync('../work/json-state/issue-275/supported-state.md','utf8'),line=md.split('\n').find(l=>/^\| T01 \|/.test(l));assert(line);assert.throws(()=>parseDocument(md.replace(line,line+'\n'+line.replace('T01','T99'))),/Duplicate state transition condition/);
 }finally{rmSync(scratch,{recursive:true,force:true});}
 pass(ids[3]);
