@@ -1,0 +1,47 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+  "scope": "Phase B受入のpackage 0.5状態遷移と、旧0.4・Markdownの一意性・表示保証を両立する。",
+  "checks": [
+    {
+      "id": "JSON05-STATE-COMPAT-001",
+      "condition": "0.5の同一fromId・activityId・conditionに別IDとsourceIdの遷移がある。",
+      "guarantee": "Phase Bの正式Validatorが受理する入力を、通常のFile・URL・復元で原文・版・全ID・参照・未決とともに保持する。異なるIDの同条件遷移は、同じ到着先と異なる到着先のいずれも黙って統合しない。",
+      "reason": "受入済み入力の閲覧と既存正本の保全のため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+      "verification": "B受入headと候補のValidator比較、通常File・URL・再読込と保存モデルを照合"
+    },
+    {
+      "id": "JSON05-STATE-COMPAT-002",
+      "condition": "同条件・別IDの0.5遷移を状態図と操作詳細で表示する。",
+      "guarantee": "各遷移について独立した線・キャプション・到着先と操作詳細を保持する。条件や通常という総称で一つにまとめない。描画成功を業務上の同時成立や人間の合意と扱わない。",
+      "reason": "依頼者が明示された遷移を見分け、業務意味を確認できるため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+      "verification": "同じ到着先と異なる到着先について実DOM・Chromeの線・キャプション・詳細を各sourceIdに対応付け"
+    },
+    {
+      "id": "JSON05-STATE-COMPAT-003",
+      "condition": "B受入0.5文書の重複条件を、IDを保持して訂正し文書・package revisionを進める。",
+      "guarantee": "既存guardAuthoringと通常CLIで訂正保存・読戻しでき、Check/StateのbasedOn・確認状態、他の遷移、未決、sourceIdと所有者を保持する。",
+      "reason": "旧正本を保存ガード経由で非破壊に訂正できるため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+      "verification": "canonicalと同梱CLIの実ファイルcommit・読戻し、前後のID・参照・未決を照合"
+    },
+    {
+      "id": "JSON05-STATE-COMPAT-004",
+      "condition": "旧0.4 JSONまたは旧Markdownで同一from・activity・conditionを別遷移として記載する。",
+      "guarantee": "#301が定めた空白正規化後の条件一意性を維持し、読込・通常保存で拒否する。異なる条件の遷移は独立して表示し、既存の元文書と図を保護する。",
+      "reason": "旧形式に採用した曖昧な宣言の検出と既存表示を維持するため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+      "verification": "固定STATE-IDENTITY-001〜006と旧0.4・Markdownの正負例、保存非破壊を照合"
+    },
+    {
+      "id": "JSON05-STATE-COMPAT-005",
+      "condition": "0.5の通常訂正で競合、不正参照、ID/sourceId変更または既存Check/StateのbasedOn変更がある。",
+      "guarantee": "従来のValidator・保存ガードで拒否し、元ファイル・確認状態・参照を変更しない。0.5の受理範囲を保持するために新形式版・別Validator・生上書き経路を作らない。",
+      "reason": "互換性修正で既存の所有者・参照・人間合意・競合保護を弱めないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6516146229",
+      "verification": "canonicalと同梱CLIのCAS・不正候補・参照変更拒否と元bytesを照合"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "本人指示：状態は単一、処理と条件から遷移先を一意に識別できること。Activityを業務上の根拠として保ち、異なる条件を通常に潰さない。",
+  "checks": [
+    {
+      "id": "STATE-IDENTITY-001",
+      "condition": "同じ状態・Activityに、待ちが残る場合と全品目の待ちが0の場合がある。",
+      "guarantee": "遷移JSONのfromId/toIdはそれぞれ単一の状態参照。購買T15/T17は登録後に待ち数量が残る条件、T16/T18は登録後に全品目の待ち数量が0の条件を明示する。業務Activityを別のユーザー操作へ分割せず、各遷移の条件と結果を一対一で保持する。",
+      "reason": "業務の実行結果による条件分岐と、複数状態を同時に持つことは異なるため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "購買JSONとBD Procedure/Result、単一参照・配列拒否の検査を照合"
+    },
+    {
+      "id": "STATE-IDENTITY-002",
+      "condition": "同じ出発状態・Activity・条件を持つ遷移を定義する。",
+      "guarantee": "条件の前後空白と連続空白を正規化した組み合わせを状態文書内で一意にする。ID・遷移先・効果・正常/例外・例外ID・旧eventを変えても重複を許さない。同じ遷移先への重複も拒否する。出発状態またはActivityまたは条件が異なる遷移は区別する。自然文の意味上の排他性を機械的に証明したとは扱わない。",
+      "reason": "IDの一意性だけでは、同じ処理条件から複数の結果へ進む曖昧な定義を検出できないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "共通の参照検査・Viewer入力・authoring保存で重複拒否と有効な差異を照合"
+    },
+    {
+      "id": "STATE-IDENTITY-003",
+      "condition": "同じ状態・Activityから異なる条件の遷移を描画する。",
+      "guarantee": "明示遷移ごとに独立した線とキャプションを持ち、Activity名・条件・単一の遷移先を表示する。通常という総称へ条件を潰さず、同じ到着先でも条件を統合しない。例外名と未決の意味は保持し、旧eventを表示名へ復活させない。Viewerは条件を推論しない。",
+      "reason": "どの条件でどこへ進むかを、人間が図の上で照合できるようにするため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "DOMとChromeで全遷移IDに対する線・ラベルの一対一対応、条件・到着先を照合"
+    },
+    {
+      "id": "STATE-IDENTITY-004",
+      "condition": "JSON正本・旧互換入力から読み込み、不正な遷移を保存または再読込する。",
+      "guarantee": "JSONとMDは既存の共通Viewerモデルと参照検査を通す。重複、配列の到着先、不正参照を拒否し、不正な保存で元ファイルを変更せず、不正な読込で有効な図・元データを失わない。既存ID/sourceIdと版・hashによる保存ガードを保つ。",
+      "reason": "表示時だけ曖昧さを隠さず、正本の作成・保存・読込で検出するため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "共通validator、実CLI保存、MD/JSON入力の拒否系とChrome再読込を照合"
+    },
+    {
+      "id": "STATE-IDENTITY-005",
+      "condition": "購買V2βの条件表現を訂正し、状態図をレビューする。",
+      "guarantee": "V1・BD・既存検証正本・状態と遷移のID・遷移先・明示的同値戻り・仮説注記を保つ。終結/破棄への根拠のない自己戻りを復活させない。package/状態文書と概念草案の参照版を更新し、操作記録を残す。",
+      "reason": "表現と検査の修正で業務意味や意図した差異を変更しないため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "更新前後のJSON、操作記録と既存の購買・状態遷移検証を照合"
+    },
+    {
+      "id": "STATE-IDENTITY-006",
+      "condition": "状態図の分岐先を選択し、PC/狭幅・両テーマで操作する。",
+      "guarantee": "選択した到着先につながる線とその遷移のキャプションだけを関連強調する。別条件の兄弟遷移のラベルへ強調を波及させない。既存の共有レイアウト・配線・ラベル余白・エフェクト・拡大縮小を使い、業務図/概念図の保証を維持する。",
+      "reason": "状態図固有の一対一対応と、グラフ間で揃える操作・描画の規則を両立するため。",
+      "source": "https://github.com/mk3008/root/issues/133",
+      "verification": "独立した余白oracle、DOM選択とChromeで条件別強調・配線・倍率を照合"
+    }
+  ]
+}

@@ -80,7 +80,7 @@ node "$SCRIPT_DIR/cli.mjs" convert "/path/to/request.json" "/path/to/new-package
 
 ## 明示された状態遷移
 
-[部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.5（旧0.4も維持）のstateTransition文書（payload 0.2）に、対象Object・明示状態・操作Activity・条件・例外ID・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。状態と操作の既存IDを保持し、0.5の既存basedOnは固定し、同じBD版で状態文書を編集する場合はその文書とpackageのrevisionを更新する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
+[部分定義の状態遷移](json-state-transitions.ja.md)の契約に従う。形式0.5（旧0.4も維持）のstateTransition文書（payload 0.2）に、対象Object・明示状態・操作Activity・条件・例外ID・根拠・未決を直接草案化できる。通常のcreate/commit/inspectと同じruntime・競合防止・参照検査を使う。明示された表示用の短縮名だけを任意の非空 `conditionLabel` に保持し、業務条件の正本 `condition` を変更・推測しない。表示名を含む0.5は旧Validatorで読めないため、対応する保存器・同梱runtime・Viewerを揃えて扱う。状態と操作の既存IDを保持し、0.5の既存basedOnは固定し、同じBD版で状態文書を編集する場合はその文書とpackageのrevisionを更新する。Checkの人間確認とは独立で、状態遷移の業務承認を推定しない。
 
 MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を指定する。明示表だけを変換し、未知のMedium/SR Dependenciesや無宣言の自然文は補正しない。元MDは残す。再変換での状態名改名bindingは未対応のため、改名はJSON正本のIDを維持したcommitで行う。
 

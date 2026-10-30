@@ -1,0 +1,13 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#論理サブシステムの表示",
+  "checks": [
+    {
+      "id": "LOGICAL-SUBSYSTEM-001",
+      "condition": "購買JSONからデータ構造全体像の概要と左ツリーを開く。",
+      "guarantee": "既存4分類を論理サブシステムとして識別できる。カードとツリーの分類名は一致し、各カードの詳細を開く操作は対応する概要へ移動する。既存のロール/業務/データ例/図と履歴を保持する。",
+      "reason": "業務上のまとまりを全体像とナビゲーションの双方から確認するため。物理的なサービス/DB分割を規定しない。",
+      "verification": "web/test-concept-review.mjs / public Chrome"
+    }
+  ]
+}

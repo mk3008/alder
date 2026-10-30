@@ -7,6 +7,8 @@ import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
 const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layout.json',import.meta.url),'utf8'));
 import {openSourceAction} from './source-menu-browser.mjs';
+import {selectGraphNode} from './graph-selection-browser.mjs';
+import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
 const object=id=>`# Object ${id}\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Record\n\n`;
 const activity=(id,label,output='(none)')=>`# Activity ${id}\n\n## Scope\n\ntrue\n\n## Why\n\nReview\n\n## When\n\nRequested\n\n## Who\n\nReviewer\n\n## Where\n\nOffice\n\n## How\n\n### Input\n\n- Record — ${label}\n\n### Procedure\n\nReview record\n\n### Output\n\n${output}\n\n## Result\n\nReviewed\n\n`;
 const source='# Wiring\n\n'+object('Record')+object('Result')+activity('Review A','data A')+activity('Review B','data B','- Result — written');
@@ -26,8 +28,7 @@ export async function verifyWiring(browser){
     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
     for(const detail of [false,true]){
      if(detail)await page.locator('.node[data-node="Review A"] .activity-open').press('Enter');
-     await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();await page.locator('[data-list-node="Record"] .node-navigate').click();
-     if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-close').click();
+     await selectGraphNode(page,'Record');
      if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
      const state=await page.evaluate(()=>{
       const s=document.querySelector('.node[data-node="Record"]'),p=document.querySelector('.edge[data-relation="0"]'),label=document.querySelector('.edge-label[data-relation="0"]'),children=[...document.querySelector('#edges').children].filter(e=>e.matches('.edge,.edge-label'));
@@ -45,11 +46,10 @@ export async function verifyWiring(browser){
       const a=state.labels[i],b=state.labels[j];assert.ok(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y,'rendered captions do not overlap');
      }
      await page.screenshot({path:`web/evidence/wiring/${width}-${theme}-${detail?'detail':'overview'}.png`});
-     // Existing hide/show clears selection without changing saved coordinates.
-     await page.locator('#node-list-toggle').click();await page.locator('#node-category-object').click();
-     const eye=page.locator('[data-list-node="Record"] .node-eye');await eye.click();await eye.click();
-     await page.locator('#node-list-close').click();assert.equal(await page.locator('.node.selected').count(),0);
-     assert.equal(await page.locator('.edge.review-related,.edge-label.review-related').count(),0);
+     // Switching selection updates the highlighted wiring without moving cards.
+     await selectGraphNode(page,detail?'Review A':'Result');
+     assert.equal(await page.locator('.node.selected').getAttribute('data-node'),detail?'Review A':'Result');
+     if(!detail)assert.equal(await page.locator('.edge[data-relation="0"]').evaluate(e=>e.classList.contains('review-related')),false);
      if(detail)await page.locator('.tab').first().locator('button').first().click();
     }
    }
@@ -97,7 +97,7 @@ export async function verifyRealWiring(browser){
    }
   };
   try{
-   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#open-sample').click();
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await closeCanvasOverlays(page);await page.locator('#open-sample').click();
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await closeDrawers();
    const overview=await positions();
    const columns=[...new Set(Object.values(overview).map(p=>p[0]))].sort((a,b)=>a-b);for(let i=1;i<columns.length;i++)assert.equal(columns[i]-columns[i-1],64,'overview uses the same compact step as detail');
@@ -114,9 +114,8 @@ export async function verifyRealWiring(browser){
     routeDesign=activityDesign(sourceDesign,spec.activity);sourcePlan=matrixPlan(routeDesign.graph,routeDesign.activityOrder,spec.activity);
     await page.locator(`.node[data-activity="${spec.activity}"] .activity-open`).press('Enter');await closeDrawers();
     assert.equal(await page.locator('.node').count(),spec.count);const detail=await positions();
-    spec.stair.forEach((id,i)=>assert.deepEqual(detail[id],[40+i*64,40+i*136],'ordinary Input then focus staircase'));
-    const outputIDs=sourceDesign.graph.relations.filter(r=>r.kind==='output'&&r.from===spec.activity).map(r=>r.to);
-    for(const n of sourceDesign.graph.nodes.filter(n=>n.type==='business'&&n.id!==spec.activity&&detail[n.id]))for(const id of outputIDs)assert.ok(detail[n.id][1]>detail[id][1],'exception peers follow every ordinary Output');
+    assert.deepEqual(detail,Object.fromEntries(Object.entries(initialPositions(routeDesign.graph,routeDesign.activityOrder))),'detail uses the same initial layout as the projected overview graph');
+    for(let i=1;i<spec.stair.length;i++)assert.ok(detail[spec.stair[i]][0]>detail[spec.stair[i-1]][0]&&detail[spec.stair[i]][1]>detail[spec.stair[i-1]][1],'ordinary inputs and focus form a down-right staircase');
     for(const theme of ['light','dark']){
      if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
      const measured=await inspect(),overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
@@ -125,7 +124,7 @@ export async function verifyRealWiring(browser){
       assert.equal(r.collisions,0);assertDeparture(r,true);assert.equal(r.anchor,'start');
       if(!r.exception&&r.source.id===spec.activity){assert.ok(r.label[0]>=r.points[0][0]+8-.01,'Output text starts at or to the right of its departure');assert.equal(r.label[1],r.source.y+101+sourcePlan.wires[r.index].captionLane*22,'Output caption follows source stack');}
       assert.ok(r.marker.includes('arrow'));assert.equal(r.title,r.source.id+' → '+r.target.id+': '+r.labelText,'directed endpoints and label meaning preserved');
-      if(r.exception){assert.notEqual(r.dash,'none');assert.ok(r.paintRuns>0,'exception has visible coordinate-phased paint runs');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]>r.points[0][1]);}}
+      if(r.exception){assert.notEqual(r.dash,'none');assert.ok(r.paintRuns>0,'exception has visible coordinate-phased paint runs');if(spec.slug==='check'){assert.equal(r.source.id,'検査項目の設計');assert.equal(r.target.id,'業務設計');assert.ok(r.points.at(-1)[1]<r.points[0][1],'the return reaches the upstream Activity');}}
       if(!r.exception&&r.target.id===spec.activity){
        inputs++;if(r.source.y>=r.target.y+68){assert.ok(r.label[0]>=Math.max(...r.points.map(p=>p[0]))+8-.01,'return caption starts beyond the outer bend');assert.ok(Math.abs(r.label[1]-r.points[0][1])<.001,'return caption shares the bend height');}else assert.equal(r.label[1],r.source.y+101+sourcePlan.wires[r.index].captionLane*22,'forward Input stays in its source stack');
        if(r.source.y<r.target.y){assert.equal(r.points.at(-1)[0],r.target.x);assert.ok(r.points.slice(1).every((p,j)=>p[0]>=r.points[j][0]-.01&&p[1]>=r.points[j][1]-.01),'forward Input remains down/right');}

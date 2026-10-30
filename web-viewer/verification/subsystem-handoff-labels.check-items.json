@@ -1,0 +1,20 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "checks": [
+    {
+      "id": "SUBSYSTEM-LABEL-001",
+      "condition": "データ構造の全体図でサブシステム間の線を表示する。",
+      "guarantee": "業務設計の全体図と同じ配線処理が返すラベル位置と同じテキスト表現・強調を使用する。独自の線分選択で位置を差し替えない。",
+      "reason": "グラフ間で線の説明の位置と見え方を揃えるため。",
+      "verification": "共通配線処理の結果と表示座標・CSSを照合する。"
+    },
+    {
+      "id": "SUBSYSTEM-LABEL-002",
+      "condition": "初期表示で受け渡しと戻しの情報を確認する。",
+      "guarantee": "両ラベルと配線を初期表示で確認でき、ラベルを選択して関連情報を右ドロワーで確認する操作を保持する。",
+      "reason": "共通の配置に揃えても情報の見切れやレビュー操作の消失を防ぐため。",
+      "verification": "初期表示のブラウザー座標とラベルの選択・詳細表示を確認する。"
+    }
+  ]
+}

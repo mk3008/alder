@@ -1,0 +1,39 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/alder/pull/313#issuecomment-6524350161",
+  "scope": "選択中Activityの右DrawerのInput・Output行から自分自身の端点だけを省く。",
+  "checks": [
+    {
+      "id": "ACTIVITY-IO-DETAIL-001",
+      "condition": "Activityを選択しInputとOutputを表示する。",
+      "guarantee": "Inputは受け取り元Objectと情報、Outputは受け渡し先Objectと情報を各行で表示する。選択中Activityを端点として繰り返さず、Input／Output見出しで方向を区別する。画像の例は『利用者 — 利用者からの来訪希望』とする。",
+      "reason": "選択中のActivityは既に見出しで分かり、端点名の繰り返しは読む幅を消費するため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6524350161",
+      "verification": "実Agent 0.5の全Input／Output行と通常Viewerの右Drawerを照合"
+    },
+    {
+      "id": "ACTIVITY-IO-DETAIL-002",
+      "condition": "同じObjectに複数の関係がある、またはData名・項目説明にActivity名や矢印が含まれる。",
+      "guarantee": "各関係と相手Object、Data名、Informationの名前・説明・条件を失わない。選択中Activityの端点はIDで区別し、同名のObjectや情報の本文を文字列置換で消さない。",
+      "reason": "表示の重複除去で別の情報や関係を失わないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6524350161",
+      "verification": "同名・同一Objectの複数関係・引用文字を含む型付き0.5のDOMを照合"
+    },
+    {
+      "id": "ACTIVITY-IO-DETAIL-003",
+      "condition": "0.5、0.4、旧Markdownを共通表示で開き、ActivityとObjectを切り替える。",
+      "guarantee": "同じInput／Output規則を適用し、Activity間のException Whenは従来の出発先・到着先・方向を保持する。Object詳細、Check表示と通常ナビゲーションを維持する。",
+      "reason": "入力形式間で同じ詳細の表示がずれず、別種類の関係は読み違えないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6524350161",
+      "verification": "0.5・購買0.4・旧Markdownの共通描画とException When・Object詳細を照合"
+    },
+    {
+      "id": "ACTIVITY-IO-DETAIL-004",
+      "condition": "詳細を開いて選択を変え、PCと狭幅で閲覧する。",
+      "guarantee": "図の各関係、元のJSON・Markdown、ID・参照と保存状態を変更しない。本人の固定Preview操作は自動検証と区別する。",
+      "reason": "表示改善で正本や画面操作を変更しないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6524350161",
+      "verification": "元データ・図モデル前後比較、DOM、実ブラウザーと本人Preview"
+    }
+  ]
+}

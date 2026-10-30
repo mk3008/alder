@@ -41,6 +41,8 @@ for(const theme of ['light','dark']){
  assert.equal(nodes.outerHTML+edges.outerHTML,original,'source DOM untouched');
  assert.equal(w.document.querySelectorAll('body > svg').length,1,'temporary measurement is removed');
 }
+detailButton.className='object-open';
+const objectImage=snapshotGraph(nodes,edges,'#fff');assert.equal(new w.DOMParser().parseFromString(objectImage.svg,'image/svg+xml').querySelector('.object-open'),null,'Object navigation control is excluded from exported graph');assert.ok(card.querySelector('.object-open'),'live Object control stays intact');detailButton.className='activity-open';
 const base=snapshotGraph(nodes,edges,'#fff');
 nodes.style.transform='scale(.25)';nodes.style.left='3000px';nodes.style.width='100000px';edges.setAttribute('viewBox','-1000 -2000 50000 90000');
 assert.deepEqual(snapshotGraph(nodes,edges,'#fff'),base,'camera wrappers never change image bounds or styles');

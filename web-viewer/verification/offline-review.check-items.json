@@ -1,0 +1,20 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "web-viewer/json.ja.md",
+  "checks": [
+    {
+      "id": "OFFLINE-REVIEW-001",
+      "condition": "指定したソース版から確認パッケージを生成し、同梱のオフラインHTMLを file:// で開く。",
+      "guarantee": "Viewerの実行に必要な分割JavaScriptとスタイルを内包し、外部JavaScriptやCSSの取得なしで画面が起動する。ソース版とビルド元の一致を検証し、元のWeb出力は変更しない。",
+      "reason": "file:// では分割モジュールの読み込みが制限され、依頼者が確認版を開けなくなるため。",
+      "verification": "生成物に外部モジュール・スタイルが残らないことを検証し、Chromeのfile://で起動とネットワーク要求を確認する。"
+    },
+    {
+      "id": "OFFLINE-REVIEW-002",
+      "condition": "オフラインの確認版でJSONファイルを開いて再読込する。",
+      "guarantee": "業務図と選択したActivityのチェック情報を表示でき、確認版専用の保存領域から復元する。製品版の保存領域を使わない。",
+      "reason": "確認内容を見られ、製品版の作業状態を巻き込まないようにするため。",
+      "verification": "ChromeでJSONの読込み、画面選択、チェック表示、再読込とIndexedDBの分離を照合する。"
+    }
+  ]
+}

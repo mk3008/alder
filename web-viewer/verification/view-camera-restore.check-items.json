@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "checks": [
+    {
+      "id": "VIEW-CAMERA-RESTORE-001",
+      "condition": "業務全体図またはActivity/Objectの個別図で拡大・スクロールし、保存して再読込する。URLに現在の個別対象が含まれる。",
+      "guarantee": "保存した現在対象、選択、座標、拡大率、スクロール位置、表示オフセットをそのまま復元する。現在の対象をURLから再選択する際に、二度目の中央寄せやカメラ初期化をしない。別対象のURLや明示されたナビゲーションは従来通り対象を開く。",
+      "reason": "履歴・URLの復元と保存済み表示状態の復元が競合すると、利用者が作業中の位置を失うため。",
+      "source": "CI-RECONCILE-002、validation.ja.md の jsonLayout native save/reload。",
+      "verification": "独立したDOM/IndexedDBの再起動検証および web/test-json-layout-browser.mjs のChromeでの完全一致。"
+    }
+  ]
+}

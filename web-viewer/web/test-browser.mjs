@@ -1,9 +1,12 @@
+import {verifyConceptInitial} from './test-concept-initial-browser.mjs';
+import {verifyViewerShell} from './test-viewer-shell-browser.mjs';
 import {verifySharedCaptions} from './test-shared-captions-browser.mjs';
 import {verifyJSONRoles} from './test-json-roles-browser.mjs';
 import {verifyJSONStates} from './test-json-states-browser.mjs';
 import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyJSON05} from './test-json-05-browser.mjs';
 import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
 import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -35,6 +38,8 @@ import {verifySavedStatePreflight} from './test-saved-state-browser.mjs';
 import {parseBrowserCaseArgs,selectBrowserCases,runBrowserCases} from './browser-cases.mjs';
 import {verifyNodeDrawer,verifyDrawerOpeningFocus} from './test-node-drawer-browser.mjs';
 import {verifyTabStrip} from './test-tab-strip-browser.mjs';
+import {verifyTabScroll} from './test-tab-scroll-browser.mjs';
+import {verifySubsystemOverview} from './test-subsystem-overview-browser.mjs';
 import {setScope} from './scope-control.mjs';
 // Real Chromium smoke checks against the built app. Synthetic/public input only.
 import assert from 'node:assert/strict';
@@ -52,11 +57,16 @@ const options=parseBrowserCaseArgs(process.argv.slice(2));
 let browser,page;
 const errors=[],external=[],checks=[];
 const cases=[
+   {name:'conceptInitial',run:()=>verifyConceptInitial(browser)},
+   {name:'viewerShell',run:()=>verifyViewerShell(browser)},
+   {name:'tabScroll',run:()=>verifyTabScroll(browser)},
+   {name:'subsystemOverview',run:()=>verifySubsystemOverview(browser)},
    {name:'jsonRoles',run:()=>verifyJSONRoles(browser)},
    {name:'jsonStates',run:()=>verifyJSONStates(browser)},
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'json05',run:()=>verifyJSON05(browser)},
    {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
    {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
@@ -113,16 +123,16 @@ const cases=[
   assert.equal(await sample.locator('#status').isVisible(),false);await clean(sample);assert.deepEqual(sampleRequests,[]);
   await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('html').getAttribute('data-theme'),'dark');assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);assert.equal(await sample.locator('#status').isVisible(),false);
   assert.ok(sampleRequests.every(url=>url.startsWith('http://127.0.0.1:4173/')));
-  assert.equal(await sample.locator('.close').isVisible(),false);assert.equal(await sample.locator('#empty').isVisible(),false);await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);
+  assert.equal(await sample.locator('.close').isVisible(),true);assert.equal(await sample.locator('#empty').isVisible(),false);await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),25);assert.equal(await sample.locator('.tab').count(),1);
   assert.deepEqual(await sample.locator('.node').first().boundingBox(),sampleAfter);
   const sampleLayout=()=>sample.locator('.node').evaluateAll(nodes=>nodes.map(n=>[n.dataset.node,n.style.left,n.style.top]));
   await sample.locator('#out').click();await sample.locator('#viewport').evaluate(e=>{e.scrollLeft=100;e.scrollTop=40;});await sample.waitForTimeout(250);
   const retainedSampleLayout=await sampleLayout(),retainedSampleView=await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleZoom=await sample.locator('#zoom').textContent();
   assert.ok(retainedSampleView[0]>0);
-  assert.equal(await sample.locator('.close').isVisible(),false);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await sample.locator('.close').isVisible(),true);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),1);assert.equal(await sample.locator('#empty').isVisible(),false);
   await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.deepEqual(await sampleLayout(),retainedSampleLayout);assert.equal(await sample.locator('#zoom').textContent(),retainedSampleZoom);assert.deepEqual(await sample.locator('#viewport').evaluate(e=>[e.scrollLeft,e.scrollTop]),retainedSampleView);assert.equal(await sample.locator('.node.selected').getAttribute('data-node'),sampleId);
-  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);assert.equal(await sample.locator('.close').isVisible(),false);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await setScope(sample,'hide');assert.equal(await sample.locator('.node').count(),12);assert.equal(await sample.locator('.close').isVisible(),true);await clean(sample);await sample.reload();await sample.waitForFunction(()=>!document.querySelector('#open').disabled);
   assert.equal(await sample.locator('.tab').count(),1);await openSourceAction(sample,'open-sample-menu');if(await sample.locator('#check-followup').isVisible())await sample.locator('#check-followup-later').click();assert.equal(await sample.locator('.node').count(),12);await setScope(sample,'show');assert.deepEqual(await sampleLayout(),retainedSampleLayout);
   assert.deepEqual(sampleErrors,[]);await sample.close();checks.push('bundled sample: keyboard/pointer open, repeat, 25 nodes/63 relations, no history/network, selection/drag/theme, disabled refresh/reload, close/reopen exact coordinates, closed-tab reload/open, hidden-node positions');
   await page.goto('http://127.0.0.1:4173/');

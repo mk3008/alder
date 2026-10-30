@@ -62,8 +62,13 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    demand(!pkg.documents.some(x=>x!==d&&x.kind==='stateTransition'&&x.objectId===d.objectId),'Duplicate Object state declaration');
    demand(d.states.length>0&&new Set(d.states.map(s=>s.name)).size===d.states.length,'Duplicate/empty state names');demand(d.states.every(s=>!s.name.startsWith('@')),'Reserved state name');
    demand(d.transitions.length<=1000,'State transition row budget');demand(new Set(d.transitions.map(t=>t.sourceId)).size===d.transitions.length,'Duplicate transition source ID');
+   const actions=new Map();
    for(const r of d.transitions){
     if(r.fromId!=='@new')target(r.fromId,'state',d.id);if(!['@unknown','@none'].includes(r.toId))target(r.toId,'state',d.id);const a=target(r.activityId,'activity',bd.id);
+    if(pkg.formatVersion!=='0.5'){
+     const action=JSON.stringify([r.fromId,r.activityId,r.condition.trim().replace(/\s+/gu,' ')]);
+     demand(!actions.has(action),'Duplicate state transition condition: '+actions.get(action)+' / '+r.sourceId);actions.set(action,r.sourceId);
+    }
     if(['0.4','0.5'].includes(pkg.formatVersion)){
      demand(r.path!=='normal'||r.exceptionId===null,'Normal transition cannot reference an exception');
      if(r.exceptionId!==null){const exception=target(r.exceptionId,'exception',bd.id);demand(exception.activityId===a.id,'Exception Activity mismatch');}

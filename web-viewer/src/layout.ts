@@ -74,6 +74,6 @@ export function layoutPlan(graph:Graph,activityOrder?:readonly string[],stairSou
  * The generic DAG fallback remains for non-Alder/imported graphs only.
  * Retained/manual coordinates are never migrated by this initial/reset plan.
  */
-export function initialPositions(graph:Graph,activityOrder?:readonly string[],activity?:string):Record<string,Point>{
-  return isMatrixGraph(graph)?matrixPlan(graph,activityOrder,activity).positions:layoutPlan(graph,activityOrder).positions;
+export function initialPositions(graph:Graph,activityOrder?:readonly string[]):Record<string,Point>{
+  return isMatrixGraph(graph)?matrixPlan(graph,activityOrder).positions:layoutPlan(graph,activityOrder).positions;
 }

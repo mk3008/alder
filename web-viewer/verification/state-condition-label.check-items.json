@@ -1,0 +1,55 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+  "scope": "共有State schema 0.2の明示された表示ラベルと、Phase Bの0.5互換および採用済み状態図表示の統合。",
+  "checks": [
+    {
+      "id": "STATE-LABEL-001",
+      "condition": "package 0.4または0.5のState schema 0.2の遷移に表示ラベルを省略するか、非空の文字列を明示する。",
+      "guarantee": "共通Schemaとcanonical・同梱Validatorは既存文書と明示ラベルを受理する。空白のみ・空・非文字列・未知項目は拒否し、packageやStateの版を変えない。",
+      "reason": "旧入力の受理を保ち、同一payloadの表現能力を揃えるため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "0.4購買実fixtureと0.5の正負例をcanonical・同梱のschema/validatorに照合"
+    },
+    {
+      "id": "STATE-LABEL-002",
+      "condition": "単独の通常遷移、例外遷移、同じ出発状態とActivityからの複数遷移を表示する。",
+      "guarantee": "単独通常はActivity名、例外はActivity名と例外名、分岐は明示された短縮条件を表示する。ラベル省略時は元condition、兄弟内で表示条件が衝突するときは元conditionへ戻し、推測生成しない。操作詳細と元JSONは原文conditionを保持する。",
+      "reason": "利用者が図上で遷移を見分けつつ、元の業務条件を確認できるため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "実購買・合成入力のDOMとChromeでキャプション、衝突時fallback、操作詳細を照合"
+    },
+    {
+      "id": "STATE-LABEL-003",
+      "condition": "同条件・同出発と到着先の別IDの0.5遷移を、ラベルの有無や衝突を含めて表示する。",
+      "guarantee": "各IDの独立したpath、異なる接続位置、キャプションと操作詳細を保持し、表示名で統合・削除しない。",
+      "reason": "Phase Bで有効な状態文書の内容を失わないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "同条件3本の0.5入力を通常読込し実SVG・詳細・復元を照合"
+    },
+    {
+      "id": "STATE-LABEL-004",
+      "condition": "ラベル付き0.4購買と0.5文書を既存の通常保存経路で訂正・読戻しする。",
+      "guarantee": "ID・sourceId・元condition・未決・参照・確認状態と明示labelを保持する。旧0.4/MDの一意性はconditionで検査し、0.5同条件は許容し、labelによって一意性や業務意味を変えない。競合・不正参照・無確認rebaseは非破壊で拒否する。",
+      "reason": "表示用項目の追加で正本と人間合意を変更しないため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "canonicalと同梱author CLIのファイル保存・読戻し・拒否時のbytesを照合"
+    },
+    {
+      "id": "STATE-LABEL-005",
+      "condition": "採用済み購買状態図のT02/T12/T14、分岐と選択をPC/狭幅で操作する。",
+      "guarantee": "採用済みのキャプション配置、例外破線の描画順、関連強調、キーボードフォーカス、tabStripと操作の詳細を保ち、既存JSON・MDと共通Viewer経路を維持する。",
+      "reason": "採用済みUIと新契約の双方を同じ候補で確認するため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "固定STATE-CAPTION-001〜003と#317の状態・tabStrip検証および実Chromeを照合"
+    },
+    {
+      "id": "STATE-LABEL-006",
+      "condition": "表示名を含む新0.5を旧Phase B Validatorに渡す。",
+      "guarantee": "旧Validatorがその新文書を読めない前方互換の制限を明示し、schema・canonical・Plugin同梱・Viewerを同じ正式配布候補に揃える。既存文書の無断変換や旧製品での成功を主張しない。",
+      "reason": "任意追加の後方互換性と旧製品の前方互換性は異なるため。",
+      "source": "https://github.com/mk3008/alder/pull/313#issuecomment-6519259849",
+      "verification": "旧B Validatorで明示label拒否、新canonical/同梱で受理、provenanceのsource bytes厳密照合"
+    }
+  ]
+}

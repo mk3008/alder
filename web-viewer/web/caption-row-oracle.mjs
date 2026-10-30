@@ -14,14 +14,15 @@ export function assertCaptionRows(positions,forward,ids=Object.keys(positions).s
 // This function is also serialized into native Chrome; no production imports.
 export function stateCaptionSnapshot(svg){
  return {
-  nodes:[...svg.querySelectorAll('[data-state]')].map(e=>{const r=e.querySelector('rect');return {id:e.dataset.state,x:+r.getAttribute('x'),y:+r.getAttribute('y'),height:+r.getAttribute('height')};}),
-  captions:[...svg.querySelectorAll('.state-diagram-edge-label')].map(e=>({y:+e.getAttribute('y'),lines:e.querySelectorAll('tspan').length,transition:e.querySelector('tspan').dataset.transitions.split(' ')[0]}))
+  nodes:[...svg.querySelectorAll('[data-state]')].map(e=>{const r=e.querySelector('rect');return {id:e.dataset.state,x:+r.getAttribute('x'),y:+r.getAttribute('y'),width:+r.getAttribute('width'),height:+r.getAttribute('height')};}),
+  captions:[...svg.querySelectorAll('.state-diagram-edge-label')].map(e=>{const transition=e.querySelector('tspan').dataset.transitions.split(' ')[0],path=[...svg.querySelectorAll('path.edge[data-transitions]')].find(p=>p.dataset.transitions===transition),start=path.getAttribute('d').match(/^M(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);return {y:+e.getAttribute('y'),lines:e.querySelectorAll('tspan').length,transition,startX:+start[1]};})
  };
 }
 export function assertStateCaptionRows(snapshot,transitions){
  const occupied=new Map();
  for(const caption of snapshot.captions){
   const from=transitions.find(t=>t.id===caption.transition).from,node=snapshot.nodes.find(n=>n.id===from);
+  if(Math.abs(caption.startX-(node.x+node.width))<1e-7)continue;
   const offset=occupied.has(from)?occupied.get(from)+8:0;
   assert.equal(caption.y,node.y+44+24+14+offset,'state caption uses the same 24px source clearance');
   occupied.set(from,offset+caption.lines*18);

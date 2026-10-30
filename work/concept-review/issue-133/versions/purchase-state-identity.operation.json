@@ -1,0 +1,6 @@
+{
+  "expectedSha256": "9142f580465941fa0114156996f87de59ee54a970890fb363bfa89a76bcedceb",
+  "expectedRevision": "purchase-v2-beta-6",
+  "reason": "登録後の待ち数量による分岐条件をJSONに明示し、遷移先を配列や通常という表示へまとめない。Activity、遷移ID、到着先、仮説は変更しない。",
+  "source": "https://github.com/mk3008/root/issues/133"
+}

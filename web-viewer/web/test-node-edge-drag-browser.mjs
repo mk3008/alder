@@ -144,7 +144,7 @@ async function pointerDriver(page,context,input){
 }
 async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView=false){
  await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
- await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();if(activityView)await page.locator('.node[data-activity] .activity-open').first().press('Enter');
+ await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();if(activityView)await page.locator('.node[data-activity] .activity-open').first().press('Enter');const viewUrl=page.url();
  await page.waitForFunction(count=>document.querySelectorAll('.node').length===count||!!document.querySelector('#status[data-kind=error]:not([hidden])'),4);
  assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
  if(activityView)assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node).sort()),['approve','person','read','record'],'detail adds the directly adjacent exception Activity');
@@ -165,7 +165,7 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  await page.evaluate(seedEdgeDragSession,{positions,zoom,scroll,viewInset,moving});
  const saved=await waitSavedViewer(page,{positions,zoom,scroll,viewInset,selected:moving});
  assert.equal(saved.drawer,false);assert.equal(saved.nodeDrawer,false);
- await page.goto(origin);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);
+ await page.goto(viewUrl);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);
  if(atExtent)await page.locator('#viewport').evaluate((v,edge)=>{if(edge==='right')v.scrollLeft=v.scrollWidth;else if(edge==='bottom')v.scrollTop=v.scrollHeight;else if(edge==='left')v.scrollLeft=0;else v.scrollTop=0;},atExtent);
  await paintedFrames(page,2);const initial=await frame(page);
  assert.deepEqual(initial.positions,positions);assert.equal(initial.zoom,zoom);
@@ -179,10 +179,11 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  if(atExtent==='left')start[0]=Math.ceil(box[0])+8;
  // Return captions can extend the canvas beyond the card's center. At the
  // actual right scroll limit, grip the visible trailing edge of that card.
- if(atExtent==='right'&&start[0]<=initial.bounds.left)start[0]=Math.floor(box[0]+260*zoom)-8;
+ if(atExtent==='right'&&start[0]<=initial.bounds.left)start[0]=Math.floor(box[0]+260*zoom)-Math.max(52*zoom,8);
  if(atExtent==='top')start[1]=Math.ceil(box[1])+8;
  const margin=atExtent?0:48;assert.ok(start[0]>initial.bounds.left+margin&&start[0]<initial.bounds.right-margin&&start[1]>initial.bounds.top+margin&&start[1]<initial.bounds.bottom-margin,'selected node must begin visibly inside the usable viewport');
  assert.equal(await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.closest('.node')?.dataset.node,start),moving,'actual hit test must reach the selected node');
+ assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('button'),start),false,'drag grip must not hit the open-detail button');
  return {moving,initial,start,grip:[start[0]-box[0],start[1]-box[1]],viewInset};
 }
 function edgeTarget(initial,start,edge){const end=[...start],b=initial.bounds;if(edge==='left')end[0]=Math.ceil(b.left)+2;if(edge==='right')end[0]=Math.floor(b.right)-2;if(edge==='top')end[1]=Math.ceil(b.top)+2;if(edge==='bottom')end[1]=Math.floor(b.bottom)-2;return end;}
@@ -258,7 +259,7 @@ async function verifyInterruption(browser,stop,input='mouse',zoom=.25){return ru
  else if(stop==='tab-close'){
   await page.locator('.tab.active .close').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelectorAll('.tab').length===1);
   await driver.up();const baseline=await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top]));await paintedFrames(page,8);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline,'detached Group drag cannot change the overview');
-  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),false);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
+  await waitForExactRead(()=>page.evaluate(readSessionInPage),1,{project:s=>s?.tabs?.length});await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>[n.dataset.node,n.style.left,n.style.top])),baseline);
   return {stop,input,zoom,closedGroupViews:1,retainedOriginal:true};
  }
  else throw Error('Unknown stop '+stop);

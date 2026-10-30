@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#全体像の内部メタデータ",
+  "scope": "本人指示によりCONCEPT-REVIEW-001の情報受け渡し表示だけを置換する新要求。",
+  "checks": [
+    {
+      "id": "LANDSCAPE-META-001",
+      "condition": "購買業務の全体像を表示する。",
+      "guarantee": "まとまりの間で受け渡す情報の見出し・リストをDOMに生成しない。6件の関係データは内部に保持し、4分類・レビュアー・各分類を開く操作を維持する。",
+      "reason": "作業者が自分の情報のまとまりをレビューする画面に、内部分析向けの関係説明を混ぜないため。",
+      "verification": "web/test-concept-review.mjs and public browser"
+    }
+  ]
+}

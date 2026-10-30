@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "../../../work/concept-review/issue-133/README.ja.md#データ例のキーセル",
+  "scope": "場面別の架空データ表の準備番号・申請番号・入庫回番号。",
+  "checks": [
+    {
+      "id": "SAMPLE-KEY-COLOR-001",
+      "condition": "9場面のデータ例を表示・切り替える。",
+      "guarantee": "同じ種別の同じ識別番号のキーセルに、表と場面をまたいで同じ背景色を付ける。異なる番号は別色にし、準備/申請/入庫を取り違えない。行全体、数量、単価、氏名、見積や版名など非対象セルは着色しない。値の文字は残す。ライト/ダークで読める背景色と文字色を組み合わせる。",
+      "reason": "添付1839.jpgの指定どおり、どの行がつながるかをキーセルから追えるようにする。V1など単独では一意でない値を誤って同一キー扱いしない。",
+      "verification": "web/test-data-examples.mjs and public browser light/dark observation"
+    }
+  ]
+}

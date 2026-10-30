@@ -2,14 +2,19 @@
 // @ts-expect-error Gate A supplies JavaScript modules without TypeScript declarations.
 import {parseStrict,validate} from '../../tools/document_storage/core.mjs';
 import type {Design} from './graph.ts';
-export type StateDocument={id:string;kind:'stateTransition';revision:string;basedOn:{documentId:string;revision:string;verification:'unverified'};objectId:string;states:{id:string;name:string}[];start:string;terminal:string;completeness:string;source:string;transitions:{id:string;sourceId:string;fromId:string;toId:string;activityId:string;exceptionId:string|null;event:string|null;condition:string;effect:string;path:string;evidence:string;note:string}[]};
+export type StateDocument={id:string;kind:'stateTransition';revision:string;basedOn:{documentId:string;revision:string;verification:'unverified'};objectId:string;states:{id:string;name:string}[];start:string;terminal:string;completeness:string;source:string;transitions:{id:string;sourceId:string;fromId:string;toId:string;activityId:string;exceptionId:string|null;event:string|null;condition:string;conditionLabel?:string;effect:string;path:string;evidence:string;note:string}[]};
 import {readViewerDocument,type NormalizedDocument} from './viewer-document.ts';
 export type Run={kind:'markdown';value:string}|{kind:'text';value:string}|{kind:'reference';targetId:string;label:string}|{kind:'link';uri:string;label:string};
-export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:string[]};
-export type ActivityEntry={id:string;name:string;scope:boolean;roleId?:string|null;why:string;when:string;who:string;where:string;procedure:string;exception:string|null;result:string;problem:string|null;painLevel:string|null};
-export type BD={id:string;kind:'businessDesign';revision:string;title:string;preface:string;scope:string;exceptions?:{id:string;activityId:string;name:string;description:string}[];roles?:{id:string;name:string;color:string}[];objects:ObjectEntry[];activities:ActivityEntry[];relations:{id:string;kind:'input'|'output'|'business-exception'|'object-exception';fromId:string;toId:string;label:string}[];findings:{id:string;sourceId:string;kind:'question'|'correction';status:'open'|'resolved';scope:'items'|'document'|'unassigned';targetIds:string[];unresolvedTargets:string[];summary:string;content:string}[]};
+export type Information={id:string;name:string;description:string};
+export type ObjectEntry={id:string;name:string;scope:boolean;icon:string;information:(string|Information)[]};
+type ActivityBase={id:string;name:string;scope:boolean;why:string;when:string;where:string;problem:string|null;painLevel:string|null};
+export type LegacyActivity=ActivityBase & {roleId?:string|null;who:string;procedure:string;exception:string|null;result:string};
+export type StructuredActivity=ActivityBase & {performers:{objectId:string;roleIds:string[]}[]|null;procedure:{steps:{id:string;text:string;obligation:'required'|'optional';appliesWhen:string|null;performerObjectIds:string[]|null}[];orderRules:({kind:'before';beforeId:string;afterId:string}|{kind:'interchangeable';stepIds:string[]})[]};results:{id:string;text:string}[]};
+export type ActivityEntry=LegacyActivity|StructuredActivity;
+export type RelationEntry={id:string;kind:'input'|'output'|'business-exception'|'object-exception';fromId:string;toId:string} & ({label:string}|{dataId:string});
+export type BD={id:string;kind:'businessDesign';schemaVersion?:string;revision:string;title:string;preface:string;scope:string;exceptions?:{id:string;activityId:string;name:string;description:string}[];roles?:{id:string;name:string;color:string}[];data?:{id:string;name:string;items:{informationId:string;condition:string|null}[]}[];objects:ObjectEntry[];activities:ActivityEntry[];relations:RelationEntry[];findings:{id:string;sourceId:string;kind:'question'|'correction';status:'open'|'resolved';scope:'items'|'document'|'unassigned';targetIds:string[];unresolvedTargets:string[];summary:string;content:string}[]};
 export type Check={id:string;kind:'checkItems';revision:string;title:string;basedOn:{documentId:string;revision:string;verification:'unverified'};intro:Run[];index:{activityId:string;purpose:string;connections:string;checkIds:string[]}[];sections:{id:string;activityId:string|null;title:string;preamble:Run[]}[];items:{id:string;checkId:string;title:string;reviewState:string;sectionId:string;detailSummary:string;fields:Record<string,Run[]>}[];guarantees:{id:string;sectionId:string;title:string;blocks:({kind:'prose';content:Run[]}|{kind:'example';exampleId:string})[]}[];examples:{id:string;guaranteeId:string;columns:string[];rows:Run[][][]}[];notes:{id:string;title:string;content:Run[]}[]};
-export type DocumentModel={formatVersion:string;revision:string;business:BD;checks:Check[];states:StateDocument[];diagnostics:string[]};
+export type DocumentModel={formatVersion:string;revision:string;business:BD;checks:Check[];states:StateDocument[];sources?:{documentId:string;revision:string;sha256:string;uri:string}[];externalDocuments?:{id:string;kind:'businessDesign';revision:string;activities:{id:string;name:string}[]}[];diagnostics:string[]};
 
 /** Direct projection into the existing display model. No Markdown document is generated.
  * `markdown` is the legacy session field for original source bytes, including JSON.
@@ -33,11 +38,11 @@ export function validateJSONBudget(pkg:any){
  for(const d of Array.isArray(pkg?.documents)?pkg.documents:[]){if(d&&typeof d==='object'&&d.kind==='businessDesign'&&((d.objects?.length??0)+(d.activities?.length??0)>2000||(d.relations?.length??0)>5000))throw Error('図の表示上限は2000要素・5000関係です。');}
 }
 export function projectJSONPackage(pkg:any,source:string):NormalizedDocument{
- if(!pkg||pkg.formatVersion!=='0.4')throw Error('JSON専用経路はformatVersion 0.4が必要です（旧形式は互換入力adapter）。');
+ if(!pkg||!['0.4','0.5'].includes(pkg.formatVersion))throw Error('JSON専用経路はformatVersion 0.4または0.5が必要です（旧形式は互換入力adapter）。');
  validateJSONBudget(pkg);
  const result=validate(pkg);
  const business=pkg.documents.filter((d:BD|Check)=>d.kind==='businessDesign') as BD[];
  if(business.length!==1)throw Error('このViewerは、単一JSON内のBusiness Designが1件の場合に対応します。');
  const bd=business[0];
- return {original:{format:'json',text:source},data:{version:1,formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),diagnostics:result.diagnostics}};
+ return {original:{format:'json',text:source},data:{version:1,formatVersion:pkg.formatVersion,revision:pkg.revision,business:bd,checks:pkg.documents.filter((d:BD|Check)=>d.kind==='checkItems'),states:pkg.documents.filter((d:StateDocument)=>d.kind==='stateTransition'),sources:pkg.sources,externalDocuments:pkg.externalDocuments,diagnostics:result.diagnostics}};
 }

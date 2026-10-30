@@ -11,6 +11,7 @@ on:
       - 'tools/document_storage/legacy-json.mjs'
       - 'tools/document_storage/state-declaration.mjs'
       - 'work/viewer-json/issue-274/json-native/**'
+      - 'work/viewer-json/issue-312/**'
       - '.github/workflows/web-viewer-once.yml'
 concurrency:
   group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
@@ -36,6 +37,12 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Lint Viewer source and tests
+        run: npm run lint
+      - name: Fetch frozen pre-B verification authority
+        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
+      - name: Verify UI verification authority
+        run: npm run verify:contract
       - run: npm test
       - run: npm run build
       - name: Install browser driver
@@ -96,6 +103,14 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Preserve shell review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-shell-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/shell/*.png
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Preserve header review screenshots
         if: always()
         uses: actions/upload-artifact@v4

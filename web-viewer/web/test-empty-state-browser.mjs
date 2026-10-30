@@ -45,7 +45,7 @@ export function readEmptyFrameInPage(){
  const visible=e=>!e.hidden&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).visibility!=='hidden';
  const v=document.querySelector('#viewport'),hint=document.querySelector('#empty'),link=document.querySelector('#open-sample'),canvas=document.querySelector('#canvas'),toolbar=document.querySelector('.toolbar');
  const linkBox=box(link),hit=document.elementFromPoint(linkBox.left+linkBox.width/2,linkBox.top+linkBox.height/2);
- return {tabs:document.querySelectorAll('.tab').length,window:{width:innerWidth,height:innerHeight},viewport:box(v),hint:{...box(hint),visible:visible(hint),text:hint.textContent},link:{...linkBox,visible:visible(link),hit:hit===link||link.contains(hit),tabIndex:link.tabIndex,disabled:link.getAttribute('aria-disabled')},scroll:[v.scrollLeft,v.scrollTop],extent:[v.scrollWidth,v.scrollHeight],client:[v.clientWidth,v.clientHeight],canvasVisible:visible(canvas),toolbarVisible:visible(toolbar),drawers:['formattedMarkdownDrawer','node-list-drawer'].map(id=>({id,visible:visible(document.getElementById(id))})),toggles:['drawer','node-list-toggle'].map(id=>({id,disabled:document.getElementById(id).disabled,expanded:document.getElementById(id).getAttribute('aria-expanded')}))};
+ return {tabs:document.querySelectorAll('.tab').length,window:{width:innerWidth,height:innerHeight},viewport:box(v),hint:{...box(hint),visible:visible(hint),text:hint.textContent},link:{...linkBox,visible:visible(link),hit:hit===link||link.contains(hit),tabIndex:link.tabIndex,disabled:link.getAttribute('aria-disabled')},scroll:[v.scrollLeft,v.scrollTop],extent:[v.scrollWidth,v.scrollHeight],client:[v.clientWidth,v.clientHeight],canvasVisible:visible(canvas),toolbarVisible:visible(toolbar),explorerVisible:visible(document.getElementById('design-explorer')),drawers:['formattedMarkdownDrawer','node-list-drawer'].map(id=>({id,visible:visible(document.getElementById(id))})),toggles:['drawer','node-list-toggle'].map(id=>({id,disabled:document.getElementById(id).disabled,expanded:document.getElementById(id).getAttribute('aria-expanded')}))};
 }
 export function assertEmptyFrame(frame){
  const contains=(outer,inner)=>inner.left>=outer.left-.75&&inner.top>=outer.top-.75&&inner.right<=outer.right+.75&&inner.bottom<=outer.bottom+.75;
@@ -57,7 +57,7 @@ export function assertEmptyFrame(frame){
  assert.equal(frame.link.hit,true,'real elementFromPoint must reach the sample link');assert.equal(frame.link.tabIndex,0);assert.equal(frame.link.disabled,'false');
  assert.deepEqual(frame.scroll,[0,0]);assert.equal(frame.canvasVisible,false);assert.equal(frame.toolbarVisible,false);
  for(const drawer of frame.drawers)assert.equal(drawer.visible,false,drawer.id+' cannot obscure empty help');
- for(const toggle of frame.toggles){assert.equal(toggle.disabled,true);assert.equal(toggle.expanded,'false');}
+ for(const toggle of frame.toggles){assert.equal(toggle.disabled,toggle.id==='drawer');assert.equal(toggle.expanded,toggle.id==='drawer'?'false':String(frame.explorerVisible));}
  for(let axis=0;axis<2;axis++)assert.ok(frame.extent[axis]<=frame.client[axis]+1,'old world extent cannot remain in the empty scroll area');
  return frame;
 }
@@ -66,7 +66,7 @@ async function inspectEmpty(page){await painted(page);return assertEmptyFrame(aw
 async function ready(page,count){await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.tab').length===count,count);}
 async function openPublicSample(page){
  await page.goto(origin);await ready(page,0);
- assert.equal(await page.locator('#drawer').isDisabled(),true,'never click a drawer while the app is empty');
+ assert.equal(await page.locator('#drawer').isDisabled(),true,'never click the detail drawer while the app is empty');
  await page.locator('#open-sample').click();await ready(page,1);await useUngroupedSample(page);
  assert.equal(await page.locator('.node').count(),design.graph.nodes.length);
  await waitForExactRead(()=>page.evaluate(readSessionInPage),true,{project:s=>s?.tabs?.length===1&&s.tabs[0].source?.kind==='sample'});
@@ -81,7 +81,7 @@ async function seedAndRestore(page,layout){
  const committed=await waitSavedViewer(page,layout);assert.equal(committed.drawer,true);assert.equal(committed.nodeDrawer,true);
  await page.goto(origin);await ready(page,1);await assertGraph(page,layout);return committed.active;
 }
-async function assertGraph(page,layout,{drawer=true,nodeDrawer=true}={}){
+async function assertGraph(page,layout,{drawer=true,nodeDrawer=false}={}){
  await painted(page);
  const observed=await page.evaluate(expected=>{
   const v=document.querySelector('#viewport'),n=document.querySelector('#nodes'),style=document.createElement('div').style;style.transform=`scale(${expected.zoom})`;
@@ -117,10 +117,18 @@ async function verifyOneEmpty({page,touch,options}){
  await page.goto(origin);await ready(page,0);const empty=await inspectEmpty(page);await disturbEmpty(page,touch,empty);
  const expected=emptyStateFixture(options.zoom);await seedAndRestore(page,expected);
  const before=await assertGraph(page,expected);assert.ok(before.extent[0]>options.width&&before.extent[1]>options.height);assert.ok(before.scroll.every(n=>n>1000));
- assert.equal(await page.locator('.tab.active .close').isVisible(),false,'overview cannot be closed');
- await page.evaluate(()=>document.querySelector('.tab.active .close').click());await assertGraph(page,expected);
+ assert.equal(await page.locator('.tab.active .close').isVisible(),true,'overview can be closed');
+ // Keep the seeded app-wide drawer preference true. At phone width the rail
+ // covers the tab row; use the close button's native keyboard activation.
+ // Pointer dismissal of the rail would intentionally change that preference.
+ if(options.width<=800)await page.locator('.tab.active .close').press('Enter');
+ else await page.locator('.tab.active .close').click();
+ assert.equal(await page.locator('#empty-workspace').isVisible(),true,'closing the last workspace shows the empty workspace');
+ if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+ await page.locator('[data-explorer-key="business:overview"]').click();
+ await assertGraph(page,expected);
  await page.reload();await ready(page,1);await assertGraph(page,expected);
- return {...options,empty,restoredFields:emptyLayoutFields,activation:['pointer and keyboard sample in initial empty viewport'],gestures:['wheel','mouse pan','observed two-contact pinch'],permanentOverview:true};
+ return {...options,empty,restoredFields:emptyLayoutFields,activation:['pointer and keyboard sample in initial empty viewport'],gestures:['wheel','mouse pan','observed two-contact pinch'],closeAndReopenOverview:true};
 }
 async function verifyRemainingTab({page}){
  const expected=emptyStateFixture(1);await seedAndRestore(page,expected);
@@ -166,19 +174,21 @@ export async function preflightEmptyStateBrowser(){
  try{
   globalThis.indexedDB=db;const w=await boot(),d=w.document,$=id=>d.getElementById(id);
   for(const selector of emptyStateSelectors)assert.equal(d.querySelectorAll(selector).length,1,selector);
-  assert.equal($('drawer').disabled,true);assert.equal($('node-list-toggle').disabled,true);assert.equal(d.querySelector('.toolbar').hidden,true);
+  assert.equal($('drawer').disabled,true);assert.equal($('node-list-toggle').disabled,false);assert.equal(d.querySelector('.toolbar').hidden,true);
   $('open-sample').click();assert.equal(d.querySelectorAll('.node').length,25);assert.equal(d.querySelectorAll('.edge').length,63);assert.equal($('drawer').disabled,false);
   if(!$('formattedMarkdownDrawer').hidden)$('drawer').click();if(!$('node-list-drawer').hidden)$('node-list-toggle').click();assert.equal($('formattedMarkdownDrawer').hidden,true);assert.equal($('node-list-drawer').hidden,true);
   await waitForExactRead(readSessionInPage,{drawer:false,nodeDrawer:false},{timeoutMs:3000,intervalMs:10,project:s=>({drawer:s?.drawer,nodeDrawer:!!s?.nodeDrawer})});w.close();
   for(const {zoom} of emptyStateMatrix){const layout=emptyStateFixture(zoom);assert.equal(await seedEmptyStateSession({layout}),true);const saved=await readSessionInPage();assert.deepEqual(emptyLayoutProjection(saved.tabs[0]),layout);assert.equal(saved.drawer,true);assert.equal(saved.nodeDrawer,true);}
   const expected=emptyStateFixture(2.5);await seedEmptyStateSession({layout:expected});const restored=await boot(),r=restored.document;
   assert.deepEqual(Object.fromEntries([...r.querySelectorAll('.node')].map(n=>[n.dataset.node,[parseFloat(n.style.left),parseFloat(n.style.top)]])),expected.positions);assert.equal(r.querySelector('#zoom').textContent,'250%');assert.deepEqual([r.querySelector('#viewport').scrollLeft,r.querySelector('#viewport').scrollTop],expected.scroll);
-  assert.equal(r.querySelector('#formattedMarkdownDrawer').hidden,false);assert.equal(r.querySelector('#node-list-drawer').hidden,false);
-  assert.equal(r.querySelector('.tab.active .close').hidden,true);await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelector('#empty').hidden,true);assert.equal(r.querySelector('#canvas').hidden,false);assert.equal(r.querySelector('.toolbar').hidden,false);assert.deepEqual(emptyLayoutProjection((await readSessionInPage()).tabs[0]),expected);
+  assert.equal(r.querySelector('#formattedMarkdownDrawer').hidden,false);assert.equal(r.querySelector('#node-list-drawer').hidden,true);
+  assert.equal(r.querySelector('.tab.active .close').hidden,false);await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelector('#empty-workspace').hidden,false);
+  if(r.querySelector('#design-explorer').hidden)r.querySelector('#node-list-toggle').click();r.querySelector('[data-explorer-key="business:overview"]').click();
+  assert.equal(r.querySelector('#empty').hidden,true);assert.equal(r.querySelector('#canvas').hidden,false);assert.equal(r.querySelector('.toolbar').hidden,false);assert.deepEqual(emptyLayoutProjection((await readSessionInPage()).tabs[0]),expected);
   r.querySelector('#open-sample').click();assert.equal(r.querySelectorAll('.node').length,25);assert.equal(r.querySelector('#drawer').disabled,false);
   // Actual parser + source-dialog ordering used by the multi-tab browser case.
   r.querySelector('#open-text').click();r.querySelector('#source-text').value=raw;await r.querySelector('#source-submit').onclick();assert.equal(r.querySelectorAll('.tab').length,1);assert.equal(r.querySelector('#source-dialog').hidden,true);
-  await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelectorAll('.tab').length,1);assert.equal(r.querySelector('#empty').hidden,true);
+  await r.querySelector('.tab.active .close').onclick();assert.equal(r.querySelector('#empty-workspace').hidden,false);
   const result={emptyStateBrowserPreflight:'passed',publicSample:'business-design/alder/README.md',nodes:25,relations:63,matrixCases:9,browserCases:10,selectors:emptyStateSelectors.length,committedSeeds:10,harnessFailureCases:3,overlayOrder:'open sample → nodes present → close overlays',limits:emptyStateLimits,budgetCalibrated:false,browserExecuted:false,limit:'Parser/DOM/fake-IDB and controlled harness failures only. Real rectangles, elementFromPoint, native wheel/pan/pinch and Chromium restoration have not been run. The 8-second case budget is uncalibrated for this new suite.'};console.log(JSON.stringify(result));return result;
  }finally{windows.forEach(w=>w.close());delete globalThis.indexedDB;}
 }

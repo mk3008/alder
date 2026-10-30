@@ -2,18 +2,24 @@ import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
+import {activityWho,performerNames,relationLabel} from './structured-display.ts';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
 export function businessDetail(design:Design,id?:string):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
- if(object){field(root,'Scope',String(object.scope));field(root,'Icon',object.icon);root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
+ if(object){field(root,'Scope',String(object.scope));field(root,'Icon',object.icon);root.append(element('h3','Information'));const list=element('ul');for(const info of object.information){const item=element('li',typeof info==='string'?info:info.name);if(typeof info!=='string'&&info.description)item.append(formattedMarkdown(info.description));list.append(item);}root.append(list);}
  else if(activity){
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
+  if('performers' in activity){
+   field(root,'Scope',String(activity.scope));field(root,'Why',activity.why);field(root,'When',activity.when);field(root,'Who',activityWho(bd,activity));field(root,'Where',activity.where);
+   root.append(element('h3','Procedure'));const steps=element('ol');for(const step of activity.procedure.steps){const item=element('li');item.append(formattedMarkdown(step.text));const detail=[step.obligation==='required'?'必須':'任意',...(step.appliesWhen?[`適用条件：${step.appliesWhen}`]:[]),`担当：${performerNames(bd,activity,step.performerObjectIds)}`];item.append(element('p',detail.join(' · ')));steps.append(item);}root.append(steps);
+   if(activity.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul'),number=(id:string)=>String(activity.procedure.steps.findIndex(s=>s.id===id)+1);for(const rule of activity.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`手順${number(rule.beforeId)} → 手順${number(rule.afterId)}`:`手順${rule.stepIds.map(number).join('・')}は入替可能`));root.append(rules);}
+   root.append(element('h3','Result'));const results=element('ul');for(const result of activity.results){const item=element('li');item.append(formattedMarkdown(result.text));results.append(item);}root.append(results);field(root,'Problem',activity.problem);field(root,'Pain level',activity.painLevel);
+  }else for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
   for(const exception of bd.exceptions?.filter(e=>e.activityId===activity.id)??[]){root.append(element('h3','Exception · '+exception.name));field(root,'説明',exception.description);}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
-  for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
+  for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations){const endpoint=kind==='business-exception'?`${names.get(r.fromId)} → ${names.get(r.toId)}`:names.get(kind==='input'?r.fromId:r.toId);root.append(element('p',`${endpoint} — ${relationLabel(bd,r)}`));if('dataId' in r){const data=bd.data!.find(d=>d.id===r.dataId)!,list=element('ul');for(const item of data.items){const info=bd.objects.flatMap(o=>o.information).find(i=>typeof i!=='string'&&i.id===item.informationId);if(typeof info==='string'||!info)continue;const line=element('li',info.name+(item.condition?`（条件：${item.condition}）`:''));if(info.description)line.append(formattedMarkdown(info.description));list.append(line);}root.append(list);}}}}
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
  return root;
 }

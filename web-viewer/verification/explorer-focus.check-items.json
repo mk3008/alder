@@ -1,0 +1,15 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "既存の一覧Drawerをグローバルエクスプローラーに置き換えた後も守るフォーカスとモバイル表示。",
+  "checks": [
+    {
+      "id": "EXPLORER-FOCUS-001",
+      "condition": "グローバルエクスプローラーを開く。",
+      "guarantee": "閉じる操作にフォーカスを置き、入力欄へ自動でフォーカスしない。検索欄はTabまたは明示操作で利用できる。Escapeまたは閉じる操作で元の開閉ボタンにフォーカスを戻す。",
+      "reason": "狭い画面で開くたびに入力用キーボードが出て図を隠すことを防ぎ、キーボード操作も維持する。",
+      "source": "既存の drawerOpeningFocus 実ブラウザー回帰と、採用済みグローバルエクスプローラー。",
+      "verification": "web/test-node-drawer.mjs と web/test-node-drawer-browser.mjs でPCと狭幅、検索とEscapeを照合する。"
+    }
+  ]
+}
