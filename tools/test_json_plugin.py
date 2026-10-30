@@ -90,6 +90,21 @@ class JSONPluginTest(unittest.TestCase):
         self.assertIn('新規で形式指定がなければJSONを既定',guide)
         self.assertNotIn('新規で形式指定がなければ既存Markdown経路を維持',guide)
 
+    def test_structured_contract_core_link_reaches_the_bundled_source(self):
+        # This new flattened reference must keep its Validator link valid without the repository.
+        with tempfile.TemporaryDirectory() as tmp:
+            installed=Path(tmp)/'alder';shutil.copytree(PLUGIN,installed)
+            skill=installed/'skills'/NAME
+            guides=[ROOT/'docs/business-design-json-0.5.ja.md',skill/'references/business-design-json-0.5.ja.md']
+            for guide in guides:
+                with self.subTest(guide=guide):
+                    link=re.search(r'\[core\.mjs\]\(https://github\.com/mk3008/alder/blob/([0-9a-f]{40})/(tools/document_storage/core\.mjs)\)',guide.read_text())
+                    self.assertIsNotNone(link,str(guide))
+                    revision,source=link.groups()
+                    content=subprocess.check_output(['git','-C',str(ROOT),'show',f'{revision}:{source}'])
+                    self.assertEqual(content,(ROOT/source).read_bytes())
+                    self.assertEqual(content,(skill/'scripts/document_storage/core.mjs').read_bytes())
+
     def test_published_bundle_matches_source_bytes_and_paths(self):
         for p,data in export_plan(ROOT,[NAME]).items():
             self.assertEqual((ROOT/p).read_bytes(),data,str(p))
