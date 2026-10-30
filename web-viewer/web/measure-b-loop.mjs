@@ -69,7 +69,7 @@ async function preview(name,body){
  try{
   let index;for(let i=0;i<120;i++){
    if(server.exitCode!==null||server.signalCode!==null)throw Error(`Preview exited: ${name}`);
-   if(readFileSync(log,'utf8').includes(':4174/'))try{const response=await fetch('http://127.0.0.1:4174/');if(response.ok){index=Buffer.from(await response.arrayBuffer());break;}}catch{}
+   if(readFileSync(log,'utf8').replace(/\x1b\[[0-9;]*m/g,'').includes('http://127.0.0.1:4174/'))try{const response=await fetch('http://127.0.0.1:4174/');if(response.ok){index=Buffer.from(await response.arrayBuffer());break;}}catch{}
    await new Promise(r=>setTimeout(r,250));
   }
   if(!index)throw Error(`Preview did not start on strict port: ${name}`);
