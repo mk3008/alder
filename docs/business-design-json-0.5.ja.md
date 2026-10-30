@@ -2,7 +2,7 @@
 
 未リリースの契約実装候補です。配布Pluginと通常Viewerの対応形式は0.4までです。このソース版のPlugin Skill・同梱Node runtimeは0.5に対応し、通常Viewerへの対応はレビュー中です。配布版の更新は別途必要です。
 
-packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`です。Checkは`0.1`、状態遷移は`0.2`を維持します。これらは文書の`revision`やPlugin製品バージョンとは異なります。Schemaは[JSON](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.json)と[生成元](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.mjs)、参照検査は[core.mjs](https://github.com/mk3008/alder/blob/9b2941209db8071e994702493f93a0b0d9604627/tools/document_storage/core.mjs)が正本です。
+packageの`formatVersion`は`0.5`、Business Designの`schemaVersion`は`0.4`です。Checkは`0.1`、状態遷移は`0.2`を維持します。これらは文書の`revision`やPlugin製品バージョンとは異なります。Schemaは[JSON](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.json)と[生成元](https://github.com/mk3008/alder/blob/85ed1d14b0e6cc0cdc9c62f6e4ac37d8b187acf8/tools/document_storage/schema.mjs)、0.5の参照検査は[受入済みcore.mjs](https://github.com/mk3008/alder/blob/5a1a4f47eb4635e6221bffa39e5d52fe2f8519bc/tools/document_storage/core.mjs)を基準とします。
 
 ## 構造と所有者
 
