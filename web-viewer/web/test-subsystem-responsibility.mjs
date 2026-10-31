@@ -26,8 +26,10 @@ const parsed=parseDocument(JSON.stringify(source)),context={business:parsed.mode
 const views=createConceptViews(context),graph=views.graph('group-result');
 assert.equal(graph.regions.length,2);assert.equal(graph.ids.length,6);assert.equal(createDataExamples(context).dataExamples.length,12);
 assert.equal(graph.tables['receiving-item'].conceptId,'item');
-const prior=structuredClone(source);delete prior.documents.find(d=>d.kind==='conceptModel').reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
-const old=parseDocument(JSON.stringify(prior));assert.equal(createConceptViews({business:old.model.business,model:old.model.concepts[0]}).graph('group-result').regions.length,0,'no boundaries inferred from names or review location');
+const overall=views.overviewGraph();assert.equal(overall.regions.length,2);assert.equal(overall.ids.length,8);assert(overall.tables['result-item'].fields.some(([,name])=>name.includes('購入しない確定数量')));
+assert(views.tables.item.fields.some(([,name])=>name.includes('購入しない確定数量')&&name.includes('入荷予実サブシステム')),'a concept detail identifies an explicitly different responsible subsystem');
+const prior=structuredClone(source),priorModel=prior.documents.find(d=>d.kind==='conceptModel');delete priorModel.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;delete priorModel.presentation.subsystemViews;
+const old=parseDocument(JSON.stringify(prior)),oldViews=createConceptViews({business:old.model.business,model:old.model.concepts[0]});assert.equal(oldViews.graph('group-result').regions.length,0,'no boundaries inferred from names or review location');assert.equal(oldViews.overviewGraph().regions.length,0);
 const invalid=change=>{const copy=structuredClone(source);change(copy.documents.find(d=>d.kind==='conceptModel').reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews);assert.throws(()=>parseDocument(JSON.stringify(copy)));};
 invalid(v=>v.nodes.push(structuredClone(v.nodes[0])));
 invalid(v=>v.nodes[0].fields[0].informationId='missing');
@@ -66,6 +68,9 @@ assert.equal(child.document.querySelector('[data-handoff-label="result-progress"
 child.document.querySelector('[data-subsystem="receiving"]').dispatchEvent(new child.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 assert.equal(parent.document.querySelector('.concept-related .shell-heading strong').textContent,'入荷予実サブシステム');
 assert.match(parent.document.querySelector('.concept-related-content').textContent,/購入しない決定/);
+const touch=(type,target)=>{const e=new child.MouseEvent(type,{bubbles:true,clientX:30,clientY:30});Object.defineProperties(e,{pointerType:{value:'touch'},pointerId:{value:42}});target.dispatchEvent(e);};
+const regionSurface=child.document.querySelector('[data-subsystem="approval"] rect');touch('pointerdown',regionSurface);touch('pointerup',regionSurface);
+assert.equal(parent.document.querySelector('.concept-related .shell-heading strong').textContent,'稟議サブシステム','touch selection uses the shared canvas gesture');
 child.document.querySelector('[data-node="approval-item"]').dispatchEvent(new child.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 assert.equal(parent.document.querySelector('.concept-related .shell-heading strong').textContent,'申請品目');
 assert.doesNotMatch(parent.document.querySelector('.concept-related-content').textContent,/購入しない/);

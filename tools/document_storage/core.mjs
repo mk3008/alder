@@ -90,28 +90,30 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    for(const c of d.concepts){has(subsystems,c.subsystemId,'subsystem');for(const i of c.information)if(i.responsibleSubsystemId)has(subsystems,i.responsibleSubsystemId,'responsible subsystem');for(const id of c.businessObjectIds)target(id,'object',bd.id);for(const a of c.activityLinks)activity(a.activityId);for(const ref of c.sourceRefs)sourceRef(ref);}
    for(const r of d.relations){has(concepts,r.fromConceptId,'concept');has(concepts,r.toConceptId,'concept');for(const ref of r.sourceRefs)sourceRef(ref);}
    for(const h of d.handoffs){has(subsystems,h.fromSubsystemId,'subsystem');has(subsystems,h.toSubsystemId,'subsystem');demand(h.fromSubsystemId!==h.toSubsystemId,'Handoff must cross subsystem boundary');for(const id of h.activityIds)activity(id);}
+   const validateSubsystemViews=(value,allowed)=>{
+    const views=unique(value.nodes,'subsystem view'),edgeViews=unique(value.edges,'subsystem view edge');
+    for(const v of views.values()){
+     has(allowed,v.conceptId,'view concept');has(subsystems,v.subsystemId,'subsystem');
+     const concept=has(concepts,v.conceptId,'concept');
+     for(const field of v.fields)demand(concept.information.some(item=>item.id===field.informationId),'Unknown information for subsystem view: '+field.informationId);
+    }
+    for(const edge of edgeViews.values()){
+     const from=has(views,edge.fromViewId,'subsystem view'),to=has(views,edge.toViewId,'subsystem view');
+     demand(from.subsystemId===to.subsystemId,'View relationship crosses subsystem boundary');
+     for(const id of edge.relationIds)has(relations,id,'concept relation');
+    }
+    demand(new Set(value.handoffIds).size===value.handoffIds.length,'Duplicate subsystem view handoff');
+    const regions=new Set([...views.values()].map(v=>v.subsystemId));
+    for(const id of value.handoffIds){const h=has(handoffs,id,'handoff');demand(regions.has(h.fromSubsystemId)&&regions.has(h.toSubsystemId),'Missing subsystem view handoff region: '+id);}
+   };
+   if(d.presentation.subsystemViews)validateSubsystemViews(d.presentation.subsystemViews,concepts);
    for(const g of d.reviewGroups){
     has(subsystems,g.subsystemId,'subsystem');target(g.reviewer.roleId,'role',bd.id);for(const id of g.relatedActivityIds)activity(id);
     const nodes=unique(g.graph.nodes.map(n=>({...n,id:n.conceptId})),'view concept');
     demand(new Set(g.graph.conceptIds).size===g.graph.conceptIds.length&&g.graph.conceptIds.length===nodes.size&&g.graph.conceptIds.every(id=>nodes.has(id)),'View concepts and nodes differ');
     for(const n of g.graph.nodes){has(concepts,n.conceptId,'concept');for(const id of n.sourceActivityIds)activity(id);}
     unique(g.graph.edges,'view edge');for(const e of g.graph.edges){has(nodes,e.fromConceptId,'view concept');has(nodes,e.toConceptId,'view concept');for(const id of e.relationIds)has(relations,id,'concept relation');}
-    if(g.graph.subsystemViews){
-     const views=unique(g.graph.subsystemViews.nodes,'subsystem view'),edgeViews=unique(g.graph.subsystemViews.edges,'subsystem view edge');
-     for(const v of views.values()){
-      has(nodes,v.conceptId,'view concept');has(subsystems,v.subsystemId,'subsystem');
-      const concept=has(concepts,v.conceptId,'concept');
-      for(const field of v.fields)demand(concept.information.some(item=>item.id===field.informationId),'Unknown information for subsystem view: '+field.informationId);
-     }
-     for(const edge of edgeViews.values()){
-      const from=has(views,edge.fromViewId,'subsystem view'),to=has(views,edge.toViewId,'subsystem view');
-      demand(from.subsystemId===to.subsystemId,'View relationship crosses subsystem boundary');
-      for(const id of edge.relationIds)has(relations,id,'concept relation');
-     }
-     demand(new Set(g.graph.subsystemViews.handoffIds).size===g.graph.subsystemViews.handoffIds.length,'Duplicate subsystem view handoff');
-     const regions=new Set([...views.values()].map(v=>v.subsystemId));
-     for(const id of g.graph.subsystemViews.handoffIds){const h=has(handoffs,id,'handoff');demand(regions.has(h.fromSubsystemId)&&regions.has(h.toSubsystemId),'Missing subsystem view handoff region: '+id);}
-    }
+    if(g.graph.subsystemViews)validateSubsystemViews(g.graph.subsystemViews,nodes);
     const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
     for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
     for(const cap of capabilities.values())for(const sample of cap.samples)for(const block of sample.blocks){

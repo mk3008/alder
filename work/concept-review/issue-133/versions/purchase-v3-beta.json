@@ -5318,7 +5318,11 @@
                       "informationId": "item-information-1"
                     },
                     {
-                      "name": "品名・税抜希望単価",
+                      "name": "品名（対象版）",
+                      "informationId": "item-information-2"
+                    },
+                    {
+                      "name": "税抜希望単価（対象版）",
                       "informationId": "item-information-2"
                     },
                     {
@@ -5708,7 +5712,298 @@
             "label": "入庫・未購入・待ち・終結",
             "promise": "元の依頼数量を変えず、その行方を説明する。"
           }
-        ]
+        ],
+        "subsystemViews": {
+          "nodes": [
+            {
+              "id": "request",
+              "conceptId": "request",
+              "subsystemId": "approval",
+              "name": "購入申請",
+              "fields": [
+                {
+                  "name": "対象申請・申請者",
+                  "informationId": "request-information-1"
+                },
+                {
+                  "name": "対象の確定版",
+                  "informationId": "request-information-2"
+                }
+              ],
+              "description": "稟議で承認した申請と確定版を購入準備へ渡す。",
+              "sources": [
+                "申請・承認：承認済みの申請と判断対象版。"
+              ]
+            },
+            {
+              "id": "version",
+              "conceptId": "version",
+              "subsystemId": "approval",
+              "name": "購入申請版",
+              "fields": [
+                {
+                  "name": "版の識別",
+                  "informationId": "version-identity"
+                },
+                {
+                  "name": "未確定／確定",
+                  "informationId": "version-information-1"
+                },
+                {
+                  "name": "購入理由",
+                  "informationId": "version-information-2"
+                },
+                {
+                  "name": "見積根拠",
+                  "informationId": "version-information-3"
+                }
+              ],
+              "description": "申請内容を版として区別し、承認済みの版を購入対象として渡す。",
+              "sources": [
+                "申請・承認：判断対象の版。"
+              ]
+            },
+            {
+              "id": "item",
+              "conceptId": "item",
+              "subsystemId": "approval",
+              "name": "申請品目",
+              "fields": [
+                {
+                  "name": "版内の品目の識別",
+                  "informationId": "item-information-1"
+                },
+                {
+                  "name": "品名（対象版）",
+                  "informationId": "item-information-2"
+                },
+                {
+                  "name": "税抜希望単価（対象版）",
+                  "informationId": "item-information-2"
+                },
+                {
+                  "name": "依頼数量 Q",
+                  "informationId": "item-information-3"
+                }
+              ],
+              "description": "確定版の品目と依頼数量を購入対象として渡す。",
+              "sources": [
+                "申請：品目、税抜希望単価、依頼数量Q。"
+              ]
+            },
+            {
+              "id": "preparation",
+              "conceptId": "preparation",
+              "subsystemId": "receiving",
+              "name": "購入準備",
+              "fields": [
+                {
+                  "name": "準備番号",
+                  "informationId": "preparation-information-1"
+                },
+                {
+                  "name": "固定した対象申請・対象版",
+                  "informationId": "preparation-information-2"
+                },
+                {
+                  "name": "書き出し日時",
+                  "informationId": "preparation-information-3"
+                }
+              ],
+              "description": "承認済みの申請と版を購入対象として確定する。",
+              "sources": [
+                "購入準備：対象申請と版の確定。"
+              ]
+            },
+            {
+              "id": "result-request",
+              "conceptId": "request",
+              "subsystemId": "receiving",
+              "name": "購入結果（申請単位）",
+              "fields": [
+                {
+                  "name": "対象申請",
+                  "informationId": "request-identity"
+                },
+                {
+                  "name": "準備番号・対象の確定版",
+                  "informationId": "request-information-4"
+                },
+                {
+                  "name": "終結結果",
+                  "informationId": "request-information-5"
+                }
+              ],
+              "description": "入荷予実で登録した結果から申請単位の進捗と終結を確認し、稟議へ返す。",
+              "sources": [
+                "購入準備：固定した対象申請と版。",
+                "結果登録：入庫と購入しない決定に基づく結果。"
+              ]
+            },
+            {
+              "id": "result-item",
+              "conceptId": "item",
+              "subsystemId": "receiving",
+              "name": "購入品目の数量状況",
+              "fields": [
+                {
+                  "name": "対象版の品目",
+                  "informationId": "item-information-1"
+                },
+                {
+                  "name": "依頼数量 Q（稟議から）",
+                  "informationId": "item-information-3"
+                },
+                {
+                  "name": "入庫累計 R",
+                  "informationId": "item-received-cumulative"
+                },
+                {
+                  "name": "購入しない確定数量 C",
+                  "informationId": "item-information-4"
+                },
+                {
+                  "name": "待ち数量 W＝Q−R−C",
+                  "informationId": "item-waiting-quantity"
+                }
+              ],
+              "description": "稟議から受け取ったQに対し、入庫実績Rと購入しない決定Cを確認し、W＝Q−R−Cを求める。",
+              "sources": [
+                "稟議：対象版の品目と依頼数量Q。",
+                "結果登録：入庫実績と購入しない決定。"
+              ]
+            },
+            {
+              "id": "receipt",
+              "conceptId": "receipt",
+              "subsystemId": "receiving",
+              "name": "入庫回",
+              "fields": [
+                {
+                  "name": "入庫回の識別",
+                  "informationId": "receipt-information-1"
+                },
+                {
+                  "name": "対象申請",
+                  "informationId": "receipt-information-2"
+                },
+                {
+                  "name": "各回の入庫内訳",
+                  "informationId": "receipt-information-3"
+                }
+              ],
+              "description": "準備対象に対する各回の入庫を区別する。入庫がなければ入庫回を作らない。",
+              "sources": [
+                "結果登録：各回の入庫。"
+              ]
+            },
+            {
+              "id": "line",
+              "conceptId": "line",
+              "subsystemId": "receiving",
+              "name": "入庫内訳",
+              "fields": [
+                {
+                  "name": "元の品目（対象版）",
+                  "informationId": "line-information-2"
+                },
+                {
+                  "name": "今回入庫数量",
+                  "informationId": "line-information-3"
+                }
+              ],
+              "description": "各回に、準備対象版のどの品目がいくつ入庫したかを示す。",
+              "sources": [
+                "購入準備：対象版の元品目。",
+                "結果登録：今回の入庫数量。"
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "id": "global-request-version",
+              "fromViewId": "request",
+              "toViewId": "version",
+              "relationIds": [
+                "request-version"
+              ],
+              "fromLabel": "1",
+              "toLabel": "0..N",
+              "kind": "down"
+            },
+            {
+              "id": "global-version-item",
+              "fromViewId": "version",
+              "toViewId": "item",
+              "relationIds": [
+                "version-item"
+              ],
+              "fromLabel": "1",
+              "toLabel": "0..N",
+              "kind": "down"
+            },
+            {
+              "id": "global-preparation-result",
+              "fromViewId": "preparation",
+              "toViewId": "result-request",
+              "relationIds": [
+                "preparation-request"
+              ],
+              "fromLabel": "0..1",
+              "toLabel": "N",
+              "kind": "down"
+            },
+            {
+              "id": "global-result-items",
+              "fromViewId": "result-request",
+              "toViewId": "result-item",
+              "relationIds": [
+                "request-version",
+                "version-item"
+              ],
+              "fromLabel": "1",
+              "toLabel": "1..N",
+              "kind": "down"
+            },
+            {
+              "id": "global-result-receipts",
+              "fromViewId": "result-request",
+              "toViewId": "receipt",
+              "relationIds": [
+                "request-receipt"
+              ],
+              "fromLabel": "1",
+              "toLabel": "0..N",
+              "kind": "down"
+            },
+            {
+              "id": "global-receipt-lines",
+              "fromViewId": "receipt",
+              "toViewId": "line",
+              "relationIds": [
+                "receipt-line"
+              ],
+              "fromLabel": "1",
+              "toLabel": "1..N",
+              "kind": "down"
+            },
+            {
+              "id": "global-item-lines",
+              "fromViewId": "result-item",
+              "toViewId": "line",
+              "relationIds": [
+                "item-line"
+              ],
+              "fromLabel": "1",
+              "toLabel": "0..N",
+              "kind": "reference"
+            }
+          ],
+          "handoffIds": [
+            "decision-preparation",
+            "result-progress"
+          ]
+        }
       },
       "schemaVersion": "0.1"
     }

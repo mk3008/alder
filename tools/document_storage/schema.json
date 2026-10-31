@@ -4572,6 +4572,145 @@
             "sampleCaption": {
               "type": "string"
             },
+            "subsystemViews": {
+              "type": "object",
+              "properties": {
+                "nodes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "conceptId": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "subsystemId": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "sources": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        }
+                      },
+                      "fields": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "\\S"
+                            },
+                            "informationId": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9_-]+$"
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "informationId"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "conceptId",
+                      "subsystemId",
+                      "name",
+                      "description",
+                      "sources",
+                      "fields"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "edges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "fromViewId": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "toViewId": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      "relationIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]+$"
+                        }
+                      },
+                      "fromLabel": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "toLabel": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "kind": {
+                        "enum": [
+                          "down",
+                          "reference"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "fromViewId",
+                      "toViewId",
+                      "relationIds",
+                      "fromLabel",
+                      "toLabel",
+                      "kind"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "handoffIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]+$"
+                  }
+                }
+              },
+              "required": [
+                "nodes",
+                "edges",
+                "handoffIds"
+              ],
+              "additionalProperties": false
+            },
             "landscapeRelationships": {
               "type": "array",
               "items": {

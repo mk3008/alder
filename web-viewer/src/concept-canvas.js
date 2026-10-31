@@ -71,8 +71,8 @@ function draw(s){
   const width=Math.max(...members.map(b=>b.x+b.w))-x+30,height=Math.max(...members.map(b=>b.y+b.h))-y+30;
   const shape={id:region.id,x,y,width,height};regions.push(shape);
   const group=svgNode('g',{'data-subsystem':region.id,role:'button',tabindex:0,'aria-label':region.name+'を選択'});
-  group.append(svgNode('rect',{x,y,width,height,rx:8,class:'concept-subsystem-region'}));
-  group.append(svgNode('text',{x:x+14,y:y+26,class:'concept-subsystem-title'},region.name));group.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectSubsystem(region.id);}};s.svg.append(group);
+  group.append(svgNode('rect',{x,y,width,height,rx:8,class:'concept-subsystem-region','data-canvas-tap':''}));
+  group.append(svgNode('text',{x:x+14,y:y+26,class:'concept-subsystem-title','data-canvas-tap':''},region.name));group.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectSubsystem(region.id);}};s.svg.append(group);
  }
  const wires=svgNode('g',{class:'concept-relations'});s.svg.append(wires);
  const focus=graphFocus(routing.routes,s.selected),related=new Set(routing.routes.filter(focus.related).map(r=>r.id));
@@ -120,7 +120,7 @@ function zoomBy(s,factor){s.touch?.cancel();s.drag?.cancel();const next=cameraZo
 function installCanvas(s){
  const host=s.host;let pointer,pan;
  s.drag=createNodeDrag({read:()=>!s.locked?{key:s.stage.id,zoom:s.zoom,scroll:[host.scrollLeft,host.scrollTop],offset:s.origin??[0,0]}:undefined,position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},connected:id=>!!s.svg.querySelector(`[data-node="${id}"]`),bounds:()=>{const r=host.getBoundingClientRect();return{left:r.left+host.clientLeft,top:r.top+host.clientTop,right:r.left+host.clientLeft+host.clientWidth,bottom:r.top+host.clientTop+host.clientHeight};},change:(id,p)=>changeNode(s,id,p),pan:d=>{host.scrollLeft+=d[0];host.scrollTop+=d[1];},requestFrame:cb=>requestAnimationFrame(cb),cancelFrame:id=>cancelAnimationFrame(id)});
- s.touch=installTouchGestures(host,{nodeDrag:s.drag,read:()=>({key:s.stage.id,zoom:s.zoom,locked:s.locked,scroll:[host.scrollLeft,host.scrollTop]}),position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},change:v=>{if(v.node)changeNode(s,v.node.id,v.node.position);if(v.zoom!==undefined){s.zoom=v.zoom;layoutCanvas(s);}if(v.scroll)host.scrollTo(...v.scroll);if(v.selected)navigateDetail(s,v.selected);},finish:()=>save(s)});
+ s.touch=installTouchGestures(host,{nodeDrag:s.drag,read:()=>({key:s.stage.id,zoom:s.zoom,locked:s.locked,scroll:[host.scrollLeft,host.scrollTop]}),position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},change:v=>{if(v.node)changeNode(s,v.node.id,v.node.position);if(v.zoom!==undefined){s.zoom=v.zoom;layoutCanvas(s);}if(v.scroll)host.scrollTo(...v.scroll);if(v.selected)navigateDetail(s,v.selected);},tapTarget:target=>{const id=target.closest('[data-subsystem]')?.dataset.subsystem;if(id)selectSubsystem(id);},finish:()=>save(s)});
  host.onpointerdown=e=>{if(e.pointerType==='touch'||e.button!==0||e.target.closest('button'))return;const r=host.getBoundingClientRect();if(e.clientX>=r.left+host.clientLeft+host.clientWidth||e.clientY>=r.top+host.clientTop+host.clientHeight)return;
  const id=e.target.closest('.node')?.dataset.node,region=e.target.closest('[data-subsystem]')?.dataset.subsystem;e.preventDefault();pointer=e.pointerId;host.setPointerCapture(pointer);if(id&&!s.locked){s.drag.begin(id,[e.clientX,e.clientY]);pan=undefined;}else pan={x:e.clientX,y:e.clientY,scroll:[host.scrollLeft,host.scrollTop],id,region,moved:false};};
  host.onpointermove=e=>{if(pointer!==e.pointerId)return;if(pan){const dx=e.clientX-pan.x,dy=e.clientY-pan.y;if(Math.hypot(dx,dy)>3)pan.moved=true;host.scrollTo(pan.scroll[0]-dx,pan.scroll[1]-dy);}else s.drag.move([e.clientX,e.clientY]);};
@@ -140,6 +140,7 @@ for(const stage of stages.filter(s=>s.id==='overview')){
  if(stage.id==='overview'){for(const[id,p]of Object.entries(saved.positions||{}))if(stage.ids.includes(id)&&Number.isFinite(p?.x)&&Number.isFinite(p?.y))s.positions.set(id,p);s.zoom=clampZoom(Number.isFinite(saved.zoom)?saved.zoom:1);s.locked=saved.locked!==false;}
 
  s.section.querySelector('.section-back').onclick=()=>history.back();states.push(s);draw(s);if(stage.id==='overview')installCanvas(s);else{s.svg.onclick=e=>{const id=e.target.closest('.node')?.dataset.node;if(id)navigateDetail(s,id);};}
+ if(stage.id==='overview'&&graph.regions?.length&&!Number.isFinite(saved.zoom))requestAnimationFrame(()=>{if(!s.host.clientWidth||!s.host.clientHeight)return;s.zoom=clampZoom(Math.min(1,(s.host.clientWidth-32)/s.width,(s.host.clientHeight-32)/s.height));layoutCanvas(s);s.host.scrollTo(0,0);save(s);});
 }
 
 window.addEventListener('message',e=>{if(!fromParent(e)||e.data?.type!=='alder-concept-highlight')return;const conceptId=e.data.id;for(const s of states){if(s.selected&&(tables[s.selected]?.conceptId??s.selected)===conceptId)continue;const id=s.stage.ids.find(id=>(tables[id].conceptId??id)===conceptId);if(id&&s.selected!==id){s.selected=id;draw(s);}}});

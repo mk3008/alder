@@ -22,7 +22,7 @@ function connect(frame,url='https://viewer.test/app/concept.html'){
  Object.defineProperty(frame.contentWindow,'postMessage',{value:(data,origin)=>c.dispatchEvent(new c.MessageEvent('message',{data,origin,source:parent})),configurable:true});
  c.eval(canvas);c.dispatchEvent(new c.MessageEvent('message',{data:{type:'alder-concept-data'},origin:'https://attacker.test',source:parent}));assert.equal(c.document.querySelectorAll('[data-node]').length,0,'wrong origin must not initialize the canvas');frame.onload();return c;
 }
-let c=connect(frame,'about:srcdoc');assert.equal(c.document.querySelectorAll('[data-node]').length,6);
+let c=connect(frame,'about:srcdoc');assert.equal(c.document.querySelectorAll('[data-node]').length,8,'the overview includes explicit approval and receiving views');
 assert(c.document.querySelector('.graph-settings-toggle svg'),'toolbar icons are added after the asynchronous canvas renders');
 assert(c.document.querySelector('[data-node="request"] .concept-open-action'),'overview has detail link');
 c.document.querySelector('[data-node="preparation"] .concept-open-action').click();

@@ -160,6 +160,7 @@ const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;del
 const resultView=preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
 assert.deepEqual(resultView.handoffIds,['decision-preparation','result-progress']);
 delete preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
+assert.deepEqual(preserved.presentation.subsystemViews.handoffIds,['decision-preparation','result-progress']);delete preserved.presentation.subsystemViews;
 for(const info of preserved.concepts.find(c=>c.id==='item').information.filter(i=>['item-information-1','item-information-2','item-information-3'].includes(i.id))){assert.equal(info.responsibleSubsystemId,'approval');assert.equal(info.responsibilityStatus,'未レビュー');delete info.responsibleSubsystemId;delete info.responsibilityStatus;}
 const outcome=preserved.concepts.find(c=>c.id==='request').information.find(i=>i.id==='request-information-5');assert.equal(outcome.responsibleSubsystemId,'receiving');assert.equal(outcome.responsibilityStatus,'未レビュー');delete outcome.responsibleSubsystemId;delete outcome.responsibilityStatus;
 const receiving=preserved.subsystems.find(s=>s.id==='receiving'),oldReceiving=model.subsystems.find(s=>s.id==='receiving');assert.match(receiving.purpose,/購入しない決定/);assert(receiving.information.some(i=>i.includes('購入しない決定')));receiving.purpose=oldReceiving.purpose;receiving.information=oldReceiving.information;
