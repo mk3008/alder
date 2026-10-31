@@ -85,6 +85,12 @@ assert.equal(parent.document.querySelector('.concept-related .shell-heading stro
 assert.match(parent.document.querySelector('.concept-related-content').textContent,/購入しない決定/);
 child.document.querySelector('[data-node="receiving-item"] .concept-open-action').click();
 assert.equal(parent.document.querySelector('#concept-tab-item').getAttribute('aria-current'),'true');
+parent.document.querySelector('#concept-tab-group-result').click();
+parent.dispatchEvent(new parent.MessageEvent('message',{origin:parent.location.origin,source:frame.contentWindow,data:{type:'alder-concept-subsystem',id:'receiving'}}));
+assert.equal(parent.document.querySelector('.concept-related .shell-heading strong').textContent,'入荷予実サブシステム');
+parent.document.querySelector('#concept-tab-group-result').parentElement.querySelector('.close').click();
+parent.document.querySelector('[data-explorer-key="concept:group-result"]').click();
+assert.equal(parent.document.querySelector('.concept-related .shell-heading strong').textContent,'入庫・未購入・終結','closing and reopening a tab clears its selected boundary');
 child.close();parent.close();
 assert.equal(createHash('sha256').update(readFileSync('verification/subsystem-responsibility.check-items.json')).digest('hex'),'671951ac25992f64fc3cfef8b6075dc4aefc6f061db8108f48dab02247cce5a1');
 console.log('Subsystem responsibility: explicit ownership, handoffs, validation, diagram, drawer and navigation verified; real browser visual review remains separate.');
