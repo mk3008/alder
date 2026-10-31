@@ -2,11 +2,12 @@ import {readRelatedChecks,checkCompatibility,confirmationKey,type RelatedChecks,
 import type {Tab} from './session';
 import {drawerTabs} from './drawer-tabs';
 import {renderChecks} from './document-view';
+import {createElement,SquareArrowOutUpRight} from 'lucide';
 export type CheckViewState={mode:'business'|'checks';candidate?:RelatedChecks;busy?:boolean;error?:string;url?:string};
 const button=(label:string,fn:()=>void)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;};
 function paragraph(root:HTMLElement,text:string){const p=document.createElement('p');p.textContent=text;root.append(p);}
 function originalMarkdown(source:string){const pre=document.createElement('pre');pre.className='check-source';pre.textContent=source;return pre;}
-export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean}):{controls:HTMLElement;content?:HTMLElement}{
+export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidate:RelatedChecks)=>void;redraw:()=>void;disabled:boolean;openSpecs?:()=>void}):{controls:HTMLElement;content?:HTMLElement}{
   const root=document.createElement('section');root.className='check-controls';root.setAttribute('aria-label','関連Check');
   const notices=document.createElement('section');notices.className='check-notices';
   if(view.busy)paragraph(notices,'関連Checkを読み込み・保存しています…');
@@ -26,9 +27,10 @@ export function checkView(tab:Tab,view:CheckViewState,actions:{confirm:(candidat
     const confirm=button('対応を確認して表示する',()=>actions.confirm(candidate));confirm.id='check-confirm';confirm.disabled=match.state==='mismatch'||actions.disabled||view.busy===true;
     const cancel=button('この読込を取り消す',()=>{view.candidate=undefined;actions.redraw();});cancel.disabled=actions.disabled||view.busy===true;panel.append(confirm,cancel);notices.append(panel);
   }
-  const nav=drawerTabs('右ドロワーの表示',(['business','checks'] as const).map(mode=>({id:'detail-mode-'+mode,label:mode==='business'?'業務内容':'チェック項目',selected:view.mode===mode,select:()=>{view.mode=mode;actions.redraw();}})));nav.classList.add('check-modes');root.append(nav);
+  const nav=drawerTabs('右ドロワーの表示',(['business','checks'] as const).map(mode=>({id:'detail-mode-'+mode,label:mode==='business'?'業務内容':'テスト仕様',selected:view.mode===mode,select:()=>{view.mode=mode;actions.redraw();}})));nav.classList.add('check-modes');root.append(nav);
   if(view.mode==='business')return {controls:root};
   const content=doc&&usable?renderChecks(tab.design,tab.selected,[doc.model]):!tab.checks?renderChecks(tab.design,tab.selected):document.createElement('section');
+  if(!tab.checks&&tab.design.model?.checks.length&&actions.openSpecs){const open=button('テスト仕様を開く',actions.openSpecs);open.className='test-spec-open';open.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));content.prepend(open);}
   content.classList.add('check-content');if(notices.childNodes.length)content.prepend(notices);
   return {controls:root,content};
 }

@@ -2,6 +2,7 @@ import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
+import {createElement,SquareArrowOutUpRight} from 'lucide';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
@@ -46,6 +47,54 @@ class RichReader{
   const ex=this.doc.examples.find(e=>e.id===id)!;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
   for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
  }
+}
+/** A second view of the same JSON Check items; references are not copied. */
+export function renderTestSpecification(design:Design,activityId:string,selectedKey:string|undefined,actions:{open:(id:string)=>void;select:(key:string)=>void;business:(id:string)=>void}){
+ const content=element('div'),detail=element('div'),model=design.model!,bd=model.business;
+ content.className='test-spec-content';detail.className='test-spec-detail';
+ const checks=model.checks.filter(doc=>doc.basedOn.documentId===bd.id);
+ const key=(doc:Check,id:string)=>JSON.stringify([doc.id,id]);
+ const itemIds=(doc:Check)=>new Set(doc.index.flatMap(row=>row.checkIds));
+ const unassigned=(doc:Check)=>doc.items.filter(item=>!itemIds(doc).has(item.id));
+ const rows=(id:string)=>checks.flatMap(doc=>doc.index.filter(row=>row.activityId===id).map(row=>({doc,row})));
+ const heading=(id:string)=>bd.activities.find(item=>item.id===id)?.name??id;
+ const select=(doc:Check,id:string)=>actions.select(key(doc,id));
+ let title='テスト仕様';
+ if(activityId==='@overview'){
+  content.append(element('h2','業務別'));
+  if(!checks.length)content.append(element('p','この文書にテスト仕様はありません。'));
+  for(const activity of bd.activities){
+   const count=new Set(rows(activity.id).flatMap(({doc,row})=>row.checkIds.map(id=>key(doc,id)))).size;
+   const button=element('button');button.type='button';button.className='test-spec-index';button.append(element('span',activity.name),element('span',count?`${count} 項目`:'項目なし'));button.onclick=()=>actions.open(activity.id);content.append(button);
+  }
+  if(checks.some(doc=>unassigned(doc).length)){const button=element('button','未割当');button.type='button';button.className='test-spec-index';button.onclick=()=>actions.open('@unassigned');content.append(button);}
+ }else{
+  const matching=activityId==='@unassigned'?checks.flatMap(doc=>unassigned(doc).map(item=>({doc,item}))):rows(activityId).flatMap(({doc,row})=>row.checkIds.map(id=>({doc,item:doc.items.find(item=>item.id===id)})).filter((value):value is {doc:Check;item:Check['items'][number]}=>!!value.item));
+  const unique=matching.filter((value,index)=>matching.findIndex(other=>key(other.doc,other.item.id)===key(value.doc,value.item.id))===index);
+  if(!unique.length)content.append(element('p','この業務に対応するテスト仕様はありません。'));
+  for(const doc of checks){
+   const sections=doc.sections.filter(section=>activityId==='@unassigned'?section.activityId===null:section.activityId===activityId);
+   const reader=new RichReader(doc);
+   for(const section of sections){reader.runs(content,section.preamble);for(const guarantee of doc.guarantees.filter(g=>g.sectionId===section.id))reader.runs(content,[{kind:'reference',targetId:guarantee.id,label:guarantee.title}]);}
+  }
+  for(const {doc,item}of unique){
+   const card=element('section');card.className='test-spec-item';card.dataset.checkId=item.checkId;
+   const button=element('button');button.type='button';button.className='test-spec-item-title';button.append(element('strong',`${item.checkId} · ${item.title}`),element('span',item.reviewState));
+   if(selectedKey===key(doc,item.id))card.classList.add('selected');button.onclick=()=>select(doc,item.id);card.append(button);
+   const reader=new RichReader(doc),fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','question'].includes(name)));
+   reader.fields(card,fields,new Set([item.id]));content.append(card);
+  }
+ }
+ const picked=checks.flatMap(doc=>doc.items.map(item=>({doc,item}))).find(({doc,item})=>key(doc,item.id)===selectedKey);
+ if(picked){
+  const {doc,item}=picked;title=`${item.checkId} · ${item.title}`;detail.append(element('h3','関連業務'));
+  const linked=doc.index.filter(row=>row.checkIds.includes(item.id));
+  if(!linked.length)detail.append(element('p','関連業務は未割当です。'));
+  for(const row of linked){const name=heading(row.activityId),b=element('button');b.type='button';b.className='test-spec-business-link';b.append(element('span',name),createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));b.setAttribute('aria-label',name+'を業務タブで開く');b.onclick=()=>actions.business(row.activityId);detail.append(b);}
+  const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>!['classification','condition','expectedResult','question'].includes(name)));
+  new RichReader(doc).fields(detail,fields,new Set([item.id]));if(item.detailSummary)field(detail,'補足',item.detailSummary);
+ }else detail.append(element('p','項目を選択すると関連業務や根拠を表示します。'));
+ return {content,detail,title};
 }
 export function renderChecks(design:Design,selected?:string,checks=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks';const json=design.model!,bd=json.business;
