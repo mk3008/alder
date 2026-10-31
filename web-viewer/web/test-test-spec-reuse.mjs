@@ -16,10 +16,12 @@ try{
  assert.equal([...w.document.querySelectorAll('.explorer-parent')].at(-1).textContent,'テスト仕様');
  entry('business:'+activity.id).click();if($('#formattedMarkdownDrawer').hidden)$('#drawer').click();$('#detail-mode-checks').click();
  await until(()=>!!$('#detail [data-check-id="SAMPLE-01"]'));
- const before=$('#detail [data-check-id="SAMPLE-01"]').outerHTML;
- entry('tests:'+activity.id).click();await until(()=>!!$('#tests-workspace [data-check-id="SAMPLE-01"]'));
- assert.equal($('#tests-workspace [data-check-id="SAMPLE-01"]').outerHTML,before,'menu must use the existing Check display without rewriting it');
- assert.match($('#tests-workspace').textContent,/条件/);assert.match($('#tests-workspace').textContent,/期待結果/);
+ const previous=$('#detail [data-check-id="SAMPLE-01"]');
+ const value=(node,label)=>{const heading=[...node.querySelectorAll('h4')].find(h=>h.textContent===label);return heading?.nextElementSibling?.textContent;};
+ const before=['条件','期待結果'].map(label=>value(previous,label));assert(before.every(Boolean));
+ entry('tests:checks:'+activity.id).click();await until(()=>!!$('#tests-workspace [data-check-id="SAMPLE-01"]'));
+ const displayed=$('#tests-workspace [data-check-id="SAMPLE-01"]');assert.deepEqual(['条件','期待結果'].map(label=>value(displayed,label)),before,'the requester view preserves the existing condition and expected result');
+ assert.doesNotMatch(displayed.textContent,/人間レビュー状態|SAMPLE-01|テスト証拠/,'internal metadata stays out of requester content');
  entry('business:'+activity.id).click();assert.equal($('#formattedMarkdownDrawer').hidden,false,'visiting the menu leaves the global drawer preference intact');
  console.log(JSON.stringify({passed:['existing Check rendering','last menu entry','global drawer state'],scope:'actual app DOM'}));
 }finally{w.close();}

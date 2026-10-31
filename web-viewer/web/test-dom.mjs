@@ -79,6 +79,36 @@ const before=$('formattedMarkdownDrawer').style.width;$('resize').dispatchEvent(
 $('theme').click();assert.equal(w.document.documentElement.dataset.theme,'dark');$('drawer').click();assert.equal($('formattedMarkdownDrawer').hidden,true);checks.push('drawer resize and theme controls');
 dom.window.close();
 
+// A real FileSystemFileHandle is structured-cloneable; this mock is not.
+// Remove only the mock handle while cloning snapshots, leaving the actual
+// application open/replace handlers and fake IndexedDB persistence in use.
+const reopened=createWindow();await restored(reopened.$);
+const originalClone=reopened.w.structuredClone;
+reopened.w.structuredClone=value=>originalClone(JSON.parse(JSON.stringify(value,(key,item)=>key==='handle'?undefined:item)));
+let onDisk=markdown;
+const reopenHandle={
+ getFile:async()=>file('reopened.md',onDisk),
+ queryPermission:async()=> 'granted',
+ isSameEntry:async other=>other===reopenHandle
+};
+reopened.w.showOpenFilePicker=async()=>[reopenHandle];
+await reopened.$('open').onclick();
+const keyBefore=reopened.w.document.querySelector('.tab').dataset.key;
+const changedMarkdown=markdown.replace('この文書は、Alderを使って業務を設計し','この文書は、Alderを使って業務を確認し');
+assert.notEqual(changedMarkdown,markdown,'fixture must make a real source change');
+onDisk=changedMarkdown;
+await reopened.$('open').onclick();
+assert.equal(reopened.w.document.querySelectorAll('.tab').length,1,'same handle must not create a duplicate tab');
+assert.equal(reopened.w.document.querySelector('.tab').dataset.key,keyBefore,'same handle retains workspace identity');
+const currentSource=async()=>{reopened.$('view-markdown').onclick();const value=reopened.$('source-text').value;await reopened.$('source-cancel').onclick();return value;};
+assert.equal(await currentSource(),changedMarkdown,'reopen must adopt the updated source');
+await reopened.$('open').onclick();
+assert.equal(await currentSource(),changedMarkdown,'unchanged reopen preserves existing content');
+onDisk='# invalid';await reopened.$('open').onclick();
+assert.equal(await currentSource(),changedMarkdown,'invalid replacement must keep the last valid document');
+reopened.w.close();
+checks.push('reopening same handle reflects changed content, preserves one tab, and rejects malformed replacement');
+
 // Real fake-indexeddb round trip with serializable file-input tabs.
 const db=new IDBFactory();const one=createWindow(db);await restored(one.$);
 Object.defineProperty(one.$('fallback'),'files',{value:[file('restore.md')]});await one.$('fallback').onchange();

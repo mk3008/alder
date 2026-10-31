@@ -147,5 +147,5 @@
 #tests-workspace{display:flex;flex:1;min-width:0;min-height:0;background:var(--bg);color:var(--fg)}
 #tests-workspace[hidden]{display:none!important}
 .test-spec-page{flex:1;min-width:0;overflow:auto;padding:20px 24px}
-.test-spec-sample{margin-top:24px}.test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}
+.test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}
 @media(max-width:800px){.test-spec-page{padding:12px}}
