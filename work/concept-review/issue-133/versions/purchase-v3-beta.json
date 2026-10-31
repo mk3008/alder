@@ -1585,7 +1585,7 @@
           "fromSubsystemId": "receiving",
           "toSubsystemId": "approval",
           "information": "入荷・未購入の結果",
-          "description": "入荷予実で記録した入庫実績と購入しない決定に基づく進捗・終結結果を稟議へ返す。",
+          "description": "入荷予実で記録した入庫実績と購入しない決定に基づく、対象申請の進捗・終結結果を稟議へ返す。",
           "activityIds": [
             "218937bd-4b6c-527e-b9e6-14075084b842",
             "ecde191f-09c5-519f-88a3-843ae6a9c3c4"

@@ -21,6 +21,7 @@ assert(approval.some(n=>n.fields.some(f=>f.informationId==='item-information-3')
 for(const id of ['item-information-4','item-received-cumulative','item-waiting-quantity'])assert(receiving.some(n=>n.fields.some(f=>f.informationId===id)));
 assert(!approval.some(n=>n.fields.some(f=>f.informationId==='item-information-4')));
 assert.deepEqual(declared.handoffIds.map(id=>{const h=model.handoffs.find(x=>x.id===id);return[h.fromSubsystemId,h.toSubsystemId,h.flowDirection];}),[['approval','receiving','forward'],['receiving','approval','return']]);
+for(const id of declared.handoffIds){const handoff=model.handoffs.find(h=>h.id===id);assert(!('toConceptId'in handoff)&&!('toInformationId'in handoff),'a subsystem handoff does not prescribe a receiving concept or column');}
 assert(model.subsystems.every(s=>s.reviewState==='未レビュー'));
 const parsed=parseDocument(JSON.stringify(source)),context={business:parsed.model.business,model:parsed.model.concepts[0]};
 const views=createConceptViews(context),graph=views.graph('group-result');
