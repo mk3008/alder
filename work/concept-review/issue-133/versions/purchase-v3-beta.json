@@ -923,7 +923,7 @@
             }
           ],
           "reason": "差戻し・再申請でも同じ購入要求を追い、終結の単位とする。",
-          "description": "差戻し・再申請でも同じ購入要求を追う。現在判断は対象版・判断日時を含み、差戻し時は理由が必須。準備所属と対象版は準備確定で存在し以後不変。終結は全品目の待ち数量が0のとき一度だけ。判断履歴を別概念として必須にしない。",
+          "description": "差戻し・再申請でも同じ購入要求を追う。現在判断は対象版・判断日時を含み、差戻し時は理由が必須。準備所属と対象版は準備確定で存在し以後不変。終結は全品目の待ち数量が0のとき一度だけ。判断履歴を別概念として必須にしない。申請の識別で、別の申請と区別する想定。",
           "businessObjectIds": [
             "65c10539-528d-5569-a3a1-5fe721ba1970"
           ],
@@ -1032,7 +1032,7 @@
             }
           ],
           "reason": "確定した提出内容を後の修正内容と区別し、承認対象を特定する。",
-          "description": "提出した内容と編集中の内容を区別する。確定した提出内容は直接変更しない。下書き保存は元の申請状態や承認を変更しない。",
+          "description": "提出した内容と編集中の内容を区別する。確定した提出内容は直接変更しない。下書き保存は元の申請状態や承認を変更しない。申請と、その申請内の版の識別を組み合わせて区別する想定。",
           "businessObjectIds": [
             "65c10539-528d-5569-a3a1-5fe721ba1970"
           ],
@@ -1151,7 +1151,7 @@
             }
           ],
           "reason": "品目・数量を独立に確認し、入庫結果を元の品目へ対応させる。",
-          "description": "下書き保存は品目0件でも可能。提出時の必要情報・条件は別に満たす。準備後は入庫累計Rと購入しない数量Cを区別し、待ちW＝Q−R−C。R・C・Wは非負。Cを増やす場合は申請者との調整済み。準備前の結果数量は未適用。",
+          "description": "下書き保存は品目0件でも可能。提出時の必要情報・条件は別に満たす。準備後は入庫累計Rと購入しない数量Cを区別し、待ちW＝Q−R−C。R・C・Wは非負。Cを増やす場合は申請者との調整済み。準備前の結果数量は未適用。申請版と、その版内の品目の識別を組み合わせて区別する想定。",
           "businessObjectIds": [
             "65c10539-528d-5569-a3a1-5fe721ba1970"
           ],
@@ -1809,7 +1809,8 @@
                             },
                             {
                               "columnId": "request-draft-version-1-column-1",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-version-1-column-2",
@@ -1871,7 +1872,8 @@
                             },
                             {
                               "columnId": "request-draft-item-2-column-1",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-item-2-column-2",
@@ -1949,7 +1951,8 @@
                             },
                             {
                               "columnId": "request-draft-approved-request-column-5",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             }
                           ]
                         }
@@ -1990,7 +1993,8 @@
                             },
                             {
                               "columnId": "request-draft-approved-version-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-approved-version-column-3",
@@ -2012,7 +2016,8 @@
                             },
                             {
                               "columnId": "request-draft-approved-version-column-2",
-                              "value": "D1"
+                              "value": "D1",
+                              "linkId": "version:R-101:D1"
                             },
                             {
                               "columnId": "request-draft-approved-version-column-3",
@@ -2066,7 +2071,8 @@
                             },
                             {
                               "columnId": "request-draft-approved-item-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-approved-item-column-3",
@@ -2092,7 +2098,8 @@
                             },
                             {
                               "columnId": "request-draft-approved-item-column-2",
-                              "value": "D1"
+                              "value": "D1",
+                              "linkId": "version:R-101:D1"
                             },
                             {
                               "columnId": "request-draft-approved-item-column-3",
@@ -2175,7 +2182,8 @@
                             },
                             {
                               "columnId": "request-draft-prepared-request-column-5",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-prepared-request-column-6",
@@ -2221,7 +2229,8 @@
                             },
                             {
                               "columnId": "request-draft-prepared-version-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-prepared-version-column-3",
@@ -2243,7 +2252,8 @@
                             },
                             {
                               "columnId": "request-draft-prepared-version-column-2",
-                              "value": "D1"
+                              "value": "D1",
+                              "linkId": "version:R-101:D1"
                             },
                             {
                               "columnId": "request-draft-prepared-version-column-3",
@@ -2297,7 +2307,8 @@
                             },
                             {
                               "columnId": "request-draft-prepared-item-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-draft-prepared-item-column-3",
@@ -2323,7 +2334,8 @@
                             },
                             {
                               "columnId": "request-draft-prepared-item-column-2",
-                              "value": "D1"
+                              "value": "D1",
+                              "linkId": "version:R-101:D1"
                             },
                             {
                               "columnId": "request-draft-prepared-item-column-3",
@@ -2405,7 +2417,8 @@
                             },
                             {
                               "columnId": "request-submitted-request-0-column-3",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-submitted-request-status",
@@ -2460,7 +2473,8 @@
                             },
                             {
                               "columnId": "request-submitted-version-1-column-1",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-submitted-version-1-column-2",
@@ -2522,7 +2536,8 @@
                             },
                             {
                               "columnId": "request-submitted-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-submitted-item-2-column-3",
@@ -2548,7 +2563,8 @@
                             },
                             {
                               "columnId": "request-submitted-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "request-submitted-item-2-column-3",
@@ -2688,7 +2704,7 @@
                   "申請の状態",
                   "現在の提出版"
                 ],
-                "description": "差戻し・再申請でも同じ購入要求を追う。提出内容は版で区別する。承認や結果の生成責任は別でも、後続業務で必要な申請内容はそのビューにも表示する。",
+                "description": "差戻し・再申請でも同じ購入要求を追う。提出内容は版で区別する。承認や結果の生成責任は別でも、後続業務で必要な申請内容はそのビューにも表示する。申請の識別で、別の申請と区別する想定。",
                 "sources": [
                   "申請・再申請：同じ購入要求と現在の提出版を特定する。"
                 ],
@@ -2706,7 +2722,7 @@
                   "見積根拠（依頼全体）",
                   "提出日時"
                 ],
-                "description": "提出した内容と編集中の内容を区別する。確定した提出内容は直接変更しない。下書き保存は元の申請状態や承認を変更しない。",
+                "description": "提出した内容と編集中の内容を区別する。確定した提出内容は直接変更しない。下書き保存は元の申請状態や承認を変更しない。申請と、その申請内の版の識別を組み合わせて区別する想定。",
                 "sources": [
                   "申請・再申請：提出時に確定した理由・見積・品目を保持する。"
                 ],
@@ -2724,7 +2740,7 @@
                   "税抜希望単価",
                   "依頼数量 Q"
                 ],
-                "description": "下書きは品目がなくても保存できる。提出時は必要な品目情報を揃える。",
+                "description": "下書きは品目がなくても保存できる。提出時は必要な品目情報を揃える。申請版と、その版内の品目の識別を組み合わせて区別する想定。",
                 "sources": [
                   "申請・再申請：対象版の品名・税抜希望単価・依頼数量。"
                 ],
@@ -2849,7 +2865,8 @@
                             },
                             {
                               "columnId": "decision-approved-request-0-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "decision-approved-request-0-column-3",
@@ -2919,7 +2936,8 @@
                             },
                             {
                               "columnId": "decision-approved-item-1-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "decision-approved-item-1-column-3",
@@ -2945,7 +2963,8 @@
                             },
                             {
                               "columnId": "decision-approved-item-1-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "decision-approved-item-1-column-3",
@@ -3032,7 +3051,8 @@
                             },
                             {
                               "columnId": "decision-resubmitted-request-0-column-2",
-                              "value": "V2"
+                              "value": "V2",
+                              "linkId": "version:R-101:V2"
                             },
                             {
                               "columnId": "decision-resubmitted-request-0-column-3",
@@ -3094,7 +3114,8 @@
                             },
                             {
                               "columnId": "decision-resubmitted-item-1-column-2",
-                              "value": "V2"
+                              "value": "V2",
+                              "linkId": "version:R-101:V2"
                             },
                             {
                               "columnId": "decision-resubmitted-item-1-column-3",
@@ -3120,7 +3141,8 @@
                             },
                             {
                               "columnId": "decision-resubmitted-item-1-column-2",
-                              "value": "V2"
+                              "value": "V2",
+                              "linkId": "version:R-101:V2"
                             },
                             {
                               "columnId": "decision-resubmitted-item-1-column-3",
@@ -3233,7 +3255,7 @@
                   "判断日時・差戻し理由",
                   "購入準備の有無（参照）"
                 ],
-                "description": "判断対象の申請内容と判断結果を一緒に確認する。品目はこの対象版に属する。再申請には旧判断を流用せず、準備確定後は差戻しできない。申請内容と判断結果の対応を確認する。",
+                "description": "判断対象の申請内容と判断結果を一緒に確認する。品目はこの対象版に属する。再申請には旧判断を流用せず、準備確定後は差戻しできない。申請内容と判断結果の対応を確認する。申請の識別で、別の申請と区別する想定。",
                 "sources": [
                   "申請・再申請：対象版の理由・見積・申請者。",
                   "承認：対象版に対する判断・日時・差戻し理由。",
@@ -3254,7 +3276,7 @@
                   "依頼数量 Q",
                   "税抜希望単価"
                 ],
-                "description": "判断対象版の品目を展開する。数量や単価を別の図で探さず、判断内容が十分か確認する。承認業務が品目を生成・変更する意味ではない。",
+                "description": "判断対象版の品目を展開する。数量や単価を別の図で探さず、判断内容が十分か確認する。承認業務が品目を生成・変更する意味ではない。申請版と、その版内の品目の識別を組み合わせて区別する想定。",
                 "sources": [
                   "申請・再申請：判断対象の確定提出版の品目を使用する。"
                 ],
@@ -3398,7 +3420,8 @@
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-4",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-5",
@@ -3410,7 +3433,8 @@
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-7",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             }
                           ]
                         },
@@ -3433,7 +3457,8 @@
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-4",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-5",
@@ -3445,7 +3470,8 @@
                             },
                             {
                               "columnId": "handoff-batch-request-1-column-7",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             }
                           ]
                         }
@@ -3491,7 +3517,8 @@
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-3",
@@ -3517,7 +3544,8 @@
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-3",
@@ -3543,7 +3571,8 @@
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             },
                             {
                               "columnId": "handoff-batch-item-2-column-3",
@@ -3675,7 +3704,8 @@
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-4",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-5",
@@ -3687,7 +3717,8 @@
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-7",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             }
                           ]
                         },
@@ -3710,7 +3741,8 @@
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-4",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-5",
@@ -3722,7 +3754,8 @@
                             },
                             {
                               "columnId": "handoff-retry-request-1-column-7",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             }
                           ]
                         }
@@ -3768,7 +3801,8 @@
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-3",
@@ -3794,7 +3828,8 @@
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-3",
@@ -3820,7 +3855,8 @@
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-102:V1"
                             },
                             {
                               "columnId": "handoff-retry-item-2-column-3",
@@ -3960,7 +3996,7 @@
                   "見積根拠（対象版）",
                   "有効な承認（対象版）"
                 ],
-                "description": "購入対象の申請内容を、対象版の理由・見積・承認まで含めて確認する。現在有効な承認と同じ版を確定し、以後は別版や最新情報から再構成しない。申請を品目別に分割しない。",
+                "description": "購入対象の申請内容を、対象版の理由・見積・承認まで含めて確認する。現在有効な承認と同じ版を確定し、以後は別版や最新情報から再構成しない。申請を品目別に分割しない。申請の識別で、別の申請と区別する想定。",
                 "sources": [
                   "購入準備：対象申請と対象版を固定する。",
                   "申請・再申請：その確定版の申請者・理由・見積根拠。",
@@ -3981,7 +4017,7 @@
                   "依頼数量 Q",
                   "税抜希望単価"
                 ],
-                "description": "購入へ回した品目・数量・単価を、その場で確認する。準備に固定した申請版の全品目を使用し、別申請・別版や後から変更された値を混ぜない。",
+                "description": "購入へ回した品目・数量・単価を、その場で確認する。準備に固定した申請版の全品目を使用し、別申請・別版や後から変更された値を混ぜない。申請版と、その版内の品目の識別を組み合わせて区別する想定。",
                 "sources": [
                   "申請・再申請：購入準備に固定した対象版の品名・依頼数量・税抜希望単価。",
                   "購入準備：使用する対象版を確定し、その内容で再出力する。"
@@ -4064,7 +4100,8 @@
                             },
                             {
                               "columnId": "result-partial-request-0-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "result-partial-request-0-column-3",
@@ -4091,6 +4128,11 @@
                           "id": "result-partial-item-clear-target-version",
                           "name": "対象版",
                           "informationId": "version-identity"
+                        },
+                        {
+                          "id": "result-partial-item-item-identity",
+                          "name": "品目番号",
+                          "informationId": "item-information-1"
                         },
                         {
                           "id": "result-partial-item-1-column-1",
@@ -4134,7 +4176,13 @@
                             },
                             {
                               "columnId": "result-partial-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-partial-item-item-identity",
+                              "value": "01",
+                              "linkId": "item:R-101:V1:01"
                             },
                             {
                               "columnId": "result-partial-item-1-column-1",
@@ -4172,7 +4220,13 @@
                             },
                             {
                               "columnId": "result-partial-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-partial-item-item-identity",
+                              "value": "02",
+                              "linkId": "item:R-101:V1:02"
                             },
                             {
                               "columnId": "result-partial-item-1-column-1",
@@ -4254,6 +4308,11 @@
                           "informationId": "version-identity"
                         },
                         {
+                          "id": "result-partial-line-item-identity",
+                          "name": "元品目番号",
+                          "informationId": "line-information-2"
+                        },
+                        {
                           "id": "result-partial-line-3-column-2",
                           "name": "元の品名",
                           "informationId": "item-information-2"
@@ -4280,7 +4339,13 @@
                             },
                             {
                               "columnId": "result-partial-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-partial-line-item-identity",
+                              "value": "01",
+                              "linkId": "item:R-101:V1:01"
                             },
                             {
                               "columnId": "result-partial-line-3-column-2",
@@ -4307,7 +4372,13 @@
                             },
                             {
                               "columnId": "result-partial-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-partial-line-item-identity",
+                              "value": "02",
+                              "linkId": "item:R-101:V1:02"
                             },
                             {
                               "columnId": "result-partial-line-3-column-2",
@@ -4381,7 +4452,8 @@
                             },
                             {
                               "columnId": "result-closed-request-0-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "result-closed-request-0-column-3",
@@ -4408,6 +4480,11 @@
                           "id": "result-closed-item-clear-target-version",
                           "name": "対象版",
                           "informationId": "version-identity"
+                        },
+                        {
+                          "id": "result-closed-item-item-identity",
+                          "name": "品目番号",
+                          "informationId": "item-information-1"
                         },
                         {
                           "id": "result-closed-item-1-column-1",
@@ -4451,7 +4528,13 @@
                             },
                             {
                               "columnId": "result-closed-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-item-item-identity",
+                              "value": "01",
+                              "linkId": "item:R-101:V1:01"
                             },
                             {
                               "columnId": "result-closed-item-1-column-1",
@@ -4489,7 +4572,13 @@
                             },
                             {
                               "columnId": "result-closed-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-item-item-identity",
+                              "value": "02",
+                              "linkId": "item:R-101:V1:02"
                             },
                             {
                               "columnId": "result-closed-item-1-column-1",
@@ -4586,6 +4675,11 @@
                           "informationId": "version-identity"
                         },
                         {
+                          "id": "result-closed-line-item-identity",
+                          "name": "元品目番号",
+                          "informationId": "line-information-2"
+                        },
+                        {
                           "id": "result-closed-line-3-column-2",
                           "name": "元の品名",
                           "informationId": "item-information-2"
@@ -4612,7 +4706,13 @@
                             },
                             {
                               "columnId": "result-closed-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-line-item-identity",
+                              "value": "01",
+                              "linkId": "item:R-101:V1:01"
                             },
                             {
                               "columnId": "result-closed-line-3-column-2",
@@ -4639,7 +4739,13 @@
                             },
                             {
                               "columnId": "result-closed-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-line-item-identity",
+                              "value": "02",
+                              "linkId": "item:R-101:V1:02"
                             },
                             {
                               "columnId": "result-closed-line-3-column-2",
@@ -4666,7 +4772,13 @@
                             },
                             {
                               "columnId": "result-closed-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-line-item-identity",
+                              "value": "01",
+                              "linkId": "item:R-101:V1:01"
                             },
                             {
                               "columnId": "result-closed-line-3-column-2",
@@ -4693,7 +4805,13 @@
                             },
                             {
                               "columnId": "result-closed-line-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "result-closed-line-item-identity",
+                              "value": "02",
+                              "linkId": "item:R-101:V1:02"
                             },
                             {
                               "columnId": "result-closed-line-3-column-2",
@@ -4767,7 +4885,8 @@
                             },
                             {
                               "columnId": "result-none-request-0-column-2",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "result-none-request-0-column-3",
@@ -4837,7 +4956,8 @@
                             },
                             {
                               "columnId": "result-none-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "result-none-item-1-column-1",
@@ -4875,7 +4995,8 @@
                             },
                             {
                               "columnId": "result-none-item-clear-target-version",
-                              "value": "V1"
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
                             },
                             {
                               "columnId": "result-none-item-1-column-1",
@@ -5082,7 +5203,7 @@
                   "準備番号・対象の確定版",
                   "終結結果"
                 ],
-                "description": "購入対象として固定した申請の結果を確認する。全品目の待ち数量が0のとき一度だけ終結。全部購入・一部購入・購入なしを区別し、破棄とは混同しない。",
+                "description": "購入対象として固定した申請の結果を確認する。全品目の待ち数量が0のとき一度だけ終結。全部購入・一部購入・購入なしを区別し、破棄とは混同しない。申請の識別で、別の申請と区別する想定。",
                 "sources": [
                   "申請・購入準備：元の購入要求と固定した対象版。",
                   "結果登録：全品目の数量状況に基づく終結。"
@@ -5104,7 +5225,7 @@
                   "購入しない確定数量 C",
                   "待ち数量 W＝Q−R−C"
                 ],
-                "description": "元の品名・単価・数量と結果を一緒に確認する。Rは各回の入庫内訳の合計、WはQ−R−Cとして計算する。Cを増やす場合は申請者と調整済み。Q・品名・単価を結果に合わせて変更しない。",
+                "description": "元の品名・単価・数量と結果を一緒に確認する。Rは各回の入庫内訳の合計、WはQ−R−Cとして計算する。Cを増やす場合は申請者と調整済み。Q・品名・単価を結果に合わせて変更しない。申請版と、その版内の品目の識別を組み合わせて区別する想定。",
                 "sources": [
                   "申請・再申請：準備対象版の品名・税抜希望単価・依頼数量Q。",
                   "結果登録：各回の入庫、調整済みの購入しない数量C。",
@@ -5362,7 +5483,7 @@
             "promise": "元の依頼数量を変えず、その行方を説明する。"
           }
         ],
-        "sampleCaption": "架空のデータ例です。各場面は独立した例で、同じ申請番号でも同時に成立する状態ではありません。"
+        "sampleCaption": "架空のデータ例です。各場面は独立した例で、同じ申請番号でも同時に成立する状態ではありません。同じ色は同じ対象を示します。"
       },
       "schemaVersion": "0.1"
     }

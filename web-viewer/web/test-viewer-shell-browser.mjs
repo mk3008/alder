@@ -4,6 +4,7 @@ import {verifyGlobalRightDrawer} from './test-global-right-drawer-browser.mjs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
 import {verifyUnifiedConcept} from './test-unified-concept-browser.mjs';
 import {verifyRightDrawerUnification} from './test-right-drawer-unification-browser.mjs';
+import {verifySampleIdentification} from './test-sample-identification-browser.mjs';
 
 // Current shell: one global explorer and one shared row for all document tabs.
 export async function verifyViewerShell(browser){
@@ -32,6 +33,7 @@ export async function verifyViewerShell(browser){
   const globalDrawer=await verifyGlobalRightDrawer(page);
   const unifiedConcept=await verifyUnifiedConcept(browser);
   const rightDrawer=await verifyRightDrawerUnification(browser);
-  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors,globalDrawer,unifiedConcept,rightDrawer};
+  const sampleIdentification=await verifySampleIdentification(browser);
+  assert.deepEqual(errors,[]);return {checks:'shared tab row, concept canvas controls and zoom persistence, detail/Back/close, explorer Escape and hierarchy, light/dark 1280/393 geometry',pageErrors:errors,globalDrawer,unifiedConcept,rightDrawer,sampleIdentification};
  }finally{await context.close();}
 }

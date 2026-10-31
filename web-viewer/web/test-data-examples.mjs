@@ -10,9 +10,10 @@ data.eval(await bundle('web/fixtures/concept-sample.ts','Samples')+';globalThis.
 const {dataExamples,findDataExample,renderDataExample}=data.Samples,{reviewGroups}=data.Review;
 const expectedIDs=['request-draft-empty','request-draft','request-draft-approved','request-draft-prepared','request-submitted','decision-approved','decision-resubmitted','handoff-batch','handoff-retry','result-partial','result-closed','result-none'];assert.deepEqual(Array.from(dataExamples,e=>e.id),expectedIDs);assert.equal(new Set(dataExamples.map(e=>e.id)).size,12);
 const rows=(root,card)=>[...root.querySelectorAll(`[data-example-card="${card}"] tbody tr`)].map(tr=>[...tr.children].map(td=>td.textContent));
+const namedRows=(root,card)=>{const block=root.querySelector(`[data-example-card="${card}"]`),headers=[...block.querySelectorAll('th')].map(th=>th.textContent);return rows(root,card).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]])));};
 function verifyBusinessData(root,group){
  if(group==='group-handoff'){const targetTable=root.querySelector('[data-example-card=request] table');const preparationColumn=[...targetTable.querySelectorAll('th')].findIndex(th=>th.textContent==='準備番号');assert(preparationColumn>=0,'target table explicitly names preparation number');for(const row of rows(root,'request')){assert.equal(row[preparationColumn],rows(root,'preparation')[0][0],'target belongs to the displayed preparation');assert.equal(row[3],row[6],'target and approved version must match');assert.equal(row[5],'承認済み');}for(const row of rows(root,'item')){const target=rows(root,'request').find(r=>r[1]===row[0]);assert(target);assert.equal(row[1],target[3]);}}
- if(group==='group-result'){const balance=rows(root,'item');let allDone=true;for(const row of balance){const [q,r,c,w]=row.slice(4).map(Number);assert([q,r,c,w].every(x=>Number.isInteger(x)&&x>=0),'nonnegative quantities');assert.equal(q,r+c+w,'Q=R+C+W');const actual=rows(root,'line').filter(line=>line[3]===row[2]).reduce((sum,line)=>sum+Number(line[4]),0);assert.equal(r,actual,'R comes from the actual receipt lines');allDone&&=w===0;}const state=rows(root,'request')[0][3];assert.match(state,allDone?/で終結$/:/作業中（未終結）/);for(const line of rows(root,'line'))assert(rows(root,'receipt').some(row=>row[0]===line[0]),'line has a receipt');}
+ if(group==='group-result'){const balance=namedRows(root,'item'),lines=namedRows(root,'line');let allDone=true;for(const row of balance){const [q,r,c,w]=['依頼数量 Q','入庫累計 R','購入しない C','待ち W'].map(key=>Number(row[key]));assert([q,r,c,w].every(x=>Number.isInteger(x)&&x>=0),'nonnegative quantities');assert.equal(q,r+c+w,'Q=R+C+W');if(row['品目番号']===undefined)assert.equal(lines.length,0,'a receipt line needs an identifiable item');const actual=lines.filter(line=>line['申請']===row['申請']&&line['対象版']===row['対象版']&&line['元品目番号']===row['品目番号']).reduce((sum,line)=>sum+Number(line['今回入庫数量']),0);assert.equal(r,actual,'R comes from the actual receipt lines for the identified item');allDone&&=w===0;}const state=rows(root,'request')[0][3];assert.match(state,allDone?/で終結$/:/作業中（未終結）/);for(const line of lines){assert(rows(root,'receipt').some(row=>row[0]===line['入庫回']),'line has a receipt');const item=balance.find(row=>row['申請']===line['申請']&&row['対象版']===line['対象版']&&row['品目番号']===line['元品目番号']);assert(item,'line has an identified item');assert.equal(line['元の品名'],item['品名'],'line displays the identified item name');}}
 }
 const rendered=new Map();
 for(const example of dataExamples){const group=reviewGroups.find(g=>g.id===example.group),root=data.document.createElement('article');renderDataExample(root,group,example.id,()=>{});assert.match(root.textContent,/架空のデータ例/);assert.match(root.textContent,/独立した例/);assert.match(root.textContent,new RegExp(example.name));assert.equal(root.querySelector('select').value,example.id);assert.equal(root.querySelector('select').options.length,dataExamples.filter(e=>e.group===group.id).length);assert.deepEqual([...root.querySelectorAll('[data-example-card]')].map(e=>e.dataset.exampleCard).sort(),Object.keys(group.concepts).sort(),'every sample block corresponds to a visible model card');for(const block of root.querySelectorAll('[data-example-card]')){assert.equal(block.querySelector('h3').textContent,group.concepts[block.dataset.exampleCard].name);assert(block.querySelector('table').getAttribute('aria-label'));}verifyBusinessData(root,group.id);rendered.set(example.id,root);}
@@ -23,22 +24,28 @@ assert.deepEqual(rows(rendered.get('request-submitted'),'item'),[['R-101','V1','
 assert.deepEqual(rows(rendered.get('decision-approved'),'item'),rows(rendered.get('request-submitted'),'item'));
 assert.equal(rows(rendered.get('decision-resubmitted'),'request')[0][1],'V2');assert.match(rows(rendered.get('decision-resubmitted'),'request')[0][4],/まだない/);assert(rows(rendered.get('decision-resubmitted'),'item').every(r=>r[1]==='V2'));assert.equal(rows(rendered.get('decision-resubmitted'),'item')[0][3],'12');assert(!rendered.get('decision-resubmitted').querySelector('table').textContent.includes('過去版の判断'),'do not invent mandatory judgment history storage');
 const batch=rendered.get('handoff-batch'),retry=rendered.get('handoff-retry');assert.equal(rows(batch,'request').length,2);assert.equal(rows(batch,'item').length,3);assert.deepEqual(rows(batch,'item').filter(r=>r[0]==='R-101'),rows(rendered.get('request-submitted'),'item'));for(const card of ['request','item'])assert.deepEqual(rows(retry,card),rows(batch,card),'re-output preserves '+card);assert.equal(rows(batch,'preparation')[0][0],'P-001');assert.equal(rows(retry,'preparation')[0][0],'P-001');assert(!retry.textContent.includes('未決'),'internal open questions are not presented as business content');
-assert.deepEqual(rows(rendered.get('result-partial'),'item').map(r=>r.slice(4)),[['10','4','0','6'],['2','1','0','1']]);assert.deepEqual(rows(rendered.get('result-closed'),'item').map(r=>r.slice(4)),[['10','7','3','0'],['2','2','0','0']]);assert.equal(rows(rendered.get('result-closed'),'receipt').length,2);assert.equal(rows(rendered.get('result-none'),'receipt').length,0);assert.equal(rows(rendered.get('result-none'),'line').length,0);assert.match(rendered.get('result-none').textContent,/入庫回は0件/);
-const badBalance=rendered.get('result-closed').cloneNode(true);badBalance.querySelector('[data-example-card=item] tbody tr').children[7].textContent='999';assert.throws(()=>verifyBusinessData(badBalance,'group-result'),/Q=R\+C\+W/);
+assert.deepEqual(rows(rendered.get('result-partial'),'item').map(r=>r.slice(5)),[['10','4','0','6'],['2','1','0','1']]);assert.deepEqual(rows(rendered.get('result-closed'),'item').map(r=>r.slice(5)),[['10','7','3','0'],['2','2','0','0']]);assert.equal(rows(rendered.get('result-closed'),'receipt').length,2);assert.equal(rows(rendered.get('result-none'),'receipt').length,0);assert.equal(rows(rendered.get('result-none'),'line').length,0);assert.match(rendered.get('result-none').textContent,/入庫回は0件/);
+const badBalance=rendered.get('result-closed').cloneNode(true);badBalance.querySelector('[data-example-card=item] tbody tr').children[8].textContent='999';assert.throws(()=>verifyBusinessData(badBalance,'group-result'),/Q=R\+C\+W/);
+const duplicateNames=rendered.get('result-partial').cloneNode(true);for(const row of duplicateNames.querySelectorAll('[data-example-card=item] tbody tr'))row.children[3].textContent='同じ品名';for(const row of duplicateNames.querySelectorAll('[data-example-card=line] tbody tr'))row.children[4].textContent='同じ品名';verifyBusinessData(duplicateNames,'group-result');
+const badItemReference=duplicateNames.cloneNode(true);badItemReference.querySelector('[data-example-card=line] tbody tr').children[3].textContent='02';assert.throws(()=>verifyBusinessData(badItemReference,'group-result'),/identified item/);
+const badItemName=rendered.get('result-partial').cloneNode(true);badItemName.querySelector('[data-example-card=line] tbody tr').children[4].textContent='別の品名';assert.throws(()=>verifyBusinessData(badItemName,'group-result'),/identified item name/);
 assert(reviewGroups.find(g=>g.id==='group-handoff').concepts.request.fields.some(field=>field[1]==='準備番号'),'structure card includes preparation membership');
 const badPreparation=batch.cloneNode(true);badPreparation.querySelector('[data-example-card=request] tbody tr').firstElementChild.textContent='P-999';assert.throws(()=>verifyBusinessData(badPreparation,'group-handoff'),/target belongs to the displayed preparation/);
 const missingPreparation=batch.cloneNode(true);missingPreparation.querySelector('[data-example-card=request] thead tr').firstElementChild.remove();assert.throws(()=>verifyBusinessData(missingPreparation,'group-handoff'),/explicitly names preparation number/);
 const badVersion=batch.cloneNode(true);badVersion.querySelector('[data-example-card=request] tbody tr').children[6].textContent='V2';assert.throws(()=>verifyBusinessData(badVersion,'group-handoff'),/version must match/);
 // SAMPLE-KEY-MUTED-002: distinguish keys within each rendered scene, not across scenes.
 const domains={'準備番号':'preparation','申請':'request','対象申請':'request','入庫回':'receipt'};
+const additionalLinkColumns=new Set(['版','対象版','承認対象版','現在の提出版','判断対象版','現在の判断対象版','品目番号','元品目番号']);
 for(const [scene,root] of rendered){
  const keyColors=new Map();
  for(const table of root.querySelectorAll('table')){
   const headers=[...table.querySelectorAll('th')].map(th=>th.textContent);
   for(const row of table.querySelectorAll('tbody tr'))for(const [index,cell] of [...row.children].entries()){
-   const domain=domains[headers[index]];
-   if(!domain){assert(!cell.hasAttribute('data-key-tone'),'non-key cells are uncolored');continue;}
-   const key=domain+':'+cell.textContent;assert.equal(cell.dataset.sampleKey,key);assert(cell.classList.contains('data-example-key'));
+   const domain=domains[headers[index]];let key;
+   if(domain){key=domain+':'+cell.textContent;assert.equal(cell.dataset.sampleKey,key);}
+   else if(additionalLinkColumns.has(headers[index])&&cell.dataset.sampleKey){key=cell.dataset.sampleKey;assert(/^(version|item):/.test(key));}
+   else{assert(!cell.hasAttribute('data-key-tone'),'unlinked cells are uncolored');continue;}
+   assert(cell.classList.contains('data-example-key'));
    assert(cell.dataset.keyTone,'identifier cell is colored');if(keyColors.has(key))assert.equal(cell.dataset.keyTone,keyColors.get(key),'same key has the same color across tables');keyColors.set(key,cell.dataset.keyTone);
   }
  }
@@ -59,7 +66,7 @@ try{
  for(const cell of cells){const key=cell.dataset.sampleKey,value=cell.dataset.keyTone;if(colorsByKey.has(key))assert.equal(colorsByKey.get(key),value);colorsByKey.set(key,value);}
  extendedKeyColors=colorsByKey;
  assert.equal(new Set(colorsByKey.values()).size,colorsByKey.size,'palette overflow does not reuse a tone within a scene');
- assert.equal(colorsByKey.size,11);
+ assert.equal(colorsByKey.size,13);
  const extras=cells.filter(c=>c.dataset.keyTone.startsWith('extra-'));
  for(const theme of ['light','dark']){const backgrounds=extras.map(c=>c.style.getPropertyValue('--sample-key-extra-'+theme));assert(backgrounds.every(Boolean));assert.equal(new Set(backgrounds).size,extras.length,'extra keys use different '+theme+' backgrounds');}
 }finally{requestBlock.rows.length=originalRows;requestBlock.keyIds.length=originalRows;}
@@ -83,7 +90,7 @@ for(const name of ['yellow','cyan','green','blue','purple','orange'])for(const d
  if(!dark)lightBackgrounds.set(name,colors[1].toLowerCase());
 }
 assert.deepEqual([...extendedKeyColors.values()].slice(0,5).map(name=>lightBackgrounds.get(name)),pastelAuthority.palette,'first five distinct keys use the selected palette in order');
-assert.deepEqual(['preparation:P-001','request:R-101','request:R-102'].map(key=>lightBackgrounds.get(tone(batch,key))),pastelAuthority.palette.slice(0,3),'published handoff scene matches the chosen preview');
+assert.deepEqual(['preparation:P-001','request:R-101','version:R-101:V1','request:R-102','version:R-102:V1'].map(key=>lightBackgrounds.get(tone(batch,key))),pastelAuthority.palette,'the handoff scene retains the chosen palette order for all five targets');
 assert.equal(new Set(lightBackgrounds.values()).size,lightBackgrounds.size,'the retained sixth tone stays distinct');
 assert.equal(findDataExample('group-request','result-none'),undefined);
 const shellCode=await bundle('src/viewer-shell.ts','Shell');
@@ -91,6 +98,10 @@ function harness(query='',group='group-handoff'){
  const w=new JSDOM('<div id="app"><header><button id="node-list-toggle">Left</button><button id="drawer">Right</button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept&concept='+group+(query.includes('dataView=')?'':'&dataView=structure')+query,runScripts:'outside-only',pretendToBeVisual:true}).window;
  w.eval(shellCode+';globalThis.Shell=Shell;');let key='purchase';const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{capture(){},business:()=>({concept:key==='purchase'?context:undefined,key,viewKey:'overview',activities:[],states:[{id:'request',name:'購入申請'}],views:[{key:'overview',name:'業務全体図'}]}),openActivity(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();return{w,d:w.document,shell,other(){key='other';shell.syncDocument();}};
 }
+const identityDetails=harness('','group-request');try{
+ identityDetails.d.querySelector('#drawer').click();const frame=identityDetails.d.querySelector('[data-concept-view=group-request]');
+ for(const [id,description] of [['request','申請の識別で、別の申請と区別する想定。'],['version','申請と、その申請内の版の識別を組み合わせて区別する想定。'],['item','申請版と、その版内の品目の識別を組み合わせて区別する想定。']]){identityDetails.w.dispatchEvent(new identityDetails.w.MessageEvent('message',{origin:identityDetails.w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id}}));assert(identityDetails.d.querySelector('.concept-related-content').textContent.includes(description),id+' detail shows the identification hypothesis');}
+}finally{identityDetails.w.close();}
 const {w,d,other}=harness();const $=s=>d.querySelector(s);
 const openExamples=async()=>{$('#concept-drawer-examples').click();await new Promise(r=>setTimeout(r,0));};
 try{
@@ -156,3 +167,4 @@ const linkAuthorityBytes=readFileSync('verification/overview-sample-links.check-
 const capabilityAuthority=JSON.parse(readFileSync('verification/capability-samples.check-items.json','utf8'));assert.deepEqual(capabilityAuthority.checks.map(c=>c.id),['CAPABILITY-SAMPLE-001','CAPABILITY-SAMPLE-002']);
 const overviewAuthority=JSON.parse(readFileSync('verification/review-overview.check-items.json','utf8'));assert.deepEqual(overviewAuthority.checks.map(c=>c.id),['REVIEW-OVERVIEW-001','REVIEW-OVERVIEW-002']);
 const authority=JSON.parse(readFileSync('verification/data-examples.check-items.json','utf8'));assert.deepEqual(authority.checks.map(c=>c.id),['DATA-EXAMPLE-001','DATA-EXAMPLE-002','DATA-EXAMPLE-003','DATA-EXAMPLE-004']);for(const c of authority.checks)for(const key of ['condition','guarantee','reason','verification'])assert(c[key]);data.close();console.log('PASS DATA-EXAMPLE-001..004 / REVIEW-OVERVIEW-001..002: STRUCTURED-OVERVIEW-001/002, CAPABILITY-SAMPLE-001/002, SAMPLE-KEY-COLOR-001, PURCHASE-TARGET-PREPARATION-001, twelve rendered scenes, preparation membership and missing/mismatched number negative cases, card correspondence, arithmetic and fixed-version negative cases, modes, drawer/canvas preservation, history, direct entry and document boundary');
+await import('./test-sample-identification.mjs');

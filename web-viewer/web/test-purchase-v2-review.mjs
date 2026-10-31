@@ -6,6 +6,7 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
 import {createDataExamples} from '../src/data-examples.ts';
+import {createConceptViews} from '../src/concept-views.ts';
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
 
 const authorityBytes=readFileSync('verification/purchase-v2-review.check-items.json');
@@ -154,6 +155,22 @@ const unifiedModel=unified.documents.find(item=>item.kind==='conceptModel');
 assert.deepEqual(unified.documents.find(item=>item.kind==='businessDesign'),bd);
 assert.deepEqual(unified.documents.find(item=>item.kind==='stateTransition'),states);
 const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;delete preserved.presentation.sampleCaption;
+// Project the explicitly authorized V3 identity additions away before comparing
+// every other model field with the frozen V2 source. The old source is not edited.
+const identificationNotes={request:'申請の識別で、別の申請と区別する想定。',version:'申請と、その申請内の版の識別を組み合わせて区別する想定。',item:'申請版と、その版内の品目の識別を組み合わせて区別する想定。'};
+for(const c of preserved.concepts)if(identificationNotes[c.id]){assert(c.description.endsWith(identificationNotes[c.id]));c.description=c.description.slice(0,-identificationNotes[c.id].length);}
+for(const g of preserved.reviewGroups){
+ for(const node of g.graph.nodes)if(identificationNotes[node.conceptId]){assert(node.description.endsWith(identificationNotes[node.conceptId]));node.description=node.description.slice(0,-identificationNotes[node.conceptId].length);}
+ for(const cap of g.capabilities)for(const example of cap.samples)for(const block of example.blocks){
+  const addedId=`${example.id}-${block.card}-item-identity`;
+  if(['result-partial','result-closed'].includes(example.id)&&['item','line'].includes(block.card)){
+   const added=block.columns.find(column=>column.id===addedId);assert(added&&added.informationId===(block.card==='item'?'item-information-1':'line-information-2'));
+   block.columns=block.columns.filter(column=>column.id!==addedId);
+   for(const row of block.rows){assert.equal(row.cells.filter(cell=>cell.columnId===addedId).length,1);row.cells=row.cells.filter(cell=>cell.columnId!==addedId);}
+  }
+  for(const row of block.rows)for(const cell of row.cells)if(cell.linkId?.startsWith('version:'))delete cell.linkId;
+ }
+}
 preserved.kind=model.kind;preserved.revision=model.revision;preserved.format=model.format;preserved.formatVersion=model.formatVersion;
 assert.deepEqual(preserved,model,'the explicit model and all review content survive one-file integration');
 const changed=structuredClone(unified);changed.documents.find(item=>item.kind==='conceptModel').reviewGroups[0].capabilities[0].description='表示される更新内容';
@@ -195,7 +212,11 @@ const card=sampleWindow.document.createElement('article');
 sampleWindow.Samples.renderDataExample(card,sampleWindow.Groups.findReviewGroup('group-request'),'request-draft-approved',()=>{});
 const requestCells=[...card.querySelectorAll('[data-sample-key="request:R-101"]')];
 assert(requestCells.length>=4);assert(requestCells[0].dataset.keyTone);assert(requestCells.every(cell=>cell.dataset.keyTone===requestCells[0].dataset.keyTone));
-for(const cell of card.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone);
+for(const version of ['V1','D1']){const cells=[...card.querySelectorAll(`[data-sample-key="version:R-101:${version}"]`)];assert(cells.length>=2);assert(cells.every(cell=>cell.dataset.keyTone===cells[0].dataset.keyTone));}
+assert.notEqual(card.querySelector('[data-sample-key="version:R-101:V1"]').dataset.keyTone,card.querySelector('[data-sample-key="version:R-101:D1"]').dataset.keyTone);
+const oldSamples=createDataExamples({business:bd,model}),oldGroup=createConceptViews({model}).findGroup('group-request'),oldCard=sampleWindow.document.createElement('article');
+oldSamples.renderDataExample(oldCard,oldGroup,'request-draft-approved',()=>{});
+for(const cell of oldCard.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone,'the frozen V2 data is not recolored');
 sampleWindow.close();
 pass('PURCHASE-V2-007','keys');
 
