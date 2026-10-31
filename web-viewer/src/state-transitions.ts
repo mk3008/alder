@@ -69,20 +69,19 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
  const loopBoxes=[...loopWires].map(([i,loop])=>{const node=nodes.find(n=>n.id===rows[i][0].from)!,group=captionGroups[i];return{x:node.x+node.width+8,y:node.y+node.height+24+loop.offset,width:group.width,height:group.height};});
  let sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
- // For a long return corridor, moving the corridor a little can keep a loop
- // caption much closer to its state. Otherwise keep the existing corridor and
- // let the shared caption escape move the text by the smaller amount.
+ // Keep loop captions next to their states by moving crossing return
+ // corridors beyond the label boxes, with separate lanes for each route.
  for(let pass=0;pass<=loopBoxes.length;pass++){
-  let changed=false;
+  let changed=false,detour=0;
   sharedRoutes.forEach((route,i)=>{
    if(!route||loopWires.has(i)||!wires[i].returning)return;
    let distance=0;
    for(const box of loopBoxes)for(let j=1;j<route.points.length;j++){
     const a=route.points[j-1],b=route.points[j];if(Math.abs(a[0]-b[0])>1e-7||Math.abs(a[1]-b[1])<2)continue;
     const x=a[0];if(x<box.x-4||x>box.x+box.width+4||Math.max(a[1],b[1])<box.y-4||Math.min(a[1],b[1])>box.y+box.height+4)continue;
-    const labelMove=x+10-box.x,routeMove=box.x+box.width+12-x;if(routeMove>0&&routeMove<labelMove)distance=Math.max(distance,routeMove);
+    const routeMove=box.x+box.width+12-x;if(routeMove>0)distance=Math.max(distance,routeMove);
    }
-   if(distance){wires[i]={...wires[i],returnLane:(wires[i].returnLane??0)+Math.ceil(distance/16)};changed=true;}
+   if(distance){wires[i]={...wires[i],returnLane:(wires[i].returnLane??0)+Math.ceil(distance/16)+detour++};changed=true;}
   });
   if(!changed)break;sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
  }

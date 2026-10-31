@@ -107,6 +107,9 @@ const detour=stateSelfLoopRoute(card,[card,blocker],{index:0,count:1,depth:80,la
 assert.equal(detour.collisions,0);assert.equal(detour.fallback,false);assert.equal(detour.rerouted,true);
 const draftNode=actual.g.nodes.find(n=>n.id==='下書き'),returned=actual.g.nodes.find(n=>n.id==='差戻し'),draftCaptions=['T19','T08'].map(id=>actual.g.captions.find(c=>c.id===id));
 assert(draftCaptions.every(c=>c.y-14>=draftNode.y+draftNode.height+24));assert(draftCaptions[0].y<draftCaptions[1].y);assert(draftCaptions[1].y<returned.y);
+assert(actual.g.captions.find(c=>c.id==='T11').x<=returned.x+returned.width+40,'the returned-state loop caption stays near its state');
+const vertical=p=>segments(pathFor(actual.svg,p).getAttribute('d')).filter(([a,b])=>Math.abs(a[0]-b[0])<.01&&Math.abs(a[1]-b[1])>2);
+for(const a of vertical('T05'))for(const b of vertical('T14'))assert(!crossing(a,b),'distinct return transitions keep separate vertical corridors');
 results.push('STATE-BUNDLE-002');
 const initial=actual.g.nodes.find(n=>n.id==='@new'),incoming=actual.g.captions.find(c=>c.id==='T02');
 assert(incoming.y>initial.y+initial.height);assert(incoming.y<draftNode.y);assert(incoming.y<draftCaptions[0].y);
