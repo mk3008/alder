@@ -12,6 +12,7 @@ on:
       - 'tools/document_storage/state-declaration.mjs'
       - 'work/viewer-json/issue-274/json-native/**'
       - '.github/workflows/web-viewer-once.yml'
+      - '.github/workflows/actions.lock'
 concurrency:
   group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -28,11 +29,11 @@ jobs:
       run:
         working-directory: web-viewer
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
           fetch-depth: 2
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4.4.0
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
@@ -87,7 +88,7 @@ jobs:
 
       - name: Retain bounded B-loop measurements
         if: always() && steps.b_loop.outputs.enabled == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: b-loop-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/b-loop/
@@ -95,7 +96,7 @@ jobs:
           retention-days: 14
       - name: Retain MD JSON geometry evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: json-layout-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-layout/
@@ -104,7 +105,7 @@ jobs:
 
       - name: Preserve shell review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: viewer-shell-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/shell/*.png
@@ -112,14 +113,14 @@ jobs:
           retention-days: 14
       - name: Preserve header review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: header-controls-${{ github.sha }}
           path: web-viewer/web/evidence/header-controls/*.png
           if-no-files-found: ignore
       - name: Retain JSON review screenshots and observations
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: json-document-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-document/
@@ -127,7 +128,7 @@ jobs:
           retention-days: 14
       - name: Retain save-conflict review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: save-conflict-review-${{ github.sha }}
           path: web-viewer/web/evidence/save-conflict-212/*.png
@@ -135,7 +136,7 @@ jobs:
           retention-days: 7
       - name: Retain findings review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: design-findings-review-${{ github.sha }}
           path: web-viewer/web/evidence/design-findings-96/*.png
@@ -143,7 +144,7 @@ jobs:
           retention-days: 7
       - name: Retain wiring review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: wiring-review-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/wiring/real-*.png
@@ -157,14 +158,14 @@ jobs:
         run: node ../tools/viewer-preview.mjs
       - name: Retain isolated review Preview
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: viewer-preview-pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           path: web-viewer/review-package/
           retention-days: 14
       - name: Retain related Check screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: related-checks-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/related-checks/*.png
@@ -173,7 +174,7 @@ jobs:
 
       - name: Retain state JSON comparison evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: json-states-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-states/
@@ -182,7 +183,7 @@ jobs:
 
       - name: Retain role JSON comparison evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: json-roles-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-roles/
