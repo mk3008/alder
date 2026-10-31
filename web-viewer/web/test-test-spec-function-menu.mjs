@@ -11,6 +11,8 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),authority=rea
 assert.equal(hash(authority),authHash);assert.equal(hash(sourceBytes),'b3dfb5aa699026d748969671a4d9efee9523aa354e34a30bbc2f81447bae46f4');
 const headingPath='verification/test-spec-function-heading.check-items.json',headingHash='3e0ec917a5fc7356129e624401a359b5455efdccf698183521a52f681ad48a3b',headingAuthority=readFileSync(headingPath),headingCovered=new Set();
 assert.equal(hash(headingAuthority),headingHash);assert.deepEqual(JSON.parse(headingAuthority).checks.map(item=>item.id),['FUNCTION-HEADING-001','FUNCTION-HEADING-002']);
+const cleanPath='verification/test-spec-clean-initial-menu.check-items.json',cleanHash='ad7ae131ead3121be0679f47a8cb5341370f4808430780675e8be382bbbe7a76',cleanAuthority=readFileSync(cleanPath),cleanCovered=new Set();
+assert.equal(hash(cleanAuthority),cleanHash);assert.deepEqual(JSON.parse(cleanAuthority).checks.map(item=>item.id),['SPEC-CLEAN-001','EXPLORER-INITIAL-001','EXPLORER-INITIAL-002']);
 const authorityIds=JSON.parse(authority).checks.map(item=>item.id),covered=new Set();assert.deepEqual(authorityIds,Array.from({length:7},(_,i)=>'FUNCTION-MENU-00'+(i+1)));
 const original=JSON.parse(sourceBytes),preview=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-function-preview.json','utf8'));
 validate(original);validate(preview);
@@ -27,8 +29,8 @@ const both=structuredClone(preview);both.documents.push(oldDemo.documents.find(d
 const shared=JSON.parse(readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'));validate(shared);
 async function bundle(raw){return (await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text','.json':'text'},plugins:[{name:'fixture',setup(b){b.onLoad({filter:/business-design\.json$/},()=>({contents:JSON.stringify(raw),loader:'text'}));}}]})).outputFiles[0].text;}
 const [previewCode,bothCode,sharedCode,originalCode]=await Promise.all([bundle(preview),bundle(both),bundle(shared),bundle(original)]),windows=[];
-async function open(code){
- const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/functions',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);
+async function open(code,{url='https://viewer.test/functions',saved}={}){
+ const w=new JSDOM('<div id="app"></div>',{url,runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);if(saved)w.sessionStorage.setItem('alder-explorer-v1:'+w.location.pathname,JSON.stringify(saved));
  w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.scrollIntoView=()=>{};w.HTMLElement.prototype.setPointerCapture=()=>{};
  w.eval(code);const $=selector=>w.document.querySelector(selector),until=async fn=>{for(let i=0;i<500&&!fn();i++)await new Promise(r=>setTimeout(r,10));assert.ok(fn(),'expected app state');};
  await until(()=>!!$('#open')&&!$('#open').disabled);$('#open-sample').click();await until(()=>w.document.querySelectorAll('.node').length>0&&!!$('[data-explorer-key="group:tests"]'));
@@ -37,13 +39,17 @@ async function open(code){
 try{
  const app=await open(previewCode),{$,entry}=app;
  assert.equal([...app.w.document.querySelectorAll('.explorer-parent')].at(-1).textContent,'テスト仕様');
+ const assertCollapsed=instance=>{const groups=[...instance.w.document.querySelectorAll('.explorer-parent:not(:disabled),.explorer-subparent:not(:disabled)')];assert(groups.length>5);for(const group of groups){assert.equal(group.getAttribute('aria-expanded'),'false',group.textContent);assert(instance.w.document.getElementById(group.getAttribute('aria-controls')).hidden,group.textContent);}};
+ assertCollapsed(app);const search=app.$('.explorer-search input');search.value='下書き保存';search.dispatchEvent(new app.w.Event('input'));assert.equal(app.$('#explorer-tests').hidden,false);assert.equal(app.$('#explorer-tests-activity-'+apply).hidden,false);search.value='';search.dispatchEvent(new app.w.Event('input'));assertCollapsed(app);
+ entry('group:tests').click();entry('group:tests-activity-'+apply).click();const saved=JSON.parse(app.w.sessionStorage.getItem('alder-explorer-v1:/functions'));const restored=await open(previewCode,{saved});assert.equal(restored.entry('group:tests').getAttribute('aria-expanded'),'true');assert.equal(restored.entry('group:tests-activity-'+apply).getAttribute('aria-expanded'),'true');assert.equal(restored.entry('group:business').getAttribute('aria-expanded'),'false');cleanCovered.add('EXPLORER-INITIAL-002');
+ const deep=await open(previewCode,{url:'https://viewer.test/deep?view=tests&spec='+encodeURIComponent(draft)});assertCollapsed(deep);assert.equal(deep.$('#tests-workspace').hidden,false);assert.equal(deep.$('#tests-workspace h2').textContent,'下書き保存');cleanCovered.add('EXPLORER-INITIAL-001');
  const applyGroup=entry('group:tests-activity-'+apply);assert(applyGroup);if(applyGroup.getAttribute('aria-expanded')==='false')applyGroup.click();
  assert.equal(entry('tests:'+draft).textContent,'下書き保存');assert.equal(entry('tests:'+submit).textContent,'提出');
  assert.equal(entry('tests:'+key(approve,'group-request','save-draft')),null,'no inferred cross-activity association');
  assert(!$('#explorer-tests').textContent.includes('正常系'));assert(!$('#explorer-tests').textContent.includes('例外系'));covered.add('FUNCTION-MENU-001');
  entry('tests:'+draft).click();const main=()=>$('#tests-workspace'),picker=()=>main().querySelector('.data-example-picker select');
  const assertFunctionHeading=(root,name)=>{const panel=root.querySelector('.test-spec-examples'),heading=panel.querySelector('h2'),description=panel.querySelector('.data-example-capability'),pickerLabel=panel.querySelector('.data-example-picker');assert.equal(heading.textContent,name);assert(heading.compareDocumentPosition(description)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);assert(description.compareDocumentPosition(pickerLabel)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);};
- assertFunctionHeading(main(),'下書き保存');assert.match(main().textContent,/品目数・申請の状態を問わず/);
+ assertFunctionHeading(main(),'下書き保存');assert.match(main().textContent,/品目数・申請の状態を問わず/);assert.doesNotMatch(main().textContent,/チェック項目はまだありません/);assert(!preview.documents.some(d=>d.kind==='checkItems'));cleanCovered.add('SPEC-CLEAN-001');
  assert.deepEqual([...picker().options].map(o=>o.textContent),['品目がない下書き','入力途中の下書き','承認後に下書きを保存','購入準備後に下書きを保存']);
  assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');
  picker().value='request-draft';picker().dispatchEvent(new app.w.Event('change'));assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft');assertFunctionHeading(main(),'下書き保存');
@@ -63,6 +69,6 @@ try{
  const conceptApp=await open(previewCode);conceptApp.entry('concept:group-request').click();conceptApp.$('#drawer').click();conceptApp.$('#concept-drawer-examples').click();const conceptPanel=conceptApp.$('.concept-drawer-body .data-examples-panel'),conceptPicker=conceptPanel.querySelector('.data-example-picker'),conceptHeading=conceptPanel.querySelector('h2');assert.equal(conceptHeading.textContent,'入力途中の内容を保存する');assert(conceptPicker.compareDocumentPosition(conceptHeading)&conceptApp.w.Node.DOCUMENT_POSITION_FOLLOWING);headingCovered.add('FUNCTION-HEADING-002');
  assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(sourceBytes));covered.add('FUNCTION-MENU-006');
  entry('business:'+apply).click();if($('#formattedMarkdownDrawer').hidden)$('#drawer').click();entry('tests:'+draft).click();entry('tests:'+submit).click();entry('tests:'+draft).click();assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');entry('business:'+apply).click();assert.equal($('#formattedMarkdownDrawer').hidden,false,'test navigation leaves global drawer preference intact');covered.add('FUNCTION-MENU-007');
- assert.deepEqual([...covered].sort(),authorityIds.sort());assert.equal(hash(readFileSync(authPath)),authHash);assert.deepEqual([...headingCovered].sort(),JSON.parse(headingAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(headingPath)),headingHash);
- console.log(JSON.stringify({passed:[...covered,...headingCovered],scope:'actual app DOM; mobile and full CI remain separate'}));
+ assert.deepEqual([...covered].sort(),authorityIds.sort());assert.equal(hash(readFileSync(authPath)),authHash);assert.deepEqual([...headingCovered].sort(),JSON.parse(headingAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(headingPath)),headingHash);assert.deepEqual([...cleanCovered].sort(),JSON.parse(cleanAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(cleanPath)),cleanHash);
+ console.log(JSON.stringify({passed:[...covered,...headingCovered,...cleanCovered],scope:'actual app DOM; mobile and full CI remain separate'}));
 }finally{for(const w of windows)w.close();}

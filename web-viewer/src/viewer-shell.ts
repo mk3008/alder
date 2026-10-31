@@ -62,7 +62,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
  const specExamples=new Map<string,string>();
  const frames=new Map<string,HTMLIFrameElement>([['overview',frame]]),selectedConcepts=new Map<string,string>(),selectedViews=new Map<string,string>(),selectedSubsystems=new Map<string,string>();
  const exampleModes=new Map<string,string>(),lastExamples=new Map<string,string>(),overviewModes=new Set<string>();
- const expanded=new Set(['business','business-activity','business-object','states','subsystems','concept','concept-relations','tests','tests-activity']),searchCollapsed=new Set<string>(),scrolls=new Map<string,number>();
+ const expanded=new Set<string>(),searchCollapsed=new Set<string>(),scrolls=new Map<string,number>();
  let saved:any;try{saved=JSON.parse(sessionStorage.getItem(storage)||'null');if(saved){overviewClosed=saved.overviewClosed===true;savedDocumentKey=typeof saved.documentKey==='string'?saved.documentKey:undefined;explorerOpen=typeof saved.left==='boolean'?saved.left:explorerOpen;if(Array.isArray(saved.expanded)){expanded.clear();for(const key of saved.expanded)if(typeof key==='string')expanded.add(key);}stateOpen=Array.isArray(saved.states)?saved.states.filter((id:unknown)=>typeof id==='string'):[];if(!options.rightDrawer){if(typeof saved.rightOpen==='boolean')fallbackRightOpen=saved.rightOpen;else if(typeof saved.right?.['concept:'+saved.active]==='boolean')fallbackRightOpen=saved.right['concept:'+saved.active];}}}catch{}
  function restoreConceptState(){if(!saved||savedDocumentKey!==options.business().key||!hasModel)return;
   for(const id of Array.isArray(saved.overviewModes)?saved.overviewModes:[])if(findReviewGroup(id))overviewModes.add(id);
@@ -87,9 +87,9 @@ export function installViewerShell(app:HTMLElement,options:Options){
   if(options.business().activities.some(activity=>activity.id===id))return functions().find(item=>item.activityId===id)?.key??(hasActivityChecks(id)?'checks:'+id:'@overview');
   return '@overview';
  }
- function selectSpec(id:string,push=true){const c=options.business();if(!c.design?.model||!c.key)return;id=normalizeSpec(id);if(area==='tests'&&id!==activeSpec)remember();if(!specOpen.includes(id))specOpen.push(id);activeSpec=id;const target=functionFor(id);if(target?.activityId)expanded.add('tests-activity-'+target.activityId);else if(id.startsWith('checks:'))expanded.add('tests-activity-'+id.slice(7));else if(target)expanded.add('tests-other');setArea('tests');renderSpec();renderTabs();renderExplorer();save();if(push)route();}
+ function selectSpec(id:string,push=true){const c=options.business();if(!c.design?.model||!c.key)return;id=normalizeSpec(id);if(area==='tests'&&id!==activeSpec)remember();if(!specOpen.includes(id))specOpen.push(id);activeSpec=id;const target=functionFor(id);if(!restoringRoute){if(target?.activityId)expanded.add('tests-activity-'+target.activityId);else if(id.startsWith('checks:'))expanded.add('tests-activity-'+id.slice(7));else if(target)expanded.add('tests-other');}setArea('tests');renderSpec();renderTabs();renderExplorer();save();if(push)route();}
  function renderSpec(){const design=options.business().design;if(!design?.model)return;const page=specs.querySelector<HTMLElement>('.test-spec-page')!,target=functionFor(activeSpec);
-  if(target){const section=document.createElement('section');section.className='test-spec-sample';if(!relevantChecks().length)text(section,'p','チェック項目はまだありません。');const group=views?.findGroup(target.groupId),example=target.capability.samples.find(item=>item.id===specExamples.get(activeSpec))??target.capability.samples[0];
+  if(target){const section=document.createElement('section');section.className='test-spec-sample';const group=views?.findGroup(target.groupId),example=target.capability.samples.find(item=>item.id===specExamples.get(activeSpec))??target.capability.samples[0];
    if(group&&example&&samples){const root=document.createElement('div');root.className='data-examples-panel test-spec-examples';section.append(root);samples.renderDataExample(root,group,example.id,id=>{scrolls.set('tests:'+activeSpec,page.scrollTop);specExamples.set(activeSpec,id);renderSpec();save();route();specs.querySelector<HTMLSelectElement>('.data-example-picker select')?.focus({preventScroll:true});},{capabilityId:target.capability.id,heading:target.name});}
    else{text(section,'h2',target.name);text(section,'p',target.capability.description);}
    page.replaceChildren(section);
@@ -219,7 +219,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
     conceptKeys=new Map(ids.map(id=>[id,reserved.has(id)||groupIds.includes(id)?'concept:'+id:id]));
     groupByKey=new Map([...groupKeys].map(([id,key])=>[key,id]));conceptByKey=new Map([...conceptKeys].map(([id,key])=>[key,id]));
     viewIds=[...wholeModes,...groupByKey.keys(),...conceptByKey.keys()];
-    if(!Array.isArray(saved?.expanded)||saved.expandedVersion!==4){expanded.add('subsystems');expanded.add('concept-relations');for(const system of next?.model.subsystems??[])expanded.add('subsystem-'+system.id);}
+    if(Array.isArray(saved?.expanded)&&saved.expandedVersion!==4){expanded.add('subsystems');expanded.add('concept-relations');for(const system of next?.model.subsystems??[])expanded.add('subsystem-'+system.id);}
    }
    documentKey=current.key;stateOpen=stateOpen.filter(id=>current.states?.some(s=>s.id===id));
    if(area==='business'&&overviewClosed&&current.views?.find(v=>v.key===current.viewKey)?.activity===undefined&&current.views?.find(v=>v.key===current.viewKey)?.object===undefined)fallback();
