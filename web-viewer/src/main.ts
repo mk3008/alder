@@ -350,7 +350,7 @@ async function openDocument(tab:Tab){
  const previous=state.document;
  const next=replaceWorkspace(state,tab);if(!previous){capture();state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);render();persist();return true;}await saveDocument(()=>next,()=>{state=next;checkFollowups.add(documentForView(state.tabs[0])?.key??state.tabs[0].key);});return true;
 }
-async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=await loadDocumentFile(file);const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){shell?.reopenBusinessOverview();state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}
+async function addFile(file:File,handle?:FileSystemFileHandle){if(sourceTarget&&!await closeSource())return;const design=await loadDocumentFile(file);const existing=current();if(handle&&existing?.handle&&await existing.handle.isSameEntry(handle)){if(existing.design.markdown!==design.markdown&&!await replace(existing,design,handle))return;shell?.reopenBusinessOverview();state.active=state.tabs[0].key;render();persist();return;}const tab=reconcile({key:crypto.randomUUID(),name:file.name,design,positions:{},scroll:[0,0],zoom:1,viewInset:[40,0],handle},design);await openDocument(tab);}
 $('empty').onpointerdown=e=>e.stopPropagation();
 for(const id of ['open','open-url','open-text'])$('guide-'+id).onclick=()=>$(id).click();
 $('open-sample').onpointerdown=e=>e.stopPropagation();
