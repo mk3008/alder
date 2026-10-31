@@ -4,12 +4,12 @@ on:
     types: [opened, synchronize]
     paths:
       - 'web-viewer/**'
+      - 'business-design/alder/business-design.json'
+      - 'business-design/alder/README.md'
       - 'tools/viewer-preview.mjs'
       - 'work/viewer-json/issue-274/layout-regression/**'
-      - 'tools/document_storage/core.mjs'
-      - 'tools/document_storage/schema.mjs'
-      - 'tools/document_storage/legacy-json.mjs'
-      - 'tools/document_storage/state-declaration.mjs'
+      - 'tools/document_storage/**'
+      - 'tools/business_graph/**'
       - 'work/viewer-json/issue-274/json-native/**'
       - '.github/workflows/web-viewer-once.yml'
       - '.github/workflows/actions.lock'

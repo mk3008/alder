@@ -1,0 +1,35 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "Alderを使った標準設計業務のサンプルをJSON正本に移す。",
+  "checks": [
+    {
+      "id": "STANDARD-SAMPLE-001",
+      "condition": "初期画面または開くメニューのサンプルを選ぶ。",
+      "guarantee": "同一の同梱JSONから標準設計業務を開き、ネットワークや追加ファイルなしで業務と同梱チェック例を確認できる。本文表示はJSONを示す。",
+      "reason": "新規設計の単一JSONの標準経路とサンプルを一致させる。",
+      "verification": "web/test-json-standard-sample.mjs"
+    },
+    {
+      "id": "STANDARD-SAMPLE-002",
+      "condition": "既存の標準設計業務とチェック例をJSONへ移行する。",
+      "guarantee": "業務・Object・関係・確認状態と未決の意味を保持し、草案を合意済みとみなさない。JSON利用に伴う形式の説明だけを現行のPlugin/Viewerの流れへ直す。",
+      "reason": "表示形式の変更で業務や人間判断を勝手に変えない。",
+      "verification": "web/test-json-standard-sample.mjs"
+    },
+    {
+      "id": "STANDARD-SAMPLE-003",
+      "condition": "従来のMarkdownサンプルや他のMD/JSONを開く、保存状態を復元する。",
+      "guarantee": "従来の入力・チェック関連・復元を維持し、自動的に旧文書を上書きしない。サンプルを明示的に開いたときだけ新しいJSONを選択する。",
+      "reason": "サンプル更新で利用中の資料や閲覧状態を壊さない。",
+      "verification": "web/test-json-standard-sample.mjs"
+    },
+    {
+      "id": "STANDARD-SAMPLE-004",
+      "condition": "業務設計書を開く・作る案内と利用文書を読む。",
+      "guarantee": "JSONが標準であることを案内し、Markdownを既存資料の互換入力として扱う。",
+      "reason": "画面の案内とPluginの標準操作が矛盾しない。",
+      "verification": "web/test-json-standard-sample.mjs"
+    }
+  ]
+}

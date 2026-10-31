@@ -7,11 +7,12 @@ import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
 import {parseDesign} from '../src/graph.ts';
-const raw=readFileSync('../business-design/alder/README.md','utf8');
-const design=parseDesign(raw);
+import {parseDocument} from '../src/document-input.ts';
+const raw=readFileSync('../business-design/alder/business-design.json','utf8');
+const design=parseDocument(raw);
 assert.equal(design.graph.nodes.length,25);assert.equal(design.graph.relations.length,63);
 assert.ok(design.graph.relations.every(r=>design.graph.nodes.some(n=>n.id===r.from)&&design.graph.nodes.some(n=>n.id===r.to)));
-const bundle=async invalid=>(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'},plugins:invalid?[{name:'invalid-sample',setup(b){b.onLoad({filter:/README\.md$/},()=>({contents:'# Invalid sample',loader:'text'}));}}]:[]})).outputFiles[0].text;
+const bundle=async invalid=>(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text','.json':'text'},plugins:invalid?[{name:'invalid-sample',setup(b){b.onLoad({filter:/business-design\.json$/},()=>({contents:'# Invalid sample',loader:'text'}));}}]:[]})).outputFiles[0].text;
 const code=await bundle(false),windows=[],checks=[];
 const tick=ms=>new Promise(r=>setTimeout(r,ms));
 function env(db=new IDBFactory(),script=code){const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;let fetches=0,pickers=0;w.fetch=()=>{fetches++;throw Error('Unexpected network');};w.showOpenFilePicker=()=>{pickers++;throw Error('Unexpected picker');};w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(script);const $=id=>w.document.getElementById(id);return {w,$,calls:()=>({fetches,pickers}),tabs:()=>w.document.querySelectorAll('.tab'),nodes:()=>w.document.querySelectorAll('.node')};}
@@ -76,5 +77,5 @@ try{
  const readonlySample=await ready(env());click(readonlySample,'open-sample');click(readonlySample,'view-markdown');assert.equal(readonlySample.$('source-text').readOnly,true);assert.equal(readonlySample.$('source-text').value,raw);assert.equal(readonlySample.$('source-submit').hidden,true);const graphBefore=readonlySample.$('nodes').innerHTML;await readonlySample.$('source-submit').onclick();await readonlySample.$('refresh').onclick();assert.equal(readonlySample.$('nodes').innerHTML,graphBefore);assert.deepEqual(readonlySample.calls(),{fetches:0,pickers:0});
  const broken=await ready(env(new IDBFactory(),await bundle(true)));click(broken,'open-sample');assert.equal(broken.tabs().length,0);assert.equal(broken.$('empty').hidden,false);assert.match(broken.$('status-text').textContent,/サンプルを開けません/);click(broken,'open-sample');assert.equal(broken.tabs().length,0);assert.deepEqual(broken.calls(),{fetches:0,pickers:0});checks.push('invalid bundled sample leaves empty state and retry link with visible error');
  const saving=await ready(env());saving.w.structuredClone=()=>{throw Error('storage unavailable');};click(saving,'open-sample');await tick(230);assert.equal(saving.nodes().length,25);assert.match(saving.$('status-text').textContent,/引き継げません/);click(saving,'open-sample');assert.equal(saving.tabs().length,1);assert.match(saving.$('status-text').textContent,/引き継げません/);checks.push('save failure retains usable sample and persistent error without duplicate tabs');
- console.log(JSON.stringify({model:'JSDOM/IndexedDB, no real browser',publicSource:'business-design/alder/README.md',nodes:25,relations:63,checks,passed:checks.length},null,2));
+ console.log(JSON.stringify({model:'JSDOM/IndexedDB, no real browser',publicSource:'business-design/alder/business-design.json',nodes:25,relations:63,checks,passed:checks.length},null,2));
 }finally{windows.forEach(w=>w.close());}

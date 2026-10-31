@@ -65,6 +65,8 @@ await caseOf('source helpers accept only source-only HTTPS and preserve exact or
 });
 await caseOf('eligibility requires URL origin without any draft or applied edit',async()=>{
  const tab={source:{kind:'url',url:source}};assert.equal(sourceSharingReason(tab),undefined);assert.equal(sourceSharingReason({...tab,edited:false}),undefined);
+ assert.equal(sourceSharingReason({source:{kind:'url',url:'https://source-sharing.test/design.json'}}),undefined,'JSON URLs share the same way as Markdown URLs');
+ assert.equal(sourceSharingReason({source:{kind:'sample'}}),'「URLを開く」で取得した文書だけ共有できます。');
  for(const t of [undefined,{}, {source:{kind:'text'}},{source:{kind:'sample'}},{...tab,edited:true},{...tab,draft:''},{...tab,draft:body},{source:{kind:'url',url:source+'?'}},{source:{kind:'url',url:source+'#'}}])assert.equal(typeof sourceSharingReason(t),'string');
 });
 await caseOf('ineligible empty, text, file, sample and query-bearing sources explain without writing clipboard',async()=>{

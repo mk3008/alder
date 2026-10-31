@@ -12,7 +12,7 @@ Alder Pluginがヒアリングや変更指示を構造化し、依頼者・設�
 
 業務設計書とCheckは単一JSONを正本として保持します。JSONの作成・更新と参照・版の検査はPlugin／Skillへ依頼し、人間がJSONを直接編集する必要はありません。Viewerは正本を読み、レビューするためのツールです。
 
-> この手順はAlder 0.4.9向けです。インストール前に[GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9)で公開済みか確認してください。JSONと状態遷移の表示はPluginとは別に公開されるViewerの対応状況に依存します。未公開の場合は[Viewer確認版](web-viewer/json.ja.md#確認版を用意する)を使ってください。概念モデルと正式JSON v1はこの版では扱いません。
+> この手順はAlder 0.4.9向けです。インストール前に[GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9)で公開済みか確認してください。JSONと状態遷移は[公開Viewer](https://mk3008.github.io/alder/)で確認できます。Plugin 0.4.9には概念モデルの作成・更新と正式JSON v1は含まれません。
 
 ## 導入する
 
@@ -38,10 +38,10 @@ ChatGPTデスクトップアプリを再起動し、Plugins Directoryの **Alder
 返却された組は整備担当の点検を待ちます。
 ```
 
-PluginはJSONの草案を作成し、未決事項を残して構造・参照を検査します。[Viewer確認版](web-viewer/json.ja.md#確認版を用意する)を準備し、「開く」→「ファイルを開く」で、返されたJSONを選びます。
+PluginはJSONの草案を作成し、未決事項を残して構造・参照を検査します。[Alder Viewer](https://mk3008.github.io/alder/)を開き、「開く」→「ファイルを開く」で、返されたJSONを選びます。
 
 1. 全体図で、業務と情報の受け渡しがつながるかを確認します。
-2. Activityを選び、「業務内容」で開始条件・手順・結果を読みます。明示された状態遷移があるObjectでは「状態遷移」も確認できます。未記載の遷移は補われません。
+2. Activityを選び、「業務内容」で開始条件・手順・結果を読みます。明示された状態遷移は、左の「状態遷移」から確認できます。未記載の遷移は補われません。
 3. メモと異なる箇所や判断が必要な点を、業務名とともにPluginへ伝えます。
 
 次は、草案のActivity名が「工具の返却を受領する」で、依頼者が追加で「返却を受け付けた担当者の名前も記録する」と決めた場合の例です。自分の草案では、Viewerに表示された業務名を指定してください。
@@ -309,7 +309,7 @@ AlderでAIレビューを行います。実装時の思い込みを引き継が�
 
 プロダクト側の検証担当は、Alderレビュー・画面検証・SR品質検証の報告について、対象版と検査根拠が対応しているかを照合します。検証元ごとの合格・不合格・未実施・未決、非適用の理由、残る課題と担当責任者をまとめて人間へ渡してください。既存のIssue / PRから各報告を参照できればよく、新しい報告書やCheck台帳は不要です。
 
-人間は統合結果をもとに、製品を受け入れるか、修正・保留するかを判断します。結果をまとめたこと自体は、採用やリリースの承認にはなりません。各業務と成果物の受け渡しは[Alder自身の業務設計書](business-design/alder/README.md)で確認できます。
+人間は統合結果をもとに、製品を受け入れるか、修正・保留するかを判断します。結果をまとめたこと自体は、採用やリリースの承認にはなりません。各業務と成果物の受け渡しは[Alder自身の業務設計書](business-design/alder/business-design.json)で確認できます。
 
 業務設計に問題があれば[業務設計書の作成](#業務設計書を作成する)へ、チェック項目に抜けや誤りがあれば[チェック項目の作成](#チェック項目を作成する)へ戻ります。コード品質や実装の問題は実装側で修正します。
 
@@ -383,7 +383,7 @@ Pluginを使わない場合は、[導入ガイドの手動プロンプト](docs/
 | 業務改善の観点と採用後の手順 | [改善提案](docs/business-design-improvement.ja.md) / [購買改善の提案例](docs/examples/purchase-improvement.ja.md) |
 | Checkの粒度、レビュー状態、Testとの対応 | [検査項目の作成・保守](docs/check-item-traceability.md) |
 | 実装レビューの観点と止める条件 | [レビュー知識v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| Alderを使った業務の責任範囲 | [Alder自身の業務設計書](business-design/alder/README.md) |
+| Alderを使った業務の責任範囲 | [Alder自身の業務設計書](business-design/alder/business-design.json) |
 | 根拠を説明へ反映する基準と安全な追試記録 | [研究成果の公開方針](docs/research-publication.md) |
 | 思想、採用判断、検証範囲と限界 | [設計思想](docs/philosophy.md) / [研究判断](docs/research-decisions.md) / [検証記録](docs/validation.md) |
 

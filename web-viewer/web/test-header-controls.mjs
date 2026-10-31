@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-current-sample-fixture.mjs';
 const css=readFileSync('src/style.css','utf8');
 const {outputFiles}=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const w=new JSDOM('<style></style><div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;

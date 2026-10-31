@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {build} from 'esbuild';
+import {build} from './legacy-current-sample-fixture.mjs';
 import {IDBFactory} from 'fake-indexeddb';
 const markdown=readFileSync('../docs/examples/purchase-check-review.ja.md','utf8'),bd=readFileSync('../business-design/purchase-request/README.md','utf8');
 const app=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});

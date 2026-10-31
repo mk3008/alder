@@ -5,6 +5,7 @@ import {readFileSync,mkdirSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
 import {activityDesign} from '../src/activities.ts';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
+import {useLegacyCurrentSample} from './legacy-current-sample-browser.mjs';
 const source=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(source),activities=design.activityOrder.map(id=>design.graph.nodes.find(n=>n.id===id));
 export async function verifyActivityWorkspace(browser){
  const results=[];mkdirSync('web/evidence/activity-workspace',{recursive:true});
@@ -15,7 +16,7 @@ export async function verifyActivityWorkspace(browser){
   const scope=async()=>setScope(page,await page.locator('#show-outside').isChecked()?'hide':'show');
   try{
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
-   await page.locator('#open-sample').click();await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);
+   await useLegacyCurrentSample(page);await saved();assert.equal(await page.locator('.tab').count(),1);assert.equal(await page.locator('.tab .close').isVisible(),true);
    assert.deepEqual(await ids(),activityDesign(design).graph.nodes.map(n=>n.id).sort());
    if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    // Body selection/drag matches Objects; only the right-hand icon navigates.

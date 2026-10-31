@@ -14,7 +14,7 @@ export async function ensureDocumentActions(page){
 }
 // Shared geometry oracle. Source refresh and image actions precede
 // sharing while the tab navigation itself owns horizontal scrolling.
-export async function assertTabStripActions(page,{refreshDisabled=false}={}){
+export async function assertTabStripActions(page,{refreshDisabled=false,checksHidden=false}={}){
  await ensureDocumentActions(page);
  const measured=await page.locator('.tab-strip').evaluate(strip=>{
   const box=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
@@ -34,6 +34,7 @@ export async function assertTabStripActions(page,{refreshDisabled=false}={}){
  let previous=menu?null:measured.tabs;
  for(const action of measured.actions){
   if(action.id==='refresh'){assert.equal(action.disabled,refreshDisabled,'refresh eligibility follows the active source');assert.equal(action.opacity,refreshDisabled?'0.4':'1','disabled refresh is visibly gray');}
+  if(action.id==='open-checks'&&checksHidden){assert.equal(action.hidden,true,'JSON documents embed checks rather than attaching a separate file');continue;}
   assert.equal(action.hidden,false,action.id+' visible with an active document');assert.ok(contains(menu?measured.group:measured.strip,action),action.id+' remains within its action container');
   if(previous)assert.ok(menu?action.top>=previous.bottom-tolerance:action.left>=previous.right-tolerance,action.id+' has a separate target after previous control');assert.equal(action.hit,true,action.id+' native center hit-test');assert.equal(action.tabIndex,0,'natural keyboard order');
   assert.ok(action.width>=40-tolerance&&action.height>=40-tolerance,action.id+' at least 40px target');previous=action;
@@ -58,14 +59,14 @@ export async function verifyTabStrip(browser){
   // Force an explicit scrollbar size in this browser fixture. This does not
   // claim Windows OS execution, but catches classic-gutter sizing mistakes.
   await page.addStyleTag({content:'.shell-open-tabs::-webkit-scrollbar{width:17px;height:17px}'});
-  const single=await checkVertical();await assertTabStripActions(page,{refreshDisabled:true});
+  const single=await checkVertical();await assertTabStripActions(page,{refreshDisabled:true,checksHidden:true});
   const keyboardOrder=async(ids)=>{
    const start=await page.locator('.tab').last().locator('.close').isVisible()?page.locator('.tab').last().locator('.close'):page.locator('.tab').last().locator('button').first();await start.focus();
    for(const id of ids){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement?.id),id,'native Tab order: '+id);}
    for(const id of ids.slice(0,-1).reverse()){await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement?.id),id,'native reverse Tab order: '+id);}
    await page.keyboard.press('Shift+Tab');assert.equal(await start.evaluate(el=>document.activeElement===el),true,'reverse traversal returns to the tab close control');
   };
-  await keyboardOrder(['save-image','copy-image','share-source','open-checks','view-markdown']);
+  await keyboardOrder(['save-image','copy-image','share-source','view-markdown']);
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
   let sourceReads=0;
   await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});

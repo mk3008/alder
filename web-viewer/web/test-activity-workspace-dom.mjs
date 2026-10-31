@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {build} from 'esbuild';
+import {build} from './legacy-current-sample-fixture.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {activityDesign} from '../src/activities.ts';
 const md=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(md),activities=design.activityOrder.map(id=>design.graph.nodes.find(n=>n.id===id));

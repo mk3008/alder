@@ -9,7 +9,7 @@ export function validateShareSource(value:string):string{
   return value;
 }
 export function sourceSharingReason(tab?:Tab):string|undefined{
-  if(!tab||tab.source?.kind!=='url')return '「URLを開く」で取得したMarkdownだけ共有できます。';
+  if(!tab||tab.source?.kind!=='url')return '「URLを開く」で取得した文書だけ共有できます。';
   try{validateShareSource(tab.source.url);}catch(error){return (error as Error).message;}
   if(tab.edited===true)return '編集を反映した文書は共有できません。「更新」で取得元から読み直してください。';
   if(tab.draft!==undefined)return '未反映の編集があるため共有できません。編集を元に戻すか、取得元を「更新」してください。';

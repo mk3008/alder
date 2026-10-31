@@ -64,7 +64,7 @@ async function openSample(page){
  assert.equal(await page.locator('.toolbar').isVisible(),false,'empty graph has no settings toolbar');
  await page.locator('#open-sample').click();
  // Complete optional onboarding before measuring ordinary toolbar invariants.
- await page.locator('#check-followup-later').click();
+ if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
  await useUngroupedSample(page);await page.waitForFunction(()=>document.querySelectorAll('.node').length===25);
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  assert.equal(await page.locator('#display-settings-toggle').getAttribute('aria-expanded'),'false','settings start collapsed');
