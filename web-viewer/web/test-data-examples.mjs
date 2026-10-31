@@ -114,7 +114,7 @@ try{
  const saved=JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/'));assert.equal(saved.lastExamples['group-handoff'],'handoff-retry');other();assert.equal($('.data-examples-panel').hidden,true);
   assert.equal($('[data-explorer-key="group:states"]').disabled,false,'authored states are still available');
   for(const [id,label] of [['subsystems','サブシステム'],['concept','データ構造']]){
-   const heading=$('[data-explorer-key="group:'+id+'"]');assert.equal(heading.disabled,true);assert.equal(heading.textContent,label+'未着手');assert.equal(d.querySelectorAll('#explorer-'+id+' .explorer-item').length,0);
+   const heading=$('[data-explorer-key="group:'+id+'"]');assert.equal(heading.disabled,true);assert.equal(heading.textContent,label);assert.equal(d.querySelectorAll('#explorer-'+id+' .explorer-item').length,0);
   }
   assert.equal($('[data-explorer-key="concept:landscape"]'),null);assert.equal($('#concept-workspace').hidden,true);assert.deepEqual(JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/')).examples,{});
 }finally{w.close();}

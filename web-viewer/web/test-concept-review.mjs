@@ -49,7 +49,7 @@ try{
  other();assert.equal(d.querySelectorAll('.concept-tabs .tab').length,0);assert.equal(d.querySelectorAll('[data-concept-view="group-request"]').length,0);
   assert.equal(d.querySelector('[data-explorer-key="group:states"]').disabled,false,'state documents remain available without a concept model');
   for(const [id,label] of [['subsystems','サブシステム'],['concept','データ構造']]){
-   const heading=d.querySelector('[data-explorer-key="group:'+id+'"]');assert.equal(heading.disabled,true);assert.equal(heading.textContent,label+'未着手');assert.equal(d.querySelectorAll('#explorer-'+id+' .explorer-item').length,0);
+   const heading=d.querySelector('[data-explorer-key="group:'+id+'"]');assert.equal(heading.disabled,true);assert.equal(heading.textContent,label);assert.equal(d.querySelectorAll('#explorer-'+id+' .explorer-item').length,0);
   }
   assert.equal(d.querySelector('[data-explorer-key="concept:landscape"]'),null);assert.equal(d.querySelector('#concept-workspace').hidden,true);
 }finally{w.close();}

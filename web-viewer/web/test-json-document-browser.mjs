@@ -17,11 +17,20 @@ export async function verifyJSONDocuments(browser){
    await page.locator('#fallback').setInputFiles({name:'gate-b.json',mimeType:'application/json',buffer:Buffer.from(raw)});
    await page.locator('.node').first().waitFor();if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await saved();
    assert.equal(await page.locator('.node').count(),6);assert.equal(await page.locator('.edge').count(),6);
-   for(const [id,label] of [['states','状態遷移'],['subsystems','サブシステム'],['concept','データ構造']]){
-    const heading=page.locator('[data-explorer-key="group:'+id+'"]');assert.equal(await heading.isDisabled(),true);assert.equal(await heading.textContent(),label+'未着手');assert.equal(await heading.locator('svg').count(),0);assert.equal(await page.locator('#explorer-'+id+' .explorer-item').count(),0);
-   }
-   assert.equal(await page.locator('.explorer-parent.explorer-pending').count(),3);
-   if(width===393)await page.locator('#node-list-toggle').click();await shot('unstarted-explorer');if(width===393)await page.locator('#node-list-toggle').click();
+   const checkUnstarted=async()=>{
+    for(const [id,label] of [['states','状態遷移'],['subsystems','サブシステム'],['concept','データ構造']]){
+     const heading=page.locator('[data-explorer-key="group:'+id+'"]');assert.equal(await heading.isDisabled(),true);assert.equal(await heading.textContent(),label);assert.equal(await heading.locator('svg').count(),0);assert.equal(await page.locator('#explorer-'+id+' .explorer-item').count(),0);
+     const visual=await heading.evaluate(el=>{const reference=document.createElement('span');reference.style.color='var(--line)';document.body.append(reference);const expected=getComputedStyle(reference).color;reference.remove();const style=getComputedStyle(el);return{color:style.color,opacity:style.opacity,expected};});
+     assert.equal(visual.color,visual.expected,'unstarted heading uses existing muted text color');assert.equal(visual.opacity,'1','disabled opacity must not double-mute text');
+    }
+    assert.equal(await page.locator('.explorer-parent.explorer-pending').count(),3);
+   };
+   await checkUnstarted();
+   if(width===393)await page.locator('#node-list-toggle').click();
+   await shot('unstarted-explorer');
+   await page.locator('#theme').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');await checkUnstarted();await shot('unstarted-explorer-dark');
+   await page.locator('#theme').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+   if(width===393)await page.locator('#node-list-toggle').click();
    assert.deepEqual((await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node))).sort(),[...bd.objects,...bd.activities].map(n=>n.id).sort());
    const selectedOnly=async()=>{const text=await page.locator('.json-detail').innerText();assert.doesNotMatch(text,/JSON 0\.1|package package-7|文書ID:|要素ID:/);if(bd.preface)assert.ok(!text.includes(bd.preface));};
    await shot('overview');
