@@ -15,6 +15,35 @@ try{
  panel.querySelector('[data-transition] button').click();assert.deepEqual(navigated,['activity-receive']);assert.ok(ui.businessDetail(design,'activity-receive').textContent.includes('項目を確認する。'));
  const withCheck=structuredClone(pkg);withCheck.documents.push({id:'check-document',schemaVersion:'0.1',kind:'checkItems',revision:'c1',title:'受付のCheck',basedOn:{documentId:'bd-native',revision:'bd-r1',verification:'unverified'},intro:[],index:[{activityId:'activity-receive',purpose:'',connections:'',checkIds:['check-1']}],sections:[{id:'section-receive',activityId:'activity-receive',title:'受付',preamble:[]}],guarantees:[],examples:[],items:[{id:'check-1',checkId:'CI-001',title:'受付条件',detailSummary:'',sectionId:'section-receive',reviewState:'要確認',fields:{condition:[{kind:'text',value:'番号がある'}],expectedResult:[{kind:'text',value:'受付を記録する'}]}}],notes:[]});
  const checked=ui.parseJSONDocument(JSON.stringify(withCheck)),checks=ui.renderChecks(checked,'activity-receive');assert.ok(checks.textContent.includes('番号がある'));assert.ok(checks.textContent.includes('要確認'));assert.equal(checked.model.checks[0].basedOn.verification,'unverified');
+
+ // A structurally valid external BD catalog must survive Viewer projection.
+ // It proves referential validity, not the external business meaning or source digest.
+ const historicalPkg=structuredClone(withCheck),historical=structuredClone(historicalPkg.documents.at(-1));
+ historical.id='historical-check-document';historical.revision='historical-check-r1';
+ historical.basedOn={documentId:'historical-bd',revision:'historical-bd-r1',verification:'unverified'};
+ historical.index[0].activityId='historical-activity';historical.index[0].checkIds=['historical-item'];
+ historical.sections[0].id='historical-section';historical.sections[0].activityId='historical-activity';
+ historical.items[0].id='historical-item';historical.items[0].sectionId='historical-section';historical.items[0].checkId='CI-002';historical.items[0].reviewState='未レビュー';
+ historicalPkg.documents.push(historical);
+ historicalPkg.externalDocuments=[{id:'historical-bd',kind:'businessDesign',revision:'historical-bd-r1',activities:[{id:'historical-activity',name:'履歴業務'}]}];
+ historicalPkg.sources=[{documentId:'historical-bd',revision:'historical-bd-r1',sha256:'0'.repeat(64),uri:'https://example.test/historical.json'}];
+ const withHistorical=ui.parseJSONDocument(JSON.stringify(historicalPkg));
+ assert.equal(withHistorical.model.checks.length,2);
+ assert.equal(withHistorical.model.checks[1].items[0].reviewState,'未レビュー');
+ assert.equal(withHistorical.model.checks[1].basedOn.verification,'unverified');
+ assert.equal(withHistorical.model.externalDocuments[0].id,'historical-bd');
+ assert.equal(withHistorical.model.sources[0].revision,'historical-bd-r1');
+ const historicalPanel=ui.renderChecks(withHistorical,'activity-receive');
+ assert.match(historicalPanel.textContent,/別の原典BDを参照しているため、この図へ関連付けません/);
+ assert.match(historicalPanel.textContent,/Check historical-check-r1/);
+ assert.match(historicalPanel.textContent,/要確認/);
+ for(const mutate of [
+  p=>p.externalDocuments=[],
+  p=>p.sources=[],
+  p=>p.externalDocuments[0].activities=[],
+  p=>p.documents.at(-1).basedOn.revision='stale'
+ ]){const invalid=structuredClone(historicalPkg);mutate(invalid);assert.throws(()=>ui.parseJSONDocument(JSON.stringify(invalid)));}
+
  const originalSVG=panel.querySelector('svg').outerHTML;
  for(const description of ['plain prose','**装飾の変更**\n- **偽の例外** — 説明','1. 番号付き\n\n別段落']){
   const changed=structuredClone(pkg);changed.documents[0].exceptions[0].description=description;changed.documents[0].activities[0].exception=description;
