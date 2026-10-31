@@ -5740,16 +5740,11 @@
                 {
                   "name": "準備所属・対象版（参照）",
                   "informationId": "request-information-4"
-                },
-                {
-                  "name": "終結結果（入荷予実から）",
-                  "informationId": "request-information-5"
                 }
               ],
-              "description": "稟議で申請と判断内容を管理し、入荷予実からの結果を進捗に反映する。",
+              "description": "稟議で申請と判断内容を管理する。",
               "sources": [
-                "申請・承認：申請と判断対象版。",
-                "入荷予実：準備対象と終結結果。"
+                "申請・承認：申請と判断対象版。"
               ]
             },
             {

@@ -28,6 +28,7 @@ const views=createConceptViews(context),graph=views.graph('group-result');
 assert.equal(graph.regions.length,2);assert.equal(graph.ids.length,6);assert.equal(createDataExamples(context).dataExamples.length,12);
 assert.equal(graph.tables['receiving-item'].conceptId,'item');
 const overall=views.overviewGraph();assert.equal(overall.regions.length,2);assert.equal(overall.ids.length,8);assert(overall.tables['result-item'].fields.some(([,name])=>name.includes('購入しない確定数量')));
+assert(!overall.tables.request.fields.some(([,name])=>name.includes('終結結果')),'the receiving concept of the return is left unspecified');
 const shownIds=new Set(model.presentation.subsystemViews.nodes.flatMap(node=>node.fields.map(field=>field.informationId)));for(const concept of model.concepts)for(const info of concept.information)assert(shownIds.has(info.id),'overview retains concept information: '+info.id);
 assert(views.tables.item.fields.some(([,name])=>name.includes('購入しない確定数量')&&name.includes('入荷予実サブシステム')),'a concept detail identifies an explicitly different responsible subsystem');
 const prior=structuredClone(source),priorModel=prior.documents.find(d=>d.kind==='conceptModel');delete priorModel.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;delete priorModel.presentation.subsystemViews;
