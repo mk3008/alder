@@ -13,7 +13,7 @@ export async function verifySampleIdentification(browser){
   await loadPurchaseReview(page);mkdirSync('web/evidence/shell',{recursive:true});
   for(const theme of ['light','dark'])for(const width of [393,1280]){
    await page.setViewportSize({width,height:960});if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
-   await example('group-request','request-draft-approved');assert((await page.locator('.data-example-caption').textContent()).includes('同じ色は同じ対象を示します。'));
+   await example('group-request','request-draft-approved');assert.equal(await page.locator('.data-example-caption').count(),0);
    let map=await colors();const req=color(map,'request:R-101',5),v1=color(map,'version:R-101:V1',3),d1=color(map,'version:R-101:D1',2);assert.equal(new Set([req,v1,d1]).size,3);
    if(width===393)await page.screenshot({path:`web/evidence/shell/sample-identity-request-${theme}.png`});
    await example('group-handoff','handoff-batch');map=await colors();assert.notEqual(color(map,'version:R-101:V1',4),color(map,'version:R-102:V1',3));
