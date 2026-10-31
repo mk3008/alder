@@ -1,0 +1,26 @@
+name: Workflow dependency lockfile
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - name: Install official lockfile verifier
+        run: gh extension install github/gh-actions-lock --pin v0.2.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Verify coverage and upstream provenance without writing
+        run: gh actions-lock --verify
+        env:
+          GH_TOKEN: ${{ github.token }}

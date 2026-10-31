@@ -17,6 +17,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/plugin-release-tag.yml'
+      - '.github/workflows/actions.lock'
       - '.github/alder-release-request.json'
       - 'tools/resolve_release_request.py'
       - 'tools/test_release_request.py'
@@ -48,12 +49,12 @@ jobs:
       revision: ${{ steps.request.outputs.revision }}
       publish: ${{ steps.request.outputs.publish }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
       - run: python3 -m unittest tools.test_release_request
@@ -73,12 +74,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
       - name: Fetch exact plugin provenance sources
@@ -113,12 +114,12 @@ jobs:
       group: alder-product-release
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
       - name: Publish approved Alder version without moving existing tags
-        uses: actions/github-script@v7
+        uses: actions/github-script@v7.1.0
         env:
           APPROVED_VERSION: ${{ needs.resolve.outputs.version }}
           APPROVED_REVISION: ${{ needs.resolve.outputs.revision }}
