@@ -14,7 +14,7 @@ export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocumen
 /** Both formats project through this boundary; renderers never re-read MD sections. */
 export function readViewerDocument({data,original}:NormalizedDocument):Design{
  if(data.version!==1)throw Error('Unsupported Viewer document version');
- const validation:{diagnostics:string[]}=validateReferences({formatVersion:'0.4',documents:[data.business,...data.checks,...data.states,...(data.concepts??[])],sources:[],externalDocuments:[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
+ const validation:{diagnostics:string[]}=validateReferences({formatVersion:'0.4',documents:[data.business,...data.checks,...data.states,...(data.concepts??[])],sources:data.sources??[],externalDocuments:data.externalDocuments??[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
  data={...data,diagnostics:[...new Set(validation.diagnostics)]};
  const bd=data.business,all=[...bd.objects,...bd.activities];
  const roleName=(a:typeof bd.activities[number])=>bd.roles?.find(r=>r.id===a.roleId)?.name??a.who;
