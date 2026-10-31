@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {validate,requireCheckedSamples,exampleCheckIds} from './core.mjs';
 import {guardAuthoring} from './authoring.mjs';
 import {applyEdits} from './edit.mjs';
+import {convertMarkdown} from './convert.mjs';
 
 // Existing, explicitly labelled preview Checks are used only as a technical fixture.
 const fixture=JSON.parse(readFileSync(new URL('../../work/concept-review/issue-133/versions/purchase-v3-beta-test-spec-preview.json',import.meta.url),'utf8'));
@@ -68,4 +69,16 @@ test('Check comparison tables require an explicit Check connection on save',()=>
  for(const item of check.items)item.fields.guarantee=strip(item.fields.guarantee??[]);
  assert.equal(exampleCheckIds(check,first).length,0);
  assert.throws(()=>requireCheckedSamples(bad),/Check example needs an explicit Check reference/);
+});
+test('Markdown conversion refuses an unlinked Check example instead of saving it',()=>{
+ const revision='c2852531ad62691c375e87818d8c3a49fd19803f';
+ const read=relative=>readFileSync(new URL('../../'+relative,import.meta.url),'utf8');
+ const original=read('work/check-item-examples/meaning-validation-20261018/purchase/final.md');
+ const start=original.indexOf('### 申請の条件・保証と例'),end=original.indexOf('## 購入申請を承認する');
+ assert(start>=0&&end>start);
+ const section=original.slice(start,end)
+  .replaceAll('[JA-EX-01](#ja-ex-01--新しい購入申請が提出済みになる)','JA-EX-01')
+  .replace('- 条件・期待結果：[申請の条件・保証と例](#申請の条件保証と例)に示す JA-EX-01 の一般保証を参照。[同節の比較例](#申請の条件保証と例)','- 条件・期待結果：適用条件と結果を確認する。');
+ const sources=[{documentId:'purchase-bd',kind:'businessDesign',revision,uri:`https://github.com/mk3008/alder/blob/${revision}/business-design/purchase-request/README.md`,text:read('business-design/purchase-request/README.md')},{documentId:'purchase-checks',kind:'checkItems',revision:'checks-1',basedOn:{documentId:'purchase-bd',revision},text:original.slice(0,start)+section+original.slice(end)}];
+ assert.throws(()=>convertMarkdown({revision:'pkg-1',sources}),/Check example needs an explicit Check reference/);
 });
