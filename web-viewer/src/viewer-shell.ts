@@ -191,6 +191,6 @@ export function installViewerShell(app:HTMLElement,options:Options){
    }
    documentKey=current.key;stateOpen=stateOpen.filter(id=>current.states?.some(s=>s.id===id));
    if(area==='business'&&overviewClosed&&current.views?.find(v=>v.key===current.viewKey)?.activity===undefined&&current.views?.find(v=>v.key===current.viewKey)?.object===undefined)fallback();
-   if(pendingRoute&&current.key){restoreConceptState();pendingRoute=false;restore();}renderExplorer();renderTabs();syncChrome();
+   if(pendingRoute&&current.key){restoreConceptState();pendingRoute=false;restore();}renderExplorer();renderTabs();syncChrome();if(changed)save();
   }};
 }
