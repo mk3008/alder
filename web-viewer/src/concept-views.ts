@@ -1,6 +1,6 @@
 import type {ConceptContext} from './concept-model';
 
-export type ConceptCard={name:string;note:string;fields:string[][];sources?:string[];sourceActivities?:string[]};
+export type ConceptCard={name:string;note:string;fields:string[][];sources?:string[];sourceActivities?:string[];conceptId?:string;subsystemId?:string};
 export type ReviewGroup={id:string;name:string;purpose:string;activities:string[];concepts:Record<string,ConceptCard>;relations:string[][]};
 
 /** Projects only fields explicitly provided by the currently opened JSON. */
@@ -15,7 +15,15 @@ export function createConceptViews({model}:ConceptContext){
   relations:group.graph.edges.map(edge=>[edge.fromConceptId,edge.toConceptId,edge.fromLabel,edge.toLabel,edge.kind])}));
  const findGroup=(id:string|undefined|null)=>groups.find(group=>group.id===id);
  const graph=(id:string)=>{const group=findGroup(id);if(!group)throw Error('Unknown review group: '+id);
+  const authored=model.reviewGroups.find(item=>item.id===id)!,views=authored.graph.subsystemViews;
+  if(views){
+   const cards:Record<string,ConceptCard>=Object.fromEntries(views.nodes.map(node=>[node.id,{...group.concepts[node.conceptId],name:node.name,note:node.description,sources:node.sources,
+    conceptId:node.conceptId,subsystemId:node.subsystemId,fields:node.fields.map(field=>['',field.name])}]));
+   const regions=model.subsystems.filter(item=>views.nodes.some(node=>node.subsystemId===item.id)).map(item=>({id:item.id,name:item.name}));
+   const handoffs=views.handoffIds.map(id=>model.handoffs.find(item=>item.id===id)!).map(item=>({id:item.id,from:item.fromSubsystemId,to:item.toSubsystemId,label:item.information,returning:item.flowDirection==='return'}));
+   return {ids:views.nodes.map(node=>node.id),tables:cards,edges:views.edges.map(edge=>[edge.fromViewId,edge.toViewId,edge.fromLabel,edge.toLabel,edge.kind]),regions,handoffs};
+  }
   const ids=Object.keys(tables).filter(key=>Object.hasOwn(group.concepts,key));
-  return {ids,tables:group.concepts,edges:group.relations.filter(([from,to])=>ids.includes(from)&&ids.includes(to))};};
+  return {ids,tables:group.concepts,edges:group.relations.filter(([from,to])=>ids.includes(from)&&ids.includes(to)),regions:[],handoffs:[]};};
  return {tables,edges,groups,findGroup,graph};
 }

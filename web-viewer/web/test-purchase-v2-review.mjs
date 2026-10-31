@@ -155,6 +155,15 @@ const unifiedModel=unified.documents.find(item=>item.kind==='conceptModel');
 assert.deepEqual(unified.documents.find(item=>item.kind==='businessDesign'),bd);
 assert.deepEqual(unified.documents.find(item=>item.kind==='stateTransition'),states);
 const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;delete preserved.presentation.sampleCaption;
+// The 2026-10-31 subsystem review explicitly adds a boundary-specific view
+// and identifies the source of Q and responsibility for the result.
+const resultView=preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
+assert.deepEqual(resultView.handoffIds,['decision-preparation','result-progress']);
+delete preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
+for(const info of preserved.concepts.find(c=>c.id==='item').information.filter(i=>['item-information-1','item-information-2','item-information-3'].includes(i.id))){assert.equal(info.responsibleSubsystemId,'approval');assert.equal(info.responsibilityStatus,'未レビュー');delete info.responsibleSubsystemId;delete info.responsibilityStatus;}
+const outcome=preserved.concepts.find(c=>c.id==='request').information.find(i=>i.id==='request-information-5');assert.equal(outcome.responsibleSubsystemId,'receiving');assert.equal(outcome.responsibilityStatus,'未レビュー');delete outcome.responsibleSubsystemId;delete outcome.responsibilityStatus;
+const receiving=preserved.subsystems.find(s=>s.id==='receiving'),oldReceiving=model.subsystems.find(s=>s.id==='receiving');assert.match(receiving.purpose,/購入しない決定/);assert(receiving.information.some(i=>i.includes('購入しない決定')));receiving.purpose=oldReceiving.purpose;receiving.information=oldReceiving.information;
+for(const h of preserved.handoffs){const old=model.handoffs.find(item=>item.id===h.id);assert(h.description.includes(h.id==='decision-preparation'?'依頼数量Q':'購入しない決定'));h.description=old.description;}
 // Project the explicitly authorized V3 identity additions away before comparing
 // every other model field with the frozen V2 source. The old source is not edited.
 const identificationNotes={request:'申請の識別で、別の申請と区別する想定。',version:'申請と、その申請内の版の識別を組み合わせて区別する想定。',item:'申請版と、その版内の品目の識別を組み合わせて区別する想定。'};
