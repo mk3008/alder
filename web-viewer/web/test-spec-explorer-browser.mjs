@@ -9,9 +9,11 @@ export async function showTestChecks(page,activityId){
   if(await group.getAttribute('aria-expanded')==='false')await group.click();
  }
  await page.locator('[data-explorer-key='+JSON.stringify(activityId?'tests:checks:'+activityId:'tests:@unassigned')+']').click();
+ if(await page.evaluate(()=>innerWidth<=800)&&await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();
 }
 export async function showBusinessOverview(page){
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
  await openExplorerGroup(page,'business');
  await page.locator('[data-explorer-key="business:overview"]').click();
+ if(await page.evaluate(()=>innerWidth<=800)&&await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();
 }
