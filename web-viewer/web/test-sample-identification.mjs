@@ -62,7 +62,7 @@ for(const [group,id,field] of [['group-request','request','申請の識別'],['g
 record('SAMPLE-IDENTITY-003');
 
 assert.equal(samples.dataExamples.length,12);assert.equal(views.groups.length,4);
-for(const sample of samples.dataExamples){const r=render(sample.group,sample.id);assert(r.textContent.includes('架空のデータ例'));assert(r.textContent.includes('同じ色は同じ対象を示します。'));const tones=new Map();for(const cell of r.querySelectorAll('[data-sample-key]')){const key=cell.dataset.sampleKey,tone=cell.dataset.keyTone;assert(cell.textContent&&tone);if(tones.has(key))assert.equal(tones.get(key),tone);tones.set(key,tone);}assert.equal(new Set(tones.values()).size,tones.size);}
+for(const sample of samples.dataExamples){const r=render(sample.group,sample.id);assert(!/架空のデータ例|独立した例|同時に成立する状態ではありません/.test(r.textContent));assert(r.textContent.includes('同じ色は同じ対象を示します。'));const tones=new Map();for(const cell of r.querySelectorAll('[data-sample-key]')){const key=cell.dataset.sampleKey,tone=cell.dataset.keyTone;assert(cell.textContent&&tone);if(tones.has(key))assert.equal(tones.get(key),tone);tones.set(key,tone);}assert.equal(new Set(tones.values()).size,tones.size);}
 record('SAMPLE-IDENTITY-004');
 complete(coverage);assert.throws(()=>complete(coverage.slice(1)));assert.throws(()=>complete([...coverage,coverage[0]]));verifyAuthority(readFileSync(path));dom.window.close();
 console.log(JSON.stringify({authority:path,sha256:expectedHash,checks:coverage,scope:'V3 JSON and real DOM; both themes and native Chrome checked separately'}));
