@@ -58,6 +58,7 @@ record('SAMPLE-IDENTITY-002');
 const notes={request:'申請の識別で、別の申請と区別する想定。',version:'申請と、その申請内の版の識別を組み合わせて区別する想定。',item:'申請版と、その版内の品目の識別を組み合わせて区別する想定。'};
 for(const [id,note] of Object.entries(notes)){const concept=context.model.concepts.find(c=>c.id===id);assert(concept.description.endsWith(note));assert.equal(concept.reviewState,'未レビュー');assert(views.tables[id].note.endsWith(note));assert(views.findGroup('group-request').concepts[id].note.endsWith(note));}
 assert.equal(context.model.concepts.find(c=>c.id==='version').information[0].name,'版の識別');assert.equal(context.model.concepts.find(c=>c.id==='item').information[0].name,'版内の品目の識別');
+for(const [group,id,field] of [['group-request','request','申請の識別'],['group-request','version','申請内の版の識別'],['group-result','item','版内の品目の識別']])assert(views.findGroup(group).concepts[id].fields.some(([,label])=>label===field),group+' '+id+' identification in the graph');
 record('SAMPLE-IDENTITY-003');
 
 assert.equal(samples.dataExamples.length,12);assert.equal(views.groups.length,4);

@@ -160,7 +160,7 @@ const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;del
 const identificationNotes={request:'申請の識別で、別の申請と区別する想定。',version:'申請と、その申請内の版の識別を組み合わせて区別する想定。',item:'申請版と、その版内の品目の識別を組み合わせて区別する想定。'};
 for(const c of preserved.concepts)if(identificationNotes[c.id]){assert(c.description.endsWith(identificationNotes[c.id]));c.description=c.description.slice(0,-identificationNotes[c.id].length);}
 for(const g of preserved.reviewGroups){
- for(const node of g.graph.nodes)if(identificationNotes[node.conceptId]){assert(node.description.endsWith(identificationNotes[node.conceptId]));node.description=node.description.slice(0,-identificationNotes[node.conceptId].length);}
+ for(const node of g.graph.nodes){if(identificationNotes[node.conceptId]){assert(node.description.endsWith(identificationNotes[node.conceptId]));node.description=node.description.slice(0,-identificationNotes[node.conceptId].length);}const added=g.id==='group-request'&&node.conceptId==='request'?'申請の識別':g.id==='group-request'&&node.conceptId==='version'?'申請内の版の識別':g.id==='group-result'&&node.conceptId==='item'?'版内の品目の識別':undefined;if(added){assert.equal(node.fields.shift(),added);}}
  for(const cap of g.capabilities)for(const example of cap.samples)for(const block of example.blocks){
   const addedId=`${example.id}-${block.card}-item-identity`;
   if(['result-partial','result-closed'].includes(example.id)&&['item','line'].includes(block.card)){
