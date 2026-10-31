@@ -24,13 +24,18 @@ export function assertStateCaptionRows(snapshot,transitions){
   const from=transitions.find(t=>t.id===caption.transition).from,node=snapshot.nodes.find(n=>n.id===from);
   if(Math.abs(caption.startX-(node.x+node.width))<1e-7)continue;
   const offset=occupied.has(from)?occupied.get(from)+8:0;
-  assert.equal(caption.y,node.y+44+24+14+offset,'state caption uses the same 24px source clearance');
+  assert.equal(caption.y,node.y+node.height+24+14+offset,'state caption uses the same 24px source clearance');
   occupied.set(from,offset+caption.lines*18);
  }
- let y=40;
+ const loops=new Map();
+ for(const row of transitions)if(row.from===row.to){const caption=snapshot.captions.find(c=>c.transition===row.id),items=loops.get(row.from)??[];items.push(caption.lines*18);loops.set(row.from,items);}
+ let y=40,occupiedBottom=4;
  for(const node of snapshot.nodes.slice().sort((a,b)=>a.y-b.y)){
-  assert.equal(node.height,44);assert.equal(node.y,y,'state rows reserve actual text once, with no inherited matrix gap');
-  y+=44+(occupied.has(node.id)?24+occupied.get(node.id)+24:44);
+  const heights=loops.get(node.id)??[],required=heights.length?32+heights.reduce((a,b)=>a+b,0)+8*(heights.length-1):0;
+  if(required)y=Math.max(y,occupiedBottom+required+12);
+  const height=Math.max(44,(heights.length+1)*14);assert.equal(node.height,height);assert.equal(node.y,y,'state rows reserve forward captions and self-loop captions once');
+  occupiedBottom=y+height+(occupied.has(node.id)?24+occupied.get(node.id):0);
+  y+=height+(occupied.has(node.id)?24+occupied.get(node.id)+24:44);
  }
  return {states:snapshot.nodes.length,captionGroups:snapshot.captions.length,clearance:24};
 }

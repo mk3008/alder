@@ -17,7 +17,13 @@ export function assertStateCaptionPlacement(snapshot,rows){
   const nums=path.d.match(/-?\d+(?:\.\d+)?/g).map(Number),x0=nums[0],y0=nums[1];
   const width=Math.max(...caption.lines.map(s=>Array.from(s).length*14)),height=caption.lines.length*18;
   const returning=Math.abs(x0-(node.x+node.width))<1e-7;
-  if(returning){
+  if(row.from===row.to){
+   assert.ok(returning,'self-loop leaves its own right edge: '+row.id);
+   const xs=nums.filter((_,i)=>i%2===0),ys=nums.filter((_,i)=>i%2===1),lastX=nums.at(-2),lastY=nums.at(-1);
+   assert.ok(lastX>node.x&&lastX<node.x+node.width&&lastY===node.y,'self-loop returns to the top of the same state: '+row.id);
+   assert.ok(caption.x>=Math.max(...xs)+8-1e-7,'self-loop caption follows its bend: '+row.id);
+   assert.ok(Math.abs(caption.y-14+height/2-Math.min(...ys))<1e-7,'self-loop caption shares its upper line: '+row.id);
+  }else if(returning){
    const right=Math.max(...nums.filter((_,i)=>i%2===0));
    assert.ok(caption.x>=right+8-1e-7,'return caption follows its right-hand bend: '+row.id);
    assert.ok(Math.abs(caption.y-14+height/2-y0)<1e-7,'return caption shares the departure line: '+row.id);

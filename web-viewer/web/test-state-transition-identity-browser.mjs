@@ -21,7 +21,7 @@ export async function verifyStateTransitionIdentity(browser){
     assert.equal(labels.length,st.transitions.length);
     for(const row of st.transitions){const l=labels.find(l=>l.id===row.sourceId);assert(l.text.includes(pkg.documents.find(d=>d.kind==='businessDesign').activities.find(a=>a.id===row.activityId).name));if(row.conditionLabel)assert(l.text.includes(row.conditionLabel));assert(!l.text.includes('通常'));assert(l.members.every(id=>id===row.sourceId));}
     assert.equal(labels.find(l=>l.id==='T12').text,'購入を準備する');assert.equal(labels.find(l=>l.id==='T14').text,'購入申請を承認する（例外：承認後差戻し）');
-    const modelRows=st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId}));
+    const modelRows=st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId,to:st.states.find(s=>s.id===t.toId)?.name??t.toId}));
     assertStateCaptionRows(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionSnapshot),modelRows);
     assertStateCaptionPlacement(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionGeometry),modelRows);
     const native=await page.locator('#states-workspace .state-diagram').evaluate(svg=>{
@@ -31,6 +31,8 @@ export async function verifyStateTransitionIdentity(browser){
      return{labelPairs:boxes.flatMap((b,i)=>boxes.slice(i+1).filter(c=>overlap(b,c)).map(c=>[b.id,c.id])),cardPairs:boxes.filter(b=>nodes.some(n=>overlap(b,n))).map(b=>b.id)};
     });
     assert.deepEqual(native.labelPairs,[],'native caption glyphs do not overlap');assert.deepEqual(native.cardPairs,[],'native caption glyphs do not cover states');
+    const loopPaths=await page.locator('#states-workspace .state-diagram path.edge[data-transitions="T08"],#states-workspace .state-diagram path.edge[data-transitions="T19"]').evaluateAll(es=>es.map(e=>e.getAttribute('d')));
+    assert.equal(loopPaths.length,2);assert.notEqual(loopPaths[0],loopPaths[1],'the two draft self-loops stay distinct');
     await page.locator('#states-workspace [data-state="購入準備済み"]').press('Enter');
     for(const [id,related]of [['T12',true],['T14',false]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
     await page.locator('#states-workspace [data-state="差戻し"]').press('Enter');

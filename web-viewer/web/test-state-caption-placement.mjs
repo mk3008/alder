@@ -34,6 +34,9 @@ try{
  const captionRelations=relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(sizes[i].width/12),'x')}));
  const routes=new RouteCache().update({},model,geometry.nodes,captionRelations,plan.wires);
  for(const [i,r]of rows.entries()){
+  // Self-loop bends and caption alignment have their own independent SVG
+  // checks above; the shared default route remains unchanged for other edges.
+  if(r.from===r.to)continue;
   const label=geometry.captions.find(c=>c.id===r.id),singleWidth=Math.max(30,captionRelations[i].label.length*12);
   assert.ok(label.x>=routes[i].label[0]-singleWidth/2,'same business anchor or collision escape: '+r.id);
   const center=routes[i].label[1]+(plan.wires[i].returning?0:sizes[i].height/2-9);

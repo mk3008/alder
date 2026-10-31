@@ -6,6 +6,7 @@ import {matrixPlan} from './matrix-layout.ts';
 import {captionOnRow,type RouteNode} from './routing.ts';
 import {RouteCache} from './route-cache.ts';
 import {captionRowStep,CAPTION_LINE_STEP} from './caption-spacing.ts';
+import {stateSelfLoopRoute} from './state-self-loop.ts';
 export type Transition={id:string;from:string;activity:string;activityId?:string;event?:string;exception?:string;exceptionId?:string|null;condition:string;conditionLabel?:string;to:string;effect:string;path:string;evidence:string;note:string};
 export type StateModel={object:string;states:string[];start:string;terminal:string;completeness:string;source:string;transitions:Transition[]};
 export type StateDeclaration={model:StateModel;error?:never}|{error:string;model?:never};
@@ -35,12 +36,23 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   group.width=Math.max(...group.lines.map(line=>Array.from(line).length*14));group.height=group.lines.length*18;
   if(!plan.wires[index].returning){group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.height);}
  }
+ const loopGroups=new Map<string,number[]>();
+ rows.forEach(([row],i)=>{if(row.from===row.to){const group=loopGroups.get(row.from)??[];group.push(i);loopGroups.set(row.from,group);}});
+ const loopWires=new Map<number,{index:number;count:number;rise:number;outerReach:number}>(),loopSpace=new Map<string,number>();
+ for(const [id,indices]of loopGroups){
+  let used=0;
+  indices.forEach((i,index)=>{const height=captionGroups[i].height,rise=32+used+height/2;loopWires.set(i,{index,count:indices.length,rise,outerReach:32+16*(indices.length-1)});loopSpace.set(id,rise+height/2);used+=height+8;});
+ }
+ const nodeHeight=(id:string)=>Math.max(44,((loopGroups.get(id)?.length??0)+1)*14);
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
  // A multiline return caption can extend above the first state. Reserve only
  // the extra initial top space needed so the initial view does not clip it.
- let y=Math.max(40,...captionGroups.map((group,i)=>plan.wires[i].returning&&group.from===ordered[0]?16+group.height/2-44*(plan.wires[i].fromPort??.5):40));const projected=new Map<string,number>();
- for(const id of ordered){projected.set(id,y);y+=captionRowStep(44,departures.get(id)??0);}
- const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32),height:44}));
+ let y=Math.max(40,...captionGroups.map((group,i)=>plan.wires[i].returning&&group.from===ordered[0]?16+group.height/2-44*(plan.wires[i].fromPort??.5):40));const projected=new Map<string,number>();let occupiedBottom=4;
+ for(const id of ordered){
+  const extra=loopSpace.get(id)??0;if(extra)y=Math.max(y,occupiedBottom+extra+12);
+  const height=nodeHeight(id),caption=departures.get(id)??0;projected.set(id,y);occupiedBottom=y+height+(caption?24+caption:0);y+=captionRowStep(height,caption);
+ }
+ const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32,((loopGroups.get(id)?.length??0)+1)*24),height:nodeHeight(id)}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
  const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。'+(ids.includes('@none')?'作成なしはこの操作の処理結果。':'')+(ids.includes('@unknown')?'未決は設計課題。':'');svg.append(title);
  svg.append(graphMarkers('state-transition-'));
@@ -52,7 +64,9 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  // The shared business router measures single-line labels. Supply equivalent
  // widths, then use its same collision escape for the full multiline boxes.
  const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
- const routes=new RouteCache().update({},model,nodes,captionRelations,wires);
+ const routes=new RouteCache().update({},model,nodes,captionRelations,wires).map((route,i)=>{
+  const loop=loopWires.get(i);return loop?stateSelfLoopRoute(nodes.find(n=>n.id===rows[i][0].from)!,nodes,loop,Math.max(30,captionRelations[i].label.length*12)):route;
+ });
  const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
  const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
  for(const i of captionOrder){
@@ -80,7 +94,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   const special=node.id.startsWith('@'),group=make('g',{role:'button',tabindex:'0','aria-label':labels[node.id]??node.id,'aria-pressed':'false',class:'node graph-shape state-shape','data-state':node.id,'data-node':node.id});
   group.append(cardSurface(document,node,special));
   group.append(make('rect',{x:String(node.x),y:String(node.y),width:String(node.width),height:String(node.height),rx:special?'20':'8',class:special?'state-diagram-node state-note':'state-diagram-node'}));
-  const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+27),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;group.append(label);
+  const label=make('text',{x:String(node.x+node.width/2),y:String(node.y+node.height/2+5),'text-anchor':'middle',class:'state-diagram-node-label'});label.textContent=labels[node.id]??node.id;group.append(label);
   if(special&&node.id!=='@new'){const note=make('text',{x:String(node.x+node.width/2),y:String(node.y-8),'text-anchor':'middle',class:'state-diagram-event-id'});note.textContent=node.id==='@unknown'?'課題：保存状態が未定義':'処理結果：記録を作らない';group.append(note);}
   group.addEventListener('click',()=>select(node.id));group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(node.id);}});
   shapeElements.set(node.id,group);svg.append(group);
