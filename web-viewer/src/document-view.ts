@@ -73,14 +73,14 @@ export function renderChecks(design:Design,selected?:string,checks=design.model!
 }
 
 /** Requester-facing view of existing Check contents; provenance remains in the document. */
-export function renderRequesterChecks(design:Design,activityId?:string,documents=design.model!.checks):HTMLElement{
+export function renderRequesterChecks(design:Design,activityId?:string,documents=design.model!.checks,exclude=new Set<string>()):HTMLElement{
  const root=element('section');root.className='check-content json-checks';const bd=design.model!.business;
  const checks=documents.filter(doc=>doc.basedOn.documentId===bd.id);
  let found=false;
  for(const doc of checks){
   const reader=new RichReader(doc),rows=doc.index.filter(row=>row.activityId===activityId);
   const assigned=new Set(doc.index.flatMap(row=>row.checkIds));
-  const ids=activityId?[...new Set(rows.flatMap(row=>row.checkIds))]:doc.items.filter(item=>!assigned.has(item.id)).map(item=>item.id);
+  const ids=(activityId?[...new Set(rows.flatMap(row=>row.checkIds))]:doc.items.filter(item=>!assigned.has(item.id)).map(item=>item.id)).filter(id=>!exclude.has(id));
   const sections=doc.sections.filter(section=>activityId?section.activityId===activityId:section.activityId===null);
   for(const section of sections){
    if(section.preamble.length||doc.guarantees.some(guarantee=>guarantee.sectionId===section.id))found=true;
@@ -100,9 +100,9 @@ export function renderRequesterChecks(design:Design,activityId?:string,documents
 }
 
 /** Show actual Check expectations tied to an example; do not infer a mapping. */
-export function renderLinkedChecks(design:Design,ids:string[]):HTMLElement{
+export function renderLinkedChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks sample-checks';const bd=design.model!.business,wanted=new Set(ids);
- for(const doc of design.model!.checks.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
+ for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
   const reader=new RichReader(doc);
   for(const item of doc.items.filter(item=>wanted.has(item.id))){
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
