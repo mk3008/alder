@@ -6,12 +6,14 @@ on:
       - 'work/traceability-drift/**'
       - 'docs/traceability-drift/**'
       - '.github/workflows/traceability-drift.yml'
+      - '.github/workflows/actions.lock'
   push:
     branches: [main]
     paths:
       - 'work/traceability-drift/**'
       - 'docs/traceability-drift/**'
       - '.github/workflows/traceability-drift.yml'
+      - '.github/workflows/actions.lock'
 
 permissions:
   contents: read
@@ -21,8 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v4.4.0
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
       - name: Detector boundary regressions

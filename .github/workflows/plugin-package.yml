@@ -30,6 +30,7 @@ on:
       - 'docs/functional-interface/prompt.md'
       - 'docs/traceability-drift/study.md'
       - '.github/workflows/plugin-package.yml'
+      - '.github/workflows/actions.lock'
   push:
     branches: [main]
     paths:
@@ -61,14 +62,15 @@ on:
       - 'docs/functional-interface/prompt.md'
       - 'docs/traceability-drift/study.md'
       - '.github/workflows/plugin-package.yml'
+      - '.github/workflows/actions.lock'
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
       - name: Fetch exact plugin provenance sources

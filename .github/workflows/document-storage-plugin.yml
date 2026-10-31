@@ -10,6 +10,7 @@ on:
       - 'plugins/alder/**'
       - 'work/plugin-json/issue-273/**'
       - '.github/workflows/document-storage-plugin.yml'
+      - '.github/workflows/actions.lock'
 permissions:
   contents: read
 jobs:
@@ -17,14 +18,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4.4.0
         with:
           node-version: '24.22.1'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
       - run: node --test tools/document_storage/test-native-json.mjs tools/document_storage/test-storage.mjs tools/document_storage/test-authoring.mjs tools/document_storage/test-states.mjs tools/document_storage/test-roles.mjs
