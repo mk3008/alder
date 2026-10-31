@@ -140,3 +140,12 @@
 /* Right details are application rails, alongside the explorer and outside the tab strip. */
 .shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:relative;top:auto;bottom:auto;right:auto;min-height:0;flex-shrink:0;align-self:stretch}
 @media(max-width:800px){.shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:absolute;right:0;top:0;bottom:0;z-index:6}}
+
+/* Test specifications are another workspace; the shared drawers and tabs retain their behavior. */
+.shell-open-tabs .spec-tabs{display:flex;flex:none;overflow:visible;min-width:0;border:0}
+.tab[data-view-kind=tests]{--tab-kind-color:#a35e20}[data-theme=dark] .tab[data-view-kind=tests]{--tab-kind-color:#e6bc85}
+#tests-workspace{display:flex;flex:1;min-width:0;min-height:0;background:var(--bg);color:var(--fg)}
+#tests-workspace[hidden]{display:none!important}
+.test-spec-page{flex:1;min-width:0;overflow:auto;padding:20px 24px}
+.test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}
+@media(max-width:800px){.test-spec-page{padding:12px}}
