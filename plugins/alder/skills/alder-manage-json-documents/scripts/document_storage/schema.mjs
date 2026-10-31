@@ -45,8 +45,13 @@ const capability=obj({id,title:text,description:str,meta:{},samples:array(sample
 const limitation=obj({id,title:text,description:str,reason:str,meta:{}});
 const viewNode=obj({conceptId:id,name:text,fields:array(text),description:str,sources:array(text),sourceActivityIds:array(id)});
 const viewEdge=obj({id,fromConceptId:id,toConceptId:id,relationIds:array(id),scope:str,fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
+// Optional subsystem-specific projections describe which information appears
+// in each boundary. A projection is not a new entity or a physical table.
+const boundaryNode=obj({id,conceptId:id,subsystemId:id,name:text,description:str,sources:array(text),fields:array(obj({name:text,informationId:id}))});
+const boundaryEdge=obj({id,fromViewId:id,toViewId:id,relationIds:array(id),fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
+const boundaryViews=obj({nodes:array(boundaryNode),edges:array(boundaryEdge),handoffIds:array(id)});
 const reviewGroup=obj({id,subsystemId:id,title:text,description:str,reviewer:obj({roleId:id}),relatedActivityIds:array(id),
- graph:obj({conceptIds:array(id),nodes:array(viewNode),edges:array(viewEdge)}),
+ graph:obj({conceptIds:array(id),nodes:array(viewNode),edges:array(viewEdge),subsystemViews:boundaryViews},['conceptIds','nodes','edges']),
  structureStatements:array(obj({id,title:text,description:str,sampleIds:array(id),sourceRefs:array(conceptSource)})),
  capabilities:array(capability),limitations:array(limitation),meta:obj({questions:array(text),hypotheses:{}},['questions'])});
 const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptModel']},revision:text,

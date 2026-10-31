@@ -79,7 +79,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    demand(!pkg.documents.some(x=>x!==d&&x.kind==='conceptModel'&&x.basedOn.documentId===bd.id),'Duplicate Concept model for Business Design');
    const unique=(items,label)=>{const map=new Map();for(const item of items){demand(!map.has(item.id),'Duplicate '+label+' ID: '+item.id);map.set(item.id,item);}return map;};
    const subsystems=unique(d.subsystems,'subsystem'),concepts=unique(d.concepts,'concept'),relations=unique(d.relations,'concept relation'),groups=unique(d.reviewGroups,'review group');
-   unique(d.handoffs,'handoff');const information=unique(d.concepts.flatMap(c=>c.information),'concept information');
+   const handoffs=unique(d.handoffs,'handoff');const information=unique(d.concepts.flatMap(c=>c.information),'concept information');
    const has=(items,id,label)=>{demand(items.has(id),'Unknown '+label+': '+id);return items.get(id);};
    const activity=id=>target(id,'activity',bd.id);
    const sourceRef=ref=>{const doc=target(ref.documentId,'document');demand(doc.revision===ref.revision,'Stale Concept source revision');
@@ -96,6 +96,22 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     demand(new Set(g.graph.conceptIds).size===g.graph.conceptIds.length&&g.graph.conceptIds.length===nodes.size&&g.graph.conceptIds.every(id=>nodes.has(id)),'View concepts and nodes differ');
     for(const n of g.graph.nodes){has(concepts,n.conceptId,'concept');for(const id of n.sourceActivityIds)activity(id);}
     unique(g.graph.edges,'view edge');for(const e of g.graph.edges){has(nodes,e.fromConceptId,'view concept');has(nodes,e.toConceptId,'view concept');for(const id of e.relationIds)has(relations,id,'concept relation');}
+    if(g.graph.subsystemViews){
+     const views=unique(g.graph.subsystemViews.nodes,'subsystem view'),edgeViews=unique(g.graph.subsystemViews.edges,'subsystem view edge');
+     for(const v of views.values()){
+      has(nodes,v.conceptId,'view concept');has(subsystems,v.subsystemId,'subsystem');
+      const concept=has(concepts,v.conceptId,'concept');
+      for(const field of v.fields)demand(concept.information.some(item=>item.id===field.informationId),'Unknown information for subsystem view: '+field.informationId);
+     }
+     for(const edge of edgeViews.values()){
+      const from=has(views,edge.fromViewId,'subsystem view'),to=has(views,edge.toViewId,'subsystem view');
+      demand(from.subsystemId===to.subsystemId,'View relationship crosses subsystem boundary');
+      for(const id of edge.relationIds)has(relations,id,'concept relation');
+     }
+     demand(new Set(g.graph.subsystemViews.handoffIds).size===g.graph.subsystemViews.handoffIds.length,'Duplicate subsystem view handoff');
+     const regions=new Set([...views.values()].map(v=>v.subsystemId));
+     for(const id of g.graph.subsystemViews.handoffIds){const h=has(handoffs,id,'handoff');demand(regions.has(h.fromSubsystemId)&&regions.has(h.toSubsystemId),'Missing subsystem view handoff region: '+id);}
+    }
     const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
     for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
     for(const cap of capabilities.values())for(const sample of cap.samples)for(const block of sample.blocks){
