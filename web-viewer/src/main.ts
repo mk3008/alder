@@ -12,7 +12,7 @@ import {matrixPlanForDesign} from './json-layout.ts';
 import {createWorkspace,documentForView,mergeLiveWorkspace,snapshotWorkspace,restoreWorkspace,replaceWorkspace,updateWorkspace,openActivity,openObject,viewDesign,viewActivity,viewObject,viewTarget,type Workspace,type WorkspaceSnapshot} from './workspace';
 import {installDropdown} from './dropdown';
 import {readRelatedChecks,checkCompatibility,confirmationKey,type RelatedChecks} from './check-items';
-import {checkView,type CheckViewState} from './check-view';
+import {availableRelatedChecks,checkView,type CheckViewState} from './check-view';
 import {installDocumentActions} from './document-actions';
 import {installHeaderTitleFit} from './header-layout';
 import {snapshotGraph,saveGraphPng,copyGraphPng} from './graph-png';
@@ -23,7 +23,7 @@ import {parseDocument as parseDesign} from './document-input';
 import {loadDocumentFile,loadDocumentURL,loadDocumentText} from './document-loader';
 import {businessDetail} from './document-view';
 import {formattedMarkdown,detailHeading} from './markdown';
-import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,type FindingSelection} from './findings';
+import {nodeFindingLabels,findingsIndex,findingsCount,findingCard,findingLinks,type FindingSelection} from './findings';
 import {reconcile,saveSession,loadSession,SessionConflictError,type Session,type Tab,type Point} from './session';
 import {RouteCache} from './route-cache';
 import {createNodeDrag} from './node-drag';
@@ -198,7 +198,7 @@ $('check-followup-later').onclick=()=>{const t=current();if(t)checkFollowups.del
 let nextCheckOpener:HTMLElement|undefined;
 for(const [from,to] of [['file','check-open'],['url','check-open-url'],['sample','check-open-sample']])$('check-followup-'+from).onclick=()=>{nextCheckOpener=$('check-followup-open');$(to).click();nextCheckOpener=undefined;};
 function isSample(t:Tab){return t.source?.kind==='sample'&&!t.edited&&t.design.markdown===legacySampleMarkdown;}
-function checkState(t:Tab){const key=documentForView(t)?.key??t.key;let v=checkViews.get(key);if(!v){v={mode:'business'};checkViews.set(key,v);}return v;}
+function checkState(t:Tab){const key=documentForView(t)?.key??t.key;let v=checkViews.get(key);if(!v){v={};checkViews.set(key,v);}return v;}
 async function saveChecks(t:Tab,checks:RelatedChecks|undefined){
   if(!isCurrentDocument(t))throw Error('原本文書が切り替わりました。');
 
@@ -212,8 +212,8 @@ async function readChecks(t:Tab,read:()=>Promise<RelatedChecks>){
     if(original!==confirmationKey(state.tabs[0]))throw Error('読込中にBDが更新されました。関連Checkを再指定してください。');
     const doc=readRelatedChecks(checks),match=checkCompatibility(doc,state.tabs[0]);
     if(match.state==='mismatch')throw Error('この業務設計書に対応するCheck Itemとは確認できません。'+match.reason);
-    if(match.state==='unverified'){v.candidate=checks;v.mode='checks';}
-    else{await saveChecks(t,checks);v.candidate=undefined;v.mode='checks';}
+    if(match.state==='unverified')v.candidate=checks;
+    else{await saveChecks(t,checks);v.candidate=undefined;shell?.openRelatedChecks(current()?.selected);}
   }catch(e){v.error='関連Checkを読み込めません。現在の関連付けとBDは保持しています: '+(e as Error).message;status(v.error,'error');}
   finally{v.busy=false;detail();}
 }
@@ -221,20 +221,22 @@ async function confirmChecks(t:Tab,candidate:RelatedChecks){
   const v=checkState(t);if(v.busy||documentSaving)return;
   if(!isCurrentDocument(t))return;const match=checkCompatibility(readRelatedChecks(candidate),state.tabs[0]);if(match.state==='mismatch'){v.error=match.reason;detail();return;}
   v.busy=true;v.error=undefined;
-  try{await saveChecks(t,{...candidate,confirmedFor:confirmationKey(state.tabs[0])});v.candidate=undefined;v.mode='checks';}
+  try{await saveChecks(t,{...candidate,confirmedFor:confirmationKey(state.tabs[0])});v.candidate=undefined;shell?.openRelatedChecks(current()?.selected);}
   catch(e){v.error='関連Checkを開けません: '+(e as Error).message;}
   finally{v.busy=false;detail();}
 }
 function detail(){
   followupChrome();
-  const t=current(),root=$('detail'),view=t?checkState(t):undefined,key=t?t.key+':'+(t.selected??'')+':'+view!.mode:'';
+  const t=current(),root=$('detail'),view=t?checkState(t):undefined,key=t?t.key+':'+(t.selected??''):'';
   $<HTMLButtonElement>('open-checks').disabled=restoring||documentSaving||closing===t||!t||view?.busy===true;
   const focus=root.contains(document.activeElement)?(document.activeElement as HTMLElement)?.id:undefined;
   const scroll=root.dataset.contentKey===key?root.scrollTop:0;root.replaceChildren();root.dataset.contentKey=key;if(!t)return;
   const n=t.design.graph.nodes.find(n=>n.id===t.selected);
   const panel=checkView(t,view!,{disabled:restoring||documentSaving||closing===t,redraw:detail,confirm:candidate=>{void confirmChecks(t,candidate);}});
   const heading=document.createElement('div');heading.className='right-drawer-heading';heading.append(detailHeading(n?.name??'業務設計'));const close=document.createElement('button');close.type='button';close.id='business-drawer-close';close.setAttribute('aria-label','右ドロワーを閉じる');close.textContent='×';close.onclick=()=>{$('drawer').click();$('drawer').focus({preventScroll:true});};heading.append(close);
-  root.append(heading,panel.controls,panel.content??businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  root.append(heading);if(panel.hasChildNodes())root.append(panel);
+  if(n){const links=findingLinks(t.design,n.id,openFinding);if(links.hasChildNodes())root.append(links);}
+  root.append(businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();
@@ -509,7 +511,7 @@ async function openSharedSource(requestedHash=location.hash){
   finally{if(token===sharedSourceToken){sharedSourceAbort=undefined;opening=false;render();drainSharedSource();}}
 }
 window.addEventListener('hashchange',()=>{void openSharedSource().then(()=>{if(state.document?.key===restoredDocumentKey)void checkSourceUpdate();});});
-function revealChecks(t:Tab){checkState(t).mode='checks';state.drawer=true;chrome();detail();}
+function revealChecks(_t:Tab){state.drawer=true;chrome();detail();}
 async function closeChecks(t:Tab){const v=checkState(t);if(t.design.sourceFormat==='json'||v.busy||documentSaving||restoring||closing===t)return;v.busy=true;try{await saveChecks(t,undefined);v.candidate=undefined;v.error=undefined;v.url=undefined;}catch(e){v.error=(e as Error).message;}finally{v.busy=false;detail();}}
 let checkFileTarget:Tab|undefined;
 checkInput.onchange=()=>{const f=checkInput.files?.[0],t=checkFileTarget??current();checkFileTarget=undefined;checkInput.value='';if(!f||!t||!isCurrentDocument(t))return;revealChecks(t);void readChecks(t,async()=>{if(f.size>2*1024*1024)throw Error('本文は2MiB以内にしてください。');return {name:f.name,markdown:await f.text()};});};
@@ -636,7 +638,7 @@ async function checkSourceUpdate(){
  }catch{/* Unknown is not a confirmed update. The cached graph stays available. */}
  finally{if(token===updateCheckToken)updateCheckPending=undefined;}
 }
-shell=installViewerShell(app,{rightDrawer:{isOpen:()=>state.drawer,isReady:()=>!restoring,setOpen:open=>{if(restoring)return;state.drawer=open;chrome();persist();}},capture:()=>{capture();touch.cancel();pan=undefined;},business:()=>({key:state.document?.key,design:state.document?.design,viewKey:current()?.key,views:state.tabs.map(t=>({key:t.key,name:t.name,activity:viewActivity(t),object:viewObject(t)})),activities:state.document?.design.graph.nodes.filter(n=>n.type==='business').map(n=>({id:n.id,name:n.name}))??[],objects:state.document?.design.graph.nodes.filter(n=>n.type==='object').map(n=>({id:n.id,name:n.name}))??[],states:state.document?.design.graph.nodes.filter(n=>n.type==='object'&&!!state.document?.design.objectStateTransitions?.[n.id]).map(n=>({id:n.id,name:n.name}))??[],concept:(()=>{const data=state.document?.design.model,model=data?.concepts?.find(item=>item.basedOn.documentId===data.business.id);return data&&model?{business:data.business,model}:undefined;})()}),openActivity:id=>{activateActivity(id);navigateNode(id);},openObject:id=>{activateObject(id);navigateNode(id);},openOverview:()=>{if(state.tabs[0]){capture();shell?.reopenBusinessOverview();state.active=state.tabs[0].key;render();persist();}},activateView:key=>{if(state.tabs.some(t=>t.key===key)){capture();state.active=key;render();persist();}},statePanel:id=>state.document?stateTransitionPanel(state.document.design,id,target=>{shell?.activateBusiness();activateActivity(target);navigateNode(target);shell?.businessActivated();}):undefined,closeLegacyList:()=>{state.nodeDrawer=false;chrome();},refresh:()=>{chrome();documentActions.update();}});
+shell=installViewerShell(app,{rightDrawer:{isOpen:()=>state.drawer,isReady:()=>!restoring,setOpen:open=>{if(restoring)return;state.drawer=open;chrome();persist();}},capture:()=>{capture();touch.cancel();pan=undefined;},business:()=>({key:state.document?.key,design:state.document?.design,relatedChecks:state.tabs[0]?availableRelatedChecks(state.tabs[0]):[],viewKey:current()?.key,views:state.tabs.map(t=>({key:t.key,name:t.name,activity:viewActivity(t),object:viewObject(t)})),activities:state.document?.design.graph.nodes.filter(n=>n.type==='business').map(n=>({id:n.id,name:n.name}))??[],objects:state.document?.design.graph.nodes.filter(n=>n.type==='object').map(n=>({id:n.id,name:n.name}))??[],states:state.document?.design.graph.nodes.filter(n=>n.type==='object'&&!!state.document?.design.objectStateTransitions?.[n.id]).map(n=>({id:n.id,name:n.name}))??[],concept:(()=>{const data=state.document?.design.model,model=data?.concepts?.find(item=>item.basedOn.documentId===data.business.id);return data&&model?{business:data.business,model}:undefined;})()}),openActivity:id=>{activateActivity(id);navigateNode(id);},openObject:id=>{activateObject(id);navigateNode(id);},openOverview:()=>{if(state.tabs[0]){capture();shell?.reopenBusinessOverview();state.active=state.tabs[0].key;render();persist();}},activateView:key=>{if(state.tabs.some(t=>t.key===key)){capture();state.active=key;render();persist();}},statePanel:id=>state.document?stateTransitionPanel(state.document.design,id,target=>{shell?.activateBusiness();activateActivity(target);navigateNode(target);shell?.businessActivated();}):undefined,closeLegacyList:()=>{state.nodeDrawer=false;chrome();},refresh:()=>{chrome();documentActions.update();}});
 const initialState=state;
 render();saveStateChrome();loadSession().then(value=>{if(value===undefined)return;const raw=value as Session|WorkspaceSnapshot;if('format' in raw){for(const t of raw.recovery??[])validateRestoredTab(t);if(raw.document){const checked={...raw.document,positions:{},scroll:[0,0] as Point,zoom:1};validateRestoredTab(checked);raw.document.design=checked.design;raw.document.checks=checked.checks;}}else{if(!Array.isArray(raw.tabs))throw Error('Invalid session');for(const t of raw.tabs)validateRestoredTab(t);}const workspace=restoreWorkspace(raw);const saved={...value,legacyViews:workspace.legacyViews,tabs:workspace.tabs.map(t=>({...t,name:workspace.document!.name,design:t.design,checks:t.checks,source:t.source,draft:t.draft,edited:t.edited,handle:t.handle}))};if(!Array.isArray(saved.tabs)||typeof saved.dark!=='boolean'||typeof saved.drawer!=='boolean'||(saved.preferWrite!==undefined&&typeof saved.preferWrite!=='boolean')||(saved.scopeOutside!==undefined&&!['show','dim','hide'].includes(saved.scopeOutside))||(saved.dimOutside!==undefined&&typeof saved.dimOutside!=='boolean')||(saved.hideOutside!==undefined&&typeof saved.hideOutside!=='boolean')||!Number.isFinite(saved.width))throw Error('Invalid session');for(const t of saved.tabs)validateRestoredTab(t);if(new Set(saved.tabs.map(t=>t.key)).size!==saved.tabs.length||(saved.active!==undefined&&typeof saved.active!=='string'))throw Error('Invalid saved tab keys');if(saved.nodeDrawer!==undefined&&typeof saved.nodeDrawer!=='boolean')throw Error('Invalid drawer');for(const t of [...saved.tabs,...(saved.sampleLayout===undefined?[]:[saved.sampleLayout])]){if(!t||!t.positions||typeof t.positions!=='object'||Array.isArray(t.positions)||(t.selectedEdgesOnly!==undefined&&typeof t.selectedEdgesOnly!=='boolean')||(t.showExceptions!==undefined&&typeof t.showExceptions!=='boolean')||(t.hiddenNodes!==undefined&&(!Array.isArray(t.hiddenNodes)||!t.hiddenNodes.every(id=>typeof id==='string')))||(t.viewInset!==undefined&&(!Array.isArray(t.viewInset)||t.viewInset.length!==2||!t.viewInset.every(v=>Number.isFinite(v)&&v>=0)))||(t.canvasOrigin!==undefined&&(!Array.isArray(t.canvasOrigin)||t.canvasOrigin.length!==2||!t.canvasOrigin.every(v=>Number.isFinite(v)&&v>=0)))||!Array.isArray(t.scroll)||t.scroll.length!==2||!t.scroll.every(Number.isFinite)||!Number.isFinite(t.zoom)||t.zoom<.25||t.zoom>2.5||!Object.values(t.positions).every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite)))throw Error('Invalid layout');}// Removed dim preferences migrate to show so previously visible nodes stay visible.
 const {dimOutside:_dimOutside,hideOutside:_hideOutside,scopeOutside:_scopeOutside,...restored}=saved;

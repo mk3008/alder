@@ -20,8 +20,8 @@ try{
  w.eval(code);await until(()=>!$('#open').disabled);$('#open-text').click();$('#source-text').value=source;await $('#source-submit').onclick();await until(()=>['saved','unchanged'].includes($('#app').dataset.saveState));
  const object=bd.objects.find(x=>x.id===state.objectId);entry('object:'+object.id).click();
  assert.equal($('#detail .right-drawer-heading h1').textContent,object.name);assert($('#business-drawer-close'));assert.equal($('#detail-mode-states'),null);
- assert.deepEqual([...d.querySelectorAll('#detail .right-drawer-tabs [role=tab]')].map(x=>x.textContent),['業務内容','チェック項目']);
- $('#detail-mode-checks').click();assert.equal($('#detail-mode-checks').getAttribute('aria-selected'),'true');$('#detail-mode-business').click();assert.equal($('#detail-mode-business').getAttribute('aria-selected'),'true');
+ assert.equal($('#detail .right-drawer-tabs'),null,'single business content has no child tabs');
+ assert.ok($('#detail>.markdown'),'business information remains directly available');
  $('#business-drawer-close').click();assert($('#formattedMarkdownDrawer').hidden);$('#drawer').click();assert(!$('#formattedMarkdownDrawer').hidden);
  entry('business:'+bd.activities[0].id).click();assert.equal($('#detail h1').textContent,bd.activities[0].name);assert.equal($('#detail-mode-states'),null);coverage.push('DRAWER-UI-001');
  entry('states:'+object.id).click();assert($('.state-detail-page .state-diagram'),'state graph stays reachable from the explorer');entry('concept:group-request').click();
@@ -35,4 +35,4 @@ try{
  assert.equal($('.concept-related .shell-heading').classList.contains('right-drawer-heading'),true);entry('business:overview').click();assert.equal($('#detail .right-drawer-heading').classList.contains('right-drawer-heading'),true);coverage.push('DRAWER-UI-004','DRAWER-UI-005');
 }finally{w.close();}
 const complete=ids=>{assert.equal(ids.length,checks.length);assert.equal(new Set(ids).size,ids.length);assert.deepEqual(new Set(ids),new Set(checks.map(c=>c.id)));};complete(coverage);assert.throws(()=>complete(coverage.slice(1)));assert.throws(()=>complete([...coverage,coverage[0]]));verify(readFileSync(authority));
-console.log(JSON.stringify({authority,sha256:expected,checks:coverage,scope:'DOM and shared structure; Chrome checks real geometry, themes and native interaction'}));
+console.log(JSON.stringify({authority,sha256:expected,checks:coverage,partiallySuperseded:{ids:['DRAWER-UI-003','DRAWER-UI-004'],authority:'verification/business-drawer-direct.check-items.json'},scope:'DOM and shared structure; Chrome checks real geometry, themes and native interaction'}));

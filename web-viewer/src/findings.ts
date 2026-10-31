@@ -41,6 +41,15 @@ export function findingsPanel(design: Design, nodeId?: string): HTMLElement {
 
 export type FindingSelection = {type:'finding'|'problem';id:string};
 export function findingsCount(design:Design):number{return (design.findings??[]).filter(f=>f.status==='open').length+design.graph.nodes.filter(n=>typeof n.problem==='string').length;}
+/** Show the author's review ID for findings on the selected item. */
+export function findingLinks(design:Design,nodeId:string,onSelect:(selection:FindingSelection)=>void):HTMLElement{
+ const root=document.createElement('nav');root.className='drawer-findings';root.setAttribute('aria-label','関連する指摘');
+ for(const finding of (design.findings??[]).filter(f=>f.status==='open'&&f.targets.includes(nodeId))){
+  const button=document.createElement('button');button.type='button';button.className='node-navigate';button.dataset.findingLink=finding.id;
+  button.textContent=`${findingLabel(finding.kind)} · ${finding.displayId??finding.id}　${finding.summary}`;button.onclick=()=>onSelect({type:'finding',id:finding.id});root.append(button);
+ }
+ return root;
+}
 /** Compact navigation, distinct from the full read-only detail panel. */
 export function findingsIndex(design:Design,showResolved:boolean,onResolved:(show:boolean)=>void,onSelect:(selection:FindingSelection)=>void,nodeId?:string):HTMLElement{
  const root=document.createElement('section');root.className='findings-index';

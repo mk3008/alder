@@ -1,0 +1,43 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-11-01本人指示：チェック項目の左メニュー化に伴い、業務の右ドロワーを単一の業務内容にする。",
+  "supersedes": [
+    "DRAWER-UI-003のうち、業務ドロワーからチェック項目を開く位置。Checkの内容・関連・互換性は左メニューから維持する。",
+    "DRAWER-UI-004のうち、業務ドロワーの子タブ。共通ヘッダーと、複数内容がある概念ドロワーの子タブは維持する。"
+  ],
+  "checks": [
+    {
+      "id": "BUSINESS-DRAWER-001",
+      "condition": "業務の全体図、ActivityまたはObjectで右ドロワーを開く。",
+      "guarantee": "項目名と閉じるボタンの直下に業務内容を表示し、業務内容・チェック項目・状態遷移の子タブを作らない。未選択時の案内も表示する。",
+      "reason": "右ドロワーの内容が1種類のときに不要な切替を作らない。",
+      "source": "本人の2026-11-01指示",
+      "verification": "全体図・Activity・ObjectをJSONと旧入力で開き、DOMと実ブラウザーで見出し、本文、タブの不在を確認する。"
+    },
+    {
+      "id": "BUSINESS-DRAWER-002",
+      "condition": "Check Itemを含むJSONで対応するActivityまたは未割当項目を開く。",
+      "guarantee": "テスト仕様の左メニューから既存のCheckを開け、条件・期待結果・共有項目を失わない。別Activityに共有されるCheckのIDと内容は変えない。",
+      "reason": "ドロワーの入口を除いてもCheckと業務の対応を失わない。",
+      "source": "本人のメニュー化指示と既存のCheck表示契約",
+      "verification": "実際のCheckを含むJSONの複数Activity・共有Check・未割当Checkをメニュー経由で確認する。"
+    },
+    {
+      "id": "BUSINESS-DRAWER-003",
+      "condition": "旧Markdown入力で、従来の関連Checkを開く、確認する、再読込する。",
+      "guarantee": "既存の参照確認を保ったまま、確認済みの関連Checkを同じテスト仕様メニューから開ける。未確認・不一致・読込失敗を勝手に承認せず、既存の関連と入力内容を保持する。",
+      "reason": "既存の入力互換性とCheckの確認状態を移動後も失わない。",
+      "source": "既存の関連Check互換性と本人のメニュー化指示",
+      "verification": "合致・未確認・不一致・再確認・保存復元・切離しをメニュー経由で検証する。"
+    },
+    {
+      "id": "BUSINESS-DRAWER-004",
+      "condition": "業務、概念モデル、状態遷移を切り替え、右ドロワーを操作する。",
+      "guarantee": "右ドロワーの共通開閉、見出し、閉じる操作を維持し、概要とデータ例がある概念モデルには既存の子タブを残す。",
+      "reason": "業務の不要なタブを除いても、複数の内容がある画面の操作を維持する。",
+      "source": "本人の右ドロワー統一と必要時のみ子タブを使う指示",
+      "verification": "業務と概念を切り替え、概念の概要・データ例とドロワー開閉を確認する。"
+    }
+  ]
+}

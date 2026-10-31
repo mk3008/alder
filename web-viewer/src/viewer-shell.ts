@@ -13,9 +13,10 @@ import {drawerTabs} from './drawer-tabs';
 import {renderRequesterChecks,renderLinkedChecks} from './document-view';
 import {testFunctions} from './test-spec-functions';
 import type {Design} from './graph';
+import type {Check} from './json-document';
 const wholeModes=['landscape','overview'];
 type Item={id:string;name:string};
-type Context={key?:string;viewKey?:string;activities:Item[];objects?:Item[];states?:Item[];views?:{key:string;name:string;activity?:string;object?:string}[];concept?:ConceptContext;design?:Design};
+type Context={key?:string;viewKey?:string;activities:Item[];objects?:Item[];states?:Item[];views?:{key:string;name:string;activity?:string;object?:string}[];concept?:ConceptContext;design?:Design;relatedChecks?:Check[]};
 type Area='business'|'concept'|'states'|'tests'|'empty';
 type Options={rightDrawer?:{isOpen:()=>boolean;isReady?:()=>boolean;setOpen:(open:boolean)=>void};capture:()=>void;business:()=>Context;openActivity:(id:string)=>void;openObject:(id:string)=>void;openOverview:()=>void;activateView:(key:string)=>void;statePanel:(id:string)=>HTMLElement|undefined;closeLegacyList:()=>void;refresh:()=>void};
 export function installViewerShell(app:HTMLElement,options:Options){
@@ -47,10 +48,10 @@ export function installViewerShell(app:HTMLElement,options:Options){
  const findReviewGroup=(key:string|undefined|null)=>views?.findGroup(groupByKey.get(key??'')),contentFor=(key:string)=>samples?.contentFor(groupByKey.get(key)??''),
   findDataExample=(key:string,id:string|undefined|null)=>samples?.findDataExample(groupByKey.get(key)??'',id),examplesFor=(key:string)=>samples?.examplesFor(groupByKey.get(key)??'')??[];
  const conceptName=(id:string)=>wholeModes.includes(id)?'全体図':contentFor(id)?.title??findReviewGroup(id)?.name??tables[conceptByKey.get(id)??'']?.name;
- const functions=()=>testFunctions(context,options.business().design?.model?.checks??[]),functionFor=(key:string)=>functions().find(item=>item.key===key);
- const relevantChecks=()=>{const model=options.business().design?.model;return model?model.checks.filter(doc=>doc.basedOn.documentId===model.business.id):[];};
+ const relevantChecks=()=>{const c=options.business(),model=c.design?.model;return model?[...model.checks,...(c.relatedChecks??[])].filter(doc=>doc.basedOn.documentId===model.business.id):[];};
+ const functions=()=>testFunctions(context,relevantChecks()),functionFor=(key:string)=>functions().find(item=>item.key===key);
  const hasActivityChecks=(id:string)=>relevantChecks().some(doc=>doc.index.some(row=>row.activityId===id)||doc.sections.some(section=>section.activityId===id));
- const hasUnassignedChecks=()=>relevantChecks().some(doc=>doc.items.some(item=>!doc.index.some(row=>row.checkIds.includes(item.id)))||doc.sections.some(section=>section.activityId===null));
+ const hasUnassignedChecks=()=>relevantChecks().some(doc=>doc.items.some(item=>!doc.index.some(row=>row.checkIds.includes(item.id)))||doc.sections.some(section=>section.activityId===null)||doc.notes.length>0);
  const specName=(key:string)=>functionFor(key)?.name??(key==='@unassigned'?'未割当':key.startsWith('checks:')?options.business().activities.find(item=>item.id===key.slice(7))?.name:key==='@overview'?'テスト仕様':undefined)??key;
  const businessRelated=business.querySelector<HTMLElement>('#formattedMarkdownDrawer');
  if(businessRelated)workbench.append(businessRelated);workbench.append(related);
@@ -93,7 +94,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
    if(group&&example&&samples){const root=document.createElement('div');root.className='data-examples-panel test-spec-examples';section.append(root);samples.renderDataExample(root,group,example.id,id=>{scrolls.set('tests:'+activeSpec,page.scrollTop);specExamples.set(activeSpec,id);renderSpec();save();route();specs.querySelector<HTMLSelectElement>('.data-example-picker select')?.focus({preventScroll:true});},{capabilityId:target.capability.id,heading:target.name,sampleIds:target.samples.map(item=>item.id),renderSpecification:host=>host.append(renderLinkedChecks(design,example.checkIds??[]))});}
    page.replaceChildren(section);
   }else if(activeSpec==='@overview'){page.replaceChildren();text(page,'p','左のメニューからテスト仕様を選択してください。');}
-  else page.replaceChildren(renderRequesterChecks(design,activeSpec.startsWith('checks:')?activeSpec.slice(7):undefined));
+  else page.replaceChildren(renderRequesterChecks(design,activeSpec.startsWith('checks:')?activeSpec.slice(7):undefined,relevantChecks()));
   page.scrollTop=scrolls.get('tests:'+activeSpec)??0;
  }
  function openBusiness(id?:string){if(!id)overviewClosed=false;setArea('business');if(id)options.openActivity(id);else{overviewClosed=false;options.openOverview();}renderExplorer();renderTabs();route();}
@@ -206,11 +207,12 @@ export function installViewerShell(app:HTMLElement,options:Options){
  if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(placeEditor);observer.observe(strip);observer.observe(app.querySelector('header')!);}window.addEventListener('resize',placeEditor);
  function restore(){remember();restoringRoute=true;try{const q=new URL(location.href).searchParams;if(!hasModel){overviewModes.clear();exampleModes.clear();lastExamples.clear();conceptOpen=[];active='overview';frame.removeAttribute('src');frame.removeAttribute('srcdoc');}if(q.get('view')==='concept'){const id=hasModel&&viewIds.includes(q.get('concept')??'')?q.get('concept')!:'landscape',example=q.get('dataExample');if(hasModel&&findReviewGroup(id)&&q.get('dataView')==='overview'&&!findDataExample(id,example)){overviewModes.add(id);exampleModes.delete(id);}else{overviewModes.delete(id);if(hasModel&&findDataExample(id,example)){exampleModes.set(id,example!);lastExamples.set(id,example!);}else exampleModes.delete(id);}selectConcept(id,false);}else if(q.get('view')==='states'){if(options.business().states?.some(s=>s.id===q.get('state')))selectState(q.get('state')!,false);else fallback();}else if(q.get('view')==='tests'){const id=normalizeSpec(q.get('spec')??'@overview'),sample=q.get('dataExample'),target=functionFor(id);if(target&&sample&&target.samples.some(item=>item.id===sample))specExamples.set(id,sample);else if(target)specExamples.delete(id);selectSpec(id,false);}else if(q.get('view')==='empty')setArea('empty');else{setArea('business');if(options.business().key){const id=q.get('activity'),object=q.get('object'),context=options.business(),current=context.views?.find(view=>view.key===context.viewKey);if(id&&context.activities.some(a=>a.id===id)){if(current?.activity!==id)options.openActivity(id);}else if(object&&context.objects?.some(a=>a.id===object)){if(current?.object!==object)options.openObject(object);}else{overviewClosed=false;if(!current||current.activity!==undefined||current.object!==undefined)options.openOverview();}}}renderTabs();renderExplorer();}finally{restoringRoute=false;}}window.addEventListener('popstate',restore);
  return {closeBusinessOverview,reopenBusinessOverview(){overviewClosed=false;},activateBusiness(){setArea('business');},businessActivated(){setArea('business');renderTabs();renderExplorer();route();},syncChrome,
+  openRelatedChecks(id?:string){expanded.add('tests');selectSpec(id&&hasActivityChecks(id)?'checks:'+id:'@overview');},
   syncDocument(){
    const current=options.business(),next=current.concept;
    const changed=!!((documentKey&&current.key!==documentKey)||(pendingRoute&&savedDocumentKey&&current.key&&current.key!==savedDocumentKey));
    const modelChanged=context?.model!==next?.model||context?.business!==next?.business;
-   if(changed||modelChanged&&context){overviewClosed=false;conceptOpen=[];stateOpen=[];specOpen=[];active='overview';activeState='';activeSpec='@overview';specExamples.clear();scrolls.clear();overviewModes.clear();exampleModes.clear();lastExamples.clear();clearConceptFrames();if(area!=='business')setArea('business');if(changed&&!pendingRoute)route(false);}
+   if(changed||modelChanged&&context){specs.querySelector<HTMLElement>('.test-spec-page')!.replaceChildren();overviewClosed=false;conceptOpen=[];stateOpen=[];specOpen=[];active='overview';activeState='';activeSpec='@overview';specExamples.clear();scrolls.clear();overviewModes.clear();exampleModes.clear();lastExamples.clear();clearConceptFrames();if(area!=='business')setArea('business');if(changed&&!pendingRoute)route(false);}
    if(modelChanged){context=next;views=next?createConceptViews(next):undefined;samples=next?createDataExamples(next):undefined;logical=next?createLogicalDetails(next):undefined;
     hasModel=!!next;tables=views?.tables??{};ids=Object.keys(tables);
     const groupIds=views?.groups.map(g=>g.id)??[],reserved=new Set([...wholeModes,'subsystems']);

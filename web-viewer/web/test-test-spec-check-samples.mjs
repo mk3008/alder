@@ -51,10 +51,11 @@ try{
  const app=await open(code);app.entry('tests:'+key).click();const root=()=>app.$('#tests-workspace'),picker=()=>root().querySelector('select');
  assert.match(root().textContent,/下書き保存/);assert.match(root().textContent,/入力途中の下書きを保存できる/);assert.match(root().textContent,/確認が必要です/);assert.match(root().textContent,/入力途中の内容を下書きとして保存できる/);assert.match(root().textContent,/参照された共通の期待結果/);assert.match(root().textContent,/結果例/);
  assert.equal(root().querySelector('[data-data-example]').dataset.dataExample,'request-draft');covered.add('SPEC-CHECK-LINK-002');
- assert.equal(root().querySelectorAll('[data-check-id]').length,2);assert.equal(second.reviewState,'要確認');covered.add('SPEC-CHECK-LINK-003');
+ const sharedCheck=checkDoc.items.find(item=>item.id==='preview-check-draft');
+ assert.equal(root().querySelectorAll('[data-check-id]').length,2);assert.match(root().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));assert.equal(second.reviewState,'要確認');covered.add('SPEC-CHECK-LINK-003');
  assert.deepEqual([...picker().options].map(o=>o.value),['request-draft','fixture-second-scene']);
  assert(root().querySelector('td[data-sample-key]'));picker().value='fixture-second-scene';picker().dispatchEvent(new app.w.Event('change'));
- assert.equal(root().querySelector('[data-data-example]').dataset.dataExample,'fixture-second-scene');assert.equal(root().querySelectorAll('[data-check-id]').length,1);covered.add('SPEC-CHECK-LINK-005');
+ assert.equal(root().querySelector('[data-data-example]').dataset.dataExample,'fixture-second-scene');assert.equal(root().querySelectorAll('[data-check-id]').length,1);assert.match(root().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));covered.add('SPEC-CHECK-LINK-005');
  const old=await open(oldCode);assert.equal(old.entry('tests:'+key),null);assert(!legacy.documents.some(d=>d.kind==='checkItems'));covered.add('SPEC-CHECK-LINK-004');
  const oldCheck=await open(unboundCode);oldCheck.entry('tests:checks:'+apply).click();const details=[...oldCheck.$('#tests-workspace').querySelectorAll('details')].find(item=>item.querySelector('summary')?.textContent==='未接続の例');assert(details);details.open=true;details.dispatchEvent(new oldCheck.w.Event('toggle'));assert.doesNotMatch(oldCheck.$('#tests-workspace').textContent,/表示されてはいけない孤立例/);
  assert.equal(pkg.documents.filter(doc=>doc.kind==='businessDesign').length,1);assert.equal(pkg.documents.filter(doc=>doc.kind==='checkItems').length,1);assert.equal(checkDoc.items.find(item=>item.id===second.id).reviewState,'要確認');covered.add('SPEC-CHECK-LINK-006');

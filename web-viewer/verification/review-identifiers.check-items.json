@@ -1,0 +1,34 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/133",
+  "scope": "2026-11-01本人指示：多数の指摘・チェックを誤解なく会話できるよう、画面に人が使うIDを表示する。",
+  "supersedes": [
+    "従来の依頼者向け表示でCheck IDをメタ情報として非表示にする部分。内部UUID、原典管理情報、不要なテスト証拠の非表示は維持する。"
+  ],
+  "checks": [
+    {
+      "id": "REVIEW-ID-001",
+      "condition": "未解決の指摘に関連するActivityまたはObjectを選ぶ。",
+      "guarantee": "右ドロワーから人が使う指摘IDと内容を識別し、既存の指摘詳細へ移動できる。F05は購入サンプルの実際の指摘内容を表示し、解決済みとは扱わない。",
+      "reason": "画面で見えない管理番号を前提に会話させない。",
+      "source": "本人の2026-11-01指示",
+      "verification": "購買JSONのF05を対象に、表示・選択・未決内容を画面で確認する。"
+    },
+    {
+      "id": "REVIEW-ID-002",
+      "condition": "テスト仕様のCheckまたはCheckに紐づくサンプルを開く。",
+      "guarantee": "Checkの表示名に人が使うCheck IDを含め、内部UUIDや無関係な原典管理情報は出さない。",
+      "reason": "多数のCheckを番号で指し示し、対象の取り違えを防ぐ。",
+      "source": "本人の2026-11-01指示",
+      "verification": "JSONと互換入力、通常のCheckとサンプルから表示するCheckのIDと本文を照合する。"
+    },
+    {
+      "id": "REVIEW-ID-003",
+      "condition": "同じCheckが複数のActivityまたはサンプルから参照される。",
+      "guarantee": "表示するCheck IDは同一で、Checkの内容・レビュー状態・参照や保存データを変更しない。",
+      "reason": "表示の識別を追加しても共有Checkの意味を分岐させない。",
+      "source": "本人のCheckとサンプルの対応に関する指示",
+      "verification": "共有Checkの複数経路の表示と入力データのバイト不変を確認する。"
+    }
+  ]
+}
