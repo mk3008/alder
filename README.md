@@ -12,7 +12,7 @@ Alder Plugin structures interview notes and requested changes into the design. R
 
 A single JSON file is the source of truth for Business Design and Checks. Ask the Plugin/Skills to create and update it and check references and revisions. People do not need to edit JSON. The Viewer reads that source for human review; it is not the source itself.
 
-> These instructions cover Alder 0.4.9. Before installation, check that the tag is available on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9). JSON and state-transition viewing depend on the Viewer being published separately from the Plugin; if that Viewer is not yet available, use the [review build](web-viewer/json.ja.md#確認版を用意する). Concept models and formal JSON v1 are outside this release.
+> These instructions cover Alder 0.4.9. Before installation, check that the tag is available on [GitHub Releases](https://github.com/mk3008/alder/releases/tag/plugin-v0.4.9). Use the [public Viewer](https://mk3008.github.io/alder/) to review JSON and state transitions. Plugin 0.4.9 does not create or update concept models and does not include formal JSON v1.
 
 ## Install / Setup
 
@@ -39,7 +39,7 @@ return receipt is confirmed by the check and return-time record.
 Returned sets await inspection by the maintenance staff.
 ```
 
-The Plugin saves a JSON draft with unresolved questions and checks its structure and references. Prepare the [Viewer review build](web-viewer/json.ja.md#確認版を用意する), choose Open → File, and select the returned JSON.
+The Plugin saves a JSON draft with unresolved questions and checks its structure and references. Open the [Alder Viewer](https://mk3008.github.io/alder/), choose Open → File, and select the returned JSON.
 
 1. Follow the activities and information exchanges in the overview.
 2. Select an Activity and read its trigger, procedure and result under business details. For an Object with explicit state definitions, inspect its state-transition tab; unrecorded transitions are not inferred.
@@ -231,7 +231,7 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 | Business improvement and adoption follow-up | [Improvement guidance](docs/business-design-improvement.ja.md) / [Purchase-improvement example](docs/examples/purchase-improvement.ja.md) |
 | Check granularity, review states, Test mappings | [Check Item traceability](docs/check-item-traceability.md) |
 | Implementation review and stopping conditions | [Review knowledge v0.3](docs/phase2/review-knowledge-v0.3.md) |
-| Responsibility boundaries when using Alder | [Alder's own Business Design](business-design/alder/README.md) |
+| Responsibility boundaries when using Alder | [Alder's own Business Design](business-design/alder/business-design.json) |
 | User-facing explanations and safe reproducible evidence | [Research publication practice](docs/research-publication.md) |
 | Rationale, adoption decisions, validation scope and limits | [Philosophy](docs/philosophy.md) / [Research decisions](docs/research-decisions.md) / [Validation](docs/validation.md) |
 

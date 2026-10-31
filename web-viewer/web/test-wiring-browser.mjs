@@ -9,6 +9,7 @@ const saved128=JSON.parse(readFileSync(new URL('./authorities/overview-128-layou
 import {openSourceAction} from './source-menu-browser.mjs';
 import {selectGraphNode} from './graph-selection-browser.mjs';
 import {closeCanvasOverlays} from './toolbar-settings-control.mjs';
+import {useUngroupedSample} from './legacy-sample-browser.mjs';
 const object=id=>`# Object ${id}\n\n## Scope\n\ntrue\n\n## Icon\n\nfile-text\n\n## Information\n\n- Record\n\n`;
 const activity=(id,label,output='(none)')=>`# Activity ${id}\n\n## Scope\n\ntrue\n\n## Why\n\nReview\n\n## When\n\nRequested\n\n## Who\n\nReviewer\n\n## Where\n\nOffice\n\n## How\n\n### Input\n\n- Record — ${label}\n\n### Procedure\n\nReview record\n\n### Output\n\n${output}\n\n## Result\n\nReviewed\n\n`;
 const source='# Wiring\n\n'+object('Record')+object('Result')+activity('Review A','data A')+activity('Review B','data B','- Result — written');
@@ -97,7 +98,7 @@ export async function verifyRealWiring(browser){
    }
   };
   try{
-   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await closeCanvasOverlays(page);await page.locator('#open-sample').click();
+   await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);await closeCanvasOverlays(page);await page.locator('#open-sample').click();await useUngroupedSample(page);
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await closeDrawers();
    const overview=await positions();
    const columns=[...new Set(Object.values(overview).map(p=>p[0]))].sort((a,b)=>a-b);for(let i=1;i<columns.length;i++)assert.equal(columns[i]-columns[i-1],64,'overview uses the same compact step as detail');

@@ -16,7 +16,7 @@ export async function verifyDocumentActions(browser){
   const m=await page.evaluate(()=>{
    const r=e=>{const b=e.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom,width:b.width,height:b.height};};
    const strip=document.querySelector('.tab-strip'),group=document.querySelector('#document-actions'),tabs=document.querySelector('.shell-open-tabs');
-   return {mode:strip.dataset.actionsMode,viewport:innerWidth,document:document.documentElement.scrollWidth,tabs:r(tabs),strip:r(strip),group:r(group),actions:[...group.querySelectorAll('button')].map(b=>({id:b.id,...r(b),hit:(()=>{const p=r(b),e=document.elementFromPoint((p.left+p.right)/2,(p.top+p.bottom)/2);return e===b||b.contains(e);})()}))};
+   return {mode:strip.dataset.actionsMode,viewport:innerWidth,document:document.documentElement.scrollWidth,tabs:r(tabs),strip:r(strip),group:r(group),actions:[...group.querySelectorAll('button')].filter(b=>!b.hidden).map(b=>({id:b.id,...r(b),hit:(()=>{const p=r(b),e=document.elementFromPoint((p.left+p.right)/2,(p.top+p.bottom)/2);return e===b||b.contains(e);})()}))};
   });
   assert.ok(m.document<=m.viewport+1,'no global horizontal overflow');assert.ok(m.tabs.width>=44,'tab navigation retains usable width');
   for(const a of m.actions){assert.ok(a.left>=-.5&&a.right<=m.viewport+.5,a.id+' inside viewport');assert.ok(a.height>=(m.mode==='menu'?43.5:39.5),a.id+' touch target');assert.ok(a.hit,a.id+' unobscured target');}

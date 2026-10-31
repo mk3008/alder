@@ -65,7 +65,7 @@ export async function verifyTabStrip(browser){
    for(const id of ids.slice(0,-1).reverse()){await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement?.id),id,'native reverse Tab order: '+id);}
    await page.keyboard.press('Shift+Tab');assert.equal(await start.evaluate(el=>document.activeElement===el),true,'reverse traversal returns to the tab close control');
   };
-  await keyboardOrder(['save-image','copy-image','share-source','open-checks','view-markdown']);
+  await keyboardOrder(['save-image','copy-image','share-source','view-markdown']);
   const sampleGraph=await page.locator('#nodes').innerHTML();await page.locator('#refresh').evaluate(button=>button.click());assert.equal(await page.locator('#nodes').innerHTML(),sampleGraph,'disabled sample button is inert');
   let sourceReads=0;
   await context.route('https://tab-strip.test/design.md',route=>{sourceReads++;return route.fulfill({status:200,contentType:'text/markdown',headers:{'access-control-allow-origin':'*'},body:sample});});
