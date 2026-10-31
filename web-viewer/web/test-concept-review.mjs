@@ -86,7 +86,7 @@ for(const id of ['request','version','item','preparation','receipt','line']){
  }finally{h.w.close();}
 }
 const searchHarness=harness('');try{
- const {d,w}=searchHarness,heading=()=>d.querySelector('[data-explorer-key="group:concept-relations"]');heading().click();assert(d.querySelector('#explorer-concept-relations').hidden);
+ const {d,w}=searchHarness,heading=()=>d.querySelector('[data-explorer-key="group:concept-relations"]');if(heading().getAttribute('aria-expanded')==='false')heading().click();heading().click();assert(d.querySelector('#explorer-concept-relations').hidden);
  const input=d.querySelector('.explorer-search input');input.value='購入申請';input.dispatchEvent(new w.Event('input'));assert(!d.querySelector('#explorer-concept-relations').hidden);assert(d.querySelector('[data-explorer-key="concept:request"]'));input.value='';input.dispatchEvent(new w.Event('input'));assert(d.querySelector('#explorer-concept-relations').hidden);
  const saved=JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/'));assert.equal(saved.expandedVersion,4);assert(!saved.expanded.includes('concept-relations'));coverage.push('CONCEPT-ENTRY-003:search');
  assert.equal(d.querySelectorAll('#explorer-concept-relations .explorer-item').length,6);assert.equal(d.querySelectorAll('#explorer-subsystems .explorer-item-nested').length,4);assert(!d.querySelector('[data-explorer-key="concept:subsystems"]'));coverage.push('CONCEPT-ENTRY-001:inner-tabs');
@@ -95,3 +95,4 @@ const verifyCoverage=rows=>{for(const c of entryAuthority.checks)assert(rows.som
 console.log('CONCEPT-ENTRY-001..003: all six menu pages, current page, close/reopen, deduplication, search and saved folding; historical authorities retained');
 
 const oldMenu=harness('',{expandedVersion:2,expanded:['business','concept']});try{assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:concept-relations"]').getAttribute('aria-expanded'),'true');assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:subsystem-approval"]').getAttribute('aria-expanded'),'true');assert.equal(oldMenu.d.querySelector('[data-explorer-key="group:business-activity"]').getAttribute('aria-expanded'),'false');}finally{oldMenu.w.close();}
+
