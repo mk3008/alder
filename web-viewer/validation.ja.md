@@ -44,6 +44,16 @@ npm run test:browser -- --cases headerControls,gettingStarted,documentActions
 
 名前は完全一致です。未知名、空の指定、未知の引数は失敗します。選択した群の中の検証やassertは省略しません。失敗しても後続の独立した群を実行し、最後は非ゼロで終了します。
 
+## ドラッグの計算をブラウザーなしで反復する
+
+ドラッグの座標・カメラ補正や符号付き配線の計算を変更するときは、次のコマンドで先に確認できます。Node 24だけで実行でき、DOMやブラウザーの準備は不要です。
+
+```sh
+node --experimental-strip-types web/test-node-edge-drag.mjs --logic-only
+```
+
+この検証は計算に限ります。DOM、実ポインター操作、保存・再読込の確認には、通常の `web/test-node-edge-drag.mjs` と `nodeEdgeDrag` ブラウザー群を使い、最終の全体検証も実行します。
+
 ## Node／DOMテストの実行方式
 
 `npm test` は、実行方式を確認する回帰の後、通常の59ファイルを[Node標準test runner](https://nodejs.org/download/release/v24.15.0/docs/api/test.html#test-runner-execution-model)の独立プロセスで最大2本ずつ実行します。共有のメモリーやfake IndexedDBを使い回しません。ファイルごとのケースとassertは変更せず、失敗したファイルがあっても同じバッチの後続ファイルを実行し、最後は非ゼロ終了します。引数が必要な3つのブラウザpreflightは、従来どおり `--preflight` を付けて実行します。ブラウザ全48群の実行方式は変更しません。
