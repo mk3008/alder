@@ -75,13 +75,13 @@ export function renderTestSpecification(design:Design,activityId:string,selected
   for(const doc of checks){
    const sections=doc.sections.filter(section=>activityId==='@unassigned'?section.activityId===null:section.activityId===activityId);
    const reader=new RichReader(doc);
-   for(const section of sections){reader.runs(content,section.preamble);for(const guarantee of doc.guarantees.filter(g=>g.sectionId===section.id))reader.runs(content,[{kind:'reference',targetId:guarantee.id,label:guarantee.title}]);}
+   for(const section of sections){reader.runs(content,section.preamble);for(const guarantee of doc.guarantees.filter(g=>g.sectionId===section.id)){const group=element('section');reader.runs(group,[{kind:'reference',targetId:guarantee.id,label:guarantee.title}]);const disclosure=group.querySelector('details');if(disclosure)disclosure.open=true;content.append(group);}}
   }
   for(const {doc,item}of unique){
    const card=element('section');card.className='test-spec-item';card.dataset.checkId=item.checkId;
    const button=element('button');button.type='button';button.className='test-spec-item-title';button.append(element('strong',`${item.checkId} · ${item.title}`),element('span',item.reviewState));
    if(selectedKey===key(doc,item.id))card.classList.add('selected');button.onclick=()=>select(doc,item.id);card.append(button);
-   const reader=new RichReader(doc),fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','question'].includes(name)));
+   const reader=new RichReader(doc),fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question'].includes(name)));
    reader.fields(card,fields,new Set([item.id]));content.append(card);
   }
  }
@@ -91,7 +91,7 @@ export function renderTestSpecification(design:Design,activityId:string,selected
   const linked=doc.index.filter(row=>row.checkIds.includes(item.id));
   if(!linked.length)detail.append(element('p','関連業務は未割当です。'));
   for(const row of linked){const name=heading(row.activityId),b=element('button');b.type='button';b.className='test-spec-business-link';b.append(element('span',name),createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));b.setAttribute('aria-label',name+'を業務タブで開く');b.onclick=()=>actions.business(row.activityId);detail.append(b);}
-  const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>!['classification','condition','expectedResult','question'].includes(name)));
+  const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>!['classification','condition','expectedResult','guarantee','question'].includes(name)));
   new RichReader(doc).fields(detail,fields,new Set([item.id]));if(item.detailSummary)field(detail,'補足',item.detailSummary);
  }else detail.append(element('p','項目を選択すると関連業務や根拠を表示します。'));
  return {content,detail,title};
