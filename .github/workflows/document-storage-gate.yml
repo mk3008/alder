@@ -4,6 +4,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - 'tools/document_storage/**'
+      - 'examples/molkky/**'
       - 'work/viewer-json/issue-274/json-native/**'
       - '.github/workflows/document-storage-gate.yml'
       - '.github/workflows/actions.lock'
@@ -33,3 +34,5 @@ jobs:
         run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
       - name: Validate generated package example
         run: node tools/document_storage/cli.mjs validate tools/document_storage/examples/purchase.json
+      - name: Validate Molkky business design example
+        run: node tools/document_storage/cli.mjs validate examples/molkky/business-design.json
