@@ -45,6 +45,14 @@ function crossing([a,b],[c,d]){
  const axis=Math.abs(b[0]-a[0])>=Math.abs(b[1]-a[1])?0:1;
  return Math.min(Math.max(a[axis],b[axis]),Math.max(c[axis],d[axis]))-Math.max(Math.min(a[axis],b[axis]),Math.min(c[axis],d[axis]))>.1;
 }
+function hitsBox([a,b],box){
+ let low=0,high=1;
+ for(let axis=0;axis<2;axis++){
+  const min=axis?box.y:box.x,max=min+(axis?box.height:box.width),delta=b[axis]-a[axis];
+  if(Math.abs(delta)<1e-10){if(a[axis]<min||a[axis]>max)return false;}
+  else{const p=(min-a[axis])/delta,q=(max-a[axis])/delta;low=Math.max(low,Math.min(p,q));high=Math.min(high,Math.max(p,q));if(low>high)return false;}
+ }return true;
+}
 function verify(candidate){
  const {panel,design,model,svg}=render(candidate),g=stateCaptionGeometry(svg),loops=model.transitions.filter(t=>t.from===t.to);
  assertStateCaptionPlacement(g,model.transitions);
@@ -65,6 +73,8 @@ function verify(candidate){
  }
  for(const loop of loops){const path=segments(svg.querySelector(`path.edge[data-transitions="${loop.id}"]`).getAttribute('d'));
   for(const other of g.paths.filter(p=>p.id!==loop.id))assert(!path.some(a=>segments(other.d).some(b=>crossing(a,b))),loop.id+' does not cross or share another transition: '+other.id);
+  const caption=g.captions.find(c=>c.id===loop.id),box={x:caption.x,y:caption.y-14,width:Math.max(...caption.lines.map(s=>Array.from(s).length*14)),height:caption.lines.length*18};
+  for(const other of g.paths.filter(p=>p.id!==loop.id))assert(!segments(other.d).some(s=>hitsBox(s,box)),loop.id+' caption does not cover a transition: '+other.id);
  }
  for(const name of ['終結','破棄'])assert(!loops.some(t=>t.from===name),name+' has no invented self-loop');
  return {g,loops,svg};
@@ -89,6 +99,7 @@ assert.equal(detour.collisions,0);assert.equal(detour.fallback,false);assert.equ
 results.push('STATE-LOOP-002');
 const node=actual.g.nodes.find(n=>n.id==='作業中');actual.svg.querySelector('[data-state="作業中"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 assert(node&&actual.svg.querySelector('[data-transition-id="T17"] tspan').classList.contains('review-related'));
+assert(actual.g.captions.find(c=>c.id==='T17').x<=node.x+node.width+40,'the normal self-loop label stays near its state');
 assert(!actual.svg.querySelector('path.edge[data-transitions="T17"]').classList.contains('exception'));
 results.push('STATE-LOOP-003');
 assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(source));

@@ -64,13 +64,37 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  // The shared business router measures single-line labels. Supply equivalent
  // widths, then use its same collision escape for the full multiline boxes.
  const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
- const sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires),otherWires=sharedRoutes.flatMap((route,i)=>route&&!loopWires.has(i)?[route.points]:[]);
+ const loopBoxes=[...loopWires].map(([i,loop])=>{const node=nodes.find(n=>n.id===rows[i][0].from)!,group=captionGroups[i];return{x:node.x+node.width+8,y:node.y-loop.rise-group.height/2,width:group.width,height:group.height};});
+ let sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
+ // For a long return corridor, moving the corridor a little can keep a loop
+ // caption much closer to its state. Otherwise keep the existing corridor and
+ // let the shared caption escape move the text by the smaller amount.
+ for(let pass=0;pass<=loopBoxes.length;pass++){
+  let changed=false;
+  sharedRoutes.forEach((route,i)=>{
+   if(!route||loopWires.has(i)||!wires[i].returning)return;
+   let distance=0;
+   for(const box of loopBoxes)for(let j=1;j<route.points.length;j++){
+    const a=route.points[j-1],b=route.points[j];if(Math.abs(a[0]-b[0])>1e-7||Math.abs(a[1]-b[1])<2)continue;
+    const x=a[0];if(x<box.x-4||x>box.x+box.width+4||Math.max(a[1],b[1])<box.y-4||Math.min(a[1],b[1])>box.y+box.height+4)continue;
+    const labelMove=x+10-box.x,routeMove=box.x+box.width+12-x;if(routeMove>0&&routeMove<labelMove)distance=Math.max(distance,routeMove);
+   }
+   if(distance){wires[i]={...wires[i],returnLane:(wires[i].returnLane??0)+Math.ceil(distance/16)};changed=true;}
+  });
+  if(!changed)break;sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
+ }
+ const otherWires=sharedRoutes.flatMap((route,i)=>route&&!loopWires.has(i)?[route.points]:[]);
  const routes=sharedRoutes.map((route,i)=>{
   const loop=loopWires.get(i);if(!loop)return route;
   const id=rows[i][0].from,node=nodes.find(n=>n.id===id)!;
-  const related=sharedRoutes.flatMap((other,j)=>other&&!loopWires.has(j)&&wires[j].returning&&(rows[j][0].from===id||rows[j][0].to===id)?[other.bounds.right]:[]);
-  const labelLeft=Math.max(node.x+node.width+8,...related.map(x=>x+8));
-  const result=stateSelfLoopRoute(node,nodes,{...loop,labelLeft},Math.max(30,captionRelations[i].label.length*12),otherWires);otherWires.push(result.points);return result;
+  const related=sharedRoutes.flatMap((other,j)=>other&&!loopWires.has(j)?[other.points]:[]);
+  const width=Math.max(30,captionRelations[i].label.length*12),group=captionGroups[i];
+  const result=stateSelfLoopRoute(node,nodes,{...loop,labelLeft:node.x+node.width+8},width,otherWires);
+  // The same shared row escape keeps a loop's label clear of another line
+  // only when that line actually passes through this label's vertical span.
+  const barriers=related.flatMap((points,j)=>points.slice(1).map((p,k)=>({id:`${j}:${k}`,x:Math.min(points[k][0],p[0])-2,y:Math.min(points[k][1],p[1])-2,width:Math.abs(points[k][0]-p[0])+4,height:Math.abs(points[k][1]-p[1])+4})));
+  const position=captionOnRow([node.x+node.width+8+group.width/2,result.label[1]],group.width,group.height,[...nodes,...barriers]);
+  result.label=[position[0]-group.width/2+width/2,position[1]];otherWires.push(result.points);return result;
  });
  const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
  const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
