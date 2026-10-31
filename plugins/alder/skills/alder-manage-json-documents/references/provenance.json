@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "abbb006c1c85ad029045eace9c2a5fbf62d6e5d7",
+  "alder_source_revision": "693280f745569052e68ad5aba03b07966278545e",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "a2deaaf532a4928615356a2456d2be6db9ac6e37996f6c705e83fe37a5463da2",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -11,12 +11,12 @@
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "4e297706dd3f190cc7a97a4b784c1b68a899acdf082f7aa76fced70242adff51"
+    "docs/json-native-contract.ja.md": "7797de0e98914a41bf5322dd5b27cb28d36cdbce6e52e58dc53003eabe34677c"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "cd71981275bf962cdb80e454b478dcadb9fc6b4d862d169c358a5be37db87d11",
-    "tools/document_storage/schema.mjs": "7cb5d8484a586a5a0dd764e3fb721cc8f4e247e4180942e7cac958be7e88e0ce",
-    "tools/document_storage/schema.json": "364015a1dc99aa88518d8957f648f18a78f542d69be81933178f26c2f5f39559",
+    "tools/document_storage/core.mjs": "723fb7b4f4b0324d2b197fcf28a1866220c29f8006f2c6b1adbf298e59de1429",
+    "tools/document_storage/schema.mjs": "d9e5a9edcd012cc74287bf5421339599c6b39323e2bea99898c434d5a7bc462a",
+    "tools/document_storage/schema.json": "b87e69c4d96c55627ef38dedfe7324cf4ec8812a85c667f8e707d63d4a5bdff5",
     "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
     "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
