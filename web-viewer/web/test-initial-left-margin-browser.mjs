@@ -132,7 +132,7 @@ async function closeAndReopen(page,layout,world){
  await closeCanvasOverlays(page);
  assert.equal(await page.locator('.tab.active .close').isVisible(),true);
  await page.locator('.tab.active .close').click();assert.equal(await page.locator('#empty-workspace').isVisible(),true);
- if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="business:overview"]').click();await ready(page,1);
+ if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();const businessGroup=page.locator('[data-explorer-key="group:business"]');if(await businessGroup.getAttribute('aria-expanded')==='false')await businessGroup.click();await page.locator('[data-explorer-key="business:overview"]').click();await ready(page,1);
  await waitSavedViewer(page,layout);await page.reload();await ready(page,1);
  await assertCamera(page,layout);assert.deepEqual(await page.evaluate(readInitialMarginWorldInPage),world,'reopened overview reload preserves every coordinate and route');return {hit:true,scroll:layout.scroll};
 }

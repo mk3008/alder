@@ -4,6 +4,7 @@ import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {packageViewerPreview} from '../../tools/viewer-preview.mjs';
+import {openExplorerGroup} from './explorer-browser.mjs';
 export async function verifyJSONOfflinePreview(browser){
  const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),pkg=JSON.parse(raw),head=process.env.REVIEW_HEAD??execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),pr=process.env.REVIEW_PR??'279';
  const {offline,manifest}=packageViewerPreview({dist:resolve('dist'),output:resolve('review-package'),head,pr,fixture:resolve('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json')});
@@ -18,6 +19,7 @@ export async function verifyJSONOfflinePreview(browser){
   const unified=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json');
   await page.locator('#fallback').setInputFiles({name:'unified.json',mimeType:'application/json',buffer:unified});
   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+  await openExplorerGroup(page,'concept');
   await page.locator('[data-explorer-key="concept:overview"]').click();
   const frame=page.frameLocator('iframe[data-concept-view="overview"]');await frame.locator('[data-node="request"]').waitFor();
   if(await page.locator('#drawer').getAttribute('aria-expanded')==='true')await page.locator('#drawer').click();

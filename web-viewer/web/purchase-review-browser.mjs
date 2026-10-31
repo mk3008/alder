@@ -1,4 +1,5 @@
 import {readFileSync} from 'node:fs';
+import {openExplorerGroup} from './explorer-browser.mjs';
 
 // Use the public file input: localhost is not an allowed shared-source URL.
 export async function loadPurchaseReview(page){
@@ -9,6 +10,7 @@ export async function loadPurchaseReview(page){
  await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
  if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+ for(const group of ['business','business-activity','business-object','states','subsystems','subsystem-approval','subsystem-receiving','concept','concept-relations'])await openExplorerGroup(page,group);
  await page.locator('[data-explorer-key="concept:landscape"]').click();
  await page.locator('.subsystem-overview-graph').waitFor();
  // Selection tests start with the application drawer explicitly closed.

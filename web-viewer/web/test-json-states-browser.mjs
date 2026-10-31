@@ -1,5 +1,6 @@
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
 import {verifyStateTransitionIdentity} from './test-state-transition-identity-browser.mjs';
+import {openExplorerGroup} from './explorer-browser.mjs';
 import assert from 'node:assert/strict';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 const dir='../work/json-state/issue-275/',raw=readFileSync(dir+'purchase.json','utf8'),md=readFileSync(dir+'supported-state.md','utf8'),pkg=JSON.parse(raw),st=pkg.documents[1],bd=pkg.documents[0];
 const parseStateRows=()=>st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId,to:st.states.find(s=>s.id===t.toId)?.name??t.toId}));
@@ -9,7 +10,7 @@ export async function verifyJSONStates(browser){
  for(const [format,source]of [['md',md],['json',raw]]){
   const context=await browser.newContext({viewport:{width,height:960}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled),saved=()=>page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
-  const select=async id=>{if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator(`[data-explorer-key="states:${id}"]`).click();};
+  const select=async id=>{if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await openExplorerGroup(page,'states');await page.locator(`[data-explorer-key="states:${id}"]`).click();};
   try{
    await page.goto('http://127.0.0.1:4173/');await ready();await page.locator('#fallback').setInputFiles({name:'states.'+format,mimeType:format==='json'?'application/json':'text/markdown',buffer:Buffer.from(source)});await page.locator('.node').first().waitFor();if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();await saved();
    await select(format==='json'?st.objectId:'購入申請');await page.locator('.state-diagram').waitFor();
@@ -44,7 +45,7 @@ export async function verifyJSONStates(browser){
    await page.goto('http://127.0.0.1:4173/');await page.waitForFunction(()=>!document.querySelector('#open').disabled);
    await page.locator('#fallback').setInputFiles({name:'native.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(input))});await page.waitForFunction(()=>document.querySelectorAll('.node').length===3);
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
-   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="states:object-request"]').click();await page.locator('.state-diagram').waitFor();
+   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await openExplorerGroup(page,'states');await page.locator('[data-explorer-key="states:object-request"]').click();await page.locator('.state-diagram').waitFor();
    assert.equal(await page.locator('[data-transition]').count(),2);const svg=await page.locator('.state-diagram').evaluate(e=>e.outerHTML);nativeSVG.push(svg);
    await page.screenshot({path:`${out}/native-0.4-${decorated?'decorated':'plain'}-393.png`});
    await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('.state-diagram').waitFor();assert.equal(await page.locator('.state-diagram').evaluate(e=>e.outerHTML),svg);

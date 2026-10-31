@@ -125,7 +125,7 @@ async function verifyOneEmpty({page,touch,options}){
  else await page.locator('.tab.active .close').click();
  assert.equal(await page.locator('#empty-workspace').isVisible(),true,'closing the last workspace shows the empty workspace');
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
- await page.locator('[data-explorer-key="business:overview"]').click();
+ const businessGroup=page.locator('[data-explorer-key="group:business"]');if(await businessGroup.getAttribute('aria-expanded')==='false')await businessGroup.click();await page.locator('[data-explorer-key="business:overview"]').click();
  await assertGraph(page,expected);
  await page.reload();await ready(page,1);await assertGraph(page,expected);
  return {...options,empty,restoredFields:emptyLayoutFields,activation:['pointer and keyboard sample in initial empty viewport'],gestures:['wheel','mouse pan','observed two-contact pinch'],closeAndReopenOverview:true};

@@ -3,6 +3,7 @@ import {setScope} from './scope-control.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseDesign} from '../src/graph.ts';
+import {openExplorerGroup} from './explorer-browser.mjs';
 
 // The old category/per-node-eye controls were removed by request. Test the
 // current explorer and the persisted legacy override through public controls.
@@ -17,7 +18,7 @@ export async function verifyNodeDrawer(browser){
   await showExplorer();const search=page.locator('.explorer-search input');await search.fill('not-a-node');assert.match(await page.locator('.explorer-groups').innerText(),/該当する項目はありません/);assert.deepEqual(await positions(),initial,'filtering the explorer leaves the graph untouched');
   await search.fill(activity);assert.equal(await entry('business',activity).isVisible(),true);if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await entry('business',activity).click();
   assert.equal(await page.locator('.node.selected').getAttribute('data-node'),activity);assert.equal(await page.locator('.tab').count(),2);assert.equal(await page.locator('.node.selected .activity-open').count(),0,'current detail has no self link');assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false,'opening detail preserves the closed right drawer');
-  await search.fill('');await entry('business','overview').click();assert.deepEqual(await positions(),initial,'overview positions survive detail navigation');assert.equal(await page.locator('#zoom').textContent(),zoom);
+  await search.fill('');await openExplorerGroup(page,'business');await openExplorerGroup(page,'business-activity');await entry('business','overview').click();assert.deepEqual(await positions(),initial,'overview positions survive detail navigation');assert.equal(await page.locator('#zoom').textContent(),zoom);
   await page.locator('#in').click();const extent=await page.locator('#viewport').evaluate(view=>{const canvas=document.querySelector('#canvas');return {scroll:[view.scrollWidth,view.scrollHeight],client:[view.clientWidth,view.clientHeight],canvas:[parseFloat(canvas.style.width),parseFloat(canvas.style.height)]};});assert.ok(extent.scroll.every((n,i)=>n<=Math.max(extent.canvas[i],extent.client[i])+2),'zoom does not multiply the world extent');await page.locator('#out').click();assert.deepEqual(await positions(),initial);
   await setScope(page,'hide');assert.equal(await page.locator('.node.outside').count(),0);await setScope(page,'show');assert.deepEqual(await positions(),initial,'scope toggle restores positions');
   await page.setViewportSize({width:393,height:852});await showExplorer();await entry('business',activity).click();assert.equal(await page.locator('#design-explorer').isVisible(),false,'mobile page selection releases the overlay');assert.equal(await page.locator('.node.selected').getAttribute('data-node'),activity);assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
