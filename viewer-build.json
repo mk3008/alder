@@ -1,10 +1,11 @@
 {
   "productManifestVersion": "0.4.9",
-  "source": "2885d51f8b5776077d13daddfc0be5edf38597c1",
-  "approvedCandidate": "9a2f5f6e1940436f97864947d9d61705cf77d17a",
-  "tree": "a1f9cefb733583140499472fd46556426b30a65a",
-  "buildRun": 40045829114,
-  "buildArtifact": 12541583021,
-  "scriptSha256": "c70aa1e0ab326a0d9633acd029b42f4e023e6f7c281ab48648bb5f029f48772f",
-  "styleSha256": "8c29e73d62dde9a176e79a372fb06a10424e3bdc9da29e5f9d7aa1c286025223"
+  "source": "fc6c4b386028ed241dc610033df1f4c2703dfa21",
+  "approvedCandidate": "304e7d4e82fe7087193012511a437a3c726ce7c2",
+  "tree": "7e5cd5f5365847cf97633befd96055dc3255e8e9",
+  "buildRun": 41191585410,
+  "buildArtifact": 13039082417,
+  "scriptSha256": "9d7b9ac361b26bda78b5a791793a291a523d028f1717a148ebe03d3268bdf9a8",
+  "styleSha256": "8221020fc68aab1f70abefb1f6b509e0fd3891bfbf9d51acd1c745c524b62f91",
+  "previousProductionCommit": "a81194ab288b3412dce230a55f1f2d52f9fda70c"
 }
