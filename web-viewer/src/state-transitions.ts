@@ -111,7 +111,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   // bend, so it cannot be confused with labels on the shared departure row.
   if(!loopWires.has(i)&&wires[i].returning&&to&&to.y>from.y){
    const falling=route.points.slice(1).map((p,j)=>[route.points[j],p] as const).filter(([a,b])=>Math.abs(a[0]-b[0])<.01&&b[1]-a[1]>24).sort(([a,b],[c,d])=>(d[1]-c[1])-(b[1]-a[1]))[0];
-   if(falling){const [a,b]=falling;anchor=[a[0]+8+group.width/2,(a[1]+b[1])/2];}
+   if(falling){const [a,b]=falling;anchor=[a[0]+8+group.width/2,a[1]+Math.min(24+group.height/2,(b[1]-a[1])/2)];}
   }
   const label=captionOnRow(anchor,group.width,group.height,nodes,placed);labelPositions[i]=label;
   placed.push({id:String(i),x:label[0]-group.width/2,y:label[1]-group.height/2,width:group.width,height:group.height});

@@ -43,7 +43,7 @@ try{
   const from=geometry.nodes.find(n=>n.id===r.from),to=geometry.nodes.find(n=>n.id===r.to);
   if(plan.wires[i].returning&&to&&to.y>from.y){
    const falling=routes[i].points.slice(1).map((p,j)=>[routes[i].points[j],p]).filter(([a,b])=>Math.abs(a[0]-b[0])<.01&&b[1]-a[1]>24).sort(([a,b],[c,d])=>(d[1]-c[1])-(b[1]-a[1]))[0];
-   if(falling){assert.equal(label.y,(falling[0][1]+falling[1][1])/2-sizes[i].height/2+14,'downward-branch caption is after its bend: '+r.id);continue;}
+   if(falling){assert.equal(label.y,falling[0][1]+Math.min(24+sizes[i].height/2,(falling[1][1]-falling[0][1])/2)-sizes[i].height/2+14,'downward-branch caption is after its bend: '+r.id);continue;}
   }
   assert.equal(label.y,center-sizes[i].height/2+14,'shared business caption row: '+r.id);
  }
