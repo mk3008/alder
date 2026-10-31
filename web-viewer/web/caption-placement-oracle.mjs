@@ -18,8 +18,8 @@ export function assertStateCaptionPlacement(snapshot,rows){
   const width=Math.max(...caption.lines.map(s=>Array.from(s).length*14)),height=caption.lines.length*18;
   const returning=Math.abs(x0-(node.x+node.width))<1e-7;
   if(row.from===row.to){
-   assert.ok(returning,'self-loop leaves its own right edge: '+row.id);
    const xs=nums.filter((_,i)=>i%2===0),ys=nums.filter((_,i)=>i%2===1),lastX=nums.at(-2),lastY=nums.at(-1);
+   assert.ok(x0>node.x&&x0<node.x+node.width&&y0===node.y,'self-loop leaves the top of its own state: '+row.id);
    assert.ok(lastX>node.x&&lastX<node.x+node.width&&lastY===node.y,'self-loop returns to the top of the same state: '+row.id);
    assert.ok(caption.x>=Math.max(...xs)+8-1e-7,'self-loop caption follows its bend: '+row.id);
    assert.ok(Math.abs(caption.y-14+height/2-Math.min(...ys))<1e-7,'self-loop caption shares its upper line: '+row.id);

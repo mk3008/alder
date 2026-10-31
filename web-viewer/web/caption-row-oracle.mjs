@@ -21,7 +21,8 @@ export function stateCaptionSnapshot(svg){
 export function assertStateCaptionRows(snapshot,transitions){
  const occupied=new Map();
  for(const caption of snapshot.captions){
-  const from=transitions.find(t=>t.id===caption.transition).from,node=snapshot.nodes.find(n=>n.id===from);
+  const row=transitions.find(t=>t.id===caption.transition),from=row.from,node=snapshot.nodes.find(n=>n.id===from);
+  if(row.from===row.to)continue;
   if(Math.abs(caption.startX-(node.x+node.width))<1e-7)continue;
   const offset=occupied.has(from)?occupied.get(from)+8:0;
   assert.equal(caption.y,node.y+node.height+24+14+offset,'state caption uses the same 24px source clearance');
@@ -33,7 +34,7 @@ export function assertStateCaptionRows(snapshot,transitions){
  for(const node of snapshot.nodes.slice().sort((a,b)=>a.y-b.y)){
   const heights=loops.get(node.id)??[],required=heights.length?32+heights.reduce((a,b)=>a+b,0)+8*(heights.length-1):0;
   if(required)y=Math.max(y,occupiedBottom+required+12);
-  const height=Math.max(44,(heights.length+1)*14);assert.equal(node.height,height);assert.equal(node.y,y,'state rows reserve forward captions and self-loop captions once');
+  const height=44;assert.equal(node.height,height);assert.equal(node.y,y,'state rows reserve forward captions and self-loop captions once');
   occupiedBottom=y+height+(occupied.has(node.id)?24+occupied.get(node.id):0);
   y+=height+(occupied.has(node.id)?24+occupied.get(node.id)+24:44);
  }

@@ -39,7 +39,11 @@ function segments(path){
 }
 function crossing([a,b],[c,d]){
  const cross=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
- return cross(a,b,c)*cross(a,b,d)<-1e-6&&cross(c,d,a)*cross(c,d,b)<-1e-6;
+ const p=cross(a,b,c),q=cross(a,b,d),r=cross(c,d,a),s=cross(c,d,b);
+ if(p*q< -1e-6&&r*s< -1e-6)return true;
+ if(Math.max(Math.abs(p),Math.abs(q),Math.abs(r),Math.abs(s))>1e-6)return false;
+ const axis=Math.abs(b[0]-a[0])>=Math.abs(b[1]-a[1])?0:1;
+ return Math.min(Math.max(a[axis],b[axis]),Math.max(c[axis],d[axis]))-Math.max(Math.min(a[axis],b[axis]),Math.min(c[axis],d[axis]))>.1;
 }
 function verify(candidate){
  const {panel,design,model,svg}=render(candidate),g=stateCaptionGeometry(svg),loops=model.transitions.filter(t=>t.from===t.to);
@@ -50,7 +54,7 @@ function verify(candidate){
   const path=svg.querySelector(`path.edge[data-transitions="${t.id}"]`),caption=svg.querySelector(`[data-transition-id="${t.id}"]`),node=g.nodes.find(n=>n.id===t.from);
   assert(path&&caption&&node,t.id);assert.equal(path.classList.contains('exception'),t.path==='exception');
   const nums=path.getAttribute('d').match(/-?\d+(?:\.\d+)?/g).map(Number);
-  assert.equal(nums[0],node.x+node.width);assert.equal(nums.at(-1),node.y);
+  assert(nums[0]>node.x&&nums[0]<node.x+node.width);assert.equal(nums[1],node.y);assert.equal(nums.at(-1),node.y);
   assert(nums.at(-2)>node.x&&nums.at(-2)<node.x+node.width);
   assert(caption.textContent.includes(design.graph.nodes.find(n=>n.id===t.activity).name));assert(panel.querySelector(`[data-transition="${t.id}"]`).textContent.includes(t.condition));
  }
@@ -58,6 +62,9 @@ function verify(candidate){
   const paths=loops.filter(t=>t.from===stateName).map(t=>svg.querySelector(`path.edge[data-transitions="${t.id}"]`).getAttribute('d'));
   assert.equal(new Set(paths).size,paths.length,'same-state transitions have distinct paths: '+stateName);
   for(const [i,path]of paths.entries())for(const other of paths.slice(i+1))assert(!segments(path).some(a=>segments(other).some(b=>crossing(a,b))),'same-state loops do not cross: '+stateName);
+ }
+ for(const loop of loops){const path=segments(svg.querySelector(`path.edge[data-transitions="${loop.id}"]`).getAttribute('d'));
+  for(const other of g.paths.filter(p=>p.id!==loop.id))assert(!path.some(a=>segments(other.d).some(b=>crossing(a,b))),loop.id+' does not cross or share another transition: '+other.id);
  }
  for(const name of ['終結','破棄'])assert(!loops.some(t=>t.from===name),name+' has no invented self-loop');
  return {g,loops,svg};
@@ -76,8 +83,8 @@ const manyResult=verify(many),same=manyResult.loops.filter(t=>t.from==='下書�
 assert.equal(same.length,5);assert.equal(new Set(same.map(t=>manyResult.svg.querySelector(`path.edge[data-transitions="${t.id}"]`).getAttribute('d'))).size,5);
 // A retained position can put another card on the nominal loop corridor.
 // The loop must find an upper-right detour without passing through that card.
-const card={id:'self',x:200,y:200,width:104,height:44},blocker={id:'other',x:324,y:150,width:24,height:40};
-const detour=stateSelfLoopRoute(card,[card,blocker],{index:0,count:1,rise:41,outerReach:32},120);
+const card={id:'self',x:200,y:200,width:104,height:44},blocker={id:'other',x:250,y:150,width:20,height:20};
+const detour=stateSelfLoopRoute(card,[card,blocker],{index:1,count:2,rise:41,labelLeft:312},120);
 assert.equal(detour.collisions,0);assert.equal(detour.fallback,false);assert.equal(detour.rerouted,true);
 results.push('STATE-LOOP-002');
 const node=actual.g.nodes.find(n=>n.id==='作業中');actual.svg.querySelector('[data-state="作業中"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));

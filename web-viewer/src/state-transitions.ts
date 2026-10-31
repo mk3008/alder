@@ -38,12 +38,12 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  }
  const loopGroups=new Map<string,number[]>();
  rows.forEach(([row],i)=>{if(row.from===row.to){const group=loopGroups.get(row.from)??[];group.push(i);loopGroups.set(row.from,group);}});
- const loopWires=new Map<number,{index:number;count:number;rise:number;outerReach:number}>(),loopSpace=new Map<string,number>();
+ const loopWires=new Map<number,{index:number;count:number;rise:number}>(),loopSpace=new Map<string,number>();
  for(const [id,indices]of loopGroups){
   let used=0;
-  indices.forEach((i,index)=>{const height=captionGroups[i].height,rise=32+used+height/2;loopWires.set(i,{index,count:indices.length,rise,outerReach:32+16*(indices.length-1)});loopSpace.set(id,rise+height/2);used+=height+8;});
+  indices.forEach((i,index)=>{const height=captionGroups[i].height,rise=32+used+height/2;loopWires.set(i,{index,count:indices.length,rise});loopSpace.set(id,rise+height/2);used+=height+8;});
  }
- const nodeHeight=(id:string)=>Math.max(44,((loopGroups.get(id)?.length??0)+1)*14);
+ const nodeHeight=(_id:string)=>44;
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
  // A multiline return caption can extend above the first state. Reserve only
  // the extra initial top space needed so the initial view does not clip it.
@@ -52,7 +52,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   const extra=loopSpace.get(id)??0;if(extra)y=Math.max(y,occupiedBottom+extra+12);
   const height=nodeHeight(id),caption=departures.get(id)??0;projected.set(id,y);occupiedBottom=y+height+(caption?24+caption:0);y+=captionRowStep(height,caption);
  }
- const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32,((loopGroups.get(id)?.length??0)+1)*24),height:nodeHeight(id)}));
+ const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32,16+Math.max(0,2*(loopGroups.get(id)?.length??0)-1)*24),height:nodeHeight(id)}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
  const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。'+(ids.includes('@none')?'作成なしはこの操作の処理結果。':'')+(ids.includes('@unknown')?'未決は設計課題。':'');svg.append(title);
  svg.append(graphMarkers('state-transition-'));
@@ -64,8 +64,13 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
  // The shared business router measures single-line labels. Supply equivalent
  // widths, then use its same collision escape for the full multiline boxes.
  const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
- const routes=new RouteCache().update({},model,nodes,captionRelations,wires).map((route,i)=>{
-  const loop=loopWires.get(i);return loop?stateSelfLoopRoute(nodes.find(n=>n.id===rows[i][0].from)!,nodes,loop,Math.max(30,captionRelations[i].label.length*12)):route;
+ const sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires),otherWires=sharedRoutes.flatMap((route,i)=>route&&!loopWires.has(i)?[route.points]:[]);
+ const routes=sharedRoutes.map((route,i)=>{
+  const loop=loopWires.get(i);if(!loop)return route;
+  const id=rows[i][0].from,node=nodes.find(n=>n.id===id)!;
+  const related=sharedRoutes.flatMap((other,j)=>other&&!loopWires.has(j)&&wires[j].returning&&(rows[j][0].from===id||rows[j][0].to===id)?[other.bounds.right]:[]);
+  const labelLeft=Math.max(node.x+node.width+8,...related.map(x=>x+8));
+  const result=stateSelfLoopRoute(node,nodes,{...loop,labelLeft},Math.max(30,captionRelations[i].label.length*12),otherWires);otherWires.push(result.points);return result;
  });
  const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
  const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
