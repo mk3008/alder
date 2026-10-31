@@ -6,7 +6,7 @@ import {stateDocument} from './state-storage.mjs';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {validate,inventory,demand} from './core.mjs';
+import {validate,inventory,demand,requireCheckedSamples} from './core.mjs';
 const parser=fileURLToPath(new URL('./markdown.py',import.meta.url));
 const hash=text=>createHash('sha256').update(text).digest('hex');
 export class ConversionError extends Error{
@@ -95,7 +95,7 @@ export function convertMarkdown(request){
  if(previousPackage)pkg=reconcile(pkg,previousPackage,renameBindings,removedIds);
  {pkg.diagnostics=pkg.diagnostics.filter(s=>!s.startsWith('Role未確定: '));for(const d of pkg.documents.filter(d=>d.kind==='businessDesign'))for(const a of d.activities)if(a.roleId===null)pkg.diagnostics.push('Role未確定: '+a.id+' — '+a.who);}
  if(previousPackage?.formatVersion==='0.3')demand(roleCatalog,'Role catalog must be retained on re-import');
- validate(pkg);
+ validate(pkg);requireCheckedSamples(pkg);
  if(previousPackage){for(const doc of pkg.documents){const prior=previousPackage.documents.find(d=>d.id===doc.id);if(prior&&JSON.stringify(prior)!==JSON.stringify(doc))demand(prior.revision!==doc.revision,'Changed document requires new revision');}
  demand(JSON.stringify(previousPackage)===JSON.stringify(pkg)||previousPackage.revision!==pkg.revision,'Changed package requires new revision');}
  return {package:pkg,diagnostics:validate(pkg).diagnostics.map(message=>({code:'UNVERIFIED_MEANING',severity:'warning',message})),approval:'not-evaluated'};

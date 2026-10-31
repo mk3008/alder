@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "bf6ac46ec27a39c99a9ee0639f2677a38321f7a6",
+  "alder_source_revision": "c9fcf58cd55c63cd6993c65ae387370b0ce31e52",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "06069103fadfe398c479bce72d2b66d409585c9443190631e0c42f1b0beb0c20",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -18,7 +18,7 @@
     "tools/document_storage/schema.mjs": "275880f85c80c3e3911876c898250f9ecaf5fab227dccfc7ac8447207585891d",
     "tools/document_storage/schema.json": "dd81eb7fc5c46483f9ec8244ac94289e3094c513491173d80c53fb506e243c2c",
     "tools/document_storage/edit.mjs": "a8a91d2c2027b6eb3769b1618a8aeaccb46656815cf14548f5bf8741b5ad3834",
-    "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
+    "tools/document_storage/convert.mjs": "8ae8de81ae2e470ad36433bab502a71c1c72fd09a466a733fdac13581db21562",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
     "tools/document_storage/authoring.mjs": "d1db48a8bd8524c1de70954474565e32781e8ec2155cd455bfe8d25aab4c8c87",
