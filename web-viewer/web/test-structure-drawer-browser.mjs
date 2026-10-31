@@ -9,7 +9,7 @@ export async function verifyStructureDrawer(page){
   await page.frameLocator('iframe[data-concept-view="'+id+'"]').locator('.node').first().waitFor();
   assert.equal(await page.locator('.concept-main .data-example-modes,.concept-main h1').count(),0);
   if(!await drawer.isVisible())await page.locator('#drawer').click();
-  assert.equal(await page.locator('.concept-overview-section').getAttribute('open'),'');
+  assert.equal(await page.locator('#concept-drawer-overview').getAttribute('aria-selected'),'true');
   assert(await page.locator('.data-review-overview .review-owner').isVisible());
   assert.equal(await page.locator('.data-review-overview .review-related-activities button:not(:disabled)').count()>0,true);
  }
@@ -20,7 +20,7 @@ export async function verifyStructureDrawer(page){
  await select('request','購入申請');assert.equal(await drawer.isVisible(),false,'shape selection keeps drawer closed');await page.locator('#drawer').click();
  assert.equal(await page.locator('.concept-related-content').textContent().then(s=>s.includes('申請者')),true);
  await page.locator('[data-sample=request-submitted]').click();
- assert.equal(await page.locator('.concept-examples-section').getAttribute('open'),'');
+ assert.equal(await page.locator('#concept-drawer-examples').getAttribute('aria-selected'),'true');
  assert.equal(await page.locator('iframe[data-concept-view=group-request]').isVisible(),true);
  const zoom=await graph.locator('.zoom-value').textContent();await graph.locator('.zoom-in').click();assert.notEqual(await graph.locator('.zoom-value').textContent(),zoom,'canvas zoom works during example review');
  await select('item','申請品目');assert.equal(await page.locator('.data-examples-panel').getAttribute('data-data-example'),'request-submitted');assert.match(await page.locator('.concept-related-content').textContent(),/依頼数量/);assert.match(await page.locator('.concept-page-details').textContent(),/申請者/);
@@ -36,7 +36,7 @@ export async function verifyStructureDrawer(page){
  }}
  await page.setViewportSize({width:1280,height:960});await page.locator('.concept-related .shell-heading button').click();assert.equal(await drawer.isVisible(),false);await select('version','購入申請版');assert.equal(await drawer.isVisible(),false);await page.locator('#drawer').click();assert.match(await page.locator('.concept-related-content').textContent(),/未確定／確定/);
  const sampleURL=new URL(page.url());assert.equal(sampleURL.searchParams.get('dataExample'),'request-submitted');
- await page.locator('.concept-examples-section>summary').click();await page.waitForFunction(()=>!new URL(location.href).searchParams.has('dataExample'));await page.goBack();await page.waitForFunction(()=>new URL(location.href).searchParams.get('dataExample')==='request-submitted');assert.equal(await page.locator('.concept-examples-section').getAttribute('open'),'');await page.goForward();await page.waitForFunction(()=>!document.querySelector('.concept-examples-section').open);assert.equal(await page.locator('.concept-examples-section').getAttribute('open'),null);
+ await page.locator('#concept-drawer-overview').click();await page.waitForFunction(()=>!new URL(location.href).searchParams.has('dataExample'));await page.goBack();await page.waitForFunction(()=>new URL(location.href).searchParams.get('dataExample')==='request-submitted');assert.equal(await page.locator('#concept-drawer-examples').getAttribute('aria-selected'),'true');await page.goForward();await page.waitForFunction(()=>document.querySelector('#concept-drawer-overview').getAttribute('aria-selected')==='true');assert.equal(await page.locator('#concept-drawer-examples').getAttribute('aria-selected'),'false');
  if(await drawer.isVisible())await page.locator('#drawer').click();if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="concept:landscape"]').click();
  return {checks:'STRUCTURE-SHELL-001..005: four graph-first pages, manual drawer, overview/sample separation, selection during samples, pointer/keyboard width, table scroll, persistence, Back/Forward, 1280/393 light/dark'};
 }

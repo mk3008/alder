@@ -4,7 +4,7 @@ import {mkdtempSync,mkdirSync,readFileSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {JSDOM} from 'jsdom';
-import {inlineOfflineHTML} from '../../tools/viewer-preview.mjs';
+import {embedOfflineConcept,inlineOfflineHTML} from '../../tools/viewer-preview.mjs';
 
 const authority=readFileSync('verification/offline-review.check-items.json');
 assert.equal(createHash('sha256').update(authority).digest('hex'),'ecc62819781cd8e8f6cf286d4c1e0908b81cd9706bba3fce2601febd222d3489');
@@ -24,6 +24,9 @@ try{
   dom.window.eval(output.script);assert.equal(dom.window.document.body.dataset.result,'chunk loaded','a split module is present and executable');
  }finally{dom.window.close();}
  assert.throws(()=>inlineOfflineHTML(html.replace('./assets/main.js','../main.js'),dir),/asset path/);
+ const embeddedInput='<html><script>window.evil=true</script></html>',embedded=new JSDOM(embedOfflineConcept(output.standalone,embeddedInput),{runScripts:'dangerously'});
+ try{assert.equal(embedded.window.__alderConceptHtml,embeddedInput);assert.equal(embedded.window.evil,undefined,'embedded page remains data until used as a frame');}finally{embedded.window.close();}
+ assert.throws(()=>embedOfflineConcept('<html></html>',embeddedInput),/entrypoint/);
  assert.throws(()=>inlineOfflineHTML(html.replace('./assets/first.css','https://example.test/first.css'),dir),/asset path/);
  writeFileSync(join(dir,'assets/first.css'),'</style>');assert.throws(()=>inlineOfflineHTML(html,dir),/Unsafe inline style/);
  console.log('OFFLINE-REVIEW-001: split JavaScript and all CSS inlined; unsafe asset paths and delimiters rejected. OFFLINE-REVIEW-002 requires real Chrome.');

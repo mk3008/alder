@@ -1,6 +1,6 @@
-import {contentFor} from './data-examples';
+import type {DataExampleIndex} from './data-examples';
 import {createElement,SquareArrowOutUpRight} from 'lucide';
-import {type ReviewGroup} from './concept-review-fixture';
+import type {ReviewGroup} from './concept-views';
 function add(root:HTMLElement,tag:string,value:string){const el=document.createElement(tag);el.textContent=value;root.append(el);return el;}
 function command(root:HTMLElement,label:string,action:()=>void){const b=document.createElement('button');b.type='button';b.className='review-open';b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));add(b,'span',label);b.onclick=action;root.append(b);return b;}
 export type LandscapeMode='overview'|'graph';
@@ -9,8 +9,8 @@ export function renderReviewLandscape(root:HTMLElement,canvas:HTMLElement|undefi
  if(mode==='overview'&&canvas){const content=document.createElement('div');content.className='landscape-overview';content.append(canvas);root.append(content);}
 
 }
-export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
- const content=contentFor(group.id);root.replaceChildren();if(!content)return;
+export function renderReviewOverview(root:HTMLElement,group:ReviewGroup,index:DataExampleIndex,openSample:(id:string)=>void=()=>{},openActivity:(id:string)=>void=()=>{},activities:{id:string;name:string}[]=[]){
+ const content=index.contentFor(group.id);root.replaceChildren();if(!content)return;
  add(root,'p',content.description).className='review-description';
  add(root,'h3','レビュアー');add(root,'p',content.reviewer.role).className='review-owner';
  add(root,'h3','関連業務');const related=document.createElement('ul');related.className='review-related-activities';for(const activity of content.relatedActivities){const li=document.createElement('li');const target=activities.find(a=>a.id===activity.id&&a.name===activity.name);const b=command(li,activity.name,()=>{if(target)openActivity(target.id);});b.disabled=!target;b.setAttribute('aria-label',activity.name+'を業務タブで開く');b.querySelector('svg')?.setAttribute('data-icon','square-arrow-out-up-right');b.append(b.querySelector('svg')!);related.append(li);}root.append(related);

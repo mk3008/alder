@@ -22,6 +22,12 @@ export function inlineOfflineHTML(html,dist){
  return {standalone,script,style:styles.join('\n')};
 }
 
+export function embedOfflineConcept(standalone,concept){
+ const marker='<script type="module">';if(!standalone.includes(marker))throw Error('Offline module entrypoint missing');
+ const embedded=JSON.stringify(concept).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+ return standalone.replace(marker,'<script>window.__alderConceptHtml='+embedded+';</script>'+marker);
+}
+
 export function packageViewerPreview({dist,output,head,pr,fixture}){
  if(!/^[0-9a-f]{40}$/.test(head)||!/^\d+$/.test(String(pr)))throw Error('Pinned review head and PR required');
  const checkout=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),tree=execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),sourceTree=execFileSync('git',['rev-parse',`${head}^{tree}`],{encoding:'utf8'}).trim();
@@ -29,7 +35,11 @@ export function packageViewerPreview({dist,output,head,pr,fixture}){
  execFileSync('git',['diff','--quiet','HEAD','--','src','../tools/viewer-preview.mjs']);
  const sub=`preview/pr-${pr}/${head}`,web=join(output,sub),offline=join(output,'offline',sub);
  mkdirSync(web,{recursive:true});cpSync(dist,web,{recursive:true});mkdirSync(offline,{recursive:true});
- const html=readFileSync(join(dist,'index.html'),'utf8'),{standalone,script,style}=inlineOfflineHTML(html,dist);
+ const html=readFileSync(join(dist,'index.html'),'utf8'),entry=inlineOfflineHTML(html,dist),{script,style}=entry;
+ // The normal concept view is an iframe. Carry its compiled page in the same
+ // offline file so opening a single JSON also works without a server.
+ const concept=inlineOfflineHTML(readFileSync(join(dist,'concept.html'),'utf8'),dist).standalone;
+ const standalone=embedOfflineConcept(entry.standalone,concept);
  writeFileSync(join(offline,'index.html'),standalone);cpSync(fixture,join(output,'gate-b-example.json'));
  const files=readdirSync(output,{recursive:true}).filter(f=>/\.(?:html|js|css|txt|json)$/.test(f)&&!['manifest.json','README.txt'].includes(f));
  const manifest={source:head,checkout,tree,sourceTree,urlPath:`/${sub}/`,offlinePath:`offline/${sub}/index.html`,scriptSha256:createHash('sha256').update(script).digest('hex'),styleSha256:createHash('sha256').update(style).digest('hex'),files:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(join(output,f))).digest('hex')]))};

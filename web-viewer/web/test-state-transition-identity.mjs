@@ -19,7 +19,7 @@ const checks=authority(bytes),results=[];
 const coverage=r=>{assert.deepEqual(r.map(x=>x.id).sort(),ids);assert(r.every(x=>x.pass));};
 for(const change of [a=>a.checks.pop(),a=>a.checks[0].condition='changed']){const a=structuredClone(checks);change(a);assert.throws(()=>authority(Buffer.from(JSON.stringify(a))));}
 assert.throws(()=>coverage(ids.slice(1).map(id=>({id,pass:true}))));
-const pass=id=>results.push({id,pass:true});
+const pass=(id,scope)=>results.push({id,pass:true,...(scope?{scope}:{})});
 const base='../work/concept-review/issue-133/versions/';
 const raw=readFileSync(base+'purchase-v2-beta.json','utf8'),pkg=JSON.parse(raw),bd=pkg.documents.find(d=>d.kind==='businessDesign'),st=pkg.documents.find(d=>d.kind==='stateTransition');
 const row=id=>st.transitions.find(t=>t.sourceId===id),state=id=>st.states.find(s=>s.id===id)?.name??({'@new':'作成前','@none':'作成なし','@unknown':'未決'}[id]??id);
@@ -46,7 +46,9 @@ const compiled=await build({entryPoints:['src/state-transitions.ts'],bundle:true
 window.eval(compiled.outputFiles[0].text+';window.StateUI=StateUI;');
 const design=parseDocument(raw),panel=window.StateUI.stateTransitionPanel(design,st.objectId,()=>{});window.document.body.append(panel);
 const svg=panel.querySelector('.state-diagram'),model=design.objectStateTransitions[st.objectId].model;
-assert.equal(svg.querySelectorAll('path.edge[data-transitions]').length,st.transitions.length);
+const renderedPaths=[...svg.querySelectorAll('path.edge[data-transitions]')];
+assert.deepEqual(renderedPaths.flatMap(p=>p.dataset.transitions.split(' ')).sort(),st.transitions.map(t=>t.sourceId).sort(),'each transition remains represented exactly once');
+for(const t of st.transitions.filter(t=>t.fromId!==t.toId))assert(renderedPaths.some(p=>p.dataset.transitions===t.sourceId),'different-state transitions keep independent paths: '+t.sourceId);
 assert.equal(svg.querySelectorAll('[data-transition-id]').length,st.transitions.length);
 for(const t of st.transitions){const label=svg.querySelector('[data-transition-id="'+t.sourceId+'"]'),detail=panel.querySelector('[data-transition="'+t.sourceId+'"]'),to=t.toId==='@none'?'この操作では作成しない':state(t.toId);assert(label.textContent.includes(bd.activities.find(a=>a.id===t.activityId).name));assert(detail.textContent.includes(t.condition));assert(detail.textContent.includes(to));assert(!label.textContent.includes('通常'));assert([...label.querySelectorAll('tspan')].every(e=>e.dataset.transitions===t.sourceId));}
 assert.equal(svg.querySelector('[data-transition-id="T12"]').textContent,'購入を準備する');
@@ -59,7 +61,7 @@ const dupPanel=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(
 const emptyLabel=structuredClone(pkg);emptyLabel.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId==='T15').conditionLabel=' ';assert.throws(()=>validate(emptyLabel));
 const sameTarget=structuredClone(pkg),extra={...row('T15'),id:'same-target',sourceId:'T98',condition:'別の明示条件'};sameTarget.documents.find(d=>d.kind==='stateTransition').transitions.push(extra);
 const extraPanel=window.StateUI.stateTransitionPanel(parseDocument(JSON.stringify(sameTarget)),st.objectId,()=>{});assert(extraPanel.querySelector('path[data-transitions="T98"]'));assert(extraPanel.querySelector('[data-transition-id="T98"]'));
-pass(ids[2]);
+pass(ids[2],'self-loop line separation superseded by STATE-BUNDLE-001; transition identity and non-self paths retained');
 
 const scratch=mkdtempSync(join(tmpdir(),'state-identity-'));
 try{

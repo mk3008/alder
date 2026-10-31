@@ -1,3 +1,4 @@
+import {context} from './fixtures/concept-sample.ts';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -31,7 +32,7 @@ w.HTMLElement.prototype.setPointerCapture=()=>{};
 w.HTMLElement.prototype.releasePointerCapture=()=>{};
 w.HTMLElement.prototype.hasPointerCapture=()=>false;
 w.eval(compiled.outputFiles[0].text+';window.Overview=Overview;');
-const changes=[],opens=[],view=w.Overview.createSubsystemOverview(w.document,id=>opens.push(id),()=>changes.push(view.selection()?.id));
+const changes=[],opens=[],view=w.Overview.createSubsystemOverview(w.document,context,'purchase',id=>opens.push(id),()=>changes.push(view.selection()?.id));
 w.document.querySelector('#host').append(view.root);
 const host=view.root.querySelector('.diagram-viewport'),region=id=>view.root.querySelector(`[data-subsystem="${id}"] .subsystem-overview-region`),selected=()=>view.selection()?.id;
 const fire=(type,pointerType,id,x,y,target=host)=>{const e=new w.Event(type,{bubbles:true,cancelable:true});Object.assign(e,{pointerId:id,pointerType,button:0,clientX:x,clientY:y});target.dispatchEvent(e);};
@@ -68,7 +69,7 @@ try{
  pass('SUBSYSTEM-REGION-002','handoff');
  view.root.querySelector('[data-subsystem="approval"] button').click();assert.equal(view.selection().kind,'group');assert.equal(selected(),'approval');
  pass('SUBSYSTEM-REGION-004','title');
- const reloaded=w.Overview.createSubsystemOverview(w.document,()=>{},()=>{});w.document.querySelector('#host').append(reloaded.root);
+ const reloaded=w.Overview.createSubsystemOverview(w.document,context,'purchase',()=>{},()=>{});w.document.querySelector('#host').append(reloaded.root);
  assert.equal(reloaded.selection()?.kind,'group');assert.equal(reloaded.selection()?.id,'approval');
  assert.equal(reloaded.root.querySelector('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');
  pass('SUBSYSTEM-REGION-004','restore');

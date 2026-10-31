@@ -19,6 +19,26 @@ function confirmedBD(pkg,check,operation){
  demand(r&&receipt(r.evidence),'Human Business Design confirmation for this exact revision is required');
  demand(pkg.documents.some(d=>d.id===r.documentId&&d.kind==='businessDesign'),'Direct JSON authoring requires an in-package Business Design');
 }
+// Nested concept identities are scoped by their authored owner. The generic
+// inventory tracks the document and its top-level relations; the remaining
+// nested IDs must not silently disappear when a package is saved either.
+function conceptIdentities(doc){
+ const keys=new Set(),add=(kind,...ids)=>keys.add(JSON.stringify([kind,...ids]));
+ for(const system of doc.subsystems)add('subsystem',system.id);
+ for(const concept of doc.concepts){add('concept',concept.id);for(const info of concept.information)add('information',concept.id,info.id);}
+ for(const handoff of doc.handoffs)add('handoff',handoff.id);
+ for(const group of doc.reviewGroups){add('group',group.id);
+  for(const edge of group.graph.edges)add('view-edge',group.id,edge.id);
+  for(const statement of group.structureStatements)add('structure-statement',group.id,statement.id);
+  for(const limit of group.limitations)add('limitation',group.id,limit.id);
+  for(const capability of group.capabilities){add('capability',group.id,capability.id);
+   for(const sample of capability.samples){add('sample',group.id,capability.id,sample.id);
+    for(const block of sample.blocks){for(const column of block.columns)add('sample-column',group.id,capability.id,sample.id,block.card,column.id);for(const row of block.rows)add('sample-row',group.id,capability.id,sample.id,block.card,row.id);}
+   }
+  }
+ }
+ return keys;
+}
 export function guardAuthoring(previous,next,operation={}){
  validate(next);if(previous)validate(previous);
  const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration','removedTransitions'];
@@ -44,6 +64,7 @@ export function guardAuthoring(previous,next,operation={}){
   }
   const removedIds=new Set(removed.map(r=>r.id));
   for(const [id,e]of old.map){if(removedIds.has(id))continue;demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
+  for(const prior of previous.documents.filter(d=>d.kind==='conceptModel')){const updated=next.documents.find(d=>d.id===prior.id);demand(updated?.kind==='conceptModel','Concept document type changed');const current=conceptIdentities(updated);for(const key of conceptIdentities(prior))demand(current.has(key),'Existing Concept ID was removed, replaced or moved: '+key);}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
   for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}

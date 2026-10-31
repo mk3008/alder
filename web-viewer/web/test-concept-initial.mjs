@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {tables,edges} from '../src/concept-fixture.ts';
-import {conceptNeighborhood} from '../public/concept-preview/neighborhood.js';
+import {tables,edges} from './fixtures/concept-sample.ts';
+import {conceptNeighborhood} from '../src/concept-neighborhood.js';
 import {conceptDiagram} from '../src/concept-layout.js';
 import {routeER} from '../src/concept-routing.js';
 // Independent segment/slab oracle includes the router's sampled rounded bends.

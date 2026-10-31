@@ -117,15 +117,25 @@
 .object-open svg{width:20px;height:20px}.object-open:hover{background:var(--select)}.object-open:focus-visible{outline-offset:-4px}
 /* Graph-first pages share one supplementary drawer; examples remain page-level evidence. */
 .concept-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible}
-.concept-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 12px 16px}
-.concept-page-title{font-size:17px;margin:12px 0}.concept-page-details>details{border-bottom:1px solid var(--subtle);padding:6px 0}.concept-page-details>details>summary{cursor:pointer;font-size:14px;font-weight:650;min-height:36px;align-content:center}
-.concept-drawer-body .data-review-overview,.concept-drawer-body .data-examples-panel{padding:8px 0;overflow:visible;min-width:0;background:var(--panel)}
+.concept-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 12px 12px}
+.concept-drawer-body .data-review-overview,.concept-drawer-body .data-examples-panel{padding:12px 0;overflow:visible;min-width:0;background:var(--panel)}
 .concept-drawer-body .data-example-picker{align-items:stretch;flex-direction:column;gap:4px}.concept-drawer-body .data-example-picker select{width:100%}
-.concept-selection>h2{font-size:14px;margin:16px 0 0}.concept-drawer-body .concept-related-content{padding:8px 0}
+.concept-selection>h2{font-size:14px;margin:12px 0 0}.concept-drawer-body .concept-related-content{padding:12px 0}
 .concept-drawer-resize{position:absolute;left:-5px;top:0;bottom:0;width:10px;cursor:col-resize;touch-action:none;z-index:8}.concept-drawer-resize:focus-visible,.concept-drawer-resize.resizing{outline:2px solid var(--accent,#357aa6);outline-offset:-4px}
-@media(max-width:800px){.concept-related{max-width:calc(100% - 16px)}.concept-drawer-body{padding:0 10px 12px}}
+@media(max-width:800px){.concept-related{max-width:calc(100% - 16px)}}
 
 .tab[data-view-kind=subsystems]{--tab-kind-color:#7b4abd}[data-theme=dark] .tab[data-view-kind=subsystems]{--tab-kind-color:#c9b2ff}
+
+/* Shared right-drawer chrome; the content beneath remains specific to its item. */
+.right-drawer-heading,.shell-heading.right-drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;height:auto;padding:0 12px;border-bottom:1px solid var(--subtle);background:var(--panel);flex-shrink:0}
+.right-drawer-heading .detail-title,.right-drawer-heading strong{min-width:0;margin:0;font-size:16px;line-height:1.4;font-weight:650;overflow-wrap:anywhere}
+.right-drawer-heading button,.shell-heading.right-drawer-heading button{display:grid;place-items:center;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;font-size:22px;flex-shrink:0}
+#detail{padding:0}#detail>.right-drawer-heading{position:sticky;top:0;z-index:2}
+#detail>.check-controls{border:0;padding:0;margin:0}#detail>:is(.markdown,.check-content){padding:12px}#detail>:is(.markdown,.check-content)>:first-child{margin-top:0}
+.right-drawer-tabs,.check-controls .right-drawer-tabs{display:flex;gap:0;margin:0;padding:0;border-bottom:1px solid var(--subtle);overflow-x:auto}
+.right-drawer-tabs button,.check-controls .right-drawer-tabs button{flex:1 0 auto;min-width:0;min-height:44px;height:44px;padding:0 12px;white-space:nowrap;border:0;border-bottom:3px solid transparent;border-radius:0;font-size:13px}
+.right-drawer-tabs button[aria-selected=true],.check-controls .right-drawer-tabs button[aria-selected=true]{background:var(--select);border-bottom-color:#357aa6;font-weight:650}
+.concept-child-tabs[hidden],.concept-page-details[hidden],.concept-selection[hidden],.data-review-overview[hidden],.data-examples-panel[hidden]{display:none!important}
 /* Right details are application rails, alongside the explorer and outside the tab strip. */
 .shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:relative;top:auto;bottom:auto;right:auto;min-height:0;flex-shrink:0;align-self:stretch}
 @media(max-width:800px){.shell-workbench>#formattedMarkdownDrawer,.shell-workbench>.concept-related{position:absolute;right:0;top:0;bottom:0;z-index:6}}

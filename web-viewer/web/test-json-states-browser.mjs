@@ -2,7 +2,7 @@ import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.
 import {verifyStateTransitionIdentity} from './test-state-transition-identity-browser.mjs';
 import assert from 'node:assert/strict';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 const dir='../work/json-state/issue-275/',raw=readFileSync(dir+'purchase.json','utf8'),md=readFileSync(dir+'supported-state.md','utf8'),pkg=JSON.parse(raw),st=pkg.documents[1],bd=pkg.documents[0];
-const parseStateRows=()=>st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId}));
+const parseStateRows=()=>st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId,to:st.states.find(s=>s.id===t.toId)?.name??t.toId}));
 export async function verifyJSONStates(browser){
  const results=[],out='web/evidence/json-states';mkdirSync(out,{recursive:true});
  for(const width of [1280,393]){const snapshots=[];

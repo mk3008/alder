@@ -2,10 +2,11 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {runInNewContext} from 'node:vm';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument} from '../src/document-input.ts';
+import {createDataExamples} from '../src/data-examples.ts';
+import {createConceptViews} from '../src/concept-views.ts';
 import {stateCaptionSnapshot,assertStateCaptionRows} from './caption-row-oracle.mjs';
 
 const authorityBytes=readFileSync('verification/purchase-v2-review.check-items.json');
@@ -148,36 +149,46 @@ for(const example of [sample('request-draft-approved'),sample('request-draft-pre
  for(const name of ['申請','保存前の状態','保存後の状態','承認対象版'])assert(columns.includes(name));
 }
 pass('PURCHASE-V2-007','standalone-columns');
-const adapter=readFileSync('src/purchase-review.ts','utf8');
-assert.match(adapter,/purchase-v2-beta\.json/);assert.match(adapter,/purchase-concepts-v2-beta\.json/);
-for(const file of ['src/data-examples.ts','src/concept-fixture.ts','src/logical-subsystems.ts'])
- assert.match(readFileSync(file,'utf8'),/purchase-review/);
-assert.match(readFileSync('vite.config.ts','utf8'),/versions\/purchase-v2-beta\.json/);
-const entryScript=readFileSync('public/review-entry.js','utf8');
-for(const mode of ['business','states','concept','request','examples','subsystems']){
- let destination;
- const location={href:'https://example.test/preview/pr-301/commit/review.html',replace(value){destination=value;}};
- runInNewContext(entryScript,{URL,location,document:{body:{dataset:{review:mode}}}});
- const url=new URL(destination);
- assert.equal(decodeURIComponent(url.hash.slice('#source='.length)),'https://example.test/preview/pr-301/commit/purchase-v2-beta.json');
- assert.equal(url.searchParams.get('review'),mode==='business'?'business':mode==='states'?'states':'concept');
+// The frozen old sample remains intact; its explicit data is now read from one package.
+const unified=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json','utf8'));
+const unifiedModel=unified.documents.find(item=>item.kind==='conceptModel');
+assert.deepEqual(unified.documents.find(item=>item.kind==='businessDesign'),bd);
+assert.deepEqual(unified.documents.find(item=>item.kind==='stateTransition'),states);
+const preserved=structuredClone(unifiedModel);delete preserved.schemaVersion;delete preserved.presentation.sampleCaption;
+// The 2026-10-31 subsystem review explicitly adds a boundary-specific view
+// and identifies the source of Q and responsibility for the result.
+const resultView=preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
+assert.deepEqual(resultView.handoffIds,['decision-preparation','result-progress']);
+delete preserved.reviewGroups.find(g=>g.id==='group-result').graph.subsystemViews;
+assert.deepEqual(preserved.presentation.subsystemViews.handoffIds,['decision-preparation','result-progress']);delete preserved.presentation.subsystemViews;
+for(const info of preserved.concepts.find(c=>c.id==='item').information.filter(i=>['item-information-1','item-information-2','item-information-3'].includes(i.id))){assert.equal(info.responsibleSubsystemId,'approval');assert.equal(info.responsibilityStatus,'未レビュー');delete info.responsibleSubsystemId;delete info.responsibilityStatus;}
+const outcome=preserved.concepts.find(c=>c.id==='request').information.find(i=>i.id==='request-information-5');assert.equal(outcome.responsibleSubsystemId,'receiving');assert.equal(outcome.responsibilityStatus,'未レビュー');delete outcome.responsibleSubsystemId;delete outcome.responsibilityStatus;
+const receiving=preserved.subsystems.find(s=>s.id==='receiving'),oldReceiving=model.subsystems.find(s=>s.id==='receiving');assert.match(receiving.purpose,/購入しない決定/);assert(receiving.information.some(i=>i.includes('購入しない決定')));receiving.purpose=oldReceiving.purpose;receiving.information=oldReceiving.information;
+for(const h of preserved.handoffs){const old=model.handoffs.find(item=>item.id===h.id);assert(h.description.includes(h.id==='decision-preparation'?'依頼数量Q':'購入しない決定'));h.description=old.description;}
+// Project the explicitly authorized V3 identity additions away before comparing
+// every other model field with the frozen V2 source. The old source is not edited.
+const identificationNotes={request:'申請の識別で、別の申請と区別する想定。',version:'申請と、その申請内の版の識別を組み合わせて区別する想定。',item:'申請版と、その版内の品目の識別を組み合わせて区別する想定。'};
+for(const c of preserved.concepts)if(identificationNotes[c.id]){assert(c.description.endsWith(identificationNotes[c.id]));c.description=c.description.slice(0,-identificationNotes[c.id].length);}
+for(const g of preserved.reviewGroups){
+ for(const node of g.graph.nodes){if(identificationNotes[node.conceptId]){assert(node.description.endsWith(identificationNotes[node.conceptId]));node.description=node.description.slice(0,-identificationNotes[node.conceptId].length);}const added=g.id==='group-request'&&node.conceptId==='request'?'申請の識別':g.id==='group-request'&&node.conceptId==='version'?'申請内の版の識別':g.id==='group-result'&&node.conceptId==='item'?'版内の品目の識別':undefined;if(added){assert.equal(node.fields.shift(),added);}}
+ for(const cap of g.capabilities)for(const example of cap.samples)for(const block of example.blocks){
+  const addedId=`${example.id}-${block.card}-item-identity`;
+  if(['result-partial','result-closed'].includes(example.id)&&['item','line'].includes(block.card)){
+   const added=block.columns.find(column=>column.id===addedId);assert(added&&added.informationId===(block.card==='item'?'item-information-1':'line-information-2'));
+   block.columns=block.columns.filter(column=>column.id!==addedId);
+   for(const row of block.rows){assert.equal(row.cells.filter(cell=>cell.columnId===addedId).length,1);row.cells=row.cells.filter(cell=>cell.columnId!==addedId);}
+  }
+  for(const row of block.rows)for(const cell of row.cells)if(cell.linkId?.startsWith('version:'))delete cell.linkId;
+ }
 }
-async function bundleWithModel(candidate){
- const compiled=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Candidate',
-  plugins:[{name:'replace-model-for-test',setup(builder){builder.onLoad({filter:/purchase-concepts-v2-beta\.json$/},
-   ()=>({contents:JSON.stringify(candidate),loader:'json'}));}}]});
- return compiled.outputFiles[0].text;
-}
-const changedModel=structuredClone(model);changedModel.reviewGroups[0].capabilities[0].description='表示される更新内容';
-const projectionWindow=new JSDOM('',{runScripts:'outside-only'}).window;
-projectionWindow.eval(await bundleWithModel(changedModel)+';window.Candidate=Candidate;');
-assert.equal(projectionWindow.Candidate.reviewContents[0].capabilities[0].description,'表示される更新内容');
-projectionWindow.close();
-const staleModel=structuredClone(model);staleModel.basedOn.revision='obsolete';
-const mismatchWindow=new JSDOM('',{runScripts:'outside-only'}).window;
-const staleBundle=await bundleWithModel(staleModel);
-assert.throws(()=>mismatchWindow.eval(staleBundle),/Business Design revisions differ/);
-mismatchWindow.close();
+preserved.kind=model.kind;preserved.revision=model.revision;preserved.format=model.format;preserved.formatVersion=model.formatVersion;
+assert.deepEqual(preserved,model,'the explicit model and all review content survive one-file integration');
+const changed=structuredClone(unified);changed.documents.find(item=>item.kind==='conceptModel').reviewGroups[0].capabilities[0].description='表示される更新内容';
+const loaded=parseDocument(JSON.stringify(changed));
+assert.equal(createDataExamples({business:loaded.model.business,model:loaded.model.concepts[0]}).reviewContents[0].capabilities[0].description,'表示される更新内容');
+const stale=structuredClone(unified);stale.documents.find(item=>item.kind==='conceptModel').basedOn.revision='obsolete';
+assert.throws(()=>parseDocument(JSON.stringify(stale)),/matching in-package BD revision/);
+for(const file of ['src/data-examples.ts','src/concept-views.ts','src/logical-subsystems.ts','src/viewer-shell.ts'])assert(!readFileSync(file,'utf8').includes('purchase-review'),'product must not depend on the purchase fixture');
 pass('PURCHASE-V2-005','source-boundary');
 
 // The nine older scenes keep their existing cells, while independent status and key columns may be added.
@@ -202,8 +213,8 @@ execFileSync(process.execPath,['web/test-navigation-authority-gate.mjs'],{stdio:
 execFileSync(process.execPath,['--experimental-strip-types','web/review-navigation-contract.mjs'],{stdio:'pipe'});
 pass('PURCHASE-V2-006','navigation-contract');
 
-const sampleBundle=await build({entryPoints:['src/data-examples.ts'],bundle:true,write:false,format:'iife',globalName:'Samples'});
-const groupsBundle=await build({entryPoints:['src/concept-review-fixture.ts'],bundle:true,write:false,format:'iife',globalName:'Groups'});
+const sampleBundle=await build({entryPoints:['web/fixtures/concept-sample.ts'],bundle:true,write:false,format:'iife',globalName:'Samples'});
+const groupsBundle=await build({entryPoints:['web/fixtures/concept-sample.ts'],bundle:true,write:false,format:'iife',globalName:'Groups'});
 const sampleWindow=new JSDOM('<body></body>',{runScripts:'outside-only'}).window;
 sampleWindow.eval(sampleBundle.outputFiles[0].text+';window.Samples=Samples;');
 sampleWindow.eval(groupsBundle.outputFiles[0].text+';window.Groups=Groups;');
@@ -211,7 +222,11 @@ const card=sampleWindow.document.createElement('article');
 sampleWindow.Samples.renderDataExample(card,sampleWindow.Groups.findReviewGroup('group-request'),'request-draft-approved',()=>{});
 const requestCells=[...card.querySelectorAll('[data-sample-key="request:R-101"]')];
 assert(requestCells.length>=4);assert(requestCells[0].dataset.keyTone);assert(requestCells.every(cell=>cell.dataset.keyTone===requestCells[0].dataset.keyTone));
-for(const cell of card.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone);
+for(const version of ['V1','D1']){const cells=[...card.querySelectorAll(`[data-sample-key="version:R-101:${version}"]`)];assert(cells.length>=2);assert(cells.every(cell=>cell.dataset.keyTone===cells[0].dataset.keyTone));}
+assert.notEqual(card.querySelector('[data-sample-key="version:R-101:V1"]').dataset.keyTone,card.querySelector('[data-sample-key="version:R-101:D1"]').dataset.keyTone);
+const oldSamples=createDataExamples({business:bd,model}),oldGroup=createConceptViews({model}).findGroup('group-request'),oldCard=sampleWindow.document.createElement('article');
+oldSamples.renderDataExample(oldCard,oldGroup,'request-draft-approved',()=>{});
+for(const cell of oldCard.querySelectorAll('td'))if(['V1','D1'].includes(cell.textContent))assert(!cell.dataset.keyTone,'the frozen V2 data is not recolored');
 sampleWindow.close();
 pass('PURCHASE-V2-007','keys');
 

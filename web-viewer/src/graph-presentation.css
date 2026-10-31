@@ -22,3 +22,11 @@
 :root .node.review-neighbor,:root .node.object.review-neighbor,.graph-shape.review-neighbor .graph-card-surface{border-color:var(--review-link)!important;border-width:var(--graph-neighbor-width)}
 /* Chromium's transient tap rectangle is separate from selection/focus. */
 .node,.graph-shape,.concept-select{-webkit-tap-highlight-color:transparent}
+/* Explicit subsystem boundaries in concept review diagrams. */
+.concept-subsystem-region{fill:var(--panel,#fff);stroke:var(--subtle,#cbd6df);stroke-width:1.5;cursor:pointer}
+.concept-subsystem-selected .concept-subsystem-region{stroke:var(--review-blue);stroke-width:2}
+.concept-subsystem-title{font:600 14px "Segoe UI","Noto Sans JP",sans-serif;fill:var(--fg,#253d38)}
+.concept-handoff{fill:none;stroke:var(--line,#7f969f);stroke-width:var(--graph-wire-width)}
+.concept-handoff.returning{stroke-dasharray:6 5}
+.concept-handoff-label{fill:var(--fg,#253d38);font:12px "Segoe UI","Noto Sans JP",sans-serif;paint-order:stroke;stroke:var(--bg,#f2f6f8);stroke-width:5px;stroke-linejoin:round}
+#concept-boundary-arrow .arrow{fill:var(--line,#7f969f)}

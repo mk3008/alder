@@ -9,8 +9,8 @@ const path='verification/global-right-drawer.check-items.json',hash='d510bbad60f
 const verify=bytes=>assert.equal(createHash('sha256').update(bytes).digest('hex'),hash);verify(readFileSync(path));assert.throws(()=>verify(Buffer.from('{}')));
 const checks=JSON.parse(readFileSync(path)).checks,covered=new Set();
 const code=(await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}})).outputFiles[0].text;
-const source=readFileSync('../work/concept-review/issue-133/versions/purchase-v2-beta.json','utf8');
-const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/global?conceptFixture=purchase',runScripts:'outside-only',pretendToBeVisual:true}).window;
+const source=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json','utf8');
+const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/global',runScripts:'outside-only',pretendToBeVisual:true}).window;
 w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.scrollIntoView=()=>{};w.HTMLElement.prototype.setPointerCapture=()=>{};
 const d=w.document,$=s=>d.querySelector(s),entry=id=>$('[data-explorer-key="'+id+'"]'),until=async fn=>{for(let i=0;i<1000;i++){if(fn())return;await new Promise(r=>setTimeout(r,5));}throw Error('not ready: '+fn);};
 const step=async direction=>{const event=new Promise(resolve=>w.addEventListener('popstate',resolve,{once:true}));w.history[direction]();await event;};

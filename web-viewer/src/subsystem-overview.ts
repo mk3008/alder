@@ -1,5 +1,5 @@
 import {createElement,SquareArrowOutUpRight,UserRound} from 'lucide';
-import {business,purchaseModel} from './purchase-review';
+import type {ConceptContext} from './concept-model';
 import {cardSurface,diagramCanvas,newDiagramView,type DiagramView} from './diagram-canvas';
 import {graphFocus} from './graph-focus';
 import {graphMarkers,paintGraphException} from './graph-visuals';
@@ -10,24 +10,25 @@ const svg=(doc:Document,tag:string,attributes:Record<string,string|number>={})=>
 export type OverviewSelection={kind:'model';id:string}|{kind:'group';id:string}|{kind:'connection';id:string};
 
 /** The model supplies membership, main-flow edges and reviewer IDs; the Viewer only lays them out. */
-export function createSubsystemOverview(doc:Document,open:(id:string)=>void,changed:()=>void){
- const groups=purchaseModel.reviewGroups,subsystems=purchaseModel.subsystems;
- const connections=purchaseModel.presentation.landscapeRelationships.map(edge=>{
+export function createSubsystemOverview(doc:Document,{model,business}:ConceptContext,documentKey:string,open:(id:string)=>void,changed:()=>void){
+ const groups=model.reviewGroups,subsystems=model.subsystems;
+ const connections=model.presentation.landscapeRelationships.map(edge=>{
   const from=groups.find(group=>group.id===edge.from),to=groups.find(group=>group.id===edge.to);
-  if(!from||!to||from.subsystemId!==to.subsystemId||!purchaseModel.presentation.reviewBoundaries.some(item=>item.from===edge.from&&item.to===edge.to))throw Error('Unknown overview relationship: '+edge.from+' -> '+edge.to);
+  if(!from||!to||from.subsystemId!==to.subsystemId||!model.presentation.reviewBoundaries.some(item=>item.from===edge.from&&item.to===edge.to))throw Error('Unknown overview relationship: '+edge.from+' -> '+edge.to);
   return edge;
  });
- const handoffs=purchaseModel.handoffs.map(item=>{if(!['forward','return'].includes(item.flowDirection))throw Error('Unknown overview handoff direction: '+item.id);return{id:item.id,from:item.fromSubsystemId,to:item.toSubsystemId,label:item.information,returning:item.flowDirection==='return'};});
+ const handoffs=model.handoffs.map(item=>{if(!['forward','return'].includes(item.flowDirection))throw Error('Unknown overview handoff direction: '+item.id);return{id:item.id,from:item.fromSubsystemId,to:item.toSubsystemId,label:item.information,returning:item.flowDirection==='return'};});
  if(new Set(handoffs.map(item=>item.id)).size!==handoffs.length)throw Error('Duplicate overview handoff');
  for(const handoff of handoffs)if(!subsystems.some(item=>item.id===handoff.from)||!subsystems.some(item=>item.id===handoff.to)||handoff.from===handoff.to||!handoff.label.trim())throw Error('Unknown overview handoff: '+handoff.id);
- for(const group of groups){if(!subsystems.some(item=>item.id===group.subsystemId))throw Error('Unknown overview subsystem: '+group.id);if(!business.roles.some(role=>role.id===group.reviewer.roleId))throw Error('Unknown overview reviewer: '+group.id);}
+ for(const group of groups){if(!subsystems.some(item=>item.id===group.subsystemId))throw Error('Unknown overview subsystem: '+group.id);if(!business.roles?.some(role=>role.id===group.reviewer.roleId))throw Error('Unknown overview reviewer: '+group.id);}
  const ordered=subsystems.flatMap(subsystem=>groups.filter(group=>group.subsystemId===subsystem.id));
  const positions=new Map<string,[number,number]>();let index=0;
  for(const [subsystemIndex,subsystem] of subsystems.entries())for(const group of ordered.filter(item=>item.subsystemId===subsystem.id)){positions.set(group.id,[80+index*170,100+index*120+subsystemIndex*64]);index++;}
- const view=newDiagramView(),storage='alder-subsystem-overview-v1:'+location.pathname;let canvas:HTMLElement|undefined,selection:OverviewSelection|undefined,restored=false;
- try{const saved=JSON.parse(localStorage.getItem(storage)||'null'),legacy=!saved?JSON.parse(localStorage.getItem('alder-logical-subsystems-v1:'+location.pathname)||'null'):undefined,record=saved??legacy;
-  if(saved){restored=true;if(typeof saved.zoom==='number'&&Number.isFinite(saved.zoom))view.zoom=Math.max(.25,Math.min(2.5,saved.zoom));if(Array.isArray(saved.scroll)&&saved.scroll.length===2&&saved.scroll.every((n:unknown)=>typeof n==='number'&&Number.isFinite(n)))view.scroll=saved.scroll;if(typeof saved.locked==='boolean')view.locked=saved.locked;for(const [id,point]of Object.entries(saved.positions??{}))if(groups.some(group=>group.id===id)&&Array.isArray(point)&&point.length===2&&point.every(n=>typeof n==='number'&&Number.isFinite(n)))view.positions.set(id,[point[0],point[1]]);}
-  const old=record?.selection,legacyGroups:Record<string,string>={request:'approval',decision:'approval',progress:'approval',preparation:'receiving',result:'receiving'},id=old?.kind==='node'?legacyGroups[old.id]:old?.id,kind=old?.kind==='node'?'group':old?.kind;
+ const view=newDiagramView(),storage='alder-subsystem-overview-v2:'+location.pathname+':'+encodeURIComponent(documentKey);let canvas:HTMLElement|undefined,selection:OverviewSelection|undefined,restored=false;
+ try{const saved=JSON.parse(localStorage.getItem(storage)||'null'),session=JSON.parse(sessionStorage.getItem('alder-explorer-v1:'+location.pathname)||'null');
+  const legacy=!saved&&session?.documentKey===documentKey?JSON.parse(localStorage.getItem('alder-subsystem-overview-v1:'+location.pathname)||localStorage.getItem('alder-logical-subsystems-v1:'+location.pathname)||'null'):undefined,record=saved??legacy;
+  if(record){restored=true;if(typeof record.zoom==='number'&&Number.isFinite(record.zoom))view.zoom=Math.max(.25,Math.min(2.5,record.zoom));if(Array.isArray(record.scroll)&&record.scroll.length===2&&record.scroll.every((n:unknown)=>typeof n==='number'&&Number.isFinite(n)))view.scroll=record.scroll;if(typeof record.locked==='boolean')view.locked=record.locked;for(const [id,point]of Object.entries(record.positions??{}))if(groups.some(group=>group.id===id)&&Array.isArray(point)&&point.length===2&&point.every(n=>typeof n==='number'&&Number.isFinite(n)))view.positions.set(id,[point[0],point[1]]);}
+  const old=record?.selection,id=old?.kind==='node'?model.concepts.find(item=>item.id===old.id)?.subsystemId:old?.id,kind=old?.kind==='node'?'group':old?.kind;
   if(typeof id==='string'&&((kind==='model'&&groups.some(item=>item.id===id))||(kind==='group'&&subsystems.some(item=>item.id===id))||(kind==='connection'&&handoffs.some(item=>item.id===id))))selection={kind,id} as OverviewSelection;
   if(selection?.kind==='model')view.selected=selection.id;
  }catch{}
@@ -44,7 +45,7 @@ export function createSubsystemOverview(doc:Document,open:(id:string)=>void,chan
   for(const [index,handoff] of handoffs.entries()){if(!regions.some(region=>region.id===handoff.from)||!regions.some(region=>region.id===handoff.to))throw Error('Missing overview handoff region: '+handoff.id);const width=Math.max(30,handoff.label.length*12),route=routeEdge({from:handoff.from,to:handoff.to,nodes:regions,index,kind:'input',matrix:{returning:handoff.returning,captionLane:0},labelWidth:width,labelHeight:18});const path=svg(doc,'path',{d:route.path,class:'edge'+(handoff.returning?' exception':''),'data-handoff-id':handoff.id,'data-from-subsystem':handoff.from,'data-to-subsystem':handoff.to,'data-flow-direction':handoff.returning?'return':'forward','marker-end':'url(#overview-arrow)'});graph.append(path);
    const label=svg(doc,'text',{x:route.label[0]-width/2,y:route.label[1],class:'edge-label','text-anchor':'start','dominant-baseline':'middle',role:'button',tabindex:0,'data-handoff-label':handoff.id});label.textContent=handoff.label;label.addEventListener('pointerdown',event=>event.stopPropagation());label.addEventListener('pointerup',event=>event.stopPropagation());label.addEventListener('click',()=>choose({kind:'connection',id:handoff.id}));label.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose({kind:'connection',id:handoff.id});}});graph.append(label);right=Math.max(right,route.bounds.right+40,route.label[0]+width/2+30);bottom=Math.max(bottom,route.bounds.bottom+40,route.label[1]+30);}
   for(const [index,edge] of connections.entries()){const route=routeEdge({from:edge.from,to:edge.to,nodes,index,kind:'input',labelWidth:0,labelHeight:0});const path=svg(doc,'path',{d:route.path,class:'edge','data-overview-from':edge.from,'data-overview-to':edge.to,'marker-end':'url(#overview-arrow)'});graph.append(path);right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);}
-  for(const node of nodes){const group=groups.find(item=>item.id===node.id)!,role=business.roles.find(item=>item.id===group.reviewer.roleId)!;const shape=svg(doc,'g',{role:'button',tabindex:0,'aria-label':group.title+'を選択','aria-pressed':'false','data-node':node.id,'data-review-group':node.id,'data-subsystem-id':group.subsystemId,class:'node graph-shape state-shape'});
+  for(const node of nodes){const group=groups.find(item=>item.id===node.id)!,role=business.roles!.find(item=>item.id===group.reviewer.roleId)!;const shape=svg(doc,'g',{role:'button',tabindex:0,'aria-label':group.title+'を選択','aria-pressed':'false','data-node':node.id,'data-review-group':node.id,'data-subsystem-id':group.subsystemId,class:'node graph-shape state-shape'});
    const surface=cardSurface(doc,node);const panel=surface.querySelector<HTMLElement>('.graph-card-surface')!;panel.classList.add('subsystem-overview-card-surface');shape.append(surface,svg(doc,'rect',{x:node.x,y:node.y,width:node.width,height:node.height,rx:8,class:'state-diagram-node'}));
    const foreign=svg(doc,'foreignObject',{x:node.x,y:node.y,width:node.width,height:node.height});const card=doc.createElement('div');card.className='subsystem-overview-card';
    const badge=doc.createElement('span');badge.className='subsystem-overview-role-icon';badge.style.setProperty('--role-color',role.color);badge.setAttribute('aria-hidden','true');badge.append(doc.importNode(createElement(UserRound,{'aria-hidden':'true','stroke-width':1.8}),true));
