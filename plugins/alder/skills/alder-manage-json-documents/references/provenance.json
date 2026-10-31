@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "2bd7e113cd13c96f50e5a0688e6cf14801645a07",
+  "alder_source_revision": "bf6ac46ec27a39c99a9ee0639f2677a38321f7a6",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "a2deaaf532a4928615356a2456d2be6db9ac6e37996f6c705e83fe37a5463da2",
+    "docs/plugin-json-authoring.ja.md": "06069103fadfe398c479bce72d2b66d409585c9443190631e0c42f1b0beb0c20",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
     "docs/check-item-traceability.md": "e248d561cba693871638108f664006c811509357f9b2b0b9e72a37565f724258",
@@ -11,17 +11,17 @@
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "f5a36905a68cfe538c652053d004203471539c230603921f1e6abc6acc8b3901"
+    "docs/json-native-contract.ja.md": "7bd04659de0a028b2fb1cd29e393a8ce5a26d19cd604761d7cd7e511488a9556"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "88792de6eb4699cb1bd608728bacc1c84b0f0adfba0e5d431e91a9bff2077147",
-    "tools/document_storage/schema.mjs": "d9e5a9edcd012cc74287bf5421339599c6b39323e2bea99898c434d5a7bc462a",
-    "tools/document_storage/schema.json": "b87e69c4d96c55627ef38dedfe7324cf4ec8812a85c667f8e707d63d4a5bdff5",
-    "tools/document_storage/edit.mjs": "39b895bfe4824f2ad776ebccc49fee82d344950eba44deb9f7365d169e490048",
+    "tools/document_storage/core.mjs": "55370d61f703bc52eaaf9819acc4cea99c1f9ba3b60d574a2ff0d0a6f233830d",
+    "tools/document_storage/schema.mjs": "275880f85c80c3e3911876c898250f9ecaf5fab227dccfc7ac8447207585891d",
+    "tools/document_storage/schema.json": "dd81eb7fc5c46483f9ec8244ac94289e3094c513491173d80c53fb506e243c2c",
+    "tools/document_storage/edit.mjs": "a8a91d2c2027b6eb3769b1618a8aeaccb46656815cf14548f5bf8741b5ad3834",
     "tools/document_storage/convert.mjs": "15e14b1382a091336ef3fcb87d3965968b21c62d3dadf8fe7ef59f3d04e50694",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "4dccf0c9ba40d1cac2cc8bc7e98c7f62b9e78608d422448ce2ea858c74f980a5",
+    "tools/document_storage/authoring.mjs": "d1db48a8bd8524c1de70954474565e32781e8ec2155cd455bfe8d25aab4c8c87",
     "tools/document_storage/author-cli.mjs": "ccde8b2a8844964d68c40c4ab0dc1314d1f02d276a1712918e05a96b6cdc13f5",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",

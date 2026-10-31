@@ -42,6 +42,10 @@ const sampleCell=obj({columnId:id,value:{anyOf:[str,{type:'number'}]},linkId:tex
 const sampleBlock=obj({card:id,columns:array(obj({id,name:text,informationId:id})),rows:array(obj({id,cells:array(sampleCell)})),empty:str},['card','columns','rows']);
 const sample=obj({id,name:text,when:str,meaning:str,blocks:array(sampleBlock),note:str},['id','name','when','meaning','blocks']);
 const capability=obj({id,title:text,description:str,meta:{},samples:array(sample)});
+// New sample records must name the Check Items whose expectations they explain.
+// The old concept payload remains readable as a compatibility input.
+const checkedSample=obj({...sample.properties,checkIds:{...array(id),minItems:1,uniqueItems:true}},[...sample.required,'checkIds']);
+const checkedCapability=obj({...capability.properties,samples:array(checkedSample)});
 const limitation=obj({id,title:text,description:str,reason:str,meta:{}});
 const viewNode=obj({conceptId:id,name:text,fields:array(text),description:str,sources:array(text),sourceActivityIds:array(id)});
 const viewEdge=obj({id,fromConceptId:id,toConceptId:id,relationIds:array(id),scope:str,fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
@@ -54,6 +58,7 @@ const reviewGroup=obj({id,subsystemId:id,title:text,description:str,reviewer:obj
  graph:obj({conceptIds:array(id),nodes:array(viewNode),edges:array(viewEdge),subsystemViews:boundaryViews},['conceptIds','nodes','edges']),
  structureStatements:array(obj({id,title:text,description:str,sampleIds:array(id),sourceRefs:array(conceptSource)})),
  capabilities:array(capability),limitations:array(limitation),meta:obj({questions:array(text),hypotheses:{}},['questions'])});
+const checkedReviewGroup=obj({...reviewGroup.properties,capabilities:array(checkedCapability)});
 const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptModel']},revision:text,
  basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),
  relatedStates:array(obj({documentId:id,revision:text,verification:{enum:['unverified']}})),
@@ -61,5 +66,6 @@ const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptMode
  benefits:array(text),considerations:array(text),reviewPoints:array(text),meta:{},
  presentation:obj({activityViews:{},creatorActivityIds:{},sampleCaption:str,subsystemViews:boundaryViews,landscapeRelationships:array(obj({from:id,to:id})),
   reviewBoundaries:array(obj({from:id,to:id,label:str,promise:str}))},['landscapeRelationships','reviewBoundaries'])});
+const checkedConceptModel=obj({...conceptModel.properties,schemaVersion:{enum:['0.2']},reviewGroups:array(checkedReviewGroup)});
 const packageShape=(version,kinds)=>obj({format:{enum:['alder-document-package']},formatVersion:{enum:[version]},revision:text,documents:array({anyOf:kinds.map(ref)}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)});
-export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel}};
+export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};

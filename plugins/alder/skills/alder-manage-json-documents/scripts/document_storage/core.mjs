@@ -29,6 +29,25 @@ export function inventory(pkg){
  return {map,owner,types};
 }
 export function validate(pkg){validateShape(pkg);return validateReferences(pkg);}
+/** Resolve only explicit Check references; section membership alone is not a binding. */
+export function exampleCheckIds(doc,example){
+ const checks=new Set(doc.items.map(item=>item.id)),found=new Set(),guarantee=doc.guarantees.find(item=>item.id===example.guaranteeId);
+ const collect=value=>{if(Array.isArray(value)){for(const item of value)collect(item);return;}if(value&&typeof value==='object'){
+  if(value.kind==='reference'&&checks.has(value.targetId))found.add(value.targetId);
+  for(const child of Object.values(value))if(child&&typeof child==='object')collect(child);
+ }};
+ collect(example.rows);for(const block of guarantee?.blocks??[])if(block.kind==='prose')collect(block.content);
+ for(const item of doc.items){const refs=item.fields.guarantee??[];if(refs.some(run=>run.kind==='reference'&&(run.targetId===example.id||run.targetId===example.guaranteeId)))found.add(item.id);}
+ return [...found];
+}
+/** Legacy examples may be read, but a new saved package must link every example. */
+export function requireCheckedSamples(pkg){
+ for(const doc of pkg.documents.filter(d=>d.kind==='conceptModel'&&d.schemaVersion==='0.1'))
+  for(const group of doc.reviewGroups)for(const cap of group.capabilities)for(const sample of cap.samples)
+   demand(false,'Legacy samples require explicit Check references and migration before saving: '+sample.id);
+ for(const doc of pkg.documents.filter(d=>d.kind==='checkItems'))for(const example of doc.examples)
+  demand(exampleCheckIds(doc,example).length>0,'Check example needs an explicit Check reference: '+example.id);
+}
 /** Shared structural references for storage JSON and the normalized Viewer model. No source grammar. */
 export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  demand(pkg.documents.length>0,'Document required');const {map,owner,types}=inventory(pkg),diagnostics=[...pkg.diagnostics],unresolvedRoles=new Set();
@@ -118,10 +137,19 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     if(g.graph.subsystemViews)validateSubsystemViews(g.graph.subsystemViews,nodes);
     const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
     for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
-    for(const cap of capabilities.values())for(const sample of cap.samples)for(const block of sample.blocks){
+    for(const cap of capabilities.values())for(const sample of cap.samples){
+     if(d.schemaVersion==='0.2'){
+      demand(sample.checkIds.length>0,'Sample needs a Check: '+sample.id);
+      demand(new Set(sample.checkIds).size===sample.checkIds.length,'Duplicate sample Check: '+sample.id);
+      for(const checkId of sample.checkIds){
+       target(checkId,'check');const checkDoc=target(owner.get(checkId),'document');
+       demand(checkDoc.kind==='checkItems'&&checkDoc.basedOn.documentId===bd.id&&checkDoc.basedOn.revision===bd.revision,'Sample Check source mismatch: '+checkId);
+      }
+     }
+     for(const block of sample.blocks){
      has(nodes,block.card,'view concept');const columns=unique(block.columns,'sample column');for(const column of block.columns)has(information,column.informationId,'concept information');unique(block.rows,'sample row');
      for(const row of block.rows){const cells=new Set();for(const cell of row.cells){has(columns,cell.columnId,'sample column');demand(!cells.has(cell.columnId),'Duplicate sample cell: '+cell.columnId);cells.add(cell.columnId);}demand(cells.size===columns.size,'Sample row does not match columns');}
-    }
+    }}
    }
    for(const edge of d.presentation.landscapeRelationships){const from=has(groups,edge.from,'review group'),to=has(groups,edge.to,'review group');demand(from.subsystemId===to.subsystemId,'Internal relationship crosses subsystem boundary');}
    for(const edge of d.presentation.reviewBoundaries){has(groups,edge.from,'review group');has(groups,edge.to,'review group');}
