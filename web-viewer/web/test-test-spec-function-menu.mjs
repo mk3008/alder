@@ -5,6 +5,7 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
 import {validate} from '../../tools/document_storage/core.mjs';
+import {makeFixture} from './fixture-check-samples.mjs';
 
 const authPath='verification/test-spec-function-menu.check-items.json',authHash='9346d5184f76eb9af0acfc843682df0a7c45fcfff40c732ee8f1c9cb7c4ba10a';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),authority=readFileSync(authPath),sourceBytes=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json');
@@ -14,21 +15,22 @@ assert.equal(hash(headingAuthority),headingHash);assert.deepEqual(JSON.parse(hea
 const cleanPath='verification/test-spec-clean-initial-menu.check-items.json',cleanHash='ad7ae131ead3121be0679f47a8cb5341370f4808430780675e8be382bbbe7a76',cleanAuthority=readFileSync(cleanPath),cleanCovered=new Set();
 assert.equal(hash(cleanAuthority),cleanHash);assert.deepEqual(JSON.parse(cleanAuthority).checks.map(item=>item.id),['SPEC-CLEAN-001','EXPLORER-INITIAL-001','EXPLORER-INITIAL-002']);
 const authorityIds=JSON.parse(authority).checks.map(item=>item.id),covered=new Set();assert.deepEqual(authorityIds,Array.from({length:7},(_,i)=>'FUNCTION-MENU-00'+(i+1)));
-const original=JSON.parse(sourceBytes),preview=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-function-preview.json','utf8'));
+const original=JSON.parse(sourceBytes),legacy=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-function-preview.json','utf8')),preview=makeFixture(legacy);
 validate(original);validate(preview);
-const withoutNavigation=structuredClone(preview),conceptOf=p=>p.documents.find(d=>d.kind==='conceptModel');
+const withoutNavigation=structuredClone(legacy),conceptOf=p=>p.documents.find(d=>d.kind==='conceptModel');
 for(const view of conceptOf(withoutNavigation).presentation.activityViews)delete view.testSpecificationFunctions;
 assert.deepEqual(withoutNavigation,original,'preview changes only explicit presentation navigation');
-assert(!preview.documents.some(d=>d.kind==='checkItems'),'the purchase preview must not fabricate formal checks');
+assert(!legacy.documents.some(d=>d.kind==='checkItems'),'the purchase preview must not fabricate formal checks');
 const bd=preview.documents.find(d=>d.kind==='businessDesign'),concept=conceptOf(preview),activity=name=>bd.activities.find(a=>a.name===name).id;
 const apply=activity('備品購入を申請する'),handoff=activity('購入を準備する'),approve=activity('購入申請を承認する');
 const key=(activityId,groupId,capabilityId)=>`fn:${activityId}:${groupId}:${capabilityId}`;
 const draft=key(apply,'group-request','save-draft'),submit=key(apply,'group-request','submit-request'),batch=key(handoff,'group-handoff','prepare-approved-requests'),retry=key(handoff,'group-handoff','reexport-fixed-preparation');
 const oldDemo=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-test-spec-preview.json','utf8'));
 const both=structuredClone(preview);both.documents.push(oldDemo.documents.find(d=>d.kind==='checkItems'));validate(both);
+const noNames=structuredClone(preview);for(const view of conceptOf(noNames).presentation.activityViews)for(const ref of view.testSpecificationFunctions??[])delete ref.name;validate(noNames);
 const shared=JSON.parse(readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'));validate(shared);
 async function bundle(raw){return (await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text','.json':'text'},plugins:[{name:'fixture',setup(b){b.onLoad({filter:/business-design\.json$/},()=>({contents:JSON.stringify(raw),loader:'text'}));}}]})).outputFiles[0].text;}
-const [previewCode,bothCode,sharedCode,originalCode]=await Promise.all([bundle(preview),bundle(both),bundle(shared),bundle(original)]),windows=[];
+const [previewCode,bothCode,sharedCode,originalCode,noNamesCode]=await Promise.all([bundle(preview),bundle(both),bundle(shared),bundle(original),bundle(noNames)]),windows=[];
 async function open(code,{url='https://viewer.test/functions',saved}={}){
  const w=new JSDOM('<div id="app"></div>',{url,runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);if(saved)w.sessionStorage.setItem('alder-explorer-v1:'+w.location.pathname,JSON.stringify(saved));
  w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.scrollIntoView=()=>{};w.HTMLElement.prototype.setPointerCapture=()=>{};
@@ -48,8 +50,8 @@ try{
  assert.equal(entry('tests:'+key(approve,'group-request','save-draft')),null,'no inferred cross-activity association');
  assert(!$('#explorer-tests').textContent.includes('正常系'));assert(!$('#explorer-tests').textContent.includes('例外系'));covered.add('FUNCTION-MENU-001');
  entry('tests:'+draft).click();const main=()=>$('#tests-workspace'),picker=()=>main().querySelector('.data-example-picker select');
- const assertFunctionHeading=(root,name)=>{const panel=root.querySelector('.test-spec-examples'),heading=panel.querySelector('h2'),description=panel.querySelector('.data-example-capability'),pickerLabel=panel.querySelector('.data-example-picker');assert.equal(heading.textContent,name);assert(heading.compareDocumentPosition(description)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);assert(description.compareDocumentPosition(pickerLabel)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);};
- assertFunctionHeading(main(),'下書き保存');assert.match(main().textContent,/品目数・申請の状態を問わず/);assert.doesNotMatch(main().textContent,/チェック項目はまだありません/);assert(!preview.documents.some(d=>d.kind==='checkItems'));cleanCovered.add('SPEC-CLEAN-001');
+ const assertFunctionHeading=(root,name)=>{const panel=root.querySelector('.test-spec-examples'),heading=panel.querySelector('h2'),description=panel.querySelector('.sample-checks'),pickerLabel=panel.querySelector('.data-example-picker');assert.equal(heading.textContent,name);assert(heading.compareDocumentPosition(description)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);assert(description.compareDocumentPosition(pickerLabel)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);};
+ assertFunctionHeading(main(),'下書き保存');assert.match(main().textContent,/品目数・申請の状態を問わず/);assert.doesNotMatch(main().textContent,/チェック項目はまだありません/);assert(preview.documents.some(d=>d.kind==='checkItems'));cleanCovered.add('SPEC-CLEAN-001');
  assert.deepEqual([...picker().options].map(o=>o.textContent),['品目がない下書き','入力途中の下書き','承認後に下書きを保存','購入準備後に下書きを保存']);
  assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');
  picker().value='request-draft';picker().dispatchEvent(new app.w.Event('change'));assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft');assertFunctionHeading(main(),'下書き保存');
@@ -64,11 +66,11 @@ try{
  const mixed=await open(bothCode);assert(mixed.entry('tests:checks:'+apply));mixed.entry('tests:'+draft).click();assert.doesNotMatch(mixed.$('#tests-workspace').textContent,/PREVIEW-01|保存を選んだ場合に/);mixed.entry('tests:checks:'+apply).click();assert.match(mixed.$('#tests-workspace').textContent,/下書き/);assert.doesNotMatch(mixed.$('#tests-workspace').textContent,/PREVIEW-01|unverified|Check preview/);
  const cross=await open(sharedCode),checkDoc=shared.documents.find(d=>d.kind==='checkItems'),sharedItem=checkDoc.items.find(i=>i.checkId==='CI-003'),refs=checkDoc.index.filter(row=>row.checkIds.includes(sharedItem.id));assert.equal(refs.length,2);
  cross.entry('tests:checks:'+refs[0].activityId).click();const first=cross.$('#tests-workspace [data-check-id="CI-003"]').outerHTML;cross.entry('tests:checks:'+refs[1].activityId).click();assert.equal(cross.$('#tests-workspace [data-check-id="CI-003"]').outerHTML,first);covered.add('FUNCTION-MENU-005');
- const plain=await open(originalCode);assert(plain.entry('tests:fn:_:group-request:save-draft'));assert.equal(plain.entry('tests:fn:_:group-request:save-draft').textContent,'入力途中の内容を保存する');
- plain.entry('tests:fn:_:group-request:save-draft').click();assertFunctionHeading(plain.$('#tests-workspace'),'入力途中の内容を保存する');
+ const plain=await open(originalCode);assert.equal(plain.entry('tests:fn:_:group-request:save-draft'),null,'legacy unlinked data is not a test specification');
+ const unnamed=await open(noNamesCode);assert.equal(unnamed.entry('tests:'+draft).textContent,'入力途中の内容を保存する');unnamed.entry('tests:'+draft).click();assertFunctionHeading(unnamed.$('#tests-workspace'),'入力途中の内容を保存する');
  const conceptApp=await open(previewCode);conceptApp.entry('concept:group-request').click();conceptApp.$('#drawer').click();conceptApp.$('#concept-drawer-examples').click();const conceptPanel=conceptApp.$('.concept-drawer-body .data-examples-panel'),conceptPicker=conceptPanel.querySelector('.data-example-picker'),conceptHeading=conceptPanel.querySelector('h2');assert.equal(conceptHeading.textContent,'入力途中の内容を保存する');assert(conceptPicker.compareDocumentPosition(conceptHeading)&conceptApp.w.Node.DOCUMENT_POSITION_FOLLOWING);headingCovered.add('FUNCTION-HEADING-002');
  assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(sourceBytes));covered.add('FUNCTION-MENU-006');
  entry('business:'+apply).click();if($('#formattedMarkdownDrawer').hidden)$('#drawer').click();entry('tests:'+draft).click();entry('tests:'+submit).click();entry('tests:'+draft).click();assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');entry('business:'+apply).click();assert.equal($('#formattedMarkdownDrawer').hidden,false,'test navigation leaves global drawer preference intact');covered.add('FUNCTION-MENU-007');
  assert.deepEqual([...covered].sort(),authorityIds.sort());assert.equal(hash(readFileSync(authPath)),authHash);assert.deepEqual([...headingCovered].sort(),JSON.parse(headingAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(headingPath)),headingHash);assert.deepEqual([...cleanCovered].sort(),JSON.parse(cleanAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(cleanPath)),cleanHash);
- console.log(JSON.stringify({passed:[...covered,...headingCovered,...cleanCovered],scope:'actual app DOM; mobile and full CI remain separate'}));
+ console.log(JSON.stringify({passed:[...covered,...headingCovered,...cleanCovered].filter(id=>id!=='SPEC-CLEAN-001'),partiallySuperseded:{id:'SPEC-CLEAN-001',portion:'unlinked examples as test specifications',authority:'verification/test-spec-check-samples.check-items.json'},scope:'actual app DOM with technical Check fixtures; mobile and full CI remain separate'}));
 }finally{for(const w of windows)w.close();}

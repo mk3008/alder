@@ -2,6 +2,8 @@ import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
+// @ts-expect-error The shared storage validator is a JavaScript module.
+import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
@@ -41,9 +43,15 @@ class RichReader{
    });
   }
  }
- fields(root:HTMLElement,fields:Record<string,Run[]>,seen:Set<string>){for(const [name,content]of Object.entries(fields)){if(!this.take(root))break;root.append(element('h4',labels[name]??name));this.runs(root,content,seen);}}
+ fields(root:HTMLElement,fields:Record<string,Run[]>,seen:Set<string>,expandGuarantees=false){for(const [name,content]of Object.entries(fields)){if(!this.take(root))break;root.append(element('h4',labels[name]??name));
+  if(name==='guarantee'&&expandGuarantees){const expanded=new Set<string>();for(const run of content){
+   const guarantee=run.kind==='reference'?this.doc.guarantees.find(item=>item.id===run.targetId):undefined;
+   if(!guarantee){this.runs(root,[run],seen);continue;}if(expanded.has(guarantee.id))continue;expanded.add(guarantee.id);
+   const visited=new Set(seen).add(guarantee.id);for(const block of guarantee.blocks){if(!this.take(root))break;if(block.kind==='prose')this.runs(root,block.content,visited);else this.example(root,block.exampleId,visited);}
+  }}else this.runs(root,content,seen);
+ }}
  private example(root:HTMLElement,id:string,seen:Set<string>){
-  const ex=this.doc.examples.find(e=>e.id===id)!;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
+  const ex=this.doc.examples.find(e=>e.id===id)!;if(!exampleCheckIds(this.doc,ex).length)return;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
   for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
  }
 }
@@ -86,5 +94,20 @@ export function renderRequesterChecks(design:Design,activityId?:string):HTMLElem
   }
  }
  if(!found)root.append(element('p','この業務のテスト仕様はありません。'));
+ return root;
+}
+
+/** Show actual Check expectations tied to an example; do not infer a mapping. */
+export function renderLinkedChecks(design:Design,ids:string[]):HTMLElement{
+ const root=element('section');root.className='check-content json-checks sample-checks';const bd=design.model!.business,wanted=new Set(ids);
+ for(const doc of design.model!.checks.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
+  const reader=new RichReader(doc);
+  for(const item of doc.items.filter(item=>wanted.has(item.id))){
+   const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
+   section.append(element('h3',item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
+   const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question','alternatives'].includes(name)));
+   reader.fields(section,fields,new Set([item.id]),true);root.append(section);
+  }
+ }
  return root;
 }

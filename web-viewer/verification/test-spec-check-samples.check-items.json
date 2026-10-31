@@ -1,0 +1,17 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "Check Item とデータ例の構造整合、および両者を使ったテスト仕様表示。既存の業務・状態・概念の入力データと独立した検証正本を保持する。",
+  "source": "2026-11-01 本人の、サンプル表はCheck Itemの意味を依頼者に説明するものであり、Check Itemがないサンプルをテスト仕様として扱わないという指示",
+  "supersedes": [
+    "SPEC-EXAMPLE-001、FUNCTION-MENU-001/002/006、FUNCTION-HEADING-002、SPEC-CLEAN-001のうち、Checkのない概念データ例をテスト仕様の機能として表示する部分。旧概念データの読込と概念側の表示は維持する。",
+    "FUNCTION-MENU-005のうち、明示的なCheck IDでの関連を使用しない部分。推測による関連付けの禁止と共有Checkの保持は維持する。"
+  ],
+  "checks": [
+    {"id":"SPEC-CHECK-LINK-001","condition":"新しい概念モデル形式にサンプルがある。","guarantee":"サンプルは同じ業務設計に属する実在Check Itemを1件以上明示参照する。欠落、空配列、重複、存在しないID、Check以外のID、異なる業務設計のCheckは検証エラーとする。","reason":"独立したサンプルをチェック仕様として保存できないようにする。","verification":"正常な複数Check参照と各不正参照を構造検証にかける。"},
+    {"id":"SPEC-CHECK-LINK-002","condition":"Checkに対応したサンプルをテスト仕様から開く。","guarantee":"選択したサンプルと、その明示Checkの条件・期待結果または一般保証を同じ画面で確認できる。未決の業務内容を確定済みとして扱わない。","reason":"例が何を説明するかを依頼者がレビューするため。","verification":"実際に保存されたCheckとサンプルを画面と照合し、未決とCheckの本文が消えないことを確認する。"},
+    {"id":"SPEC-CHECK-LINK-003","condition":"同じCheckを複数Activityまたは複数サンプルで参照する。","guarantee":"同じCheck ID、本文、人間レビュー状態およびTest証拠を共有し、項目を複製しない。","reason":"一つの保証を異なる場面から確認しても、内容や合意状態を分岐させないため。","verification":"複数の参照から同一のIDとCheckを参照し、本文と状態が変わらないことを確認する。"},
+    {"id":"SPEC-CHECK-LINK-004","condition":"旧概念形式でCheckとの対応がない例を含む文書を開く。","guarantee":"既存の概念データ例を損なわず読込むが、対応を推測してテスト仕様には表示しない。Checkが独立して存在する場合は従来どおり開ける。","reason":"既存入力との互換性と、例をCheckと誤認させないことの両方を守るため。","verification":"旧購買JSON、CheckだけのJSON、Checkと旧概念データ例を併せたJSONで確認する。"},
+    {"id":"SPEC-CHECK-LINK-005","condition":"Checkに対応したサンプルの場面を切り替える。","guarantee":"機能名・場面選択・複数表・同一データを示すLink IDの配色を既存表示と同じように維持し、選択した場面以外のサンプルを混ぜない。","reason":"本人確認済みの表示を生かして、サンプルを正しく理解するため。","verification":"複数の場面、複数の表とLink IDを持つ文書で値と色を照合する。"},
+    {"id":"SPEC-CHECK-LINK-006","condition":"チェック仕様のJSONを作成または読む。","guarantee":"Business Design、Check、状態遷移、概念、サンプルは単一JSON内のIDと版で結び、既存のID、未決、人間レビュー状態、Test証拠を保持する。","reason":"別ファイルや名前の推測を正本にせず、既存の追跡を失わないため。","verification":"保存前後の構造、ID、参照、レビュー状態、Test証拠を比較する。"}
+  ]
+}

@@ -1,6 +1,6 @@
 /** Gate B operation guards. No storage Schema change; evidence is operation input, not approval in the package. */
 import {createHash} from 'node:crypto';
-import {validate,inventory,demand} from './core.mjs';
+import {validate,inventory,demand,requireCheckedSamples} from './core.mjs';
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 export const fingerprint=v=>createHash('sha256').update(typeof v==='string'?v:JSON.stringify(canonical(v))).digest('hex');
 const equal=(a,b)=>fingerprint(a)===fingerprint(b);
@@ -43,7 +43,8 @@ export function guardAuthoring(previous,next,operation={}){
  validate(next);if(previous)validate(previous);
  const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration','removedTransitions'];
  const structuredUpgrade=operation.migration==='exceptions-0.4'&&previous&&['0.1','0.2','0.3'].includes(previous.formatVersion)&&next.formatVersion==='0.4';
- demand(!operation.migration||structuredUpgrade||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
+ const checkedSamplesUpgrade=operation.migration==='check-samples-0.2'&&previous&&previous.formatVersion==='0.4'&&next.formatVersion==='0.4';
+ demand(!operation.migration||structuredUpgrade||checkedSamplesUpgrade||operation.migration==='roles-0.3'&&previous&&['0.1','0.2'].includes(previous.formatVersion)&&next.formatVersion==='0.3','Unsupported migration operation');
  demand(Object.keys(operation).every(k=>allowed.includes(k)),'Unknown authoring operation field');
  const decisions=operation.humanDecisions??[];demand(Array.isArray(decisions),'Human decisions must be an array');
  demand(new Set(decisions.map(d=>d.id)).size===decisions.length,'Duplicate human decision');
@@ -67,8 +68,9 @@ export function guardAuthoring(previous,next,operation={}){
   for(const prior of previous.documents.filter(d=>d.kind==='conceptModel')){const updated=next.documents.find(d=>d.id===prior.id);demand(updated?.kind==='conceptModel','Concept document type changed');const current=conceptIdentities(updated);for(const key of conceptIdentities(prior))demand(current.has(key),'Existing Concept ID was removed, replaced or moved: '+key);}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
-  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
+  for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||checkedSamplesUpgrade&&d.kind==='conceptModel'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2'||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
  }
+ requireCheckedSamples(next);
  const used=new Set();
  for(const d of next.documents.filter(d=>d.kind==='checkItems')){
   const prior=previous?.documents.find(p=>p.id===d.id),needsBD=!prior||changedDocs.has(d.id);
