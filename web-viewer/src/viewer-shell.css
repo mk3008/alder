@@ -35,6 +35,7 @@
 .tab[data-view-kind=business]{--tab-kind-color:#357aa6}.tab[data-view-kind=states]{--tab-kind-color:#008576}.tab[data-view-kind=concept]{--tab-kind-color:#7b4abd}[data-theme=dark] .tab[data-view-kind=business]{--tab-kind-color:#8fc8ef}[data-theme=dark] .tab[data-view-kind=states]{--tab-kind-color:#8dd4c5}[data-theme=dark] .tab[data-view-kind=concept]{--tab-kind-color:#c9b2ff}
 @media(max-width:800px){.shell-open-tabs .tab{max-width:220px}.shell-open-tabs .tab>button:first-child{max-width:188px}}
 .explorer-item{padding-left:29px;font-size:14px}.explorer-empty{padding-left:29px}
+.explorer-parent.explorer-pending{color:var(--line);cursor:default}.explorer-parent.explorer-pending:hover{background:transparent}.explorer-pending-label{font-size:12px;flex:0 0 auto;color:var(--line)}
 .shell-open-tabs .tab[hidden],#empty-workspace[hidden]{display:none!important}#empty-workspace{flex:1;min-height:0;padding:24px;background:var(--bg);color:var(--line)}.concept-related-content h2{font-size:18px;margin:4px 0 12px}.concept-related-content ul{padding-left:20px}
 /* Type colors identify the diagram; the common blue underline identifies selection. */
 .shell-open-tabs .tab[data-view-kind]{background:color-mix(in srgb,var(--tab-kind-color) 12%,var(--panel));box-shadow:inset 0 2px var(--tab-kind-color);border-radius:0}
