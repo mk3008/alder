@@ -36,35 +36,38 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   group.width=Math.max(...group.lines.map(line=>Array.from(line).length*14));group.height=group.lines.length*18;
   if(!plan.wires[index].returning){group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.height);}
  }
- const loopGroups=new Map<string,number[]>();
- rows.forEach(([row],i)=>{if(row.from===row.to){const group=loopGroups.get(row.from)??[];group.push(i);loopGroups.set(row.from,group);}});
- const loopWires=new Map<number,{index:number;count:number;rise:number}>(),loopSpace=new Map<string,number>();
- for(const [id,indices]of loopGroups){
-  let used=0;
-  indices.forEach((i,index)=>{const height=captionGroups[i].height,rise=32+used+height/2;loopWires.set(i,{index,count:indices.length,rise});loopSpace.set(id,rise+height/2);used+=height+8;});
+ // Only identical self-loop endpoints and line styles share a visual path.
+ // Each transition keeps its own caption, ID and details.
+ const loopGroups=new Map<string,Map<string,number[]>>();
+ rows.forEach(([row],i)=>{if(row.from===row.to){const styles=loopGroups.get(row.from)??new Map<string,number[]>(),indices=styles.get(row.path)??[];indices.push(i);styles.set(row.path,indices);loopGroups.set(row.from,styles);}});
+ const loopWires=new Map<number,{leader:number;index:number;count:number;depth:number;offset:number}>(),loopSpace=new Map<string,number>();
+ for(const [id,styles]of loopGroups){
+  let used=0;const groups=[...styles.values()];
+  groups.forEach((indices,index)=>{for(const i of [...indices].reverse()){loopWires.set(i,{leader:indices[0],index,count:groups.length,depth:0,offset:used});used+=captionGroups[i].height+8;}});
+  const depth=24+Math.max(0,used-8)+8;loopSpace.set(id,depth);
+  for(const indices of groups)for(const i of indices)loopWires.get(i)!.depth=depth;
  }
  const nodeHeight=(_id:string)=>44;
  const ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
  // A multiline return caption can extend above the first state. Reserve only
  // the extra initial top space needed so the initial view does not clip it.
- let y=Math.max(40,...captionGroups.map((group,i)=>plan.wires[i].returning&&group.from===ordered[0]?16+group.height/2-44*(plan.wires[i].fromPort??.5):40));const projected=new Map<string,number>();let occupiedBottom=4;
+ let y=Math.max(40,...captionGroups.map((group,i)=>plan.wires[i].returning&&group.from===ordered[0]?16+group.height/2-44*(plan.wires[i].fromPort??.5):40));const projected=new Map<string,number>();
  for(const id of ordered){
-  const extra=loopSpace.get(id)??0;if(extra)y=Math.max(y,occupiedBottom+extra+12);
-  const height=nodeHeight(id),caption=departures.get(id)??0;projected.set(id,y);occupiedBottom=y+height+(caption?24+caption:0);y+=captionRowStep(height,caption);
+  const height=nodeHeight(id),caption=(departures.get(id)??0)+(loopSpace.get(id)??0);projected.set(id,y);y+=captionRowStep(height,caption);
  }
- const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32,16+Math.max(0,2*(loopGroups.get(id)?.length??0)-1)*24),height:nodeHeight(id)}));
+ const nodes:RouteNode[]=ids.map(id=>({id,x:view.positions.get(id)?.[0]??plan.positions[id][0],y:view.positions.get(id)?.[1]??projected.get(id)!,width:Math.max(104,Array.from(labels[id]??id).length*14+32,16+Math.max(0,2*(loopGroups.get(id)?.size??0)-1)*24),height:nodeHeight(id)}));
  const svg=make('svg',{role:'group','aria-label':model.object+'の状態遷移図',class:'state-diagram'}) as SVGSVGElement;
  const title=make('title');title.textContent=model.object+'：Activity名による階段状の状態遷移図。実線は通常、破線は例外。'+(ids.includes('@none')?'作成なしはこの操作の処理結果。':'')+(ids.includes('@unknown')?'未決は設計課題。':'');svg.append(title);
  svg.append(graphMarkers('state-transition-'));
- const shapeElements=new Map<string,SVGElement>(),edgeElements:SVGElement[]=[],captionElements:{element:SVGElement;rows:Transition[]}[]=[];
+ const shapeElements=new Map<string,SVGElement>(),edgeElements:{element:SVGElement;rows:Transition[]}[]=[],captionElements:{element:SVGElement;rows:Transition[]}[]=[];
  let selected:string|undefined=view.selected;
- const select=(id?:string)=>{selected=id;view.selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','node graph-shape state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach((element,i)=>{element.setAttribute('class','edge'+(rows[i][0].path==='exception'?' exception':'')+focus.labelClasses(rows[i]));element.setAttribute('marker-end','url(#state-transition-'+(rows[i].some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));svg.querySelectorAll('[data-exception-paint]').forEach(e=>e.remove());for(const path of edgeElements)if(path.classList.contains('exception'))paintGraphException(svg,path,{path:path.getAttribute('d')!},{'data-transitions':path.getAttribute('data-transitions')!});svg.querySelectorAll('.state-diagram-edge-label').forEach(label=>svg.append(label));};
+ const select=(id?:string)=>{selected=id;view.selected=id;const focus=graphFocus(model.transitions,selected);for(const [state,element]of shapeElements){element.setAttribute('class','node graph-shape state-shape'+focus.nodeClasses(state));element.setAttribute('aria-pressed',String(state===selected));}edgeElements.forEach(({element,rows:members})=>{element.setAttribute('class','edge'+(members[0].path==='exception'?' exception':'')+focus.labelClasses(members));element.setAttribute('marker-end','url(#state-transition-'+(members.some(focus.related)?'related-arrow':'arrow')+')');});for(const caption of captionElements)caption.element.setAttribute('class','state-caption-line'+focus.labelClasses(caption.rows));svg.querySelectorAll('[data-exception-paint]').forEach(e=>e.remove());for(const {element:path} of edgeElements)if(path.classList.contains('exception'))paintGraphException(svg,path,{path:path.getAttribute('d')!},{'data-transitions':path.getAttribute('data-transitions')!});svg.querySelectorAll('.state-diagram-edge-label').forEach(label=>svg.append(label));};
  svg.addEventListener('click',event=>{if(event.target===svg)select();});svg.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();select();}});
- const wires=plan.wires.map((wire,i)=>({...wire,captionLane:captionGroups[i].offset/CAPTION_LINE_STEP}));
+ const wires=plan.wires.map((wire,i)=>({...wire,captionLane:(captionGroups[i].offset+(loopSpace.get(captionGroups[i].from)??0))/CAPTION_LINE_STEP}));
  // The shared business router measures single-line labels. Supply equivalent
  // widths, then use its same collision escape for the full multiline boxes.
  const captionRelations=layoutGraph.relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(captionGroups[i].width/12),'x')}));
- const loopBoxes=[...loopWires].map(([i,loop])=>{const node=nodes.find(n=>n.id===rows[i][0].from)!,group=captionGroups[i];return{x:node.x+node.width+8,y:node.y-loop.rise-group.height/2,width:group.width,height:group.height};});
+ const loopBoxes=[...loopWires].map(([i,loop])=>{const node=nodes.find(n=>n.id===rows[i][0].from)!,group=captionGroups[i];return{x:node.x+node.width+8,y:node.y+node.height+24+loop.offset,width:group.width,height:group.height};});
  let sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
  // For a long return corridor, moving the corridor a little can keep a loop
  // caption much closer to its state. Otherwise keep the existing corridor and
@@ -84,32 +87,42 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   if(!changed)break;sharedRoutes=new RouteCache().update({},model,nodes,captionRelations,wires);
  }
  const otherWires=sharedRoutes.flatMap((route,i)=>route&&!loopWires.has(i)?[route.points]:[]);
+ const loopRoutes=new Map<number,ReturnType<typeof stateSelfLoopRoute>>();
  const routes=sharedRoutes.map((route,i)=>{
   const loop=loopWires.get(i);if(!loop)return route;
   const id=rows[i][0].from,node=nodes.find(n=>n.id===id)!;
   const related=sharedRoutes.flatMap((other,j)=>other&&!loopWires.has(j)?[other.points]:[]);
   const width=Math.max(30,captionRelations[i].label.length*12),group=captionGroups[i];
-  const result=stateSelfLoopRoute(node,nodes,{...loop,labelLeft:node.x+node.width+8},width,otherWires);
+  let result=loopRoutes.get(loop.leader);
+  if(!result){result=stateSelfLoopRoute(node,nodes,{...loop,labelLeft:node.x+node.width+8},width,otherWires);loopRoutes.set(loop.leader,result);otherWires.push(result.points);}
   // The same shared row escape keeps a loop's label clear of another line
   // only when that line actually passes through this label's vertical span.
   const barriers=related.flatMap((points,j)=>points.slice(1).map((p,k)=>({id:`${j}:${k}`,x:Math.min(points[k][0],p[0])-2,y:Math.min(points[k][1],p[1])-2,width:Math.abs(points[k][0]-p[0])+4,height:Math.abs(points[k][1]-p[1])+4})));
-  const position=captionOnRow([node.x+node.width+8+group.width/2,result.label[1]],group.width,group.height,[...nodes,...barriers]);
-  result.label=[position[0]-group.width/2+width/2,position[1]];otherWires.push(result.points);return result;
+  const position=captionOnRow([node.x+node.width+8+group.width/2,node.y+node.height+24+loop.offset+group.height/2],group.width,group.height,[...nodes,...barriers]);
+  return {...result,label:[position[0]-group.width/2+width/2,position[1]] as [number,number]};
  });
  const labelPositions:([number,number]|undefined)[]=new Array(rows.length),placed:RouteNode[]=[];
  const captionOrder=rows.map((_,i)=>i).sort((a,b)=>Number(wires[a].returning)-Number(wires[b].returning));
  for(const i of captionOrder){
   const route=routes[i]!,group=captionGroups[i],singleWidth=Math.max(30,captionRelations[i].label.length*12);
-  const anchor:[number,number]=[route.label[0]-singleWidth/2+group.width/2,route.label[1]+(wires[i].returning?0:group.height/2-9)];
+  let anchor:[number,number]=[route.label[0]-singleWidth/2+group.width/2,route.label[1]+(wires[i].returning?0:group.height/2-9)];
+  const from=nodes.find(n=>n.id===rows[i][0].from)!,to=nodes.find(n=>n.id===rows[i][0].to);
+  // A downward branch from a right-hand departure gets its label after the
+  // bend, so it cannot be confused with labels on the shared departure row.
+  if(!loopWires.has(i)&&wires[i].returning&&to&&to.y>from.y){
+   const falling=route.points.slice(1).map((p,j)=>[route.points[j],p] as const).filter(([a,b])=>Math.abs(a[0]-b[0])<.01&&b[1]-a[1]>24).sort(([a,b],[c,d])=>(d[1]-c[1])-(b[1]-a[1]))[0];
+   if(falling){const [a,b]=falling;anchor=[a[0]+8+group.width/2,(a[1]+b[1])/2];}
+  }
   const label=captionOnRow(anchor,group.width,group.height,nodes,placed);labelPositions[i]=label;
   placed.push({id:String(i),x:label[0]-group.width/2,y:label[1]-group.height/2,width:group.width,height:group.height});
  }
  let right=Math.max(...nodes.map(n=>n.x+n.width))+40,bottom=Math.max(...nodes.map(n=>n.y+n.height))+40;
  rows.forEach((rs,index)=>{
-  const row=rs[0];
+  const loop=loopWires.get(index);if(loop&&loop.leader!==index)return;
+  const members=loop?rows.flatMap((r,i)=>loopWires.get(i)?.leader===index?r:[]):rs,row=members[0];
   const route=routes[index]!;
-  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','marker-end':'url(#state-transition-arrow)','data-transitions':rs.map(r=>r.id).join(' ')});if(row.path==='exception'){path.classList.add('exception');path.setAttribute('stroke-dasharray','6 5');}
-  const description=make('title');description.textContent=rs.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);edgeElements.push(path);
+  const path=make('path',{d:route.path,fill:'none',stroke:'currentColor','marker-end':'url(#state-transition-arrow)','data-transitions':members.map(r=>r.id).join(' ')});if(row.path==='exception'){path.classList.add('exception');path.setAttribute('stroke-dasharray','6 5');}
+  const description=make('title');description.textContent=members.map(r=>`${r.id} ${r.activity} / ${r.path==='normal'?'通常':r.exception??'例外名未定義'}：${r.condition}`).join(' / ');path.append(description);svg.append(path);edgeElements.push({element:path,rows:members});
   right=Math.max(right,route.bounds.right+40);bottom=Math.max(bottom,route.bounds.bottom+40);
  });
  for(const [index,group] of captionGroups.entries()){

@@ -16,12 +16,13 @@ export async function verifyStateTransitionIdentity(browser){
    for(const theme of ['light','dark']){
     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
     const edges=await page.locator('#states-workspace .state-diagram path.edge[data-transitions]').evaluateAll(es=>es.map(e=>e.dataset.transitions));
-    assert.deepEqual(edges.sort(),st.transitions.map(t=>t.sourceId).sort(),'every explicit transition has one independent route');
+    assert.deepEqual(edges.flatMap(e=>e.split(' ')).sort(),st.transitions.map(t=>t.sourceId).sort(),'every explicit transition remains represented');
+    for(const t of st.transitions.filter(t=>t.fromId!==t.toId))assert(edges.includes(t.sourceId),'different-state transitions keep independent routes: '+t.sourceId);
     const labels=await page.locator('#states-workspace .state-diagram [data-transition-id]').evaluateAll(es=>es.map(e=>({id:e.dataset.transitionId,text:e.textContent,members:[...e.querySelectorAll('tspan')].map(t=>t.dataset.transitions)})));
     assert.equal(labels.length,st.transitions.length);
     for(const row of st.transitions){const l=labels.find(l=>l.id===row.sourceId);assert(l.text.includes(pkg.documents.find(d=>d.kind==='businessDesign').activities.find(a=>a.id===row.activityId).name));if(row.conditionLabel)assert(l.text.includes(row.conditionLabel));assert(!l.text.includes('通常'));assert(l.members.every(id=>id===row.sourceId));}
     assert.equal(labels.find(l=>l.id==='T12').text,'購入を準備する');assert.equal(labels.find(l=>l.id==='T14').text,'購入申請を承認する（例外：承認後差戻し）');
-    const modelRows=st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId,to:st.states.find(s=>s.id===t.toId)?.name??t.toId}));
+    const modelRows=st.transitions.map(t=>({id:t.sourceId,from:st.states.find(s=>s.id===t.fromId)?.name??t.fromId,to:st.states.find(s=>s.id===t.toId)?.name??t.toId,path:t.path}));
     assertStateCaptionRows(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionSnapshot),modelRows);
     assertStateCaptionPlacement(await page.locator('#states-workspace .state-diagram').evaluate(stateCaptionGeometry),modelRows);
     const native=await page.locator('#states-workspace .state-diagram').evaluate(svg=>{
@@ -31,8 +32,8 @@ export async function verifyStateTransitionIdentity(browser){
      return{labelPairs:boxes.flatMap((b,i)=>boxes.slice(i+1).filter(c=>overlap(b,c)).map(c=>[b.id,c.id])),cardPairs:boxes.filter(b=>nodes.some(n=>overlap(b,n))).map(b=>b.id)};
     });
     assert.deepEqual(native.labelPairs,[],'native caption glyphs do not overlap');assert.deepEqual(native.cardPairs,[],'native caption glyphs do not cover states');
-    const loopPaths=await page.locator('#states-workspace .state-diagram path.edge[data-transitions="T08"],#states-workspace .state-diagram path.edge[data-transitions="T19"]').evaluateAll(es=>es.map(e=>e.getAttribute('d')));
-    assert.equal(loopPaths.length,2);assert.notEqual(loopPaths[0],loopPaths[1],'the two draft self-loops stay distinct');
+    const loopPaths=await page.locator('#states-workspace .state-diagram path.edge[data-transitions~="T08"],#states-workspace .state-diagram path.edge[data-transitions~="T19"]').evaluateAll(es=>es.map(e=>({d:e.getAttribute('d'),ids:e.dataset.transitions,exception:e.classList.contains('exception')})));
+    assert.equal(loopPaths.length,1);assert.deepEqual(loopPaths[0].ids.split(' ').sort(),['T08','T19']);assert(loopPaths[0].exception,'the two draft exceptions share one dashed loop');
     await page.locator('#states-workspace [data-state="購入準備済み"]').press('Enter');
     for(const [id,related]of [['T12',true],['T14',false]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
     await page.locator('#states-workspace [data-state="差戻し"]').press('Enter');
@@ -54,7 +55,20 @@ export async function verifyStateTransitionIdentity(browser){
    assert.equal(await page.locator('#states-workspace .state-diagram').evaluate(e=>e.outerHTML),svg,'invalid source retains the accepted diagram');
    await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app').dataset.saveState));await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);await page.locator('#states-workspace .state-diagram').waitFor();
    assert.equal(await page.locator('#states-workspace .state-diagram [data-transition-id]').count(),st.transitions.length);assert.equal(await page.locator('#states-workspace [data-transition-id="T99"]').count(),0);
-   assert.deepEqual(errors,[]);results.push({width,themes:['light','dark'],transitions:st.transitions.length,oneCaptionPerTransition:true,conditionSpecificSelection:true,invalidReadPreserved:true,reload:true});
+   const mixed=structuredClone(pkg),mixedStates=mixed.documents.find(d=>d.kind==='stateTransition'),base=mixedStates.transitions.find(t=>t.sourceId==='T19');
+   mixedStates.transitions.push({...base,id:'normal-self',sourceId:'T90',path:'normal',exceptionId:null,condition:'状態を変えずに別の通常操作を実行'});
+   await page.locator('#fallback').setInputFiles({name:'mixed-self-loops.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(mixed))});
+   await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+   await page.locator('[data-explorer-key="states:'+st.objectId+'"]').click();await page.locator('#states-workspace [data-transition-id="T90"]').waitFor();
+   const normal=page.locator('#states-workspace path.edge[data-transitions~="T90"]'),exception=page.locator('#states-workspace path.edge[data-transitions~="T08"]');
+   assert.equal(await normal.count(),1);assert.equal(await exception.count(),1);
+   assert.equal(await normal.evaluate(e=>e.classList.contains('exception')),false);assert.equal(await exception.evaluate(e=>e.classList.contains('exception')),true);
+   await page.locator('#states-workspace [data-state="下書き"]').press('Enter');
+   for(const id of ['T08','T19','T90'])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(Boolean));
+   const zoom=page.locator('#states-workspace .canvas-zoom'),before=await zoom.innerText();await page.locator('#states-workspace .zoom-in').click();
+   assert.notEqual(await zoom.innerText(),before);assert.equal(await normal.count(),1);assert.equal(await exception.count(),1);await page.locator('#states-workspace .zoom-out').click();
+   assert.deepEqual(errors,[]);results.push({width,themes:['light','dark'],transitions:st.transitions.length,oneCaptionPerTransition:true,conditionSpecificSelection:true,mixedSelfLoops:true,zoom:true,invalidReadPreserved:true,reload:true});
   }finally{await context.close();}
  }
  return {checks:'STATE-IDENTITY-001..006: actual purchase JSON, singular routes and conditions, state-specific highlighting, shared spacing, invalid-read preservation',results};

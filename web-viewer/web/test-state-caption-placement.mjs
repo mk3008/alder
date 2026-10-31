@@ -30,7 +30,7 @@ try{
  const aliases={'@new':'作成前','@none':'作成なし','@unknown':'未決'},model=design.objectStateTransitions[state.objectId].model,ids=[...new Set(['@new',...model.states,...rows.map(r=>r.to)])];
  const relations=rows.map(r=>({kind:r.path==='exception'?'business-exception':'input',from:r.from,to:r.to,label:r.id+'：'+(design.graph.nodes.find(n=>n.id===r.activity)?.name??r.activity)+'：'+r.condition}));
  const graph={version:1,nodes:ids.map(id=>({id,type:'business',name:aliases[id]??id,scope:true})),relations},plan=matrixPlan(graph,ids),used=new Map();
- const sizes=rows.map((row,i)=>{const c=geometry.captions.find(c=>c.id===row.id),height=c.lines.length*18,width=Math.max(...c.lines.map(line=>Array.from(line).length*14));if(!plan.wires[i].returning){const offset=used.has(row.from)?used.get(row.from)+8:0;used.set(row.from,offset+height);plan.wires[i].captionLane=offset/22;}return{width,height};});
+ const sizes=rows.map((row,i)=>{const c=geometry.captions.find(c=>c.id===row.id),height=c.lines.length*18,width=Math.max(...c.lines.map(line=>Array.from(line).length*14));if(!plan.wires[i].returning){const offset=used.has(row.from)?used.get(row.from)+8:0;used.set(row.from,offset+height);const loops=rows.filter(r=>r.from===row.from&&r.to===r.from).map(r=>geometry.captions.find(c=>c.id===r.id));const loopDepth=loops.length?24+loops.reduce((n,c)=>n+c.lines.length*18,0)+8*(loops.length-1)+8:0;plan.wires[i].captionLane=(offset+loopDepth)/22;}return{width,height};});
  const captionRelations=relations.map((relation,i)=>({...relation,label:String(i).padEnd(Math.ceil(sizes[i].width/12),'x')}));
  const routes=new RouteCache().update({},model,geometry.nodes,captionRelations,plan.wires);
  for(const [i,r]of rows.entries()){
@@ -40,6 +40,11 @@ try{
   const label=geometry.captions.find(c=>c.id===r.id),singleWidth=Math.max(30,captionRelations[i].label.length*12);
   assert.ok(label.x>=routes[i].label[0]-singleWidth/2,'same business anchor or collision escape: '+r.id);
   const center=routes[i].label[1]+(plan.wires[i].returning?0:sizes[i].height/2-9);
+  const from=geometry.nodes.find(n=>n.id===r.from),to=geometry.nodes.find(n=>n.id===r.to);
+  if(plan.wires[i].returning&&to&&to.y>from.y){
+   const falling=routes[i].points.slice(1).map((p,j)=>[routes[i].points[j],p]).filter(([a,b])=>Math.abs(a[0]-b[0])<.01&&b[1]-a[1]>24).sort(([a,b],[c,d])=>(d[1]-c[1])-(b[1]-a[1]))[0];
+   if(falling){assert.equal(label.y,(falling[0][1]+falling[1][1])/2-sizes[i].height/2+14,'downward-branch caption is after its bend: '+r.id);continue;}
+  }
   assert.equal(label.y,center-sizes[i].height/2+14,'shared business caption row: '+r.id);
  }
  const long=structuredClone(pkg),longException=long.documents.find(d=>d.kind==='stateTransition').transitions.find(t=>t.sourceId==='T02').exceptionId;long.documents.find(d=>d.kind==='businessDesign').exceptions.find(e=>e.id===longException).name='長い例外名'.repeat(30);
@@ -59,5 +64,5 @@ try{
  const focused=svg.querySelector('[data-state="申請済み"]');window.document.body.append(panel);focused.focus();focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  assert.equal(window.document.activeElement,focused,'selection keeps keyboard focus');focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(focused.getAttribute('aria-pressed'),'false','Escape clears the selected state');
  results.push('STATE-CAPTION-003');validateAuthority(readFileSync('verification/state-caption-placement.check-items.json'));coverage(results);
- console.log(JSON.stringify({domChecks:results,transitions:rows.length,browser:'separate'}));
+ console.log(JSON.stringify({domChecks:results,transitions:rows.length,supersession:'self-loop line separation is superseded by STATE-BUNDLE-001; transition/caption identity remains',browser:'separate'}));
 }finally{window.close();}

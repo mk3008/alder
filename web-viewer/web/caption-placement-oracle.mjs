@@ -10,27 +10,32 @@ export function stateCaptionGeometry(svg){
 
 export function assertStateCaptionPlacement(snapshot,rows){
  const boxes=[],occupied=new Map();
- assert.equal(snapshot.paths.length,rows.length);assert.equal(snapshot.captions.length,rows.length);
+ assert.equal(snapshot.captions.length,rows.length);
+ assert.deepEqual(snapshot.paths.flatMap(p=>p.id.split(' ')).sort(),rows.map(r=>r.id).sort(),'each transition belongs to exactly one displayed path');
  for(const row of rows){
-  const node=snapshot.nodes.find(n=>n.id===row.from),caption=snapshot.captions.find(c=>c.id===row.id),path=snapshot.paths.find(p=>p.id===row.id);
+  const node=snapshot.nodes.find(n=>n.id===row.from),caption=snapshot.captions.find(c=>c.id===row.id),path=snapshot.paths.find(p=>p.id.split(' ').includes(row.id));
   assert.ok(node&&caption&&path,'one state, caption, and path for '+row.id);
   const nums=path.d.match(/-?\d+(?:\.\d+)?/g).map(Number),x0=nums[0],y0=nums[1];
   const width=Math.max(...caption.lines.map(s=>Array.from(s).length*14)),height=caption.lines.length*18;
   const returning=Math.abs(x0-(node.x+node.width))<1e-7;
   if(row.from===row.to){
    const xs=nums.filter((_,i)=>i%2===0),ys=nums.filter((_,i)=>i%2===1),lastX=nums.at(-2),lastY=nums.at(-1);
-   assert.ok(x0>node.x&&x0<node.x+node.width&&y0===node.y,'self-loop leaves the top of its own state: '+row.id);
-   assert.ok(lastX>node.x&&lastX<node.x+node.width&&lastY===node.y,'self-loop returns to the top of the same state: '+row.id);
+   assert.ok(x0>node.x&&x0<node.x+node.width&&y0===node.y+node.height,'self-loop leaves the bottom of its own state: '+row.id);
+   assert.ok(lastX>node.x&&lastX<node.x+node.width&&lastY===node.y+node.height,'self-loop returns to the bottom of the same state: '+row.id);
    assert.ok(caption.x>=Math.max(...xs)+8-1e-7,'self-loop caption follows its bend: '+row.id);
-   assert.ok(Math.abs(caption.y-14+height/2-Math.min(...ys))<1e-7,'self-loop caption shares its upper line: '+row.id);
+   assert.ok(caption.y-14>=node.y+node.height+24-1e-7&&caption.y-14+height<=Math.max(...ys)+1e-7,'self-loop caption is beside the lower loop: '+row.id);
   }else if(returning){
    const right=Math.max(...nums.filter((_,i)=>i%2===0));
    assert.ok(caption.x>=right+8-1e-7,'return caption follows its right-hand bend: '+row.id);
-   assert.ok(Math.abs(caption.y-14+height/2-y0)<1e-7,'return caption shares the departure line: '+row.id);
+   const target=snapshot.nodes.find(n=>n.id===row.to);
+   if(target&&target.y>node.y)assert.ok(caption.y-14+height/2>y0&&caption.y-14+height/2<target.y+target.height,'downward branch caption follows its bend: '+row.id);
+   else assert.ok(Math.abs(caption.y-14+height/2-y0)<1e-7,'return caption shares the departure line: '+row.id);
   }else{
    assert.ok(Math.abs(y0-(node.y+node.height))<1e-7,'forward line departs below its state: '+row.id);
    const offset=occupied.has(row.from)?occupied.get(row.from)+8:0;
-   assert.ok(Math.abs(caption.y-(node.y+node.height+24+14+offset))<1e-7,'forward caption has 24px departure clearance: '+row.id);
+   const loopCaptions=rows.filter(r=>r.from===row.from&&r.to===r.from).map(r=>snapshot.captions.find(c=>c.id===r.id));
+   const loopDepth=loopCaptions.length?24+loopCaptions.reduce((n,c)=>n+c.lines.length*18,0)+8*(loopCaptions.length-1)+8:0;
+   assert.ok(Math.abs(caption.y-(node.y+node.height+24+loopDepth+14+offset))<1e-7,'forward caption follows the reserved self-loop space: '+row.id);
    occupied.set(row.from,offset+height);
   }
   boxes.push({id:row.id,x:caption.x,y:caption.y-14,width,height});
