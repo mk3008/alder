@@ -9,6 +9,8 @@ import {validate} from '../../tools/document_storage/core.mjs';
 const authPath='verification/test-spec-function-menu.check-items.json',authHash='9346d5184f76eb9af0acfc843682df0a7c45fcfff40c732ee8f1c9cb7c4ba10a';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),authority=readFileSync(authPath),sourceBytes=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json');
 assert.equal(hash(authority),authHash);assert.equal(hash(sourceBytes),'b3dfb5aa699026d748969671a4d9efee9523aa354e34a30bbc2f81447bae46f4');
+const headingPath='verification/test-spec-function-heading.check-items.json',headingHash='3e0ec917a5fc7356129e624401a359b5455efdccf698183521a52f681ad48a3b',headingAuthority=readFileSync(headingPath),headingCovered=new Set();
+assert.equal(hash(headingAuthority),headingHash);assert.deepEqual(JSON.parse(headingAuthority).checks.map(item=>item.id),['FUNCTION-HEADING-001','FUNCTION-HEADING-002']);
 const authorityIds=JSON.parse(authority).checks.map(item=>item.id),covered=new Set();assert.deepEqual(authorityIds,Array.from({length:7},(_,i)=>'FUNCTION-MENU-00'+(i+1)));
 const original=JSON.parse(sourceBytes),preview=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-function-preview.json','utf8'));
 validate(original);validate(preview);
@@ -40,12 +42,13 @@ try{
  assert.equal(entry('tests:'+key(approve,'group-request','save-draft')),null,'no inferred cross-activity association');
  assert(!$('#explorer-tests').textContent.includes('正常系'));assert(!$('#explorer-tests').textContent.includes('例外系'));covered.add('FUNCTION-MENU-001');
  entry('tests:'+draft).click();const main=()=>$('#tests-workspace'),picker=()=>main().querySelector('.data-example-picker select');
- assert.match(main().textContent,/入力途中の内容を保存する/);assert.match(main().textContent,/品目数・申請の状態を問わず/);
+ const assertFunctionHeading=(root,name)=>{const panel=root.querySelector('.test-spec-examples'),heading=panel.querySelector('h2'),description=panel.querySelector('.data-example-capability'),pickerLabel=panel.querySelector('.data-example-picker');assert.equal(heading.textContent,name);assert(heading.compareDocumentPosition(description)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);assert(description.compareDocumentPosition(pickerLabel)&app.w.Node.DOCUMENT_POSITION_FOLLOWING);};
+ assertFunctionHeading(main(),'下書き保存');assert.match(main().textContent,/品目数・申請の状態を問わず/);
  assert.deepEqual([...picker().options].map(o=>o.textContent),['品目がない下書き','入力途中の下書き','承認後に下書きを保存','購入準備後に下書きを保存']);
  assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');
- picker().value='request-draft';picker().dispatchEvent(new app.w.Event('change'));assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft');
+ picker().value='request-draft';picker().dispatchEvent(new app.w.Event('change'));assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft');assertFunctionHeading(main(),'下書き保存');
  app.w.history.back();await app.until(()=>main().querySelector('[data-data-example]')?.dataset.dataExample==='request-draft-empty');
- entry('tests:'+submit).click();assert.deepEqual([...picker().options].map(o=>o.textContent),['2品目をまとめて提出']);assert.doesNotMatch(main().textContent,/入力途中の下書き/);covered.add('FUNCTION-MENU-002');
+ entry('tests:'+submit).click();assertFunctionHeading(main(),'提出');assert.match(main().textContent,/理由・見積・全品目情報を揃え/);assert.deepEqual([...picker().options].map(o=>o.textContent),['2品目をまとめて提出']);assert.doesNotMatch(main().textContent,/入力途中の下書き/);covered.add('FUNCTION-MENU-002');headingCovered.add('FUNCTION-HEADING-001');
  const text=main().textContent;assert.doesNotMatch(text,/原典の意味対応|unverified|Check preview|purchase-concepts|人間レビュー状態|同じ色は同じ対象/);covered.add('FUNCTION-MENU-003');
  entry('tests:'+batch).click();assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'handoff-batch');assert.deepEqual([...picker().options].map(o=>o.textContent),['2申請をまとめて購入へ']);
  const sourceSample=concept.reviewGroups.find(g=>g.id==='group-handoff').capabilities.find(c=>c.id==='prepare-approved-requests').samples[0];
@@ -56,8 +59,10 @@ try{
  const cross=await open(sharedCode),checkDoc=shared.documents.find(d=>d.kind==='checkItems'),sharedItem=checkDoc.items.find(i=>i.checkId==='CI-003'),refs=checkDoc.index.filter(row=>row.checkIds.includes(sharedItem.id));assert.equal(refs.length,2);
  cross.entry('tests:checks:'+refs[0].activityId).click();const first=cross.$('#tests-workspace [data-check-id="CI-003"]').outerHTML;cross.entry('tests:checks:'+refs[1].activityId).click();assert.equal(cross.$('#tests-workspace [data-check-id="CI-003"]').outerHTML,first);covered.add('FUNCTION-MENU-005');
  const plain=await open(originalCode);assert(plain.entry('tests:fn:_:group-request:save-draft'));assert.equal(plain.entry('tests:fn:_:group-request:save-draft').textContent,'入力途中の内容を保存する');
+ plain.entry('tests:fn:_:group-request:save-draft').click();assertFunctionHeading(plain.$('#tests-workspace'),'入力途中の内容を保存する');
+ const conceptApp=await open(previewCode);conceptApp.entry('concept:group-request').click();conceptApp.$('#drawer').click();conceptApp.$('#concept-drawer-examples').click();const conceptPanel=conceptApp.$('.concept-drawer-body .data-examples-panel'),conceptPicker=conceptPanel.querySelector('.data-example-picker'),conceptHeading=conceptPanel.querySelector('h2');assert.equal(conceptHeading.textContent,'入力途中の内容を保存する');assert(conceptPicker.compareDocumentPosition(conceptHeading)&conceptApp.w.Node.DOCUMENT_POSITION_FOLLOWING);headingCovered.add('FUNCTION-HEADING-002');
  assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(sourceBytes));covered.add('FUNCTION-MENU-006');
  entry('business:'+apply).click();if($('#formattedMarkdownDrawer').hidden)$('#drawer').click();entry('tests:'+draft).click();entry('tests:'+submit).click();entry('tests:'+draft).click();assert.equal(main().querySelector('[data-data-example]').dataset.dataExample,'request-draft-empty');entry('business:'+apply).click();assert.equal($('#formattedMarkdownDrawer').hidden,false,'test navigation leaves global drawer preference intact');covered.add('FUNCTION-MENU-007');
- assert.deepEqual([...covered].sort(),authorityIds.sort());assert.equal(hash(readFileSync(authPath)),authHash);
- console.log(JSON.stringify({passed:[...covered],scope:'actual app DOM; mobile and full CI remain separate'}));
+ assert.deepEqual([...covered].sort(),authorityIds.sort());assert.equal(hash(readFileSync(authPath)),authHash);assert.deepEqual([...headingCovered].sort(),JSON.parse(headingAuthority).checks.map(item=>item.id).sort());assert.equal(hash(readFileSync(headingPath)),headingHash);
+ console.log(JSON.stringify({passed:[...covered,...headingCovered],scope:'actual app DOM; mobile and full CI remain separate'}));
 }finally{for(const w of windows)w.close();}
