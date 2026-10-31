@@ -100,7 +100,9 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     for(const edge of edgeViews.values()){
      const from=has(views,edge.fromViewId,'subsystem view'),to=has(views,edge.toViewId,'subsystem view');
      demand(from.subsystemId===to.subsystemId,'View relationship crosses subsystem boundary');
-     for(const id of edge.relationIds)has(relations,id,'concept relation');
+     demand(edge.relationIds.length>0,'Subsystem view relationship needs a concept relation');
+     let current=from.conceptId;for(const id of edge.relationIds){const relation=has(relations,id,'concept relation');demand(relation.fromConceptId===current,'Subsystem view relation path is disconnected: '+id);current=relation.toConceptId;}
+     demand(current===to.conceptId,'Subsystem view relation target differs');
     }
     demand(new Set(value.handoffIds).size===value.handoffIds.length,'Duplicate subsystem view handoff');
     const regions=new Set([...views.values()].map(v=>v.subsystemId));

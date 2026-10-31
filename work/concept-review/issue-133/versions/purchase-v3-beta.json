@@ -5722,17 +5722,34 @@
               "name": "購入申請",
               "fields": [
                 {
-                  "name": "対象申請・申請者",
+                  "name": "申請の識別",
+                  "informationId": "request-identity"
+                },
+                {
+                  "name": "申請者・進行状態",
                   "informationId": "request-information-1"
                 },
                 {
-                  "name": "対象の確定版",
+                  "name": "現在の判断対象版",
                   "informationId": "request-information-2"
+                },
+                {
+                  "name": "現在判断（承認／差戻し）",
+                  "informationId": "request-information-3"
+                },
+                {
+                  "name": "準備所属・対象版（参照）",
+                  "informationId": "request-information-4"
+                },
+                {
+                  "name": "終結結果（入荷予実から）",
+                  "informationId": "request-information-5"
                 }
               ],
-              "description": "稟議で承認した申請と確定版を購入準備へ渡す。",
+              "description": "稟議で申請と判断内容を管理し、入荷予実からの結果を進捗に反映する。",
               "sources": [
-                "申請・承認：承認済みの申請と判断対象版。"
+                "申請・承認：申請と判断対象版。",
+                "入荷予実：準備対象と終結結果。"
               ]
             },
             {
@@ -5756,6 +5773,10 @@
                 {
                   "name": "見積根拠",
                   "informationId": "version-information-3"
+                },
+                {
+                  "name": "提出日時",
+                  "informationId": "version-information-4"
                 }
               ],
               "description": "申請内容を版として区別し、承認済みの版を購入対象として渡す。",
@@ -5903,6 +5924,10 @@
               "subsystemId": "receiving",
               "name": "入庫内訳",
               "fields": [
+                {
+                  "name": "回内の識別",
+                  "informationId": "line-information-1"
+                },
                 {
                   "name": "元の品目（対象版）",
                   "informationId": "line-information-2"
