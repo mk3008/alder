@@ -1,0 +1,1757 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.4",
+  "revision": "package-8",
+  "documents": [
+    {
+      "id": "4d4d78a4-ed9e-4663-8eae-036fe947498b",
+      "schemaVersion": "0.3",
+      "kind": "businessDesign",
+      "revision": "bd-3",
+      "title": "モルックの点数計算の業務設計",
+      "preface": "草案。対象は1回の点数、複数回の合計、各回までの合計点の推移の3機能。まだ投げていない0回と、1回投げて0本だった場合の区別を含め、本版の内容は確認待ち。",
+      "scope": "倒れた棒の番号から1回の点数を求め、投擲順に点数を足した合計と各回までの合計点の推移を利用者に示す。まだ1回も投げていない場合も合計と推移の対象とする。",
+      "roles": [
+        {
+          "id": "7d59a094-8ac5-4b90-8238-ce13348d32f1",
+          "name": "点数計算機能",
+          "color": "#2563eb"
+        }
+      ],
+      "objects": [
+        {
+          "id": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8",
+          "name": "利用者",
+          "scope": false,
+          "icon": "user",
+          "information": [
+            "1回ごとに倒れた棒の番号",
+            "計算した1回の点数",
+            "複数回の合計点",
+            "各回までの合計点の推移"
+          ]
+        },
+        {
+          "id": "eff07917-b9d9-4249-a9ba-ff3fde99e593",
+          "name": "投擲ごとの点数",
+          "scope": true,
+          "icon": "list-ordered",
+          "information": [
+            "投擲順",
+            "各回の点数（0回なら点数なし）"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "name": "1回の点数を計算する",
+          "scope": true,
+          "why": "利用者が1回投げた結果の点数を知るため",
+          "when": "利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。計算対象には、まだ1回も投げていない0回も含む。",
+          "who": "点数計算機能",
+          "roleId": "7d59a094-8ac5-4b90-8238-ce13348d32f1",
+          "where": "規定なし",
+          "procedure": "利用者から、計算対象の投擲順と各回に倒れた棒の番号を受け取る。まだ1回も投げていない場合は0回として扱い、1回分の点数を作らない。棒は1番から12番まで各1本であり、投げるたびに立て直すため、別の回で同じ番号を使える。計算対象全体について、各番号が1〜12の整数の数値で、同じ回に重複がないことを検査する。入力全体に誤りがなければ、各回の点数を計算する。倒れた本数が0本なら0点、1本ならその棒の番号、2本以上なら倒れた本数をその回の点数とする。例えば8番だけなら8点、3番と8番なら2点となる。投擲ごとの点数として投擲順と各回の点数を扱い、利用者に計算対象の各回の点数を示す。0回の場合は各回の点数がないことを扱う。",
+          "exception": "入力に1〜12以外の番号、整数でない番号、数値でないもの、同じ回で重複した番号があれば、入力誤りとして計算せず、利用者に入力エラーを返す。重複を黙って1つにまとめたり、複数本として数えたりしない。複数回をまとめて計算する場合は、1回でも誤りがあれば計算対象全体をエラーにし、正しい回だけの途中結果は返さない。全体エラーの対象には各回の点数、合計、推移を含む。",
+          "result": "計算対象全体に入力誤りがない場合に、投擲順と各回の点数が分かり、合計と推移を計算できる。0回の場合は、1回分の点数を作らず、各回の点数がないものとして合計と推移を計算できる。",
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "03c07114-72b9-48f2-943b-9c5d3fc5c827",
+          "name": "合計と点数の推移を計算する",
+          "scope": true,
+          "why": "利用者が複数回の合計と各回までの合計点を知るため",
+          "when": "計算対象全体に入力誤りがなく、投擲ごとの点数が得られたとき。まだ1回も投げていない0回の場合も含む。",
+          "who": "点数計算機能",
+          "roleId": "7d59a094-8ac5-4b90-8238-ce13348d32f1",
+          "where": "規定なし",
+          "procedure": "投擲ごとの点数から、投擲順と各回の点数を受け取る。まだ1回も投げていない0回の場合は、合計0点、推移は何もないものとする。合計は0点から始めて各回の点数をそのまま足す。合計の上限や50点を超えたときの特別な扱いは設けない。各回の点数を足した時点の合計を、その回までの推移の値とする。1回投げて0本だった場合は、その回の点数は0点、合計は0点で、推移には0点が1つ入る。利用者に現在までの合計と投擲ごとの累計の推移を示す。例えば各回の点数が8点、2点、0点なら、合計は10点、推移は8点、10点、10点となる。",
+          "exception": null,
+          "result": "利用者が計算対象の合計点と、各回までの合計点の推移を確認できる。まだ投げていない0回は合計0点・推移なしで、1回投げて0本は合計0点・推移に0点が1つあるものとして区別できる。",
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "5a3bf147-f5c3-481c-aee7-d28217e45a3f",
+          "kind": "input",
+          "fromId": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8",
+          "toId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "label": "計算対象の投擲順と各回に倒れた棒の番号（0回を含む）"
+        },
+        {
+          "id": "5d07cb3b-db7d-4c55-91c2-d1d52ac8f0ca",
+          "kind": "output",
+          "fromId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "toId": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8",
+          "label": "計算対象の各回の点数（0回ならなし）、または入力エラー"
+        },
+        {
+          "id": "279e4bec-b172-475e-996d-2106f012c0df",
+          "kind": "output",
+          "fromId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "toId": "eff07917-b9d9-4249-a9ba-ff3fde99e593",
+          "label": "入力全体に誤りがない場合の投擲順と各回の点数（0回ならなし）"
+        },
+        {
+          "id": "4e3cceef-6f2e-47af-b466-14b20d405ea3",
+          "kind": "input",
+          "fromId": "eff07917-b9d9-4249-a9ba-ff3fde99e593",
+          "toId": "03c07114-72b9-48f2-943b-9c5d3fc5c827",
+          "label": "入力全体に誤りがない場合の投擲順と各回の点数（0回ならなし）"
+        },
+        {
+          "id": "7e0fdf37-7cb0-4b53-9694-78b86f251f4c",
+          "kind": "output",
+          "fromId": "03c07114-72b9-48f2-943b-9c5d3fc5c827",
+          "toId": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8",
+          "label": "計算対象の合計点と投擲ごとの累計の推移（0回は合計0点・推移なし）"
+        }
+      ],
+      "exceptions": [
+        {
+          "id": "2e5293ed-0012-41c7-808a-2163eaf2064a",
+          "activityId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "name": "入力誤り",
+          "description": "入力に1〜12以外の番号、整数でない番号、数値でないもの、同じ回で重複した番号があれば、入力誤りとして計算せず、利用者に入力エラーを返す。重複を黙って1つにまとめたり、複数本として数えたりしない。複数回をまとめて計算する場合は、1回でも誤りがあれば計算対象全体をエラーにし、正しい回だけの途中結果は返さない。全体エラーの対象には各回の点数、合計、推移を含む。"
+        }
+      ],
+      "findings": [
+        {
+          "id": "51f1d122-1208-4fee-83b3-1bb87e1fca43",
+          "sourceId": "Q-1",
+          "kind": "question",
+          "status": "resolved",
+          "scope": "items",
+          "targetIds": [
+            "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792"
+          ],
+          "unresolvedTargets": [],
+          "summary": "不正な番号入力への対応",
+          "content": "依頼者がinputs/turn-5.txtで入力エラー対応を明示した。範囲外、整数でない番号、数値でないもの、同一回の重複は誤りとして計算しない。まとめて計算する際は1回でも誤りがあれば全体をエラーとする。別の回での同番号は認める。対応する業務内容をActivityのProcedureと入力誤りのExceptionに反映した。"
+        }
+      ]
+    },
+    {
+      "id": "1a6dc30e-7cec-4c60-8b62-c700ed904df8",
+      "schemaVersion": "0.1",
+      "kind": "checkItems",
+      "revision": "checks-5",
+      "title": "モルックの点数計算のCheck草案",
+      "basedOn": {
+        "documentId": "4d4d78a4-ed9e-4663-8eae-036fe947498b",
+        "revision": "bd-3",
+        "verification": "unverified"
+      },
+      "intro": [
+        {
+          "kind": "text",
+          "value": "業務設計bd-3を原典とするCheck草案。全項目は要確認（未承認の注意状態）。条件と期待結果をIDごとに確認する。"
+        }
+      ],
+      "index": [
+        {
+          "activityId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "purpose": "利用者が1回投げた結果の点数を知るため",
+          "connections": "利用者から倒れた番号と投擲順を受け取り、各回点数を利用者と投擲ごとの点数へ渡す。入力誤りは計算対象全体のエラーとなる。",
+          "checkIds": [
+            "11e00654-5e3e-4258-bd20-7e1587613ab0",
+            "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30",
+            "d1173d0e-85c5-4df7-94ff-2a7b0f0dece7",
+            "6aa87608-427f-4460-ac21-2cafe394fe3b",
+            "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+            "fbe6b158-c4d2-4e6b-b092-d2306aa2b126",
+            "d7555dd8-b6e1-4bf9-a893-bad9a0940374",
+            "d714ae01-770a-49aa-a5cc-8c9133618cb5"
+          ]
+        },
+        {
+          "activityId": "03c07114-72b9-48f2-943b-9c5d3fc5c827",
+          "purpose": "利用者が複数回の合計と各回までの合計点を知るため",
+          "connections": "投擲ごとの点数から、正常な入力全体の投擲順と各回点数を受け取り、合計と推移を利用者へ返す。0回も扱う。",
+          "checkIds": [
+            "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+            "111dd648-710c-4c06-8be3-d5da1c90b71a",
+            "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+            "d714ae01-770a-49aa-a5cc-8c9133618cb5"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "activityId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+          "title": "1回の点数を計算する",
+          "preamble": [
+            {
+              "kind": "text",
+              "value": "各回の点数と入力誤りを確認する。0回の全体結果は共有の"
+            },
+            {
+              "kind": "reference",
+              "targetId": "d714ae01-770a-49aa-a5cc-8c9133618cb5",
+              "label": "MK-10"
+            },
+            {
+              "kind": "text",
+              "value": "も参照する。"
+            }
+          ]
+        },
+        {
+          "id": "079f2521-6018-48c5-96c5-2f29309e57e6",
+          "activityId": "03c07114-72b9-48f2-943b-9c5d3fc5c827",
+          "title": "合計と点数の推移を計算する",
+          "preamble": [
+            {
+              "kind": "text",
+              "value": "合計と推移を確認する。入力全体のエラーは共有の"
+            },
+            {
+              "kind": "reference",
+              "targetId": "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+              "label": "MK-05"
+            },
+            {
+              "kind": "text",
+              "value": "を参照する。正常入力は"
+            },
+            {
+              "kind": "reference",
+              "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+              "label": "共通前提"
+            },
+            {
+              "kind": "text",
+              "value": "を用いる。"
+            }
+          ]
+        }
+      ],
+      "guarantees": [
+        {
+          "id": "e29d47dc-f649-42df-8626-a2068baa3907",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "title": "正常入力の共通前提と操作",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "共通前提：計算対象のどの回も、"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+                  "label": "入力誤りの条件"
+                },
+                {
+                  "kind": "text",
+                  "value": "に当てはまらない。操作：計算対象の投擲順と各回の倒れた番号を使い、該当Checkで指定した点数・合計・推移を求める。各Checkの条件と期待結果が一般規則の唯一の定義であり、具体例だけに適用範囲を限定しない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "b65512df-9429-4c29-b985-d23f6a145af7"
+            },
+            {
+              "kind": "example",
+              "exampleId": "ce897e1b-613a-4a3c-905c-450647561f1e"
+            },
+            {
+              "kind": "example",
+              "exampleId": "abf243a9-29b0-4bd5-9161-ea5611994a7a"
+            }
+          ]
+        },
+        {
+          "id": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "title": "入力誤りの条件",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "入力誤りの条件は、いずれかに当てはまる番号があること：1〜12の範囲外、整数でない番号、数値でないもの、同じ回での番号重複。別々の回で同じ番号を使うことは、この重複に含めない。ここでは誤りの条件を定義し、単回とまとめ計算の結果は各Checkで定義する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "338090fd-b937-4103-8fb5-628009e4f1b7"
+            },
+            {
+              "kind": "example",
+              "exampleId": "928ba636-a385-4070-8840-ff856cb488f4"
+            }
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "b65512df-9429-4c29-b985-d23f6a145af7",
+          "guaranteeId": "e29d47dc-f649-42df-8626-a2068baa3907",
+          "columns": [
+            "計算対象の1回",
+            "倒れた本数",
+            "その回の点数",
+            "確かめるCheck"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "倒れた番号なし（1回投げた）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "11e00654-5e3e-4258-bd20-7e1587613ab0",
+                  "label": "MK-01"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "8番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "1本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "8点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30",
+                  "label": "MK-02"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "3番と8番"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "2本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "2点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "d1173d0e-85c5-4df7-94ff-2a7b0f0dece7",
+                  "label": "MK-03"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "1番から12番すべて"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "12本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "12点（番号の合計78点ではない）"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "d1173d0e-85c5-4df7-94ff-2a7b0f0dece7",
+                  "label": "MK-03"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "338090fd-b937-4103-8fb5-628009e4f1b7",
+          "guaranteeId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+          "columns": [
+            "計算対象の1回の入力",
+            "入力の判断",
+            "その回の結果",
+            "確かめるCheck"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "1番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "正常（下限）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "1点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30",
+                  "label": "MK-02"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "12番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "正常（上限）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "12点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30",
+                  "label": "MK-02"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "0番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "範囲外"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力エラー・点数を計算しない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+                  "label": "MK-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "13番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "範囲外"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力エラー・点数を計算しない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+                  "label": "MK-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "1.5という番号"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "整数でない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力エラー・点数を計算しない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+                  "label": "MK-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "文字の「abc」"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "数値でない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力エラー・点数を計算しない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+                  "label": "MK-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "同じ回に8番を2つ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "同一回の重複"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "入力エラー・点数を計算しない。8点にも2点にもしない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+                  "label": "MK-04"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "928ba636-a385-4070-8840-ff856cb488f4",
+          "guaranteeId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+          "columns": [
+            "まとめて計算する各回（／で回を区切る）",
+            "誤りの位置",
+            "全体の結果",
+            "確かめるCheck"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "8番だけ／13番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "後の回"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "全体エラー。8点という途中点数、途中合計、途中推移は返さない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+                  "label": "MK-05"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "13番だけ／8番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "先の回"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "全体エラー。後の正しい回の点数・合計・推移も返さない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+                  "label": "MK-05"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "ce897e1b-613a-4a3c-905c-450647561f1e",
+          "guaranteeId": "e29d47dc-f649-42df-8626-a2068baa3907",
+          "columns": [
+            "計算対象の各回（／で回を区切る）",
+            "各回の点数（投擲順）",
+            "合計",
+            "推移（投擲順）",
+            "確かめるCheck"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "8番だけ／3番と8番／0本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "8、2、0点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "10点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "8、10、10点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "d7555dd8-b6e1-4bf9-a893-bad9a0940374",
+                  "label": "MK-07"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+                  "label": "MK-08"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+                  "label": "MK-09"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "3番と8番／8番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "2、8点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "10点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "2、10点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "d7555dd8-b6e1-4bf9-a893-bad9a0940374",
+                  "label": "MK-07"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+                  "label": "MK-08"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+                  "label": "MK-09"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "8番だけ／8番だけ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "8、8点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "16点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "8、16点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "fbe6b158-c4d2-4e6b-b092-d2306aa2b126",
+                  "label": "MK-06"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "d7555dd8-b6e1-4bf9-a893-bad9a0940374",
+                  "label": "MK-07"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+                  "label": "MK-08"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+                  "label": "MK-09"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "12番だけを5回"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "12、12、12、12、12点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "60点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "12、24、36、48、60点"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "fbe6b158-c4d2-4e6b-b092-d2306aa2b126",
+                  "label": "MK-06"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+                  "label": "MK-08"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+                  "label": "MK-09"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "abf243a9-29b0-4bd5-9161-ea5611994a7a",
+          "guaranteeId": "e29d47dc-f649-42df-8626-a2068baa3907",
+          "columns": [
+            "計算対象",
+            "各回の点数",
+            "合計",
+            "推移",
+            "確かめるCheck"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "まだ1回も投げていない（0回）"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "なし"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "d714ae01-770a-49aa-a5cc-8c9133618cb5",
+                  "label": "MK-10"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "1回投げて0本"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0点が1つ"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0点"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "0点が1つ"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "11e00654-5e3e-4258-bd20-7e1587613ab0",
+                  "label": "MK-01"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+                  "label": "MK-08"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+                  "label": "MK-09"
+                }
+              ]
+            ]
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "11e00654-5e3e-4258-bd20-7e1587613ab0",
+          "checkId": "MK-01",
+          "title": "0本の1回は0点になる",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たし、1回の投擲で倒れた棒が0本である。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "その回の点数は0点になる。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "b65512df-9429-4c29-b985-d23f6a145af7",
+                "label": "具体例表1"
+              },
+              {
+                "kind": "reference",
+                "targetId": "abf243a9-29b0-4bd5-9161-ea5611994a7a",
+                "label": "具体例表5"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/procedure"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T02 deepEqual: [[]] → scores=[0],total=0,history=[0]。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30",
+          "checkId": "MK-02",
+          "title": "1本の1回は棒の番号が点数になる",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たし、1回の投擲で棒が1本だけ倒れる。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "その棒の番号が、その回の点数になる。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "b65512df-9429-4c29-b985-d23f6a145af7",
+                "label": "具体例表1"
+              },
+              {
+                "kind": "reference",
+                "targetId": "338090fd-b937-4103-8fb5-628009e4f1b7",
+                "label": "具体例表2"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/procedure"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T03 deepEqual: 1番/8番/12番それぞれの単回結果が当該番号と一致。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "d1173d0e-85c5-4df7-94ff-2a7b0f0dece7",
+          "checkId": "MK-03",
+          "title": "2本以上の1回は倒れた本数が点数になる",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たし、1回の投擲で棒が2本以上倒れる。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "倒れた本数がその回の点数になる。番号の合計ではない。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "b65512df-9429-4c29-b985-d23f6a145af7",
+                "label": "具体例表1"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/procedure"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T04 deepEqual: [3,8]の単回は2点、全12本の単回は12点（番号和ではない）。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "6aa87608-427f-4460-ac21-2cafe394fe3b",
+          "checkId": "MK-04",
+          "title": "誤った番号の入力は点数を計算しない",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "text",
+                "value": "1回の点数を求める入力が"
+              },
+              {
+                "kind": "reference",
+                "targetId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+                "label": "入力誤りの条件"
+              },
+              {
+                "kind": "text",
+                "value": "のいずれかに当てはまる。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "入力エラーとして点数を計算しない。同じ回の番号重複を黙って1つにまとめたり、複数本として数えたりしない。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+                "label": "入力誤りの条件"
+              },
+              {
+                "kind": "reference",
+                "targetId": "338090fd-b937-4103-8fb5-628009e4f1b7",
+                "label": "具体例表2"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/exception、/exceptions/0"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T09/T10 throws(TypeError): 0/13/非整数/非数値/同回[8,8]は戻り値でなく例外。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "875b8c7d-f924-446e-8b8c-6ab5564de83d",
+          "checkId": "MK-05",
+          "title": "まとめ計算は1回でも誤りがあれば全体エラーにする",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "text",
+                "value": "各回の点数・合計・推移をまとめて求める計算対象で、少なくとも1回が"
+              },
+              {
+                "kind": "reference",
+                "targetId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+                "label": "入力誤りの条件"
+              },
+              {
+                "kind": "text",
+                "value": "に当てはまる。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "計算対象全体をエラーにし、正しい回だけの各回の点数・合計・推移という途中結果を返さない。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "c56c79b5-be21-4d60-975b-e98ccb07ba7d",
+                "label": "入力誤りの条件"
+              },
+              {
+                "kind": "reference",
+                "targetId": "928ba636-a385-4070-8840-ff856cb488f4",
+                "label": "具体例表3"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/exception、/activities/1/when、/relations/2、/relations/3"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する、合計と点数の推移を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T11 throws(TypeError): 誤りが先/後/中央の列は例外となり、部分結果の戻り値では通らない。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fbe6b158-c4d2-4e6b-b092-d2306aa2b126",
+          "checkId": "MK-06",
+          "title": "別の回では同じ番号を使える",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たし、別々の回で同じ番号が入力される。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "別の回での番号の重なりを入力誤りにせず、それぞれの回を通常の点数規則で計算できる。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "ce897e1b-613a-4a3c-905c-450647561f1e",
+                "label": "具体例表4"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/procedure"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T07/T08 deepEqual: 別回の8番再使用は[8,8],16,[8,16]、12番5回は60点まで通常加算。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "d7555dd8-b6e1-4bf9-a893-bad9a0940374",
+          "checkId": "MK-07",
+          "title": "各回の点数を投げた順に扱う",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "e6ecb72c-2e52-4245-9df2-72d826d83a28",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たし、1回以上の投擲を対象に各回の点数を求める。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "各回の点数を投擲順に対応させて利用者へ示し、同じ順の点数を合計・推移の計算へ渡す。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "ce897e1b-613a-4a3c-905c-450647561f1e",
+                "label": "具体例表4"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 / JSON欄 /activities/0/procedure、/activities/0/result、/relations/2、/relations/3"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T05/T06/T07 deepEqual: scores=[8,2,0]/[2,8]/[8,8]を各history/totalとともに固定値照合。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "111dd648-710c-4c06-8be3-d5da1c90b71a",
+          "checkId": "MK-08",
+          "title": "合計は0点から加算し上限を設けない",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "079f2521-6018-48c5-96c5-2f29309e57e6",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たす1回以上の各回の点数について合計を求める。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "合計は0点から各回の点数をそのまま足した値になる。上限を設けず、50点を超えても特別な扱いをしない。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "ce897e1b-613a-4a3c-905c-450647561f1e",
+                "label": "具体例表4"
+              },
+              {
+                "kind": "reference",
+                "targetId": "abf243a9-29b0-4bd5-9161-ea5611994a7a",
+                "label": "具体例表5"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID 03c07114-72b9-48f2-943b-9c5d3fc5c827 / JSON欄 /activities/1/procedure"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "合計と点数の推移を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T02/T05/T06/T07/T08 deepEqual: 合計0/10/10/16/60。48→60に50点特例がない。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "0d63b69d-1188-4b65-ba46-b3bd46d519de",
+          "checkId": "MK-09",
+          "title": "推移は各回までの合計を投げた順に残す",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "079f2521-6018-48c5-96c5-2f29309e57e6",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "text",
+                "value": "を満たす1回以上の各回の点数について推移を求める。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "その回までの合計点を投擲順に1回につき1つ並べる。0点の回も省かず、その回までの合計点を残す。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "ce897e1b-613a-4a3c-905c-450647561f1e",
+                "label": "具体例表4"
+              },
+              {
+                "kind": "reference",
+                "targetId": "abf243a9-29b0-4bd5-9161-ea5611994a7a",
+                "label": "具体例表5"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b / 要素ID 03c07114-72b9-48f2-943b-9c5d3fc5c827 / JSON欄 /activities/1/procedure、/activities/1/result"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "合計と点数の推移を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T02/T05/T06/T07/T08 deepEqual: history=[0]/[8,10,10]/[2,10]/[8,16]/[12,24,36,48,60]。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "d714ae01-770a-49aa-a5cc-8c9133618cb5",
+          "checkId": "MK-10",
+          "title": "まだ0回なら点数と推移はなく合計は0点になる",
+          "detailSummary": "業務設計bd-3の根拠と共通前提・例を参照する。",
+          "sectionId": "079f2521-6018-48c5-96c5-2f29309e57e6",
+          "reviewState": "要確認",
+          "fields": {
+            "classification": [
+              {
+                "kind": "text",
+                "value": "通常項目"
+              }
+            ],
+            "condition": [
+              {
+                "kind": "text",
+                "value": "まだ1回も投げていない0回の投擲を計算対象とする。"
+              }
+            ],
+            "expectedResult": [
+              {
+                "kind": "text",
+                "value": "各回の点数はなく、合計は0点、推移は何もない。1回分の0点を作らず、1回投げて0本の場合と区別する。"
+              }
+            ],
+            "guarantee": [
+              {
+                "kind": "reference",
+                "targetId": "e29d47dc-f649-42df-8626-a2068baa3907",
+                "label": "正常入力の共通前提"
+              },
+              {
+                "kind": "reference",
+                "targetId": "abf243a9-29b0-4bd5-9161-ea5611994a7a",
+                "label": "具体例表5"
+              }
+            ],
+            "evidence": [
+              {
+                "kind": "text",
+                "value": "業務設計 bd-3 / 文書ID 4d4d78a4-ed9e-4663-8eae-036fe947498b の文書欄 /scope。Activity「1回の点数を計算する」/ 要素ID b5a0fb06-1fde-4cf5-97ff-a04fbac7b792 の欄 /activities/0/procedure、/activities/0/result。Activity「合計と点数の推移を計算する」/ 要素ID 03c07114-72b9-48f2-943b-9c5d3fc5c827 の欄 /activities/1/when、/activities/1/procedure、/activities/1/result。JSON欄はBD文書を起点とする位置。"
+              }
+            ],
+            "derivation": [
+              {
+                "kind": "text",
+                "value": "明示（一般規則はbd-3に明記。表の追加数値例はその規則の計算例）"
+              }
+            ],
+            "confidence": [
+              {
+                "kind": "text",
+                "value": "高。レビュー優先度：通常。人間レビューの承認を意味しない。"
+              }
+            ],
+            "related": [
+              {
+                "kind": "text",
+                "value": "1回の点数を計算する、合計と点数の推移を計算する"
+              }
+            ],
+            "testEvidence": [
+              {
+                "kind": "text",
+                "value": "技術対応はmapped、正式な人間確認は未承認（candidate/unapproved）のまま。対象はBD bd-3 / 模擬確認済みCheck checks-4の同一ID・同一期待。Test: app/test/score.test.ts — T01とT02 deepEqual: []はscores/history空・total0、[[]]のscores/history各[0]と区別。 独立の静的assertion照合: reviews/implementation-1-review.ja.md。観測した実行: logs/designer-npm-test.json と同stdout/stderr（exit0、12pass/0fail/0skip）、初期node --testも成功。コード/Testのpin: commit 470d1e01f8a213cdc46d4b927df45e981cf4d514（初期dbab867d6a2d4d25fba01fc51a106183850a1deeから不変）。代表例の証拠であり全入力空間の証明ではない。Codeへの恒久対応は作らない。"
+              }
+            ]
+          }
+        }
+      ],
+      "notes": [
+        {
+          "id": "3d3fa1bd-375e-4830-b079-d3650068b7d2",
+          "title": "Checkの扱い",
+          "content": [
+            {
+              "kind": "text",
+              "value": "全CheckはAI草案の要確認（未承認の注意状態）である。本実験はAI依頼者の模擬レビューで進め、実在人間の承認済み状態やverificationの承認を主張しない。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}
