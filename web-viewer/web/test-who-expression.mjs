@@ -6,6 +6,7 @@ import {IDBFactory} from 'fake-indexeddb';
 import {build} from 'esbuild';
 
 const css=readFileSync('src/style.css','utf8');
+const shellCss=readFileSync('src/viewer-shell.css','utf8');
 const main=readFileSync('src/main.ts','utf8');
 const palette=['#8b5cf6','#2563eb','#c2410c','#008576','#be185d'];
 assert.ok(main.includes(JSON.stringify(palette).replaceAll('"',"'")), 'legacy five-color palette remains');
@@ -15,8 +16,14 @@ const styleDom=new JSDOM('<style>'+css+'</style>');
 const rules=[...styleDom.window.document.styleSheets[0].cssRules];
 const badgeRules=rules.filter(r=>r.selectorText?.includes('.node .who-badge'));
 const roleBadgeRule=rules.find(r=>r.selectorText==='.role-heading .who-badge');assert.ok(roleBadgeRule);assert.equal(roleBadgeRule.style.background,'var(--role-color)');assert.ok(['white','rgb(255, 255, 255)'].includes(roleBadgeRule.style.color));
-assert.deepEqual(badgeRules.map(r=>r.selectorText),['.node .who-badge,.right-drawer-heading .who-badge','.node .who-badge svg,.right-drawer-heading .who-badge svg','[data-theme=dark] .node .who-badge,[data-theme=dark] .right-drawer-heading .who-badge']);
+assert.deepEqual(badgeRules.map(r=>r.selectorText),['.node .who-badge','.node .who-badge svg','[data-theme=dark] .node .who-badge']);
 const [badge,svg]=badgeRules.map(r=>r.style);
+const shellDom=new JSDOM('<style>'+shellCss+'</style>');
+const shellRules=[...shellDom.window.document.styleSheets[0].cssRules];
+for(const [nodeSelector,drawerSelector] of [['.node .who-badge','.right-drawer-heading .who-badge'],['.node .who-badge svg','.right-drawer-heading .who-badge svg']]){
+ const nodeRule=rules.find(rule=>rule.selectorText===nodeSelector),drawerRule=shellRules.find(rule=>rule.selectorText===drawerSelector);
+ assert.ok(drawerRule,`missing ${drawerSelector}`);assert.equal(drawerRule.style.cssText,nodeRule.style.cssText,'drawer and graph role badge declarations match');
+}
 assert.equal(badge.background,'var(--role-color)');
 assert.equal(badge.color,'rgb(255, 255, 255)');
 for(const key of ['width','height','min-width']) assert.equal(badge.getPropertyValue(key),'28px');
@@ -25,10 +32,11 @@ assert.equal(badge.border,'2px solid var(--role-color)');
 assert.equal(svg.width,'16px');assert.equal(svg.height,'16px');
 assert.equal(svg.color,'inherit');assert.equal(svg.getPropertyPriority('color'),'important');
 assert.equal(svg.getPropertyValue('stroke-width'),'2');
-assert.ok(css.includes('[data-theme=dark] .node .who-badge,[data-theme=dark] .right-drawer-heading .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}')); // jsdom drops this unsupported color-mix value.
+assert.ok(css.includes('[data-theme=dark] .node .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}')); // jsdom drops this unsupported color-mix value.
+assert.ok(shellCss.includes('[data-theme=dark] .right-drawer-heading .who-badge{border-color:color-mix(in srgb,var(--role-color) 50%,white)}'));
 for(const rule of rules) if(rule.cssText.includes('--role-color')) assert.ok(rule.selectorText?.includes('.who-badge'),'Who color must stay inside badge rules');
 assert.ok(!css.replace(/[^{}]*\.who-badge[^{}]*\{[^{}]*\}/g,'').includes('--role-color'),'No role-color outside badge declarations');
-styleDom.window.close();
+styleDom.window.close();shellDom.window.close();
 
 const compiled=await build({entryPoints:['src/main.ts'],bundle:true,write:false,format:'iife',loader:{'.css':'empty','.md':'text'}});
 const dom=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true});
