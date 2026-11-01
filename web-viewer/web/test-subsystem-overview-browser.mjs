@@ -93,6 +93,11 @@ export async function verifySubsystemOverview(browser){
    await page.locator('#concept-tab-landscape').click();
   }
   const structureDrawer=await verifyStructureDrawer(page);
+  // The drawer test reloads while another group is active. Reopen the result
+  // graph so the comparison below measures its actual post-reload surface.
+  await page.locator('[data-explorer-key="concept:group-result"]').click();
+  await page.frameLocator('iframe[data-concept-view="group-result"]').locator('.concept-subsystem-region').first().waitFor();
+  await page.locator('[data-explorer-key="concept:landscape"]').click();
   mkdirSync('web/evidence/shell',{recursive:true});const observations=[];
   for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(const width of [1280,393]){
    await page.setViewportSize({width,height:960});const measured=await page.locator('.subsystem-overview-graph').evaluate(graph=>{
