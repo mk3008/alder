@@ -132,17 +132,25 @@ export function renderLinkedChecks(design:Design,ids:string[],documents=design.m
  return root;
 }
 
+// Older JSON documents sometimes embedded this display legend in prose. Keep
+// their business context but render the meaning of the symbol in one place.
+const legacyDecisionLegend=/[‐-]\s*[＝=]\s*[^。\r\n]*(?:不問|左右しない|問わない)[^。\r\n]*。?/g;
+function decisionProse(runs:Run[]):Run[]{const result:Run[]=[];for(const run of runs){
+ if(run.kind!=='text'&&run.kind!=='markdown'){result.push(run);continue;}
+ const value=run.value.replace(legacyDecisionLegend,'');if(value===run.value)result.push(run);else if(value.trim())result.push({...run,value});
+}return result;}
+
 /** The authored comparison belongs to the Check document, not to a data example. */
 export function renderDecisionExamples(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks decision-examples';const bd=design.model!.business;
  for(const id of ids)for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
   const example=doc.examples.find(value=>value.id===id);if(!example||!exampleCheckIds(doc,example).length)continue;
   const reader=new RichReader(doc,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
-  for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,block.content,new Set([guarantee!.id]));
+  for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,decisionProse(block.content),new Set([guarantee!.id]));
   if(example.rows.length>1)section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'));
-  const hasDontCare=example.rows.some(row=>row.some(cell=>cell.some(run=>run.kind==='text'&&/^\s*[-‐]\s*$/.test(run.value))));
-  const hasLegend=guarantee?.blocks.some(block=>block.kind==='prose'&&block.content.some(run=>run.kind==='text'&&/[‐-]\s*[＝=][^。]*(?:不問|左右しない|問わない)/.test(run.value)));
-  if(hasDontCare&&!hasLegend)section.append(element('p','‐ は不問です。'));
+  const resultColumn=example.columns.indexOf('結果'),conditionCount=resultColumn>0?resultColumn:example.columns.length;
+  const hasDontCare=example.rows.some(row=>row.slice(0,conditionCount).some(cell=>cell.some(run=>run.kind==='text'&&/^\s*[-‐]\s*$/.test(run.value))));
+  if(hasDontCare)section.append(element('p','‐＝値不問。'));
   reader.example(section,id,new Set([id]),true);root.append(section);
  }
  return root;

@@ -16,6 +16,8 @@ const resultAuthority=readFileSync('verification/result-example-first.check-item
 assert.equal(createHash('sha256').update(resultAuthority).digest('hex'),'8dded4ab43d807a467b7027f622f1e8b6c8acd755b6480c829380a8312a0b03a');
 const independenceAuthority=readFileSync('verification/result-decision-independence.check-items.json');
 assert.equal(createHash('sha256').update(independenceAuthority).digest('hex'),'7e844c4d1f8707e28df5633c35b92fd93165755edb6142cc8c99f9f80e954ae7');
+const valueIndependentAuthority=readFileSync('verification/decision-value-independent.check-items.json');
+assert.equal(createHash('sha256').update(valueIndependentAuthority).digest('hex'),'8ecb702e7c5912cbac1f505f17b942e2ff57243012c8108dba49fa1aa024b9cf');
 const expected=JSON.parse(authority).checks.map(check=>check.id),covered=new Set();
 const layoutExpected=JSON.parse(layoutAuthority).checks.map(check=>check.id),layoutCovered=new Set();
 const groupExpected=JSON.parse(groupAuthority).checks.map(check=>check.id),groupCovered=new Set();
@@ -53,10 +55,10 @@ try{
  assert.deepEqual(rows(),[['品目','入力内容','見積','申請状態','役職別上限','結果','Check ID'],['‐','‐','‐','‐','‐','保存可','P-01']]);
  assert.equal(page.querySelector('.decision-examples details'),null,'the table must not expand Check prose');
  assert.match(byId.get('purchase-check-p-01').fields.expectedResult[0].value,/役職別上限への適合・申請状態を問わず/,'underlying Check remains available in JSON');
- assert.match(page.textContent,/保存の可否を左右しない/);covered.add('SPEC-SEPARATE-001');covered.add('SPEC-SEPARATE-002');layoutCovered.add('DECISION-TABLE-002');layoutCovered.add('DECISION-TABLE-003');
+ assert.match(page.textContent,/‐＝値不問。/);assert.doesNotMatch(page.textContent,/‐＝保存の可否を左右しない/);covered.add('SPEC-SEPARATE-001');covered.add('SPEC-SEPARATE-002');layoutCovered.add('DECISION-TABLE-002');layoutCovered.add('DECISION-TABLE-003');
  page=open('decision',key('submit-request'));assert.equal(page.querySelector('[data-data-example]'),null);
  assert.deepEqual(rows(),[['見積','役職別上限','結果','備考','Check ID'],['あり','上限以下','提出可','','P-03'],['あり','それ以外','提出不可','上限超過、判定不能など','P-04、P-06'],['なし','‐','提出不可','','P-05']]);
- assert.match(page.textContent,/上から順に判定/);assert.match(page.textContent,/その行では不問/);assert.doesNotMatch(page.textContent,/複数の行に該当する場合があります/);
+ assert.match(page.textContent,/上から順に判定/);assert.match(page.textContent,/‐＝値不問。/);assert.doesNotMatch(page.textContent,/その行では不問|複数の行に該当する場合があります/);
  const first=(quote,limit)=>rows().slice(1).find(row=>row[0]===quote&&(row[1]==='‐'||row[1]===limit||(row[1]==='それ以外'&&limit!=='上限以下')));
  assert.equal(first('なし','上限超過')[4],'P-05');assert.equal(first('なし','判定不能')[4],'P-05');assert.equal(first('あり','上限以下')[4],'P-03');assert.equal(first('あり','判定不能')[4],'P-04、P-06');
  assert.equal(page.querySelector('.decision-examples details'),null);assert.match(byId.get('purchase-check-p-05').fields.expectedResult[0].value,/提出を成立させない/);
@@ -87,7 +89,7 @@ try{
    assert.equal(head.at(-1),'Check ID',`${cap.id} must put Check ID last`);assert(head.includes('結果'),`${cap.id} must identify its result`);assert(head.indexOf('結果')>0,`${cap.id} must have a condition column`);
    assert(!head.includes('条件')&&!head.includes('対象・条件'),`${cap.id} must name independent condition axes`);
    const bodyNodes=[...table.querySelectorAll('tbody tr')];assert.equal(body.length,bodyNodes.length);for(const row of bodyNodes){const cells=[...row.children];assert.equal(cells.length,head.length);assert(cells[head.indexOf('結果')].classList.contains('decision-result'));assert.match(cells.at(-1).textContent.trim(),/^P-\d+(、P-\d+)*$/);assert.equal(cells.at(-1).querySelector('details,button,a'),null);}
-   const section=table.closest('[data-decision-example]');if(body.length>1)assert.match(section.textContent,/上から順に判定/);if(body.some(row=>row.slice(0,head.indexOf('結果')).includes('‐')))assert.match(section.textContent,/不問|左右しない/);
+   const section=table.closest('[data-decision-example]');if(body.length>1)assert.match(section.textContent,/上から順に判定/);const usesDash=body.some(row=>row.slice(0,head.indexOf('結果')).includes('‐'));assert.equal((section.textContent.match(/‐＝値不問。/g)??[]).length,usesDash?1:0);assert.doesNotMatch(section.textContent,/‐＝(?:その行では不問|[^。]*左右しない)/);
   }
   for(const checkId of spec.decisionCheckIds){assert(page.textContent.includes(byId.get(checkId).checkId),`decision Check ${checkId} is not reachable`);reached.add(checkId);}
   page=open('result',id);assert.equal(page.querySelector('.decision-examples'),null);
@@ -144,6 +146,41 @@ try{
  assert.match(candidateById.get('purchase-check-p-03').fields.expectedResult[0].value,/申請内容を確定/,'shared P-03 is a result guarantee, not a branch dependency');
 }finally{candidateApp.w.close();}
 assert.deepEqual(JSON.parse(independenceAuthority).checks.map(check=>check.id).sort(),['RESULT-INDEPENDENT-001','RESULT-INDEPENDENT-002','RESULT-INDEPENDENT-003','RESULT-INDEPENDENT-004']);
+
+// The legend is presentation, while original business scope and table values
+// remain in the new draft and the previously shared JSON is unchanged.
+const displayCandidate=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v7-value-independent-review.json','utf8'));validate(displayCandidate);
+const expectedDisplay=structuredClone(candidate);expectedDisplay.revision='purchase-v7-value-independent-review-1';
+const displayChecks=expectedDisplay.documents.find(d=>d.kind==='checkItems');displayChecks.revision='checks-v10-value-independent-review-1';
+const replacements=new Map([
+ ['decision-draft-guarantee',['‐＝保存の可否を左右しない。','']],
+ ['decision-submit-guarantee',['品目情報と購入理由が揃っている場合。‐＝その行では不問。','品目情報と購入理由が揃っている場合。']],
+ ['decision-return-request-guarantee',['承認者が差戻しを判断する場合。‐＝購入準備番号の確定後は、申請状態が差戻しの可否を左右しない。','承認者が差戻しを判断する場合。']],
+ ['decision-resubmit-request-guarantee',['同じ申請の再提出を選ぶ場合。‐＝その行では不問。見積があり上限以下でも、品目情報または購入理由が不足する場合の可否はこの表では示していません。','同じ申請の再提出を選ぶ場合。見積があり上限以下でも、品目情報または購入理由が不足する場合の可否はこの表では示していません。']],
+ ['decision-prepare-approved-requests-guarantee',['差戻しとの競合がない場合。‐＝重複確定の可否を左右しない。','差戻しとの競合がない場合。']],
+ ['decision-record-partial-receipts-guarantee',['‐＝その行では不問。','']]
+]);
+for(const [id,[before,after]] of replacements){const guarantee=displayChecks.guarantees.find(item=>item.id===id),block=guarantee.blocks.find(item=>item.kind==='prose');assert.equal(block.content[0].value,before);if(after)block.content[0].value=after;else guarantee.blocks.splice(guarantee.blocks.indexOf(block),1);}
+assert.deepEqual(displayCandidate,expectedDisplay,'only the six display legends and version labels change');
+const displayModel=displayCandidate.documents.find(d=>d.kind==='conceptModel'),displayApp=await appFor(displayCandidate);
+try{
+ displayApp.entry('group:tests').click();
+ for(const view of displayModel.presentation.activityViews)for(const ref of view.testSpecificationFunctions??[]){
+  const group=displayModel.reviewGroups.find(g=>g.id===ref.groupId),cap=group.capabilities.find(c=>c.id===ref.capabilityId),id=`fn:${view.activityId}:${group.id}:${cap.id}`;
+  displayApp.entry('tests:decision:'+id).click();const page=displayApp.$('#tests-workspace');
+  for(const section of page.querySelectorAll('[data-decision-example]')){const table=section.querySelector('table'),heads=[...table.querySelectorAll('thead tr:nth-child(2) th')],body=[...table.querySelectorAll('tbody tr')],usesDash=body.some(row=>[...row.children].slice(0,heads.length).some(cell=>['‐','-'].includes(cell.textContent.trim())));assert.equal((section.textContent.match(/‐＝値不問。/g)??[]).length,usesDash?1:0);}
+ }
+ const applyId=displayCandidate.documents.find(d=>d.kind==='businessDesign').activities.find(a=>a.name==='備品購入を申請する').id;
+ displayApp.entry('tests:decision:fn:'+applyId+':group-request:submit-request').click();assert.match(displayApp.$('#tests-workspace').textContent,/品目情報と購入理由が揃っている場合/);
+ const retryView=displayModel.presentation.activityViews.find(view=>view.testSpecificationFunctions?.some(ref=>ref.capabilityId==='resubmit-request'));
+ displayApp.entry(`tests:decision:fn:${retryView.activityId}:group-request:resubmit-request`).click();assert.match(displayApp.$('#tests-workspace').textContent,/不足する場合の可否はこの表では示していません/);
+}finally{displayApp.w.close();}
+
+// A dash in a result/notes column does not make a condition value irrelevant.
+const noteDash=structuredClone(candidate),noteDoc=noteDash.documents.find(d=>d.kind==='checkItems'),noteTable=noteDoc.examples.find(e=>e.id==='decision-submit-table'),noteGuarantee=noteDoc.guarantees.find(g=>g.id===noteTable.guaranteeId);
+noteTable.rows=noteTable.rows.slice(0,1);noteTable.rows[0][3]=[{kind:'text',value:'‐'}];noteGuarantee.blocks[0].content=[{kind:'text',value:'前提'},{kind:'text',value:' '},{kind:'text',value:'説明。‐＝その行では不問。'},{kind:'text',value:'補足。'}];validate(noteDash);
+const noteApp=await appFor(noteDash);try{noteApp.entry('tests:decision:'+key('submit-request')).click();const page=noteApp.$('#tests-workspace');assert.match(page.textContent,/前提 説明。補足。/);assert.doesNotMatch(page.textContent,/‐＝値不問。|その行では不問/);}finally{noteApp.w.close();}
+assert.deepEqual(JSON.parse(valueIndependentAuthority).checks.map(check=>check.id).sort(),['VALUE-INDEPENDENT-001','VALUE-INDEPENDENT-002','VALUE-INDEPENDENT-003','VALUE-INDEPENDENT-004']);
 assert.deepEqual([...covered].sort(),expected.slice().sort());
 assert.deepEqual([...layoutCovered].sort(),layoutExpected.slice().sort());
 assert.deepEqual([...groupCovered].sort(),groupExpected.slice().sort());assert.deepEqual([...resultCovered].sort(),resultExpected.slice().sort());

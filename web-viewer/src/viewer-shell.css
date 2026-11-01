@@ -123,7 +123,7 @@
 /* Graph-first pages share one supplementary drawer; examples remain page-level evidence. */
 .concept-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible}
 .concept-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 12px 12px}
-.concept-example-back{min-height:44px;padding:8px 0;color:var(--review-link);text-align:left;text-decoration:underline;text-underline-offset:3px}
+.concept-example-back,.concept-selection-clear{min-height:44px;padding:8px 0;color:var(--review-link);text-align:left;text-decoration:underline;text-underline-offset:3px}
 .concept-drawer-body .data-review-overview,.concept-drawer-body .data-examples-panel{padding:12px 0;overflow:visible;min-width:0;background:var(--panel)}
 .concept-drawer-body .data-example-picker{align-items:stretch;flex-direction:column;gap:4px}.concept-drawer-body .data-example-picker select{width:100%}
 .concept-selection>h2{font-size:14px;margin:12px 0 0}.concept-drawer-body .concept-related-content{padding:12px 0}

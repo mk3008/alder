@@ -68,6 +68,20 @@ test('function decision and result references are explicit, scoped and may omit 
  validate(other);other.documents.find(d=>d.kind==='conceptModel').reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft').testSpecification.decisionCheckIds.push('other-check');
  assert.throws(()=>validate(other),/Function Check source mismatch/);
 });
+test('an explicitly linked function decision table does not need a placeholder prose guarantee',()=>{
+ const pkg=strict(),model=pkg.documents.find(d=>d.kind==='conceptModel'),doc=pkg.documents.find(d=>d.kind==='checkItems');
+ const cap=model.reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft'),item=doc.items.find(i=>i.id==='preview-check-draft');
+ doc.guarantees.push({id:'table-only-guarantee',sectionId:item.sectionId,title:'可否',blocks:[{kind:'example',exampleId:'table-only-example'}]});
+ doc.examples.push({id:'table-only-example',guaranteeId:'table-only-guarantee',columns:['条件','結果','Check'],rows:[[[{kind:'text',value:'‐'}],[{kind:'text',value:'可'}],[{kind:'reference',targetId:item.id,label:item.checkId}]]]});
+ cap.testSpecification={decisionExampleIds:['table-only-example'],decisionCheckIds:[item.id],resultCheckIds:[item.id],sampleIds:['request-draft']};
+ validate(pkg);requireCheckedSamples(pkg);
+ const unassigned=structuredClone(pkg);unassigned.documents.find(d=>d.kind==='conceptModel').reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft').testSpecification.decisionExampleIds=[];
+ assert.throws(()=>validate(unassigned),/General guarantee prose required/);
+ const unlinked=structuredClone(pkg);unlinked.documents.find(d=>d.kind==='checkItems').examples.find(e=>e.id==='table-only-example').rows[0][2]=[{kind:'text',value:'未関連'}];
+ assert.throws(()=>validate(unlinked),/General guarantee prose required|Function decision table needs a Check/);
+ const emptyCheck=structuredClone(pkg);emptyCheck.documents.find(d=>d.kind==='checkItems').items.find(i=>i.id===item.id).fields={};
+ assert.throws(()=>validate(emptyCheck),/Check guarantee required/);
+});
 test('legacy concept samples stay readable but are not silently upgraded',()=>{
  validate(fixture);const next=structuredClone(fixture),model=next.documents.find(d=>d.kind==='conceptModel');next.revision+='-new';model.revision+='-new';model.schemaVersion='0.2';
  for(const group of model.reviewGroups)for(const capability of group.capabilities)for(const example of capability.samples)example.checkIds=['preview-check-draft'];

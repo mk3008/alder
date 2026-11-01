@@ -12,6 +12,14 @@ export async function verifyStructureDrawer(page){
   assert.equal(await page.locator('.concept-child-tabs,.concept-related [role=tablist]').count(),0);assert(await page.locator('.data-review-overview').isVisible());
   assert.equal(await page.locator('.data-review-overview .review-owner').count(),0);assert.equal(await page.locator('.data-review-overview h3').filter({hasText:'レビュアー'}).count(),0);
   assert.equal(await page.locator('.data-review-overview .review-related-activities button:not(:disabled)').count()>0,true);
+  const graph=page.frameLocator('iframe[data-concept-view="'+id+'"]'),heading=await drawer.locator('.shell-heading strong').textContent();
+  await graph.locator('.node .concept-select').first().click();await graph.locator('.node.selected').first().waitFor();
+  assert(await drawer.locator('.concept-selection-clear').isVisible());
+  await graph.locator('.canvas').click({position:{x:4,y:4}});
+  await page.waitForFunction(expected=>document.querySelector('.concept-related .shell-heading strong')?.textContent===expected,heading);
+  assert.equal(await graph.locator('.node.selected').count(),0);assert(await page.locator('.data-review-overview').isVisible());
+  await graph.locator('.node .concept-select').first().click();await drawer.locator('.concept-selection-clear').click();assert.equal(await graph.locator('.node.selected').count(),0);
+  await graph.locator('.node .concept-select').first().click();await graph.locator('.canvas').press('Escape');assert.equal(await graph.locator('.node.selected').count(),0);
  }
  await page.locator('[data-explorer-key="concept:group-request"]').click();
  if(await drawer.isVisible())await page.locator('#drawer').click();
@@ -38,5 +46,5 @@ export async function verifyStructureDrawer(page){
  const sampleURL=new URL(page.url());assert.equal(sampleURL.searchParams.get('dataExample'),'request-submitted');
  await page.locator('.concept-example-back').click();await page.waitForFunction(()=>!new URL(location.href).searchParams.has('dataExample'));await page.goBack();await page.waitForFunction(()=>new URL(location.href).searchParams.get('dataExample')==='request-submitted');assert(await page.locator('.data-examples-panel').isVisible());await page.goForward();await page.waitForFunction(()=>!document.querySelector('.data-review-overview').hidden);assert(await page.locator('.data-review-overview').isVisible());
  if(await drawer.isVisible())await page.locator('#drawer').click();if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();await page.locator('[data-explorer-key="concept:landscape"]').click();
- return {checks:'STRUCTURE-SHELL-001..005: four graph-first pages, manual drawer, overview/sample separation, selection during samples, pointer/keyboard width, table scroll, persistence, Back/Forward, 1280/393 light/dark'};
+ return {checks:'STRUCTURE-SHELL-001..005, SUBSYSTEM-RETURN-001..002: four graph-first pages, background/clear/Escape, manual drawer, overview/sample separation, selection during samples, pointer/keyboard width, table scroll, persistence, Back/Forward, 1280/393 light/dark'};
 }
