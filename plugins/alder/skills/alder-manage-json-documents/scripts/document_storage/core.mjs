@@ -40,13 +40,33 @@ export function exampleCheckIds(doc,example){
  for(const item of doc.items){const refs=item.fields.guarantee??[];if(refs.some(run=>run.kind==='reference'&&(run.targetId===example.id||run.targetId===example.guaranteeId)))found.add(item.id);}
  return [...found];
 }
-/** Legacy examples may be read, but a new saved package must link every example. */
-export function requireCheckedSamples(pkg){
+// Unmapped historical examples may be carried forward only while their source,
+// ownership and immediate meaning are unchanged; never infer a Check binding.
+const sameStored=(left,right)=>JSON.stringify(left)===JSON.stringify(right);
+const exceptKey=(value,key)=>Object.fromEntries(Object.entries(value).filter(([name])=>name!==key));
+function unchangedLegacySample(previous,doc,group,cap,sample){
+ const old=previous?.documents.find(value=>value.id===doc.id&&value.kind==='conceptModel'&&value.schemaVersion==='0.1');
+ const oldGroup=old?.reviewGroups.find(value=>value.id===group.id),oldCap=oldGroup?.capabilities.find(value=>value.id===cap.id),oldSample=oldCap?.samples.find(value=>value.id===sample.id);
+ return !!(old&&oldGroup&&oldCap&&oldSample&&sameStored(old.basedOn,doc.basedOn)
+  &&['relatedStates','subsystems','concepts','relations','handoffs','presentation'].every(key=>sameStored(old[key],doc[key]))
+  &&sameStored(exceptKey(oldGroup,'capabilities'),exceptKey(group,'capabilities'))
+  &&sameStored(exceptKey(oldCap,'samples'),exceptKey(cap,'samples'))&&sameStored(oldSample,sample));
+}
+function unchangedLegacyExample(previous,doc,example){
+ const old=previous?.documents.find(value=>value.id===doc.id&&value.kind==='checkItems'),oldExample=old?.examples.find(value=>value.id===example.id);
+ const oldGuarantee=old?.guarantees.find(value=>value.id===oldExample?.guaranteeId),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId);
+ const oldSection=old?.sections.find(value=>value.id===oldGuarantee?.sectionId),section=doc.sections.find(value=>value.id===guarantee?.sectionId);
+ return !!(old&&oldExample&&oldGuarantee&&guarantee&&oldSection&&section&&sameStored(old.basedOn,doc.basedOn)
+  &&exampleCheckIds(old,oldExample).length===0&&sameStored(oldExample,example)
+  &&sameStored(oldGuarantee,guarantee)&&sameStored(oldSection,section));
+}
+/** New/changed examples require explicit links; unchanged legacy examples are preserved. */
+export function requireCheckedSamples(pkg,previous){
  for(const doc of pkg.documents.filter(d=>d.kind==='conceptModel'&&d.schemaVersion==='0.1'))
   for(const group of doc.reviewGroups)for(const cap of group.capabilities)for(const sample of cap.samples)
-   demand(false,'Legacy samples require explicit Check references and migration before saving: '+sample.id);
+   demand(unchangedLegacySample(previous,doc,group,cap,sample),'Legacy samples require explicit Check references and migration before saving: '+sample.id);
  for(const doc of pkg.documents.filter(d=>d.kind==='checkItems'))for(const example of doc.examples)
-  demand(exampleCheckIds(doc,example).length>0,'Check example needs an explicit Check reference: '+example.id);
+  demand(exampleCheckIds(doc,example).length>0||unchangedLegacyExample(previous,doc,example),'Check example needs an explicit Check reference: '+example.id);
 }
 /** Shared structural references for storage JSON and the normalized Viewer model. No source grammar. */
 export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){

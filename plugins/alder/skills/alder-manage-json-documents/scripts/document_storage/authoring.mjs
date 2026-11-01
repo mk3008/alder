@@ -70,7 +70,7 @@ export function guardAuthoring(previous,next,operation={}){
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');
   for(const d of next.documents){const p=previous.documents.find(p=>p.id===d.id);if(!p){changedDocs.add(d.id);continue;}demand((d.schemaVersion===p.schemaVersion||structuredUpgrade&&((d.kind==='businessDesign'&&d.schemaVersion==='0.3')||(d.kind==='stateTransition'&&d.schemaVersion==='0.2'))||checkedSamplesUpgrade&&d.kind==='conceptModel'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2'||operation.migration==='roles-0.3'&&d.kind==='businessDesign'&&p.schemaVersion==='0.1'&&d.schemaVersion==='0.2')&&d.kind===p.kind,'Document contract changed');const changed=!equal({...d,revision:''},{...p,revision:''});demand(changed?d.revision!==p.revision:d.revision===p.revision,'Document revision must track actual changes: '+d.id);if(changed)changedDocs.add(d.id);}
  }
- requireCheckedSamples(next);
+ requireCheckedSamples(next,previous);
  const used=new Set();
  for(const d of next.documents.filter(d=>d.kind==='checkItems')){
   const prior=previous?.documents.find(p=>p.id===d.id),needsBD=!prior||changedDocs.has(d.id);
