@@ -6,7 +6,11 @@ import {IDBFactory} from 'fake-indexeddb';
 import {validate} from '../../tools/document_storage/core.mjs';
 
 const source=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta-function-preview.json','utf8'));
+// Preserve the original all-scene legacy contract independently of the new
+// explicit split presentation, whose decision/result cases have their own test.
 const pkg=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v4-check-review.json','utf8'));
+for(const group of pkg.documents.find(doc=>doc.kind==='conceptModel').reviewGroups)for(const cap of group.capabilities)delete cap.testSpecification;
+const oldChecks=pkg.documents.find(doc=>doc.kind==='checkItems');oldChecks.guarantees=oldChecks.guarantees.filter(g=>!g.id.startsWith('decision-'));oldChecks.examples=oldChecks.examples.filter(e=>!e.id.startsWith('decision-'));
 validate(pkg);
 const bd=pkg.documents.find(doc=>doc.kind==='businessDesign'),model=pkg.documents.find(doc=>doc.kind==='conceptModel'),doc=pkg.documents.find(doc=>doc.kind==='checkItems');
 const oldModel=source.documents.find(d=>d.kind==='conceptModel'),all=group=>group.capabilities.flatMap(cap=>cap.samples);

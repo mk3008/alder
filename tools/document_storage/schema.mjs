@@ -45,7 +45,10 @@ const capability=obj({id,title:text,description:str,meta:{},samples:array(sample
 // New sample records must name the Check Items whose expectations they explain.
 // The old concept payload remains readable as a compatibility input.
 const checkedSample=obj({...sample.properties,checkIds:{...array(id),minItems:1,uniqueItems:true}},[...sample.required,'checkIds']);
-const checkedCapability=obj({...capability.properties,samples:array(checkedSample)});
+// An optional review projection references existing Checks, comparison tables,
+// and successful data examples. The Check remains the source of each guarantee.
+const functionSpecification=obj({decisionExampleIds:array(id),decisionCheckIds:array(id),resultCheckIds:array(id),sampleIds:array(id)});
+const checkedCapability=obj({...capability.properties,samples:array(checkedSample),testSpecification:functionSpecification},[...Object.keys(capability.properties)]);
 const limitation=obj({id,title:text,description:str,reason:str,meta:{}});
 const viewNode=obj({conceptId:id,name:text,fields:array(text),description:str,sources:array(text),sourceActivityIds:array(id)});
 const viewEdge=obj({id,fromConceptId:id,toConceptId:id,relationIds:array(id),scope:str,fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});

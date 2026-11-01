@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v4-check-review-1",
+  "revision": "purchase-v4-check-review-2",
   "documents": [
     {
       "id": "purchase-bd",
@@ -843,7 +843,7 @@
     },
     {
       "id": "purchase-concepts",
-      "revision": "concepts-v4-review-1",
+      "revision": "concepts-v4-review-2",
       "kind": "conceptModel",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -2390,6 +2390,24 @@
                   }
                 ],
                 "hypothesisId": "draft-preserves-existing"
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-draft-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-01",
+                  "purchase-check-p-02",
+                  "purchase-check-p-30"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-02",
+                  "purchase-check-p-30"
+                ],
+                "sampleIds": [
+                  "request-draft",
+                  "request-draft-approved"
+                ]
               }
             },
             {
@@ -2705,6 +2723,23 @@
                     "basis": "見積・理由・全品目情報必須。税抜小計合計≦役職上限と判定可能。",
                     "activityId": "ecde191f-09c5-519f-88a3-843ae6a9c3c4"
                   }
+                ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-submit-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-03",
+                  "purchase-check-p-04",
+                  "purchase-check-p-05",
+                  "purchase-check-p-06"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-03"
+                ],
+                "sampleIds": [
+                  "request-submitted"
                 ]
               }
             },
@@ -3179,7 +3214,24 @@
                   ]
                 }
               ],
-              "meta": {}
+              "meta": {},
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-resubmit-request-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-11",
+                  "purchase-check-p-12",
+                  "purchase-check-p-14",
+                  "purchase-check-p-28"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-11"
+                ],
+                "sampleIds": [
+                  "retry-submitted"
+                ]
+              }
             },
             {
               "id": "discard-request",
@@ -3289,7 +3341,22 @@
                   ]
                 }
               ],
-              "meta": {}
+              "meta": {},
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-discard-request-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-13"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-13"
+                ],
+                "sampleIds": [
+                  "discard-draft",
+                  "discard-returned"
+                ]
+              }
             }
           ],
           "limitations": [
@@ -3723,6 +3790,20 @@
                     "activityId": "27f9ed6d-c78f-580b-913b-1fab6b20d365"
                   }
                 ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-approve-current-version-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-07"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-07"
+                ],
+                "sampleIds": [
+                  "decision-approved"
+                ]
               }
             },
             {
@@ -3905,6 +3986,17 @@
                     "basis": "提出成功時の確定・現在対象版切替・旧判断の無効化。過去の確定版は直接変更しない。",
                     "activityId": "b180c827-00ce-50ca-85b6-1a2f9f5d3533"
                   }
+                ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [],
+                "decisionCheckIds": [],
+                "resultCheckIds": [
+                  "purchase-check-p-11",
+                  "purchase-check-p-15"
+                ],
+                "sampleIds": [
+                  "decision-resubmitted"
                 ]
               }
             },
@@ -4105,7 +4197,25 @@
                   ]
                 }
               ],
-              "meta": {}
+              "meta": {},
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-return-request-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-08",
+                  "purchase-check-p-09",
+                  "purchase-check-p-10"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-08",
+                  "purchase-check-p-09"
+                ],
+                "sampleIds": [
+                  "decision-return",
+                  "decision-return-approved"
+                ]
+              }
             }
           ],
           "limitations": [
@@ -4646,6 +4756,24 @@
                     "activityId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5"
                   }
                 ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-prepare-approved-requests-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-16",
+                  "purchase-check-p-17",
+                  "purchase-check-p-26"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-16",
+                  "purchase-check-p-25",
+                  "purchase-check-p-27"
+                ],
+                "sampleIds": [
+                  "handoff-batch"
+                ]
               }
             },
             {
@@ -4932,6 +5060,20 @@
                     "basis": "失敗でも準備は残る。同番号・同内容を再出力。",
                     "activityId": "ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5"
                   }
+                ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-reexport-fixed-preparation-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-18"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-18"
+                ],
+                "sampleIds": [
+                  "handoff-retry"
                 ]
               }
             }
@@ -6107,6 +6249,26 @@
                     "activityId": "218937bd-4b6c-527e-b9e6-14075084b842"
                   }
                 ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-record-partial-receipts-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-23",
+                  "purchase-check-p-24"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-19",
+                  "purchase-check-p-21",
+                  "purchase-check-p-29",
+                  "purchase-check-p-31"
+                ],
+                "sampleIds": [
+                  "result-partial",
+                  "result-all-received",
+                  "result-retry"
+                ]
               }
             },
             {
@@ -6545,6 +6707,23 @@
                     "activityId": "218937bd-4b6c-527e-b9e6-14075084b842"
                   }
                 ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-close-with-unpurchased-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-20",
+                  "purchase-check-p-21"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-20",
+                  "purchase-check-p-21",
+                  "purchase-check-p-31"
+                ],
+                "sampleIds": [
+                  "result-closed"
+                ]
               }
             },
             {
@@ -6799,6 +6978,25 @@
                     "basis": "入庫がなければ入庫回は作らない。全品目W＝0なら終結結果。",
                     "activityId": "218937bd-4b6c-527e-b9e6-14075084b842"
                   }
+                ]
+              },
+              "testSpecification": {
+                "decisionExampleIds": [
+                  "decision-close-without-receipt-table"
+                ],
+                "decisionCheckIds": [
+                  "purchase-check-p-20",
+                  "purchase-check-p-21",
+                  "purchase-check-p-22"
+                ],
+                "resultCheckIds": [
+                  "purchase-check-p-20",
+                  "purchase-check-p-21",
+                  "purchase-check-p-22",
+                  "purchase-check-p-31"
+                ],
+                "sampleIds": [
+                  "result-none"
                 ]
               }
             }
@@ -7802,7 +8000,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v1-review",
+      "revision": "checks-v2-review",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -7911,8 +8109,953 @@
           "preamble": []
         }
       ],
-      "guarantees": [],
-      "examples": [],
+      "guarantees": [
+        {
+          "id": "decision-draft-guarantee",
+          "sectionId": "purchase-check-section-ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "title": "下書き保存の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "‐＝保存の可否を左右しない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-draft-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-submit-guarantee",
+          "sectionId": "purchase-check-section-ecde191f-09c5-519f-88a3-843ae6a9c3c4",
+          "title": "提出の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "品目情報と購入理由が揃っている場合。‐＝提出の成立を左右しない。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-submit-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-approve-current-version-guarantee",
+          "sectionId": "purchase-check-section-27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "title": "承認の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請済みの対象版を承認者が確認する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-approve-current-version-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-return-request-guarantee",
+          "sectionId": "purchase-check-section-27f9ed6d-c78f-580b-913b-1fab6b20d365",
+          "title": "差戻しの可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "承認者が差戻しを判断する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-return-request-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-resubmit-request-guarantee",
+          "sectionId": "purchase-check-section-b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+          "title": "再提出の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請者が同じ申請の再提出を選ぶ。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-resubmit-request-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-discard-request-guarantee",
+          "sectionId": "purchase-check-section-b180c827-00ce-50ca-85b6-1a2f9f5d3533",
+          "title": "破棄の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請者が破棄を選ぶ。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-discard-request-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-prepare-approved-requests-guarantee",
+          "sectionId": "purchase-check-section-ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
+          "title": "購入対象の確定可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "対象となる申請について判断する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-prepare-approved-requests-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-reexport-fixed-preparation-guarantee",
+          "sectionId": "purchase-check-section-ef8c1f4f-aff8-5f76-8ebd-a3445ae443f5",
+          "title": "再出力の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "確定済みの購入準備について判断する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-reexport-fixed-preparation-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-record-partial-receipts-guarantee",
+          "sectionId": "purchase-check-section-218937bd-4b6c-527e-b9e6-14075084b842",
+          "title": "入庫登録の可否",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "登録先と数量について判断する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-record-partial-receipts-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-close-with-unpurchased-guarantee",
+          "sectionId": "purchase-check-section-218937bd-4b6c-527e-b9e6-14075084b842",
+          "title": "未購入での終結",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請者との調整により購入しない数量を確定する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-close-with-unpurchased-table"
+            }
+          ]
+        },
+        {
+          "id": "decision-close-without-receipt-guarantee",
+          "sectionId": "purchase-check-section-218937bd-4b6c-527e-b9e6-14075084b842",
+          "title": "入庫なしでの終結",
+          "blocks": [
+            {
+              "kind": "prose",
+              "content": [
+                {
+                  "kind": "text",
+                  "value": "申請者と購入しないことを調整する。"
+                }
+              ]
+            },
+            {
+              "kind": "example",
+              "exampleId": "decision-close-without-receipt-table"
+            }
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "decision-draft-table",
+          "guaranteeId": "decision-draft-guarantee",
+          "columns": [
+            "条件",
+            "下書き保存",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "見積"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-01",
+                  "label": "P-01"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "品目・入力内容"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-01",
+                  "label": "P-01"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請の状態"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-02",
+                  "label": "P-02（確認が必要）"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "役職別上限"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "保存の条件にしない"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-30",
+                  "label": "P-30"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-submit-table",
+          "guaranteeId": "decision-submit-guarantee",
+          "columns": [
+            "見積",
+            "役職別上限",
+            "提出",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "あり"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "上限以下"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-03",
+                  "label": "P-03"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "あり"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "上限超過"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-04",
+                  "label": "P-04"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-05",
+                  "label": "P-05"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "あり"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "判定不能"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-06",
+                  "label": "P-06"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-approve-current-version-table",
+          "guaranteeId": "decision-approve-current-version-guarantee",
+          "columns": [
+            "対象",
+            "購入判断",
+            "承認",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請済みの対象版"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "認める"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-07",
+                  "label": "P-07"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-return-request-table",
+          "guaranteeId": "decision-return-request-guarantee",
+          "columns": [
+            "対象・条件",
+            "差戻し",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "申請済みで購入を認めない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-08",
+                  "label": "P-08"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "承認済み・購入準備番号が未確定"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-09",
+                  "label": "P-09"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "購入準備番号が確定済み"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-10",
+                  "label": "P-10"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-resubmit-request-table",
+          "guaranteeId": "decision-resubmit-request-guarantee",
+          "columns": [
+            "申請の状態",
+            "条件",
+            "再提出",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "下書き・差戻し"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "必要情報と役職別上限を満たす"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-11",
+                  "label": "P-11"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "下書き・差戻し"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "上限を超過する"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-12",
+                  "label": "P-12（確認が必要）"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "下書き・差戻し"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "見積なし"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-12",
+                  "label": "P-12（確認が必要）"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-28",
+                  "label": "P-28"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "購入準備済み"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "同じ申請を再提出"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-14",
+                  "label": "P-14（確認が必要）"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-discard-request-table",
+          "guaranteeId": "decision-discard-request-guarantee",
+          "columns": [
+            "申請の状態",
+            "破棄",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "下書き・差戻し"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-13",
+                  "label": "P-13（確認が必要）"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-prepare-approved-requests-table",
+          "guaranteeId": "decision-prepare-approved-requests-guarantee",
+          "columns": [
+            "対象・条件",
+            "確定",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "承認済み・まだ準備に含まれない"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-16",
+                  "label": "P-16"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "すでに別の購入準備に含まれる"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "重複確定は不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-17",
+                  "label": "P-17"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "差戻しと準備確定が競合する"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "両方の同時成立は不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-26",
+                  "label": "P-26"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-reexport-fixed-preparation-table",
+          "guaranteeId": "decision-reexport-fixed-preparation-guarantee",
+          "columns": [
+            "状況",
+            "再出力",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "CSVの出力失敗・紛失"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-18",
+                  "label": "P-18"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-record-partial-receipts-table",
+          "guaranteeId": "decision-record-partial-receipts-guarantee",
+          "columns": [
+            "対象・条件",
+            "入庫登録",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "待ち数量を超える数量"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-23",
+                  "label": "P-23"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "別申請・旧版の品目"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "不可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-24",
+                  "label": "P-24"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-close-with-unpurchased-table",
+          "guaranteeId": "decision-close-with-unpurchased-guarantee",
+          "columns": [
+            "条件",
+            "終結",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "全品目の待ち数量が0になる"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-20",
+                  "label": "P-20"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-21",
+                  "label": "P-21"
+                }
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "decision-close-without-receipt-table",
+          "guaranteeId": "decision-close-without-receipt-guarantee",
+          "columns": [
+            "条件",
+            "終結",
+            "関連 Check"
+          ],
+          "rows": [
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "入庫せず全品目を購入しないと確定する"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "可"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-20",
+                  "label": "P-20"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-21",
+                  "label": "P-21"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-22",
+                  "label": "P-22"
+                }
+              ]
+            ]
+          ]
+        }
+      ],
       "items": [
         {
           "id": "purchase-check-p-01",

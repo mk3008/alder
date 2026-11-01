@@ -38,6 +38,36 @@ test('new samples require explicit Checks in the same Business Design and accept
  other.documents.push({id:'other-check-doc',schemaVersion:'0.1',kind:'checkItems',revision:'other-check-r1',title:'別のCheck',basedOn:{documentId:'other-bd',revision:'other-r1',verification:'unverified'},intro:[],index:[{activityId:'other-activity',purpose:'',connections:'',checkIds:['other-check']}],sections:[{id:'other-section',activityId:'other-activity',title:'別の業務',preamble:[]}],guarantees:[],examples:[],items:[{id:'other-check',checkId:'OTHER-1',title:'別の保証',detailSummary:'',sectionId:'other-section',reviewState:'未レビュー',fields:{guarantee:[{kind:'text',value:'別の業務の保証'}]}}],notes:[]});
  validate(other);sample(other).checkIds=['other-check'];assert.throws(()=>validate(other),/Sample Check source mismatch/);
 });
+test('function decision and result references are explicit, scoped and may omit samples',()=>{
+ const pkg=strict(),model=pkg.documents.find(d=>d.kind==='conceptModel'),doc=pkg.documents.find(d=>d.kind==='checkItems');
+ const cap=model.reviewGroups.flatMap(group=>group.capabilities).find(value=>value.id==='save-draft'),item=doc.items.find(value=>value.id==='preview-check-draft');
+ doc.guarantees.push({id:'test-decision-guarantee',sectionId:item.sectionId,title:'可否',blocks:[{kind:'prose',content:[{kind:'text',value:'判定条件'}]},{kind:'example',exampleId:'test-decision-table'}]});
+ doc.examples.push({id:'test-decision-table',guaranteeId:'test-decision-guarantee',columns:['条件','Check'],rows:[[[{kind:'text',value:'不問'}],[{kind:'reference',targetId:item.id,label:item.checkId}]]]});
+ cap.testSpecification={decisionExampleIds:['test-decision-table'],decisionCheckIds:[item.id],resultCheckIds:[item.id],sampleIds:['request-draft']};
+ validate(pkg);requireCheckedSamples(pkg);
+ const onlyDecision=structuredClone(pkg),onlyCap=onlyDecision.documents.find(d=>d.kind==='conceptModel').reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft');
+ onlyCap.samples=[];onlyCap.testSpecification.sampleIds=[];onlyCap.testSpecification.resultCheckIds=[];
+ for(const group of onlyDecision.documents.find(d=>d.kind==='conceptModel').reviewGroups)for(const statement of group.structureStatements)statement.sampleIds=statement.sampleIds.filter(id=>id!=='request-draft');
+ validate(onlyDecision);
+ for(const mutate of [
+  c=>c.testSpecification.decisionCheckIds=['missing-check'],
+  c=>c.testSpecification.decisionCheckIds=['purchase-bd'],
+  c=>c.testSpecification.decisionCheckIds=[item.id,item.id],
+  c=>c.testSpecification.decisionCheckIds=[],
+  c=>c.testSpecification.decisionExampleIds=['missing-table'],
+  c=>c.testSpecification.decisionExampleIds=[item.id],
+  c=>c.testSpecification.resultCheckIds=[],
+  c=>c.testSpecification.sampleIds=['handoff-batch'],
+  c=>c.testSpecification.sampleIds=['request-draft','request-draft']
+ ]){const broken=structuredClone(pkg),bad=broken.documents.find(d=>d.kind==='conceptModel').reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft');mutate(bad);assert.throws(()=>validate(broken));}
+ const orphan=structuredClone(pkg),orphanDoc=orphan.documents.find(d=>d.kind==='checkItems');orphanDoc.examples.find(e=>e.id==='test-decision-table').rows[0][1]=[{kind:'text',value:'関連なし'}];
+ assert.throws(()=>validate(orphan),/Function decision table needs a Check/);
+ const other=structuredClone(pkg);other.externalDocuments.push({id:'other-bd',kind:'businessDesign',revision:'other-r1',activities:[{id:'other-activity',name:'別の業務'}]});
+ other.sources.push({documentId:'other-bd',revision:'other-r1',sha256:'0'.repeat(64),uri:''});
+ other.documents.push({id:'other-check-doc',schemaVersion:'0.1',kind:'checkItems',revision:'other-check-r1',title:'別のCheck',basedOn:{documentId:'other-bd',revision:'other-r1',verification:'unverified'},intro:[],index:[{activityId:'other-activity',purpose:'',connections:'',checkIds:['other-check']}],sections:[{id:'other-section',activityId:'other-activity',title:'別の業務',preamble:[]}],guarantees:[],examples:[],items:[{id:'other-check',checkId:'OTHER-1',title:'別の保証',detailSummary:'',sectionId:'other-section',reviewState:'未レビュー',fields:{guarantee:[{kind:'text',value:'別の業務の保証'}]}}],notes:[]});
+ validate(other);other.documents.find(d=>d.kind==='conceptModel').reviewGroups.flatMap(g=>g.capabilities).find(c=>c.id==='save-draft').testSpecification.decisionCheckIds.push('other-check');
+ assert.throws(()=>validate(other),/Function Check source mismatch/);
+});
 test('legacy concept samples stay readable but are not silently upgraded',()=>{
  validate(fixture);const next=structuredClone(fixture),model=next.documents.find(d=>d.kind==='conceptModel');next.revision+='-new';model.revision+='-new';model.schemaVersion='0.2';
  for(const group of model.reviewGroups)for(const capability of group.capabilities)for(const example of capability.samples)example.checkIds=['preview-check-draft'];

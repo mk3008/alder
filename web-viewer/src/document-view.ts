@@ -22,7 +22,7 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
 /** References are expanded on demand. Neither a cycle nor fan-out eagerly builds a tree. */
 class RichReader{
  private remaining=5000;private warned=false;
- constructor(private doc:Check){}
+ constructor(private doc:Check,private requester=false){}
  private take(root:HTMLElement){if(this.remaining-->0)return true;if(!this.warned){this.warned=true;root.append(element('p','展開する内容が表示量の上限に達しました。続きは原文で確認してください。'));}return false;}
  runs(root:HTMLElement,values:Run[],seen=new Set<string>()){
   for(const r of values){if(!this.take(root))break;
@@ -36,7 +36,7 @@ class RichReader{
     const visited=new Set(seen).add(r.targetId),doc=this.doc,guarantee=doc.guarantees.find(g=>g.id===r.targetId),example=doc.examples.find(e=>e.id===r.targetId),item=doc.items.find(i=>i.id===r.targetId),section=doc.sections.find(s=>s.id===r.targetId),note=doc.notes.find(n=>n.id===r.targetId);
     if(guarantee){detail.append(element('h4',guarantee.title));for(const block of guarantee.blocks){if(!this.take(detail))break;if(block.kind==='prose')this.runs(detail,block.content,visited);else this.example(detail,block.exampleId,visited);}}
     else if(example)this.example(detail,example.id,visited);
-    else if(item){detail.append(element('p',`${item.checkId} · ${item.title} · ${item.reviewState}`));this.fields(detail,item.fields,visited);}
+    else if(item){detail.append(element('p',`${item.checkId} · ${item.title}`+(this.requester?'':` · ${item.reviewState}`)));if(this.requester&&(item.reviewState==='要確認'||item.reviewState==='要修正'))detail.append(element('p','確認が必要です。'));const fields=this.requester?Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question','alternatives'].includes(name))):item.fields;this.fields(detail,fields,visited);}
     else if(section){detail.append(element('h4',section.title));this.runs(detail,section.preamble,visited);}
     else if(note){detail.append(element('h4',note.title));this.runs(detail,note.content,visited);}
     else if(r.targetId===doc.id){detail.append(element('h4',doc.title));this.runs(detail,doc.intro,visited);}
@@ -50,7 +50,7 @@ class RichReader{
    const visited=new Set(seen).add(guarantee.id);for(const block of guarantee.blocks){if(!this.take(root))break;if(block.kind==='prose')this.runs(root,block.content,visited);else this.example(root,block.exampleId,visited);}
   }}else this.runs(root,content,seen);
  }}
- private example(root:HTMLElement,id:string,seen:Set<string>){
+ example(root:HTMLElement,id:string,seen:Set<string>){
   const ex=this.doc.examples.find(e=>e.id===id)!;if(!exampleCheckIds(this.doc,ex).length)return;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
   for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
  }
@@ -73,7 +73,7 @@ export function renderChecks(design:Design,selected?:string,checks=design.model!
 }
 
 /** Requester-facing view of existing Check contents; provenance remains in the document. */
-export function renderRequesterChecks(design:Design,activityId?:string,documents=design.model!.checks,exclude=new Set<string>()):HTMLElement{
+export function renderRequesterChecks(design:Design,activityId?:string,documents=design.model!.checks,exclude=new Set<string>(),excludeGuarantees=new Set<string>()):HTMLElement{
  const root=element('section');root.className='check-content json-checks';const bd=design.model!.business;
  const checks=documents.filter(doc=>doc.basedOn.documentId===bd.id);
  let found=false;
@@ -83,9 +83,9 @@ export function renderRequesterChecks(design:Design,activityId?:string,documents
   const ids=(activityId?[...new Set(rows.flatMap(row=>row.checkIds))]:doc.items.filter(item=>!assigned.has(item.id)).map(item=>item.id)).filter(id=>!exclude.has(id));
   const sections=doc.sections.filter(section=>activityId?section.activityId===activityId:section.activityId===null);
   for(const section of sections){
-   if(section.preamble.length||doc.guarantees.some(guarantee=>guarantee.sectionId===section.id))found=true;
+   if(section.preamble.length||doc.guarantees.some(guarantee=>guarantee.sectionId===section.id&&!excludeGuarantees.has(guarantee.id)))found=true;
    reader.runs(root,section.preamble);
-   for(const guarantee of doc.guarantees.filter(value=>value.sectionId===section.id))reader.runs(root,[{kind:'reference',targetId:guarantee.id,label:guarantee.title}]);
+   for(const guarantee of doc.guarantees.filter(value=>value.sectionId===section.id&&!excludeGuarantees.has(value.id)))reader.runs(root,[{kind:'reference',targetId:guarantee.id,label:guarantee.title}]);
   }
   for(const id of ids){const item=doc.items.find(value=>value.id===id);if(!item)continue;found=true;
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;section.append(element('h3',item.checkId+' · '+item.title));
@@ -109,6 +109,52 @@ export function renderLinkedChecks(design:Design,ids:string[],documents=design.m
    section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question','alternatives'].includes(name)));
    reader.fields(section,fields,new Set([item.id]),true);root.append(section);
+  }
+ }
+ return root;
+}
+
+/** The authored comparison belongs to the Check document, not to a data example. */
+export function renderDecisionExamples(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
+ const root=element('section');root.className='check-content json-checks decision-examples';const bd=design.model!.business;
+ for(const id of ids)for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
+  const example=doc.examples.find(value=>value.id===id);if(!example||!exampleCheckIds(doc,example).length)continue;
+  const reader=new RichReader(doc,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
+  for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,block.content,new Set([guarantee!.id]));
+  reader.example(section,id,new Set([id]));root.append(section);
+ }
+ return root;
+}
+
+/** For a Check without a comparison table, keep the condition separate from its outcome. */
+export function renderDecisionChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
+ const root=element('section');root.className='check-content json-checks decision-checks';const bd=design.model!.business,wanted=new Set(ids);
+ for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
+  const reader=new RichReader(doc,true);
+  for(const item of doc.items.filter(value=>wanted.has(value.id))){
+   const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
+   section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
+   if(item.fields.condition?.length){section.append(element('h4','条件'));reader.runs(section,item.fields.condition,new Set([item.id]));}
+   const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));
+   if(Object.keys(fields).length){const detail=element('details');detail.append(element('summary','期待結果'));reader.fields(detail,fields,new Set([item.id]),true);section.append(detail);}
+   root.append(section);
+  }
+ }
+ return root;
+}
+
+/** Result expectations stay visible while their complete Check remains reachable. */
+export function renderResultChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
+ const root=element('section');root.className='check-content json-checks result-checks';const bd=design.model!.business,wanted=new Set(ids);
+ for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
+  const reader=new RichReader(doc,true);
+  for(const item of doc.items.filter(value=>wanted.has(value.id))){
+   const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
+   section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
+   const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));
+   reader.fields(section,fields,new Set([item.id]),true);
+   if(item.fields.condition?.length){const detail=element('details'),summary=element('summary','適用条件');detail.append(summary);reader.runs(detail,item.fields.condition,new Set([item.id]));section.append(detail);}
+   root.append(section);
   }
  }
  return root;
