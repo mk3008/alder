@@ -1,0 +1,35 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "2026-11-01 本人指示：権限判定の不成立と、エラーではない下書き保存・再開の別ルートを同じ例外として見せない。Result・項目ごとのテスト仕様への対応も維持する。",
+  "scope": "業務設計右ドロワーで、JSONに明示された扱いを区別する。従来の型なし入力は推測しない。",
+  "related": [
+    "BUSINESS-VARIATION-001",
+    "BUSINESS-VARIATION-002",
+    "BUSINESS-VARIATION-003",
+    "ACTIVITY-SECTION-SPEC-001",
+    "DRAFT-ROUTE-001"
+  ],
+  "checks": [
+    {
+      "id": "BUSINESS-ROUTE-TYPE-001",
+      "condition": "同じActivityに区分が明示された別ルートと不成立がある。",
+      "guarantee": "Resultとは別に「別ルート」と「例外」をそれぞれのセクションとして示し、各説明は一度だけ表示する。例外の説明以外の情報を落とさない。",
+      "reason": "保存等の選択可能な操作を、処理不成立のエラーと誤認させない。",
+      "verification": "購買の申請および購入準備について、実際の明示区分と右ドロワーの見出し・本文を照合する。"
+    },
+    {
+      "id": "BUSINESS-ROUTE-TYPE-002",
+      "condition": "旧資料に区分がない、区分が重複して矛盾する、または他のActivityの項目を参照している。",
+      "guarantee": "名前・順番・Checkの有無から分類しない。未確定項目は従来の中立的な「通常以外の扱い」に置き、旧データを変更しない。",
+      "reason": "誤った意味を生成しないため。",
+      "verification": "旧V8、区分欠落・矛盾・対象違いの正負例を実DOMで確認する。"
+    },
+    {
+      "id": "BUSINESS-ROUTE-TYPE-003",
+      "condition": "項目別のテスト仕様への対応が明示されている。",
+      "guarantee": "別ルート・例外のいずれも、元の項目IDに対応する可否判定・処理結果リンクと未作成／未確認の扱いを保持する。",
+      "reason": "表示分類でトレーサビリティを失わないため。",
+      "verification": "申請の下書き保存・権限判定不成立と購入準備の再出力・競合のリンクを実際のアプリDOMで確認する。"
+    }
+  ]
+}
