@@ -26,11 +26,24 @@ async function boot(script,db=new IDBFactory()){
  const $=s=>w.document.querySelector(s),entry=key=>$('[data-explorer-key="'+key+'"]'),until=async fn=>{for(let i=0;i<500&&!fn();i++)await new Promise(r=>setTimeout(r,10));assert.ok(fn(),'expected app state');};
  await until(()=>!!$('#open')&&!$('#open').disabled);return {w,$,entry,until};
 }
+function checkRelationLists(doc,business,activityId){
+ const names=new Map([...business.objects,...business.activities].map(item=>[item.id,item.name]));
+ const detail=doc.querySelector('#detail>.markdown');
+ for(const [kind,title] of [['input','Input'],['output','Output']]){
+  const expected=business.relations.filter(r=>r.kind===kind&&(r.fromId===activityId||r.toId===activityId)).map(r=>`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`);
+  const heading=[...detail.children].find(el=>el.tagName==='H3'&&el.textContent===title);
+  assert.equal(!!heading,expected.length>0,`${title}: heading exists only when relations exist`);
+  if(!heading)continue;
+  const list=heading.nextElementSibling;assert.equal(list?.tagName,'UL',`${title}: relations use a list`);
+  assert.deepEqual([...list.children].map(el=>[el.tagName,el.textContent]),expected.map(text=>['LI',text]),`${title}: retain each relation and its order`);
+ }
+}
 try{
  const app=await boot(normal),{$,entry,until}=app;$('#open-text').click();$('#source-text').value=purchaseRaw;await $('#source-submit').onclick();await until(()=>!!entry('business:'+activity.id));
  assert.equal($('#detail .right-drawer-tabs'),null);assert.match($('#detail').textContent,/項目を選択すると業務内容/);
  const graphZoom=$('#zoom').textContent,graphWheel=new app.w.WheelEvent('wheel',{bubbles:true,cancelable:true,ctrlKey:true,deltaY:-100,clientX:100,clientY:100});$('#viewport').dispatchEvent(graphWheel);assert(graphWheel.defaultPrevented);assert.notEqual($('#zoom').textContent,graphZoom);
- entry('business:'+activity.id).click();assert.equal($('#detail .right-drawer-tabs'),null);assert.equal($('#detail h1').textContent,activity.name);assert($('#detail>.markdown'));
+ entry('business:'+activity.id).click();assert.equal($('#detail .right-drawer-tabs'),null);assert.equal($('#detail h1').textContent,activity.name);assert($('#detail>.markdown'));checkRelationLists(app.w.document,bd,activity.id);
+ const prepare=bd.activities.find(a=>a.name==='購入を準備する');entry('business:'+prepare.id).click();checkRelationLists(app.w.document,bd,prepare.id);entry('business:'+activity.id).click();
  const activityCard=$('[data-node="'+activity.id+'"] .who-badge'),activityTitle=$('#detail h1 .who-badge');assert(activityCard&&activityTitle);assert.equal(activityTitle.style.getPropertyValue('--role-color'),activityCard.style.getPropertyValue('--role-color'));assert.equal(activityTitle.querySelector('svg').innerHTML,activityCard.querySelector('svg').innerHTML);assert.equal(activityTitle.getAttribute('aria-hidden'),'true');
  const finding=$('#detail [data-finding-link="'+f05.id+'"]');assert(finding);assert.match(finding.textContent,/F05/);assert.match(finding.textContent,/下書き保存/);finding.click();
  assert.match($('#node-list .finding-card').textContent,/F05/);assert.match($('#node-list .finding-card').textContent,/仮説/);assert.equal(f05.status,'open');covered.add('REVIEW-ID-001');
@@ -41,7 +54,7 @@ try{
  const shown=$('#tests-workspace [data-check-id="SAMPLE-01"]');assert(shown);assert.match(shown.querySelector('h3').textContent,/^SAMPLE-01 · /);assert(!shown.textContent.includes(standardItem.id));assert.match(shown.textContent,/業務上の意味/);covered.add('BUSINESS-DRAWER-002');covered.add('REVIEW-ID-002');
  const legacyApp=await boot(legacy),L=legacyApp.$;L('#open-sample').click();await legacyApp.until(()=>!!L('#open-checks')&&!L('#open-checks').hidden);L('#check-open-sample').click();
  await legacyApp.until(()=>!!legacyApp.entry('tests:checks:業務設計'));legacyApp.entry('tests:checks:業務設計').click();assert.match(L('#tests-workspace [data-check-id="SAMPLE-01"]').textContent,/SAMPLE-01/);
- legacyApp.entry('business:業務設計').click();assert.equal(L('#detail .right-drawer-tabs'),null);assert(L('#detail>.markdown'));covered.add('BUSINESS-DRAWER-003');
+ legacyApp.entry('business:業務設計').click();assert.equal(L('#detail .right-drawer-tabs'),null);assert(L('#detail>.markdown'));for(const title of ['Input','Output']){const heading=[...L('#detail>.markdown').children].find(el=>el.tagName==='H3'&&el.textContent===title);assert(heading&&heading.nextElementSibling?.tagName==='UL'&&heading.nextElementSibling.querySelector('li'),`legacy ${title} keeps its relations in a list`);}covered.add('BUSINESS-DRAWER-003');
  assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(purchaseRaw));assert.equal(standardItem.reviewState,'未レビュー');covered.add('REVIEW-ID-003');
  assert.deepEqual([...covered].sort(),required.sort());for(const [path,expected] of sources)assert.equal(hash(readFileSync(path)),expected);
  console.log(JSON.stringify({passed:[...covered],authorities:sources,scope:'application DOM; real browser and semantic review are separate'}));

@@ -23,7 +23,12 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
   for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
   const summary=exceptionSummary(activity.exception,exceptions);if(summary||exceptions.length){const section=element('section');section.dataset.businessVariations='';section.append(element('h3','通常以外の扱い'));if(summary)section.append(summary);for(const exception of exceptions)section.append(element('h4',exception.name),formattedMarkdown(exception.description));root.append(section);}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
-  for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
+  for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
+   const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(!relations.length)continue;
+   root.append(element('h3',label));const descriptions=relations.map(r=>`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`);
+   if(kind==='business-exception'){for(const description of descriptions)root.append(element('p',description));}
+   else{const list=element('ul');for(const description of descriptions)list.append(element('li',description));root.append(list);}
+  }
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
  return root;
 }
