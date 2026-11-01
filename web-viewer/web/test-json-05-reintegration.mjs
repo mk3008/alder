@@ -5,6 +5,7 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {parseDocument,readDesignFile} from '../src/document-input.ts';
 import {loadDocumentURL} from '../src/document-loader.ts';
+import {activityRole} from '../src/roles.ts';
 
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const authorities={
@@ -54,12 +55,15 @@ try{
  assert.doesNotMatch(detailText,/担当：/,'single Activity performer is not repeated for inherited Step');assert.equal(single.findings.filter(f=>f.id.startsWith('viewer:')).length,0);
  const explicit=structuredClone(photo);explicit.documents[0].activities[0].procedure.steps[0].performerObjectIds=['fx-person'];assert.doesNotMatch(w.Detail.businessDetail(make(explicit),'photo-activity').textContent,/担当：/);
  const noRole=structuredClone(photo);noRole.documents[0].activities[0].performers[0].roleIds=[];assert.ok(w.Detail.businessDetail(make(noRole),'photo-activity').textContent.includes('その写真を残す'));
+ const oneRole=structuredClone(photo);oneRole.documents[0].activities[0].performers[0].roleIds=['fx-player'];assert.equal(activityRole(make(oneRole),'photo-activity').id,'fx-player');assert.equal(activityRole(single,'photo-activity'),undefined,'multiple Roles do not acquire an arbitrary single color');
  const unresolved=packageFor('molkkyCross'),unknown=make(unresolved),unknownActivity=unresolved.documents[0].activities[0];assert.match(w.Detail.businessDetail(unknown,unknownActivity.id).textContent,/担当：未決/);assert(unknown.findings.some(f=>f.id===`viewer:who:${unknownActivity.id}`));assert(unknown.findings.some(f=>f.id===`viewer:steps:${unknownActivity.id}`));
  done.push(ids[1]);
 
  const issue=design.findings.find(f=>f.id==='viewer:who:c-guidance');assert(issue);assert.equal(issue.kind,'correction');assert.deepEqual(issue.targets,['c-guidance']);for(const s of ['受付担当','受付システム','担当者','1つ'])assert.ok(issue.content.includes(s),s);
  assert.ok(w.Findings.findingLinks(design,'c-guidance',()=>{}).textContent.includes('構造の要確認（表示のみ）'));
  assert.deepEqual(design.model.business.findings,seed.documents[0].findings);assert.deepEqual(design.model.checks[0].items.map(i=>i.reviewState),seed.documents[1].items.map(i=>i.reviewState));assert.equal(design.markdown,seedRaw);
+ // An external Check belongs to its declared source, not the locally displayed BD.
+ const foreign=structuredClone(seed),foreignCheck=foreign.documents.find(d=>d.kind==='checkItems');foreignCheck.basedOn={documentId:'external-bd',revision:'external-r1',verification:'unverified'};foreignCheck.index[0].activityId='external-activity';foreignCheck.sections[0].activityId='external-activity';foreign.externalDocuments=[{id:'external-bd',kind:'businessDesign',revision:'external-r1',activities:[{id:'external-activity',name:'別原典の業務'}]}];foreign.sources=[{documentId:'external-bd',revision:'external-r1',sha256:'0'.repeat(64),uri:'https://example.test/external.json'}];const external=make(foreign),foreignPanel=w.Detail.renderChecks(external,'c-guidance');assert.match(foreignPanel.textContent,/別の原典BD/);assert.doesNotMatch(foreignPanel.textContent,/人間レビュー状態: 確認済み/);assert.equal(external.model.checks[0].items[0].reviewState,'確認済み');const staleExternal=structuredClone(foreign);staleExternal.externalDocuments[0].revision='stale';assert.throws(()=>make(staleExternal),/Stale Check/);
  done.push(ids[2]);oldDone.push(oldIds[1]);
 
  const sourceView=make(synthetic),sourceBD=synthetic.documents.find(d=>d.kind==='businessDesign'),a=sourceBD.activities[0],mixedDetail=w.Detail.businessDetail(sourceView,a.id),content=mixedDetail.textContent;
