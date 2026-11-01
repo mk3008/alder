@@ -5,7 +5,7 @@ import {graphFocus} from './graph-focus.ts';
 import {graphMarkers} from './graph-visuals.ts';
 import {routeEdge} from './routing.ts';
 import {cardSurface} from './diagram-canvas.ts';
-import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin} from './graph-camera.ts';
+import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin,installCtrlWheelZoom} from './graph-camera.ts';
 import './graph-presentation.css';
 import './canvas-toolbar.css';
 import {conceptNeighborhood} from './concept-neighborhood.js';
@@ -121,6 +121,7 @@ function installCanvas(s){
  const host=s.host;let pointer,pan;
  s.drag=createNodeDrag({read:()=>!s.locked?{key:s.stage.id,zoom:s.zoom,scroll:[host.scrollLeft,host.scrollTop],offset:s.origin??[0,0]}:undefined,position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},connected:id=>!!s.svg.querySelector(`[data-node="${id}"]`),bounds:()=>{const r=host.getBoundingClientRect();return{left:r.left+host.clientLeft,top:r.top+host.clientTop,right:r.left+host.clientLeft+host.clientWidth,bottom:r.top+host.clientTop+host.clientHeight};},change:(id,p)=>changeNode(s,id,p),pan:d=>{host.scrollLeft+=d[0];host.scrollTop+=d[1];},requestFrame:cb=>requestAnimationFrame(cb),cancelFrame:id=>cancelAnimationFrame(id)});
  s.touch=installTouchGestures(host,{nodeDrag:s.drag,read:()=>({key:s.stage.id,zoom:s.zoom,locked:s.locked,scroll:[host.scrollLeft,host.scrollTop]}),position:id=>{const b=s.boxes.get(id);return b&&[b.x,b.y];},change:v=>{if(v.node)changeNode(s,v.node.id,v.node.position);if(v.zoom!==undefined){s.zoom=v.zoom;layoutCanvas(s);}if(v.scroll)host.scrollTo(...v.scroll);if(v.selected)navigateDetail(s,v.selected);},tapTarget:target=>{const id=target.closest('[data-subsystem]')?.dataset.subsystem;if(id)selectSubsystem(s,id);},finish:()=>save(s)});
+ installCtrlWheelZoom(host,{read:()=>({zoom:s.zoom,scroll:[host.scrollLeft,host.scrollTop]}),change:camera=>{s.touch.cancel();s.drag.cancel();pointer=undefined;pan=undefined;s.zoom=camera.zoom;layoutCanvas(s);host.scrollTo(...camera.scroll);save(s);}});
  host.onpointerdown=e=>{if(e.pointerType==='touch'||e.button!==0||e.target.closest('button'))return;const r=host.getBoundingClientRect();if(e.clientX>=r.left+host.clientLeft+host.clientWidth||e.clientY>=r.top+host.clientTop+host.clientHeight)return;
  const id=e.target.closest('.node')?.dataset.node,region=e.target.closest('[data-subsystem]')?.dataset.subsystem;e.preventDefault();pointer=e.pointerId;host.setPointerCapture(pointer);if(id&&!s.locked){s.drag.begin(id,[e.clientX,e.clientY]);pan=undefined;}else pan={x:e.clientX,y:e.clientY,scroll:[host.scrollLeft,host.scrollTop],id,region,moved:false};};
  host.onpointermove=e=>{if(pointer!==e.pointerId)return;if(pan){const dx=e.clientX-pan.x,dy=e.clientY-pan.y;if(Math.hypot(dx,dy)>3)pan.moved=true;host.scrollTo(pan.scroll[0]-dx,pan.scroll[1]-dy);}else s.drag.move([e.clientX,e.clientY]);};

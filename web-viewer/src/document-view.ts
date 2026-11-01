@@ -6,14 +6,22 @@ import {formattedMarkdown} from './markdown';
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
+function exceptionSummary(root:HTMLElement,value:string|null,exceptions:{name:string;description:string}[]){
+ if(value===null)return;const content=formattedMarkdown(value),normalize=(text:string|null)=>String(text??'').replace(/\s+/g,'');
+ const repeated=new Set(exceptions.map(e=>normalize(formattedMarkdown(`**${e.name}** — ${e.description}`).textContent)));
+ for(const item of Array.from(content.querySelectorAll('li')))if(repeated.has(normalize(item.textContent)))item.remove();
+ for(const list of Array.from(content.querySelectorAll('ul,ol')))if(!list.children.length)list.remove();
+ if(content.textContent?.trim())root.append(element('h3','Exception'),content);
+}
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
 export function businessDetail(design:Design,id?:string):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
- if(object){field(root,'Scope',String(object.scope));field(root,'Icon',object.icon);root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
+ if(object){field(root,'Scope',String(object.scope));root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
  else if(activity){
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
-  for(const exception of bd.exceptions?.filter(e=>e.activityId===activity.id)??[]){root.append(element('h3','Exception · '+exception.name));field(root,'説明',exception.description);}
+  const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
+  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){if(key==='exception')exceptionSummary(root,activity.exception,exceptions);else field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));}
+  for(const exception of exceptions){root.append(element('h3','Exception · '+exception.name));field(root,'説明',exception.description);}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
@@ -51,10 +59,18 @@ class RichReader{
   }}else this.runs(root,content,seen);
  }}
  example(root:HTMLElement,id:string,seen:Set<string>,checkIdsOnly=false){
-  const ex=this.doc.examples.find(e=>e.id===id)!;if(!exampleCheckIds(this.doc,ex).length)return;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
-  for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');
+  const ex=this.doc.examples.find(e=>e.id===id)!;if(!exampleCheckIds(this.doc,ex).length)return;const table=element('table');
+  const result=checkIdsOnly?ex.columns.indexOf('結果'):-1,grouped=result>0&&ex.columns.at(-1)==='Check ID';
+  if(grouped){
+   const conditions=element('colgroup');conditions.span=result;table.append(conditions);for(let i=result;i<ex.columns.length;i++)table.append(element('colgroup'));
+   const thead=element('thead'),top=element('tr'),group=element('th','条件');group.colSpan=result;group.scope='colgroup';top.append(group);
+   for(let i=result;i<ex.columns.length;i++){const th=element('th',ex.columns[i]);th.rowSpan=2;th.scope='col';if(i===result)th.className='decision-result';else if(ex.columns[i]==='備考')th.className='decision-notes';top.append(th);}
+   const axes=element('tr');for(const label of ex.columns.slice(0,result)){const th=element('th',label);th.scope='col';axes.append(th);}thead.append(top,axes);table.append(thead);
+  }else{const head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);}
+  const body=grouped?element('tbody'):table;
+  for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const [index,cell] of row.entries()){if(!this.take(root))break;const td=element('td');if(grouped&&index===result)td.className='decision-result';else if(grouped&&ex.columns[index]==='備考')td.className='decision-notes';
    if(checkIdsOnly){for(const run of cell){const item=run.kind==='reference'?this.doc.items.find(value=>value.id===run.targetId):undefined;if(item)td.append(element('span',item.checkId));else this.runs(td,[run],seen);}}
-   else this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
+   else this.runs(td,cell,seen);tr.append(td);}body.append(tr);}if(grouped)table.append(body);const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
  }
 }
 export function renderChecks(design:Design,selected?:string,checks=design.model!.checks):HTMLElement{
@@ -145,12 +161,15 @@ export function renderDecisionChecks(design:Design,ids:string[],documents=design
  return root;
 }
 
-/** Result expectations stay visible while their complete Check remains reachable. */
-export function renderResultChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
+/** Samples explain their Checks; unsampled or unresolved expectations remain readable. */
+export function renderResultChecks(design:Design,ids:string[],documents=design.model!.checks,sampledIds=new Set<string>()):HTMLElement{
  const root=element('section');root.className='check-content json-checks result-checks';const bd=design.model!.business,wanted=new Set(ids);
  for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
   const reader=new RichReader(doc,true);
+  const explained=doc.items.filter(item=>wanted.has(item.id)&&sampledIds.has(item.id)&&item.reviewState!=='要確認'&&item.reviewState!=='要修正'&&!item.fields.question?.length&&!item.fields.alternatives?.length);
+  if(explained.length)root.append(element('p',explained.map(item=>item.checkId).join('、')));
   for(const item of doc.items.filter(value=>wanted.has(value.id))){
+   if(explained.includes(item))continue;
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
    section.append(element('h3',item.checkId));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));

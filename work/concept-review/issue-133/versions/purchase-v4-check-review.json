@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v4-check-review-6",
+  "revision": "purchase-v4-check-review-7",
   "documents": [
     {
       "id": "purchase-bd",
@@ -843,7 +843,7 @@
     },
     {
       "id": "purchase-concepts",
-      "revision": "concepts-v4-review-4",
+      "revision": "concepts-v4-review-5",
       "kind": "conceptModel",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -1726,7 +1726,7 @@
                   "id": "request-draft",
                   "name": "入力途中の下書き",
                   "when": "ボールペンを購入したいが、数量・見積がまだ決まっていない。",
-                  "meaning": "品目が存在することと、値がすべて入力済みであることを分けます。保存できますが、提出済みではありません。",
+                  "meaning": "品目が存在していても数量・見積が未入力の下書きを保存できます。保存だけでは提出済みや役職別上限の適合済みにはなりません。",
                   "blocks": [
                     {
                       "card": "request",
@@ -1913,8 +1913,8 @@
                 {
                   "id": "request-draft-approved",
                   "name": "承認後に下書きを保存",
-                  "when": "R-101が承認済みのとき、ボールペンを12本にする内容を下書き保存した。",
-                  "meaning": "V1の提出内容と承認は残り、保存した下書きは別に確認できます。下書きの保存だけでは提出しません。",
+                  "when": "R-101の承認済みのV1にはボールペン10本がある。12本に変更する内容を別の下書きとして保存する。",
+                  "meaning": "V1の提出内容と承認は残り、保存した下書きは別に確認できます。下書きD1は新しい提出や役職別上限の適合済みにはなりません。",
                   "blocks": [
                     {
                       "card": "request",
@@ -2143,8 +2143,8 @@
                 {
                   "id": "request-draft-prepared",
                   "name": "購入準備後に下書きを保存",
-                  "when": "R-101が購入準備済みのとき、ボールペンを12本にする内容を下書き保存した。",
-                  "meaning": "V1の提出内容と承認は残り、保存した下書きは別に確認できます。下書きの保存だけでは提出しません。",
+                  "when": "R-101はボールペン10本を含むV1で購入準備P-001を確定済み。12本に変更する内容を別の下書きとして保存する。",
+                  "meaning": "購入準備P-001とV1の提出内容・承認は残り、保存した下書きは別に確認できます。下書きD1は新しい提出や役職別上限の適合済みにはなりません。",
                   "blocks": [
                     {
                       "card": "request",
@@ -2404,7 +2404,8 @@
                 ],
                 "sampleIds": [
                   "request-draft",
-                  "request-draft-approved"
+                  "request-draft-approved",
+                  "request-draft-prepared"
                 ]
               }
             },
@@ -3813,8 +3814,8 @@
                 {
                   "id": "decision-resubmitted",
                   "name": "差戻し後のV2は判断待ち",
-                  "when": "V1は「数量を見直してください」と差し戻された。数量を12本に修正し、見積と役職別上限額への適合を確認してV2を再提出した。",
-                  "meaning": "以前のV1への差戻しを、V2の判断として扱いません。新しい対象版はV2で、まだ判断されていません。",
+                  "when": "ボールペン10本のV1は「数量を見直してください」と差し戻された。12本に修正し、見積と役職別上限額への適合を確認してV2を再提出した。",
+                  "meaning": "以前のV1への差戻しをV2の判断として扱いません。V1の内容は残り、V2は新たな判断を待ちます。",
                   "blocks": [
                     {
                       "card": "request",
@@ -3914,6 +3915,60 @@
                         }
                       ],
                       "rows": [
+                        {
+                          "id": "decision-resubmitted-old-v1-item-1",
+                          "cells": [
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-1",
+                              "value": "R-101",
+                              "linkId": "request:R-101"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-2",
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-3",
+                              "value": "ボールペン"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-4",
+                              "value": 10
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-5",
+                              "value": "100円"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "decision-resubmitted-old-v1-item-2",
+                          "cells": [
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-1",
+                              "value": "R-101",
+                              "linkId": "request:R-101"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-2",
+                              "value": "V1",
+                              "linkId": "version:R-101:V1"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-3",
+                              "value": "ファイル"
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-4",
+                              "value": 2
+                            },
+                            {
+                              "columnId": "decision-resubmitted-item-1-column-5",
+                              "value": "500円"
+                            }
+                          ]
+                        },
                         {
                           "id": "decision-resubmitted-item-1-row-1",
                           "cells": [
@@ -4375,7 +4430,7 @@
                   "id": "handoff-batch",
                   "name": "2申請をまとめて購入へ",
                   "when": "R-101のV1とR-102のV1に有効な承認があり、同じ購入準備P-001へ確定した。",
-                  "meaning": "1つの準備に2申請、対象品目は合計3行。各購入対象の準備番号で購入準備との対応を確認でき、各品目がどの申請・版のものか追えます。",
+                  "meaning": "1つの準備に2申請、対象品目は合計3行。各購入対象の準備番号で購入準備との対応を確認でき、各品目がどの申請・版のものか追えます。 CSV出力だけでは購入済みになりません。",
                   "blocks": [
                     {
                       "card": "preparation",
@@ -4789,7 +4844,7 @@
                 {
                   "id": "handoff-retry",
                   "name": "CSV失敗後も同じ内容を再出力",
-                  "when": "10:00のCSV出力に失敗したが、購入準備P-001は残った。10:05に同じ対象を再出力する。",
+                  "when": "R-101とR-102のV1をまとめた準備P-001は確定済み。10:00のCSV出力に失敗したため、10:05に同じ対象を再出力する。",
                   "meaning": "準備番号・対象申請・対象版・品目・数量・単価を変えずに再出力します。新しい準備を作る例ではありません。",
                   "blocks": [
                     {
@@ -8005,7 +8060,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v6-review",
+      "revision": "checks-v7-review",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -8852,7 +8907,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "元の状態を保つ（要確認）"
+                  "value": "元の状態を保つ"
                 }
               ],
               [
@@ -8903,7 +8958,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "元の状態を保つ（要確認）"
+                  "value": "元の状態を保つ"
                 }
               ],
               [
@@ -8944,7 +8999,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "破棄可（要確認）"
+                  "value": "破棄可"
                 }
               ],
               [
@@ -9245,7 +9300,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "確定済みの準備を保つ（要確認）"
+                  "value": "確定済みの準備を保つ"
                 }
               ],
               [
@@ -9379,7 +9434,7 @@
           "title": "既存申請を変えずに下書きを保存する",
           "detailSummary": "",
           "sectionId": "purchase-check-section-ecde191f-09c5-519f-88a3-843ae6a9c3c4",
-          "reviewState": "要確認",
+          "reviewState": "未レビュー",
           "fields": {
             "condition": [
               {
@@ -9659,7 +9714,7 @@
           "title": "再申請不成立なら元の状態を保つ",
           "detailSummary": "",
           "sectionId": "purchase-check-section-b180c827-00ce-50ca-85b6-1a2f9f5d3533",
-          "reviewState": "要確認",
+          "reviewState": "未レビュー",
           "fields": {
             "condition": [
               {
@@ -9687,7 +9742,7 @@
           "title": "下書き・差戻しを破棄する",
           "detailSummary": "",
           "sectionId": "purchase-check-section-b180c827-00ce-50ca-85b6-1a2f9f5d3533",
-          "reviewState": "要確認",
+          "reviewState": "未レビュー",
           "fields": {
             "condition": [
               {
@@ -9715,7 +9770,7 @@
           "title": "準備済みの申請は再提出しない",
           "detailSummary": "",
           "sectionId": "purchase-check-section-b180c827-00ce-50ca-85b6-1a2f9f5d3533",
-          "reviewState": "要確認",
+          "reviewState": "未レビュー",
           "fields": {
             "condition": [
               {

@@ -15,6 +15,7 @@ export async function verifyStateTransitionIdentity(browser){
    await page.locator('[data-explorer-key="states:'+st.objectId+'"]').click();await page.locator('#states-workspace .state-diagram').waitFor();
    for(const theme of ['light','dark']){
     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+    const colors=await page.locator('#states-workspace .diagram-viewport').evaluate(viewport=>({background:getComputedStyle(viewport).backgroundColor,stroke:getComputedStyle(viewport.querySelector('.state-diagram-edge-label')).stroke}));assert.equal(colors.stroke,colors.background,'state label halo follows the canvas background in both themes');
     const edges=await page.locator('#states-workspace .state-diagram path.edge[data-transitions]').evaluateAll(es=>es.map(e=>e.dataset.transitions));
     assert.deepEqual(edges.flatMap(e=>e.split(' ')).sort(),st.transitions.map(t=>t.sourceId).sort(),'every explicit transition remains represented');
     for(const t of st.transitions.filter(t=>t.fromId!==t.toId))assert(edges.includes(t.sourceId),'different-state transitions keep independent routes: '+t.sourceId);

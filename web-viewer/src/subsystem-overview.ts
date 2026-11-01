@@ -55,7 +55,7 @@ export function createSubsystemOverview(doc:Document,{model,business}:ConceptCon
   }
   graph.setAttribute('viewBox',`0 0 ${right} ${bottom}`);paint(graph);return graph;
  };
- canvas=diagramCanvas(doc,render,view);canvas.classList.add('subsystem-overview-canvas');
+ canvas=diagramCanvas(doc,render,view,save);canvas.classList.add('subsystem-overview-canvas');
  canvas.addEventListener('click',save);canvas.addEventListener('pointerup',()=>queueMicrotask(save));canvas.querySelector('.diagram-viewport')?.addEventListener('scroll',save);
  if(!restored)doc.defaultView?.requestAnimationFrame?.(()=>{const host=canvas!.querySelector<HTMLElement>('.diagram-viewport')!,zoomOut=canvas!.querySelector<HTMLButtonElement>('.zoom-out')!;if(!host.clientWidth)return;for(let i=0;i<8;i++){host.scrollLeft=0;host.scrollTop=0;const edge=host.getBoundingClientRect().right;if(Array.from(canvas!.querySelectorAll('[data-handoff-label]')).every(label=>label.getBoundingClientRect().right<=edge))break;zoomOut.click();}view.scroll=[host.scrollLeft,host.scrollTop];save();});
  return {root:canvas,selected:()=>view.selected,selection:()=>selection,restore:()=>{const apply=()=>{const host=canvas!.querySelector<HTMLElement>('.diagram-viewport')!;host.scrollLeft=view.scroll[0];host.scrollTop=view.scroll[1];};if(doc.defaultView?.requestAnimationFrame)doc.defaultView.requestAnimationFrame(apply);else apply();}};
