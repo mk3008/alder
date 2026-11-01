@@ -200,10 +200,9 @@ const selected=selectBrowserCases(cases,options.names);
 if(options.list){
  console.log(JSON.stringify({browserPlan:{scope:selected.length===cases.length?'full':'targeted',available:cases.length,selected:selected.map(c=>c.name)}}));
 }else{
- const setupStart=performance.now(),require=createRequire(import.meta.url);
+ const require=createRequire(import.meta.url);
  const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
- const launchStart=performance.now();browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/usr/bin/google-chrome',headless:true});
- if(process.env.EDGE_DRAG_PROFILE_REPS||process.env.GITHUB_ACTIONS==='true')console.log('EDGE_DRAG_BROWSER_SETUP '+JSON.stringify({driverLoadMs:launchStart-setupStart,launchMs:performance.now()-launchStart,node:process.version,browser:browser.version()}));
+ browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/usr/bin/google-chrome',headless:true});
  try{
   page=await browser.newPage({viewport:{width:1280,height:960}});
   page.on('pageerror',error=>errors.push(error.message));
