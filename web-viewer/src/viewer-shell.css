@@ -109,10 +109,10 @@
 [data-theme=dark] .subsystem-overview-card{color:#dbeaff}
 .subsystem-overview-role-icon{display:grid;place-items:center;width:28px;height:28px;max-height:none;border-radius:50%;background:var(--role-color);color:white}
 .subsystem-overview-role-icon svg{width:16px;height:16px}
-.subsystem-overview-card .subsystem-overview-labels{display:flex;flex-direction:column;min-width:0;max-height:none;gap:2px;line-height:1.2}
-.subsystem-overview-card .subsystem-overview-kind{font-size:10px;font-weight:650;max-height:none}
-.subsystem-overview-name{font-size:14px;font-weight:650;overflow-wrap:anywhere}
-.subsystem-overview-role{font-size:11px;color:inherit;opacity:.85}
+.subsystem-overview-card .subsystem-overview-labels{display:grid;grid-template-rows:10.8px 16.25px 12px;min-width:0;max-height:none;gap:2px;line-height:1.2}
+.subsystem-overview-card .subsystem-overview-kind{font-size:9px;letter-spacing:.03em;font-weight:650;max-height:none}
+.subsystem-overview-name{font-size:13px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subsystem-overview-role{font-size:10px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .subsystem-overview-open{width:40px;height:44px;display:grid;place-items:center;border-radius:4px;touch-action:manipulation}
 .subsystem-overview-open svg{width:20px;height:20px}.subsystem-overview-open:hover{background:var(--select)}
 
@@ -145,6 +145,8 @@
 #detail{padding:0}#detail>.right-drawer-heading{position:sticky;top:0;z-index:2}
 #detail>.check-controls{border:0;padding:0;margin:0}#detail>:is(.markdown,.check-content){padding:12px}#detail>:is(.markdown,.check-content)>:first-child{margin-top:0}
 #detail>.drawer-findings{padding:4px 12px;border-bottom:1px solid var(--subtle)}#detail>.drawer-findings button{display:block;width:100%;min-height:44px}
+.markdown [data-business-variations]>h4,.markdown [data-business-variations]>article{margin-left:12px}
+.markdown [data-business-variations]>h4{font-size:13px;margin-top:16px;margin-bottom:4px}
 .right-drawer-tabs,.check-controls .right-drawer-tabs{display:flex;gap:0;margin:0;padding:0;border-bottom:1px solid var(--subtle);overflow-x:auto}
 .right-drawer-tabs button,.check-controls .right-drawer-tabs button{flex:1 0 auto;min-width:0;min-height:44px;height:44px;padding:0 12px;white-space:nowrap;border:0;border-bottom:3px solid transparent;border-radius:0;font-size:13px}
 .right-drawer-tabs button[aria-selected=true],.check-controls .right-drawer-tabs button[aria-selected=true]{background:var(--select);border-bottom-color:#357aa6;font-weight:650}

@@ -1,0 +1,10 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "2026-11-01 本人指示：業務設計ドロワーで Result の後に並ぶ項目を、JSONの構造を確認したうえで別のセクションの下に表示する。",
+  "scope": "Business Design の Activity.exception と exceptions[].description の表示。JSONにはエラーと別ルートの種別がないため、個々を推測分類しない。",
+  "checks": [
+    {"id":"BUSINESS-VARIATION-001","condition":"Activity に構造化された exceptions がある。","guarantee":"Result とは独立した「通常以外の扱い」セクションを表示し、個々の名前をその下の見出しとして表示する。","reason":"唐突な見出しが Result の続きに見えないようにするため。","source":"本人のJSON構造に沿ったセクション化の指示","verification":"購入準備の CSV再出力・購入準備競合を含む全ActivityのDOMと実ブラウザーを確認する。"},
+    {"id":"BUSINESS-VARIATION-002","condition":"構造化項目と重複する、異なる、または構造化されていない exception の文章がある。","guarantee":"重複文は一度だけ表示し、固有の文章は残す。項目がない場合はセクションを表示しない。","reason":"既存文書の情報を欠落させないため。","source":"BUSINESS-EXCEPTION-DEDUP と本人の重複解消の指示","verification":"重複、異なる文章、構造化なし、空の場合をDOMで照合する。"},
+    {"id":"BUSINESS-VARIATION-003","condition":"下書き保存や再出力、不成立や競合が含まれる。","guarantee":"JSONにないエラー・機能・別ルートの型を推測せず、中立の見出しのもとで各項目の元の名前・説明を保持する。JSONとレビュー状態は変更しない。","reason":"例外という保存上の分類から、意味の異なる業務上の扱いを勝手に確定しないため。","source":"本人のエラーと別ルートを混同しない指示、JSON正本","verification":"入力JSONの不変と各名前・説明を全Activityで照合する。"}
+  ]
+}

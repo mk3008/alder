@@ -7,6 +7,7 @@ import {verifyCtrlWheelZoom} from './test-ctrl-wheel-zoom-browser.mjs';
 import {verifySubsystemSpecLinks} from './test-subsystem-to-test-spec-browser.mjs';
 import {verifySpecRelatedLinks} from './test-test-spec-related-links-browser.mjs';
 import {verifyGraphInitialZoom} from './test-graph-initial-zoom-browser.mjs';
+import {verifyBusinessSubsystemCardSize} from './test-business-subsystem-card-size-browser.mjs';
 
 async function backgroundPoint(page,id){
  const point=await page.evaluate(subsystem=>{
@@ -114,6 +115,6 @@ export async function verifySubsystemOverview(browser){
    for(const control of ['.zoom-in','.zoom-out','.canvas-lock','.reset-layout'])assert.equal(await page.locator('.subsystem-overview-canvas '+control).count(),1);
    await page.screenshot({path:`web/evidence/shell/subsystem-overview-${width}-${theme}.png`});observations.push({width,theme,...measured});
   }}
-  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser),relatedLinks=await verifySpecRelatedLinks(browser),initialZoom=await verifyGraphInitialZoom(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks,relatedLinks,initialZoom};
+  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser),relatedLinks=await verifySpecRelatedLinks(browser),initialZoom=await verifyGraphInitialZoom(browser),cardSize=await verifyBusinessSubsystemCardSize(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks,relatedLinks,initialZoom,cardSize};
  }finally{await context.close();}
 }

@@ -119,7 +119,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
  }
  function relatedLink(root:HTMLElement,label:string,activate:()=>void){const b=document.createElement('button');b.type='button';b.className='shell-evidence';text(b,'span',label);b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));b.onclick=activate;root.append(b);return b;}
  function appendTestLinks(root:HTMLElement,targets:FunctionTarget[]){const linked=targets.filter(target=>target.capability.testSpecification);if(!linked.length)return;
-  const section=document.createElement('section');section.className='shell-test-links';text(section,'h3','関連テスト仕様');
+  const section=document.createElement('section');section.className='shell-test-links';text(section,'h3','テスト仕様書');
   for(const target of linked)for(const [prefix,label]of [['decision:','可否判定'],['','処理結果']] as const){const key=prefix+target.key;const button=relatedLink(section,functionName(target)+'・'+label,()=>selectSpec(key));button.dataset.relatedSpec=key;}
   root.append(section);
  }
@@ -129,7 +129,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
   if(group){text(root,'h3','概念モデル');const button=relatedLink(root,group.name,()=>selectConcept(groupKey(group.id)));button.dataset.relatedGroup=group.id;}
   const concepts=relatedConceptIds(target);if(concepts.length){text(root,'h3','概念');for(const id of concepts){const item=context!.model.concepts.find(concept=>concept.id===id)!;const button=relatedLink(root,item.name,()=>selectConcept(conceptKey(id)));button.dataset.relatedConcept=id;}}
  }
- function evidence(root:HTMLElement,id:string){text(root,'h3',findReviewGroup(active)?'関連する業務':'作成する業務');const c=options.business(),group=findReviewGroup(active),concept=context?.model.concepts.find(item=>item.id===id);
+ function evidence(root:HTMLElement,id:string){text(root,'h3','Activity');const c=options.business(),group=findReviewGroup(active),concept=context?.model.concepts.find(item=>item.id===id);
   const activityIds=group?.concepts[id]?.sourceActivities??group?.activities??concept?.activityLinks.filter(link=>link.uses.includes('生成')).map(link=>link.activityId)??[];
   for(const activityId of activityIds){const target=c.activities.find(item=>item.id===activityId);if(!target)continue;const b=document.createElement('button');b.className='shell-evidence';text(b,'span',target.name);b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8,'data-icon':'square-arrow-out-up-right'}));b.title=target.name+'を業務タブで開く';b.setAttribute('aria-label',b.title);b.onclick=()=>openBusiness(target.id);root.append(b);}}
  function displayGraph(key:string){const group=findReviewGroup(key);return group?views?.graph(group.id):key==='overview'?views?.overviewGraph():undefined;}

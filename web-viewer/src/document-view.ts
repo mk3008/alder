@@ -6,12 +6,12 @@ import {formattedMarkdown} from './markdown';
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
-function exceptionSummary(root:HTMLElement,value:string|null,exceptions:{name:string;description:string}[]){
+function exceptionSummary(value:string|null,exceptions:{name:string;description:string}[]){
  if(value===null)return;const content=formattedMarkdown(value),normalize=(text:string|null)=>String(text??'').replace(/\s+/g,'');
  const repeated=new Set(exceptions.map(e=>normalize(formattedMarkdown(`**${e.name}** — ${e.description}`).textContent)));
  for(const item of Array.from(content.querySelectorAll('li')))if(repeated.has(normalize(item.textContent)))item.remove();
  for(const list of Array.from(content.querySelectorAll('ul,ol')))if(!list.children.length)list.remove();
- if(content.textContent?.trim())root.append(element('h3','Exception'),content);
+ return content.textContent?.trim()?content:undefined;
 }
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
 export function businessDetail(design:Design,id?:string):HTMLElement{
@@ -20,8 +20,8 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
  if(object){field(root,'Scope',String(object.scope));root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){if(key==='exception')exceptionSummary(root,activity.exception,exceptions);else field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));}
-  for(const exception of exceptions){root.append(element('h3',exception.name),formattedMarkdown(exception.description));}
+  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
+  const summary=exceptionSummary(activity.exception,exceptions);if(summary||exceptions.length){const section=element('section');section.dataset.businessVariations='';section.append(element('h3','通常以外の扱い'));if(summary)section.append(summary);for(const exception of exceptions)section.append(element('h4',exception.name),formattedMarkdown(exception.description));root.append(section);}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
