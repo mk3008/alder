@@ -20,12 +20,11 @@ export async function verifyRightDrawerUnification(browser){
    if(width===393)await page.screenshot({path:`web/evidence/shell/right-business-${theme}.png`});
    await page.locator('#business-drawer-close').click();assert.equal(await page.locator('#formattedMarkdownDrawer').isVisible(),false);
    await go('concept:group-request');await open();assert.equal(await page.locator('.concept-related .right-drawer-heading strong').textContent(),'購入要求・申請内容');
-   await page.locator('#concept-drawer-overview').click();const concept=await shape('.concept-related');assert.deepEqual(concept.close,[44,44]);
+   assert(await page.locator('.data-review-overview').isVisible());assert.equal(await page.locator('.concept-child-tabs').count(),0);const concept=await shape('.concept-related');assert.deepEqual(concept.close,[44,44]);
    for(const key of ['headerHeight','paddingLeft','paddingRight','titleSize'])assert.equal(concept[key],business[key],key+' must match');
    for(const key of ['bodyLeft','bodyTop'])assert.ok(Math.abs(concept[key]-business[key])<=1,key+' must match within a pixel');
-   for(const t of concept.tabs){assert(t.width>=44&&t.height>=44);assert.equal(t.whiteSpace,'nowrap');}
-   assert.equal(concept.tabs.filter(x=>x.selected==='true').length,1);assert.equal(concept.tabs.find(x=>x.selected==='true').border,'3px');
-   await page.locator('#concept-drawer-examples').click();assert.equal(await page.locator('.data-examples-panel').isVisible(),true);await page.locator('#concept-drawer-examples').press('ArrowLeft');assert.equal(await page.locator('#concept-drawer-overview').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#concept-drawer-overview').evaluate(e=>e===document.activeElement),true);
+   assert.equal(concept.tabs.length,0);
+   await page.locator('[data-sample=request-submitted]').click();assert.equal(await page.locator('.data-examples-panel').isVisible(),true);await page.locator('.concept-example-back').press('Enter');assert.equal(await page.locator('.data-review-overview').isVisible(),true);assert.equal(await page.locator('.data-review-overview').evaluate(e=>e===document.activeElement),true);
    if(width===393)await page.screenshot({path:`web/evidence/shell/right-concept-${theme}.png`});
    await page.locator('.concept-related .right-drawer-heading button').click();assert.equal(await page.locator('.concept-related').isVisible(),false);
   }
@@ -33,7 +32,7 @@ export async function verifyRightDrawerUnification(browser){
   const finding=bd.findings.find(item=>item.sourceId==='F05'),activity=bd.activities.find(item=>finding.targetIds.includes(item.id));
   await go('business:'+activity.id);await open();const findingLink=page.locator('#detail [data-finding-link="'+finding.id+'"]');assert.match(await findingLink.innerText(),/F05/);await findingLink.click();assert.match(await page.locator('#node-list .finding-card').innerText(),/F05/);assert.match(await page.locator('#node-list .finding-card').innerText(),/仮説/);await page.locator('#node-list-close').click();
   await go('states:'+object.id);assert(await page.locator('.state-detail-page .state-diagram').isVisible());
-  await go('concept:request');await open();assert.equal(await page.locator('.concept-child-tabs').isVisible(),false);const frame=page.frameLocator('iframe[data-concept-view=request]');await frame.locator('[data-node=request]').waitFor();assert.equal(await frame.locator('[data-node=request] [data-concept-open=request]').count(),0);assert(await frame.locator('[data-concept-open=version]').count()>0);
+  await go('concept:request');await open();assert.equal(await page.locator('.concept-child-tabs').count(),0);const frame=page.frameLocator('iframe[data-concept-view=request]');await frame.locator('[data-node=request]').waitFor();assert.equal(await frame.locator('[data-node=request] [data-concept-open=request]').count(),0);assert(await frame.locator('[data-concept-open=version]').count()>0);
   assert.deepEqual(errors,[]);return {checks:'DRAWER-UI-001..005: real common header and tabs, 320/393/1280 light/dark, close and keyboard, state menu and intentional concept link difference',pageErrors:errors};
  }finally{await context.close();}
 }
