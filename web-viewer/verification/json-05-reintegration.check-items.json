@@ -1,0 +1,15 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/alder/issues/340#issuecomment-6564640291",
+  "scope": "未公開の旧0.5を最新mainの共通Viewerで読み取り、業務構造の不整合と未決を原文と区別して表示する。",
+  "checks": [
+    {"id":"JSON05-REINTEGRATE-001","condition":"旧0.5をFile、URL、保存状態から開く。","guarantee":"元JSONを保持して同一Viewerへ投影し、改訂や暗黙移行を行わない。","reason":"既存文書を同じ操作で確認する。","verification":"採用例とCheck/State付seedでFile、URL、復元と原文を照合"},
+    {"id":"JSON05-REINTEGRATE-002","condition":"1主体に複数Role、または主体未決がある。","guarantee":"元Objectと全Role、未決を表示し、I/Oから担当を推定しない。","reason":"単一Whoと兼任Roleを表し未決を隠さない。","verification":"単一主体の0/1/複数Role、未決、I/Oで異なるObjectを照合"},
+    {"id":"JSON05-REINTEGRATE-003","condition":"Activityに複数主体がある。","guarantee":"全主体とRoleを保持し、当該Activityと影響を示す表示上の構造指摘を出す。原文Findingや確認状態へ書かない。","reason":"旧形式のvalidを単一Who方針への適合と誤認しない。","verification":"合成seedの複数主体・異なるStep担当・元JSON/Checkを照合"},
+    {"id":"JSON05-REINTEGRATE-004","condition":"Stepが同一主体の明示または単一主体から継承される、あるいは担当未決・複数主体別担当である。","guarantee":"同一担当の重複を省き、未決と異なる担当は表示する。順序・必須任意・適用条件・局所制約を保持する。","reason":"繰返しを抑えながら責任の不整合を隠さない。","verification":"明示/継承/未決/複数主体別担当と順序制約をDOM・Chromeで照合"},
+    {"id":"JSON05-REINTEGRATE-005","condition":"複数Result、共有Data、I/Oまたは例外を表示する。","guarantee":"各ResultとData項目・条件・I/O方向を保持し、Activity単位の仕様リンクをResult個別の確定対応としない。","reason":"結果と受渡しをレビューでき、仕様対応を捏造しない。","verification":"複数Result、同Data参照、項目説明/条件、既存リンクと未確認を照合"},
+    {"id":"JSON05-REINTEGRATE-006","condition":"0.5に同条件別IDや自己遷移がある。","guarantee":"全遷移のID・説明・条件・選択を保持し、mainの自己遷移破線束ねを使う。","reason":"表示の集約と業務データの統合を分ける。","verification":"旧0.5の別IDと正常/例外混在自己遷移のDOM・Chromeを照合"},
+    {"id":"JSON05-REINTEGRATE-007","condition":"0.4・旧Markdown・概念/Check/Stateを開き操作する。","guarantee":"既存UI、参照、確認状態、Drawer、選択、復元とテスト正本を維持する。","reason":"旧0.5対応が現行の業務レビューを損なわない。","verification":"既存正本と0.4/旧MD/conceptModel/Check/Stateの回帰"},
+    {"id":"JSON05-REINTEGRATE-008","condition":"不正参照、重複key、未知版、破損した保存状態を読み込む。","guarantee":"安全に拒否し有効な表示と原本を保持する。旧0.5 CLIや正式Schemaを改変しない。","reason":"誤入力を合格やデータ消失と扱わない。","verification":"不正参照・表示保持・旧CLIの通常訂正と異常保存を照合"}
+  ]
+}
