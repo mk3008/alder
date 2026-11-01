@@ -27,6 +27,8 @@ export async function verifyJSONStates(browser){
    await selectActivity(format==='json'?bd.activities.find(a=>a.name==='購入を準備する').id:'購入を準備する');assert.equal(await page.locator('#nodes .node.selected').getAttribute('data-node'),format==='json'?bd.activities.find(a=>a.name==='購入を準備する').id:'購入を準備する');
    await select(format==='json'?st.objectId:'購入申請');await saved();await page.reload();await ready();await page.locator('.state-diagram').waitFor();assert.equal(await page.locator('.state-diagram').evaluate(e=>e.outerHTML),svg);
    // A state operation outside an Activity detail must use existing navigation back to overview.
+   // The open related drawer may overlay the canvas on narrow screens, never the tabs.
+   if(width<=800){const tab=await page.locator('#tabs .tab button:first-child').first().boundingBox(),drawer=await page.locator('#test-related-panel').boundingBox();assert.ok(tab&&drawer&&drawer.y>=tab.y+tab.height-1,'drawer starts below the tab strip at narrow widths');}
    await page.locator('#tabs .tab button:first-child').first().click();if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    const firstActivity=format==='json'?bd.activities[0].id:bd.activities[0].name;
    await page.locator(`.node[data-activity="${firstActivity}"] .activity-open`).first().press('Enter');

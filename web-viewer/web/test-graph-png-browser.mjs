@@ -140,7 +140,8 @@ function sceneInPage(){
  const cards=[...document.querySelectorAll('#nodes > .node')].map(node=>{
   const r=node.getBoundingClientRect(),name=node.querySelector('.node-name'),n=name.getBoundingClientRect(),scale=r.width/node.offsetWidth,s=getComputedStyle(node);
   const icon=node.querySelector(':scope > svg'),iconRect=icon?.getBoundingClientRect();
-  return {id:node.dataset.node,text:node.textContent,classes:node.className,icon:icon?{box:{x:parseFloat(node.style.left)+(iconRect.left-r.left)/scale,y:parseFloat(node.style.top)+(iconRect.top-r.top)/scale,width:iconRect.width/scale,height:iconRect.height/scale},ink:getComputedStyle(icon).color}:null,box:{x:parseFloat(node.style.left),y:parseFloat(node.style.top),width:node.offsetWidth,height:node.offsetHeight},background:s.backgroundColor,
+  const content=node.cloneNode(true);content.querySelector('.activity-open,.object-open')?.remove();
+  return {id:node.dataset.node,text:content.textContent,classes:node.className,icon:icon?{box:{x:parseFloat(node.style.left)+(iconRect.left-r.left)/scale,y:parseFloat(node.style.top)+(iconRect.top-r.top)/scale,width:iconRect.width/scale,height:iconRect.height/scale},ink:getComputedStyle(icon).color}:null,box:{x:parseFloat(node.style.left),y:parseFloat(node.style.top),width:node.offsetWidth,height:node.offsetHeight},background:s.backgroundColor,
    nameBox:{x:parseFloat(node.style.left)+(n.left-r.left)/scale,y:parseFloat(node.style.top)+(n.top-r.top)/scale,width:n.width/scale,height:n.height/scale},ink:getComputedStyle(name).color,
    offscreen:r.right<v.left||r.left>v.right||r.bottom<v.top||r.top>v.bottom};
  });
