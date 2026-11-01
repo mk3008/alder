@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v9-draft-routes-reference-draft",
+  "revision": "purchase-v9-route-types-reference-draft",
   "documents": [
     {
       "id": "purchase-bd",
@@ -891,7 +891,7 @@
     },
     {
       "id": "purchase-concepts",
-      "revision": "concepts-v8-draft-routes-reference-draft",
+      "revision": "concepts-v9-route-types-reference-draft",
       "kind": "conceptModel",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -8062,6 +8062,16 @@
                   }
                 ]
               }
+            ],
+            "businessVariations": [
+              {
+                "exceptionId": "c3ffeb0c-8200-4898-822c-18a82a1ac5f0",
+                "kind": "exception"
+              },
+              {
+                "exceptionId": "3709feb3-25e6-4a08-95dc-83dc35cdb39a",
+                "kind": "alternative"
+              }
             ]
           },
           {
@@ -8230,6 +8240,16 @@
                     ]
                   }
                 ]
+              }
+            ],
+            "businessVariations": [
+              {
+                "exceptionId": "77ed2d49-4c0a-497c-b40b-0fa562e78a9c",
+                "kind": "alternative"
+              },
+              {
+                "exceptionId": "4928dbea-f131-4543-a2f1-2c099db2c4f8",
+                "kind": "exception"
               }
             ]
           },
@@ -11081,6 +11101,7 @@
     "内部の未決: 調達不能時の合意の記録・保存範囲、実績金額や日付の粒度・税区分、準備競合時の通知とやり直し操作。業務グラフとObjectの表示には未決の説明を置かない。",
     "F05・F06は根拠を示した設計仮説として記述し、質問としては閉じた。業務上の採否とCheckの人間レビューは未了。",
     "下書き再開は本人の指摘に基づく未合意の参考草案。Check P-32・P-33と状態遷移 T20〜T22 は人間レビュー前。",
-    "V9は下書き保存を不成立ではなく利用者が選ぶ操作として状態図に表す参考草案。旧版の例外ID参照を持つ状態経路は保持しないが、旧版と元の業務項目IDは変更しない。業務項目自体の種別・重複の正式JSON整理は未決。"
+    "V9は下書き保存を不成立ではなく利用者が選ぶ操作として状態図に表す参考草案。旧版の例外ID参照を持つ状態経路は保持しないが、旧版と元の業務項目IDは変更しない。業務項目自体の種別・重複の正式JSON整理は未決。",
+    "別ルートと例外の表示区分は本人の指示に基づく参考案で、既存の項目IDを presentation の試作参照で区別する。0.5正式契約の区分・移行は別途必要。"
   ]
 }

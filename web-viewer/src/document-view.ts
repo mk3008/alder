@@ -14,6 +14,24 @@ function exceptionSummary(value:string|null,exceptions:{name:string;description:
  return content.textContent?.trim()?content:undefined;
 }
 const labels:Record<string,string>={classification:'分類',condition:'条件',expectedResult:'期待結果',guarantee:'一般保証',question:'未決事項',alternatives:'選択肢',evidence:'根拠',testEvidence:'Test証拠',derivation:'導出',confidence:'確信度',related:'関連'};
+type VariationKind='alternative'|'exception';
+/** Only explicit, unambiguous annotations for the same Activity may classify a route. */
+function variationKinds(design:Design,activityId:string,items:{id:string}[]):Map<string,VariationKind>{
+ const kinds=new Map<string,VariationKind>(),conflicted=new Set<string>(),allowed=new Set(items.map(item=>item.id)),business=design.model!.business;
+ for(const model of design.model!.concepts??[]){
+  if(model.basedOn.documentId!==business.id||model.basedOn.revision!==business.revision)continue;
+  const views=model.presentation.activityViews;if(!Array.isArray(views))continue;
+  for(const view of views){
+   if(!view||typeof view!=='object'||Array.isArray(view)||view.activityId!==activityId||!Array.isArray(view.businessVariations))continue;
+   for(const item of view.businessVariations){
+    if(!item||typeof item!=='object'||Array.isArray(item)||typeof item.exceptionId!=='string'||!allowed.has(item.exceptionId)||(item.kind!=='alternative'&&item.kind!=='exception')||conflicted.has(item.exceptionId))continue;
+    const previous=kinds.get(item.exceptionId);
+    if(previous&&previous!==item.kind){kinds.delete(item.exceptionId);conflicted.add(item.exceptionId);}else kinds.set(item.exceptionId,item.kind);
+   }
+  }
+ }
+ return kinds;
+}
 export function businessDetail(design:Design,id?:string):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
@@ -21,7 +39,14 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
   for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){const content=field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));if(key==='result'&&content)content.dataset.businessResult='';}
-  const summary=exceptionSummary(activity.exception,exceptions);if(summary||exceptions.length){const section=element('section');section.dataset.businessVariations='';section.append(element('h3','通常以外の扱い'));if(summary)section.append(summary);for(const exception of exceptions){const content=formattedMarkdown(exception.description);content.dataset.businessException=exception.id;section.append(element('h4',exception.name),content);}root.append(section);}
+  const summary=exceptionSummary(activity.exception,exceptions),kinds=variationKinds(design,activity.id,exceptions);
+  const section=(title:string,items:typeof exceptions,extra?:HTMLElement)=>{if(!items.length&&!extra)return;const group=element('section');group.dataset.businessVariations='';group.append(element('h3',title));if(extra)group.append(extra);for(const item of items){const content=formattedMarkdown(item.description);content.dataset.businessException=item.id;group.append(element('h4',item.name),content);}root.append(group);};
+  if(!kinds.size)section('通常以外の扱い',exceptions,summary);
+  else{
+   section('例外',exceptions.filter(item=>kinds.get(item.id)==='exception'));
+   section('別ルート',exceptions.filter(item=>kinds.get(item.id)==='alternative'));
+   section('通常以外の扱い',exceptions.filter(item=>!kinds.has(item.id)),summary);
+  }
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
    const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(!relations.length)continue;

@@ -27,7 +27,7 @@ license: MIT
 
 業務設計の各Resultと例外・別ルートについて、対応するCheck／テスト仕様の根拠を照合する。複数の対応先があれば保持し、名称だけで対応を推測しない。仕様が存在しない場合と、既存仕様との対応が未確認の場合を区別し、不足と未決を人間が確認できるようにする。Checkの存在をテストや人間合意の完了とは扱わない。
 
-Viewerの参考案で項目別の対応を示す場合は、既存の`presentation.activityViews[].testSpecificationFunctions[]`に`businessSections`を追加し、`kind: "result"`、または`kind: "exception"`と同じActivityの`exceptionId`、実際に対応する`pages`（`decision`／`result`）を記録する。実際に未作成と確認した項目のみ、同じActivity viewの`uncreatedTestSections`に`result`または例外IDを記録する。参照の妥当性と意味対応は別々に確認し、名前の一致だけでは追加しない。これは既存の自由形式presentationを使う試作上の表現であり、正式なJSON標準の採用や人間合意を意味しない。
+Viewerの参考案で項目別の対応を示す場合は、既存の`presentation.activityViews[].testSpecificationFunctions[]`に`businessSections`を追加し、`kind: "result"`、または`kind: "exception"`と同じActivityの`exceptionId`、実際に対応する`pages`（`decision`／`result`）を記録する。実際に未作成と確認した項目のみ、同じActivity viewの`uncreatedTestSections`に`result`または例外IDを記録する。参照の妥当性と意味対応は別々に確認し、名前の一致だけでは追加しない。別ルートと不成立が明示されている場合は、同じActivity viewの `businessVariations` に同じActivityの `exceptionId` と `kind: "alternative"` または `"exception"` を記録できる。名前やテストの存在から種別を推測しない。これは既存の自由形式presentationを使う試作上の表現であり、正式なJSON標準の採用や人間合意を意味しない。
 
 明示的なMD変換は[同梱converter](scripts/document_storage/cli.mjs)のconvertを使う。元MDを保持し、旧MD全文の同梱・JSON→MD同期を行わない。購買研究草案の未知見出しやCheck原典版の不一致は診断して止める。
 
