@@ -21,6 +21,7 @@ export async function verifyConceptInitial(browser){
       for(const label of labels){const b=label.getBBox();for(const wire of wires){const length=wire.getTotalLength();for(let distance=0;distance<=length;distance+=.5){const p=wire.getPointAtLength(distance);if(p.x>=b.x-2&&p.x<=b.x+b.width+2&&p.y>=b.y-2&&p.y<=b.y+b.height+2){collisions.push({count:label.textContent,from:wire.dataset.from,to:wire.dataset.to});break;}}}}
       return {collisions,wires:wires.length,labels:labels.length,zoom:section.querySelector('.zoom-value').textContent,warning:section.querySelector('.routing-warning').textContent,backgrounds:section.querySelectorAll('.world>svg>rect').length};
      });
+     if(level===0)assert.equal(result.zoom.trim(),'100%',`fresh concept graph ${focus||'overview'} at ${width}px`);
      assert.deepEqual(result.collisions,[],JSON.stringify({width,theme,focus,...result}));assert.equal(result.backgrounds,0);assert.equal(result.warning,'');assert.equal(result.labels,result.wires*2);
      observations.push({width,theme,focus:focus||'overview',...result});
      if(width===393&&['','preparation'].includes(focus)&&level===1)await page.screenshot({path:`web/evidence/shell/concept-initial-${focus||'overview'}-${theme}.png`});

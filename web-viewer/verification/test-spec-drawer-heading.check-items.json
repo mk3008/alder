@@ -1,0 +1,9 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "2026-11-01 本人指示：右ドロワーの「関連テスト仕様」を「テスト仕様書」に変更する。",
+  "scope": "Activity、概念モデル、概念からテスト仕様へのリンク見出し。",
+  "checks": [
+    {"id":"TEST-SPEC-HEADING-001","condition":"Activity、概念モデル、概念の右ドロワーでテスト仕様へのリンクを見る。","guarantee":"リンク一覧の見出しを「テスト仕様書」と表示する。","reason":"画面内の同じ資料の呼び方を統一するため。","source":"本人の見出し変更指示","verification":"各画面の実DOMと実ブラウザーで見出しを確認する。"},
+    {"id":"TEST-SPEC-HEADING-002","condition":"見出し下の可否判定・処理結果を開く。","guarantee":"以前と同じ対象を開き、対応のないデータには見出しやリンクを作らない。","reason":"見出しだけの変更で画面の相互リンクを変えないため。","source":"SPEC-RELATED-002と本人の指示","verification":"両方向の実際のナビゲーションと関連しない対象を確認する。"}
+  ]
+}

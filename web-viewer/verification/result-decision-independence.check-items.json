@@ -1,0 +1,16 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "2026-11-01 本人指示：処理結果は可否判定の特定行に依存しない。結果例から『関連する可否条件』を表示せず、JSONに不要な関連を持たない。",
+  "scope": "機能ごとの可否判定・処理結果と、成功時の結果例のCheck参照。",
+  "supersedes": [{
+    "ids": ["SPEC-SEPARATE-004", "RESUME-DRAFT-003"],
+    "only": "成功時の結果例に、可否専用Checkへの参照を維持して画面から誘導すること。",
+    "retained": "結果を説明するCheckとの対応、既存のCheckの内容・ID・人間状態、可否表、結果例の内容と旧版。"
+  }],
+  "checks": [
+    {"id":"RESULT-INDEPENDENT-001","condition":"判定専用Checkを参照する従来の結果例を表示する。","guarantee":"『関連する可否条件』や判定Checkへの誘導を表示しない。例は判定表の特定行ではなく機能の処理結果を説明する。","verification":"旧JSONと新JSONの下書き保存・再開を含め、全機能の全場面をDOMで確認する。"},
+    {"id":"RESULT-INDEPENDENT-002","condition":"新しい購買の結果例をJSONで保持する。","guarantee":"結果例のCheck参照は結果の保証を説明するために持ち、判定表の行を指すための判定専用Checkを追加しない。全結果例には少なくとも一つ結果Checkを維持する。","verification":"旧版と新版の結果例の参照差分、全結果例の所有関係と構造を検証する。"},
+    {"id":"RESULT-INDEPENDENT-003","condition":"同じCheckが可否と結果の両方を記述している。","guarantee":"Checkと結果例の内容を失わず、結果Checkとしての参照を判定行への実行依存と解釈しない。Check IDやレビュー状態を変更しない。","verification":"P-03を含む全Checkと判定表を旧版と照合し、結果例の参照と可否表の参照をそれぞれ確認する。"},
+    {"id":"RESULT-INDEPENDENT-004","condition":"既存版のJSONを読み込む。","guarantee":"従来の判定専用Check参照を含むJSONも読める。可否画面・メニュー・成功時のデータ例、Checkへの紐付けを保つ。","verification":"旧版の検証と機能の可否・結果の切替、例の選択、内容とCheck IDを確認する。"}
+  ]
+}

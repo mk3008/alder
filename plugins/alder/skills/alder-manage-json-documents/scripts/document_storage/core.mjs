@@ -29,6 +29,45 @@ export function inventory(pkg){
  return {map,owner,types};
 }
 export function validate(pkg){validateShape(pkg);return validateReferences(pkg);}
+/** Resolve only explicit Check references; section membership alone is not a binding. */
+export function exampleCheckIds(doc,example){
+ const checks=new Set(doc.items.map(item=>item.id)),found=new Set(),guarantee=doc.guarantees.find(item=>item.id===example.guaranteeId);
+ const collect=value=>{if(Array.isArray(value)){for(const item of value)collect(item);return;}if(value&&typeof value==='object'){
+  if(value.kind==='reference'&&checks.has(value.targetId))found.add(value.targetId);
+  for(const child of Object.values(value))if(child&&typeof child==='object')collect(child);
+ }};
+ collect(example.rows);for(const block of guarantee?.blocks??[])if(block.kind==='prose')collect(block.content);
+ for(const item of doc.items){const refs=item.fields.guarantee??[];if(refs.some(run=>run.kind==='reference'&&(run.targetId===example.id||run.targetId===example.guaranteeId)))found.add(item.id);}
+ return [...found];
+}
+// Unmapped historical examples may be carried forward only while their source,
+// ownership and immediate meaning are unchanged; never infer a Check binding.
+const sameStored=(left,right)=>JSON.stringify(left)===JSON.stringify(right);
+const exceptKey=(value,key)=>Object.fromEntries(Object.entries(value).filter(([name])=>name!==key));
+function unchangedLegacySample(previous,doc,group,cap,sample){
+ const old=previous?.documents.find(value=>value.id===doc.id&&value.kind==='conceptModel'&&value.schemaVersion==='0.1');
+ const oldGroup=old?.reviewGroups.find(value=>value.id===group.id),oldCap=oldGroup?.capabilities.find(value=>value.id===cap.id),oldSample=oldCap?.samples.find(value=>value.id===sample.id);
+ return !!(old&&oldGroup&&oldCap&&oldSample&&sameStored(old.basedOn,doc.basedOn)
+  &&['relatedStates','subsystems','concepts','relations','handoffs','presentation'].every(key=>sameStored(old[key],doc[key]))
+  &&sameStored(exceptKey(oldGroup,'capabilities'),exceptKey(group,'capabilities'))
+  &&sameStored(exceptKey(oldCap,'samples'),exceptKey(cap,'samples'))&&sameStored(oldSample,sample));
+}
+function unchangedLegacyExample(previous,doc,example){
+ const old=previous?.documents.find(value=>value.id===doc.id&&value.kind==='checkItems'),oldExample=old?.examples.find(value=>value.id===example.id);
+ const oldGuarantee=old?.guarantees.find(value=>value.id===oldExample?.guaranteeId),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId);
+ const oldSection=old?.sections.find(value=>value.id===oldGuarantee?.sectionId),section=doc.sections.find(value=>value.id===guarantee?.sectionId);
+ return !!(old&&oldExample&&oldGuarantee&&guarantee&&oldSection&&section&&sameStored(old.basedOn,doc.basedOn)
+  &&exampleCheckIds(old,oldExample).length===0&&sameStored(oldExample,example)
+  &&sameStored(oldGuarantee,guarantee)&&sameStored(oldSection,section));
+}
+/** New/changed examples require explicit links; unchanged legacy examples are preserved. */
+export function requireCheckedSamples(pkg,previous){
+ for(const doc of pkg.documents.filter(d=>d.kind==='conceptModel'&&d.schemaVersion==='0.1'))
+  for(const group of doc.reviewGroups)for(const cap of group.capabilities)for(const sample of cap.samples)
+   demand(unchangedLegacySample(previous,doc,group,cap,sample),'Legacy samples require explicit Check references and migration before saving: '+sample.id);
+ for(const doc of pkg.documents.filter(d=>d.kind==='checkItems'))for(const example of doc.examples)
+  demand(exampleCheckIds(doc,example).length>0||unchangedLegacyExample(previous,doc,example),'Check example needs an explicit Check reference: '+example.id);
+}
 /** Shared structural references for storage JSON and the normalized Viewer model. No source grammar. */
 export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  demand(pkg.documents.length>0,'Document required');const {map,owner,types}=inventory(pkg),diagnostics=[...pkg.diagnostics],unresolvedRoles=new Set();
@@ -118,10 +157,27 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     if(g.graph.subsystemViews)validateSubsystemViews(g.graph.subsystemViews,nodes);
     const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
     for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
-    for(const cap of capabilities.values())for(const sample of cap.samples)for(const block of sample.blocks){
+    for(const cap of capabilities.values())if(cap.testSpecification){
+     const spec=cap.testSpecification;
+     for(const [name,ids]of Object.entries(spec))demand(new Set(ids).size===ids.length,'Duplicate function specification reference: '+name);
+     const sameSource=(id,type)=>{const value=target(id,type),doc=target(owner.get(id),'document');demand(doc.kind==='checkItems'&&doc.basedOn.documentId===bd.id&&doc.basedOn.revision===bd.revision,'Function Check source mismatch: '+id);return {value,doc};};
+     for(const id of [...spec.decisionCheckIds,...spec.resultCheckIds])sameSource(id,'check');
+     for(const id of spec.decisionExampleIds){const {value,doc}=sameSource(id,'example'),ids=exampleCheckIds(doc,value);demand(ids.length>0,'Function decision table needs a Check: '+id);demand(ids.every(checkId=>spec.decisionCheckIds.includes(checkId)),'Function decision table Check is not assigned: '+id);}
+     for(const id of spec.sampleIds){const sample=cap.samples.find(value=>value.id===id);demand(sample,'Function result sample belongs to another capability: '+id);demand(sample.checkIds.some(checkId=>spec.resultCheckIds.includes(checkId)),'Function result sample needs a result Check: '+id);demand(sample.checkIds.every(checkId=>spec.resultCheckIds.includes(checkId)||spec.decisionCheckIds.includes(checkId)),'Function result sample Check is not assigned: '+id);}
+    }
+    for(const cap of capabilities.values())for(const sample of cap.samples){
+     if(d.schemaVersion==='0.2'){
+      demand(sample.checkIds.length>0,'Sample needs a Check: '+sample.id);
+      demand(new Set(sample.checkIds).size===sample.checkIds.length,'Duplicate sample Check: '+sample.id);
+      for(const checkId of sample.checkIds){
+       target(checkId,'check');const checkDoc=target(owner.get(checkId),'document');
+       demand(checkDoc.kind==='checkItems'&&checkDoc.basedOn.documentId===bd.id&&checkDoc.basedOn.revision===bd.revision,'Sample Check source mismatch: '+checkId);
+      }
+     }
+     for(const block of sample.blocks){
      has(nodes,block.card,'view concept');const columns=unique(block.columns,'sample column');for(const column of block.columns)has(information,column.informationId,'concept information');unique(block.rows,'sample row');
      for(const row of block.rows){const cells=new Set();for(const cell of row.cells){has(columns,cell.columnId,'sample column');demand(!cells.has(cell.columnId),'Duplicate sample cell: '+cell.columnId);cells.add(cell.columnId);}demand(cells.size===columns.size,'Sample row does not match columns');}
-    }
+    }}
    }
    for(const edge of d.presentation.landscapeRelationships){const from=has(groups,edge.from,'review group'),to=has(groups,edge.to,'review group');demand(from.subsystemId===to.subsystemId,'Internal relationship crosses subsystem boundary');}
    for(const edge of d.presentation.reviewBoundaries){has(groups,edge.from,'review group');has(groups,edge.to,'review group');}
@@ -132,7 +188,10 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    const rowActs=new Set();for(const row of d.index){target(row.activityId,'activity',bd.id);demand(!rowActs.has(row.activityId),'Duplicate Activity index');rowActs.add(row.activityId);demand(new Set(row.checkIds).size===row.checkIds.length,'Duplicate Check binding');for(const id of row.checkIds)target(id,'check',d.id);}
    demand(new Set(d.sections.map(s=>s.activityId??s.title)).size===d.sections.length,'Duplicate Activity section');
    for(const s of d.sections){if(s.activityId!==null){target(s.activityId,'activity',bd.id);demand(rowActs.has(s.activityId),'Section missing from index');}rich(s.preamble,d.id);}
-   for(const g of d.guarantees){demand(g.blocks.some(b=>b.kind==='prose'&&hasContent(b.content)),'General guarantee prose required');target(g.sectionId,'section',d.id);for(const b of g.blocks)if(b.kind==='prose')rich(b.content,d.id);else{const e=target(b.exampleId,'example',d.id);demand(e.guaranteeId===g.id,'Example owner mismatch');}}
+   const decisionExamples=new Set(pkg.documents.filter(model=>model.kind==='conceptModel'&&model.basedOn.documentId===bd.id&&model.basedOn.revision===bd.revision).flatMap(model=>model.reviewGroups.flatMap(group=>group.capabilities.flatMap(cap=>cap.testSpecification?.decisionExampleIds??[]))));
+   for(const g of d.guarantees){
+    const decisionOnly=g.blocks.length>0&&g.blocks.every(block=>block.kind==='example'&&decisionExamples.has(block.exampleId)&&d.examples.some(example=>example.id===block.exampleId&&example.guaranteeId===g.id&&exampleCheckIds(d,example).length>0));
+    demand(g.blocks.some(b=>b.kind==='prose'&&hasContent(b.content))||decisionOnly,'General guarantee prose required');target(g.sectionId,'section',d.id);for(const b of g.blocks)if(b.kind==='prose')rich(b.content,d.id);else{const e=target(b.exampleId,'example',d.id);demand(e.guaranteeId===g.id,'Example owner mismatch');}}
    for(const ex of d.examples){target(ex.guaranteeId,'guarantee',d.id);demand(ex.columns.length>0,'Example columns required');for(const row of ex.rows){demand(row.length===ex.columns.length,'Example column mismatch');for(const cell of row)rich(cell,d.id);}}
    for(const item of d.items){const section=target(item.sectionId,'section',d.id);demand(section.activityId===null?!d.index.some(r=>r.checkIds.includes(item.id)):d.index.some(r=>r.activityId===section.activityId&&r.checkIds.includes(item.id)),'Primary Check absent from Activity index or assigned while declared unassigned');demand(hasContent(item.fields.guarantee)||hasContent(item.fields.condition)&&hasContent(item.fields.expectedResult),'Check guarantee required');for(const runs of Object.values(item.fields))rich(runs,d.id);demand(section.activityId===null||d.index.some(row=>row.checkIds.includes(item.id)),'Unbound Check');}
    for(const n of d.notes)rich(n.content,d.id);rich(d.intro,d.id);

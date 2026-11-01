@@ -51,19 +51,20 @@ async function until(predicate){for(let i=0;i<200&&!predicate();i++)await sleep(
 function env(db=new IDBFactory(),script=code){const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;let fetches=0;w.fetch=()=>{fetches++;throw Error('Unexpected network');};w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(script);return {w,$:id=>w.document.getElementById(id),fetches:()=>fetches};}
 async function ready(e){await until(()=>!e.$('open').disabled);e.$('layout-lock').click();return e;}
 function select(e,id){const node=[...e.w.document.querySelectorAll('.node')].find(n=>n.dataset.node===id);assert.ok(node);node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointerup({pointerId:1});}
+function showChecks(e,id){const button=e.w.document.querySelector('[data-explorer-key="tests:checks:'+id+'"]');assert.ok(button,'Check menu for '+id);button.click();}
 try{
  const e=await ready(env());assert.match(e.$('opening-guide').textContent,/JSON形式/);assert.match(e.$('authoring-guide').textContent,/JSONの草案/);
  e.$('open-sample').click();await until(()=>e.w.document.querySelectorAll('.node').length===25);
  e.$('view-markdown').click();assert.equal(e.$('source-text').value,raw);assert.match(e.$('source-title').textContent,/JSON/);await e.$('source-cancel').onclick();
- select(e,designActivity.id);e.$('detail-mode-checks').click();assert.ok(e.$('detail').querySelector('[data-check-id="SAMPLE-01"]'),e.$('detail').textContent+' / selected='+e.w.document.querySelector('.node.selected')?.dataset.node);assert.equal(e.$('open-checks').hidden,true);
+ select(e,designActivity.id);showChecks(e,designActivity.id);assert.ok(e.$('tests-workspace').querySelector('[data-check-id="SAMPLE-01"]'));assert.equal(e.$('open-checks').hidden,true);
  const key=e.w.document.querySelector('.tab').dataset.key;e.$('open-sample-menu').click();assert.equal(e.w.document.querySelector('.tab').dataset.key,key);assert.equal(e.fetches(),0);
 
  const db=new IDBFactory(),legacyApp=await ready(env(db,legacyCode));legacyApp.$('open-sample').click();await until(()=>legacyApp.w.document.querySelectorAll('.node').length===25);
  legacyApp.$('check-open-sample').click();await until(()=>legacyApp.$('app').dataset.saveState==='saved');select(legacyApp,oldActivity.id);
- assert.ok(legacyApp.$('detail-mode-checks'));legacyApp.$('detail-mode-checks').click();assert.ok(legacyApp.$('detail').querySelector('[data-check-id="SAMPLE-01"]'));
+ showChecks(legacyApp,oldActivity.id);assert.ok(legacyApp.$('tests-workspace').querySelector('[data-check-id="SAMPLE-01"]'));
  await sleep(300);legacyApp.w.close();
  const restored=await ready(env(db));restored.$('view-markdown').click();assert.equal(restored.$('source-text').value,legacy,'legacy source is not replaced on restore');await restored.$('source-cancel').onclick();
- restored.$('detail-mode-checks').click();assert.ok(restored.$('detail').querySelector('[data-check-id="SAMPLE-01"]'),'legacy attached checks survive restore');
+ showChecks(restored,oldActivity.id);assert.ok(restored.$('tests-workspace').querySelector('[data-check-id="SAMPLE-01"]'),'legacy attached checks survive restore');
  await restored.$('open-sample').onclick({preventDefault(){}});await until(()=>restored.w.document.querySelector(`[data-node="${designActivity.id}"]`));
  assert.equal(restored.w.document.querySelector('.node.selected')?.dataset.node,designActivity.id,'explicit switch maps legacy selection by unique name');
  restored.$('view-markdown').click();assert.equal(restored.$('source-text').value,raw);assert.equal(restored.fetches(),0);

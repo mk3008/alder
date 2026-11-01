@@ -1,0 +1,12 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "テスト仕様の機能とチェック項目の重複するメニューを整理し、元の情報へ到達できることを維持する。",
+  "source": "2026-11-01 本人の、機能画面でチェック項目とサンプルを合わせて見られるなら重複するチェック項目メニューは不要という指示",
+  "supersedes": ["従来のチェック項目メニューを、機能からすべての内容に到達できる場合にも表示する部分。Checkの内容、例との明示的な対応と既存入力の情報への到達は維持する。"],
+  "checks": [
+    {"id":"SPEC-MENU-DEDUP-001","condition":"あるActivityの全Checkを機能のサンプルから確認できる。","guarantee":"該当機能のメニューだけを表示し、同じ内容を開く独立したチェック項目メニューは表示しない。各CheckのID・条件・期待結果と選択した例は機能画面で確認できる。","reason":"同じ仕様を確認する二つのメニューで迷わないため。","verification":"複数の機能・場面を持つ文書でメニューと各場面のCheck本文を照合する。"},
+    {"id":"SPEC-MENU-DEDUP-002","condition":"Activityに機能から参照されないCheckまたは独立した共通説明がある。","guarantee":"その内容はActivity内のその他から確認でき、機能に属すると推測しない。機能から見られるCheckをその他に重複表示しない。","reason":"例がないCheckや共通の説明を隠さないため。","verification":"同一Activityで参照あり・なしのCheckと共通説明を併せて開き、IDと内容を照合する。"},
+    {"id":"SPEC-MENU-DEDUP-003","condition":"機能データのない旧文書やCheckだけの文書を開く。","guarantee":"既存のActivity別Check、共有情報、未割当項目を引き続き開ける。例の関連を推測せず、データやレビュー状態を変更しない。","reason":"メニュー整理で既存文書を読めなくしないため。","verification":"Checkのみ、共有Check、旧概念例を含む文書の各導線と内容を確認する。"},
+    {"id":"SPEC-MENU-DEDUP-004","condition":"保存済みのチェック項目URLや複数Activityに関連するCheckを開く。","guarantee":"従来URLも開け、明示的に関連する同じCheckのIDと内容を保持する。機能画面でも同じ業務設計版の関連Checkを表示する。","reason":"既存リンクとCheckの単一性を保つため。","verification":"旧URLの再読込と複数Activityからの表示を確認し、対象外のCheckを結び付けない。"}
+  ]
+}

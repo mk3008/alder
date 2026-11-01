@@ -63,6 +63,7 @@ try{
  assert.ok(paints.length);assert.ok(paints.every(p=>labels.every(label=>order.indexOf(p)<order.indexOf(label))),'selected dashed paint remains behind every caption');
  const focused=svg.querySelector('[data-state="申請済み"]');window.document.body.append(panel);focused.focus();focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  assert.equal(window.document.activeElement,focused,'selection keeps keyboard focus');focused.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(focused.getAttribute('aria-pressed'),'false','Escape clears the selected state');
+ const viewport=panel.querySelector('.diagram-viewport'),zoom=panel.querySelector('.canvas-zoom').textContent,wheel=new window.WheelEvent('wheel',{bubbles:true,cancelable:true,ctrlKey:true,deltaY:-100,clientX:100,clientY:100});viewport.dispatchEvent(wheel);assert(wheel.defaultPrevented);assert.notEqual(panel.querySelector('.canvas-zoom').textContent,zoom);
  results.push('STATE-CAPTION-003');validateAuthority(readFileSync('verification/state-caption-placement.check-items.json'));coverage(results);
  console.log(JSON.stringify({domChecks:results,transitions:rows.length,supersession:'self-loop line separation is superseded by STATE-BUNDLE-001; transition/caption identity remains',browser:'separate'}));
 }finally{window.close();}

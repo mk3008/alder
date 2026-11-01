@@ -1,8 +1,13 @@
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
-import {verifyStructureDrawer} from './test-structure-drawer-browser.mjs';
+import {contrast,verifyStructureDrawer} from './test-structure-drawer-browser.mjs';
 import {touchDriver} from './touch-driver.mjs';
+import {verifyCtrlWheelZoom} from './test-ctrl-wheel-zoom-browser.mjs';
+import {verifySubsystemSpecLinks} from './test-subsystem-to-test-spec-browser.mjs';
+import {verifySpecRelatedLinks} from './test-test-spec-related-links-browser.mjs';
+import {verifyGraphInitialZoom} from './test-graph-initial-zoom-browser.mjs';
+import {verifyBusinessSubsystemCardSize} from './test-business-subsystem-card-size-browser.mjs';
 
 async function backgroundPoint(page,id){
  const point=await page.evaluate(subsystem=>{
@@ -23,6 +28,10 @@ async function headingBackgroundPoint(page,id){
  assert(point,'the empty part of the heading row must reach the region background for '+id);return point;
 }
 
+async function overallBackgroundPoint(page){
+ const point=await page.evaluate(()=>{const viewport=document.querySelector('.subsystem-overview-canvas .diagram-viewport'),world=viewport.querySelector('.diagram-world'),svg=world.querySelector('svg'),r=viewport.getBoundingClientRect();for(let y=r.top+40;y<r.bottom-20;y+=16)for(let x=r.left+20;x<r.right-20;x+=16){const hit=document.elementFromPoint(x,y);if(hit===viewport||hit===world||hit===svg)return{x,y};}});assert(point,'visible blank space on the overall diagram');return point;
+}
+
 export async function verifySubsystemOverview(browser){
  const context=await browser.newContext({viewport:{width:1280,height:960},hasTouch:true}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
  const cdp=await context.newCDPSession(page),touch=touchDriver(page,cdp);await touch.install();
@@ -37,16 +46,19 @@ export async function verifySubsystemOverview(browser){
 
   assert.equal(await page.locator('.concept-review-landscape h1').count(),0);assert.equal(await page.locator('#concept-tab-landscape .view-tab-name').textContent(),'全体図');assert.equal(await page.locator('[data-explorer-key="group:concept"]').textContent(),'データ構造');assert.equal(await page.locator('.landscape-modes').count(),0);assert.equal(await page.locator('[data-explorer-key="concept:overview"]').textContent(),'全体図');
   assert.equal(await page.locator('[data-subsystem]').count(),2);assert.equal(await page.locator('[data-review-group]').count(),4);assert.equal(await page.locator('[data-overview-from]').count(),2);assert.equal(await page.locator('[data-handoff-id]').count(),2);assert.deepEqual(await page.locator('[data-handoff-label]').allTextContents(),['承認済みの版・品目','入荷・未購入の結果']);
-  for(const label of await page.locator('[data-handoff-label]').all()){const bounds=await label.boundingBox(),viewport=await page.locator('.subsystem-overview-canvas .diagram-viewport').boundingBox();assert.ok(bounds.x>=viewport.x&&bounds.x+bounds.width<=viewport.x+viewport.width&&bounds.y>=viewport.y&&bounds.y+bounds.height<=viewport.y+viewport.height,'handoff label is visible on initial desktop display');}
+  assert.equal((await page.locator('.subsystem-overview-canvas .canvas-zoom').textContent()).trim(),'100%','fresh overview is not fitted to the viewport');
+  // The previous all-visible assertion still applies after the viewer explicitly zooms out.
+  for(let i=0;i<8;i++){const fits=await page.locator('[data-handoff-label]').evaluateAll(labels=>{const v=labels[0].closest('.diagram-viewport').getBoundingClientRect();return labels.every(label=>{const b=label.getBoundingClientRect();return b.left>=v.left&&b.right<=v.right&&b.top>=v.top&&b.bottom<=v.bottom;});});if(fits)break;await page.locator('.subsystem-overview-canvas .zoom-out').click();}
+  for(const label of await page.locator('[data-handoff-label]').all()){const bounds=await label.boundingBox(),viewport=await page.locator('.subsystem-overview-canvas .diagram-viewport').boundingBox();assert.ok(bounds.x>=viewport.x&&bounds.x+bounds.width<=viewport.x+viewport.width&&bounds.y>=viewport.y&&bounds.y+bounds.height<=viewport.y+viewport.height,'handoff label is reachable after explicit zoom out');}
   let point=await backgroundPoint(page,'approval');await page.mouse.click(point.x,point.y);
   assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);
-  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');
+  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');const fixedDrawer=await page.locator('.concept-related-content').innerHTML();
   point=await backgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
-  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');
+  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related-content').innerHTML(),fixedDrawer);
   point=await headingBackgroundPoint(page,'approval');await page.mouse.click(point.x,point.y);
-  assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'稟議サブシステム');await page.locator('#drawer').click();
+  assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related-content').innerHTML(),fixedDrawer);await page.locator('#drawer').click();
   point=await headingBackgroundPoint(page,'receiving');await page.touchscreen.tap(point.x,point.y);
-  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷予実サブシステム');await page.locator('#drawer').click();
+  assert.equal(await page.locator('[data-subsystem="receiving"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related-content').innerHTML(),fixedDrawer);await page.locator('#drawer').click();
   const title=page.locator('[data-subsystem="approval"] button');await title.focus();await page.keyboard.press('Enter');assert.equal(await title.getAttribute('aria-pressed'),'true');await page.keyboard.press('Space');assert.equal(await title.getAttribute('aria-pressed'),'true');
   const viewport=page.locator('.subsystem-overview-canvas .diagram-viewport');
   for(let i=0;i<8;i++){const size=await viewport.evaluate(v=>({x:v.scrollWidth-v.clientWidth,y:v.scrollHeight-v.clientHeight}));if(size.x>100&&size.y>100)break;await page.locator('.subsystem-overview-canvas .zoom-in').click();}
@@ -67,9 +79,12 @@ export async function verifySubsystemOverview(browser){
   assert.notEqual(await page.locator('.subsystem-overview-canvas .canvas-zoom').textContent(),zoom,'pinch changes zoom');assert.equal(await title.getAttribute('aria-pressed'),'true','pinch does not change selection');
   await page.locator('.subsystem-overview-canvas .graph-settings-toggle').click();await page.locator('.subsystem-overview-canvas .reset-layout').click();
   if(await page.locator('.subsystem-overview-canvas .canvas-lock').getAttribute('aria-pressed')==='false')await page.locator('.subsystem-overview-canvas .canvas-lock').click();
-  await page.locator('[data-handoff-label="result-progress"]').click();assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷・未購入の結果');await page.locator('#drawer').click();
+  await page.locator('[data-handoff-label="result-progress"]').click();assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related-content').innerHTML(),fixedDrawer);await page.locator('#drawer').click();
   const shape=page.locator('[data-review-group="group-request"]');await shape.click();assert.equal(await shape.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);assert.ok((await page.locator('[data-review-group="group-decision"]').getAttribute('class')).includes('review-neighbor'));
-  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related').isVisible(),true);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'購入要求・申請内容');await page.locator('#drawer').click();
+  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related').isVisible(),true);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related-content').innerHTML(),fixedDrawer);assert.equal(await page.locator('.concept-related .shell-heading .subsystem-overview-role-icon').count(),0);assert(await shape.locator('.subsystem-overview-role-icon').isVisible());await page.locator('#drawer').click();
+  await page.locator('#drawer').click();point=await overallBackgroundPoint(page);await page.mouse.click(point.x,point.y);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related').isVisible(),true);assert.deepEqual(await page.locator('.concept-related-content h3').allTextContents(),['メリット','デメリット・必要な管理','レビューポイント']);assert.equal(await page.locator('.concept-related-content details').count(),0);assert.equal(await page.locator('.concept-related .shell-heading .subsystem-overview-role-icon').count(),0);
+  await shape.click();point=await overallBackgroundPoint(page);await page.touchscreen.tap(point.x,point.y);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');
+  await shape.click();await viewport.focus();await page.keyboard.press('Escape');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');await page.locator('#drawer').click();
   await shape.locator('.subsystem-overview-open').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'購入要求・申請内容');await page.locator('iframe[data-concept-view=group-request]').waitFor({state:'visible'});assert.equal(await page.locator('.concept-main .data-example-modes').count(),0);await page.goBack();await page.locator('.subsystem-overview-graph').waitFor();
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
@@ -84,14 +99,22 @@ export async function verifySubsystemOverview(browser){
    await page.locator('#concept-tab-landscape').click();
   }
   const structureDrawer=await verifyStructureDrawer(page);
+  // The drawer test reloads while another group is active. Reopen the result
+  // graph so the comparison below measures its actual post-reload surface.
+  await page.locator('[data-explorer-key="concept:group-result"]').click();
+  await page.frameLocator('iframe[data-concept-view="group-result"]').locator('.concept-subsystem-region').first().waitFor();
+  await page.locator('[data-explorer-key="concept:landscape"]').click();
   mkdirSync('web/evidence/shell',{recursive:true});const observations=[];
   for(const theme of ['light','dark']){if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();for(const width of [1280,393]){
    await page.setViewportSize({width,height:960});const measured=await page.locator('.subsystem-overview-graph').evaluate(graph=>{
     const boxes=[...graph.querySelectorAll('[data-review-group]')].map(g=>{const rect=g.querySelector('.state-diagram-node'),region=graph.querySelector(`[data-subsystem="${g.dataset.subsystemId}"] rect`);const num=(e,k)=>Number(e.getAttribute(k));return{id:g.dataset.reviewGroup,x:num(rect,'x'),y:num(rect,'y'),inside:num(rect,'x')>=num(region,'x')&&num(rect,'y')>=num(region,'y')&&num(rect,'x')+num(rect,'width')<=num(region,'x')+num(region,'width')&&num(rect,'y')+num(rect,'height')<=num(region,'y')+num(region,'height')};});return {boxes,edges:graph.querySelectorAll('[data-overview-from]').length,overflow:document.documentElement.scrollWidth>innerWidth};});
    assert.equal(measured.overflow,false,'no document-wide horizontal overflow');assert.ok(measured.boxes.every(box=>box.inside),'every card is within its region');for(let i=1;i<measured.boxes.length;i++){assert.ok(measured.boxes[i].x>measured.boxes[i-1].x);assert.ok(measured.boxes[i].y>measured.boxes[i-1].y);}assert.equal(measured.edges,2);
+   const colors=await page.locator('.subsystem-overview-region').first().evaluate(el=>({fill:getComputedStyle(el).fill,border:getComputedStyle(el).stroke,background:getComputedStyle(el.closest('.diagram-viewport')).backgroundColor}));
+   const detailFill=await page.locator('iframe[data-concept-view=group-result]').evaluate(frame=>frame.contentWindow.getComputedStyle(frame.contentDocument.querySelector('.concept-subsystem-region')).fill);
+   assert.equal(colors.fill,detailFill,'overall and detail use the same region surface');if(theme==='dark'){assert(contrast(colors.fill,colors.background)>=1.35);assert(contrast(colors.border,colors.fill)>=3);assert(contrast(colors.border,colors.background)>=3);}
    for(const control of ['.zoom-in','.zoom-out','.canvas-lock','.reset-layout'])assert.equal(await page.locator('.subsystem-overview-canvas '+control).count(),1);
    await page.screenshot({path:`web/evidence/shell/subsystem-overview-${width}-${theme}.png`});observations.push({width,theme,...measured});
   }}
-  assert.deepEqual(errors,[]);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer};
+  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser),relatedLinks=await verifySpecRelatedLinks(browser),initialZoom=await verifyGraphInitialZoom(browser),cardSize=await verifyBusinessSubsystemCardSize(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks,relatedLinks,initialZoom,cardSize};
  }finally{await context.close();}
 }

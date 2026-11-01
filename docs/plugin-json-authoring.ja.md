@@ -18,6 +18,8 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 ## 更新とレビュー
 
+既存の概念データ例をCheckに対応付ける場合は、[構造契約](json-native-contract.ja.md#check-itemとデータ例)の `conceptModel/0.2` と明示移行を使う。各例の `checkIds` は同じ業務設計に属する実在Checkの内部IDを指定し、名前・類似した値・セルの `linkId` から対応を推測しない。参照の構造検査後、条件・対象・結果と未合意をCheckおよびBusiness Designと別途照合する。Checkの生成・変更に必要な合意と既存ID、人間状態、Test証拠を維持する。
+
 既存正本をvalidate/inspectし、byte hashとpackage revisionを取得する。全体を読んでから依頼された要素だけを候補で変更する。Activity/Object追加には新IDを割り当て、既存の改名・並べ替え・内容更新ではIDを維持する。変更文書とpackageのrevisionだけ更新する。既存IDの無申告の削除/置換、原典目録の書換え、外部目録の改変は保存器が拒否する。保存前後で未決、Findings、文章内の引用、関係と共有Checkを比較する。
 
 状態遷移の訂正で不要な遷移を除く場合に限り、commit操作の`removedTransitions`に対象ID、理由、依頼や根拠の出所を明記する。候補で実際に削除した遷移と操作の申告は一致させ、操作記録を保存する。同じsourceIdの新IDへの置換はできない。他の種類の要素の削除には対応しない。削除による業務の意味を保存器が判定したり、削除したIDの将来の再利用を検知したりするわけではない。

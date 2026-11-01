@@ -1,0 +1,12 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "2026-11-01 本人指示：ディシジョンテーブルの『‐』の説明は『値不問』に統一し、描画上の共通ルールとして扱う。JSONに説明を重複保持しない。",
+  "scope": "機能別の可否判定表とそのJSONの説明。",
+  "supersedes": [{"ids":["DECISION-ORDER-001","DECISION-TABLE-002"],"only":"表ごとに記載された『‐』の説明の文言と、JSONに凡例を持つこと。","retained":"値が判定材料にならないこと、行の順序、条件の範囲、結果・備考・Check・レビュー状態。"}],
+  "checks": [
+    {"id":"VALUE-INDEPENDENT-001","condition":"条件に『‐』がある可否判定表を表示する。","guarantee":"Viewerが『‐＝値不問。』を一度だけ表示する。条件の値・判定結果・備考・Check IDと、上からの判定順は変えない。","verification":"下書き・提出と全機能の表をDOMで確認し、異なる旧説明が重複しないことを照合する。"},
+    {"id":"VALUE-INDEPENDENT-002","condition":"『‐』のない可否判定表を表示する。","guarantee":"不要な『値不問』の凡例は追加しない。","verification":"『‐』のない複数行と一行の表を確認する。"},
+    {"id":"VALUE-INDEPENDENT-003","condition":"旧JSONに凡例と業務上の前提が混在する。","guarantee":"元のJSONは変更せず、既存の凡例だけを共通表示に置き換え、前提・対象範囲・備考などは表示し続ける。","verification":"旧版の提出、再提出、差戻し、購入準備の文章と表示を照合する。"},
+    {"id":"VALUE-INDEPENDENT-004","condition":"購買の新しい参考草案を保存する。","guarantee":"共通凡例をJSONの説明に保存せず、具体的な業務の条件・結果・Checkと例を保持する。旧版と人間レビュー状態は変更しない。","verification":"旧版と新版の差分、全決定表の参照、構造検証および意味を確認する。"}
+  ]
+}

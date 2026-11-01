@@ -12,6 +12,11 @@ const hash=value=>createHash('sha256').update(value).digest('hex');
 const rawAuthority=readFileSync('verification/state-bundled-loop.check-items.json');
 const authorityHash='3d586237dd362e2ad4fb58ce9835a1e58b1835ec6eba89386152cad5f41e8d67';
 const ids=['STATE-BUNDLE-001','STATE-BUNDLE-002','STATE-BUNDLE-003','STATE-BUNDLE-004','STATE-BUNDLE-005'];
+const newAuthority=readFileSync('verification/state-unified-loop.check-items.json');
+const newAuthorityHash='334d6e172795a1e321f81ac68144d076f0e1a9cb599bc14c6ff66f9be6c1f3be';
+const newIds=['STATE-SAME-001','STATE-SAME-002','STATE-SAME-003','STATE-SAME-004'];
+function verifyNewAuthority(value){assert.equal(hash(value),newAuthorityHash);assert.deepEqual(JSON.parse(value).checks.map(c=>c.id),newIds);}
+verifyNewAuthority(newAuthority);const changedNew=JSON.parse(newAuthority);changedNew.checks[0].guarantee='changed';assert.throws(()=>verifyNewAuthority(Buffer.from(JSON.stringify(changedNew))));
 const legacyAuthorities=[
  ['verification/state-self-loop.check-items.json','08d8c155f86867541212b55ac15233057d4e5f1cfed05935b1cda292ce9a9caa'],
  ['verification/state-transition-identity.check-items.json','9e4e340940d214878b471fc70101e8fabb2087c6369f1281b567e2ff7276be90'],
@@ -65,10 +70,11 @@ function verify(candidate){
  const {panel,design,model,svg}=render(candidate),g=stateCaptionGeometry(svg),loops=model.transitions.filter(t=>t.from===t.to);
  assertStateCaptionPlacement(g,model.transitions);
  assertStateCaptionRows(stateCaptionSnapshot(svg),model.transitions);
- assert.equal(g.paths.length,model.transitions.filter(t=>t.from!==t.to).length+new Set(loops.map(t=>JSON.stringify([t.from,t.path]))).size);assert.equal(g.captions.length,model.transitions.length);
+ assert.equal(g.paths.length,model.transitions.filter(t=>t.from!==t.to).length+new Set(loops.map(t=>t.from)).size);assert.equal(g.captions.length,model.transitions.length);
  for(const t of loops){
   const path=pathFor(svg,t.id),caption=svg.querySelector(`[data-transition-id="${t.id}"]`),node=g.nodes.find(n=>n.id===t.from);
-  assert(path&&caption&&node,t.id);assert.equal(path.classList.contains('exception'),t.path==='exception');
+  assert(path&&caption&&node,t.id);assert(path.classList.contains('state-self-loop'));assert.equal(path.getAttribute('stroke-dasharray'),'6 5');
+  assert(svg.querySelector(`[data-exception-paint][data-transitions~="${t.id}"][stroke-dasharray="6 5"]`),'self-loop retains visible dashed paint');
   const nums=path.getAttribute('d').match(/-?\d+(?:\.\d+)?/g).map(Number);
   assert(nums[0]>node.x&&nums[0]<node.x+node.width);assert.equal(nums[1],node.y+node.height);assert.equal(nums.at(-1),node.y+node.height);
   assert(nums.at(-2)>node.x&&nums.at(-2)<node.x+node.width);
@@ -76,14 +82,14 @@ function verify(candidate){
  }
  for(const stateName of new Set(loops.map(t=>t.from))){
   const stateLoops=loops.filter(t=>t.from===stateName);
-  for(const a of stateLoops)for(const b of stateLoops)assert.equal(pathFor(svg,a.id)===pathFor(svg,b.id),a.path===b.path,'same-state loops group only the same line style');
+  for(const a of stateLoops)for(const b of stateLoops)assert.equal(pathFor(svg,a.id),pathFor(svg,b.id),'same-state loops share one path regardless of classification');
  }
  for(const loop of loops){const path=segments(pathFor(svg,loop.id).getAttribute('d'));
   for(const other of g.paths.filter(p=>!p.id.split(' ').includes(loop.id)))assert(!path.some(a=>segments(other.d).some(b=>crossing(a,b))),loop.id+' does not cross or share another transition: '+other.id);
   const caption=g.captions.find(c=>c.id===loop.id),box={x:caption.x,y:caption.y-14,width:Math.max(...caption.lines.map(s=>Array.from(s).length*14)),height:caption.lines.length*18};
   for(const other of g.paths.filter(p=>!p.id.split(' ').includes(loop.id)))assert(!segments(other.d).some(s=>hitsBox(s,box)),loop.id+' caption does not cover a transition: '+other.id);
  }
- for(const row of model.transitions.filter(t=>t.from!==t.to))assert.equal(pathFor(svg,row.id).dataset.transitions,row.id,'non-self routes remain separate');
+ for(const row of model.transitions.filter(t=>t.from!==t.to)){const path=pathFor(svg,row.id);assert.equal(path.dataset.transitions,row.id,'non-self routes remain separate');assert.equal(path.classList.contains('exception'),row.path==='exception','non-self line style follows the original path');assert(!path.classList.contains('state-self-loop'));}
  for(const name of ['終結','破棄'])assert(!loops.some(t=>t.from===name),name+' has no invented self-loop');
  return {g,loops,svg};
 }
@@ -119,20 +125,25 @@ for(const id of ['T12','T14'])assert(actual.svg.querySelector(`[data-transition-
 results.push('STATE-BUNDLE-003');
 const mixed=structuredClone(original),md=mixed.documents.find(d=>d.kind==='stateTransition');
 md.transitions.push({...base,id:'normal-self',sourceId:'T90',path:'normal',exceptionId:null,condition:'状態を変えずに別の通常操作を実行'});
-const mix=verify(mixed),normal=pathFor(mix.svg,'T90'),exception=pathFor(mix.svg,'T08');assert.notEqual(normal,exception);assert(!normal.classList.contains('exception'));assert(exception.classList.contains('exception'));
+const mix=verify(mixed),normal=pathFor(mix.svg,'T90'),exception=pathFor(mix.svg,'T08');assert.equal(normal,exception);assert(normal.classList.contains('state-self-loop'));assert.deepEqual(normal.dataset.transitions.split(' ').sort(),['T08','T19','T90']);
+assert.match(normal.querySelector('title').textContent,/T90.*通常/);assert.match(normal.querySelector('title').textContent,/T08.*例外/);
+const normalFirst=structuredClone(mixed),normalRows=normalFirst.documents.find(d=>d.kind==='stateTransition').transitions,normalRow=normalRows.pop();normalRows.unshift(normalRow);
+const normalFirstResult=verify(normalFirst);assert.equal(pathFor(normalFirstResult.svg,'T90'),pathFor(normalFirstResult.svg,'T08'));assert.equal(pathFor(normalFirstResult.svg,'T90').getAttribute('stroke-dasharray'),'6 5');
 mix.svg.querySelector('[data-state="下書き"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 for(const id of ['T08','T19','T90'])assert([...mix.svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>t.classList.contains('review-related')));
+assert(normal.classList.contains('review-related'));assert(mix.svg.querySelector('[data-exception-paint][data-transitions~="T90"].review-related'));
 mix.svg.querySelector('[data-state="申請済み"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 for(const id of ['T08','T19','T90'])assert([...mix.svg.querySelectorAll(`[data-transition-id="${id}"] tspan`)].every(t=>!t.classList.contains('review-related')));
+assert(!normal.classList.contains('review-related'));
 const node=actual.g.nodes.find(n=>n.id==='作業中');actual.svg.querySelector('[data-state="作業中"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
 assert(node&&actual.svg.querySelector('[data-transition-id="T17"] tspan').classList.contains('review-related'));
 assert(actual.g.captions.find(c=>c.id==='T17').x<=node.x+node.width+40,'the normal self-loop label stays near its state');
-assert(!pathFor(actual.svg,'T17').classList.contains('exception'));
-results.push('STATE-BUNDLE-004');
+assert(pathFor(actual.svg,'T17').classList.contains('state-self-loop'));assert.equal(pathFor(actual.svg,'T17').getAttribute('stroke-dasharray'),'6 5');
+results.push('STATE-BUNDLE-004'); // Its old line-separation condition is superseded by STATE-SAME.
 assert.equal(hash(readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json')),hash(source));
 for(const [path,digest]of [['src/routing.ts','23a5980eca7fe6017870030f99cfedd455d602032b68487c21c6b97b9471df49'],['src/matrix-layout.ts','151ce84c5c41eb9f58720efbf8a66f38719d098a6519e039cd52c0a554d91a2d'],['src/route-cache.ts','cd432c32d12b305aae2e65f100f77a2806f7b35d55ff85cec69b380f8c90d14f']])assert.equal(hash(readFileSync(path)),digest);
 for(const [path,digest]of legacyAuthorities)assert.equal(hash(readFileSync(path)),digest);
-results.push('STATE-BUNDLE-005');verifyAuthority(readFileSync('verification/state-bundled-loop.check-items.json'));verifyCoverage(results);
+results.push('STATE-BUNDLE-005');verifyAuthority(readFileSync('verification/state-bundled-loop.check-items.json'));verifyCoverage(results);verifyNewAuthority(readFileSync('verification/state-unified-loop.check-items.json'));
 const originalDraft=actual.g.nodes.find(n=>n.id==='下書き'),manyDraft=manyResult.g.nodes.find(n=>n.id==='下書き');
-console.log(JSON.stringify({checks:ids,examples:[0,1,2,5],draftNode:{two:[originalDraft.width,originalDraft.height],five:[manyDraft.width,manyDraft.height]},svg:{two:actual.svg.getAttribute('viewBox'),five:manyResult.svg.getAttribute('viewBox')},limitation:'DOM geometry; real browser and human review are separate'}));
+console.log(JSON.stringify({checks:ids,newChecks:newIds,superseded:'normal/exception self-loop separation only',examples:[0,1,2,5,'mixed normal/exception in both orders'],draftNode:{two:[originalDraft.width,originalDraft.height],five:[manyDraft.width,manyDraft.height]},svg:{two:actual.svg.getAttribute('viewBox'),five:manyResult.svg.getAttribute('viewBox')},limitation:'DOM geometry; real browser and human review are separate'}));
 window.close();

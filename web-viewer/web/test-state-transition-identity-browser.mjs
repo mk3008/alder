@@ -15,6 +15,7 @@ export async function verifyStateTransitionIdentity(browser){
    await page.locator('[data-explorer-key="states:'+st.objectId+'"]').click();await page.locator('#states-workspace .state-diagram').waitFor();
    for(const theme of ['light','dark']){
     if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();
+    const colors=await page.locator('#states-workspace .diagram-viewport').evaluate(viewport=>({background:getComputedStyle(viewport).backgroundColor,stroke:getComputedStyle(viewport.querySelector('.state-diagram-edge-label')).stroke}));assert.equal(colors.stroke,colors.background,'state label halo follows the canvas background in both themes');
     const edges=await page.locator('#states-workspace .state-diagram path.edge[data-transitions]').evaluateAll(es=>es.map(e=>e.dataset.transitions));
     assert.deepEqual(edges.flatMap(e=>e.split(' ')).sort(),st.transitions.map(t=>t.sourceId).sort(),'every explicit transition remains represented');
     for(const t of st.transitions.filter(t=>t.fromId!==t.toId))assert(edges.includes(t.sourceId),'different-state transitions keep independent routes: '+t.sourceId);
@@ -32,8 +33,14 @@ export async function verifyStateTransitionIdentity(browser){
      return{labelPairs:boxes.flatMap((b,i)=>boxes.slice(i+1).filter(c=>overlap(b,c)).map(c=>[b.id,c.id])),cardPairs:boxes.filter(b=>nodes.some(n=>overlap(b,n))).map(b=>b.id)};
     });
     assert.deepEqual(native.labelPairs,[],'native caption glyphs do not overlap');assert.deepEqual(native.cardPairs,[],'native caption glyphs do not cover states');
-    const loopPaths=await page.locator('#states-workspace .state-diagram path.edge[data-transitions~="T08"],#states-workspace .state-diagram path.edge[data-transitions~="T19"]').evaluateAll(es=>es.map(e=>({d:e.getAttribute('d'),ids:e.dataset.transitions,exception:e.classList.contains('exception')})));
-    assert.equal(loopPaths.length,1);assert.deepEqual(loopPaths[0].ids.split(' ').sort(),['T08','T19']);assert(loopPaths[0].exception,'the two draft exceptions share one dashed loop');
+    const loopPaths=await page.locator('#states-workspace .state-diagram path.edge[data-transitions~="T08"],#states-workspace .state-diagram path.edge[data-transitions~="T19"]').evaluateAll(es=>es.map(e=>({d:e.getAttribute('d'),ids:e.dataset.transitions,self:e.classList.contains('state-self-loop'),dash:getComputedStyle(e).strokeDasharray})));
+    assert.equal(loopPaths.length,1);assert.deepEqual(loopPaths[0].ids.split(' ').sort(),['T08','T19']);assert(loopPaths[0].self);assert.notEqual(loopPaths[0].dash,'none','the two draft exceptions share one dashed loop');
+    const normalSelf=page.locator('#states-workspace .state-diagram path.edge[data-transitions~="T17"]');assert.equal(await normalSelf.count(),1);assert.equal(await normalSelf.evaluate(e=>e.classList.contains('state-self-loop')),true);assert.notEqual(await normalSelf.evaluate(e=>getComputedStyle(e).strokeDasharray),'none','a normal self-loop is dashed too');
+    for(const [selected,front,back] of [['下書き','T06','T09'],['差戻し','T09','T06']]){
+     await page.locator(`#states-workspace [data-state="${selected}"]`).press('Enter');
+     const ordering=await page.locator('#states-workspace .state-diagram').evaluate((svg,{front,back})=>{const children=[...svg.children],edge=id=>svg.querySelector(`path.edge[data-transitions~="${id}"]`),a=edge(front),b=edge(back),painted=children.filter(e=>e.matches('path.edge,[data-exception-paint]')),selected=painted.filter(e=>e.classList.contains('review-related')),other=painted.filter(e=>!e.classList.contains('review-related')),content=children.filter(e=>e.matches('[data-state],.state-diagram-edge-label'));return{front:children.indexOf(a),back:children.indexOf(b),frontMarker:a.getAttribute('marker-end'),backMarker:b.getAttribute('marker-end'),selectedAfterOthers:Math.max(...other.map(e=>children.indexOf(e)))<Math.min(...selected.map(e=>children.indexOf(e))),behindContent:Math.max(...painted.map(e=>children.indexOf(e)))<Math.min(...content.map(e=>children.indexOf(e)))};},{front,back});
+     assert(ordering.front>ordering.back,'highlighted arrow is painted over the unrelated arrow');assert.match(ordering.frontMarker,/related-arrow/);assert.match(ordering.backMarker,/transition-arrow/);assert(ordering.selectedAfterOthers);assert(ordering.behindContent);
+    }
     await page.locator('#states-workspace [data-state="購入準備済み"]').press('Enter');
     for(const [id,related]of [['T12',true],['T14',false]])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(v=>v===related));
     await page.locator('#states-workspace [data-state="差戻し"]').press('Enter');
@@ -63,9 +70,11 @@ export async function verifyStateTransitionIdentity(browser){
    await page.locator('[data-explorer-key="states:'+st.objectId+'"]').click();await page.locator('#states-workspace [data-transition-id="T90"]').waitFor();
    const normal=page.locator('#states-workspace path.edge[data-transitions~="T90"]'),exception=page.locator('#states-workspace path.edge[data-transitions~="T08"]');
    assert.equal(await normal.count(),1);assert.equal(await exception.count(),1);
-   assert.equal(await normal.evaluate(e=>e.classList.contains('exception')),false);assert.equal(await exception.evaluate(e=>e.classList.contains('exception')),true);
+   assert.deepEqual((await normal.getAttribute('data-transitions')).split(' ').sort(),['T08','T19','T90']);assert.equal(await normal.getAttribute('d'),await exception.getAttribute('d'));
+   assert.equal(await normal.evaluate(e=>e.classList.contains('state-self-loop')),true);assert.notEqual(await normal.evaluate(e=>getComputedStyle(e).strokeDasharray),'none');
    await page.locator('#states-workspace [data-state="下書き"]').press('Enter');
    for(const id of ['T08','T19','T90'])assert((await page.locator(`#states-workspace [data-transition-id="${id}"] tspan`).evaluateAll(es=>es.map(e=>e.classList.contains('review-related')))).every(Boolean));
+   assert.equal(await normal.evaluate(e=>e.classList.contains('review-related')),true);assert(await page.locator('#states-workspace [data-exception-paint][data-transitions~="T90"].review-related').count()>0);
    const zoom=page.locator('#states-workspace .canvas-zoom'),before=await zoom.innerText();await page.locator('#states-workspace .zoom-in').click();
    assert.notEqual(await zoom.innerText(),before);assert.equal(await normal.count(),1);assert.equal(await exception.count(),1);await page.locator('#states-workspace .zoom-out').click();
    assert.deepEqual(errors,[]);results.push({width,themes:['light','dark'],transitions:st.transitions.length,oneCaptionPerTransition:true,conditionSpecificSelection:true,mixedSelfLoops:true,zoom:true,invalidReadPreserved:true,reload:true});

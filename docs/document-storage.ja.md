@@ -26,7 +26,7 @@ BDにはObjectの名称・Scope・Icon・Information、ActivityのWhat（name）
 
 Checkには既存Check ID（`checkId`）、内部の安定ID（`id`）、タイトル、人間レビュー状態、条件/期待結果/一般保証・根拠・導出・AI確度・関連業務・Test証拠・未決/選択肢を保持する。内部IDを分けるため、複数Check文書で同じ表示Check IDを使えても文書間で混線しない。同一文書内のCheck ID重複は拒否する。
 
-共通保証のproseと比較表のcolumns/rows、見出しリンクの参照先IDを保持する。例だけでは一般保証を代替できない。共有Checkは一本文・一レビュー状態を複数Activityのindexから参照する。未割当Checkは`sections[].activityId: null`として残し、Activityを推測しない。
+共通保証のproseと比較表のcolumns/rows、見出しリンクの参照先IDを保持する。例だけでは一般保証を代替できない。ただし機能に割り当てられ、同じ業務設計のCheckを明示参照する可否判定表だけを置く場合、その表の枠に凡例などの文章を追加する必要はない。参照先のCheckには条件と期待結果などの実質的な保証が必要である。共有Checkは一本文・一レビュー状態を複数Activityのindexから参照する。未割当Checkは`sections[].activityId: null`として残し、Activityを推測しない。
 
 0.1/0.2のWhoは短いロール名の文字列を保持する。0.3ではWho原文とRole ID参照を区別し、Roleの名称・5色を一元化する。役割の同義語や複合表現を自動統合しない。
 

@@ -6,6 +6,7 @@ import {parseDesign} from '../src/graph.ts';
 import {activityDesign} from '../src/activities.ts';
 import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 import {useLegacyCurrentSample} from './legacy-current-sample-browser.mjs';
+import {showTestChecks,showBusinessOverview} from './test-spec-explorer-browser.mjs';
 const source=readFileSync('../business-design/alder/README.md','utf8'),design=parseDesign(source),activities=design.activityOrder.map(id=>design.graph.nodes.find(n=>n.id===id));
 export async function verifyActivityWorkspace(browser){
  const results=[];mkdirSync('web/evidence/activity-workspace',{recursive:true});
@@ -43,7 +44,7 @@ export async function verifyActivityWorkspace(browser){
    await page.locator('.tab.active .close').click();await saved();assert.equal(await page.locator('.tab').count(),1);
    await scope();const hidden=await ids();await saved();await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.deepEqual(await ids(),hidden,'scope visibility survives aggregate restore');await scope();assert.ok((await ids()).includes('画面設計'));
    await ensureDocumentActions(page);await page.locator('#open-checks').click();await page.locator('#check-open-sample').click();await saved();
-   await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await selectGraphNode(page,'業務設計');if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('[data-check-id="SAMPLE-01"]').waitFor();
+   await showBusinessOverview(page);await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');await selectGraphNode(page,'業務設計');if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail .right-drawer-tabs').count(),0);await showTestChecks(page,'業務設計');await page.locator('[data-check-id="SAMPLE-01"]').waitFor();await showBusinessOverview(page);await page.locator('.node[data-activity="業務設計"] .activity-open').first().press('Enter');
    await saved();const record=await page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('alder-web-viewer',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('session'),q=tx.objectStore('session').get('current');tx.oncomplete=()=>{db.close();resolve(q.result);};};r.onerror=()=>reject(r.error);}));assert.equal(record.format,3);assert.equal(record.document.design.markdown,source);assert.ok(record.document.checks);assert.ok(record.views.every(v=>!('design' in v)&&!('draft' in v)&&!('checks' in v)));
    if(width===1280){
     // Close the initiating view while a real intercepted Check request waits.

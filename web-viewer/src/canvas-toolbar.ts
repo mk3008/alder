@@ -1,4 +1,4 @@
-import {createElement,Settings,LockKeyhole,LockKeyholeOpen,Minus,Plus,SquareArrowOutUpRight} from 'lucide';
+import {createElement,Settings,LockKeyhole,LockKeyholeOpen,Minus,Plus} from 'lucide';
 import styles from './canvas-toolbar.css?url';
 /** Use the same Lucide paths and stylesheet inside the isolated concept canvas. */
 export function styleConceptToolbar(doc:Document){
@@ -9,10 +9,9 @@ export function styleConceptToolbar(doc:Document){
  put('.graph-settings-toggle',Settings);put('.layout-lock',LockKeyhole,'lock-closed');put('.layout-lock',LockKeyholeOpen,'lock-open');put('.zoom-out',Minus);put('.zoom-in',Plus);
 }
 
-/** Populate shape commands with Lucide without duplicating icon paths in the fixture. */
+/** Keep card navigation distinct from selection without an external-link icon. */
 export function styleConceptNodes(doc:Document){
  for(const button of Array.from(doc.querySelectorAll<HTMLButtonElement>('.concept-open-action'))){
-  if(button.querySelector('svg'))continue;
-  button.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));
+  if(button.textContent!=='開く'||button.querySelector('svg'))button.replaceChildren('開く');
  }
 }

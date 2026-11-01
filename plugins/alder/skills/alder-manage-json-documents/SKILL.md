@@ -1,6 +1,6 @@
 ---
 name: alder-manage-json-documents
-description: Create, update or review Alder typed JSON Business Design/Check/explicit partial State Transition package, as the default for new artifacts, or explicitly convert existing Markdown to JSON. Use for 「Alderで業務設計をJSONで草案にして」「このJSONの業務を追加・改名して」「JSON正本からCheckを作って」「AlderのMDをJSONへ変換して」. Preserve human agreement gates and existing Markdown workflows. Not general lifecycle/concept model specification, Viewer implementation, or business approval.
+description: Create, update or review Alder typed JSON Business Design/Check/explicit partial State Transition package, link existing concept examples to Checks, or explicitly convert existing Markdown to JSON. Use for 「Alderで業務設計をJSONで草案にして」「このJSONの業務を追加・改名して」「JSON正本からCheckを作って」「AlderのMDをJSONへ変換して」. Preserve human agreement gates and existing Markdown workflows. Not general lifecycle/concept model specification, Viewer implementation, or business approval.
 license: MIT
 ---
 
@@ -14,10 +14,20 @@ license: MIT
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。
 3. [同梱runtime](scripts/document_storage/author-cli.mjs)のruntimeを実行する。直接JSONはNode24以上、MD変換はPython3.12以上も必要。利用不能なら報告してその操作を止める。repo clone・外部API・ランタイムの無断導入を要求しない。
 4. 作成はIDを割り当ててJSON候補を直接書き、validate→create→保存後inspect/validateを行う。更新は既存IDを維持し、文書/package版とファイルhashを照合するcommitを使う。参照・版ずれ、既存lock、競合、未対応欄を修正したふりで通さない。
-5. BDレビューでは[品質](references/business-design-quality-check.ja.md)、[相関](references/business-design-correlation-check.ja.md)、[漏れ](references/business-design-omission-check.ja.md)、[Findings](references/design-findings.ja.md)を適用する。review-onlyは読取り・検査・指摘だけにし、保存・状態変更しない。
+5. BDレビューでは[品質](references/business-design-quality-check.ja.md)、[相関](references/business-design-correlation-check.ja.md)、[漏れ](references/business-design-omission-check.ja.md)、[Findings](references/design-findings.ja.md)を適用する。未完了の作業を保存して後から続けると明記されていれば、誰が対象を特定・選択し、どの業務で再開し、提出・終了まで何をするかを文書全体からたどる。最後の状態遷移があるだけで再開経路を補完せず、業務の継続を妨げる欠落は根拠付きで指摘する。特定の画面や未記載の権限を推測しない。review-onlyは読取り・検査・指摘だけにし、保存・状態変更しない。
 6. Check操作では[Check契約](references/check-item-traceability.md)を読み、**正確なBD版に対する人間合意を先に確認**する。なければCheck草案/更新を止め、必要な業務判断を求める。[共通の意味保持圧縮指針](references/check-item-traceability.md#meaning-preserving-condition-compression)を条件組合せの検討・草案・更新・Consistency reviewに適用する。共有保証・例・根拠・Test証拠・既存ID/人間状態を保持する。確認済みへの変更は該当期待への実際の人間発言と候補hashを明示し、テストや無回答から推定しない。basedOn.verificationはunverifiedのままにする。
 7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONの移行は候補作成と明示migration commitに分け、原本・人間Checkゲートを保持する。
 8. 返却前に全体Schema/参照/版と要求・業務意味の対応を別々に点検する。Checkは保存候補とBD全体を使って、原典→保証/例・全index/共有参照を確認するread-onlyのConsistency reviewを別工程で行う。独立readerがない場合は同じ文脈で行ったと開示する。根拠のある範囲だけ修正し、再検査する。人間にJSONの手修正を委ねない。
+
+既存の概念データ例をCheckの具体例として使う依頼では、[JSON操作ガイド](references/plugin-json-authoring.ja.md)のCheck参照・明示移行に従う。対応先を名前やデータ値から推測せず、参照検査と意味の整合レビューを分ける。例をCheckに結び付ける操作も、Check新規作成や内容変更の合意ゲートを免除しない。
+
+ディシジョンテーブルは上から順に見て最初に該当する行を用いる。‐ はその行の条件を問わない意味であり、同上ではない。前の条件で扱っていない値は、適用範囲と結果の根拠が明確なら「それ以外」で示せる。同じ行に複数のCheck IDを置いても独立した保証を保持し、すべてが同時に成立すると扱わない。列の順序を変えても業務上の結論を保ち、表の読み順を実装の評価順として強制しない。未決の条件に結果を補わない。
+
+可否判定は対象操作の入力・引数または操作前にシステムが観測できる状態を条件とし、操作後に観測できる結果を示す。利用者が操作を行う理由、システム外でのファイル紛失、操作後の失敗を、明示的な入力や記録済み状態なしに条件にしない。例えばCSVの紛失は再出力のきっかけであり、条件は対象の購入準備番号や確定状態から確認する。失敗の注入や同時操作は、準備・操作・観測する保証を再現可能なシナリオとして記述する。未定義のエラー応答や業務ルールは推測しない。
+
+業務設計の各Resultと例外・別ルートについて、対応するCheck／テスト仕様の根拠を照合する。複数の対応先があれば保持し、名称だけで対応を推測しない。仕様が存在しない場合と、既存仕様との対応が未確認の場合を区別し、不足と未決を人間が確認できるようにする。Checkの存在をテストや人間合意の完了とは扱わない。
+
+Viewerの参考案で項目別の対応を示す場合は、既存の`presentation.activityViews[].testSpecificationFunctions[]`に`businessSections`を追加し、`kind: "result"`、または`kind: "exception"`と同じActivityの`exceptionId`、実際に対応する`pages`（`decision`／`result`）を記録する。実際に未作成と確認した項目のみ、同じActivity viewの`uncreatedTestSections`に`result`または例外IDを記録する。参照の妥当性と意味対応は別々に確認し、名前の一致だけでは追加しない。別ルートと不成立が明示されている場合は、同じActivity viewの `businessVariations` に同じActivityの `exceptionId` と `kind: "alternative"` または `"exception"` を記録できる。名前やテストの存在から種別を推測しない。これは既存の自由形式presentationを使う試作上の表現であり、正式なJSON標準の採用や人間合意を意味しない。
 
 明示的なMD変換は[同梱converter](scripts/document_storage/cli.mjs)のconvertを使う。元MDを保持し、旧MD全文の同梱・JSON→MD同期を行わない。購買研究草案の未知見出しやCheck原典版の不一致は診断して止める。
 

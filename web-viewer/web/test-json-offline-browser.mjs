@@ -4,6 +4,8 @@ import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {packageViewerPreview} from '../../tools/viewer-preview.mjs';
+import {openExplorerGroup} from './explorer-browser.mjs';
+import {showTestChecks} from './test-spec-explorer-browser.mjs';
 export async function verifyJSONOfflinePreview(browser){
  const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8'),pkg=JSON.parse(raw),head=process.env.REVIEW_HEAD??execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),pr=process.env.REVIEW_PR??'279';
  const {offline,manifest}=packageViewerPreview({dist:resolve('dist'),output:resolve('review-package'),head,pr,fixture:resolve('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json')});
@@ -13,11 +15,12 @@ export async function verifyJSONOfflinePreview(browser){
   await page.locator('#fallback').setInputFiles({name:'gate-b.json',mimeType:'application/json',buffer:Buffer.from(raw)});await page.locator('.node').first().waitFor();await page.waitForFunction(()=>document.querySelector('#app')?.dataset.saveState==='saved');assert.equal(await page.locator('.node').count(),6);
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('.node').count(),6);
   const databases=await page.evaluate(()=>indexedDB.databases());assert.ok(databases.some(d=>d.name===`alder-web-viewer:preview:pr-${pr}:${head}`));assert.ok(!databases.some(d=>d.name==='alder-web-viewer'));
-  if(await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();await page.locator(`.node[data-node="${pkg.documents[0].activities[0].id}"]`).click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();await page.locator('#detail-mode-checks').click();assert.ok((await page.locator('.json-checks').innerText()).includes('意味対応は未確認'));
+  if(await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();await page.locator(`.node[data-node="${pkg.documents[0].activities[0].id}"]`).click();if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail .right-drawer-tabs').count(),0);await showTestChecks(page,pkg.documents[0].activities[0].id);assert.ok((await page.locator('.json-checks').innerText()).includes('CI-001'));
   mkdirSync('web/evidence/json-document',{recursive:true});await page.screenshot({path:'web/evidence/json-document/offline-preview-393.png'});
   const unified=readFileSync('../work/concept-review/issue-133/versions/purchase-v3-beta.json');
   await page.locator('#fallback').setInputFiles({name:'unified.json',mimeType:'application/json',buffer:unified});
   if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+  await openExplorerGroup(page,'concept');
   await page.locator('[data-explorer-key="concept:overview"]').click();
   const frame=page.frameLocator('iframe[data-concept-view="overview"]');await frame.locator('[data-node="request"]').waitFor();
   if(await page.locator('#drawer').getAttribute('aria-expanded')==='true')await page.locator('#drawer').click();
