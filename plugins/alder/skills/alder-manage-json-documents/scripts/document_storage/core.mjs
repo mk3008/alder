@@ -137,6 +137,14 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     if(g.graph.subsystemViews)validateSubsystemViews(g.graph.subsystemViews,nodes);
     const capabilities=unique(g.capabilities,'capability'),samples=unique(g.capabilities.flatMap(c=>c.samples),'sample');unique(g.limitations,'limitation');unique(g.structureStatements,'structure statement');
     for(const statement of g.structureStatements){for(const id of statement.sampleIds)has(samples,id,'sample');for(const ref of statement.sourceRefs)sourceRef(ref);}
+    for(const cap of capabilities.values())if(cap.testSpecification){
+     const spec=cap.testSpecification;
+     for(const [name,ids]of Object.entries(spec))demand(new Set(ids).size===ids.length,'Duplicate function specification reference: '+name);
+     const sameSource=(id,type)=>{const value=target(id,type),doc=target(owner.get(id),'document');demand(doc.kind==='checkItems'&&doc.basedOn.documentId===bd.id&&doc.basedOn.revision===bd.revision,'Function Check source mismatch: '+id);return {value,doc};};
+     for(const id of [...spec.decisionCheckIds,...spec.resultCheckIds])sameSource(id,'check');
+     for(const id of spec.decisionExampleIds){const {value,doc}=sameSource(id,'example'),ids=exampleCheckIds(doc,value);demand(ids.length>0,'Function decision table needs a Check: '+id);demand(ids.every(checkId=>spec.decisionCheckIds.includes(checkId)),'Function decision table Check is not assigned: '+id);}
+     for(const id of spec.sampleIds){const sample=cap.samples.find(value=>value.id===id);demand(sample,'Function result sample belongs to another capability: '+id);demand(sample.checkIds.some(checkId=>spec.resultCheckIds.includes(checkId)),'Function result sample needs a result Check: '+id);demand(sample.checkIds.every(checkId=>spec.resultCheckIds.includes(checkId)||spec.decisionCheckIds.includes(checkId)),'Function result sample Check is not assigned: '+id);}
+    }
     for(const cap of capabilities.values())for(const sample of cap.samples){
      if(d.schemaVersion==='0.2'){
       demand(sample.checkIds.length>0,'Sample needs a Check: '+sample.id);

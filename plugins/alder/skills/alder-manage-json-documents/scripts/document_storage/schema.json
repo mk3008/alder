@@ -5770,6 +5770,46 @@
                         ],
                         "additionalProperties": false
                       }
+                    },
+                    "testSpecification": {
+                      "type": "object",
+                      "properties": {
+                        "decisionExampleIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                          }
+                        },
+                        "decisionCheckIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                          }
+                        },
+                        "resultCheckIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                          }
+                        },
+                        "sampleIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "decisionExampleIds",
+                        "decisionCheckIds",
+                        "resultCheckIds",
+                        "sampleIds"
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "required": [
