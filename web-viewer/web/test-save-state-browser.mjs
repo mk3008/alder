@@ -157,7 +157,10 @@ export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={})
   cases.push({name,run:async()=>{
    if(!measure)return withPage(browser,url,run,{...options,traceLabel:name,traceMode:'after'});
    let first;const modes=['before','after','after','before','before','after'];
-   for(const [trial,traceMode] of modes.entries()){const value=await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial,traceMode});if(trial===0)first=value;}
+   for(const [trial,traceMode] of modes.entries()){
+    const started=performance.now();const value=await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial,traceMode});
+    console.log('SAVE_STATE_CASE_SAMPLE '+JSON.stringify({case:name,trial,mode:traceMode,durationMs:Math.round(performance.now()-started)}));if(trial===0)first=value;
+   }
    if(draft){
     const probe=async({page,departure})=>{await openSourceAction(page,'open-text');await page.locator('#source-text').fill('Synthetic controlled draft');await guard(page,true,['draft']);return departure('dismiss');};
     const old=await withPage(browser,url,probe,{traceLabel:'injected-failure',traceMode:'before',injectNavError:true});
