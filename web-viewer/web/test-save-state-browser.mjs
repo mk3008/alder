@@ -5,6 +5,7 @@ import {ensureDocumentActions} from './test-tab-strip-browser.mjs';
 // controls hold REAL transactions alive; they never replace product modules,
 // transaction completion, generation comparison, or a stored document value.
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import {runBrowserCases} from './browser-cases.mjs';
 import {concurrencyBodies,changedMarkdown,readConcurrencyRecord,seedLegacyRecord} from './test-session-concurrency-browser.mjs';
 
@@ -72,7 +73,32 @@ async function readingError(page){
 }
 async function failedDocument(page,body=concurrencyBodies.shared){await page.evaluate(()=>__saveStateControl.failWrites=1);await openText(page,body);await submit(page);await flush(page);await stateIs(page,'error');await guard(page,true,['error']);}
 
-async function withPage(browser,url,run,{viewport={width:1280,height:960},controls={},traceLabel='',traceTrial=0}={}){
+// Wait for the native dialog result, not a navigation event that cannot occur after dismissal.
+async function canceledReload(page,context,seen,marker){
+ const session=await context.newCDPSession(page);let timer,onClosed;
+ try{
+  await session.send('Page.enable');
+  const closed=new Promise((resolve,reject)=>{
+   onClosed=event=>resolve(event);session.once('Page.javascriptDialogClosed',onClosed);
+   timer=setTimeout(()=>reject(Error('Native departure dialog did not close')),7000);
+  });
+  const [,event]=await Promise.all([session.send('Page.reload'),closed,seen]);
+  assert.equal(event.result,false,'the native dismissal must cancel navigation');
+  return {loaded:(await page.evaluate(()=>globalThis.__departureIdentity))!==marker};
+ }finally{clearTimeout(timer);if(onClosed)session.off('Page.javascriptDialogClosed',onClosed);await session.detach();}
+}
+
+function sampleProcessTree(){
+ try{
+  const raw=execFileSync('ps',['-eo','pid=,ppid=,rss=,cputimes='],{encoding:'utf8',timeout:3000});
+  const rows=raw.trim().split('\n').map(line=>line.trim().split(/\s+/).map(Number));
+  const ids=new Set([process.pid]);let previous;
+  do{previous=ids.size;for(const [pid,ppid] of rows)if(ids.has(ppid))ids.add(pid);}while(ids.size!==previous);
+  const selected=rows.filter(([pid])=>ids.has(pid));
+  return {rssKiB:selected.reduce((sum,row)=>sum+row[2],0),cpuSeconds:selected.reduce((sum,row)=>sum+row[3],0),processes:selected.length};
+ }catch(error){return {error:String(error.message)};}
+}
+async function withPage(browser,url,run,{viewport={width:1280,height:960},controls={},traceLabel='',traceTrial=0,traceMode='after',injectNavError=false,forceDialogAccept=false}={}){
  const context=await browser.newContext({viewport}),errors=[],external=[],dialogs=[];let expected,activeTrace;
  const origin=new URL(url).origin;
  try{
@@ -82,17 +108,41 @@ async function withPage(browser,url,run,{viewport={width:1280,height:960},contro
    if(activeTrace)activeTrace.dialogMs=Math.round(performance.now()-activeTrace.started);
    dialogs.push({type:dialog.type(),action:expected?.action??'unexpected'});
    const request=expected;expected=undefined;
-   try{assert.equal(dialog.type(),'beforeunload');if(!request)throw Error('Unexpected departure dialog');await dialog[request.action]();if(activeTrace)activeTrace.respondedMs=Math.round(performance.now()-activeTrace.started);request.resolve();}catch(error){errors.push(error.message);try{await dialog.accept();}catch{}request?.reject(error);}
+   try{assert.equal(dialog.type(),'beforeunload');if(!request)throw Error('Unexpected departure dialog');await dialog[forceDialogAccept&&request.action==='dismiss'?'accept':request.action]();if(activeTrace)activeTrace.respondedMs=Math.round(performance.now()-activeTrace.started);request.resolve();}catch(error){errors.push(error.message);try{await dialog.accept();}catch{}request?.reject(error);}
   });});
   const page=await context.newPage();await page.goto(url);await ready(page);
+  if(injectNavError&&traceMode==='after'){
+   const create=context.newCDPSession.bind(context);
+   context.newCDPSession=async target=>{
+    const session=await create(target),send=session.send.bind(session);
+    session.send=(method,...args)=>{
+     if(method!=='Page.reload')return send(method,...args);
+     const injected=new Promise((_,reject)=>target.once('dialog',()=>reject(Error('Injected navigation failure'))));
+     return Promise.all([send(method,...args),injected]).then(([value])=>value);
+    };return session;
+   };
+  }
   const departure=async (action,trigger)=>{
-   const trace=activeTrace={case:traceLabel,trial:traceTrial,action,trigger:!!trigger,started:performance.now()};
+   const trace=activeTrace={case:traceLabel,trial:traceTrial,mode:traceMode,action,trigger:!!trigger,started:performance.now(),injectNavError,forceDialogAccept};
+   const cpuStart=process.cpuUsage();trace.resourceStart=sampleProcessTree();let peak=trace.resourceStart.rssKiB??0;
+   const samplerTimer=setInterval(()=>{const sample=sampleProcessTree();if(sample.rssKiB)peak=Math.max(peak,sample.rssKiB);},250);samplerTimer.unref();
    // Real click/fill user activation in callers enables native beforeunload.
    let timeout;const seen=new Promise((resolve,reject)=>{expected={action,resolve,reject};timeout=setTimeout(()=>reject(Error('Expected actual beforeunload dialog did not appear')),7000);});
    const marker=await page.evaluate(()=>globalThis.__departureIdentity??=(Math.random().toString()));
    trace.navigationStartedMs=Math.round(performance.now()-trace.started);
-   const navigation=(trigger?trigger():page.reload()).then(()=>{trace.navigationOutcome='resolved';trace.navigationMs=Math.round(performance.now()-trace.started);return {loaded:true};},error=>{trace.navigationOutcome='rejected';trace.navigationMs=Math.round(performance.now()-trace.started);trace.errorName=error.name;trace.errorMessage=String(error.message).split('\n')[0];return {loaded:false,error:error.message};});
-   try{await seen;trace.seenMs=Math.round(performance.now()-trace.started);const result=await navigation;if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{trace.finishedMs=Math.round(performance.now()-trace.started);console.log('SAVE_STATE_DEPARTURE_TRACE '+JSON.stringify(trace));activeTrace=undefined;clearTimeout(timeout);expected=undefined;}
+   const fault=injectNavError&&traceMode==='before'?new Promise((_,reject)=>page.once('dialog',()=>reject(Error('Injected navigation failure')))):null;
+   let operation;
+   if(traceMode==='after'&&action==='dismiss'&&!trigger)operation=canceledReload(page,context,seen,marker);
+   else{
+    let original=trigger?trigger():page.reload();if(fault)original=Promise.race([original,fault]);
+    operation=traceMode==='before'?original.then(()=>({loaded:true}),error=>{trace.errorName=error.name;trace.errorMessage=String(error.message).split('\n')[0];return {loaded:false,error:error.message};}):original.then(()=>({loaded:true}));
+   }
+   const navigation=operation.then(result=>{trace.navigationOutcome=result.loaded?'resolved':'not-loaded';trace.navigationMs=Math.round(performance.now()-trace.started);return result;},error=>{trace.navigationOutcome='rejected';trace.navigationMs=Math.round(performance.now()-trace.started);trace.errorName=error.name;trace.errorMessage=String(error.message).split('\n')[0];throw error;});
+   try{const [,result]=await Promise.all([seen,navigation]);trace.seenMs=trace.respondedMs;if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{
+    clearInterval(samplerTimer);trace.resourceEnd=sampleProcessTree();trace.sampledPeakRssKiB=Math.max(peak,trace.resourceEnd.rssKiB??0);
+    const cpu=process.cpuUsage(cpuStart);trace.nodeCpuMs=Math.round((cpu.user+cpu.system)/1000);trace.finishedMs=Math.round(performance.now()-trace.started);
+    console.log('SAVE_STATE_DEPARTURE_TRACE '+JSON.stringify(trace));activeTrace=undefined;clearTimeout(timeout);expected=undefined;
+   }
   };
   const result=await run({page,context,departure,dialogs,database:databaseFor(url)});
   assert.deepEqual(errors,[],'no page errors or unexpected dialogs');assert.deepEqual(external,[],'no external network calls');return result;
@@ -102,11 +152,24 @@ async function withPage(browser,url,run,{viewport={width:1280,height:960},contro
 export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={}){
  const target=new URL(url);assert.ok(['localhost','127.0.0.1','[::1]'].includes(target.hostname),'save-state gate requires an isolated local server');
  const cases=[];const add=(name,run,options)=>{
-  const measure=name==='save state: native draft reload is dismissible and explicitly discardable'||name==='save state: native pending write warns, dismissal retains it, completion clears warning';
+  const draft=name==='save state: native draft reload is dismissible and explicitly discardable';
+  const measure=draft||name==='save state: native pending write warns, dismissal retains it, completion clears warning';
   cases.push({name,run:async()=>{
-   const result=await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:0});
-   if(measure)for(const trial of [1,2])await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial});
-   return result;
+   if(!measure)return withPage(browser,url,run,{...options,traceLabel:name,traceMode:'after'});
+   let first;const modes=['before','after','after','before','before','after'];
+   for(const [trial,traceMode] of modes.entries()){const value=await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial,traceMode});if(trial===0)first=value;}
+   if(draft){
+    const probe=async({page,departure})=>{await openSourceAction(page,'open-text');await page.locator('#source-text').fill('Synthetic controlled draft');await guard(page,true,['draft']);return departure('dismiss');};
+    const old=await withPage(browser,url,probe,{traceLabel:'injected-failure',traceMode:'before',injectNavError:true});
+    assert.equal(old.loaded,false);console.log('SAVE_STATE_NEGATIVE old-unexpected-error-was-accepted');
+    await assert.rejects(withPage(browser,url,probe,{traceLabel:'injected-failure',traceMode:'after',injectNavError:true}),/Injected navigation failure/);
+    console.log('SAVE_STATE_NEGATIVE new-unexpected-error-rejected');
+    await assert.rejects(withPage(browser,url,probe,{traceLabel:'forced-accept',traceMode:'after',forceDialogAccept:true}),/native dismissal must cancel navigation/);
+    console.log('SAVE_STATE_NEGATIVE wrong-native-action-rejected');
+    await assert.rejects(withPage(browser,url,async({departure})=>departure('dismiss'),{traceLabel:'no-dialog',traceMode:'after'}),/Expected actual beforeunload dialog did not appear|Native departure dialog did not close/);
+    console.log('SAVE_STATE_NEGATIVE missing-dialog-rejected');
+   }
+   return first;
   }});
  };
  add('save state: clean restore and unchanged lifecycle do not warn or write',async({page,database,dialogs})=>{
