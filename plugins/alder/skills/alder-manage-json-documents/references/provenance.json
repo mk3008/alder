@@ -1,20 +1,20 @@
 {
-  "alder_source_revision": "e600f4d31eeee76ee847e847aafaddb8c2860297",
+  "alder_source_revision": "8a0b779ebb6b316b24b71e7383bd1c87a0c48e8d",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "06069103fadfe398c479bce72d2b66d409585c9443190631e0c42f1b0beb0c20",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
-    "docs/check-item-traceability.md": "e248d561cba693871638108f664006c811509357f9b2b0b9e72a37565f724258",
+    "docs/check-item-traceability.md": "5d12a583284076b27f0b32d89167f6c767c7c375e8d4e2d29de03c70205fccda",
     "docs/business-design-quality-check.ja.md": "31de5ed1e52fe9e863f14022e0fad2ff533abb0b3684aa0a56c42ebe873fb5ae",
     "docs/business-design-correlation-check.ja.md": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "ecd279549807baae8157b8335da7d9f4123be579f64dd425a8b6321e217abb0b"
+    "docs/json-native-contract.ja.md": "d429817ddffcfaf31bc45069974f7843158fa93d67f1266514301ec36fc5f078"
   },
   "scripts": {
-    "tools/document_storage/core.mjs": "977c530d2ca7e59e61142ab8c5d182b496c6599fd878244985c1dc60a2a0cfff",
+    "tools/document_storage/core.mjs": "49218ac8919ecc46cf42ba2884b08bb45f614d3f4bd20d73bb09af00112b8a1f",
     "tools/document_storage/schema.mjs": "9a6f63990f5b679ea807d873e56e0c5895aae28d1b253d78c3af63f4141546df",
     "tools/document_storage/schema.json": "0ca5579fe212d1bf088b72a0930da305ed4a87c684fea145c4fc107e9d934ea3",
     "tools/document_storage/edit.mjs": "a8a91d2c2027b6eb3769b1618a8aeaccb46656815cf14548f5bf8741b5ad3834",

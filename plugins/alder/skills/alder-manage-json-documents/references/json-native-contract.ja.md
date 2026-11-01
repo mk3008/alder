@@ -18,7 +18,9 @@
 
 従来の `checkItems` 内の比較表も、表のセルや共有保証からCheck IDを明示参照するか、Checkから対象の保証／例を明示参照する。単に同じActivity節に置くだけでは対応とみなさない。未接続の比較表を含む旧文書は読み取れるが、そのまま保存せず、ViewerでもCheckの例として表示しない。
 
-機能別の可否判定と処理結果を分けて表示する場合、`conceptModel/0.2` の該当 `capabilities[]` に任意の `testSpecification` を置ける。`decisionExampleIds` は同じBD版のCheck文書にある比較表、`decisionCheckIds` は判定のCheck、`resultCheckIds` は処理結果のCheck、`sampleIds` は同じ機能にある結果説明用データ例を参照する。表が参照するCheckは判定のCheckに含め、結果例は少なくとも一つの結果Checkを参照する。例が判定のCheckも参照する場合は、その判定Checkにも到達できる。可否のみの機能に結果例は要求しない。従来の `testSpecification` を持たない文書も読める。この欄を知らない旧検証器は新しい欄を持つJSONを受理できない。
+機能別の可否判定と処理結果を分けて表示する場合、`conceptModel/0.2` の該当 `capabilities[]` に任意の `testSpecification` を置ける。`decisionExampleIds` は同じBD版のCheck文書にある比較表、`decisionCheckIds` は判定のCheck、`resultCheckIds` は処理結果のCheck、`sampleIds` は同じ機能にある結果説明用データ例を参照する。表が参照するCheckは判定のCheckに含め、結果例は少なくとも一つの結果Checkを参照する。結果は可否判定が可の場合の処理を表し、特定の判定行やCheck IDを実行条件として結び付けない。新たな結果例には、それが説明する結果Checkを記載し、判定行を示すだけの判定専用Checkは追加しない。一つのCheckが判定と結果の両方を記述する場合は、双方から参照してよい。従来の判定専用Check参照を含む結果例も読み取れるが、その参照を実行条件と解釈しない。可否のみの機能に結果例は要求しない。従来の `testSpecification` を持たない文書も読める。この欄を知らない旧検証器は新しい欄を持つJSONを受理できない。
+
+可否判定表の条件値 `‐` は、その行では値を問わないことを表す。Viewerは必要な表に「‐＝値不問。」を共通表示するため、JSONに凡例を重複して記載しない。業務上の前提、表の対象範囲、判断順序、結果や備考は別に保持する。未定義・未決・不適用を `‐` に置き換えない。
 
 参照が妥当でも、例の条件・対象・期待結果がCheckの意味に一致するとは限らない。本人がCheckをレビューできるよう、原典・Check・各例の意味と未決を別途照合し、テストはCheckの条件と期待結果に対応させる。例の内容変更を理由に人間の合意やテスト証拠を推測しない。
 
