@@ -10,7 +10,7 @@ export async function verifyStructureDrawer(page){
   assert.equal(await page.locator('.concept-main .data-example-modes,.concept-main h1').count(),0);
   if(!await drawer.isVisible())await page.locator('#drawer').click();
   assert.equal(await page.locator('.concept-child-tabs,.concept-related [role=tablist]').count(),0);assert(await page.locator('.data-review-overview').isVisible());
-  assert(await page.locator('.data-review-overview .review-owner').isVisible());
+  assert.equal(await page.locator('.data-review-overview .review-owner').count(),0);assert.equal(await page.locator('.data-review-overview h3').filter({hasText:'レビュアー'}).count(),0);
   assert.equal(await page.locator('.data-review-overview .review-related-activities button:not(:disabled)').count()>0,true);
  }
  await page.locator('[data-explorer-key="concept:group-request"]').click();
