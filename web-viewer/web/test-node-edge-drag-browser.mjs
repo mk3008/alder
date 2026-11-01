@@ -293,6 +293,25 @@ async function verifyLocked(browser,input){return runIsolated(browser,{width:320
  await waitSavedViewer(page,{positions:edgeDragPositions,zoom:1});return {input,positions:edgeDragPositions,stationaryAutopan:false};
 });}
 
+// Each batch runs at most two cases; edge-drag cases use separate contexts.
+// Per-case timing remains meaningful even when completion order differs.
+export async function runNodeEdgeDragCases(cases,deadline=performance.now()+suiteBudgetMs,emit=console.log){
+ const results=[];
+ for(let i=0;i<cases.length;i+=2){
+  const batch=await Promise.all(cases.slice(i,i+2).map(async test=>{
+   const started=performance.now();let result;
+   if(performance.now()+caseTimeoutMs>deadline)result={name:test.name,status:'not-run',error:'Six-minute suite budget exhausted; this case is explicitly unverified and fails the gate.'};
+   else try{result={name:test.name,status:'passed',result:await test.run()};}
+   catch(error){result={name:test.name,status:'failed',error:error?.stack??String(error)};}
+   result.durationMs=Math.round(performance.now()-started);emit('NODE_EDGE_DRAG_CASE '+JSON.stringify(result));return result;
+  }));
+  results.push(...batch);
+ }
+ const failed=results.filter(r=>r.status!=='passed');emit('NODE_EDGE_DRAG_CASE_RESULTS '+JSON.stringify({total:results.length,passed:results.length-failed.length,failed:failed.length,results}));
+ if(failed.length){const error=new AggregateError(failed.map(r=>Error(r.name+': '+r.error)),`${failed.length}/${results.length} node edge-drag cases failed`);error.results=results;throw error;}
+ return results;
+}
+
 // Caller owns Chromium/server. Every case owns a fresh context and has an
 // explicit deadline; failures never silently skip independent cases or inputs.
 export async function verifyNodeEdgeDrag(browser){
@@ -304,9 +323,6 @@ export async function verifyNodeEdgeDrag(browser){
   {name:'native touch cancel',run:()=>verifyInterruption(browser,'cancel','touch')},
   ...['capture-loss','lock','blur','tab-close'].map(stop=>({name:`stop on ${stop}`,run:()=>verifyInterruption(browser,stop)})),
   ...['mouse','touch'].map(input=>({name:`locked ${input} does not move nodes or edge-hold pan`,run:()=>verifyLocked(browser,input)}))];
- const results=[],deadline=performance.now()+suiteBudgetMs;
- for(const test of cases){if(performance.now()+caseTimeoutMs>deadline)results.push({name:test.name,status:'not-run',error:'Six-minute suite budget exhausted; this case is explicitly unverified and fails the gate.'});else try{results.push({name:test.name,status:'passed',result:await test.run()});}catch(error){results.push({name:test.name,status:'failed',error:error?.stack??String(error)});}console.log('NODE_EDGE_DRAG_CASE '+JSON.stringify(results.at(-1)));}
- const failed=results.filter(r=>r.status!=='passed');console.log('NODE_EDGE_DRAG_CASE_RESULTS '+JSON.stringify({total:results.length,passed:results.length-failed.length,failed:failed.length,results}));
- if(failed.length){const error=new AggregateError(failed.map(r=>Error(r.name+': '+r.error)),`${failed.length}/${results.length} node edge-drag cases failed`);error.results=results;throw error;}
+ const results=await runNodeEdgeDragCases(cases);
  return {passed:results.length,checks:results,limits:['CDP touch and pen emulate browser input; physical mobile/stylus hardware is not tested.','Blur handler receives an explicit lifecycle event; OS window focus loss is not tested.','Runtime route history is not persisted; cold reload verifies exact world/camera state, not route-cache history.']};
 }
