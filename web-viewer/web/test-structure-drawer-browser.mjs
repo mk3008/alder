@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {openLegacySampleInBrowser} from './legacy-sample-route.mjs';
 import {createHash} from 'node:crypto';
 import {mkdirSync,readFileSync} from 'node:fs';
 
@@ -21,6 +22,8 @@ export async function verifyStructureDrawer(page){
   assert.equal(await page.locator('.data-review-overview .review-related-activities button:not(:disabled)').count()>0,true);
   const graph=page.frameLocator('iframe[data-concept-view="'+id+'"]'),heading=await drawer.locator('.shell-heading strong').textContent();
   await graph.locator('.node .concept-select').first().click();await graph.locator('.node.selected').first().waitFor();
+  // Selection is sent from the graph iframe to the parent asynchronously.
+  await drawer.locator('.concept-selection-clear').waitFor({state:'visible'});
   assert(await drawer.locator('.concept-selection-clear').isVisible());
   await graph.locator('.canvas').click({position:{x:4,y:4}});
   await page.waitForFunction(expected=>document.querySelector('.concept-related .shell-heading strong')?.textContent===expected,heading);
@@ -50,7 +53,7 @@ export async function verifyStructureDrawer(page){
  const select=async(id,name)=>{await graph.locator('[data-node='+id+'] .concept-select').click();await graph.locator('[data-node='+id+'].selected').waitFor();await page.waitForFunction(expected=>document.querySelector('.concept-related .shell-heading strong')?.textContent===expected,name);};
  await select('request','購入申請');assert.equal(await drawer.isVisible(),false,'shape selection keeps drawer closed');await page.locator('#drawer').click();
  assert.equal(await page.locator('.concept-related-content').textContent().then(s=>s.includes('申請者')),true);
- await page.locator('[data-sample=request-submitted]').click();
+ assert(await page.locator('[data-sample=request-submitted]').isDisabled());await openLegacySampleInBrowser(page,'request-submitted');
  assert(await page.locator('.concept-example-back').isVisible());assert(await page.locator('.data-examples-panel').isVisible());
  assert.equal(await page.locator('iframe[data-concept-view=group-request]').isVisible(),true);
  const zoom=await graph.locator('.zoom-value').textContent();await graph.locator('.zoom-in').click();assert.notEqual(await graph.locator('.zoom-value').textContent(),zoom,'canvas zoom works during example review');

@@ -1,5 +1,6 @@
 import {context} from './fixtures/concept-sample.ts';
 import assert from 'node:assert/strict';
+import {openLegacySample} from './legacy-sample-route.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
@@ -31,7 +32,7 @@ const t=boot();try{
  }
  d.querySelector('[data-explorer-key="concept:group-request"]').click();const frame=d.querySelector('[data-concept-view=group-request]'),send=id=>w.dispatchEvent(new w.MessageEvent('message',{origin:w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id}}));
  assert(d.querySelector('.concept-related').hidden);send('request');assert(d.querySelector('.concept-related').hidden);d.querySelector('#drawer').click();
- const page=d.querySelector('.concept-page-details');assert.equal(d.querySelector('.concept-child-tabs'),null);d.querySelector('[data-sample=request-submitted]').click();assert.equal(frame.hidden,false);assert.equal(d.querySelector('.concept-example-back').hidden,false);assert.equal(d.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');send('item');assert.equal(d.querySelector('.concept-page-details'),page);assert.equal(d.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');assert.match(d.querySelector('.concept-related-content').textContent,/依頼数量/);assert.match(page.textContent,/申請者/);coverage.add('STRUCTURE-SHELL-003');
+ const page=d.querySelector('.concept-page-details');assert.equal(d.querySelector('.concept-child-tabs'),null);assert(d.querySelector('[data-sample=request-submitted]').disabled);openLegacySample(w,'request-submitted');assert.equal(frame.hidden,false);assert.equal(d.querySelector('.concept-example-back').hidden,false);assert.equal(d.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');send('item');assert.equal(d.querySelector('.concept-page-details'),page);assert.equal(d.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');assert.match(d.querySelector('.concept-related-content').textContent,/依頼数量/);assert.match(page.textContent,/申請者/);coverage.add('STRUCTURE-SHELL-003');
  const separator=d.querySelector('[role=separator]');const width=+separator.getAttribute('aria-valuenow');separator.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true}));assert.equal(+separator.getAttribute('aria-valuenow'),width+40);separator.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(+separator.getAttribute('aria-valuenow'),280);assert.equal(w.sessionStorage.getItem('alder-explorer-v1:/:drawer-width'),'280');coverage.add('STRUCTURE-SHELL-004');
  t.other();assert.equal(d.querySelectorAll('[data-explorer-key^="concept:group-"]').length,0);assert.equal(d.querySelector('.concept-page-details').hidden,true);assert.equal(d.querySelector('.data-review-overview').textContent,'');coverage.add('STRUCTURE-SHELL-005');
 }finally{t.w.close();}

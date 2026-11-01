@@ -4,6 +4,7 @@ import {loadPurchaseReview} from './purchase-review-browser.mjs';
 import {contrast,verifyStructureDrawer} from './test-structure-drawer-browser.mjs';
 import {touchDriver} from './touch-driver.mjs';
 import {verifyCtrlWheelZoom} from './test-ctrl-wheel-zoom-browser.mjs';
+import {verifySubsystemSpecLinks} from './test-subsystem-to-test-spec-browser.mjs';
 
 async function backgroundPoint(page,id){
  const point=await page.evaluate(subsystem=>{
@@ -103,6 +104,6 @@ export async function verifySubsystemOverview(browser){
    for(const control of ['.zoom-in','.zoom-out','.canvas-lock','.reset-layout'])assert.equal(await page.locator('.subsystem-overview-canvas '+control).count(),1);
    await page.screenshot({path:`web/evidence/shell/subsystem-overview-${width}-${theme}.png`});observations.push({width,theme,...measured});
   }}
-  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom};
+  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks};
  }finally{await context.close();}
 }

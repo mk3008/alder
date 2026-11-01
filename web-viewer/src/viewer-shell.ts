@@ -10,7 +10,7 @@ import {installDrawerResize} from './drawer-resize';
 import {createSubsystemOverview} from './subsystem-overview';
 import {createDataExamples} from './data-examples';
 import {renderRequesterChecks,renderLinkedChecks,renderDecisionExamples,renderDecisionChecks,renderResultChecks} from './document-view';
-import {testFunctions} from './test-spec-functions';
+import {sampleDestination,testFunctions} from './test-spec-functions';
 import type {Design} from './graph';
 import type {Check} from './json-document';
 const wholeModes=['landscape','overview'];
@@ -138,7 +138,11 @@ export function installViewerShell(app:HTMLElement,options:Options){
   const landscape=concept.querySelector<HTMLElement>('.concept-review-landscape')!,group=findReviewGroup(active),page=related.querySelector<HTMLElement>('.concept-page-details')!,overviewPanel=related.querySelector<HTMLElement>('.data-review-overview')!,panel=related.querySelector<HTMLElement>('.data-examples-panel')!;
   page.hidden=!hasModel||!group;overviewPanel.hidden=!hasModel||!group||exampleModes.has(active);panel.hidden=!hasModel||!group||!exampleModes.has(active);related.querySelector<HTMLButtonElement>('.concept-example-back')!.hidden=panel.hidden;
   if(hasModel&&group){
-   renderReviewOverview(overviewPanel,group,samples!,id=>setExample(id),id=>openBusiness(id),options.business().activities);
+   const available=functions();
+   renderReviewOverview(overviewPanel,group,samples!,(capabilityId,id)=>{
+    const destination=sampleDestination(available,group.id,capabilityId,id);if(!destination)return undefined;
+    return {kind:destination.kind,open:()=>{const current=sampleDestination(functions(),group.id,capabilityId,id);if(!current)return;if(current.sampleId)specExamples.set(current.key,current.sampleId);else specExamples.delete(current.key);selectSpec(current.key);}};
+   },id=>openBusiness(id),options.business().activities);
    const sample=exampleModes.get(active)??lastExamples.get(active)??examplesFor(active)[0]?.id;
    if(sample)samples!.renderDataExample(panel,group,sample,id=>setExample(id));
    overviewPanel.scrollTop=scrolls.get('review-overview:'+active)??0;panel.scrollTop=scrolls.get('example:'+active+':'+sample)??0;

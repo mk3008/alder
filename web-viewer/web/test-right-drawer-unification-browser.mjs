@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {openLegacySampleInBrowser} from './legacy-sample-route.mjs';
 import {mkdirSync,readFileSync} from 'node:fs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
 
@@ -24,7 +25,7 @@ export async function verifyRightDrawerUnification(browser){
    for(const key of ['headerHeight','paddingLeft','paddingRight','titleSize'])assert.equal(concept[key],business[key],key+' must match');
    for(const key of ['bodyLeft','bodyTop'])assert.ok(Math.abs(concept[key]-business[key])<=1,key+' must match within a pixel');
    assert.equal(concept.tabs.length,0);
-   const sample=page.locator('[data-sample=request-submitted]'),body=page.locator('.concept-drawer-body');await sample.scrollIntoViewIfNeeded();const overviewScroll=await body.evaluate(el=>el.scrollTop);await sample.click();assert.equal(await page.locator('.data-examples-panel').isVisible(),true);await page.locator('.concept-example-back').press('Enter');assert.equal(await page.locator('.data-review-overview').isVisible(),true);assert.equal(await page.locator('.data-review-overview').evaluate(e=>e===document.activeElement),true);assert.ok(Math.abs((await body.evaluate(el=>el.scrollTop))-overviewScroll)<=1,'returning to the overview restores its scroll position');
+   const sample=page.locator('[data-sample=request-submitted]'),body=page.locator('.concept-drawer-body');await sample.scrollIntoViewIfNeeded();const overviewScroll=await body.evaluate(el=>el.scrollTop);assert(await sample.isDisabled());await openLegacySampleInBrowser(page,'request-submitted');assert.equal(await page.locator('.data-examples-panel').isVisible(),true);await page.locator('.concept-example-back').press('Enter');assert.equal(await page.locator('.data-review-overview').isVisible(),true);assert.equal(await page.locator('.data-review-overview').evaluate(e=>e===document.activeElement),true);assert.ok(Math.abs((await body.evaluate(el=>el.scrollTop))-overviewScroll)<=1,'returning to the overview restores its scroll position');
    if(width===393)await page.screenshot({path:`web/evidence/shell/right-concept-${theme}.png`});
    await page.locator('.concept-related .right-drawer-heading button').click();assert.equal(await page.locator('.concept-related').isVisible(),false);
   }

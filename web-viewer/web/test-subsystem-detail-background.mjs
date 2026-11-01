@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {openLegacySample} from './legacy-sample-route.mjs';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
@@ -48,7 +49,7 @@ for(const group of pkg.documents.find(d=>d.kind==='conceptModel').reviewGroups){
 p.document.querySelector('[data-explorer-key="concept:group-request"]').click();
 const requestFrame=p.document.querySelector('iframe[data-concept-view=group-request]');assert.equal(requestFrame,firstFrame);
 if(p.document.querySelector('.concept-related').hidden)p.document.querySelector('#drawer').click();
-p.document.querySelector('[data-sample=request-submitted]').click();assert.equal(p.document.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');
+openLegacySample(p,'request-submitted');assert.equal(p.document.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');
 firstChild.document.querySelector('.node .concept-select').dispatchEvent(new firstChild.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
 p.document.querySelector('.concept-selection-clear').click();assert.equal(p.document.querySelector('.data-examples-panel').dataset.dataExample,'request-submitted');assert.equal(p.document.querySelector('.data-examples-panel').hidden,false);assert.equal(p.document.querySelector('.concept-example-back').hidden,false);
 checkAuthority();for(const child of children)child.close();p.close();

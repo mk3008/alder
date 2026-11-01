@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {openLegacySample} from './legacy-sample-route.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
@@ -21,7 +22,7 @@ try{
  const workbench=$('.shell-workbench');assert.equal($('#formattedMarkdownDrawer').parentElement,workbench);assert.equal($('.concept-related').parentElement,workbench);assert.equal($('#design-explorer').parentElement,workbench);assert.equal($('.tab-strip').parentElement,$('.shell-center'));covered.add('GLOBAL-DRAWER-002');
  entry('concept:landscape').click();assert.equal($('.concept-related').hidden,false,'business open carries into subsystem');entry('concept:overview').click();assert.equal($('.concept-related').hidden,false);entry('concept:request').click();assert.equal($('.concept-related').hidden,false);
  $('.concept-related .shell-heading button').click();entry('business:overview').click();assert.equal($('#formattedMarkdownDrawer').hidden,true,'concept close carries back to business');$('#drawer').click();assert.equal($('#formattedMarkdownDrawer').hidden,false);entry('concept:group-request').click();assert.equal($('.concept-related').hidden,false);
- const frame=$('[data-concept-view=group-request]');$('#drawer').click();w.dispatchEvent(new w.MessageEvent('message',{origin:w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id:'item'}}));assert($('.concept-related').hidden);assert.match($('.concept-related-content').textContent,/依頼数量/);$('#drawer').click();$('[data-sample=request-submitted]').click();
+ const frame=$('[data-concept-view=group-request]');$('#drawer').click();w.dispatchEvent(new w.MessageEvent('message',{origin:w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id:'item'}}));assert($('.concept-related').hidden);assert.match($('.concept-related-content').textContent,/依頼数量/);$('#drawer').click();assert($('[data-sample=request-submitted]').disabled);openLegacySample(w,'request-submitted');
  assert.equal($('.data-examples-panel').dataset.dataExample,'request-submitted');entry('concept:overview').click();assert.equal($('.concept-related').hidden,false);$('#drawer').click();await step('back');assert($('.concept-related').hidden,'Back to a sample URL cannot reopen the global closed drawer');assert.equal($('.data-examples-panel').dataset.dataExample,'request-submitted');await step('forward');assert($('.concept-related').hidden);
  entry('concept:group-request').click();$('#concept-tab-group-request').parentElement.querySelector('.close').click();entry('concept:group-request').click();assert($('.concept-related').hidden,'closing/reopening a tab cannot reset app preference');covered.add('GLOBAL-DRAWER-001');
  const sceneBeforeState=$('.data-examples-panel').dataset.dataExample;$('#drawer').click();

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {openLegacySample} from './legacy-sample-route.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
@@ -29,7 +30,7 @@ try{
  entry('states:'+object.id).click();assert($('.state-detail-page .state-diagram'),'state graph stays reachable from the explorer');entry('concept:group-request').click();
  assert.equal($('.concept-related .shell-heading strong').textContent,'購入要求・申請内容');assert.equal($('.concept-page-title'),null);assert.equal($('.concept-page-details details.concept-overview-section'),null);
  assert.equal($('.concept-child-tabs'),null);assert.equal($('.data-review-overview').hidden,false);
- const frame=$('[data-concept-view=group-request]');$('[data-sample=request-submitted]').click();assert.equal($('.concept-example-back').hidden,false);assert.equal($('.data-examples-panel').dataset.dataExample,'request-submitted');
+ const frame=$('[data-concept-view=group-request]');assert($('[data-sample=request-submitted]').disabled);openLegacySample(w,'request-submitted');assert.equal($('.concept-example-back').hidden,false);assert.equal($('.data-examples-panel').dataset.dataExample,'request-submitted');
  w.dispatchEvent(new w.MessageEvent('message',{origin:w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id:'item'}}));assert.equal($('.concept-related .shell-heading strong').textContent,'申請品目');assert.match($('.concept-related-content').textContent,/依頼数量/);assert.equal($('.data-examples-panel').dataset.dataExample,'request-submitted');
  $('.concept-example-back').click();assert.equal(d.activeElement,$('.data-review-overview'));assert.equal($('.data-review-overview').hidden,false);assert.equal($('.concept-example-back').hidden,true);
  $('.concept-related .shell-heading button').click();w.dispatchEvent(new w.MessageEvent('message',{origin:w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id:'version'}}));assert($('.concept-related').hidden,'selection must not reopen a closed drawer');$('#drawer').click();assert.equal($('.concept-related .shell-heading strong').textContent,'購入申請版');coverage.push('DRAWER-UI-002','DRAWER-UI-003');

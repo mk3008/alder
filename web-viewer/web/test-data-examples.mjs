@@ -1,5 +1,6 @@
 import {context} from './fixtures/concept-sample.ts';
 import assert from 'node:assert/strict';
+import {openLegacySample} from './legacy-sample-route.mjs';
 import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
 import {readFileSync} from 'node:fs';
@@ -103,7 +104,7 @@ const identityDetails=harness('','group-request');try{
  for(const [id,description] of [['request','申請の識別で、別の申請と区別する想定。'],['version','申請と、その申請内の版の識別を組み合わせて区別する想定。'],['item','申請版と、その版内の品目の識別を組み合わせて区別する想定。']]){identityDetails.w.dispatchEvent(new identityDetails.w.MessageEvent('message',{origin:identityDetails.w.location.origin,source:frame.contentWindow,data:{type:'alder-concept-select',id}}));assert(identityDetails.d.querySelector('.concept-related-content').textContent.includes(description),id+' detail shows the identification hypothesis');}
 }finally{identityDetails.w.close();}
 const {w,d,other}=harness();const $=s=>d.querySelector(s);
-const openExamples=async id=>{$('[data-sample="'+id+'"]').click();await new Promise(r=>setTimeout(r,0));};
+const openExamples=async id=>{assert($('[data-sample="'+id+'"]').disabled);openLegacySample(w,id);await new Promise(r=>setTimeout(r,0));};
 try{
  const frame=$('[data-concept-view=group-handoff]');assert.equal(frame.hidden,false);assert($('.concept-related').hidden);$('#drawer').click();assert.equal($('.concept-related').hidden,false);assert.equal($('.concept-child-tabs'),null);await openExamples('handoff-batch');assert.equal(frame.hidden,false,'examples keep the graph visible');assert.equal($('.concept-related').hidden,false);assert(!$('#drawer').disabled);assert.equal($('.data-examples-panel').dataset.dataExample,'handoff-batch');assert.equal(new URL(w.location.href).searchParams.get('dataExample'),'handoff-batch');
  const picker=$('.data-example-picker select');picker.value='handoff-retry';picker.dispatchEvent(new w.Event('change'));assert.equal(new URL(w.location.href).searchParams.get('dataExample'),'handoff-retry');assert.match($('.data-examples-panel').textContent,/10:05/);
@@ -136,7 +137,7 @@ for(const group of reviewJSON.groups){
    for(const evidence of capability.meta.evidence){assert(nativeBD.activities.some(a=>a.id===evidence.activityId));assert(evidence.scene&&evidence.basis);}
    for(const sample of capability.samples){
     nestedIDs.push(sample.id);assert.equal(sample.group,undefined,'group is owned by the parent JSON');
-    h.d.querySelector('[data-sample="'+sample.id+'"]').click();
+    assert(h.d.querySelector('[data-sample="'+sample.id+'"]').disabled);openLegacySample(h.w,sample.id);
     const panel=h.d.querySelector('.data-examples-panel');assert.equal(panel.hidden,false);assert.equal(panel.dataset.dataExample,sample.id);assert.equal(panel.dataset.capability,capability.id);assert.match(panel.textContent,new RegExp(capability.title));assert.match(panel.textContent,new RegExp(capability.description.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
     assert.equal(new URL(h.w.location.href).searchParams.get('dataExample'),sample.id);
     const optgroup=panel.querySelector('option[value="'+sample.id+'"]').parentElement;assert.equal(optgroup.tagName,'OPTGROUP');assert.equal(optgroup.label,capability.title);
