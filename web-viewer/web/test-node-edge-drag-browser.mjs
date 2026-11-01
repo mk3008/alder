@@ -7,6 +7,8 @@ import {readSessionInPage,waitForExactRead,waitSavedViewer,viewerProjection} fro
 
 const origin='http://127.0.0.1:4173/';
 const caseTimeoutMs=8000, suiteBudgetMs=360000; // Global budget leaves room for the existing CI gates.
+let profileMarks=null;
+const profileMark=name=>{if(profileMarks)profileMarks.push({name,ms:performance.now()});};
 export const edgeDragMoving='person';
 export const edgeDragPositions={person:[0,0],record:[700,1000],read:[1300,600],approve:[1300,1400]};
 export function edgeDragFixture(){
@@ -121,7 +123,7 @@ function assertDrag(current,initial,start,end,zoom,grip){
 }
 function stoppedProjection(value){return {positions:value.positions,styles:value.styles,routes:value.routes,scroll:value.scroll,offset:value.offset,extent:value.extent,transform:value.transform,zoom:value.zoom};}
 async function assertStopped(page,baseline){
- for(const sample of await paintedFrames(page,8))assert.deepEqual(stoppedProjection(sample),stoppedProjection(baseline),'released/interrupted edge hold must stop on every painted frame');
+ for(const sample of await paintedFrames(page,8))assert.deepEqual(stoppedProjection(sample),stoppedProjection(baseline),'released/interrupted edge hold must stop on every painted frame');profileMark('stopped_frames_checked');
 }
 
 async function installTrace(page){await page.addInitScript(()=>{
@@ -143,16 +145,16 @@ async function pointerDriver(page,context,input){
  return {down:async p=>{await page.mouse.move(...p);await page.mouse.down();},move:p=>page.mouse.move(...p),up:()=>page.mouse.up()};
 }
 async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView=false){
- await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+ await page.goto(origin);await page.waitForFunction(()=>!document.querySelector('#open').disabled);profileMark('initial_page_ready');
  await openSourceAction(page,'open-text');await page.locator('#source-text').fill(raw);await page.locator('#source-submit').click();if(activityView)await page.locator('.node[data-activity] .activity-open').first().press('Enter');const viewUrl=page.url();
  await page.waitForFunction(count=>document.querySelectorAll('.node').length===count||!!document.querySelector('#status[data-kind=error]:not([hidden])'),4);
- assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');
+ assert.equal(await page.locator('#status[data-kind=error]:not([hidden])').count(),0,'public parser fixture must open without an error');profileMark('source_opened');
  if(activityView)assert.deepEqual(await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node).sort()),['approve','person','read','record'],'detail adds the directly adjacent exception Activity');
- await waitSavedViewer(page,{positions:(await frame(page)).positions});
+ await waitSavedViewer(page,{positions:(await frame(page)).positions});profileMark('initial_save_observed');
  // Explicitly close both overlays before measuring the visible viewport.
  if(await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
  if(await page.locator('#node-list-drawer').isVisible())await page.locator('#node-list-toggle').click();
- await waitForExactRead(()=>page.evaluate(readSessionInPage),{drawer:false,nodeDrawer:false},{project:s=>({drawer:s?.drawer,nodeDrawer:!!s?.nodeDrawer})});
+ await waitForExactRead(()=>page.evaluate(readSessionInPage),{drawer:false,nodeDrawer:false},{project:s=>({drawer:s?.drawer,nodeDrawer:!!s?.nodeDrawer})});profileMark('drawers_saved');
  const measured=await frame(page),viewInset=[4096,4096],positions=Object.fromEntries(Object.entries(clone(edgeDragPositions)).filter(([id])=>!activityView||id in measured.positions));
  if(moving!==edgeDragMoving){positions[edgeDragMoving]=positions[moving];positions[moving]=[0,0];}
  if(atExtent==='right'){positions[moving]=[7000,0];viewInset[0]=0;}
@@ -161,13 +163,13 @@ async function openFixture(page,zoom,atExtent,moving=edgeDragMoving,activityView
  if(atExtent==='top')viewInset[1]=0;
  const scroll=[Math.max(0,Math.round((positions[moving][0]+viewInset[0]+130)*zoom-measured.client[0]/2)),Math.max(0,Math.round((positions[moving][1]+viewInset[1]+34)*zoom-(measured.bounds.bottom-measured.bounds.top)/2))];
  assert.ok(scroll.every(x=>x>=0),'inset must be large enough to center the visible fixture');
- await page.goto(origin+'LICENSE.txt');
- await page.evaluate(seedEdgeDragSession,{positions,zoom,scroll,viewInset,moving});
- const saved=await waitSavedViewer(page,{positions,zoom,scroll,viewInset,selected:moving});
+ await page.goto(origin+'LICENSE.txt');profileMark('neutral_page_ready');
+ await page.evaluate(seedEdgeDragSession,{positions,zoom,scroll,viewInset,moving});profileMark('seed_transaction_completed');
+ const saved=await waitSavedViewer(page,{positions,zoom,scroll,viewInset,selected:moving});profileMark('seed_readback');
  assert.equal(saved.drawer,false);assert.equal(saved.nodeDrawer,false);
- await page.goto(viewUrl);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);
+ await page.goto(viewUrl);await page.waitForFunction(count=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===count,4);profileMark('fixture_restored');
  if(atExtent)await page.locator('#viewport').evaluate((v,edge)=>{if(edge==='right')v.scrollLeft=v.scrollWidth;else if(edge==='bottom')v.scrollTop=v.scrollHeight;else if(edge==='left')v.scrollLeft=0;else v.scrollTop=0;},atExtent);
- await paintedFrames(page,2);const initial=await frame(page);
+ await paintedFrames(page,2);const initial=await frame(page);profileMark('fixture_painted');
  assert.deepEqual(initial.positions,positions);assert.equal(initial.zoom,zoom);
  if(!atExtent)assert.deepEqual(initial.scroll,scroll);
  else {const axis=['left','right'].includes(atExtent)?0:1,negative=['left','top'].includes(atExtent);assert.equal(initial.scroll[axis],negative?0:initial.extent[axis]-initial.client[axis],'boundary fixture begins at the realized scroll limit');}
@@ -191,9 +193,9 @@ async function unlock(page){await page.locator('#layout-lock').click();assert.eq
 async function beginHold(env,edge){
  const {page,driver,input,zoom,initial,start,grip,moving}=env,end=edgeTarget(initial,start,edge);
  await page.evaluate(oracle=>{window.edgeDragOracle=oracle;},{id:moving,position:initial.positions[moving],start,end,zoom,before:{scroll:initial.scroll,offset:initial.offset}});
- await driver.down(start);await driver.move(end);
- await page.waitForFunction(({input,end})=>window.edgeDragTrace.some(e=>e.type==='pointermove'&&e.kind===input&&e.trusted&&Math.abs(e.x-end[0])<.01&&Math.abs(e.y-end[1])<.01),{input,end});
- const first=await frame(page),samples=await paintedFrames(page,env.atExtent&&['left','top'].includes(edge)?24:10),last=samples.at(-1),axis=['left','right'].includes(edge)?0:1,direction=['left','top'].includes(edge)?-1:1;
+ await driver.down(start);await driver.move(end);profileMark('pointer_dispatched');
+ await page.waitForFunction(({input,end})=>window.edgeDragTrace.some(e=>e.type==='pointermove'&&e.kind===input&&e.trusted&&Math.abs(e.x-end[0])<.01&&Math.abs(e.y-end[1])<.01),{input,end});profileMark('trusted_pointer_observed');
+ const first=await frame(page),samples=await paintedFrames(page,env.atExtent&&['left','top'].includes(edge)?24:10),last=samples.at(-1),axis=['left','right'].includes(edge)?0:1,direction=['left','top'].includes(edge)?-1:1;profileMark('hold_frames_observed');
  if(env.atExtent&&direction<0)console.log('NODE_EDGE_DRAG_TRACE '+JSON.stringify({edge,zoom,input,initial:{scroll:initial.scroll,offset:initial.offset},frames:[first,...samples].map(s=>({scroll:s.scroll,offset:s.offset,physicalCamera:s.scroll.map((v,i)=>v-s.offset[i]),position:s.positions[moving],style:s.styles[moving],grip:s.rects[moving].slice(0,2).map((v,i)=>v+grip[i])}))}));
  assert.ok(direction*(last.positions[moving][axis]-first.positions[moving][axis])*zoom>=4,'stationary pointer hold must advance world position on successive painted frames');
  for(const sample of samples){assertDrag(sample,initial,start,end,zoom,grip);assert.equal(sample.events,first.events,'stationary hold must not depend on fresh pointer events');}
@@ -212,10 +214,10 @@ async function committedReload(env,expected,knownView={}){
  if(detailed)console.log('NODE_EDGE_DRAG_EXPECTED '+JSON.stringify({stage:'before-commit',expected:fields,observedDOM:{positions:current.positions,zoom:current.zoom,transform:current.transform,scroll:current.scroll,offset:current.offset}}));
  assert.equal(current.transform,transform,'rendered scale is the exact canonical CSSOM representation of independent zoom');
  let lastObserved;const observe=stage=>({observed,reads})=>{const encoded=JSON.stringify(observed);if(detailed&&encoded!==lastObserved){console.log('NODE_EDGE_DRAG_DB '+JSON.stringify({stage,reads,expected:fields,observed}));lastObserved=encoded;}};
- const committed=await waitSavedViewer(page,fields,{observe:observe('committed')});
+ const committed=await waitSavedViewer(page,fields,{observe:observe('committed')});profileMark('drag_save_observed');
  assert.deepEqual({drawer:committed.drawer,nodeDrawer:committed.nodeDrawer,preferWrite:committed.preferWrite},{drawer:false,nodeDrawer:false,preferWrite:false});
  const tab=committed.tabs.find(t=>t.key===committed.active);assert.deepEqual(tab.positions,expected,'actual committed DB values must equal independent world coordinates');
- await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);await paintedFrames(page,2);
+ await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled&&document.querySelectorAll('.node').length===4);await paintedFrames(page,2);profileMark('cold_reload_painted');
  const restored=await frame(page),canonical=await page.evaluate(expected=>Object.fromEntries(Object.entries(expected).map(([id,p])=>{const style=document.createElement('div').style;style.left=p[0]+'px';style.top=p[1]+'px';return [id,[style.left,style.top]];})),expected);assert.deepEqual(restored.styles,canonical,'cold reload DOM exactly serializes the independently expected world coordinates');assert.equal(restored.transform,transform,'cold reload scale exactly matches canonical CSSOM of independent zoom');
  // Cold routing may discover a more-negative route and grow canvasOrigin.
  // The saved DB snapshot above remains exact. This check is solely the screen
@@ -223,7 +225,7 @@ async function committedReload(env,expected,knownView={}){
  const screenCameraDelta=restored.scroll.map((value,axis)=>(value-current.scroll[axis])-(restored.offset[axis]-current.offset[axis]));
  assert.ok(screenCameraDelta.every(v=>Math.abs(v)<=1),'cold route-origin compensation must preserve the physical camera within 1 CSS pixel');
  for(const [id,box] of Object.entries(current.rects))for(const axis of [0,1])assert.ok(Math.abs(restored.rects[id][axis]-box[axis])<=1,`cold reload actual card screen position ${id} axis ${axis} must stay within 1 CSS pixel`);
- const readback=await page.evaluate(readSessionInPage),stableFields={...fields};delete stableFields.scroll;delete stableFields.canvasOrigin;
+ const readback=await page.evaluate(readSessionInPage),stableFields={...fields};profileMark('cold_readback');delete stableFields.scroll;delete stableFields.canvasOrigin;
  if(detailed)console.log('NODE_EDGE_DRAG_DB '+JSON.stringify({stage:'cold-readback',expected:fields,observed:viewerProjection(readback,Object.keys(fields)),observedDOM:{positions:restored.positions,zoom:restored.zoom,transform:restored.transform,scroll:restored.scroll,offset:restored.offset}}));
  assert.deepEqual(viewerProjection(readback,Object.keys(stableFields)),stableFields,'cold DB positions, exact numeric zoom, inset, selection and visibility remain exact');
  assert.deepEqual({drawer:readback.drawer,nodeDrawer:readback.nodeDrawer,preferWrite:readback.preferWrite},{drawer:false,nodeDrawer:false,preferWrite:false});
@@ -234,16 +236,16 @@ async function committedReload(env,expected,knownView={}){
  return {positions:expected,scroll:current.scroll,canvasOrigin,coldView:{scroll:restored.scroll,offset:restored.offset,originScreenChange:restored.offset.map((v,i)=>v-current.offset[i]),screenCameraDelta}};
 }
 async function runIsolated(browser,options,body){
- const context=await browser.newContext({viewport:{width:options.width,height:960},hasTouch:options.input==='touch'}),page=await context.newPage(),errors=[];
+ const context=await browser.newContext({viewport:{width:options.width,height:960},hasTouch:options.input==='touch'});profileMark('context_created');const page=await context.newPage();profileMark('page_created');const errors=[];
  page.setDefaultTimeout(4000);page.setDefaultNavigationTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
  let timer;try{
-  return await Promise.race([(async()=>{await installTrace(page);const driver=await pointerDriver(page,context,options.input),fixture=await openFixture(page,options.zoom,options.atExtent,options.moving,options.activityView),env={...options,...fixture,page,context,driver};
-   const result=await body(env);assert.deepEqual(errors,[],'browser page errors');return result;
+  return await Promise.race([(async()=>{await installTrace(page);profileMark('trace_installed');const driver=await pointerDriver(page,context,options.input);profileMark('driver_ready');const fixture=await openFixture(page,options.zoom,options.atExtent,options.moving,options.activityView);profileMark('fixture_ready');const env={...options,...fixture,page,context,driver};
+   const result=await body(env);profileMark('body_complete');assert.deepEqual(errors,[],'browser page errors');return result;
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`Independent edge-drag case exceeded ${caseTimeoutMs}ms`)),caseTimeoutMs);})]);
  }catch(error){
   let diagnostics;try{diagnostics=await Promise.race([page.evaluate(()=>({events:window.edgeDragTrace?.slice(-12),touch:window.touchCommand,status:document.querySelector('#status-text')?.textContent})),new Promise(resolve=>setTimeout(()=>resolve({diagnosticTimeout:true}),500))]);}catch(readError){diagnostics={readError:String(readError)};}
   console.error('NODE_EDGE_DRAG_DIAGNOSTICS '+JSON.stringify({options,errors,diagnostics}));throw error;
- }finally{clearTimeout(timer);await context.close();}
+ }finally{clearTimeout(timer);await context.close();profileMark('context_closed');}
 }
 async function verifyEdge(browser,options){return runIsolated(browser,options,async env=>{
  await unlock(env.page);const hold=await beginHold(env,options.edge);if(options.atExtent){const axis=['left','right'].includes(options.edge)?0:1;if(['left','top'].includes(options.edge)){assertNegativeBoundary(env.initial,hold.frames,axis);}else assert.ok(hold.last.extent[axis]>env.initial.extent[axis]+4,'holding at the existing positive scroll limit must grow the real canvas extent');}await env.driver.up();const released=await frame(env.page),expected=assertDrag(released,env.initial,env.start,hold.end,env.zoom,env.grip);
@@ -304,6 +306,17 @@ export async function verifyNodeEdgeDrag(browser){
   {name:'native touch cancel',run:()=>verifyInterruption(browser,'cancel','touch')},
   ...['capture-loss','lock','blur','tab-close'].map(stop=>({name:`stop on ${stop}`,run:()=>verifyInterruption(browser,stop)})),
   ...['mouse','touch'].map(input=>({name:`locked ${input} does not move nodes or edge-hold pan`,run:()=>verifyLocked(browser,input)}))];
+ const profileReps=process.env.EDGE_DRAG_PROFILE_REPS??(process.env.GITHUB_ACTIONS==='true'?'3':'');
+ if(profileReps){
+  const reps=Number(profileReps);assert.ok(Number.isInteger(reps)&&reps>=1&&reps<=5,'profile repetitions must be 1..5');
+  for(let round=0;round<reps;round++){
+   for(const name of ['mouse right 393px 100%','touch top 320px 25%','stop on capture-loss']){
+    const selected=cases.find(c=>c.name===name);assert.ok(selected,`missing profile case: ${name}`);
+    profileMarks=[];profileMark('start');let outcome='failed';
+    try{await selected.run();outcome='passed';}finally{profileMark('finish');const marks=profileMarks;profileMarks=null;console.log('EDGE_DRAG_PROFILE '+JSON.stringify({name,round,outcome,node:process.version,browser:browser.version(),marks,nodeMemory:process.memoryUsage()}));}
+   }
+  }
+ }
  const results=[],deadline=performance.now()+suiteBudgetMs;
  for(const test of cases){if(performance.now()+caseTimeoutMs>deadline)results.push({name:test.name,status:'not-run',error:'Six-minute suite budget exhausted; this case is explicitly unverified and fails the gate.'});else try{results.push({name:test.name,status:'passed',result:await test.run()});}catch(error){results.push({name:test.name,status:'failed',error:error?.stack??String(error)});}console.log('NODE_EDGE_DRAG_CASE '+JSON.stringify(results.at(-1)));}
  const failed=results.filter(r=>r.status!=='passed');console.log('NODE_EDGE_DRAG_CASE_RESULTS '+JSON.stringify({total:results.length,passed:results.length-failed.length,failed:failed.length,results}));
