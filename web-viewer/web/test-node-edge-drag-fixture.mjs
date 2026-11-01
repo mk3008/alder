@@ -3,8 +3,24 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {IDBFactory} from 'fake-indexeddb';
-import {edgeDragFixture,edgeDragMoving,edgeDragPositions,edgeDragMatrix,expectedEdgePosition,seedEdgeDragSession,assertNegativeBoundary,expectedPinchZoom,canonicalZoomInPage} from './test-node-edge-drag-browser.mjs';
+import {edgeDragFixture,edgeDragMoving,edgeDragPositions,edgeDragMatrix,expectedEdgePosition,seedEdgeDragSession,assertNegativeBoundary,expectedPinchZoom,canonicalZoomInPage,runNodeEdgeDragCases} from './test-node-edge-drag-browser.mjs';
 import {readSessionInPage,waitForExactRead,waitSavedViewer} from './wait-saved-viewer.mjs';
+
+// An independently failed case must be reported, while its peer and a later
+// case still run. The budget must still mark unrun cases as gate failures.
+{
+ const messages=[],started=[];let active=0,maxActive=0,failedWhilePeerActive=false;
+ const make=(name,fail)=>({name,run:async()=>{started.push(name);active++;maxActive=Math.max(maxActive,active);await new Promise(resolve=>setTimeout(resolve,fail?5:50));active--;if(fail)throw Error('injected independent failure');return name;}});
+ const cases=[make('failed',true),make('peer',false),make('later',false)];let result;
+ try{await runNodeEdgeDragCases(cases,performance.now()+12000,message=>{messages.push(message);if(message.startsWith('NODE_EDGE_DRAG_CASE ')&&JSON.parse(message.slice('NODE_EDGE_DRAG_CASE '.length)).name==='failed')failedWhilePeerActive=active>0;});assert.fail('an independent failure must reject');}catch(error){result=error;}
+ assert.ok(result instanceof AggregateError);assert.deepEqual(started,['failed','peer','later']);assert.equal(maxActive,2);
+ assert.deepEqual(result.results.map(({name,status})=>({name,status})),[{name:'failed',status:'failed'},{name:'peer',status:'passed'},{name:'later',status:'passed'}]);
+ assert.equal(failedWhilePeerActive,true,'a failed case must be reported before waiting for its peer');
+ assert.equal(messages.filter(message=>message.startsWith('NODE_EDGE_DRAG_CASE ')).length,3);assert.equal(messages.filter(message=>message.startsWith('NODE_EDGE_DRAG_CASE_RESULTS ')).length,1);
+ await assert.rejects(runNodeEdgeDragCases([make('budget',false)],0,()=>{}),error=>error instanceof AggregateError&&error.results[0].status==='not-run');
+ assert.equal(started.includes('budget'),false,'budget-exhausted cases must not be silently run or reported as passed');
+ const passed=await runNodeEdgeDragCases([{name:'success',run:async()=>42}],performance.now()+12000,()=>{});assert.deepEqual(passed.map(({name,status,result})=>({name,status,result})),[{name:'success',status:'passed',result:42}]);assert.ok(Number.isFinite(passed[0].durationMs)&&passed[0].durationMs>=0);
+}
 
 const {raw,design}=edgeDragFixture();
 assert.deepEqual(design.graph.nodes.map(n=>n.id).sort(),Object.keys(edgeDragPositions).sort());
