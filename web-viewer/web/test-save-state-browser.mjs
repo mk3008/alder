@@ -103,8 +103,11 @@ export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={})
  const target=new URL(url);assert.ok(['localhost','127.0.0.1','[::1]'].includes(target.hostname),'save-state gate requires an isolated local server');
  const cases=[];const add=(name,run,options)=>{
   const measure=name==='save state: native draft reload is dismissible and explicitly discardable'||name==='save state: native pending write warns, dismissal retains it, completion clears warning';
-  const addTrial=trial=>cases.push({name:trial?`${name} [timing ${trial}]`:name,run:()=>withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial})});
-  addTrial(0);if(measure){addTrial(1);addTrial(2);}
+  cases.push({name,run:async()=>{
+   const result=await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:0});
+   if(measure)for(const trial of [1,2])await withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial});
+   return result;
+  }});
  };
  add('save state: clean restore and unchanged lifecycle do not warn or write',async({page,database,dialogs})=>{
   await guard(page,false,['unchanged']);const before=await page.evaluate(readConcurrencyRecord,database);
