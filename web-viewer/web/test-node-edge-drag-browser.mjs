@@ -255,7 +255,7 @@ async function runIsolated(browser,options,body){
    const result=await body(env);profileMark('body_complete');assert.deepEqual(errors,[],'browser page errors');return result;
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`Independent edge-drag case exceeded ${caseTimeoutMs}ms`)),caseTimeoutMs);})]);
  }catch(error){
-  let diagnostics;try{diagnostics=await Promise.race([page.evaluate(()=>({events:window.edgeDragTrace?.slice(-12),touch:window.touchCommand,status:document.querySelector('#status-text')?.textContent})),new Promise(resolve=>setTimeout(()=>resolve({diagnosticTimeout:true}),500))]);}catch(readError){diagnostics={readError:String(readError)};}
+  let diagnostics;try{diagnostics=await Promise.race([page.evaluate(()=>({events:window.edgeDragTrace?.slice(-12),touch:window.touchCommand,status:document.querySelector('#status-text')?.textContent,injectedCaptureFaults:window.__injectedCaptureFaults,injectedSaveFaults:window.__injectedSaveFaults})),new Promise(resolve=>setTimeout(()=>resolve({diagnosticTimeout:true}),500))]);}catch(readError){diagnostics={readError:String(readError)};}
   console.error('NODE_EDGE_DRAG_DIAGNOSTICS '+JSON.stringify({options,errors,diagnostics}));throw error;
  }finally{clearTimeout(timer);await context.close();profileMark('context_closed');}
 }
@@ -336,44 +336,51 @@ export async function verifyNodeEdgeDrag(browser){
   // /proc observations cover the runner process tree, including Chrome. RSS
   // sums shared mappings and CPU sampling can miss short-lived processes.
   function resourceSampler(){
-   let previous=new Map(),cpuTicks=0,maxTreeRssKb=0,maxChromeRssKb=0,samples=0,unavailable;
+   let previous=new Map(),cpuTicks=0,maxTreeRssKb=0,maxChromeRssKb=0,samples=0,unavailable,rootPid;
    const sample=()=>{try{
     const entries=new Map();for(const id of readdirSync('/proc'))if(/^\d+$/.test(id))try{
      const stat=readFileSync(`/proc/${id}/stat`,'utf8'),end=stat.lastIndexOf(')'),fields=stat.slice(end+2).split(' ');
      const status=readFileSync(`/proc/${id}/status`,'utf8'),rss=Number(status.match(/^VmRSS:\s+(\d+)/m)?.[1]??0);
      entries.set(Number(id),{parent:Number(fields[1]),ticks:Number(fields[11])+Number(fields[12]),rss,chrome:/chrome|chromium/i.test(stat.slice(0,end+1))});
     }catch{};
-    const tree=new Set([process.pid]);let grew=true;while(grew){grew=false;for(const [pid,p] of entries)if(tree.has(p.parent)&&!tree.has(pid)){tree.add(pid);grew=true;}}
+    rootPid=Number(readFileSync('/proc/self/stat','utf8').split(' ',1)[0]);if(!rootPid||!entries.has(rootPid))throw Error('sampler cannot identify its process in /proc');
+    const tree=new Set([rootPid]);let grew=true;while(grew){grew=false;for(const [pid,p] of entries)if(tree.has(p.parent)&&!tree.has(pid)){tree.add(pid);grew=true;}}
     let total=0,chrome=0;const current=new Map();for(const pid of tree){const p=entries.get(pid);if(!p)continue;total+=p.rss;if(p.chrome)chrome+=p.rss;current.set(pid,p.ticks);if(samples)cpuTicks+=Math.max(0,p.ticks-(previous.get(pid)??0));}
     maxTreeRssKb=Math.max(maxTreeRssKb,total);maxChromeRssKb=Math.max(maxChromeRssKb,chrome);previous=current;samples++;
    }catch(error){unavailable=String(error);}};
    sample();const timer=setInterval(sample,250);
-   return ()=>{clearInterval(timer);sample();return {samples,cpuTicks,clockTicksPerSecond,maxTreeRssKb,maxChromeRssKb,unavailable};};
+   return ()=>{clearInterval(timer);sample();return {samples,cpuTicks,clockTicksPerSecond,maxTreeRssKb,maxChromeRssKb,rootPid,nodePid:process.pid,unavailable};};
   }
-  const names=['mouse right 393px 100%','touch top 320px 25%',
-   'stop on capture-loss','stop on lock','stop on blur','stop on tab-close',
-   'second finger rollback/pinch 25%','grow existing left extent 25%'];
-  const selected=names.map(name=>{const c=cases.find(test=>test.name===name);assert.ok(c,`missing comparison case ${name}`);return c;});
-  async function measured(test){
-   const start=performance.now();try{await comparisonLabel.run(test.name,()=>test.run());return {name:test.name,status:'passed',durationMs:performance.now()-start};}
-   catch(error){return {name:test.name,status:'failed',durationMs:performance.now()-start,error:error?.stack??String(error)};}
+  const selected=cases;assert.equal(selected.length,67,'full comparison must retain all cases');
+  async function measured(test,deadline=Infinity){
+   const start=performance.now();let outcome,value;
+   if(performance.now()+caseTimeoutMs>deadline)outcome={name:test.name,status:'not-run',error:'Six-minute comparison budget exhausted'};
+   else try{value=await comparisonLabel.run(test.name,()=>test.run());outcome={name:test.name,status:'passed',durationMs:performance.now()-start};}
+   catch(error){outcome={name:test.name,status:'failed',durationMs:performance.now()-start,error:error?.stack??String(error)};}
+   console.log('EDGE_DRAG_COMPARE_CASE '+JSON.stringify({...outcome,result:value}));return outcome;
   }
   async function sample(mode,round){
-   comparisonTelemetry=[];const start=performance.now(),cpuStart=process.cpuUsage(),stopResources=resourceSampler(),results=[];
-   if(mode==='serial')for(const c of selected)results.push(await measured(c));
-   else for(let i=0;i<selected.length;i+=2)results.push(...await Promise.all(selected.slice(i,i+2).map(measured)));
-   const resources=stopResources(),focus=comparisonTelemetry;comparisonTelemetry=null;console.log('EDGE_DRAG_COMPARE '+JSON.stringify({mode,round,durationMs:performance.now()-start,nodeCpu:process.cpuUsage(cpuStart),resources,focus,results}));
+   comparisonTelemetry=[];const start=performance.now(),deadline=start+suiteBudgetMs,cpuStart=process.cpuUsage(),nodeRssStart=process.memoryUsage().rss,stopResources=resourceSampler(),results=[];
+   if(mode==='serial')for(const c of selected)results.push(await measured(c,deadline));
+   else for(let i=0;i<selected.length;i+=2)results.push(...await Promise.all(selected.slice(i,i+2).map(c=>measured(c,deadline))));
+   const resources=stopResources(),focus=comparisonTelemetry;comparisonTelemetry=null;console.log('EDGE_DRAG_COMPARE '+JSON.stringify({mode,round,durationMs:performance.now()-start,nodeCpu:process.cpuUsage(cpuStart),nodeRssStart,nodeRssEnd:process.memoryUsage().rss,resources,focus,results}));
+   return results.some(result=>result.status!=='passed');
   }
-  for(const [round,mode] of ['serial','pair','pair','serial'].entries())await sample(mode,round);
+  for(const [round,mode] of ['serial','pair','pair','serial','serial','pair'].entries())if(await sample(mode,round)){console.log('EDGE_DRAG_COMPARE_STOP further rounds unverified after a failure');break;}
   const faultBrowser={newContext:async options=>{
    const context=await browser.newContext(options);
-   await context.addInitScript(()=>{const native=Element.prototype.setPointerCapture;Element.prototype.setPointerCapture=function(id){if(this.matches('.node'))return;return native.call(this,id);};});
+   await context.addInitScript(()=>{const native=Element.prototype.setPointerCapture;Element.prototype.setPointerCapture=function(id){if(this.matches('.node')){window.__injectedCaptureFaults=(window.__injectedCaptureFaults??0)+1;return;}return native.call(this,id);};});
    return context;
   }};
-  for(const mode of ['serial','pair']){
-   const fault={name:'capture loss without native node pointer capture',run:()=>verifyInterruption(faultBrowser,'capture-loss')};
+  const noSaveBrowser={newContext:async options=>{
+   const context=await browser.newContext(options);
+   await context.addInitScript(()=>{let dragging=false;document.addEventListener('pointermove',event=>{if(event.isTrusted&&event.buttons===1)dragging=true;},true);const native=IDBObjectStore.prototype.put;IDBObjectStore.prototype.put=function(value,key){if(this.name==='session'&&dragging){window.__injectedSaveFaults=(window.__injectedSaveFaults??0)+1;throw new DOMException('injected session save failure after drag','AbortError');}return native.call(this,value,key);};});
+   return context;
+  }};
+  const faults=[{name:'capture loss without native node pointer capture',run:()=>verifyInterruption(faultBrowser,'capture-loss')},{name:'session IndexedDB write rejected after drag',run:()=>verifyEdge(noSaveBrowser,{width:393,zoom:1,input:'mouse',edge:'right'})}];
+  for(const fault of faults)for(const mode of ['serial','pair']){
    const control=selected.find(c=>c.name==='stop on lock');
-   const results=mode==='serial'?[await measured(fault),await measured(control)]:await Promise.all([fault,control].map(measured));
+   const results=mode==='serial'?[await measured(fault),await measured(control)]:await Promise.all([fault,control].map(c=>measured(c)));
    console.log('EDGE_DRAG_FAULT_EXPERIMENT '+JSON.stringify({mode,results}));
   }
  }
