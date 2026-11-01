@@ -19,7 +19,7 @@ export function diagramCanvas(doc:Document,render:(view:DiagramView)=>SVGSVGElem
  const root=doc.createElement('div');root.className='diagram-canvas';
  root.innerHTML='<div class="canvas-controls" data-settings-open="false"><button class="graph-settings-toggle" aria-label="表示設定を開く" aria-expanded="false"></button><div class="concept-display-options" hidden><button class="reset-layout">レイアウトを初期値に戻す</button></div><button class="canvas-lock" aria-label="配置ロック"></button><button class="zoom-out" aria-label="縮小"></button><span class="canvas-zoom"></span><button class="zoom-in" aria-label="拡大"></button></div><div class="diagram-viewport" tabindex="0"><div class="diagram-world"></div></div>';
  const host=root.querySelector<HTMLElement>('.diagram-viewport')!,world=root.querySelector<HTMLElement>('.diagram-world')!,bar=root.querySelector<HTMLElement>('.canvas-controls')!;
- if(onBackgroundTap){host.setAttribute('role','region');host.setAttribute('aria-label','サブシステム全体図。背景を選択するか Escape キーで全体の情報に戻る');}
+ if(onBackgroundTap){host.setAttribute('role','region');host.setAttribute('aria-label','サブシステム全体図。背景を選択するか Escape キーで選択を解除');}
  const button=(s:string)=>bar.querySelector<HTMLButtonElement>(s)!,gear=button('.graph-settings-toggle'),panel=bar.querySelector<HTMLElement>('.concept-display-options')!,lock=button('.canvas-lock');
  for(const[s,i,c]of [['.graph-settings-toggle',Settings,''],['.canvas-lock',LockKeyhole,'lock-closed'],['.canvas-lock',LockKeyholeOpen,'lock-open'],['.zoom-out',Minus,''],['.zoom-in',Plus,'']] as const){const icon=createElement(i,{'stroke-width':1.8,'aria-hidden':'true'});if(c)icon.classList.add(c);button(s).append(doc.importNode(icon,true));}
  let svg:SVGSVGElement,width=0,height=0;
