@@ -22,7 +22,7 @@ export async function verifyRightDrawerUnification(browser){
    await go('concept:group-request');await open();assert.equal(await page.locator('.concept-related .right-drawer-heading strong').textContent(),'購入要求・申請内容');
    assert(await page.locator('.data-review-overview').isVisible());assert.equal(await page.locator('.concept-child-tabs').count(),0);const concept=await shape('.concept-related');assert.deepEqual(concept.close,[44,44]);
    for(const key of ['headerHeight','paddingLeft','paddingRight','titleSize'])assert.equal(concept[key],business[key],key+' must match');
-   for(const key of ['bodyLeft','bodyTop'])assert.ok(Math.abs(concept[key]-business[key])<=1,key+' must match within a pixel');
+   for(const key of ['bodyLeft','bodyTop'])assert.ok(Math.abs(concept[key]-business[key])<=1,`${key} at ${width}px ${theme}: business=${JSON.stringify(business)}, concept=${JSON.stringify(concept)}`);
    assert.equal(concept.tabs.length,0);
    await page.locator('[data-sample=request-submitted]').click();assert.equal(await page.locator('.data-examples-panel').isVisible(),true);await page.locator('.concept-example-back').press('Enter');assert.equal(await page.locator('.data-review-overview').isVisible(),true);assert.equal(await page.locator('.data-review-overview').evaluate(e=>e===document.activeElement),true);
    if(width===393)await page.screenshot({path:`web/evidence/shell/right-concept-${theme}.png`});

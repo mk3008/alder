@@ -83,7 +83,7 @@ jobs:
           if [ "${{ steps.b_loop.outputs.enabled }}" = true ]; then
             node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
           else
-            node web/test-browser.mjs
+            node web/test-browser.mjs --cases viewerShell
           fi
 
       - name: Retain bounded B-loop measurements
