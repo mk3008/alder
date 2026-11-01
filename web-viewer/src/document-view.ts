@@ -50,9 +50,11 @@ class RichReader{
    const visited=new Set(seen).add(guarantee.id);for(const block of guarantee.blocks){if(!this.take(root))break;if(block.kind==='prose')this.runs(root,block.content,visited);else this.example(root,block.exampleId,visited);}
   }}else this.runs(root,content,seen);
  }}
- example(root:HTMLElement,id:string,seen:Set<string>){
+ example(root:HTMLElement,id:string,seen:Set<string>,checkIdsOnly=false){
   const ex=this.doc.examples.find(e=>e.id===id)!;if(!exampleCheckIds(this.doc,ex).length)return;const table=element('table'),head=element('tr');for(const c of ex.columns){if(!this.take(root))break;head.append(element('th',c));}table.append(head);
-  for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
+  for(const row of ex.rows){if(!this.take(root))break;const tr=element('tr');for(const cell of row){if(!this.take(root))break;const td=element('td');
+   if(checkIdsOnly){for(const run of cell){const item=run.kind==='reference'?this.doc.items.find(value=>value.id===run.targetId):undefined;if(item)td.append(element('span',item.checkId));else this.runs(td,[run],seen);}}
+   else this.runs(td,cell,seen);tr.append(td);}table.append(tr);}const wrap=element('div');wrap.className='json-example';wrap.append(table);root.append(wrap);
  }
 }
 export function renderChecks(design:Design,selected?:string,checks=design.model!.checks):HTMLElement{
@@ -121,7 +123,7 @@ export function renderDecisionExamples(design:Design,ids:string[],documents=desi
   const example=doc.examples.find(value=>value.id===id);if(!example||!exampleCheckIds(doc,example).length)continue;
   const reader=new RichReader(doc,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
   for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,block.content,new Set([guarantee!.id]));
-  reader.example(section,id,new Set([id]));root.append(section);
+  reader.example(section,id,new Set([id]),true);root.append(section);
  }
  return root;
 }
