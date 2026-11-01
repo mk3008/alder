@@ -45,7 +45,10 @@ try{
  const p05=[...page.querySelectorAll('summary')].find(summary=>summary.textContent==='P-05');assert(p05);p05.parentElement.open=true;p05.parentElement.dispatchEvent(new w.Event('toggle'));
  assert.match(p05.parentElement.textContent,/提出を成立させない/);assert.doesNotMatch(p05.parentElement.textContent,/未レビュー|confidence|testEvidence/);covered.add('SPEC-SEPARATE-003');
  page=open('result',key('submit-request'));assert.match(page.textContent,/処理結果/);assert.match(page.textContent,/P-03/);assert.doesNotMatch(page.textContent,/P-04|P-05|P-06/);
+ const resultCheck=page.querySelector('[data-element-id="purchase-check-p-03"]');assert.equal(resultCheck.querySelector('h3').textContent,'P-03');assert.doesNotMatch(resultCheck.querySelector('h4').nextElementSibling.textContent,/上限/);
+ const checkDetail=resultCheck.querySelector('details');assert.equal(checkDetail.open,false);assert.match(checkDetail.textContent,/上限額と同額も含む/);
  assert.equal(page.querySelector('.decision-examples'),null);assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,'request-submitted');assert.equal(page.querySelector('select'),null,'one data example needs no picker');
+ const scenario=page.querySelector('.data-example-context');assert(scenario);assert.equal(scenario.open,false);assert.match(scenario.textContent,/上限額2,000円と同額/);
  assert.match(page.textContent,/ボールペン/);assert.match(page.textContent,/ファイル/);const repeated=[...page.querySelectorAll('.data-example-key')].filter(cell=>cell.textContent==='R-101');assert(repeated.length>=3);assert.equal(new Set(repeated.map(cell=>cell.dataset.keyTone)).size,1);
  page=open('result',key('save-draft'));assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['request-draft','request-draft-approved']);assert.equal(page.querySelector('.data-example-decision-links button').textContent,'P-01');
  page.querySelector('.data-example-decision-links button').click();assert.match($('#tests-workspace').textContent,/可否判定/);page=open('result',key('save-draft'));

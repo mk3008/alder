@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v4-check-review-2",
+  "revision": "purchase-v4-check-review-3",
   "documents": [
     {
       "id": "purchase-bd",
@@ -8000,7 +8000,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v2-review",
+      "revision": "checks-v3-review",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -9124,13 +9124,13 @@
             "condition": [
               {
                 "kind": "text",
-                "value": "見積・理由・全品目情報が揃い、各品目の税抜単価×数量の合計が役職別上限額以下と判定できる。"
+                "value": "見積・理由・全品目情報が揃い、各品目の税抜単価×数量の合計が役職別上限額以下と判定できる。上限額と同額も含む。"
               }
             ],
             "expectedResult": [
               {
                 "kind": "text",
-                "value": "申請内容を確定し、申請済みとして承認者が判断できる。上限額と同額も含む。"
+                "value": "申請内容を確定し、申請済みとして承認者が判断できる。"
               }
             ],
             "evidence": [

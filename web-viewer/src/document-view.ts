@@ -150,10 +150,10 @@ export function renderResultChecks(design:Design,ids:string[],documents=design.m
   const reader=new RichReader(doc,true);
   for(const item of doc.items.filter(value=>wanted.has(value.id))){
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
-   section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
+   section.append(element('h3',item.checkId));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));
    reader.fields(section,fields,new Set([item.id]),true);
-   if(item.fields.condition?.length){const detail=element('details'),summary=element('summary','適用条件');detail.append(summary);reader.runs(detail,item.fields.condition,new Set([item.id]));section.append(detail);}
+   const detail=element('details'),summary=element('summary','Check の詳細');detail.append(summary,element('p',item.title));if(item.fields.condition?.length)reader.runs(detail,item.fields.condition,new Set([item.id]));section.append(detail);
    root.append(section);
   }
  }
