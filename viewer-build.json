@@ -1,11 +1,11 @@
 {
   "productManifestVersion": "0.4.9",
-  "source": "ba888a994509040e01f2448e229d12aa960215a0",
-  "approvedCandidate": "532e7d4d245d20c7c150609d85e6b038775dea07",
-  "tree": "524a70119bf5495f7b744efe7bce83c102f97b57",
-  "buildRun": 41200718384,
-  "buildArtifact": 13042772936,
-  "scriptSha256": "b6ed043013935d4c6ad3dcc796dd81a934f40d5cca44590a1b55e4f01ea5db30",
-  "styleSha256": "8221020fc68aab1f70abefb1f6b509e0fd3891bfbf9d51acd1c745c524b62f91",
-  "previousProductionCommit": "66d1c59d67ef3b81960198a1a5c02e5f087d8bd9"
+  "source": "d809b971d18903f0e3135a2cc08415dd9ffa42bb",
+  "approvedCandidate": "0e5f3a17ce0966e8595b69bb6757902e587170d4",
+  "tree": "c7c0abb07df744357a27edc1c4ecf558e4fa31fe",
+  "buildRun": 41312431733,
+  "buildArtifact": 13086224053,
+  "scriptSha256": "5ad2f45635d3f3ffb05ea5c6c76e634ffa9bdf36181444a17762da538a668774",
+  "styleSha256": "e5312ec9f6f2bd28fe3ad072733463836520137446e51cd10efe4c155b6cea3a",
+  "previousProductionCommit": "a92a90eafa25323917a2f95a78f1b6eff039be28"
 }
