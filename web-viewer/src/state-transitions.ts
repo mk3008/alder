@@ -31,7 +31,7 @@ function stateDiagram(model:StateModel,view:DiagramView=newDiagramView()):SVGSVG
   const shortConditions=siblings.map(other=>(other.conditionLabel??other.condition).trim().replace(/\s+/g,' '));
   const condition=new Set(shortConditions).size===siblings.length?(row.conditionLabel??row.condition):row.condition;
   const exception=row.path==='exception'?'例外：'+(row.exception??'例外名未定義'):'';
-  const detail=[exception,...(siblings.length>1?[condition]:[])].filter(Boolean).join('：');
+  const detail=[exception,...(siblings.length>1||row.path==='normal'&&row.conditionLabel?[condition]:[])].filter(Boolean).join('：');
   group.lines=wrap(group.activity+(detail?'（'+detail+'）':''));group.lineRows=group.lines.map(()=>group.rows);
   group.width=Math.max(...group.lines.map(line=>Array.from(line).length*14));group.height=group.lines.length*18;
   if(!plan.wires[index].returning){group.offset=departures.has(group.from)?departures.get(group.from)!+8:0;departures.set(group.from,group.offset+group.height);}
