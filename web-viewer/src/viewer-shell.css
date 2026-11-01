@@ -177,3 +177,6 @@
 .decision-examples :is(th,td).decision-result,.decision-examples :is(th,td).decision-notes{border-left:2px solid var(--line)}
 .data-example-context{font-size:13px;margin:4px 0}.data-example-context summary{cursor:pointer}
 @media(max-width:800px){.test-spec-page{padding:12px}}
+
+/* The card action is a label, while layout-owned CSS stays unchanged. */
+.activity-open{font-size:11px}
