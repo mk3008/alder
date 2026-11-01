@@ -1,6 +1,6 @@
-:root{--graph-wire-width:1.5px;--graph-related-width:3.2px;--graph-card-border-width:1.5px;--graph-neighbor-width:2px}
+:root{--graph-wire-width:1.5px;--graph-related-width:3.2px;--graph-card-border-width:1.5px;--graph-neighbor-width:2px;--graph-region-fill:var(--panel,#fff);--graph-region-border:var(--subtle,#cbd6df)}
 :root{--review-blue:#2563eb;--review-green:#16835d;--review-ring:#a55b06;--review-link:#176ba0;--review-shadow:rgba(37,99,235,.3)}
-[data-theme=dark]{--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46)}
+[data-theme=dark]{--review-blue:#78adff;--review-green:#64d6ad;--review-ring:#ffd36c;--review-link:#80caff;--review-shadow:rgba(94,166,255,.46);--graph-region-fill:#263746;--graph-region-border:#708a9b}
 /* Both canvases render selection with the same HTML box-shadow.
    The concept SVG reserves a transparent foreignObject behind each shape. */
 .node.review-neighbor,.node.business.review-neighbor,.graph-shape.review-neighbor>.concept-selection-glow>div{box-shadow:0 0 0 1px color-mix(in srgb,var(--review-link) 35%,transparent),0 3px 8px #0002}
@@ -23,8 +23,10 @@
 /* Chromium's transient tap rectangle is separate from selection/focus. */
 .node,.graph-shape,.concept-select{-webkit-tap-highlight-color:transparent}
 /* Explicit subsystem boundaries in concept review diagrams. */
-.concept-subsystem-region{fill:var(--panel,#fff);stroke:var(--subtle,#cbd6df);stroke-width:1.5;cursor:pointer}
+.concept-subsystem-region{fill:var(--graph-region-fill);stroke:var(--graph-region-border);stroke-width:1.5;cursor:pointer}
 .concept-subsystem-selected .concept-subsystem-region{stroke:var(--review-blue);stroke-width:2}
+[data-theme=dark] .concept-subsystem-region,[data-theme=dark] .subsystem-overview-region{stroke-width:2}
+[data-theme=dark] .concept-subsystem-selected .concept-subsystem-region,[data-theme=dark] .subsystem-overview-group.selected .subsystem-overview-region{stroke-width:3}
 .concept-subsystem-title{font:600 14px "Segoe UI","Noto Sans JP",sans-serif;fill:var(--fg,#253d38)}
 .concept-handoff{fill:none;stroke:var(--line,#7f969f);stroke-width:var(--graph-wire-width)}
 .concept-handoff.returning{stroke-dasharray:6 5}

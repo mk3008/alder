@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 import {loadPurchaseReview} from './purchase-review-browser.mjs';
-import {verifyStructureDrawer} from './test-structure-drawer-browser.mjs';
+import {contrast,verifyStructureDrawer} from './test-structure-drawer-browser.mjs';
 import {touchDriver} from './touch-driver.mjs';
 import {verifyCtrlWheelZoom} from './test-ctrl-wheel-zoom-browser.mjs';
 
@@ -97,6 +97,9 @@ export async function verifySubsystemOverview(browser){
    await page.setViewportSize({width,height:960});const measured=await page.locator('.subsystem-overview-graph').evaluate(graph=>{
     const boxes=[...graph.querySelectorAll('[data-review-group]')].map(g=>{const rect=g.querySelector('.state-diagram-node'),region=graph.querySelector(`[data-subsystem="${g.dataset.subsystemId}"] rect`);const num=(e,k)=>Number(e.getAttribute(k));return{id:g.dataset.reviewGroup,x:num(rect,'x'),y:num(rect,'y'),inside:num(rect,'x')>=num(region,'x')&&num(rect,'y')>=num(region,'y')&&num(rect,'x')+num(rect,'width')<=num(region,'x')+num(region,'width')&&num(rect,'y')+num(rect,'height')<=num(region,'y')+num(region,'height')};});return {boxes,edges:graph.querySelectorAll('[data-overview-from]').length,overflow:document.documentElement.scrollWidth>innerWidth};});
    assert.equal(measured.overflow,false,'no document-wide horizontal overflow');assert.ok(measured.boxes.every(box=>box.inside),'every card is within its region');for(let i=1;i<measured.boxes.length;i++){assert.ok(measured.boxes[i].x>measured.boxes[i-1].x);assert.ok(measured.boxes[i].y>measured.boxes[i-1].y);}assert.equal(measured.edges,2);
+   const colors=await page.locator('.subsystem-overview-region').first().evaluate(el=>({fill:getComputedStyle(el).fill,border:getComputedStyle(el).stroke,background:getComputedStyle(el.closest('.diagram-viewport')).backgroundColor}));
+   const detailFill=await page.locator('iframe[data-concept-view=group-result]').evaluate(frame=>frame.contentWindow.getComputedStyle(frame.contentDocument.querySelector('.concept-subsystem-region')).fill);
+   assert.equal(colors.fill,detailFill,'overall and detail use the same region surface');if(theme==='dark'){assert(contrast(colors.fill,colors.background)>=1.35);assert(contrast(colors.border,colors.fill)>=3);assert(contrast(colors.border,colors.background)>=3);}
    for(const control of ['.zoom-in','.zoom-out','.canvas-lock','.reset-layout'])assert.equal(await page.locator('.subsystem-overview-canvas '+control).count(),1);
    await page.screenshot({path:`web/evidence/shell/subsystem-overview-${width}-${theme}.png`});observations.push({width,theme,...measured});
   }}
