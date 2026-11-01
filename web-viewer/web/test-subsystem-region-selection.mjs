@@ -21,7 +21,7 @@ const cases={
  'SUBSYSTEM-REGION-002':['model','open','handoff'],
  'SUBSYSTEM-REGION-003':['mouse-locked','mouse-unlocked','touch-locked','touch-unlocked','pinch'],
  'SUBSYSTEM-REGION-004':['title','restore'],
- 'SUBSYSTEM-REGION-005':['unmarked-background']
+ 'SUBSYSTEM-REGION-005':['overall-background']
 },results=[];
 const pass=(id,name)=>results.push(id+':'+name);
 function verifyCoverage(actual){assert.deepEqual([...actual].sort(),Object.entries(cases).flatMap(([id,names])=>names.map(name=>id+':'+name)).sort(),'every case must be present exactly once');}
@@ -73,8 +73,10 @@ try{
  assert.equal(reloaded.selection()?.kind,'group');assert.equal(reloaded.selection()?.id,'approval');
  assert.equal(reloaded.root.querySelector('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');
  pass('SUBSYSTEM-REGION-004','restore');
- const beforeEmpty=changes.length;fire('pointerdown','touch',1,100,100,host);fire('pointerup','touch',1,100,100);assert.equal(changes.length,beforeEmpty);assert.equal(selected(),'approval');
- pass('SUBSYSTEM-REGION-005','unmarked-background');
+ // The new background-return requirement explicitly replaces the former
+ // no-op on this diagram only; the shared canvas tests retain other diagrams.
+ const beforeEmpty=changes.length;fire('pointerdown','touch',1,100,100,host);fire('pointerup','touch',1,100,100);assert.equal(changes.length,beforeEmpty+1);assert.equal(selected(),undefined);
+ pass('SUBSYSTEM-REGION-005','overall-background');
  const css=readFileSync('src/viewer-shell.css','utf8');assert.match(css,/\.subsystem-overview-region\{[^}]*cursor:pointer/);assert.doesNotMatch(css,/\.subsystem-overview-region\{[^}]*pointer-events:none/);
 }finally{w.close();}
 verifyCoverage(results);assert.throws(()=>verifyCoverage(results.slice(1)),/every case/);assert.throws(()=>verifyCoverage([...results,results[0]]),/every case/);
