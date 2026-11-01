@@ -42,7 +42,9 @@ try{
  const draftCheck=page.querySelector('.decision-examples details');draftCheck.open=true;draftCheck.dispatchEvent(new w.Event('toggle'));assert.match(draftCheck.textContent,/役職別上限への適合・申請状態を問わず/);
  assert.match(page.textContent,/保存の可否を左右しない/);covered.add('SPEC-SEPARATE-001');covered.add('SPEC-SEPARATE-002');
  page=open('decision',key('submit-request'));assert.equal(page.querySelector('[data-data-example]'),null);
- assert.deepEqual(rows(),[['見積','役職別上限','提出','関連 Check'],['あり','上限以下','可','P-03'],['あり','上限超過','不可','P-04'],['なし','‐','不可','P-05'],['あり','判定不能','不可','P-06']]);
+ assert.deepEqual(rows(),[['見積','役職別上限','提出','関連 Check'],['あり','上限以下','可','P-03'],['‐','上限超過','不可','P-04'],['なし','‐','不可','P-05'],['‐','判定不能','不可','P-06']]);
+ assert.match(page.textContent,/複数の条件に該当する場合があります/);const applicable=(quote,limit)=>rows().slice(1).filter(row=>(row[0]==='‐'||row[0]===quote)&&(row[1]==='‐'||row[1]===limit)).map(row=>row[3]).sort();
+ assert.deepEqual(applicable('なし','上限超過'),['P-04','P-05']);assert.deepEqual(applicable('なし','判定不能'),['P-05','P-06']);assert.deepEqual(applicable('あり','上限以下'),['P-03']);
  const p05=[...page.querySelectorAll('summary')].find(summary=>summary.textContent==='P-05');assert(p05);p05.parentElement.open=true;p05.parentElement.dispatchEvent(new w.Event('toggle'));
  assert.match(p05.parentElement.textContent,/提出を成立させない/);assert.doesNotMatch(p05.parentElement.textContent,/未レビュー|confidence|testEvidence/);covered.add('SPEC-SEPARATE-003');
  page=open('result',key('submit-request'));assert.match(page.textContent,/処理結果/);assert.match(page.textContent,/P-03/);assert.doesNotMatch(page.textContent,/P-04|P-05|P-06/);

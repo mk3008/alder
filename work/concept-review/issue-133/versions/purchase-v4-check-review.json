@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v4-check-review-4",
+  "revision": "purchase-v4-check-review-5",
   "documents": [
     {
       "id": "purchase-bd",
@@ -7998,7 +7998,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v4-review",
+      "revision": "checks-v5-review",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -8138,7 +8138,7 @@
               "content": [
                 {
                   "kind": "text",
-                  "value": "品目情報と購入理由が揃っている場合。‐＝提出の成立を左右しない。"
+                  "value": "品目情報と購入理由が揃っている場合。‐＝提出の成立を左右しない。複数の条件に該当する場合があります。"
                 }
               ]
             },
@@ -8466,7 +8466,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "あり"
+                  "value": "‐"
                 }
               ],
               [
@@ -8520,7 +8520,7 @@
               [
                 {
                   "kind": "text",
-                  "value": "あり"
+                  "value": "‐"
                 }
               ],
               [
