@@ -1,0 +1,17 @@
+{
+  "sourceHead": "1f08e7bf9c9d3a17ae22f527d0193005ae8a3ed0",
+  "sourceTree": "4dd360229766319904d76869d533f3d070e65f6a",
+  "files": {
+    "web-viewer/dist/LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "web-viewer/dist/THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "web-viewer/dist/index.html": "11641e1cb525020eb82324bc7de65eb6fc82d2ca4f43fe624ee0f9c6e0fd0fed",
+    "web-viewer/dist/concept.html": "18454eac3d305311a4efd0e41f6fc5beba786457a33f2396b4a222e8b44c0f56",
+    "web-viewer/dist/assets/canvas-toolbar-DuA_31SG.js": "407b65d37b96f3b6a92b8db529a7f2cf388fdc22d27389aca3e226f7ee5dc878",
+    "web-viewer/dist/assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "web-viewer/dist/assets/concept-CGdGzMvu.js": "80bb754fc1b018ec88a4506cecb1046936daa8abe6f3b3a95683586305d95e68",
+    "web-viewer/dist/assets/concept-Dn8Gxjbu.css": "4bc3983607d944dee1cb95dffcb09d00980b7de199e14556a4559d30044d5c0b",
+    "web-viewer/dist/assets/main-DBHbYKQo.css": "4018ac66cc660ca29b3cbc556f7daf9ba09f67fdd09362e47e6349184e4fb5bc",
+    "web-viewer/dist/assets/main-DcLAF7AF.js": "b54f198515e20cf22ce6eeab5e9bbbf41e1f59831315fdffc85db3b70e0fa47d",
+    "work/concept-review/issue-133/versions/purchase-v7-value-independent-review.json": "5f2eaa2779b414deaf437ed0bfbd93415418291b7b18982a5884492e7131575c"
+  }
+}
