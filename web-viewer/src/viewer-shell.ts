@@ -1,4 +1,3 @@
-import {createElement,SquareArrowOutUpRight} from 'lucide';
 import {viewTabLabel,viewTabClose,menuChevron} from './view-tab';
 import {installTabScroll,revealTab} from './tab-scroll';
 import {styleConceptToolbar,styleConceptNodes} from './canvas-toolbar';
@@ -117,7 +116,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
   const known=new Set(group.graph.nodes.map(node=>node.conceptId));
   return [...new Set(target.samples.flatMap(sample=>sample.blocks.map(block=>block.card)))].filter(id=>known.has(id)&&context?.model.concepts.some(item=>item.id===id));
  }
- function relatedLink(root:HTMLElement,label:string,activate:()=>void){const b=document.createElement('button');b.type='button';b.className='shell-evidence';text(b,'span',label);b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));b.onclick=activate;root.append(b);return b;}
+ function relatedLink(root:HTMLElement,label:string,activate:()=>void){const b=document.createElement('button');b.type='button';b.className='shell-evidence';text(b,'span',label);b.onclick=activate;root.append(b);return b;}
  function appendTestLinks(root:HTMLElement,targets:FunctionTarget[]){const linked=targets.filter(target=>target.capability.testSpecification);if(!linked.length)return;
   const section=document.createElement('section');section.className='shell-test-links';text(section,'h3','テスト仕様書');
   for(const target of linked)for(const [prefix,label]of [['decision:','可否判定'],['','処理結果']] as const){const key=prefix+target.key;const button=relatedLink(section,functionName(target)+'・'+label,()=>selectSpec(key));button.dataset.relatedSpec=key;}
@@ -131,7 +130,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
  }
  function evidence(root:HTMLElement,id:string){text(root,'h3','Activity');const c=options.business(),group=findReviewGroup(active),concept=context?.model.concepts.find(item=>item.id===id);
   const activityIds=group?.concepts[id]?.sourceActivities??group?.activities??concept?.activityLinks.filter(link=>link.uses.includes('生成')).map(link=>link.activityId)??[];
-  for(const activityId of activityIds){const target=c.activities.find(item=>item.id===activityId);if(!target)continue;const b=document.createElement('button');b.className='shell-evidence';text(b,'span',target.name);b.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8,'data-icon':'square-arrow-out-up-right'}));b.title=target.name+'を業務タブで開く';b.setAttribute('aria-label',b.title);b.onclick=()=>openBusiness(target.id);root.append(b);}}
+  for(const activityId of activityIds){const target=c.activities.find(item=>item.id===activityId);if(!target)continue;const b=document.createElement('button');b.className='shell-evidence';text(b,'span',target.name);b.title=target.name+'を業務タブで開く';b.setAttribute('aria-label',b.title);b.onclick=()=>openBusiness(target.id);root.append(b);}}
  function displayGraph(key:string){const group=findReviewGroup(key);return group?views?.graph(group.id):key==='overview'?views?.overviewGraph():undefined;}
  function selectedView(id:string){const viewId=selectedViews.get(active),card=viewId?displayGraph(active)?.tables[viewId]:undefined;return card?.conceptId===id?card:undefined;}
  function describeConcept(root:HTMLElement,id:string){const t=selectedView(id)??findReviewGroup(active)?.concepts[id]??{...tables[id],sources:undefined};root.replaceChildren();text(root,'p',t.note);text(root,'h3','持つ情報');const ul=document.createElement('ul');for(const[,value]of t.fields)text(ul,'li',value);root.append(ul);if(t.sources?.length){text(root,'h3','情報の出所・対象時点');const sources=document.createElement('ul');for(const source of t.sources)text(sources,'li',source);root.append(sources);}evidence(root,id);appendTestLinks(root,functions().filter(target=>relatedConceptIds(target).includes(id)));}
