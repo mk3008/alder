@@ -236,7 +236,7 @@ function detail(){
   const heading=document.createElement('div');heading.className='right-drawer-heading';const title=detailHeading(n?.name??'業務設計');if(n){const image=n.type==='business'?roleBadge(String(n.who),n.id):graphNodeIcon(n);image.classList.add('drawer-node-icon');title.prepend(image);}heading.append(title);const close=document.createElement('button');close.type='button';close.id='business-drawer-close';close.setAttribute('aria-label','右ドロワーを閉じる');close.textContent='×';close.onclick=()=>{$('drawer').click();$('drawer').focus({preventScroll:true});};heading.append(close);
   root.append(heading);if(panel.hasChildNodes())root.append(panel);
   if(n){const links=findingLinks(t.design,n.id,openFinding);if(links.hasChildNodes())root.append(links);}
-  root.append(businessDetail(t.design,n?.id));root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
+  root.append(businessDetail(t.design,n?.id));if(n?.type==='business')shell?.appendActivityTestLinks(root,n.id);root.scrollTop=scroll;if(focus)document.getElementById(focus)?.focus({preventScroll:true});
 }
 type Category='activity'|'object'|'role';
 const listViews=new Map<string,{category:Category;search:string;collapsed:Set<string>;mode:'items'|'findings';resolved:boolean;finding?:FindingSelection;filterNode?:string}>();

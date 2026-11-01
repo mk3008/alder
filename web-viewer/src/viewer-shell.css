@@ -159,6 +159,13 @@
 #tests-workspace{display:flex;flex:1;min-width:0;min-height:0;background:var(--bg);color:var(--fg)}
 #tests-workspace[hidden]{display:none!important}
 .test-spec-page{flex:1;min-width:0;overflow:auto;padding:20px 24px}
+.spec-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible;color:var(--fg)}
+.shell-workbench>.spec-related{position:relative;top:auto;bottom:auto;right:auto;min-height:0;flex-shrink:0;align-self:stretch}
+.spec-related-content{flex:1;min-height:0;overflow:auto;padding:12px;line-height:1.6;font-size:13px}
+.spec-related-content h3,.shell-test-links h3{font-size:14px;margin:12px 0 4px}
+#detail>.shell-test-links{padding:0 12px 12px}
+[data-theme=dark] .shell-evidence{color:#8fc8ef}
+@media(max-width:800px){.shell-workbench>.spec-related{position:absolute;right:0;top:0;bottom:0;z-index:6}}
 .test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}
 .decision-examples .json-example{border:1px solid var(--subtle);border-radius:4px;background:var(--panel)}.decision-examples .json-example table{min-width:0}.decision-examples .json-example th{background:var(--select)}.decision-examples summary{cursor:pointer}.result-checks+.test-spec-examples{margin-top:8px}.test-spec-sample>.result-checks+h3{margin-top:20px}
 .decision-examples :is(th,td).decision-result,.decision-examples :is(th,td).decision-notes{border-left:2px solid var(--line)}

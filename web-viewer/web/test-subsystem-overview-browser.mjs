@@ -5,6 +5,8 @@ import {contrast,verifyStructureDrawer} from './test-structure-drawer-browser.mj
 import {touchDriver} from './touch-driver.mjs';
 import {verifyCtrlWheelZoom} from './test-ctrl-wheel-zoom-browser.mjs';
 import {verifySubsystemSpecLinks} from './test-subsystem-to-test-spec-browser.mjs';
+import {verifySpecRelatedLinks} from './test-test-spec-related-links-browser.mjs';
+import {verifyGraphInitialZoom} from './test-graph-initial-zoom-browser.mjs';
 
 async function backgroundPoint(page,id){
  const point=await page.evaluate(subsystem=>{
@@ -43,7 +45,10 @@ export async function verifySubsystemOverview(browser){
 
   assert.equal(await page.locator('.concept-review-landscape h1').count(),0);assert.equal(await page.locator('#concept-tab-landscape .view-tab-name').textContent(),'全体図');assert.equal(await page.locator('[data-explorer-key="group:concept"]').textContent(),'データ構造');assert.equal(await page.locator('.landscape-modes').count(),0);assert.equal(await page.locator('[data-explorer-key="concept:overview"]').textContent(),'全体図');
   assert.equal(await page.locator('[data-subsystem]').count(),2);assert.equal(await page.locator('[data-review-group]').count(),4);assert.equal(await page.locator('[data-overview-from]').count(),2);assert.equal(await page.locator('[data-handoff-id]').count(),2);assert.deepEqual(await page.locator('[data-handoff-label]').allTextContents(),['承認済みの版・品目','入荷・未購入の結果']);
-  for(const label of await page.locator('[data-handoff-label]').all()){const bounds=await label.boundingBox(),viewport=await page.locator('.subsystem-overview-canvas .diagram-viewport').boundingBox();assert.ok(bounds.x>=viewport.x&&bounds.x+bounds.width<=viewport.x+viewport.width&&bounds.y>=viewport.y&&bounds.y+bounds.height<=viewport.y+viewport.height,'handoff label is visible on initial desktop display');}
+  assert.equal((await page.locator('.subsystem-overview-canvas .canvas-zoom').textContent()).trim(),'100%','fresh overview is not fitted to the viewport');
+  // The previous all-visible assertion still applies after the viewer explicitly zooms out.
+  for(let i=0;i<8;i++){const fits=await page.locator('[data-handoff-label]').evaluateAll(labels=>{const v=labels[0].closest('.diagram-viewport').getBoundingClientRect();return labels.every(label=>{const b=label.getBoundingClientRect();return b.left>=v.left&&b.right<=v.right&&b.top>=v.top&&b.bottom<=v.bottom;});});if(fits)break;await page.locator('.subsystem-overview-canvas .zoom-out').click();}
+  for(const label of await page.locator('[data-handoff-label]').all()){const bounds=await label.boundingBox(),viewport=await page.locator('.subsystem-overview-canvas .diagram-viewport').boundingBox();assert.ok(bounds.x>=viewport.x&&bounds.x+bounds.width<=viewport.x+viewport.width&&bounds.y>=viewport.y&&bounds.y+bounds.height<=viewport.y+viewport.height,'handoff label is reachable after explicit zoom out');}
   let point=await backgroundPoint(page,'approval');await page.mouse.click(point.x,point.y);
   assert.equal(await page.locator('[data-subsystem="approval"] button').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);
   await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');const fixedDrawer=await page.locator('.concept-related-content').innerHTML();
@@ -109,6 +114,6 @@ export async function verifySubsystemOverview(browser){
    for(const control of ['.zoom-in','.zoom-out','.canvas-lock','.reset-layout'])assert.equal(await page.locator('.subsystem-overview-canvas '+control).count(),1);
    await page.screenshot({path:`web/evidence/shell/subsystem-overview-${width}-${theme}.png`});observations.push({width,theme,...measured});
   }}
-  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks};
+  assert.deepEqual(errors,[]);const wheelZoom=await verifyCtrlWheelZoom(browser),specLinks=await verifySubsystemSpecLinks(browser),relatedLinks=await verifySpecRelatedLinks(browser),initialZoom=await verifyGraphInitialZoom(browser);return {checks:'browser selection, manual drawer, open detail, Back, region containment, staircase, common controls, 1280/393 light/dark',observations,structureDrawer,wheelZoom,specLinks,relatedLinks,initialZoom};
  }finally{await context.close();}
 }

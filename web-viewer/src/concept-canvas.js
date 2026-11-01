@@ -143,7 +143,6 @@ for(const stage of stages.filter(s=>s.id==='overview')){
  if(stage.id==='overview'){for(const[id,p]of Object.entries(saved.positions||{}))if(stage.ids.includes(id)&&Number.isFinite(p?.x)&&Number.isFinite(p?.y))s.positions.set(id,p);s.zoom=clampZoom(Number.isFinite(saved.zoom)?saved.zoom:1);s.locked=saved.locked!==false;}
 
  s.section.querySelector('.section-back').onclick=()=>history.back();states.push(s);draw(s);if(stage.id==='overview')installCanvas(s);else{s.svg.onclick=e=>{const id=e.target.closest('.node')?.dataset.node;if(id)navigateDetail(s,id);};}
- if(stage.id==='overview'&&graph.regions?.length&&!Number.isFinite(saved.zoom))requestAnimationFrame(()=>{if(!s.host.clientWidth||!s.host.clientHeight)return;s.zoom=clampZoom(Math.min(1,(s.host.clientWidth-32)/s.width,(s.host.clientHeight-32)/s.height));layoutCanvas(s);s.host.scrollTo(0,0);save(s);});
 }
 
 window.addEventListener('message',e=>{if(!fromParent(e))return;if(e.data?.type==='alder-concept-clear-highlight'){for(const s of states)clearSelection(s,false);return;}if(e.data?.type!=='alder-concept-highlight')return;const conceptId=e.data.id;for(const s of states){if(s.selected&&(tables[s.selected]?.conceptId??s.selected)===conceptId)continue;const id=s.stage.ids.find(id=>(tables[id].conceptId??id)===conceptId);if(id&&s.selected!==id){s.selected=id;draw(s);}}});
