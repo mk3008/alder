@@ -1,0 +1,55 @@
+name: Publish PR 342 fixed Viewer beta preview
+on:
+  push:
+    branches:
+      - beta/publish-pr342-5d29ef82
+    paths:
+      - '.github/workflows/publish-pr342-beta.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify artifact and publish isolated beta path
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHA="5d29ef829f1e38f38bf7453e9074464be8502827"
+          PREFIX="preview/pr-342/$SHA"
+          TMP="$(mktemp -d)"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13104443484/zip" > "$TMP/ci.zip"
+          unzip -qq "$TMP/ci.zip" -d "$TMP/pkg"
+          python3 - "$TMP/pkg" "$PREFIX" "$SHA" <<'PY'
+          import hashlib,json,pathlib,sys
+          root=pathlib.Path(sys.argv[1]); prefix=sys.argv[2]; sha=sys.argv[3]
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest['source']==sha
+          assert manifest['urlPath']=='/'+prefix+'/'
+          checked=0
+          for relative,digest in manifest['files'].items():
+              if not relative.startswith(prefix+'/'): continue
+              path=root/relative
+              assert path.is_file(),relative
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==digest,relative
+              checked+=1
+          assert checked>=10,checked
+          assert (root/prefix/'index.html').is_file()
+          print('Verified immutable CI preview files:',checked)
+          PY
+          gh auth setup-git
+          git clone --quiet --depth=1 --branch gh-pages-web-viewer "https://github.com/$GITHUB_REPOSITORY.git" "$TMP/pages"
+          DEST="$TMP/pages/$PREFIX"
+          if [ -e "$DEST" ]; then echo "Refusing to replace existing beta preview" >&2; exit 1; fi
+          mkdir -p "$(dirname "$DEST")"
+          cp -a "$TMP/pkg/$PREFIX" "$DEST"
+          mkdir -p "$DEST/data"
+          curl --silent --show-error --location --fail --retry 2 "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$SHA/web-viewer/web/fixtures/json-05-reviewed-seed.json" > "$DEST/data/reviewed-seed.json"
+          ACTUAL="$(git hash-object "$DEST/data/reviewed-seed.json")"
+          test "$ACTUAL" = "f2b09eee95d26d536868cb8778e1931e9891047a"
+          git -C "$TMP/pages" add "$PREFIX"
+          git -C "$TMP/pages" -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Publish PR 342 fixed Viewer beta preview" --quiet
+          git -C "$TMP/pages" push --quiet origin HEAD:gh-pages-web-viewer
+          echo "Published isolated beta: $PREFIX"
