@@ -139,6 +139,10 @@ export function renderDecisionExamples(design:Design,ids:string[],documents=desi
   const example=doc.examples.find(value=>value.id===id);if(!example||!exampleCheckIds(doc,example).length)continue;
   const reader=new RichReader(doc,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
   for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,block.content,new Set([guarantee!.id]));
+  if(example.rows.length>1)section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'));
+  const hasDontCare=example.rows.some(row=>row.some(cell=>cell.some(run=>run.kind==='text'&&/^\s*[-‐]\s*$/.test(run.value))));
+  const hasLegend=guarantee?.blocks.some(block=>block.kind==='prose'&&block.content.some(run=>run.kind==='text'&&/[‐-]\s*[＝=][^。]*(?:不問|左右しない|問わない)/.test(run.value)));
+  if(hasDontCare&&!hasLegend)section.append(element('p','‐ は不問です。'));
   reader.example(section,id,new Set([id]),true);root.append(section);
  }
  return root;

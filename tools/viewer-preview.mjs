@@ -25,7 +25,7 @@ export function inlineOfflineHTML(html,dist){
 export function embedOfflineConcept(standalone,concept){
  const marker='<script type="module">';if(!standalone.includes(marker))throw Error('Offline module entrypoint missing');
  const embedded=JSON.stringify(concept).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
- return standalone.replace(marker,'<script>window.__alderConceptHtml='+embedded+';</script>'+marker);
+ return standalone.replace(marker,()=>'<script>window.__alderConceptHtml='+embedded+';</script>'+marker);
 }
 
 export function packageViewerPreview({dist,output,head,pr,fixture}){

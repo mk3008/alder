@@ -24,8 +24,8 @@ try{
   dom.window.eval(output.script);assert.equal(dom.window.document.body.dataset.result,'chunk loaded','a split module is present and executable');
  }finally{dom.window.close();}
  assert.throws(()=>inlineOfflineHTML(html.replace('./assets/main.js','../main.js'),dir),/asset path/);
- const embeddedInput='<html><script>window.evil=true</script></html>',embedded=new JSDOM(embedOfflineConcept(output.standalone,embeddedInput),{runScripts:'dangerously'});
- try{assert.equal(embedded.window.__alderConceptHtml,embeddedInput);assert.equal(embedded.window.evil,undefined,'embedded page remains data until used as a frame');}finally{embedded.window.close();}
+ const embeddedInput="<html><script>window.evil=true</script><p>$& $$ $' $` "+String.fromCharCode(0x2028,0x2029)+"</p></html>",embedded=new JSDOM(embedOfflineConcept(output.standalone,embeddedInput),{runScripts:'dangerously'});
+ try{assert.equal(embedded.window.__alderConceptHtml,embeddedInput,'replacement syntax in concept text remains literal');assert.equal(embedded.window.evil,undefined,'embedded page remains data until used as a frame');}finally{embedded.window.close();}
  assert.throws(()=>embedOfflineConcept('<html></html>',embeddedInput),/entrypoint/);
  assert.throws(()=>inlineOfflineHTML(html.replace('./assets/first.css','https://example.test/first.css'),dir),/asset path/);
  writeFileSync(join(dir,'assets/first.css'),'</style>');assert.throws(()=>inlineOfflineHTML(html,dir),/Unsafe inline style/);

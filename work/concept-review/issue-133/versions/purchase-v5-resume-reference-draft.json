@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v5-resume-reference-draft",
+  "revision": "purchase-v5-resume-reference-draft-2",
   "documents": [
     {
       "id": "purchase-bd",
@@ -8553,7 +8553,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v8-resume-reference-draft",
+      "revision": "checks-v9-resume-reference-draft",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -8695,7 +8695,7 @@
               "content": [
                 {
                   "kind": "text",
-                  "value": "品目情報と購入理由が揃っている場合。‐＝提出の可否を左右しない。複数の行に該当する場合があります。"
+                  "value": "品目情報と購入理由が揃っている場合。‐＝その行では不問。"
                 }
               ]
             },
@@ -8755,7 +8755,7 @@
               "content": [
                 {
                   "kind": "text",
-                  "value": "同じ申請の再提出を選ぶ場合。‐＝その行の条件下では再提出の可否を左右しない。複数の行に該当する場合があります。"
+                  "value": "同じ申請の再提出を選ぶ場合。‐＝その行では不問。見積があり上限以下でも、品目情報または購入理由が不足する場合の可否はこの表では示していません。"
                 }
               ]
             },
@@ -8835,7 +8835,7 @@
               "content": [
                 {
                   "kind": "text",
-                  "value": "‐＝その行の条件下では入庫登録の可否を左右しない。複数の行に該当する場合があります。"
+                  "value": "‐＝その行では不問。"
                 }
               ]
             },
@@ -9034,6 +9034,7 @@
             "見積",
             "役職別上限",
             "結果",
+            "備考",
             "Check ID"
           ],
           "rows": [
@@ -9058,6 +9059,12 @@
               ],
               [
                 {
+                  "kind": "text",
+                  "value": ""
+                }
+              ],
+              [
+                {
                   "kind": "reference",
                   "targetId": "purchase-check-p-03",
                   "label": "P-03"
@@ -9068,13 +9075,13 @@
               [
                 {
                   "kind": "text",
-                  "value": "‐"
+                  "value": "あり"
                 }
               ],
               [
                 {
                   "kind": "text",
-                  "value": "上限超過"
+                  "value": "それ以外"
                 }
               ],
               [
@@ -9085,9 +9092,24 @@
               ],
               [
                 {
+                  "kind": "text",
+                  "value": "上限超過、判定不能など"
+                }
+              ],
+              [
+                {
                   "kind": "reference",
                   "targetId": "purchase-check-p-04",
                   "label": "P-04"
+                },
+                {
+                  "kind": "text",
+                  "value": "、"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-06",
+                  "label": "P-06"
                 }
               ]
             ],
@@ -9112,36 +9134,15 @@
               ],
               [
                 {
+                  "kind": "text",
+                  "value": ""
+                }
+              ],
+              [
+                {
                   "kind": "reference",
                   "targetId": "purchase-check-p-05",
                   "label": "P-05"
-                }
-              ]
-            ],
-            [
-              [
-                {
-                  "kind": "text",
-                  "value": "‐"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "判定不能"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "提出不可"
-                }
-              ],
-              [
-                {
-                  "kind": "reference",
-                  "targetId": "purchase-check-p-06",
-                  "label": "P-06"
                 }
               ]
             ]
@@ -9392,57 +9393,6 @@
               [
                 {
                   "kind": "text",
-                  "value": "‐"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "‐"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "‐"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "上限超過"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "再提出不可"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
-                  "value": "元の状態を保つ"
-                }
-              ],
-              [
-                {
-                  "kind": "reference",
-                  "targetId": "purchase-check-p-12",
-                  "label": "P-12"
-                }
-              ]
-            ],
-            [
-              [
-                {
-                  "kind": "text",
-                  "value": "下書き・差戻し"
-                }
-              ],
-              [
-                {
-                  "kind": "text",
                   "value": "なし"
                 }
               ],
@@ -9490,6 +9440,57 @@
                   "kind": "reference",
                   "targetId": "purchase-check-p-28",
                   "label": "P-28"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "kind": "text",
+                  "value": "下書き・差戻し"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "あり"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "‐"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "上限超過または判定不能"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "再提出不可"
+                }
+              ],
+              [
+                {
+                  "kind": "text",
+                  "value": "元の状態を保つ"
+                }
+              ],
+              [
+                {
+                  "kind": "reference",
+                  "targetId": "purchase-check-p-12",
+                  "label": "P-12"
                 }
               ]
             ]
