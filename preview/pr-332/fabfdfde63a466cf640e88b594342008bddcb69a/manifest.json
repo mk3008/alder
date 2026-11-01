@@ -1,0 +1,18 @@
+{
+  "sourceHead": "fabfdfde63a466cf640e88b594342008bddcb69a",
+  "sourceTree": "3b9a8f443fac144445bdb0c334c991f667ebdb27",
+  "files": {
+    "web-viewer/dist/LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "web-viewer/dist/THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "web-viewer/dist/assets/canvas-toolbar-DuA_31SG.js": "407b65d37b96f3b6a92b8db529a7f2cf388fdc22d27389aca3e226f7ee5dc878",
+    "web-viewer/dist/assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "web-viewer/dist/assets/concept-DhsXTxXS.js": "f6aadecbc168a6f1e1c43ecc26364de9d6cbdafdb470d8f5d084838e8317a0d4",
+    "web-viewer/dist/assets/concept-Dn8Gxjbu.css": "4bc3983607d944dee1cb95dffcb09d00980b7de199e14556a4559d30044d5c0b",
+    "web-viewer/dist/assets/main-C3gfcidJ.css": "52200d75ec4ff23be675a07d1006221fd64d4a2f344616825c6a317d4236a081",
+    "web-viewer/dist/assets/main-CqxPt3l7.js": "f6c7e388b1bf52001b0526689f9dc8c2a68c523036df65348f6c2fe51df92e64",
+    "web-viewer/dist/concept.html": "3f3c19f1413cbf9b947be6d5126606e9b2089605d84a39c1aec48d7fda46e82b",
+    "web-viewer/dist/index.html": "25acb660b791df807914155b712ecdf46f957efe6c72299e58edd3e889947b4c",
+    "work/concept-review/issue-133/versions/purchase-v4-check-review.json": "7cafb6848c621ec7c4af86f6a62e84b17684dd48b2d3174ba7e24549548aeb1f",
+    "work/concept-review/issue-133/versions/purchase-v5-resume-reference-draft.json": "3d81bae8b4b44cf928c9088a1549469c7b47a21a82a4f55abcb5ccf0501a2412"
+  }
+}
