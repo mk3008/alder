@@ -72,24 +72,27 @@ async function readingError(page){
 }
 async function failedDocument(page,body=concurrencyBodies.shared){await page.evaluate(()=>__saveStateControl.failWrites=1);await openText(page,body);await submit(page);await flush(page);await stateIs(page,'error');await guard(page,true,['error']);}
 
-async function withPage(browser,url,run,{viewport={width:1280,height:960},controls={}}={}){
- const context=await browser.newContext({viewport}),errors=[],external=[],dialogs=[];let expected;
+async function withPage(browser,url,run,{viewport={width:1280,height:960},controls={},traceLabel='',traceTrial=0}={}){
+ const context=await browser.newContext({viewport}),errors=[],external=[],dialogs=[];let expected,activeTrace;
  const origin=new URL(url).origin;
  try{
   await context.route('**/*',route=>{if(new URL(route.request().url()).origin===origin)return route.continue();external.push(route.request().url());return route.abort();});
   await context.addInitScript(installSaveStateControls,controls);
   context.on('page',page=>{page.setDefaultTimeout(7000);page.setDefaultNavigationTimeout(10000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',async dialog=>{
+   if(activeTrace)activeTrace.dialogMs=Math.round(performance.now()-activeTrace.started);
    dialogs.push({type:dialog.type(),action:expected?.action??'unexpected'});
    const request=expected;expected=undefined;
-   try{assert.equal(dialog.type(),'beforeunload');if(!request)throw Error('Unexpected departure dialog');await dialog[request.action]();request.resolve();}catch(error){errors.push(error.message);try{await dialog.accept();}catch{}request?.reject(error);}
+   try{assert.equal(dialog.type(),'beforeunload');if(!request)throw Error('Unexpected departure dialog');await dialog[request.action]();if(activeTrace)activeTrace.respondedMs=Math.round(performance.now()-activeTrace.started);request.resolve();}catch(error){errors.push(error.message);try{await dialog.accept();}catch{}request?.reject(error);}
   });});
   const page=await context.newPage();await page.goto(url);await ready(page);
   const departure=async (action,trigger)=>{
+   const trace=activeTrace={case:traceLabel,trial:traceTrial,action,trigger:!!trigger,started:performance.now()};
    // Real click/fill user activation in callers enables native beforeunload.
    let timeout;const seen=new Promise((resolve,reject)=>{expected={action,resolve,reject};timeout=setTimeout(()=>reject(Error('Expected actual beforeunload dialog did not appear')),7000);});
    const marker=await page.evaluate(()=>globalThis.__departureIdentity??=(Math.random().toString()));
-   const navigation=(trigger?trigger():page.reload()).then(()=>({loaded:true}),error=>({loaded:false,error:error.message}));
-   try{await seen;const result=await navigation;if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{clearTimeout(timeout);expected=undefined;}
+   trace.navigationStartedMs=Math.round(performance.now()-trace.started);
+   const navigation=(trigger?trigger():page.reload()).then(()=>{trace.navigationOutcome='resolved';trace.navigationMs=Math.round(performance.now()-trace.started);return {loaded:true};},error=>{trace.navigationOutcome='rejected';trace.navigationMs=Math.round(performance.now()-trace.started);trace.errorName=error.name;trace.errorMessage=String(error.message).split('\n')[0];return {loaded:false,error:error.message};});
+   try{await seen;trace.seenMs=Math.round(performance.now()-trace.started);const result=await navigation;if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{trace.finishedMs=Math.round(performance.now()-trace.started);console.log('SAVE_STATE_DEPARTURE_TRACE '+JSON.stringify(trace));activeTrace=undefined;clearTimeout(timeout);expected=undefined;}
   };
   const result=await run({page,context,departure,dialogs,database:databaseFor(url)});
   assert.deepEqual(errors,[],'no page errors or unexpected dialogs');assert.deepEqual(external,[],'no external network calls');return result;
@@ -98,7 +101,11 @@ async function withPage(browser,url,run,{viewport={width:1280,height:960},contro
 
 export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={}){
  const target=new URL(url);assert.ok(['localhost','127.0.0.1','[::1]'].includes(target.hostname),'save-state gate requires an isolated local server');
- const cases=[];const add=(name,run,options)=>cases.push({name,run:()=>withPage(browser,url,run,options)});
+ const cases=[];const add=(name,run,options)=>{
+  const measure=name==='save state: native draft reload is dismissible and explicitly discardable'||name==='save state: native pending write warns, dismissal retains it, completion clears warning';
+  const addTrial=trial=>cases.push({name:trial?`${name} [timing ${trial}]`:name,run:()=>withPage(browser,url,run,{...options,traceLabel:name,traceTrial:trial})});
+  addTrial(0);if(measure){addTrial(1);addTrial(2);}
+ };
  add('save state: clean restore and unchanged lifecycle do not warn or write',async({page,database,dialogs})=>{
   await guard(page,false,['unchanged']);const before=await page.evaluate(readConcurrencyRecord,database);
   for(const type of ['blur','pagehide'])await page.evaluate(type=>window.dispatchEvent(new Event(type)),type);
