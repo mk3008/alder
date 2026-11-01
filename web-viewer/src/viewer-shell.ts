@@ -141,7 +141,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
    const links=targets.flatMap(target=>target.businessSections.filter(section=>section.kind===kind&&(kind==='result'||section.exceptionId===exceptionId)).flatMap(section=>section.pages.filter(page=>page==='decision'?target.decisionCheckIds.length||target.decisionExampleIds.length:target.resultCheckIds.length||target.samples.length).map(page=>({target,page}))));
    const section=document.createElement('section');section.className='shell-section-links';section.setAttribute('aria-label','テスト仕様書');
    const emitted=new Set<string>();for(const {target,page}of links){const key=(page==='decision'?'decision:':'')+target.key;if(emitted.has(key))continue;emitted.add(key);const b=relatedLink(section,functionName(target)+'・'+(page==='decision'?'可否判定':'処理結果'),()=>selectSpec(key));b.dataset.relatedSpec=key;}
-   if(!emitted.size){const missing=uncreated.includes(sectionKey)||!targets.length&&!hasActivityChecks(id);const warning=text(section,'p',missing?'テスト仕様書未作成':'テスト仕様書との対応未確認');warning.className='shell-spec-warning';}
+   if(!emitted.size){const warning=text(section,'p',uncreated.includes(sectionKey)?'テスト仕様書未作成':'テスト仕様書との対応未確認');warning.className='shell-spec-warning';}
    content.after(section);
   }
   // Old documents lack section-level links; keep their existing Activity links.
