@@ -113,12 +113,12 @@
 .subsystem-overview-card .subsystem-overview-kind{font-size:9px;letter-spacing:.03em;font-weight:650;max-height:none}
 .subsystem-overview-name{font-size:13px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .subsystem-overview-role{font-size:10px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.subsystem-overview-open{width:40px;height:44px;display:grid;place-items:center;border-radius:4px;touch-action:manipulation}
+.subsystem-overview-open{font-size:11px;width:40px;height:44px;display:grid;place-items:center;border-radius:4px;touch-action:manipulation}
 .subsystem-overview-open svg{width:20px;height:20px}.subsystem-overview-open:hover{background:var(--select)}
 
 /* Object details use the existing Activity detail-icon geometry. */
 .node.object .node-text{padding-right:36px}
-.object-open{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
+.object-open{font-size:11px;position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
 .object-open svg{width:20px;height:20px}.object-open:hover{background:var(--select)}.object-open:focus-visible{outline-offset:-4px}
 /* Graph-first pages share one supplementary drawer; examples remain page-level evidence. */
 .concept-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible}
@@ -167,8 +167,9 @@
 .spec-related{width:var(--concept-drawer-width,440px);max-width:calc(100% - 16px);min-width:0;overflow:visible;color:var(--fg)}
 .shell-workbench>.spec-related{position:relative;top:auto;bottom:auto;right:auto;min-height:0;flex-shrink:0;align-self:stretch}
 .spec-related-content{flex:1;min-height:0;overflow:auto;padding:12px;line-height:1.6;font-size:13px}
-.spec-related-content h3,.shell-test-links h3{font-size:14px;margin:8px 0}
-#detail>.shell-test-links{padding:0 12px 12px}
+.spec-related-content h3,.shell-test-links h3,.shell-related-links h3{font-size:14px;margin:8px 0}
+#detail>.shell-test-links,#detail>.shell-related-links{padding:0 12px 12px}
+.shell-section-links{margin:2px 0 10px}.markdown [data-business-variations]>.shell-section-links{margin-left:12px}.shell-spec-warning{font-size:12px;color:#9a5b00}.shell-spec-warning::before{content:'⚠ ';}[data-theme=dark] .shell-spec-warning{color:#ffd080}
 [data-theme=dark] .shell-evidence{color:#8fc8ef}
 @media(max-width:800px){.shell-workbench>.spec-related{position:absolute;right:0;top:0;bottom:0;z-index:6}}
 .test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}

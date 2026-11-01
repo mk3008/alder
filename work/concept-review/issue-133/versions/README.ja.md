@@ -1,12 +1,15 @@
 # 購買データの版
 
-現在のレビュー用は [V7](purchase-v7-value-independent-review.json)。V6の参考草案から、可否表に共通する記号の凡例をJSONの文章から除いた。Viewerは条件値 `‐` を「値不問」として表示する。表固有の前提・条件・結果・備考・Checkと人間のレビュー状態は保持する。V6では、結果を説明するCheckは残し、判定行を示すための判定専用Check参照を結果例から取り除いた。下書き再開を含む業務内容は引き続き人間レビュー前の草案であり、V4〜V6は過去の版として保持する。
+現在のレビュー用は [V8](purchase-v8-testability-reference-draft.json)。V7から、再出力の条件を購入準備番号と確定状態に改め、差戻しと準備確定の競合を事前状態と並行操作に分けた。Activity の Result・例外と既存仕様の対応を追加し、Check ID と人間レビュー状態を保持する。未決を含む参考草案であり、業務合意・テスト実行の完了を意味しない。全表の確認と残る論点は [見直し記録](../test-spec-testability-review.ja.md)を参照する。
+
+[V7](purchase-v7-value-independent-review.json) は、可否表に共通する記号の凡例をJSONの文章から除いた過去の参考草案。Viewerは条件値 `‐` を「値不問」として表示する。V4〜V7は過去の版として保持する。
 
 | 版 | 内容 | 扱い |
 | --- | --- | --- |
 | [V1](purchase-v1.json) | 既存の購買 JSON の保存時点を、そのまま保全したもの | 履歴。今後の変更を反映しない |
-| [V2β：業務設計・状態遷移](purchase-v2-beta.json) | 詳細な購買業務を反映し、下書き保存条件を訂正した JSON | 現在の編集対象。業務内容は草案 |
-| [V2β：概念モデル](purchase-concepts-v2-beta.json) | 論理サブシステム、概念、関係、担当者向け説明とサンプルの構造草案 | 現在の編集対象。正式スキーマと Viewer 読込は未対応 |
+| [V2β：業務設計・状態遷移](purchase-v2-beta.json) | 詳細な購買業務を反映し、下書き保存条件を訂正した JSON | 過去の草案 |
+| [V2β：概念モデル](purchase-concepts-v2-beta.json) | 論理サブシステム、概念、関係とサンプルの構造草案 | 過去の草案 |
+| [V8：検証可能性](purchase-v8-testability-reference-draft.json) | 単一 JSON の業務・状態・概念・Check と項目別の対応 | 現在の参考草案。人間レビュー前 |
 
 V1 は [`work/json-state/issue-275/purchase.json`](../../../json-state/issue-275/purchase.json) の複製で、内容・ID・版は変更していない。V1 と、V2βの素材となった[詳細な購買業務設計草案](https://github.com/mk3008/alder/blob/6e55d98710a1d8757937ea268176929abcf49b2e/business-design/purchase-request/README.md)は同じ内容ではない。V2βは詳細草案と[６概念のモデル草案](https://github.com/mk3008/alder/blob/cbb3073b42b86323e152b20ac899589f1686d61c/work/business-structure-model/issue-133/model.ja.md)、その後の本人指定を根拠としている。両者を単純な JSON の版変換として扱わない。
 
@@ -16,7 +19,7 @@ V1 は [`work/json-state/issue-275/purchase.json`](../../../json-state/issue-275
 
 既存申請からの下書きは、確定した提出内容とは区別し、保存だけでは元の申請状態・承認・購入準備を変えない案とする。この扱いと、準備後の状態名は人間レビュー前の仮説である。下書きからの再提出条件は別に扱う。状態図では、無条件の下書き保存から各状態への自己遷移を推定しない。下書きの再保存と、作業中に一部実績を登録して作業が続く自己遷移はレビュー候補として残す。
 
-## 照合の範囲
+## V2β 当時の照合の範囲
 
 V2βの業務設計・状態遷移は Alder の候補形式 `alder-document-package/0.4` で保存する。概念モデルの正式な文書種別は未定義のため、構造草案を別ファイルで保持する。概念・関係・分類別の図と情報、ロール・Activity参照、概要と各具体例をこの草案に記載する。表示は各版の記述を使い、Viewerで新たな業務条件を推論しない。旧版の Check Item を新版へ自動追従させておらず、新版の業務意味が全体として合意されたとみなして Check Item を生成していない。
 

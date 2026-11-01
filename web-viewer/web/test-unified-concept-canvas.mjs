@@ -25,7 +25,7 @@ function connect(frame,url='https://viewer.test/app/concept.html'){
 let c=connect(frame,'about:srcdoc');assert.equal(c.document.querySelectorAll('[data-node]').length,8,'the overview includes explicit approval and receiving views');
  const host=c.document.querySelector('.canvas'),beforeZoom=c.document.querySelector('.canvas-zoom').textContent,wheel=new c.WheelEvent('wheel',{bubbles:true,cancelable:true,ctrlKey:true,deltaY:-100,clientX:100,clientY:100});host.dispatchEvent(wheel);assert(wheel.defaultPrevented);assert.notEqual(c.document.querySelector('.canvas-zoom').textContent,beforeZoom);
 assert(c.document.querySelector('.graph-settings-toggle svg'),'toolbar icons are added after the asynchronous canvas renders');
-assert(c.document.querySelector('[data-node="request"] .concept-open-action'),'overview has detail link');
+assert(c.document.querySelector('[data-node="request"] .concept-open-action'),'overview has detail link');assert.equal(c.document.querySelector('[data-node="request"] .concept-open-action').textContent,'開く');assert.equal(c.document.querySelector('[data-node="request"] .concept-open-action svg'),null);
 c.document.querySelector('[data-node="preparation"] .concept-open-action').click();
 frame=p.document.querySelector('iframe[data-concept-view="preparation"]');assert(frame&&!frame.hidden);c.close();c=connect(frame);
 assert.equal(c.document.querySelector('[data-node="preparation"] .concept-open-action'),null,'current concept has no self link');

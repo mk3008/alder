@@ -253,7 +253,7 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 
 /* Only this icon opens Activity details; the card retains selection/drag. */
 .node.business .node-text{padding-right:36px}
-.activity-open{position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
+.activity-open{font-size:11px;position:absolute;right:0;top:11px;width:40px;height:44px;padding:0;display:grid;place-items:center;border-radius:4px;cursor:pointer;touch-action:manipulation}
 .activity-open svg{width:20px;height:20px}.activity-open:hover{background:var(--select)}.activity-open:focus-visible{outline-offset:-4px}
 
 #url-history {max-height:40vh;overflow:auto;max-width:min(420px,80vw);}

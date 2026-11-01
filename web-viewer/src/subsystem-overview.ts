@@ -1,4 +1,4 @@
-import {createElement,SquareArrowOutUpRight,UserRound} from 'lucide';
+import {createElement,UserRound} from 'lucide';
 import type {ConceptContext} from './concept-model';
 import {cardSurface,diagramCanvas,newDiagramView,type DiagramView} from './diagram-canvas';
 import {graphFocus} from './graph-focus';
@@ -52,7 +52,7 @@ export function createSubsystemOverview(doc:Document,{model,business}:ConceptCon
    const foreign=svg(doc,'foreignObject',{x:node.x,y:node.y,width:node.width,height:node.height});const card=doc.createElement('div');card.className='subsystem-overview-card';
    const badge=subsystemRoleIcon(doc,role.color);
    const labels=doc.createElement('span');labels.className='subsystem-overview-labels';labels.title=group.title+' — '+role.name;for(const [tag,name,value]of [['span','subsystem-overview-kind','概念モデル'],['strong','subsystem-overview-name',group.title],['small','subsystem-overview-role',role.name]] as const){const el=doc.createElement(tag);el.className=name;el.textContent=value;labels.append(el);}
-   const action=doc.createElement('button');action.type='button';action.className='subsystem-overview-open';action.setAttribute('aria-label',group.title+'の詳細タブを開く');action.title='詳細タブを開く';action.append(doc.importNode(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}),true));action.onpointerdown=event=>event.stopPropagation();action.onpointerup=event=>event.stopPropagation();action.onclick=event=>{event.stopPropagation();open(group.id);};card.append(badge,labels,action);foreign.append(card);shape.append(foreign);
+   const action=doc.createElement('button');action.type='button';action.className='subsystem-overview-open';action.setAttribute('aria-label',group.title+'の詳細タブを開く');action.title='詳細タブを開く';action.textContent='開く';action.onpointerdown=event=>event.stopPropagation();action.onpointerup=event=>event.stopPropagation();action.onclick=event=>{event.stopPropagation();open(group.id);};card.append(badge,labels,action);foreign.append(card);shape.append(foreign);
    shape.addEventListener('click',()=>choose({kind:'model',id:node.id}));shape.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose({kind:'model',id:node.id});}});graph.append(shape);
   }
   graph.setAttribute('viewBox',`0 0 ${right} ${bottom}`);paint(graph);return graph;

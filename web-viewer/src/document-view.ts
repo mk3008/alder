@@ -5,7 +5,7 @@ import {formattedMarkdown} from './markdown';
 // @ts-expect-error The shared storage validator is a JavaScript module.
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
-function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;root.append(element('h3',name),formattedMarkdown(value));}
+function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;const content=formattedMarkdown(value);root.append(element('h3',name),content);return content;}
 function exceptionSummary(value:string|null,exceptions:{name:string;description:string}[]){
  if(value===null)return;const content=formattedMarkdown(value),normalize=(text:string|null)=>String(text??'').replace(/\s+/g,'');
  const repeated=new Set(exceptions.map(e=>normalize(formattedMarkdown(`**${e.name}** — ${e.description}`).textContent)));
@@ -20,8 +20,8 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
  if(object){field(root,'Scope',String(object.scope));root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const)field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));
-  const summary=exceptionSummary(activity.exception,exceptions);if(summary||exceptions.length){const section=element('section');section.dataset.businessVariations='';section.append(element('h3','通常以外の扱い'));if(summary)section.append(summary);for(const exception of exceptions)section.append(element('h4',exception.name),formattedMarkdown(exception.description));root.append(section);}
+  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){const content=field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));if(key==='result'&&content)content.dataset.businessResult='';}
+  const summary=exceptionSummary(activity.exception,exceptions);if(summary||exceptions.length){const section=element('section');section.dataset.businessVariations='';section.append(element('h3','通常以外の扱い'));if(summary)section.append(summary);for(const exception of exceptions){const content=formattedMarkdown(exception.description);content.dataset.businessException=exception.id;section.append(element('h4',exception.name),content);}root.append(section);}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
    const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(!relations.length)continue;

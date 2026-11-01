@@ -5,6 +5,7 @@ import {JSDOM} from 'jsdom';
 import {build} from 'esbuild';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+assert.equal(createHash('sha256').update(readFileSync('verification/internal-link-icons.check-items.json')).digest('hex'),'9e68703f50550bd8fc971e839ef2cb0313455f12c562e394fc6628b0c6780ec6');
 const bundle=async(path,globalName)=>(await build({entryPoints:[path],bundle:true,write:false,format:'iife',globalName,loader:{'.css':'empty'}})).outputFiles[0].text;
 const data=new JSDOM('',{runScripts:'outside-only'}).window;
 data.eval(await bundle('web/fixtures/concept-sample.ts','Samples')+';globalThis.Samples=Samples;');data.eval(await bundle('web/fixtures/concept-sample.ts','Review')+';globalThis.Review=Review;');
