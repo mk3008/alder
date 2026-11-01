@@ -103,7 +103,7 @@
 [data-theme=dark] .subsystem-overview-card-surface{--graph-object-fill:#213b58;--graph-object-border:#6594c5}
 .subsystem-overview-card{width:100%;height:100%;display:grid;grid-template-columns:28px minmax(0,1fr) 40px;align-items:center;gap:9px;padding:9px 0 9px 12px;color:#19385e;cursor:pointer}
 [data-theme=dark] .subsystem-overview-card{color:#dbeaff}
-.subsystem-overview-card .subsystem-overview-role-icon{display:grid;place-items:center;width:28px;height:28px;max-height:none;border-radius:50%;background:var(--role-color);color:white}
+.subsystem-overview-role-icon{display:grid;place-items:center;width:28px;height:28px;max-height:none;border-radius:50%;background:var(--role-color);color:white}
 .subsystem-overview-role-icon svg{width:16px;height:16px}
 .subsystem-overview-card .subsystem-overview-labels{display:flex;flex-direction:column;min-width:0;max-height:none;gap:2px;line-height:1.2}
 .subsystem-overview-card .subsystem-overview-kind{font-size:10px;font-weight:650;max-height:none}

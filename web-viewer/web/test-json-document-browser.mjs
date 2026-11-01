@@ -39,6 +39,7 @@ export async function verifyJSONDocuments(browser){
    const activity=bd.activities[0];await selectGraphNode(page,activity.id);
    await shot('activity-selection');
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
+   const roleStyle=el=>({background:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,border:getComputedStyle(el).borderColor,width:getComputedStyle(el).width,height:getComputedStyle(el).height});assert.deepEqual(await page.locator('#detail h1 .who-badge').evaluate(roleStyle),await page.locator('[data-node="'+activity.id+'"] .who-badge').evaluate(roleStyle),'Activity title retains the card role badge and color');
    assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await selectedOnly();await shot('activity-detail');
    assert.equal(await page.locator('#detail .right-drawer-tabs').count(),0);await showTestChecks(page,activity.id);assert.equal(await page.locator('#tests-workspace .check-item').count(),2);
    const item=page.locator('[data-check-id="CI-001"]');assert.ok((await item.innerText()).includes('CI-001'));
