@@ -14,6 +14,8 @@ const groupAuthority=readFileSync('verification/decision-table-groups.check-item
 assert.equal(createHash('sha256').update(groupAuthority).digest('hex'),'6ebb9859e6b15ea876b8c784d246c8c4c26171b93bbad9af36ce76cd9b86edfe');
 const resultAuthority=readFileSync('verification/result-example-first.check-items.json');
 assert.equal(createHash('sha256').update(resultAuthority).digest('hex'),'8dded4ab43d807a467b7027f622f1e8b6c8acd755b6480c829380a8312a0b03a');
+const independenceAuthority=readFileSync('verification/result-decision-independence.check-items.json');
+assert.equal(createHash('sha256').update(independenceAuthority).digest('hex'),'7e844c4d1f8707e28df5633c35b92fd93165755edb6142cc8c99f9f80e954ae7');
 const expected=JSON.parse(authority).checks.map(check=>check.id),covered=new Set();
 const layoutExpected=JSON.parse(layoutAuthority).checks.map(check=>check.id),layoutCovered=new Set();
 const groupExpected=JSON.parse(groupAuthority).checks.map(check=>check.id),groupCovered=new Set();
@@ -71,8 +73,7 @@ try{
  assert.equal(page.querySelector('.decision-examples'),null);assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,'request-submitted');assert.equal(page.querySelector('select'),null,'one data example needs no picker');
  assert.equal(page.querySelector('.data-example-context'),null);assert.match(page.querySelector('.data-example-when').textContent,/上限額2,000円と同額/);resultCovered.add('RESULT-EXAMPLE-001');
  assert.match(page.textContent,/ボールペン/);assert.match(page.textContent,/ファイル/);const repeated=[...page.querySelectorAll('.data-example-key')].filter(cell=>cell.textContent==='R-101');assert(repeated.length>=3);assert.equal(new Set(repeated.map(cell=>cell.dataset.keyTone)).size,1);
- page=open('result',key('save-draft'));assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['request-draft','request-draft-approved','request-draft-prepared']);assert.equal(page.querySelector('.data-example-decision-links button').textContent,'P-01');
- page.querySelector('.data-example-decision-links button').click();assert.match($('#tests-workspace').textContent,/可否判定/);page=open('result',key('save-draft'));
+ page=open('result',key('save-draft'));assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['request-draft','request-draft-approved','request-draft-prepared']);assert.equal(page.querySelector('.data-example-decision-links'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
  page.querySelector('select').value='request-draft-approved';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,'request-draft-approved');assert.equal(page.querySelector('.result-checks').textContent,'P-02、P-30');assert.doesNotMatch(page.textContent,/確認が必要/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/12/);
  page.querySelector('select').value='request-draft-prepared';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');assert.match(page.textContent,/P-001/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/適合済みにはなりません/);assert.equal(byId.get('purchase-check-p-02').reviewState,'未レビュー');covered.add('SPEC-SEPARATE-004');resultCovered.add('RESULT-EXAMPLE-004');
 
@@ -90,10 +91,11 @@ try{
   }
   for(const checkId of spec.decisionCheckIds){assert(page.textContent.includes(byId.get(checkId).checkId),`decision Check ${checkId} is not reachable`);reached.add(checkId);}
   page=open('result',id);assert.equal(page.querySelector('.decision-examples'),null);
+  assert.equal(page.querySelector('.data-example-decision-links'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
   for(const checkId of spec.resultCheckIds){assert(page.querySelector('.result-checks').textContent.includes(byId.get(checkId).checkId),`result Check ${checkId} is not visible`);reached.add(checkId);}
   assert.equal(page.querySelector('.result-checks details'),null,'covered examples display IDs without duplicate Check prose');
   const displayed=page.querySelector('[data-data-example]');assert(spec.sampleIds.includes(displayed?.dataset.dataExample));
-  const picker=page.querySelector('select');if(spec.sampleIds.length>1){assert(picker);assert.deepEqual([...picker.options].map(option=>option.value),spec.sampleIds);for(const sampleId of spec.sampleIds){const current=$('#tests-workspace select');current.value=sampleId;current.dispatchEvent(new w.Event('change'));assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,sampleId);}}else assert.equal(picker,null);
+  const picker=page.querySelector('select');if(spec.sampleIds.length>1){assert(picker);assert.deepEqual([...picker.options].map(option=>option.value),spec.sampleIds);for(const sampleId of spec.sampleIds){const current=$('#tests-workspace select');current.value=sampleId;current.dispatchEvent(new w.Event('change'));assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,sampleId);assert.doesNotMatch($('#tests-workspace').textContent,/関連する可否条件/);}}else assert.equal(picker,null);
   count++;
  }
  assert.deepEqual([...reached].sort(),doc.items.map(item=>item.id).sort(),'all existing Checks remain reachable across decision and result');
@@ -111,6 +113,37 @@ const unresolved=structuredClone(pkg),pending=unresolved.documents.find(d=>d.kin
 const unresolvedApp=await appFor(unresolved);try{unresolvedApp.entry('tests:'+key('save-draft')).click();assert.match(unresolvedApp.$('.result-checks').textContent,/保存後の扱いは未決/);assert.match(unresolvedApp.$('.result-checks').textContent,/確認が必要/);}finally{unresolvedApp.w.close();}
 const nonstandard=structuredClone(pkg),legacyExample=nonstandard.documents.find(d=>d.kind==='checkItems').examples.find(e=>e.id==='decision-submit-table');legacyExample.columns=['見積','役職別上限','提出','備考','関連 Check'];validate(nonstandard);
 const legacyApp=await appFor(nonstandard);try{legacyApp.entry('tests:decision:'+key('submit-request')).click();const table=legacyApp.$('.decision-examples table');assert.equal(table.querySelector('thead'),null);assert.deepEqual([...table.querySelector('tr').children].map(cell=>cell.textContent),legacyExample.columns);groupCovered.add('DECISION-GROUP-003');}finally{legacyApp.w.close();}
+
+// A new candidate removes decision-only references from result examples without
+// changing the business, Check, decision tables, sample contents, or old files.
+const previous=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v5-resume-reference-draft.json','utf8'));
+const candidate=JSON.parse(readFileSync('../work/concept-review/issue-133/versions/purchase-v6-result-independence-review.json','utf8'));
+validate(previous);validate(candidate);
+const expectedCandidate=structuredClone(previous),candidateModel=candidate.documents.find(d=>d.kind==='conceptModel'),expectedModel=expectedCandidate.documents.find(d=>d.kind==='conceptModel');
+expectedCandidate.revision='purchase-v6-result-independence-review-1';expectedModel.revision='concepts-v6-result-independence-review-1';
+const removedDecisionRefs=new Map([['request-draft','purchase-check-p-01'],['resume-new-draft','purchase-check-p-32'],['resume-approved-draft','purchase-check-p-32']]);
+for(const group of expectedModel.reviewGroups)for(const cap of group.capabilities)for(const sample of cap.samples){const id=removedDecisionRefs.get(sample.id);if(id){assert(sample.checkIds.includes(id));sample.checkIds=sample.checkIds.filter(value=>value!==id);}}
+assert.deepEqual(candidate,expectedCandidate,'only explicitly identified decision-only references and version labels change');
+const candidateChecks=candidate.documents.find(d=>d.kind==='checkItems'),candidateById=new Map(candidateChecks.items.map(item=>[item.id,item]));
+const candidateApp=await appFor(candidate);
+try{
+ candidateApp.entry('group:tests').click();
+ for(const view of candidateModel.presentation.activityViews)for(const ref of view.testSpecificationFunctions??[]){
+  const group=candidateModel.reviewGroups.find(value=>value.id===ref.groupId),cap=group.capabilities.find(value=>value.id===ref.capabilityId),spec=cap.testSpecification,id=`fn:${view.activityId}:${group.id}:${cap.id}`;
+  const decision=candidateApp.entry('tests:decision:'+id),result=candidateApp.entry('tests:'+id);assert(decision&&result);
+  decision.click();assert(candidateApp.$('#tests-workspace .decision-examples'));for(const checkId of spec.decisionCheckIds)assert(candidateApp.$('#tests-workspace').textContent.includes(candidateById.get(checkId).checkId));
+  result.click();let page=candidateApp.$('#tests-workspace');assert.equal(page.querySelector('.decision-examples'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
+  for(const sampleId of spec.sampleIds){
+   const sample=cap.samples.find(value=>value.id===sampleId);assert(sample.checkIds.length&&sample.checkIds.every(checkId=>spec.resultCheckIds.includes(checkId)),`${sampleId}: result Checks only`);
+   const picker=page.querySelector('select');if(picker){picker.value=sampleId;picker.dispatchEvent(new candidateApp.w.Event('change'));page=candidateApp.$('#tests-workspace');}
+   assert.equal(page.querySelector('[data-data-example]')?.dataset.dataExample,sampleId);assert.doesNotMatch(page.textContent,/関連する可否条件/);
+  }
+ }
+ const submit=candidateModel.reviewGroups.flatMap(group=>group.capabilities).find(cap=>cap.id==='submit-request');
+ assert(submit.testSpecification.decisionCheckIds.includes('purchase-check-p-03'));assert(submit.testSpecification.resultCheckIds.includes('purchase-check-p-03'));
+ assert.match(candidateById.get('purchase-check-p-03').fields.expectedResult[0].value,/申請内容を確定/,'shared P-03 is a result guarantee, not a branch dependency');
+}finally{candidateApp.w.close();}
+assert.deepEqual(JSON.parse(independenceAuthority).checks.map(check=>check.id).sort(),['RESULT-INDEPENDENT-001','RESULT-INDEPENDENT-002','RESULT-INDEPENDENT-003','RESULT-INDEPENDENT-004']);
 assert.deepEqual([...covered].sort(),expected.slice().sort());
 assert.deepEqual([...layoutCovered].sort(),layoutExpected.slice().sort());
 assert.deepEqual([...groupCovered].sort(),groupExpected.slice().sort());assert.deepEqual([...resultCovered].sort(),resultExpected.slice().sort());

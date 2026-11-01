@@ -59,7 +59,7 @@ try{
  let page=$('#tests-workspace');assert.match(page.textContent,/対象の下書き/);assert.match(page.textContent,/保存済み/);assert.match(page.textContent,/再開可/);assert.match(page.textContent,/P-32/);
  entry('tests:'+key).click();page=$('#tests-workspace');assert.equal(page.querySelector('.result-checks').textContent,'P-33');
  assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['resume-new-draft','resume-approved-draft']);
- assert.match(page.textContent,/再開だけでは提出されず/);assert.match(page.textContent,/ボールペン/);assert.equal(page.querySelector('.data-example-decision-links button').textContent,'P-32');
+ assert.match(page.textContent,/再開だけでは提出されず/);assert.match(page.textContent,/ボールペン/);assert.equal(page.querySelector('.data-example-decision-links'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
  covered.add('RESUME-DRAFT-001');
  page.querySelector('select').value='resume-approved-draft';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');
  assert.match(page.textContent,/再開前の状態/);assert.match(page.textContent,/再開後の状態/);assert.match(page.textContent,/D1/);assert.match(page.textContent,/V1/);assert.match(page.textContent,/承認済み/);assert.doesNotMatch(page.textContent,/参考草案|未レビュー/);

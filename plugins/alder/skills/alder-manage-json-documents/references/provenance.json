@@ -11,7 +11,7 @@
     "docs/design-findings.ja.md": "1322c3bc07df280cba817e3c1bef65f4a5f0d269655b87c424fad518afdf662b",
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
-    "docs/json-native-contract.ja.md": "ecd279549807baae8157b8335da7d9f4123be579f64dd425a8b6321e217abb0b"
+    "docs/json-native-contract.ja.md": "382b6ed8697129ae80905ed4680e8980d93c7299f8b782ec9f81481863c4442b"
   },
   "scripts": {
     "tools/document_storage/core.mjs": "977c530d2ca7e59e61142ab8c5d182b496c6599fd878244985c1dc60a2a0cfff",

@@ -162,6 +162,5 @@
 .test-spec-sample>h2{margin:0 0 8px}.test-spec-sample>h3{font-size:14px;margin:0 0 8px}.test-spec-examples{padding:0;overflow:visible}.test-spec-examples .data-example-table{max-width:100%}
 .decision-examples .json-example{border:1px solid var(--subtle);border-radius:4px;background:var(--panel)}.decision-examples .json-example table{min-width:0}.decision-examples .json-example th{background:var(--select)}.decision-examples summary{cursor:pointer}.result-checks+.test-spec-examples{margin-top:8px}.test-spec-sample>.result-checks+h3{margin-top:20px}
 .decision-examples :is(th,td).decision-result,.decision-examples :is(th,td).decision-notes{border-left:2px solid var(--line)}
-.data-example-decision-links{font-size:13px;margin:4px 0}.data-example-decision-links button{color:#26749b;text-decoration:underline;text-underline-offset:3px;padding:6px 4px}.data-example-decision-links button:focus-visible{outline:2px solid currentColor;outline-offset:2px}[data-theme=dark] .data-example-decision-links button{color:#8fc8ef}
 .data-example-context{font-size:13px;margin:4px 0}.data-example-context summary{cursor:pointer}
 @media(max-width:800px){.test-spec-page{padding:12px}}
