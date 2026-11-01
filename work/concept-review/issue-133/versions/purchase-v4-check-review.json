@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "purchase-v4-check-review-3",
+  "revision": "purchase-v4-check-review-4",
   "documents": [
     {
       "id": "purchase-bd",
@@ -843,7 +843,7 @@
     },
     {
       "id": "purchase-concepts",
-      "revision": "concepts-v4-review-2",
+      "revision": "concepts-v4-review-3",
       "kind": "conceptModel",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -2396,9 +2396,7 @@
                   "decision-draft-table"
                 ],
                 "decisionCheckIds": [
-                  "purchase-check-p-01",
-                  "purchase-check-p-02",
-                  "purchase-check-p-30"
+                  "purchase-check-p-01"
                 ],
                 "resultCheckIds": [
                   "purchase-check-p-02",
@@ -8000,7 +7998,7 @@
       "id": "purchase-review-checks",
       "schemaVersion": "0.1",
       "kind": "checkItems",
-      "revision": "checks-v3-review",
+      "revision": "checks-v4-review",
       "title": "購買のテスト仕様",
       "basedOn": {
         "documentId": "purchase-bd",
@@ -8399,8 +8397,8 @@
               [
                 {
                   "kind": "reference",
-                  "targetId": "purchase-check-p-02",
-                  "label": "P-02（確認が必要）"
+                  "targetId": "purchase-check-p-01",
+                  "label": "P-01"
                 }
               ]
             ],
@@ -8420,8 +8418,8 @@
               [
                 {
                   "kind": "reference",
-                  "targetId": "purchase-check-p-30",
-                  "label": "P-30"
+                  "targetId": "purchase-check-p-01",
+                  "label": "P-01"
                 }
               ]
             ]
@@ -9060,7 +9058,7 @@
         {
           "id": "purchase-check-p-01",
           "checkId": "P-01",
-          "title": "未入力でも下書きを保存できる",
+          "title": "入力・申請状態を問わず下書きを保存できる",
           "detailSummary": "",
           "sectionId": "purchase-check-section-ecde191f-09c5-519f-88a3-843ae6a9c3c4",
           "reviewState": "未レビュー",
@@ -9068,13 +9066,13 @@
             "condition": [
               {
                 "kind": "text",
-                "value": "品目0件、または品名・数量・見積などの入力が途中で下書き保存を選ぶ。"
+                "value": "申請者が下書き保存を選ぶ。"
               }
             ],
             "expectedResult": [
               {
                 "kind": "text",
-                "value": "入力途中でも下書きを保存できる。"
+                "value": "品目数・見積・入力内容・役職別上限への適合・申請状態を問わず、下書きを保存できる。"
               }
             ],
             "evidence": [

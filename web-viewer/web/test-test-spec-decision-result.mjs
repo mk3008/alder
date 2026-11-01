@@ -38,7 +38,8 @@ try{
  let page=open('decision',key('save-draft'));assert.equal(new URL(w.location.href).searchParams.get('spec'),'decision:'+key('save-draft'));
  assert.match(page.textContent,/可否判定/);assert.equal(page.querySelector('[data-data-example]'),null);
  const rows=()=>[...page.querySelectorAll('.decision-examples tr')].map(row=>[...row.children].map(cell=>cell.textContent.trim()));
- assert.deepEqual(rows(),[['条件','下書き保存','関連 Check'],['見積','‐','P-01'],['品目・入力内容','‐','P-01'],['申請の状態','‐','P-02（確認が必要）'],['役職別上限','保存の条件にしない','P-30']]);
+ assert.deepEqual(rows(),[['条件','下書き保存','関連 Check'],['見積','‐','P-01'],['品目・入力内容','‐','P-01'],['申請の状態','‐','P-01'],['役職別上限','保存の条件にしない','P-01']]);
+ const draftCheck=page.querySelector('.decision-examples details');draftCheck.open=true;draftCheck.dispatchEvent(new w.Event('toggle'));assert.match(draftCheck.textContent,/役職別上限への適合・申請状態を問わず/);
  assert.match(page.textContent,/保存の可否を左右しない/);covered.add('SPEC-SEPARATE-001');covered.add('SPEC-SEPARATE-002');
  page=open('decision',key('submit-request'));assert.equal(page.querySelector('[data-data-example]'),null);
  assert.deepEqual(rows(),[['見積','役職別上限','提出','関連 Check'],['あり','上限以下','可','P-03'],['あり','上限超過','不可','P-04'],['なし','‐','不可','P-05'],['あり','判定不能','不可','P-06']]);
