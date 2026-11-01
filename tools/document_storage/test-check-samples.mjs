@@ -89,10 +89,10 @@ test('legacy concept samples stay readable but are not silently upgraded',()=>{
  assert.equal(guardAuthoring(fixture,next,{expectedRevision:fixture.revision,migration:'check-samples-0.2'}).valid,true);
  const changed=structuredClone(fixture);changed.revision+='-new';const oldModel=changed.documents.find(d=>d.kind==='conceptModel');oldModel.revision+='-new';oldModel.reviewGroups[0].capabilities[0].samples[0].meaning+=' changed';
  assert.throws(()=>guardAuthoring(fixture,changed,{expectedRevision:fixture.revision}),/Legacy samples require explicit Check references/);
- const unrelated=structuredClone(fixture);unrelated.revision+='-new';const changedModel=unrelated.documents.find(d=>d.kind==='conceptModel');changedModel.revision+='-new';changedModel.concepts[0].name+=' (別の変更)';
- assert.throws(()=>guardAuthoring(fixture,unrelated,{expectedRevision:fixture.revision}),/Legacy samples require explicit Check references/);
+ const unrelated=structuredClone(fixture);unrelated.revision+='-new';const changedModel=unrelated.documents.find(d=>d.kind==='conceptModel');changedModel.revision+='-new';changedModel.benefits.push('別の変更');
+ assert.equal(guardAuthoring(fixture,unrelated,{expectedRevision:fixture.revision}).valid,true,'unchanged legacy samples survive unrelated edits');
  const original=fixture.documents.find(d=>d.kind==='conceptModel');
- assert.throws(()=>applyEdits(fixture,{expectedRevision:fixture.revision,revision:fixture.revision+'-edit',documentRevisions:{[original.id]:{expected:original.revision,next:original.revision+'-edit'}},changes:[{id:original.id,values:{benefits:[...original.benefits,'別の変更']}}]}),/Legacy samples require explicit Check references/);
+ assert.doesNotThrow(()=>applyEdits(fixture,{expectedRevision:fixture.revision,revision:fixture.revision+'-edit',documentRevisions:{[original.id]:{expected:original.revision,next:original.revision+'-edit'}},changes:[{id:original.id,values:{benefits:[...original.benefits,'別の変更']}}]}));
 });
 test('linking examples does not bypass the exact-revision Business Design confirmation gate',()=>{
  const previous=structuredClone(fixture);previous.documents=previous.documents.filter(doc=>doc.kind!=='checkItems');
