@@ -7,7 +7,7 @@ import type {ConceptContext} from './concept-model';
 import {renderReviewLandscape,renderReviewOverview} from './concept-review';
 import {createLogicalDetails} from './logical-subsystems';
 import {installDrawerResize} from './drawer-resize';
-import {createSubsystemOverview} from './subsystem-overview';
+import {createSubsystemOverview,subsystemRoleIcon} from './subsystem-overview';
 import {createDataExamples} from './data-examples';
 import {drawerTabs} from './drawer-tabs';
 import {renderRequesterChecks,renderLinkedChecks,renderDecisionExamples,renderDecisionChecks,renderResultChecks} from './document-view';
@@ -116,20 +116,21 @@ export function installViewerShell(app:HTMLElement,options:Options){
  function displayGraph(key:string){const group=findReviewGroup(key);return group?views?.graph(group.id):key==='overview'?views?.overviewGraph():undefined;}
  function selectedView(id:string){const viewId=selectedViews.get(active),card=viewId?displayGraph(active)?.tables[viewId]:undefined;return card?.conceptId===id?card:undefined;}
  function describeConcept(root:HTMLElement,id:string){const t=selectedView(id)??findReviewGroup(active)?.concepts[id]??{...tables[id],sources:undefined};root.replaceChildren();text(root,'p',t.note);text(root,'h3','持つ情報');const ul=document.createElement('ul');for(const[,value]of t.fields)text(ul,'li',value);root.append(ul);if(t.sources?.length){text(root,'h3','情報の出所・対象時点');const sources=document.createElement('ul');for(const source of t.sources)text(sources,'li',source);root.append(sources);}evidence(root,id);}
+ function relatedTitle(name:string,roleColor?:string){const title=related.querySelector<HTMLElement>('.shell-heading strong')!;title.replaceChildren();title.classList.toggle('has-subsystem-icon',!!roleColor);if(roleColor)title.append(subsystemRoleIcon(document,roleColor));title.append(document.createTextNode(name));related.setAttribute('aria-label',name);}
  function renderRelated(){
   const root=related.querySelector<HTMLElement>('.concept-related-content')!;related.querySelector<HTMLElement>('.concept-selection')!.hidden=!!findReviewGroup(active)&&!selectedConcepts.has(active)&&!selectedSubsystems.has(active);related.querySelector<HTMLElement>('.concept-selection>h2')!.hidden=!findReviewGroup(active);
-  const subsystem=selectedSubsystems.get(active);if(subsystem&&logical){const name=logical.describe(root,{kind:'group',id:subsystem});related.querySelector<HTMLElement>('.shell-heading strong')!.textContent=name;related.setAttribute('aria-label',name);return;}
+  const subsystem=selectedSubsystems.get(active);if(subsystem&&logical){const name=logical.describe(root,{kind:'group',id:subsystem});relatedTitle(name);return;}
   if(active==='landscape'&&subsystemOverview){
-   const selection=subsystemOverview.selection();root.replaceChildren();let name='サブシステムの情報';
+   const selection=subsystemOverview.selection();root.replaceChildren();let name='サブシステムの情報',roleColor:string|undefined;
    if(selection?.kind==='group'||selection?.kind==='connection'){
     name=logical!.describe(root,selection);const activities=logical!.activities(selection);
     if(activities.length){text(root,'h3','関連業務');for(const activity of activities){const target=options.business().activities.find(a=>a.id===activity.id&&a.name===activity.name),button=document.createElement('button');button.type='button';button.className='shell-evidence';text(button,'span',activity.name);button.append(createElement(SquareArrowOutUpRight,{'aria-hidden':'true','stroke-width':1.8}));button.setAttribute('aria-label',activity.name+'を業務タブで開く');button.disabled=!target;button.onclick=()=>{if(target)openBusiness(target.id);};root.append(button);}}
-   }else if(selection?.kind==='model'){const item=contentFor(groupKey(selection.id));if(item){name=item.title;text(root,'h3','レビュアー');text(root,'p',item.reviewer.role);}}
+   }else if(selection?.kind==='model'){const item=contentFor(groupKey(selection.id));if(item){name=item.title;text(root,'h3','レビュアー');text(root,'p',item.reviewer.role);}const group=context?.model.reviewGroups.find(g=>g.id===selection.id);roleColor=context?.business.roles?.find(role=>role.id===group?.reviewer.roleId)?.color;}
    else text(root,'p','サブシステムや概念モデル、受渡しを選ぶと情報を確認できます。');
-   for(const [heading,items]of logical!.sections){const detail=document.createElement('details'),summary=document.createElement('summary'),list=document.createElement('ul');summary.textContent=heading;for(const item of items)text(list,'li',item);detail.append(summary,list);root.append(detail);}
-   related.querySelector<HTMLElement>('.shell-heading strong')!.textContent=name;related.setAttribute('aria-label',name);return;
+   for(const [heading,items]of logical!.sections){text(root,'h3',heading);const list=document.createElement('ul');for(const item of items)text(list,'li',item);root.append(list);}
+   relatedTitle(name,roleColor);return;
   }
-  const id=selectedConcepts.get(active),group=findReviewGroup(active),name=hasModel&&id?(selectedView(id)?.name??group?.concepts[id]?.name??tables[id].name):group?.name??'データ構造の情報';related.querySelector<HTMLElement>('.shell-heading strong')!.textContent=name;related.setAttribute('aria-label',name);if(hasModel&&id)describeConcept(root,id);else{root.replaceChildren();if(!group)text(root,'p','シェイプを選ぶとデータ構造の情報を確認できます。');}
+  const id=selectedConcepts.get(active),group=findReviewGroup(active),name=hasModel&&id?(selectedView(id)?.name??group?.concepts[id]?.name??tables[id].name):group?.name??'データ構造の情報';relatedTitle(name);if(hasModel&&id)describeConcept(root,id);else{root.replaceChildren();if(!group)text(root,'p','シェイプを選ぶとデータ構造の情報を確認できます。');}
  }
  function configureFrame(f:HTMLIFrameElement){f.onload=()=>{theme();if(f.contentDocument){styleConceptToolbar(f.contentDocument);styleConceptNodes(f.contentDocument);}const id=f.dataset.conceptView??'overview';if(!views||!context)return;
   const group=findReviewGroup(id),graph=group?views.graph(group.id):id==='overview'?views.overviewGraph():{ids,edges:views.edges,tables};

@@ -131,6 +131,7 @@
 .right-drawer-heading,.shell-heading.right-drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;height:auto;padding:0 12px;border-bottom:1px solid var(--subtle);background:var(--panel);flex-shrink:0}
 .right-drawer-heading .detail-title,.right-drawer-heading strong{min-width:0;margin:0;font-size:16px;line-height:1.4;font-weight:650;overflow-wrap:anywhere}
 .right-drawer-heading .detail-title{display:flex;align-items:center;gap:8px}
+.right-drawer-heading .has-subsystem-icon{display:flex;align-items:center;gap:8px}.right-drawer-heading .subsystem-overview-role-icon{flex:none}
 .right-drawer-heading .drawer-node-icon:not(.who-badge){width:20px;height:20px;flex:none;color:var(--review-green)}
 .right-drawer-heading button,.shell-heading.right-drawer-heading button{display:grid;place-items:center;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;font-size:22px;flex-shrink:0}
 #detail{padding:0}#detail>.right-drawer-heading{position:sticky;top:0;z-index:2}

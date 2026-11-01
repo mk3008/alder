@@ -21,7 +21,7 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
   for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Exception','exception'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){if(key==='exception')exceptionSummary(root,activity.exception,exceptions);else field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));}
-  for(const exception of exceptions){root.append(element('h3','Exception · '+exception.name));field(root,'説明',exception.description);}
+  for(const exception of exceptions){root.append(element('h3',exception.name),formattedMarkdown(exception.description));}
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(relations.length){root.append(element('h3',label));for(const r of relations)root.append(element('p',`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`));}}
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}

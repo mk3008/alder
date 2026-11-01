@@ -36,7 +36,7 @@ for(const selectedItem of [...bd.objects,...bd.activities]){
  const detail=dom.window.jsonUI.businessDetail(detailDesign,selectedItem.id);
  assert.doesNotMatch(detail.textContent,/DOCUMENT-PREFACE-ONLY|JSON 0\.1|package |文書ID:|要素ID:/);
  assert.ok(detail.querySelector('h3'));
- if(bd.objects.includes(selectedItem))assert.deepEqual([...detail.querySelectorAll('h3')].map(n=>n.textContent),['Scope','Icon','Information']);
+ if(bd.objects.includes(selectedItem)){assert.deepEqual([...detail.querySelectorAll('h3')].map(n=>n.textContent),['Scope','Information']);assert.equal(parsed.model.business.objects.find(o=>o.id===selectedItem.id).icon,selectedItem.icon,'icon remains in the source model');}
 }
 assert.equal(dom.window.jsonUI.businessDetail(detailDesign).textContent,'項目を選択すると業務内容を表示します。');
 assert.equal(detailDesign.markdown,raw,'source remains unchanged');

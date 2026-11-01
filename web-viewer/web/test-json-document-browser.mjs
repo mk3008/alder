@@ -35,7 +35,7 @@ export async function verifyJSONDocuments(browser){
    assert.deepEqual((await page.locator('.node').evaluateAll(ns=>ns.map(n=>n.dataset.node))).sort(),[...bd.objects,...bd.activities].map(n=>n.id).sort());
    const selectedOnly=async()=>{const text=await page.locator('.json-detail').innerText();assert.doesNotMatch(text,/JSON 0\.1|package package-7|文書ID:|要素ID:/);if(bd.preface)assert.ok(!text.includes(bd.preface));};
    await shot('overview');
-   await selectGraphNode(page,bd.objects[0].id);if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail h1').textContent(),bd.objects[0].name);for(const info of bd.objects[0].information)assert.ok((await page.locator('.json-detail').innerText()).includes(info));assert.deepEqual(await page.locator('.json-detail h3').allTextContents(),['Scope','Icon','Information']);await selectedOnly();await shot('object-detail');
+   await selectGraphNode(page,bd.objects[0].id);if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();assert.equal(await page.locator('#detail h1').textContent(),bd.objects[0].name);assert.equal(await page.locator('#detail h1 svg.drawer-node-icon').count(),1);for(const info of bd.objects[0].information)assert.ok((await page.locator('.json-detail').innerText()).includes(info));assert.deepEqual(await page.locator('.json-detail h3').allTextContents(),['Scope','Information']);await selectedOnly();await shot('object-detail');
    const activity=bd.activities[0];await selectGraphNode(page,activity.id);
    await shot('activity-selection');
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();

@@ -24,6 +24,10 @@ async function headingBackgroundPoint(page,id){
  assert(point,'the empty part of the heading row must reach the region background for '+id);return point;
 }
 
+async function overallBackgroundPoint(page){
+ const point=await page.evaluate(()=>{const viewport=document.querySelector('.subsystem-overview-canvas .diagram-viewport'),world=viewport.querySelector('.diagram-world'),svg=world.querySelector('svg'),r=viewport.getBoundingClientRect();for(let y=r.top+40;y<r.bottom-20;y+=16)for(let x=r.left+20;x<r.right-20;x+=16){const hit=document.elementFromPoint(x,y);if(hit===viewport||hit===world||hit===svg)return{x,y};}});assert(point,'visible blank space on the overall diagram');return point;
+}
+
 export async function verifySubsystemOverview(browser){
  const context=await browser.newContext({viewport:{width:1280,height:960},hasTouch:true}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
  const cdp=await context.newCDPSession(page),touch=touchDriver(page,cdp);await touch.install();
@@ -70,7 +74,10 @@ export async function verifySubsystemOverview(browser){
   if(await page.locator('.subsystem-overview-canvas .canvas-lock').getAttribute('aria-pressed')==='false')await page.locator('.subsystem-overview-canvas .canvas-lock').click();
   await page.locator('[data-handoff-label="result-progress"]').click();assert.equal(await page.locator('.concept-related').isVisible(),false);await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'入荷・未購入の結果');await page.locator('#drawer').click();
   const shape=page.locator('[data-review-group="group-request"]');await shape.click();assert.equal(await shape.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.concept-related').isVisible(),false);assert.ok((await page.locator('[data-review-group="group-decision"]').getAttribute('class')).includes('review-neighbor'));
-  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related').isVisible(),true);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'購入要求・申請内容');await page.locator('#drawer').click();
+  await page.locator('#drawer').click();assert.equal(await page.locator('.concept-related').isVisible(),true);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'購入要求・申請内容');assert.equal(await page.locator('.concept-related .shell-heading .subsystem-overview-role-icon').getAttribute('style'),await shape.locator('.subsystem-overview-role-icon').getAttribute('style'));await page.locator('#drawer').click();
+  await page.locator('#drawer').click();point=await overallBackgroundPoint(page);await page.mouse.click(point.x,point.y);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');assert.equal(await page.locator('.concept-related').isVisible(),true);assert.deepEqual(await page.locator('.concept-related-content h3').allTextContents(),['メリット','デメリット・必要な管理','レビューポイント']);assert.equal(await page.locator('.concept-related-content details').count(),0);assert.equal(await page.locator('.concept-related .shell-heading .subsystem-overview-role-icon').count(),0);
+  await shape.click();point=await overallBackgroundPoint(page);await page.touchscreen.tap(point.x,point.y);assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');
+  await shape.click();await viewport.focus();await page.keyboard.press('Escape');assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'サブシステムの情報');await page.locator('#drawer').click();
   await shape.locator('.subsystem-overview-open').click();assert.equal(await page.locator('.concept-related .shell-heading strong').textContent(),'購入要求・申請内容');await page.locator('iframe[data-concept-view=group-request]').waitFor({state:'visible'});assert.equal(await page.locator('.concept-main .data-example-modes').count(),0);await page.goBack();await page.locator('.subsystem-overview-graph').waitFor();
   for(const theme of ['light','dark']){
    if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme').click();

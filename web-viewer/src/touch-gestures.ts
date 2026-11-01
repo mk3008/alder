@@ -4,8 +4,8 @@ import type {createNodeDrag} from './node-drag';
 export const clampZoom=(zoom:number)=>Math.max(.25,Math.min(2.5,zoom));
 type View={key:string;zoom:number;scroll:Point;locked?:boolean};
 type Change={zoom?:number;scroll?:Point;node?:{id:string;position:Point};selected?:string};
-type Host={read:()=>View|undefined;position:(id:string)=>Point|undefined;change:(value:Change)=>void;finish:()=>void;nodeDrag?:ReturnType<typeof createNodeDrag>;tapTarget?:(target:Element)=>void};
-type Single={kind:'single';view:View;start:Point;node?:{id:string;position:Point};tapTarget?:Element;moved:boolean};
+type Host={read:()=>View|undefined;position:(id:string)=>Point|undefined;change:(value:Change)=>void;finish:()=>void;nodeDrag?:ReturnType<typeof createNodeDrag>;tapTarget?:(target:Element)=>void;isBackground?:(target:Element)=>boolean;tapBackground?:()=>void};
+type Single={kind:'single';view:View;start:Point;node?:{id:string;position:Point};tapTarget?:Element;background?:boolean;moved:boolean};
 type Pinch={kind:'pinch';view:View;distance:number;anchor:Point};
 const middle=(a:Point,b:Point):Point=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
 const distance=(a:Point,b:Point)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
@@ -27,7 +27,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
     if(points.size===1){
       const id=(e.target as Element).closest<HTMLElement>('.node')?.dataset.node,position=id?host.position(id):undefined;
       const tapTarget=(e.target as Element).closest('[data-canvas-tap]')??undefined;
-      gesture={kind:'single',view,start:[e.clientX,e.clientY],node:id&&position?{id,position:[...position]}:undefined,tapTarget,moved:false};
+      gesture={kind:'single',view,start:[e.clientX,e.clientY],node:id&&position?{id,position:[...position]}:undefined,tapTarget,background:host.isBackground?.(e.target as Element),moved:false};
       if(id&&position&&!view.locked)host.nodeDrag?.begin(id,[e.clientX,e.clientY]);
     }else if(points.size===2){
       // A first finger may have started a drag while the second was landing.
@@ -60,6 +60,7 @@ export function installTouchGestures(viewport:HTMLElement,host:Host){
     if(e.type==='pointerup'&&!blocked&&valid()&&gesture?.kind==='single'&&!gesture.moved){
       if(gesture.node)host.change({selected:gesture.node.id});
       else if(gesture.tapTarget)host.tapTarget?.(gesture.tapTarget);
+      else if(gesture.background)host.tapBackground?.();
     }
     points.delete(e.pointerId);
     // After a pinch/cancel, the remaining finger cannot accidentally drag/select.
