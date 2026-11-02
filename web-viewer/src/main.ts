@@ -359,6 +359,7 @@ function planChrome(){
 async function switchPlan(id:string){
  const doc=state.document;if(!doc?.design.namedPlans||restoring||opening||documentSaving||closing)return;
  if(id===doc.design.namedPlans.selected)return;
+ const selector=document.querySelector<HTMLSelectElement>('#plan-select'),restoreFocus=document.activeElement===selector;
  try{
   if(!$('source-dialog').hidden&&!await closeSource()){planChrome();return;}
   const design=parseDesign(doc.design.markdown,id),key=crypto.randomUUID();
@@ -366,6 +367,7 @@ async function switchPlan(id:string){
   await saveDocument(()=>next,()=>{state=next;});
   shell?.reopenBusinessOverview();shell?.activateBusiness();shell?.businessActivated();status('');
  }catch(error){render();if(!(error instanceof DocumentSaveError))status('案を切り替えられません: '+(error as Error).message,'error');}
+ finally{if(restoreFocus&&(document.activeElement===document.body||document.activeElement===document.documentElement||document.activeElement===selector))document.querySelector<HTMLSelectElement>('#plan-select')?.focus({preventScroll:true});}
 }
 // New documents start with extra camera padding on the left. Reconcile and
 // restored tabs keep their existing camera, including an absent legacy inset.
