@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {guardAuthoring,fingerprint,meaningHash} from './authoring.mjs';
+import {readLegacyPackage} from './legacy-json.mjs';
 const root=new URL('../../work/plugin-json/issue-273/',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL('snapshots/'+n,root),'utf8'));
 const p1=read('01-direct-bd.json'),p2=read('02-add-rename.json'),p3=read('03-direct-checks.json');
 const c=p=>p.documents.find(d=>d.kind==='checkItems'),b=p=>p.documents[0];
@@ -26,20 +27,20 @@ test('ID replacement, provenance loss, and fake decisions are refused',()=>{cons
 
 test('CLI protects last package, CAS, alias targets, lock and runtime without Python',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-json-guard-')),cli=new URL('./author-cli.mjs',import.meta.url).pathname;
- try{const target=path.join(dir,'design.json'),candidate=path.join(dir,'candidate.json'),opfile=path.join(dir,'op.json');fs.writeFileSync(candidate,JSON.stringify(p1));fs.writeFileSync(opfile,'{}');
+ try{const native1=readLegacyPackage(p1),native2=readLegacyPackage(p2),target=path.join(dir,'design.json'),candidate=path.join(dir,'candidate.json'),opfile=path.join(dir,'op.json');fs.writeFileSync(candidate,JSON.stringify(native1));fs.writeFileSync(opfile,'{}');
  const run=(args,env={})=>spawnSync(process.execPath,[cli,...args],{encoding:'utf8',env:{...process.env,...env}});
  assert.equal(run(['create',candidate,target,opfile]).status,0);const initial=fs.readFileSync(target,'utf8');assert.equal(run(['create',candidate,target,opfile]).status,2);
  const runtime=run(['runtime'],{ALDER_PYTHON:'/missing-python'});assert.equal(runtime.status,0);assert.equal(JSON.parse(runtime.stdout).directJSON,true);assert.equal(JSON.parse(runtime.stdout).markdownConversion,false);
- fs.writeFileSync(candidate,JSON.stringify(p2));let op={expectedRevision:p1.revision,expectedSha256:'wrong'};fs.writeFileSync(opfile,JSON.stringify(op));assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),initial);
+ fs.writeFileSync(candidate,JSON.stringify(native2));let op={expectedRevision:native1.revision,expectedSha256:'wrong'};fs.writeFileSync(opfile,JSON.stringify(op));assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),initial);
  op.expectedSha256=fingerprint(initial);fs.writeFileSync(opfile,JSON.stringify(op));fs.writeFileSync(target+'.alder-lock','foreign lock');assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target+'.alder-lock','utf8'),'foreign lock');fs.unlinkSync(target+'.alder-lock');
- assert.equal(run(['commit',target,candidate,opfile]).status,0);const saved=fs.readFileSync(target,'utf8');assert.equal(JSON.parse(saved).revision,p2.revision);assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);
+ assert.equal(run(['commit',target,candidate,opfile]).status,0);const saved=fs.readFileSync(target,'utf8');assert.equal(JSON.parse(saved).revision,native2.revision);assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);
  fs.writeFileSync(candidate,'{broken');assert.equal(run(['commit',target,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);assert.ok(!fs.readdirSync(dir).some(f=>f.includes('.alder-json-')||f.endsWith('.alder-lock')));
- for(const [name,link]of [['alias',fs.symlinkSync],['hard',fs.linkSync]]){const alias=path.join(dir,name);link(target,alias);fs.writeFileSync(candidate,JSON.stringify(p2));assert.equal(run(['commit',alias,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);}
+ for(const [name,link]of [['alias',fs.symlinkSync],['hard',fs.linkSync]]){const alias=path.join(dir,name);link(target,alias);fs.writeFileSync(candidate,JSON.stringify(native2));assert.equal(run(['commit',alias,candidate,opfile]).status,2);assert.equal(fs.readFileSync(target,'utf8'),saved);}
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 
 test('PURCHASE-STATE-005: transition removal retains CLI byte conflict protection',()=>{
- const previous=JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url),'utf8'));
+ const previous=readLegacyPackage(JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url),'utf8')));
  const next=structuredClone(previous),state=next.documents.find(d=>d.kind==='stateTransition'),removed=state.transitions.pop();
  next.revision+='-next';state.revision+='-next';
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-state-removal-'));
