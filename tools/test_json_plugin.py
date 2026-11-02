@@ -7,6 +7,52 @@ PLUGIN=ROOT/'plugins/alder'
 NAME='alder-manage-json-documents'
 
 class JSONPluginTest(unittest.TestCase):
+    def test_named_plans_in_isolated_installed_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda *args:subprocess.run(['node',str(scripts/'named-plans-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            fixtures=ROOT/'work/plugin-json/issue-273/snapshots';source=root/'source.json';candidate=root/'candidate.json';target=root/'plans.json';op=root/'operation.json';extracted=root/'extracted.json'
+            source.write_bytes((fixtures/'01-direct-bd.json').read_bytes());candidate.write_bytes((fixtures/'02-add-rename.json').read_bytes());source_before=source.read_bytes()
+            created=run('create',target,'current','現行案',source,'improved','改善案',source,'alternative','別案',source);self.assertEqual(created.returncode,0,created.stderr)
+            if os.name!='nt': target.chmod(0o644)
+            info=json.loads(run('inspect',target).stdout);self.assertEqual([p['id'] for p in info['plans']],['current','improved','alternative'])
+            self.assertEqual(run('extract',target,'current',extracted).returncode,0);self.assertEqual(json.loads(extracted.read_text()),json.loads(source.read_text()))
+            before=json.loads(target.read_text());op.write_text(json.dumps({'expectedSha256':info['sha256'],'expectedRevision':info['plans'][0]['revision']}))
+            if os.name!='nt':
+                saved=target.read_bytes();preload=root/'fail-chmod.mjs';preload.write_text("import fs from 'node:fs';fs.chmodSync=()=>{throw Error('synthetic chmod failure');};\n")
+                failed=subprocess.run(['node','--import',str(preload),str(scripts/'named-plans-cli.mjs'),'commit',str(target),'current',str(candidate),str(op)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+                self.assertEqual(failed.returncode,2,failed.stderr);self.assertIn('synthetic chmod failure',failed.stderr);self.assertEqual(target.read_bytes(),saved);self.assertEqual(target.stat().st_mode&0o7777,0o644)
+                self.assertFalse((root/'plans.json.alder-lock').exists());self.assertFalse(list(root.glob('.alder-plans-*')))
+            committed=run('commit',target,'current',candidate,op);self.assertEqual(committed.returncode,0,committed.stderr)
+            if os.name!='nt': self.assertEqual(target.stat().st_mode&0o7777,0o644)
+            after=json.loads(target.read_text());self.assertEqual(after['plans'][1:],before['plans'][1:]);self.assertEqual(source.read_bytes(),source_before)
+            saved=target.read_bytes();self.assertEqual(run('commit',target,'current',candidate,op).returncode,2);self.assertEqual(target.read_bytes(),saved)
+
+    def test_named_plan_check_confirmation_uses_existing_human_guards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            source=root/'source.json';source.write_bytes((ROOT/'work/plugin-json/issue-273/snapshots/03-direct-checks.json').read_bytes());original=source.read_bytes()
+            target=root/'plans.json';extracted=root/'selected.json';candidate=root/'candidate.json';op=root/'operation.json'
+            created=run('named-plans-cli.mjs','create',target,'current','現行案',source,'improved','改善案',source,'alternative','提案A',source);self.assertEqual(created.returncode,0,created.stderr)
+            if os.name!='nt': target.chmod(0o644)
+            info=json.loads(run('named-plans-cli.mjs','inspect',target).stdout);self.assertEqual(run('named-plans-cli.mjs','extract',target,'improved',extracted).returncode,0)
+            inspected=run('author-cli.mjs','inspect',extracted);self.assertEqual(inspected.returncode,0,inspected.stderr);single=json.loads(inspected.stdout)
+            before=json.loads(target.read_text());updated=json.loads(extracted.read_text());updated['revision']='package-4';checks=next(d for d in updated['documents'] if d['kind']=='checkItems');checks['revision']='checks-2'
+            item=next(i for i in checks['items'] if i['checkId']=='CI-001');item['reviewState']='確認済み';candidate.write_text(json.dumps(updated,ensure_ascii=False))
+            request={'expectedSha256':info['sha256'],'expectedRevision':single['revision']};op.write_text(json.dumps(request));saved=target.read_bytes()
+            denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human Business Design',denied.stderr);self.assertEqual(target.read_bytes(),saved)
+            if os.name!='nt': self.assertEqual(target.stat().st_mode&0o7777,0o644)
+            bd=next(d for d in updated['documents'] if d['kind']=='businessDesign');bd_receipt={'source':'fixture:synthetic-user','quote':'業務設計 bd-2 の内容を確認しました。'}
+            request['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':bd_receipt}];op.write_text(json.dumps(request))
+            denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human review state',denied.stderr);self.assertEqual(target.read_bytes(),saved)
+            if os.name!='nt': self.assertEqual(target.stat().st_mode&0o7777,0o644)
+            meaning=next(c['meaningSha256'] for c in single['checks'] if c['id']==item['id']);check_receipt={'source':'fixture:synthetic-user','quote':'CI-001「受付内容が対象の台帳へ記録される」の条件と期待結果を確認しました。'}
+            request['humanDecisions']=[{'id':item['id'],'state':'確認済み','meaningSha256':meaning,'evidence':check_receipt}];op.write_text(json.dumps(request))
+            committed=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(committed.returncode,0,committed.stderr)
+            if os.name!='nt': self.assertEqual(target.stat().st_mode&0o7777,0o644)
+            after=json.loads(target.read_text());self.assertEqual(after['plans'][1]['package'],updated);self.assertEqual(after['plans'][0],before['plans'][0]);self.assertEqual(after['plans'][2],before['plans'][2]);self.assertEqual(source.read_bytes(),original)
+
     def test_new_artifact_default_and_explicit_legacy_update_instructions(self):
         # Distribution contract only; actual model routing needs a forward run.
         for name in ['alder-draft-business-design', 'alder-draft-check-items']:

@@ -1,0 +1,11 @@
+{
+  "format": "storage-verification/1",
+  "requirement": "https://github.com/mk3008/alder/pull/345#issuecomment-6572831213",
+  "scope": "名前付き業務案の既存ファイルを更新するときの権限と保存ガード。",
+  "checks": [
+    {"id":"NAMED-PLANS-MODE-001","condition":"POSIX環境で、0600、0640、0644、0660等のモードを持つ既存ファイルの案を更新する。","guarantee":"成功後も更新前のモードを維持し、対象案以外と元の単一JSONを変更しない。","reason":"更新で既存の読み書き権限を失わない。","verification":"tools/document_storage/test-named-plans.mjs"},
+    {"id":"NAMED-PLANS-MODE-002","condition":"ハッシュ・revision・人間合意ガードまたは更新用一時ファイルのchmodが失敗する。","guarantee":"診断して拒否し、既存ファイルの内容とモードを保持し、自分が作った一時ファイルとロックを片付ける。","reason":"更新失敗で原本や他案を失わない。","verification":"tools/document_storage/test-named-plans.mjs と tools/test_json_plugin.py"},
+    {"id":"NAMED-PLANS-MODE-003","condition":"Plugin同梱CLIで既存の案を更新する。","guarantee":"正規CLIと同じ保存ガード・モード維持を適用する。","reason":"インストール後の操作でも同じファイル権限を維持する。","verification":"tools/test_json_plugin.py と同梱元照合"},
+    {"id":"NAMED-PLANS-MODE-004","condition":"createまたはextractで新しいファイルを作る。","guarantee":"既存ファイルを上書きせず、新しいファイルの権限を0600より広くしない。","reason":"既存の安全な新規作成動作を維持する。","verification":"tools/document_storage/test-named-plans.mjs"}
+  ]
+}
