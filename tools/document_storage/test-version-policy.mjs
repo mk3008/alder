@@ -38,6 +38,10 @@ test('VERSION-POLICY-002/003: only current packages can be created or directly c
    write(candidate,pkg);const result=run('author-cli.mjs','create',candidate,target,op);assert.equal(result.status,2,result.stderr);
    assert.match(message(result),/0\.4/);assert.ok(message(result).includes(pkg.formatVersion));assert.ok(message(result).includes(pkg.format));assert.equal(fs.existsSync(target),false);
   }
+  for(const version of [0.5,null]){
+   write(candidate,{...current,formatVersion:version});const result=run('author-cli.mjs','create',candidate,target,op);
+   assert.equal(result.status,2,result.stderr);assert.ok(message(result).includes('formatVersion='+JSON.stringify(version)));assert.equal(fs.existsSync(target),false);
+  }
   for(const old of [old1,old2,old3]){
    write(target,old);const before=fs.readFileSync(target);write(candidate,{...old,revision:old.revision+'-next'});write(op,{expectedRevision:old.revision,expectedSha256:fingerprint(before.toString())});
    const denied=run('author-cli.mjs','commit',target,candidate,op);assert.equal(denied.status,2,denied.stderr);assert.ok(message(denied).includes(old.formatVersion));assert.match(message(denied),/0\.4/);assert.match(message(denied),/explicit/i);assert.deepEqual(fs.readFileSync(target),before);
@@ -70,5 +74,6 @@ test('VERSION-POLICY-004: mixed named plans gate only the requested plan and pre
   const future=JSON.parse(saved);future.plans[0].package.formatVersion='0.5';write(plans,future);const futureBytes=fs.readFileSync(plans);
   result=run('named-plans-cli.mjs','inspect',plans);assert.equal(result.status,2,result.stderr);assert.match(message(result),/old/);assert.match(message(result),/0\.5/);assert.deepEqual(fs.readFileSync(plans),futureBytes);
   future.formatVersion='2.0';write(plans,future);result=run('named-plans-cli.mjs','inspect',plans);assert.equal(result.status,2,result.stderr);assert.match(message(result),/2\.0/);assert.match(message(result),/1\.0/);
+  future.formatVersion=2;write(plans,future);result=run('named-plans-cli.mjs','inspect',plans);assert.equal(result.status,2,result.stderr);assert.match(message(result),/formatVersion=2/);assert.match(message(result),/1\.0/);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

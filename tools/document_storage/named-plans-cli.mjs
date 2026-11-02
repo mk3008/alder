@@ -4,15 +4,15 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import {parseStrict,stringify,demand} from './core.mjs';
-import {fingerprint,guardAuthoring,packageVersionPolicy,requireEditablePackage} from './authoring.mjs';
+import {describeDeclaredValue,fingerprint,guardAuthoring,packageVersionPolicy,requireEditablePackage} from './authoring.mjs';
 import {validateNamedPlans,selectNamedPlan} from './named-plans.mjs';
 
 export async function run(args){
  let temp,lock,ownsLock=false;
  const read=file=>parseStrict(fs.readFileSync(file,'utf8'));
  const checkVersions=bundle=>{
-  const format=typeof bundle?.format==='string'?bundle.format:'<missing>',version=typeof bundle?.formatVersion==='string'?bundle.formatVersion:'<missing>';
-  demand(format==='alder-named-plans'&&version==='1.0',`Bundle format=${format} formatVersion=${version} is unsupported; supported format is alder-named-plans 1.0. Stop editing and check format support.`);
+  const format=bundle?.format,version=bundle?.formatVersion;
+  demand(format==='alder-named-plans'&&version==='1.0',`Bundle format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(version)} is unsupported; supported format is alder-named-plans 1.0. Stop editing and check format support.`);
   if(Array.isArray(bundle.plans))for(const plan of bundle.plans)packageVersionPolicy(plan?.package,'Plan '+(plan?.id??'<missing>'));
  };
  const stage=(target,text)=>{
