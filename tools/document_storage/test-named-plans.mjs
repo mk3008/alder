@@ -80,9 +80,9 @@ test('NAMED-PLANS-005: an attempted human-state change cannot bypass the single-
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-plans-human-'));
  try{
   const target=path.join(dir,'plans.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json'),b=bundle();
-  fs.writeFileSync(target,JSON.stringify(b));const before=fs.readFileSync(target,'utf8'),q=structuredClone(p3);q.revision+='-next';const check=q.documents.find(d=>d.kind==='checkItems');check.revision+='-next';check.items[0].reviewState='確認済み';
+  fs.writeFileSync(target,JSON.stringify(b));if(process.platform!=='win32')fs.chmodSync(target,0o644);const before=fs.readFileSync(target,'utf8'),q=structuredClone(p3);q.revision+='-next';const check=q.documents.find(d=>d.kind==='checkItems');check.revision+='-next';check.items[0].reviewState='確認済み';
   fs.writeFileSync(candidate,JSON.stringify(q));fs.writeFileSync(op,JSON.stringify({expectedRevision:p3.revision,expectedSha256:fingerprint(before)}));
   const result=spawnSync(process.execPath,[new URL('./named-plans-cli.mjs',import.meta.url).pathname,'commit',target,'alternative',candidate,op],{encoding:'utf8'});
-  assert.equal(result.status,2);assert.equal(fs.readFileSync(target,'utf8'),before);
+  assert.equal(result.status,2);assert.equal(fs.readFileSync(target,'utf8'),before);if(process.platform!=='win32')assert.equal(fs.statSync(target).mode&0o7777,0o644);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "ce73ee05fd5b278fe93a314292c390a3c9b1d724",
+  "alder_source_revision": "5fa81940af72b13ccea462ce3d73f98aede2907a",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "d0197bcc4c2db6130bbe6232177f3ad07d8682a64545ba3a537ec6638bedf1da",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -29,7 +29,7 @@
     "tools/document_storage/roles.mjs": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1",
     "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
     "tools/document_storage/named-plans.mjs": "35106e4e46a1880f2ffc87c1aa75f5bb1d74101aa70dbd0c9499a3c633499a9b",
-    "tools/document_storage/named-plans-cli.mjs": "8df771f6ea064dc815d35545e688df0fc0aa9359a4911e73deefad50ccfa0802",
+    "tools/document_storage/named-plans-cli.mjs": "ce74b2f65b1ee07377942512bc4cdea9aa60ebf8b14b8ed4b50954fbd696cb8e",
     "tools/document_storage/named-plans-schema.json": "d208c03d7425d0f3fe3e1aae2aab10972eba5357fc2b328c251f8d6d9fa625ea"
   },
   "script_destinations": {
