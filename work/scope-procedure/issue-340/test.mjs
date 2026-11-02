@@ -21,9 +21,53 @@ test('baseline is structurally valid but identifies unresolved Who, effect and g
 });
 test('read request and response project endpoints and Data from different Relations', () => {
   const rows=validate(fixture).rows;
-  assert.deepEqual(rows.find(r=>r.stepId==='s-search'),{stepId:'s-search',kind:'exchange',from:'who:activity-inquiry',to:'object:notebook',dataId:'d-search-criteria',direction:'output',phase:'request',operation:'検索',effect:'read',replyToStepId:null});
+  assert.deepEqual(rows.find(r=>r.stepId==='s-search'),{stepId:'s-search',kind:'exchange',relationId:'r-search',from:'who:activity-inquiry',to:'object:notebook',dataId:'d-search-criteria',direction:'output',phase:'request',operation:'検索',effect:'read',replyToStepId:null});
   const r=rows.find(r=>r.stepId==='s-search-result');
   assert.equal(r.from,'object:notebook'); assert.equal(r.to,'who:activity-inquiry'); assert.equal(r.dataId,'d-search-result'); assert.equal(r.replyToStepId,'s-search');
+});
+test('graph Activity endpoint and table Who always represent the same Activity',()=>{
+  const r=validate(fixture), edge=r.graphEdges.find(e=>e.relationId==='r-search'), row=r.rows.find(s=>s.stepId==='s-search');
+  assert.deepEqual(edge,{relationId:'r-search',from:'activity:activity-inquiry',to:'object:notebook',dataId:'d-search-criteria',direction:'output'});
+  assert.equal(row.from,'who:activity-inquiry'); assert.equal(row.to,edge.to);
+  assert.equal(row.relationId,edge.relationId); assert.equal(row.dataId,edge.dataId); assert.equal(row.direction,edge.direction);
+  const incoming=r.graphEdges.find(e=>e.relationId==='r-search-result'), answer=r.rows.find(s=>s.stepId==='s-search-result');
+  assert.equal(incoming.to,'activity:activity-inquiry'); assert.equal(answer.to,'who:activity-inquiry'); assert.equal(answer.from,incoming.from);
+});
+test('unresolved Role does not remove the Activity/Who endpoint correspondence',()=>{
+  const d=copy(), before=validate(d).rows.find(s=>s.stepId==='s-search');
+  activity(d,'activity-inquiry').roleId=null;
+  const result=validate(d), after=result.rows.find(s=>s.stepId==='s-search');
+  assert.deepEqual(after,before); assert.ok(outstanding(result,'WHO_UNRESOLVED','activity-inquiry'));
+  assert.equal(result.graphEdges.find(e=>e.relationId==='r-search').from,'activity:activity-inquiry');
+});
+test('the same Role across Activities does not merge the two graph endpoints',()=>{
+  const d=copy(); activity(d,'activity-approval').roleId='role-designer';
+  const result=validate(d);
+  assert.equal(result.rows.find(s=>s.stepId==='s-search').from,'who:activity-inquiry');
+  assert.equal(result.rows.find(s=>s.stepId==='s-approval').from,'who:activity-approval');
+  assert.deepEqual(result.errors,[]);
+});
+test('a graph Relation without a corresponding Procedure step is reported for review',()=>{
+  const d=copy(); d.relations.push({...relation(d,'r-search'),id:'r-uncovered',dataId:'d-search-result'});
+  const result=validate(d);
+  assert.deepEqual(result.errors,[]);
+  assert.ok(outstanding(result,'RELATION_WITHOUT_STEP','r-uncovered'));
+  assert.ok(result.graphEdges.some(e=>e.relationId==='r-uncovered'));
+});
+test('an unlinked Procedure exchange is not falsely claimed as covered by the graph',()=>{
+  const d=copy(), s=step(d,'s-search');
+  s.exchange={phase:'request',operation:'検索',effect:'read',unlinked:{from:{kind:'who'},to:{kind:'object',id:'notebook'},data:{status:'ref',dataId:'d-search-criteria'},reason:'このStepと図の対応が未確認'}};
+  const result=validate(d);
+  assert.deepEqual(result.errors,[]);
+  assert.ok(outstanding(result,'UNLINKED_RELATION','s-search'));
+  assert.ok(outstanding(result,'RELATION_WITHOUT_STEP','r-search'));
+  assert.equal(result.rows.find(row=>row.stepId==='s-search').relationId,null);
+});
+test('changing one Relation changes graph and table Data together',()=>{
+  const d=copy(); relation(d,'r-search').dataId='d-search-result';
+  const result=validate(d), edge=result.graphEdges.find(e=>e.relationId==='r-search'), row=result.rows.find(s=>s.stepId==='s-search');
+  assert.equal(edge.dataId,'d-search-result'); assert.equal(row.dataId,'d-search-result'); assert.deepEqual(result.errors,[]);
+  // Agreement with the natural-language intent still requires semantic review.
 });
 test('input can be Request; external Object may be outside Scope', () => {
   const row=validate(fixture).rows.find(r=>r.stepId==='s-one-way');

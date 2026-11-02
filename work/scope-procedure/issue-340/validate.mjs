@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 
 export function validate(doc) {
-  const errors = [], pending = [], rows = [], ids = new Map(), infoOwners = new Map();
+  const errors = [], pending = [], rows = [], graphEdges = [], ids = new Map(), infoOwners = new Map(), linkedRelations = new Set();
   const error = (code, where) => errors.push({code, where});
   const todo = (code, where) => pending.push({code, where});
   const array = (value, where) => {
@@ -55,6 +55,7 @@ export function validate(doc) {
     const d = ref(r.dataId, 'data', r.id);
     const objectId = r.kind === 'input' ? r.fromId : r.toId;
     for (const item of d?.items ?? []) if (infoOwners.get(item.informationId) !== objectId) error('DATA_OWNER', `${r.id}:${item.informationId}`);
+    graphEdges.push({relationId:r.id, from:`${r.kind === 'input' ? 'object' : 'activity'}:${r.fromId}`, to:`${r.kind === 'input' ? 'activity' : 'object'}:${r.toId}`, dataId:r.dataId, direction:r.kind});
   }
   for (const e of exceptions) ref(e.activityId, 'activity', e.id);
   for (const a of activities) {
@@ -68,7 +69,9 @@ export function validate(doc) {
     if (!results.length) error('RESULT_REQUIRED', a.id);
     for (const r of results) if (typeof r.text !== 'string' || !r.text.trim()) error('RESULT_TEXT', r.id);
     const stepMap = new Map(steps.map((s, i) => [s.id, {step:s, index:i}])), projected = new Map();
-    const who = `who:${a.id}`; // Symbolic alias to Activity.roleId, not a separately persisted actor.
+    // The graph's Activity endpoint is always this Activity's Who in the table.
+    // Its Role name may be unresolved; no additional Who/Activity mapping is needed.
+    const who = `who:${a.id}`;
     const endpoint = (x, where) => {
       if (x?.kind === 'who' && Object.keys(x).length === 1) return who;
       if (x?.kind === 'object' && typeof x.id === 'string') { ref(x.id, 'object', where); return `object:${x.id}`; }
@@ -101,6 +104,7 @@ export function validate(doc) {
           if (r.kind === 'input' && r.toId === a.id) { from = `object:${r.fromId}`; to = who; direction = 'input'; }
           else if (r.kind === 'output' && r.fromId === a.id) { from = who; to = `object:${r.toId}`; direction = 'output'; }
           else error('RELATION_ACTIVITY_DIRECTION', s.id);
+          if (from && to) linkedRelations.add(r.id);
           dataId = r.dataId;
         }
       } else if (!('relationId' in x) && x.unlinked && typeof x.unlinked === 'object') {
@@ -113,7 +117,7 @@ export function validate(doc) {
         todo('UNLINKED_RELATION', s.id);
       } else error('EXCHANGE_BINDING', s.id);
       projected.set(s.id, {from,to,phase:x.phase});
-      rows.push({stepId:s.id, kind:'exchange', from, to, dataId, direction, phase:x.phase, operation:x.operation, effect:x.effect ?? null, replyToStepId:x.replyToStepId ?? null});
+      rows.push({stepId:s.id, kind:'exchange', relationId:x.relationId ?? null, from, to, dataId, direction, phase:x.phase, operation:x.operation, effect:x.effect ?? null, replyToStepId:x.replyToStepId ?? null});
     }
     for (const s of steps) {
       const x = s.exchange;
@@ -143,7 +147,10 @@ export function validate(doc) {
     for (const s of steps) if (reaches(s.id,s.id)) error('ORDER_CYCLE', a.id);
     for (const group of swaps) for (const left of group) for (const right of group) if (left!==right && reaches(left,right)) error('INTERCHANGEABLE_CONFLICT', a.id);
   }
-  return {errors,pending,rows};
+  // Coverage is a review diagnostic, not proof of a business defect. An old or
+  // partially structured document must not acquire a fabricated Procedure row.
+  for (const r of relations) if (['input','output'].includes(r.kind) && !linkedRelations.has(r.id)) todo('RELATION_WITHOUT_STEP',r.id);
+  return {errors,pending,graphEdges,rows};
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

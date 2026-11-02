@@ -2,11 +2,18 @@
 
 このディレクトリは**研究用の部分モデル**であり、正式なAlder package、製品Schema、保存器、移行器、Viewerではない。版、列、フィールド名、通知の扱いを採用済みとみなさない。[Viewer統合 #340](https://github.com/mk3008/alder/issues/340)の後続検討用。例はすべて合成データ。
 
-## 先に分かったこと
+## Activity・Whoと図／表の対応
 
-現行の通常I/O Relationは `Object → Activity` または `Activity → Object` であり、`Who → Object` のRelationではない。旧0.5候補も同じ端点に `dataId` を付けている。業務の受渡しと手順上の実行主体が対応すると明示された場合に限り、Activity端点をそのActivityの単一Whoとして**表へ投影する候補**とする。これは両者が常に同じという推論ではない。対応は手順が `relationId` を明示参照することで主張し、意味の正しさは人間が確認する。
+**1 ActivityのWhoは直接結び付く単一Roleであり、業務フロー図のActivity図形は、そのActivityのWhoを表す。** 通常I/O Relationの `Object → Activity` は表の `Object → Who`、`Activity → Object` は `Who → Object` として扱う。Activity端点とWhoの対応を別に記録・確認する必要はない。Role名が未決でも「このActivityのWho」という対応は維持する。同じRoleを複数Activityが使う場合も、それぞれのActivity図形は別に保つ。
 
-各Relationの方向・相手・Dataを正本として、対応行のA/B/Cをそこから得る。Stepには同じ方向・Data・Objectを再記録しない。I/Oは情報がActivityに入る／出る方向、Request/Responseはやり取り上の役割であり別軸。**Input Requestも成立**する。既存のRelationが集約的なI/Oである場合など、個々のStepへの対応が根拠をもって定められなければ未接続とし、見かけの一致から自動接続しない。
+| 図のRelation | 同じRelationから表示するProcedure行 |
+| --- | --- |
+| 業務 → ノート：検索条件 | Who → ノート：検索条件 |
+| ノート → 業務：検索結果 | ノート → Who：検索結果 |
+
+同じRelationを図と表の方向・相手・Dataの正本とする候補。Stepの `relationId` は**StepとRelationの対応**であり、ActivityとWhoの対応を新たに判定するためのものではない。Stepには同じ方向・Data・Objectを再記録しない。I/Oは情報がActivityに入る／出る方向、Request/Responseはやり取り上の役割であり別軸。**Input Requestも成立**する。
+
+構造化されたやり取りで、StepからRelationが参照されない場合や、図のRelationに対応するStepがない場合は、図と表が対応済みとは扱わず要照合とする。既存文書のRelationが集約的である場合や未構造化の旧Procedureでは、要照合をそのまま業務誤りと断定せず、元の事実を保持する。実在しない手順や線を自動生成しない。
 
 表を全手順に適用するため、A/B/C/Dを必須にしない。内部判断は本文だけのローカルStepを同じ表に表示できる。`exchange` の省略はローカル、`null` はやり取り自体が未決として区別する。自発的な通知は依頼でも応答でもない反例のため、PoCでは仮に `notification` と区別した。この第3種を正式採用するか、別の扱いにするかは未決。応答なしRequestはRequestだけで表せる。応答が別Activityの依頼に対するものなど、対応するRequestが同一Procedureにない場合は対応未決とし、偽のRequestを生成しない。
 
@@ -44,7 +51,7 @@ Object同士のやり取り、無情報の合図、対応先のRelationが未確
 }
 ```
 
-`r-search` の `kind: output`、Activity/Object端点、`dataId` からA/B/CとI/O方向を表示する。応答Stepは別のRelationを参照し、同一Procedure内のRequest Step IDを `replyToStepId` で参照する。新規のやり取りIDを必須にしない案。1 Requestへの複数ResponseもPoCでは許す。RequestにはResponseを必須にしない。Responseの相手が不明なら `replyToStepId: null` とし未決を出す。同一Procedure外のやり取り・複数先・一つの業務Stepと複数Relationの対応は未決で、今回の構造に押し込まない。
+`r-search` の `kind: output`、Activity/Object端点、`dataId` からA/B/CとI/O方向を表示する。図のActivity端点は表では常に当該ActivityのWhoに対応する。応答Stepは別のRelationを参照し、同一Procedure内のRequest Step IDを `replyToStepId` で参照する。新規のやり取りIDを必須にしない案。1 Requestへの複数ResponseもPoCでは許す。RequestにはResponseを必須にしない。Responseの相手が不明なら `replyToStepId: null` とし未決を出す。同一Procedure外のやり取り・複数先・一つの業務Stepと複数Relationの対応は未決で、今回の構造に押し込まない。
 
 `effect` はRequestに限り `create/read/update/delete/not-applicable/undecided` とした仮候補。業務操作の意味とCRUDは同一ではなく、`not-applicable` と `undecided` も異なる。Responseと通知にCRUDを強制しない。Step本文と操作名の意味の食い違いを機械で検出できるとは限らず、別々に保存する必要性を正式設計で再確認する。判断・例外・Resultの意味は別々に保ち、一般的な更新結果や例外を捏造しない。例外catalogやStateの `exceptionId` を通常手順や通知に読み替えない。
 
@@ -55,9 +62,9 @@ node test.mjs
 node validate.mjs fixture.json
 ```
 
-`test.mjs` は合成例と変異をNode標準機能で検査する。正常例、未知Relation/Data、DataとObject.Informationの所有者不一致、Relationの型付き方向・別Activity、不正なRequest/Response対応・逆方向不一致、Input Request、通知、応答なし、未接続、Scope=false、Role未決、ID・必須/任意・条件・局所順序・複数Result・例外を確認する。出力の `errors: []` は**構造上の検査を通ったことだけ**で、`pending` が残るfixtureは完成・業務合意ではない。現在の対応チェックは、同一Activity内で両端が直接逆転する応答に限る。中継・第三者からの応答を誤って不正と確定しない方式は後続で検討する。
+`test.mjs` は合成例と変異をNode標準機能で検査する。図のActivityと表のWhoの端点対応、同じRelation ID・Data・方向からの両投影、図だけ／表だけに残る要照合、Role未決・同一Roleの複数Activity、未知Relation/Data、所有者、方向、不正なRequest/Response対応、Input Request、通知、応答なし、Scope=false、ID・条件・局所順序・複数Result・例外を確認する。出力の `errors: []` は**構造上の検査を通ったことだけ**で、`pending` が残るfixtureは完成・業務合意ではない。現在の応答対応チェックは、同一Activity内で両端が直接逆転する場合に限る。中継・第三者からの応答を誤って不正と確定しない方式は後続で検討する。
 
-図／表を同一のRelationから投影するので、重複フィールド間の不一致は発生しない設計。誤ったRelationを正しい型・方向で選んだ場合、その意味の誤りは機械だけでは分からない。上の負例が保証するのは参照・端点・明示されたペアの構造上の矛盾であり、文章と図の意味の完全一致ではない。CRUDや通知種別も自然文から判定していない。PoCは正式package全体、Check/State/概念の参照、旧版の移行、Viewerや旧検証正本を実行するものではない。これらは後続で実装・検証する。
+PoCの `graphEdges` はRelationからの**図のモデル**、`rows` は同じRelationからの表のモデルであり、実Viewerの描画ではない。`RELATION_WITHOUT_STEP` と `UNLINKED_RELATION` は対応漏れ候補を示す。図／表を同一のRelationから投影するので、重複フィールド間の不一致は発生しない設計。誤ったRelationを正しい型・方向で選んだ場合、その意味の誤りは機械だけでは分からない。上の負例が保証するのは参照・端点・明示されたペアの構造上の矛盾であり、文章と図の意味の完全一致ではない。CRUDや通知種別も自然文から判定していない。PoCは正式package全体、Check/State/概念の参照、旧版の移行、Viewerや旧検証正本を実行するものではない。これらは後続で実装・検証する。
 
 ## 互換性・明示移行の方針
 
@@ -89,7 +96,7 @@ GUI共通部分はmainのDrawer・Explorer・タブ・図・状態・概念・Ch
 
 ## 後続Phase案と受入
 
-0. **Chatで契約レビュー**：上記の通知、未接続、Scope意味移行、旧0.5の未決Who、Relationと手順の対応を判断。GUI・形式版・移行後の意味はPoCの成功だけで採用しない。
+0. **Chatで契約レビュー**：Activity図形を当該Whoとして扱う点は本人確認済み。通知、未接続、Scope意味移行、旧0.5の未決Who、個々のStepとRelationの粒度・対応範囲は引き続き判断する。GUI・形式版・移行後の意味はPoCの成功だけで採用しない。
 1. **Schema/Validator・保存器**：合意された版・実例を固定。正式Schemaと既存保存経路に最小実装し、旧0.4/旧0.5の読取、版識別・未知拒否、明示別出力移行、Scope再判定、Step/Result/Data/例外/局所順序、参照と全人間状態・CAS/lock/失敗非書込みを正負・実CLIで確認。#348の版ゲートと競合させない。自動保存・rebaseしない。
 2. **生成/編集・レビューSkill**：Phase 1の固定契約を入力にcanonical/bundle/provenanceを更新。版別の読取/編集/明示変換、単一Who、表・図の相関、未決、Check合意ゲートを確認。隔離配布copyで実Agentの作成→更新→保存→読戻し、read-onlyレビュー、異常系を検証。
 3. **Viewer**：最新mainと#341の採用表示を基準に、#342から旧0.5互換・黄色警告等を選択移植。新契約の表と図を共通モデルから表示。旧0.4/MD/旧0.5・新形式、File/URL/復元、不正時保持、情報と状態、PC/狭幅、固定Preview・最終全体CIと本人GUI操作を確認。
