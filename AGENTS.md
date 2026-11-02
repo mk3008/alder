@@ -6,6 +6,10 @@ For a new independent Fresh agent review in this repository, request reasoning e
 
 This is the default for future Fresh reviews, not a retroactive change to frozen historical research runs. If a specific experiment has preregistered settings or the requester specifies settings, use and record those settings. A Fresh review reports evidence and questions; it does not approve business meaning or edit the source under review.
 
+## Verification and implementation review responsibility boundaries
+
+For Check Item test-specification quality, Check-to-Test mapping, requirements/test-effectiveness review, and implementation/verification-path quality, follow [the S / X / A / B responsibility contract](docs/review-responsibilities.ja.md). Keep missing Check test patterns (S), missing or incorrect Test/assertion mappings (X), behavioral nonconformance or ineffective tests (A), and structural/verification-route improvements (B) distinct. This reference does not register new Skills, change plugin routing, or introduce a mandatory additional review phase.
+
 ## User-facing documentation polish gate
 
 When drafting, polishing, or reviewing README content and other user-facing documentation, check for **author-side meta information leaking into the reader-facing text** in addition to grammar and style.
