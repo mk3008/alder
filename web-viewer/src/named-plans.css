@@ -1,4 +1,5 @@
-header #plan-select{max-width:min(42vw,360px);font:inherit;font-weight:700;letter-spacing:inherit;color:inherit;background:#163c61;border:1px solid #ffffff70;border-radius:5px;padding:5px 8px;cursor:pointer}
+header:has(#plan-select) #header-title{flex-shrink:1;min-width:0}
+header #plan-select{max-width:min(100%,42vw,360px);font:inherit;font-weight:700;letter-spacing:inherit;color:inherit;background:#163c61;border:1px solid #ffffff70;border-radius:5px;padding:5px 8px;cursor:pointer}
 header #plan-select:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media(max-width:600px){
  header:has(#plan-select){--header-control-width:40px;column-gap:2px;padding-inline:4px}

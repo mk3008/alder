@@ -36,6 +36,12 @@ export async function verifyNamedPlans(browser){
    assert.deepEqual(errors,[]);results.push({width,threePlans:true,sharedIDs:true,checks:true,state:true,concept:true,resetViews:true,reload:true,invalidKeepsDisplay:true});
   }finally{await context.close();}
  }
+ const longContext=await browser.newContext({viewport:{width:601,height:960}}),longPage=await longContext.newPage();
+ try{
+  const long=JSON.parse(raw),name='長い業務案名の表示確認を行うための非常に長い案の名前です';long.plans[0].name=name;
+  await longPage.goto('http://127.0.0.1:4173/');await longPage.waitForFunction(()=>!document.querySelector('#open').disabled);await longPage.locator('#fallback').setInputFiles({name:'long.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(long))});await longPage.locator('.node').first().waitFor();
+  for(const width of [320,393,601,800,1280]){await longPage.setViewportSize({width,height:960});await longPage.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));const geometry=await longPage.locator('header').evaluate(root=>({client:root.clientWidth,scroll:root.scrollWidth,actions:[...root.querySelectorAll(':scope > button, :scope > a')].map(node=>{const r=node.getBoundingClientRect();return [r.left,r.right];})}));assert.ok(geometry.scroll<=geometry.client,'long plan name does not overflow at '+width);assert.ok(geometry.actions.every(([left,right])=>left>=0&&right<=width),'all header actions remain visible at '+width);assert.equal(await longPage.locator('#plan-select').getAttribute('title'),name);}
+ }finally{await longContext.close();}
  const context=await browser.newContext({viewport:{width:1280,height:960}}),page=await context.newPage(),errors=[];
  page.on('pageerror',error=>errors.push(error.message));let response=raw;
  await page.route('https://example.test/named-plans.json',route=>route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:response}));
