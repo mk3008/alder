@@ -50,7 +50,7 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
    const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(!relations.length)continue;
-   root.append(element('h3',label));const descriptions=relations.map(r=>`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`);
+   root.append(element('h3',label));const descriptions=relations.map(r=>`${kind==='business-exception'?`${names.get(r.fromId)} → ${names.get(r.toId)}`:names.get(kind==='input'?r.fromId:r.toId)} — ${r.label}`);
    if(kind==='business-exception'){for(const description of descriptions)root.append(element('p',description));}
    else{const list=element('ul');for(const description of descriptions)list.append(element('li',description));root.append(list);}
   }

@@ -30,7 +30,9 @@ function checkRelationLists(doc,business,activityId){
  const names=new Map([...business.objects,...business.activities].map(item=>[item.id,item.name]));
  const detail=doc.querySelector('#detail>.markdown');
  for(const [kind,title] of [['input','Input'],['output','Output']]){
-  const expected=business.relations.filter(r=>r.kind===kind&&(r.fromId===activityId||r.toId===activityId)).map(r=>`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`);
+  // The selected Activity is already the drawer heading; keep every relation
+  // in order with the other endpoint and the complete information label.
+  const expected=business.relations.filter(r=>r.kind===kind&&(r.fromId===activityId||r.toId===activityId)).map(r=>`${names.get(kind==='input'?r.fromId:r.toId)} — ${r.label}`);
   const heading=[...detail.children].find(el=>el.tagName==='H3'&&el.textContent===title);
   assert.equal(!!heading,expected.length>0,`${title}: heading exists only when relations exist`);
   if(!heading)continue;
