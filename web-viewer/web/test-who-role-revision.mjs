@@ -33,6 +33,7 @@ try{
  const nview=load(n);assert.equal(section(detail(nview,na.id),'Who'),'単一ロールN');assert.equal(activityRole(nview,na.id).id,nr.id);assert.equal(nview.graph.nodes.find(node=>node.id===na.id).who,'単一ロールN');checks.push(ids[1]);
 
  const single=packageFor('photo'),sa=single.documents[0].activities[0],multiRoles=structuredClone(single),oneRole=structuredClone(single),zeroRoles=structuredClone(single);
+ assert.equal(sa.performers.length,1,'the critical legacy case has exactly one Object');assert.deepEqual(sa.performers[0].roleIds,['fx-player','fx-recorder'],'the same Object has two distinct Roles');
  oneRole.documents[0].activities[0].performers[0].roleIds=['fx-player'];zeroRoles.documents[0].activities[0].performers[0].roleIds=[];
  for(const p of [oneRole,zeroRoles,multiRoles]){const v=load(p),render=detail(v,sa.id);assert.equal(section(render,'Who'),'未決');assert.match(render.textContent,/旧形式の担当情報/);assert.equal(activityRole(v,sa.id),undefined);assert.equal(v.graph.nodes.find(node=>node.id===sa.id).who,'未決');assert.deepEqual(v.model.business,p.documents[0]);assert.equal(v.markdown,JSON.stringify(p));}
  checks.push(ids[2]);
