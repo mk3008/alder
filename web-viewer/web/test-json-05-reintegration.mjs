@@ -52,14 +52,14 @@ try{
 
  const photo=packageFor('photo'),single=make(photo),activity=photo.documents[0].activities[0],detail=w.Detail.businessDetail(single,activity.id),detailText=detail.textContent;
  for(const value of ['参加者','記録担当','写真がある場合','その写真を残す'])assert.ok(detailText.includes(value),value);
- assert.doesNotMatch(detailText,/担当：/,'single Activity performer is not repeated for inherited Step');assert.equal(single.findings.filter(f=>f.id.startsWith('viewer:')).length,0);
- const explicit=structuredClone(photo);explicit.documents[0].activities[0].procedure.steps[0].performerObjectIds=['fx-person'];assert.doesNotMatch(w.Detail.businessDetail(make(explicit),'photo-activity').textContent,/担当：/);
- const noRole=structuredClone(photo);noRole.documents[0].activities[0].performers[0].roleIds=[];assert.ok(w.Detail.businessDetail(make(noRole),'photo-activity').textContent.includes('その写真を残す'));
- const oneRole=structuredClone(photo);oneRole.documents[0].activities[0].performers[0].roleIds=['fx-player'];assert.equal(activityRole(make(oneRole),'photo-activity').id,'fx-player');assert.equal(activityRole(single,'photo-activity'),undefined,'multiple Roles do not acquire an arbitrary single color');
- const unresolved=packageFor('molkkyCross'),unknown=make(unresolved),unknownActivity=unresolved.documents[0].activities[0];assert.match(w.Detail.businessDetail(unknown,unknownActivity.id).textContent,/担当：未決/);assert(unknown.findings.some(f=>f.id===`viewer:who:${unknownActivity.id}`));assert(unknown.findings.some(f=>f.id===`viewer:steps:${unknownActivity.id}`));
+ assert.doesNotMatch(detailText,/旧形式の担当：/,'single historical performer is not repeated for an inherited Step');assert.match(detailText,/旧形式の担当情報を継承/);assert.match(single.findings.find(f=>f.id==='viewer:who:photo-activity').summary,/複数Role/);
+ const explicit=structuredClone(photo);explicit.documents[0].activities[0].procedure.steps[0].performerObjectIds=['fx-person'];assert.doesNotMatch(w.Detail.businessDetail(make(explicit),'photo-activity').textContent,/旧形式の担当：/);
+ const noRole=structuredClone(photo);noRole.documents[0].activities[0].performers[0].roleIds=[];assert.ok(w.Detail.businessDetail(make(noRole),'photo-activity').textContent.includes('その写真を残す'));assert.equal(activityRole(make(noRole),'photo-activity'),undefined);
+ const oneRole=structuredClone(photo);oneRole.documents[0].activities[0].performers[0].roleIds=['fx-player'];assert.equal(activityRole(make(oneRole),'photo-activity'),undefined,'a historical Role is not a direct Who reference');assert.equal(activityRole(single,'photo-activity'),undefined,'multiple historical Roles do not acquire an arbitrary single color');
+ const unresolved=packageFor('molkkyCross'),unknown=make(unresolved),unknownActivity=unresolved.documents[0].activities[0];assert.match(w.Detail.businessDetail(unknown,unknownActivity.id).textContent,/旧形式の担当：未決/);assert(unknown.findings.some(f=>f.id===`viewer:who:${unknownActivity.id}`));assert(unknown.findings.some(f=>f.id===`viewer:steps:${unknownActivity.id}`));
  done.push(ids[1]);
 
- const issue=design.findings.find(f=>f.id==='viewer:who:c-guidance');assert(issue);assert.equal(issue.kind,'correction');assert.deepEqual(issue.targets,['c-guidance']);for(const s of ['受付担当','受付システム','担当者','1つ'])assert.ok(issue.content.includes(s),s);
+ const issue=design.findings.find(f=>f.id==='viewer:who:c-guidance');assert(issue);assert.equal(issue.kind,'correction');assert.deepEqual(issue.targets,['c-guidance']);for(const s of ['受付担当','受付システム','担当者','単一','Role'])assert.ok(issue.content.includes(s),s);
  assert.ok(w.Findings.findingLinks(design,'c-guidance',()=>{}).textContent.includes('構造の要確認（表示のみ）'));
  assert.deepEqual(design.model.business.findings,seed.documents[0].findings);assert.deepEqual(design.model.checks[0].items.map(i=>i.reviewState),seed.documents[1].items.map(i=>i.reviewState));assert.equal(design.markdown,seedRaw);
  // An external Check belongs to its declared source, not the locally displayed BD.
@@ -67,8 +67,8 @@ try{
  done.push(ids[2]);oldDone.push(oldIds[1]);
 
  const sourceView=make(synthetic),sourceBD=synthetic.documents.find(d=>d.kind==='businessDesign'),a=sourceBD.activities[0],mixedDetail=w.Detail.businessDetail(sourceView,a.id),content=mixedDetail.textContent;
- for(const value of ['受付担当','受付システム','相談申込を入力する','入力された申込を確認する','担当：受付担当','担当：受付システム','任意','手順1 → 手順2','手順2・3は入替可能'])assert.ok(content.includes(value),value);
- const pending=structuredClone(synthetic),pa=pending.documents[0].activities[0];pa.procedure.steps[0].performerObjectIds=null;pending.documents[0].findings.push({id:'test-pending-step',sourceId:'PENDING-1',kind:'question',status:'open',scope:'items',targetIds:[pa.id],unresolvedTargets:[],summary:'手順担当未決',content:'担当を確認する。'});const pendingDesign=make(pending);assert.match(w.Detail.businessDetail(pendingDesign,pa.id).textContent,/担当：未決/);assert(pendingDesign.findings.some(f=>f.id===`viewer:steps:${pa.id}`));
+ for(const value of ['受付担当','受付システム','相談申込を入力する','入力された申込を確認する','旧形式の担当：受付担当','旧形式の担当：受付システム','任意','手順1 → 手順2','手順2・3は入替可能'])assert.ok(content.includes(value),value);
+ const pending=structuredClone(synthetic),pa=pending.documents[0].activities[0];pa.procedure.steps[0].performerObjectIds=null;pending.documents[0].findings.push({id:'test-pending-step',sourceId:'PENDING-1',kind:'question',status:'open',scope:'items',targetIds:[pa.id],unresolvedTargets:[],summary:'手順担当未決',content:'担当を確認する。'});const pendingDesign=make(pending);assert.match(w.Detail.businessDetail(pendingDesign,pa.id).textContent,/旧形式の担当：未決/);assert(pendingDesign.findings.some(f=>f.id===`viewer:steps:${pa.id}`));
  done.push(ids[3]);oldDone.push(oldIds[2]);
 
  for(const value of ['依頼者へ担当窓口が説明される','依頼者へ次の連絡方法が説明される','連絡案内','その相談の担当窓口','次の連絡方法'])assert.ok(content.includes(value),value);
@@ -90,5 +90,5 @@ try{
  assert.throws(()=>parseDocument('{"format":"a","format":"b"}'),/Duplicate JSON key/);
  done.push(ids[7]);oldDone.push(oldIds[5]);
  coverage(done);oldCoverage(oldDone);for(const path of Object.keys(authorities))verify(path);
- console.log(JSON.stringify({checks:done,oldAuthority:oldDone,scope:'Node/DOM partial; File adapter and mocked URL. Restore, real Chrome, external server and CI are separate.'}));
+ console.log(JSON.stringify({retainedCoverage:done,olderRetainedCoverage:oldDone,supersededWhoInterpretations:['JSON05-REINTEGRATE-002','JSON05-REINTEGRATE-003','JSON05-REINTEGRATE-004','JSON05-VIEWER-002'],revisionAuthority:'verification/json-05-who-role-revision.check-items.json',scope:'Node/DOM partial; File adapter and mocked URL. Restore, real Chrome, external server and CI are separate.'}));
 }finally{w.close();}

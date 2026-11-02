@@ -1,19 +1,19 @@
 import type {ActivityEntry,BD,RelationEntry,StructuredActivity} from './json-document';
 import type {Finding} from './graph';
 
-/** Names come only from explicit references in the validated source. */
-export function performerNames(bd:BD,activity:StructuredActivity,ids?:string[]|null):string{
+/** Historical assignments are source information, not the Activity's Who. */
+export function legacyPerformerNames(bd:BD,activity:StructuredActivity,ids?:string[]|null):string{
  if(activity.performers===null)return '未決';
  const performers=ids===undefined?activity.performers:ids===null?(activity.performers.length===1?activity.performers:[]):activity.performers.filter(p=>ids.includes(p.objectId));
  if(!performers.length)return '未決';
  return performers.map(p=>{
   const name=bd.objects.find(o=>o.id===p.objectId)!.name;
   const roles=p.roleIds.map(id=>bd.roles!.find(r=>r.id===id)!.name);
-  return roles.length?`${name}（${roles.join('・')}）`:name;
+  return roles.length?`${name}（旧Role：${roles.join('・')}）`:name;
  }).join('、');
 }
 export function activityWho(bd:BD,activity:ActivityEntry):string{
- return 'performers' in activity?performerNames(bd,activity):(bd.roles?.find(r=>r.id===activity.roleId)?.name??activity.who);
+ return 'performers' in activity?'未決':(bd.roles?.find(r=>r.id===activity.roleId)?.name??activity.who);
 }
 export function relationLabel(bd:BD,relation:RelationEntry):string{
  return 'dataId' in relation?bd.data!.find(d=>d.id===relation.dataId)!.name:relation.label;
@@ -28,10 +28,14 @@ export function structureFindings(bd:BD):Finding[]{
    id:`viewer:${suffix}:${activity.id}`,displayId:'構造の要確認（表示のみ）',kind,status:'open',scope:'items',
    targets:[activity.id],targetNames:[activity.name],summary,content,unresolvedTargets:[]
   });
-  if(activity.performers===null)add('who','question','実行主体が未決です。','実行主体を確認してください。入力や出力の相手からは決められません。');
-  else if(activity.performers.length>1)add('who','correction','実行主体が複数あります。',`主体：${performerNames(bd,activity)}。1つのActivityの実行主体は1つです。各手順の担当と業務の区切りを確認してください。`);
+  const objects=activity.performers??[],roles=new Set(objects.flatMap(performer=>performer.roleIds));
+  const problems=[...(objects.length>1?['複数の担当Object']:[]),...(roles.size>1?['複数Role']:[])];
+  add('who',problems.length?'correction':'question',problems.length?`旧形式に${problems.join('と')}があります。`:'Whoは未決です。',
+   `旧形式の担当情報：${legacyPerformerNames(bd,activity)}。旧0.5にはActivityからWhoへの直接参照がありません。このActivityのWhoを単一の業務Roleとして確認してください。入力や出力の相手からは決められません。`);
   const pending=activity.procedure.steps.filter(step=>step.performerObjectIds===null&&activity.performers?.length!==1);
-  if(pending.length)add('steps','question','担当が未決の手順があります。',`担当未決：${pending.map((step)=>step.text).join('、')}。Activityの主体から一意に継承できません。`);
+  const different=activity.procedure.steps.filter(step=>step.performerObjectIds!==null&&(step.performerObjectIds.length!==objects.length||step.performerObjectIds.some(id=>!objects.some(p=>p.objectId===id))));
+  if(pending.length||different.length)add('steps',different.length?'correction':'question',different.length?'旧形式の手順の担当情報が異なります。':'旧形式の担当情報が未決の手順があります。',
+   [pending.length?`旧形式の担当情報が未決：${pending.map(step=>step.text).join('、')}。`:'' ,different.length?`Activityと異なる旧形式の担当情報：${different.map(step=>step.text).join('、')}。責任境界が変わる場合はActivityの分割を検討してください。`:''].join(''));
  }
  return findings;
 }

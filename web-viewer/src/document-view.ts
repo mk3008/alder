@@ -2,7 +2,7 @@ import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
-import {activityWho,performerNames,relationLabel} from './structured-display';
+import {activityWho,legacyPerformerNames,relationLabel} from './structured-display';
 // @ts-expect-error The shared storage validator is a JavaScript module.
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -40,13 +40,15 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
   if('performers' in activity){
-   field(root,'Scope',String(activity.scope));field(root,'Why',activity.why);field(root,'When',activity.when);field(root,'Who',activityWho(bd,activity));field(root,'Where',activity.where);
+   field(root,'Scope',String(activity.scope));field(root,'Why',activity.why);field(root,'When',activity.when);field(root,'Who',activityWho(bd,activity));field(root,'旧形式の担当情報',legacyPerformerNames(bd,activity));
+   if(activity.performers?.length===1&&activity.procedure.steps.some(step=>step.performerObjectIds===null))root.append(element('p','旧形式では、指定のない手順は旧形式の担当情報を継承します。'));
+   field(root,'Where',activity.where);
    const issues=(design.findings??[]).filter(f=>f.id.startsWith('viewer:')&&f.targets.includes(activity.id));
    for(const issue of issues){const warning=element('p',issue.summary+' 詳細は構造の要確認を参照してください。');warning.className='finding-reference-warning';warning.dataset.structureIssue=issue.id;root.append(warning);}
    root.append(element('h3','Procedure'));const steps=element('ol');
    for(const step of activity.procedure.steps){const item=element('li');item.append(formattedMarkdown(step.text));
     const same=activity.performers?.length===1&&(step.performerObjectIds===null||step.performerObjectIds.length===1&&step.performerObjectIds[0]===activity.performers[0].objectId);
-    const detail=[step.obligation==='required'?'必須':'任意',...(step.appliesWhen?[`適用条件：${step.appliesWhen}`]:[]),...(!same?[`担当：${performerNames(bd,activity,step.performerObjectIds)}`]:[])];
+    const detail=[step.obligation==='required'?'必須':'任意',...(step.appliesWhen?[`適用条件：${step.appliesWhen}`]:[]),...(!same?[`旧形式の担当：${legacyPerformerNames(bd,activity,step.performerObjectIds)}`]:[])];
     item.append(element('p',detail.join(' · ')));steps.append(item);
    }root.append(steps);
    if(activity.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul'),number=(id:string)=>String(activity.procedure.steps.findIndex(s=>s.id===id)+1);for(const rule of activity.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`手順${number(rule.beforeId)} → 手順${number(rule.afterId)}`:`手順${rule.stepIds.map(number).join('・')}は入替可能`));root.append(rules);}
