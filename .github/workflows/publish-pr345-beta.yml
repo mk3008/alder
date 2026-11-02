@@ -1,0 +1,60 @@
+name: Publish PR 345 fixed Viewer beta preview
+on:
+  push:
+    branches:
+      - beta/publish-pr345-07925d6
+    paths:
+      - '.github/workflows/publish-pr345-beta.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify artifact and publish isolated beta path
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHA="07925d6f36df4f2e8d95f48e6f70645474bf0da9"
+          PREFIX="preview/pr-345/$SHA"
+          TMP="$(mktemp -d)"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13122973569/zip" > "$TMP/ci.zip"
+          echo "5a93ca80625d4ff11ce08652deb39eaecf639f5c34e6cf5b2f0de52de3d5f135  $TMP/ci.zip" | sha256sum --check
+          unzip -qq "$TMP/ci.zip" -d "$TMP/pkg"
+          python3 - "$TMP/pkg" "$PREFIX" "$SHA" <<'PY'
+          import hashlib, json, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          prefix, sha = sys.argv[2:]
+          manifest = json.loads((root / 'manifest.json').read_text())
+          assert manifest['source'] == sha
+          assert manifest['sourceTree'] == '848c8870658de7bc5f4955b34a6270ae40feb11d'
+          assert manifest['tree'] == manifest['sourceTree']
+          assert manifest['urlPath'] == '/' + prefix + '/'
+          entries = {key: value for key, value in manifest['files'].items() if key.startswith(prefix + '/')}
+          assert len(entries) == 11, len(entries)
+          expected = set(entries)
+          actual = {p.relative_to(root).as_posix() for p in (root / prefix).rglob('*') if p.is_file()}
+          assert actual == expected
+          for relative, digest in entries.items():
+              path = root / relative
+              assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == digest, relative
+          assert (root / prefix / 'index.html').is_file()
+          plans = json.loads((root / prefix / 'named-plans-example.json').read_text())['plans']
+          assert [p['name'] for p in plans] == ['現行案', '改善案', '提案A']
+          print('Verified immutable CI preview files:', len(entries))
+          PY
+          gh auth setup-git
+          git clone --quiet --depth=1 --branch gh-pages-web-viewer "https://github.com/$GITHUB_REPOSITORY.git" "$TMP/pages"
+          DEST="$TMP/pages/$PREFIX"
+          if [ -e "$DEST" ]; then echo "Refusing to replace existing beta preview" >&2; exit 1; fi
+          mkdir -p "$(dirname "$DEST")"
+          cp -a "$TMP/pkg/$PREFIX" "$DEST"
+          test "$(git hash-object "$DEST/named-plans-example.json")" = "cfc2d1cbef9d53233e9c95af52311e218012580c"
+          git -C "$TMP/pages" add "$PREFIX"
+          test "$(git -C "$TMP/pages" diff --cached --name-only | wc -l)" -eq 11
+          test -z "$(git -C "$TMP/pages" diff --cached --name-only | grep -v "^$PREFIX/" || true)"
+          git -C "$TMP/pages" -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Publish PR 345 fixed Viewer beta preview" --quiet
+          git -C "$TMP/pages" push --quiet origin HEAD:gh-pages-web-viewer
+          echo "Published isolated beta: $PREFIX"
