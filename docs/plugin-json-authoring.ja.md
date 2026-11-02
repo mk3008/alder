@@ -20,9 +20,11 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 ### 複数の業務案
 
-`alder-named-plans/1.0` では、各案のID・表示名と単一JSONを独立して保持する。単一JSONを変更せずにまとめるときは、同梱 `named-plans-cli.mjs create` に出力先と「案ID・表示名・元ファイル」を繰り返し渡す。`inspect` は全案を検査してファイルhashと各案のrevisionを返す。
+`alder-named-plans/1.0` では、各案のID・表示名と単一JSONを独立して保持する。単一JSONを変更せずにまとめるときは、同梱 `named-plans-cli.mjs create` に出力先と「案ID・表示名・元ファイル」を繰り返し渡す。`inspect` は全案を検査し、ファイルhash、各案のrevision、形式・版と読取／編集の対応状況を返す。
 
 案を更新するときは対象IDを明示し、`extract` で別ファイルへ取り出して通常の手順で候補を作る。`named-plans-cli.mjs commit` に複数案ファイル・案ID・候補・操作要求を渡す。操作要求の `expectedSha256` は複数案ファイルのhash、`expectedRevision` は対象案の旧package revisionとする。BDの合意・Checkの人間判断・削除や移行の条件は単一JSONと同じで、他案を変更しない。原本の単一ファイルは書換えない。人間にJSONの手編集を求めない。
+
+単一JSONと対象案の直接編集は `alder-document-package/0.4` に限る。`inspect` の `compatibility` で形式・版と `editable` を確認する。旧0.1〜0.3は読取り可能でも直接保存せず、未知版も推測して補正しない。旧版には利用者の明示依頼による別ファイルへの変換が必要だが、個別データの変換可否は未評価である。自動移行や原本への上書きはしない。
 
 既存の概念データ例をCheckに対応付ける場合は、[構造契約](json-native-contract.ja.md#check-itemとデータ例)の `conceptModel/0.2` と明示移行を使う。各例の `checkIds` は同じ業務設計に属する実在Checkの内部IDを指定し、名前・類似した値・セルの `linkId` から対応を推測しない。参照の構造検査後、条件・対象・結果と未合意をCheckおよびBusiness Designと別途照合する。Checkの生成・変更に必要な合意と既存ID、人間状態、Test証拠を維持する。
 
@@ -96,4 +98,4 @@ MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を�
 
 ## ロールの同一性と保存色
 
-[ロール契約](json-roles.ja.md)を読み、候補0.4ではBD schemaVersion 0.3のrolesとActivity.roleIdを直接草案・更新する。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1〜0.3の読取りは互換境界で行う。旧0.1/0.2からRoleだけを構造化するprepare-role-upgradeは従来の候補0.3を作る。候補0.4への明示移行はprepare-exception-upgradeで新しい候補だけを作り、検査後にmigration操作と期待版/hashを伴うcommitを行う。Checkがある場合の新BD版の人間合意を推定しない。
+[ロール契約](json-roles.ja.md)を読み、候補0.4ではBD schemaVersion 0.3のrolesとActivity.roleIdを直接草案・更新する。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1〜0.3の読取りは互換境界で行う。prepare-role-upgradeとprepare-exception-upgradeは別ファイルへの候補生成であり、旧原本へのcommitは行わない。生成候補の正式な移行保存・差分検証は未対応のため、実行可能と断定しない。Checkがある場合の新BD版の人間合意を推定しない。

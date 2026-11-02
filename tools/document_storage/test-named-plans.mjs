@@ -6,8 +6,10 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fingerprint} from './authoring.mjs';
 import {namedPlansSchema,validateNamedPlans,selectNamedPlan} from './named-plans.mjs';
+import {readLegacyPackage} from './legacy-json.mjs';
 
-const fixture=name=>JSON.parse(fs.readFileSync(new URL('../../work/plugin-json/issue-273/snapshots/'+name,import.meta.url),'utf8'));
+// Synthetic 0.1 snapshots are normalized only to prepare current-version test fixtures.
+const fixture=name=>readLegacyPackage(JSON.parse(fs.readFileSync(new URL('../../work/plugin-json/issue-273/snapshots/'+name,import.meta.url),'utf8')));
 const p1=fixture('01-direct-bd.json'),p2=fixture('02-add-rename.json'),p3=fixture('03-direct-checks.json');
 const bundle=()=>({format:'alder-named-plans',formatVersion:'1.0',plans:[{id:'current',name:'現行案',package:structuredClone(p1)},{id:'next',name:'改善案',package:structuredClone(p1)},{id:'alternative',name:'別案',package:structuredClone(p3)}]});
 test('NAMED-PLANS-002: schema and three independent plans preserve identical inner IDs',()=>{

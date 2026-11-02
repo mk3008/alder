@@ -4,12 +4,17 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import {parseStrict,stringify,demand} from './core.mjs';
-import {fingerprint,guardAuthoring} from './authoring.mjs';
+import {describeDeclaredValue,fingerprint,guardAuthoring,packageVersionPolicy,requireEditablePackage} from './authoring.mjs';
 import {validateNamedPlans,selectNamedPlan} from './named-plans.mjs';
 
 export async function run(args){
  let temp,lock,ownsLock=false;
  const read=file=>parseStrict(fs.readFileSync(file,'utf8'));
+ const checkVersions=bundle=>{
+  const format=bundle?.format,version=bundle?.formatVersion;
+  demand(format==='alder-named-plans'&&version==='1.0',`Bundle format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(version)} is unsupported; supported format is alder-named-plans 1.0. Stop editing and check format support.`);
+  if(Array.isArray(bundle.plans))for(const plan of bundle.plans)packageVersionPolicy(plan?.package,'Plan '+(plan?.id??'<missing>'));
+ };
  const stage=(target,text)=>{
   temp=path.join(path.dirname(path.resolve(target)),'.alder-plans-'+randomUUID());
   const fd=fs.openSync(temp,'wx',0o600);
@@ -20,21 +25,21 @@ export async function run(args){
   const [command,...rest]=args;
   if(command==='inspect'){
    demand(rest.length===1,'inspect plans.json');
-   const text=fs.readFileSync(rest[0],'utf8'),bundle=parseStrict(text),result=validateNamedPlans(bundle);
-   console.log(JSON.stringify({...result,sha256:fingerprint(text),plans:bundle.plans.map(({id,name,package:pkg})=>({id,name,revision:pkg.revision}))}));return 0;
+   const text=fs.readFileSync(rest[0],'utf8'),bundle=parseStrict(text);checkVersions(bundle);const result=validateNamedPlans(bundle);
+   console.log(JSON.stringify({...result,sha256:fingerprint(text),plans:bundle.plans.map(({id,name,package:pkg})=>({id,name,revision:pkg.revision,compatibility:packageVersionPolicy(pkg,'Plan '+id)}))}));return 0;
   }
   if(command==='create'){
    demand(rest.length>=4&&(rest.length-1)%3===0,'create output.json plan-id name source.json [plan-id name source.json ...]');
    const [target,...entries]=rest,plans=[];
    for(let i=0;i<entries.length;i+=3){const [id,name,source]=entries.slice(i,i+3);demand(path.resolve(source)!==path.resolve(target),'Source must be separate from output');plans.push({id,name,package:read(source)});}
-   const bundle={format:'alder-named-plans',formatVersion:'1.0',plans};validateNamedPlans(bundle);
+   const bundle={format:'alder-named-plans',formatVersion:'1.0',plans};checkVersions(bundle);validateNamedPlans(bundle);
    stage(target,stringify(bundle));validateNamedPlans(read(temp));fs.linkSync(temp,target);
    console.log(JSON.stringify({target,sha256:fingerprint(fs.readFileSync(target,'utf8')),approval:'not-evaluated'}));return 0;
   }
   if(command==='extract'){
    demand(rest.length===3,'extract plans.json plan-id output.json');const [source,id,target]=rest;
    demand(path.resolve(source)!==path.resolve(target),'Source must be separate from output');
-   const plan=selectNamedPlan(read(source),id);stage(target,stringify(plan.package));fs.linkSync(temp,target);
+   const bundle=read(source);checkVersions(bundle);const plan=selectNamedPlan(bundle,id);stage(target,stringify(plan.package));fs.linkSync(temp,target);
    console.log(JSON.stringify({target,plan:id,approval:'not-evaluated'}));return 0;
   }
   if(command==='commit'){
@@ -44,7 +49,8 @@ export async function run(args){
    lock=target+'.alder-lock';const fd=fs.openSync(lock,'wx',0o600);ownsLock=true;fs.closeSync(fd);
    const current=fs.readFileSync(target,'utf8'),bundle=parseStrict(current),operation=read(opfile),next=read(candidate);
    demand(operation.expectedSha256===fingerprint(current),'File content conflict');
-   const previous=selectNamedPlan(bundle,id).package;
+   checkVersions(bundle);const previous=selectNamedPlan(bundle,id).package;
+   requireEditablePackage(previous,'Plan '+id);requireEditablePackage(next,'candidate for plan '+id);
    const result=guardAuthoring(previous,next,operation);
    const updated=structuredClone(bundle);updated.plans.find(p=>p.id===id).package=next;validateNamedPlans(updated);
    stage(target,stringify(updated));validateNamedPlans(read(temp));
