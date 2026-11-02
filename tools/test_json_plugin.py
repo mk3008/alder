@@ -6,13 +6,32 @@ ROOT=Path(__file__).resolve().parents[1]
 PLUGIN=ROOT/'plugins/alder'
 NAME='alder-manage-json-documents'
 
+def current_fixture(source,scripts):
+    # Prepare synthetic current-version fixtures; this is not a user data migration.
+    js="import fs from 'node:fs';const {readLegacyPackage}=await import(process.argv[1]);process.stdout.write(JSON.stringify(readLegacyPackage(JSON.parse(fs.readFileSync(process.argv[2],'utf8')))));"
+    return subprocess.run(['node','--input-type=module','-e',js,(scripts/'legacy-json.mjs').as_uri(),str(source)],capture_output=True,check=True).stdout
+
 class JSONPluginTest(unittest.TestCase):
+    def test_version_gate_in_isolated_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True)
+            source=root/'old.json';source.write_bytes((ROOT/'work/plugin-json/issue-273/snapshots/01-direct-bd.json').read_bytes());original=source.read_bytes()
+            candidate=root/'candidate.json';candidate.write_bytes((ROOT/'work/viewer-json/issue-274/json-native/independent.json').read_bytes());op=root/'op.json';op.write_text('{}');new=root/'new.json'
+            r=run('author-cli.mjs','inspect',source);self.assertEqual(r.returncode,0,r.stderr);info=json.loads(r.stdout);self.assertFalse(info['compatibility']['editable']);self.assertEqual(info['compatibility']['formatVersion'],'0.1')
+            r=run('author-cli.mjs','create',source,new,op);self.assertEqual(r.returncode,2);self.assertIn('0.1',r.stderr);self.assertIn('0.4',r.stderr);self.assertFalse(new.exists())
+            op.write_text(json.dumps({'expectedRevision':info['revision'],'expectedSha256':info['sha256']}));r=run('author-cli.mjs','commit',source,candidate,op);self.assertEqual(r.returncode,2);self.assertIn('explicit',r.stderr);self.assertEqual(source.read_bytes(),original)
+            plans=root/'plans.json';r=run('named-plans-cli.mjs','create',plans,'old','旧案',source,'new','現行案',candidate);self.assertEqual(r.returncode,0,r.stderr)
+            r=run('named-plans-cli.mjs','inspect',plans);self.assertEqual(r.returncode,0,r.stderr);info=json.loads(r.stdout);self.assertFalse(info['plans'][0]['compatibility']['editable']);self.assertTrue(info['plans'][1]['compatibility']['editable'])
+            before=plans.read_bytes();op.write_text(json.dumps({'expectedRevision':info['plans'][0]['revision'],'expectedSha256':info['sha256']}));r=run('named-plans-cli.mjs','commit',plans,'old',candidate,op)
+            self.assertEqual(r.returncode,2);self.assertIn('old',r.stderr);self.assertIn('0.1',r.stderr);self.assertEqual(plans.read_bytes(),before);self.assertEqual(source.read_bytes(),original)
+
     def test_named_plans_in_isolated_installed_bundle(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
             run=lambda *args:subprocess.run(['node',str(scripts/'named-plans-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
             fixtures=ROOT/'work/plugin-json/issue-273/snapshots';source=root/'source.json';candidate=root/'candidate.json';target=root/'plans.json';op=root/'operation.json';extracted=root/'extracted.json'
-            source.write_bytes((fixtures/'01-direct-bd.json').read_bytes());candidate.write_bytes((fixtures/'02-add-rename.json').read_bytes());source_before=source.read_bytes()
+            source.write_bytes(current_fixture(fixtures/'01-direct-bd.json',scripts));candidate.write_bytes(current_fixture(fixtures/'02-add-rename.json',scripts));source_before=source.read_bytes()
             created=run('create',target,'current','現行案',source,'improved','改善案',source,'alternative','別案',source);self.assertEqual(created.returncode,0,created.stderr)
             if os.name!='nt': target.chmod(0o644)
             info=json.loads(run('inspect',target).stdout);self.assertEqual([p['id'] for p in info['plans']],['current','improved','alternative'])
@@ -32,7 +51,7 @@ class JSONPluginTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
             run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
-            source=root/'source.json';source.write_bytes((ROOT/'work/plugin-json/issue-273/snapshots/03-direct-checks.json').read_bytes());original=source.read_bytes()
+            source=root/'source.json';source.write_bytes(current_fixture(ROOT/'work/plugin-json/issue-273/snapshots/03-direct-checks.json',scripts));original=source.read_bytes()
             target=root/'plans.json';extracted=root/'selected.json';candidate=root/'candidate.json';op=root/'operation.json'
             created=run('named-plans-cli.mjs','create',target,'current','現行案',source,'improved','改善案',source,'alternative','提案A',source);self.assertEqual(created.returncode,0,created.stderr)
             if os.name!='nt': target.chmod(0o644)
@@ -110,8 +129,8 @@ class JSONPluginTest(unittest.TestCase):
             root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
             run=lambda *args:subprocess.run(['node',str(scripts/'author-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True)
             fixtures=ROOT/'work/plugin-json/issue-273/snapshots';candidate=root/'candidate.json';target=root/'design.json';op=root/'operation.json'
-            candidate.write_bytes((fixtures/'01-direct-bd.json').read_bytes());op.write_text('{}');r=run('create',candidate,target,op);self.assertEqual(r.returncode,0,r.stderr)
-            before=target.read_bytes();inspect=json.loads(run('inspect',target).stdout);candidate.write_bytes((fixtures/'03-direct-checks.json').read_bytes());op.write_text(json.dumps({'expectedRevision':inspect['revision'],'expectedSha256':inspect['sha256']}))
+            candidate.write_bytes(current_fixture(fixtures/'01-direct-bd.json',scripts));op.write_text('{}');r=run('create',candidate,target,op);self.assertEqual(r.returncode,0,r.stderr)
+            before=target.read_bytes();inspect=json.loads(run('inspect',target).stdout);candidate.write_bytes(current_fixture(fixtures/'03-direct-checks.json',scripts));op.write_text(json.dumps({'expectedRevision':inspect['revision'],'expectedSha256':inspect['sha256']}))
             r=run('commit',target,candidate,op);self.assertEqual(r.returncode,2,r.stderr);self.assertIn('Human Business Design',r.stderr);self.assertEqual(before,target.read_bytes())
             # Read-only validation and inspect do not write the canonical file.
             self.assertEqual(run('inspect',target).returncode,0);self.assertEqual(before,target.read_bytes())
@@ -120,7 +139,7 @@ class JSONPluginTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
             run=lambda *args:subprocess.run(['node',str(scripts/'author-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
-            candidate=root/'candidate.json';target=root/'states.json';op=root/'op.json';pkg=json.loads((ROOT/'work/json-state/issue-275/purchase.json').read_text());candidate.write_text(json.dumps(pkg));op.write_text('{}')
+            candidate=root/'candidate.json';target=root/'states.json';op=root/'op.json';pkg=json.loads(current_fixture(ROOT/'work/json-state/issue-275/purchase.json',scripts));candidate.write_text(json.dumps(pkg));op.write_text('{}')
             r=run('create',candidate,target,op);self.assertEqual(r.returncode,0,r.stderr)
             inspected=json.loads(run('inspect',target).stdout);before=target.read_bytes();state=pkg['documents'][1]['states'][0];state['name']='名前変更後';pkg['documents'][1]['revision']='states-2';pkg['revision']='package-2';candidate.write_text(json.dumps(pkg));op.write_text(json.dumps({'expectedRevision':inspected['revision'],'expectedSha256':inspected['sha256']}))
             r=run('commit',target,candidate,op);self.assertEqual(r.returncode,0,r.stderr);saved=json.loads(target.read_text());self.assertEqual(saved['documents'][1]['states'][0]['id'],state['id']);self.assertEqual(len(saved['documents'][1]['transitions']),13)
@@ -132,9 +151,9 @@ class JSONPluginTest(unittest.TestCase):
             run=lambda *args:subprocess.run(['node',str(scripts/'author-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
             legacy=json.loads((ROOT/'work/json-state/issue-275/purchase.json').read_text());source=root/'old.json';source.write_text(json.dumps(legacy));before=source.read_bytes();candidate=root/'new-candidate.json';request=root/'revisions.json';request.write_text(json.dumps({'expectedRevision':legacy['revision'],'revision':'roles-1','documentRevisions':{d['id']:{'expected':d['revision'],'next':d['revision']+'-role-1'} for d in legacy['documents']}}))
             r=run('prepare-role-upgrade',source,candidate,request);self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(source.read_bytes(),before);new=json.loads(candidate.read_text());self.assertEqual(new['formatVersion'],'0.3');self.assertTrue(new['documents'][0]['roles'])
-            # Migration does not bypass the normal file/revision guard.
+            # A prepared legacy candidate never permits an in-place upgrade.
             original=json.loads(run('inspect',source).stdout);op=root/'operation.json';op.write_text(json.dumps({'expectedRevision':original['revision'],'expectedSha256':original['sha256']}));self.assertEqual(run('commit',source,candidate,op).returncode,2);self.assertEqual(source.read_bytes(),before)
-            data=json.loads(op.read_text());data['migration']='roles-0.3';op.write_text(json.dumps(data));r=run('commit',source,candidate,op);self.assertEqual(r.returncode,0,r.stderr);role=new['documents'][0]['roles'][0];role['name']='担当ロール改名';new['revision']='roles-2';new['documents'][0]['revision']='bd-role-2';new['documents'][1]['revision']='states-role-2';new['documents'][1]['basedOn']['revision']='bd-role-2';candidate.write_text(json.dumps(new));inspected=json.loads(run('inspect',source).stdout);op.write_text(json.dumps({'expectedRevision':inspected['revision'],'expectedSha256':inspected['sha256']}));r=run('commit',source,candidate,op);self.assertEqual(r.returncode,0,r.stderr);saved=json.loads(source.read_text());self.assertEqual(saved['documents'][0]['roles'][0],role);self.assertEqual(saved['documents'][1]['transitions'],legacy['documents'][1]['transitions'])
+            data=json.loads(op.read_text());data['migration']='roles-0.3';op.write_text(json.dumps(data));r=run('commit',source,candidate,op);self.assertEqual(r.returncode,2,r.stderr);self.assertIn('0.4',r.stderr);self.assertEqual(source.read_bytes(),before);self.assertEqual(json.loads(candidate.read_text()),new)
 
 
     def test_native_json_works_when_legacy_modules_are_absent(self):

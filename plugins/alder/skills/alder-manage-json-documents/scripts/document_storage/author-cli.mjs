@@ -6,7 +6,7 @@ import {randomUUID} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {parseStrict,validate,stringify,demand} from './core.mjs';
 import {upgradeRoles} from './roles.mjs';
-import {guardAuthoring,fingerprint,meaningHash} from './authoring.mjs';
+import {guardAuthoring,fingerprint,meaningHash,packageVersionPolicy,requireEditablePackage} from './authoring.mjs';
 export async function run(args){
  let temp,lock,ownsLock=false;
  try{
@@ -24,8 +24,8 @@ export async function run(args){
   }
   if(command==='ids'){const n=Number(rest[0]);demand(rest.length===1&&Number.isInteger(n)&&n>0&&n<=100,'ids expects 1..100');console.log(JSON.stringify(Array.from({length:n},()=>randomUUID())));return 0;}
   if(command==='inspect'){
-   demand(rest.length===1,'inspect package.json');const text=fs.readFileSync(rest[0],'utf8'),pkg=parseStrict(text);validate(pkg.formatVersion==='0.4'?pkg:(await import('./legacy-json.mjs')).readLegacyPackage(pkg));
-   console.log(JSON.stringify({sha256:fingerprint(text),revision:pkg.revision,documents:pkg.documents.map(d=>({id:d.id,kind:d.kind,revision:d.revision})),checks:pkg.documents.flatMap(d=>(d.items??[]).map(i=>({id:i.id,checkId:i.checkId,reviewState:i.reviewState,meaningSha256:meaningHash(pkg,i)})))}));return 0;
+   demand(rest.length===1,'inspect package.json');const text=fs.readFileSync(rest[0],'utf8'),pkg=parseStrict(text),compatibility=packageVersionPolicy(pkg,'input');validate(pkg.formatVersion==='0.4'?pkg:(await import('./legacy-json.mjs')).readLegacyPackage(pkg));
+   console.log(JSON.stringify({sha256:fingerprint(text),revision:pkg.revision,compatibility,documents:pkg.documents.map(d=>({id:d.id,kind:d.kind,revision:d.revision})),checks:pkg.documents.flatMap(d=>(d.items??[]).map(i=>({id:i.id,checkId:i.checkId,reviewState:i.reviewState,meaningSha256:meaningHash(pkg,i)})))}));return 0;
   }
   demand(['create','commit'].includes(command)&&rest.length===3,'Usage: create candidate.json target.json operation.json | commit target.json candidate.json operation.json | inspect package.json | ids N | runtime');
   const [a,b,op]=rest,target=path.resolve(command==='create'?b:a),candidate=path.resolve(command==='create'?a:b);
@@ -36,7 +36,7 @@ export async function run(args){
    lock=target+'.alder-lock';const fd=fs.openSync(lock,'wx',0o600);ownsLock=true;fs.closeSync(fd);
    const current=fs.readFileSync(target,'utf8');demand(operation.expectedSha256===fingerprint(current),'File content conflict');previous=parseStrict(current);
   }
-  for(const pkg of [previous,next].filter(Boolean))if(pkg.formatVersion!=='0.4')(await import('./legacy-json.mjs')).readLegacyPackage(pkg);
+  if(previous)requireEditablePackage(previous,'target');requireEditablePackage(next,'candidate');
   const result=guardAuthoring(previous,next,operation),text=stringify(next);
   temp=path.join(path.dirname(target),'.alder-json-'+randomUUID());const fd=fs.openSync(temp,'wx',0o600);try{fs.writeFileSync(fd,text,'utf8');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
   validate(parseStrict(fs.readFileSync(temp,'utf8')));

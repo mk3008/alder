@@ -12,13 +12,15 @@ license: MIT
 
 複数の業務案を扱うときは、操作ガイドの「複数の業務案」に従い、同梱`named-plans-cli.mjs`で案を作成・検査・抽出・更新する。`inspect`の案IDと名前を依頼に照合し、更新・レビュー対象を一意に特定できないときは対象を確認する。先頭案を自動選択して編集しない。案IDと文書revisionを区別し、対象以外の案・元の単一ファイル・人間判断を保持する。レビューだけなら対象案を読み取って検査し、正本を変更しない。
 
-1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。既存正本のformatを確認し、新規作成はJSON、既存JSONは同じJSONを更新する。既存MDを指名した改稿は元のMD Skillの互換経路へ戻り、明示依頼なしに移行しない。MD原典から新規JSON Checkを作る場合も、一方向変換の明示依頼と対象BD版への人間合意を先に確認する。
+JSONの編集前に正規CLIの`inspect`で`format`・`formatVersion`と`compatibility`を確認する。複数案は対象案を一意に選び、その案のpackage版を確認する。直接編集できるのは現在の`alder-document-package/0.4`だけで、Plugin版・外側bundle版・文書revisionとは区別する。旧版や未知版はそのまま編集せず、対象・検出版・対応版を示して止める。旧版の編集には別ファイルへの明示変換が必要であり、未知版は形式の対応可否を確認する。変換可否は未評価で、利用者の明示依頼なしに変換せず、未対応の変換が可能だと断定しない。閲覧・レビューでは旧版を原本不変で読める場合がある。
+
+1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。既存正本の形式・版を確認し、新規作成はJSON、編集対応版の既存JSONは同じJSONを更新する。既存MDを指名した改稿は元のMD Skillの互換経路へ戻り、明示依頼なしに移行しない。MD原典から新規JSON Checkを作る場合も、一方向変換の明示依頼と対象BD版への人間合意を先に確認する。
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。
 3. [同梱runtime](scripts/document_storage/author-cli.mjs)のruntimeを実行する。直接JSONはNode24以上、MD変換はPython3.12以上も必要。利用不能なら報告してその操作を止める。repo clone・外部API・ランタイムの無断導入を要求しない。
 4. 作成はIDを割り当ててJSON候補を直接書き、validate→create→保存後inspect/validateを行う。更新は既存IDを維持し、文書/package版とファイルhashを照合するcommitを使う。参照・版ずれ、既存lock、競合、未対応欄を修正したふりで通さない。
 5. BDレビューでは[品質](references/business-design-quality-check.ja.md)、[相関](references/business-design-correlation-check.ja.md)、[漏れ](references/business-design-omission-check.ja.md)、[Findings](references/design-findings.ja.md)を適用する。未完了の作業を保存して後から続けると明記されていれば、誰が対象を特定・選択し、どの業務で再開し、提出・終了まで何をするかを文書全体からたどる。最後の状態遷移があるだけで再開経路を補完せず、業務の継続を妨げる欠落は根拠付きで指摘する。特定の画面や未記載の権限を推測しない。review-onlyは読取り・検査・指摘だけにし、保存・状態変更しない。
 6. Check操作では[Check契約](references/check-item-traceability.md)を読み、**正確なBD版に対する人間合意を先に確認**する。なければCheck草案/更新を止め、必要な業務判断を求める。[共通の意味保持圧縮指針](references/check-item-traceability.md#meaning-preserving-condition-compression)を条件組合せの検討・草案・更新・Consistency reviewに適用する。共有保証・例・根拠・Test証拠・既存ID/人間状態を保持する。確認済みへの変更は該当期待への実際の人間発言と候補hashを明示し、テストや無回答から推定しない。basedOn.verificationはunverifiedのままにする。
-7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONの移行は候補作成と明示migration commitに分け、原本・人間Checkゲートを保持する。
+7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONは原本へのmigration commitをせず、別ファイルへの明示変換の対応可否を確認する。人間Checkゲートを保持する。
 8. 返却前に全体Schema/参照/版と要求・業務意味の対応を別々に点検する。Checkは保存候補とBD全体を使って、原典→保証/例・全index/共有参照を確認するread-onlyのConsistency reviewを別工程で行う。独立readerがない場合は同じ文脈で行ったと開示する。根拠のある範囲だけ修正し、再検査する。人間にJSONの手修正を委ねない。
 
 既存の概念データ例をCheckの具体例として使う依頼では、[JSON操作ガイド](references/plugin-json-authoring.ja.md)のCheck参照・明示移行に従う。対応先を名前やデータ値から推測せず、参照検査と意味の整合レビューを分ける。例をCheckに結び付ける操作も、Check新規作成や内容変更の合意ゲートを免除しない。
