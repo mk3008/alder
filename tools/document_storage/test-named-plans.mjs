@@ -33,8 +33,10 @@ test('NAMED-PLANS-004/005/008: create, extract and guarded commit preserve other
   const run=(...args)=>spawnSync(process.execPath,[new URL('./named-plans-cli.mjs',import.meta.url).pathname,...args],{encoding:'utf8'});
   const sourceBytes=fs.readFileSync(source,'utf8'),created=run('create',target,'current','現行案',source,'next','改善案',source,'alternative','別案',second);
   assert.equal(created.status,0,created.stderr);assert.equal(fs.readFileSync(source,'utf8'),sourceBytes);
+  if(process.platform!=='win32')assert.equal(fs.statSync(target).mode&0o077,0);
   const initial=fs.readFileSync(target,'utf8');assert.equal(run('create',target,'current','現行案',source).status,2);assert.equal(fs.readFileSync(target,'utf8'),initial);
   assert.equal(run('extract',target,'current',extracted).status,0);assert.deepEqual(JSON.parse(fs.readFileSync(extracted)),p1);assert.equal(run('extract',target,'current',extracted).status,2);
+  if(process.platform!=='win32')assert.equal(fs.statSync(extracted).mode&0o077,0);
   fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:'wrong'}));assert.equal(run('commit',target,'current',candidate,op).status,2);assert.equal(fs.readFileSync(target,'utf8'),initial);
   fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:fingerprint(initial)}));
   fs.writeFileSync(target+'.alder-lock','foreign');assert.equal(run('commit',target,'current',candidate,op).status,2);assert.equal(fs.readFileSync(target+'.alder-lock','utf8'),'foreign');fs.unlinkSync(target+'.alder-lock');
@@ -42,6 +44,36 @@ test('NAMED-PLANS-004/005/008: create, extract and guarded commit preserve other
   const saved=JSON.parse(fs.readFileSync(target)),before=JSON.parse(initial);assert.deepEqual(saved.plans[0].package,p2);assert.deepEqual(saved.plans.slice(1),before.plans.slice(1));
   const savedText=fs.readFileSync(target,'utf8');assert.equal(run('commit',target,'current',candidate,op).status,2);assert.equal(fs.readFileSync(target,'utf8'),savedText);
   assert.equal(run('commit',target,'unknown',candidate,op).status,2);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+for(const mode of [0o600,0o640,0o644,0o660])test(`NAMED-PLANS-MODE-001: commit preserves ${mode.toString(8)} permissions`,{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-plans-mode-'));
+ try{
+  const file=n=>path.join(dir,n),source=file('source.json'),target=file('plans.json'),candidate=file('candidate.json'),op=file('operation.json');
+  const run=(...args)=>spawnSync(process.execPath,[new URL('./named-plans-cli.mjs',import.meta.url).pathname,...args],{encoding:'utf8'});
+  fs.writeFileSync(source,JSON.stringify(p1));fs.writeFileSync(candidate,JSON.stringify(p2));const sourceBytes=fs.readFileSync(source);
+  const created=run('create',target,'current','現行案',source,'next','改善案',source,'alternative','別案',source);assert.equal(created.status,0,created.stderr);
+  fs.chmodSync(target,mode);assert.equal(fs.statSync(target).mode&0o7777,mode);
+  const before=fs.readFileSync(target,'utf8'),plans=JSON.parse(before).plans;
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:fingerprint(before)}));
+  const committed=run('commit',target,'current',candidate,op);assert.equal(committed.status,0,committed.stderr);
+  assert.equal(fs.statSync(target).mode&0o7777,mode);const saved=JSON.parse(fs.readFileSync(target));
+  assert.deepEqual(saved.plans[0].package,p2);assert.deepEqual(saved.plans.slice(1),plans.slice(1));assert.deepEqual(fs.readFileSync(source),sourceBytes);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('NAMED-PLANS-MODE-002: guard or chmod failure preserves bytes and permissions',{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-plans-mode-failure-'));
+ try{
+  const file=n=>path.join(dir,n),target=file('plans.json'),candidate=file('candidate.json'),op=file('operation.json'),preload=file('fail-chmod.mjs');
+  const cli=new URL('./named-plans-cli.mjs',import.meta.url).pathname;
+  const run=(prefix,...args)=>spawnSync(process.execPath,[...prefix,cli,...args],{encoding:'utf8'});
+  fs.writeFileSync(target,JSON.stringify(bundle()));fs.chmodSync(target,0o644);fs.writeFileSync(candidate,JSON.stringify(p2));
+  const before=fs.readFileSync(target,'utf8'),check=()=>{assert.equal(fs.readFileSync(target,'utf8'),before);assert.equal(fs.statSync(target).mode&0o7777,0o644);assert.equal(fs.existsSync(target+'.alder-lock'),false);assert.deepEqual(fs.readdirSync(dir).filter(n=>n.startsWith('.alder-plans-')),[]);};
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:'wrong'}));assert.equal(run([],'commit',target,'current',candidate,op).status,2);check();
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:'wrong',expectedSha256:fingerprint(before)}));assert.equal(run([],'commit',target,'current',candidate,op).status,2);check();
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:fingerprint(before)}));
+  fs.writeFileSync(preload,"import fs from 'node:fs';fs.chmodSync=()=>{throw Error('synthetic chmod failure');};\n");
+  const failed=run(['--import',preload],'commit',target,'current',candidate,op);assert.equal(failed.status,2,failed.stderr);assert.match(failed.stderr,/synthetic chmod failure/);check();
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('NAMED-PLANS-005: an attempted human-state change cannot bypass the single-package guard',()=>{
