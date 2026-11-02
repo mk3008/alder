@@ -6,7 +6,7 @@ import {showTestChecks} from './test-spec-explorer-browser.mjs';
 const raw=readFileSync('public/named-plans-example.json','utf8');
 export async function verifyNamedPlans(browser){
  const results=[];
- for(const width of [1280,393]){
+ for(const width of [1280,393,320]){
   const context=await browser.newContext({viewport:{width,height:960}}),page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   const ready=()=>page.waitForFunction(()=>!document.querySelector('#open').disabled);
@@ -31,6 +31,8 @@ export async function verifyNamedPlans(browser){
    await page.locator('#status-text').filter({hasText:'Plan alternative'}).waitFor();assert.equal(await page.locator('#plan-select').inputValue(),'improved');assert.match(await page.locator('#nodes').innerText(),/改善案の受付を行う/);
    await choose('current','現行案');assert.equal(await page.locator('#plan-select').isVisible(),true);
    const box=await page.locator('#plan-select').boundingBox();assert.ok(box&&box.x>=0&&box.x+box.width<=width,'plan selector remains visible in the header');
+   const header=await page.locator('header').evaluate(root=>({client:root.clientWidth,scroll:root.scrollWidth,actions:[...root.querySelectorAll(':scope > button, :scope > a')].map(node=>{const r=node.getBoundingClientRect();return {left:r.left,right:r.right};})}));
+   assert.ok(header.scroll<=header.client,'header does not overflow');for(const action of header.actions)assert.ok(action.left>=0&&action.right<=width,'existing header actions remain visible');
    assert.deepEqual(errors,[]);results.push({width,threePlans:true,sharedIDs:true,checks:true,state:true,concept:true,resetViews:true,reload:true,invalidKeepsDisplay:true});
   }finally{await context.close();}
  }

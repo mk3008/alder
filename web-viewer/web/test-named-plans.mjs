@@ -16,6 +16,7 @@ test('NAMED-PLANS-006/007: each plan projects its own content despite shared IDs
   assert.equal(design.model.concepts[0].concepts[0].name,label+'の受付記録');
  }
  assert.equal(parseDocument(raw).namedPlans.selected,'current');
+ const one={...namedPlansFixture,plans:[namedPlansFixture.plans[0]]};assert.equal(parseDocument(JSON.stringify(one)).namedPlans.choices.length,1);
  assert.throws(()=>parseDocument(raw,'unknown'),/業務案/);
  assert.throws(()=>parseDocument(JSON.stringify(namedPlansFixture.plans[0].package),'current'),/業務案/);
 });

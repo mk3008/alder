@@ -354,7 +354,7 @@ function planChrome(){
  if(!select){title.replaceChildren();select=document.createElement('select');select.id='plan-select';select.setAttribute('aria-label','業務案を切り替える');select.onchange=()=>{void switchPlan(select!.value);};title.append(select);}
  const existing=Array.from(select.options).map(option=>[option.value,option.textContent]);
  if(JSON.stringify(existing)!==JSON.stringify(plans.choices.map(({id,name})=>[id,name]))){select.replaceChildren(...plans.choices.map(({id,name})=>{const option=document.createElement('option');option.value=id;option.textContent=name;return option;}));}
- select.value=plans.selected;select.disabled=restoring||opening||documentSaving||!!closing;
+ select.value=plans.selected;select.title=plans.choices.find(choice=>choice.id===plans.selected)?.name??'';select.disabled=restoring||opening||documentSaving||!!closing;
 }
 async function switchPlan(id:string){
  const doc=state.document;if(!doc?.design.namedPlans||restoring||opening||documentSaving||closing)return;

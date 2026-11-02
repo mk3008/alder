@@ -14,6 +14,7 @@ test('NAMED-PLANS-002: schema and three independent plans preserve identical inn
  assert.deepEqual(namedPlansSchema,JSON.parse(fs.readFileSync(new URL('./named-plans-schema.json',import.meta.url),'utf8')));
  const b=bundle(),original=structuredClone(b);assert.equal(validateNamedPlans(b).valid,true);assert.deepEqual(b,original);
  assert.equal(selectNamedPlan(b,'next').package.documents[0].id,b.plans[0].package.documents[0].id);
+ const one={...b,plans:[b.plans[0]]};assert.equal(validateNamedPlans(one).valid,true);assert.equal(selectNamedPlan(one,'current').name,'現行案');
  assert.throws(()=>selectNamedPlan(b,'missing'),/Unknown plan ID/);
 });
 test('NAMED-PLANS-003: malformed envelope and every inner package are rejected',()=>{
