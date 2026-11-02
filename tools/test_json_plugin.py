@@ -21,6 +21,26 @@ class JSONPluginTest(unittest.TestCase):
             after=json.loads(target.read_text());self.assertEqual(after['plans'][1:],before['plans'][1:]);self.assertEqual(source.read_bytes(),source_before)
             saved=target.read_bytes();self.assertEqual(run('commit',target,'current',candidate,op).returncode,2);self.assertEqual(target.read_bytes(),saved)
 
+    def test_named_plan_check_confirmation_uses_existing_human_guards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda script,*args:subprocess.run(['node',str(scripts/script),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            source=root/'source.json';source.write_bytes((ROOT/'work/plugin-json/issue-273/snapshots/03-direct-checks.json').read_bytes());original=source.read_bytes()
+            target=root/'plans.json';extracted=root/'selected.json';candidate=root/'candidate.json';op=root/'operation.json'
+            created=run('named-plans-cli.mjs','create',target,'current','現行案',source,'improved','改善案',source,'alternative','提案A',source);self.assertEqual(created.returncode,0,created.stderr)
+            info=json.loads(run('named-plans-cli.mjs','inspect',target).stdout);self.assertEqual(run('named-plans-cli.mjs','extract',target,'improved',extracted).returncode,0)
+            inspected=run('author-cli.mjs','inspect',extracted);self.assertEqual(inspected.returncode,0,inspected.stderr);single=json.loads(inspected.stdout)
+            before=json.loads(target.read_text());updated=json.loads(extracted.read_text());updated['revision']='package-4';checks=next(d for d in updated['documents'] if d['kind']=='checkItems');checks['revision']='checks-2'
+            item=next(i for i in checks['items'] if i['checkId']=='CI-001');item['reviewState']='確認済み';candidate.write_text(json.dumps(updated,ensure_ascii=False))
+            request={'expectedSha256':info['sha256'],'expectedRevision':single['revision']};op.write_text(json.dumps(request));saved=target.read_bytes()
+            denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human Business Design',denied.stderr);self.assertEqual(target.read_bytes(),saved)
+            bd=next(d for d in updated['documents'] if d['kind']=='businessDesign');receipt={'source':'fixture:synthetic-user','quote':'この版の業務内容を確認した模擬発言'}
+            request['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':receipt}];op.write_text(json.dumps(request))
+            denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human review state',denied.stderr);self.assertEqual(target.read_bytes(),saved)
+            meaning=next(c['meaningSha256'] for c in single['checks'] if c['id']==item['id']);request['humanDecisions']=[{'id':item['id'],'state':'確認済み','meaningSha256':meaning,'evidence':receipt}];op.write_text(json.dumps(request))
+            committed=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(committed.returncode,0,committed.stderr)
+            after=json.loads(target.read_text());self.assertEqual(after['plans'][1]['package'],updated);self.assertEqual(after['plans'][0],before['plans'][0]);self.assertEqual(after['plans'][2],before['plans'][2]);self.assertEqual(source.read_bytes(),original)
+
     def test_new_artifact_default_and_explicit_legacy_update_instructions(self):
         # Distribution contract only; actual model routing needs a forward run.
         for name in ['alder-draft-business-design', 'alder-draft-check-items']:

@@ -10,7 +10,7 @@ license: MIT
 
 [JSON操作ガイド](references/plugin-json-authoring.ja.md)を読み、操作を選ぶ。実際の導入版は`../../plugin.json`、同梱ソースの版/hashは[provenance](references/provenance.json)で確認する。候補契約は`alder-document-package/0.1（BD/Check）、0.2（部分定義の状態遷移）、0.3（Role ID/名称/保存色）、0.4（構造化した例外とID参照）`。Plugin版やGraph v1と混同しない。
 
-複数の業務案を扱うときは、操作ガイドの「複数の業務案」に従い、同梱`named-plans-cli.mjs`で案を作成・検査・抽出・更新する。案IDと文書revisionを区別し、対象以外の案・元の単一ファイル・人間判断を保持する。
+複数の業務案を扱うときは、操作ガイドの「複数の業務案」に従い、同梱`named-plans-cli.mjs`で案を作成・検査・抽出・更新する。`inspect`の案IDと名前を依頼に照合し、更新・レビュー対象を一意に特定できないときは対象を確認する。先頭案を自動選択して編集しない。案IDと文書revisionを区別し、対象以外の案・元の単一ファイル・人間判断を保持する。レビューだけなら対象案を読み取って検査し、正本を変更しない。
 
 1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。既存正本のformatを確認し、新規作成はJSON、既存JSONは同じJSONを更新する。既存MDを指名した改稿は元のMD Skillの互換経路へ戻り、明示依頼なしに移行しない。MD原典から新規JSON Checkを作る場合も、一方向変換の明示依頼と対象BD版への人間合意を先に確認する。
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。

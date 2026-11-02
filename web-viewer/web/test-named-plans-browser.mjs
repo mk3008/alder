@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {openExplorerGroup} from './explorer-browser.mjs';
 import {showTestChecks} from './test-spec-explorer-browser.mjs';
+import {readConcurrencyRecord} from './test-session-concurrency-browser.mjs';
 
 const raw=readFileSync('public/named-plans-example.json','utf8');
 export async function verifyNamedPlans(browser){
@@ -69,5 +70,49 @@ export async function verifyNamedPlans(browser){
   const stored=await restorePage.evaluate(()=>new Promise((resolve,reject)=>{const request=indexedDB.open('alder-web-viewer',1);request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result,tx=db.transaction('session'),get=tx.objectStore('session').get('current');get.onsuccess=()=>resolve(get.result.document.design.namedPlans.selected);tx.oncomplete=()=>db.close();};}));
   assert.equal(stored,'missing');assert.equal(await restorePage.locator('.node').count(),0);
  }finally{await damaged.close();}
- return {browser:browser.version(),results,urlRefreshAndHistory:true,missingPlanKeepsDisplay:true,invalidRestoreProtected:true};
+ // NAMED-PLANS-008: a failed transaction must roll the selector back along
+ // with the graph, retain the committed session, and allow a later retry.
+ const failed=await browser.newContext(),failedPage=await failed.newPage();
+ const record=page=>page.evaluate(readConcurrencyRecord,{database:'alder-web-viewer',raw:true});
+ try{
+  await failedPage.goto('http://127.0.0.1:4173/');await failedPage.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await failedPage.locator('#fallback').setInputFiles({name:'plans.json',mimeType:'application/json',buffer:Buffer.from(raw)});
+  await failedPage.locator('.node .node-name').filter({hasText:'現行案の受付を行う'}).waitFor();await failedPage.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
+  const before=await record(failedPage);
+  await failedPage.evaluate(()=>{
+   const original=IDBObjectStore.prototype.put;
+   window.__namedPlanFaults=0;
+   IDBObjectStore.prototype.put=function(value,key){if(key==='current'&&window.__namedPlanFaults===0){window.__namedPlanFaults++;throw new DOMException('synthetic quota failure','QuotaExceededError');}return original.apply(this,arguments);};
+   window.__restoreNamedPlanPut=()=>{IDBObjectStore.prototype.put=original;};
+  });
+  await failedPage.locator('#plan-select').selectOption('improved');
+  await failedPage.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='error');
+  assert.equal(await failedPage.evaluate(()=>window.__namedPlanFaults),1,'the write failure was actually injected');
+  assert.equal(await failedPage.locator('#plan-select').inputValue(),'current');
+  assert.match(await failedPage.locator('#nodes').innerText(),/現行案の受付を行う/);
+  assert.match(await failedPage.locator('#status-text').innerText(),/表示を次回に引き継げません/);
+  assert.deepEqual(await record(failedPage),before,'failed switch leaves the entire committed session unchanged');
+  await failedPage.evaluate(()=>window.__restoreNamedPlanPut());
+  await failedPage.locator('#plan-select').selectOption('improved');
+  await failedPage.locator('.node .node-name').filter({hasText:'改善案の受付を行う'}).waitFor();await failedPage.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
+  await failedPage.reload();await failedPage.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await failedPage.locator('#plan-select').inputValue(),'improved');assert.match(await failedPage.locator('#nodes').innerText(),/改善案の受付を行う/);
+ }finally{await failed.close();}
+ // A real competing tab exercises the session-generation conflict path.
+ const competing=await browser.newContext(),first=await competing.newPage(),stale=await competing.newPage();
+ try{
+  await first.goto('http://127.0.0.1:4173/');await first.waitForFunction(()=>!document.querySelector('#open').disabled);
+  await first.locator('#fallback').setInputFiles({name:'plans.json',mimeType:'application/json',buffer:Buffer.from(raw)});
+  await first.locator('.node').first().waitFor();await first.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
+  await stale.goto('http://127.0.0.1:4173/');await stale.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await stale.locator('#plan-select').inputValue(),'current');
+  await first.locator('#plan-select').selectOption('alternative');await first.locator('.node .node-name').filter({hasText:'提案Aの受付を行う'}).waitFor();await first.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='saved');
+  const newer=await record(first);
+  await stale.locator('#plan-select').selectOption('improved');await stale.waitForFunction(()=>document.querySelector('#app').dataset.saveState==='conflict');
+  assert.equal(await stale.locator('#plan-select').inputValue(),'current');assert.match(await stale.locator('#nodes').innerText(),/現行案の受付を行う/);
+  assert.match(await stale.locator('#status-text').innerText(),/別の画面で表示が変更されました/);
+  assert.deepEqual(await record(stale),newer,'stale plan switch does not overwrite the newer committed session');
+  stale.on('dialog',dialog=>dialog.accept());await stale.reload();await stale.waitForFunction(()=>!document.querySelector('#open').disabled);
+  assert.equal(await stale.locator('#plan-select').inputValue(),'alternative');assert.match(await stale.locator('#nodes').innerText(),/提案Aの受付を行う/);
+ }finally{await competing.close();}
+ return {browser:browser.version(),results,urlRefreshAndHistory:true,missingPlanKeepsDisplay:true,invalidRestoreProtected:true,switchWriteFailureRetry:true,switchConflictRecovery:true};
 }
