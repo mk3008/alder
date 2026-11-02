@@ -1,0 +1,23 @@
+{
+  "format": "viewer-verification/1",
+  "revision": "phase-3b-who-role",
+  "requirement": "https://github.com/mk3008/alder/pull/342#issuecomment-6565464569",
+  "businessDefinition": "https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/docs/business-design-structure.ja.md",
+  "scope": "現行のActivity直接Role参照を維持し、旧0.5の担当情報をWhoと誤認せず閲覧・確認する。正式保存契約と移行は変更しない。",
+  "history": [
+    {"source":"json-05-reintegration.check-items.json","revision":"c5a3209e7851f573a86437fdee8c90caa3970de8","ids":["JSON05-REINTEGRATE-002","JSON05-REINTEGRATE-003","JSON05-REINTEGRATE-004"],"change":"単一Objectと複数Roleを単一Whoとする解釈、およびStepへのWho継承を撤回。旧情報・未決・不一致を表示する保証は保持する。"},
+    {"source":"json-05-viewer.check-items.json","revision":"fa93735283f84e51fceac74e07b35f9df70d2d9a","ids":["JSON05-VIEWER-002"],"change":"旧ObjectとRoleは旧形式の担当情報としてのみ表示する。旧データ保全・未決表示・I/Oからの非推測は保持する。"}
+  ],
+  "checks": [
+    {"id":"WHO-ROLE-001","condition":"現行形式のActivityが単一roleIdを持つ。","guarantee":"直接参照された一つのRole名をWhoに表示し、同じRole IDの既存表示・色・選択・復元を維持する。","reason":"WhoはActivityに直接結び付く業務Role。","verification":"現行0.4のRole ID、表示、色と回帰を照合"},
+    {"id":"WHO-ROLE-002","condition":"Activityの単一Roleが抽象Role Nである。","guarantee":"WhoはNのみとし、その構成や個人への割当・兼任を展開、推測、管理しない。","reason":"複合Roleの内部はAlderの積極的な管理対象ではない。","verification":"NのRole IDと名称だけで表示、他のRoleへ分解されない正例"},
+    {"id":"WHO-ROLE-003","condition":"旧0.5のActivityにWhoへの直接参照がない。","guarantee":"ObjectやRole配列の件数に関係なくWhoは未決とする。旧Objectと全Roleは別の旧形式担当情報と明示し、元JSONとIDを保持する。","reason":"旧performersはActivityからWhoへの確かな直接参照ではない。","verification":"Object 1件・Role 0件/1件/複数件の表示と原文を照合"},
+    {"id":"WHO-ROLE-004","condition":"旧0.5で1つのObjectに複数Roleが関連付いている。","guarantee":"単一Whoの正例と判定せず、各Roleと対象Activity、旧構造の問題、単一Roleへの人間の確認を表示する。","reason":"Objectが1件でもRole複数は正しいWhoの証拠ではない。","verification":"旧誤判定を再現した負例と表示上の構造指摘"},
+    {"id":"WHO-ROLE-005","condition":"旧0.5に複数Objectまたは旧担当情報の未決がある。","guarantee":"全Object・Roleまたは未決を旧情報として表示し、ActivityのWho未決と訂正判断を明示する。","reason":"情報を消さず、旧形式validを業務構造適合にしない。","verification":"複数Object・異なるRole・nullと表示上の指摘を照合"},
+    {"id":"WHO-ROLE-006","condition":"旧0.5のStep担当が明示、旧契約上継承、未決、または他StepやActivityの旧担当情報と異なる。","guarantee":"旧形式の情報・継承・未決を区別し、実際の不一致を隠さず、責任境界が変わるならActivity分割の検討を示す。Stepの別Whoを確定しない。","reason":"Stepの担当情報を複数Whoの正当化に使わない。","verification":"明示/継承/未決、不一致、順序・条件・必須任意を照合"},
+    {"id":"WHO-ROLE-007","condition":"Input/OutputのObjectやRole候補が存在する。","guarantee":"入出力先やObject名、Role配列からActivityのWhoや個人の割当を自動決定しない。","reason":"情報の受渡し相手は仕事を担うRoleの正本ではない。","verification":"I/Oを変えた負例でもWho未決と各方向を保持"},
+    {"id":"WHO-ROLE-008","condition":"旧0.5のFile/URL/復元と不正入力を扱う。","guarantee":"Activity/Step/Result/Data/Role/Stateの元ID・原文・参照・版・人間確認状態を保持し、表示上の指摘を原文へ書き戻さない。不正入力は既存表示を保持する。","reason":"互換読取と人間状態を破壊しない。","verification":"旧0.5 fixture、Check/State、復元、破損参照のNode・Chrome回帰"},
+    {"id":"WHO-ROLE-009","condition":"0.4・旧Markdown・概念・Check・Stateを開き操作する。","guarantee":"既存導線、右Drawer、選択・復元と状態自己遷移の束ねを維持する。","reason":"旧0.5対応で現行Viewerを退行させない。","verification":"既存正本と対応Node/DOM・Chrome回帰"},
+    {"id":"WHO-ROLE-010","condition":"旧データにシステムやスケジューラーを表すObjectがある。","guarantee":"旧情報として保持するが、未決の例外表現や新しい正式Who契約を推測・確定しない。","reason":"スケジューラーの表現は別判断。","verification":"システムObjectを含む旧0.5でRoleの自動選定をしない負例"}
+  ]
+}

@@ -2,6 +2,7 @@ import {activityRole} from './roles';
 import type {Design} from './graph';
 import type {Check,Run} from './json-document';
 import {formattedMarkdown} from './markdown';
+import {activityWho,legacyPerformerNames,relationLabel} from './structured-display';
 // @ts-expect-error The shared storage validator is a JavaScript module.
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -35,11 +36,25 @@ function variationKinds(design:Design,activityId:string,items:{id:string}[]):Map
 export function businessDetail(design:Design,id?:string):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
- if(object){field(root,'Scope',String(object.scope));root.append(element('h3','Information'));const list=element('ul');for(const info of object.information)list.append(element('li',info));root.append(list);}
+ if(object){field(root,'Scope',String(object.scope));root.append(element('h3','Information'));const list=element('ul');for(const info of object.information){const item=element('li',typeof info==='string'?info:info.name);if(typeof info!=='string'&&info.description)item.append(formattedMarkdown(info.description));list.append(item);}root.append(list);}
  else if(activity){
   const exceptions=bd.exceptions?.filter(e=>e.activityId===activity.id)??[];
-  for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){const content=field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));if(key==='result'&&content)content.dataset.businessResult='';}
-  const summary=exceptionSummary(activity.exception,exceptions),kinds=variationKinds(design,activity.id,exceptions);
+  if('performers' in activity){
+   field(root,'Scope',String(activity.scope));field(root,'Why',activity.why);field(root,'When',activity.when);field(root,'Who',activityWho(bd,activity));field(root,'旧形式の担当情報',legacyPerformerNames(bd,activity));
+   if(activity.performers?.length===1&&activity.procedure.steps.some(step=>step.performerObjectIds===null))root.append(element('p','旧形式では、指定のない手順は旧形式の担当情報を継承します。'));
+   field(root,'Where',activity.where);
+   const issues=(design.findings??[]).filter(f=>f.id.startsWith('viewer:')&&f.targets.includes(activity.id));
+   for(const issue of issues){const warning=element('p',issue.summary+' 詳細は構造の要確認を参照してください。');warning.className='finding-reference-warning';warning.dataset.structureIssue=issue.id;root.append(warning);}
+   root.append(element('h3','Procedure'));const steps=element('ol');
+   for(const step of activity.procedure.steps){const item=element('li');item.append(formattedMarkdown(step.text));
+    const same=activity.performers?.length===1&&(step.performerObjectIds===null||step.performerObjectIds.length===1&&step.performerObjectIds[0]===activity.performers[0].objectId);
+    const detail=[step.obligation==='required'?'必須':'任意',...(step.appliesWhen?[`適用条件：${step.appliesWhen}`]:[]),...(!same?[`旧形式の担当：${legacyPerformerNames(bd,activity,step.performerObjectIds)}`]:[])];
+    item.append(element('p',detail.join(' · ')));steps.append(item);
+   }root.append(steps);
+   if(activity.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul'),number=(id:string)=>String(activity.procedure.steps.findIndex(s=>s.id===id)+1);for(const rule of activity.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`手順${number(rule.beforeId)} → 手順${number(rule.afterId)}`:`手順${rule.stepIds.map(number).join('・')}は入替可能`));root.append(rules);}
+   root.append(element('h3','Result'));const results=element('ul');results.dataset.businessResult='';results.dataset.resultScope='activity';for(const result of activity.results){const item=element('li');item.append(formattedMarkdown(result.text));results.append(item);}root.append(results);field(root,'Problem',activity.problem);field(root,'Pain level',activity.painLevel);
+  }else for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){const content=field(root,label,key==='who'?(activityRole(design,activity.id)?.name??activity.who):activity[key]===null?null:String(activity[key]));if(key==='result'&&content)content.dataset.businessResult='';}
+  const summary=exceptionSummary('exception' in activity?activity.exception:null,exceptions),kinds=variationKinds(design,activity.id,exceptions);
   const section=(title:string,items:typeof exceptions,extra?:HTMLElement)=>{if(!items.length&&!extra)return;const group=element('section');group.dataset.businessVariations='';group.append(element('h3',title));if(extra)group.append(extra);for(const item of items){const content=formattedMarkdown(item.description);content.dataset.businessException=item.id;group.append(element('h4',item.name),content);}root.append(group);};
   if(!kinds.size)section('通常以外の扱い',exceptions,summary);
   else{
@@ -50,9 +65,13 @@ export function businessDetail(design:Design,id?:string):HTMLElement{
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
   for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
    const relations=bd.relations.filter(r=>r.kind===kind&&(r.fromId===id||r.toId===id));if(!relations.length)continue;
-   root.append(element('h3',label));const descriptions=relations.map(r=>`${names.get(r.fromId)} → ${names.get(r.toId)} — ${r.label}`);
-   if(kind==='business-exception'){for(const description of descriptions)root.append(element('p',description));}
-   else{const list=element('ul');for(const description of descriptions)list.append(element('li',description));root.append(list);}
+   root.append(element('h3',label));const list=element('ul');
+   for(const r of relations){const endpoints='dataId' in r?names.get(kind==='input'?r.fromId:r.toId):`${names.get(r.fromId)} → ${names.get(r.toId)}`;const description=`${endpoints} — ${relationLabel(bd,r)}`;
+    if(kind==='business-exception'){root.append(element('p',description));continue;}
+    const item=element('li',description);
+    if('dataId' in r){const data=bd.data!.find(d=>d.id===r.dataId)!,details=element('ul');for(const entry of data.items){const info=bd.objects.flatMap(o=>o.information).find(i=>typeof i!=='string'&&i.id===entry.informationId);if(!info||typeof info==='string')continue;const line=element('li',info.name+(entry.condition?`（条件：${entry.condition}）`:''));if(info.description)line.append(formattedMarkdown(info.description));details.append(line);}item.append(details);}
+    list.append(item);
+   }if(kind!=='business-exception')root.append(list);
   }
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
  return root;
