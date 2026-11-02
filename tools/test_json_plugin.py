@@ -34,10 +34,11 @@ class JSONPluginTest(unittest.TestCase):
             item=next(i for i in checks['items'] if i['checkId']=='CI-001');item['reviewState']='確認済み';candidate.write_text(json.dumps(updated,ensure_ascii=False))
             request={'expectedSha256':info['sha256'],'expectedRevision':single['revision']};op.write_text(json.dumps(request));saved=target.read_bytes()
             denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human Business Design',denied.stderr);self.assertEqual(target.read_bytes(),saved)
-            bd=next(d for d in updated['documents'] if d['kind']=='businessDesign');receipt={'source':'fixture:synthetic-user','quote':'この版の業務内容を確認した模擬発言'}
-            request['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':receipt}];op.write_text(json.dumps(request))
+            bd=next(d for d in updated['documents'] if d['kind']=='businessDesign');bd_receipt={'source':'fixture:synthetic-user','quote':'業務設計 bd-2 の内容を確認しました。'}
+            request['bdConfirmations']=[{'documentId':bd['id'],'revision':bd['revision'],'evidence':bd_receipt}];op.write_text(json.dumps(request))
             denied=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(denied.returncode,2);self.assertIn('Human review state',denied.stderr);self.assertEqual(target.read_bytes(),saved)
-            meaning=next(c['meaningSha256'] for c in single['checks'] if c['id']==item['id']);request['humanDecisions']=[{'id':item['id'],'state':'確認済み','meaningSha256':meaning,'evidence':receipt}];op.write_text(json.dumps(request))
+            meaning=next(c['meaningSha256'] for c in single['checks'] if c['id']==item['id']);check_receipt={'source':'fixture:synthetic-user','quote':'CI-001「受付内容が対象の台帳へ記録される」の条件と期待結果を確認しました。'}
+            request['humanDecisions']=[{'id':item['id'],'state':'確認済み','meaningSha256':meaning,'evidence':check_receipt}];op.write_text(json.dumps(request))
             committed=run('named-plans-cli.mjs','commit',target,'improved',candidate,op);self.assertEqual(committed.returncode,0,committed.stderr)
             after=json.loads(target.read_text());self.assertEqual(after['plans'][1]['package'],updated);self.assertEqual(after['plans'][0],before['plans'][0]);self.assertEqual(after['plans'][2],before['plans'][2]);self.assertEqual(source.read_bytes(),original)
 
