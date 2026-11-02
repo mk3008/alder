@@ -7,6 +7,20 @@ PLUGIN=ROOT/'plugins/alder'
 NAME='alder-manage-json-documents'
 
 class JSONPluginTest(unittest.TestCase):
+    def test_named_plans_in_isolated_installed_bundle(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);installed=root/'alder';shutil.copytree(PLUGIN,installed);scripts=installed/'skills'/NAME/'scripts/document_storage'
+            run=lambda *args:subprocess.run(['node',str(scripts/'named-plans-cli.mjs'),*map(str,args)],cwd=root,capture_output=True,text=True,env={**os.environ,'ALDER_PYTHON':'/no-python'})
+            fixtures=ROOT/'work/plugin-json/issue-273/snapshots';source=root/'source.json';candidate=root/'candidate.json';target=root/'plans.json';op=root/'operation.json';extracted=root/'extracted.json'
+            source.write_bytes((fixtures/'01-direct-bd.json').read_bytes());candidate.write_bytes((fixtures/'02-add-rename.json').read_bytes());source_before=source.read_bytes()
+            created=run('create',target,'current','現行案',source,'improved','改善案',source,'alternative','別案',source);self.assertEqual(created.returncode,0,created.stderr)
+            info=json.loads(run('inspect',target).stdout);self.assertEqual([p['id'] for p in info['plans']],['current','improved','alternative'])
+            self.assertEqual(run('extract',target,'current',extracted).returncode,0);self.assertEqual(json.loads(extracted.read_text()),json.loads(source.read_text()))
+            before=json.loads(target.read_text());op.write_text(json.dumps({'expectedSha256':info['sha256'],'expectedRevision':info['plans'][0]['revision']}))
+            committed=run('commit',target,'current',candidate,op);self.assertEqual(committed.returncode,0,committed.stderr)
+            after=json.loads(target.read_text());self.assertEqual(after['plans'][1:],before['plans'][1:]);self.assertEqual(source.read_bytes(),source_before)
+            saved=target.read_bytes();self.assertEqual(run('commit',target,'current',candidate,op).returncode,2);self.assertEqual(target.read_bytes(),saved)
+
     def test_new_artifact_default_and_explicit_legacy_update_instructions(self):
         # Distribution contract only; actual model routing needs a forward run.
         for name in ['alder-draft-business-design', 'alder-draft-check-items']:
