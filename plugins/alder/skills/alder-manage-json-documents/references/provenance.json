@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "a304d349eb533f59858b1c469c188da1f48b12a4",
+  "alder_source_revision": "fa2defe695783e3df19460f1605f010dd1948287",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "4b0f3fb419d9eb1ef4147d6cd0be676e351ae33958c12eba0d142aa3c5c56591",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
@@ -21,7 +21,7 @@
     "tools/document_storage/convert.mjs": "8ae8de81ae2e470ad36433bab502a71c1c72fd09a466a733fdac13581db21562",
     "tools/document_storage/cli.mjs": "7583d935d013a2c0e6e0f3489d5f9074e853a371947e95162d538b66aa910989",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "e3393b28fe23506243e2d003f25c47fff2c4f3416fb22be6b302b981bf0634e7",
+    "tools/document_storage/authoring.mjs": "9f3895b827de1f9e07acf7b4f7fac87b3caa3fceb8d86ace6e7c6330d7c699a5",
     "tools/document_storage/author-cli.mjs": "5b78effbaceefcd7976732469c8f058a872d8513b9e866c402950f987d53b80a",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
@@ -29,7 +29,7 @@
     "tools/document_storage/roles.mjs": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1",
     "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
     "tools/document_storage/named-plans.mjs": "35106e4e46a1880f2ffc87c1aa75f5bb1d74101aa70dbd0c9499a3c633499a9b",
-    "tools/document_storage/named-plans-cli.mjs": "572d6bfe9b9f5829af069499106cc93ddfd2cd2979fae9b304ad7e60c1aadd0e",
+    "tools/document_storage/named-plans-cli.mjs": "68d1970ea714a5c61afed7140917120c8dd2ea380b5f8aadcc092ad7ee3d31fb",
     "tools/document_storage/named-plans-schema.json": "d208c03d7425d0f3fe3e1aae2aab10972eba5357fc2b328c251f8d6d9fa625ea"
   },
   "script_destinations": {

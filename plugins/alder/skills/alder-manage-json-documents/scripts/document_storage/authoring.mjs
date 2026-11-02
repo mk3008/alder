@@ -4,10 +4,11 @@ import {validate,inventory,demand,requireCheckedSamples} from './core.mjs';
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 export const fingerprint=v=>createHash('sha256').update(typeof v==='string'?v:JSON.stringify(canonical(v))).digest('hex');
 const equal=(a,b)=>fingerprint(a)===fingerprint(b);
+export const describeDeclaredValue=value=>value===undefined?'<missing>':typeof value==='string'?value:JSON.stringify(value);
 // This classifies declared versions only; callers must also validate the package.
 export function packageVersionPolicy(pkg,target='package'){
- const format=typeof pkg?.format==='string'?pkg.format:'<missing>',formatVersion=typeof pkg?.formatVersion==='string'?pkg.formatVersion:'<missing>';
- demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4'].includes(formatVersion),`${target}: unsupported format=${format} formatVersion=${formatVersion}; supported read formats are alder-document-package 0.1–0.4 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
+ const format=pkg?.format,formatVersion=pkg?.formatVersion;
+ demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.4 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
  const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only-unassessed'};
 }
 export function requireEditablePackage(pkg,target='package'){
