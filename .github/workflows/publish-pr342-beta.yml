@@ -1,8 +1,8 @@
-name: Publish PR 342 fixed Viewer beta preview
+name: Publish PR 342 Phase 3B fixed Viewer beta
 on:
   push:
     branches:
-      - beta/publish-pr342-5d29ef82
+      - beta/publish-pr342-fbc2b06b
     paths:
       - '.github/workflows/publish-pr342-beta.yml'
 permissions:
@@ -12,21 +12,23 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify artifact and publish isolated beta path
+      - name: Verify final CI artifact and publish only the new beta path
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          SHA="5d29ef829f1e38f38bf7453e9074464be8502827"
+          SHA="fbc2b06b799f25c154cac268c1babc79221d2bd6"
           PREFIX="preview/pr-342/$SHA"
           TMP="$(mktemp -d)"
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13104443484/zip" > "$TMP/ci.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13143219714/zip" > "$TMP/ci.zip"
           unzip -qq "$TMP/ci.zip" -d "$TMP/pkg"
           python3 - "$TMP/pkg" "$PREFIX" "$SHA" <<'PY'
           import hashlib,json,pathlib,sys
           root=pathlib.Path(sys.argv[1]); prefix=sys.argv[2]; sha=sys.argv[3]
           manifest=json.loads((root/'manifest.json').read_text())
           assert manifest['source']==sha
+          assert manifest['sourceTree']=='0239aa3fe1c05549fb20280e30367db39a5e8bb4'
+          assert manifest['tree']==manifest['sourceTree']
           assert manifest['urlPath']=='/'+prefix+'/'
           checked=0
           for relative,digest in manifest['files'].items():
@@ -47,9 +49,29 @@ jobs:
           cp -a "$TMP/pkg/$PREFIX" "$DEST"
           mkdir -p "$DEST/data"
           curl --silent --show-error --location --fail --retry 2 "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$SHA/web-viewer/web/fixtures/json-05-reviewed-seed.json" > "$DEST/data/reviewed-seed.json"
-          ACTUAL="$(git hash-object "$DEST/data/reviewed-seed.json")"
-          test "$ACTUAL" = "f2b09eee95d26d536868cb8778e1931e9891047a"
+          test "$(git hash-object "$DEST/data/reviewed-seed.json")" = "f2b09eee95d26d536868cb8778e1931e9891047a"
+          curl --silent --show-error --location --fail --retry 2 "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$SHA/web-viewer/web/fixtures/json-05-d2-cases.json" > "$TMP/d2-cases.json"
+          test "$(git hash-object "$TMP/d2-cases.json")" = "1e1044ce47c9830bd446032ae7644cc3cece3dfa"
+          curl --silent --show-error --location --fail --retry 2 "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$SHA/work/viewer-json/issue-274/json-native/independent.json" > "$TMP/current.json"
+          test "$(git hash-object "$TMP/current.json")" = "23bd9cf87a00c42b5156351f188621df04222285"
+          node - "$TMP/d2-cases.json" "$TMP/current.json" "$DEST/data" <<'JS'
+          const fs=require('node:fs');
+          const cases=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+          const business=structuredClone(cases.find(c=>c.caseId==='photo').candidate.business);
+          for(const a of business.activities)a.results=a.results.map(r=>({id:r.id,text:r.condition?r.condition+'、'+r.text:r.text}));
+          fs.writeFileSync(process.argv[4]+'/legacy-single-multiple-roles.json',JSON.stringify({format:'alder-document-package',formatVersion:'0.5',revision:'browser-probe',documents:[business],sources:[],externalDocuments:[],diagnostics:[]}));
+          const modern=JSON.parse(fs.readFileSync(process.argv[3],'utf8'));modern.revision='package-role-n-preview';
+          const bd=modern.documents.find(d=>d.kind==='businessDesign'),role=bd.roles[0];bd.revision='bd-role-n-preview';bd.title='単一Role Nの表示例（模擬）';role.name='単一ロールN';
+          for(const a of bd.activities)if(a.roleId===role.id)a.who=role.name;
+          for(const d of modern.documents)if(d.basedOn?.documentId===bd.id){d.basedOn.revision=bd.revision;d.revision='state-role-n-preview';}
+          fs.writeFileSync(process.argv[4]+'/current-single-role-n.json',JSON.stringify(modern));
+          JS
+          echo '755171a8aace46459baaf1cdd12503ebc4481b94b8198683c9aeaf183b78b5fc  '"$DEST/data/legacy-single-multiple-roles.json" | sha256sum -c -
+          echo '7cfc41626befa02e5cfe90d43133a7bf4915197f5c43ccb0773f1ae081032bb4  '"$DEST/data/current-single-role-n.json" | sha256sum -c -
           git -C "$TMP/pages" add "$PREFIX"
-          git -C "$TMP/pages" -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Publish PR 342 fixed Viewer beta preview" --quiet
+          git -C "$TMP/pages" diff --cached --name-only > "$TMP/paths.txt"
+          test "$(wc -l < "$TMP/paths.txt")" -ge 13
+          while IFS= read -r path; do case "$path" in "$PREFIX/"*) ;; *) echo "Unexpected changed path: $path" >&2; exit 1;; esac; done < "$TMP/paths.txt"
+          git -C "$TMP/pages" -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Publish PR 342 Phase 3B fixed Viewer beta" --quiet
           git -C "$TMP/pages" push --quiet origin HEAD:gh-pages-web-viewer
           echo "Published isolated beta: $PREFIX"
