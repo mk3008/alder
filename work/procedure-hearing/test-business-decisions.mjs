@@ -117,19 +117,56 @@ class Node{
   append(child){this.children.push(child);}
   setAttribute(key,value){this.attributes[key]=String(value);}
 }
-const elements=new Map(['title','context','steps','decisions','result','status'].map(id=>[id,new Node(id)]));
-const document={getElementById:id=>elements.get(id),createElement:tag=>new Node(tag)};
 const html=readFileSync(new URL('./business-decisions-preview.html',import.meta.url),'utf8');
 const script=html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];assert.ok(script);
-await runInNewContext(`(async()=>{${script}})()`,{document,fetch:async()=>({ok:true,json:async()=>candidate})});
+async function render(fixture){
+  const elements=new Map(['title','context','steps','decisions','result','status'].map(id=>[id,new Node(id)]));
+  const document={getElementById:id=>elements.get(id),createElement:tag=>new Node(tag)};
+  await runInNewContext(`(async()=>{${script}})()`,{document,fetch:async()=>({ok:true,json:async()=>fixture})});
+  return elements;
+}
+const elements=await render(candidate);
 assert.equal(elements.get('status').textContent,'');
 assert.equal(elements.get('steps').children.length,5);
 const tables=elements.get('decisions').children.map(section=>section.children.find(node=>node.tag==='div').children[0]);
-const rows=table=>table.children.find(node=>node.tag==='tbody').children.map(row=>row.children.map(cell=>cell.textContent));
+const physicalRows=table=>table.children.find(node=>node.tag==='tbody').children;
+const rows=table=>{
+  const logical=[];
+  physicalRows(table).forEach((row,rowIndex)=>{
+    logical[rowIndex]??=[];let column=0;
+    for(const cell of row.children){
+      while(logical[rowIndex][column]!==undefined)column++;
+      for(let offset=0;offset<(cell.rowSpan??1);offset++){
+        logical[rowIndex+offset]??=[];
+        assert.equal(logical[rowIndex+offset][column],undefined);
+        logical[rowIndex+offset][column]=cell.textContent;
+      }
+      column++;
+    }
+  });
+  return logical;
+};
 assert.deepEqual(rows(tables[0]).map(row=>row.slice(0,3)),[
   ['1〜12の整数','なし','有効'],['1〜12の整数','それ以外','入力エラー'],['それ以外','不問','入力エラー']
 ]);
 assert.deepEqual(rows(tables[1]).map(row=>row.slice(0,3)),[
   ['1回以上','0本','0点'],['1回以上','1本','倒れた棒の番号'],['1回以上','それ以外','倒れた本数'],['それ以外','不問','1回分の点数なし']
+]);
+assert.deepEqual(rows(tables[0]).map(row=>row[3]),['—','MK-04','MK-04']);
+assert.deepEqual(rows(tables[1]).map(row=>row[3]),['MK-01','MK-02','MK-03','MK-10*']);
+assert.equal(physicalRows(tables[0])[0].children[0].rowSpan,2);
+assert.equal(physicalRows(tables[1])[0].children[0].rowSpan,3);
+
+// Equal nested conditions must not cross a boundary in an earlier condition.
+const nested=structuredClone(candidate),nestedRows=nested.businessDesign.decisions[0].rows;
+nestedRows[1].conditions[1]=structuredClone(nestedRows[0].conditions[1]);
+nestedRows[2].conditions[1]=structuredClone(nestedRows[0].conditions[1]);
+const nestedElements=await render(nested);
+assert.equal(nestedElements.get('status').textContent,'');
+const nestedTable=nestedElements.get('decisions').children[0].children.find(node=>node.tag==='div').children[0];
+assert.equal(physicalRows(nestedTable)[0].children[1].rowSpan,2);
+assert.equal(physicalRows(nestedTable)[2].children[1].textContent,'なし');
+assert.deepEqual(rows(nestedTable).map(row=>row.slice(0,3)),[
+  ['1〜12の整数','なし','有効'],['1〜12の整数','なし','入力エラー'],['それ以外','なし','入力エラー']
 ]);
 console.log('Business decisions PoC: source IDs, relationships, checks, boundary cases and rendered tables passed.');
