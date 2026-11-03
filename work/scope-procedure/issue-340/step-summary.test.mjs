@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {project} from './step-summary.mjs';
 
 const raw=await readFile(new URL('./step-summary-fixture.json',import.meta.url),'utf8');
+const awaitPaper=await readFile(new URL('./paper-note-fixture.json',import.meta.url),'utf8');
 const fixture=JSON.parse(raw), copy=()=>structuredClone(fixture);
 const act=(d,id)=>d.activities.find(a=>a.id===id);
 const step=(d,id)=>d.activities.flatMap(a=>a.steps).find(s=>s.id===id);
@@ -87,7 +88,7 @@ const bad=[
   ['duplicate Step ID is rejected','DUPLICATE_ID',d=>{step(d,'s-date-query').id='s-name-query';}],
   ['unknown direction is rejected','DIRECTION',d=>{step(d,'s-name-query').exchange.direction='sideways';}],
   ['unknown communication phase is rejected in this candidate','PHASE',d=>{step(d,'s-name-query').exchange.phase='notification';}],
-  ['Scope is explicit boolean','SCOPE_BOOLEAN',d=>{d.objects[0].scope='true';}],
+  ['invalid Scope values are rejected','SCOPE_BOOLEAN',d=>{d.objects[0].scope='true';}],
   ['unknown Step effect is rejected','EFFECT',d=>{step(d,'s-name-query').effect='maybe';}]
 ];
 for(const [name,code,mutate] of bad)test(name,()=>{const d=copy();mutate(d);const r=project(d);assert.ok(has(r,code),`${code}: ${JSON.stringify(r.errors)}`);});
@@ -99,5 +100,35 @@ test('unresolved Data is reported without creating an invented label',()=>{
 test('an unresolved exchange is not assumed to be local',()=>{
   const d=copy();step(d,'s-judge').exchange=null;const r=project(d);
   assert.ok(pending(r,'EXCHANGE_UNRESOLVED','s-judge'));assert.equal(r.rows.find(x=>x.stepId==='s-judge').kind,'unresolved');
+});
+test('paper-to-note example keeps the same Data in the two explicit interactions',()=>{
+  const paper=JSON.parse(awaitPaper), r=project(paper), a=act(paper,'a-copy');
+  assert.deepEqual(r.errors,[]);assert.deepEqual(r.pending.map(p=>p.where).sort(),['a-copy','memo','paper','s-read']);
+  assert.ok(pending(r,'DATA_UNRESOLVED','s-read'));
+  assert.deepEqual(a.steps.map(s=>s.id),['s-read','s-read-response','s-write','s-write-response']);
+  assert.equal(step(paper,'s-read-response').exchange.dataId,'content');
+  assert.equal(step(paper,'s-write').exchange.dataId,'content');
+  assert.equal(paper.objects.find(o=>o.id==='paper').scope,null);
+  assert.deepEqual(r.edges.find(e=>e.objectId==='paper'&&e.direction==='input').data,[{id:'content',name:'記載内容'}]);
+  assert.deepEqual(r.edges.find(e=>e.objectId==='memo'&&e.direction==='output').data,[{id:'content',name:'記載内容'}]);
+  assert.deepEqual(r.edges.find(e=>e.objectId==='memo'&&e.direction==='input').data,[{id:'write-success',name:'記載成功'}]);
+  assert.deepEqual(r.edges.filter(e=>e.data.length===0).map(e=>[e.objectId,e.direction]),[['paper','output']]);
+});
+test('paper Scope requires context; classification does not change the recorded steps',()=>{
+  const paper=JSON.parse(awaitPaper), before=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=true;const machine=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=false;const human=project(paper);
+  assert.ok(pending(before,'SCOPE_UNRESOLVED','paper'));
+  assert.ok(!pending(machine,'SCOPE_UNRESOLVED','paper'));assert.ok(!pending(human,'SCOPE_UNRESOLVED','paper'));
+  assert.deepEqual(machine.rows,human.rows);assert.deepEqual(machine.edges,human.edges);
+});
+test('no Data differs from unresolved Data and does not manufacture a label',()=>{
+  const d=copy();const e=step(d,'s-name-query').exchange;delete e.dataId;e.noData=true;
+  const r=project(d);assert.deepEqual(r.errors,[]);assert.ok(!pending(r,'DATA_UNRESOLVED','s-name-query'));
+  assert.ok(!r.edges.find(x=>x.activityId==='a-inquiry'&&x.direction==='output').data.some(x=>x.id==='d-name-filter'));
+});
+test('missing or contradictory Data declaration is rejected',()=>{
+  const d=copy(),e=step(d,'s-name-query').exchange;delete e.dataId;
+  assert.ok(has(project(d),'DATA_SHAPE'));e.dataId='d-name-filter';e.noData=true;assert.ok(has(project(d),'DATA_SHAPE'));
 });
 console.log(`${count} tests passed`);

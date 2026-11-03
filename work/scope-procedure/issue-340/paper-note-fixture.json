@@ -1,0 +1,22 @@
+{
+  "candidateVersion": "step-summary-poc/1",
+  "roles": [{"id": "worker", "name": "作業者"}],
+  "objects": [
+    {"id": "paper", "name": "紙", "scope": null},
+    {"id": "memo", "name": "メモ", "scope": null}
+  ],
+  "data": [{"id": "content", "name": "記載内容"}, {"id": "write-success", "name": "記載成功"}],
+  "activities": [{
+    "id": "a-copy",
+    "name": "記載内容の転記",
+    "scope": null,
+    "who": {"kind": "role", "roleId": "worker"},
+    "when": "転記作業のとき",
+    "steps": [
+      {"id": "s-read", "text": "紙の記載内容を読み取る", "obligation": "required", "appliesWhen": null, "effect": "read", "exchange": {"phase": "request", "direction": "output", "objectId": "paper", "dataId": null}},
+      {"id": "s-read-response", "text": "紙から記載内容を受け取る", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"phase": "response", "direction": "input", "objectId": "paper", "dataId": "content"}},
+      {"id": "s-write", "text": "記載内容をメモに書く", "obligation": "required", "appliesWhen": null, "effect": "undecided", "exchange": {"phase": "request", "direction": "output", "objectId": "memo", "dataId": "content"}},
+      {"id": "s-write-response", "text": "メモの記載成功を受け取る", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"phase": "response", "direction": "input", "objectId": "memo", "dataId": "write-success"}}
+    ]
+  }]
+}

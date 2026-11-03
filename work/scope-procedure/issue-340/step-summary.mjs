@@ -15,7 +15,7 @@ export function project(doc) {
   if(doc?.candidateVersion!=='step-summary-poc/1')error('CANDIDATE_VERSION','candidateVersion');
   const roles=list(doc?.roles,'roles'), objects=list(doc?.objects,'objects'), data=list(doc?.data,'data'), activities=list(doc?.activities,'activities');
   for(const role of roles)add(role,'role','roles');
-  for(const object of objects){add(object,'object','objects');if(typeof object.scope!=='boolean')error('SCOPE_BOOLEAN',object.id);}
+  for(const object of objects){add(object,'object','objects');if(object.scope===null)todo('SCOPE_UNRESOLVED',object.id);else if(typeof object.scope!=='boolean')error('SCOPE_BOOLEAN',object.id);}
   for(const datum of data)add(datum,'data','data');
   for(const activity of activities){
     add(activity,'activity','activities');
@@ -24,7 +24,7 @@ export function project(doc) {
   const ref=(id,type,where)=>{const found=ids.get(id);if(!found||found.type!==type){error('INVALID_REFERENCE',`${where}:${type}:${id}`);return null;}return found.item;};
   const grouping=new Map();
   for(const activity of activities){
-    if(typeof activity.scope!=='boolean')error('SCOPE_BOOLEAN',activity.id);
+    if(activity.scope===null)todo('SCOPE_UNRESOLVED',activity.id);else if(typeof activity.scope!=='boolean')error('SCOPE_BOOLEAN',activity.id);
     const who=activity.who;
     if(who===null)todo('WHO_UNRESOLVED',activity.id);
     else if(!who || Array.isArray(who) || typeof who!=='object')error('SINGLE_WHO_REQUIRED',activity.id);
@@ -46,10 +46,15 @@ export function project(doc) {
       if(!['input','output'].includes(x.direction)){error('DIRECTION',step.id);continue;}
       const object=ref(x.objectId,'object',step.id);
       let datum=null;
-      if(x.dataId===null)todo('DATA_UNRESOLVED',step.id);else datum=ref(x.dataId,'data',step.id);
+      const hasDataId=Object.hasOwn(x,'dataId'), hasNoData=Object.hasOwn(x,'noData');
+      if(hasNoData && (x.noData!==true || hasDataId))error('DATA_SHAPE',step.id);
+      else if(!hasNoData && !hasDataId)error('DATA_SHAPE',step.id);
+      else if(hasNoData){} // An explicitly empty payload is different from unknown Data.
+      else if(x.dataId===null)todo('DATA_UNRESOLVED',step.id);
+      else datum=ref(x.dataId,'data',step.id);
       const whoEndpoint=`who:${activity.id}`, objectEndpoint=`object:${x.objectId}`;
       rows.push({stepId:step.id,kind:'exchange',from:x.direction==='output'?whoEndpoint:objectEndpoint,to:x.direction==='output'?objectEndpoint:whoEndpoint,phase:x.phase,direction:x.direction,objectId:x.objectId,dataId:x.dataId,effect:step.effect});
-      if(!object || (!datum && x.dataId!==null))continue;
+      if(!object || (!datum && !hasNoData && x.dataId!==null))continue;
       const key=JSON.stringify([activity.id,x.objectId,x.direction]);
       if(!grouping.has(key))grouping.set(key,{activityId:activity.id,objectId:x.objectId,direction:x.direction,stepIds:[],data:[]});
       const group=grouping.get(key);
