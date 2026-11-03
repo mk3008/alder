@@ -24,15 +24,20 @@ export function activityTestAvailability(design:Design,activityId:string,documen
  return {available:groups.length>0,unlinked:items.length>0&&items.every(item=>!item.fields.testEvidence?.length)};
 }
 
-function evidenceRuns(root:HTMLElement,runs:Run[]){
+function evidenceRuns(root:HTMLElement,runs:Run[],doc:Check,seen=new Set<string>()){
  for(const run of runs){
   if(run.kind==='text'){const span=el('span',run.value);span.style.whiteSpace='pre-wrap';root.append(span);}
   else if(run.kind==='markdown')root.append(formattedMarkdown(run.value));
   else if(run.kind==='link'){
    let uri:URL|undefined;try{uri=new URL(run.uri);}catch{}
-   if(uri&&(uri.protocol==='https:'||uri.protocol==='http:')){const a=el('a',run.label||run.uri);a.href=uri.href;a.target='_blank';a.rel='noopener noreferrer';root.append(a,el('span','（リンク先未確認）'));}
+   if(uri&&uri.protocol==='https:'&&!uri.username&&!uri.password){const a=el('a',run.label||run.uri);a.href=uri.href;a.target='_blank';a.rel='noopener noreferrer';root.append(a,el('span','（リンク先未確認）'));}
    else root.append(el('span',run.label||run.uri));
-  }else root.append(el('span',run.label||run.targetId));
+  }else{
+   const note=doc.notes.find(item=>item.id===run.targetId);
+   if(!note){new RichReader(doc,true).runs(root,[run],seen);continue;}
+   const details=el('details');details.append(el('summary',run.label||note.title));root.append(details);let loaded=false;
+   details.addEventListener('toggle',()=>{if(!details.open||loaded)return;loaded=true;if(seen.has(note.id)||seen.size>=16){details.append(el('p','参照を展開できません。原文で確認してください。'));return;}evidenceRuns(details,note.content,doc,new Set(seen).add(note.id));});
+  }
  }
 }
 
@@ -92,11 +97,11 @@ export function renderActivityTestSpec(design:Design,activityId:string,documents
  root.append(spec);
 
  const tests=addSection('テスト',el('section'));tests.className='activity-test-section activity-test-evidence';tests.append(el('h2','テスト'));
- const records:{item:Item;runs:Run[]}[]=groups.flatMap(({items})=>items.flatMap(item=>item.fields.testEvidence?.length?[{item,runs:item.fields.testEvidence}]:[]));
+ const records:{doc:Check;item:Item;runs:Run[]}[]=groups.flatMap(({doc,items})=>items.flatMap(item=>item.fields.testEvidence?.length?[{doc,item,runs:item.fields.testEvidence}]:[]));
  if(!records.length)tests.append(el('p','対応するテストの記録はありません。'));
  else{
   tests.append(el('p','保存された証拠の記述があります。テストとの対応、実行結果、鮮度は確認されていません。'));
-  for(const {item,runs} of records){const details=el('details'),summary=el('summary',item.checkId+' の証拠記録');details.append(summary);const content=el('div');evidenceRuns(content,runs);details.append(content);tests.append(details);}
+  for(const {doc,item,runs} of records){const details=el('details'),summary=el('summary',item.checkId+' の証拠記録');details.append(summary);const content=el('div');evidenceRuns(content,runs,doc);details.append(content);tests.append(details);}
  }
  root.append(tests);return {root,sections};
 }

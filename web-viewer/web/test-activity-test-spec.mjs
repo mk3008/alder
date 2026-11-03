@@ -73,14 +73,18 @@ try{
  missing.entry('tests:activity:'+activities[0].id).click();
  assert.match(missing.$('.activity-test-evidence').textContent,/記録はありません/);
 
- const linked=structuredClone(pkg),linkedCheck=linked.documents.find(doc=>doc.kind==='checkItems').items.find(item=>item.checkId==='MK-01');
- linkedCheck.fields.testEvidence=[{kind:'link',uri:'https://example.org/project/test.ts#L12',label:'保存された参照'}];
+ const linked=structuredClone(pkg),linkedChecks=linked.documents.find(doc=>doc.kind==='checkItems'),linkedCheck=linkedChecks.items.find(item=>item.checkId==='MK-01');
+ linkedChecks.notes.push({id:'fixture-evidence-note',title:'証拠の注記',content:[{kind:'link',uri:'https://example.org/project/test.ts#L20',label:'注記内の参照'},{kind:'reference',targetId:'fixture-evidence-note',label:'循環'}]});
+ linkedCheck.fields.testEvidence=[{kind:'link',uri:'https://example.org/project/test.ts#L12',label:'保存された参照'},{kind:'reference',targetId:'fixture-evidence-note',label:'証拠の注記'}];
  const linkedApp=await open(await bundle(linked),'https://viewer.test/activity-spec-link');
  linkedApp.entry('tests:activity:'+activities[0].id).click();
  const link=linkedApp.$('.activity-test-evidence a');
  assert.equal(link.href,'https://example.org/project/test.ts#L12');
  assert.equal(link.rel,'noopener noreferrer');
  assert.match(link.parentElement.textContent,/リンク先未確認/);
+ const note=linkedApp.$('.activity-test-evidence details details');note.open=true;note.dispatchEvent(new linkedApp.w.Event('toggle'));
+ assert.equal(note.querySelector('a').href,'https://example.org/project/test.ts#L20');
+ const cycle=note.querySelector('details');cycle.open=true;cycle.dispatchEvent(new linkedApp.w.Event('toggle'));assert.match(cycle.textContent,/原文で確認/);
  assert.equal(hash(readFileSync('../examples/molkky/business-design.json','utf8')),hash(source),'source JSON stays unchanged');
  assert.equal(hash(readFileSync(authorityPath)),hash(authority),'verification authority stays unchanged');
  console.log(JSON.stringify({passed:['TEST-ACTIVITY-001','TEST-ACTIVITY-002','TEST-ACTIVITY-003'],partial:'TEST-ACTIVITY-004: DOM click only; native scrolling, narrow width and drawer geometry require browser',authority:authorityPath,scope:'DOM with source JSON and explicitly unverified evidence'}));
