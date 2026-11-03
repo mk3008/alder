@@ -18,7 +18,7 @@
 - Activityの `decisions` は安定ID、種別（`authorization`・`validation`・`algorithm`）、条件軸、順序付き行、結果、Check参照を持ちます。Stepの `decisionIds` は同じActivityの判定表、`whenDecision` は適用される判定行を参照します。表自体にも他の判定行による適用条件を指定できます。
 - 各条件セルは軸IDと `value`・`else`・`any`・`undecided` を区別します。値の比較方法と値、結果種別・業務上の結果、関連Data・Exception、Check内部IDと対応範囲は別々に保存します。Checkの表示番号やレビュー状態を判定表へコピーしません。
 - 条件の列数・順序、ID・所有Activity、Data、Exception、Checkと原典版、StepのRelation方向、Request/Responseの組、判定間の循環を検査します。`else`には同じ左側の分岐に先行条件が必要です。構造検査は聞き取り内容の意味や条件の網羅性を確定しません。
-- 0.7では、未レビュー・要確認のCheck草案を業務設計と同じ候補に保存できます。Checkの原典は `unverified` のままです。新規Checkを確認済みにできず、既存の人間判断を勝手に変更しません。確認済み・要修正を含むCheckの原典改版などは従来の正確なBD版の合意ガードを維持し、判定の意味が変わったCheckに古い確認を引き継ぎません。
+- 0.7では、未レビュー・要確認のCheck草案を業務設計と同じ候補に保存できます。Checkの原典は `unverified` のままです。新規Checkを確認済みにできず、既存の人間判断を勝手に変更しません。確認済み・要修正を含むCheckの原典改版などは従来の正確なBD版の合意ガードを維持し、判定表の条件・結果・補足、前提となる判定、参照するDataやExceptionの意味が変わったCheckに古い確認を引き継ぎません。
 
 ## 旧版からの移行
 

@@ -1,5 +1,5 @@
 {
-  "alder_source_revision": "56bff0d657c99e91a2c6e497aaa24742d0122794",
+  "alder_source_revision": "25034b7e1df89e1d5b4421af2db838ab45bc07a8",
   "sources": {
     "docs/plugin-json-authoring.ja.md": "86726f8fba63bf2184f0e742df323a27cbff39c1c3a1226c6efd01d13317b8d3",
     "docs/adoption.md": "5feacd421c45f6f5bb41c7affb9ed08d7052d7fc753561a85bf6cac52d2edc90",
@@ -12,7 +12,7 @@
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
     "docs/json-native-contract.ja.md": "35ee6ef7e31e72bedee18969dc08d70f7f3a77093b3065902055b06a37b6592d",
-    "docs/business-design-decisions-v07.ja.md": "20c71e11492c6cf91de23bbcbe05a2eb5fce5711e181f20fb8df5f7e05b8f4b2"
+    "docs/business-design-decisions-v07.ja.md": "b20d5f6c0093e6a27b286397761aef05d63c19288378958478aac14accb85ff3"
   },
   "scripts": {
     "tools/document_storage/core.mjs": "48cf816e436913765fab852bad0173fa972a363aacb4bd2df04b027c2d325bd5",
@@ -22,7 +22,7 @@
     "tools/document_storage/convert.mjs": "8ae8de81ae2e470ad36433bab502a71c1c72fd09a466a733fdac13581db21562",
     "tools/document_storage/cli.mjs": "2bfb373a8130c55bb5875acd287c5c2e0da54c8c00e683eca64df238624fc6e6",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "df1a4ceb34865815c14570580950cc19ab545974010ece4835438a702983db97",
+    "tools/document_storage/authoring.mjs": "414aaedec354355d87935af1809f6ae9bc86e65cbe38ff3db4c3a4af4e4913c3",
     "tools/document_storage/author-cli.mjs": "3b82af289bd64bbfb032b58901b625f842f983a811c7cb6c24cf87f114caaf55",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
