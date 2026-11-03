@@ -32,6 +32,7 @@ for(const text of ['申請者','発生条件','下書きとして保存','再開
 assert.equal(detail.querySelectorAll('table').length,1);assert.deepEqual(detail.querySelectorAll('th').map(x=>x.textContent),['Step','From','To','Data','Action']);
 covered.push(ids[0]);
 const ended=JSON.parse(read('../tools/document_storage/examples/continuity-draft-v06.json'));Object.assign(ended.documents[0].exceptions[0].continuity,{outcome:'end',onInterrupt:null,resumeCondition:null,resumeAction:null,interruptedAtStepId:null,resumeAtStepId:null,retainedDataIds:null});const endDetail=businessDetail(parseDocument(JSON.stringify(ended)),'fill');assert.match(endDetail.textContent,/終了/);assert.doesNotMatch(endDetail.textContent,/再開条件|再開方法|中断時の扱い/);
+ended.documents[0].exceptions[0].continuity.resumeAction='再開すると記載されている';assert.match(businessDetail(parseDocument(JSON.stringify(ended)),'fill').textContent,/再開すると記載されている/,'do not hide an inconsistent authored restart');
 covered.push(ids[1]);
 const source=read('../tools/document_storage/examples/paper-manual-v06.json'),paper=parseDocument(source),paperDetail=businessDetail(paper,'copy');
 assert.equal(paper.markdown,source);assert.equal(paperDetail.querySelectorAll('tr').length,3);assert.deepEqual(paper.graph.relations.map(x=>[x.kind,x.from,x.to]),[['input','paper','copy'],['output','copy','memo']]);
