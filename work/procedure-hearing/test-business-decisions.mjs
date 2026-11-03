@@ -13,6 +13,7 @@ assert.equal(source.revision,candidate.source.businessRevision);
 assert.equal(sourceChecks.id,candidate.source.checkDocumentId);
 assert.equal(originalActivity.who,candidate.businessDesign.activity.who.name);
 assert.match(originalActivity.procedure,/0本なら0点、1本ならその棒の番号、2本以上なら倒れた本数/);
+assert.match(originalActivity.exception,/入力誤りとして計算せず/);
 assert.match(originalActivity.exception,/1回でも誤りがあれば計算対象全体をエラー/);
 
 function validate(pkg){
@@ -128,6 +129,11 @@ async function render(fixture){
 const elements=await render(candidate);
 assert.equal(elements.get('status').textContent,'');
 assert.equal(elements.get('steps').children.length,5);
+for(const index of [2,3]){
+  assert.deepEqual(design.steps[index].when,{decisionId:'input-validation',rowId:'valid'});
+  assert.equal(elements.get('steps').children[index].children[3].children.filter(child=>child.className==='condition').length,0);
+}
+assert.ok(elements.get('decisions').children[0].children.some(child=>child.textContent.includes('誤りが1回でもあれば計算せず')));
 const tables=elements.get('decisions').children.map(section=>section.children.find(node=>node.tag==='div').children[0]);
 const physicalRows=table=>table.children.find(node=>node.tag==='tbody').children;
 const rows=table=>{
@@ -169,4 +175,15 @@ assert.equal(physicalRows(nestedTable)[2].children[1].textContent,'なし');
 assert.deepEqual(rows(nestedTable).map(row=>row.slice(0,3)),[
   ['1〜12の整数','なし','有効'],['1〜12の整数','なし','入力エラー'],['それ以外','なし','入力エラー']
 ]);
+
+// Other step conditions remain visible and point to the exact decision row.
+const conditional=structuredClone(candidate);
+conditional.businessDesign.steps[2].when.rowId='duplicate';
+const conditionalElements=await render(conditional);
+assert.equal(conditionalElements.get('status').textContent,'');
+const conditionNote=conditionalElements.get('steps').children[2].children[3].children.find(child=>child.className==='condition');
+assert.ok(conditionNote);
+assert.equal(conditionNote.children[0].href,'#input-validation--duplicate');
+const conditionalTable=conditionalElements.get('decisions').children[0].children.find(node=>node.tag==='div').children[0];
+assert.equal(physicalRows(conditionalTable)[1].id,'input-validation--duplicate');
 console.log('Business decisions PoC: source IDs, relationships, checks, boundary cases and rendered tables passed.');

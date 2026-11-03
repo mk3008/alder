@@ -46,13 +46,24 @@
       const numbers=new Map(design.decisions.map((item,index)=>[item.id,index+1]));
       const add=(parent,tag,value,css)=>{const el=document.createElement(tag);el.textContent=value;if(css)el.className=css;parent.append(el);return el;};
       for(const [label,value] of [['Why',design.activity.why],['When',design.activity.when],['Who',design.activity.who.name]])add(document.getElementById('context'),'p',label+'：'+value);
-      for(const step of design.steps){
+      for(const [stepIndex,step] of design.steps.entries()){
         const row=document.createElement('tr');
         add(row,'td',names.get(step.from));add(row,'td',step.to===null?'—':names.get(step.to));
         add(row,'td',data.get(step.dataId),'data');
         const cell=add(row,'td',step.action);
         for(const id of step.decisionIds){const link=add(cell,'a','（※'+numbers.get(id)+'）');link.href='#'+id;}
-        if(step.when)add(cell,'span','入力が有効な場合','condition');
+        if(step.when){
+          const decision=design.decisions.find(item=>item.id===step.when.decisionId);
+          const decisionRow=decision?.rows.find(item=>item.id===step.when.rowId);
+          const checkedEarlier=design.steps.slice(0,stepIndex).some(item=>item.decisionIds.includes(step.when.decisionId));
+          const errorExplained=design.exceptions.some(item=>item.when.decisionId===step.when.decisionId&&item.result.kind==='input-error');
+          const impliedByValidation=checkedEarlier&&errorExplained&&decision?.kind==='validation'&&decisionRow?.result.kind==='valid';
+          if(!impliedByValidation){
+            const note=add(cell,'span','条件：','condition');
+            if(decision&&decisionRow){const link=add(note,'a',decision.title);link.href='#'+decision.id+'--'+decisionRow.id;}
+            else add(note,'span','未決');
+          }
+        }
         document.getElementById('steps').append(row);
       }
       const conditionLabel=(axis,condition)=>{
@@ -92,7 +103,7 @@
           return condition.axisId===other.axisId&&condition.op===other.op&&condition.value===other.value;
         });
         for(const [rowIndex,item] of decision.rows.entries()){
-          const row=document.createElement('tr');
+          const row=document.createElement('tr');row.id=decision.id+'--'+item.id;
           for(const [axisIndex,axis] of decision.axes.entries()){
             if(rowIndex>0&&samePrefix(rowIndex,rowIndex-1,axisIndex))continue;
             let span=1;
@@ -107,7 +118,7 @@
         if(decision.rows.some(row=>row.checkRefs.some(ref=>ref.coverage==='partial')))add(section,'p','*：この業務で扱う範囲のみ','note');
         for(const exception of design.exceptions.filter(item=>item.when.decisionId===decision.id)){
           const suppressed=exception.result.suppressDataIds.map(id=>data.get(id)).join('・');
-          add(section,'p','入力エラー時は全体をエラーとし、'+suppressed+'を返しません。（'+exception.checkRefs.map(ref=>ref.code).join('、')+'）','note');
+          add(section,'p','入力に誤りが1回でもあれば計算せず、全体をエラーとし、'+suppressed+'を返しません。（'+exception.checkRefs.map(ref=>ref.code).join('、')+'）','note');
         }
         document.getElementById('decisions').append(section);
       }
