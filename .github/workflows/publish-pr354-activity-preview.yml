@@ -1,0 +1,128 @@
+name: Publish isolated PR 354 Activity review preview
+on:
+  push:
+    branches: [beta/pr-354-activity-pages-8e34c3ce]
+    paths: [.github/workflows/publish-pr354-activity-preview.yml]
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: pr354-activity-preview
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: github.repository == 'mk3008/alder'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SOURCE_SHA: 8e34c3ce00352169f200491224697aac9afe7216
+      SOURCE_TREE: 76b1b57ad9c643989fc70fd7cf254fa6374ff39c
+      SOURCE_CI: '41644616507'
+      ARTIFACT_ID: '13234894431'
+      ARTIFACT_SHA256: c895def1741291134498476c8bda77f9ccd3a64685e98ac25d446334b4145fa0
+      SAMPLE_BLOB: 6695b192f394af084cba1746b48a40dc17e7c2aa
+    steps:
+      - name: Verify the exact PR and successful source CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 2 -H "Authorization: Bearer $GH_TOKEN" "$GITHUB_API_URL/repos/mk3008/alder/actions/runs/$SOURCE_CI" -o "$RUNNER_TEMP/source-run.json"
+          test "$(jq -r .head_sha "$RUNNER_TEMP/source-run.json")" = "$SOURCE_SHA"
+          test "$(jq -r .conclusion "$RUNNER_TEMP/source-run.json")" = success
+          test "$(jq -r '.pull_requests[0].number' "$RUNNER_TEMP/source-run.json")" = 354
+          curl -fsSL --retry 2 -H "Authorization: Bearer $GH_TOKEN" "$GITHUB_API_URL/repos/mk3008/alder/actions/artifacts/$ARTIFACT_ID/zip" -o "$RUNNER_TEMP/preview.zip"
+          echo "$ARTIFACT_SHA256  $RUNNER_TEMP/preview.zip" | sha256sum --check --status
+      - name: Extract and verify the CI-built Viewer
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,zipfile
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          sha=os.environ['SOURCE_SHA']
+          prefix='preview/pr-354/'+sha+'/'
+          with zipfile.ZipFile(root/'preview.zip') as z:
+              manifest=json.loads(z.read('manifest.json'))
+              assert manifest['source']==sha and manifest['tree']==manifest['sourceTree']==os.environ['SOURCE_TREE']
+              for name,expected in manifest['files'].items():
+                  assert hashlib.sha256(z.read(name)).hexdigest()==expected, name
+              files=[info for info in z.infolist() if info.filename.startswith(prefix) and not info.is_dir()]
+              assert files and any(info.filename==prefix+'index.html' for info in files)
+              for info in files:
+                  relative=pathlib.PurePosixPath(info.filename.removeprefix(prefix))
+                  assert not relative.is_absolute() and '..' not in relative.parts
+                  target=root/'verified-preview'/relative
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(z.read(info))
+          PY
+          curl -fsSL --retry 2 "https://raw.githubusercontent.com/mk3008/alder/$SOURCE_SHA/examples/molkky/business-design.json" -o "$RUNNER_TEMP/verified-preview/molkky.json"
+          test "$(git hash-object "$RUNNER_TEMP/verified-preview/molkky.json")" = "$SAMPLE_BLOB"
+      - name: Checkout current Pages branch
+        uses: actions/checkout@v4.4.0
+        with:
+          ref: gh-pages-web-viewer
+          path: pages
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Stage only the new fixed preview
+        run: |
+          set -euo pipefail
+          DEST="pages/preview/pr-354/$SOURCE_SHA"
+          test ! -e "$DEST"
+          mkdir -p "$DEST"
+          cp -a "$RUNNER_TEMP/verified-preview/." "$DEST/"
+          jq -n --arg source "$SOURCE_SHA" --arg tree "$SOURCE_TREE" --arg ci "$SOURCE_CI" --arg artifact "$ARTIFACT_SHA256" --arg sample "$SAMPLE_BLOB" '{kind:"isolated review preview",source:$source,sourceTree:$tree,sourceCI:$ci,artifactSha256:$artifact,sampleGitBlob:$sample}' > "$DEST/preview-manifest.json"
+      - name: Smoke test the staged preview in Chrome
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/pr354-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+          python3 -m http.server 4188 --bind 127.0.0.1 --directory pages > "$RUNNER_TEMP/pr354-preview.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS -o /dev/null "http://127.0.0.1:4188/preview/pr-354/$SOURCE_SHA/index.html"; then break; fi
+            sleep 1
+          done
+          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/pr354-browser/node_modules/playwright"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {createRequire} from 'node:module';
+          import {readFileSync} from 'node:fs';
+          const root=`pages/preview/pr-354/${process.env.SOURCE_SHA}`;
+          const raw=readFileSync(`${root}/molkky.json`);
+          const pkg=JSON.parse(raw),bd=pkg.documents.find(doc=>doc.kind==='businessDesign');
+          const browser=await createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE).chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+          try{
+            for(const width of [1280,393]){
+              const context=await browser.newContext({viewport:{width,height:960}}),page=await context.newPage(),errors=[];
+              page.on('pageerror',error=>errors.push(error.message));
+              try{
+                await page.goto(`http://127.0.0.1:4188/preview/pr-354/${process.env.SOURCE_SHA}/`);
+                await page.waitForFunction(()=>!document.querySelector('#open').disabled);
+                await page.locator('#fallback').setInputFiles({name:'molkky.json',mimeType:'application/json',buffer:raw});
+                await page.locator('.node').first().waitFor();
+                if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
+                if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
+                const group=page.locator('[data-explorer-key="group:tests"]');
+                if(await group.getAttribute('aria-expanded')!=='true')await group.click();
+                await page.locator('[data-explorer-key='+JSON.stringify('tests:activity:'+bd.activities[0].id)+']').click();
+                assert.equal(await page.locator('.activity-test-spec h1').textContent(),bd.activities[0].name);
+                assert.match(await page.locator('.activity-test-status').innerText(),/未確認/);
+                assert.equal(await page.locator('.activity-test-toc').isVisible(),width>800);
+                assert.deepEqual(errors,[]);
+              }finally{await context.close();}
+            }
+            console.log(JSON.stringify({preview:'passed',source:process.env.SOURCE_SHA,widths:[1280,393]}));
+          }finally{await browser.close();}
+          JS
+      - name: Publish only the isolated preview directory
+        run: |
+          set -euo pipefail
+          git -C pages config user.name 'github-actions[bot]'
+          git -C pages config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C pages add -- "preview/pr-354/$SOURCE_SHA"
+          test -n "$(git -C pages diff --cached --name-only)"
+          if git -C pages diff --cached --name-only | grep -v "^preview/pr-354/$SOURCE_SHA/"; then exit 1; fi
+          git -C pages commit -m "Publish isolated PR 354 Activity preview from $SOURCE_SHA"
+          git -C pages push origin HEAD:gh-pages-web-viewer
+          echo "https://mk3008.github.io/alder/preview/pr-354/$SOURCE_SHA/" >> "$GITHUB_STEP_SUMMARY"
