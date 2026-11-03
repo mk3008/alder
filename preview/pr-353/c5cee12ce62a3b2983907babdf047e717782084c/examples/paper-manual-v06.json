@@ -1,0 +1,14 @@
+{
+  "format":"alder-document-package","formatVersion":"0.6","revision":"sample-1",
+  "documents":[{
+    "id":"bd-manual","schemaVersion":"0.5","kind":"businessDesign","revision":"bd-1","title":"紙からメモへの転記","preface":"合成例。紙は目視し、対象システムは紙へアクセスしない。","scope":"",
+    "objects":[{"id":"paper","name":"紙","scope":false,"icon":"file-text","information":[{"id":"content-info","name":"記載内容","description":"紙に記載された内容"}]},{"id":"memo","name":"メモ","scope":false,"icon":"file-text","information":[]}],
+    "roles":[{"id":"worker","name":"作業者","color":"#8b5cf6"}],
+    "activities":[{"id":"copy","name":"記載内容を転記する","scope":false,"why":"内容をメモへ写す","when":"転記が必要なとき","where":"規定なし","who":{"kind":"role","roleId":"worker"},"procedure":{"steps":[
+      {"id":"read","action":"読む","method":"目視","whatDataIds":["content"],"obligation":"required","appliesWhen":null,"effect":null,"parties":{"from":{"kind":"who"},"to":{"kind":"object","objectId":"paper"}},"exchange":{"kind":"interaction","phase":"not-applicable","direction":"input","objectId":"paper","dataIds":["content"],"relationId":"paper-in","pairedStepId":null}},
+      {"id":"write","action":"書く","method":"手書き","whatDataIds":["content"],"obligation":"required","appliesWhen":null,"effect":null,"parties":{"from":{"kind":"who"},"to":{"kind":"object","objectId":"memo"}},"exchange":{"kind":"interaction","phase":"not-applicable","direction":"output","objectId":"memo","dataIds":["content"],"relationId":"memo-out","pairedStepId":null}}
+    ],"orderRules":[]},"results":[{"id":"result","text":"記載内容をメモへ転記した"}],"problem":null,"painLevel":null}],
+    "data":[{"id":"content","name":"記載内容","items":[{"informationId":"content-info","condition":null}]}],
+    "relations":[{"id":"paper-in","kind":"input","fromId":"paper","toId":"copy"},{"id":"memo-out","kind":"output","fromId":"copy","toId":"memo"}],"exceptions":[],"findings":[]
+  }],"sources":[],"externalDocuments":[],"diagnostics":[]
+}
