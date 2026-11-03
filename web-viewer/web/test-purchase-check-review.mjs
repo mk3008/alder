@@ -32,14 +32,14 @@ try{
   const activityId=view.activityId,visible=new Set();
   for(const ref of view.testSpecificationFunctions??[]){
    const group=model.reviewGroups.find(g=>g.id===ref.groupId),cap=group.capabilities.find(c=>c.id===ref.capabilityId);
-   const key=`fn:${activityId}:${group.id}:${cap.id}`,button=entry('tests:'+key);assert(button,`missing function ${ref.name}`);button.click();
-   const picker=()=>$('#tests-workspace select'),expected=cap.samples.filter(sample=>sample.checkIds.some(id=>doc.index.some(row=>row.activityId===activityId&&row.checkIds.includes(id))));
+   const key=`fn:${activityId}:${group.id}:${cap.id}`,button=entry('tests:activity:'+activityId);assert(button,`missing Activity ${activityId}`);button.click();
+   const panel=()=>[...$('#tests-workspace').querySelectorAll('.activity-test-samples')].find(node=>node.dataset.functionKey===key),picker=()=>panel()?.querySelector('select'),expected=cap.samples.filter(sample=>sample.checkIds.some(id=>doc.index.some(row=>row.activityId===activityId&&row.checkIds.includes(id))));assert(panel(),`missing function ${ref.name}`);
    assert.deepEqual([...picker().options].map(option=>option.value),expected.map(sample=>sample.id));
    for(const sample of expected){
-    picker().value=sample.id;picker().dispatchEvent(new w.Event('change'));const panel=$('#tests-workspace');assert.equal(panel.querySelector('[data-data-example]').dataset.dataExample,sample.id);
-    const cards=[...panel.querySelectorAll('[data-element-id]')];assert.deepEqual(cards.map(card=>card.dataset.elementId),sample.checkIds);
+    picker().value=sample.id;picker().dispatchEvent(new w.Event('change'));const selected=panel();assert.equal(selected.querySelector('[data-data-example]').dataset.dataExample,sample.id);
+    const cards=[...selected.querySelectorAll('[data-element-id]')];assert.deepEqual(cards.map(card=>card.dataset.elementId),sample.checkIds);
     for(const card of cards){const check=byId.get(card.dataset.elementId);assert.match(card.textContent,new RegExp(check.checkId));assert(card.textContent.includes(check.fields.condition[0].value));assert(card.textContent.includes(check.fields.expectedResult[0].value));visible.add(check.id);seen.add(check.id);}
-    assert(panel.querySelector('table'),'the sample has a visible table');scenes++;
+    assert(selected.querySelector('table'),'the sample has a table');scenes++;
    }
   }
   const expectedIds=doc.index.filter(row=>row.activityId===activityId).flatMap(row=>row.checkIds);assert.deepEqual([...visible].sort(),[...new Set(expectedIds)].sort(),`activity ${activityId} loses no Check`);
@@ -47,6 +47,6 @@ try{
  }
  assert.deepEqual([...seen].sort(),doc.items.map(item=>item.id).sort());assert.equal(scenes,31);
  const apply=bd.activities.find(a=>a.name==='備品購入を申請する').id;
- const key=cap=>`tests:fn:${apply}:group-request:${cap}`;entry(key('save-draft')).click();assert.equal($('#tests-workspace select').options.length,4);entry(key('submit-request')).click();assert.equal($('#tests-workspace select').options.length,4);
+ entry('tests:activity:'+apply).click();const samplePanel=cap=>[...$('#tests-workspace').querySelectorAll('.activity-test-samples')].find(node=>node.dataset.functionKey===`fn:${apply}:group-request:${cap}`);assert.equal(samplePanel('save-draft').querySelector('select').options.length,4);assert.equal(samplePanel('submit-request').querySelector('select').options.length,4);
  console.log(JSON.stringify({checks:seen.size,scenes,activities:bd.activities.length,originalScenes:originals.length,scope:'actual purchase review JSON in Viewer DOM; business approval is not inferred'}));
 }finally{w.close();}

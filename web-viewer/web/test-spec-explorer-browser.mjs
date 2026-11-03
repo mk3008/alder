@@ -4,11 +4,9 @@ import {openExplorerGroup} from './explorer-browser.mjs';
 export async function showTestChecks(page,activityId){
  if(!await page.locator('#design-explorer').isVisible())await page.locator('#node-list-toggle').click();
  await openExplorerGroup(page,'tests');
- if(activityId){
-  const group=page.locator('[data-explorer-key='+JSON.stringify('group:tests-activity-'+activityId)+']');
-  if(await group.getAttribute('aria-expanded')==='false')await group.click();
- }
- await page.locator('[data-explorer-key='+JSON.stringify(activityId?'tests:checks:'+activityId:'tests:@unassigned')+']').click();
+ const item=activityId?page.locator('[data-explorer-key='+JSON.stringify('tests:activity:'+activityId)+']'):page.locator('#explorer-tests .explorer-item').first();
+ await item.click();
+ if(!activityId)await page.locator('.activity-test-unassigned > summary').click();
  if(await page.evaluate(()=>innerWidth<=800)&&await page.locator('#design-explorer').isVisible())await page.locator('#design-explorer .shell-heading button').click();
 }
 export async function showBusinessOverview(page){

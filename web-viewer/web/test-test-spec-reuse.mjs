@@ -19,9 +19,10 @@ try{
  const value=(node,label)=>{const heading=[...node.querySelectorAll('h4')].find(h=>h.textContent===label);return heading?.nextElementSibling?.textContent;};
  const original=pkg.documents.find(d=>d.kind==='checkItems').items.find(i=>i.checkId==='SAMPLE-01');
  const before=[original.fields.condition,original.fields.expectedResult].map(runs=>runs.map(run=>run.value??'').join(''));assert(before.every(Boolean));
- entry('tests:checks:'+activity.id).click();await until(()=>!!$('#tests-workspace [data-check-id="SAMPLE-01"]'));
+ entry('tests:activity:'+activity.id).click();await until(()=>!!$('#tests-workspace [data-check-id="SAMPLE-01"]'));
  const displayed=$('#tests-workspace [data-check-id="SAMPLE-01"]');assert.deepEqual(['条件','期待結果'].map(label=>value(displayed,label)),before,'the requester view preserves the existing condition and expected result');
- assert.match(displayed.querySelector('h3').textContent,/^SAMPLE-01 · /,'the human-facing Check ID identifies the item');
+ assert.equal(displayed.querySelector('.activity-test-check-id').textContent,'SAMPLE-01','the human-facing Check ID identifies the item');
+ assert.equal(displayed.querySelector('h3').textContent,original.title);
  assert.doesNotMatch(displayed.textContent,/人間レビュー状態|テスト証拠/,'internal metadata stays out of requester content');
  entry('business:'+activity.id).click();assert.equal($('#formattedMarkdownDrawer').hidden,false,'visiting the menu leaves the global drawer preference intact');
  console.log(JSON.stringify({passed:['existing Check rendering','last menu entry','global drawer state'],scope:'actual app DOM'}));

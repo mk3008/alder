@@ -42,13 +42,13 @@ try{
    entry('concept:'+group.id).click();if($('.concept-related').hidden)$('#drawer').click();
    const button=$(`[data-capability="${capability.id}"] [data-sample="${sample.id}"]`);assert(button&&!button.disabled,sample.id);button.click();
    assert.equal($('#app').dataset.workspaceArea,'tests',sample.id);assert($('.concept-related').hidden,'test specification uses the main area');
-   const url=new URL(w.location.href),page=$('#tests-workspace');
+   const url=new URL(w.location.href),page=$('#tests-workspace'),samplePanel=[...page.querySelectorAll('.activity-test-samples')].find(node=>node.dataset.functionKey===key);
    if(spec.sampleIds.includes(sample.id)){
-    assert.match(button.textContent,/^サンプル：/);assert.equal(url.searchParams.get('spec'),key);assert.equal(url.searchParams.get('dataExample'),sample.id);
-    const current=page.querySelector('[data-data-example]');assert(current,sample.id);assert.equal(current.dataset.dataExample,sample.id);assert(current.textContent.includes(sample.name),sample.id+' must show the selected scene');
+    assert.match(button.textContent,/^サンプル：/);assert.equal(url.searchParams.get('spec'),'activity:'+view.activityId);assert.equal(url.searchParams.get('specPart'),key);assert.equal(url.searchParams.get('dataExample'),sample.id);
+    const current=samplePanel?.querySelector('[data-data-example]');assert(current,sample.id);assert.equal(current.dataset.dataExample,sample.id);assert(current.textContent.includes(sample.name),sample.id+' must show the selected scene');
     for(const id of sample.checkIds)assert(page.textContent.includes(checkId.get(id)),sample.id+' does not show '+id);resultCount++;
    }else{
-    assert.match(button.textContent,/^可否判定：/);assert.equal(url.searchParams.get('spec'),'decision:'+key);assert.equal(url.searchParams.has('dataExample'),false);assert(page.querySelector('.decision-examples'),sample.id);assert.equal(page.querySelector('[data-data-example]'),null);
+    assert.match(button.textContent,/^可否判定：/);assert.equal(url.searchParams.get('spec'),'activity:'+view.activityId);assert.equal(url.searchParams.get('specPart'),'decision:'+key);assert.equal(url.searchParams.has('dataExample'),false);assert(page.querySelector('.decision-examples'),sample.id);
     assert(sample.checkIds.some(id=>page.textContent.includes(checkId.get(id))),sample.id+' does not show its decision Check');decisionCount++;
    }
   }
@@ -56,14 +56,14 @@ try{
  assert.equal(resultCount,20);assert.equal(decisionCount,13);coverage.push('SUBSYSTEM-SPEC-001','SUBSYSTEM-SPEC-002');
  // Opening a specific scene overrides the previous selection without duplicating the tab.
  entry('concept:group-request').click();if($('.concept-related').hidden)$('#drawer').click();
- $('[data-sample=request-draft-approved]').click();assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,'request-draft-approved');
- const activeURL=w.location.href;entry('concept:group-request').click();$('[data-sample=request-draft-prepared]').click();assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,'request-draft-prepared');
+ $('[data-sample=request-draft-approved]').click();const focused=()=>[...$('#tests-workspace').querySelectorAll('.activity-test-samples')].find(node=>node.open);assert.equal(focused().querySelector('[data-data-example]').dataset.dataExample,'request-draft-approved');
+ const activeURL=w.location.href;entry('concept:group-request').click();$('[data-sample=request-draft-prepared]').click();assert.equal(focused().querySelector('[data-data-example]').dataset.dataExample,'request-draft-prepared');
  const draftView=model.presentation.activityViews.find(v=>v.testSpecificationFunctions?.some(f=>f.groupId==='group-request'&&f.capabilityId==='save-draft'));
- const draftTab=`spec-tab-fn:${draftView.activityId}:group-request:save-draft`;
+ const draftTab=`spec-tab-activity:${draftView.activityId}`;
  assert.equal([...w.document.querySelectorAll('.spec-tabs button')].filter(button=>button.id===draftTab).length,1,'the existing result tab is reused');
  // The saved test URL restores its exact sample, while Back returns to the original graph.
- w.history.pushState({},'',activeURL);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,'request-draft-approved');
- w.history.back();await new Promise(resolve=>w.addEventListener('popstate',resolve,{once:true}));assert.equal($('#app').dataset.workspaceArea,'tests');assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,'request-draft-prepared');
+ w.history.pushState({},'',activeURL);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(focused().querySelector('[data-data-example]').dataset.dataExample,'request-draft-approved');
+ w.history.back();await new Promise(resolve=>w.addEventListener('popstate',resolve,{once:true}));assert.equal($('#app').dataset.workspaceArea,'tests');assert.equal(focused().querySelector('[data-data-example]').dataset.dataExample,'request-draft-prepared');
  w.history.back();await new Promise(resolve=>w.addEventListener('popstate',resolve,{once:true}));assert.equal($('#app').dataset.workspaceArea,'concept');assert.equal($('.concept-related').hidden,false);
  coverage.push('SUBSYSTEM-SPEC-004');
 }finally{w.close();}

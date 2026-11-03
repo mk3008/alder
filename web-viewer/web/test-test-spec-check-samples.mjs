@@ -53,22 +53,22 @@ async function open(script){
  return {w,$,entry:id=>$('[data-explorer-key="'+id+'"]')};
 }
 try{
- const app=await open(code);app.entry('tests:'+key).click();const root=()=>app.$('#tests-workspace'),picker=()=>root().querySelector('select');
+ const app=await open(code);app.entry('tests:activity:'+apply).click();const root=()=>app.$('#tests-workspace'),panel=()=>[...root().querySelectorAll('.activity-test-samples')].find(node=>node.dataset.functionKey===key),picker=()=>panel().querySelector('select');assert(panel());panel().open=true;
  assert.equal(app.entry('tests:checks:'+apply),null);assert.equal(app.entry('tests:remaining:'+apply),null);
- assert.match(root().textContent,/下書き保存/);assert.match(root().textContent,/入力途中の下書きを保存できる/);assert.match(root().textContent,/確認が必要です/);assert.match(root().textContent,/入力途中の内容を下書きとして保存できる/);assert.match(root().textContent,/参照された共通の期待結果/);assert.match(root().textContent,/結果例/);
- assert.equal(root().querySelector('[data-data-example]').dataset.dataExample,'request-draft');covered.add('SPEC-CHECK-LINK-002');
+ assert.match(panel().textContent,/下書き保存/);assert.match(panel().textContent,/入力途中の下書きを保存できる/);assert.match(panel().textContent,/確認が必要です/);assert.match(panel().textContent,/入力途中の内容を下書きとして保存できる/);assert.match(panel().textContent,/参照された共通の期待結果/);assert.match(panel().textContent,/結果例/);
+ assert.equal(panel().querySelector('[data-data-example]').dataset.dataExample,'request-draft');covered.add('SPEC-CHECK-LINK-002');
  const sharedCheck=checkDoc.items.find(item=>item.id==='preview-check-draft');
- assert.equal(root().querySelectorAll('[data-check-id]').length,2);assert.match(root().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));assert.equal(second.reviewState,'要確認');covered.add('SPEC-CHECK-LINK-003');
+ assert.equal(panel().querySelectorAll('[data-check-id]').length,2);assert.match(panel().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));assert.equal(second.reviewState,'要確認');covered.add('SPEC-CHECK-LINK-003');
  assert.deepEqual([...picker().options].map(o=>o.value),['request-draft','fixture-second-scene']);
- assert(root().querySelector('td[data-sample-key]'));picker().value='fixture-second-scene';picker().dispatchEvent(new app.w.Event('change'));
- assert.equal(root().querySelector('[data-data-example]').dataset.dataExample,'fixture-second-scene');assert.equal(root().querySelectorAll('[data-check-id]').length,1);assert.match(root().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));covered.add('SPEC-CHECK-LINK-005');
+ assert(panel().querySelector('td[data-sample-key]'));picker().value='fixture-second-scene';picker().dispatchEvent(new app.w.Event('change'));
+ assert.equal(panel().querySelector('[data-data-example]').dataset.dataExample,'fixture-second-scene');assert.equal(panel().querySelectorAll('[data-check-id]').length,1);assert.match(panel().querySelector(`[data-check-id="${sharedCheck.checkId}"] h3`).textContent,new RegExp(`^${sharedCheck.checkId} · `));covered.add('SPEC-CHECK-LINK-005');
  menuCovered.add('SPEC-MENU-DEDUP-001');
- const withExtra=await open(mixedCode),other=withExtra.entry('tests:remaining:'+apply);assert(other);assert.equal(other.textContent,'その他');other.click();
- assert.match(withExtra.$('#tests-workspace').textContent,/業務共通の説明/);assert.match(withExtra.$('#tests-workspace').textContent,/独立した期待結果/);assert(withExtra.$('#tests-workspace [data-check-id="FIXTURE-UNLINKED"]'));assert.equal(withExtra.$('#tests-workspace [data-check-id="PREVIEW-01"]'),null);menuCovered.add('SPEC-MENU-DEDUP-002');
+ const withExtra=await open(mixedCode),other=withExtra.entry('tests:activity:'+apply);assert(other);other.click();
+ assert.match(withExtra.$('#tests-workspace').textContent,/業務共通の説明/);assert.match(withExtra.$('#tests-workspace').textContent,/独立した期待結果/);assert(withExtra.$('#tests-workspace [data-check-id="FIXTURE-UNLINKED"]'));assert(withExtra.$('#tests-workspace .activity-test-check[data-check-id="PREVIEW-01"]'));menuCovered.add('SPEC-MENU-DEDUP-002');
  const old=await open(oldCode);assert.equal(old.entry('tests:'+key),null);assert(!legacy.documents.some(d=>d.kind==='checkItems'));covered.add('SPEC-CHECK-LINK-004');
- const oldCheck=await open(unboundCode);oldCheck.entry('tests:checks:'+apply).click();assert(oldCheck.$('#tests-workspace [data-check-id="PREVIEW-01"]'));const details=[...oldCheck.$('#tests-workspace').querySelectorAll('details')].find(item=>item.querySelector('summary')?.textContent==='未接続の例');assert(details);details.open=true;details.dispatchEvent(new oldCheck.w.Event('toggle'));assert.doesNotMatch(oldCheck.$('#tests-workspace').textContent,/表示されてはいけない孤立例/);menuCovered.add('SPEC-MENU-DEDUP-003');
+ const oldCheck=await open(unboundCode);oldCheck.entry('tests:activity:'+apply).click();assert(oldCheck.$('#tests-workspace [data-check-id="PREVIEW-01"]'));assert.doesNotMatch(oldCheck.$('#tests-workspace').textContent,/表示されてはいけない孤立例/);menuCovered.add('SPEC-MENU-DEDUP-003');
  app.w.history.pushState({},'',`?view=tests&spec=${encodeURIComponent('checks:'+apply)}`);app.w.dispatchEvent(new app.w.PopStateEvent('popstate'));assert(root().querySelector('[data-check-id="PREVIEW-01"]'));assert.equal(app.entry('tests:checks:'+apply),null);menuCovered.add('SPEC-MENU-DEDUP-004');
  assert.equal(pkg.documents.filter(doc=>doc.kind==='businessDesign').length,1);assert.equal(pkg.documents.filter(doc=>doc.kind==='checkItems').length,1);assert.equal(checkDoc.items.find(item=>item.id===second.id).reviewState,'要確認');covered.add('SPEC-CHECK-LINK-006');
  assert.deepEqual([...covered].sort(),expected.sort());assert.equal(hash(readFileSync(authorityPath)),authHash);assert.deepEqual([...menuCovered].sort(),menuExpected.sort());assert.equal(hash(readFileSync(menuPath)),menuHash);
- console.log(JSON.stringify({passed:[...covered,...menuCovered],scope:'actual DOM with technical Check fixture; semantic correspondence and human review not established'}));
+ console.log(JSON.stringify({passed:[...covered,...menuCovered].filter(id=>!['SPEC-MENU-DEDUP-001','SPEC-MENU-DEDUP-002'].includes(id)),partiallySuperseded:{ids:['SPEC-MENU-DEDUP-001','SPEC-MENU-DEDUP-002'],portion:'separate function and other menus',authority:'verification/activity-test-spec.check-items.json'},scope:'actual DOM with technical Check fixture; semantic correspondence and human review not established'}));
 }finally{for(const w of windows)w.close();}

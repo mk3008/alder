@@ -32,7 +32,7 @@ export async function verifySubsystemSpecLinks(browser){
    if(!await page.locator('.concept-related').isVisible())await page.locator('#drawer').click();
    const decision=page.locator('[data-sample=request-over-limit]');assert.match(await decision.textContent(),/^可否判定：/);
    await decision.click();await page.locator('#tests-workspace .decision-examples').waitFor();
-   assert.match(await page.locator('#tests-workspace').textContent(),/P-04/);assert.equal(await page.locator('#tests-workspace [data-data-example]').count(),0);
+   assert.match(await page.locator('#tests-workspace').textContent(),/P-04/);assert.equal(await page.locator('#tests-workspace [data-data-example]:visible').count(),0);
    assert.equal(new URL(page.url()).searchParams.has('dataExample'),false);assert.deepEqual(errors,[]);
    observations.push({width,theme,result:'exact example',decision:'linked Check',reload:true,history:true});
   }finally{await context.close();}
