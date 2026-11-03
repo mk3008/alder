@@ -1,0 +1,10 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "構造化Procedureの手順表で、内容を損なわずに余白と重複表示を減らす。",
+  "source": "2026-11-03の本人によるPR #353ベータ画面の指摘",
+  "checks": [
+    {"id":"PROCEDURE-TABLE-001","condition":"短いFrom・ToとDataを含む手順を広幅・狭幅で開く","guarantee":"列と行の不要な余白を抑え、見出しと内容を読み取れ、横スクロールとキーボード操作を維持する。","reason":"一覧で手順を確認しやすくする。","verification":"実ブラウザーで幅・行高・横スクロールと長い値の表示を確認する。"},
+    {"id":"PROCEDURE-TABLE-002","condition":"DataとInformationの名前が同じ手順、複数Dataや異なる対象／受渡しを含む手順を表示する","guarantee":"Dataを箇条書きで示し、同じ名前や説明を初期表示で重複させない。Informationの内訳・条件・説明は必要なとき確認でき、対象と受渡しの違いを保つ。","reason":"Dataの意味を確認しながら冗長な表現を減らす。","verification":"通常・複数Data・未決・対象／受渡し相違と詳細の開閉を検証する。"},
+    {"id":"PROCEDURE-TABLE-003","condition":"必須の通常手順、任意・条件・方法・CRUD・Request/Response・異なるData方向を持つ手順を表示する","guarantee":"通常手順のActionは動作名を中心に簡潔に示す。例外的な属性と、From／Toから分からない受渡しの相手や方向は確認できる。","reason":"重複を避けつつ操作とData方向の違いを見落とさない。","verification":"通常手順と目視読取、任意・条件・方法・CRUD・Request/Responseの例を照合する。"}
+  ]
+}
