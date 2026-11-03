@@ -279,3 +279,8 @@ header #preview-badge{order:-1;flex-basis:100%;max-width:none;font-size:11px;pad
 .json-example{max-width:100%;overflow:auto;margin:8px 0}
 .json-example table{border-collapse:collapse;min-width:420px;width:100%}
 .json-example th,.json-example td{border:1px solid #8886;padding:6px;text-align:left;vertical-align:top}
+
+.node.scope-undecided{border-style:dashed}
+.markdown [data-procedure-table]{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
+.markdown [data-procedure-table] th,.markdown [data-procedure-table] td{padding:5px 8px;border:1px solid var(--subtle);vertical-align:top}
+.markdown [data-procedure-table] td small{display:block;white-space:normal}

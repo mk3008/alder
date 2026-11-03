@@ -2808,7 +2808,8 @@
                                     {
                                       "enum": [
                                         "request",
-                                        "response"
+                                        "response",
+                                        "not-applicable"
                                       ]
                                     },
                                     {
@@ -2903,6 +2904,104 @@
                               "additionalProperties": false
                             }
                           ]
+                        },
+                        "parties": {
+                          "type": "object",
+                          "properties": {
+                            "from": {
+                              "anyOf": [
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "kind": {
+                                          "enum": [
+                                            "who"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "kind"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "kind": {
+                                          "enum": [
+                                            "object"
+                                          ]
+                                        },
+                                        "objectId": {
+                                          "type": "string",
+                                          "pattern": "^[A-Za-z0-9_-]+$"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "objectId"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "to": {
+                              "anyOf": [
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "kind": {
+                                          "enum": [
+                                            "who"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "kind"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "kind": {
+                                          "enum": [
+                                            "object"
+                                          ]
+                                        },
+                                        "objectId": {
+                                          "type": "string",
+                                          "pattern": "^[A-Za-z0-9_-]+$"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "objectId"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "from",
+                            "to"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -3218,6 +3317,120 @@
               },
               "description": {
                 "type": "string"
+              },
+              "continuity": {
+                "type": "object",
+                "properties": {
+                  "trigger": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "onInterrupt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "outcome": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "resume",
+                          "continue",
+                          "end"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "resumeCondition": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "resumeAction": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "interruptedAtStepId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "resumeAtStepId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]+$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "retainedDataIds": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]+$"
+                        }
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "trigger",
+                  "onInterrupt",
+                  "outcome",
+                  "resumeCondition",
+                  "resumeAction",
+                  "interruptedAtStepId",
+                  "resumeAtStepId",
+                  "retainedDataIds"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [

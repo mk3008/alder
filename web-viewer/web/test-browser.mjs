@@ -7,6 +7,8 @@ import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
 import {verifyNamedPlans} from './test-named-plans-browser.mjs';
+import {verifyJSON05Reintegration} from './test-json-05-reintegration-browser.mjs';
+import {verifyProcedureContinuity} from './test-procedure-continuity-browser.mjs';
 import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
 import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -67,6 +69,8 @@ const cases=[
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
    {name:'namedPlans',run:()=>verifyNamedPlans(browser)},
+   {name:'json05Reintegration',run:()=>verifyJSON05Reintegration(browser)},
+   {name:'procedureContinuity',run:()=>verifyProcedureContinuity(browser)},
    {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
    {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},
    {name:'activityWorkspace',run:()=>verifyActivityWorkspace(browser)},
