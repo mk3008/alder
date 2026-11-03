@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>手順とチェックの検討例</title>
+  <style>
+    :root{font-family:system-ui,"Noto Sans JP",sans-serif;color:#202830;background:#f4f7fa}
+    body{margin:0}header{background:#163e68;color:white;padding:12px 20px}
+    main{max-width:960px;margin:auto;padding:18px}h1{font-size:20px;margin:0}
+    h2{font-size:18px;margin:22px 0 8px}p{margin:8px 0;line-height:1.5}
+    .note{color:#56616d;font-size:14px}.scroll{overflow-x:auto}
+    table{border-collapse:collapse;background:white;width:max-content;max-width:100%}
+    th,td{border:1px solid #d0d9e2;padding:7px 10px;text-align:left;vertical-align:top}
+    th{background:#edf3f8;white-space:nowrap}td{min-width:4em}
+    td.data{min-width:10em}td.action{min-width:6em}a{color:#146597}
+    .decision th,.decision td{min-width:0}
+    .decision .result{border-left:2px solid #8193a5}
+    .decision .check-id{white-space:nowrap;font-size:14px}
+    .error{color:#a22424}.success{color:#146044}
+    @media(max-width:600px){header{padding:10px 12px}main{padding:12px}th,td{padding:6px 8px}}
+  </style>
+</head>
+<body>
+  <header><h1>試合の開始を記録する</h1></header>
+  <main>
+    <p class="note">検討用モック。手順とチェックを同じ聞き取りの中で記録する例です。</p>
+    <h2>手順</h2>
+    <div class="scroll"><table aria-label="手順"><thead><tr><th>From</th><th>To</th><th>Data</th><th>Action</th></tr></thead><tbody id="steps"></tbody></table></div>
+    <h2 id="checks-title">チェック項目（※1）</h2>
+    <p class="note">上から順に判定し、最初に当てはまる行を見ます。</p>
+    <div class="scroll"><table class="decision" aria-label="チェック項目"><thead><tr><th scope="colgroup" colspan="2">条件</th><th class="result" scope="col" rowspan="2">結果</th><th scope="col" rowspan="2">Check ID</th></tr><tr><th scope="col">参加者数</th><th scope="col">同名の人</th></tr></thead><tbody id="checks"></tbody></table></div>
+    <p class="note" id="start-effects"></p>
+    <p class="note">エラーの表示方法・文言と、同名の照合方法は未確認です。</p>
+    <p class="note" id="status" role="status"></p>
+  </main>
+  <script type="module">
+    const status=document.getElementById('status');
+    try {
+      const response=await fetch('./issue-340-molkky.json');
+      if(!response.ok)throw Error('データを読み込めませんでした。');
+      const source=await response.json();
+      const names=new Map(source.parties.map(item=>[item.id,item.name]));
+      const data=new Map(source.data.map(item=>[item.id,item.name]));
+      const addCell=(row,value,css)=>{const cell=document.createElement('td');cell.textContent=value;if(css)cell.className=css;row.append(cell);return cell;};
+      for(const step of source.steps){
+        const row=document.createElement('tr');
+        addCell(row,names.get(step.from));addCell(row,names.get(step.to));
+        const cell=addCell(row,data.get(step.dataId),'data');
+        if(step.checkIds.length){const link=document.createElement('a');link.href='#checks-title';link.textContent='（※1）';cell.append(link);}
+        addCell(row,step.action,'action');document.getElementById('steps').append(row);
+      }
+      // For this example the participant count is the list length. Only use
+      // the 2-or-more / otherwise grouping when the source checks establish it.
+      const few=source.checks.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='count-in'&&JSON.stringify(c.conditions[0].values)==='[0,1]');
+      const repeated=source.checks.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='duplicates-exist'&&c.conditions[0].value===true);
+      const start=source.checks.find(c=>c.conditions.length===2&&c.conditions.some(x=>x.predicate==='count-at-least'&&x.value===2)&&c.conditions.some(x=>x.predicate==='duplicates-exist'&&x.value===false));
+      const startCount=start?.conditions.find(c=>c.predicate==='count-at-least'),startDuplicate=start?.conditions.find(c=>c.predicate==='duplicates-exist');
+      const grouped=source.checks.length===3&&few&&repeated&&start&&few.conditions[0].dataId===startCount.dataId&&repeated.conditions[0].dataId===startCount.dataId&&startDuplicate.dataId===startCount.dataId&&repeated.conditions[0].fieldId===startDuplicate.fieldId;
+      const ordered=grouped?[repeated,start,few]:source.checks;
+      for(const check of ordered){
+        const row=document.createElement('tr'),count=check.conditions.find(c=>c.predicate==='count-in'||c.predicate==='count-at-least'),duplicate=check.conditions.find(c=>c.predicate==='duplicates-exist');
+        const countLabel=grouped?(check===few?'それ以外':'2名以上'):(count?(count.predicate==='count-in'?count.values.join('または')+'名':count.value+'名以上'):'不問');
+        addCell(row,countLabel);
+        addCell(row,duplicate?(grouped&&check===start?'それ以外':(duplicate.value?'いる':'いない')):'不問');
+        const score=check.expected.effects.find(effect=>effect.action==='set-initial-score');
+        const result=check.expected.outcome==='error'?'エラー':'正常';
+        if(check.expected.outcome==='started'){
+          const record=check.expected.effects.find(effect=>effect.action==='record');
+          const fields=record.fieldIds.map(id=>source.data.find(item=>item.id===record.dataId).fields.find(field=>field.id===id).name);
+          document.getElementById('start-effects').textContent=`開始時の記録：${fields.join('、')}、各自${score.value}点。`;
+        }
+        addCell(row,result,`result ${check.expected.outcome==='error'?'error':'success'}`);
+        addCell(row,check.id,'check-id');document.getElementById('checks').append(row);
+      }
+    } catch(error) {status.textContent=error.message;}
+  </script>
+</body>
+</html>
