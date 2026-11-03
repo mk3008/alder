@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {validate} from './core.mjs';
 import {guardAuthoring,meaningHash} from './authoring.mjs';
+import {validateNamedPlans} from './named-plans.mjs';
 
 const read=name=>readFileSync(new URL(name,import.meta.url),'utf8');
 const authority=read('./verification/procedure-dependencies.check-items.json');
@@ -22,6 +23,11 @@ test('DEP-001: explicit prerequisites permit independent reorder and reject a re
  const independent=copy(),a=activity(independent),extra=structuredClone(step(independent,'validate'));
  Object.assign(extra,{id:'other-review',action:'別項目を確認する',decisionIds:[],dependsOn:[prereq('receive')]});
  a.procedure.steps.splice(2,0,extra);assert.doesNotThrow(()=>validate(independent));swap(a.procedure.steps,'validate','other-review');assert.doesNotThrow(()=>validate(independent));
+});
+test('DEP-001/003: named plans use the same dependency validation',()=>{
+ const bundle={format:'alder-named-plans',formatVersion:'1.0',plans:[{id:'plan',name:'点数',package:copy()}]};
+ assert.doesNotThrow(()=>validateNamedPlans(bundle));swap(activity(bundle.plans[0].package).procedure.steps,'validate','calculate');
+ assert.throws(()=>validateNamedPlans(bundle),/contradicts prerequisite/);
 });
 test('DEP-002: absence/null are unknown, empty is explicit, and a later decision link only raises a review diagnostic',()=>{
  const old=JSON.parse(read('./examples/molkky-decisions-v07.json')),before=JSON.stringify(old);assert.doesNotThrow(()=>validate(old));assert.equal(JSON.stringify(old),before);
