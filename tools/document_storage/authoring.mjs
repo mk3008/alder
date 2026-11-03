@@ -28,8 +28,20 @@ export function checkMeaning(pkg,item){
  const fields=primary(item.fields);visit(fields);const section=doc.sections.find(s=>s.id===item.sectionId);visit(section.preamble);
  const base={title:item.title,fields,sectionPreamble:section.preamble,dependencies:[...seen].sort(([a],[b])=>a.localeCompare(b)).map(([,e])=>e)};
  const bd=pkg.documents.find(d=>d.kind==='businessDesign'&&d.id===doc.basedOn.documentId);
- const businessDecisions=(bd?.activities??[]).flatMap(activity=>(activity.decisions??[]).filter(decision=>decision.rows.some(row=>row.checkRefs.some(ref=>ref.checkId===item.id))).map(decision=>({activityId:activity.id,id:decision.id,title:decision.title,kind:decision.kind,appliesWhen:decision.appliesWhen,axes:decision.axes,rows:decision.rows.map(row=>({id:row.id,conditions:row.conditions,result:row.result,coverage:row.checkRefs.find(ref=>ref.checkId===item.id)?.coverage??null}))})));
- return businessDecisions.length?{...base,businessDecisions}:base;
+ const businessDecisions=(bd?.activities??[]).flatMap(activity=>{
+  const decisions=activity.decisions??[],included=new Set(),pending=decisions.filter(decision=>decision.rows.some(row=>row.checkRefs.some(ref=>ref.checkId===item.id)));
+  while(pending.length){const decision=pending.pop();if(included.has(decision.id))continue;included.add(decision.id);if(decision.appliesWhen){const dependency=decisions.find(value=>value.id===decision.appliesWhen.decisionId);if(dependency)pending.push(dependency);}}
+  return decisions.filter(decision=>included.has(decision.id)).map(decision=>({activityId:activity.id,id:decision.id,title:decision.title,kind:decision.kind,note:decision.note,appliesWhen:decision.appliesWhen,axes:decision.axes,rows:decision.rows.map(row=>({id:row.id,conditions:row.conditions,result:row.result,coverage:row.checkRefs.find(ref=>ref.checkId===item.id)?.coverage??null}))}));
+ });
+ if(!businessDecisions.length)return base;
+ const dataIds=new Set(businessDecisions.flatMap(decision=>[...decision.axes.flatMap(axis=>axis.dataIds),...decision.rows.flatMap(row=>row.result.dataIds)]));
+ const exceptionIds=new Set(businessDecisions.flatMap(decision=>decision.rows.flatMap(row=>row.result.exceptionIds)));
+ const businessData=(bd.data??[]).filter(data=>dataIds.has(data.id)).map(data=>({...data,items:data.items.map(item=>{
+  const object=(bd.objects??[]).find(value=>value.information.some(info=>typeof info!=='string'&&info.id===item.informationId));
+  return {...item,information:object?.information.find(info=>typeof info!=='string'&&info.id===item.informationId),object:object?{id:object.id,name:object.name}:null};
+ })}));
+ const businessExceptions=(bd.exceptions??[]).filter(exception=>exceptionIds.has(exception.id));
+ return {...base,businessDecisions,businessData,businessExceptions};
 }
 export const meaningHash=(pkg,item)=>fingerprint(checkMeaning(pkg,item));
 function confirmedBD(pkg,check,operation){

@@ -44,10 +44,17 @@ test('business changes require new review for linked confirmed checks, not unrel
  next.revision='changed-package';bd(next).revision='changed-business';checks(next).revision='changed-checks';checks(next).basedOn.revision=bd(next).revision;decision(next,1).rows[0].result.text='別の点数';
  const oldItem=checks(prior).items[0],newItem=checks(next).items[0];assert.notEqual(meaningHash(prior,oldItem),meaningHash(next,newItem));
  assert.equal(meaningHash(prior,checks(prior).items[3]),meaningHash(next,checks(next).items[3]));
+ const noteChanged=structuredClone(prior);decision(noteChanged,1).note='各回ではなく合計してから判定する';assert.notEqual(meaningHash(prior,oldItem),meaningHash(noteChanged,checks(noteChanged).items[0]),'changed decision context requires renewed review');
+ const dependencyChanged=structuredClone(prior);for(const row of decision(dependencyChanged).rows.slice(0,2))row.conditions[0].value='1〜11の整数';assert.doesNotThrow(()=>validate(dependencyChanged));assert.notEqual(meaningHash(prior,oldItem),meaningHash(dependencyChanged,checks(dependencyChanged).items[0]),'changed upstream validation requires renewed review');
+ const dataChanged=structuredClone(prior);bd(dataChanged).objects[0].information[0].description='新しい入力情報の意味';assert.notEqual(meaningHash(prior,oldItem),meaningHash(dataChanged,checks(dataChanged).items[0]),'changed decision input Data meaning requires renewed review');
+ const exceptionChanged=structuredClone(prior);bd(exceptionChanged).exceptions[0].description='入力エラーの扱いを変更';assert.notEqual(meaningHash(prior,oldItem),meaningHash(exceptionChanged,checks(exceptionChanged).items[0]),'changed upstream exception requires renewed review');
  const operation={expectedRevision:prior.revision,bdConfirmations:[{documentId:bd(next).id,revision:bd(next).revision,evidence:{source:'test',quote:'test'}}]};
  assert.throws(()=>guardAuthoring(prior,next,operation),/renewed human review/);
  for(const item of checks(next).items.filter(item=>['check-01','check-02','check-03','check-10'].includes(item.id)))item.reviewState='要確認';
  assert.equal(guardAuthoring(prior,next,operation).valid,true);assert.equal(checks(prior).items.every(item=>item.reviewState==='確認済み'),true);
+ dependencyChanged.revision='changed-package';bd(dependencyChanged).revision='changed-business';checks(dependencyChanged).revision='changed-checks';checks(dependencyChanged).basedOn.revision=bd(dependencyChanged).revision;
+ assert.throws(()=>guardAuthoring(prior,dependencyChanged,operation),/renewed human review/);
+ for(const item of checks(dependencyChanged).items.filter(item=>item.id!=='check-05'))item.reviewState='要確認';assert.equal(guardAuthoring(prior,dependencyChanged,operation).valid,true);
 });
 function oldPackage(){const p=clone();p.formatVersion='0.6';bd(p).schemaVersion='0.5';for(const a of bd(p).activities){delete a.decisions;for(const s of a.procedure.steps){delete s.decisionIds;delete s.whenDecision;}}for(const item of checks(p).items)item.fields={guarantee:[{kind:'text',value:'既存の保証'}]};return p;}
 test('0.6 to 0.7 preparation keeps the original and separates dependent human review',()=>{
