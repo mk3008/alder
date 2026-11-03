@@ -29,7 +29,7 @@
               {"id":"invalid-number","conditions":[{"axisId":"axis-numbers","kind":"else"},{"axisId":"axis-duplicate","kind":"any"}],"result":{"kind":"error","text":"入力エラー","dataIds":[],"exceptionIds":["invalid-input"]},"checkRefs":[{"checkId":"check-04","coverage":"full"}]}
             ]
           },
-          {"id":"score-algorithm","title":"点数の計算","kind":"algorithm","note":"入力が有効な場合に、1回以上なら各回ごとに判定します。","appliesWhen":{"decisionId":"input-validation","rowId":"valid"},
+          {"id":"score-algorithm","title":"点数の計算","kind":"algorithm","note":"1回以上なら各回ごとに判定します。","appliesWhen":{"decisionId":"input-validation","rowId":"valid"},
             "axes":[{"id":"axis-throws","name":"投擲回数","dataIds":["throws"],"unit":"回"},{"id":"axis-pins","name":"倒れた本数","dataIds":["throws"],"unit":"本"}],
             "rows":[
               {"id":"zero-pins","conditions":[{"axisId":"axis-throws","kind":"value","operator":"gte","value":1},{"axisId":"axis-pins","kind":"value","operator":"eq","value":0}],"result":{"kind":"value","text":"0点","dataIds":[],"exceptionIds":[]},"checkRefs":[{"checkId":"check-01","coverage":"full"}]},

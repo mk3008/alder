@@ -21,6 +21,9 @@
 .markdown [data-procedure-table][data-business-decisions] th:nth-child(n){width:auto}
 .markdown [data-procedure-table][data-business-decisions] :is(th,td),[data-business-decision-table] :is(th,td){padding:4px 6px;border:1px solid var(--subtle);text-align:left;vertical-align:top;white-space:nowrap}
 .markdown [data-procedure-table][data-business-decisions] th,[data-business-decision-table] th{background:var(--select)}
+.markdown [data-procedure-table][data-business-decisions] .procedure-original{display:inline;margin-left:.25rem}
+.markdown [data-procedure-table][data-business-decisions] .procedure-original>summary{display:inline;cursor:pointer;text-decoration:underline}
+.markdown [data-procedure-table][data-business-decisions] .procedure-original[open]{display:block;margin-left:0}
 [data-business-decision-scroll]{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
 [data-business-decision-table] td[rowspan]{vertical-align:middle}
 [data-business-decision-table] [data-decision-result]{border-left:2px solid var(--line)}
