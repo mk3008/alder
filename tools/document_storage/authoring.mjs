@@ -8,8 +8,8 @@ export const describeDeclaredValue=value=>value===undefined?'<missing>':typeof v
 // This classifies declared versions only; callers must also validate the package.
 export function packageVersionPolicy(pkg,target='package'){
  const format=pkg?.format,formatVersion=pkg?.formatVersion;
- demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.4 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
- const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only-unassessed'};
+ demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4','0.5','0.6'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.6 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
+ const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':formatVersion==='0.6'?'candidate-not-yet-editable':'explicit-only-unassessed'};
 }
 export function requireEditablePackage(pkg,target='package'){
  const policy=packageVersionPolicy(pkg,target);
@@ -79,7 +79,8 @@ export function guardAuthoring(previous,next,operation={}){
    demand(!doc.transitions.some(t=>t.sourceId===prior.sourceId),'Removed transition source ID was replaced: '+r.id);
   }
   const removedIds=new Set(removed.map(r=>r.id));
-  for(const [id,e]of old.map){if(removedIds.has(id))continue;demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
+  for(const [id,e]of old.map){if(removedIds.has(id))continue;demand(fresh.map.has(id),'Existing ID was removed or replaced: '+id);demand(fresh.types.get(id)===old.types.get(id)&&fresh.owner.get(id)===old.owner.get(id)&&fresh.parent.get(id)===old.parent.get(id),'Identity type/owner changed');const n=fresh.map.get(id);if(old.types.get(id)==='exception')demand(e.activityId===n.activityId,'Exception Activity ownership changed');demand(e.checkId===n.checkId&&e.sourceId===n.sourceId,'Source identity changed');}
+  if(previous.formatVersion==='0.6')for(const d of next.documents.filter(d=>['checkItems','stateTransition','conceptModel'].includes(d.kind))){const prior=previous.documents.find(p=>p.id===d.id);if(prior)demand(equal(prior.basedOn,d.basedOn),'Existing dependent source cannot be rebased by normal authoring: '+d.id);}
   for(const prior of previous.documents.filter(d=>d.kind==='conceptModel')){const updated=next.documents.find(d=>d.id===prior.id);demand(updated?.kind==='conceptModel','Concept document type changed');const current=conceptIdentities(updated);for(const key of conceptIdentities(prior))demand(current.has(key),'Existing Concept ID was removed, replaced or moved: '+key);}
   demand(equal(previous.externalDocuments,next.externalDocuments),'External reference catalog is read-only');
   for(const s of previous.sources)demand(next.sources.some(n=>equal(s,n)),'Import provenance must be retained');

@@ -1,0 +1,20 @@
+{
+  "format": "storage-verification/1",
+  "source": "https://github.com/mk3008/alder/pull/351 at d158a97578b69fba71139bb25b25522cd381cba1",
+  "scope": "Scope・Procedureの新構造候補と旧版を保護する保存境界",
+  "checks": [
+    {"id":"SP-001","condition":"旧0.4、未公開旧0.5、新形式または未知版を読む","guarantee":"各形式を明示識別し、未知版や版と内容の不一致を拒否する。読取り時に原本を変更しない。","reason":"同じフィールドの旧意味と新意味を混同しない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-002","condition":"ActivityのWhoを記録する","guarantee":"Role参照、自動実行システム、スケジューラー、未決を区別し、複数Whoや存在しないRoleを拒否する。","reason":"自動主体へ人間Roleを捏造しない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-003","condition":"ActivityやObjectのScopeを記録する","guarantee":"システム作成時の考慮要否を記録し、Scope外Objectも図と資料として保持する。必要な文脈がなければ未決として扱い、入力方向だけからScopeを変えない。OCRによる紙へのシステムアクセスと、システムがアクセスせず人が目視する場合を区別する。","reason":"設計資料と実装対象を区別する","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-004","condition":"手順と結果を記録する","guarantee":"Step ID、本文、確認済みの方法、必須/任意、適用条件、局所順序と複数ResultのID・本文を保つ。方法が未決なら推測しない。","reason":"業務意味と識別を落とさない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-005","condition":"Procedureの入出力を記録する","guarantee":"StepごとにObject、方向、Data、Request/Responseと操作効果を保持し、未知参照や型違いを拒否する。","reason":"図と表が同じやり取りを参照できる","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-006","condition":"同一Activity・Object・方向への複数のやり取りがある","guarantee":"図の線とDataラベルは方向ごとに集約し、Step ID・Data ID・元Relation IDを失わない。逆方向や別Activityは分ける。","reason":"図の見通しと手順明細を両立する","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-007","condition":"明示したRelationや対応Stepが不正である","guarantee":"参照の端点・方向不一致、同一方向のRequest/Response対応、同種の対応、異なるObjectの対応を拒否する。対応のない一方向通信を架空の対にしない。","reason":"矢印方向とRequest/Responseを独立に保つ","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-008","condition":"内部判断や未決の通信を記録する","guarantee":"内部判断、通信未決、Responseなしを区別し、Object・Data・Request/Response・CRUDを捏造しない。","reason":"表へ収めるために業務上の意味を変えない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-009","condition":"順序制約を記録する","guarantee":"存在しない・別ActivityのStep、自己参照、矛盾、循環を拒否し、条件文は実行せず原文を保持する。","reason":"局所順序を検査し業務条件を推測しない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-010","condition":"共通DataとObjectのInformationを参照する","guarantee":"安定IDと名前・説明・既存の所有情報を保持し、未登録や重複を検査する。紙から受け取った記載内容をメモへ渡すときなど、参照元Informationの所有Objectと受渡し先が異なっても同じDataを使える。","reason":"同じ情報を手順と図で二重管理しない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-011","condition":"旧版から明示移行する","guarantee":"元bytesを保ち別出力に限定し、旧Scope・Who・文章の意味を推測しない。判断不足やID・内容の欠落は対象と理由を示し停止する。","reason":"旧データと人間判断を保護する","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-012","condition":"新形式の保存と更新を試みる","guarantee":"ID・所有者・版・ハッシュ・ロック・失敗時の非書込み・Check/State/概念の参照と人間状態を守る。","reason":"構造追加により既存の保存保証を失わない","verification":"test-scope-procedure.mjs および既存の保存器テスト"},
+    {"id":"SP-013","condition":"新形式と旧形式が同じ経路に入る","guarantee":"旧0.4の文字列手順・旧Scope、旧0.5のperformers・Step担当や情報を新しいWhoやScopeと暗黙に同一視しない。","reason":"旧版の閲覧と解釈を保つ","verification":"test-scope-procedure.mjs"}
+  ]
+}

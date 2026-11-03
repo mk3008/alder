@@ -13,6 +13,32 @@ const bd=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['businessDesign']},rev
 const role=obj({id,name:text,color:{enum:['#8b5cf6','#2563eb','#c2410c','#008576','#be185d']}});
 const roleBD=obj({...bd.properties,schemaVersion:{enum:['0.2']},roles:array(role),activities:array(obj({...bd.properties.activities.items.properties,roleId:nullable(id)}))});
 const structuredBD=obj({...roleBD.properties,schemaVersion:{enum:['0.3']},exceptions:array(obj({id,activityId:id,name:text,description:str}))});
+const nonempty=items=>({...array(items),minItems:1});
+const information=obj({id,name:text,description:str});
+const orderRule={anyOf:[obj({kind:{enum:['before']},beforeId:id,afterId:id}),obj({kind:{enum:['interchangeable']},stepIds:{...array(id),minItems:2}})]};
+const structuredActivityProperties=Object.fromEntries(Object.entries(structuredBD.properties.activities.items.properties).filter(([key])=>!['who','roleId','procedure','result','exception'].includes(key)));
+// 0.5 is the historical, unreleased D2.2 format. Its performer meaning is not
+// reinterpreted as the new Activity Who.
+const oldPerformer=obj({objectId:id,roleIds:array(id)});
+const oldStep=obj({id,text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),performerObjectIds:nullable(nonempty(id))});
+const sharedData=obj({id,name:text,items:nonempty(obj({informationId:id,condition:nullable(text)}))});
+const oldStructuredBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.4']},
+ objects:array(obj({...entity,icon:text,information:array(information)})),
+ activities:nonempty(obj({...structuredActivityProperties,performers:nullable(nonempty(oldPerformer)),procedure:obj({steps:nonempty(oldStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
+ data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id,dataId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
+// 0.6 is the new candidate: a Step owns the interaction details; a relation
+// may retain an existing endpoint/ID but never duplicates its Data label.
+const who={anyOf:[obj({kind:{enum:['role']},roleId:id}),obj({kind:{enum:['system','scheduler']},name:text}),{type:'null'}]};
+const exchange={anyOf:[
+ obj({kind:{enum:['interaction']},phase:{enum:['request','response']},direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
+ obj({kind:{enum:['internal']}}),obj({kind:{enum:['unresolved']}})
+]};
+const newStep=obj({id,text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange});
+const scopedEntity={...entity,scope:nullable({type:'boolean'})};
+const newBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.5']},
+ objects:array(obj({...scopedEntity,icon:text,information:array(information)})),
+ activities:nonempty(obj({...structuredActivityProperties,...scopedEntity,who,procedure:obj({steps:nonempty(newStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
+ data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
 const checkFields=Object.fromEntries(['classification','condition','expectedResult','guarantee','evidence','derivation','related','testEvidence','question','alternatives','confidence'].map(k=>[k,rich]));
 const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},revision:text,title:text,basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),intro:rich,
  index:array(obj({activityId:id,purpose:str,connections:str,checkIds:array(id)})),
@@ -71,4 +97,4 @@ const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptMode
   reviewBoundaries:array(obj({from:id,to:id,label:str,promise:str}))},['landscapeRelationships','reviewBoundaries'])});
 const checkedConceptModel=obj({...conceptModel.properties,schemaVersion:{enum:['0.2']},reviewGroups:array(checkedReviewGroup)});
 const packageShape=(version,kinds)=>obj({format:{enum:['alder-document-package']},formatVersion:{enum:[version]},revision:text,documents:array({anyOf:kinds.map(ref)}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)});
-export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};
+export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.5',['oldStructuredBusinessDesign','checkItems','stateTransitionStructured']),packageShape('0.6',['procedureBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,oldStructuredBusinessDesign:oldStructuredBD,procedureBusinessDesign:newBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};
