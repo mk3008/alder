@@ -64,7 +64,7 @@ class Node{
   append(child){this.children.push(child);}
 }
 async function render(source){
-  const elements=new Map(['status','steps','checks'].map(id=>[id,new Node(id)]));
+  const elements=new Map(['status','steps','checks','start-effects'].map(id=>[id,new Node(id)]));
   const document={getElementById:id=>elements.get(id),createElement:tag=>new Node(tag)};
   await runInNewContext(`(async()=>{${script}})()`,{document,fetch:async()=>({ok:true,json:async()=>source})});
   assert.equal(elements.get('status').textContent,'');return elements;
@@ -73,8 +73,9 @@ const rendered=await render(candidate);
 assert.deepEqual(rendered.get('checks').children.map(row=>row.children.map(cell=>cell.textContent)),[
   ['0人または1人','‐','エラー','check-few'],
   ['‐','いる','エラー','check-duplicate'],
-  ['それ以外','開始。参加者名と順番、各自の初期0点を記録する','check-start']
+  ['それ以外','開始','check-start']
 ]);
+assert.equal(rendered.get('start-effects').textContent,'開始時の記録：参加者の名前、順番、各自0点。');
 assert.equal(rendered.get('checks').children[2].children[0].colSpan,2);
 const changed=structuredClone(candidate);changed.checks[0].conditions[0].values=[0];
 const notComplement=await render(changed);
