@@ -1,10 +1,10 @@
 {
-  "alder_source_revision": "fa2defe695783e3df19460f1605f010dd1948287",
+  "alder_source_revision": "a5d5919379fd1d306d2e49e2199dc982557aeed7",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "4b0f3fb419d9eb1ef4147d6cd0be676e351ae33958c12eba0d142aa3c5c56591",
-    "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
+    "docs/plugin-json-authoring.ja.md": "9b913c59a611f2c2c7d13a72b5c07119d0b5b1f7a9a4d5b810914ba2273682f9",
+    "docs/adoption.md": "5feacd421c45f6f5bb41c7affb9ed08d7052d7fc753561a85bf6cac52d2edc90",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
-    "docs/check-item-traceability.md": "5d12a583284076b27f0b32d89167f6c767c7c375e8d4e2d29de03c70205fccda",
+    "docs/check-item-traceability.md": "584d2ffcf01184e8c0052bb922db9768ffd8543d738c3bf628743acef0e5cf66",
     "docs/business-design-quality-check.ja.md": "31de5ed1e52fe9e863f14022e0fad2ff533abb0b3684aa0a56c42ebe873fb5ae",
     "docs/business-design-correlation-check.ja.md": "c0ce131529bf3c935f70d20205796937ae1e7974fc00f0b64c5a4594377bf549",
     "docs/business-design-omission-check.ja.md": "a551044af3f4b9cc62615224a8b500ad0c6967b06aad685c0dc154e571be6b2d",

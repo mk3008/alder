@@ -42,14 +42,14 @@ Bidirectional traceability does **not** make these artifacts equally authoritati
 
 Business Design is the authoritative source for business meaning.
 
-Functional Interfaces, Check Items, Decision Records, tests, and code are downstream artifacts. They can expose ambiguity, inconsistency, missing evidence, or an implementation choice, but they do not acquire authority to redefine business meaning.
+Functional Interfaces, Check Items, Decision Records, tests, and code can expose ambiguity, inconsistency, missing evidence, or an implementation choice, but they do not acquire authority to redefine business meaning. A Check candidate may be recorded from interview evidence while Business Design is being drafted; that timing does not make the candidate an agreed business decision.
 
 When a human review reveals that the current meaning is wrong, incomplete, or not decided:
 
 1. Mark the affected Check as **要確認** or return it as **Business Designへ戻す事項**.
-2. Update Business Design first.
-3. Have the responsible human confirm the revised business meaning.
-4. Re-derive or update affected Functional Interfaces and Check Items from that confirmed Business Design revision.
+2. Update the Business Design and affected structured Check candidates as the revised meaning becomes known; retain their source and existing IDs.
+3. Have the responsible human confirm the revised business meaning and relevant expectations before handoff.
+4. Update affected Functional Interfaces and Check Items from that confirmed meaning without inferring review state.
 5. Collect the rationale for changed implementation choices or assumptions; record confirmed material choices in the Alder review/follow-up without treating them as business approval.
 6. Update tests and code.
 7. After implementation and test execution, use the separate Alder review/follow-up to check Test expectations against the confirmed Check Items, update Check → Test traceability and remaining evidence gaps, and re-check Business Design → Interface → Check → Test before accepting the implementation change.
@@ -86,7 +86,7 @@ A product can use direct Business Design → Check → Test traceability where a
 
 For new artifacts, Business Design and Checks share the typed JSON package. Source links use the exact BD document ID/revision and Activity IDs; Check IDs and shared guarantee/example references remain stable across rename and reorder. The Viewer displays business names, conditions, expected results, unresolved questions and saved human review states. People need not maintain JSON IDs or use source-code notation to review the work. A name match or a valid reference is not evidence of agreement.
 
-Ask the Plugin to update the same package from actual decisions. Preserve confirmed unchanged expectations, shared guarantees, Test evidence and pending meaning; do not infer human confirmation from viewing, silence or passing tests. New Check drafting requires human agreement on the exact source BD revision. Existing Markdown selected for update remains in its old format unless conversion is explicitly requested.
+Ask the Plugin to update the same package from actual decisions. Preserve confirmed unchanged expectations, shared guarantees, Test evidence and pending meaning; do not infer human confirmation from viewing, silence or passing tests. Capture known Check conditions and expected results as structured, unapproved candidates during interviews or Business Design drafting; do not require the entire BD to be agreed before recording them. The current JSON runtime still requires agreement on the exact source BD revision for canonical Check save, so retain unsupported early candidates separately until that runtime is updated. Existing Markdown selected for update remains in its old format unless conversion is explicitly requested.
 
 The human-facing rules below apply to meaning and review in both representations. H2/H3 layout, heading fragments, Markdown tables and literal Activity-name diagnostics are **Markdown compatibility** instructions, not requirements to synthesize Markdown from JSON. JSON uses its typed structures and validator. The restricted drift pilot retains its own supported input contract; JSON adoption does not make that pilot universal.
 
