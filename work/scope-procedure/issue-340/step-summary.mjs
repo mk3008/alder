@@ -35,16 +35,21 @@ export function project(doc) {
     if(typeof activity.when!=='string'||!activity.when.trim())error('WHEN_REQUIRED',activity.id);
     for(const step of list(activity.steps,`${activity.id}.steps`)){
       if(typeof step.text!=='string'||!step.text.trim())error('STEP_TEXT',step.id);
+      if(Object.hasOwn(step,'action')&&(typeof step.action!=='string'||!step.action.trim()))error('ACTION',step.id);
+      if(Object.hasOwn(step,'method')&&step.method!==null&&(typeof step.method!=='string'||!step.method.trim()))error('METHOD',step.id);
+      if(Object.hasOwn(step,'targetDataId')&&step.targetDataId!==null)ref(step.targetDataId,'data',step.id);
       if(!['required','optional'].includes(step.obligation))error('OBLIGATION',step.id);
       if(step.appliesWhen!==null&&(typeof step.appliesWhen!=='string'||!step.appliesWhen.trim()))error('APPLIES_WHEN',step.id);
       if(step.effect!==null&&!['create','read','update','delete','not-applicable','undecided'].includes(step.effect))error('EFFECT',step.id);
-      if(!('exchange' in step)){rows.push({stepId:step.id,text:step.text,kind:'local',effect:step.effect});continue;}
+      if(!('exchange' in step)){rows.push({stepId:step.id,text:step.text,action:step.action??step.text,method:step.method??null,kind:'local',from:`who:${activity.id}`,to:null,whatDataId:step.targetDataId??null,effect:step.effect});continue;}
       const x=step.exchange;
-      if(x===null){todo('EXCHANGE_UNRESOLVED',step.id);rows.push({stepId:step.id,text:step.text,kind:'unresolved',effect:step.effect});continue;}
+      if(x===null){todo('EXCHANGE_UNRESOLVED',step.id);rows.push({stepId:step.id,text:step.text,action:step.action??step.text,method:step.method??null,kind:'unresolved',from:null,to:null,whatDataId:step.targetDataId??null,effect:step.effect});continue;}
       if(!x||typeof x!=='object'||Array.isArray(x)){error('EXCHANGE_SHAPE',step.id);continue;}
       if(!['request','response'].includes(x.phase))error('PHASE',step.id);
       if(!['input','output'].includes(x.direction)){error('DIRECTION',step.id);continue;}
       const object=ref(x.objectId,'object',step.id);
+      const hasTarget=Object.hasOwn(x,'targetDataId');
+      if(hasTarget&&x.targetDataId!==null)ref(x.targetDataId,'data',step.id);
       let datum=null;
       const hasDataId=Object.hasOwn(x,'dataId'), hasNoData=Object.hasOwn(x,'noData');
       if(hasNoData && (x.noData!==true || hasDataId))error('DATA_SHAPE',step.id);
@@ -53,7 +58,7 @@ export function project(doc) {
       else if(x.dataId===null)todo('DATA_UNRESOLVED',step.id);
       else datum=ref(x.dataId,'data',step.id);
       const whoEndpoint=`who:${activity.id}`, objectEndpoint=`object:${x.objectId}`;
-      rows.push({stepId:step.id,text:step.text,kind:'exchange',from:x.direction==='output'?whoEndpoint:objectEndpoint,to:x.direction==='output'?objectEndpoint:whoEndpoint,phase:x.phase,direction:x.direction,objectId:x.objectId,dataId:x.dataId,effect:step.effect});
+      rows.push({stepId:step.id,text:step.text,action:step.action??step.text,method:step.method??null,kind:'exchange',from:x.direction==='output'?whoEndpoint:objectEndpoint,to:x.direction==='output'?objectEndpoint:whoEndpoint,phase:x.phase,direction:x.direction,objectId:x.objectId,whatDataId:hasTarget?x.targetDataId:x.dataId,dataId:x.dataId,effect:step.effect});
       if(!object || (!datum && !hasNoData && x.dataId!==null))continue;
       const key=JSON.stringify([activity.id,x.objectId,x.direction]);
       if(!grouping.has(key))grouping.set(key,{activityId:activity.id,objectId:x.objectId,direction:x.direction,stepIds:[],data:[]});

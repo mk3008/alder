@@ -93,7 +93,7 @@ node step-summary.test.mjs
 node step-summary.mjs step-summary-fixture.json
 ```
 
-`step-summary.test.mjs` はNode標準機能で、単一Role／システム／スケジューラー、同一Object・同一方向の線とラベルの集約、逆方向の分離、個々のStep ID/Dataの保持、CRUD変更が図へ出ないこと、複数開始条件から条件付き手順を経て合流する例、不正参照や未決を確認する。`paper-note-fixture.json` は4手順の共有Data、Dataなしと未決の区別、およびScopeの未決・内外による表と図の保持を確認する。PoCの`null`や`noData`という表現は正式Schemaの決定ではない。
+`step-summary.test.mjs` はNode標準機能で、単一Role／システム／スケジューラー、同一Object・同一方向の線とラベルの集約、逆方向の分離、個々のStep ID/Dataの保持、CRUD変更が図へ出ないこと、複数開始条件から条件付き手順を経て合流する例、不正参照や未決を確認する。`paper-note-fixture.json` は4列の候補、4手順の共有Data、Dataなしと未決の区別、およびScopeの未決・内外による表と図の保持を確認する。読み取り対象を`targetDataId`で参照し、実際に送るDataの`dataId`は未決とする限定例と、受渡し相手がない内部判断の例も確認する。PoCの`null`、`noData`、`targetDataId`という表現や、これらとDFD表示との最終関係は正式Schemaの決定ではない。
 
 このPoCのDataにはInformationとその所有者がないため、旧0.5の所有者制約との互換・移行は実証していない。後続で実際のInformation IDと所有情報を持つ正負例を使って検証する。
 

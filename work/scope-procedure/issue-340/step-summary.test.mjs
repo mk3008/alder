@@ -113,15 +113,21 @@ test('paper-to-note example keeps the same Data in the two explicit interactions
   assert.deepEqual(r.edges.find(e=>e.objectId==='memo'&&e.direction==='output').data,[{id:'content',name:'記載内容'}]);
   assert.deepEqual(r.edges.find(e=>e.objectId==='memo'&&e.direction==='input').data,[{id:'write-success',name:'記載成功'}]);
   assert.deepEqual(r.edges.filter(e=>e.data.length===0).map(e=>[e.objectId,e.direction]),[['paper','output']]);
+  assert.deepEqual(r.rows.map(row=>[row.from,row.to,row.whatDataId,row.action]),[
+    ['who:a-copy','object:paper','content','読み取る'],['object:paper','who:a-copy','content','返す'],
+    ['who:a-copy','object:memo','content','書く'],['object:memo','who:a-copy','write-success','返す']
+  ]);
+  assert.equal(r.rows[0].dataId,null);assert.equal(r.rows[0].method,null);
 });
 test('paper Scope requires context; classification does not change the recorded steps',()=>{
   const paper=JSON.parse(awaitPaper), before=project(paper);
-  paper.objects.find(o=>o.id==='paper').scope=true;step(paper,'s-read').text='作業者が対象システムのOCRで紙を読み取る';const machine=project(paper);
-  paper.objects.find(o=>o.id==='paper').scope=false;step(paper,'s-read').text='作業者が紙を目視で読み取る';const human=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=true;step(paper,'s-read').text='作業者が対象システムのOCRで紙を読み取る';step(paper,'s-read').method='対象システムのOCR';const machine=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=false;step(paper,'s-read').text='作業者が紙を目視で読み取る';step(paper,'s-read').method='目視';const human=project(paper);
   assert.ok(pending(before,'SCOPE_UNRESOLVED','paper'));
   assert.ok(!pending(machine,'SCOPE_UNRESOLVED','paper'));assert.ok(!pending(human,'SCOPE_UNRESOLVED','paper'));
   assert.equal(machine.rows.find(x=>x.stepId==='s-read').text,'作業者が対象システムのOCRで紙を読み取る');
   assert.equal(human.rows.find(x=>x.stepId==='s-read').text,'作業者が紙を目視で読み取る');
+  assert.equal(machine.rows.find(x=>x.stepId==='s-read').method,'対象システムのOCR');assert.equal(human.rows.find(x=>x.stepId==='s-read').method,'目視');
   assert.deepEqual(machine.edges,human.edges);
 });
 test('no Data differs from unresolved Data and does not manufacture a label',()=>{
@@ -132,5 +138,13 @@ test('no Data differs from unresolved Data and does not manufacture a label',()=
 test('missing or contradictory Data declaration is rejected',()=>{
   const d=copy(),e=step(d,'s-name-query').exchange;delete e.dataId;
   assert.ok(has(project(d),'DATA_SHAPE'));e.dataId='d-name-filter';e.noData=true;assert.ok(has(project(d),'DATA_SHAPE'));
+});
+test('unknown target Data is rejected rather than converted into a transferred value',()=>{
+  const paper=JSON.parse(awaitPaper);step(paper,'s-read').exchange.targetDataId='missing';assert.ok(has(project(paper),'INVALID_REFERENCE'));
+});
+test('internal judgement can name its Data without inventing a receiving Object',()=>{
+  const d=copy(),s=step(d,'s-judge');s.action='判断する';s.targetDataId='d-name-result';const r=project(d),row=r.rows.find(x=>x.stepId==='s-judge');
+  assert.deepEqual(r.errors,[]);assert.equal(row.from,'who:a-inquiry');assert.equal(row.to,null);assert.equal(row.whatDataId,'d-name-result');assert.equal(row.action,'判断する');
+  s.targetDataId='missing';assert.ok(has(project(d),'INVALID_REFERENCE'));
 });
 console.log(`${count} tests passed`);
