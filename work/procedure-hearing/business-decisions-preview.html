@@ -12,7 +12,8 @@
     p{margin:8px 0;line-height:1.5}.note{color:#56616d;font-size:14px}
     .scroll{overflow-x:auto}table{border-collapse:collapse;background:white;width:max-content;max-width:100%}
     th,td{border:1px solid #d0d9e2;padding:7px 10px;text-align:left;vertical-align:top}
-    th{background:#edf3f8;white-space:nowrap}.procedure td.data{min-width:10em}
+    th{background:#edf3f8;white-space:nowrap}table.procedure{max-width:none}
+    .procedure td{white-space:nowrap}.procedure td.data{min-width:10em}
     table.decision{max-width:none;font-size:14px}.decision th,.decision td{padding:4px 6px;white-space:nowrap}
     .decision .result{border-left:2px solid #8193a5}.decision .refs{font-size:14px}
     a{color:#146597}.error{color:#a22424}.success{color:#146044}
@@ -25,7 +26,8 @@
     <p class="note">検討用モック。手順と、手順で使う判断を同じ業務設計として表示します。</p>
     <section id="context" aria-label="業務の概要"></section>
     <h2>手順</h2>
-    <div class="scroll"><table class="procedure" aria-label="手順"><thead><tr><th>From</th><th>To</th><th>Data</th><th>Action</th></tr></thead><tbody id="steps"></tbody></table></div>
+    <p class="note">手順表は左右にスクロールできます。</p>
+    <div class="scroll" tabindex="0" role="region" aria-label="手順表"><table class="procedure" aria-label="手順"><thead><tr><th>From</th><th>To</th><th>Data</th><th>Action</th></tr></thead><tbody id="steps"></tbody></table></div>
     <section id="decisions" aria-label="手順で使う判断"></section>
     <section id="result" aria-label="業務の結果"></section>
     <p class="note" id="status" role="status"></p>
