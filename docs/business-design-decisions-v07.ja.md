@@ -10,7 +10,7 @@
 
 判定表は条件軸を左、結果とCheckを右に置き、上から順に最初に該当した行を読みます。連続する同じ条件は、左側の分岐が同じ場合に限って縦結合します。「それ以外」は同じ前提で先行条件に当てはまらない場合、「不問」はその軸を判定しない場合、「未決」は内容が分かっていない場合です。パターン数を減らすことより、IF／elseとして読めることを優先します。`is`は聞き取った業務上の条件であり、実行可能な式という意味ではありません。
 
-例は [`molkky-decisions-v07.json`](../tools/document_storage/examples/molkky-decisions-v07.json) です。元のモルック設計書を変更せず作成した、未レビューの合成例です。Check番号の使用は既存Checkの承認や移行を意味しません。入力エラー時に全体をエラーとする扱いと、一部対応の`MK-10*`も例に含みます。
+例は `tools/document_storage/examples/molkky-decisions-v07.json` です（同梱版では `scripts/document_storage/examples/molkky-decisions-v07.json`）。元のモルック設計書を変更せず作成した、未レビューの合成例です。Check番号の使用は既存Checkの承認や移行を意味しません。入力エラー時に全体をエラーとする扱いと、一部対応の`MK-10*`も例に含みます。
 
 ## JSONと検証
 

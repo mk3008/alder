@@ -48,4 +48,4 @@ const nextJSON = stringify(next);
 
 CLIは既存ファイルを上書きしません。失敗時はJSONを確定せず、stderrへ診断を出しexit 2で終了します。Markdownの全方言や曖昧な名前対応は対象外です。JSON→Markdown逆変換は提供しません。
 
-The draft `0.7` candidate records ordered Business Design decision tables and links them to Procedure and Check drafts. See [the contract and migration guide](../../docs/business-design-decisions-v07.ja.md) and the synthetic `examples/molkky-decisions-v07.json`. `prepare-decision-upgrade` creates a separate 0.7 BD candidate from 0.6; it never modifies or silently rebases the source, dependent documents, or human review states.
+Draft PRの候補0.7では、業務設計の判定表とProcedure・Check草案を参照で結びます。[契約と移行の説明](../../docs/business-design-decisions-v07.ja.md)と合成例 `examples/molkky-decisions-v07.json` を参照してください。`prepare-decision-upgrade` は0.6から別の0.7 BD候補を作り、原本や依存文書、人間確認状態を変更・自動追従しません。
