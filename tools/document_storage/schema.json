@@ -2804,9 +2804,16 @@
                                   ]
                                 },
                                 "phase": {
-                                  "enum": [
-                                    "request",
-                                    "response"
+                                  "anyOf": [
+                                    {
+                                      "enum": [
+                                        "request",
+                                        "response"
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
                                   ]
                                 },
                                 "direction": {

@@ -30,7 +30,7 @@ const oldStructuredBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.4'
 // may retain an existing endpoint/ID but never duplicates its Data label.
 const who={anyOf:[obj({kind:{enum:['role']},roleId:id}),obj({kind:{enum:['system','scheduler']},name:text}),{type:'null'}]};
 const exchange={anyOf:[
- obj({kind:{enum:['interaction']},phase:{enum:['request','response']},direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
+ obj({kind:{enum:['interaction']},phase:nullable({enum:['request','response']}),direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
  obj({kind:{enum:['internal']}}),obj({kind:{enum:['unresolved']}})
 ]};
 // Action is the fourth table column. Historical Step prose may be retained as

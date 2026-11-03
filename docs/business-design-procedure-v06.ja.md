@@ -12,7 +12,7 @@ ActivityとObjectのScopeは、対象システムを作る際に考慮する必�
 
 例えば「作業者が紙の記載内容を読み取る」のDataは、読む対象を意味する。表の対象DataがそのままFromからToへ送信されると推測しない。対象Dataと実際の受渡しDataは、それぞれ同じData定義のIDへの参照として記録し、内容は二重管理しない。紙とメモの具体例では、受渡しの有無が分からない読取要求を未決とし、紙から受け取る記載内容とメモに書く記載内容は同じDataを使う。
 
-やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
+やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。Request／Responseが未決なら`null`のまま相手と方向を記録できる。対応Stepの指定は双方の種別が判明してから行う。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
 
 共通DataはInformationを参照する。同じ記載内容を紙から受け取り、メモへ送るStepで同一Dataを使える。Informationの所有先と受渡し先のObjectが違うだけでは拒否しない。InformationのID・所有先・名前・説明は勝手に移動・上書きしない。旧0.5を読む場合は旧版の所有先制約で検証する。
 

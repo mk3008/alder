@@ -61,6 +61,7 @@ export function validateProcedureStructure(bd,inv,target,diagnostics){
    else {unique(s.whatDataIds,'Duplicate Step target Data');for(const id of s.whatDataIds)ref(id,'data');}
    const x=s.exchange;if(x.kind==='unresolved'){diagnostics.push('やり取り未確定: '+s.id);continue;}if(x.kind==='internal')continue;
    ref(x.objectId,'object');
+   if(x.phase===null)diagnostics.push('Request/Response未確定: '+s.id);
    if(x.dataIds===null)diagnostics.push('Data未確定: '+s.id);
    else {unique(x.dataIds,'Duplicate Step Data');for(const id of x.dataIds)ref(id,'data');}
    if(x.relationId!==null){const relation=ref(x.relationId,'relation');const input=x.direction==='input';
@@ -68,7 +69,7 @@ export function validateProcedureStructure(bd,inv,target,diagnostics){
    }
    if(x.pairedStepId!==null){
     const pair=steps.get(x.pairedStepId);demand(pair&&pair.activity.id===a.id&&pair.step.id!==s.id,'Invalid paired Step: '+s.id);
-    const y=pair.step.exchange;demand(y.kind==='interaction'&&y.phase!==x.phase&&y.direction!==x.direction&&y.objectId===x.objectId,'Request/Response mismatch: '+s.id);
+    const y=pair.step.exchange;demand(y.kind==='interaction'&&x.phase!==null&&y.phase!==null&&y.phase!==x.phase&&y.direction!==x.direction&&y.objectId===x.objectId,'Request/Response mismatch: '+s.id);
    }
   }
  }

@@ -90,6 +90,10 @@ test('SP-008: internal judgement, unresolved exchange and no response are distin
  const row=projectProcedure(bd(p)).rows.find(x=>x.stepId==='judge');assert.equal(row.to,null);assert.deepEqual(row.data,[{id:'content',name:'記載内容',uses:['target']}]);
  const q=copy();step(q,'read').exchange={kind:'unresolved'};step(q,'read-response').exchange.pairedStepId=null;assert.ok(validate(q).diagnostics.includes('やり取り未確定: read'));
  const r=copy();activity(r).procedure.steps=activity(r).procedure.steps.filter(s=>s.id!=='write-response');step(r,'write').exchange.pairedStepId=null;validate(r);assert.ok(!projectProcedure(bd(r)).rows.some(x=>x.stepId==='write-response'));
+ const partial=copy();step(partial,'read').exchange.phase=null;step(partial,'read').exchange.pairedStepId=null;step(partial,'read-response').exchange.pairedStepId=null;
+ assert.ok(validate(partial).diagnostics.includes('Request/Response未確定: read'));
+ const partialRow=projectProcedure(bd(partial)).rows.find(x=>x.stepId==='read');assert.deepEqual(partialRow.to,{kind:'object',objectId:'paper'});assert.equal(partialRow.direction,'output');assert.equal(partialRow.phase,null);assert.equal(partialRow.data[0].id,'content');
+ const falsePair=copy();step(falsePair,'read').exchange.phase=null;assert.throws(()=>validate(falsePair),/Request\/Response mismatch/);
  const noPayload=copy();step(noPayload,'read').exchange.dataIds=[];assert.ok(!validate(noPayload).diagnostics.includes('Data未確定: read'));
 });
 
