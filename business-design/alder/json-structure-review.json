@@ -1250,14 +1250,18 @@
             },
             {
               "id": "fmt-exchange-field-3",
-              "name": "phase: request / response / not-applicable / null"
+              "name": "phase: request / response"
             },
             {
               "id": "fmt-exchange-field-4",
-              "name": "dataIds[] / relationId"
+              "name": "not-applicable / null"
             },
             {
               "id": "fmt-exchange-field-5",
+              "name": "dataIds[] / relationId"
+            },
+            {
+              "id": "fmt-exchange-field-6",
               "name": "pairedStepId"
             }
           ],
@@ -2397,7 +2401,8 @@
                 "fields": [
                   "kind: interaction / internal / unresolved",
                   "objectId / direction",
-                  "phase: request / response / not-applicable / null",
+                  "phase: request / response",
+                  "not-applicable / null",
                   "dataIds[] / relationId",
                   "pairedStepId"
                 ],
@@ -2575,7 +2580,8 @@
                 "fields": [
                   "kind: interaction / internal / unresolved",
                   "objectId / direction",
-                  "phase: request / response / not-applicable / null",
+                  "phase: request / response",
+                  "not-applicable / null",
                   "dataIds[] / relationId",
                   "pairedStepId"
                 ],
@@ -3208,16 +3214,20 @@
                   "informationId": "fmt-exchange-field-2"
                 },
                 {
-                  "name": "phase: request / response / not-applicable / null",
+                  "name": "phase: request / response",
                   "informationId": "fmt-exchange-field-3"
                 },
                 {
-                  "name": "dataIds[] / relationId",
+                  "name": "not-applicable / null",
                   "informationId": "fmt-exchange-field-4"
                 },
                 {
-                  "name": "pairedStepId",
+                  "name": "dataIds[] / relationId",
                   "informationId": "fmt-exchange-field-5"
+                },
+                {
+                  "name": "pairedStepId",
+                  "informationId": "fmt-exchange-field-6"
                 }
               ]
             },

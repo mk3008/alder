@@ -22,4 +22,5 @@ test('JSON-STRUCT-004: exchange shape alone cannot decide which of two valid pai
   response.exchange.pairedStepId=cross?'receive-2':'receive';otherResponse.exchange.pairedStepId=cross?'receive':'receive-2';list.splice(1,0,other);list.push(otherResponse);return pkg;};
  const first=make(false),second=make(true);assert.doesNotThrow(()=>validate(first));assert.doesNotThrow(()=>validate(second));
  assert.notEqual(byId(first,'receive').exchange.pairedStepId,byId(second,'receive').exchange.pairedStepId);
+ const manyToOne=make(false);byId(manyToOne,'receive-2').exchange.pairedStepId='reply';assert.doesNotThrow(()=>validate(manyToOne),'multiple steps may reference the same matching response');
 });
