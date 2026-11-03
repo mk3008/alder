@@ -18,9 +18,9 @@ globalThis.document={createElement:tag=>new Node(tag),createTextNode:text=>Objec
 registerHooks({resolve(spec,context,next){if((spec.startsWith('./')||spec.startsWith('../'))&&!/\.[a-z0-9]+$/i.test(spec)){try{return next(spec+'.ts',context)}catch{}try{return next(spec+'.js',context)}catch{}}return next(spec,context)}});
 const {parseDocument}=await import('../src/document-input.ts');
 const {businessDetail}=await import('../src/document-view.ts');
-const {findingLinks}=await import('../src/findings.ts');
-const {activityRole,roleGroupKey}=await import('../src/roles.ts');
-const read=path=>readFileSync(path,'utf8'),parse=path=>parseDocument(read(path));
+await import('../src/findings.ts');
+await import('../src/roles.ts');
+const read=path=>readFileSync(path,'utf8');
 const {renderChecks}=await import('../src/document-view.ts');
 const {decisionSpans,conditionLabel}=await import('../src/business-decisions.ts');
 Node.prototype.addEventListener=function(name,fn){(this.listeners??={})[name]=fn;};Node.prototype.scrollIntoView=function(options){this.scrolled=true;this.scrollOptions=options;};
