@@ -1,9 +1,9 @@
 import {activityRole} from './roles';
 import type {Design} from './graph';
-import type {BD,Check,Run,LegacyActivity,ProcedureActivity,Party} from './json-document';
+import type {BD,Check,Run,LegacyActivity,ProcedureActivity,Party,BusinessDecision,DecisionRow} from './json-document';
 import {formattedMarkdown} from './markdown';
 import {activityWho,legacyPerformerNames,relationLabel} from './structured-display';
-import {businessDecisionTable,decisionExceptions} from './business-decisions';
+import {businessDecisionTable,conditionLabel,decisionExceptions} from './business-decisions';
 // @ts-expect-error The shared storage validator is a JavaScript module.
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -44,12 +44,18 @@ function variationKinds(design:Design,activityId:string,items:{id:string}[]):Map
 function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
  const bd=design.model!.business,checks=design.model!.checks,decisions=a.decisions??[],sections=new Map<string,HTMLElement>();
  const number=(id:string)=>decisions.findIndex(decision=>decision.id===id)+1;
- const link=(id:string)=>{const button=element('button',`（※${number(id)}）`);button.type='button';button.className='business-decision-link';button.onclick=()=>sections.get(id)?.scrollIntoView({behavior:'smooth',block:'start'});return button;};
+ const link=(id:string,rowId?:string)=>{const button=element('button',`（※${number(id)}）`);button.type='button';button.className='business-decision-link';button.onclick=()=>{const section=sections.get(id),row=rowId?Array.from(section?.querySelectorAll('tr')??[]).find(item=>item.dataset.decisionRow===rowId):undefined;(row??section)?.scrollIntoView({behavior:'smooth',block:'start'});};return button;};
+ const branchLabel=(decision:BusinessDecision|undefined,branch:DecisionRow|undefined,showConditions:boolean)=>{
+  if(!decision||!branch)return '未決';
+  const result=branch.result.text??'未決';if(!showConditions)return result;
+  const conditions=branch.conditions.map((condition,i)=>`${decision.axes[i].name}：${conditionLabel(condition,decision.axes[i])}`).join('、');
+  return `${result}（${decision.rows.indexOf(branch)+1}行目：${conditions}）`;
+ };
  const party=(value:Party|null|undefined)=>!value?'未決':value.kind==='who'?activityWho(bd,a):(bd.objects.find(object=>object.id===value.objectId)?.name??'未決');
  const sameData=(a:string[]|null,b:string[]|null)=>a===null||b===null?a===b:a.length===b.length&&a.every((id,i)=>id===b[i]);
  const simpleData=(ids:string[]|null)=>{if(ids?.length===1&&!dataDetails(bd,ids).children.length)return element('span',bd.data?.find(data=>data.id===ids[0])?.name??'未決');return procedureData(bd,ids);};
  root.append(element('h3','Procedure'));
- const hint=element('p','表は左右にスクロールできます。');hint.className='procedure-scroll-hint';root.append(hint);
+ const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');hint.className='procedure-scroll-hint';root.append(hint);
  const scroll=element('div');scroll.dataset.procedureScroll='';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute('aria-label','手順表');
  const table=element('table');table.dataset.procedureTable='';table.dataset.businessDecisions='';const head=element('thead'),headRow=element('tr');
  for(const title of ['From','To','Data','Action']){const th=element('th',title);th.scope='col';headRow.append(th);}head.append(headRow);table.append(head);const body=element('tbody');
@@ -61,21 +67,21 @@ function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
   if(x.kind!=='interaction'||sameData(step.whatDataIds,x.dataIds))data.append(simpleData(step.whatDataIds));
   else data.append(element('span','対象：'),simpleData(step.whatDataIds),element('span','受渡し：'),simpleData(x.dataIds));row.append(data);
   const action=element('td',step.action);for(const id of step.decisionIds??[])action.append(link(id));
-  const metadata:string[]=[];if(step.obligation==='optional')metadata.push('任意');if(step.method)metadata.push(`方法：${step.method}`);if(step.appliesWhen)metadata.push(`適用条件：${step.appliesWhen}`);if(step.effect)metadata.push(`操作効果：${step.effect}`);
+  const metadata:string[]=[],optional=step.obligation==='optional';let conditionReference:{decisionId:string;rowId:string}|undefined;if(step.method)metadata.push(`方法：${step.method}`);if(step.appliesWhen)metadata.push(`適用条件：${step.appliesWhen}`);if(step.effect)metadata.push(`操作効果：${step.effect}`);
   if(step.whenDecision){const decision=decisions.find(item=>item.id===step.whenDecision!.decisionId),branch=decision?.rows.find(item=>item.id===step.whenDecision!.rowId);
    const shownEarlier=a.procedure.steps.slice(0,index).some(item=>item.decisionIds?.includes(decision?.id??''));
-   const clearValidation=decision?.kind==='validation'&&branch?.result.kind==='accepted'&&decision.rows.some(item=>item.result.kind==='error')&&shownEarlier;
-   if(!clearValidation)metadata.push(`判定条件：${decision?.title??'未決'} / ${branch?.result.text??'未決'}`);
+   const clearValidation=decision?.kind==='validation'&&branch?.result.kind==='accepted'&&decision.rows.some(item=>item.result.kind==='error')&&decision.rows.every(item=>item===branch||item.result.kind==='error')&&shownEarlier;
+   if(!clearValidation){metadata.push(`判定条件：${decision?.title??'未決'} / ${branchLabel(decision,branch,true)}`);conditionReference=step.whenDecision;}
   }
   if(step.parties){const suppliedFrom=party(step.parties.from),suppliedTo=party(step.parties.to);if(suppliedFrom!==from||suppliedTo!==to)metadata.push(`操作主体と対象：${suppliedFrom} → ${suppliedTo}`);}
   if(x.kind==='interaction'){if(x.phase===null)metadata.push('Request/Response：未決');else if(x.phase!=='not-applicable')metadata.push(x.phase==='request'?'Request':'Response');if(x.pairedStepId)metadata.push(`対応：手順${a.procedure.steps.findIndex(item=>item.id===x.pairedStepId)+1}`);}
   else if(x.kind==='unresolved')metadata.push('やり取り：未決');
-  if(metadata.length){const more=element('details'),summary=element('summary','詳細');more.className='procedure-original';more.append(summary,element('small',metadata.join(' · ')));action.append(more);}
+  if(metadata.length){const more=element('details'),summary=element('summary',optional?'詳細（任意）':'詳細'),text=element('small',metadata.join(' · '));if(conditionReference)text.append(link(conditionReference.decisionId,conditionReference.rowId));more.className='procedure-original';more.append(summary,text);action.append(more);}else if(optional)action.append(element('small','（任意）'));
   if(step.legacyText){const original=element('details');original.className='procedure-original';original.append(element('summary','元の手順'),formattedMarkdown(step.legacyText));action.append(original);}row.append(action);body.append(row);
  }
  table.append(body);scroll.append(table);root.append(scroll);
  if(a.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul'),stepNumber=(id:string)=>String(a.procedure.steps.findIndex(s=>s.id===id)+1);for(const rule of a.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`手順${stepNumber(rule.beforeId)} → 手順${stepNumber(rule.afterId)}`:`手順${rule.stepIds.map(stepNumber).join('・')}は入替可能`));root.append(rules);}
- for(const decision of decisions){const section=element('section');section.dataset.businessDecision=decision.id;sections.set(decision.id,section);section.append(element('h3',`${decision.title}（※${number(decision.id)}）`));if(decision.appliesWhen){const parent=decisions.find(value=>value.id===decision.appliesWhen!.decisionId),branch=parent?.rows.find(value=>value.id===decision.appliesWhen!.rowId),condition=element('p',`適用条件：${parent?.title??'未決'} — ${branch?.result.text??'未決'}`);condition.append(link(decision.appliesWhen.decisionId));if(decision.note)condition.append(document.createTextNode(' · '+decision.note));section.append(condition);}else if(decision.note)section.append(element('p',decision.note));section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'),businessDecisionTable(decision,checks),...decisionExceptions(decision,bd,checks));root.append(section);}
+ for(const decision of decisions){const section=element('section');section.dataset.businessDecision=decision.id;sections.set(decision.id,section);section.append(element('h3',`${decision.title}（※${number(decision.id)}）`));if(decision.appliesWhen){const parent=decisions.find(value=>value.id===decision.appliesWhen!.decisionId),branch=parent?.rows.find(value=>value.id===decision.appliesWhen!.rowId),ambiguous=!!branch&&!!parent&&parent.rows.filter(row=>row.result.text===branch.result.text).length>1,condition=element('p',`適用条件：${parent?.title??'未決'} — ${branchLabel(parent,branch,ambiguous)}`);condition.append(link(decision.appliesWhen.decisionId,decision.appliesWhen.rowId));if(decision.note)condition.append(document.createTextNode(' · '+decision.note));section.append(condition);}else if(decision.note)section.append(element('p',decision.note));section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'),businessDecisionTable(decision,checks),...decisionExceptions(decision,bd,checks));root.append(section);}
 }
 export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:string)=>void):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;

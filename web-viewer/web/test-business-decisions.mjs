@@ -39,4 +39,43 @@ assert.match(tables[1].textContent,/MK-04/);assert.match(tables[2].textContent,/
 const reverseOnly=JSON.parse(source),reverseItem=reverseOnly.documents.find(x=>x.kind==='checkItems').items[0];reverseItem.fields.guarantee=[{kind:'text',value:'0本は0点'}];const reverseView=renderChecks(parseDocument(JSON.stringify(reverseOnly)),'calculate-score'),reverseCard=reverseView.querySelectorAll('section').find(x=>x.dataset.elementId==='check-01'),reverseLink=reverseCard.querySelectorAll('details').find(x=>x.dataset.linkedBusinessDecision==='score-algorithm');assert.ok(reverseLink);reverseLink.open=true;reverseLink.listeners.toggle();assert.match(reverseLink.textContent,/投擲回数/);assert.match(detail.textContent,/適用条件：入力の検査 — 有効/);
 const legacy=parseDocument(read('../tools/document_storage/examples/continuity-draft-v06.json')),oldTable=businessDetail(legacy,'fill').querySelector('table');assert.deepEqual(oldTable.querySelectorAll('th').map(x=>x.textContent),['Step','From','To','Data','Action']);const invalid=JSON.parse(source);invalid.formatVersion='0.8';assert.throws(()=>parseDocument(JSON.stringify(invalid)));covered.push(expected[4]);
 const css=read('src/procedure-continuity.css');assert.match(css,/\[data-procedure-table\]\[data-business-decisions\]/);assert.match(css,/\[data-business-decision-table\].*padding:4px 6px/);assert.match(css,/overflow-x:auto/);assert.match(css,/border-left:2px solid/);covered.push(expected[5]);
-assert.doesNotMatch(rows[3].textContent,/入力が有効な場合|判定条件/);assert.match(detail.textContent,/全体.*エラー/);const changed=JSON.parse(source);changed.documents[0].activities[0].procedure.steps[2].appliesWhen='特別な場合';assert.match(businessDetail(parseDocument(JSON.stringify(changed)),'calculate-score').textContent,/適用条件：特別な場合/);covered.push(expected[6]);assert.deepEqual(covered,expected);console.log('Integrated business decision model and DOM checks passed; real browser remains separate.');
+assert.doesNotMatch(rows[3].textContent,/入力が有効な場合|判定条件/);assert.match(detail.textContent,/全体.*エラー/);const changed=JSON.parse(source);changed.documents[0].activities[0].procedure.steps[2].appliesWhen='特別な場合';assert.match(businessDetail(parseDocument(JSON.stringify(changed)),'calculate-score').textContent,/適用条件：特別な場合/);covered.push(expected[6]);assert.deepEqual(covered,expected);
+
+// An accepted branch must remain identifiable when another accepted branch has
+// the same result label. Both the Step and the dependent decision point to it.
+const makeBranches=()=>{
+ const pkg=JSON.parse(source),activity=pkg.documents[0].activities[0],validation=activity.decisions[0];
+ validation.axes[1]={id:'axis-duplicate',name:'申請区分',dataIds:['throws']};
+ validation.rows[0].conditions[1]={axisId:'axis-duplicate',kind:'value',operator:'is',value:'A'};
+ const alternate=structuredClone(validation.rows[0]);alternate.id='valid-b';alternate.conditions[1].value='B';validation.rows.splice(1,0,alternate);
+ return pkg;
+};
+for(const [rowId,expectedValue,forbiddenValue] of [['valid','A','B'],['valid-b','B','A']]){
+ const pkg=makeBranches(),a=pkg.documents[0].activities[0];a.procedure.steps[2].whenDecision.rowId=rowId;a.decisions[1].appliesWhen.rowId=rowId;
+ const view=businessDetail(parseDocument(JSON.stringify(pkg)),'calculate-score'),step=view.querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate');
+ const stepDetails=step.querySelector('details');assert.ok(stepDetails);assert.match(stepDetails.textContent,new RegExp(`判定条件：.*申請区分：${expectedValue}`));assert.doesNotMatch(stepDetails.textContent,new RegExp(`申請区分：${forbiddenValue}`));
+ const conditional=stepDetails.querySelectorAll('button').find(n=>n.textContent==='（※1）');assert.ok(conditional);conditional.onclick();
+ const target=view.querySelectorAll('tr').find(n=>n.dataset.decisionRow===rowId);assert.equal(target.scrolled,true);
+ const dependent=view.querySelectorAll('section').find(n=>n.dataset.businessDecision==='score-algorithm');assert.match(dependent.textContent,new RegExp(`適用条件：.*申請区分：${expectedValue}`));target.scrolled=false;dependent.querySelector('button').onclick();assert.equal(target.scrolled,true);
+}
+
+// An undecided branch is not an error, even if the table has just one
+// accepted row; suppressing the Step's condition would hide that distinction.
+const pending=JSON.parse(source),pendingActivity=pending.documents[0].activities[0],pendingValidation=pendingActivity.decisions[0];
+pendingValidation.rows.push({id:'pending',conditions:[{axisId:'axis-numbers',kind:'undecided'},{axisId:'axis-duplicate',kind:'any'}],result:{kind:'undecided',text:null,dataIds:[],exceptionIds:[]},checkRefs:[]});
+const pendingView=businessDetail(parseDocument(JSON.stringify(pending)),'calculate-score'),pendingStep=pendingView.querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate');assert.match(pendingStep.textContent,/判定条件：/);
+
+// Explicit else/any are shown as decision-table terms, rather than substituted
+// by the result label or inferred to mean a different decision row.
+const otherwise=makeBranches(),otherwiseValidation=otherwise.documents[0].activities[0].decisions[0];
+otherwiseValidation.rows[1].conditions[1]={axisId:'axis-duplicate',kind:'else'};
+otherwise.documents[0].activities[0].procedure.steps[2].whenDecision.rowId='valid-b';
+const otherwiseView=businessDetail(parseDocument(JSON.stringify(otherwise)),'calculate-score'),otherwiseStep=otherwiseView.querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate');assert.match(otherwiseStep.textContent,/申請区分：それ以外/);
+
+// Required and optional remain distinguishable without expanding every row.
+const optional=JSON.parse(source);optional.documents[0].activities[0].procedure.steps[2].obligation='optional';
+const optionalView=businessDetail(parseDocument(JSON.stringify(optional)),'calculate-score'),optionalStep=optionalView.querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate');
+assert.match(optionalView.textContent,/無印の手順は必須/);assert.match(optionalStep.textContent,/任意/);
+optional.documents[0].activities[0].procedure.steps[2].method='目視';
+const optionalDetails=businessDetail(parseDocument(JSON.stringify(optional)),'calculate-score').querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate').querySelector('details');assert.match(optionalDetails.querySelector('summary').textContent,/任意/);assert.match(optionalDetails.textContent,/方法：目視/);
+console.log('Integrated business decision model and DOM checks passed; real browser remains separate.');
