@@ -46,4 +46,4 @@
 
 候補0.6の`parties`は操作主体・対象を表します。上の情報のFrom・Toとは意味が違うため、既存データを自動的に読み替えません。新しい契約では版の識別と明示移行、既存ID・原本・確認状態の保持を扱います。
 
-[手順とチェックのモルック検討例](../work/procedure-hearing/proposal.ja.md)と[構造化JSON](../work/procedure-hearing/issue-340-molkky.json)は、表示と参照を確かめるPoCです。正式Schemaや通常Viewerへの対応を意味しません。今後、[導入ガイド](adoption.md)、[チェック項目の追跡関係](check-item-traceability.md)、[JSON操作ガイド](plugin-json-authoring.ja.md)と対応するSkill・保存器・Viewerを、この方針と整合させます。
+[手順とチェックのモルック検討例](../work/procedure-hearing/proposal.ja.md)と[構造化JSON](../work/procedure-hearing/issue-340-molkky.json)は、表示と参照を確かめるPoCです。正式Schemaや通常Viewerへの対応を意味しません。今後、[導入ガイド](adoption.md)、[チェック項目の追跡関係](check-item-traceability.md)、[JSON操作ガイド](plugin-json-authoring.ja.md)と、配布するSkill・保存器・Viewerを、この方針と整合させます。
