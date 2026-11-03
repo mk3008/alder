@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "9c640f0b1be05b614bcaaef9f4d828f2bf4eb590",
+  "alder_source_revision": "1e5a069536d49fa6e9662344b49bfa77866833f9",
   "sources": {
     "docs/behavior-derivation/functional-considerations.md": "456792a0bf641d1a3d8c1cd046d8b761dab89e9deb14fa096059aa2a6a59aba5",
-    "docs/check-item-traceability.md": "3f336eb8ec6e4905e309534ddbb721b7c7650f5726f7939694c14adb458940c8"
+    "docs/check-item-traceability.md": "071a8c800c5e958372c1c04f96d152b9eba312356049ef5dcf7b7f11ec38108c"
   }
 }
