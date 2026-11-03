@@ -38,9 +38,9 @@ export function project(doc) {
       if(!['required','optional'].includes(step.obligation))error('OBLIGATION',step.id);
       if(step.appliesWhen!==null&&(typeof step.appliesWhen!=='string'||!step.appliesWhen.trim()))error('APPLIES_WHEN',step.id);
       if(step.effect!==null&&!['create','read','update','delete','not-applicable','undecided'].includes(step.effect))error('EFFECT',step.id);
-      if(!('exchange' in step)){rows.push({stepId:step.id,kind:'local',effect:step.effect});continue;}
+      if(!('exchange' in step)){rows.push({stepId:step.id,text:step.text,kind:'local',effect:step.effect});continue;}
       const x=step.exchange;
-      if(x===null){todo('EXCHANGE_UNRESOLVED',step.id);rows.push({stepId:step.id,kind:'unresolved',effect:step.effect});continue;}
+      if(x===null){todo('EXCHANGE_UNRESOLVED',step.id);rows.push({stepId:step.id,text:step.text,kind:'unresolved',effect:step.effect});continue;}
       if(!x||typeof x!=='object'||Array.isArray(x)){error('EXCHANGE_SHAPE',step.id);continue;}
       if(!['request','response'].includes(x.phase))error('PHASE',step.id);
       if(!['input','output'].includes(x.direction)){error('DIRECTION',step.id);continue;}
@@ -53,7 +53,7 @@ export function project(doc) {
       else if(x.dataId===null)todo('DATA_UNRESOLVED',step.id);
       else datum=ref(x.dataId,'data',step.id);
       const whoEndpoint=`who:${activity.id}`, objectEndpoint=`object:${x.objectId}`;
-      rows.push({stepId:step.id,kind:'exchange',from:x.direction==='output'?whoEndpoint:objectEndpoint,to:x.direction==='output'?objectEndpoint:whoEndpoint,phase:x.phase,direction:x.direction,objectId:x.objectId,dataId:x.dataId,effect:step.effect});
+      rows.push({stepId:step.id,text:step.text,kind:'exchange',from:x.direction==='output'?whoEndpoint:objectEndpoint,to:x.direction==='output'?objectEndpoint:whoEndpoint,phase:x.phase,direction:x.direction,objectId:x.objectId,dataId:x.dataId,effect:step.effect});
       if(!object || (!datum && !hasNoData && x.dataId!==null))continue;
       const key=JSON.stringify([activity.id,x.objectId,x.direction]);
       if(!grouping.has(key))grouping.set(key,{activityId:activity.id,objectId:x.objectId,direction:x.direction,stepIds:[],data:[]});

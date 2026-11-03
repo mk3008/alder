@@ -116,11 +116,13 @@ test('paper-to-note example keeps the same Data in the two explicit interactions
 });
 test('paper Scope requires context; classification does not change the recorded steps',()=>{
   const paper=JSON.parse(awaitPaper), before=project(paper);
-  paper.objects.find(o=>o.id==='paper').scope=true;const machine=project(paper);
-  paper.objects.find(o=>o.id==='paper').scope=false;const human=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=true;step(paper,'s-read').text='作業者が対象システムのOCRで紙を読み取る';const machine=project(paper);
+  paper.objects.find(o=>o.id==='paper').scope=false;step(paper,'s-read').text='作業者が紙を目視で読み取る';const human=project(paper);
   assert.ok(pending(before,'SCOPE_UNRESOLVED','paper'));
   assert.ok(!pending(machine,'SCOPE_UNRESOLVED','paper'));assert.ok(!pending(human,'SCOPE_UNRESOLVED','paper'));
-  assert.deepEqual(machine.rows,human.rows);assert.deepEqual(machine.edges,human.edges);
+  assert.equal(machine.rows.find(x=>x.stepId==='s-read').text,'作業者が対象システムのOCRで紙を読み取る');
+  assert.equal(human.rows.find(x=>x.stepId==='s-read').text,'作業者が紙を目視で読み取る');
+  assert.deepEqual(machine.edges,human.edges);
 });
 test('no Data differs from unresolved Data and does not manufacture a label',()=>{
   const d=copy();const e=step(d,'s-name-query').exchange;delete e.dataId;e.noData=true;
