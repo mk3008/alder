@@ -1,0 +1,307 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.6",
+  "revision": "molkky-review-1",
+  "documents": [
+    {
+      "id": "a621101e-db72-4d87-92b3-14cd2dd9308f",
+      "kind": "businessDesign",
+      "schemaVersion": "0.5",
+      "revision": "molkky-review-1",
+      "title": "試合開始",
+      "preface": "旧0.5の公開fixture「試合開始」から作った表の検討用候補。主体・入出力の対応は未確定であり、移行済み原本ではない。",
+      "scope": "scopeは外側のexample.scopeを参照",
+      "objects": [
+        {
+          "id": "978d11b3-def5-4149-971c-c7118065139b",
+          "name": "遊ぶ人と記録する人",
+          "scope": false,
+          "icon": "users",
+          "information": [
+            {
+              "id": "m-participants",
+              "name": "参加者名",
+              "description": ""
+            },
+            {
+              "id": "m-order",
+              "name": "元の順番",
+              "description": ""
+            },
+            {
+              "id": "m-start-status",
+              "name": "参加者条件に合う試合の開始可否",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+          "name": "試合の記録",
+          "scope": true,
+          "icon": "file-text",
+          "information": [
+            {
+              "id": "m-record-participants",
+              "name": "参加者名",
+              "description": ""
+            },
+            {
+              "id": "m-record-order",
+              "name": "元の順番",
+              "description": ""
+            },
+            {
+              "id": "m-initial",
+              "name": "各自の初期0点",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "roles": [
+        {
+          "id": "efa1c9f1-9f0c-456c-811c-cf4962492596",
+          "name": "参加者",
+          "color": "#2563eb"
+        },
+        {
+          "id": "168c052e-2574-4159-9a95-6c06932e5a74",
+          "name": "記録する人",
+          "color": "#008576"
+        },
+        {
+          "id": "4555cbf3-a0cd-4b5c-b0fe-c8cf4b6ceaea",
+          "name": "道具",
+          "color": "#c2410c"
+        }
+      ],
+      "activities": [
+        {
+          "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+          "name": "試合の開始を記録する",
+          "scope": true,
+          "why": "参加者と順番をその試合に結び付け、条件に合う試合を始めるため",
+          "when": "人が決めた参加者の名前と順番を道具に伝え、新しい試合を始めようとするとき",
+          "where": "CLI",
+          "procedure": {
+            "steps": [
+              {
+                "id": "m-receive",
+                "action": "受け取る",
+                "method": null,
+                "whatDataIds": [
+                  "data-a11a030e-0574-493f-976c-bdc56b3e041e"
+                ],
+                "legacyText": "人が決めた参加者名と元の順番を受け取る。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": null,
+                "parties": {
+                  "from": {
+                    "kind": "who"
+                  },
+                  "to": {
+                    "kind": "object",
+                    "objectId": "978d11b3-def5-4149-971c-c7118065139b"
+                  }
+                },
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "not-applicable",
+                  "direction": "input",
+                  "objectId": "978d11b3-def5-4149-971c-c7118065139b",
+                  "dataIds": [
+                    "data-a11a030e-0574-493f-976c-bdc56b3e041e"
+                  ],
+                  "relationId": "a11a030e-0574-493f-976c-bdc56b3e041e",
+                  "pairedStepId": null
+                }
+              },
+              {
+                "id": "m-check",
+                "action": "開始可否を判定する（0人・1人または同名では開始しない）",
+                "method": null,
+                "whatDataIds": [
+                  "data-a11a030e-0574-493f-976c-bdc56b3e041e"
+                ],
+                "legacyText": "0人・1人または同名なら試合を始めない。2人以上で重複名がなければ記録へ進む。",
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": null,
+                "exchange": {
+                  "kind": "internal"
+                }
+              },
+              {
+                "id": "m-write",
+                "action": "記録する",
+                "method": null,
+                "whatDataIds": [
+                  "data-f92e3d72-c9cc-46e7-b116-6460ae44787b"
+                ],
+                "legacyText": "対象試合に参加者名・元の順番・全員の初期0点を記録し、得点と順番の見直しへ渡す。",
+                "obligation": "required",
+                "appliesWhen": "参加者が2人以上で名前が重複しない",
+                "effect": null,
+                "parties": {
+                  "from": {
+                    "kind": "who"
+                  },
+                  "to": {
+                    "kind": "object",
+                    "objectId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2"
+                  }
+                },
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "not-applicable",
+                  "direction": "output",
+                  "objectId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2",
+                  "dataIds": [
+                    "data-f92e3d72-c9cc-46e7-b116-6460ae44787b"
+                  ],
+                  "relationId": "f92e3d72-c9cc-46e7-b116-6460ae44787b",
+                  "pairedStepId": null
+                }
+              },
+              {
+                "id": "m-handoff",
+                "action": "得点と順番の見直しへ渡す",
+                "method": null,
+                "whatDataIds": [
+                  "data-f92e3d72-c9cc-46e7-b116-6460ae44787b"
+                ],
+                "obligation": "required",
+                "appliesWhen": "参加者が2人以上で名前が重複しない",
+                "effect": null,
+                "parties": {
+                  "from": {
+                    "kind": "who"
+                  },
+                  "to": null
+                },
+                "exchange": {
+                  "kind": "unresolved"
+                }
+              }
+            ],
+            "orderRules": [
+              {
+                "kind": "before",
+                "beforeId": "m-receive",
+                "afterId": "m-check"
+              },
+              {
+                "kind": "before",
+                "beforeId": "m-check",
+                "afterId": "m-write"
+              },
+              {
+                "kind": "before",
+                "beforeId": "m-write",
+                "afterId": "m-handoff"
+              }
+            ]
+          },
+          "results": [
+            {
+              "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e-r1",
+              "text": "条件に合う対象試合に参加者名と元の順番が結び付く。"
+            },
+            {
+              "id": "d38e0b2b-db26-4cce-92fd-5643a064d51e-r2",
+              "text": "条件に合う対象試合の各自の初期0点が記録される。"
+            }
+          ],
+          "problem": null,
+          "painLevel": null,
+          "who": null
+        }
+      ],
+      "relations": [
+        {
+          "id": "f92e3d72-c9cc-46e7-b116-6460ae44787b",
+          "kind": "output",
+          "fromId": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+          "toId": "99b1067c-f0c8-46b1-b1d6-53d7619473a2"
+        },
+        {
+          "id": "a11a030e-0574-493f-976c-bdc56b3e041e",
+          "kind": "input",
+          "fromId": "978d11b3-def5-4149-971c-c7118065139b",
+          "toId": "d38e0b2b-db26-4cce-92fd-5643a064d51e"
+        },
+        {
+          "id": "c1022cfd-1a81-4343-86ba-215a9369769a",
+          "kind": "output",
+          "fromId": "d38e0b2b-db26-4cce-92fd-5643a064d51e",
+          "toId": "978d11b3-def5-4149-971c-c7118065139b"
+        }
+      ],
+      "findings": [
+        {
+          "id": "m-actor-question",
+          "sourceId": "m-actor-question",
+          "kind": "question",
+          "status": "open",
+          "scope": "items",
+          "targetIds": [
+            "d38e0b2b-db26-4cce-92fd-5643a064d51e"
+          ],
+          "unresolvedTargets": [],
+          "summary": "実行主体Object未確定",
+          "content": "Who=道具に対応するObjectの同一性・実行分担を確認する。記録Objectと同一と推定しない。"
+        }
+      ],
+      "exceptions": [],
+      "data": [
+        {
+          "id": "data-f92e3d72-c9cc-46e7-b116-6460ae44787b",
+          "name": "開始した試合",
+          "items": [
+            {
+              "informationId": "m-record-participants",
+              "condition": null
+            },
+            {
+              "informationId": "m-record-order",
+              "condition": null
+            },
+            {
+              "informationId": "m-initial",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "data-a11a030e-0574-493f-976c-bdc56b3e041e",
+          "name": "参加者と順番",
+          "items": [
+            {
+              "informationId": "m-participants",
+              "condition": null
+            },
+            {
+              "informationId": "m-order",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "data-c1022cfd-1a81-4343-86ba-215a9369769a",
+          "name": "開始可否",
+          "items": [
+            {
+              "informationId": "m-start-status",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}
