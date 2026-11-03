@@ -1,6 +1,10 @@
 # Scope・Procedureの新構造候補
 
-この文書は新しいBusiness Design構造の候補を説明する。候補package `formatVersion: "0.6"` とBusiness Design `schemaVersion: "0.5"` は、未公開の旧package 0.5／Business Design 0.4と異なる。採番は候補であり、製品版Pluginや公開リリースの版を示さない。現行の直接編集対象は従来どおりpackage 0.4で、新構造の直接編集・Skill・Viewerは後続の対応が必要である。
+この文書は新しいBusiness Design構造の候補を説明する。候補package `formatVersion: "0.6"` とBusiness Design `schemaVersion: "0.5"` は、未公開の旧package 0.5／Business Design 0.4と異なる。採番は候補であり、製品版Pluginや公開リリースの版を示さない。候補Viewerは旧0.5と新0.6を読取り専用で表示する。現行の直接編集対象は従来どおりpackage 0.4で、新構造の通常編集とSkillは後続の対応が必要である。
+
+## 新しい聞き取り・Checkの方針
+
+[聞き取りで手順とチェックを記録する](business-design-hearing-and-checks.ja.md)方針では、条件と結果を聞いた時点で構造化したCheck草案に残し、手順から参照する。表のFrom・Toは情報の受渡し方向として検討する。この方針は現行候補0.6の保存器・Viewerおよび配布済みSkillにはまだ実装されていない。以下の0.6のpartiesは操作主体・対象であり、新しい意味に暗黙変換しない。
 
 ## Scopeと手順
 
@@ -10,9 +14,9 @@ ActivityとObjectのScopeは、対象システムを作る際に考慮する必�
 
 1つのActivityは単一のWhoを持つ。WhoはRole参照、システム、スケジューラー、未決を表せる。手順は順序付きStepと、必要な局所順序制約を持つ。標準の表は **From・To・Data・Action** を中心にし、必要な方法・条件等を併せて確認できる候補である。各StepはActionと方法、操作対象Data、必須・任意、適用条件、業務操作の効果、やり取りまたは内部判断を保持する。方法未決は`null`で表し、自然文の文法解析に依存しない。例外と複数Resultの意味・IDは別に保持する。
 
-例えば「作業者が紙の記載内容を読み取る」のDataは、読む対象を意味する。表の対象DataがそのままFromからToへ送信されると推測しない。対象Dataと実際の受渡しDataは、それぞれ同じData定義のIDへの参照として記録し、内容は二重管理しない。紙とメモの具体例では、受渡しの有無が分からない読取要求を未決とし、紙から受け取る記載内容とメモに書く記載内容は同じDataを使う。
+例えば「作業者が紙の記載内容を読み取る」のDataは、読む対象を意味する。表の対象DataがそのままFromからToへ送信されると推測しない。Stepの任意の`parties`は操作する主体と対象を表し、受渡しの`direction`とは独立する。未記載の主体・対象は推測しない。目視の場合は「作業者が紙を読む」の1行で、情報は紙からActivityへ入力されると表せる。紙が応答したことにはしない。[目視の例](../tools/document_storage/examples/paper-manual-v06.json)では同じ記載内容をメモへ書く。
 
-問い合わせを整理する合成例では、次のように検索、ヒアリング、判断、記録、承認と通知を並べられる。
+以下は旧来の合成例であり、確認が必要になる条件と、記録が確認メモか登録かは未整理である。業務の区切りを決める根拠にはしない。
 
 | From | To | Data | Action |
 | --- | --- | --- | --- |
@@ -28,7 +32,13 @@ ActivityとObjectのScopeは、対象システムを作る際に考慮する必�
 
 回答が得られない場合は、条件付きStep「確認待ちとして記録する」と別のResult・例外を残す。通知には応答を作らない。この例では顧客と承認者に人が直接対応し、対象システムはアクセスしない前提で、それぞれをScope外Objectとして参照する。別のActivityでは定刻バッチをWhoとし、対象データの照合を記録できる。[構造化された合成例](../tools/document_storage/examples/procedure-cases-v06.json)を使い、手順の理解を共有し、違いや不足を指摘できるかを確認する。
 
-やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。Request／Responseが未決なら`null`のまま相手と方向を記録できる。対応Stepの指定は双方の種別が判明してから行う。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
+やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。Request／Responseが未決なら`null`、その区別を適用しない場合は`not-applicable`を使う。対応Stepの指定は双方がRequestとResponseの場合に限る。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
+
+## 例外と再開
+
+例外はActivityに属する`exceptions`へ記録する。候補0.6では任意の`continuity`に発生条件、中断時の扱い、再開／継続／終了、再開条件と再開方法を記述できる。中断・再開に対応するStep IDと保持するData IDも参照できる。Stepは同じActivity、Dataは同じ文書に存在するものを使う。未決は`null`とし、実際にない中断や応答は作らない。[下書きを探して再開する合成例](../tools/document_storage/examples/continuity-draft-v06.json)では、再開条件は確認用の仮定である。
+
+例外の説明だけを持つ従来データはそのまま読める。フロー図への例外の表示方針は未決で、現行の例外関係を維持する。例外の説明と受け側のException Whenの関係、Stateとの役割分担は引き続き確認する。
 
 共通DataはInformationを参照する。同じ記載内容を紙から受け取り、メモへ送るStepで同一Dataを使える。Informationの所有先と受渡し先のObjectが違うだけでは拒否しない。InformationのID・所有先・名前・説明は勝手に移動・上書きしない。旧0.5を読む場合は旧版の所有先制約で検証する。
 

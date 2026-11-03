@@ -1,4 +1,4 @@
-export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean; [key: string]: unknown };
+export type GraphNode = { id: string; type: 'business' | 'object'; name: string; scope: boolean|null; [key: string]: unknown };
 export type Relation = { kind: 'input' | 'output' | 'business-exception' | 'object-exception'; from: string; to: string; label: string };
 export type Graph = { version: 1; scope?: string; nodes: GraphNode[]; relations: Relation[] };
 export type Finding = { id: string; displayId?:string; targetNames?:string[]; kind: 'question' | 'correction'; status: 'open' | 'resolved'; scope: 'items' | 'document' | 'unassigned'; targets: string[]; summary: string; content: string; unresolvedTargets: string[] };

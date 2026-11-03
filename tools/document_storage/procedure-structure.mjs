@@ -51,12 +51,18 @@ export function validateOldStructure(bd,inv,target){
 // Information on another Object; ownership itself remains unchanged.
 export function validateProcedureStructure(bd,inv,target,diagnostics){
  const ref=validateCommon(bd,inv,target),steps=new Map(bd.activities.flatMap(a=>a.procedure.steps.map(s=>[s.id,{activity:a,step:s}])));
+ for(const exception of bd.exceptions){
+  const c=exception.continuity;if(!c)continue;
+  for(const id of [c.interruptedAtStepId,c.resumeAtStepId])if(id!==null)ref(id,'step',exception.activityId);
+  if(c.retainedDataIds!==null){unique(c.retainedDataIds,'Duplicate retained Data');for(const id of c.retainedDataIds)ref(id,'data');}
+ }
  for(const object of bd.objects)if(object.scope===null)diagnostics.push('Scope未確定: '+object.id);
  for(const a of bd.activities){
   if(a.scope===null)diagnostics.push('Scope未確定: '+a.id);
   if(a.who===null)diagnostics.push('Who未確定: '+a.id);
   else if(a.who.kind==='role')ref(a.who.roleId,'role');
   for(const s of a.procedure.steps){
+   if(s.parties)for(const party of [s.parties.from,s.parties.to])if(party?.kind==='object')ref(party.objectId,'object');
    if(s.whatDataIds===null)diagnostics.push('対象Data未確定: '+s.id);
    else {unique(s.whatDataIds,'Duplicate Step target Data');for(const id of s.whatDataIds)ref(id,'data');}
    const x=s.exchange;if(x.kind==='unresolved'){diagnostics.push('やり取り未確定: '+s.id);continue;}if(x.kind==='internal')continue;
@@ -69,7 +75,7 @@ export function validateProcedureStructure(bd,inv,target,diagnostics){
    }
    if(x.pairedStepId!==null){
     const pair=steps.get(x.pairedStepId);demand(pair&&pair.activity.id===a.id&&pair.step.id!==s.id,'Invalid paired Step: '+s.id);
-    const y=pair.step.exchange;demand(y.kind==='interaction'&&x.phase!==null&&y.phase!==null&&y.phase!==x.phase&&y.direction!==x.direction&&y.objectId===x.objectId,'Request/Response mismatch: '+s.id);
+    const y=pair.step.exchange;demand(y.kind==='interaction'&&['request','response'].includes(x.phase)&&['request','response'].includes(y.phase)&&y.phase!==x.phase&&y.direction!==x.direction&&y.objectId===x.objectId,'Request/Response mismatch: '+s.id);
    }
   }
  }
@@ -83,7 +89,7 @@ export function projectProcedure(bd){
   const x=s.exchange,mentioned=new Map();
   const add=(id,kind)=>{let item=mentioned.get(id);if(!item){const d=data.get(id);demand(d,'Unknown Data during projection: '+id);item={id:d.id,name:d.name,uses:[]};mentioned.set(id,item);}if(!item.uses.includes(kind))item.uses.push(kind);};
   for(const id of s.whatDataIds??[])add(id,'target');if(x.kind==='interaction')for(const id of x.dataIds??[])add(id,'transferred');
-  const common={activityId:a.id,stepId:s.id,action:s.action,method:s.method,data:[...mentioned.values()],targetDataUndecided:s.whatDataIds===null,obligation:s.obligation,appliesWhen:s.appliesWhen,effect:s.effect};
+  const common={activityId:a.id,stepId:s.id,action:s.action,method:s.method,data:[...mentioned.values()],targetDataUndecided:s.whatDataIds===null,obligation:s.obligation,appliesWhen:s.appliesWhen,effect:s.effect,...(s.parties?{parties:s.parties}:{})};
   if(x.kind!=='interaction'){rows.push({...common,kind:x.kind,from:x.kind==='internal'?{kind:'who',activityId:a.id}:null,to:null});continue;}
   const who={kind:'who',activityId:a.id},object={kind:'object',objectId:x.objectId};
   rows.push({...common,kind:x.kind,from:x.direction==='output'?who:object,to:x.direction==='output'?object:who,

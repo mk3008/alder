@@ -40,7 +40,10 @@ export async function verifyJSONDocuments(browser){
    await shot('activity-selection');
    if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    const roleStyle=el=>({background:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,border:getComputedStyle(el).borderColor,width:getComputedStyle(el).width,height:getComputedStyle(el).height});assert.deepEqual(await page.locator('#detail h1 .who-badge').evaluate(roleStyle),await page.locator('[data-node="'+activity.id+'"] .who-badge').evaluate(roleStyle),'Activity title retains the card role badge and color');
-   assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await selectedOnly();await shot('activity-detail');
+   assert.equal(await page.locator('#detail h1').textContent(),activity.name);for(const line of activity.procedure.split('\n'))assert.ok((await page.locator('#detail').innerText()).includes(line.replace(/^\d+\. /,'')));await selectedOnly();
+   const ioRows=()=>page.locator('.json-detail').evaluate(root=>Object.fromEntries(['Input','Output'].map(name=>{const heading=[...root.children].find(node=>node.tagName==='H3'&&node.textContent===name);return [name,[...(heading?.nextElementSibling?.querySelectorAll('li')??[])].map(item=>item.textContent)];})));
+   const expectedIO={Input:['依頼内容 — 品名 / 返却予定日（必須）'],Output:['持出受付台帳 — 受付番号 / 品名 / 返却予定日 / 受付済み']};
+   assert.deepEqual(await ioRows(),expectedIO);await shot('activity-detail');
    assert.equal(await page.locator('#detail .right-drawer-tabs').count(),0);await showTestChecks(page,activity.id);assert.equal(await page.locator('#tests-workspace .check-item').count(),2);
    const item=page.locator('[data-check-id="CI-001"]');assert.ok((await item.innerText()).includes('CI-001'));
    await item.locator('summary').filter({hasText:'CI-001の一般保証'}).click();await item.locator('table').waitFor({state:'visible'});assert.ok((await item.innerText()).includes('必須不足'));
@@ -51,7 +54,7 @@ export async function verifyJSONDocuments(browser){
    await showBusinessOverview(page);await selectGraphNode(page,activity.id);if(!await page.locator('#formattedMarkdownDrawer').isVisible())await page.locator('#drawer').click();
    await page.locator(`.node[data-activity="${activity.id}"] .activity-open`).first().press('Enter');await saved();
    assert.equal(await page.locator('#tabs .tab').count(),2);assert.ok((await page.locator('#tabs .tab.active').innerText()).includes(activity.name));
-   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#tabs .tab').count(),2);assert.equal(await page.locator('#detail h1').textContent(),activity.name);
+   await page.reload();await page.waitForFunction(()=>!document.querySelector('#open').disabled);assert.equal(await page.locator('#tabs .tab').count(),2);assert.equal(await page.locator('#detail h1').textContent(),activity.name);assert.deepEqual(await ioRows(),expectedIO);
    await selectedOnly();await page.locator('#tabs .tab').first().locator('button').first().click();
    await page.locator(`.finding-badges[aria-label="${bd.activities[2].name}の指摘を開く"]`).press('Enter');
    assert.ok((await page.locator('#node-list').innerText()).includes('通知媒体'));assert.ok((await page.locator('#node-list').innerText()).includes(bd.activities[2].name));await shot('findings');

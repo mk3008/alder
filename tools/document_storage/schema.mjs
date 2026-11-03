@@ -30,17 +30,25 @@ const oldStructuredBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.4'
 // may retain an existing endpoint/ID but never duplicates its Data label.
 const who={anyOf:[obj({kind:{enum:['role']},roleId:id}),obj({kind:{enum:['system','scheduler']},name:text}),{type:'null'}]};
 const exchange={anyOf:[
- obj({kind:{enum:['interaction']},phase:nullable({enum:['request','response']}),direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
+ obj({kind:{enum:['interaction']},phase:nullable({enum:['request','response','not-applicable']}),direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
  obj({kind:{enum:['internal']}}),obj({kind:{enum:['unresolved']}})
 ]};
 // Action is the fourth table column. Historical Step prose may be retained as
 // legacyText during migration; it is not a second current action definition.
-const newStep=obj({id,action:text,method:nullable(text),whatDataIds:nullable(array(id)),legacyText:text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange},['id','action','method','whatDataIds','obligation','appliesWhen','effect','exchange']);
+// The acting/target parties are independent of the direction in which Data
+// moves. Missing parties are undecided, not inferred from an input arrow.
+const party={anyOf:[obj({kind:{enum:['who']}}),obj({kind:{enum:['object']},objectId:id})]};
+const parties=obj({from:nullable(party),to:nullable(party)});
+const newStep=obj({id,action:text,method:nullable(text),whatDataIds:nullable(array(id)),legacyText:text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange,parties},['id','action','method','whatDataIds','obligation','appliesWhen','effect','exchange']);
+// A continuation is optional: historical descriptions and undecided business
+// facts must remain readable without manufacturing a pause or a restart.
+const continuity=obj({trigger:nullable(text),onInterrupt:nullable(text),outcome:nullable({enum:['resume','continue','end']}),resumeCondition:nullable(text),resumeAction:nullable(text),interruptedAtStepId:nullable(id),resumeAtStepId:nullable(id),retainedDataIds:nullable(array(id))});
+const procedureException=obj({id,activityId:id,name:text,description:str,continuity},['id','activityId','name','description']);
 const scopedEntity={...entity,scope:nullable({type:'boolean'})};
 const newBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.5']},
  objects:array(obj({...scopedEntity,icon:text,information:array(information)})),
  activities:nonempty(obj({...structuredActivityProperties,...scopedEntity,who,procedure:obj({steps:nonempty(newStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
- data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
+ exceptions:array(procedureException),data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
 const checkFields=Object.fromEntries(['classification','condition','expectedResult','guarantee','evidence','derivation','related','testEvidence','question','alternatives','confidence'].map(k=>[k,rich]));
 const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},revision:text,title:text,basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),intro:rich,
  index:array(obj({activityId:id,purpose:str,connections:str,checkIds:array(id)})),

@@ -1,3 +1,3 @@
 import type {Design} from './graph';
-export function activityRole(design:Design,id:string){const bd=design.model?.business,a=bd?.activities.find(a=>a.id===id);return a?.roleId?bd?.roles?.find(r=>r.id===a.roleId):undefined;}
-export function roleGroupKey(design:Design,id:string,who:string){return activityRole(design,id)?.id??(design.model?.business.roles?'unresolved:'+id:who);}
+export function activityRole(design:Design,id:string){const bd=design.model?.business,a=bd?.activities.find(a=>a.id===id);if(!a||'performers' in a)return;const roleId=typeof a.who==='object'&&a.who?.kind==='role'?a.who.roleId:('roleId' in a?a.roleId:undefined);return roleId?bd?.roles?.find(r=>r.id===roleId):undefined;}
+export function roleGroupKey(design:Design,id:string,who:string){const a=design.model?.business.activities.find(a=>a.id===id);if(a&&'who' in a&&typeof a.who==='object'&&a.who&&(a.who.kind==='system'||a.who.kind==='scheduler'))return a.who.kind+':'+a.who.name;return activityRole(design,id)?.id??(design.model?.business.roles?'unresolved:'+id:who);}
