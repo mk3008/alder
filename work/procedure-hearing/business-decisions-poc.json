@@ -1,0 +1,89 @@
+{
+  "format": "alder-business-decisions-poc",
+  "version": "draft-1",
+  "status": "review-candidate",
+  "source": {
+    "url": "https://github.com/mk3008/alder/blob/8d88e3267c1bf46c0e48009c9dcd62b95285233e/examples/molkky/business-design.json",
+    "businessDocumentId": "4d4d78a4-ed9e-4663-8eae-036fe947498b",
+    "businessRevision": "bd-3",
+    "activityId": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+    "checkDocumentId": "1a6dc30e-7cec-4c60-8b62-c700ed904df8"
+  },
+  "businessDesign": {
+    "activity": {
+      "id": "b5a0fb06-1fde-4cf5-97ff-a04fbac7b792",
+      "name": "1回の点数を計算する",
+      "scope": true,
+      "why": "利用者が1回投げた結果の点数を知るため",
+      "who": { "id": "who", "name": "点数計算機能", "kind": null, "sourceRoleId": "7d59a094-8ac5-4b90-8238-ce13348d32f1" },
+      "when": "利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。0回を含む。",
+      "where": "規定なし",
+      "result": { "when": { "decisionId": "input-validation", "rowId": "valid" }, "dataId": "scores", "usedFor": ["total", "history"], "noThrows": "no-per-throw-score" }
+    },
+    "objects": [
+      { "id": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8", "name": "利用者", "scope": false },
+      { "id": "eff07917-b9d9-4249-a9ba-ff3fde99e593", "name": "投擲ごとの点数", "scope": true }
+    ],
+    "data": [
+      { "id": "throws", "name": "投擲順・各回の棒の番号" },
+      { "id": "response", "name": "各回の点数または入力エラー" },
+      { "id": "scores", "name": "投擲順・各回の点数" },
+      { "id": "total", "name": "合計点" },
+      { "id": "history", "name": "各回までの合計点の推移" }
+    ],
+    "relations": [
+      { "id": "5a3bf147-f5c3-481c-aee7-d28217e45a3f", "from": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8", "to": "who", "dataId": "throws" },
+      { "id": "5d07cb3b-db7d-4c55-91c2-d1d52ac8f0ca", "from": "who", "to": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8", "dataId": "response" },
+      { "id": "279e4bec-b172-475e-996d-2106f012c0df", "from": "who", "to": "eff07917-b9d9-4249-a9ba-ff3fde99e593", "dataId": "scores" }
+    ],
+    "steps": [
+      { "id": "receive", "from": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8", "to": "who", "dataId": "throws", "action": "受け取る", "relationId": "5a3bf147-f5c3-481c-aee7-d28217e45a3f", "exchange": "request", "pairId": "reply", "decisionIds": [] },
+      { "id": "validate", "from": "who", "to": null, "dataId": "throws", "action": "検査する", "decisionIds": ["input-validation"] },
+      { "id": "calculate", "from": "who", "to": null, "dataId": "throws", "action": "計算する", "when": { "decisionId": "input-validation", "rowId": "valid" }, "decisionIds": ["score-algorithm"] },
+      { "id": "pass-scores", "from": "who", "to": "eff07917-b9d9-4249-a9ba-ff3fde99e593", "dataId": "scores", "action": "渡す", "relationId": "279e4bec-b172-475e-996d-2106f012c0df", "when": { "decisionId": "input-validation", "rowId": "valid" }, "decisionIds": [] },
+      { "id": "reply", "from": "who", "to": "f0399ea1-5dfc-4e89-ad97-1ccdb7bcd0a8", "dataId": "response", "action": "返す", "relationId": "5d07cb3b-db7d-4c55-91c2-d1d52ac8f0ca", "exchange": "response", "pairId": "receive", "decisionIds": [] }
+    ],
+    "decisions": [
+      {
+        "id": "input-validation",
+        "kind": "validation",
+        "title": "入力の検査",
+        "dataId": "throws",
+        "axes": [
+          { "id": "validNumbers", "label": "棒の番号", "source": { "kind": "all-integer-range", "dataId": "throws", "min": 1, "max": 12 } },
+          { "id": "duplicateInTurn", "label": "同じ回の重複", "source": { "kind": "duplicate-within-turn", "dataId": "throws" } }
+        ],
+        "rows": [
+          { "id": "valid", "conditions": [{ "axisId": "validNumbers", "op": "eq", "value": true }, { "axisId": "duplicateInTurn", "op": "eq", "value": false }], "result": { "kind": "valid" }, "checkRefs": [] },
+          { "id": "duplicate", "conditions": [{ "axisId": "validNumbers", "op": "eq", "value": true }, { "axisId": "duplicateInTurn", "op": "else" }], "result": { "kind": "input-error" }, "checkRefs": [{ "id": "6aa87608-427f-4460-ac21-2cafe394fe3b", "code": "MK-04" }] },
+          { "id": "invalid-number", "conditions": [{ "axisId": "validNumbers", "op": "else" }, { "axisId": "duplicateInTurn", "op": "any" }], "result": { "kind": "input-error" }, "checkRefs": [{ "id": "6aa87608-427f-4460-ac21-2cafe394fe3b", "code": "MK-04" }] }
+        ]
+      },
+      {
+        "id": "score-algorithm",
+        "kind": "algorithm",
+        "title": "点数の計算",
+        "dataId": "throws",
+        "appliesWhen": { "decisionId": "input-validation", "rowId": "valid" },
+        "axes": [
+          { "id": "throwCount", "label": "投擲回数", "source": { "kind": "throw-count", "dataId": "throws" } },
+          { "id": "pinCount", "label": "倒れた本数", "source": { "kind": "pin-count-per-throw", "dataId": "throws" } }
+        ],
+        "rows": [
+          { "id": "zero-pins", "conditions": [{ "axisId": "throwCount", "op": "gte", "value": 1 }, { "axisId": "pinCount", "op": "eq", "value": 0 }], "result": { "kind": "constant", "value": 0, "unit": "点" }, "checkRefs": [{ "id": "11e00654-5e3e-4258-bd20-7e1587613ab0", "code": "MK-01" }] },
+          { "id": "one-pin", "conditions": [{ "axisId": "throwCount", "op": "gte", "value": 1 }, { "axisId": "pinCount", "op": "eq", "value": 1 }], "result": { "kind": "only-pin-number", "dataId": "throws" }, "checkRefs": [{ "id": "fa58c33c-f31f-48ba-aa5d-273ad2cc6a30", "code": "MK-02" }] },
+          { "id": "many-pins", "conditions": [{ "axisId": "throwCount", "op": "gte", "value": 1 }, { "axisId": "pinCount", "op": "else" }], "result": { "kind": "pin-count", "dataId": "throws" }, "checkRefs": [{ "id": "d1173d0e-85c5-4df7-94ff-2a7b0f0dece7", "code": "MK-03" }] },
+          { "id": "no-throws", "conditions": [{ "axisId": "throwCount", "op": "else" }, { "axisId": "pinCount", "op": "any" }], "result": { "kind": "no-per-throw-score" }, "checkRefs": [{ "id": "d714ae01-770a-49aa-a5cc-8c9133618cb5", "code": "MK-10", "coverage": "partial" }] }
+        ]
+      }
+    ],
+    "exceptions": [
+      {
+        "id": "invalid-input",
+        "when": { "decisionId": "input-validation", "rowIds": ["duplicate", "invalid-number"] },
+        "result": { "kind": "input-error", "suppressDataIds": ["scores", "total", "history"] },
+        "checkRefs": [{ "id": "875b8c7d-f924-446e-8b8c-6ab5564de83d", "code": "MK-05" }]
+      }
+    ]
+  }
+}
