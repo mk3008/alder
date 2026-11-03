@@ -57,24 +57,19 @@ function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
  const sameData=(a:string[]|null,b:string[]|null)=>a===null||b===null?a===b:a.length===b.length&&a.every((id,i)=>id===b[i]);
  const simpleData=(ids:string[]|null)=>{if(ids?.length===1&&!dataDetails(bd,ids).children.length)return element('span',bd.data?.find(data=>data.id===ids[0])?.name??'未決');return procedureData(bd,ids);};
  root.append(element('h3','Procedure'));
- const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');if(a.procedure.steps.some(step=>step.dependsOn===undefined))hint.append(' 前提が未確認の手順があります。');hint.className='procedure-scroll-hint';root.append(hint);
+ const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');hint.className='procedure-scroll-hint';root.append(hint);
  const scroll=element('div');scroll.dataset.procedureScroll='';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute('aria-label','手順表');
  const table=element('table');table.dataset.procedureTable='';table.dataset.businessDecisions='';const head=element('thead'),headRow=element('tr');
- for(const title of ['From','To','Data','Action']){const th=element('th',title);th.scope='col';headRow.append(th);}head.append(headRow);table.append(head);const body=element('tbody'),stepRows=new Map<string,HTMLElement>();
+ for(const title of ['From','To','Data','Action']){const th=element('th',title);th.scope='col';headRow.append(th);}head.append(headRow);table.append(head);const body=element('tbody');
  const stepLabel=(id:string)=>{const index=a.procedure.steps.findIndex(step=>step.id===id),step=a.procedure.steps[index];return a.procedure.steps.filter(item=>item.action===step.action).length>1?`${step.action}（${index+1}行目）`:step.action;};
  for(const [index,step] of a.procedure.steps.entries()){
-  const row=element('tr');row.dataset.stepId=step.id;stepRows.set(step.id,row);const x=step.exchange,who=activityWho(bd,a),object=x.kind==='interaction'?(bd.objects.find(o=>o.id===x.objectId)?.name??'未決'):null;
+  const row=element('tr');row.dataset.stepId=step.id;const x=step.exchange,who=activityWho(bd,a),object=x.kind==='interaction'?(bd.objects.find(o=>o.id===x.objectId)?.name??'未決'):null;
   const from=x.kind==='interaction'?(x.direction==='input'?object!:who):x.kind==='internal'?who:'未決';
   const to=x.kind==='interaction'?(x.direction==='input'?who:object!):x.kind==='internal'?'—':'未決';
   row.append(element('td',from),element('td',to));const data=element('td');
   if(x.kind!=='interaction'||sameData(step.whatDataIds,x.dataIds))data.append(simpleData(step.whatDataIds));
   else data.append(element('span','対象：'),simpleData(step.whatDataIds),element('span','受渡し：'),simpleData(x.dataIds));row.append(data);
   const action=element('td',step.action);for(const id of step.decisionIds??[])action.append(link(id));
-  if(step.dependsOn===null)action.append(element('small','前提：未確認'));
-  else if(step.dependsOn?.length){const dependencies=element('small','前提：');for(const [i,dependency] of step.dependsOn.entries()){const id=dependency.stepId;
-   if(i)dependencies.append('、');const button=element('button',stepLabel(id));button.type='button';button.className='business-decision-link';button.setAttribute('aria-label',`前提の手順「${stepLabel(id)}」に移動`);button.onclick=()=>stepRows.get(id)?.scrollIntoView({behavior:'smooth',block:'center'});dependencies.append(button);
-   if(dependency.whenDecision){const pointer=dependency.whenDecision,decision=decisions.find(value=>value.id===pointer.decisionId),branch=decision?.rows.find(value=>value.id===pointer.rowId),ambiguous=decision?.rows.filter(value=>value.result.text===branch?.result.text).length!==1;dependencies.append(document.createTextNode(`（${branchLabel(decision,branch,ambiguous)}）`),link(pointer.decisionId,pointer.rowId));}
-  }action.append(dependencies);}
   if(laterDecisionReference(a,step))action.append(element('small','判定表を参照する手順が後方です。前提を確認'));
   const metadata:string[]=[],optional=step.obligation==='optional';let conditionReference:{decisionId:string;rowId:string}|undefined;if(step.method)metadata.push(`方法：${step.method}`);if(step.appliesWhen)metadata.push(`適用条件：${step.appliesWhen}`);if(step.effect)metadata.push(`操作効果：${step.effect}`);
   if(step.whenDecision){const decision=decisions.find(item=>item.id===step.whenDecision!.decisionId),branch=decision?.rows.find(item=>item.id===step.whenDecision!.rowId);
