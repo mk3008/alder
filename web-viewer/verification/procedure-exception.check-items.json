@@ -1,0 +1,13 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "Activityの例外に中断・再開を記録し、旧入力と既存の図・詳細表示を維持する。",
+  "source": "https://github.com/mk3008/alder/issues/340",
+  "checks": [
+    {"id":"CONTINUITY-001","condition":"業務上の例外として中断・再開が分かる場合","guarantee":"例外IDと原文を保ち、発生条件・中断時の扱い・再開条件・再開する手順と保持情報を必要に応じて記録し確認できる。","reason":"中断した仕事の続け方を依頼者が確認できる。","verification":"保存器と詳細DOMの正常例"},
+    {"id":"CONTINUITY-002","condition":"中断しない、再開せず終了する、または条件が未決の例外","guarantee":"未決を未決として残し、存在しない中断や再開を捏造しない。","reason":"例外の実際の扱いを共有する。","verification":"終了・継続・未決の正例"},
+    {"id":"CONTINUITY-003","condition":"再開手順または保持Dataに明示的な参照がある","guarantee":"同じActivityの実在するStepと同じ文書の実在するDataを参照し、不正IDや他ActivityのStepを拒否する。","reason":"表と例外を同じ情報に結び付ける。","verification":"正例と欠落・他Activity参照の負例"},
+    {"id":"CONTINUITY-004","condition":"旧0.4・旧0.5を閲覧する","guarantee":"版を区別して原本・旧担当情報・Step・Result・Data・人間確認状態を保ち、Whoを推測しない。","reason":"新しい契約により旧版の意味を変えない。","verification":"既存の旧入力・表示・保存回帰"},
+    {"id":"CONTINUITY-005","condition":"入力・出力や例外関係を詳細と図で確認する","guarantee":"#341の相手Objectと情報を表示するInput/Output、既存の例外関係・方向・操作を維持し、元データを変えない。","reason":"採用済み表示と既存のつながりを保つ。","verification":"0.4・旧0.5・新形式の詳細と関係"},
+    {"id":"CONTINUITY-006","condition":"旧0.5に表示専用の構造指摘がある","guarantee":"黄色の本文警告とその詳細への導線を保ち、Drawer上部の同じ指摘だけの重複を解消し、別の指摘や原文Findingは残す。","reason":"重要な未決を見せながら同じ警告を二重表示しない。","verification":"警告・詳細導線・独立Findingの正負例"}
+  ]
+}

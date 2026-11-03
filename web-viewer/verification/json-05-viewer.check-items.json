@@ -1,0 +1,55 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/root/issues/177",
+  "scope": "Phase C: package 0.5 / Business Design schema 0.4を既存の通常Viewerへ表示し、旧入力と採用済みUIを保持する。",
+  "checks": [
+    {
+      "id": "JSON05-VIEWER-001",
+      "condition": "正式0.5 JSONを通常のファイル、URL、復元の入口から開く。",
+      "guarantee": "既存の共通モデルと参照検査へ投影し、元のJSONを保持する。比較用入口、Markdown経由の新機能、別の正本を作らない。",
+      "reason": "実際のViewerで依頼者が正式文書を確認するため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "採用例5件、通常入力・URL・復元の検査と固定Preview上の操作"
+    },
+    {
+      "id": "JSON05-VIEWER-002",
+      "condition": "複数主体と兼任Role、未決主体、Step担当がある。",
+      "guarantee": "Object名とRole名を表示し、明示または契約上の単一主体継承だけを担当に用いる。未決を未決として示し、I/O相手や内部IDから担当を創作しない。",
+      "reason": "人間が担当を誤認せず未決を指摘できるようにするため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "複数主体・兼任・単独継承・複数主体未決・Activity未決の詳細欄と図を照合"
+    },
+    {
+      "id": "JSON05-VIEWER-003",
+      "condition": "標準順の複数Step、必須・任意、適用条件、局所順序制約がある。",
+      "guarantee": "既存詳細欄にStep本文と必要な属性・明示制約を表示し、標準順と厳守・入替可能の違いを保持する。制約のない順序を推定しない。",
+      "reason": "手順の現時点の理解と未確認事項を見分けられるようにするため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "複数Step・条件・明示before/interchangeableと制約なしを照合"
+    },
+    {
+      "id": "JSON05-VIEWER-004",
+      "condition": "複数Result、例外、I/Oと共通Data項目・条件がある。",
+      "guarantee": "Resultと例外を区別し、各I/Oの方向と共通Data名・Informationの名前/説明・項目条件を同じ定義から表示する。内部IDや未定義のResult条件を表示・補完しない。",
+      "reason": "業務の結果と情報の受渡しを既存詳細欄から照合できるため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "共有Dataへの複数参照、複数Result、例外、情報項目を照合"
+    },
+    {
+      "id": "JSON05-VIEWER-005",
+      "condition": "既存の0.4・旧JSON・旧Markdownを開き、通常操作する。",
+      "guarantee": "既存UI・情報・図・操作を保ち、旧入力を暗黙に0.5へ移行しない。ヘッダー、Explorer、タブ、配線、カード、ズームと共有右Drawerの既存検証正本を保持する。",
+      "reason": "既存文書の閲覧互換とユーザーが採用した操作を守るため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "既存の入力・表示・状態・共通Drawer・ナビゲーション回帰と固定Preview"
+    },
+    {
+      "id": "JSON05-VIEWER-006",
+      "condition": "不正な参照・多重度・未対応versionや重複キーを読み込む。",
+      "guarantee": "正式Validatorと既存入口で拒否し、表示済み有効文書・元ファイルを失わない。Check/Stateの参照版・確認状態を変えない。",
+      "reason": "不正な入力を有効な図や人間の合意と誤認しないため。",
+      "source": "https://github.com/mk3008/root/issues/177",
+      "verification": "不正入力、既存表示・原文維持、Check/Stateの読戻しを確認"
+    }
+  ]
+}
