@@ -1,0 +1,8 @@
+{
+  "kind": "isolated review preview",
+  "source": "8e34c3ce00352169f200491224697aac9afe7216",
+  "sourceTree": "76b1b57ad9c643989fc70fd7cf254fa6374ff39c",
+  "sourceCI": "41644616507",
+  "artifactSha256": "c895def1741291134498476c8bda77f9ccd3a64685e98ac25d446334b4145fa0",
+  "sampleGitBlob": "6695b192f394af084cba1746b48a40dc17e7c2aa"
+}
