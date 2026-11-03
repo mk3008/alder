@@ -1,0 +1,54 @@
+{
+  "format": "alder-procedure-hearing-poc",
+  "version": "draft-1",
+  "status": "review-candidate",
+  "activity": {"id": "start-game", "name": "試合の開始を記録する", "whoId": "recorder"},
+  "parties": [
+    {"id": "participant", "name": "参加者", "kind": "object"},
+    {"id": "recorder", "name": "記録係", "kind": "who"},
+    {"id": "rule", "name": "ルール", "kind": "object"},
+    {"id": "game-record", "name": "試合の記録", "kind": "object"}
+  ],
+  "data": [
+    {
+      "id": "participants",
+      "name": "参加者の名前、順番",
+      "fields": [
+        {"id": "participant-name", "name": "参加者の名前"},
+        {"id": "order", "name": "順番"}
+      ]
+    },
+    {"id": "registration-result", "name": "登録結果", "fields": []}
+  ],
+  "steps": [
+    {"id": "receive", "from": "participant", "to": "recorder", "dataId": "participants", "action": "受け取る", "method": null, "phase": "not-applicable", "pairId": null, "checkIds": []},
+    {"id": "start", "from": "recorder", "to": "rule", "dataId": "participants", "action": "開始する", "method": null, "phase": "request", "pairId": "result", "checkIds": []},
+    {"id": "result", "from": "rule", "to": "recorder", "dataId": "registration-result", "action": "返却する", "method": null, "phase": "response", "pairId": "start", "checkIds": ["check-few", "check-duplicate", "check-start"]}
+  ],
+  "checks": [
+    {
+      "id": "check-few",
+      "conditions": [{"dataId": "participants", "predicate": "count-in", "values": [0, 1]}],
+      "expected": {"outcome": "error", "effects": []}
+    },
+    {
+      "id": "check-duplicate",
+      "conditions": [{"dataId": "participants", "fieldId": "participant-name", "predicate": "duplicates-exist", "value": true}],
+      "expected": {"outcome": "error", "effects": []}
+    },
+    {
+      "id": "check-start",
+      "conditions": [
+        {"dataId": "participants", "predicate": "count-at-least", "value": 2},
+        {"dataId": "participants", "fieldId": "participant-name", "predicate": "duplicates-exist", "value": false}
+      ],
+      "expected": {
+        "outcome": "started",
+        "effects": [
+          {"targetId": "game-record", "action": "record", "dataId": "participants", "fieldIds": ["participant-name", "order"]},
+          {"targetId": "game-record", "action": "set-initial-score", "value": 0, "per": "participant"}
+        ]
+      }
+    }
+  ]
+}
