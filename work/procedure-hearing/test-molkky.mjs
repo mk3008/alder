@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
 
 const candidate=JSON.parse(readFileSync(new URL('./issue-340-molkky.json',import.meta.url),'utf8'));
 function validate(p){
@@ -47,6 +48,37 @@ for(const [names,expected] of [
   [['A','A'],['check-duplicate']],
   [['A','B'],['check-start']]
 ])assert.deepEqual(candidate.checks.filter(c=>matches(c,names)).map(c=>c.id),expected);
+// Evaluate the displayed first-match order against the original structured
+// checks, including both boundary and repeated-name cases.
+for(const [names,expected] of [
+  [[], 'check-few'], [['A'], 'check-few'], [['A','A'], 'check-duplicate'],
+  [['A','B'], 'check-start'], [['A','B','A'], 'check-duplicate'], [['A','B','C'], 'check-start']
+])assert.equal(candidate.checks.find(check=>matches(check,names))?.id,expected);
+
+// Run the preview's own renderer with the same JSON: a residual label may be
+// used only while the earlier conditions actually cover its complement.
+const html=readFileSync(new URL('./preview.html',import.meta.url),'utf8');
+const script=html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];assert.ok(script);
+class Node{
+  constructor(tag){this.tag=tag;this.textContent='';this.children=[];this.className='';}
+  append(child){this.children.push(child);}
+}
+async function render(source){
+  const elements=new Map(['status','steps','checks'].map(id=>[id,new Node(id)]));
+  const document={getElementById:id=>elements.get(id),createElement:tag=>new Node(tag)};
+  await runInNewContext(`(async()=>{${script}})()`,{document,fetch:async()=>({ok:true,json:async()=>source})});
+  assert.equal(elements.get('status').textContent,'');return elements;
+}
+const rendered=await render(candidate);
+assert.deepEqual(rendered.get('checks').children.map(row=>row.children.map(cell=>cell.textContent)),[
+  ['0人または1人','‐','エラー','check-few'],
+  ['‐','いる','エラー','check-duplicate'],
+  ['それ以外','開始。参加者名と順番、各自の初期0点を記録する','check-start']
+]);
+assert.equal(rendered.get('checks').children[2].children[0].colSpan,2);
+const changed=structuredClone(candidate);changed.checks[0].conditions[0].values=[0];
+const notComplement=await render(changed);
+assert.deepEqual(notComplement.get('checks').children[2].children.slice(0,2).map(cell=>cell.textContent),['2人以上','いない']);
 const missing=structuredClone(candidate);missing.steps[2].checkIds[0]='missing';assert.throws(()=>validate(missing));
 const badData=structuredClone(candidate);badData.steps[0].dataId='missing';assert.throws(()=>validate(badData));
 const badDirection=structuredClone(candidate);badDirection.steps[2].from='recorder';assert.throws(()=>validate(badDirection));
