@@ -14,6 +14,8 @@ license: MIT
 
 JSONの編集前に正規CLIの`inspect`で`format`・`formatVersion`と`compatibility`を確認する。複数案は対象案を一意に選び、その案のpackage版を確認する。直接編集できるのは現在の`alder-document-package/0.4`だけで、Plugin版・外側bundle版・文書revisionとは区別する。旧版や未知版はそのまま編集せず、対象・検出版・対応版を示して止める。旧版の編集には別ファイルへの明示変換が必要であり、未知版は形式の対応可否を確認する。変換可否は未評価で、利用者の明示依頼なしに変換せず、未対応の変換が可能だと断定しない。閲覧・レビューでは旧版を原本不変で読める場合がある。
 
+聞き取り時の構造化Check候補の先行記録は、同梱ガイドにある旧「BD合意後にCheck草案」の順序より優先する。現行保存器の正式保存ガードと、人間確認を伴う実装引き渡しは維持する。
+
 1. 対象ProjectのAGENTSと既存正本、今回の依頼を読む。既存正本の形式・版を確認し、新規作成はJSON、編集対応版の既存JSONは同じJSONを更新する。既存MDを指名した改稿は元のMD Skillの互換経路へ戻り、明示依頼なしに移行しない。MD原典から新規JSON Checkを作る場合も、一方向変換の明示依頼と対象BD版への人間合意を先に確認する。
 2. BDの作成・改稿には[adoption](references/adoption.md)のsection 1と[文書構造](references/business-design-structure.ja.md)を読む。JSONでは見出しを[Schema](scripts/document_storage/schema.json)の型付きフィールドへ対応させ、Markdown中間正本を作らない。既知の入力・IO・条件・役割・Procedure/Resultを保持し、未決を推測補完しない。
 3. [同梱runtime](scripts/document_storage/author-cli.mjs)のruntimeを実行する。直接JSONはNode24以上、MD変換はPython3.12以上も必要。利用不能なら報告してその操作を止める。repo clone・外部API・ランタイムの無断導入を要求しない。

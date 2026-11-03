@@ -10,6 +10,8 @@ For new artifacts without a selected existing format, default to typed JSON thro
 
 For `alder-named-plans` input, use the JSON document skill to identify the requested plan and its exact Business Design revision before drafting or updating Checks; preserve the other plans and the same human agreement gates.
 
+Capture source-grounded structured Check candidates while eliciting business work; do not apply older bundled guidance's post-agreement drafting sequence to this preliminary recording. The current canonical-save guard and human review required for handoff remain in effect.
+
 Read the bundled [current Check Item guidance](references/check-item-traceability.md) in full and [adoption](references/adoption.md#draft-and-review-check-items-required) through the optional Functional Interface section. For initial derivation, read [c3](references/candidate-c3.md). Current adoption and traceability take precedence over historical c3/f1 passages: permanent mappings stop at Test/assertion, never Code, file, SQL entry point or line. Do not fetch newer authority or ask the requester to supply Alder's internal documents.
 
 ## Locate the work and choose the requested operation
