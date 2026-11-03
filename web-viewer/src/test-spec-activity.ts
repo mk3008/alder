@@ -49,7 +49,7 @@ export function renderActivityTestSpec(design:Design,activityId:string,documents
  const addSection=(label:string,node:HTMLElement)=>{node.tabIndex=-1;sections.push({label,node});return node;};
  if(!activity){root.append(el('p','この業務は見つかりません。'));return {root,sections};}
  const groups=activityDocuments(design,activityId,documents);
- const header=el('header');header.className='activity-test-header';
+ const header=el('div');header.className='activity-test-header';
  const heading=el('h1',activity.name),id=el('span',activity.id);id.className='activity-test-id';id.title=activity.id;
  const title=el('div');title.className='activity-test-title';title.append(id,heading);header.append(title);
  if(activity.why)header.append(formattedMarkdown(activity.why));
