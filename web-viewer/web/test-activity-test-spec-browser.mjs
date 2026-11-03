@@ -27,8 +27,10 @@ export async function verifyActivityTestSpec(browser){
     await page.locator('.activity-test-toc button').filter({hasText:'MK-03'}).click();
     await page.waitForFunction(()=>document.activeElement?.dataset.checkId==='MK-03');
     assert.equal(await page.locator('.activity-test-toc button[aria-current="location"]').textContent(),'MK-03');
+    await page.screenshot({path:`${output}/activity-test-spec-check-${width}.png`});
     await page.locator('.activity-test-toc button').filter({hasText:'テスト'}).click();
     assert.equal(await page.locator('.activity-test-toc button[aria-current="location"]').textContent(),'テスト');
+    await page.screenshot({path:`${output}/activity-test-spec-evidence-${width}.png`});
    }
    await showTestChecks(page,bd.activities[0].id);assert.equal(await page.locator('.spec-tabs .tab').count(),1);
    await showTestChecks(page,bd.activities[1].id);assert.equal(await page.locator('.spec-tabs .tab').count(),2);

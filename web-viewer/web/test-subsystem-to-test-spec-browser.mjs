@@ -22,6 +22,7 @@ export async function verifySubsystemSpecLinks(browser){
    const exact=page.locator('[data-sample=request-draft-approved]');assert.match(await exact.textContent(),/^サンプル：/);
    await exact.click();await page.locator('#tests-workspace [data-data-example="request-draft-approved"]').waitFor();
    assert.equal(await page.locator('.concept-related').isVisible(),false);assert.match(await page.locator('#tests-workspace').textContent(),/P-02/);
+   if(width>800){assert.equal(await page.locator('#test-related-panel').isVisible(),true);if(await page.locator('.activity-test-toc').isVisible()){const toc=await page.locator('.activity-test-toc').boundingBox(),drawer=await page.locator('#test-related-panel').boundingBox();assert(toc&&drawer&&toc.x+toc.width<=drawer.x,'section contents do not overlap the related drawer');}}
    const resultURL=new URL(page.url());assert.equal(resultURL.searchParams.get('view'),'tests');assert.equal(resultURL.searchParams.get('dataExample'),'request-draft-approved');
    await page.waitForFunction(()=>['saved','unchanged'].includes(document.querySelector('#app')?.dataset.saveState));
    await page.reload();await page.locator('#tests-workspace [data-data-example="request-draft-approved"]').waitFor();
