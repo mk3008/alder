@@ -71,11 +71,17 @@ async function render(source){
 }
 const rendered=await render(candidate);
 assert.deepEqual(rendered.get('checks').children.map(row=>row.children.map(cell=>cell.textContent)),[
-  ['0または1名','不問','エラー','check-few'],
   ['2名以上','いる','エラー','check-duplicate'],
-  ['2名以上','いない','正常','check-start']
+  ['2名以上','それ以外','正常','check-start'],
+  ['それ以外','不問','エラー','check-few']
 ]);
 assert.equal(rendered.get('start-effects').textContent,'開始時の記録：参加者の名前、順番、各自0点。');
+const displayed=rendered.get('checks').children.map(row=>row.children.map(cell=>cell.textContent));
+for(const names of [[],['A'],['A','A'],['A','B'],['A','B','A'],['A','B','C']]){
+  const hasDuplicates=new Set(names).size<names.length;
+  const row=displayed.find(([number,duplicate])=>(number==='2名以上'?names.length>=2:names.length<2)&&(duplicate==='不問'||(duplicate==='いる'&&hasDuplicates)||(duplicate==='それ以外'&&!hasDuplicates)));
+  assert.equal(row?.[3],candidate.checks.find(check=>matches(check,names))?.id);
+}
 const changed=structuredClone(candidate);changed.checks[0].conditions[0].values=[0];
 const changedRows=await render(changed);
 assert.deepEqual(changedRows.get('checks').children[1].children.slice(0,2).map(cell=>cell.textContent),['不問','いる']);
