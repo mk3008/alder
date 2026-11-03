@@ -26,13 +26,13 @@ ActivityとObjectのScopeは、対象システムを作る際に考慮する必�
 | 承認者 | 設計者 | 承認結果 | 返す |
 | 設計者 | 顧客 | 結果通知 | 通知する |
 
-回答が得られない場合は、条件付きStep「確認待ちとして記録する」と別のResult・例外を残す。通知には応答を作らない。この例では顧客と承認者に人が直接対応し、対象システムはアクセスしない前提で、それぞれをScope外Objectとして参照する。別のActivityでは定刻バッチをWhoとし、対象データの照合を記録できる。[構造化された合成例](../tools/document_storage/examples/procedure-cases-v06.json)はこれらを確認するための資料であり、実業務の正しさを示すものではない。
+回答が得られない場合は、条件付きStep「確認待ちとして記録する」と別のResult・例外を残す。通知には応答を作らない。この例では顧客と承認者に人が直接対応し、対象システムはアクセスしない前提で、それぞれをScope外Objectとして参照する。別のActivityでは定刻バッチをWhoとし、対象データの照合を記録できる。[構造化された合成例](../tools/document_storage/examples/procedure-cases-v06.json)を使い、手順の理解を共有し、違いや不足を指摘できるかを確認する。
 
 やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。Request／Responseが未決なら`null`のまま相手と方向を記録できる。対応Stepの指定は双方の種別が判明してから行う。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
 
 共通DataはInformationを参照する。同じ記載内容を紙から受け取り、メモへ送るStepで同一Dataを使える。Informationの所有先と受渡し先のObjectが違うだけでは拒否しない。InformationのID・所有先・名前・説明は勝手に移動・上書きしない。旧0.5を読む場合は旧版の所有先制約で検証する。
 
-図の線とDataラベルの候補は、StepをActivity・Object・方向ごとに集約して生成する。逆方向は別の線。Step ID・Data ID・明示済みRelation IDは集約しても失わない。未決の受渡しを確定済みのDataラベルにしない。Dataのない要求や内部判断を実際のDFDにどう表示するかは、採用前に確認する。業務的に必要なStepの欠落自体は、図表の一致だけでは検出できず、業務要件やCheckとの照合が必要である。
+図の線とDataラベルの候補は、StepをActivity・Object・方向ごとに集約して生成する。逆方向は別の線。Step ID・Data ID・明示済みRelation IDは集約しても失わない。未決の受渡しを確定済みのDataラベルにしない。Dataのない要求や内部判断を実際のDFDにどう表示するかは、採用前に確認する。例えば同じノートへの顧客名検索と受付日検索を一つの線へ集約しても、各Stepをたどって確認し、元の説明との違いや不足を指摘できることをレビューする。
 
 ## 版の読取りと候補準備
 
