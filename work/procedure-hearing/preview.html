@@ -30,6 +30,7 @@
     <h2 id="checks-title">チェック項目（※1）</h2>
     <p class="note">上から順に判定し、最初に当てはまる行を見ます。‐＝値不問。</p>
     <div class="scroll"><table class="decision" aria-label="チェック項目"><thead><tr><th scope="colgroup" colspan="2">条件</th><th class="result" scope="col" rowspan="2">結果</th><th scope="col" rowspan="2">Check ID</th></tr><tr><th scope="col">参加者数</th><th scope="col">同名の人</th></tr></thead><tbody id="checks"></tbody></table></div>
+    <p class="note" id="start-effects"></p>
     <p class="note">エラーの表示方法・文言と、同名の照合方法は未確認です。</p>
     <p class="note" id="status" role="status"></p>
   </main>
@@ -63,7 +64,12 @@
           addCell(row,duplicate?(duplicate.value?'いる':'いない'):'‐');
         }
         const score=check.expected.effects.find(effect=>effect.action==='set-initial-score');
-        const result=check.expected.outcome==='error'?'エラー':`開始。参加者名と順番、各自の初期${score.value}点を記録する`;
+        const result=check.expected.outcome==='error'?'エラー':'開始';
+        if(check.expected.outcome==='started'){
+          const record=check.expected.effects.find(effect=>effect.action==='record');
+          const fields=record.fieldIds.map(id=>source.data.find(item=>item.id===record.dataId).fields.find(field=>field.id===id).name);
+          document.getElementById('start-effects').textContent=`開始時の記録：${fields.join('、')}、各自${score.value}点。`;
+        }
         addCell(row,result,`result ${check.expected.outcome==='error'?'error':'success'}`);
         addCell(row,check.id,'check-id');document.getElementById('checks').append(row);
       }
