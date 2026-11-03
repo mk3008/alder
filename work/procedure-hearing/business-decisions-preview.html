@@ -13,7 +13,8 @@
     .scroll{overflow-x:auto}table{border-collapse:collapse;background:white;width:max-content;max-width:100%}
     th,td{border:1px solid #d0d9e2;padding:7px 10px;text-align:left;vertical-align:top}
     th{background:#edf3f8;white-space:nowrap}.procedure td.data{min-width:10em}
-    .decision .result{border-left:2px solid #8193a5}.decision .refs{white-space:nowrap;font-size:14px}
+    table.decision{max-width:none;font-size:14px}.decision th,.decision td{padding:4px 6px;white-space:nowrap}
+    .decision .result{border-left:2px solid #8193a5}.decision .refs{font-size:14px}
     a{color:#146597}.error{color:#a22424}.success{color:#146044}
     @media(max-width:600px){header{padding:10px 12px}main{padding:12px}th,td{padding:6px 8px}}
   </style>
@@ -77,7 +78,7 @@
         const head=document.createElement('thead'),groups=document.createElement('tr');
         const group=add(groups,'th','条件');group.colSpan=decision.axes.length;group.setAttribute('scope','colgroup');
         const result=add(groups,'th','結果','result');result.rowSpan=2;result.setAttribute('scope','col');
-        const refs=add(groups,'th','関連Check');refs.rowSpan=2;refs.setAttribute('scope','col');
+        const refs=add(groups,'th','Check');refs.rowSpan=2;refs.setAttribute('scope','col');
         head.append(groups);const columns=document.createElement('tr');
         for(const axis of decision.axes){const th=add(columns,'th',axis.label);th.setAttribute('scope','col');}
         head.append(columns);table.append(head);const body=document.createElement('tbody');
@@ -85,9 +86,10 @@
           const row=document.createElement('tr');
           for(const axis of decision.axes){const condition=item.conditions.find(value=>value.axisId===axis.id);add(row,'td',conditionLabel(axis,condition));}
           add(row,'td',resultLabel(item.result),'result '+(item.result.kind==='input-error'?'error':'success'));
-          add(row,'td',item.checkRefs.map(ref=>ref.code+(ref.coverage==='partial'?'（一部）':'')).join('、')||'—','refs');body.append(row);
+          add(row,'td',item.checkRefs.map(ref=>ref.code+(ref.coverage==='partial'?'*':'')).join('、')||'—','refs');body.append(row);
         }
         table.append(body);wrap.append(table);section.append(wrap);
+        if(decision.rows.some(row=>row.checkRefs.some(ref=>ref.coverage==='partial')))add(section,'p','*：この業務で扱う範囲のみ','note');
         for(const exception of design.exceptions.filter(item=>item.when.decisionId===decision.id)){
           const suppressed=exception.result.suppressDataIds.map(id=>data.get(id)).join('・');
           add(section,'p','入力エラー時は全体をエラーとし、'+suppressed+'を返しません。（'+exception.checkRefs.map(ref=>ref.code).join('、')+'）','note');
