@@ -1,6 +1,7 @@
 import {demand,inventory,validate} from './core.mjs';
 
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const orderRuleKey=rule=>rule.kind==='before'?JSON.stringify([rule.kind,rule.beforeId,rule.afterId]):JSON.stringify([rule.kind,...[...rule.stepIds].sort()]);
 
 /** Validate a separately authored candidate against a legacy source.
  * This does not infer Scope, split prose, choose Who, rebase a dependent
@@ -47,6 +48,10 @@ export function prepareProcedureUpgrade(previous,candidate,request){
  for(const original of originals){const doc=next.find(d=>d.id===original.id);demand(doc.revision!==original.revision,'Candidate Business Design needs a new revision: '+doc.id);
   demand(doc.objects.length===original.objects.length&&doc.activities.length===original.activities.length,'Migration must not invent Objects or Activities');
   for(const object of original.objects){const updated=doc.objects.find(x=>x.id===object.id);if(previous.formatVersion==='0.4')for(const text of object.information)demand(updated.information.some(i=>i.name===text),'Legacy Information needs explicit preservation: '+object.id);}
+  if(previous.formatVersion==='0.5')for(const activity of original.activities){
+   const updated=doc.activities.find(item=>item.id===activity.id),rules=new Set(updated.procedure.orderRules.map(orderRuleKey));
+   for(const rule of activity.procedure.orderRules)demand(rules.has(orderRuleKey(rule)),'Migration changed or omitted legacy Step order: '+activity.id);
+  }
   if(previous.formatVersion==='0.4')for(const activity of original.activities)if(activity.exception!==null)demand(doc.exceptions.some(e=>e.activityId===activity.id&&e.description===activity.exception),'Legacy exception text needs explicit preservation: '+activity.id);
   for(const item of [...doc.objects,...doc.activities]){
    const decision=scopes[item.id];if(item.scope===null){demand(!decision||decision.value===null,'Unresolved Scope decision mismatch: '+item.id);continue;}

@@ -4236,6 +4236,55 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "dependsOn": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "stepId": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]+$"
+                                  },
+                                  "whenDecision": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "decisionId": {
+                                            "type": "string",
+                                            "pattern": "^[A-Za-z0-9_-]+$"
+                                          },
+                                          "rowId": {
+                                            "type": "string",
+                                            "pattern": "^[A-Za-z0-9_-]+$"
+                                          }
+                                        },
+                                        "required": [
+                                          "decisionId",
+                                          "rowId"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "stepId",
+                                  "whenDecision"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         }
                       },
                       "required": [

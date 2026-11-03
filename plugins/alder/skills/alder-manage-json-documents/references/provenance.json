@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "25034b7e1df89e1d5b4421af2db838ab45bc07a8",
+  "alder_source_revision": "8d2b9c9e6484626de7ac5e6fe9cc7174b591d71b",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "86726f8fba63bf2184f0e742df323a27cbff39c1c3a1226c6efd01d13317b8d3",
+    "docs/plugin-json-authoring.ja.md": "36cee290dbab490c27685c2127a8e12e2070e2710502b95f88c3efd7ec4587cb",
     "docs/adoption.md": "5feacd421c45f6f5bb41c7affb9ed08d7052d7fc753561a85bf6cac52d2edc90",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
     "docs/check-item-traceability.md": "071a8c800c5e958372c1c04f96d152b9eba312356049ef5dcf7b7f11ec38108c",
@@ -12,17 +12,17 @@
     "docs/json-state-transitions.ja.md": "576153ea2d6884d1f68b4548e768a7e2d07d3cabb1f288f28740ab878ba6abc7",
     "docs/json-roles.ja.md": "f6b1aa6369a51c664cf32682961ca36f21b301600dcdd7befc410478ce2cb59d",
     "docs/json-native-contract.ja.md": "35ee6ef7e31e72bedee18969dc08d70f7f3a77093b3065902055b06a37b6592d",
-    "docs/business-design-decisions-v07.ja.md": "b20d5f6c0093e6a27b286397761aef05d63c19288378958478aac14accb85ff3"
+    "docs/business-design-decisions-v07.ja.md": "627c331280c87d4cad4e5f4711910c878fa23f3c4fc09fe9fceab3c6487a5aa8"
   },
   "scripts": {
     "tools/document_storage/core.mjs": "48cf816e436913765fab852bad0173fa972a363aacb4bd2df04b027c2d325bd5",
-    "tools/document_storage/schema.mjs": "75cfb54efaede7fe924cd4da296705fae384593d0aef9338b4c03f907aa1c730",
-    "tools/document_storage/schema.json": "818f7fbaec326b8405b7f22e3a8ad6ea3eb27dc1c09fd228af8bcea5ac0d5c24",
+    "tools/document_storage/schema.mjs": "e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2",
+    "tools/document_storage/schema.json": "f86a061cd272f16788d7f2b8e36d0e9af271b6c4ffd529b613c2cd10c9cc0980",
     "tools/document_storage/edit.mjs": "84bbea4e1e498e8a9f52d2e054e23ad70fd8daad2198af78fc8782a269442b6c",
     "tools/document_storage/convert.mjs": "8ae8de81ae2e470ad36433bab502a71c1c72fd09a466a733fdac13581db21562",
     "tools/document_storage/cli.mjs": "2bfb373a8130c55bb5875acd287c5c2e0da54c8c00e683eca64df238624fc6e6",
     "tools/document_storage/markdown.py": "a6f28f748596b6742a741d1cf4924ba46e5be9be818aa5d2854114db17283dff",
-    "tools/document_storage/authoring.mjs": "414aaedec354355d87935af1809f6ae9bc86e65cbe38ff3db4c3a4af4e4913c3",
+    "tools/document_storage/authoring.mjs": "b4d746bb9099a3596c6fd2a0ea0b8fc4cdf3f556347795d4b3b1cf7b11f65b72",
     "tools/document_storage/author-cli.mjs": "3b82af289bd64bbfb032b58901b625f842f983a811c7cb6c24cf87f114caaf55",
     "tools/business_graph/export.py": "01a0b4df89865ffe814782bbb319db9969d6accb7c95acb21daa093a35f19ea5",
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
@@ -31,11 +31,12 @@
     "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
     "tools/document_storage/named-plans.mjs": "6670846016b5eeedb8b66388874b4de7a1eb0300b33e08f9022685ea13bf4c20",
     "tools/document_storage/named-plans-cli.mjs": "68d1970ea714a5c61afed7140917120c8dd2ea380b5f8aadcc092ad7ee3d31fb",
-    "tools/document_storage/named-plans-schema.json": "ce1975561159ca23fa3bb66c3470161f4115bb32c7515aa424b2048d9f2da888",
-    "tools/document_storage/procedure-structure.mjs": "33cf1bfa5a5720099be5fb546c5149144a7515987d50edb1707e3164b8dd3499",
-    "tools/document_storage/prepare-procedure.mjs": "152246916ecc5787fdef4c7be5639ac091396f8a5a975fb7bad19c7c8e62e36a",
+    "tools/document_storage/named-plans-schema.json": "eea31e28f09cd9154f306cf1bd67ba9924975a634f0d46fbea53470c1dda5c61",
+    "tools/document_storage/procedure-structure.mjs": "1387154d9ca57dc7867f5fc4529f173f101d730570aeb48243b48cca2c220427",
+    "tools/document_storage/prepare-procedure.mjs": "1bf28101ac09105c102023181cd6957013c8b7547ae7270f242161c850bcd803",
     "tools/document_storage/prepare-decisions.mjs": "489ba0031a7f79adf539eb95aa99e9144234757e87bf30744908e8d0425dd819",
-    "tools/document_storage/examples/molkky-decisions-v07.json": "eb732a3650a7d6a3b5cc1aa8e7d0a5ea1008f4fbe4f7333833f8ba4830e4eafc"
+    "tools/document_storage/examples/molkky-decisions-v07.json": "eb732a3650a7d6a3b5cc1aa8e7d0a5ea1008f4fbe4f7333833f8ba4830e4eafc",
+    "tools/document_storage/examples/molkky-dependencies-v07.json": "927c37882106ac0fb17073e2f57b3ae604f9c60a2060c10c3f92000f54ab0ccc"
   },
   "script_destinations": {
     "tools/document_storage/core.mjs": "document_storage/core.mjs",
@@ -58,6 +59,7 @@
     "tools/document_storage/procedure-structure.mjs": "document_storage/procedure-structure.mjs",
     "tools/document_storage/prepare-procedure.mjs": "document_storage/prepare-procedure.mjs",
     "tools/document_storage/prepare-decisions.mjs": "document_storage/prepare-decisions.mjs",
-    "tools/document_storage/examples/molkky-decisions-v07.json": "document_storage/examples/molkky-decisions-v07.json"
+    "tools/document_storage/examples/molkky-decisions-v07.json": "document_storage/examples/molkky-decisions-v07.json",
+    "tools/document_storage/examples/molkky-dependencies-v07.json": "document_storage/examples/molkky-dependencies-v07.json"
   }
 }

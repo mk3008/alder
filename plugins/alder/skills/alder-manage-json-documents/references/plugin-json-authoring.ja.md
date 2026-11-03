@@ -104,4 +104,6 @@ MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を�
 
 [候補契約](business-design-decisions-v07.ja.md)に沿い、聞き取った認可・入力検査・正常系アルゴリズムをActivity内の判定表として書き、StepとCheckから実在IDで参照する。未レビュー・要確認のCheck草案は、対象BD全体の合意前でも0.7候補へ同時に保存できる。`basedOn.verification`は`unverified`、新規Checkの人間状態は未レビューまたは要確認とし、実装への正式引き渡しや既存確認済みCheckの原典改版には、従来どおり該当BD版の人間合意を確認する。未決は未決のままとし、応答や判定結果を補わない。
 
+手順の標準順は、確認できた前提を守る範囲で入れ替えられる。前提が分かればStepの `dependsOn` に同一ActivityのStep IDを記録し、特定の判定行の場合だけ必要ならその行を参照する。未確認は省略または `null`、前提なしと確認済みの場合は `[]` とする。共有Dataや判定表の参照から前提を推測しない。旧 `before`／`interchangeable` と原本は移行時に維持する。
+
 0.4・旧0.5・0.6の原本は直接変更せず、明示移行が必要な場合は旧版→0.6→0.7の各候補を別ファイルに作る。0.6→0.7の`prepare-decision-upgrade`はsource hashとrevisionを確認し、Check・State・概念文書の原典改版や確認状態を自動移行しない。候補対応はDraft PR上のものとして扱い、実際に利用する同梱runtimeの版を確認する。
