@@ -1,0 +1,17 @@
+{
+  "format": "alder-document-package", "formatVersion": "0.6", "revision": "sample-1",
+  "documents": [{
+    "id": "bd-draft", "schemaVersion": "0.5", "kind": "businessDesign", "revision": "bd-1",
+    "title": "申請書の記入", "preface": "合成例。再開条件は確認用の仮定。", "scope": "",
+    "objects": [{"id":"application","name":"申請書","scope":true,"icon":"file-text","information":[{"id":"application-info","name":"申請内容","description":"記入した内容"}]}],
+    "roles": [{"id":"applicant","name":"申請者","color":"#8b5cf6"}],
+    "activities": [{"id":"fill","name":"申請書を記入する","scope":true,"why":"申請する","when":"申請が必要なとき","where":"規定なし","who":{"kind":"role","roleId":"applicant"},
+      "procedure":{"steps":[{"id":"enter","action":"記入する","method":null,"whatDataIds":["application-data"],"obligation":"required","appliesWhen":null,"effect":null,"parties":{"from":{"kind":"who"},"to":{"kind":"object","objectId":"application"}},"exchange":{"kind":"interaction","phase":"not-applicable","direction":"output","objectId":"application","dataIds":["application-data"],"relationId":"application-out","pairedStepId":null}}],"orderRules":[]},
+      "results":[{"id":"entered","text":"申請内容を記入した"}],"problem":null,"painLevel":null}],
+    "data":[{"id":"application-data","name":"申請内容","items":[{"informationId":"application-info","condition":null}]}],
+    "relations":[{"id":"application-out","kind":"output","fromId":"fill","toId":"application"}],
+    "exceptions":[{"id":"missing-info","activityId":"fill","name":"不明点による中断","description":"記入中に不明点がある。","continuity":{"trigger":"記入中に不明点が見つかったとき","onInterrupt":"入力済みの内容を下書きとして保存する","outcome":"resume","resumeCondition":"必要な情報が分かったとき（仮）","resumeAction":"対象の下書きを探して開き、記入を続ける","interruptedAtStepId":"enter","resumeAtStepId":"enter","retainedDataIds":["application-data"]}}],
+    "findings":[]
+  }],
+  "sources":[],"externalDocuments":[],"diagnostics":[]
+}

@@ -1,0 +1,12 @@
+{
+  "source": "a136fabb5f28b46fe2d5883d0e8ae8eab8885a05",
+  "baseArtifact": "ccdd82523a7e7fdc14e47cbfa36acb045922f639",
+  "kind": "rapid-review-preview",
+  "method": "前版CIビルドのJS/CSSに対象2箇所の表示差分を適用。正式Vite buildではない。",
+  "fullCI": "未実施",
+  "note": "正式採用前には対象版の正式ビルド・CIと本人GUI確認が必要。",
+  "sha256": {
+    "main-DXN-AX3s.js": "9bb75dd003c243e1420fca1c3e0c622f28990f7f47e248dd2318cdf4717f7f6f",
+    "main-XkckJ4wu.css": "8ced99c3c4711e5410577d18f31a7811c9c126396deff5b063612badac8dbd9b"
+  }
+}
