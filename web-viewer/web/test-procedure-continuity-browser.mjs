@@ -17,6 +17,9 @@ export async function verifyProcedureContinuity(browser){
    const details=page.locator('.json-detail');for(const value of ['発生条件','下書きとして保存','再開条件','下書きを探して開き','再開する手順'])assert.ok((await details.innerText()).includes(value),value);
    assert.deepEqual(await details.locator('[data-procedure-table] th').allTextContents(),['Step','From','To','Data','Action']);
    assert.equal(await details.locator('[data-procedure-table] tbody tr').count(),1);
+   const scroller=details.locator('[data-procedure-scroll]');assert.equal(await scroller.getAttribute('role'),'region');assert.equal(await scroller.getAttribute('tabindex'),'0');assert.match(await details.innerText(),/表は左右にスクロールできます/);
+   const geometry=await scroller.evaluate(el=>({client:el.clientWidth,scroll:el.scrollWidth,overflow:getComputedStyle(el).overflowX,headings:[...el.querySelectorAll('th')].map(th=>th.getBoundingClientRect().width)}));assert.equal(geometry.overflow,'auto');assert.ok(geometry.scroll>geometry.client);assert.ok(geometry.headings.every(n=>n>=50));
+   assert.ok(await scroller.evaluate(el=>{el.scrollLeft=el.scrollWidth;return el.scrollLeft>0;}));await scroller.evaluate(el=>{el.scrollLeft=0;});
    await page.screenshot({path:`web/evidence/json-document/procedure-continuity-${width}.png`});
    const bad=JSON.parse(draft);bad.documents[0].exceptions[0].continuity.resumeAtStepId='missing';await file(JSON.stringify(bad));
    await page.locator('#status-text').filter({hasText:'開けません'}).waitFor();assert.equal(await page.locator('[data-node="fill"]').count(),1);
