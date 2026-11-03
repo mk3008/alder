@@ -1,13 +1,13 @@
 {
   "format": "storage-verification/1",
-  "source": "https://github.com/mk3008/alder/pull/351 at d158a97578b69fba71139bb25b25522cd381cba1",
+  "source": "https://github.com/mk3008/alder/pull/351 at 7c1956a27051eef63be0ad817bb783e89c606224",
   "scope": "Scope・Procedureの新構造候補と旧版を保護する保存境界",
   "checks": [
     {"id":"SP-001","condition":"旧0.4、未公開旧0.5、新形式または未知版を読む","guarantee":"各形式を明示識別し、未知版や版と内容の不一致を拒否する。読取り時に原本を変更しない。","reason":"同じフィールドの旧意味と新意味を混同しない","verification":"test-scope-procedure.mjs"},
     {"id":"SP-002","condition":"ActivityのWhoを記録する","guarantee":"Role参照、自動実行システム、スケジューラー、未決を区別し、複数Whoや存在しないRoleを拒否する。","reason":"自動主体へ人間Roleを捏造しない","verification":"test-scope-procedure.mjs"},
     {"id":"SP-003","condition":"ActivityやObjectのScopeを記録する","guarantee":"システム作成時の考慮要否を記録し、Scope外Objectも図と資料として保持する。必要な文脈がなければ未決として扱い、入力方向だけからScopeを変えない。OCRによる紙へのシステムアクセスと、システムがアクセスせず人が目視する場合を区別する。","reason":"設計資料と実装対象を区別する","verification":"test-scope-procedure.mjs"},
-    {"id":"SP-004","condition":"手順と結果を記録する","guarantee":"Step ID、本文、確認済みの方法、必須/任意、適用条件、局所順序と複数ResultのID・本文を保つ。方法が未決なら推測しない。","reason":"業務意味と識別を落とさない","verification":"test-scope-procedure.mjs"},
-    {"id":"SP-005","condition":"Procedureの入出力を記録する","guarantee":"StepごとにObject、方向、Data、Request/Responseと操作効果を保持し、未知参照や型違いを拒否する。","reason":"図と表が同じやり取りを参照できる","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-004","condition":"手順と結果を記録する","guarantee":"From・To・Data・Actionを中心にStep ID、Action、確認済みの方法、旧Stepの原文、必須/任意、適用条件、局所順序と複数ResultのID・本文を保つ。方法が未決なら推測しない。","reason":"業務意味と識別を落とさない","verification":"test-scope-procedure.mjs"},
+    {"id":"SP-005","condition":"Procedureの入出力を記録する","guarantee":"StepごとにObject、方向、操作対象Dataと受渡しData、Request/Responseと操作効果を保持し、未知参照や型違いを拒否する。対象Dataだけで実際の受渡しを推測しない。","reason":"図と表が同じやり取りを参照できる","verification":"test-scope-procedure.mjs"},
     {"id":"SP-006","condition":"同一Activity・Object・方向への複数のやり取りがある","guarantee":"図の線とDataラベルは方向ごとに集約し、Step ID・Data ID・元Relation IDを失わない。逆方向や別Activityは分ける。","reason":"図の見通しと手順明細を両立する","verification":"test-scope-procedure.mjs"},
     {"id":"SP-007","condition":"明示したRelationや対応Stepが不正である","guarantee":"参照の端点・方向不一致、同一方向のRequest/Response対応、同種の対応、異なるObjectの対応を拒否する。対応のない一方向通信を架空の対にしない。","reason":"矢印方向とRequest/Responseを独立に保つ","verification":"test-scope-procedure.mjs"},
     {"id":"SP-008","condition":"内部判断や未決の通信を記録する","guarantee":"内部判断、通信未決、Responseなしを区別し、Object・Data・Request/Response・CRUDを捏造しない。","reason":"表へ収めるために業務上の意味を変えない","verification":"test-scope-procedure.mjs"},

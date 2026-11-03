@@ -33,12 +33,12 @@ test('SP-002: Who is one Role, system, scheduler or explicitly unresolved',()=>{
 
 test('SP-003/004: reading method stays in the Step, and Scope remains undecided until context is known',()=>{
  const p=copy(),unresolved=validate(p);assert.ok(unresolved.diagnostics.includes('Scope未確定: paper'));
- const ocr=copy();bd(ocr).objects[0].scope=true;step(ocr,'read').text='作業者が対象システムのOCRで紙を読み取る';validate(ocr);
- const manual=copy();bd(manual).objects[0].scope=false;step(manual,'read').text='作業者が紙を目視で読み取る';validate(manual);
- assert.match(projectProcedure(bd(ocr)).rows[0].text,/OCR/);assert.match(projectProcedure(bd(manual)).rows[0].text,/目視/);
+ const ocr=copy();bd(ocr).objects[0].scope=true;step(ocr,'read').method='対象システムのOCR';validate(ocr);
+ const manual=copy();bd(manual).objects[0].scope=false;step(manual,'read').method='目視';validate(manual);
+ assert.equal(projectProcedure(bd(ocr)).rows[0].method,'対象システムのOCR');assert.equal(projectProcedure(bd(manual)).rows[0].method,'目視');
  assert.deepEqual(projectProcedure(bd(ocr)).edges,projectProcedure(bd(manual)).edges);
- const unchanged=copy();assert.equal(bd(unchanged).objects[0].scope,null);assert.equal(step(unchanged,'read').text,'紙の記載内容を読み取る');
- step(unchanged,'read').text='作業者が対象システムのOCRで紙を読み取る';assert.ok(validate(unchanged).diagnostics.includes('Scope未確定: paper'));assert.equal(bd(unchanged).objects[0].scope,null);
+ const unchanged=copy();assert.equal(bd(unchanged).objects[0].scope,null);assert.equal(step(unchanged,'read').method,null);
+ step(unchanged,'read').method='対象システムのOCR';assert.ok(validate(unchanged).diagnostics.includes('Scope未確定: paper'));assert.equal(bd(unchanged).objects[0].scope,null);
  bad(p=>{bd(p).objects[0].scope='false';});
 });
 
@@ -59,8 +59,10 @@ test('SP-005/010: paper content is one shared Data even when it is sent to the m
  assert.equal(d.data.find(x=>x.id==='content').items[0].informationId,'paper-content');assert.equal(inventory(example).parent.get('paper-content'),'paper');
  const rows=projectProcedure(d).rows;assert.deepEqual(rows.find(x=>x.stepId==='read-response').from,{kind:'object',objectId:'paper'});assert.deepEqual(rows.find(x=>x.stepId==='write').from,{kind:'who',activityId:'copy'});assert.equal(rows.find(x=>x.stepId==='write').pairedStepId,'write-response');
  const edges=projectProcedure(d).edges;assert.equal(edges.find(e=>e.objectId==='paper'&&e.direction==='input').label,'記載内容');assert.equal(edges.find(e=>e.objectId==='memo'&&e.direction==='output').label,'記載内容');
+ const request=rows.find(x=>x.stepId==='read');assert.equal(request.action,'読み取る');assert.deepEqual(request.data,[{id:'content',name:'記載内容',uses:['target']}]);
+ const outgoing=edges.find(e=>e.objectId==='paper'&&e.direction==='output');assert.equal(outgoing.transferUndecided,true);assert.equal(outgoing.data.length,0);assert.equal(outgoing.label,'');
  bad(p=>{step(p,'write').exchange.dataIds=['missing'];});bad(p=>{bd(p).data[0].items[0].informationId='missing';});bad(p=>{step(p,'write').exchange.objectId='worker';});
- bad(p=>{step(p,'write').exchange.dataIds=['content','content'];});
+ bad(p=>{step(p,'write').exchange.dataIds=['content','content'];});bad(p=>{step(p,'read').whatDataIds=['missing'];});bad(p=>{step(p,'read').whatDataIds=['content','content'];});
 });
 
 test('SP-006: Steps summarize into one edge per Activity/Object/direction while their IDs and existing Relation IDs remain distinct',()=>{
@@ -84,7 +86,8 @@ test('SP-007: explicit pairing and relation mismatches reject without equating p
 });
 
 test('SP-008: internal judgement, unresolved exchange and no response are distinct',()=>{
- const p=copy();activity(p).procedure.steps.push({id:'judge',text:'内容を判断する',obligation:'required',appliesWhen:null,effect:'not-applicable',exchange:{kind:'internal'}});validate(p);
+ const p=copy();activity(p).procedure.steps.push({id:'judge',action:'判断する',method:null,whatDataIds:['content'],obligation:'required',appliesWhen:null,effect:'not-applicable',exchange:{kind:'internal'}});validate(p);
+ const row=projectProcedure(bd(p)).rows.find(x=>x.stepId==='judge');assert.equal(row.to,null);assert.deepEqual(row.data,[{id:'content',name:'記載内容',uses:['target']}]);
  const q=copy();step(q,'read').exchange={kind:'unresolved'};step(q,'read-response').exchange.pairedStepId=null;assert.ok(validate(q).diagnostics.includes('やり取り未確定: read'));
  const r=copy();activity(r).procedure.steps=activity(r).procedure.steps.filter(s=>s.id!=='write-response');step(r,'write').exchange.pairedStepId=null;validate(r);assert.ok(!projectProcedure(bd(r)).rows.some(x=>x.stepId==='write-response'));
  const noPayload=copy();step(noPayload,'read').exchange.dataIds=[];assert.ok(!validate(noPayload).diagnostics.includes('Data未確定: read'));
@@ -116,8 +119,10 @@ function old05Fixture(){
  d.data.push({id:'read-request-data',name:'読取依頼',items:[{informationId:'paper-request-info',condition:null}]});
  d.data.push({id:'memo-content-data',name:'メモの記載内容',items:[{informationId:'memo-content-info',condition:null}]});
  step(candidate,'read').exchange.dataIds=['read-request-data'];step(candidate,'write').exchange.dataIds=['memo-content-data'];a.who=null;
+ const originalText={read:'紙の記載内容を読み取る','read-response':'紙から記載内容を受け取る',write:'記載内容をメモに書く','write-response':'メモの記載成功を受け取る'};
+ for(const s of a.procedure.steps)s.legacyText=originalText[s.id];
  const oldActivity={id:a.id,name:a.name,scope:true,why:a.why,when:a.when,where:a.where,problem:a.problem,painLevel:a.painLevel,
-  performers:[{objectId:'old-worker',roleIds:['worker']}],procedure:{steps:a.procedure.steps.map(s=>({id:s.id,text:s.text,obligation:s.obligation,appliesWhen:s.appliesWhen,performerObjectIds:['old-worker']})),orderRules:a.procedure.orderRules},results:a.results};
+  performers:[{objectId:'old-worker',roleIds:['worker']}],procedure:{steps:a.procedure.steps.map(s=>({id:s.id,text:s.legacyText,obligation:s.obligation,appliesWhen:s.appliesWhen,performerObjectIds:['old-worker']})),orderRules:a.procedure.orderRules},results:a.results};
  const relationData={'paper-output':'read-request-data','paper-input':'content','memo-output':'memo-content-data','memo-input':'success'};
  const oldBD={...structuredClone(d),schemaVersion:'0.4',revision:'legacy-bd-05',objects:d.objects.map(o=>({...o,scope:false})),activities:[oldActivity],relations:d.relations.map(r=>({...r,dataId:relationData[r.id]}))};
  const old={format:'alder-document-package',formatVersion:'0.5',revision:'legacy-package-05',documents:[oldBD],sources:[],externalDocuments:[],diagnostics:[]};
@@ -141,12 +146,13 @@ test('SP-011/013: old 0.5 keeps every Step/Data/Relation and never infers direct
  assert.ok(result.manualReview.some(x=>x.kind==='legacy-performers'&&x.id==='copy'));assert.ok(result.manualReview.some(x=>x.kind==='legacy-step-performers'&&x.id==='read'));
  for(const id of ['read','read-response','write','write-response','content','memo-content-data','paper-input','memo-output'])assert.ok(inventory(candidate).map.has(id));
  const missing=structuredClone(candidate);step(missing,'write').exchange.dataIds=['content'];assert.throws(()=>prepareProcedureUpgrade(old,missing,request),/explicit Step mapping/);
+ const changedText=structuredClone(candidate);step(changedText,'read').legacyText='変更された旧文';assert.throws(()=>prepareProcedureUpgrade(old,changedText,request),/legacy Step text/);
  const assumed=structuredClone(candidate);activity(assumed).who={kind:'role',roleId:'worker'};assert.throws(()=>prepareProcedureUpgrade(old,assumed,request),/Who evidence/);
  const moved=structuredClone(candidate),info=bd(moved).objects[0].information.shift();bd(moved).objects[1].information.push(info);assert.throws(()=>prepareProcedureUpgrade(old,moved,request),/owner changed/i);
 });
 
 test('SP-012: protected authoring retains nested identities and does not silently reassign Information',()=>{
- const next=copy();next.revision='example-2';bd(next).revision='bd-2';step(next,'write').text+='（確認）';assert.equal(guardAuthoring(example,next,{expectedRevision:example.revision}).valid,true);
+ const next=copy();next.revision='example-2';bd(next).revision='bd-2';step(next,'write').action+='（確認）';assert.equal(guardAuthoring(example,next,{expectedRevision:example.revision}).valid,true);
  const moved=structuredClone(next),info=bd(moved).objects[0].information.pop();bd(moved).objects[1].information.push(info);assert.throws(()=>guardAuthoring(example,moved,{expectedRevision:example.revision}),/owner changed/i);
  const removed=structuredClone(next);activity(removed).results=[];assert.throws(()=>guardAuthoring(example,removed,{expectedRevision:example.revision}));
  const base=copy(),checks=structuredClone(old04Fixture().documents[1]);checks.basedOn.revision=bd(base).revision;base.documents.push(checks);validate(base);

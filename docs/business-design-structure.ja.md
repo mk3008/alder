@@ -8,8 +8,6 @@
 
 開発者が保存形式を扱う場合は[JSON構造契約](https://github.com/mk3008/alder/blob/bd8ff1e2b55765a9e5cac10e85d6dee3ca85ebec/docs/json-native-contract.ja.md)を参照してください。JSONの直接編集は通常の利用手順ではありません。
 
-この文書の旧Markdownと現行JSON 0.4のScopeは、それぞれの既存定義として扱います。対象システムの作成時に考慮が必要かを示す新しいScopeと構造化Procedureは、[新構造候補](business-design-procedure-v06.ja.md)で説明します。旧版のScope値を新しい意味に自動で読み替えません。
-
 ## 旧Markdownの記法（互換Reference）
 
 以下は既存MDの読込・更新・明示的な一方向変換を行う際の記法です。新規JSONを作るために、この見出しを中間MDへ出力する必要はありません。旧ファイルをJSONへ変換するときは元MDを保持します。[Business GraphのMarkdown形式](business-graph.md#opt-in-markdown-profile-v1)は従来の独立した出力契約です。

@@ -57,6 +57,8 @@ export function validateProcedureStructure(bd,inv,target,diagnostics){
   if(a.who===null)diagnostics.push('Who未確定: '+a.id);
   else if(a.who.kind==='role')ref(a.who.roleId,'role');
   for(const s of a.procedure.steps){
+   if(s.whatDataIds===null)diagnostics.push('対象Data未確定: '+s.id);
+   else {unique(s.whatDataIds,'Duplicate Step target Data');for(const id of s.whatDataIds)ref(id,'data');}
    const x=s.exchange;if(x.kind==='unresolved'){diagnostics.push('やり取り未確定: '+s.id);continue;}if(x.kind==='internal')continue;
    ref(x.objectId,'object');
    if(x.dataIds===null)diagnostics.push('Data未確定: '+s.id);
@@ -77,13 +79,16 @@ export function validateProcedureStructure(bd,inv,target,diagnostics){
 export function projectProcedure(bd){
  const data=new Map(bd.data.map(d=>[d.id,d])),groups=new Map(),rows=[];
  for(const a of bd.activities)for(const s of a.procedure.steps){
-  const x=s.exchange,common={activityId:a.id,stepId:s.id,text:s.text,obligation:s.obligation,appliesWhen:s.appliesWhen,effect:s.effect};
-  if(x.kind!=='interaction'){rows.push({...common,kind:x.kind});continue;}
+  const x=s.exchange,mentioned=new Map();
+  const add=(id,kind)=>{let item=mentioned.get(id);if(!item){const d=data.get(id);demand(d,'Unknown Data during projection: '+id);item={id:d.id,name:d.name,uses:[]};mentioned.set(id,item);}if(!item.uses.includes(kind))item.uses.push(kind);};
+  for(const id of s.whatDataIds??[])add(id,'target');if(x.kind==='interaction')for(const id of x.dataIds??[])add(id,'transferred');
+  const common={activityId:a.id,stepId:s.id,action:s.action,method:s.method,data:[...mentioned.values()],targetDataUndecided:s.whatDataIds===null,obligation:s.obligation,appliesWhen:s.appliesWhen,effect:s.effect};
+  if(x.kind!=='interaction'){rows.push({...common,kind:x.kind,from:x.kind==='internal'?{kind:'who',activityId:a.id}:null,to:null});continue;}
   const who={kind:'who',activityId:a.id},object={kind:'object',objectId:x.objectId};
   rows.push({...common,kind:x.kind,from:x.direction==='output'?who:object,to:x.direction==='output'?object:who,
    objectId:x.objectId,direction:x.direction,phase:x.phase,dataIds:x.dataIds,relationId:x.relationId,pairedStepId:x.pairedStepId});
   const key=JSON.stringify([a.id,x.objectId,x.direction]);if(!groups.has(key))groups.set(key,{activityId:a.id,objectId:x.objectId,direction:x.direction,stepIds:[],relationIds:[],data:[]});
-  const group=groups.get(key);group.stepIds.push(s.id);if(x.relationId!==null&&!group.relationIds.includes(x.relationId))group.relationIds.push(x.relationId);
+  const group=groups.get(key);group.stepIds.push(s.id);if(x.relationId!==null&&!group.relationIds.includes(x.relationId))group.relationIds.push(x.relationId);if(x.dataIds===null)group.transferUndecided=true;
   for(const id of x.dataIds??[])if(!group.data.some(item=>item.id===id)){const d=data.get(id);demand(d,'Unknown Data during projection: '+id);group.data.push({id:d.id,name:d.name});}
  }
  return {rows,edges:[...groups.values()].map(group=>({...group,label:group.data.map(d=>d.name).join(' / ')}))};

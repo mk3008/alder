@@ -30,7 +30,7 @@ export function prepareProcedureUpgrade(previous,candidate,request){
   if(type==='exception')demand(equal(value,newer),'Migration changed exception: '+id);
   if(type==='finding')demand(equal(value,newer),'Migration changed finding: '+id);
   if(type==='result')demand(equal(value,newer),'Migration changed Result: '+id);
-  if(type==='step')demand(value.text===newer.text&&value.obligation===newer.obligation&&value.appliesWhen===newer.appliesWhen,'Migration changed Step meaning: '+id);
+  if(type==='step')demand(value.text===newer.legacyText&&value.obligation===newer.obligation&&value.appliesWhen===newer.appliesWhen,'Migration changed or omitted legacy Step text/conditions: '+id);
   if(type==='data')demand(equal(value.items,newer.items),'Migration changed Data items: '+id);
   if(type==='relation'){
    demand(value.kind===newer.kind&&value.fromId===newer.fromId&&value.toId===newer.toId,'Migration changed relation endpoint: '+id);

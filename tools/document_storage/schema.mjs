@@ -33,7 +33,9 @@ const exchange={anyOf:[
  obj({kind:{enum:['interaction']},phase:{enum:['request','response']},direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
  obj({kind:{enum:['internal']}}),obj({kind:{enum:['unresolved']}})
 ]};
-const newStep=obj({id,text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange});
+// Action is the fourth table column. Historical Step prose may be retained as
+// legacyText during migration; it is not a second current action definition.
+const newStep=obj({id,action:text,method:nullable(text),whatDataIds:nullable(array(id)),legacyText:text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange},['id','action','method','whatDataIds','obligation','appliesWhen','effect','exchange']);
 const scopedEntity={...entity,scope:nullable({type:'boolean'})};
 const newBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.5']},
  objects:array(obj({...scopedEntity,icon:text,information:array(information)})),

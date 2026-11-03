@@ -2722,7 +2722,38 @@
                           "type": "string",
                           "pattern": "^[A-Za-z0-9_-]+$"
                         },
-                        "text": {
+                        "action": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        },
+                        "method": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "\\S"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "whatDataIds": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9_-]+$"
+                              }
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "legacyText": {
                           "type": "string",
                           "minLength": 1,
                           "pattern": "\\S"
@@ -2869,7 +2900,9 @@
                       },
                       "required": [
                         "id",
-                        "text",
+                        "action",
+                        "method",
+                        "whatDataIds",
                         "obligation",
                         "appliesWhen",
                         "effect",

@@ -19,10 +19,10 @@
       "id": "copy", "name": "記載内容を転記する", "scope": null,
       "why": "記載内容をメモへ写す", "when": "転記作業のとき", "where": "未決", "who": {"kind": "role", "roleId": "worker"},
       "procedure": {"steps": [
-        {"id": "read", "text": "紙の記載内容を読み取る", "obligation": "required", "appliesWhen": null, "effect": "read", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "paper", "dataIds": null, "relationId": "paper-output", "pairedStepId": "read-response"}},
-        {"id": "read-response", "text": "紙から記載内容を受け取る", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "paper", "dataIds": ["content"], "relationId": "paper-input", "pairedStepId": "read"}},
-        {"id": "write", "text": "記載内容をメモに書く", "obligation": "required", "appliesWhen": null, "effect": "undecided", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "memo", "dataIds": ["content"], "relationId": "memo-output", "pairedStepId": "write-response"}},
-        {"id": "write-response", "text": "メモの記載成功を受け取る", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "memo", "dataIds": ["success"], "relationId": "memo-input", "pairedStepId": "write"}}
+        {"id": "read", "action": "読み取る", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": "read", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "paper", "dataIds": null, "relationId": "paper-output", "pairedStepId": "read-response"}},
+        {"id": "read-response", "action": "返す", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "paper", "dataIds": ["content"], "relationId": "paper-input", "pairedStepId": "read"}},
+        {"id": "write", "action": "書く", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": "undecided", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "memo", "dataIds": ["content"], "relationId": "memo-output", "pairedStepId": "write-response"}},
+        {"id": "write-response", "action": "返す", "method": null, "whatDataIds": ["success"], "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "memo", "dataIds": ["success"], "relationId": "memo-input", "pairedStepId": "write"}}
       ], "orderRules": []},
       "results": [{"id": "result-written", "text": "メモへの記載が成功した"}],
       "problem": null, "painLevel": null

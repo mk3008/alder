@@ -6,15 +6,17 @@
 
 ActivityとObjectのScopeは、対象システムを作る際に考慮する必要があるかを示す。`true`は対象、`false`は実装対象外、`null`は判断に必要な情報が未決である。Scope外Objectも入力の元資料として残せる。Scopeはヒアリングを通じて判断し、情報不足の時点では一度で当てる必要はない。
 
-例えば紙を読む場合、対象システムがOCRで紙を取り込むなら紙は対象であり、人が紙を目視し、システムにその紙の生成責任やアクセスがないなら対象外である。「読む」だけでは判定できない。確認できた読み方はStep本文に記し、未確認の方法を補わない。Scopeを本文から自動推定しない。
+例えば紙を読む場合、対象システムがOCRで紙を取り込むなら紙は対象であり、人が紙を目視し、システムにその紙の生成責任やアクセスがないなら対象外である。「読む」だけでは判定できない。確認できた読み方はStepの方法として記し、未確認の方法を補わない。Scopeを方法から自動推定しない。
 
-1つのActivityは単一のWhoを持つ。WhoはRole参照、システム、スケジューラー、未決を表せる。手順は順序付きStepと、必要な局所順序制約を持つ。Stepは本文、必須・任意、適用条件、業務操作の効果、やり取りまたは内部判断を持つ。例外と複数Resultの意味・IDは別に保持する。
+1つのActivityは単一のWhoを持つ。WhoはRole参照、システム、スケジューラー、未決を表せる。手順は順序付きStepと、必要な局所順序制約を持つ。標準の表は **From・To・Data・Action** を中心にし、必要な方法・条件等を併せて確認できる候補である。各StepはActionと方法、操作対象Data、必須・任意、適用条件、業務操作の効果、やり取りまたは内部判断を保持する。方法未決は`null`で表し、自然文の文法解析に依存しない。例外と複数Resultの意味・IDは別に保持する。
+
+例えば「作業者が紙の記載内容を読み取る」のDataは、読む対象を意味する。表の対象DataがそのままFromからToへ送信されると推測しない。対象Dataと実際の受渡しDataは、それぞれ同じData定義のIDへの参照として記録し、内容は二重管理しない。紙とメモの具体例では、受渡しの有無が分からない読取要求を未決とし、紙から受け取る記載内容とメモに書く記載内容は同じDataを使う。
 
 やり取りのStepは、既存Object、Request／Response、Input／Output方向、既存DataのID、任意の既存Relation ID、任意の対応Stepを持つ。方向とRequest／Responseは別の属性であり、入力Requestも出力Responseも存在できる。対応する応答がない場合に架空のResponseを作らない。`dataIds: []`はDataなし、`dataIds: null`は未決を表す。未決のやり取りも内部判断と区別する。
 
 共通DataはInformationを参照する。同じ記載内容を紙から受け取り、メモへ送るStepで同一Dataを使える。Informationの所有先と受渡し先のObjectが違うだけでは拒否しない。InformationのID・所有先・名前・説明は勝手に移動・上書きしない。旧0.5を読む場合は旧版の所有先制約で検証する。
 
-図の通常の線とDataラベルは、StepをActivity・Object・方向ごとに集約して生成する。逆方向は別の線。Step ID・Data ID・明示済みRelation IDは集約しても失わない。表と図に別々のData本文を保存しない。業務的に必要なStepの欠落自体は、図表の一致だけでは検出できず、業務要件やCheckとの照合が必要である。
+図の線とDataラベルの候補は、StepをActivity・Object・方向ごとに集約して生成する。逆方向は別の線。Step ID・Data ID・明示済みRelation IDは集約しても失わない。未決の受渡しを確定済みのDataラベルにしない。Dataのない要求や内部判断を実際のDFDにどう表示するかは、採用前に確認する。業務的に必要なStepの欠落自体は、図表の一致だけでは検出できず、業務要件やCheckとの照合が必要である。
 
 ## 版の読取りと候補準備
 
@@ -29,6 +31,6 @@ ActivityとObjectのScopeは、対象システムを作る際に考慮する必�
 node tools/document_storage/author-cli.mjs prepare-procedure-upgrade source.json authored-candidate.json new-candidate.json request.json
 ```
 
-`request.json`の`expectedRevision`と`expectedSha256`は旧原本の版とバイト列の照合用である。`scopeDecisions`と`whoDecisions`には、判定済み対象のID、値、根拠を明示する。未決は`null`とし、根拠を推測しない。候補には元BDと同じActivity・Object・Relation等の既存IDを維持する。旧0.5のStep・Result・Data・InformationのIDと内容、既存Informationの所有先も保持し、旧RelationのDataとStepの対応を明示する。
+`request.json`の`expectedRevision`と`expectedSha256`は旧原本の版とバイト列の照合用である。`scopeDecisions`と`whoDecisions`には、判定済み対象のID、値、根拠を明示する。未決は`null`とし、根拠を推測しない。候補には元BDと同じActivity・Object・Relation等の既存IDを維持する。旧0.5のStep原文は各Stepの`legacyText`へ保持する。Step・Result・Data・InformationのIDと内容、既存Informationの所有先も保持し、旧RelationのDataとStepの対応を明示する。
 
 出力は新しいBD候補であり、旧Check・State・概念モデルは元ファイルに残る。確認済み状態を新版への合意に読み替えず、付替えは別途確認する。旧文章を自動分割せず、旧WhoやScopeを推測しない。変換できない箇所・業務的な意味の確認は人間による作業として残る。元ファイルや既存出力は上書きしない。
