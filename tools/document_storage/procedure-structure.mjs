@@ -2,6 +2,7 @@ import {demand} from './core.mjs';
 
 const unique=(items,message)=>demand(new Set(items).size===items.length,message);
 const nonempty=(items,message)=>demand(items.length>0,message);
+const conditionKey=value=>JSON.stringify(value.kind==='value'?[value.axisId,value.kind,value.operator,value.value]:[value.axisId,value.kind]);
 
 // Local ordering describes the standard sequence; conditions remain prose.
 function validateOrder(activity,ref){
@@ -34,6 +35,42 @@ function validateCommon(bd,inv,target){
  return ref;
 }
 
+// Decisions belong to the Activity. Check references cross into a Check
+// document only when that document explicitly covers the same Activity.
+function validateDecisions(bd,inv,target,ref,diagnostics){
+ for(const activity of bd.activities){
+  const pointer=value=>{const decision=ref(value.decisionId,'decision',activity.id);ref(value.rowId,'decision-row',decision.id);return decision;};
+  for(const step of activity.procedure.steps){
+   unique(step.decisionIds,'Duplicate Step decision');for(const id of step.decisionIds)ref(id,'decision',activity.id);
+   if(step.whenDecision)pointer(step.whenDecision);
+  }
+  for(const decision of activity.decisions){
+   nonempty(decision.axes,'Decision requires a condition axis: '+decision.id);nonempty(decision.rows,'Decision requires a row: '+decision.id);
+   if(decision.appliesWhen){pointer(decision.appliesWhen);demand(decision.appliesWhen.decisionId!==decision.id,'Decision cannot depend on itself: '+decision.id);}
+   for(const axis of decision.axes){unique(axis.dataIds,'Duplicate decision axis Data');for(const id of axis.dataIds)ref(id,'data');demand((axis.trueLabel===undefined)===(axis.falseLabel===undefined),'Boolean labels must be paired: '+axis.id);}
+   for(const [index,row] of decision.rows.entries()){
+    demand(row.conditions.length===decision.axes.length,'Decision row must cover every axis: '+row.id);
+    for(const [column,condition] of row.conditions.entries()){
+     demand(condition.axisId===decision.axes[column].id,'Decision condition axis/order mismatch: '+row.id);
+     if(condition.kind==='value'&&['gte','lte','gt','lt'].includes(condition.operator))demand(typeof condition.value==='number','Ordered comparison requires a number: '+row.id);
+     if(condition.kind==='undecided')demand(row.result.kind==='undecided','Undecided condition cannot assert an outcome: '+row.id);
+     if(condition.kind==='else'){
+      const prefix=JSON.stringify(row.conditions.slice(0,column).map(conditionKey));
+      demand(decision.rows.slice(0,index).some(prior=>JSON.stringify(prior.conditions.slice(0,column).map(conditionKey))===prefix&&prior.conditions[column]?.kind==='value'),'Else needs an earlier branch in the same context: '+row.id);
+     }
+    }
+    demand(row.result.kind==='undecided'||row.result.text!==null,'Known decision result needs a description: '+row.id);
+    if(row.result.kind==='undecided')diagnostics.push('業務判断未決: '+row.id);
+    unique(row.result.dataIds,'Duplicate decision result Data');for(const id of row.result.dataIds)ref(id,'data');
+    unique(row.result.exceptionIds,'Duplicate decision exception');for(const id of row.result.exceptionIds){const exception=ref(id,'exception');demand(exception.activityId===activity.id,'Decision exception Activity mismatch: '+id);}
+    unique(row.checkRefs.map(value=>value.checkId),'Duplicate decision Check');
+    for(const link of row.checkRefs){target(link.checkId,'check');const doc=inv.map.get(inv.owner.get(link.checkId));demand(doc?.kind==='checkItems'&&doc.basedOn.documentId===bd.id&&doc.basedOn.revision===bd.revision,'Decision Check source mismatch: '+link.checkId);demand(doc.index.some(item=>item.activityId===activity.id&&item.checkIds.includes(link.checkId)),'Decision Check Activity mismatch: '+link.checkId);}
+   }
+  }
+  for(const decision of activity.decisions){const seen=new Set();let current=decision;while(current.appliesWhen){demand(!seen.has(current.id),'Decision dependency cycle: '+decision.id);seen.add(current.id);current=pointer(current.appliesWhen);}}
+ }
+}
+
 // Preserve the unshipped 0.5 meaning exactly when reading it; never infer the
 // new direct Who or alter an old payload during inspection.
 export function validateOldStructure(bd,inv,target){
@@ -51,6 +88,7 @@ export function validateOldStructure(bd,inv,target){
 // Information on another Object; ownership itself remains unchanged.
 export function validateProcedureStructure(bd,inv,target,diagnostics){
  const ref=validateCommon(bd,inv,target),steps=new Map(bd.activities.flatMap(a=>a.procedure.steps.map(s=>[s.id,{activity:a,step:s}])));
+ if(bd.schemaVersion==='0.6')validateDecisions(bd,inv,target,ref,diagnostics);
  for(const exception of bd.exceptions){
   const c=exception.continuity;if(!c)continue;
   for(const id of [c.interruptedAtStepId,c.resumeAtStepId])if(id!==null)ref(id,'step',exception.activityId);

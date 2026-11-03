@@ -20,7 +20,7 @@ export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocumen
 export function readViewerDocument({data,original,namedPlans}:NormalizedDocument):Design{
  if(data.version!==1)throw Error('Unsupported Viewer document version');
  const validateModel=data.formatVersion==='0.5'?validateReferences05:validateReferences;
- const validation:{diagnostics:string[]}=validateModel({formatVersion:['0.5','0.6'].includes(data.formatVersion)?data.formatVersion:'0.4',documents:[data.business,...data.checks,...data.states,...(data.concepts??[])],sources:data.sources??[],externalDocuments:data.externalDocuments??[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
+ const validation:{diagnostics:string[]}=validateModel({formatVersion:['0.5','0.6','0.7'].includes(data.formatVersion)?data.formatVersion:'0.4',documents:[data.business,...data.checks,...data.states,...(data.concepts??[])],sources:data.sources??[],externalDocuments:data.externalDocuments??[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
  data={...data,diagnostics:[...new Set(validation.diagnostics)]};
  const bd=data.business,all=[...bd.objects,...bd.activities];
  const nodes:GraphNode[]=[...bd.objects.map(o=>({...o,information:o.information.map(i=>typeof i==='string'?i:i.name),type:'object' as const})),...bd.activities.map(a=>({id:a.id,type:'business' as const,name:a.name,scope:a.scope,why:a.why,when:a.when,who:activityWho(bd,a),where:a.where,result:'results' in a?a.results.map(r=>r.text).join('\n'):a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
@@ -31,7 +31,7 @@ export function readViewerDocument({data,original,namedPlans}:NormalizedDocument
   return [d.objectId,{model}];
  })));
  const baseRelations=bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:relationLabel(bd,r)}));
- const relations=data.formatVersion==='0.6'?(()=>{
+ const relations=['0.6','0.7'].includes(data.formatVersion)?(()=>{
   const projected:{activityId:string;objectId:string;direction:'input'|'output';label:string;transferUndecided?:boolean}[]=projectProcedure(bd).edges;
   const edges=projected.map(e=>({kind:e.direction,from:e.direction==='input'?e.objectId:e.activityId,to:e.direction==='input'?e.activityId:e.objectId,label:e.label||(e.transferUndecided?'未決':'')}));
   for(const r of baseRelations)if(!edges.some(e=>e.kind===r.kind&&e.from===r.from&&e.to===r.to))edges.push(r as typeof edges[number]);

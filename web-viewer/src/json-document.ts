@@ -14,8 +14,13 @@ type ActivityBase={id:string;name:string;scope:boolean|null;why:string;when:stri
 export type LegacyActivity=ActivityBase & {roleId?:string|null;who:string;procedure:string;exception:string|null;result:string};
 export type StructuredActivity=ActivityBase & {performers:{objectId:string;roleIds:string[]}[]|null;procedure:{steps:{id:string;text:string;obligation:'required'|'optional';appliesWhen:string|null;performerObjectIds:string[]|null}[];orderRules:({kind:'before';beforeId:string;afterId:string}|{kind:'interchangeable';stepIds:string[]})[]};results:{id:string;text:string}[]};
 export type Party={kind:'who'}|{kind:'object';objectId:string};
-export type ProcedureStep={id:string;action:string;method:string|null;whatDataIds:string[]|null;legacyText?:string;obligation:'required'|'optional';appliesWhen:string|null;effect:string|null;parties?:{from:Party|null;to:Party|null};exchange:{kind:'interaction';phase:'request'|'response'|'not-applicable'|null;direction:'input'|'output';objectId:string;dataIds:string[]|null;relationId:string|null;pairedStepId:string|null}|{kind:'internal'|'unresolved'}};
-export type ProcedureActivity=ActivityBase & {who:{kind:'role';roleId:string}|{kind:'system'|'scheduler';name:string}|null;procedure:{steps:ProcedureStep[];orderRules:({kind:'before';beforeId:string;afterId:string}|{kind:'interchangeable';stepIds:string[]})[]};results:{id:string;text:string}[]};
+export type DecisionPointer={decisionId:string;rowId:string};
+export type DecisionAxis={id:string;name:string;dataIds:string[];unit?:string;trueLabel?:string;falseLabel?:string};
+export type DecisionCondition={axisId:string;kind:'value';operator:'is'|'eq'|'gte'|'lte'|'gt'|'lt';value:string|number|boolean}|{axisId:string;kind:'else'|'any'|'undecided'};
+export type DecisionRow={id:string;conditions:DecisionCondition[];result:{kind:'accepted'|'error'|'value'|'undecided';text:string|null;dataIds:string[];exceptionIds:string[]};checkRefs:{checkId:string;coverage:'full'|'partial'}[]};
+export type BusinessDecision={id:string;title:string;kind:'authorization'|'validation'|'algorithm';note:string|null;appliesWhen:DecisionPointer|null;axes:DecisionAxis[];rows:DecisionRow[]};
+export type ProcedureStep={id:string;action:string;method:string|null;whatDataIds:string[]|null;legacyText?:string;obligation:'required'|'optional';appliesWhen:string|null;effect:string|null;parties?:{from:Party|null;to:Party|null};decisionIds?:string[];whenDecision?:DecisionPointer|null;exchange:{kind:'interaction';phase:'request'|'response'|'not-applicable'|null;direction:'input'|'output';objectId:string;dataIds:string[]|null;relationId:string|null;pairedStepId:string|null}|{kind:'internal'|'unresolved'}};
+export type ProcedureActivity=ActivityBase & {who:{kind:'role';roleId:string}|{kind:'system'|'scheduler';name:string}|null;procedure:{steps:ProcedureStep[];orderRules:({kind:'before';beforeId:string;afterId:string}|{kind:'interchangeable';stepIds:string[]})[]};decisions?:BusinessDecision[];results:{id:string;text:string}[]};
 export type ActivityEntry=LegacyActivity|StructuredActivity|ProcedureActivity;
 export type RelationEntry={id:string;kind:'input'|'output'|'business-exception'|'object-exception';fromId:string;toId:string;label?:string;dataId?:string};
 export type Continuity={trigger:string|null;onInterrupt:string|null;outcome:'resume'|'continue'|'end'|null;resumeCondition:string|null;resumeAction:string|null;interruptedAtStepId:string|null;resumeAtStepId:string|null;retainedDataIds:string[]|null};
@@ -45,7 +50,7 @@ export function validateJSONBudget(pkg:any){
  for(const d of Array.isArray(pkg?.documents)?pkg.documents:[]){if(d&&typeof d==='object'&&d.kind==='businessDesign'&&((d.objects?.length??0)+(d.activities?.length??0)>2000||(d.relations?.length??0)>5000))throw Error('図の表示上限は2000要素・5000関係です。');}
 }
 export function projectJSONPackage(pkg:any,source:string):NormalizedDocument{
- if(!pkg||!['0.4','0.5','0.6'].includes(pkg.formatVersion))throw Error('JSON専用経路はformatVersion 0.4、旧候補0.5または候補0.6が必要です（旧形式は互換入力adapter）。');
+ if(!pkg||!['0.4','0.5','0.6','0.7'].includes(pkg.formatVersion))throw Error('JSON専用経路はformatVersion 0.4、旧候補0.5または候補0.6・0.7が必要です（旧形式は互換入力adapter）。');
  validateJSONBudget(pkg);
  const result=pkg.formatVersion==='0.5'?validate05(pkg):validate(pkg);
  const business=pkg.documents.filter((d:BD|Check)=>d.kind==='businessDesign') as BD[];

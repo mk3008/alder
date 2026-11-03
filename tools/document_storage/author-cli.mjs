@@ -15,6 +15,15 @@ export async function run(args){
    demand(!rest.length,'runtime takes no arguments');const p=spawnSync(process.env.ALDER_PYTHON||'python3',['-c','import sys,json;print(json.dumps(list(sys.version_info[:3])))'],{encoding:'utf8'});let version=null;try{version=JSON.parse(p.stdout);}catch{}
    console.log(JSON.stringify({node:process.version,directJSON:true,python:version,markdownConversion:!!version&&(version[0]>3||version[0]===3&&version[1]>=12)}));return 0;
   }
+  if(command==='prepare-decision-upgrade'){
+   demand(rest.length===3,'prepare-decision-upgrade source.json new-candidate.json request.json');const [source,output,requestFile]=rest;
+   demand(path.resolve(source)!==path.resolve(output),'Migration must preserve the source');
+   const sourceText=fs.readFileSync(source,'utf8'),request=parseStrict(fs.readFileSync(requestFile,'utf8'));demand(request.expectedSha256===fingerprint(sourceText),'Source file content conflict');
+   const {next,report}=(await import('./prepare-decisions.mjs')).prepareDecisionUpgrade(parseStrict(sourceText),request),text=stringify(next);
+   temp=path.join(path.dirname(path.resolve(output)),'.alder-json-'+randomUUID());const fd=fs.openSync(temp,'wx',0o600);try{fs.writeFileSync(fd,text,'utf8');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+   validate(parseStrict(fs.readFileSync(temp,'utf8')));demand(fingerprint(fs.readFileSync(source,'utf8'))===request.expectedSha256,'Source changed while preparing candidate');fs.linkSync(temp,output);
+   console.log(JSON.stringify({candidate:output,sourceSha256:request.expectedSha256,...report}));return 0;
+  }
   if(command==='prepare-procedure-upgrade'){
    demand(rest.length===4,'prepare-procedure-upgrade source.json authored-candidate.json new-candidate.json request.json');
    const [source,candidate,output,requestFile]=rest;
@@ -38,7 +47,7 @@ export async function run(args){
    demand(rest.length===1,'inspect package.json');const text=fs.readFileSync(rest[0],'utf8'),pkg=parseStrict(text),compatibility=packageVersionPolicy(pkg,'input');validate(['0.1','0.2','0.3'].includes(pkg.formatVersion)?(await import('./legacy-json.mjs')).readLegacyPackage(pkg):pkg);
    console.log(JSON.stringify({sha256:fingerprint(text),revision:pkg.revision,compatibility,documents:pkg.documents.map(d=>({id:d.id,kind:d.kind,revision:d.revision})),checks:pkg.documents.flatMap(d=>(d.items??[]).map(i=>({id:i.id,checkId:i.checkId,reviewState:i.reviewState,meaningSha256:meaningHash(pkg,i)})))}));return 0;
   }
-  demand(['create','commit'].includes(command)&&rest.length===3,'Usage: create candidate.json target.json operation.json | commit target.json candidate.json operation.json | prepare-procedure-upgrade source.json authored-candidate.json new-candidate.json request.json | inspect package.json | ids N | runtime');
+  demand(['create','commit'].includes(command)&&rest.length===3,'Usage: create candidate.json target.json operation.json | commit target.json candidate.json operation.json | prepare-procedure-upgrade source.json authored-candidate.json new-candidate.json request.json | prepare-decision-upgrade source.json new-candidate.json request.json | inspect package.json | ids N | runtime');
   const [a,b,op]=rest,target=path.resolve(command==='create'?b:a),candidate=path.resolve(command==='create'?a:b);
   demand(candidate!==target,'Candidate must be separate from target');const operation=parseStrict(fs.readFileSync(op,'utf8')),next=parseStrict(fs.readFileSync(candidate,'utf8'));
   let previous=null;

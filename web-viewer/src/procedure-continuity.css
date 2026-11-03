@@ -16,3 +16,18 @@
 .markdown [data-structure-issue]{padding:8px 10px;border-left-color:#b97816;border-radius:2px;background:#fff3cd;color:#694900}
 .markdown [data-structure-issue] button{padding:2px 4px;color:inherit;text-decoration:underline}
 [data-theme=dark] .markdown [data-structure-issue]{border-left-color:#ffd080;background:#483712;color:#ffe2a1}
+/* Only the new, adopted procedure/decision representation is affected. */
+.markdown [data-procedure-table][data-business-decisions], [data-business-decision-table]{width:max-content;min-width:0;max-width:none;table-layout:auto;border-collapse:collapse;font-size:13px;line-height:1.55}
+.markdown [data-procedure-table][data-business-decisions] th:nth-child(n){width:auto}
+.markdown [data-procedure-table][data-business-decisions] :is(th,td),[data-business-decision-table] :is(th,td){padding:4px 6px;border:1px solid var(--subtle);text-align:left;vertical-align:top;white-space:nowrap}
+.markdown [data-procedure-table][data-business-decisions] th,[data-business-decision-table] th{background:var(--select)}
+[data-business-decision-scroll]{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+[data-business-decision-table] td[rowspan]{vertical-align:middle}
+[data-business-decision-table] [data-decision-result]{border-left:2px solid var(--line)}
+[data-business-decision-table] [data-result-kind=error]{color:#b42318}
+[data-business-decision-table] [data-result-kind=accepted],[data-business-decision-table] [data-result-kind=value]{color:#087443}
+[data-theme=dark] [data-business-decision-table] [data-result-kind=error]{color:#ff9b91}
+[data-theme=dark] [data-business-decision-table] :is([data-result-kind=accepted],[data-result-kind=value]){color:#80dcb3}
+.business-decision-link{padding:0;color:#26749b;text-decoration:underline}
+[data-theme=dark] .business-decision-link{color:#8fc8ef}
+.decision-footnote,.decision-exception{color:var(--line);font-size:12px}

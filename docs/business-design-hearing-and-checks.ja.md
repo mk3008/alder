@@ -64,8 +64,8 @@
 
 現行Viewerのテスト仕様は、処理結果にCheckへ対応したデータ例も表示しています。上記の整理との対応方法は後続で検討し、既存の参照・URL・確認状態を保全します。
 
-上記は新しい運用方針です。現行の正式Schema・保存器は業務設計内の判定表と手順からの参照に対応していません。現行Pluginの保存経路は対象BD版の合意前に正式なCheck草案を保存できず、候補0.6にはStepからCheckへの型付き参照もありません。対応までは、聞き取った判断を別の構造化された検討候補に保ち、正式な保存や確認済み状態に読み替えません。
+上記は新しい運用方針です。Draft PRの候補0.7では、業務設計内の判定表と手順・Checkの参照、未レビューCheck草案の同時保存を試せます。正式版と配布済みPluginはまだ対応していません。正式な保存や確認済み状態に読み替えません。
 
-候補0.6の`parties`は操作主体・対象を表します。上の情報のFrom・Toとは意味が違うため、既存データを自動的に読み替えません。新しい契約では版の識別と明示移行、既存ID・原本・確認状態の保持を扱います。
+候補0.6の`parties`は操作主体・対象を表します。上の情報のFrom・Toとは意味が違うため、既存データを自動的に読み替えません。候補0.7への明示移行では、既存ID・原本・確認状態を保持します。詳細は[候補契約](business-design-decisions-v07.ja.md)を参照します。
 
-[手順とチェックのモルック検討例](../work/procedure-hearing/proposal.ja.md)と[業務設計内の判定表のPoC](../work/procedure-hearing/business-decisions-poc.json)は、表示と参照を確かめる検討用の構造です。正式Schemaや通常Viewerへの対応を意味しません。今後、[導入ガイド](adoption.md)、[チェック項目の追跡関係](check-item-traceability.md)、[JSON操作ガイド](plugin-json-authoring.ja.md)と、配布するSkill・保存器・Viewerを、この方針と整合させます。
+[手順とチェックのモルック検討例](../work/procedure-hearing/proposal.ja.md)と[業務設計内の判定表のPoC](../work/procedure-hearing/business-decisions-poc.json)は、表示と参照を確かめる検討用の構造です。候補0.7の通常Viewer統合はDraft PRで検証中で、正式版への反映を意味しません。今後、[導入ガイド](adoption.md)、[チェック項目の追跡関係](check-item-traceability.md)、[JSON操作ガイド](plugin-json-authoring.ja.md)と、配布するSkill・保存器・Viewerを、この方針と整合させます。

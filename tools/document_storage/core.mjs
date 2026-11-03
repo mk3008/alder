@@ -26,9 +26,9 @@ export function inventory(pkg){
  const map=new Map(),owner=new Map(),types=new Map(),parent=new Map();
  const add=(e,doc,type,parentId=doc.id)=>{demand(!map.has(e.id),'Duplicate ID: '+e.id);map.set(e.id,e);owner.set(e.id,doc.id);types.set(e.id,type);parent.set(e.id,parentId);};
  for(const d of pkg.documents){add(d,d,'document',null);for(const [key,type] of Object.entries({objects:'object',activities:'activity',relations:'relation',findings:'finding',sections:'section',guarantees:'guarantee',examples:'example',items:'check',notes:'note',states:'state',transitions:'transition',roles:'role',exceptions:'exception'}))for(const e of d[key]??[])add(e,d,type);
-  if(d.kind==='businessDesign'&&['0.4','0.5'].includes(d.schemaVersion)){
+  if(d.kind==='businessDesign'&&['0.4','0.5','0.6'].includes(d.schemaVersion)){
    for(const object of d.objects)for(const info of object.information)add(info,d,'information',object.id);
-   for(const activity of d.activities){for(const step of activity.procedure.steps)add(step,d,'step',activity.id);for(const result of activity.results)add(result,d,'result',activity.id);}
+   for(const activity of d.activities){for(const step of activity.procedure.steps)add(step,d,'step',activity.id);for(const result of activity.results)add(result,d,'result',activity.id);for(const decision of activity.decisions??[]){add(decision,d,'decision',activity.id);for(const axis of decision.axes)add(axis,d,'decision-axis',decision.id);for(const row of decision.rows)add(row,d,'decision-row',decision.id);}}
    for(const data of d.data)add(data,d,'data');
   }
  }
@@ -81,11 +81,19 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  for(const s of pkg.sources)if(s.uri){const u=new URL(s.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe source URI');}
  const target=(id,type,doc)=>{demand(map.has(id),'Dangling reference: '+id);if(type)demand(types.get(id)===type,'Reference type mismatch: '+id);if(doc)demand(owner.get(id)===doc,'Cross-document mismatch: '+id);return map.get(id);};
  const hasContent=runs=>runs?.some(r=>r.kind==='text'?r.value.trim().length>0:true);
- const rich=(runs,doc)=>{for(const r of runs){if(r.kind==='reference'){target(r.targetId,null,doc);demand(['document','section','guarantee','example','check','note'].includes(types.get(r.targetId)),'Invalid rich reference target');}if(r.kind==='link'){const u=new URL(r.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe external link');}}};
+ const rich=(runs,doc)=>{for(const r of runs){if(r.kind==='reference'){
+  const type=types.get(r.targetId);
+  if(type==='decision-row'||type==='exception'){
+   demand(pkg.formatVersion==='0.7','Business rich references require formatVersion 0.7');
+   const checkDoc=map.get(doc),value=target(r.targetId,type),activityId=type==='exception'?value.activityId:inv.parent.get(inv.parent.get(r.targetId));
+   demand(checkDoc?.kind==='checkItems'&&checkDoc.basedOn.documentId===owner.get(r.targetId),'Business reference must use the Check source Business Design');
+   demand(checkDoc.index.some(item=>item.activityId===activityId),'Business reference Activity is absent from Check index');
+  }else{target(r.targetId,null,doc);demand(['document','section','guarantee','example','check','note'].includes(type),'Invalid rich reference target');}
+ }if(r.kind==='link'){const u=new URL(r.uri);demand(u.protocol==='https:'&&!u.username&&!u.password,'Unsafe external link');}}};
  for(const d of pkg.documents){
   demand(pkg.formatVersion!=='0.1'||d.kind!=='stateTransition','State documents require formatVersion 0.2');
   if(d.kind==='businessDesign'){
-   demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(['0.4','0.5','0.6'].includes(pkg.formatVersion)?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
+   demand(d.activities.length>0,'Activity required');const names=[...d.objects,...d.activities].map(x=>x.name);demand(new Set(names).size===names.length,'Duplicate visible name');demand(names.every(n=>n===n.trim()&&!(['0.4','0.5','0.6','0.7'].includes(pkg.formatVersion)?['\n','\r']:['\n','\r',' — ',' → ','<!--']).some(t=>n.includes(t))),'Invalid Graph-visible name');for(const o of d.objects)demand(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(o.icon),'Invalid icon');
    if(['0.2','0.3'].includes(d.schemaVersion)){
     demand(new Set(d.roles.map(r=>r.name)).size===d.roles.length,'Duplicate Role name');demand(d.roles.every(r=>r.name===r.name.trim()&&!/[\r\n]/.test(r.name)),'Invalid Role name');
     for(const a of d.activities){if(a.roleId!==null)target(a.roleId,'role',d.id);else unresolvedRoles.add('Role未確定: '+a.id+' — '+a.who);}
@@ -93,9 +101,9 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
    for(const a of d.activities){demand((a.problem===null)===(a.painLevel===null),'Problem/Pain pair mismatch');}
    for(const e of d.exceptions??[])target(e.activityId,'activity',d.id);
    const endpoints={input:['object','activity'],output:['activity','object'],'business-exception':['activity','activity'],'object-exception':['object','object']};const seen=new Set();
-   for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,d.schemaVersion==='0.5'?r.id:r.dataId??r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}
+   for(const r of d.relations){target(r.fromId,endpoints[r.kind][0],d.id);target(r.toId,endpoints[r.kind][1],d.id);const key=JSON.stringify([r.kind,r.fromId,r.toId,['0.5','0.6'].includes(d.schemaVersion)?r.id:r.dataId??r.label]);demand(!seen.has(key),'Duplicate relation');seen.add(key);}
    if(d.schemaVersion==='0.4')validateOldStructure(d,inv,target);
-   if(d.schemaVersion==='0.5')validateProcedureStructure(d,inv,target,diagnostics);
+   if(['0.5','0.6'].includes(d.schemaVersion))validateProcedureStructure(d,inv,target,diagnostics);
    demand(new Set(d.findings.map(f=>f.sourceId)).size===d.findings.length,'Duplicate Finding source ID');
    for(const f of d.findings){demand(f.scope==='items'?f.targetIds.length+f.unresolvedTargets.length>0:!f.targetIds.length&&!f.unresolvedTargets.length,'Finding scope mismatch');demand(new Set(f.targetIds).size===f.targetIds.length,'Duplicate Finding target');for(const t of f.targetIds){target(t,null,d.id);demand(['object','activity'].includes(types.get(t)),'Invalid Finding target');}if(f.unresolvedTargets.length){demand(allowUnresolvedFindings,'Unresolved Finding target: '+f.sourceId);diagnostics.push('Finding参照未決: '+f.sourceId);}}
   }else if(d.kind==='stateTransition'){
@@ -108,7 +116,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     if(r.fromId!=='@new')target(r.fromId,'state',d.id);if(!['@unknown','@none'].includes(r.toId))target(r.toId,'state',d.id);const a=target(r.activityId,'activity',bd.id);
     const action=JSON.stringify([r.fromId,r.activityId,r.condition.trim().replace(/\s+/gu,' ')]);
     demand(!actions.has(action),'Duplicate state transition condition: '+actions.get(action)+' / '+r.sourceId);actions.set(action,r.sourceId);
-    if(['0.4','0.5','0.6'].includes(pkg.formatVersion)){
+    if(['0.4','0.5','0.6','0.7'].includes(pkg.formatVersion)){
      demand(r.path!=='normal'||r.exceptionId===null,'Normal transition cannot reference an exception');
      if(r.exceptionId!==null){const exception=target(r.exceptionId,'exception',bd.id);demand(exception.activityId===a.id,'Exception Activity mismatch');}
      else if(r.path==='exception')demand(diagnostics.includes('例外参照未決: '+r.id),'Unresolved exception requires a diagnostic');
@@ -202,7 +210,10 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
     const decisionOnly=g.blocks.length>0&&g.blocks.every(block=>block.kind==='example'&&decisionExamples.has(block.exampleId)&&d.examples.some(example=>example.id===block.exampleId&&example.guaranteeId===g.id&&exampleCheckIds(d,example).length>0));
     demand(g.blocks.some(b=>b.kind==='prose'&&hasContent(b.content))||decisionOnly,'General guarantee prose required');target(g.sectionId,'section',d.id);for(const b of g.blocks)if(b.kind==='prose')rich(b.content,d.id);else{const e=target(b.exampleId,'example',d.id);demand(e.guaranteeId===g.id,'Example owner mismatch');}}
    for(const ex of d.examples){target(ex.guaranteeId,'guarantee',d.id);demand(ex.columns.length>0,'Example columns required');for(const row of ex.rows){demand(row.length===ex.columns.length,'Example column mismatch');for(const cell of row)rich(cell,d.id);}}
-   for(const item of d.items){const section=target(item.sectionId,'section',d.id);demand(section.activityId===null?!d.index.some(r=>r.checkIds.includes(item.id)):d.index.some(r=>r.activityId===section.activityId&&r.checkIds.includes(item.id)),'Primary Check absent from Activity index or assigned while declared unassigned');demand(hasContent(item.fields.guarantee)||hasContent(item.fields.condition)&&hasContent(item.fields.expectedResult),'Check guarantee required');for(const runs of Object.values(item.fields))rich(runs,d.id);demand(section.activityId===null||d.index.some(row=>row.checkIds.includes(item.id)),'Unbound Check');}
+   for(const item of d.items){const section=target(item.sectionId,'section',d.id);demand(section.activityId===null?!d.index.some(r=>r.checkIds.includes(item.id)):d.index.some(r=>r.activityId===section.activityId&&r.checkIds.includes(item.id)),'Primary Check absent from Activity index or assigned while declared unassigned');demand(hasContent(item.fields.guarantee)||hasContent(item.fields.condition)&&hasContent(item.fields.expectedResult),'Check guarantee required');for(const runs of Object.values(item.fields)){rich(runs,d.id);for(const run of runs)if(run.kind==='reference'){
+    if(types.get(run.targetId)==='decision-row')demand(map.get(run.targetId).checkRefs.some(link=>link.checkId===item.id),'Check and decision row must explicitly correspond: '+item.id);
+    if(types.get(run.targetId)==='exception')demand(d.index.some(row=>row.activityId===map.get(run.targetId).activityId&&row.checkIds.includes(item.id)),'Check and exception Activity mismatch: '+item.id);
+   }}demand(section.activityId===null||d.index.some(row=>row.checkIds.includes(item.id)),'Unbound Check');}
    for(const n of d.notes)rich(n.content,d.id);rich(d.intro,d.id);
   }
  }
@@ -215,7 +226,7 @@ export function validateReferences(pkg,{allowUnresolvedFindings=false}={}){
  return {diagnostics,entities:map.size};
 }
 export function graphV1(pkg,documentId){
- const d=pkg.documents.find(d=>d.id===documentId&&d.kind==='businessDesign');demand(d,'BD not found');demand(!['0.4','0.5'].includes(d.schemaVersion),'Graph v1 cannot project a structured Business Design');demand([...d.objects,...d.activities].every(n=>!['\n','\r',' — ',' → ','<!--'].some(token=>n.name.includes(token))),'Graph v1 cannot represent this display name');const names=new Map([...d.objects,...d.activities].map(n=>[n.id,n.name]));
+ const d=pkg.documents.find(d=>d.id===documentId&&d.kind==='businessDesign');demand(d,'BD not found');demand(!['0.4','0.5','0.6'].includes(d.schemaVersion),'Graph v1 cannot project a structured Business Design');demand([...d.objects,...d.activities].every(n=>!['\n','\r',' — ',' → ','<!--'].some(token=>n.name.includes(token))),'Graph v1 cannot represent this display name');const names=new Map([...d.objects,...d.activities].map(n=>[n.id,n.name]));
  const nodes=[...d.objects.map(o=>({id:o.name,type:'object',name:o.name,scope:o.scope,icon:o.icon,information:o.information})),...d.activities.map(a=>({id:a.name,type:'business',name:a.name,scope:a.scope,why:a.why,when:a.when,who:a.who,where:a.where,result:a.result,...(a.problem===null?{}:{problem:a.problem,pain_level:a.painLevel})}))];
  return {version:1,...(d.scope?{scope:d.scope}:{}),nodes,relations:d.relations.map(r=>({kind:r.kind,from:names.get(r.fromId),to:names.get(r.toId),label:r.label}))};
 }

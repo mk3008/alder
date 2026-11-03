@@ -99,3 +99,9 @@ MD宣言の変換はrequestのstateDocumentsに文書ID/版/BD ID/Object名を�
 ## ロールの同一性と保存色
 
 [ロール契約](json-roles.ja.md)を読み、候補0.4ではBD schemaVersion 0.3のrolesとActivity.roleIdを直接草案・更新する。改名時にID/色を再発行せず、複合Whoを統合しない。旧0.1〜0.3の読取りは互換境界で行う。prepare-role-upgradeとprepare-exception-upgradeは別ファイルへの候補生成であり、旧原本へのcommitは行わない。生成候補の正式な移行保存・差分検証は未対応のため、実行可能と断定しない。Checkがある場合の新BD版の人間合意を推定しない。
+
+## 手順と判定表の0.7候補
+
+[候補契約](business-design-decisions-v07.ja.md)に沿い、聞き取った認可・入力検査・正常系アルゴリズムをActivity内の判定表として書き、StepとCheckから実在IDで参照する。未レビュー・要確認のCheck草案は、対象BD全体の合意前でも0.7候補へ同時に保存できる。`basedOn.verification`は`unverified`、新規Checkの人間状態は未レビューまたは要確認とし、実装への正式引き渡しや既存確認済みCheckの原典改版には、従来どおり該当BD版の人間合意を確認する。未決は未決のままとし、応答や判定結果を補わない。
+
+0.4・旧0.5・0.6の原本は直接変更せず、明示移行が必要な場合は旧版→0.6→0.7の各候補を別ファイルに作る。0.6→0.7の`prepare-decision-upgrade`はsource hashとrevisionを確認し、Check・State・概念文書の原典改版や確認状態を自動移行しない。候補対応はDraft PR上のものとして扱い、実際に利用する同梱runtimeの版を確認する。

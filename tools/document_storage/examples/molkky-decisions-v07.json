@@ -1,0 +1,70 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.7",
+  "revision": "molkky-review-1",
+  "documents": [
+    {
+      "id": "bd-score-example", "schemaVersion": "0.6", "kind": "businessDesign", "revision": "bd-review-1",
+      "title": "モルックの点数計算", "preface": "画面確認用の合成例。点数計算機能を自動主体とする分類は仮定。", "scope": "",
+      "objects": [
+        {"id":"player","name":"利用者","scope":false,"icon":"user","information":[{"id":"throws-info","name":"投擲順・各回の棒の番号","description":""}]},
+        {"id":"score-object","name":"投擲ごとの点数","scope":true,"icon":"file-text","information":[{"id":"scores-info","name":"投擲順・各回の点数","description":""},{"id":"response-info","name":"各回の点数または入力エラー","description":""},{"id":"total-info","name":"合計点","description":""},{"id":"history-info","name":"各回までの合計点の推移","description":""}]}
+      ],
+      "roles": [],
+      "activities": [{
+        "id":"calculate-score","name":"1回の点数を計算する","scope":true,"why":"利用者が1回投げた結果の点数を知るため","when":"利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。0回を含む。","where":"規定なし","who":{"kind":"system","name":"点数計算機能"},
+        "procedure":{"steps":[
+          {"id":"receive","action":"受け取る","method":null,"whatDataIds":["throws"],"obligation":"required","appliesWhen":null,"effect":null,"exchange":{"kind":"interaction","phase":"request","direction":"input","objectId":"player","dataIds":["throws"],"relationId":"rel-input","pairedStepId":"reply"},"decisionIds":[],"whenDecision":null},
+          {"id":"validate","action":"検査する","method":null,"whatDataIds":["throws"],"obligation":"required","appliesWhen":null,"effect":null,"exchange":{"kind":"internal"},"decisionIds":["input-validation"],"whenDecision":null},
+          {"id":"calculate","action":"計算する","method":null,"whatDataIds":["throws"],"obligation":"required","appliesWhen":null,"effect":null,"exchange":{"kind":"internal"},"decisionIds":["score-algorithm"],"whenDecision":{"decisionId":"input-validation","rowId":"valid"}},
+          {"id":"pass-scores","action":"渡す","method":null,"whatDataIds":["scores"],"obligation":"required","appliesWhen":null,"effect":null,"exchange":{"kind":"interaction","phase":"not-applicable","direction":"output","objectId":"score-object","dataIds":["scores"],"relationId":"rel-scores","pairedStepId":null},"decisionIds":[],"whenDecision":{"decisionId":"input-validation","rowId":"valid"}},
+          {"id":"reply","action":"返す","method":null,"whatDataIds":["response"],"obligation":"required","appliesWhen":null,"effect":null,"exchange":{"kind":"interaction","phase":"response","direction":"output","objectId":"player","dataIds":["response"],"relationId":"rel-output","pairedStepId":"receive"},"decisionIds":[],"whenDecision":null}
+        ],"orderRules":[]},
+        "decisions":[
+          {"id":"input-validation","title":"入力の検査","kind":"validation","note":null,"appliesWhen":null,
+            "axes":[{"id":"axis-numbers","name":"棒の番号","dataIds":["throws"]},{"id":"axis-duplicate","name":"同じ回の重複","dataIds":["throws"],"trueLabel":"あり","falseLabel":"なし"}],
+            "rows":[
+              {"id":"valid","conditions":[{"axisId":"axis-numbers","kind":"value","operator":"is","value":"1〜12の整数"},{"axisId":"axis-duplicate","kind":"value","operator":"eq","value":false}],"result":{"kind":"accepted","text":"有効","dataIds":[],"exceptionIds":[]},"checkRefs":[]},
+              {"id":"duplicate","conditions":[{"axisId":"axis-numbers","kind":"value","operator":"is","value":"1〜12の整数"},{"axisId":"axis-duplicate","kind":"else"}],"result":{"kind":"error","text":"入力エラー","dataIds":[],"exceptionIds":["invalid-input"]},"checkRefs":[{"checkId":"check-04","coverage":"full"}]},
+              {"id":"invalid-number","conditions":[{"axisId":"axis-numbers","kind":"else"},{"axisId":"axis-duplicate","kind":"any"}],"result":{"kind":"error","text":"入力エラー","dataIds":[],"exceptionIds":["invalid-input"]},"checkRefs":[{"checkId":"check-04","coverage":"full"}]}
+            ]
+          },
+          {"id":"score-algorithm","title":"点数の計算","kind":"algorithm","note":"入力が有効な場合に、1回以上なら各回ごとに判定します。","appliesWhen":{"decisionId":"input-validation","rowId":"valid"},
+            "axes":[{"id":"axis-throws","name":"投擲回数","dataIds":["throws"],"unit":"回"},{"id":"axis-pins","name":"倒れた本数","dataIds":["throws"],"unit":"本"}],
+            "rows":[
+              {"id":"zero-pins","conditions":[{"axisId":"axis-throws","kind":"value","operator":"gte","value":1},{"axisId":"axis-pins","kind":"value","operator":"eq","value":0}],"result":{"kind":"value","text":"0点","dataIds":[],"exceptionIds":[]},"checkRefs":[{"checkId":"check-01","coverage":"full"}]},
+              {"id":"one-pin","conditions":[{"axisId":"axis-throws","kind":"value","operator":"gte","value":1},{"axisId":"axis-pins","kind":"value","operator":"eq","value":1}],"result":{"kind":"value","text":"倒れた棒の番号","dataIds":["throws"],"exceptionIds":[]},"checkRefs":[{"checkId":"check-02","coverage":"full"}]},
+              {"id":"many-pins","conditions":[{"axisId":"axis-throws","kind":"value","operator":"gte","value":1},{"axisId":"axis-pins","kind":"else"}],"result":{"kind":"value","text":"倒れた本数","dataIds":["throws"],"exceptionIds":[]},"checkRefs":[{"checkId":"check-03","coverage":"full"}]},
+              {"id":"no-throws","conditions":[{"axisId":"axis-throws","kind":"else"},{"axisId":"axis-pins","kind":"any"}],"result":{"kind":"value","text":"1回分の点数なし","dataIds":[],"exceptionIds":[]},"checkRefs":[{"checkId":"check-10","coverage":"partial"}]}
+            ]
+          }
+        ],
+        "results":[{"id":"score-result","text":"入力が有効なら投擲順・各回の点数が分かる。0回の場合、1回分の点数はない。"}],"problem":null,"painLevel":null
+      }],
+      "exceptions":[{"id":"invalid-input","activityId":"calculate-score","name":"入力エラー","description":"入力に誤りが1回でもあれば計算せず、全体をエラーとし、投擲順・各回の点数・合計点・各回までの合計点の推移を返さない。"}],
+      "data":[
+        {"id":"throws","name":"投擲順・各回の棒の番号","items":[{"informationId":"throws-info","condition":null}]},
+        {"id":"scores","name":"投擲順・各回の点数","items":[{"informationId":"scores-info","condition":null}]},
+        {"id":"response","name":"各回の点数または入力エラー","items":[{"informationId":"response-info","condition":null}]},
+        {"id":"total","name":"合計点","items":[{"informationId":"total-info","condition":null}]},
+        {"id":"history","name":"各回までの合計点の推移","items":[{"informationId":"history-info","condition":null}]}
+      ],
+      "relations":[{"id":"rel-input","kind":"input","fromId":"player","toId":"calculate-score"},{"id":"rel-output","kind":"output","fromId":"calculate-score","toId":"player"},{"id":"rel-scores","kind":"output","fromId":"calculate-score","toId":"score-object"}],"findings":[]
+    },
+    {
+      "id":"checks-score-example","schemaVersion":"0.1","kind":"checkItems","revision":"checks-review-1","title":"点数計算のCheck",
+      "basedOn":{"documentId":"bd-score-example","revision":"bd-review-1","verification":"unverified"},"intro":[],
+      "index":[{"activityId":"calculate-score","purpose":"","connections":"","checkIds":["check-01","check-02","check-03","check-04","check-05","check-10"]}],
+      "sections":[{"id":"score-check-section","activityId":"calculate-score","title":"点数計算","preamble":[]}],"guarantees":[],"examples":[],
+      "items":[
+        {"id":"check-01","checkId":"MK-01","title":"0本の点数","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"zero-pins","label":"点数の計算"}]}},
+        {"id":"check-02","checkId":"MK-02","title":"1本の点数","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"one-pin","label":"点数の計算"}]}},
+        {"id":"check-03","checkId":"MK-03","title":"複数本の点数","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"many-pins","label":"点数の計算"}]}},
+        {"id":"check-04","checkId":"MK-04","title":"誤入力の扱い","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"duplicate","label":"同じ回の重複"},{"kind":"reference","targetId":"invalid-number","label":"番号の誤り"}]}},
+        {"id":"check-05","checkId":"MK-05","title":"まとめ計算のエラー","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"invalid-input","label":"入力エラー"}]}},
+        {"id":"check-10","checkId":"MK-10","title":"投擲0回の扱い","detailSummary":"","sectionId":"score-check-section","reviewState":"未レビュー","fields":{"guarantee":[{"kind":"reference","targetId":"no-throws","label":"点数の計算の一部"}]}}
+      ],"notes":[]
+    }
+  ],
+  "sources":[],"externalDocuments":[],"diagnostics":[]
+}
