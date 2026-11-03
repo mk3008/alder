@@ -50,15 +50,19 @@
         if(step.checkIds.length){const link=document.createElement('a');link.href='#checks-title';link.textContent='（※1）';cell.append(link);}
         addCell(row,step.action,'action');document.getElementById('steps').append(row);
       }
-      for(const [index,check] of source.checks.entries()){
+      // For this example the participant count is the list length. Only use
+      // the 2-or-more / otherwise grouping when the source checks establish it.
+      const few=source.checks.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='count-in'&&JSON.stringify(c.conditions[0].values)==='[0,1]');
+      const repeated=source.checks.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='duplicates-exist'&&c.conditions[0].value===true);
+      const start=source.checks.find(c=>c.conditions.length===2&&c.conditions.some(x=>x.predicate==='count-at-least'&&x.value===2)&&c.conditions.some(x=>x.predicate==='duplicates-exist'&&x.value===false));
+      const startCount=start?.conditions.find(c=>c.predicate==='count-at-least'),startDuplicate=start?.conditions.find(c=>c.predicate==='duplicates-exist');
+      const grouped=source.checks.length===3&&few&&repeated&&start&&few.conditions[0].dataId===startCount.dataId&&repeated.conditions[0].dataId===startCount.dataId&&startDuplicate.dataId===startCount.dataId&&repeated.conditions[0].fieldId===startDuplicate.fieldId;
+      const ordered=grouped?[repeated,start,few]:source.checks;
+      for(const check of ordered){
         const row=document.createElement('tr'),count=check.conditions.find(c=>c.predicate==='count-in'||c.predicate==='count-at-least'),duplicate=check.conditions.find(c=>c.predicate==='duplicates-exist');
-        // Participant count is the length of the participant list. After the
-        // 0/1 branch, its remaining values are explicitly 2 or more.
-        const previous=source.checks.slice(0,index);
-        const priorFew=previous.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='count-in'&&c.conditions[0].dataId===duplicate?.dataId&&JSON.stringify(c.conditions[0].values)==='[0,1]');
-        const countLabel=count?(count.predicate==='count-in'?count.values.join('または')+'名':count.value+'名以上'):(duplicate&&priorFew?'2名以上':'不問');
+        const countLabel=grouped?(check===few?'それ以外':'2名以上'):(count?(count.predicate==='count-in'?count.values.join('または')+'名':count.value+'名以上'):'不問');
         addCell(row,countLabel);
-        addCell(row,duplicate?(duplicate.value?'いる':'いない'):'不問');
+        addCell(row,duplicate?(grouped&&check===start?'それ以外':(duplicate.value?'いる':'いない')):'不問');
         const score=check.expected.effects.find(effect=>effect.action==='set-initial-score');
         const result=check.expected.outcome==='error'?'エラー':'正常';
         if(check.expected.outcome==='started'){
