@@ -97,6 +97,19 @@ test('SP-008: internal judgement, unresolved exchange and no response are distin
  const noPayload=copy();step(noPayload,'read').exchange.dataIds=[];assert.ok(!validate(noPayload).diagnostics.includes('Data未確定: read'));
 });
 
+test('SP-003/004/005/008: business examples retain their meaning in a structured procedure',()=>{
+ const p=read('./examples/procedure-cases-v06.json'),d=bd(p),diagnostics=validate(p).diagnostics,view=projectProcedure(d),rows=new Map(view.rows.map(r=>[r.stepId,r]));
+ assert.equal(rows.get('search').action,'検索する');assert.equal(rows.get('search').effect,'read');assert.equal(rows.get('search-result').data[0].name,'検索結果');
+ assert.equal(rows.get('ask').action,'確認する');assert.deepEqual(rows.get('ask').to,{kind:'object',objectId:'customer'});assert.equal(d.objects.find(o=>o.id==='customer').scope,false);
+ assert.equal(rows.get('answer-step').data[0].name,'顧客回答');assert.equal(rows.get('save').data[0].name,'顧客回答');assert.equal(rows.get('save').effect,'create');
+ assert.equal(rows.get('apply').action,'承認を依頼する');assert.equal(rows.get('decide').data[0].name,'承認結果');assert.equal(rows.get('decide').pairedStepId,'apply');
+ assert.equal(rows.get('notify').action,'通知する');assert.equal(rows.get('notify').method,'人が直接やり取りする');assert.equal(d.objects.find(o=>o.id==='approver').scope,false);assert.equal(rows.get('notify').phase,null);assert.equal(rows.get('notify').pairedStepId,null);assert.ok(diagnostics.includes('Request/Response未確定: notify'));
+ assert.equal(rows.get('judge').to,null);assert.equal(rows.get('wait-record').appliesWhen,'期限までに顧客回答がない場合');assert.equal(d.exceptions[0].description,'期限までに顧客回答がない場合は確認待ちとして記録する。');
+ assert.equal(d.activities[0].results.length,2);assert.deepEqual(d.activities[1].who,{kind:'scheduler',name:'定刻バッチ'});assert.equal(d.activities[1].when,'定刻');
+ assert.equal(rows.get('auto-read').effect,'read');assert.equal(rows.get('auto-read').dataIds,null);assert.ok(diagnostics.includes('Data未確定: auto-read'));
+ const broken=structuredClone(p);bd(broken).activities[0].procedure.steps.find(s=>s.id==='save').whatDataIds=['missing'];assert.throws(()=>validate(broken));
+});
+
 test('SP-010/013: the old 0.5 owner constraint remains on the historical version',()=>{
  const old=oldCase('molkkyCross'),d=bd(old),r=d.relations.find(r=>['input','output'].includes(r.kind)),target=r.kind==='input'?r.fromId:r.toId;
  const other=d.objects.find(o=>o.id!==target&&o.information.length);assert.ok(other,'fixture has Information owned by another Object');
