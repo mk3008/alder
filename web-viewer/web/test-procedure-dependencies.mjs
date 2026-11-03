@@ -21,7 +21,8 @@ assert.equal(root.querySelector('[data-decision-row="valid"]').scrolled.block,'c
 const unknown=structuredClone(pkg);unknown.documents[0].activities[0].procedure.steps[2].dependsOn=null;assert.match(view(unknown).querySelector('[data-step-id="calculate"]').textContent,/前提：未確認/);
 const legacy=JSON.parse(read('../tools/document_storage/examples/molkky-decisions-v07.json'));
 legacy.documents[0].activities[0].procedure.orderRules=[{kind:'before',beforeId:'validate',afterId:'calculate'}];
-assert.match(view(legacy).textContent,/検査する → 計算する/);
+assert.match(view(legacy).textContent,/検査する → 計算する/);assert.match(view(legacy).textContent,/前提が未確認の手順があります/);
+assert.doesNotMatch(root.textContent,/前提が未確認の手順があります/);
 const late=JSON.parse(read('../tools/document_storage/examples/molkky-decisions-v07.json')),steps=late.documents[0].activities[0].procedure.steps;[steps[1],steps[2]]=[steps[2],steps[1]];
 assert.match(view(late).querySelector('[data-step-id="calculate"]').textContent,/判定表を参照する手順が後方です。前提を確認/);
 console.log('DEP-005: dependency links, conditional references, undecided and legacy order verified in DOM.');

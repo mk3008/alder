@@ -57,7 +57,7 @@ function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
  const sameData=(a:string[]|null,b:string[]|null)=>a===null||b===null?a===b:a.length===b.length&&a.every((id,i)=>id===b[i]);
  const simpleData=(ids:string[]|null)=>{if(ids?.length===1&&!dataDetails(bd,ids).children.length)return element('span',bd.data?.find(data=>data.id===ids[0])?.name??'未決');return procedureData(bd,ids);};
  root.append(element('h3','Procedure'));
- const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');hint.className='procedure-scroll-hint';root.append(hint);
+ const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');if(a.procedure.steps.some(step=>step.dependsOn===undefined))hint.append(' 前提が未確認の手順があります。');hint.className='procedure-scroll-hint';root.append(hint);
  const scroll=element('div');scroll.dataset.procedureScroll='';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute('aria-label','手順表');
  const table=element('table');table.dataset.procedureTable='';table.dataset.businessDecisions='';const head=element('thead'),headRow=element('tr');
  for(const title of ['From','To','Data','Action']){const th=element('th',title);th.scope='col';headRow.append(th);}head.append(headRow);table.append(head);const body=element('tbody'),stepRows=new Map<string,HTMLElement>();
