@@ -22,15 +22,15 @@ export async function verifyActivityTestSpec(browser){
    assert.equal(await page.locator('#tests-workspace [aria-label="テスト成功"],#tests-workspace [aria-label="テスト失敗"]').count(),0);
    assert.ok(await page.locator('.activity-test-section table').count()>0);
    assert.equal(await page.locator('.activity-test-toc').isVisible(),width>800);
+   await page.screenshot({path:`${output}/activity-test-spec-${width}.png`});
    const layout=await page.locator('.activity-test-spec').evaluate(spec=>{
     const header=spec.querySelector('.activity-test-header'),content=spec.closest('.test-spec-page'),workspace=spec.closest('#tests-workspace');
     return {headerTag:header.tagName,headerColor:getComputedStyle(header).color,workspaceColor:getComputedStyle(workspace).color,contentWidth:content.clientWidth,contentScrollWidth:content.scrollWidth,headerWidth:header.getBoundingClientRect().width,tableOverflow:[...spec.querySelectorAll('table')].map(table=>getComputedStyle(table).overflowX)};
    });
    assert.notEqual(layout.headerTag,'HEADER','the page heading must not inherit the application header styles');
    assert.equal(layout.headerColor,layout.workspaceColor,'the page heading uses the document text color');
-   assert.ok(layout.headerWidth<=layout.contentWidth+2&&layout.contentScrollWidth<=layout.contentWidth+2,'the reading area fits the viewport');
+   assert.ok(layout.headerWidth<=layout.contentWidth+2&&layout.contentScrollWidth<=layout.contentWidth+2,'the reading area fits the viewport: '+JSON.stringify({width,...layout}));
    if(width<=800)assert.ok(layout.tableOverflow.every(value=>value==='auto'),'wide tables scroll within the reading area');
-   await page.screenshot({path:`${output}/activity-test-spec-${width}.png`});
    if(width>800){
     await page.locator('.activity-test-toc button').filter({hasText:'MK-03'}).click();
     await page.waitForFunction(()=>document.activeElement?.dataset.checkId==='MK-03');
