@@ -1,0 +1,4 @@
+.node.scope-undecided{border-style:dashed}
+.markdown [data-procedure-table]{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
+.markdown [data-procedure-table] th,.markdown [data-procedure-table] td{padding:5px 8px;border:1px solid var(--subtle);vertical-align:top}
+.markdown [data-procedure-table] td small{display:block;white-space:normal}

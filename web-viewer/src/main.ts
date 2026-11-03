@@ -32,6 +32,7 @@ import {hiddenReadIndexes} from './edge-visibility';
 import {fetchDocumentSource,fetchMarkdown} from './source';
 import {sourceSharingReason,createSourceShareLink,readSharedSource} from './sharing';
 import './style.css';
+import './procedure-continuity.css';
 import './named-plans.css';
 import './canvas-toolbar.css';
 import './viewer-shell.css';

@@ -64,7 +64,8 @@ export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:
     const row=element('tr');row.dataset.stepId=step.id;const parties=step.parties;const names=(ids:string[]|null)=>ids===null?'未決':ids.map(id=>bd.data?.find(d=>d.id===id)?.name??'未決').join('、')||'なし';
     const target=names(step.whatDataIds),transferred=step.exchange.kind==='interaction'?names(step.exchange.dataIds):null;
     const data=transferred===null||transferred===target?target:`対象：${target} / 受渡し：${transferred}`;
-    for(const value of [String(index+1),party(parties?.from),party(parties?.to)])row.append(element('td',value));const dataCell=element('td',data),items=dataDetails(bd,[...(step.whatDataIds??[]),...(step.exchange.kind==='interaction'?step.exchange.dataIds??[]:[])]);if(items.children.length)dataCell.append(items);row.append(dataCell);
+    const from=parties?party(parties.from):step.exchange.kind==='internal'?activityWho(bd,a):'未決';const to=parties?party(parties.to):step.exchange.kind==='internal'?'—':'未決';
+    for(const value of [String(index+1),from,to])row.append(element('td',value));const dataCell=element('td',data),items=dataDetails(bd,[...(step.whatDataIds??[]),...(step.exchange.kind==='interaction'?step.exchange.dataIds??[]:[])]);if(items.children.length)dataCell.append(items);row.append(dataCell);
     const action=element('td',step.action),details=[step.obligation==='required'?'必須':'任意',...(step.method?[`方法：${step.method}`]:[]),...(step.appliesWhen?[`適用条件：${step.appliesWhen}`]:[]),...(step.effect?[`操作効果：${step.effect}`]:[])];
     if(step.exchange.kind==='interaction'){const exchange=step.exchange;details.push(`受渡し：${exchange.direction==='input'?'Input':'Output'}${exchange.phase==='not-applicable'?'':exchange.phase?` / ${exchange.phase}`:' / 未決'}`);if(exchange.pairedStepId)details.push(`対応：手順${a.procedure.steps.findIndex(s=>s.id===exchange.pairedStepId)+1}`);}
     else if(step.exchange.kind==='unresolved')details.push('やり取り：未決');
