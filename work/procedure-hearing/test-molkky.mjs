@@ -55,8 +55,8 @@ for(const [names,expected] of [
   [['A','B'], 'check-start'], [['A','B','A'], 'check-duplicate'], [['A','B','C'], 'check-start']
 ])assert.equal(candidate.checks.find(check=>matches(check,names))?.id,expected);
 
-// Run the preview's own renderer with the same JSON: a residual label may be
-// used only while the earlier conditions actually cover its complement.
+// Run the preview's own renderer with the same JSON: each row exposes its
+// deciding conditions and retains its Check ID and expected outcome.
 const html=readFileSync(new URL('./preview.html',import.meta.url),'utf8');
 const script=html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];assert.ok(script);
 class Node{
@@ -71,15 +71,14 @@ async function render(source){
 }
 const rendered=await render(candidate);
 assert.deepEqual(rendered.get('checks').children.map(row=>row.children.map(cell=>cell.textContent)),[
-  ['0人または1人','‐','エラー','check-few'],
-  ['‐','いる','エラー','check-duplicate'],
-  ['それ以外','開始','check-start']
+  ['0または1名','不問','エラー','check-few'],
+  ['2名以上','いる','エラー','check-duplicate'],
+  ['2名以上','いない','正常','check-start']
 ]);
 assert.equal(rendered.get('start-effects').textContent,'開始時の記録：参加者の名前、順番、各自0点。');
-assert.equal(rendered.get('checks').children[2].children[0].colSpan,2);
 const changed=structuredClone(candidate);changed.checks[0].conditions[0].values=[0];
-const notComplement=await render(changed);
-assert.deepEqual(notComplement.get('checks').children[2].children.slice(0,2).map(cell=>cell.textContent),['2人以上','いない']);
+const changedRows=await render(changed);
+assert.deepEqual(changedRows.get('checks').children[1].children.slice(0,2).map(cell=>cell.textContent),['不問','いる']);
 const missing=structuredClone(candidate);missing.steps[2].checkIds[0]='missing';assert.throws(()=>validate(missing));
 const badData=structuredClone(candidate);badData.steps[0].dataId='missing';assert.throws(()=>validate(badData));
 const badDirection=structuredClone(candidate);badDirection.steps[2].from='recorder';assert.throws(()=>validate(badDirection));
