@@ -1,0 +1,74 @@
+{
+  "candidateVersion": "scope-procedure-poc/1",
+  "roles": [
+    {"id": "role-designer", "name": "設計者"},
+    {"id": "role-applicant", "name": "申請者"},
+    {"id": "role-approver", "name": "承認者"}
+  ],
+  "objects": [
+    {"id": "notebook", "name": "ノート", "scope": true, "information": [
+      {"id": "i-search-criteria", "name": "検索条件"}, {"id": "i-search-result", "name": "検索結果"},
+      {"id": "i-notes", "name": "ヒアリング結果"}, {"id": "i-save-result", "name": "保存結果"}
+    ]},
+    {"id": "customer", "name": "顧客", "scope": false, "information": [
+      {"id": "i-question", "name": "確認事項"}, {"id": "i-answer", "name": "回答"},
+      {"id": "i-notice", "name": "連絡"}
+    ]},
+    {"id": "approver", "name": "承認者", "scope": false, "information": [
+      {"id": "i-application", "name": "承認依頼"}, {"id": "i-decision", "name": "承認結果"}
+    ]},
+    {"id": "record", "name": "会計システム", "scope": true, "information": [{"id": "i-record", "name": "送金依頼"}]},
+    {"id": "external", "name": "外部決済サービス", "scope": false, "information": []}
+  ],
+  "data": [
+    {"id": "d-search-criteria", "name": "検索条件", "items": [{"informationId": "i-search-criteria", "condition": null}]},
+    {"id": "d-search-result", "name": "検索結果", "items": [{"informationId": "i-search-result", "condition": null}]},
+    {"id": "d-question", "name": "確認事項", "items": [{"informationId": "i-question", "condition": null}]},
+    {"id": "d-answer", "name": "回答", "items": [{"informationId": "i-answer", "condition": null}]},
+    {"id": "d-notes", "name": "ヒアリング結果", "items": [{"informationId": "i-notes", "condition": null}]},
+    {"id": "d-save-result", "name": "保存結果", "items": [{"informationId": "i-save-result", "condition": null}]},
+    {"id": "d-notice", "name": "連絡", "items": [{"informationId": "i-notice", "condition": null}]},
+    {"id": "d-application", "name": "承認依頼", "items": [{"informationId": "i-application", "condition": null}]},
+    {"id": "d-decision", "name": "承認結果", "items": [{"informationId": "i-decision", "condition": null}]},
+    {"id": "d-record", "name": "送金依頼", "items": [{"informationId": "i-record", "condition": null}]}
+  ],
+  "relations": [
+    {"id": "r-search", "kind": "output", "fromId": "activity-inquiry", "toId": "notebook", "dataId": "d-search-criteria"},
+    {"id": "r-search-result", "kind": "input", "fromId": "notebook", "toId": "activity-inquiry", "dataId": "d-search-result"},
+    {"id": "r-question", "kind": "output", "fromId": "activity-inquiry", "toId": "customer", "dataId": "d-question"},
+    {"id": "r-answer", "kind": "input", "fromId": "customer", "toId": "activity-inquiry", "dataId": "d-answer"},
+    {"id": "r-save", "kind": "output", "fromId": "activity-inquiry", "toId": "notebook", "dataId": "d-notes"},
+    {"id": "r-save-result", "kind": "input", "fromId": "notebook", "toId": "activity-inquiry", "dataId": "d-save-result"},
+    {"id": "r-notice", "kind": "input", "fromId": "customer", "toId": "activity-inquiry", "dataId": "d-notice"},
+    {"id": "r-external-request", "kind": "input", "fromId": "customer", "toId": "activity-inquiry", "dataId": "d-question"},
+    {"id": "r-approval", "kind": "output", "fromId": "activity-approval", "toId": "approver", "dataId": "d-application"},
+    {"id": "r-decision", "kind": "input", "fromId": "approver", "toId": "activity-approval", "dataId": "d-decision"}
+  ],
+  "activities": [
+    {"id": "activity-inquiry", "name": "問合せを整理する", "scope": true, "roleId": "role-designer", "procedure": {"steps": [
+      {"id": "s-search", "text": "過去の問合せを検索する", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "request", "relationId": "r-search", "operation": "検索", "effect": "read"}},
+      {"id": "s-search-result", "text": "検索結果を受け取る", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "response", "relationId": "r-search-result", "operation": "検索結果を受領", "replyToStepId": "s-search"}},
+      {"id": "s-question", "text": "顧客に確認する", "obligation": "optional", "appliesWhen": "事実が不足するとき", "exchange": {"phase": "request", "relationId": "r-question", "operation": "ヒアリング", "effect": "not-applicable"}},
+      {"id": "s-answer", "text": "顧客の回答を受け取る", "obligation": "required", "appliesWhen": "確認したとき", "exchange": {"phase": "response", "relationId": "r-answer", "operation": "回答を受領", "replyToStepId": "s-question"}},
+      {"id": "s-judge", "text": "回答が既存情報と矛盾するか判断する", "obligation": "required", "appliesWhen": null},
+      {"id": "s-save", "text": "ヒアリング結果をノートに記録する", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "request", "relationId": "r-save", "operation": "記録", "effect": "create"}},
+      {"id": "s-save-result", "text": "保存結果を受け取る", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "response", "relationId": "r-save-result", "operation": "保存結果を受領", "replyToStepId": "s-save"}},
+      {"id": "s-notice", "text": "顧客からの自発的な連絡を受け取る", "obligation": "optional", "appliesWhen": "連絡があったとき", "exchange": {"phase": "notification", "relationId": "r-notice", "operation": "連絡を受領"}},
+      {"id": "s-one-way", "text": "顧客から確認を依頼される。応答はこの記述範囲にない", "obligation": "optional", "appliesWhen": "依頼があったとき", "exchange": {"phase": "request", "relationId": "r-external-request", "operation": "確認依頼を受領", "effect": "undecided"}}
+    ], "orderRules": [{"kind": "before", "beforeId": "s-search", "afterId": "s-save"}]}, "results": [
+      {"id": "result-recorded", "text": "確認結果が記録される"}, {"id": "result-pending", "text": "不明点がある場合は未決として残る"}
+    ]},
+    {"id": "activity-approval", "name": "承認を依頼する", "scope": true, "roleId": "role-applicant", "procedure": {"steps": [
+      {"id": "s-approval", "text": "承認者へ依頼する", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "request", "relationId": "r-approval", "operation": "承認依頼", "effect": "not-applicable"}},
+      {"id": "s-decision", "text": "承認または拒否の結果を受け取る", "obligation": "required", "appliesWhen": null, "exchange": {"phase": "response", "relationId": "r-decision", "operation": "承認結果を受領", "replyToStepId": "s-approval"}}
+    ], "orderRules": []}, "results": [{"id": "result-decision", "text": "承認結果が確認される"}]},
+    {"id": "activity-external-approval", "name": "承認内容を判断する", "scope": false, "roleId": "role-approver", "procedure": {"steps": [
+      {"id": "s-external-judge", "text": "受け取った内容を承認または拒否する", "obligation": "required", "appliesWhen": null}
+    ], "orderRules": []}, "results": [{"id": "result-external-decision", "text": "承認結果が決まる"}]},
+    {"id": "activity-auto", "name": "記録を自動照合する", "scope": true, "roleId": null, "procedure": {"steps": [
+      {"id": "s-auto", "text": "所定の条件で記録を自動照合する。担当Roleは未決", "obligation": "required", "appliesWhen": null},
+      {"id": "s-object-transfer", "text": "会計システムが外部決済サービスへ送金を依頼する", "obligation": "optional", "appliesWhen": "外部送信する場合", "exchange": {"phase": "request", "operation": "送金依頼", "effect": "undecided", "unlinked": {"from": {"kind": "object", "id": "record"}, "to": {"kind": "object", "id": "external"}, "data": {"status": "ref", "dataId": "d-record"}, "reason": "現行の通常I/O RelationはObject同士を接続できない"}}}
+    ], "orderRules": []}, "results": [{"id": "result-auto", "text": "照合結果が確認可能になる"}]}
+  ],
+  "exceptions": [{"id": "ex-unavailable", "activityId": "activity-auto", "name": "外部サービスを利用できない", "description": "送信せず、確認が必要なことを残す。"}]
+}
