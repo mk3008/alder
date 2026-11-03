@@ -3,11 +3,12 @@ import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {selectGraphNode} from './graph-selection-browser.mjs';
 import {verifyDocumentHistory} from './test-document-history-browser.mjs';
 import {showTestChecks,showBusinessOverview} from './test-spec-explorer-browser.mjs';
+import {verifyActivityTestSpec} from './test-activity-test-spec-browser.mjs';
 
 const raw=readFileSync('../work/plugin-json/issue-273/snapshots/04-final-after-replay.json','utf8');
 const pkg=JSON.parse(raw),bd=pkg.documents[0],checks=pkg.documents[1];
 export async function verifyJSONDocuments(browser){
- const results=[],out='web/evidence/json-document';mkdirSync(out,{recursive:true});
+ const activitySpec=await verifyActivityTestSpec(browser),results=[],out='web/evidence/json-document';mkdirSync(out,{recursive:true});
  for(const width of [1280,393]){
   const context=await browser.newContext({viewport:{width,height:960}}),page=await context.newPage(),errors=[],requests=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()!=='GET')requests.push(r.method()+' '+r.url());});
@@ -60,5 +61,5 @@ export async function verifyJSONDocuments(browser){
   }catch(error){await shot('failure').catch(()=>{});throw error;}finally{await context.close();writeFileSync(`${out}/smoke-results.json`,JSON.stringify({browser:browser.version(),results},null,2));}
  }
  const mdContext=await browser.newContext({viewport:{width:1280,height:960}}),mdPage=await mdContext.newPage();try{await mdPage.goto('http://127.0.0.1:4173/');await mdPage.waitForFunction(()=>!document.querySelector('#open').disabled);await mdPage.locator('#fallback').setInputFiles({name:'legacy.md',mimeType:'text/markdown',buffer:readFileSync('web/authorities/business-design.md')});await mdPage.locator('.node').first().waitFor();if(await mdPage.locator('#check-followup').isVisible())await mdPage.locator('#check-followup-later').click();await selectGraphNode(mdPage,await mdPage.locator('.node[data-activity]').first().getAttribute('data-node'));if(!await mdPage.locator('#formattedMarkdownDrawer').isVisible())await mdPage.locator('#drawer').click();assert.equal(await mdPage.locator('.json-detail').count(),1,'legacy MD uses the same typed detail renderer');assert.ok((await mdPage.locator('#detail').innerText()).includes('Why'));await mdPage.screenshot({path:`${out}/legacy-md-detail-1280.png`});}finally{await mdContext.close();}
- return {browser:browser.version(),results,legacyMDComparisonScreenshot:true,history:await verifyDocumentHistory(browser)};
+ return {browser:browser.version(),results,activitySpec,legacyMDComparisonScreenshot:true,history:await verifyDocumentHistory(browser)};
 }

@@ -1,0 +1,14 @@
+{
+  "format": "viewer-verification/1",
+  "source": "2026-11-03 本人の Activity 単位のテスト仕様画面と添付デザイン",
+  "scope": "既存エクスプローラー、Activity 単位のテスト仕様タブ、およびその本文。BD・Check の意味と JSON 正本は変更しない。",
+  "supersedes": [
+    "FUNCTION-MENU-001/002/006/007、SPEC-MENU-DEDUP-001/002、SPEC-SEPARATE-001 のうち、左メニュー・メインタブを機能や可否・結果の別画面に分ける配置。明示された Check・サンプルの関係、可否表と結果例の意味、場面選択、データ例とドロワー設定は維持する。"
+  ],
+  "checks": [
+    {"id":"TEST-ACTIVITY-001","condition":"テスト仕様のエクスプローラーを開き、Activity を選択し直す。","guarantee":"Activity 名のみを並べ、既存のメインタブにその Activity のテスト仕様を一つだけ開く。閉じる・再表示・履歴・復元の操作を維持する。","reason":"業務単位で仕様を追い、タブの重複を防ぐ。","verification":"JSON と実際の DOM・ブラウザーで Activity、タブ、履歴、復元を照合する。"},
+    {"id":"TEST-ACTIVITY-002","condition":"対応する Check と共有保証・具体例がある Activity を開く。","guarantee":"条件・期待結果・未決事項・人間レビュー状態と、明示された一般則・有用な表・サンプルを保持する。共有情報は不用意に重複させず、AI 内部情報は通常画面に展開しない。","reason":"仕様の意味を失わず人間が読めるようにする。","verification":"元 JSON の対応 ID・条件・期待・共有参照・例と表示を照合する。"},
+    {"id":"TEST-ACTIVITY-003","condition":"Test の記録、実行結果、鮮度、または人間承認が不足する。","guarantee":"各状態を混同せず、根拠のない成功・失敗・Test やコード位置を作らない。証拠記録は未確認の記録として識別する。","reason":"証拠不足をテスト成功と誤認させない。","verification":"記録あり・なし・未承認・リンクを持つ入力の表示を確認する。"},
+    {"id":"TEST-ACTIVITY-004","condition":"仕様の目次を使い、本文をスクロールする。","guarantee":"仕様・Check ID・テストへ同じタブ内で移動でき、位置に追従する。狭い画面では本文を優先し、既存右ドロワーと競合しない。","reason":"長い仕様を移動しやすくする。","verification":"DOM・実ブラウザーでクリック、スクロール、狭幅と右ドロワーを確認する。"}
+  ]
+}

@@ -51,7 +51,7 @@ async function until(predicate){for(let i=0;i<200&&!predicate();i++)await sleep(
 function env(db=new IDBFactory(),script=code){const w=new JSDOM('<div id="app"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);w.indexedDB=db;w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;let fetches=0;w.fetch=()=>{fetches++;throw Error('Unexpected network');};w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.releasePointerCapture=()=>{};w.eval(script);return {w,$:id=>w.document.getElementById(id),fetches:()=>fetches};}
 async function ready(e){await until(()=>!e.$('open').disabled);e.$('layout-lock').click();return e;}
 function select(e,id){const node=[...e.w.document.querySelectorAll('.node')].find(n=>n.dataset.node===id);assert.ok(node);node.onpointerdown({button:0,clientX:0,clientY:0,pointerId:1,stopPropagation(){}});node.onpointerup({pointerId:1});}
-function showChecks(e,id){const button=e.w.document.querySelector('[data-explorer-key="tests:checks:'+id+'"]');assert.ok(button,'Check menu for '+id);button.click();}
+function showChecks(e,id){const button=e.w.document.querySelector('[data-explorer-key="tests:activity:'+id+'"]');assert.ok(button,'Check menu for '+id);button.click();}
 try{
  const e=await ready(env());assert.match(e.$('opening-guide').textContent,/JSON形式/);assert.match(e.$('authoring-guide').textContent,/JSONの草案/);
  e.$('open-sample').click();await until(()=>e.w.document.querySelectorAll('.node').length===25);

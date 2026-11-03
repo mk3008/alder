@@ -35,20 +35,21 @@ async function appFor(data){
  w.indexedDB=new IDBFactory();w.structuredClone=structuredClone;w.TextEncoder=TextEncoder;w.HTMLElement.prototype.scrollIntoView=()=>{};w.HTMLElement.prototype.setPointerCapture=()=>{};
  const $=selector=>w.document.querySelector(selector),entry=key=>$(`[data-explorer-key="${key}"]`),until=async fn=>{for(let i=0;i<500&&!fn();i++)await new Promise(resolve=>setTimeout(resolve,10));assert.ok(fn(),'expected app state');};
  w.eval(bundle.outputFiles[0].text);await until(()=>!!$('#open')&&!$('#open').disabled);$('#open-sample').click();await until(()=>w.document.querySelectorAll('.node').length>0&&entry('group:tests'));
- return {w,$,entry};
+ const openSpec=(kind,id)=>{const legacy=(kind==='decision'?'decision:':'')+id;w.history.pushState({},'',`?view=tests&spec=${encodeURIComponent(legacy)}`);w.dispatchEvent(new w.PopStateEvent('popstate'));const selector=kind==='decision'?'.activity-test-decision':'.activity-test-samples',node=[...w.document.querySelectorAll(selector)].find(value=>value.dataset.functionKey===id);assert(node,`missing ${kind} content for ${id}`);if(node.tagName==='DETAILS')node.open=true;return node;};
+ return {w,$,entry,openSpec};
 }
 const apply=bd.activities.find(a=>a.name==='備品購入を申請する').id;
 const key=cap=>`fn:${apply}:group-request:${cap}`;
 const app=await appFor(pkg),{w,$,entry}=app;
 try{
  entry('group:tests').click();
- const open=(kind,id)=>{const button=entry('tests:'+(kind==='decision'?'decision:':'')+id);assert(button,`missing ${kind} menu for ${id}`);button.click();return $('#tests-workspace');};
+ const open=(kind,id)=>app.openSpec(kind,id);
  for(const cap of ['save-draft','submit-request']){
-  const group=entry('group:tests-function-'+key(cap));assert(group,`function group ${cap}`);group.click();assert.equal(entry('group:tests-function-'+key(cap)).getAttribute('aria-expanded'),'true');
-  assert.equal(entry('tests:decision:'+key(cap)).textContent,'可否判定');assert.equal(entry('tests:'+key(cap)).textContent,'処理結果');
+  assert.equal(entry('group:tests-function-'+key(cap)),null);
+  assert.equal(entry('tests:decision:'+key(cap)),null);assert.equal(entry('tests:'+key(cap)),null);
  }
- assert.equal(entry('group:tests-activity-'+apply),null,'the function replaces the duplicate Activity group');
- let page=open('decision',key('save-draft'));assert.equal(new URL(w.location.href).searchParams.get('spec'),'decision:'+key('save-draft'));
+ assert(entry('tests:activity:'+apply),'the Activity is the only explorer entry');
+ let page=open('decision',key('save-draft'));assert.equal(new URL(w.location.href).searchParams.get('spec'),'decision:'+key('save-draft'));assert.equal($('#tests-workspace .activity-test-spec h1').textContent,bd.activities.find(activity=>activity.id===apply).name);
  assert.match(page.textContent,/可否判定/);assert.equal(page.querySelector('[data-data-example]'),null);
  const tableRows=table=>{const top=table.querySelector('thead tr:first-child'),axes=table.querySelector('thead tr:nth-child(2)');assert(top&&axes,'decision table must group its headers');return [[...axes.children,...[...top.children].slice(1)].map(cell=>cell.textContent.trim()),...[...table.querySelectorAll('tbody tr')].map(row=>[...row.children].map(cell=>cell.textContent.trim()))];};
  const rows=()=>[...page.querySelectorAll('.decision-examples table')].flatMap(tableRows);
@@ -76,8 +77,8 @@ try{
  assert.equal(page.querySelector('.data-example-context'),null);assert.match(page.querySelector('.data-example-when').textContent,/上限額2,000円と同額/);resultCovered.add('RESULT-EXAMPLE-001');
  assert.match(page.textContent,/ボールペン/);assert.match(page.textContent,/ファイル/);const repeated=[...page.querySelectorAll('.data-example-key')].filter(cell=>cell.textContent==='R-101');assert(repeated.length>=3);assert.equal(new Set(repeated.map(cell=>cell.dataset.keyTone)).size,1);
  page=open('result',key('save-draft'));assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['request-draft','request-draft-approved','request-draft-prepared']);assert.equal(page.querySelector('.data-example-decision-links'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
- page.querySelector('select').value='request-draft-approved';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,'request-draft-approved');assert.equal(page.querySelector('.result-checks').textContent,'P-02、P-30');assert.doesNotMatch(page.textContent,/確認が必要/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/12/);
- page.querySelector('select').value='request-draft-prepared';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');assert.match(page.textContent,/P-001/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/適合済みにはなりません/);assert.equal(byId.get('purchase-check-p-02').reviewState,'未レビュー');covered.add('SPEC-SEPARATE-004');resultCovered.add('RESULT-EXAMPLE-004');
+ page.querySelector('select').value='request-draft-approved';page.querySelector('select').dispatchEvent(new w.Event('change'));assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,'request-draft-approved');assert.equal(page.querySelector('.result-checks').textContent,'P-02、P-30');assert.doesNotMatch(page.textContent,/確認が必要/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/12/);
+ page.querySelector('select').value='request-draft-prepared';page.querySelector('select').dispatchEvent(new w.Event('change'));assert.match(page.textContent,/P-001/);assert.match(page.querySelector('.data-example-when').textContent,/10本/);assert.match(page.textContent,/適合済みにはなりません/);assert.equal(byId.get('purchase-check-p-02').reviewState,'未レビュー');covered.add('SPEC-SEPARATE-004');resultCovered.add('RESULT-EXAMPLE-004');
 
  const reached=new Set();let count=0;
  for(const view of model.presentation.activityViews)for(const ref of view.testSpecificationFunctions??[]){
@@ -97,7 +98,7 @@ try{
   for(const checkId of spec.resultCheckIds){assert(page.querySelector('.result-checks').textContent.includes(byId.get(checkId).checkId),`result Check ${checkId} is not visible`);reached.add(checkId);}
   assert.equal(page.querySelector('.result-checks details'),null,'covered examples display IDs without duplicate Check prose');
   const displayed=page.querySelector('[data-data-example]');assert(spec.sampleIds.includes(displayed?.dataset.dataExample));
-  const picker=page.querySelector('select');if(spec.sampleIds.length>1){assert(picker);assert.deepEqual([...picker.options].map(option=>option.value),spec.sampleIds);for(const sampleId of spec.sampleIds){const current=$('#tests-workspace select');current.value=sampleId;current.dispatchEvent(new w.Event('change'));assert.equal($('#tests-workspace [data-data-example]').dataset.dataExample,sampleId);assert.doesNotMatch($('#tests-workspace').textContent,/関連する可否条件/);}}else assert.equal(picker,null);
+  const picker=page.querySelector('select');if(spec.sampleIds.length>1){assert(picker);assert.deepEqual([...picker.options].map(option=>option.value),spec.sampleIds);for(const sampleId of spec.sampleIds){const current=page.querySelector('select');current.value=sampleId;current.dispatchEvent(new w.Event('change'));assert.equal(page.querySelector('[data-data-example]').dataset.dataExample,sampleId);assert.doesNotMatch(page.textContent,/関連する可否条件/);}}else assert.equal(picker,null);
   count++;
  }
  assert.deepEqual([...reached].sort(),doc.items.map(item=>item.id).sort(),'all existing Checks remain reachable across decision and result');
@@ -109,12 +110,12 @@ try{
 const noSamples=structuredClone(pkg),noModel=noSamples.documents.find(d=>d.kind==='conceptModel'),group=noModel.reviewGroups.find(g=>g.id==='group-request'),draft=group.capabilities.find(cap=>cap.id==='save-draft'),removed=new Set(draft.samples.map(sample=>sample.id));
 draft.samples=[];draft.testSpecification.sampleIds=[];for(const statement of group.structureStatements)statement.sampleIds=statement.sampleIds.filter(id=>!removed.has(id));validate(noSamples);
 const emptyApp=await appFor(noSamples);
-try{const button=emptyApp.entry('tests:decision:'+key('save-draft'));assert(button);button.click();assert.match(emptyApp.$('#tests-workspace').textContent,/品目/);assert.match(emptyApp.$('#tests-workspace').textContent,/入力内容/);assert.equal(emptyApp.$('#tests-workspace [data-data-example]'),null);
- emptyApp.entry('tests:'+key('save-draft')).click();assert.match(emptyApp.$('#tests-workspace .result-checks').textContent,/元の状態・確定版・承認・購入準備を変えず/);covered.add('SPEC-SEPARATE-005');resultCovered.add('RESULT-EXAMPLE-003');}finally{emptyApp.w.close();}
+try{let page=emptyApp.openSpec('decision',key('save-draft'));assert.match(page.textContent,/品目/);assert.match(page.textContent,/入力内容/);assert.equal(page.querySelector('[data-data-example]'),null);
+ page=emptyApp.openSpec('result',key('save-draft'));assert.match(page.querySelector('.result-checks').textContent,/元の状態・確定版・承認・購入準備を変えず/);covered.add('SPEC-SEPARATE-005');resultCovered.add('RESULT-EXAMPLE-003');}finally{emptyApp.w.close();}
 const unresolved=structuredClone(pkg),pending=unresolved.documents.find(d=>d.kind==='checkItems').items.find(item=>item.checkId==='P-02');pending.reviewState='要確認';pending.fields.question=[{kind:'text',value:'保存後の扱いは未決。'}];validate(unresolved);
-const unresolvedApp=await appFor(unresolved);try{unresolvedApp.entry('tests:'+key('save-draft')).click();assert.match(unresolvedApp.$('.result-checks').textContent,/保存後の扱いは未決/);assert.match(unresolvedApp.$('.result-checks').textContent,/確認が必要/);}finally{unresolvedApp.w.close();}
+const unresolvedApp=await appFor(unresolved);try{const page=unresolvedApp.openSpec('result',key('save-draft'));assert.match(page.querySelector('.result-checks').textContent,/保存後の扱いは未決/);assert.match(page.querySelector('.result-checks').textContent,/確認が必要/);}finally{unresolvedApp.w.close();}
 const nonstandard=structuredClone(pkg),legacyExample=nonstandard.documents.find(d=>d.kind==='checkItems').examples.find(e=>e.id==='decision-submit-table');legacyExample.columns=['見積','役職別上限','提出','備考','関連 Check'];validate(nonstandard);
-const legacyApp=await appFor(nonstandard);try{legacyApp.entry('tests:decision:'+key('submit-request')).click();const table=legacyApp.$('.decision-examples table');assert.equal(table.querySelector('thead'),null);assert.deepEqual([...table.querySelector('tr').children].map(cell=>cell.textContent),legacyExample.columns);groupCovered.add('DECISION-GROUP-003');}finally{legacyApp.w.close();}
+const legacyApp=await appFor(nonstandard);try{const page=legacyApp.openSpec('decision',key('submit-request')),table=page.querySelector('.decision-examples table');assert.equal(table.querySelector('thead'),null);assert.deepEqual([...table.querySelector('tr').children].map(cell=>cell.textContent),legacyExample.columns);groupCovered.add('DECISION-GROUP-003');}finally{legacyApp.w.close();}
 
 // A new candidate removes decision-only references from result examples without
 // changing the business, Check, decision tables, sample contents, or old files.
@@ -132,12 +133,11 @@ try{
  candidateApp.entry('group:tests').click();
  for(const view of candidateModel.presentation.activityViews)for(const ref of view.testSpecificationFunctions??[]){
   const group=candidateModel.reviewGroups.find(value=>value.id===ref.groupId),cap=group.capabilities.find(value=>value.id===ref.capabilityId),spec=cap.testSpecification,id=`fn:${view.activityId}:${group.id}:${cap.id}`;
-  const decision=candidateApp.entry('tests:decision:'+id),result=candidateApp.entry('tests:'+id);assert(decision&&result);
-  decision.click();assert(candidateApp.$('#tests-workspace .decision-examples'));for(const checkId of spec.decisionCheckIds)assert(candidateApp.$('#tests-workspace').textContent.includes(candidateById.get(checkId).checkId));
-  result.click();let page=candidateApp.$('#tests-workspace');assert.equal(page.querySelector('.decision-examples'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
+  const decision=candidateApp.openSpec('decision',id);assert(decision.querySelector('.decision-examples'));for(const checkId of spec.decisionCheckIds)assert(decision.textContent.includes(candidateById.get(checkId).checkId));
+  let page=candidateApp.openSpec('result',id);assert.equal(page.querySelector('.decision-examples'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
   for(const sampleId of spec.sampleIds){
    const sample=cap.samples.find(value=>value.id===sampleId);assert(sample.checkIds.length&&sample.checkIds.every(checkId=>spec.resultCheckIds.includes(checkId)),`${sampleId}: result Checks only`);
-   const picker=page.querySelector('select');if(picker){picker.value=sampleId;picker.dispatchEvent(new candidateApp.w.Event('change'));page=candidateApp.$('#tests-workspace');}
+   const picker=page.querySelector('select');if(picker){picker.value=sampleId;picker.dispatchEvent(new candidateApp.w.Event('change'));}
    assert.equal(page.querySelector('[data-data-example]')?.dataset.dataExample,sampleId);assert.doesNotMatch(page.textContent,/関連する可否条件/);
   }
  }
@@ -167,21 +167,21 @@ try{
  displayApp.entry('group:tests').click();
  for(const view of displayModel.presentation.activityViews)for(const ref of view.testSpecificationFunctions??[]){
   const group=displayModel.reviewGroups.find(g=>g.id===ref.groupId),cap=group.capabilities.find(c=>c.id===ref.capabilityId),id=`fn:${view.activityId}:${group.id}:${cap.id}`;
-  displayApp.entry('tests:decision:'+id).click();const page=displayApp.$('#tests-workspace');
+  const page=displayApp.openSpec('decision',id);
   for(const section of page.querySelectorAll('[data-decision-example]')){const table=section.querySelector('table'),heads=[...table.querySelectorAll('thead tr:nth-child(2) th')],body=[...table.querySelectorAll('tbody tr')],usesDash=body.some(row=>[...row.children].slice(0,heads.length).some(cell=>['‐','-'].includes(cell.textContent.trim())));assert.equal((section.textContent.match(/‐＝値不問。/g)??[]).length,usesDash?1:0);}
  }
  const applyId=displayCandidate.documents.find(d=>d.kind==='businessDesign').activities.find(a=>a.name==='備品購入を申請する').id;
- displayApp.entry('tests:decision:fn:'+applyId+':group-request:submit-request').click();assert.match(displayApp.$('#tests-workspace').textContent,/品目情報と購入理由が揃っている場合/);
+ assert.match(displayApp.openSpec('decision','fn:'+applyId+':group-request:submit-request').textContent,/品目情報と購入理由が揃っている場合/);
  const retryView=displayModel.presentation.activityViews.find(view=>view.testSpecificationFunctions?.some(ref=>ref.capabilityId==='resubmit-request'));
- displayApp.entry(`tests:decision:fn:${retryView.activityId}:group-request:resubmit-request`).click();assert.match(displayApp.$('#tests-workspace').textContent,/不足する場合の可否はこの表では示していません/);
+ assert.match(displayApp.openSpec('decision',`fn:${retryView.activityId}:group-request:resubmit-request`).textContent,/不足する場合の可否はこの表では示していません/);
 }finally{displayApp.w.close();}
 
 // A dash in a result/notes column does not make a condition value irrelevant.
 const noteDash=structuredClone(candidate),noteDoc=noteDash.documents.find(d=>d.kind==='checkItems'),noteTable=noteDoc.examples.find(e=>e.id==='decision-submit-table'),noteGuarantee=noteDoc.guarantees.find(g=>g.id===noteTable.guaranteeId);
 noteTable.rows=noteTable.rows.slice(0,1);noteTable.rows[0][3]=[{kind:'text',value:'‐'}];noteGuarantee.blocks[0].content=[{kind:'text',value:'前提'},{kind:'text',value:' '},{kind:'text',value:'説明。‐＝その行では不問。'},{kind:'text',value:'補足。'}];validate(noteDash);
-const noteApp=await appFor(noteDash);try{noteApp.entry('tests:decision:'+key('submit-request')).click();const page=noteApp.$('#tests-workspace');assert.match(page.textContent,/前提 説明。補足。/);assert.doesNotMatch(page.textContent,/‐＝値不問。|その行では不問/);}finally{noteApp.w.close();}
+const noteApp=await appFor(noteDash);try{const page=noteApp.openSpec('decision',key('submit-request'));assert.match(page.textContent,/前提 説明。補足。/);assert.doesNotMatch(page.textContent,/‐＝値不問。|その行では不問/);}finally{noteApp.w.close();}
 assert.deepEqual(JSON.parse(valueIndependentAuthority).checks.map(check=>check.id).sort(),['VALUE-INDEPENDENT-001','VALUE-INDEPENDENT-002','VALUE-INDEPENDENT-003','VALUE-INDEPENDENT-004']);
 assert.deepEqual([...covered].sort(),expected.slice().sort());
 assert.deepEqual([...layoutCovered].sort(),layoutExpected.slice().sort());
 assert.deepEqual([...groupCovered].sort(),groupExpected.slice().sort());assert.deepEqual([...resultCovered].sort(),resultExpected.slice().sort());
-console.log(JSON.stringify({passed:[...covered],activities:bd.activities.length,checks:doc.items.length,scope:'explicit specification, purchase DOM and legacy URL; human review remains separate'}));
+console.log(JSON.stringify({passed:[...covered].filter(id=>id!=='SPEC-SEPARATE-001'),partiallySuperseded:{id:'SPEC-SEPARATE-001',portion:'separate function menus and tabs',authority:'verification/activity-test-spec.check-items.json'},activities:bd.activities.length,checks:doc.items.length,scope:'explicit specification, purchase DOM and legacy URL; human review remains separate'}));

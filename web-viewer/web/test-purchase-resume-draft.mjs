@@ -55,13 +55,14 @@ const $=selector=>w.document.querySelector(selector),entry=key=>$(`[data-explore
 try{
  w.eval(bundle.outputFiles[0].text);await until(()=>!!$('#open')&&!$('#open').disabled);$('#open-sample').click();await until(()=>w.document.querySelectorAll('.node').length>0&&entry('group:tests'));
  const key='fn:b180c827-00ce-50ca-85b6-1a2f9f5d3533:group-request:resume-draft';entry('group:tests').click();
- assert(entry('tests:decision:'+key),'resume decision is navigable');entry('tests:decision:'+key).click();
- let page=$('#tests-workspace');assert.match(page.textContent,/対象の下書き/);assert.match(page.textContent,/保存済み/);assert.match(page.textContent,/再開可/);assert.match(page.textContent,/P-32/);
- entry('tests:'+key).click();page=$('#tests-workspace');assert.equal(page.querySelector('.result-checks').textContent,'P-33');
+ assert(entry('tests:activity:b180c827-00ce-50ca-85b6-1a2f9f5d3533'),'resume Activity is navigable');entry('tests:activity:b180c827-00ce-50ca-85b6-1a2f9f5d3533').click();
+ const section=(kind)=>[...$('#tests-workspace').querySelectorAll(kind==='decision'?'.activity-test-decision':'.activity-test-samples')].find(node=>node.dataset.functionKey===key);
+ let page=section('decision');assert(page,'resume decision is present');assert.match(page.textContent,/対象の下書き/);assert.match(page.textContent,/保存済み/);assert.match(page.textContent,/再開可/);assert.match(page.textContent,/P-32/);
+ page=section('result');assert(page,'resume result is present');page.open=true;assert.equal(page.querySelector('.result-checks').textContent,'P-33');
  assert.deepEqual([...page.querySelector('select').options].map(option=>option.value),['resume-new-draft','resume-approved-draft']);
  assert.match(page.textContent,/再開だけでは提出されず/);assert.match(page.textContent,/ボールペン/);assert.equal(page.querySelector('.data-example-decision-links'),null);assert.doesNotMatch(page.textContent,/関連する可否条件/);
  covered.add('RESUME-DRAFT-001');
- page.querySelector('select').value='resume-approved-draft';page.querySelector('select').dispatchEvent(new w.Event('change'));page=$('#tests-workspace');
+ page.querySelector('select').value='resume-approved-draft';page.querySelector('select').dispatchEvent(new w.Event('change'));page=section('result');
  assert.match(page.textContent,/再開前の状態/);assert.match(page.textContent,/再開後の状態/);assert.match(page.textContent,/D1/);assert.match(page.textContent,/V1/);assert.match(page.textContent,/承認済み/);assert.doesNotMatch(page.textContent,/参考草案|未レビュー/);
  covered.add('RESUME-DRAFT-002');
 }finally{w.close();}
