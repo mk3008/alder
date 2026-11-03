@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>業務設計：手順と判断の検討例</title>
+  <style>
+    :root{font-family:system-ui,"Noto Sans JP",sans-serif;color:#202830;background:#f4f7fa}
+    body{margin:0}header{background:#163e68;color:white;padding:12px 20px}
+    main{max-width:960px;margin:auto;padding:18px}h1{font-size:20px;margin:0}
+    h2{font-size:18px;margin:22px 0 8px}h3{font-size:16px;margin:18px 0 6px}
+    p{margin:8px 0;line-height:1.5}.note{color:#56616d;font-size:14px}
+    .scroll{overflow-x:auto}table{border-collapse:collapse;background:white;width:max-content;max-width:100%}
+    th,td{border:1px solid #d0d9e2;padding:7px 10px;text-align:left;vertical-align:top}
+    th{background:#edf3f8;white-space:nowrap}table.procedure{max-width:none}
+    .procedure td{white-space:nowrap}.procedure td.data{min-width:10em}
+    .procedure td:last-child{min-width:7em;max-width:9em;white-space:normal}
+    .procedure .condition{display:block;color:#56616d;font-size:12px;line-height:1.3}
+    table.decision{max-width:none;font-size:14px}.decision th,.decision td{padding:4px 6px;white-space:nowrap}
+    .decision .result{border-left:2px solid #8193a5}.decision .refs{font-size:14px}
+    a{color:#146597}.error{color:#a22424}.success{color:#146044}
+    @media(max-width:600px){header{padding:10px 12px}main{padding:12px}th,td{padding:6px 8px}}
+  </style>
+</head>
+<body>
+  <header><h1 id="title">業務設計</h1></header>
+  <main>
+    <p class="note">検討用モック。手順と、手順で使う判断を同じ業務設計として表示します。</p>
+    <section id="context" aria-label="業務の概要"></section>
+    <h2>手順</h2>
+    <p class="note">手順表は左右にスクロールできます。</p>
+    <div class="scroll" tabindex="0" role="region" aria-label="手順表"><table class="procedure" aria-label="手順"><thead><tr><th>From</th><th>To</th><th>Data</th><th>Action</th></tr></thead><tbody id="steps"></tbody></table></div>
+    <section id="decisions" aria-label="手順で使う判断"></section>
+    <section id="result" aria-label="業務の結果"></section>
+    <p class="note" id="status" role="status"></p>
+  </main>
+  <script type="module">
+    const status=document.getElementById('status');
+    try {
+      const response=await fetch('./business-decisions-poc.json');
+      if(!response.ok)throw Error('データを読み込めませんでした。');
+      const source=await response.json(),design=source.businessDesign;
+      document.getElementById('title').textContent=design.activity.name;
+      const names=new Map([[design.activity.who.id,design.activity.who.name],...design.objects.map(item=>[item.id,item.name])]);
+      const data=new Map(design.data.map(item=>[item.id,item.name]));
+      const numbers=new Map(design.decisions.map((item,index)=>[item.id,index+1]));
+      const add=(parent,tag,value,css)=>{const el=document.createElement(tag);el.textContent=value;if(css)el.className=css;parent.append(el);return el;};
+      for(const [label,value] of [['Why',design.activity.why],['When',design.activity.when],['Who',design.activity.who.name]])add(document.getElementById('context'),'p',label+'：'+value);
+      for(const step of design.steps){
+        const row=document.createElement('tr');
+        add(row,'td',names.get(step.from));add(row,'td',step.to===null?'—':names.get(step.to));
+        add(row,'td',data.get(step.dataId),'data');
+        const cell=add(row,'td',step.action);
+        for(const id of step.decisionIds){const link=add(cell,'a','（※'+numbers.get(id)+'）');link.href='#'+id;}
+        if(step.when)add(cell,'span','入力が有効な場合','condition');
+        document.getElementById('steps').append(row);
+      }
+      const conditionLabel=(axis,condition)=>{
+        if(condition.op==='else')return 'それ以外';
+        if(condition.op==='any')return '不問';
+        if(axis.source.kind==='all-integer-range')return axis.source.min+'〜'+axis.source.max+'の整数';
+        if(axis.source.kind==='duplicate-within-turn')return condition.value?'あり':'なし';
+        if(axis.source.kind==='throw-count')return condition.value+'回以上';
+        if(axis.source.kind==='pin-count-per-throw')return condition.value+'本';
+        throw Error('未対応の条件です。');
+      };
+      const resultLabel=result=>{
+        if(result.kind==='valid')return '有効';
+        if(result.kind==='input-error')return '入力エラー';
+        if(result.kind==='constant')return result.value+result.unit;
+        if(result.kind==='only-pin-number')return '倒れた棒の番号';
+        if(result.kind==='pin-count')return '倒れた本数';
+        if(result.kind==='no-per-throw-score')return '1回分の点数なし';
+        throw Error('未対応の結果です。');
+      };
+      for(const decision of design.decisions){
+        const section=document.createElement('section');section.id=decision.id;
+        add(section,'h2',decision.title+'（※'+numbers.get(decision.id)+'）');
+        if(decision.appliesWhen)add(section,'p','入力が有効な場合に、1回以上なら各回ごとに判定します。','note');
+        add(section,'p','上から順に判定し、最初に当てはまる行を見ます。','note');
+        const wrap=document.createElement('div');wrap.className='scroll';const table=document.createElement('table');table.className='decision';table.setAttribute('aria-label',decision.title);
+        const head=document.createElement('thead'),groups=document.createElement('tr');
+        const group=add(groups,'th','条件');group.colSpan=decision.axes.length;group.setAttribute('scope','colgroup');
+        const result=add(groups,'th','結果','result');result.rowSpan=2;result.setAttribute('scope','col');
+        const refs=add(groups,'th','Check');refs.rowSpan=2;refs.setAttribute('scope','col');
+        head.append(groups);const columns=document.createElement('tr');
+        for(const axis of decision.axes){const th=add(columns,'th',axis.label);th.setAttribute('scope','col');}
+        head.append(columns);table.append(head);const body=document.createElement('tbody');
+        for(const item of decision.rows){
+          const row=document.createElement('tr');
+          for(const axis of decision.axes){const condition=item.conditions.find(value=>value.axisId===axis.id);add(row,'td',conditionLabel(axis,condition));}
+          add(row,'td',resultLabel(item.result),'result '+(item.result.kind==='input-error'?'error':'success'));
+          add(row,'td',item.checkRefs.map(ref=>ref.code+(ref.coverage==='partial'?'*':'')).join('、')||'—','refs');body.append(row);
+        }
+        table.append(body);wrap.append(table);section.append(wrap);
+        if(decision.rows.some(row=>row.checkRefs.some(ref=>ref.coverage==='partial')))add(section,'p','*：この業務で扱う範囲のみ','note');
+        for(const exception of design.exceptions.filter(item=>item.when.decisionId===decision.id)){
+          const suppressed=exception.result.suppressDataIds.map(id=>data.get(id)).join('・');
+          add(section,'p','入力エラー時は全体をエラーとし、'+suppressed+'を返しません。（'+exception.checkRefs.map(ref=>ref.code).join('、')+'）','note');
+        }
+        document.getElementById('decisions').append(section);
+      }
+      const outcome=document.getElementById('result');
+      add(outcome,'h2','Result');
+      add(outcome,'p','入力が有効なら、'+data.get(design.activity.result.dataId)+'が分かり、'+design.activity.result.usedFor.map(id=>data.get(id)).join('と')+'を計算できます。');
+      if(design.activity.result.noThrows==='no-per-throw-score')add(outcome,'p','0回の場合、1回分の点数はありません。');
+    } catch(error) {status.textContent=error.message;}
+  </script>
+</body>
+</html>
