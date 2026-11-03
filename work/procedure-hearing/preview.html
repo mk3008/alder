@@ -14,6 +14,9 @@
     th,td{border:1px solid #d0d9e2;padding:7px 10px;text-align:left;vertical-align:top}
     th{background:#edf3f8;white-space:nowrap}td{min-width:4em}
     td.data{min-width:10em}td.action{min-width:6em}a{color:#146597}
+    .decision th,.decision td{min-width:0}
+    .decision .result{border-left:2px solid #8193a5}
+    .decision .check-id{white-space:nowrap;font-size:14px}
     .error{color:#a22424}.success{color:#146044}
     @media(max-width:600px){header{padding:10px 12px}main{padding:12px}th,td{padding:6px 8px}}
   </style>
@@ -25,7 +28,8 @@
     <h2>手順</h2>
     <div class="scroll"><table aria-label="手順"><thead><tr><th>From</th><th>To</th><th>Data</th><th>Action</th></tr></thead><tbody id="steps"></tbody></table></div>
     <h2 id="checks-title">チェック項目（※1）</h2>
-    <div class="scroll"><table aria-label="チェック項目"><thead><tr><th>参加者数</th><th>同名の人</th><th>結果</th></tr></thead><tbody id="checks"></tbody></table></div>
+    <p class="note">上から順に判定し、最初に当てはまる行を見ます。‐＝値不問。</p>
+    <div class="scroll"><table class="decision" aria-label="チェック項目"><thead><tr><th scope="colgroup" colspan="2">条件</th><th class="result" scope="col" rowspan="2">結果</th><th scope="col" rowspan="2">Check ID</th></tr><tr><th scope="col">参加者数</th><th scope="col">同名の人</th></tr></thead><tbody id="checks"></tbody></table></div>
     <p class="note">エラーの表示方法・文言と、同名の照合方法は未確認です。</p>
     <p class="note" id="status" role="status"></p>
   </main>
@@ -45,13 +49,23 @@
         if(step.checkIds.length){const link=document.createElement('a');link.href='#checks-title';link.textContent='（※1）';cell.append(link);}
         addCell(row,step.action,'action');document.getElementById('steps').append(row);
       }
-      for(const check of source.checks){
+      for(const [index,check] of source.checks.entries()){
         const row=document.createElement('tr'),count=check.conditions.find(c=>c.predicate==='count-in'||c.predicate==='count-at-least'),duplicate=check.conditions.find(c=>c.predicate==='duplicates-exist');
-        addCell(row,count?(count.predicate==='count-in'?count.values.join('人または')+'人':count.value+'人以上'):'—');
-        addCell(row,duplicate?(duplicate.value?'いる':'いない'):'—');
+        // The last branch is "otherwise" only when its structured conditions are
+        // exactly the complement of the two preceding participant checks.
+        const previous=source.checks.slice(0,index);
+        const few=previous.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='count-in'&&c.conditions[0].dataId===count?.dataId&&JSON.stringify(c.conditions[0].values)==='[0,1]');
+        const repeated=previous.find(c=>c.conditions.length===1&&c.conditions[0].predicate==='duplicates-exist'&&c.conditions[0].dataId===duplicate?.dataId&&c.conditions[0].fieldId===duplicate?.fieldId&&c.conditions[0].value===true);
+        const otherwise=index===source.checks.length-1&&check.conditions.length===2&&count?.predicate==='count-at-least'&&count.value===2&&duplicate?.value===false&&count.dataId===duplicate.dataId&&few&&repeated;
+        if(otherwise){const cell=addCell(row,'それ以外');cell.colSpan=2;}
+        else{
+          addCell(row,count?(count.predicate==='count-in'?count.values.join('人または')+'人':count.value+'人以上'):'‐');
+          addCell(row,duplicate?(duplicate.value?'いる':'いない'):'‐');
+        }
         const score=check.expected.effects.find(effect=>effect.action==='set-initial-score');
         const result=check.expected.outcome==='error'?'エラー':`開始。参加者名と順番、各自の初期${score.value}点を記録する`;
-        addCell(row,result,check.expected.outcome==='error'?'error':'success');document.getElementById('checks').append(row);
+        addCell(row,result,`result ${check.expected.outcome==='error'?'error':'success'}`);
+        addCell(row,check.id,'check-id');document.getElementById('checks').append(row);
       }
     } catch(error) {status.textContent=error.message;}
   </script>
