@@ -222,6 +222,7 @@ To use Alder without a plugin, follow the [manual prompts in the adoption guide]
 | Legacy MD interview/draft examples (compatibility reference) | [Interview](work/structural-discovery/issue-99/customer-transcript.md) / [Draft](work/structural-discovery/issue-99/design/v4.md) |
 | Legacy MD description examples (compatibility reference) | [Booking](docs/examples/meeting-room-reservation.ja.md) / [Booking/cancellation](docs/examples/meeting-room-lifecycle.ja.md) |
 | Field meanings and legacy MD notation | [Document structure](docs/business-design-structure.ja.md) / [Field guidance](docs/adoption.md#business-design-format) / [Quality field mapping](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
+| New structured hearing and Check workflow | [Direction and implementation status](docs/business-design-hearing-and-checks.ja.md) (Japanese) |
 | Design-review examples and rationale | [Review case](docs/business-design-review.ja.md) / [Quality rationale](docs/business-design-quality-review.md) / [Functional consideration discovery](docs/behavior-derivation/functional-considerations.md) |
 | Review descriptions, omissions, and correlations | [Quality](docs/business-design-quality-check.ja.md) / [Omissions](docs/business-design-omission-check.ja.md) / [Correlations](docs/business-design-correlation-check.ja.md) |
 | Plugin installation, versions, and scope | [Plugin setup](docs/plugin-adoption.md) / [Versioning](docs/versioning.md) |

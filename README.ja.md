@@ -374,6 +374,7 @@ Pluginを使わない場合は、[導入ガイドの手動プロンプト](docs/
 | 旧MDのヒアリング・草案例（互換Reference） | [ヒアリング](work/structural-discovery/issue-99/customer-transcript.md) / [草案](work/structural-discovery/issue-99/design/v4.md) |
 | 旧MDの記述例（互換Reference） | [予約受付](docs/examples/meeting-room-reservation.ja.md) / [予約・取消](docs/examples/meeting-room-lifecycle.ja.md) |
 | 業務項目の意味と旧MD記法 | [文書構造](docs/business-design-structure.ja.md) / [欄の説明](docs/adoption.md#business-design-format) / [品質要求の配置](docs/adoption.md#business-quality-requirements-belong-where-they-constrain-the-work) |
+| 聞き取り時に手順とチェックを構造化する新しい方針 | [運用方針と対応状況](docs/business-design-hearing-and-checks.ja.md) |
 | 設計レビューの事例と根拠 | [レビュー事例](docs/business-design-review.ja.md) / [記述品質の根拠](docs/business-design-quality-review.md) / [考慮漏れ探索](docs/behavior-derivation/functional-considerations.md) |
 | 記述、漏れ、業務のつながりをレビューする | [品質チェック](docs/business-design-quality-check.ja.md) / [漏れのチェック](docs/business-design-omission-check.ja.md) / [相関チェック](docs/business-design-correlation-check.ja.md) |
 | Pluginの導入、版、提供範囲 | [Plugin導入ガイド](docs/plugin-adoption.md) / [版管理](docs/versioning.md) |

@@ -2,7 +2,11 @@
 
 この文書は新しいBusiness Design構造の候補を説明する。候補package `formatVersion: "0.6"` とBusiness Design `schemaVersion: "0.5"` は、未公開の旧package 0.5／Business Design 0.4と異なる。採番は候補であり、製品版Pluginや公開リリースの版を示さない。候補Viewerは旧0.5と新0.6を読取り専用で表示する。現行の直接編集対象は従来どおりpackage 0.4で、新構造の通常編集とSkillは後続の対応が必要である。
 
-## Scopeと手順
+## 新しい聞き取り・Checkの方針
+
+[聞き取りで手順とチェックを記録する](business-design-hearing-and-checks.ja.md)方針では、条件と結果を聞いた時点で構造化したCheck草案に残し、手順から参照する。表のFrom・Toは情報の受渡し方向として検討する。この方針は現行候補0.6の保存器・Viewer・Skillにはまだ実装されていない。以下の0.6のpartiesは操作主体・対象であり、新しい意味に暗黙変換しない。
+
+## Scopeと手順（候補0.6）
 
 ActivityとObjectのScopeは、対象システムを作る際に考慮する必要があるかを示す。`true`は対象、`false`は実装対象外、`null`は判断に必要な情報が未決である。Scope外Objectも入力の元資料として残せる。Scopeはヒアリングを通じて判断し、情報不足の時点では一度で当てる必要はない。
 
