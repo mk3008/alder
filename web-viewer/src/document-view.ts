@@ -44,7 +44,7 @@ function variationKinds(design:Design,activityId:string,items:{id:string}[]):Map
 function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
  const bd=design.model!.business,checks=design.model!.checks,decisions=a.decisions??[],sections=new Map<string,HTMLElement>();
  const number=(id:string)=>decisions.findIndex(decision=>decision.id===id)+1;
- const link=(id:string,rowId?:string)=>{const button=element('button',`（※${number(id)}）`);button.type='button';button.className='business-decision-link';button.onclick=()=>{const section=sections.get(id),row=rowId?Array.from(section?.querySelectorAll('tr')??[]).find(item=>item.dataset.decisionRow===rowId):undefined;(row??section)?.scrollIntoView({behavior:'smooth',block:'start'});};return button;};
+ const link=(id:string,rowId?:string)=>{const button=element('button',`（※${number(id)}）`);button.type='button';button.className='business-decision-link';button.onclick=()=>{const section=sections.get(id),row=rowId?Array.from(section?.querySelectorAll('tr')??[]).find(item=>item.dataset.decisionRow===rowId):undefined;(row??section)?.scrollIntoView({behavior:'smooth',block:row?'center':'start'});};return button;};
  const branchLabel=(decision:BusinessDecision|undefined,branch:DecisionRow|undefined,showConditions:boolean)=>{
   if(!decision||!branch)return '未決';
   const result=branch.result.text??'未決';if(!showConditions)return result;

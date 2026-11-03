@@ -23,7 +23,7 @@ const {activityRole,roleGroupKey}=await import('../src/roles.ts');
 const read=path=>readFileSync(path,'utf8'),parse=path=>parseDocument(read(path));
 const {renderChecks}=await import('../src/document-view.ts');
 const {decisionSpans,conditionLabel}=await import('../src/business-decisions.ts');
-Node.prototype.addEventListener=function(name,fn){(this.listeners??={})[name]=fn;};Node.prototype.scrollIntoView=function(){this.scrolled=true;};
+Node.prototype.addEventListener=function(name,fn){(this.listeners??={})[name]=fn;};Node.prototype.scrollIntoView=function(options){this.scrolled=true;this.scrollOptions=options;};
 const raw=read('verification/business-decisions-integration.check-items.json');
 assert.equal(createHash('sha256').update(raw).digest('hex'),'e0af5f884590680a5422e653a281e28507b99301b8d2c0aeec8d3bceedc421f2');
 const expected=Array.from({length:7},(_,i)=>`BD-DECISION-00${i+1}`);assert.deepEqual(JSON.parse(raw).checks.map(value=>value.id),expected);const covered=[];
@@ -55,7 +55,7 @@ for(const [rowId,expectedValue,forbiddenValue] of [['valid','A','B'],['valid-b',
  const view=businessDetail(parseDocument(JSON.stringify(pkg)),'calculate-score'),step=view.querySelectorAll('tr').find(n=>n.dataset.stepId==='calculate');
  const stepDetails=step.querySelector('details');assert.ok(stepDetails);assert.match(stepDetails.textContent,new RegExp(`判定条件：.*申請区分：${expectedValue}`));assert.doesNotMatch(stepDetails.textContent,new RegExp(`申請区分：${forbiddenValue}`));
  const conditional=stepDetails.querySelectorAll('button').find(n=>n.textContent==='（※1）');assert.ok(conditional);conditional.onclick();
- const target=view.querySelectorAll('tr').find(n=>n.dataset.decisionRow===rowId);assert.equal(target.scrolled,true);
+ const target=view.querySelectorAll('tr').find(n=>n.dataset.decisionRow===rowId);assert.equal(target.scrolled,true);assert.equal(target.scrollOptions.block,'center');
  const dependent=view.querySelectorAll('section').find(n=>n.dataset.businessDecision==='score-algorithm');assert.match(dependent.textContent,new RegExp(`適用条件：.*申請区分：${expectedValue}`));target.scrolled=false;dependent.querySelector('button').onclick();assert.equal(target.scrolled,true);
 }
 
