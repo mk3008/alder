@@ -62,7 +62,10 @@ const decisionResult=obj({kind:{enum:['accepted','error','value','undecided']},t
 const decisionRow=obj({id,conditions:nonempty(decisionCondition),result:decisionResult,checkRefs:array(obj({checkId:id,coverage:{enum:['full','partial']}}))});
 const decisionReference=obj({decisionId:id,rowId:id});
 const decisionTable=obj({id,title:text,kind:{enum:['authorization','validation','algorithm']},note:nullable(text),appliesWhen:nullable(decisionReference),axes:nonempty(decisionAxis),rows:nonempty(decisionRow)});
-const decisionStep=obj({...newStep.properties,decisionIds:array(id),whenDecision:nullable(decisionReference)},[...newStep.required,'decisionIds','whenDecision']);
+// An omitted or null dependency list is undecided; [] explicitly records that
+// the Step has no local prerequisites. Older 0.7 candidates stay readable.
+const stepPrerequisite=obj({stepId:id,whenDecision:nullable(decisionReference)});
+const decisionStep=obj({...newStep.properties,decisionIds:array(id),whenDecision:nullable(decisionReference),dependsOn:nullable(array(stepPrerequisite))},[...newStep.required,'decisionIds','whenDecision']);
 const decisionBD=obj({...newBD.properties,schemaVersion:{enum:['0.6']},activities:nonempty(obj({...newBD.properties.activities.items.properties,procedure:obj({steps:nonempty(decisionStep),orderRules:array(orderRule)}),decisions:array(decisionTable)}))});
 const checkFields=Object.fromEntries(['classification','condition','expectedResult','guarantee','evidence','derivation','related','testEvidence','question','alternatives','confidence'].map(k=>[k,rich]));
 const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},revision:text,title:text,basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),intro:rich,

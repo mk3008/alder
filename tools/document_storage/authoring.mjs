@@ -41,7 +41,11 @@ export function checkMeaning(pkg,item){
   return {...item,information:object?.information.find(info=>typeof info!=='string'&&info.id===item.informationId),object:object?{id:object.id,name:object.name}:null};
  })}));
  const businessExceptions=(bd.exceptions??[]).filter(exception=>exceptionIds.has(exception.id));
- return {...base,businessDecisions,businessData,businessExceptions};
+ const linkedDecisionIds=new Set(businessDecisions.map(decision=>decision.id));
+ const procedureDependencies=(bd.activities??[]).flatMap(activity=>activity.procedure.steps.filter(step=>Array.isArray(step.dependsOn)&&(
+  (step.decisionIds??[]).some(id=>linkedDecisionIds.has(id))||linkedDecisionIds.has(step.whenDecision?.decisionId)||step.dependsOn.some(dependency=>linkedDecisionIds.has(dependency.whenDecision?.decisionId))
+ )).map(step=>({activityId:activity.id,stepId:step.id,dependsOn:step.dependsOn})));
+ return procedureDependencies.length?{...base,businessDecisions,businessData,businessExceptions,procedureDependencies}:{...base,businessDecisions,businessData,businessExceptions};
 }
 export const meaningHash=(pkg,item)=>fingerprint(checkMeaning(pkg,item));
 function confirmedBD(pkg,check,operation){
