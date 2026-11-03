@@ -1,13 +1,18 @@
 .node.scope-undecided{border-style:dashed}
 .markdown .procedure-scroll-hint{margin:0 0 6px;color:var(--line);font-size:12px}
 .markdown [data-procedure-scroll]{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
-.markdown [data-procedure-table]{width:100%;min-width:40rem;border-collapse:collapse;table-layout:fixed}
-.markdown [data-procedure-table] th,.markdown [data-procedure-table] td{padding:5px 8px;border:1px solid var(--subtle);vertical-align:top}
+.markdown [data-procedure-table]{width:100%;min-width:32rem;border-collapse:collapse;table-layout:fixed}
+.markdown [data-procedure-table] th,.markdown [data-procedure-table] td{padding:4px 6px;border:1px solid var(--subtle);vertical-align:top}
 .markdown [data-procedure-table] th{white-space:nowrap}
-.markdown [data-procedure-table] th:nth-child(1){width:4rem}
-.markdown [data-procedure-table] th:nth-child(2),.markdown [data-procedure-table] th:nth-child(3){width:7rem}
-.markdown [data-procedure-table] th:nth-child(4){width:11rem}
-.markdown [data-procedure-table] td small{display:block;white-space:normal}
+.markdown [data-procedure-table] th:nth-child(1){width:3.25rem}
+.markdown [data-procedure-table] th:nth-child(2),.markdown [data-procedure-table] th:nth-child(3){width:5rem}
+.markdown [data-procedure-table] th:nth-child(4){width:8rem}
+.markdown [data-procedure-table] td small{display:block;white-space:normal;line-height:1.4}
+.markdown [data-procedure-table] td ul{margin:0;padding-left:1.2em}
+.markdown [data-procedure-table] td p{margin:0}
+.markdown [data-procedure-table] .procedure-data-details{display:inline;margin-left:.4em}
+.markdown [data-procedure-table] .procedure-data-details[open]{display:block;margin-left:0}
+.markdown [data-procedure-table] .procedure-data-details>summary{display:inline;cursor:pointer;text-decoration:underline}
 .markdown [data-structure-issue]{padding:8px 10px;border-left-color:#b97816;border-radius:2px;background:#fff3cd;color:#694900}
 .markdown [data-structure-issue] button{padding:2px 4px;color:inherit;text-decoration:underline}
 [data-theme=dark] .markdown [data-structure-issue]{border-left-color:#ffd080;background:#483712;color:#ffe2a1}
