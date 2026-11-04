@@ -78,7 +78,7 @@ function draw(s){
  const wires=svgNode('g',{class:'concept-relations'});s.svg.append(wires);
  const focus=graphFocus(routing.routes,s.selected),related=new Set(routing.routes.filter(focus.related).map(r=>r.id));
  s.width=Math.max(260,routing.width,...[...boxes.values()].map(b=>b.x+b.w+24));s.height=Math.max(180,routing.height,...[...boxes.values()].map(b=>b.y+b.h+24));s.svg.setAttribute('viewBox',`0 0 ${s.width} ${s.height}`);
- s.minX=Math.min(0,...regions.map(r=>r.x));s.minY=Math.min(0,...regions.map(r=>r.y));
+ s.minX=Math.min(0,routing.left,...regions.map(r=>r.x));s.minY=Math.min(0,routing.top,...regions.map(r=>r.y));
  const visibleHandoffs=(graph.handoffs??[]).filter(h=>regions.some(r=>r.id===h.from)&&regions.some(r=>r.id===h.to));
  const regionBoxes=new Map(regions.map(r=>[r.id,{x:r.x,y:r.y,w:r.width,h:r.height}]));
  const handoffRouting=routeER(regionBoxes,visibleHandoffs.map(h=>[h.from,h.to,'','',h.returning?'reference':'down']));

@@ -1,6 +1,7 @@
-// Concept relationships deliberately use one elbow only. Other diagrams use
-// their own router and are not affected by this layout rule.
+// Concept relationships use a straight line or one elbow. A self reference is
+// a distinct top-right loop. Other diagrams use their own router.
 const vectors={left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
+const SHAPE_MARGIN=12;
 const single=count=>count==='1'||count==='0..1';
 export const isOneToOne=edge=>single(edge[2])&&single(edge[3]);
 const overlap=(a,b,c,d)=>Math.min(Math.max(a,b),Math.max(c,d))-Math.max(Math.min(a,b),Math.min(c,d))>0.01;
@@ -65,37 +66,53 @@ function path(start,corner,end){
  const radius=Math.min(6,Math.abs(corner.y-start.y)/2,Math.abs(end.x-corner.x)/2),dy=Math.sign(corner.y-start.y),dx=Math.sign(end.x-corner.x);
  return `M ${start.x} ${start.y} L ${corner.x} ${corner.y-dy*radius} Q ${corner.x} ${corner.y} ${corner.x+dx*radius} ${corner.y} L ${end.x} ${end.y}`;
 }
+function loopPath(points){
+ let d=`M ${points[0].x} ${points[0].y}`;
+ for(let i=1;i<points.length-1;i++){
+  const a=points[i-1],b=points[i],c=points[i+1],radius=Math.min(6,(Math.abs(a.x-b.x)+Math.abs(a.y-b.y))/2,(Math.abs(c.x-b.x)+Math.abs(c.y-b.y))/2);
+  const before={x:b.x+Math.sign(a.x-b.x)*radius,y:b.y+Math.sign(a.y-b.y)*radius},after={x:b.x+Math.sign(c.x-b.x)*radius,y:b.y+Math.sign(c.y-b.y)*radius};
+  d+=` L ${before.x} ${before.y} Q ${b.x} ${b.y} ${after.x} ${after.y}`;
+ }
+ const last=points.at(-1);return d+` L ${last.x} ${last.y}`;
+}
+function separation(a,b){
+ return Math.max(0,a.x-(b.x+b.w),b.x-(a.x+a.w))+Math.max(0,a.y-(b.y+b.h),b.y-(a.y+a.h));
+}
 export function routeER(boxes,edges){
  const active=edges.filter(([a,b])=>boxes.has(a)&&boxes.has(b)).map(([from,to,fromCount,toCount,kind],id)=>({id,from,to,fromCount,toCount,kind}));
- const used=[],placed=[],routed=[],cards=[...boxes.values()].map(r=>({left:r.x,top:r.y,w:r.w,h:r.h}));let width=0,height=0;
- for(const e of active){
-  const reference=e.kind==='reference',fromBox=boxes.get(e.from),toBox=boxes.get(e.to),straight=isOneToOne([e.from,e.to,e.fromCount,e.toCount]);
-  const fromPorts=ports(e.id,e.from,fromBox,reference?'top':'bottom',e.fromCount),toPorts=ports(e.id,e.to,toBox,reference?'right':'left',e.toCount);
+ const work=[...active].sort((a,b)=>separation(boxes.get(a.from),boxes.get(a.to))-separation(boxes.get(b.from),boxes.get(b.to))||a.id-b.id);
+ const used=[],placed=[],routed=[],cards=[...boxes.values()].map(r=>({left:r.x,top:r.y,w:r.w,h:r.h}));let width=0,height=0,left=0,top=0;
+ for(const e of work){
+  const self=e.from===e.to,reference=e.kind==='reference',fromBox=boxes.get(e.from),toBox=boxes.get(e.to),straight=!self&&isOneToOne([e.from,e.to,e.fromCount,e.toCount]);
+  const fromPorts=ports(e.id,e.from,fromBox,self||reference?'top':'bottom',e.fromCount),toPorts=ports(e.id,e.to,toBox,self||reference?'right':'left',e.toCount);
   const pairs=straight?straightPairs(e,fromBox,toBox):fromPorts.flatMap(from=>toPorts.map(to=>[from,to]));
   const prior=routed.flatMap(r=>r.segments);
   let best,bestScore;
-  for(const [from,to]of pairs){
+  for(const [from,to]of pairs)for(const depth of self?[32,52,72,92]:[0]){
    const a=from.p,b=to.p;
    // No reversal or extra corner is permitted, including for saved positions.
-   if(!straight&&(reference?!(a.x>b.x+2&&a.y>b.y+2):!(a.x+2<b.x&&a.y+2<b.y)))continue;
-   const corner=straight?null:{x:a.x,y:b.y},segments=straight?[segment(a,b)]:[segment(a,corner),segment(corner,b)];
-   if(!straight&&[...boxes].some(([id,box])=>id!==e.from&&id!==e.to&&segments.some(s=>blocked(s.a,s.b,box))))continue;
+   if(!self&&!straight&&(reference?!(a.x>b.x+2&&a.y>b.y+2):!(a.x+2<b.x&&a.y+2<b.y)))continue;
+   const corner=straight||self?null:{x:a.x,y:b.y};
+   const points=self?[a,{x:a.x,y:fromBox.y-depth},{x:fromBox.x+fromBox.w+depth,y:fromBox.y-depth},{x:fromBox.x+fromBox.w+depth,y:b.y},b]:straight?[a,b]:[a,corner,b];
+   const segments=points.slice(1).map((point,i)=>segment(points[i],point));
+   const obstacles=[...boxes].filter(([id,box])=>id!==e.from&&id!==e.to&&segments.some(s=>blocked(s.a,s.b,{x:box.x-SHAPE_MARGIN,y:box.y-SHAPE_MARGIN,w:box.w+2*SHAPE_MARGIN,h:box.h+2*SHAPE_MARGIN}))).map(([id])=>id);
+   if(!straight&&obstacles.length)continue;
    const duplicates=[from,to].filter(p=>used.some(q=>p.table===q.table&&p.side===q.side&&p.p.x===q.p.x&&p.p.y===q.p.y)).length;
    const shared=segments.reduce((n,s)=>n+prior.filter(t=>sharedRun(s.a,s.b,t.a,t.b)).length,0);
    const cross=segments.reduce((n,s)=>n+prior.filter(t=>crosses(s,t)).length,0);
    const first=nearLabel(from.label,cards,placed,[...prior,...segments]);
    const second=nearLabel(to.label,cards,first?[...placed,first]:placed,[...prior,...segments]);
    const labelConflicts=Number(!first)+Number(!second)+segments.reduce((n,s)=>n+placed.filter(l=>crossesLabel(s,l)).length,0);
-   const score=[duplicates,shared,labelConflicts,cross,Math.abs(a.x-b.x)+Math.abs(a.y-b.y)];
-   if(!best||better(score,bestScore)){best={from,to,corner,segments,labels:[first??{...from.label,conflict:true},second??{...to.label,conflict:true}]};bestScore=score;}
+   const length=segments.reduce((n,s)=>n+Math.abs(s.a.x-s.b.x)+Math.abs(s.a.y-s.b.y),0),score=[obstacles.length,duplicates,shared,cross,labelConflicts,length];
+   if(!best||better(score,bestScore)){best={from,to,points,segments,obstacles,labels:[first??{...from.label,conflict:true},second??{...to.label,conflict:true}]};bestScore=score;}
   }
-  if(!best){routed.push({...e,ports:[],points:[],segments:[],unrouted:true,d:''});continue;}
-  const p=[best.from,best.to],points=straight?[best.from.p,best.to.p]:[best.from.p,best.corner,best.to.p];used.push(...p);placed.push(...best.labels);
-  width=Math.max(width,...points.map(v=>v.x+35));height=Math.max(height,...points.map(v=>v.y+35));
-  const d=straight?`M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`:path(...points);
-  routed.push({...e,ports:p,points,segments:best.segments,unrouted:false,d});
+  if(!best){routed.push({...e,ports:[],points:[],segments:[],shapeObstacles:[],unrouted:true,d:''});continue;}
+  const p=[best.from,best.to],points=best.points;used.push(...p);placed.push(...best.labels);
+  width=Math.max(width,...points.map(v=>v.x+35));height=Math.max(height,...points.map(v=>v.y+35));left=Math.min(left,...points.map(v=>v.x-6));top=Math.min(top,...points.map(v=>v.y-6));
+  const d=self?loopPath(points):straight?`M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`:path(...points);
+  routed.push({...e,ports:p,points,segments:best.segments,shapeObstacles:best.obstacles,unrouted:false,d});
  }
  const segments=routed.flatMap(r=>r.segments),labels=placed.map(l=>segments.some(s=>crossesLabel(s,l))?{...l,conflict:true}:l);
- for(const l of labels){width=Math.max(width,l.left+l.w+20);height=Math.max(height,l.top+l.h+20);}
- return {routes:routed,labels,width,height};
+ for(const l of labels){width=Math.max(width,l.left+l.w+20);height=Math.max(height,l.top+l.h+20);left=Math.min(left,l.left-6);top=Math.min(top,l.top-6);}
+ return {routes:routed.sort((a,b)=>a.id-b.id),labels,width,height,left,top};
 }

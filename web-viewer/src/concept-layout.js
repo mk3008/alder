@@ -14,16 +14,34 @@ function stableOrder(ids,pairs){
  }
  return order;
 }
+function orderStraightGroup(members,directed){
+ if(members.length<3)return stableOrder(members,directed.filter(x=>!isOneToOne(x.edge)).map(x=>[x.upper,x.lower]));
+ const memberSet=new Set(members),within=directed.filter(x=>memberSet.has(x.upper)&&memberSet.has(x.lower)&&x.upper!==x.lower);
+ const constraints=within.filter(x=>!isOneToOne(x.edge)),straight=within.filter(x=>isOneToOne(x.edge));
+ let best,bestCost=Infinity,attempts=0;
+ function visit(order,remaining){
+  if(attempts>=5000||bestCost===0)return;
+  if(!remaining.length){attempts++;const positions=new Map(order.map((id,i)=>[id,i]));
+   const cost=straight.reduce((sum,x)=>sum+Math.max(0,Math.abs(positions.get(x.upper)-positions.get(x.lower))-1),0);
+   if(cost<bestCost){best=[...order];bestCost=cost;}return;
+  }
+  const ready=remaining.filter(id=>!constraints.some(x=>x.lower===id&&remaining.includes(x.upper)));
+  if(!ready.length){attempts++;return;}
+  for(const id of ready)visit([...order,id],remaining.filter(value=>value!==id));
+ }
+ visit([],members);
+ return best??stableOrder(members,constraints.map(x=>[x.upper,x.lower]));
+}
 export function conceptCorrelationGrid(ids,edges){
  const parents=new Map(ids.map(id=>[id,id])),root=id=>{while(parents.get(id)!==id)id=parents.get(id);return id;};
  for(const edge of edges){const [a,b]=edge;if(parents.has(a)&&parents.has(b)&&isOneToOne(edge))parents.set(root(b),root(a));}
  const groupIds=[...new Set(ids.map(root))],groups=new Map(groupIds.map(id=>[id,ids.filter(n=>root(n)===id)]));
  const directed=edges.filter(([a,b])=>parents.has(a)&&parents.has(b)).map(edge=>{const [from,to,,,kind]=edge;return {edge,upper:kind==='reference'?to:from,lower:kind==='reference'?from:to};});
  const groupOrder=stableOrder(groupIds,directed.map(({upper,lower})=>[root(upper),root(lower)]));
- const orderedGroups=groupOrder.map(id=>stableOrder(groups.get(id),directed.filter(x=>root(x.upper)===id&&root(x.lower)===id).map(x=>[x.upper,x.lower])));
+ const orderedGroups=groupOrder.map(id=>orderStraightGroup(groups.get(id),directed));
  const order=orderedGroups.flat(),levels=new Map(ids.map(id=>[id,0]));
  for(const members of orderedGroups)for(const id of members)for(const item of directed){
-  if(item.upper===id&&members.includes(item.lower)&&!isOneToOne(item.edge))levels.set(item.lower,Math.max(levels.get(item.lower),levels.get(id)+1));
+  if(item.upper===id&&item.lower!==id&&members.includes(item.lower)&&!isOneToOne(item.edge))levels.set(item.lower,Math.max(levels.get(item.lower),levels.get(id)+1));
  }
  const indices=new Map(order.map((id,i)=>[id,i]));
  const cells=order.map(()=>order.map(()=>[]));
@@ -46,7 +64,7 @@ function routeScore(routing){
    if(x>Math.min(h.a.x,h.b.x)&&x<Math.max(h.a.x,h.b.x)&&y>Math.min(v.a.y,v.b.y)&&y<Math.max(v.a.y,v.b.y))crossings++;
   }
  }
- return [routing.routes.filter(r=>r.unrouted).length,routing.labels.filter(l=>l.conflict).length,shared,crossings];
+ return [routing.routes.filter(r=>r.unrouted).length,routing.routes.reduce((n,r)=>n+r.shapeObstacles.length,0),routing.labels.filter(l=>l.conflict).length,shared,crossings];
 }
 const better=(a,b)=>a.some((v,i)=>v!==b[i]&&v<b[i]&&a.slice(0,i).every((n,j)=>n===b[j]));
 
