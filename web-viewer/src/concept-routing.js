@@ -15,7 +15,7 @@ function intersects(a,b,c,d){
  const v=a.x===b.x?{a,b}:{a:c,b:d},h=a.x===b.x?{a:c,b:d}:{a,b};
  return v.a.x===v.b.x&&h.a.y===h.b.y&&v.a.x>=Math.min(h.a.x,h.b.x)&&v.a.x<=Math.max(h.a.x,h.b.x)&&h.a.y>=Math.min(v.a.y,v.b.y)&&h.a.y<=Math.max(v.a.y,v.b.y);
 }
-function sides(){return ['bottom','left'];}
+function sides(_source,_target,kind){return kind==='reference'?['top','right']:['bottom','left'];}
 function rectOverlap(a,b){return a.left<b.left+b.w&&a.left+a.w>b.left&&a.top<b.top+b.h&&a.top+a.h>b.top;}
 function label(port,count){
  const [vx,vy]=vectors[port.side],horizontal=vx!==0,x=port.p.x+vx*24+(horizontal?0:10),y=port.p.y+vy*24+(horizontal?-10:4),w=count.length*8+10;
@@ -77,7 +77,11 @@ export function routeER(boxes,edges){
  }
  const nodes=[...boxes].map(([id,b])=>({id,x:b.x,y:b.y,width:b.w,height:b.h})),routed=[];let width=0,height=0;
  for(const e of active){const [a,b]=e.ports,source=boxes.get(e.from),target=boxes.get(e.to);
-  const route=routeEdge({from:e.from,to:e.to,nodes,index:e.id,kind:'input',matrix:{returning:false,captionLane:0},ports:{from:(a.p.x-source.x)/source.w,to:(b.p.y-target.y)/target.h},labelWidth:0,labelHeight:0});
+  const fraction=(p,box)=>p.side==='top'||p.side==='bottom'?(p.p.x-box.x)/box.w:(p.p.y-box.y)/box.h;
+  const reference=e.kind==='reference';
+  const route=routeEdge({from:e.from,to:e.to,nodes,index:e.id,kind:reference?'reference':'input',
+   ...(reference?{sides:{from:'top',to:'right'}}:{matrix:{returning:false,captionLane:0}}),
+   ports:{from:fraction(a,source),to:fraction(b,target)},labelWidth:0,labelHeight:0});
   const points=route.points.map(([x,y])=>({x,y})),segments=points.slice(1).map((p,i)=>segment(points[i],p));
   width=Math.max(width,route.bounds.right+35);height=Math.max(height,route.bounds.bottom+35);
   routed.push({...e,points,segments,unrouted:route.fallback,d:route.path});

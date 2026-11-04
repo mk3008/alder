@@ -19,13 +19,23 @@ for(const focus of [null,...ids]){
  assert.deepEqual({boxes,routing},standalone,'the same selected graph renders identically as a standalone overview');
  assert.deepEqual([...boxes.keys()],view.ids,'B contains only A-selected cards');
  assert.equal(routing.routes.length,view.edges.length);
- for(const route of routing.routes){assert(!route.unrouted,focus+' routes without fallback');assert.equal(route.points[0].y,boxes.get(route.from).y+boxes.get(route.from).h);assert.equal(route.points.at(-1).x,boxes.get(route.to).x);}
+ for(const route of routing.routes){
+  assert(!route.unrouted,focus+' routes without fallback');
+  const source=boxes.get(route.from),target=boxes.get(route.to);
+  if(route.kind==='reference'){
+   assert.equal(route.points[0].y,source.y,'reference starts at the source top');
+   assert.equal(route.points.at(-1).x,target.x+target.w,'reference ends at the target right');
+  }else{
+   assert.equal(route.points[0].y,source.y+source.h,'containment keeps its bottom outlet');
+   assert.equal(route.points.at(-1).x,target.x,'containment keeps its left inlet');
+  }
+ }
  for(const label of routing.labels){
   for(const route of routing.routes)assert(!route.segments.some(({a,b})=>crosses(a,b,label)),`${focus||'overview'}: ${label.table} ${label.count} must not cover ${route.from}->${route.to}`);
   for(const box of boxes.values())assert(!(label.left<box.x+box.w&&label.left+label.w>box.x&&label.top<box.y+box.h&&label.top+label.h>box.y),focus+' count outside cards');
  }
 }
-console.log('PASS concept initial layout: overview and all six one-hop views, complete bottom/left wires and counts clear of every routed segment/card');
+console.log('PASS concept initial layout: overview and all six one-hop views, containment bottom/left and reference top/right, counts clear of every routed segment/card');
 
 // Retained 64px positions from before the fix must also keep the entire wire
 // clear: the target label used to cover x=62 at y=238..256.
