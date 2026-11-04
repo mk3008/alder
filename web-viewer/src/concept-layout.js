@@ -1,63 +1,79 @@
 import {routeER,sharedRun} from './concept-routing.js';
-import {matrixPlan} from './matrix-layout.ts';
 
-// Cache by the actual graph and measured card sizes. Selection redraws the
-// same graph frequently; testing compact candidates must not reroute it then.
+// The grid records every explicit relationship before any pixel placement.
+// For a reference the referenced concept precedes the referencing concept;
+// for containment the parent precedes the child. Parallel relations remain
+// separate entries in a cell rather than becoming a second source of truth.
+export function conceptCorrelationGrid(ids,edges){
+ const active=new Set(ids),next=new Map(ids.map(id=>[id,new Set()])),indegree=new Map(ids.map(id=>[id,0]));
+ for(const [from,to,,,kind]of edges){
+  if(!active.has(from)||!active.has(to))continue;
+  const [upper,lower]=kind==='reference'?[to,from]:[from,to];
+  if(!next.get(upper).has(lower)){next.get(upper).add(lower);indegree.set(lower,indegree.get(lower)+1);}
+ }
+ const remaining=new Set(ids),order=[];
+ while(remaining.size){
+  // A cycle has no perfect placement. Keep all its cards and relations so
+  // routing can report precisely which ones cannot satisfy the rule.
+  const id=ids.find(id=>remaining.has(id)&&indegree.get(id)===0)??ids.find(id=>remaining.has(id));
+  remaining.delete(id);order.push(id);
+  for(const child of next.get(id))indegree.set(child,indegree.get(child)-1);
+ }
+ const indices=new Map(order.map((id,i)=>[id,i]));
+ const cells=order.map(()=>order.map(()=>[]));
+ edges.forEach(([from,to,,,kind],i)=>{
+  if(!indices.has(from)||!indices.has(to))return;
+  const [upper,lower]=kind==='reference'?[to,from]:[from,to];
+  cells[indices.get(upper)][indices.get(lower)].push(i);
+ });
+ return {order,cells};
+}
+
 const layoutCache=new WeakMap();
-/** Lay out the selected graph without overview/detail knowledge.
- * Reserve room for both endpoint counts even in a single-relation view.
- */
+function routeScore(routing){
+ let shared=0,crossings=0;
+ for(let i=0;i<routing.routes.length;i++)for(let j=0;j<i;j++){
+  for(const p of routing.routes[i].segments)for(const q of routing.routes[j].segments){
+   if(sharedRun(p.a,p.b,q.a,q.b)){shared++;continue;}
+   const pv=p.a.x===p.b.x,qv=q.a.x===q.b.x;if(pv===qv)continue;
+   const v=pv?p:q,h=pv?q:p,x=v.a.x,y=h.a.y;
+   if(x>Math.min(h.a.x,h.b.x)&&x<Math.max(h.a.x,h.b.x)&&y>Math.min(v.a.y,v.b.y)&&y<Math.max(v.a.y,v.b.y))crossings++;
+  }
+ }
+ return [routing.routes.filter(r=>r.unrouted).length,routing.labels.filter(l=>l.conflict).length,shared,crossings];
+}
+const better=(a,b)=>a.some((v,i)=>v!==b[i]&&v<b[i]&&a.slice(0,i).every((n,j)=>n===b[j]));
+
+/** Place the ordered matrix in a compact staircase before projecting wires. */
 export function initialConceptPositions(ids,edges,sizes){
  const signature=JSON.stringify([ids.map(id=>[id,sizes.get(id).w,sizes.get(id).h]),edges]);
  let cache=layoutCache.get(sizes);if(!cache){cache=new Map();layoutCache.set(sizes,cache);}
  if(cache.has(signature))return cache.get(signature);
- const graph={version:1,nodes:ids.map(id=>({id,type:'business',name:id,scope:true})),relations:edges.map(([from,to])=>({kind:'input',from,to,label:''}))};
- const plan=matrixPlan(graph,ids),ordered=ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);
- const ports=Math.max(1,...ids.map(id=>edges.filter(([a,b])=>a===id||b===id).length));
- const widestCount=Math.max(0,...edges.flatMap(([, ,from,to])=>[from.length,to.length]).map(n=>n*8+10));
- const previousStep=Math.max(96,64+36*Math.max(0,ports-1),22+24+widestCount/2+8);
- const firstStep=Math.max(96,Math.ceil(22+24+widestCount/2+8));
- const steps=[firstStep,128,160,192].filter((step,index,all)=>step>=firstStep&&step<previousStep&&all.indexOf(step)===index);steps.push(previousStep);
- const columns=Math.max(0,...ids.map(id=>plan.cells[id][0])),gaps=Array.from({length:columns},()=>previousStep);
- const place=spacing=>{const result={},x=[40];let y=40;for(const gap of spacing)x.push(x.at(-1)+gap);for(const id of ordered){result[id]={x:x[plan.cells[id][0]],y};y+=sizes.get(id).h+44;}return result;};
- const route=positions=>routeER(new Map(ids.map(id=>[id,{...positions[id],...sizes.get(id)}])),edges);
- const aligned=s=>s.a.x===s.b.x||s.a.y===s.b.y;
- const crossing=(a,b)=>{
-  const av=a.a.x===a.b.x,bv=b.a.x===b.b.x;if(av===bv)return false;
-  const v=av?a:b,h=av?b:a,x=v.a.x,y=h.a.y;
-  const within=(n,a,b)=>n>=Math.min(a,b)-0.01&&n<=Math.max(a,b)+0.01;
-  return within(x,h.a.x,h.b.x)&&within(y,v.a.y,v.b.y);
+ const {order}=conceptCorrelationGrid(ids,edges);
+ const place=gaps=>{
+  const positions={};let x=40,y=40;
+  for(const [column,id]of order.entries()){if(column)x+=gaps[column-1];positions[id]={x,y};y+=sizes.get(id).h+44;}
+  return positions;
  };
- const counts=routing=>{
-  let duplicatePorts=0,sharedLines=0,crossings=0;
-  for(let i=0;i<routing.routes.length;i++)for(let j=0;j<i;j++){
-   const a=routing.routes[i],b=routing.routes[j];
-   for(const p of a.ports)for(const q of b.ports)if(p.table===q.table&&p.p.x===q.p.x&&p.p.y===q.p.y)duplicatePorts++;
-   for(const p of a.segments)for(const q of b.segments)if(aligned(p)&&aligned(q)){if(sharedRun(p.a,p.b,q.a,q.b))sharedLines++;else if(crossing(p,q))crossings++;}
-  }
-  return [routing.routes.filter(item=>item.unrouted).length,routing.labels.filter(item=>item.conflict).length,duplicatePorts,sharedLines,crossings];
- };
- const displacement=routing=>new Map(routing.labels.map(label=>{
-  const port=routing.routes.find(item=>item.id===label.edge).ports.find(item=>item.table===label.table);
-  return [label.edge+':'+label.table,Math.abs(label.x-port.label.x)+Math.abs(label.y-port.label.y)];
- }));
- const original=route(place(gaps)),baseline=counts(original),originalDisplacement=displacement(original);
- let attempts=0;
- // Keep large graphs responsive: untried columns retain their prior spacing.
- outer:for(let column=0;column<gaps.length;column++)for(const step of steps){
-  if(attempts++>=48){gaps[column]=previousStep;break outer;}
-  gaps[column]=step;
-  const routing=route(place(gaps));
-  if(counts(routing).every((value,index)=>value<=baseline[index])&&[...displacement(routing)].every(([key,value])=>value<=Math.max(32,originalDisplacement.get(key)??0)))break;
+ const score=gaps=>{const positions=place(gaps),boxes=new Map(ids.map(id=>[id,{...positions[id],...sizes.get(id)}]));return routeScore(routeER(boxes,edges));};
+ let bestGaps,bestScore;
+ for(const step of [72,96,128,160,192,240,300,384]){
+  const gaps=Array(Math.max(0,order.length-1)).fill(step),candidate=score(gaps);
+  if(!bestGaps||better(candidate,bestScore)){bestGaps=gaps;bestScore=candidate;}
+  if(candidate.every(value=>value===0))break;
  }
- const positions=place(gaps);
- cache.set(signature,positions);
- return positions;
+ // Compact each column without introducing a missing line, a label conflict,
+ // an overlapping line, or more crossings than the safe initial placement.
+ let attempts=0;
+ for(let column=0;column<bestGaps.length&&attempts<42;column++)for(const gap of [72,96,128,160,192]){
+  if(gap>=bestGaps[column]||attempts++>=42)continue;
+  const trial=bestGaps.slice();trial[column]=gap;const candidate=score(trial);
+  if(candidate.every((value,i)=>value<=bestScore[i])){bestGaps=trial;bestScore=candidate;break;}
+ }
+ const best=place(bestGaps);cache.set(signature,best);return best;
 }
 
-/** B: layout and route only the graph selected upstream by A.
- * No focus, hidden source graph, or overview/detail mode enters this function.
- */
+/** Layout and route only the graph selected upstream, including saved positions. */
 export function conceptDiagram(ids,edges,sizes,overrides=new Map()){
  const initial=initialConceptPositions(ids,edges,sizes);
  const boxes=new Map(ids.map(id=>[id,{...(overrides.get(id)||initial[id]),...sizes.get(id)}]));

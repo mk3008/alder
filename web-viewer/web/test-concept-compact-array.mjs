@@ -47,10 +47,15 @@ const widest=Math.max(0,...g.edges.flatMap(([, ,from,to])=>[from.length,to.lengt
 const oldStep=Math.max(96,64+36*Math.max(0,degree-1),22+24+widest/2+8),oldPositions=new Map();let y=40;
 for(const id of ordered){oldPositions.set(id,{x:40+oldStep*plan.cells[id][0],y,...sizes.get(id)});y+=sizes.get(id).h+44;}
 const before=routeER(oldPositions,g.edges),after=conceptDiagram(g.ids,g.edges,sizes);
-assert(after.routing.width<before.width-500,'the full model is materially narrower than the previous layout');
+// The old placement can no longer route every edge under the one-corner rule;
+// include the old cards themselves when measuring its occupied width. This is
+// a stricter bound than the former routed width for this fixture.
+const oldWidth=Math.max(before.width,...[...oldPositions.values()].map(box=>box.x+box.w));
+const newWidth=Math.max(after.routing.width,...[...after.boxes.values()].map(box=>box.x+box.w));
+assert(newWidth<oldWidth-500,'the full model is materially narrower than the previous layout');
 assert.equal(after.routing.routes.filter(r=>r.unrouted).length,0);assert.equal(after.routing.labels.filter(label=>label.conflict).length,0);
 const offset=(routing,label)=>{const port=routing.routes.find(route=>route.id===label.edge).ports.find(item=>item.table===label.table);return Math.abs(label.x-port.label.x)+Math.abs(label.y-port.label.y);};
-for(const label of after.routing.labels){const prior=before.labels.find(item=>item.edge===label.edge&&item.table===label.table);assert(prior);assert(offset(after.routing,label)<=Math.max(32,offset(before,prior)),'counts stay near their own connection');}
+for(const label of after.routing.labels)assert(offset(after.routing,label)<=32,'counts stay near their own connection');
 const aligned=s=>s.a.x===s.b.x||s.a.y===s.b.y;
 for(let i=0;i<after.routing.routes.length;i++)for(let j=0;j<i;j++){
  const a=after.routing.routes[i],b=after.routing.routes[j];

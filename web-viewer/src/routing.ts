@@ -11,8 +11,6 @@ export interface RouteOptions {
   kind?: string;
   matrix?: MatrixWire;
   ports?:{from:number;to:number};
-  /** Explicit endpoint sides for a caller with a structural port contract. */
-  sides?:{from:'top';to:'right'};
   /** Existing label rectangles; labels never become path obstacles. */
   labels?: readonly RouteNode[];
   /** Other routed lines, used only to place captions. */
@@ -192,11 +190,11 @@ function rounded(waypoints:readonly Point[]):Geometry|undefined {
  * Overlaps and obstructed ports may be unavoidable; a finite best effort is
  * returned with fallback=true rather than concealing remaining collisions.
  */
-export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix,ports,sides}:RouteOptions):EdgeRoute {
+export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,kind,labels=[],wires=[],matrix,ports}:RouteOptions):EdgeRoute {
   const source=nodes.find(n=>n.id===from),target=nodes.find(n=>n.id===to);
   if(!source||!target)throw new Error('Route endpoint is missing');
   const endpointPort=(node:RouteNode,side:Side,end:'from'|'to'):Point=>port(node,side,ports?.[end]??(side==='right'?(end==='from'?matrix?.fromPort:matrix?.toPort):undefined));
-  if(matrix&&!sides){
+  if(matrix){
     const a=endpointPort(source,matrix.returning?'right':'bottom','from'),b=endpointPort(target,matrix.returning?'right':'left','to');
     // Matrix contracts determine sides. Coordinates never reclassify an edge.
     // The return lane is outside every card in its vertical interval.
@@ -224,7 +222,7 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   const obstacles=nodes.filter(n=>n.id!==from&&n.id!==to),endpoints=source===target?[source]:[source,target];
   const ac=center(source),bc=center(target),returning=matrix?.returning??(target.y+target.height<=source.y||(bc[0]<ac[0]&&bc[1]<=ac[1])||source===target);
   const returnInput=kind==='input'&&returning,exception=kind?.endsWith('exception')===true,rightReturn=matrix?.returning??(returnInput||exception);
-  const preferred:[Side,Side]=sides?[sides.from,sides.to]:matrix?(matrix.returning?['right','right']:['bottom','left']):rightReturn?['right','right']:returning?['bottom','right']:['bottom','left'];
+  const preferred:[Side,Side]=matrix?(matrix.returning?['right','right']:['bottom','left']):rightReturn?['right','right']:returning?['bottom','right']:['bottom','left'];
   // Clear feedback corridors share a fixed card clearance, independent of
   // relation order. Aligned source cards therefore share their vertical run.
   const spread=rightReturn?0:(Math.abs(Math.trunc(index))%4)*10,reach=(rightReturn?RETURN_REACH:CLEARANCE+RADIUS)+spread+16*(matrix?.returnLane??0);
@@ -264,25 +262,11 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   // Feedback Inputs from Output-side Objects may use a short right/up/right
   // return corridor. Exceptions share this right/right convention; ordinary
   // forward relations retain the icon-side bottom outlet.
-  if(sides){
-    tryPorts([sides.from,sides.to]);
-    // A manual layout can leave a narrow gap at either endpoint. Explore
-    // obstacle-adjacent lanes without changing the explicitly chosen sides.
-    if(bestScore[0]>0||bestScore[1]>0){
-      const a=endpointPort(source,sides.from,'from'),b=endpointPort(target,sides.to,'to'),pair:[Side,Side]=[sides.from,sides.to];
-      const xs=[bounds.left,bounds.right,...obstacles.flatMap(n=>[n.x-CLEARANCE-RADIUS,n.x+n.width+CLEARANCE+RADIUS])];
-      const ys=[bounds.top,bounds.bottom,...obstacles.flatMap(n=>[n.y-CLEARANCE-RADIUS,n.y+n.height+CLEARANCE+RADIUS])];
-      for(const stub of [reach,RADIUS,RADIUS/2]){
-        const exit=add(a,normals[sides.from],stub),entry=add(b,normals[sides.to],stub);
-        for(const x of xs)evaluate([a,exit,[x,exit[1]],[x,entry[1]],entry,b],pair,false);
-        for(const y of ys)evaluate([a,exit,[exit[0],y],[entry[0],y],entry,b],pair,false);
-      }
-    }
-  }else if(rightReturn||matrix?.returning)tryPorts(['right','right']);
+  if(rightReturn||matrix?.returning)tryPorts(['right','right']);
   // Ordinary relations leave below the icon. Obstructed saved positions may
   // require a short initial turn, but never silently change the source port.
   const a=endpointPort(source,'bottom','from');
-  if(!sides&&!matrix?.returning&&(!rightReturn||bestScore[0]>0||bestScore[1]>0))for(const side of (matrix?['left']:['left','right','top','bottom']) as Side[]){
+  if(!matrix?.returning&&(!rightReturn||bestScore[0]>0||bestScore[1]>0))for(const side of (matrix?['left']:['left','right','top','bottom']) as Side[]){
     const b=endpointPort(target,side,'to'),entry=add(b,normals[side],reach),pair:[Side,Side]=['bottom',side];
     tryPorts(pair);
     // Local obstacle boundaries provide escape lanes without global detours.
@@ -298,17 +282,10 @@ export function routeEdge({from,to,nodes,index=0,labelWidth=100,labelHeight=20,k
   // Coincident/covered ports can invalidate every direction. A short exterior
   // loop always exists geometrically; collision reporting remains honest.
   if(!chosen){
-    if(sides){
-      const a=endpointPort(source,'top','from'),b=endpointPort(target,'right','to');
-      const y=Math.min(source.y,target.y)-reach,x=Math.max(source.x+source.width,target.x+target.width)+reach;
-      chosen=rounded([a,[a[0],y],[x,y],[x,b[1]],b])!;
-      bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
-    }else{
     const a=endpointPort(source,matrix?.returning?'right':'bottom','from'),b=endpointPort(target,matrix?(matrix.returning?'right':'left'):'right','to');
     const x=Math.max(source.x+source.width,target.x+target.width)+reach,y=(matrix?Math.max(source.y+source.height,target.y+target.height):source.y+source.height)+reach;
     chosen=rounded(matrix?.returning?[a,[x,a[1]],[x,y],[x+reach,y],[x+reach,b[1]],b]:matrix?[a,[a[0],y],[target.x-reach,y],[target.x-reach,b[1]],b]:[a,[a[0],y],[x,y],[x,b[1]],b])!;
     bestScore=[routeCollisionCount(chosen.points,obstacles,CLEARANCE+chosen.error)+routeCollisionCount(chosen.points,endpoints,-.1),offCanvas(chosen.points)];rerouted=true;
-    }
   }
   const label=matrix?.returning?{point:[chosen.vertices[1][0]+8+labelWidth/2,chosen.vertices[0][1]] as Point,blocked:false}:((kind==='input'||kind==='output')&&chosen.points[0][1]===source.y+source.height?{point:departureCaption(source,labelWidth,labelHeight,nodes,labels,matrix?.captionLane??0),blocked:false}:labelAt(chosen.points,nodes,labelWidth,labelHeight,minimum,kind==='input'||kind?.endsWith('exception')===true,labels,source,wires));
   return {path:chosen.path,label:label.point,points:chosen.points,bounds:chosen.bounds,collisions:bestScore[0],rerouted,fallback:bestScore[0]>0||bestScore[1]>0||label.blocked};

@@ -1,9 +1,9 @@
 import {canOpenDetail} from './detail-navigation.ts';
 
 import {conceptDiagram,initialConceptPositions} from './concept-layout.js';
+import {routeER} from './concept-routing.js';
 import {graphFocus} from './graph-focus.ts';
 import {graphMarkers} from './graph-visuals.ts';
-import {routeEdge} from './routing.ts';
 import {cardSurface} from './diagram-canvas.ts';
 import {cameraZoom,initialCamera,ZOOM_FACTOR,cameraOrigin,installCtrlWheelZoom} from './graph-camera.ts';
 import './graph-presentation.css';
@@ -79,17 +79,24 @@ function draw(s){
  const focus=graphFocus(routing.routes,s.selected),related=new Set(routing.routes.filter(focus.related).map(r=>r.id));
  s.width=Math.max(260,routing.width,...[...boxes.values()].map(b=>b.x+b.w+24));s.height=Math.max(180,routing.height,...[...boxes.values()].map(b=>b.y+b.h+24));s.svg.setAttribute('viewBox',`0 0 ${s.width} ${s.height}`);
  s.minX=Math.min(0,...regions.map(r=>r.x));s.minY=Math.min(0,...regions.map(r=>r.y));
- for(const [index,handoff]of (graph.handoffs??[]).entries()){
-  if(!regions.some(r=>r.id===handoff.from)||!regions.some(r=>r.id===handoff.to))continue;
-  const width=Math.max(30,measure(handoff.label,12)),route=routeEdge({from:handoff.from,to:handoff.to,nodes:regions,index,kind:'input',matrix:{returning:handoff.returning,captionLane:0},labelWidth:width,labelHeight:18});
-  wires.append(svgNode('path',{class:'concept-handoff'+(handoff.returning?' returning':''),d:route.path,'data-handoff-id':handoff.id,'data-from-subsystem':handoff.from,'data-to-subsystem':handoff.to,'data-flow-direction':handoff.returning?'return':'forward','marker-end':'url(#concept-boundary-arrow)'}));
-  wires.append(svgNode('text',{class:'edge-label concept-handoff-label',x:route.label[0]-width/2,y:route.label[1],'dominant-baseline':'middle','data-handoff-label':handoff.id},handoff.label));
-  s.width=Math.max(s.width,route.bounds.right+40,route.label[0]+width/2+30);s.height=Math.max(s.height,route.bounds.bottom+40,route.label[1]+30);s.minX=Math.min(s.minX,route.bounds.left,route.label[0]-width/2);s.minY=Math.min(s.minY,route.bounds.top,route.label[1]-20);
+ const visibleHandoffs=(graph.handoffs??[]).filter(h=>regions.some(r=>r.id===h.from)&&regions.some(r=>r.id===h.to));
+ const regionBoxes=new Map(regions.map(r=>[r.id,{x:r.x,y:r.y,w:r.width,h:r.height}]));
+ const handoffRouting=routeER(regionBoxes,visibleHandoffs.map(h=>[h.from,h.to,'','',h.returning?'reference':'down']));
+ for(const [index,handoff]of visibleHandoffs.entries()){
+  const route=handoffRouting.routes[index],width=Math.max(30,measure(handoff.label,12));
+  wires.append(svgNode('path',{class:'concept-handoff'+(handoff.returning?' returning':'')+(route.unrouted?' unresolved':''),d:route.d,'data-handoff-id':handoff.id,'data-from-subsystem':handoff.from,'data-to-subsystem':handoff.to,'data-flow-direction':handoff.returning?'return':'forward','data-unrouted':route.unrouted,'marker-end':'url(#concept-boundary-arrow)'}));
+  if(route.unrouted)continue;
+  const [start,corner,end]=route.points,horizontal=Math.abs(end.x-corner.x);
+  const x=horizontal>=width+20?(corner.x+end.x)/2-width/2:corner.x+8,y=horizontal>=width+20?corner.y-10:(start.y+corner.y)/2;
+  wires.append(svgNode('text',{class:'edge-label concept-handoff-label',x,y,'dominant-baseline':'middle','data-handoff-label':handoff.id},handoff.label));
+  s.width=Math.max(s.width,handoffRouting.width,x+width+30);s.height=Math.max(s.height,handoffRouting.height,y+30);s.minX=Math.min(s.minX,x);s.minY=Math.min(s.minY,y-20);
  }
  for(const r of regions){s.width=Math.max(s.width,r.x+r.width+40);s.height=Math.max(s.height,r.y+r.height+40);}
  for(const r of routing.routes){const p=svgNode('path',{class:'wire'+(related.has(r.id)?' review-related':'')+(r.unrouted?' unresolved':''),d:r.d,'data-from':r.from,'data-to':r.to,'data-edge':r.id,'data-from-cardinality':r.fromCount,'data-to-cardinality':r.toCount,'data-unrouted':r.unrouted,role:'img','aria-label':tables[r.from].name+'1件に対して'+tables[r.to].name+r.toCount+'件／'+tables[r.to].name+'1件に対して'+tables[r.from].name+r.fromCount+'件'});wires.append(p);for(const port of r.ports)wires.append(svgNode('circle',{class:'concept-port'+(related.has(r.id)?' review-related':''),cx:port.p.x,cy:port.p.y,r:2.5,fill:'#7f969f','data-edge':r.id,'data-port-table':port.table,'pointer-events':'none'}));}
  for(const l of routing.labels){wires.append(svgNode('text',{class:'endpoint-count'+(related.has(l.edge)?' review-related':''),'data-edge':l.edge,'data-table':l.table,x:l.x,y:l.y,'text-anchor':l.anchor,'pointer-events':'none'},l.count));}
- s.warning.textContent=routing.routes.some(r=>r.unrouted)||routing.labels.some(l=>l.conflict)?'接続線または件数表示を確保できない配置です。概念間を広げてください。':'';
+ const unresolved=routing.routes.filter(r=>r.unrouted).map(r=>`${tables[r.from].name}（${r.fromCount}） → ${tables[r.to].name}（${r.toCount}）`);
+ for(const [i,r]of handoffRouting.routes.entries())if(r.unrouted)unresolved.push(visibleHandoffs[i].label);
+ s.warning.textContent=unresolved.length?'一つの角で接続できない関係：'+unresolved.join('、')+'。配置を調整してください。':routing.labels.some(l=>l.conflict)?'件数表示を確保できない配置です。概念間を広げてください。':'';
  for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'node graph-shape table'+(s.stage.id==='overview'?' read':'')+focus.nodeClasses(id),'data-node':id,'data-table':id,role:'group','aria-label':t.name});
  const surface=cardSurface(s.svg.ownerDocument,b);surface.firstElementChild.classList.add('concept-card-surface');g.append(surface);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);
