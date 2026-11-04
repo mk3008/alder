@@ -1,0 +1,23 @@
+.structure-explorer{flex:1;min-width:0;min-height:0;overflow:auto;padding:20px 24px;background:var(--bg);color:var(--fg)}
+.structure-explorer[hidden]{display:none!important}
+.structure-heading>div{display:flex;align-items:center;gap:9px}.structure-heading h2{font-size:20px;margin:0}.structure-heading .structure-icon{width:22px;height:22px;color:#357aa6}
+.structure-intro{font-size:13px;line-height:1.5;margin:10px 0 14px;color:var(--line)}
+.structure-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:14px;align-items:start}
+.structure-panel,.structure-help-card{min-width:0;border:1px solid var(--subtle);border-radius:5px;background:var(--panel)}
+.structure-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--subtle)}
+.structure-toolbar button{min-height:36px;padding:5px 10px;border:1px solid var(--subtle);border-radius:4px;font-size:13px;white-space:nowrap}
+.structure-toolbar button:hover{background:var(--select)}.structure-search{display:flex;align-items:center;gap:6px;min-height:36px;min-width:180px;flex:1;padding:0 8px;border:1px solid var(--subtle);border-radius:4px}
+.structure-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--fg);font:inherit;font-size:13px}.structure-search .structure-icon{color:var(--line)}
+.structure-tree{overflow:auto;max-height:calc(100dvh - 225px);min-height:240px;padding:10px 12px;font-size:13px;line-height:1.45}
+.structure-tree ul{list-style:none;margin:0;padding:0}.structure-tree .structure-children,.structure-tree .structure-fields{margin-left:12px;padding-left:14px;border-left:1px solid var(--subtle)}
+.structure-tree li{margin:0;padding:0}.structure-tree li[hidden]{display:none!important}.structure-tree summary{cursor:pointer;list-style:none}.structure-tree summary::-webkit-details-marker{display:none}
+.structure-node-row,.structure-group>summary{display:flex;align-items:center;gap:6px;min-height:27px;padding:2px 4px;white-space:nowrap;width:max-content;max-width:none}
+.structure-node>summary::before,.structure-group>summary::before{content:'▸';display:inline-block;width:12px;color:#315d7d}.structure-node[open]>summary::before,.structure-group[open]>summary::before{content:'▾'}
+.structure-node-row:hover,.structure-group>summary:hover{background:var(--select)}.structure-root>.structure-item>.structure-node>summary{background:color-mix(in srgb,#8bc0f2 28%,var(--panel));border-radius:4px}
+.structure-icon{width:15px;height:15px;flex:none;color:#1766a6}.structure-count{display:inline-block;min-width:38px;padding:0 5px;border:1px solid #9ac7ef;border-radius:5px;background:color-mix(in srgb,#8bc0f2 24%,var(--panel));color:#1766a6;text-align:center;font-weight:650;font-size:12px}
+.structure-id,.structure-reverse,.structure-edge-detail,.structure-type{font-size:12px;color:var(--line)}.structure-edge-detail{max-width:320px;overflow:hidden;text-overflow:ellipsis}.structure-seen{padding:1px 5px;border-radius:4px;background:var(--select);color:var(--line);font-size:11px}
+.structure-field{display:flex;align-items:center;gap:6px;min-height:25px;white-space:nowrap}.structure-field code{font-size:12px;color:var(--line)}.structure-field .structure-icon{color:var(--line)}
+.structure-condition{margin:2px 0 4px 24px;max-width:650px;color:var(--line);font-size:12px;line-height:1.5;white-space:normal}
+.structure-help-card{padding:12px 14px;font-size:13px;line-height:1.6}.structure-help-card h3{font-size:15px;margin:0 0 8px}.structure-help-card ul{padding-left:20px;margin:0}.structure-help-card li+li{margin-top:6px}.structure-unreachable,.structure-empty{color:var(--line);font-size:13px}
+[data-theme=dark] .structure-icon,[data-theme=dark] .structure-count{color:#8fc8ef}[data-theme=dark] .structure-node>summary::before,[data-theme=dark] .structure-group>summary::before{color:#8fc8ef}
+@media(max-width:800px){.structure-explorer{padding:12px}.structure-workspace{grid-template-columns:minmax(0,1fr)}.structure-tree{max-height:none;min-height:200px}.structure-help-card{padding:10px 12px}}
