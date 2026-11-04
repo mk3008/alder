@@ -32,7 +32,8 @@ const measureContext=document.createElement('canvas').getContext('2d');
 function measure(text,size=14){measureContext.font=size+'px "Segoe UI","Noto Sans JP",sans-serif';return measureContext.measureText(text).width;}
 function svgNode(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}');}catch{}
-const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.ceil(Math.max(220,measure(t.name,15)+64,...t.fields.map(([,n])=>measure(n)+24))),h:44+t.fields.length*25}]));
+const arrayLabel=(type,nullable)=>type==='array'?(nullable==='nullable'?' ［配列・未決可］':' ［配列］'):'';
+const sizes=new Map(Object.entries(tables).map(([id,t])=>[id,{w:Math.ceil(Math.max(220,measure(t.name,15)+64,...t.fields.map(([,name,,type,nullable])=>measure(name+arrayLabel(type,nullable))+24))),h:44+t.fields.length*25}]));
 // Lay out only explicitly authored subsystem views; legacy graphs retain their
 // original layout. The positions can still be moved and saved by the user.
 function boundaryPositions(){
@@ -93,10 +94,11 @@ function draw(s){
  const surface=cardSurface(s.svg.ownerDocument,b);surface.firstElementChild.classList.add('concept-card-surface');g.append(surface);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);
  body.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));body.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));
- t.fields.forEach(([physical,name,informationId],i)=>{
+ t.fields.forEach(([physical,name,informationId,type,nullable],i)=>{
   const relatedField=(graph.fieldLinks??[]).some(link=>link.owner===id&&link.informationId===informationId&&s.selected!==id&&
    ((link.from===s.selected&&link.to===id)||(link.to===s.selected&&link.from===id)));
-  const text=svgNode('text',{x:b.x+12,y:b.y+56+i*25,...(informationId?{'data-information-id':informationId}:{}),...(relatedField?{class:'concept-field-related'}:{})},name);
+  const text=svgNode('text',{x:b.x+12,y:b.y+56+i*25,...(informationId?{'data-information-id':informationId}:{}),...(type==='array'?{'data-field-type':'array','aria-label':name+'、配列'+(nullable==='nullable'?'、未決可':'')+(physical?'（物理名：'+physical+'）':'')}:{}),...(relatedField?{class:'concept-field-related'}:{})},name);
+  if(type==='array')text.append(svgNode('tspan',{class:'concept-array-label'},arrayLabel(type,nullable)));
   if(physical)text.append(svgNode('title',{},'物理名：'+physical));
   body.append(text);
  });

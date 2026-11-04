@@ -7,7 +7,7 @@ export type ReviewGroup={id:string;name:string;purpose:string;activities:string[
 export function createConceptViews({model}:ConceptContext){
  // This optional mapping is authored with the document. Never infer a field
  // relationship from similar names or from the existence of an edge alone.
- type FieldMapping={informationId:string;physicalName:string;relationIds:string[]};
+ type FieldMapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean};
  type FieldLink={from:string;to:string;owner:string;informationId:string};
  const meta=model.meta&&typeof model.meta==='object'?model.meta as {fieldMappings?:unknown}:{};
  const mappings:FieldMapping[]=Array.isArray(meta.fieldMappings)?meta.fieldMappings.filter((value):value is FieldMapping=>
@@ -18,7 +18,10 @@ export function createConceptViews({model}:ConceptContext){
  const field=(conceptId:string,name:string,informationId?:string)=>{
   const info=concepts.get(conceptId)?.information.find(item=>informationId?item.id===informationId:item.name===name);
   const mapping=info&&mappingByInfo.get(info.id);
-  return mapping?[mapping.physicalName,name,info.id]:['',name];
+  if(!mapping)return ['',name];
+  const result=[mapping.physicalName,name,info.id,mapping.valueType==='array'?'array':''];
+  if(mapping.valueType==='array'&&mapping.nullable===true)result.push('nullable');
+  return result;
  };
  const links=(projected:{from:string;to:string;relationIds:string[]}[],cards:Record<string,ConceptCard>):FieldLink[]=>{
   const result:FieldLink[]=[];

@@ -3131,7 +3131,8 @@
             "relationIds": [
               "rel-package-bd",
               "rel-package-checkdoc"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-bd-field-1",
@@ -3148,33 +3149,38 @@
             "physicalName": "activities[]",
             "relationIds": [
               "rel-bd-activity"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-bd-field-4",
             "physicalName": "objects[]",
             "relationIds": [
               "rel-bd-object"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-bd-field-5",
             "physicalName": "data[]",
             "relationIds": [
               "rel-bd-data"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-bd-field-6",
             "physicalName": "relations[]",
             "relationIds": [
               "rel-bd-relation"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-bd-field-7",
             "physicalName": "exceptions[]",
-            "relationIds": []
+            "relationIds": [],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-activity-field-1",
@@ -3200,14 +3206,16 @@
             "physicalName": "decisions[]",
             "relationIds": [
               "rel-activity-decision"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-activity-field-5",
             "physicalName": "results[]",
             "relationIds": [
               "rel-activity-result"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-who-field-1",
@@ -3236,14 +3244,16 @@
             "physicalName": "steps[]",
             "relationIds": [
               "rel-procedure-step"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-procedure-field-2",
             "physicalName": "orderRules[]",
             "relationIds": [
               "rel-procedure-order"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-step-field-1",
@@ -3255,7 +3265,9 @@
             "physicalName": "whatDataIds[]",
             "relationIds": [
               "rel-step-data"
-            ]
+            ],
+            "valueType": "array",
+            "nullable": true
           },
           {
             "informationId": "fmt-step-field-2-2",
@@ -3284,7 +3296,8 @@
             "physicalName": "decisionIds[]",
             "relationIds": [
               "rel-step-decision"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-step-field-5-2",
@@ -3298,7 +3311,9 @@
             "physicalName": "dependsOn[]",
             "relationIds": [
               "rel-step-dependency"
-            ]
+            ],
+            "valueType": "array",
+            "nullable": true
           },
           {
             "informationId": "fmt-step-field-6-2",
@@ -3322,7 +3337,8 @@
             "physicalName": "stepIds[]",
             "relationIds": [
               "rel-order-step"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-dependency-field-1",
@@ -3370,7 +3386,9 @@
             "physicalName": "dataIds[]",
             "relationIds": [
               "rel-exchange-data"
-            ]
+            ],
+            "valueType": "array",
+            "nullable": true
           },
           {
             "informationId": "fmt-exchange-field-5-2",
@@ -3396,7 +3414,8 @@
             "physicalName": "information[]",
             "relationIds": [
               "rel-object-information"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-relation-field-1",
@@ -3421,7 +3440,8 @@
             "physicalName": "items[]",
             "relationIds": [
               "rel-data-dataitem"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-dataitem-field-1",
@@ -3455,14 +3475,16 @@
             "physicalName": "axes[]",
             "relationIds": [
               "rel-decision-axis"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-decision-field-3-2",
             "physicalName": "rows[]",
             "relationIds": [
               "rel-decision-row"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-axis-field-1",
@@ -3472,7 +3494,8 @@
           {
             "informationId": "fmt-axis-field-2",
             "physicalName": "dataIds[]",
-            "relationIds": []
+            "relationIds": [],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-axis-field-3",
@@ -3489,7 +3512,8 @@
             "physicalName": "conditions[]",
             "relationIds": [
               "rel-row-condition"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-row-field-2",
@@ -3503,7 +3527,8 @@
             "physicalName": "checkRefs[]",
             "relationIds": [
               "rel-row-checkref"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-condition-field-1",
@@ -3530,12 +3555,14 @@
           {
             "informationId": "fmt-outcome-field-2",
             "physicalName": "dataIds[]",
-            "relationIds": []
+            "relationIds": [],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-outcome-field-3",
             "physicalName": "exceptionIds[]",
-            "relationIds": []
+            "relationIds": [],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-checkref-field-1",
@@ -3566,12 +3593,14 @@
             "physicalName": "items[]",
             "relationIds": [
               "rel-checkdoc-check"
-            ]
+            ],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-checkdoc-field-3-2",
             "physicalName": "index[]",
-            "relationIds": []
+            "relationIds": [],
+            "valueType": "array"
           },
           {
             "informationId": "fmt-check-field-1",

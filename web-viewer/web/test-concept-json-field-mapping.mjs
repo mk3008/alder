@@ -16,15 +16,16 @@ const context=parseDocument(JSON.stringify(pkg)).model,model=context.concepts[0]
 const map=new Map(model.meta.fieldMappings.map(item=>[item.informationId,item]));
 assert.equal(map.size,model.concepts.flatMap(item=>item.information).length,'every logical information item has one physical mapping');
 assert.equal(map.get('fmt-package-field-4').physicalName,'documents[]');
-assert.deepEqual(views.overviewGraph().tables['overview-package'].fields.find(x=>x[2]==='fmt-package-field-4'),['documents[]','文書一覧','fmt-package-field-4']);
+assert.deepEqual(views.overviewGraph().tables['overview-package'].fields.find(x=>x[2]==='fmt-package-field-4'),['documents[]','文書一覧','fmt-package-field-4','array']);
 assert.match(model.concepts.find(item=>item.id==='fmt-package').description,/業務設計書だけでなく/);
 assert(views.overviewGraph().fieldLinks.some(x=>x.from==='overview-package'&&x.to==='overview-bd'&&x.informationId==='fmt-package-field-4'));
 assert(views.graph('group-exchange').fieldLinks.some(x=>x.from==='fmt-step'&&x.to==='fmt-exchange'&&x.informationId==='fmt-step-field-4'));
 assert(views.fieldLinks.some(x=>x.from==='fmt-step'&&x.to==='fmt-exchange'&&x.informationId==='fmt-step-field-4'));
 
 const bundle=(await build({entryPoints:['src/concept-canvas.js'],bundle:true,write:false,format:'iife',loader:{'.css':'empty'}})).outputFiles[0].text;
-function mount(graph,focus){
+function mount(graph,focus,saved){
  const w=new JSDOM(readFileSync('concept.html','utf8'),{url:'https://viewer.test/concept.html',runScripts:'outside-only',pretendToBeVisual:true}).window;
+ if(saved)w.localStorage.setItem('alder-concept-canvas-v9:/concept.html:test:test',JSON.stringify(saved));
  w.scrollTo=()=>{};w.HTMLElement.prototype.scrollTo=function(x,y){this.scrollLeft=x;this.scrollTop=y;};w.HTMLElement.prototype.scrollIntoView=()=>{};
  w.HTMLElement.prototype.setPointerCapture=()=>{};w.HTMLElement.prototype.hasPointerCapture=()=>false;w.SVGElement.prototype.focus=()=>{};
  w.HTMLCanvasElement.prototype.getContext=()=>({measureText:value=>({width:value.length*14})});
@@ -34,6 +35,9 @@ function mount(graph,focus){
 function choose(w,id){const node=w.document.querySelector(`[data-node="${id}"]`);assert(node,id);node.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));}
 function highlighted(w,id){return !!w.document.querySelector(`[data-information-id="${id}"].concept-field-related`);}
 let w=mount(views.overviewGraph());
+assert.match(w.document.querySelector('[data-information-id="fmt-package-field-4"]').textContent,/［配列］/);
+assert.match(w.document.querySelector('[data-information-id="fmt-package-field-4"]').getAttribute('aria-label'),/文書一覧、配列/);
+assert.equal(w.document.querySelector('[data-information-id="fmt-package-field-1"]').getAttribute('data-field-type'),null);
 assert(!highlighted(w,'fmt-package-field-4'));
 choose(w,'overview-bd');assert(highlighted(w,'fmt-package-field-4'),'selected BD highlights documents in the parent');
 assert(w.document.querySelector('[data-node="overview-bd"]').classList.contains('selected'));
@@ -44,14 +48,18 @@ assert(highlighted(w,'fmt-bd-field-5'),'selecting Data highlights the BD data fi
 w.document.querySelector('.canvas').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(w.document.querySelectorAll('.concept-field-related').length,0);w.close();
 
 w=mount(views.graph('group-exchange'));choose(w,'fmt-exchange');assert(highlighted(w,'fmt-step-field-4'),'group shows the field containing the selected exchange');
+assert.match(w.document.querySelector('[data-information-id="fmt-step-field-2"]').textContent,/配列・未決可/);
 choose(w,'fmt-data');assert(highlighted(w,'fmt-step-field-2'));assert(highlighted(w,'fmt-exchange-field-5'));w.close();
 w=mount(views.graph('group-steps'));choose(w,'fmt-step');assert(highlighted(w,'fmt-order-field-2'));assert(highlighted(w,'fmt-order-field-3'),'both forms of the old order rule reference steps');w.close();
 w=mount({ids:Object.keys(views.tables),edges:views.edges,tables:views.tables,fieldLinks:views.fieldLinks},'fmt-exchange');
 choose(w,'fmt-exchange');assert(highlighted(w,'fmt-step-field-4'),'detail view keeps authored relationship mapping');w.close();
+w=mount(views.overviewGraph(),null,{positions:{'overview-bd':{x:842,y:362}},zoom:0.8,locked:true});
+assert.equal(w.document.querySelector('[data-node="overview-bd"] .concept-select>rect').getAttribute('x'),'842');assert.equal(w.document.querySelector('.canvas-zoom').textContent,'80%');
+w.document.querySelector('.reset-layout').click();assert.notEqual(w.document.querySelector('[data-node="overview-bd"] .concept-select>rect').getAttribute('x'),'842');assert.equal(w.document.querySelector('.canvas-zoom').textContent,'100%');w.close();
 
 const noMap=structuredClone(model);delete noMap.meta.fieldMappings;
 const oldViews=createConceptViews({business:context.business,model:noMap});w=mount(oldViews.overviewGraph());choose(w,'overview-bd');
-assert.equal(w.document.querySelectorAll('.concept-field-related').length,0,'unmapped documents never infer a connection from names');w.close();
+assert.equal(w.document.querySelectorAll('.concept-field-related').length,0,'unmapped documents never infer a connection from names');assert.equal(w.document.querySelectorAll('[data-field-type="array"]').length,0,'unrecorded array types are not guessed');w.close();
 const invalid=structuredClone(model);invalid.meta.fieldMappings.find(x=>x.informationId==='fmt-package-field-4').relationIds=['rel-bd-data'];
 const invalidViews=createConceptViews({business:context.business,model:invalid});w=mount(invalidViews.overviewGraph());choose(w,'overview-bd');
 assert(!highlighted(w,'fmt-package-field-4'),'a nonincident relation cannot highlight the field');w.close();
