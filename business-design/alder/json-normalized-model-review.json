@@ -959,7 +959,7 @@
       "subsystems": [
         {
           "id": "format-review",
-          "name": "JSON正規化候補（主要構造・全関係は一覧）",
+          "name": "JSON正規化候補（全概念）",
           "purpose": "実際の0.7保存構造から作る正規化候補を検討する。",
           "information": [
             "業務と手順",

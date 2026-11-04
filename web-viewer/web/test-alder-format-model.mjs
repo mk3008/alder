@@ -47,6 +47,8 @@ for(const [id,labels] of Object.entries(expected)){
 assert.match(model.concepts.find(value=>value.id==='fmt-exchange').description,/internalとunresolved/);
 assert.match(model.relations.find(value=>value.id==='rel-exchange-pair').condition,/片方向可/);
 const design=parseDocument(JSON.stringify(pkg)),views=createConceptViews({business:design.model.business,model:design.model.concepts[0]});
-assert.equal(views.overviewGraph().ids.length,11);assert.equal(views.groups.length,4);
+assert.equal(views.authoredOverviewGraph().ids.length,11,'the original authored projection is retained');
+assert.equal(new Set(views.overviewGraph().ids.map(id=>views.overviewGraph().tables[id].conceptId??id)).size,model.concepts.length,'the overview includes every model concept');
+assert.equal(views.groups.length,4);
 for(const id of ['group-steps','group-exchange','group-data','group-decisions'])assert.ok(views.graph(id).ids.length>=5,id);
 console.log('JSON-STRUCT-002/003: fixed schema, multiplicities, original documents and existing Viewer projections verified.');

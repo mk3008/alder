@@ -100,7 +100,7 @@ const relationships=[
 ];
 const base=read('../../business-design/alder/json-structure-review.json'),original=base.documents.find(d=>d.kind==='conceptModel');
 const m=structuredClone(original);m.id='alder-normalized-model-study';m.revision='normalized-study-1';m.schemaVersion='0.1';
-m.subsystems[0].name='JSON正規化候補（主要構造・全関係は一覧）';m.subsystems[0].purpose='実際の0.7保存構造から作る正規化候補を検討する。';
+m.subsystems[0].name='JSON正規化候補（全概念）';m.subsystems[0].purpose='実際の0.7保存構造から作る正規化候補を検討する。';
 m.concepts=definitions.map(([id,name,table,fields])=>({id:'n-'+id,name,subsystemId:'format-review',information:fields.map((value,i)=>({id:`n-${id}-field-${i+1}`,name:value.split('|')[1]})),reason:'正規化候補の構造レビュー。',description:`候補の ${table}。現行0.7の物理構造そのものではない。`,businessObjectIds:[],activityLinks:[],sourceRefs:[],reviewState:'未レビュー'}));
 m.relations=relationships.map(([id,from,to,fromLabel,toLabel,kind,condition])=>({id:'nr-'+id,fromConceptId:'n-'+from,toConceptId:'n-'+to,fromPerTarget:fromLabel,toPerSource:toLabel,condition,reviewState:'未レビュー',sourceRefs:[],fromLabel,toLabel,kind}));
 m.reviewGroups=[];m.handoffs=[];m.benefits=[];m.considerations=[];m.reviewPoints=[];
@@ -109,8 +109,8 @@ m.meta={sourceFormatVersion:'0.7',modelStatus:'normalized-study',scope:'Business
  const fieldRelations={'activity.whoId':['nr-who-activity'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],'step.whenDecisionRowId':['nr-step-when'],'dependency.whenDecisionRowId':['nr-dependency-when'],'dependency.prerequisiteStepId':['nr-dependency-step'],'decision.appliesWhenRowId':['nr-decision-when'],'condition.axisId':['nr-condition-axis'],'rowcheck.checkId':['nr-checklink-check']};
  return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:fieldRelations[fieldKey]??[]};
 }))};
-// A clearly labelled summary avoids pretending that a dense overview is a
-// complete ER. Every individual concept still uses the entire model graph.
+// Preserve the earlier authored 13-concept projection. The Viewer adds all
+// missing concepts and explicit relations when constructing the overview.
 const overviewIds=['bd','who','activity','object','information','data','step','result','decision','row','external','checkdoc','check'];
 const overviewRelations=['bd-actor','bd-activity','who-activity','bd-object','object-information','bd-data','activity-step','activity-result','activity-decision','decision-row','bd-checkdoc','external-checkdoc','checkdoc-check'];
 const selectedConcepts=m.concepts.filter(x=>overviewIds.includes(x.id.slice(2)));
@@ -121,6 +121,6 @@ m.presentation={landscapeRelationships:[],reviewBoundaries:[],subsystemViews:{no
 base.documents=base.documents.filter(d=>d.kind!=='conceptModel');base.documents.push(m);base.revision='normalized-model-review-1';
 validate(base);writeFileSync(new URL('../../business-design/alder/json-normalized-model-review.json',here),JSON.stringify(base,null,2)+'\n');
 const labels=new Map(definitions.map(([id,name])=>[id,name]));
-const lines=['# 正規化候補の関係一覧','','全体図は主要構造だけを表示する。この一覧は個別図の配線警告がある場合も含む全関係。多重度は、それぞれ反対側の一件に対する最大・最小件数。','', '| 出発側 | 出発側の件数 | 到着側の件数 | 到着側 | 意味 |','| --- | --- | --- | --- | --- |',...relationships.map(([,from,to,fromLabel,toLabel,,condition])=>`| ${labels.get(from)} | ${fromLabel} | ${toLabel} | ${labels.get(to)} | ${condition} |`)];
+const lines=['# 正規化候補の関係一覧','','全体図は全概念と全関係を対象にする。指定の形で配線できない関係は画面の警告とこの一覧で確認する。多重度は、それぞれ反対側の一件に対する最大・最小件数。','', '| 出発側 | 出発側の件数 | 到着側の件数 | 到着側 | 意味 |','| --- | --- | --- | --- | --- |',...relationships.map(([,from,to,fromLabel,toLabel,,condition])=>`| ${labels.get(from)} | ${fromLabel} | ${toLabel} | ${labels.get(to)} | ${condition} |`)];
 writeFileSync(new URL('relationships.ja.md',here),lines.join('\n')+'\n');
 console.log('Created normalized sample and review model:',normalized.entities.actors.length,'actors;',m.concepts.length,'concepts;',m.relations.length,'relations');

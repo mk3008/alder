@@ -20,7 +20,7 @@ assert.equal(normalized.entities.activities.find(x=>x.id==='score-review-two').w
 
 const original=read('../business-design/alder/json-structure-review.json'),pkg=read('../business-design/alder/json-normalized-model-review.json');
 assert.deepEqual(pkg.documents.filter(d=>d.kind!=='conceptModel'),original.documents.filter(d=>d.kind!=='conceptModel'),'BD and Check source and human states remain untouched');
-validate(pkg);const context=parseDocument(JSON.stringify(pkg)).model,model=context.concepts[0],views=createConceptViews({business:context.business,model}),overview=views.overviewGraph();
+validate(pkg);const context=parseDocument(JSON.stringify(pkg)).model,model=context.concepts[0],views=createConceptViews({business:context.business,model}),overview=views.authoredOverviewGraph();
 assert.equal(model.meta.modelStatus,'normalized-study');assert.match(model.meta.scope,/Business Designのみ/);
 assert(model.concepts.find(c=>c.id==='n-who').information.every(x=>x.name!=='未決'),'unknown is not a Who attribute');
 assert(model.concepts.find(c=>c.id==='n-activity').information.some(x=>x.name.includes('実行主体')));
@@ -29,7 +29,7 @@ const expected=['n-activity','n-who','0..N','0..1','reference'];assert.deepEqual
 assert.deepEqual(views.edges.find(([from,to])=>from==='n-condition'&&to==='n-axis'),['n-condition','n-axis','1..N','1','reference'],'each axis occurs once in every nonempty row');
 assert.deepEqual(overview.edges.find(([from,to])=>from==='overview-n-activity'&&to==='overview-n-who'),['overview-n-activity','overview-n-who','0..N','0..1','reference']);
 assert(overview.fieldLinks.some(x=>x.owner==='overview-n-activity'&&x.from==='overview-n-activity'&&x.to==='overview-n-who'),'Who selection is mapped to the actual activity field');
-assert.match(model.subsystems[0].name,/主要構造・全関係は一覧/,'the smaller overview is labelled');
+assert.match(model.subsystems[0].name,/全概念/,'the complete overview is labelled');
 for(const focus of ['n-who','n-activity']){
  const ids=Object.keys(views.tables),view=conceptNeighborhood(ids,views.edges,focus),sizes=new Map(view.ids.map(id=>[id,{w:Math.max(220,views.tables[id].name.length*14+64,...views.tables[id].fields.map(([,name])=>name.length*14+24)),h:44+views.tables[id].fields.length*25}]));
  assert(view.edges.some(([a,b])=>a==='n-activity'&&b==='n-who'));const d=conceptDiagram(view.ids,view.edges,sizes);
