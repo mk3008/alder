@@ -8,12 +8,12 @@ export const describeDeclaredValue=value=>value===undefined?'<missing>':typeof v
 // This classifies declared versions only; callers must also validate the package.
 export function packageVersionPolicy(pkg,target='package'){
  const format=pkg?.format,formatVersion=pkg?.formatVersion;
- demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4','0.5','0.6'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.6 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
- const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':formatVersion==='0.6'?'candidate-not-yet-editable':'explicit-only-unassessed'};
+ demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4','0.5','0.6','0.7'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.7 and direct edit is 0.4 or 0.7. Stop editing and check whether explicit conversion to a separate file is supported.`);
+ const editable=['0.4','0.7'].includes(formatVersion);return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':formatVersion==='0.6'?'candidate-not-yet-editable':'explicit-only-unassessed'};
 }
 export function requireEditablePackage(pkg,target='package'){
  const policy=packageVersionPolicy(pkg,target);
- demand(policy.editable,`${target}: format=${policy.format} formatVersion=${policy.formatVersion} cannot be edited directly; supported direct-edit version is alder-document-package 0.4. Request explicit conversion to a separate file; availability must be assessed.`);
+ demand(policy.editable,`${target}: format=${policy.format} formatVersion=${policy.formatVersion} cannot be edited directly; supported direct-edit versions are alder-document-package 0.4 and 0.7. Request explicit conversion to a separate file; availability must be assessed.`);
  return policy;
 }
 function validateForAuthoring(pkg,target){
@@ -26,7 +26,26 @@ export function checkMeaning(pkg,item){
  const normalize=(e,type)=>type==='check'?{id:e.id,title:e.title,fields:primary(e.fields)}:type==='section'?{id:e.id,activityId:e.activityId,preamble:e.preamble}:e;
  const visit=v=>{if(!v||typeof v!=='object')return;for(const [k,value]of Object.entries(v)){if(['targetId','exampleId'].includes(k)&&typeof value==='string'&&!seen.has(value)){const target=normalize(inv.map.get(value),inv.types.get(value));seen.set(value,target);visit(target);}else if(typeof value==='object')visit(value);}};
  const fields=primary(item.fields);visit(fields);const section=doc.sections.find(s=>s.id===item.sectionId);visit(section.preamble);
- return {title:item.title,fields,sectionPreamble:section.preamble,dependencies:[...seen].sort(([a],[b])=>a.localeCompare(b)).map(([,e])=>e)};
+ const base={title:item.title,fields,sectionPreamble:section.preamble,dependencies:[...seen].sort(([a],[b])=>a.localeCompare(b)).map(([,e])=>e)};
+ const bd=pkg.documents.find(d=>d.kind==='businessDesign'&&d.id===doc.basedOn.documentId);
+ const businessDecisions=(bd?.activities??[]).flatMap(activity=>{
+  const decisions=activity.decisions??[],included=new Set(),pending=decisions.filter(decision=>decision.rows.some(row=>row.checkRefs.some(ref=>ref.checkId===item.id)));
+  while(pending.length){const decision=pending.pop();if(included.has(decision.id))continue;included.add(decision.id);if(decision.appliesWhen){const dependency=decisions.find(value=>value.id===decision.appliesWhen.decisionId);if(dependency)pending.push(dependency);}}
+  return decisions.filter(decision=>included.has(decision.id)).map(decision=>({activityId:activity.id,id:decision.id,title:decision.title,kind:decision.kind,note:decision.note,appliesWhen:decision.appliesWhen,axes:decision.axes,rows:decision.rows.map(row=>({id:row.id,conditions:row.conditions,result:row.result,coverage:row.checkRefs.find(ref=>ref.checkId===item.id)?.coverage??null}))}));
+ });
+ if(!businessDecisions.length)return base;
+ const dataIds=new Set(businessDecisions.flatMap(decision=>[...decision.axes.flatMap(axis=>axis.dataIds),...decision.rows.flatMap(row=>row.result.dataIds)]));
+ const exceptionIds=new Set(businessDecisions.flatMap(decision=>decision.rows.flatMap(row=>row.result.exceptionIds)));
+ const businessData=(bd.data??[]).filter(data=>dataIds.has(data.id)).map(data=>({...data,items:data.items.map(item=>{
+  const object=(bd.objects??[]).find(value=>value.information.some(info=>typeof info!=='string'&&info.id===item.informationId));
+  return {...item,information:object?.information.find(info=>typeof info!=='string'&&info.id===item.informationId),object:object?{id:object.id,name:object.name}:null};
+ })}));
+ const businessExceptions=(bd.exceptions??[]).filter(exception=>exceptionIds.has(exception.id));
+ const linkedDecisionIds=new Set(businessDecisions.map(decision=>decision.id));
+ const procedureDependencies=(bd.activities??[]).flatMap(activity=>activity.procedure.steps.filter(step=>Array.isArray(step.dependsOn)&&(
+  (step.decisionIds??[]).some(id=>linkedDecisionIds.has(id))||linkedDecisionIds.has(step.whenDecision?.decisionId)||step.dependsOn.some(dependency=>linkedDecisionIds.has(dependency.whenDecision?.decisionId))
+ )).map(step=>({activityId:activity.id,stepId:step.id,dependsOn:step.dependsOn})));
+ return procedureDependencies.length?{...base,businessDecisions,businessData,businessExceptions,procedureDependencies}:{...base,businessDecisions,businessData,businessExceptions};
 }
 export const meaningHash=(pkg,item)=>fingerprint(checkMeaning(pkg,item));
 function confirmedBD(pkg,check,operation){
@@ -90,7 +109,14 @@ export function guardAuthoring(previous,next,operation={}){
  const used=new Set();
  for(const d of next.documents.filter(d=>d.kind==='checkItems')){
   const prior=previous?.documents.find(p=>p.id===d.id),needsBD=!prior||changedDocs.has(d.id);
-  if(needsBD)confirmedBD(next,d,operation);
+  // Version 0.7 permits hearing-time, explicitly unreviewed Check drafts in
+  // the same package. Existing confirmed/revision-required human states still
+  // require confirmation of the exact Business Design revision to rebase.
+  const draftOnly=next.formatVersion==='0.7'&&d.items.every(item=>{
+   const before=prior?.items.find(value=>value.id===item.id);
+   return ['未レビュー','要確認'].includes(item.reviewState)&&(!before||['未レビュー','要確認'].includes(before.reviewState));
+  });
+  if(needsBD&&!draftOnly)confirmedBD(next,d,operation);
   for(const item of d.items){const before=prior?.items.find(p=>p.id===item.id),decision=decisions.find(r=>r.id===item.id);
    const changed=before&&!equal(checkMeaning(previous,before),checkMeaning(next,item));
    if(decision){demand(before,'New drafts cannot be immediately human-confirmed');demand(receipt(decision.evidence),'Explicit human feedback source and quotation required');demand(decision.meaningSha256===meaningHash(next,item),'Human decision is for a different Check expectation');demand(decision.state===item.reviewState,'Human decision/state mismatch');confirmedBD(next,d,operation);used.add(item.id);}

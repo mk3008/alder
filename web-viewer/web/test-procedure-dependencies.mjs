@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {registerHooks} from 'node:module';
+import {JSDOM} from 'jsdom';
+
+const dom=new JSDOM('<!doctype html><html><body></body></html>');
+globalThis.document=dom.window.document;
+dom.window.HTMLElement.prototype.scrollIntoView=function(options){this.scrolled=options;};
+registerHooks({resolve(spec,context,next){if((spec.startsWith('./')||spec.startsWith('../'))&&!/\.[a-z0-9]+$/i.test(spec)){try{return next(spec+'.ts',context)}catch{}try{return next(spec+'.js',context)}catch{}}return next(spec,context)}});
+const {parseDocument}=await import('../src/document-input.ts');
+const {businessDetail}=await import('../src/document-view.ts');
+const read=path=>readFileSync(path,'utf8'),source=read('../tools/document_storage/examples/molkky-dependencies-v07.json');
+const view=pkg=>businessDetail(parseDocument(JSON.stringify(pkg)),'calculate-score');
+const pkg=JSON.parse(source),original=JSON.stringify(pkg),root=view(pkg),table=root.querySelector('[data-procedure-table]');
+assert.deepEqual([...table.querySelectorAll('th')].map(value=>value.textContent),['From','To','Data','Action']);
+const row=id=>root.querySelector(`[data-step-id="${id}"]`);
+assert.doesNotMatch(table.textContent,/前提：/);assert.equal(JSON.stringify(pkg),original);
+assert.deepEqual(pkg.documents[0].activities[0].procedure.steps[2].dependsOn,[{stepId:'validate',whenDecision:null}]);
+const conditional=pkg.documents[0].activities[0].procedure.steps[4].dependsOn[1];assert.deepEqual(conditional,{stepId:'calculate',whenDecision:{decisionId:'input-validation',rowId:'valid'}});
+const decision=row('validate').querySelector('button');decision.click();assert.equal(root.querySelector('[data-business-decision="input-validation"]').scrolled.block,'start');
+const reversed=structuredClone(pkg),sequence=reversed.documents[0].activities[0].procedure.steps;[sequence[1],sequence[2]]=[sequence[2],sequence[1]];assert.throws(()=>view(reversed),/contradicts prerequisite/);
+const unknown=structuredClone(pkg);unknown.documents[0].activities[0].procedure.steps[2].dependsOn=null;assert.doesNotMatch(view(unknown).textContent,/前提：未確認/);
+const legacy=JSON.parse(read('../tools/document_storage/examples/molkky-decisions-v07.json'));
+legacy.documents[0].activities[0].procedure.orderRules=[{kind:'before',beforeId:'validate',afterId:'calculate'}];
+assert.match(view(legacy).textContent,/検査する → 計算する/);assert.doesNotMatch(view(legacy).textContent,/前提が未確認の手順があります/);
+const late=JSON.parse(read('../tools/document_storage/examples/molkky-decisions-v07.json')),steps=late.documents[0].activities[0].procedure.steps;[steps[1],steps[2]]=[steps[2],steps[1]];
+assert.match(view(late).querySelector('[data-step-id="calculate"]').textContent,/判定表を参照する手順が後方です。前提を確認/);
+console.log('JSON-STRUCT-001: prerequisites remain in JSON and validation, while normal rows hide them; decision links and diagnostics remain.');

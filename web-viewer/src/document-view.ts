@@ -1,10 +1,13 @@
 import {activityRole} from './roles';
 import type {Design} from './graph';
-import type {BD,Check,Run,LegacyActivity,ProcedureActivity,Party} from './json-document';
+import type {BD,Check,Run,LegacyActivity,ProcedureActivity,Party,BusinessDecision,DecisionRow} from './json-document';
 import {formattedMarkdown} from './markdown';
 import {activityWho,legacyPerformerNames,relationLabel} from './structured-display';
+import {businessDecisionTable,conditionLabel,decisionExceptions} from './business-decisions';
 // @ts-expect-error The shared storage validator is a JavaScript module.
 import {exampleCheckIds} from '../../tools/document_storage/core.mjs';
+// @ts-expect-error The shared dependency diagnostic is a JavaScript module.
+import {laterDecisionReference} from '../../tools/document_storage/procedure-structure.mjs';
 const element=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function field(root:HTMLElement,name:string,value:string|null|undefined){if(value===null||value===undefined)return;const content=formattedMarkdown(value);root.append(element('h3',name),content);return content;}
 function dataDetails(bd:BD,ids:string[]){const list=element('ul');for(const id of [...new Set(ids)]){const data=bd.data?.find(d=>d.id===id);if(!data)continue;for(const entry of data.items){const info=bd.objects.flatMap(o=>o.information).find(i=>typeof i!=='string'&&i.id===entry.informationId);if(!info||typeof info==='string')continue;const name=info.name===data.name?'':info.name,condition=entry.condition?`条件：${entry.condition}`:'';if(!name&&!condition&&!info.description)continue;const item=element('li',[name,condition].filter(Boolean).join(' — '));if(info.description)item.append(formattedMarkdown(info.description));list.append(item);}}return list;}
@@ -40,6 +43,50 @@ function variationKinds(design:Design,activityId:string,items:{id:string}[]):Map
  }
  return kinds;
 }
+function decisionProcedure(root:HTMLElement,design:Design,a:ProcedureActivity){
+ const bd=design.model!.business,checks=design.model!.checks,decisions=a.decisions??[],sections=new Map<string,HTMLElement>();
+ const number=(id:string)=>decisions.findIndex(decision=>decision.id===id)+1;
+ const link=(id:string,rowId?:string)=>{const button=element('button',`（※${number(id)}）`);button.type='button';button.className='business-decision-link';button.onclick=()=>{const section=sections.get(id),row=rowId?Array.from(section?.querySelectorAll('tr')??[]).find(item=>item.dataset.decisionRow===rowId):undefined;(row??section)?.scrollIntoView({behavior:'smooth',block:row?'center':'start'});};return button;};
+ const branchLabel=(decision:BusinessDecision|undefined,branch:DecisionRow|undefined,showConditions:boolean)=>{
+  if(!decision||!branch)return '未決';
+  const result=branch.result.text??'未決';if(!showConditions)return result;
+  const conditions=branch.conditions.map((condition,i)=>`${decision.axes[i].name}：${conditionLabel(condition,decision.axes[i])}`).join('、');
+  return `${result}（${decision.rows.indexOf(branch)+1}行目：${conditions}）`;
+ };
+ const party=(value:Party|null|undefined)=>!value?'未決':value.kind==='who'?activityWho(bd,a):(bd.objects.find(object=>object.id===value.objectId)?.name??'未決');
+ const sameData=(a:string[]|null,b:string[]|null)=>a===null||b===null?a===b:a.length===b.length&&a.every((id,i)=>id===b[i]);
+ const simpleData=(ids:string[]|null)=>{if(ids?.length===1&&!dataDetails(bd,ids).children.length)return element('span',bd.data?.find(data=>data.id===ids[0])?.name??'未決');return procedureData(bd,ids);};
+ root.append(element('h3','Procedure'));
+ const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');hint.className='procedure-scroll-hint';root.append(hint);
+ const scroll=element('div');scroll.dataset.procedureScroll='';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute('aria-label','手順表');
+ const table=element('table');table.dataset.procedureTable='';table.dataset.businessDecisions='';const head=element('thead'),headRow=element('tr');
+ for(const title of ['From','To','Data','Action']){const th=element('th',title);th.scope='col';headRow.append(th);}head.append(headRow);table.append(head);const body=element('tbody');
+ const stepLabel=(id:string)=>{const index=a.procedure.steps.findIndex(step=>step.id===id),step=a.procedure.steps[index];return a.procedure.steps.filter(item=>item.action===step.action).length>1?`${step.action}（${index+1}行目）`:step.action;};
+ for(const [index,step] of a.procedure.steps.entries()){
+  const row=element('tr');row.dataset.stepId=step.id;const x=step.exchange,who=activityWho(bd,a),object=x.kind==='interaction'?(bd.objects.find(o=>o.id===x.objectId)?.name??'未決'):null;
+  const from=x.kind==='interaction'?(x.direction==='input'?object!:who):x.kind==='internal'?who:'未決';
+  const to=x.kind==='interaction'?(x.direction==='input'?who:object!):x.kind==='internal'?'—':'未決';
+  row.append(element('td',from),element('td',to));const data=element('td');
+  if(x.kind!=='interaction'||sameData(step.whatDataIds,x.dataIds))data.append(simpleData(step.whatDataIds));
+  else data.append(element('span','対象：'),simpleData(step.whatDataIds),element('span','受渡し：'),simpleData(x.dataIds));row.append(data);
+  const action=element('td',step.action);for(const id of step.decisionIds??[])action.append(link(id));
+  if(laterDecisionReference(a,step))action.append(element('small','判定表を参照する手順が後方です。前提を確認'));
+  const metadata:string[]=[],optional=step.obligation==='optional';let conditionReference:{decisionId:string;rowId:string}|undefined;if(step.method)metadata.push(`方法：${step.method}`);if(step.appliesWhen)metadata.push(`適用条件：${step.appliesWhen}`);if(step.effect)metadata.push(`操作効果：${step.effect}`);
+  if(step.whenDecision){const decision=decisions.find(item=>item.id===step.whenDecision!.decisionId),branch=decision?.rows.find(item=>item.id===step.whenDecision!.rowId);
+   const shownEarlier=a.procedure.steps.slice(0,index).some(item=>item.decisionIds?.includes(decision?.id??''));
+   const clearValidation=decision?.kind==='validation'&&branch?.result.kind==='accepted'&&decision.rows.some(item=>item.result.kind==='error')&&decision.rows.every(item=>item===branch||item.result.kind==='error')&&shownEarlier;
+   if(!clearValidation){metadata.push(`判定条件：${decision?.title??'未決'} / ${branchLabel(decision,branch,true)}`);conditionReference=step.whenDecision;}
+  }
+  if(step.parties){const suppliedFrom=party(step.parties.from),suppliedTo=party(step.parties.to);if(suppliedFrom!==from||suppliedTo!==to)metadata.push(`操作主体と対象：${suppliedFrom} → ${suppliedTo}`);}
+  if(x.kind==='interaction'){if(x.phase===null)metadata.push('Request/Response：未決');else if(x.phase!=='not-applicable')metadata.push(x.phase==='request'?'Request':'Response');if(x.pairedStepId)metadata.push(`対応：手順${a.procedure.steps.findIndex(item=>item.id===x.pairedStepId)+1}`);}
+  else if(x.kind==='unresolved')metadata.push('やり取り：未決');
+  if(metadata.length){const more=element('details'),summary=element('summary',optional?'詳細（任意）':'詳細'),text=element('small',metadata.join(' · '));if(conditionReference)text.append(link(conditionReference.decisionId,conditionReference.rowId));more.className='procedure-original';more.append(summary,text);action.append(more);}else if(optional)action.append(element('small','（任意）'));
+  if(step.legacyText){const original=element('details');original.className='procedure-original';original.append(element('summary','元の手順'),formattedMarkdown(step.legacyText));action.append(original);}row.append(action);body.append(row);
+ }
+ table.append(body);scroll.append(table);root.append(scroll);
+ if(a.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul');for(const rule of a.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`${stepLabel(rule.beforeId)} → ${stepLabel(rule.afterId)}`:`${rule.stepIds.map(stepLabel).join('・')}は入替可能`));root.append(rules);}
+ for(const decision of decisions){const section=element('section');section.dataset.businessDecision=decision.id;sections.set(decision.id,section);section.append(element('h3',`${decision.title}（※${number(decision.id)}）`));if(decision.appliesWhen){const parent=decisions.find(value=>value.id===decision.appliesWhen!.decisionId),branch=parent?.rows.find(value=>value.id===decision.appliesWhen!.rowId),ambiguous=!!branch&&!!parent&&parent.rows.filter(row=>row.result.text===branch.result.text).length>1,condition=element('p',`適用条件：${parent?.title??'未決'} — ${branchLabel(parent,branch,ambiguous)}`);condition.append(link(decision.appliesWhen.decisionId,decision.appliesWhen.rowId));if(decision.note)condition.append(document.createTextNode(' · '+decision.note));section.append(condition);}else if(decision.note)section.append(element('p',decision.note));section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'),businessDecisionTable(decision,checks),...decisionExceptions(decision,bd,checks));root.append(section);}
+}
 export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:string)=>void):HTMLElement{
  const root=element('article');root.className='markdown json-detail';const json=design.model!,bd=json.business;
  const object=bd.objects.find(n=>n.id===id),activity=bd.activities.find(n=>n.id===id);
@@ -63,6 +110,8 @@ export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:
   }else if(typeof activity.who!=='string'){
    const a=activity as ProcedureActivity;
    field(root,'Scope',a.scope===null?'未決':String(a.scope));field(root,'Why',a.why);field(root,'When',a.when);field(root,'Who',activityWho(bd,a));field(root,'Where',a.where);
+   if(json.formatVersion==='0.7')decisionProcedure(root,design,a);
+   else{
    root.append(element('h3','Procedure'));
    const table=element('table');table.dataset.procedureTable='';const head=element('thead'),header=element('tr');for(const name of ['Step','From','To','Data','Action']){const th=element('th',name);th.scope='col';header.append(th);}head.append(header);table.append(head);const body=element('tbody');
    const party=(p:Party|null|undefined)=>!p?'未決':p.kind==='who'?activityWho(bd,a):(bd.objects.find(o=>o.id===p.objectId)?.name??'未決');
@@ -76,11 +125,12 @@ export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:
     if(details.length)action.append(element('small',details.join(' · ')));if(step.legacyText){const original=element('details');original.className='procedure-original';original.append(element('summary','元の手順'),formattedMarkdown(step.legacyText));action.append(original);}row.append(action);body.append(row);
    }table.append(body);const hint=element('p','表は左右にスクロールできます。無印の手順は必須です。');hint.className='procedure-scroll-hint';const scroll=element('div');scroll.dataset.procedureScroll='';scroll.tabIndex=0;scroll.setAttribute('role','region');scroll.setAttribute('aria-label','手順表');scroll.append(table);root.append(hint,scroll);
    if(a.procedure.orderRules.length){root.append(element('h3','手順の順序制約'));const rules=element('ul'),number=(id:string)=>String(a.procedure.steps.findIndex(s=>s.id===id)+1);for(const rule of a.procedure.orderRules)rules.append(element('li',rule.kind==='before'?`手順${number(rule.beforeId)} → 手順${number(rule.afterId)}`:`手順${rule.stepIds.map(number).join('・')}は入替可能`));root.append(rules);}
+   }
    root.append(element('h3','Result'));const results=element('ul');results.dataset.businessResult='';results.dataset.resultScope='activity';for(const result of a.results){const item=element('li');item.append(formattedMarkdown(result.text));results.append(item);}root.append(results);field(root,'Problem',a.problem);field(root,'Pain level',a.painLevel);
   }else {const a=activity as LegacyActivity;for(const [label,key]of [['Scope','scope'],['Why','why'],['When','when'],['Who','who'],['Where','where'],['Procedure','procedure'],['Result','result'],['Problem','problem'],['Pain level','painLevel']] as const){const content=field(root,label,key==='who'?(activityRole(design,a.id)?.name??a.who):a[key]===null?null:String(a[key]));if(key==='result'&&content)content.dataset.businessResult='';}}
   const summary=exceptionSummary('exception' in activity?activity.exception:null,exceptions),kinds=variationKinds(design,activity.id,exceptions);
   const section=(title:string,items:typeof exceptions,extra?:HTMLElement)=>{if(!items.length&&!extra)return;const group=element('section');group.dataset.businessVariations='';group.append(element('h3',title));if(extra)group.append(extra);for(const item of items){const content=formattedMarkdown(item.description);content.dataset.businessException=item.id;group.append(element('h4',item.name),content);const c=item.continuity;if(c){const lines=element('dl');const stepName=(id:string|null)=>id&&typeof activity.procedure!=='string'?`手順${activity.procedure.steps.findIndex(s=>s.id===id)+1}`:'未決';const dataName=(ids:string[]|null)=>ids===null?'未決':ids.map(id=>bd.data?.find(d=>d.id===id)?.name??'未決').join('、')||'なし';const entries:[string,string][]=[['発生条件',c.trigger??'未決']];if(c.onInterrupt!==null||c.outcome==='resume'||c.outcome===null)entries.push(['中断時の扱い',c.onInterrupt??'未決']);entries.push(['その後',c.outcome==='resume'?'再開':c.outcome==='continue'?'そのまま続行':c.outcome==='end'?'終了':'未決']);if(c.outcome==='resume'||c.outcome===null||c.resumeCondition!==null||c.resumeAction!==null)entries.push(['再開条件',c.resumeCondition??'未決'],['再開方法',c.resumeAction??'未決']);if(c.interruptedAtStepId)entries.push(['中断した手順',stepName(c.interruptedAtStepId)]);if(c.resumeAtStepId)entries.push(['再開する手順',stepName(c.resumeAtStepId)]);if(c.retainedDataIds!==null||c.outcome==='resume')entries.push(['保持するData',dataName(c.retainedDataIds)]);for(const [key,value]of entries)lines.append(element('dt',key),element('dd',value));group.append(lines);}}root.append(group);};
-  if(json.formatVersion==='0.6')section('Exception',exceptions,summary);
+  if(['0.6','0.7'].includes(json.formatVersion))section('Exception',exceptions,summary);
   else if(!kinds.size)section('通常以外の扱い',exceptions,summary);
   else{
    section('例外',exceptions.filter(item=>kinds.get(item.id)==='exception'));
@@ -88,7 +138,7 @@ export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:
    section('通常以外の扱い',exceptions.filter(item=>!kinds.has(item.id)),summary);
   }
   const names=new Map([...bd.objects,...bd.activities].map(n=>[n.id,n.name]));
-  if(json.formatVersion==='0.6'){
+  if(['0.6','0.7'].includes(json.formatVersion)){
    for(const [kind,label]of [['input','Input'],['output','Output'],['business-exception','Exception When']] as const){
     const relations=design.graph.relations.filter(r=>r.kind===kind&&(r.from===id||r.to===id));if(!relations.length)continue;
     root.append(element('h3',label));const list=element('ul');
@@ -111,11 +161,23 @@ export function businessDetail(design:Design,id?:string,onStructureFinding?:(id:
  }else{root.append(element('p','項目を選択すると業務内容を表示します。'));}
  return root;
 }
+function linkedBusinessDecisions(design:Design,itemId:string){
+ if(design.model?.formatVersion!=='0.7')return [];
+ return design.model.business.activities.flatMap(activity=>'decisions' in activity?activity.decisions??[]:[]).filter(decision=>decision.rows.some(row=>row.checkRefs.some(ref=>ref.checkId===itemId)));
+}
+function appendLinkedBusinessDecisions(root:HTMLElement,design:Design,item:Check['items'][number]){
+ const direct=new Set(Object.values(item.fields).flat().filter(run=>run.kind==='reference').map(run=>(run as Extract<Run,{kind:'reference'}>).targetId));
+ for(const decision of linkedBusinessDecisions(design,item.id)){
+  if(decision.rows.some(row=>direct.has(row.id)))continue;
+  const detail=element('details');detail.dataset.linkedBusinessDecision=decision.id;detail.append(element('summary',`${decision.title}（業務判断）`));let loaded=false;
+  detail.addEventListener('toggle',()=>{if(!detail.open||loaded)return;loaded=true;detail.append(businessDecisionTable(decision,design.model!.checks),...decisionExceptions(decision,design.model!.business,design.model!.checks));});root.append(detail);
+ }
+}
 /** References are expanded on demand. Neither a cycle nor fan-out eagerly builds a tree. */
 class RichReader{
  private remaining=5000;private warned=false;
- private doc:Check;private requester:boolean;
- constructor(doc:Check,requester=false){this.doc=doc;this.requester=requester;}
+ private doc:Check;private design:Design;private requester:boolean;
+ constructor(doc:Check,design:Design,requester=false){this.doc=doc;this.design=design;this.requester=requester;}
  private take(root:HTMLElement){if(this.remaining-->0)return true;if(!this.warned){this.warned=true;root.append(element('p','展開する内容が表示量の上限に達しました。続きは原文で確認してください。'));}return false;}
  runs(root:HTMLElement,values:Run[],seen=new Set<string>()){
   for(const r of values){if(!this.take(root))break;
@@ -133,6 +195,11 @@ class RichReader{
     else if(section){detail.append(element('h4',section.title));this.runs(detail,section.preamble,visited);}
     else if(note){detail.append(element('h4',note.title));this.runs(detail,note.content,visited);}
     else if(r.targetId===doc.id){detail.append(element('h4',doc.title));this.runs(detail,doc.intro,visited);}
+    else if(this.design.model?.formatVersion==='0.7'){
+     const bd=this.design.model.business,decision=bd.activities.flatMap(activity=>'decisions' in activity?activity.decisions??[]:[]).find(value=>value.rows.some(row=>row.id===r.targetId)),exception=bd.exceptions?.find(value=>value.id===r.targetId);
+     if(decision)detail.append(element('h4',decision.title),businessDecisionTable(decision,this.design.model.checks),...decisionExceptions(decision,bd,this.design.model.checks));
+     else if(exception)detail.append(element('h4',exception.name),formattedMarkdown(exception.description));
+    }
    });
   }
  }
@@ -162,10 +229,10 @@ export function renderChecks(design:Design,selected?:string,checks=design.model!
  const root=element('section');root.className='check-content json-checks';const json=design.model!,bd=json.business;
  root.append(element('p','原典の意味対応は未確認です。ID・版の一致は、業務合意やCheckの人間承認を表しません。'));
  if(!checks.length){root.append(element('p','この文書にCheck Itemはありません。'));return root;}
- for(const doc of checks){const reader=new RichReader(doc);
+ for(const doc of checks){const reader=new RichReader(doc,design);
   root.append(element('h3',doc.title),element('p',`Check ${doc.revision} · BD ${doc.basedOn.revision} · ${doc.basedOn.verification}`));reader.runs(root,doc.intro);
   if(doc.basedOn.documentId!==bd.id){root.append(element('p','別の原典BDを参照しているため、この図へ関連付けません。'));continue;}
-  const card=(id:string)=>{const item=doc.items.find(i=>i.id===id)!;const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;section.append(element('h3',`${item.checkId} · ${item.title}`),element('p',`人間レビュー状態: ${item.reviewState}`));reader.fields(section,item.fields,new Set([item.id]));if(item.detailSummary)field(section,'補足',item.detailSummary);root.append(section);};
+  const card=(id:string)=>{const item=doc.items.find(i=>i.id===id)!;const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;section.append(element('h3',`${item.checkId} · ${item.title}`),element('p',`人間レビュー状態: ${item.reviewState}`));reader.fields(section,item.fields,new Set([item.id]));appendLinkedBusinessDecisions(section,design,item);if(item.detailSummary)field(section,'補足',item.detailSummary);root.append(section);};
   const unknown=doc.index.filter(r=>!bd.activities.some(a=>a.id===r.activityId));if(unknown.length)root.append(element('p','対応先不明: '+unknown.map(r=>r.activityId).join('、')));
   const row=doc.index.find(r=>r.activityId===selected);
   if(!row)root.append(element('p','Activityを選択すると、対応するCheckを表示します。'));
@@ -181,7 +248,7 @@ export function renderRequesterChecks(design:Design,activityId?:string,documents
  const checks=documents.filter(doc=>doc.basedOn.documentId===bd.id);
  let found=false;
  for(const doc of checks){
-  const reader=new RichReader(doc),rows=doc.index.filter(row=>row.activityId===activityId);
+  const reader=new RichReader(doc,design),rows=doc.index.filter(row=>row.activityId===activityId);
   const assigned=new Set(doc.index.flatMap(row=>row.checkIds));
   const ids=(activityId?[...new Set(rows.flatMap(row=>row.checkIds))]:doc.items.filter(item=>!assigned.has(item.id)).map(item=>item.id)).filter(id=>!exclude.has(id));
   const sections=doc.sections.filter(section=>activityId?section.activityId===activityId:section.activityId===null);
@@ -194,7 +261,7 @@ export function renderRequesterChecks(design:Design,activityId?:string,documents
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;section.append(element('h3',item.checkId+' · '+item.title));
    if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question','alternatives'].includes(name)));
-   reader.fields(section,fields,new Set([item.id]));root.append(section);
+   reader.fields(section,fields,new Set([item.id]));appendLinkedBusinessDecisions(section,design,item);root.append(section);
   }
   if(!activityId)for(const note of doc.notes){found=true;reader.runs(root,[{kind:'reference',targetId:note.id,label:note.title}]);}
  }
@@ -206,12 +273,12 @@ export function renderRequesterChecks(design:Design,activityId?:string,documents
 export function renderLinkedChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks sample-checks';const bd=design.model!.business,wanted=new Set(ids);
  for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
-  const reader=new RichReader(doc);
+  const reader=new RichReader(doc,design);
   for(const item of doc.items.filter(item=>wanted.has(item.id))){
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
    section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['classification','condition','expectedResult','guarantee','question','alternatives'].includes(name)));
-   reader.fields(section,fields,new Set([item.id]),true);root.append(section);
+   reader.fields(section,fields,new Set([item.id]),true);appendLinkedBusinessDecisions(section,design,item);root.append(section);
   }
  }
  return root;
@@ -230,7 +297,7 @@ export function renderDecisionExamples(design:Design,ids:string[],documents=desi
  const root=element('section');root.className='check-content json-checks decision-examples';const bd=design.model!.business;
  for(const id of ids)for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
   const example=doc.examples.find(value=>value.id===id);if(!example||!exampleCheckIds(doc,example).length)continue;
-  const reader=new RichReader(doc,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
+  const reader=new RichReader(doc,design,true),guarantee=doc.guarantees.find(value=>value.id===example.guaranteeId),section=element('section');section.dataset.decisionExample=id;
   for(const block of guarantee?.blocks??[])if(block.kind==='prose')reader.runs(section,decisionProse(block.content),new Set([guarantee!.id]));
   if(example.rows.length>1)section.append(element('p','上から順に判定し、最初に当てはまる行を見ます。'));
   const resultColumn=example.columns.indexOf('結果'),conditionCount=resultColumn>0?resultColumn:example.columns.length;
@@ -245,14 +312,14 @@ export function renderDecisionExamples(design:Design,ids:string[],documents=desi
 export function renderDecisionChecks(design:Design,ids:string[],documents=design.model!.checks):HTMLElement{
  const root=element('section');root.className='check-content json-checks decision-checks';const bd=design.model!.business,wanted=new Set(ids);
  for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
-  const reader=new RichReader(doc,true);
+  const reader=new RichReader(doc,design,true);
   for(const item of doc.items.filter(value=>wanted.has(value.id))){
    const section=element('section');section.className='check-item';section.dataset.checkId=item.checkId;section.dataset.elementId=item.id;
    section.append(element('h3',item.checkId+' · '+item.title));if(item.reviewState==='要確認'||item.reviewState==='要修正')section.append(element('p','確認が必要です。'));
    if(item.fields.condition?.length){section.append(element('h4','条件'));reader.runs(section,item.fields.condition,new Set([item.id]));}
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));
    if(Object.keys(fields).length){const detail=element('details');detail.append(element('summary','期待結果'));reader.fields(detail,fields,new Set([item.id]),true);section.append(detail);}
-   root.append(section);
+   appendLinkedBusinessDecisions(section,design,item);root.append(section);
   }
  }
  return root;
@@ -262,8 +329,8 @@ export function renderDecisionChecks(design:Design,ids:string[],documents=design
 export function renderResultChecks(design:Design,ids:string[],documents=design.model!.checks,sampledIds=new Set<string>()):HTMLElement{
  const root=element('section');root.className='check-content json-checks result-checks';const bd=design.model!.business,wanted=new Set(ids);
  for(const doc of documents.filter(d=>d.basedOn.documentId===bd.id&&d.basedOn.revision===bd.revision)){
-  const reader=new RichReader(doc,true);
-  const explained=doc.items.filter(item=>wanted.has(item.id)&&sampledIds.has(item.id)&&item.reviewState!=='要確認'&&item.reviewState!=='要修正'&&!item.fields.question?.length&&!item.fields.alternatives?.length);
+  const reader=new RichReader(doc,design,true);
+  const explained=doc.items.filter(item=>wanted.has(item.id)&&sampledIds.has(item.id)&&item.reviewState!=='要確認'&&item.reviewState!=='要修正'&&!item.fields.question?.length&&!item.fields.alternatives?.length&&!linkedBusinessDecisions(design,item.id).length);
   if(explained.length)root.append(element('p',explained.map(item=>item.checkId).join('、')));
   for(const item of doc.items.filter(value=>wanted.has(value.id))){
    if(explained.includes(item))continue;
@@ -272,7 +339,7 @@ export function renderResultChecks(design:Design,ids:string[],documents=design.m
    const fields=Object.fromEntries(Object.entries(item.fields).filter(([name])=>['expectedResult','guarantee','question','alternatives'].includes(name)));
    reader.fields(section,fields,new Set([item.id]),true);
    const detail=element('details'),summary=element('summary','Check の詳細');detail.append(summary,element('p',item.title));if(item.fields.condition?.length)reader.runs(detail,item.fields.condition,new Set([item.id]));section.append(detail);
-   root.append(section);
+   appendLinkedBusinessDecisions(section,design,item);root.append(section);
   }
  }
  return root;

@@ -49,6 +49,24 @@ const newBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.5']},
  objects:array(obj({...scopedEntity,icon:text,information:array(information)})),
  activities:nonempty(obj({...structuredActivityProperties,...scopedEntity,who,procedure:obj({steps:nonempty(newStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
  exceptions:array(procedureException),data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
+// 0.7 keeps the 0.6 interaction meaning and adds Activity-owned decisions.
+// Cells, their operators, result references and Check links are separate from
+// readable business terms; they are not an executable rules language.
+const decisionValue={anyOf:[text,{type:'number'},{type:'boolean'}]};
+const decisionCondition={anyOf:[
+ obj({axisId:id,kind:{enum:['value']},operator:{enum:['is','eq','gte','lte','gt','lt']},value:decisionValue}),
+ ...['else','any','undecided'].map(kind=>obj({axisId:id,kind:{enum:[kind]}}))
+]};
+const decisionAxis=obj({id,name:text,dataIds:array(id),unit:str,trueLabel:text,falseLabel:text},['id','name','dataIds']);
+const decisionResult=obj({kind:{enum:['accepted','error','value','undecided']},text:nullable(text),dataIds:array(id),exceptionIds:array(id)});
+const decisionRow=obj({id,conditions:nonempty(decisionCondition),result:decisionResult,checkRefs:array(obj({checkId:id,coverage:{enum:['full','partial']}}))});
+const decisionReference=obj({decisionId:id,rowId:id});
+const decisionTable=obj({id,title:text,kind:{enum:['authorization','validation','algorithm']},note:nullable(text),appliesWhen:nullable(decisionReference),axes:nonempty(decisionAxis),rows:nonempty(decisionRow)});
+// An omitted or null dependency list is undecided; [] explicitly records that
+// the Step has no local prerequisites. Older 0.7 candidates stay readable.
+const stepPrerequisite=obj({stepId:id,whenDecision:nullable(decisionReference)});
+const decisionStep=obj({...newStep.properties,decisionIds:array(id),whenDecision:nullable(decisionReference),dependsOn:nullable(array(stepPrerequisite))},[...newStep.required,'decisionIds','whenDecision']);
+const decisionBD=obj({...newBD.properties,schemaVersion:{enum:['0.6']},activities:nonempty(obj({...newBD.properties.activities.items.properties,procedure:obj({steps:nonempty(decisionStep),orderRules:array(orderRule)}),decisions:array(decisionTable)}))});
 const checkFields=Object.fromEntries(['classification','condition','expectedResult','guarantee','evidence','derivation','related','testEvidence','question','alternatives','confidence'].map(k=>[k,rich]));
 const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},revision:text,title:text,basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),intro:rich,
  index:array(obj({activityId:id,purpose:str,connections:str,checkIds:array(id)})),
@@ -107,4 +125,4 @@ const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptMode
   reviewBoundaries:array(obj({from:id,to:id,label:str,promise:str}))},['landscapeRelationships','reviewBoundaries'])});
 const checkedConceptModel=obj({...conceptModel.properties,schemaVersion:{enum:['0.2']},reviewGroups:array(checkedReviewGroup)});
 const packageShape=(version,kinds)=>obj({format:{enum:['alder-document-package']},formatVersion:{enum:[version]},revision:text,documents:array({anyOf:kinds.map(ref)}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)});
-export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.5',['oldStructuredBusinessDesign','checkItems','stateTransitionStructured']),packageShape('0.6',['procedureBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,oldStructuredBusinessDesign:oldStructuredBD,procedureBusinessDesign:newBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};
+export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.5',['oldStructuredBusinessDesign','checkItems','stateTransitionStructured']),packageShape('0.6',['procedureBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.7',['decisionBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,oldStructuredBusinessDesign:oldStructuredBD,procedureBusinessDesign:newBD,decisionBusinessDesign:decisionBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};

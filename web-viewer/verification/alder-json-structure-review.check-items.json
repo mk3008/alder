@@ -1,0 +1,17 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "手順の前提表示の整理と、0.7候補のJSON構造を既存Viewerで確認するためのモデル",
+  "source": "2026-11-04 本人：前提は必要だが表示は不要、黄色の詳細の必要性を確認し、既存JSONを概念モデルのViewerで見たい",
+  "supersedes": [{
+    "id": "DEP-005",
+    "scope": "前提をAction欄に表示して前提手順へ移動する保証のみ",
+    "reason": "本人が前提の表示は不要と明示した。",
+    "retained": "前提のJSON保持・参照と順序の検証、4列、判定表、旧版やその他の手順情報の保持"
+  }],
+  "checks": [
+    {"id":"JSON-STRUCT-001","condition":"0.7候補の前提が記録・未確認・条件付きである手順を表示する","guarantee":"前提を通常の手順行に表示せず、前提情報・条件・元JSON・前提の正負検証を維持する。","reason":"レビュー時の表示を簡潔にし、機械検査に必要な情報を失わない。","verification":"手順DOM・正負の構造検査・元JSON照合"},
+    {"id":"JSON-STRUCT-002","condition":"現在の0.7候補を概念モデルとして説明する","guarantee":"構造は固定commitのSchemaと検証器に対応させ、入れ子、配列、参照と件数、未決・空、誰、要求応答と対応手順の実際の制約を区別する。","reason":"閲覧者が現在の実装と検討案を区別できる。","verification":"固定Schema・Validator・実例を構造単位で照合"},
+    {"id":"JSON-STRUCT-003","condition":"構造説明用のモデルをViewerで開く","guarantee":"既存のデータ構造Viewerで図と各概念の説明を閲覧できる。実業務の原本・Check確認状態や正式契約を変更しない。","reason":"現行JSONの関連を画面でたどれる。","verification":"JSON validate、Viewer DOM、固定Previewの実画面"},
+    {"id":"JSON-STRUCT-004","condition":"手順の黄色の詳細について必要性を判断する","guarantee":"画面の内容と保存されるフィールド、現行の検証で使う条件を区別し、表の情報だけでは識別できない例を確認する。その他の方法や任意条件等の情報を削除しない。","reason":"AIと人間にとって必要な情報と冗長な表示を分ける。","verification":"Request／Responseと対応Stepの有無・不一致・複数往復をコードとJSONで確認"}
+  ]
+}

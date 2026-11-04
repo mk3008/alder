@@ -1,0 +1,13 @@
+{
+  "format": "storage-verification/1",
+  "scope": "手順の前提関係とその表示",
+  "source": "2026-11-04 本人方針：並列の専用表現は不要、依存を守る範囲で手順の標準順を変更可能",
+  "checks": [
+    {"id":"DEP-001","condition":"確認済みの前提手順がある","guarantee":"同じActivityの手順IDで前提を保存し、標準順で前提が先にあることを検査する。前提を守る無関係な手順の入替は許す。","reason":"表示順そのものではなく、実際に必要な依存を維持する。","verification":"test-procedure-dependencies.mjs の正常、独立手順の入替、前後逆転"},
+    {"id":"DEP-002","condition":"前提が未確認または前提がないと確認済み","guarantee":"未記載・nullと空配列を区別し、Dataや判定表の参照から前提手順を推測しない。既存0.7を暗黙に書き換えない。","reason":"未確認を依存なしと読み替えない。","verification":"test-procedure-dependencies.mjs の旧0.7、null、空配列と結果の参照"},
+    {"id":"DEP-003","condition":"前提の参照が不正または旧順序制約と矛盾する","guarantee":"無効・別Activity・重複・自己参照・循環・標準順との矛盾を拒否し、旧入替可能制約と依存の矛盾を検出する。","reason":"依存を守った並びと誤参照を区別する。","verification":"test-procedure-dependencies.mjs の不正例"},
+    {"id":"DEP-004","condition":"任意や条件付きの手順を前提にする","guarantee":"任意・条件を保持し、先行手順を実行する条件が常に満たされるとは推定しない。確認が必要な場合は通知する。","reason":"前後関係だけから実行や条件の成立を保証しない。","verification":"test-procedure-dependencies.mjs の任意・条件付き例"},
+    {"id":"DEP-005","condition":"判定表を伴う手順をViewerで開く","guarantee":"既存のFrom・To・Data・Actionの4列と判定表を維持し、前提手順をActionから読み取って対象行に移動できる。未確認を依存なしと表示しない。","reason":"前提の確認を手順から行える。","verification":"test-procedure-dependencies.mjs と実画面の確認"},
+    {"id":"DEP-006","condition":"旧形式の順序規則を読み、または0.5から明示移行する","guarantee":"前後・入替可能の旧規則と原本・ID・人間確認状態を保持する。確認済みの規則が候補から失われた場合は移行準備を拒否する。","reason":"新しい表現で旧情報を失わない。","verification":"test-scope-procedure.mjs の旧規則保全と変更・削除"}
+  ]
+}

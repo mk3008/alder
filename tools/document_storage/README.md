@@ -47,3 +47,5 @@ const nextJSON = stringify(next);
 - 検証：`node --test tools/document_storage/test-storage.mjs`
 
 CLIは既存ファイルを上書きしません。失敗時はJSONを確定せず、stderrへ診断を出しexit 2で終了します。Markdownの全方言や曖昧な名前対応は対象外です。JSON→Markdown逆変換は提供しません。
+
+Draft PRの候補0.7では、業務設計の判定表とProcedure・Check草案を参照で結びます。[契約と移行の説明](../../docs/business-design-decisions-v07.ja.md)と合成例 `examples/molkky-decisions-v07.json` を参照してください。`prepare-decision-upgrade` は0.6から別の0.7 BD候補を作り、原本や依存文書、人間確認状態を変更・自動追従しません。

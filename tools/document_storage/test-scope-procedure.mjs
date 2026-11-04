@@ -168,6 +168,18 @@ test('SP-011/013: old 0.5 keeps every Step/Data/Relation and never infers direct
  const moved=structuredClone(candidate),info=bd(moved).objects[0].information.shift();bd(moved).objects[1].information.push(info);assert.throws(()=>prepareProcedureUpgrade(old,moved,request),/owner changed/i);
 });
 
+test('DEP-006: explicit migration preserves every old before and interchangeable rule',()=>{
+ const {old,candidate}=old05Fixture(),source=old.documents[0].activities[0];
+ source.procedure.orderRules=[{kind:'before',beforeId:'read',afterId:'write'},{kind:'interchangeable',stepIds:['read-response','write-response']}];
+ activity(candidate).procedure.orderRules=structuredClone(source.procedure.orderRules);
+ const original=JSON.stringify(old),request={expectedRevision:old.revision,expectedSha256:fingerprint(original)};
+ assert.doesNotThrow(()=>prepareProcedureUpgrade(old,candidate,request));
+ const reordered=structuredClone(candidate);activity(reordered).procedure.orderRules[1].stepIds.reverse();assert.doesNotThrow(()=>prepareProcedureUpgrade(old,reordered,request));
+ const missing=structuredClone(candidate);activity(missing).procedure.orderRules.pop();assert.throws(()=>prepareProcedureUpgrade(old,missing,request),/omitted legacy Step order/);
+ const changed=structuredClone(candidate);activity(changed).procedure.orderRules[0].afterId='write-response';assert.throws(()=>prepareProcedureUpgrade(old,changed,request),/omitted legacy Step order/);
+ assert.equal(JSON.stringify(old),original);
+});
+
 test('SP-012: protected authoring retains nested identities and does not silently reassign Information',()=>{
  const next=copy();next.revision='example-2';bd(next).revision='bd-2';step(next,'write').action+='（確認）';assert.equal(guardAuthoring(example,next,{expectedRevision:example.revision}).valid,true);
  const moved=structuredClone(next),info=bd(moved).objects[0].information.pop();bd(moved).objects[1].information.push(info);assert.throws(()=>guardAuthoring(example,moved,{expectedRevision:example.revision}),/owner changed/i);

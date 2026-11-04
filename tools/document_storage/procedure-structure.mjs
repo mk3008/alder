@@ -2,8 +2,18 @@ import {demand} from './core.mjs';
 
 const unique=(items,message)=>demand(new Set(items).size===items.length,message);
 const nonempty=(items,message)=>demand(items.length>0,message);
+const conditionKey=value=>JSON.stringify(value.kind==='value'?[value.axisId,value.kind,value.operator,value.value]:[value.axisId,value.kind]);
 
-// Local ordering describes the standard sequence; conditions remain prose.
+// A decisionIds link identifies a reference, not necessarily the producer.
+// Flag an unambiguous later reference for review; never turn it into an edge.
+export function laterDecisionReference(activity,step){
+ if(!step.whenDecision||step.dependsOn!=null)return null;
+ const uses=activity.procedure.steps.filter(value=>value.decisionIds?.includes(step.whenDecision.decisionId));
+ return uses.length===1&&activity.procedure.steps.indexOf(uses[0])>activity.procedure.steps.indexOf(step)?uses[0]:null;
+}
+
+// The array is a convenient standard order. Only explicitly recorded
+// dependencies and legacy before rules constrain a reordering.
 function validateOrder(activity,ref){
  const steps=activity.procedure.steps,ids=steps.map(s=>s.id),edges=new Map(ids.map(id=>[id,[]])),before=new Set(),groups=new Set(),swaps=[];
  nonempty(steps,'Procedure requires a Step: '+activity.id);
@@ -20,6 +30,15 @@ function validateOrder(activity,ref){
    const key=JSON.stringify([...rule.stepIds].sort());demand(!groups.has(key),'Duplicate interchangeable group');groups.add(key);swaps.push(rule.stepIds);
   }
  }
+ for(const step of steps){
+  if(!Array.isArray(step.dependsOn))continue;
+  unique(step.dependsOn.map(value=>JSON.stringify([value.stepId,value.whenDecision?.decisionId??null,value.whenDecision?.rowId??null])),'Duplicate Step prerequisite: '+step.id);
+  for(const dependency of step.dependsOn){const id=dependency.stepId;
+   ref(id,'step',activity.id);demand(id!==step.id,'Self Step prerequisite: '+step.id);
+   demand(ids.indexOf(id)<ids.indexOf(step.id),'Standard Step order contradicts prerequisite: '+id+' -> '+step.id);
+   edges.get(id).push(step.id);
+  }
+ }
  const reaches=(from,to)=>{const pending=[from],seen=new Set();while(pending.length){const id=pending.pop();if(seen.has(id))continue;seen.add(id);for(const n of edges.get(id)){if(n===to)return true;pending.push(n);}}return false;};
  for(const id of ids)demand(!reaches(id,id),'Step order cycle');
  for(const group of swaps)for(const x of group)for(const y of group)if(x!==y)demand(!reaches(x,y),'Interchangeable Steps conflict with before constraint');
@@ -32,6 +51,49 @@ function validateCommon(bd,inv,target){
  for(const d of bd.data){demand(d.name===d.name.trim(),'Data name whitespace');nonempty(d.items,'Data requires Information: '+d.id);unique(d.items.map(i=>i.informationId),'Duplicate Data information');for(const i of d.items)ref(i.informationId,'information');}
  for(const a of bd.activities){nonempty(a.results,'Activity requires Result: '+a.id);validateOrder(a,ref);}
  return ref;
+}
+
+// Decisions belong to the Activity. Check references cross into a Check
+// document only when that document explicitly covers the same Activity.
+function validateDecisions(bd,inv,target,ref,diagnostics){
+ for(const activity of bd.activities){
+  const pointer=value=>{const decision=ref(value.decisionId,'decision',activity.id);ref(value.rowId,'decision-row',decision.id);return decision;};
+  for(const step of activity.procedure.steps){
+   unique(step.decisionIds,'Duplicate Step decision');for(const id of step.decisionIds)ref(id,'decision',activity.id);
+   if(step.whenDecision)pointer(step.whenDecision);
+   const later=laterDecisionReference(activity,step);if(later)diagnostics.push('判定表を参照する手順が後方: '+step.id+' / '+later.id+'（前提を確認）');
+   for(const dependency of step.dependsOn??[]){const id=dependency.stepId,prior=activity.procedure.steps.find(value=>value.id===id);
+    if(dependency.whenDecision)pointer(dependency.whenDecision);
+    const sameDecision=value=>value&&prior.whenDecision&&value.decisionId===prior.whenDecision.decisionId&&value.rowId===prior.whenDecision.rowId;
+    const unmatchedDecision=prior.whenDecision&&!sameDecision(step.whenDecision)&&!sameDecision(dependency.whenDecision);
+    if(prior.obligation==='optional'||prior.appliesWhen||unmatchedDecision)diagnostics.push('前提手順の実施条件を確認: '+step.id+' <- '+id);
+   }
+  }
+  for(const decision of activity.decisions){
+   nonempty(decision.axes,'Decision requires a condition axis: '+decision.id);nonempty(decision.rows,'Decision requires a row: '+decision.id);
+   if(decision.appliesWhen){pointer(decision.appliesWhen);demand(decision.appliesWhen.decisionId!==decision.id,'Decision cannot depend on itself: '+decision.id);}
+   for(const axis of decision.axes){unique(axis.dataIds,'Duplicate decision axis Data');for(const id of axis.dataIds)ref(id,'data');demand((axis.trueLabel===undefined)===(axis.falseLabel===undefined),'Boolean labels must be paired: '+axis.id);}
+   for(const [index,row] of decision.rows.entries()){
+    demand(row.conditions.length===decision.axes.length,'Decision row must cover every axis: '+row.id);
+    for(const [column,condition] of row.conditions.entries()){
+     demand(condition.axisId===decision.axes[column].id,'Decision condition axis/order mismatch: '+row.id);
+     if(condition.kind==='value'&&['gte','lte','gt','lt'].includes(condition.operator))demand(typeof condition.value==='number','Ordered comparison requires a number: '+row.id);
+     if(condition.kind==='undecided')demand(row.result.kind==='undecided','Undecided condition cannot assert an outcome: '+row.id);
+     if(condition.kind==='else'){
+      const prefix=JSON.stringify(row.conditions.slice(0,column).map(conditionKey));
+      demand(decision.rows.slice(0,index).some(prior=>JSON.stringify(prior.conditions.slice(0,column).map(conditionKey))===prefix&&prior.conditions[column]?.kind==='value'),'Else needs an earlier branch in the same context: '+row.id);
+     }
+    }
+    demand(row.result.kind==='undecided'||row.result.text!==null,'Known decision result needs a description: '+row.id);
+    if(row.result.kind==='undecided')diagnostics.push('業務判断未決: '+row.id);
+    unique(row.result.dataIds,'Duplicate decision result Data');for(const id of row.result.dataIds)ref(id,'data');
+    unique(row.result.exceptionIds,'Duplicate decision exception');for(const id of row.result.exceptionIds){const exception=ref(id,'exception');demand(exception.activityId===activity.id,'Decision exception Activity mismatch: '+id);}
+    unique(row.checkRefs.map(value=>value.checkId),'Duplicate decision Check');
+    for(const link of row.checkRefs){target(link.checkId,'check');const doc=inv.map.get(inv.owner.get(link.checkId));demand(doc?.kind==='checkItems'&&doc.basedOn.documentId===bd.id&&doc.basedOn.revision===bd.revision,'Decision Check source mismatch: '+link.checkId);demand(doc.index.some(item=>item.activityId===activity.id&&item.checkIds.includes(link.checkId)),'Decision Check Activity mismatch: '+link.checkId);}
+   }
+  }
+  for(const decision of activity.decisions){const seen=new Set();let current=decision;while(current.appliesWhen){demand(!seen.has(current.id),'Decision dependency cycle: '+decision.id);seen.add(current.id);current=pointer(current.appliesWhen);}}
+ }
 }
 
 // Preserve the unshipped 0.5 meaning exactly when reading it; never infer the
@@ -51,6 +113,7 @@ export function validateOldStructure(bd,inv,target){
 // Information on another Object; ownership itself remains unchanged.
 export function validateProcedureStructure(bd,inv,target,diagnostics){
  const ref=validateCommon(bd,inv,target),steps=new Map(bd.activities.flatMap(a=>a.procedure.steps.map(s=>[s.id,{activity:a,step:s}])));
+ if(bd.schemaVersion==='0.6')validateDecisions(bd,inv,target,ref,diagnostics);
  for(const exception of bd.exceptions){
   const c=exception.continuity;if(!c)continue;
   for(const id of [c.interruptedAtStepId,c.resumeAtStepId])if(id!==null)ref(id,'step',exception.activityId);
