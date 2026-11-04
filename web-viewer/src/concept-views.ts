@@ -60,6 +60,29 @@ export function createConceptViews({model}:ConceptContext){
   const ids=Object.keys(tables).filter(key=>Object.hasOwn(group.concepts,key));
   return {ids,tables:group.concepts,edges:group.relations.filter(([from,to])=>ids.includes(from)&&ids.includes(to)),regions:[],handoffs:[],
    fieldLinks:links(authored.graph.edges.map(edge=>({from:edge.fromConceptId,to:edge.toConceptId,relationIds:edge.relationIds})),group.concepts)};};
- const overviewGraph=()=>model.presentation.subsystemViews?projection(model.presentation.subsystemViews,tables):{ids:Object.keys(tables),tables,edges,regions:[],handoffs:[],fieldLinks};
- return {tables,edges,groups,findGroup,graph,overviewGraph,fieldLinks};
+ // The authored projection remains available as a scoped view. An overview,
+ // however, must include concepts and relations outside that projection too.
+ const authoredOverviewGraph=()=>model.presentation.subsystemViews?projection(model.presentation.subsystemViews,tables):{ids:Object.keys(tables),tables,edges,regions:[],handoffs:[],fieldLinks};
+ const overviewGraph=()=>{
+  const authored=model.presentation.subsystemViews;if(!authored)return authoredOverviewGraph();
+  const nodes=[...authored.nodes],projectedEdges=[...authored.edges],usedIds=new Set(nodes.map(node=>node.id));
+  const conceptView=new Map<string,string>();
+  for(const concept of model.concepts){
+   let node=nodes.find(item=>item.conceptId===concept.id&&item.subsystemId===concept.subsystemId)??nodes.find(item=>item.conceptId===concept.id);
+   if(!node){
+    const base='overview-'+concept.id;let id=base,n=2;while(usedIds.has(id))id=base+'-'+n++;
+    node={id,conceptId:concept.id,subsystemId:concept.subsystemId,name:concept.name,description:concept.description,sources:[],
+     fields:concept.information.map((item,index)=>({name:tables[concept.id].fields[index][1],informationId:item.id}))};
+    nodes.push(node);usedIds.add(id);
+   }
+   conceptView.set(concept.id,node.id);
+  }
+  const represented=new Set(projectedEdges.flatMap(edge=>edge.relationIds));
+  for(const relation of model.relations){if(represented.has(relation.id))continue;
+   projectedEdges.push({id:'overview-'+relation.id,fromViewId:conceptView.get(relation.fromConceptId)!,toViewId:conceptView.get(relation.toConceptId)!,
+    relationIds:[relation.id],fromLabel:relation.fromLabel,toLabel:relation.toLabel,kind:relation.kind});
+  }
+  return projection({nodes,edges:projectedEdges,handoffIds:authored.handoffIds},tables);
+ };
+ return {tables,edges,groups,findGroup,graph,overviewGraph,authoredOverviewGraph,fieldLinks};
 }

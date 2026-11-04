@@ -38,7 +38,9 @@ for(const [id,definition] of Object.entries(arrayProperties)){
 assert.deepEqual([...mapping.values()].filter(x=>x.valueType==='array').map(x=>x.informationId).sort(),Object.keys(arrayProperties).sort(),'no extra or missing array markers');
 assert.equal(mapping.get('fmt-package-field-1').valueType,undefined,'scalar format is not labeled as an array');
 
-const v=createConceptViews({business:context.business,model}),g=v.overviewGraph();
+// Retain the existing geometric guarantees for the same authored projection;
+// the complete overview has additional, independently checked relationships.
+const v=createConceptViews({business:context.business,model}),g=v.authoredOverviewGraph();
 const sizes=new Map(g.ids.map(id=>[id,{w:Math.max(220,g.tables[id].name.length*14+64,...g.tables[id].fields.map(([,name,,type,nullable])=>(name+(type==='array'?(nullable==='nullable'?' ［配列・未決可］':' ［配列］'):'')).length*14+24)),h:44+g.tables[id].fields.length*25}]));
 const graph={version:1,nodes:g.ids.map(id=>({id,type:'business',name:id,scope:true})),relations:g.edges.map(([from,to])=>({kind:'input',from,to,label:''}))};
 const plan=matrixPlan(graph,g.ids),ordered=g.ids.slice().sort((a,b)=>plan.positions[a][1]-plan.positions[b][1]);

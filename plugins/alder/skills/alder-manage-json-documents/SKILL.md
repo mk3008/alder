@@ -37,4 +37,4 @@ Viewerの参考案で項目別の対応を示す場合は、既存の`presentati
 
 明示的なMD変換は[同梱converter](scripts/document_storage/cli.mjs)のconvertを使う。元MDを保持し、旧MD全文の同梱・JSON→MD同期を行わない。購買研究草案の未知見出しやCheck原典版の不一致は診断して止める。
 
-明示された部分定義の状態遷移は[状態文書契約](references/json-state-transitions.ja.md)を読み、既存ID・未決・例外名・根拠を保持して直接草案/更新する。一般の状態遷移や概念モデルの業務意味、JSONの正式v1採用、Viewer対応、配布/releaseはここで決めない。保存した版・実際に使ったランタイムと検査結果、残る未決と人間判断を短く返す。
+明示された部分定義の状態遷移は[状態文書契約](references/json-state-transitions.ja.md)を読み、既存ID・未決・例外名・根拠を保持して直接草案/更新する。概念モデルの草案・正規化は[概念モデリング](../alder-draft-concept-model/SKILL.md)で扱う。一般の状態遷移や概念モデルの業務意味、JSONの正式v1採用、Viewer対応、配布/releaseはJSON管理で決めない。保存した版・実際に使ったランタイムと検査結果、残る未決と人間判断を短く返す。
