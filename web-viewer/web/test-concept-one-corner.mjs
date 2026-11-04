@@ -8,13 +8,13 @@ import {build} from 'esbuild';
 registerHooks({resolve(s,c,n){if((s.startsWith('./')||s.startsWith('../'))&&!/\.[a-z0-9]+$/i.test(s)){try{return n(s+'.ts',c)}catch{}try{return n(s+'.js',c)}catch{}}return n(s,c)}});
 const {conceptCorrelationGrid,conceptDiagram}=await import('../src/concept-layout.js');
 const {conceptNeighborhood}=await import('../src/concept-neighborhood.js');
-const {routeER}=await import('../src/concept-routing.js');
+const {routeER,isOneToOne}=await import('../src/concept-routing.js');
 const {parseDocument}=await import('../src/document-input.ts');
 const {createConceptViews}=await import('../src/concept-views.ts');
 const {tables,edges,reviewGraph}=await import('./fixtures/concept-sample.ts');
 
 const authority=readFileSync('verification/concept-one-corner.check-items.json');
-assert.equal(createHash('sha256').update(authority).digest('hex'),'6ccfb35ca1dfc5d390f7df242de74c20ed05a6645714dca716d5d156bfb358f6');
+assert.equal(createHash('sha256').update(authority).digest('hex'),'cd93baac5aaf2631ad02ad3547c7c911da300ff8cf132465b9e1b84e968d848e');
 const oracle=JSON.parse(authority);
 assert.deepEqual(oracle.checks.map(c=>c.id),['CONCEPT-CORNER-001','CONCEPT-CORNER-002','CONCEPT-CORNER-003']);
 function inside(a,b,r){
@@ -30,19 +30,26 @@ function check(view, cards, name){
  const result=conceptDiagram(view.ids,view.edges,sizes);
  assert.equal(result.routing.routes.length,view.edges.length,name+' preserves every drawn relation');
  for(const route of result.routing.routes){
-  assert(!route.unrouted,`${name}: ${route.from} -> ${route.to} has a valid one-corner route`);
-  assert.equal((route.d.match(/Q/g)||[]).length,1,`${name}: exactly one rounded corner`);
-  assert.equal(route.points.length,3,`${name}: one logical corner`);
-  const [start,corner,end]=route.points,source=result.boxes.get(route.from),target=result.boxes.get(route.to);
-  assert.equal(corner.x,start.x);assert.equal(corner.y,end.y);
-  if(route.kind==='reference'){
-   assert.equal(start.y,source.y);assert.equal(end.x,target.x+target.w);
-   assert(start.x>end.x&&start.y>end.y,`${name}: reference is ┐`);
+  assert(!route.unrouted,`${name}: ${route.from} -> ${route.to} has a valid route`);
+  const source=result.boxes.get(route.from),target=result.boxes.get(route.to);
+  if(isOneToOne([route.from,route.to,route.fromCount,route.toCount])){
+   assert.equal((route.d.match(/Q/g)||[]).length,0,`${name}: 1:1 has no corner`);
+   assert.equal(route.points.length,2,`${name}: 1:1 has two endpoints`);
+   const [a,b]=route.points;assert.equal(a.y,b.y,`${name}: 1:1 is horizontal`);
+   assert(a.x===source.x||a.x===source.x+source.w);assert(b.x===target.x||b.x===target.x+target.w);
   }else{
-   assert.equal(start.y,source.y+source.h);assert.equal(end.x,target.x);
-   assert(start.x<end.x&&start.y<end.y,`${name}: containment is └`);
+   assert.equal((route.d.match(/Q/g)||[]).length,1,`${name}: exactly one rounded corner`);
+   assert.equal(route.points.length,3,`${name}: one logical corner`);
+   const [start,corner,end]=route.points;assert.equal(corner.x,start.x);assert.equal(corner.y,end.y);
+   if(route.kind==='reference'){
+    assert.equal(start.y,source.y);assert.equal(end.x,target.x+target.w);
+    assert(start.x>end.x&&start.y>end.y,`${name}: reference is ┐`);
+   }else{
+    assert.equal(start.y,source.y+source.h);assert.equal(end.x,target.x);
+    assert(start.x<end.x&&start.y<end.y,`${name}: containment is └`);
+   }
+   for(const [id,box]of result.boxes)for(const {a,b}of route.segments)if(id!==route.from&&id!==route.to)assert(!inside(a,b,box),`${name}: ${route.from} -> ${route.to} crosses ${id}`);
   }
-  for(const [id,box]of result.boxes)for(const {a,b}of route.segments)if(id!==route.from&&id!==route.to)assert(!inside(a,b,box),`${name}: ${route.from} -> ${route.to} crosses ${id}`);
  }
  assert(!result.routing.labels.some(label=>label.conflict),name+' cardinalities remain readable');
 }
@@ -52,7 +59,10 @@ check(overview,overview.tables,'JSON structure overview');
 const allIds=Object.keys(views.tables),step=conceptNeighborhood(allIds,views.edges,'fmt-step');
 assert(step.edges.some(([a,b,,,kind])=>a==='fmt-order'&&b==='fmt-step'&&kind==='reference'),'covers the reported multi-bend relation');
 assert(step.edges.some(([a,b,,,kind])=>a==='fmt-dependency'&&b==='fmt-step'&&kind==='reference'),'covers the prerequisite reference');
+assert(step.edges.some(([a,b,x,y])=>a==='fmt-step'&&b==='fmt-exchange'&&x==='1'&&y==='1'),'covers the 1:1 in the same pair as a 1:N reference');
+assert(step.edges.some(([a,b,x,y])=>a==='fmt-exchange'&&b==='fmt-step'&&x==='0..N'&&y==='0..1'),'retains the separate 1:N reference');
 check(step,views.tables,'Step detail');
+check(conceptNeighborhood(allIds,views.edges,'fmt-row'),views.tables,'Decision row detail');
 const purchaseIds=Object.keys(tables);
 check({ids:purchaseIds,edges},tables,'purchase overview');
 for(const id of purchaseIds)check(conceptNeighborhood(purchaseIds,edges,id),tables,'purchase '+id);
@@ -61,9 +71,16 @@ const fixed=new Map([['a',{x:400,y:20,w:220,h:100}],['b',{x:40,y:240,w:220,h:100
 const blocked=routeER(fixed,[['a','b','1','1','down']]).routes[0];
 assert(blocked.unrouted,'saved reverse placement is not silently rerouted');
 assert.equal(blocked.d,'','do not draw an elbow in the forbidden direction or a multi-bend detour');
-const cycle=conceptDiagram(['a','b'],[['a','b','1','1','down'],['b','a','1','1','down']],new Map([['a',{w:220,h:100}],['b',{w:220,h:100}]]));
+const cycle=conceptDiagram(['a','b'],[['a','b','1','0..N','down'],['b','a','1','0..N','down']],new Map([['a',{w:220,h:100}],['b',{w:220,h:100}]]));
 assert.equal(cycle.routing.routes.length,2,'a contradictory cycle keeps both relationships');
 assert(cycle.routing.routes.some(route=>route.unrouted&&!route.d),'an impossible one-corner cycle is reported');
+const manyCycle=conceptDiagram(['a','b','c'],[['a','b','0..N','0..N','reference'],['b','c','0..N','0..N','reference'],['c','a','0..N','0..N','reference']],new Map(['a','b','c'].map(id=>[id,{w:220,h:100}])));
+assert.equal(manyCycle.routing.routes.length,3,'a many-to-many reference cycle keeps all relationships');
+assert(manyCycle.routing.routes.some(route=>route.unrouted&&!route.d),'the current N:N direction constraint must not silently hide an impossible cycle');
+const rowBoxes=new Map([['a',{x:40,y:40,w:100,h:100}],['b',{x:220,y:40,w:100,h:100}],['c',{x:400,y:40,w:100,h:100}]]);
+const row=routeER(rowBoxes,[['a','b','1','1','down'],['a','c','1','1','down']]);
+assert(row.routes.every(r=>!r.unrouted&&r.points.length===2&&r.points[0].y===r.points[1].y),'multiple 1:1 relations are horizontal');
+assert(row.routes[1].segments.some(s=>inside(s.a,s.b,rowBoxes.get('b'))),'a 1:1 line can run behind an intervening card');
 
 // A saved layout that cannot satisfy the constraint must keep both positions
 // and expose the relation and both counts to the person reviewing the model.

@@ -1,6 +1,8 @@
 // Concept relationships deliberately use one elbow only. Other diagrams use
 // their own router and are not affected by this layout rule.
 const vectors={left:[-1,0],right:[1,0],top:[0,-1],bottom:[0,1]};
+const single=count=>count==='1'||count==='0..1';
+export const isOneToOne=edge=>single(edge[2])&&single(edge[3]);
 const overlap=(a,b,c,d)=>Math.min(Math.max(a,b),Math.max(c,d))-Math.max(Math.min(a,b),Math.min(c,d))>0.01;
 const segment=(a,b)=>({a,b});
 function blocked(a,b,r){return a.x===b.x?a.x>r.x&&a.x<r.x+r.w&&overlap(a.y,b.y,r.y,r.y+r.h):a.y===b.y&&a.y>r.y&&a.y<r.y+r.h&&overlap(a.x,b.x,r.x,r.x+r.w);}
@@ -40,11 +42,23 @@ function nearLabel(item,cards,placed,segments){
 function ports(edge,table,box,side,count){
  const horizontal=side==='top'||side==='bottom',span=horizontal?box.w:box.h,offsets=[],spacing=Math.max(20,Math.ceil((span-28)/24));
  for(let n=18;n<=span-10;n+=spacing)offsets.push(n);
+ if(offsets.length&&offsets.at(-1)<span-10)offsets.push(span-10);
  if(!offsets.length)offsets.push(span/2);
  return offsets.map(offset=>{
   const p={x:side==='left'?box.x:side==='right'?box.x+box.w:box.x+offset,y:side==='top'?box.y:side==='bottom'?box.y+box.h:box.y+offset};
   const result={edge,table,side,count,p};result.label=label(result,count);return result;
  });
+}
+function straightPairs(e,fromBox,toBox){
+ const left=fromBox.x+fromBox.w<toBox.x,right=toBox.x+toBox.w<fromBox.x;if(!left&&!right)return [];
+ const fromSide=left?'right':'left',toSide=left?'left':'right';
+ const top=Math.max(fromBox.y,toBox.y)+18,bottom=Math.min(fromBox.y+fromBox.h,toBox.y+toBox.h)-10,pairs=[];
+ for(let y=top;y<=bottom;y+=20){
+  const from={edge:e.id,table:e.from,side:fromSide,count:e.fromCount,p:{x:left?fromBox.x+fromBox.w:fromBox.x,y}};
+  const to={edge:e.id,table:e.to,side:toSide,count:e.toCount,p:{x:left?toBox.x:toBox.x+toBox.w,y}};
+  from.label=label(from,e.fromCount);to.label=label(to,e.toCount);pairs.push([from,to]);
+ }
+ return pairs;
 }
 const better=(a,b)=>a.some((v,i)=>v!==b[i]&&v<b[i]&&a.slice(0,i).every((n,j)=>n===b[j]));
 function path(start,corner,end){
@@ -55,16 +69,17 @@ export function routeER(boxes,edges){
  const active=edges.filter(([a,b])=>boxes.has(a)&&boxes.has(b)).map(([from,to,fromCount,toCount,kind],id)=>({id,from,to,fromCount,toCount,kind}));
  const used=[],placed=[],routed=[],cards=[...boxes.values()].map(r=>({left:r.x,top:r.y,w:r.w,h:r.h}));let width=0,height=0;
  for(const e of active){
-  const reference=e.kind==='reference',fromBox=boxes.get(e.from),toBox=boxes.get(e.to);
+  const reference=e.kind==='reference',fromBox=boxes.get(e.from),toBox=boxes.get(e.to),straight=isOneToOne([e.from,e.to,e.fromCount,e.toCount]);
   const fromPorts=ports(e.id,e.from,fromBox,reference?'top':'bottom',e.fromCount),toPorts=ports(e.id,e.to,toBox,reference?'right':'left',e.toCount);
+  const pairs=straight?straightPairs(e,fromBox,toBox):fromPorts.flatMap(from=>toPorts.map(to=>[from,to]));
   const prior=routed.flatMap(r=>r.segments);
   let best,bestScore;
-  for(const from of fromPorts)for(const to of toPorts){
+  for(const [from,to]of pairs){
    const a=from.p,b=to.p;
    // No reversal or extra corner is permitted, including for saved positions.
-   if(reference?!(a.x>b.x+2&&a.y>b.y+2):!(a.x+2<b.x&&a.y+2<b.y))continue;
-   const corner={x:a.x,y:b.y},segments=[segment(a,corner),segment(corner,b)];
-   if([...boxes].some(([id,box])=>id!==e.from&&id!==e.to&&segments.some(s=>blocked(s.a,s.b,box))))continue;
+   if(!straight&&(reference?!(a.x>b.x+2&&a.y>b.y+2):!(a.x+2<b.x&&a.y+2<b.y)))continue;
+   const corner=straight?null:{x:a.x,y:b.y},segments=straight?[segment(a,b)]:[segment(a,corner),segment(corner,b)];
+   if(!straight&&[...boxes].some(([id,box])=>id!==e.from&&id!==e.to&&segments.some(s=>blocked(s.a,s.b,box))))continue;
    const duplicates=[from,to].filter(p=>used.some(q=>p.table===q.table&&p.side===q.side&&p.p.x===q.p.x&&p.p.y===q.p.y)).length;
    const shared=segments.reduce((n,s)=>n+prior.filter(t=>sharedRun(s.a,s.b,t.a,t.b)).length,0);
    const cross=segments.reduce((n,s)=>n+prior.filter(t=>crosses(s,t)).length,0);
@@ -75,9 +90,10 @@ export function routeER(boxes,edges){
    if(!best||better(score,bestScore)){best={from,to,corner,segments,labels:[first??{...from.label,conflict:true},second??{...to.label,conflict:true}]};bestScore=score;}
   }
   if(!best){routed.push({...e,ports:[],points:[],segments:[],unrouted:true,d:''});continue;}
-  const p=[best.from,best.to],points=[best.from.p,best.corner,best.to.p];used.push(...p);placed.push(...best.labels);
+  const p=[best.from,best.to],points=straight?[best.from.p,best.to.p]:[best.from.p,best.corner,best.to.p];used.push(...p);placed.push(...best.labels);
   width=Math.max(width,...points.map(v=>v.x+35));height=Math.max(height,...points.map(v=>v.y+35));
-  routed.push({...e,ports:p,points,segments:best.segments,unrouted:false,d:path(...points)});
+  const d=straight?`M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`:path(...points);
+  routed.push({...e,ports:p,points,segments:best.segments,unrouted:false,d});
  }
  const segments=routed.flatMap(r=>r.segments),labels=placed.map(l=>segments.some(s=>crossesLabel(s,l))?{...l,conflict:true}:l);
  for(const l of labels){width=Math.max(width,l.left+l.w+20);height=Math.max(height,l.top+l.h+20);}

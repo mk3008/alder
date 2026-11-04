@@ -96,7 +96,7 @@ function draw(s){
  for(const l of routing.labels){wires.append(svgNode('text',{class:'endpoint-count'+(related.has(l.edge)?' review-related':''),'data-edge':l.edge,'data-table':l.table,x:l.x,y:l.y,'text-anchor':l.anchor,'pointer-events':'none'},l.count));}
  const unresolved=routing.routes.filter(r=>r.unrouted).map(r=>`${tables[r.from].name}（${r.fromCount}） → ${tables[r.to].name}（${r.toCount}）`);
  for(const [i,r]of handoffRouting.routes.entries())if(r.unrouted)unresolved.push(visibleHandoffs[i].label);
- s.warning.textContent=unresolved.length?'一つの角で接続できない関係：'+unresolved.join('、')+'。配置を調整してください。':routing.labels.some(l=>l.conflict)?'件数表示を確保できない配置です。概念間を広げてください。':'';
+ s.warning.textContent=unresolved.length?'指定の形で接続できない関係：'+unresolved.join('、')+'。配置を調整してください。':routing.labels.some(l=>l.conflict)?'件数表示を確保できない配置です。概念間を広げてください。':'';
  for(const[id,b]of boxes){const t=tables[id],g=svgNode('g',{class:'node graph-shape table'+(s.stage.id==='overview'?' read':'')+focus.nodeClasses(id),'data-node':id,'data-table':id,role:'group','aria-label':t.name});
  const surface=cardSurface(s.svg.ownerDocument,b);surface.firstElementChild.classList.add('concept-card-surface');g.append(surface);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);

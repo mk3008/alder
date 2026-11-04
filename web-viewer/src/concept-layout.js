@@ -1,23 +1,29 @@
-import {routeER,sharedRun} from './concept-routing.js';
+import {routeER,sharedRun,isOneToOne} from './concept-routing.js';
 
 // The grid records every explicit relationship before any pixel placement.
 // For a reference the referenced concept precedes the referencing concept;
 // for containment the parent precedes the child. Parallel relations remain
 // separate entries in a cell rather than becoming a second source of truth.
-export function conceptCorrelationGrid(ids,edges){
- const active=new Set(ids),next=new Map(ids.map(id=>[id,new Set()])),indegree=new Map(ids.map(id=>[id,0]));
- for(const [from,to,,,kind]of edges){
-  if(!active.has(from)||!active.has(to))continue;
-  const [upper,lower]=kind==='reference'?[to,from]:[from,to];
-  if(!next.get(upper).has(lower)){next.get(upper).add(lower);indegree.set(lower,indegree.get(lower)+1);}
- }
+function stableOrder(ids,pairs){
+ const next=new Map(ids.map(id=>[id,new Set()])),indegree=new Map(ids.map(id=>[id,0]));
+ for(const [a,b]of pairs)if(a!==b&&next.has(a)&&next.has(b)&&!next.get(a).has(b)){next.get(a).add(b);indegree.set(b,indegree.get(b)+1);}
  const remaining=new Set(ids),order=[];
  while(remaining.size){
-  // A cycle has no perfect placement. Keep all its cards and relations so
-  // routing can report precisely which ones cannot satisfy the rule.
   const id=ids.find(id=>remaining.has(id)&&indegree.get(id)===0)??ids.find(id=>remaining.has(id));
-  remaining.delete(id);order.push(id);
-  for(const child of next.get(id))indegree.set(child,indegree.get(child)-1);
+  remaining.delete(id);order.push(id);for(const child of next.get(id))indegree.set(child,indegree.get(child)-1);
+ }
+ return order;
+}
+export function conceptCorrelationGrid(ids,edges){
+ const parents=new Map(ids.map(id=>[id,id])),root=id=>{while(parents.get(id)!==id)id=parents.get(id);return id;};
+ for(const edge of edges){const [a,b]=edge;if(parents.has(a)&&parents.has(b)&&isOneToOne(edge))parents.set(root(b),root(a));}
+ const groupIds=[...new Set(ids.map(root))],groups=new Map(groupIds.map(id=>[id,ids.filter(n=>root(n)===id)]));
+ const directed=edges.filter(([a,b])=>parents.has(a)&&parents.has(b)).map(edge=>{const [from,to,,,kind]=edge;return {edge,upper:kind==='reference'?to:from,lower:kind==='reference'?from:to};});
+ const groupOrder=stableOrder(groupIds,directed.map(({upper,lower})=>[root(upper),root(lower)]));
+ const orderedGroups=groupOrder.map(id=>stableOrder(groups.get(id),directed.filter(x=>root(x.upper)===id&&root(x.lower)===id).map(x=>[x.upper,x.lower])));
+ const order=orderedGroups.flat(),levels=new Map(ids.map(id=>[id,0]));
+ for(const members of orderedGroups)for(const id of members)for(const item of directed){
+  if(item.upper===id&&members.includes(item.lower)&&!isOneToOne(item.edge))levels.set(item.lower,Math.max(levels.get(item.lower),levels.get(id)+1));
  }
  const indices=new Map(order.map((id,i)=>[id,i]));
  const cells=order.map(()=>order.map(()=>[]));
@@ -26,7 +32,7 @@ export function conceptCorrelationGrid(ids,edges){
   const [upper,lower]=kind==='reference'?[to,from]:[from,to];
   cells[indices.get(upper)][indices.get(lower)].push(i);
  });
- return {order,cells};
+ return {order,cells,groups:orderedGroups,levels};
 }
 
 const layoutCache=new WeakMap();
@@ -49,16 +55,28 @@ export function initialConceptPositions(ids,edges,sizes){
  const signature=JSON.stringify([ids.map(id=>[id,sizes.get(id).w,sizes.get(id).h]),edges]);
  let cache=layoutCache.get(sizes);if(!cache){cache=new Map();layoutCache.set(sizes,cache);}
  if(cache.has(signature))return cache.get(signature);
- const {order}=conceptCorrelationGrid(ids,edges);
+ const {order,groups,levels}=conceptCorrelationGrid(ids,edges),membership=new Map(groups.flatMap((group,i)=>group.map(id=>[id,i])));
+ const minimum=order.slice(1).map((id,i)=>membership.get(id)===membership.get(order[i])?sizes.get(order[i]).w+140:72);
+ const stagger=groups.map((group,i)=>{
+  let distance=120;
+  for(const edge of edges){const [a,b]=edge;if(!isOneToOne(edge)||membership.get(a)!==i||membership.get(b)!==i)continue;
+   const delta=Math.abs(levels.get(a)-levels.get(b));if(!delta)continue;
+   const upper=levels.get(a)<levels.get(b)?a:b;distance=Math.min(distance,Math.floor((sizes.get(upper).h-28)/delta));
+  }
+  return Math.max(0,distance);
+ });
  const place=gaps=>{
-  const positions={};let x=40,y=40;
-  for(const [column,id]of order.entries()){if(column)x+=gaps[column-1];positions[id]={x,y};y+=sizes.get(id).h+44;}
+  const positions={};let x=40,y=40,column=0;
+  for(const [i,group]of groups.entries()){let bottom=y;
+   for(const id of group){if(column)x+=gaps[column-1];const top=y+levels.get(id)*stagger[i];positions[id]={x,y:top};bottom=Math.max(bottom,top+sizes.get(id).h);column++;}
+   y=bottom+44;
+  }
   return positions;
  };
  const score=gaps=>{const positions=place(gaps),boxes=new Map(ids.map(id=>[id,{...positions[id],...sizes.get(id)}]));return routeScore(routeER(boxes,edges));};
  let bestGaps,bestScore;
  for(const step of [72,96,128,160,192,240,300,384]){
-  const gaps=Array(Math.max(0,order.length-1)).fill(step),candidate=score(gaps);
+  const gaps=minimum.map(gap=>Math.max(gap,step)),candidate=score(gaps);
   if(!bestGaps||better(candidate,bestScore)){bestGaps=gaps;bestScore=candidate;}
   if(candidate.every(value=>value===0))break;
  }
@@ -66,7 +84,7 @@ export function initialConceptPositions(ids,edges,sizes){
  // an overlapping line, or more crossings than the safe initial placement.
  let attempts=0;
  for(let column=0;column<bestGaps.length&&attempts<42;column++)for(const gap of [72,96,128,160,192]){
-  if(gap>=bestGaps[column]||attempts++>=42)continue;
+  if(gap<minimum[column]||gap>=bestGaps[column]||attempts++>=42)continue;
   const trial=bestGaps.slice();trial[column]=gap;const candidate=score(trial);
   if(candidate.every((value,i)=>value<=bestScore[i])){bestGaps=trial;bestScore=candidate;break;}
  }
