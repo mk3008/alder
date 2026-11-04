@@ -93,7 +93,13 @@ function draw(s){
  const surface=cardSurface(s.svg.ownerDocument,b);surface.firstElementChild.classList.add('concept-card-surface');g.append(surface);
  const body=svgNode('g',{class:'concept-select',tabindex:0,role:'button','aria-label':t.name+'を選択','aria-pressed':String(s.selected===id)});g.append(body);
  body.append(svgNode('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:5}));body.append(svgNode('text',{class:'name',x:b.x+12,y:b.y+23},t.name));
- t.fields.forEach(([,name],i)=>body.append(svgNode('text',{x:b.x+12,y:b.y+56+i*25},name)));
+ t.fields.forEach(([physical,name,informationId],i)=>{
+  const relatedField=(graph.fieldLinks??[]).some(link=>link.owner===id&&link.informationId===informationId&&s.selected!==id&&
+   ((link.from===s.selected&&link.to===id)||(link.to===s.selected&&link.from===id)));
+  const text=svgNode('text',{x:b.x+12,y:b.y+56+i*25,...(informationId?{'data-information-id':informationId}:{}),...(relatedField?{class:'concept-field-related'}:{})},name);
+  if(physical)text.append(svgNode('title',{},'物理名：'+physical));
+  body.append(text);
+ });
  g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigateDetail(s,id);}else if(s.stage.id==='overview'&&!s.locked&&e.altKey&&e.key.startsWith('Arrow')){e.preventDefault();const d=e.shiftKey?50:10;changeNode(s,id,[b.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0),b.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0)]);s.svg.querySelector(`[data-node="${id}"] .concept-select`)?.focus();save(s);}};
  if(canOpenDetail(t.conceptId??id,focusId)){const command=svgNode('foreignObject',{x:b.x+b.w-35,y:b.y+1,width:34,height:34});const button=document.createElement('button');button.type='button';button.className='concept-open-action';button.textContent='開く';button.dataset.conceptOpen=id;button.setAttribute('aria-label',t.name+'と隣接する概念を開く');button.title='隣接する概念を開く';button.onclick=e=>{e.stopPropagation();parent.postMessage({type:'alder-concept-open',id:t.conceptId??id},messageOrigin);};button.onkeydown=e=>e.stopPropagation();command.append(button);g.append(command);}s.svg.append(g);
  }

@@ -12,6 +12,7 @@
 .wire.review-related{stroke:var(--review-link);stroke-width:var(--graph-related-width)}
 .endpoint-count.review-related{fill:var(--review-link);font-weight:800}
 .concept-port.review-related{fill:var(--review-link)}
+.table .concept-select>text.concept-field-related,[data-theme=dark] .table .concept-select>text.concept-field-related{fill:var(--review-link);font-weight:800}
 
 .graph-card-surface{box-shadow:0 2px 5px #152d5012}.diagram-canvas{position:relative;height:70dvh;min-height:360px;overflow:hidden}.diagram-viewport{height:100%;overflow:auto;touch-action:none;background:var(--bg)}.diagram-world{position:relative}.diagram-world>svg{display:block;max-width:none}.state-diagram .state-caption-line.review-related{font-weight:800}
 

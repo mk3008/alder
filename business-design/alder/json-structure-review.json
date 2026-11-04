@@ -981,23 +981,23 @@
           "information": [
             {
               "id": "fmt-package-field-1",
-              "name": "format"
+              "name": "形式"
             },
             {
               "id": "fmt-package-field-2",
-              "name": "formatVersion: 0.7"
+              "name": "形式の版"
             },
             {
               "id": "fmt-package-field-3",
-              "name": "revision"
+              "name": "改訂"
             },
             {
               "id": "fmt-package-field-4",
-              "name": "documents[]"
+              "name": "文書一覧"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
-          "description": "固定した0.7候補の外側のJSON。documentsに複数種の文書を保持する。図の対象は業務・手順・やり取り・Data・判定とCheckで、状態遷移と概念モデル自体の内部は対象外。保存器は複数BDを扱えるが、Viewerは同一JSON内のBDが1件の場合に表示する。この図を表示する器のBDは旧0.4であり、0.7へ変換していない。",
+          "description": "固定した0.7候補の外側のJSON。documentsに複数種の文書を保持する。図の対象は業務・手順・やり取り・Data・判定とCheckで、状態遷移と概念モデル自体の内部は対象外。保存器は複数BDを扱えるが、Viewerは同一JSON内のBDが1件の場合に表示する。この図を表示する器のBDは旧0.4であり、0.7へ変換していない。 documentsは業務設計書だけでなく、Check・状態遷移・概念モデルなどを含む文書の一覧。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1010,31 +1010,31 @@
           "information": [
             {
               "id": "fmt-bd-field-1",
-              "name": "id"
+              "name": "識別子"
             },
             {
               "id": "fmt-bd-field-2",
-              "name": "schemaVersion: 0.6"
+              "name": "構造の版"
             },
             {
               "id": "fmt-bd-field-3",
-              "name": "activities[]"
+              "name": "業務一覧"
             },
             {
               "id": "fmt-bd-field-4",
-              "name": "objects[]"
+              "name": "対象一覧"
             },
             {
               "id": "fmt-bd-field-5",
-              "name": "data[]"
+              "name": "データ一覧"
             },
             {
               "id": "fmt-bd-field-6",
-              "name": "relations[]"
+              "name": "関係一覧"
             },
             {
               "id": "fmt-bd-field-7",
-              "name": "exceptions[]"
+              "name": "例外一覧"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1053,23 +1053,23 @@
           "information": [
             {
               "id": "fmt-activity-field-1",
-              "name": "id / name / scope"
+              "name": "識別子・名前・範囲"
             },
             {
               "id": "fmt-activity-field-2",
-              "name": "who"
+              "name": "実行主体"
             },
             {
               "id": "fmt-activity-field-3",
-              "name": "procedure"
+              "name": "手順"
             },
             {
               "id": "fmt-activity-field-4",
-              "name": "decisions[]"
+              "name": "判定表"
             },
             {
               "id": "fmt-activity-field-5",
-              "name": "results[]"
+              "name": "業務結果"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1088,15 +1088,15 @@
           "information": [
             {
               "id": "fmt-who-field-1",
-              "name": "kind: role / system / scheduler"
+              "name": "主体の種類"
             },
             {
               "id": "fmt-who-field-2",
-              "name": "roleId または name"
+              "name": "ロールまたは主体名"
             },
             {
               "id": "fmt-who-field-3",
-              "name": "null：未決"
+              "name": "未決"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1115,7 +1115,7 @@
           "information": [
             {
               "id": "fmt-role-field-1",
-              "name": "id / name / color"
+              "name": "識別子・名前・色"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1132,11 +1132,11 @@
           "information": [
             {
               "id": "fmt-procedure-field-1",
-              "name": "steps[]"
+              "name": "手順行"
             },
             {
               "id": "fmt-procedure-field-2",
-              "name": "orderRules[]"
+              "name": "旧順序規則"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1155,27 +1155,43 @@
           "information": [
             {
               "id": "fmt-step-field-1",
-              "name": "id / action / method"
+              "name": "識別子・操作・方法"
             },
             {
               "id": "fmt-step-field-2",
-              "name": "whatDataIds[] / effect"
+              "name": "操作対象データ"
+            },
+            {
+              "id": "fmt-step-field-2-2",
+              "name": "操作効果"
             },
             {
               "id": "fmt-step-field-3",
-              "name": "obligation / appliesWhen"
+              "name": "必須／任意・適用条件"
             },
             {
               "id": "fmt-step-field-4",
-              "name": "exchange / parties"
+              "name": "やり取り"
+            },
+            {
+              "id": "fmt-step-field-4-2",
+              "name": "操作主体と対象"
             },
             {
               "id": "fmt-step-field-5",
-              "name": "decisionIds[] / whenDecision"
+              "name": "判定表"
+            },
+            {
+              "id": "fmt-step-field-5-2",
+              "name": "判定行"
             },
             {
               "id": "fmt-step-field-6",
-              "name": "dependsOn[] / legacyText"
+              "name": "前提"
+            },
+            {
+              "id": "fmt-step-field-6-2",
+              "name": "旧手順本文"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1194,15 +1210,15 @@
           "information": [
             {
               "id": "fmt-order-field-1",
-              "name": "kind: before / interchangeable"
+              "name": "順序規則の種類"
             },
             {
               "id": "fmt-order-field-2",
-              "name": "beforeId / afterId"
+              "name": "前後の手順"
             },
             {
               "id": "fmt-order-field-3",
-              "name": "stepIds[]"
+              "name": "対象手順"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1219,11 +1235,11 @@
           "information": [
             {
               "id": "fmt-dependency-field-1",
-              "name": "stepId：前提となるStep"
+              "name": "前提となる手順"
             },
             {
               "id": "fmt-dependency-field-2",
-              "name": "whenDecision：条件の判定行 / null"
+              "name": "条件となる判定行"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1242,27 +1258,35 @@
           "information": [
             {
               "id": "fmt-exchange-field-1",
-              "name": "kind: interaction / internal / unresolved"
+              "name": "やり取りの種類"
             },
             {
               "id": "fmt-exchange-field-2",
-              "name": "objectId / direction"
+              "name": "対象"
+            },
+            {
+              "id": "fmt-exchange-field-2-2",
+              "name": "入出力の向き"
             },
             {
               "id": "fmt-exchange-field-3",
-              "name": "phase: request / response"
+              "name": "要求／応答の区分"
             },
             {
               "id": "fmt-exchange-field-4",
-              "name": "not-applicable / null"
+              "name": "対象外・未決"
             },
             {
               "id": "fmt-exchange-field-5",
-              "name": "dataIds[] / relationId"
+              "name": "受渡しデータ"
+            },
+            {
+              "id": "fmt-exchange-field-5-2",
+              "name": "入出力の関係"
             },
             {
               "id": "fmt-exchange-field-6",
-              "name": "pairedStepId"
+              "name": "対応する手順"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1281,11 +1305,11 @@
           "information": [
             {
               "id": "fmt-object-field-1",
-              "name": "id / name / scope"
+              "name": "識別子・名前・範囲"
             },
             {
               "id": "fmt-object-field-2",
-              "name": "information[]"
+              "name": "情報項目"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1304,11 +1328,11 @@
           "information": [
             {
               "id": "fmt-relation-field-1",
-              "name": "id / kind"
+              "name": "識別子・関係の種類"
             },
             {
               "id": "fmt-relation-field-2",
-              "name": "fromId / toId"
+              "name": "始点・終点"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1327,11 +1351,11 @@
           "information": [
             {
               "id": "fmt-data-field-1",
-              "name": "id / name"
+              "name": "識別子・名前"
             },
             {
               "id": "fmt-data-field-2",
-              "name": "items[]"
+              "name": "構成する情報"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1350,11 +1374,11 @@
           "information": [
             {
               "id": "fmt-dataitem-field-1",
-              "name": "informationId"
+              "name": "情報項目"
             },
             {
               "id": "fmt-dataitem-field-2",
-              "name": "condition / null"
+              "name": "条件"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1373,7 +1397,7 @@
           "information": [
             {
               "id": "fmt-information-field-1",
-              "name": "id / name / description"
+              "name": "識別子・名前・説明"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1392,15 +1416,19 @@
           "information": [
             {
               "id": "fmt-decision-field-1",
-              "name": "id / title / kind"
+              "name": "識別子・表題・種類"
             },
             {
               "id": "fmt-decision-field-2",
-              "name": "appliesWhen"
+              "name": "適用条件"
             },
             {
               "id": "fmt-decision-field-3",
-              "name": "axes[] / rows[]"
+              "name": "判定軸"
+            },
+            {
+              "id": "fmt-decision-field-3-2",
+              "name": "判定行"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1419,15 +1447,15 @@
           "information": [
             {
               "id": "fmt-axis-field-1",
-              "name": "id / name"
+              "name": "識別子・名前"
             },
             {
               "id": "fmt-axis-field-2",
-              "name": "dataIds[]"
+              "name": "対象データ"
             },
             {
               "id": "fmt-axis-field-3",
-              "name": "unit / trueLabel / falseLabel"
+              "name": "単位・真偽の表示"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1446,15 +1474,19 @@
           "information": [
             {
               "id": "fmt-row-field-1",
-              "name": "id / conditions[]"
+              "name": "識別子"
+            },
+            {
+              "id": "fmt-row-field-1-2",
+              "name": "条件"
             },
             {
               "id": "fmt-row-field-2",
-              "name": "result"
+              "name": "判定結果"
             },
             {
               "id": "fmt-row-field-3",
-              "name": "checkRefs[]"
+              "name": "チェック項目への参照"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1473,11 +1505,15 @@
           "information": [
             {
               "id": "fmt-condition-field-1",
-              "name": "axisId / kind"
+              "name": "判定軸"
+            },
+            {
+              "id": "fmt-condition-field-1-2",
+              "name": "条件の種類"
             },
             {
               "id": "fmt-condition-field-2",
-              "name": "operator / value（値の場合）"
+              "name": "比較方法・値"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1496,15 +1532,15 @@
           "information": [
             {
               "id": "fmt-outcome-field-1",
-              "name": "kind / text"
+              "name": "結果の種類・文言"
             },
             {
               "id": "fmt-outcome-field-2",
-              "name": "dataIds[]"
+              "name": "関連データ"
             },
             {
               "id": "fmt-outcome-field-3",
-              "name": "exceptionIds[]"
+              "name": "関連する例外"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1523,11 +1559,11 @@
           "information": [
             {
               "id": "fmt-checkref-field-1",
-              "name": "checkId"
+              "name": "チェック項目"
             },
             {
               "id": "fmt-checkref-field-2",
-              "name": "coverage: full / partial"
+              "name": "対応の範囲"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1544,15 +1580,19 @@
           "information": [
             {
               "id": "fmt-checkdoc-field-1",
-              "name": "id / schemaVersion / revision"
+              "name": "識別子・構造版・改訂"
             },
             {
               "id": "fmt-checkdoc-field-2",
-              "name": "basedOn"
+              "name": "参照する業務設計書"
             },
             {
               "id": "fmt-checkdoc-field-3",
-              "name": "items[] / index[]"
+              "name": "チェック項目"
+            },
+            {
+              "id": "fmt-checkdoc-field-3-2",
+              "name": "索引"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1571,15 +1611,15 @@
           "information": [
             {
               "id": "fmt-check-field-1",
-              "name": "id / checkId / title"
+              "name": "識別子・Check ID・表題"
             },
             {
               "id": "fmt-check-field-2",
-              "name": "reviewState"
+              "name": "人間の確認状態"
             },
             {
               "id": "fmt-check-field-3",
-              "name": "fields"
+              "name": "内容"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -1598,7 +1638,7 @@
           "information": [
             {
               "id": "fmt-result-field-1",
-              "name": "id / text"
+              "name": "識別子・結果"
             }
           ],
           "reason": "0.7候補のJSON構造を共有し、要否と参照を確認する。",
@@ -2150,11 +2190,11 @@
                 "name": "業務（Activity）",
                 "description": "一つのWhoと一つのProcedureを持つ。判定表と結果はActivityに属する。",
                 "fields": [
-                  "id / name / scope",
-                  "who",
-                  "procedure",
-                  "decisions[]",
-                  "results[]"
+                  "識別子・名前・範囲",
+                  "実行主体",
+                  "手順",
+                  "判定表",
+                  "業務結果"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2164,9 +2204,9 @@
                 "name": "主体（Who）",
                 "description": "Activityのwho。nullは未決。Role・システム・スケジューラーを区別する。",
                 "fields": [
-                  "kind: role / system / scheduler",
-                  "roleId または name",
-                  "null：未決"
+                  "主体の種類",
+                  "ロールまたは主体名",
+                  "未決"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2176,7 +2216,7 @@
                 "name": "役割（Role）",
                 "description": "who.kind=roleのときだけroleIdで参照する。システムに人間Roleを作らない。",
                 "fields": [
-                  "id / name / color"
+                  "識別子・名前・色"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2186,8 +2226,8 @@
                 "name": "手順全体（Procedure）",
                 "description": "Activity内のオブジェクト。配列順は説明用の標準順。",
                 "fields": [
-                  "steps[]",
-                  "orderRules[]"
+                  "手順行",
+                  "旧順序規則"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2197,12 +2237,16 @@
                 "name": "手順行（Step）",
                 "description": "手順を表す。Action、対象Data、適用条件、任意、やり取りと前提を別に保持する。",
                 "fields": [
-                  "id / action / method",
-                  "whatDataIds[] / effect",
-                  "obligation / appliesWhen",
-                  "exchange / parties",
-                  "decisionIds[] / whenDecision",
-                  "dependsOn[] / legacyText"
+                  "識別子・操作・方法",
+                  "操作対象データ",
+                  "操作効果",
+                  "必須／任意・適用条件",
+                  "やり取り",
+                  "操作主体と対象",
+                  "判定表",
+                  "判定行",
+                  "前提",
+                  "旧手順本文"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2212,9 +2256,9 @@
                 "name": "旧順序規則（OrderRule）",
                 "description": "Procedure.orderRules内。beforeは2手順、interchangeableは2手順以上を参照する。並列の定義ではない。",
                 "fields": [
-                  "kind: before / interchangeable",
-                  "beforeId / afterId",
-                  "stepIds[]"
+                  "順序規則の種類",
+                  "前後の手順",
+                  "対象手順"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2224,8 +2268,8 @@
                 "name": "前提（dependsOnの要素）",
                 "description": "Step.dependsOn内の要素。条件付き前提には既存判定行を参照する。要素自体にidはない。省略・nullは未確認、[]は前提なしと確認済み。",
                 "fields": [
-                  "stepId：前提となるStep",
-                  "whenDecision：条件の判定行 / null"
+                  "前提となる手順",
+                  "条件となる判定行"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2235,7 +2279,7 @@
                 "name": "業務結果（Activity Result）",
                 "description": "Activity.resultsの1件。判定表の各行の結果とは別。",
                 "fields": [
-                  "id / text"
+                  "識別子・結果"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2384,12 +2428,16 @@
                 "name": "手順行（Step）",
                 "description": "手順を表す。Action、対象Data、適用条件、任意、やり取りと前提を別に保持する。",
                 "fields": [
-                  "id / action / method",
-                  "whatDataIds[] / effect",
-                  "obligation / appliesWhen",
-                  "exchange / parties",
-                  "decisionIds[] / whenDecision",
-                  "dependsOn[] / legacyText"
+                  "識別子・操作・方法",
+                  "操作対象データ",
+                  "操作効果",
+                  "必須／任意・適用条件",
+                  "やり取り",
+                  "操作主体と対象",
+                  "判定表",
+                  "判定行",
+                  "前提",
+                  "旧手順本文"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2399,12 +2447,14 @@
                 "name": "やり取り（Exchange）",
                 "description": "各Stepに1つ。interactionだけが相手・方向・Request/Response・対応Stepを持つ。internalとunresolvedにはそれらの属性はない。",
                 "fields": [
-                  "kind: interaction / internal / unresolved",
-                  "objectId / direction",
-                  "phase: request / response",
-                  "not-applicable / null",
-                  "dataIds[] / relationId",
-                  "pairedStepId"
+                  "やり取りの種類",
+                  "対象",
+                  "入出力の向き",
+                  "要求／応答の区分",
+                  "対象外・未決",
+                  "受渡しデータ",
+                  "入出力の関係",
+                  "対応する手順"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2414,8 +2464,8 @@
                 "name": "相手・対象（Object）",
                 "description": "業務の入出力先や情報を持つ対象。人・紙・システムなどを表す。Whoとは別。",
                 "fields": [
-                  "id / name / scope",
-                  "information[]"
+                  "識別子・名前・範囲",
+                  "情報項目"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2425,8 +2475,8 @@
                 "name": "入出力の関係（Relation）",
                 "description": "BD.relationsのinput/output。ActivityとObjectの端点・方向を保持する。Dataは関係本体に複製せず、Stepのやり取りから図の線とラベルを集約する。例外関係は別種。",
                 "fields": [
-                  "id / kind",
-                  "fromId / toId"
+                  "識別子・関係の種類",
+                  "始点・終点"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2436,8 +2486,8 @@
                 "name": "情報のまとまり（Data）",
                 "description": "名前付きの共通Data。Stepの対象と受け渡しから同じIDを参照できる。",
                 "fields": [
-                  "id / name",
-                  "items[]"
+                  "識別子・名前",
+                  "構成する情報"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2563,12 +2613,16 @@
                 "name": "手順行（Step）",
                 "description": "手順を表す。Action、対象Data、適用条件、任意、やり取りと前提を別に保持する。",
                 "fields": [
-                  "id / action / method",
-                  "whatDataIds[] / effect",
-                  "obligation / appliesWhen",
-                  "exchange / parties",
-                  "decisionIds[] / whenDecision",
-                  "dependsOn[] / legacyText"
+                  "識別子・操作・方法",
+                  "操作対象データ",
+                  "操作効果",
+                  "必須／任意・適用条件",
+                  "やり取り",
+                  "操作主体と対象",
+                  "判定表",
+                  "判定行",
+                  "前提",
+                  "旧手順本文"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2578,12 +2632,14 @@
                 "name": "やり取り（Exchange）",
                 "description": "各Stepに1つ。interactionだけが相手・方向・Request/Response・対応Stepを持つ。internalとunresolvedにはそれらの属性はない。",
                 "fields": [
-                  "kind: interaction / internal / unresolved",
-                  "objectId / direction",
-                  "phase: request / response",
-                  "not-applicable / null",
-                  "dataIds[] / relationId",
-                  "pairedStepId"
+                  "やり取りの種類",
+                  "対象",
+                  "入出力の向き",
+                  "要求／応答の区分",
+                  "対象外・未決",
+                  "受渡しデータ",
+                  "入出力の関係",
+                  "対応する手順"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2593,8 +2649,8 @@
                 "name": "相手・対象（Object）",
                 "description": "業務の入出力先や情報を持つ対象。人・紙・システムなどを表す。Whoとは別。",
                 "fields": [
-                  "id / name / scope",
-                  "information[]"
+                  "識別子・名前・範囲",
+                  "情報項目"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2604,8 +2660,8 @@
                 "name": "情報のまとまり（Data）",
                 "description": "名前付きの共通Data。Stepの対象と受け渡しから同じIDを参照できる。",
                 "fields": [
-                  "id / name",
-                  "items[]"
+                  "識別子・名前",
+                  "構成する情報"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2615,8 +2671,8 @@
                 "name": "Data項目（Data.itemsの要素）",
                 "description": "Dataを構成するInformationへの参照と任意の条件。要素自体にidはない。",
                 "fields": [
-                  "informationId",
-                  "condition / null"
+                  "情報項目",
+                  "条件"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2626,7 +2682,7 @@
                 "name": "情報項目（Information）",
                 "description": "Objectに所有され、Dataから参照される。参照したDataの受け渡し先が所有Objectと異なってもよい。",
                 "fields": [
-                  "id / name / description"
+                  "識別子・名前・説明"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2768,11 +2824,11 @@
                 "name": "業務（Activity）",
                 "description": "一つのWhoと一つのProcedureを持つ。判定表と結果はActivityに属する。",
                 "fields": [
-                  "id / name / scope",
-                  "who",
-                  "procedure",
-                  "decisions[]",
-                  "results[]"
+                  "識別子・名前・範囲",
+                  "実行主体",
+                  "手順",
+                  "判定表",
+                  "業務結果"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2782,12 +2838,16 @@
                 "name": "手順行（Step）",
                 "description": "手順を表す。Action、対象Data、適用条件、任意、やり取りと前提を別に保持する。",
                 "fields": [
-                  "id / action / method",
-                  "whatDataIds[] / effect",
-                  "obligation / appliesWhen",
-                  "exchange / parties",
-                  "decisionIds[] / whenDecision",
-                  "dependsOn[] / legacyText"
+                  "識別子・操作・方法",
+                  "操作対象データ",
+                  "操作効果",
+                  "必須／任意・適用条件",
+                  "やり取り",
+                  "操作主体と対象",
+                  "判定表",
+                  "判定行",
+                  "前提",
+                  "旧手順本文"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2797,9 +2857,10 @@
                 "name": "判定表（Decision）",
                 "description": "Activity内。認可・検査・アルゴリズムを表し、上から最初に一致した行を読む。",
                 "fields": [
-                  "id / title / kind",
-                  "appliesWhen",
-                  "axes[] / rows[]"
+                  "識別子・表題・種類",
+                  "適用条件",
+                  "判定軸",
+                  "判定行"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2809,9 +2870,9 @@
                 "name": "判定軸（DecisionAxis）",
                 "description": "判定表の条件列。1表に1件以上あり、条件セルは同じ順序で軸IDを参照する。",
                 "fields": [
-                  "id / name",
-                  "dataIds[]",
-                  "unit / trueLabel / falseLabel"
+                  "識別子・名前",
+                  "対象データ",
+                  "単位・真偽の表示"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2821,9 +2882,10 @@
                 "name": "判定行（DecisionRow）",
                 "description": "判定表に1行以上。各軸の条件と結果を持ち、必要に応じてCheckを参照する。",
                 "fields": [
-                  "id / conditions[]",
-                  "result",
-                  "checkRefs[]"
+                  "識別子",
+                  "条件",
+                  "判定結果",
+                  "チェック項目への参照"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2833,8 +2895,9 @@
                 "name": "条件セル（Condition）",
                 "description": "判定行の各軸に1つ。value、else、any、undecidedを区別する。",
                 "fields": [
-                  "axisId / kind",
-                  "operator / value（値の場合）"
+                  "判定軸",
+                  "条件の種類",
+                  "比較方法・値"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2844,9 +2907,9 @@
                 "name": "判定結果（DecisionResult）",
                 "description": "判定行に1つ。Activity.resultsとは別。結果種別・文言・Data・Exception参照を保持する。",
                 "fields": [
-                  "kind / text",
-                  "dataIds[]",
-                  "exceptionIds[]"
+                  "結果の種類・文言",
+                  "関連データ",
+                  "関連する例外"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2856,8 +2919,8 @@
                 "name": "Check参照（checkRefsの要素）",
                 "description": "判定行から既存Checkへの参照。full / partialを保持する。要素自体にidはない。",
                 "fields": [
-                  "checkId",
-                  "coverage: full / partial"
+                  "チェック項目",
+                  "対応の範囲"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2867,9 +2930,10 @@
                 "name": "チェック文書（Check Items）",
                 "description": "package.documents内の別文書。basedOnは業務設計書またはexternalDocuments内の目録のIDとrevisionを指す。",
                 "fields": [
-                  "id / schemaVersion / revision",
-                  "basedOn",
-                  "items[] / index[]"
+                  "識別子・構造版・改訂",
+                  "参照する業務設計書",
+                  "チェック項目",
+                  "索引"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -2879,9 +2943,9 @@
                 "name": "チェック項目（Check）",
                 "description": "Check Itemsに属する。判定行とActivityから参照される。人間の確認状態を保持する。",
                 "fields": [
-                  "id / checkId / title",
-                  "reviewState",
-                  "fields"
+                  "識別子・Check ID・表題",
+                  "人間の確認状態",
+                  "内容"
                 ],
                 "sources": [],
                 "sourceActivityIds": []
@@ -3044,7 +3108,491 @@
         "sourceBusinessDesignSchemaVersion": "0.6",
         "schemaSource": "https://github.com/mk3008/alder/blob/14e59596bf07cc42b6dac43dc0c426b06f546a34/tools/document_storage/schema.mjs",
         "validatorSource": "https://github.com/mk3008/alder/blob/14e59596bf07cc42b6dac43dc0c426b06f546a34/tools/document_storage/procedure-structure.mjs",
-        "note": "既存のAlder業務設計書にモデルを追加した別候補。元BDとCheckは変更しない。構造図の根拠は0.7候補Schemaと検証器であり、0.4のBDから0.7形式を自動導出したものではない。"
+        "note": "既存のAlder業務設計書にモデルを追加した別候補。元BDとCheckは変更しない。構造図の根拠は0.7候補Schemaと検証器であり、0.4のBDから0.7形式を自動導出したものではない。",
+        "fieldMappings": [
+          {
+            "informationId": "fmt-package-field-1",
+            "physicalName": "format",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-package-field-2",
+            "physicalName": "formatVersion: 0.7",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-package-field-3",
+            "physicalName": "revision",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-package-field-4",
+            "physicalName": "documents[]",
+            "relationIds": [
+              "rel-package-bd",
+              "rel-package-checkdoc"
+            ]
+          },
+          {
+            "informationId": "fmt-bd-field-1",
+            "physicalName": "id",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-bd-field-2",
+            "physicalName": "schemaVersion: 0.6",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-bd-field-3",
+            "physicalName": "activities[]",
+            "relationIds": [
+              "rel-bd-activity"
+            ]
+          },
+          {
+            "informationId": "fmt-bd-field-4",
+            "physicalName": "objects[]",
+            "relationIds": [
+              "rel-bd-object"
+            ]
+          },
+          {
+            "informationId": "fmt-bd-field-5",
+            "physicalName": "data[]",
+            "relationIds": [
+              "rel-bd-data"
+            ]
+          },
+          {
+            "informationId": "fmt-bd-field-6",
+            "physicalName": "relations[]",
+            "relationIds": [
+              "rel-bd-relation"
+            ]
+          },
+          {
+            "informationId": "fmt-bd-field-7",
+            "physicalName": "exceptions[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-activity-field-1",
+            "physicalName": "id / name / scope",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-activity-field-2",
+            "physicalName": "who",
+            "relationIds": [
+              "rel-activity-who"
+            ]
+          },
+          {
+            "informationId": "fmt-activity-field-3",
+            "physicalName": "procedure",
+            "relationIds": [
+              "rel-activity-procedure"
+            ]
+          },
+          {
+            "informationId": "fmt-activity-field-4",
+            "physicalName": "decisions[]",
+            "relationIds": [
+              "rel-activity-decision"
+            ]
+          },
+          {
+            "informationId": "fmt-activity-field-5",
+            "physicalName": "results[]",
+            "relationIds": [
+              "rel-activity-result"
+            ]
+          },
+          {
+            "informationId": "fmt-who-field-1",
+            "physicalName": "kind: role / system / scheduler",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-who-field-2",
+            "physicalName": "roleId / name",
+            "relationIds": [
+              "rel-who-role"
+            ]
+          },
+          {
+            "informationId": "fmt-who-field-3",
+            "physicalName": "who = null",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-role-field-1",
+            "physicalName": "id / name / color",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-procedure-field-1",
+            "physicalName": "steps[]",
+            "relationIds": [
+              "rel-procedure-step"
+            ]
+          },
+          {
+            "informationId": "fmt-procedure-field-2",
+            "physicalName": "orderRules[]",
+            "relationIds": [
+              "rel-procedure-order"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-1",
+            "physicalName": "id / action / method",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-step-field-2",
+            "physicalName": "whatDataIds[]",
+            "relationIds": [
+              "rel-step-data"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-2-2",
+            "physicalName": "effect",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-step-field-3",
+            "physicalName": "obligation / appliesWhen",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-step-field-4",
+            "physicalName": "exchange",
+            "relationIds": [
+              "rel-step-exchange"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-4-2",
+            "physicalName": "parties",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-step-field-5",
+            "physicalName": "decisionIds[]",
+            "relationIds": [
+              "rel-step-decision"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-5-2",
+            "physicalName": "whenDecision",
+            "relationIds": [
+              "rel-step-row"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-6",
+            "physicalName": "dependsOn[]",
+            "relationIds": [
+              "rel-step-dependency"
+            ]
+          },
+          {
+            "informationId": "fmt-step-field-6-2",
+            "physicalName": "legacyText",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-order-field-1",
+            "physicalName": "kind: before / interchangeable",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-order-field-2",
+            "physicalName": "beforeId / afterId",
+            "relationIds": [
+              "rel-order-step"
+            ]
+          },
+          {
+            "informationId": "fmt-order-field-3",
+            "physicalName": "stepIds[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-dependency-field-1",
+            "physicalName": "stepId",
+            "relationIds": [
+              "rel-dependency-step"
+            ]
+          },
+          {
+            "informationId": "fmt-dependency-field-2",
+            "physicalName": "whenDecision",
+            "relationIds": [
+              "rel-dependency-row"
+            ]
+          },
+          {
+            "informationId": "fmt-exchange-field-1",
+            "physicalName": "kind: interaction / internal / unresolved",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-exchange-field-2",
+            "physicalName": "objectId",
+            "relationIds": [
+              "rel-exchange-object"
+            ]
+          },
+          {
+            "informationId": "fmt-exchange-field-2-2",
+            "physicalName": "direction",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-exchange-field-3",
+            "physicalName": "phase: request / response",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-exchange-field-4",
+            "physicalName": "phase: not-applicable / null",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-exchange-field-5",
+            "physicalName": "dataIds[]",
+            "relationIds": [
+              "rel-exchange-data"
+            ]
+          },
+          {
+            "informationId": "fmt-exchange-field-5-2",
+            "physicalName": "relationId",
+            "relationIds": [
+              "rel-exchange-relation"
+            ]
+          },
+          {
+            "informationId": "fmt-exchange-field-6",
+            "physicalName": "pairedStepId",
+            "relationIds": [
+              "rel-exchange-pair"
+            ]
+          },
+          {
+            "informationId": "fmt-object-field-1",
+            "physicalName": "id / name / scope",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-object-field-2",
+            "physicalName": "information[]",
+            "relationIds": [
+              "rel-object-information"
+            ]
+          },
+          {
+            "informationId": "fmt-relation-field-1",
+            "physicalName": "id / kind",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-relation-field-2",
+            "physicalName": "fromId / toId",
+            "relationIds": [
+              "rel-relation-object",
+              "rel-relation-activity"
+            ]
+          },
+          {
+            "informationId": "fmt-data-field-1",
+            "physicalName": "id / name",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-data-field-2",
+            "physicalName": "items[]",
+            "relationIds": [
+              "rel-data-dataitem"
+            ]
+          },
+          {
+            "informationId": "fmt-dataitem-field-1",
+            "physicalName": "informationId",
+            "relationIds": [
+              "rel-dataitem-information"
+            ]
+          },
+          {
+            "informationId": "fmt-dataitem-field-2",
+            "physicalName": "condition",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-information-field-1",
+            "physicalName": "id / name / description",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-decision-field-1",
+            "physicalName": "id / title / kind",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-decision-field-2",
+            "physicalName": "appliesWhen",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-decision-field-3",
+            "physicalName": "axes[]",
+            "relationIds": [
+              "rel-decision-axis"
+            ]
+          },
+          {
+            "informationId": "fmt-decision-field-3-2",
+            "physicalName": "rows[]",
+            "relationIds": [
+              "rel-decision-row"
+            ]
+          },
+          {
+            "informationId": "fmt-axis-field-1",
+            "physicalName": "id / name",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-axis-field-2",
+            "physicalName": "dataIds[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-axis-field-3",
+            "physicalName": "unit / trueLabel / falseLabel",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-row-field-1",
+            "physicalName": "id",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-row-field-1-2",
+            "physicalName": "conditions[]",
+            "relationIds": [
+              "rel-row-condition"
+            ]
+          },
+          {
+            "informationId": "fmt-row-field-2",
+            "physicalName": "result",
+            "relationIds": [
+              "rel-row-outcome"
+            ]
+          },
+          {
+            "informationId": "fmt-row-field-3",
+            "physicalName": "checkRefs[]",
+            "relationIds": [
+              "rel-row-checkref"
+            ]
+          },
+          {
+            "informationId": "fmt-condition-field-1",
+            "physicalName": "axisId",
+            "relationIds": [
+              "rel-condition-axis"
+            ]
+          },
+          {
+            "informationId": "fmt-condition-field-1-2",
+            "physicalName": "kind",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-condition-field-2",
+            "physicalName": "operator / value",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-outcome-field-1",
+            "physicalName": "kind / text",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-outcome-field-2",
+            "physicalName": "dataIds[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-outcome-field-3",
+            "physicalName": "exceptionIds[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-checkref-field-1",
+            "physicalName": "checkId",
+            "relationIds": [
+              "rel-checkref-check"
+            ]
+          },
+          {
+            "informationId": "fmt-checkref-field-2",
+            "physicalName": "coverage: full / partial",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-checkdoc-field-1",
+            "physicalName": "id / schemaVersion / revision",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-checkdoc-field-2",
+            "physicalName": "basedOn",
+            "relationIds": [
+              "rel-checkdoc-bd"
+            ]
+          },
+          {
+            "informationId": "fmt-checkdoc-field-3",
+            "physicalName": "items[]",
+            "relationIds": [
+              "rel-checkdoc-check"
+            ]
+          },
+          {
+            "informationId": "fmt-checkdoc-field-3-2",
+            "physicalName": "index[]",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-check-field-1",
+            "physicalName": "id / checkId / title",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-check-field-2",
+            "physicalName": "reviewState",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-check-field-3",
+            "physicalName": "fields",
+            "relationIds": []
+          },
+          {
+            "informationId": "fmt-result-field-1",
+            "physicalName": "id / text",
+            "relationIds": []
+          }
+        ],
+        "fieldMappingNote": "informationIdごとの和名と物理名、明示した関係を対応付ける。"
       },
       "presentation": {
         "landscapeRelationships": [],
@@ -3056,23 +3604,23 @@
               "conceptId": "fmt-package",
               "subsystemId": "format-review",
               "name": "文書パッケージ（0.7候補）",
-              "description": "固定した0.7候補の外側のJSON。documentsに複数種の文書を保持する。図の対象は業務・手順・やり取り・Data・判定とCheckで、状態遷移と概念モデル自体の内部は対象外。保存器は複数BDを扱えるが、Viewerは同一JSON内のBDが1件の場合に表示する。この図を表示する器のBDは旧0.4であり、0.7へ変換していない。",
+              "description": "固定した0.7候補の外側のJSON。documentsに複数種の文書を保持する。図の対象は業務・手順・やり取り・Data・判定とCheckで、状態遷移と概念モデル自体の内部は対象外。保存器は複数BDを扱えるが、Viewerは同一JSON内のBDが1件の場合に表示する。この図を表示する器のBDは旧0.4であり、0.7へ変換していない。 documentsは業務設計書だけでなく、Check・状態遷移・概念モデルなどを含む文書の一覧。",
               "sources": [],
               "fields": [
                 {
-                  "name": "format",
+                  "name": "形式",
                   "informationId": "fmt-package-field-1"
                 },
                 {
-                  "name": "formatVersion: 0.7",
+                  "name": "形式の版",
                   "informationId": "fmt-package-field-2"
                 },
                 {
-                  "name": "revision",
+                  "name": "改訂",
                   "informationId": "fmt-package-field-3"
                 },
                 {
-                  "name": "documents[]",
+                  "name": "文書一覧",
                   "informationId": "fmt-package-field-4"
                 }
               ]
@@ -3086,31 +3634,31 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id",
+                  "name": "識別子",
                   "informationId": "fmt-bd-field-1"
                 },
                 {
-                  "name": "schemaVersion: 0.6",
+                  "name": "構造の版",
                   "informationId": "fmt-bd-field-2"
                 },
                 {
-                  "name": "activities[]",
+                  "name": "業務一覧",
                   "informationId": "fmt-bd-field-3"
                 },
                 {
-                  "name": "objects[]",
+                  "name": "対象一覧",
                   "informationId": "fmt-bd-field-4"
                 },
                 {
-                  "name": "data[]",
+                  "name": "データ一覧",
                   "informationId": "fmt-bd-field-5"
                 },
                 {
-                  "name": "relations[]",
+                  "name": "関係一覧",
                   "informationId": "fmt-bd-field-6"
                 },
                 {
-                  "name": "exceptions[]",
+                  "name": "例外一覧",
                   "informationId": "fmt-bd-field-7"
                 }
               ]
@@ -3124,23 +3672,23 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / name / scope",
+                  "name": "識別子・名前・範囲",
                   "informationId": "fmt-activity-field-1"
                 },
                 {
-                  "name": "who",
+                  "name": "実行主体",
                   "informationId": "fmt-activity-field-2"
                 },
                 {
-                  "name": "procedure",
+                  "name": "手順",
                   "informationId": "fmt-activity-field-3"
                 },
                 {
-                  "name": "decisions[]",
+                  "name": "判定表",
                   "informationId": "fmt-activity-field-4"
                 },
                 {
-                  "name": "results[]",
+                  "name": "業務結果",
                   "informationId": "fmt-activity-field-5"
                 }
               ]
@@ -3154,28 +3702,44 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / action / method",
+                  "name": "識別子・操作・方法",
                   "informationId": "fmt-step-field-1"
                 },
                 {
-                  "name": "whatDataIds[] / effect",
+                  "name": "操作対象データ",
                   "informationId": "fmt-step-field-2"
                 },
                 {
-                  "name": "obligation / appliesWhen",
+                  "name": "操作効果",
+                  "informationId": "fmt-step-field-2-2"
+                },
+                {
+                  "name": "必須／任意・適用条件",
                   "informationId": "fmt-step-field-3"
                 },
                 {
-                  "name": "exchange / parties",
+                  "name": "やり取り",
                   "informationId": "fmt-step-field-4"
                 },
                 {
-                  "name": "decisionIds[] / whenDecision",
+                  "name": "操作主体と対象",
+                  "informationId": "fmt-step-field-4-2"
+                },
+                {
+                  "name": "判定表",
                   "informationId": "fmt-step-field-5"
                 },
                 {
-                  "name": "dependsOn[] / legacyText",
+                  "name": "判定行",
+                  "informationId": "fmt-step-field-5-2"
+                },
+                {
+                  "name": "前提",
                   "informationId": "fmt-step-field-6"
+                },
+                {
+                  "name": "旧手順本文",
+                  "informationId": "fmt-step-field-6-2"
                 }
               ]
             },
@@ -3188,11 +3752,11 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "stepId：前提となるStep",
+                  "name": "前提となる手順",
                   "informationId": "fmt-dependency-field-1"
                 },
                 {
-                  "name": "whenDecision：条件の判定行 / null",
+                  "name": "条件となる判定行",
                   "informationId": "fmt-dependency-field-2"
                 }
               ]
@@ -3206,27 +3770,35 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "kind: interaction / internal / unresolved",
+                  "name": "やり取りの種類",
                   "informationId": "fmt-exchange-field-1"
                 },
                 {
-                  "name": "objectId / direction",
+                  "name": "対象",
                   "informationId": "fmt-exchange-field-2"
                 },
                 {
-                  "name": "phase: request / response",
+                  "name": "入出力の向き",
+                  "informationId": "fmt-exchange-field-2-2"
+                },
+                {
+                  "name": "要求／応答の区分",
                   "informationId": "fmt-exchange-field-3"
                 },
                 {
-                  "name": "not-applicable / null",
+                  "name": "対象外・未決",
                   "informationId": "fmt-exchange-field-4"
                 },
                 {
-                  "name": "dataIds[] / relationId",
+                  "name": "受渡しデータ",
                   "informationId": "fmt-exchange-field-5"
                 },
                 {
-                  "name": "pairedStepId",
+                  "name": "入出力の関係",
+                  "informationId": "fmt-exchange-field-5-2"
+                },
+                {
+                  "name": "対応する手順",
                   "informationId": "fmt-exchange-field-6"
                 }
               ]
@@ -3240,11 +3812,11 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / name / scope",
+                  "name": "識別子・名前・範囲",
                   "informationId": "fmt-object-field-1"
                 },
                 {
-                  "name": "information[]",
+                  "name": "情報項目",
                   "informationId": "fmt-object-field-2"
                 }
               ]
@@ -3258,11 +3830,11 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / name",
+                  "name": "識別子・名前",
                   "informationId": "fmt-data-field-1"
                 },
                 {
-                  "name": "items[]",
+                  "name": "構成する情報",
                   "informationId": "fmt-data-field-2"
                 }
               ]
@@ -3276,16 +3848,20 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / title / kind",
+                  "name": "識別子・表題・種類",
                   "informationId": "fmt-decision-field-1"
                 },
                 {
-                  "name": "appliesWhen",
+                  "name": "適用条件",
                   "informationId": "fmt-decision-field-2"
                 },
                 {
-                  "name": "axes[] / rows[]",
+                  "name": "判定軸",
                   "informationId": "fmt-decision-field-3"
+                },
+                {
+                  "name": "判定行",
+                  "informationId": "fmt-decision-field-3-2"
                 }
               ]
             },
@@ -3298,15 +3874,19 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / conditions[]",
+                  "name": "識別子",
                   "informationId": "fmt-row-field-1"
                 },
                 {
-                  "name": "result",
+                  "name": "条件",
+                  "informationId": "fmt-row-field-1-2"
+                },
+                {
+                  "name": "判定結果",
                   "informationId": "fmt-row-field-2"
                 },
                 {
-                  "name": "checkRefs[]",
+                  "name": "チェック項目への参照",
                   "informationId": "fmt-row-field-3"
                 }
               ]
@@ -3320,15 +3900,15 @@
               "sources": [],
               "fields": [
                 {
-                  "name": "id / checkId / title",
+                  "name": "識別子・Check ID・表題",
                   "informationId": "fmt-check-field-1"
                 },
                 {
-                  "name": "reviewState",
+                  "name": "人間の確認状態",
                   "informationId": "fmt-check-field-2"
                 },
                 {
-                  "name": "fields",
+                  "name": "内容",
                   "informationId": "fmt-check-field-3"
                 }
               ]
