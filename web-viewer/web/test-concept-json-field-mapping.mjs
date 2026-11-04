@@ -45,6 +45,7 @@ w.document.querySelector('.canvas').dispatchEvent(new w.KeyboardEvent('keydown',
 
 w=mount(views.graph('group-exchange'));choose(w,'fmt-exchange');assert(highlighted(w,'fmt-step-field-4'),'group shows the field containing the selected exchange');
 choose(w,'fmt-data');assert(highlighted(w,'fmt-step-field-2'));assert(highlighted(w,'fmt-exchange-field-5'));w.close();
+w=mount(views.graph('group-steps'));choose(w,'fmt-step');assert(highlighted(w,'fmt-order-field-2'));assert(highlighted(w,'fmt-order-field-3'),'both forms of the old order rule reference steps');w.close();
 w=mount({ids:Object.keys(views.tables),edges:views.edges,tables:views.tables,fieldLinks:views.fieldLinks},'fmt-exchange');
 choose(w,'fmt-exchange');assert(highlighted(w,'fmt-step-field-4'),'detail view keeps authored relationship mapping');w.close();
 

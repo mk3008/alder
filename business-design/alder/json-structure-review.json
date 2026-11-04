@@ -3320,7 +3320,9 @@
           {
             "informationId": "fmt-order-field-3",
             "physicalName": "stepIds[]",
-            "relationIds": []
+            "relationIds": [
+              "rel-order-step"
+            ]
           },
           {
             "informationId": "fmt-dependency-field-1",
