@@ -49,6 +49,8 @@ for(const id of ordered){oldPositions.set(id,{x:40+oldStep*plan.cells[id][0],y,.
 const before=routeER(oldPositions,g.edges),after=conceptDiagram(g.ids,g.edges,sizes);
 assert(after.routing.width<before.width-500,'the full model is materially narrower than the previous layout');
 assert.equal(after.routing.routes.filter(r=>r.unrouted).length,0);assert.equal(after.routing.labels.filter(label=>label.conflict).length,0);
+const offset=(routing,label)=>{const port=routing.routes.find(route=>route.id===label.edge).ports.find(item=>item.table===label.table);return Math.abs(label.x-port.label.x)+Math.abs(label.y-port.label.y);};
+for(const label of after.routing.labels){const prior=before.labels.find(item=>item.edge===label.edge&&item.table===label.table);assert(prior);assert(offset(after.routing,label)<=Math.max(32,offset(before,prior)),'counts stay near their own connection');}
 const aligned=s=>s.a.x===s.b.x||s.a.y===s.b.y;
 for(let i=0;i<after.routing.routes.length;i++)for(let j=0;j<i;j++){
  const a=after.routing.routes[i],b=after.routing.routes[j];

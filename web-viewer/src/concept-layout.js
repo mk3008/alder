@@ -37,13 +37,18 @@ export function initialConceptPositions(ids,edges,sizes){
   }
   return [routing.routes.filter(item=>item.unrouted).length,routing.labels.filter(item=>item.conflict).length,duplicatePorts,sharedLines,crossings];
  };
- const baseline=counts(route(place(gaps)));
+ const displacement=routing=>new Map(routing.labels.map(label=>{
+  const port=routing.routes.find(item=>item.id===label.edge).ports.find(item=>item.table===label.table);
+  return [label.edge+':'+label.table,Math.abs(label.x-port.label.x)+Math.abs(label.y-port.label.y)];
+ }));
+ const original=route(place(gaps)),baseline=counts(original),originalDisplacement=displacement(original);
  let attempts=0;
  // Keep large graphs responsive: untried columns retain their prior spacing.
  outer:for(let column=0;column<gaps.length;column++)for(const step of steps){
   if(attempts++>=48){gaps[column]=previousStep;break outer;}
   gaps[column]=step;
-  if(counts(route(place(gaps))).every((value,index)=>value<=baseline[index]))break;
+  const routing=route(place(gaps));
+  if(counts(routing).every((value,index)=>value<=baseline[index])&&[...displacement(routing)].every(([key,value])=>value<=Math.max(32,originalDisplacement.get(key)??0)))break;
  }
  const positions=place(gaps);
  cache.set(signature,positions);
