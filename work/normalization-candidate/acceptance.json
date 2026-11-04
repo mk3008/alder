@@ -1,0 +1,12 @@
+{
+  "format": "alder-review-acceptance/1",
+  "scope": "候補0.7のBusiness Designを対象にした正規化試作と概念モデリングSkill候補。正式形式の変更や移行の承認ではない。",
+  "source": "2026-11-04 本人: Activityから共通Whoを参照し、未決はNULLで表す。JSON構造の正規化と概念モデリングの改善を求める。",
+  "checks": [
+    {"id":"NORM-01","condition":"複数Activityと未決、Role・system・schedulerを含む業務設計","guarantee":"Whoは共有主体を参照でき、各Activityは高々一つ。未決はnullであって共通の未決主体を作らない。Actorは人間個人やRole兼任を表さない。","verification":"共有・複数・未決・型違い・存在しないIDの正負例"},
+    {"id":"NORM-02","condition":"0.7の明示変換","guarantee":"既存RoleはID、名前、色と参照を保持。IDのないsystem/schedulerの同一性を名前から決めず、明示対応のない変換は停止する。","verification":"明示共有と別主体、未指定・衝突・不一致の正負例"},
+    {"id":"NORM-03","condition":"手順、判断、Data、例外と依存を含む0.7","guarantee":"ID、配列順、任意プロパティの有無、nullと空配列、Request/Response・方向・元参照・他文書の人間確認状態を保ち、旧構造へ正確に戻せる。","verification":"元Schemaを満たす実例と境界例の完全往復、元バイト不変、旧検証器と負例"},
+    {"id":"NORM-04","condition":"正規化モデルとViewer用図","guarantee":"実体、属性、関係、値、存在条件、表示用の投影を区別。全体図と詳細図で同じ概念と関係を追え、物理JSONの現状と提案を混同しない。","verification":"旧候補・新候補の明示対応、全体と個別のWho/Activityの図形と線の照合"},
+    {"id":"NORM-05","condition":"概念モデリングSkill候補","guarantee":"業務上の同一性・従属性・多重度・時間・未決と保存形式を具体例で検討する。架空の同一性・業務条件を確定せず、既存原本・人間判断を保持する。","verification":"Skill本文・入力経路・二つの題材を別工程で照合。実Agentによる発見能力は別途検証する。"}
+  ]
+}
