@@ -65,7 +65,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
  const aside=document.createElement('section');aside.className='structure-help';workspace.append(aside);
  const guide=document.createElement('div');guide.className='structure-help-card';aside.append(guide);text(guide,'h3','表示ルール');
  const list=document.createElement('ul');guide.append(list);
- for(const item of ['階層は探索経路です。','所有関係・所有元は包含の両方向です。','参照関係・参照元は参照の両方向です。','件数は移動先、括弧内は反対側です。','既出は同じ構造です。循環はそこで止まります。','記載のない属性の型は「未定義」です。'])text(list,'li',item);
+ for(const item of ['階層は探索経路です。','所有関係・所有元は包含の両方向です。','参照関係・参照元は参照の両方向です。','件数は移動先、「逆」は反対側です。','既出は同じ構造です。循環はそこで止まります。','記載のない属性の型は「未定義」です。'])text(list,'li',item);
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
  if(unreachable.length)text(guide,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  let savedTree:Node|null=null;
