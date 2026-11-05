@@ -1,0 +1,53 @@
+name: Build isolated PR 357 review preview
+on:
+  push:
+    branches:
+      - beta/pr-357-preview-17ebf69d
+    paths:
+      - .github/workflows/build-pr357-review.yml
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: 17ebf69d90641514b2f4008135e8d5bec3127619
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - name: Verify source revision
+        run: |
+          test "$(git rev-parse HEAD)" = 17ebf69d90641514b2f4008135e8d5bec3127619
+          test "$(git rev-parse 'HEAD^{tree}')" = 9493581be945cea8e1c7c3786b0bd50e8d193b15
+          git diff --quiet HEAD
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run test:structure-explorer
+      - run: npm run test:normalization-candidate
+      - run: npm run build
+      - name: Package pinned public review JSON
+        run: |
+          mkdir -p dist/examples
+          cp ../business-design/alder/json-normalized-model-review.json dist/examples/json-normalized-model-review.json
+          echo '237becc1721ae233c250416d4c66558c4a123036d1813a7e7df748fcb98b5c4a  dist/examples/json-normalized-model-review.json' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('dist')
+          files={str(path.relative_to(root)):hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(root.rglob('*')) if path.is_file()}
+          assert 'index.html' in files and 'concept.html' in files
+          assert 'examples/json-normalized-model-review.json' in files
+          manifest={'source':'17ebf69d90641514b2f4008135e8d5bec3127619','sourceTree':'9493581be945cea8e1c7c3786b0bd50e8d193b15','files':files}
+          (root/'preview-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: pr357-fixed-preview-17ebf69d
+          path: web-viewer/dist
+          if-no-files-found: error
+          retention-days: 14
