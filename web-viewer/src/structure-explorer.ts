@@ -86,7 +86,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
-   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span',concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');};
+   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');};
    if(edge.roleName&&fields.length===1)entry(edge.roleName,fields[0]);
    else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
   }else text(row,'strong',concept.name);
