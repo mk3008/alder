@@ -58,7 +58,7 @@ jobs:
               await state.locator(':scope > summary').click();
               const states=state.locator('[data-relation-id="cr-801f6a69f2d0fc"] > details');
               await states.locator(':scope > summary').click();
-              assert((await states.innerText()).includes('参考例：受付済'));
+              const stateText=await states.innerText();console.log('state-visible '+JSON.stringify(stateText));assert(/参考例：\s*受付済/.test(stateText),stateText);
               const check=page.locator('[data-relation-id="nr-package-checkdoc"] > details');
               await check.locator(':scope > summary').click();
               const checkItem=check.locator('[data-relation-id="nr-checkdoc-check"] > details');
