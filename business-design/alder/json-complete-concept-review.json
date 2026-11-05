@@ -5561,7 +5561,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務設計書を他の文書と区別し、原典や参照を追跡する識別子。",
+            "referenceValue": "alder-design",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-bd-field-2",
@@ -5571,7 +5574,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "業務設計書を識別し、確認相手が何の設計か分かる名前が必要。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "依頼者と設計者が、どの業務についての設計書かを識別する名前。",
+            "referenceValue": "Alderを使った設計業務 — Business Design",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-bd-field-3",
@@ -5581,7 +5587,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "同じ業務設計書の改訂を区別する値。",
+            "referenceValue": "alder-design-1",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-who-field-1",
@@ -5591,7 +5600,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "各業務の実行主体を同一のものとして参照するための識別子。"
           },
           {
             "informationId": "n-who-field-2",
@@ -5601,7 +5611,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "役割か自動主体かを区別する。未決のWhoは主体を仮作成せず、業務の参照を未決にする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "実行主体の種類。人が担う役割と自動実行する主体を区別する。"
           },
           {
             "informationId": "n-who-field-3",
@@ -5611,7 +5622,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "主体を他の主体と区別して業務に結び付けるため、名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務を実行する役割、または自動主体を区別する名前。",
+            "referenceValue": "業務設計者",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-who-field-4",
@@ -5621,7 +5635,8 @@
             "valueType": "string",
             "nullable": null,
             "nullableReason": "色はRoleにのみ関係する。非該当と未設定を区別し、主体の種類との持たせ方を検討する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "Roleを画面で見分けるための表示色。業務上の権限や担当者を表すものではない。"
           },
           {
             "informationId": "n-activity-field-1",
@@ -5631,7 +5646,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務を一意に識別し、関連する手順やチェックとの対応を追跡する。",
+            "referenceValue": "29871eb8-5c38-5151-8b76-e05db78efbfe",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-activity-field-2",
@@ -5641,7 +5659,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "業務を区別し、他の資料から参照できる名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "何を行う業務なのか、他の業務と区別できる名前。",
+            "referenceValue": "業務設計",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-activity-field-3",
@@ -5662,7 +5683,8 @@
             "valueType": "boolean | null",
             "nullable": true,
             "nullableReason": "システム化対象の判定が未決の業務を保持し、対象外のfalseと区別する。合意時には判定を求める。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その業務を対象システムの作成時に考慮するかどうか。未決と対象外は異なる。"
           },
           {
             "informationId": "n-activity-field-5",
@@ -5672,7 +5694,10 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "目的が未決の草案を保持できるようにする。合意済みの業務では目的を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その業務を行い、結果を成立させる目的。",
+            "referenceValue": "業務上の意味と保証の合意",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-activity-field-6",
@@ -5682,7 +5707,10 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "開始条件が未決の草案を保持できるようにする。合意済みの業務では開始条件を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務を開始する契機や成立に必要な条件。",
+            "referenceValue": "目的・変更要求・現在業務のProblem / Painの記録依頼を受領したとき、または改善候補の採用判断を受けたとき",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-object-field-1",
@@ -5692,7 +5720,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務が受け渡しや処理の対象とするものを識別する。",
+            "referenceValue": "c309e18c-479c-5534-92f5-02c420ba3fac",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-object-field-2",
@@ -5702,7 +5733,10 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "対象を業務上区別し、入出力から参照できる名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務で扱う人、帳票、システム、記録などの対象を区別する名前。",
+            "referenceValue": "依頼者",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "n-object-field-3",
@@ -5712,7 +5746,8 @@
             "valueType": "boolean | null",
             "nullable": true,
             "nullableReason": "システム化対象の判定が未決の対象を保持し、対象外のfalseと区別する。合意時には判定を求める。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その対象を対象システムの作成時に考慮するかどうか。"
           },
           {
             "informationId": "n-information-field-1",
@@ -5722,7 +5757,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "対象が持つ情報項目を識別し、他のまとまりから参照できるようにする。"
           },
           {
             "informationId": "n-information-field-2",
@@ -5733,7 +5769,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "対象が持つ情報項目を他の項目と区別できる名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "対象が持つ個々の情報の名前。郵便番号や住所1など。"
           },
           {
             "informationId": "n-information-field-3",
@@ -5752,7 +5789,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "情報項目のまとまりを識別し、複数の手順や受渡しで参照する。"
           },
           {
             "informationId": "n-data-field-2",
@@ -5763,7 +5801,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "受渡しや業務フローで参照する情報項目のまとまりに名前を付ける。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "複数の情報項目を目的に応じてまとめた名前。住所や申込情報など。"
           },
           {
             "informationId": "n-dataitem-field-1",
@@ -5792,7 +5831,8 @@
             "valueType": "string | null",
             "nullable": true,
             "nullableReason": "無条件・条件未決は条件の確定状態で区別する。条件ありの場合は条件の内容が必要。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "そのグループに情報項目を含める条件。無条件と条件未決は確定状態で区別する。"
           },
           {
             "informationId": "n-step-field-1",
@@ -5802,7 +5842,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "一つの業務内の手順を識別し、前提や判定との対応を追跡する。"
           },
           {
             "informationId": "n-step-field-2",
@@ -5821,7 +5862,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "手順の操作が未決の草案を保持できるようにする。合意済みの手順では操作を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "手順で主体が行う操作や、相手に対する働きかけ。"
           },
           {
             "informationId": "n-step-field-4",
@@ -5832,7 +5874,8 @@
             "valueType": "string | null",
             "nullable": true,
             "nullableReason": "方法が未決の手順を保持する。方法が不要・該当しない場合との区別は別途必要。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その操作をどのように行うか。方法の違いが業務やシステム化に影響する場合に表す。"
           },
           {
             "informationId": "n-step-field-5",
@@ -5842,7 +5885,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "手順のやり取りの有無・種類が未決の場合を保持し、やり取りなしの確定と区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "手順で受渡しを行うか、そのやり取りをどう扱うかの区分。"
           },
           {
             "informationId": "n-step-field-6",
@@ -5883,7 +5927,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "受渡しの向きが未決の草案を保持し、合意時に方向を確認する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "主体から相手へ、または相手から主体への受渡しの方向。"
           },
           {
             "informationId": "n-exchange-field-4",
@@ -5893,7 +5938,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "要求か応答かが未決の受渡しを保持し、応答がない場合と混同しない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "相手への要求か、その要求に対する応答かを区別する。"
           },
           {
             "informationId": "n-exchange-field-5",
@@ -5933,7 +5979,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "手順上の当事者がFromとToのどちらかを区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "手順のやり取りにおける送る側（From）か受ける側（To）か。"
           },
           {
             "informationId": "n-party-field-3",
@@ -5942,7 +5989,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "当事者の種類が未決の場合を保持する。主体が存在しないと確定した意味にはしない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その手順の当事者がどの種類の主体・対象かを区別する。"
           },
           {
             "informationId": "n-party-field-4",
@@ -6028,7 +6076,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "一つの業務から成立する結果を識別する。"
           },
           {
             "informationId": "n-result-field-2",
@@ -6047,7 +6096,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "結果が未決の草案を保持する。合意済み業務では成立する結果を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務が正常に終わったときに成立する結果や状態。"
           },
           {
             "informationId": "n-decision-field-1",
@@ -6076,7 +6126,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "何を判断する表なのかを区別する名前。"
           },
           {
             "informationId": "n-decision-field-4",
@@ -6126,7 +6177,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "判定で条件を分ける観点の名前。"
           },
           {
             "informationId": "n-row-field-1",
@@ -6205,7 +6257,8 @@
             "valueType": "string",
             "nullable": null,
             "nullableReason": "条件の種類によって比較が非該当の場合と、比較方法が未決の場合を区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "判定軸の値と条件値をどのように比較するか。"
           },
           {
             "informationId": "n-condition-field-5",
@@ -6215,7 +6268,8 @@
             "valueType": "string | number | boolean",
             "nullable": null,
             "nullableReason": "条件の種類によって値が非該当の場合と、比較値が未決の場合を区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "判定条件で比較または確認する値。"
           },
           {
             "informationId": "n-rowcheck-field-1",
@@ -6274,7 +6328,8 @@
             "valueType": "string",
             "nullable": false,
             "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務で起きる例外を他と区別する名前。"
           },
           {
             "informationId": "n-exception-field-4",
@@ -6284,7 +6339,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "例外が発生する状況や、業務上の扱いを説明する。"
           },
           {
             "informationId": "n-continuity-field-1",
@@ -6302,7 +6358,8 @@
             "valueType": "string | null",
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "中断・再開の扱いが必要になる条件。"
           },
           {
             "informationId": "n-continuity-field-3",
@@ -6320,7 +6377,8 @@
             "valueType": "string | null",
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "中断した業務を再開できる条件。"
           },
           {
             "informationId": "n-continuity-field-5",
@@ -6349,7 +6407,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務と対象の間の入出力や例外などの関係の種類。"
           },
           {
             "informationId": "n-relation-field-3",
@@ -6387,7 +6446,8 @@
             "valueType": "string",
             "nullable": true,
             "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "設計上の確認事項が未確認・確認済みなど、どの状態にあるか。"
           },
           {
             "informationId": "n-finding-field-3",
@@ -8827,7 +8887,10 @@
             "sampleValue": "",
             "nullable": true,
             "nullableReason": "対象範囲を検討中は未決として保持する。合意済みの設計書では範囲を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "設計書全体で扱う業務・対象と、その範囲を説明する。個々のシステム化対象の判定とは区別する。",
+            "referenceValue": "この文書は、Alder利用者が業務設計を作成・合意し、現在の業務にProblem / Painがあれば任意で改善を検討し、合意済みの業務設計書と検査項目を後続の開発へ引き渡すまでを対象とする。設計・改善・実現と検証は一つのBusiness Designを業務上の正本として共有する。業務改善レビューは正常に成立している業務に対する任意の業務であり、設計の失敗や例外による差し戻しではない。改善候補を採用するのは依頼者・責任者であり、採用時には業務設計を改訂・再合意してから検査項目や実装を更新する。未承認の候補は現在の業務設計書に含めない。標準設計業務は合意済み業務設計書と検査項目の引き渡しで完了する。\n\n画面設計、システム全体の要件・品質条件を整理するシステム設計、実装、実装後のAlder実装レビュー・製品検証・検証結果の統合は、前後の受け渡しを示すScope外の業務である。Alder実装レビューはAlderの開発ループで必須だが、この標準設計業務の境界には含めない。画面設計、SRの作成・妥当性・完全性の確認、UIや性能・安全性・運用等の実検証は製品側の責務であり、Alderレビューが代行・保証するものではない。検証結果の統合は報告と証拠の整理までを扱い、製品の採否・リリースを判断しない。Scope外であることは、製品に必要な作業を省略してよいという意味ではない。\n\n同期漏れ検査は疑いが生じたときだけ使う任意の診断として独立させる。Business Graph JSONは外部ツール向けの任意の中間投影形式で、標準Activityや依頼者への成果物ではない。Alderという手法自体の研究、ガイド改訂の採否、PR・Release、製品の採否判断・デプロイの手順は記述しない。Activity Scopeのtrueは標準設計業務とその任意の診断、falseは受け渡しを示す範囲外の業務を表す。Object Scopeのtrueはこの業務境界内で成立・管理する成果物またはAlderが提供する知識・照合情報、falseは依頼者や範囲外の業務が成立・管理するObjectを表す。Input / Outputの向きだけで内外を決めない。",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "cf-adc18421aa701a",
@@ -8847,7 +8910,8 @@
             "sampleValue": "",
             "nullable": true,
             "nullableReason": "説明が未記録の項目を保持する。説明が不要と確定したこととは区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "情報項目の意味や、その業務での扱いを説明する。"
           },
           {
             "informationId": "cf-f7851e4656568f",
@@ -8857,7 +8921,10 @@
             "sampleValue": "規定なし",
             "nullable": null,
             "nullableReason": "場所が決まっていない場合と、場所を限定しない場合を区別する必要がある。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "業務が行われる場所、または場所に関する制約。",
+            "referenceValue": "規定なし",
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "cf-79e1f59247290a",
@@ -8867,7 +8934,10 @@
             "sampleValue": null,
             "nullable": true,
             "nullableReason": "課題が未確認・課題なしの場合は内容を持たない。両者は課題の確認状態で区別し、課題ありなら内容が必要。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "現在の業務で実際に経験される困りごと。未決の業務仕様とは区別する。",
+            "referenceValue": null,
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "cf-423df2519d7898",
@@ -8877,7 +8947,10 @@
             "sampleValue": null,
             "nullable": true,
             "nullableReason": "課題なしの場合は非該当、課題ありで程度が未評価なら未決。課題の確認状態と併せて区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "記録した課題がもたらす困りごとの程度。課題なし・未評価を区別する。",
+            "referenceValue": null,
+            "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
           {
             "informationId": "cf-db0d007e8ba4d3",
@@ -8896,7 +8969,8 @@
             "sampleValue": "required",
             "nullable": true,
             "nullableReason": "必須・任意が未決の手順を保持し、合意時に必要性を明らかにする。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "手順が必須か任意かを表す。適用条件とは区別する。"
           },
           {
             "informationId": "cf-d6937d0cbb9486",
@@ -8906,7 +8980,8 @@
             "sampleValue": null,
             "nullable": null,
             "nullableReason": "適用条件なしと条件未決は別であり、nullだけで両方を表さない。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "その手順を適用する条件。"
           },
           {
             "informationId": "cf-7c34239a2778a4",
@@ -8916,7 +8991,8 @@
             "sampleValue": null,
             "nullable": null,
             "nullableReason": "効果を記録しない手順と効果が未決の手順を区別する。",
-            "nullableStatus": "proposal"
+            "nullableStatus": "proposal",
+            "logicalMeaning": "手順の操作によって成立する効果。"
           },
           {
             "informationId": "cf-e53cb54e69e740",

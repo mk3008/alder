@@ -3,6 +3,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {schema} from '../../tools/document_storage/schema.mjs';
 import {validate} from '../../tools/document_storage/core.mjs';
 import {nullabilityProposal} from './nullability-proposal.mjs';
+import {attributeMeaning} from './attribute-meanings.mjs';
 
 // This file creates only a review projection. The 0.7 contract, original
 // example, normalizer, Check state and the previous review remain untouched.
@@ -10,6 +11,10 @@ const here=new URL('./',import.meta.url);
 const read=path=>JSON.parse(readFileSync(new URL(path,here),'utf8'));
 const pkg=read('../../business-design/alder/json-normalized-model-review.json');
 const source=read('./example-source.json'),normalized=read('./example-normalized.json');
+const actualPackage=read('../../business-design/alder/business-design.json');
+const actualBusiness=actualPackage.documents.find(document=>document.kind==='businessDesign');
+const actualActivity=actualBusiness.activities.find(activity=>activity.name==='業務設計');
+const actualObject=actualBusiness.objects.find(object=>object.name==='依頼者');
 const model=pkg.documents.find(d=>d.kind==='conceptModel');
 const referenceModel=structuredClone(model);
 const originalByKind=kind=>source.documents.find(document=>document.kind===kind);
@@ -524,8 +529,23 @@ for(const [owner,key,label,type,paths,meaning] of [
 // deliberately not inferred from the current JSON type or a sample value.
 for(const concept of model.concepts)for(const info of concept.information){
  const mapping=infoMap.get(info.id);if(mapping&&mapping.representation!=='relationKey')Object.assign(mapping,nullabilityProposal(concept,info,mapping));
+ if(mapping&&!mapping.logicalMeaning){const meaning=attributeMeaning(mapping);if(meaning)mapping.logicalMeaning=meaning;}
 }
 model.meta.nullabilityProposal='業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。';
+// Real Alder business records are additional, labelled references. Scope is
+// intentionally omitted: the old and proposed scope semantics differ.
+const actualReferences={
+ 'businessDesigns.id':actualBusiness.id,'businessDesigns.title':actualBusiness.title,
+ 'businessDesigns.revision':actualBusiness.revision,'businessDesigns.scope':actualBusiness.scope,
+ 'actors.name':actualActivity.who,'activities.id':actualActivity.id,'activities.name':actualActivity.name,
+ 'activities.why':actualActivity.why,'activities.when':actualActivity.when,'activities.where':actualActivity.where,
+ 'activities.problem':actualActivity.problem,'activities.painLevel':actualActivity.painLevel,
+ 'objects.id':actualObject.id,'objects.name':actualObject.name
+};
+for(const [path,value] of Object.entries(actualReferences)){
+ const mapping=model.meta.fieldMappings.find(item=>item.physicalName===path);
+ if(mapping&&value!==undefined&&!Object.hasOwn(mapping,'referenceValue')){mapping.referenceValue=structuredClone(value);mapping.referenceSource='Alder自身の業務設計書（旧0.4形式）';}
+}
 // Refresh the already-authored overview's labels/fields without changing its
 // membership; the structure explorer reads the full model and new package root.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));

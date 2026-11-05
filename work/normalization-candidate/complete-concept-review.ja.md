@@ -44,6 +44,8 @@
 
 根拠として、[業務設計書の構造](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/docs/business-design-structure.ja.md)の目的・開始条件・手順・結果、および識別・入出力の考え方と、実際の[購買申請](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/purchase-request/README.md)、[会議室予約](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/meeting-room/README.md)、[設備保守](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/facilities-maintenance/README.md)を参照した。Scopeは後の本人判断で「システム化対象」として扱う。
 
+主要な業務・対象・情報項目・手順の属性には、これらの設計上の意味に基づく説明を候補として付ける。属性詳細では、既存の表示用サンプルに加えて、Alder自身の業務設計書にある「業務設計」「業務上の意味と保証の合意」などを出所付きの参考例として示す。旧Scopeの値は定義が異なるため新Scopeの参考例に流用しない。
+
 - **識別子・名前**：同一の業務や対象を区別して参照するため、値を必要とする候補。採番方法は決めない。
 - **業務の目的・開始条件、システム化対象**：草案中は未決を保持できる候補。特にScopeの未決を、対象外の `false` と混同しない。合意済み業務では内容・判定を明らかにする。
 - **情報項目グループの含有条件**：「条件の確定状態」を `未決／無条件／条件あり` に分ける候補。条件ありの場合は条件の内容を必要とし、無条件と条件未決を `null` 一つにまとめない。

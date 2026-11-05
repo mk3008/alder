@@ -1,7 +1,7 @@
 import {createElement,Box,ExternalLink,FileText,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
-type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown};
+type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
 type RelationField={relationId:string;physicalName:string};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
@@ -116,6 +116,7 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   add('説明',typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning);
   add('サンプル',mapping?sampleLabels(mapping):undefined);
+  if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
   add('情報項目のID',info.id);
   if(mapping?.physicalName)add('対応する項目',mapping.physicalName);
   if(mapping?.sourceSchemaPath)add('定義元',mapping.sourceSchemaPath);
