@@ -63,7 +63,10 @@ try{
  assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（1）','所有（2）','参照（1）','参照元（1）','種類未定義（出）（1）'],'folder counts show direct entries and directions');
  assert(!host.querySelector('.structure-heading, .structure-intro, .structure-help'),'the tab already supplies the title and the tree uses the full content area');
  const one=host.querySelector('[data-relation-id="one"][data-relation-direction="owned"] > details'),many=host.querySelector('[data-relation-id="many"][data-relation-direction="owned"] > details');
- assert(one&&!one.open&&many&&!many.open);one.open=true;one.dispatchEvent(new w.Event('toggle'));
+ assert(one&&!one.open&&many&&!many.open);
+ assert.equal(one.querySelector(':scope > summary .structure-condition').textContent,'one','relationship description is shown before expanding');
+ one.open=true;one.dispatchEvent(new w.Event('toggle'));
+ assert.equal(one.querySelectorAll(':scope > p.structure-condition').length,0,'expansion does not duplicate the description');
  assert.deepEqual(groups(one),['属性（1）','所有（1）','所有先（1）','参照（1）'],'nested counts include the owner without reversing its meaning');
  assert.equal(many.open,false,'one branch does not expand another');
  assert(one.querySelector('[data-relation-id="nested"][data-relation-direction="owned"]'),'single-valued ownership exposes its child');
@@ -77,6 +80,13 @@ try{
  host.querySelectorAll('.structure-toolbar button')[1].click();assert.equal(host.querySelector('.structure-node').open,false,'collapse all closes the root');covered.add('STRUCTURE-003');
  w.Explorer.renderStructureExplorer(host,model);
  assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（6）','所有（5）','所有先（1）','参照（1）','参照元（3）'],'parallel references count as separate relationships');
+ const step=host.querySelector('[data-relation-id="nr-activity-step"][data-relation-direction="owned"] > details');
+ const stepRow=step.querySelector(':scope > summary');assert.equal(step.open,false);
+ assert.match(stepRow.textContent,/1\.\.N.*手順行（Step）.*業務内の順序付き手順。/,'description follows the name on the collapsed row');
+ assert(!stepRow.textContent.includes('n-step')&&!stepRow.textContent.includes('逆 1'),'internal ID and reverse count are not displayed in the row');
+ assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
+ const parallel=[...host.querySelectorAll('[data-concept-id="n-relation"][data-relation-direction="referencedBy"] > details > summary')].map(row=>row.textContent);
+ assert(parallel.some(value=>value.includes('fromIdがActivityを指す関係の場合。'))&&parallel.some(value=>value.includes('toIdがActivityを指す関係の場合。')),'parallel relationships stay distinguishable before expanding');
  host.querySelector('.structure-toolbar button').click();
  const concepts=new Set([...host.querySelectorAll('[data-concept-id]')].map(el=>el.dataset.conceptId));
  const relations=new Set([...host.querySelectorAll('[data-relation-id]')].map(el=>el.dataset.relationId));

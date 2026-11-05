@@ -70,17 +70,14 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
   const cycle=path.has(id),visited=!!seen?.has(id),row=cycle?document.createElement('div'):document.createElement('summary');
   row.className='structure-node-row';row.append(icon(Box));
   if(edge){text(row,'span',edge.count,'structure-count');row.title=`${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
-  text(row,'strong',concept.name);text(row,'span',concept.id,'structure-id');
-  if(edge){text(row,'span',`逆 ${edge.reverseCount}`,'structure-reverse');
-   const allEdges=graph.edges.get(edge.from)??[],parallel=allEdges.filter(other=>other.to===edge.to&&other.direction===edge.direction).length>1;
-   const detail=edge.fields.join('、')||(parallel?edge.relation.condition:'');if(detail)text(row,'span',detail,'structure-edge-detail');
-  }
+  text(row,'strong',concept.name);
+  if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
+  if(edge?.fields.length)text(row,'span',edge.fields.join('、'),'structure-edge-detail');
   if(cycle||visited)text(row,'span','既出','structure-seen');
   if(cycle){row.setAttribute('aria-label',concept.name+'、既出のため展開しません');item.append(row);return item;}
   const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
-   if(edge?.relation.condition)text(details,'p',edge.relation.condition,'structure-condition');
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
    if(concept.information.length){const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(Folder));text(summary,'span','属性');text(summary,'span',`（${concept.information.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
     const fields=document.createElement('ul');fields.className='structure-fields';folder.append(fields);
