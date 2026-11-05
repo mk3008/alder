@@ -47,7 +47,7 @@ try{
  const mapping=model=>model.meta.fieldMappings.find(field=>field.informationId==='n-information-field-3');
 
  render(normalized,'n-information');
- assert.equal(fields().length,2);assert(fields().some(value=>value.includes('識別子'))&&fields().some(value=>value.includes('名前')));
+ assert.equal(fields().length,2);assert(fields().some(value=>value.includes('識別子'))&&fields().some(value=>value.includes('項目名')));
  assert(!fields().some(value=>value.includes('所属する対象')||value.includes('objectId')));
  render(normalized,'n-activity');
  assert(!fields().some(value=>value.includes('実行主体')));assert(row('nr-who-activity').textContent.includes('実行主体'));
